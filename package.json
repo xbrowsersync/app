@@ -1,0 +1,52 @@
+{
+  "name": "xbrowsersync-app",
+  "description": "The client app component of the xBrowserSync application.",
+  "version": "0.1.0",
+  "author": "Rich Browne",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/richjbrowne/xBrowserSync.git"
+  },
+  "bugs": {
+    "url": "https://github.com/richjbrowne/xBrowserSync/issues"
+  },
+  "dependencies": {
+    "angular": "latest",
+    "angular-animate": "latest",
+    "angular-sanitize": "latest",
+    "bootstrap": "latest",
+    "cryptojs": "latest",
+    "font-awesome": "latest",
+    "underscore": "latest"
+  },
+  "devDependencies": {
+    "jshint": "latest",
+    "npm-build-tools": "latest",
+    "node-sass": "latest"
+  },
+  "scripts": {
+    "lint": "jshint **/*.js",
+    
+    "prebuild:chrome": "npm run clearprevbuild",
+    "clearprevbuild": "n-clean build",
+    "postclearprevbuild": "npm run compilecorecss",
+    "compilecorecss": "node-sass css/styles.scss css/styles.css",
+    "build:chrome": "npm run copyplatformfiles -- --source platform/chrome",
+    "copyplatformfiles": "n-copy --destination build \"*\" \"**/*\"",
+    "postcopyplatformfiles": "npm run copycorefiles",
+    "copycorefiles": "n-copy --source . --destination build \"app.html\" \"css/*.css\" \"fonts/*\" \"images/*\" \"scripts/*\"",
+    "postcopycorefiles": "npm run copycorefonts",
+    "copycorefonts": "n-copy --source fonts --destination build/fonts \"**/*\"",
+    "postcopycorefonts": "npm run copynodemodulesscripts",
+    "copynodemodulesscripts": "n-copy --source node_modules --destination build/scripts \"angular*/*.min.js\" \"underscore/underscore-min.js\" \"cryptojs/lib/*.js\"",
+    "postcopynodemodulesscripts": "npm run copynodemodulescss",
+    "copynodemodulescss": "n-copy --source node_modules --destination build/css \"bootstrap/dist/css/bootstrap.min.css\" \"font-awesome/css/font-awesome.min.css\"",
+    "postcopynodemodulescss": "npm run copynodemodulesfonts",
+    "copynodemodulesfonts": "n-copy --source node_modules --destination build/fonts \"font-awesome/fonts/*\"",
+    "postcopynodemodulesfonts": "npm run compileplatformcss",
+    "compileplatformcss": "node-sass build/css/platform.scss build/css/platform.css",
+    "postcompileplatformcss": "npm run removescssfiles",
+    "removescssfiles": "n-clean build/css/*.scss"
+  }
+}

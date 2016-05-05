@@ -1,0 +1,20 @@
+@mixin placeholder {
+    &::-webkit-input-placeholder {@content}
+    &:-moz-placeholder           {@content}
+    &::-moz-placeholder          {@content}
+    &:-ms-input-placeholder      {@content}  
+}
+
+@mixin transition($property, $effect, $duration) {
+    -webkit-transition:     #{$property} #{$effect} #{$duration};
+    -moz-transition:        #{$property} #{$effect} #{$duration};
+    -o-transition:          #{$property} #{$effect} #{$duration};
+    transition:             #{$property} #{$effect} #{$duration};
+}
+
+@mixin calc($property, $expression) { 
+  #{$property}: -webkit-calc(#{$expression}); 
+  #{$property}: calc(#{$expression}); 
+}
+
+/* TODO: Add box-shadow mixin */
