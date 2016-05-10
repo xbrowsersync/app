@@ -18,7 +18,7 @@ xBrowserSync.App.Global = function(platform) {
             },
             Period: {
                 Get: function() {
-                    return 5;
+                    return 1;
                 }
             }
         },
@@ -437,7 +437,7 @@ xBrowserSync.App.Global = function(platform) {
                 }
             },
             Bookmarks: '/bookmarks',
-            LastUpdated: '/lastUpdated',
+            LastUpdated: '/lastupdated',
             Status: '/status'
         }
     };

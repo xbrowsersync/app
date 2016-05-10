@@ -12,51 +12,6 @@ xBrowserSync.App.API = function($http, $q, global) {
 /* ------------------------------------------------------------------------------------
  * Public functions
  * ------------------------------------------------------------------------------------ */
-   
-	var getStatus = function(url) {
-		if (!url) {
-			url = global.URL.Host.Get() + global.URL.Status;
-		}
-		else {
-			url = url + global.URL.Status;
-		}
-		
-		return $http.get(url)
-            .then(function(response) {
-				if (!!response && !!response.data) {
-					return response.data;
-				}
-				else {
-					return $q.reject({ code: global.ErrorCodes.NoStatus });
-				}
-			})
-            .catch(function(err) {
-                return $q.reject(getErrorCodeFromHttpError(err));
-            });
-	};
-	
-	var getBookmarks = function() {
-		// Check secret and sync ID are present
-		if (!global.ClientSecret.Get() || !global.Id.Get()) {
-			return $q.reject({ code: global.ErrorCodes.MissingClientData });
-		}
-		
-		var secretHash = Crypto.SHA1(global.ClientSecret.Get()).toString();
-		
-		return $http.get(global.URL.Host.Get() + global.URL.Bookmarks + '/' + 
-			             global.Id.Get() + '/' + secretHash)
-            .then(function(response) {
-				if (!!response && !!response.data) {
-					return response.data;
-				}
-				else {
-					return $q.reject({ code: global.ErrorCodes.NoDataFound });
-				}
-			})
-            .catch(function(err) {
-                return $q.reject(getErrorCodeFromHttpError(err));
-            });
-	};
 	
 	var createBookmarks = function(encryptedBookmarks) {
 		// Check secret is present
@@ -91,7 +46,7 @@ xBrowserSync.App.API = function($http, $q, global) {
             });
 	};
 	
-	var updateBookmarks = function(encryptedBookmarks) {
+	var getBookmarks = function() {
 		// Check secret and sync ID are present
 		if (!global.ClientSecret.Get() || !global.Id.Get()) {
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
@@ -99,13 +54,8 @@ xBrowserSync.App.API = function($http, $q, global) {
 		
 		var secretHash = Crypto.SHA1(global.ClientSecret.Get()).toString();
 		
-		var data = { 
-			bookmarks: encryptedBookmarks,
-			secretHash: secretHash
-		};
-		
-		return $http.post(global.URL.Host.Get() + global.URL.Bookmarks + '/' + global.Id.Get(),
-			JSON.stringify(data))
+		return $http.get(global.URL.Host.Get() + global.URL.Bookmarks + '/' + 
+			             global.Id.Get() + '/' + secretHash)
             .then(function(response) {
 				if (!!response && !!response.data) {
 					return response.data;
@@ -135,6 +85,56 @@ xBrowserSync.App.API = function($http, $q, global) {
 				}
 				
 				return response.data;
+			})
+            .catch(function(err) {
+                return $q.reject(getErrorCodeFromHttpError(err));
+            });
+	};
+	
+	var getStatus = function(url) {
+		if (!url) {
+			url = global.URL.Host.Get() + global.URL.Status;
+		}
+		else {
+			url = url + global.URL.Status;
+		}
+		
+		return $http.get(url)
+            .then(function(response) {
+				if (!!response && !!response.data) {
+					return response.data;
+				}
+				else {
+					return $q.reject({ code: global.ErrorCodes.NoStatus });
+				}
+			})
+            .catch(function(err) {
+                return $q.reject(getErrorCodeFromHttpError(err));
+            });
+	};
+	
+	var updateBookmarks = function(encryptedBookmarks) {
+		// Check secret and sync ID are present
+		if (!global.ClientSecret.Get() || !global.Id.Get()) {
+			return $q.reject({ code: global.ErrorCodes.MissingClientData });
+		}
+		
+		var secretHash = Crypto.SHA1(global.ClientSecret.Get()).toString();
+		
+		var data = { 
+			bookmarks: encryptedBookmarks,
+			secretHash: secretHash
+		};
+		
+		return $http.post(global.URL.Host.Get() + global.URL.Bookmarks + '/' + global.Id.Get(),
+			JSON.stringify(data))
+            .then(function(response) {
+				if (!!response && !!response.data) {
+					return response.data;
+				}
+				else {
+					return $q.reject({ code: global.ErrorCodes.NoDataFound });
+				}
 			})
             .catch(function(err) {
                 return $q.reject(getErrorCodeFromHttpError(err));
