@@ -134,10 +134,10 @@
 	"button_RestoreData_Label" : {
 		"message":  "Restore Data"
 	},
-	"button_RestoreData_Label_Invalid" : {
+	"button_RestoreData_Invalid_Label" : {
 		"message":  "Invalid Data"
 	},
-	"button_RestoreData_Label_Ready" : {
+	"button_RestoreData_Ready_Label" : {
 		"message":  "Ready to Restore"
 	},
 	"syncPanel_Title" : {
@@ -241,6 +241,12 @@
 	},
 	"error_RequestEntityTooLarge_Message" : {
 		"message":  "Unable to sync your data as the xBrowserSync service is limiting sync size to "
+	},
+	"error_NotAcceptingNewSyncs_Title" : {
+		"message":  "Service Not Accepting New Syncs"
+	},
+	"error_NotAcceptingNewSyncs_Message" : {
+		"message":  "Unable to sync as this xBrowserSync service is not currently accepting new syncs. Try again later or choose a different service to sync to."
 	},
 	"error_MissingClientData_Title" : {
 		"message":  "Unable to find your xBrowserSync ID or secret"

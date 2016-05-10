@@ -27,7 +27,9 @@ xBrowserSync.App.Platform = function() {
 			Updated_Move: undefined,
 			Updated_Update: undefined
 		},
-		Constants: undefined,
+		Constants: {
+			Get: undefined
+		},
         CurrentUrl: {
             Get: undefined
         },

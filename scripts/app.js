@@ -16,6 +16,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
  
     var BrowserAction = function() {
         vm = this;
+        vm.global = global;
+        vm.platform = platform; 
 		
 		vm.alert = {
 			show: false,
@@ -39,34 +41,26 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
         
         vm.domElements = {
             btnRestoreData: function() {
-                if (vm.sync.inProgress()) {
-                    return vm.text.restoreData_Restoring_Label;
-                }
-                
                 if (!vm.settings.dataToRestore) {
-                    return vm.text.restoreData_Default_Label;
+                    return platform.Constants.Get(global.Constants.Button_RestoreData_Label);
                 }
                 
                 if (!vm.settings.dataToRestoreIsValid()) {
-                    return vm.text.restoreData_Invalid_Label;
+                    return platform.Constants.Get(global.Constants.Button_RestoreData_Invalid_Label);
                 }
                 
-                return vm.text.restoreData_Ready_Label;
+                return platform.Constants.Get(global.Constants.Button_RestoreData_Ready_Label);
             },
             btnSync: function() {
-                if (vm.sync.inProgress()) {
-                    return vm.text.sync_InProgress_Label;
-                }
-                
                 if (vm.sync.enabled()) {
                     if (vm.domElements.btnSync_hover) {
-                        return vm.text.sync_Disable_Label;
+                        return platform.Constants.Get(global.Constants.Button_Sync_Disable_Label);
                     }
                     
-                    return vm.text.sync_Enabled_Label;
+                    return platform.Constants.Get(global.Constants.Button_Sync_Enabled_Label);
                 }
                 
-                return vm.text.sync_Enable_Label;
+                return platform.Constants.Get(global.Constants.Button_Sync_Enable_Label);
             },
             btnSync_hover: false
         };
@@ -180,77 +174,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             },
             showConfirmation: false
 		};
-        
-        vm.text = {
-            title: platform.Constants.ExtName,
-            button_Settings_Label: platform.Constants.Button_Settings_Label,
-            button_AddBookmark_Label: platform.Constants.Button_AddBookmark_Label,
-            button_EditBookmark_Label: platform.Constants.Button_EditBookmark_Label,
-            showHelp: platform.Constants.ShowHelp,
-            introduction: platform.Constants.Introduction,
-            clientSecret_Label: platform.Constants.Field_ClientSecret_Label,
-            clientSecret_Description: platform.Constants.Field_ClientSecret_Description,
-            id_Label: platform.Constants.Field_Id_Label,
-            id_Description: platform.Constants.Field_Id_Description,
-            sync_Enabled_Label: platform.Constants.Button_Sync_Enabled_Label,
-			sync_Enable_Label: platform.Constants.Button_Sync_Enable_Label,
-			sync_Disable_Label: platform.Constants.Button_Sync_Disable_Label,
-            sync_InProgress_Label: platform.Constants.Button_Sync_InProgress_Label,
-            confirmReplaceBookmarks_Title: platform.Constants.ConfirmReplaceBookmarks_Title,
-            confirmReplaceBookmarks_Message: platform.Constants.ConfirmReplaceBookmarks_Message,
-            button_ReplaceBookmarks_Confirm: platform.Constants.Button_ReplaceBookmarks_Confirm,
-            button_ReplaceBookmarks_Cancel: platform.Constants.Button_ReplaceBookmarks_Cancel,
-            field_Search_Description: platform.Constants.Field_Search_Description,
-            noSearchResults_Message: platform.Constants.NoSearchResults_Message,
-            serviceStatus_Label: platform.Constants.ServiceStatus_Label,
-            serviceStatus_Message: platform.Constants.ServiceStatus_Message,
-            serviceStatus_Online: platform.Constants.ServiceStatus_Online,
-            serviceStatus_Offline: platform.Constants.ServiceStatus_Offline,
-            button_UpdateServiceUrl_Label: platform.Constants.Button_UpdateServiceUrl_Label,
-            updateServiceUrlForm_Description: platform.Constants.UpdateServiceUrlForm_Description,
-            updateServiceUrlForm_Placeholder: platform.Constants.UpdateServiceUrlForm_Placeholder,
-            button_UpdateServiceUrl_Submit_Label: platform.Constants.Button_UpdateServiceUrl_Submit_Label,
-            button_UpdateServiceUrl_Cancel_Label: platform.Constants.Button_UpdateServiceUrl_Cancel_Label,
-            export_Message: platform.Constants.Export_Message,
-            backupRestore_Title: platform.Constants.BackupRestore_Title,
-            backupRestore_Message: platform.Constants.BackupRestore_Message,
-            button_Backup_Label: platform.Constants.Button_Backup_Label,
-            button_Restore_Label: platform.Constants.Button_Restore_Label,
-            button_Restore_Cancel_Label: platform.Constants.Button_Restore_Cancel_Label,
-            button_Restore_Done_Label: platform.Constants.Button_Restore_Done_Label,
-            button_Close_Label: platform.Constants.Button_Close_Label,
-            backupSuccess_Message: platform.Constants.BackupSuccess_Message,
-            restoreSuccess_Message: platform.Constants.RestoreSuccess_Message,
-            restoreForm_Message: platform.Constants.RestoreForm_Message,
-            dataToRestore_Label: platform.Constants.DataToRestore_Label,
-            restoreData_Default_Label: platform.Constants.Button_RestoreData_Label,
-            restoreData_Ready_Label: platform.Constants.Button_RestoreData_Label_Ready,
-            restoreData_Invalid_Label: platform.Constants.Button_RestoreData_Label_Invalid,
-            syncPanel_Title: platform.Constants.SyncPanel_Title,
-            syncPanel_Message: platform.Constants.SyncPanel_Message,
-            syncPanel_Id_Label: platform.Constants.SyncPanel_Id_Label,
-            syncPanel_IncludeBookmarksBar_Label: platform.Constants.SyncPanel_IncludeBookmarksBar_Label,
-            bookmarkPanel_Title_Add: platform.Constants.BookmarkPanel_Title_Add,
-            bookmarkPanel_Title_Edit: platform.Constants.BookmarkPanel_Title_Edit,
-            bookmarkPanel_Field_Title_Label: platform.Constants.BookmarkPanel_Field_Title_Label,
-            bookmarkPanel_Field_Url_Label: platform.Constants.BookmarkPanel_Field_Url_Label,
-            bookmarkPanel_Field_Description_Label: platform.Constants.BookmarkPanel_Field_Description_Label,
-            bookmarkPanel_Field_Tags_Label: platform.Constants.BookmarkPanel_Field_Tags_Label,
-            bookmarkPanel_Field_Tags_Placeholder: platform.Constants.BookmarkPanel_Field_Tags_Placeholder,
-            bookmarkPanel_Button_AddTags_Label: platform.Constants.BookmarkPanel_Button_AddTags_Label,
-            bookmarkPanel_Button_RemoveTag_Label: platform.Constants.BookmarkPanel_Button_RemoveTag_Label,
-            bookmarkPanel_Button_AddBookmark_Label: platform.Constants.BookmarkPanel_Button_AddBookmark_Label,
-            bookmarkPanel_Button_RemoveBookmark_Label: platform.Constants.BookmarkPanel_Button_RemoveBookmark_Label,
-            bookmarkPanel_Button_UpdateBookmark_Label: platform.Constants.BookmarkPanel_Button_UpdateBookmark_Label,
-            working_Title: platform.Constants.Working_Title,
-            working_Message: platform.Constants.Working_Message,
-            syncInterrupted_Title: platform.Constants.SyncInterrupted_Title,
-            syncInterrupted_Message: platform.Constants.SyncInterrupted_Message,
-            confirmRestore_Sync_Message: platform.Constants.ConfirmRestore_Sync_Message,
-            confirmRestore_NoSync_Message: platform.Constants.ConfirmRestore_NoSync_Message,
-            button_ConfirmRestore_Confirm_Label: platform.Constants.Button_ConfirmRestore_Confirm_Label,
-            button_ConfirmRestore_Cancel_Label: platform.Constants.Button_ConfirmRestore_Cancel_Label
-        };
 
 		vm.view = {
 			current: null,
@@ -384,7 +307,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
 				backupLink.click();
                 
                 // Display message
-                var message = vm.text.backupSuccess_Message.replace(
+                var message = platform.Constants.Get(global.Constants.BackupSuccess_Message).replace(
                     '{fileName}',
                     fileName);
                 
@@ -401,8 +324,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
 		if (!data) {
             // Display alert
             vm.alert.display(
-                platform.Constants.Error_NoDataToRestore_Title,
-                platform.Constants.Error_NoDataToRestore_Message, 
+                platform.Constants.Get(global.Constants.Error_NoDataToRestore_Title),
+                platform.Constants.Get(global.Constants.Error_NoDataToRestore_Message), 
                 'danger');
             
             return;
@@ -678,7 +601,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                 if (response.success) {
                     // Display message
                     vm.view.reset();
-                    vm.settings.backupRestoreResult = vm.text.restoreSuccess_Message;
+                    vm.settings.backupRestoreResult = platform.Constants.Get(global.Constants.RestoreSuccess_Message);
                 }
                 else {
                     // Display alert

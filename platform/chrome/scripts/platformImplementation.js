@@ -25,7 +25,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		platform.Bookmarks.Updated_Delete = updateBookmarks_Delete;
 		platform.Bookmarks.Updated_Move = updateBookmarks_Move;
 		platform.Bookmarks.Updated_Update = updateBookmarks_Update;
-		platform.Constants = getConstants();
+		platform.Constants.Get = getConstant;
         platform.CurrentUrl.Get = getCurrentUrl;
 		platform.DisplayAlert = displayAlert;
         platform.Interface.Refresh = refreshInterface;
@@ -271,107 +271,8 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		return retrievedBookmarks;
 	};
 	
-	var getConstants = function() {
-		return {
-			// Localised constants
-			ExtName: chrome.i18n.getMessage('extName'),
-			ExtDescription: chrome.i18n.getMessage('extDescription'),
-			BookmarksBarTitle: chrome.i18n.getMessage('bookmarksBarTitle'),
-			TooltipSyncEnabled: chrome.i18n.getMessage('tooltipSyncEnabled'),
-			TooltipWorking: chrome.i18n.getMessage('tooltipWorking'),
-			Button_Settings_Label: chrome.i18n.getMessage('button_Settings_Label'),
-			Button_AddBookmark_Label: chrome.i18n.getMessage('button_AddBookmark_Label'),
-			Button_EditBookmark_Label: chrome.i18n.getMessage('button_EditBookmark_Label'),
-            ShowHelp: chrome.i18n.getMessage('showHelp'),
-            Introduction: chrome.i18n.getMessage('introduction'),
-			Field_ClientSecret_Label: chrome.i18n.getMessage('field_ClientSecret_Label'),
-			Field_ClientSecret_Description: chrome.i18n.getMessage('field_ClientSecret_Description'),
-			Field_Id_Label: chrome.i18n.getMessage('field_Id_Label'),
-			Field_Id_Description: chrome.i18n.getMessage('field_Id_Description'),
-			Button_Sync_Enable_Label: chrome.i18n.getMessage('button_Sync_Enable_Label'),
-			Button_Sync_Disable_Label: chrome.i18n.getMessage('button_Sync_Disable_Label'),
-			Button_Sync_Enabled_Label: chrome.i18n.getMessage('button_Sync_Enabled_Label'),
-			Button_Sync_InProgress_Label: chrome.i18n.getMessage('button_Sync_InProgress_Label'),
-			ConfirmReplaceBookmarks_Title: chrome.i18n.getMessage('confirmReplaceBookmarks_Title'),
-			ConfirmReplaceBookmarks_Message: chrome.i18n.getMessage('confirmReplaceBookmarks_Message'),
-			Button_ReplaceBookmarks_Confirm: chrome.i18n.getMessage('button_ReplaceBookmarks_Confirm'),
-			Button_ReplaceBookmarks_Cancel: chrome.i18n.getMessage('button_ReplaceBookmarks_Cancel'),
-			Field_Search_Description: chrome.i18n.getMessage('field_Search_Description'),
-            NoSearchResults_Message: chrome.i18n.getMessage('noSearchResults_Message'), 
-            ServiceStatus_Label: chrome.i18n.getMessage('serviceStatus_Label'),
-			ServiceStatus_Message: chrome.i18n.getMessage('serviceStatus_Message'),
-			ServiceStatus_Online: chrome.i18n.getMessage('serviceStatus_Online'),
-			ServiceStatus_Offline: chrome.i18n.getMessage('serviceStatus_Offline'),
-			Button_UpdateServiceUrl_Label: chrome.i18n.getMessage('button_UpdateServiceUrl_Label'),
-			UpdateServiceUrlForm_Description: chrome.i18n.getMessage('updateServiceUrlForm_Description'),
-			UpdateServiceUrlForm_Placeholder: chrome.i18n.getMessage('updateServiceUrlForm_Placeholder'),
-			Button_UpdateServiceUrl_Submit_Label: chrome.i18n.getMessage('button_UpdateServiceUrl_Submit_Label'),
-			Button_UpdateServiceUrl_Cancel_Label: chrome.i18n.getMessage('button_UpdateServiceUrl_Cancel_Label'),
-			BackupRestore_Title: chrome.i18n.getMessage('backupRestore_Title'),
-            BackupRestore_Message: chrome.i18n.getMessage('backupRestore_Message'),
-			Button_Backup_Label: chrome.i18n.getMessage('button_Backup_Label'),
-			Button_Restore_Label: chrome.i18n.getMessage('button_Restore_Label'),
-			Button_Restore_Cancel_Label: chrome.i18n.getMessage('button_Restore_Cancel_Label'),
-			Button_Restore_Done_Label: chrome.i18n.getMessage('button_Restore_Done_Label'),
-			Button_Close_Label: chrome.i18n.getMessage('button_Close_Label'),
-			BackupSuccess_Message: chrome.i18n.getMessage('backupSuccess_Message'),
-			RestoreSuccess_Message: chrome.i18n.getMessage('restoreSuccess_Message'),
-			RestoreForm_Message: chrome.i18n.getMessage('restoreForm_Message'),
-			DataToRestore_Label: chrome.i18n.getMessage('dataToRestore_Label'),
-			Button_RestoreData_Label: chrome.i18n.getMessage('button_RestoreData_Label'),
-			Button_RestoreData_Label_Invalid: chrome.i18n.getMessage('button_RestoreData_Label_Invalid'),
-			Button_RestoreData_Label_Ready: chrome.i18n.getMessage('button_RestoreData_Label_Ready'),
-			SyncPanel_Title: chrome.i18n.getMessage('syncPanel_Title'),
-            SyncPanel_Message: chrome.i18n.getMessage('syncPanel_Message'),
-            SyncPanel_Id_Label: chrome.i18n.getMessage('syncPanel_Id_Label'),
-			SyncPanel_IncludeBookmarksBar_Label: chrome.i18n.getMessage('syncPanel_IncludeBookmarksBar_Label'),
-			Button_ConfirmRestore_Confirm_Label: chrome.i18n.getMessage('button_ConfirmRestore_Confirm_Label'),
-            Button_ConfirmRestore_Cancel_Label: chrome.i18n.getMessage('button_ConfirmRestore_Cancel_Label'),
-            ConfirmRestore_Sync_Message: chrome.i18n.getMessage('confirmRestore_Sync_Message'),
-            ConfirmRestore_NoSync_Message: chrome.i18n.getMessage('confirmRestore_NoSync_Message'),
-            BookmarkPanel_Title_Add: chrome.i18n.getMessage('bookmarkPanel_Title_Add'),
-            BookmarkPanel_Title_Edit: chrome.i18n.getMessage('bookmarkPanel_Title_Edit'),
-            BookmarkPanel_Field_Title_Label: chrome.i18n.getMessage('bookmarkPanel_Field_Title_Label'),
-            BookmarkPanel_Field_Url_Label: chrome.i18n.getMessage('bookmarkPanel_Field_Url_Label'),
-            BookmarkPanel_Field_Description_Label: chrome.i18n.getMessage('bookmarkPanel_Field_Description_Label'),
-            BookmarkPanel_Field_Tags_Label: chrome.i18n.getMessage('bookmarkPanel_Field_Tags_Label'),
-            BookmarkPanel_Field_Tags_Placeholder: chrome.i18n.getMessage('bookmarkPanel_Field_Tags_Placeholder'),
-            BookmarkPanel_Button_AddTags_Label: chrome.i18n.getMessage('bookmarkPanel_Button_AddTags_Label'),
-            BookmarkPanel_Button_RemoveTag_Label: chrome.i18n.getMessage('bookmarkPanel_Button_RemoveTag_Label'),
-            BookmarkPanel_Button_AddBookmark_Label: chrome.i18n.getMessage('bookmarkPanel_Button_AddBookmark_Label'),
-            BookmarkPanel_Button_RemoveBookmark_Label: chrome.i18n.getMessage('bookmarkPanel_Button_RemoveBookmark_Label'),
-            BookmarkPanel_Button_UpdateBookmark_Label: chrome.i18n.getMessage('bookmarkPanel_Button_UpdateBookmark_Label'),
-            Working_Title: chrome.i18n.getMessage('working_Title'),
-            Working_Message: chrome.i18n.getMessage('working_Message'),
-            SyncInterrupted_Title: chrome.i18n.getMessage('syncInterrupted_Title'),
-            SyncInterrupted_Message: chrome.i18n.getMessage('syncInterrupted_Message'),
-            Error_Default_Title: chrome.i18n.getMessage('error_Default_Title'),
-            Error_Default_Message: chrome.i18n.getMessage('error_Default_Message'),
-            Error_HttpRequestFailed_Title: chrome.i18n.getMessage('error_HttpRequestFailed_Title'),
-            Error_HttpRequestFailed_Message: chrome.i18n.getMessage('error_HttpRequestFailed_Message'),
-            Error_TooManyRequests_Title: chrome.i18n.getMessage('error_TooManyRequests_Title'),
-            Error_TooManyRequests_Message: chrome.i18n.getMessage('error_TooManyRequests_Message'),
-			Error_RequestEntityTooLarge_Title: chrome.i18n.getMessage('error_RequestEntityTooLarge_Title'),
-            Error_RequestEntityTooLarge_Message: chrome.i18n.getMessage('error_RequestEntityTooLarge_Message'),
-            Error_MissingClientData_Title: chrome.i18n.getMessage('error_MissingClientData_Title'),
-            Error_MissingClientData_Message: chrome.i18n.getMessage('error_MissingClientData_Message'),
-			Error_NoDataFound_Title: chrome.i18n.getMessage('error_NoDataFound_Title'),
-			Error_NoDataFound_Message: chrome.i18n.getMessage('error_NoDataFound_Message'),
-			Error_NoDataToRestore_Title: chrome.i18n.getMessage('error_NoDataToRestore_Title'),
-			Error_NoDataToRestore_Message: chrome.i18n.getMessage('error_NoDataToRestore_Message'),
-			Error_FailedGetLocalBookmarks_Title: chrome.i18n.getMessage('error_FailedGetLocalBookmarks_Title'),
-			Error_FailedGetLocalBookmarks_Message: chrome.i18n.getMessage('error_FailedGetLocalBookmarks_Message'),
-            Error_FailedCreateLocalBookmarks_Title: chrome.i18n.getMessage('error_FailedCreateLocalBookmarks_Title'),
-            Error_FailedCreateLocalBookmarks_Message: chrome.i18n.getMessage('error_FailedCreateLocalBookmarks_Message'),
-			Error_FailedRemoveLocalBookmarks_Title: chrome.i18n.getMessage('error_FailedRemoveLocalBookmarks_Title'),
-			Error_FailedRemoveLocalBookmarks_Message: chrome.i18n.getMessage('error_FailedRemoveLocalBookmarks_Message'),
-			Error_InvalidData_Title: chrome.i18n.getMessage('error_InvalidData_Title'),
-			Error_InvalidData_Message: chrome.i18n.getMessage('error_InvalidData_Message'),
-			Error_FailedFindUpdatedBookmark_Title: chrome.i18n.getMessage('error_FailedFindUpdatedBookmark_Title'),
-			Error_FailedFindUpdatedBookmark_Message: chrome.i18n.getMessage('error_FailedFindUpdatedBookmark_Message'),
-			Error_NumBookmarksMismatch_Title: chrome.i18n.getMessage('error_NumBookmarksMismatch_Title'),
-			Error_NumBookmarksMismatch_Message: chrome.i18n.getMessage('error_NumBookmarksMismatch_Message')
-		};
+	var getConstant = function(constName) {
+		return chrome.i18n.getMessage(constName);
 	};
 	
 	var getCurrentUrl = function() {
@@ -445,7 +346,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		var promises = [];
 		
 		// Get bookmarks bar if present
-		var bookmarksBar = _.findWhere(bookmarks, { Title: platform.Constants.BookmarksBarTitle });
+		var bookmarksBar = _.findWhere(bookmarks, { Title: getConstant(global.Constants.BookmarksBarTitle) });
 		var bookmarksExBookmarksBar = _.difference(bookmarks, [ bookmarksBar ]);
 		
 		// Populate bookmarks bar
@@ -488,15 +389,15 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 	
 	var refreshInterface = function() {
 		var iconPath;
-		var tooltip = platform.Constants.ExtName;
+		var tooltip = getConstant(global.Constants.ExtName);
 		
 		if (!!global.IsSyncing.Get()) {
 			iconPath = global.Images.BrowserAction.Working;
-			tooltip += ' - ' + platform.Constants.TooltipWorking;
+			tooltip += ' - ' + getConstant(global.Constants.TooltipWorking);
 		}
 		else if (!!global.SyncEnabled.Get()) {
 			iconPath = global.Images.BrowserAction.On;
-			tooltip += ' - ' + platform.Constants.TooltipSyncEnabled;
+			tooltip += ' - ' + getConstant(global.Constants.TooltipSyncEnabled);
 		}
 		else {
 			iconPath = global.Images.BrowserAction.Off;
@@ -626,7 +527,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 					syncedBookmarks.push(newBookmark);
 					
 					// Move Bookmarks bar to end of array
-					var bookmarksBarIndex = _.findIndex(syncedBookmarks, { Title: platform.Constants.BookmarksBarTitle });
+					var bookmarksBarIndex = _.findIndex(syncedBookmarks, { Title: getConstant(global.Constants.BookmarksBarTitle) });
 					if (bookmarksBarIndex >= 0) {
 						var bookmarksBar = syncedBookmarks.splice(bookmarksBarIndex, 1);
 						syncedBookmarks.push(bookmarksBar[0]);

@@ -3,10 +3,10 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 /* ------------------------------------------------------------------------------------
  * Class name:	xBrowserSync.App.Utility
- * Description:	Defines utility functions used in all app implementations.
+ * Description:	Defines utility functions.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Utility = function($q, browser, global, api) { 
+xBrowserSync.App.Utility = function($q, platform, global, api) { 
     'use strict';
 
 /* ------------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ xBrowserSync.App.Utility = function($q, browser, global, api) {
     var checkServiceStatus = function(url) {
 		return api.GetStatus(url)
 			.then(function(response) {
-				if (!(!!response.status && response.status === 'Online')) {
+				if (!(!!response.status && response.status === global.ServiceStatus.Online)) {
 					return $q.reject();
 				}
 			});
@@ -62,8 +62,8 @@ xBrowserSync.App.Utility = function($q, browser, global, api) {
 		};
 		 
 		if (!err || !err.code) {
-			errorMessage.title = browser.Constants.Error_Default_Title;
-			errorMessage.message = browser.Constants.Error_Default_Message;
+			errorMessage.title = platform.Constants.Get(global.Constants.Error_Default_Title);
+			errorMessage.message = platform.Constants.Get(global.Constants.Error_Default_Message);
 			return errorMessage;
 		}
 		
@@ -71,52 +71,56 @@ xBrowserSync.App.Utility = function($q, browser, global, api) {
 		
 		switch(err.code) {
             case global.ErrorCodes.HttpRequestFailed:
-				errorMessage.title = browser.Constants.Error_HttpRequestFailed_Title;
-				errorMessage.message = browser.Constants.Error_HttpRequestFailed_Message; 
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_HttpRequestFailed_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_HttpRequestFailed_Message); 
 				break;
             case global.ErrorCodes.TooManyRequests:
-				errorMessage.title = browser.Constants.Error_TooManyRequests_Title;
-				errorMessage.message = browser.Constants.Error_TooManyRequests_Message; 
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_TooManyRequests_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_TooManyRequests_Message); 
 				break;
             case global.ErrorCodes.RequestEntityTooLarge:
-				errorMessage.title = browser.Constants.Error_RequestEntityTooLarge_Title;
-				errorMessage.message = browser.Constants.Error_RequestEntityTooLarge_Message + err.details; 
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_RequestEntityTooLarge_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_RequestEntityTooLarge_Message) + err.details; 
+				break;
+            case global.ErrorCodes.NotAcceptingNewSyncs:
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_NotAcceptingNewSyncs_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_NotAcceptingNewSyncs_Message); 
 				break;
             case global.ErrorCodes.MissingClientData:
-				errorMessage.title = browser.Constants.Error_MissingClientData_Title;
-				errorMessage.message = browser.Constants.Error_MissingClientData_Message; 
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_MissingClientData_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_MissingClientData_Message); 
 				break;
             case global.ErrorCodes.FailedGetLocalBookmarks:
-				errorMessage.title = browser.Constants.Error_FailedGetLocalBookmarks_Title;
-				errorMessage.message = browser.Constants.Error_FailedGetLocalBookmarks_Message; 
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_FailedGetLocalBookmarks_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_FailedGetLocalBookmarks_Message); 
 				break;
             case global.ErrorCodes.FailedCreateLocalBookmarks:
-				errorMessage.title = browser.Constants.Error_FailedCreateLocalBookmarks_Title;
-				errorMessage.message = browser.Constants.Error_FailedCreateLocalBookmarks_Message + err.details;
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_FailedCreateLocalBookmarks_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_FailedCreateLocalBookmarks_Message) + err.details;
 				break;
             case global.ErrorCodes.FailedRemoveLocalBookmarks:
-				errorMessage.title = browser.Constants.Error_FailedRemoveLocalBookmarks_Title;
-				errorMessage.message = browser.Constants.Error_FailedRemoveLocalBookmarks_Message; 
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_FailedRemoveLocalBookmarks_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_FailedRemoveLocalBookmarks_Message); 
 				break;
             case global.ErrorCodes.NoDataFound:
-				errorMessage.title = browser.Constants.Error_NoDataFound_Title;
-				errorMessage.message = browser.Constants.Error_NoDataFound_Message;
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_NoDataFound_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_NoDataFound_Message);
 				break;
 			case global.ErrorCodes.InvalidData:
-				errorMessage.title = browser.Constants.Error_InvalidData_Title;
-				errorMessage.message = browser.Constants.Error_InvalidData_Message; 
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_InvalidData_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_InvalidData_Message); 
 				break;
 			case global.ErrorCodes.FailedFindUpdatedBookmark:
-				errorMessage.title = browser.Constants.Error_FailedFindUpdatedBookmark_Title;
-				errorMessage.message = browser.Constants.Error_FailedFindUpdatedBookmark_Message; 
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_FailedFindUpdatedBookmark_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_FailedFindUpdatedBookmark_Message); 
 				break;
 			case global.ErrorCodes.NumBookmarksMismatch:
-				errorMessage.title = browser.Constants.Error_NumBookmarksMismatch_Title;
-				errorMessage.message = browser.Constants.Error_NumBookmarksMismatch_Message; 
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_NumBookmarksMismatch_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_NumBookmarksMismatch_Message); 
 				break;
             default:
-				errorMessage.title = browser.Constants.Error_Default_Title;
-                errorMessage.message = browser.Constants.Error_Default_Message;
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_Default_Title);
+                errorMessage.message = platform.Constants.Get(global.Constants.Error_Default_Message);
 		}
 		
 		return errorMessage;

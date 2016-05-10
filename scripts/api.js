@@ -41,10 +41,10 @@ xBrowserSync.App.API = function($http, $q, global) {
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
-		var secretCheck = Crypto.SHA1(global.ClientSecret.Get()).toString();
+		var secretHash = Crypto.SHA1(global.ClientSecret.Get()).toString();
 		
 		return $http.get(global.URL.Host.Get() + global.URL.Bookmarks + '/' + 
-			             global.Id.Get() + '/' + secretCheck)
+			             global.Id.Get() + '/' + secretHash)
             .then(function(response) {
 				if (!!response && !!response.data) {
 					return response.data;
@@ -64,11 +64,11 @@ xBrowserSync.App.API = function($http, $q, global) {
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
-		var secretCheck = Crypto.SHA1(global.ClientSecret.Get()).toString();
+		var secretHash = Crypto.SHA1(global.ClientSecret.Get()).toString();
 		
 		var data = { 
 			bookmarks: encryptedBookmarks,
-			secretCheck: secretCheck
+			secretHash: secretHash
 		};
 		
 		return $http.post(global.URL.Host.Get() + global.URL.Bookmarks,
@@ -82,7 +82,12 @@ xBrowserSync.App.API = function($http, $q, global) {
 				}
 			})
             .catch(function(err) {
-                return $q.reject(getErrorCodeFromHttpError(err));
+                // Check for 405 Method Not Allowed: server not accepting new syncs
+				if (!!err && err.status === 405) {
+					return $q.reject({ code: global.ErrorCodes.NotAcceptingNewSyncs });
+				}
+				
+				return $q.reject(getErrorCodeFromHttpError(err));
             });
 	};
 	
@@ -92,11 +97,11 @@ xBrowserSync.App.API = function($http, $q, global) {
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
-		var secretCheck = Crypto.SHA1(global.ClientSecret.Get()).toString();
+		var secretHash = Crypto.SHA1(global.ClientSecret.Get()).toString();
 		
 		var data = { 
 			bookmarks: encryptedBookmarks,
-			secretCheck: secretCheck
+			secretHash: secretHash
 		};
 		
 		return $http.post(global.URL.Host.Get() + global.URL.Bookmarks + '/' + global.Id.Get(),
@@ -120,10 +125,10 @@ xBrowserSync.App.API = function($http, $q, global) {
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
-		var secretCheck = Crypto.SHA1(global.ClientSecret.Get()).toString();
+		var secretHash = Crypto.SHA1(global.ClientSecret.Get()).toString();
 		
 		return $http.get(global.URL.Host.Get() + global.URL.Bookmarks + '/' + 
-			             global.Id.Get() + global.URL.LastUpdated + '/' + secretCheck)
+			             global.Id.Get() + global.URL.LastUpdated + '/' + secretHash)
             .then(function(response) {
 				if (!response || !response.data) {
 					return response;
