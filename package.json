@@ -31,8 +31,8 @@
     "prebuild:chrome": "npm run clearprevbuild",
     "clearprevbuild": "n-clean build",
     "postclearprevbuild": "npm run compilecorecss",
-    "compilecorecss": "node-sass css/styles.scss css/styles.css",
-    "build:chrome": "npm run copyplatformfiles -- --source platform/chrome",
+    "compilecorecss": "node-sass css/styles.scss css/styles.css -q",
+    "build:chrome": "echo '=> Building platform:chrome' && npm run copyplatformfiles -- --source platform/chrome",
     "copyplatformfiles": "n-copy --destination build \"*\" \"**/*\"",
     "postcopyplatformfiles": "npm run copycorefiles",
     "copycorefiles": "n-copy --source . --destination build \"app.html\" \"css/*.css\" \"fonts/*\" \"images/*\" \"scripts/*\"",
@@ -45,8 +45,9 @@
     "postcopynodemodulescss": "npm run copynodemodulesfonts",
     "copynodemodulesfonts": "n-copy --source node_modules --destination build/fonts \"font-awesome/fonts/*\"",
     "postcopynodemodulesfonts": "npm run compileplatformcss",
-    "compileplatformcss": "node-sass build/css/platform.scss build/css/platform.css",
+    "compileplatformcss": "node-sass build/css/platform.scss build/css/platform.css -q",
     "postcompileplatformcss": "npm run removescssfiles",
-    "removescssfiles": "n-clean build/css/*.scss"
+    "removescssfiles": "n-clean build/css/*.scss",
+    "postremovescssfiles": "echo '=> Done'"
   }
 }
