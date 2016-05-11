@@ -89,6 +89,7 @@ xBrowserSync.App.Global = function(platform) {
             NoSearchResults_Message: 'noSearchResults_Message', 
             ServiceStatus_Label: 'serviceStatus_Label',
 			ServiceStatus_Message: 'serviceStatus_Message',
+            ServiceStatus_NoNewSyncs: 'serviceStatus_NoNewSyncs',
 			ServiceStatus_Online: 'serviceStatus_Online',
 			ServiceStatus_Offline: 'serviceStatus_Offline',
 			Button_UpdateServiceUrl_Label: 'button_UpdateServiceUrl_Label',
@@ -320,7 +321,9 @@ xBrowserSync.App.Global = function(platform) {
         },
         RetrySyncTimeout: 100,
         ServiceStatus: {
-            Online: 1
+            Online: 1,
+            Offline: 2,
+            NoNewSyncs: 3
         },
         ShowHints: {
             Get: function() {

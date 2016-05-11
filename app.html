@@ -278,17 +278,23 @@
                 </h4>
                 <div class="panel-content animate-fold" ng-show="vm.settings.visiblePanel === vm.settings.panels.serviceStatus">
                     <div class="status-display animate-fade" ng-hide="vm.settings.service.displayUpdateServiceUrlForm">
-                        <p ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Message)"></p>
+                        <p>{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Message) }}</p>
                         <div class="text-center">
-                            <p>
+                            <div class="status-url-panel">
                                 <a class="status-url overflow-ellipses" ng-href="{{ vm.settings.service.url() }}" target="_blank">{{ vm.settings.service.url() }}</a>
-                                <i class="fa fa-check-circle text-success" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Online) }}" ng-show="vm.settings.service.online">
+                                <i class="fa fa-check-circle text-success" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Online) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.Online">
                                     <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Online) }}</span>
                                 </i>
-                                <i class="fa fa-times-circle text-danger" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Offline) }}" ng-show="!vm.settings.service.online">
+                                <i class="fa fa-times-circle text-danger" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Offline) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.Offline">
                                     <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Offline) }}</span>                                    
                                 </i>
-                            </p>
+                                <i class="fa fa-exclamation-circle text-warning" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_NoNewSyncs) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.NoNewSyncs">
+                                    <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_NoNewSyncs) }}</span>                                    
+                                </i>
+                            </div>
+                            <p class="status-message" ng-show="!!vm.settings.service.statusMessage">
+                                {{ vm.settings.service.statusMessage }}
+                            </p> 
                             <button class="btn btn-default" ng-click="vm.events.updateServiceUrlForm_Display_Click()">
                                 {{ vm.platform.Constants.Get(vm.global.Constants.Button_UpdateServiceUrl_Label) }}
                             </button>

@@ -323,6 +323,18 @@ body {
         text-overflow: ellipsis;
     }
     
+    .text-success {
+        color: $colour-success;
+    }
+    
+    .text-warning {
+        color: $colour-warning;
+    }
+    
+    .text-danger {
+        color: $colour-danger;
+    }
+    
     .view {
         padding: 10px;
         
@@ -707,10 +719,6 @@ body {
     }
     
     .status-panel {
-        p {
-            margin-bottom: 10px;
-        }
-        
         .status-display {
             i {
                 font-size: 15px;
@@ -727,6 +735,17 @@ body {
             
             span.label {
                 font-size: 90%;
+            }
+            
+            p.status-message {
+                color: $colour-link;
+                margin-bottom: 0;
+                max-height: 40px;
+                overflow-y: auto
+            }
+            
+            button {
+                margin-top: 20px;
             }
         }
     

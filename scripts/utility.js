@@ -41,9 +41,16 @@ xBrowserSync.App.Utility = function($q, platform, global, api) {
     var checkServiceStatus = function(url) {
 		return api.GetStatus(url)
 			.then(function(response) {
-				if (!(!!response.status && response.status === global.ServiceStatus.Online)) {
+				if (!response) {
 					return $q.reject();
 				}
+				
+				var serviceStatus = {
+					status: response.status,
+					message: response.message
+				};
+				
+				return serviceStatus;
 			});
 	};
 	

@@ -75,7 +75,10 @@
 		"message":  "Service status"
 	},
 	"serviceStatus_Message" : {
-		"message":  "Check current service status or sync to a different xBrowserSync service by changing the service URL here.<br/><br/>When you change the service URL, any current sync will be disabled and you'll then need to create a new sync, unless you already have a corresponding xBrowserSync ID for that service."
+		"message":  "Check current service status or sync to a different xBrowserSync service by changing the service URL here."
+	},
+	"serviceStatus_NoNewSyncs" : {
+		"message":  "Online but not accepting new syncs"
 	},
 	"serviceStatus_Online" : {
 		"message":  "Online"
@@ -87,7 +90,7 @@
 		"message":  "Update Service URL"
 	},
 	"updateServiceUrlForm_Description" : {
-		"message":  "Enter the URL of an alternative xBrowserSync service."
+		"message":  "Enter the URL of an alternative xBrowserSync service. When you change the service URL, any current sync will be disabled and you'll then need to create a new sync, unless you already have a corresponding xBrowserSync ID for that service."
 	},
 	"updateServiceUrlForm_Placeholder" : {
 		"message":  "xBrowserSync service URL"
@@ -246,7 +249,7 @@
 		"message":  "Service Not Accepting New Syncs"
 	},
 	"error_NotAcceptingNewSyncs_Message" : {
-		"message":  "Unable to sync as this xBrowserSync service is not currently accepting new syncs. Try again later or choose a different service to sync to."
+		"message":  "Unable to sync as this xBrowserSync service is not currently accepting new syncs. If you have already created a sync using this service URL enter your xBrowserSync ID, or choose a different service to sync to."
 	},
 	"error_MissingClientData_Title" : {
 		"message":  "Unable to find your xBrowserSync ID or secret"

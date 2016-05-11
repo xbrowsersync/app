@@ -144,7 +144,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             service: {
                 displayUpdateServiceUrlForm: false,
                 newServiceUrl: '',
-                online: true,
+                status: global.ServiceStatus.Online,
+                statusMessage: '',
                 url: function(value) {
                     return arguments.length ? 
                         global.URL.Host.Set(value) : 
@@ -227,10 +228,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                     // Get service status
                     utility.CheckServiceStatus()
                         .then(function(response) {
-                            vm.settings.service.online = true;
+                            vm.settings.service.status = response.status;
+                            vm.settings.service.statusMessage = response.message;
                         })
                         .catch(function(err) {
-                            vm.settings.service.online = false;
+                            vm.settings.service.status = global.ServiceStatus.Offline;
                         });
                     
                     // If sync is enabled, generate a QR code 
@@ -544,7 +546,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
 		}
 		
 		return validData;
-	}; 
+	};
     
     var getTagArrayFromText = function(tagText) {
         if (!tagText) {
@@ -1032,10 +1034,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                 // Update service status
                 utility.CheckServiceStatus()
                     .then(function(response) {
-                        vm.settings.service.online = true;
+                        vm.settings.service.status = response.status;
+                        vm.settings.service.statusMessage = response.message;
                     })
                     .catch(function(err) {
-                        vm.settings.service.online = false;
+                        vm.settings.service.status = global.ServiceStatus.Offline;
                     });
                 
                 // Reset view
