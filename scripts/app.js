@@ -548,6 +548,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
 		return validData;
 	};
     
+    var generateQRCode = function() {
+        var qr = qrcode(2, 'M');
+        qr.addData(vm.settings.id());
+        qr.make();
+
+        document.getElementById('qr').innerHTML =  qr.createImgTag();
+    };
+    
     var getTagArrayFromText = function(tagText) {
         if (!tagText) {
             return null;
@@ -568,14 +576,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             .value();
         
         return tags;
-    };
-    
-    var generateQRCode = function() {
-        var qr = qrcode(2, 'M');
-        qr.addData(vm.settings.id());
-        qr.make();
-
-        document.getElementById('qr').innerHTML =  qr.createImgTag();
     };
     
     var handleSyncResponse = function(response) {

@@ -42,12 +42,12 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
 		var count = 0;
 		
 		_.each(bookmarks, function(bookmark) {
-			if (bookmark.Title != platform.Constants.BookmarksBarTitle) {
+			if (bookmark.Title != platform.Constants.Get(global.Constants.BookmarksBarTitle)) {
 				count++;
 			}
 			
 			if (!!bookmark.Children && bookmark.Children.length > 0) {
-				if (bookmark.Title === platform.Constants.BookmarksBarTitle && 
+				if (bookmark.Title === platform.Constants.Get(global.Constants.BookmarksBarTitle) && 
 					!global.IncludeBookmarksBar.Get()) {
 					return;
 				}
@@ -523,10 +523,10 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                             }
                             
                             // Get xBrowserSync group
-		                    var xBrowserSync = _.findWhere(bookmarksToUpdate, { Title: platform.Constants.ExtName });
+		                    var xBrowserSync = _.findWhere(bookmarksToUpdate, { Title: platform.Constants.Get(global.Constants.ExtName) });
                             
                             if (!xBrowserSync) {
-                                xBrowserSync = new utility.Bookmark(platform.Constants.ExtName);
+                                xBrowserSync = new utility.Bookmark(platform.Constants.Get(global.Constants.ExtName));
                                 bookmarksToUpdate.push(xBrowserSync);
                             }
                             
@@ -534,7 +534,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                             xBrowserSync.Children.push(syncData.changeInfo.bookmark);
                             
                             // Move Bookmarks bar to end of array
-                            var bookmarksBarIndex = _.findIndex(bookmarksToUpdate, { Title: platform.Constants.BookmarksBarTitle });
+                            var bookmarksBarIndex = _.findIndex(bookmarksToUpdate, { Title: platform.Constants.Get(global.Constants.BookmarksBarTitle) });
                             if (bookmarksBarIndex >= 0) {
                                 var bookmarksBar = bookmarksToUpdate.splice(bookmarksBarIndex, 1);
                                 bookmarksToUpdate.push(bookmarksBar[0]);
