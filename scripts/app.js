@@ -584,6 +584,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
         switch(response.command) {
             case global.Commands.SyncBookmarks:
                 if (response.success) {
+                    // Set bookmark status
+                    setBookmarkStatus()
+                        .catch(function(err) {
+                            // Display alert
+                            var errMessage = utility.GetErrorMessageFromException(err);
+                            vm.alert.display(errMessage.title, errMessage.message, 'danger');
+                        });
+                    
                     // Display the main view
                     vm.view.change(vm.view.views.main);
                 }
@@ -601,6 +609,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                 break;
             case global.Commands.RestoreBookmarks:
                 if (response.success) {
+                    // Set bookmark status
+                    setBookmarkStatus()
+                        .catch(function(err) {
+                            // Display alert
+                            var errMessage = utility.GetErrorMessageFromException(err);
+                            vm.alert.display(errMessage.title, errMessage.message, 'danger');
+                        });
+                    
                     // Display message
                     vm.view.reset();
                     vm.settings.backupRestoreResult = platform.Constants.Get(global.Constants.RestoreSuccess_Message);
