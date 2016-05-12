@@ -53,9 +53,15 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 				}
 			})
             .catch(function(err) {
-                // Check for 405 Method Not Allowed: server not accepting new syncs
-				if (!!err && err.status === 405) {
-					return $q.reject({ code: global.ErrorCodes.NotAcceptingNewSyncs });
+                if (!!err) {
+					switch (err.status) {
+						// 405 Method Not Allowed: server not accepting new syncs
+						case 405:
+							return $q.reject({ code: global.ErrorCodes.NotAcceptingNewSyncs });
+						// 429 Too Many Requests: daily new sync limit exceeded
+						case 429:
+							return $q.reject({ code: global.ErrorCodes.DailyNewSyncLimitExceeded });
+					}
 				}
 				
 				return $q.reject(getErrorCodeFromHttpError(err));

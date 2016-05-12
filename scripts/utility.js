@@ -77,6 +77,10 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_NotAcceptingNewSyncs_Title);
 				errorMessage.message = platform.Constants.Get(global.Constants.Error_NotAcceptingNewSyncs_Message); 
 				break;
+            case global.ErrorCodes.DailyNewSyncLimitExceeded:
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_DailyNewSyncLimitExceeded_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_DailyNewSyncLimitExceeded_Message); 
+				break;
             case global.ErrorCodes.MissingClientData:
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_MissingClientData_Title);
 				errorMessage.message = platform.Constants.Get(global.Constants.Error_MissingClientData_Message); 

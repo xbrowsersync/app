@@ -251,6 +251,12 @@
 	"error_NotAcceptingNewSyncs_Message" : {
 		"message":  "Unable to sync as this xBrowserSync service is not currently accepting new syncs. If you have already created a sync using this service URL enter your xBrowserSync ID, or choose a different service to sync to."
 	},
+	"error_DailyNewSyncLimitExceeded_Title" : {
+		"message":  "Daily New Sync Limit Exceeded"
+	},
+	"error_DailyNewSyncLimitExceeded_Message" : {
+		"message":  "Unable to create new sync as you have exceeded your daily new sync limit for this xBrowserSync service. Sync with an existing xBrowserSync ID or try again tomorrow."
+	},
 	"error_MissingClientData_Title" : {
 		"message":  "Unable to find your xBrowserSync ID or secret"
 	},
