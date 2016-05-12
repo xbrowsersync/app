@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description:	Defines utility functions.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Utility = function($q, platform, global, api) { 
+xBrowserSync.App.Utility = function($q, platform, global) { 
     'use strict';
 
 /* ------------------------------------------------------------------------------------
@@ -38,28 +38,12 @@ xBrowserSync.App.Utility = function($q, platform, global, api) {
 		return object;
 	};
     
-    var checkServiceStatus = function(url) {
-		return api.GetStatus(url)
-			.then(function(response) {
-				if (!response) {
-					return $q.reject();
-				}
-				
-				var serviceStatus = {
-					status: response.status,
-					message: response.message
-				};
-				
-				return serviceStatus;
-			});
-	};
-	
-	var encryptData = function(data, errorCallback) {
-		return Crypto.AES.encrypt(data, global.ClientSecret.Get());
+    var encryptData = function(data, errorCallback) {
+		return CryptoJS.AES.encrypt(data, global.ClientSecret.Get()).toString();
 	};
 	
 	var decryptData = function(data, errorCallback) {
-		return Crypto.AES.decrypt(data, global.ClientSecret.Get());
+		return CryptoJS.AES.decrypt(data, global.ClientSecret.Get()).toString(CryptoJS.enc.Utf8);
 	};
 	
 	var getErrorMessageFromException = function(err) {
@@ -133,11 +117,15 @@ xBrowserSync.App.Utility = function($q, platform, global, api) {
 		return errorMessage;
 	};
 	
+	var hash = function(message) {
+		return CryptoJS.SHA1(message).toString();
+	};
+	
 	return {
 		Bookmark: bookmark,
-		CheckServiceStatus: checkServiceStatus,
 		DecryptData: decryptData,
 		EncryptData: encryptData,
-		GetErrorMessageFromException: getErrorMessageFromException
+		GetErrorMessageFromException: getErrorMessageFromException,
+		Hash: hash
 	};
 };

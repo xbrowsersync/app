@@ -226,7 +226,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                     vm.settings.visiblePanel = vm.settings.panels.sync;
                     
                     // Get service status
-                    utility.CheckServiceStatus()
+                    api.CheckServiceStatus()
                         .then(function(response) {
                             vm.settings.service.status = response.status;
                             vm.settings.service.statusMessage = response.message;
@@ -1035,7 +1035,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
         // Check service url
         var url = vm.settings.service.newServiceUrl.replace(/\/$/, '');
         
-        utility.CheckServiceStatus(url)
+        api.CheckServiceStatus(url)
             .then(function(response) {
                 // Disable sync
                 vm.sync.enabled(false);
@@ -1048,7 +1048,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                 global.Id.Set('');
                 
                 // Update service status
-                utility.CheckServiceStatus()
+                api.CheckServiceStatus()
                     .then(function(response) {
                         vm.settings.service.status = response.status;
                         vm.settings.service.statusMessage = response.message;
@@ -1090,13 +1090,13 @@ xBrowserSyncApp.factory('platform', xBrowserSync.App.Platform);
 xBrowserSync.App.Global.$inject = ['platform'];
 xBrowserSyncApp.factory('global', xBrowserSync.App.Global);
 
-// Add api service
-xBrowserSync.App.API.$inject = ['$http', '$q', 'global'];
-xBrowserSyncApp.factory('api', xBrowserSync.App.API);
-
 // Add utility service
-xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'global', 'api'];
+xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'global'];
 xBrowserSyncApp.factory('utility', xBrowserSync.App.Utility);
+
+// Add api service
+xBrowserSync.App.API.$inject = ['$http', '$q', 'global', 'utility'];
+xBrowserSyncApp.factory('api', xBrowserSync.App.API);
 
 // Add bookmarks service
 xBrowserSync.App.Bookmarks.$inject = ['$q', 'platform', 'global', 'api', 'utility'];

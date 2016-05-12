@@ -276,13 +276,13 @@ xBrowserSyncApp.factory('platform', xBrowserSync.App.Platform);
 xBrowserSync.App.Global.$inject = ['platform'];
 xBrowserSyncApp.factory('global', xBrowserSync.App.Global);
 
-// Add api service
-xBrowserSync.App.API.$inject = ['$http', '$q', 'global'];
-xBrowserSyncApp.factory('api', xBrowserSync.App.API);
-
 // Add utility service
-xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'global', 'api'];
+xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'global'];
 xBrowserSyncApp.factory('utility', xBrowserSync.App.Utility);
+
+// Add api service
+xBrowserSync.App.API.$inject = ['$http', '$q', 'global', 'utility'];
+xBrowserSyncApp.factory('api', xBrowserSync.App.API);
 
 // Add bookmarks service
 xBrowserSync.App.Bookmarks.$inject = ['$q', 'platform', 'global', 'api', 'utility'];

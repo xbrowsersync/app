@@ -6,27 +6,29 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/richjbrowne/xBrowserSync.git"
+    "url": "https://github.com/xBrowserSync/App.git"
   },
   "bugs": {
-    "url": "https://github.com/richjbrowne/xBrowserSync/issues"
+    "url": "https://github.com/xBrowserSync/App/issues"
   },
   "dependencies": {
-    "angular": "latest",
-    "angular-animate": "latest",
-    "angular-sanitize": "latest",
-    "bootstrap": "latest",
-    "cryptojs": "latest",
-    "font-awesome": "latest",
-    "underscore": "latest"
+    "angular": "1.5.x",
+    "angular-animate": "1.5.x",
+    "angular-sanitize": "1.5.x",
+    "bootstrap": "3.3.x",
+    "crypto-js": "3.1.x",
+    "font-awesome": "4.6.x",
+    "underscore": "1.8.x"
   },
   "devDependencies": {
-    "jshint": "latest",
-    "npm-build-tools": "latest",
-    "node-sass": "latest"
+    "jshint": "2.9.x",
+    "npm-build-tools": "2.2.x",
+    "node-sass": "3.7.x"
   },
   "scripts": {
-    "lint": "jshint **/*.js",
+    "test": "npm run lint",
+    "lint": "echo '=> Linting' && jshint .",
+    "postlint": "echo '=> Done'",
     
     "prebuild:chrome": "npm run clearprevbuild",
     "clearprevbuild": "n-clean build",
@@ -39,7 +41,7 @@
     "postcopycorefiles": "npm run copycorefonts",
     "copycorefonts": "n-copy --source fonts --destination build/fonts \"**/*\"",
     "postcopycorefonts": "npm run copynodemodulesscripts",
-    "copynodemodulesscripts": "n-copy --source node_modules --destination build/scripts \"angular*/*.min.js\" \"underscore/underscore-min.js\" \"cryptojs/lib/*.js\"",
+    "copynodemodulesscripts": "n-copy --source node_modules --destination build/scripts \"angular*/*.min.js\" \"underscore/underscore-min.js\" \"crypto-js/crypto-js.js\"",
     "postcopynodemodulesscripts": "npm run copynodemodulescss",
     "copynodemodulescss": "n-copy --source node_modules --destination build/css \"bootstrap/dist/css/bootstrap.min.css\" \"font-awesome/css/font-awesome.min.css\"",
     "postcopynodemodulescss": "npm run copynodemodulesfonts",

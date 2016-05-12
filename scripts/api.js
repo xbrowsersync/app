@@ -6,12 +6,28 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description:	Contains functions that call the API service.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.API = function($http, $q, global) {
+xBrowserSync.App.API = function($http, $q, global, utility) {
     'use strict';
     
 /* ------------------------------------------------------------------------------------
  * Public functions
  * ------------------------------------------------------------------------------------ */
+	
+	var checkServiceStatus = function(url) {
+		return getStatus(url)
+			.then(function(response) {
+				if (!response) {
+					return $q.reject();
+				}
+				
+				var serviceStatus = {
+					status: response.status,
+					message: response.message
+				};
+				
+				return serviceStatus;
+			});
+	};
 	
 	var createBookmarks = function(encryptedBookmarks) {
 		// Check secret is present
@@ -19,7 +35,7 @@ xBrowserSync.App.API = function($http, $q, global) {
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
-		var secretHash = Crypto.SHA1(global.ClientSecret.Get()).toString();
+		var secretHash = utility.Hash(global.ClientSecret.Get());
 		
 		var data = { 
 			bookmarks: encryptedBookmarks,
@@ -52,7 +68,7 @@ xBrowserSync.App.API = function($http, $q, global) {
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
-		var secretHash = Crypto.SHA1(global.ClientSecret.Get()).toString();
+		var secretHash = utility.Hash(global.ClientSecret.Get());
 		
 		return $http.get(global.URL.Host.Get() + global.URL.Bookmarks + '/' + 
 			             global.Id.Get() + '/' + secretHash)
@@ -75,7 +91,7 @@ xBrowserSync.App.API = function($http, $q, global) {
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
-		var secretHash = Crypto.SHA1(global.ClientSecret.Get()).toString();
+		var secretHash = utility.Hash(global.ClientSecret.Get());
 		
 		return $http.get(global.URL.Host.Get() + global.URL.Bookmarks + '/' + 
 			             global.Id.Get() + global.URL.LastUpdated + '/' + secretHash)
@@ -91,35 +107,13 @@ xBrowserSync.App.API = function($http, $q, global) {
             });
 	};
 	
-	var getStatus = function(url) {
-		if (!url) {
-			url = global.URL.Host.Get() + global.URL.Status;
-		}
-		else {
-			url = url + global.URL.Status;
-		}
-		
-		return $http.get(url)
-            .then(function(response) {
-				if (!!response && !!response.data) {
-					return response.data;
-				}
-				else {
-					return $q.reject({ code: global.ErrorCodes.NoStatus });
-				}
-			})
-            .catch(function(err) {
-                return $q.reject(getErrorCodeFromHttpError(err));
-            });
-	};
-	
 	var updateBookmarks = function(encryptedBookmarks) {
 		// Check secret and sync ID are present
 		if (!global.ClientSecret.Get() || !global.Id.Get()) {
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
-		var secretHash = Crypto.SHA1(global.ClientSecret.Get()).toString();
+		var secretHash = utility.Hash(global.ClientSecret.Get());
 		
 		var data = { 
 			bookmarks: encryptedBookmarks,
@@ -172,9 +166,31 @@ xBrowserSync.App.API = function($http, $q, global) {
        
         return err;
     };
+	
+	var getStatus = function(url) {
+		if (!url) {
+			url = global.URL.Host.Get() + global.URL.Status;
+		}
+		else {
+			url = url + global.URL.Status;
+		}
+		
+		return $http.get(url)
+            .then(function(response) {
+				if (!!response && !!response.data) {
+					return response.data;
+				}
+				else {
+					return $q.reject({ code: global.ErrorCodes.NoStatus });
+				}
+			})
+            .catch(function(err) {
+                return $q.reject(getErrorCodeFromHttpError(err));
+            });
+	};
    
 	return {
-		GetStatus: getStatus,
+		CheckServiceStatus: checkServiceStatus,
 		GetBookmarks: getBookmarks,
 		CreateBookmarks: createBookmarks,
 		UpdateBookmarks: updateBookmarks,
