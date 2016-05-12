@@ -27,7 +27,6 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		platform.Bookmarks.Updated_Update = updateBookmarks_Update;
 		platform.Constants.Get = getConstant;
         platform.CurrentUrl.Get = getCurrentUrl;
-		platform.DisplayAlert = displayAlert;
         platform.Interface.Refresh = refreshInterface;
 		platform.LocalStorage.Get = getFromLocalStorage;
 		platform.LocalStorage.Set = setInLocalStorage;
@@ -207,21 +206,6 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		});
 	};
 	
-	var displayAlert = function(title, message, callback) {
-		var options = {
-			type: 'basic',
-			title: title,
-			message: message,
-			iconUrl: global.Images.Logo150
-		};
-		
-		if (!callback) {
-			callback = null;
-		};
-		
-		chrome.notifications.create('xBrowserSync-notification', options, callback);
-	};
-	
 	var findSyncedBookmarks = function(bookmarks, title, url, index, predicate) {
 		var results = [];
 		
@@ -392,15 +376,15 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		var tooltip = getConstant(global.Constants.ExtName);
 		
 		if (!!global.IsSyncing.Get()) {
-			iconPath = global.Images.BrowserAction.Working;
+			iconPath = 'images/browser-action-working.png';
 			tooltip += ' - ' + getConstant(global.Constants.TooltipWorking);
 		}
 		else if (!!global.SyncEnabled.Get()) {
-			iconPath = global.Images.BrowserAction.On;
+			iconPath = 'images/browser-action-on.png';
 			tooltip += ' - ' + getConstant(global.Constants.TooltipSyncEnabled);
 		}
 		else {
-			iconPath = global.Images.BrowserAction.Off;
+			iconPath = 'images/browser-action-off.png';
 		};
         
         $timeout(function() {

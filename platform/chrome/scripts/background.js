@@ -84,15 +84,19 @@ xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform)
 			});
 	};
 	
-	var displayAlert = function(title, message) {
+	var displayAlert = function(title, message, callback) {
 		var options = {
 			type: 'basic',
 			title: title,
 			message: message,
-			iconUrl: global.Images.Logo64
+			iconUrl: 'images/notification-icon.png'
 		};
 		
-		chrome.notifications.create('xBrowserSync-notification', options);
+		if (!callback) {
+			callback = null;
+		};
+		
+		chrome.notifications.create('xBrowserSync-notification', options, callback);
 	};
 	
 	var handleAlarm = function(alarm) {

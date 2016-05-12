@@ -33,7 +33,6 @@ xBrowserSync.App.Platform = function() {
         CurrentUrl: {
             Get: undefined
         },
-		DisplayAlert: undefined,
 		Interface: {
 			Refresh: undefined
 		},

@@ -239,15 +239,6 @@ xBrowserSync.App.Global = function(platform) {
                     value);
             }
         },
-        Images: {
-            BrowserAction: {
-                Off: 'images/browser-action-off.png',
-                On: 'images/browser-action-on.png',
-                Working: 'images/browser-action-working.png'
-            },
-            Logo64: 'images/logo-64.png',
-            Logo150: 'images/logo-150.png'
-        },
         IncludeBookmarksBar: {
             Get: function() {
                 var value;
