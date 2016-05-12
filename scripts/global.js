@@ -18,7 +18,7 @@ xBrowserSync.App.Global = function(platform) {
             },
             Period: {
                 Get: function() {
-                    return 1;
+                    return 5;
                 }
             }
         },
