@@ -304,12 +304,10 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 				});
 				
 				// Run content script to return page metadata
-				try {
-					chrome.tabs.executeScript(null, { file: 'scripts/content.js' });
-				}
-				catch (err) {
-					deferred.reject(err);
-				}
+				chrome.tabs.executeScript(null, { file: 'scripts/content.js' }, 
+					function() {
+						deferred.resolve(metadata);
+					});
         });
         
         return deferred.promise;

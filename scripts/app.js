@@ -981,6 +981,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             // If ID provided, display confirmation panel
             if (!!global.Id.Get()) {
                 vm.sync.showConfirmation = true;
+                $timeout(function(){
+                    document.querySelector('#btnSync_Confirm').focus();
+                });
             }
             else {
                 // Otherwise start sync

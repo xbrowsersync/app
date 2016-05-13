@@ -357,7 +357,7 @@ body {
         position: relative;
         vertical-align: middle;
         text-align: center;
-        z-index: 20;
+        z-index: 110;
         padding-bottom: 20px;
         
         h3 {
@@ -371,7 +371,7 @@ body {
         width: 100%;
         top: 0;
         left: 0;
-        z-index: 10;
+        z-index: 100;
         opacity: 0.95;
         background: #fff;
     }
