@@ -63,8 +63,8 @@ xBrowserSync.App.Global = function(platform) {
             RestoreBookmarks: 2
         },
         Constants: {
-            ExtName: 'extName',
-			ExtDescription: 'extDescription',
+            Title: 'title',
+			Description: 'description',
 			BookmarksBarTitle: 'bookmarksBarTitle',
 			TooltipSyncEnabled: 'tooltipSyncEnabled',
 			TooltipWorking: 'tooltipWorking',

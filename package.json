@@ -1,6 +1,6 @@
 {
   "name": "xbrowsersync-app",
-  "description": "The client app component of the xBrowserSync application.",
+  "description": "The xBrowserSync client app.",
   "version": "0.1.0",
   "author": "Rich Browne",
   "license": "MIT",

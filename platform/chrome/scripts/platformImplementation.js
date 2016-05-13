@@ -264,10 +264,10 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
         
         // Get current tab
         chrome.tabs.query(
-            { 'currentWindow': true },
+            { currentWindow: true, active: true },
             function(tabs) {
-                var activeTab = _.findWhere(tabs, { active: true });
-                var url = activeTab.url || null;
+                var activeTab = tabs[0];
+                var url = activeTab.url;
                 
                 deferred.resolve(url);
         });
@@ -282,28 +282,34 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
     var getPageMetadata = function() {
         var deferred = $q.defer();
         var metadata = {};
-        
+		
+		// Get current tab
         chrome.tabs.query(
-            { 'currentWindow': true },
+            { currentWindow: true, active: true },
             function(tabs) {
-                var activeTab = _.findWhere(tabs, { active: true });
-                
-                if (!activeTab) {
-                    return;
-                };
-                
+                var activeTab = tabs[0];
                 metadata.url = activeTab.url;
                 
-                // Get current tab content
-                chrome.tabs.sendMessage(activeTab.id, {text: 'getPageMetadata'}, null, function(pageMetadata) {
-                    if (!!pageMetadata) {
-                        metadata.title = pageMetadata.title;
-                        metadata.description = pageMetadata.description;
-                        metadata.tags = pageMetadata.tags;
-                    };
-                    
-                    deferred.resolve(metadata);
-                });
+				// Add listener to receive page metadata from content script
+                chrome.runtime.onMessage.addListener(function(message, sender) {
+					if (message.command === 'getPageMetadata') {
+						if (!!message.metadata) {
+							metadata.title = message.metadata.title;
+							metadata.description = message.metadata.description;
+							metadata.tags = message.metadata.tags;
+						};
+						
+						deferred.resolve(metadata);
+					}
+				});
+				
+				// Run content script to return page metadata
+				try {
+					chrome.tabs.executeScript(null, { file: 'scripts/content.js' });
+				}
+				catch (err) {
+					deferred.reject(err);
+				}
         });
         
         return deferred.promise;
@@ -373,7 +379,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 	
 	var refreshInterface = function() {
 		var iconPath;
-		var tooltip = getConstant(global.Constants.ExtName);
+		var tooltip = getConstant(global.Constants.Title);
 		
 		if (!!global.IsSyncing.Get()) {
 			iconPath = 'images/browser-action-working.png';

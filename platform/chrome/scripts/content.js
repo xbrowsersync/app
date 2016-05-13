@@ -14,19 +14,18 @@ xBrowserSync.App.Content = function() {
  * ------------------------------------------------------------------------------------ */
  
 	var Content = function() {
-		// Listen for messages
-        chrome.runtime.onMessage.addListener(function (msg, sender, callback) {
-            if (msg.text === 'getPageMetadata') {
-                var metadata = {
-                    title: getPageTitle(),
-                    url: document.location.href,
-                    description: getPageDescription(),
-                    tags: getPageTags()
-                };
-                
-                // Return page metadata
-                callback(metadata);
-            }
+		// Get page metadata
+        var metadata = {
+            title: getPageTitle(),
+            url: document.location.href,
+            description: getPageDescription(),
+            tags: getPageTags()
+        };
+        
+        // Return metadata to caller
+        chrome.runtime.sendMessage({
+            command: 'getPageMetadata',
+            metadata: metadata
         });
 	};
     

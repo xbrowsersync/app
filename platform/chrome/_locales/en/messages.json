@@ -1,9 +1,9 @@
 {
-	"extName": {
+	"title": {
 		"message": "xBrowserSync"
 	},
-	"extDescription": {
-		"message": "Syncs your browser data with the secure and anonymous xBrowserSync service."
+	"description": {
+		"message": "Syncs your browser data with a secure and anonymous xBrowserSync service."
 	},
 	"bookmarksBarTitle": {
 		"message": "Bookmarks bar"

@@ -523,10 +523,10 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                             }
                             
                             // Get xBrowserSync group
-		                    var xBrowserSync = _.findWhere(bookmarksToUpdate, { Title: platform.Constants.Get(global.Constants.ExtName) });
+		                    var xBrowserSync = _.findWhere(bookmarksToUpdate, { Title: platform.Constants.Get(global.Constants.Title) });
                             
                             if (!xBrowserSync) {
-                                xBrowserSync = new utility.Bookmark(platform.Constants.Get(global.Constants.ExtName));
+                                xBrowserSync = new utility.Bookmark(platform.Constants.Get(global.Constants.Title));
                                 bookmarksToUpdate.push(xBrowserSync);
                             }
                             
