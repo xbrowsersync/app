@@ -433,18 +433,14 @@ body {
             input {
                 padding-left: 35px;
                 border-radius: 20px;
-                border-color: $colour-link;
-                color: $colour-link;
-                font-size: 14px;
-                line-height: 22px;
+                font-size: 16px;
+                height: 33px;
             }
             
             .lookahead {
-                font-size: 14px;
-                line-height: 22px;
-                height: 34px;
-                padding: 6px 0;
                 left: 36px;
+                font-size: 16px;
+                line-height: 33px;
             }
             
             .measure {
