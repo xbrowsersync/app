@@ -22,6 +22,7 @@ xBrowserSync.App.Global = function(platform) {
                 }
             }
         },
+        ApiVersion: '1.0.0',
         Bookmark: {
             DescriptionMaxLength: 500
         },

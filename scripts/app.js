@@ -1093,6 +1093,13 @@ xBrowserSyncApp.factory('platform', xBrowserSync.App.Platform);
 xBrowserSync.App.Global.$inject = ['platform'];
 xBrowserSyncApp.factory('global', xBrowserSync.App.Global);
 
+// Add httpInterceptor service
+xBrowserSync.App.HttpInterceptor.$inject = ['$q', 'global'];
+xBrowserSyncApp.factory('httpInterceptor', xBrowserSync.App.HttpInterceptor);
+xBrowserSyncApp.config(['$httpProvider', function($httpProvider) {
+  $httpProvider.interceptors.push('httpInterceptor');
+}]);
+
 // Add utility service
 xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'global'];
 xBrowserSyncApp.factory('utility', xBrowserSync.App.Utility);
