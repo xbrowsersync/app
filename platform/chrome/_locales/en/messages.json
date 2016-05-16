@@ -18,7 +18,7 @@
 		"message": "Show help"
 	},
 	"introduction": {
-		"message": "Enter a secret value that will be used to encrypt your data before it is synced.<br/><br/>If you already have an xBrowserSync ID, enter it here with the corresponding secret and your synced data will be retrieved. Otherwise, your local data will be synced and a new xBrowserSync ID will be created for you.<br/><br/>Open the settings panel to retrieve your xBrowserSync ID if you'd like to sync your data with other xBrowserSync apps."
+		"message": "Enter a secret value that will be used to encrypt your data before it is synced.<br/><br/>If you already have an xBrowserSync ID, enter it here with the corresponding secret and your synced data will be retrieved. Otherwise, your local data will be synced and a new xBrowserSync ID will be created for you.<br/><br/>You can change the xBrowserSync service to sync to in the Settings panel."
 	},
 	"button_Settings_Label": {
 		"message": "Settings"
@@ -147,7 +147,7 @@
 		"message":  "Sync"
 	},
 	"syncPanel_Message" : {
-		"message":  "Start syncing with xBrowserSync now! If you already have an xBrowserSync ID you can use it to sync your existing data.<br/><br/>Also you can disable syncing changes to the Bookmarks bar, handy if you want to sync your bookmarks to different browsers but prefer them to display different bookmarks in the Bookmarks bar."
+		"message":  "Start syncing with xBrowserSync now! If you already have an xBrowserSync ID you can use it to sync your existing data.<br/><br/>Optionally you can disable syncing changes to the Bookmarks bar, handy if you want to sync your bookmarks to multiple browsers but prefer them to display different links in the Bookmarks bar."
 	},
 	"syncPanel_Id_Label" : {
 		"message":  "Your xBrowserSync ID"
