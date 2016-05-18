@@ -135,8 +135,6 @@ xBrowserSync.App.Global = function(platform) {
             BookmarkPanel_Button_UpdateBookmark_Label: 'bookmarkPanel_Button_UpdateBookmark_Label',
             Working_Title: 'working_Title',
             Working_Message: 'working_Message',
-            SyncInterrupted_Title: 'syncInterrupted_Title',
-            SyncInterrupted_Message: 'syncInterrupted_Message',
             Error_Default_Title: 'error_Default_Title',
             Error_Default_Message: 'error_Default_Message',
             Error_HttpRequestFailed_Title: 'error_HttpRequestFailed_Title',
@@ -170,7 +168,9 @@ xBrowserSync.App.Global = function(platform) {
             Error_BrowserImportBookmarksNotSupported_Title: 'error_BrowserImportBookmarksNotSupported_Title',
 			Error_BrowserImportBookmarksNotSupported_Message: 'error_BrowserImportBookmarksNotSupported_Message',
             Error_NotImplemented_Title: 'error_NotImplemented_Title',
-			Error_NotImplemented_Message: 'error_NotImplemented_Message'
+			Error_NotImplemented_Message: 'error_NotImplemented_Message',
+            Error_SyncInterrupted_Title: 'error_syncInterrupted_Title',
+            Error_SyncInterrupted_Message: 'error_syncInterrupted_Message'
         },
         ClientSecret: {
             Get: function() {
@@ -375,31 +375,6 @@ xBrowserSync.App.Global = function(platform) {
                     value);
                 
                 platform.Interface.Refresh();
-            }
-        },
-        SyncInterrupted: {
-            Get: function() {
-                var value;
-                
-                value = platform.LocalStorage.Get(
-                    'xBrowserSync-syncInterrupted');
-                
-                if (!value) {
-                    return false;
-                }
-                else {
-                    if (value === 'true') {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-            },
-            Set: function(value) {
-                platform.LocalStorage.Set(
-                    'xBrowserSync-syncInterrupted', 
-                    value);
             }
         },
         SyncType: { 

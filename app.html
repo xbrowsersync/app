@@ -66,11 +66,6 @@
                 </div>
             </div>
 
-            <div class="alert alert-warning animate-fade" role="alert" ng-show="vm.sync.interrupted()">
-                <h4>{{ vm.platform.Constants.Get(vm.global.Constants.SyncInterrupted_Title) }}</h4>
-                <p>{{ vm.platform.Constants.Get(vm.global.Constants.SyncInterrupted_Message) }}</p>
-            </div>
-
             <form name="vm.syncForm" novalidate>
                 <label class="sr-only" for="txtClientSecret">{{ vm.platform.Constants.Get(vm.global.Constants.Field_ClientSecret_Label) }}</label>
                 <div class="input-group" ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtClientSecret.$invalid]">

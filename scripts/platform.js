@@ -13,8 +13,13 @@ xBrowserSync.App.Platform = function($q) {
     'use strict';
 	
 	var notImplemented = function() {
+		function NotImplementedException() {
+			this.name = 'NotImplementedException';
+			this.code = 10400;
+		}
+		
 		// Throw not implemented exception
-		return $q.reject({ code: 10400 });
+		throw new NotImplementedException();
 	};
     
 	return {

@@ -91,7 +91,7 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 				break;
             case global.ErrorCodes.FailedCreateLocalBookmarks:
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_FailedCreateLocalBookmarks_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_FailedCreateLocalBookmarks_Message) + err.details;
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_FailedCreateLocalBookmarks_Message);
 				break;
             case global.ErrorCodes.FailedRemoveLocalBookmarks:
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_FailedRemoveLocalBookmarks_Title);

@@ -209,12 +209,6 @@
 	"working_Message" : {
 		"message":  "Don't close the window yet."
 	},
-	"syncInterrupted_Title" : {
-		"message":  "Sync Interrupted"
-	},
-	"syncInterrupted_Message" : {
-		"message":  "A previous sync was interrupted and failed to complete. Re-enable sync to finished syncing your data. Remember, always allow the sync to finish before closing this panel."
-	},
 	"error_Default_Title" : {
 		"message":  "Oww :("
 	},
@@ -309,12 +303,18 @@
 		"message":  "Importing not supported"
 	},
 	"error_BrowserImportBookmarksNotSupported_Message" : {
-		"message":  "Browser import bookmarks functionality is not supported in xBrowserSync, sync has been disabled. To sync your newly imported bookmarks with xBrowserSync you'll need to create a new sync."
+		"message":  "Browser import bookmarks functionality is not supported in xBrowserSync. Create a new sync to sync your newly imported bookmarks."
 	},
 	"error_NotImplemented_Title" : {
 		"message":  "Function not implemented"
 	},
 	"error_NotImplemented_Message" : {
 		"message":  "A required function has not been implemented and is causing xBrowserSync to not function correctly."
+	},
+	"error_SyncInterrupted_Title" : {
+		"message":  "Sync interrupted"
+	},
+	"error_SyncInterrupted_Message" : {
+		"message":  "A previous sync was interrupted and failed to complete. Re-enable sync to restore your synced data."
 	}
 }

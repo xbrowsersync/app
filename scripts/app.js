@@ -169,11 +169,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                     global.IsSyncing.Set(value) : 
                     global.IsSyncing.Get();
             },
-            interrupted: function(value) {
-                return arguments.length ? 
-                    global.SyncInterrupted.Set(value) : 
-                    global.SyncInterrupted.Get();
-            },
             showConfirmation: false
 		};
 
@@ -249,7 +244,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                 vm.hints.introduction = false;
                 vm.working = false;
                 
-                vm.sync.interrupted(false);
                 vm.sync.showConfirmation = false;
                 if (vm.syncForm) {
                     vm.syncForm.$setPristine();
@@ -669,15 +663,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                 handleSyncResponse(msg);
             });
         });
-        
-        // Add unload event listener to cleanup sync if in progress
-        addEventListener('unload', function (event) {
-            if (vm.sync.inProgress()) {
-                vm.sync.inProgress(false);
-                vm.sync.interrupted(true);
-                vm.sync.enabled(false);
-            }            
-        }, true);
         
         // Enable event listeners
         global.DisableEventListeners.Set(false);

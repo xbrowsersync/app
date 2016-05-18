@@ -7,7 +7,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  *              event registration.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform) {
+xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks) {
     'use strict';
 	
 	var syncBookmarksCommandMsg = 'sync';
@@ -118,9 +118,6 @@ xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform)
 	
 	var handleImport = function() {
 		if (!!global.SyncEnabled.Get()) {
-			// Disable sync
-			global.SyncEnabled.Set(false);
-			
 			// Display alert so that user knows to create new sync
 			displayAlert(
 				platform.Constants.Get(global.Constants.Error_BrowserImportBookmarksNotSupported_Title), 
@@ -229,6 +226,21 @@ xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform)
 	};
 	
 	var startup = function() {
+		// Check if a sync was interrupted
+		if (!!global.IsSyncing.Get()) {
+			global.IsSyncing.Set(false);
+			
+			// Disable sync
+			global.SyncEnabled.Set(false);
+			
+			// Display alert
+			displayAlert(
+				platform.Constants.Get(global.Constants.Error_SyncInterrupted_Title), 
+				platform.Constants.Get(global.Constants.Error_SyncInterrupted_Message));
+			
+			return;
+		}
+		
 		// Exit if sync isn't enabled or event listeners disabled
 		if (!global.SyncEnabled.Get() || global.DisableEventListeners.Get()) {
             return;
@@ -309,5 +321,5 @@ xBrowserSync.App.PlatformImplementation.$inject = ['$q', '$timeout', 'platform',
 xBrowserSyncApp.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add background module
-xBrowserSync.App.Background.$inject = ['$q', 'global', 'utility', 'bookmarks', 'platformImplementation'];
+xBrowserSync.App.Background.$inject = ['$q', 'platform', 'global', 'utility', 'bookmarks', 'platformImplementation'];
 xBrowserSyncApp.controller('Controller', xBrowserSync.App.Background);
