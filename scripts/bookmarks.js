@@ -42,17 +42,17 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
 		var count = 0;
 		
 		_.each(bookmarks, function(bookmark) {
-			if (bookmark.Title != platform.Constants.Get(global.Constants.BookmarksBarTitle)) {
+			if (bookmark.title != platform.Constants.Get(global.Constants.BookmarksBarTitle)) {
 				count++;
 			}
 			
-			if (!!bookmark.Children && bookmark.Children.length > 0) {
-				if (bookmark.Title === platform.Constants.Get(global.Constants.BookmarksBarTitle) && 
+			if (!!bookmark.children && bookmark.children.length > 0) {
+				if (bookmark.title === platform.Constants.Get(global.Constants.BookmarksBarTitle) && 
 					!global.IncludeBookmarksBar.Get()) {
 					return;
 				}
 				
-				count += countBookmarks(bookmark.Children);
+				count += countBookmarks(bookmark.children);
 			}
 		});
 		
@@ -267,10 +267,10 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                     // Add unique IDs
                     var counter = 0;
                     var addIdToBookmark = function(bookmark) {
-                        bookmark.Id = counter;
+                        bookmark.id = counter;
                         counter++;
                         
-                        _.each(bookmark.Children, addIdToBookmark);
+                        _.each(bookmark.children, addIdToBookmark);
                     };
                     
                     _.each(bookmarks, addIdToBookmark);
@@ -285,15 +285,15 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
     var recursiveDelete = function(bookmarks, url) {
         return _.map(
             _.reject(bookmarks, function(bookmark) {
-                if (!bookmark.Url) {
+                if (!bookmark.url) {
                     return false;
                 }
                 
-                return bookmark.Url === url;
+                return bookmark.url === url;
             }), 
             function(bookmark) {
-                if (!!bookmark.Children && bookmark.Children.length > 0) {
-                    bookmark.Children = recursiveDelete(bookmark.Children, url);
+                if (!!bookmark.children && bookmark.children.length > 0) {
+                    bookmark.children = recursiveDelete(bookmark.children, url);
                 }
             
                 return bookmark;
@@ -305,15 +305,15 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         return _.map(
             bookmarks, 
             function(bookmark) {
-                if (!!bookmark.Url && bookmark.Url === url) {
-                    bookmark.Title = updatedBookmark.Title;
-                    bookmark.Url = updatedBookmark.Url;
-                    bookmark.Description = updatedBookmark.Description;
-                    bookmark.Tags = updatedBookmark.Tags;
+                if (!!bookmark.url && bookmark.url === url) {
+                    bookmark.title = updatedBookmark.title;
+                    bookmark.url = updatedBookmark.url;
+                    bookmark.description = updatedBookmark.description;
+                    bookmark.tags = updatedBookmark.tags;
                 }
                 
-                if (!!bookmark.Children && bookmark.Children.length > 0) {
-                    bookmark.Children = recursiveUpdate(bookmark.Children, url, updatedBookmark);
+                if (!!bookmark.children && bookmark.children.length > 0) {
+                    bookmark.children = recursiveUpdate(bookmark.children, url, updatedBookmark);
                 }
             
                 return bookmark;
@@ -327,20 +327,20 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         }
         
         _.each(bookmarksToSearch, function(bookmark) {
-            if (!_.isUndefined(bookmark.Children)) {
+            if (!_.isUndefined(bookmark.children)) {
                 // This is a folder, search children
-                if (bookmark.Children.length > 0) {
-                    searchBookmarksByKeywords(bookmark.Children, keywords, results);
+                if (bookmark.children.length > 0) {
+                    searchBookmarksByKeywords(bookmark.children, keywords, results);
                 }
             }
             else {
                 var bookmarkWords = [];
                 
                 // Add all words in bookmark to array
-                bookmarkWords = bookmarkWords.concat(_.compact(bookmark.Title.replace("'", '').toLowerCase().split(/\W/)));
-                bookmarkWords = bookmarkWords.concat(_.compact(bookmark.Url.replace("'", '').toLowerCase().split(/\W/)));
-                if (!!bookmark.Description) { bookmarkWords = bookmarkWords.concat(_.compact(bookmark.Description.toLowerCase().split(/\W/))); }
-                if (!!bookmark.Tags) { bookmarkWords = bookmarkWords.concat(_.compact(bookmark.Tags)); }
+                bookmarkWords = bookmarkWords.concat(_.compact(bookmark.title.replace("'", '').toLowerCase().split(/\W/)));
+                bookmarkWords = bookmarkWords.concat(_.compact(bookmark.url.replace("'", '').toLowerCase().split(/\W/)));
+                if (!!bookmark.description) { bookmarkWords = bookmarkWords.concat(_.compact(bookmark.description.toLowerCase().split(/\W/))); }
+                if (!!bookmark.tags) { bookmarkWords = bookmarkWords.concat(_.compact(bookmark.tags)); }
                 
                 // Get match scores for each keyword against bookmark words
                 var scores = _.map(keywords, function(keyword) { 
@@ -360,12 +360,12 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                         
                     // Add result
                     var result = {
-                        Id: bookmark.Id,
-                        Title: bookmark.Title,
-                        Url: bookmark.Url,
-                        Description: bookmark.Description,
-                        Tags: bookmark.Tags,
-                        Score: score
+                        id: bookmark.id,
+                        title: bookmark.title,
+                        url: bookmark.url,
+                        description: bookmark.description,
+                        tags: bookmark.tags,
+                        score: score
                     };
                     
                     results.push(result);
@@ -378,11 +378,11 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
     
     var searchBookmarksByUrl = function(bookmarksToSearch, url) {
         var result = _.find(bookmarksToSearch, function(bookmark) {
-            if (!bookmark.Url) {
+            if (!bookmark.url) {
                 return false;
             }
             
-            return bookmark.Url === url;
+            return bookmark.url === url;
         });
         
         if (!!result) {
@@ -390,8 +390,8 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         }
         
         for (var i = 0; i < bookmarksToSearch.length; i++) {
-            if (!!bookmarksToSearch[i].Children && bookmarksToSearch[i].Children.length > 0) {
-                result = searchBookmarksByUrl(bookmarksToSearch[i].Children, url);
+            if (!!bookmarksToSearch[i].children && bookmarksToSearch[i].children.length > 0) {
+                result = searchBookmarksByUrl(bookmarksToSearch[i].children, url);
                 
                 if (!!result) {
                     return result;
@@ -406,18 +406,18 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         }
         
         _.each(bookmarksToSearch, function(bookmark) {
-            if (!!bookmark.Children && bookmark.Children.length > 0) {
-                results = searchBookmarksForLookaheads(bookmark.Children, word, tagsOnly, results);
+            if (!!bookmark.children && bookmark.children.length > 0) {
+                results = searchBookmarksForLookaheads(bookmark.children, word, tagsOnly, results);
             }
             else {
                 var bookmarkWords = [];
                 
                 if (!tagsOnly) {
                     // Add all words in bookmark to array
-                    bookmarkWords = bookmarkWords.concat(_.compact(bookmark.Title.replace("'", '').toLowerCase().split(/\W/)));
+                    bookmarkWords = bookmarkWords.concat(_.compact(bookmark.title.replace("'", '').toLowerCase().split(/\W/)));
                 }
                 
-                if (!!bookmark.Tags) { bookmarkWords = bookmarkWords.concat(_.compact(bookmark.Tags)); }
+                if (!!bookmark.tags) { bookmarkWords = bookmarkWords.concat(_.compact(bookmark.tags)); }
                 
                 // Find all words that begin with lookahead word
                 results = results.concat(_.filter(bookmarkWords, function(bookmark) { return bookmark.startsWith(word); }));
@@ -523,18 +523,18 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                             }
                             
                             // Get xBrowserSync group
-		                    var xBrowserSync = _.findWhere(bookmarksToUpdate, { Title: platform.Constants.Get(global.Constants.Title) });
+		                    var xBrowserSync = _.findWhere(bookmarksToUpdate, { title: platform.Constants.Get(global.Constants.Title) });
                             
                             if (!xBrowserSync) {
-                                xBrowserSync = new utility.Bookmark(platform.Constants.Get(global.Constants.Title));
+                                xBrowserSync = new utility.XBookmark(platform.Constants.Get(global.Constants.Title));
                                 bookmarksToUpdate.push(xBrowserSync);
                             }
                             
                             // Add new bookmark to xBrowserSync group
-                            xBrowserSync.Children.push(syncData.changeInfo.bookmark);
+                            xBrowserSync.children.push(syncData.changeInfo.bookmark);
                             
                             // Move Bookmarks bar to end of array
-                            var bookmarksBarIndex = _.findIndex(bookmarksToUpdate, { Title: platform.Constants.Get(global.Constants.BookmarksBarTitle) });
+                            var bookmarksBarIndex = _.findIndex(bookmarksToUpdate, { title: platform.Constants.Get(global.Constants.BookmarksBarTitle) });
                             if (bookmarksBarIndex >= 0) {
                                 var bookmarksBar = bookmarksToUpdate.splice(bookmarksBarIndex, 1);
                                 bookmarksToUpdate.push(bookmarksBar[0]);
@@ -562,8 +562,8 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                             }
                             
                             // If url has changed, remove bookmarks containing updated url parameter
-                            if (syncData.changeInfo.url != syncData.changeInfo.bookmark.Url) {
-                                bookmarksToUpdate = recursiveDelete(bookmarksToUpdate, syncData.changeInfo.bookmark.Url);
+                            if (syncData.changeInfo.url != syncData.changeInfo.bookmark.url) {
+                                bookmarksToUpdate = recursiveDelete(bookmarksToUpdate, syncData.changeInfo.bookmark.url);
                             }
                             
                             // Update bookmarks containing url parameter

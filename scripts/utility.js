@@ -13,32 +13,7 @@ xBrowserSync.App.Utility = function($q, platform, global) {
  * Public functions
  * ------------------------------------------------------------------------------------ */
  
-	var bookmark = function(title, url, description, tags) {
-		var object = {};
-		
-		if (!!title) {
-			object.Title = title.trim();
-		}
-		
-		if (!!url) {
-			object.Url = url.trim();
-		}
-		else {
-			object.Children = [];
-		}
-		
-		if (!!description) {
-			object.Description = description.trim().substring(0, global.Bookmark.DescriptionMaxLength);
-		}
-		
-		if (!!tags && tags.length > 0) {
-			object.Tags = tags;
-		}
-		
-		return object;
-	};
-    
-    var encryptData = function(data, errorCallback) {
+	var encryptData = function(data, errorCallback) {
 		return CryptoJS.AES.encrypt(data, global.ClientSecret.Get()).toString();
 	};
 	
@@ -129,8 +104,33 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 		return CryptoJS.SHA1(message).toString();
 	};
 	
+	var xBookmark = function(title, url, description, tags) {
+		var xBookmark = {};
+		
+		if (!!title) {
+			xBookmark.title = title.trim();
+		}
+		
+		if (!!url) {
+			xBookmark.url = url.trim();
+		}
+		else {
+			xBookmark.children = [];
+		}
+		
+		if (!!description) {
+			xBookmark.description = description.trim().substring(0, global.Bookmark.DescriptionMaxLength);
+		}
+		
+		if (!!tags && tags.length > 0) {
+			xBookmark.tags = tags;
+		}
+		
+		return xBookmark;
+	};
+	
 	return {
-		Bookmark: bookmark,
+		XBookmark: xBookmark,
 		DecryptData: decryptData,
 		EncryptData: encryptData,
 		GetErrorMessageFromException: getErrorMessageFromException,

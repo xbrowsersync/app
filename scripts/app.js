@@ -337,8 +337,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
     
     var bookmarkForm_BookmarkDescription_Change = function() {
         // Limit the bookmark description to the max length
-        if (!!vm.bookmark.current.Description && vm.bookmark.current.Description.length > global.Bookmark.DescriptionMaxLength) {
-            vm.bookmark.current.Description = vm.bookmark.current.Description.substring(0, global.Bookmark.DescriptionMaxLength);
+        if (!!vm.bookmark.current.description && vm.bookmark.current.description.length > global.Bookmark.DescriptionMaxLength) {
+            vm.bookmark.current.description = vm.bookmark.current.description.substring(0, global.Bookmark.DescriptionMaxLength);
         }
     };
     
@@ -369,7 +369,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
         // Clean and sort tags and add them to tag array
         var newTags = getTagArrayFromText(vm.bookmark.tagText);
         
-        vm.bookmark.current.Tags = _.sortBy(_.union(newTags, vm.bookmark.current.Tags), function(tag) {
+        vm.bookmark.current.tags = _.sortBy(_.union(newTags, vm.bookmark.current.tags), function(tag) {
             return tag;
         });
         
@@ -483,7 +483,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
     };
     
     var bookmarkForm_RemoveTag_Click = function(tag) {
-        vm.bookmark.current.Tags = _.without(vm.bookmark.current.Tags, tag);
+        vm.bookmark.current.tags = _.without(vm.bookmark.current.tags, tag);
         document.querySelector('#bookmarkForm input[name="bookmarkTags"]').focus();
     };
     
@@ -513,7 +513,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                 
                 // Set bookmark active status if current bookmark is current page 
                 if (currentUrl === vm.bookmark.current.originalUrl) {
-                    vm.bookmark.active = (currentUrl === vm.bookmark.current.Url);
+                    vm.bookmark.active = (currentUrl === vm.bookmark.current.url);
                 }
                 
                 // Display the main view
@@ -906,7 +906,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
     
     var searchForm_UpdateBookmark_Click = function(bookmark) {
         vm.bookmark.current = bookmark;
-        vm.bookmark.current.originalUrl = vm.bookmark.current.Url; 
+        vm.bookmark.current.originalUrl = vm.bookmark.current.url; 
         vm.bookmark.displayUpdateForm = true;
         
         // Display bookmark panel
@@ -941,14 +941,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                                 return $q.reject({ code: global.ErrorCodes.SyncedBookmarkNotFound });
                             }
                             
-                            var bookmark = new utility.Bookmark(
-                                result.Title, 
-                                result.Url, 
-                                result.Description,
-                                result.Tags);
+                            var bookmark = new utility.XBookmark(
+                                result.title, 
+                                result.url, 
+                                result.description,
+                                result.tags);
                             
                             vm.bookmark.current = bookmark;
-                            vm.bookmark.current.originalUrl = bookmark.Url;
+                            vm.bookmark.current.originalUrl = bookmark.url;
                             
                             // Display update form
                             vm.bookmark.displayUpdateForm = true;
@@ -960,7 +960,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                     }
                     
                     // Get current page info
-                    var bookmark = new utility.Bookmark(
+                    var bookmark = new utility.XBookmark(
                         metadata.title, 
                         metadata.url, 
                         metadata.description,

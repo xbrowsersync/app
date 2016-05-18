@@ -132,13 +132,13 @@
                     <h4>{{ vm.platform.Constants.Get(vm.global.Constants.NoSearchResults_Message) }}</h4>
                 </div>
                 <div class="list-group" ng-show="vm.search.results.length > 0">
-                    <div class="list-group-item" ng-repeat="result in vm.search.results track by result.Id">
-                        <a href="{{ result.Url }}" target="_blank"  tabindex="{{ $index + 1 }}"
+                    <div class="list-group-item" ng-repeat="result in vm.search.results track by result.id">
+                        <a href="{{ result.url }}" target="_blank"  tabindex="{{ $index + 1 }}"
                            ng-keydown="vm.events.searchForm_SearchResult_KeyDown($event)">
-                            <h4 class="list-group-item-heading">{{ result.Title }}</h4>
+                            <h4 class="list-group-item-heading">{{ result.title }}</h4>
                             <div class="list-group-item-text">
-                                <div class="description">{{ result.Description }}</div>
-                                <div class="url">{{ result.Url }}</div>
+                                <div class="description">{{ result.description }}</div>
+                                <div class="url">{{ result.url }}</div>
                             </div>
                         </a>
                         <button class="btn btn-icon btn-close" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) }}" ng-click="vm.events.searchForm_UpdateBookmark_Click(result)">
@@ -165,16 +165,16 @@
                 <form id="bookmarkForm" name="vm.bookmarkForm" novalidate>
                     <div class="form-group" ng-class="{ true: 'has-error' }[vm.bookmarkForm.bookmarkTitle.$touched && vm.bookmarkForm.bookmarkTitle.$invalid]">
                         <label for="bookmarkTitle">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Title_Label) }}</label>
-                        <input type="text" class="form-control" name="bookmarkTitle" ng-model="vm.bookmark.current.Title" maxlength="255" tabindex="1" required>
+                        <input type="text" class="form-control" name="bookmarkTitle" ng-model="vm.bookmark.current.title" maxlength="255" tabindex="1" required>
                     </div>
                     <div class="form-group" ng-class="{ true: 'has-error' }[vm.bookmarkForm.bookmarkUrl.$touched && vm.bookmarkForm.bookmarkUrl.$invalid]">
                         <label for="bookmarkUrl">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Url_Label) }}</label>
-                        <input type="text" class="form-control" name="bookmarkUrl" placeholder="http(s)://..." ng-model="vm.bookmark.current.Url" 
+                        <input type="text" class="form-control" name="bookmarkUrl" placeholder="http(s)://..." ng-model="vm.bookmark.current.url" 
                                ng-change="vm.events.bookmarkForm_BookmarkUrl_Change()" maxlength="255" tabindex="2" required>
                     </div>
                     <div class="form-group">
                         <label for="bookmarkDescription">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Description_Label) }}</label>
-                        <textarea class="form-control" name="bookmarkDescription" rows="3" ng-model="vm.bookmark.current.Description"
+                        <textarea class="form-control" name="bookmarkDescription" rows="3" ng-model="vm.bookmark.current.description"
                                   ng-change="vm.events.bookmarkForm_BookmarkDescription_Change()" tabindex="3"></textarea>
                     </div>
                     <div class="form-group">
@@ -191,7 +191,7 @@
                             </span>
                         </div>
                         <div class="tags clearfix">
-                            <span class="label label-default" ng-repeat="tag in vm.bookmark.current.Tags track by $index">
+                            <span class="label label-default" ng-repeat="tag in vm.bookmark.current.tags track by $index">
                                 {{ tag }}
                                 <button type="button" class="btn btn-icon" title="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_RemoveTag_Label) }}" ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
                                     <i class="fa fa-times" aria-hidden="true"></i>
