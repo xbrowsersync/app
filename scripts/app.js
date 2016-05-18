@@ -77,11 +77,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             bookmarkForm_DeleteBookmark_Click: bookmarkForm_DeleteBookmark_Click,
             bookmarkForm_RemoveTag_Click: bookmarkForm_RemoveTag_Click,
             bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
+            includeBookmarksBar_Click: includeBookmarksBar_Click,
+            queueSync: queueSync,
             searchForm_SearchText_Change: searchForm_SearchText_Change,
             searchForm_SearchText_KeyDown: searchForm_SearchText_KeyDown,
             searchForm_SearchResult_KeyDown: searchForm_SearchResult_KeyDown,
             searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
-            syncForm_Confim_Click: syncForm_Confim_Click,
             syncForm_Sync_Click: syncForm_Sync_Click,
             toggleBookmark_Click: toggleBookmark_Click,
             updateServiceUrlForm_Display_Click: updateServiceUrlForm_Display_Click,
@@ -489,7 +490,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
     
     var bookmarkForm_RemoveTag_Click = function(tag) {
         vm.bookmark.current.Tags = _.without(vm.bookmark.current.Tags, tag);
-        document.querySelector('#bookmarkForm input[name="bookmarkTags"]').focus()
+        document.querySelector('#bookmarkForm input[name="bookmarkTags"]').focus();
     };
     
     var bookmarkForm_UpdateBookmark_Click = function() {
@@ -630,7 +631,35 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                 // Hide loading animation
                 vm.working = false;
                 break;
+            case global.Commands.NoCallback:
+                /* falls through */
+            default:
+                if (!response.success) {
+                    // Display alert
+                    errMessage = utility.GetErrorMessageFromException(response.error);
+                    vm.alert.display(errMessage.title, errMessage.message, 'danger');
+                }
+                
+                // Hide loading animation
+                vm.working = false;
+                break;
         }
+    };
+    
+    var includeBookmarksBar_Click = function() {
+        if (!global.IncludeBookmarksBar.Get()) {
+            // No need to sync, return
+            return;
+        }
+        
+        var syncData = {};
+        syncData.type = (!global.Id.Get()) ? global.SyncType.Push : global.SyncType.Pull;
+        
+        // Show loading animation
+        vm.working = true;
+        
+        // Start sync with no callback action
+        platform.Sync(vm.sync.asyncChannel, syncData, global.Commands.NoCallback);
     };
     
     var init = function() {
@@ -663,6 +692,17 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
         
         // Display the main view
         vm.view.change(vm.view.views.main);
+    };
+	
+	var queueSync = function() {
+        // Show loading animation
+        vm.working = true;
+        
+        var syncData = {};
+        syncData.type = (!global.Id.Get()) ? global.SyncType.Push : global.SyncType.Pull; 
+        
+        // Start sync
+        platform.Sync(vm.sync.asyncChannel, syncData);
     };
 	
 	var restoreData = function(data, restoreCallback) {
@@ -913,7 +953,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                     return bookmarks.Search({ url: metadata.url })
                         .then(function(result) {
                             if (!result) {
-                                return $q.reject({ code: global.ErrorCodes.FailedFindBookmark });
+                                return $q.reject({ code: global.ErrorCodes.SyncedBookmarkNotFound });
                             }
                             
                             var bookmark = new utility.Bookmark(
@@ -948,17 +988,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                 }
             });
     };
-	
-	var syncForm_Confim_Click = function() {
-        // Show loading animation
-        vm.working = true;
-        
-        var syncData = {};
-        syncData.type = (!global.Id.Get()) ? global.SyncType.Push : global.SyncType.Pull; 
-        
-        // Start sync
-        platform.Sync(vm.sync.asyncChannel, syncData);
-    };
     
     var syncForm_Sync_Click = function() {
 		// Return if the form is not valid
@@ -987,7 +1016,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             }
             else {
                 // Otherwise start sync
-				syncForm_Confim_Click();
+				queueSync();
             }
         }
 	};
@@ -1087,6 +1116,7 @@ xBrowserSyncApp.config(['$compileProvider', function($compileProvider) {
 }]);
 
 // Add platform service
+xBrowserSync.App.Platform.$inject = ['$q'];
 xBrowserSyncApp.factory('platform', xBrowserSync.App.Platform);
 
 // Add global service

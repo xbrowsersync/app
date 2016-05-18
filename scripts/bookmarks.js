@@ -62,7 +62,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
 	var exportBookmarks = function() {
         // If sync is not enabled, export local browser data
         if (!global.SyncEnabled.Get()) {
-            return platform.Bookmarks.Retrieve()
+            return platform.Bookmarks.Get()
                 .then(function(bookmarks) {
                     var exportData = {
                         xBrowserSync: { 
@@ -415,7 +415,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 if (!tagsOnly) {
                     // Add all words in bookmark to array
                     bookmarkWords = bookmarkWords.concat(_.compact(bookmark.Title.replace("'", '').toLowerCase().split(/\W/)));
-                };
+                }
                 
                 if (!!bookmark.Tags) { bookmarkWords = bookmarkWords.concat(_.compact(bookmark.Tags)); }
                 
@@ -685,7 +685,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
             }
             
             // New sync, get local bookmarks
-            getBookmarksPromise = platform.Bookmarks.Retrieve();
+            getBookmarksPromise = platform.Bookmarks.Get();
         }
         else {
             // Check secret and bookmarks ID are present
@@ -712,16 +712,16 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                     switch(syncData.changeInfo.type) {
                         // Create bookmark
                         case global.UpdateType.Create:
-                            return platform.Bookmarks.Updated_Create(bookmarks, syncData.changeInfo.data);
+                            return platform.Bookmarks.Created(bookmarks, syncData.changeInfo.data);
                         // Delete bookmark
                         case global.UpdateType.Delete:
-                            return platform.Bookmarks.Updated_Delete(bookmarks, syncData.changeInfo.data);
+                            return platform.Bookmarks.Deleted(bookmarks, syncData.changeInfo.data);
                         // Update bookmark
                         case global.UpdateType.Update:
-                            return platform.Bookmarks.Updated_Update(bookmarks, syncData.changeInfo.data);
+                            return platform.Bookmarks.Updated(bookmarks, syncData.changeInfo.data);
                         // Move bookmark
                         case global.UpdateType.Move:
-                            return platform.Bookmarks.Updated_Move(bookmarks, syncData.changeInfo.data);
+                            return platform.Bookmarks.Moved(bookmarks, syncData.changeInfo.data);
                         // Ambiguous sync
                         default:
                             return $q.reject({ code: global.ErrorCodes.AmbiguousSyncRequest });
@@ -737,23 +737,43 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 // Encrypt local bookmarks
                 var encryptedBookmarks = utility.EncryptData(JSON.stringify(bookmarks));
                 
-                // Create new bookmarks sync
-                return api.CreateBookmarks(encryptedBookmarks);
+                if (!syncData.changeInfo) {
+                    // Create new bookmarks sync
+                    return api.CreateBookmarks(encryptedBookmarks);
+                }
+                else {
+                    // Update bookmarks sync
+                    return api.UpdateBookmarks(encryptedBookmarks);
+                }
             })
             .then(function(data) {
-                // Check valid data was returned
-                if (!data.id) {
-                    return reject({ code: global.ErrorCodes.NoDataFound });
+                if (!syncData.changeInfo) {
+                    // Check valid data was returned
+                    if (!data.id) {
+                        return reject({ code: global.ErrorCodes.NoDataFound });
+                    }
+                
+                    // Save bookmarks ID
+                    global.Id.Set(data.id);
+                    
+                    // Set last updated
+                    global.LastUpdated.Set(data.lastUpdated);
+                    
+                    // Return bookmarks
+                    return bookmarks;
                 }
-            
-                // Save bookmarks ID
-                global.Id.Set(data.id);
+                else {
+                    // Check valid data was returned
+                    if (!data.lastUpdated) {
+                        return reject({ code: global.ErrorCodes.NoDataFound });
+                    }
                 
-                // Set last updated
-                global.LastUpdated.Set(data.lastUpdated);
-                
-                // Return bookmarks
-                return bookmarks;
+                    // Set last updated
+                    global.LastUpdated.Set(data.lastUpdated);
+                    
+                    // Return bookmarks
+                    return bookmarks;
+                }
             });
     };
 		

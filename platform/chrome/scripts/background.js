@@ -46,7 +46,7 @@ xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform)
 		// Exit if sync isn't enabled or event listeners disabled
 		if (!global.SyncEnabled.Get() || global.DisableEventListeners.Get()) {
             return;
-		};
+		}
 		
 		// Sync updates
 		bookmarks.Sync({
@@ -67,7 +67,7 @@ xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform)
 		// Exit if sync isn't enabled or event listeners disabled
 		if (!global.SyncEnabled.Get() || global.DisableEventListeners.Get()) {
             return;
-		};
+		}
 		
 		// Sync updates
 		bookmarks.Sync({
@@ -94,7 +94,7 @@ xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform)
 		
 		if (!callback) {
 			callback = null;
-		};
+		}
 		
 		chrome.notifications.create('xBrowserSync-notification', options, callback);
 	};
@@ -105,7 +105,7 @@ xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform)
 			// Exit if sync isn't enabled or event listeners disabled
 			if (!global.SyncEnabled.Get() || global.DisableEventListeners.Get()) {
 				return;
-			};
+			}
 			
 			bookmarks.CheckForUpdates()
 				.catch(function(err) {
@@ -113,7 +113,7 @@ xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform)
 					var errMessage = utility.GetErrorMessageFromException(err);
 					displayAlert(errMessage.title, errMessage.message);
 				});
-		};
+		}
 	};
 	
 	var handleImport = function() {
@@ -123,22 +123,26 @@ xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform)
 			
 			// Display alert so that user knows to create new sync
 			displayAlert(
-				chrome.i18n.getMessage('browserImportBookmarksNotSupported_Title'), 
-				chrome.i18n.getMessage('browserImportBookmarksNotSupported_Message'));
-		};
+				platform.Constants.Get(global.Constants.Error_BrowserImportBookmarksNotSupported_Title), 
+				platform.Constants.Get(global.Constants.Error_BrowserImportBookmarksNotSupported_Message));
+		}
 	};
 	
 	var handleMessage = function(msg) {
 		switch (msg.command) {
 			// Trigger bookmarks sync
 			case global.Commands.SyncBookmarks:
-				syncBookmarks(msg);
+				syncBookmarks(msg, global.Commands.SyncBookmarks);
+				break;
+			// Trigger bookmarks sync with no callback
+			case global.Commands.NoCallback:
+				syncBookmarks(msg, global.Commands.NoCallback);
 				break;
 			// Trigger bookmarks restore
 			case global.Commands.RestoreBookmarks:
 				restoreBookmarks(msg);
 				break;
-		};
+		}
 	};
 	
 	var install = function() {
@@ -155,7 +159,7 @@ xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform)
 	var listenForMessages = function(port) {
 		if (port.name !== global.Title.Get()) {
 			return;
-		};
+		}
 		
 		asyncChannel = port;
 		
@@ -169,7 +173,7 @@ xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform)
 		// Exit if sync isn't enabled or event listeners disabled
 		if (!global.SyncEnabled.Get() || global.DisableEventListeners.Get()) {
             return;
-		};
+		}
 		
 		// Sync updates
 		bookmarks.Sync({
@@ -190,7 +194,7 @@ xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform)
 		// Exit if sync isn't enabled or event listeners disabled
 		if (!global.SyncEnabled.Get() || global.DisableEventListeners.Get()) {
             return;
-		};
+		}
 		
 		// Sync updates
 		bookmarks.Sync({
@@ -214,13 +218,13 @@ xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform)
 				try {
 					asyncChannel.postMessage({ command: global.Commands.RestoreBookmarks, success: true });
 				}
-				catch (ex) {};
+				catch (ex) {}
 			})
 			.catch(function(err) {
 				try {
 					asyncChannel.postMessage({ command: global.Commands.RestoreBookmarks, success: false, error: err });
 				}
-				catch (ex) {};
+				catch (ex) {}
 			});
 	};
 	
@@ -228,7 +232,7 @@ xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform)
 		// Exit if sync isn't enabled or event listeners disabled
 		if (!global.SyncEnabled.Get() || global.DisableEventListeners.Get()) {
             return;
-		};
+		}
 		
 		// Check for updates to synced bookmarks
 		bookmarks.CheckForUpdates()
@@ -239,20 +243,20 @@ xBrowserSync.App.Background = function($q, global, utility, bookmarks, platform)
 			});
 	};
 	
-	var syncBookmarks = function(syncData) {
+	var syncBookmarks = function(syncData, command) {
 		// Start sync
 		bookmarks.Sync(syncData)
 			.then(function() {
 				try {
-					asyncChannel.postMessage({ command: global.Commands.SyncBookmarks, success: true });
+					asyncChannel.postMessage({ command: command, success: true });
 				}
-				catch (ex) {};
+				catch (ex) {}
 			})
 			.catch(function(err) {
 				try {
-					asyncChannel.postMessage({ command: global.Commands.SyncBookmarks, success: false, error: err });
+					asyncChannel.postMessage({ command: command, success: false, error: err });
 				}
-				catch (ex) {};
+				catch (ex) {}
 			});
 	};
 	
@@ -274,6 +278,7 @@ xBrowserSyncApp.config(['$compileProvider', function($compileProvider) {
 }]);
 
 // Add platform service
+xBrowserSync.App.Platform.$inject = ['$q'];
 xBrowserSyncApp.factory('platform', xBrowserSync.App.Platform);
 
 // Add global service

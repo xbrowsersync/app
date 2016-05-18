@@ -91,7 +91,7 @@
                     <h4>{{ vm.platform.Constants.Get(vm.global.Constants.ConfirmReplaceBookmarks_Title) }}</h4>
                     <p>{{ vm.platform.Constants.Get(vm.global.Constants.ConfirmReplaceBookmarks_Message) }}</p>
                     <div class="buttons text-center">
-                        <button id="btnSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncForm_Confim_Click()">
+                        <button id="btnSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.queueSync()">
                             {{ vm.platform.Constants.Get(vm.global.Constants.Button_ReplaceBookmarks_Confirm) }}
                         </button>
                         <button id="btnSync_Cancel" type="button" class="btn btn-default" ng-click="vm.view.reset()">
@@ -250,7 +250,8 @@
                         
                         <div class="checkbox">
                             <label>
-                                <input id="includeBookmarksBar" type="checkbox" ng-model="vm.settings.includeBookmarksBar" ng-model-options="{ getterSetter: true }" />
+                                <input id="includeBookmarksBar" type="checkbox" ng-model="vm.settings.includeBookmarksBar" ng-model-options="{ getterSetter: true }" 
+                                 ng-click="vm.events.includeBookmarksBar_Click()" />
                                 <span>{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_IncludeBookmarksBar_Label) }}</span>
                             </label>
                         </div>

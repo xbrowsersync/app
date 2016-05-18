@@ -77,9 +77,9 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_NotAcceptingNewSyncs_Title);
 				errorMessage.message = platform.Constants.Get(global.Constants.Error_NotAcceptingNewSyncs_Message); 
 				break;
-            case global.ErrorCodes.DailyNewSyncLimitExceeded:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_DailyNewSyncLimitExceeded_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_DailyNewSyncLimitExceeded_Message); 
+            case global.ErrorCodes.DailyNewSyncLimitReached:
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_DailyNewSyncLimitReached_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_DailyNewSyncLimitReached_Message); 
 				break;
             case global.ErrorCodes.MissingClientData:
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_MissingClientData_Title);
@@ -105,13 +105,17 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_InvalidData_Title);
 				errorMessage.message = platform.Constants.Get(global.Constants.Error_InvalidData_Message); 
 				break;
-			case global.ErrorCodes.FailedFindUpdatedBookmark:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_FailedFindUpdatedBookmark_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_FailedFindUpdatedBookmark_Message); 
+			case global.ErrorCodes.UpdatedBookmarkNotFound:
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_LastChangeNotSynced_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_LastChangeNotSynced_Message); 
 				break;
-			case global.ErrorCodes.NumBookmarksMismatch:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_NumBookmarksMismatch_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_NumBookmarksMismatch_Message); 
+			case global.ErrorCodes.SyncedBookmarkNotFound:
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_OutOfSync_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_OutOfSync_Message); 
+				break;
+			case global.ErrorCodes.NotImplemented:
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_NotImplemented_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_NotImplemented_Message); 
 				break;
             default:
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_Default_Title);

@@ -9,40 +9,44 @@ xBrowserSync.App = xBrowserSync.App || {};
  *              platform/chrome/scripts/platformImplementation.js.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Platform = function() {
+xBrowserSync.App.Platform = function($q) {
     'use strict';
+	
+	var notImplemented = function() {
+		// Throw not implemented exception
+		return $q.reject({ code: 10400 });
+	};
     
 	return {
 		AsyncChannel: {
-            Get: undefined
+            Get: notImplemented
         },
 		Bookmarks: {
-			Clear: undefined,
-            ContainsCurrentPage: undefined,
-			Count: undefined,
-            Populate: undefined,
-			Retrieve: undefined,
-			Updated_Create: undefined,
-			Updated_Delete: undefined,
-			Updated_Move: undefined,
-			Updated_Update: undefined
+			Clear: notImplemented,
+            ContainsCurrentPage: notImplemented,
+			Created: notImplemented,
+			Deleted: notImplemented,
+			Get: notImplemented,
+			Moved: notImplemented,
+            Populate: notImplemented,
+			Updated: notImplemented
 		},
 		Constants: {
-			Get: undefined
+			Get: notImplemented
 		},
         CurrentUrl: {
-            Get: undefined
+            Get: notImplemented
         },
 		Interface: {
-			Refresh: undefined
+			Refresh: notImplemented
 		},
 		LocalStorage: {
-			Get: undefined,
-			Set: undefined
+			Get: notImplemented,
+			Set: notImplemented
 		},
         PageMetadata: {
-            Get: undefined
+            Get: notImplemented
         },
-		Sync: undefined
+		Sync: notImplemented
 	};
 };

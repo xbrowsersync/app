@@ -35,7 +35,7 @@ xBrowserSync.App.Content = function() {
         
         if (!!metaElement && !!metaElement.getAttribute('content')) {
             return metaElement.getAttribute('content');
-        };
+        }
         
         return null;
     };
@@ -49,17 +49,17 @@ xBrowserSync.App.Content = function() {
             
             for (var i = 0; i < tagElements.length; i++) {
                 tags += tagElements[i].getAttribute('content') + ',';
-            };
+            }
             
             return tags;
-        };
+        }
         
         // Get meta tag values
         var metaElement = document.querySelector('meta[name="keywords"]');
         
         if (!!metaElement && !!metaElement.getAttribute('content')) {
             return metaElement.getAttribute('content');
-        };
+        }
         
         return null;
     };
@@ -72,7 +72,7 @@ xBrowserSync.App.Content = function() {
         }
         else {
             return document.title;
-        };
+        }
     };
 	
 	// Call constructor

@@ -215,100 +215,106 @@
 	"syncInterrupted_Message" : {
 		"message":  "A previous sync was interrupted and failed to complete. Re-enable sync to finished syncing your data. Remember, always allow the sync to finish before closing this panel."
 	},
-	"browserImportBookmarksNotSupported_Title" : {
-		"message":  "Import Bookmarks Not Supported"
-	},
-	"browserImportBookmarksNotSupported_Message" : {
-		"message":  "Importing bookmarks is not supported in xBrowserSync, sync has been disabled. Create a new sync to sync your newly imported bookmarks with xBrowserSync."
-	},
 	"error_Default_Title" : {
-		"message":  "I Broke It"
+		"message":  "Oww :("
 	},
 	"error_Default_Message" : {
-		"message":  "Something went wrong, can't tell you what though unfortunately..."
+		"message":  "Something went wrong, can't tell you what though unfortunately. If the problem persists get in touch with the xBrowserSync team."
 	},
 	"error_HttpRequestFailed_Title" : {
-		"message":  "Connection Lost"
+		"message":  "Connection lost"
 	},
 	"error_HttpRequestFailed_Message" : {
 		"message":  "Couldn't connect to the xBrowserSync service, check the service status in the settings panel."
 	},
 	"error_TooManyRequests_Title" : {
-		"message":  "Slow Down!"
+		"message":  "Slow down!"
 	},
 	"error_TooManyRequests_Message" : {
 		"message":  "Too many requests sent, sync has been disabled. Re-enable sync to resume syncing."
 	},
 	"error_RequestEntityTooLarge_Title" : {
-		"message":  "Sync Data Limit Reached"
+		"message":  "Sync data limit reached"
 	},
 	"error_RequestEntityTooLarge_Message" : {
 		"message":  "Unable to sync your data as the xBrowserSync service is limiting sync size to "
 	},
 	"error_NotAcceptingNewSyncs_Title" : {
-		"message":  "Service Not Accepting New Syncs"
+		"message":  "Service not accepting new syncs"
 	},
 	"error_NotAcceptingNewSyncs_Message" : {
 		"message":  "Unable to sync as this xBrowserSync service is not currently accepting new syncs. If you have already created a sync using this service URL enter your xBrowserSync ID, or choose a different service to sync to."
 	},
-	"error_DailyNewSyncLimitExceeded_Title" : {
-		"message":  "Daily New Sync Limit Exceeded"
+	"error_DailyNewSyncLimitReached_Title" : {
+		"message":  "Daily new sync limit reached"
 	},
-	"error_DailyNewSyncLimitExceeded_Message" : {
-		"message":  "Unable to create new sync as you have exceeded your daily new sync limit for this xBrowserSync service. Sync with an existing xBrowserSync ID or try again tomorrow."
+	"error_DailyNewSyncLimitReached_Message" : {
+		"message":  "Unable to create new sync as you have reached your daily new sync limit for this xBrowserSync service. Sync with an existing xBrowserSync ID or try again tomorrow."
 	},
 	"error_MissingClientData_Title" : {
-		"message":  "Unable to find your xBrowserSync ID or secret"
+		"message":  "Missing xBrowserSync ID or secret"
 	},
 	"error_MissingClientData_Message" : {
 		"message":  "Check the values in the xBrowserSync panel and then re-enable sync."
 	},
 	"error_NoDataFound_Title" : {
-		"message":  "No Data Found"
+		"message":  "No data found"
 	},
 	"error_NoDataFound_Message" : {
 		"message":  "Double check your xBrowserSync ID and secret and try again."
 	},
 	"error_NoDataToRestore_Title" : {
-		"message":  "No Data to Restore"
+		"message":  "No data to restore"
 	},
 	"error_NoDataToRestore_Message" : {
 		"message":  "Make sure you have provided valid xBrowserSync data before restoring."
 	},
 	"error_FailedGetLocalBookmarks_Title" : {
-		"message":  "Couldn't Get Local Bookmarks"
+		"message":  "Couldn't get local bookmarks"
 	},
 	"error_FailedGetLocalBookmarks_Message" : {
 		"message":  "An error occurred when trying to retrieve local bookmarks."
 	},
 	"error_FailedCreateLocalBookmarks_Title" : {
-		"message":  "Couldn't Create Bookmarks"
+		"message":  "Couldn't create bookmarks"
 	},
 	"error_FailedCreateLocalBookmarks_Message" : {
 		"message":  "An error occurred when trying to create a local bookmark."
 	},
 	"error_FailedRemoveLocalBookmarks_Title" : {
-		"message":  "Couldn't Overwrite Bookmark"
+		"message":  "Couldn't overwrite bookmark"
 	},
 	"error_FailedRemoveLocalBookmarks_Message" : {
 		"message":  "An error occurred when trying to overwrite local bookmarks."
 	},
 	"error_InvalidData_Title" : {
-		"message":  "Couldn't Decrypt xBrowserSync Data"
+		"message":  "Couldn't decrypt xBrowserSync data"
 	},
 	"error_InvalidData_Message" : {
 		"message":  "Ensure your secret is identical to the one used when initially syncing for this ID."
 	},
-	"error_FailedFindUpdatedBookmark_Title" : {
-		"message":  "Sync Changes Failed"
+	"error_LastChangeNotSynced_Title" : {
+		"message":  "Last change not synced"
 	},
-	"error_FailedFindUpdatedBookmark_Message" : {
-		"message":  "Sync has been disabled due to an error syncing changes. Re-enable sync to refresh browser data with xBrowserSync data."
+	"error_LastChangeNotSynced_Message" : {
+		"message":  "The last change was not synced due to a bookmarks conflict. It would be a good idea to disable and re-enable sync before continuing."
 	},
-	"error_NumBookmarksMismatch_Title" : {
-		"message":  "Data Out Of Sync"
+	"error_OutOfSync_Title" : {
+		"message":  "Bookmarks out of sync"
 	},
-	"error_NumBookmarksMismatch_Message" : {
-		"message":  "Sync has been disabled as local browser data has somehow become out of sync with your xBrowserSync data. You'll need to re-enable sync to re-sync with your xBrowserSync data."
+	"error_OutOfSync_Message" : {
+		"message":  "The last change was not synced due to a bookmarks conflict. It would be a good idea to disable and re-enable sync before continuing."
+	},
+	"error_BrowserImportBookmarksNotSupported_Title" : {
+		"message":  "Importing not supported"
+	},
+	"error_BrowserImportBookmarksNotSupported_Message" : {
+		"message":  "Browser import bookmarks functionality is not supported in xBrowserSync, sync has been disabled. To sync your newly imported bookmarks with xBrowserSync you'll need to create a new sync."
+	},
+	"error_NotImplemented_Title" : {
+		"message":  "Function not implemented"
+	},
+	"error_NotImplemented_Message" : {
+		"message":  "A required function has not been implemented and is causing xBrowserSync to not function correctly."
 	}
 }

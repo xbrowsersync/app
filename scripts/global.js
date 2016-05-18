@@ -61,7 +61,8 @@ xBrowserSync.App.Global = function(platform) {
         },
         Commands: {
             SyncBookmarks: 1,
-            RestoreBookmarks: 2
+            RestoreBookmarks: 2,
+            NoCallback: 3
         },
         Constants: {
             Title: 'title',
@@ -146,8 +147,8 @@ xBrowserSync.App.Global = function(platform) {
             Error_RequestEntityTooLarge_Message: 'error_RequestEntityTooLarge_Message',
             Error_NotAcceptingNewSyncs_Title: 'error_NotAcceptingNewSyncs_Title',
             Error_NotAcceptingNewSyncs_Message: 'error_NotAcceptingNewSyncs_Message',
-            Error_DailyNewSyncLimitExceeded_Title: 'error_DailyNewSyncLimitExceeded_Title',
-            Error_DailyNewSyncLimitExceeded_Message: 'error_DailyNewSyncLimitExceeded_Message',
+            Error_DailyNewSyncLimitReached_Title: 'error_DailyNewSyncLimitReached_Title',
+            Error_DailyNewSyncLimitReached_Message: 'error_DailyNewSyncLimitReached_Message',
             Error_MissingClientData_Title: 'error_MissingClientData_Title',
             Error_MissingClientData_Message: 'error_MissingClientData_Message',
 			Error_NoDataFound_Title: 'error_NoDataFound_Title',
@@ -162,10 +163,14 @@ xBrowserSync.App.Global = function(platform) {
 			Error_FailedRemoveLocalBookmarks_Message: 'error_FailedRemoveLocalBookmarks_Message',
 			Error_InvalidData_Title: 'error_InvalidData_Title',
 			Error_InvalidData_Message: 'error_InvalidData_Message',
-			Error_FailedFindUpdatedBookmark_Title: 'error_FailedFindUpdatedBookmark_Title',
-			Error_FailedFindUpdatedBookmark_Message: 'error_FailedFindUpdatedBookmark_Message',
-			Error_NumBookmarksMismatch_Title: 'error_NumBookmarksMismatch_Title',
-			Error_NumBookmarksMismatch_Message: 'error_NumBookmarksMismatch_Message'
+			Error_LastChangeNotSynced_Title: 'error_LastChangeNotSynced_Title',
+			Error_LastChangeNotSynced_Message: 'error_LastChangeNotSynced_Message',
+			Error_OutOfSync_Title: 'error_OutOfSync_Title',
+			Error_OutOfSync_Message: 'error_OutOfSync_Message',
+            Error_BrowserImportBookmarksNotSupported_Title: 'error_BrowserImportBookmarksNotSupported_Title',
+			Error_BrowserImportBookmarksNotSupported_Message: 'error_BrowserImportBookmarksNotSupported_Message',
+            Error_NotImplemented_Title: 'error_NotImplemented_Title',
+			Error_NotImplemented_Message: 'error_NotImplemented_Message'
         },
         ClientSecret: {
             Get: function() {
@@ -210,7 +215,7 @@ xBrowserSync.App.Global = function(platform) {
             TooManyRequests: 10001,
             RequestEntityTooLarge: 10002,
             NotAcceptingNewSyncs: 10003,
-            DailyNewSyncLimitExceeded: 10004,
+            DailyNewSyncLimitReached: 10004,
             MissingClientData: 10100, 
             AmbiguousSyncRequest: 10101,
             FailedGetLocalBookmarks: 10102,
@@ -218,11 +223,11 @@ xBrowserSync.App.Global = function(platform) {
             FailedRemoveLocalBookmarks: 10104,            
             NoDataFound: 10105,
             InvalidData: 10106,
-            FailedFindUpdatedBookmark: 10107,
-            NumBookmarksMismatch: 10108,
-            FailedFindBookmark: 10109,
+            UpdatedBookmarkNotFound: 10107,
+            SyncedBookmarkNotFound: 10108,
             NoStatus: 10200,
-            FailedGetPageMetadata: 10300
+            FailedGetPageMetadata: 10300,
+            NotImplemented: 10400
         },
         Id: {
             Get: function() {
