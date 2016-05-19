@@ -330,7 +330,7 @@
                                 <button class="btn btn-default" ng-click="vm.events.backupRestoreForm_Backup_Click()">
                                     {{ vm.platform.Constants.Get(vm.global.Constants.Button_Backup_Label) }}
                                 </button>
-                                <button id="btnRestore" class="btn btn-default" ng-click="vm.view.reset(); vm.settings.displayRestoreForm = true">
+                                <button id="btnRestore" class="btn btn-default" ng-click="vm.events.backupRestoreForm_DisplayRestoreForm_Click()">
                                     {{ vm.platform.Constants.Get(vm.global.Constants.Button_Restore_Label) }}
                                 </button>
                                 <a id="backupLink" class="hidden"></a>
@@ -343,7 +343,7 @@
                             <textarea ng-model="vm.settings.dataToRestore" class="form-control" rows="3"></textarea>
                             <div class="text-center">
                                 <button id="btnRestoreData" class="btn" ng-disabled="!vm.settings.dataToRestoreIsValid()"
-                                        ng-click="vm.settings.displayRestoreConfirmation = true" ng-class="{
+                                        ng-click="vm.events.backupRestoreForm_DisplayRestoreConfirmation_Click()" ng-class="{
                                             'btn-default': !vm.settings.dataToRestore,
                                             'btn-success': vm.settings.dataToRestore && vm.settings.dataToRestoreIsValid(),
                                             'btn-danger': vm.settings.dataToRestore && !vm.settings.dataToRestoreIsValid() }">
@@ -360,7 +360,7 @@
                                 {{ vm.sync.enabled() ? vm.platform.Constants.Get(vm.global.Constants.ConfirmRestore_Sync_Message) : vm.platform.Constants.Get(vm.global.Constants.ConfirmRestore_NoSync_Message) }}
                             </p>
                             <div class="buttons text-center">
-                                <button class="btn btn-default" ng-click="vm.events.backupRestoreForm_Restore_Click(vm.settings.dataToRestore)">
+                                <button id="btn_ConfirmRestore" class="btn btn-default" ng-click="vm.events.backupRestoreForm_Restore_Click(vm.settings.dataToRestore)">
                                     {{ vm.platform.Constants.Get(vm.global.Constants.Button_ConfirmRestore_Confirm_Label) }}
                                 </button>
                                 <button type="reset" class="btn btn-default" ng-click="vm.view.reset()">
@@ -373,7 +373,7 @@
                     <div class="animate-fade" ng-show="vm.settings.backupRestoreResult">
                         <p>{{ vm.settings.backupRestoreResult }}</p>
                         <div class="text-center">
-                            <button type="reset" class="btn btn-default" ng-click="vm.settings.backupRestoreResult = null">
+                            <button id="btn_RestoreComplete" type="reset" class="btn btn-default" ng-click="vm.settings.backupRestoreResult = null">
                                 {{ vm.platform.Constants.Get(vm.global.Constants.Button_Restore_Done_Label) }}
                             </button>
                         </div>

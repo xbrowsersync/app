@@ -3,7 +3,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 /* ------------------------------------------------------------------------------------
  * Class name:	xBrowserSync.App.API
- * Description:	Contains functions that call the API service.
+ * Description:	Responsible for communicating with the xBrowserSync API service.
  * ------------------------------------------------------------------------------------ */
 
 xBrowserSync.App.API = function($http, $q, global, utility) {

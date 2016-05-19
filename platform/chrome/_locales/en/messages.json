@@ -33,13 +33,13 @@
 		"message": "Secret"
 	},
 	"field_ClientSecret_Description": {
-		"message": "Your secret"
+		"message": "Your secret word"
 	},
 	"field_Id_Label": {
 		"message": "ID"
 	},
 	"field_Id_Description": {
-		"message": "Your xBrowserSync ID"
+		"message": "Your xBrowserSync ID (optional)"
 	},
 	"button_Sync_Enable_Label": {
 		"message": "Enable Sync"
@@ -54,7 +54,7 @@
 		"message":  "Syncing..."
 	},
 	"confirmReplaceBookmarks_Title" : {
-		"message":  "Overwrite Browser Data?"
+		"message":  "Overwrite browser data?"
 	},
 	"confirmReplaceBookmarks_Message" : {
 		"message":  "xBrowserSync data will overwrite local browser data. OK to proceed?"
@@ -168,10 +168,10 @@
 		"message":  "As sync is currently disabled, the data being restored will overwrite the local browser data. OK to proceed?"
 	},
 	"bookmarkPanel_Title_Add" : {
-		"message":  "Add Bookmark"
+		"message":  "Add bookmark"
 	},
 	"bookmarkPanel_Title_Edit" : {
-		"message":  "Edit Bookmark"
+		"message":  "Edit bookmark"
 	},
 	"bookmarkPanel_Field_Title_Label": {
 		"message": "Title"

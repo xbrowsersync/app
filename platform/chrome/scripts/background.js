@@ -3,8 +3,8 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 /* ------------------------------------------------------------------------------------
  * Class name:	xBrowserSync.App.Background
- * Description:	Initialises Chrome background required functionality, i.e. sets up 
- *              event registration.
+ * Description:	Initialises Chrome background required functionality; registers events; 
+ *              listens for sync requests.
  * ------------------------------------------------------------------------------------ */
 
 xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks) {

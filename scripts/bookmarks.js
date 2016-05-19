@@ -3,7 +3,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 /* ------------------------------------------------------------------------------------
  * Class name:	xBrowserSync.App.Bookmarks
- * Description:	Defines functions used for bookmark functionality.
+ * Description:	Responsible for handling bookmark data.
  * ------------------------------------------------------------------------------------ */
 
 xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) { 
@@ -36,27 +36,6 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                     return queueSync({ type: global.SyncType.Pull });
 				}
 			});
-	};
-    
-    var countBookmarks = function(bookmarks) {
-		var count = 0;
-		
-		_.each(bookmarks, function(bookmark) {
-			if (bookmark.title != platform.Constants.Get(global.Constants.BookmarksBarTitle)) {
-				count++;
-			}
-			
-			if (!!bookmark.children && bookmark.children.length > 0) {
-				if (bookmark.title === platform.Constants.Get(global.Constants.BookmarksBarTitle) && 
-					!global.IncludeBookmarksBar.Get()) {
-					return;
-				}
-				
-				count += countBookmarks(bookmark.children);
-			}
-		});
-		
-		return count;
 	};
 	
 	var exportBookmarks = function() {

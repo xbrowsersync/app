@@ -3,7 +3,8 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 /* ------------------------------------------------------------------------------------
  * Class name:	xBrowserSync.App.Content
- * Description:	
+ * Description:	Chrome content script that accesses page metadata and returns it to the
+ *              xBrowserSync extension.
  * ------------------------------------------------------------------------------------ */
 
 xBrowserSync.App.Content = function() {

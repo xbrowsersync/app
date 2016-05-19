@@ -3,7 +3,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 /* ------------------------------------------------------------------------------------
  * Class name:  xBrowserSync.App.PlatformImplementation 
- * Description: Implements xBrowserSync.App.Platform.
+ * Description: Implements xBrowserSync.App.Platform for Chrome extension.
  * ------------------------------------------------------------------------------------ */
 
 xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, global, utility) {
@@ -41,7 +41,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
  * Public functions
  * ------------------------------------------------------------------------------------ */
 	
-	var bookmarksCreated = function(syncedBookmarks, args) {
+	var bookmarksCreated = function(xBookmarks, args) {
 		var id = args[0];
 		var createInfo = args[1];
 		var createdLocalBookmarkParent, bookmarksBar, possibleParents;
@@ -49,12 +49,12 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		
 		var title = createInfo.title;
 		var url = (!!createInfo.url) ? createInfo.url : null;
-		var newBookmark = new utility.XBookmark(title, url);
+		var newXBookmark = new utility.XBookmark(title, url);
 		
 		// Get created local bookmark's parent
 		getLocalBookmark(createInfo.parentId)
-			.then(function(bookmark) {
-				createdLocalBookmarkParent = bookmark;
+			.then(function(localBookmark) {
+				createdLocalBookmarkParent = localBookmark;
 				
 				// Check if in Bookmarks bar
 				return isLocalBookmarkInBookmarksBar(createdLocalBookmarkParent);
@@ -63,22 +63,22 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 				if (inBookmarksBar) {
 					if (!global.IncludeBookmarksBar.Get()) {
 						// Not syncing Bookmarks bar, return
-						return deferred.resolve(syncedBookmarks);
+						return deferred.resolve(xBookmarks);
 					}
 					
 					// Find synced parent bookmark in Bookmarks bar
-					bookmarksBar = _.where(syncedBookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) })[0];
+					bookmarksBar = _.where(xBookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) })[0];
 					
 					// Create Bookmarks bar if it doesn't exist
 					if (!bookmarksBar) {
 						bookmarksBar = new utility.XBookmark(getConstant(global.Constants.BookmarksBarTitle));
-						syncedBookmarks.push(bookmarksBar);
+						xBookmarks.push(bookmarksBar);
 					}
 					
 					// Find parent in Bookmarks bar
-					possibleParents = findSyncedBookmark([bookmarksBar], createdLocalBookmarkParent.title, createdLocalBookmarkParent.url, createdLocalBookmarkParent.index, function(bookmark) {
+					possibleParents = findXBookmark([bookmarksBar], createdLocalBookmarkParent.title, createdLocalBookmarkParent.url, createdLocalBookmarkParent.index, function(xBookmark) {
 						// Amount of child bookmarks must be equal to index of new bookmark
-						return bookmark.children.length === createInfo.index;
+						return xBookmark.children.length === createInfo.index;
 					});
 					
 					if (!possibleParents || possibleParents.length === 0 || possibleParents.length > 1) {
@@ -87,27 +87,27 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 					}
 					
 					// Add new child bookmark
-					possibleParents[0].children.push(newBookmark);
+					possibleParents[0].children.push(newXBookmark);
 				}
 				
 				// Check if parent is Other bookmarks
 				else if (createInfo.parentId === '2') {
 					// Add new bookmark
-					syncedBookmarks.push(newBookmark);
+					xBookmarks.push(newXBookmark);
 					
 					// Move Bookmarks bar to end of array
-					var bookmarksBarIndex = _.findIndex(syncedBookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) });
+					var bookmarksBarIndex = _.findIndex(xBookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) });
 					if (bookmarksBarIndex >= 0) {
-						bookmarksBar = syncedBookmarks.splice(bookmarksBarIndex, 1);
-						syncedBookmarks.push(bookmarksBar[0]);
+						bookmarksBar = xBookmarks.splice(bookmarksBarIndex, 1);
+						xBookmarks.push(bookmarksBar[0]);
 					}
 				}
 				
 				else {
 					// Find parent in synced bookmarks
-					possibleParents = findSyncedBookmark(syncedBookmarks, createdLocalBookmarkParent.title, createdLocalBookmarkParent.url, createdLocalBookmarkParent.index, function(bookmark) {
+					possibleParents = findXBookmark(xBookmarks, createdLocalBookmarkParent.title, createdLocalBookmarkParent.url, createdLocalBookmarkParent.index, function(xBookmark) {
 						// Amount of child bookmarks must be equal to index of new bookmark
-						return bookmark.children.length === createInfo.index;
+						return xBookmark.children.length === createInfo.index;
 					});
 					
 					if (!possibleParents || possibleParents.length === 0 || possibleParents.length > 1) {
@@ -116,17 +116,17 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 					}
 					
 					// Add new child bookmark
-					possibleParents[0].children.push(newBookmark);
+					possibleParents[0].children.push(newXBookmark);
 				}
 				
-				deferred.resolve(syncedBookmarks);
+				deferred.resolve(xBookmarks);
 			})
 			.catch(deferred.reject);
 		
 		return deferred.promise;
 	};
 	
-	var bookmarksDeleted = function(syncedBookmarks, args) {
+	var bookmarksDeleted = function(xBookmarks, args) {
 		var id = args[0];
 		var removeInfo = args[1];
 		var deletedBookmarkIndex = removeInfo.index;
@@ -135,8 +135,8 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		
 		// Get deleted local bookmark's parent
 		getLocalBookmark(removeInfo.parentId)
-			.then(function(bookmark) {
-				deletedLocalBookmarkParent = bookmark;
+			.then(function(localBookmark) {
+				deletedLocalBookmarkParent = localBookmark;
 				
 				// Check if in Bookmarks bar
 				return isLocalBookmarkInBookmarksBar(deletedLocalBookmarkParent);
@@ -145,11 +145,11 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 				if (inBookmarksBar) {
 					if (!global.IncludeBookmarksBar.Get()) {
 						// Not syncing Bookmarks bar, return
-						return deferred.resolve(syncedBookmarks);
+						return deferred.resolve(xBookmarks);
 					}
 					
 					// Find synced bookmark to update in Bookmarks bar
-					var bookmarksBar = _.where(syncedBookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) })[0];
+					var bookmarksBar = _.where(xBookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) })[0];
 					
 					if (!bookmarksBar || !bookmarksBar.children || bookmarksBar.children.length === 0) {
 						// Bookmark bar doesn't exist in synced bookmarks
@@ -157,12 +157,12 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 					}
 					
 					// Find parent in Bookmarks bar
-					possibleParents = findSyncedBookmark([bookmarksBar], deletedLocalBookmarkParent.title, deletedLocalBookmarkParent.url, deletedLocalBookmarkParent.index, function(bookmark) {
+					possibleParents = findXBookmark([bookmarksBar], deletedLocalBookmarkParent.title, deletedLocalBookmarkParent.url, deletedLocalBookmarkParent.index, function(xBookmark) {
 						// Check that child exists at correct index and has correct properties
-						return !!bookmark.children && 
-								bookmark.children.length >= deletedBookmarkIndex + 1 &&
-								(bookmark.children[deletedBookmarkIndex].title === removeInfo.node.title && 
-								bookmark.children[deletedBookmarkIndex].url === removeInfo.node.url);
+						return !!xBookmark.children && 
+								xBookmark.children.length >= deletedBookmarkIndex + 1 &&
+								(xBookmark.children[deletedBookmarkIndex].title === removeInfo.node.title && 
+								xBookmark.children[deletedBookmarkIndex].url === removeInfo.node.url);
 					});
 					
 					if (!possibleParents || possibleParents.length === 0 || possibleParents.length > 1) {
@@ -177,17 +177,17 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 				// Check if parent is Other bookmarks
 				else if (removeInfo.parentId === '2') {
 					// Remove deleted bookmark from Other bookmarks
-					syncedBookmarks.splice(deletedBookmarkIndex, 1);
+					xBookmarks.splice(deletedBookmarkIndex, 1);
 				}
 				
 				else {
 					// Find parent in synced bookmarks
-					possibleParents = findSyncedBookmark(syncedBookmarks, deletedLocalBookmarkParent.title, deletedLocalBookmarkParent.url, deletedLocalBookmarkParent.index, function(bookmark) {
+					possibleParents = findXBookmark(xBookmarks, deletedLocalBookmarkParent.title, deletedLocalBookmarkParent.url, deletedLocalBookmarkParent.index, function(xBookmark) {
 						// Check that child exists at correct index and has correct properties
-						return !!bookmark.children && 
-							   bookmark.children.length >= deletedBookmarkIndex + 1 &&
-							   (bookmark.children[deletedBookmarkIndex].title === removeInfo.node.title && 
-							   bookmark.children[deletedBookmarkIndex].url === removeInfo.node.url);
+						return !!xBookmark.children && 
+							   xBookmark.children.length >= deletedBookmarkIndex + 1 &&
+							   (xBookmark.children[deletedBookmarkIndex].title === removeInfo.node.title && 
+							   xBookmark.children[deletedBookmarkIndex].url === removeInfo.node.url);
 					});
 					
 					if (!possibleParents || possibleParents.length === 0 || possibleParents.length > 1) {
@@ -199,31 +199,31 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 					possibleParents[0].children.splice(deletedBookmarkIndex, 1);
 				}
 				
-				deferred.resolve(syncedBookmarks);
+				deferred.resolve(xBookmarks);
 			})
 			.catch(deferred.reject);
 		
 		return deferred.promise;
 	};
 	
-	var bookmarksMoved = function(syncedBookmarks, args) {
+	var bookmarksMoved = function(xBookmarks, args) {
 		var id = args[0];
 		var moveInfo = args[1];
 		var deferred = $q.defer();
-		var getSyncedBookmarkToUpdate = $q.defer();
+		var getXBookmarkToUpdate = $q.defer();
 		var movedLocalBookmark, movedLocalBookmarkOldParent, movedLocalBookmarkNewParent, 
-			syncedBookmarkToMove, possibleParents;
+			xBookmarkToMove, possibleParents;
 		
 		// Get moved local bookmark
 		var removeFromOldParentDelegate = getLocalBookmark(id)
-			.then(function(bookmark) {
-				movedLocalBookmark = bookmark;
+			.then(function(localBookmark) {
+				movedLocalBookmark = localBookmark;
 				
 				// Get moved local bookmark's old parent
 				return getLocalBookmark(moveInfo.oldParentId);
 			})
-			.then(function(bookmark) {
-				movedLocalBookmarkOldParent = bookmark;
+			.then(function(localBookmark) {
+				movedLocalBookmarkOldParent = localBookmark;
 				
 				// Check if in Bookmarks bar
 				return isLocalBookmarkInBookmarksBar(movedLocalBookmarkOldParent);
@@ -231,7 +231,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			.then(function(inBookmarksBar) {
 				if (inBookmarksBar) {
 					// Find synced bookmark to update in Bookmarks bar
-					var bookmarksBar = _.where(syncedBookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) })[0];
+					var bookmarksBar = _.where(xBookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) })[0];
 					
 					if (!global.IncludeBookmarksBar.Get()) {
 						// Not syncing Bookmarks bar, don't remove
@@ -248,12 +248,12 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 					}
 					
 					// Find parent in Bookmarks bar
-					possibleParents = findSyncedBookmark([bookmarksBar], movedLocalBookmarkOldParent.title, movedLocalBookmarkOldParent.url, movedLocalBookmarkOldParent.index, function(bookmark) {
+					possibleParents = findXBookmark([bookmarksBar], movedLocalBookmarkOldParent.title, movedLocalBookmarkOldParent.url, movedLocalBookmarkOldParent.index, function(xBookmark) {
 						// Check that child exists at correct index and has correct properties
-						return !!bookmark.children && 
-							   bookmark.children.length >= moveInfo.oldIndex + 1 &&
-							   (bookmark.children[moveInfo.oldIndex].title === movedLocalBookmark.title && 
-							   bookmark.children[moveInfo.oldIndex].url === movedLocalBookmark.url);
+						return !!xBookmark.children && 
+							   xBookmark.children.length >= moveInfo.oldIndex + 1 &&
+							   (xBookmark.children[moveInfo.oldIndex].title === movedLocalBookmark.title && 
+							   xBookmark.children[moveInfo.oldIndex].url === movedLocalBookmark.url);
 					});
 					
 					if (!possibleParents || possibleParents.length === 0 || possibleParents.length > 1) {
@@ -268,17 +268,17 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 				// Check if parent is Other bookmarks
 				else if (moveInfo.oldParentId === '2') {
 					// Remove moved bookmark from Other bookmarks
-					return syncedBookmarks.splice(moveInfo.oldIndex, 1)[0];
+					return xBookmarks.splice(moveInfo.oldIndex, 1)[0];
 				}
 				
 				else {
 					// Find parent in synced bookmarks
-					possibleParents = findSyncedBookmark(syncedBookmarks, movedLocalBookmarkOldParent.title, movedLocalBookmarkOldParent.url, movedLocalBookmarkOldParent.index, function(bookmark) {
+					possibleParents = findXBookmark(xBookmarks, movedLocalBookmarkOldParent.title, movedLocalBookmarkOldParent.url, movedLocalBookmarkOldParent.index, function(xBookmark) {
 						// Check that child exists at correct index and has correct properties
-						return !!bookmark.children && 
-							   bookmark.children.length >= moveInfo.oldIndex + 1 &&
-							   (bookmark.children[moveInfo.oldIndex].title === movedLocalBookmark.title && 
-							   bookmark.children[moveInfo.oldIndex].url === movedLocalBookmark.url);
+						return !!xBookmark.children && 
+							   xBookmark.children.length >= moveInfo.oldIndex + 1 &&
+							   (xBookmark.children[moveInfo.oldIndex].title === movedLocalBookmark.title && 
+							   xBookmark.children[moveInfo.oldIndex].url === movedLocalBookmark.url);
 					});
 					
 					if (!possibleParents || possibleParents.length === 0 || possibleParents.length > 1) {
@@ -293,20 +293,20 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			.catch(deferred.reject);
 		
 		removeFromOldParentDelegate
-			.then(function(bookmark) {
-				if (!bookmark) {
+			.then(function(xBookmark) {
+				if (!xBookmark) {
 					var title = movedLocalBookmark.title;
 					var url = (!!movedLocalBookmark.url) ? movedLocalBookmark.url : null;
-					bookmark = new utility.XBookmark(title, url);
+					xBookmark = new utility.XBookmark(title, url);
 				}
 				
-				syncedBookmarkToMove = bookmark;
+				xBookmarkToMove = xBookmark;
 				
 				// Get moved local bookmark's new parent
 				return getLocalBookmark(moveInfo.parentId);
 			})
-			.then(function(bookmark) {
-				movedLocalBookmarkNewParent = bookmark;
+			.then(function(localBookmark) {
+				movedLocalBookmarkNewParent = localBookmark;
 				
 				// Check if in Bookmarks bar
 				return isLocalBookmarkInBookmarksBar(movedLocalBookmarkNewParent);
@@ -315,22 +315,22 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 				if (inBookmarksBar) {
 					if (!global.IncludeBookmarksBar.Get()) {
 						// Not syncing Bookmarks bar, return
-						return deferred.resolve(syncedBookmarks);
+						return deferred.resolve(xBookmarks);
 					}
 					
 					// Find synced parent bookmark in Bookmarks bar
-					var bookmarksBar = _.where(syncedBookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) })[0];
+					var bookmarksBar = _.where(xBookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) })[0];
 					
 					// Create Bookmarks bar if it doesn't exist
 					if (!bookmarksBar) {
 						bookmarksBar = new utility.XBookmark(getConstant(global.Constants.BookmarksBarTitle));
-						syncedBookmarks.push(bookmarksBar);
+						xBookmarks.push(bookmarksBar);
 					}
 					
 					// Find parent in Bookmarks bar
-					possibleParents = findSyncedBookmark([bookmarksBar], movedLocalBookmarkNewParent.title, movedLocalBookmarkNewParent.url, movedLocalBookmarkNewParent.index, function(bookmark) {
+					possibleParents = findXBookmark([bookmarksBar], movedLocalBookmarkNewParent.title, movedLocalBookmarkNewParent.url, movedLocalBookmarkNewParent.index, function(xBookmark) {
 						// Amount of child bookmarks must be greater than or equal to index of new bookmark
-						return !!bookmark.children && bookmark.children.length >= moveInfo.index;
+						return !!xBookmark.children && xBookmark.children.length >= moveInfo.index;
 					});
 					
 					if (!possibleParents || possibleParents.length === 0 || possibleParents.length > 1) {
@@ -339,20 +339,20 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 					}
 					
 					// Add moved bookmark at new index
-					possibleParents[0].children.splice(moveInfo.index, 0, syncedBookmarkToMove);
+					possibleParents[0].children.splice(moveInfo.index, 0, xBookmarkToMove);
 				}
 				
 				// Check if parent is Other bookmarks
 				else if (moveInfo.parentId === '2') {
 					// Add moved bookmark at new index
-					syncedBookmarks.splice(moveInfo.index, 0, syncedBookmarkToMove);
+					xBookmarks.splice(moveInfo.index, 0, xBookmarkToMove);
 				}
 				
 				else {
 					// Find parent in synced bookmarks
-					possibleParents = findSyncedBookmark(syncedBookmarks, movedLocalBookmarkNewParent.title, movedLocalBookmarkNewParent.url, movedLocalBookmarkNewParent.index, function(bookmark) {
+					possibleParents = findXBookmark(xBookmarks, movedLocalBookmarkNewParent.title, movedLocalBookmarkNewParent.url, movedLocalBookmarkNewParent.index, function(xBookmark) {
 						// Amount of child bookmarks must be greater than or equal to index of new bookmark
-						return !!bookmark.children && bookmark.children.length >= moveInfo.index;
+						return !!xBookmark.children && xBookmark.children.length >= moveInfo.index;
 					});
 					
 					if (!possibleParents || possibleParents.length === 0 || possibleParents.length > 1) {
@@ -361,33 +361,33 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 					}
 					
 					// Add moved bookmark at new index
-					possibleParents[0].children.splice(moveInfo.index, 0, syncedBookmarkToMove);
+					possibleParents[0].children.splice(moveInfo.index, 0, xBookmarkToMove);
 				}
 				
-				deferred.resolve(syncedBookmarks);
+				deferred.resolve(xBookmarks);
 			})
 			.catch(deferred.reject);
 		
 		return deferred.promise;
 	};
 	
-	var bookmarksUpdated = function(syncedBookmarks, args) {
+	var bookmarksUpdated = function(xBookmarks, args) {
 		var id = args[0];
 		var updateInfo = args[1];
 		var updatedLocalBookmark, updatedLocalBookmarkParent, possibleParents;
 		var deferred = $q.defer();
-		var getSyncedBookmarkToUpdate = $q.defer();
+		var getXBookmarkToUpdate = $q.defer();
 		
 		// Get updated local bookmark
 		getLocalBookmark(id)
-			.then(function(bookmark) {
-				updatedLocalBookmark = bookmark;
+			.then(function(localBookmark) {
+				updatedLocalBookmark = localBookmark;
 				
 				// Get updated local bookmark parent
 				return getLocalBookmark(updatedLocalBookmark.parentId);
 			})
-			.then(function(bookmark) {
-				updatedLocalBookmarkParent = bookmark;
+			.then(function(localBookmark) {
+				updatedLocalBookmarkParent = localBookmark;
 				
 				// Check if in Bookmarks bar
 				return isLocalBookmarkInBookmarksBar(updatedLocalBookmark);
@@ -396,11 +396,11 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 				if (inBookmarksBar) {
 					if (!global.IncludeBookmarksBar.Get()) {
 						// Not syncing Bookmarks bar, return
-						return deferred.resolve(syncedBookmarks);
+						return deferred.resolve(xBookmarks);
 					}
 					
 					// Find synced bookmark to update in Bookmarks bar
-					var bookmarksBar = _.where(syncedBookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) })[0];
+					var bookmarksBar = _.where(xBookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) })[0];
 					
 					if (!bookmarksBar || !bookmarksBar.children || bookmarksBar.children.length === 0) {
 						// Bookmark bar doesn't exist in synced bookmarks
@@ -408,12 +408,12 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 					}
 					
 					// Find parent in Bookmarks bar
-					possibleParents = findSyncedBookmark([bookmarksBar], updatedLocalBookmarkParent.title, updatedLocalBookmarkParent.url, updatedLocalBookmarkParent.index, function(bookmark) {
+					possibleParents = findXBookmark([bookmarksBar], updatedLocalBookmarkParent.title, updatedLocalBookmarkParent.url, updatedLocalBookmarkParent.index, function(xBookmark) {
 						// Check that child exists at correct index and has correct properties
-						return !!bookmark.children && 
-							   bookmark.children.length >= updatedLocalBookmark.index + 1 &&
-							   (bookmark.children[updatedLocalBookmark.index].title === updateInfo.title || 
-							   bookmark.children[updatedLocalBookmark.index].url === updateInfo.url);
+						return !!xBookmark.children && 
+							   xBookmark.children.length >= updatedLocalBookmark.index + 1 &&
+							   (xBookmark.children[updatedLocalBookmark.index].title === updateInfo.title || 
+							   xBookmark.children[updatedLocalBookmark.index].url === updateInfo.url);
 					});
 					
 					if (!possibleParents || possibleParents.length === 0 || possibleParents.length > 1) {
@@ -421,22 +421,22 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 						return deferred.reject({ code: global.ErrorCodes.UpdatedBookmarkNotFound });
 					}
 					
-					return getSyncedBookmarkToUpdate.resolve(possibleParents[0].children[updatedLocalBookmark.index]);
+					return getXBookmarkToUpdate.resolve(possibleParents[0].children[updatedLocalBookmark.index]);
 				}
 				else {
 					// Check if parent is Other bookmarks
 					if (updatedLocalBookmark.parentId === '2') {
 						// Find bookmark to update in Other bookmarks
-						return getSyncedBookmarkToUpdate.resolve(syncedBookmarks[updatedLocalBookmark.index]);
+						return getXBookmarkToUpdate.resolve(xBookmarks[updatedLocalBookmark.index]);
 					}
 					
 					// Find parent in synced bookmarks
-					possibleParents = findSyncedBookmark(syncedBookmarks, updatedLocalBookmarkParent.title, updatedLocalBookmarkParent.url, updatedLocalBookmarkParent.index, function(bookmark) {
+					possibleParents = findXBookmark(xBookmarks, updatedLocalBookmarkParent.title, updatedLocalBookmarkParent.url, updatedLocalBookmarkParent.index, function(xBookmark) {
 						// Check that child exists at correct index and has correct properties
-						return !!bookmark.children && 
-							   bookmark.children.length >= updatedLocalBookmark.index + 1 &&
-							   (bookmark.children[updatedLocalBookmark.index].title === updateInfo.title || 
-							   bookmark.children[updatedLocalBookmark.index].url === updateInfo.url);
+						return !!xBookmark.children && 
+							   xBookmark.children.length >= updatedLocalBookmark.index + 1 &&
+							   (xBookmark.children[updatedLocalBookmark.index].title === updateInfo.title || 
+							   xBookmark.children[updatedLocalBookmark.index].url === updateInfo.url);
 					});
 					
 					if (!possibleParents || possibleParents.length === 0 || possibleParents.length > 1) {
@@ -444,18 +444,18 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 						return deferred.reject({ code: global.ErrorCodes.UpdatedBookmarkNotFound });
 					}
 					
-					return getSyncedBookmarkToUpdate.resolve(possibleParents[0].children[updatedLocalBookmark.index]);
+					return getXBookmarkToUpdate.resolve(possibleParents[0].children[updatedLocalBookmark.index]);
 				}
 			})
 			.catch(deferred.reject);
 		
-		getSyncedBookmarkToUpdate.promise
+		getXBookmarkToUpdate.promise
 			.then(function(bookmarkToUpdate) {
 				// Update bookmark
 				bookmarkToUpdate.title = updateInfo.title;
 				bookmarkToUpdate.url = updateInfo.url;
 				
-				return deferred.resolve(syncedBookmarks);
+				return deferred.resolve(xBookmarks);
 			});
 		
 		return deferred.promise;
@@ -549,15 +549,15 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		return asyncChannel;
 	};
 	
-	var getBookmarks = function(bookmarkId) {
-		// If bookmarkId provided, return the tree from this ID
-		if (!!bookmarkId) {
+	var getBookmarks = function(localBookmarkId) {
+		// If bookmark id provided, return the tree from this ID
+		if (!!localBookmarkId) {
 			return $q(function(resolve, reject) {
 				try {
-					chrome.bookmarks.getSubTree(bookmarkId, function(results) {
+					chrome.bookmarks.getSubTree(localBookmarkId, function(results) {
 						if (results[0].children.length > 0) {
-							var bookmarks = getLocalBookmarksRecursive(results);
-							resolve(bookmarks);
+							var xBookmarks = getLocalBookmarksAsXBookmarks(results);
+							resolve(xBookmarks);
 						}
 						else {
 							resolve();
@@ -570,13 +570,13 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			});
 		}
 		
-        // If no bookmarkId provided, add Other bookmarks
+        // If no bookmark id provided, add Other bookmarks
 		return $q(function(resolve, reject) {
 			try {
                 chrome.bookmarks.getSubTree('2', function(results) {
                     if (results[0].children.length > 0) {
-                        var bookmarks = getLocalBookmarksRecursive(results[0].children);
-                        resolve(bookmarks);
+                        var xBookmarks = getLocalBookmarksAsXBookmarks(results[0].children);
+                        resolve(xBookmarks);
                     }
                     else {
                         resolve();
@@ -587,27 +587,27 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
                 return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
             }
 		})
-            .then(function(bookmarks) {
+            .then(function(xBookmarks) {
 				// Add Bookmarks bar
 				return $q(function(resolve, reject) {
 					try {
                         if (!global.IncludeBookmarksBar.Get()) {
-							return resolve(bookmarks);
+							return resolve(xBookmarks);
 						}
 						
 						chrome.bookmarks.getSubTree('1', function(results) {
 							if (results[0].children.length > 0) {
-								if (!bookmarks) {
-									bookmarks = [];
+								if (!xBookmarks) {
+									xBookmarks = [];
 								}
 								
 								var bookmarksBar = new utility.XBookmark(results[0].title);
-								bookmarksBar.children = getLocalBookmarksRecursive(results[0].children);						
-								bookmarks.push(bookmarksBar);
-								resolve(bookmarks);
+								bookmarksBar.children = getLocalBookmarksAsXBookmarks(results[0].children);						
+								xBookmarks.push(bookmarksBar);
+								resolve(xBookmarks);
 							}
 							else {
-								resolve(bookmarks);
+								resolve(xBookmarks);
 							}
 						});
                     }
@@ -691,19 +691,19 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		asyncChannel.postMessage(syncData);
 	};
 	
-	var populateBookmarks = function(bookmarks) {
+	var populateBookmarks = function(xBookmarks) {
 		var populateBookmarksBar, populateOtherBookmarks;
 		
 		// Get bookmarks bar if present
-		var bookmarksBar = _.findWhere(bookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) });
-		var bookmarksExBookmarksBar = _.difference(bookmarks, [ bookmarksBar ]);
+		var bookmarksBar = _.findWhere(xBookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) });
+		var bookmarksExBookmarksBar = _.difference(xBookmarks, [ bookmarksBar ]);
 		
 		// Populate bookmarks bar
 		populateBookmarksBar = $q(function(resolve, reject) {
 			if (global.IncludeBookmarksBar.Get() && !!bookmarksBar && bookmarksBar.children.length > 0) {
 				try {
                     chrome.bookmarks.get('1', function(results) {
-                        createLocalBookmarksRecursive(results[0].id, bookmarksBar.children, resolve, reject);
+                        createLocalBookmarksFromXBookmarks(results[0].id, bookmarksBar.children, resolve, reject);
                     });
                 }
                 catch (err) {
@@ -719,7 +719,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		populateOtherBookmarks = $q(function(resolve, reject) {
 			try {
                 chrome.bookmarks.get('2', function(results) {
-                    createLocalBookmarksRecursive(results[0].id, bookmarksExBookmarksBar, resolve, reject);
+                    createLocalBookmarksFromXBookmarks(results[0].id, bookmarksExBookmarksBar, resolve, reject);
                 });
             }
             catch (err) {
@@ -761,13 +761,13 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		var deferred = $q.defer();
 		
 		try {
-			var bookmark = {
+			var newLocalBookmark = {
 				parentId: parentId,
 				title: title,
 				url: url
 			};
 			
-			chrome.bookmarks.create(bookmark, function(result) {
+			chrome.bookmarks.create(newLocalBookmark, function(result) {
 				deferred.resolve(result);
 			});
 		}
@@ -778,15 +778,15 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		return deferred.promise;
 	};
     
-    var createLocalBookmarksRecursive = function(parentId, bookmarks, success, failed) {
+    var createLocalBookmarksFromXBookmarks = function(parentId, xBookmarks, success, failed) {
 		(function step(i, callback) {
-			if (i < bookmarks.length) {
-				createLocalBookmark(parentId, bookmarks[i].title, bookmarks[i].url).then(
-					function(newBookmark) {
-						var originalBookmark = bookmarks[i];
+			if (i < xBookmarks.length) {
+				createLocalBookmark(parentId, xBookmarks[i].title, xBookmarks[i].url).then(
+					function(newLocalBookmark) {
+						var xBookmark = xBookmarks[i];
 						
-						if (!!originalBookmark.children && originalBookmark.children.length > 0) {
-							createLocalBookmarksRecursive(newBookmark.id, originalBookmark.children,
+						if (!!xBookmark.children && xBookmark.children.length > 0) {
+							createLocalBookmarksFromXBookmarks(newLocalBookmark.id, xBookmark.children,
 								function() {
 									step(i + 1, callback);
 								},
@@ -808,44 +808,44 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		});
 	};
 	
-	var findSyncedBookmark = function(bookmarks, title, url, index, predicate) {
+	var findXBookmark = function(xBookmarks, title, url, index, predicate) {
 		var results = [];
 		
 		// Filter array
-		results = _.union(results, _.filter(bookmarks, function(bookmark) {
+		results = _.union(results, _.filter(xBookmarks, function(xBookmark) {
 			var found = false;
 			
 			// Match based on supplied title, url and index
-			if (bookmark.title === title &&
-				bookmark.url === url &&
-				bookmarks.length >= index + 1 &&
-				bookmarks[index].title === bookmark.title &&
-				bookmarks[index].url === bookmark.url) {
+			if (xBookmark.title === title &&
+				xBookmark.url === url &&
+				xBookmarks.length >= index + 1 &&
+				xBookmarks[index].title === xBookmark.title &&
+				xBookmarks[index].url === xBookmark.url) {
 					found = true;
 				}
 			
 			// If supplied, match based on predicate
 			if (!!found && !!predicate) {
-				found = predicate(bookmark);
+				found = predicate(xBookmark);
 			}
 			
 			return found;
 		}));
 		
 		// Process children
-		var children = _.pluck(bookmarks, 'Children');		
+		var children = _.pluck(xBookmarks, 'children');		
 		for (var i = 0; i < children.length; i++) {
-			results = _.union(results, findSyncedBookmark(children[i], title, url, index, predicate));
+			results = _.union(results, findXBookmark(children[i], title, url, index, predicate));
 		}
 		
 		return results;
 	};
 	
-	var getLocalBookmark = function(bookmarkId) {
+	var getLocalBookmark = function(localBookmarkId) {
 		var deferred = $q.defer();
 		
 		try {
-			chrome.bookmarks.get(bookmarkId, function(results) {
+			chrome.bookmarks.get(localBookmarkId, function(results) {
 				if (!!results[0]) {
 					deferred.resolve(results[0]);
 				}
@@ -861,40 +861,40 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		return deferred.promise;
 	};
 	
-	var getLocalBookmarksRecursive = function(bookmarks) {
-		var retrievedBookmarks = [];
+	var getLocalBookmarksAsXBookmarks = function(localBookmarks) {
+		var xBookmarks = [];
 		
-		for (var i = 0; i < bookmarks.length; i++) {
-			var bookmark = new utility.XBookmark(bookmarks[i].title, bookmarks[i].url);
+		for (var i = 0; i < localBookmarks.length; i++) {
+			var newXBookmark = new utility.XBookmark(localBookmarks[i].title, localBookmarks[i].url);
 			
 			// If this is a folder and has chldren, process them
-			if (!!bookmarks[i].children && bookmarks[i].children.length > 0) {
-				bookmark.children = getLocalBookmarksRecursive(bookmarks[i].children);
+			if (!!localBookmarks[i].children && localBookmarks[i].children.length > 0) {
+				newXBookmark.children = getLocalBookmarksAsXBookmarks(localBookmarks[i].children);
 			}
 			
-			retrievedBookmarks.push(bookmark);
+			xBookmarks.push(newXBookmark);
 		}
 		
-		return retrievedBookmarks;
+		return xBookmarks;
 	};
 	
-	var isLocalBookmarkInBookmarksBar = function(bookmark, deferred) {
+	var isLocalBookmarkInBookmarksBar = function(localBookmark, deferred) {
 		if (!deferred) {
 			deferred = $q.defer();
 		}
 		
-		if (!!bookmark.parentId && (bookmark.id === '1' || bookmark.parentId === '1'))
+		if (!!localBookmark.parentId && (localBookmark.id === '1' || localBookmark.parentId === '1'))
 		{
 			// Bookmark or parent is Bookmarks bar
 			deferred.resolve(true);
 		}
-		else if (!bookmark.parentId || bookmark.parentId === '0' || bookmark.parentId === '2') {
+		else if (!localBookmark.parentId || localBookmark.parentId === '0' || localBookmark.parentId === '2') {
 			// Parent is null, root, or Other bookmarks
 			deferred.resolve(false);
 		}
 		else {
 			// Get parent bookmark and call self when done
-			getLocalBookmark(bookmark.parentId)
+			getLocalBookmark(localBookmark.parentId)
 				.then(function(parent) {
 					isLocalBookmarkInBookmarksBar(parent, deferred);
 				})

@@ -3,7 +3,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 /* ------------------------------------------------------------------------------------
  * Class name:	xBrowserSync.App.HttpInterceptor
- * Description:	Contains functions that call the API service.
+ * Description:	Adds Accept-Version HTTP header to all requests.
  * ------------------------------------------------------------------------------------ */
 
 xBrowserSync.App.HttpInterceptor = function($q, global) {

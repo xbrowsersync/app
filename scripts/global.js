@@ -3,7 +3,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 /* ------------------------------------------------------------------------------------
  * Class name:	xBrowserSync.App.Global
- * Description:	Defines global properties.
+ * Description:	Defines global properties used across all platforms.
  * ------------------------------------------------------------------------------------ */ 
 
 xBrowserSync.App.Global = function(platform) {
@@ -224,7 +224,7 @@ xBrowserSync.App.Global = function(platform) {
             NoDataFound: 10105,
             InvalidData: 10106,
             UpdatedBookmarkNotFound: 10107,
-            SyncedBookmarkNotFound: 10108,
+            XBookmarkNotFound: 10108,
             NoStatus: 10200,
             FailedGetPageMetadata: 10300,
             NotImplemented: 10400

@@ -5,7 +5,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Class name:  xBrowserSync.App.Platform
  * Description:	Defines an interface for platform-specific functionality in order
  *              to separate from common functionality. This interface must be
- *              implemented for all supported browsers, e.g. see 
+ *              implemented for all supported platforms, e.g. see 
  *              platform/chrome/scripts/platformImplementation.js.
  * ------------------------------------------------------------------------------------ */
 

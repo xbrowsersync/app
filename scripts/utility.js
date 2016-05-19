@@ -3,7 +3,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 /* ------------------------------------------------------------------------------------
  * Class name:	xBrowserSync.App.Utility
- * Description:	Defines utility functions.
+ * Description:	Defines utility functions used across all platforms.
  * ------------------------------------------------------------------------------------ */
 
 xBrowserSync.App.Utility = function($q, platform, global) { 
@@ -84,7 +84,7 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_LastChangeNotSynced_Title);
 				errorMessage.message = platform.Constants.Get(global.Constants.Error_LastChangeNotSynced_Message); 
 				break;
-			case global.ErrorCodes.SyncedBookmarkNotFound:
+			case global.ErrorCodes.XBookmarkNotFound:
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_OutOfSync_Title);
 				errorMessage.message = platform.Constants.Get(global.Constants.Error_OutOfSync_Message); 
 				break;

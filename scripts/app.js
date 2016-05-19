@@ -3,7 +3,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 /* ------------------------------------------------------------------------------------
  * Class name:  xBrowserSync.App.Controller 
- * Description: Main controller for the app.
+ * Description: Main angular controller class for the app.
  * ------------------------------------------------------------------------------------ */
 
 xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, api, utility, bookmarks, platformImplementation) { 
@@ -67,6 +67,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
         
         vm.events = {
             backupRestoreForm_Backup_Click: backupRestoreForm_Backup_Click,
+            backupRestoreForm_DisplayRestoreForm_Click: backupRestoreForm_DisplayRestoreForm_Click,
+            backupRestoreForm_DisplayRestoreConfirmation_Click: backupRestoreForm_DisplayRestoreConfirmation_Click,
             backupRestoreForm_Restore_Click: backupRestoreForm_Restore_Click,
             bookmarkForm_BookmarkDescription_Change: bookmarkForm_BookmarkDescription_Change,
             bookmarkForm_BookmarkTags_Change: bookmarkForm_BookmarkTags_Change,
@@ -316,6 +318,27 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
 				vm.alert.display(errMessage.title, errMessage.message, 'danger');
 			});
 	};
+    
+    var backupRestoreForm_DisplayRestoreForm_Click = function() {
+        // Display restore form 
+        vm.view.reset();
+        vm.settings.displayRestoreForm = true;
+        
+        // Focus in restore textarea
+        $timeout(function() {
+            document.querySelector('#restoreForm textarea').select();
+        });
+    };
+    
+    var backupRestoreForm_DisplayRestoreConfirmation_Click = function() {
+        // Display restore confirmation 
+        vm.settings.displayRestoreConfirmation = true;
+        
+        // Focus on confirm button
+        $timeout(function() {
+            document.querySelector('#btn_ConfirmRestore').focus();
+        });
+    };
 	
 	var backupRestoreForm_Restore_Click = function(data) {
 		if (!data) {
@@ -615,6 +638,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                     // Display message
                     vm.view.reset();
                     vm.settings.backupRestoreResult = platform.Constants.Get(global.Constants.RestoreSuccess_Message);
+                    
+                    // Focus on done button
+                    $timeout(function() {
+                        document.querySelector('#btn_RestoreComplete').focus();
+                    });
                 }
                 else {
                     // Display alert
@@ -938,7 +966,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                     return bookmarks.Search({ url: metadata.url })
                         .then(function(result) {
                             if (!result) {
-                                return $q.reject({ code: global.ErrorCodes.SyncedBookmarkNotFound });
+                                return $q.reject({ code: global.ErrorCodes.XBookmarkNotFound });
                             }
                             
                             var bookmark = new utility.XBookmark(
@@ -995,7 +1023,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             // If ID provided, display confirmation panel
             if (!!global.Id.Get()) {
                 vm.sync.showConfirmation = true;
-                $timeout(function(){
+                $timeout(function() {
                     document.querySelector('#btnSync_Confirm').focus();
                 });
             }
