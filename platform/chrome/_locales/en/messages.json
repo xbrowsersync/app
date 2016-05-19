@@ -18,7 +18,7 @@
 		"message": "Show help"
 	},
 	"introduction": {
-		"message": "Enter a secret value that will be used to encrypt your data before it is synced.<br/><br/>If you already have an xBrowserSync ID, enter it here with the corresponding secret and your synced data will be retrieved. Otherwise, your local data will be synced and a new xBrowserSync ID will be created for you.<br/><br/>You can change the xBrowserSync service to sync to in the Settings panel."
+		"message": "Enter a secret word that will be used to encrypt and decrypt your data when syncing.<br/><br/>If you already have an xBrowserSync ID, enter it here with the corresponding secret and your synced data will be retrieved. Otherwise, your local data will be synced and a new xBrowserSync ID will be created for you.<br/><br/>You can change the xBrowserSync service to sync to in the Settings panel."
 	},
 	"button_Settings_Label": {
 		"message": "Settings"
