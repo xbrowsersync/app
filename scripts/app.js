@@ -213,6 +213,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                         vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', true);
                     }
                     
+                    vm.bookmark.tagText = '';
+                    
                     // Focus on title field
                     $timeout(function() {
                         document.querySelector('input[name="bookmarkTitle"]').select();
@@ -434,13 +436,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
     };
     
     var bookmarkForm_BookmarkTags_Change = function() {
-        // Hide alerts
         vm.alert.show = false;
-        
-        // Clear lookahead
         vm.bookmark.tagLookahead = null;
         
-        if (vm.bookmark.tagText.length > 1) {
+        // Display lookahead if text length exceeds minimum
+        if (vm.bookmark.tagText.length > global.LookaheadMinChars) {
             // Get last word of tag text
             var matches = vm.bookmark.tagText.match(/[\w]+$/);
             var lastWord = (!!matches) ? matches[0] : null;
@@ -458,12 +458,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                         
                         // Display lookahead
                         if (!!lookahead && word === lastWord) {
-                            vm.bookmark.tagLookahead = lookahead;                        
-                            $timeout(function() {
-                                var measure = document.querySelector('#bookmarkForm span.measure');
-                                var element = document.querySelector('#bookmarkForm span.lookahead');
-                                element.style.left = measure.offsetLeft + measure.offsetWidth + 'px';
-                            });
+                            vm.bookmark.tagLookahead = lookahead;
                         }
                     });
             }
@@ -768,10 +763,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
     };
     
     var searchForm_SearchText_Change = function() {
-        // Hide alerts
         vm.alert.show = false;
-        
-        // Clear lookahead
         vm.search.lookahead = null;
         
         // Clear timeout
@@ -780,7 +772,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             vm.search.getResultsTimeout = null;
         }
         
-        if (vm.search.query.length > 2) {
+        // Display lookahead if query length exceed minimum
+        if (vm.search.query.length > global.LookaheadMinChars) {
             // Get last word of search query
             var matches = vm.search.query.match(/[\w]+$/);
             vm.search.lastWord = (!!matches) ? matches[0] : null;
@@ -796,20 +789,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                         var lookahead = results[0];
                         var word =  results[1];
                         
-                        // Display lookahead
                         if (!!lookahead && word === vm.search.lastWord) {
-                            vm.search.lookahead = lookahead;                        
-                            $timeout(function() {
-                                var measure = document.querySelector('.search-form span.measure');
-                                var element = document.querySelector('.search-form span.lookahead');
-                                element.style.left = measure.offsetLeft + measure.offsetWidth + 'px';
-                            });
+                            vm.search.lookahead = lookahead;
                         }
                     });
             }
             
+            // Execute search after timeout
             vm.search.getResultsTimeout = $timeout(function() {
-                // Search bookmarks
                 searchBookmarks();
             }, 1000);
         }

@@ -1,5 +1,5 @@
 .vscode/
 node_modules/
 build/
-styles.css
+css/styles.css
 *.log

@@ -319,6 +319,7 @@ xBrowserSync.App.Global = function(platform) {
                     value);
             }
         },
+        LookaheadMinChars: 1,
         RetrySyncTimeout: 100,
         ServiceStatus: {
             Online: 1,

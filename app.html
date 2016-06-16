@@ -110,8 +110,10 @@
         <div id="main-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.main">
             <div class="header-panel clearfix">
                 <div class="search-form">
-                    <span class="lookahead" ng-show="vm.search.lookahead">{{ vm.search.lookahead }}</span>
-                    <span class="measure">{{ vm.search.query }}</span>
+                    <div class="lookahead-container">
+                        <span class="measure">{{ vm.search.query }}</span>
+                        <span class="lookahead" ng-show="vm.search.lookahead">{{ vm.search.lookahead }}</span>
+                    </div>
                     <label for="txtSearch"><i class="fa fa-search"></i></label>
                     <input class="form-control" name="txtSearch" maxlength="200" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.Field_Search_Description) }}" ng-model="vm.search.query" 
                            ng-change="vm.events.searchForm_SearchText_Change()" ng-keydown="vm.events.searchForm_SearchText_KeyDown($event)" tabindex="1" />
@@ -182,8 +184,10 @@
                     <div class="form-group">
                         <label for="bookmarkTags">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Tags_Label) }}</label>
                         <div class="input-group">
-                            <span class="lookahead" ng-show="vm.bookmark.tagLookahead">{{ vm.bookmark.tagLookahead }}</span>
-                            <span class="measure">{{ vm.bookmark.tagText }}</span>
+                            <div class="lookahead-container">
+                                <span class="measure">{{ vm.bookmark.tagText }}</span>
+                                <span class="lookahead" ng-show="vm.bookmark.tagLookahead">{{ vm.bookmark.tagLookahead }}</span>
+                            </div>
                             <input type="text" class="form-control" name="bookmarkTags" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Tags_Placeholder) }}" 
                                    ng-model="vm.bookmark.tagText" ng-change="vm.events.bookmarkForm_BookmarkTags_Change()" ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" maxlength="33" tabindex="4">
                             <span class="input-group-btn">
@@ -193,7 +197,7 @@
                             </span>
                         </div>
                         <div class="tags clearfix">
-                            <span class="label label-default" ng-repeat="tag in vm.bookmark.current.tags track by $index">
+                            <span class="label label-default" ng-repeat="tag in vm.bookmark.current.tags track by $index" ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
                                 {{ tag }}
                                 <button type="button" class="btn btn-icon" title="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_RemoveTag_Label) }}" ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
                                     <i class="fa fa-times" aria-hidden="true"></i>

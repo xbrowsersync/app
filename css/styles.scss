@@ -297,16 +297,23 @@ body {
         font-weight: bold;
     }
     
-    .lookahead {
+    .lookahead-container {
         position: absolute;
-        color: $colour-link;
-        opacity: 0.35;
         z-index: 10;
-    }
-    
-    .measure {
-        @extend .lookahead;
-        visibility: hidden;
+        
+        .lookahead {            
+            float: left;
+            color: $colour-link;
+            opacity: 0.35;
+            
+            /* TODO: convert to mixin */
+            -webkit-user-select: none;
+        }
+        
+        .measure {
+            @extend .lookahead;
+            visibility: hidden;
+        }
     }
     
     .overflow-ellipses {
@@ -437,15 +444,13 @@ body {
                 height: 33px;
             }
             
-            .lookahead {
+            .lookahead-container {
                 left: 36px;
-                font-size: 16px;
-                line-height: 33px;
-            }
-            
-            .measure {
-                @extend .lookahead;
-                visibility: hidden;
+                
+                .lookahead {
+                    font-size: 16px;
+                    line-height: 33px;
+                }
             }
         }
     }
@@ -588,17 +593,15 @@ body {
         z-index: 20;
     }
     
-    .lookahead {
-        font-size: 12px;
-        line-height: 22px;
-        height: 34px;
-        padding: 6px 0;
+    .lookahead-container {
         left: 13px;
-    }
-    
-    .measure {
-        @extend .lookahead;
-        visibility: hidden;
+        
+        .lookahead {
+            font-size: 12px;
+            line-height: 22px;
+            height: 34px;
+            padding: 6px 0;
+        }
     }
     
     .tags {
@@ -618,12 +621,20 @@ body {
             border: 1px solid $colour-link;
             line-height: 12px;
             
+            &:hover {
+                cursor: pointer;
+                
+                button i {
+                    opacity: 1;
+                }
+            }
+            
             button {
                 font-size: 10px;
                 line-height: 18px;
                 color: $colour-link;
                 
-                &:hover i, &:focus i {
+                &:hover i {
                     opacity: 1;
                 }
                 
