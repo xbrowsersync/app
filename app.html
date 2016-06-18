@@ -88,7 +88,7 @@
                     <h4>{{ vm.platform.Constants.Get(vm.global.Constants.ConfirmReplaceBookmarks_Title) }}</h4>
                     <p>{{ vm.platform.Constants.Get(vm.global.Constants.ConfirmReplaceBookmarks_Message) }}</p>
                     <div class="buttons text-center">
-                        <button id="btnSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.queueSync()" tabindex="4">
+                        <button id="btnSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncForm_confirmSync_Click()" tabindex="4">
                             {{ vm.platform.Constants.Get(vm.global.Constants.Button_ReplaceBookmarks_Confirm) }}
                         </button>
                         <button id="btnSync_Cancel" type="button" class="btn btn-default" ng-click="vm.view.reset()" tabindex="5">
@@ -98,10 +98,8 @@
                 </div>
                 
                 <div id="syncButtonPanel" class="text-center animate-fade" ng-hide="vm.sync.showConfirmation">
-                    <button id="btnSync" type="submit" class="btn" ng-click="vm.events.syncForm_Sync_Click()" 
-                            ng-mouseenter="vm.domElements.btnSync_hover = true" ng-mouseout="vm.domElements.btnSync_hover = false" 
-                            ng-class="{ 'btn-default': !vm.sync.enabled(), 'btn-success': vm.sync.enabled() }" tabindex="3">
-                        {{ vm.domElements.btnSync() }}
+                    <button id="btnSync" type="submit" class="btn btn-default" ng-click="vm.events.syncForm_enableSync_Click()" tabindex="3">
+                        {{ vm.platform.Constants.Get(vm.global.Constants.Button_Sync_Enable_Label) }}
                     </button>
                 </div>
             </form>
@@ -261,7 +259,7 @@
                         <button class="btn btn-default" ng-click="vm.view.change(vm.view.views.login)" ng-hide="vm.sync.enabled()" tabindex="2">
                             {{ vm.platform.Constants.Get(vm.global.Constants.Button_Sync_Enable_Label) }}
                         </button>
-                        <button class="btn btn-default" ng-click="vm.events.syncForm_Sync_Click(true); vm.view.change(vm.view.views.login)" 
+                        <button class="btn btn-default" ng-click="vm.events.syncForm_disableSync_Click();" 
                                 ng-show="vm.sync.enabled()" tabindex="3">
                             {{ vm.platform.Constants.Get(vm.global.Constants.Button_Sync_Disable_Label) }}
                         </button>

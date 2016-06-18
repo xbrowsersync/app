@@ -50,19 +50,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                 }
                 
                 return platform.Constants.Get(global.Constants.Button_RestoreData_Ready_Label);
-            },
-            btnSync: function() {
-                if (vm.sync.enabled()) {
-                    if (vm.domElements.btnSync_hover) {
-                        return platform.Constants.Get(global.Constants.Button_Sync_Disable_Label);
-                    }
-                    
-                    return platform.Constants.Get(global.Constants.Button_Sync_Enabled_Label);
-                }
-                
-                return platform.Constants.Get(global.Constants.Button_Sync_Enable_Label);
-            },
-            btnSync_hover: false
+            }
         };
         
         vm.events = {
@@ -85,7 +73,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             searchForm_SearchText_KeyDown: searchForm_SearchText_KeyDown,
             searchForm_SearchResult_KeyDown: searchForm_SearchResult_KeyDown,
             searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
-            syncForm_Sync_Click: syncForm_Sync_Click,
+            syncForm_confirmSync_Click: startSyncing,
+            syncForm_disableSync_Click: syncForm_disableSync_Click,
+            syncForm_enableSync_Click: syncForm_enableSync_Click,
             toggleBookmark_Click: toggleBookmark_Click,
             updateServiceUrlForm_Display_Click: updateServiceUrlForm_Display_Click,
             updateServiceUrlForm_Update_Click: updateServiceUrlForm_Update_Click
@@ -180,65 +170,60 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
 				// Reset view
                 vm.view.reset();
                 
-                if (view === vm.view.views.main) {
-					if (!!global.SyncEnabled.Get()) {
-                        // Focus on search bar
+                switch (view) {
+                    case vm.view.views.main:
                         $timeout(function() {
                             document.querySelector('input[name=txtSearch]').select();
                         }, 200);
-                    }
-                    else {
-                        view = vm.view.views.login;
-                    }
-                    
-                    // Display introduction
-                    if (vm.hints.show()) {
+                        break;
+                    case vm.view.views.bookmark:
+                        // Reset
+                        if (vm.bookmarkForm) {
+                            vm.bookmarkForm.$setPristine();
+                            vm.bookmarkForm.$setUntouched();
+                            vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', true);
+                        }
+                        
+                        vm.bookmark.tagText = '';
+                        
+                        // Focus on title field
                         $timeout(function() {
-                            vm.hints.introduction = true;
-                        }, 500);
-                    }
-				}
-                
-                if (view === vm.view.views.login) {
-                    $timeout(function() {
-                        document.querySelector('input[name=txtClientSecret]').select();
-                    });
-                }
-                
-                if (view === vm.view.views.bookmark) {
-                    // Reset
-                    if (vm.bookmarkForm) {
-                        vm.bookmarkForm.$setPristine();
-                        vm.bookmarkForm.$setUntouched();
-                        vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', true);
-                    }
-                    
-                    vm.bookmark.tagText = '';
-                    
-                    // Focus on title field
-                    $timeout(function() {
-                        document.querySelector('input[name="bookmarkTitle"]').select();
-                    }, 100);
-                }
-                
-                if (view === vm.view.views.settings) {
-                    // Set visible panel to sync panel
-                    vm.settings.visiblePanel = vm.settings.panels.sync;
-                    
-                    // Get service status
-                    api.CheckServiceStatus()
-                        .then(function(response) {
-                            vm.settings.service.status = response.status;
-                            vm.settings.service.statusMessage = response.message;
-                        })
-                        .catch(function(err) {
-                            vm.settings.service.status = global.ServiceStatus.Offline;
+                            document.querySelector('input[name="bookmarkTitle"]').select();
+                        }, 100);
+                        break;
+                    case vm.view.views.settings:
+                        // Set visible panel to sync panel
+                        vm.settings.visiblePanel = vm.settings.panels.sync;
+                        
+                        // Get service status
+                        api.CheckServiceStatus()
+                            .then(function(response) {
+                                vm.settings.service.status = response.status;
+                                vm.settings.service.statusMessage = response.message;
+                            })
+                            .catch(function(err) {
+                                vm.settings.service.status = global.ServiceStatus.Offline;
+                            });
+                        
+                        // If sync is enabled, generate a QR code 
+                        if (global.SyncEnabled.Get()) {
+                            generateQRCode();
+                        }
+                        break;
+                    case vm.view.views.login:
+                        /* falls through */
+                    default:
+                        $timeout(function() {
+                            document.querySelector('input[name=txtClientSecret]').select();
                         });
-                    
-                    // If sync is enabled, generate a QR code 
-                    if (global.SyncEnabled.Get()) {
-                        generateQRCode();
-                    }
+
+                        // Display introductory help
+                        if (vm.hints.show()) {
+                            $timeout(function() {
+                                vm.hints.introduction = true;
+                            }, 500);
+                        }
+                        break;
                 }
 				
 				vm.view.current = view;
@@ -368,13 +353,17 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
     };
     
     var bookmarkForm_CreateBookmark_Click = function() {
-        // Return if the form is not valid
-		if (!vm.bookmarkForm.$valid) {
+        if (!vm.bookmarkForm.$valid) {
 			document.querySelector('#bookmarkForm .ng-invalid').select();
             return;
 		}
+
+        // Add tags if tag text present
+        if (!!vm.bookmark.tagText && vm.bookmark.tagText.length > 0) {
+            bookmarkForm_CreateTags_Click();
+        }
         
-        // Add the bookmark
+        // Add the new bookmark and sync
         platform.Sync(vm.sync.asyncChannel, {
             type: global.SyncType.Both,
             changeInfo: { 
@@ -383,22 +372,17 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             }
         });
         
-        // Set bookmark active status
         vm.bookmark.active = true;
-        
-        // Display the main view
         vm.view.change(vm.view.views.main);
     };
     
     var bookmarkForm_CreateTags_Click = function() {
         // Clean and sort tags and add them to tag array
-        var newTags = getTagArrayFromText(vm.bookmark.tagText);
-        
+        var newTags = getTagArrayFromText(vm.bookmark.tagText);        
         vm.bookmark.current.tags = _.sortBy(_.union(newTags, vm.bookmark.current.tags), function(tag) {
             return tag;
         });
         
-        // Clear tag field and return focus
         vm.bookmark.tagText = '';
         document.querySelector('input[name="bookmarkTags"]').focus();
     };
@@ -447,7 +431,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             
             // Get tags lookahead
             if (!!lastWord) {
-                bookmarks.Lookahead(lastWord, null, true)
+                bookmarks.GetLookahead(lastWord, null, true)
                     .then(function(results) {
                         if (!results) {
                             return;
@@ -458,6 +442,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                         
                         // Display lookahead
                         if (!!lookahead && word === lastWord) {
+                            // Trim word from lookahead
+                            lookahead = (!!lookahead) ? lookahead.replace(new RegExp('^' + word), '') : null;
                             vm.bookmark.tagLookahead = lookahead;
                         }
                     });
@@ -471,7 +457,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             case ($event.keyCode === 13):
                 // Add new tags
                 $event.preventDefault();
-                vm.events.bookmarkForm_CreateTags_Click();            
+                bookmarkForm_CreateTags_Click();
                 break;
             // If user pressed tab or right arrow key and lookahead present
             case (($event.keyCode === 9 || $event.keyCode === 39) && !!vm.bookmark.tagLookahead):
@@ -595,69 +581,53 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
         var errMessage;
         
         switch(response.command) {
+            // After syncing bookmarks
             case global.Commands.SyncBookmarks:
                 if (response.success) {
-                    // Set bookmark status
                     setBookmarkStatus()
                         .catch(function(err) {
-                            // Display alert
                             var errMessage = utility.GetErrorMessageFromException(err);
                             vm.alert.display(errMessage.title, errMessage.message, 'danger');
                         });
-                    
-                    // Display the main view
-                    vm.view.change(vm.view.views.main);
                 }
                 else {
-                    // Display alert
                     errMessage = utility.GetErrorMessageFromException(response.error);
                     vm.alert.display(errMessage.title, errMessage.message, 'danger');
                 }
                 
-                // Hide loading animation
                 vm.working = false;
-                
-                // Hide sync confirmation
-                vm.sync.showConfirmation = false;
                 break;
+            // After restoring bookmarks
             case global.Commands.RestoreBookmarks:
                 if (response.success) {
-                    // Set bookmark status
                     setBookmarkStatus()
                         .catch(function(err) {
-                            // Display alert
                             var errMessage = utility.GetErrorMessageFromException(err);
                             vm.alert.display(errMessage.title, errMessage.message, 'danger');
                         });
                     
-                    // Display message
                     vm.view.reset();
                     vm.settings.backupRestoreResult = platform.Constants.Get(global.Constants.RestoreSuccess_Message);
                     
-                    // Focus on done button
                     $timeout(function() {
                         document.querySelector('#btn_RestoreComplete').focus();
                     });
                 }
                 else {
-                    // Display alert
                     errMessage = utility.GetErrorMessageFromException(response.error);
                     vm.alert.display(errMessage.title, errMessage.message, 'danger');
                 }
                 
-                // Hide loading animation
                 vm.working = false;
                 break;
             case global.Commands.NoCallback:
                 /* falls through */
             default:
                 if (!response.success) {
-                    // Display alert
                     errMessage = utility.GetErrorMessageFromException(response.error);
                     vm.alert.display(errMessage.title, errMessage.message, 'danger');
                 }
                 
-                // Hide loading animation
                 vm.working = false;
                 break;
         }
@@ -687,25 +657,23 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             });
         });
         
-        // Enable event listeners
         global.DisableEventListeners.Set(false);
         
-        // Set bookmark status
         setBookmarkStatus()
             .catch(function(err) {
-				// Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
 				vm.alert.display(errMessage.title, errMessage.message, 'danger');
 			});
         
-        // Display the main view
-        vm.view.change(vm.view.views.main);
+        if (!!global.SyncEnabled.Get()) {
+            vm.view.change(vm.view.views.main);
+        }
+        else {
+            vm.view.change(vm.view.views.login);
+        }
     };
 	
 	var queueSync = function() {
-        // Show loading animation
-        vm.working = true;
-        
         var syncData = {};
         syncData.type = (!global.Id.Get()) ? global.SyncType.Push : global.SyncType.Pull; 
         
@@ -745,18 +713,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
         bookmarks.Search({ keywords: vm.search.query })
             .then(function(results) {
                 vm.search.results = results;
-                
-                if (!!results && results.length > 0) {
-                    $timeout(function() {
-                        // Focus on first search result
-                        document.querySelector('.search-results-panel .list-group').firstElementChild.firstElementChild.focus();
-                    });
-                }
             })
             .catch(function(err) {
                 vm.search.results = null;
-                
-                // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
             });
@@ -780,7 +739,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             
             // Get lookahead
             if (!!vm.search.lastWord) {
-                bookmarks.Lookahead(vm.search.lastWord, vm.search.results)
+                bookmarks.GetLookahead(vm.search.lastWord, vm.search.results)
                     .then(function(results) {
                         if (!results) {
                             return;
@@ -790,6 +749,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                         var word =  results[1];
                         
                         if (!!lookahead && word === vm.search.lastWord) {
+                            // Trim word from lookahead
+                            lookahead = (!!lookahead) ? lookahead.replace(new RegExp('^' + word), '') : null;
                             vm.search.lookahead = lookahead;
                         }
                     });
@@ -798,7 +759,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             // Execute search after timeout
             vm.search.getResultsTimeout = $timeout(function() {
                 searchBookmarks();
-            }, 1000);
+            }, 250);
         }
         else {
             vm.search.results = null;
@@ -840,22 +801,26 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
         
         switch (true) {
             // Up arrow
-            case ($event.keyCode === 40):
-                $event.preventDefault();
-            
-                if (!!$event.target.parentElement.nextElementSibling) {
-                    // Focus on next result
-                    $event.target.parentElement.nextElementSibling.firstElementChild.focus();
-                }
-                
-                break;
-            // Down arrow
             case ($event.keyCode === 38):
                 $event.preventDefault();
             
                 if (!!$event.target.parentElement.previousElementSibling) {
                     // Focus on previous result
                     $event.target.parentElement.previousElementSibling.firstElementChild.focus();
+                }
+                else {
+                    // Focus on search box
+                    document.querySelector('.search-form input').focus();
+                }
+                
+                break;
+            // Down arrow
+            case ($event.keyCode === 40):
+                $event.preventDefault();
+            
+                if (!!$event.target.parentElement.nextElementSibling) {
+                    // Focus on next result
+                    $event.target.parentElement.nextElementSibling.firstElementChild.focus();
                 }
                 
                 break;
@@ -988,38 +953,36 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                 }
             });
     };
+
+    var startSyncing = function() {
+        vm.sync.showConfirmation = false;
+        vm.view.change(vm.view.views.main);
+        queueSync();
+    }
+
+    var syncForm_disableSync_Click = function() {
+        global.SyncEnabled.Set(false);
+        vm.view.change(vm.view.views.login);
+    }
     
-    var syncForm_Sync_Click = function() {
-		// Return if the form is not valid
+    var syncForm_enableSync_Click = function() {
 		if (!vm.syncForm.txtClientSecret.$valid) {
 			document.querySelector('[name=txtClientSecret]').select();
             return;
 		}
-		
-		// Exit if a sync is currently in progress
-        if (global.IsSyncing.Get()) {
-            return;
-        }
         
-        // Toggle sync
-        if (global.SyncEnabled.Get()) {
-            // Set syncing state
-		    global.SyncEnabled.Set(false);
+        // If ID provided, display confirmation panel
+        if (!!global.Id.Get()) {
+            vm.sync.showConfirmation = true;
+            $timeout(function() {
+                document.querySelector('#btnSync_Confirm').focus();
+            });
         }
         else {
-            // If ID provided, display confirmation panel
-            if (!!global.Id.Get()) {
-                vm.sync.showConfirmation = true;
-                $timeout(function() {
-                    document.querySelector('#btnSync_Confirm').focus();
-                });
-            }
-            else {
-                // Otherwise start sync
-				queueSync();
-            }
+            // Otherwise start syncing
+            startSyncing();
         }
-	};
+	}
     
     var toggleBookmark_Click = function() {
         // Display bookmark panel
