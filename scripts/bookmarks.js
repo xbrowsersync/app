@@ -478,7 +478,6 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
             .then(currentSync.deferred.resolve)
             .catch(currentSync.deferred.reject)
             .finally(function () {
-                global.SyncEnabled.Set(true);
                 global.IsSyncing.Set(false);
                 global.DisableEventListeners.Set(false);
             });

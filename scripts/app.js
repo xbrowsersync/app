@@ -585,6 +585,16 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             // After syncing bookmarks
             case global.Commands.SyncBookmarks:
                 if (response.success) {
+                    // Enable sync
+                    if (!global.SyncEnabled.Get()) {
+                        global.SyncEnabled.Set(true);
+                    }
+                    
+                    // If initial sync, switch to main view 
+                    if (vm.view.current === vm.view.views.login) {
+                    	vm.view.change(vm.view.views.main);
+                    }
+
                     setBookmarkStatus()
                         .catch(function(err) {
                             var errMessage = utility.GetErrorMessageFromException(err);
@@ -958,7 +968,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
 
     var startSyncing = function() {
         vm.sync.showConfirmation = false;
-        vm.view.change(vm.view.views.main);
+        vm.working = true;
         queueSync();
     }
 
