@@ -299,7 +299,6 @@ body {
     
     .lookahead-container {
         position: absolute;
-        z-index: 10;
         
         .lookahead {            
             float: left;
@@ -438,6 +437,9 @@ body {
             }
             
             input {
+                position: relative;
+                z-index: 50;
+                background: transparent;
                 padding-left: 35px;
                 border-radius: 20px;
                 font-size: 16px;
@@ -578,6 +580,7 @@ body {
     }
     
     input[name="bookmarkTags"] {
+        background: transparent;
         text-transform: lowercase;
         border-radius: 4px 0 0 4px;
     }

@@ -422,12 +422,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
     var bookmarkForm_BookmarkTags_Change = function() {
         vm.alert.show = false;
         vm.bookmark.tagLookahead = null;
+        vm.bookmark.tagTextMeasure = vm.bookmark.tagText.replace(/\s/g, '&nbsp;');
         
         // Display lookahead if text length exceeds minimum
         if (vm.bookmark.tagText.length > global.LookaheadMinChars) {
             // Get last word of tag text
-            var matches = vm.bookmark.tagText.match(/[\w]+$/);
-            var lastWord = (!!matches) ? matches[0] : null;
+            var matches = vm.bookmark.tagText.match(/[\w\s]+$/);
+            var lastWord = (!!matches) ? matches[0].trimLeft() : null;
             
             // Get tags lookahead
             if (!!lastWord) {
@@ -444,7 +445,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                         if (!!lookahead && word === lastWord) {
                             // Trim word from lookahead
                             lookahead = (!!lookahead) ? lookahead.replace(new RegExp('^' + word), '') : null;
-                            vm.bookmark.tagLookahead = lookahead;
+                            vm.bookmark.tagLookahead = lookahead.replace(/\s/g, '&nbsp;');
                         }
                     });
             }
@@ -463,7 +464,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             case (($event.keyCode === 9 || $event.keyCode === 39) && !!vm.bookmark.tagLookahead):
                 // Add lookahead to search query
                 $event.preventDefault();
-                vm.bookmark.tagText += vm.bookmark.tagLookahead;
+                vm.bookmark.tagText += vm.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
                 bookmarkForm_BookmarkTags_Change();
                 break;
         }
@@ -724,6 +725,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
     var searchForm_SearchText_Change = function() {
         vm.alert.show = false;
         vm.search.lookahead = null;
+        vm.search.queryMeasure = vm.search.query.replace(/\s/g, '&nbsp;');
         
         // Clear timeout
         if (!!vm.search.getResultsTimeout) {
