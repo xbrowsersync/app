@@ -396,7 +396,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 var bookmarkWords = [];
                 
                 if (!tagsOnly) {
-                    // Add all words in bookmark to array
+                    // Add all words from title
                     bookmarkWords = bookmarkWords.concat(_.compact(bookmark.title.replace("'", '').toLowerCase().split(/\W/)));
                     
                     // Split tags into individual words
@@ -410,6 +410,12 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                             .value();
 
                         bookmarkWords = bookmarkWords.concat(tags);
+                    }
+
+                    // Add url host
+                    var hostMatch = bookmark.url.match(/^(https?:\/\/)?([^\/]+)/);
+                    if (!!hostMatch && hostMatch.length > 2) {
+                        bookmarkWords.push(hostMatch[2]);
                     }
                 }
                 else {

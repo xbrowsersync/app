@@ -736,7 +736,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
         // Display lookahead if query length exceed minimum
         if (vm.search.query.length > global.LookaheadMinChars) {
             // Get last word of search query
-            var matches = vm.search.query.match(/[\w]+$/);
+            var matches = vm.search.query.match(/[\S]+$/);
             vm.search.lastWord = (!!matches) ? matches[0] : null;
             
             // Get lookahead
