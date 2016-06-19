@@ -721,7 +721,17 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
 	};
     
     var searchBookmarks = function() {
-        bookmarks.Search({ keywords: vm.search.query })
+        var queryData;
+        
+        var urlRegex = /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
+        if (!!vm.search.query.trim().match(urlRegex)) {
+            queryData = { url: vm.search.query.trim() };
+        }
+        else {
+            queryData = { keywords: vm.search.query.trim() };
+        }
+        
+        bookmarks.Search(queryData)
             .then(function(results) {
                 vm.search.results = results;
             })
@@ -934,10 +944,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                             }
                             
                             var bookmark = new utility.XBookmark(
-                                result.title, 
-                                result.url, 
-                                result.description,
-                                result.tags);
+                                result[0].title, 
+                                result[0].url, 
+                                result[0].description,
+                                result[0].tags);
                             
                             vm.bookmark.current = bookmark;
                             vm.bookmark.current.originalUrl = bookmark.url;

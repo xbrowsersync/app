@@ -158,7 +158,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         
         // Get keywords array from query
         keywords = (!!query.keywords) ? 
-            _.compact(query.keywords.trim().replace("'", '').toLowerCase().split(/\W/)) : null;
+            _.compact(query.keywords.trim().replace("'", '').toLowerCase().split(/\s/)) : null;
         
         // Get url from query
         url = (!!query.url) ? query.url : null;
@@ -169,7 +169,10 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 switch (true) {
                     case (!!url):
                         // Get search results from url
-                        results = searchBookmarksByUrl(bookmarks, url);
+                        results = searchBookmarksByUrl(bookmarks, url) || [];
+                        if (!Array.isArray(results)) {
+                            results = [results];
+                        }
                         break;
                     case (!!keywords):
                         // Get search results from keywords and sort
@@ -365,7 +368,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 return false;
             }
             
-            return bookmark.url === url;
+            return bookmark.url.indexOf(url) >= 0;
         });
         
         if (!!result) {
