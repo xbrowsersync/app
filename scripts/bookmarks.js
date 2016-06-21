@@ -323,9 +323,9 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 var bookmarkWords = [];
                 
                 // Add all words in bookmark to array
-                bookmarkWords = bookmarkWords.concat(_.compact(bookmark.title.replace("'", '').toLowerCase().split(/\W/)));
-                bookmarkWords = bookmarkWords.concat(_.compact(bookmark.url.replace("'", '').toLowerCase().split(/\W/)));
-                if (!!bookmark.description) { bookmarkWords = bookmarkWords.concat(_.compact(bookmark.description.toLowerCase().split(/\W/))); }
+                bookmarkWords = bookmarkWords.concat(_.compact(bookmark.title.replace("'", '').toLowerCase().split(/\s/)));
+                bookmarkWords = bookmarkWords.concat(_.compact(bookmark.url.replace("'", '').toLowerCase().split(/\s/)));
+                if (!!bookmark.description) { bookmarkWords = bookmarkWords.concat(_.compact(bookmark.description.toLowerCase().split(/\s/))); }
                 if (!!bookmark.tags) { bookmarkWords = bookmarkWords.concat(_.compact(bookmark.tags)); }
                 
                 // Get match scores for each keyword against bookmark words
@@ -400,7 +400,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 
                 if (!tagsOnly) {
                     // Add all words from title
-                    bookmarkWords = bookmarkWords.concat(_.compact(bookmark.title.replace("'", '').toLowerCase().split(/\W/)));
+                    bookmarkWords = bookmarkWords.concat(_.compact(bookmark.title.replace("'", '').toLowerCase().split(/\s/)));
                     
                     // Split tags into individual words
                     if (!!bookmark.tags) { 
