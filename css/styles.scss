@@ -623,27 +623,24 @@ body {
             color: $colour-link;
             border: 1px solid $colour-link;
             line-height: 12px;
+
+            &:focus {
+                outline: none;
+            }
             
             &:hover {
                 cursor: pointer;
                 
-                button i {
+                i {
                     opacity: 1;
                 }
             }
             
-            button {
+            i {
                 font-size: 10px;
                 line-height: 18px;
                 color: $colour-link;
-                
-                &:hover i {
-                    opacity: 1;
-                }
-                
-                i {
-                    opacity: 0.5;
-                }
+                opacity: 0.5;
             }
         }
     }

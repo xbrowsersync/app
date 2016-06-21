@@ -195,13 +195,11 @@
                             </span>
                         </div>
                         <div class="tags clearfix">
-                            <span class="label label-default" ng-repeat="tag in vm.bookmark.current.tags track by $index" ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
+                            <button class="label label-default" ng-repeat="tag in vm.bookmark.current.tags track by $index" ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
                                 {{ tag }}
-                                <button type="button" class="btn btn-icon" title="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_RemoveTag_Label) }}" ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                    <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_RemoveTag_Label) }}</span>
-                                </button>
-                            </span>
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                                <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_RemoveTag_Label) }}</span>
+                            </button>
                         </div>
                     </div>
                     <div class="text-center">
