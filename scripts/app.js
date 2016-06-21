@@ -355,33 +355,35 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
     var bookmarkForm_BookmarkTags_Change = function() {
         vm.alert.show = false;
         vm.bookmark.tagLookahead = null;
-        vm.bookmark.tagTextMeasure = vm.bookmark.tagText.replace(/\s/g, '&nbsp;');
-        
-        // Display lookahead if text length exceeds minimum
-        if (vm.bookmark.tagText.length > global.LookaheadMinChars) {
-            // Get last word of tag text
-            var matches = vm.bookmark.tagText.match(/[\w\s]+$/);
-            var lastWord = (!!matches) ? matches[0].trimLeft() : null;
-            
+
+        if (!vm.bookmark.tagText.trim()) {
+            return;
+        }
+
+        // Get last word of tag text
+        var matches = vm.bookmark.tagText.match(/[^,]+$/);
+        var lastWord = (!!matches) ? matches[0].trimLeft() : null;
+
+        // Display lookahead if word length exceeds minimum
+        if (!!lastWord && lastWord.length > global.LookaheadMinChars) {
             // Get tags lookahead
-            if (!!lastWord) {
-                bookmarks.GetLookahead(lastWord, null, true)
-                    .then(function(results) {
-                        if (!results) {
-                            return;
-                        }
-                        
-                        var lookahead = results[0];
-                        var word =  results[1];
-                        
-                        // Display lookahead
-                        if (!!lookahead && word === lastWord) {
-                            // Trim word from lookahead
-                            lookahead = (!!lookahead) ? lookahead.replace(new RegExp('^' + word), '') : null;
-                            vm.bookmark.tagLookahead = lookahead.replace(/\s/g, '&nbsp;');
-                        }
-                    });
-            }
+            bookmarks.GetLookahead(lastWord, null, true)
+                .then(function(results) {
+                    if (!results) {
+                        return;
+                    }
+                    
+                    var lookahead = results[0];
+                    var word =  results[1];
+                    
+                    // Display lookahead
+                    if (!!lookahead && word === lastWord) {
+                        // Trim word from lookahead
+                        lookahead = (!!lookahead) ? lookahead.substring(word.length) : null;
+                        vm.bookmark.tagLookahead = lookahead.replace(/\s/g, '&nbsp;');
+                        vm.bookmark.tagTextMeasure = vm.bookmark.tagText.replace(/\s/g, '&nbsp;');
+                    }
+                });
         }
     };
     
@@ -568,7 +570,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
         }
         
         // Conver to lowercase and split tags into array
-        var tags = tagText.toLowerCase().replace(/[^(\w|\s|,|\-)]/g, '').split(',');
+        var tags = tagText.toLowerCase().replace(/['"]/g, '').split(',');
         
         // Clean and sort tags
         tags = _.chain(tags)
@@ -751,7 +753,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
     var searchForm_SearchText_Change = function() {
         vm.alert.show = false;
         vm.search.lookahead = null;
-        vm.search.queryMeasure = vm.search.query.replace(/\s/g, '&nbsp;');
         
         // Clear timeout
         if (!!vm.search.getResultsTimeout) {
@@ -759,38 +760,40 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             vm.search.getResultsTimeout = null;
         }
         
-        // Display lookahead if query length exceed minimum
-        if (vm.search.query.length > global.LookaheadMinChars) {
-            // Get last word of search query
-            var matches = vm.search.query.match(/[\S]+$/);
-            vm.search.lastWord = (!!matches) ? matches[0] : null;
-            
+        // No query, clear results
+        if (!vm.search.query.trim()) {
+            vm.search.results = null;
+            return;
+        }
+
+        // Get last word of search query
+        var matches = vm.search.query.match(/[\S]+$/);
+        var lastWord = (!!matches) ? matches[0] : null;
+        
+        // Display lookahead if word length exceed minimum
+        if (!!lastWord && lastWord.length > global.LookaheadMinChars) {
             // Get lookahead
-            if (!!vm.search.lastWord) {
-                bookmarks.GetLookahead(vm.search.lastWord, vm.search.results)
-                    .then(function(results) {
-                        if (!results) {
-                            return;
-                        }
-                        
-                        var lookahead = results[0];
-                        var word =  results[1];
-                        
-                        if (!!lookahead && word === vm.search.lastWord) {
-                            // Trim word from lookahead
-                            lookahead = (!!lookahead) ? lookahead.replace(new RegExp('^' + word), '') : null;
-                            vm.search.lookahead = lookahead;
-                        }
-                    });
-            }
+            bookmarks.GetLookahead(lastWord, vm.search.results)
+                .then(function(results) {
+                    if (!results) {
+                        return;
+                    }
+                    
+                    var lookahead = results[0];
+                    var word =  results[1];
+                    
+                    if (!!lookahead && word === lastWord) {
+                        // Trim word from lookahead
+                        lookahead = (!!lookahead) ? lookahead.substring(word.length) : null;
+                        vm.search.lookahead = lookahead.replace(/\s/g, '&nbsp;');
+                        vm.search.queryMeasure = vm.search.query.replace(/\s/g, '&nbsp;');
+                    }
+                });
             
             // Execute search after timeout
             vm.search.getResultsTimeout = $timeout(function() {
                 searchBookmarks();
             }, 250);
-        }
-        else {
-            vm.search.results = null;
         }
     };
     
