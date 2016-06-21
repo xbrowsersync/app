@@ -158,7 +158,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         
         // Get keywords array from query
         keywords = (!!query.keywords) ? 
-            _.compact(query.keywords.trim().replace("'", '').toLowerCase().split(/\s/)) : null;
+            _.compact(query.keywords.trim().replace("'", '').replace(/\W$/, '').toLowerCase().split(/\s/)) : null;
         
         // Get url from query
         url = (!!query.url) ? query.url : null;
@@ -392,7 +392,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         }
         
         _.each(bookmarksToSearch, function(bookmark) {
-            if (!!bookmark.children && bookmark.children.length > 0) {
+            if (!bookmark.url) {
                 results = searchBookmarksForLookaheads(bookmark.children, word, tagsOnly, results);
             }
             else {

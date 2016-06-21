@@ -352,73 +352,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
         }
     };
     
-    var bookmarkForm_CreateBookmark_Click = function() {
-        if (!vm.bookmarkForm.$valid) {
-			document.querySelector('#bookmarkForm .ng-invalid').select();
-            return;
-		}
-
-        // Add tags if tag text present
-        if (!!vm.bookmark.tagText && vm.bookmark.tagText.length > 0) {
-            bookmarkForm_CreateTags_Click();
-        }
-        
-        // Add the new bookmark and sync
-        platform.Sync(vm.sync.asyncChannel, {
-            type: global.SyncType.Both,
-            changeInfo: { 
-                type: global.UpdateType.Create, 
-                bookmark: vm.bookmark.current 
-            }
-        });
-        
-        vm.bookmark.active = true;
-        vm.view.change(vm.view.views.main);
-    };
-    
-    var bookmarkForm_CreateTags_Click = function() {
-        // Clean and sort tags and add them to tag array
-        var newTags = getTagArrayFromText(vm.bookmark.tagText);        
-        vm.bookmark.current.tags = _.sortBy(_.union(newTags, vm.bookmark.current.tags), function(tag) {
-            return tag;
-        });
-        
-        vm.bookmark.tagText = '';
-        document.querySelector('input[name="bookmarkTags"]').focus();
-    };
-    
-    var bookmarkForm_DeleteBookmark_Click = function() {
-        // Get current page url
-		platform.CurrentUrl.Get()
-            .then(function(currentUrl) {
-                if (!currentUrl) {
-                    return $q.reject({ code: global.ErrorCodes.FailedGetPageMetadata });
-                }
-                
-                // Delete the bookmark
-                platform.Sync(vm.sync.asyncChannel, {
-                    type: global.SyncType.Both,
-                    changeInfo: { 
-                        type: global.UpdateType.Delete, 
-                        url: vm.bookmark.current.originalUrl
-                    }
-                });
-                
-                // Set bookmark active status if current bookmark is current page 
-                if (currentUrl === vm.bookmark.current.originalUrl) {
-                    vm.bookmark.active = false;
-                }
-                
-                // Display the main view
-                vm.view.change(vm.view.views.main);
-            })
-            .catch(function(err) {
-                // Display alert
-                var errMessage = utility.GetErrorMessageFromException(err);
-                vm.alert.display(errMessage.title, errMessage.message, 'danger');
-            });
-    };
-    
     var bookmarkForm_BookmarkTags_Change = function() {
         vm.alert.show = false;
         vm.bookmark.tagLookahead = null;
@@ -487,6 +420,74 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
         }
     };
     
+    var bookmarkForm_CreateBookmark_Click = function() {
+        if (!vm.bookmarkForm.$valid) {
+			document.querySelector('#bookmarkForm .ng-invalid').select();
+            return;
+		}
+
+        // Add tags if tag text present
+        if (!!vm.bookmark.tagText && vm.bookmark.tagText.length > 0) {
+            bookmarkForm_CreateTags_Click();
+        }
+        
+        // Add the new bookmark and sync
+        platform.Sync(vm.sync.asyncChannel, {
+            type: global.SyncType.Both,
+            changeInfo: { 
+                type: global.UpdateType.Create, 
+                bookmark: vm.bookmark.current 
+            }
+        });
+        
+        vm.bookmark.active = true;
+        vm.view.change(vm.view.views.main);
+    };
+    
+    var bookmarkForm_CreateTags_Click = function() {
+        // Clean and sort tags and add them to tag array
+        var newTags = getTagArrayFromText(vm.bookmark.tagText);        
+        vm.bookmark.current.tags = _.sortBy(_.union(newTags, vm.bookmark.current.tags), function(tag) {
+            return tag;
+        });
+        
+        vm.bookmark.tagText = '';
+        vm.bookmark.tagLookahead = '';
+        document.querySelector('input[name="bookmarkTags"]').focus();
+    };
+    
+    var bookmarkForm_DeleteBookmark_Click = function() {
+        // Get current page url
+		platform.CurrentUrl.Get()
+            .then(function(currentUrl) {
+                if (!currentUrl) {
+                    return $q.reject({ code: global.ErrorCodes.FailedGetPageMetadata });
+                }
+                
+                // Delete the bookmark
+                platform.Sync(vm.sync.asyncChannel, {
+                    type: global.SyncType.Both,
+                    changeInfo: { 
+                        type: global.UpdateType.Delete, 
+                        url: vm.bookmark.current.originalUrl
+                    }
+                });
+                
+                // Set bookmark active status if current bookmark is current page 
+                if (currentUrl === vm.bookmark.current.originalUrl) {
+                    vm.bookmark.active = false;
+                }
+                
+                // Display the main view
+                vm.view.change(vm.view.views.main);
+            })
+            .catch(function(err) {
+                // Display alert
+                var errMessage = utility.GetErrorMessageFromException(err);
+                vm.alert.display(errMessage.title, errMessage.message, 'danger');
+            });
+    };
+    
     var bookmarkForm_RemoveTag_Click = function(tag) {
         vm.bookmark.current.tags = _.without(vm.bookmark.current.tags, tag);
         document.querySelector('#bookmarkForm input[name="bookmarkTags"]').focus();
@@ -498,6 +499,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
 			document.querySelector('#bookmarkForm .ng-invalid').select();
             return;
 		}
+
+        // Add tags if tag text present
+        if (!!vm.bookmark.tagText && vm.bookmark.tagText.length > 0) {
+            bookmarkForm_CreateTags_Click();
+        }
         
         // Get current page url
 		platform.CurrentUrl.Get()
@@ -723,7 +729,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
     var searchBookmarks = function() {
         var queryData;
         
-        var urlRegex = /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
+        var urlRegex = /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
         if (!!vm.search.query.trim().match(urlRegex)) {
             queryData = { url: vm.search.query.trim() };
         }
