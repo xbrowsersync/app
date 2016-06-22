@@ -24,9 +24,7 @@ Replace [platform] with the name of the desired platform to build (corresponding
 
 # Bugs
 
-If you experience an issue in the course of using any of the client apps, please report it to:
-
-> [https://github.com/xBrowserSync/App/issues/]
+If you find a bug in the course of using any of the client apps, please report it [here](https://github.com/xBrowserSync/App/issues/).
 
 # Translation
 
