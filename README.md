@@ -2,7 +2,7 @@
 
 [xBrowserSync](http://xbrowsersync.org/) is a tool for syncing your bookmarks and other browser information to a secure and anonymous cloud service. For full details, see http://xbrowsersync.org.
 
-This repository contains the source code for the client applications (browser extensions and apps) that are used for syncing to an xBrowserSync service. You can get the official releases of the xBrowserSync clients from the various app stores, but if you'd like to build the apps yourself you can do so here.
+This repository contains the source code for the client applications (browser extensions and mobile apps) that are used for syncing to an xBrowserSync service. You can get the official releases of the xBrowserSync clients from the various app stores, but if you'd like to build the apps yourself you can do so here.
 
 # Prerequisites
 
