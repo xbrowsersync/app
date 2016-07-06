@@ -655,7 +655,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
                 metadata.url = activeTab.url;
 				
 				// Exit if this is a chrome url
-				if (activeTab.url.toLowerCase().startsWith('chrome://')) {
+				if (!!activeTab.url && activeTab.url.toLowerCase().startsWith('chrome://')) {
 					return deferred.resolve(metadata);
 				}
                 
@@ -700,7 +700,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
                 var activeTab = tabs[0];
 				
 				// Open url in current tab if new
-				if (activeTab.url === 'chrome://newtab/') {
+				if (!!activeTab.url && activeTab.url.startsWith('chrome://newtab')) {
 					chrome.tabs.update(activeTab.id, { url: url }, function() {
 						window.close();
 					});
