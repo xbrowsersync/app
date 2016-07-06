@@ -135,7 +135,7 @@
                 </div>
                 <div class="list-group" ng-show="vm.search.results.length > 0">
                     <div class="list-group-item" ng-repeat="result in vm.search.results track by result.id">
-                        <a href="{{ result.url }}" target="_blank"  tabindex="{{ $index + 1 }}"
+                        <a href="{{ result.url }}" ng-click="vm.events.searchForm_SearchResult_Click($event)"  tabindex="{{ $index + 1 }}"
                            ng-keydown="vm.events.searchForm_SearchResult_KeyDown($event)">
                             <h4 class="list-group-item-heading">{{ result.title }}</h4>
                             <div class="list-group-item-text">
@@ -276,7 +276,7 @@
                         <p>{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Message) }}</p>
                         <div class="text-center">
                             <div class="status-url-panel">
-                                <a class="status-url overflow-ellipses" ng-href="{{ vm.settings.service.url() }}" target="_blank" tabindex="4">{{ vm.settings.service.url() }}</a>
+                                <a class="status-url overflow-ellipses" ng-href="{{ vm.settings.service.url() }}" ng-click="vm.events.searchForm_SearchResult_Click($event)" tabindex="4">{{ vm.settings.service.url() }}</a>
                                 <i class="fa fa-check-circle text-success" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Online) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.Online">
                                     <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Online) }}</span>
                                 </i>

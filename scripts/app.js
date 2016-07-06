@@ -71,6 +71,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             queueSync: queueSync,
             searchForm_SearchText_Change: searchForm_SearchText_Change,
             searchForm_SearchText_KeyDown: searchForm_SearchText_KeyDown,
+            searchForm_SearchResult_Click: searchForm_SearchResult_Click,
             searchForm_SearchResult_KeyDown: searchForm_SearchResult_KeyDown,
             searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
             syncForm_confirmSync_Click: startSyncing,
@@ -825,6 +826,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             searchForm_SearchText_Change();
             return;
         }
+    };
+    
+    var searchForm_SearchResult_Click = function($event) {
+        platform.OpenUrl($event.currentTarget.href);
+        return false;
     };
     
     var searchForm_SearchResult_KeyDown = function($event) {

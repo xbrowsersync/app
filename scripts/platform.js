@@ -49,6 +49,7 @@ xBrowserSync.App.Platform = function($q) {
 			Get: notImplemented,
 			Set: notImplemented
 		},
+		OpenUrl: notImplemented, 
         PageMetadata: {
             Get: notImplemented
         },

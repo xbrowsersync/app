@@ -29,6 +29,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
         platform.Interface.Refresh = refreshInterface;
 		platform.LocalStorage.Get = getFromLocalStorage;
 		platform.LocalStorage.Set = setInLocalStorage;
+		platform.OpenUrl = openUrl;
 		platform.PageMetadata.Get = getPageMetadata;
 		platform.Sync = sync;
         
@@ -689,6 +690,25 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 	var sync = function(asyncChannel, syncData, command) {
 		syncData.command = (!!command) ? command : global.Commands.SyncBookmarks;
 		asyncChannel.postMessage(syncData);
+	};
+
+	var openUrl = function(url) {
+		// Get current tab
+        chrome.tabs.query(
+            { currentWindow: true, active: true },
+            function(tabs) {
+                var activeTab = tabs[0];
+				
+				// Open url in current tab if new
+				if (activeTab.url === 'chrome://newtab/') {
+					chrome.tabs.update(activeTab.id, { url: url }, function() {
+						window.close();
+					});
+				}
+				else {
+					chrome.tabs.create({ 'url': url });
+				}
+        });
 	};
 	
 	var populateBookmarks = function(xBookmarks) {
