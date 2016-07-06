@@ -362,28 +362,26 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         return results;
     };
     
-    var searchBookmarksByUrl = function(bookmarksToSearch, url) {
-        var result = _.find(bookmarksToSearch, function(bookmark) {
+    var searchBookmarksByUrl = function(bookmarksToSearch, url, results) {
+        if (!results) {
+            results = [];
+        }
+        
+        results = results.concat(_.filter(bookmarksToSearch, function(bookmark) {
             if (!bookmark.url) {
                 return false;
             }
             
             return bookmark.url.indexOf(url) >= 0;
-        });
-        
-        if (!!result) {
-            return result;
-        }
+        }));
         
         for (var i = 0; i < bookmarksToSearch.length; i++) {
             if (!!bookmarksToSearch[i].children && bookmarksToSearch[i].children.length > 0) {
-                result = searchBookmarksByUrl(bookmarksToSearch[i].children, url);
-                
-                if (!!result) {
-                    return result;
-                }
+                results = searchBookmarksByUrl(bookmarksToSearch[i].children, url, results);
             }
         }
+
+        return results;
     };
     
     var searchBookmarksForLookaheads = function(bookmarksToSearch, word, tagsOnly, results) {

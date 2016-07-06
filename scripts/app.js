@@ -947,16 +947,20 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                 if (vm.bookmark.active) {
                     // Get existing bookmark info
                     return bookmarks.Search({ url: metadata.url })
-                        .then(function(result) {
+                        .then(function(results) {
+                            var result = _.find(results, function(bookmark) { 
+                                return bookmark.url.toLowerCase() === metadata.url.toLowerCase(); 
+                            });
+                            
                             if (!result) {
                                 return $q.reject({ code: global.ErrorCodes.XBookmarkNotFound });
                             }
                             
                             var bookmark = new utility.XBookmark(
-                                result[0].title, 
-                                result[0].url, 
-                                result[0].description,
-                                result[0].tags);
+                                result.title, 
+                                result.url, 
+                                result.description,
+                                result.tags);
                             
                             vm.bookmark.current = bookmark;
                             vm.bookmark.current.originalUrl = bookmark.url;
