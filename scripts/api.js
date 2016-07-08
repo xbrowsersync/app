@@ -99,8 +99,8 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 		
 		var secretHash = utility.Hash(global.ClientSecret.Get());
 		
-		return $http.get(global.URL.Host.Get() + global.URL.Bookmarks + '/' + 
-			             global.Id.Get() + global.URL.LastUpdated + '/' + secretHash)
+		return $http.get(global.URL.Host.Get() + global.URL.Bookmarks + 
+			global.URL.LastUpdated + global.Id.Get() + '/' + secretHash)
             .then(function(response) {
 				if (!response || !response.data) {
 					return response;
@@ -122,11 +122,11 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 		var secretHash = utility.Hash(global.ClientSecret.Get());
 		
 		var data = { 
-			bookmarks: encryptedBookmarks,
-			secretHash: secretHash
+			bookmarks: encryptedBookmarks
 		};
 		
-		return $http.post(global.URL.Host.Get() + global.URL.Bookmarks + '/' + global.Id.Get(),
+		return $http.post(global.URL.Host.Get() + global.URL.Bookmarks + '/' + 
+			global.Id.Get() + '/' + secretHash,
 			JSON.stringify(data))
             .then(function(response) {
 				if (!!response && !!response.data) {

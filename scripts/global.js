@@ -416,7 +416,7 @@ xBrowserSync.App.Global = function(platform) {
                 }
             },
             Bookmarks: '/bookmarks',
-            LastUpdated: '/lastupdated',
+            LastUpdated: '/lastUpdated',
             Status: '/status'
         }
     };
