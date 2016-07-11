@@ -100,7 +100,7 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 		var secretHash = utility.Hash(global.ClientSecret.Get());
 		
 		return $http.get(global.URL.Host.Get() + global.URL.Bookmarks + 
-			global.URL.LastUpdated + global.Id.Get() + '/' + secretHash)
+			global.URL.LastUpdated + '/' + global.Id.Get() + '/' + secretHash)
             .then(function(response) {
 				if (!response || !response.data) {
 					return response;
