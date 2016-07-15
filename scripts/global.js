@@ -73,7 +73,6 @@ xBrowserSync.App.Global = function(platform) {
 			Button_Settings_Label: 'button_Settings_Label',
 			Button_AddBookmark_Label: 'button_AddBookmark_Label',
 			Button_EditBookmark_Label: 'button_EditBookmark_Label',
-            ShowHelp: 'showHelp',
             Introduction: 'introduction',
 			Field_ClientSecret_Label: 'field_ClientSecret_Label',
 			Field_ClientSecret_Description: 'field_ClientSecret_Description',
@@ -325,31 +324,6 @@ xBrowserSync.App.Global = function(platform) {
             Online: 1,
             Offline: 2,
             NoNewSyncs: 3
-        },
-        ShowHints: {
-            Get: function() {
-                var value;
-                
-                value = platform.LocalStorage.Get(
-                    'xBrowserSync-showHints');
-                
-                if (!value) {
-                    return true;
-                }
-                else {
-                    if (value === 'true') {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-            },
-            Set: function(value) {
-                platform.LocalStorage.Set(
-                    'xBrowserSync-showHints', 
-                    value);
-            }
         },
         SyncEnabled: {
             Get: function() {

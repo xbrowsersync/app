@@ -14,11 +14,8 @@
 	"tooltipWorking": {
 		"message": "syncing..."
 	},
-	"showHelp": {
-		"message": "Show help"
-	},
 	"introduction": {
-		"message": "Enter a secret word that will be used to encrypt and decrypt your data when syncing.<br/><br/>If you already have an xBrowserSync ID, enter it here with the corresponding secret and your synced data will be retrieved. Otherwise, your local data will be synced and a new xBrowserSync ID will be created for you.<br/><br/>You can change the xBrowserSync service to sync to in the Settings panel."
+		"message": "Welcome to xBrowserSync! To start syncing, enter a secret word or phrase that will be used to encrypt and decrypt your browser data.<br/><br/>If you already have an xBrowserSync ID, enter it here with the corresponding secret and your synced data will be retrieved. Otherwise, your local data will be synced and you'll receive a new xBrowserSync ID.<br/><br/>You can change the xBrowserSync service to sync to in the Settings panel."
 	},
 	"button_Settings_Label": {
 		"message": "Settings"
@@ -33,7 +30,7 @@
 		"message": "Secret"
 	},
 	"field_ClientSecret_Description": {
-		"message": "Your secret word"
+		"message": "Your secret word or phrase"
 	},
 	"field_Id_Label": {
 		"message": "ID"
@@ -42,7 +39,7 @@
 		"message": "Your xBrowserSync ID (optional)"
 	},
 	"button_Sync_Enable_Label": {
-		"message": "Enable Sync"
+		"message": "Sync"
 	},
 	"button_Sync_Disable_Label": {
 		"message": "Disable Sync"
@@ -90,7 +87,7 @@
 		"message":  "Update Service URL"
 	},
 	"updateServiceUrlForm_Description" : {
-		"message":  "Enter the URL of an alternative xBrowserSync service. When you change the service URL, any current sync will be disabled and you'll then need to create a new sync, unless you already have a corresponding xBrowserSync ID for that service."
+		"message":  "Enter the URL of an alternative xBrowserSync service to sync to that service.<br/><br/>Any current sync will be disabled and you'll then need to create a new sync, unless you already have an xBrowserSync ID from that service."
 	},
 	"updateServiceUrlForm_Placeholder" : {
 		"message":  "xBrowserSync service URL"
@@ -105,7 +102,7 @@
 		"message":  "Backup or restore data"
 	},
 	"backupRestore_Message" : {
-		"message":  "You can backup your xBrowserSync data here in order to restore your data when necessary.<br/><br/>If sync is not enabled, backup and restore will affect local browser data only."
+		"message":  "Backup your xBrowserSync data or restore from a previous backup.<br/><br/>If sync is not enabled, backup and restore will apply to local browser data only."
 	},
 	"button_Backup_Label" : {
 		"message":  "Backup"
@@ -147,7 +144,7 @@
 		"message":  "Sync"
 	},
 	"syncPanel_Message" : {
-		"message":  "Start syncing with xBrowserSync now! If you already have an xBrowserSync ID you can use it to sync your existing data.<br/><br/>Optionally you can disable syncing changes to the Bookmarks bar, handy if you want to sync your bookmarks to multiple browsers but prefer them to display different links in the Bookmarks bar."
+		"message":  "Start syncing with xBrowserSync now! If you already have an xBrowserSync ID you can use it to sync your existing data.<br/><br/>Disable syncing changes to the Bookmarks bar if you want to sync your bookmarks to multiple browsers but prefer their Bookmarks bars to display different links."
 	},
 	"syncPanel_Id_Label" : {
 		"message":  "Your xBrowserSync ID"

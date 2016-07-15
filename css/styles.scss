@@ -254,31 +254,6 @@ body {
         }
     }
     
-    .hint {
-        i {
-            font-size: 30px;
-            float: right;
-            margin: 0 0 10px 10px;
-            color: $colour-link-icon;
-        }
-        
-        .checkbox {
-            margin-bottom: 0;
-            
-            label {
-                font-size: 10px;
-                color: $colour-link;
-                min-height: initial;
-                
-                input {
-                    margin: -1px 0 0 -15px;
-                }
-            }
-        }
-        
-        
-    }
-    
     .input-group {
         margin-bottom: 15px;
     
@@ -382,9 +357,33 @@ body {
 
 #login-panel {
     padding: 0 10px 15px;
+
+    & > p {
+        margin-bottom: 15px;
+    }
     
-    input {
-        
+    .secret-form-group {
+        position: relative;
+
+        input {
+            position: relative;
+            z-index: 20;
+            background: transparent;
+        }
+
+        .progress {
+            position: absolute;
+            top: 0;
+            z-index: 10;
+            box-shadow: none;
+            height: 34px;
+            width: 100%;
+            opacity: 0.25;
+        }
+
+        .progress-bar-default {
+            background-color: transparent;
+        }
     }
     
     .confirm-replace-bookmarks {
@@ -698,10 +697,6 @@ body {
     }
     
     .sync-panel {
-        p {
-            margin-bottom: 5px;
-        }
-        
         .id-panel {
             label {
                 font-weight: normal;
@@ -751,7 +746,17 @@ body {
                 color: $colour-link;
                 margin-bottom: 0;
                 max-height: 43px;
-                overflow-y: auto
+                overflow-y: auto;
+                font-style: italic;
+                quotes: '\201c' '\201d';
+
+                &:before {
+                    content: open-quote;
+                }
+
+                &:after {
+                    content: close-quote;
+                }
             }
             
             button {

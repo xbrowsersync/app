@@ -20,11 +20,11 @@
         </div>
         
         <div class="alert animate-fade" role="alert" ng-show="vm.alert.show" 
-                ng-class="{
-                'alert-success': vm.alert.type === 'success',
-                'info': vm.alert.type === 'info',
-                'warning': vm.alert.type === 'warning',
-                'alert-danger': vm.alert.type === 'danger' }">
+             ng-class="{
+             'alert-success': vm.alert.type === 'success',
+             'info': vm.alert.type === 'info',
+             'warning': vm.alert.type === 'warning',
+             'alert-danger': vm.alert.type === 'danger' }">
             <h4 ng-bind-html="vm.alert.title"></h4>
             <p ng-bind-html="vm.alert.message"></p>
         </div>
@@ -42,25 +42,26 @@
                 </h1>
             </div>
 
-            <div class="hint well well-sm animate-reveal" ng-show="vm.hints.show() && vm.hints.introduction">
-                 <i class="fa fa-info-circle"></i>
-                 <span ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.Introduction)"></span>
-                 <div class="checkbox text-right">
-                    <label>
-                        <input type="checkbox" ng-checked="vm.hints.show()" ng-click="vm.hints.toggle()"> 
-                        {{ vm.platform.Constants.Get(vm.global.Constants.ShowHelp) }}
-                    </label>
-                </div>
-            </div>
+            <p ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.Introduction)"></p>
 
             <form name="vm.syncForm" novalidate>
                 <label class="sr-only" for="txtClientSecret">{{ vm.platform.Constants.Get(vm.global.Constants.Field_ClientSecret_Label) }}</label>
-                <div class="form-group" ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtClientSecret.$invalid]">
-                    <input ng-model="vm.settings.secret" type="password" class="form-control" name="txtClientSecret" 
-                           ng-model-options="{ getterSetter: true }" ng-disabled="vm.sync.enabled()" maxlength="16"
+                <div class="form-group secret-form-group" ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtClientSecret.$invalid]">
+                    <input ng-model="vm.settings.secret" type="password" class="form-control" name="txtClientSecret" ng-change="vm.events.syncForm_ClientSecret_Change()"
+                           ng-model-options="{ getterSetter: true }" ng-disabled="vm.sync.enabled()" maxlength="150"
                            placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.Field_ClientSecret_Description) }}" tabindex="1" required />
+                    <div class="progress" ng-class="{ 
+                        'progress-bar-danger': !!vm.settings.secret() > 0 && vm.settings.secretComplexity.complexity === 0, 
+                        'progress-bar-default': !vm.settings.secret() || vm.settings.secretComplexity.complexity > 0 }">
+                        <div class="progress-bar" role="progressbar" style="width: {{ vm.settings.secretComplexity.complexity }}%" ng-class="{
+                            'progress-bar-danger': vm.settings.secretComplexity.complexity < 25,
+                            'progress-bar-warning': vm.settings.secretComplexity.complexity < 50,
+                            'progress-bar-success': vm.settings.secretComplexity.complexity <= 100
+                            }">
+                        </div>
+                    </div>
                 </div>
-                
+
                 <label class="sr-only" for="txtId">{{ vm.platform.Constants.Get(vm.global.Constants.Field_Id_Label) }}</label>
                 <div class="form-group">
                     <input name="txtId" ng-model="vm.settings.id" class="form-control" ng-model-options="{ getterSetter: true }"
@@ -283,9 +284,8 @@
                     <div class="update-service-url animate-fade" ng-show="vm.settings.service.displayUpdateServiceUrlForm">
                         <form name="vm.updateServiceUrlForm" novalidate>
                             <div>
-                                <p>{{ vm.platform.Constants.Get(vm.global.Constants.UpdateServiceUrlForm_Description) }}</p>
-                                <div class="input-group" ng-class="{ 'has-error': vm.updateServiceUrlForm.txtServiceUrl.$invalid }">
-                                    <div class="input-group-addon">URL</div>
+                                <p ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.UpdateServiceUrlForm_Description)"></p>
+                                <div class="form-group" ng-class="{ 'has-error': vm.updateServiceUrlForm.txtServiceUrl.$invalid }">
                                     <input name="txtServiceUrl" class="form-control" ng-model="vm.settings.service.newServiceUrl"
                                         placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.UpdateServiceUrlForm_Placeholder) }}" maxlength="128" tabindex="6" required />
                                 </div>
@@ -374,6 +374,7 @@
     <script src="scripts/angular/angular.min.js"></script>
     <script src="scripts/angular-sanitize/angular-sanitize.min.js"></script>
     <script src="scripts/angular-animate/angular-animate.min.js"></script>
+    <script src="scripts/angular-complexify/build/angular-complexify.min.js"></script>
     <script src="scripts/underscore/underscore-min.js"></script>
     <script src="scripts/crypto-js/crypto-js.js"></script>
     <script src="scripts/qrcode.js"></script>

@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Main angular controller class for the app.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, api, utility, bookmarks, platformImplementation) { 
+xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platform, global, api, utility, bookmarks, platformImplementation) { 
 	'use strict';    
     var vm;
     
@@ -74,33 +74,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             searchForm_SearchResult_Click: searchForm_SearchResult_Click,
             searchForm_SearchResult_KeyDown: searchForm_SearchResult_KeyDown,
             searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
+            syncForm_ClientSecret_Change: syncForm_ClientSecret_Change,
             syncForm_confirmSync_Click: startSyncing,
             syncForm_disableSync_Click: syncForm_disableSync_Click,
             syncForm_enableSync_Click: syncForm_enableSync_Click,
             toggleBookmark_Click: toggleBookmark_Click,
             updateServiceUrlForm_Display_Click: updateServiceUrlForm_Display_Click,
             updateServiceUrlForm_Update_Click: updateServiceUrlForm_Update_Click
-        };
-        
-        vm.hints = {
-            introduction: false,
-            show: function(value) {
-                return arguments.length ? 
-                    global.ShowHints.Set(value) : 
-                    global.ShowHints.Get();
-            },
-            toggle: function() {
-                if (!!vm.hints.toggleTimeout) {
-                    $timeout.cancel(vm.hints.toggleTimeout);
-                    vm.hints.toggleTimeout = null;
-                }
-                else {
-                    vm.hints.toggleTimeout = $timeout(function() {
-                        vm.hints.show(!vm.hints.show());
-                    }, 2000);
-                }
-            },
-            toggleTimeout: null
         };
         
         vm.search = {
@@ -135,6 +115,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                     global.ClientSecret.Set(value) : 
                     global.ClientSecret.Get();
             },
+            secretComplexity: null,
             service: {
                 displayUpdateServiceUrlForm: false,
                 newServiceUrl: '',
@@ -218,13 +199,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                         $timeout(function() {
                             document.querySelector('input[name=txtClientSecret]').select();
                         });
-
-                        // Display introductory help
-                        if (vm.hints.show()) {
-                            $timeout(function() {
-                                vm.hints.introduction = true;
-                            }, 500);
-                        }
                         break;
                 }
 				
@@ -239,8 +213,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                 }
             },
             reset: function() {
+                // TODO: remove this function
                 vm.alert.show = false;
-                vm.hints.introduction = false;
                 vm.working = false;
                 
                 vm.sync.showConfirmation = false;
@@ -1013,6 +987,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
         queueSync();
     }
 
+    var syncForm_ClientSecret_Change = function() {
+        // Update client secret complexity value
+        vm.settings.secretComplexity = complexify(vm.settings.secret());
+    };
+
     var syncForm_disableSync_Click = function() {
         global.SyncEnabled.Set(false);
         vm.view.change(vm.view.views.login);
@@ -1121,7 +1100,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
  * ------------------------------------------------------------------------------------ */
 
 // Initialise the angular app
-var xBrowserSyncApp = angular.module('xBrowserSyncApp', ['ngSanitize', 'ngAnimate']);
+var xBrowserSyncApp = angular.module('xBrowserSyncApp', ['ngSanitize', 'ngAnimate', 'angular-complexify']);
 
 // Disable debug info
 xBrowserSyncApp.config(['$compileProvider', function($compileProvider) {
@@ -1160,5 +1139,5 @@ xBrowserSync.App.PlatformImplementation.$inject = ['$q', '$timeout', 'platform',
 xBrowserSyncApp.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add main controller
-xBrowserSync.App.Controller.$inject = ['$scope', '$q', '$timeout', 'platform', 'global', 'api', 'utility', 'bookmarks', 'platformImplementation'];
+xBrowserSync.App.Controller.$inject = ['$scope', '$q', '$timeout', 'Complexify', 'platform', 'global', 'api', 'utility', 'bookmarks', 'platformImplementation'];
 xBrowserSyncApp.controller('Controller', xBrowserSync.App.Controller);
