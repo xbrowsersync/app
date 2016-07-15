@@ -14,10 +14,12 @@ xBrowserSync.App.Utility = function($q, platform, global) {
  * ------------------------------------------------------------------------------------ */
  
 	var encryptData = function(data, errorCallback) {
+		// Encrypt using AES
 		return CryptoJS.AES.encrypt(data, global.ClientSecret.Get()).toString();
 	};
 	
 	var decryptData = function(data, errorCallback) {
+		// Decrypt using AES
 		return CryptoJS.AES.decrypt(data, global.ClientSecret.Get()).toString(CryptoJS.enc.Utf8);
 	};
 	
@@ -100,10 +102,6 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 		return errorMessage;
 	};
 	
-	var hash = function(message) {
-		return CryptoJS.SHA1(message).toString();
-	};
-	
 	var xBookmark = function(title, url, description, tags) {
 		var xBookmark = {};
 		
@@ -133,7 +131,6 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 		XBookmark: xBookmark,
 		DecryptData: decryptData,
 		EncryptData: encryptData,
-		GetErrorMessageFromException: getErrorMessageFromException,
-		Hash: hash
+		GetErrorMessageFromException: getErrorMessageFromException
 	};
 };

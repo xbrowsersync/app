@@ -14,18 +14,13 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
  * ------------------------------------------------------------------------------------ */
 	
 	var checkServiceStatus = function(url) {
-		return getStatus(url)
+		return getServiceInformation(url)
 			.then(function(response) {
 				if (!response) {
 					return $q.reject();
 				}
 				
-				var serviceStatus = {
-					status: response.status,
-					message: response.message
-				};
-				
-				return serviceStatus;
+				return response;
 			});
 	};
 	
@@ -35,11 +30,8 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
-		var secretHash = utility.Hash(global.ClientSecret.Get());
-		
 		var data = { 
-			bookmarks: encryptedBookmarks,
-			secretHash: secretHash
+			bookmarks: encryptedBookmarks
 		};
 		
 		return $http.post(global.URL.Host.Get() + global.URL.Bookmarks,
@@ -74,10 +66,8 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
-		var secretHash = utility.Hash(global.ClientSecret.Get());
-		
 		return $http.get(global.URL.Host.Get() + global.URL.Bookmarks + '/' + 
-			             global.Id.Get() + '/' + secretHash)
+			             global.Id.Get())
             .then(function(response) {
 				if (!!response && !!response.data) {
 					return response.data;
@@ -97,10 +87,8 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
-		var secretHash = utility.Hash(global.ClientSecret.Get());
-		
 		return $http.get(global.URL.Host.Get() + global.URL.Bookmarks + 
-			global.URL.LastUpdated + '/' + global.Id.Get() + '/' + secretHash)
+			'/' + global.Id.Get() + global.URL.LastUpdated)
             .then(function(response) {
 				if (!response || !response.data) {
 					return response;
@@ -119,14 +107,11 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
-		var secretHash = utility.Hash(global.ClientSecret.Get());
-		
 		var data = { 
 			bookmarks: encryptedBookmarks
 		};
 		
-		return $http.post(global.URL.Host.Get() + global.URL.Bookmarks + '/' + 
-			global.Id.Get() + '/' + secretHash,
+		return $http.put(global.URL.Host.Get() + global.URL.Bookmarks + '/' + global.Id.Get(),
 			JSON.stringify(data))
             .then(function(response) {
 				if (!!response && !!response.data) {
@@ -173,12 +158,12 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
         return err;
     };
 	
-	var getStatus = function(url) {
+	var getServiceInformation = function(url) {
 		if (!url) {
-			url = global.URL.Host.Get() + global.URL.Status;
+			url = global.URL.Host.Get() + global.URL.ServiceInformation;
 		}
 		else {
-			url = url + global.URL.Status;
+			url = url + global.URL.ServiceInformation;
 		}
 		
 		return $http.get(url)

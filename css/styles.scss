@@ -25,12 +25,9 @@
 body {
 	font-family: $font-stack;
     color: $colour-base;
+    font-size: 12px;
+    line-height: 15px;
 
-    &, p, .panel-title {
-        font-size: 12px;
-        line-height: 1.2;
-    }
-    
     h1 {
         margin: 10px auto 20px;
         background-image: url('../images/title.png');
@@ -46,7 +43,7 @@ body {
     }
     
     h4 {
-        font-size: 1.2em;
+        font-size: 1.3em;
         margin-top: 0;
     }
     
@@ -84,7 +81,7 @@ body {
         }
         
         &.btn-default, &.btn-success, &.btn-danger {
-            font-size: 12px;
+            font-size: 1em;
             border-radius: 20px;
             padding: 5px 15px;
             @include transition(all, ease-in, 0.1s);
@@ -386,6 +383,10 @@ body {
 #login-panel {
     padding: 0 10px 15px;
     
+    input {
+        
+    }
+    
     .confirm-replace-bookmarks {
         margin-bottom: 0;
     }
@@ -572,7 +573,7 @@ body {
     padding: 0 10px 15px;
     
     input {
-        font-size: 12px;
+        font-size: 1em;
     }
     
     textarea {
@@ -589,22 +590,30 @@ body {
         margin-bottom: 10px;
     }
     
-    .input-group-btn button {
-        margin-right: 0;
-        padding: 8px 0 7px;
-        border-radius: 0 4px 4px 0;
-        z-index: 20;
+    .input-group-btn {
+        font-size: 1em;
+        
+        button {
+            margin-right: 0;
+            padding: 8px 0 7px;
+            border-radius: 0 4px 4px 0;
+            z-index: 20;
+        }
     }
     
     .lookahead-container {
         left: 13px;
         
         .lookahead {
-            font-size: 12px;
+            font-size: 1em;
             line-height: 22px;
             height: 34px;
             padding: 6px 0;
         }
+    }
+
+    .tags-form-group {
+        margin-bottom: 10px;
     }
     
     .tags {
@@ -678,7 +687,7 @@ body {
             }
         }
         
-        p, .input-group, textarea {
+        .input-group, textarea {
             margin-bottom: 20px;
         }
         
@@ -694,15 +703,15 @@ body {
         }
         
         .id-panel {
-            h5 {
-                font-size: 12px;
-                text-align: center;
-                margin: 0 0 1px;
+            label {
+                font-weight: normal;
+                margin-bottom: 0;
             }
             
-            p {
-                font-size: 17px;
-                margin-bottom: 10px;
+            #id {
+                font-size: 1.2em;
+                font-weight: bold;
+                margin: 5px 0 10px;
             }
             
             #qr {
@@ -758,6 +767,15 @@ body {
     }
     
     .backup-restore-panel {
+        .introduction {
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
         #restoreForm {
             textarea {
                 font-size: 9px;

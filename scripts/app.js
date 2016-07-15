@@ -138,6 +138,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             service: {
                 displayUpdateServiceUrlForm: false,
                 newServiceUrl: '',
+                recaptcha: {
+                    enabled: false,
+                    siteKey: ''
+                },
                 status: global.ServiceStatus.Online,
                 statusMessage: '',
                 url: function(value) {
@@ -198,10 +202,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                         
                         // Get service status
                         api.CheckServiceStatus()
-                            .then(function(response) {
-                                vm.settings.service.status = response.status;
-                                vm.settings.service.statusMessage = response.message;
-                            })
+                            .then(setServiceInformation)
                             .catch(function(err) {
                                 vm.settings.service.status = global.ServiceStatus.Offline;
                             });
@@ -229,6 +230,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
 				
 				vm.view.current = view;
 			},
+            displayMain: function() {
+                if (!!global.SyncEnabled.Get()) {
+                    vm.view.change(vm.view.views.main);
+                }
+                else {
+                    vm.view.change(vm.view.views.login);
+                }
+            },
             reset: function() {
                 vm.alert.show = false;
                 vm.hints.introduction = false;
@@ -558,7 +567,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
 	};
     
     var generateQRCode = function() {
-        var qr = qrcode(2, 'M');
+        var qr = qrcode(3, 'M');
         qr.addData(vm.settings.id());
         qr.make();
 
@@ -685,12 +694,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
 				vm.alert.display(errMessage.title, errMessage.message, 'danger');
 			});
         
-        if (!!global.SyncEnabled.Get()) {
-            vm.view.change(vm.view.views.main);
-        }
-        else {
-            vm.view.change(vm.view.views.login);
-        }
+        // Display main view
+        vm.view.displayMain();
     };
 	
 	var queueSync = function() {
@@ -995,6 +1000,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
             });
     };
 
+    var setServiceInformation = function(serviceInfo) {
+        vm.settings.service.status = serviceInfo.status;
+        vm.settings.service.statusMessage = serviceInfo.message;
+        vm.settings.service.recaptcha.enabled = serviceInfo.recaptcha.enabled;
+        vm.settings.service.recaptcha.siteKey = serviceInfo.recaptcha.siteKey;
+    }
+
     var startSyncing = function() {
         vm.sync.showConfirmation = false;
         vm.working = true;
@@ -1085,10 +1097,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, platform, global, a
                 
                 // Update service status
                 api.CheckServiceStatus()
-                    .then(function(response) {
-                        vm.settings.service.status = response.status;
-                        vm.settings.service.statusMessage = response.message;
-                    })
+                    .then(setServiceInformation)
                     .catch(function(err) {
                         vm.settings.service.status = global.ServiceStatus.Offline;
                     });
