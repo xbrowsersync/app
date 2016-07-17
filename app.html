@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="xBrowserSyncApp">
+<html ng-app="xBrowserSync.App.UI">
 <head>
     <title>{{ vm.platform.Constants.Get(vm.global.Constants.Title) }}</title>
     <link rel="stylesheet" href="css/bootstrap/dist/css/bootstrap.min.css" />
@@ -81,9 +81,9 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <div id="syncButtonPanel" class="text-center animate-fade" ng-hide="vm.sync.showConfirmation">
-                    <button id="btnSync" type="submit" class="btn btn-default" ng-click="vm.events.syncForm_enableSync_Click()" tabindex="3">
+                    <button id="btnSync" type="submit" class="btn btn-default" ng-click="vm.events.syncForm_enableSync_Click()" tabindex="4">
                         {{ vm.platform.Constants.Get(vm.global.Constants.Button_Sync_Enable_Label) }}
                     </button>
                 </div>
@@ -376,8 +376,8 @@
     <script src="scripts/angular-animate/angular-animate.min.js"></script>
     <script src="scripts/angular-complexify/build/angular-complexify.min.js"></script>
     <script src="scripts/underscore/underscore-min.js"></script>
-    <script src="scripts/crypto-js/crypto-js.js"></script>
-    <script src="scripts/qrcode.js"></script>
+    <script src="scripts/crypto-js/crypto-js.js" async></script>
+    <script src="scripts/qrcode.js" async></script>
     <script src="scripts/global.js"></script>
     <script src="scripts/utility.js"></script>
     <script src="scripts/httpInterceptor.js"></script>

@@ -119,10 +119,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             service: {
                 displayUpdateServiceUrlForm: false,
                 newServiceUrl: '',
-                recaptcha: {
-                    enabled: false,
-                    siteKey: ''
-                },
                 status: global.ServiceStatus.Online,
                 statusMessage: '',
                 url: function(value) {
@@ -662,6 +658,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         global.DisableEventListeners.Set(false);
         
+        // Check if current page is a bookmark
         setBookmarkStatus()
             .catch(function(err) {
 				var errMessage = utility.GetErrorMessageFromException(err);
@@ -684,6 +681,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		// Set ID and client secret if sync not enabled
         if (!global.SyncEnabled.Get()) {
             global.ClientSecret.Set('');
+            vm.settings.secretComplexity = null;
             
             if (!!data.xBrowserSync.id) {
                 global.Id.Set(data.xBrowserSync.id);
@@ -977,15 +975,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var setServiceInformation = function(serviceInfo) {
         vm.settings.service.status = serviceInfo.status;
         vm.settings.service.statusMessage = serviceInfo.message;
-        vm.settings.service.recaptcha.enabled = serviceInfo.recaptcha.enabled;
-        vm.settings.service.recaptcha.siteKey = serviceInfo.recaptcha.siteKey;
-    }
+    };
 
     var startSyncing = function() {
         vm.sync.showConfirmation = false;
         vm.working = true;
         queueSync();
-    }
+    };
 
     var syncForm_ClientSecret_Change = function() {
         // Update client secret complexity value
@@ -995,7 +991,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var syncForm_disableSync_Click = function() {
         global.SyncEnabled.Set(false);
         vm.view.change(vm.view.views.login);
-    }
+    };
     
     var syncForm_enableSync_Click = function() {
 		if (!vm.syncForm.txtClientSecret.$valid) {
@@ -1014,7 +1010,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             // Otherwise start syncing
             startSyncing();
         }
-	}
+	};
     
     var toggleBookmark_Click = function() {
         // Display bookmark panel
@@ -1072,6 +1068,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 
                 // Remove saved client secret and ID
                 global.ClientSecret.Set('');
+                vm.settings.secretComplexity = null;
                 global.Id.Set('');
                 
                 // Update service status
@@ -1100,44 +1097,44 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
  * ------------------------------------------------------------------------------------ */
 
 // Initialise the angular app
-var xBrowserSyncApp = angular.module('xBrowserSyncApp', ['ngSanitize', 'ngAnimate', 'angular-complexify']);
+xBrowserSync.App.UI = angular.module('xBrowserSync.App.UI', ['ngSanitize', 'ngAnimate', 'angular-complexify']);
 
 // Disable debug info
-xBrowserSyncApp.config(['$compileProvider', function($compileProvider) {
+xBrowserSync.App.UI.config(['$compileProvider', function($compileProvider) {
   $compileProvider.debugInfoEnabled(false);
 }]);
 
 // Add platform service
 xBrowserSync.App.Platform.$inject = ['$q'];
-xBrowserSyncApp.factory('platform', xBrowserSync.App.Platform);
+xBrowserSync.App.UI.factory('platform', xBrowserSync.App.Platform);
 
 // Add global service
 xBrowserSync.App.Global.$inject = ['platform'];
-xBrowserSyncApp.factory('global', xBrowserSync.App.Global);
+xBrowserSync.App.UI.factory('global', xBrowserSync.App.Global);
 
 // Add httpInterceptor service
 xBrowserSync.App.HttpInterceptor.$inject = ['$q', 'global'];
-xBrowserSyncApp.factory('httpInterceptor', xBrowserSync.App.HttpInterceptor);
-xBrowserSyncApp.config(['$httpProvider', function($httpProvider) {
+xBrowserSync.App.UI.factory('httpInterceptor', xBrowserSync.App.HttpInterceptor);
+xBrowserSync.App.UI.config(['$httpProvider', function($httpProvider) {
   $httpProvider.interceptors.push('httpInterceptor');
 }]);
 
 // Add utility service
 xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'global'];
-xBrowserSyncApp.factory('utility', xBrowserSync.App.Utility);
+xBrowserSync.App.UI.factory('utility', xBrowserSync.App.Utility);
 
 // Add api service
 xBrowserSync.App.API.$inject = ['$http', '$q', 'global', 'utility'];
-xBrowserSyncApp.factory('api', xBrowserSync.App.API);
+xBrowserSync.App.UI.factory('api', xBrowserSync.App.API);
 
 // Add bookmarks service
 xBrowserSync.App.Bookmarks.$inject = ['$q', 'platform', 'global', 'api', 'utility'];
-xBrowserSyncApp.factory('bookmarks', xBrowserSync.App.Bookmarks);
+xBrowserSync.App.UI.factory('bookmarks', xBrowserSync.App.Bookmarks);
 
 // Add platform implementation service
 xBrowserSync.App.PlatformImplementation.$inject = ['$q', '$timeout', 'platform', 'global', 'utility'];
-xBrowserSyncApp.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
+xBrowserSync.App.UI.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add main controller
 xBrowserSync.App.Controller.$inject = ['$scope', '$q', '$timeout', 'Complexify', 'platform', 'global', 'api', 'utility', 'bookmarks', 'platformImplementation'];
-xBrowserSyncApp.controller('Controller', xBrowserSync.App.Controller);
+xBrowserSync.App.UI.controller('Controller', xBrowserSync.App.Controller);
