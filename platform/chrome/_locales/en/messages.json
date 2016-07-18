@@ -159,7 +159,7 @@
 		"message":  "No"
 	},
 	"confirmRestore_Sync_Message" : {
-		"message":  "As sync is currently enabled, the data being restored will overwrite your xBrowserSync data. To restore to the local browser only disable sync before restoring. OK to proceed?"
+		"message":  "As sync is currently enabled, the data being restored will overwrite your xBrowserSync synced data. To restore data to the local browser only, disable sync before restoring. OK to proceed?"
 	},
 	"confirmRestore_NoSync_Message" : {
 		"message":  "As sync is currently disabled, the data being restored will overwrite the local browser data. OK to proceed?"
