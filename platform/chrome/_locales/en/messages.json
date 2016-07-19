@@ -15,7 +15,7 @@
 		"message": "syncing..."
 	},
 	"introduction": {
-		"message": "Welcome to xBrowserSync! To start syncing, enter a secret word or phrase that will be used to encrypt and decrypt your browser data.<br/><br/>If you already have an xBrowserSync ID, enter it here with the corresponding secret and your synced data will be retrieved. Otherwise, your local data will be synced and you'll receive a new xBrowserSync ID.<br/><br/>You can change the xBrowserSync service to sync to in the Settings panel."
+		"message": "Welcome to xBrowserSync! To start syncing, enter a secret word or phrase that will be used to encrypt and decrypt your browser data.<br/><br/>If you already have an xBrowserSync ID, enter it here with the corresponding secret and your synced data will be retrieved. Otherwise, your local data will be synced and you'll receive a new xBrowserSync ID.<br/><br/>You can change sync settings in the Settings panel."
 	},
 	"button_Settings_Label": {
 		"message": "Settings"
