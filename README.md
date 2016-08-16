@@ -22,9 +22,9 @@ Run a build for the desired platform:
 
 Replace [platform] with the name of the desired platform to build (corresponding to a folder name in the [platform](https://github.com/xBrowserSync/App/tree/master/platform/) folder). The app code will be output to the 'build' folder.
 
-# Bugs
+# Issues
 
-If you find a bug in the course of using any of the client apps, please report it [here](https://github.com/xBrowserSync/App/issues/).
+If you've found a bug or wish to request a new feature, please submit it [here](https://github.com/xBrowserSync/App/issues/).
 
 # Translation
 
