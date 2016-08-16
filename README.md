@@ -1,4 +1,4 @@
-![xBrowserSync](https://raw.githubusercontent.com/xBrowserSync/xbrowsersync.github.io/master/images/logo_150.png "xBrowserSync")
+![xBrowserSync](https://raw.githubusercontent.com/xBrowserSync/xbrowsersync.github.io/master/assets/images/logo-150.png "xBrowserSync")
 
 [xBrowserSync](http://xbrowsersync.org/) is a tool for encrypting and syncing your bookmarks and other browser data to an anonymous cloud service. For full details, see http://xbrowsersync.org.
 
