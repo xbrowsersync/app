@@ -1,6 +1,4 @@
-$font-roboto:       		'Roboto Condensed';
-$font-roboto-path:  		'../fonts/roboto/';
-$font-stack:        		$font-roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-stack:        		$font-roboto, sans-serif;
 
 $colour-base:				#09313C;
 $colour-link:				#257C91;
@@ -9,6 +7,14 @@ $colour-panel:				#C9DFE4;
 $colour-panel-highlight:	#70D2E1;
 $colour-well:				#EFF6F7;
 
-$colour-success:            #3c763d;
-$colour-warning:            #EFBF00;
-$colour-danger:             #C71814;
+$colour-bg1:				#01AB8A;
+$colour-bg2:				#35C6E8;
+$colour-text1:              #EDFEFF;
+$colour-text2:              #083039;
+$colour-link:			    #75959C;
+$colour-link-highlight:	    $colour-bg2;
+$colour-success:            #30D278;
+$colour-warning:            #BDC71B;
+$colour-danger:             #EA3869;
+
+$border-radius:             25px;

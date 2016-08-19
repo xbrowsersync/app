@@ -1,38 +1,18 @@
+@import 'fonts.scss';
 @import 'mixins.scss';
 @import 'variables.scss';
 
-@font-face {
-    font-family: $font-roboto;
-    src: url($font-roboto-path + 'Roboto-Condensed.ttf');
-}
-@font-face {
-    font-family: $font-roboto;
-    src: url($font-roboto-path + 'Roboto-BoldCondensed.ttf');
-	font-weight: bold;
-}
-@font-face {
-    font-family: $font-roboto;
-    src: url($font-roboto-path + 'Roboto-CondensedItalic.ttf');
-	font-style: italic;
-}
-@font-face {
-    font-family: $font-roboto;
-    src: url($font-roboto-path + 'Roboto-BoldCondensedItalic.ttf');
-	font-weight: bold;
-	font-style: italic;
-}
-
 body {
 	font-family: $font-stack;
-    color: $colour-base;
-    font-size: 12px;
-    line-height: 15px;
+    color: $colour-text1;
+    font-size: 13px;
+    line-height: 17px;
 
     h1 {
-        margin: 10px auto 20px;
-        background-image: url('../images/title.png');
-        height: 64px;
-        width: 64px;
+        margin: auto;
+        background: url("../images/title.png") 0 40px no-repeat;
+        height: 260px;
+        width: 150px;
     }
     
     h2 {
@@ -49,102 +29,64 @@ body {
     
     a {
         color: $colour-link;
-        @include transition(all, ease-in, 0.1s);
+        @include transition(all, ease-in, 0.2s);
+        cursor: pointer;
         
-        &:hover {
-            color: $colour-base;
-        }
-        
+        .active,
         &:active,
-        &:focus {
-            outline: none;
+        &:focus,
+        &:hover {
+            color: $colour-link-highlight;
+            text-decoration: none;
+            outline: 0;
         }
     }
     
     button {
         &.btn {
-            &:active,
-            &:focus,
-            &:active:focus {
+            &.btn-default {
+                font-size: 1.2em;
+                font-weight: 800;
+                background-color: transparent;
+                color: $colour-text1;
                 outline: none;
-                box-shadow: none;
-            }
-            
-            &.active {
-                &:active,
-                &:focus,
-                &:active:focus {
-                    outline: none;
-                    box-shadow: none;
+                border-color: $colour-text1;
+                border-width: 2px;
+                @include border-radius(25px);
+                @include transition(all, ease-in, 0.1s);
+                @include box-shadow(0, 0, 0);
+                
+                &:not([disabled]):hover, &:not([disabled]):focus {
+                    background-color: $colour-text1;
+                    color: $colour-link-highlight;
+                    border-color: $colour-text1;
                 }
             }
-        }
-        
-        &.btn-default, &.btn-success, &.btn-danger {
-            font-size: 1em;
-            border-radius: 20px;
-            padding: 5px 15px;
-            @include transition(all, ease-in, 0.1s);
-            min-width: 50px;
-            margin-right: 5px;
-        }
-        
-        &.btn-default {
-            border-color: $colour-link;
-            background-color: $colour-panel;
-            color: $colour-link;
             
-            &:not([disabled]):hover, &:not([disabled]):focus {
-                background-color: $colour-panel-highlight;
-                color: $colour-base;
-                border-color: $colour-base;
+            &.btn-icon {
+                background: none;
+                color: $colour-text1;
+                padding: 0;
+                @include transition(all, ease-in, 0.1s);
+                @include box-shadow(0, 0, 0);
+                
+                .active,
+                &:active,
+                &:focus,
+                &:hover {
+                    color: $colour-text2;
+                }
+            }
+
+            .active,
+            &:active,
+            &:active:focus,
+            &:focus,
+            &:hover {
+                @include box-shadow(0, 0, 0);
+                outline: 0;
             }
         }
-            
-        &.btn-default[disabled]:hover,
-        &.btn-default[disabled]:focus {
-            @extend .btn-default;
-        }
-        
-        &.btn-icon {
-            background: none;
-            color: $colour-link-icon;
-            padding: 0;
-            @include transition(all, ease-in, 0.1s);
-            box-shadow: none;
-            
-            &:focus, &:active:focus {
-                @extend .btn-icon;
-                color: $colour-link;
-            }
-            
-            &:hover, &:active:hover {
-                color: $colour-link;
-            }
-        }
-    }
-    
-    input {
-        &.form-control {
-            border-color: $colour-link;
-            color: $colour-link;
-            
-            @include placeholder {
-                color:    $colour-link-icon;
-                opacity:  1;
-            }
-            
-            &:focus {
-                box-shadow: none;
-                border-color: $colour-link;
-            }
-        }
-    }
-    
-    textarea.form-control {
-        @extend input.form-control;
-        
-        resize: none;
     }
     
     .alert {
@@ -241,6 +183,26 @@ body {
     .container {
         padding: 0;
         margin: 0;
+        @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
+    }
+
+    .form-control {
+        background-color: $colour-text1; 
+        color: $colour-text2;
+        font-size: 1.1em;
+        padding: 20px 15px;
+        resize: none;
+        border: none;
+        @include border-radius($border-radius);
+        @include box-shadow(0, 0, 0);
+        @include placeholder {
+            color: $colour-text2;
+            @include opacity(0.4);
+        }
+
+        &:focus {
+            @include box-shadow(0, 0, 0);
+        }
     }
     
     .header-panel {
@@ -293,6 +255,18 @@ body {
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    .progress-bar-success {
+        background-color: $colour-success;
+    }
+    
+    .progress-bar-warning {
+        background-color: $colour-warning;
+    }
+    
+    .progress-bar-danger {
+        background-color: $colour-danger;
+    }
     
     .text-success {
         color: $colour-success;
@@ -311,7 +285,7 @@ body {
         
         .well {
             background-color: $colour-well;
-            box-shadow: none;
+            @include box-shadow(0, 0, 0);
             border-radius: 5px;
             border-color: $colour-panel;
             padding: 9px;
@@ -362,6 +336,14 @@ body {
         margin-bottom: 15px;
     }
     
+    .introduction {
+        background-color: $colour-text2;
+        padding: 15px 20px;
+        @include border-radius($border-radius);
+        height: 250px;
+        display: none;
+    }
+    
     .secret-form-group {
         position: relative;
 
@@ -375,14 +357,25 @@ body {
             position: absolute;
             top: 0;
             z-index: 10;
-            box-shadow: none;
-            height: 34px;
+            @include box-shadow(0, 0, 0);
+            height: 40px;
             width: 100%;
-            opacity: 0.25;
-        }
-
-        .progress-bar-default {
             background-color: transparent;
+            border: solid 2px $colour-text1;
+            @include border-radius($border-radius);
+
+            .progress-bar {
+                @include box-shadow(0, 0, 0);
+            }
+        }
+            
+        .progress-bar-background {
+            background-color: $colour-text1;
+            height: 40px;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            @include border-radius($border-radius);
         }
     }
     
@@ -407,7 +400,7 @@ body {
             
             &.active {
                 color: $colour-link-icon;
-                box-shadow: none;
+                @include box-shadow(0, 0, 0);
 
                 i:before {
                     content: "\f02e";

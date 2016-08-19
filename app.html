@@ -36,13 +36,13 @@
                     <i class="fa fa-cog" aria-hidden="true"></i>
                     <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Settings_Label) }}</span>
                 </button>
-                
-                <h1>
-                    <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Title) }}</span>
-                </h1>
             </div>
 
-            <p ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.Introduction)"></p>
+            <h1>
+                <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Title) }}</span>
+            </h1>
+
+            <p class="introduction" ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.Introduction)"></p>
 
             <form name="vm.syncForm" novalidate>
                 <label class="sr-only" for="txtClientSecret">{{ vm.platform.Constants.Get(vm.global.Constants.Field_ClientSecret_Label) }}</label>
@@ -60,6 +60,7 @@
                             }">
                         </div>
                     </div>
+                    <div class="progress-bar-background"></div>
                 </div>
 
                 <label class="sr-only" for="txtId">{{ vm.platform.Constants.Get(vm.global.Constants.Field_Id_Label) }}</label>
