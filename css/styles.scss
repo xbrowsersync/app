@@ -16,14 +16,16 @@ body {
     }
     
     h2 {
-        float: left;
+        font-size: 1.8em;
+        font-weight: 800;
         line-height: 30px;
+        float: left;
         margin: 1px 0 5px 0;
-        font-size: 20px;
     }
     
     h4 {
         font-size: 1.3em;
+        font-weight: 800;
         margin-top: 0;
     }
     
@@ -50,31 +52,47 @@ body {
                 background-color: transparent;
                 color: $colour-text1;
                 outline: none;
+                min-width: 60px;
                 border-color: $colour-text1;
                 border-width: 2px;
                 @include border-radius(25px);
-                @include transition(all, ease-in, 0.1s);
+                @include transition(all, ease-in, 0.2s);
                 @include box-shadow(0, 0, 0);
                 
-                &:not([disabled]):hover, &:not([disabled]):focus {
+                &:not([disabled]):hover {
                     background-color: $colour-text1;
                     color: $colour-link-highlight;
                     border-color: $colour-text1;
+                }
+
+                &:not([disabled]):focus {
+                    text-decoration: underline;
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+
+                &[disabled] {
+                    @extend .btn-default;
+                    opacity: 0.5;
+                    cursor: default;
                 }
             }
             
             &.btn-icon {
                 background: none;
-                color: $colour-text1;
+                color: $colour-text2;
+                opacity: 0.4;
                 padding: 0;
-                @include transition(all, ease-in, 0.1s);
+                @include transition(all, ease-in, 0.2s);
                 @include box-shadow(0, 0, 0);
                 
                 .active,
                 &:active,
                 &:focus,
                 &:hover {
-                    color: $colour-text2;
+                    opacity: 1;
                 }
             }
 
@@ -87,6 +105,11 @@ body {
                 outline: 0;
             }
         }
+    }
+
+    textarea.form-control {
+        padding: 8px 13px;
+        @include border-radius(15px);
     }
     
     .alert {
@@ -203,6 +226,29 @@ body {
         &:focus {
             @include box-shadow(0, 0, 0);
         }
+
+        &.ng-invalid {
+            color: $colour-danger;
+            @include placeholder {
+                color: $colour-danger;
+                opacity: 0.7;
+            }
+        }
+    }
+
+    .has-error {
+        .form-control {
+            @include box-shadow(0, 0, 0);
+            color: $colour-danger;
+            @include placeholder {
+                color: $colour-danger;
+                opacity: 0.7;
+            }
+
+            &:focus {
+                @include box-shadow(0, 0, 0);
+            }
+        }
     }
     
     .header-panel {
@@ -282,20 +328,53 @@ body {
     
     .view {
         padding: 10px;
+    }
         
-        .well {
-            background-color: $colour-well;
-            @include box-shadow(0, 0, 0);
-            border-radius: 5px;
-            border-color: $colour-panel;
-            padding: 9px;
-            margin-bottom: 15px;
-        
+    .well {
+        background-color: $colour-text1;
+        color: $colour-text2;
+        @include box-shadow(0, 0, 0);
+        @include border-radius(25px);
+        border: none;
+        padding: 15px 20px;
+        margin-bottom: 15px;
+    
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        .btn.btn-default {
+            color: $colour-text2;
+            border-color: $colour-text2;
+            font-weight: normal;
+            border-width: 1px;
+            font-size: 1.1em;
+            padding: 6px 12px 8px;
+            margin-right: 10px;
+            
+            &:not([disabled]):hover {
+                background-color: $colour-text2;
+                color: $colour-link-highlight;
+                border-color: $colour-text2;
+            }
+
             &:last-child {
-                margin-bottom: 0;
+                margin-right: 0;
             }
         }
+    
+        .confirm {
+            margin-bottom: 0;
+        }
+
+        .form-control {
+            border: solid 1px $colour-text2;
+        }
     }
+}
+
+#login-panel, #bookmark-panel, #settings-panel {
+    height: 460px;
 }
 
 #loading-panel {
@@ -337,9 +416,6 @@ body {
     }
     
     .introduction {
-        background-color: $colour-text2;
-        padding: 15px 20px;
-        @include border-radius($border-radius);
         height: 250px;
         display: none;
     }
@@ -378,14 +454,23 @@ body {
             @include border-radius($border-radius);
         }
     }
-    
-    .confirm-replace-bookmarks {
-        margin-bottom: 0;
+
+    #txtId {
+        font-size: 1em;
+        @include placeholder {
+            font-size: 1.1em;
+        }
     }
 }
 
 #main-panel {
     .header-panel {
+        i {
+            line-height: 1em;
+            top: 10px;
+            position: relative;
+        }
+
         .btn-toggle-bookmark {
             float: left;
             margin-left: 12px;
@@ -394,20 +479,9 @@ body {
                 content: "\f097";
             }
             
-            &:hover, &:focus {
-                color: $colour-link;
-            }
-            
             &.active {
-                color: $colour-link-icon;
-                @include box-shadow(0, 0, 0);
-
                 i:before {
                     content: "\f02e";
-                }
-                
-                &:hover, &:focus {
-                    color: $colour-link;
                 }
             }
         }
@@ -419,24 +493,23 @@ body {
         
             label {
                 position: absolute;
-                top: 8px;
                 left: 13px;
-                color: $colour-link;
+                color: $colour-text2;
+                z-index: 60;
             }
             
             i {
-                font-size: 15px;
-                line-height: 17px;
+                font-size: 1.3em;
+                line-height: 40px;
+                top: 0;
             }
             
             input {
                 position: relative;
                 z-index: 50;
-                background: transparent;
                 padding-left: 35px;
-                border-radius: 20px;
-                font-size: 16px;
-                height: 33px;
+                @include border-radius(20px);
+                font-size: 1.5em;
             }
             
             .lookahead-container {
@@ -459,6 +532,13 @@ body {
         
         &.ng-hide {
             margin-top: 0;
+        }
+
+        h4.no-bookmarks {
+            font-size: 1.4em;
+            font-weight: normal;
+            text-align: center;
+            margin: 10px;
         }
 
         .list-group {
@@ -564,33 +644,12 @@ body {
 #bookmark-panel {
     padding: 0 10px 15px;
     
-    input {
-        font-size: 1em;
-    }
-    
-    textarea {
-        font-size: 10px;
-    }
-    
     input[name="bookmarkTags"] {
-        background: transparent;
         text-transform: lowercase;
-        border-radius: 4px 0 0 4px;
     }
-    
-    .input-group {
-        margin-bottom: 10px;
-    }
-    
-    .input-group-btn {
-        font-size: 1em;
-        
-        button {
-            margin-right: 0;
-            padding: 8px 0 7px;
-            border-radius: 0 4px 4px 0;
-            z-index: 20;
-        }
+
+    textarea {
+        height: 190px;
     }
     
     .lookahead-container {
@@ -603,27 +662,24 @@ body {
             padding: 6px 0;
         }
     }
-
-    .tags-form-group {
-        margin-bottom: 10px;
-    }
     
     .tags {
         overflow-y: auto;
-        max-height: 80px;
+        max-height: 55px;
+        margin: 15px 0;
         
         .label {
             display: block;
             float: left;
             margin: 0px 5px 5px 0;
-            padding: 0 5px;
-            font-size: 11px;
+            color: $colour-text1;
+            background-color: $colour-text2;
+            border: 0;
+            border-radius: 10px;
+            font-size: 0.9em;
             font-weight: normal;
             text-transform: capitalize;
-            background: $colour-panel;
-            color: $colour-link;
-            border: 1px solid $colour-link;
-            line-height: 12px;
+            padding: 6px 8px;
 
             &:focus {
                 outline: none;
@@ -633,14 +689,13 @@ body {
                 cursor: pointer;
                 
                 i {
+                    color: $colour-link-highlight;
                     opacity: 1;
                 }
             }
             
             i {
-                font-size: 10px;
-                line-height: 18px;
-                color: $colour-link;
+                font-size: 0.9em;
                 opacity: 0.5;
             }
         }
@@ -650,17 +705,17 @@ body {
 #settings-panel {
     padding: 0 10px 15px;
     
-    .sync-panel, .status-panel, .backup-restore-panel {
+    .well {
         padding: 0;
         
         h4 {
-            padding: 10px;
+            padding: 15px 20px;
             margin-bottom: 0;
             cursor: pointer;
             
             &:hover {
                 i {
-                    color: $colour-link-icon;
+                    opacity: 1;
                 }
             }
             
@@ -668,14 +723,18 @@ body {
                 cursor: auto;
                 
                 &:hover i {
-                    color: $colour-well;
+                    opacity: 0;
+                }
+                
+                i {
+                    opacity: 0;
                 }
             }
             
             i {
-                color: $colour-well;
+                opacity: 0.4;
                 float: right;
-                @include transition(all, ease-in, 0.1s);
+                @include transition(all, ease-in, 0.2s);
             }
         }
         
@@ -684,8 +743,8 @@ body {
         }
         
         .panel-content {
-            padding: 0 10px;
-            height: 200px;
+            padding: 0 20px;
+            height: 235px;
         }
     }
     
@@ -697,9 +756,9 @@ body {
             }
             
             #id {
-                font-size: 1.2em;
+                font-size: 1em;
                 font-weight: bold;
-                margin: 5px 0 10px;
+                margin: 10px 0;
             }
             
             #qr {
@@ -708,7 +767,7 @@ body {
         }
         
         .checkbox {
-            margin: 0 0 5px;
+            margin: 15px 0;
             
             #includeBookmarksBar {
                 margin-top: 0;
@@ -719,16 +778,19 @@ body {
     .status-panel {
         .status-display {
             i {
-                font-size: 15px;
+                font-size: 1.3em;
                 position: relative;
-                top: -5px;
-                margin-left: 5px;
+                top: -3px;
+                margin-right: 2px;
             }
             
             .status-url {
-                font-size: 14px;
+                font-size: 1.2em;
                 max-width: 90%;
-                line-height: 20px;
+            }
+
+            .status-url-panel {
+                margin-top: 20px;
             }
             
             span.label {
@@ -737,8 +799,8 @@ body {
             
             p.status-message {
                 color: $colour-link;
-                margin-bottom: 0;
-                max-height: 43px;
+                margin: 10px 0 0;
+                max-height: 53px;
                 overflow-y: auto;
                 font-style: italic;
                 quotes: '\201c' '\201d';
@@ -756,12 +818,6 @@ body {
                 margin-top: 20px;
             }
         }
-    
-        .update-service-url { 
-            .input-group-addon, input {
-                font-size: 1em;
-            }
-        }
     }
     
     .backup-restore-panel {
@@ -776,10 +832,9 @@ body {
         
         #restoreForm {
             textarea {
-                font-size: 9px;
                 font-family: "courier new", sans-serif;
-                padding: 2px 3px;
-                height: 80px;
+                font-size: 0.8em;
+                height: 115px;
             }
         }
     }

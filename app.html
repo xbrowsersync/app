@@ -42,9 +42,9 @@
                 <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Title) }}</span>
             </h1>
 
-            <p class="introduction" ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.Introduction)"></p>
+            <p class="introduction well well-sm" ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.Introduction)"></p>
 
-            <form name="vm.syncForm" novalidate>
+            <form name="vm.syncForm" class="animate-fade" ng-hide="vm.sync.showConfirmation" novalidate>
                 <label class="sr-only" for="txtClientSecret">{{ vm.platform.Constants.Get(vm.global.Constants.Field_ClientSecret_Label) }}</label>
                 <div class="form-group secret-form-group" ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtClientSecret.$invalid]">
                     <input ng-model="vm.settings.secret" type="password" class="form-control" name="txtClientSecret" ng-change="vm.events.syncForm_ClientSecret_Change()"
@@ -69,26 +69,26 @@
                            ng-disabled="vm.sync.enabled()" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.Field_Id_Description) }}" 
                            maxlength="32" tabindex="2" />
                 </div>
-                
-                <div class="confirm-replace-bookmarks well well-sm animate-fade" ng-show="vm.sync.showConfirmation">
-                    <h4>{{ vm.platform.Constants.Get(vm.global.Constants.ConfirmReplaceBookmarks_Title) }}</h4>
-                    <p>{{ vm.platform.Constants.Get(vm.global.Constants.ConfirmReplaceBookmarks_Message) }}</p>
-                    <div class="buttons text-center">
-                        <button id="btnSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncForm_confirmSync_Click()" tabindex="4">
-                            {{ vm.platform.Constants.Get(vm.global.Constants.Button_ReplaceBookmarks_Confirm) }}
-                        </button>
-                        <button id="btnSync_Cancel" type="button" class="btn btn-default" ng-click="vm.view.reset()" tabindex="5">
-                            {{ vm.platform.Constants.Get(vm.global.Constants.Button_ReplaceBookmarks_Cancel) }}
-                        </button>
-                    </div>
-                </div>
 
-                <div id="syncButtonPanel" class="text-center animate-fade" ng-hide="vm.sync.showConfirmation">
-                    <button id="btnSync" type="submit" class="btn btn-default" ng-click="vm.events.syncForm_enableSync_Click()" tabindex="4">
+                <div id="syncButtonPanel" class="text-center">
+                    <button id="btnSync" type="submit" class="btn btn-default" ng-disabled="!vm.settings.secret()" ng-click="vm.events.syncForm_enableSync_Click()" tabindex="4">
                         {{ vm.platform.Constants.Get(vm.global.Constants.Button_Sync_Enable_Label) }}
                     </button>
                 </div>
             </form>
+                
+            <div class="confirm well well-sm animate-fade" ng-show="vm.sync.showConfirmation">
+                <h4>{{ vm.platform.Constants.Get(vm.global.Constants.ConfirmReplaceBookmarks_Title) }}</h4>
+                <p>{{ vm.platform.Constants.Get(vm.global.Constants.ConfirmReplaceBookmarks_Message) }}</p>
+                <div class="buttons text-center">
+                    <button id="btnSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncForm_confirmSync_Click()" tabindex="4">
+                        {{ vm.platform.Constants.Get(vm.global.Constants.Button_ReplaceBookmarks_Confirm) }}
+                    </button>
+                    <button id="btnSync_Cancel" type="button" class="btn btn-default" ng-click="vm.view.reset()" tabindex="5">
+                        {{ vm.platform.Constants.Get(vm.global.Constants.Button_ReplaceBookmarks_Cancel) }}
+                    </button>
+                </div>
+            </div>
         </div>
         
         <div id="main-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.main">
@@ -116,9 +116,9 @@
             </div>
             
             <div class="search-results-panel animate-fold-max" ng-show="!!vm.search.results">
-                <div class="well well-sm" ng-show="vm.search.results.length === 0">
-                    <h4>{{ vm.platform.Constants.Get(vm.global.Constants.NoSearchResults_Message) }}</h4>
-                </div>
+                <h4 class="no-bookmarks" ng-show="vm.search.results.length === 0">
+                    {{ vm.platform.Constants.Get(vm.global.Constants.NoSearchResults_Message) }}
+                </h4>
                 <div class="list-group" ng-show="vm.search.results.length > 0">
                     <div class="list-group-item" ng-repeat="result in vm.search.results track by result.id">
                         <a href="{{ result.url }}" ng-click="vm.events.searchForm_SearchResult_Click($event)"  tabindex="{{ $index + 1 }}"
@@ -152,35 +152,35 @@
             <div class="bookmark-form-panel animate-fade">
                 <form id="bookmarkForm" name="vm.bookmarkForm" novalidate>
                     <div class="form-group" ng-class="{ true: 'has-error' }[vm.bookmarkForm.bookmarkTitle.$touched && vm.bookmarkForm.bookmarkTitle.$invalid]">
-                        <label for="bookmarkTitle">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Title_Label) }}</label>
-                        <input type="text" class="form-control" name="bookmarkTitle" ng-model="vm.bookmark.current.title" maxlength="255" tabindex="1" required>
+                        <label for="bookmarkTitle" class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Title_Label) }}</label>
+                        <input type="text" class="form-control" name="bookmarkTitle" ng-model="vm.bookmark.current.title" maxlength="255" tabindex="1"
+                               placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Title_Label) }}" required>
                     </div>
                     <div class="form-group" ng-class="{ true: 'has-error' }[vm.bookmarkForm.bookmarkUrl.$touched && vm.bookmarkForm.bookmarkUrl.$invalid]">
-                        <label for="bookmarkUrl">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Url_Label) }}</label>
+                        <label for="bookmarkUrl" class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Url_Label) }}</label>
                         <input type="text" class="form-control" name="bookmarkUrl" placeholder="http(s)://..." ng-model="vm.bookmark.current.url" 
-                               ng-change="vm.events.bookmarkForm_BookmarkUrl_Change()" maxlength="255" tabindex="2" required>
+                               ng-change="vm.events.bookmarkForm_BookmarkUrl_Change()" maxlength="255" tabindex="2"
+                               placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Url_Label) }}" required>
                     </div>
                     <div class="form-group">
-                        <label for="bookmarkDescription">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Description_Label) }}</label>
-                        <textarea class="form-control" name="bookmarkDescription" rows="3" ng-model="vm.bookmark.current.description"
-                                  ng-change="vm.events.bookmarkForm_BookmarkDescription_Change()" tabindex="3"></textarea>
+                        <label for="bookmarkDescription" class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Description_Label) }}</label>
+                        <textarea class="form-control" name="bookmarkDescription" rows="3" ng-model="vm.bookmark.current.description" ng-change="vm.events.bookmarkForm_BookmarkDescription_Change()"
+                                  tabindex="3" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Description_Label) }}"></textarea>
                     </div>
                     <div class="form-group tags-form-group">
-                        <label for="bookmarkTags">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Tags_Label) }}</label>
-                        <div class="input-group">
-                            <div class="lookahead-container">
-                                <span class="measure" ng-bind-html="vm.bookmark.tagTextMeasure"></span>
-                                <span class="lookahead" ng-bind-html="vm.bookmark.tagLookahead" ng-show="vm.bookmark.tagLookahead"></span>
-                            </div>
-                            <input type="text" class="form-control" name="bookmarkTags" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Tags_Placeholder) }}" maxlength="50" tabindex="4"
-                                   ng-model="vm.bookmark.tagText" ng-change="vm.events.bookmarkForm_BookmarkTags_Change()" ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" ng-trim="false">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" ng-click="vm.events.bookmarkForm_CreateTags_Click()" tabindex="5">
-                                    {{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_AddTags_Label) }}
-                                </button>
-                            </span>
+                        <label for="bookmarkTags" class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Tags_Label) }}</label>
+                        <div class="lookahead-container">
+                            <span class="measure" ng-bind-html="vm.bookmark.tagTextMeasure"></span>
+                            <span class="lookahead" ng-bind-html="vm.bookmark.tagLookahead" ng-show="vm.bookmark.tagLookahead"></span>
                         </div>
-                        <div class="tags clearfix">
+                        <input type="text" class="form-control" name="bookmarkTags" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Tags_Placeholder) }}" maxlength="50" tabindex="4"
+                                ng-model="vm.bookmark.tagText" ng-change="vm.events.bookmarkForm_BookmarkTags_Change()" ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" ng-trim="false">
+                        <!--<span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="vm.events.bookmarkForm_CreateTags_Click()" tabindex="5">
+                                {{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_AddTags_Label) }}
+                            </button>
+                        </span>-->
+                        <div class="tags clearfix" ng-show="vm.bookmark.current.tags.length > 0">
                             <button class="label label-default" ng-repeat="tag in vm.bookmark.current.tags track by $index" ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
                                 {{ tag }}
                                 <i class="fa fa-times" aria-hidden="true"></i>
@@ -248,6 +248,19 @@
                             {{ vm.platform.Constants.Get(vm.global.Constants.Button_Sync_Disable_Label) }}
                         </button>
                     </div>
+
+                    <div class="confirm well well-sm animate-fade ng-hide">
+                        <h4>Cancel Syncing?</h4>
+                        <p>There is currently a sync in progress, if you proceed your bookmarks data will be incomplete. Proceed?</p>
+                        <div class="buttons text-center">
+                            <button id="btnSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncForm_confirmSync_Click()" tabindex="4">
+                                Yes
+                            </button>
+                            <button id="btnSync_Cancel" type="button" class="btn btn-default" ng-click="vm.view.reset()" tabindex="5">
+                                No
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -260,19 +273,19 @@
                 <div class="panel-content animate-fold" ng-show="vm.settings.visiblePanel === vm.settings.panels.serviceStatus">
                     <div class="status-display animate-fade" ng-hide="vm.settings.service.displayUpdateServiceUrlForm">
                         <p>{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Message) }}</p>
+                        <div class="status-url-panel">
+                            <i class="fa fa-check-circle text-success" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Online) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.Online">
+                                <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Online) }}</span>
+                            </i>
+                            <i class="fa fa-times-circle text-danger" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Offline) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.Offline">
+                                <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Offline) }}</span>                                    
+                            </i>
+                            <i class="fa fa-exclamation-circle text-warning" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_NoNewSyncs) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.NoNewSyncs">
+                                <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_NoNewSyncs) }}</span>                                    
+                            </i>
+                            <a class="status-url overflow-ellipses" ng-href="{{ vm.settings.service.url() }}" ng-click="vm.events.searchForm_SearchResult_Click($event)" tabindex="4">{{ vm.settings.service.url() }}</a>
+                        </div>
                         <div class="text-center">
-                            <div class="status-url-panel">
-                                <a class="status-url overflow-ellipses" ng-href="{{ vm.settings.service.url() }}" ng-click="vm.events.searchForm_SearchResult_Click($event)" tabindex="4">{{ vm.settings.service.url() }}</a>
-                                <i class="fa fa-check-circle text-success" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Online) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.Online">
-                                    <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Online) }}</span>
-                                </i>
-                                <i class="fa fa-times-circle text-danger" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Offline) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.Offline">
-                                    <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Offline) }}</span>                                    
-                                </i>
-                                <i class="fa fa-exclamation-circle text-warning" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_NoNewSyncs) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.NoNewSyncs">
-                                    <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_NoNewSyncs) }}</span>                                    
-                                </i>
-                            </div>
                             <p class="status-message" ng-show="!!vm.settings.service.statusMessage">
                                 {{ vm.settings.service.statusMessage }}
                             </p> 
@@ -286,13 +299,13 @@
                         <form name="vm.updateServiceUrlForm" novalidate>
                             <div>
                                 <p ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.UpdateServiceUrlForm_Description)"></p>
-                                <div class="form-group" ng-class="{ 'has-error': vm.updateServiceUrlForm.txtServiceUrl.$invalid }">
+                                <div class="form-group">
                                     <input name="txtServiceUrl" class="form-control" ng-model="vm.settings.service.newServiceUrl"
                                         placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.UpdateServiceUrlForm_Placeholder) }}" maxlength="128" tabindex="6" required />
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-default" ng-click="vm.events.updateServiceUrlForm_Update_Click()" tabindex="7">
+                                <button type="submit" class="btn btn-default" ng-disabled="!vm.updateServiceUrlForm.txtServiceUrl || vm.updateServiceUrlForm.txtServiceUrl.$invalid" ng-click="vm.events.updateServiceUrlForm_Update_Click()" tabindex="7">
                                     {{ vm.platform.Constants.Get(vm.global.Constants.Button_UpdateServiceUrl_Submit_Label) }}
                                 </button>
                                 <button type="button" class="btn btn-default" ng-click="vm.view.reset()" tabindex="8">
@@ -331,11 +344,8 @@
                             <label for="dataToRestore" class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.DataToRestore_Label) }}</label>
                             <textarea ng-model="vm.settings.dataToRestore" class="form-control" rows="3" tabindex="11"></textarea>
                             <div class="buttons">
-                                <button id="btnRestoreData" class="btn" ng-disabled="!vm.settings.dataToRestoreIsValid()"
-                                        ng-click="vm.events.backupRestoreForm_DisplayRestoreConfirmation_Click()" ng-class="{
-                                            'btn-default': !vm.settings.dataToRestore,
-                                            'btn-success': vm.settings.dataToRestore && vm.settings.dataToRestoreIsValid(),
-                                            'btn-danger': vm.settings.dataToRestore && !vm.settings.dataToRestoreIsValid() }" tabindex="12">
+                                <button id="btnRestoreData" class="btn btn-default" ng-disabled="!vm.settings.dataToRestoreIsValid()"
+                                        ng-click="vm.events.backupRestoreForm_DisplayRestoreConfirmation_Click()" tabindex="12">
                                     {{ vm.domElements.btnRestoreData() }}
                                 </button>
                                 <button type="reset" class="btn btn-default" ng-click="vm.settings.displayRestoreForm = false" tabindex="13">
