@@ -79,6 +79,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             syncForm_disableSync_Click: syncForm_disableSync_Click,
             syncForm_enableSync_Click: syncForm_enableSync_Click,
             toggleBookmark_Click: toggleBookmark_Click,
+            updateServiceUrlForm_Confirm_Click: updateServiceUrlForm_Confirm_Click,
             updateServiceUrlForm_Display_Click: updateServiceUrlForm_Display_Click,
             updateServiceUrlForm_Update_Click: updateServiceUrlForm_Update_Click
         };
@@ -117,6 +118,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             },
             secretComplexity: null,
             service: {
+                displayUpdateServiceUrlConfirmation: false,
                 displayUpdateServiceUrlForm: false,
                 newServiceUrl: '',
                 status: global.ServiceStatus.Online,
@@ -165,11 +167,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                             vm.bookmarkForm.$setUntouched();
                             vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', true);
                         }
+
+                        // Update description field height
+                        bookmarkForm_ResizeDescriptionField();
                         
                         vm.bookmark.tagText = '';
                         
-                        // Focus on title field
                         $timeout(function() {
+                            // Focus on title field
                             document.querySelector('input[name="bookmarkTitle"]').select();
                         }, 100);
                         break;
@@ -219,6 +224,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.syncForm.$setUntouched();
                 }
                     
+                vm.settings.service.displayUpdateServiceUrlConfirmation = false;
                 vm.settings.service.displayUpdateServiceUrlForm = false;
                 vm.settings.service.newServiceUrl = vm.settings.service.url();
                 vm.settings.backupRestoreResult = null;
@@ -432,6 +438,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.bookmark.current.tags = _.sortBy(_.union(newTags, vm.bookmark.current.tags), function(tag) {
             return tag;
         });
+
+        // Update description field height
+        bookmarkForm_ResizeDescriptionField();
         
         vm.bookmark.tagText = '';
         vm.bookmark.tagLookahead = '';
@@ -472,7 +481,20 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var bookmarkForm_RemoveTag_Click = function(tag) {
         vm.bookmark.current.tags = _.without(vm.bookmark.current.tags, tag);
+        bookmarkForm_ResizeDescriptionField();
         document.querySelector('#bookmarkForm input[name="bookmarkTags"]').focus();
+    };
+
+    var bookmarkForm_ResizeDescriptionField = function() {
+        var newHeight = 190;
+        
+        $timeout(function() {
+            if (!!vm.bookmark.current.tags && vm.bookmark.current.tags.length > 0) {
+                newHeight = (newHeight - 15 - document.querySelector('.tags').offsetHeight);
+            }
+
+            document.querySelector('textarea[name="bookmarkDescription"]').style.height = newHeight + 'px';
+        });
     };
     
     var bookmarkForm_UpdateBookmark_Click = function() {
@@ -1031,6 +1053,32 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
             });
     };
+
+    var updateServiceUrlForm_Confirm_Click = function() {
+        // Check service url
+        var url = vm.settings.service.newServiceUrl.replace(/\/$/, '');
+        
+        // Disable sync
+        vm.sync.enabled(false);
+        
+        // Update the service URL
+        vm.settings.service.url(url);
+        
+        // Remove saved client secret and ID
+        global.ClientSecret.Set('');
+        vm.settings.secretComplexity = null;
+        global.Id.Set('');
+        
+        // Update service status
+        api.CheckServiceStatus()
+            .then(setServiceInformation)
+            .catch(function(err) {
+                vm.settings.service.status = global.ServiceStatus.Offline;
+            });
+        
+        // Reset view
+        vm.view.reset();
+    };
     
     var updateServiceUrlForm_Display_Click = function() {
         // Reset view
@@ -1041,7 +1089,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // Focus on url field
         $timeout(function() {
-            document.querySelector('input[name="txtServiceUrl"]').select();            
+            document.querySelector('input[name="txtServiceUrl"]').focus();            
         });
     };
 	
@@ -1051,7 +1099,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // Return if the form is not valid
 		if (!vm.updateServiceUrlForm.txtServiceUrl.$valid) {
-			document.querySelector('[name=txtServiceUrl]').select();
+			document.querySelector('[name=txtServiceUrl]').focus();
             return;
 		}
         
@@ -1060,30 +1108,18 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         api.CheckServiceStatus(url)
             .then(function(response) {
-                // Disable sync
-                vm.sync.enabled(false);
-                
-                // Update the service URL
-                vm.settings.service.url(url);
-                
-                // Remove saved client secret and ID
-                global.ClientSecret.Set('');
-                vm.settings.secretComplexity = null;
-                global.Id.Set('');
-                
-                // Update service status
-                api.CheckServiceStatus()
-                    .then(setServiceInformation)
-                    .catch(function(err) {
-                        vm.settings.service.status = global.ServiceStatus.Offline;
-                    });
-                
-                // Reset view
-                vm.view.reset();
+                if (!!global.SyncEnabled.Get()) {
+                    // Display confirmation panel
+                    vm.settings.service.displayUpdateServiceUrlConfirmation = true;
+                }
+                else {
+                    // Update service url
+                    updateServiceUrlForm_Confirm_Click();
+                }
             })
             .catch(function(err) {
                 vm.updateServiceUrlForm.txtServiceUrl.$setValidity('InvalidService', false);
-                document.querySelector('[name=txtServiceUrl]').select();
+                document.querySelector('[name=txtServiceUrl]').focus();
             });
     };
 	

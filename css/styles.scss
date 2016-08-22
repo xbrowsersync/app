@@ -10,7 +10,7 @@ body {
 
     h1 {
         margin: auto;
-        background: url("../images/title.png") 0 40px no-repeat;
+        background: url("../img/title.png") 0 40px no-repeat;
         height: 260px;
         width: 150px;
     }
@@ -160,14 +160,7 @@ body {
         }
         
         &.ng-hide-remove {
-            animation-name: animate-reveal;
-            -webkit-animation-name: animate-reveal;
-            
-            animation-duration: 0.3s;
-            -webkit-animation-duration: 0.3s;
-
-            animation-timing-function: ease-in-out;
-            -webkit-animation-timing-function: ease-in-out;
+            @include animation(animate-reveal 0.3s ease-in-out);
         }
         
         &.ng-hide-add {
@@ -175,7 +168,7 @@ body {
         }
     }
 
-    @keyframes animate-reveal {
+    @include keyframes(animate-reveal) {
         0% {
             transform: scale(0);
             opacity: 0.0;
@@ -186,15 +179,21 @@ body {
         }
     }
 
-    @-webkit-keyframes animate-reveal {
+    @include keyframes(animate-flash) {
         0% {
-            -webkit-transform: scale(0);
-            opacity: 0.0;
+            opacity: 0;
         }
-        100% {
-            -webkit-transform: scale(1);
+        50% {
             opacity: 1;
         }
+        100% {
+            opacity: 0;
+        }
+    }
+    
+    .buttons {
+        text-align: center;
+        margin-top: 15px;
     }
     
     .confirm {
@@ -225,14 +224,6 @@ body {
 
         &:focus {
             @include box-shadow(0, 0, 0);
-        }
-
-        &.ng-invalid {
-            color: $colour-danger;
-            @include placeholder {
-                color: $colour-danger;
-                opacity: 0.7;
-            }
         }
     }
 
@@ -490,6 +481,14 @@ body {
             position: relative;
             float: left;
             @include calc(width, "100% - 60px");
+
+            &.not-searching i {
+                opacity: 0.4;
+            }
+
+            &.searching i {
+                @include animation(animate-flash 1s linear infinite);
+            }
         
             label {
                 position: absolute;
@@ -756,21 +755,27 @@ body {
             }
             
             #id {
-                font-size: 1em;
+                font-size: 1.1em;
                 font-weight: bold;
-                margin: 10px 0;
+                position: absolute;
+                margin: 5px 0 0;
+                left: 23px;
             }
             
             #qr {
-                margin-bottom: 10px;
+                margin: 30px 0 20px;
             }
         }
         
         .checkbox {
             margin: 15px 0;
+
+            span {
+                font-size: 1.1em;
+            }
             
             #includeBookmarksBar {
-                margin-top: 0;
+                margin-top: 2px;
             }
         }
     }
@@ -818,16 +823,22 @@ body {
                 margin-top: 20px;
             }
         }
+
+
+        .update-service-url {
+            .form-control.ng-invalid {
+                color: $colour-danger;
+                @include placeholder {
+                    color: $colour-danger;
+                    opacity: 0.7;
+                }
+            }
+        }
     }
     
     .backup-restore-panel {
         .introduction {
             margin-bottom: 20px;
-        }
-
-        .buttons {
-            text-align: center;
-            margin-top: 20px;
         }
         
         #restoreForm {

@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description:	Defines an interface for platform-specific functionality in order
  *              to separate from common functionality. This interface must be
  *              implemented for all supported platforms, e.g. see 
- *              platform/chrome/scripts/platformImplementation.js.
+ *              platform/chrome//platformImplementation.js.
  * ------------------------------------------------------------------------------------ */
 
 xBrowserSync.App.Platform = function($q) {

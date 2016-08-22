@@ -87,7 +87,7 @@
 		"message":  "Update Service URL"
 	},
 	"updateServiceUrlForm_Description" : {
-		"message":  "Enter the URL of an alternative xBrowserSync service to sync to that service.<br/><br/>Any current sync will be disabled and you'll then need to create a new sync, unless you already have an xBrowserSync ID from that service."
+		"message":  "Enter the URL of an alternative xBrowserSync service to sync to that service."
 	},
 	"updateServiceUrlForm_Placeholder" : {
 		"message":  "xBrowserSync service URL"
@@ -144,7 +144,7 @@
 		"message":  "Sync"
 	},
 	"syncPanel_Message" : {
-		"message":  "Start syncing with xBrowserSync now! If you already have an xBrowserSync ID you can use it to sync your existing data.<br/><br/>Disable syncing changes to the Bookmarks bar if you want to sync your bookmarks to multiple browsers but prefer their Bookmarks bars to display different links."
+		"message":  "Disable syncing changes to the Bookmarks bar if you want to sync your bookmarks to multiple browsers but prefer their Bookmarks bars to display different links."
 	},
 	"syncPanel_Id_Label" : {
 		"message":  "Your xBrowserSync ID"

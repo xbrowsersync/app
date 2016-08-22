@@ -93,7 +93,7 @@
         
         <div id="main-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.main">
             <div class="header-panel clearfix">
-                <div class="search-form">
+                <div class="search-form not-searching">
                     <div class="lookahead-container">
                         <span class="measure" data-ng-bind-html="vm.search.queryMeasure"></span>
                         <span class="lookahead" ng-show="vm.search.lookahead">{{ vm.search.lookahead }}</span>
@@ -227,7 +227,7 @@
                     
                     <div class="text-center">
                         <div class="id-panel" ng-show="vm.sync.enabled()"> 
-                            <label>{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_Id_Label) }}</label>
+                            <label>{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_Id_Label) }}:</label>
                             <p id="id">{{ vm.settings.id() }}</p>
                             <div id="qr"></div>
                         </div>
@@ -240,9 +240,6 @@
                             </label>
                         </div>
                         
-                        <button class="btn btn-default" ng-click="vm.view.change(vm.view.views.login)" ng-hide="vm.sync.enabled()" tabindex="2">
-                            {{ vm.platform.Constants.Get(vm.global.Constants.Button_Sync_Enable_Label) }}
-                        </button>
                         <button class="btn btn-default" ng-click="vm.events.syncForm_disableSync_Click();" 
                                 ng-show="vm.sync.enabled()" tabindex="3">
                             {{ vm.platform.Constants.Get(vm.global.Constants.Button_Sync_Disable_Label) }}
@@ -296,7 +293,7 @@
                     </div>
                     
                     <div class="update-service-url animate-fade" ng-show="vm.settings.service.displayUpdateServiceUrlForm">
-                        <form name="vm.updateServiceUrlForm" novalidate>
+                        <form name="vm.updateServiceUrlForm" ng-show="!vm.settings.service.displayUpdateServiceUrlConfirmation" novalidate>
                             <div>
                                 <p ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.UpdateServiceUrlForm_Description)"></p>
                                 <div class="form-group">
@@ -305,7 +302,8 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-default" ng-disabled="!vm.updateServiceUrlForm.txtServiceUrl || vm.updateServiceUrlForm.txtServiceUrl.$invalid" ng-click="vm.events.updateServiceUrlForm_Update_Click()" tabindex="7">
+                                <button type="submit" class="btn btn-default" ng-disabled="!vm.updateServiceUrlForm.txtServiceUrl.$dirty || !vm.updateServiceUrlForm.txtServiceUrl" 
+                                        ng-click="vm.events.updateServiceUrlForm_Update_Click()" tabindex="7">
                                     {{ vm.platform.Constants.Get(vm.global.Constants.Button_UpdateServiceUrl_Submit_Label) }}
                                 </button>
                                 <button type="button" class="btn btn-default" ng-click="vm.view.reset()" tabindex="8">
@@ -313,6 +311,20 @@
                                 </button>
                             </div>
                         </form>
+                    
+                        <div class="animate-fade" ng-show="vm.settings.service.displayUpdateServiceUrlConfirmation">
+                            <p>
+                                If you change the service URL, the current sync will be disabled and you'll need to create a new sync, unless you already have an xBrowserSync ID from the new service. Proceed?
+                            </p>
+                            <div class="buttons">
+                                <button class="btn btn-default" ng-click="vm.events.updateServiceUrlForm_Confirm_Click()" tabindex="14">
+                                    Yes
+                                </button>
+                                <button type="reset" class="btn btn-default" ng-click="vm.settings.service.displayUpdateServiceUrlConfirmation = false" tabindex="15">
+                                    No
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -382,20 +394,20 @@
         </div>
     </div>
 
-    <script src="scripts/angular/angular.min.js"></script>
-    <script src="scripts/angular-sanitize/angular-sanitize.min.js"></script>
-    <script src="scripts/angular-animate/angular-animate.min.js"></script>
-    <script src="scripts/angular-complexify/build/angular-complexify.min.js"></script>
-    <script src="scripts/underscore/underscore-min.js"></script>
-    <script src="scripts/crypto-js/crypto-js.js" async></script>
-    <script src="scripts/qrcode.js" async></script>
-    <script src="scripts/global.js"></script>
-    <script src="scripts/utility.js"></script>
-    <script src="scripts/httpInterceptor.js"></script>
-    <script src="scripts/api.js"></script>
-    <script src="scripts/bookmarks.js"></script>
-    <script src="scripts/platform.js"></script>
-    <script src="scripts/platformImplementation.js"></script>
-    <script src="scripts/app.js"></script>
+    <script src="js/angular/angular.min.js"></script>
+    <script src="js/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="js/angular-animate/angular-animate.min.js"></script>
+    <script src="js/angular-complexify/build/angular-complexify.min.js"></script>
+    <script src="js/underscore/underscore-min.js"></script>
+    <script src="js/crypto-js/crypto-js.js" async></script>
+    <script src="js/qrcode.js" async></script>
+    <script src="js/global.js"></script>
+    <script src="js/utility.js"></script>
+    <script src="js/httpInterceptor.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/bookmarks.js"></script>
+    <script src="js/platform.js"></script>
+    <script src="js/platformImplementation.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>

@@ -4,12 +4,12 @@
   "version": "1.0",
   "description": "__MSG_description__",
   "icons": { 
-    "128": "images/ext-icon.png" 
+    "128": "img/ext-icon.png" 
   },
   "default_locale": "en",
   "browser_action": {
     "default_icon": {
-        "19": "images/browser-action-off.png"
+        "19": "img/browser-action-off.png"
     },
     "default_popup": "app.html",
     "default_title": "__MSG_title__"
