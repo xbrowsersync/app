@@ -14,8 +14,53 @@
 	"tooltipWorking": {
 		"message": "syncing..."
 	},
-	"introduction": {
-		"message": "Welcome to xBrowserSync! To start syncing, enter a secret word or phrase that will be used to encrypt and decrypt your browser data.<br/><br/>If you already have an xBrowserSync ID, enter it here with the corresponding secret and your synced data will be retrieved. Otherwise, your local data will be synced and you'll receive a new xBrowserSync ID.<br/><br/>You can change sync settings in the Settings panel."
+	"button_Help_Label": {
+		"message": "Display help"
+	},
+	"button_Next_Label": {
+		"message": "Next"
+	},
+	"button_Previous_Label": {
+		"message": "Previous"
+	},
+	"introPanel1_Message": {
+		"message": "<h4>Welcome</h4><p>Thanks for installing xBrowserSync!</p><p>Have a read through the following pages to help you get started. Should you require futher help, check out the <a href='http://xbrowsersync.org/#faqs' target='_blank'>FAQs</a>.</p>"
+	},
+	"introPanel2_Message": {
+		"message": "<h4>Your secret word</h4><p>To begin, enter a secret word or phrase that will be used to encrypt and decrypt your browser data.</p><p>Make it strong to protect your data but also memorable, if you forget it we can't remind you and you won't be able to decrypt your data without it.</p>"
+	},
+	"introPanel3_Message": {
+		"message": "<h4>Syncing for the first time</h4><p>Once you've entered your secret word or phrase, you are ready to create a new sync. Just click the Sync button and your browser data will be encrypted before being synced to the xBrowserSync service.</p><p>And that's it, you're synced! Any future changes will be synced automatically in the background.</p>"
+	},
+	"introPanel4_Message": {
+		"message": "<h4>Your xBrowserSync ID</h4><p>Every time you create a new sync you are given a new xBrowserSync ID, which can be found via the Settings panel.</p><p>You can use this ID along with your corresponding secret word or phrase to retrieve your synced data or sync on a different device.</p>"
+	},
+	"introPanel5_Message": {
+		"message": "<h4>Syncing to another service</h4><p>When creating new syncs, by default your data is synced to the official xBrowserSync service, but you can change the service you sync to via the Settings panel.</p><p>You may do this because the service is full, offline, or perhaps you would like to <a href='https://github.com/xBrowserSync/API' target='_blank'>run your own xBrowserSync service</a> to sync your data to.</p>"
+	},
+	"introPanel6_Message": {
+		"message": "<h4>New service, new ID</h4><p>IDs are service-specific. If you have created a sync and received an xBrowserSync ID with one service it cannot be used with another.</p><p>Whenever you change services you must create a new sync. You'll then receive a new ID for use with that service.</p>"
+	},
+	"introPanel7_Message": {
+		"message": "<h4>Use it or lose it</h4><p>Service space is limited. If you do not use xBrowserSync for an extended period, any syncs you have created may be deleted to make room for others.</p><p>If you're synced, whenever you have your browser open xBrowserSync will sync regularly in the background which will prevent your sync from being deleted.</p>"
+	},
+	"introPanel8_Message": {
+		"message": "<h4>Searching your bookmarks</h4><p>Once synced, all of your bookmarks will be available in the local browser which can be searched easily on the Search panel.</p><p>From there you can also modify or delete existing bookmarks. Just hover the mouse over a specific search result and click the pen icon to edit the bookmark.</p>"
+	},
+	"introPanel9_Message": {
+		"message": "<h4>Native features supported</h4><p>Feel free to use your browser's native bookmarking features whilst synced, any changes you make there will be synced by xBrowserSync automatically.</p><p>If you have spent time organising your bookmarks don't worry, xBrowserSync will respect your existing bookmarks hierarchy!</p>"
+	},
+	"introPanel10_Message": {
+		"message": "<h4>Adding a bookmark</h4><p>You can add the current page as a bookmark (or modify it if it is bookmarked already) by clicking on the bookmark icon in the Search panel.</p><p>Include a description which will be displayed in search results, and add tags to help find the bookmark more easily when searching.</p>"
+	},
+	"introPanel11_Message": {
+		"message": "<h4>Remember to back up</h4><p>Backup and restore for your browser data is available via the Settings panel.</p><p>Back up saves your unencrypted browser data to a text file. Restore syncs your backed up data. If you are not currently synced, only local browser data will be affected.</p>"
+	},
+	"introPanel12_Message": {
+		"message": "<h4>Handy tip</h4><p>When changing services, backup your synced data using the first service before creating a new sync with the second, then restore your backed up data to the second service.</p><p>This will ensure that any bookmark descriptions and tags that are not supported natively by your browser are also synced.</p>"
+	},
+	"introPanel13_Message": {
+		"message": "<h4>Noticed an issue?</h4><p>If you've found a bug in xBrowserSync or would like to request a new feature, head on over to Git Hub and <a href='https://github.com/xBrowserSync/App/issues' target='_blank'>submit an issue</a>.</p><p>Calling all coders! If you would like to help make xBrowserSync better, go ahead and fork the <a href='https://github.com/xBrowserSync/App' target='_blank'>xBrowserSync Git Hub repo</a> and submit a pull request.</p>"
 	},
 	"button_Settings_Label": {
 		"message": "Settings"
@@ -44,22 +89,16 @@
 	"button_Sync_Disable_Label": {
 		"message": "Disable Sync"
 	},
-	"button_Sync_Enabled_Label": {
-		"message": "Sync Enabled"
-	},
-	"button_Sync_InProgress_Label" : {
-		"message":  "Syncing..."
-	},
 	"confirmReplaceBookmarks_Title" : {
 		"message":  "Overwrite browser data?"
 	},
 	"confirmReplaceBookmarks_Message" : {
 		"message":  "xBrowserSync data will overwrite local browser data. OK to proceed?"
 	},
-	"button_ReplaceBookmarks_Confirm" : {
+	"button_Confirm_Label" : {
 		"message":  "Yes"
 	},
-	"button_ReplaceBookmarks_Cancel" : {
+	"button_Deny_Label" : {
 		"message":  "No"
 	},
 	"field_Search_Description" : {
@@ -69,10 +108,7 @@
 		"message":  "No bookmarks found"
 	},
 	"serviceStatus_Label" : {
-		"message":  "Service status"
-	},
-	"serviceStatus_Message" : {
-		"message":  "Check current service status or sync to a different xBrowserSync service by changing the service URL here."
+		"message":  "Service"
 	},
 	"serviceStatus_NoNewSyncs" : {
 		"message":  "Online but not accepting new syncs"
@@ -84,10 +120,10 @@
 		"message":  "Offline"
 	},
 	"button_UpdateServiceUrl_Label" : {
-		"message":  "Update Service URL"
+		"message":  "Change Service"
 	},
 	"updateServiceUrlForm_Description" : {
-		"message":  "Enter the URL of an alternative xBrowserSync service to sync to that service."
+		"message":  "Enter the URL of an alternative xBrowserSync service, check the list of public services <a href='http://xbrowsersync.org/#status' target='_blank'>here</a>."
 	},
 	"updateServiceUrlForm_Placeholder" : {
 		"message":  "xBrowserSync service URL"
@@ -95,11 +131,14 @@
 	"button_UpdateServiceUrl_Submit_Label" : {
 		"message":  "Update"
 	},
-	"button_UpdateServiceUrl_Cancel_Label" : {
+	"button_Cancel_Label" : {
 		"message":  "Cancel"
 	},
+	"confirmUpdateServiceUrl_Message": {
+		"message":  "After changing the service, the current sync will be disabled and you'll need to create a new sync. If you already have an xBrowserSync ID from the service you can use it to retrieve your synced data. Proceed?"
+	},
 	"backupRestore_Title" : {
-		"message":  "Backup or restore data"
+		"message":  "Backup and restore"
 	},
 	"backupRestore_Message" : {
 		"message":  "Backup your xBrowserSync data or restore from a previous backup.<br/><br/>If sync is not enabled, backup and restore will apply to local browser data only."
@@ -110,10 +149,7 @@
 	"button_Restore_Label" : {
 		"message":  "Restore"
 	},
-	"button_Restore_Cancel_Label" : {
-		"message":  "Cancel"
-	},
-	"button_Restore_Done_Label" : {
+	"button_Done_Label" : {
 		"message":  "Done"
 	},
 	"button_Close_Label" : {
@@ -151,12 +187,6 @@
 	},
 	"syncPanel_IncludeBookmarksBar_Label" : {
 		"message":  "Include Bookmarks bar"
-	},
-	"button_ConfirmRestore_Confirm_Label" : {
-		"message":  "Yes"
-	},
-	"button_ConfirmRestore_Cancel_Label" : {
-		"message":  "No"
 	},
 	"confirmRestore_Sync_Message" : {
 		"message":  "As sync is currently enabled, the data being restored will overwrite your xBrowserSync synced data. To restore data to the local browser only, disable sync before restoring. OK to proceed?"
@@ -216,7 +246,7 @@
 		"message":  "Connection lost"
 	},
 	"error_HttpRequestFailed_Message" : {
-		"message":  "Couldn't connect to the xBrowserSync service, check the service status in the settings panel."
+		"message":  "Couldn't connect to the xBrowserSync service, check the service status in the Settings panel."
 	},
 	"error_TooManyRequests_Title" : {
 		"message":  "Slow down!"

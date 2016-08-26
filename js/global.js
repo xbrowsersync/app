@@ -73,23 +73,35 @@ xBrowserSync.App.Global = function(platform) {
 			Button_Settings_Label: 'button_Settings_Label',
 			Button_AddBookmark_Label: 'button_AddBookmark_Label',
 			Button_EditBookmark_Label: 'button_EditBookmark_Label',
-            Introduction: 'introduction',
+			Button_Help_Label: 'button_Help_Label',
+			Button_Next_Label: 'button_Next_Label',
+			Button_Previous_Label: 'button_Previous_Label',
+            IntroPanel1_Message: 'introPanel1_Message',
+            IntroPanel2_Message: 'introPanel2_Message',
+            IntroPanel3_Message: 'introPanel3_Message',
+            IntroPanel4_Message: 'introPanel4_Message',
+            IntroPanel5_Message: 'introPanel5_Message',
+            IntroPanel6_Message: 'introPanel6_Message',
+            IntroPanel7_Message: 'introPanel7_Message',
+            IntroPanel8_Message: 'introPanel8_Message',
+            IntroPanel9_Message: 'introPanel9_Message',
+            IntroPanel10_Message: 'introPanel10_Message',
+            IntroPanel11_Message: 'introPanel11_Message',
+            IntroPanel12_Message: 'introPanel12_Message',
+            IntroPanel13_Message: 'introPanel13_Message',
 			Field_ClientSecret_Label: 'field_ClientSecret_Label',
 			Field_ClientSecret_Description: 'field_ClientSecret_Description',
 			Field_Id_Label: 'field_Id_Label',
 			Field_Id_Description: 'field_Id_Description',
 			Button_Sync_Enable_Label: 'button_Sync_Enable_Label',
 			Button_Sync_Disable_Label: 'button_Sync_Disable_Label',
-			Button_Sync_Enabled_Label: 'button_Sync_Enabled_Label',
-			Button_Sync_InProgress_Label: 'button_Sync_InProgress_Label',
 			ConfirmReplaceBookmarks_Title: 'confirmReplaceBookmarks_Title',
 			ConfirmReplaceBookmarks_Message: 'confirmReplaceBookmarks_Message',
-			Button_ReplaceBookmarks_Confirm: 'button_ReplaceBookmarks_Confirm',
-			Button_ReplaceBookmarks_Cancel: 'button_ReplaceBookmarks_Cancel',
+			Button_Confirm_Label: 'button_Confirm_Label',
+			Button_Deny_Label: 'button_Deny_Label',
 			Field_Search_Description: 'field_Search_Description',
             NoSearchResults_Message: 'noSearchResults_Message', 
             ServiceStatus_Label: 'serviceStatus_Label',
-			ServiceStatus_Message: 'serviceStatus_Message',
             ServiceStatus_NoNewSyncs: 'serviceStatus_NoNewSyncs',
 			ServiceStatus_Online: 'serviceStatus_Online',
 			ServiceStatus_Offline: 'serviceStatus_Offline',
@@ -97,13 +109,13 @@ xBrowserSync.App.Global = function(platform) {
 			UpdateServiceUrlForm_Description: 'updateServiceUrlForm_Description',
 			UpdateServiceUrlForm_Placeholder: 'updateServiceUrlForm_Placeholder',
 			Button_UpdateServiceUrl_Submit_Label: 'button_UpdateServiceUrl_Submit_Label',
-			Button_UpdateServiceUrl_Cancel_Label: 'button_UpdateServiceUrl_Cancel_Label',
+			Button_Cancel_Label: 'button_Cancel_Label',
+			ConfirmUpdateServiceUrl_Message: 'confirmUpdateServiceUrl_Message',
 			BackupRestore_Title: 'backupRestore_Title',
             BackupRestore_Message: 'backupRestore_Message',
 			Button_Backup_Label: 'button_Backup_Label',
 			Button_Restore_Label: 'button_Restore_Label',
-			Button_Restore_Cancel_Label: 'button_Restore_Cancel_Label',
-			Button_Restore_Done_Label: 'button_Restore_Done_Label',
+			Button_Done_Label: 'button_Done_Label',
 			Button_Close_Label: 'button_Close_Label',
 			BackupSuccess_Message: 'backupSuccess_Message',
 			RestoreSuccess_Message: 'restoreSuccess_Message',
@@ -116,8 +128,6 @@ xBrowserSync.App.Global = function(platform) {
             SyncPanel_Message: 'syncPanel_Message',
             SyncPanel_Id_Label: 'syncPanel_Id_Label',
 			SyncPanel_IncludeBookmarksBar_Label: 'syncPanel_IncludeBookmarksBar_Label',
-			Button_ConfirmRestore_Confirm_Label: 'button_ConfirmRestore_Confirm_Label',
-            Button_ConfirmRestore_Cancel_Label: 'button_ConfirmRestore_Cancel_Label',
             ConfirmRestore_Sync_Message: 'confirmRestore_Sync_Message',
             ConfirmRestore_NoSync_Message: 'confirmRestore_NoSync_Message',
             BookmarkPanel_Title_Add: 'bookmarkPanel_Title_Add',
@@ -206,6 +216,31 @@ xBrowserSync.App.Global = function(platform) {
             Set: function(value) {
                 platform.LocalStorage.Set(
                     'xBrowserSync-disableEventListeners', 
+                    value);
+            }
+        },
+        DisplayIntro: {
+            Get: function() {
+                var value;
+                
+                value = platform.LocalStorage.Get(
+                    'xBrowserSync-displayIntro');
+                
+                if (!value) {
+                    return true;
+                }
+                else {
+                    if (value === 'true') {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            },
+            Set: function(value) {
+                platform.LocalStorage.Set(
+                    'xBrowserSync-displayIntro', 
                     value);
             }
         },

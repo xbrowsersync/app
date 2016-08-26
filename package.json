@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "jshint": "2.9.x",
+    "minifier": "0.8.x",
     "npm-build-tools": "2.2.x",
     "node-sass": "3.7.x"
   },

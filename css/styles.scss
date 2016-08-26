@@ -1,6 +1,7 @@
 @import 'fonts.scss';
 @import 'mixins.scss';
 @import 'variables.scss';
+@import 'animations.scss';
 
 body {
 	font-family: $font-stack;
@@ -8,13 +9,6 @@ body {
     font-size: 13px;
     line-height: 17px;
 
-    h1 {
-        margin: auto;
-        background: url("../img/title.png") 0 40px no-repeat;
-        height: 260px;
-        width: 150px;
-    }
-    
     h2 {
         font-size: 1.8em;
         font-weight: 800;
@@ -31,7 +25,7 @@ body {
     
     a {
         color: $colour-link;
-        @include transition(all, ease-in, 0.2s);
+        transition: all, ease-in, 0.2s;
         cursor: pointer;
         
         .active,
@@ -55,9 +49,9 @@ body {
                 min-width: 60px;
                 border-color: $colour-text1;
                 border-width: 2px;
-                @include border-radius(25px);
-                @include transition(all, ease-in, 0.2s);
-                @include box-shadow(0, 0, 0);
+                border-radius: $border-radius;
+                transition: all, ease-in, 0.2s;
+                box-shadow: none;
                 
                 &:not([disabled]):hover {
                     background-color: $colour-text1;
@@ -85,8 +79,8 @@ body {
                 color: $colour-text2;
                 opacity: 0.4;
                 padding: 0;
-                @include transition(all, ease-in, 0.2s);
-                @include box-shadow(0, 0, 0);
+                transition: all, ease-in, 0.2s;
+                box-shadow: none;
                 
                 .active,
                 &:active,
@@ -101,7 +95,7 @@ body {
             &:active:focus,
             &:focus,
             &:hover {
-                @include box-shadow(0, 0, 0);
+                box-shadow: none;
                 outline: 0;
             }
         }
@@ -109,7 +103,7 @@ body {
 
     textarea.form-control {
         padding: 8px 13px;
-        @include border-radius(15px);
+        border-radius: 15px;
     }
     
     .alert {
@@ -126,74 +120,17 @@ body {
         }
     }
     
-    .animate-fade {
-        &.ng-hide {
-            opacity: 0;
-        }
-        
-        &.ng-hide-remove {
-            @include transition(opacity, linear, 0.2s);
-        }
-    }
-    
-    .animate-fold {
-        @include transition(height, linear, 0.1s);
-        overflow: hidden;        
-        
-        &.ng-hide {
-            height: 0!important;
-        }
-    }
-    
-    .animate-fold-max {
-        @include transition(max-height, linear, 0.1s);
-        overflow: hidden;        
-        
-        &.ng-hide {
-            max-height: 0!important;
-        }
-    }
-    
-    .animate-reveal {
-        &.ng-hide {
-            opacity: 0;
-        }
-        
-        &.ng-hide-remove {
-            @include animation(animate-reveal 0.3s ease-in-out);
-        }
-        
-        &.ng-hide-add {
-            @include transition(opacity, linear, 0.5s);
-        }
-    }
-
-    @include keyframes(animate-reveal) {
-        0% {
-            transform: scale(0);
-            opacity: 0.0;
-        }
-        100% {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-
-    @include keyframes(animate-flash) {
-        0% {
-            opacity: 0;
-        }
-        50% {
-            opacity: 1;
-        }
-        100% {
-            opacity: 0;
-        }
-    }
-    
     .buttons {
         text-align: center;
         margin-top: 15px;
+
+        button {
+            margin-right: 10px;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
     }
     
     .confirm {
@@ -215,21 +152,21 @@ body {
         padding: 20px 15px;
         resize: none;
         border: none;
-        @include border-radius($border-radius);
-        @include box-shadow(0, 0, 0);
+        border-radius: $border-radius;
+        box-shadow: none;
         @include placeholder {
             color: $colour-text2;
-            @include opacity(0.4);
+            opacity: 0.4;
         }
 
         &:focus {
-            @include box-shadow(0, 0, 0);
+            box-shadow: none;
         }
     }
 
     .has-error {
         .form-control {
-            @include box-shadow(0, 0, 0);
+            box-shadow: none;
             color: $colour-danger;
             @include placeholder {
                 color: $colour-danger;
@@ -237,7 +174,7 @@ body {
             }
 
             &:focus {
-                @include box-shadow(0, 0, 0);
+                box-shadow: none;
             }
         }
     }
@@ -255,17 +192,6 @@ body {
     
     .input-group {
         margin-bottom: 15px;
-    
-        &.error .ng-invalid {
-            border-color: #a94442;
-        }
-    }
-        
-    .input-group-addon {
-        border-color: $colour-link;
-        background-color: $colour-panel;
-        color: $colour-link;
-        font-weight: bold;
     }
     
     .lookahead-container {
@@ -273,11 +199,9 @@ body {
         
         .lookahead {            
             float: left;
-            color: $colour-link;
-            opacity: 0.35;
-            
-            /* TODO: convert to mixin */
-            -webkit-user-select: none;
+            color: $colour-text2;
+            opacity: 0.4;
+            @include css-prefix(user-select, none);
         }
         
         .measure {
@@ -294,27 +218,27 @@ body {
     }
 
     .progress-bar-success {
-        background-color: $colour-success;
+        background-color: $colour-success!important;
     }
     
     .progress-bar-warning {
-        background-color: $colour-warning;
+        background-color: $colour-warning!important;
     }
     
     .progress-bar-danger {
-        background-color: $colour-danger;
+        background-color: $colour-danger!important;
     }
     
     .text-success {
-        color: $colour-success;
+        color: $colour-success!important;
     }
     
     .text-warning {
-        color: $colour-warning;
+        color: $colour-warning!important;
     }
     
     .text-danger {
-        color: $colour-danger;
+        color: $colour-danger!important;
     }
     
     .view {
@@ -324,14 +248,19 @@ body {
     .well {
         background-color: $colour-text1;
         color: $colour-text2;
-        @include box-shadow(0, 0, 0);
-        @include border-radius(25px);
+        box-shadow: none;
+        border-radius: $border-radius;
         border: none;
         padding: 15px 20px;
         margin-bottom: 15px;
     
         &:last-child {
             margin-bottom: 0;
+        }
+
+        &.dark {
+            background-color: $colour-text2;
+            color: $colour-text1;
         }
 
         .btn.btn-default {
@@ -341,16 +270,11 @@ body {
             border-width: 1px;
             font-size: 1.1em;
             padding: 6px 12px 8px;
-            margin-right: 10px;
             
             &:not([disabled]):hover {
                 background-color: $colour-text2;
                 color: $colour-link-highlight;
                 border-color: $colour-text2;
-            }
-
-            &:last-child {
-                margin-right: 0;
             }
         }
     
@@ -384,6 +308,7 @@ body {
         
         h3 {
             margin-top: 0;
+            color: $colour-link-highlight;
         }
     }
     
@@ -394,8 +319,8 @@ body {
         top: 0;
         left: 0;
         z-index: 100;
-        opacity: 0.95;
-        background: #fff;
+        opacity: 0.8;
+        background: $colour-text2;
     }
 }
 
@@ -405,10 +330,56 @@ body {
     & > p {
         margin-bottom: 15px;
     }
+
+    .intro-panel {
+        height: 260px;
+        overflow: hidden;
     
-    .introduction {
-        height: 250px;
-        display: none;
+        & > div {
+            position: absolute;
+            height: 245px;
+            width: 255px;
+            font-size: 1.1em;
+            line-height: 1.3em;
+            left: 10px;
+            padding: 12px 25px;
+
+            & > div {
+                position: relative;
+                z-index: 20;
+            }
+        }
+
+        h1 {
+            margin: auto;
+            background: url("../img/title.png") 0 40px no-repeat;
+            height: 260px;
+            width: 150px;
+        }
+
+        .buttons {
+            text-align: left;
+            margin: 0;
+            width: 100%;
+            position: absolute;
+            left: 0;
+            top: 110px;
+            z-index: 10;
+
+            button {
+                color: $colour-text1;
+                font-size: 1.2em;
+            }
+
+            .btn-prev {
+                margin-left: 7px;
+            }
+            
+            .btn-next {
+                margin-right: 7px;
+                float: right;
+            }
+        }
     }
     
     .secret-form-group {
@@ -424,15 +395,16 @@ body {
             position: absolute;
             top: 0;
             z-index: 10;
-            @include box-shadow(0, 0, 0);
+            box-shadow: none;
             height: 40px;
             width: 100%;
             background-color: transparent;
             border: solid 2px $colour-text1;
-            @include border-radius($border-radius);
+            border-radius: $border-radius;
 
             .progress-bar {
-                @include box-shadow(0, 0, 0);
+                box-shadow: none;
+                background-color: $colour-danger;                
             }
         }
             
@@ -442,7 +414,7 @@ body {
             width: 100%;
             position: absolute;
             top: 0;
-            @include border-radius($border-radius);
+            border-radius: $border-radius;
         }
     }
 
@@ -480,16 +452,10 @@ body {
         .search-form {
             position: relative;
             float: left;
-            @include calc(width, "100% - 60px");
+            border-radius: $border-radius;
+            background-color: $colour-text1;
+            width: calc(100% - 60px);
 
-            &.not-searching i {
-                opacity: 0.4;
-            }
-
-            &.searching i {
-                @include animation(animate-flash 1s linear infinite);
-            }
-        
             label {
                 position: absolute;
                 left: 13px;
@@ -501,29 +467,29 @@ body {
                 font-size: 1.3em;
                 line-height: 40px;
                 top: 0;
+                opacity: 0.4;
             }
             
             input {
                 position: relative;
                 z-index: 50;
                 padding-left: 35px;
-                @include border-radius(20px);
                 font-size: 1.5em;
+                background: transparent;
             }
             
             .lookahead-container {
                 left: 36px;
                 
                 .lookahead {
-                    font-size: 16px;
-                    line-height: 33px;
+                    font-size: 1.5em;
+                    line-height: 2.2;
                 }
             }
         }
     }
     
     .search-results-panel {
-        border-radius: 3px;
         margin-top: 10px;
         max-height: 300px;
         overflow-y: auto;
@@ -545,78 +511,68 @@ body {
         }
         
         .list-group-item {
-            background: transparent;
+            background: $colour-text1;
             border: none;
-            border-radius: 5px;
+            border-radius: $border-radius;
             padding: 0;
-            margin-bottom: 5px;
+            margin: 0 10px 10px 0;
+            outline: none;
             
             &:last-child {
                 margin-bottom: 0;
             }
         
             &:hover {
-                a {
-                    background: $colour-well;
+                .list-group-item-heading {
+                    color: $colour-link-highlight;
                 }
                     
-                button.btn-close { 
+                button {
                     display: block;
                 }
             }
             
             a {
-                border-radius: 5px;
-                padding: 7px 25px 7px 5px;
+                border-radius: $border-radius;
+                padding: 12px 30px 12px 20px;
                 display: block;
-                
-                &:hover,
-                &:active,
+
                 &:focus {
-                    background: $colour-well;
-                    text-decoration: none;
-                    color: $colour-link;
+                    .list-group-item-heading {
+                        text-decoration: underline;
+                    }
                 }
             }
             
-            button.btn-close {
+            button {
                 display: none;
                 position: absolute;
-                top: 4px;
-                right: 5px;
-                
-                &:active,
-                &:focus {
-                    color: $colour-link-icon;
-                    
-                    &:hover {
-                        color: $colour-link;
-                    }
-                }
+                top: 7px;
+                right: 10px;
+                padding: 5px;
             }
         }
         
         .list-group-item-heading {
-            color: $colour-base;
-            font-size: 16px;
-            line-height: 18px;
+            color: $colour-text2;
+            font-size: 1.3em;
+            font-weight: normal;
+            line-height: 20px;
             margin-bottom: 3px;
+            transition: all, ease-in, 0.2s;
         }
         
         .list-group-item-text {
-            color: $colour-base;
-        }
-        
-        .url, .description {
-            font-size: 11px;
-            line-height: 14px;
+            color: $colour-text2;
         }
         
         .description {
             font-style: italic;
+            margin-bottom: 3px;
         }
         
         .url {
+            font-size: 0.9em;
             color: $colour-link;
             white-space: nowrap;
             overflow: hidden;
@@ -625,7 +581,6 @@ body {
         }
         
         .well {
-            background: $colour-well;
             border: none;
             text-align: center;
             padding: 20px;
@@ -652,20 +607,18 @@ body {
     }
     
     .lookahead-container {
-        left: 13px;
+        left: 25px;
         
         .lookahead {
-            font-size: 1em;
-            line-height: 22px;
-            height: 34px;
-            padding: 6px 0;
+            font-size: 1.1em;
+            line-height: 2.8;
         }
     }
     
     .tags {
         overflow-y: auto;
-        max-height: 55px;
-        margin: 15px 0;
+        max-height: 56px;
+        margin: 10px 0 15px;
         
         .label {
             display: block;
@@ -733,7 +686,7 @@ body {
             i {
                 opacity: 0.4;
                 float: right;
-                @include transition(all, ease-in, 0.2s);
+                transition: all, ease-in, 0.2s;
             }
         }
         
@@ -783,10 +736,10 @@ body {
     .status-panel {
         .status-display {
             i {
-                font-size: 1.3em;
+                font-size: 1.2em;
                 position: relative;
-                top: -3px;
                 margin-right: 2px;
+                vertical-align: top;
             }
             
             .status-url {
@@ -795,7 +748,7 @@ body {
             }
 
             .status-url-panel {
-                margin-top: 20px;
+                margin-top: 10px;
             }
             
             span.label {
@@ -803,9 +756,9 @@ body {
             }
             
             p.status-message {
-                color: $colour-link;
+                color: $colour-bg1;
                 margin: 10px 0 0;
-                max-height: 53px;
+                max-height: 120px;
                 overflow-y: auto;
                 font-style: italic;
                 quotes: '\201c' '\201d';

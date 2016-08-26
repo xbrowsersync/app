@@ -8,34 +8,13 @@
 }
 
 @mixin animation($str) {
-  @include css-prefix('animation', $str);
+  @include css-prefix(animation, $str);
 }
 
 @mixin background-gradient($direction, $startColor, $startColorAmount, $endColor, $endColorAmount) {
   background-color: $startColor;
-  background: -webkit-linear-gradient($direction, $startColor $startColorAmount, $endColor $endColorAmount);
-  background: -moz-linear-gradient($direction, $startColor $startColorAmount, $endColor $endColorAmount);
-  background: -ms-linear-gradient($direction, $startColor $startColorAmount, $endColor $endColorAmount);
-  background: -o-linear-gradient($direction, $startColor $startColorAmount, $endColor $endColorAmount);
   background: linear-gradient($direction, $startColor $startColorAmount, $endColor $endColorAmount);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#{$startColor}', endColorStr='#{$endColor}');
-}
-
-@mixin border-radius($radius: 5px) {
-  @include css-prefix('border-radius', $radius);
-}
-
-@mixin box-shadow($x: 2px, $y: 2px, $blur: 5px, $color: rgba(0,0,0,.4), $inset: "") {
-  @if ($inset != "") {
-    @include css-prefix('box-shadow', $inset $x $y $blur $color);
-  } @else {
-    @include css-prefix('box-shadow', $x $y $blur $color);
-  }
-}
-
-@mixin calc($property, $expression) { 
-  #{$property}: -webkit-calc(#{$expression}); 
-  #{$property}: calc(#{$expression}); 
 }
 
 @mixin hide-text{
@@ -66,14 +45,6 @@
   }
 }
 
-@mixin opacity($opacity: 0.5) {
-  $opacityMultiplied: ($opacity * 100);
-
-  filter: alpha(opacity=$opacityMultiplied);
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=" + $opacityMultiplied + ")";
-  @include css-prefix('opacity', $opacity);
-}
-
 @mixin placeholder {
   &::-webkit-input-placeholder {
     @content;
@@ -98,8 +69,4 @@
   white-space: -pre-pre-wrap;
   white-space: -o-pre-wrap;
   word-wrap: break-word;
-}
-
-@mixin transition($property, $effect, $duration) {
-  @include css-prefix('transition', #{$property} #{$effect} #{$duration});
 }

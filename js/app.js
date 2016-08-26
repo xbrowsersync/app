@@ -68,20 +68,49 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             bookmarkForm_RemoveTag_Click: bookmarkForm_RemoveTag_Click,
             bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
             includeBookmarksBar_Click: includeBookmarksBar_Click,
+            introPanel_ShowHelp_Click: introPanel_ShowHelp_Click,
             queueSync: queueSync,
             searchForm_SearchText_Change: searchForm_SearchText_Change,
             searchForm_SearchText_KeyDown: searchForm_SearchText_KeyDown,
             searchForm_SearchResult_Click: searchForm_SearchResult_Click,
             searchForm_SearchResult_KeyDown: searchForm_SearchResult_KeyDown,
             searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
+            syncForm_CancelSyncConfirmation_Click: syncForm_CancelSyncConfirmation_Click,
             syncForm_ClientSecret_Change: syncForm_ClientSecret_Change,
-            syncForm_confirmSync_Click: startSyncing,
-            syncForm_disableSync_Click: syncForm_disableSync_Click,
-            syncForm_enableSync_Click: syncForm_enableSync_Click,
+            syncForm_ConfirmSync_Click: startSyncing,
+            syncForm_DisableSync_Click: syncForm_DisableSync_Click,
+            syncForm_EnableSync_Click: syncForm_EnableSync_Click,
             toggleBookmark_Click: toggleBookmark_Click,
             updateServiceUrlForm_Confirm_Click: updateServiceUrlForm_Confirm_Click,
             updateServiceUrlForm_Display_Click: updateServiceUrlForm_Display_Click,
-            updateServiceUrlForm_Update_Click: updateServiceUrlForm_Update_Click
+            updateServiceUrlForm_Update_Click: updateServiceUrlForm_Update_Click,
+            updateServiceUrlForm_Update_KeyPress: updateServiceUrlForm_Update_KeyPress
+        };
+
+        vm.introduction = {
+            displayIntro: function(value) {
+                return arguments.length ? 
+                    global.DisplayIntro.Set(value) : 
+                    global.DisplayIntro.Get();
+            },
+            displayPanel: function(panelToDisplay) {
+                if (!panelToDisplay || panelToDisplay > vm.introduction.currentPanel) {
+                    var panels = document.querySelectorAll('.intro-panel > div');
+
+                    for (var i = 0; i < panels.length; i++) {
+                        panels[i].classList.remove('reverse');
+                    }
+                }
+                else if (panelToDisplay < vm.introduction.currentPanel) {
+                    document.querySelector('#intro-panel-' + vm.introduction.currentPanel).classList.add('reverse');
+                    document.querySelector('#intro-panel-' + panelToDisplay).classList.add('reverse');
+                }
+                
+                vm.introduction.showLogo = (!panelToDisplay) ? true : false;                
+                vm.introduction.currentPanel = (!panelToDisplay) ? 0 : panelToDisplay;
+            },
+            showLogo: true,
+            currentPanel: 0
         };
         
         vm.search = {
@@ -99,6 +128,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             dataToRestoreIsValid: function() {
                 return checkRestoreData(vm.settings.dataToRestore);
             },
+            displayCancelSyncConfirmation: false,
 			displayRestoreConfirmation: false,
             displayRestoreForm: false,
 			id: function(value) {
@@ -179,9 +209,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         }, 100);
                         break;
                     case vm.view.views.settings:
-                        // Set visible panel to sync panel
-                        vm.settings.visiblePanel = vm.settings.panels.sync;
-                        
                         // Get service status
                         api.CheckServiceStatus()
                             .then(setServiceInformation)
@@ -214,9 +241,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 }
             },
             reset: function() {
-                // TODO: remove this function
                 vm.alert.show = false;
                 vm.working = false;
+                
+                if (!vm.introduction.displayIntro()) {
+                    vm.introduction.displayPanel();
+                }
                 
                 vm.sync.showConfirmation = false;
                 if (vm.syncForm) {
@@ -224,6 +254,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.syncForm.$setUntouched();
                 }
                     
+                if (vm.view.current !== vm.view.views.settings) {
+                    vm.settings.visiblePanel = vm.settings.panels.sync;
+                }
+
+                vm.settings.service.displayCancelSyncConfirmation = false;
                 vm.settings.service.displayUpdateServiceUrlConfirmation = false;
                 vm.settings.service.displayUpdateServiceUrlForm = false;
                 vm.settings.service.newServiceUrl = vm.settings.service.url();
@@ -232,7 +267,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.settings.displayRestoreConfirmation = false;
                 vm.settings.dataToRestore = '';
                 if (vm.updateServiceUrlForm) {
-                    vm.updateServiceUrlForm.txtServiceUrl.$setValidity('InvalidService', true);
+                    updateServiceUrlForm_Clean();
                 }
                 
                 vm.search.lookahead = null;
@@ -342,7 +377,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.alert.show = false;
         vm.bookmark.tagLookahead = null;
 
-        if (!vm.bookmark.tagText.trim()) {
+        if (!vm.bookmark.tagText || !vm.bookmark.tagText.trim()) {
             return;
         }
 
@@ -599,6 +634,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     if (!global.SyncEnabled.Get()) {
                         global.SyncEnabled.Set(true);
                     }
+
+                    // Disable the intro animation
+                    vm.introduction.displayIntro(false);
                     
                     // If initial sync, switch to main view 
                     if (vm.view.current === vm.view.views.login) {
@@ -689,6 +727,35 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // Display main view
         vm.view.displayMain();
+        
+        // Display intro animation if required
+        if (vm.view.current === vm.view.views.login && !!vm.introduction.displayIntro()) {
+            introPanel_DisplayIntro();
+        }
+    };
+
+    var introPanel_DisplayIntro = function() {
+        vm.introduction.showLogo = false;
+
+        $timeout(function() {
+            vm.introduction.showLogo = true;
+
+            $timeout(function() {
+                vm.introduction.showLogo = false;
+
+                $timeout(function() {
+                    vm.introduction.displayPanel(1);
+                }, 1000);
+            }, 3000);
+        }, 1000);
+    };
+
+    var introPanel_ShowHelp_Click = function() {
+        vm.introduction.showLogo = false;
+        
+        $timeout(function() {
+            vm.introduction.displayPanel(1);
+        }, 500);
     };
 	
 	var queueSync = function() {
@@ -730,6 +797,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var searchBookmarks = function() {
         var queryData;
+
+        searchForm_ToggleSearchingAnimation(true);
         
         var urlRegex = /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
         if (!!vm.search.query.trim().match(urlRegex)) {
@@ -742,11 +811,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         bookmarks.Search(queryData)
             .then(function(results) {
                 vm.search.results = results;
+                searchForm_ToggleSearchingAnimation
             })
             .catch(function(err) {
                 vm.search.results = null;
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
+            })
+            .finally(function() {
+                searchForm_ToggleSearchingAnimation(false);
             });
     };
     
@@ -919,6 +992,17 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 break;
         }
     };
+
+    var searchForm_ToggleSearchingAnimation = function(active) {
+        var searchIcon = document.querySelector('.search-form i');
+        
+        if (active) {
+            searchIcon.classList.add("animate-flash");
+        }
+        else {
+            searchIcon.classList.remove("animate-flash");
+        }
+    };
     
     var searchForm_UpdateBookmark_Click = function(bookmark) {
         vm.bookmark.current = bookmark;
@@ -1005,17 +1089,34 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         queueSync();
     };
 
-    var syncForm_ClientSecret_Change = function() {
-        // Update client secret complexity value
-        vm.settings.secretComplexity = complexify(vm.settings.secret());
-    };
-
-    var syncForm_disableSync_Click = function() {
+    var syncForm_CancelSyncConfirmation_Click = function() {
+        // TODO: Ensure any sync messaging or process is cancelled also
+        global.IsSyncing.Set(false);
         global.SyncEnabled.Set(false);
         vm.view.change(vm.view.views.login);
     };
+
+    var syncForm_ClientSecret_Change = function() {
+        // Update client secret complexity value
+    	if (!!vm.settings.secret()) {
+        	vm.settings.secretComplexity = complexify(vm.settings.secret());
+    	}
+    	else {
+    		vm.settings.secretComplexity = null;
+    	}
+    };
+
+    var syncForm_DisableSync_Click = function() {
+        // If sync is in progress, display confirmation
+        if (!!global.IsSyncing.Get()) {
+            vm.settings.service.displayCancelSyncConfirmation = true;
+            return;
+        }
+        
+        syncForm_CancelSyncConfirmation_Click();
+    };
     
-    var syncForm_enableSync_Click = function() {
+    var syncForm_EnableSync_Click = function() {
 		if (!vm.syncForm.txtClientSecret.$valid) {
 			document.querySelector('[name=txtClientSecret]').select();
             return;
@@ -1054,6 +1155,20 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             });
     };
 
+    var updateServiceUrlForm_CheckServiceUrl = function(url, callback) {
+        var url = vm.settings.service.newServiceUrl.replace(/\/$/, '');
+        return api.CheckServiceStatus(url)
+            .then(callback)
+            .catch(function(err) {
+                vm.updateServiceUrlForm.txtServiceUrl.$setValidity('InvalidService', false);
+                document.querySelector('[name=txtServiceUrl]').focus();
+            })
+    };
+    
+    var updateServiceUrlForm_Clean = function() {
+        vm.updateServiceUrlForm.txtServiceUrl.$setValidity('InvalidService', true);
+    };
+    
     var updateServiceUrlForm_Confirm_Click = function() {
         // Check service url
         var url = vm.settings.service.newServiceUrl.replace(/\/$/, '');
@@ -1086,6 +1201,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // Display update form panel
         vm.settings.service.displayUpdateServiceUrlForm = true;
+
+        // Check service url
+        updateServiceUrlForm_CheckServiceUrl(vm.settings.service.newServiceUrl);
         
         // Focus on url field
         $timeout(function() {
@@ -1094,8 +1212,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
 	
 	var updateServiceUrlForm_Update_Click = function() {
-        // Reset invalid service validator
-        vm.updateServiceUrlForm.txtServiceUrl.$setValidity('InvalidService', true);
+        updateServiceUrlForm_Clean();
         
         // Return if the form is not valid
 		if (!vm.updateServiceUrlForm.txtServiceUrl.$valid) {
@@ -1104,23 +1221,20 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		}
         
         // Check service url
-        var url = vm.settings.service.newServiceUrl.replace(/\/$/, '');
-        
-        api.CheckServiceStatus(url)
-            .then(function(response) {
-                if (!!global.SyncEnabled.Get()) {
-                    // Display confirmation panel
-                    vm.settings.service.displayUpdateServiceUrlConfirmation = true;
-                }
-                else {
-                    // Update service url
-                    updateServiceUrlForm_Confirm_Click();
-                }
-            })
-            .catch(function(err) {
-                vm.updateServiceUrlForm.txtServiceUrl.$setValidity('InvalidService', false);
-                document.querySelector('[name=txtServiceUrl]').focus();
-            });
+        updateServiceUrlForm_CheckServiceUrl(vm.settings.service.newServiceUrl, function(response) {
+            if (!!global.SyncEnabled.Get()) {
+                // Display confirmation panel
+                vm.settings.service.displayUpdateServiceUrlConfirmation = true;
+            }
+            else {
+                // Update service url
+                updateServiceUrlForm_Confirm_Click();
+            }
+        });
+    };
+
+    var updateServiceUrlForm_Update_KeyPress = function($event) {
+        updateServiceUrlForm_Clean();
     };
 	
 	// Call constructor
