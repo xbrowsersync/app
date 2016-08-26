@@ -237,10 +237,10 @@
 		"message":  "Don't close the window yet."
 	},
 	"error_Default_Title" : {
-		"message":  "Oww :("
+		"message":  "Something went wrong"
 	},
 	"error_Default_Message" : {
-		"message":  "Something went wrong, can't tell you what though unfortunately. If the problem persists get in touch with the xBrowserSync team."
+		"message":  "If the problem persists, <a href='https://github.com/xBrowserSync/App/issues' target='_blank'>submit an issue</a> to the xBrowserSync team."
 	},
 	"error_HttpRequestFailed_Title" : {
 		"message":  "Connection lost"
@@ -258,7 +258,7 @@
 		"message":  "Sync data limit reached"
 	},
 	"error_RequestEntityTooLarge_Message" : {
-		"message":  "Unable to sync your data as the xBrowserSync service is limiting sync size to "
+		"message":  "Unable to sync your data as it exceeds the size limit set by the xBrowserSync service. Remove some old bookmarks and try again."
 	},
 	"error_NotAcceptingNewSyncs_Title" : {
 		"message":  "Service not accepting new syncs"

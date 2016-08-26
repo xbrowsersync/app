@@ -48,7 +48,7 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 				break;
             case global.ErrorCodes.RequestEntityTooLarge:
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_RequestEntityTooLarge_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_RequestEntityTooLarge_Message) + err.details; 
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_RequestEntityTooLarge_Message); 
 				break;
             case global.ErrorCodes.NotAcceptingNewSyncs:
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_NotAcceptingNewSyncs_Title);

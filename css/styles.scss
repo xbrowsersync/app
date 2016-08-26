@@ -111,12 +111,12 @@ body {
         border-radius: 0;
         padding: 10px 10px 15px;
         margin-bottom: 5px;
+        background-color: $colour-danger;
+        border: none;
+        color: $colour-text1;
         
         a {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: block;
+            color: $colour-link-highlight;
         }
     }
     

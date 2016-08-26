@@ -166,8 +166,12 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 			url = url + global.URL.ServiceInformation;
 		}
 		
-		return $http.get(url)
-            .then(function(response) {
+		return $http({
+			method: 'GET',
+			url: url,
+			timeout: 3000,
+		})
+        	.then(function(response) {
 				if (!!response && !!response.data) {
 					return response.data;
 				}
