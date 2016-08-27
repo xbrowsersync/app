@@ -122,8 +122,8 @@
 	"button_UpdateServiceUrl_Label" : {
 		"message":  "Change Service"
 	},
-	"updateServiceUrlForm_Description" : {
-		"message":  "Enter the URL of an alternative xBrowserSync service, check the list of public services <a href='http://xbrowsersync.org/#status' target='_blank'>here</a>."
+	"updateServiceUrlForm_Message" : {
+		"message":  "Enter the URL of an alternative xBrowserSync service. You can check the list of public xBrowserSync services <a href='http://xbrowsersync.org/#status' target='_blank'>here</a>."
 	},
 	"updateServiceUrlForm_Placeholder" : {
 		"message":  "xBrowserSync service URL"
@@ -135,13 +135,13 @@
 		"message":  "Cancel"
 	},
 	"confirmUpdateServiceUrl_Message": {
-		"message":  "After changing the service, the current sync will be disabled and you'll need to create a new sync. If you already have an xBrowserSync ID from the service you can use it to retrieve your synced data. Proceed?"
+		"message":  "<p>After changing the service, the current sync will be disabled and you'll need to create a new sync.</p><p>If you already have an xBrowserSync ID from the service you can use it to retrieve your synced data. OK to proceed?</p>"
 	},
 	"backupRestore_Title" : {
 		"message":  "Backup and restore"
 	},
 	"backupRestore_Message" : {
-		"message":  "Backup your xBrowserSync data or restore from a previous backup.<br/><br/>If sync is not enabled, backup and restore will apply to local browser data only."
+		"message":  "<p>Backup your xBrowserSync data or restore from a previous backup.</p><p>If sync is not enabled, backup and restore will apply to local browser data only.</p>"
 	},
 	"button_Backup_Label" : {
 		"message":  "Backup"

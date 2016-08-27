@@ -1,7 +1,30 @@
-@import 'fonts.scss';
-@import 'mixins.scss';
 @import 'variables.scss';
+@import 'mixins.scss';
 @import 'animations.scss';
+
+@font-face {
+    font-family: $font-roboto;
+    src: url($font-roboto-path + 'Roboto-Condensed.ttf');
+}
+
+@font-face {
+    font-family: $font-roboto;
+    src: url($font-roboto-path + 'Roboto-BoldCondensed.ttf');
+	font-weight: bold;
+}
+
+@font-face {
+    font-family: $font-roboto;
+    src: url($font-roboto-path + 'Roboto-CondensedItalic.ttf');
+	font-style: italic;
+}
+
+@font-face {
+    font-family: $font-roboto;
+    src: url($font-roboto-path + 'Roboto-BoldCondensedItalic.ttf');
+	font-weight: bold;
+	font-style: italic;
+}
 
 body {
 	font-family: $font-stack;
@@ -209,6 +232,10 @@ body {
             visibility: hidden;
         }
     }
+
+    .margin-bottom-15 {
+        margin-bottom: 15px;
+    }
     
     .overflow-ellipses {
         display: inline-block;
@@ -326,10 +353,6 @@ body {
 
 #login-panel {
     padding: 0 10px 15px;
-
-    & > p {
-        margin-bottom: 15px;
-    }
 
     .intro-panel {
         height: 260px;
@@ -790,10 +813,6 @@ body {
     }
     
     .backup-restore-panel {
-        .introduction {
-            margin-bottom: 20px;
-        }
-        
         #restoreForm {
             textarea {
                 font-family: "courier new", sans-serif;

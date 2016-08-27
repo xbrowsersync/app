@@ -106,7 +106,7 @@ xBrowserSync.App.Global = function(platform) {
 			ServiceStatus_Online: 'serviceStatus_Online',
 			ServiceStatus_Offline: 'serviceStatus_Offline',
 			Button_UpdateServiceUrl_Label: 'button_UpdateServiceUrl_Label',
-			UpdateServiceUrlForm_Description: 'updateServiceUrlForm_Description',
+			UpdateServiceUrlForm_Message: 'updateServiceUrlForm_Message',
 			UpdateServiceUrlForm_Placeholder: 'updateServiceUrlForm_Placeholder',
 			Button_UpdateServiceUrl_Submit_Label: 'button_UpdateServiceUrl_Submit_Label',
 			Button_Cancel_Label: 'button_Cancel_Label',
