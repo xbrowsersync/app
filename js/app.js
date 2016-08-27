@@ -388,7 +388,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Display lookahead if word length exceeds minimum
         if (!!lastWord && lastWord.length > global.LookaheadMinChars) {
             // Get tags lookahead
-            bookmarks.GetLookahead(lastWord, null, true)
+            bookmarks.GetLookahead(lastWord.toLowerCase(), null, true)
                 .then(function(results) {
                     if (!results) {
                         return;
@@ -398,7 +398,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     var word =  results[1];
                     
                     // Display lookahead
-                    if (!!lookahead && word === lastWord) {
+                    if (!!lookahead && word.toLowerCase() === lastWord.toLowerCase()) {
                         // Trim word from lookahead
                         lookahead = (!!lookahead) ? lookahead.substring(word.length) : null;
                         vm.bookmark.tagLookahead = lookahead.replace(/\s/g, '&nbsp;');
@@ -845,16 +845,16 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Display lookahead if word length exceed minimum
         if (!!lastWord && lastWord.length > global.LookaheadMinChars) {
             // Get lookahead
-            bookmarks.GetLookahead(lastWord, vm.search.results)
+            bookmarks.GetLookahead(lastWord.toLowerCase(), vm.search.results)
                 .then(function(results) {
                     if (!results) {
                         return;
                     }
-                    
+
                     var lookahead = results[0];
                     var word =  results[1];
                     
-                    if (!!lookahead && word === lastWord) {
+                    if (!!lookahead && word.toLowerCase() === lastWord.toLowerCase()) {
                         // Trim word from lookahead
                         lookahead = (!!lookahead) ? lookahead.substring(word.length) : null;
                         vm.search.lookahead = lookahead.replace(/\s/g, '&nbsp;');
@@ -1109,6 +1109,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // If sync is in progress, display confirmation
         if (!!global.IsSyncing.Get()) {
             vm.settings.service.displayCancelSyncConfirmation = true;
+            $timeout(function() {
+                document.querySelector('#btnCancelSync_Confirm').focus();
+            });
             return;
         }
         
@@ -1224,6 +1227,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             if (!!global.SyncEnabled.Get()) {
                 // Display confirmation panel
                 vm.settings.service.displayUpdateServiceUrlConfirmation = true;
+                $timeout(function() {
+                    document.querySelector('#btnUpdateServiceUrl_Confirm').focus();
+                });
             }
             else {
                 // Update service url

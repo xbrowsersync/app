@@ -197,7 +197,20 @@
                 <div id="intro-panel-13" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 13" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel13_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(11)">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(12)">
+                            <i class="fa fa-step-backward" aria-hidden="true"></i>
+                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
+                        </button>
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.introduction.displayPanel(14)">
+                            <i class="fa fa-step-forward" aria-hidden="true"></i>
+                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="intro-panel-14" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 14" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
+                    <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel14_Message)"></div>
+                    <div class="buttons">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(13)">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
@@ -387,12 +400,12 @@
                         </button>
                     </div>
                     <div class="confirm well well-sm animate-fade" ng-show="vm.settings.service.displayCancelSyncConfirmation">
-                        <p>There is currently a sync in progress, if you proceed your local synced data will be incomplete. Proceed?</p>
+                        <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.CancelSyncConfirmation_Message)"></div>
                         <div class="buttons text-center">
-                            <button id="btnSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncForm_CancelSyncConfirmation_Click()" tabindex="4">
+                            <button id="btnCancelSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncForm_CancelSyncConfirmation_Click()" tabindex="4">
                                 {{ vm.platform.Constants.Get(vm.global.Constants.Button_Confirm_Label) }}
                             </button>
-                            <button id="btnSync_Cancel" type="button" class="btn btn-default" ng-click="vm.settings.service.displayCancelSyncConfirmation = false" tabindex="5">
+                            <button type="button" class="btn btn-default" ng-click="vm.settings.service.displayCancelSyncConfirmation = false" tabindex="5">
                                 {{ vm.platform.Constants.Get(vm.global.Constants.Button_Deny_Label) }}
                             </button>
                         </div>
@@ -454,7 +467,7 @@
                         <div class="animate-fade" ng-show="vm.settings.service.displayUpdateServiceUrlConfirmation">
                             <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.ConfirmUpdateServiceUrl_Message)"></div>
                             <div class="buttons">
-                                <button class="btn btn-default" ng-click="vm.events.updateServiceUrlForm_Confirm_Click()" tabindex="14">
+                                <button id="btnUpdateServiceUrl_Confirm" class="btn btn-default" ng-click="vm.events.updateServiceUrlForm_Confirm_Click()" tabindex="14">
                                     {{ vm.platform.Constants.Get(vm.global.Constants.Button_Confirm_Label) }}
                                 </button>
                                 <button type="reset" class="btn btn-default" ng-click="vm.settings.service.displayUpdateServiceUrlConfirmation = false" tabindex="15">

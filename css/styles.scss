@@ -488,8 +488,7 @@ body {
             
             i {
                 font-size: 1.3em;
-                line-height: 40px;
-                top: 0;
+                top: 10px;
                 opacity: 0.4;
             }
             
@@ -502,11 +501,11 @@ body {
             }
             
             .lookahead-container {
-                left: 36px;
+                left: 35px;
                 
                 .lookahead {
                     font-size: 1.5em;
-                    line-height: 2.2;
+                    padding-top: 12px;
                 }
             }
         }
@@ -635,6 +634,10 @@ body {
         .lookahead {
             font-size: 1.1em;
             line-height: 2.8;
+        }
+
+        .measure {
+            text-transform: lowercase;
         }
     }
     

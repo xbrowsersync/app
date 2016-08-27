@@ -54,12 +54,15 @@
 		"message": "<h4>Adding a bookmark</h4><p>You can add the current page as a bookmark (or modify it if it is bookmarked already) by clicking on the bookmark icon in the Search panel.</p><p>Include a description which will be displayed in search results, and add tags to help find the bookmark more easily when searching.</p>"
 	},
 	"introPanel11_Message": {
-		"message": "<h4>Remember to back up</h4><p>Backup and restore for your browser data is available via the Settings panel.</p><p>Back up saves your unencrypted browser data to a text file. Restore syncs your backed up data. If you are not currently synced, only local browser data will be affected.</p>"
+		"message": "<h4>Remember to back up</h4><p>Back up and restore for your browser data is available via the Settings panel.</p><p>Back up saves your unencrypted browser data to a text file. Restore syncs your backed up data. If you are not currently synced, only local browser data will be affected.</p>"
 	},
 	"introPanel12_Message": {
-		"message": "<h4>Handy tip</h4><p>When changing services, backup your synced data using the first service before creating a new sync with the second, then restore your backed up data to the second service.</p><p>This will ensure that any bookmark descriptions and tags that are not supported natively by your browser are also synced.</p>"
+		"message": "<h4>When switching services</h4><p>Back up your synced data using the first service before creating a new sync with the second, then restore your backed up data to the second service.</p><p>This will ensure that any bookmark descriptions and tags that are not supported natively by your browser are also synced.</p>"
 	},
 	"introPanel13_Message": {
+		"message": "<h4>Shortcut xBrowserSync</h4><p>To access xBrowserSync quickly, assign a keyboard shortcut to activate the extension then just start typing to search your bookmarks.</p><p>Browse to chrome://extensions/, the keyboard shortcuts option is at the bottom of the page."
+	},
+	"introPanel14_Message": {
 		"message": "<h4>Noticed an issue?</h4><p>If you've found a bug in xBrowserSync or would like to request a new feature, head on over to Git Hub and <a href='https://github.com/xBrowserSync/App/issues' target='_blank'>submit an issue</a>.</p><p>Calling all coders! If you would like to help make xBrowserSync better, go ahead and fork the <a href='https://github.com/xBrowserSync/App' target='_blank'>xBrowserSync Git Hub repo</a> and submit a pull request.</p>"
 	},
 	"button_Settings_Label": {
@@ -107,6 +110,9 @@
 	"noSearchResults_Message" : {
 		"message":  "No bookmarks found"
 	},
+	"cancelSyncConfirmation_Message": {
+		"message":  "<p>There is currently a sync in progress, if you proceed your local synced data will be incomplete. OK to proceed?</p>"
+	},
 	"serviceStatus_Label" : {
 		"message":  "Service"
 	},
@@ -135,16 +141,16 @@
 		"message":  "Cancel"
 	},
 	"confirmUpdateServiceUrl_Message": {
-		"message":  "<p>After changing the service, the current sync will be disabled and you'll need to create a new sync.</p><p>If you already have an xBrowserSync ID from the service you can use it to retrieve your synced data. OK to proceed?</p>"
+		"message":  "<p>After changing the service, the current sync will be disabled and you'll need to create a new sync.</p><p>If you have previously created a sync using the service and would like to retrieve your data, you can use the xBrowserSync ID provided at the time. OK to proceed?</p>"
 	},
 	"backupRestore_Title" : {
-		"message":  "Backup and restore"
+		"message":  "Back up and restore"
 	},
 	"backupRestore_Message" : {
-		"message":  "<p>Backup your xBrowserSync data or restore from a previous backup.</p><p>If sync is not enabled, backup and restore will apply to local browser data only.</p>"
+		"message":  "<p>Back up your xBrowserSync data or restore from a previous backup.</p><p>If sync is not enabled, back up and restore will apply to local browser data only.</p>"
 	},
 	"button_Backup_Label" : {
-		"message":  "Backup"
+		"message":  "Back Up"
 	},
 	"button_Restore_Label" : {
 		"message":  "Restore"
@@ -264,7 +270,7 @@
 		"message":  "Service not accepting new syncs"
 	},
 	"error_NotAcceptingNewSyncs_Message" : {
-		"message":  "Unable to sync as this xBrowserSync service is not currently accepting new syncs. If you have already created a sync using this service URL enter your xBrowserSync ID, or choose a different service to sync to."
+		"message":  "Unable to sync as this xBrowserSync service is not currently accepting new syncs. If you have already created a sync using this service enter your xBrowserSync ID, or change to an alternative service."
 	},
 	"error_DailyNewSyncLimitReached_Title" : {
 		"message":  "Daily new sync limit reached"
@@ -276,7 +282,7 @@
 		"message":  "Missing xBrowserSync ID or secret"
 	},
 	"error_MissingClientData_Message" : {
-		"message":  "Check the values in the xBrowserSync panel and then re-enable sync."
+		"message":  "Re-enable sync and try again."
 	},
 	"error_NoDataFound_Title" : {
 		"message":  "No data found"
@@ -288,7 +294,7 @@
 		"message":  "No data to restore"
 	},
 	"error_NoDataToRestore_Message" : {
-		"message":  "Make sure you have provided valid xBrowserSync data before restoring."
+		"message":  "Ensure you have provided a valid xBrowserSync back up before restoring."
 	},
 	"error_FailedGetLocalBookmarks_Title" : {
 		"message":  "Couldn't get local bookmarks"
@@ -312,7 +318,7 @@
 		"message":  "Couldn't decrypt xBrowserSync data"
 	},
 	"error_InvalidData_Message" : {
-		"message":  "Ensure your secret is identical to the one used when initially syncing for this ID."
+		"message":  "Ensure your secret is identical to the one used when you created the sync for this ID."
 	},
 	"error_LastChangeNotSynced_Title" : {
 		"message":  "Last change not synced"

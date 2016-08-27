@@ -27,6 +27,7 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 	var createBookmarks = function(encryptedBookmarks) {
 		// Check secret is present
 		if (!global.ClientSecret.Get()) {
+			global.SyncEnabled.Set(false);
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
@@ -63,6 +64,7 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 	var getBookmarks = function() {
 		// Check secret and sync ID are present
 		if (!global.ClientSecret.Get() || !global.Id.Get()) {
+			global.SyncEnabled.Set(false);
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
@@ -84,6 +86,7 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 	var getBookmarksLastUpdated = function() {
 		// Check secret and sync ID are present
 		if (!global.ClientSecret.Get() || !global.Id.Get()) {
+			global.SyncEnabled.Set(false);
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
@@ -104,6 +107,7 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 	var updateBookmarks = function(encryptedBookmarks) {
 		// Check secret and sync ID are present
 		if (!global.ClientSecret.Get() || !global.Id.Get()) {
+			global.SyncEnabled.Set(false);
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
