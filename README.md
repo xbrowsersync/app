@@ -1,6 +1,6 @@
-![xBrowserSync](https://raw.githubusercontent.com/xBrowserSync/xbrowsersync.github.io/master/assets/images/logo-150.png "xBrowserSync")
+![xBrowserSync](https://raw.githubusercontent.com/xBrowserSync/xbrowsersync.github.io/master/assets/img/logo-150.png "xBrowserSync")
 
-[xBrowserSync](http://xbrowsersync.org/) is a tool for encrypting and syncing your bookmarks and other browser data to an anonymous cloud service. For full details, see http://xbrowsersync.org.
+[xBrowserSync](http://xbrowsersync.org/) is a completely free and open source tool for syncing your browser data between your browsers and devices. For full details, see http://xbrowsersync.org.
 
 This repository contains the source code for the client applications (browser extensions and mobile apps) that are used for syncing to an xBrowserSync service. You can get the official releases of the xBrowserSync clients from the various app stores, but if you'd like to build the apps yourself you can do so here.
 
