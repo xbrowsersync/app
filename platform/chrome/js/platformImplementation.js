@@ -43,7 +43,6 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
  * ------------------------------------------------------------------------------------ */
 	
 	var bookmarksCreated = function(xBookmarks, args) {
-		var id = args[0];
 		var createInfo = args[1];
 		var createdLocalBookmarkParent, bookmarksBar, possibleParents;
 		var deferred = $q.defer();
@@ -128,7 +127,6 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 	};
 	
 	var bookmarksDeleted = function(xBookmarks, args) {
-		var id = args[0];
 		var removeInfo = args[1];
 		var deletedBookmarkIndex = removeInfo.index;
 		var deletedLocalBookmarkParent, possibleParents;
@@ -211,7 +209,6 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		var id = args[0];
 		var moveInfo = args[1];
 		var deferred = $q.defer();
-		var getXBookmarkToUpdate = $q.defer();
 		var movedLocalBookmark, movedLocalBookmarkOldParent, movedLocalBookmarkNewParent, 
 			xBookmarkToMove, possibleParents;
 		

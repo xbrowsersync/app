@@ -435,9 +435,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
         
         // Check url is valid
-        var matches = vm.bookmark.url.match(/^https?:\/\/\w+/i);
-        var urlValid = (!!matches && matches.length > 0) ? true: false;
-        
+        var matches = vm.bookmark.url.match(/^https?:\/\/\w+/i);        
         if (!matches || matches.length <= 0) {
             vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', false);
         }
@@ -1085,11 +1083,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
     var setNewTabLinks = function() {
         var links = document.querySelectorAll('a.new-tab');
+        var onClickEvent = function() {
+            openUrl({ currentTarget: { href: this.href } });
+        };
+        
         for (var i = 0; i < links.length; i++) {
             var link = links[i];
-            link.onclick = function() {
-                openUrl({ currentTarget: { href: this.href } });
-            };
+            link.onclick = onClickEvent;
         }
     };
 

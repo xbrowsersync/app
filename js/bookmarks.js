@@ -87,7 +87,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
 	};
     
     var getLookahead = function(word, bookmarks, tagsOnly) {
-        var keywords, getBookmarks;
+        var getBookmarks;
         var deferred = $q.defer();
         
         if (!word) {
@@ -197,22 +197,6 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
 /* ------------------------------------------------------------------------------------
  * Private functions
  * ------------------------------------------------------------------------------------ */
-    
-    var findMatchingCategories = function(bookmarksToSearch, attrs) {
-        return _.filter(extractChildren(bookmarksToSearch, []), attrs);
-
-        function extractChildren(bookmarks, results) {
-            _.each(bookmarks, function (value) {
-                results.push(value);
-                
-                if (value.categories) {
-                    extractChildren(value.categories, results);
-                }
-            }, []);
-            
-            return results;
-        }
-    };
     
     var getCachedBookmarks = function(bookmarks) {
             var getBookmarksPromise;

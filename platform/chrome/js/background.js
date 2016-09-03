@@ -10,7 +10,6 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks) {
     'use strict';
 	
-	var syncBookmarksCommandMsg = 'sync';
 	var asyncChannel;
 
 /* ------------------------------------------------------------------------------------
