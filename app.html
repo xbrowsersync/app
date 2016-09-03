@@ -285,7 +285,7 @@
                 </h4>
                 <div class="list-group" ng-show="vm.search.results.length > 0">
                     <div class="list-group-item" ng-repeat="result in vm.search.results track by result.id">
-                        <a href="{{ result.url }}" ng-click="vm.events.searchForm_SearchResult_Click($event)"  tabindex="{{ $index + 1 }}"
+                        <a href="{{ result.url }}" ng-click="vm.events.openUrl($event)"  tabindex="{{ $index + 1 }}"
                            ng-keydown="vm.events.searchForm_SearchResult_KeyDown($event)">
                             <h4 class="list-group-item-heading">{{ result.title }}</h4>
                             <div class="list-group-item-text">
@@ -432,7 +432,7 @@
                             <i class="fa fa-exclamation-circle text-warning" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_NoNewSyncs) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.NoNewSyncs">
                                 <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_NoNewSyncs) }}</span>                                    
                             </i>
-                            <a class="status-url overflow-ellipses" ng-href="{{ vm.settings.service.url() }}" ng-click="vm.events.searchForm_SearchResult_Click($event)" title="{{ vm.settings.service.url() }}" tabindex="4">
+                            <a class="status-url overflow-ellipses new-tab" ng-href="{{ vm.settings.service.url() }}" title="{{ vm.settings.service.url() }}" tabindex="4">
                                 {{ vm.settings.service.url() }}
                             </a>
                         </div>

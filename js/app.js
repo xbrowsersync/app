@@ -69,10 +69,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
             includeBookmarksBar_Click: includeBookmarksBar_Click,
             introPanel_ShowHelp_Click: introPanel_ShowHelp_Click,
+            openUrl: openUrl,
             queueSync: queueSync,
             searchForm_SearchText_Change: searchForm_SearchText_Change,
             searchForm_SearchText_KeyDown: searchForm_SearchText_KeyDown,
-            searchForm_SearchResult_Click: searchForm_SearchResult_Click,
             searchForm_SearchResult_KeyDown: searchForm_SearchResult_KeyDown,
             searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
             syncForm_CancelSyncConfirmation_Click: syncForm_CancelSyncConfirmation_Click,
@@ -716,6 +716,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             });
         });
         
+        // Enable event listeners
         global.DisableEventListeners.Set(false);
         
         // Check if current page is a bookmark
@@ -724,6 +725,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 				var errMessage = utility.GetErrorMessageFromException(err);
 				vm.alert.display(errMessage.title, errMessage.message, 'danger');
 			});
+        
+        // Attach events to new tab links
+        $timeout(function() {
+            setNewTabLinks();
+        });
         
         // Display main view
         vm.view.displayMain();
@@ -756,6 +762,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         $timeout(function() {
             vm.introduction.displayPanel(1);
         }, 500);
+    };
+    
+    var openUrl = function(obj) {
+        platform.OpenUrl(obj.currentTarget.href);
+        return false;
     };
 	
 	var queueSync = function() {
@@ -897,11 +908,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             searchForm_SearchText_Change();
             return;
         }
-    };
-    
-    var searchForm_SearchResult_Click = function($event) {
-        platform.OpenUrl($event.currentTarget.href);
-        return false;
     };
     
     var searchForm_SearchResult_KeyDown = function($event) {
@@ -1075,6 +1081,16 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.bookmark.displayUpdateForm = false;
                 }
             });
+    };
+
+    var setNewTabLinks = function() {
+        var links = document.querySelectorAll('a.new-tab');
+        for (var i = 0; i < links.length; i++) {
+            var link = links[i];
+            link.onclick = function() {
+                openUrl({ currentTarget: { href: this.href } });
+            };
+        }
     };
 
     var setServiceInformation = function(serviceInfo) {

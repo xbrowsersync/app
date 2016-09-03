@@ -3,7 +3,7 @@
 		"message": "xBrowserSync"
 	},
 	"description": {
-		"message": "Cloud syncing as it should be: secure, anonymous and free!"
+		"message": "Browser syncing as it should be: secure, anonymous and free!"
 	},
 	"bookmarksBarTitle": {
 		"message": "Bookmarks bar"
@@ -24,7 +24,7 @@
 		"message": "Previous"
 	},
 	"introPanel1_Message": {
-		"message": "<h4>Welcome</h4><p>Thanks for installing xBrowserSync!</p><p>Have a read through the following pages to help you get started. Should you require futher help, check out the <a href='http://xbrowsersync.org/#faqs' target='_blank'>FAQs</a>.</p>"
+		"message": "<h4>Welcome</h4><p>Thanks for installing xBrowserSync!</p><p>Have a read through the following pages to help you get started. Should you require futher help, check out the <a href='http://xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
 	},
 	"introPanel2_Message": {
 		"message": "<h4>Your secret word</h4><p>To begin, enter a secret word or phrase that will be used to encrypt and decrypt your browser data.</p><p>Make it strong to protect your data but also memorable, if you forget it we can't remind you and you won't be able to decrypt your data without it.</p>"
@@ -36,7 +36,7 @@
 		"message": "<h4>Your xBrowserSync ID</h4><p>Every time you create a new sync you are given a new xBrowserSync ID, which can be found via the Settings panel.</p><p>You can use this ID along with your corresponding secret word or phrase to retrieve your synced data or sync on a different device.</p>"
 	},
 	"introPanel5_Message": {
-		"message": "<h4>Syncing to another service</h4><p>When creating new syncs, by default your data is synced to the official xBrowserSync service, but you can change the service you sync to via the Settings panel.</p><p>You may do this because the service is full, offline, or perhaps you would like to <a href='https://github.com/xBrowserSync/API' target='_blank'>run your own xBrowserSync service</a> to sync your data to.</p>"
+		"message": "<h4>Syncing to another service</h4><p>When creating new syncs, by default your data is synced to the official xBrowserSync service, but you can change the service you sync to via the Settings panel.</p><p>You may do this because the service is full, offline, or perhaps you would like to <a href='https://github.com/xBrowserSync/API' class='new-tab'>run your own xBrowserSync service</a> to sync your data to.</p>"
 	},
 	"introPanel6_Message": {
 		"message": "<h4>New service, new ID</h4><p>IDs are service-specific. If you have created a sync and received an xBrowserSync ID with one service it cannot be used with another.</p><p>Whenever you change services you must create a new sync. You'll then receive a new ID for use with that service.</p>"
@@ -63,7 +63,7 @@
 		"message": "<h4>Shortcut xBrowserSync</h4><p>To access xBrowserSync quickly, assign a keyboard shortcut to activate the extension then just start typing to search your bookmarks.</p><p>Browse to chrome://extensions/, the keyboard shortcuts option is at the bottom of the page."
 	},
 	"introPanel14_Message": {
-		"message": "<h4>Noticed an issue?</h4><p>If you've found a bug in xBrowserSync or would like to request a new feature, head on over to Git Hub and <a href='https://github.com/xBrowserSync/App/issues' target='_blank'>submit an issue</a>.</p><p>Calling all coders! If you would like to help make xBrowserSync better, go ahead and fork the <a href='https://github.com/xBrowserSync/App' target='_blank'>xBrowserSync Git Hub repo</a> and submit a pull request.</p>"
+		"message": "<h4>Noticed an issue?</h4><p>If you've found a bug in xBrowserSync or would like to request a new feature, head on over to Git Hub and <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>submit an issue</a>.</p><p>Calling all coders! If you would like to help make xBrowserSync better, go ahead and fork the <a href='https://github.com/xBrowserSync/App' class='new-tab'>xBrowserSync Git Hub repo</a> and submit a pull request.</p>"
 	},
 	"button_Settings_Label": {
 		"message": "Settings"
@@ -129,7 +129,7 @@
 		"message":  "Change Service"
 	},
 	"updateServiceUrlForm_Message" : {
-		"message":  "Enter the URL of an alternative xBrowserSync service. You can check the list of public xBrowserSync services <a href='http://xbrowsersync.org/#status' target='_blank'>here</a>."
+		"message":  "Enter the URL of an alternative xBrowserSync service. You can check the list of public xBrowserSync services <a href='http://xbrowsersync.org/#status' class='new-tab'>here</a>."
 	},
 	"updateServiceUrlForm_Placeholder" : {
 		"message":  "xBrowserSync service URL"
@@ -246,7 +246,7 @@
 		"message":  "Something went wrong"
 	},
 	"error_Default_Message" : {
-		"message":  "If the problem persists, <a href='https://github.com/xBrowserSync/App/issues' target='_blank'>submit an issue</a> to the xBrowserSync team."
+		"message":  "If the problem persists, <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>submit an issue</a> to the xBrowserSync team."
 	},
 	"error_HttpRequestFailed_Title" : {
 		"message":  "Connection lost"
