@@ -128,9 +128,9 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 	};
 	
 	return {
-		XBookmark: xBookmark,
 		DecryptData: decryptData,
 		EncryptData: encryptData,
-		GetErrorMessageFromException: getErrorMessageFromException
+		GetErrorMessageFromException: getErrorMessageFromException,
+		XBookmark: xBookmark		
 	};
 };

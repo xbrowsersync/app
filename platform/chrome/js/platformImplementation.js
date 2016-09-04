@@ -95,6 +95,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 					// Add new bookmark
 					xBookmarks.push(newXBookmark);
 					
+					// TODO: Redesign
 					// Move Bookmarks bar to end of array
 					var bookmarksBarIndex = _.findIndex(xBookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) });
 					if (bookmarksBarIndex >= 0) {

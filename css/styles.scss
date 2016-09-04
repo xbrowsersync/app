@@ -100,20 +100,33 @@ body {
             &.btn-icon {
                 background: none;
                 color: $colour-text2;
-                opacity: 0.4;
                 padding: 0;
                 transition: all, ease-in, 0.2s;
                 box-shadow: none;
+                border-radius: 0;
                 
-                .active,
-                &:active,
-                &:focus,
+                &:focus {
+                    border-bottom: solid 1px $colour-text2;
+                }
+
                 &:hover {
-                    opacity: 1;
+                    &:focus {
+                        border-bottom: none;
+                    }
+
+                    i {
+                        opacity: 1;
+                    }
+                }
+
+                i {
+                    opacity: 0.4;
+                    transition: all, ease-in, 0.2s;
                 }
             }
 
             .active,
+            &.active:focus,
             &:active,
             &:active:focus,
             &:focus,
@@ -130,16 +143,33 @@ body {
     }
     
     .alert {
+        position: absolute;
+        z-index: 10;
         border: none;
         border-radius: 0;
         padding: 10px 10px 15px;
         margin-bottom: 5px;
-        background-color: $colour-danger;
+        background-color: rgba(234,56,105,0.8);
         border: none;
         color: $colour-text1;
         
         a {
             color: $colour-link-highlight;
+        }
+
+        button.btn-close {
+            float: right;
+            color: $colour-text1;
+            font-size: 1.2em;
+            line-height: 1.2em;
+
+            &:focus {
+                border-bottom-color: $colour-text1;
+            }
+
+            i {
+                opacity: 0.7;
+            }
         }
     }
     
@@ -203,13 +233,16 @@ body {
     }
     
     .header-panel {
-        i {
-            font-size: 20px;
-            line-height: 32px;
-        }
-        
-        .btn-settings, .btn-close {
-            float: right;
+        .btn-icon {
+            margin-top: 7px;
+            
+            &.btn-settings, &.btn-close {
+                float: right;
+            }
+
+            i {
+                font-size: 1.4em;
+            }
         }
     }
     
@@ -452,9 +485,7 @@ body {
 #main-panel {
     .header-panel {
         i {
-            line-height: 1em;
-            top: 10px;
-            position: relative;
+            margin-top: 3px;
         }
 
         .btn-toggle-bookmark {
@@ -488,7 +519,7 @@ body {
             
             i {
                 font-size: 1.3em;
-                top: 10px;
+                margin-top: 11px;
                 opacity: 0.4;
             }
             

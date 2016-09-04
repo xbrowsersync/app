@@ -46,18 +46,7 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 				}
 			})
             .catch(function(err) {
-                if (!!err) {
-					switch (err.status) {
-						// 405 Method Not Allowed: server not accepting new syncs
-						case 405:
-							return $q.reject({ code: global.ErrorCodes.NotAcceptingNewSyncs });
-						// 429 Too Many Requests: daily new sync limit reached
-						case 429:
-							return $q.reject({ code: global.ErrorCodes.DailyNewSyncLimitReached });
-					}
-				}
-				
-				return $q.reject(getErrorCodeFromHttpError(err));
+                return $q.reject(getErrorCodeFromHttpError(err));
             });
 	};
 	
@@ -144,17 +133,28 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
         }
        
         switch (httpErr.status) {
-            case 413:
-				err.code = global.ErrorCodes.RequestEntityTooLarge;
-				err.details = (!!httpErr.data.message) ? 
-					httpErr.data.message.match(/\d+$/)[0] + 'kB.' : '.';
+            // 405 Method Not Allowed: server not accepting new syncs
+			case 405:
+				err.code = global.ErrorCodes.NotAcceptingNewSyncs;
 				break;
+			// 406 Not Acceptable: daily new sync limit reached
+			case 406:
+				err.code = global.ErrorCodes.DailyNewSyncLimitReached;
+				break;
+			// 409 Conflict: invalid id
+			case 409:
+				err.code = global.ErrorCodes.NoDataFound;
+				break;
+			// 413 Request Entity Too Large: sync data size exceeds server limit
+			case 413:
+				err.code = global.ErrorCodes.RequestEntityTooLarge;
+				break;
+			// 429 Too Many Requests: daily new sync limit reached
 			case 429:
 				err.code = global.ErrorCodes.TooManyRequests;
-				
-				// Disable sync
-				global.SyncEnabled.Set(false);				
+				global.SyncEnabled.Set(false); // Disable sync				
 				break;
+			// Otherwise generic request failed
 			default:
                 err.code = global.ErrorCodes.HttpRequestFailed;
         }

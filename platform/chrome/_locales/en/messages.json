@@ -141,7 +141,7 @@
 		"message":  "Cancel"
 	},
 	"confirmUpdateServiceUrl_Message": {
-		"message":  "<p>After changing the service, the current sync will be disabled and you'll need to create a new sync.</p><p>If you have previously created a sync using the service and would like to retrieve your data, you can use the xBrowserSync ID provided at the time. OK to proceed?</p>"
+		"message":  "<p>After changing the service, the current sync will be disabled and you'll need to create a new sync.</p><p>If you have previously created a sync using this service and would like to retrieve your data, you can use the xBrowserSync ID provided at the time. OK to proceed?</p>"
 	},
 	"backupRestore_Title" : {
 		"message":  "Back up and restore"
@@ -261,10 +261,10 @@
 		"message":  "Too many requests sent, sync has been disabled. Re-enable sync to resume syncing."
 	},
 	"error_RequestEntityTooLarge_Title" : {
-		"message":  "Sync data limit reached"
+		"message":  "Sync data limit exceeded"
 	},
 	"error_RequestEntityTooLarge_Message" : {
-		"message":  "Unable to sync your data as it exceeds the size limit set by the xBrowserSync service. Remove some old bookmarks and try again."
+		"message":  "Unable to sync your data as it exceeds the size limit set by the xBrowserSync service. Remove some old bookmarks and try again or switch to a different xBrowserSync service that allows for larger syncs."
 	},
 	"error_NotAcceptingNewSyncs_Title" : {
 		"message":  "Service not accepting new syncs"

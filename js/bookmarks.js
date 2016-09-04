@@ -513,6 +513,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                             // Add new bookmark to xBrowserSync group
                             xBrowserSync.children.push(syncData.changeInfo.bookmark);
                             
+                            // TODO: Redesign 
                             // Move Bookmarks bar to end of array
                             var bookmarksBarIndex = _.findIndex(bookmarksToUpdate, { title: platform.Constants.Get(global.Constants.BookmarksBarTitle) });
                             if (bookmarksBarIndex >= 0) {
