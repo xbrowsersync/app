@@ -101,6 +101,42 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 		
 		return errorMessage;
 	};
+
+	var getOtherContainer = function(bookmarks, createIfNotPresent) {
+        var container = _.findWhere(bookmarks, { title: global.Bookmarks.OtherContainerName });
+
+        // If container does not exist, create it if specified
+        if (!container && !!createIfNotPresent) {
+            container = new xBookmark(global.Bookmarks.OtherContainerName);
+            bookmarks.push(container);
+        }
+
+        return container;
+    };
+
+	var getToolbarContainer = function(bookmarks, createIfNotPresent) {
+        var container = _.findWhere(bookmarks, { title: global.Bookmarks.ToolbarContainerName });
+
+        // If container does not exist, create it if specified
+        if (!container && !!createIfNotPresent) {
+            container = new xBookmark(global.Bookmarks.ToolbarContainerName);
+            bookmarks.push(container);
+        }
+
+        return container;
+    };
+
+	var getXBrowserSyncContainer = function(bookmarks, createIfNotPresent) {
+        var container = _.findWhere(bookmarks, { title: global.Bookmarks.xBrowserSyncContainerName });
+
+        // If container does not exist, create it if specified
+        if (!container && !!createIfNotPresent) {
+            container = new xBookmark(global.Bookmarks.xBrowserSyncContainerName);
+            bookmarks.push(container);
+        }
+
+        return container;
+    };
 	
 	var xBookmark = function(title, url, description, tags) {
 		var xBookmark = {};
@@ -117,7 +153,7 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 		}
 		
 		if (!!description) {
-			xBookmark.description = description.trim().substring(0, global.Bookmark.DescriptionMaxLength);
+			xBookmark.description = description.trim().substring(0, global.Bookmarks.DescriptionMaxLength);
 		}
 		
 		if (!!tags && tags.length > 0) {
@@ -131,6 +167,9 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 		DecryptData: decryptData,
 		EncryptData: encryptData,
 		GetErrorMessageFromException: getErrorMessageFromException,
+		GetOtherContainer: getOtherContainer,
+		GetToolbarContainer: getToolbarContainer,
+		GetXBrowserSyncContainer: getXBrowserSyncContainer,
 		XBookmark: xBookmark		
 	};
 };

@@ -251,7 +251,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                     return bookmarks;
                 });
     };
-                            
+
     var recursiveDelete = function(bookmarks, url) {
         return _.map(
             _.reject(bookmarks, function(bookmark) {
@@ -503,23 +503,10 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                             }
                             
                             // Get xBrowserSync group
-		                    var xBrowserSync = _.findWhere(bookmarksToUpdate, { title: platform.Constants.Get(global.Constants.Title) });
-                            
-                            if (!xBrowserSync) {
-                                xBrowserSync = new utility.XBookmark(platform.Constants.Get(global.Constants.Title));
-                                bookmarksToUpdate.push(xBrowserSync);
-                            }
+		                    var xbsContainer = utility.GetXBrowserSyncContainer(bookmarksToUpdate, true);
                             
                             // Add new bookmark to xBrowserSync group
-                            xBrowserSync.children.push(syncData.changeInfo.bookmark);
-                            
-                            // TODO: Redesign 
-                            // Move Bookmarks bar to end of array
-                            var bookmarksBarIndex = _.findIndex(bookmarksToUpdate, { title: platform.Constants.Get(global.Constants.BookmarksBarTitle) });
-                            if (bookmarksBarIndex >= 0) {
-                                var bookmarksBar = bookmarksToUpdate.splice(bookmarksBarIndex, 1);
-                                bookmarksToUpdate.push(bookmarksBar[0]);
-                            }
+                            xbsContainer.children.push(syncData.changeInfo.bookmark);
                             
                             return bookmarksToUpdate;
                         });

@@ -308,7 +308,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 				// Trigger download 
 				var exportUrl = window.URL.createObjectURL(blob);
                 var backupLink = document.getElementById('backupLink');
-                var fileName = 'xBrowserSyncExport_' + dateString + '.txt';
+                var fileName = 'xBrowserSyncBackup_' + dateString + '.txt';
                 backupLink.setAttribute('download', fileName);
 				backupLink.setAttribute('href', exportUrl);
 				backupLink.click();
@@ -370,8 +370,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var bookmarkForm_BookmarkDescription_Change = function() {
         // Limit the bookmark description to the max length
-        if (!!vm.bookmark.current.description && vm.bookmark.current.description.length > global.Bookmark.DescriptionMaxLength) {
-            vm.bookmark.current.description = vm.bookmark.current.description.substring(0, global.Bookmark.DescriptionMaxLength);
+        if (!!vm.bookmark.current.description && vm.bookmark.current.description.length > global.Bookmarks.DescriptionMaxLength) {
+            vm.bookmark.current.description = vm.bookmark.current.description.substring(0, global.Bookmarks.DescriptionMaxLength);
         }
     };
     

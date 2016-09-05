@@ -8,7 +8,15 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, global, utility) {
 	'use strict';
-	
+
+/* ------------------------------------------------------------------------------------
+ * Platform variables
+ * ------------------------------------------------------------------------------------ */
+
+	var bookmarksBarId = '1';
+	var otherBookmarksId = '2';
+
+
 /* ------------------------------------------------------------------------------------
  * Constructor
  * ------------------------------------------------------------------------------------ */
@@ -461,10 +469,10 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 	};
 	
 	var clearBookmarks = function() {
-		var clearOtherBookmarksDeferred, clearBookmarksBarDeferred;
+		var clearOtherBookmarks, clearBookmarksBar;
 		
-		// Clear other bookmarks
-		clearOtherBookmarksDeferred = $q(function(resolve, reject) {
+		// Clear Other bookmarks
+		clearOtherBookmarks = $q(function(resolve, reject) {
 			try {
                 chrome.bookmarks.getChildren('2', function(results) {
                     try {
@@ -486,8 +494,8 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
             }
 		});
 		
-		// Clear bookmarks bar
-		clearBookmarksBarDeferred = $q(function(resolve, reject) {
+		// Clear Bookmarks bar
+		clearBookmarksBar = $q(function(resolve, reject) {
 			if (global.IncludeBookmarksBar.Get()) {
 				try {
                     chrome.bookmarks.getChildren('1', function(results) {
@@ -514,7 +522,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			}
 		});
 			
-		return $q.all([clearOtherBookmarksDeferred.promise, clearBookmarksBarDeferred.promise]);
+		return $q.all([clearOtherBookmarks.promise, clearBookmarksBar.promise]);
 	};
 	
 	var containsCurrentPage = function() {
@@ -549,6 +557,8 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 	};
 	
 	var getBookmarks = function(localBookmarkId) {
+		var getOtherBookmarks, getBookmarksBar;
+
 		// If bookmark id provided, return the tree from this ID
 		if (!!localBookmarkId) {
 			return $q(function(resolve, reject) {
@@ -569,8 +579,8 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			});
 		}
 		
-        // If no bookmark id provided, add Other bookmarks
-		return $q(function(resolve, reject) {
+        // If no bookmark id provided, get Other bookmarks
+		getOtherBookmarks = $q(function(resolve, reject) {
 			try {
                 chrome.bookmarks.getSubTree('2', function(results) {
                     if (results[0].children.length > 0) {
@@ -585,35 +595,61 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
             catch (err) {
                 return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
             }
-		})
-            .then(function(xBookmarks) {
-				// Add Bookmarks bar
-				return $q(function(resolve, reject) {
-					try {
-                        if (!global.IncludeBookmarksBar.Get()) {
-							return resolve(xBookmarks);
-						}
-						
-						chrome.bookmarks.getSubTree('1', function(results) {
-							if (results[0].children.length > 0) {
-								if (!xBookmarks) {
-									xBookmarks = [];
-								}
-								
-								var bookmarksBar = new utility.XBookmark(results[0].title);
-								bookmarksBar.children = getLocalBookmarksAsXBookmarks(results[0].children);						
-								xBookmarks.push(bookmarksBar);
-								resolve(xBookmarks);
-							}
-							else {
-								resolve(xBookmarks);
-							}
-						});
-                    }
-                    catch (err) {
-                        return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
-                    }
+		});
+
+		// Get bookmarks bar
+        getBookmarksBar = $q(function(resolve, reject) {
+			try {
+				if (!global.IncludeBookmarksBar.Get()) {
+					return resolve(xBookmarks);
+				}
+				
+				chrome.bookmarks.getSubTree('1', function(results) {
+					if (results[0].children.length > 0) {
+						var xBookmarks = getLocalBookmarksAsXBookmarks(results[0].children);
+                        resolve(xBookmarks);
+					}
+					else {
+						resolve();
+					}
 				});
+			}
+			catch (err) {
+				return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
+			}
+		});
+		
+		return $q.all([getOtherBookmarks, getBookmarksBar])
+			.then(function(results) {
+				var otherBookmarks = results[0];
+				var bookmarksBar = results[1];
+				var xBookmarks = [];
+
+				// Add xBrowserSync container if bookmarks present
+				var xbsBookmarks = _.findWhere(otherBookmarks, function(bookmark) { 
+					return bookmark.title === global.Bookmarks.xBrowserSyncContainerName; 
+				});
+
+				if (!!xbsBookmarks && xbsBookmarks.children.length > 0) {
+					var xbsContainer = utility.GetXBrowserSyncContainer(xBookmarks, true);
+					xbsContainer.children = xbsBookmarks.children;
+				}
+
+				// Add other container if bookmarks present
+				var otherBookmarksExcXbs = _.reject(otherBookmarks, function(bookmark) { return bookmark.title === global.Bookmarks.xBrowserSyncContainerName; });
+
+				if (!!otherBookmarksExcXbs && otherBookmarksExcXbs.length > 0) {
+					var otherContainer = utility.GetOtherContainer(xBookmarks, true);
+					otherContainer.children = otherBookmarksExcXbs;
+				}
+
+				// Add toolbar container if bookmarks present
+				if (!!bookmarksBar && bookmarksBar.length > 0) {
+					var toolbarContainer = utility.GetToolbarContainer(xBookmarks, true);
+					toolbarContainer.children = bookmarksBar;
+				}
+
+				return xBookmarks;
 			});
 	};
 	
@@ -710,18 +746,53 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 	};
 	
 	var populateBookmarks = function(xBookmarks) {
-		var populateBookmarksBar, populateOtherBookmarks;
+		var populateToolbar, populateOther, populateXbs;
 		
-		// Get bookmarks bar if present
-		var bookmarksBar = _.findWhere(xBookmarks, { title: getConstant(global.Constants.BookmarksBarTitle) });
-		var bookmarksExBookmarksBar = _.difference(xBookmarks, [ bookmarksBar ]);
+		// Get containers
+		var otherContainer = utility.GetOtherContainer(xBookmarks);
+		var toolbarContainer = utility.GetToolbarContainer(xBookmarks);
+		var xbsContainer = utility.GetXBrowserSyncContainer(xBookmarks);
 		
-		// Populate bookmarks bar
-		populateBookmarksBar = $q(function(resolve, reject) {
-			if (global.IncludeBookmarksBar.Get() && !!bookmarksBar && bookmarksBar.children.length > 0) {
+		// Populate xBrowserSync bookmarks in Other bookmarks
+		populateXbs = $q(function(resolve, reject) {
+			if (!!xbsContainer && xbsContainer.children.length > 0) {
 				try {
-                    chrome.bookmarks.get('1', function(results) {
-                        createLocalBookmarksFromXBookmarks(results[0].id, bookmarksBar.children, resolve, reject);
+					chrome.bookmarks.get(otherBookmarksId, function(results) {
+						createLocalBookmarksFromXBookmarks(otherBookmarksId, [xbsContainer], resolve, reject);
+					});
+				}
+				catch (err) {
+					return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
+				}
+			}
+			else {
+				resolve();
+			}
+		});
+		
+		// Populate Other bookmarks
+		populateOther = $q(function(resolve, reject) {
+			if (!!otherContainer && otherContainer.children.length > 0) {
+				try {
+					chrome.bookmarks.get(otherBookmarksId, function(results) {
+						createLocalBookmarksFromXBookmarks(otherBookmarksId, otherContainer.children, resolve, reject);
+					});
+				}
+				catch (err) {
+					return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
+				}
+			}
+			else {
+				resolve();
+			}
+		});
+
+		// Populate Bookmarks bar
+		populateToolbar = $q(function(resolve, reject) {
+			if (global.IncludeBookmarksBar.Get() && !!toolbarContainer && toolbarContainer.children.length > 0) {
+				try {
+                    chrome.bookmarks.get(bookmarksBarId, function(results) {
+                        createLocalBookmarksFromXBookmarks(bookmarksBarId, toolbarContainer.children, resolve, reject);
                     });
                 }
                 catch (err) {
@@ -733,19 +804,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			}
 		});
 		
-		// Populate other bookmarks
-		populateOtherBookmarks = $q(function(resolve, reject) {
-			try {
-                chrome.bookmarks.get('2', function(results) {
-                    createLocalBookmarksFromXBookmarks(results[0].id, bookmarksExBookmarksBar, resolve, reject);
-                });
-            }
-            catch (err) {
-                return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
-            }
-		});
-		
-		return $q.all([populateBookmarksBar, populateOtherBookmarks]);
+		return $q.all([populateXbs, populateOther, populateToolbar]);
 	};
 	
 	var refreshInterface = function() {
