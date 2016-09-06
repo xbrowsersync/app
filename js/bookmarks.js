@@ -702,8 +702,8 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         
         // Push bookmarks
         return getBookmarks
-            .then(function(bookmarksToSync) {
-                bookmarks = bookmarksToSync || [];
+            .then(function(results) {
+                bookmarks = results[0] || [];
 
                 // Refresh bookmarks cache
                 refreshCachedBookmarks(bookmarks);

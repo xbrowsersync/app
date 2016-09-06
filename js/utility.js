@@ -138,7 +138,7 @@ xBrowserSync.App.Utility = function($q, platform, global) {
         return container;
     };
 	
-	var xBookmark = function(title, url, description, tags) {
+	var xBookmark = function(title, url, description, tags, children) {
 		var xBookmark = {};
 		
 		if (!!title) {
@@ -149,7 +149,7 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 			xBookmark.url = url.trim();
 		}
 		else {
-			xBookmark.children = [];
+			xBookmark.children = children || [];
 		}
 		
 		if (!!description) {
