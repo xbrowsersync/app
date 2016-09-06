@@ -392,9 +392,9 @@
                         </div>
                         <div class="checkbox">
                             <label>
-                                <input id="includeBookmarksBar" type="checkbox" ng-model="vm.settings.includeBookmarksBar" ng-model-options="{ getterSetter: true }" 
-                                 ng-click="vm.events.includeBookmarksBar_Click()" tabindex="1" />
-                                <span>{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_IncludeBookmarksBar_Label) }}</span>
+                                <input id="syncBookmarksToolbar" type="checkbox" ng-model="vm.settings.syncBookmarksToolbar" ng-model-options="{ getterSetter: true }" 
+                                 ng-click="vm.events.syncBookmarksToolbar_Click()" tabindex="1" />
+                                <span>{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_SyncBookmarksToolbar_Label) }}</span>
                             </label>
                         </div>
                         <button class="btn btn-default" ng-click="vm.events.syncForm_DisableSync_Click()" 

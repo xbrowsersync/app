@@ -67,7 +67,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             bookmarkForm_DeleteBookmark_Click: bookmarkForm_DeleteBookmark_Click,
             bookmarkForm_RemoveTag_Click: bookmarkForm_RemoveTag_Click,
             bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
-            includeBookmarksBar_Click: includeBookmarksBar_Click,
+            syncBookmarksToolbar_Click: syncBookmarksToolbar_Click,
             introPanel_ShowHelp_Click: introPanel_ShowHelp_Click,
             openUrl: openUrl,
             queueSync: queueSync,
@@ -137,10 +137,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     global.Id.Set(value) : 
                     global.Id.Get();
             },
-            includeBookmarksBar: function(value) {
+            syncBookmarksToolbar: function(value) {
                 return arguments.length ? 
-                    global.IncludeBookmarksBar.Set(value) : 
-                    global.IncludeBookmarksBar.Get();
+                    global.SyncBookmarksToolbar.Set(value) : 
+                    global.SyncBookmarksToolbar.Get();
             },
 			secret: function(value) {
                 return arguments.length ? 
@@ -694,8 +694,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
     };
     
-    var includeBookmarksBar_Click = function() {
-        if (!global.IncludeBookmarksBar.Get()) {
+    var syncBookmarksToolbar_Click = function() {
+        if (!global.SyncBookmarksToolbar.Get()) {
             // No need to sync, return
             return;
         }

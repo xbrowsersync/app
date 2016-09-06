@@ -70,7 +70,8 @@ xBrowserSync.App.Global = function(platform) {
         Constants: {
             Title: 'title',
 			Description: 'description',
-			BookmarksBarTitle: 'bookmarksBarTitle',
+			BookmarksToolbarTitle: 'bookmarksToolbarTitle',
+            BookmarksOtherTitle: 'bookmarksOtherTitle',
 			TooltipSyncEnabled: 'tooltipSyncEnabled',
 			TooltipWorking: 'tooltipWorking',
 			Button_Settings_Label: 'button_Settings_Label',
@@ -132,7 +133,7 @@ xBrowserSync.App.Global = function(platform) {
 			SyncPanel_Title: 'syncPanel_Title',
             SyncPanel_Message: 'syncPanel_Message',
             SyncPanel_Id_Label: 'syncPanel_Id_Label',
-			SyncPanel_IncludeBookmarksBar_Label: 'syncPanel_IncludeBookmarksBar_Label',
+			SyncPanel_SyncBookmarksToolbar_Label: 'syncPanel_SyncBookmarksToolbar_Label',
             ConfirmRestore_Sync_Message: 'confirmRestore_Sync_Message',
             ConfirmRestore_NoSync_Message: 'confirmRestore_NoSync_Message',
             BookmarkPanel_Title_Add: 'bookmarkPanel_Title_Add',
@@ -284,35 +285,6 @@ xBrowserSync.App.Global = function(platform) {
                     value);
             }
         },
-        IncludeBookmarksBar: {
-            Get: function() {
-                var value;
-                
-                value = platform.LocalStorage.Get(
-                    'xBrowserSync-includeBookmarksBar');
-                
-                if (!value) {
-                    return true;
-                }
-                else {
-                    if (value === 'true') {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-            },
-            Set: function(value) {
-                platform.LocalStorage.Set(
-                    'xBrowserSync-includeBookmarksBar', 
-                    value);
-                
-                // Clear LastUpdated to ensure next update check refreshes local
-                // bookmarks
-                Global.LastUpdated.Set('');
-            }
-        },
         IsSyncing: {
             Get: function() {
                 var value;
@@ -364,6 +336,34 @@ xBrowserSync.App.Global = function(platform) {
             Online: 1,
             Offline: 2,
             NoNewSyncs: 3
+        },
+        SyncBookmarksToolbar: {
+            Get: function() {
+                var value;
+                
+                value = platform.LocalStorage.Get(
+                    'xBrowserSync-syncBookmarksToolbar');
+                
+                if (!value) {
+                    return true;
+                }
+                else {
+                    if (value === 'true') {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            },
+            Set: function(value) {
+                platform.LocalStorage.Set(
+                    'xBrowserSync-syncBookmarksToolbar', 
+                    value);
+                
+                // Clear LastUpdated to ensure next update check refreshes local bookmarks
+                Global.LastUpdated.Set('');
+            }
         },
         SyncEnabled: {
             Get: function() {

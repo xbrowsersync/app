@@ -5,8 +5,11 @@
 	"description": {
 		"message": "Browser syncing as it should be: secure, anonymous and free!"
 	},
-	"bookmarksBarTitle": {
+	"bookmarksToolbarTitle": {
 		"message": "Bookmarks bar"
+	},
+	"bookmarksOtherTitle": {
+		"message": "Other bookmarks"
 	},
 	"tooltipSyncEnabled": {
 		"message": "sync enabled"
@@ -191,8 +194,8 @@
 	"syncPanel_Id_Label" : {
 		"message":  "Your xBrowserSync ID"
 	},
-	"syncPanel_IncludeBookmarksBar_Label" : {
-		"message":  "Include Bookmarks bar"
+	"syncPanel_SyncBookmarksToolbar_Label" : {
+		"message":  "Include bookmarks bar"
 	},
 	"confirmRestore_Sync_Message" : {
 		"message":  "As sync is currently enabled, the data being restored will overwrite your xBrowserSync synced data. To restore data to the local browser only, disable sync before restoring. OK to proceed?"
