@@ -143,13 +143,14 @@ body {
     }
     
     .alert {
+        width: 100%;
         position: absolute;
-        z-index: 10;
+        z-index: 90;
         border: none;
         border-radius: 0;
         padding: 10px 10px 15px;
         margin-bottom: 5px;
-        background-color: rgba(234,56,105,0.8);
+        background-color: rgba(234,56,105,0.9);
         border: none;
         color: $colour-text1;
         
@@ -765,7 +766,6 @@ body {
             }
             
             #id {
-                font-size: 1.1em;
                 font-weight: bold;
                 margin: 5px 0 0;
             }

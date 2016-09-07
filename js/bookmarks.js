@@ -199,7 +199,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
  * ------------------------------------------------------------------------------------ */
     
     var getCachedBookmarks = function(bookmarks) {
-            var getBookmarksPromise;
+            var getBookmarks;
             
             if (!bookmarks) {
                 // Get cached bookmarks
@@ -211,7 +211,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 }
 
                 // Get synced bookmarks
-                getBookmarksPromise = api.GetBookmarks()
+                getBookmarks = api.GetBookmarks()
                     .then(function(data) {
                         if (!data || !data.lastUpdated) {
                             return $q.reject({ code: global.ErrorCodes.NoDataFound });
@@ -228,18 +228,20 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                     });
             }
             else {
-                getBookmarksPromise = $q.resolve(bookmarks);
+                getBookmarks = $q.resolve(bookmarks);
             }
             
             // If cache is empty, get synced bookmarks
-            return getBookmarksPromise
+            return getBookmarks
                 .then(function(bookmarks) {
                     // Add unique IDs
                     var counter = 0;
                     var addIdToBookmark = function(bookmark) {
-                        bookmark.id = counter;
-                        counter++;
-                        
+                        if (!!bookmark.url) {
+                            bookmark.id = counter;
+                            counter++;
+                        }
+
                         _.each(bookmark.children, addIdToBookmark);
                     };
                     
@@ -289,6 +291,27 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 return bookmark;
             }
         );
+    };
+
+    var removeEmptyContainers = function(xBookmarks) {
+        var otherContainer = utility.GetOtherContainer(xBookmarks, false);
+        var toolbarContainer = utility.GetToolbarContainer(xBookmarks, false);
+        var xbsContainer = utility.GetXBrowserSyncContainer(xBookmarks, false);
+        var removeArr = [];
+
+        if (!!otherContainer && (!otherContainer.children || otherContainer.children.length === 0)) {
+            removeArr.push(otherContainer);
+        }
+
+        if (!!toolbarContainer && (!toolbarContainer.children || toolbarContainer.children.length === 0)) {
+            removeArr.push(toolbarContainer);
+        }
+
+        if (!!xbsContainer && (!xbsContainer.children || xbsContainer.children.length === 0)) {
+            removeArr.push(xbsContainer);
+        }
+
+        return _.difference(xBookmarks, removeArr);
     };
 	
 	var searchBookmarksByKeywords = function (bookmarksToSearch, keywords, results) {
@@ -683,16 +706,28 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                     switch(syncData.changeInfo.type) {
                         // Create bookmark
                         case global.UpdateType.Create:
-                            return platform.Bookmarks.Created(bookmarks, syncData.changeInfo.data);
+                            return platform.Bookmarks.Created(bookmarks, syncData.changeInfo.data)
+                                .then(function(results) {
+                                    return results.bookmarks;
+                                });
                         // Delete bookmark
                         case global.UpdateType.Delete:
-                            return platform.Bookmarks.Deleted(bookmarks, syncData.changeInfo.data);
+                            return platform.Bookmarks.Deleted(bookmarks, syncData.changeInfo.data)
+                                .then(function(results) {
+                                    return results.bookmarks;
+                                });
                         // Update bookmark
                         case global.UpdateType.Update:
-                            return platform.Bookmarks.Updated(bookmarks, syncData.changeInfo.data);
+                            return platform.Bookmarks.Updated(bookmarks, syncData.changeInfo.data)
+                                .then(function(results) {
+                                    return results.bookmarks;
+                                });
                         // Move bookmark
                         case global.UpdateType.Move:
-                            return platform.Bookmarks.Moved(bookmarks, syncData.changeInfo.data);
+                            return platform.Bookmarks.Moved(bookmarks, syncData.changeInfo.data)
+                                .then(function(results) {
+                                    return results.bookmarks;
+                                });
                         // Ambiguous sync
                         default:
                             return $q.reject({ code: global.ErrorCodes.AmbiguousSyncRequest });
@@ -702,8 +737,11 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         
         // Push bookmarks
         return getBookmarks
-            .then(function(results) {
-                bookmarks = results[0] || [];
+            .then(function(bookmarks) {
+                bookmarks = bookmarks || [];
+
+                // Remove empty containers
+                bookmarks = removeEmptyContainers(bookmarks);
 
                 // Refresh bookmarks cache
                 refreshCachedBookmarks(bookmarks);

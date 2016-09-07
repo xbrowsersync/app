@@ -249,7 +249,7 @@
 		"message":  "Something went wrong"
 	},
 	"error_Default_Message" : {
-		"message":  "If the problem persists, <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>submit an issue</a> to the xBrowserSync team."
+		"message":  "If the problem persists, submit an issue for the xBrowserSync team at https://github.com/xBrowserSync/App."
 	},
 	"error_HttpRequestFailed_Title" : {
 		"message":  "Connection lost"
@@ -279,7 +279,7 @@
 		"message":  "Daily new sync limit reached"
 	},
 	"error_DailyNewSyncLimitReached_Message" : {
-		"message":  "Unable to create new sync as you have reached your daily new sync limit for this xBrowserSync service. Sync with an existing xBrowserSync ID or try again tomorrow."
+		"message":  "Unable to create new sync as you have reached your daily new sync limit for this xBrowserSync service. Sync with an existing xBrowserSync ID, choose a different service or try again tomorrow."
 	},
 	"error_MissingClientData_Title" : {
 		"message":  "Missing xBrowserSync ID or secret"
@@ -334,6 +334,12 @@
 	},
 	"error_OutOfSync_Message" : {
 		"message":  "The last change was not synced due to a bookmarks conflict. It would be a good idea to disable and re-enable sync before continuing."
+	},
+	"error_ContainerChanged_Title" : {
+		"message": "xBrowserSync folder changed"
+	},
+	"error_ContainerChanged_Message" : {
+		"message": "Changing, deleting or moving xBrowserSync application folders can cause issues, sync has been disabled. Re-enable sync to restore bookmarks."
 	},
 	"error_BrowserImportBookmarksNotSupported_Title" : {
 		"message":  "Importing not supported"

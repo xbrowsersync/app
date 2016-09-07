@@ -180,6 +180,8 @@ xBrowserSync.App.Global = function(platform) {
 			Error_LastChangeNotSynced_Message: 'error_LastChangeNotSynced_Message',
 			Error_OutOfSync_Title: 'error_OutOfSync_Title',
 			Error_OutOfSync_Message: 'error_OutOfSync_Message',
+            Error_ContainerChanged_Title: 'error_ContainerChanged_Title',
+            Error_ContainerChanged_Message: 'error_ContainerChanged_Message',
             Error_BrowserImportBookmarksNotSupported_Title: 'error_BrowserImportBookmarksNotSupported_Title',
 			Error_BrowserImportBookmarksNotSupported_Message: 'error_BrowserImportBookmarksNotSupported_Message',
             Error_NotImplemented_Title: 'error_NotImplemented_Title',
@@ -265,6 +267,7 @@ xBrowserSync.App.Global = function(platform) {
             InvalidData: 10106,
             UpdatedBookmarkNotFound: 10107,
             XBookmarkNotFound: 10108,
+            ContainerChanged: 10109,
             NoStatus: 10200,
             FailedGetPageMetadata: 10300,
             NotImplemented: 10400

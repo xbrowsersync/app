@@ -79,7 +79,7 @@
 }
 
 .animate-flash {
-    @include animation(animate-flash 1s linear infinite);
+    @include animation(animate-flash 0.8s linear infinite);
 }
 
 .animate-fold {

@@ -711,15 +711,23 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
     
     var init = function() {
+        // Display main view
+        vm.view.displayMain();
+        
+        // Display intro animation if required
+        if (vm.view.current === vm.view.views.login && !!vm.introduction.displayIntro()) {
+            introPanel_DisplayIntro();
+        }
+        
+        // Enable event listeners
+        global.DisableEventListeners.Set(false);
+
         // Get async channel for syncing in background
         vm.sync.asyncChannel = platform.AsyncChannel.Get(function(msg) {
             $scope.$apply(function() {
                 handleSyncResponse(msg);
             });
         });
-        
-        // Enable event listeners
-        global.DisableEventListeners.Set(false);
         
         // Check if current page is a bookmark
         setBookmarkStatus()
@@ -732,14 +740,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         $timeout(function() {
             setNewTabLinks();
         });
-        
-        // Display main view
-        vm.view.displayMain();
-        
-        // Display intro animation if required
-        if (vm.view.current === vm.view.views.login && !!vm.introduction.displayIntro()) {
-            introPanel_DisplayIntro();
-        }
     };
 
     var introPanel_DisplayIntro = function() {

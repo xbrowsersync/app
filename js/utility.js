@@ -22,6 +22,88 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 		// Decrypt using AES
 		return CryptoJS.AES.decrypt(data, global.ClientSecret.Get()).toString(CryptoJS.enc.Utf8);
 	};
+
+	var findXBookmarkInContainers = function(xBookmarks, predicate) {
+		// Search for bookmark in other container
+		var checkOtherContainer = $q(function(resolve, reject) {
+			var otherContainer = getOtherContainer(xBookmarks, true);
+			var result = {
+				found: false,
+				xBookmark: null
+			};
+
+			var foundXBookmarks = findXBookmark([otherContainer], predicate);
+			if (!foundXBookmarks || foundXBookmarks.length === 0 || foundXBookmarks.length > 1) {
+				return resolve(result);
+			}
+
+			result.found = true;
+			result.xBookmark = foundXBookmarks[0];
+			return resolve(result);
+		});
+
+		// Search for bookmark in toolbar container
+		var checkToolbarContainer = $q(function(resolve, reject) {
+			var toolbarContainer = getToolbarContainer(xBookmarks, true);
+			var result = {
+				found: false,
+				xBookmark: null
+			};
+
+			var foundXBookmarks = findXBookmark([toolbarContainer], predicate);
+			if (!foundXBookmarks || foundXBookmarks.length === 0 || foundXBookmarks.length > 1) {
+				return resolve(result);
+			}
+
+			result.found = true;
+			result.xBookmark = foundXBookmarks[0];
+			return resolve(result);
+		});
+
+		// Search for bookmark in xbs container
+		var checkXbsContainer = $q(function(resolve, reject) {
+			var xbsContainer = getXBrowserSyncContainer(xBookmarks, true);
+			var result = {
+				found: false,
+				xBookmark: null
+			};
+
+			var foundXBookmarks = findXBookmark([xbsContainer], predicate);
+			if (!foundXBookmarks || foundXBookmarks.length === 0 || foundXBookmarks.length > 1) {
+				return resolve(result);
+			}
+
+			result.found = true;
+			result.xBookmark = foundXBookmarks[0];
+			return resolve(result);
+		});
+
+		return $q.all([checkOtherContainer, checkToolbarContainer, checkXbsContainer])
+			.then(function(results) {
+				var otherContainerResult = results[0];
+				var toolbarContainerResult = results[1];
+				var xbsContainerResult = results[2];
+				var result = {
+					container: null,
+					xBookmark: null
+				};
+
+				if (!!otherContainerResult.found) {
+					result.container = global.Bookmarks.OtherContainerName;
+					result.xBookmark = otherContainerResult.xBookmark;
+				}
+				else if (!!toolbarContainerResult.found) {
+					result.container = global.Bookmarks.ToolbarContainerName;
+					result.xBookmark = toolbarContainerResult.xBookmark;
+				}
+				else if (!!xbsContainerResult.found) {
+					result.container = global.Bookmarks.xBrowserSyncContainerName;
+					result.xBookmark = xbsContainerResult.xBookmark;
+				}
+
+				return result;
+			}); 
+	};
 	
 	var getErrorMessageFromException = function(err) {
 		var errorMessage = { 
@@ -90,6 +172,10 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_OutOfSync_Title);
 				errorMessage.message = platform.Constants.Get(global.Constants.Error_OutOfSync_Message); 
 				break;
+			case global.ErrorCodes.ContainerChanged:
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_ContainerChanged_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_ContainerChanged_Message); 
+				break;
 			case global.ErrorCodes.NotImplemented:
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_NotImplemented_Title);
 				errorMessage.message = platform.Constants.Get(global.Constants.Error_NotImplemented_Message); 
@@ -137,6 +223,12 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 
         return container;
     };
+
+	var isBookmarkContainer = function(bookmark) {
+		return (bookmark.title === global.Bookmarks.OtherContainerName ||
+				bookmark.title === global.Bookmarks.ToolbarContainerName ||
+				bookmark.title === global.Bookmarks.xBrowserSyncContainerName);
+	};
 	
 	var xBookmark = function(title, url, description, tags, children) {
 		var xBookmark = {};
@@ -162,14 +254,40 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 		
 		return xBookmark;
 	};
+
+
+/* ------------------------------------------------------------------------------------
+ * Private functions
+ * ------------------------------------------------------------------------------------ */
 	
+	var findXBookmark = function(xBookmarks, predicate) {
+		var results = [];
+		
+		// Filter array
+		results = _.union(results, _.filter(xBookmarks, function(xBookmark) {
+			// Match based on supplied predicate
+			return predicate(xBookmark);
+		}));
+		
+		// Process children
+		var children = _.pluck(xBookmarks, 'children');		
+		for (var i = 0; i < children.length; i++) {
+			results = _.union(results, findXBookmark(children[i], predicate));
+		}
+		
+		return results;
+	};
+	
+
 	return {
 		DecryptData: decryptData,
 		EncryptData: encryptData,
+		FindXBookmarkInContainers: findXBookmarkInContainers,
 		GetErrorMessageFromException: getErrorMessageFromException,
 		GetOtherContainer: getOtherContainer,
 		GetToolbarContainer: getToolbarContainer,
 		GetXBrowserSyncContainer: getXBrowserSyncContainer,
+		IsBookmarkContainer: isBookmarkContainer,
 		XBookmark: xBookmark		
 	};
 };
