@@ -180,7 +180,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		};
 
 		vm.view = {
-			current: null,
+			current: (global.SyncEnabled.Get()) ? 1 : 0,
 			change: function(view) {
 				vm.alert.show = false;
                 vm.working = false;
@@ -193,7 +193,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', true);
                         vm.bookmark.tagText = '';
                         break;
-                    case vm.view.views.main:
+                    case vm.view.views.search:
                         vm.search.lookahead = null;
                         vm.search.query = null;
                         vm.search.results = null;
@@ -225,7 +225,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 }
                 
                 switch(view) {
-                    case vm.view.views.main:
+                    case vm.view.views.search:
                         $timeout(function() {
                             document.querySelector('input[name=txtSearch]').select();
                         });
@@ -266,15 +266,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 				
 				vm.view.current = view;
 			},
-            displayMain: function() {
+            displayMainView: function() {
                 if (!!global.SyncEnabled.Get()) {
-                    vm.view.change(vm.view.views.main);
+                    vm.view.change(vm.view.views.search);
                 }
                 else {
                     vm.view.change(vm.view.views.login);
                 }
             },
-            views: { login: 0, main: 1, bookmark: 2, settings: 3 }
+            views: { login: 0, search: 1, bookmark: 2, settings: 3 }
 		};
         
         vm.working = false;
@@ -464,7 +464,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         });
         
         vm.bookmark.active = true;
-        vm.view.change(vm.view.views.main);
+        vm.view.change(vm.view.views.search);
     };
     
     var bookmarkForm_CreateTags_Click = function() {
@@ -504,8 +504,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.bookmark.active = false;
                 }
                 
-                // Display the main view
-                vm.view.change(vm.view.views.main);
+                // Display the search panel
+                vm.view.change(vm.view.views.search);
             })
             .catch(function(err) {
                 // Display alert
@@ -566,8 +566,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.bookmark.active = (currentUrl === vm.bookmark.current.url);
                 }
                 
-                // Display the main view
-                vm.view.change(vm.view.views.main);
+                // Display the search panel
+                vm.view.change(vm.view.views.search);
             })
             .catch(function(err) {
                 // Display alert
@@ -638,9 +638,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     // Disable the intro animation
                     vm.introduction.displayIntro(false);
                     
-                    // If initial sync, switch to main view 
+                    // If initial sync, switch to search panel
                     if (vm.view.current === vm.view.views.login) {
-                    	vm.view.change(vm.view.views.main);
+                    	vm.view.change(vm.view.views.search);
                     }
 
                     setBookmarkStatus()
@@ -711,9 +711,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
     
     var init = function() {
-        // Display main view
-        vm.view.displayMain();
-        
         // Display intro animation if required
         if (vm.view.current === vm.view.views.login && !!vm.introduction.displayIntro()) {
             introPanel_DisplayIntro();

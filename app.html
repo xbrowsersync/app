@@ -262,7 +262,7 @@
             </div>
         </div>
         
-        <div id="main-panel" class="view" ng-show="vm.view.current === vm.view.views.main">
+        <div id="search-panel" class="view" ng-show="vm.view.current === vm.view.views.search">
             <div class="header-panel clearfix">
                 <div class="search-form">
                     <div class="lookahead-container">
@@ -311,7 +311,7 @@
                 <h2>
                     {{ (vm.bookmark.displayUpdateForm) ? vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Title_Edit) : vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Title_Add) }}
                 </h2>
-                <button class="btn btn-icon btn-close" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}" ng-click="vm.view.displayMain()"  tabindex="1000">
+                <button class="btn btn-icon btn-close" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}" ng-click="vm.view.displayMainView()"  tabindex="1000">
                     <i class="fa fa-times-circle" aria-hidden="true"></i>
                     <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}</span>
                 </button>
@@ -369,7 +369,7 @@
             <div class="header-panel clearfix">
                 <h2>{{ vm.platform.Constants.Get(vm.global.Constants.Button_Settings_Label) }}</h2>
                 <button class="btn btn-icon btn-close" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}" 
-                        ng-click="vm.view.displayMain()" tabindex="1001">
+                        ng-click="vm.view.displayMainView()" tabindex="1001">
                     <i class="fa fa-times-circle" aria-hidden="true"></i>
                     <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}</span>
                 </button>
