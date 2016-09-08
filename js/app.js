@@ -234,9 +234,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         });
                         break;
                     case vm.view.views.bookmark:
-                        // Update description field height
-                        bookmarkForm_ResizeDescriptionField();
-
                         $timeout(function() {
                             // Focus on title field
                             document.querySelector('input[name="bookmarkTitle"]').select();
@@ -705,6 +702,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // Otherwise, display sync confirmation
         vm.settings.service.displaySyncBookmarksToolbarConfirmation = true;
+        $timeout(function() {
+            document.querySelector('#btnSyncBookmarksToolbar_Confirm').focus();
+        });
     };
     
     var syncBookmarksToolbar_Confirm = function() {
@@ -731,6 +731,17 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if (vm.view.current === vm.view.views.login && !!vm.introduction.displayIntro()) {
             introPanel_DisplayIntro();
         }
+
+        $timeout(function() {
+            if (vm.view.current === vm.view.views.login) {
+                // Focus on secret input
+                document.querySelector('input[name=txtClientSecret]').select();
+            }
+            else {
+                // Focus on search box
+                document.querySelector('input[name=txtSearch]').select();
+            }
+        });
         
         // Enable event listeners
         global.DisableEventListeners.Set(false);
@@ -939,7 +950,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 }
                 else {
                     // Focus on search box
-                    document.querySelector('.search-form input').focus();
+                    document.querySelector('input[name=txtSearch]').select();
                 }
                 
                 break;
@@ -1008,7 +1019,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             // Numbers and letters
             case ($event.keyCode > 47 && $event.keyCode < 112):
                 // Focus on search box
-                document.querySelector('.search-form input').focus();
+                document.querySelector('input[name=txtSearch]').select();
                 break;
         }
     };
@@ -1182,6 +1193,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             .then(function() {
                 // Hide loading animation
                 vm.working = false;
+
+                // Update description field height
+                bookmarkForm_ResizeDescriptionField();
             })
             .catch(function(err) {
                 // Display alert

@@ -405,7 +405,7 @@
                     <div class="confirm well well-sm animate-fade" ng-show="vm.settings.service.displaySyncBookmarksToolbarConfirmation">
                         <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.SyncBookmarksToolbarConfirmation_Message)"></div>
                         <div class="buttons text-center">
-                            <button id="btnCancelSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncBookmarksToolbar_Confirm()" tabindex="4">
+                            <button id="btnSyncBookmarksToolbar_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncBookmarksToolbar_Confirm()" tabindex="4">
                                 {{ vm.platform.Constants.Get(vm.global.Constants.Button_Confirm_Label) }}
                             </button>
                             <button type="button" class="btn btn-default" ng-click="vm.settings.syncBookmarksToolbar(false); vm.settings.service.displaySyncBookmarksToolbarConfirmation = false" tabindex="5">

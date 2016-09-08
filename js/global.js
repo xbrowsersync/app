@@ -415,7 +415,7 @@ xBrowserSync.App.Global = function(platform) {
         URL: {
             Host: {
                 Get: function() {
-                    var defaultUrl = 'https://api-xbrowsersync.rhcloud.com';
+                    var defaultUrl = 'https://api.xbrowsersync.org';
                     var urlHost = platform.LocalStorage.Get(
                         'xBrowserSync-urlHost');
                     
