@@ -681,6 +681,11 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
             getBookmarks = platform.Bookmarks.Get();
         }
         else {
+            // Check sync is enabled
+            if (!global.SyncEnabled.Get()) {
+                return $q.resolve();
+            }
+
             // Check secret and bookmarks ID are present
             if (!global.ClientSecret.Get() || !global.Id.Get()) {
                 global.SyncEnabled.Set(false);
