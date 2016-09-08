@@ -106,6 +106,7 @@ xBrowserSync.App.Global = function(platform) {
 			Button_Deny_Label: 'button_Deny_Label',
 			Field_Search_Description: 'field_Search_Description',
             NoSearchResults_Message: 'noSearchResults_Message', 
+            SyncBookmarksToolbarConfirmation_Message: 'syncBookmarksToolbarConfirmation_Message',
             CancelSyncConfirmation_Message: 'cancelSyncConfirmation_Message',
             ServiceStatus_Label: 'serviceStatus_Label',
             ServiceStatus_NoNewSyncs: 'serviceStatus_NoNewSyncs',

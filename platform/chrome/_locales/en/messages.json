@@ -113,6 +113,9 @@
 	"noSearchResults_Message" : {
 		"message":  "No bookmarks found"
 	},
+	"syncBookmarksToolbarConfirmation_Message": {
+		"message":  "<p>Enabling syncing of the bookmarks bar will replace the bookmarks currently in the bookmarks bar with your synced bookmarks. OK to proceed?</p>"
+	},
 	"cancelSyncConfirmation_Message": {
 		"message":  "<p>There is currently a sync in progress, if you proceed your local synced data will be incomplete. OK to proceed?</p>"
 	},
@@ -189,7 +192,7 @@
 		"message":  "Sync"
 	},
 	"syncPanel_Message" : {
-		"message":  "Disable syncing changes to the Bookmarks bar if you want to sync your bookmarks to multiple browsers but prefer their Bookmarks bars to display different links."
+		"message":  "Disable syncing changes to the bookmarks bar if you want to sync your bookmarks to multiple browsers but prefer their bookmarks bars to display different links."
 	},
 	"syncPanel_Id_Label" : {
 		"message":  "Your xBrowserSync ID"

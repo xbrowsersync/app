@@ -221,7 +221,7 @@
                     </div>
                 </div>
             </div>
-            <form name="vm.syncForm" class="animate-fade" ng-hide="vm.sync.showConfirmation" novalidate>
+            <form name="vm.syncForm" class="animate-fade" ng-hide="vm.sync.displaySyncConfirmation" novalidate>
                 <label class="sr-only" for="txtClientSecret">{{ vm.platform.Constants.Get(vm.global.Constants.Field_ClientSecret_Label) }}</label>
                 <div class="form-group secret-form-group" ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtClientSecret.$invalid]">
                     <input ng-model="vm.settings.secret" type="password" class="form-control" name="txtClientSecret" ng-change="vm.events.syncForm_ClientSecret_Change()"
@@ -248,14 +248,14 @@
                     </button>
                 </div>
             </form>
-            <div class="confirm well well-sm animate-fade" ng-show="vm.sync.showConfirmation">
+            <div class="confirm well well-sm animate-fade" ng-show="vm.sync.displaySyncConfirmation">
                 <h4>{{ vm.platform.Constants.Get(vm.global.Constants.ConfirmReplaceBookmarks_Title) }}</h4>
                 <p>{{ vm.platform.Constants.Get(vm.global.Constants.ConfirmReplaceBookmarks_Message) }}</p>
                 <div class="buttons">
                     <button id="btnSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncForm_ConfirmSync_Click()" tabindex="4">
                         {{ vm.platform.Constants.Get(vm.global.Constants.Button_Confirm_Label) }}
                     </button>
-                    <button id="btnSync_Cancel" type="button" class="btn btn-default" ng-click="vm.sync.showConfirmation = false" tabindex="5">
+                    <button id="btnSync_Cancel" type="button" class="btn btn-default" ng-click="vm.sync.displaySyncConfirmation = false" tabindex="5">
                         {{ vm.platform.Constants.Get(vm.global.Constants.Button_Deny_Label) }}
                     </button>
                 </div>
@@ -384,7 +384,7 @@
                     <div ng-hide="vm.sync.enabled()">
                         <p ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.SyncPanel_Message)"></p>
                     </div>
-                    <div class="text-center" ng-hide="vm.settings.service.displayCancelSyncConfirmation">
+                    <div class="text-center" ng-hide="vm.settings.service.displaySyncBookmarksToolbarConfirmation || vm.settings.service.displayCancelSyncConfirmation">
                         <div class="id-panel" ng-show="vm.sync.enabled()"> 
                             <label>{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_Id_Label) }}:</label>
                             <p id="id">{{ vm.settings.id() }}</p>
@@ -401,6 +401,17 @@
                                 ng-show="vm.sync.enabled()" tabindex="3">
                             {{ vm.platform.Constants.Get(vm.global.Constants.Button_Sync_Disable_Label) }}
                         </button>
+                    </div>
+                    <div class="confirm well well-sm animate-fade" ng-show="vm.settings.service.displaySyncBookmarksToolbarConfirmation">
+                        <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.SyncBookmarksToolbarConfirmation_Message)"></div>
+                        <div class="buttons text-center">
+                            <button id="btnCancelSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncBookmarksToolbar_Confirm()" tabindex="4">
+                                {{ vm.platform.Constants.Get(vm.global.Constants.Button_Confirm_Label) }}
+                            </button>
+                            <button type="button" class="btn btn-default" ng-click="vm.settings.syncBookmarksToolbar(false); vm.settings.service.displaySyncBookmarksToolbarConfirmation = false" tabindex="5">
+                                {{ vm.platform.Constants.Get(vm.global.Constants.Button_Deny_Label) }}
+                            </button>
+                        </div>
                     </div>
                     <div class="confirm well well-sm animate-fade" ng-show="vm.settings.service.displayCancelSyncConfirmation">
                         <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.CancelSyncConfirmation_Message)"></div>
