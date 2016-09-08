@@ -124,7 +124,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 				}
 		
 				// Get deleted local bookmark's parent
-				return getLocalBookmark(removeInfo.parentId)
+				return getLocalBookmark(removeInfo.parentId);
 			})
 			.then(function(localBookmark) {
 				deletedLocalBookmarkParent = localBookmark;
@@ -414,7 +414,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
         getBookmarksBar = getLocalBookmark(bookmarksBarId)
 			.then(function(bookmarksBar) {
 				if (!global.SyncBookmarksToolbar.Get()) {
-					return xBookmarks;
+					return;
 				}
 				
 				if (bookmarksBar.children.length > 0) {
