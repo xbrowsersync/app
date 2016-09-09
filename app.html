@@ -336,12 +336,13 @@
                     </div>
                     <div class="form-group tags-form-group">
                         <label for="bookmarkTags" class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Tags_Label) }}</label>
-                        <div class="lookahead-container">
-                            <span class="measure" ng-bind-html="vm.bookmark.tagTextMeasure"></span>
-                            <span class="lookahead" ng-bind-html="vm.bookmark.tagLookahead" ng-show="vm.bookmark.tagLookahead"></span>
+                            <div class="lookahead-container">
+                                <span class="measure" ng-bind-html="vm.bookmark.tagTextMeasure"></span>
+                                <span class="lookahead" ng-bind-html="vm.bookmark.tagLookahead" ng-show="vm.bookmark.tagLookahead"></span>
+                            </div>
+                            <input type="text" class="form-control" name="bookmarkTags" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Tags_Placeholder) }}" maxlength="50" tabindex="4"
+                                   ng-model="vm.bookmark.tagText" ng-change="vm.events.bookmarkForm_BookmarkTags_Change()" ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" ng-trim="false">
                         </div>
-                        <input type="text" class="form-control" name="bookmarkTags" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Tags_Placeholder) }}" maxlength="50" tabindex="4"
-                                ng-model="vm.bookmark.tagText" ng-change="vm.events.bookmarkForm_BookmarkTags_Change()" ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" ng-trim="false">
                         <div class="tags clearfix" ng-show="vm.bookmark.current.tags.length > 0">
                             <button class="label label-default" ng-repeat="tag in vm.bookmark.current.tags track by $index" ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
                                 {{ tag }}
@@ -349,7 +350,6 @@
                                 <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_RemoveTag_Label) }}</span>
                             </button>
                         </div>
-                    </div>
                     <div class="buttons">
                         <button type="submit" class="btn btn-default" ng-if="!vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_CreateBookmark_Click()" tabindex="6">
                             {{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_AddBookmark_Label) }}

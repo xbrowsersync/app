@@ -474,9 +474,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             return tag;
         });
 
-        // Update description field height
         bookmarkForm_ResizeDescriptionField();
-        
         vm.bookmark.tagText = '';
         vm.bookmark.tagLookahead = '';
         document.querySelector('input[name="bookmarkTags"]').focus();
@@ -1043,7 +1041,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Display bookmark panel
         $timeout(function() {
             vm.view.change(vm.view.views.bookmark);
-        }, 100);
+            bookmarkForm_ResizeDescriptionField();
+        });
     };
     
     var setBookmarkStatus = function() {
@@ -1191,10 +1190,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Set bookmark status
         setBookmarkStatus()
             .then(function() {
-                // Hide loading animation
                 vm.working = false;
-
-                // Update description field height
                 bookmarkForm_ResizeDescriptionField();
             })
             .catch(function(err) {

@@ -652,24 +652,32 @@ body {
 #bookmark-panel {
     padding: 0 10px 15px;
     
-    input[name="bookmarkTags"] {
-        text-transform: lowercase;
-    }
-
     textarea {
         height: 190px;
     }
-    
-    .lookahead-container {
-        left: 25px;
+
+    .tags-form-group {
+        border-radius: $border-radius;
+        background-color: $colour-text1;
         
-        .lookahead {
-            font-size: 1.1em;
-            line-height: 2.8;
+        input {
+            text-transform: lowercase;
+            position: relative;
+            z-index: 50;
+            background: transparent; 
         }
 
-        .measure {
-            text-transform: lowercase;
+        .lookahead-container {
+            left: 25px;
+            
+            .lookahead {
+                font-size: 1.1em;
+                line-height: 2.8;
+            }
+
+            .measure {
+                text-transform: lowercase;
+            }
         }
     }
     
