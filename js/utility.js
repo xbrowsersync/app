@@ -169,12 +169,16 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 				errorMessage.message = platform.Constants.Get(global.Constants.Error_LastChangeNotSynced_Message); 
 				break;
 			case global.ErrorCodes.XBookmarkNotFound:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_OutOfSync_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_OutOfSync_Message); 
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_BookmarkNotFound_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Wrror_BookmarkNotFound_Message); 
 				break;
 			case global.ErrorCodes.ContainerChanged:
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_ContainerChanged_Title);
 				errorMessage.message = platform.Constants.Get(global.Constants.Error_ContainerChanged_Message); 
+				break;
+			case global.ErrorCodes.DataOutOfSync:
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_OutOfSync_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_OutOfSync_Message); 
 				break;
 			case global.ErrorCodes.NotImplemented:
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_NotImplemented_Title);

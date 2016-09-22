@@ -230,12 +230,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 switch(view) {
                     case vm.view.views.search:
                         $timeout(function() {
+                            platform.Interface.Refresh();
                             document.querySelector('input[name=txtSearch]').select();
                         });
                         break;
                     case vm.view.views.bookmark:
                         $timeout(function() {
-                            // Focus on title field
                             document.querySelector('input[name="bookmarkTitle"]').select();
                         });
                         break;
@@ -650,6 +650,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 else {
                     errMessage = utility.GetErrorMessageFromException(response.error);
                     vm.alert.display(errMessage.title, errMessage.message, 'danger');
+
+                    // If data out of sync, refresh sync
+                    if (!!response.error && !!response.error.code && response.error.code === global.ErrorCodes.DataOutOfSync) {
+                        platform.Sync(vm.sync.asyncChannel, { type: global.SyncType.Pull });
+                    }
                 }
                 
                 vm.working = false;
@@ -690,38 +695,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.working = false;
                 break;
         }
-    };
-    
-    var syncBookmarksToolbar_Click = function() {
-        // If sync not enabled or user just clicked to disable toolbar sync, return
-        if (!global.SyncEnabled.Get() || !global.SyncBookmarksToolbar.Get()) {
-            return;
-        }
-        
-        // Otherwise, display sync confirmation
-        vm.settings.service.displaySyncBookmarksToolbarConfirmation = true;
-        $timeout(function() {
-            document.querySelector('#btnSyncBookmarksToolbar_Confirm').focus();
-        });
-    };
-    
-    var syncBookmarksToolbar_Confirm = function() {
-        // If sync not enabled, return
-        if (!global.SyncEnabled.Get()) {
-            return;
-        }
-        
-        var syncData = {};
-        syncData.type = (!global.Id.Get()) ? global.SyncType.Push : global.SyncType.Pull;
-        
-        // Hide sync confirmation
-        vm.settings.service.displaySyncBookmarksToolbarConfirmation = false;
-        
-        // Show loading animation
-        vm.working = true;
-        
-        // Start sync with no callback action
-        platform.Sync(vm.sync.asyncChannel, syncData, global.Commands.NoCallback);
     };
 
     var init = function() {
@@ -1129,6 +1102,38 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.sync.displaySyncConfirmation = false;
         vm.working = true;
         queueSync();
+    };
+    
+    var syncBookmarksToolbar_Click = function() {
+        // If sync not enabled or user just clicked to disable toolbar sync, return
+        if (!global.SyncEnabled.Get() || !global.SyncBookmarksToolbar.Get()) {
+            return;
+        }
+        
+        // Otherwise, display sync confirmation
+        vm.settings.service.displaySyncBookmarksToolbarConfirmation = true;
+        $timeout(function() {
+            document.querySelector('#btnSyncBookmarksToolbar_Confirm').focus();
+        });
+    };
+    
+    var syncBookmarksToolbar_Confirm = function() {
+        // If sync not enabled, return
+        if (!global.SyncEnabled.Get()) {
+            return;
+        }
+        
+        var syncData = {};
+        syncData.type = (!global.Id.Get()) ? global.SyncType.Push : global.SyncType.Pull;
+        
+        // Hide sync confirmation
+        vm.settings.service.displaySyncBookmarksToolbarConfirmation = false;
+        
+        // Show loading animation
+        vm.working = true;
+        
+        // Start sync with no callback action
+        platform.Sync(vm.sync.asyncChannel, syncData, global.Commands.NoCallback);
     };
 
     var syncForm_CancelSyncConfirmation_Click = function() {

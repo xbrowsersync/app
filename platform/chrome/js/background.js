@@ -48,18 +48,13 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 		}
 		
 		// Sync updates
-		bookmarks.Sync({
+		syncBookmarks({
 			type: global.SyncType.Push,
 			changeInfo: {
 				type: global.UpdateType.Update, 
 				data: [id, changeInfo]
 			}
-		})
-			.catch(function(err) {
-				// Display alert
-				var errMessage = utility.GetErrorMessageFromException(err);
-				displayAlert(errMessage.title, errMessage.message);
-			});
+		});
 	};
 	
 	var createBookmark = function(id, bookmark) {
@@ -69,18 +64,13 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 		}
 		
 		// Sync updates
-		bookmarks.Sync({
+		syncBookmarks({
 			type: global.SyncType.Push,
 			changeInfo: { 
 				type: global.UpdateType.Create, 
 				data: [id, bookmark]
 			}
-		})
-			.catch(function(err) {
-				// Display alert
-				var errMessage = utility.GetErrorMessageFromException(err);
-				displayAlert(errMessage.title, errMessage.message);
-			});
+		});
 	};
 	
 	var displayAlert = function(title, message, callback) {
@@ -172,18 +162,13 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 		}
 		
 		// Sync updates
-		bookmarks.Sync({
+		syncBookmarks({
 			type: global.SyncType.Push,
 			changeInfo: { 
 				type: global.UpdateType.Move, 
 				data: [id, moveInfo]
 			}
-		})
-			.catch(function(err) {
-				// Display alert
-				var errMessage = utility.GetErrorMessageFromException(err);
-				displayAlert(errMessage.title, errMessage.message);
-			});
+		});
 	};
 	
 	var removeBookmark = function(id, removeInfo) {
@@ -193,7 +178,7 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 		}
 		
 		// Sync updates
-		bookmarks.Sync({
+		syncBookmarks({
 			type: global.SyncType.Push,
 			changeInfo: {
 				type: global.UpdateType.Delete, 
@@ -204,24 +189,16 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 				// Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
 				displayAlert(errMessage.title, errMessage.message);
+
+				// If data out of sync, refresh sync
+				if (!!err && !!err.code && err.code === global.ErrorCodes.DataOutOfSync) {
+					syncBookmarks({ type: global.SyncType.Pull });
+				}
 			});
 	};
 	
 	var restoreBookmarks = function(restoreData) {
-		// Start restore
-		bookmarks.Sync(restoreData)
-			.then(function() {
-				try {
-					asyncChannel.postMessage({ command: global.Commands.RestoreBookmarks, success: true });
-				}
-				catch (ex) {}
-			})
-			.catch(function(err) {
-				try {
-					asyncChannel.postMessage({ command: global.Commands.RestoreBookmarks, success: false, error: err });
-				}
-				catch (ex) {}
-			});
+		syncBookmarks(restoreData, global.Commands.RestoreBookmarks);
 	};
 	
 	var startup = function() {
@@ -256,18 +233,25 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 	
 	var syncBookmarks = function(syncData, command) {
 		// Start sync
-		bookmarks.Sync(syncData)
+		return bookmarks.Sync(syncData)
 			.then(function() {
-				try {
-					asyncChannel.postMessage({ command: command, success: true });
+				if (!!command) {
+					try {
+						asyncChannel.postMessage({ command: command, success: true });
+					}
+					catch (ex) {}
 				}
-				catch (ex) {}
 			})
 			.catch(function(err) {
-				try {
-					asyncChannel.postMessage({ command: command, success: false, error: err });
+				if (!!command) {
+					try {
+						asyncChannel.postMessage({ command: command, success: false, error: err });
+					}
+					catch (ex) {}
 				}
-				catch (ex) {}
+				else {
+					throw err;
+				}
 			});
 	};
 	

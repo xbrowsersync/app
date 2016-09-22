@@ -405,7 +405,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 
                 if (!tagsOnly) {
                     // Add all words from title
-                    bookmarkWords = bookmarkWords.concat(_.compact(bookmark.title.replace("'", '').toLowerCase().split(/\s/)));
+                    bookmarkWords = bookmarkWords.concat(_.compact(bookmark.title.replace("'", '').toLowerCase().split(/[\W_]/)));
                     
                     // Split tags into individual words
                     if (!!bookmark.tags) { 
@@ -514,6 +514,12 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                             if (!data || !data.lastUpdated) {
                                 return $q.reject({ code: global.ErrorCodes.NoDataFound });
                             }
+
+                            // Check if data is out of sync
+                            var lastUpdated = new Date(data.lastUpdated);
+                            if (global.LastUpdated.Get().getTime() !== lastUpdated.getTime()) {
+                                return $q.reject({ code: global.ErrorCodes.DataOutOfSync });
+                            }
                             
                             var bookmarksToUpdate;
                             
@@ -540,6 +546,12 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                         .then(function(data) {
                             if (!data || !data.lastUpdated) {
                                 return $q.reject({ code: global.ErrorCodes.NoDataFound });
+                            }
+
+                            // Check if data is out of sync
+                            var lastUpdated = new Date(data.lastUpdated);
+                            if (global.LastUpdated.Get().getTime() !== lastUpdated.getTime()) {
+                                return $q.reject({ code: global.ErrorCodes.DataOutOfSync });
                             }
                             
                             var bookmarksToUpdate;
@@ -569,6 +581,12 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                         .then(function(data) {
                             if (!data || !data.lastUpdated) {
                                 return $q.reject({ code: global.ErrorCodes.NoDataFound });
+                            }
+
+                            // Check if data is out of sync
+                            var lastUpdated = new Date(data.lastUpdated);
+                            if (global.LastUpdated.Get().getTime() !== lastUpdated.getTime()) {
+                                return $q.reject({ code: global.ErrorCodes.DataOutOfSync });
                             }
                             
                             var bookmarksToUpdate;
@@ -697,6 +715,12 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 .then(function(data) {
                     if (!data || !data.lastUpdated) {
                         return $q.reject({ code: global.ErrorCodes.NoDataFound });
+                    }
+
+                    // Check if data is out of sync
+                    var lastUpdated = new Date(data.lastUpdated);
+                    if (global.LastUpdated.Get().getTime() !== lastUpdated.getTime()) {
+                        return $q.reject({ code: global.ErrorCodes.DataOutOfSync });
                     }
                     
                     // Decrypt bookmarks

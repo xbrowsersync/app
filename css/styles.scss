@@ -144,13 +144,11 @@ body {
     
     .alert {
         width: 100%;
-        position: absolute;
-        z-index: 90;
         border: none;
         border-radius: 0;
         padding: 10px 10px 15px;
-        margin-bottom: 5px;
-        background-color: rgba(234,56,105,0.9);
+        margin-bottom: 0;
+        background-color: $colour-danger;
         border: none;
         color: $colour-text1;
         

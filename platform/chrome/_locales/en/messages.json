@@ -27,7 +27,7 @@
 		"message": "Previous"
 	},
 	"introPanel1_Message": {
-		"message": "<h4>Welcome</h4><p>Thanks for installing xBrowserSync!</p><p>Have a read through the following pages to help you get started. Should you require futher help, check out the <a href='http://xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
+		"message": "<h4>Welcome</h4><p>Thanks for installing xBrowserSync!</p><p>Have a read through the following pages to help you get started. Should you require futher help, check out the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
 	},
 	"introPanel2_Message": {
 		"message": "<h4>Your secret word</h4><p>To begin, enter a secret word or phrase that will be used to encrypt and decrypt your browser data.</p><p>Make it strong to protect your data but also memorable, if you forget it we can't remind you and you won't be able to decrypt your data without it.</p>"
@@ -135,7 +135,7 @@
 		"message":  "Change Service"
 	},
 	"updateServiceUrlForm_Message" : {
-		"message":  "Enter the URL of an alternative xBrowserSync service. You can check the list of public xBrowserSync services <a href='http://xbrowsersync.org/#status' class='new-tab'>here</a>."
+		"message":  "Enter the URL of an alternative xBrowserSync service. You can check the list of public xBrowserSync services <a href='https://www.xbrowsersync.org/#status' class='new-tab'>here</a>."
 	},
 	"updateServiceUrlForm_Placeholder" : {
 		"message":  "xBrowserSync service URL"
@@ -332,11 +332,17 @@
 	"error_LastChangeNotSynced_Message" : {
 		"message":  "The last change was not synced due to a bookmarks conflict. It would be a good idea to disable and re-enable sync before continuing."
 	},
+	"error_BookmarkNotFound_Title" : {
+		"message":  "Bookmark not found"
+	},
+	"error_BookmarkNotFound_Message" : {
+		"message":  "It looks like your bookmarks are out of sync. It would be a good idea to disable and re-enable sync before continuing."
+	},
 	"error_OutOfSync_Title" : {
-		"message":  "Bookmarks out of sync"
+		"message":  "Data out of sync"
 	},
 	"error_OutOfSync_Message" : {
-		"message":  "The last change was not synced due to a bookmarks conflict. It would be a good idea to disable and re-enable sync before continuing."
+		"message":  "Local data was out of sync but has now been refreshed. However, your last change was not synced so you will need to redo this change."
 	},
 	"error_ContainerChanged_Title" : {
 		"message": "xBrowserSync folder changed"

@@ -516,15 +516,6 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
         
         return deferred.promise;
     };
-	
-	var setInLocalStorage = function(itemName, itemValue) {
-		localStorage.setItem(itemName, itemValue);
-	};
-	
-	var sync = function(asyncChannel, syncData, command) {
-		syncData.command = (!!command) ? command : global.Commands.SyncBookmarks;
-		asyncChannel.postMessage(syncData);
-	};
 
 	var openUrl = function(url) {
 		// Get current tab
@@ -623,10 +614,17 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			iconPath = 'img/browser-action-off.png';
 		}
         
-        $timeout(function() {
-            chrome.browserAction.setIcon({ path: iconPath });
-		    chrome.browserAction.setTitle({ title: tooltip });
-        }, 100);
+		chrome.browserAction.setIcon({ path: iconPath });
+		chrome.browserAction.setTitle({ title: tooltip });
+	};
+	
+	var setInLocalStorage = function(itemName, itemValue) {
+		localStorage.setItem(itemName, itemValue);
+	};
+	
+	var sync = function(asyncChannel, syncData, command) {
+		syncData.command = (!!command) ? command : global.Commands.SyncBookmarks;
+		asyncChannel.postMessage(syncData);
 	};
 	
  
