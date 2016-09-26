@@ -192,6 +192,7 @@ body {
     }
     
     .container {
+        width: 100%;
         padding: 0;
         margin: 0;
         @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
@@ -302,6 +303,8 @@ body {
     
     .view {
         padding: 10px;
+        max-width: 768px;
+        margin: 0 auto;
     }
         
     .well {
@@ -389,14 +392,15 @@ body {
     .intro-panel {
         height: 260px;
         overflow: hidden;
+        position: relative;
     
         & > div {
             position: absolute;
             height: 245px;
-            width: 255px;
+            width: 100%;
             font-size: 1.1em;
             line-height: 1.3em;
-            left: 10px;
+            left: 0;
             padding: 12px 25px;
 
             & > div {
@@ -435,6 +439,11 @@ body {
                 float: right;
             }
         }
+    }
+
+    .form-control {
+        height: auto;
+        padding: 10px 0 10px 20px;
     }
     
     .secret-form-group {
