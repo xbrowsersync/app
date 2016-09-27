@@ -27,10 +27,15 @@
 }
 
 body {
-	font-family: $font-stack;
+    font-family: $font-stack;
     color: $colour-text1;
     font-size: 13px;
     line-height: 17px;
+
+    @media (min-width: $width-tablet) {
+        font-size: 16px;
+        line-height: 20px;
+    }
 
     h2 {
         font-size: 1.8em;
@@ -63,6 +68,11 @@ body {
     
     button {
         &.btn {
+
+            @media (min-width: $width-tablet) {
+                font-size: 18px;
+            }
+
             &.btn-default {
                 font-size: 1.2em;
                 font-weight: 800;
@@ -144,10 +154,11 @@ body {
     
     .alert {
         width: 100%;
+        max-width: $width-tablet;
         border: none;
         border-radius: 0;
         padding: 10px 10px 15px;
-        margin-bottom: 0;
+        margin: 0 auto;
         background-color: $colour-danger;
         border: none;
         color: $colour-text1;
@@ -233,6 +244,10 @@ body {
     }
     
     .header-panel {
+        @media (min-width: $width-tablet) {
+            margin: 10px 0;
+        }
+        
         .btn-icon {
             margin-top: 7px;
             
@@ -332,6 +347,11 @@ body {
             border-width: 1px;
             font-size: 1.1em;
             padding: 6px 12px 8px;
+
+            @media (min-width: $width-tablet) {
+                font-size: 1em;
+                padding: 6px 12px;
+            }
             
             &:not([disabled]):hover {
                 background-color: $colour-text2;
@@ -348,10 +368,6 @@ body {
             border: solid 1px $colour-text2;
         }
     }
-}
-
-#login-panel, #bookmark-panel, #settings-panel {
-    height: 460px;
 }
 
 #loading-panel {
@@ -403,6 +419,10 @@ body {
             left: 0;
             padding: 12px 25px;
 
+            @media (min-width: $width-tablet) {
+                padding: 50px;
+            }
+
             & > div {
                 position: relative;
                 z-index: 20;
@@ -443,7 +463,7 @@ body {
 
     .form-control {
         height: auto;
-        padding: 10px 0 10px 20px;
+        padding: 10px 20px;
     }
     
     .secret-form-group {
@@ -466,6 +486,10 @@ body {
             border: solid 2px $colour-text1;
             border-radius: $border-radius;
 
+            @media (min-width: $width-tablet) {
+                height: 45px;
+            }
+
             .progress-bar {
                 box-shadow: none;
                 background-color: $colour-danger;                
@@ -479,6 +503,10 @@ body {
             position: absolute;
             top: 0;
             border-radius: $border-radius;
+
+            @media (min-width: $width-tablet) {
+                height: 45px;
+            }
         }
     }
 
@@ -814,6 +842,7 @@ body {
             }
 
             .status-url-panel {
+                text-align: center;
                 margin-top: 10px;
             }
             

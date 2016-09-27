@@ -23,7 +23,6 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
     
 	var ChromeImplementation = function() {
 		// Inject required platform implementation functions
-		platform.AsyncChannel.Get = getAsyncChannel; 
 		platform.Bookmarks.Clear = clearBookmarks;
         platform.Bookmarks.ContainsCurrentPage = containsCurrentPage;
 		platform.Bookmarks.Created = bookmarksCreated;
@@ -34,6 +33,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		platform.Bookmarks.Updated = bookmarksUpdated;
 		platform.Constants.Get = getConstant;
         platform.CurrentUrl.Get = getCurrentUrl;
+		platform.Init = init;
         platform.Interface.Refresh = refreshInterface;
 		platform.LocalStorage.Get = getFromLocalStorage;
 		platform.LocalStorage.Set = setInLocalStorage;
@@ -516,6 +516,23 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
         
         return deferred.promise;
     };
+
+	var init = function(vm) {
+		// Enable event listeners
+        global.DisableEventListeners.Set(false);
+
+		// Get async channel for syncing in background
+        vm.sync.asyncChannel = getAsyncChannel(function(msg) {
+            vm.scope.$apply(function() {
+                vm.events.handleSyncResponse(msg);
+            });
+        });
+
+		// Set login validation
+		vm.sync.validateLogin = function() {
+			return !!vm.settings.secret();
+		};
+	};
 
 	var openUrl = function(url) {
 		// Get current tab

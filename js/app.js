@@ -18,6 +18,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm = this;
         vm.global = global;
         vm.platform = platform; 
+        vm.scope = $scope;
 		
 		vm.alert = {
 			show: false,
@@ -69,6 +70,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
             syncBookmarksToolbar_Click: syncBookmarksToolbar_Click,
             syncBookmarksToolbar_Confirm: syncBookmarksToolbar_Confirm,
+            handleSyncResponse: handleSyncResponse,
             introPanel_ShowHelp_Click: introPanel_ShowHelp_Click,
             openUrl: openUrl,
             queueSync: queueSync,
@@ -178,7 +180,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 return arguments.length ? 
                     global.IsSyncing.Set(value) : 
                     global.IsSyncing.Get();
-            }
+            },
+            validateLogin: undefined
 		};
 
 		vm.view = {
@@ -714,16 +717,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             }
         });
         
-        // Enable event listeners
-        global.DisableEventListeners.Set(false);
-
-        // Get async channel for syncing in background
-        vm.sync.asyncChannel = platform.AsyncChannel.Get(function(msg) {
-            $scope.$apply(function() {
-                handleSyncResponse(msg);
-            });
-        });
-        
         // Check if current page is a bookmark
         setBookmarkStatus()
             .catch(function(err) {
@@ -735,6 +728,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         $timeout(function() {
             setNewTabLinks();
         });
+
+        // Platform-specific initation
+        platform.Init(vm);
     };
 
     var introPanel_DisplayIntro = function() {
@@ -769,7 +765,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 	var queueSync = function() {
         var syncData = {};
         syncData.type = (!global.Id.Get()) ? global.SyncType.Push : global.SyncType.Pull; 
-        
+
         // Start sync
         platform.Sync(vm.sync.asyncChannel, syncData);
     };
@@ -1084,7 +1080,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var setNewTabLinks = function() {
         var links = document.querySelectorAll('a.new-tab');
         var onClickEvent = function() {
-            openUrl({ currentTarget: { href: this.href } });
+            return openUrl({ currentTarget: { href: this.href } });
         };
         
         for (var i = 0; i < links.length; i++) {
@@ -1167,12 +1163,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
     
     var syncForm_EnableSync_Click = function() {
-		if (!vm.syncForm.txtClientSecret.$valid) {
-			document.querySelector('[name=txtClientSecret]').select();
-            return;
-		}
-        
-        // If ID provided, display confirmation panel
+		// If ID provided, display confirmation panel
         if (!!global.Id.Get()) {
             vm.sync.displaySyncConfirmation = true;
             $timeout(function() {

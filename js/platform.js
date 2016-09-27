@@ -23,9 +23,6 @@ xBrowserSync.App.Platform = function($q) {
 	};
     
 	return {
-		AsyncChannel: {
-            Get: notImplemented
-        },
 		Bookmarks: {
 			Clear: notImplemented,
             ContainsCurrentPage: notImplemented,
@@ -42,6 +39,7 @@ xBrowserSync.App.Platform = function($q) {
         CurrentUrl: {
             Get: notImplemented
         },
+		Init: notImplemented,
 		Interface: {
 			Refresh: notImplemented
 		},

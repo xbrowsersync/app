@@ -1,3 +1,7 @@
-#search-panel {
-    width: 600px;
+html, body, .container {
+    height: 100%;
+}
+
+#loading-panel .content p {
+    display: none;
 }
