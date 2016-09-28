@@ -74,9 +74,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             introPanel_ShowHelp_Click: introPanel_ShowHelp_Click,
             openUrl: openUrl,
             queueSync: queueSync,
+            searchForm_DeleteBookmark_Click: searchForm_DeleteBookmark_Click,
             searchForm_SearchText_Change: searchForm_SearchText_Change,
             searchForm_SearchText_KeyDown: searchForm_SearchText_KeyDown,
             searchForm_SearchResult_KeyDown: searchForm_SearchResult_KeyDown,
+            searchForm_SelectBookmark_Press: searchForm_SelectBookmark_Press,
             searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
             syncForm_CancelSyncConfirmation_Click: syncForm_CancelSyncConfirmation_Click,
             syncForm_ClientSecret_Change: syncForm_ClientSecret_Change,
@@ -757,8 +759,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }, 500);
     };
     
-    var openUrl = function(obj) {
-        platform.OpenUrl(obj.currentTarget.href);
+    var openUrl = function(event) {
+        if (!!event.preventDefault) { 
+            event.preventDefault();
+        }
+
+        platform.OpenUrl(event.currentTarget.href);
+
         return false;
     };
 	
@@ -824,6 +831,24 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             .finally(function() {
                 searchForm_ToggleSearchingAnimation(false);
             });
+    };
+
+    var searchForm_DeleteBookmark_Click = function(event, bookmark) {
+        var resultItem = event.target.closest('.list-group-item');
+        resultItem.classList.add('deleted');
+        
+        $timeout(function() {
+            resultItem.remove();
+
+            // Delete the bookmark
+            platform.Sync(vm.sync.asyncChannel, {
+                type: global.SyncType.Both,
+                changeInfo: { 
+                    type: global.UpdateType.Delete, 
+                    url: bookmark.url
+                }
+            });
+        }, 400);
     };
     
     var searchForm_SearchText_Change = function() {
@@ -991,6 +1016,19 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
     };
 
+    var searchForm_SelectBookmark_Press = function(event) {
+        var bookmarkItem = event.target.closest('.list-group-item');
+        var isActive = _.contains(bookmarkItem.classList, 'active');
+
+        document.querySelectorAll('.list-group-item.active').forEach(function(element) { 
+            element.classList.remove('active'); 
+        });
+
+        if (!isActive) {
+            bookmarkItem.classList.add('active');
+        }
+    };
+    
     var searchForm_ToggleSearchingAnimation = function(active) {
         var searchIcon = document.querySelector('.search-form i');
         

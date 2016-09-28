@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Implements xBrowserSync.App.Platform for Chrome extension.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, global, utility) {
+xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, platform, global, utility) {
 	'use strict';
 
 /* ------------------------------------------------------------------------------------

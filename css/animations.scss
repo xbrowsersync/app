@@ -1,3 +1,21 @@
+@include keyframes(animate-fade-in) {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@include keyframes(animate-fade-out) {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
 @include keyframes(animate-flash) {
     0% {
         opacity: 0;
@@ -10,7 +28,16 @@
     }
 }
 
-@include keyframes(animate-intro-slide-in) {
+@include keyframes(animate-slide-up) {
+    0% {
+        max-height: 200px;
+    }
+    100% {
+        max-height: 0;
+    }
+}
+
+@include keyframes(animate-slide-in) {
     0% {
         @include css-prefix(transform, translateX(105%));
     }
@@ -19,7 +46,7 @@
     }
 }
 
-@include keyframes(animate-intro-slide-out) {
+@include keyframes(animate-slide-out) {
     0% {
         @include css-prefix(transform, translateX(0%));
     }
@@ -28,7 +55,7 @@
     }
 }
 
-@include keyframes(animate-intro-reverse-slide-in) {
+@include keyframes(animate-reverse-slide-in) {
     0% {
         @include css-prefix(transform, translateX(-105%));
     }
@@ -37,13 +64,21 @@
     }
 }
 
-@include keyframes(animate-intro-reverse-slide-out) {
+@include keyframes(animate-reverse-slide-out) {
     0% {
         @include css-prefix(transform, translateX(0%));
     }
     100% {
         @include css-prefix(transform, translateX(105%));
     }
+}
+
+.animate-css-fade-in {
+    @include animation(animate-fade-in 0.2s linear);
+}
+
+.animate-css-fade-out {
+    @include animation(animate-fade-out 0.2s linear);
 }
 
 .animate-fade {
@@ -100,22 +135,22 @@
     }
 }
 
-.animate-intro-slide {       
+.animate-slide {       
     &.ng-hide-add {
-        @include animation(animate-intro-slide-out 0.2s linear);
+        @include animation(animate-slide-out 0.2s linear);
     }
 
     &.ng-hide-remove {
-        @include animation(animate-intro-slide-in 0.2s linear);
+        @include animation(animate-slide-in 0.2s linear);
     }
 
     &.reverse {
         &.ng-hide-add {
-            @include animation(animate-intro-reverse-slide-out 0.2s linear);
+            @include animation(animate-reverse-slide-out 0.2s linear);
         }
 
         &.ng-hide-remove {
-            @include animation(animate-intro-reverse-slide-in 0.2s linear);
+            @include animation(animate-reverse-slide-in 0.2s linear);
         }
     }
 }

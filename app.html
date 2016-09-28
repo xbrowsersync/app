@@ -1,6 +1,9 @@
 <!doctype html>
 <html ng-app="xBrowserSync.App.UI">
 <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width,initial-scale=1" name="viewport">
     <title>{{ vm.platform.Constants.Get(vm.global.Constants.Title) }}</title>
     <link rel="stylesheet" href="css/styles.min.css" />
 </head>
@@ -46,7 +49,7 @@
                 <h1 class="animate-fade-out" ng-show="!!vm.introduction.showLogo" ng-class="{ true: 'animate-fade-long' }[vm.introduction.displayIntro()]">
                     <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Title) }}</span>
                 </h1>
-                <div id="intro-panel-1" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 1" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
+                <div id="intro-panel-1" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 1" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel1_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.introduction.displayPanel(2)">
@@ -55,7 +58,7 @@
                         </button>
                     </div>
                 </div>
-                <div id="intro-panel-2" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 2" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
+                <div id="intro-panel-2" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 2" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel2_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(1)">
@@ -68,7 +71,7 @@
                         </button>
                     </div>
                 </div>
-                <div id="intro-panel-3" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 3" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
+                <div id="intro-panel-3" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 3" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel3_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(2)">
@@ -81,7 +84,7 @@
                         </button>
                     </div>
                 </div>
-                <div id="intro-panel-4" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 4" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
+                <div id="intro-panel-4" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 4" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel4_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(3)">
@@ -94,7 +97,7 @@
                         </button>
                     </div>
                 </div>
-                <div id="intro-panel-5" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 5" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
+                <div id="intro-panel-5" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 5" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel5_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(4)">
@@ -107,7 +110,7 @@
                         </button>
                     </div>
                 </div>
-                <div id="intro-panel-6" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 6" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
+                <div id="intro-panel-6" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 6" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel6_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(5)">
@@ -120,7 +123,7 @@
                         </button>
                     </div>
                 </div>
-                <div id="intro-panel-7" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 7" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
+                <div id="intro-panel-7" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 7" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel7_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(6)">
@@ -133,7 +136,7 @@
                         </button>
                     </div>
                 </div>
-                <div id="intro-panel-8" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 8" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
+                <div id="intro-panel-8" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 8" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel8_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(7)">
@@ -146,7 +149,7 @@
                         </button>
                     </div>
                 </div>
-                <div id="intro-panel-9" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 9" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
+                <div id="intro-panel-9" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 9" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel9_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(8)">
@@ -159,7 +162,7 @@
                         </button>
                     </div>
                 </div>
-                <div id="intro-panel-10" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 10" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
+                <div id="intro-panel-10" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 10" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel10_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(9)">
@@ -172,7 +175,7 @@
                         </button>
                     </div>
                 </div>
-                <div id="intro-panel-11" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 11" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
+                <div id="intro-panel-11" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 11" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel11_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(10)">
@@ -185,7 +188,7 @@
                         </button>
                     </div>
                 </div>
-                <div id="intro-panel-12" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 12" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
+                <div id="intro-panel-12" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 12" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel12_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(11)">
@@ -198,7 +201,7 @@
                         </button>
                     </div>
                 </div>
-                <div id="intro-panel-13" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 13" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
+                <div id="intro-panel-13" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 13" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel13_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(12)">
@@ -211,7 +214,7 @@
                         </button>
                     </div>
                 </div>
-                <div id="intro-panel-14" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 14" ng-class="{ true: 'animate-intro-slide' }[vm.view.current === vm.view.views.login]">
+                <div id="intro-panel-14" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 14" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel14_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(13)">
@@ -289,7 +292,19 @@
                 </h4>
                 <div class="list-group" ng-show="vm.search.results.length > 0">
                     <div class="list-group-item" ng-repeat="result in vm.search.results track by result.id">
-                        <a href="{{ result.url }}" ng-click="vm.events.openUrl($event)"  tabindex="{{ $index + 1 }}"
+                        <div class="overlay" hm-press="vm.events.searchForm_SelectBookmark_Press($event)">
+                            <div class="buttons">
+                                <button id="btnEditBookmark" class="btn btn-icon" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) }}" ng-click="vm.events.searchForm_UpdateBookmark_Click(result)">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) }}</span>
+                                </button>
+                                <button id="btnDeleteBookmark" class="btn btn-icon" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_DeleteBookmark_Label) }}" ng-click="vm.events.searchForm_DeleteBookmark_Click($event, result)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                    <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_DeleteBookmark_Label) }}</span>
+                                </button>
+                            </div>
+                        </div>
+                        <a href="{{ result.url }}" ng-click="vm.events.openUrl($event)" hm-press="vm.events.searchForm_SelectBookmark_Press($event)"  tabindex="{{ $index + 1 }}"
                            ng-keydown="vm.events.searchForm_SearchResult_KeyDown($event)">
                             <h4 class="list-group-item-heading">{{ result.title }}</h4>
                             <div class="list-group-item-text">

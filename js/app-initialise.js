@@ -1,5 +1,5 @@
 // Initialise the angular app
-xBrowserSync.App.UI = angular.module('xBrowserSync.App.UI', ['ngSanitize', 'ngAnimate', 'angular-complexify']);
+xBrowserSync.App.UI = angular.module('xBrowserSync.App.UI', ['ngSanitize', 'ngAnimate', 'angular-complexify', 'hmTouchEvents']);
 
 // Disable debug info
 xBrowserSync.App.UI.config(['$compileProvider', function($compileProvider) {
@@ -34,7 +34,7 @@ xBrowserSync.App.Bookmarks.$inject = ['$q', 'platform', 'global', 'api', 'utilit
 xBrowserSync.App.UI.factory('bookmarks', xBrowserSync.App.Bookmarks);
 
 // Add platform implementation service
-xBrowserSync.App.PlatformImplementation.$inject = ['$q', '$timeout', 'platform', 'global', 'utility', 'bookmarks'];
+xBrowserSync.App.PlatformImplementation.$inject = ['$q', '$timeout', '$interval', 'platform', 'global', 'utility', 'bookmarks'];
 xBrowserSync.App.UI.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add main controller

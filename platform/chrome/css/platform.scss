@@ -1,11 +1,13 @@
 .view {
     width: 275px;
-}
-
-#login-panel, #bookmark-panel, #settings-panel {
     height: 460px;
 }
 
 #search-panel {
     width: 600px;
+    height: auto;
+
+    .search-results-panel {
+        max-height: 393px;
+    }
 }

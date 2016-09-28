@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Implements xBrowserSync.App.Platform for web app.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, global, utility, bookmarks) {
+xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, platform, global, utility, bookmarks) {
 	'use strict';
 
 /* ------------------------------------------------------------------------------------
@@ -88,6 +88,9 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		},
 		"button_AddBookmark_Label": {
 			"message": "Add bookmark"
+		},
+		"button_DeleteBookmark_Label": {
+			"message": "Delete bookmark"
 		},
 		"button_EditBookmark_Label": {
 			"message": "Edit bookmark"
@@ -509,6 +512,13 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 
 		// Remove sync confirmation
 		vm.events.syncForm_EnableSync_Click = vm.events.syncForm_ConfirmSync_Click;
+
+		// Check for updates regularly
+		bookmarks.CheckForUpdates();
+		$interval(function() {
+			bookmarks.CheckForUpdates();
+		}, global.Alarm.Period.Get() * 60000);
+		
 	};
 
 	var openUrl = function(url) {

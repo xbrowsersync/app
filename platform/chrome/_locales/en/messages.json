@@ -74,6 +74,9 @@
 	"button_AddBookmark_Label": {
 		"message": "Add bookmark"
 	},
+	"button_DeleteBookmark_Label": {
+		"message": "Delete bookmark"
+	},
 	"button_EditBookmark_Label": {
 		"message": "Edit bookmark"
 	},
