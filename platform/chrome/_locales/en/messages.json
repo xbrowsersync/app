@@ -167,6 +167,9 @@
 	"button_Done_Label" : {
 		"message":  "Done"
 	},
+	"button_Clear_Label" : {
+		"message":  "Clear"
+	},
 	"button_Close_Label" : {
 		"message":  "Close"
 	},

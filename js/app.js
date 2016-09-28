@@ -74,6 +74,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             introPanel_ShowHelp_Click: introPanel_ShowHelp_Click,
             openUrl: openUrl,
             queueSync: queueSync,
+            searchForm_Autocomplete_Click: searchForm_Autocomplete_Click,
+            searchForm_Clear_Click: searchForm_Clear_Click,
             searchForm_DeleteBookmark_Click: searchForm_DeleteBookmark_Click,
             searchForm_SearchText_Change: searchForm_SearchText_Change,
             searchForm_SearchText_KeyDown: searchForm_SearchText_KeyDown,
@@ -130,6 +132,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
 		vm.settings = {
 			backupRestoreResult: null,
+            clientSecretFocus: true,
             dataToRestore: null,
             dataToRestoreIsValid: function() {
                 return checkRestoreData(vm.settings.dataToRestore);
@@ -263,9 +266,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     case vm.view.views.login:
                         /* falls through */
                     default:
-                        $timeout(function() {
-                            document.querySelector('input[name=txtClientSecret]').select();
-                        });
+                        if (!!vm.settings.clientSecretFocus) {
+                            $timeout(function() {
+                                document.querySelector('input[name=txtClientSecret]').select();
+                            });
+                        }
                         break;
                 }
 				
@@ -703,15 +708,23 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
 
     var init = function() {
+        // Display contents
+        document.querySelector('.container').classList.remove('loading');
+        
         // Display intro animation if required
         if (vm.view.current === vm.view.views.login && !!vm.introduction.displayIntro()) {
             introPanel_DisplayIntro();
         }
 
+        // Platform-specific initation
+        platform.Init(vm);
+
         $timeout(function() {
             if (vm.view.current === vm.view.views.login) {
-                // Focus on secret input
-                document.querySelector('input[name=txtClientSecret]').select();
+                if (!!vm.settings.clientSecretFocus) {
+                    // Focus on secret input
+                    document.querySelector('input[name=txtClientSecret]').select();
+                }
             }
             else {
                 // Focus on search box
@@ -730,9 +743,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         $timeout(function() {
             setNewTabLinks();
         });
-
-        // Platform-specific initation
-        platform.Init(vm);
     };
 
     var introPanel_DisplayIntro = function() {
@@ -833,6 +843,18 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             });
     };
 
+    var searchForm_Autocomplete_Click = function() {
+        vm.search.query += vm.search.lookahead;
+        searchForm_SearchText_Change();
+    };
+
+    var searchForm_Clear_Click = function() {
+        vm.search.query = null;
+        vm.search.lookahead = null;
+        vm.search.results = null;
+        document.querySelector('input[name=txtSearch]').select();
+    };
+
     var searchForm_DeleteBookmark_Click = function(event, bookmark) {
         var resultItem = event.target.closest('.list-group-item');
         resultItem.classList.add('deleted');
@@ -922,8 +944,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if (($event.keyCode === 9 || $event.keyCode === 39) && !!vm.search.lookahead) {
             // Add lookahead to search query
             $event.preventDefault();
-            vm.search.query += vm.search.lookahead;
-            searchForm_SearchText_Change();
+            searchForm_Autocomplete_Click();
             return;
         }
     };
@@ -1017,6 +1038,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
 
     var searchForm_SelectBookmark_Press = function(event) {
+        event.preventDefault();
+
         var bookmarkItem = event.target.closest('.list-group-item');
         var isActive = _.contains(bookmarkItem.classList, 'active');
 

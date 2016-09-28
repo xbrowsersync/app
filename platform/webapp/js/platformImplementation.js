@@ -182,6 +182,9 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		"button_Done_Label" : {
 			"message":  "Done"
 		},
+		"button_Clear_Label" : {
+			"message":  "Clear"
+		},
 		"button_Close_Label" : {
 			"message":  "Close"
 		},
@@ -513,12 +516,14 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		// Remove sync confirmation
 		vm.events.syncForm_EnableSync_Click = vm.events.syncForm_ConfirmSync_Click;
 
+		// Turn off auto focus on client secret
+		vm.settings.clientSecretFocus = false;
+
 		// Check for updates regularly
 		bookmarks.CheckForUpdates();
 		$interval(function() {
 			bookmarks.CheckForUpdates();
 		}, global.Alarm.Period.Get() * 60000);
-		
 	};
 
 	var openUrl = function(url) {

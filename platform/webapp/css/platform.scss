@@ -1,7 +1,132 @@
-html, body, .container {
+html, body, .container, #search-panel {
     height: 100%;
+}
+
+body {
+    font-size: 16px;
+    line-height: 20px;
+
+    button {
+        &.btn {
+            font-size: 18px;
+        }
+    }
+
+    .header-panel {
+        margin-bottom: 5px;
+
+        .btn-icon {
+            margin-top: 2px;
+
+            i {
+                font-size: 1.8em;
+            }
+        }
+    }
+
+    .well .btn.btn-default {
+        font-size: 1em;
+        padding: 6px 12px;
+    }
 }
 
 #loading-panel .content p {
     display: none;
+}
+
+#login-panel {
+    padding: 10px;
+    
+    .intro-panel {
+        height: 325px;
+        
+        & > div {
+            padding: 20px 35px;
+        }
+
+        h1 {
+            background-size: 225px;
+            height: 260px;
+        }
+
+        .buttons {
+            top: 140px;
+        }
+    }
+
+    .secret-form-group {
+        .progress, .progress-bar-background {
+            height: 45px;
+        }
+    }
+}
+
+#search-panel {
+    .header-panel {
+        background: url(../img/icon.svg) 50% 4px no-repeat;
+        background-size: 30px;
+
+        .btn-icon {
+            &.btn-toggle-bookmark {
+                float: left;
+            }
+
+            &.btn-settings {
+                float: none;
+            }
+        }
+        
+        .buttons {
+            float: none;
+            margin-bottom: 11px;
+        }
+
+        .search-form {
+            width: 100%;
+
+            .lookahead-container {
+                z-index: 60;
+
+                .lookahead {
+                    padding-top: 12px;
+
+                    &:after {
+                        content: "\f0d0";
+                        font-family: "FontAwesome";
+                        font-size: 0.7em;
+                        margin-left: 5px;
+                    }
+                }
+            }
+        }
+    }
+
+    .search-results-panel {
+        max-height: 80%;
+        margin-top: 15px;
+
+        .list-group-item {
+            margin: 0 0 15px 0;
+
+            &:hover button {
+                display: none;
+            }
+
+            a {
+                padding: 15px 20px;
+            }
+        }
+    }
+}
+
+#bookmark-panel {
+    padding: 10px;
+}
+
+#settings-panel {
+    padding: 10px;
+
+    .well .panel-content {
+        height: 296px;
+    }
 }
