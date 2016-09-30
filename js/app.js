@@ -37,7 +37,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             active: false,
             current: null,
             displayUpdateForm : false,
-            tagText: null
+            tagText: null,
+            descriptionFieldOriginalHeight: 190
         };
         
         vm.domElements = {
@@ -60,6 +61,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             backupRestoreForm_DisplayRestoreConfirmation_Click: backupRestoreForm_DisplayRestoreConfirmation_Click,
             backupRestoreForm_Restore_Click: backupRestoreForm_Restore_Click,
             bookmarkForm_BookmarkDescription_Change: bookmarkForm_BookmarkDescription_Change,
+            bookmarkForm_BookmarkTags_Autocomplete: bookmarkForm_BookmarkTags_Autocomplete,
             bookmarkForm_BookmarkTags_Change: bookmarkForm_BookmarkTags_Change,
             bookmarkForm_BookmarkTags_KeyDown: bookmarkForm_BookmarkTags_KeyDown,
             bookmarkForm_BookmarkUrl_Change: bookmarkForm_BookmarkUrl_Change,
@@ -74,9 +76,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             introPanel_ShowHelp_Click: introPanel_ShowHelp_Click,
             openUrl: openUrl,
             queueSync: queueSync,
-            searchForm_Autocomplete_Click: searchForm_Autocomplete_Click,
             searchForm_Clear_Click: searchForm_Clear_Click,
             searchForm_DeleteBookmark_Click: searchForm_DeleteBookmark_Click,
+            searchForm_SearchText_Autocomplete: searchForm_SearchText_Autocomplete,
             searchForm_SearchText_Change: searchForm_SearchText_Change,
             searchForm_SearchText_KeyDown: searchForm_SearchText_KeyDown,
             searchForm_SearchResult_KeyDown: searchForm_SearchResult_KeyDown,
@@ -87,7 +89,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             syncForm_ConfirmSync_Click: startSyncing,
             syncForm_DisableSync_Click: syncForm_DisableSync_Click,
             syncForm_EnableSync_Click: syncForm_EnableSync_Click,
-            toggleBookmark_Click: toggleBookmark_Click,
+            searchForm_ToggleBookmark_Click: searchForm_ToggleBookmark_Click,
             updateServiceUrlForm_Cancel_Click: updateServiceUrlForm_Cancel_Click,
             updateServiceUrlForm_Confirm_Click: updateServiceUrlForm_Confirm_Click,
             updateServiceUrlForm_Display_Click: updateServiceUrlForm_Display_Click,
@@ -201,7 +203,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         vm.bookmarkForm.$setPristine();
                         vm.bookmarkForm.$setUntouched();
                         vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', true);
-                        vm.bookmark.tagText = '';
+                        vm.bookmark.tagText = null;
+                        vm.bookmark.tagTextMeasure = null;
+                        vm.bookmark.tagLookahead = null;
                         break;
                     case vm.view.views.search:
                         vm.search.lookahead = null;
@@ -384,6 +388,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             vm.bookmark.current.description = vm.bookmark.current.description.substring(0, global.Bookmarks.DescriptionMaxLength);
         }
     };
+
+    var bookmarkForm_BookmarkTags_Autocomplete = function() {
+        vm.bookmark.tagText += vm.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
+        bookmarkForm_BookmarkTags_Change();
+        document.querySelector('input[name="bookmarkTags"]').focus();
+    };
     
     var bookmarkForm_BookmarkTags_Change = function() {
         vm.alert.show = false;
@@ -432,8 +442,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             case (($event.keyCode === 9 || $event.keyCode === 39) && !!vm.bookmark.tagLookahead):
                 // Add lookahead to search query
                 $event.preventDefault();
-                vm.bookmark.tagText += vm.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
-                bookmarkForm_BookmarkTags_Change();
+                bookmarkForm_BookmarkTags_Autocomplete();
                 break;
         }
     };
@@ -529,14 +538,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
 
     var bookmarkForm_ResizeDescriptionField = function() {
-        var newHeight = 190;
-        
         $timeout(function() {
-            if (!!vm.bookmark.current.tags && vm.bookmark.current.tags.length > 0) {
+            var descriptionField = document.querySelector('textarea[name="bookmarkDescription"]');
+            var newHeight = vm.bookmark.descriptionFieldOriginalHeight;
+            
+            if (!!vm.bookmark.current && vm.bookmark.current.tags.length > 0) {
                 newHeight = (newHeight - 15 - document.querySelector('.tags').offsetHeight);
             }
 
-            document.querySelector('textarea[name="bookmarkDescription"]').style.height = newHeight + 'px';
+            descriptionField.style.height = newHeight + 'px';
         });
     };
     
@@ -769,12 +779,17 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }, 500);
     };
     
-    var openUrl = function(event) {
+    var openUrl = function(event, url) {
         if (!!event.preventDefault) { 
             event.preventDefault();
         }
 
-        platform.OpenUrl(event.currentTarget.href);
+        if (!!url) {
+            platform.OpenUrl(url);
+        }
+        else {
+            platform.OpenUrl(event.currentTarget.href);
+        }
 
         return false;
     };
@@ -843,7 +858,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             });
     };
 
-    var searchForm_Autocomplete_Click = function() {
+    var searchForm_SearchText_Autocomplete = function() {
         vm.search.query += vm.search.lookahead;
         searchForm_SearchText_Change();
     };
@@ -870,7 +885,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     url: bookmark.url
                 }
             });
-        }, 400);
+        }, 200);
     };
     
     var searchForm_SearchText_Change = function() {
@@ -944,7 +959,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if (($event.keyCode === 9 || $event.keyCode === 39) && !!vm.search.lookahead) {
             // Add lookahead to search query
             $event.preventDefault();
-            searchForm_Autocomplete_Click();
+            searchForm_SearchText_Autocomplete();
             return;
         }
     };
@@ -1043,13 +1058,33 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         var bookmarkItem = event.target.closest('.list-group-item');
         var isActive = _.contains(bookmarkItem.classList, 'active');
 
-        document.querySelectorAll('.list-group-item.active').forEach(function(element) { 
-            element.classList.remove('active'); 
+        _.each(document.querySelectorAll('.list-group-item.active'), function(obj) { 
+            obj.classList.remove('active');
         });
 
         if (!isActive) {
             bookmarkItem.classList.add('active');
         }
+    };
+    
+    var searchForm_ToggleBookmark_Click = function() {
+        // Display bookmark panel
+        vm.view.change(vm.view.views.bookmark);
+        
+        // Show loading animation
+        vm.working = true;
+        
+        // Set bookmark status
+        setBookmarkStatus()
+            .then(function() {
+                vm.working = false;
+                bookmarkForm_ResizeDescriptionField();
+            })
+            .catch(function(err) {
+                // Display alert
+                var errMessage = utility.GetErrorMessageFromException(err);
+                vm.alert.display(errMessage.title, errMessage.message, 'danger');
+            });
     };
     
     var searchForm_ToggleSearchingAnimation = function(active) {
@@ -1092,6 +1127,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 
                 vm.bookmark.active = data[0];
                 var metadata = data[1];
+
+                if (!metadata) {
+                    return $q.resolve();
+                }
                 
                 if (vm.bookmark.active) {
                     // Get existing bookmark info
@@ -1236,26 +1275,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             startSyncing();
         }
 	};
-    
-    var toggleBookmark_Click = function() {
-        // Display bookmark panel
-        vm.view.change(vm.view.views.bookmark);
-        
-        // Show loading animation
-        vm.working = true;
-        
-        // Set bookmark status
-        setBookmarkStatus()
-            .then(function() {
-                vm.working = false;
-                bookmarkForm_ResizeDescriptionField();
-            })
-            .catch(function(err) {
-                // Display alert
-                var errMessage = utility.GetErrorMessageFromException(err);
-                vm.alert.display(errMessage.title, errMessage.message, 'danger');
-            });
-    };
 
     var updateServiceUrlForm_Cancel_Click = function() {
         vm.settings.service.displayUpdateServiceUrlForm = false;

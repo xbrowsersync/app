@@ -192,12 +192,22 @@ body {
             margin-bottom: 10px;
         }
     }
+
+    .background {
+        position: fixed !important;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: -100;
+        @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
+    }
     
     .container {
         width: 100%;
         padding: 0;
         margin: 0;
-        @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
 
         &.loading {
             #loading-panel, .alert, .view {
@@ -210,7 +220,8 @@ body {
         background-color: $colour-text1; 
         color: $colour-text2;
         font-size: 1.1em;
-        padding: 20px 15px;
+        height: auto;
+        padding: 10px 20px;
         resize: none;
         border: none;
         border-radius: $border-radius;
@@ -448,11 +459,6 @@ body {
             }
         }
     }
-
-    .form-control {
-        height: auto;
-        padding: 10px 20px;
-    }
     
     .secret-form-group {
         position: relative;
@@ -543,7 +549,7 @@ body {
                 position: relative;
                 z-index: 50;
                 height: auto;
-                padding: 5px 40px 5px 40px;
+                padding: 5px 60px 5px 40px;
                 font-size: 1.5em;
                 background: transparent;
             }
@@ -606,24 +612,24 @@ body {
             }
         
             &:hover {
+                .btn-edit-bookmark {
+                    display: block;
+                }
+
                 .list-group-item-heading {
                     color: $colour-link-highlight;
-                }
-                    
-                button {
-                    display: block;
                 }
             }
 
             &.active {
-                .overlay {
+                .menu {
                     @include animation(animate-fade-in 0.2s linear);
                     display: block;
                 }
             }
 
             &.deleted {
-                @include animation(animate-slide-out 0.4s linear);
+                @include animation(animate-slide-out 0.2s linear);
                 transform: translateX(-105%);
             }
             
@@ -631,6 +637,7 @@ body {
                 border-radius: $border-radius;
                 padding: 12px 30px 12px 20px;
                 display: block;
+                @include css-prefix(user-select, none);
 
                 &:focus {
                     .list-group-item-heading {
@@ -639,7 +646,7 @@ body {
                 }
             }
             
-            button {
+            .btn-edit-bookmark {
                 display: none;
                 position: absolute;
                 top: 7px;
@@ -647,50 +654,61 @@ body {
                 padding: 5px;
             }
 
-            .overlay {
-                display: none;
-                position: absolute;
-                width: 100%;
-                height: 100%;
+            .menu {
                 background-color: rgba(8,48,57,0.9);
-                border-radius: $border-radius;
                 text-align: center;
+                z-index: 60;
 
-                button {
+                &:before {
+                    content: '';
                     display: inline-block;
-                    position: static;
-                    background-color: $colour-text1;
-                    color: $colour-text2;
-                    font-size: 1.5em;
-                    border-radius: 100%;
-                    width: 55px;
-                    height: 55px;
-                    margin-right: 20px;
-
-                    &:last-child {
-                        margin-right: 0;
-                    }
-
-                    &#btnDeleteBookmark {
-                        background-color: $colour-danger;
-                    }
-
-                    i {
-                        opacity: 1;
-                    }
+                    height: 85%; 
+                    vertical-align: middle;
                 }
 
                 .buttons {
                     display: inline-block;
                     vertical-align: middle;
+
+                    button {
+                        display: inline-block;
+                        position: static;
+                        background-color: $colour-text1;
+                        color: $colour-text2;
+                        font-size: 1.5em;
+                        border-radius: 100%;
+                        width: 55px;
+                        height: 55px;
+                        margin-right: 20px;
+
+                        &:last-child {
+                            margin-right: 0;
+                        }
+
+                        &.btn-delete-bookmark {
+                            background-color: $colour-danger;
+                        }
+
+                        i {
+                            opacity: 1;
+                        }
+                    }
                 }
             }
 
-            .overlay:before {
-                content: '';
-                display: inline-block;
-                height: 85%; 
-                vertical-align: middle;
+            .menu, .overlay {
+                display: none;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                border-radius: $border-radius;
+                @include css-prefix(user-select, none);
+                touch-action: none;
+            }
+
+            .overlay {
+                opacity: 0;
+                z-index: 50;
             }
         }
         
@@ -744,8 +762,10 @@ body {
     }
 
     .tags-form-group {
+        position: relative;
         border-radius: $border-radius;
         background-color: $colour-text1;
+        overflow: hidden;
         
         input {
             text-transform: lowercase;
@@ -755,11 +775,11 @@ body {
         }
 
         .lookahead-container {
-            left: 25px;
+            left: 20px;
             
             .lookahead {
                 font-size: 1.1em;
-                line-height: 2.8;
+                padding-top: 12px;
             }
 
             .measure {

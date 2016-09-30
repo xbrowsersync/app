@@ -1,3 +1,5 @@
+@import 'variables.scss';
+
 html, body, .container, #search-panel {
     height: 100%;
 }
@@ -12,6 +14,15 @@ body {
         }
     }
 
+    textarea.form-control {
+        padding: 10px 20px;
+    }
+
+    .alert {
+        position: absolute;
+        z-index: 200;
+    }
+
     .header-panel {
         margin-bottom: 5px;
 
@@ -21,6 +32,18 @@ body {
             i {
                 font-size: 1.8em;
             }
+        }
+    }
+
+    .lookahead-container .lookahead {
+        z-index: 60;
+        position: relative;
+
+        &:after {
+            content: "\f0d0";
+            font-family: "FontAwesome";
+            font-size: 0.7em;
+            margin-left: 5px;
         }
     }
 
@@ -69,6 +92,14 @@ body {
         .btn-icon {
             &.btn-toggle-bookmark {
                 float: left;
+
+                @media (min-width: $width-landscape) and (orientation:landscape) {
+                    margin-right: 15px;
+                }
+
+                i:before {
+                    content: "\f02e";
+                }
             }
 
             &.btn-settings {
@@ -79,24 +110,21 @@ body {
         .buttons {
             float: none;
             margin-bottom: 11px;
+
+            @media (min-width: $width-landscape) and (orientation:landscape) {
+                float: right;
+            }
         }
 
         .search-form {
             width: 100%;
 
-            .lookahead-container {
-                z-index: 60;
+            @media (min-width: $width-landscape) and (orientation:landscape) {
+                width: calc(100% - 85px);
+            }
 
-                .lookahead {
-                    padding-top: 12px;
-
-                    &:after {
-                        content: "\f0d0";
-                        font-family: "FontAwesome";
-                        font-size: 0.7em;
-                        margin-left: 5px;
-                    }
-                }
+            .lookahead-container .lookahead {
+                padding-top: 12px;
             }
         }
     }
@@ -108,12 +136,24 @@ body {
         .list-group-item {
             margin: 0 0 15px 0;
 
-            &:hover button {
-                display: none;
+            &.active {
+                &:hover {
+                    .list-group-item-heading {
+                        color: $colour-text2;
+                    }
+                }
             }
 
             a {
                 padding: 15px 20px;
+            }
+
+            .btn-edit-bookmark {
+                display: none!important;
+            }
+
+            .overlay {
+                display: block;
             }
         }
     }
@@ -121,6 +161,25 @@ body {
 
 #bookmark-panel {
     padding: 10px;
+
+    textarea {
+        height: 244px;
+    }
+
+    .tags {
+        max-height: 100px;
+
+        .label {
+            font-size: 1em;
+            padding: 12px 15px;
+            border-radius: 25px;
+            margin: 0 6px 8px 0;
+        }
+    }
+
+    .tags-form-group .lookahead-container .lookahead:after {
+        font-size: 0.9em;
+    }
 }
 
 #settings-panel {

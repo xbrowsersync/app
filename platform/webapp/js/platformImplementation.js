@@ -402,7 +402,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
         platform.Bookmarks.ContainsCurrentPage = containsCurrentPage;
 		platform.Bookmarks.Populate = populateBookmarks;
 		platform.Constants.Get = getConstant;
-        //platform.CurrentUrl.Get = getCurrentUrl;
+        platform.CurrentUrl.Get = getCurrentUrl;
 		platform.Init = init;
         platform.Interface.Refresh = refreshInterface;
 		platform.LocalStorage.Get = getFromLocalStorage;
@@ -423,19 +423,6 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 	
 	var containsCurrentPage = function() {
         return $q.resolve(false);
-		
-		var deferred = $q.defer();
-        
-        // Get current url
-        getCurrentUrl()
-            .then(function(currentUrl) {
-                // Find current url in local bookmarks
-                chrome.bookmarks.search({ url: currentUrl }, function(results) {
-                    deferred.resolve(!!results && results.length > 0);
-                });
-            });
-        
-        return deferred.promise;
     };
 	
 	var getConstant = function(constName) {
@@ -443,19 +430,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 	};
 	
 	var getCurrentUrl = function() {
-        var deferred = $q.defer();
-        
-        // Get current tab
-        chrome.tabs.query(
-            { currentWindow: true, active: true },
-            function(tabs) {
-                var activeTab = tabs[0];
-                var url = activeTab.url;
-                
-                deferred.resolve(url);
-        });
-        
-        return deferred.promise;
+        return $q.resolve(' ');
     };
     
     var getFromLocalStorage = function(itemName) {
@@ -463,45 +438,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 	};
     
     var getPageMetadata = function() {
-        var deferred = $q.defer();
-        var metadata = {};
-
-		return $q.resolve(metadata);
-		
-		// Get current tab
-        chrome.tabs.query(
-            { currentWindow: true, active: true },
-            function(tabs) {
-                var activeTab = tabs[0];
-                metadata.url = activeTab.url;
-				
-				// Exit if this is a chrome url
-				if (!!activeTab.url && activeTab.url.toLowerCase().startsWith('chrome://')) {
-					return deferred.resolve(metadata);
-				}
-                
-				// Add listener to receive page metadata from content script
-                chrome.runtime.onMessage.addListener(function(message, sender) {
-					if (message.command === 'getPageMetadata') {
-						if (!!message.metadata) {
-							metadata.title = message.metadata.title;
-							metadata.description = message.metadata.description;
-							metadata.tags = message.metadata.tags;
-						}
-						
-						deferred.resolve(metadata);
-					}
-				});
-				
-				// Run content script to return page metadata
-				chrome.tabs.executeScript(null, { file: 'js/content.js' }, 
-					function() {
-						// If error, resolve deferred
-						deferred.resolve(metadata);
-					});
-        });
-        
-        return deferred.promise;
+		return $q.resolve(null);
     };
 
 	var init = function(vm) {
@@ -518,6 +455,9 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 
 		// Turn off auto focus on client secret
 		vm.settings.clientSecretFocus = false;
+
+		// Set bookmark description field height
+		vm.bookmark.descriptionFieldOriginalHeight = 244;
 
 		// Check for updates regularly
 		bookmarks.CheckForUpdates();
