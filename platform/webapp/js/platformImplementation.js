@@ -456,9 +456,6 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		// Turn off auto focus on client secret
 		vm.settings.clientSecretFocus = false;
 
-		// Set bookmark description field height
-		vm.bookmark.descriptionFieldOriginalHeight = 244;
-
 		// Check for updates regularly
 		bookmarks.CheckForUpdates();
 		$interval(function() {

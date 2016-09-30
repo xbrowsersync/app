@@ -29,8 +29,8 @@
 body {
     font-family: $font-stack;
     color: $colour-text1;
-    font-size: 13px;
-    line-height: 17px;
+    font-size: 14px;
+    line-height: 20px;
     min-width: 275px;
 
     h2 {
@@ -64,6 +64,8 @@ body {
     
     button {
         &.btn {
+            font-size: 14px;
+            
             &.btn-default {
                 font-size: 1.2em;
                 font-weight: 800;
@@ -92,7 +94,6 @@ body {
                 }
 
                 &[disabled] {
-                    @extend .btn-default;
                     opacity: 0.5;
                     cursor: default;
                 }
@@ -177,6 +178,8 @@ body {
     .buttons {
         text-align: center;
         margin-top: 15px;
+        position: relative;
+        white-space: nowrap;
 
         button {
             margin-right: 10px;
@@ -217,9 +220,9 @@ body {
     }
 
     .form-control {
+        font-size: 1em;
         background-color: $colour-text1; 
         color: $colour-text2;
-        font-size: 1.1em;
         height: auto;
         padding: 10px 20px;
         resize: none;
@@ -252,19 +255,26 @@ body {
     }
     
     .header-panel {
+        position: relative;
+        min-height: 1.8em;
+        margin-bottom: 10px;
+        
         h2 {
-            line-height: 1.3em;
+            line-height: 0.8em;
         }
 
-        .btn-icon {
-            margin-top: 8px;
-            
+        button {
+            font-size: 1.1em;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+
             &.btn-settings, &.btn-close {
-                float: right;
+                right: 0;
             }
 
             i {
-                font-size: 1.4em;
+                font-size: 1.6em;
             }
         }
     }
@@ -278,6 +288,7 @@ body {
         
         .lookahead {            
             float: left;
+            line-height: 1.43;
             color: $colour-text2;
             opacity: 0.4;
             @include css-prefix(user-select, none);
@@ -373,6 +384,10 @@ body {
     }
 }
 
+#login-panel, #bookmark-panel, #settings-panel {
+    height: $height-iPhone4;
+}
+
 #loading-panel {
     display: table;
     position: absolute;
@@ -406,10 +421,8 @@ body {
 }
 
 #login-panel {
-    padding: 0 10px 15px;
-
     .intro-panel {
-        height: 260px;
+        height: 58%;
         overflow: hidden;
         position: relative;
     
@@ -417,10 +430,8 @@ body {
             position: absolute;
             height: 95%;
             width: 100%;
-            font-size: 1.1em;
-            line-height: 1.3em;
             left: 0;
-            padding: 12px 25px;
+            padding: 15px 30px;
 
             & > div {
                 position: relative;
@@ -429,10 +440,14 @@ body {
         }
 
         h1 {
+            background: url("../img/logo.svg") 50% 40% no-repeat;
+            background-size: 75%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
             margin: auto;
-            background: url("../img/logo.svg") no-repeat center bottom;
-            background-size: 150px;
-            height: 200px;
         }
 
         .buttons {
@@ -441,7 +456,7 @@ body {
             width: 100%;
             position: absolute;
             left: 0;
-            top: 110px;
+            top: 45%;
             z-index: 10;
 
             button {
@@ -450,11 +465,11 @@ body {
             }
 
             .btn-prev {
-                margin-left: 7px;
+                margin-left: 10px;
             }
             
             .btn-next {
-                margin-right: 7px;
+                margin-right: 10px;
                 float: right;
             }
         }
@@ -495,23 +510,20 @@ body {
             border-radius: $border-radius;
         }
     }
-
-    #txtId {
-        font-size: 1em;
-        @include placeholder {
-            font-size: 1.1em;
-        }
-    }
 }
 
 #search-panel {
     .header-panel {
+        margin-bottom: 0;
+
         .buttons {
-            float: right;
-            text-align: right;
-            margin-top: 0;
+            position: absolute;
+            right: 0;
+            top: -5px;
 
             .btn-toggle-bookmark {
+                right: 20px;
+
                 i:before {
                     content: "\f097";
                 }
@@ -539,9 +551,8 @@ body {
             }
             
             i {
-                margin-top: 3px;
                 font-size: 1.3em;
-                line-height: 1.8em;
+                line-height: 2.1em;
                 opacity: 0.4;
             }
             
@@ -557,7 +568,6 @@ body {
             .btn-clear {
                 position: absolute;
                 right: 15px;
-                margin-top: 0;
                 font-size: 1em;
                 z-index: 70;
 
@@ -571,7 +581,7 @@ body {
                 
                 .lookahead {
                     font-size: 1.5em;
-                    padding-top: 10px;
+                    padding: 5px 0;
                 }
             }
         }
@@ -716,7 +726,7 @@ body {
             color: $colour-text2;
             font-size: 1.3em;
             font-weight: normal;
-            line-height: 1.2em;
+            line-height: 1.1em;
             margin-bottom: 5px;
             transition: all, ease-in, 0.2s;
         }
@@ -752,13 +762,24 @@ body {
             }
         }
     }
+
+    .search-panel-background {
+        display: none;
+        background: url("../img/logo.svg") 50% no-repeat;
+        background-size: 60%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        opacity: 0.25;
+        z-index: -50;
+    }
 }
 
 #bookmark-panel {
-    padding: 0 10px 15px;
-    
     textarea {
-        height: 190px;
+        height: 195px;
     }
 
     .tags-form-group {
@@ -778,8 +799,7 @@ body {
             left: 20px;
             
             .lookahead {
-                font-size: 1.1em;
-                padding-top: 12px;
+                padding: 10px 0;
             }
 
             .measure {
@@ -828,10 +848,10 @@ body {
 }
 
 #settings-panel {
-    padding: 0 10px 15px;
-    
     .well {
         padding: 0;
+        max-height: 62%;
+        overflow: hidden;
         
         h4 {
             padding: 15px 20px;
@@ -840,6 +860,7 @@ body {
             
             &:hover {
                 i {
+                    transition: all, ease-in, 0.2s;
                     opacity: 1;
                 }
             }
@@ -859,7 +880,6 @@ body {
             i {
                 opacity: 0.4;
                 float: right;
-                transition: all, ease-in, 0.2s;
             }
         }
         
@@ -869,7 +889,7 @@ body {
         
         .panel-content {
             padding: 0 20px;
-            height: 235px;
+            height: 2000px;
         }
     }
     
@@ -886,7 +906,7 @@ body {
             }
             
             #qr {
-                margin: 10px 0 20px;
+                margin: 10px 0 15px;
             }
         }
         

@@ -38,7 +38,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             current: null,
             displayUpdateForm : false,
             tagText: null,
-            descriptionFieldOriginalHeight: 190
+            descriptionFieldOriginalHeight: null
         };
         
         vm.domElements = {
@@ -203,9 +203,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         vm.bookmarkForm.$setPristine();
                         vm.bookmarkForm.$setUntouched();
                         vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', true);
+                        vm.bookmark.current = null;
                         vm.bookmark.tagText = null;
                         vm.bookmark.tagTextMeasure = null;
                         vm.bookmark.tagLookahead = null;
+                        document.querySelector('textarea[name="bookmarkDescription"]').style.height = null;
+                        vm.bookmark.displayUpdateForm = false;
                         break;
                     case vm.view.views.search:
                         vm.search.lookahead = null;
@@ -540,13 +543,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var bookmarkForm_ResizeDescriptionField = function() {
         $timeout(function() {
             var descriptionField = document.querySelector('textarea[name="bookmarkDescription"]');
-            var newHeight = vm.bookmark.descriptionFieldOriginalHeight;
-            
-            if (!!vm.bookmark.current && vm.bookmark.current.tags.length > 0) {
-                newHeight = (newHeight - 15 - document.querySelector('.tags').offsetHeight);
-            }
+            var bookmarkPanel = document.querySelector('#bookmark-panel');
+            var lessHeight = bookmarkPanel.scrollHeight - bookmarkPanel.offsetHeight;
 
-            descriptionField.style.height = newHeight + 'px';
+            if (lessHeight > 0) {
+                // Remove the height of the tags area container the description field
+                var newHeight = descriptionField.offsetHeight - lessHeight - 15;
+                descriptionField.style.height = newHeight + 'px';
+            }
         });
     };
     

@@ -1,17 +1,17 @@
 @import 'variables.scss';
 
-html, body, .container, #search-panel {
+html, body, .container, #login-panel, #search-panel, #bookmark-panel, #settings-panel {
     height: 100%;
 }
 
 body {
-    font-size: 16px;
-    line-height: 20px;
+    @media (min-height: $height-iPhone5) {
+        font-size: 16px;
+    }
 
-    button {
-        &.btn {
-            font-size: 18px;
-        }
+    @media (min-height: $height-iPhone6) {
+        font-size: 18px;
+        line-height: 22px;
     }
 
     textarea.form-control {
@@ -23,16 +23,14 @@ body {
         z-index: 200;
     }
 
-    .header-panel {
-        margin-bottom: 5px;
-
-        .btn-icon {
-            margin-top: 2px;
-
-            i {
-                font-size: 1.8em;
-            }
+    .btn {
+        @media (min-height: $height-iPhone6Plus) {
+            font-size: 18px;
         }
+    }
+
+    .header-panel {
+        margin-bottom: 15px;
     }
 
     .lookahead-container .lookahead {
@@ -58,22 +56,44 @@ body {
 }
 
 #login-panel {
-    padding: 10px;
+    input[name="txtId"] {
+        @media (min-height: $height-iPhone5) and (max-width: $width-mobile) {
+            font-size: 1em;
+        }
+    }
     
     .intro-panel {
-        height: 325px;
-        
+        @media (min-height: $height-iPhone5) {
+            height: 61%;
+        }
+
         & > div {
-            padding: 20px 35px;
+            @media (min-height: $height-iPhone5) {
+                padding: 20px 40px;
+            }
+            
+            @media (min-height: $height-iPhone6) {
+                padding: 30px 40px;
+            }
         }
 
         h1 {
-            background-size: 225px;
-            height: 260px;
+            @media (max-height: $height-iPhone4) {
+                background-position-y: 30%;
+                background-size: 60%;
+            }
         }
 
         .buttons {
-            top: 140px;
+            @media (min-height: $height-iPhone6) {
+                .btn-prev {
+                    margin-left: 12px;
+                }
+                
+                .btn-next {
+                    margin-right: 12px;
+                }
+            }
         }
     }
 
@@ -86,52 +106,57 @@ body {
 
 #search-panel {
     .header-panel {
-        background: url(../img/icon.svg) 50% 4px no-repeat;
-        background-size: 30px;
-
-        .btn-icon {
-            &.btn-toggle-bookmark {
-                float: left;
-
-                @media (min-width: $width-landscape) and (orientation:landscape) {
-                    margin-right: 15px;
-                }
-
-                i:before {
-                    content: "\f02e";
-                }
-            }
-
-            &.btn-settings {
-                float: none;
-            }
-        }
-        
         .buttons {
-            float: none;
-            margin-bottom: 11px;
+            height: 1.8em;
+            background: url(../img/icon.svg) 50% 2px no-repeat;
+            background-size: 1.6em;
 
-            @media (min-width: $width-landscape) and (orientation:landscape) {
-                float: right;
+            @media (max-width: $height-iPhone4) and (orientation:portrait) {
+                position: static;
+                margin: 0 0 15px;
+            }
+
+            button {
+                bottom: auto;
+                    
+                &.btn-toggle-bookmark {
+                    left: 0;
+
+                    @media (min-width: $height-iPhone4) and (orientation:landscape) {
+                        left: auto;
+                    }
+
+                    i:before {
+                        content: "\f02e";
+                    }
+                }
             }
         }
 
         .search-form {
             width: 100%;
 
-            @media (min-width: $width-landscape) and (orientation:landscape) {
-                width: calc(100% - 85px);
-            }
-
-            .lookahead-container .lookahead {
-                padding-top: 12px;
+            @media (min-width: $height-iPhone4) and (orientation:landscape) {
+                width: calc(100% - 60px);
             }
         }
     }
 
     .search-results-panel {
-        max-height: 80%;
+        max-height: 78%;
         margin-top: 15px;
+
+        @media (min-height: $height-iPhone5), (min-height: $width-iPhone6) and (orientation:landscape) {
+            max-height: 81%;
+        }
+
+        @media (min-height: $height-iPhone6), (min-height: $width-iPhone6Plus) and (orientation:landscape) {
+            max-height: 83%;
+        }
+
+        @media (min-height: $height-iPhone6) and (orientation:landscape) {
+
+        }
 
         .list-group-item {
             margin: 0 0 15px 0;
@@ -157,17 +182,32 @@ body {
             }
         }
     }
+
+    .search-panel-background {
+        display: block;
+
+        @media (min-width: $height-iPhone4) and (orientation:landscape) {
+            background-size: 30%;
+            background-position-y: 60%;
+        }
+    }
 }
 
 #bookmark-panel {
-    padding: 10px;
-
-    textarea {
-        height: 244px;
-    }
-
     .tags {
-        max-height: 100px;
+        max-height: 60px;
+
+        @media (min-height: $height-iPhone5) {
+            max-height: 88px;
+        }
+        
+        @media (min-height: $height-iPhone6) {
+            max-height: 135px;
+        }
+
+        @media (min-height: $height-iPhone6Plus) {
+            max-height: 175px;
+        }
 
         .label {
             font-size: 1em;
@@ -183,9 +223,9 @@ body {
 }
 
 #settings-panel {
-    padding: 10px;
-
-    .well .panel-content {
-        height: 296px;
+    .well {
+        @media (min-height: $height-iPhone5) {
+            max-height: 65%;
+        }
     }
 }

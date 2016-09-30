@@ -34,7 +34,7 @@
             <p ng-bind-html="vm.alert.message"></p>
         </div>
         
-        <div id="login-panel" class="view" ng-show="vm.view.current === vm.view.views.login">
+        <div id="login-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.login">
             <div class="header-panel clearfix">
                 <button class="btn btn-icon animate-fade" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Help_Label) }}" 
                         ng-click="vm.events.introPanel_ShowHelp_Click()" ng-show="!vm.introduction.displayIntro() && !!vm.introduction.showLogo" tabindex="1000">
@@ -281,7 +281,7 @@
             </div>
         </div>
         
-        <div id="search-panel" class="view" ng-show="vm.view.current === vm.view.views.search">
+        <div id="search-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.search">
             <div class="header-panel clearfix">
                 <div class="buttons">
                     <button class="btn btn-icon btn-toggle-bookmark" ng-class="{ 'active': vm.bookmark.active }" title="{{ vm.bookmark.active ? vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) : vm.platform.Constants.Get(vm.global.Constants.Button_AddBookmark_Label) }}" 
@@ -340,9 +340,10 @@
                     </div>
                 </div>
             </div>
+            <div class="search-panel-background" ng-show="!vm.search.results"></div>
         </div>
         
-        <div id="bookmark-panel" class="view" ng-show="vm.view.current === vm.view.views.bookmark">
+        <div id="bookmark-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.bookmark">
             <div class="header-panel clearfix">
                 <h2>
                     {{ (vm.bookmark.displayUpdateForm) ? vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Title_Edit) : vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Title_Add) }}
@@ -387,13 +388,13 @@
                             </button>
                         </div>
                     <div class="buttons">
-                        <button type="submit" class="btn btn-default" ng-if="!vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_CreateBookmark_Click()" tabindex="6">
+                        <button type="submit" class="btn btn-default" ng-hide="vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_CreateBookmark_Click()" tabindex="6">
                             {{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_AddBookmark_Label) }}
                         </button>
-                        <button type="submit" class="btn btn-default" ng-if="vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_UpdateBookmark_Click()" tabindex="6">
+                        <button type="submit" class="btn btn-default" ng-show="vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_UpdateBookmark_Click()" tabindex="6">
                             {{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_UpdateBookmark_Label) }}
                         </button>
-                        <button type="button" class="btn btn-default" ng-if="vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_DeleteBookmark_Click()" tabindex="7">
+                        <button type="button" class="btn btn-default" ng-show="vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_DeleteBookmark_Click()" tabindex="7">
                             {{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_RemoveBookmark_Label) }}
                         </button>
                     </div>
@@ -401,7 +402,7 @@
             </div>
         </div>
         
-        <div id="settings-panel" class="view" ng-show="vm.view.current === vm.view.views.settings">
+        <div id="settings-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.settings">
             <div class="header-panel clearfix">
                 <h2>{{ vm.platform.Constants.Get(vm.global.Constants.Button_Settings_Label) }}</h2>
                 <button class="btn btn-icon btn-close" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}" 
@@ -416,7 +417,7 @@
                     {{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_Title) }}
                     <i class="fa fa-arrow-down"></i>
                 </h4>
-                <div class="panel-content animate-fold" ng-show="vm.settings.visiblePanel === vm.settings.panels.sync">
+                <div class="panel-content" ng-show="vm.settings.visiblePanel === vm.settings.panels.sync">
                     <div ng-hide="vm.sync.enabled()">
                         <p ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.SyncPanel_Message)"></p>
                     </div>
@@ -468,7 +469,7 @@
                     {{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Label) }}
                     <i class="fa fa-arrow-down"></i>
                 </h4>
-                <div class="panel-content animate-fold" ng-show="vm.settings.visiblePanel === vm.settings.panels.serviceStatus">
+                <div class="panel-content" ng-show="vm.settings.visiblePanel === vm.settings.panels.serviceStatus">
                     <div class="status-display animate-fade" ng-hide="vm.settings.service.displayUpdateServiceUrlForm">
                         <div class="status-url-panel">
                             <i class="fa fa-check-circle text-success" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Online) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.Online">
@@ -532,7 +533,7 @@
                     {{ vm.platform.Constants.Get(vm.global.Constants.BackupRestore_Title) }}
                     <i class="fa fa-arrow-down"></i>
                 </h4>
-                <div class="panel-content animate-fold" ng-show="vm.settings.visiblePanel === vm.settings.panels.backupRestore">
+                <div class="panel-content" ng-show="vm.settings.visiblePanel === vm.settings.panels.backupRestore">
                     <div class="animate-fade" ng-hide="vm.settings.backupRestoreResult">
                         <div class="animate-fade" ng-hide="vm.settings.displayRestoreForm">
                             <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.BackupRestore_Message)"></div>
