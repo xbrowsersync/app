@@ -5,11 +5,11 @@ html, body, .container, #login-panel, #search-panel, #bookmark-panel, #settings-
 }
 
 body {
-    @media (min-height: $height-iPhone5) {
+    @media (min-device-height: $height-iPhone5) {
         font-size: 16px;
     }
 
-    @media (min-height: $height-iPhone6) {
+    @media (min-device-height: $height-iPhone6Plus) {
         font-size: 18px;
         line-height: 22px;
     }
@@ -24,7 +24,7 @@ body {
     }
 
     .btn {
-        @media (min-height: $height-iPhone6Plus) {
+        @media (min-device-height: $height-iPhone6Plus) {
             font-size: 18px;
         }
     }
@@ -56,36 +56,41 @@ body {
 }
 
 #login-panel {
-    input[name="txtId"] {
-        @media (min-height: $height-iPhone5) and (max-width: $width-mobile) {
-            font-size: 1em;
+    input {
+        @media (min-device-height: $height-iPhone5) {
+            font-size: 1.1em;
         }
     }
     
     .intro-panel {
-        @media (min-height: $height-iPhone5) {
+        @media (min-device-height: $height-iPhone5) {
+            height: 60%;
+        }
+
+        @media (min-device-height: $height-iPhone6) {
             height: 61%;
         }
 
         & > div {
-            @media (min-height: $height-iPhone5) {
-                padding: 20px 40px;
-            }
-            
-            @media (min-height: $height-iPhone6) {
+            @media (min-device-height: $height-iPhone5) {
                 padding: 30px 40px;
+            }
+
+            @media (min-device-height: $height-iPhone6) {
+                font-size: 1.1em;
+                line-height: 1.3em;
             }
         }
 
         h1 {
-            @media (max-height: $height-iPhone4) {
+            @media (max-device-height: $height-iPhone4) {
                 background-position-y: 30%;
                 background-size: 60%;
             }
         }
 
         .buttons {
-            @media (min-height: $height-iPhone6) {
+            @media (min-device-height: $height-iPhone6) {
                 .btn-prev {
                     margin-left: 12px;
                 }
@@ -111,7 +116,7 @@ body {
             background: url(../img/icon.svg) 50% 2px no-repeat;
             background-size: 1.6em;
 
-            @media (max-width: $height-iPhone4) and (orientation:portrait) {
+            @media (max-device-width: $height-iPhone4 - 1) {
                 position: static;
                 margin: 0 0 15px;
             }
@@ -122,8 +127,9 @@ body {
                 &.btn-toggle-bookmark {
                     left: 0;
 
-                    @media (min-width: $height-iPhone4) and (orientation:landscape) {
+                    @media (min-device-width: $height-iPhone4) {
                         left: auto;
+                        right: 35px;
                     }
 
                     i:before {
@@ -136,26 +142,30 @@ body {
         .search-form {
             width: 100%;
 
-            @media (min-width: $height-iPhone4) and (orientation:landscape) {
-                width: calc(100% - 60px);
+            @media (min-device-width: $height-iPhone4) {
+                width: calc(100% - 90px);
             }
         }
     }
 
     .search-results-panel {
-        max-height: 78%;
+        max-height: 77%;
         margin-top: 15px;
 
-        @media (min-height: $height-iPhone5), (min-height: $width-iPhone6) and (orientation:landscape) {
-            max-height: 81%;
+        @media (min-device-height: $height-iPhone5), (min-device-height: $width-iPhone6) and (orientation:landscape) {
+            max-height: 79%;
         }
 
-        @media (min-height: $height-iPhone6), (min-height: $width-iPhone6Plus) and (orientation:landscape) {
-            max-height: 83%;
+        @media (min-device-height: $height-iPhone6), (min-device-height: $width-iPhone6Plus) and (orientation:landscape) {
+            max-height: 82%;
         }
 
-        @media (min-height: $height-iPhone6) and (orientation:landscape) {
+        @media (min-device-height: $height-iPhone6) and (orientation:landscape) {
+            max-height: 84%;
+        }
 
+        @media (min-device-height: $height-iPad) {
+            max-height: 93%;
         }
 
         .list-group-item {
@@ -186,9 +196,13 @@ body {
     .search-panel-background {
         display: block;
 
-        @media (min-width: $height-iPhone4) and (orientation:landscape) {
+        @media (min-device-height: $height-iPhone6) {
+            margin-top: 130px;
+        }
+
+        @media (min-device-width: $height-iPhone4) and (orientation:landscape) {
             background-size: 30%;
-            background-position-y: 60%;
+            margin-top: 60px;
         }
     }
 }
@@ -197,15 +211,15 @@ body {
     .tags {
         max-height: 60px;
 
-        @media (min-height: $height-iPhone5) {
+        @media (min-device-height: $height-iPhone5) {
             max-height: 88px;
         }
         
-        @media (min-height: $height-iPhone6) {
+        @media (min-device-height: $height-iPhone6) {
             max-height: 135px;
         }
 
-        @media (min-height: $height-iPhone6Plus) {
+        @media (min-device-height: $height-iPhone6Plus) {
             max-height: 175px;
         }
 
@@ -224,7 +238,7 @@ body {
 
 #settings-panel {
     .well {
-        @media (min-height: $height-iPhone5) {
+        @media (min-device-height: $height-iPhone5) {
             max-height: 65%;
         }
     }
