@@ -250,6 +250,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         });
                         break;
                     case vm.view.views.bookmark:
+                        // Create new bookmark if necessary
+                        if (!vm.bookmark.current) {
+                            vm.bookmark.current = new utility.XBookmark(null, 'http://');
+                        }
+                        
                         $timeout(function() {
                             document.querySelector('input[name="bookmarkTitle"]').select();
                         });
@@ -453,19 +458,33 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var bookmarkForm_BookmarkUrl_Change = function() {
         // Reset invalid service validator
         vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', true);
+
+        var isValid = true;
         
-        if (!vm.bookmark.url) {
-            return;
+        if (!vm.bookmark.current.url) {
+            isValid = false;
         }
-        
-        // Check url is valid
-        var matches = vm.bookmark.url.match(/^https?:\/\/\w+/i);        
-        if (!matches || matches.length <= 0) {
+        else {
+            if (vm.bookmark.current.url.toLowerCase()[0] !== 'h') {
+                vm.bookmark.current.url = 'http://' + vm.bookmark.current.url;
+            }
+            
+            // Check url is valid
+            var matches = vm.bookmark.current.url.match(/^https?:\/\/\w+/i);        
+            if (!matches || matches.length <= 0) {
+                isValid = false;
+            }
+        }
+
+        if (!isValid) {
             vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', false);
         }
     };
     
     var bookmarkForm_CreateBookmark_Click = function() {
+        // Validate url
+        bookmarkForm_BookmarkUrl_Change();
+        
         if (!vm.bookmarkForm.$valid) {
 			document.querySelector('#bookmarkForm .ng-invalid').select();
             return;
@@ -555,6 +574,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
     
     var bookmarkForm_UpdateBookmark_Click = function() {
+        // Validate url
+        bookmarkForm_BookmarkUrl_Change();
+        
         // Return if the form is not valid
 		if (!vm.bookmarkForm.$valid) {
 			document.querySelector('#bookmarkForm .ng-invalid').select();
