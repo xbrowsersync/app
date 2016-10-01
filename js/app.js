@@ -616,11 +616,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 	};
     
     var generateQRCode = function() {
-        var qr = qrcode(3, 'M');
-        qr.addData(vm.settings.id());
-        qr.make();
-
-        document.getElementById('qr').innerHTML =  qr.createImgTag();
+        qr.canvas({
+            canvas: document.getElementById('qr'),
+            value: vm.settings.id(),
+            level: 'M',
+            size: '3',
+            background: '#EDFEFF'
+        });
     };
     
     var getTagArrayFromText = function(tagText) {

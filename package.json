@@ -21,6 +21,7 @@
     "crypto-js": "3.1.x",
     "font-awesome": "4.6.x",
     "hammerjs": "2.0.x",
+    "qr-js": "1.1.x",
     "underscore": "1.8.x"
   },
   "devDependencies": {
@@ -54,7 +55,7 @@
     "postcompileplatformcss": "npm run minifycss",
     "minifycss": "minify build/css/font-awesome.css node_modules/bootstrap/dist/css/bootstrap.min.css build/css/styles.css build/css/platform.css > build/css/styles.min.css",
     "postminifycss": "npm run bundledependencies",
-    "bundledependencies": "n-concat node_modules/angular/angular.min.js node_modules/angular-animate/angular-animate.min.js node_modules/angular-complexify/build/angular-complexify.min.js node_modules/angular-sanitize/angular-sanitize.min.js node_modules/underscore/underscore-min.js node_modules/crypto-js/crypto-js.js node_modules/hammerjs/hammer.min.js node_modules/angular-hammer/angular.hammer.min.js js/qrcode.js | n-pipe build/js/dependencies.min.js", 
+    "bundledependencies": "n-concat node_modules/angular/angular.min.js node_modules/angular-animate/angular-animate.min.js node_modules/angular-complexify/build/angular-complexify.min.js node_modules/angular-sanitize/angular-sanitize.min.js node_modules/underscore/underscore-min.js node_modules/crypto-js/crypto-js.js node_modules/hammerjs/hammer.min.js node_modules/angular-hammer/angular.hammer.min.js node_modules/qr-js/qr.js | n-pipe build/js/dependencies.min.js", 
     "postbundledependencies": "npm run bundlejs",
     "bundlejs": "uglifyjs --compress --source-map-include-sources --source-map build/js/scripts.min.js.map --source-map-url scripts.min.js.map --output build/js/scripts.min.js -- js/global.js js/utility.js js/httpInterceptor.js js/api.js js/bookmarks.js js/platform.js build/js/platformImplementation.js js/app.js"
   }
