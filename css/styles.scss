@@ -31,7 +31,7 @@ body {
     color: $colour-text1;
     font-size: 14px;
     line-height: 20px;
-    min-width: 275px;
+    min-width: 285px;
 
     h2 {
         font-size: 1.8em;
@@ -285,12 +285,16 @@ body {
     
     .lookahead-container {
         position: absolute;
+        top: 0;
+        width: 200%;
         
-        .lookahead {            
+        .lookahead {
+            position: relative;
             float: left;
+            z-index: 60;
             line-height: 1.43;
-            color: $colour-text2;
-            opacity: 0.4;
+            color: $colour-link;
+            background-color: $colour-text1;
             @include css-prefix(user-select, none);
         }
         
@@ -422,17 +426,18 @@ body {
 
 #login-panel {
     .intro-panel {
-        height: 58%;
+        height: 18em;
+        margin-bottom: 15px;
         overflow: hidden;
         position: relative;
     
         & > div {
             position: absolute;
-            height: 95%;
+            height: 100%;
             width: 100%;
             left: 0;
             padding: 15px 30px;
-            overflow-y: auto;
+            overflow: hidden;
 
             & > div {
                 position: relative;
@@ -488,9 +493,10 @@ body {
         .progress {
             position: absolute;
             top: 0;
+            margin: 0;
             z-index: 10;
             box-shadow: none;
-            height: 40px;
+            height: 2.8em;
             width: 100%;
             background-color: transparent;
             border: solid 2px $colour-text1;
@@ -504,7 +510,7 @@ body {
             
         .progress-bar-background {
             background-color: $colour-text1;
-            height: 40px;
+            height: 2.8em;
             width: 100%;
             position: absolute;
             top: 0;
@@ -522,16 +528,20 @@ body {
             right: 0;
             top: -5px;
 
-            .btn-toggle-bookmark {
-                right: 20px;
+            button {
+                height: 1.8em;
 
-                i:before {
-                    content: "\f097";
-                }
-                
-                &.active {
+                &.btn-toggle-bookmark {
+                    right: 1.3em;
+
                     i:before {
-                        content: "\f02e";
+                        content: "\f097";
+                    }
+                    
+                    &.active {
+                        i:before {
+                            content: "\f02e";
+                        }
                     }
                 }
             }
@@ -542,11 +552,13 @@ body {
             float: left;
             border-radius: $border-radius;
             background-color: $colour-text1;
-            width: calc(100% - 60px);
+            width: calc(100% - 4em);
+            overflow: hidden;
 
             label {
                 position: absolute;
-                left: 13px;
+                top: 0;
+                left: 15px;
                 color: $colour-text2;
                 z-index: 60;
             }
@@ -561,7 +573,7 @@ body {
                 position: relative;
                 z-index: 50;
                 height: auto;
-                padding: 5px 60px 5px 40px;
+                padding: 5px 40px 5px 40px;
                 font-size: 1.5em;
                 background: transparent;
             }
@@ -570,7 +582,7 @@ body {
                 position: absolute;
                 right: 15px;
                 font-size: 1em;
-                z-index: 70;
+                z-index: 55;
 
                 &:hover i {
                     opacity: 1;
@@ -767,12 +779,9 @@ body {
     .search-panel-background {
         display: none;
         background: url("../img/logo.svg") 50% 0 no-repeat;
-        background-size: 60%;
-        position: absolute;
-        margin-top: 70px;
-        width: 100%;
-        height: 600px;
-        max-width: $width-tablet;
+        background-size: 15em;
+        height: 15em;
+        margin-top: 5em;
         opacity: 0.25;
         z-index: -50;
     }
@@ -780,7 +789,8 @@ body {
 
 #bookmark-panel {
     textarea {
-        height: 195px;
+        height: 14em;
+        min-height: 7.5em;
     }
 
     .tags-form-group {
@@ -801,6 +811,7 @@ body {
             
             .lookahead {
                 padding: 10px 0;
+                background-color: transparent;
             }
 
             .measure {
@@ -851,7 +862,7 @@ body {
 #settings-panel {
     .well {
         padding: 0;
-        max-height: 62%;
+        max-height: 20.5em;
         overflow: hidden;
         
         h4 {
@@ -905,14 +916,10 @@ body {
                 font-weight: bold;
                 margin: 5px 0 0;
             }
-            
-            #qr {
-                margin-top: 5px;
-            }
         }
         
         .checkbox {
-            margin: 15px 0;
+            margin: 10px 0;
             
             #syncBookmarksToolbar {
                 margin-top: 2px;
@@ -924,6 +931,7 @@ body {
         .status-display {
             i {
                 font-size: 1.2em;
+                line-height: 1.2em;
                 position: relative;
                 margin-right: 2px;
                 vertical-align: top;

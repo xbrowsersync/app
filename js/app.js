@@ -254,10 +254,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         if (!vm.bookmark.current) {
                             vm.bookmark.current = new utility.XBookmark(null, 'http://');
                         }
-                        
+
+                        // Resize description field to account for tags
+                        bookmarkForm_ResizeDescriptionField();
                         $timeout(function() {
+                            bookmarkForm_ResizeDescriptionField();
                             document.querySelector('input[name="bookmarkTitle"]').select();
-                        });
+                        }, 500);
                         break;
                     case vm.view.views.settings:
                         // Get service status
@@ -889,6 +892,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var searchForm_SearchText_Autocomplete = function() {
         vm.search.query += vm.search.lookahead;
         searchForm_SearchText_Change();
+        document.querySelector('input[name=txtSearch]').focus();
     };
 
     var searchForm_Clear_Click = function() {
@@ -899,11 +903,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
 
     var searchForm_DeleteBookmark_Click = function(event, bookmark) {
-        var resultItem = event.target.closest('.list-group-item');
-        resultItem.classList.add('deleted');
+        var bookmarkItem = event.target.parentNode.parentNode.parentNode.parentNode;
+        bookmarkItem.classList.add('deleted');
         
         $timeout(function() {
-            resultItem.remove();
+            bookmarkItem.remove();
 
             // Delete the bookmark
             platform.Sync(vm.sync.asyncChannel, {
@@ -1083,7 +1087,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var searchForm_SelectBookmark_Press = function(event) {
         event.preventDefault();
 
-        var bookmarkItem = event.target.closest('.list-group-item');
+        var bookmarkItem = event.target.parentNode;
         var isActive = _.contains(bookmarkItem.classList, 'active');
 
         _.each(document.querySelectorAll('.list-group-item.active'), function(obj) { 
@@ -1134,7 +1138,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Display bookmark panel
         $timeout(function() {
             vm.view.change(vm.view.views.bookmark);
-            bookmarkForm_ResizeDescriptionField();
         });
     };
     

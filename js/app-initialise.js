@@ -3,7 +3,12 @@ xBrowserSync.App.UI = angular.module('xBrowserSync.App.UI', ['ngSanitize', 'ngAn
 
 // Disable debug info
 xBrowserSync.App.UI.config(['$compileProvider', function($compileProvider) {
-$compileProvider.debugInfoEnabled(false);
+    $compileProvider.debugInfoEnabled(false);
+}]);
+
+// Configure animated elements
+xBrowserSync.App.UI.config(['$animateProvider', function($animateProvider) {
+    $animateProvider.classNameFilter(/animate\-/);
 }]);
 
 // Add platform service

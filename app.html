@@ -295,19 +295,19 @@
                     </button>
                 </div>
                 <div class="search-form">
+                    <input class="form-control" name="txtSearch" maxlength="200" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.Field_Search_Description) }}" ng-model="vm.search.query" 
+                           ng-change="vm.events.searchForm_SearchText_Change()" ng-keydown="vm.events.searchForm_SearchText_KeyDown($event)" ng-trim="false" tabindex="1" />
+                    <label for="txtSearch"><i class="fa fa-search"></i></label>
                     <div class="lookahead-container">
                         <span class="measure" data-ng-bind-html="vm.search.queryMeasure"></span>
                         <span class="lookahead" ng-show="vm.search.lookahead" ng-click="vm.events.searchForm_SearchText_Autocomplete()">{{ vm.search.lookahead }}</span>
                     </div>
-                    <label for="txtSearch"><i class="fa fa-search"></i></label>
                     <button class="btn btn-icon btn-clear" ng-show="vm.search.query" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Clear_Label) }}" ng-click="vm.events.searchForm_Clear_Click()">
                         <i class="fa fa-times-circle" aria-hidden="true"></i>
                     </button>
-                    <input class="form-control" name="txtSearch" maxlength="200" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.Field_Search_Description) }}" ng-model="vm.search.query" 
-                           ng-change="vm.events.searchForm_SearchText_Change()" ng-keydown="vm.events.searchForm_SearchText_KeyDown($event)" ng-trim="false" tabindex="1" />
                 </div>
             </div>
-            <div class="search-results-panel animate-fold-max" ng-show="!!vm.search.results">
+            <div class="search-results-panel" ng-show="!!vm.search.results">
                 <h4 class="no-bookmarks" ng-show="vm.search.results.length === 0">
                     {{ vm.platform.Constants.Get(vm.global.Constants.NoSearchResults_Message) }}
                 </h4>
@@ -373,12 +373,12 @@
                     </div>
                     <div class="form-group tags-form-group">
                         <label for="bookmarkTags" class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Tags_Label) }}</label>
+                            <input type="text" class="form-control" name="bookmarkTags" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Tags_Placeholder) }}" maxlength="50" tabindex="4"
+                                   ng-model="vm.bookmark.tagText" ng-change="vm.events.bookmarkForm_BookmarkTags_Change()" ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" ng-trim="false">
                             <div class="lookahead-container">
                                 <span class="measure" ng-bind-html="vm.bookmark.tagTextMeasure"></span>
                                 <span class="lookahead" ng-bind-html="vm.bookmark.tagLookahead" ng-show="vm.bookmark.tagLookahead" ng-click="vm.events.bookmarkForm_BookmarkTags_Autocomplete()"></span>
                             </div>
-                            <input type="text" class="form-control" name="bookmarkTags" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Tags_Placeholder) }}" maxlength="50" tabindex="4"
-                                   ng-model="vm.bookmark.tagText" ng-change="vm.events.bookmarkForm_BookmarkTags_Change()" ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" ng-trim="false">
                         </div>
                         <div class="tags clearfix" ng-show="vm.bookmark.current.tags.length > 0">
                             <button class="label label-default" ng-repeat="tag in vm.bookmark.current.tags track by $index" ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
@@ -388,7 +388,7 @@
                             </button>
                         </div>
                     <div class="buttons">
-                        <button type="submit" class="btn btn-default" ng-hide="vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_CreateBookmark_Click()" tabindex="6">
+                        <button type="submit" class="btn btn-default" ng-show="!vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_CreateBookmark_Click()" tabindex="6">
                             {{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_AddBookmark_Label) }}
                         </button>
                         <button type="submit" class="btn btn-default" ng-show="vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_UpdateBookmark_Click()" tabindex="6">

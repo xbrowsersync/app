@@ -433,7 +433,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 }
                 
                 // Find all words that begin with lookahead word
-                results = results.concat(_.filter(bookmarkWords, function(bookmark) { return bookmark.startsWith(word); }));
+                results = results.concat(_.filter(bookmarkWords, function(bookmark) { return bookmark.indexOf(word) === 0; }));
             }
         });
         
