@@ -422,10 +422,21 @@
                         <p ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.SyncPanel_Message)"></p>
                     </div>
                     <div class="text-center" ng-hide="vm.settings.service.displaySyncBookmarksToolbarConfirmation || vm.settings.service.displayCancelSyncConfirmation">
-                        <div class="id-panel" ng-show="vm.sync.enabled()"> 
+                        <div ng-show="vm.sync.enabled()"> 
                             <label>{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_Id_Label) }}:</label>
-                            <p id="id">{{ vm.settings.id() }}</p>
-                            <canvas id="qr"></canvas>
+                            <a class="id" href="#" title="{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_DisplayQRCode_Label) }}" ng-click="vm.events.displayQRCode_Click()">
+                                {{ vm.settings.id() }}
+                            </a>
+                            <div class="data-panel animate-fade" ng-hide="vm.settings.displayQRCode">
+                                <div id="data-chart"></div>
+                                <div class="values">
+                                    <span class="percent">{{ vm.settings.syncDataUsed }}%</span>
+                                    <span class="max">/ {{ vm.settings.syncDataMax }}kB</span>
+                                </div>
+                            </div>
+                            <div class="qr-panel animate-fade" ng-show="vm.settings.displayQRCode">
+                                <canvas id="qr"></canvas>
+                            </div>
                         </div>
                         <div class="checkbox">
                             <label>

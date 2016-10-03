@@ -31,7 +31,7 @@ body {
     color: $colour-text1;
     font-size: 14px;
     line-height: 20px;
-    min-width: 285px;
+    min-width: 300px;
 
     h2 {
         font-size: 1.8em;
@@ -472,6 +472,7 @@ body {
 
             .btn-prev {
                 margin-left: 10px;
+                float: left;
             }
             
             .btn-next {
@@ -906,24 +907,71 @@ body {
     }
     
     .sync-panel {
-        .id-panel {
-            label {
-                font-weight: normal;
-                margin-bottom: 0;
+        a.id {
+            color: $colour-text2;
+            white-space: nowrap;
+
+            .active,
+            &:active,
+            &:focus,
+            &:hover {
+                color: $colour-link-highlight;
             }
-            
-            #id {
-                font-weight: bold;
-                margin: 5px 0 0;
+
+            &:after {
+                content: "\f029";
+                font-family: "FontAwesome";
             }
         }
         
+        label {
+            font-weight: normal;
+            font-size: 0.9em;
+            margin-bottom: 0;
+        }
+        
         .checkbox {
-            margin: 10px 0;
+            margin: 15px 0;
+            font-size: 1.1em;
             
             #syncBookmarksToolbar {
-                margin-top: 2px;
+                margin-top: 0.2em;
             }
+        }
+
+        .data-panel {
+            height: 5.5em;
+            margin-top: 1em;
+            position: relative;
+
+            #data-chart {
+                height: 5.5em;
+                width: 5.5em;
+                margin: auto;
+            }
+
+            .values {
+                position: absolute;
+                width: 5em;
+                top: 50%;
+                left: 50%;
+                margin: -1.1em 0 0 -2.5em;
+
+                .percent {
+                    font-size: 1.5em;
+                }
+
+                .max {
+                    display: block;
+                    font-size: 0.7em;
+                    line-height: 1em;
+                }
+            }
+        }
+
+        .qr-panel {
+            height: 5.5em;
+            margin-top: 1em;
         }
     }
     
@@ -931,7 +979,6 @@ body {
         .status-display {
             i {
                 font-size: 1.2em;
-                line-height: 1.2em;
                 position: relative;
                 margin-right: 2px;
                 vertical-align: top;

@@ -41,7 +41,7 @@ body {
     }
 
     .view {
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 
     .well .btn.btn-default {
@@ -217,9 +217,23 @@ body {
 }
 
 #settings-panel {
-    .sync-panel .checkbox {
-        @media (min-height: $height-iPhone5) {
-            margin: 15px 0;
+    .sync-panel {
+        .checkbox {
+            @media (max-height: $height-iPhone5) {
+                margin: 10px 0;
+            }
+        }
+
+        .data-panel, .qr-panel {
+            @media (max-height: $height-iPhone5) {
+                margin-top: 0.5em;
+            }
+        }
+        
+        .data-panel .values {
+            @media (min-height: $height-iPhone5) {
+                margin-top: -1em;
+            }
         }
     }
 

@@ -204,6 +204,10 @@ xBrowserSync.App.Utility = function($q, platform, global) {
         return container;
     };
 
+	var getStringSizeInBytes = function(str) {
+		return encodeURI(str).split(/%..|./).length - 1;
+	};
+
 	var getToolbarContainer = function(bookmarks, createIfNotPresent) {
         var container = _.findWhere(bookmarks, { title: global.Bookmarks.ToolbarContainerName });
 
@@ -289,6 +293,7 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 		FindXBookmarkInContainers: findXBookmarkInContainers,
 		GetErrorMessageFromException: getErrorMessageFromException,
 		GetOtherContainer: getOtherContainer,
+		GetStringSizeInBytes: getStringSizeInBytes,
 		GetToolbarContainer: getToolbarContainer,
 		GetXBrowserSyncContainer: getXBrowserSyncContainer,
 		IsBookmarkContainer: isBookmarkContainer,

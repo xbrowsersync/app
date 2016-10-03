@@ -218,6 +218,9 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		"syncPanel_Id_Label" : {
 			"message":  "Your xBrowserSync ID"
 		},
+		"syncPanel_DisplayQRCode_Label" : {
+			"message":  "Display QR code"
+		},
 		"syncPanel_SyncBookmarksToolbar_Label" : {
 			"message":  "Include bookmarks bar"
 		},

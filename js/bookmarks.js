@@ -128,6 +128,17 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         
         return deferred.promise;
     };
+
+    var getSyncSize = function() {
+        // Get cached synced bookmarks
+        return getCachedBookmarks()
+            .then(function(bookmarks) {
+                // Return size in bytes of encrypted bookmarks
+                var encryptedBookmarks = utility.EncryptData(JSON.stringify(bookmarks));
+                var sizeInBytes = utility.GetStringSizeInBytes(encryptedBookmarks);
+                return sizeInBytes;
+            })
+    };
 	
 	var queueSync = function(syncData) {
         syncData.deferred = $q.defer();
@@ -818,6 +829,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         RefreshCache: refreshCachedBookmarks,
         Search: searchBookmarks,
         Set: setBookmarks,
-		Sync: queueSync
+		Sync: queueSync,
+        SyncSize: getSyncSize
 	};
 };

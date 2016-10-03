@@ -136,6 +136,7 @@ xBrowserSync.App.Global = function(platform) {
 			SyncPanel_Title: 'syncPanel_Title',
             SyncPanel_Message: 'syncPanel_Message',
             SyncPanel_Id_Label: 'syncPanel_Id_Label',
+            SyncPanel_DisplayQRCode_Label: 'syncPanel_DisplayQRCode_Label',
 			SyncPanel_SyncBookmarksToolbar_Label: 'syncPanel_SyncBookmarksToolbar_Label',
             ConfirmRestore_Sync_Message: 'confirmRestore_Sync_Message',
             ConfirmRestore_NoSync_Message: 'confirmRestore_NoSync_Message',

@@ -70,8 +70,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             bookmarkForm_DeleteBookmark_Click: bookmarkForm_DeleteBookmark_Click,
             bookmarkForm_RemoveTag_Click: bookmarkForm_RemoveTag_Click,
             bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
-            syncBookmarksToolbar_Click: syncBookmarksToolbar_Click,
-            syncBookmarksToolbar_Confirm: syncBookmarksToolbar_Confirm,
+            displayQRCode_Click: displayQRCode_Click,
             handleSyncResponse: handleSyncResponse,
             introPanel_ShowHelp_Click: introPanel_ShowHelp_Click,
             openUrl: openUrl,
@@ -84,6 +83,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             searchForm_SearchResult_KeyDown: searchForm_SearchResult_KeyDown,
             searchForm_SelectBookmark_Press: searchForm_SelectBookmark_Press,
             searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
+            syncBookmarksToolbar_Click: syncBookmarksToolbar_Click,
+            syncBookmarksToolbar_Confirm: syncBookmarksToolbar_Confirm,
             syncForm_CancelSyncConfirmation_Click: syncForm_CancelSyncConfirmation_Click,
             syncForm_ClientSecret_Change: syncForm_ClientSecret_Change,
             syncForm_ConfirmSync_Click: startSyncing,
@@ -140,7 +141,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 return checkRestoreData(vm.settings.dataToRestore);
             },
             displayCancelSyncConfirmation: false,
-			displayRestoreConfirmation: false,
+			displayQRCode: false,
+            displayRestoreConfirmation: false,
             displayRestoreForm: false,
             displaySyncBookmarksToolbarConfirmation: false,            
 			id: function(value) {
@@ -171,6 +173,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         global.URL.Host.Get();
                 }
             },
+            syncDataMax: null,
+            syncDataUsed: null,
             panels: { sync: 0, serviceStatus: 1, backupRestore: 2 },
             visiblePanel: 0
 		};
@@ -218,6 +222,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     case vm.view.views.settings:
                         vm.settings.visiblePanel = vm.settings.panels.sync;
                         vm.settings.displayCancelSyncConfirmation = false;
+                        vm.settings.displayQRCode = false;
+                        vm.settings.syncDataUsed = null;
+                        vm.settings.syncDataMax = null;
                         vm.settings.displayRestoreConfirmation = false;
                         vm.settings.displayRestoreForm = false;
                         vm.settings.displaySyncBookmarksToolbarConfirmation = false;  
@@ -265,18 +272,22 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     case vm.view.views.settings:
                         // Get service status
                         api.CheckServiceStatus()
-                            .then(setServiceInformation)
+                            .then(function(serviceInfo) {
+                                // Set service info
+                                setServiceInformation(serviceInfo);
+
+                                // If sync is enabled, display sync data chart
+                                if (global.SyncEnabled.Get()) {
+                                    generateSyncDataChart(serviceInfo.maxSyncSize);
+                                }
+                            })
                             .catch(function(err) {
                                 vm.settings.service.status = global.ServiceStatus.Offline;
                             });
                         
                         // Set new service form url
                         vm.settings.service.newServiceUrl = vm.settings.service.url();
-                        
-                        // If sync is enabled, generate a QR code 
-                        if (global.SyncEnabled.Get()) {
-                            generateQRCode();
-                        }
+
                         break;
                     case vm.view.views.login:
                         /* falls through */
@@ -640,7 +651,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		return validData;
 	};
     
-    var generateQRCode = function() {
+    var displayQRCode_Click = function() {
         qr.canvas({
             canvas: document.getElementById('qr'),
             value: vm.settings.id(),
@@ -648,6 +659,41 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             size: '3',
             background: '#EDFEFF'
         });
+        vm.settings.displayQRCode = true;
+        return false;
+    };
+
+    var generateSyncDataChart = function(maxSyncSize) {
+        // Remove old chart
+        var oldChart = document.querySelector('#data-chart > svg');
+        if (!!oldChart) {
+            oldChart.remove();
+        }
+        
+        // Get bookmarks sync size
+        bookmarks.SyncSize()
+            .then(function(bookmarksSyncSize) {
+                // Calculate sync data percentage used and display chart 
+                var percentUsed = (bookmarksSyncSize / maxSyncSize) * 100;
+
+                // Set view model values
+                vm.settings.syncDataUsed = Math.round(percentUsed);
+                vm.settings.syncDataMax = Math.round(maxSyncSize / 1024);
+
+                // Display new chart
+                new CircleChart({
+                    $container: document.querySelector('#data-chart'),
+                    ringProportion: 0.39,
+                    staticTotal: true,
+                    total: 100,
+                    middleCircleColor: '#EDFEFF',
+                    background: '#35C6E8',
+                    definition: [{
+                        color: '#083039', 
+                        value: percentUsed
+                    }]
+                });
+            });
     };
     
     var getTagArrayFromText = function(tagText) {
