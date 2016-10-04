@@ -188,6 +188,9 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		"button_Close_Label" : {
 			"message":  "Close"
 		},
+		"button_Back_Label" : {
+			"message":  "Back"
+		},
 		"backupSuccess_Message" : {
 			"message":  "Your data has been backed up to {fileName}, check downloaded files for the location."
 		},
@@ -221,8 +224,17 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		"syncPanel_DisplayQRCode_Label" : {
 			"message":  "Display QR code"
 		},
+		"syncPanel_DisplayDataUsage_Label" : {
+			"message": "Data Usage"
+		},
+		"syncPanel_DisplaySyncOptions_Label" : {
+			"message": "Sync Options"
+		},
 		"syncPanel_SyncBookmarksToolbar_Label" : {
 			"message":  "Include bookmarks bar"
+		},
+		"syncDataUsagePanel_Message" : {
+			"message":  "Current sync data usage"
 		},
 		"confirmRestore_Sync_Message" : {
 			"message":  "As sync is currently enabled, the data being restored will overwrite your xBrowserSync synced data. To restore data to the local browser only, disable sync before restoring. OK to proceed?"

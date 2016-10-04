@@ -14,6 +14,20 @@ body {
         line-height: 22px;
     }
 
+    button.btn {
+        @media (min-device-height: $height-iPhone6Plus) {
+            font-size: 18px;
+        }
+
+        &.btn-default:not([disabled]):focus {
+            text-decoration: none;
+        }
+
+        &.btn-icon:focus {
+            border-bottom: none;
+        }
+    }
+
     textarea.form-control {
         padding: 10px 20px;
     }
@@ -21,12 +35,6 @@ body {
     .alert {
         position: absolute;
         z-index: 200;
-    }
-
-    .btn {
-        @media (min-device-height: $height-iPhone6Plus) {
-            font-size: 18px;
-        }
     }
 
     .header-panel {
@@ -46,7 +54,6 @@ body {
 
     .well .btn.btn-default {
         font-size: 1em;
-        padding: 6px 12px;
     }
 }
 
@@ -218,26 +225,48 @@ body {
 
 #settings-panel {
     .sync-panel {
+        .buttons {
+            margin: 1.5em 0;
+        }
+        
         .checkbox {
             @media (max-height: $height-iPhone5) {
                 margin: 10px 0;
             }
         }
-
-        .data-panel, .qr-panel {
+        
+        .chart-panel {
             @media (max-height: $height-iPhone5) {
-                margin-top: 0.5em;
+                #chart {
+                    height: 7em;
+                    width: 7em;
+                }
+
+                .values {
+                    font-size: 0.8em;
+                    margin-top: -1.4em;
+                }
+            }
+
+            @media (min-height: $height-iPhone6) {
+                .values {
+                    margin-top: -1em;
+                }
             }
         }
-        
-        .data-panel .values {
-            @media (min-height: $height-iPhone5) {
-                margin-top: -1em;
+
+        #id {
+            @media (min-height: $height-iPhone5) and (max-height: $height-iPhone6 - 1) {
+                font-size: 1em;
             }
+        }
+
+        #syncDataUsage-Panel .buttons {
+            margin-bottom: 0;
         }
     }
 
-    .well {
-        max-height: 19em;
+    .well .panel-content {
+        height: 15em;
     }
 }

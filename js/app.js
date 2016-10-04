@@ -83,13 +83,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             searchForm_SearchResult_KeyDown: searchForm_SearchResult_KeyDown,
             searchForm_SelectBookmark_Press: searchForm_SelectBookmark_Press,
             searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
-            syncBookmarksToolbar_Click: syncBookmarksToolbar_Click,
-            syncBookmarksToolbar_Confirm: syncBookmarksToolbar_Confirm,
+            syncPanel_SyncBookmarksToolbar_Click: syncPanel_SyncBookmarksToolbar_Click,
+            syncPanel_SyncBookmarksToolbar_Confirm: syncPanel_SyncBookmarksToolbar_Confirm,
             syncForm_CancelSyncConfirmation_Click: syncForm_CancelSyncConfirmation_Click,
             syncForm_ClientSecret_Change: syncForm_ClientSecret_Change,
             syncForm_ConfirmSync_Click: startSyncing,
             syncForm_DisableSync_Click: syncForm_DisableSync_Click,
             syncForm_EnableSync_Click: syncForm_EnableSync_Click,
+            syncPanel_DisplayDataUsage_Click: syncPanel_DisplayDataUsage_Click,
+            syncPanel_DisplaySyncOptions_Click: syncPanel_DisplaySyncOptions_Click,
             searchForm_ToggleBookmark_Click: searchForm_ToggleBookmark_Click,
             updateServiceUrlForm_Cancel_Click: updateServiceUrlForm_Cancel_Click,
             updateServiceUrlForm_Confirm_Click: updateServiceUrlForm_Confirm_Click,
@@ -144,7 +146,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 			displayQRCode: false,
             displayRestoreConfirmation: false,
             displayRestoreForm: false,
-            displaySyncBookmarksToolbarConfirmation: false,            
+            displaySyncBookmarksToolbarConfirmation: false,
+            displaySyncDataUsage: false,
+            displaySyncOptions: true,
 			id: function(value) {
                 return arguments.length ? 
                     global.Id.Set(value) : 
@@ -223,8 +227,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         vm.settings.visiblePanel = vm.settings.panels.sync;
                         vm.settings.displayCancelSyncConfirmation = false;
                         vm.settings.displayQRCode = false;
-                        vm.settings.syncDataUsed = null;
-                        vm.settings.syncDataMax = null;
+                        vm.settings.displaySyncDataUsage = false;
                         vm.settings.displayRestoreConfirmation = false;
                         vm.settings.displayRestoreForm = false;
                         vm.settings.displaySyncBookmarksToolbarConfirmation = false;  
@@ -270,16 +273,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         }, 500);
                         break;
                     case vm.view.views.settings:
+                        vm.settings.displaySyncOptions = !global.SyncEnabled.Get();
+                        
                         // Get service status
                         api.CheckServiceStatus()
                             .then(function(serviceInfo) {
                                 // Set service info
                                 setServiceInformation(serviceInfo);
-
-                                // If sync is enabled, display sync data chart
-                                if (global.SyncEnabled.Get()) {
-                                    generateSyncDataChart(serviceInfo.maxSyncSize);
-                                }
                             })
                             .catch(function(err) {
                                 vm.settings.service.status = global.ServiceStatus.Offline;
@@ -652,48 +652,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 	};
     
     var displayQRCode_Click = function() {
+        // Generate new QR code
         qr.canvas({
             canvas: document.getElementById('qr'),
-            value: vm.settings.id(),
-            level: 'M',
-            size: '3',
-            background: '#EDFEFF'
+            value: vm.settings.id()
         });
+
         vm.settings.displayQRCode = true;
-        return false;
-    };
-
-    var generateSyncDataChart = function(maxSyncSize) {
-        // Remove old chart
-        var oldChart = document.querySelector('#data-chart > svg');
-        if (!!oldChart) {
-            oldChart.remove();
-        }
-        
-        // Get bookmarks sync size
-        bookmarks.SyncSize()
-            .then(function(bookmarksSyncSize) {
-                // Calculate sync data percentage used and display chart 
-                var percentUsed = (bookmarksSyncSize / maxSyncSize) * 100;
-
-                // Set view model values
-                vm.settings.syncDataUsed = Math.round(percentUsed);
-                vm.settings.syncDataMax = Math.round(maxSyncSize / 1024);
-
-                // Display new chart
-                new CircleChart({
-                    $container: document.querySelector('#data-chart'),
-                    ringProportion: 0.39,
-                    staticTotal: true,
-                    total: 100,
-                    middleCircleColor: '#EDFEFF',
-                    background: '#35C6E8',
-                    definition: [{
-                        color: '#083039', 
-                        value: percentUsed
-                    }]
-                });
-            });
     };
     
     var getTagArrayFromText = function(tagText) {
@@ -1029,7 +994,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if ($event.keyCode === 40 && !!vm.search.results && vm.search.results.length > 0) {
             // Focus on first search result
             $event.preventDefault();
-            document.querySelector('.search-results-panel .list-group').firstElementChild.firstElementChild.focus();
+            document.querySelector('.search-results-panel .list-group').firstElementChild.children[2].focus();
             return;
         }
         
@@ -1052,7 +1017,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             
                 if (!!$event.target.parentElement.previousElementSibling) {
                     // Focus on previous result
-                    $event.target.parentElement.previousElementSibling.firstElementChild.focus();
+                    $event.target.parentElement.previousElementSibling.children[2].focus();
                 }
                 else {
                     // Focus on search box
@@ -1066,7 +1031,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             
                 if (!!$event.target.parentElement.nextElementSibling) {
                     // Focus on next result
-                    $event.target.parentElement.nextElementSibling.firstElementChild.focus();
+                    $event.target.parentElement.nextElementSibling.children[2].focus();
                 }
                 
                 break;
@@ -1079,10 +1044,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 newIndex = currentIndex - 6;
                 
                 if (newIndex < 0) {
-                    $event.target.parentElement.parentElement.firstElementChild.firstElementChild.focus();
+                    $event.target.parentElement.parentElement.firstElementChild.children[2].focus();
                 }
                 else {
-                    $event.target.parentElement.parentElement.children[newIndex].firstElementChild.focus();
+                    $event.target.parentElement.parentElement.children[newIndex].children[2].focus();
                 }
                 
                 break;
@@ -1095,10 +1060,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 newIndex = currentIndex + 6;
                 
                 if ($event.target.parentElement.parentElement.children.length < newIndex) {
-                    $event.target.parentElement.parentElement.lastElementChild.firstElementChild.focus();
+                    $event.target.parentElement.parentElement.lastElementChild.children[2].focus();
                 }
                 else {
-                    $event.target.parentElement.parentElement.children[newIndex].firstElementChild.focus();
+                    $event.target.parentElement.parentElement.children[newIndex].children[2].focus();
                 }
                 
                 break;
@@ -1107,7 +1072,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 $event.preventDefault();
             
                 // Focus on first result
-                $event.target.parentElement.parentElement.firstElementChild.firstElementChild.focus();
+                $event.target.parentElement.parentElement.firstElementChild.children[2].focus();
                 
                 break;
             // End
@@ -1115,7 +1080,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 $event.preventDefault();
             
                 // Focus on last result
-                $event.target.parentElement.parentElement.lastElementChild.firstElementChild.focus();
+                $event.target.parentElement.parentElement.lastElementChild.children[2].focus();
                 
                 break;
             // Backspace
@@ -1276,38 +1241,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.working = true;
         queueSync();
     };
-    
-    var syncBookmarksToolbar_Click = function() {
-        // If sync not enabled or user just clicked to disable toolbar sync, return
-        if (!global.SyncEnabled.Get() || !global.SyncBookmarksToolbar.Get()) {
-            return;
-        }
-        
-        // Otherwise, display sync confirmation
-        vm.settings.service.displaySyncBookmarksToolbarConfirmation = true;
-        $timeout(function() {
-            document.querySelector('#btnSyncBookmarksToolbar_Confirm').focus();
-        });
-    };
-    
-    var syncBookmarksToolbar_Confirm = function() {
-        // If sync not enabled, return
-        if (!global.SyncEnabled.Get()) {
-            return;
-        }
-        
-        var syncData = {};
-        syncData.type = (!global.Id.Get()) ? global.SyncType.Push : global.SyncType.Pull;
-        
-        // Hide sync confirmation
-        vm.settings.service.displaySyncBookmarksToolbarConfirmation = false;
-        
-        // Show loading animation
-        vm.working = true;
-        
-        // Start sync with no callback action
-        platform.Sync(vm.sync.asyncChannel, syncData, global.Commands.NoCallback);
-    };
 
     var syncForm_CancelSyncConfirmation_Click = function() {
         // TODO: Ensure any sync messaging or process is cancelled also
@@ -1352,6 +1285,93 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             startSyncing();
         }
 	};
+
+    var syncPanel_DisplayDataUsage_Click = function() {
+        // Get service info and bookmarks sync size
+        $q.all([
+            api.CheckServiceStatus(),
+            bookmarks.SyncSize()
+        ])
+            .then(function(result) {
+                var serviceInfo = result[0];
+                var bookmarksSyncSize = result[1];
+                
+                // Calculate sync data percentage used and display chart 
+                var percentUsed = (bookmarksSyncSize / serviceInfo.maxSyncSize) * 100;
+
+                // Set view model values
+                vm.settings.syncDataUsed = (percentUsed > 100) ? 100 : Math.round(percentUsed);
+                vm.settings.syncDataMax = Math.round(serviceInfo.maxSyncSize / 1024);
+
+                // Display new chart
+                new CircleChart({
+                    $container: document.querySelector('#chart'),
+                    ringProportion: 0.39,
+                    staticTotal: true,
+                    total: 100,
+                    middleCircleColor: '#EDFEFF',
+                    background: '#083039',
+                    definition: [{
+                        color: '#35C6E8', 
+                        value: percentUsed
+                    }]
+                });
+            });
+        
+        // Remove old chart
+        var chart = document.querySelector('#chart > svg');
+        if (!!chart) {
+            chart.remove();
+        }
+
+        vm.settings.syncDataUsed = null;
+        vm.settings.syncDataMax = null;
+        vm.settings.displaySyncDataUsage = true;
+
+        $timeout(function() {
+            document.querySelector('#syncDataUsage-Panel .btn-back').focus();
+        });
+    };
+
+    var syncPanel_DisplaySyncOptions_Click = function() {
+        vm.settings.displaySyncOptions = true;
+
+        $timeout(function() {
+            document.querySelector('#syncOptions-Panel .btn-back').focus();
+        });
+    };
+    
+    var syncPanel_SyncBookmarksToolbar_Click = function() {
+        // If sync not enabled or user just clicked to disable toolbar sync, return
+        if (!global.SyncEnabled.Get() || !global.SyncBookmarksToolbar.Get()) {
+            return;
+        }
+        
+        // Otherwise, display sync confirmation
+        vm.settings.service.displaySyncBookmarksToolbarConfirmation = true;
+        $timeout(function() {
+            document.querySelector('#btnSyncBookmarksToolbar_Confirm').focus();
+        });
+    };
+    
+    var syncPanel_SyncBookmarksToolbar_Confirm = function() {
+        // If sync not enabled, return
+        if (!global.SyncEnabled.Get()) {
+            return;
+        }
+        
+        var syncData = {};
+        syncData.type = (!global.Id.Get()) ? global.SyncType.Push : global.SyncType.Pull;
+        
+        // Hide sync confirmation
+        vm.settings.service.displaySyncBookmarksToolbarConfirmation = false;
+        
+        // Show loading animation
+        vm.working = true;
+        
+        // Start sync with no callback action
+        platform.Sync(vm.sync.asyncChannel, syncData, global.Commands.NoCallback);
+    };
 
     var updateServiceUrlForm_Cancel_Click = function() {
         vm.settings.service.displayUpdateServiceUrlForm = false;

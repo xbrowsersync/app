@@ -219,6 +219,17 @@ body {
         }
     }
 
+    .darken {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        opacity: 0.8;
+        background: $colour-text2;
+    }
+
     .form-control {
         font-size: 1em;
         background-color: $colour-text1; 
@@ -369,7 +380,7 @@ body {
             font-weight: normal;
             border-width: 1px;
             font-size: 1.1em;
-            padding: 6px 12px 8px;
+            padding: 0.5em 1em;
 
             &:not([disabled]):hover {
                 background-color: $colour-text2;
@@ -411,16 +422,19 @@ body {
             color: $colour-link-highlight;
         }
     }
-    
-    .background {
+}
+
+#qr-panel {
+    @extend #loading-panel;
+
+    #qr {
+        cursor: pointer;
         position: absolute;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        left: 0;
-        z-index: 100;
-        opacity: 0.8;
-        background: $colour-text2;
+        z-index: 110;
+        left: 50%;
+        top: 50%;
+        margin: -55px 0 0 -55px;
+        border: solid 10px white;
     }
 }
 
@@ -823,6 +837,7 @@ body {
     
     .tags {
         overflow-y: auto;
+        overflow-x: hidden;
         max-height: 56px;
         margin: 10px 0 15px;
         
@@ -863,7 +878,6 @@ body {
 #settings-panel {
     .well {
         padding: 0;
-        max-height: 20.5em;
         overflow: hidden;
         
         h4 {
@@ -902,28 +916,11 @@ body {
         
         .panel-content {
             padding: 0 20px;
-            height: 2000px;
+            height: 17em;
         }
     }
     
     .sync-panel {
-        a.id {
-            color: $colour-text2;
-            white-space: nowrap;
-
-            .active,
-            &:active,
-            &:focus,
-            &:hover {
-                color: $colour-link-highlight;
-            }
-
-            &:after {
-                content: "\f029";
-                font-family: "FontAwesome";
-            }
-        }
-        
         label {
             font-weight: normal;
             font-size: 0.9em;
@@ -932,21 +929,25 @@ body {
         
         .checkbox {
             margin: 15px 0;
-            font-size: 1.1em;
+            font-size: 1.3em;
+            text-align: center;
             
             #syncBookmarksToolbar {
                 margin-top: 0.2em;
             }
         }
 
-        .data-panel {
-            height: 5.5em;
-            margin-top: 1em;
+        .buttons {
+            margin: 2em 0;
+        }
+        
+        .chart-panel {
             position: relative;
+            margin-top: 15px;
 
-            #data-chart {
-                height: 5.5em;
-                width: 5.5em;
+            #chart {
+                height: 8em;
+                width: 8em;
                 margin: auto;
             }
 
@@ -958,20 +959,28 @@ body {
                 margin: -1.1em 0 0 -2.5em;
 
                 .percent {
-                    font-size: 1.5em;
+                    font-size: 2.5em;
                 }
 
                 .max {
                     display: block;
-                    font-size: 0.7em;
                     line-height: 1em;
                 }
             }
         }
 
-        .qr-panel {
-            height: 5.5em;
-            margin-top: 1em;
+        #id {
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .btn-qrcode {
+            display: block;
+            margin: 5px auto 0;
+
+            i {
+                font-size: 2em;                
+            }
         }
     }
     
@@ -991,7 +1000,7 @@ body {
 
             .status-url-panel {
                 text-align: center;
-                margin-top: 10px;
+                padding-top: 15px;
             }
             
             span.label {
@@ -1001,7 +1010,7 @@ body {
             p.status-message {
                 color: $colour-bg1;
                 margin: 10px 0 0;
-                max-height: 120px;
+                max-height: 7em;
                 overflow-y: auto;
                 font-style: italic;
                 quotes: '\201c' '\201d';

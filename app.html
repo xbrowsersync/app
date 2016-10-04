@@ -17,7 +17,12 @@
                 <h3>{{ vm.platform.Constants.Get(vm.global.Constants.Working_Title) }}</h3>
                 <p>{{ vm.platform.Constants.Get(vm.global.Constants.Working_Message) }}</p>
             </div>
-            <div class="background"></div>
+            <div class="darken"></div>
+        </div>
+
+        <div id="qr-panel" ng-show="vm.settings.displayQRCode">
+            <canvas id="qr" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}" ng-click="vm.settings.displayQRCode = false"></canvas>
+            <div class="darken"></div>
         </div>
         
         <div class="alert animate-fade animate-fade-out" role="alert" ng-show="vm.alert.show" 
@@ -418,52 +423,71 @@
                     <i class="fa fa-arrow-down"></i>
                 </h4>
                 <div class="panel-content" ng-show="vm.settings.visiblePanel === vm.settings.panels.sync">
-                    <div ng-hide="vm.sync.enabled()">
+                    <div id="syncOptions-Panel" class="animate-fade" ng-show="vm.settings.displaySyncOptions && !vm.settings.service.displaySyncBookmarksToolbarConfirmation">
                         <p ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.SyncPanel_Message)"></p>
-                    </div>
-                    <div class="text-center" ng-hide="vm.settings.service.displaySyncBookmarksToolbarConfirmation || vm.settings.service.displayCancelSyncConfirmation">
-                        <div ng-show="vm.sync.enabled()"> 
-                            <label>{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_Id_Label) }}:</label>
-                            <a class="id" href="#" title="{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_DisplayQRCode_Label) }}" ng-click="vm.events.displayQRCode_Click()">
-                                {{ vm.settings.id() }}
-                            </a>
-                            <div class="data-panel animate-fade" ng-hide="vm.settings.displayQRCode">
-                                <div id="data-chart"></div>
-                                <div class="values">
-                                    <span class="percent">{{ vm.settings.syncDataUsed }}%</span>
-                                    <span class="max">/ {{ vm.settings.syncDataMax }}kB</span>
-                                </div>
-                            </div>
-                            <div class="qr-panel animate-fade" ng-show="vm.settings.displayQRCode">
-                                <canvas id="qr"></canvas>
-                            </div>
-                        </div>
                         <div class="checkbox">
                             <label>
                                 <input id="syncBookmarksToolbar" type="checkbox" ng-model="vm.settings.syncBookmarksToolbar" ng-model-options="{ getterSetter: true }" 
-                                 ng-click="vm.events.syncBookmarksToolbar_Click()" tabindex="1" />
+                                 ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Click()" tabindex="1" />
                                 <span>{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_SyncBookmarksToolbar_Label) }}</span>
                             </label>
                         </div>
-                        <button class="btn btn-default" ng-click="vm.events.syncForm_DisableSync_Click()" 
-                                ng-show="vm.sync.enabled()" tabindex="3">
+                        <div class="buttons">
+                            <button type="button" class="btn btn-default btn-back" ng-show="vm.sync.enabled()" ng-click="vm.settings.displaySyncOptions = false" tabindex="2">
+                                {{ vm.platform.Constants.Get(vm.global.Constants.Button_Back_Label) }}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="animate-fade text-center" ng-show="vm.sync.enabled() && (!vm.settings.displaySyncOptions && !vm.settings.displaySyncDataUsage)">
+                        <label>{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_Id_Label) }}:</label>
+                        <span id="id">{{ vm.settings.id() }}</span>
+                        <button class="btn btn-icon btn-qrcode" title="{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_DisplayQRCode_Label) }}" 
+                                ng-click="vm.events.displayQRCode_Click()" tabindex="3">
+                            <i class="fa fa-qrcode" aria-hidden="true"></i>
+                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_DisplayQRCode_Label) }}</span>
+                        </button>
+                        <div class="buttons">
+                            <button class="btn btn-default" ng-click="vm.events.syncPanel_DisplayDataUsage_Click()" tabindex="4">
+                                {{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_DisplayDataUsage_Label) }}
+                            </button>
+                            <button class="btn btn-default" ng-click="vm.events.syncPanel_DisplaySyncOptions_Click()" tabindex="5">
+                                {{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_DisplaySyncOptions_Label) }}
+                            </button>
+                        </div>
+                        <button class="btn btn-default" ng-click="vm.events.syncForm_DisableSync_Click()" tabindex="6">
                             {{ vm.platform.Constants.Get(vm.global.Constants.Button_Sync_Disable_Label) }}
                         </button>
                     </div>
-                    <div class="confirm well well-sm animate-fade" ng-show="vm.settings.service.displaySyncBookmarksToolbarConfirmation">
+                    <div id="syncDataUsage-Panel" class="text-center animate-fade" ng-show="vm.settings.displaySyncDataUsage">
+                        <div>{{ vm.platform.Constants.Get(vm.global.Constants.SyncDataUsagePanel_Message) }}:</div>
+                        <div class="chart-panel">
+                            <div id="chart"></div>
+                            <div class="values" ng-show="!!vm.settings.syncDataUsed">
+                                <span class="percent" ng-class="{ 'text-danger': vm.settings.syncDataUsed >= 90 }">{{ vm.settings.syncDataUsed }}%</span>
+                                <span class="max">/ {{ vm.settings.syncDataMax }}kB</span>
+                            </div>
+                        </div>
+                        <div class="buttons">
+                            <button type="button" class="btn btn-default btn-back" ng-click="vm.settings.displaySyncDataUsage = false" tabindex="2">
+                                {{ vm.platform.Constants.Get(vm.global.Constants.Button_Back_Label) }}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="animate-fade" ng-show="vm.settings.service.displaySyncBookmarksToolbarConfirmation">
                         <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.SyncBookmarksToolbarConfirmation_Message)"></div>
-                        <div class="buttons text-center">
-                            <button id="btnSyncBookmarksToolbar_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncBookmarksToolbar_Confirm()" tabindex="4">
+                        <div class="buttons">
+                            <button id="btnSyncBookmarksToolbar_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Confirm()" tabindex="4">
                                 {{ vm.platform.Constants.Get(vm.global.Constants.Button_Confirm_Label) }}
                             </button>
-                            <button type="button" class="btn btn-default" ng-click="vm.settings.syncBookmarksToolbar(false); vm.settings.service.displaySyncBookmarksToolbarConfirmation = false" tabindex="5">
+                            <button type="button" class="btn btn-default" tabindex="5"
+                                    ng-click="vm.settings.syncBookmarksToolbar(false); vm.settings.service.displaySyncBookmarksToolbarConfirmation = false">
                                 {{ vm.platform.Constants.Get(vm.global.Constants.Button_Deny_Label) }}
                             </button>
                         </div>
                     </div>
-                    <div class="confirm well well-sm animate-fade" ng-show="vm.settings.service.displayCancelSyncConfirmation">
+                    <div class="animate-fade" ng-show="vm.settings.service.displayCancelSyncConfirmation">
                         <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.CancelSyncConfirmation_Message)"></div>
-                        <div class="buttons text-center">
+                        <div class="buttons">
                             <button id="btnCancelSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncForm_CancelSyncConfirmation_Click()" tabindex="4">
                                 {{ vm.platform.Constants.Get(vm.global.Constants.Button_Confirm_Label) }}
                             </button>
