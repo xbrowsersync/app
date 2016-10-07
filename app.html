@@ -584,9 +584,22 @@
                         </div>
                         
                         <div id="restoreForm" class="animate-fade" ng-show="vm.settings.displayRestoreForm && !vm.settings.displayRestoreConfirmation">
-                            <p>{{ vm.platform.Constants.Get(vm.global.Constants.RestoreForm_Message) }}</p>                
-                            <label for="dataToRestore" class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.DataToRestore_Label) }}</label>
-                            <textarea ng-model="vm.settings.dataToRestore" class="form-control" rows="3" tabindex="11"></textarea>
+                            <p>{{ vm.platform.Constants.Get(vm.global.Constants.RestoreForm_Message) }}</p>
+                            <div id="backupContentsPanel">
+                                <label for="dataToRestore" class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.DataToRestore_Label) }}</label>
+                                <textarea ng-model="vm.settings.dataToRestore" class="form-control" rows="3" tabindex="11"></textarea>
+                            </div>
+                            <div id="backupFilePanel">
+                                <div class="buttons">
+                                    <button class="btn btn-default" ng-click="vm.events.backupRestoreForm_SelectBackupFile_Click()" tabindex="11">
+                                        {{ vm.platform.Constants.Get(vm.global.Constants.Button_SelectBackupFile_Label) }}
+                                    </button>
+                                    <p ng-class="{ true: 'text-danger' }[ !vm.settings.dataToRestoreIsValid() ]">
+                                        {{ vm.settings.backupFileName }}
+                                    </p>
+                                </div>
+                                <input id="backupFile" type="file">
+                            </div>
                             <div class="buttons">
                                 <button id="btnRestoreData" class="btn btn-default" ng-disabled="!vm.settings.dataToRestoreIsValid()"
                                         ng-click="vm.events.backupRestoreForm_DisplayRestoreConfirmation_Click()" tabindex="12">

@@ -57,9 +57,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         vm.events = {
             backupRestoreForm_Backup_Click: backupRestoreForm_Backup_Click,
+            backupRestoreForm_BackupFile_Change: backupRestoreForm_BackupFile_Change,
             backupRestoreForm_DisplayRestoreForm_Click: backupRestoreForm_DisplayRestoreForm_Click,
             backupRestoreForm_DisplayRestoreConfirmation_Click: backupRestoreForm_DisplayRestoreConfirmation_Click,
             backupRestoreForm_Restore_Click: backupRestoreForm_Restore_Click,
+            backupRestoreForm_SelectBackupFile_Click: backupRestoreForm_SelectBackupFile_Click,
             bookmarkForm_BookmarkDescription_Change: bookmarkForm_BookmarkDescription_Change,
             bookmarkForm_BookmarkTags_Autocomplete: bookmarkForm_BookmarkTags_Autocomplete,
             bookmarkForm_BookmarkTags_Change: bookmarkForm_BookmarkTags_Change,
@@ -136,6 +138,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         };
         
 		vm.settings = {
+            backupFileName: null,
 			backupRestoreResult: null,
             clientSecretFocus: true,
             dataToRestore: null,
@@ -234,6 +237,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         vm.settings.service.displayUpdateServiceUrlConfirmation = false;
                         vm.settings.service.displayUpdateServiceUrlForm = false;
                         updateServiceUrlForm_SetValidity(true);
+                        document.querySelector('#backupFile').value = null;
+                        vm.settings.backupFileName = null;
                         vm.settings.backupRestoreResult = null;
                         vm.settings.dataToRestore = '';
                         break;
@@ -328,25 +333,19 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		// Export bookmarks
 		bookmarks.Export()
             .then(function(data) {
-				var blob = new Blob(
-					[JSON.stringify(data)], {
-						type: 'application/json' });
-				
 				var date = new Date();
-				var second = ('0' + date.getSeconds()).slice(-2);
 				var minute = ('0' + date.getMinutes()).slice(-2);
 				var hour = ('0' + date.getHours()).slice(-2);
 				var day = ('0' + date.getDate()).slice(-2);
 				var month = ('0' + (date.getMonth() + 1)).slice(-2);
 				var year = date.getFullYear();
-				var dateString = year + month + day + hour + minute + second;
+				var dateString = year + month + day + hour + minute;
 				
 				// Trigger download 
-				var exportUrl = window.URL.createObjectURL(blob);
                 var backupLink = document.getElementById('backupLink');
                 var fileName = 'xBrowserSyncBackup_' + dateString + '.txt';
                 backupLink.setAttribute('download', fileName);
-				backupLink.setAttribute('href', exportUrl);
+				backupLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(data)));
 				backupLink.click();
                 
                 // Display message
@@ -362,9 +361,32 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 				vm.alert.display(errMessage.title, errMessage.message, 'danger');
 			});
 	};
+
+    var backupRestoreForm_BackupFile_Change = function(event) {
+        var files = event.target.files;
+
+        if (files.length > 0) {
+            var file = files[0];
+            vm.settings.backupFileName = file.name;
+            var reader = new FileReader();
+
+            reader.onload = (function(data) {
+                return function(event) {
+                    $scope.$apply(function() {
+                        vm.settings.dataToRestore = event.target.result;
+                    });
+                };
+            })(file);
+
+            // Read the backup file data
+            reader.readAsText(file);
+        }
+    };
     
     var backupRestoreForm_DisplayRestoreForm_Click = function() {
         // Display restore form 
+        document.querySelector('#backupFile').value = null;
+        vm.settings.backupFileName = null;
         vm.settings.backupRestoreResult = null;
         vm.settings.displayRestoreConfirmation = false;
         vm.settings.dataToRestore = '';
@@ -403,6 +425,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Start restore
         restoreData(JSON.parse(data));
 	};
+
+    var backupRestoreForm_SelectBackupFile_Click = function() {
+        document.querySelector('#backupFile').click();
+    };
     
     var bookmarkForm_BookmarkDescription_Change = function() {
         // Limit the bookmark description to the max length

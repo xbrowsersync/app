@@ -131,6 +131,7 @@ xBrowserSync.App.Global = function(platform) {
 			RestoreSuccess_Message: 'restoreSuccess_Message',
 			RestoreForm_Message: 'restoreForm_Message',
 			DataToRestore_Label: 'dataToRestore_Label',
+            Button_SelectBackupFile_Label: 'button_SelectBackupFile_Label',
 			Button_RestoreData_Label: 'button_RestoreData_Label',
 			Button_RestoreData_Invalid_Label: 'button_RestoreData_Invalid_Label',
 			Button_RestoreData_Ready_Label: 'button_RestoreData_Ready_Label',

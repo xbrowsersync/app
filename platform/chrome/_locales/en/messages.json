@@ -188,6 +188,9 @@
 	"dataToRestore_Label" : {
 		"message":  "Paste backup data"
 	},
+	"button_SelectBackupFile_Label" : {
+		"message":  "Select File"
+	},
 	"button_RestoreData_Label" : {
 		"message":  "Restore Data"
 	},

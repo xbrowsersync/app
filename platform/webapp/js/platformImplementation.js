@@ -198,10 +198,13 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 			"message":  "Your data has been restored."
 		},
 		"restoreForm_Message" : {
-			"message":  "Copy the contents of a backup file to restore data."
+			"message":  "Select an xBrowserSync backup file to restore data."
 		},
 		"dataToRestore_Label" : {
 			"message":  "Paste backup data"
+		},
+		"button_SelectBackupFile_Label" : {
+			"message":  "Select File"
 		},
 		"button_RestoreData_Label" : {
 			"message":  "Restore Data"
@@ -237,7 +240,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 			"message":  "Current sync data usage"
 		},
 		"confirmRestore_Sync_Message" : {
-			"message":  "As sync is currently enabled, the data being restored will overwrite your xBrowserSync synced data. To restore data to the local browser only, disable sync before restoring. OK to proceed?"
+			"message":  "The data being restored will overwrite your synced data. OK to proceed?"
 		},
 		"confirmRestore_NoSync_Message" : {
 			"message":  "As sync is currently disabled, the data being restored will overwrite the local browser data. OK to proceed?"
@@ -470,6 +473,9 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 
 		// Turn off auto focus on client secret
 		vm.settings.clientSecretFocus = false;
+
+		// Hook up  
+        document.querySelector('#backupFile').addEventListener('change', vm.events.backupRestoreForm_BackupFile_Change, false);
 
 		// Check for updates regularly
 		bookmarks.CheckForUpdates();

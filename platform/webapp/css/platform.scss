@@ -128,6 +128,8 @@ body {
                 bottom: auto;
                     
                 &.btn-toggle-bookmark {
+                    right: 1.1em;
+                    
                     @media (max-width: $width-tablet) {
                         left: 0;
                         right: auto;
@@ -135,6 +137,16 @@ body {
 
                     i:before {
                         content: "\f02e";
+                    }
+
+                    i:after {
+                        content: "\f067";
+                        font-size: 0.35em;
+                        color: $colour-bg2;
+                        position: relative;
+                        top: -0.9em;
+                        left: -1.4em;
+                        opacity: 1;
                     }
                 }
             }
@@ -224,9 +236,19 @@ body {
 }
 
 #settings-panel {
+    .backup-restore-panel #restoreForm {
+        #backupContentsPanel {
+            display: none;
+        }
+
+        #backupFilePanel {
+            display: block;
+        }
+    }
+    
     .sync-panel {
         .buttons {
-            margin: 1.5em 0;
+            margin: 15px 0;
         }
         
         .checkbox {
@@ -252,12 +274,6 @@ body {
                 .values {
                     margin-top: -1em;
                 }
-            }
-        }
-
-        #id {
-            @media (min-height: $height-iPhone5) and (max-height: $height-iPhone6 - 1) {
-                font-size: 1em;
             }
         }
 
