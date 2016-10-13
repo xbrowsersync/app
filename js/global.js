@@ -23,6 +23,7 @@ xBrowserSync.App.Global = function(platform) {
             }
         },
         ApiVersion: '1.0.x',
+        AppVersion: '1.2.0',
         Bookmarks: {
             DescriptionMaxLength: 500,
             OtherContainerName: '_other_',
@@ -74,13 +75,16 @@ xBrowserSync.App.Global = function(platform) {
             BookmarksOtherTitle: 'bookmarksOtherTitle',
 			TooltipSyncEnabled: 'tooltipSyncEnabled',
 			TooltipWorking: 'tooltipWorking',
-			Button_Settings_Label: 'button_Settings_Label',
+			Button_About_Label: 'button_About_Label',
+            Button_Settings_Label: 'button_Settings_Label',
 			Button_AddBookmark_Label: 'button_AddBookmark_Label',
 			Button_DeleteBookmark_Label: 'button_DeleteBookmark_Label',
             Button_EditBookmark_Label: 'button_EditBookmark_Label',
 			Button_Help_Label: 'button_Help_Label',
 			Button_Next_Label: 'button_Next_Label',
 			Button_Previous_Label: 'button_Previous_Label',
+            AboutPanel_Title: 'aboutPanel_Title',
+            AboutPanel_VersionHistoryLink_Label: 'aboutPanel_VersionHistoryLink_Label',
             IntroPanel1_Message: 'introPanel1_Message',
             IntroPanel2_Message: 'introPanel2_Message',
             IntroPanel3_Message: 'introPanel3_Message',
@@ -235,6 +239,31 @@ xBrowserSync.App.Global = function(platform) {
             Set: function(value) {
                 platform.LocalStorage.Set(
                     'xBrowserSync-disableEventListeners', 
+                    value);
+            }
+        },
+        DisplayAboutOnStartup: {
+            Get: function() {
+                var value;
+                
+                value = platform.LocalStorage.Get(
+                    'xBrowserSync-displayAboutOnStartup');
+                
+                if (!value) {
+                    return false;
+                }
+                else {
+                    if (value === 'true') {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            },
+            Set: function(value) {
+                platform.LocalStorage.Set(
+                    'xBrowserSync-displayAboutOnStartup', 
                     value);
             }
         },

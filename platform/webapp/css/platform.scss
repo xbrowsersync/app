@@ -1,17 +1,20 @@
 @import 'variables.scss';
 
-html, body, .container, #login-panel, #search-panel, #bookmark-panel, #settings-panel {
-    height: 100%;
-}
-
 body {
-    @media (min-height: $height-iPhone5) {
+    @media (min-device-height: $height-iPhone6) {
         font-size: 16px;
     }
-
-    @media (min-height: $height-iPhone6Plus) {
+    
+    @media (min-device-height: $height-iPhone6Plus) {
         font-size: 18px;
-        line-height: 22px;
+    }
+
+    h1 {
+        background-size: 5.5em;
+        
+        @media (min-height: $height-iPhone6) {
+            background-size: 6.5em;
+        }
     }
 
     button.btn {
@@ -57,6 +60,19 @@ body {
     }
 }
 
+#about-panel { 
+    h1 {
+        @media (max-height: $height-iPhone4) {
+            background-size: 45%;
+            background-position: 50% 10%;
+        }
+    }
+    
+    .well .contents {
+        height: 13em;
+    }
+}
+
 #loading-panel .content p {
     display: none;
 }
@@ -69,24 +85,9 @@ body {
     }
     
     .intro-panel {
-        height: 16.5em;
-        
         & > div {
-            @media (min-height: $height-iPhone5) {
+            @media (min-height: $height-iPhone6) {
                 padding: 30px 40px;
-            }
-
-            @media (min-height: $height-iPhone6) {
-                font-size: 1.1em;
-                line-height: 1.3em;
-            }
-        }
-
-        h1 {
-            background-size: 5.5em;
-            
-            @media (min-height: $height-iPhone6) {
-                background-size: 6.5em;
             }
         }
 
@@ -102,14 +103,28 @@ body {
             }
         }
     }
+
+    .secret-form-group {
+        .progress, .progress-bar-background {
+            @media (min-device-height: $height-iPhone5) {
+                height: 41px;
+            }
+
+            @media (min-device-height: $height-iPhone6) {
+                height: 2.65em;
+            }
+            
+            @media (min-device-height: $height-iPhone6Plus) {
+                height: 48px;
+            }
+        }
+    }
 }
 
 #search-panel {
     .header-panel {
         .buttons {
             height: 1.8em;
-            background: url(../img/icon.svg) 50% 2px no-repeat;
-            background-size: 1.6em;
 
             @media (max-width: $height-iPhone4 - 1) {
                 position: static;
@@ -127,6 +142,12 @@ body {
             button {
                 bottom: auto;
                     
+                &.btn-about {
+                    @media (max-width: $height-iPhone4 - 1) {
+                        display: block;
+                    }
+                }
+
                 &.btn-toggle-bookmark {
                     right: 1.1em;
                     
@@ -153,7 +174,7 @@ body {
         }
 
         .search-form {
-            @media (max-width: $width-tablet) {
+            @media (max-width: $width-tablet - 1) {
                 width: 100%;
             }
         }
@@ -161,16 +182,7 @@ body {
 
     .search-results-panel {
         margin-top: 15px;
-        max-height: calc(100% - 7em);
-
-        @media (min-height: $height-iPhone5) {
-            max-height: calc(100% - 6.5em);
-        }
-
-        @media (min-height: $height-iPad) {
-            max-height: calc(100% - 4em);
-        }
-
+        
         .list-group-item {
             margin: 0 0 15px 0;
 
@@ -190,10 +202,6 @@ body {
                 display: none!important;
             }
 
-            .buttons {
-                margin-top: 0.5em;
-            }
-
             .overlay {
                 display: block;
             }
@@ -204,24 +212,14 @@ body {
         display: block;
 
         @media (min-width: $height-iPhone4) and (orientation:landscape) {
-            background-size: 30%;
-            margin-top: 7em;
+            background-size: 20%;
+            margin-top: 5%;
         }
     }
 }
 
 #bookmark-panel {
-    textarea {
-        height: 13em;
-    }
-    
     .tags {
-        max-height: 4.5em;
-
-        @media (min-height: $height-iPhone6) {
-            max-height: 9.5em;
-        }
-
         .label {
             font-size: 1em;
             padding: 12px 15px;
@@ -245,7 +243,7 @@ body {
             display: block;
         }
     }
-    
+
     .sync-panel {
         .buttons {
             margin: 15px 0;
@@ -281,8 +279,45 @@ body {
             margin-bottom: 0;
         }
     }
+}
 
-    .well .panel-content {
-        height: 15em;
+
+/* Heights */
+
+html, body, .container, .view {
+    height: 100%;
+}
+
+#bookmark-panel {
+    textarea {
+        height: 14em;
     }
+
+    .tags {
+        max-height: 5.5em;
+
+        @media (min-height: $height-iPhone6) {
+            max-height: 9.5em;
+        }
+    }
+}
+
+#login-panel .intro-panel {
+    height: 18em;
+}
+
+#search-panel .search-results-panel {
+    max-height: calc(100% - 7em);
+
+    @media (min-height: $height-iPhone5) {
+        max-height: calc(100% - 6.5em);
+    }
+
+    @media (min-height: $height-iPad) {
+        max-height: calc(100% - 4em);
+    }
+}
+
+#settings-panel .well .panel-content {
+    height: 16.7em;
 }

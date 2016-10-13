@@ -35,6 +35,12 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		"button_Help_Label": {
 			"message": "Display help"
 		},
+		"aboutPanel_Title" : {
+			"message": "What's new in version"
+		},
+		"aboutPanel_VersionHistoryLink_Label" : {
+			"message": "Full release history"
+		},
 		"button_Next_Label": {
 			"message": "Next"
 		},
@@ -42,46 +48,40 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 			"message": "Previous"
 		},
 		"introPanel1_Message": {
-			"message": "<h4>Welcome</h4><p>Thanks for using xBrowserSync!</p><p>Have a read through the following pages to help you get started. Should you require futher help, check out the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
+			"message": "<h4>Welcome</h4><p>Thanks for using xBrowserSync - browser syncing as it should be: secure, anonymous and free!</p><p>Have a read through the following pages to help you get started. Should you require futher help, check out the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
 		},
 		"introPanel2_Message": {
-			"message": "<h4>Your secret word</h4><p>To begin, enter a secret word or phrase that will be used to encrypt and decrypt your browser data.</p><p>Make it strong to protect your data but also memorable, if you forget it we can't remind you and you won't be able to decrypt your data without it.</p>"
+			"message": "<h4>Creating a new sync</h4><p>The xBrowserSync app allows you to access a sync created using the xBrowserSync <a href='https://chrome.google.com/webstore/detail/xbrowsersync/lcbjdhceifofjlpecfpeimnnphbcjgnc' class='new-tab'>Chrome extension</a>. If you haven't already created a sync, download the extension and create a new sync before continuing.</p>"
 		},
 		"introPanel3_Message": {
-			"message": "<h4>Syncing for the first time</h4><p>Once you've entered your secret word or phrase, you are ready to create a new sync. Just click the Sync button and your browser data will be encrypted before being synced to the xBrowserSync service.</p><p>And that's it, you're synced! Any future changes will be synced automatically in the background.</p>"
+			"message": "<h4>Accessing your synced data</h4><p>Enter your xBrowserSync ID along with the secret word or phrase used when you created the sync.</p><p>Avoid typing the ID by hand by tapping on the camera icon and scanning the QR code for your sync. You can view the QR code by opening the Chrome extension (make sure you're synced) and in the Settings panel click on the QR code icon below your ID.</p>"
 		},
 		"introPanel4_Message": {
-			"message": "<h4>Your xBrowserSync ID</h4><p>Every time you create a new sync you are given a new xBrowserSync ID, which can be found via the Settings panel.</p><p>You can use this ID along with your corresponding secret word or phrase to retrieve your synced data or sync on a different device.</p>"
+			"message": "<h4>Searching your bookmarks</h4><p>Simply type some keywords or a URL to search your synced bookmarks.</p><p>You can also modify or delete a bookmark from the search results by long pressing on the bookmark.</p>"
 		},
 		"introPanel5_Message": {
-			"message": "<h4>Syncing to another service</h4><p>When creating new syncs, by default your data is synced to the official xBrowserSync service, but you can change the service you sync to via the Settings panel.</p><p>You may do this because the service is full, offline, or perhaps you would like to <a href='https://github.com/xBrowserSync/API' class='new-tab'>run your own xBrowserSync service</a> to sync your data to.</p>"
+			"message": "<h4>Adding a bookmark</h4><p>You can add a new bookmark by clicking on the bookmark icon above the search box.</p><p>Include a description which will be displayed in search results, and add tags to help find the bookmark more easily when searching.</p>"
 		},
 		"introPanel6_Message": {
-			"message": "<h4>New service, new ID</h4><p>IDs are service-specific. If you have created a sync and received an xBrowserSync ID with one service it cannot be used with another.</p><p>Whenever you change services you must create a new sync. You'll then receive a new ID for use with that service.</p>"
+			"message": "<h4>Checking service status</h4><p>If you are having problems accessing or updating your synced data, it could be due to problems with the xBrowserSync service you are syncing to.</p><p>Open the Settings panel and check the Service tab to view the current service status.</p>"
 		},
 		"introPanel7_Message": {
-			"message": "<h4>Use it or lose it</h4><p>Service space is limited. If you do not use xBrowserSync for an extended period, any syncs you have created may be deleted to make room for others.</p><p>If you're synced, whenever you have your browser open xBrowserSync will sync regularly in the background which will prevent your sync from being deleted.</p>"
+			"message": "<h4>Switching to another service</h4><p>If you would like to switch to a different xBrowserSync service, you can update the service URL in the Settings panel, Service tab (remember you will need to have created a sync on the service using the <a href='https://chrome.google.com/webstore/detail/xbrowsersync/lcbjdhceifofjlpecfpeimnnphbcjgnc' class='new-tab'>Chrome extension</a> to access the sync via the app).</p><p>You can view all of the available public xBrowserSync services on the <a href='https://www.xbrowsersync.org/#status' class='new-tab'>xBrowserSync website</a>.</p>"
 		},
 		"introPanel8_Message": {
-			"message": "<h4>Searching your bookmarks</h4><p>Once synced, all of your bookmarks will be available in the local browser which can be searched easily on the Search panel.</p><p>From there you can also modify or delete existing bookmarks. Just hover the mouse over a specific search result and click the pen icon to edit the bookmark.</p>"
+			"message": "<h4>Use it or lose it</h4><p>Service space is limited. If you do not use xBrowserSync for an extended period, any syncs you have created may be deleted to make room for others.</p><p>If you're synced, xBrowserSync will check for changes regularly in the background which will prevent your sync from being deleted.</p>"
 		},
 		"introPanel9_Message": {
-			"message": "<h4>Native features supported</h4><p>Feel free to use your browser's native bookmarking features whilst synced, any changes you make there will be synced by xBrowserSync automatically.</p><p>If you have spent time organising your bookmarks don't worry, xBrowserSync will respect your existing bookmarks hierarchy!</p>"
+			"message": "<h4>Run your own service</h4><p>If you need to sync more data or are concerned about syncing to public servers, it's easy to run your own xBrowserSync service on your web server. Check out the <a href='https://github.com/xBrowserSync/API' class='new-tab'>API Git Hub repo</a> for more information.</p><p>If you would like to make your service available to others to sync to, <a href='https://www.xbrowsersync.org/#contact' class='new-tab'>let us know</a> the URL of your service so it can be added to the list of public xBrowserSync services.</p>"
 		},
 		"introPanel10_Message": {
-			"message": "<h4>Adding a bookmark</h4><p>You can add the current page as a bookmark (or modify it if it is bookmarked already) by clicking on the bookmark icon in the Search panel.</p><p>Include a description which will be displayed in search results, and add tags to help find the bookmark more easily when searching.</p>"
+			"message": "<h4>Remember to back up</h4><p>xBrowserSync services are run voluntarily, plus servers can break and go wrong so please look after your data and make sure to keep backups.</p><p>Open the Settings panel and in the Back up and restore tab you can back up your unencrypted synced data to a local file, which can then restored at a later date should you need to.</p>"
 		},
 		"introPanel11_Message": {
-			"message": "<h4>Remember to back up</h4><p>Back up and restore for your browser data is available via the Settings panel.</p><p>Back up saves your unencrypted browser data to a text file. Restore syncs your backed up data. If you are not currently synced, only local browser data will be affected.</p>"
-		},
-		"introPanel12_Message": {
-			"message": "<h4>When switching services</h4><p>Back up your synced data using the first service before creating a new sync with the second, then restore your backed up data to the second service.</p><p>This will ensure that any bookmark descriptions and tags that are not supported natively by your browser are also synced.</p>"
-		},
-		"introPanel13_Message": {
-			"message": "<h4>Shortcut xBrowserSync</h4><p>To access xBrowserSync quickly, assign a keyboard shortcut to activate the extension then just start typing to search your bookmarks.</p><p>Browse to chrome://extensions/, the keyboard shortcuts option is at the bottom of the page."
-		},
-		"introPanel14_Message": {
 			"message": "<h4>Noticed an issue?</h4><p>If you've found a bug in xBrowserSync or would like to request a new feature, head on over to Git Hub and <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>submit an issue</a>.</p><p>Calling all coders! If you would like to help make xBrowserSync better, go ahead and fork the <a href='https://github.com/xBrowserSync/App' class='new-tab'>xBrowserSync Git Hub repo</a> and submit a pull request.</p>"
+		},
+		"button_About_Label": {
+			"message": "About"
 		},
 		"button_Settings_Label": {
 			"message": "Settings"
@@ -198,7 +198,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 			"message":  "Your data has been restored."
 		},
 		"restoreForm_Message" : {
-			"message":  "Select an xBrowserSync backup file to restore data."
+			"message":  "Select an xBrowserSync backup file to restore."
 		},
 		"dataToRestore_Label" : {
 			"message":  "Paste backup data"

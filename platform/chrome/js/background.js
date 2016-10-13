@@ -131,15 +131,22 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 		}
 	};
 	
-	var install = function() {
-		// Clear alarm
-		chrome.alarms.clear(global.Alarm.Name.Get(), function() {
-			// Create alarm
-			chrome.alarms.create(
-				global.Alarm.Name.Get(), {
-					periodInMinutes: global.Alarm.Period.Get()
+	var install = function(details) {
+		switch(details.reason) {
+			case "install":
+				// On install, register alarm
+				chrome.alarms.clear(global.Alarm.Name.Get(), function() {
+					chrome.alarms.create(
+						global.Alarm.Name.Get(), {
+							periodInMinutes: global.Alarm.Period.Get()
+						});
 				});
-		});
+				break;
+			case "update":
+				// If extension has been updated, display about panel 
+				global.DisplayAboutOnStartup.Set(true);
+				break;
+		};
 	};
 	
 	var listenForMessages = function(port) {

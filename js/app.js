@@ -56,6 +56,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         };
         
         vm.events = {
+            aboutPanel_Back_Click: aboutPanel_Back_Click,
             backupRestoreForm_Backup_Click: backupRestoreForm_Backup_Click,
             backupRestoreForm_BackupFile_Change: backupRestoreForm_BackupFile_Change,
             backupRestoreForm_DisplayRestoreForm_Click: backupRestoreForm_DisplayRestoreForm_Click,
@@ -203,8 +204,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		};
 
 		vm.view = {
-			current: (global.SyncEnabled.Get()) ? 1 : 0,
-			change: function(view) {
+			current: (function() {
+                if (global.DisplayAboutOnStartup.Get()) {
+                    return 4;
+                }
+
+                return global.SyncEnabled.Get() ? 1 : 0;
+            }()),
+            change: function(view) {
 				vm.alert.show = false;
                 vm.working = false;
                 
@@ -243,8 +250,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         vm.settings.dataToRestore = '';
                         break;
                     case vm.view.views.login:
-                        /* falls through */
-                    default:
                         if (!vm.introduction.displayIntro()) {
                             vm.introduction.displayPanel();
                         }
@@ -295,8 +300,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
                         break;
                     case vm.view.views.login:
-                        /* falls through */
-                    default:
                         if (!!vm.settings.clientSecretFocus) {
                             $timeout(function() {
                                 document.querySelector('input[name=txtClientSecret]').select();
@@ -315,7 +318,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.view.change(vm.view.views.login);
                 }
             },
-            views: { login: 0, search: 1, bookmark: 2, settings: 3 }
+            views: { login: 0, search: 1, bookmark: 2, settings: 3, about: 4 }
 		};
         
         vm.working = false;
@@ -329,7 +332,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
  * Private functions
  * ------------------------------------------------------------------------------------ */
 	
-	var backupRestoreForm_Backup_Click = function() {
+	var aboutPanel_Back_Click = function() {
+        // Turn off display about on startup
+        global.DisplayAboutOnStartup.Set(false);
+        vm.view.displayMainView();
+    };
+    
+    var backupRestoreForm_Backup_Click = function() {
 		// Export bookmarks
 		bookmarks.Export()
             .then(function(data) {
@@ -1342,6 +1351,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         value: percentUsed
                     }]
                 });
+            })
+            .catch(function(err) {
+                // Display alert
+				var errMessage = utility.GetErrorMessageFromException(err);
+				vm.alert.display(errMessage.title, errMessage.message, 'danger');
             });
         
         // Remove old chart

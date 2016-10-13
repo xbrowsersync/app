@@ -20,8 +20,8 @@
             <div class="darken"></div>
         </div>
 
-        <div id="qr-panel" ng-show="vm.settings.displayQRCode">
-            <canvas id="qr" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}" ng-click="vm.settings.displayQRCode = false"></canvas>
+        <div id="qr-panel" ng-show="vm.settings.displayQRCode" ng-click="vm.settings.displayQRCode = false">
+            <canvas id="qr" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}"></canvas>
             <div class="darken"></div>
         </div>
         
@@ -37,6 +37,35 @@
             </button>
             <h4 ng-bind-html="vm.alert.title"></h4>
             <p ng-bind-html="vm.alert.message"></p>
+        </div>
+        
+        <div id="about-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.about">
+            <h1 class="animate-fade-long">
+                <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Title) }}</span>
+            </h1>
+            <div class="bottom">
+                <div class="well well-sm dark">
+                    <div class="contents">
+                        <h4>{{ vm.platform.Constants.Get(vm.global.Constants.AboutPanel_Title) }} {{ vm.global.AppVersion }}</h4>
+                        <ul>
+                            <li>[Added] Support for mobile apps. xBrowserSync core code has been updated to support porting directly to native mobile apps. Expect releases for iOS and Android soon.</li>
+                            <li>[Added] Support for Firefox. xBrowserSync now works with Firefox's new WebExtensions browser extension API. However, Mozilla are still in the process of adding support for the full API used by Chrome and there are gaps, some of which xBrowserSync depends on. Once support has been added (soon hopefully) xBrowserSync will be released for Firefox.</li>
+                            <li>[Added] Data usage chart. Check how much of your allocated sync data you are currently using in Settings > Sync > Data Usage.</li>
+                            <li>[Fixed] QR code now displayed using canvas, much clearer at higher resolutions.</li>
+                        </ul>
+                        <p class="text-center">
+                            <a href="https://github.com/xBrowserSync/App/releases" class="new-tab">
+                                {{ vm.platform.Constants.Get(vm.global.Constants.AboutPanel_VersionHistoryLink_Label) }}
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button type="button" class="btn btn-default btn-back" ng-click="vm.events.aboutPanel_Back_Click()" tabindex="1">
+                        {{ vm.platform.Constants.Get(vm.global.Constants.Button_Back_Label) }}
+                    </button>
+                </div>
+            </div>
         </div>
         
         <div id="login-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.login">
@@ -294,7 +323,10 @@
                         <i class="fa" aria-hidden="true"></i>
                         <span class="sr-only">{{ vm.bookmark.active ? vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) : vm.platform.Constants.Get(vm.global.Constants.Button_AddBookmark_Label) }}</span>
                     </button>
-                    <button class="btn btn-icon btn-settings" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Settings_Label) }}" ng-click="vm.view.change(vm.view.views.settings)" tabindex="1001">
+                    <button class="btn btn-icon btn-about" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_About_Label) }}" ng-click="vm.view.change(vm.view.views.about)" tabindex="1001">
+                        <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_About_Label) }}</span>
+                    </button>
+                    <button class="btn btn-icon btn-settings" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Settings_Label) }}" ng-click="vm.view.change(vm.view.views.settings)" tabindex="1002">
                         <i class="fa fa-cog" aria-hidden="true"></i>
                         <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Settings_Label) }}</span>
                     </button>
