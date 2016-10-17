@@ -76,6 +76,32 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             displayQRCode_Click: displayQRCode_Click,
             handleSyncResponse: handleSyncResponse,
             introPanel_ShowHelp_Click: introPanel_ShowHelp_Click,
+            introPanel1_Next_Click: introPanel1_Next_Click,
+            introPanel2_Next_Click: introPanel2_Next_Click,
+            introPanel2_Prev_Click: introPanel2_Prev_Click,
+            introPanel3_Next_Click: introPanel3_Next_Click,
+            introPanel3_Prev_Click: introPanel3_Prev_Click,
+            introPanel4_Next_Click: introPanel4_Next_Click,
+            introPanel4_Prev_Click: introPanel4_Prev_Click,
+            introPanel5_Next_Click: introPanel5_Next_Click,
+            introPanel5_Prev_Click: introPanel5_Prev_Click,
+            introPanel6_Next_Click: introPanel6_Next_Click,
+            introPanel6_Prev_Click: introPanel6_Prev_Click,
+            introPanel7_Next_Click: introPanel7_Next_Click,
+            introPanel7_Prev_Click: introPanel7_Prev_Click,
+            introPanel8_Next_Click: introPanel8_Next_Click,
+            introPanel8_Prev_Click: introPanel8_Prev_Click,
+            introPanel9_Next_Click: introPanel9_Next_Click,
+            introPanel9_Prev_Click: introPanel9_Prev_Click,
+            introPanel10_Next_Click: introPanel10_Next_Click,
+            introPanel10_Prev_Click: introPanel10_Prev_Click,
+            introPanel11_Next_Click: introPanel11_Next_Click,
+            introPanel11_Prev_Click: introPanel11_Prev_Click,
+            introPanel12_Next_Click: introPanel12_Next_Click,
+            introPanel12_Prev_Click: introPanel12_Prev_Click,
+            introPanel13_Next_Click: introPanel13_Next_Click,
+            introPanel13_Prev_Click: introPanel13_Prev_Click,
+            introPanel14_Prev_Click: introPanel14_Prev_Click,
             openUrl: openUrl,
             queueSync: queueSync,
             searchForm_Clear_Click: searchForm_Clear_Click,
@@ -854,6 +880,110 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         $timeout(function() {
             vm.introduction.displayPanel(1);
         }, 500);
+    };
+
+    var introPanel1_Next_Click = function() {
+        vm.introduction.displayPanel(2);
+    };
+
+    var introPanel2_Next_Click = function() {
+        vm.introduction.displayPanel(3);
+    };
+
+    var introPanel2_Prev_Click = function() {
+        vm.introduction.displayPanel(1);
+    };
+
+    var introPanel3_Next_Click = function() {
+        vm.introduction.displayPanel(4);
+    };
+
+    var introPanel3_Prev_Click = function() {
+        vm.introduction.displayPanel(2);
+    };
+
+    var introPanel4_Next_Click = function() {
+        vm.introduction.displayPanel(5);
+    };
+
+    var introPanel4_Prev_Click = function() {
+        vm.introduction.displayPanel(3);
+    };
+
+    var introPanel5_Next_Click = function() {
+        vm.introduction.displayPanel(6);
+    };
+
+    var introPanel5_Prev_Click = function() {
+        vm.introduction.displayPanel(4);
+    };
+
+    var introPanel6_Next_Click = function() {
+        vm.introduction.displayPanel(7);
+    };
+
+    var introPanel6_Prev_Click = function() {
+        vm.introduction.displayPanel(5);
+    };
+
+    var introPanel7_Next_Click = function() {
+        vm.introduction.displayPanel(8);
+    };
+
+    var introPanel7_Prev_Click = function() {
+        vm.introduction.displayPanel(6);
+    };
+
+    var introPanel8_Next_Click = function() {
+        vm.introduction.displayPanel(9);
+    };
+
+    var introPanel8_Prev_Click = function() {
+        vm.introduction.displayPanel(7);
+    };
+
+    var introPanel9_Next_Click = function() {
+        vm.introduction.displayPanel(10);
+    };
+
+    var introPanel9_Prev_Click = function() {
+        vm.introduction.displayPanel(8);
+    };
+
+    var introPanel10_Next_Click = function() {
+        vm.introduction.displayPanel(11);
+    };
+
+    var introPanel10_Prev_Click = function() {
+        vm.introduction.displayPanel(9);
+    };
+
+    var introPanel11_Next_Click = function() {
+        vm.introduction.displayPanel(12);
+    };
+
+    var introPanel11_Prev_Click = function() {
+        vm.introduction.displayPanel(10);
+    };
+
+    var introPanel12_Next_Click = function() {
+        vm.introduction.displayPanel(13);
+    };
+
+    var introPanel12_Prev_Click = function() {
+        vm.introduction.displayPanel(11);
+    };
+
+    var introPanel13_Next_Click = function() {
+        vm.introduction.displayPanel(14);
+    };
+
+    var introPanel13_Prev_Click = function() {
+        vm.introduction.displayPanel(12);
+    };
+
+    var introPanel14_Prev_Click = function() {
+        vm.introduction.displayPanel(13);
     };
     
     var openUrl = function(event, url) {

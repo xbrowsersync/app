@@ -89,7 +89,7 @@ body {
                 border-radius: $border-radius;
                 transition: all, ease-in, 0.2s;
                 box-shadow: none;
-                padding: 6px 15px;
+                padding: 6px 15px 7px;
                 
                 &:not([disabled]):hover {
                     background-color: $colour-text1;

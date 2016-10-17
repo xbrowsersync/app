@@ -54,7 +54,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 			"message": "<h4>Creating a new sync</h4><p>The xBrowserSync app allows you to access a sync created using the xBrowserSync <a href='https://chrome.google.com/webstore/detail/xbrowsersync/lcbjdhceifofjlpecfpeimnnphbcjgnc' class='new-tab'>Chrome extension</a>. If you haven't already created a sync, download the extension and create a new sync before continuing.</p>"
 		},
 		"introPanel3_Message": {
-			"message": "<h4>Accessing your synced data</h4><p>Enter your xBrowserSync ID along with the secret word or phrase used when you created the sync.</p><p>Avoid typing the ID by hand by tapping on the camera icon and scanning the QR code for your sync. You can view the QR code by opening the Chrome extension (make sure you're synced) and in the Settings panel click on the QR code icon below your ID.</p>"
+			"message": "<h4>Accessing your synced data</h4><p>Enter your xBrowserSync ID along with the secret word or phrase used when you created the sync.</p><p>Avoid typing your ID by hand by tapping on the camera icon and scanning the QR code for your sync. You can view the QR code by opening the Chrome extension (make sure you're synced) and in the Settings panel click on the QR code icon below your ID.</p>"
 		},
 		"introPanel4_Message": {
 			"message": "<h4>Searching your bookmarks</h4><p>Simply type some keywords or a URL to search your synced bookmarks.</p><p>You can also modify or delete a bookmark from the search results by long pressing on the bookmark.</p>"
@@ -78,6 +78,15 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 			"message": "<h4>Remember to back up</h4><p>xBrowserSync services are run voluntarily, plus servers can break and go wrong so please look after your data and make sure to keep backups.</p><p>Open the Settings panel and in the Back up and restore tab you can back up your unencrypted synced data to a local file, which can then restored at a later date should you need to.</p>"
 		},
 		"introPanel11_Message": {
+			"message": ""
+		},
+		"introPanel12_Message": {
+			"message": ""
+		},
+		"introPanel13_Message": {
+			"message": ""
+		},
+		"introPanel14_Message": {
 			"message": "<h4>Noticed an issue?</h4><p>If you've found a bug in xBrowserSync or would like to request a new feature, head on over to Git Hub and <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>submit an issue</a>.</p><p>Calling all coders! If you would like to help make xBrowserSync better, go ahead and fork the <a href='https://github.com/xBrowserSync/App' class='new-tab'>xBrowserSync Git Hub repo</a> and submit a pull request.</p>"
 		},
 		"button_About_Label": {
@@ -219,7 +228,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 			"message":  "Sync"
 		},
 		"syncPanel_Message" : {
-			"message":  "Disable syncing changes to the bookmarks bar if you want to sync your bookmarks to multiple browsers but prefer their bookmarks bars to display different links."
+			"message":  "<p>Your sync settings will be displayed here once you are synced.</p><p>To sync. return to the Login panel and enter your xBrowserSync ID and secret word or phrase.</p>"
 		},
 		"syncPanel_Id_Label" : {
 			"message":  "Your xBrowserSync ID"
@@ -474,8 +483,16 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		// Turn off auto focus on client secret
 		vm.settings.clientSecretFocus = false;
 
-		// Hook up  
+		// Hook up back up file select event
         document.querySelector('#backupFile').addEventListener('change', vm.events.backupRestoreForm_BackupFile_Change, false);
+
+		// Set intro panel button events
+		vm.events.introPanel10_Next_Click = function() {
+			vm.introduction.displayPanel(14);
+		};
+		vm.events.introPanel14_Prev_Click = function() {
+			vm.introduction.displayPanel(10);
+		};
 
 		// Check for updates regularly
 		bookmarks.CheckForUpdates();

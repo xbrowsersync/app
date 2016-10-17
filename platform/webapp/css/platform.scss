@@ -245,14 +245,16 @@ body {
     }
 
     .sync-panel {
+        .btn-syncOptions {
+            display: none;
+        }
+        
         .buttons {
             margin: 15px 0;
         }
         
         .checkbox {
-            @media (max-height: $height-iPhone5) {
-                margin: 10px 0;
-            }
+            display: none;
         }
         
         .chart-panel {

@@ -74,7 +74,7 @@
 
 .animate-fade {
     &.ng-hide {
-        opacity: 0;
+        opacity: 0!important;
     }
     
     &.ng-hide-remove {
@@ -84,7 +84,7 @@
 
 .animate-fade-out {
     &.ng-hide {
-        opacity: 0;
+        opacity: 0!important;
     }
     
     &.ng-hide-add {
@@ -96,7 +96,7 @@
     transition: opacity, linear, 0.7s;
     
     &.ng-hide {
-        opacity: 0;
+        opacity: 0!important;
     }
     
     &.ng-hide-add {

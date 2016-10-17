@@ -52,6 +52,7 @@
                             <li>[Added] Support for Firefox. xBrowserSync now works with Firefox's new WebExtensions browser extension API. However, Mozilla are still in the process of adding support for the full API used by Chrome and there are gaps, some of which xBrowserSync depends on. Once support has been added (soon hopefully) xBrowserSync will be released for Firefox.</li>
                             <li>[Added] Data usage chart. Check how much of your allocated sync data you are currently using in Settings > Sync > Data Usage.</li>
                             <li>[Fixed] QR code now displayed using canvas, much clearer at higher resolutions.</li>
+                            <li>[Added] About panel (this) to display latest changes when a new version is installed.</li>
                         </ul>
                         <p class="text-center">
                             <a href="https://github.com/xBrowserSync/App/releases" class="new-tab">
@@ -86,188 +87,188 @@
                     <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Title) }}</span>
                 </h1>
                 <div id="intro-panel-1" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 1" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.introduction.displayPanel(2)">
+                     hm-swipeleft="vm.events.introPanel1_Next_Click()">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel1_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.introduction.displayPanel(2)">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel1_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-2" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 2" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.introduction.displayPanel(3)" hm-swiperight="vm.introduction.displayPanel(1)">
+                     hm-swipeleft="vm.events.introPanel2_Next_Click()" hm-swiperight="vm.events.introPanel2_Prev_Click()">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel2_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(1)">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel2_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.introduction.displayPanel(3)">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel2_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-3" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 3" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.introduction.displayPanel(4)" hm-swiperight="vm.introduction.displayPanel(2)">
+                     hm-swipeleft="vm.events.introPanel3_Next_Click()" hm-swiperight="vm.events.introPanel3_Prev_Click()">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel3_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(2)">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel3_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.introduction.displayPanel(4)">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel3_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-4" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 4" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.introduction.displayPanel(5)" hm-swiperight="vm.introduction.displayPanel(3)">
+                     hm-swipeleft="vm.events.introPanel4_Next_Click()" hm-swiperight="vm.events.introPanel4_Prev_Click()">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel4_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(3)">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel4_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.introduction.displayPanel(5)">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel4_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-5" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 5" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.introduction.displayPanel(6)" hm-swiperight="vm.introduction.displayPanel(4)">
+                     hm-swipeleft="vm.events.introPanel5_Next_Click()" hm-swiperight="vm.events.introPanel5_Prev_Click()">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel5_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(4)">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel5_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.introduction.displayPanel(6)">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel5_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-6" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 6" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.introduction.displayPanel(7)" hm-swiperight="vm.introduction.displayPanel(5)">
+                     hm-swipeleft="vm.events.introPanel6_Next_Click()" hm-swiperight="vm.events.introPanel6_Prev_Click()">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel6_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(5)">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel6_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.introduction.displayPanel(7)">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel6_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-7" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 7" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                    hm-swipeleft="vm.introduction.displayPanel(8)" hm-swiperight="vm.introduction.displayPanel(6)">
+                    hm-swipeleft="vm.events.introPanel7_Next_Click()" hm-swiperight="vm.events.introPanel7_Prev_Click()">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel7_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(6)">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel7_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.introduction.displayPanel(8)">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel7_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-8" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 8" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.introduction.displayPanel(9)" hm-swiperight="vm.introduction.displayPanel(7)">
+                     hm-swipeleft="vm.events.introPanel8_Next_Click()" hm-swiperight="vm.events.introPanel8_Prev_Click()">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel8_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(7)">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel8_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.introduction.displayPanel(9)">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel8_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-9" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 9" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.introduction.displayPanel(10)" hm-swiperight="vm.introduction.displayPanel(8)">
+                     hm-swipeleft="vm.events.introPanel9_Next_Click()" hm-swiperight="vm.events.introPanel9_Prev_Click()">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel9_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(8)">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel9_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.introduction.displayPanel(10)">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel9_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-10" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 10" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.introduction.displayPanel(11)" hm-swiperight="vm.introduction.displayPanel(9)">
+                     hm-swipeleft="vm.events.introPanel10_Next_Click()" hm-swiperight="vm.events.introPanel10_Prev_Click()">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel10_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(9)">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel10_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.introduction.displayPanel(11)">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel10_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-11" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 11" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.introduction.displayPanel(12)" hm-swiperight="vm.introduction.displayPanel(10)">
+                     hm-swipeleft="vm.events.introPanel11_Next_Click()" hm-swiperight="vm.events.introPanel11_Prev_Click()">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel11_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(10)">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel11_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.introduction.displayPanel(12)">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel11_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-12" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 12" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.introduction.displayPanel(13)" hm-swiperight="vm.introduction.displayPanel(11)">
+                     hm-swipeleft="vm.events.introPanel12_Next_Click()" hm-swiperight="vm.events.introPanel12_Prev_Click()">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel12_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(11)">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel12_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.introduction.displayPanel(13)">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel12_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-13" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 13" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.introduction.displayPanel(14)" hm-swiperight="vm.introduction.displayPanel(12)">
+                     hm-swipeleft="vm.events.introPanel13_Next_Click()" hm-swiperight="vm.events.introPanel13_Prev_Click()">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel13_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(12)">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel13_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.introduction.displayPanel(14)">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel13_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-14" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 14" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swiperight="vm.introduction.displayPanel(13)">
+                     hm-swiperight="vm.events.introPanel14_Prev_Click()">
                     <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel14_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.introduction.displayPanel(13)">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel14_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
@@ -350,13 +351,13 @@
                 </h4>
                 <div class="list-group" ng-show="vm.search.results.length > 0">
                     <div class="list-group-item" ng-repeat="result in vm.search.results track by result.id">
-                        <div class="menu">
+                        <div class="menu" hm-tap="vm.events.searchForm_SelectBookmark_Press($event)">
                             <div class="buttons">
-                                <button class="btn btn-icon" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) }}" ng-click="vm.events.searchForm_UpdateBookmark_Click(result)">
+                                <button class="btn btn-icon" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) }}" hm-tap="vm.events.searchForm_UpdateBookmark_Click(result)">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                     <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) }}</span>
                                 </button>
-                                <button class="btn btn-icon btn-delete-bookmark" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_DeleteBookmark_Label) }}" ng-click="vm.events.searchForm_DeleteBookmark_Click($event, result)">
+                                <button class="btn btn-icon btn-delete-bookmark" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_DeleteBookmark_Label) }}" hm-tap="vm.events.searchForm_DeleteBookmark_Click($event, result)">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                     <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_DeleteBookmark_Label) }}</span>
                                 </button>
@@ -377,7 +378,7 @@
                     </div>
                 </div>
             </div>
-            <div class="search-panel-background" ng-show="!vm.search.results"></div>
+            <div class="search-panel-background animate-fade-long" ng-show="!vm.search.results"></div>
         </div>
         
         <div id="bookmark-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.bookmark">
@@ -482,13 +483,13 @@
                             <button class="btn btn-default" ng-click="vm.events.syncPanel_DisplayDataUsage_Click()" tabindex="4">
                                 {{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_DisplayDataUsage_Label) }}
                             </button>
-                            <button class="btn btn-default" ng-click="vm.events.syncPanel_DisplaySyncOptions_Click()" tabindex="5">
+                            <button class="btn btn-default btn-syncOptions" ng-click="vm.events.syncPanel_DisplaySyncOptions_Click()" tabindex="5">
                                 {{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_DisplaySyncOptions_Label) }}
                             </button>
+                            <button class="btn btn-default" ng-click="vm.events.syncForm_DisableSync_Click()" tabindex="6">
+                                {{ vm.platform.Constants.Get(vm.global.Constants.Button_Sync_Disable_Label) }}
+                            </button>
                         </div>
-                        <button class="btn btn-default" ng-click="vm.events.syncForm_DisableSync_Click()" tabindex="6">
-                            {{ vm.platform.Constants.Get(vm.global.Constants.Button_Sync_Disable_Label) }}
-                        </button>
                     </div>
                     <div id="syncDataUsage-Panel" class="text-center animate-fade" ng-show="vm.settings.displaySyncDataUsage">
                         <div>{{ vm.platform.Constants.Get(vm.global.Constants.SyncDataUsagePanel_Message) }}:</div>
