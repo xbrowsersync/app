@@ -990,26 +990,13 @@ body {
     }
     
     .sync-panel {
-        .checkbox {
-            margin: 20px 0;
-            font-size: 1.3em;
-            text-align: center;
-
-            input {
-                margin-top: 0;
-                position: relative;
-            }
-
-            label {
-                font-weight: normal;
-                font-size: 0.9em;
-                line-height: 0.9em;
-                margin-bottom: 0;
-            }
-        }
-
         .buttons {
             margin: 2em 0;
+            white-space: normal;
+
+            button {
+                margin-bottom: 10px;
+            }
         }
         
         .chart-panel {
@@ -1037,6 +1024,24 @@ body {
                     display: block;
                     line-height: 1em;
                 }
+            }
+        }
+
+        .checkbox {
+            margin: 20px 0;
+            font-size: 1.3em;
+            text-align: center;
+
+            input {
+                margin-top: 0;
+                position: relative;
+            }
+
+            label {
+                font-weight: normal;
+                font-size: 0.9em;
+                line-height: 0.9em;
+                margin-bottom: 0;
             }
         }
 
