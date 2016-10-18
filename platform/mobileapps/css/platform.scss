@@ -1,5 +1,17 @@
 @import 'variables.scss';
 
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('#{$fa-font-path}/fontawesome-webfont.eot');
+  src: url('#{$fa-font-path}/fontawesome-webfont.eot') format('embedded-opentype'),
+    url('#{$fa-font-path}/fontawesome-webfont.woff2') format('woff2'),
+    url('#{$fa-font-path}/fontawesome-webfont.woff') format('woff'),
+    url('#{$fa-font-path}/fontawesome-webfont.ttf') format('truetype'),
+    url('#{$fa-font-path}/fontawesome-webfont.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
     @media (min-device-height: $height-iPhone6) {
         font-size: 16px;
@@ -12,7 +24,7 @@ body {
     h1 {
         background-size: 5.5em;
         
-        @media (min-height: $height-iPhone6) {
+        @media (min-device-height: $height-iPhone6) {
             background-size: 6.5em;
         }
     }
@@ -62,7 +74,7 @@ body {
 
 #about-panel { 
     h1 {
-        @media (max-height: $height-iPhone4) {
+        @media (max-device-height: $height-iPhone4) {
             background-size: 45%;
             background-position: 50% 10%;
         }
@@ -79,20 +91,20 @@ body {
 
 #login-panel {
     input {
-        @media (min-height: $height-iPhone5) {
+        @media (min-device-height: $height-iPhone5) {
             font-size: 1.1em;
         }
     }
     
     .intro-panel {
         & > div {
-            @media (min-height: $height-iPhone6) {
+            @media (min-device-height: $height-iPhone6) {
                 padding: 30px 40px;
             }
         }
 
         .buttons {
-            @media (min-height: $height-iPhone6) {
+            @media (min-device-height: $height-iPhone6) {
                 .btn-prev {
                     margin-left: 12px;
                 }
@@ -126,12 +138,12 @@ body {
         .buttons {
             height: 1.8em;
 
-            @media (max-width: $height-iPhone4 - 1) {
+            @media (max-device-width: $height-iPhone4 - 1) {
                 position: static;
                 margin: 0 0 15px;
             }
 
-            @media (min-width: $height-iPhone4) {
+            @media (min-device-width: $height-iPhone4) {
                 display: none;
             }
 
@@ -143,7 +155,7 @@ body {
                 bottom: auto;
                     
                 &.btn-about {
-                    @media (max-width: $height-iPhone4 - 1) {
+                    @media (max-device-width: $height-iPhone4 - 1) {
                         display: block;
                     }
                 }
@@ -151,7 +163,7 @@ body {
                 &.btn-toggle-bookmark {
                     right: 1.1em;
                     
-                    @media (max-width: $width-tablet) {
+                    @media (max-device-width: $width-tablet) {
                         left: 0;
                         right: auto;
                     }
@@ -174,7 +186,7 @@ body {
         }
 
         .search-form {
-            @media (max-width: $width-tablet - 1) {
+            @media (max-device-width: $width-tablet - 1) {
                 width: 100%;
             }
         }
@@ -211,7 +223,7 @@ body {
     .search-panel-background {
         display: block;
 
-        @media (min-width: $height-iPhone4) and (orientation:landscape) {
+        @media (min-device-width: $height-iPhone4) and (orientation:landscape) {
             background-size: 20%;
             margin-top: 5%;
         }
@@ -258,7 +270,7 @@ body {
         }
         
         .chart-panel {
-            @media (max-height: $height-iPhone5) {
+            @media (max-device-height: $height-iPhone5) {
                 #chart {
                     height: 7em;
                     width: 7em;
@@ -270,7 +282,7 @@ body {
                 }
             }
 
-            @media (min-height: $height-iPhone6) {
+            @media (min-device-height: $height-iPhone6) {
                 .values {
                     margin-top: -1em;
                 }
@@ -296,10 +308,10 @@ html, body, .container, .view {
     }
 
     .tags {
-        max-height: 5.5em;
+        max-device-height: 5.5em;
 
-        @media (min-height: $height-iPhone6) {
-            max-height: 9.5em;
+        @media (min-device-height: $height-iPhone6) {
+            max-device-height: 9.5em;
         }
     }
 }
@@ -309,14 +321,14 @@ html, body, .container, .view {
 }
 
 #search-panel .search-results-panel {
-    max-height: calc(100% - 7em);
+    max-device-height: calc(100% - 7em);
 
-    @media (min-height: $height-iPhone5) {
-        max-height: calc(100% - 6.5em);
+    @media (min-device-height: $height-iPhone5) {
+        max-device-height: calc(100% - 6.5em);
     }
 
-    @media (min-height: $height-iPad) {
-        max-height: calc(100% - 4em);
+    @media (min-device-height: $height-iPad) {
+        max-device-height: calc(100% - 4em);
     }
 }
 
