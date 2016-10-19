@@ -13,24 +13,29 @@
 }
 
 body {
-    @media (min-device-height: $height-iPhone6) {
+    @media (min-device-height: $height-mobile-medium) {
+        font-size: 15px;
+    }
+
+    @media (min-device-height: $height-mobile-large) {
         font-size: 16px;
     }
     
-    @media (min-device-height: $height-iPhone6Plus) {
+    @media (min-device-height: $height-mobile-xlarge) {
         font-size: 18px;
+        line-height: 1.35em;
     }
 
     h1 {
         background-size: 5.5em;
         
-        @media (min-device-height: $height-iPhone6) {
+        @media (min-device-height: $height-mobile-large) {
             background-size: 6.5em;
         }
     }
 
     button.btn {
-        @media (min-device-height: $height-iPhone6Plus) {
+        @media (min-device-height: $height-mobile-xlarge) {
             font-size: 18px;
         }
 
@@ -63,10 +68,6 @@ body {
         margin-left: 5px;
     }
 
-    .view {
-        overflow-y: auto;
-    }
-
     .well .btn.btn-default {
         font-size: 1em;
     }
@@ -74,7 +75,7 @@ body {
 
 #about-panel { 
     h1 {
-        @media (max-device-height: $height-iPhone4) {
+        @media (max-device-height: $height-mobile-small) {
             background-size: 45%;
             background-position: 50% 10%;
         }
@@ -91,20 +92,20 @@ body {
 
 #login-panel {
     input {
-        @media (min-device-height: $height-iPhone5) {
+        @media (min-device-height: $height-mobile-medium) {
             font-size: 1.1em;
         }
     }
     
     .intro-panel {
         & > div {
-            @media (min-device-height: $height-iPhone6) {
-                padding: 30px 40px;
+            @media (min-device-height: $height-mobile-large) {
+                padding: 25px 35px;
             }
         }
 
         .buttons {
-            @media (min-device-height: $height-iPhone6) {
+            @media (min-device-height: $height-mobile-large) {
                 .btn-prev {
                     margin-left: 12px;
                 }
@@ -118,16 +119,16 @@ body {
 
     .secret-form-group {
         .progress, .progress-bar-background {
-            @media (min-device-height: $height-iPhone5) {
-                height: 41px;
+            @media (min-device-height: $height-mobile-medium) {
+                height: 2.85em;
             }
 
-            @media (min-device-height: $height-iPhone6) {
-                height: 2.65em;
+            @media (min-device-height: $height-mobile-large) {
+                height: 2.8em;
             }
             
-            @media (min-device-height: $height-iPhone6Plus) {
-                height: 48px;
+            @media (min-device-height: $height-mobile-xlarge) {
+                height: 2.65em;
             }
         }
     }
@@ -138,12 +139,12 @@ body {
         .buttons {
             height: 1.8em;
 
-            @media (max-device-width: $height-iPhone4 - 1) {
+            @media (max-device-width: $height-mobile-small - 1) {
                 position: static;
                 margin: 0 0 15px;
             }
 
-            @media (min-device-width: $height-iPhone4) {
+            @media (min-device-width: $height-mobile-small) {
                 display: none;
             }
 
@@ -155,7 +156,7 @@ body {
                 bottom: auto;
                     
                 &.btn-about {
-                    @media (max-device-width: $height-iPhone4 - 1) {
+                    @media (max-device-width: $height-mobile-small - 1) {
                         display: block;
                     }
                 }
@@ -223,7 +224,7 @@ body {
     .search-panel-background {
         display: block;
 
-        @media (min-device-width: $height-iPhone4) and (orientation:landscape) {
+        @media (min-device-width: $height-mobile-small) and (orientation:landscape) {
             background-size: 20%;
             margin-top: 5%;
         }
@@ -270,7 +271,7 @@ body {
         }
         
         .chart-panel {
-            @media (max-device-height: $height-iPhone5) {
+            @media (max-device-height: $height-mobile-medium) {
                 #chart {
                     height: 7em;
                     width: 7em;
@@ -282,7 +283,7 @@ body {
                 }
             }
 
-            @media (min-device-height: $height-iPhone6) {
+            @media (min-device-height: $height-mobile-large) {
                 .values {
                     margin-top: -1em;
                 }
@@ -298,40 +299,65 @@ body {
 
 /* Heights */
 
-html, body, .container, .view {
-    height: 100%;
+html, body, .container, #about-panel  {
+    height: 100vh;
+}
+
+.view {
+    height: auto;
 }
 
 #bookmark-panel {
     textarea {
         height: 14em;
+
+        @media (min-device-height: $height-mobile-medium) {
+            height: 15.5em;
+        }
+
+        @media (min-device-height: $height-mobile-large) {
+            height: 16em;
+        }
     }
 
     .tags {
-        max-device-height: 5.5em;
+        max-height: 5.5em;
 
-        @media (min-device-height: $height-iPhone6) {
-            max-device-height: 9.5em;
+        @media (min-device-height: $height-mobile-medium) {
+            max-height: 6em;
+        }
+        
+        @media (min-device-height: $height-mobile-large) {
+            max-height: 9.5em;
+        }
+
+        @media (min-device-height: $height-mobile-xlarge) {
+            max-height: 12em;
         }
     }
 }
 
 #login-panel .intro-panel {
     height: 18em;
+
+    @media (min-device-height: $height-mobile-medium) {
+        height: 19em;
+    }
 }
 
-#search-panel .search-results-panel {
-    max-device-height: calc(100% - 7em);
-
-    @media (min-device-height: $height-iPhone5) {
-        max-device-height: calc(100% - 6.5em);
-    }
-
-    @media (min-device-height: $height-iPad) {
-        max-device-height: calc(100% - 4em);
-    }
+#search-panel {
+    height: calc(100vh - 10px);
+    overflow: hidden;
 }
 
 #settings-panel .well .panel-content {
     height: 16.7em;
+
+    @media (min-device-height: $height-mobile-medium) {
+        height: 18.3em;
+    }
+
+    @media (min-device-height: $height-mobile-large) {
+        height: 18.5em;
+    }
 }

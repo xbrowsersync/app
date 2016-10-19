@@ -637,8 +637,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var bookmarkForm_ResizeDescriptionField = function() {
         $timeout(function() {
             var descriptionField = document.querySelector('textarea[name="bookmarkDescription"]');
-            var bookmarkPanel = document.querySelector('#bookmark-panel');
-            var lessHeight = bookmarkPanel.scrollHeight - bookmarkPanel.offsetHeight;
+            var container = document.querySelector('.container');
+            var lessHeight = container.scrollHeight - container.offsetHeight;
 
             if (lessHeight > 0) {
                 // Remove the height of the tags area container the description field

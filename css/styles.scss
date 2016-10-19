@@ -217,12 +217,9 @@ body {
     }
 
     .background {
-        position: fixed !important;
         position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
+        height: 100%;
+        width: 100%;
         z-index: -100;
         @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
     }
@@ -769,13 +766,14 @@ body {
                 &:before {
                     content: '';
                     display: inline-block;
-                    height: 85%; 
+                    height: 100%; 
                     vertical-align: middle;
                 }
 
                 .buttons {
                     display: inline-block;
                     vertical-align: middle;
+                    margin-top: 0;
 
                     button {
                         display: inline-block;
