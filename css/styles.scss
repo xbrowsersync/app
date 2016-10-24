@@ -76,6 +76,7 @@ body {
     button {
         &.btn {
             font-size: 14px;
+            border-width: 0;
             
             &.btn-default {
                 font-size: 1.2em;
@@ -471,9 +472,10 @@ body {
 
 #loading-panel {
     display: table;
-    position: absolute;
+    position: fixed;
     height: 100%;
     width: 100%;
+    z-index: 1000;
     
     .content {
         display: table-cell;
