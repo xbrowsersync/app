@@ -75,9 +75,16 @@ body {
 
 #about-panel { 
     h1 {
-        @media (max-device-height: $height-mobile-small) {
-            background-size: 45%;
-            background-position: 50% 10%;
+        background-size: 45%;
+        background-position: 50% 10%;
+        
+        @media (min-device-height: $height-mobile-medium) {
+            background-size: 50%;
+        }
+        
+        @media (min-device-height: $height-mobile-xlarge) {
+            background-size: 60%;
+            background-position: 50% 15%;
         }
     }
     
@@ -193,31 +200,27 @@ body {
         }
     }
 
-    .search-results-panel {
-        margin-top: 15px;
-        
-        .list-group-item {
-            margin: 0 0 15px 0;
+    .search-results-panel .list-group-item {
+        margin: 0 0 15px 0;
 
-            &.active {
-                &:hover {
-                    .list-group-item-heading {
-                        color: $colour-text2;
-                    }
+        &.active {
+            &:hover {
+                .list-group-item-heading {
+                    color: $colour-text2;
                 }
             }
+        }
 
-            a {
-                padding: 15px 20px;
-            }
+        a {
+            padding: 15px 20px;
+        }
 
-            .btn-edit-bookmark {
-                display: none!important;
-            }
+        .btn-edit-bookmark {
+            display: none!important;
+        }
 
-            .overlay {
-                display: block;
-            }
+        .overlay {
+            display: block;
         }
     }
 
@@ -299,8 +302,8 @@ body {
 
 /* Heights */
 
-html, body, .container, body .background, #about-panel  {
-    height: 100vh;
+body, body .container, #about-panel, #search-panel  {
+    height: 100%;
 }
 
 .view {
@@ -328,11 +331,11 @@ html, body, .container, body .background, #about-panel  {
         }
         
         @media (min-device-height: $height-mobile-large) {
-            max-height: 9.5em;
+            max-height: 8em;
         }
 
         @media (min-device-height: $height-mobile-xlarge) {
-            max-height: 12em;
+            max-height: 10em;
         }
     }
 }
@@ -346,8 +349,30 @@ html, body, .container, body .background, #about-panel  {
 }
 
 #search-panel {
-    height: calc(100vh - 10px);
     overflow: hidden;
+
+    .search-results-panel {
+        height: auto;
+        position: absolute;
+        top: 7.6em;
+        right: 10px;
+        left: 10px;
+        bottom: 0;
+        margin-top: 0;
+        padding-bottom: 15px;
+
+        @media (min-device-height: $height-mobile-medium) {
+            top: 7.3em;
+        }
+
+        @media (min-device-height: $height-mobile-large) {
+            top: 7.1em;
+        }
+
+        @media (min-device-height: $height-mobile-xlarge) {
+            top: 6.7em;
+        }
+    }
 }
 
 #settings-panel .well .panel-content {

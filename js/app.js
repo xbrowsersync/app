@@ -292,7 +292,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     case vm.view.views.search:
                         $timeout(function() {
                             platform.Interface.Refresh();
-                            document.querySelector('input[name=txtSearch]').select();
+                            document.querySelector('input[name=txtSearch]').focus();
                         });
                         break;
                     case vm.view.views.bookmark:
@@ -305,8 +305,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         bookmarkForm_ResizeDescriptionField();
                         $timeout(function() {
                             bookmarkForm_ResizeDescriptionField();
-                            document.querySelector('input[name="bookmarkTitle"]').select();
-                        }, 500);
+                            document.querySelector('input[name="bookmarkTitle"]').focus();
+                        }, 100);
                         break;
                     case vm.view.views.settings:
                         vm.settings.displaySyncOptions = !global.SyncEnabled.Get();
@@ -324,13 +324,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         // Set new service form url
                         vm.settings.service.newServiceUrl = vm.settings.service.url();
 
-                        break;
-                    case vm.view.views.login:
-                        if (!!vm.settings.clientSecretFocus) {
-                            $timeout(function() {
-                                document.querySelector('input[name=txtClientSecret]').select();
-                            });
-                        }
                         break;
                 }
 				
@@ -561,7 +554,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         bookmarkForm_BookmarkUrl_Change();
         
         if (!vm.bookmarkForm.$valid) {
-			document.querySelector('#bookmarkForm .ng-invalid').select();
+			document.querySelector('#bookmarkForm .ng-invalid').focus();
             return;
 		}
 
@@ -654,7 +647,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // Return if the form is not valid
 		if (!vm.bookmarkForm.$valid) {
-			document.querySelector('#bookmarkForm .ng-invalid').select();
+			document.querySelector('#bookmarkForm .ng-invalid').focus();
             return;
 		}
 
@@ -833,17 +826,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         platform.Init(vm);
 
         $timeout(function() {
-            if (vm.view.current === vm.view.views.login) {
-                if (!!vm.settings.clientSecretFocus) {
-                    // Focus on secret input
-                    document.querySelector('input[name=txtClientSecret]').select();
-                }
-            }
-            else {
+            if (vm.view.current === vm.view.views.search) {
                 // Focus on search box
-                document.querySelector('input[name=txtSearch]').select();
+                document.querySelector('input[name=txtSearch]').focus();
             }
-        });
+        }, 100);
         
         // Check if current page is a bookmark
         setBookmarkStatus()
@@ -1075,7 +1062,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.search.query = null;
         vm.search.lookahead = null;
         vm.search.results = null;
-        document.querySelector('input[name=txtSearch]').select();
+        document.querySelector('input[name=txtSearch]').focus();
     };
 
     var searchForm_DeleteBookmark_Click = function(event, bookmark) {
@@ -1186,7 +1173,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 }
                 else {
                     // Focus on search box
-                    document.querySelector('input[name=txtSearch]').select();
+                    document.querySelector('input[name=txtSearch]').focus();
                 }
                 
                 break;
@@ -1255,7 +1242,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             // Numbers and letters
             case ($event.keyCode > 47 && $event.keyCode < 112):
                 // Focus on search box
-                document.querySelector('input[name=txtSearch]').select();
+                document.querySelector('input[name=txtSearch]').focus();
                 break;
         }
     };

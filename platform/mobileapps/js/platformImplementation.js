@@ -469,6 +469,17 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
     };
 
 	var init = function(vm) {
+		// Set window height
+		var e = window;
+		var a = 'inner';
+		if (!('innerWidth' in window))
+		{
+			a = 'client';
+			e = document.documentElement || document.body;
+		}
+		document.querySelector('html').style.height = e[a + 'Height'] + 'px';
+		document.querySelector('.background').style.height = e[a + 'Height'] + 'px';
+		
 		// Set login validation
 		vm.sync.validateLogin = function() {
 			return !!vm.settings.secret() && !!vm.settings.id();
