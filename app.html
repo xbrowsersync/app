@@ -40,7 +40,7 @@
         </div>
         
         <div id="about-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.about">
-            <h1 class="animate-fade-long">
+            <h1>
                 <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Title) }}</span>
             </h1>
             <div class="bottom">
@@ -83,7 +83,7 @@
                 </button>
             </div>
             <div class="intro-panel">
-                <h1 class="animate-fade-out" ng-show="!!vm.introduction.showLogo" ng-class="{ true: 'animate-fade-long' }[vm.introduction.displayIntro()]">
+                <h1 class="animate-fade-out" ng-show="!!vm.introduction.showLogo" ng-class="{ true: 'animate-fade-long animate-fade-out-long' }[vm.introduction.displayIntro()]">
                     <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Title) }}</span>
                 </h1>
                 <div id="intro-panel-1" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 1" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"

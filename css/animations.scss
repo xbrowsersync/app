@@ -1,21 +1,3 @@
-@include keyframes(animate-fade-in) {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
-@include keyframes(animate-fade-out) {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
-}
-
 @include keyframes(animate-flash) {
     0% {
         opacity: 0;
@@ -64,14 +46,6 @@
     }
 }
 
-.animate-css-fade-in {
-    @include animation(animate-fade-in 0.2s linear);
-}
-
-.animate-css-fade-out {
-    @include animation(animate-fade-out 0.2s linear);
-}
-
 .animate-fade {
     &.ng-hide {
         opacity: 0!important;
@@ -79,6 +53,16 @@
     
     &.ng-hide-remove {
         transition: opacity, linear, 0.2s;
+    }
+}
+
+.animate-fade-long {
+    &.ng-hide {
+        opacity: 0!important;
+    }
+    
+    &.ng-hide-remove {
+        transition: opacity, linear, 0.7s;
     }
 }
 
@@ -92,9 +76,7 @@
     }
 }
 
-.animate-fade-long {
-    transition: opacity, linear, 0.7s;
-    
+.animate-fade-out-long {
     &.ng-hide {
         opacity: 0!important;
     }
