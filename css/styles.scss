@@ -510,6 +510,16 @@ body {
 }
 
 #login-panel {
+    .btn-scanCode {
+        display: none;
+        font-size: 1.8em;
+        position: absolute;
+        top: 0.1em;
+        right: 20px;
+        z-index: 55;
+        border-bottom: none;
+    }
+
     .intro-panel {
         height: 18em;
         margin-bottom: 15px;
@@ -555,10 +565,12 @@ body {
             }
         }
     }
+
+    .form-group {
+        position: relative;
+    }
     
     .secret-form-group {
-        position: relative;
-
         input {
             position: relative;
             z-index: 20;
@@ -669,6 +681,7 @@ body {
                 right: 15px;
                 font-size: 1em;
                 z-index: 55;
+                border-bottom: none;
 
                 &:hover i {
                     opacity: 1;

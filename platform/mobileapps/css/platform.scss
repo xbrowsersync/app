@@ -62,10 +62,6 @@ body {
         }
 
         &.btn-icon {
-            &:focus {
-                border-bottom: none;
-            }
-
             &:active:hover {
                 i {
                     opacity: 1;
@@ -156,6 +152,10 @@ body {
         @media (min-device-height: $height-mobile-medium) {
             font-size: 1.1em;
         }
+    }
+
+    .btn-scanCode {
+        display: block;
     }
     
     .intro-panel {

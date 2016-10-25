@@ -13,7 +13,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
  * Platform variables
  * ------------------------------------------------------------------------------------ */
 
-	var vm;
+	var vm, $scope;
 	
 	var constants = {
 		"title": {
@@ -117,6 +117,9 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		},
 		"field_Id_Description": {
 			"message": "Your xBrowserSync ID"
+		},
+		"button_ScanCode_Label": {
+			"message": "Scan your xBrowserSync ID"
 		},
 		"button_Sync_Enable_Label": {
 			"message": "Sync"
@@ -454,6 +457,19 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
         return $q.resolve(false);
     };
 
+	var deviceReady = function() {
+		if (vm.view.current === vm.view.views.search) {
+			// Focus on search box and show keyboard
+			$timeout(function() {
+				document.querySelector('input[name=txtSearch]').focus();
+				cordova.plugins.Keyboard.show();
+			}, 100);
+		}
+
+		// Use toasts for alerts
+		vm.alert.display = displayToast;
+	};
+
 	var displayToast = function(title, message) {
 		window.plugins.toast.showWithOptions({
 			message: title + '. ' + message,
@@ -478,9 +494,10 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		return $q.resolve(null);
     };
 
-	var init = function(viewModel) {
-		// Set view model to global variable
+	var init = function(viewModel, scope) {
+		// Set global variables
 		vm = viewModel;
+		$scope = scope;
 
 		// Set window height
 		var e = window;
@@ -497,8 +514,9 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		var script = document.createElement('script');
 		script.src = 'cordova.js';
 		script.onload = function() {
-            // Bind to device ready
-			document.addEventListener('deviceready', onDeviceReady, false);
+            // Bind to device events
+			document.addEventListener('deviceready', deviceReady, false);
+			document.addEventListener('resume', resume, false);
         };
 		document.getElementsByTagName('head')[0].appendChild(script);
 		
@@ -513,12 +531,6 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		// Remove sync confirmation
 		vm.events.syncForm_EnableSync_Click = vm.events.syncForm_ConfirmSync_Click;
 
-		// Turn off auto focus on client secret
-		vm.settings.clientSecretFocus = false;
-
-		// Hook up back up file select event
-        document.querySelector('#backupFile').addEventListener('change', vm.events.backupRestoreForm_BackupFile_Change, false);
-
 		// Set intro panel button events
 		vm.events.introPanel10_Next_Click = function() {
 			vm.introduction.displayPanel(14);
@@ -527,24 +539,17 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 			vm.introduction.displayPanel(10);
 		};
 
+		// Hook up back up file select event
+        document.querySelector('#backupFile').addEventListener('change', vm.events.backupRestoreForm_BackupFile_Change, false);
+
+		// Set scan code button click event
+		vm.events.searchForm_ScanCode_Click = searchForm_ScanCode_Click;
+
 		// Check for updates regularly
 		bookmarks.CheckForUpdates();
 		$interval(function() {
 			bookmarks.CheckForUpdates();
 		}, global.Alarm.Period.Get() * 60000);
-	};
-
-	var onDeviceReady = function() {
-		if (vm.view.current === vm.view.views.search) {
-			// Focus on search box and show keyboard
-			$timeout(function() {
-				document.querySelector('input[name=txtSearch]').focus();
-				cordova.plugins.Keyboard.show();
-			}, 100);
-		}
-
-		// Use toasts for alerts
-		vm.alert.display = displayToast;
 	};
 
 	var openUrl = function(url) {
@@ -557,6 +562,43 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 	
 	var refreshInterface = function() {
 	};
+
+	var resume = function() {
+		if (vm.view.current === vm.view.views.search) {
+			// Focus on search box and show keyboard
+			$timeout(function() {
+				document.querySelector('input[name=txtSearch]').focus();
+				cordova.plugins.Keyboard.show();
+			}, 100);
+		}
+
+		if (!!global.SyncEnabled.Get()) {
+			// Check for bookmarks updates
+			bookmarks.CheckForUpdates();
+		}
+	};
+
+    var searchForm_ScanCode_Click = function() {
+        cordova.plugins.barcodeScanner.scan(
+			function (result) {
+				// Set result as id
+				if (!!result && !!result.text) {
+					$scope.$apply(function() {
+						vm.settings.id(result.text);
+					});
+				}
+			},
+			function (error) {
+				vm.alert.display('Unable to scan', error);
+			},
+			{
+				'preferFrontCamera': false, 
+				'showFlipCameraButton': false, 
+				'prompt': getConstant(vm.global.Constants.Button_ScanCode_Label), 
+				'formats': 'QR_CODE' 
+			}
+		);
+    };
 	
 	var setInLocalStorage = function(itemName, itemValue) {
 		localStorage.setItem(itemName, itemValue);

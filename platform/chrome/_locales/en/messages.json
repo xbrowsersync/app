@@ -101,6 +101,9 @@
 	"field_Id_Description": {
 		"message": "Your xBrowserSync ID (optional)"
 	},
+	"button_ScanCode_Label": {
+		"message": "Scan your xBrowserSync ID"
+	},
 	"button_Sync_Enable_Label": {
 		"message": "Sync"
 	},

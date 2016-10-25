@@ -106,6 +106,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             queueSync: queueSync,
             searchForm_Clear_Click: searchForm_Clear_Click,
             searchForm_DeleteBookmark_Click: searchForm_DeleteBookmark_Click,
+            searchForm_ScanCode_Click: null,
             searchForm_SearchText_Autocomplete: searchForm_SearchText_Autocomplete,
             searchForm_SearchText_Change: searchForm_SearchText_Change,
             searchForm_SearchText_KeyDown: searchForm_SearchText_KeyDown,
@@ -814,7 +815,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
     var init = function() {
         // Platform-specific initation
-        platform.Init(vm);
+        platform.Init(vm, $scope);
         
         // Display contents
         document.querySelector('.container').classList.remove('loading');

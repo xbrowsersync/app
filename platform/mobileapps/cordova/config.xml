@@ -47,4 +47,7 @@
     <preference name="keyboardDisplayRequiresUserAction" value="false" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
     <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
+    <plugin name="phonegap-plugin-barcodescanner" spec="~6.0.3">
+        <variable name="CAMERA_USAGE_DESCRIPTION" value=" " />
+    </plugin>
 </widget>

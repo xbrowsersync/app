@@ -295,6 +295,9 @@
                 </div>
                 <label class="sr-only" for="txtId">{{ vm.platform.Constants.Get(vm.global.Constants.Field_Id_Label) }}</label>
                 <div class="form-group">
+                    <button class="btn btn-icon btn-scanCode" ng-hide="vm.settings.id()" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_ScanCode_Label) }}" ng-click="vm.events.searchForm_ScanCode_Click()">
+                        <i class="fa fa-qrcode" aria-hidden="true"></i>
+                    </button>
                     <input name="txtId" ng-model="vm.settings.id" class="form-control" ng-model-options="{ getterSetter: true }"
                            ng-disabled="vm.sync.enabled()" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.Field_Id_Description) }}" 
                            maxlength="32" tabindex="2" />
