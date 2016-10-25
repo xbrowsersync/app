@@ -167,7 +167,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		vm.settings = {
             backupFileName: null,
 			backupRestoreResult: null,
-            clientSecretFocus: true,
             dataToRestore: null,
             dataToRestoreIsValid: function() {
                 return checkRestoreData(vm.settings.dataToRestore);
@@ -814,6 +813,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
 
     var init = function() {
+        // Platform-specific initation
+        platform.Init(vm);
+        
         // Display contents
         document.querySelector('.container').classList.remove('loading');
         
@@ -822,16 +824,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             introPanel_DisplayIntro();
         }
 
-        // Platform-specific initation
-        platform.Init(vm);
-
-        $timeout(function() {
-            if (vm.view.current === vm.view.views.search) {
-                // Focus on search box
-                document.querySelector('input[name=txtSearch]').focus();
-            }
-        }, 100);
-        
         // Check if current page is a bookmark
         setBookmarkStatus()
             .catch(function(err) {

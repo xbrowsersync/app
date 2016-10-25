@@ -92,6 +92,7 @@ body {
                 box-shadow: none;
                 padding: 6px 15px 7px;
                 
+                &:not([disabled]):active,
                 &:not([disabled]):hover {
                     background-color: $colour-text1;
                     color: $colour-link-highlight;
@@ -101,7 +102,7 @@ body {
                 &:not([disabled]):focus {
                     text-decoration: underline;
 
-                    &:hover {
+                    &:active, &:hover {
                         text-decoration: none;
                     }
                 }
@@ -122,12 +123,13 @@ body {
                 transition: all, ease-in, 0.2s;
                 box-shadow: none;
                 border-radius: 0;
+                border-bottom: solid 1px transparent;
                 
                 &:focus {
-                    border-bottom: solid 1px $colour-text2;
+                    border-bottom-color: $colour-text2;
                 }
 
-                &:hover {
+                &:active, &:hover {
                     &:focus {
                         border-bottom-color: transparent;
                     }
@@ -399,6 +401,7 @@ body {
             border-width: 1px;
             font-size: 1.1em;
 
+            &:not([disabled]):active,
             &:not([disabled]):hover {
                 background-color: $colour-text2;
                 color: $colour-link-highlight;

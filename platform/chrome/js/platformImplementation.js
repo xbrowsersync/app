@@ -532,6 +532,13 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		vm.sync.validateLogin = function() {
 			return !!vm.settings.secret();
 		};
+
+		// Focus on search box
+		if (vm.view.current === vm.view.views.search) {
+			$timeout(function() {
+				document.querySelector('input[name=txtSearch]').focus();
+			}, 100);
+		}
 	};
 
 	var openUrl = function(url) {

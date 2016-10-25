@@ -13,6 +13,8 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
  * Platform variables
  * ------------------------------------------------------------------------------------ */
 
+	var vm;
+	
 	var constants = {
 		"title": {
 			"message": "xBrowserSync"
@@ -468,7 +470,10 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		return $q.resolve(null);
     };
 
-	var init = function(vm) {
+	var init = function(viewModel) {
+		// Set view model to global variable
+		vm = viewModel;
+
 		// Set window height
 		var e = window;
 		var a = 'inner';
@@ -479,6 +484,15 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		}
 		document.querySelector('html').style.height = e[a + 'Height'] + 'px';
 		document.querySelector('.background').style.height = e[a + 'Height'] + 'px';
+
+		// Load cordova.js
+		var script = document.createElement('script');
+		script.src = 'cordova.js';
+		script.onload = function() {
+            // Bind to device ready
+			document.addEventListener('deviceready', onDeviceReady, false);
+        };
+		document.getElementsByTagName('head')[0].appendChild(script);
 		
 		// Set login validation
 		vm.sync.validateLogin = function() {
@@ -510,6 +524,16 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		$interval(function() {
 			bookmarks.CheckForUpdates();
 		}, global.Alarm.Period.Get() * 60000);
+	};
+
+	var onDeviceReady = function() {
+		if (vm.view.current === vm.view.views.search) {
+			// Focus on search box and show keyboard
+			$timeout(function() {
+				document.querySelector('input[name=txtSearch]').focus();
+				cordova.plugins.Keyboard.show();
+			}, 100);
+		}
 	};
 
 	var openUrl = function(url) {

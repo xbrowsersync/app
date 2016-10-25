@@ -39,12 +39,44 @@ body {
             font-size: 18px;
         }
 
+        &.btn-default {
+            &:not([disabled]):active:hover {
+                background-color: $colour-text1;
+                color: $colour-link-highlight;
+                border-color: $colour-text1;
+            }
+            
+            &:not([disabled]):hover {
+                background-color: transparent;
+                color: $colour-text1;
+                border-color: $colour-text1;
+            }
+
+            &:not([disabled]):focus {
+                text-decoration: none;
+            }
+        }
+
         &.btn-default:not([disabled]):focus {
             text-decoration: none;
         }
 
-        &.btn-icon:focus {
-            border-bottom: none;
+        &.btn-icon {
+            &:focus {
+                border-bottom: none;
+            }
+
+            &:active:hover {
+                i {
+                    opacity: 1;
+                }
+            }
+
+            &:hover {
+                i {
+                    opacity: 0.4;
+                }
+            }
         }
     }
 
@@ -68,8 +100,30 @@ body {
         margin-left: 5px;
     }
 
-    .well .btn.btn-default {
-        font-size: 1em;
+    .well {
+        .btn.btn-default {
+            color: $colour-text2;
+            border-color: $colour-text2;
+            font-weight: normal;
+            border-width: 1px;
+            font-size: 1em;
+
+            &:not([disabled]):active:hover {
+                background-color: $colour-text2;
+                color: $colour-link-highlight;
+                border-color: $colour-text2;
+            }
+
+            &:not([disabled]):hover {
+                background-color: transparent;
+                color: $colour-text2;
+                border-color: $colour-text2;
+            }
+        }
+        
+        .btn.btn-default {
+            font-size: 1em;
+        }
     }
 }
 
@@ -261,6 +315,12 @@ body {
     }
 
     .sync-panel {
+        #id {
+            @media (min-device-height: $height-mobile-large) {
+                font-size: 1.1em;
+            }
+        }
+        
         .btn-syncOptions {
             display: none;
         }

@@ -1,48 +1,49 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.xBrowserSync" android-packageName="com.xBrowserSync.android" ios-CFBundleIdentifier="com.xBrowserSync.ios" version="1.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<?xml version='1.0' encoding='utf-8'?>
+<widget android-packageName="com.xBrowserSync.android" id="com.xBrowserSync" ios-CFBundleIdentifier="com.xBrowserSync.ios" version="1.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>xBrowserSync</name>
     <description>Browser syncing as it should be: secure, anonymous and free!</description>
-    <author email="admin@xbrowsersync.org" href="https://www.xbrowsersync.org"/>
-    <content src="app.html"/>
-    <plugin name="cordova-plugin-whitelist" spec="1"/>
-    <access origin="*"/>
-    <allow-intent href="http://*/*"/>
-    <allow-intent href="https://*/*"/>
-    <allow-intent href="tel:*"/>
-    <allow-intent href="sms:*"/>
-    <allow-intent href="mailto:*"/>
-    <allow-intent href="geo:*"/>
+    <author email="admin@xbrowsersync.org" href="https://www.xbrowsersync.org" />
+    <content src="app.html" />
+    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
     <platform name="android">
-        <allow-intent href="market:*"/>
-        <icon src="res/icon/android/ldpi.png" density="ldpi"/>
-        <icon src="res/icon/android/mdpi.png" density="mdpi"/>
-        <icon src="res/icon/android/hdpi.png" density="hdpi"/>
-        <icon src="res/icon/android/xhdpi.png" density="xhdpi"/>
-        <icon src="res/icon/android/xxhdpi.png" density="xxhdpi"/>
-        <icon src="res/icon/android/xxxhdpi.png" density="xxxhdpi"/>
+        <allow-intent href="market:*" />
+        <icon density="ldpi" src="res/icon/android/ldpi.png" />
+        <icon density="mdpi" src="res/icon/android/mdpi.png" />
+        <icon density="hdpi" src="res/icon/android/hdpi.png" />
+        <icon density="xhdpi" src="res/icon/android/xhdpi.png" />
+        <icon density="xxhdpi" src="res/icon/android/xxhdpi.png" />
+        <icon density="xxxhdpi" src="res/icon/android/xxxhdpi.png" />
     </platform>
     <platform name="ios">
-        <allow-intent href="itms:*"/>
-        <allow-intent href="itms-apps:*"/>
-        <icon src="res/icon/ios/icon-40.png" height="40" width="40"/>
-        <icon src="res/icon/ios/icon.png" height="57" width="57"/>
-        <icon src="res/icon/ios/icon-40@2x.png" height="80" width="80"/>
-        <icon src="res/icon/ios/icon-40@3x.png" height="120" width="120"/>
-        <icon src="res/icon/ios/icon-60.png" height="60" width="60"/>
-        <icon src="res/icon/ios/icon-60@2x.png" height="120" width="120"/>
-        <icon src="res/icon/ios/icon-60@3x.png" height="180" width="180"/>
-        <icon src="res/icon/ios/icon@2x.png" height="114" width="114"/>
-        <icon src="res/icon/ios/icon-small.png" height="29" width="29"/>
-        <icon src="res/icon/ios/icon-small@2x.png" height="58" width="58"/>
-        <icon src="res/icon/ios/icon-small@3x.png" height="87" width="87"/>
-        <icon src="res/icon/ios/icon-76@2x.png" height="152" width="152"/>
-        <icon src="res/icon/ios/icon-76.png" height="76" width="76"/>
-        <icon src="res/icon/ios/icon-72.png" height="72" width="72"/>
-        <icon src="res/icon/ios/icon-72@2x.png" height="144" width="144"/>
-        <icon src="res/icon/ios/icon-50.png" height="50" width="50"/>
-        <icon src="res/icon/ios/icon-50@2x.png" height="100" width="100"/>
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+        <icon height="40" src="res/icon/ios/icon-40.png" width="40" />
+        <icon height="57" src="res/icon/ios/icon.png" width="57" />
+        <icon height="80" src="res/icon/ios/icon-40@2x.png" width="80" />
+        <icon height="120" src="res/icon/ios/icon-40@3x.png" width="120" />
+        <icon height="60" src="res/icon/ios/icon-60.png" width="60" />
+        <icon height="120" src="res/icon/ios/icon-60@2x.png" width="120" />
+        <icon height="180" src="res/icon/ios/icon-60@3x.png" width="180" />
+        <icon height="114" src="res/icon/ios/icon@2x.png" width="114" />
+        <icon height="29" src="res/icon/ios/icon-small.png" width="29" />
+        <icon height="58" src="res/icon/ios/icon-small@2x.png" width="58" />
+        <icon height="87" src="res/icon/ios/icon-small@3x.png" width="87" />
+        <icon height="152" src="res/icon/ios/icon-76@2x.png" width="152" />
+        <icon height="76" src="res/icon/ios/icon-76.png" width="76" />
+        <icon height="72" src="res/icon/ios/icon-72.png" width="72" />
+        <icon height="144" src="res/icon/ios/icon-72@2x.png" width="144" />
+        <icon height="50" src="res/icon/ios/icon-50.png" width="50" />
+        <icon height="100" src="res/icon/ios/icon-50@2x.png" width="100" />
     </platform>
-    <engine name="android" spec="~5.2.2"/>
-    <engine name="ios" spec="~4.2.1"/>
+    <engine name="android" spec="~5.2.2" />
+    <engine name="ios" spec="~4.2.1" />
     <preference name="keyboardDisplayRequiresUserAction" value="false" />
+    <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
 </widget>
