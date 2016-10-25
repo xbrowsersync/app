@@ -311,7 +311,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 			"message":  "Couldn't connect to the xBrowserSync service, check the service status in the Settings panel."
 		},
 		"error_TooManyRequests_Title" : {
-			"message":  "Slow down!"
+			"message":  "Slow down"
 		},
 		"error_TooManyRequests_Message" : {
 			"message":  "Too many requests sent, sync has been disabled. Re-enable sync to resume syncing."
@@ -453,6 +453,14 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 	var containsCurrentPage = function() {
         return $q.resolve(false);
     };
+
+	var displayToast = function(title, message) {
+		window.plugins.toast.showWithOptions({
+			message: title + '. ' + message,
+			duration: 6000, 
+			position: 'center'
+		});
+	};
 	
 	var getConstant = function(constName) {
 		return constants[constName].message;
@@ -534,6 +542,9 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 				cordova.plugins.Keyboard.show();
 			}, 100);
 		}
+
+		// Use toasts for alerts
+		vm.alert.display = displayToast;
 	};
 
 	var openUrl = function(url) {

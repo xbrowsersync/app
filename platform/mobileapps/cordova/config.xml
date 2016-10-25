@@ -46,4 +46,5 @@
     <engine name="ios" spec="~4.2.1" />
     <preference name="keyboardDisplayRequiresUserAction" value="false" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
+    <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
 </widget>
