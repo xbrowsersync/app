@@ -112,6 +112,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             searchForm_SearchText_KeyDown: searchForm_SearchText_KeyDown,
             searchForm_SearchResult_KeyDown: searchForm_SearchResult_KeyDown,
             searchForm_SelectBookmark_Press: searchForm_SelectBookmark_Press,
+            searchForm_ShareBookmark_Click: null,
             searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
             syncPanel_SyncBookmarksToolbar_Click: syncPanel_SyncBookmarksToolbar_Click,
             syncPanel_SyncBookmarksToolbar_Confirm: syncPanel_SyncBookmarksToolbar_Confirm,

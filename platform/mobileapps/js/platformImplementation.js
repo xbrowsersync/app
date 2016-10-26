@@ -145,6 +145,12 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		"noSearchResults_Message" : {
 			"message":  "No bookmarks found"
 		},
+		"shareBookmark_Prompt": {
+			"message":  "Share bookmark with"
+		},
+		"shareBookmark_Title": {
+			"message":  "shared via xBrowserSync"
+		},
 		"syncBookmarksToolbarConfirmation_Message": {
 			"message":  "<p>Enabling syncing of the bookmarks bar will replace the bookmarks currently in the bookmarks bar with your synced bookmarks. OK to proceed?</p>"
 		},
@@ -420,6 +426,12 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		},
 		"error_SyncInterrupted_Message" : {
 			"message":  "A previous sync was interrupted and failed to complete. Re-enable sync to restore your synced data."
+		},
+		"error_ScanFailed_Title" : {
+			"message":  "Scan failed"
+		},
+		"error_ShareFailed_Title" : {
+			"message":  "Share failed"
 		}
 	}
 
@@ -545,6 +557,9 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		// Set scan code button click event
 		vm.events.searchForm_ScanCode_Click = searchForm_ScanCode_Click;
 
+		// Set share bookmark button click event
+		vm.events.searchForm_ShareBookmark_Click = searchForm_ShareBookmark_Click;
+
 		// Check for updates regularly
 		bookmarks.CheckForUpdates();
 		$interval(function() {
@@ -564,6 +579,14 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 	};
 
 	var resume = function() {
+		if (!!global.SyncEnabled.Get()) {
+			// Check for bookmarks updates
+			bookmarks.CheckForUpdates();
+		}
+		
+		// Reset view to login/search panel
+		vm.view.displayMainView();
+		
 		if (vm.view.current === vm.view.views.search) {
 			// Focus on search box and show keyboard
 			$timeout(function() {
@@ -571,33 +594,46 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 				cordova.plugins.Keyboard.show();
 			}, 100);
 		}
-
-		if (!!global.SyncEnabled.Get()) {
-			// Check for bookmarks updates
-			bookmarks.CheckForUpdates();
-		}
 	};
 
     var searchForm_ScanCode_Click = function() {
-        cordova.plugins.barcodeScanner.scan(
-			function (result) {
-				// Set result as id
-				if (!!result && !!result.text) {
-					$scope.$apply(function() {
-						vm.settings.id(result.text);
-					});
-				}
-			},
-			function (error) {
-				vm.alert.display('Unable to scan', error);
-			},
-			{
-				'preferFrontCamera': false, 
-				'showFlipCameraButton': false, 
-				'prompt': getConstant(vm.global.Constants.Button_ScanCode_Label), 
-				'formats': 'QR_CODE' 
+        var options = {
+			'preferFrontCamera': false, 
+			'showFlipCameraButton': false, 
+			'prompt': getConstant(vm.global.Constants.Button_ScanCode_Label), 
+			'formats': 'QR_CODE' 
+		};
+
+		var onSuccess = function (result) {
+			// Set result as id
+			if (!!result && !!result.text) {
+				$scope.$apply(function() {
+					vm.settings.id(result.text);
+				});
 			}
-		);
+		};
+
+		var onError = function (error) {
+			vm.alert.display(getConstant(vm.global.Constants.Error_ScanFailed_Title), error);
+		};
+		
+		// Activate barcode scanner
+		cordova.plugins.barcodeScanner.scan(onSuccess, onError, options);
+    };
+
+    var searchForm_ShareBookmark_Click = function($event, result) {
+        var options = {
+			subject: result.title + ' (' + getConstant(vm.global.Constants.ShareBookmark_Title) + ')', 
+			url: result.url,
+			chooserTitle: getConstant(vm.global.Constants.ShareBookmark_Prompt)
+		};
+			
+		var onError = function(error) {
+			vm.alert.display(getConstant(vm.global.Constants.Error_ShareFailed_Title), error);
+		};
+		
+		// Display share sheet
+		window.plugins.socialsharing.shareWithOptions(options, null, onError);
     };
 	
 	var setInLocalStorage = function(itemName, itemValue) {

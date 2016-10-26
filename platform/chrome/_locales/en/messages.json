@@ -128,6 +128,12 @@
 	"noSearchResults_Message" : {
 		"message":  "No bookmarks found"
 	},
+	"shareBookmark_Prompt": {
+		"message":  "Share bookmark with"
+	},
+	"shareBookmark_Title": {
+		"message":  "shared via xBrowserSync"
+	},
 	"syncBookmarksToolbarConfirmation_Message": {
 		"message":  "<p>Enabling syncing of the bookmarks bar will replace the bookmarks currently in the bookmarks bar with your synced bookmarks. OK to proceed?</p>"
 	},
@@ -403,5 +409,11 @@
 	},
 	"error_SyncInterrupted_Message" : {
 		"message":  "A previous sync was interrupted and failed to complete. Re-enable sync to restore your synced data."
+	},
+	"error_ScanFailed_Title" : {
+		"message":  "Scan failed"
+	},
+	"error_ShareFailed_Title" : {
+		"message":  "Share failed"
 	}
 }

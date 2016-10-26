@@ -111,7 +111,9 @@ xBrowserSync.App.Global = function(platform) {
 			Button_Confirm_Label: 'button_Confirm_Label',
 			Button_Deny_Label: 'button_Deny_Label',
 			Field_Search_Description: 'field_Search_Description',
-            NoSearchResults_Message: 'noSearchResults_Message', 
+            NoSearchResults_Message: 'noSearchResults_Message',
+            ShareBookmark_Prompt: 'shareBookmark_Prompt',
+            ShareBookmark_Title: 'shareBookmark_Title',
             SyncBookmarksToolbarConfirmation_Message: 'syncBookmarksToolbarConfirmation_Message',
             CancelSyncConfirmation_Message: 'cancelSyncConfirmation_Message',
             ServiceStatus_Label: 'serviceStatus_Label',
@@ -203,7 +205,9 @@ xBrowserSync.App.Global = function(platform) {
             Error_NotImplemented_Title: 'error_NotImplemented_Title',
 			Error_NotImplemented_Message: 'error_NotImplemented_Message',
             Error_SyncInterrupted_Title: 'error_syncInterrupted_Title',
-            Error_SyncInterrupted_Message: 'error_syncInterrupted_Message'
+            Error_SyncInterrupted_Message: 'error_syncInterrupted_Message',
+            Error_ScanFailed_Title: 'error_ScanFailed_Title',
+            Error_ShareFailed_Title: 'error_ShareFailed_Title'
         },
         ClientSecret: {
             Get: function() {

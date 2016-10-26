@@ -359,6 +359,10 @@
                     <div class="list-group-item" ng-repeat="result in vm.search.results track by result.id">
                         <div class="menu" hm-tap="vm.events.searchForm_SelectBookmark_Press($event)">
                             <div class="buttons">
+                                <button class="btn btn-icon" title="Share bookmark" hm-tap="vm.events.searchForm_ShareBookmark_Click($event, result)">
+                                    <i class="fa fa-share-alt" aria-hidden="true"></i>
+                                    <span class="sr-only">Share bookmark</span>
+                                </button>
                                 <button class="btn btn-icon" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) }}" hm-tap="vm.events.searchForm_UpdateBookmark_Click(result)">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                     <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) }}</span>
