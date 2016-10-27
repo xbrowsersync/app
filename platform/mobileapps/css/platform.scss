@@ -125,21 +125,9 @@ body {
 
 #about-panel { 
     h1 {
-        background-size: 45%;
-        background-position: 50% 10%;
-        
         @media (min-device-height: $height-mobile-medium) {
             background-size: 50%;
         }
-        
-        @media (min-device-height: $height-mobile-xlarge) {
-            background-size: 60%;
-            background-position: 50% 15%;
-        }
-    }
-    
-    .well .contents {
-        height: 13em;
     }
 }
 
@@ -257,11 +245,9 @@ body {
     .search-results-panel .list-group-item {
         margin: 0 0 15px 0;
 
-        &.active {
-            &:hover {
-                .list-group-item-heading {
-                    color: $colour-text2;
-                }
+        &.active:hover, &:hover {
+            .list-group-item-heading {
+                color: $colour-text2;
             }
         }
 

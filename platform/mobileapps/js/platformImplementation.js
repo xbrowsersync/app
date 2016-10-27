@@ -560,6 +560,9 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		// Set share bookmark button click event
 		vm.events.searchForm_ShareBookmark_Click = searchForm_ShareBookmark_Click;
 
+		// Increase search results timeout to avoid display lag
+		vm.settings.getResultsTimeout = 500;
+
 		// Check for updates regularly
 		bookmarks.CheckForUpdates();
 		$interval(function() {

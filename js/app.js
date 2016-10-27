@@ -180,6 +180,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             displaySyncBookmarksToolbarConfirmation: false,
             displaySyncDataUsage: false,
             displaySyncOptions: true,
+            getResultsTimeout: 250,
 			id: function(value) {
                 return arguments.length ? 
                     global.Id.Set(value) : 
@@ -1035,6 +1036,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         bookmarks.Search(queryData)
             .then(function(results) {
                 vm.search.results = results;
+
+                // Scroll to top of search results
+                $timeout(function() {
+                    document.querySelector('.search-results-panel').scrollTop = 0;
+                });
             })
             .catch(function(err) {
                 vm.search.results = null;
@@ -1120,13 +1126,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             // Execute search after timeout
             vm.search.getResultsTimeout = $timeout(function() {
                 searchBookmarks();
-            }, 250);
+            }, vm.settings.getResultsTimeout);
         }
     };
     
     var searchForm_SearchText_KeyDown = function($event) {
-        // If user pressed enter
-        if ($event.keyCode === 13) {
+        // If user pressed enter and search text present
+        if ($event.keyCode === 13 && !!vm.search.query) {
             if (!!vm.search.getResultsTimeout) {
                 $timeout.cancel(vm.search.getResultsTimeout);
                 vm.search.getResultsTimeout = null;

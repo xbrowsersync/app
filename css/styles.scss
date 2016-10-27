@@ -429,8 +429,8 @@ body {
     width: 100%;
 
     h1 {
-        background-position: 50% 15%;
-        background-size: 60%;
+        background-position: 50% 15px;
+        background-size: 40%;
     }
 
     h4 {
@@ -466,7 +466,7 @@ body {
         z-index: 50;
         
         .contents {
-            height: 120px;
+            height: 48vh;
             overflow-y: auto;
             font-size: 0.9em;
         }
@@ -1071,7 +1071,7 @@ body {
             margin: 5px auto 0;
 
             i {
-                font-size: 2em;                
+                font-size: 2.5em;                
             }
         }
     }
