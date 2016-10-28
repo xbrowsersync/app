@@ -85,6 +85,24 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
 		// Update browser bookmarks
 		return setBookmarks(bookmarks);
 	};
+
+    var isCurrentPageABookmark = function() {
+        var currentUrl;
+        
+        // Check if current url is contained in bookmarks
+		return platform.CurrentUrl.Get()
+            .then(function(result) {
+                currentUrl = result;
+                return searchBookmarks({ url: currentUrl });
+            })
+            .then(function(results) {
+				var result = _.find(results, function(bookmark) { 
+                    return bookmark.url.toLowerCase() === currentUrl.toLowerCase(); 
+                });
+
+                return $q.resolve(result);
+            });
+    };
     
     var getLookahead = function(word, bookmarks, tagsOnly) {
         var getBookmarks;
@@ -825,6 +843,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         CheckForUpdates: checkForUpdates,
 		Export: exportBookmarks,
 		Import: importBookmarks,
+        IncludesCurrentPage: isCurrentPageABookmark,
         GetLookahead: getLookahead,
         RefreshCache: refreshCachedBookmarks,
         Search: searchBookmarks,

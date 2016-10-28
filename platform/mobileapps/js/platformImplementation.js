@@ -6,14 +6,14 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Implements xBrowserSync.App.Platform for web app.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, platform, global, utility, bookmarks) {
+xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeout, platform, global, utility, bookmarks) {
 	'use strict';
 
 /* ------------------------------------------------------------------------------------
  * Platform variables
  * ------------------------------------------------------------------------------------ */
 
-	var vm, $scope;
+	var vm, $scope, currentUrl;
 	
 	var constants = {
 		"title": {
@@ -421,6 +421,12 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		"error_NotImplemented_Message" : {
 			"message":  "A required function has not been implemented and is causing xBrowserSync to not function correctly."
 		},
+		"error_FailedGetPageMetadata_Title" : {
+			"message":  "Couldn't get URL metadata"
+		},
+		"error_FailedGetPageMetadata_Message" : {
+			"message":  "URL is invalid or webpage data could not be retrieved."
+		},
 		"error_SyncInterrupted_Title" : {
 			"message":  "Sync interrupted"
 		},
@@ -443,7 +449,6 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 	var WebAppImplementation = function() {
 		// Inject required platform implementation functions
 		platform.Bookmarks.Clear = clearBookmarks;
-        platform.Bookmarks.ContainsCurrentPage = containsCurrentPage;
 		platform.Bookmarks.Populate = populateBookmarks;
 		platform.Constants.Get = getConstant;
         platform.CurrentUrl.Get = getCurrentUrl;
@@ -465,37 +470,12 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		return $q.resolve();
 	};
 	
-	var containsCurrentPage = function() {
-        return $q.resolve(false);
-    };
-
-	var deviceReady = function() {
-		if (vm.view.current === vm.view.views.search) {
-			// Focus on search box and show keyboard
-			$timeout(function() {
-				document.querySelector('input[name=txtSearch]').focus();
-				cordova.plugins.Keyboard.show();
-			}, 100);
-		}
-
-		// Use toasts for alerts
-		vm.alert.display = displayToast;
-	};
-
-	var displayToast = function(title, message) {
-		window.plugins.toast.showWithOptions({
-			message: title + '. ' + message,
-			duration: 6000, 
-			position: 'center'
-		});
-	};
-	
 	var getConstant = function(constName) {
 		return constants[constName].message;
 	};
 	
 	var getCurrentUrl = function() {
-        return $q.resolve(' ');
+        return $q.resolve(currentUrl);
     };
     
     var getFromLocalStorage = function(itemName) {
@@ -503,7 +483,79 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 	};
     
     var getPageMetadata = function() {
-		return $q.resolve(null);
+		// If current url not set, return with default url
+		if (!currentUrl) {
+			return $q.resolve({ url: 'http://' });
+		}
+
+		// If current url is not valid, return with default url
+		var matches = currentUrl.match(/^https?:\/\/\w+/i);    
+		if (!matches || matches.length <= 0) {
+			return $q.resolve({ url: 'http://' });
+		}
+		
+		// Otherwise get metadata for current url
+        var metadata = {
+			title: null,
+			url: currentUrl,
+			description: null,
+			tags: null
+		};
+
+		return $http.get(currentUrl)
+            .then(function(response) {
+				if (!response || !response.data) {
+					return $q.reject({ code: global.ErrorCodes.FailedGetPageMetadata });
+				}
+
+				// Extract metadata properties
+				var parser = new DOMParser();
+				var html = parser.parseFromString(response.data, 'text/html');
+
+				// Get page title
+				var title = html.querySelector('meta[property="og:title"]');
+				if (!!title && !!title.getAttribute('content')) {
+					metadata.title = title.getAttribute('content');
+				}
+				else {
+					metadata.title = html.title;
+				}
+				
+				// Get page description
+				var description = html.querySelector('meta[property="og:description"]') ||
+				html.querySelector('meta[name="description"]');				
+				if (!!description && !!description.getAttribute('content')) {
+					metadata.description = description.getAttribute('content');
+				}
+
+				// Get page tags
+				var tagElements = html.querySelectorAll('meta[property$="video:tag"]');
+				if (!!tagElements && tagElements.length > 0) {
+					var tags = '';
+					
+					for (var i = 0; i < tagElements.length; i++) {
+						tags += tagElements[i].getAttribute('content') + ',';
+					}
+
+					metadata.tags = tags;
+					return metadata;
+				}
+				
+				// Get meta tag values
+				var tagElements = html.querySelector('meta[name="keywords"]');
+				if (!!tagElements && !!tagElements.getAttribute('content')) {
+					metadata.tags = tagElements.getAttribute('content');
+				}
+				
+				return metadata;
+			})
+            .catch(function(err) {
+                return $q.reject({ code: global.ErrorCodes.FailedGetPageMetadata });
+            })
+			.finally(function() {
+				// Reset current url
+				currentUrl = null;
+			});
     };
 
 	var init = function(viewModel, scope) {
@@ -580,6 +632,70 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 	
 	var refreshInterface = function() {
 	};
+	
+	var setInLocalStorage = function(itemName, itemValue) {
+		localStorage.setItem(itemName, itemValue);
+	};
+	
+	var sync = function(vm, syncData, command) {
+		syncData.command = (!!command) ? command : global.Commands.SyncBookmarks;
+
+		// Start sync
+		bookmarks.Sync(syncData)
+			.then(function() {
+				vm.events.handleSyncResponse({ command: syncData.command, success: true });
+			})
+			.catch(function(err) {
+				vm.events.handleSyncResponse({ command: syncData.command, success: false, error: err });
+			});
+	};
+
+
+/* ------------------------------------------------------------------------------------
+ * Public functions
+ * ------------------------------------------------------------------------------------ */
+
+	var checkForSharedLink = function() {
+		// Set up intent to receive shared link
+		window.plugins.webintent.getExtra(
+			window.plugins.webintent.EXTRA_TEXT,
+			function(url) {
+				if (!!url && !!global.SyncEnabled.Get()) {
+					// Set shared url to current url
+					currentUrl = url;
+
+					// Display bookmark panel
+					vm.view.change(vm.view.views.bookmark);
+				}
+			});
+	};
+
+	var deviceReady = function() {
+		if (vm.view.current === vm.view.views.search) {
+			// Focus on search box and show keyboard
+			$timeout(function() {
+				document.querySelector('input[name=txtSearch]').focus();
+				cordova.plugins.Keyboard.show();
+			}, 100);
+		}
+
+		// Use toasts for alerts
+		vm.alert.display = displayToast;
+
+		// Check if a link was shared
+		checkForSharedLink();
+	};
+
+	var displayToast = function(title, description) {
+		var message = (!!title) ? title + '. ' + description : description;
+		
+		window.plugins.toast.showWithOptions({
+			message: message,
+			duration: 6000, 
+			position: 'bottom',
+			addPixelsY: -50
+		});
+	};
 
 	var resume = function() {
 		if (!!global.SyncEnabled.Get()) {
@@ -597,6 +713,9 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 				cordova.plugins.Keyboard.show();
 			}, 100);
 		}
+
+		// Check if a link was shared
+		checkForSharedLink();
 	};
 
     var searchForm_ScanCode_Click = function() {
@@ -617,6 +736,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		};
 
 		var onError = function (error) {
+			// Display alert
 			vm.alert.display(getConstant(vm.global.Constants.Error_ScanFailed_Title), error);
 		};
 		
@@ -632,29 +752,13 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		};
 			
 		var onError = function(error) {
+			// Display alert
 			vm.alert.display(getConstant(vm.global.Constants.Error_ShareFailed_Title), error);
 		};
 		
 		// Display share sheet
 		window.plugins.socialsharing.shareWithOptions(options, null, onError);
     };
-	
-	var setInLocalStorage = function(itemName, itemValue) {
-		localStorage.setItem(itemName, itemValue);
-	};
-	
-	var sync = function(vm, syncData, command) {
-		syncData.command = (!!command) ? command : global.Commands.SyncBookmarks;
-
-		// Start sync
-		bookmarks.Sync(syncData)
-			.then(function() {
-				vm.events.handleSyncResponse({ command: syncData.command, success: true });
-			})
-			.catch(function(err) {
-				vm.events.handleSyncResponse({ command: syncData.command, success: false, error: err });
-			});
-	};
 	
 	
 	// Call constructor

@@ -302,7 +302,7 @@ xBrowserSync.App.Bookmarks.$inject = ['$q', 'platform', 'global', 'api', 'utilit
 xBrowserSync.App.ChromeBackground.factory('bookmarks', xBrowserSync.App.Bookmarks);
 
 // Add platform implementation service
-xBrowserSync.App.PlatformImplementation.$inject = ['$q', '$timeout', '$interval', 'platform', 'global', 'utility'];
+xBrowserSync.App.PlatformImplementation.$inject = ['$http', '$interval', '$q', '$timeout', 'platform', 'global', 'utility', 'bookmarks'];
 xBrowserSync.App.ChromeBackground.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add background module

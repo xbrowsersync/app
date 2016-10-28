@@ -404,6 +404,12 @@
 	"error_NotImplemented_Message" : {
 		"message":  "A required function has not been implemented and is causing xBrowserSync to not function correctly."
 	},
+	"error_FailedGetPageMetadata_Title" : {
+		"message":  "Couldn't get URL metadata"
+	},
+	"error_FailedGetPageMetadata_Message" : {
+		"message":  "URL is invalid or webpage data could not be retrieved."
+	},
 	"error_SyncInterrupted_Title" : {
 		"message":  "Sync interrupted"
 	},

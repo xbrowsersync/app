@@ -36,6 +36,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.bookmark = {
             active: false,
             current: null,
+            currentUrl: null,
             displayUpdateForm : false,
             tagText: null,
             descriptionFieldOriginalHeight: null
@@ -239,98 +240,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
                 return global.SyncEnabled.Get() ? 1 : 0;
             }()),
-            change: function(view) {
-				vm.alert.show = false;
-                vm.working = false;
-                
-                // Reset view
-                switch(vm.view.current) {
-                    case vm.view.views.bookmark:
-                        vm.bookmarkForm.$setPristine();
-                        vm.bookmarkForm.$setUntouched();
-                        vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', true);
-                        vm.bookmark.current = null;
-                        vm.bookmark.tagText = null;
-                        vm.bookmark.tagTextMeasure = null;
-                        vm.bookmark.tagLookahead = null;
-                        document.querySelector('textarea[name="bookmarkDescription"]').style.height = null;
-                        vm.bookmark.displayUpdateForm = false;
-                        break;
-                    case vm.view.views.search:
-                        vm.search.lookahead = null;
-                        vm.search.query = null;
-                        vm.search.results = null;
-                        break;
-                    case vm.view.views.settings:
-                        vm.settings.visiblePanel = vm.settings.panels.sync;
-                        vm.settings.displayCancelSyncConfirmation = false;
-                        vm.settings.displayQRCode = false;
-                        vm.settings.displaySyncDataUsage = false;
-                        vm.settings.displayRestoreConfirmation = false;
-                        vm.settings.displayRestoreForm = false;
-                        vm.settings.displaySyncBookmarksToolbarConfirmation = false;  
-                        vm.settings.service.displayUpdateServiceUrlConfirmation = false;
-                        vm.settings.service.displayUpdateServiceUrlForm = false;
-                        updateServiceUrlForm_SetValidity(true);
-                        document.querySelector('#backupFile').value = null;
-                        vm.settings.backupFileName = null;
-                        vm.settings.backupRestoreResult = null;
-                        vm.settings.dataToRestore = '';
-                        break;
-                    case vm.view.views.login:
-                        if (!vm.introduction.displayIntro()) {
-                            vm.introduction.displayPanel();
-                        }
-                        
-                        vm.sync.displaySyncConfirmation = false;
-                        if (vm.syncForm) {
-                            vm.syncForm.$setPristine();
-                            vm.syncForm.$setUntouched();
-                        }
-                        break;
-                }
-                
-                switch(view) {
-                    case vm.view.views.search:
-                        $timeout(function() {
-                            platform.Interface.Refresh();
-                            document.querySelector('input[name=txtSearch]').focus();
-                        });
-                        break;
-                    case vm.view.views.bookmark:
-                        // Create new bookmark if necessary
-                        if (!vm.bookmark.current) {
-                            vm.bookmark.current = new utility.XBookmark(null, 'http://');
-                        }
-
-                        // Resize description field to account for tags
-                        bookmarkForm_ResizeDescriptionField();
-                        $timeout(function() {
-                            bookmarkForm_ResizeDescriptionField();
-                            document.querySelector('input[name="bookmarkTitle"]').focus();
-                        }, 100);
-                        break;
-                    case vm.view.views.settings:
-                        vm.settings.displaySyncOptions = !global.SyncEnabled.Get();
-                        
-                        // Get service status
-                        api.CheckServiceStatus()
-                            .then(function(serviceInfo) {
-                                // Set service info
-                                setServiceInformation(serviceInfo);
-                            })
-                            .catch(function(err) {
-                                vm.settings.service.status = global.ServiceStatus.Offline;
-                            });
-                        
-                        // Set new service form url
-                        vm.settings.service.newServiceUrl = vm.settings.service.url();
-
-                        break;
-                }
-				
-				vm.view.current = view;
-			},
+            change: changeView,
             displayMainView: function() {
                 if (!!global.SyncEnabled.Get()) {
                     vm.view.change(vm.view.views.search);
@@ -609,7 +519,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 });
                 
                 // Set bookmark active status if current bookmark is current page 
-                if (currentUrl === vm.bookmark.current.originalUrl) {
+                if (currentUrl.toLowerCase() === vm.bookmark.current.originalUrl.toLowerCase()) {
                     vm.bookmark.active = false;
                 }
                 
@@ -621,6 +531,72 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
             });
+    };
+
+    var bookmarkForm_Init = function() {
+        // If form properties already set, return 
+        if (!!vm.bookmark.current) {
+            vm.bookmark.current.originalUrl = vm.bookmark.url;
+            vm.bookmark.displayUpdateForm = true;
+            return $q.resolve();
+        }
+        
+        var deferred = $q.defer();
+        
+        // Show loading animation
+        vm.working = true;
+
+        // Check if current url is a bookmark
+        bookmarks.IncludesCurrentPage()
+            .then(function(result) {
+				if (!!result) {
+                    // Set form properties to current bookmark
+                    var bookmark = new utility.XBookmark(
+                        result.title, 
+                        result.url,
+                        result.description,
+                        result.tags);
+                    bookmark.originalUrl = result.url;
+                    vm.bookmark.current = bookmark;
+                    
+                    // Display update form
+                    vm.bookmark.displayUpdateForm = true;
+
+                    return deferred.resolve();
+                }
+                
+                // Get page metadata for current url
+                return platform.PageMetadata.Get();
+            })
+            .then(function(metadata) {
+                    if (!metadata) {
+                        return;
+                    }
+                    
+                    // Set form properties to url metadata
+                    var bookmark = new utility.XBookmark(
+                        metadata.title, 
+                        metadata.url, 
+                        metadata.description,
+                        getTagArrayFromText(metadata.tags));
+                    bookmark.originalUrl = metadata.url;
+                    vm.bookmark.current = bookmark;
+                    
+                    // Display add form
+                    vm.bookmark.displayUpdateForm = false;
+
+                    return deferred.resolve();
+            })
+            .catch(function(err) {
+                // Display alert
+                var errMessage = utility.GetErrorMessageFromException(err);
+                vm.alert.display(errMessage.title, errMessage.message, 'danger');
+            })
+            .finally(function() {
+                vm.working = false;
+            });
+        
+        return deferred.promise;
     };
     
     var bookmarkForm_RemoveTag_Click = function(tag) {
@@ -676,8 +652,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 });
                 
                 // Set bookmark active status if current bookmark is current page 
-                if (currentUrl === vm.bookmark.current.originalUrl) {
-                    vm.bookmark.active = (currentUrl === vm.bookmark.current.url);
+                if (currentUrl.toLowerCase() === vm.bookmark.current.originalUrl.toLowerCase()) {
+                    vm.bookmark.active = (currentUrl.toLowerCase() === vm.bookmark.current.url.toLowerCase());
                 }
                 
                 // Display the search panel
@@ -688,6 +664,98 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
             });
+    };
+
+    var changeView = function(view) {
+        vm.alert.show = false;
+        vm.working = false;
+        
+        // Reset current view
+        switch(vm.view.current) {
+            case vm.view.views.bookmark:
+                vm.bookmarkForm.$setPristine();
+                vm.bookmarkForm.$setUntouched();
+                vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', true);
+                vm.bookmark.current = null;
+                vm.bookmark.tagText = null;
+                vm.bookmark.tagTextMeasure = null;
+                vm.bookmark.tagLookahead = null;
+                document.querySelector('textarea[name="bookmarkDescription"]').style.height = null;
+                vm.bookmark.displayUpdateForm = false;
+                break;
+            case vm.view.views.search:
+                vm.search.lookahead = null;
+                vm.search.query = null;
+                vm.search.results = null;
+                break;
+            case vm.view.views.settings:
+                vm.settings.visiblePanel = vm.settings.panels.sync;
+                vm.settings.displayCancelSyncConfirmation = false;
+                vm.settings.displayQRCode = false;
+                vm.settings.displaySyncDataUsage = false;
+                vm.settings.displayRestoreConfirmation = false;
+                vm.settings.displayRestoreForm = false;
+                vm.settings.displaySyncBookmarksToolbarConfirmation = false;  
+                vm.settings.service.displayUpdateServiceUrlConfirmation = false;
+                vm.settings.service.displayUpdateServiceUrlForm = false;
+                updateServiceUrlForm_SetValidity(true);
+                document.querySelector('#backupFile').value = null;
+                vm.settings.backupFileName = null;
+                vm.settings.backupRestoreResult = null;
+                vm.settings.dataToRestore = '';
+                break;
+            case vm.view.views.login:
+                if (!vm.introduction.displayIntro()) {
+                    vm.introduction.displayPanel();
+                }
+                
+                vm.sync.displaySyncConfirmation = false;
+                if (vm.syncForm) {
+                    vm.syncForm.$setPristine();
+                    vm.syncForm.$setUntouched();
+                }
+                break;
+        }
+        
+        // Initialise new view
+        switch(view) {
+            case vm.view.views.search:
+                $timeout(function() {
+                    platform.Interface.Refresh();
+                    document.querySelector('input[name=txtSearch]').focus();
+                });
+                break;
+            case vm.view.views.bookmark:
+                // Set bookmark form properties
+                bookmarkForm_Init()
+                    .then(function() {
+                        // Resize description field to account for tags
+                        bookmarkForm_ResizeDescriptionField();
+                        $timeout(function() {
+                            bookmarkForm_ResizeDescriptionField();
+                            document.querySelector('input[name="bookmarkTitle"]').focus();
+                        }, 100);
+                    });
+                break;
+            case vm.view.views.settings:
+                vm.settings.displaySyncOptions = !global.SyncEnabled.Get();
+                
+                // Get service status
+                api.CheckServiceStatus()
+                    .then(function(serviceInfo) {
+                        // Set service info
+                        setServiceInformation(serviceInfo);
+                    })
+                    .catch(function(err) {
+                        vm.settings.service.status = global.ServiceStatus.Offline;
+                    });
+                
+                // Set new service form url
+                vm.settings.service.newServiceUrl = vm.settings.service.url();
+                break;
+        }
+        
+        vm.view.current = view;
     };
 	
 	var checkRestoreData = function(data) {
@@ -759,11 +827,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     	vm.view.change(vm.view.views.search);
                     }
 
-                    setBookmarkStatus()
-                        .catch(function(err) {
-                            var errMessage = utility.GetErrorMessageFromException(err);
-                            vm.alert.display(errMessage.title, errMessage.message, 'danger');
-                        });
+                    setBookmarkStatus();
                 }
                 else {
                     errMessage = utility.GetErrorMessageFromException(response.error);
@@ -780,11 +844,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             // After restoring bookmarks
             case global.Commands.RestoreBookmarks:
                 if (response.success) {
-                    setBookmarkStatus()
-                        .catch(function(err) {
-                            var errMessage = utility.GetErrorMessageFromException(err);
-                            vm.alert.display(errMessage.title, errMessage.message, 'danger');
-                        });
+                    setBookmarkStatus();
                     
                     vm.settings.displayRestoreForm = false;
                     vm.settings.displayRestoreConfirmation = false;
@@ -828,11 +888,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
 
         // Check if current page is a bookmark
-        setBookmarkStatus()
-            .catch(function(err) {
-				var errMessage = utility.GetErrorMessageFromException(err);
-				vm.alert.display(errMessage.title, errMessage.message, 'danger');
-			});
+        setBookmarkStatus();
         
         // Attach events to new tab links
         $timeout(function() {
@@ -1265,21 +1321,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var searchForm_ToggleBookmark_Click = function() {
         // Display bookmark panel
         vm.view.change(vm.view.views.bookmark);
-        
-        // Show loading animation
-        vm.working = true;
-        
-        // Set bookmark status
-        setBookmarkStatus()
-            .then(function() {
-                vm.working = false;
-                bookmarkForm_ResizeDescriptionField();
-            })
-            .catch(function(err) {
-                // Display alert
-                var errMessage = utility.GetErrorMessageFromException(err);
-                vm.alert.display(errMessage.title, errMessage.message, 'danger');
-            });
     };
     
     var searchForm_ToggleSearchingAnimation = function(active) {
@@ -1294,80 +1335,26 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
     
     var searchForm_UpdateBookmark_Click = function(bookmark) {
+        // Set bookmark form properties to selected bookmark
         vm.bookmark.current = bookmark;
-        vm.bookmark.current.originalUrl = vm.bookmark.current.url; 
-        vm.bookmark.displayUpdateForm = true;
         
-        // Display bookmark panel
-        $timeout(function() {
-            vm.view.change(vm.view.views.bookmark);
-        });
+        // Display update bookmark panel
+        vm.view.change(vm.view.views.bookmark);
     };
     
     var setBookmarkStatus = function() {
         if (!global.SyncEnabled.Get()) {
             return $q.resolve();
         }
-        
-        // Get bookmark active status and current page metadata
-        return $q.all([
-            platform.Bookmarks.ContainsCurrentPage(), 
-            platform.PageMetadata.Get()
-        ])
-            .then(function(data) {
-                if (!data) {
-                    return $q.reject();
-                }
-                
-                vm.bookmark.active = data[0];
-                var metadata = data[1];
 
-                if (!metadata) {
-                    return $q.resolve();
-                }
-                
-                if (vm.bookmark.active) {
-                    // Get existing bookmark info
-                    return bookmarks.Search({ url: metadata.url })
-                        .then(function(results) {
-                            var result = _.find(results, function(bookmark) { 
-                                return bookmark.url.toLowerCase() === metadata.url.toLowerCase(); 
-                            });
-                            
-                            if (!result) {
-                                return $q.reject({ code: global.ErrorCodes.XBookmarkNotFound });
-                            }
-                            
-                            var bookmark = new utility.XBookmark(
-                                result.title, 
-                                result.url, 
-                                result.description,
-                                result.tags);
-                            
-                            vm.bookmark.current = bookmark;
-                            vm.bookmark.current.originalUrl = bookmark.url;
-                            
-                            // Display update form
-                            vm.bookmark.displayUpdateForm = true;
-                        });
-                }
-                else {
-                    if (!metadata) {
-                        return;
-                    }
-                    
-                    // Get current page info
-                    var bookmark = new utility.XBookmark(
-                        metadata.title, 
-                        metadata.url, 
-                        metadata.description,
-                        getTagArrayFromText(metadata.tags));
-                    
-                    vm.bookmark.current = bookmark;
-                    
-                    // Display add form
-                    vm.bookmark.displayUpdateForm = false;
-                }
+        // If current page is a bookmark, actvate bookmark icon
+        bookmarks.IncludesCurrentPage()
+            .then(function(result) {
+				vm.bookmark.active = !!result;
+            })
+            .catch(function(err) {
+                var errMessage = utility.GetErrorMessageFromException(err);
+                vm.alert.display(errMessage.title, errMessage.message, 'danger');
             });
     };
 

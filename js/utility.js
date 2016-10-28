@@ -184,6 +184,10 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_NotImplemented_Title);
 				errorMessage.message = platform.Constants.Get(global.Constants.Error_NotImplemented_Message); 
 				break;
+			case global.ErrorCodes.FailedGetPageMetadata:
+				errorMessage.title = platform.Constants.Get(global.Constants.Error_FailedGetPageMetadata_Title);
+				errorMessage.message = platform.Constants.Get(global.Constants.Error_FailedGetPageMetadata_Message); 
+				break;
             default:
 				errorMessage.title = platform.Constants.Get(global.Constants.Error_Default_Title);
                 errorMessage.message = platform.Constants.Get(global.Constants.Error_Default_Message);

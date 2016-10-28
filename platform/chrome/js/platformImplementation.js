@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Implements xBrowserSync.App.Platform for Chrome extension.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, platform, global, utility, bookmarks) {
+xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeout, platform, global, utility, bookmarks) {
 	'use strict';
 
 /* ------------------------------------------------------------------------------------
@@ -24,7 +24,6 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 	var ChromeImplementation = function() {
 		// Inject required platform implementation functions
 		platform.Bookmarks.Clear = clearBookmarks;
-        platform.Bookmarks.ContainsCurrentPage = containsCurrentPage;
 		platform.Bookmarks.Created = bookmarksCreated;
 		platform.Bookmarks.Deleted = bookmarksDeleted;
 		platform.Bookmarks.Get = getBookmarks;
@@ -356,21 +355,6 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
 		return $q.all([clearOtherBookmarks.promise, clearBookmarksBar.promise]);
 	};
 	
-	var containsCurrentPage = function() {
-        var deferred = $q.defer();
-        
-        // Get current url
-        getCurrentUrl()
-            .then(function(currentUrl) {
-                // Find current url in local bookmarks
-                chrome.bookmarks.search({ url: currentUrl }, function(results) {
-                    deferred.resolve(!!results && results.length > 0);
-                });
-            });
-        
-        return deferred.promise;
-    };
-	
 	var getAsyncChannel = function(syncCallback) {
 		// Configure async messaging channel
 		var asyncChannel = chrome.runtime.connect({ name: global.Title.Get() });
@@ -489,7 +473,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, $interval, plat
                 metadata.url = activeTab.url;
 				
 				// Exit if this is a chrome url
-				if (!!activeTab.url && activeTab.url.toLowerCase().startsWith('chrome://')) {
+				if (activeTab.url.toLowerCase().startsWith('chrome://')) {
 					return deferred.resolve(metadata);
 				}
                 

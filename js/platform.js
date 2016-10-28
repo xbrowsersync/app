@@ -25,7 +25,6 @@ xBrowserSync.App.Platform = function($q) {
 	return {
 		Bookmarks: {
 			Clear: notImplemented,
-            ContainsCurrentPage: notImplemented,
 			Created: notImplemented,
 			Deleted: notImplemented,
 			Get: notImplemented,

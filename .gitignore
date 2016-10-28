@@ -6,3 +6,4 @@ css/styles.css
 platform/mobileapps/cordova/platforms/**
 platform/mobileapps/cordova/plugins/**
 platform/mobileapps/cordova/www/**
+platform/hello

@@ -204,6 +204,8 @@ xBrowserSync.App.Global = function(platform) {
 			Error_BrowserImportBookmarksNotSupported_Message: 'error_BrowserImportBookmarksNotSupported_Message',
             Error_NotImplemented_Title: 'error_NotImplemented_Title',
 			Error_NotImplemented_Message: 'error_NotImplemented_Message',
+            Error_FailedGetPageMetadata_Title: 'error_FailedGetPageMetadata_Title',
+            Error_FailedGetPageMetadata_Message: 'error_FailedGetPageMetadata_Message',
             Error_SyncInterrupted_Title: 'error_syncInterrupted_Title',
             Error_SyncInterrupted_Message: 'error_syncInterrupted_Message',
             Error_ScanFailed_Title: 'error_ScanFailed_Title',
