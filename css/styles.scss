@@ -751,8 +751,11 @@ body {
             }
 
             &.deleted {
-                @include animation(animate-slide-out 0.2s linear);
+                @include animation(animate-slide-out-fold-up 0.5s ease-out);
                 transform: translateX(-105%);
+                max-height: 0px;
+                margin-bottom: 0px;
+                overflow: hidden;
             }
             
             a {

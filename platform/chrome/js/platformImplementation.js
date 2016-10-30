@@ -13,8 +13,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
  * Platform variables
  * ------------------------------------------------------------------------------------ */
 
-	var bookmarksBarId = '1';
-	var otherBookmarksId = '2';
+	var bookmarksBarId = '1', otherBookmarksId = '2', vm;
 
 
 /* ------------------------------------------------------------------------------------
@@ -23,6 +22,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
     
 	var ChromeImplementation = function() {
 		// Inject required platform implementation functions
+		platform.BackupData = backupData;
 		platform.Bookmarks.Clear = clearBookmarks;
 		platform.Bookmarks.Created = bookmarksCreated;
 		platform.Bookmarks.Deleted = bookmarksDeleted;
@@ -48,6 +48,39 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 /* ------------------------------------------------------------------------------------
  * Public functions
  * ------------------------------------------------------------------------------------ */
+	
+	var backupData = function() {
+		// Export bookmarks
+		bookmarks.Export()
+            .then(function(data) {
+				var date = new Date();
+				var minute = ('0' + date.getMinutes()).slice(-2);
+				var hour = ('0' + date.getHours()).slice(-2);
+				var day = ('0' + date.getDate()).slice(-2);
+				var month = ('0' + (date.getMonth() + 1)).slice(-2);
+				var year = date.getFullYear();
+				var dateString = year + month + day + hour + minute;
+				
+				// Trigger download 
+                var backupLink = document.getElementById('backupLink');
+                var fileName = 'xBrowserSyncBackup_' + dateString + '.txt';
+                backupLink.setAttribute('download', fileName);
+				backupLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(data)));
+				backupLink.click();
+                
+                // Display message
+                var message = platform.Constants.Get(global.Constants.BackupSuccess_Message).replace(
+                    '{fileName}',
+                    fileName);
+                
+                vm.settings.backupRestoreResult = message;
+			})
+            .catch(function(err) {
+				// Display alert
+				var errMessage = utility.GetErrorMessageFromException(err);
+				vm.alert.display(errMessage.title, errMessage.message, 'danger');
+			});
+	};
 	
 	var bookmarksCreated = function(xBookmarks, args) {
 		var createInfo = args[1];
@@ -501,24 +534,27 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         return deferred.promise;
     };
 
-	var init = function(vm, scope) {
+	var init = function(viewModel, scope) {
+		// Set global variables
+		vm = viewModel;
+		
 		// Enable event listeners
         global.DisableEventListeners.Set(false);
 
 		// Get async channel for syncing in background
-        vm.sync.asyncChannel = getAsyncChannel(function(msg) {
-            vm.scope.$apply(function() {
-                vm.events.handleSyncResponse(msg);
+        viewModel.sync.asyncChannel = getAsyncChannel(function(msg) {
+            viewModel.scope.$apply(function() {
+                viewModel.events.handleSyncResponse(msg);
             });
         });
 
 		// Set login validation
-		vm.sync.validateLogin = function() {
-			return !!vm.settings.secret();
+		viewModel.sync.validateLogin = function() {
+			return !!viewModel.settings.secret();
 		};
 
 		// Focus on search box
-		if (vm.view.current === vm.view.views.search) {
+		if (viewModel.view.current === viewModel.view.views.search) {
 			$timeout(function() {
 				document.querySelector('input[name=txtSearch]').focus();
 			}, 100);

@@ -23,6 +23,7 @@ xBrowserSync.App.Platform = function($q) {
 	};
     
 	return {
+		BackupData: notImplemented,
 		Bookmarks: {
 			Clear: notImplemented,
 			Created: notImplemented,
@@ -30,6 +31,7 @@ xBrowserSync.App.Platform = function($q) {
 			Get: notImplemented,
 			Moved: notImplemented,
             Populate: notImplemented,
+			Share: notImplemented,
 			Updated: notImplemented
 		},
 		Constants: {
@@ -50,6 +52,8 @@ xBrowserSync.App.Platform = function($q) {
         PageMetadata: {
             Get: notImplemented
         },
+		ScanID: notImplemented,
+		SelectFile: notImplemented,
 		Sync: notImplemented
 	};
 };

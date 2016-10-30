@@ -318,6 +318,7 @@ xBrowserSync.App.Global = function(platform) {
             DataOutOfSync: 10110,
             NoStatus: 10200,
             FailedGetPageMetadata: 10300,
+            FailedSaveBackup: 10301,
             NotImplemented: 10400
         },
         Id: {

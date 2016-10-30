@@ -13,7 +13,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
  * Platform variables
  * ------------------------------------------------------------------------------------ */
 
-	var vm, $scope, currentUrl;
+	var $scope, currentUrl, showMainViewOnFocus = true, vm;
 	
 	var constants = {
 		"title": {
@@ -448,8 +448,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
     
 	var WebAppImplementation = function() {
 		// Inject required platform implementation functions
+		platform.BackupData = backupData;
 		platform.Bookmarks.Clear = clearBookmarks;
 		platform.Bookmarks.Populate = populateBookmarks;
+		platform.Bookmarks.Share = shareBookmark;
 		platform.Constants.Get = getConstant;
         platform.CurrentUrl.Get = getCurrentUrl;
 		platform.Init = init;
@@ -458,6 +460,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		platform.LocalStorage.Set = setInLocalStorage;
 		platform.OpenUrl = openUrl;
 		platform.PageMetadata.Get = getPageMetadata;
+		platform.ScanID = scanId;
+		platform.SelectFile = selectBackupFile;
 		platform.Sync = sync;
 	};
 
@@ -465,6 +469,60 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 /* ------------------------------------------------------------------------------------
  * Public functions
  * ------------------------------------------------------------------------------------ */
+	
+	var backupData = function() {
+		// Export bookmarks
+		bookmarks.Export()
+            .then(function(data) {
+				var date = new Date();
+				var minute = ('0' + date.getMinutes()).slice(-2);
+				var hour = ('0' + date.getHours()).slice(-2);
+				var day = ('0' + date.getDate()).slice(-2);
+				var month = ('0' + (date.getMonth() + 1)).slice(-2);
+				var year = date.getFullYear();
+				var dateString = year + month + day + hour + minute;
+				var fileName = 'xBrowserSyncBackup_' + dateString + '.txt';
+				
+				// Ensure view isn't reset if permissions dialog displays
+				showMainViewOnFocus = false;
+
+				var onError = function(err) {
+					// Display alert
+					var errMessage = utility.GetErrorMessageFromException(err);
+					vm.alert.display(errMessage.title, errMessage.message);
+				};
+				
+				window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function (dirEntry) { 
+					dirEntry.getDirectory('xBrowserSync', { create: true }, function (dirEntry) {
+						dirEntry.getFile(fileName, { create: true }, function (fileEntry) {
+							fileEntry.createWriter(function (fileWriter) {
+								fileWriter.write(JSON.stringify(data));
+								
+								fileWriter.onwriteend = function() {
+									// Display message
+									var message = platform.Constants.Get(global.Constants.BackupSuccess_Message).replace(
+										'{fileName}',
+										fileEntry.name);
+									
+									$scope.$apply(function() {
+										vm.settings.backupRestoreResult = message;
+									});
+
+									// Reset view on resume
+									showMainViewOnFocus = true;
+								};
+								
+								fileWriter.onerror = onError;
+							},
+							onError);
+						},
+						onError);
+					},
+					onError);
+				},
+				onError);
+			});
+	};
 	
 	var clearBookmarks = function() {
 		return $q.resolve();
@@ -603,14 +661,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			vm.introduction.displayPanel(10);
 		};
 
-		// Hook up back up file select event
-        document.querySelector('#backupFile').addEventListener('change', vm.events.backupRestoreForm_BackupFile_Change, false);
-
-		// Set scan code button click event
-		vm.events.searchForm_ScanCode_Click = searchForm_ScanCode_Click;
-
-		// Set share bookmark button click event
-		vm.events.searchForm_ShareBookmark_Click = searchForm_ShareBookmark_Click;
+		// Set backup file change event
+		document.getElementById('backupFile').addEventListener('change', backupFile_Change, false);
 
 		// Increase search results timeout to avoid display lag
 		vm.settings.getResultsTimeout = 500;
@@ -636,6 +688,65 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	var setInLocalStorage = function(itemName, itemValue) {
 		localStorage.setItem(itemName, itemValue);
 	};
+
+    var scanId = function() {
+        var options = {
+			'preferFrontCamera': false, 
+			'showFlipCameraButton': false, 
+			'prompt': getConstant(vm.global.Constants.Button_ScanCode_Label), 
+			'formats': 'QR_CODE' 
+		};
+
+		var onSuccess = function (result) {
+			// Set result as id
+			if (!!result && !!result.text) {
+				$scope.$apply(function() {
+					vm.settings.id(result.text);
+				});
+			}
+
+			// Reset view on resume
+			showMainViewOnFocus = true;
+		};
+
+		var onError = function (error) {
+			// Display alert
+			vm.alert.display(getConstant(vm.global.Constants.Error_ScanFailed_Title), error);
+
+			// Reset view on resume
+			showMainViewOnFocus = true;
+		};
+
+		// Ensure view isn't reset if permissions dialog displays
+		showMainViewOnFocus = false;
+		
+		// Activate barcode scanner
+		cordova.plugins.barcodeScanner.scan(onSuccess, onError, options);
+    };
+
+    var selectBackupFile = function() {
+        // Ensure view isn't reset once app regains focus
+		showMainViewOnFocus = false;
+		
+		// Open file dialog
+		document.querySelector('#backupFile').click();
+    };
+
+    var shareBookmark = function(event, result) {
+        var options = {
+			subject: result.title + ' (' + getConstant(vm.global.Constants.ShareBookmark_Title) + ')', 
+			url: result.url,
+			chooserTitle: getConstant(vm.global.Constants.ShareBookmark_Prompt)
+		};
+			
+		var onError = function(error) {
+			// Display alert
+			vm.alert.display(getConstant(vm.global.Constants.Error_ShareFailed_Title), error);
+		};
+		
+		// Display share sheet
+		window.plugins.socialsharing.shareWithOptions(options, null, onError);
+    };
 	
 	var sync = function(vm, syncData, command) {
 		syncData.command = (!!command) ? command : global.Commands.SyncBookmarks;
@@ -652,11 +763,35 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 
 /* ------------------------------------------------------------------------------------
- * Public functions
+ * Private functions
  * ------------------------------------------------------------------------------------ */
 
+	var backupFile_Change = function(event) {
+		var fileInput = document.getElementById('backupFile');
+		
+		if (fileInput.files.length > 0) {
+            var file = fileInput.files[0];
+            vm.settings.backupFileName = file.name;
+            var reader = new FileReader();
+
+            reader.onload = (function(data) {
+                return function(event) {
+                    $scope.$apply(function() {
+                        vm.settings.dataToRestore = event.target.result;
+                    });
+                };
+            })(file);
+
+            // Read the backup file data
+            reader.readAsText(file);
+        }
+
+		// Reset view on resume
+		showMainViewOnFocus = true;
+    };
+
 	var checkForSharedLink = function() {
-		// Set up intent to receive shared link
+		// Check for an existing intent and shared link
 		window.plugins.webintent.getExtra(
 			window.plugins.webintent.EXTRA_TEXT,
 			function(url) {
@@ -667,10 +802,15 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					// Display bookmark panel
 					vm.view.change(vm.view.views.bookmark);
 				}
+
+				// Remove the intent
+				window.plugins.webintent.removeExtra(window.plugins.webintent.EXTRA_TEXT);
 			});
 	};
 
 	var deviceReady = function() {
+		document.addEventListener('backbutton', handleBackButton, false);
+		
 		if (vm.view.current === vm.view.views.search) {
 			// Focus on search box and show keyboard
 			$timeout(function() {
@@ -697,14 +837,44 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		});
 	};
 
+	var handleBackButton = function(event) {
+		if (vm.view.current === vm.view.views.bookmark ||
+			vm.view.current === vm.view.views.settings ||
+			vm.view.current === vm.view.views.about
+		) {
+			// Back to login/search panel
+			event.preventDefault();
+			vm.view.displayMainView();
+
+			if (vm.view.current === vm.view.views.search) {
+				// Focus on search box and show keyboard
+				$timeout(function() {
+					document.querySelector('input[name=txtSearch]').focus();
+					cordova.plugins.Keyboard.show();
+				}, 100);
+			}
+		}
+		else {
+			// On main view, exit app
+			event.preventDefault();
+			navigator.app.exitApp();
+		}
+	};
+
 	var resume = function() {
 		if (!!global.SyncEnabled.Get()) {
 			// Check for bookmarks updates
 			bookmarks.CheckForUpdates();
 		}
-		
+
 		// Reset view to login/search panel
-		vm.view.displayMainView();
+		if (!!showMainViewOnFocus) {
+			vm.view.displayMainView();
+		}
+		else {
+			// Reset view on resume
+			showMainViewOnFocus = true;
+		}
 		
 		if (vm.view.current === vm.view.views.search) {
 			// Focus on search box and show keyboard
@@ -717,48 +887,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Check if a link was shared
 		checkForSharedLink();
 	};
-
-    var searchForm_ScanCode_Click = function() {
-        var options = {
-			'preferFrontCamera': false, 
-			'showFlipCameraButton': false, 
-			'prompt': getConstant(vm.global.Constants.Button_ScanCode_Label), 
-			'formats': 'QR_CODE' 
-		};
-
-		var onSuccess = function (result) {
-			// Set result as id
-			if (!!result && !!result.text) {
-				$scope.$apply(function() {
-					vm.settings.id(result.text);
-				});
-			}
-		};
-
-		var onError = function (error) {
-			// Display alert
-			vm.alert.display(getConstant(vm.global.Constants.Error_ScanFailed_Title), error);
-		};
-		
-		// Activate barcode scanner
-		cordova.plugins.barcodeScanner.scan(onSuccess, onError, options);
-    };
-
-    var searchForm_ShareBookmark_Click = function($event, result) {
-        var options = {
-			subject: result.title + ' (' + getConstant(vm.global.Constants.ShareBookmark_Title) + ')', 
-			url: result.url,
-			chooserTitle: getConstant(vm.global.Constants.ShareBookmark_Prompt)
-		};
-			
-		var onError = function(error) {
-			// Display alert
-			vm.alert.display(getConstant(vm.global.Constants.Error_ShareFailed_Title), error);
-		};
-		
-		// Display share sheet
-		window.plugins.socialsharing.shareWithOptions(options, null, onError);
-    };
 	
 	
 	// Call constructor

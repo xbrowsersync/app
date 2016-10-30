@@ -59,7 +59,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.events = {
             aboutPanel_Back_Click: aboutPanel_Back_Click,
             backupRestoreForm_Backup_Click: backupRestoreForm_Backup_Click,
-            backupRestoreForm_BackupFile_Change: backupRestoreForm_BackupFile_Change,
             backupRestoreForm_DisplayRestoreForm_Click: backupRestoreForm_DisplayRestoreForm_Click,
             backupRestoreForm_DisplayRestoreConfirmation_Click: backupRestoreForm_DisplayRestoreConfirmation_Click,
             backupRestoreForm_Restore_Click: backupRestoreForm_Restore_Click,
@@ -107,13 +106,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             queueSync: queueSync,
             searchForm_Clear_Click: searchForm_Clear_Click,
             searchForm_DeleteBookmark_Click: searchForm_DeleteBookmark_Click,
-            searchForm_ScanCode_Click: null,
+            searchForm_ScanCode_Click: searchForm_ScanCode_Click,
             searchForm_SearchText_Autocomplete: searchForm_SearchText_Autocomplete,
             searchForm_SearchText_Change: searchForm_SearchText_Change,
             searchForm_SearchText_KeyDown: searchForm_SearchText_KeyDown,
             searchForm_SearchResult_KeyDown: searchForm_SearchResult_KeyDown,
             searchForm_SelectBookmark_Press: searchForm_SelectBookmark_Press,
-            searchForm_ShareBookmark_Click: null,
+            searchForm_ShareBookmark_Click: searchForm_ShareBookmark_Click,
             searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
             syncPanel_SyncBookmarksToolbar_Click: syncPanel_SyncBookmarksToolbar_Click,
             syncPanel_SyncBookmarksToolbar_Confirm: syncPanel_SyncBookmarksToolbar_Confirm,
@@ -270,58 +269,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
     
     var backupRestoreForm_Backup_Click = function() {
-		// Export bookmarks
-		bookmarks.Export()
-            .then(function(data) {
-				var date = new Date();
-				var minute = ('0' + date.getMinutes()).slice(-2);
-				var hour = ('0' + date.getHours()).slice(-2);
-				var day = ('0' + date.getDate()).slice(-2);
-				var month = ('0' + (date.getMonth() + 1)).slice(-2);
-				var year = date.getFullYear();
-				var dateString = year + month + day + hour + minute;
-				
-				// Trigger download 
-                var backupLink = document.getElementById('backupLink');
-                var fileName = 'xBrowserSyncBackup_' + dateString + '.txt';
-                backupLink.setAttribute('download', fileName);
-				backupLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(data)));
-				backupLink.click();
-                
-                // Display message
-                var message = platform.Constants.Get(global.Constants.BackupSuccess_Message).replace(
-                    '{fileName}',
-                    fileName);
-                
-                vm.settings.backupRestoreResult = message;
-			})
-            .catch(function(err) {
-				// Display alert
-				var errMessage = utility.GetErrorMessageFromException(err);
-				vm.alert.display(errMessage.title, errMessage.message, 'danger');
-			});
+		platform.BackupData();
 	};
-
-    var backupRestoreForm_BackupFile_Change = function(event) {
-        var files = event.target.files;
-
-        if (files.length > 0) {
-            var file = files[0];
-            vm.settings.backupFileName = file.name;
-            var reader = new FileReader();
-
-            reader.onload = (function(data) {
-                return function(event) {
-                    $scope.$apply(function() {
-                        vm.settings.dataToRestore = event.target.result;
-                    });
-                };
-            })(file);
-
-            // Read the backup file data
-            reader.readAsText(file);
-        }
-    };
     
     var backupRestoreForm_DisplayRestoreForm_Click = function() {
         // Display restore form 
@@ -367,8 +316,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 	};
 
     var backupRestoreForm_SelectBackupFile_Click = function() {
-        document.querySelector('#backupFile').click();
-    };
+        platform.SelectFile();
+    }; 
     
     var bookmarkForm_BookmarkDescription_Change = function() {
         // Limit the bookmark description to the max length
@@ -505,10 +454,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Get current page url
 		platform.CurrentUrl.Get()
             .then(function(currentUrl) {
-                if (!currentUrl) {
-                    return $q.reject({ code: global.ErrorCodes.FailedGetPageMetadata });
-                }
-                
                 // Delete the bookmark
                 platform.Sync(vm.sync.asyncChannel, {
                     type: global.SyncType.Both,
@@ -519,7 +464,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 });
                 
                 // Set bookmark active status if current bookmark is current page 
-                if (currentUrl.toLowerCase() === vm.bookmark.current.originalUrl.toLowerCase()) {
+                if (!!currentUrl && currentUrl.toLowerCase() === vm.bookmark.current.originalUrl.toLowerCase()) {
                     vm.bookmark.active = false;
                 }
                 
@@ -536,7 +481,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var bookmarkForm_Init = function() {
         // If form properties already set, return 
         if (!!vm.bookmark.current) {
-            vm.bookmark.current.originalUrl = vm.bookmark.url;
+            vm.bookmark.current.originalUrl = vm.bookmark.current.url;
             vm.bookmark.displayUpdateForm = true;
             return $q.resolve();
         }
@@ -637,10 +582,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Get current page url
 		platform.CurrentUrl.Get()
             .then(function(currentUrl) {
-                if (!currentUrl) {
-                    return $q.reject({ code: global.ErrorCodes.FailedGetPageMetadata });
-                }
-                
                 // Update the bookmark
                 platform.Sync(vm.sync.asyncChannel, {
                     type: global.SyncType.Both,
@@ -650,9 +591,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         bookmark: vm.bookmark.current
                     }
                 });
-                
+
                 // Set bookmark active status if current bookmark is current page 
-                if (currentUrl.toLowerCase() === vm.bookmark.current.originalUrl.toLowerCase()) {
+                if (!!currentUrl && currentUrl.toLowerCase() === vm.bookmark.current.originalUrl.toLowerCase()) {
                     vm.bookmark.active = (currentUrl.toLowerCase() === vm.bookmark.current.url.toLowerCase());
                 }
                 
@@ -1136,7 +1077,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     url: bookmark.url
                 }
             });
-        }, 200);
+        }, 500);
+    };
+
+    var searchForm_ScanCode_Click = function() {
+        platform.ScanID();
     };
     
     var searchForm_SearchText_Change = function() {
@@ -1316,6 +1261,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if (!isActive) {
             bookmarkItem.classList.add('active');
         }
+    };
+
+    var searchForm_ShareBookmark_Click = function(event, result) {
+        platform.Bookmarks.Share(event, result);
     };
     
     var searchForm_ToggleBookmark_Click = function() {
