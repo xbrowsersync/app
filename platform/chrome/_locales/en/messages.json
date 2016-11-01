@@ -176,6 +176,9 @@
 	"backupRestore_Message" : {
 		"message":  "<p>Back up your xBrowserSync data or restore from a previous backup.</p><p>If sync is not enabled, back up and restore will apply to local browser data only.</p>"
 	},
+	"backupRestore_NotSynced_Message": {
+		"message": "<p>Back up and restore will be available here once you are synced.</p>"
+	},
 	"button_Backup_Label" : {
 		"message":  "Back Up"
 	},
@@ -195,7 +198,7 @@
 		"message":  "Back"
 	},
 	"backupSuccess_Message" : {
-		"message":  "Your data has been backed up to {fileName}, check downloaded files for the location."
+		"message":  "Your unencrypted data has been saved to {fileName}. Check downloaded files for the location."
 	},
 	"restoreSuccess_Message" : {
 		"message":  "Your data has been restored."
@@ -421,5 +424,8 @@
 	},
 	"error_ShareFailed_Title" : {
 		"message":  "Share failed"
+	},
+	"error_FailedBackupData_Title" : {
+		"message":  "Backup failed"
 	}
 }

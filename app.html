@@ -17,14 +17,14 @@
         
         <div id="loading-panel" ng-show="vm.working">
             <div class="content">
-                <h3>{{ vm.platform.Constants.Get(vm.global.Constants.Working_Title) }}</h3>
-                <p>{{ vm.platform.Constants.Get(vm.global.Constants.Working_Message) }}</p>
+                <h3>{{ vm.platform.GetConstant(vm.global.Constants.Working_Title) }}</h3>
+                <p>{{ vm.platform.GetConstant(vm.global.Constants.Working_Message) }}</p>
             </div>
             <div class="darken"></div>
         </div>
 
         <div id="qr-panel" ng-show="vm.settings.displayQRCode" ng-click="vm.settings.displayQRCode = false">
-            <canvas id="qr" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}"></canvas>
+            <canvas id="qr" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Close_Label) }}"></canvas>
             <div class="darken"></div>
         </div>
         
@@ -34,9 +34,9 @@
              'info': vm.alert.type === 'info',
              'warning': vm.alert.type === 'warning',
              'alert-danger': vm.alert.type === 'danger' }">
-            <button class="btn btn-icon btn-close" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}" ng-click="vm.alert.show = false"  tabindex="1000">
+            <button class="btn btn-icon btn-close" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Close_Label) }}" ng-click="vm.alert.show = false"  tabindex="1000">
                 <i class="fa fa-times-circle" aria-hidden="true"></i>
-                <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}</span>
+                <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Close_Label) }}</span>
             </button>
             <h4 ng-bind-html="vm.alert.title"></h4>
             <p ng-bind-html="vm.alert.message"></p>
@@ -44,12 +44,12 @@
         
         <div id="about-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.about">
             <h1>
-                <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Title) }}</span>
+                <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Title) }}</span>
             </h1>
             <div class="bottom">
                 <div class="well well-sm dark">
                     <div class="contents">
-                        <h4>{{ vm.platform.Constants.Get(vm.global.Constants.AboutPanel_Title) }} {{ vm.global.AppVersion }}</h4>
+                        <h4>{{ vm.platform.GetConstant(vm.global.Constants.AboutPanel_Title) }} {{ vm.global.AppVersion }}</h4>
                         <ul>
                             <li>[Added] Support for mobile apps. xBrowserSync core code has been updated to support porting directly to native mobile apps. Expect releases for iOS and Android soon.</li>
                             <li>[Added] Support for Firefox. xBrowserSync now works with Firefox's new WebExtensions browser extension API. However, Mozilla are still in the process of adding support for the full API used by Chrome and there are gaps, some of which xBrowserSync depends on. Once support has been added (soon hopefully) xBrowserSync will be released for Firefox.</li>
@@ -59,14 +59,14 @@
                         </ul>
                         <p class="text-center">
                             <a href="https://github.com/xBrowserSync/App/releases" class="new-tab">
-                                {{ vm.platform.Constants.Get(vm.global.Constants.AboutPanel_VersionHistoryLink_Label) }}
+                                {{ vm.platform.GetConstant(vm.global.Constants.AboutPanel_VersionHistoryLink_Label) }}
                             </a>
                         </p>
                     </div>
                 </div>
                 <div class="buttons">
                     <button type="button" class="btn btn-default btn-back" ng-click="vm.events.aboutPanel_Back_Click()" tabindex="1">
-                        {{ vm.platform.Constants.Get(vm.global.Constants.Button_Back_Label) }}
+                        {{ vm.platform.GetConstant(vm.global.Constants.Button_Back_Label) }}
                     </button>
                 </div>
             </div>
@@ -74,216 +74,216 @@
         
         <div id="login-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.login">
             <div class="header-panel clearfix">
-                <button class="btn btn-icon animate-fade" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Help_Label) }}" 
+                <button class="btn btn-icon animate-fade" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Help_Label) }}" 
                         ng-click="vm.events.introPanel_ShowHelp_Click()" ng-show="!vm.introduction.displayIntro() && !!vm.introduction.showLogo" tabindex="1000">
                     <i class="fa fa-question-circle" aria-hidden="true"></i>
-                    <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Help_Label) }}</span>
+                    <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Help_Label) }}</span>
                 </button>
-                <button class="btn btn-icon btn-settings" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Settings_Label) }}" 
+                <button class="btn btn-icon btn-settings" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Settings_Label) }}" 
                         ng-click="vm.view.change(vm.view.views.settings)" tabindex="1001">
                     <i class="fa fa-cog" aria-hidden="true"></i>
-                    <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Settings_Label) }}</span>
+                    <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Settings_Label) }}</span>
                 </button>
             </div>
             <div class="intro-panel">
                 <h1 class="animate-fade-out" ng-show="!!vm.introduction.showLogo" ng-class="{ true: 'animate-fade-long animate-fade-out-long' }[vm.introduction.displayIntro()]">
-                    <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Title) }}</span>
+                    <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Title) }}</span>
                 </h1>
                 <div id="intro-panel-1" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 1" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
                      hm-swipeleft="vm.events.introPanel1_Next_Click()">
-                    <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel1_Message)"></div>
+                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.IntroPanel1_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel1_Next_Click()">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel1_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-2" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 2" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
                      hm-swipeleft="vm.events.introPanel2_Next_Click()" hm-swiperight="vm.events.introPanel2_Prev_Click()">
-                    <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel2_Message)"></div>
+                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.IntroPanel2_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel2_Prev_Click()">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel2_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel2_Next_Click()">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel2_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-3" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 3" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
                      hm-swipeleft="vm.events.introPanel3_Next_Click()" hm-swiperight="vm.events.introPanel3_Prev_Click()">
-                    <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel3_Message)"></div>
+                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.IntroPanel3_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel3_Prev_Click()">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel3_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel3_Next_Click()">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel3_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-4" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 4" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
                      hm-swipeleft="vm.events.introPanel4_Next_Click()" hm-swiperight="vm.events.introPanel4_Prev_Click()">
-                    <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel4_Message)"></div>
+                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.IntroPanel4_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel4_Prev_Click()">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel4_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel4_Next_Click()">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel4_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-5" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 5" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
                      hm-swipeleft="vm.events.introPanel5_Next_Click()" hm-swiperight="vm.events.introPanel5_Prev_Click()">
-                    <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel5_Message)"></div>
+                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.IntroPanel5_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel5_Prev_Click()">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel5_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel5_Next_Click()">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel5_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-6" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 6" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
                      hm-swipeleft="vm.events.introPanel6_Next_Click()" hm-swiperight="vm.events.introPanel6_Prev_Click()">
-                    <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel6_Message)"></div>
+                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.IntroPanel6_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel6_Prev_Click()">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel6_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel6_Next_Click()">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel6_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-7" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 7" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
                     hm-swipeleft="vm.events.introPanel7_Next_Click()" hm-swiperight="vm.events.introPanel7_Prev_Click()">
-                    <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel7_Message)"></div>
+                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.IntroPanel7_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel7_Prev_Click()">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel7_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel7_Next_Click()">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel7_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-8" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 8" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
                      hm-swipeleft="vm.events.introPanel8_Next_Click()" hm-swiperight="vm.events.introPanel8_Prev_Click()">
-                    <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel8_Message)"></div>
+                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.IntroPanel8_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel8_Prev_Click()">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel8_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel8_Next_Click()">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel8_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-9" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 9" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
                      hm-swipeleft="vm.events.introPanel9_Next_Click()" hm-swiperight="vm.events.introPanel9_Prev_Click()">
-                    <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel9_Message)"></div>
+                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.IntroPanel9_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel9_Prev_Click()">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel9_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel9_Next_Click()">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel9_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-10" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 10" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
                      hm-swipeleft="vm.events.introPanel10_Next_Click()" hm-swiperight="vm.events.introPanel10_Prev_Click()">
-                    <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel10_Message)"></div>
+                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.IntroPanel10_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel10_Prev_Click()">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel10_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel10_Next_Click()">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel10_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-11" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 11" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
                      hm-swipeleft="vm.events.introPanel11_Next_Click()" hm-swiperight="vm.events.introPanel11_Prev_Click()">
-                    <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel11_Message)"></div>
+                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.IntroPanel11_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel11_Prev_Click()">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel11_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel11_Next_Click()">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel11_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-12" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 12" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
                      hm-swipeleft="vm.events.introPanel12_Next_Click()" hm-swiperight="vm.events.introPanel12_Prev_Click()">
-                    <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel12_Message)"></div>
+                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.IntroPanel12_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel12_Prev_Click()">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel12_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel12_Next_Click()">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel12_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-13" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 13" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
                      hm-swipeleft="vm.events.introPanel13_Next_Click()" hm-swiperight="vm.events.introPanel13_Prev_Click()">
-                    <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel13_Message)"></div>
+                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.IntroPanel13_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel13_Prev_Click()">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel13_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel13_Next_Click()">
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel13_Next_Click()">
                             <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Next_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}</span>
                         </button>
                     </div>
                 </div>
                 <div id="intro-panel-14" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 14" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
                      hm-swiperight="vm.events.introPanel14_Prev_Click()">
-                    <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.IntroPanel14_Message)"></div>
+                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.IntroPanel14_Message)"></div>
                     <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel14_Prev_Click()">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel14_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Previous_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
                     </div>
                 </div>
             </div>
             <form name="vm.syncForm" class="animate-fade" ng-hide="vm.sync.displaySyncConfirmation" novalidate>
-                <label class="sr-only" for="txtClientSecret">{{ vm.platform.Constants.Get(vm.global.Constants.Field_ClientSecret_Label) }}</label>
+                <label class="sr-only" for="txtClientSecret">{{ vm.platform.GetConstant(vm.global.Constants.Field_ClientSecret_Label) }}</label>
                 <div class="form-group secret-form-group" ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtClientSecret.$invalid]">
                     <input name="txtClientSecret" ng-model="vm.settings.secret" type="password" class="form-control" ng-change="vm.events.syncForm_ClientSecret_Change()"
                            ng-model-options="{ getterSetter: true }" ng-disabled="vm.sync.enabled()" maxlength="150"
-                           placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.Field_ClientSecret_Description) }}" tabindex="1" />
+                           placeholder="{{ vm.platform.GetConstant(vm.global.Constants.Field_ClientSecret_Description) }}" tabindex="1" />
                     <div class="progress" ng-hide="!vm.settings.secret()">
                         <div class="progress-bar" role="progressbar" style="width: {{ (vm.settings.secretComplexity.complexity === 0) ? 100 : vm.settings.secretComplexity.complexity }}%" ng-class="{
                             'progress-bar-warning': vm.settings.secretComplexity.complexity > 25 && vm.settings.secretComplexity.complexity < 50,
@@ -293,30 +293,30 @@
                     </div>
                     <div class="progress-bar-background"></div>
                 </div>
-                <label class="sr-only" for="txtId">{{ vm.platform.Constants.Get(vm.global.Constants.Field_Id_Label) }}</label>
+                <label class="sr-only" for="txtId">{{ vm.platform.GetConstant(vm.global.Constants.Field_Id_Label) }}</label>
                 <div class="form-group">
-                    <button type="button" class="btn btn-icon btn-scanCode" ng-hide="vm.settings.id()" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_ScanCode_Label) }}" ng-click="vm.events.searchForm_ScanCode_Click()">
+                    <button type="button" class="btn btn-icon btn-scanCode" ng-hide="vm.settings.id()" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_ScanCode_Label) }}" ng-click="vm.events.searchForm_ScanCode_Click()">
                         <i class="fa fa-qrcode" aria-hidden="true"></i>
                     </button>
                     <input name="txtId" ng-model="vm.settings.id" class="form-control" ng-model-options="{ getterSetter: true }"
-                           ng-disabled="vm.sync.enabled()" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.Field_Id_Description) }}" 
+                           ng-disabled="vm.sync.enabled()" placeholder="{{ vm.platform.GetConstant(vm.global.Constants.Field_Id_Description) }}" 
                            maxlength="32" tabindex="2" />
                 </div>
                 <div id="syncButtonPanel" class="text-center">
                     <button id="btnSync" type="submit" class="btn btn-default" ng-disabled="!vm.sync.validateLogin()" ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
-                        {{ vm.platform.Constants.Get(vm.global.Constants.Button_Sync_Enable_Label) }}
+                        {{ vm.platform.GetConstant(vm.global.Constants.Button_Sync_Enable_Label) }}
                     </button>
                 </div>
             </form>
             <div class="confirm well well-sm animate-fade" ng-show="vm.sync.displaySyncConfirmation">
-                <h4>{{ vm.platform.Constants.Get(vm.global.Constants.ConfirmReplaceBookmarks_Title) }}</h4>
-                <p>{{ vm.platform.Constants.Get(vm.global.Constants.ConfirmReplaceBookmarks_Message) }}</p>
+                <h4>{{ vm.platform.GetConstant(vm.global.Constants.ConfirmReplaceBookmarks_Title) }}</h4>
+                <p>{{ vm.platform.GetConstant(vm.global.Constants.ConfirmReplaceBookmarks_Message) }}</p>
                 <div class="buttons">
                     <button id="btnSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncForm_ConfirmSync_Click()" tabindex="4">
-                        {{ vm.platform.Constants.Get(vm.global.Constants.Button_Confirm_Label) }}
+                        {{ vm.platform.GetConstant(vm.global.Constants.Button_Confirm_Label) }}
                     </button>
                     <button id="btnSync_Cancel" type="button" class="btn btn-default" ng-click="vm.sync.displaySyncConfirmation = false" tabindex="5">
-                        {{ vm.platform.Constants.Get(vm.global.Constants.Button_Deny_Label) }}
+                        {{ vm.platform.GetConstant(vm.global.Constants.Button_Deny_Label) }}
                     </button>
                 </div>
             </div>
@@ -325,35 +325,35 @@
         <div id="search-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.search">
             <div class="header-panel clearfix">
                 <div class="buttons">
-                    <button class="btn btn-icon btn-toggle-bookmark" ng-class="{ 'active': vm.bookmark.active }" title="{{ vm.bookmark.active ? vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) : vm.platform.Constants.Get(vm.global.Constants.Button_AddBookmark_Label) }}" 
+                    <button class="btn btn-icon btn-toggle-bookmark" ng-class="{ 'active': vm.bookmark.active }" title="{{ vm.bookmark.active ? vm.platform.GetConstant(vm.global.Constants.Button_EditBookmark_Label) : vm.platform.GetConstant(vm.global.Constants.Button_AddBookmark_Label) }}" 
                             ng-click="vm.events.searchForm_ToggleBookmark_Click()" tabindex="1000">
                         <i class="fa" aria-hidden="true"></i>
-                        <span class="sr-only">{{ vm.bookmark.active ? vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) : vm.platform.Constants.Get(vm.global.Constants.Button_AddBookmark_Label) }}</span>
+                        <span class="sr-only">{{ vm.bookmark.active ? vm.platform.GetConstant(vm.global.Constants.Button_EditBookmark_Label) : vm.platform.GetConstant(vm.global.Constants.Button_AddBookmark_Label) }}</span>
                     </button>
-                    <button class="btn btn-icon btn-about" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_About_Label) }}" ng-click="vm.view.change(vm.view.views.about)" tabindex="1001">
-                        <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_About_Label) }}</span>
+                    <button class="btn btn-icon btn-about" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_About_Label) }}" ng-click="vm.view.change(vm.view.views.about)" tabindex="1001">
+                        <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_About_Label) }}</span>
                     </button>
-                    <button class="btn btn-icon btn-settings" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Settings_Label) }}" ng-click="vm.view.change(vm.view.views.settings)" tabindex="1002">
+                    <button class="btn btn-icon btn-settings" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Settings_Label) }}" ng-click="vm.view.change(vm.view.views.settings)" tabindex="1002">
                         <i class="fa fa-cog" aria-hidden="true"></i>
-                        <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Settings_Label) }}</span>
+                        <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Settings_Label) }}</span>
                     </button>
                 </div>
                 <div class="search-form">
-                    <input class="form-control" name="txtSearch" maxlength="200" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.Field_Search_Description) }}" ng-model="vm.search.query" 
+                    <input class="form-control" name="txtSearch" maxlength="200" placeholder="{{ vm.platform.GetConstant(vm.global.Constants.Field_Search_Description) }}" ng-model="vm.search.query" 
                            ng-change="vm.events.searchForm_SearchText_Change()" ng-keydown="vm.events.searchForm_SearchText_KeyDown($event)" ng-trim="false" tabindex="1" />
                     <label for="txtSearch"><i class="fa fa-search"></i></label>
                     <div class="lookahead-container">
                         <span class="measure" data-ng-bind-html="vm.search.queryMeasure"></span>
                         <span class="lookahead" ng-show="vm.search.lookahead" ng-click="vm.events.searchForm_SearchText_Autocomplete()">{{ vm.search.lookahead }}</span>
                     </div>
-                    <button class="btn btn-icon btn-clear" ng-show="vm.search.query" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Clear_Label) }}" ng-click="vm.events.searchForm_Clear_Click()">
+                    <button class="btn btn-icon btn-clear" ng-show="vm.search.query" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Clear_Label) }}" ng-click="vm.events.searchForm_Clear_Click()">
                         <i class="fa fa-times-circle" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
             <div class="search-results-panel" ng-show="!!vm.search.results">
                 <h4 class="no-bookmarks" ng-show="vm.search.results.length === 0">
-                    {{ vm.platform.Constants.Get(vm.global.Constants.NoSearchResults_Message) }}
+                    {{ vm.platform.GetConstant(vm.global.Constants.NoSearchResults_Message) }}
                 </h4>
                 <div class="list-group" ng-show="vm.search.results.length > 0">
                     <div class="list-group-item" ng-repeat="result in vm.search.results track by result.id">
@@ -363,13 +363,13 @@
                                     <i class="fa fa-share-alt" aria-hidden="true"></i>
                                     <span class="sr-only">Share bookmark</span>
                                 </button>
-                                <button class="btn btn-icon" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) }}" hm-tap="vm.events.searchForm_UpdateBookmark_Click(result)">
+                                <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_EditBookmark_Label) }}" hm-tap="vm.events.searchForm_UpdateBookmark_Click(result)">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
-                                    <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) }}</span>
+                                    <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_EditBookmark_Label) }}</span>
                                 </button>
-                                <button class="btn btn-icon btn-delete-bookmark" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_DeleteBookmark_Label) }}" hm-tap="vm.events.searchForm_DeleteBookmark_Click($event, result)">
+                                <button class="btn btn-icon btn-delete-bookmark" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_DeleteBookmark_Label) }}" hm-tap="vm.events.searchForm_DeleteBookmark_Click($event, result)">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
-                                    <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_DeleteBookmark_Label) }}</span>
+                                    <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_DeleteBookmark_Label) }}</span>
                                 </button>
                             </div>
                         </div>
@@ -381,9 +381,9 @@
                                 <div class="url">{{ result.url }}</div>
                             </div>
                         </a>
-                        <button class="btn btn-icon btn-edit-bookmark" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) }}" ng-click="vm.events.searchForm_UpdateBookmark_Click(result)">
+                        <button class="btn btn-icon btn-edit-bookmark" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_EditBookmark_Label) }}" ng-click="vm.events.searchForm_UpdateBookmark_Click(result)">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_EditBookmark_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_EditBookmark_Label) }}</span>
                         </button>
                     </div>
                 </div>
@@ -394,34 +394,34 @@
         <div id="bookmark-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.bookmark">
             <div class="header-panel clearfix">
                 <h2>
-                    {{ (vm.bookmark.displayUpdateForm) ? vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Title_Edit) : vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Title_Add) }}
+                    {{ (vm.bookmark.displayUpdateForm) ? vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Title_Edit) : vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Title_Add) }}
                 </h2>
-                <button class="btn btn-icon btn-close" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}" ng-click="vm.view.displayMainView()"  tabindex="1000">
+                <button class="btn btn-icon btn-close" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Close_Label) }}" ng-click="vm.view.displayMainView()"  tabindex="1000">
                     <i class="fa fa-times-circle" aria-hidden="true"></i>
-                    <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}</span>
+                    <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Close_Label) }}</span>
                 </button>
             </div>
             <div class="bookmark-form-panel animate-fade">
                 <form id="bookmarkForm" name="vm.bookmarkForm" novalidate>
                     <div class="form-group" ng-class="{ true: 'has-error' }[vm.bookmarkForm.bookmarkTitle.$touched && vm.bookmarkForm.bookmarkTitle.$invalid]">
-                        <label for="bookmarkTitle" class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Title_Label) }}</label>
+                        <label for="bookmarkTitle" class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Field_Title_Label) }}</label>
                         <input type="text" class="form-control" name="bookmarkTitle" ng-model="vm.bookmark.current.title" maxlength="255" tabindex="1"
-                               placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Title_Label) }}" required>
+                               placeholder="{{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Field_Title_Label) }}" required>
                     </div>
                     <div class="form-group" ng-class="{ true: 'has-error' }[vm.bookmarkForm.bookmarkUrl.$touched && vm.bookmarkForm.bookmarkUrl.$invalid]">
-                        <label for="bookmarkUrl" class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Url_Label) }}</label>
+                        <label for="bookmarkUrl" class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Field_Url_Label) }}</label>
                         <input type="text" class="form-control" name="bookmarkUrl" placeholder="http(s)://..." ng-model="vm.bookmark.current.url" 
                                ng-change="vm.events.bookmarkForm_BookmarkUrl_Change()" maxlength="255" tabindex="2"
-                               placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Url_Label) }}" required>
+                               placeholder="{{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Field_Url_Label) }}" required>
                     </div>
                     <div class="form-group">
-                        <label for="bookmarkDescription" class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Description_Label) }}</label>
+                        <label for="bookmarkDescription" class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Field_Description_Label) }}</label>
                         <textarea class="form-control" name="bookmarkDescription" rows="3" ng-model="vm.bookmark.current.description" ng-change="vm.events.bookmarkForm_BookmarkDescription_Change()"
-                                  tabindex="3" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Description_Label) }}"></textarea>
+                                  tabindex="3" placeholder="{{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Field_Description_Label) }}"></textarea>
                     </div>
                     <div class="form-group tags-form-group">
-                        <label for="bookmarkTags" class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Tags_Label) }}</label>
-                            <input type="text" class="form-control" name="bookmarkTags" placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Field_Tags_Placeholder) }}" maxlength="50" tabindex="4"
+                        <label for="bookmarkTags" class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Field_Tags_Label) }}</label>
+                            <input type="text" class="form-control" name="bookmarkTags" placeholder="{{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Field_Tags_Placeholder) }}" maxlength="50" tabindex="4"
                                    ng-model="vm.bookmark.tagText" ng-change="vm.events.bookmarkForm_BookmarkTags_Change()" ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" ng-trim="false">
                             <div class="lookahead-container">
                                 <span class="measure" ng-bind-html="vm.bookmark.tagTextMeasure"></span>
@@ -432,18 +432,18 @@
                             <button class="label label-default" ng-repeat="tag in vm.bookmark.current.tags track by $index" ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
                                 {{ tag }}
                                 <i class="fa fa-times" aria-hidden="true"></i>
-                                <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_RemoveTag_Label) }}</span>
+                                <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Button_RemoveTag_Label) }}</span>
                             </button>
                         </div>
                     <div class="buttons">
                         <button type="submit" class="btn btn-default" ng-show="!vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_CreateBookmark_Click()" tabindex="6">
-                            {{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_AddBookmark_Label) }}
+                            {{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Button_AddBookmark_Label) }}
                         </button>
                         <button type="submit" class="btn btn-default" ng-show="vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_UpdateBookmark_Click()" tabindex="6">
-                            {{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_UpdateBookmark_Label) }}
+                            {{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Button_UpdateBookmark_Label) }}
                         </button>
                         <button type="button" class="btn btn-default" ng-show="vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_DeleteBookmark_Click()" tabindex="7">
-                            {{ vm.platform.Constants.Get(vm.global.Constants.BookmarkPanel_Button_RemoveBookmark_Label) }}
+                            {{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Button_RemoveBookmark_Label) }}
                         </button>
                     </div>
                 </form>
@@ -452,57 +452,57 @@
         
         <div id="settings-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.settings">
             <div class="header-panel clearfix">
-                <h2>{{ vm.platform.Constants.Get(vm.global.Constants.Button_Settings_Label) }}</h2>
-                <button class="btn btn-icon btn-close" title="{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}" 
+                <h2>{{ vm.platform.GetConstant(vm.global.Constants.Button_Settings_Label) }}</h2>
+                <button class="btn btn-icon btn-close" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Close_Label) }}" 
                         ng-click="vm.view.displayMainView()" tabindex="1001">
                     <i class="fa fa-times-circle" aria-hidden="true"></i>
-                    <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.Button_Close_Label) }}</span>
+                    <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Close_Label) }}</span>
                 </button>
             </div>
             <div class="sync-panel well well-sm">
                 <h4 ng-click="vm.settings.visiblePanel = vm.settings.panels.sync"
                     ng-class="{ active: (vm.settings.visiblePanel === vm.settings.panels.sync) }">
-                    {{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_Title) }}
+                    {{ vm.platform.GetConstant(vm.global.Constants.SyncPanel_Title) }}
                     <i class="fa fa-arrow-down"></i>
                 </h4>
                 <div class="panel-content" ng-show="vm.settings.visiblePanel === vm.settings.panels.sync">
                     <div id="syncOptions-Panel" class="animate-fade" ng-show="vm.settings.displaySyncOptions && !vm.settings.service.displaySyncBookmarksToolbarConfirmation">
-                        <p ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.SyncPanel_Message)"></p>
+                        <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.SyncPanel_Message)"></div>
                         <div class="checkbox">
                             <label>
                                 <input id="syncBookmarksToolbar" type="checkbox" ng-model="vm.settings.syncBookmarksToolbar" ng-model-options="{ getterSetter: true }" 
                                  ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Click()" tabindex="1" />
-                                <span>{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_SyncBookmarksToolbar_Label) }}</span>
+                                <span>{{ vm.platform.GetConstant(vm.global.Constants.SyncPanel_SyncBookmarksToolbar_Label) }}</span>
                             </label>
                         </div>
                         <div class="buttons">
                             <button type="button" class="btn btn-default btn-back" ng-show="vm.sync.enabled()" ng-click="vm.settings.displaySyncOptions = false" tabindex="2">
-                                {{ vm.platform.Constants.Get(vm.global.Constants.Button_Back_Label) }}
+                                {{ vm.platform.GetConstant(vm.global.Constants.Button_Back_Label) }}
                             </button>
                         </div>
                     </div>
                     <div class="animate-fade text-center" ng-show="vm.sync.enabled() && (!vm.settings.displaySyncOptions && !vm.settings.displaySyncDataUsage)">
-                        <label>{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_Id_Label) }}:</label>
+                        <label>{{ vm.platform.GetConstant(vm.global.Constants.SyncPanel_Id_Label) }}:</label>
                         <span id="id">{{ vm.settings.id() }}</span>
-                        <button class="btn btn-icon btn-qrcode" title="{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_DisplayQRCode_Label) }}" 
+                        <button class="btn btn-icon btn-qrcode" title="{{ vm.platform.GetConstant(vm.global.Constants.SyncPanel_DisplayQRCode_Label) }}" 
                                 ng-click="vm.events.displayQRCode_Click()" tabindex="3">
                             <i class="fa fa-qrcode" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_DisplayQRCode_Label) }}</span>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.SyncPanel_DisplayQRCode_Label) }}</span>
                         </button>
                         <div class="buttons">
                             <button class="btn btn-default" ng-click="vm.events.syncPanel_DisplayDataUsage_Click()" tabindex="4">
-                                {{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_DisplayDataUsage_Label) }}
+                                {{ vm.platform.GetConstant(vm.global.Constants.SyncPanel_DisplayDataUsage_Label) }}
                             </button>
                             <button class="btn btn-default btn-syncOptions" ng-click="vm.events.syncPanel_DisplaySyncOptions_Click()" tabindex="5">
-                                {{ vm.platform.Constants.Get(vm.global.Constants.SyncPanel_DisplaySyncOptions_Label) }}
+                                {{ vm.platform.GetConstant(vm.global.Constants.SyncPanel_DisplaySyncOptions_Label) }}
                             </button>
                             <button class="btn btn-default" ng-click="vm.events.syncForm_DisableSync_Click()" tabindex="6">
-                                {{ vm.platform.Constants.Get(vm.global.Constants.Button_Sync_Disable_Label) }}
+                                {{ vm.platform.GetConstant(vm.global.Constants.Button_Sync_Disable_Label) }}
                             </button>
                         </div>
                     </div>
                     <div id="syncDataUsage-Panel" class="text-center animate-fade" ng-show="vm.settings.displaySyncDataUsage">
-                        <div>{{ vm.platform.Constants.Get(vm.global.Constants.SyncDataUsagePanel_Message) }}:</div>
+                        <div>{{ vm.platform.GetConstant(vm.global.Constants.SyncDataUsagePanel_Message) }}:</div>
                         <div class="chart-panel">
                             <div id="chart"></div>
                             <div class="values" ng-show="!!vm.settings.syncDataUsed">
@@ -512,30 +512,30 @@
                         </div>
                         <div class="buttons">
                             <button type="button" class="btn btn-default btn-back" ng-click="vm.settings.displaySyncDataUsage = false" tabindex="2">
-                                {{ vm.platform.Constants.Get(vm.global.Constants.Button_Back_Label) }}
+                                {{ vm.platform.GetConstant(vm.global.Constants.Button_Back_Label) }}
                             </button>
                         </div>
                     </div>
                     <div class="animate-fade" ng-show="vm.settings.service.displaySyncBookmarksToolbarConfirmation">
-                        <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.SyncBookmarksToolbarConfirmation_Message)"></div>
+                        <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.SyncBookmarksToolbarConfirmation_Message)"></div>
                         <div class="buttons">
                             <button id="btnSyncBookmarksToolbar_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Confirm()" tabindex="4">
-                                {{ vm.platform.Constants.Get(vm.global.Constants.Button_Confirm_Label) }}
+                                {{ vm.platform.GetConstant(vm.global.Constants.Button_Confirm_Label) }}
                             </button>
                             <button type="button" class="btn btn-default" tabindex="5"
                                     ng-click="vm.settings.syncBookmarksToolbar(false); vm.settings.service.displaySyncBookmarksToolbarConfirmation = false">
-                                {{ vm.platform.Constants.Get(vm.global.Constants.Button_Deny_Label) }}
+                                {{ vm.platform.GetConstant(vm.global.Constants.Button_Deny_Label) }}
                             </button>
                         </div>
                     </div>
                     <div class="animate-fade" ng-show="vm.settings.service.displayCancelSyncConfirmation">
-                        <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.CancelSyncConfirmation_Message)"></div>
+                        <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.CancelSyncConfirmation_Message)"></div>
                         <div class="buttons">
                             <button id="btnCancelSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncForm_CancelSyncConfirmation_Click()" tabindex="4">
-                                {{ vm.platform.Constants.Get(vm.global.Constants.Button_Confirm_Label) }}
+                                {{ vm.platform.GetConstant(vm.global.Constants.Button_Confirm_Label) }}
                             </button>
                             <button type="button" class="btn btn-default" ng-click="vm.settings.service.displayCancelSyncConfirmation = false" tabindex="5">
-                                {{ vm.platform.Constants.Get(vm.global.Constants.Button_Deny_Label) }}
+                                {{ vm.platform.GetConstant(vm.global.Constants.Button_Deny_Label) }}
                             </button>
                         </div>
                     </div>
@@ -544,20 +544,20 @@
             <div class="status-panel well well-sm">
                 <h4 ng-click="vm.settings.visiblePanel = vm.settings.panels.serviceStatus"
                     ng-class="{ active: (vm.settings.visiblePanel === vm.settings.panels.serviceStatus) }">
-                    {{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Label) }}
+                    {{ vm.platform.GetConstant(vm.global.Constants.ServiceStatus_Label) }}
                     <i class="fa fa-arrow-down"></i>
                 </h4>
                 <div class="panel-content" ng-show="vm.settings.visiblePanel === vm.settings.panels.serviceStatus">
                     <div class="status-display animate-fade" ng-hide="vm.settings.service.displayUpdateServiceUrlForm">
                         <div class="status-url-panel">
-                            <i class="fa fa-check-circle text-success" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Online) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.Online">
-                                <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Online) }}</span>
+                            <i class="fa fa-check-circle text-success" title="{{ vm.platform.GetConstant(vm.global.Constants.ServiceStatus_Online) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.Online">
+                                <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.ServiceStatus_Online) }}</span>
                             </i>
-                            <i class="fa fa-times-circle text-danger" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Offline) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.Offline">
-                                <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_Offline) }}</span>                                    
+                            <i class="fa fa-times-circle text-danger" title="{{ vm.platform.GetConstant(vm.global.Constants.ServiceStatus_Offline) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.Offline">
+                                <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.ServiceStatus_Offline) }}</span>                                    
                             </i>
-                            <i class="fa fa-exclamation-circle text-warning" title="{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_NoNewSyncs) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.NoNewSyncs">
-                                <span class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.ServiceStatus_NoNewSyncs) }}</span>                                    
+                            <i class="fa fa-exclamation-circle text-warning" title="{{ vm.platform.GetConstant(vm.global.Constants.ServiceStatus_NoNewSyncs) }}" ng-show="vm.settings.service.status === vm.global.ServiceStatus.NoNewSyncs">
+                                <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.ServiceStatus_NoNewSyncs) }}</span>                                    
                             </i>
                             <a class="status-url overflow-ellipses new-tab" ng-href="{{ vm.settings.service.url() }}" title="{{ vm.settings.service.url() }}" tabindex="4">
                                 {{ vm.settings.service.url() }}
@@ -568,37 +568,37 @@
                                 {{ vm.settings.service.statusMessage }}
                             </p> 
                             <button class="btn btn-default" ng-click="vm.events.updateServiceUrlForm_Display_Click()" tabindex="5">
-                                {{ vm.platform.Constants.Get(vm.global.Constants.Button_UpdateServiceUrl_Label) }}
+                                {{ vm.platform.GetConstant(vm.global.Constants.Button_UpdateServiceUrl_Label) }}
                             </button>
                         </div>
                     </div>
                     
                     <div class="update-service-url animate-fade" ng-show="vm.settings.service.displayUpdateServiceUrlForm">
                         <form name="vm.updateServiceUrlForm" ng-show="!vm.settings.service.displayUpdateServiceUrlConfirmation" novalidate>
-                            <p class="margin-bottom-15" ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.UpdateServiceUrlForm_Message)"></p>
+                            <p class="margin-bottom-15" ng-bind-html="vm.platform.GetConstant(vm.global.Constants.UpdateServiceUrlForm_Message)"></p>
                             <div class="form-group">
                                 <input name="txtServiceUrl" class="form-control" ng-model="vm.settings.service.newServiceUrl" ng-keypress="vm.events.updateServiceUrlForm_Update_KeyPress($event)"
-                                    placeholder="{{ vm.platform.Constants.Get(vm.global.Constants.UpdateServiceUrlForm_Placeholder) }}" maxlength="128" tabindex="6" required />
+                                    placeholder="{{ vm.platform.GetConstant(vm.global.Constants.UpdateServiceUrlForm_Placeholder) }}" maxlength="128" tabindex="6" required />
                             </div>
                             <div class="buttons">
                                 <button type="submit" class="btn btn-default" ng-disabled="!vm.updateServiceUrlForm.txtServiceUrl.$dirty || !vm.settings.service.newServiceUrl" 
                                         ng-click="vm.events.updateServiceUrlForm_Update_Click()" tabindex="7">
-                                    {{ vm.platform.Constants.Get(vm.global.Constants.Button_UpdateServiceUrl_Submit_Label) }}
+                                    {{ vm.platform.GetConstant(vm.global.Constants.Button_UpdateServiceUrl_Submit_Label) }}
                                 </button>
                                 <button type="button" class="btn btn-default" ng-click="vm.events.updateServiceUrlForm_Cancel_Click()" tabindex="8">
-                                    {{ vm.platform.Constants.Get(vm.global.Constants.Button_Cancel_Label) }}
+                                    {{ vm.platform.GetConstant(vm.global.Constants.Button_Cancel_Label) }}
                                 </button>
                             </div>
                         </form>
                     
                         <div class="animate-fade" ng-show="vm.settings.service.displayUpdateServiceUrlConfirmation">
-                            <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.ConfirmUpdateServiceUrl_Message)"></div>
+                            <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.ConfirmUpdateServiceUrl_Message)"></div>
                             <div class="buttons">
                                 <button id="btnUpdateServiceUrl_Confirm" class="btn btn-default" ng-click="vm.events.updateServiceUrlForm_Confirm_Click()" tabindex="14">
-                                    {{ vm.platform.Constants.Get(vm.global.Constants.Button_Confirm_Label) }}
+                                    {{ vm.platform.GetConstant(vm.global.Constants.Button_Confirm_Label) }}
                                 </button>
                                 <button type="reset" class="btn btn-default" ng-click="vm.settings.service.displayUpdateServiceUrlConfirmation = false" tabindex="15">
-                                    {{ vm.platform.Constants.Get(vm.global.Constants.Button_Deny_Label) }}
+                                    {{ vm.platform.GetConstant(vm.global.Constants.Button_Deny_Label) }}
                                 </button>
                             </div>
                         </div>
@@ -608,34 +608,37 @@
             <div class="backup-restore-panel well well-sm">
                 <h4 ng-click="vm.settings.visiblePanel = vm.settings.panels.backupRestore"
                     ng-class="{ active: (vm.settings.visiblePanel === vm.settings.panels.backupRestore) }">
-                    {{ vm.platform.Constants.Get(vm.global.Constants.BackupRestore_Title) }}
+                    {{ vm.platform.GetConstant(vm.global.Constants.BackupRestore_Title) }}
                     <i class="fa fa-arrow-down"></i>
                 </h4>
-                <div class="panel-content" ng-show="vm.settings.visiblePanel === vm.settings.panels.backupRestore">
+                <div class="panel-content" ng-show="!vm.sync.enabled() && vm.platformName !== vm.global.Platforms.Chrome && vm.settings.visiblePanel === vm.settings.panels.backupRestore">
+                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.BackupRestore_NotSynced_Message)"></div>
+                </div>
+                <div class="panel-content" ng-show="vm.sync.enabled() && vm.settings.visiblePanel === vm.settings.panels.backupRestore">
                     <div class="animate-fade" ng-hide="vm.settings.backupRestoreResult">
                         <div class="animate-fade" ng-hide="vm.settings.displayRestoreForm">
-                            <div ng-bind-html="vm.platform.Constants.Get(vm.global.Constants.BackupRestore_Message)"></div>
+                            <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.BackupRestore_Message)"></div>
                             <div class="buttons">
                                 <button class="btn btn-default" ng-click="vm.events.backupRestoreForm_Backup_Click()" tabindex="9">
-                                    {{ vm.platform.Constants.Get(vm.global.Constants.Button_Backup_Label) }}
+                                    {{ vm.platform.GetConstant(vm.global.Constants.Button_Backup_Label) }}
                                 </button>
                                 <button id="btnRestore" class="btn btn-default" ng-click="vm.events.backupRestoreForm_DisplayRestoreForm_Click()" tabindex="10">
-                                    {{ vm.platform.Constants.Get(vm.global.Constants.Button_Restore_Label) }}
+                                    {{ vm.platform.GetConstant(vm.global.Constants.Button_Restore_Label) }}
                                 </button>
                                 <a id="backupLink" class="hidden"></a>
                             </div>
                         </div>
                         
                         <div id="restoreForm" class="animate-fade" ng-show="vm.settings.displayRestoreForm && !vm.settings.displayRestoreConfirmation">
-                            <p>{{ vm.platform.Constants.Get(vm.global.Constants.RestoreForm_Message) }}</p>
+                            <p>{{ vm.platform.GetConstant(vm.global.Constants.RestoreForm_Message) }}</p>
                             <div id="backupContentsPanel">
-                                <label for="dataToRestore" class="sr-only">{{ vm.platform.Constants.Get(vm.global.Constants.DataToRestore_Label) }}</label>
+                                <label for="dataToRestore" class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.DataToRestore_Label) }}</label>
                                 <textarea ng-model="vm.settings.dataToRestore" class="form-control" rows="3" tabindex="11"></textarea>
                             </div>
                             <div id="backupFilePanel">
                                 <div class="buttons">
                                     <button class="btn btn-default" ng-click="vm.events.backupRestoreForm_SelectBackupFile_Click()" tabindex="11">
-                                        {{ vm.platform.Constants.Get(vm.global.Constants.Button_SelectBackupFile_Label) }}
+                                        {{ vm.platform.GetConstant(vm.global.Constants.Button_SelectBackupFile_Label) }}
                                     </button>
                                     <p ng-class="{ true: 'text-danger' }[ !vm.settings.dataToRestoreIsValid() ]">
                                         {{ vm.settings.backupFileName }}
@@ -649,21 +652,21 @@
                                     {{ vm.domElements.btnRestoreData() }}
                                 </button>
                                 <button type="reset" class="btn btn-default" ng-click="vm.settings.displayRestoreForm = false" tabindex="13">
-                                    {{ vm.platform.Constants.Get(vm.global.Constants.Button_Cancel_Label) }}
+                                    {{ vm.platform.GetConstant(vm.global.Constants.Button_Cancel_Label) }}
                                 </button>
                             </div>
                         </div>
                         
                         <div class="animate-fade" ng-show="vm.settings.displayRestoreConfirmation">
                             <p>
-                                {{ vm.sync.enabled() ? vm.platform.Constants.Get(vm.global.Constants.ConfirmRestore_Sync_Message) : vm.platform.Constants.Get(vm.global.Constants.ConfirmRestore_NoSync_Message) }}
+                                {{ vm.sync.enabled() ? vm.platform.GetConstant(vm.global.Constants.ConfirmRestore_Sync_Message) : vm.platform.GetConstant(vm.global.Constants.ConfirmRestore_NoSync_Message) }}
                             </p>
                             <div class="buttons">
                                 <button id="btn_ConfirmRestore" class="btn btn-default" ng-click="vm.events.backupRestoreForm_Restore_Click(vm.settings.dataToRestore)" tabindex="14">
-                                    {{ vm.platform.Constants.Get(vm.global.Constants.Button_Confirm_Label) }}
+                                    {{ vm.platform.GetConstant(vm.global.Constants.Button_Confirm_Label) }}
                                 </button>
                                 <button type="reset" class="btn btn-default" ng-click="vm.settings.displayRestoreConfirmation = false" tabindex="15">
-                                    {{ vm.platform.Constants.Get(vm.global.Constants.Button_Deny_Label) }}
+                                    {{ vm.platform.GetConstant(vm.global.Constants.Button_Deny_Label) }}
                                 </button>
                             </div>
                         </div>
@@ -672,7 +675,7 @@
                         <p>{{ vm.settings.backupRestoreResult }}</p>
                         <div class="buttons">
                             <button id="btn_RestoreComplete" type="reset" class="btn btn-default" ng-click="vm.settings.backupRestoreResult = null" tabindex="16">
-                                {{ vm.platform.Constants.Get(vm.global.Constants.Button_Done_Label) }}
+                                {{ vm.platform.GetConstant(vm.global.Constants.Button_Done_Label) }}
                             </button>
                         </div>
                     </div>

@@ -45,14 +45,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.domElements = {
             btnRestoreData: function() {
                 if (!vm.settings.dataToRestore) {
-                    return platform.Constants.Get(global.Constants.Button_RestoreData_Label);
+                    return platform.GetConstant(global.Constants.Button_RestoreData_Label);
                 }
                 
                 if (!vm.settings.dataToRestoreIsValid()) {
-                    return platform.Constants.Get(global.Constants.Button_RestoreData_Invalid_Label);
+                    return platform.GetConstant(global.Constants.Button_RestoreData_Invalid_Label);
                 }
                 
-                return platform.Constants.Get(global.Constants.Button_RestoreData_Ready_Label);
+                return platform.GetConstant(global.Constants.Button_RestoreData_Ready_Label);
             }
         };
         
@@ -156,6 +156,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             showLogo: true,
             currentPanel: 0
         };
+
+        vm.platformName = null;
         
         vm.search = {
             getLookaheadTimeout: null,
@@ -301,8 +303,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		if (!data) {
             // Display alert
             vm.alert.display(
-                platform.Constants.Get(global.Constants.Error_NoDataToRestore_Title),
-                platform.Constants.Get(global.Constants.Error_NoDataToRestore_Message), 
+                platform.GetConstant(global.Constants.Error_NoDataToRestore_Title),
+                platform.GetConstant(global.Constants.Error_NoDataToRestore_Message), 
                 'danger');
             
             return;
@@ -452,7 +454,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var bookmarkForm_DeleteBookmark_Click = function() {
         // Get current page url
-		platform.CurrentUrl.Get()
+		platform.GetCurrentUrl()
             .then(function(currentUrl) {
                 // Delete the bookmark
                 platform.Sync(vm.sync.asyncChannel, {
@@ -511,7 +513,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 }
                 
                 // Get page metadata for current url
-                return platform.PageMetadata.Get();
+                return platform.GetPageMetadata();
             })
             .then(function(metadata) {
                     if (!metadata) {
@@ -580,7 +582,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
         
         // Get current page url
-		platform.CurrentUrl.Get()
+		platform.GetCurrentUrl()
             .then(function(currentUrl) {
                 // Update the bookmark
                 platform.Sync(vm.sync.asyncChannel, {
@@ -691,7 +693,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         vm.settings.service.status = global.ServiceStatus.Offline;
                     });
                 
-                // Set new service form url
+                // Set new service form url default value to current service url
                 vm.settings.service.newServiceUrl = vm.settings.service.url();
                 break;
         }
@@ -790,7 +792,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.settings.displayRestoreForm = false;
                     vm.settings.displayRestoreConfirmation = false;
                     vm.settings.dataToRestore = '';
-                    vm.settings.backupRestoreResult = platform.Constants.Get(global.Constants.RestoreSuccess_Message);
+                    vm.settings.backupRestoreResult = platform.GetConstant(global.Constants.RestoreSuccess_Message);
                     
                     $timeout(function() {
                         document.querySelector('#btn_RestoreComplete').focus();

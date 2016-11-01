@@ -112,8 +112,8 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 		};
 		 
 		if (!err || !err.code) {
-			errorMessage.title = platform.Constants.Get(global.Constants.Error_Default_Title);
-			errorMessage.message = platform.Constants.Get(global.Constants.Error_Default_Message);
+			errorMessage.title = platform.GetConstant(global.Constants.Error_Default_Title);
+			errorMessage.message = platform.GetConstant(global.Constants.Error_Default_Message);
 			return errorMessage;
 		}
 		
@@ -121,76 +121,85 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 		
 		switch(err.code) {
             case global.ErrorCodes.HttpRequestFailed:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_HttpRequestFailed_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_HttpRequestFailed_Message); 
+				errorMessage.title = platform.GetConstant(global.Constants.Error_HttpRequestFailed_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_HttpRequestFailed_Message); 
 				break;
             case global.ErrorCodes.TooManyRequests:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_TooManyRequests_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_TooManyRequests_Message); 
+				errorMessage.title = platform.GetConstant(global.Constants.Error_TooManyRequests_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_TooManyRequests_Message); 
 				break;
             case global.ErrorCodes.RequestEntityTooLarge:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_RequestEntityTooLarge_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_RequestEntityTooLarge_Message); 
+				errorMessage.title = platform.GetConstant(global.Constants.Error_RequestEntityTooLarge_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_RequestEntityTooLarge_Message); 
 				break;
             case global.ErrorCodes.NotAcceptingNewSyncs:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_NotAcceptingNewSyncs_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_NotAcceptingNewSyncs_Message); 
+				errorMessage.title = platform.GetConstant(global.Constants.Error_NotAcceptingNewSyncs_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_NotAcceptingNewSyncs_Message); 
 				break;
             case global.ErrorCodes.DailyNewSyncLimitReached:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_DailyNewSyncLimitReached_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_DailyNewSyncLimitReached_Message); 
+				errorMessage.title = platform.GetConstant(global.Constants.Error_DailyNewSyncLimitReached_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_DailyNewSyncLimitReached_Message); 
 				break;
             case global.ErrorCodes.MissingClientData:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_MissingClientData_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_MissingClientData_Message); 
+				errorMessage.title = platform.GetConstant(global.Constants.Error_MissingClientData_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_MissingClientData_Message); 
 				break;
             case global.ErrorCodes.FailedGetLocalBookmarks:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_FailedGetLocalBookmarks_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_FailedGetLocalBookmarks_Message); 
+				errorMessage.title = platform.GetConstant(global.Constants.Error_FailedGetLocalBookmarks_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_FailedGetLocalBookmarks_Message); 
 				break;
             case global.ErrorCodes.FailedCreateLocalBookmarks:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_FailedCreateLocalBookmarks_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_FailedCreateLocalBookmarks_Message);
+				errorMessage.title = platform.GetConstant(global.Constants.Error_FailedCreateLocalBookmarks_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_FailedCreateLocalBookmarks_Message);
 				break;
             case global.ErrorCodes.FailedRemoveLocalBookmarks:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_FailedRemoveLocalBookmarks_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_FailedRemoveLocalBookmarks_Message); 
+				errorMessage.title = platform.GetConstant(global.Constants.Error_FailedRemoveLocalBookmarks_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_FailedRemoveLocalBookmarks_Message); 
 				break;
             case global.ErrorCodes.NoDataFound:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_NoDataFound_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_NoDataFound_Message);
+				errorMessage.title = platform.GetConstant(global.Constants.Error_NoDataFound_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_NoDataFound_Message);
 				break;
 			case global.ErrorCodes.InvalidData:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_InvalidData_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_InvalidData_Message); 
+				errorMessage.title = platform.GetConstant(global.Constants.Error_InvalidData_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_InvalidData_Message); 
 				break;
 			case global.ErrorCodes.UpdatedBookmarkNotFound:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_LastChangeNotSynced_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_LastChangeNotSynced_Message); 
+				errorMessage.title = platform.GetConstant(global.Constants.Error_LastChangeNotSynced_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_LastChangeNotSynced_Message); 
 				break;
 			case global.ErrorCodes.XBookmarkNotFound:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_BookmarkNotFound_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Wrror_BookmarkNotFound_Message); 
+				errorMessage.title = platform.GetConstant(global.Constants.Error_BookmarkNotFound_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Wrror_BookmarkNotFound_Message); 
 				break;
 			case global.ErrorCodes.ContainerChanged:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_ContainerChanged_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_ContainerChanged_Message); 
+				errorMessage.title = platform.GetConstant(global.Constants.Error_ContainerChanged_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_ContainerChanged_Message); 
 				break;
 			case global.ErrorCodes.DataOutOfSync:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_OutOfSync_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_OutOfSync_Message); 
+				errorMessage.title = platform.GetConstant(global.Constants.Error_OutOfSync_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_OutOfSync_Message); 
 				break;
 			case global.ErrorCodes.NotImplemented:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_NotImplemented_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_NotImplemented_Message); 
+				errorMessage.title = platform.GetConstant(global.Constants.Error_NotImplemented_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_NotImplemented_Message); 
 				break;
 			case global.ErrorCodes.FailedGetPageMetadata:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_FailedGetPageMetadata_Title);
-				errorMessage.message = platform.Constants.Get(global.Constants.Error_FailedGetPageMetadata_Message); 
+				errorMessage.title = platform.GetConstant(global.Constants.Error_FailedGetPageMetadata_Title);
+				errorMessage.message = platform.GetConstant(global.Constants.Error_FailedGetPageMetadata_Message); 
+				break;
+			case global.ErrorCodes.FailedScanID:
+				errorMessage.title = platform.GetConstant(global.Constants.Error_ScanFailed_Title);
+				break;
+			case global.ErrorCodes.FailedShareBookmark:
+				errorMessage.title = platform.GetConstant(global.Constants.Error_ShareFailed_Title);
+				break;
+			case global.ErrorCodes.FailedBackupData:
+				errorMessage.title = platform.GetConstant(global.Constants.Error_FailedBackupData_Title);
 				break;
             default:
-				errorMessage.title = platform.Constants.Get(global.Constants.Error_Default_Title);
-                errorMessage.message = platform.Constants.Get(global.Constants.Error_Default_Message);
+				errorMessage.title = platform.GetConstant(global.Constants.Error_Default_Title);
+                errorMessage.message = platform.GetConstant(global.Constants.Error_Default_Message);
 		}
 		
 		return errorMessage;

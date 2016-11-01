@@ -34,12 +34,9 @@ xBrowserSync.App.Platform = function($q) {
 			Share: notImplemented,
 			Updated: notImplemented
 		},
-		Constants: {
-			Get: notImplemented
-		},
-        CurrentUrl: {
-            Get: notImplemented
-        },
+		GetConstant: notImplemented,
+        GetCurrentUrl: notImplemented,
+        GetPageMetadata: notImplemented,
 		Init: notImplemented,
 		Interface: {
 			Refresh: notImplemented
@@ -49,9 +46,6 @@ xBrowserSync.App.Platform = function($q) {
 			Set: notImplemented
 		},
 		OpenUrl: notImplemented, 
-        PageMetadata: {
-            Get: notImplemented
-        },
 		ScanID: notImplemented,
 		SelectFile: notImplemented,
 		Sync: notImplemented

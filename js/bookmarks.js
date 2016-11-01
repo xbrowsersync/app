@@ -90,7 +90,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         var currentUrl;
         
         // Check if current url is contained in bookmarks
-		return platform.CurrentUrl.Get()
+		return platform.GetCurrentUrl()
             .then(function(result) {
                 currentUrl = result;
                 return searchBookmarks({ url: currentUrl });

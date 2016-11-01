@@ -191,7 +191,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Back up and restore"
 		},
 		"backupRestore_Message" : {
-			"message":  "<p>Back up your xBrowserSync data or restore from a previous backup.</p><p>If sync is not enabled, back up and restore will apply to local browser data only.</p>"
+			"message":  "<p>Back up your xBrowserSync data or restore from a previous backup.</p>"
+		},
+		"backupRestore_NotSynced_Message": {
+			"message": "<p>Back up and restore will be available here once you are synced.</p>"
 		},
 		"button_Backup_Label" : {
 			"message":  "Back Up"
@@ -212,7 +215,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Back"
 		},
 		"backupSuccess_Message" : {
-			"message":  "Your data has been backed up to {fileName}, check downloaded files for the location."
+			"message":  "Your unencrypted data has been saved to {fileName} in the xBrowserSync folder on external storage (if available, otherwise check internal storage)."
 		},
 		"restoreSuccess_Message" : {
 			"message":  "Your data has been restored."
@@ -239,7 +242,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Sync"
 		},
 		"syncPanel_Message" : {
-			"message":  "<p>Your sync settings will be displayed here once you are synced.</p><p>To sync. return to the Login panel and enter your xBrowserSync ID and secret word or phrase.</p>"
+			"message":  "<p>Sync settings will be available here once you are synced.</p>"
 		},
 		"syncPanel_Id_Label" : {
 			"message":  "Your xBrowserSync ID"
@@ -438,6 +441,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		},
 		"error_ShareFailed_Title" : {
 			"message":  "Share failed"
+		},
+		"error_FailedBackupData_Title" : {
+			"message":  "Backup failed"
 		}
 	}
 
@@ -452,14 +458,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		platform.Bookmarks.Clear = clearBookmarks;
 		platform.Bookmarks.Populate = populateBookmarks;
 		platform.Bookmarks.Share = shareBookmark;
-		platform.Constants.Get = getConstant;
-        platform.CurrentUrl.Get = getCurrentUrl;
+		platform.GetConstant = getConstant;
+        platform.GetCurrentUrl = getCurrentUrl;
+		platform.GetPageMetadata = getPageMetadata;
 		platform.Init = init;
         platform.Interface.Refresh = refreshInterface;
 		platform.LocalStorage.Get = getFromLocalStorage;
 		platform.LocalStorage.Set = setInLocalStorage;
 		platform.OpenUrl = openUrl;
-		platform.PageMetadata.Get = getPageMetadata;
 		platform.ScanID = scanId;
 		platform.SelectFile = selectBackupFile;
 		platform.Sync = sync;
@@ -486,12 +492,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				// Ensure view isn't reset if permissions dialog displays
 				showMainViewOnFocus = false;
 
-				var onError = function(err) {
+				var onError = function() {
 					// Display alert
-					var errMessage = utility.GetErrorMessageFromException(err);
-					vm.alert.display(errMessage.title, errMessage.message);
+					var errMessage = utility.GetErrorMessageFromException({ code: global.ErrorCodes.FailedBackupData });
+					vm.alert.display(errMessage.title, null);
 				};
 				
+				// TODO: Add iOS support
 				window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function (dirEntry) { 
 					dirEntry.getDirectory('xBrowserSync', { create: true }, function (dirEntry) {
 						dirEntry.getFile(fileName, { create: true }, function (fileEntry) {
@@ -500,7 +507,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 								
 								fileWriter.onwriteend = function() {
 									// Display message
-									var message = platform.Constants.Get(global.Constants.BackupSuccess_Message).replace(
+									var message = platform.GetConstant(global.Constants.BackupSuccess_Message).replace(
 										'{fileName}',
 										fileEntry.name);
 									
@@ -709,9 +716,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			showMainViewOnFocus = true;
 		};
 
-		var onError = function (error) {
+		var onError = function (err) {
 			// Display alert
-			vm.alert.display(getConstant(vm.global.Constants.Error_ScanFailed_Title), error);
+			var errMessage = utility.GetErrorMessageFromException({ code: global.ErrorCodes.FailedScanID });
+			vm.alert.display(errMessage.title, err);
 
 			// Reset view on resume
 			showMainViewOnFocus = true;
@@ -739,9 +747,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			chooserTitle: getConstant(vm.global.Constants.ShareBookmark_Prompt)
 		};
 			
-		var onError = function(error) {
+		var onError = function(err) {
 			// Display alert
-			vm.alert.display(getConstant(vm.global.Constants.Error_ShareFailed_Title), error);
+			var errMessage = utility.GetErrorMessageFromException({ code: global.ErrorCodes.FailedShareBookmark });
+			vm.alert.display(errMessage.title, err);
 		};
 		
 		// Display share sheet
@@ -791,24 +800,30 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
     };
 
 	var checkForSharedLink = function() {
-		// Check for an existing intent and shared link
-		window.plugins.webintent.getExtra(
-			window.plugins.webintent.EXTRA_TEXT,
-			function(url) {
-				if (!!url && !!global.SyncEnabled.Get()) {
-					// Set shared url to current url
-					currentUrl = url;
+		if (vm.platformName === vm.global.Platforms.Android) {
+			// Check for an existing intent and shared link
+			window.plugins.webintent.getExtra(
+				window.plugins.webintent.EXTRA_TEXT,
+				function(url) {
+					if (!!url && !!global.SyncEnabled.Get()) {
+						// Set shared url to current url
+						currentUrl = url;
 
-					// Display bookmark panel
-					vm.view.change(vm.view.views.bookmark);
-				}
+						// Display bookmark panel
+						vm.view.change(vm.view.views.bookmark);
+					}
 
-				// Remove the intent
-				window.plugins.webintent.removeExtra(window.plugins.webintent.EXTRA_TEXT);
-			});
+					// Remove the intent
+					window.plugins.webintent.removeExtra(window.plugins.webintent.EXTRA_TEXT);
+				});
+		}
 	};
 
 	var deviceReady = function() {
+		// Set platform
+		vm.platformName = device.platform;
+		
+		// Set back button event
 		document.addEventListener('backbutton', handleBackButton, false);
 		
 		if (vm.view.current === vm.view.views.search) {

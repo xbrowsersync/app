@@ -109,8 +109,8 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 		if (!!global.SyncEnabled.Get()) {
 			// Display alert so that user knows to create new sync
 			displayAlert(
-				platform.Constants.Get(global.Constants.Error_BrowserImportBookmarksNotSupported_Title), 
-				platform.Constants.Get(global.Constants.Error_BrowserImportBookmarksNotSupported_Message));
+				platform.GetConstant(global.Constants.Error_BrowserImportBookmarksNotSupported_Title), 
+				platform.GetConstant(global.Constants.Error_BrowserImportBookmarksNotSupported_Message));
 		}
 	};
 	
@@ -218,8 +218,8 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 			
 			// Display alert
 			displayAlert(
-				platform.Constants.Get(global.Constants.Error_SyncInterrupted_Title), 
-				platform.Constants.Get(global.Constants.Error_SyncInterrupted_Message));
+				platform.GetConstant(global.Constants.Error_SyncInterrupted_Title), 
+				platform.GetConstant(global.Constants.Error_SyncInterrupted_Message));
 			
 			return;
 		}

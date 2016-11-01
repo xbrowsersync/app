@@ -30,14 +30,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		platform.Bookmarks.Moved = bookmarksMoved;
 		platform.Bookmarks.Populate = populateBookmarks;
 		platform.Bookmarks.Updated = bookmarksUpdated;
-		platform.Constants.Get = getConstant;
-        platform.CurrentUrl.Get = getCurrentUrl;
+		platform.GetConstant = getConstant;
+        platform.GetCurrentUrl = getCurrentUrl;
+		platform.GetPageMetadata = getPageMetadata;
 		platform.Init = init;
         platform.Interface.Refresh = refreshInterface;
 		platform.LocalStorage.Get = getFromLocalStorage;
 		platform.LocalStorage.Set = setInLocalStorage;
 		platform.OpenUrl = openUrl;
-		platform.PageMetadata.Get = getPageMetadata;
 		platform.Sync = sync;
         
         // Refresh browser action icon on reload
@@ -69,7 +69,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				backupLink.click();
                 
                 // Display message
-                var message = platform.Constants.Get(global.Constants.BackupSuccess_Message).replace(
+                var message = platform.GetConstant(global.Constants.BackupSuccess_Message).replace(
                     '{fileName}',
                     fileName);
                 
@@ -537,6 +537,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	var init = function(viewModel, scope) {
 		// Set global variables
 		vm = viewModel;
+
+		// Set platform
+		vm.platformName = 'Chrome';
 		
 		// Enable event listeners
         global.DisableEventListeners.Set(false);

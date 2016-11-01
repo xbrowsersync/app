@@ -128,6 +128,7 @@ xBrowserSync.App.Global = function(platform) {
 			ConfirmUpdateServiceUrl_Message: 'confirmUpdateServiceUrl_Message',
 			BackupRestore_Title: 'backupRestore_Title',
             BackupRestore_Message: 'backupRestore_Message',
+            BackupRestore_NotSynced_Message: 'backupRestore_NotSynced_Message',
 			Button_Backup_Label: 'button_Backup_Label',
 			Button_Restore_Label: 'button_Restore_Label',
 			Button_Done_Label: 'button_Done_Label',
@@ -209,7 +210,8 @@ xBrowserSync.App.Global = function(platform) {
             Error_SyncInterrupted_Title: 'error_syncInterrupted_Title',
             Error_SyncInterrupted_Message: 'error_syncInterrupted_Message',
             Error_ScanFailed_Title: 'error_ScanFailed_Title',
-            Error_ShareFailed_Title: 'error_ShareFailed_Title'
+            Error_ShareFailed_Title: 'error_ShareFailed_Title',
+            Error_FailedBackupData_Title: 'error_FailedBackupData_Title'
         },
         ClientSecret: {
             Get: function() {
@@ -319,6 +321,9 @@ xBrowserSync.App.Global = function(platform) {
             NoStatus: 10200,
             FailedGetPageMetadata: 10300,
             FailedSaveBackup: 10301,
+            FailedScanID: 10302,
+            FailedShareBookmark: 10303,
+            FailedBackupData: 10304,
             NotImplemented: 10400
         },
         Id: {
@@ -383,6 +388,11 @@ xBrowserSync.App.Global = function(platform) {
             }
         },
         LookaheadMinChars: 1,
+        Platforms: {
+            Android: 'Android',
+            Chrome: 'Chrome',
+            IOS: 'iOS'
+        },
         RetrySyncTimeout: 100,
         ServiceStatus: {
             Online: 1,
