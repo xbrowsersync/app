@@ -145,6 +145,9 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 			case "update":
 				// If extension has been updated, display about panel 
 				global.DisplayAboutOnStartup.Set(true);
+
+				// Clear cached bookmarks
+				global.Cache.Bookmarks.Set(null);
 				break;
 		};
 	};
@@ -209,24 +212,9 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 	};
 	
 	var startup = function() {
-		// Check if a sync was interrupted
-		if (!!global.IsSyncing.Get()) {
-			global.IsSyncing.Set(false);
-			
-			// Disable sync
-			global.SyncEnabled.Set(false);
-			
-			// Display alert
-			displayAlert(
-				platform.GetConstant(global.Constants.Error_SyncInterrupted_Title), 
-				platform.GetConstant(global.Constants.Error_SyncInterrupted_Message));
-			
-			return;
-		}
-		
 		// Exit if sync isn't enabled or event listeners disabled
 		if (!global.SyncEnabled.Get() || global.DisableEventListeners.Get()) {
-            return;
+        	    return;
 		}
 		
 		// Check for updates to synced bookmarks

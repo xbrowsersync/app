@@ -561,6 +561,22 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			return !!viewModel.settings.secret();
 		};
 
+		// Check if a sync was interrupted
+		if (!!global.IsSyncing.Get()) {
+			global.IsSyncing.Set(false);
+			
+			// Disable sync
+			global.SyncEnabled.Set(false);
+			
+			// Display alert
+			vm.alert.display(
+				platform.GetConstant(global.Constants.Error_SyncInterrupted_Title), 
+				platform.GetConstant(global.Constants.Error_SyncInterrupted_Message),
+                'danger');
+            
+            return;
+		}
+
 		// Focus on search box
 		if (viewModel.view.current === viewModel.view.views.search) {
 			$timeout(function() {

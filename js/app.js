@@ -838,17 +838,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if (vm.view.current === vm.view.views.login && !!vm.introduction.displayIntro()) {
             introPanel_DisplayIntro();
         }
-
-        // Check if current page is a bookmark
-        setBookmarkStatus();
         
         // Attach events to new tab links
         $timeout(function() {
             setNewTabLinks();
         });
 
-        // Reset syncing flags
-        global.IsSyncing.Set(false);
+        // Check if current page is a bookmark
+        setBookmarkStatus();
     };
 
     var introPanel_DisplayIntro = function() {

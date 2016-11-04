@@ -861,6 +861,21 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Use toasts for alerts
 		vm.alert.display = displayToast;
 
+		// Check if a sync was interrupted
+		if (!!global.IsSyncing.Get()) {
+			global.IsSyncing.Set(false);
+			
+			// Disable sync
+			global.SyncEnabled.Set(false);
+			
+			// Display alert
+			vm.alert.display(
+				platform.GetConstant(global.Constants.Error_SyncInterrupted_Title), 
+				platform.GetConstant(global.Constants.Error_SyncInterrupted_Message));
+            
+            return;
+		}
+
 		// Check if a link was shared
 		checkForSharedLink();
 	};
@@ -921,6 +936,21 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				document.querySelector('input[name=txtSearch]').focus();
 				cordova.plugins.Keyboard.show();
 			}, 100);
+		}
+
+		// Check if a sync was interrupted
+		if (!!global.IsSyncing.Get()) {
+			global.IsSyncing.Set(false);
+			
+			// Disable sync
+			global.SyncEnabled.Set(false);
+			
+			// Display alert
+			vm.alert.display(
+				platform.GetConstant(global.Constants.Error_SyncInterrupted_Title), 
+				platform.GetConstant(global.Constants.Error_SyncInterrupted_Message));
+            
+            return;
 		}
 
 		// Check if a link was shared
