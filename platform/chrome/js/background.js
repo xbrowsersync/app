@@ -212,6 +212,21 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 	};
 	
 	var startup = function() {
+		// Check if a sync was interrupted
+		if (!!global.IsSyncing.Get()) {
+			global.IsSyncing.Set(false);
+			
+			// Disable sync
+			global.SyncEnabled.Set(false);
+			
+			// Display alert
+			displayAlert(
+				platform.GetConstant(global.Constants.Error_SyncInterrupted_Title), 
+				platform.GetConstant(global.Constants.Error_SyncInterrupted_Message));
+			
+			return;
+		}
+		
 		// Exit if sync isn't enabled or event listeners disabled
 		if (!global.SyncEnabled.Get() || global.DisableEventListeners.Get()) {
         	    return;
