@@ -34,7 +34,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         platform.GetCurrentUrl = getCurrentUrl;
 		platform.GetPageMetadata = getPageMetadata;
 		platform.Init = init;
-        platform.Interface.Refresh = refreshInterface;
+        platform.Interface.Loading.Show = displayLoading;
+		platform.Interface.Loading.Hide = hideLoading;
+		platform.Interface.Refresh = refreshInterface;
 		platform.LocalStorage.Get = getFromLocalStorage;
 		platform.LocalStorage.Set = setInLocalStorage;
 		platform.OpenUrl = openUrl;
@@ -51,7 +53,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	
 	var backupData = function() {
 		// Export bookmarks
-		bookmarks.Export()
+		return bookmarks.Export()
             .then(function(data) {
 				var date = new Date();
 				var minute = ('0' + date.getMinutes()).slice(-2);
@@ -74,11 +76,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
                     fileName);
                 
                 vm.settings.backupRestoreResult = message;
-			})
-            .catch(function(err) {
-				// Display alert
-				var errMessage = utility.GetErrorMessageFromException(err);
-				vm.alert.display(errMessage.title, errMessage.message, 'danger');
 			});
 	};
 	
@@ -387,6 +384,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			
 		return $q.all([clearOtherBookmarks.promise, clearBookmarksBar.promise]);
 	};
+
+	var displayLoading = function() {
+		vm.working = true;
+	};
 	
 	var getAsyncChannel = function(syncCallback) {
 		// Configure async messaging channel
@@ -533,6 +534,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         
         return deferred.promise;
     };
+
+	var hideLoading = function() {
+		vm.working = false;
+	};
 
 	var init = function(viewModel, scope) {
 		// Set global variables

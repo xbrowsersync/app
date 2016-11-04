@@ -39,6 +39,10 @@ xBrowserSync.App.Platform = function($q) {
         GetPageMetadata: notImplemented,
 		Init: notImplemented,
 		Interface: {
+			Loading: {
+				Hide: notImplemented,
+				Show: notImplemented
+			},
 			Refresh: notImplemented
 		},
 		LocalStorage: {

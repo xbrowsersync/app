@@ -253,8 +253,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             views: { login: 0, search: 1, bookmark: 2, settings: 3, about: 4 }
 		};
         
-        vm.working = false;
-        
         // Initialise the app
         init();
     };
@@ -271,7 +269,18 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
     
     var backupRestoreForm_Backup_Click = function() {
-		platform.BackupData();
+		// Display loading overlay
+        platform.Interface.Loading.Show();
+        
+        platform.BackupData()
+            .catch(function(err) {
+                // Display alert
+                var errMessage = utility.GetErrorMessageFromException(err);
+                vm.alert.display(errMessage.title, errMessage.message, 'danger');
+            })
+            .finally(function() {
+                platform.Interface.Loading.Hide();
+            });
 	};
     
     var backupRestoreForm_DisplayRestoreForm_Click = function() {
@@ -310,8 +319,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             return;
         }
         
-        // Show loading animation
-        vm.working = true;
+        // Display loading overlay
+        platform.Interface.Loading.Show();
         
         // Start restore
         restoreData(JSON.parse(data));
@@ -490,8 +499,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         var deferred = $q.defer();
         
-        // Show loading animation
-        vm.working = true;
+        // Display loading overlay 
+        platform.Interface.Loading.Show();
 
         // Check if current url is a bookmark
         bookmarks.IncludesCurrentPage()
@@ -540,7 +549,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
             })
             .finally(function() {
-                vm.working = false;
+                platform.Interface.Loading.Hide();
             });
         
         return deferred.promise;
@@ -611,7 +620,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
     var changeView = function(view) {
         vm.alert.show = false;
-        vm.working = false;
+        platform.Interface.Loading.Hide();
         
         // Reset current view
         switch(vm.view.current) {
@@ -781,8 +790,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         platform.Sync(vm.sync.asyncChannel, { type: global.SyncType.Pull });
                     }
                 }
-                
-                vm.working = false;
+
+                platform.Interface.Loading.Hide();
                 break;
             // After restoring bookmarks
             case global.Commands.RestoreBookmarks:
@@ -803,7 +812,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.alert.display(errMessage.title, errMessage.message, 'danger');
                 }
                 
-                vm.working = false;
+                platform.Interface.Loading.Hide();
                 break;
             case global.Commands.NoCallback:
                 /* falls through */
@@ -813,7 +822,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.alert.display(errMessage.title, errMessage.message, 'danger');
                 }
                 
-                vm.working = false;
+                platform.Interface.Loading.Hide();
                 break;
         }
     };
@@ -837,6 +846,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         $timeout(function() {
             setNewTabLinks();
         });
+
+        // Reset syncing flags
+        global.IsSyncing.Set(false);
     };
 
     var introPanel_DisplayIntro = function() {
@@ -1012,8 +1024,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         syncData.type = (!global.SyncEnabled.Get()) ? global.SyncType.Pull : global.SyncType.Both;
         syncData.bookmarks = bookmarksToRestore;
         
-        // Show loading animation
-        vm.working = true;
+        // Display loading overlay 
+        platform.Interface.Loading.Show();
         
         // Start restore
         platform.Sync(vm.sync.asyncChannel, syncData, global.Commands.RestoreBookmarks);
@@ -1328,7 +1340,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
     var startSyncing = function() {
         vm.sync.displaySyncConfirmation = false;
-        vm.working = true;
+        platform.Interface.Loading.Show();
         queueSync();
     };
 
@@ -1461,8 +1473,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Hide sync confirmation
         vm.settings.service.displaySyncBookmarksToolbarConfirmation = false;
         
-        // Show loading animation
-        vm.working = true;
+        // Display loading overlay
+        platform.Interface.Loading.Show();
         
         // Start sync with no callback action
         platform.Sync(vm.sync.asyncChannel, syncData, global.Commands.NoCallback);
@@ -1483,7 +1495,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 document.querySelector('[name=txtServiceUrl]').focus();
             })
             .finally(function() {
-                vm.working = false;
+                platform.Interface.Loading.Hide();
             });
     };
     
@@ -1543,7 +1555,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             return;
 		}
 
-        vm.working = true;
+        // Display loading overlay
+        platform.Interface.Loading.Show();
         
         // Check service url
         updateServiceUrlForm_CheckServiceUrl(vm.settings.service.newServiceUrl, function(response) {

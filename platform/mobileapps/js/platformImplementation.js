@@ -462,7 +462,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         platform.GetCurrentUrl = getCurrentUrl;
 		platform.GetPageMetadata = getPageMetadata;
 		platform.Init = init;
-        platform.Interface.Refresh = refreshInterface;
+        platform.Interface.Loading.Show = displayLoading;
+		platform.Interface.Loading.Hide = hideLoading;
+		platform.Interface.Refresh = refreshInterface;
 		platform.LocalStorage.Get = getFromLocalStorage;
 		platform.LocalStorage.Set = setInLocalStorage;
 		platform.OpenUrl = openUrl;
@@ -477,6 +479,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
  * ------------------------------------------------------------------------------------ */
 	
 	var backupData = function() {
+		var deferred = $q.defer();
+		
 		// Export bookmarks
 		bookmarks.Export()
             .then(function(data) {
@@ -493,9 +497,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				showMainViewOnFocus = false;
 
 				var onError = function() {
-					// Display alert
-					var errMessage = utility.GetErrorMessageFromException({ code: global.ErrorCodes.FailedBackupData });
-					vm.alert.display(errMessage.title, null);
+					return deferred.reject({ code: global.ErrorCodes.FailedBackupData });
 				};
 				
 				// TODO: Add iOS support
@@ -517,6 +519,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 									// Reset view on resume
 									showMainViewOnFocus = true;
+
+									return deferred.resolve();
 								};
 								
 								fileWriter.onerror = onError;
@@ -529,10 +533,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				},
 				onError);
 			});
+		
+		return deferred.promise;
 	};
 	
 	var clearBookmarks = function() {
 		return $q.resolve();
+	};
+
+	var displayLoading = function() {
+		SpinnerPlugin.activityStart(getConstant(global.Constants.Working_Title), { dimBackground: true });
 	};
 	
 	var getConstant = function(constName) {
@@ -622,6 +632,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				currentUrl = null;
 			});
     };
+
+	var hideLoading = function() {
+		SpinnerPlugin.activityStop();
+	};
 
 	var init = function(viewModel, scope) {
 		// Set global variables
@@ -799,23 +813,33 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		showMainViewOnFocus = true;
     };
 
-	var checkForSharedLink = function() {
+	var checkForSharedLink = function(intent) {
 		if (vm.platformName === vm.global.Platforms.Android) {
-			// Check for an existing intent and shared link
-			window.plugins.webintent.getExtra(
-				window.plugins.webintent.EXTRA_TEXT,
-				function(url) {
-					if (!!url && !!global.SyncEnabled.Get()) {
-						// Set shared url to current url
-						currentUrl = url;
+			// If there is a current intent, retrieve it
+			window.plugins.webintent.hasExtra(window.plugins.webintent.EXTRA_TEXT,
+				function(has) {
+					if (!!has) {
+						// Only use the intent if sync is enabled
+						if (!!global.SyncEnabled.Get()) {
+							window.plugins.webintent.getExtra(window.plugins.webintent.EXTRA_TEXT,
+								function(url) {
+									// Set shared link url to current url
+									currentUrl = url;
 
-						// Display bookmark panel
-						vm.view.change(vm.view.views.bookmark);
+									// Display bookmark panel
+									vm.view.change(vm.view.views.bookmark);
+									
+									// Remove the intent
+									window.plugins.webintent.removeExtra(window.plugins.webintent.EXTRA_TEXT);
+								});
+						}
+						else {
+							// Can't use it so remove the intent
+							window.plugins.webintent.removeExtra(window.plugins.webintent.EXTRA_TEXT);
+						}
 					}
-
-					// Remove the intent
-					window.plugins.webintent.removeExtra(window.plugins.webintent.EXTRA_TEXT);
-				});
+				}
+			);
 		}
 	};
 
