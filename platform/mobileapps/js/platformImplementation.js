@@ -13,7 +13,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
  * Platform variables
  * ------------------------------------------------------------------------------------ */
 
-	var $scope, currentUrl, showMainViewOnFocus = true, vm;
+	var $scope, currentUrl, moduleName = 'xBrowserSync.App.PlatformImplementation', showMainViewOnFocus = true, vm;
 	
 	var constants = {
 		"title": {
@@ -632,7 +632,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				return metadata;
 			})
             .catch(function(err) {
-                return $q.reject({ code: global.ErrorCodes.FailedGetPageMetadata });
+                // Log error
+				utility.LogMessage(
+					moduleName, 'getPageMetadata', utility.LogType.Error,
+					JSON.stringify(err));
+					
+				return $q.reject({ code: global.ErrorCodes.FailedGetPageMetadata });
             })
 			.finally(function() {
 				// Reset current url
@@ -792,6 +797,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				vm.events.handleSyncResponse({ command: syncData.command, success: true });
 			})
 			.catch(function(err) {
+				// Log error
+				utility.LogMessage(
+					moduleName, 'sync', utility.LogType.Error,
+					JSON.stringify(err));
+				utility.LogMessage(
+					moduleName, 'sync', utility.LogType.Info,
+					'syncData: ' + JSON.stringify(syncData));
+					
 				vm.events.handleSyncResponse({ command: syncData.command, success: false, error: err });
 			});
 	};

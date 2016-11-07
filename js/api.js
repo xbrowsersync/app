@@ -8,6 +8,8 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 xBrowserSync.App.API = function($http, $q, global, utility) {
     'use strict';
+
+	var moduleName = 'xBrowserSync.App.API';
     
 /* ------------------------------------------------------------------------------------
  * Public functions
@@ -46,6 +48,11 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 				}
 			})
             .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'createBookmarks', utility.LogType.Error,
+                    JSON.stringify(err));
+                
                 return $q.reject(getErrorCodeFromHttpError(err));
             });
 	};
@@ -68,6 +75,11 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 				}
 			})
             .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'getBookmarks', utility.LogType.Error,
+                    JSON.stringify(err));
+                
                 return $q.reject(getErrorCodeFromHttpError(err));
             });
 	};
@@ -89,6 +101,11 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 				return response.data;
 			})
             .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'getBookmarksLastUpdated', utility.LogType.Error,
+                    JSON.stringify(err));
+                
                 return $q.reject(getErrorCodeFromHttpError(err));
             });
 	};
@@ -115,6 +132,11 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 				}
 			})
             .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'updateBookmarks', utility.LogType.Error,
+                    JSON.stringify(err));
+                
                 return $q.reject(getErrorCodeFromHttpError(err));
             });
 	};
@@ -184,6 +206,11 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 				}
 			})
             .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'getServiceInformation', utility.LogType.Error,
+                    JSON.stringify(err));
+                
                 return $q.reject(getErrorCodeFromHttpError(err));
             });
 	};

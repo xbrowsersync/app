@@ -251,6 +251,30 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 				bookmark.title === global.Bookmarks.xBrowserSyncContainerName);
 	};
 	
+	var logMessage = function(moduleName, functionName, messageType, message) {
+		var logFunction = console.log;
+
+		switch (messageType) {
+			case logType.Error:
+				messageType = 'ERROR';
+				logFunction = console.error;
+				break;
+			case logType.Warning:
+				messageType = 'WARNING';
+				logFunction = console.warn;
+				break;
+			case logType.Info:
+			default:
+				messageType = 'INFO';
+				logFunction = console.info;
+				break;
+		}
+		
+		logFunction(moduleName + ':' + functionName + ', ' + messageType + ': ' + message);
+	};
+
+	var logType = { Info: 0, Warning: 1, Error: 2};
+
 	var xBookmark = function(title, url, description, tags, children) {
 		var xBookmark = {};
 		
@@ -310,6 +334,8 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 		GetToolbarContainer: getToolbarContainer,
 		GetXBrowserSyncContainer: getXBrowserSyncContainer,
 		IsBookmarkContainer: isBookmarkContainer,
+		LogMessage: logMessage,
+		LogType: logType,
 		XBookmark: xBookmark		
 	};
 };

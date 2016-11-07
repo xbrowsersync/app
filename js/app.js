@@ -8,7 +8,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platform, global, api, utility, bookmarks, platformImplementation) { 
 	'use strict';    
-    var vm;
+    var vm, moduleName = 'xBrowserSync.App.Controller';
     
 /* ------------------------------------------------------------------------------------
  * Constructor
@@ -276,6 +276,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         platform.BackupData()
             .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'backupRestoreForm_Backup_Click', utility.LogType.Error,
+                    JSON.stringify(err));
+                
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
@@ -485,6 +490,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.view.change(vm.view.views.search);
             })
             .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'bookmarkForm_DeleteBookmark_Click', utility.LogType.Error,
+                    JSON.stringify(err));
+                
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
@@ -546,6 +556,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     return deferred.resolve();
             })
             .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'bookmarkForm_Init', utility.LogType.Error,
+                    JSON.stringify(err));
+                
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
@@ -614,6 +629,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.view.change(vm.view.views.search);
             })
             .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'bookmarkForm_UpdateBookmark_Click', utility.LogType.Error,
+                    JSON.stringify(err));
+                
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
@@ -701,6 +721,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         setServiceInformation(serviceInfo);
                     })
                     .catch(function(err) {
+                        // Log error
+                        utility.LogMessage(
+                            moduleName, 'changeView', utility.LogType.Error,
+                            JSON.stringify(err));
+                        
                         vm.settings.service.status = global.ServiceStatus.Offline;
                     });
                 
@@ -723,7 +748,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 					validData = true;
 				}
 			}
-			catch(err) { }
+			catch(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'checkRestoreData', utility.LogType.Error,
+                    JSON.stringify(err));
+            }
 		}
 		
 		return validData;
@@ -1053,7 +1083,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 });
             })
             .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'searchBookmarks', utility.LogType.Error,
+                    JSON.stringify(err));
+                
                 vm.search.results = null;
+
+                // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
             })
@@ -1315,6 +1352,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 				vm.bookmark.active = !!result;
             })
             .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'setBookmarkStatus', utility.LogType.Error,
+                    JSON.stringify(err));
+                
+                // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
             });
@@ -1419,6 +1462,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 });
             })
             .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'syncPanel_DisplayDataUsage_Click', utility.LogType.Error,
+                    JSON.stringify(err));
+                
                 // Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
 				vm.alert.display(errMessage.title, errMessage.message, 'danger');
@@ -1490,6 +1538,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         return api.CheckServiceStatus(url)
             .then(callback)
             .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'updateServiceUrlForm_CheckServiceUrl', utility.LogType.Error,
+                    JSON.stringify(err));
+                
+                // Set form as invalid and focus on url field
                 updateServiceUrlForm_SetValidity(false);
                 document.querySelector('[name=txtServiceUrl]').focus();
             })
@@ -1517,6 +1571,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         api.CheckServiceStatus()
             .then(setServiceInformation)
             .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'updateServiceUrlForm_Confirm_Click', utility.LogType.Error,
+                    JSON.stringify(err));
+                
                 vm.settings.service.status = global.ServiceStatus.Offline;
             });
         

@@ -10,7 +10,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks) {
     'use strict';
 	
-	var asyncChannel;
+	var asyncChannel, moduleName = 'xBrowserSync.App.Background';
 
 /* ------------------------------------------------------------------------------------
  * Constructor
@@ -98,6 +98,11 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 			
 			bookmarks.CheckForUpdates()
 				.catch(function(err) {
+					// Log error
+					utility.LogMessage(
+						moduleName, 'handleAlarm', utility.LogType.Error,
+						JSON.stringify(err));
+					
 					// Display alert
 					var errMessage = utility.GetErrorMessageFromException(err);
 					displayAlert(errMessage.title, errMessage.message);
@@ -196,6 +201,11 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 			}
 		})
 			.catch(function(err) {
+				// Log error
+				utility.LogMessage(
+					moduleName, 'removeBookmark', utility.LogType.Error,
+					JSON.stringify(err));
+				
 				// Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
 				displayAlert(errMessage.title, errMessage.message);
@@ -235,6 +245,11 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 		// Check for updates to synced bookmarks
 		bookmarks.CheckForUpdates()
 			.catch(function(err) {
+				// Log error
+				utility.LogMessage(
+					moduleName, 'startup', utility.LogType.Error,
+					JSON.stringify(err));
+				
 				// Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
 				displayAlert(errMessage.title, errMessage.message);
@@ -249,15 +264,33 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 					try {
 						asyncChannel.postMessage({ command: command, success: true });
 					}
-					catch (ex) {}
+					catch (err) {
+						// Log error
+						utility.LogMessage(
+							moduleName, 'syncBookmarks', utility.LogType.Error,
+							'Error posting message to async channel; ' + JSON.stringify(err));
+					}
 				}
 			})
 			.catch(function(err) {
+				// Log error
+				utility.LogMessage(
+					moduleName, 'syncBookmarks', utility.LogType.Error,
+					'Error syncing bookmarks; ' + JSON.stringify(err));
+				utility.LogMessage(
+					moduleName, 'syncBookmarks', utility.LogType.Info,
+					'syncData: ' + JSON.stringify(syncData));
+
 				if (!!command) {
 					try {
 						asyncChannel.postMessage({ command: command, success: false, error: err });
 					}
-					catch (ex) {}
+					catch (err2) {
+						// Log error
+						utility.LogMessage(
+							moduleName, 'syncBookmarks', utility.LogType.Error,
+							'Error posting message to async channel; ' + JSON.stringify(err2));
+					}
 				}
 				else {
 					throw err;

@@ -40,7 +40,7 @@ xBrowserSync.App.Global = function(platform) {
                         try {
                             bookmarks = JSON.parse(bookmarks);
                         }
-                        catch(err) {
+                        catch (err) {
                             bookmarks = null;
                         }
                     }
@@ -54,7 +54,7 @@ xBrowserSync.App.Global = function(platform) {
                         try {
                             bookmarks = JSON.stringify(value);
                         }
-                        catch(err) { }
+                        catch (err) { }
                     }
                     
                     platform.LocalStorage.Set(

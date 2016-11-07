@@ -9,7 +9,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) { 
     'use strict';
     
-    var syncQueue = [];
+    var moduleName = 'xBrowserSync.App.Bookmarks', syncQueue = [];
 
 /* ------------------------------------------------------------------------------------
  * Public functions
@@ -66,6 +66,11 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                         bookmarks = JSON.parse(utility.DecryptData(data.bookmarks));
                     }
                     catch (err) { 
+                        // Log error
+                        utility.LogMessage(
+                            moduleName, 'exportBookmarks', utility.LogType.Error,
+                            JSON.stringify(err));
+                        
                         return $q.reject({ code: global.ErrorCodes.InvalidData });
                     }
                     
@@ -141,6 +146,11 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 deferred.resolve([lookahead, word]);
             })
             .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'getLookahead', utility.LogType.Error,
+                    JSON.stringify(err));
+                
                 deferred.reject(err);
             });
         
@@ -240,6 +250,11 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                         bookmarks = JSON.parse(utility.DecryptData(bookmarkData));
                     }
                     catch (err) { 
+                        // Log error
+                        utility.LogMessage(
+                            moduleName, 'getCachedBookmarks', utility.LogType.Error,
+                            'Error decrypting cached bookmarks data; ' + JSON.stringify(err));
+                        
                         return $q.reject({ code: global.ErrorCodes.InvalidData });
                     }
 
@@ -258,6 +273,11 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                                 bookmarks = JSON.parse(utility.DecryptData(data.bookmarks));
                             }
                             catch (err) { 
+                                // Log error
+                                utility.LogMessage(
+                                    moduleName, 'getCachedBookmarks', utility.LogType.Error,
+                                    'Error decrypting synced bookmarks data; ' + JSON.stringify(err));
+                                
                                 return $q.reject({ code: global.ErrorCodes.InvalidData });
                             }
 
@@ -565,6 +585,11 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                                 bookmarksToUpdate = JSON.parse(utility.DecryptData(data.bookmarks));
                             }
                             catch (err) { 
+                                // Log error
+                                utility.LogMessage(
+                                    moduleName, 'sync_handleBoth', utility.LogType.Error,
+                                    'Error creating bookmark; ' + JSON.stringify(err));
+                                
                                 return $q.reject({ code: global.ErrorCodes.InvalidData });
                             }
                             
@@ -598,6 +623,11 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                                 bookmarksToUpdate = JSON.parse(utility.DecryptData(data.bookmarks));
                             }
                             catch (err) { 
+                                // Log error
+                                utility.LogMessage(
+                                    moduleName, 'sync_handleBoth', utility.LogType.Error,
+                                    'Error updating bookmark; ' + JSON.stringify(err));
+                                
                                 return $q.reject({ code: global.ErrorCodes.InvalidData });
                             }
                             
@@ -633,6 +663,11 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                                 bookmarksToUpdate = JSON.parse(utility.DecryptData(data.bookmarks));
                             }
                             catch (err) { 
+                                // Log error
+                                utility.LogMessage(
+                                    moduleName, 'sync_handleBoth', utility.LogType.Error,
+                                    'Error deleting bookmark; ' + JSON.stringify(err));
+                                
                                 return $q.reject({ code: global.ErrorCodes.InvalidData });
                             }
                             
@@ -705,6 +740,11 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                     bookmarks = JSON.parse(utility.DecryptData(data.bookmarks));
                 }
                 catch (err) { 
+                    // Log error
+                    utility.LogMessage(
+                        moduleName, 'sync_handlePull', utility.LogType.Error,
+                        JSON.stringify(err));
+                    
                     return $q.reject({ code: global.ErrorCodes.InvalidData });
                 }
 
@@ -765,6 +805,11 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                         bookmarks = JSON.parse(utility.DecryptData(data.bookmarks));
                     }
                     catch (err) { 
+                        // Log error
+                        utility.LogMessage(
+                            moduleName, 'sync_handlePush', utility.LogType.Error,
+                            JSON.stringify(err));
+                        
                         return $q.reject({ code: global.ErrorCodes.InvalidData });
                     }
             

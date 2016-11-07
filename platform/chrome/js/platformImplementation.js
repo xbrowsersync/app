@@ -13,7 +13,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
  * Platform variables
  * ------------------------------------------------------------------------------------ */
 
-	var bookmarksBarId = '1', otherBookmarksId = '2', vm;
+	var moduleName = 'xBrowserSync.App.PlatformImplementation', vm;
+	var bookmarksBarId = '1', otherBookmarksId = '2';
 
 
 /* ------------------------------------------------------------------------------------
@@ -345,7 +346,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
                         }
                     }
                     catch (err) {
-                        return reject({ code: global.ErrorCodes.FailedRemoveLocalBookmarks });
+                        // Log error
+						utility.LogMessage(
+							moduleName, 'clearBookmarks', utility.LogType.Error,
+							'Error clearing other bookmarks; ' + JSON.stringify(err));
+							
+						return reject({ code: global.ErrorCodes.FailedRemoveLocalBookmarks });
                     }
                 });
             }
@@ -369,7 +375,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
                             }
                         }
                         catch (err) {
-                            return reject({ code: global.ErrorCodes.FailedRemoveLocalBookmarks });
+                            // Log error
+							utility.LogMessage(
+								moduleName, 'clearBookmarks', utility.LogType.Error,
+								'Error clearing bookmarks bar; ' + JSON.stringify(err));
+							
+							return reject({ code: global.ErrorCodes.FailedRemoveLocalBookmarks });
                         }
                     });
                 }
@@ -591,7 +602,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		var toolbarContainer = utility.GetToolbarContainer(xBookmarks);
 		var xbsContainer = utility.GetXBrowserSyncContainer(xBookmarks);
 		
-		// Populate xBrowserSync bookmarks in Other bookmarks
+		// Populate xBrowserSync bookmarks in other bookmarks
 		populateXbs = $q(function(resolve, reject) {
 			if (!!xbsContainer && xbsContainer.children.length > 0) {
 				try {
@@ -600,6 +611,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					});
 				}
 				catch (err) {
+					// Log error
+					utility.LogMessage(
+						moduleName, 'populateBookmarks', utility.LogType.Error,
+						'Error populating xBrowserSync bookmarks in other bookmarks; ' + JSON.stringify(err));
+					
 					return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
 				}
 			}
@@ -608,7 +624,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			}
 		});
 		
-		// Populate Other bookmarks
+		// Populate other bookmarks
 		populateOther = $q(function(resolve, reject) {
 			if (!!otherContainer && otherContainer.children.length > 0) {
 				try {
@@ -617,6 +633,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					});
 				}
 				catch (err) {
+					// Log error
+					utility.LogMessage(
+						moduleName, 'populateBookmarks', utility.LogType.Error,
+						'Error populating other bookmarks; ' + JSON.stringify(err));
+					
 					return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
 				}
 			}
@@ -625,7 +646,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			}
 		});
 
-		// Populate Bookmarks bar
+		// Populate bookmarks bar
 		populateToolbar = $q(function(resolve, reject) {
 			if (global.SyncBookmarksToolbar.Get() && !!toolbarContainer && toolbarContainer.children.length > 0) {
 				try {
@@ -634,7 +655,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
                     });
                 }
                 catch (err) {
-                    return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
+                    // Log error
+					utility.LogMessage(
+						moduleName, 'populateBookmarks', utility.LogType.Error,
+						'Error populating bookmarks bar; ' + JSON.stringify(err));
+					
+					return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
                 }
 			}
 			else {
@@ -694,6 +720,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			});
 		}
 		catch(err) {
+			// Log error
+			utility.LogMessage(
+				moduleName, 'createLocalBookmark', utility.LogType.Error,
+				JSON.stringify(err));
+			
 			deferred.reject({ code: global.ErrorCodes.FailedCreateLocalBookmarks });
 		}
 		
@@ -744,6 +775,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			});
 		}
 		catch (err) {
+			// Log error
+			utility.LogMessage(
+				moduleName, 'getLocalBookmark', utility.LogType.Error,
+				JSON.stringify(err));
+			
 			deferred.reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
 		}
 		
