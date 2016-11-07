@@ -127,11 +127,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"button_Sync_Disable_Label": {
 			"message": "Disable Sync"
 		},
-		"confirmReplaceBookmarks_Title" : {
-			"message":  "Overwrite browser data?"
+		"confirmSync_Title" : {
+			"message":  "Create new sync?"
 		},
-		"confirmReplaceBookmarks_Message" : {
-			"message":  "xBrowserSync data will overwrite local browser data. OK to proceed?"
+		"confirmSync_Message" : {
+			"message":  "No xBrowserSync ID has been provided so a new sync will be created for you. OK to proceed?"
 		},
 		"button_Confirm_Label" : {
 			"message":  "Yes"
@@ -445,7 +445,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"error_FailedBackupData_Title" : {
 			"message":  "Backup failed"
 		}
-	}
+	};
 
 
 /* ------------------------------------------------------------------------------------
@@ -456,6 +456,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Inject required platform implementation functions
 		platform.BackupData = backupData;
 		platform.Bookmarks.Clear = clearBookmarks;
+		platform.Bookmarks.Get = getBookmarks;
 		platform.Bookmarks.Populate = populateBookmarks;
 		platform.Bookmarks.Share = shareBookmark;
 		platform.GetConstant = getConstant;
@@ -544,6 +545,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	var displayLoading = function() {
 		SpinnerPlugin.activityStart(getConstant(global.Constants.Working_Title), { dimBackground: true });
 	};
+
+	var getBookmarks = function() {
+		return $q.resolve();
+	};
 	
 	var getConstant = function(constName) {
 		return constants[constName].message;
@@ -583,12 +588,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					return $q.reject({ code: global.ErrorCodes.FailedGetPageMetadata });
 				}
 
+				var parser, html, description, tagElements, tags;
+
 				// Extract metadata properties
-				var parser = new DOMParser();
-				var html = parser.parseFromString(response.data, 'text/html');
+				parser = new DOMParser();
+				html = parser.parseFromString(response.data, 'text/html');
 
 				// Get page title
-				var title = html.querySelector('meta[property="og:title"]');
+				title = html.querySelector('meta[property="og:title"]');
 				if (!!title && !!title.getAttribute('content')) {
 					metadata.title = title.getAttribute('content');
 				}
@@ -597,16 +604,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				}
 				
 				// Get page description
-				var description = html.querySelector('meta[property="og:description"]') ||
+				description = html.querySelector('meta[property="og:description"]') ||
 				html.querySelector('meta[name="description"]');				
 				if (!!description && !!description.getAttribute('content')) {
 					metadata.description = description.getAttribute('content');
 				}
 
 				// Get page tags
-				var tagElements = html.querySelectorAll('meta[property$="video:tag"]');
+				tagElements = html.querySelectorAll('meta[property$="video:tag"]');
 				if (!!tagElements && tagElements.length > 0) {
-					var tags = '';
+					tags = '';
 					
 					for (var i = 0; i < tagElements.length; i++) {
 						tags += tagElements[i].getAttribute('content') + ',';
@@ -617,7 +624,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				}
 				
 				// Get meta tag values
-				var tagElements = html.querySelector('meta[name="keywords"]');
+				tagElements = html.querySelector('meta[name="keywords"]');
 				if (!!tagElements && !!tagElements.getAttribute('content')) {
 					metadata.tags = tagElements.getAttribute('content');
 				}
@@ -662,17 +669,22 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			document.addEventListener('resume', resume, false);
         };
 		document.getElementsByTagName('head')[0].appendChild(script);
-		
-		// Set login validation
-		vm.sync.validateLogin = function() {
-			return !!vm.settings.secret() && !!vm.settings.id();
-		};
 
 		// Set async channel to view model
 		vm.sync.asyncChannel = vm;
 
-		// Remove sync confirmation
-		vm.events.syncForm_EnableSync_Click = vm.events.syncForm_ConfirmSync_Click;
+		// If no ID provided, display confirmation panel
+		vm.events.syncForm_EnableSync_Click = function() {
+			if (!global.Id.Get()) {
+				vm.sync.displaySyncConfirmation = true;
+				$timeout(function() {
+					document.querySelector('#btnSync_Confirm').focus();
+				});
+			}
+			else {
+				vm.events.syncForm_ConfirmSync_Click();
+			}
+		};
 
 		// Set intro panel button events
 		vm.events.introPanel10_Next_Click = function() {
@@ -916,11 +928,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 
 	var resume = function() {
-		if (!!global.SyncEnabled.Get()) {
-			// Check for bookmarks updates
-			bookmarks.CheckForUpdates();
-		}
-
 		// Reset view to login/search panel
 		if (!!showMainViewOnFocus) {
 			vm.view.displayMainView();
@@ -930,12 +937,32 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			showMainViewOnFocus = true;
 		}
 		
+		// Check if a sync was interrupted
+		if (!!global.IsSyncing.Get()) {
+			global.IsSyncing.Set(false);
+			
+			// Disable sync
+			global.SyncEnabled.Set(false);
+			
+			// Display alert
+			vm.alert.display(
+				getConstant(global.Constants.Error_SyncInterrupted_Title), 
+				getConstant(global.Constants.Error_SyncInterrupted_Message));
+            
+            return;
+		}
+		
 		if (vm.view.current === vm.view.views.search) {
 			// Focus on search box and show keyboard
 			$timeout(function() {
 				document.querySelector('input[name=txtSearch]').focus();
 				cordova.plugins.Keyboard.show();
 			}, 100);
+		}
+
+		// Check for bookmarks updates
+		if (!!global.SyncEnabled.Get()) {
+			bookmarks.CheckForUpdates();
 		}
 
 		// Check if a link was shared

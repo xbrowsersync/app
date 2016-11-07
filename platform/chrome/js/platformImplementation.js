@@ -556,11 +556,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
             });
         });
 
-		// Set login validation
-		viewModel.sync.validateLogin = function() {
-			return !!viewModel.settings.secret();
-		};
-
 		// Focus on search box
 		if (viewModel.view.current === viewModel.view.views.search) {
 			$timeout(function() {

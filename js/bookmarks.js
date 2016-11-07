@@ -155,7 +155,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 var encryptedBookmarks = utility.EncryptData(JSON.stringify(bookmarks));
                 var sizeInBytes = utility.GetStringSizeInBytes(encryptedBookmarks);
                 return sizeInBytes;
-            })
+            });
     };
 	
 	var queueSync = function(syncData) {
@@ -495,7 +495,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         global.IsSyncing.Set(true);
         
         var syncPromise;
-        
+
         // Process sync
         switch(currentSync.type) {
             // Push bookmarks to xBrowserSync service

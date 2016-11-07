@@ -230,7 +230,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     global.IsSyncing.Set(value) : 
                     global.IsSyncing.Get();
             },
-            validateLogin: undefined
+            validateLogin: function() {
+                return !!vm.settings.secret();
+            }
 		};
 
 		vm.view = {

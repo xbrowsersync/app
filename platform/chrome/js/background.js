@@ -149,7 +149,7 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 				// Clear cached bookmarks
 				global.Cache.Bookmarks.Set(null);
 				break;
-		};
+		}
 	};
 	
 	var listenForMessages = function(port) {

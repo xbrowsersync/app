@@ -110,10 +110,10 @@
 	"button_Sync_Disable_Label": {
 		"message": "Disable Sync"
 	},
-	"confirmReplaceBookmarks_Title" : {
+	"confirmSync_Title" : {
 		"message":  "Overwrite browser data?"
 	},
-	"confirmReplaceBookmarks_Message" : {
+	"confirmSync_Message" : {
 		"message":  "xBrowserSync data will overwrite local browser data. OK to proceed?"
 	},
 	"button_Confirm_Label" : {
