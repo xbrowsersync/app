@@ -20,6 +20,12 @@
 	"aboutPanel_Title" : {
 		"message": "What's new in version"
 	},
+	"aboutPanel_WebsiteLink_Label" : {
+		"message": "Website"
+	},
+	"aboutPanel_GitHubLink_Label" : {
+		"message": "Git Hub Repos"
+	},
 	"aboutPanel_VersionHistoryLink_Label" : {
 		"message": "Full release history"
 	},

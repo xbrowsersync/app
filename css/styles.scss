@@ -63,7 +63,7 @@ body {
         transition: all, ease-in, 0.2s;
         cursor: pointer;
         
-        .active,
+        &.active,
         &:active,
         &:focus,
         &:hover {
@@ -145,7 +145,7 @@ body {
                 }
             }
 
-            .active,
+            &.active,
             &.active:focus,
             &:active,
             &:active:focus,
@@ -194,6 +194,7 @@ body {
     }
 
     .bottom {
+        position: relative;
         display: table-cell;
         vertical-align: bottom;
     }
@@ -461,12 +462,38 @@ body {
         margin-bottom: 5px;
     }
 
+    .links {
+        width: 60%;
+        margin: 0 auto 20px;
+
+        a {
+            color: $colour-text2;
+            opacity: 0.5;
+
+            &.active,
+            &:active,
+            &:active:focus,
+            &:hover {
+                opacity: 1;
+                text-decoration: none;
+            }
+
+            &:focus {
+                text-decoration: underline;
+            }
+            
+            &.right {
+                float: right;
+            }
+        }
+    }
+
     .well {
         position: relative;
         z-index: 50;
         
         .contents {
-            height: 48vh;
+            height: 40vh;
             overflow-y: auto;
             font-size: 0.9em;
         }

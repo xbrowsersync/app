@@ -40,6 +40,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"aboutPanel_Title" : {
 			"message": "What's new in version"
 		},
+		"aboutPanel_WebsiteLink_Label" : {
+			"message": "Website"
+		},
+		"aboutPanel_GitHubLink_Label" : {
+			"message": "Git Hub Repos"
+		},
 		"aboutPanel_VersionHistoryLink_Label" : {
 			"message": "Full release history"
 		},
@@ -588,7 +594,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					return $q.reject({ code: global.ErrorCodes.FailedGetPageMetadata });
 				}
 
-				var parser, html, description, tagElements, tags;
+				var parser, html, title, description, tagElements, tags;
 
 				// Extract metadata properties
 				parser = new DOMParser();
@@ -600,9 +606,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					metadata.title = title.getAttribute('content');
 				}
 				else {
-					metadata.title = html.title;
+					metadata.title = html.title || '';
 				}
-				
+
 				// Get page description
 				description = html.querySelector('meta[property="og:description"]') ||
 				html.querySelector('meta[name="description"]');				
@@ -622,13 +628,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					metadata.tags = tags;
 					return metadata;
 				}
-				
+
 				// Get meta tag values
 				tagElements = html.querySelector('meta[name="keywords"]');
 				if (!!tagElements && !!tagElements.getAttribute('content')) {
 					metadata.tags = tagElements.getAttribute('content');
 				}
-				
+
 				return metadata;
 			})
             .catch(function(err) {

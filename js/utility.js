@@ -252,25 +252,21 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 	};
 	
 	var logMessage = function(moduleName, functionName, messageType, message) {
-		var logFunction = console.log;
-
 		switch (messageType) {
 			case logType.Error:
 				messageType = 'ERROR';
-				logFunction = console.error;
+				console.error(moduleName + ':' + functionName + ', ' + messageType + ': ' + message);
 				break;
 			case logType.Warning:
 				messageType = 'WARNING';
-				logFunction = console.warn;
+				console.warn(moduleName + ':' + functionName + ', ' + messageType + ': ' + message);
 				break;
 			case logType.Info:
 			default:
 				messageType = 'INFO';
-				logFunction = console.info;
+				console.info(moduleName + ':' + functionName + ', ' + messageType + ': ' + message);
 				break;
 		}
-		
-		logFunction(moduleName + ':' + functionName + ', ' + messageType + ': ' + message);
 	};
 
 	var logType = { Info: 0, Warning: 1, Error: 2};

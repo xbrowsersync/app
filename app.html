@@ -47,6 +47,10 @@
                 <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Title) }}</span>
             </h1>
             <div class="bottom">
+                <div class="links">
+                    <a href="https://www.xbrowsersync.org/" class="new-tab">{{ vm.platform.GetConstant(vm.global.Constants.AboutPanel_WebsiteLink_Label) }}</a>
+                    <a href="https://github.com/xBrowserSync/" class="new-tab right">{{ vm.platform.GetConstant(vm.global.Constants.AboutPanel_GitHubLink_Label) }}</a>
+                </div>
                 <div class="well well-sm dark">
                     <div class="contents">
                         <h4>{{ vm.platform.GetConstant(vm.global.Constants.AboutPanel_Title) }} {{ vm.global.AppVersion }}</h4>
@@ -505,7 +509,7 @@
                         <div>{{ vm.platform.GetConstant(vm.global.Constants.SyncDataUsagePanel_Message) }}:</div>
                         <div class="chart-panel">
                             <div id="chart"></div>
-                            <div class="values" ng-show="!!vm.settings.syncDataUsed">
+                            <div class="values" ng-show="vm.settings.syncDataUsed !== null">
                                 <span class="percent" ng-class="{ 'text-danger': vm.settings.syncDataUsed >= 90 }">{{ vm.settings.syncDataUsed }}%</span>
                                 <span class="max">/ {{ vm.settings.syncDataMax }}kB</span>
                             </div>

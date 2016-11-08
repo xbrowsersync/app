@@ -84,6 +84,8 @@ xBrowserSync.App.Global = function(platform) {
 			Button_Next_Label: 'button_Next_Label',
 			Button_Previous_Label: 'button_Previous_Label',
             AboutPanel_Title: 'aboutPanel_Title',
+            AboutPanel_WebsiteLink_Label: 'aboutPanel_WebsiteLink_Label',
+            AboutPanel_GitHubLink_Label: 'aboutPanel_GitHubLink_Label',
             AboutPanel_VersionHistoryLink_Label: 'aboutPanel_VersionHistoryLink_Label',
             IntroPanel1_Message: 'introPanel1_Message',
             IntroPanel2_Message: 'introPanel2_Message',
