@@ -237,7 +237,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
 		vm.view = {
 			current: (function() {
-                if (global.DisplayAboutOnStartup.Get()) {
+                if (!!global.DisplayAboutOnStartup.Get()) {
                     return 4;
                 }
 
