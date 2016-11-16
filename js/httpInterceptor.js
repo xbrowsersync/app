@@ -21,7 +21,7 @@ xBrowserSync.App.HttpInterceptor = function($q, global) {
 				config.headers['Accept-Version'] = global.ApiVersion;
 
 				// Set default request timeout
-				config.timeout = 10000;
+				config.timeout = (!config.timeout) ? 10000 : config.timeout;
 
 				return config || $q.when(config);
 			}

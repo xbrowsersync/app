@@ -721,6 +721,8 @@ body {
                 .lookahead {
                     font-size: 1.5em;
                     padding: 5px 0;
+                    margin-left: 1px;
+                    text-indent: -1px;
                 }
             }
         }
@@ -793,7 +795,7 @@ body {
 
                 &:focus {
                     .list-group-item-heading {
-                        text-decoration: underline;
+                        color: $colour-link-highlight;
                     }
                 }
             }

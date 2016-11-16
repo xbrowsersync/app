@@ -160,8 +160,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.platformName = null;
         
         vm.search = {
+            cancelGetBookmarksRequest: null,
             getLookaheadTimeout: null,
-            getResultsTimeout: null,
+            getSearchLookaheadTimeout: null,
+            getSearchResultsTimeout: null,
             lastWord: null,
             lookahead: null,
             query: null,
@@ -182,7 +184,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             displaySyncBookmarksToolbarConfirmation: false,
             displaySyncDataUsage: false,
             displaySyncOptions: true,
-            getResultsTimeout: 250,
+            getSearchLookaheadDelay: 50,
+            getSearchResultsDelay: 250,
 			id: function(value) {
                 return arguments.length ? 
                     global.Id.Set(value) : 
@@ -365,7 +368,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Display lookahead if word length exceeds minimum
         if (!!lastWord && lastWord.length > global.LookaheadMinChars) {
             // Get tags lookahead
-            bookmarks.GetLookahead(lastWord.toLowerCase(), null, true)
+            bookmarks.GetLookahead(lastWord.toLowerCase(), null, null, true)
                 .then(function(results) {
                     if (!results) {
                         return;
@@ -1063,8 +1066,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var searchBookmarks = function() {
         var queryData;
 
-        searchForm_ToggleSearchingAnimation(true);
-        
+        // Search by url if query is in url format, otherwise search by keywords
         var urlRegex = /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
         if (!!vm.search.query.trim().match(urlRegex)) {
             queryData = { url: vm.search.query.trim() };
@@ -1113,10 +1115,21 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
 
     var searchForm_DeleteBookmark_Click = function(event, bookmark) {
-        var bookmarkItem = event.target.parentNode.parentNode.parentNode.parentNode;
+        var bookmarkItem = event.target.closest('.list-group-item');
+
+        if (!bookmarkItem) {
+            return;
+        }
+
         bookmarkItem.classList.add('deleted');
         
         $timeout(function() {
+            // If deleting the last search result, reset results to display no results panel  
+            if (!!bookmarkItem.parentElement.children && bookmarkItem.parentElement.children.length === 1) {
+                vm.search.results = [];
+            }
+            
+            // Delete the node from the DOM
             bookmarkItem.remove();
 
             // Delete the bookmark
@@ -1138,10 +1151,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.alert.show = false;
         vm.search.lookahead = null;
         
-        // Clear timeout
-        if (!!vm.search.getResultsTimeout) {
-            $timeout.cancel(vm.search.getResultsTimeout);
-            vm.search.getResultsTimeout = null;
+        // Clear timeouts
+        if (!!vm.search.getSearchLookaheadTimeout) {
+            $timeout.cancel(vm.search.getSearchLookaheadTimeout);
+            vm.search.getSearchLookaheadTimeout = null;
+        }
+
+        if (!!vm.search.getSearchResultsTimeout) {
+            $timeout.cancel(vm.search.getSearchResultsTimeout);
+            vm.search.getSearchResultsTimeout = null;
         }
         
         // No query, clear results
@@ -1153,40 +1171,54 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Get last word of search query
         var matches = vm.search.query.match(/[\S]+$/);
         var lastWord = (!!matches) ? matches[0] : null;
+        var getLookahead;
         
         // Display lookahead if word length exceed minimum
         if (!!lastWord && lastWord.length > global.LookaheadMinChars) {
-            // Get lookahead
-            bookmarks.GetLookahead(lastWord.toLowerCase(), vm.search.results)
-                .then(function(results) {
-                    if (!results) {
-                        return;
-                    }
+            // Get lookahead after delay
+            vm.search.getSearchLookaheadTimeout = $timeout(function() {
+                searchForm_ToggleSearchingAnimation(true);                
+                
+                // Cancel any exist http request to get bookmarks and refresh deferred
+                if (!!vm.search.cancelGetBookmarksRequest && 
+                    vm.search.cancelGetBookmarksRequest.promise.$$state.status === 0) {
+                    vm.search.cancelGetBookmarksRequest.resolve();
+                }
+                vm.search.cancelGetBookmarksRequest = $q.defer();
+                
+                getLookahead = bookmarks.GetLookahead(lastWord.toLowerCase(), vm.search.results, vm.search.cancelGetBookmarksRequest.promise)
+                    .then(function(results) {
+                        if (!results) {
+                            return;
+                        }
 
-                    var lookahead = results[0];
-                    var word =  results[1];
-                    
-                    if (!!lookahead && word.toLowerCase() === lastWord.toLowerCase()) {
-                        // Trim word from lookahead
-                        lookahead = (!!lookahead) ? lookahead.substring(word.length) : null;
-                        vm.search.lookahead = lookahead.replace(/\s/g, '&nbsp;');
-                        vm.search.queryMeasure = vm.search.query.replace(/\s/g, '&nbsp;');
-                    }
-                });
+                        var lookahead = results[0];
+                        var word =  results[1];
+                        
+                        if (!!lookahead && word.toLowerCase() === lastWord.toLowerCase()) {
+                            // Trim word from lookahead
+                            lookahead = (!!lookahead) ? lookahead.substring(word.length) : null;
+                            vm.search.lookahead = lookahead.replace(/\s/g, '&nbsp;');
+                            vm.search.queryMeasure = vm.search.query.replace(/\s/g, '&nbsp;');
+                        }
+
+                        vm.search.cancelGetBookmarksRequest = null;
+                    });
+            }, vm.settings.getSearchLookaheadDelay);
             
-            // Execute search after timeout
-            vm.search.getResultsTimeout = $timeout(function() {
-                searchBookmarks();
-            }, vm.settings.getResultsTimeout);
+            // Execute search after timeout and once lookahead request is finished
+            vm.search.getSearchResultsTimeout = $timeout(function() {
+                getLookahead.then(searchBookmarks);
+            }, vm.settings.getSearchResultsDelay);
         }
     };
     
     var searchForm_SearchText_KeyDown = function($event) {
         // If user pressed enter and search text present
         if ($event.keyCode === 13 && !!vm.search.query) {
-            if (!!vm.search.getResultsTimeout) {
-                $timeout.cancel(vm.search.getResultsTimeout);
-                vm.search.getResultsTimeout = null;
+            if (!!vm.search.getSearchResultsTimeout) {
+                $timeout.cancel(vm.search.getSearchResultsTimeout);
+                vm.search.getSearchResultsTimeout = null;
             }
             
             searchBookmarks();

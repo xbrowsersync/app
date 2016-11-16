@@ -709,7 +709,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		document.getElementById('backupFile').addEventListener('change', backupFile_Change, false);
 
 		// Increase search results timeout to avoid display lag
-		vm.settings.getResultsTimeout = 500;
+		vm.settings.getSearchResultsDelay = 500;
 
 		// Check for updates regularly
 		bookmarks.CheckForUpdates();

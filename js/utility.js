@@ -262,6 +262,7 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 				console.warn(moduleName + ':' + functionName + ', ' + messageType + ': ' + message);
 				break;
 			case logType.Info:
+				/* falls through */
 			default:
 				messageType = 'INFO';
 				console.info(moduleName + ':' + functionName + ', ' + messageType + ': ' + message);

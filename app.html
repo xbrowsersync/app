@@ -55,11 +55,14 @@
                     <div class="contents">
                         <h4>{{ vm.platform.GetConstant(vm.global.Constants.AboutPanel_Title) }} {{ vm.global.AppVersion }}</h4>
                         <ul>
-                            <li>[Added] Support for mobile apps. xBrowserSync core code has been updated to support porting directly to native mobile apps. Expect releases for iOS and Android soon.</li>
+                            <li>[Added] Support for mobile apps. Expect releases for Android followed by iOS very soon.</li>
                             <li>[Added] Support for Firefox. xBrowserSync now works with Firefox's new WebExtensions browser extension API. However, Mozilla are still in the process of adding support for the full API used by Chrome and there are gaps, some of which xBrowserSync depends on. Once support has been added (soon hopefully) xBrowserSync will be released for Firefox.</li>
                             <li>[Added] Data usage chart. Check how much of your allocated sync data you are currently using in Settings > Sync > Data Usage.</li>
+                            <li>[Fixed] Synced data is now left encrypted before being cached locally, for extra security.</li>
                             <li>[Fixed] QR code now displayed using canvas, much clearer at higher resolutions.</li>
                             <li>[Added] About panel (this) to display latest changes when a new version is installed.</li>
+                            <li>[Fixed] Bookmark searches no longer match partial words to improve results relevance.</li>
+                            <li>Numerous other minor enhancements and bug fixes.</li>
                         </ul>
                         <p class="text-center">
                             <a href="https://github.com/xBrowserSync/App/releases" class="new-tab">

@@ -109,7 +109,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
             });
     };
     
-    var getLookahead = function(word, bookmarks, tagsOnly) {
+    var getLookahead = function(word, bookmarks, canceller, tagsOnly) {
         var getBookmarks;
         var deferred = $q.defer();
         
@@ -123,7 +123,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
         }
         else {
             // Get cached synced bookmarks
-            getBookmarks = getCachedBookmarks();
+            getBookmarks = getCachedBookmarks(null, canceller);
         }
         
         // With bookmarks
@@ -146,6 +146,11 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 deferred.resolve([lookahead, word]);
             })
             .catch(function(err) {
+                // Return if request was cancelled
+                if (!!err && !!err.code && err.code === global.ErrorCodes.HttpRequestCancelled) {
+                    return;
+                }
+                
                 // Log error
                 utility.LogMessage(
                     moduleName, 'getLookahead', utility.LogType.Error,
@@ -237,7 +242,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
  * Private functions
  * ------------------------------------------------------------------------------------ */
     
-    var getCachedBookmarks = function(bookmarks) {
+    var getCachedBookmarks = function(bookmarks, canceller) {
             var bookmarkData, getBookmarks;
             
             if (!bookmarks) {
@@ -262,7 +267,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 }
                 else {
                     // Get synced bookmarks
-                    getBookmarks = api.GetBookmarks()
+                    getBookmarks = api.GetBookmarks(canceller)
                         .then(function(data) {
                             if (!data || !data.lastUpdated) {
                                 return $q.reject({ code: global.ErrorCodes.NoDataFound });
@@ -370,6 +375,17 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
 
         return _.difference(xBookmarks, removeArr);
     };
+
+    var cleanWords = function (wordsToClean) {
+        if (!wordsToClean) {
+            return;
+        }
+        
+        // Remove all non alphanumerics and spaces and return as array
+        var cleanWords = wordsToClean.toLowerCase().replace(/[^a-z0-9\s]/g, '');
+        var cleanWordsArr = _.compact(cleanWords.split(/\s/)); 
+        return cleanWordsArr;
+    };
 	
 	var searchBookmarksByKeywords = function (bookmarksToSearch, keywords, results) {
         if (!results) {
@@ -387,17 +403,17 @@ xBrowserSync.App.Bookmarks = function($q, platform, global, api, utility) {
                 var bookmarkWords = [];
                 
                 // Add all words in bookmark to array
-                bookmarkWords = bookmarkWords.concat(_.compact(bookmark.title.replace("'", '').toLowerCase().split(/\s/)));
-                bookmarkWords = bookmarkWords.concat(_.compact(bookmark.url.replace("'", '').toLowerCase().split(/\s/)));
-                if (!!bookmark.description) { bookmarkWords = bookmarkWords.concat(_.compact(bookmark.description.toLowerCase().split(/\s/))); }
-                if (!!bookmark.tags) { bookmarkWords = bookmarkWords.concat(_.compact(bookmark.tags)); }
+                bookmarkWords = bookmarkWords.concat(cleanWords(bookmark.title));
+                if (!!bookmark.description) { bookmarkWords = bookmarkWords.concat(cleanWords(bookmark.description)); }
+                if (!!bookmark.tags) { bookmarkWords = bookmarkWords.concat(cleanWords(bookmark.tags.join(' '))); }
                 
                 // Get match scores for each keyword against bookmark words
                 var scores = _.map(keywords, function(keyword) { 
                     var count = 0; 
                     
+                    // Match words that begin with keyword
                     _.each(bookmarkWords, function(bookmarkWord) { 
-                        if (bookmarkWord.indexOf(keyword) >= 0) { count++; } 
+                        if (bookmarkWord.indexOf(keyword) === 0) { count++; } 
                     }); 
                     
                     return count; 

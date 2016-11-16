@@ -57,15 +57,15 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
             });
 	};
 	
-	var getBookmarks = function() {
+	var getBookmarks = function(canceller) {
 		// Check secret and sync ID are present
 		if (!global.ClientSecret.Get() || !global.Id.Get()) {
 			global.SyncEnabled.Set(false);
 			return $q.reject({ code: global.ErrorCodes.MissingClientData });
 		}
 		
-		return $http.get(global.URL.Host.Get() + global.URL.Bookmarks + '/' + 
-			             global.Id.Get())
+		return $http.get(global.URL.Host.Get() + global.URL.Bookmarks + '/' + global.Id.Get(), 
+						 { timeout: canceller })
             .then(function(response) {
 				if (!!response && !!response.data) {
 					return response.data;
@@ -75,7 +75,14 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 				}
 			})
             .catch(function(err) {
-                // Log error
+                // Return if request was cancelled
+				if (!!err.config.timeout.$$state &&
+					!!err.config.timeout.$$state.status &&
+					err.config.timeout.$$state.status === 1) {
+					return $q.reject({ code: global.ErrorCodes.HttpRequestCancelled });
+				}
+				
+				// Log error
                 utility.LogMessage(
                     moduleName, 'getBookmarks', utility.LogType.Error,
                     JSON.stringify(err));
