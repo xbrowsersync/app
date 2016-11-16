@@ -925,6 +925,21 @@ body {
         min-height: 7.5em;
     }
 
+    .btn-delete-bookmark {
+        background-color: $colour-danger;
+
+        &:not([disabled]):active,
+        &:not([disabled]):hover {
+            background-color: $colour-text1;
+            color: $colour-danger;
+            border-color: $colour-text1;
+        }
+    }
+
+    .btn-share-bookmark {
+        display: none;
+    }
+
     .tags-form-group {
         position: relative;
         border-radius: $border-radius;

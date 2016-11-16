@@ -72,6 +72,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             bookmarkForm_CreateTags_Click: bookmarkForm_CreateTags_Click,
             bookmarkForm_DeleteBookmark_Click: bookmarkForm_DeleteBookmark_Click,
             bookmarkForm_RemoveTag_Click: bookmarkForm_RemoveTag_Click,
+            bookmarkForm_ShareBookmark_Click: platform.Bookmarks.Share,
             bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
             displayQRCode_Click: displayQRCode_Click,
             handleSyncResponse: handleSyncResponse,
@@ -99,9 +100,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             introPanel11_Prev_Click: introPanel11_Prev_Click,
             introPanel12_Next_Click: introPanel12_Next_Click,
             introPanel12_Prev_Click: introPanel12_Prev_Click,
-            introPanel13_Next_Click: introPanel13_Next_Click,
             introPanel13_Prev_Click: introPanel13_Prev_Click,
-            introPanel14_Prev_Click: introPanel14_Prev_Click,
             openUrl: openUrl,
             queueSync: queueSync,
             searchForm_Clear_Click: searchForm_Clear_Click,
@@ -112,7 +111,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             searchForm_SearchText_KeyDown: searchForm_SearchText_KeyDown,
             searchForm_SearchResult_KeyDown: searchForm_SearchResult_KeyDown,
             searchForm_SelectBookmark_Press: searchForm_SelectBookmark_Press,
-            searchForm_ShareBookmark_Click: searchForm_ShareBookmark_Click,
+            searchForm_ShareBookmark_Click: platform.Bookmarks.Share,
             searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
             syncPanel_SyncBookmarksToolbar_Click: syncPanel_SyncBookmarksToolbar_Click,
             syncPanel_SyncBookmarksToolbar_Confirm: syncPanel_SyncBookmarksToolbar_Confirm,
@@ -999,16 +998,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.introduction.displayPanel(11);
     };
 
-    var introPanel13_Next_Click = function() {
-        vm.introduction.displayPanel(14);
-    };
-
     var introPanel13_Prev_Click = function() {
         vm.introduction.displayPanel(12);
-    };
-
-    var introPanel14_Prev_Click = function() {
-        vm.introduction.displayPanel(13);
     };
     
     var openUrl = function(event, url) {
@@ -1343,10 +1334,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if (!isActive) {
             bookmarkItem.classList.add('active');
         }
-    };
-
-    var searchForm_ShareBookmark_Click = function(event, result) {
-        platform.Bookmarks.Share(event, result);
     };
     
     var searchForm_ToggleBookmark_Click = function() {

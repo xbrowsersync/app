@@ -275,6 +275,10 @@ body {
 }
 
 #bookmark-panel {
+    .btn-share-bookmark {
+        display: inline-block;
+    }
+    
     .tags {
         .label {
             font-size: 1em;

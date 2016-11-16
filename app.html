@@ -56,11 +56,11 @@
                         <h4>{{ vm.platform.GetConstant(vm.global.Constants.AboutPanel_Title) }} {{ vm.global.AppVersion }}</h4>
                         <ul>
                             <li>[Added] Support for mobile apps. Expect releases for Android followed by iOS very soon.</li>
-                            <li>[Added] Support for Firefox. xBrowserSync now works with Firefox's new WebExtensions browser extension API. However, Mozilla are still in the process of adding support for the full API used by Chrome and there are gaps, some of which xBrowserSync depends on. Once support has been added (soon hopefully) xBrowserSync will be released for Firefox.</li>
+                            <li>[Added] Support for Firefox. xBrowserSync now works with Firefox's new WebExtensions browser extension API. However, Mozilla are still in the process of implementing the full API used by Chrome and currently there are gaps, some of which xBrowserSync depends on. Once support has been added xBrowserSync will be released for Firefox.</li>
                             <li>[Added] Data usage chart. Check how much of your allocated sync data you are currently using in Settings > Sync > Data Usage.</li>
+                            <li>[Added] About panel (this).</li>
                             <li>[Fixed] Synced data is now left encrypted before being cached locally, for extra security.</li>
                             <li>[Fixed] QR code now displayed using canvas, much clearer at higher resolutions.</li>
-                            <li>[Added] About panel (this) to display latest changes when a new version is installed.</li>
                             <li>[Fixed] Bookmark searches no longer match partial words to improve results relevance.</li>
                             <li>Numerous other minor enhancements and bug fixes.</li>
                         </ul>
@@ -268,20 +268,6 @@
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}</span>
                         </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel13_Next_Click()">
-                            <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Next_Label) }}</span>
-                        </button>
-                    </div>
-                </div>
-                <div id="intro-panel-14" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 14" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swiperight="vm.events.introPanel14_Prev_Click()">
-                    <div ng-bind-html="vm.platform.GetConstant(vm.global.Constants.IntroPanel14_Message)"></div>
-                    <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel14_Prev_Click()">
-                            <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.GetConstant(vm.global.Constants.Button_Previous_Label) }}</span>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -366,7 +352,7 @@
                     <div class="list-group-item" ng-repeat="result in vm.search.results track by result.id">
                         <div class="menu" hm-tap="vm.events.searchForm_SelectBookmark_Press($event)">
                             <div class="buttons">
-                                <button class="btn btn-icon" title="Share bookmark" hm-tap="vm.events.searchForm_ShareBookmark_Click($event, result)">
+                                <button class="btn btn-icon" title="Share bookmark" hm-tap="vm.events.searchForm_ShareBookmark_Click(result)">
                                     <i class="fa fa-share-alt" aria-hidden="true"></i>
                                     <span class="sr-only">Share bookmark</span>
                                 </button>
@@ -449,8 +435,11 @@
                         <button type="submit" class="btn btn-default" ng-show="vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_UpdateBookmark_Click()" tabindex="6">
                             {{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Button_UpdateBookmark_Label) }}
                         </button>
-                        <button type="button" class="btn btn-default" ng-show="vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_DeleteBookmark_Click()" tabindex="7">
-                            {{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Button_RemoveBookmark_Label) }}
+                        <button type="button" class="btn btn-default btn-share-bookmark" ng-show="vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_ShareBookmark_Click(vm.bookmark.current)" tabindex="7">
+                            {{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Button_ShareBookmark_Label) }}
+                        </button>
+                        <button type="button" class="btn btn-default btn-delete-bookmark" ng-show="vm.bookmark.displayUpdateForm" ng-click="vm.events.bookmarkForm_DeleteBookmark_Click()" tabindex="8">
+                            {{ vm.platform.GetConstant(vm.global.Constants.BookmarkPanel_Button_DeleteBookmark_Label) }}
                         </button>
                     </div>
                 </form>

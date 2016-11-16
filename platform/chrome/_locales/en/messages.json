@@ -57,27 +57,24 @@
 		"message": "<h4>New service, new ID</h4><p>IDs are service-specific. If you have created a sync and received an xBrowserSync ID with one service it cannot be used with another.</p><p>Whenever you change services you must create a new sync. You'll then receive a new ID for use with that service.</p>"
 	},
 	"introPanel7_Message": {
-		"message": "<h4>Use it or lose it</h4><p>Service space is limited. If you do not use xBrowserSync for an extended period, any syncs you have created may be deleted to make room for others.</p><p>If you're synced, xBrowserSync will check for changes regularly in the background which will prevent your sync from being deleted.</p>"
-	},
-	"introPanel8_Message": {
 		"message": "<h4>Searching your bookmarks</h4><p>Once synced, all of your bookmarks will be available in the local browser which can be searched easily on the Search panel.</p><p>From there you can also modify or delete existing bookmarks. Just hover the mouse over a specific search result and click the pen icon to edit the bookmark.</p>"
 	},
-	"introPanel9_Message": {
+	"introPanel8_Message": {
 		"message": "<h4>Native features supported</h4><p>Feel free to use your browser's native bookmarking features whilst synced, any changes you make there will be synced by xBrowserSync automatically.</p><p>If you have spent time organising your bookmarks don't worry, xBrowserSync will respect your existing bookmarks hierarchy!</p>"
 	},
-	"introPanel10_Message": {
+	"introPanel9_Message": {
 		"message": "<h4>Adding a bookmark</h4><p>You can add the current page as a bookmark (or modify it if it is bookmarked already) by clicking on the bookmark icon in the Search panel.</p><p>Include a description which will be displayed in search results, and add tags to help find the bookmark more easily when searching.</p>"
 	},
-	"introPanel11_Message": {
-		"message": "<h4>Remember to back up</h4><p>Back up and restore for your browser data is available via the Settings panel.</p><p>Backing up will save your unencrypted browser data to a local file, which can then be used to restore your backed up data. If you are not currently synced, only local browser data will be affected.</p>"
+	"introPanel10_Message": {
+		"message": "<h4>Remember to back up</h4><p>xBrowserSync services are run voluntarily, plus servers can break and go wrong so please look after your data and make sure to keep backups.</p><p>Open the Settings panel and in the Back up and restore tab you can back up your unencrypted synced data to a local file, which can then restored at a later date should you need to.</p>"
 	},
-	"introPanel12_Message": {
+	"introPanel11_Message": {
 		"message": "<h4>When switching services</h4><p>Back up your synced data using the first service before creating a new sync with the second, then restore your backed up data to the second service.</p><p>This will ensure that any bookmark descriptions and tags that are not supported natively by your browser are also synced.</p>"
 	},
-	"introPanel13_Message": {
+	"introPanel12_Message": {
 		"message": "<h4>Shortcut xBrowserSync</h4><p>To access xBrowserSync quickly, assign a keyboard shortcut to activate the extension then just start typing to search your bookmarks.</p><p>Browse to chrome://extensions/, the keyboard shortcuts option is at the bottom of the page."
 	},
-	"introPanel14_Message": {
+	"introPanel13_Message": {
 		"message": "<h4>Noticed an issue?</h4><p>If you've found a bug in xBrowserSync or would like to request a new feature, head on over to Git Hub and <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>submit an issue</a>.</p><p>Calling all coders! If you would like to help make xBrowserSync better, go ahead and fork the <a href='https://github.com/xBrowserSync/App' class='new-tab'>xBrowserSync Git Hub repo</a> and submit a pull request.</p>"
 	},
 	"button_About_Label": {
@@ -287,8 +284,11 @@
 	"bookmarkPanel_Button_AddBookmark_Label": {
 		"message": "Add Bookmark"
 	},
-	"bookmarkPanel_Button_RemoveBookmark_Label": {
-		"message": "Remove"
+	"bookmarkPanel_Button_DeleteBookmark_Label": {
+		"message": "Delete"
+	},
+	"bookmarkPanel_Button_ShareBookmark_Label": {
+		"message": "Share"
 	},
 	"bookmarkPanel_Button_UpdateBookmark_Label": {
 		"message": "Update"

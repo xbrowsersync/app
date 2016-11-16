@@ -1,5 +1,6 @@
 var xBrowserSync = xBrowserSync || {};
 xBrowserSync.App = xBrowserSync.App || {};
+var SpinnerPlugin = SpinnerPlugin || {};
 
 /* ------------------------------------------------------------------------------------
  * Class name:  xBrowserSync.App.PlatformImplementation 
@@ -59,31 +60,31 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "<h4>Welcome</h4><p>Thanks for using xBrowserSync - browser syncing as it should be: secure, anonymous and free!</p><p>Have a read through the following pages to help you get started. Should you require futher help, check out the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
 		},
 		"introPanel2_Message": {
-			"message": "<h4>Creating a new sync</h4><p>The xBrowserSync app allows you to access a sync created using the xBrowserSync <a href='https://chrome.google.com/webstore/detail/xbrowsersync/lcbjdhceifofjlpecfpeimnnphbcjgnc' class='new-tab'>Chrome extension</a>. If you haven't already created a sync, download the extension and create a new sync before continuing.</p>"
+			"message": "<h4>Your secret word</h4><p>To begin, enter a secret word or phrase that will be used to encrypt and decrypt your browser data.</p><p>Make it strong to protect your data but also memorable, if you forget it we can't remind you and you won't be able to decrypt your data without it.</p>"
 		},
 		"introPanel3_Message": {
-			"message": "<h4>Accessing your synced data</h4><p>Enter your xBrowserSync ID along with the secret word or phrase used when you created the sync.</p><p>Avoid typing your ID by hand by tapping on the camera icon and scanning the QR code for your sync. You can view the QR code by opening the Chrome extension (make sure you're synced) and in the Settings panel click on the QR code icon below your ID.</p>"
+			"message": "<h4>Syncing for the first time</h4><p>Once you've entered your secret word or phrase, you are ready to create a new sync. Just click the Sync button and your browser data will be encrypted before being synced to the xBrowserSync service.</p><p>And that's it, you're synced! Any future changes will be synced automatically in the background.</p>"
 		},
 		"introPanel4_Message": {
-			"message": "<h4>Searching your bookmarks</h4><p>Simply type some keywords or a URL to search your synced bookmarks.</p><p>You can also modify or delete a bookmark from the search results by long pressing on the bookmark.</p>"
+			"message": "<h4>Your xBrowserSync ID</h4><p>Every time you create a new sync you are given a new xBrowserSync ID, which can be found via the Settings panel.</p><p>You can use this ID along with your corresponding secret word or phrase to retrieve your synced data or sync on a different device.</p><p>Pro tip! Tap the camera icon to scan the QR code for your existing xBrowserSync ID via the browser extension.</p>"
 		},
 		"introPanel5_Message": {
-			"message": "<h4>Adding a bookmark</h4><p>You can add a new bookmark by clicking on the bookmark icon above the search box.</p><p>Include a description which will be displayed in search results, and add tags to help find the bookmark more easily when searching.</p>"
+			"message": "<h4>Syncing to another service</h4><p>When creating new syncs, by default your data is synced to the official xBrowserSync service, but you can change the service you sync to via the Settings panel.</p><p>You may do this because the service is full, offline, or perhaps you would like to <a href='https://github.com/xBrowserSync/API' class='new-tab'>run your own xBrowserSync service</a> to sync your data to.</p>"
 		},
 		"introPanel6_Message": {
-			"message": "<h4>Checking service status</h4><p>If you are having problems accessing or updating your synced data, it could be due to problems with the xBrowserSync service you are syncing to.</p><p>Open the Settings panel and check the Service tab to view the current service status.</p>"
+			"message": "<h4>New service, new ID</h4><p>IDs are service-specific. If you have created a sync and received an xBrowserSync ID with one service it cannot be used with another.</p><p>Whenever you change services you must create a new sync. You'll then receive a new ID for use with that service.</p>"
 		},
 		"introPanel7_Message": {
-			"message": "<h4>Switching to another service</h4><p>If you would like to switch to a different xBrowserSync service, you can update the service URL in the Settings panel, Service tab (remember you will need to have created a sync on the service using the <a href='https://chrome.google.com/webstore/detail/xbrowsersync/lcbjdhceifofjlpecfpeimnnphbcjgnc' class='new-tab'>Chrome extension</a> to access the sync via the app).</p><p>You can view all of the available public xBrowserSync services on the <a href='https://www.xbrowsersync.org/#status' class='new-tab'>xBrowserSync website</a>.</p>"
+			"message": "<h4>Searching your bookmarks</h4><p>Start typing some keywords or a URL to search your synced bookmarks.</p><p>You can also share, modify or delete bookmarks from the search results by long pressing on a search result.</p>"
 		},
 		"introPanel8_Message": {
-			"message": "<h4>Use it or lose it</h4><p>Service space is limited. If you do not use xBrowserSync for an extended period, any syncs you have created may be deleted to make room for others.</p><p>If you're synced, xBrowserSync will check for changes regularly in the background which will prevent your sync from being deleted.</p>"
+			"message": "<h4>Adding a bookmark</h4><p>You can add a new bookmark by either sharing a URL to xBrowserSync from your browser app, or by clicking on the bookmark icon above the search box.</p><p>Include a description which will be displayed in search results, and add tags to help find the bookmark more easily when searching.</p>"
 		},
 		"introPanel9_Message": {
-			"message": "<h4>Run your own service</h4><p>If you need to sync more data or are concerned about syncing to public servers, it's easy to run your own xBrowserSync service on your web server. Check out the <a href='https://github.com/xBrowserSync/API' class='new-tab'>API Git Hub repo</a> for more information.</p><p>If you would like to make your service available to others to sync to, <a href='https://www.xbrowsersync.org/#contact' class='new-tab'>let us know</a> the URL of your service so it can be added to the list of public xBrowserSync services.</p>"
+			"message": "<h4>Remember to back up</h4><p>xBrowserSync services are run voluntarily, plus servers can break and go wrong so please look after your data and make sure to keep backups.</p><p>Open the Settings panel and in the Back up and restore tab you can back up your unencrypted synced data to a local file, which can then restored at a later date should you need to.</p>"
 		},
 		"introPanel10_Message": {
-			"message": "<h4>Remember to back up</h4><p>xBrowserSync services are run voluntarily, plus servers can break and go wrong so please look after your data and make sure to keep backups.</p><p>Open the Settings panel and in the Back up and restore tab you can back up your unencrypted synced data to a local file, which can then restored at a later date should you need to.</p>"
+			"message": ""
 		},
 		"introPanel11_Message": {
 			"message": ""
@@ -92,9 +93,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": ""
 		},
 		"introPanel13_Message": {
-			"message": ""
-		},
-		"introPanel14_Message": {
 			"message": "<h4>Noticed an issue?</h4><p>If you've found a bug in xBrowserSync or would like to request a new feature, head on over to Git Hub and <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>submit an issue</a>.</p><p>Calling all coders! If you would like to help make xBrowserSync better, go ahead and fork the <a href='https://github.com/xBrowserSync/App' class='new-tab'>xBrowserSync Git Hub repo</a> and submit a pull request.</p>"
 		},
 		"button_About_Label": {
@@ -122,7 +120,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "ID"
 		},
 		"field_Id_Description": {
-			"message": "Your xBrowserSync ID"
+			"message": "Your xBrowserSync ID (optional)"
 		},
 		"button_ScanCode_Label": {
 			"message": "Scan your xBrowserSync ID"
@@ -304,8 +302,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"bookmarkPanel_Button_AddBookmark_Label": {
 			"message": "Add Bookmark"
 		},
-		"bookmarkPanel_Button_RemoveBookmark_Label": {
-			"message": "Remove"
+		"bookmarkPanel_Button_DeleteBookmark_Label": {
+			"message": "Delete"
+		},
+		"bookmarkPanel_Button_ShareBookmark_Label": {
+			"message": "Share"
 		},
 		"bookmarkPanel_Button_UpdateBookmark_Label": {
 			"message": "Update"
@@ -660,6 +661,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		vm = viewModel;
 		$scope = scope;
 
+		// Declare spinner plugin functions to prevent errors when testing in browser 
+		SpinnerPlugin.activityStart = SpinnerPlugin.activityStart || function () {};
+		SpinnerPlugin.activityStop = SpinnerPlugin.activityStop || function () {};
+
 		// Set window height
 		var e = window;
 		var a = 'inner';
@@ -698,11 +703,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		};
 
 		// Set intro panel button events
-		vm.events.introPanel10_Next_Click = function() {
-			vm.introduction.displayPanel(14);
+		vm.events.introPanel9_Next_Click = function() {
+			vm.introduction.displayPanel(13);
 		};
-		vm.events.introPanel14_Prev_Click = function() {
-			vm.introduction.displayPanel(10);
+		vm.events.introPanel13_Prev_Click = function() {
+			vm.introduction.displayPanel(9);
 		};
 
 		// Set backup file change event
@@ -777,10 +782,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		document.querySelector('#backupFile').click();
     };
 
-    var shareBookmark = function(event, result) {
+    var shareBookmark = function(bookmark) {
         var options = {
-			subject: result.title + ' (' + getConstant(vm.global.Constants.ShareBookmark_Title) + ')', 
-			url: result.url,
+			subject: bookmark.title + ' (' + getConstant(vm.global.Constants.ShareBookmark_Title) + ')', 
+			url: bookmark.url,
 			chooserTitle: getConstant(vm.global.Constants.ShareBookmark_Prompt)
 		};
 			
