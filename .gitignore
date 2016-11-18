@@ -1,9 +1,6 @@
+.DS_Store
 .vscode/
 node_modules/
 build/
 css/styles.css
 *.log
-platform/mobileapps/cordova/platforms/**
-platform/mobileapps/cordova/plugins/**
-platform/mobileapps/cordova/www/**
-platform/hello

@@ -763,8 +763,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var displayQRCode_Click = function() {
         // Generate new QR code
-        qr.canvas({
-            canvas: document.getElementById('qr'),
+        var qr = new QRious({
+            element: document.getElementById('qr'),
             value: vm.settings.id()
         });
 
