@@ -219,7 +219,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Back"
 		},
 		"backupSuccess_Message" : {
-			"message":  "Your unencrypted data has been saved to {fileName} in the xBrowserSync folder on external storage (if available, otherwise check internal storage)."
+			"message":  ""
+		},
+		"backupSuccess_Android_Message" : {
+			"message":  "Your synced data has been unencrypted and saved to {fileName} in the xBrowserSync folder on external storage root (if available, otherwise check internal storage)."
+		},
+		"backupSuccess_IOS_Message" : {
+			"message":  "Your synced data has been unencrypted and saved to {fileName} in the xBrowserSync folder in Documents."
 		},
 		"restoreSuccess_Message" : {
 			"message":  "Your data has been restored."
@@ -508,16 +514,20 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					return deferred.reject({ code: global.ErrorCodes.FailedBackupData });
 				};
 				
-				// TODO: Add iOS support
-				window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function (dirEntry) { 
-					dirEntry.getDirectory('xBrowserSync', { create: true }, function (dirEntry) {
+				// Get/Create xBrowserSync dir in persistent storage location and save export file
+				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) { 
+					fs.root.getDirectory('xBrowserSync', { create: true }, function (dirEntry) {
 						dirEntry.getFile(fileName, { create: true }, function (fileEntry) {
 							fileEntry.createWriter(function (fileWriter) {
+								// Save export file
 								fileWriter.write(JSON.stringify(data));
 								
 								fileWriter.onwriteend = function() {
 									// Display message
-									var message = getConstant(global.Constants.BackupSuccess_Message).replace(
+									var platformStr = (vm.platformName === global.Platforms.IOS) ? 
+										global.Constants.BackupSuccess_IOS_Message : 
+										global.Constants.BackupSuccess_Android_Message;
+									var message = getConstant(platformStr).replace(
 										'{fileName}',
 										fileEntry.name);
 									
@@ -881,7 +891,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 	var deviceReady = function() {
 		// Set platform
-		vm.platformName = device.platform;
+		vm.platformName = cordova.platformId;
 		
 		// Set back button event
 		document.addEventListener('backbutton', handleBackButton, false);

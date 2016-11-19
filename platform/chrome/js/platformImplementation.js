@@ -555,7 +555,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		vm = viewModel;
 
 		// Set platform
-		vm.platformName = 'Chrome';
+		vm.platformName = global.Platforms.Chrome;
 		
 		// Enable event listeners
         global.DisableEventListeners.Set(false);

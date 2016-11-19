@@ -203,6 +203,12 @@
 	"backupSuccess_Message" : {
 		"message":  "Your unencrypted data has been saved to {fileName}. Check downloaded files for the location."
 	},
+	"backupSuccess_Android_Message" : {
+		"message":  ""
+	},
+	"backupSuccess_IOS_Message" : {
+		"message":  ""
+	},
 	"restoreSuccess_Message" : {
 		"message":  "Your data has been restored."
 	},

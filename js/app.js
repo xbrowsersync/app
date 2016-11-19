@@ -698,7 +698,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             case vm.view.views.search:
                 $timeout(function() {
                     platform.Interface.Refresh();
-                    document.querySelector('input[name=txtSearch]').focus();
+                    $timeout(function() {
+                        document.querySelector('input[name=txtSearch]').focus();
+                    }, 100);
                 });
                 break;
             case vm.view.views.bookmark:
@@ -763,7 +765,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var displayQRCode_Click = function() {
         // Generate new QR code
-        var qr = new QRious({
+        new QRious({
             element: document.getElementById('qr'),
             value: vm.settings.id()
         });
