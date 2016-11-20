@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Main angular controller class for the app.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platform, global, api, utility, bookmarks, platformImplementation) { 
+xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platform, globals, api, utility, bookmarks, platformImplementation) { 
 	'use strict';    
     var vm, moduleName = 'xBrowserSync.App.Controller';
     
@@ -16,7 +16,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
  
     var BrowserAction = function() {
         vm = this;
-        vm.global = global;
+        vm.globals = globals;
         vm.platform = platform; 
         vm.scope = $scope;
 		
@@ -45,14 +45,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.domElements = {
             btnRestoreData: function() {
                 if (!vm.settings.dataToRestore) {
-                    return platform.GetConstant(global.Constants.Button_RestoreData_Label);
+                    return platform.GetConstant(globals.Constants.Button_RestoreData_Label);
                 }
                 
                 if (!vm.settings.dataToRestoreIsValid()) {
-                    return platform.GetConstant(global.Constants.Button_RestoreData_Invalid_Label);
+                    return platform.GetConstant(globals.Constants.Button_RestoreData_Invalid_Label);
                 }
                 
-                return platform.GetConstant(global.Constants.Button_RestoreData_Ready_Label);
+                return platform.GetConstant(globals.Constants.Button_RestoreData_Ready_Label);
             }
         };
         
@@ -133,8 +133,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.introduction = {
             displayIntro: function(value) {
                 return arguments.length ? 
-                    global.DisplayIntro.Set(value) : 
-                    global.DisplayIntro.Get();
+                    globals.DisplayIntro.Set(value) : 
+                    globals.DisplayIntro.Get();
             },
             displayPanel: function(panelToDisplay) {
                 if (!panelToDisplay || panelToDisplay > vm.introduction.currentPanel) {
@@ -187,30 +187,30 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             getSearchResultsDelay: 250,
 			id: function(value) {
                 return arguments.length ? 
-                    global.Id.Set(value) : 
-                    global.Id.Get();
+                    globals.Id.Set(value) : 
+                    globals.Id.Get();
             },
             syncBookmarksToolbar: function(value) {
                 return arguments.length ? 
-                    global.SyncBookmarksToolbar.Set(value) : 
-                    global.SyncBookmarksToolbar.Get();
+                    globals.SyncBookmarksToolbar.Set(value) : 
+                    globals.SyncBookmarksToolbar.Get();
             },
 			secret: function(value) {
                 return arguments.length ? 
-                    global.ClientSecret.Set(value) : 
-                    global.ClientSecret.Get();
+                    globals.ClientSecret.Set(value) : 
+                    globals.ClientSecret.Get();
             },
             secretComplexity: null,
             service: {
                 displayUpdateServiceUrlConfirmation: false,
                 displayUpdateServiceUrlForm: false,
                 newServiceUrl: '',
-                status: global.ServiceStatus.Online,
+                status: globals.ServiceStatus.Online,
                 statusMessage: '',
                 url: function(value) {
                     return arguments.length ? 
-                        global.URL.Host.Set(value) : 
-                        global.URL.Host.Get();
+                        globals.URL.Host.Set(value) : 
+                        globals.URL.Host.Get();
                 }
             },
             syncDataMax: null,
@@ -224,13 +224,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             displaySyncConfirmation: false,
             enabled: function(value) {
                 return arguments.length ? 
-                    global.SyncEnabled.Set(value) : 
-                    global.SyncEnabled.Get();
+                    globals.SyncEnabled.Set(value) : 
+                    globals.SyncEnabled.Get();
             },
             inProgress: function(value) {
                 return arguments.length ? 
-                    global.IsSyncing.Set(value) : 
-                    global.IsSyncing.Get();
+                    globals.IsSyncing.Set(value) : 
+                    globals.IsSyncing.Get();
             },
             validateLogin: function() {
                 return !!vm.settings.secret();
@@ -239,15 +239,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
 		vm.view = {
 			current: (function() {
-                if (!!global.DisplayAboutOnStartup.Get()) {
+                if (!!globals.DisplayAboutOnStartup.Get()) {
                     return 4;
                 }
 
-                return global.SyncEnabled.Get() ? 1 : 0;
+                return globals.SyncEnabled.Get() ? 1 : 0;
             }()),
             change: changeView,
             displayMainView: function() {
-                if (!!global.SyncEnabled.Get()) {
+                if (!!globals.SyncEnabled.Get()) {
                     vm.view.change(vm.view.views.search);
                 }
                 else {
@@ -268,7 +268,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 	
 	var aboutPanel_Back_Click = function() {
         // Turn off display about on startup
-        global.DisplayAboutOnStartup.Set(false);
+        globals.DisplayAboutOnStartup.Set(false);
         vm.view.displayMainView();
     };
     
@@ -321,8 +321,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		if (!data) {
             // Display alert
             vm.alert.display(
-                platform.GetConstant(global.Constants.Error_NoDataToRestore_Title),
-                platform.GetConstant(global.Constants.Error_NoDataToRestore_Message), 
+                platform.GetConstant(globals.Constants.Error_NoDataToRestore_Title),
+                platform.GetConstant(globals.Constants.Error_NoDataToRestore_Message), 
                 'danger');
             
             return;
@@ -341,8 +341,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var bookmarkForm_BookmarkDescription_Change = function() {
         // Limit the bookmark description to the max length
-        if (!!vm.bookmark.current.description && vm.bookmark.current.description.length > global.Bookmarks.DescriptionMaxLength) {
-            vm.bookmark.current.description = vm.bookmark.current.description.substring(0, global.Bookmarks.DescriptionMaxLength);
+        if (!!vm.bookmark.current.description && vm.bookmark.current.description.length > globals.Bookmarks.DescriptionMaxLength) {
+            vm.bookmark.current.description = vm.bookmark.current.description.substring(0, globals.Bookmarks.DescriptionMaxLength);
         }
     };
 
@@ -365,7 +365,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         var lastWord = (!!matches) ? matches[0].trimLeft() : null;
 
         // Display lookahead if word length exceeds minimum
-        if (!!lastWord && lastWord.length > global.LookaheadMinChars) {
+        if (!!lastWord && lastWord.length > globals.LookaheadMinChars) {
             // Get tags lookahead
             bookmarks.GetLookahead(lastWord.toLowerCase(), null, null, true)
                 .then(function(results) {
@@ -446,9 +446,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // Add the new bookmark and sync
         platform.Sync(vm.sync.asyncChannel, {
-            type: global.SyncType.Both,
+            type: globals.SyncType.Both,
             changeInfo: { 
-                type: global.UpdateType.Create, 
+                type: globals.UpdateType.Create, 
                 bookmark: vm.bookmark.current 
             }
         });
@@ -476,9 +476,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             .then(function(currentUrl) {
                 // Delete the bookmark
                 platform.Sync(vm.sync.asyncChannel, {
-                    type: global.SyncType.Both,
+                    type: globals.SyncType.Both,
                     changeInfo: { 
-                        type: global.UpdateType.Delete, 
+                        type: globals.UpdateType.Delete, 
                         url: vm.bookmark.current.originalUrl
                     }
                 });
@@ -614,9 +614,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             .then(function(currentUrl) {
                 // Update the bookmark
                 platform.Sync(vm.sync.asyncChannel, {
-                    type: global.SyncType.Both,
+                    type: globals.SyncType.Both,
                     changeInfo: { 
-                        type: global.UpdateType.Update, 
+                        type: globals.UpdateType.Update, 
                         url: vm.bookmark.current.originalUrl, 
                         bookmark: vm.bookmark.current
                     }
@@ -716,7 +716,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     });
                 break;
             case vm.view.views.settings:
-                vm.settings.displaySyncOptions = !global.SyncEnabled.Get();
+                vm.settings.displaySyncOptions = !globals.SyncEnabled.Get();
                 
                 // Get service status
                 api.CheckServiceStatus()
@@ -730,7 +730,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                             moduleName, 'changeView', utility.LogType.Error,
                             JSON.stringify(err));
                         
-                        vm.settings.service.status = global.ServiceStatus.Offline;
+                        vm.settings.service.status = globals.ServiceStatus.Offline;
                     });
                 
                 // Set new service form url default value to current service url
@@ -800,11 +800,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         switch(response.command) {
             // After syncing bookmarks
-            case global.Commands.SyncBookmarks:
+            case globals.Commands.SyncBookmarks:
                 if (response.success) {
                     // Enable sync
-                    if (!global.SyncEnabled.Get()) {
-                        global.SyncEnabled.Set(true);
+                    if (!globals.SyncEnabled.Get()) {
+                        globals.SyncEnabled.Set(true);
                     }
 
                     // Disable the intro animation
@@ -822,22 +822,22 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.alert.display(errMessage.title, errMessage.message, 'danger');
 
                     // If data out of sync, refresh sync
-                    if (!!response.error && !!response.error.code && response.error.code === global.ErrorCodes.DataOutOfSync) {
-                        platform.Sync(vm.sync.asyncChannel, { type: global.SyncType.Pull });
+                    if (!!response.error && !!response.error.code && response.error.code === globals.ErrorCodes.DataOutOfSync) {
+                        platform.Sync(vm.sync.asyncChannel, { type: globals.SyncType.Pull });
                     }
                 }
 
                 platform.Interface.Loading.Hide();
                 break;
             // After restoring bookmarks
-            case global.Commands.RestoreBookmarks:
+            case globals.Commands.RestoreBookmarks:
                 if (response.success) {
                     setBookmarkStatus();
                     
                     vm.settings.displayRestoreForm = false;
                     vm.settings.displayRestoreConfirmation = false;
                     vm.settings.dataToRestore = '';
-                    vm.settings.backupRestoreResult = platform.GetConstant(global.Constants.RestoreSuccess_Message);
+                    vm.settings.backupRestoreResult = platform.GetConstant(globals.Constants.RestoreSuccess_Message);
                     
                     $timeout(function() {
                         document.querySelector('#btn_RestoreComplete').focus();
@@ -850,7 +850,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 
                 platform.Interface.Loading.Hide();
                 break;
-            case global.Commands.NoCallback:
+            case globals.Commands.NoCallback:
                 /* falls through */
             default:
                 if (!response.success) {
@@ -1021,7 +1021,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 	
 	var queueSync = function() {
         var syncData = {};
-        syncData.type = (!global.Id.Get()) ? global.SyncType.Push : global.SyncType.Pull; 
+        syncData.type = (!globals.Id.Get()) ? globals.SyncType.Push : globals.SyncType.Pull; 
 
         // Start sync
         platform.Sync(vm.sync.asyncChannel, syncData);
@@ -1029,12 +1029,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 	
 	var restoreData = function(data, restoreCallback) {
 		// Set ID and client secret if sync not enabled
-        if (!global.SyncEnabled.Get()) {
-            global.ClientSecret.Set('');
+        if (!globals.SyncEnabled.Get()) {
+            globals.ClientSecret.Set('');
             vm.settings.secretComplexity = null;
             
             if (!!data.xBrowserSync.id) {
-                global.Id.Set(data.xBrowserSync.id);
+                globals.Id.Set(data.xBrowserSync.id);
             }
 		}
         
@@ -1046,14 +1046,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
         
         var syncData = {};
-        syncData.type = (!global.SyncEnabled.Get()) ? global.SyncType.Pull : global.SyncType.Both;
+        syncData.type = (!globals.SyncEnabled.Get()) ? globals.SyncType.Pull : globals.SyncType.Both;
         syncData.bookmarks = bookmarksToRestore;
         
         // Display loading overlay 
         platform.Interface.Loading.Show();
         
         // Start restore
-        platform.Sync(vm.sync.asyncChannel, syncData, global.Commands.RestoreBookmarks);
+        platform.Sync(vm.sync.asyncChannel, syncData, globals.Commands.RestoreBookmarks);
 	};
     
     var searchBookmarks = function() {
@@ -1127,9 +1127,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
             // Delete the bookmark
             platform.Sync(vm.sync.asyncChannel, {
-                type: global.SyncType.Both,
+                type: globals.SyncType.Both,
                 changeInfo: { 
-                    type: global.UpdateType.Delete, 
+                    type: globals.UpdateType.Delete, 
                     url: bookmark.url
                 }
             });
@@ -1167,7 +1167,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         var getLookahead;
         
         // Display lookahead if word length exceed minimum
-        if (!!lastWord && lastWord.length > global.LookaheadMinChars) {
+        if (!!lastWord && lastWord.length > globals.LookaheadMinChars) {
             // Get lookahead after delay
             vm.search.getSearchLookaheadTimeout = $timeout(function() {
                 searchForm_ToggleSearchingAnimation(true);                
@@ -1363,7 +1363,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
     
     var setBookmarkStatus = function() {
-        if (!global.SyncEnabled.Get()) {
+        if (!globals.SyncEnabled.Get()) {
             return $q.resolve();
         }
 
@@ -1409,8 +1409,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
     var syncForm_CancelSyncConfirmation_Click = function() {
         // TODO: Ensure any sync messaging or process is cancelled also
-        global.IsSyncing.Set(false);
-        global.SyncEnabled.Set(false);
+        globals.IsSyncing.Set(false);
+        globals.SyncEnabled.Set(false);
         vm.view.change(vm.view.views.login);
     };
 
@@ -1426,7 +1426,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
     var syncForm_DisableSync_Click = function() {
         // If sync is in progress, display confirmation
-        if (!!global.IsSyncing.Get()) {
+        if (!!globals.IsSyncing.Get()) {
             vm.settings.service.displayCancelSyncConfirmation = true;
             $timeout(function() {
                 document.querySelector('#btnCancelSync_Confirm').focus();
@@ -1439,7 +1439,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var syncForm_EnableSync_Click = function() {
 		// If ID provided, display confirmation panel
-        if (!!global.Id.Get()) {
+        if (!!globals.Id.Get()) {
             vm.sync.displaySyncConfirmation = true;
             $timeout(function() {
                 document.querySelector('#btnSync_Confirm').focus();
@@ -1518,7 +1518,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var syncPanel_SyncBookmarksToolbar_Click = function() {
         // If sync not enabled or user just clicked to disable toolbar sync, return
-        if (!global.SyncEnabled.Get() || !global.SyncBookmarksToolbar.Get()) {
+        if (!globals.SyncEnabled.Get() || !globals.SyncBookmarksToolbar.Get()) {
             return;
         }
         
@@ -1531,12 +1531,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var syncPanel_SyncBookmarksToolbar_Confirm = function() {
         // If sync not enabled, return
-        if (!global.SyncEnabled.Get()) {
+        if (!globals.SyncEnabled.Get()) {
             return;
         }
         
         var syncData = {};
-        syncData.type = (!global.Id.Get()) ? global.SyncType.Push : global.SyncType.Pull;
+        syncData.type = (!globals.Id.Get()) ? globals.SyncType.Push : globals.SyncType.Pull;
         
         // Hide sync confirmation
         vm.settings.service.displaySyncBookmarksToolbarConfirmation = false;
@@ -1545,7 +1545,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         platform.Interface.Loading.Show();
         
         // Start sync with no callback action
-        platform.Sync(vm.sync.asyncChannel, syncData, global.Commands.NoCallback);
+        platform.Sync(vm.sync.asyncChannel, syncData, globals.Commands.NoCallback);
     };
 
     var updateServiceUrlForm_Cancel_Click = function() {
@@ -1584,9 +1584,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.settings.service.url(url);
         
         // Remove saved client secret and ID
-        global.ClientSecret.Set('');
+        globals.ClientSecret.Set('');
         vm.settings.secretComplexity = null;
-        global.Id.Set('');
+        globals.Id.Set('');
         
         // Update service status
         api.CheckServiceStatus()
@@ -1597,7 +1597,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     moduleName, 'updateServiceUrlForm_Confirm_Click', utility.LogType.Error,
                     JSON.stringify(err));
                 
-                vm.settings.service.status = global.ServiceStatus.Offline;
+                vm.settings.service.status = globals.ServiceStatus.Offline;
             });
         
         // Reset view
@@ -1639,7 +1639,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // Check service url
         updateServiceUrlForm_CheckServiceUrl(vm.settings.service.newServiceUrl, function(response) {
-            if (!!global.SyncEnabled.Get()) {
+            if (!!globals.SyncEnabled.Get()) {
                 // Display confirmation panel
                 vm.settings.service.displayUpdateServiceUrlConfirmation = true;
                 $timeout(function() {

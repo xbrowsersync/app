@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description:	Adds Accept-Version HTTP header to all requests.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.HttpInterceptor = function($q, global) {
+xBrowserSync.App.HttpInterceptor = function($q, globals) {
     'use strict';
     
 /* ------------------------------------------------------------------------------------
@@ -18,7 +18,7 @@ xBrowserSync.App.HttpInterceptor = function($q, global) {
 		return {
 			'request': function (config) {
 				// Add the api version to the http Accept-Version header
-				config.headers['Accept-Version'] = global.ApiVersion;
+				config.headers['Accept-Version'] = globals.ApiVersion;
 
 				// Set default request timeout
 				config.timeout = (!config.timeout) ? 10000 : config.timeout;

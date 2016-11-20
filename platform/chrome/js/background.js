@@ -7,7 +7,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  *              listens for sync requests.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks) {
+xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks) {
     'use strict';
 	
 	var asyncChannel, moduleName = 'xBrowserSync.App.Background';
@@ -43,15 +43,15 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 	
 	var changeBookmark = function(id, changeInfo) {
 		// Exit if sync isn't enabled or event listeners disabled
-		if (!global.SyncEnabled.Get() || global.DisableEventListeners.Get()) {
+		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
             return;
 		}
 		
 		// Sync updates
 		syncBookmarks({
-			type: global.SyncType.Push,
+			type: globals.SyncType.Push,
 			changeInfo: {
-				type: global.UpdateType.Update, 
+				type: globals.UpdateType.Update, 
 				data: [id, changeInfo]
 			}
 		});
@@ -59,15 +59,15 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 	
 	var createBookmark = function(id, bookmark) {
 		// Exit if sync isn't enabled or event listeners disabled
-		if (!global.SyncEnabled.Get() || global.DisableEventListeners.Get()) {
+		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
             return;
 		}
 		
 		// Sync updates
 		syncBookmarks({
-			type: global.SyncType.Push,
+			type: globals.SyncType.Push,
 			changeInfo: { 
-				type: global.UpdateType.Create, 
+				type: globals.UpdateType.Create, 
 				data: [id, bookmark]
 			}
 		});
@@ -90,9 +90,9 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 	
 	var handleAlarm = function(alarm) {
 		// When alarm fires check for sync updates
-		if (alarm && alarm.name === global.Alarm.Name.Get()) {
+		if (alarm && alarm.name === globals.Alarm.Name.Get()) {
 			// Exit if sync isn't enabled or event listeners disabled
-			if (!global.SyncEnabled.Get() || global.DisableEventListeners.Get()) {
+			if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
 				return;
 			}
 			
@@ -111,26 +111,26 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 	};
 	
 	var handleImport = function() {
-		if (!!global.SyncEnabled.Get()) {
+		if (!!globals.SyncEnabled.Get()) {
 			// Display alert so that user knows to create new sync
 			displayAlert(
-				platform.GetConstant(global.Constants.Error_BrowserImportBookmarksNotSupported_Title), 
-				platform.GetConstant(global.Constants.Error_BrowserImportBookmarksNotSupported_Message));
+				platform.GetConstant(globals.Constants.Error_BrowserImportBookmarksNotSupported_Title), 
+				platform.GetConstant(globals.Constants.Error_BrowserImportBookmarksNotSupported_Message));
 		}
 	};
 	
 	var handleMessage = function(msg) {
 		switch (msg.command) {
 			// Trigger bookmarks sync
-			case global.Commands.SyncBookmarks:
-				syncBookmarks(msg, global.Commands.SyncBookmarks);
+			case globals.Commands.SyncBookmarks:
+				syncBookmarks(msg, globals.Commands.SyncBookmarks);
 				break;
 			// Trigger bookmarks sync with no callback
-			case global.Commands.NoCallback:
-				syncBookmarks(msg, global.Commands.NoCallback);
+			case globals.Commands.NoCallback:
+				syncBookmarks(msg, globals.Commands.NoCallback);
 				break;
 			// Trigger bookmarks restore
-			case global.Commands.RestoreBookmarks:
+			case globals.Commands.RestoreBookmarks:
 				restoreBookmarks(msg);
 				break;
 		}
@@ -140,25 +140,25 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 		switch(details.reason) {
 			case "install":
 				// On install, register alarm
-				chrome.alarms.clear(global.Alarm.Name.Get(), function() {
+				chrome.alarms.clear(globals.Alarm.Name.Get(), function() {
 					chrome.alarms.create(
-						global.Alarm.Name.Get(), {
-							periodInMinutes: global.Alarm.Period.Get()
+						globals.Alarm.Name.Get(), {
+							periodInMinutes: globals.Alarm.Period.Get()
 						});
 				});
 				break;
 			case "update":
 				// If extension has been updated, display about panel 
-				global.DisplayAboutOnStartup.Set(true);
+				globals.DisplayAboutOnStartup.Set(true);
 
 				// Clear cached bookmarks
-				global.Cache.Bookmarks.Set(null);
+				globals.Cache.Bookmarks.Set(null);
 				break;
 		}
 	};
 	
 	var listenForMessages = function(port) {
-		if (port.name !== global.Title.Get()) {
+		if (port.name !== globals.Title.Get()) {
 			return;
 		}
 		
@@ -172,15 +172,15 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 	
 	var moveBookmark = function(id, moveInfo) {
 		// Exit if sync isn't enabled or event listeners disabled
-		if (!global.SyncEnabled.Get() || global.DisableEventListeners.Get()) {
+		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
             return;
 		}
 		
 		// Sync updates
 		syncBookmarks({
-			type: global.SyncType.Push,
+			type: globals.SyncType.Push,
 			changeInfo: { 
-				type: global.UpdateType.Move, 
+				type: globals.UpdateType.Move, 
 				data: [id, moveInfo]
 			}
 		});
@@ -188,15 +188,15 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 	
 	var removeBookmark = function(id, removeInfo) {
 		// Exit if sync isn't enabled or event listeners disabled
-		if (!global.SyncEnabled.Get() || global.DisableEventListeners.Get()) {
+		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
             return;
 		}
 		
 		// Sync updates
 		syncBookmarks({
-			type: global.SyncType.Push,
+			type: globals.SyncType.Push,
 			changeInfo: {
-				type: global.UpdateType.Delete, 
+				type: globals.UpdateType.Delete, 
 				data: [id, removeInfo]
 			}
 		})
@@ -211,34 +211,34 @@ xBrowserSync.App.Background = function($q, platform, global, utility, bookmarks)
 				displayAlert(errMessage.title, errMessage.message);
 
 				// If data out of sync, refresh sync
-				if (!!err && !!err.code && err.code === global.ErrorCodes.DataOutOfSync) {
-					syncBookmarks({ type: global.SyncType.Pull });
+				if (!!err && !!err.code && err.code === globals.ErrorCodes.DataOutOfSync) {
+					syncBookmarks({ type: globals.SyncType.Pull });
 				}
 			});
 	};
 	
 	var restoreBookmarks = function(restoreData) {
-		syncBookmarks(restoreData, global.Commands.RestoreBookmarks);
+		syncBookmarks(restoreData, globals.Commands.RestoreBookmarks);
 	};
 	
 	var startup = function() {
 		// Check if a sync was interrupted
-		if (!!global.IsSyncing.Get()) {
-			global.IsSyncing.Set(false);
+		if (!!globals.IsSyncing.Get()) {
+			globals.IsSyncing.Set(false);
 			
 			// Disable sync
-			global.SyncEnabled.Set(false);
+			globals.SyncEnabled.Set(false);
 			
 			// Display alert
 			displayAlert(
-				platform.GetConstant(global.Constants.Error_SyncInterrupted_Title), 
-				platform.GetConstant(global.Constants.Error_SyncInterrupted_Message));
+				platform.GetConstant(globals.Constants.Error_SyncInterrupted_Title), 
+				platform.GetConstant(globals.Constants.Error_SyncInterrupted_Message));
 			
 			return;
 		}
 		
 		// Exit if sync isn't enabled or event listeners disabled
-		if (!global.SyncEnabled.Get() || global.DisableEventListeners.Get()) {
+		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
         	    return;
 		}
 		
@@ -316,31 +316,31 @@ xBrowserSync.App.ChromeBackground.factory('platform', xBrowserSync.App.Platform)
 
 // Add global service
 xBrowserSync.App.Global.$inject = ['platform'];
-xBrowserSync.App.ChromeBackground.factory('global', xBrowserSync.App.Global);
+xBrowserSync.App.ChromeBackground.factory('globals', xBrowserSync.App.Global);
 
 // Add httpInterceptor service
-xBrowserSync.App.HttpInterceptor.$inject = ['$q', 'global'];
+xBrowserSync.App.HttpInterceptor.$inject = ['$q', 'globals'];
 xBrowserSync.App.ChromeBackground.factory('httpInterceptor', xBrowserSync.App.HttpInterceptor);
 xBrowserSync.App.ChromeBackground.config(['$httpProvider', function($httpProvider) {
 $httpProvider.interceptors.push('httpInterceptor');
 }]);
 
 // Add utility service
-xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'global'];
+xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'globals'];
 xBrowserSync.App.ChromeBackground.factory('utility', xBrowserSync.App.Utility);
 
 // Add api service
-xBrowserSync.App.API.$inject = ['$http', '$q', 'global', 'utility'];
+xBrowserSync.App.API.$inject = ['$http', '$q', 'globals', 'utility'];
 xBrowserSync.App.ChromeBackground.factory('api', xBrowserSync.App.API);
 
 // Add bookmarks service
-xBrowserSync.App.Bookmarks.$inject = ['$q', 'platform', 'global', 'api', 'utility'];
+xBrowserSync.App.Bookmarks.$inject = ['$q', 'platform', 'globals', 'api', 'utility'];
 xBrowserSync.App.ChromeBackground.factory('bookmarks', xBrowserSync.App.Bookmarks);
 
 // Add platform implementation service
-xBrowserSync.App.PlatformImplementation.$inject = ['$http', '$interval', '$q', '$timeout', 'platform', 'global', 'utility', 'bookmarks'];
+xBrowserSync.App.PlatformImplementation.$inject = ['$http', '$interval', '$q', '$timeout', 'platform', 'globals', 'utility', 'bookmarks'];
 xBrowserSync.App.ChromeBackground.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add background module
-xBrowserSync.App.Background.$inject = ['$q', 'platform', 'global', 'utility', 'bookmarks', 'platformImplementation'];
+xBrowserSync.App.Background.$inject = ['$q', 'platform', 'globals', 'utility', 'bookmarks', 'platformImplementation'];
 xBrowserSync.App.ChromeBackground.controller('Controller', xBrowserSync.App.Background);

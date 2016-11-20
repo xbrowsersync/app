@@ -439,5 +439,8 @@
 	},
 	"error_FailedBackupData_Title" : {
 		"message":  "Backup failed"
+	},
+	"error_InvalidUrlScheme_Title": {
+		"message":  "Only URLs can be shared to xBrowserSync"
 	}
 }

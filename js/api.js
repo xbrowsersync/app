@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description:	Responsible for communicating with the xBrowserSync API service.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.API = function($http, $q, global, utility) {
+xBrowserSync.App.API = function($http, $q, globals, utility) {
     'use strict';
 
 	var moduleName = 'xBrowserSync.App.API';
@@ -28,23 +28,23 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 	
 	var createBookmarks = function(encryptedBookmarks) {
 		// Check secret is present
-		if (!global.ClientSecret.Get()) {
-			global.SyncEnabled.Set(false);
-			return $q.reject({ code: global.ErrorCodes.MissingClientData });
+		if (!globals.ClientSecret.Get()) {
+			globals.SyncEnabled.Set(false);
+			return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
 		
 		var data = { 
 			bookmarks: encryptedBookmarks
 		};
 		
-		return $http.post(global.URL.Host.Get() + global.URL.Bookmarks,
+		return $http.post(globals.URL.Host.Get() + globals.URL.Bookmarks,
 			JSON.stringify(data))
             .then(function(response) {
 				if (!!response && !!response.data) {
 					return response.data;
 				}
 				else {
-					return $q.reject({ code: global.ErrorCodes.NoDataFound });
+					return $q.reject({ code: globals.ErrorCodes.NoDataFound });
 				}
 			})
             .catch(function(err) {
@@ -59,19 +59,19 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 	
 	var getBookmarks = function(canceller) {
 		// Check secret and sync ID are present
-		if (!global.ClientSecret.Get() || !global.Id.Get()) {
-			global.SyncEnabled.Set(false);
-			return $q.reject({ code: global.ErrorCodes.MissingClientData });
+		if (!globals.ClientSecret.Get() || !globals.Id.Get()) {
+			globals.SyncEnabled.Set(false);
+			return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
 		
-		return $http.get(global.URL.Host.Get() + global.URL.Bookmarks + '/' + global.Id.Get(), 
+		return $http.get(globals.URL.Host.Get() + globals.URL.Bookmarks + '/' + globals.Id.Get(), 
 						 { timeout: canceller })
             .then(function(response) {
 				if (!!response && !!response.data) {
 					return response.data;
 				}
 				else {
-					return $q.reject({ code: global.ErrorCodes.NoDataFound });
+					return $q.reject({ code: globals.ErrorCodes.NoDataFound });
 				}
 			})
             .catch(function(err) {
@@ -79,7 +79,7 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 				if (!!err.config.timeout.$$state &&
 					!!err.config.timeout.$$state.status &&
 					err.config.timeout.$$state.status === 1) {
-					return $q.reject({ code: global.ErrorCodes.HttpRequestCancelled });
+					return $q.reject({ code: globals.ErrorCodes.HttpRequestCancelled });
 				}
 				
 				// Log error
@@ -93,13 +93,13 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 
 	var getBookmarksLastUpdated = function() {
 		// Check secret and sync ID are present
-		if (!global.ClientSecret.Get() || !global.Id.Get()) {
-			global.SyncEnabled.Set(false);
-			return $q.reject({ code: global.ErrorCodes.MissingClientData });
+		if (!globals.ClientSecret.Get() || !globals.Id.Get()) {
+			globals.SyncEnabled.Set(false);
+			return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
 		
-		return $http.get(global.URL.Host.Get() + global.URL.Bookmarks + 
-			'/' + global.Id.Get() + global.URL.LastUpdated)
+		return $http.get(globals.URL.Host.Get() + globals.URL.Bookmarks + 
+			'/' + globals.Id.Get() + globals.URL.LastUpdated)
             .then(function(response) {
 				if (!response || !response.data) {
 					return response;
@@ -119,23 +119,23 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 	
 	var updateBookmarks = function(encryptedBookmarks) {
 		// Check secret and sync ID are present
-		if (!global.ClientSecret.Get() || !global.Id.Get()) {
-			global.SyncEnabled.Set(false);
-			return $q.reject({ code: global.ErrorCodes.MissingClientData });
+		if (!globals.ClientSecret.Get() || !globals.Id.Get()) {
+			globals.SyncEnabled.Set(false);
+			return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
 		
 		var data = { 
 			bookmarks: encryptedBookmarks
 		};
 		
-		return $http.put(global.URL.Host.Get() + global.URL.Bookmarks + '/' + global.Id.Get(),
+		return $http.put(globals.URL.Host.Get() + globals.URL.Bookmarks + '/' + globals.Id.Get(),
 			JSON.stringify(data))
             .then(function(response) {
 				if (!!response && !!response.data) {
 					return response.data;
 				}
 				else {
-					return $q.reject({ code: global.ErrorCodes.NoDataFound });
+					return $q.reject({ code: globals.ErrorCodes.NoDataFound });
 				}
 			})
             .catch(function(err) {
@@ -157,35 +157,35 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
         var err = { };
        
         if (!httpErr || !httpErr.status) {
-            err.code = global.ErrorCodes.HttpRequestFailed;
+            err.code = globals.ErrorCodes.HttpRequestFailed;
             return err;
         }
        
         switch (httpErr.status) {
             // 405 Method Not Allowed: server not accepting new syncs
 			case 405:
-				err.code = global.ErrorCodes.NotAcceptingNewSyncs;
+				err.code = globals.ErrorCodes.NotAcceptingNewSyncs;
 				break;
 			// 406 Not Acceptable: daily new sync limit reached
 			case 406:
-				err.code = global.ErrorCodes.DailyNewSyncLimitReached;
+				err.code = globals.ErrorCodes.DailyNewSyncLimitReached;
 				break;
 			// 409 Conflict: invalid id
 			case 409:
-				err.code = global.ErrorCodes.NoDataFound;
+				err.code = globals.ErrorCodes.NoDataFound;
 				break;
 			// 413 Request Entity Too Large: sync data size exceeds server limit
 			case 413:
-				err.code = global.ErrorCodes.RequestEntityTooLarge;
+				err.code = globals.ErrorCodes.RequestEntityTooLarge;
 				break;
 			// 429 Too Many Requests: daily new sync limit reached
 			case 429:
-				err.code = global.ErrorCodes.TooManyRequests;
-				global.SyncEnabled.Set(false); // Disable sync				
+				err.code = globals.ErrorCodes.TooManyRequests;
+				globals.SyncEnabled.Set(false); // Disable sync				
 				break;
 			// Otherwise generic request failed
 			default:
-                err.code = global.ErrorCodes.HttpRequestFailed;
+                err.code = globals.ErrorCodes.HttpRequestFailed;
         }
        
         return err;
@@ -193,10 +193,10 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 	
 	var getServiceInformation = function(url) {
 		if (!url) {
-			url = global.URL.Host.Get() + global.URL.ServiceInformation;
+			url = globals.URL.Host.Get() + globals.URL.ServiceInformation;
 		}
 		else {
-			url = url + global.URL.ServiceInformation;
+			url = url + globals.URL.ServiceInformation;
 		}
 		
 		return $http({
@@ -209,7 +209,7 @@ xBrowserSync.App.API = function($http, $q, global, utility) {
 					return response.data;
 				}
 				else {
-					return $q.reject({ code: global.ErrorCodes.NoStatus });
+					return $q.reject({ code: globals.ErrorCodes.NoStatus });
 				}
 			})
             .catch(function(err) {

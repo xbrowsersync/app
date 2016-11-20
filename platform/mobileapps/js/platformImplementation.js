@@ -7,7 +7,7 @@ var SpinnerPlugin = SpinnerPlugin || {};
  * Description: Implements xBrowserSync.App.Platform for web app.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeout, platform, global, utility, bookmarks) {
+xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeout, platform, globals, utility, bookmarks) {
 	'use strict';
 
 /* ------------------------------------------------------------------------------------
@@ -457,6 +457,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		},
 		"error_FailedBackupData_Title" : {
 			"message":  "Backup failed"
+		},
+		"error_InvalidUrlScheme_Title": {
+			"message":  "Only URLs can be shared to xBrowserSync"
 		}
 	};
 
@@ -511,7 +514,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				showMainViewOnFocus = false;
 
 				var onError = function() {
-					return deferred.reject({ code: global.ErrorCodes.FailedBackupData });
+					return deferred.reject({ code: globals.ErrorCodes.FailedBackupData });
 				};
 				
 				// Get/Create xBrowserSync dir in persistent storage location and save export file
@@ -524,9 +527,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 								
 								fileWriter.onwriteend = function() {
 									// Display message
-									var platformStr = (vm.platformName === global.Platforms.IOS) ? 
-										global.Constants.BackupSuccess_IOS_Message : 
-										global.Constants.BackupSuccess_Android_Message;
+									var platformStr = (vm.platformName === globals.Platforms.IOS) ? 
+										globals.Constants.BackupSuccess_IOS_Message : 
+										globals.Constants.BackupSuccess_Android_Message;
 									var message = getConstant(platformStr).replace(
 										'{fileName}',
 										fileEntry.name);
@@ -560,7 +563,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 
 	var displayLoading = function() {
-		SpinnerPlugin.activityStart(getConstant(global.Constants.Working_Title), { dimBackground: true });
+		SpinnerPlugin.activityStart(getConstant(globals.Constants.Working_Title), { dimBackground: true });
 	};
 
 	var getBookmarks = function() {
@@ -602,7 +605,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return $http.get(currentUrl)
             .then(function(response) {
 				if (!response || !response.data) {
-					return $q.reject({ code: global.ErrorCodes.FailedGetPageMetadata });
+					return $q.reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
 				}
 
 				var parser, html, title, description, tagElements, tags;
@@ -654,7 +657,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					moduleName, 'getPageMetadata', utility.LogType.Error,
 					JSON.stringify(err));
 					
-				return $q.reject({ code: global.ErrorCodes.FailedGetPageMetadata });
+				return $q.reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
             })
 			.finally(function() {
 				// Reset current url
@@ -701,7 +704,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 		// If no ID provided, display confirmation panel
 		vm.events.syncForm_EnableSync_Click = function() {
-			if (!global.Id.Get()) {
+			if (!globals.Id.Get()) {
 				vm.sync.displaySyncConfirmation = true;
 				$timeout(function() {
 					document.querySelector('#btnSync_Confirm').focus();
@@ -733,7 +736,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		bookmarks.CheckForUpdates();
 		$interval(function() {
 			bookmarks.CheckForUpdates();
-		}, global.Alarm.Period.Get() * 60000);
+		}, globals.Alarm.Period.Get() * 60000);
 	};
 
 	var openUrl = function(url) {
@@ -755,7 +758,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         var options = {
 			'preferFrontCamera': false, 
 			'showFlipCameraButton': false, 
-			'prompt': getConstant(vm.global.Constants.Button_ScanCode_Label), 
+			'prompt': getConstant(vm.globals.Constants.Button_ScanCode_Label), 
 			'formats': 'QR_CODE' 
 		};
 
@@ -773,7 +776,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 		var onError = function (err) {
 			// Display alert
-			var errMessage = utility.GetErrorMessageFromException({ code: global.ErrorCodes.FailedScanID });
+			var errMessage = utility.GetErrorMessageFromException({ code: globals.ErrorCodes.FailedScanID });
 			vm.alert.display(errMessage.title, err);
 
 			// Reset view on resume
@@ -797,14 +800,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
     var shareBookmark = function(bookmark) {
         var options = {
-			subject: bookmark.title + ' (' + getConstant(vm.global.Constants.ShareBookmark_Title) + ')', 
+			subject: bookmark.title + ' (' + getConstant(vm.globals.Constants.ShareBookmark_Title) + ')', 
 			url: bookmark.url,
-			chooserTitle: getConstant(vm.global.Constants.ShareBookmark_Prompt)
+			chooserTitle: getConstant(vm.globals.Constants.ShareBookmark_Prompt)
 		};
 			
 		var onError = function(err) {
 			// Display alert
-			var errMessage = utility.GetErrorMessageFromException({ code: global.ErrorCodes.FailedShareBookmark });
+			var errMessage = utility.GetErrorMessageFromException({ code: globals.ErrorCodes.FailedShareBookmark });
 			vm.alert.display(errMessage.title, err);
 		};
 		
@@ -813,7 +816,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
     };
 	
 	var sync = function(vm, syncData, command) {
-		syncData.command = (!!command) ? command : global.Commands.SyncBookmarks;
+		syncData.command = (!!command) ? command : globals.Commands.SyncBookmarks;
 
 		// Start sync
 		bookmarks.Sync(syncData)
@@ -863,13 +866,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
     };
 
 	var checkForSharedLink = function(intent) {
-		if (vm.platformName === vm.global.Platforms.Android) {
+		if (vm.platformName === vm.globals.Platforms.Android) {
 			// If there is a current intent, retrieve it
 			window.plugins.webintent.hasExtra(window.plugins.webintent.EXTRA_TEXT,
 				function(has) {
 					if (!!has) {
 						// Only use the intent if sync is enabled
-						if (!!global.SyncEnabled.Get()) {
+						if (!!globals.SyncEnabled.Get()) {
 							window.plugins.webintent.getExtra(window.plugins.webintent.EXTRA_TEXT,
 								function(url) {
 									// Set shared link url to current url
@@ -890,23 +893,22 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				}
 			);
 		}
-		else if (vm.platformName === vm.global.Platforms.IOS) {
+		else if (vm.platformName === vm.globals.Platforms.IOS) {
 			// Process requested url if sync is enabled
-			if (!!intent && !!global.SyncEnabled.Get()) {
+			if (!!intent && !!globals.SyncEnabled.Get()) {
 				var requestedUrl = utility.ParseUrl(intent);
 
 				// Check requested url scheme is valid
-				if (!requestedUrl || !requestedUrl.pathname || !requestedUrl.searchObject || 
-					!requestedUrl.searchObject.url || 
-					requestedUrl.pathname.indexOf(global.URL.Bookmarks + global.URL.Current) < 0) {
+				if (!requestedUrl || !requestedUrl.searchObject || !requestedUrl.searchObject.url || 
+					'/' + requestedUrl.hostname !== globals.URL.Bookmarks || requestedUrl.pathname !== globals.URL.Current) {
 					// Log error
 					utility.LogMessage(
 						moduleName, 'checkForSharedLink', utility.LogType.Error,
 						'Invalid url scheme: ' + intent);
 			
 					// Display alert
-					var errMessage = utility.GetErrorMessageFromException({ code: global.ErrorCodes.InvalidUrlScheme });
-					vm.alert.display(errMessage.title);
+					var errMessage = utility.GetErrorMessageFromException({ code: globals.ErrorCodes.InvalidUrlScheme });
+					vm.alert.display(null, errMessage.title);
 					
 					return;
 				}
@@ -942,16 +944,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		vm.alert.display = displayToast;
 
 		// Check if a sync was interrupted
-		if (!!global.IsSyncing.Get()) {
-			global.IsSyncing.Set(false);
+		if (!!globals.IsSyncing.Get()) {
+			globals.IsSyncing.Set(false);
 			
 			// Disable sync
-			global.SyncEnabled.Set(false);
+			globals.SyncEnabled.Set(false);
 			
 			// Display alert
 			vm.alert.display(
-				getConstant(global.Constants.Error_SyncInterrupted_Title), 
-				getConstant(global.Constants.Error_SyncInterrupted_Message));
+				getConstant(globals.Constants.Error_SyncInterrupted_Title), 
+				getConstant(globals.Constants.Error_SyncInterrupted_Message));
             
             return;
 		}
@@ -1006,16 +1008,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		}
 		
 		// Check if a sync was interrupted
-		if (!!global.IsSyncing.Get()) {
-			global.IsSyncing.Set(false);
+		if (!!globals.IsSyncing.Get()) {
+			globals.IsSyncing.Set(false);
 			
 			// Disable sync
-			global.SyncEnabled.Set(false);
+			globals.SyncEnabled.Set(false);
 			
 			// Display alert
 			vm.alert.display(
-				getConstant(global.Constants.Error_SyncInterrupted_Title), 
-				getConstant(global.Constants.Error_SyncInterrupted_Message));
+				getConstant(globals.Constants.Error_SyncInterrupted_Title), 
+				getConstant(globals.Constants.Error_SyncInterrupted_Message));
             
             return;
 		}
@@ -1029,7 +1031,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		}
 
 		// Check for bookmarks updates
-		if (!!global.SyncEnabled.Get()) {
+		if (!!globals.SyncEnabled.Get()) {
 			bookmarks.CheckForUpdates();
 		}
 

@@ -216,7 +216,8 @@ xBrowserSync.App.Global = function(platform) {
             Error_SyncInterrupted_Message: 'error_SyncInterrupted_Message',
             Error_ScanFailed_Title: 'error_ScanFailed_Title',
             Error_ShareFailed_Title: 'error_ShareFailed_Title',
-            Error_FailedBackupData_Title: 'error_FailedBackupData_Title'
+            Error_FailedBackupData_Title: 'error_FailedBackupData_Title',
+            Error_InvalidUrlScheme_Title: 'error_InvalidUrlScheme_Title'
         },
         ClientSecret: {
             Get: function() {
