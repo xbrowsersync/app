@@ -16,6 +16,18 @@
         <icon density="xhdpi" src="res/icon/android/xhdpi.png" />
         <icon density="xxhdpi" src="res/icon/android/xxhdpi.png" />
         <icon density="xxxhdpi" src="res/icon/android/xxxhdpi.png" />
+        <splash src="res/screen/android/splash-land-hdpi.png" density="land-hdpi"/>
+        <splash src="res/screen/android/splash-land-ldpi.png" density="land-ldpi"/>
+        <splash src="res/screen/android/splash-land-mdpi.png" density="land-mdpi"/>
+        <splash src="res/screen/android/splash-land-xhdpi.png" density="land-xhdpi"/>
+        <splash src="res/screen/android/splash-land-xxhdpi.png" density="land-xxhdpi"/>
+        <splash src="res/screen/android/splash-land-xxxhdpi.png" density="land-xxxhdpi"/>
+        <splash src="res/screen/android/splash-port-hdpi.png" density="port-hdpi"/>
+        <splash src="res/screen/android/splash-port-ldpi.png" density="port-ldpi"/>
+        <splash src="res/screen/android/splash-port-mdpi.png" density="port-mdpi"/>
+        <splash src="res/screen/android/splash-port-xhdpi.png" density="port-xhdpi"/>
+        <splash src="res/screen/android/splash-port-xxhdpi.png" density="port-xxhdpi"/>
+        <splash src="res/screen/android/splash-port-xxxhdpi.png" density="port-xxxhdpi"/>
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -37,6 +49,16 @@
         <icon height="50" src="res/icon/ios/icon-50.png" width="50" />
         <icon height="100" src="res/icon/ios/icon-50@2x.png" width="100" />
         <icon height="167" src="res/icon/ios/icon-83.5@2x.png" width="167" />
+        <splash height="480" src="res/screen/ios/Default~iphone.png" width="320" />
+        <splash height="960" src="res/screen/ios/Default@2x~iphone.png" width="640" />
+        <splash height="1024" src="res/screen/ios/Default-Portrait~ipad.png" width="768" />
+        <splash height="2048" src="res/screen/ios/Default-Portrait@2x~ipad.png" width="1536" />
+        <splash height="768" src="res/screen/ios/Default-Landscape~ipad.png" width="1024" />
+        <splash height="1536" src="res/screen/ios/Default-Landscape@2x~ipad.png" width="2048" />
+        <splash height="1136" src="res/screen/ios/Default-568h@2x~iphone.png" width="640" />
+        <splash height="1334" src="res/screen/ios/Default-667h.png" width="750" />
+        <splash height="2208" src="res/screen/ios/Default-736h.png" width="1242" />
+        <splash height="1242" src="res/screen/ios/Default-Landscape-736h.png" width="2208" />
     </platform>
     <engine name="android" spec="~5.2.2" />
     <engine name="ios" spec="~4.2.1" />
@@ -45,6 +67,9 @@
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
     <preference name="iosPersistentFileLocation" value="Compatibility" />
     <preference name="BackupWebStorage" value="none" />
+    <preference name="SplashScreenDelay" value="100" />
+    <preference name="FadeSplashScreen" value="false"/>
+    <preference name="SplashMaintainAspectRatio" value="true" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
     <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
     <plugin name="phonegap-plugin-barcodescanner" spec="~6.0.3">
@@ -61,4 +86,5 @@
         <variable name="ANDROID_PATHPREFIX" value="/" />
     </plugin>
     <plugin name="cordova-plugin-inappbrowser" spec="~1.5.0" />
+    <plugin name="cordova-plugin-splashscreen" spec="~4.0.0" />
 </widget>
