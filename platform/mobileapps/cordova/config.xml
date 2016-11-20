@@ -54,4 +54,10 @@
     <plugin name="cordova-plugin-file" spec="~4.3.0" />
     <plugin name="cordova-plugin-spinner" spec="~1.1.0" />
     <plugin name="com-borismus-webintent" spec="https://github.com/wjbergin/virtualartifacts-webintent.git" />
+    <plugin name="cordova-plugin-customurlscheme" spec="https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin.git">
+        <variable name="URL_SCHEME" value="xbrowsersync" />
+        <variable name="ANDROID_SCHEME" value=" " />
+        <variable name="ANDROID_HOST" value=" " />
+        <variable name="ANDROID_PATHPREFIX" value="/" />
+    </plugin>
 </widget>

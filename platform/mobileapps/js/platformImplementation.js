@@ -465,7 +465,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
  * Constructor
  * ------------------------------------------------------------------------------------ */
     
-	var WebAppImplementation = function() {
+	var MobileAppsImplementation = function() {
 		// Inject required platform implementation functions
 		platform.BackupData = backupData;
 		platform.Bookmarks.Clear = clearBookmarks;
@@ -726,6 +726,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Increase search results timeout to avoid display lag
 		vm.settings.getSearchResultsDelay = 500;
 
+		// Attach event handler for iOS Share activity
+		window.handleOpenURL = checkForSharedLink;
+
 		// Check for updates regularly
 		bookmarks.CheckForUpdates();
 		$interval(function() {
@@ -887,6 +890,37 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				}
 			);
 		}
+		else if (vm.platformName === vm.global.Platforms.IOS) {
+			// Process requested url if sync is enabled
+			if (!!intent && !!global.SyncEnabled.Get()) {
+				var requestedUrl = utility.ParseUrl(intent);
+
+				// Check requested url scheme is valid
+				if (!requestedUrl || !requestedUrl.pathname || !requestedUrl.searchObject || 
+					!requestedUrl.searchObject.url || 
+					requestedUrl.pathname.indexOf(global.URL.Bookmarks + global.URL.Current) < 0) {
+					// Log error
+					utility.LogMessage(
+						moduleName, 'checkForSharedLink', utility.LogType.Error,
+						'Invalid url scheme: ' + intent);
+			
+					// Display alert
+					var errMessage = utility.GetErrorMessageFromException({ code: global.ErrorCodes.InvalidUrlScheme });
+					vm.alert.display(errMessage.title);
+					
+					return;
+				}
+
+				// Set shared url to current url
+				var sharedUrl = decodeURIComponent(requestedUrl.searchObject.url);
+				currentUrl = sharedUrl;
+
+				// Display bookmark panel
+				$timeout(function() {
+					vm.view.change(vm.view.views.bookmark);
+				}, 100);
+			}
+		}
 	};
 
 	var deviceReady = function() {
@@ -1005,5 +1039,5 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	
 	
 	// Call constructor
-	return new WebAppImplementation();
+	return new MobileAppsImplementation();
 };

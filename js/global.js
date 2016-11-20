@@ -330,7 +330,8 @@ xBrowserSync.App.Global = function(platform) {
             FailedScanID: 10302,
             FailedShareBookmark: 10303,
             FailedBackupData: 10304,
-            NotImplemented: 10400
+            InvalidUrlScheme: 10400,
+            NotImplemented: 10500
         },
         Id: {
             Get: function() {
@@ -498,6 +499,7 @@ xBrowserSync.App.Global = function(platform) {
                 }
             },
             Bookmarks: '/bookmarks',
+            Current: '/current',
             LastUpdated: '/lastUpdated',
             ServiceInformation: '/info'
         }

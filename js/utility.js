@@ -197,6 +197,10 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 			case global.ErrorCodes.FailedBackupData:
 				errorMessage.title = platform.GetConstant(global.Constants.Error_FailedBackupData_Title);
 				break;
+			case global.ErrorCodes.InvalidUrlScheme:
+				// TODO: Add error message
+				errorMessage.title = platform.GetConstant(global.Constants.Error_FailedBackupData_Title);
+				break;
             default:
 				errorMessage.title = platform.GetConstant(global.Constants.Error_Default_Title);
                 errorMessage.message = platform.GetConstant(global.Constants.Error_Default_Message);
@@ -272,6 +276,30 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 
 	var logType = { Info: 0, Warning: 1, Error: 2};
 
+	var parseUrl = function(url) {
+		var parser = document.createElement('a'),
+			searchObject = {},
+			queries, split, i;
+
+		parser.href = url;
+		queries = parser.search.replace(/^\?/, '').split('&');
+		for( i = 0; i < queries.length; i++ ) {
+			split = queries[i].split('=');
+			searchObject[split[0]] = split[1];
+		}
+
+		return {
+			protocol: parser.protocol,
+			host: parser.host,
+			hostname: parser.hostname,
+			port: parser.port,
+			pathname: parser.pathname,
+			search: parser.search,
+			searchObject: searchObject,
+			hash: parser.hash
+		};
+	};
+
 	var xBookmark = function(title, url, description, tags, children) {
 		var xBookmark = {};
 		
@@ -333,6 +361,7 @@ xBrowserSync.App.Utility = function($q, platform, global) {
 		IsBookmarkContainer: isBookmarkContainer,
 		LogMessage: logMessage,
 		LogType: logType,
+		ParseUrl: parseUrl,
 		XBookmark: xBookmark		
 	};
 };
