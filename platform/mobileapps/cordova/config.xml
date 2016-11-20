@@ -60,4 +60,5 @@
         <variable name="ANDROID_HOST" value=" " />
         <variable name="ANDROID_PATHPREFIX" value="/" />
     </plugin>
+    <plugin name="cordova-plugin-inappbrowser" spec="~1.5.0" />
 </widget>

@@ -730,7 +730,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		vm.settings.getSearchResultsDelay = 500;
 
 		// Attach event handler for iOS Share activity
-		window.handleOpenURL = checkForSharedLink;
+		window.handleOpenURL = function(url) {
+			checkForSharedLink(url);
+		};
 
 		// Check for updates regularly
 		bookmarks.CheckForUpdates();
@@ -740,7 +742,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 
 	var openUrl = function(url) {
-		window.open(url, '_blank');
+		cordova.InAppBrowser.open(url, '_system');
 	};
 	
 	var populateBookmarks = function(xBookmarks) {
@@ -865,7 +867,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		showMainViewOnFocus = true;
     };
 
-	var checkForSharedLink = function(intent) {
+	var checkForSharedLink = function(data) {
 		if (vm.platformName === vm.globals.Platforms.Android) {
 			// If there is a current intent, retrieve it
 			window.plugins.webintent.hasExtra(window.plugins.webintent.EXTRA_TEXT,
@@ -895,8 +897,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		}
 		else if (vm.platformName === vm.globals.Platforms.IOS) {
 			// Process requested url if sync is enabled
-			if (!!intent && !!globals.SyncEnabled.Get()) {
-				var requestedUrl = utility.ParseUrl(intent);
+			if (!!data && !!globals.SyncEnabled.Get()) {
+				var requestedUrl = utility.ParseUrl(data);
 
 				// Check requested url scheme is valid
 				if (!requestedUrl || !requestedUrl.searchObject || !requestedUrl.searchObject.url || 
@@ -904,7 +906,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					// Log error
 					utility.LogMessage(
 						moduleName, 'checkForSharedLink', utility.LogType.Error,
-						'Invalid url scheme: ' + intent);
+						'Invalid url scheme: ' + data);
 			
 					// Display alert
 					var errMessage = utility.GetErrorMessageFromException({ code: globals.ErrorCodes.InvalidUrlScheme });
