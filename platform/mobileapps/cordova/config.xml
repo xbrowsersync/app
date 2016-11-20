@@ -67,9 +67,10 @@
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
     <preference name="iosPersistentFileLocation" value="Compatibility" />
     <preference name="BackupWebStorage" value="none" />
-    <preference name="SplashScreenDelay" value="100" />
-    <preference name="FadeSplashScreen" value="false"/>
-    <preference name="SplashMaintainAspectRatio" value="true" />
+    <preference name="SplashScreenDelay" value="0" />
+    <preference name="FadeSplashScreen" value="false" />
+    <preference name="FadeSplashScreenDuration" value="0" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
     <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
     <plugin name="phonegap-plugin-barcodescanner" spec="~6.0.3">
