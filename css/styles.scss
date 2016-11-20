@@ -33,7 +33,6 @@ body {
     line-height: 1.25em;
     min-width: 300px;
     @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
-    overflow: hidden;
 
     h1 {
         background: url("../img/logo.svg") 50% 40% no-repeat;

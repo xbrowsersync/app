@@ -602,9 +602,33 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			tags: null
 		};
 
-		return $http.get(currentUrl)
-            .then(function(response) {
-				if (!response || !response.data) {
+		var deferred = $q.defer();
+		var inAppBrowser = cordova.InAppBrowser.open(currentUrl, '_blank', 'location=yes,hidden=yes');
+		
+		inAppBrowser.addEventListener('loaderror', function(err) {
+			// Close InAppBrowser
+			inAppBrowser.close();
+			inAppBrowser = null;
+			
+			// Reset current url
+			currentUrl = null;
+			
+			// Log error
+			utility.LogMessage(
+				moduleName, 'getPageMetadata', utility.LogType.Error,
+				JSON.stringify(err));
+				
+			return $deferred.reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
+		});
+		
+		inAppBrowser.addEventListener('loadstop', function() {
+			inAppBrowser.executeScript({
+				code: "document.querySelector('html').outerHTML"
+			},
+			function(pageContent) {
+				console.log(pageContent);
+				
+				if (!pageContent) {
 					return $q.reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
 				}
 
@@ -612,7 +636,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 				// Extract metadata properties
 				parser = new DOMParser();
-				html = parser.parseFromString(response.data, 'text/html');
+				html = parser.parseFromString(pageContent, 'text/html');
+
+				_.each(html.querySelectorAll('meta'), function(meta) { console.log((!!meta) ? meta.outerHTML : ''); });
 
 				// Get page title
 				title = html.querySelector('meta[property="og:title"]');
@@ -649,20 +675,19 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					metadata.tags = tagElements.getAttribute('content');
 				}
 
-				return metadata;
-			})
-            .catch(function(err) {
-                // Log error
-				utility.LogMessage(
-					moduleName, 'getPageMetadata', utility.LogType.Error,
-					JSON.stringify(err));
-					
-				return $q.reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
-            })
-			.finally(function() {
+				// Close InAppBrowser
+				inAppBrowser.close();
+    			inAppBrowser = null;
+				
 				// Reset current url
 				currentUrl = null;
+
+				// Return metadata
+				deferred.resolve(metadata);
 			});
+		});
+
+		return deferred.promise;
     };
 
 	var hideLoading = function() {
