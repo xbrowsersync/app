@@ -62,7 +62,10 @@
     </platform>
     <engine name="android" spec="~5.2.2" />
     <engine name="ios" spec="~4.2.1" />
-    <preference name="keyboardDisplayRequiresUserAction" value="false" />
+    <preference name="OverrideUserAgent" value="Mozilla/5.0" />
+    <preference name="KeyboardDisplayRequiresUserAction" value="false" />
+    <preference name="webviewbounce" value="false" />
+    <preference name="DisallowOverscroll" value="true" />
     <preference name="AndroidLaunchMode" value="singleTask" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
     <preference name="iosPersistentFileLocation" value="Compatibility" />

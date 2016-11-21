@@ -81,10 +81,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "<h4>Adding a bookmark</h4><p>You can add a new bookmark by either sharing a URL to xBrowserSync from your browser app, or by clicking on the bookmark icon above the search box.</p><p>Include a description which will be displayed in search results, and add tags to help find the bookmark more easily when searching.</p>"
 		},
 		"introPanel9_Message": {
-			"message": "<h4>Remember to back up</h4><p>xBrowserSync services are run voluntarily, plus servers can break and go wrong so please look after your data and make sure to keep backups.</p><p>Open the Settings panel and in the Back up and restore tab you can back up your unencrypted synced data to a local file, which can then restored at a later date should you need to.</p>"
+			"message": "<h4>Bookmark from your browser</h4><p>In order to add bookmarks directly from your browser, you will first need to enable sharing to xBrowserSync.</p><p>In your browser app, tap the share button to bring up the share sheet, slide to the right and tap the More option. Enable the xBrowserSync activity and tap Done to save your changes. From now on you can tap xBrowserSync on the share sheet to add the current webpage to xBrowserSync.</p>"
 		},
 		"introPanel10_Message": {
-			"message": ""
+			"message": "<h4>Remember to back up</h4><p>xBrowserSync services are run voluntarily, plus servers can break and go wrong so please look after your data and make sure to keep backups.</p><p>Open the Settings panel and in the Back up and restore tab you can back up your unencrypted synced data to a local file, which can then restored at a later date should you need to.</p>"
 		},
 		"introPanel11_Message": {
 			"message": ""
@@ -510,8 +510,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				var dateString = year + month + day + hour + minute;
 				var fileName = 'xBrowserSyncBackup_' + dateString + '.txt';
 				
-				// Ensure view isn't reset if permissions dialog displays
-				showMainViewOnFocus = false;
+				// Ensure view isn't reset if permissions dialog displayed on Android
+				if (vm.platformName === vm.globals.Platforms.Android) {
+					showMainViewOnFocus = false;
+				}
 
 				var onError = function() {
 					return deferred.reject({ code: globals.ErrorCodes.FailedBackupData });
@@ -528,9 +530,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 								fileWriter.onwriteend = function() {
 									// Display message
 									var platformStr = (vm.platformName === globals.Platforms.IOS) ? 
-										globals.Constants.BackupSuccess_IOS_Message : 
-										globals.Constants.BackupSuccess_Android_Message;
-									var message = getConstant(platformStr).replace(
+										constants.backupSuccess_IOS_Message : 
+										constants.backupSuccess_Android_Message;
+									var message = platformStr.message.replace(
 										'{fileName}',
 										fileEntry.name);
 									
@@ -606,19 +608,26 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		var inAppBrowser = cordova.InAppBrowser.open(currentUrl, '_blank', 'location=yes,hidden=yes');
 		
 		inAppBrowser.addEventListener('loaderror', function(err) {
+			if (!!err && !!err.code && err.code === -999) {
+				return;
+			}
+			
 			// Close InAppBrowser
 			inAppBrowser.close();
 			inAppBrowser = null;
 			
 			// Reset current url
 			currentUrl = null;
+
+			// Display main view
+			vm.view.displayMainView();
 			
 			// Log error
 			utility.LogMessage(
 				moduleName, 'getPageMetadata', utility.LogType.Error,
 				JSON.stringify(err));
 				
-			return $deferred.reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
+			return deferred.reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
 		});
 		
 		inAppBrowser.addEventListener('loadstop', function() {
@@ -626,8 +635,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				code: "document.querySelector('html').outerHTML"
 			},
 			function(pageContent) {
-				console.log(pageContent);
+				// Close InAppBrowser
+				inAppBrowser.close();
+    			inAppBrowser = null;
 				
+				// Reset current url
+				currentUrl = null;
+				
+				// Check html content was returned
 				if (!pageContent) {
 					return $q.reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
 				}
@@ -637,8 +652,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				// Extract metadata properties
 				parser = new DOMParser();
 				html = parser.parseFromString(pageContent, 'text/html');
-
-				_.each(html.querySelectorAll('meta'), function(meta) { console.log((!!meta) ? meta.outerHTML : ''); });
 
 				// Get page title
 				title = html.querySelector('meta[property="og:title"]');
@@ -666,7 +679,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					}
 
 					metadata.tags = tags;
-					return metadata;
 				}
 
 				// Get meta tag values
@@ -674,13 +686,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				if (!!tagElements && !!tagElements.getAttribute('content')) {
 					metadata.tags = tagElements.getAttribute('content');
 				}
-
-				// Close InAppBrowser
-				inAppBrowser.close();
-    			inAppBrowser = null;
-				
-				// Reset current url
-				currentUrl = null;
 
 				// Return metadata
 				deferred.resolve(metadata);
@@ -741,11 +746,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		};
 
 		// Set intro panel button events
-		vm.events.introPanel9_Next_Click = function() {
+		vm.events.introPanel10_Next_Click = function() {
 			vm.introduction.displayPanel(13);
 		};
 		vm.events.introPanel13_Prev_Click = function() {
-			vm.introduction.displayPanel(9);
+			vm.introduction.displayPanel(10);
 		};
 
 		// Set backup file change event
@@ -810,16 +815,20 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			showMainViewOnFocus = true;
 		};
 
-		// Ensure view isn't reset if permissions dialog displays
-		showMainViewOnFocus = false;
+		// Ensure view isn't reset if permissions dialog displayed on Android
+		if (vm.platformName === vm.globals.Platforms.Android) {
+			showMainViewOnFocus = false;
+		}
 		
 		// Activate barcode scanner
 		cordova.plugins.barcodeScanner.scan(onSuccess, onError, options);
     };
 
     var selectBackupFile = function() {
-        // Ensure view isn't reset once app regains focus
-		showMainViewOnFocus = false;
+        // Ensure view isn't reset once app regains focus on Android
+		if (vm.platformName === vm.globals.Platforms.Android) {
+			showMainViewOnFocus = false;
+		}
 		
 		// Open file dialog
 		document.querySelector('#backupFile').click();
@@ -958,6 +967,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		
 		// Set back button event
 		document.addEventListener('backbutton', handleBackButton, false);
+
+		// Don't display iOS specific help panels
+		if (vm.platformName === vm.globals.Platforms.Android) {
+			vm.events.introPanel8_Next_Click = function() {
+				vm.introduction.displayPanel(10);
+			};
+			vm.events.introPanel10_Prev_Click = function() {
+				vm.introduction.displayPanel(8);
+			};
+		}
 		
 		if (vm.view.current === vm.view.views.search) {
 			// Focus on search box and show keyboard
@@ -1027,7 +1046,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	var resume = function() {
 		// Reset view to login/search panel
 		if (!!showMainViewOnFocus) {
-			vm.view.displayMainView();
+			$scope.$apply(function() {
+				vm.view.displayMainView();
+			});
 		}
 		else {
 			// Reset view on resume

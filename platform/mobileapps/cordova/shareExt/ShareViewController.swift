@@ -29,8 +29,8 @@ class ShareViewController: SLComposeServiceViewController {
     private func dictionaryToQueryString(dict: Dictionary<String,String>) -> String {
         return dict.map({ entry in
             let value = entry.1
-            let valueEncoded = value.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())
-            return entry.0 + "=" + valueEncoded!
+            let valueEncoded = (value.urlEncode() as String)
+            return entry.0 + "=" + valueEncoded
         }).joinWithSeparator("&")
     }
     
@@ -116,5 +116,17 @@ extension NSObject {
         dispatch_after(time, dispatch_get_main_queue(), {
             NSThread.detachNewThreadSelector(selector, toTarget:self, withObject: object)
         })
+    }
+}
+
+extension String {
+    func urlEncode() -> CFString {
+        return CFURLCreateStringByAddingPercentEscapes(
+            nil,
+            self,
+            nil,
+            "!*'();:@&=+$,/?%#[]",
+            CFStringBuiltInEncodings.UTF8.rawValue
+        )
     }
 }
