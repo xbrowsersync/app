@@ -87,12 +87,15 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "<h4>Remember to back up</h4><p>xBrowserSync services are run voluntarily, plus servers can break and go wrong so please look after your data and make sure to keep backups.</p><p>Open the Settings panel and in the Back up and restore tab you can back up your unencrypted synced data to a local file, which can then restored at a later date should you need to.</p>"
 		},
 		"introPanel11_Message": {
-			"message": ""
+			"message": "<h4>Got desktop?</h4><p>Sync your xBrowserSync data with your desktop browser using the xBrowserSync browser extension, available for Chrome and with Firefox support coming soon.</p>"
 		},
 		"introPanel12_Message": {
 			"message": ""
 		},
 		"introPanel13_Message": {
+			"message": ""
+		},
+		"introPanel14_Message": {
 			"message": "<h4>Noticed an issue?</h4><p>If you've found a bug in xBrowserSync or would like to request a new feature, head on over to Git Hub and <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>submit an issue</a>.</p><p>Calling all coders! If you would like to help make xBrowserSync better, go ahead and fork the <a href='https://github.com/xBrowserSync/App' class='new-tab'>xBrowserSync Git Hub repo</a> and submit a pull request.</p>"
 		},
 		"button_About_Label": {
@@ -746,11 +749,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		};
 
 		// Set intro panel button events
-		vm.events.introPanel10_Next_Click = function() {
-			vm.introduction.displayPanel(13);
+		vm.events.introPanel11_Next_Click = function() {
+			vm.introduction.displayPanel(14);
 		};
-		vm.events.introPanel13_Prev_Click = function() {
-			vm.introduction.displayPanel(10);
+		vm.events.introPanel14_Prev_Click = function() {
+			vm.introduction.displayPanel(11);
 		};
 
 		// Set backup file change event

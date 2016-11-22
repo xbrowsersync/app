@@ -97,11 +97,21 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			}
 			
 			bookmarks.CheckForUpdates()
+				.then(function() {
+					// Reset fail counter
+					globals.CheckForUpdates.Attempts.Set(0);
+				})
 				.catch(function(err) {
 					// Log error
 					utility.LogMessage(
 						moduleName, 'handleAlarm', utility.LogType.Error,
 						JSON.stringify(err));
+					
+					globals.CheckForUpdates.Attempts.Set(globals.CheckForUpdates.Attempts.Get() + 1);
+					if (err.code === globals.ErrorCodes.HttpRequestFailed &&
+						globals.CheckForUpdates.Attempts.Get() < globals.CheckForUpdates.MaxRetries) {
+						return;
+					}
 					
 					// Display alert
 					var errMessage = utility.GetErrorMessageFromException(err);

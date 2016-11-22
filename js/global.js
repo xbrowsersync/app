@@ -63,6 +63,35 @@ xBrowserSync.App.Global = function(platform) {
                 }
             }
         },
+        CheckForUpdates: {
+            Attempts: {
+                Get: function() {
+                    var attempts = platform.LocalStorage.Get('xBrowserSync-checkForUpdatesAttempts') || '0';
+                    return parseInt(attempts);
+                },
+                Set: function(value) {
+                    value = (!value) ? '0' : value;
+                    
+                    platform.LocalStorage.Set(
+                        'xBrowserSync-checkForUpdatesAttempts', 
+                        value);
+                }
+            },
+            MaxRetries: 3
+        },
+        ClientSecret: {
+            Get: function() {
+                return platform.LocalStorage.Get(
+                    'xBrowserSync-clientSecret');
+            },
+            Set: function(value) {
+                value = (!value) ? '' : value.trim();
+                
+                platform.LocalStorage.Set(
+                    'xBrowserSync-clientSecret', 
+                    value);
+            }
+        },
         Commands: {
             SyncBookmarks: 1,
             RestoreBookmarks: 2,
@@ -216,19 +245,6 @@ xBrowserSync.App.Global = function(platform) {
             Error_ShareFailed_Title: 'error_ShareFailed_Title',
             Error_FailedBackupData_Title: 'error_FailedBackupData_Title',
             Error_InvalidUrlScheme_Title: 'error_InvalidUrlScheme_Title'
-        },
-        ClientSecret: {
-            Get: function() {
-                return platform.LocalStorage.Get(
-                    'xBrowserSync-clientSecret');
-            },
-            Set: function(value) {
-                value = (!value) ? '' : value.trim();
-                
-                platform.LocalStorage.Set(
-                    'xBrowserSync-clientSecret', 
-                    value);
-            }
         },
         DisableEventListeners: {
             Get: function() {

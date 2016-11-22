@@ -100,7 +100,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             introPanel11_Prev_Click: introPanel11_Prev_Click,
             introPanel12_Next_Click: introPanel12_Next_Click,
             introPanel12_Prev_Click: introPanel12_Prev_Click,
+            introPanel13_Next_Click: introPanel13_Next_Click,
             introPanel13_Prev_Click: introPanel13_Prev_Click,
+            introPanel14_Prev_Click: introPanel14_Prev_Click,
             openUrl: openUrl,
             queueSync: queueSync,
             searchForm_Clear_Click: searchForm_Clear_Click,
@@ -1000,8 +1002,16 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.introduction.displayPanel(11);
     };
 
+    var introPanel13_Next_Click = function() {
+        vm.introduction.displayPanel(14);
+    };
+
     var introPanel13_Prev_Click = function() {
         vm.introduction.displayPanel(12);
+    };
+
+    var introPanel14_Prev_Click = function() {
+        vm.introduction.displayPanel(13);
     };
     
     var openUrl = function(event, url) {

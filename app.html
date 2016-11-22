@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1">
@@ -55,13 +54,14 @@
                     <div class="contents">
                         <h4>{{ vm.platform.GetConstant(vm.globals.Constants.AboutPanel_Title) }} {{ vm.globals.AppVersion }}</h4>
                         <ul>
-                            <li>[Added] Support for mobile apps. Expect releases for Android followed by iOS very soon.</li>
+                            <li>[Added] Mobile apps. Expect releases for Android followed by iOS very soon.</li>
                             <li>[Added] Support for Firefox. xBrowserSync now works with Firefox's new WebExtensions browser extension API. However, Mozilla are still in the process of implementing the full API used by Chrome and currently there are gaps, some of which xBrowserSync depends on. Once support has been added xBrowserSync will be released for Firefox.</li>
                             <li>[Added] Data usage chart. Check how much of your allocated sync data you are currently using in Settings > Sync > Data Usage.</li>
                             <li>[Added] About panel (this).</li>
                             <li>[Fixed] Synced data is now left encrypted before being cached locally, for extra security.</li>
                             <li>[Fixed] QR code now displayed using canvas, much clearer at higher resolutions.</li>
                             <li>[Fixed] Bookmark searches no longer match partial words to improve results relevance.</li>
+                            <li>[Fixed] Suppressed the frequency of alerts if unable to connect to the xBrowserSync service when syncing in background.</li>
                             <li>Numerous other minor enhancements and bug fixes.</li>
                         </ul>
                         <p class="text-center">
@@ -268,6 +268,20 @@
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
                         </button>
+                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}" ng-click="vm.events.introPanel13_Next_Click()">
+                            <i class="fa fa-step-forward" aria-hidden="true"></i>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="intro-panel-14" class="well well-sm dark" ng-show="vm.introduction.currentPanel === 14" ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
+                     hm-swiperight="vm.events.introPanel14_Prev_Click()">
+                    <div ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.IntroPanel14_Message)"></div>
+                    <div class="buttons">
+                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" ng-click="vm.events.introPanel14_Prev_Click()">
+                            <i class="fa fa-step-backward" aria-hidden="true"></i>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -333,7 +347,7 @@
                 </div>
                 <div class="search-form">
                     <input class="form-control" name="txtSearch" maxlength="200" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Field_Search_Description) }}" ng-model="vm.search.query" 
-                           ng-change="vm.events.searchForm_SearchText_Change()" ng-keydown="vm.events.searchForm_SearchText_KeyDown($event)" ng-trim="false" tabindex="1" />
+                           ng-change="vm.events.searchForm_SearchText_Change()" ng-keydown="vm.events.searchForm_SearchText_KeyDown($event)" ng-trim="false" autocomplete="off" tabindex="1" />
                     <label for="txtSearch"><i class="fa fa-search"></i></label>
                     <div class="lookahead-container">
                         <span class="measure" data-ng-bind-html="vm.search.queryMeasure"></span>
