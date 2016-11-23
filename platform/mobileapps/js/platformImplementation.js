@@ -610,34 +610,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		var deferred = $q.defer();
 		var inAppBrowser = cordova.InAppBrowser.open(currentUrl, '_blank', 'location=yes,hidden=yes');
 		
-		inAppBrowser.addEventListener('loaderror', function(err) {
-			if (!!err && !!err.code && err.code === -999) {
-				return;
-			}
-			
-			// Close InAppBrowser
-			inAppBrowser.close();
-			inAppBrowser = null;
-			
-			// Reset current url
-			currentUrl = null;
-
-			// Display main view
-			vm.view.displayMainView();
-			
-			// Log error
-			utility.LogMessage(
-				moduleName, 'getPageMetadata', utility.LogType.Error,
-				JSON.stringify(err));
-				
-			return deferred.reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
-		});
-		
-		inAppBrowser.addEventListener('loadstop', function() {
-			inAppBrowser.executeScript({
-				code: "document.querySelector('html').outerHTML"
-			},
-			function(pageContent) {
+		var callback = function(pageContent, err) {
 				// Close InAppBrowser
 				inAppBrowser.close();
     			inAppBrowser = null;
@@ -646,8 +619,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				currentUrl = null;
 				
 				// Check html content was returned
-				if (!pageContent) {
-					return $q.reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
+				if (!!err || !pageContent) {
+					// Log error
+					utility.LogMessage(
+						moduleName, 'getPageMetadata', utility.LogType.Error,
+						JSON.stringify(err));
+					
+					return deferred.reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
 				}
 
 				var parser, html, title, description, tagElements, tags;
@@ -692,7 +670,24 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 				// Return metadata
 				deferred.resolve(metadata);
-			});
+			};
+		
+		inAppBrowser.addEventListener('loaderror', function(err) {
+			if (!!err && !!err.code && err.code === -999) {
+				return;
+			}
+			
+			callback(null, err);
+		});
+		
+		inAppBrowser.addEventListener('loadstop', function() {
+			// Remove invasive content and return doc html
+			inAppBrowser.executeScript({
+				code: 
+					"(function() { var elements = document.querySelectorAll('video,script'); for (var i = 0; i < elements.length; i++) { elements[i].parentNode.removeChild(elements[i]); } })();" +
+					"document.querySelector('html').outerHTML;"
+			},
+			callback);
 		});
 
 		return deferred.promise;
