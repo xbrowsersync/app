@@ -607,71 +607,76 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			tags: null
 		};
 
-		var deferred = $q.defer();
-		var inAppBrowser = cordova.InAppBrowser.open(currentUrl, '_blank', 'location=yes,hidden=yes');
-		
 		var callback = function(pageContent, err) {
-				// Close InAppBrowser
-				inAppBrowser.close();
-    			inAppBrowser = null;
+			// Close InAppBrowser
+			inAppBrowser.close();
+			inAppBrowser = null;
+			
+			// Check html content was returned
+			if (!!err || !pageContent) {
+				// Log error
+				utility.LogMessage(
+					moduleName, 'getPageMetadata', utility.LogType.Error,
+					JSON.stringify(err));
 				
+				var errObj = { code: globals.ErrorCodes.FailedGetPageMetadata, url: currentUrl };
+
 				// Reset current url
 				currentUrl = null;
 				
-				// Check html content was returned
-				if (!!err || !pageContent) {
-					// Log error
-					utility.LogMessage(
-						moduleName, 'getPageMetadata', utility.LogType.Error,
-						JSON.stringify(err));
-					
-					return deferred.reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
+				return deferred.reject(errObj);
+			}
+
+			// Reset current url
+			currentUrl = null;
+
+			var parser, html, title, description, tagElements, tags;
+
+			// Extract metadata properties
+			parser = new DOMParser();
+			html = parser.parseFromString(pageContent, 'text/html');
+
+			// Get page title
+			title = html.querySelector('meta[property="og:title"]');
+			if (!!title && !!title.getAttribute('content')) {
+				metadata.title = title.getAttribute('content');
+			}
+			else {
+				metadata.title = html.title || '';
+			}
+
+			// Get page description
+			description = html.querySelector('meta[property="og:description"]') ||
+			html.querySelector('meta[name="description"]');				
+			if (!!description && !!description.getAttribute('content')) {
+				metadata.description = description.getAttribute('content');
+			}
+
+			// Get page tags
+			tagElements = html.querySelectorAll('meta[property$="video:tag"]');
+			if (!!tagElements && tagElements.length > 0) {
+				tags = '';
+				
+				for (var i = 0; i < tagElements.length; i++) {
+					tags += tagElements[i].getAttribute('content') + ',';
 				}
 
-				var parser, html, title, description, tagElements, tags;
+				metadata.tags = tags;
+			}
 
-				// Extract metadata properties
-				parser = new DOMParser();
-				html = parser.parseFromString(pageContent, 'text/html');
+			// Get meta tag values
+			tagElements = html.querySelector('meta[name="keywords"]');
+			if (!!tagElements && !!tagElements.getAttribute('content')) {
+				metadata.tags = tagElements.getAttribute('content');
+			}
 
-				// Get page title
-				title = html.querySelector('meta[property="og:title"]');
-				if (!!title && !!title.getAttribute('content')) {
-					metadata.title = title.getAttribute('content');
-				}
-				else {
-					metadata.title = html.title || '';
-				}
+			// Return metadata
+			deferred.resolve(metadata);
+		};
 
-				// Get page description
-				description = html.querySelector('meta[property="og:description"]') ||
-				html.querySelector('meta[name="description"]');				
-				if (!!description && !!description.getAttribute('content')) {
-					metadata.description = description.getAttribute('content');
-				}
+		var deferred = $q.defer();
+		var inAppBrowser = cordova.InAppBrowser.open(currentUrl, '_blank', 'location=yes,hidden=yes');
 
-				// Get page tags
-				tagElements = html.querySelectorAll('meta[property$="video:tag"]');
-				if (!!tagElements && tagElements.length > 0) {
-					tags = '';
-					
-					for (var i = 0; i < tagElements.length; i++) {
-						tags += tagElements[i].getAttribute('content') + ',';
-					}
-
-					metadata.tags = tags;
-				}
-
-				// Get meta tag values
-				tagElements = html.querySelector('meta[name="keywords"]');
-				if (!!tagElements && !!tagElements.getAttribute('content')) {
-					metadata.tags = tagElements.getAttribute('content');
-				}
-
-				// Return metadata
-				deferred.resolve(metadata);
-			};
-		
 		inAppBrowser.addEventListener('loaderror', function(err) {
 			if (!!err && !!err.code && err.code === -999) {
 				return;
@@ -689,6 +694,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			},
 			callback);
 		});
+
+		// Time out metadata load after 10 secs
+		$timeout(function() {
+			if (deferred.promise.$$state.status === 0) {
+				callback(null, 'Timed out retrieving page metadata.');
+			}
+		}, 10000);
 
 		return deferred.promise;
     };

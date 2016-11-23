@@ -560,6 +560,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     return deferred.resolve();
             })
             .catch(function(err) {
+                // Set bookmark url
+                if (!!err && !!err.url) {
+                    var bookmark = new utility.XBookmark(
+                        '', 
+                        err.url);
+                    bookmark.originalUrl = bookmark.url;
+                    vm.bookmark.current = bookmark;
+                }
+                
                 // Log error
                 utility.LogMessage(
                     moduleName, 'bookmarkForm_Init', utility.LogType.Error,
@@ -568,6 +577,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
+
+                return deferred.resolve();
             })
             .finally(function() {
                 platform.Interface.Loading.Hide();
