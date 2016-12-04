@@ -42,6 +42,13 @@
         </div>
         
         <div id="about-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.about">
+            <div class="header-panel">
+                <button class="btn btn-icon btn-close" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}" 
+                        ng-click="vm.events.aboutPanel_Close_Click()" tabindex="1001">
+                    <i class="fa fa-times-circle" aria-hidden="true"></i>
+                    <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}</span>
+                </button>
+            </div>
             <h1>
                 <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Title) }}</span>
             </h1>
@@ -70,11 +77,6 @@
                             </a>
                         </p>
                     </div>
-                </div>
-                <div class="buttons">
-                    <button type="button" class="btn btn-default btn-back" ng-click="vm.events.aboutPanel_Back_Click()" tabindex="1">
-                        {{ vm.platform.GetConstant(vm.globals.Constants.Button_Back_Label) }}
-                    </button>
                 </div>
             </div>
         </div>
@@ -337,9 +339,6 @@
                         <i class="fa" aria-hidden="true"></i>
                         <span class="sr-only">{{ vm.bookmark.active ? vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) : vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}</span>
                     </button>
-                    <button class="btn btn-icon btn-about" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_About_Label) }}" ng-click="vm.view.change(vm.view.views.about)" tabindex="1001">
-                        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_About_Label) }}</span>
-                    </button>
                     <button class="btn btn-icon btn-settings" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}" ng-click="vm.view.change(vm.view.views.settings)" tabindex="1002">
                         <i class="fa fa-cog" aria-hidden="true"></i>
                         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}</span>
@@ -350,8 +349,10 @@
                            ng-change="vm.events.searchForm_SearchText_Change()" ng-keydown="vm.events.searchForm_SearchText_KeyDown($event)" ng-trim="false" autocomplete="off" tabindex="1" />
                     <label for="txtSearch"><i class="fa fa-search"></i></label>
                     <div class="lookahead-container">
-                        <span class="measure" data-ng-bind-html="vm.search.queryMeasure"></span>
-                        <span class="lookahead" ng-show="vm.search.lookahead" ng-click="vm.events.searchForm_SearchText_Autocomplete()">{{ vm.search.lookahead }}</span>
+                        <div class="float-nowrap">
+                            <span class="measure" data-ng-bind-html="vm.search.queryMeasure"></span>
+                            <span class="lookahead" ng-show="vm.search.lookahead" ng-click="vm.events.searchForm_SearchText_Autocomplete()">{{ vm.search.lookahead }}</span>
+                        </div>
                     </div>
                     <button class="btn btn-icon btn-clear" ng-show="vm.search.query" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Clear_Label) }}" ng-click="vm.events.searchForm_Clear_Click()">
                         <i class="fa fa-times-circle" aria-hidden="true"></i>
@@ -432,7 +433,7 @@
                                    ng-model="vm.bookmark.tagText" ng-change="vm.events.bookmarkForm_BookmarkTags_Change()" ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" ng-trim="false">
                             <div class="lookahead-container">
                                 <span class="measure" ng-bind-html="vm.bookmark.tagTextMeasure"></span>
-                                <span class="lookahead" ng-bind-html="vm.bookmark.tagLookahead" ng-show="vm.bookmark.tagLookahead" ng-click="vm.events.bookmarkForm_BookmarkTags_Autocomplete()"></span>
+                                <span class="lookahead" ng-bind-html="vm.bookmark.tagLookahead" ng-show="vm.bookmark.tagLookahead" ng-click="vm.events.bookmarkForm_BookmarkTags_Click()"></span>
                             </div>
                         </div>
                         <div class="tags clearfix" ng-show="vm.bookmark.current.tags.length > 0">
@@ -467,6 +468,11 @@
                         ng-click="vm.view.displayMainView()" tabindex="1001">
                     <i class="fa fa-times-circle" aria-hidden="true"></i>
                     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}</span>
+                </button>
+                <button class="btn btn-icon btn-about" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_About_Label) }}" 
+                        ng-click="vm.view.change(vm.view.views.about)" tabindex="1000">
+                    <i class="fa fa-question-circle" aria-hidden="true"></i>
+                    <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_About_Label) }}</span>
                 </button>
             </div>
             <div class="sync-panel well well-sm">

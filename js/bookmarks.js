@@ -97,15 +97,19 @@ xBrowserSync.App.Bookmarks = function($q, platform, globals, api, utility) {
         // Check if current url is contained in bookmarks
 		return platform.GetCurrentUrl()
             .then(function(result) {
+                if (!result) {
+                    return;
+                }
+                
                 currentUrl = result;
-                return searchBookmarks({ url: currentUrl });
-            })
-            .then(function(results) {
-				var result = _.find(results, function(bookmark) { 
-                    return bookmark.url.toLowerCase() === currentUrl.toLowerCase(); 
-                });
+                return searchBookmarks({ url: currentUrl })
+                    .then(function(results) {
+                        var result = _.find(results, function(bookmark) { 
+                            return bookmark.url.toLowerCase() === currentUrl.toLowerCase(); 
+                        });
 
-                return $q.resolve(result);
+                        return $q.resolve(result);
+                    });
             });
     };
     
@@ -194,35 +198,23 @@ xBrowserSync.App.Bookmarks = function($q, platform, globals, api, utility) {
     };
     
     var searchBookmarks = function(query) {
-        var keywords, url, results;
-        
         if (!query) {
             return $q.resolve();
         }
-        
-        // Get keywords array from query
-        keywords = (!!query.keywords) ? 
-            _.compact(query.keywords.trim().replace("'", '').replace(/\W$/, '').toLowerCase().split(/\s/)) : null;
-        
-        // Get url from query
-        url = (!!query.url) ? query.url : null;
 
         // Get cached synced bookmarks
         return getCachedBookmarks()
             .then(function(bookmarks) {
-                switch (true) {
-                    case (!!url):
-                        // Get search results from url
-                        results = searchBookmarksByUrl(bookmarks, url) || [];
-                        if (!Array.isArray(results)) {
-                            results = [results];
-                        }
-                        break;
-                    case (!!keywords):
-                        // Get search results from keywords and sort
-                        results = _.sortBy(searchBookmarksByKeywords(bookmarks, keywords), 'score').reverse();
-                        break;
+                var results;
+                
+                // If url supplied, first search by url
+                if  (!!query.url) {
+                    results = searchBookmarksByUrl(bookmarks, query.url) || [];
                 }
+                
+                // Search by keywords and sort using results from url search if relevant
+                bookmarks = results || bookmarks;
+                results = _.sortBy(searchBookmarksByKeywords(bookmarks, query.keywords), 'score').reverse();
                 
                 return results;
             });
@@ -413,7 +405,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, globals, api, utility) {
                     
                     // Match words that begin with keyword
                     _.each(bookmarkWords, function(bookmarkWord) { 
-                        if (bookmarkWord.indexOf(keyword) === 0) { count++; } 
+                        if (bookmarkWord.toLowerCase().indexOf(keyword.toLowerCase()) === 0) { count++; } 
                     }); 
                     
                     return count; 
@@ -452,7 +444,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, globals, api, utility) {
                 return false;
             }
             
-            return bookmark.url.indexOf(url) >= 0;
+            return bookmark.url.toLowerCase().indexOf(url.toLowerCase()) >= 0;
         }));
         
         for (var i = 0; i < bookmarksToSearch.length; i++) {
@@ -484,7 +476,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, globals, api, utility) {
                     if (!!bookmark.tags) { 
                         var tags = _.chain(bookmark.tags)
                             .map(function(tag) {
-                                return tag.split(/\s/);
+                                return tag.toLowerCase().split(/\s/);
                             })
                             .flatten()
                             .compact()
@@ -494,9 +486,11 @@ xBrowserSync.App.Bookmarks = function($q, platform, globals, api, utility) {
                     }
 
                     // Add url host
-                    var hostMatch = bookmark.url.match(/^(https?:\/\/)?([^\/]+)/);
-                    if (!!hostMatch && hostMatch.length > 2) {
-                        bookmarkWords.push(hostMatch[2]);
+                    var hostMatch = bookmark.url.toLowerCase().match(/^(https?:\/\/)?(www\.)?([^\/]+)/);
+                    if (!!hostMatch) {
+                        bookmarkWords.push(hostMatch[0]);
+                        bookmarkWords.push(hostMatch[2] + hostMatch[3]);
+                        bookmarkWords.push(hostMatch[3]);
                     }
                 }
                 else {
@@ -504,6 +498,9 @@ xBrowserSync.App.Bookmarks = function($q, platform, globals, api, utility) {
                         bookmarkWords = bookmarkWords.concat(_.compact(bookmark.tags)); 
                     }
                 }
+
+                // Remove words of two chars or less
+                bookmarkWords = _.filter(bookmarkWords, function(item) { return item.length > 2; });
                 
                 // Find all words that begin with lookahead word
                 results = results.concat(_.filter(bookmarkWords, function(bookmark) { return bookmark.indexOf(word) === 0; }));

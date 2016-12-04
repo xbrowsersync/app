@@ -57,7 +57,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         };
         
         vm.events = {
-            aboutPanel_Back_Click: aboutPanel_Back_Click,
+            aboutPanel_Close_Click: aboutPanel_Close_Click,
             backupRestoreForm_Backup_Click: backupRestoreForm_Backup_Click,
             backupRestoreForm_DisplayRestoreForm_Click: backupRestoreForm_DisplayRestoreForm_Click,
             backupRestoreForm_DisplayRestoreConfirmation_Click: backupRestoreForm_DisplayRestoreConfirmation_Click,
@@ -66,6 +66,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             bookmarkForm_BookmarkDescription_Change: bookmarkForm_BookmarkDescription_Change,
             bookmarkForm_BookmarkTags_Autocomplete: bookmarkForm_BookmarkTags_Autocomplete,
             bookmarkForm_BookmarkTags_Change: bookmarkForm_BookmarkTags_Change,
+            bookmarkForm_BookmarkTags_Click: bookmarkForm_BookmarkTags_Click,
             bookmarkForm_BookmarkTags_KeyDown: bookmarkForm_BookmarkTags_KeyDown,
             bookmarkForm_BookmarkUrl_Change: bookmarkForm_BookmarkUrl_Change,
             bookmarkForm_CreateBookmark_Click: bookmarkForm_CreateBookmark_Click,
@@ -268,7 +269,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
  * Private functions
  * ------------------------------------------------------------------------------------ */
 	
-	var aboutPanel_Back_Click = function() {
+	var aboutPanel_Close_Click = function() {
         // Turn off display about on startup
         globals.DisplayAboutOnStartup.Set(false);
         vm.view.displayMainView();
@@ -387,6 +388,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     }
                 });
         }
+    };
+
+    var bookmarkForm_BookmarkTags_Click = function() {
+        vm.bookmark.tagText += vm.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
+        bookmarkForm_CreateTags_Click();
+        document.querySelector('input[name="bookmarkTags"]').focus();
     };
     
     var bookmarkForm_BookmarkTags_KeyDown = function($event) {
@@ -656,6 +663,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
 
     var changeView = function(view) {
+        var deferred = $q.defer();
         vm.alert.show = false;
         platform.Interface.Loading.Hide();
         
@@ -713,6 +721,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     platform.Interface.Refresh();
                     $timeout(function() {
                         document.querySelector('input[name=txtSearch]').focus();
+                        deferred.resolve();
                     }, 100);
                 });
                 break;
@@ -725,6 +734,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         $timeout(function() {
                             bookmarkForm_ResizeDescriptionField();
                             document.querySelector('input[name="bookmarkTitle"]').focus();
+                            return deferred.resolve();
                         }, 100);
                     });
                 break;
@@ -744,14 +754,16 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                             JSON.stringify(err));
                         
                         vm.settings.service.status = globals.ServiceStatus.Offline;
-                    });
+                    })
+                    .finally(deferred.resolve);
                 
                 // Set new service form url default value to current service url
                 vm.settings.service.newServiceUrl = vm.settings.service.url();
                 break;
         }
         
-        vm.view.current = view;
+        vm.view.current = view;            
+        return deferred.promise;
     };
 	
 	var checkRestoreData = function(data) {
@@ -1078,16 +1090,29 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 	};
     
     var searchBookmarks = function() {
-        var queryData;
-
-        // Search by url if query is in url format, otherwise search by keywords
+        if (!vm.search.query) {
+            return;
+        }
+        
+        var queryData = {
+            url: null,
+            keywords: []
+        };
         var urlRegex = /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
-        if (!!vm.search.query.trim().match(urlRegex)) {
-            queryData = { url: vm.search.query.trim() };
-        }
-        else {
-            queryData = { keywords: vm.search.query.trim() };
-        }
+
+        // Iterate query words to form query data object
+        _.each(vm.search.query.split(/[\s]+/), function (queryWord) {
+            // Add query word as url if query is in url format, otherwise add to keywords
+            if (!queryData.url && queryWord.trim().match(urlRegex)) {
+                queryData.url = queryWord.trim();
+            }
+            else {
+                var keyword = queryWord.trim().replace("'", '').replace(/\W$/, '').toLowerCase();
+                if (!!keyword) {
+                    queryData.keywords.push(queryWord.trim());
+                }
+            }
+        });
         
         bookmarks.Search(queryData)
             .then(function(results) {
@@ -1109,16 +1134,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
-            })
-            .finally(function() {
-                searchForm_ToggleSearchingAnimation(false);
             });
     };
 
     var searchForm_SearchText_Autocomplete = function() {
         vm.search.query += vm.search.lookahead;
         searchForm_SearchText_Change();
-        document.querySelector('input[name=txtSearch]').focus();
+        $timeout(function() {
+            document.querySelector('input[name=txtSearch]').focus();
+        });
     };
 
     var searchForm_Clear_Click = function() {
@@ -1163,7 +1187,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var searchForm_SearchText_Change = function() {
         vm.alert.show = false;
-        vm.search.lookahead = null;
         
         // Clear timeouts
         if (!!vm.search.getSearchLookaheadTimeout) {
@@ -1179,19 +1202,23 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // No query, clear results
         if (!vm.search.query.trim()) {
             vm.search.results = null;
+            vm.search.lookahead = null;
             return;
         }
 
         // Get last word of search query
-        var matches = vm.search.query.match(/[\S]+$/);
-        var lastWord = (!!matches) ? matches[0] : null;
+        var queryWords = vm.search.query.split(/[\s]+/);
+        var lastWord = _.last(queryWords);
         var getLookahead;
         
         // Display lookahead if word length exceed minimum
         if (!!lastWord && lastWord.length > globals.LookaheadMinChars) {
             // Get lookahead after delay
             vm.search.getSearchLookaheadTimeout = $timeout(function() {
-                searchForm_ToggleSearchingAnimation(true);                
+                // Enable searching animation if bookmark cache is empty
+                if (!globals.Cache.Bookmarks.Get()) {
+                    searchForm_ToggleSearchingAnimation(true);
+                }
                 
                 // Cancel any exist http request to get bookmarks and refresh deferred
                 if (!!vm.search.cancelGetBookmarksRequest && 
@@ -1203,6 +1230,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 getLookahead = bookmarks.GetLookahead(lastWord.toLowerCase(), vm.search.results, vm.search.cancelGetBookmarksRequest.promise)
                     .then(function(results) {
                         if (!results) {
+                            vm.search.lookahead = null;
                             return;
                         }
 
@@ -1217,6 +1245,19 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         }
 
                         vm.search.cancelGetBookmarksRequest = null;
+                    })
+                    .catch(function(err) {
+                        // Log error
+                        utility.LogMessage(
+                            moduleName, 'searchForm_SearchText_Change', utility.LogType.Error,
+                            JSON.stringify(err));
+                        
+                        // Display alert
+                        var errMessage = utility.GetErrorMessageFromException(err);
+                        vm.alert.display(errMessage.title, errMessage.message, 'danger');
+                    })
+                    .finally(function() {
+                        searchForm_ToggleSearchingAnimation(false);
                     });
             }, vm.settings.getSearchLookaheadDelay);
             
@@ -1224,6 +1265,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             vm.search.getSearchResultsTimeout = $timeout(function() {
                 getLookahead.then(searchBookmarks);
             }, vm.settings.getSearchResultsDelay);
+        }
+        else {
+            vm.search.lookahead = null;
         }
     };
     

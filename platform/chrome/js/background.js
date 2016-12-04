@@ -102,12 +102,11 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					globals.CheckForUpdates.Attempts.Set(0);
 				})
 				.catch(function(err) {
-					// Log error
-					utility.LogMessage(
-						moduleName, 'handleAlarm', utility.LogType.Error,
-						JSON.stringify(err));
-					
+					// Increment counter
 					globals.CheckForUpdates.Attempts.Set(globals.CheckForUpdates.Attempts.Get() + 1);
+					
+					// If the error is a network error, only display an alert if the counter has reached
+					// max number of retries.
 					if (err.code === globals.ErrorCodes.HttpRequestFailed &&
 						globals.CheckForUpdates.Attempts.Get() < globals.CheckForUpdates.MaxRetries) {
 						return;
@@ -116,6 +115,14 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					// Display alert
 					var errMessage = utility.GetErrorMessageFromException(err);
 					displayAlert(errMessage.title, errMessage.message);
+
+					// Log error
+					utility.LogMessage(
+						moduleName, 'handleAlarm', utility.LogType.Error,
+						JSON.stringify(err));
+					
+					// Reset counter
+					globals.CheckForUpdates.Attempts.Set(0);
 				});
 		}
 	};

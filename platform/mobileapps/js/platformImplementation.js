@@ -441,10 +441,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "A required function has not been implemented and is causing xBrowserSync to not function correctly."
 		},
 		"error_FailedGetPageMetadata_Title" : {
-			"message":  "Couldn't get URL metadata"
+			"message":  "Retrieve metadata failed"
 		},
 		"error_FailedGetPageMetadata_Message" : {
-			"message":  "URL is invalid or webpage data could not be retrieved."
+			"message":  "URL is invalid or web page did not load properly."
 		},
 		"error_SyncInterrupted_Title" : {
 			"message":  "Sync interrupted"
@@ -925,7 +925,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 									currentUrl = url;
 
 									// Display bookmark panel
-									vm.view.change(vm.view.views.bookmark);
+									vm.view.change(vm.view.views.bookmark)
+										.then(function() {
+											cordova.plugins.Keyboard.show();
+										});
 									
 									// Remove the intent
 									window.plugins.webintent.removeExtra(window.plugins.webintent.EXTRA_TEXT);

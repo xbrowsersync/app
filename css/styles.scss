@@ -235,9 +235,7 @@ body {
         margin: 0;
 
         &.loading {
-            #loading-panel, .alert, .view {
-                visibility: hidden;
-            }
+            display: none;
         }
     }
 
@@ -250,6 +248,11 @@ body {
         z-index: 100;
         opacity: 0.8;
         background: $colour-text2;
+    }
+
+    .float-nowrap {
+        width: 200%;
+        overflow: auto;
     }
 
     .form-control {
@@ -298,12 +301,9 @@ body {
 
         button {
             font-size: 1.1em;
-            position: absolute;
-            top: 0;
-            bottom: 0;
 
-            &.btn-settings, &.btn-close {
-                right: 0;
+            &.btn-about, &.btn-close, &.btn-settings {
+                float: right;
             }
 
             i {
@@ -431,7 +431,8 @@ body {
     width: 100%;
 
     h1 {
-        background-position: 50% 15px;
+        margin-top: 1.25em;
+        background-position: 50% 0;
         background-size: 40%;
     }
 
@@ -459,8 +460,13 @@ body {
         }
     }
 
-    .buttons {
-        margin-bottom: 5px;
+    .header-panel {
+        position: absolute;
+        left: 0;
+        z-index: 10;
+        width: 100%;
+        margin-bottom: 0;
+        padding: 0 10px;
     }
 
     .links {
@@ -494,7 +500,7 @@ body {
         z-index: 50;
         
         .contents {
-            height: 40vh;
+            height: 45vh;
             overflow-y: auto;
             font-size: 0.9em;
         }
@@ -646,17 +652,6 @@ body {
             button {
                 height: 1.8em;
 
-                &.btn-about {
-                    display: none;
-                    background: url(../img/icon.svg) 0 0 no-repeat;
-                    background-size: 1.6em;
-                    width: 1.5em;
-                    position: absolute;
-                    left: 50%;
-                    margin-left: -0.75em;
-                    margin-right: 0;
-                }
-                
                 &.btn-toggle-bookmark {
                     right: 1.5em;
 
@@ -687,11 +682,12 @@ body {
                 left: 15px;
                 color: $colour-text2;
                 z-index: 60;
+                margin-bottom: 0;
             }
             
             i {
                 font-size: 1.3em;
-                line-height: 2.1em;
+                line-height: 2.2em;
                 opacity: 0.4;
             }
             
@@ -706,6 +702,7 @@ body {
 
             .btn-clear {
                 position: absolute;
+                top: 0;
                 right: 15px;
                 font-size: 1em;
                 z-index: 55;
@@ -718,6 +715,8 @@ body {
             
             .lookahead-container {
                 left: 40px;
+                width: calc(100% - 80px);
+                overflow: hidden;
                 
                 .lookahead {
                     font-size: 1.5em;
@@ -1009,6 +1008,12 @@ body {
 }
 
 #settings-panel {
+    .header-panel {
+        .btn-about {
+            margin-right: 10px;
+        }
+    }
+    
     .well {
         padding: 0;
         overflow: hidden;

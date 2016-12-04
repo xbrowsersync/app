@@ -126,7 +126,7 @@ body {
 #about-panel { 
     h1 {
         @media (min-device-height: $height-mobile-medium) {
-            background-size: 50%;
+            background-size: 55%;
         }
     }
 }
@@ -203,19 +203,12 @@ body {
 
             button {
                 bottom: auto;
-                    
-                &.btn-about {
-                    @media (max-device-width: $height-mobile-small - 1) {
-                        display: block;
-                    }
-                }
 
                 &.btn-toggle-bookmark {
                     right: 1.1em;
                     
                     @media (max-device-width: $width-tablet) {
-                        left: 0;
-                        right: auto;
+                        float: left;
                     }
 
                     i:before {
