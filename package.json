@@ -26,7 +26,7 @@
     "underscore": "1.8.x"
   },
   "devDependencies": {
-    "cordova": "6.3.x",
+    "cordova": "6.4.x",
     "jshint": "2.9.x",
     "minify": "2.0.x",
     "npm-build-tools": "2.2.x",
