@@ -14,7 +14,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
  * Platform variables
  * ------------------------------------------------------------------------------------ */
 
-	var $scope, currentUrl, moduleName = 'xBrowserSync.App.PlatformImplementation', showMainViewOnFocus = true, vm;
+	var $scope, currentUrl, moduleName = 'xBrowserSync.App.PlatformImplementation', vm;
 	
 	var constants = {
 		"title": {
@@ -512,11 +512,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				var year = date.getFullYear();
 				var dateString = year + month + day + hour + minute;
 				var fileName = 'xBrowserSyncBackup_' + dateString + '.txt';
-				
-				// Ensure view isn't reset if permissions dialog displayed on Android
-				if (vm.platformName === vm.globals.Platforms.Android) {
-					showMainViewOnFocus = false;
-				}
 
 				var onError = function() {
 					return deferred.reject({ code: globals.ErrorCodes.FailedBackupData });
@@ -542,9 +537,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 									$scope.$apply(function() {
 										vm.settings.backupRestoreResult = message;
 									});
-
-									// Reset view on resume
-									showMainViewOnFocus = true;
 
 									return deferred.resolve();
 								};
@@ -811,35 +803,19 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					vm.settings.id(result.text);
 				});
 			}
-
-			// Reset view on resume
-			showMainViewOnFocus = true;
 		};
 
 		var onError = function (err) {
 			// Display alert
 			var errMessage = utility.GetErrorMessageFromException({ code: globals.ErrorCodes.FailedScanID });
 			vm.alert.display(errMessage.title, err);
-
-			// Reset view on resume
-			showMainViewOnFocus = true;
 		};
-
-		// Ensure view isn't reset if permissions dialog displayed on Android
-		if (vm.platformName === vm.globals.Platforms.Android) {
-			showMainViewOnFocus = false;
-		}
 		
 		// Activate barcode scanner
 		cordova.plugins.barcodeScanner.scan(onSuccess, onError, options);
     };
 
     var selectBackupFile = function() {
-        // Ensure view isn't reset once app regains focus on Android
-		if (vm.platformName === vm.globals.Platforms.Android) {
-			showMainViewOnFocus = false;
-		}
-		
 		// Open file dialog
 		document.querySelector('#backupFile').click();
     };
@@ -906,9 +882,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
             // Read the backup file data
             reader.readAsText(file);
         }
-
-		// Reset view on resume
-		showMainViewOnFocus = true;
     };
 
 	var checkForSharedLink = function(data) {
@@ -1057,17 +1030,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 
 	var resume = function() {
-		// Reset view to login/search panel
-		if (!!showMainViewOnFocus) {
-			$scope.$apply(function() {
-				vm.view.displayMainView();
-			});
-		}
-		else {
-			// Reset view on resume
-			showMainViewOnFocus = true;
-		}
-		
 		// Check if a sync was interrupted
 		if (!!globals.IsSyncing.Get()) {
 			globals.IsSyncing.Set(false);
