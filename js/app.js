@@ -468,7 +468,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var bookmarkForm_CreateTags_Click = function() {
         // Clean and sort tags and add them to tag array
-        var newTags = getTagArrayFromText(vm.bookmark.tagText);        
+        var newTags = utility.GetTagArrayFromText(vm.bookmark.tagText);        
         vm.bookmark.current.tags = _.sortBy(_.union(newTags, vm.bookmark.current.tags), function(tag) {
             return tag;
         });
@@ -557,7 +557,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         metadata.title, 
                         metadata.url, 
                         metadata.description,
-                        getTagArrayFromText(metadata.tags));
+                        utility.GetTagArrayFromText(metadata.tags));
                     bookmark.originalUrl = metadata.url;
                     vm.bookmark.current = bookmark;
                     
@@ -796,28 +796,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         });
 
         vm.settings.displayQRCode = true;
-    };
-    
-    var getTagArrayFromText = function(tagText) {
-        if (!tagText) {
-            return null;
-        }
-        
-        // Conver to lowercase and split tags into array
-        var tags = tagText.toLowerCase().replace(/['"]/g, '').split(',');
-        
-        // Clean and sort tags
-        tags = _.chain(tags)
-            .map(function(tag) {
-                return tag.trim();
-            })
-            .compact()
-            .sortBy(function(tag) {
-                return tag;
-            })
-            .value();
-        
-        return tags;
     };
     
     var handleSyncResponse = function(response) {

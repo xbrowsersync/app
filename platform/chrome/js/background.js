@@ -20,6 +20,12 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		chrome.runtime.onInstalled.addListener(install);
 		
 		chrome.runtime.onStartup.addListener(startup);
+
+		chrome.runtime.onConnect.addListener(listenForMessages);
+
+		chrome.runtime.onMessage.addListener(handleMessage);
+
+		chrome.alarms.onAlarm.addListener(handleAlarm);
 		
 		chrome.bookmarks.onCreated.addListener(createBookmark);
 		
@@ -30,10 +36,6 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		chrome.bookmarks.onMoved.addListener(moveBookmark);
 		
 		chrome.bookmarks.onImportBegan.addListener(handleImport);
-		
-		chrome.alarms.onAlarm.addListener(handleAlarm);
-		
-		chrome.runtime.onConnect.addListener(listenForMessages);
 	};
 
 
@@ -62,15 +64,50 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
             return;
 		}
-		
-		// Sync updates
-		syncBookmarks({
-			type: globals.SyncType.Push,
-			changeInfo: { 
-				type: globals.UpdateType.Create, 
-				data: [id, bookmark]
+
+		// Get current page metadata from local storage
+		var metadataColl = globals.MetadataCollection.Get();
+		var metadata = _.findWhere(metadataColl, { url: bookmark.url })
+
+		var bookmarkUpdated = $q.defer();
+
+		if (!!metadata) {
+			// Update native bookmark title if different to metadata
+			if (bookmark.title !== metadata.title) {
+				// Disable event listeners so won't trigger on update
+        		globals.DisableEventListeners.Set(true);
+
+				// Update native bookmark title
+				chrome.bookmarks.update(id, { title: metadata.title }, function() {
+					bookmark.title = metadata.title; 
+					bookmark.description = metadata.description;
+					bookmark.tags =	utility.GetTagArrayFromText(metadata.tags);
+					bookmarkUpdated.resolve();
+				});
 			}
-		});
+			else {
+				bookmark.title = metadata.title; 
+				bookmark.description = metadata.description;
+				bookmark.tags =	utility.GetTagArrayFromText(metadata.tags);
+				bookmarkUpdated.resolve();
+			}
+		}
+	
+		bookmarkUpdated.promise
+			.then(function() {
+				// Sync updates
+				return syncBookmarks({
+					type: globals.SyncType.Push,
+					changeInfo: { 
+						type: globals.UpdateType.Create, 
+						data: [id, bookmark]
+					}
+				});
+			})
+			.finally(function () {
+				// Enable event listeners
+				globals.DisableEventListeners.Set(false);
+			});
 	};
 	
 	var displayAlert = function(title, message, callback) {
@@ -150,6 +187,16 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			case globals.Commands.RestoreBookmarks:
 				restoreBookmarks(msg);
 				break;
+			// Store current page metadata
+			case globals.Commands.GetPageMetadata:
+				if (!!msg.metadata && !!msg.metadata.url) {
+					var metadataColl = globals.MetadataCollection.Get(); 
+					if (!_.findWhere(metadataColl, { url: msg.metadata.url })) {
+						metadataColl.push(msg.metadata);
+						globals.MetadataCollection.Set(metadataColl);
+					}
+				}
+				break;
 		}
 	};
 	
@@ -165,11 +212,14 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 				});
 				break;
 			case "update":
-				// If extension has been updated, display about panel 
-				globals.DisplayAboutOnStartup.Set(true);
+				if (!!details.previousVersion && details.previousVersion !== 
+					chrome.runtime.getManifest().version) {
+					// If extension has been updated, display about panel 
+					globals.DisplayAboutOnStartup.Set(true);
 
-				// Clear cached bookmarks
-				globals.Cache.Bookmarks.Set(null);
+					// Clear cached bookmarks
+					globals.Cache.Bookmarks.Set(null);
+				}
 				break;
 		}
 	};
@@ -239,6 +289,9 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 	};
 	
 	var startup = function() {
+		// Clear metadata collection
+		globals.MetadataCollection.Set(null);
+		
 		// Check if a sync was interrupted
 		if (!!globals.IsSyncing.Get()) {
 			globals.IsSyncing.Set(false);

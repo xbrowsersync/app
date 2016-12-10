@@ -224,6 +224,28 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		return encodeURI(str).split(/%..|./).length - 1;
 	};
 
+	var getTagArrayFromText = function(tagText) {
+        if (!tagText) {
+            return null;
+        }
+        
+        // Conver to lowercase and split tags into array
+        var tags = tagText.toLowerCase().replace(/['"]/g, '').split(',');
+        
+        // Clean and sort tags
+        tags = _.chain(tags)
+            .map(function(tag) {
+                return tag.trim();
+            })
+            .compact()
+            .sortBy(function(tag) {
+                return tag;
+            })
+            .value();
+        
+        return tags;
+    };
+
 	var getToolbarContainer = function(bookmarks, createIfNotPresent) {
         var container = _.findWhere(bookmarks, { title: globals.Bookmarks.ToolbarContainerName });
 
@@ -355,6 +377,7 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		GetErrorMessageFromException: getErrorMessageFromException,
 		GetOtherContainer: getOtherContainer,
 		GetStringSizeInBytes: getStringSizeInBytes,
+		GetTagArrayFromText: getTagArrayFromText,
 		GetToolbarContainer: getToolbarContainer,
 		GetXBrowserSyncContainer: getXBrowserSyncContainer,
 		IsBookmarkContainer: isBookmarkContainer,

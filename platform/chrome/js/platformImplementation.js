@@ -515,16 +515,19 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
             { currentWindow: true, active: true },
             function(tabs) {
                 var activeTab = tabs[0];
-                metadata.url = activeTab.url;
-				
-				// Exit if this is a chrome url
-				if (activeTab.url.toLowerCase().startsWith('chrome://')) {
-					return deferred.resolve(metadata);
+                
+				if (!!activeTab) {
+					metadata.url = activeTab.url;
+					
+					// Exit if this is a chrome url
+					if (activeTab.url.toLowerCase().startsWith('chrome://')) {
+						return deferred.resolve(metadata);
+					}
 				}
                 
 				// Add listener to receive page metadata from content script
                 chrome.runtime.onMessage.addListener(function(message, sender) {
-					if (message.command === 'getPageMetadata') {
+					if (message.command === globals.Commands.GetPageMetadata) {
 						if (!!message.metadata) {
 							metadata.title = message.metadata.title;
 							metadata.description = message.metadata.description;

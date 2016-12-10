@@ -95,7 +95,8 @@ xBrowserSync.App.Global = function(platform) {
         Commands: {
             SyncBookmarks: 1,
             RestoreBookmarks: 2,
-            NoCallback: 3
+            NoCallback: 3,
+            GetPageMetadata: 4
         },
         Constants: {
             Title: 'title',
@@ -245,6 +246,20 @@ xBrowserSync.App.Global = function(platform) {
             Error_ShareFailed_Title: 'error_ShareFailed_Title',
             Error_FailedBackupData_Title: 'error_FailedBackupData_Title',
             Error_InvalidUrlScheme_Title: 'error_InvalidUrlScheme_Title'
+        },
+        MetadataCollection: {
+            Get: function() {
+                var metadata = platform.LocalStorage.Get(
+                    'xBrowserSync-metadataColl');
+                return (!metadata) ? [] : JSON.parse(metadata);
+            },
+            Set: function(value) {
+                value = (!value) ? '' : JSON.stringify(value);
+                
+                platform.LocalStorage.Set(
+                    'xBrowserSync-metadataColl', 
+                    value);
+            }
         },
         DisableEventListeners: {
             Get: function() {

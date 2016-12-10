@@ -18,6 +18,12 @@
     "page": "background.html",
     "persistent": false
   },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["js/content.js"]
+    }
+  ],
   "permissions": [
     "activeTab",
     "alarms",
