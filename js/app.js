@@ -113,6 +113,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             searchForm_SearchText_Change: searchForm_SearchText_Change,
             searchForm_SearchText_KeyDown: searchForm_SearchText_KeyDown,
             searchForm_SearchResult_KeyDown: searchForm_SearchResult_KeyDown,
+            searchForm_SearchResults_Scroll: searchForm_SearchResults_Scroll,
             searchForm_SelectBookmark_Press: searchForm_SelectBookmark_Press,
             searchForm_ShareBookmark_Click: platform.Bookmarks.Share,
             searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
@@ -169,7 +170,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             lastWord: null,
             lookahead: null,
             query: null,
-            results: null
+            results: null,
+            resultsDisplayed: 10
         };
         
 		vm.settings = {
@@ -1366,6 +1368,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
     };
 
+    var searchForm_SearchResults_Scroll = function() {
+        if (!!vm.search.results && vm.search.results.length > 0) {
+            // Display 10 more results
+            vm.search.resultsDisplayed += 10;
+            vm.search.results = vm.search.results;
+        } 
+    };
+    
     var searchForm_SelectBookmark_Press = function(event) {
         event.preventDefault();
 

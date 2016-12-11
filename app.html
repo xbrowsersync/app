@@ -364,8 +364,8 @@
                 <h4 class="no-bookmarks" ng-show="vm.search.results.length === 0">
                     {{ vm.platform.GetConstant(vm.globals.Constants.NoSearchResults_Message) }}
                 </h4>
-                <div class="list-group" ng-show="vm.search.results.length > 0">
-                    <div class="list-group-item" ng-repeat="result in vm.search.results track by result.id">
+                <div class="list-group" ng-show="vm.search.results.length > 0" infinite-scroll="vm.events.searchForm_SearchResults_Scroll()" infinite-scroll-container="'.search-results-panel'">
+                    <div class="list-group-item" ng-repeat="result in vm.search.results | limitTo:vm.search.resultsDisplayed track by result.id">
                         <div class="menu" hm-tap="vm.events.searchForm_SelectBookmark_Press($event)">
                             <div class="buttons">
                                 <button class="btn btn-icon" title="Share bookmark" hm-tap="vm.events.searchForm_ShareBookmark_Click(result)">
