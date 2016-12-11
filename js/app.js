@@ -163,6 +163,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.platformName = null;
         
         vm.search = {
+            batchResultsNum: 10,
             cancelGetBookmarksRequest: null,
             getLookaheadTimeout: null,
             getSearchLookaheadTimeout: null,
@@ -171,7 +172,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             lookahead: null,
             query: null,
             results: null,
-            resultsDisplayed: 10
+            resultsDisplayed: 10,
+            scrollDisplayMoreEnabled: true
         };
         
 		vm.settings = {
@@ -1096,11 +1098,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         bookmarks.Search(queryData)
             .then(function(results) {
+                vm.search.scrollDisplayMoreEnabled = false;
+                vm.search.resultsDisplayed = vm.search.batchResultsNum;
                 vm.search.results = results;
 
                 // Scroll to top of search results
                 $timeout(function() {
                     document.querySelector('.search-results-panel').scrollTop = 0;
+                    vm.search.scrollDisplayMoreEnabled = true;
                 });
             })
             .catch(function(err) {
@@ -1369,9 +1374,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
 
     var searchForm_SearchResults_Scroll = function() {
-        if (!!vm.search.results && vm.search.results.length > 0) {
-            // Display 10 more results
-            vm.search.resultsDisplayed += 10;
+        if (!!vm.search.results && vm.search.results.length > 0 && !!vm.search.scrollDisplayMoreEnabled) {
+            // Display next batch of results
+            vm.search.resultsDisplayed += vm.search.batchResultsNum;
             vm.search.results = vm.search.results;
         } 
     };
