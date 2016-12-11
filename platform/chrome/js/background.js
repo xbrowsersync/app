@@ -69,45 +69,19 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		var metadataColl = globals.MetadataCollection.Get();
 		var metadata = _.findWhere(metadataColl, { url: bookmark.url })
 
-		var bookmarkUpdated = $q.defer();
-
+		// Add metadata if provided
 		if (!!metadata) {
-			// Update native bookmark title if different to metadata
-			if (bookmark.title !== metadata.title) {
-				// Disable event listeners so won't trigger on update
-        		globals.DisableEventListeners.Set(true);
-
-				// Update native bookmark title
-				chrome.bookmarks.update(id, { title: metadata.title }, function() {
-					bookmark.title = metadata.title; 
-					bookmark.description = metadata.description;
-					bookmark.tags =	utility.GetTagArrayFromText(metadata.tags);
-					bookmarkUpdated.resolve();
-				});
-			}
-			else {
-				bookmark.title = metadata.title; 
-				bookmark.description = metadata.description;
-				bookmark.tags =	utility.GetTagArrayFromText(metadata.tags);
-				bookmarkUpdated.resolve();
-			}
+			bookmark.description = metadata.description;
+			bookmark.tags =	utility.GetTagArrayFromText(metadata.tags);
 		}
 	
-		bookmarkUpdated.promise
-			.then(function() {
-				// Sync updates
-				return syncBookmarks({
-					type: globals.SyncType.Push,
-					changeInfo: { 
-						type: globals.UpdateType.Create, 
-						data: [id, bookmark]
-					}
-				});
-			})
-			.finally(function () {
-				// Enable event listeners
-				globals.DisableEventListeners.Set(false);
-			});
+		syncBookmarks({
+			type: globals.SyncType.Push,
+			changeInfo: { 
+				type: globals.UpdateType.Create, 
+				data: [id, bookmark]
+			}
+		});
 	};
 	
 	var displayAlert = function(title, message, callback) {
