@@ -31,7 +31,7 @@ body {
     color: $colour-text1;
     font-size: 14px;
     line-height: 1.25em;
-    min-width: 300px;
+    min-width: 320px;
     @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
 
     h1 {
@@ -315,6 +315,13 @@ body {
     .input-group {
         margin-bottom: 15px;
     }
+
+    .loader {
+        svg path,
+        svg rect {
+            fill: $colour-text2;
+        }
+    }
     
     .lookahead-container {
         position: absolute;
@@ -508,7 +515,7 @@ body {
     }
 }
 
-#loading-panel {
+#working-panel {
     display: table;
     position: fixed;
     height: 100%;
@@ -531,7 +538,7 @@ body {
 }
 
 #qr-panel {
-    @extend #loading-panel;
+    @extend #working-panel;
 
     #qr {
         cursor: pointer;
@@ -755,7 +762,7 @@ body {
             border: none;
             border-radius: $border-radius;
             padding: 0;
-            margin: 0 10px 10px 0;
+            margin: 0 0 10px 0;
             outline: none;
             overflow: hidden;
             
@@ -1073,6 +1080,15 @@ body {
             position: relative;
             margin-top: 15px;
 
+            .loader {
+                width: 24px;
+                height: 30px;
+                position: absolute;
+                top: 3em;
+                left: 50%;
+                margin-left: -12px;
+            }
+
             #chart {
                 height: 8em;
                 width: 8em;
@@ -1117,7 +1133,7 @@ body {
 
         #id {
             display: block;
-            font-size: 1em;
+            font-size: 1.1em;
         }
 
         .btn-qrcode {

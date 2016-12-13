@@ -11,10 +11,10 @@
 </head>
 
 <body>
-    <div class="container loading">
+    <div class="container" ng-class="{ 'loading': !!vm.loading }">
         <div class="background"></div>
         
-        <div id="loading-panel" ng-show="vm.working">
+        <div id="working-panel" ng-show="vm.working">
             <div class="content">
                 <h3>{{ vm.platform.GetConstant(vm.globals.Constants.Working_Title) }}</h3>
                 <p>{{ vm.platform.GetConstant(vm.globals.Constants.Working_Message) }}</p>
@@ -522,6 +522,26 @@
                         <div>{{ vm.platform.GetConstant(vm.globals.Constants.SyncDataUsagePanel_Message) }}:</div>
                         <div class="chart-panel">
                             <div id="chart"></div>
+                            <div class="loader" ng-if="vm.settings.syncDataUsed === null">
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                    width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+                                    <rect x="0" y="10" width="4" height="10" fill="#333" opacity="0.2">
+                                        <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0s" dur="0.6s" repeatCount="indefinite" />
+                                        <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0s" dur="0.6s" repeatCount="indefinite" />
+                                        <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0s" dur="0.6s" repeatCount="indefinite" />
+                                    </rect>
+                                    <rect x="8" y="10" width="4" height="10" fill="#333"  opacity="0.2">
+                                        <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
+                                        <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
+                                        <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.15s" dur="0.6s" repeatCount="indefinite" />
+                                    </rect>
+                                    <rect x="16" y="10" width="4" height="10" fill="#333"  opacity="0.2">
+                                        <animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
+                                        <animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
+                                        <animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.3s" dur="0.6s" repeatCount="indefinite" />
+                                    </rect>
+                                </svg>
+                            </div>
                             <div class="values" ng-show="vm.settings.syncDataUsed !== null">
                                 <span class="percent" ng-class="{ 'text-danger': vm.settings.syncDataUsed >= 90 }">{{ vm.settings.syncDataUsed }}%</span>
                                 <span class="max">/ {{ vm.settings.syncDataMax }}kB</span>

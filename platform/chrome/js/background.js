@@ -67,7 +67,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 
 		// Get current page metadata from local storage
 		var metadataColl = globals.MetadataCollection.Get();
-		var metadata = _.findWhere(metadataColl, { url: bookmark.url })
+		var metadata = _.findWhere(metadataColl, { url: bookmark.url });
 
 		// Add metadata if provided
 		if (!!metadata) {

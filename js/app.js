@@ -19,6 +19,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.globals = globals;
         vm.platform = platform; 
         vm.scope = $scope;
+
+        vm.loading = true;
+        vm.working = false;
 		
 		vm.alert = {
 			show: false,
@@ -220,6 +223,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         globals.URL.Host.Get();
                 }
             },
+            syncDataChart: null,
             syncDataMax: null,
             syncDataUsed: null,
             panels: { sync: 0, serviceStatus: 1, backupRestore: 2 },
@@ -875,7 +879,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         platform.Init(vm, $scope);
         
         // Display contents
-        document.querySelector('.container').classList.remove('loading');
+        vm.loading = false;
         
         // Display intro animation if required
         if (vm.view.current === vm.view.views.login && !!vm.introduction.displayIntro()) {
@@ -1510,24 +1514,19 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 	};
 
     var syncPanel_DisplayDataUsage_Click = function() {
-        // Get service info and bookmarks sync size
-        $q.all([
-            api.CheckServiceStatus(),
-            bookmarks.SyncSize()
-        ])
-            .then(function(result) {
-                var serviceInfo = result[0];
-                var bookmarksSyncSize = result[1];
-                
-                // Calculate sync data percentage used and display chart 
-                var percentUsed = (bookmarksSyncSize / serviceInfo.maxSyncSize) * 100;
+        // Reset values
+        vm.settings.syncDataUsed = null;
+        vm.settings.syncDataMax = null;
+        vm.settings.displaySyncDataUsage = true;
 
-                // Set view model values
-                vm.settings.syncDataUsed = (percentUsed > 100) ? 100 : Math.round(percentUsed);
-                vm.settings.syncDataMax = Math.round(serviceInfo.maxSyncSize / 1024);
+        if (!!vm.settings.syncDataChart) {
+            vm.settings.syncDataChart.update({ dataUsed: 0 });
+        }
 
+        $timeout(function() {
+            if (!vm.settings.syncDataChart) {
                 // Display new chart
-                new CircleChart({
+                vm.settings.syncDataChart = new CircleChart({
                     $container: document.querySelector('#chart'),
                     ringProportion: 0.39,
                     staticTotal: true,
@@ -1535,33 +1534,43 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     middleCircleColor: '#EDFEFF',
                     background: '#083039',
                     definition: [{
-                        color: '#35C6E8', 
-                        value: percentUsed
+                        name: 'dataUsed',
+                        value: 0,
+                        color: '#35C6E8'
                     }]
                 });
-            })
-            .catch(function(err) {
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'syncPanel_DisplayDataUsage_Click', utility.LogType.Error,
-                    JSON.stringify(err));
-                
-                // Display alert
-				var errMessage = utility.GetErrorMessageFromException(err);
-				vm.alert.display(errMessage.title, errMessage.message, 'danger');
-            });
-        
-        // Remove old chart
-        var chart = document.querySelector('#chart > svg');
-        if (!!chart) {
-            chart.remove();
-        }
+            }
+            
+            // Get service info and bookmarks sync size
+            $q.all([
+                api.CheckServiceStatus(),
+                bookmarks.SyncSize()
+            ])
+                .then(function(result) {
+                    var serviceInfo = result[0];
+                    var bookmarksSyncSize = result[1];
+                    
+                    // Calculate sync data percentage used and display chart 
+                    var percentUsed = (bookmarksSyncSize / serviceInfo.maxSyncSize) * 100;
 
-        vm.settings.syncDataUsed = null;
-        vm.settings.syncDataMax = null;
-        vm.settings.displaySyncDataUsage = true;
+                    // Set view model values
+                    vm.settings.syncDataUsed = (percentUsed > 100) ? 100 : Math.round(percentUsed);
+                    vm.settings.syncDataMax = Math.round(serviceInfo.maxSyncSize / 1024);
 
-        $timeout(function() {
+                    // Update chart
+                    vm.settings.syncDataChart.update({ dataUsed: percentUsed });
+                })
+                .catch(function(err) {
+                    // Log error
+                    utility.LogMessage(
+                        moduleName, 'syncPanel_DisplayDataUsage_Click', utility.LogType.Error,
+                        JSON.stringify(err));
+                    
+                    // Display alert
+                    var errMessage = utility.GetErrorMessageFromException(err);
+                    vm.alert.display(errMessage.title, errMessage.message, 'danger');
+                });
+            
             document.querySelector('#syncDataUsage-Panel .btn-back').focus();
         });
     };
