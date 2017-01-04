@@ -884,6 +884,28 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         }
     };
 
+	var checkForInterruptedSync = function () {
+		// Check if a sync was interrupted
+		if (!!globals.IsSyncing.Get()) {
+			globals.IsSyncing.Set(false);
+			
+			// Disable sync
+			globals.SyncEnabled.Set(false);
+
+			// Display login panel
+			vm.view.displayMainView();
+			
+			// Display alert
+			vm.alert.display(
+				getConstant(globals.Constants.Error_SyncInterrupted_Title), 
+				getConstant(globals.Constants.Error_SyncInterrupted_Message));
+            
+            return true;
+		}
+
+		return false;
+	};
+
 	var checkForSharedLink = function(data) {
 		if (vm.platformName === vm.globals.Platforms.Android) {
 			// If there is a current intent, retrieve it
@@ -976,18 +998,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		vm.alert.display = displayToast;
 
 		// Check if a sync was interrupted
-		if (!!globals.IsSyncing.Get()) {
-			globals.IsSyncing.Set(false);
-			
-			// Disable sync
-			globals.SyncEnabled.Set(false);
-			
-			// Display alert
-			vm.alert.display(
-				getConstant(globals.Constants.Error_SyncInterrupted_Title), 
-				getConstant(globals.Constants.Error_SyncInterrupted_Message));
-            
-            return;
+		if (checkForInterruptedSync()) {
+			return;
+		}
+
+		// If synced, check for bookmarks updates
+		if (!!globals.SyncEnabled.Get()) {
+			bookmarks.CheckForUpdates();
 		}
 
 		// Check if a link was shared
@@ -1031,18 +1048,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 	var resume = function() {
 		// Check if a sync was interrupted
-		if (!!globals.IsSyncing.Get()) {
-			globals.IsSyncing.Set(false);
-			
-			// Disable sync
-			globals.SyncEnabled.Set(false);
-			
-			// Display alert
-			vm.alert.display(
-				getConstant(globals.Constants.Error_SyncInterrupted_Title), 
-				getConstant(globals.Constants.Error_SyncInterrupted_Message));
-            
-            return;
+		if (checkForInterruptedSync()) {
+			return;
 		}
 		
 		if (vm.view.current === vm.view.views.search) {

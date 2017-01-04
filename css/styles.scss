@@ -315,13 +315,6 @@ body {
     .input-group {
         margin-bottom: 15px;
     }
-
-    .loader {
-        svg path,
-        svg rect {
-            fill: $colour-text2;
-        }
-    }
     
     .lookahead-container {
         position: absolute;
@@ -1080,13 +1073,40 @@ body {
             position: relative;
             margin-top: 15px;
 
+            %bar {
+                width: $loader-bar-width;
+                height: $loader-bar-height;
+                background-color: $loader-bar-color;
+                border-radius: $loader-bar-radius;
+            }
+
             .loader {
-                width: 24px;
-                height: 30px;
                 position: absolute;
-                top: 3em;
+                top: 3.3em;
                 left: 50%;
-                margin-left: -12px;
+                margin-left: -2px;
+                @include animation(animate-loader 1s ease 0.1s infinite);
+                @extend %bar;
+                
+                &:before,
+                &:after {
+                    content: "";
+                    position: absolute;
+                    display: block;
+                    @extend %bar;
+                    top: 50%;
+                    transform: translateY(-1 * $loader-bar-height / 2) translateZ(0);
+                }
+  
+                &:before {
+                    left: -1 * ($loader-bar-width + $loader-bar-width/2);
+                    @include animation(animate-loader 1s ease 0s infinite);
+                }
+
+                &:after {
+                    left: $loader-bar-width + $loader-bar-width/2;
+                    @include animation(animate-loader 1s ease 0.2s infinite);
+                }
             }
 
             #chart {

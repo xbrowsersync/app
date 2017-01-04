@@ -13,14 +13,21 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
  * Public functions
  * ------------------------------------------------------------------------------------ */
  
-	var encryptData = function(data, errorCallback) {
-		// Encrypt using AES
-		return CryptoJS.AES.encrypt(data, globals.ClientSecret.Get()).toString();
+	var closest = function(element, predicate) {
+		// Find closest element where predicate is true 
+		return predicate(element) ? element : (
+			element && closest(element.parentNode, predicate)
+		);
 	};
 	
 	var decryptData = function(data, errorCallback) {
 		// Decrypt using AES
 		return CryptoJS.AES.decrypt(data, globals.ClientSecret.Get()).toString(CryptoJS.enc.Utf8);
+	};
+	
+	var encryptData = function(data, errorCallback) {
+		// Encrypt using AES
+		return CryptoJS.AES.encrypt(data, globals.ClientSecret.Get()).toString();
 	};
 
 	var findXBookmarkInContainers = function(xBookmarks, predicate) {
@@ -371,6 +378,7 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 	
 
 	return {
+		Closest: closest,
 		DecryptData: decryptData,
 		EncryptData: encryptData,
 		FindXBookmarkInContainers: findXBookmarkInContainers,

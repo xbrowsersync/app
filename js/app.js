@@ -404,18 +404,18 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         document.querySelector('input[name="bookmarkTags"]').focus();
     };
     
-    var bookmarkForm_BookmarkTags_KeyDown = function($event) {
+    var bookmarkForm_BookmarkTags_KeyDown = function(event) {
         switch (true) {
             // If user pressed Enter
-            case ($event.keyCode === 13):
+            case (event.keyCode === 13):
                 // Add new tags
-                $event.preventDefault();
+                event.preventDefault();
                 bookmarkForm_CreateTags_Click();
                 break;
             // If user pressed tab or right arrow key and lookahead present
-            case (($event.keyCode === 9 || $event.keyCode === 39) && !!vm.bookmark.tagLookahead):
+            case ((event.keyCode === 9 || event.keyCode === 39) && !!vm.bookmark.tagLookahead):
                 // Add lookahead to search query
-                $event.preventDefault();
+                event.preventDefault();
                 bookmarkForm_BookmarkTags_Autocomplete();
                 break;
         }
@@ -1142,7 +1142,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
 
     var searchForm_DeleteBookmark_Click = function(event, bookmark) {
-        var bookmarkItem = event.target.closest('.list-group-item');
+        var bookmarkItem = utility.Closest(event.target, function (element) { 
+            return _.indexOf(element.classList, 'list-group-item') >= 0; 
+        });
 
         if (!bookmarkItem) {
             return;
@@ -1260,9 +1262,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
     };
     
-    var searchForm_SearchText_KeyDown = function($event) {
+    var searchForm_SearchText_KeyDown = function(event) {
         // If user pressed enter and search text present
-        if ($event.keyCode === 13 && !!vm.search.query) {
+        if (event.keyCode === 13 && !!vm.search.query) {
             if (!!vm.search.getSearchResultsTimeout) {
                 $timeout.cancel(vm.search.getSearchResultsTimeout);
                 vm.search.getSearchResultsTimeout = null;
@@ -1273,33 +1275,33 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
         
         // If user pressed down arrow and search results present
-        if ($event.keyCode === 40 && !!vm.search.results && vm.search.results.length > 0) {
+        if (event.keyCode === 40 && !!vm.search.results && vm.search.results.length > 0) {
             // Focus on first search result
-            $event.preventDefault();
+            event.preventDefault();
             document.querySelector('.search-results-panel .list-group').firstElementChild.children[2].focus();
             return;
         }
         
         // If user pressed tab or right arrow key and lookahead present
-        if (($event.keyCode === 9 || $event.keyCode === 39) && !!vm.search.lookahead) {
+        if ((event.keyCode === 9 || event.keyCode === 39) && !!vm.search.lookahead) {
             // Add lookahead to search query
-            $event.preventDefault();
+            event.preventDefault();
             searchForm_SearchText_Autocomplete();
             return;
         }
     };
     
-    var searchForm_SearchResult_KeyDown = function($event) {
+    var searchForm_SearchResult_KeyDown = function(event) {
         var currentIndex, newIndex;
         
         switch (true) {
             // Up arrow
-            case ($event.keyCode === 38):
-                $event.preventDefault();
+            case (event.keyCode === 38):
+                event.preventDefault();
             
-                if (!!$event.target.parentElement.previousElementSibling) {
+                if (!!event.target.parentElement.previousElementSibling) {
                     // Focus on previous result
-                    $event.target.parentElement.previousElementSibling.children[2].focus();
+                    event.target.parentElement.previousElementSibling.children[2].focus();
                 }
                 else {
                     // Focus on search box
@@ -1308,69 +1310,69 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 
                 break;
             // Down arrow
-            case ($event.keyCode === 40):
-                $event.preventDefault();
+            case (event.keyCode === 40):
+                event.preventDefault();
             
-                if (!!$event.target.parentElement.nextElementSibling) {
+                if (!!event.target.parentElement.nextElementSibling) {
                     // Focus on next result
-                    $event.target.parentElement.nextElementSibling.children[2].focus();
+                    event.target.parentElement.nextElementSibling.children[2].focus();
                 }
                 
                 break;
             // Page up
-            case ($event.keyCode === 33):
-                $event.preventDefault();
+            case (event.keyCode === 33):
+                event.preventDefault();
             
                 // Focus on result 6 down from current
-                currentIndex = _.indexOf($event.target.parentElement.parentElement.children, $event.target.parentElement);
+                currentIndex = _.indexOf(event.target.parentElement.parentElement.children, event.target.parentElement);
                 newIndex = currentIndex - 6;
                 
                 if (newIndex < 0) {
-                    $event.target.parentElement.parentElement.firstElementChild.children[2].focus();
+                    event.target.parentElement.parentElement.firstElementChild.children[2].focus();
                 }
                 else {
-                    $event.target.parentElement.parentElement.children[newIndex].children[2].focus();
+                    event.target.parentElement.parentElement.children[newIndex].children[2].focus();
                 }
                 
                 break;
             // Page down
-            case ($event.keyCode === 34):
-                $event.preventDefault();
+            case (event.keyCode === 34):
+                event.preventDefault();
                 
                 // Focus on result 6 down from current
-                currentIndex = _.indexOf($event.target.parentElement.parentElement.children, $event.target.parentElement);
+                currentIndex = _.indexOf(event.target.parentElement.parentElement.children, event.target.parentElement);
                 newIndex = currentIndex + 6;
                 
-                if ($event.target.parentElement.parentElement.children.length < newIndex) {
-                    $event.target.parentElement.parentElement.lastElementChild.children[2].focus();
+                if (event.target.parentElement.parentElement.children.length < newIndex) {
+                    event.target.parentElement.parentElement.lastElementChild.children[2].focus();
                 }
                 else {
-                    $event.target.parentElement.parentElement.children[newIndex].children[2].focus();
+                    event.target.parentElement.parentElement.children[newIndex].children[2].focus();
                 }
                 
                 break;
             // Home
-            case ($event.keyCode === 36):
-                $event.preventDefault();
+            case (event.keyCode === 36):
+                event.preventDefault();
             
                 // Focus on first result
-                $event.target.parentElement.parentElement.firstElementChild.children[2].focus();
+                event.target.parentElement.parentElement.firstElementChild.children[2].focus();
                 
                 break;
             // End
-            case ($event.keyCode === 35):
-                $event.preventDefault();
+            case (event.keyCode === 35):
+                event.preventDefault();
             
                 // Focus on last result
-                $event.target.parentElement.parentElement.lastElementChild.children[2].focus();
+                event.target.parentElement.parentElement.lastElementChild.children[2].focus();
                 
                 break;
             // Backspace
-            case ($event.keyCode === 8):
+            case (event.keyCode === 8):
             // Space
-            case ($event.keyCode === 32):
+            case (event.keyCode === 32):
             // Numbers and letters
-            case ($event.keyCode > 47 && $event.keyCode < 112):
+            case (event.keyCode > 47 && event.keyCode < 112):
                 // Focus on search box
                 document.querySelector('input[name=txtSearch]').focus();
                 break;
@@ -1723,7 +1725,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         });
     };
 
-    var updateServiceUrlForm_Update_KeyPress = function($event) {
+    var updateServiceUrlForm_Update_KeyPress = function(event) {
         updateServiceUrlForm_SetValidity(true);
     };
 	
