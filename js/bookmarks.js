@@ -405,7 +405,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                     
                     // Match words that begin with keyword
                     _.each(bookmarkWords, function(bookmarkWord) { 
-                        if (bookmarkWord.toLowerCase().indexOf(keyword.toLowerCase()) === 0) { count++; } 
+                        if (!!bookmarkWord && bookmarkWord.toLowerCase().indexOf(keyword.toLowerCase()) === 0) { count++; } 
                     }); 
                     
                     return count; 
