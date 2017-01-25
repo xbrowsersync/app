@@ -530,7 +530,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					if (message.command === globals.Commands.GetPageMetadata) {
 						if (!!message.metadata) {
 							metadata.title = message.metadata.title;
-							metadata.description = message.metadata.description;
+							metadata.description = utility.StripTags(message.metadata.description);
 							metadata.tags = message.metadata.tags;
 						}
 						

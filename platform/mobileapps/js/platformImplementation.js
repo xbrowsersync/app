@@ -638,10 +638,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			}
 
 			// Get page description
-			description = html.querySelector('meta[property="og:description"]') ||
-			html.querySelector('meta[name="description"]');				
+			description = html.querySelector('meta[property="og:description"]') || html.querySelector('meta[name="description"]');				
 			if (!!description && !!description.getAttribute('content')) {
-				metadata.description = description.getAttribute('content');
+				metadata.description = utility.StripTags(description.getAttribute('content'));
 			}
 
 			// Get page tags

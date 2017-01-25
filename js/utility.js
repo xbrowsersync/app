@@ -328,6 +328,10 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		};
 	};
 
+	var stripTags = function(str) {
+		return (!!str) ? str.replace(/<(?:.|\n)*?>/gm, '') : str;
+	};
+
 	var xBookmark = function(title, url, description, tags, children) {
 		var xBookmark = {};
 		
@@ -392,6 +396,7 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		LogMessage: logMessage,
 		LogType: logType,
 		ParseUrl: parseUrl,
+		StripTags: stripTags,
 		XBookmark: xBookmark		
 	};
 };
