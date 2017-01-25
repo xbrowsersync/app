@@ -6,10 +6,10 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description:	Responsible for handling bookmark data.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Bookmarks = function($q, platform, globals, api, utility) { 
+xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, utility) { 
     'use strict';
     
-    var moduleName = 'xBrowserSync.App.Bookmarks', syncQueue = [];
+    var moduleName = 'xBrowserSync.App.Bookmarks', retryFailedSync, syncQueue = [];
 
 /* ------------------------------------------------------------------------------------
  * Public functions
@@ -184,7 +184,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, globals, api, utility) {
         syncQueue.push(syncData);
         
         // Trigger sync
-        sync();
+        sync(syncData.deferred);
         
         return syncData.deferred.promise;
     };
@@ -510,14 +510,20 @@ xBrowserSync.App.Bookmarks = function($q, platform, globals, api, utility) {
         return results;
     };
     
-    var sync = function() {		
+    var sync = function(deferredToResolve) {
         // If a sync is in progress, retry later
 		if (globals.IsSyncing.Get()) {
-			setTimeout(function() { sync(); }, globals.RetrySyncTimeout);
+			$timeout(sync, globals.SyncPollTimeout);
 			return;
 		}
+
+        // Clear any active failed sync retry
+        if (!!retryFailedSync) {
+            clearTimeout(retryFailedSync);
+            retryFailedSync = null;
+        }
         
-        // Get next queued sync
+        // Get next queued sync (process syncs in order )
         var currentSync = syncQueue.shift();
         
         // Queue is empty, return
@@ -526,7 +532,7 @@ xBrowserSync.App.Bookmarks = function($q, platform, globals, api, utility) {
         }
         
         globals.IsSyncing.Set(true);
-        
+
         var syncPromise;
 
         // Process sync
@@ -550,11 +556,38 @@ xBrowserSync.App.Bookmarks = function($q, platform, globals, api, utility) {
                 syncPromise = $q.reject({ code: globals.ErrorCodes.AmbiguousSyncRequest });
                 break;
         }
+
+        // If deferred was not provided, use current sync's deferred.
+        deferredToResolve = deferredToResolve || currentSync.deferred;
         
         syncPromise
             // Resolve original sync deferred
-            .then(currentSync.deferred.resolve)
-            .catch(currentSync.deferred.reject)
+            .then(function() {
+                deferredToResolve.resolve();
+
+                // If there are items in the queue call sync
+                if (syncQueue.length > 0) {
+                    $timeout(sync);
+                }
+            })
+            .catch(function (err) {
+                // Handle network error
+                if (!!globals.Network.Disconnected.Get()) {
+                    // If the user was committing an update, add sync back into queue and retry periodically, and 
+                    // return specific error code
+                    if (currentSync.type !== globals.SyncType.Pull) {
+                        syncQueue.unshift(currentSync);
+                        retryFailedSync = $timeout(sync, globals.RetryFailedSyncTimeout);
+                        
+                        deferredToResolve.reject({ 
+                            code: globals.ErrorCodes.HttpRequestFailedWhileUpdating 
+                        });
+                        return;
+                    }
+                }
+                    
+                deferredToResolve.reject(err);
+            })
             .finally(function () {
                 globals.IsSyncing.Set(false);
                 globals.DisableEventListeners.Set(false);

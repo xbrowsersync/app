@@ -131,6 +131,10 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 				errorMessage.title = platform.GetConstant(globals.Constants.Error_HttpRequestFailed_Title);
 				errorMessage.message = platform.GetConstant(globals.Constants.Error_HttpRequestFailed_Message); 
 				break;
+            case globals.ErrorCodes.HttpRequestFailedWhileUpdating:
+				errorMessage.title = platform.GetConstant(globals.Constants.Error_HttpRequestFailedWhileUpdating_Title);
+				errorMessage.message = platform.GetConstant(globals.Constants.Error_HttpRequestFailedWhileUpdating_Message); 
+				break;
             case globals.ErrorCodes.TooManyRequests:
 				errorMessage.title = platform.GetConstant(globals.Constants.Error_TooManyRequests_Title);
 				errorMessage.message = platform.GetConstant(globals.Constants.Error_TooManyRequests_Message); 

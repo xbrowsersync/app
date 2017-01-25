@@ -312,13 +312,19 @@
 		"message":  "Something went wrong"
 	},
 	"error_Default_Message" : {
-		"message":  "If the problem persists, submit an issue for the xBrowserSync team at https://github.com/xBrowserSync/App."
+		"message":  "If the problem persists, submit an issue to the xBrowserSync team at github.com/xBrowserSync/App."
 	},
 	"error_HttpRequestFailed_Title" : {
 		"message":  "Connection lost"
 	},
 	"error_HttpRequestFailed_Message" : {
 		"message":  "Couldn't connect to the xBrowserSync service, check the service status in the Settings panel."
+	},
+	"error_HttpRequestFailedWhileUpdating_Title" : {
+		"message":  "Connection lost"
+	},
+	"error_HttpRequestFailedWhileUpdating_Message" : {
+		"message":  "Your sync will be retried automatically when connection is restored."
 	},
 	"error_TooManyRequests_Title" : {
 		"message":  "Slow down!"

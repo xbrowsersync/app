@@ -18,6 +18,9 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 	var checkServiceStatus = function(url) {
 		return getServiceInformation(url)
 			.then(function(response) {
+				// Reset network disconnected flag
+				globals.Network.Disconnected.Set(false);
+
 				if (!response) {
 					return $q.reject();
 				}
@@ -40,6 +43,9 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 		return $http.post(globals.URL.Host.Get() + globals.URL.Bookmarks,
 			JSON.stringify(data))
             .then(function(response) {
+				// Reset network disconnected flag
+				globals.Network.Disconnected.Set(false);
+
 				if (!!response && !!response.data) {
 					return response.data;
 				}
@@ -67,6 +73,9 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 		return $http.get(globals.URL.Host.Get() + globals.URL.Bookmarks + '/' + globals.Id.Get(), 
 						 { timeout: canceller })
             .then(function(response) {
+				// Reset network disconnected flag
+				globals.Network.Disconnected.Set(false);
+
 				if (!!response && !!response.data) {
 					return response.data;
 				}
@@ -101,6 +110,9 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 		return $http.get(globals.URL.Host.Get() + globals.URL.Bookmarks + 
 			'/' + globals.Id.Get() + globals.URL.LastUpdated)
             .then(function(response) {
+				// Reset network disconnected flag
+				globals.Network.Disconnected.Set(false);
+
 				if (!response || !response.data) {
 					return response;
 				}
@@ -131,6 +143,9 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 		return $http.put(globals.URL.Host.Get() + globals.URL.Bookmarks + '/' + globals.Id.Get(),
 			JSON.stringify(data))
             .then(function(response) {
+				// Reset network disconnected flag
+				globals.Network.Disconnected.Set(false);
+
 				if (!!response && !!response.data) {
 					return response.data;
 				}
@@ -160,6 +175,9 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
             err.code = globals.ErrorCodes.HttpRequestFailed;
             return err;
         }
+
+		// Reset network disconnected flag
+		globals.Network.Disconnected.Set(false);
        
         switch (httpErr.status) {
             // 405 Method Not Allowed: server not accepting new syncs
@@ -183,6 +201,10 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 				err.code = globals.ErrorCodes.TooManyRequests;
 				globals.SyncEnabled.Set(false); // Disable sync				
 				break;
+			// -1: No network connection
+			case -1:
+				globals.Network.Disconnected.Set(true);
+				/* falls through */
 			// Otherwise generic request failed
 			default:
                 err.code = globals.ErrorCodes.HttpRequestFailed;
@@ -205,6 +227,9 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 			timeout: 3000,
 		})
         	.then(function(response) {
+				// Reset network disconnected flag
+				globals.Network.Disconnected.Set(false);
+				
 				if (!!response && !!response.data) {
 					return response.data;
 				}

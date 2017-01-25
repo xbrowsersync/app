@@ -10,7 +10,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks) {
     'use strict';
 	
-	var asyncChannel, moduleName = 'xBrowserSync.App.Background';
+	var asyncChannel, moduleName = 'xBrowserSync.App.Background', networkErrorDetected = false;
 
 /* ------------------------------------------------------------------------------------
  * Constructor
@@ -56,7 +56,22 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 				type: globals.UpdateType.Update, 
 				data: [id, changeInfo]
 			}
-		});
+		})
+			.catch(function(err) {
+				// Log error
+				utility.LogMessage(
+					moduleName, 'changeBookmark', utility.LogType.Error,
+					JSON.stringify(err));
+				
+				// Display alert
+				var errMessage = utility.GetErrorMessageFromException(err);
+				displayAlert(errMessage.title, errMessage.message);
+
+				// If data out of sync, refresh sync
+				if (!!err && !!err.code && err.code === globals.ErrorCodes.DataOutOfSync) {
+					syncBookmarks({ type: globals.SyncType.Pull });
+				}
+			});
 	};
 	
 	var createBookmark = function(id, bookmark) {
@@ -81,7 +96,22 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 				type: globals.UpdateType.Create, 
 				data: [id, bookmark]
 			}
-		});
+		})
+			.catch(function(err) {
+				// Log error
+				utility.LogMessage(
+					moduleName, 'createBookmark', utility.LogType.Error,
+					JSON.stringify(err));
+				
+				// Display alert
+				var errMessage = utility.GetErrorMessageFromException(err);
+				displayAlert(errMessage.title, errMessage.message);
+
+				// If data out of sync, refresh sync
+				if (!!err && !!err.code && err.code === globals.ErrorCodes.DataOutOfSync) {
+					syncBookmarks({ type: globals.SyncType.Pull });
+				}
+			});
 	};
 	
 	var displayAlert = function(title, message, callback) {
@@ -109,31 +139,30 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			
 			bookmarks.CheckForUpdates()
 				.then(function() {
-					// Reset fail counter
-					globals.CheckForUpdates.Attempts.Set(0);
+					// As connection succeeded, reset network error displayed flag
+					globals.Network.DisconnectedAlertDisplayed.Set(false)
 				})
 				.catch(function(err) {
-					// Increment counter
-					globals.CheckForUpdates.Attempts.Set(globals.CheckForUpdates.Attempts.Get() + 1);
-					
-					// If the error is a network error, only display an alert if the counter has reached
-					// max number of retries.
-					if (err.code === globals.ErrorCodes.HttpRequestFailed &&
-						globals.CheckForUpdates.Attempts.Get() < globals.CheckForUpdates.MaxRetries) {
-						return;
-					}
-					
-					// Display alert
-					var errMessage = utility.GetErrorMessageFromException(err);
-					displayAlert(errMessage.title, errMessage.message);
-
 					// Log error
 					utility.LogMessage(
 						moduleName, 'handleAlarm', utility.LogType.Error,
 						JSON.stringify(err));
-					
-					// Reset counter
-					globals.CheckForUpdates.Attempts.Set(0);
+
+					// If network error, only display an alert on the first error, or if the user
+					// is pushing an update
+					if (!!globals.Network.Disconnected.Get()) {
+						// Return if this is not an update and network error detected previously
+						if (err.code === globals.ErrorCodes.HttpRequestFailed && !!globals.Network.DisconnectedAlertDisplayed.Get()) {
+							return;
+						}
+
+						// Set network error displayed flag
+						globals.Network.DisconnectedAlertDisplayed.Set(true);
+					}
+						
+					// Display alert
+					var errMessage = utility.GetErrorMessageFromException(err);
+					displayAlert(errMessage.title, errMessage.message);
 				});
 		}
 	};
@@ -224,7 +253,22 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 				type: globals.UpdateType.Move, 
 				data: [id, moveInfo]
 			}
-		});
+		})
+			.catch(function(err) {
+				// Log error
+				utility.LogMessage(
+					moduleName, 'moveBookmark', utility.LogType.Error,
+					JSON.stringify(err));
+				
+				// Display alert
+				var errMessage = utility.GetErrorMessageFromException(err);
+				displayAlert(errMessage.title, errMessage.message);
+
+				// If data out of sync, refresh sync
+				if (!!err && !!err.code && err.code === globals.ErrorCodes.DataOutOfSync) {
+					syncBookmarks({ type: globals.SyncType.Pull });
+				}
+			});
 	};
 	
 	var removeBookmark = function(id, removeInfo) {
@@ -378,7 +422,7 @@ xBrowserSync.App.API.$inject = ['$http', '$q', 'globals', 'utility'];
 xBrowserSync.App.ChromeBackground.factory('api', xBrowserSync.App.API);
 
 // Add bookmarks service
-xBrowserSync.App.Bookmarks.$inject = ['$q', 'platform', 'globals', 'api', 'utility'];
+xBrowserSync.App.Bookmarks.$inject = ['$q', '$timeout', 'platform', 'globals', 'api', 'utility'];
 xBrowserSync.App.ChromeBackground.factory('bookmarks', xBrowserSync.App.Bookmarks);
 
 // Add platform implementation service

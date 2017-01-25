@@ -63,22 +63,6 @@ xBrowserSync.App.Global = function(platform) {
                 }
             }
         },
-        CheckForUpdates: {
-            Attempts: {
-                Get: function() {
-                    var attempts = platform.LocalStorage.Get('xBrowserSync-checkForUpdatesAttempts') || '0';
-                    return parseInt(attempts);
-                },
-                Set: function(value) {
-                    value = (!value) ? '0' : value;
-                    
-                    platform.LocalStorage.Set(
-                        'xBrowserSync-checkForUpdatesAttempts', 
-                        value);
-                }
-            },
-            MaxRetries: 3
-        },
         ClientSecret: {
             Get: function() {
                 return platform.LocalStorage.Get(
@@ -204,6 +188,8 @@ xBrowserSync.App.Global = function(platform) {
             Error_Default_Message: 'error_Default_Message',
             Error_HttpRequestFailed_Title: 'error_HttpRequestFailed_Title',
             Error_HttpRequestFailed_Message: 'error_HttpRequestFailed_Message',
+            Error_HttpRequestFailedWhileUpdating_Title: 'error_HttpRequestFailedWhileUpdating_Title',
+            Error_HttpRequestFailedWhileUpdating_Message: 'error_HttpRequestFailedWhileUpdating_Message',
             Error_TooManyRequests_Title: 'error_TooManyRequests_Title',
             Error_TooManyRequests_Message: 'error_TooManyRequests_Message',
 			Error_RequestEntityTooLarge_Title: 'error_RequestEntityTooLarge_Title',
@@ -246,20 +232,6 @@ xBrowserSync.App.Global = function(platform) {
             Error_ShareFailed_Title: 'error_ShareFailed_Title',
             Error_FailedBackupData_Title: 'error_FailedBackupData_Title',
             Error_InvalidUrlScheme_Title: 'error_InvalidUrlScheme_Title'
-        },
-        MetadataCollection: {
-            Get: function() {
-                var metadata = platform.LocalStorage.Get(
-                    'xBrowserSync-metadataColl');
-                return (!metadata) ? [] : JSON.parse(metadata);
-            },
-            Set: function(value) {
-                value = (!value) ? '' : JSON.stringify(value);
-                
-                platform.LocalStorage.Set(
-                    'xBrowserSync-metadataColl', 
-                    value);
-            }
         },
         DisableEventListeners: {
             Get: function() {
@@ -338,11 +310,12 @@ xBrowserSync.App.Global = function(platform) {
         },
         ErrorCodes: {
             HttpRequestFailed: 10000,
-            HttpRequestCancelled: 10001,
-            TooManyRequests: 10002,
-            RequestEntityTooLarge: 10003,
-            NotAcceptingNewSyncs: 10004,
-            DailyNewSyncLimitReached: 10005,
+            HttpRequestFailedWhileUpdating: 10001,
+            HttpRequestCancelled: 10002,
+            TooManyRequests: 10003,
+            RequestEntityTooLarge: 10004,
+            NotAcceptingNewSyncs: 10005,
+            DailyNewSyncLimitReached: 10006,
             MissingClientData: 10100, 
             AmbiguousSyncRequest: 10101,
             FailedGetLocalBookmarks: 10102,
@@ -425,12 +398,79 @@ xBrowserSync.App.Global = function(platform) {
             }
         },
         LookaheadMinChars: 1,
+        MetadataCollection: {
+            Get: function() {
+                var metadata = platform.LocalStorage.Get(
+                    'xBrowserSync-metadataColl');
+                return (!metadata) ? [] : JSON.parse(metadata);
+            },
+            Set: function(value) {
+                value = (!value) ? '' : JSON.stringify(value);
+                
+                platform.LocalStorage.Set(
+                    'xBrowserSync-metadataColl', 
+                    value);
+            }
+        },
+        Network: {
+            Disconnected: {
+                Get: function() {
+                    var value;
+                    
+                    value = platform.LocalStorage.Get(
+                        'xBrowserSync-networkDisconnected');
+                    
+                    if (!value) {
+                        return true;
+                    }
+                    else {
+                        if (value === 'true') {
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+                    }
+                },
+                Set: function(value) {
+                    platform.LocalStorage.Set(
+                        'xBrowserSync-networkDisconnected', 
+                        value);
+                }
+            },
+            DisconnectedAlertDisplayed: {
+                Get: function() {
+                    var value;
+                    
+                    value = platform.LocalStorage.Get(
+                        'xBrowserSync-networkDisconnectedAlertDisplayed');
+                    
+                    if (!value) {
+                        return true;
+                    }
+                    else {
+                        if (value === 'true') {
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+                    }
+                },
+                Set: function(value) {
+                    platform.LocalStorage.Set(
+                        'xBrowserSync-networkDisconnectedAlertDisplayed', 
+                        value);
+                }
+            }
+        },
         Platforms: {
             Android: 'android',
             Chrome: 'chrome',
             IOS: 'ios'
         },
-        RetrySyncTimeout: 100,
+        SyncPollTimeout: 100,
+        RetryFailedSyncTimeout: 10000,
         ServiceStatus: {
             Online: 1,
             Offline: 2,

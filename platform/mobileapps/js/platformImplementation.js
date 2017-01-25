@@ -330,13 +330,19 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Something went wrong"
 		},
 		"error_Default_Message" : {
-			"message":  "If the problem persists, submit an issue for the xBrowserSync team at https://github.com/xBrowserSync/App."
+			"message":  "If the problem persists, <a href='https://github.com/xBrowserSync/App' class='new-tab'>submit an issue</a> to the xBrowserSync team."
 		},
 		"error_HttpRequestFailed_Title" : {
 			"message":  "Connection lost"
 		},
 		"error_HttpRequestFailed_Message" : {
 			"message":  "Couldn't connect to the xBrowserSync service, check the service status in the Settings panel."
+		},
+		"error_HttpRequestFailedWhileUpdating_Title" : {
+			"message":  "Connection lost"
+		},
+		"error_HttpRequestFailedWhileUpdating_Message" : {
+			"message":  "Your sync will be retried automatically when connection is restored."
 		},
 		"error_TooManyRequests_Title" : {
 			"message":  "Slow down"
@@ -976,6 +982,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Set back button event
 		document.addEventListener('backbutton', handleBackButton, false);
 
+		// Set network online event
+		document.addEventListener('online', handleNetworkReconnected, false);
+
 		// Don't display iOS specific help panels
 		if (vm.platformName === vm.globals.Platforms.Android) {
 			vm.events.introPanel8_Next_Click = function() {
@@ -1043,6 +1052,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			// On main view, exit app
 			event.preventDefault();
 			navigator.app.exitApp();
+		}
+	};
+
+	var handleNetworkReconnected = function () {
+		// If a previous sync failed due to lost connection, resync now
+		if (!!globals.Network.Disconnected.Get()) {
+			sync(vm, { type: globals.SyncType.Push });
 		}
 	};
 
