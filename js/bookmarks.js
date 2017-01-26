@@ -286,6 +286,10 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 }
             }
             else {
+                // Encrypt bookmarks and add to cache
+                var encryptedBookmarks = utility.EncryptData(JSON.stringify(bookmarks));
+                globals.Cache.Bookmarks.Set(encryptedBookmarks);
+
                 getBookmarks = $q.resolve(bookmarks);
             }
             
