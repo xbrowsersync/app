@@ -15,8 +15,7 @@
     "default_title": "__MSG_title__"
   },
   "background": {
-    "page": "background.html",
-    "persistent": false
+    "page": "background.html"
   },
   "content_scripts": [
     {

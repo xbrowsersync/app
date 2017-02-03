@@ -1,3 +1,11 @@
+.container {
+    display: none;
+
+    &.done-loading {
+        display: block;
+    }
+}
+
 .view {
     width: 320px;
     height: 480px;

@@ -136,11 +136,18 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
 				return;
 			}
+
+			var networkPreviouslyDisconnected = globals.Network.Disconnected.Get();
 			
 			bookmarks.CheckForUpdates()
 				.then(function() {
 					// As connection succeeded, reset network error displayed flag
 					globals.Network.DisconnectedAlertDisplayed.Set(false)
+
+					// Alert the user if a previous update that failed has now synced
+					if (!!networkPreviouslyDisconnected) {
+						displayAlert(platform.GetConstant(globals.Constants.ConnRestored_Title), platform.GetConstant(globals.Constants.ConnRestored_Message));
+					}
 				})
 				.catch(function(err) {
 					// Log error
@@ -151,8 +158,10 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					// If network error, only display an alert on the first error, or if the user
 					// is pushing an update
 					if (!!globals.Network.Disconnected.Get()) {
-						// Return if this is not an update and network error detected previously
-						if (err.code === globals.ErrorCodes.HttpRequestFailed && !!globals.Network.DisconnectedAlertDisplayed.Get()) {
+						// Return if this is not an update and network error detected previously, or if attempting to 
+						// sync after a previously failed attempt due to network error
+						if ((err.code === globals.ErrorCodes.HttpRequestFailed && !!globals.Network.DisconnectedAlertDisplayed.Get()) ||
+							err.code === globals.ErrorCodes.HttpRequestFailedWhileUpdating) {
 							return;
 						}
 

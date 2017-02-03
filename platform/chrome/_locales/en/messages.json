@@ -308,11 +308,17 @@
 	"working_Message" : {
 		"message":  "Don't close the window yet."
 	},
+	"connRestored_Title" : {
+		"message":  "Connection restored"
+	},
+	"connRestored_Message" : {
+		"message":  "Your xBrowserSync changes have been synced."
+	},
 	"error_Default_Title" : {
 		"message":  "Something went wrong"
 	},
 	"error_Default_Message" : {
-		"message":  "If the problem persists, submit an issue to the xBrowserSync team at github.com/xBrowserSync/App."
+		"message":  "If this problem recurs, <a href='https://github.com/xBrowserSync/App' class='new-tab'>submit an issue</a>."
 	},
 	"error_HttpRequestFailed_Title" : {
 		"message":  "Connection lost"

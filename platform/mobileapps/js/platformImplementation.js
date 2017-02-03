@@ -326,11 +326,17 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"working_Message" : {
 			"message":  "Don't close the window yet."
 		},
+		"connRestored_Title" : {
+			"message":  "Connection restored"
+		},
+		"connRestored_Message" : {
+			"message":  "Your xBrowserSync changes have been synced."
+		},
 		"error_Default_Title" : {
 			"message":  "Something went wrong"
 		},
 		"error_Default_Message" : {
-			"message":  "If the problem persists, <a href='https://github.com/xBrowserSync/App' class='new-tab'>submit an issue</a> to the xBrowserSync team."
+			"message":  "If this problem recurs, submit an issue at github.com/xBrowserSync/App."
 		},
 		"error_HttpRequestFailed_Title" : {
 			"message":  "Connection lost"
@@ -995,11 +1001,15 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		}
 		
 		if (vm.view.current === vm.view.views.search) {
-			// Focus on search box and show keyboard
+			// Focus on search box
 			$timeout(function() {
 				document.querySelector('input[name=txtSearch]').focus();
-				cordova.plugins.Keyboard.show();
 			}, 100);
+
+			// Show keyboard with delay due to plugin bug hiding keyboard on startup
+			$timeout(function() {
+				cordova.plugins.Keyboard.show();
+			}, 2000);
 		}
 
 		// Use toasts for alerts
@@ -1057,7 +1067,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	var handleNetworkReconnected = function () {
 		// If a previous sync failed due to lost connection, resync now
 		if (!!globals.Network.Disconnected.Get()) {
-			sync(vm, { type: globals.SyncType.Push });
+			bookmarks.Sync()
+				.then(function() {
+					vm.alert.display(platform.GetConstant(globals.Constants.ConnRestored_Title), platform.GetConstant(globals.Constants.ConnRestored_Message));
+				});
 		}
 	};
 

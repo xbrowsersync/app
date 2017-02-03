@@ -9,7 +9,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, utility) { 
     'use strict';
     
-    var moduleName = 'xBrowserSync.App.Bookmarks', retryFailedSync, syncQueue = [];
+    var moduleName = 'xBrowserSync.App.Bookmarks', syncQueue = [];
 
 /* ------------------------------------------------------------------------------------
  * Public functions
@@ -21,21 +21,27 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             return $q.resolve();
 		}
         
-        // Check if bookmarks have been updated
-		return api.GetBookmarksLastUpdated()
-            .then(function(data) {
-				if (!data || !data.lastUpdated) {
-					return $q.reject({ code: globals.ErrorCodes.NoDataFound });
-				}
-				
-				var lastUpdated = new Date(data.lastUpdated);
-				
-				// If last updated is different the date in local storage, refresh bookmarks
-				if (!globals.LastUpdated.Get() || globals.LastUpdated.Get().getTime() !== lastUpdated.getTime()) {
-					// Run sync
-                    return queueSync({ type: globals.SyncType.Pull });
-				}
-			});
+        if (!!globals.Network.Disconnected.Get()) {
+            // If a previous sync failed due to lost connection, resync now
+			return queueSync();
+        }
+        else {
+            // Check if bookmarks have been updated
+            return api.GetBookmarksLastUpdated()
+                .then(function(data) {
+                    if (!data || !data.lastUpdated) {
+                        return $q.reject({ code: globals.ErrorCodes.NoDataFound });
+                    }
+                    
+                    var lastUpdated = new Date(data.lastUpdated);
+                    
+                    // If last updated is different the date in local storage, refresh bookmarks
+                    if (!globals.LastUpdated.Get() || globals.LastUpdated.Get().getTime() !== lastUpdated.getTime()) {
+                        // Run sync
+                        return queueSync({ type: globals.SyncType.Pull });
+                    }
+                });
+        }
 	};
 	
 	var exportBookmarks = function() {
@@ -178,15 +184,18 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
     };
 	
 	var queueSync = function(syncData) {
-        syncData.deferred = $q.defer();
+        var deferred = $q.defer();
         
-        // Add sync to queue
-        syncQueue.push(syncData);
-        
+        if (!!syncData) {
+            syncData.deferred = deferred;
+            
+            // Add sync to queue
+            syncQueue.push(syncData);
+        }
+
         // Trigger sync
-        sync(syncData.deferred);
-        
-        return syncData.deferred.promise;
+        sync(deferred);
+        return deferred.promise;
     };
 	
 	var refreshCachedBookmarks = function(bookmarks) {
@@ -520,18 +529,16 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
 			$timeout(sync, globals.SyncPollTimeout);
 			return;
 		}
-
-        // Clear any active failed sync retry
-        if (!!retryFailedSync) {
-            clearTimeout(retryFailedSync);
-            retryFailedSync = null;
-        }
         
         // Get next queued sync (process syncs in order )
         var currentSync = syncQueue.shift();
         
         // Queue is empty, return
         if (!currentSync) {
+            if (!!deferredToResolve) {
+                deferredToResolve.resolve();
+            }
+
             return;
         }
         
@@ -581,8 +588,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                     // return specific error code
                     if (currentSync.type !== globals.SyncType.Pull) {
                         syncQueue.unshift(currentSync);
-                        retryFailedSync = $timeout(sync, globals.RetryFailedSyncTimeout);
-                        
                         deferredToResolve.reject({ 
                             code: globals.ErrorCodes.HttpRequestFailedWhileUpdating 
                         });

@@ -184,6 +184,8 @@ xBrowserSync.App.Global = function(platform) {
             BookmarkPanel_Button_UpdateBookmark_Label: 'bookmarkPanel_Button_UpdateBookmark_Label',
             Working_Title: 'working_Title',
             Working_Message: 'working_Message',
+            ConnRestored_Title: 'connRestored_Title',
+            ConnRestored_Message: 'connRestored_Message',
             Error_Default_Title: 'error_Default_Title',
             Error_Default_Message: 'error_Default_Message',
             Error_HttpRequestFailed_Title: 'error_HttpRequestFailed_Title',
@@ -470,7 +472,6 @@ xBrowserSync.App.Global = function(platform) {
             IOS: 'ios'
         },
         SyncPollTimeout: 100,
-        RetryFailedSyncTimeout: 10000,
         ServiceStatus: {
             Online: 1,
             Offline: 2,
