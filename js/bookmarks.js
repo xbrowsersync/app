@@ -21,7 +21,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             return $q.resolve();
 		}
         
-        if (!!globals.Network.Disconnected.Get()) {
+        if (!!globals.Network.Disconnected.Get() && syncQueue.length > 0) {
             // If a previous sync failed due to lost connection, resync now
 			return queueSync();
         }
@@ -290,7 +290,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                             // Add encrypted bookmark data to cache
                             globals.Cache.Bookmarks.Set(data.bookmarks);
 
-                            return bookmarks;                            
+                            return bookmarks;
                         });
                 }
             }
@@ -574,7 +574,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         syncPromise
             // Resolve original sync deferred
             .then(function() {
-                deferredToResolve.resolve();
+                deferredToResolve.resolve(true);
 
                 // If there are items in the queue call sync
                 if (syncQueue.length > 0) {

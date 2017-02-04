@@ -227,9 +227,6 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 			timeout: 3000,
 		})
         	.then(function(response) {
-				// Reset network disconnected flag
-				globals.Network.Disconnected.Set(false);
-				
 				if (!!response && !!response.data) {
 					return response.data;
 				}

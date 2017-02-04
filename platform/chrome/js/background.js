@@ -140,12 +140,15 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			var networkPreviouslyDisconnected = globals.Network.Disconnected.Get();
 			
 			bookmarks.CheckForUpdates()
-				.then(function() {
+				.then(function(syncUpdated) {
 					// As connection succeeded, reset network error displayed flag
 					globals.Network.DisconnectedAlertDisplayed.Set(false)
 
+					// Reset network disconnected flag
+        			globals.Network.Disconnected.Set(false);
+
 					// Alert the user if a previous update that failed has now synced
-					if (!!networkPreviouslyDisconnected) {
+					if (!!networkPreviouslyDisconnected && !!syncUpdated) {
 						displayAlert(platform.GetConstant(globals.Constants.ConnRestored_Title), platform.GetConstant(globals.Constants.ConnRestored_Message));
 					}
 				})
