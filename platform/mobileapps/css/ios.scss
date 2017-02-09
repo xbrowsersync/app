@@ -1,0 +1,23 @@
+@import 'variables.scss';
+
+#about-panel, #login-panel, #search-panel, #bookmark-panel, #settings-panel {
+    padding-top: 30px;
+}
+
+#about-panel h1 {
+    top: 20px;
+}
+
+#search-panel .search-results-panel {
+    @media (min-device-height: $height-mobile-medium) {
+        top: calc(7.3em + 20px);
+    }
+
+    @media (min-device-height: $height-mobile-large) {
+        top: calc(7.1em + 20px);
+    }
+
+    @media (min-device-height: $height-mobile-xlarge) {
+        top: calc(6.7em + 20px);
+    }
+}

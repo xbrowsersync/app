@@ -25,7 +25,7 @@ xBrowserSync.App.Content = function() {
         
         // Return metadata to caller
         chrome.runtime.sendMessage({
-            command: 'getPageMetadata',
+            command: 4,
             metadata: metadata
         });
 	};

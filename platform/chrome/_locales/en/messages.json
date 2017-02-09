@@ -17,6 +17,18 @@
 	"tooltipWorking": {
 		"message": "syncing..."
 	},
+	"aboutPanel_Title" : {
+		"message": "What's new in version"
+	},
+	"aboutPanel_WebsiteLink_Label" : {
+		"message": "Website"
+	},
+	"aboutPanel_GitHubLink_Label" : {
+		"message": "Git Hub Repos"
+	},
+	"aboutPanel_VersionHistoryLink_Label" : {
+		"message": "Full release history"
+	},
 	"button_Help_Label": {
 		"message": "Display help"
 	},
@@ -27,7 +39,7 @@
 		"message": "Previous"
 	},
 	"introPanel1_Message": {
-		"message": "<h4>Welcome</h4><p>Thanks for installing xBrowserSync!</p><p>Have a read through the following pages to help you get started. Should you require futher help, check out the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
+		"message": "<h4>Welcome</h4><p>Thanks for using xBrowserSync &mdash; browser syncing as it should be: secure, anonymous and free!</p><p>Take some time to read through the following pages to get aquainted with xBrowserSync's features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
 	},
 	"introPanel2_Message": {
 		"message": "<h4>Your secret word</h4><p>To begin, enter a secret word or phrase that will be used to encrypt and decrypt your browser data.</p><p>Make it strong to protect your data but also memorable, if you forget it we can't remind you and you won't be able to decrypt your data without it.</p>"
@@ -45,34 +57,40 @@
 		"message": "<h4>New service, new ID</h4><p>IDs are service-specific. If you have created a sync and received an xBrowserSync ID with one service it cannot be used with another.</p><p>Whenever you change services you must create a new sync. You'll then receive a new ID for use with that service.</p>"
 	},
 	"introPanel7_Message": {
-		"message": "<h4>Use it or lose it</h4><p>Service space is limited. If you do not use xBrowserSync for an extended period, any syncs you have created may be deleted to make room for others.</p><p>If you're synced, whenever you have your browser open xBrowserSync will sync regularly in the background which will prevent your sync from being deleted.</p>"
-	},
-	"introPanel8_Message": {
 		"message": "<h4>Searching your bookmarks</h4><p>Once synced, all of your bookmarks will be available in the local browser which can be searched easily on the Search panel.</p><p>From there you can also modify or delete existing bookmarks. Just hover the mouse over a specific search result and click the pen icon to edit the bookmark.</p>"
 	},
+	"introPanel8_Message": {
+		"message": "<h4>Native features supported</h4><p>Feel free to use your browser's native bookmarking features whilst synced, any changes you make will be synced automatically.</p><p>xBrowserSync will respect your existing bookmarks hierarchy, and will even add description and tags metadata to bookmarks added via the native bookmark button.</p>"
+	},
 	"introPanel9_Message": {
-		"message": "<h4>Native features supported</h4><p>Feel free to use your browser's native bookmarking features whilst synced, any changes you make there will be synced by xBrowserSync automatically.</p><p>If you have spent time organising your bookmarks don't worry, xBrowserSync will respect your existing bookmarks hierarchy!</p>"
+		"message": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel where you can modify the description and tags &mdash; providing good metadata means more relevant results when searching.</p><p>Alternatively, simply click the default browser bookmark button as you normally would and xBrowserSync will automatically add the page's default description and tags.</p>"
 	},
 	"introPanel10_Message": {
-		"message": "<h4>Adding a bookmark</h4><p>You can add the current page as a bookmark (or modify it if it is bookmarked already) by clicking on the bookmark icon in the Search panel.</p><p>Include a description which will be displayed in search results, and add tags to help find the bookmark more easily when searching.</p>"
+		"message": "<h4>Remember to back up</h4><p>xBrowserSync services are run voluntarily, plus servers can break and go wrong so please look after your data and make sure to keep backups.</p><p>Open the Settings panel and in the Back up and restore tab you can back up your unencrypted synced data to a local file, which can then restored at a later date should you need to.</p>"
 	},
 	"introPanel11_Message": {
-		"message": "<h4>Remember to back up</h4><p>Back up and restore for your browser data is available via the Settings panel.</p><p>Back up saves your unencrypted browser data to a text file. Restore syncs your backed up data. If you are not currently synced, only local browser data will be affected.</p>"
-	},
-	"introPanel12_Message": {
 		"message": "<h4>When switching services</h4><p>Back up your synced data using the first service before creating a new sync with the second, then restore your backed up data to the second service.</p><p>This will ensure that any bookmark descriptions and tags that are not supported natively by your browser are also synced.</p>"
 	},
-	"introPanel13_Message": {
+	"introPanel12_Message": {
 		"message": "<h4>Shortcut xBrowserSync</h4><p>To access xBrowserSync quickly, assign a keyboard shortcut to activate the extension then just start typing to search your bookmarks.</p><p>Browse to chrome://extensions/, the keyboard shortcuts option is at the bottom of the page."
+	},
+	"introPanel13_Message": {
+		"message": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync mobile app, available on the iOS and Android app stores.</p>"
 	},
 	"introPanel14_Message": {
 		"message": "<h4>Noticed an issue?</h4><p>If you've found a bug in xBrowserSync or would like to request a new feature, head on over to Git Hub and <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>submit an issue</a>.</p><p>Calling all coders! If you would like to help make xBrowserSync better, go ahead and fork the <a href='https://github.com/xBrowserSync/App' class='new-tab'>xBrowserSync Git Hub repo</a> and submit a pull request.</p>"
+	},
+	"button_About_Label": {
+		"message": "About"
 	},
 	"button_Settings_Label": {
 		"message": "Settings"
 	},
 	"button_AddBookmark_Label": {
 		"message": "Add bookmark"
+	},
+	"button_DeleteBookmark_Label": {
+		"message": "Delete bookmark"
 	},
 	"button_EditBookmark_Label": {
 		"message": "Edit bookmark"
@@ -89,16 +107,19 @@
 	"field_Id_Description": {
 		"message": "Your xBrowserSync ID (optional)"
 	},
+	"button_ScanCode_Label": {
+		"message": "Scan your xBrowserSync ID"
+	},
 	"button_Sync_Enable_Label": {
 		"message": "Sync"
 	},
 	"button_Sync_Disable_Label": {
 		"message": "Disable Sync"
 	},
-	"confirmReplaceBookmarks_Title" : {
+	"confirmSync_Title" : {
 		"message":  "Overwrite browser data?"
 	},
-	"confirmReplaceBookmarks_Message" : {
+	"confirmSync_Message" : {
 		"message":  "xBrowserSync data will overwrite local browser data. OK to proceed?"
 	},
 	"button_Confirm_Label" : {
@@ -112,6 +133,12 @@
 	},
 	"noSearchResults_Message" : {
 		"message":  "No bookmarks found"
+	},
+	"shareBookmark_Prompt": {
+		"message":  "Share bookmark with"
+	},
+	"shareBookmark_Title": {
+		"message":  "shared via xBrowserSync"
 	},
 	"syncBookmarksToolbarConfirmation_Message": {
 		"message":  "<p>Enabling syncing of the bookmarks bar will replace the bookmarks currently in the bookmarks bar with your synced bookmarks. OK to proceed?</p>"
@@ -155,6 +182,9 @@
 	"backupRestore_Message" : {
 		"message":  "<p>Back up your xBrowserSync data or restore from a previous backup.</p><p>If sync is not enabled, back up and restore will apply to local browser data only.</p>"
 	},
+	"backupRestore_NotSynced_Message": {
+		"message": "<p>Back up and restore will be available here once you are synced.</p>"
+	},
 	"button_Backup_Label" : {
 		"message":  "Back Up"
 	},
@@ -164,11 +194,23 @@
 	"button_Done_Label" : {
 		"message":  "Done"
 	},
+	"button_Clear_Label" : {
+		"message":  "Clear"
+	},
 	"button_Close_Label" : {
 		"message":  "Close"
 	},
+	"button_Back_Label" : {
+		"message":  "Back"
+	},
 	"backupSuccess_Message" : {
-		"message":  "Your data has been backed up to {fileName}, check downloaded files for the location."
+		"message":  "Your unencrypted data has been saved to {fileName}. Check downloaded files for the location."
+	},
+	"backupSuccess_Android_Message" : {
+		"message":  ""
+	},
+	"backupSuccess_IOS_Message" : {
+		"message":  ""
 	},
 	"restoreSuccess_Message" : {
 		"message":  "Your data has been restored."
@@ -178,6 +220,9 @@
 	},
 	"dataToRestore_Label" : {
 		"message":  "Paste backup data"
+	},
+	"button_SelectBackupFile_Label" : {
+		"message":  "Select File"
 	},
 	"button_RestoreData_Label" : {
 		"message":  "Restore Data"
@@ -197,8 +242,20 @@
 	"syncPanel_Id_Label" : {
 		"message":  "Your xBrowserSync ID"
 	},
+	"syncPanel_DisplayQRCode_Label" : {
+		"message":  "Display QR code"
+	},
+	"syncPanel_DisplayDataUsage_Label" : {
+		"message": "Data Usage"
+	},
+	"syncPanel_DisplaySyncOptions_Label" : {
+		"message": "Sync Options"
+	},
 	"syncPanel_SyncBookmarksToolbar_Label" : {
 		"message":  "Include bookmarks bar"
+	},
+	"syncDataUsagePanel_Message" : {
+		"message":  "Current sync data usage"
 	},
 	"confirmRestore_Sync_Message" : {
 		"message":  "As sync is currently enabled, the data being restored will overwrite your xBrowserSync synced data. To restore data to the local browser only, disable sync before restoring. OK to proceed?"
@@ -236,8 +293,11 @@
 	"bookmarkPanel_Button_AddBookmark_Label": {
 		"message": "Add Bookmark"
 	},
-	"bookmarkPanel_Button_RemoveBookmark_Label": {
-		"message": "Remove"
+	"bookmarkPanel_Button_DeleteBookmark_Label": {
+		"message": "Delete"
+	},
+	"bookmarkPanel_Button_ShareBookmark_Label": {
+		"message": "Share"
 	},
 	"bookmarkPanel_Button_UpdateBookmark_Label": {
 		"message": "Update"
@@ -248,17 +308,29 @@
 	"working_Message" : {
 		"message":  "Don't close the window yet."
 	},
+	"connRestored_Title" : {
+		"message":  "Connection restored"
+	},
+	"connRestored_Message" : {
+		"message":  "Your xBrowserSync changes have been synced."
+	},
 	"error_Default_Title" : {
 		"message":  "Something went wrong"
 	},
 	"error_Default_Message" : {
-		"message":  "If the problem persists, submit an issue for the xBrowserSync team at https://github.com/xBrowserSync/App."
+		"message":  "If this problem recurs, <a href='https://github.com/xBrowserSync/App' class='new-tab'>submit an issue</a>."
 	},
 	"error_HttpRequestFailed_Title" : {
 		"message":  "Connection lost"
 	},
 	"error_HttpRequestFailed_Message" : {
 		"message":  "Couldn't connect to the xBrowserSync service, check the service status in the Settings panel."
+	},
+	"error_HttpRequestFailedWhileUpdating_Title" : {
+		"message":  "Connection lost"
+	},
+	"error_HttpRequestFailedWhileUpdating_Message" : {
+		"message":  "Your sync will be retried automatically when connection is restored."
 	},
 	"error_TooManyRequests_Title" : {
 		"message":  "Slow down!"
@@ -362,10 +434,28 @@
 	"error_NotImplemented_Message" : {
 		"message":  "A required function has not been implemented and is causing xBrowserSync to not function correctly."
 	},
+	"error_FailedGetPageMetadata_Title" : {
+		"message":  "Couldn't get URL metadata"
+	},
+	"error_FailedGetPageMetadata_Message" : {
+		"message":  "URL is invalid or webpage data could not be retrieved."
+	},
 	"error_SyncInterrupted_Title" : {
 		"message":  "Sync interrupted"
 	},
 	"error_SyncInterrupted_Message" : {
 		"message":  "A previous sync was interrupted and failed to complete. Re-enable sync to restore your synced data."
+	},
+	"error_ScanFailed_Title" : {
+		"message":  "Scan failed"
+	},
+	"error_ShareFailed_Title" : {
+		"message":  "Share failed"
+	},
+	"error_FailedBackupData_Title" : {
+		"message":  "Backup failed"
+	},
+	"error_InvalidUrlScheme_Title": {
+		"message":  "Only URLs can be shared to xBrowserSync"
 	}
 }

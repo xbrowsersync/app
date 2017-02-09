@@ -27,10 +27,23 @@
 }
 
 body {
-	font-family: $font-stack;
+    font-family: $font-stack;
     color: $colour-text1;
-    font-size: 13px;
-    line-height: 17px;
+    font-size: 14px;
+    line-height: 1.25em;
+    min-width: 320px;
+    @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
+
+    h1 {
+        background: url("../img/logo.svg") 50% 40% no-repeat;
+        background-size: 70%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
 
     h2 {
         font-size: 1.8em;
@@ -51,7 +64,7 @@ body {
         transition: all, ease-in, 0.2s;
         cursor: pointer;
         
-        .active,
+        &.active,
         &:active,
         &:focus,
         &:hover {
@@ -63,6 +76,9 @@ body {
     
     button {
         &.btn {
+            font-size: 14px;
+            border-width: 0;
+            
             &.btn-default {
                 font-size: 1.2em;
                 font-weight: 800;
@@ -75,7 +91,9 @@ body {
                 border-radius: $border-radius;
                 transition: all, ease-in, 0.2s;
                 box-shadow: none;
+                padding: 6px 15px 7px;
                 
+                &:not([disabled]):active,
                 &:not([disabled]):hover {
                     background-color: $colour-text1;
                     color: $colour-link-highlight;
@@ -85,15 +103,17 @@ body {
                 &:not([disabled]):focus {
                     text-decoration: underline;
 
-                    &:hover {
+                    &:active, &:hover {
                         text-decoration: none;
                     }
                 }
 
                 &[disabled] {
-                    @extend .btn-default;
                     opacity: 0.5;
                     cursor: default;
+                    background-color: transparent;
+                    border-color: $colour-text1;
+                    color: $colour-text1;
                 }
             }
             
@@ -104,12 +124,13 @@ body {
                 transition: all, ease-in, 0.2s;
                 box-shadow: none;
                 border-radius: 0;
+                border-bottom: solid 1px transparent;
                 
                 &:focus {
-                    border-bottom: solid 1px $colour-text2;
+                    border-bottom-color: $colour-text2;
                 }
 
-                &:hover {
+                &:active, &:hover {
                     &:focus {
                         border-bottom-color: transparent;
                     }
@@ -125,7 +146,7 @@ body {
                 }
             }
 
-            .active,
+            &.active,
             &.active:focus,
             &:active,
             &:active:focus,
@@ -144,10 +165,11 @@ body {
     
     .alert {
         width: 100%;
+        max-width: $width-tablet;
         border: none;
         border-radius: 0;
         padding: 10px 10px 15px;
-        margin-bottom: 0;
+        margin: 0 auto;
         background-color: $colour-danger;
         border: none;
         color: $colour-text1;
@@ -171,10 +193,18 @@ body {
             }
         }
     }
+
+    .bottom {
+        position: relative;
+        display: table-cell;
+        vertical-align: bottom;
+    }
     
     .buttons {
         text-align: center;
         margin-top: 15px;
+        position: relative;
+        white-space: nowrap;
 
         button {
             margin-right: 10px;
@@ -184,6 +214,14 @@ body {
             }
         }
     }
+
+    .background {
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        z-index: -100;
+        @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
+    }
     
     .confirm {
         p {
@@ -192,16 +230,37 @@ body {
     }
     
     .container {
+        width: 100%;
         padding: 0;
         margin: 0;
-        @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
+
+        &.loading {
+            display: none;
+        }
+    }
+
+    .darken {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        opacity: 0.8;
+        background: $colour-text2;
+    }
+
+    .float-nowrap {
+        width: 200%;
+        overflow: auto;
     }
 
     .form-control {
+        font-size: 1em;
         background-color: $colour-text1; 
         color: $colour-text2;
-        font-size: 1.1em;
-        padding: 20px 15px;
+        height: auto;
+        padding: 10px 20px;
         resize: none;
         border: none;
         border-radius: $border-radius;
@@ -232,15 +291,23 @@ body {
     }
     
     .header-panel {
-        .btn-icon {
-            margin-top: 7px;
-            
-            &.btn-settings, &.btn-close {
+        position: relative;
+        min-height: 1.8em;
+        margin-bottom: 10px;
+        
+        h2 {
+            line-height: 0.8em;
+        }
+
+        button {
+            font-size: 1.1em;
+
+            &.btn-about, &.btn-close, &.btn-settings {
                 float: right;
             }
 
             i {
-                font-size: 1.4em;
+                font-size: 1.6em;
             }
         }
     }
@@ -251,11 +318,17 @@ body {
     
     .lookahead-container {
         position: absolute;
+        top: 0;
+        width: 200%;
         
-        .lookahead {            
+        .lookahead {
+            cursor: pointer;
+            position: relative;
             float: left;
-            color: $colour-text2;
-            opacity: 0.4;
+            z-index: 60;
+            line-height: 1.43;
+            color: $colour-link;
+            background-color: $colour-text1;
             @include css-prefix(user-select, none);
         }
         
@@ -302,6 +375,8 @@ body {
     
     .view {
         padding: 10px;
+        max-width: $width-tablet;
+        margin: 0 auto;
     }
         
     .well {
@@ -328,12 +403,17 @@ body {
             font-weight: normal;
             border-width: 1px;
             font-size: 1.1em;
-            padding: 6px 12px 8px;
-            
+
+            &:not([disabled]):active,
             &:not([disabled]):hover {
                 background-color: $colour-text2;
                 color: $colour-link-highlight;
                 border-color: $colour-text2;
+            }
+
+            &[disabled] {
+                border-color: $colour-text2;
+                color: $colour-text2;
             }
         }
     
@@ -347,15 +427,93 @@ body {
     }
 }
 
-#login-panel, #bookmark-panel, #settings-panel {
-    height: 460px;
+#about-panel {
+    display: table;
+    width: 100%;
+
+    h1 {
+        margin-top: 1.25em;
+        background-position: 50% 0;
+        background-size: 40%;
+    }
+
+    h4 {
+        text-align: center;
+    }
+
+    ul {
+        padding-left: 0;
+        margin-bottom: 15px;
+        list-style: none;
+
+        li {
+            padding-left: 20px;
+            margin-bottom: 10px;
+            position: relative;
+
+            &:before {
+                content: "\f069";
+                font-family: FontAwesome;
+                font-size: 0.8em;
+                position: absolute;
+                left: 0;
+            }
+        }
+    }
+
+    .header-panel {
+        position: absolute;
+        left: 0;
+        z-index: 10;
+        width: 100%;
+        margin-bottom: 0;
+        padding: 0 10px;
+    }
+
+    .links {
+        width: 60%;
+        margin: 0 auto 20px;
+
+        a {
+            color: $colour-text2;
+            opacity: 0.5;
+
+            &.active,
+            &:active,
+            &:active:focus,
+            &:hover {
+                opacity: 1;
+                text-decoration: none;
+            }
+
+            &:focus {
+                text-decoration: underline;
+            }
+            
+            &.right {
+                float: right;
+            }
+        }
+    }
+
+    .well {
+        position: relative;
+        z-index: 50;
+        
+        .contents {
+            height: 45vh;
+            overflow-y: auto;
+            font-size: 0.9em;
+        }
+    }
 }
 
-#loading-panel {
+#working-panel {
     display: table;
-    position: absolute;
+    position: fixed;
     height: 100%;
     width: 100%;
+    z-index: 1000;
     
     .content {
         display: table-cell;
@@ -370,46 +528,51 @@ body {
             color: $colour-link-highlight;
         }
     }
-    
-    .background {
+}
+
+#qr-panel {
+    @extend #working-panel;
+
+    #qr {
+        cursor: pointer;
         position: absolute;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        left: 0;
-        z-index: 100;
-        opacity: 0.8;
-        background: $colour-text2;
+        z-index: 110;
+        left: 50%;
+        top: 50%;
+        margin: -55px 0 0 -55px;
+        border: solid 10px white;
     }
 }
 
 #login-panel {
-    padding: 0 10px 15px;
+    .btn-scanCode {
+        display: none;
+        font-size: 1.8em;
+        position: absolute;
+        top: 0.1em;
+        right: 20px;
+        z-index: 55;
+        border-bottom: none;
+    }
 
     .intro-panel {
-        height: 260px;
+        height: 18em;
+        margin-bottom: 15px;
         overflow: hidden;
+        position: relative;
     
         & > div {
             position: absolute;
-            height: 245px;
-            width: 255px;
-            font-size: 1.1em;
-            line-height: 1.3em;
-            left: 10px;
-            padding: 12px 25px;
+            height: 100%;
+            width: 100%;
+            left: 0;
+            padding: 20px 30px;
+            overflow: hidden;
 
             & > div {
                 position: relative;
                 z-index: 20;
             }
-        }
-
-        h1 {
-            margin: auto;
-            background: url("../img/title.png") 0 40px no-repeat;
-            height: 260px;
-            width: 150px;
         }
 
         .buttons {
@@ -418,7 +581,7 @@ body {
             width: 100%;
             position: absolute;
             left: 0;
-            top: 110px;
+            top: 45%;
             z-index: 10;
 
             button {
@@ -427,19 +590,22 @@ body {
             }
 
             .btn-prev {
-                margin-left: 7px;
+                margin-left: 10px;
+                float: left;
             }
             
             .btn-next {
-                margin-right: 7px;
+                margin-right: 10px;
                 float: right;
             }
         }
     }
+
+    .form-group {
+        position: relative;
+    }
     
     .secret-form-group {
-        position: relative;
-
         input {
             position: relative;
             z-index: 20;
@@ -449,9 +615,10 @@ body {
         .progress {
             position: absolute;
             top: 0;
+            margin: 0;
             z-index: 10;
             box-shadow: none;
-            height: 40px;
+            height: 2.8em;
             width: 100%;
             background-color: transparent;
             border: solid 2px $colour-text1;
@@ -465,39 +632,39 @@ body {
             
         .progress-bar-background {
             background-color: $colour-text1;
-            height: 40px;
+            height: 2.8em;
             width: 100%;
             position: absolute;
             top: 0;
             border-radius: $border-radius;
         }
     }
-
-    #txtId {
-        font-size: 1em;
-        @include placeholder {
-            font-size: 1.1em;
-        }
-    }
 }
 
 #search-panel {
     .header-panel {
-        i {
-            margin-top: 3px;
-        }
+        margin-bottom: 0;
 
-        .btn-toggle-bookmark {
-            float: left;
-            margin-left: 12px;
-            
-            i:before {
-                content: "\f097";
-            }
-            
-            &.active {
-                i:before {
-                    content: "\f02e";
+        .buttons {
+            position: absolute;
+            right: 0;
+            top: -5px;
+
+            button {
+                height: 1.8em;
+
+                &.btn-toggle-bookmark {
+                    right: 1.5em;
+
+                    i:before {
+                        content: "\f097";
+                    }
+                    
+                    &.active {
+                        i:before {
+                            content: "\f02e";
+                        }
+                    }
                 }
             }
         }
@@ -507,45 +674,66 @@ body {
             float: left;
             border-radius: $border-radius;
             background-color: $colour-text1;
-            width: calc(100% - 60px);
+            width: calc(100% - 4.5em);
+            overflow: hidden;
 
             label {
                 position: absolute;
-                left: 13px;
+                top: 0;
+                left: 15px;
                 color: $colour-text2;
                 z-index: 60;
+                margin-bottom: 0;
             }
             
             i {
                 font-size: 1.3em;
-                margin-top: 11px;
+                line-height: 2.2em;
                 opacity: 0.4;
             }
             
             input {
                 position: relative;
                 z-index: 50;
-                padding-left: 35px;
+                height: auto;
+                padding: 5px 40px 5px 40px;
                 font-size: 1.5em;
                 background: transparent;
             }
+
+            .btn-clear {
+                position: absolute;
+                top: 0;
+                right: 15px;
+                font-size: 1em;
+                z-index: 55;
+                border-bottom: none;
+
+                &:hover i {
+                    opacity: 1;
+                }
+            }
             
             .lookahead-container {
-                left: 35px;
+                left: 40px;
+                width: calc(100% - 80px);
+                overflow: hidden;
                 
                 .lookahead {
                     font-size: 1.5em;
-                    padding-top: 12px;
+                    padding: 5px 0;
+                    margin-left: 1px;
+                    text-indent: -1px;
                 }
             }
         }
     }
     
     .search-results-panel {
-        margin-top: 10px;
-        max-height: 300px;
+        height: 100%;
         overflow-y: auto;
         padding: 0;
+        margin-top: 10px;
         
         &.ng-hide {
             margin-top: 0;
@@ -567,41 +755,116 @@ body {
             border: none;
             border-radius: $border-radius;
             padding: 0;
-            margin: 0 10px 10px 0;
+            margin: 0 0 10px 0;
             outline: none;
+            overflow: hidden;
             
             &:last-child {
                 margin-bottom: 0;
             }
         
             &:hover {
+                .btn-edit-bookmark {
+                    display: block;
+                }
+
                 .list-group-item-heading {
                     color: $colour-link-highlight;
                 }
-                    
-                button {
+            }
+
+            &.active {
+                .menu {
+                    @include animation(animate-fade-in 0.2s linear);
                     display: block;
                 }
+            }
+
+            &.deleted {
+                @include animation(animate-slide-out-fold-up 0.5s ease-out);
+                transform: translateX(-105%);
+                max-height: 0px;
+                margin-bottom: 0px;
+                overflow: hidden;
             }
             
             a {
                 border-radius: $border-radius;
                 padding: 12px 30px 12px 20px;
                 display: block;
+                @include css-prefix(user-select, none);
 
                 &:focus {
                     .list-group-item-heading {
-                        text-decoration: underline;
+                        color: $colour-link-highlight;
                     }
                 }
             }
             
-            button {
+            .btn-edit-bookmark {
                 display: none;
                 position: absolute;
                 top: 7px;
                 right: 10px;
                 padding: 5px;
+            }
+
+            .menu {
+                background-color: rgba(8,48,57,0.9);
+                text-align: center;
+                z-index: 60;
+
+                &:before {
+                    content: '';
+                    display: inline-block;
+                    height: 100%; 
+                    vertical-align: middle;
+                }
+
+                .buttons {
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin-top: 0;
+
+                    button {
+                        display: inline-block;
+                        position: static;
+                        background-color: $colour-text1;
+                        color: $colour-text2;
+                        font-size: 1.5em;
+                        border-radius: 100%;
+                        width: 55px;
+                        height: 55px;
+                        margin-right: 20px;
+
+                        &:last-child {
+                            margin-right: 0;
+                        }
+
+                        &.btn-delete-bookmark {
+                            background-color: $colour-danger;
+                        }
+
+                        i {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+
+            .menu, .overlay {
+                display: none;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                border-radius: $border-radius;
+                @include css-prefix(user-select, none);
+                touch-action: none;
+            }
+
+            .overlay {
+                opacity: 0;
+                z-index: 50;
             }
         }
         
@@ -609,8 +872,8 @@ body {
             color: $colour-text2;
             font-size: 1.3em;
             font-weight: normal;
-            line-height: 20px;
-            margin-bottom: 3px;
+            line-height: 1.1em;
+            margin-bottom: 5px;
             transition: all, ease-in, 0.2s;
         }
         
@@ -620,7 +883,7 @@ body {
         
         .description {
             font-style: italic;
-            margin-bottom: 3px;
+            margin-bottom: 5px;
         }
         
         .url {
@@ -645,18 +908,44 @@ body {
             }
         }
     }
+
+    .search-panel-background {
+        display: none;
+        background: url("../img/logo.svg") 50% 0 no-repeat;
+        background-size: 15em;
+        height: 15em;
+        margin-top: 5em;
+        opacity: 0.25;
+        z-index: -50;
+    }
 }
 
 #bookmark-panel {
-    padding: 0 10px 15px;
-    
     textarea {
-        height: 190px;
+        height: 14em;
+        min-height: 7.5em;
+    }
+
+    .btn-delete-bookmark {
+        background-color: $colour-danger;
+
+        &:not([disabled]):active,
+        &:not([disabled]):hover {
+            background-color: $colour-text1;
+            color: $colour-danger;
+            border-color: $colour-text1;
+        }
+    }
+
+    .btn-share-bookmark {
+        display: none;
     }
 
     .tags-form-group {
+        position: relative;
         border-radius: $border-radius;
         background-color: $colour-text1;
+        overflow: hidden;
         
         input {
             text-transform: lowercase;
@@ -666,11 +955,11 @@ body {
         }
 
         .lookahead-container {
-            left: 25px;
+            left: 20px;
             
             .lookahead {
-                font-size: 1.1em;
-                line-height: 2.8;
+                padding: 10px 0;
+                background-color: transparent;
             }
 
             .measure {
@@ -681,7 +970,8 @@ body {
     
     .tags {
         overflow-y: auto;
-        max-height: 56px;
+        overflow-x: hidden;
+        max-height: 60px;
         margin: 10px 0 15px;
         
         .label {
@@ -719,10 +1009,15 @@ body {
 }
 
 #settings-panel {
-    padding: 0 10px 15px;
+    .header-panel {
+        .btn-about {
+            margin-right: 10px;
+        }
+    }
     
     .well {
         padding: 0;
+        overflow: hidden;
         
         h4 {
             padding: 15px 20px;
@@ -731,6 +1026,7 @@ body {
             
             &:hover {
                 i {
+                    transition: all, ease-in, 0.2s;
                     opacity: 1;
                 }
             }
@@ -750,7 +1046,6 @@ body {
             i {
                 opacity: 0.4;
                 float: right;
-                transition: all, ease-in, 0.2s;
             }
         }
         
@@ -760,32 +1055,113 @@ body {
         
         .panel-content {
             padding: 0 20px;
-            height: 235px;
+            height: 17em;
         }
     }
     
     .sync-panel {
-        .id-panel {
-            label {
-                font-weight: normal;
-                margin-bottom: 0;
-            }
-            
-            #id {
-                font-weight: bold;
-                margin: 5px 0 0;
-            }
-            
-            #qr {
-                margin: 10px 0 20px;
+        .buttons {
+            margin: 2em 0;
+            white-space: normal;
+
+            button {
+                margin-bottom: 10px;
             }
         }
         
+        .chart-panel {
+            position: relative;
+            margin-top: 15px;
+
+            %bar {
+                width: $loader-bar-width;
+                height: $loader-bar-height;
+                background-color: $loader-bar-color;
+                border-radius: $loader-bar-radius;
+            }
+
+            .loader {
+                position: absolute;
+                top: 3.3em;
+                left: 50%;
+                margin-left: -2px;
+                @include animation(animate-loader 1s ease 0.1s infinite);
+                @extend %bar;
+                
+                &:before,
+                &:after {
+                    content: "";
+                    position: absolute;
+                    display: block;
+                    @extend %bar;
+                    top: 50%;
+                    transform: translateY(-1 * $loader-bar-height / 2) translateZ(0);
+                }
+  
+                &:before {
+                    left: -1 * ($loader-bar-width + $loader-bar-width/2);
+                    @include animation(animate-loader 1s ease 0s infinite);
+                }
+
+                &:after {
+                    left: $loader-bar-width + $loader-bar-width/2;
+                    @include animation(animate-loader 1s ease 0.2s infinite);
+                }
+            }
+
+            #chart {
+                height: 8em;
+                width: 8em;
+                margin: auto;
+            }
+
+            .values {
+                position: absolute;
+                width: 5em;
+                top: 50%;
+                left: 50%;
+                margin: -1.1em 0 0 -2.5em;
+
+                .percent {
+                    font-size: 2.5em;
+                }
+
+                .max {
+                    display: block;
+                    line-height: 1em;
+                }
+            }
+        }
+
         .checkbox {
-            margin: 15px 0;
-            
-            #syncBookmarksToolbar {
-                margin-top: 2px;
+            margin: 20px 0;
+            font-size: 1.3em;
+            text-align: center;
+
+            input {
+                margin-top: 0;
+                position: relative;
+            }
+
+            label {
+                font-weight: normal;
+                font-size: 0.9em;
+                line-height: 0.9em;
+                margin-bottom: 0;
+            }
+        }
+
+        #id {
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .btn-qrcode {
+            display: block;
+            margin: 5px auto 0;
+
+            i {
+                font-size: 2.5em;                
             }
         }
     }
@@ -794,6 +1170,7 @@ body {
         .status-display {
             i {
                 font-size: 1.2em;
+                line-height: 1.2em;
                 position: relative;
                 margin-right: 2px;
                 vertical-align: top;
@@ -801,11 +1178,13 @@ body {
             
             .status-url {
                 font-size: 1.2em;
+                line-height: 1.2em;
                 max-width: 90%;
             }
 
             .status-url-panel {
-                margin-top: 10px;
+                text-align: center;
+                padding-top: 15px;
             }
             
             span.label {
@@ -815,7 +1194,7 @@ body {
             p.status-message {
                 color: $colour-bg1;
                 margin: 10px 0 0;
-                max-height: 120px;
+                max-height: 7em;
                 overflow-y: auto;
                 font-style: italic;
                 quotes: '\201c' '\201d';
@@ -852,6 +1231,27 @@ body {
                 font-family: "courier new", sans-serif;
                 font-size: 0.8em;
                 height: 115px;
+            }
+
+            #backupFilePanel {
+                display: none;
+
+                button {
+                    margin-right: 0;
+                }
+
+                p {
+                    margin-top: 15px;
+                    min-height: 1.2em;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: 100%;
+                }
+            }
+            
+            #backupFile {
+                display: none;
             }
         }
     }

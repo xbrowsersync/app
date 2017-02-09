@@ -6,15 +6,15 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Implements xBrowserSync.App.Platform for Chrome extension.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, global, utility) {
+xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeout, platform, globals, utility, bookmarks) {
 	'use strict';
 
 /* ------------------------------------------------------------------------------------
  * Platform variables
  * ------------------------------------------------------------------------------------ */
 
-	var bookmarksBarId = '1';
-	var otherBookmarksId = '2';
+	var moduleName = 'xBrowserSync.App.PlatformImplementation', vm;
+	var bookmarksBarId = '1', otherBookmarksId = '2';
 
 
 /* ------------------------------------------------------------------------------------
@@ -23,22 +23,24 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
     
 	var ChromeImplementation = function() {
 		// Inject required platform implementation functions
-		platform.AsyncChannel.Get = getAsyncChannel; 
+		platform.BackupData = backupData;
 		platform.Bookmarks.Clear = clearBookmarks;
-        platform.Bookmarks.ContainsCurrentPage = containsCurrentPage;
 		platform.Bookmarks.Created = bookmarksCreated;
 		platform.Bookmarks.Deleted = bookmarksDeleted;
 		platform.Bookmarks.Get = getBookmarks;
 		platform.Bookmarks.Moved = bookmarksMoved;
 		platform.Bookmarks.Populate = populateBookmarks;
 		platform.Bookmarks.Updated = bookmarksUpdated;
-		platform.Constants.Get = getConstant;
-        platform.CurrentUrl.Get = getCurrentUrl;
-        platform.Interface.Refresh = refreshInterface;
+		platform.GetConstant = getConstant;
+        platform.GetCurrentUrl = getCurrentUrl;
+		platform.GetPageMetadata = getPageMetadata;
+		platform.Init = init;
+        platform.Interface.Loading.Show = displayLoading;
+		platform.Interface.Loading.Hide = hideLoading;
+		platform.Interface.Refresh = refreshInterface;
 		platform.LocalStorage.Get = getFromLocalStorage;
 		platform.LocalStorage.Set = setInLocalStorage;
 		platform.OpenUrl = openUrl;
-		platform.PageMetadata.Get = getPageMetadata;
 		platform.Sync = sync;
         
         // Refresh browser action icon on reload
@@ -49,6 +51,34 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 /* ------------------------------------------------------------------------------------
  * Public functions
  * ------------------------------------------------------------------------------------ */
+	
+	var backupData = function() {
+		// Export bookmarks
+		return bookmarks.Export()
+            .then(function(data) {
+				var date = new Date();
+				var minute = ('0' + date.getMinutes()).slice(-2);
+				var hour = ('0' + date.getHours()).slice(-2);
+				var day = ('0' + date.getDate()).slice(-2);
+				var month = ('0' + (date.getMonth() + 1)).slice(-2);
+				var year = date.getFullYear();
+				var dateString = year + month + day + hour + minute;
+				
+				// Trigger download 
+                var backupLink = document.getElementById('backupLink');
+                var fileName = 'xBrowserSyncBackup_' + dateString + '.txt';
+                backupLink.setAttribute('download', fileName);
+				backupLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(data)));
+				backupLink.click();
+                
+                // Display message
+                var message = platform.GetConstant(globals.Constants.BackupSuccess_Message).replace(
+                    '{fileName}',
+                    fileName);
+                
+                vm.settings.backupRestoreResult = message;
+			});
+	};
 	
 	var bookmarksCreated = function(xBookmarks, args) {
 		var createInfo = args[1];
@@ -65,8 +95,8 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		// Check new bookmark doesn't have the same name as a container
 		if (utility.IsBookmarkContainer(createInfo)) {
 			// Disable sync
-			global.SyncEnabled.Set(false);
-			return $q.reject({ code: global.ErrorCodes.ContainerChanged });
+			globals.SyncEnabled.Set(false);
+			return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
 		}
 		
 		// Get created local bookmark's parent
@@ -91,12 +121,12 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			.then(function(checkContainersResult) {
 				if (!checkContainersResult.container) {
 					// Bookmark not found in any containers
-					return $q.reject({ code: global.ErrorCodes.UpdatedBookmarkNotFound });
+					return $q.reject({ code: globals.ErrorCodes.UpdatedBookmarkNotFound });
 				}
 
 				// If bookmark is in toolbar and not syncing toolbar, return
-				if (checkContainersResult.container === global.Bookmarks.ToolbarContainerName &&
-					!global.SyncBookmarksToolbar.Get()) {
+				if (checkContainersResult.container === globals.Bookmarks.ToolbarContainerName &&
+					!globals.SyncBookmarksToolbar.Get()) {
 					return deferred.resolve({ bookmarks: xBookmarks });
 				}
 
@@ -119,8 +149,8 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			.then(function(changedBookmarkIsContainer) {
 				if (!!changedBookmarkIsContainer) {
 					// Disable sync
-					global.SyncEnabled.Set(false);
-					return $q.reject({ code: global.ErrorCodes.ContainerChanged });
+					globals.SyncEnabled.Set(false);
+					return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
 				}
 		
 				// Get deleted local bookmark's parent
@@ -149,12 +179,12 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			.then(function(checkContainersResult) {
 				if (!checkContainersResult.container) {
 					// Bookmark not found in any containers
-					return $q.reject({ code: global.ErrorCodes.UpdatedBookmarkNotFound });
+					return $q.reject({ code: globals.ErrorCodes.UpdatedBookmarkNotFound });
 				}
 
 				// If bookmark is in toolbar and not syncing toolbar, return
-				if (checkContainersResult.container === global.Bookmarks.ToolbarContainerName &&
-					!global.SyncBookmarksToolbar.Get()) {
+				if (checkContainersResult.container === globals.Bookmarks.ToolbarContainerName &&
+					!globals.SyncBookmarksToolbar.Get()) {
 					return deferred.resolve({ bookmarks: xBookmarks });
 				}
 
@@ -248,8 +278,8 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			.then(function(changedBookmarkIsContainer) {
 				if (!!changedBookmarkIsContainer) {
 					// Disable sync
-					global.SyncEnabled.Set(false);
-					return $q.reject({ code: global.ErrorCodes.ContainerChanged });
+					globals.SyncEnabled.Set(false);
+					return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
 				}
 				
 				// Get updated local bookmark parent
@@ -278,12 +308,12 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			.then(function(checkContainersResult) {
 				if (!checkContainersResult.container) {
 					// Bookmark not found in any containers
-					return $q.reject({ code: global.ErrorCodes.UpdatedBookmarkNotFound });
+					return $q.reject({ code: globals.ErrorCodes.UpdatedBookmarkNotFound });
 				}
 
 				// If bookmark is in toolbar and not syncing toolbar, return
-				if (checkContainersResult.container === global.Bookmarks.ToolbarContainerName &&
-					!global.SyncBookmarksToolbar.Get()) {
+				if (checkContainersResult.container === globals.Bookmarks.ToolbarContainerName &&
+					!globals.SyncBookmarksToolbar.Get()) {
 					return deferred.resolve({ bookmarks: xBookmarks });
 				}
 
@@ -316,18 +346,23 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
                         }
                     }
                     catch (err) {
-                        return reject({ code: global.ErrorCodes.FailedRemoveLocalBookmarks });
+                        // Log error
+						utility.LogMessage(
+							moduleName, 'clearBookmarks', utility.LogType.Error,
+							'Error clearing other bookmarks; ' + JSON.stringify(err));
+							
+						return reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
                     }
                 });
             }
             catch (err) {
-                return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
+                return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
             }
 		});
 		
 		// Clear Bookmarks bar
 		clearBookmarksBar = $q(function(resolve, reject) {
-			if (global.SyncBookmarksToolbar.Get()) {
+			if (globals.SyncBookmarksToolbar.Get()) {
 				try {
                     chrome.bookmarks.getChildren(bookmarksBarId, function(results) {
                         try {
@@ -340,12 +375,17 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
                             }
                         }
                         catch (err) {
-                            return reject({ code: global.ErrorCodes.FailedRemoveLocalBookmarks });
+                            // Log error
+							utility.LogMessage(
+								moduleName, 'clearBookmarks', utility.LogType.Error,
+								'Error clearing bookmarks bar; ' + JSON.stringify(err));
+							
+							return reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
                         }
                     });
                 }
                 catch (err) {
-                    return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
+                    return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
                 }
 			}
 			else {
@@ -355,25 +395,14 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			
 		return $q.all([clearOtherBookmarks.promise, clearBookmarksBar.promise]);
 	};
-	
-	var containsCurrentPage = function() {
-        var deferred = $q.defer();
-        
-        // Get current url
-        getCurrentUrl()
-            .then(function(currentUrl) {
-                // Find current url in local bookmarks
-                chrome.bookmarks.search({ url: currentUrl }, function(results) {
-                    deferred.resolve(!!results && results.length > 0);
-                });
-            });
-        
-        return deferred.promise;
-    };
+
+	var displayLoading = function() {
+		vm.working = true;
+	};
 	
 	var getAsyncChannel = function(syncCallback) {
 		// Configure async messaging channel
-		var asyncChannel = chrome.runtime.connect({ name: global.Title.Get() });
+		var asyncChannel = chrome.runtime.connect({ name: globals.Title.Get() });
 		
 		// Begin listening for sync messages
 		asyncChannel.onMessage.addListener(function(msg) {
@@ -413,7 +442,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		// Get bookmarks bar
         getBookmarksBar = getLocalBookmark(bookmarksBarId)
 			.then(function(bookmarksBar) {
-				if (!global.SyncBookmarksToolbar.Get()) {
+				if (!globals.SyncBookmarksToolbar.Get()) {
 					return;
 				}
 				
@@ -437,7 +466,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 				}
 
 				// Add other container if bookmarks present
-				var otherBookmarksExcXbs = _.reject(otherBookmarks, function(bookmark) { return bookmark.title === global.Bookmarks.xBrowserSyncContainerName; });
+				var otherBookmarksExcXbs = _.reject(otherBookmarks, function(bookmark) { return bookmark.title === globals.Bookmarks.xBrowserSyncContainerName; });
 				if (!!otherBookmarksExcXbs && otherBookmarksExcXbs.length > 0) {
 					var otherContainer = utility.GetOtherContainer(xBookmarks, true);
 					otherContainer.children = otherBookmarksExcXbs;
@@ -486,19 +515,22 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
             { currentWindow: true, active: true },
             function(tabs) {
                 var activeTab = tabs[0];
-                metadata.url = activeTab.url;
-				
-				// Exit if this is a chrome url
-				if (!!activeTab.url && activeTab.url.toLowerCase().startsWith('chrome://')) {
-					return deferred.resolve(metadata);
+                
+				if (!!activeTab) {
+					metadata.url = activeTab.url;
+					
+					// Exit if this is a chrome url
+					if (activeTab.url.toLowerCase().startsWith('chrome://')) {
+						return deferred.resolve(metadata);
+					}
 				}
                 
 				// Add listener to receive page metadata from content script
                 chrome.runtime.onMessage.addListener(function(message, sender) {
-					if (message.command === 'getPageMetadata') {
+					if (message.command === globals.Commands.GetPageMetadata) {
 						if (!!message.metadata) {
 							metadata.title = message.metadata.title;
-							metadata.description = message.metadata.description;
+							metadata.description = utility.StripTags(message.metadata.description);
 							metadata.tags = message.metadata.tags;
 						}
 						
@@ -516,6 +548,35 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
         
         return deferred.promise;
     };
+
+	var hideLoading = function() {
+		vm.working = false;
+	};
+
+	var init = function(viewModel, scope) {
+		// Set global variables
+		vm = viewModel;
+
+		// Set platform
+		vm.platformName = globals.Platforms.Chrome;
+		
+		// Enable event listeners
+        globals.DisableEventListeners.Set(false);
+
+		// Get async channel for syncing in background
+        viewModel.sync.asyncChannel = getAsyncChannel(function(msg) {
+            viewModel.scope.$apply(function() {
+                viewModel.events.handleSyncResponse(msg);
+            });
+        });
+
+		// Focus on search box
+		if (viewModel.view.current === viewModel.view.views.search) {
+			$timeout(function() {
+				document.querySelector('input[name=txtSearch]').focus();
+			}, 100);
+		}
+	};
 
 	var openUrl = function(url) {
 		// Get current tab
@@ -544,7 +605,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 		var toolbarContainer = utility.GetToolbarContainer(xBookmarks);
 		var xbsContainer = utility.GetXBrowserSyncContainer(xBookmarks);
 		
-		// Populate xBrowserSync bookmarks in Other bookmarks
+		// Populate xBrowserSync bookmarks in other bookmarks
 		populateXbs = $q(function(resolve, reject) {
 			if (!!xbsContainer && xbsContainer.children.length > 0) {
 				try {
@@ -553,7 +614,12 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 					});
 				}
 				catch (err) {
-					return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
+					// Log error
+					utility.LogMessage(
+						moduleName, 'populateBookmarks', utility.LogType.Error,
+						'Error populating xBrowserSync bookmarks in other bookmarks; ' + JSON.stringify(err));
+					
+					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
 				}
 			}
 			else {
@@ -561,7 +627,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			}
 		});
 		
-		// Populate Other bookmarks
+		// Populate other bookmarks
 		populateOther = $q(function(resolve, reject) {
 			if (!!otherContainer && otherContainer.children.length > 0) {
 				try {
@@ -570,7 +636,12 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 					});
 				}
 				catch (err) {
-					return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
+					// Log error
+					utility.LogMessage(
+						moduleName, 'populateBookmarks', utility.LogType.Error,
+						'Error populating other bookmarks; ' + JSON.stringify(err));
+					
+					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
 				}
 			}
 			else {
@@ -578,16 +649,21 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			}
 		});
 
-		// Populate Bookmarks bar
+		// Populate bookmarks bar
 		populateToolbar = $q(function(resolve, reject) {
-			if (global.SyncBookmarksToolbar.Get() && !!toolbarContainer && toolbarContainer.children.length > 0) {
+			if (globals.SyncBookmarksToolbar.Get() && !!toolbarContainer && toolbarContainer.children.length > 0) {
 				try {
                     chrome.bookmarks.get(bookmarksBarId, function(results) {
                         createLocalBookmarksFromXBookmarks(bookmarksBarId, toolbarContainer.children, resolve, reject);
                     });
                 }
                 catch (err) {
-                    return reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
+                    // Log error
+					utility.LogMessage(
+						moduleName, 'populateBookmarks', utility.LogType.Error,
+						'Error populating bookmarks bar; ' + JSON.stringify(err));
+					
+					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
                 }
 			}
 			else {
@@ -600,15 +676,15 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 	
 	var refreshInterface = function() {
 		var iconPath;
-		var tooltip = getConstant(global.Constants.Title);
+		var tooltip = getConstant(globals.Constants.Title);
 		
-		if (!!global.IsSyncing.Get()) {
+		if (!!globals.IsSyncing.Get()) {
 			iconPath = 'img/browser-action-working.png';
-			tooltip += ' - ' + getConstant(global.Constants.TooltipWorking);
+			tooltip += ' - ' + getConstant(globals.Constants.TooltipWorking);
 		}
-		else if (!!global.SyncEnabled.Get()) {
+		else if (!!globals.SyncEnabled.Get()) {
 			iconPath = 'img/browser-action-on.png';
-			tooltip += ' - ' + getConstant(global.Constants.TooltipSyncEnabled);
+			tooltip += ' - ' + getConstant(globals.Constants.TooltipSyncEnabled);
 		}
 		else {
 			iconPath = 'img/browser-action-off.png';
@@ -623,7 +699,7 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 	};
 	
 	var sync = function(asyncChannel, syncData, command) {
-		syncData.command = (!!command) ? command : global.Commands.SyncBookmarks;
+		syncData.command = (!!command) ? command : globals.Commands.SyncBookmarks;
 		asyncChannel.postMessage(syncData);
 	};
 	
@@ -647,7 +723,12 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			});
 		}
 		catch(err) {
-			deferred.reject({ code: global.ErrorCodes.FailedCreateLocalBookmarks });
+			// Log error
+			utility.LogMessage(
+				moduleName, 'createLocalBookmark', utility.LogType.Error,
+				JSON.stringify(err));
+			
+			deferred.reject({ code: globals.ErrorCodes.FailedCreateLocalBookmarks });
 		}
 		
 		return deferred.promise;
@@ -692,12 +773,17 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 					deferred.resolve(results[0]);
 				}
 				else {
-					deferred.reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
+					deferred.reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
 				}
 			});
 		}
 		catch (err) {
-			deferred.reject({ code: global.ErrorCodes.FailedGetLocalBookmarks });
+			// Log error
+			utility.LogMessage(
+				moduleName, 'getLocalBookmark', utility.LogType.Error,
+				JSON.stringify(err));
+			
+			deferred.reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
 		}
 		
 		return deferred.promise;
@@ -725,9 +811,9 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 			.then(function(localBookmark) {
 				var bookmarks = localBookmark.children.slice(0, bookmarkIndex);
 				var containers = _.filter(bookmarks, function(bookmark) { 
-					return bookmark.title === global.Bookmarks.OtherContainerName || 
-						   bookmark.title === global.Bookmarks.ToolbarContainerName ||
-						   bookmark.title === global.Bookmarks.xBrowserSyncContainerName;
+					return bookmark.title === globals.Bookmarks.OtherContainerName || 
+						   bookmark.title === globals.Bookmarks.ToolbarContainerName ||
+						   bookmark.title === globals.Bookmarks.xBrowserSyncContainerName;
 				});
 				
 				if (!!containers) {
@@ -742,10 +828,10 @@ xBrowserSync.App.PlatformImplementation = function($q, $timeout, platform, globa
 	var isXBookmarkTitleEqual = function(xBookmark, title) {
 		// Compare bookmark title to value accounting for bookmark container titles
 		switch (title.toLowerCase()) {
-			case getConstant(global.Constants.BookmarksOtherTitle).toLowerCase():
-				return xBookmark.title === global.Bookmarks.OtherContainerName;
-			case getConstant(global.Constants.BookmarksToolbarTitle).toLowerCase():
-				return xBookmark.title === global.Bookmarks.ToolbarContainerName;
+			case getConstant(globals.Constants.BookmarksOtherTitle).toLowerCase():
+				return xBookmark.title === globals.Bookmarks.OtherContainerName;
+			case getConstant(globals.Constants.BookmarksToolbarTitle).toLowerCase():
+				return xBookmark.title === globals.Bookmarks.ToolbarContainerName;
 			default:
 				return xBookmark.title === title; 
 		}

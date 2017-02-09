@@ -23,26 +23,26 @@ xBrowserSync.App.Platform = function($q) {
 	};
     
 	return {
-		AsyncChannel: {
-            Get: notImplemented
-        },
+		BackupData: notImplemented,
 		Bookmarks: {
 			Clear: notImplemented,
-            ContainsCurrentPage: notImplemented,
 			Created: notImplemented,
 			Deleted: notImplemented,
 			Get: notImplemented,
 			Moved: notImplemented,
             Populate: notImplemented,
+			Share: notImplemented,
 			Updated: notImplemented
 		},
-		Constants: {
-			Get: notImplemented
-		},
-        CurrentUrl: {
-            Get: notImplemented
-        },
+		GetConstant: notImplemented,
+        GetCurrentUrl: notImplemented,
+        GetPageMetadata: notImplemented,
+		Init: notImplemented,
 		Interface: {
+			Loading: {
+				Hide: notImplemented,
+				Show: notImplemented
+			},
 			Refresh: notImplemented
 		},
 		LocalStorage: {
@@ -50,9 +50,8 @@ xBrowserSync.App.Platform = function($q) {
 			Set: notImplemented
 		},
 		OpenUrl: notImplemented, 
-        PageMetadata: {
-            Get: notImplemented
-        },
+		ScanID: notImplemented,
+		SelectFile: notImplemented,
 		Sync: notImplemented
 	};
 };

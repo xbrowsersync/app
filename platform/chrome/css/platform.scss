@@ -1,7 +1,21 @@
+.container {
+    display: none;
+
+    &.done-loading {
+        display: block;
+    }
+}
+
 .view {
-    width: 275px;
+    width: 320px;
+    height: 480px;
 }
 
 #search-panel {
     width: 600px;
+    height: auto;
+
+    .search-results-panel {
+        max-height: 410px;
+    }
 }
