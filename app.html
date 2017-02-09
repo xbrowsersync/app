@@ -499,7 +499,8 @@
                             </button>
                         </div>
                     </div>
-                    <div class="animate-fade text-center" ng-show="vm.sync.enabled() && (!vm.settings.displaySyncOptions && !vm.settings.displaySyncDataUsage)">
+                    <div class="animate-fade text-center" ng-show="vm.sync.enabled() && (!vm.settings.displaySyncOptions && !vm.settings.displaySyncDataUsage && 
+                        !vm.settings.service.displayCancelSyncConfirmation)">
                         <label>{{ vm.platform.GetConstant(vm.globals.Constants.SyncPanel_Id_Label) }}:</label>
                         <span id="id">{{ vm.settings.id() }}</span>
                         <button class="btn btn-icon btn-qrcode" title="{{ vm.platform.GetConstant(vm.globals.Constants.SyncPanel_DisplayQRCode_Label) }}" 
@@ -547,7 +548,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="animate-fade" ng-show="vm.settings.service.displayCancelSyncConfirmation">
+                    <div class="animate-fade" ng-show="vm.sync.enabled() && vm.settings.service.displayCancelSyncConfirmation">
                         <div ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.CancelSyncConfirmation_Message)"></div>
                         <div class="buttons">
                             <button id="btnCancelSync_Confirm" type="button" class="btn btn-default" ng-click="vm.events.syncForm_CancelSyncConfirmation_Click()" tabindex="4">

@@ -39,7 +39,7 @@
 		"message": "Previous"
 	},
 	"introPanel1_Message": {
-		"message": "<h4>Welcome</h4><p>Thanks for using xBrowserSync - browser syncing as it should be: secure, anonymous and free!</p><p>Have a read through the following pages to help you get started. Should you require futher help, check out the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
+		"message": "<h4>Welcome</h4><p>Thanks for using xBrowserSync &mdash; browser syncing as it should be: secure, anonymous and free!</p><p>Take some time to read through the following pages to get aquainted with xBrowserSync's features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
 	},
 	"introPanel2_Message": {
 		"message": "<h4>Your secret word</h4><p>To begin, enter a secret word or phrase that will be used to encrypt and decrypt your browser data.</p><p>Make it strong to protect your data but also memorable, if you forget it we can't remind you and you won't be able to decrypt your data without it.</p>"
@@ -63,7 +63,7 @@
 		"message": "<h4>Native features supported</h4><p>Feel free to use your browser's native bookmarking features whilst synced, any changes you make will be synced automatically.</p><p>xBrowserSync will respect your existing bookmarks hierarchy, and will even add description and tags metadata to bookmarks added via the native bookmark button.</p>"
 	},
 	"introPanel9_Message": {
-		"message": "<h4>Adding a bookmark</h4><p>You can add the current page as a bookmark (or modify it if it is bookmarked already) by clicking on the bookmark icon in the Search panel.</p><p>Include a description which will be displayed in search results, and add tags to help find the bookmark more easily when searching.</p>"
+		"message": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel where you can modify the description and tags &mdash; providing good metadata means more relevant results when searching.</p><p>Alternatively, simply click the default browser bookmark button as you normally would and xBrowserSync will automatically add the page's default description and tags.</p>"
 	},
 	"introPanel10_Message": {
 		"message": "<h4>Remember to back up</h4><p>xBrowserSync services are run voluntarily, plus servers can break and go wrong so please look after your data and make sure to keep backups.</p><p>Open the Settings panel and in the Back up and restore tab you can back up your unencrypted synced data to a local file, which can then restored at a later date should you need to.</p>"

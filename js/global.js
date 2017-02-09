@@ -439,31 +439,6 @@ xBrowserSync.App.Global = function(platform) {
                         'xBrowserSync-networkDisconnected', 
                         value);
                 }
-            },
-            DisconnectedAlertDisplayed: {
-                Get: function() {
-                    var value;
-                    
-                    value = platform.LocalStorage.Get(
-                        'xBrowserSync-networkDisconnectedAlertDisplayed');
-                    
-                    if (!value) {
-                        return true;
-                    }
-                    else {
-                        if (value === 'true') {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
-                    }
-                },
-                Set: function(value) {
-                    platform.LocalStorage.Set(
-                        'xBrowserSync-networkDisconnectedAlertDisplayed', 
-                        value);
-                }
             }
         },
         Platforms: {

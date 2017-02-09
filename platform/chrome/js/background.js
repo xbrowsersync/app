@@ -10,7 +10,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks) {
     'use strict';
 	
-	var asyncChannel, moduleName = 'xBrowserSync.App.Background', networkErrorDetected = false;
+	var asyncChannel, moduleName = 'xBrowserSync.App.Background', networkErrorDetected = false, checkForUpdatesAttempts = 0, disconnectedAlertDisplayed = false;
 
 /* ------------------------------------------------------------------------------------
  * Constructor
@@ -141,8 +141,11 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			
 			bookmarks.CheckForUpdates()
 				.then(function(syncUpdated) {
+					// Reset counter
+					checkForUpdatesAttempts = 0;
+					
 					// As connection succeeded, reset network error displayed flag
-					globals.Network.DisconnectedAlertDisplayed.Set(false)
+					disconnectedAlertDisplayed = false;
 
 					// Reset network disconnected flag
         			globals.Network.Disconnected.Set(false);
@@ -161,16 +164,18 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					// If network error, only display an alert on the first error, or if the user
 					// is pushing an update
 					if (!!globals.Network.Disconnected.Get()) {
+						checkForUpdatesAttempts++;
+						
 						// Return if this is not an update and network error detected previously, or if attempting to 
 						// sync after a previously failed attempt due to network error
-						if ((err.code === globals.ErrorCodes.HttpRequestFailed && !!globals.Network.DisconnectedAlertDisplayed.Get()) ||
+						if ((err.code === globals.ErrorCodes.HttpRequestFailed && checkForUpdatesAttempts < 3) ||
+							!!disconnectedAlertDisplayed ||
 							err.code === globals.ErrorCodes.HttpRequestFailedWhileUpdating) {
 							return;
 						}
-
-						// Set network error displayed flag
-						globals.Network.DisconnectedAlertDisplayed.Set(true);
 					}
+
+					disconnectedAlertDisplayed = true;
 						
 					// Display alert
 					var errMessage = utility.GetErrorMessageFromException(err);
@@ -234,6 +239,9 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 
 					// Clear cached bookmarks
 					globals.Cache.Bookmarks.Set(null);
+
+					// Set network disconnected flag
+					globals.Network.Disconnected.Set(false);
 				}
 				break;
 		}
@@ -357,9 +365,16 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 	};
 	
 	var syncBookmarks = function(syncData, command) {
+		var networkPreviouslyDisconnected = globals.Network.Disconnected.Get();
+		
 		// Start sync
 		return bookmarks.Sync(syncData)
-			.then(function() {
+			.then(function(syncUpdated) {
+				// Alert the user if a previous update that failed has now synced
+				if (!!networkPreviouslyDisconnected && !!syncUpdated) {
+					displayAlert(platform.GetConstant(globals.Constants.ConnRestored_Title), platform.GetConstant(globals.Constants.ConnRestored_Message));
+				}
+				
 				if (!!command) {
 					try {
 						asyncChannel.postMessage({ command: command, success: true });
@@ -380,6 +395,9 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 				utility.LogMessage(
 					moduleName, 'syncBookmarks', utility.LogType.Info,
 					'syncData: ' + JSON.stringify(syncData));
+
+				// Set flag if user has been alerted of disconnection 
+				disconnectedAlertDisplayed = (err.code === globals.ErrorCodes.HttpRequestFailed || err.code === globals.ErrorCodes.HttpRequestFailedWhileUpdating);
 
 				if (!!command) {
 					try {

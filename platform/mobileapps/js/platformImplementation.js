@@ -57,7 +57,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "Previous"
 		},
 		"introPanel1_Message": {
-			"message": "<h4>Welcome</h4><p>Thanks for using xBrowserSync - browser syncing as it should be: secure, anonymous and free!</p><p>Have a read through the following pages to help you get started. Should you require futher help, check out the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
+			"message": "<h4>Welcome</h4><p>Thanks for using xBrowserSync &mdash; browser syncing as it should be: secure, anonymous and free!</p><p>Take some time to read through the following pages to get aquainted with xBrowserSync's features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
 		},
 		"introPanel2_Message": {
 			"message": "<h4>Your secret word</h4><p>To begin, enter a secret word or phrase that will be used to encrypt and decrypt your browser data.</p><p>Make it strong to protect your data but also memorable, if you forget it we can't remind you and you won't be able to decrypt your data without it.</p>"
