@@ -23,7 +23,7 @@ xBrowserSync.App.Global = function(platform) {
             }
         },
         ApiVersion: '1.0.x',
-        AppVersion: '1.2.0',
+        AppVersion: '1.2.1',
         Bookmarks: {
             DescriptionMaxLength: 500,
             OtherContainerName: '_other_',

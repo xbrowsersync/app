@@ -61,17 +61,7 @@
                     <div class="contents">
                         <h4>{{ vm.platform.GetConstant(vm.globals.Constants.AboutPanel_Title) }} {{ vm.globals.AppVersion }}</h4>
                         <ul>
-                            <li>[Added] Mobile apps support. Expect releases for Android and iOS very soon.</li>
-                            <li>[Added] Firefox support. xBrowserSync now works with Firefox's new WebExtensions browser extension API. However, Mozilla are still in the process of implementing the full API used by Chrome and currently there are gaps, some of which xBrowserSync depends on. Once support has been added xBrowserSync will be released for Firefox.</li>
-                            <li>[Added] Data usage chart. Check how much of your allocated sync data you are currently using in Settings > Sync > Data Usage.</li>
-                            <li>[Added] Adding a bookmark via native browser bookmark button now adds description and tags metadata automatically.</li>
-                            <li>[Added] Bookmark updates made whilst offline will now be synced automatically when connection is restored.</li>
-                            <li>[Added] About panel (this).</li>
-                            <li>[Fixed] Synced data is now left encrypted before being cached locally, for extra security.</li>
-                            <li>[Fixed] QR code now displayed using canvas, much clearer at higher resolutions.</li>
-                            <li>[Fixed] Bookmark searches no longer match partial words to improve results relevance.</li>
-                            <li>[Fixed] Suppressed the frequency of alerts if unable to connect to the xBrowserSync service when syncing in background.</li>
-                            <li>Numerous other minor enhancements and bug fixes.</li>
+                            <li>[Fixed] No more bookmark conflict errors.</li>
                         </ul>
                         <p class="text-center">
                             <a href="https://github.com/xBrowserSync/App/releases" class="new-tab">
