@@ -61,7 +61,9 @@
                     <div class="contents">
                         <h4>{{ vm.platform.GetConstant(vm.globals.Constants.AboutPanel_Title) }} {{ vm.globals.AppVersion }}</h4>
                         <ul>
-                            <li>[Fixed] No more bookmark conflict errors.</li>
+                            <li>[Added] Search results are now sorted in order of highest score *and* date bookmark added. Note: only applies to bookmarks added after this update was installed.</li>
+                            <li>[Added] Searching with no search terms entered displays bookmarks in order of date bookmark added. Note: only applies to bookmarks added after this update was installed.</li>
+                            <li>[Fixed] Searching for "un" no longer displays "undefined" as a suggestion.</li>
                         </ul>
                         <p class="text-center">
                             <a href="https://github.com/xBrowserSync/App/releases" class="new-tab">

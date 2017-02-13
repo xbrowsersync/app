@@ -1079,29 +1079,27 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 	};
     
     var searchBookmarks = function() {
-        if (!vm.search.query) {
-            return;
-        }
-        
         var queryData = {
             url: null,
             keywords: []
         };
         var urlRegex = /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
 
-        // Iterate query words to form query data object
-        _.each(vm.search.query.split(/[\s]+/), function (queryWord) {
-            // Add query word as url if query is in url format, otherwise add to keywords
-            if (!queryData.url && queryWord.trim().match(urlRegex)) {
-                queryData.url = queryWord.trim();
-            }
-            else {
-                var keyword = queryWord.trim().replace("'", '').replace(/\W$/, '').toLowerCase();
-                if (!!keyword) {
-                    queryData.keywords.push(queryWord.trim());
+        if (!!vm.search.query) {
+            // Iterate query words to form query data object
+            _.each(vm.search.query.split(/[\s]+/), function (queryWord) {
+                // Add query word as url if query is in url format, otherwise add to keywords
+                if (!queryData.url && queryWord.trim().match(urlRegex)) {
+                    queryData.url = queryWord.trim();
                 }
-            }
-        });
+                else {
+                    var keyword = queryWord.trim().replace("'", '').replace(/\W$/, '').toLowerCase();
+                    if (!!keyword) {
+                        queryData.keywords.push(queryWord.trim());
+                    }
+                }
+            });
+        }
         
         bookmarks.Search(queryData)
             .then(function(results) {
@@ -1267,7 +1265,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var searchForm_SearchText_KeyDown = function(event) {
         // If user pressed enter and search text present
-        if (event.keyCode === 13 && !!vm.search.query) {
+        if (event.keyCode === 13) {
             if (!!vm.search.getSearchResultsTimeout) {
                 $timeout.cancel(vm.search.getSearchResultsTimeout);
                 vm.search.getSearchResultsTimeout = null;

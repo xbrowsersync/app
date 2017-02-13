@@ -81,17 +81,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 	
 	var bookmarksCreated = function(xBookmarks, args) {
+		var deferred = $q.defer();
 		var createInfo = args[1];
 		var createdLocalBookmarkParent, changedBookmarkIndex;
-		var newXBookmark = new utility.XBookmark(
-			createInfo.title, 
-			createInfo.url || null,
-			createInfo.description,
-			createInfo.tags,
-			createInfo.children
-			);
-		var deferred = $q.defer();
-
+		
 		// Check new bookmark doesn't have the same name as a container
 		if (utility.IsBookmarkContainer(createInfo)) {
 			// Disable sync
@@ -99,8 +92,29 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
 		}
 		
-		// Get created local bookmark's parent
-		getLocalBookmark(createInfo.parentId)
+		var newXBookmark = new utility.XBookmark(
+			createInfo.title, 
+			createInfo.url || null,
+			createInfo.description,
+			createInfo.tags,
+			createInfo.children);
+		
+		// Get new bookmark id
+		var getNewId;
+		if (!!createInfo.newId) {
+			// Use new id supplied
+			getNewId = $q.resolve(createInfo.newId);
+		}
+		else {
+			getNewId = bookmarks.GetNewBookmarkId();
+		}
+
+		getNewId.then(function(newId) {
+				newXBookmark.id = newId;
+		
+				// Get created local bookmark's parent
+				return getLocalBookmark(createInfo.parentId)
+			})
 			.then(function(localBookmark) {
 				createdLocalBookmarkParent = localBookmark;
 
@@ -218,6 +232,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		var createArgs = [null, {
 			index: moveInfo.index,
 			parentId: moveInfo.parentId,
+			id: null,
 			title: null,
 			url: null,
 			children: null,
@@ -245,6 +260,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				createArgs[1].title = movedLocalBookmark.title;
 				createArgs[1].url = movedLocalBookmark.url;
 				if (!!removedBookmark) {
+					createArgs[1].newId = removedBookmark.id;
 					createArgs[1].children = removedBookmark.children;
 					createArgs[1].description = removedBookmark.description;
 					createArgs[1].tags = removedBookmark.tags;

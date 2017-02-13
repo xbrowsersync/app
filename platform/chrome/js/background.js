@@ -238,7 +238,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					globals.DisplayAboutOnStartup.Set(true);
 
 					// Clear cached bookmarks
-					globals.Cache.Bookmarks.Set(null);
+					bookmarks.RefreshCache();
 
 					// Set network disconnected flag
 					globals.Network.Disconnected.Set(false);
