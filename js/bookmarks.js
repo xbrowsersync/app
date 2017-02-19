@@ -15,7 +15,58 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
  * Public functions
  * ------------------------------------------------------------------------------------ */
  
-	var checkForUpdates = function() {
+    var addIdsToBookmarks = function(bookmarks) {
+        var idCounter = 0;
+
+        // Add ids to containers
+        var xbsContainer = getXBrowserSyncContainer(bookmarks);
+        if (!!xbsContainer) { xbsContainer.id = idCounter; idCounter++; }
+
+        var otherContainer = getOtherContainer(bookmarks);
+        if (!!otherContainer) { otherContainer.id = idCounter; idCounter++; }
+
+        var toolbarContainer = getToolbarContainer(bookmarks);
+        if (!!toolbarContainer) { toolbarContainer.id = idCounter; idCounter++; }
+
+        // Add ids to containers' children
+        var addIdToBookmark = function(bookmark) {
+            bookmark.id = idCounter;
+            idCounter++;
+
+            _.each(bookmark.children, addIdToBookmark);
+        };
+
+        if (!!xbsContainer) { _.each(xbsContainer.children, addIdToBookmark); }
+        if (!!otherContainer) { _.each(otherContainer.children, addIdToBookmark); }
+        if (!!toolbarContainer) { _.each(toolbarContainer.children, addIdToBookmark); }
+
+        return bookmarks;
+    };
+    
+    var checkBookmarksHaveIds = function(bookmarks) {
+        var bookmarksHaveIds = true;
+
+        // Check if the bookmarks in supplied array all have ids
+        _.each(bookmarks, function(bookmark) {
+            if (_.isUndefined(bookmark.id)) {
+                bookmarksHaveIds = false;
+            }
+        });
+
+        // Run recursively for children, stopping if no id is found
+        var index = 0;
+        while (!!bookmarksHaveIds && index < bookmarks.length) {
+            var bookmark = bookmarks[index];
+            if (!!bookmark.children && bookmark.children.length > 0) {
+                bookmarksHaveIds = checkBookmarksHaveIds(bookmark.children);
+            }
+            index++;
+        }
+        
+        return bookmarksHaveIds;
+    };
+    
+    var checkForUpdates = function() {
 		// Exit if sync is in progress
 		if (globals.IsSyncing.Get()) {
             return $q.resolve();
@@ -47,7 +98,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
 	var exportBookmarks = function() {
         // If sync is not enabled, export local browser data
         if (!globals.SyncEnabled.Get()) {
-            return platform.Bookmarks.Get()
+            return platform.Bookmarks.Get(false)
                 .then(function(bookmarks) {
                     var exportData = {
                         xBrowserSync: { 
@@ -92,34 +143,19 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         }
 	};
 	
-	var importBookmarks = function(bookmarks) {
-		// Update browser bookmarks
-		return setBookmarks(bookmarks);
-	};
+	var getOtherContainer = function(bookmarks, createIfNotPresent) {
+        var container = _.findWhere(bookmarks, { title: globals.Bookmarks.OtherContainerName });
 
-    var isCurrentPageABookmark = function() {
-        var currentUrl;
-        
-        // Check if current url is contained in bookmarks
-		return platform.GetCurrentUrl()
-            .then(function(result) {
-                if (!result) {
-                    return;
-                }
-                
-                currentUrl = result;
-                return searchBookmarks({ url: currentUrl })
-                    .then(function(results) {
-                        var result = _.find(results, function(bookmark) { 
-                            return bookmark.url.toLowerCase() === currentUrl.toLowerCase(); 
-                        });
+        // If container does not exist, create it if specified
+        if (!container && !!createIfNotPresent) {
+            container = new xBookmark(globals.Bookmarks.OtherContainerName);
+            bookmarks.push(container);
+        }
 
-                        return $q.resolve(result);
-                    });
-            });
+        return container;
     };
-    
-    var getLookahead = function(word, bookmarks, canceller, tagsOnly) {
+
+	var getLookahead = function(word, bookmarks, canceller, tagsOnly) {
         var getBookmarks;
         var deferred = $q.defer();
         
@@ -197,7 +233,59 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             });
     };
 	
-	var queueSync = function(syncData) {
+	var getToolbarContainer = function(bookmarks, createIfNotPresent) {
+        var container = _.findWhere(bookmarks, { title: globals.Bookmarks.ToolbarContainerName });
+
+        // If container does not exist, create it if specified
+        if (!container && !!createIfNotPresent) {
+            container = new xBookmark(globals.Bookmarks.ToolbarContainerName);
+            bookmarks.push(container);
+        }
+
+        return container;
+    };
+
+	var getXBrowserSyncContainer = function(bookmarks, createIfNotPresent) {
+        var container = _.findWhere(bookmarks, { title: globals.Bookmarks.xBrowserSyncContainerName });
+
+        // If container does not exist, create it if specified
+        if (!container && !!createIfNotPresent) {
+            container = new xBookmark(globals.Bookmarks.xBrowserSyncContainerName);
+            bookmarks.push(container);
+        }
+
+        return container;
+    };
+
+    var isBookmarkContainer = function(bookmark) {
+		return (bookmark.title === globals.Bookmarks.OtherContainerName ||
+				bookmark.title === globals.Bookmarks.ToolbarContainerName ||
+				bookmark.title === globals.Bookmarks.xBrowserSyncContainerName);
+	};
+	
+	var isCurrentPageABookmark = function() {
+        var currentUrl;
+        
+        // Check if current url is contained in bookmarks
+		return platform.GetCurrentUrl()
+            .then(function(result) {
+                if (!result) {
+                    return;
+                }
+                
+                currentUrl = result;
+                return searchBookmarks({ url: currentUrl })
+                    .then(function(results) {
+                        var result = _.find(results, function(bookmark) { 
+                            return bookmark.url.toLowerCase() === currentUrl.toLowerCase(); 
+                        });
+
+                        return $q.resolve(result);
+                    });
+            });
+    };
+    
+    var queueSync = function(syncData) {
         var deferred = $q.defer();
         
         if (!!syncData) {
@@ -256,53 +344,35 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             });
 	};
 
+	var xBookmark = function(title, url, description, tags, children) {
+		var xBookmark = {};
+		
+		if (!!title) {
+			xBookmark.title = title.trim();
+		}
+		
+		if (!!url) {
+			xBookmark.url = url.trim();
+		}
+		else {
+			xBookmark.children = children || [];
+		}
+		
+		if (!!description) {
+			xBookmark.description = description.trim().substring(0, globals.Bookmarks.DescriptionMaxLength);
+		}
+		
+		if (!!tags && tags.length > 0) {
+			xBookmark.tags = tags;
+		}
+		
+		return xBookmark;
+	};
+
 
 /* ------------------------------------------------------------------------------------
  * Private functions
  * ------------------------------------------------------------------------------------ */
-    
-    var addIdsToBookmarks = function(bookmarks) {
-        var idCounter = 0;
-
-        // Add ids to containers
-        var xbsContainer = utility.GetXBrowserSyncContainer(bookmarks);
-        if (!!xbsContainer) { xbsContainer.id = idCounter; idCounter++; }
-
-        var otherContainer = utility.GetOtherContainer(bookmarks);
-        if (!!otherContainer) { otherContainer.id = idCounter; idCounter++; }
-
-        var toolbarContainer = utility.GetToolbarContainer(bookmarks);
-        if (!!toolbarContainer) { toolbarContainer.id = idCounter; idCounter++; }
-
-        // Add ids to containers' children
-        var addIdToBookmark = function(bookmark) {
-            bookmark.id = idCounter;
-            idCounter++;
-
-            _.each(bookmark.children, addIdToBookmark);
-        };
-
-        if (!!xbsContainer) { _.each(xbsContainer.children, addIdToBookmark); }
-        if (!!otherContainer) { _.each(otherContainer.children, addIdToBookmark); }
-        if (!!toolbarContainer) { _.each(toolbarContainer.children, addIdToBookmark); }
-
-        return bookmarks;
-    };
-
-    var checkBookmarksHaveIds = function(bookmarks) {
-        var xbsContainer = utility.GetXBrowserSyncContainer(bookmarks);
-        var otherContainer = utility.GetOtherContainer(bookmarks);
-        var toolbarContainer = utility.GetToolbarContainer(bookmarks);
-
-        // If any container doesn't have an id, add ids to all bookmarks
-        if ((!!xbsContainer && xbsContainer.id == null) ||
-            (!!otherContainer && otherContainer.id == null) ||
-            (!!toolbarContainer && toolbarContainer.id == null)) {
-                bookmarks = addIdsToBookmarks(bookmarks);
-            }
-        
-        return bookmarks;
-    };
     
     var getCachedBookmarks = function(bookmarks, canceller) {
             var bookmarkData, getBookmarks;
@@ -348,10 +418,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                                 return $q.reject({ code: globals.ErrorCodes.InvalidData });
                             }
 
-                            // Check bookmarks have ids
-                            bookmarks = checkBookmarksHaveIds(bookmarks);
-                            data.bookmarks = utility.EncryptData(JSON.stringify(bookmarks));
-
                             // Add encrypted bookmark data to cache
                             globals.Cache.Bookmarks.Set(data.bookmarks);
 
@@ -370,18 +436,14 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             return getBookmarks;
     };
 
-    var recursiveDelete = function(bookmarks, url) {
+    var recursiveDelete = function(bookmarks, id) {
         return _.map(
             _.reject(bookmarks, function(bookmark) {
-                if (!bookmark.url) {
-                    return false;
-                }
-                
-                return bookmark.url === url;
+                return bookmark.id === id;
             }), 
             function(bookmark) {
                 if (!!bookmark.children && bookmark.children.length > 0) {
-                    bookmark.children = recursiveDelete(bookmark.children, url);
+                    bookmark.children = recursiveDelete(bookmark.children, id);
                 }
             
                 return bookmark;
@@ -389,11 +451,11 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         );
     };
                             
-    var recursiveUpdate = function(bookmarks, url, updatedBookmark) {
+    var recursiveUpdate = function(bookmarks, updatedBookmark) {
         return _.map(
             bookmarks, 
             function(bookmark) {
-                if (!!bookmark.url && bookmark.url === url) {
+                if (bookmark.id === updatedBookmark.id) {
                     bookmark.title = updatedBookmark.title;
                     bookmark.url = updatedBookmark.url;
                     bookmark.description = updatedBookmark.description;
@@ -401,7 +463,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 }
                 
                 if (!!bookmark.children && bookmark.children.length > 0) {
-                    bookmark.children = recursiveUpdate(bookmark.children, url, updatedBookmark);
+                    bookmark.children = recursiveUpdate(bookmark.children, updatedBookmark);
                 }
             
                 return bookmark;
@@ -410,9 +472,9 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
     };
 
     var removeEmptyContainers = function(bookmarks) {
-        var otherContainer = utility.GetOtherContainer(bookmarks, false);
-        var toolbarContainer = utility.GetToolbarContainer(bookmarks, false);
-        var xbsContainer = utility.GetXBrowserSyncContainer(bookmarks, false);
+        var otherContainer = getOtherContainer(bookmarks, false);
+        var toolbarContainer = getToolbarContainer(bookmarks, false);
+        var xbsContainer = getXBrowserSyncContainer(bookmarks, false);
         var removeArr = [];
 
         if (!!otherContainer && (!otherContainer.children || otherContainer.children.length === 0)) {
@@ -524,9 +586,11 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 var bookmarkWords = [];
                 
                 if (!tagsOnly) {
-                    // Add all words from title
-                    bookmarkWords = bookmarkWords.concat(_.compact(bookmark.title.replace("'", '').toLowerCase().split(/[\W_]/)));
-                    
+                    if (!!bookmark.title) {
+                        // Add all words from title
+                        bookmarkWords = bookmarkWords.concat(_.compact(bookmark.title.replace("'", '').toLowerCase().split(/[\W_]/)));
+                    }
+
                     // Split tags into individual words
                     if (!!bookmark.tags) { 
                         var tags = _.chain(bookmark.tags)
@@ -691,7 +755,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                             }
                             
                             // Get xBrowserSync group
-		                    xbsContainer = utility.GetXBrowserSyncContainer(bookmarksToUpdate, true);
+		                    xbsContainer = getXBrowserSyncContainer(bookmarksToUpdate, true);
                             
                             // Get new bookmark id
                             return getNewBookmarkId();
@@ -736,13 +800,8 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                                 return $q.reject({ code: globals.ErrorCodes.InvalidData });
                             }
                             
-                            // If url has changed, remove bookmarks containing updated url parameter
-                            if (syncData.changeInfo.url != syncData.changeInfo.bookmark.url) {
-                                bookmarksToUpdate = recursiveDelete(bookmarksToUpdate, syncData.changeInfo.bookmark.url);
-                            }
-                            
-                            // Update bookmarks containing url parameter
-                            bookmarksToUpdate = recursiveUpdate(bookmarksToUpdate, syncData.changeInfo.url, syncData.changeInfo.bookmark);
+                            // Update bookmark
+                            bookmarksToUpdate = recursiveUpdate(bookmarksToUpdate, syncData.changeInfo.bookmark);
                             
                             return bookmarksToUpdate;
                         });
@@ -777,7 +836,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                             }
                             
                             // Remove bookmarks containing url parameter
-                            bookmarksToUpdate = recursiveDelete(bookmarksToUpdate, syncData.changeInfo.url);
+                            bookmarksToUpdate = recursiveDelete(bookmarksToUpdate, syncData.changeInfo.id);
                             
                             return bookmarksToUpdate;
                         });
@@ -795,9 +854,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         return syncPromise
             .then(function(bookmarksToSync) {
                 bookmarks = bookmarksToSync || [];
-
-                // Check bookmark have ids 
-                bookmarks = checkBookmarksHaveIds(bookmarks);
 
                 // Refresh bookmarks cache
                 refreshCachedBookmarks(bookmarks);
@@ -854,6 +910,11 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                         JSON.stringify(err));
                     
                     return $q.reject({ code: globals.ErrorCodes.InvalidData });
+                }
+
+                // Check bookmark have ids
+                if (!checkBookmarksHaveIds(bookmarks)) {
+                    bookmarks = addIdsToBookmarks(bookmarks);
                 }
 
                 // Refresh bookmarks cache
@@ -962,9 +1023,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 // Remove empty containers
                 bookmarks = removeEmptyContainers(bookmarks);
 
-                // Check bookmark have ids 
-                bookmarks = checkBookmarksHaveIds(bookmarks);
-
                 // Refresh bookmarks cache
                 refreshCachedBookmarks(bookmarks);
                 
@@ -1004,16 +1062,22 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
     };
 		
 	return {
+        AddIdsToBookmarks: addIdsToBookmarks,
+        CheckBookmarksHaveIds: checkBookmarksHaveIds,
         CheckForUpdates: checkForUpdates,
 		Export: exportBookmarks,
-		Import: importBookmarks,
-        IncludesCurrentPage: isCurrentPageABookmark,
         GetLookahead: getLookahead,
         GetNewBookmarkId: getNewBookmarkId,
+        GetOtherContainer: getOtherContainer,
+        GetToolbarContainer: getToolbarContainer,
+		GetXBrowserSyncContainer: getXBrowserSyncContainer,
+        IncludesCurrentPage: isCurrentPageABookmark,
+		IsBookmarkContainer: isBookmarkContainer,
         RefreshCache: refreshCachedBookmarks,
         Search: searchBookmarks,
         Set: setBookmarks,
 		Sync: queueSync,
-        SyncSize: getSyncSize
+        SyncSize: getSyncSize,
+        XBookmark: xBookmark
 	};
 };

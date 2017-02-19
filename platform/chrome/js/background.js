@@ -323,6 +323,11 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 	};
 	
 	var restoreBookmarks = function(restoreData) {
+        // Check bookmark have ids 
+		if (!bookmarks.CheckBookmarksHaveIds(restoreData.bookmarks)) {
+			restoreData.bookmarks = bookmarks.AddIdsToBookmarks(restoreData.bookmarks);
+		}
+		
 		syncBookmarks(restoreData, globals.Commands.RestoreBookmarks);
 	};
 	

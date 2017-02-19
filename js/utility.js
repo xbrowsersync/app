@@ -30,88 +30,6 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		return CryptoJS.AES.encrypt(data, globals.ClientSecret.Get()).toString();
 	};
 
-	var findXBookmarkInContainers = function(xBookmarks, predicate) {
-		// Search for bookmark in other container
-		var checkOtherContainer = $q(function(resolve, reject) {
-			var otherContainer = getOtherContainer(xBookmarks, true);
-			var result = {
-				found: false,
-				xBookmark: null
-			};
-
-			var foundXBookmarks = findXBookmark([otherContainer], predicate);
-			if (!foundXBookmarks || foundXBookmarks.length === 0 || foundXBookmarks.length > 1) {
-				return resolve(result);
-			}
-
-			result.found = true;
-			result.xBookmark = foundXBookmarks[0];
-			return resolve(result);
-		});
-
-		// Search for bookmark in toolbar container
-		var checkToolbarContainer = $q(function(resolve, reject) {
-			var toolbarContainer = getToolbarContainer(xBookmarks, true);
-			var result = {
-				found: false,
-				xBookmark: null
-			};
-
-			var foundXBookmarks = findXBookmark([toolbarContainer], predicate);
-			if (!foundXBookmarks || foundXBookmarks.length === 0 || foundXBookmarks.length > 1) {
-				return resolve(result);
-			}
-
-			result.found = true;
-			result.xBookmark = foundXBookmarks[0];
-			return resolve(result);
-		});
-
-		// Search for bookmark in xbs container
-		var checkXbsContainer = $q(function(resolve, reject) {
-			var xbsContainer = getXBrowserSyncContainer(xBookmarks, true);
-			var result = {
-				found: false,
-				xBookmark: null
-			};
-
-			var foundXBookmarks = findXBookmark([xbsContainer], predicate);
-			if (!foundXBookmarks || foundXBookmarks.length === 0 || foundXBookmarks.length > 1) {
-				return resolve(result);
-			}
-
-			result.found = true;
-			result.xBookmark = foundXBookmarks[0];
-			return resolve(result);
-		});
-
-		return $q.all([checkOtherContainer, checkToolbarContainer, checkXbsContainer])
-			.then(function(results) {
-				var otherContainerResult = results[0];
-				var toolbarContainerResult = results[1];
-				var xbsContainerResult = results[2];
-				var result = {
-					container: null,
-					xBookmark: null
-				};
-
-				if (!!otherContainerResult.found) {
-					result.container = globals.Bookmarks.OtherContainerName;
-					result.xBookmark = otherContainerResult.xBookmark;
-				}
-				else if (!!toolbarContainerResult.found) {
-					result.container = globals.Bookmarks.ToolbarContainerName;
-					result.xBookmark = toolbarContainerResult.xBookmark;
-				}
-				else if (!!xbsContainerResult.found) {
-					result.container = globals.Bookmarks.xBrowserSyncContainerName;
-					result.xBookmark = xbsContainerResult.xBookmark;
-				}
-
-				return result;
-			}); 
-	};
-	
 	var getErrorMessageFromException = function(err) {
 		var errorMessage = { 
 			title: '',
@@ -181,7 +99,7 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 				break;
 			case globals.ErrorCodes.XBookmarkNotFound:
 				errorMessage.title = platform.GetConstant(globals.Constants.Error_BookmarkNotFound_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Wrror_BookmarkNotFound_Message); 
+				errorMessage.message = platform.GetConstant(globals.Constants.Error_BookmarkNotFound_Message); 
 				break;
 			case globals.ErrorCodes.ContainerChanged:
 				errorMessage.title = platform.GetConstant(globals.Constants.Error_ContainerChanged_Title);
@@ -219,18 +137,6 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		return errorMessage;
 	};
 
-	var getOtherContainer = function(bookmarks, createIfNotPresent) {
-        var container = _.findWhere(bookmarks, { title: globals.Bookmarks.OtherContainerName });
-
-        // If container does not exist, create it if specified
-        if (!container && !!createIfNotPresent) {
-            container = new xBookmark(globals.Bookmarks.OtherContainerName);
-            bookmarks.push(container);
-        }
-
-        return container;
-    };
-
 	var getStringSizeInBytes = function(str) {
 		return encodeURI(str).split(/%..|./).length - 1;
 	};
@@ -257,36 +163,6 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
         return tags;
     };
 
-	var getToolbarContainer = function(bookmarks, createIfNotPresent) {
-        var container = _.findWhere(bookmarks, { title: globals.Bookmarks.ToolbarContainerName });
-
-        // If container does not exist, create it if specified
-        if (!container && !!createIfNotPresent) {
-            container = new xBookmark(globals.Bookmarks.ToolbarContainerName);
-            bookmarks.push(container);
-        }
-
-        return container;
-    };
-
-	var getXBrowserSyncContainer = function(bookmarks, createIfNotPresent) {
-        var container = _.findWhere(bookmarks, { title: globals.Bookmarks.xBrowserSyncContainerName });
-
-        // If container does not exist, create it if specified
-        if (!container && !!createIfNotPresent) {
-            container = new xBookmark(globals.Bookmarks.xBrowserSyncContainerName);
-            bookmarks.push(container);
-        }
-
-        return container;
-    };
-
-	var isBookmarkContainer = function(bookmark) {
-		return (bookmark.title === globals.Bookmarks.OtherContainerName ||
-				bookmark.title === globals.Bookmarks.ToolbarContainerName ||
-				bookmark.title === globals.Bookmarks.xBrowserSyncContainerName);
-	};
-	
 	var logMessage = function(moduleName, functionName, messageType, message) {
 		switch (messageType) {
 			case logType.Error:
@@ -336,71 +212,17 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		return (!!str) ? str.replace(/<(?:.|\n)*?>/gm, '') : str;
 	};
 
-	var xBookmark = function(title, url, description, tags, children) {
-		var xBookmark = {};
-		
-		if (!!title) {
-			xBookmark.title = title.trim();
-		}
-		
-		if (!!url) {
-			xBookmark.url = url.trim();
-		}
-		else {
-			xBookmark.children = children || [];
-		}
-		
-		if (!!description) {
-			xBookmark.description = description.trim().substring(0, globals.Bookmarks.DescriptionMaxLength);
-		}
-		
-		if (!!tags && tags.length > 0) {
-			xBookmark.tags = tags;
-		}
-		
-		return xBookmark;
-	};
-
-
-/* ------------------------------------------------------------------------------------
- * Private functions
- * ------------------------------------------------------------------------------------ */
 	
-	var findXBookmark = function(xBookmarks, predicate) {
-		var results = [];
-		
-		// Filter array
-		results = _.union(results, _.filter(xBookmarks, function(xBookmark) {
-			// Match based on supplied predicate
-			return predicate(xBookmark);
-		}));
-		
-		// Process children
-		var children = _.pluck(xBookmarks, 'children');		
-		for (var i = 0; i < children.length; i++) {
-			results = _.union(results, findXBookmark(children[i], predicate));
-		}
-		
-		return results;
-	};
-	
-
 	return {
 		Closest: closest,
 		DecryptData: decryptData,
 		EncryptData: encryptData,
-		FindXBookmarkInContainers: findXBookmarkInContainers,
 		GetErrorMessageFromException: getErrorMessageFromException,
-		GetOtherContainer: getOtherContainer,
 		GetStringSizeInBytes: getStringSizeInBytes,
 		GetTagArrayFromText: getTagArrayFromText,
-		GetToolbarContainer: getToolbarContainer,
-		GetXBrowserSyncContainer: getXBrowserSyncContainer,
-		IsBookmarkContainer: isBookmarkContainer,
 		LogMessage: logMessage,
 		LogType: logType,
 		ParseUrl: parseUrl,
-		StripTags: stripTags,
-		XBookmark: xBookmark		
+		StripTags: stripTags
 	};
 };

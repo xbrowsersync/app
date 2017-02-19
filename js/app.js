@@ -496,7 +496,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     type: globals.SyncType.Both,
                     changeInfo: { 
                         type: globals.UpdateType.Delete, 
-                        url: vm.bookmark.current.originalUrl
+                        id: vm.bookmark.current.id
                     }
                 });
                 
@@ -538,7 +538,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             .then(function(result) {
 				if (!!result) {
                     // Set form properties to current bookmark
-                    var bookmark = new utility.XBookmark(
+                    var bookmark = new bookmarks.XBookmark(
                         result.title, 
                         result.url,
                         result.description,
@@ -561,7 +561,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     }
                     
                     // Set form properties to url metadata
-                    var bookmark = new utility.XBookmark(
+                    var bookmark = new bookmarks.XBookmark(
                         metadata.title, 
                         metadata.url, 
                         metadata.description,
@@ -577,7 +577,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             .catch(function(err) {
                 // Set bookmark url
                 if (!!err && !!err.url) {
-                    var bookmark = new utility.XBookmark(
+                    var bookmark = new bookmarks.XBookmark(
                         '', 
                         err.url);
                     bookmark.originalUrl = bookmark.url;
@@ -1066,13 +1066,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		if (!bookmarksToRestore) {
             return restoreCallback();
         }
-        
+
+        // Display loading overlay 
+        platform.Interface.Loading.Show();
+
         var syncData = {};
         syncData.type = (!globals.SyncEnabled.Get()) ? globals.SyncType.Pull : globals.SyncType.Both;
         syncData.bookmarks = bookmarksToRestore;
-        
-        // Display loading overlay 
-        platform.Interface.Loading.Show();
         
         // Start restore
         platform.Sync(vm.sync.asyncChannel, syncData, globals.Commands.RestoreBookmarks);
@@ -1103,6 +1103,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         bookmarks.Search(queryData)
             .then(function(results) {
+                // Add host to any bookmarks without titles
+                var hyperlinkElement = document.createElement('a');
+                _.chain(results)
+                    .filter(function(result) { return !result.title; })
+                    .each(function(result) { 
+                        hyperlinkElement.href = result.url;
+                        result.host = hyperlinkElement.host;
+                    });
+                
                 vm.search.scrollDisplayMoreEnabled = false;
                 vm.search.resultsDisplayed = vm.search.batchResultsNum;
                 vm.search.results = results;

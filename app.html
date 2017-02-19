@@ -63,6 +63,7 @@
                         <ul>
                             <li>[Added] Search results are now sorted in order of highest score *and* date bookmark added. Note: only applies to bookmarks added after this update was installed.</li>
                             <li>[Added] Searching with no search terms entered displays bookmarks in order of date bookmark added. Note: only applies to bookmarks added after this update was installed.</li>
+                            <li>[Fixed] Can now handle bookmarks without titles.</li>
                             <li>[Fixed] Searching for "un" no longer displays "undefined" as a suggestion.</li>
                         </ul>
                         <p class="text-center">
@@ -377,7 +378,8 @@
                         </div>
                         <div class="overlay" hm-tap="vm.events.openUrl($event, result.url)" hm-press="vm.events.searchForm_SelectBookmark_Press($event)"></div>
                         <a href="{{ result.url }}" ng-click="vm.events.openUrl($event)" tabindex="{{ $index + 1 }}" ng-keydown="vm.events.searchForm_SearchResult_KeyDown($event)">
-                            <h4 class="list-group-item-heading">{{ result.title }}</h4>
+                            <h4 class="list-group-item-heading" ng-if="result.title">{{ result.title }}</h4>
+                            <h4 class="list-group-item-heading" ng-if="result.host">{{ result.host }}</h4>
                             <div class="list-group-item-text">
                                 <div class="description">{{ result.description }}</div>
                                 <div class="url">{{ result.url }}</div>
@@ -408,7 +410,7 @@
                     <div class="form-group" ng-class="{ true: 'has-error' }[vm.bookmarkForm.bookmarkTitle.$touched && vm.bookmarkForm.bookmarkTitle.$invalid]">
                         <label for="bookmarkTitle" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Title_Label) }}</label>
                         <input type="text" class="form-control" name="bookmarkTitle" ng-model="vm.bookmark.current.title" maxlength="255" tabindex="1"
-                               placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Title_Label) }}" required>
+                               placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Title_Label) }}">
                     </div>
                     <div class="form-group" ng-class="{ true: 'has-error' }[vm.bookmarkForm.bookmarkUrl.$touched && vm.bookmarkForm.bookmarkUrl.$invalid]">
                         <label for="bookmarkUrl" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Url_Label) }}</label>
