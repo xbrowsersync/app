@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+  - "node"
+  - "iojs"
+install:
+  - npm install
+script:
+  - npm run build:chrome
