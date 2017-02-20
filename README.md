@@ -10,7 +10,10 @@ This repository contains the source code for the client applications (browser ex
 
 CD into the source directory and install the package and dependencies using NPM:
 
+	$ sudo npm install -g cordova
 	$ npm install
+	$ cd ./platform/mobileapps/
+	$ cordova prepare
 
 # Building
 
