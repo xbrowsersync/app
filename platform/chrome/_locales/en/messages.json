@@ -3,7 +3,7 @@
 		"message": "xBrowserSync"
 	},
 	"description": {
-		"message": "Browser syncing as it should be: secure, anonymous and free!"
+		"message": "Browser syncing as it should be: secure, anonymous and free! Sync your bookmarks across your browsers and devices with xBrowserSync in one click, no sign up required."
 	},
 	"bookmarksToolbarTitle": {
 		"message": "Bookmarks bar"
@@ -129,7 +129,7 @@
 		"message":  "No"
 	},
 	"field_Search_Description" : {
-		"message":  "Find a bookmark"
+		"message":  "Start typing to find bookmarks or just hit Enter..."
 	},
 	"noSearchResults_Message" : {
 		"message":  "No bookmarks found"
@@ -318,7 +318,7 @@
 		"message":  "Something went wrong"
 	},
 	"error_Default_Message" : {
-		"message":  "If this problem recurs, <a href='https://github.com/xBrowserSync/App' class='new-tab'>submit an issue</a>."
+		"message":  "If this problem recurs, submit an issue at github.com/xBrowserSync/App."
 	},
 	"error_HttpRequestFailed_Title" : {
 		"message":  "Connection lost"

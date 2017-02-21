@@ -8,7 +8,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 xBrowserSync.App.Global = function(platform) {
     'use strict';
-    
+
 	var Global = {
         Alarm: {
             Name: {
@@ -23,7 +23,7 @@ xBrowserSync.App.Global = function(platform) {
             }
         },
         ApiVersion: '1.0.x',
-        AppVersion: '1.2.0',
+        AppVersion: '1.2.1',
         Bookmarks: {
             DescriptionMaxLength: 500,
             OtherContainerName: '_other_',
@@ -475,9 +475,6 @@ xBrowserSync.App.Global = function(platform) {
                 platform.LocalStorage.Set(
                     'xBrowserSync-syncBookmarksToolbar', 
                     value);
-                
-                // Clear LastUpdated to ensure next update check refreshes local bookmarks
-                Global.LastUpdated.Set('');
             }
         },
         SyncEnabled: {
@@ -504,6 +501,12 @@ xBrowserSync.App.Global = function(platform) {
                     'xBrowserSync-syncEnabled', 
                     value);
                 
+                // Reset network disconnected flag
+                platform.LocalStorage.Set(
+                    'xBrowserSync-networkDisconnected', 
+                    false);
+                
+                // Update icon
                 platform.Interface.Refresh();
             }
         },

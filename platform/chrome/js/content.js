@@ -31,8 +31,9 @@ xBrowserSync.App.Content = function() {
 	};
     
     var getPageDescription = function() {
-        var metaElement = document.querySelector('meta[property="og:description"]') ||
-            document.querySelector('meta[name="description"]');
+        var metaElement = document.querySelector('meta[property="og:description" i]') ||
+            document.querySelector('meta[name="twitter:description" i]') || 
+            document.querySelector('meta[name="description" i]');
         
         if (!!metaElement && !!metaElement.getAttribute('content')) {
             return metaElement.getAttribute('content');
@@ -43,7 +44,7 @@ xBrowserSync.App.Content = function() {
     
     var getPageTags = function() {
         // Get open graph tag values
-        var tagElements = document.querySelectorAll('meta[property$="video:tag"]');
+        var tagElements = document.querySelectorAll('meta[property$="video:tag" i]');
         
         if (!!tagElements && tagElements.length > 0) {
             var tags = '';
@@ -56,7 +57,7 @@ xBrowserSync.App.Content = function() {
         }
         
         // Get meta tag values
-        var metaElement = document.querySelector('meta[name="keywords"]');
+        var metaElement = document.querySelector('meta[name="keywords" i]');
         
         if (!!metaElement && !!metaElement.getAttribute('content')) {
             return metaElement.getAttribute('content');
@@ -66,8 +67,9 @@ xBrowserSync.App.Content = function() {
     };
     
     var getPageTitle = function() {
-        var metaElement = document.querySelector('meta[property="og:title"]');
-        
+        var metaElement = document.querySelector('meta[property="og:title" i]') || 
+            document.querySelector('meta[name="twitter:title" i]');
+
         if (!!metaElement && !!metaElement.getAttribute('content')) {
             return metaElement.getAttribute('content');
         }

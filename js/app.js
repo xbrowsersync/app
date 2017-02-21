@@ -496,7 +496,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     type: globals.SyncType.Both,
                     changeInfo: { 
                         type: globals.UpdateType.Delete, 
-                        url: vm.bookmark.current.originalUrl
+                        id: vm.bookmark.current.id
                     }
                 });
                 
@@ -538,7 +538,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             .then(function(result) {
 				if (!!result) {
                     // Set form properties to current bookmark
-                    var bookmark = new utility.XBookmark(
+                    var bookmark = new bookmarks.XBookmark(
                         result.title, 
                         result.url,
                         result.description,
@@ -561,7 +561,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     }
                     
                     // Set form properties to url metadata
-                    var bookmark = new utility.XBookmark(
+                    var bookmark = new bookmarks.XBookmark(
                         metadata.title, 
                         metadata.url, 
                         metadata.description,
@@ -577,7 +577,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             .catch(function(err) {
                 // Set bookmark url
                 if (!!err && !!err.url) {
-                    var bookmark = new utility.XBookmark(
+                    var bookmark = new bookmarks.XBookmark(
                         '', 
                         err.url);
                     bookmark.originalUrl = bookmark.url;
@@ -1066,45 +1066,52 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		if (!bookmarksToRestore) {
             return restoreCallback();
         }
-        
+
+        // Display loading overlay 
+        platform.Interface.Loading.Show();
+
         var syncData = {};
         syncData.type = (!globals.SyncEnabled.Get()) ? globals.SyncType.Pull : globals.SyncType.Both;
         syncData.bookmarks = bookmarksToRestore;
-        
-        // Display loading overlay 
-        platform.Interface.Loading.Show();
         
         // Start restore
         platform.Sync(vm.sync.asyncChannel, syncData, globals.Commands.RestoreBookmarks);
 	};
     
     var searchBookmarks = function() {
-        if (!vm.search.query) {
-            return;
-        }
-        
         var queryData = {
             url: null,
             keywords: []
         };
         var urlRegex = /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
 
-        // Iterate query words to form query data object
-        _.each(vm.search.query.split(/[\s]+/), function (queryWord) {
-            // Add query word as url if query is in url format, otherwise add to keywords
-            if (!queryData.url && queryWord.trim().match(urlRegex)) {
-                queryData.url = queryWord.trim();
-            }
-            else {
-                var keyword = queryWord.trim().replace("'", '').replace(/\W$/, '').toLowerCase();
-                if (!!keyword) {
-                    queryData.keywords.push(queryWord.trim());
+        if (!!vm.search.query) {
+            // Iterate query words to form query data object
+            _.each(vm.search.query.split(/[\s]+/), function (queryWord) {
+                // Add query word as url if query is in url format, otherwise add to keywords
+                if (!queryData.url && queryWord.trim().match(urlRegex)) {
+                    queryData.url = queryWord.trim();
                 }
-            }
-        });
+                else {
+                    var keyword = queryWord.trim().replace("'", '').replace(/\W$/, '').toLowerCase();
+                    if (!!keyword) {
+                        queryData.keywords.push(queryWord.trim());
+                    }
+                }
+            });
+        }
         
         bookmarks.Search(queryData)
             .then(function(results) {
+                // Add host to any bookmarks without titles
+                var hyperlinkElement = document.createElement('a');
+                _.chain(results)
+                    .filter(function(result) { return !result.title; })
+                    .each(function(result) { 
+                        hyperlinkElement.href = result.url;
+                        result.host = hyperlinkElement.host;
+                    });
+                
                 vm.search.scrollDisplayMoreEnabled = false;
                 vm.search.resultsDisplayed = vm.search.batchResultsNum;
                 vm.search.results = results;
@@ -1267,7 +1274,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var searchForm_SearchText_KeyDown = function(event) {
         // If user pressed enter and search text present
-        if (event.keyCode === 13 && !!vm.search.query) {
+        if (event.keyCode === 13) {
             if (!!vm.search.getSearchResultsTimeout) {
                 $timeout.cancel(vm.search.getSearchResultsTimeout);
                 vm.search.getSearchResultsTimeout = null;

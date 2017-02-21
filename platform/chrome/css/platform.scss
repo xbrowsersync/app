@@ -1,3 +1,7 @@
+@import 'variables.scss';
+@import 'mixins.scss';
+@import 'animations.scss';
+
 .container {
     display: none;
 
@@ -14,6 +18,12 @@
 #search-panel {
     width: 600px;
     height: auto;
+
+    .header-panel .search-form input {
+        @include placeholder {
+            font-size: 0.9em;
+        }
+    }
 
     .search-results-panel {
         max-height: 410px;

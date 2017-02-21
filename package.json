@@ -1,7 +1,7 @@
 {
   "name": "xbrowsersync-app",
   "description": "The xBrowserSync client app.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "xBrowserSync",
   "license": "MIT",
   "repository": {

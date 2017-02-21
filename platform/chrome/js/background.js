@@ -237,11 +237,11 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					// If extension has been updated, display about panel 
 					globals.DisplayAboutOnStartup.Set(true);
 
-					// Clear cached bookmarks
-					globals.Cache.Bookmarks.Set(null);
+					// Disable sync so that ids are added during next sync
+					globals.SyncEnabled.Set(false);
 
-					// Set network disconnected flag
-					globals.Network.Disconnected.Set(false);
+					// Alert user
+					displayAlert('xBrowserSync Updated', 'Your current sync has been disabled. Please re-enable to upgrade your sync so that it is compatible with the latest version.');
 				}
 				break;
 		}
@@ -323,7 +323,18 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 	};
 	
 	var restoreBookmarks = function(restoreData) {
-		syncBookmarks(restoreData, globals.Commands.RestoreBookmarks);
+        $q(function(resolve, reject) {
+			// Check bookmark have ids
+			if (!bookmarks.CheckBookmarksHaveIds(restoreData.bookmarks)) {
+				return resolve(platform.Bookmarks.AddIds(restoreData.bookmarks));
+			}
+
+			return resolve(restoreData.bookmarks);
+		})
+			.then(function(bookmarks) {
+				restoreData.bookmarks = bookmarks;
+				syncBookmarks(restoreData, globals.Commands.RestoreBookmarks);				
+			});
 	};
 	
 	var startup = function() {
@@ -370,6 +381,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		// Start sync
 		return bookmarks.Sync(syncData)
 			.then(function(syncUpdated) {
+				// TODO: Fix so that only displays message if previous push sync couldn't connect 
 				// Alert the user if a previous update that failed has now synced
 				if (!!networkPreviouslyDisconnected && !!syncUpdated) {
 					displayAlert(platform.GetConstant(globals.Constants.ConnRestored_Title), platform.GetConstant(globals.Constants.ConnRestored_Message));
