@@ -237,11 +237,11 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					// If extension has been updated, display about panel 
 					globals.DisplayAboutOnStartup.Set(true);
 
-					// Clear cached bookmarks
-					bookmarks.RefreshCache();
+					// Disable sync so that ids are added during next sync
+					globals.SyncEnabled.Set(false);
 
-					// Set network disconnected flag
-					globals.Network.Disconnected.Set(false);
+					// Alert user
+					displayAlert('xBrowserSync Updated', 'Your current sync has been disabled. Please re-enable to upgrade your sync so that it is compatible with the latest version.');
 				}
 				break;
 		}

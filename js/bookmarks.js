@@ -639,12 +639,13 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         
         globals.IsSyncing.Set(true);
 
-        var syncPromise;
+        var syncPromise, pushChanges = false;
 
         // Process sync
         switch(currentSync.type) {
             // Push bookmarks to xBrowserSync service
             case globals.SyncType.Push:
+                pushChanges = true;
                 syncPromise = sync_handlePush(currentSync);
                 break;
             // Overwrite local bookmarks
@@ -654,6 +655,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 break;
             // Sync to service and overwrite local bookmarks
             case globals.SyncType.Both:
+                pushChanges = true;
                 globals.DisableEventListeners.Set(true);
                 syncPromise = sync_handleBoth(currentSync);
                 break;
@@ -669,7 +671,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         syncPromise
             // Resolve original sync deferred
             .then(function() {
-                deferredToResolve.resolve(true);
+                deferredToResolve.resolve(pushChanges);
 
                 // If there are items in the queue call sync
                 if (syncQueue.length > 0) {
@@ -679,7 +681,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             .catch(function (err) {
                 // Handle network error
                 if (!!globals.Network.Disconnected.Get()) {
-                    // If the user was committing an update, add sync back into queue and retry periodically, and 
+                    // If the user was committing an update add failed sync back to beginning of queue and 
                     // return specific error code
                     if (currentSync.type !== globals.SyncType.Pull) {
                         syncQueue.unshift(currentSync);
