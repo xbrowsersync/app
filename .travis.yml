@@ -2,11 +2,6 @@ language: node_js
 node_js:
   - "node"
   - "iojs"
-<<<<<<< HEAD
-=======
-env:
-  - TRAVIS_BUILD_NUMBER='1.2.1'
->>>>>>> v1.2.1
 install:
   - npm install
 script:
