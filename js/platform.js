@@ -25,6 +25,7 @@ xBrowserSync.App.Platform = function($q) {
 	return {
 		BackupData: notImplemented,
 		Bookmarks: {
+			AddIds: notImplemented,
 			Clear: notImplemented,
 			Created: notImplemented,
 			Deleted: notImplemented,

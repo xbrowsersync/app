@@ -24,6 +24,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	var ChromeImplementation = function() {
 		// Inject required platform implementation functions
 		platform.BackupData = backupData;
+		platform.Bookmarks.AddIds = addIdsToBookmarks;
 		platform.Bookmarks.Clear = clearBookmarks;
 		platform.Bookmarks.Created = bookmarksCreated;
 		platform.Bookmarks.Deleted = bookmarksDeleted;
@@ -35,8 +36,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         platform.GetCurrentUrl = getCurrentUrl;
 		platform.GetPageMetadata = getPageMetadata;
 		platform.Init = init;
-        platform.Interface.Loading.Show = displayLoading;
 		platform.Interface.Loading.Hide = hideLoading;
+        platform.Interface.Loading.Show = displayLoading;
 		platform.Interface.Refresh = refreshInterface;
 		platform.LocalStorage.Get = getFromLocalStorage;
 		platform.LocalStorage.Set = setInLocalStorage;
@@ -51,6 +52,58 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 /* ------------------------------------------------------------------------------------
  * Public functions
  * ------------------------------------------------------------------------------------ */
+	
+	var addIdsToBookmarks = function(xBookmarks) { 
+        // Get all bookmarks into array
+		return $q(function(resolve, reject) {
+			chrome.bookmarks.getTree(function(results) { 
+				return resolve(results); 
+			});
+		})
+			.then(function(bookmarkTreeNodes) {
+				var allBookmarks = [];
+				
+				// Get all local bookmarks into flat array
+				bookmarks.Each(bookmarkTreeNodes, function(bookmark) { 
+					if (!!bookmark.url) { 
+						allBookmarks.push(bookmark); 
+					}
+				});
+ 
+				// Sort by dateAdded asc 
+				allBookmarks = _.sortBy(allBookmarks, function(bookmark) {  
+					return bookmark.dateAdded;  
+				}); 
+ 
+				var idCounter = allBookmarks.length; 
+				
+				// Add ids to containers' children 
+				var addIdToBookmark = function(bookmark) { 
+					var bookmarkId; 
+		
+					// If url is not null, check allBookmarks for index 
+					if (!!bookmark.url) { 
+						bookmarkId = _.findIndex(allBookmarks, function(sortedBookmark) {  
+							return sortedBookmark.url === bookmark.url; 
+						}); 
+					} 
+		
+					// Otherwise take id from counter and increment 
+					if (!_.isUndefined(bookmarkId) && bookmarkId >= 0) { 
+						bookmark.id = bookmarkId; 
+					} 
+					else { 
+						bookmark.id = idCounter; 
+						idCounter++; 
+					} 
+		
+					_.each(bookmark.children, addIdToBookmark); 
+				}; 
+				_.each(xBookmarks, addIdToBookmark);
+
+				return xBookmarks;
+			});
+    };
 	
 	var backupData = function() {
 		// Export bookmarks
@@ -91,34 +144,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			globals.SyncEnabled.Set(false);
 			return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
 		}
-		
-		var newXBookmark = new bookmarks.XBookmark(
-			createInfo.title, 
-			createInfo.url || null,
-			createInfo.description,
-			createInfo.tags,
-			createInfo.children);
-		
-		// Get new bookmark id
-		var getNewId;
-		if (!!createInfo.newId) {
-			// Use new id supplied
-			getNewId = $q.resolve(createInfo.newId);
-		}
-		else {
-			getNewId = bookmarks.GetNewBookmarkId();
-		}
 
-		getNewId
-			.then(function(newId) {
-				newXBookmark.id = newId;
-		
-				// Get local bookmark's parent's corresponding xBookmark and container
-				// Check if any containers are before the changed bookmark that would throw off index
-				return $q.all([
-					findXBookmarkUsingLocalBookmarkId(createInfo.parentId, xBookmarks), 
-					getNumContainersBeforeBookmarkIndex(createInfo.parentId, createInfo.index)]);
-			})
+		// Get local bookmark's parent's corresponding xBookmark and container
+		// Check if any containers are before the changed bookmark that would throw off index
+		$q.all([
+			findXBookmarkUsingLocalBookmarkId(createInfo.parentId, xBookmarks), 
+			getNumContainersBeforeBookmarkIndex(createInfo.parentId, createInfo.index)])
 			.then(function(results) {
 				var findParentXBookmark = results[0];
             
@@ -134,6 +165,23 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					return $q.reject({
 						code: globals.ErrorCodes.UpdatedBookmarkNotFound
 					});
+				}
+
+				// Create new bookmark
+				var newXBookmark = new bookmarks.XBookmark(
+					createInfo.title, 
+					createInfo.url || null,
+					createInfo.description,
+					createInfo.tags,
+					createInfo.children);
+				
+				if (!!createInfo.newId) {
+					// Use new id supplied
+					newXBookmark.id = createInfo.newId;
+				}
+				else {
+					// Get new bookmark id
+					newXBookmark.id = bookmarks.GetNewBookmarkId(xBookmarks);
 				}
 
 				// Add the new bookmark to the parent's children at the correct index
@@ -473,9 +521,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				}
 
 				// Add unique ids
-				xBookmarks = bookmarks.AddIdsToBookmarks(xBookmarks);
-
-				return xBookmarks;
+				return addIdsToBookmarks(xBookmarks);
 			});
 	};
 	

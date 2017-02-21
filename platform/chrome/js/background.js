@@ -323,12 +323,18 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 	};
 	
 	var restoreBookmarks = function(restoreData) {
-        // Check bookmark have ids 
-		if (!bookmarks.CheckBookmarksHaveIds(restoreData.bookmarks)) {
-			restoreData.bookmarks = bookmarks.AddIdsToBookmarks(restoreData.bookmarks);
-		}
-		
-		syncBookmarks(restoreData, globals.Commands.RestoreBookmarks);
+        $q(function(resolve, reject) {
+			// Check bookmark have ids
+			if (!bookmarks.CheckBookmarksHaveIds(restoreData.bookmarks)) {
+				return resolve(platform.Bookmarks.AddIds(restoreData.bookmarks));
+			}
+
+			return resolve(restoreData.bookmarks);
+		})
+			.then(function(bookmarks) {
+				restoreData.bookmarks = bookmarks;
+				syncBookmarks(restoreData, globals.Commands.RestoreBookmarks);				
+			});
 	};
 	
 	var startup = function() {
@@ -375,6 +381,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		// Start sync
 		return bookmarks.Sync(syncData)
 			.then(function(syncUpdated) {
+				// TODO: Fix so that only displays message if previous push sync couldn't connect 
 				// Alert the user if a previous update that failed has now synced
 				if (!!networkPreviouslyDisconnected && !!syncUpdated) {
 					displayAlert(platform.GetConstant(globals.Constants.ConnRestored_Title), platform.GetConstant(globals.Constants.ConnRestored_Message));
