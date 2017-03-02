@@ -17,12 +17,6 @@
   "background": {
     "page": "background.html"
   },
-  "content_scripts": [
-    {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": ["js/content.js"]
-    }
-  ],
   "permissions": [
     "activeTab",
     "alarms",

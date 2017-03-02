@@ -558,33 +558,26 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
             { currentWindow: true, active: true },
             function(tabs) {
                 var activeTab = tabs[0];
-                
-				if (!!activeTab) {
-					metadata.url = activeTab.url;
-					
-					// Exit if this is a chrome url
-					if (activeTab.url.toLowerCase().startsWith('chrome://')) {
-						return deferred.resolve(metadata);
-					}
+				metadata.url = activeTab.url;
+				
+				// Exit if this is a chrome url
+				if (activeTab.url.toLowerCase().startsWith('chrome://')) {
+					return deferred.resolve(metadata);
 				}
-                
-				// Add listener to receive page metadata from content script
-                chrome.runtime.onMessage.addListener(function(message, sender) {
-					if (message.command === globals.Commands.GetPageMetadata) {
-						if (!!message.metadata) {
-							metadata.title = message.metadata.title;
-							metadata.description = utility.StripTags(message.metadata.description);
-							metadata.tags = message.metadata.tags;
+
+				// Grab metadata from current page
+				chrome.tabs.executeScript(null, { 
+						code: "(" + getCurrentPageMetadata.toString() + ")();" 
+					}, 
+					function(response) {  
+						if (!!response && response.length >= 0) {
+							var currentPageMetadata = response[0];
+
+							metadata.title = currentPageMetadata.title;
+							metadata.description = utility.StripTags(currentPageMetadata.description);
+							metadata.tags = currentPageMetadata.tags;
 						}
 						
-						deferred.resolve(metadata);
-					}
-				});
-				
-				// Run content script to return page metadata
-				chrome.tabs.executeScript(null, { file: 'js/content.js' }, 
-					function() {
-						// If error, resolve deferred
 						deferred.resolve(metadata);
 					});
         });
@@ -922,6 +915,65 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
         return deferred.promise;
     };
+
+	var getCurrentPageMetadata = function() { 
+		var getPageDescription = function() { 
+			var metaElement = document.querySelector('meta[property="og:description" i]') || 
+				document.querySelector('meta[name="twitter:description" i]') ||  
+				document.querySelector('meta[name="description" i]'); 
+			
+			if (!!metaElement && !!metaElement.getAttribute('content')) { 
+				return metaElement.getAttribute('content'); 
+			} 
+			
+			return null; 
+		}; 
+		
+		var getPageTags = function() { 
+			// Get open graph tag values 
+			var tagElements = document.querySelectorAll('meta[property$="video:tag" i]'); 
+			
+			if (!!tagElements && tagElements.length > 0) { 
+				var tags = ''; 
+				
+				for (var i = 0; i < tagElements.length; i++) { 
+					tags += tagElements[i].getAttribute('content') + ','; 
+				} 
+				
+				return tags; 
+			} 
+			
+			// Get meta tag values 
+			var metaElement = document.querySelector('meta[name="keywords" i]'); 
+			
+			if (!!metaElement && !!metaElement.getAttribute('content')) { 
+				return metaElement.getAttribute('content'); 
+			} 
+			
+			return null; 
+		}; 
+		
+		var getPageTitle = function() { 
+			var metaElement = document.querySelector('meta[property="og:title" i]') ||  
+				document.querySelector('meta[name="twitter:title" i]'); 
+	
+			if (!!metaElement && !!metaElement.getAttribute('content')) { 
+				return metaElement.getAttribute('content'); 
+			} 
+			else { 
+				return document.title; 
+			} 
+		}; 
+	
+		var metadata = { 
+			title: getPageTitle(), 
+			url: document.location.href, 
+			description: getPageDescription(), 
+			tags: getPageTags() 
+		}; 
+	
+		return metadata; 
+	};
 	
 	var getLocalBookmarksAsXBookmarks = function(localBookmarks) {
 		var xBookmarks = [];
