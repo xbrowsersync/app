@@ -613,11 +613,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
             });
         });
 
+		// Display contents
+		vm.loading = false;
+
 		// Focus on search box
 		if (viewModel.view.current === viewModel.view.views.search) {
 			$timeout(function() {
 				document.querySelector('input[name=txtSearch]').focus();
-			}, 100);
+			});
 		}
 	};
 

@@ -168,6 +168,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.search = {
             batchResultsNum: 10,
             cancelGetBookmarksRequest: null,
+            displayDefaultState: displayDefaultSearchState,
+            execute: searchBookmarks,
             getLookaheadTimeout: null,
             getSearchLookaheadTimeout: null,
             getSearchResultsTimeout: null,
@@ -688,11 +690,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 document.querySelector('textarea[name="bookmarkDescription"]').style.height = null;
                 vm.bookmark.displayUpdateForm = false;
                 break;
-            case vm.view.views.search:
-                vm.search.lookahead = null;
-                vm.search.query = null;
-                vm.search.results = null;
-                break;
             case vm.view.views.settings:
                 vm.settings.visiblePanel = vm.settings.panels.sync;
                 vm.settings.displayCancelSyncConfirmation = false;
@@ -725,10 +722,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Initialise new view
         switch(view) {
             case vm.view.views.search:
+                vm.search.displayDefaultState();
                 $timeout(function() {
                     platform.Interface.Refresh();
                     $timeout(function() {
-                        document.querySelector('input[name=txtSearch]').focus();
                         deferred.resolve();
                     }, 100);
                 });
@@ -795,6 +792,18 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		
 		return validData;
 	};
+
+    var displayDefaultSearchState = function() {
+        // Clear search and results
+        vm.search.query = null;
+        vm.search.lookahead = null;
+        vm.search.results = null;
+
+        // Focus on search box
+        $timeout(function() {
+            document.querySelector('input[name=txtSearch]').focus();
+        }, 100);
+    };
     
     var displayQRCode_Click = function() {
         // Generate new QR code
@@ -880,9 +889,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
         // Platform-specific initation
         platform.Init(vm, $scope);
-        
-        // Display contents
-        vm.loading = false;
         
         // Display intro animation if required
         if (vm.view.current === vm.view.views.login && !!vm.introduction.displayIntro()) {
@@ -1145,10 +1151,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
 
     var searchForm_Clear_Click = function() {
-        vm.search.query = null;
-        vm.search.lookahead = null;
-        vm.search.results = null;
-        document.querySelector('input[name=txtSearch]').focus();
+        vm.search.displayDefaultState();
     };
 
     var searchForm_DeleteBookmark_Click = function(event, bookmark) {
@@ -1202,8 +1205,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // No query, clear results
         if (!vm.search.query.trim()) {
-            vm.search.results = null;
-            vm.search.lookahead = null;
+            vm.search.displayDefaultState();
             return;
         }
 
