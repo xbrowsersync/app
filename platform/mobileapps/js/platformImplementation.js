@@ -14,7 +14,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
  * Platform variables
  * ------------------------------------------------------------------------------------ */
 
-	var $scope, currentUrl, moduleName = 'xBrowserSync.App.PlatformImplementation', vm, networkErrorDetected = false;
+	var $scope, currentUrl, moduleName = 'xBrowserSync.App.PlatformImplementation', vm;
 	
 	var constants = {
 		"title": {
@@ -571,8 +571,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return $q.resolve();
 	};
 
-	var displayLoading = function() {
-		SpinnerPlugin.activityStart(getConstant(globals.Constants.Working_Title), { dimBackground: true });
+	var displayLoading = function(delay) {
+		if (!delay) {
+			SpinnerPlugin.activityStart(getConstant(globals.Constants.Working_Title), { dimBackground: true });
+			return;
+		}
+		
+		return $timeout(function() {
+			SpinnerPlugin.activityStart(getConstant(globals.Constants.Working_Title), { dimBackground: true });
+		}, 500);
+		
 	};
 
 	var getBookmarks = function() {
@@ -708,7 +716,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return deferred.promise;
     };
 
-	var hideLoading = function() {
+	var hideLoading = function(timeout) {
+		if (!!timeout) {
+			$timeout.cancel(timeout);
+		}
 		SpinnerPlugin.activityStop();
 	};
 

@@ -341,9 +341,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             return;
         }
         
-        // Display loading overlay
-        platform.Interface.Loading.Show();
-        
         // Start restore
         restoreData(JSON.parse(data));
 	};
@@ -533,7 +530,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         var deferred = $q.defer();
         
         // Display loading overlay 
-        platform.Interface.Loading.Show();
+         var displayLoadingPanelTimeout = platform.Interface.Loading.Show(true);
 
         // Check if current url is a bookmark
         bookmarks.IncludesCurrentPage()
@@ -598,7 +595,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 return deferred.resolve();
             })
             .finally(function() {
-                platform.Interface.Loading.Hide();
+                platform.Interface.Loading.Hide(displayLoadingPanelTimeout);
             });
         
         return deferred.promise;
@@ -718,6 +715,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 }
                 break;
         }
+
+        vm.view.current = view;           
         
         // Initialise new view
         switch(view) {
@@ -767,7 +766,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 break;
         }
         
-        vm.view.current = view;            
         return deferred.promise;
     };
 	

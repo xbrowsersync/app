@@ -448,8 +448,15 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return $q.all([clearOtherBookmarks.promise, clearBookmarksBar.promise]);
 	};
 
-	var displayLoading = function() {
-		vm.working = true;
+	var displayLoading = function(delay) {
+		if (!delay) {
+			vm.working = true;
+			return;
+		}
+		
+		return $timeout(function() {
+			vm.working = true;
+		}, 500);
 	};
 	
 	var getAsyncChannel = function(syncCallback) {
@@ -585,7 +592,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         return deferred.promise;
     };
 
-	var hideLoading = function() {
+	var hideLoading = function(timeout) {
+		if (!!timeout) {
+			$timeout.cancel(timeout);
+		}
 		vm.working = false;
 	};
 
