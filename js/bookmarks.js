@@ -39,32 +39,23 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
     };
     
     var checkForUpdates = function() {
-		// Exit if sync is in progress
-		if (globals.IsSyncing.Get()) {
-            return $q.resolve();
-		}
-        
-        if (!!globals.Network.Disconnected.Get() && syncQueue.length > 0) {
-            // If a previous sync failed due to lost connection, resync now
-			return queueSync();
+		// Check if there are unsynced local updates
+        if (syncQueue.length > 0) {
+            return $q.resolve(true);
         }
-        else {
-            // Check if bookmarks have been updated
-            return api.GetBookmarksLastUpdated()
-                .then(function(data) {
-                    if (!data || !data.lastUpdated) {
-                        return $q.reject({ code: globals.ErrorCodes.NoDataFound });
-                    }
-                    
-                    var lastUpdated = new Date(data.lastUpdated);
-                    
-                    // If last updated is different the date in local storage, refresh bookmarks
-                    if (!globals.LastUpdated.Get() || globals.LastUpdated.Get().getTime() !== lastUpdated.getTime()) {
-                        // Run sync
-                        return queueSync({ type: globals.SyncType.Pull });
-                    }
-                });
-        }
+
+        // Check if bookmarks have been updated
+        return api.GetBookmarksLastUpdated()
+            .then(function(data) {
+                if (!data || !data.lastUpdated) {
+                    return $q.reject({ code: globals.ErrorCodes.NoDataFound });
+                }
+                
+                var lastUpdated = new Date(data.lastUpdated);
+                
+                // If last updated is different the date in local storage, refresh bookmarks
+                return !globals.LastUpdated.Get() || globals.LastUpdated.Get().getTime() !== lastUpdated.getTime();
+            });
 	};
 
     var eachBookmark = function(bookmarks, iteratee) {
@@ -346,7 +337,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
 		}
 		
 		if (!!description) {
-			xBookmark.description = description.trim().substring(0, globals.Bookmarks.DescriptionMaxLength);
+			xBookmark.description = utility.TrimToNearestWord(description, globals.Bookmarks.DescriptionMaxLength);
 		}
 		
 		if (!!tags && tags.length > 0) {
@@ -625,7 +616,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
 			return;
 		}
         
-        // Get next queued sync (process syncs in order )
+        // Get next queued sync (process syncs in order)
         var currentSync = syncQueue.shift();
         
         // Queue is empty, return
@@ -639,13 +630,12 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         
         globals.IsSyncing.Set(true);
 
-        var syncPromise, pushChanges = false;
+        var syncPromise;
 
         // Process sync
         switch(currentSync.type) {
             // Push bookmarks to xBrowserSync service
             case globals.SyncType.Push:
-                pushChanges = true;
                 syncPromise = sync_handlePush(currentSync);
                 break;
             // Overwrite local bookmarks
@@ -655,7 +645,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 break;
             // Sync to service and overwrite local bookmarks
             case globals.SyncType.Both:
-                pushChanges = true;
                 globals.DisableEventListeners.Set(true);
                 syncPromise = sync_handleBoth(currentSync);
                 break;
@@ -671,7 +660,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         syncPromise
             // Resolve original sync deferred
             .then(function() {
-                deferredToResolve.resolve(pushChanges);
+                deferredToResolve.resolve(currentSync.initialSyncFailed);
 
                 // If there are items in the queue call sync
                 if (syncQueue.length > 0) {
@@ -684,6 +673,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                     // If the user was committing an update add failed sync back to beginning of queue and 
                     // return specific error code
                     if (currentSync.type !== globals.SyncType.Pull) {
+                        currentSync.initialSyncFailed = true;
                         syncQueue.unshift(currentSync);
                         deferredToResolve.reject({ 
                             code: globals.ErrorCodes.HttpRequestFailedWhileUpdating 
@@ -749,6 +739,9 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                             // Add new id to new bookmark
                             var newBookmark = syncData.changeInfo.bookmark;
                             newBookmark.id = getNewBookmarkId(bookmarksToUpdate);
+
+                            // Remove animation Class
+                            if (!!newBookmark.class) { delete newBookmark.class; }
                             
                             // Add new bookmark to xBrowserSync group
                             xbsContainer.children.push(newBookmark);

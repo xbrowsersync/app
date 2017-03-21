@@ -6,7 +6,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1">
-    <title>xBrowserSync</title>
+    <title>{{ vm.platform.GetConstant(vm.globals.Constants.Title) }}</title>
     <link rel="stylesheet" href="css/styles.min.css" />
 </head>
 
@@ -61,7 +61,9 @@
                     <div class="contents">
                         <h4>{{ vm.platform.GetConstant(vm.globals.Constants.AboutPanel_Title) }} {{ vm.globals.AppVersion }}</h4>
                         <ul>
-                            <li></li>
+                            <li>Added: iOS and Android apps released.</li>
+                            <li>Fixed: New bookmark descriptions are shortened to 300 characters to the nearest word.</li>
+                            <li>Fixed: For Chrome extension, "Connection Lost" warnings are no longer shown when checking for updates in the background.</li>
                         </ul>
                         <p class="text-center">
                             <a href="https://github.com/xBrowserSync/App/releases" class="new-tab">
@@ -352,11 +354,11 @@
                 </div>
             </div>
             <div class="search-results-panel" ng-show="!!vm.search.results">
-                <h4 class="no-bookmarks" ng-show="vm.search.results.length === 0">
+                <h4 class="no-bookmarks" ng-show="!!vm.search.query && vm.search.results.length === 0">
                     {{ vm.platform.GetConstant(vm.globals.Constants.NoSearchResults_Message) }}
                 </h4>
                 <div class="list-group" ng-show="vm.search.results.length > 0" infinite-scroll="vm.events.searchForm_SearchResults_Scroll()" infinite-scroll-container="'.search-results-panel'">
-                    <div class="list-group-item" ng-repeat="result in vm.search.results | limitTo:vm.search.resultsDisplayed track by result.id">
+                    <div class="list-group-item search-result-item" data-bookmark-id="{{ result.id }}" ng-class="{ true: 'animate-' + result.class }[!!result.class]" ng-repeat="result in vm.search.results | limitTo:vm.search.resultsDisplayed track by result.id">
                         <div class="menu" hm-tap="vm.events.searchForm_SelectBookmark_Press($event)">
                             <div class="buttons">
                                 <button class="btn btn-icon" title="Share bookmark" hm-tap="vm.events.searchForm_ShareBookmark_Click(result)">
@@ -389,7 +391,7 @@
                     </div>
                 </div>
             </div>
-            <div class="search-panel-background animate-fade-long" ng-show="!vm.search.results"></div>
+            <div class="search-panel-background animate-fade-long" ng-hide="(!!vm.search.query && vm.search.results.length === 0) || vm.search.results.length > 0"></div>
         </div>
         
         <div id="bookmark-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.bookmark">

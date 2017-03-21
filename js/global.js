@@ -25,7 +25,7 @@ xBrowserSync.App.Global = function(platform) {
         ApiVersion: '1.0.x',
         AppVersion: '1.2.2',
         Bookmarks: {
-            DescriptionMaxLength: 500,
+            DescriptionMaxLength: 300,
             OtherContainerName: '_other_',
             ToolbarContainerName: '_toolbar_',
             xBrowserSyncContainerName: '_xBrowserSync_'

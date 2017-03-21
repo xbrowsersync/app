@@ -687,7 +687,7 @@ body {
             }
             
             i {
-                font-size: 1.3em;
+                font-size: 1.2em;
                 line-height: 2.2em;
                 opacity: 0.4;
             }
@@ -780,12 +780,33 @@ body {
                 }
             }
 
-            &.deleted {
-                @include animation(animate-slide-out-fold-up 0.5s ease-out);
-                transform: translateX(-105%);
-                max-height: 0px;
-                margin-bottom: 0px;
-                overflow: hidden;
+            &.animate-added {
+                &.ng-enter {
+                    @include animation(animate-fold-down-slide-in 0.5s ease-out);
+
+                    &.ng-enter-active {
+                        transform: translateX(0%);
+                        max-height: 250px;
+                        margin-bottom: 15px;
+                    }
+                }
+            }
+            
+            &.animate-deleted {
+                &.ng-enter,
+                &.ng-leave,
+                &.ng-move {
+                    @include animation(animate-slide-out-fold-up 0.5s ease-out);
+
+                    &.ng-enter-active,
+                    &.ng-leave-active,
+                    &.ng-move-active {
+                        transform: translateX(-105%);
+                        max-height: 0px;
+                        margin-bottom: 0px;
+                        overflow: hidden;
+                    }
+                }
             }
             
             a {

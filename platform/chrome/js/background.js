@@ -128,6 +128,23 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		
 		chrome.notifications.create('xBrowserSync-notification', options, callback);
 	};
+
+	var getLatestUpdates = function() {
+		// Exit if sync isn't enabled or event listeners disabled
+		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
+			return;
+		}
+
+		return bookmarks.CheckForUpdates()
+			.then(function(updatesAvailable) {
+				if (!updatesAvailable) {
+					return;
+				}
+
+				// Get bookmark updates
+				return syncBookmarks({ type: globals.SyncType.Pull });
+			});
+	};
 	
 	var handleAlarm = function(alarm) {
 		// When alarm fires check for sync updates
@@ -137,45 +154,18 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 				return;
 			}
 
-			var networkPreviouslyDisconnected = globals.Network.Disconnected.Get();
-			
-			bookmarks.CheckForUpdates()
-				.then(function(syncUpdated) {
-					// Reset counter
-					checkForUpdatesAttempts = 0;
-					
-					// As connection succeeded, reset network error displayed flag
-					disconnectedAlertDisplayed = false;
-
-					// Reset network disconnected flag
-        			globals.Network.Disconnected.Set(false);
-
-					// Alert the user if a previous update that failed has now synced
-					if (!!networkPreviouslyDisconnected && !!syncUpdated) {
-						displayAlert(platform.GetConstant(globals.Constants.ConnRestored_Title), platform.GetConstant(globals.Constants.ConnRestored_Message));
-					}
-				})
+			getLatestUpdates()
 				.catch(function(err) {
 					// Log error
 					utility.LogMessage(
 						moduleName, 'handleAlarm', utility.LogType.Error,
 						JSON.stringify(err));
-
-					// If network error, only display an alert on the first error, or if the user
-					// is pushing an update
-					if (!!globals.Network.Disconnected.Get()) {
-						checkForUpdatesAttempts++;
-						
-						// Return if this is not an update and network error detected previously, or if attempting to 
-						// sync after a previously failed attempt due to network error
-						if ((err.code === globals.ErrorCodes.HttpRequestFailed && checkForUpdatesAttempts < 3) ||
-							!!disconnectedAlertDisplayed ||
-							err.code === globals.ErrorCodes.HttpRequestFailedWhileUpdating) {
-							return;
-						}
+					
+					// Don't display alert if sync failed due to network connection
+					if (err.code === globals.ErrorCodes.HttpRequestFailed || 
+						err.code === globals.ErrorCodes.HttpRequestFailedWhileUpdating) {
+						return;
 					}
-
-					disconnectedAlertDisplayed = true;
 						
 					// Display alert
 					var errMessage = utility.GetErrorMessageFromException(err);
@@ -374,11 +364,15 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		
 		// Start sync
 		return bookmarks.Sync(syncData)
-			.then(function(syncUpdated) {
-				// TODO: Fix so that only displays message if previous push sync couldn't connect 
-				// Alert the user if a previous update that failed has now synced
-				if (!!networkPreviouslyDisconnected && !!syncUpdated) {
-					displayAlert(platform.GetConstant(globals.Constants.ConnRestored_Title), platform.GetConstant(globals.Constants.ConnRestored_Message));
+			.then(function(initialSyncFailed) {
+				// Reset network disconnected flag
+				globals.Network.Disconnected.Set(false);
+
+				// If this sync initially failed, alert the user and refresh search results
+				if (!!initialSyncFailed) {
+					displayAlert(
+						platform.GetConstant(globals.Constants.ConnRestored_Title), 
+						platform.GetConstant(globals.Constants.ConnRestored_Message));
 				}
 				
 				if (!!command) {
@@ -401,9 +395,6 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 				utility.LogMessage(
 					moduleName, 'syncBookmarks', utility.LogType.Info,
 					'syncData: ' + JSON.stringify(syncData));
-
-				// Set flag if user has been alerted of disconnection 
-				disconnectedAlertDisplayed = (err.code === globals.ErrorCodes.HttpRequestFailed || err.code === globals.ErrorCodes.HttpRequestFailedWhileUpdating);
 
 				if (!!command) {
 					try {

@@ -6,9 +6,9 @@ xBrowserSync.App.UI.config(['$compileProvider', function($compileProvider) {
     $compileProvider.debugInfoEnabled(false);
 }]);
 
-// Configure animated elements
+// Restrict animations to elements with class prefix "animate-"
 xBrowserSync.App.UI.config(['$animateProvider', function($animateProvider) {
-    $animateProvider.classNameFilter(/animate\-/);
+    $animateProvider.classNameFilter(/animate\-|search\-result\-item/);
 }]);
 
 // Add platform service

@@ -212,6 +212,19 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		return (!!str) ? str.replace(/<(?:.|\n)*?>/gm, '') : str;
 	};
 
+	var trimToNearestWord = function(text, limit) {
+		if (!text) { return ''; }
+
+		text = text.trim();
+
+		if (limit >= text.length) {
+			return text;
+		}
+
+		var trimmedText = text.substring(0, text.lastIndexOf(' ', limit)) + '\u2026';
+  		return trimmedText;
+	};
+
 	
 	return {
 		Closest: closest,
@@ -223,6 +236,7 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		LogMessage: logMessage,
 		LogType: logType,
 		ParseUrl: parseUrl,
-		StripTags: stripTags
+		StripTags: stripTags,
+		TrimToNearestWord: trimToNearestWord
 	};
 };
