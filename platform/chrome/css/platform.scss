@@ -2,14 +2,6 @@
 @import 'mixins.scss';
 @import 'animations.scss';
 
-.container {
-    display: none;
-
-    &.done-loading {
-        display: block;
-    }
-}
-
 .view {
     width: 320px;
     height: 480px;

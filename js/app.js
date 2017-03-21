@@ -20,7 +20,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.platform = platform; 
         vm.scope = $scope;
 
-        vm.loading = true;
         vm.working = false;
 		
 		vm.alert = {

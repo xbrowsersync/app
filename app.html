@@ -11,10 +11,10 @@
 </head>
 
 <body>
-    <div class="container" ng-class="{ 'done-loading': !vm.loading }">
+    <div class="container">
         <div class="background"></div>
         
-        <div id="working-panel" ng-show="vm.working">
+        <div id="working-panel" ng-show="vm.working" ng-cloak>
             <div class="content">
                 <h3>{{ vm.platform.GetConstant(vm.globals.Constants.Working_Title) }}</h3>
                 <p>{{ vm.platform.GetConstant(vm.globals.Constants.Working_Message) }}</p>
@@ -22,12 +22,12 @@
             <div class="darken"></div>
         </div>
 
-        <div id="qr-panel" ng-show="vm.settings.displayQRCode" ng-click="vm.settings.displayQRCode = false">
+        <div id="qr-panel" ng-show="vm.settings.displayQRCode" ng-click="vm.settings.displayQRCode = false" ng-cloak>
             <canvas id="qr" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}"></canvas>
             <div class="darken"></div>
         </div>
         
-        <div class="alert animate-fade animate-fade-out" role="alert" ng-show="vm.alert.show" 
+        <div class="alert animate-fade animate-fade-out" role="alert" ng-show="vm.alert.show" ng-cloak
              ng-class="{
              'alert-success': vm.alert.type === 'success',
              'info': vm.alert.type === 'info',
@@ -41,7 +41,7 @@
             <p ng-bind-html="vm.alert.message"></p>
         </div>
         
-        <div id="about-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.about">
+        <div id="about-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.about" ng-cloak>
             <div class="header-panel">
                 <button class="btn btn-icon btn-close" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}" 
                         ng-click="vm.events.aboutPanel_Close_Click()" tabindex="1001">
@@ -75,7 +75,7 @@
             </div>
         </div>
         
-        <div id="login-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.login">
+        <div id="login-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.login" ng-cloak>
             <div class="header-panel clearfix">
                 <button class="btn btn-icon animate-fade" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}" 
                         ng-click="vm.events.introPanel_ShowHelp_Click()" ng-show="!vm.introduction.displayIntro() && !!vm.introduction.showLogo" tabindex="1000">
@@ -325,7 +325,7 @@
             </div>
         </div>
         
-        <div id="search-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.search">
+        <div id="search-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.search" ng-cloak>
             <div class="header-panel clearfix">
                 <div class="buttons">
                     <button class="btn btn-icon btn-toggle-bookmark" ng-class="{ 'active': vm.bookmark.active }" title="{{ vm.bookmark.active ? vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) : vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}" 
@@ -394,7 +394,7 @@
             <div class="search-panel-background animate-fade-long" ng-hide="(!!vm.search.query && vm.search.results.length === 0) || vm.search.results.length > 0"></div>
         </div>
         
-        <div id="bookmark-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.bookmark">
+        <div id="bookmark-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.bookmark" ng-cloak>
             <div class="header-panel clearfix">
                 <h2>
                     {{ (vm.bookmark.displayUpdateForm) ? vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Title_Edit) : vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Title_Add) }}
@@ -456,7 +456,7 @@
             </div>
         </div>
         
-        <div id="settings-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.settings">
+        <div id="settings-panel" class="view animate-fade" ng-show="vm.view.current === vm.view.views.settings" ng-cloak>
             <div class="header-panel clearfix">
                 <h2>{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}</h2>
                 <button class="btn btn-icon btn-close" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}" 
