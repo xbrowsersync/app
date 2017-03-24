@@ -15,27 +15,38 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
  * Public functions
  * ------------------------------------------------------------------------------------ */
  
-    var checkBookmarksHaveIds = function(bookmarks) {
+    var checkBookmarksHaveUniqueIds = function(bookmarks) {
+        // Find any bookmark without an id
         var bookmarksHaveIds = true;
-
-        // Check if the bookmarks in supplied array all have ids
-        _.each(bookmarks, function(bookmark) {
+        self.Each(bookmarks, function(bookmark) {
             if (_.isUndefined(bookmark.id)) {
                 bookmarksHaveIds = false;
             }
         });
 
-        // Run recursively for children, stopping if no id is found
-        var index = 0;
-        while (!!bookmarksHaveIds && index < bookmarks.length) {
-            var bookmark = bookmarks[index];
-            if (!!bookmark.children && bookmark.children.length > 0) {
-                bookmarksHaveIds = checkBookmarksHaveIds(bookmark.children);
-            }
-            index++;
+        if (!bookmarksHaveIds) {
+            return false;
         }
         
-        return bookmarksHaveIds;
+        // Get all local bookmarks into flat array
+        var allBookmarks = [];
+        self.Each(bookmarks, function(bookmark) { 
+            allBookmarks.push(bookmark); 
+        });
+
+        // Find a bookmark with a duplicate id
+        var duplicateIds = _.chain(allBookmarks)
+            .countBy('id')
+            .find(function(count) { 
+                return count > 1; }
+            )
+            .value();
+        
+        if (!_.isUndefined(duplicateIds)) {
+            return false;
+        }
+
+        return true;
     };
     
     var checkForUpdates = function() {
@@ -857,7 +868,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
     };
     
     var sync_handlePull = function(syncData) {
-        var bookmarks, lastUpdated;
+        var bookmarks, getBookmarksPromise, lastUpdated, updatedBookmarks;
         
         if (!_.isUndefined(syncData.bookmarks)) {
             // Local import, update browser bookmarks
@@ -892,11 +903,20 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                     return $q.reject({ code: globals.ErrorCodes.InvalidData });
                 }
 
-                // Check bookmark have ids
-                if (!checkBookmarksHaveIds(bookmarks)) {
-                    return platform.Bookmarks.AddIds(bookmarks);
-                }
+                // If bookmarks don't have unique ids, add new ids and re-sync
+                var hasUniqueIds = checkBookmarksHaveUniqueIds(bookmarks);
+                if (!hasUniqueIds) {
+                    return platform.Bookmarks.AddIds(bookmarks)
+                        .then(function(updatedBookmarks) {
+                            queueSync({ 
+                                bookmarks: updatedBookmarks, 
+                                type: globals.SyncType.Both 
+                            });
 
+                            return updatedBookmarks;
+                        });
+                }
+                
                 return bookmarks;
             })
             .then(function(bookmarks) {
@@ -1043,8 +1063,8 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             });
     };
 		
-	return {
-        CheckBookmarksHaveIds: checkBookmarksHaveIds,
+	var self = {
+        CheckBookmarksHaveUniqueIds: checkBookmarksHaveUniqueIds,
         CheckForUpdates: checkForUpdates,
         Each: eachBookmark,
 		Export: exportBookmarks,
@@ -1062,4 +1082,5 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         SyncSize: getSyncSize,
         XBookmark: xBookmark
 	};
+    return self;
 };

@@ -308,12 +308,16 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 	
 	var restoreBookmarks = function(restoreData) {
         $q(function(resolve, reject) {
-			// Check bookmark have ids
-			if (!bookmarks.CheckBookmarksHaveIds(restoreData.bookmarks)) {
-				return resolve(platform.Bookmarks.AddIds(restoreData.bookmarks));
+			// If bookmarks don't have unique ids, add new ids
+			if (!bookmarks.CheckBookmarksHaveUniqueIds(restoreData.bookmarks)) {
+				platform.Bookmarks.AddIds(restoreData.bookmarks)
+					.then(function(updatedBookmarks) {
+						resolve(updatedBookmarks);
+					});
 			}
-
-			return resolve(restoreData.bookmarks);
+			else {
+				resolve(restoreData.bookmarks);
+			}
 		})
 			.then(function(bookmarks) {
 				restoreData.bookmarks = bookmarks;

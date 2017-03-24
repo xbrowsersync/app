@@ -65,9 +65,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				
 				// Get all local bookmarks into flat array
 				bookmarks.Each(bookmarkTreeNodes, function(bookmark) { 
-					if (!!bookmark.url) { 
-						allBookmarks.push(bookmark); 
-					}
+					allBookmarks.push(bookmark); 
 				});
  
 				// Sort by dateAdded asc 
@@ -81,16 +79,21 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				var addIdToBookmark = function(bookmark) { 
 					var bookmarkId; 
 		
-					// If url is not null, check allBookmarks for index 
-					if (!!bookmark.url) { 
-						bookmarkId = _.findIndex(allBookmarks, function(sortedBookmark) {  
-							return sortedBookmark.url === bookmark.url; 
-						}); 
-					} 
+					// Check allBookmarks for index 
+					bookmarkId = _.findIndex(allBookmarks, function(sortedBookmark) {  
+						if (sortedBookmark.title === bookmark.title && 
+						sortedBookmark.url === bookmark.url &&
+						!sortedBookmark.assigned) {
+							return true;
+						}
+					});
 		
 					// Otherwise take id from counter and increment 
 					if (!_.isUndefined(bookmarkId) && bookmarkId >= 0) { 
 						bookmark.id = bookmarkId; 
+
+						// Mark this bookmark as assigned to prevent duplicate ids
+						allBookmarks[bookmarkId].assigned = true;
 					} 
 					else { 
 						bookmark.id = idCounter; 
