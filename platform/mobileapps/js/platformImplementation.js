@@ -697,7 +697,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			// Get meta tag values
 			tagElements = _.find(metaTagsArr, function(tag) { 
 				return !!tag.getAttribute('name') && 
-					   !!tag.getAttribute('name').toUpperCase() === 'KEYWORDS';
+					   tag.getAttribute('name').toUpperCase() === 'KEYWORDS';
 			}); 
 
 			if (!!tagElements) {
