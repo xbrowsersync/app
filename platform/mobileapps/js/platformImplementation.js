@@ -21,7 +21,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "xBrowserSync"
 		},
 		"description": {
-			"message": "Browser syncing as it should be: secure, anonymous and free!"
+			"message": "Browser syncing as it should be: secure, anonymous and free! Sync your bookmarks across your browsers and devices with xBrowserSync in one click, no sign up required."
 		},
 		"bookmarksToolbarTitle": {
 			"message": "Bookmarks bar"
@@ -63,22 +63,22 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "<h4>Your secret word</h4><p>To begin, enter a secret word or phrase that will be used to encrypt and decrypt your browser data.</p><p>Make it strong to protect your data but also memorable, if you forget it we can't remind you and you won't be able to decrypt your data without it.</p>"
 		},
 		"introPanel3_Message": {
-			"message": "<h4>Syncing for the first time</h4><p>Once you've entered your secret word or phrase, you are ready to create a new sync. Just click the Sync button and your browser data will be encrypted before being synced to the xBrowserSync service.</p><p>And that's it, you're synced! Any future changes will be synced automatically in the background.</p>"
+			"message": "<h4>Syncing for the first time</h4><p>Once you've entered your secret word or phrase, you are ready to create a new sync. Just click the Sync button and your browser data will be encrypted before being synced to the xBrowserSync service.</p><p>And that's it! Any future changes will be synced automatically in the background.</p>"
 		},
 		"introPanel4_Message": {
-			"message": "<h4>Your xBrowserSync ID</h4><p>Every time you create a new sync you are given a new xBrowserSync ID, which can be found via the Settings panel.</p><p>You can use this ID along with your corresponding secret word or phrase to retrieve your synced data or sync on a different device.</p><p>Pro tip! Tap the camera icon to scan the QR code for your existing xBrowserSync ID via the browser extension.</p>"
+			"message": "<h4>Your xBrowserSync ID</h4><p>When you create a new sync you are given a new xBrowserSync ID (find it in the Settings panel), which you can use along with your secret word or phrase to enable syncing of your data on a different device.</p><p>If you've already created a sync using the xBrowserSync browser extension, tap the camera icon to scan the QR code to get your existing sync ID.</p>"
 		},
 		"introPanel5_Message": {
-			"message": "<h4>Syncing to another service</h4><p>When creating new syncs, by default your data is synced to the official xBrowserSync service, but you can change the service you sync to via the Settings panel.</p><p>You may do this because the service is full, offline, or perhaps you would like to <a href='https://github.com/xBrowserSync/API' class='new-tab'>run your own xBrowserSync service</a> to sync your data to.</p>"
+			"message": "<h4>Syncing to another service</h4><p>By default your data is synced to the official xBrowserSync service, though anyone can <a href='https://github.com/xBrowserSync/API' class='new-tab'>run their own xBrowserSync service</a>, either for private use (for ultimate security and privacy) or to make available for public use so that more people can enjoy xBrowserSync.</p><p>Check the available <a href='https://www.xbrowsersync.org/#status' class='new-tab'>xBrowserSync services</a> and switch your active service in the Settings panel.</p>"
 		},
 		"introPanel6_Message": {
-			"message": "<h4>New service, new ID</h4><p>IDs are service-specific. If you have created a sync and received an xBrowserSync ID with one service it cannot be used with another.</p><p>Whenever you change services you must create a new sync. You'll then receive a new ID for use with that service.</p>"
+			"message": "<h4>New service, new ID</h4><p>IDs are service-specific. When you create a sync with a service, the xBrowserSync ID you are given can only be used with that service.</p><p>Whenever you change services you must create a new sync, you'll then receive a new ID for use with that service (you can then restore your backed-up data after creating the new sync).</p>"
 		},
 		"introPanel7_Message": {
-			"message": "<h4>Searching your bookmarks</h4><p>Start typing some keywords or a URL to search your synced bookmarks.</p><p>You can also share, modify or delete bookmarks from the search results by long pressing on a search result.</p>"
+			"message": "<h4>Searching your bookmarks</h4><p>Your existing bookmarks are displayed with the most recent showing first. To search your bookmarks, simply enter some keywords or a URL and the list will be filtered to display only those bookmarks that are relevant to your query.</p><p>You can also share, modify or delete bookmarks from the search results by long pressing on a search result.</p>"
 		},
 		"introPanel8_Message": {
-			"message": "<h4>Adding a bookmark</h4><p>You can add a new bookmark by either sharing a URL to xBrowserSync from your browser app, or by clicking on the bookmark icon above the search box.</p><p>Include a description which will be displayed in search results, and add tags to help find the bookmark more easily when searching.</p>"
+			"message": "<h4>Adding a bookmark</h4><p>You can add a new bookmark by either sharing a URL to the xBrowserSync app from your favourite browser app, or by clicking on the bookmark icon above the search box to add a bookmark manually.</p><p>When sharing a bookmark, the title, description and tags will be populated for you automatically, otherwise a description and tags to help find the bookmark more easily when searching.</p>"
 		},
 		"introPanel9_Message": {
 			"message": "<h4>Bookmark from your browser</h4><p>In order to add bookmarks directly from your browser, you will first need to enable sharing to xBrowserSync.</p><p>In your browser app, tap the share button to bring up the share sheet, slide to the right and tap the More option. Enable the xBrowserSync activity and tap Done to save your changes. From now on you can tap xBrowserSync on the share sheet to add the current webpage to xBrowserSync.</p>"
@@ -148,6 +148,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		},
 		"field_Search_Description" : {
 			"message":  "Find a bookmark"
+		},
+		"noBookmarks_Message" : {
+			"message":  "You currently have no bookmarks to display.<br/><br/>Start adding bookmarks easily by sharing web pages from your favourite browser app."
 		},
 		"noSearchResults_Message" : {
 			"message":  "No bookmarks found"
@@ -648,10 +651,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			parser = new DOMParser();
 			html = parser.parseFromString(pageContent, 'text/html');
 
+			// Get all meta tags
+			var metaTagsArr = html.getElementsByTagName('meta');
+
 			// Get page title
-			title = html.querySelector('meta[property="og:title"]') ||  
-					html.querySelector('meta[name="twitter:title"]'); 	
-			if (!!title && !!title.getAttribute('content')) { 
+			title = _.find(metaTagsArr, function(tag) { 
+				return (!!tag.getAttribute('property') && tag.getAttribute('property').toUpperCase() === 'OG:TITLE') || 
+					   (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase() === 'TWITTER:TITLE'); 
+			}); 
+			
+			if (!!title) {
 				metadata.title = title.getAttribute('content');
 			} 
 			else { 
@@ -659,15 +668,22 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			} 
 
 			// Get page description
-			description = html.querySelector('meta[property="og:description"]') || 
-						  html.querySelector('meta[name="twitter:description"]') ||  
-						  html.querySelector('meta[name="description"]'); 			
-			if (!!description && !!description.getAttribute('content')) {
+			description = _.find(metaTagsArr, function(tag) { 
+				return (!!tag.getAttribute('property') && tag.getAttribute('property').toUpperCase() === 'OG:DESCRIPTION') ||
+					   (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase() === 'TWITTER:DESCRIPTION') ||
+					   (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase() === 'DESCRIPTION');
+			});
+
+			if (!!description) {
 				metadata.description = utility.StripTags(description.getAttribute('content'));
 			}
 
 			// Get page tags
-			tagElements = html.querySelectorAll('meta[property$="video:tag"]');
+			tagElements = _.filter(metaTagsArr, function(tag) { 
+				return !!tag.getAttribute('property') && 
+					   !!tag.getAttribute('property').match(/video\:tag$/i); 
+			}); 
+
 			if (!!tagElements && tagElements.length > 0) {
 				tags = '';
 				
@@ -679,8 +695,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			}
 
 			// Get meta tag values
-			tagElements = html.querySelector('meta[name="keywords"]');
-			if (!!tagElements && !!tagElements.getAttribute('content')) {
+			tagElements = _.find(metaTagsArr, function(tag) { 
+				return !!tag.getAttribute('name') && 
+					   !!tag.getAttribute('name').toUpperCase() === 'KEYWORDS';
+			}); 
+
+			if (!!tagElements) {
 				metadata.tags = tagElements.getAttribute('content');
 			}
 
@@ -772,14 +792,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			}
 		};
 
-		// Set intro panel button events
-		vm.events.introPanel11_Next_Click = function() {
-			vm.introduction.displayPanel(14);
-		};
-		vm.events.introPanel14_Prev_Click = function() {
-			vm.introduction.displayPanel(11);
-		};
-
 		// Set clear search button to display all bookmarks
 		vm.search.displayDefaultState = displayDefaultSearchState;
 
@@ -860,7 +872,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
     };
 	
 	var sync = function(vm, syncData, command) {
-		var networkPreviouslyDisconnected = globals.Network.Disconnected.Get();
 		syncData.command = (!!command) ? command : globals.Commands.SyncBookmarks;
 
 		// Start sync
@@ -1048,6 +1059,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Set network online event
 		document.addEventListener('online', handleNetworkReconnected, false);
 
+		// Set intro panel button events
+		vm.events.introPanel11_Next_Click = function() {
+			vm.introduction.displayPanel(14);
+		};
+		vm.events.introPanel14_Prev_Click = function() {
+			vm.introduction.displayPanel(11);
+		};
+		
 		// Don't display iOS specific help panels
 		if (vm.platformName === vm.globals.Platforms.Android) {
 			vm.events.introPanel8_Next_Click = function() {

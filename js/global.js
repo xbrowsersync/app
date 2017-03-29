@@ -127,6 +127,7 @@ xBrowserSync.App.Global = function(platform) {
 			Button_Confirm_Label: 'button_Confirm_Label',
 			Button_Deny_Label: 'button_Deny_Label',
 			Field_Search_Description: 'field_Search_Description',
+            NoBookmarks_Message: 'noBookmarks_Message',
             NoSearchResults_Message: 'noSearchResults_Message',
             ShareBookmark_Prompt: 'shareBookmark_Prompt',
             ShareBookmark_Title: 'shareBookmark_Title',

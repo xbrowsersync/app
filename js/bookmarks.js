@@ -868,7 +868,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
     };
     
     var sync_handlePull = function(syncData) {
-        var bookmarks, getBookmarksPromise, lastUpdated, updatedBookmarks;
+        var bookmarks, lastUpdated;
         
         if (!_.isUndefined(syncData.bookmarks)) {
             // Local import, update browser bookmarks

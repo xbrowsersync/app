@@ -683,7 +683,7 @@ body {
             }
             
             i {
-                font-size: 1.2em;
+                font-size: 1.25em;
                 line-height: 2.2em;
                 opacity: 0.4;
             }
@@ -735,11 +735,13 @@ body {
             margin-top: 0;
         }
 
-        h4.no-bookmarks {
+        & > h4 {
             font-size: 1.4em;
             font-weight: normal;
             text-align: center;
             margin: 10px;
+            position: relative;
+            z-index: 10;
         }
 
         .list-group {
@@ -932,7 +934,7 @@ body {
         background-size: 15em;
         height: 15em;
         margin-top: 5em;
-        opacity: 0.25;
+        opacity: 0.15;
         z-index: -50;
     }
 }
