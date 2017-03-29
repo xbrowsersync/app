@@ -751,7 +751,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                             var newBookmark = syncData.changeInfo.bookmark;
                             newBookmark.id = getNewBookmarkId(bookmarksToUpdate);
 
-                            // Remove animation Class
+                            // Remove unwanted properties
                             if (!!newBookmark.class) { delete newBookmark.class; }
                             
                             // Add new bookmark to xBrowserSync group
@@ -788,9 +788,14 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                                 
                                 return $q.reject({ code: globals.ErrorCodes.InvalidData });
                             }
+
+                            var bookmarkToUpdate = syncData.changeInfo.bookmark;
+
+                            // Remove unwanted properties
+                            if (!!bookmarkToUpdate.class) { delete bookmarkToUpdate.class; }
                             
                             // Update bookmark
-                            bookmarksToUpdate = recursiveUpdate(bookmarksToUpdate, syncData.changeInfo.bookmark);
+                            bookmarksToUpdate = recursiveUpdate(bookmarksToUpdate, bookmarkToUpdate);
                             
                             return bookmarksToUpdate;
                         });

@@ -365,9 +365,9 @@
                     <div class="list-group-item search-result-item" data-bookmark-id="{{ result.id }}" data-ng-class="{ true: 'animate-' + result.class }[!!result.class]" data-ng-repeat="result in vm.search.results | limitTo:vm.search.resultsDisplayed track by result.id">
                         <div class="menu" hm-tap="vm.events.searchForm_SelectBookmark_Press($event)">
                             <div class="buttons">
-                                <button class="btn btn-icon" title="Share bookmark" hm-tap="vm.events.searchForm_ShareBookmark_Click(result)">
+                                <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}" hm-tap="vm.events.searchForm_ShareBookmark_Click(result)">
                                     <i class="fa fa-share-alt" aria-hidden="true"></i>
-                                    <span class="sr-only">Share bookmark</span>
+                                    <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}</span>
                                 </button>
                                 <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}" hm-tap="vm.events.searchForm_UpdateBookmark_Click(result)">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -382,7 +382,7 @@
                         <div class="overlay" hm-tap="vm.events.openUrl($event, result.url)" hm-press="vm.events.searchForm_SelectBookmark_Press($event)"></div>
                         <a href="{{ result.url }}" data-ng-click="vm.events.openUrl($event)" tabindex="{{ $index + 1 }}" data-ng-keydown="vm.events.searchForm_SearchResult_KeyDown($event)">
                             <h4 class="list-group-item-heading" data-ng-if="result.title">{{ result.title }}</h4>
-                            <h4 class="list-group-item-heading" data-ng-if="result.host">{{ result.host }}</h4>
+                            <h4 class="list-group-item-heading" data-ng-if="!result.title">{{ vm.utility.GetHostFromUrl(result.url) }}</h4>
                             <div class="list-group-item-text">
                                 <div class="description">{{ result.description }}</div>
                                 <div class="url">{{ result.url }}</div>

@@ -137,6 +137,16 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		return errorMessage;
 	};
 
+	var getHostFromUrl = function(url) {
+		if (!url) {
+			return '';
+		}
+		
+		var hyperlinkElement = document.createElement('a');
+		hyperlinkElement.href = url;
+		return hyperlinkElement.host;
+	};
+
 	var getStringSizeInBytes = function(str) {
 		return encodeURI(str).split(/%..|./).length - 1;
 	};
@@ -231,6 +241,7 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		DecryptData: decryptData,
 		EncryptData: encryptData,
 		GetErrorMessageFromException: getErrorMessageFromException,
+		GetHostFromUrl: getHostFromUrl,
 		GetStringSizeInBytes: getStringSizeInBytes,
 		GetTagArrayFromText: getTagArrayFromText,
 		LogMessage: logMessage,

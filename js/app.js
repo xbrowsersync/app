@@ -17,7 +17,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var BrowserAction = function() {
         vm = this;
         vm.globals = globals;
-        vm.platform = platform; 
+        vm.platform = platform;
+        vm.utility = utility; 
         vm.scope = $scope;
 
         vm.working = false;
@@ -688,16 +689,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         });
 
                         if (updatedBookmarkIndex >= 0) {
-                            // Add host if bookmark has no title
-                            if (!bookmarkToUpdate.title) { 
-                                var hyperlinkElement = document.createElement('a');                        
-                                hyperlinkElement.href = bookmarkToUpdate.url;
-                                bookmarkToUpdate.host = hyperlinkElement.host;
-                            }
-                            else if (!!bookmarkToUpdate.host) {
-                                delete bookmarkToUpdate.host;
-                            }
-
                             $timeout(function() {
                                 vm.search.results[updatedBookmarkIndex] = bookmarkToUpdate;
                             });
@@ -1165,15 +1156,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         bookmarks.Search(queryData)
             .then(function(results) {
-                // Add host to any bookmarks without titles
-                var hyperlinkElement = document.createElement('a');
-                _.chain(results)
-                    .filter(function(result) { return !result.title; })
-                    .each(function(result) { 
-                        hyperlinkElement.href = result.url;
-                        result.host = hyperlinkElement.host;
-                    });
-                
                 vm.search.scrollDisplayMoreEnabled = false;
                 vm.search.resultsDisplayed = vm.search.batchResultsNum;
                 vm.search.results = results;

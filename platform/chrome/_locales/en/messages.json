@@ -95,6 +95,9 @@
 	"button_EditBookmark_Label": {
 		"message": "Edit bookmark"
 	},
+	"button_ShareBookmark_Label": {
+		"message": "Share bookmark"
+	},
 	"field_ClientSecret_Label": {
 		"message": "Secret"
 	},

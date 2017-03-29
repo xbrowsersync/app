@@ -113,6 +113,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"button_EditBookmark_Label": {
 			"message": "Edit bookmark"
 		},
+		"button_ShareBookmark_Label": {
+			"message": "Share bookmark"
+		},
 		"field_ClientSecret_Label": {
 			"message": "Secret"
 		},
@@ -656,8 +659,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 			// Get page title
 			title = _.find(metaTagsArr, function(tag) { 
-				return (!!tag.getAttribute('property') && tag.getAttribute('property').toUpperCase() === 'OG:TITLE') || 
-					   (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase() === 'TWITTER:TITLE'); 
+				return (!!tag.getAttribute('property') && tag.getAttribute('property').toUpperCase() === 'OG:TITLE' && !!tag.getAttribute('content')) || 
+					   (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase() === 'TWITTER:TITLE' && !!tag.getAttribute('content')); 
 			}); 
 			
 			if (!!title) {
@@ -669,9 +672,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 			// Get page description
 			description = _.find(metaTagsArr, function(tag) { 
-				return (!!tag.getAttribute('property') && tag.getAttribute('property').toUpperCase() === 'OG:DESCRIPTION') ||
-					   (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase() === 'TWITTER:DESCRIPTION') ||
-					   (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase() === 'DESCRIPTION');
+				return (!!tag.getAttribute('property') && tag.getAttribute('property').toUpperCase() === 'OG:DESCRIPTION' && !!tag.getAttribute('content')) ||
+					   (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase() === 'TWITTER:DESCRIPTION' && !!tag.getAttribute('content')) ||
+					   (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase() === 'DESCRIPTION' && !!tag.getAttribute('content'));
 			});
 
 			if (!!description) {
@@ -681,7 +684,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			// Get page tags
 			tagElements = _.filter(metaTagsArr, function(tag) { 
 				return !!tag.getAttribute('property') && 
-					   !!tag.getAttribute('property').match(/video\:tag$/i); 
+					   !!tag.getAttribute('property').match(/video\:tag$/i) &&
+					   !!tag.getAttribute('content');
 			}); 
 
 			if (!!tagElements && tagElements.length > 0) {
@@ -697,7 +701,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			// Get meta tag values
 			tagElements = _.find(metaTagsArr, function(tag) { 
 				return !!tag.getAttribute('name') && 
-					   tag.getAttribute('name').toUpperCase() === 'KEYWORDS';
+					   tag.getAttribute('name').toUpperCase() === 'KEYWORDS' &&
+					   !!tag.getAttribute('content');
 			}); 
 
 			if (!!tagElements) {

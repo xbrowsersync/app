@@ -94,6 +94,7 @@ xBrowserSync.App.Global = function(platform) {
 			Button_AddBookmark_Label: 'button_AddBookmark_Label',
 			Button_DeleteBookmark_Label: 'button_DeleteBookmark_Label',
             Button_EditBookmark_Label: 'button_EditBookmark_Label',
+            Button_ShareBookmark_Label: 'button_ShareBookmark_Label',
 			Button_Help_Label: 'button_Help_Label',
 			Button_Next_Label: 'button_Next_Label',
 			Button_Previous_Label: 'button_Previous_Label',
