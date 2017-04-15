@@ -165,6 +165,7 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
                 return tag.trim();
             })
             .compact()
+			.uniq()
             .sortBy(function(tag) {
                 return tag;
             })

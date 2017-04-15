@@ -67,6 +67,8 @@
                             <li>Added: iOS and Android apps released.</li>
                             <li>Fixed: New bookmark descriptions are shortened to 300 characters to the nearest word.</li>
                             <li>Fixed: For Chrome extension, "Connection Lost" warnings are no longer shown when checking for updates in the background.</li>
+                            <li>Fixed: Instances where some bookmarks have duplicate IDs.</li>
+                            <li>Fixed: Bug where bookmarks with no title set don't display their URL host instead.</li>
                         </ul>
                         <p class="text-center">
                             <a href="https://github.com/xBrowserSync/App/releases" class="new-tab">
@@ -260,24 +262,10 @@
                     </div>
                 </div>
                 <div id="intro-panel-13" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 13" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.events.introPanel13_Next_Click()" hm-swiperight="vm.events.introPanel13_Prev_Click()">
+                     hm-swiperight="vm.events.introPanel13_Prev_Click()">
                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.IntroPanel13_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel13_Prev_Click()">
-                            <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
-                        </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}" data-ng-click="vm.events.introPanel13_Next_Click()">
-                            <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
-                        </button>
-                    </div>
-                </div>
-                <div id="intro-panel-14" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 14" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swiperight="vm.events.introPanel14_Prev_Click()">
-                    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.IntroPanel14_Message)"></div>
-                    <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel14_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
                         </button>

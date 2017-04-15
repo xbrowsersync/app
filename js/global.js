@@ -115,7 +115,6 @@ xBrowserSync.App.Global = function(platform) {
             IntroPanel11_Message: 'introPanel11_Message',
             IntroPanel12_Message: 'introPanel12_Message',
             IntroPanel13_Message: 'introPanel13_Message',
-            IntroPanel14_Message: 'introPanel14_Message',
 			Field_ClientSecret_Label: 'field_ClientSecret_Label',
 			Field_ClientSecret_Description: 'field_ClientSecret_Description',
 			Field_Id_Label: 'field_Id_Label',

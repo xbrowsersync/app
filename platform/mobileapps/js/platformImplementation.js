@@ -75,7 +75,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "<h4>New service, new ID</h4><p>IDs are service-specific. When you create a sync with a service, the xBrowserSync ID you are given can only be used with that service.</p><p>Whenever you change services you must create a new sync, you'll then receive a new ID for use with that service (you can then restore your backed-up data after creating the new sync).</p>"
 		},
 		"introPanel7_Message": {
-			"message": "<h4>Searching your bookmarks</h4><p>Your existing bookmarks are displayed with the most recent showing first. To search your bookmarks, simply enter some keywords or a URL and the list will be filtered to display only those bookmarks that are relevant to your query.</p><p>You can also share, modify or delete bookmarks from the search results by long pressing on a search result.</p>"
+			"message": "<h4>Searching your bookmarks</h4><p>Your bookmarks are displayed with the most recent showing first. To search your bookmarks, simply enter some keywords or a URL and the list will be filtered to display only those bookmarks that are relevant to your query.</p><p>You can also share, modify or delete bookmarks from the search results by long pressing on a search result.</p>"
 		},
 		"introPanel8_Message": {
 			"message": "<h4>Adding a bookmark</h4><p>You can add a new bookmark by either sharing a URL to the xBrowserSync app from your favourite browser app, or by clicking on the bookmark icon above the search box to add a bookmark manually.</p><p>When sharing a bookmark, the title, description and tags will be populated for you automatically, otherwise a description and tags to help find the bookmark more easily when searching.</p>"
@@ -93,9 +93,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": ""
 		},
 		"introPanel13_Message": {
-			"message": ""
-		},
-		"introPanel14_Message": {
 			"message": "<h4>Noticed an issue?</h4><p>If you've found a bug in xBrowserSync or would like to request a new feature, head on over to Git Hub and <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>submit an issue</a>.</p><p>Calling all coders! If you would like to help make xBrowserSync better, go ahead and fork the <a href='https://github.com/xBrowserSync/App' class='new-tab'>xBrowserSync Git Hub repo</a> and submit a pull request.</p>"
 		},
 		"button_About_Label": {
@@ -808,11 +805,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 		// Attach event handler for iOS Share activity
 		window.handleOpenURL = function(url) {
+			// TODO: Check if this is required, can it be handled solely via deviceReady/resume?
 			checkForSharedLink(url);
 		};
 	};
 
 	var openUrl = function(url) {
+		// TODO: Check why iOS displays warning toast when opening a link
 		cordova.InAppBrowser.open(url, '_system');
 	};
 	
@@ -1066,9 +1065,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 		// Set intro panel button events
 		vm.events.introPanel11_Next_Click = function() {
-			vm.introduction.displayPanel(14);
+			vm.introduction.displayPanel(13);
 		};
-		vm.events.introPanel14_Prev_Click = function() {
+		vm.events.introPanel13_Prev_Click = function() {
 			vm.introduction.displayPanel(11);
 		};
 		
