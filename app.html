@@ -391,7 +391,7 @@
                 <h2>
                     {{ (vm.bookmark.displayUpdateForm) ? vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Title_Edit) : vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Title_Add) }}
                 </h2>
-                <button class="btn btn-icon btn-close" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}" data-ng-click="vm.view.displayMainView()"  tabindex="1000">
+                <button class="btn btn-icon btn-close" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}" data-ng-click="vm.events.bookmarkPanel_Close_Click()"  tabindex="1000">
                     <i class="fa fa-times-circle" aria-hidden="true"></i>
                     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}</span>
                 </button>

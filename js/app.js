@@ -79,6 +79,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             bookmarkForm_RemoveTag_Click: bookmarkForm_RemoveTag_Click,
             bookmarkForm_ShareBookmark_Click: platform.Bookmarks.Share,
             bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
+            bookmarkPanel_Close_Click: bookmarkPanel_Close_Click,
             displayQRCode_Click: displayQRCode_Click,
             handleSyncResponse: handleSyncResponse,
             introPanel_ShowHelp_Click: introPanel_ShowHelp_Click,
@@ -704,6 +705,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
             });
+    };
+
+    var bookmarkPanel_Close_Click = function() {
+        vm.view.displayMainView();
     };
 
     var changeView = function(view) {

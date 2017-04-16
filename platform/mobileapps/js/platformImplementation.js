@@ -781,18 +781,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Set async channel to view model
 		vm.sync.asyncChannel = vm;
 
-		// If no ID provided, display confirmation panel
-		vm.events.syncForm_EnableSync_Click = function() {
-			if (!globals.Id.Get()) {
-				vm.sync.displaySyncConfirmation = true;
-				$timeout(function() {
-					document.querySelector('#btnSync_Confirm').focus();
-				});
-			}
-			else {
-				vm.events.syncForm_ConfirmSync_Click();
-			}
-		};
+		// Set required events to mobile app handlers
+		vm.events.bookmarkPanel_Close_Click = bookmarkPanel_Close_Click;
+		vm.events.introPanel11_Next_Click = introPanel11_Next_Click;
+		vm.events.introPanel13_Prev_Click = introPanel13_Prev_Click;
+		vm.events.syncForm_EnableSync_Click = syncForm_EnableSync_Click;
 
 		// Set clear search button to display all bookmarks
 		vm.search.displayDefaultState = displayDefaultSearchState;
@@ -804,18 +797,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		vm.settings.getSearchResultsDelay = 500;
 
 		// Attach event handler for iOS Share activity
-		window.handleOpenURL = function(url) {
-			checkForSharedLink(url)
-				.then(function(sharedUrl) {
-					if (!!sharedUrl) {
-						// Set shared link url to current url
-						currentUrl = sharedUrl;
-
-						// Display bookmark panel
-						vm.view.change(vm.view.views.bookmark);
-					}
-				});
-		};
+		window.handleOpenURL = handleSharedIosUrl;
 	};
 
 	var openUrl = function(url) {
@@ -948,6 +930,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         }
     };
 
+	var bookmarkPanel_Close_Click = function() {
+        // Reset current url before switching to main view
+		currentUrl = null;
+		vm.view.displayMainView();
+    };
+
 	var checkForInterruptedSync = function () {
 		// Check if a sync was interrupted
 		if (!!globals.IsSyncing.Get()) {
@@ -1028,28 +1016,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return deferred.promise;
 	};
 
-	var getLatestUpdates = function() {
-		// Exit if sync isn't enabled or event listeners disabled
-		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
-			return;
-		}
-
-		bookmarks.CheckForUpdates()
-			.then(function(updatesAvailable) {
-				if (!updatesAvailable) {
-					return;
-				}
-
-				// Get bookmark updates
-				return sync(vm, { type: globals.SyncType.Pull });
-			})
-			.catch(function(err) {
-				// Log error
-				utility.LogMessage(
-					moduleName, 'getLatestUpdates', utility.LogType.Error,
-					JSON.stringify(err));
-			});
-	};
+	var displayDefaultSearchState = function() {
+        // Clear search and display all bookmarks
+		vm.search.query = null;
+        vm.search.lookahead = null;
+        vm.search.results = null;
+		vm.search.execute();
+    };
 
 	var deviceReady = function() {
 		// Set platform
@@ -1061,22 +1034,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Set network online event
 		document.addEventListener('online', handleNetworkReconnected, false);
 
-		// Set intro panel button events
-		vm.events.introPanel11_Next_Click = function() {
-			vm.introduction.displayPanel(13);
-		};
-		vm.events.introPanel13_Prev_Click = function() {
-			vm.introduction.displayPanel(11);
-		};
-		
 		// Don't display iOS specific help panels
 		if (vm.platformName === vm.globals.Platforms.Android) {
-			vm.events.introPanel8_Next_Click = function() {
-				vm.introduction.displayPanel(10);
-			};
-			vm.events.introPanel10_Prev_Click = function() {
-				vm.introduction.displayPanel(8);
-			};
+			vm.events.introPanel8_Next_Click = introPanel8_Android_Next_Click;
+			vm.events.introPanel10_Prev_Click = introPanel10_Android_Prev_Click;
 		}
 
 		// Use toasts for alerts
@@ -1151,6 +1112,29 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		});
 	};
 
+	var getLatestUpdates = function() {
+		// Exit if sync isn't enabled or event listeners disabled
+		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
+			return;
+		}
+
+		bookmarks.CheckForUpdates()
+			.then(function(updatesAvailable) {
+				if (!updatesAvailable) {
+					return;
+				}
+
+				// Get bookmark updates
+				return sync(vm, { type: globals.SyncType.Pull });
+			})
+			.catch(function(err) {
+				// Log error
+				utility.LogMessage(
+					moduleName, 'getLatestUpdates', utility.LogType.Error,
+					JSON.stringify(err));
+			});
+	};
+
 	var handleBackButton = function(event) {
 		if (vm.view.current === vm.view.views.bookmark ||
 			vm.view.current === vm.view.views.settings ||
@@ -1172,6 +1156,35 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		if (!!globals.Network.Disconnected.Get()) {
 			getLatestUpdates();
 		}
+	};
+
+	var handleSharedIosUrl = function(url) {
+		checkForSharedLink(url)
+			.then(function(sharedUrl) {
+				if (!!sharedUrl) {
+					// Set shared link url to current url
+					currentUrl = sharedUrl;
+
+					// Display bookmark panel
+					vm.view.change(vm.view.views.bookmark);
+				}
+			});
+	};
+
+	var introPanel8_Android_Next_Click = function() {
+		vm.introduction.displayPanel(10);
+	};
+
+	var introPanel10_Android_Prev_Click = function() {
+		vm.introduction.displayPanel(8);
+	};
+
+	var introPanel11_Next_Click = function() {
+		vm.introduction.displayPanel(13);
+	};
+
+	var introPanel13_Prev_Click = function() {
+		vm.introduction.displayPanel(11);
 	};
 
 	var resume = function() {
@@ -1228,13 +1241,17 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		}
 	};
 
-	var displayDefaultSearchState = function() {
-        // Clear search and display all bookmarks
-		vm.search.query = null;
-        vm.search.lookahead = null;
-        vm.search.results = null;
-		vm.search.execute();
-    };
+	var syncForm_EnableSync_Click = function() {
+		if (!globals.Id.Get()) {
+			vm.sync.displaySyncConfirmation = true;
+			$timeout(function() {
+				document.querySelector('#btnSync_Confirm').focus();
+			});
+		}
+		else {
+			vm.events.syncForm_ConfirmSync_Click();
+		}
+	};
 	
 	
 	// Call constructor
