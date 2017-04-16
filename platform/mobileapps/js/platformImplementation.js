@@ -805,8 +805,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 		// Attach event handler for iOS Share activity
 		window.handleOpenURL = function(url) {
-			// TODO: Check if this is required, can it be handled solely via deviceReady/resume?
-			checkForSharedLink(url);
+			checkForSharedLink(url)
+				.then(function(sharedUrl) {
+					if (!!sharedUrl) {
+						// Set shared link url to current url
+						currentUrl = sharedUrl;
+
+						// Display bookmark panel
+						vm.view.change(vm.view.views.bookmark);
+					}
+				});
 		};
 	};
 
@@ -984,12 +992,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						else {
 							// Can't use it so remove the intent
 							window.plugins.webintent.removeExtra(window.plugins.webintent.EXTRA_TEXT);
-							deferred.resolve(false);
 						}
 					}
-					else {
-						deferred.resolve(false);
-					}
+
+					deferred.resolve();
 				}
 			);
 		}
@@ -999,32 +1005,24 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				var requestedUrl = utility.ParseUrl(data);
 
 				// Check requested url scheme is valid
-				if (!requestedUrl || !requestedUrl.searchObject || !requestedUrl.searchObject.url || 
-					'/' + requestedUrl.hostname !== globals.URL.Bookmarks || requestedUrl.pathname !== globals.URL.Current) {
-					// Log error
-					utility.LogMessage(
-						moduleName, 'checkForSharedLink', utility.LogType.Error,
-						'Invalid url scheme: ' + data);
-			
-					// Display alert
-					var errMessage = utility.GetErrorMessageFromException({ code: globals.ErrorCodes.InvalidUrlScheme });
-					vm.alert.display(null, errMessage.title);
-					
-					return deferred.resolve(false);
+				if (!!requestedUrl && !!requestedUrl.searchObject && !!requestedUrl.searchObject.url && 
+					'/' + requestedUrl.hostname === globals.URL.Bookmarks && requestedUrl.pathname === globals.URL.Current) {
+					// Set shared url to current url
+					var sharedUrl = decodeURIComponent(requestedUrl.searchObject.url);
+
+					// Return the shared url
+					deferred.resolve(sharedUrl);
 				}
-
-				// Set shared url to current url
-				var sharedUrl = decodeURIComponent(requestedUrl.searchObject.url);
-
-				// Return the shared url
-				return deferred.resolve(sharedUrl);
+				else {
+					deferred.resolve();
+				}
 			}
 			else {
-				deferred.resolve(false);
+				deferred.resolve();
 			}
 		}
 		else {
-			deferred.resolve(false);
+			deferred.resolve();
 		}
 
 		return deferred.promise;
@@ -1220,13 +1218,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 							vm.alert.display(errMessage.title, errMessage.message);
 						})
 						.finally(function() {
-							if (!displayBookmarkPanel) {
+							// Hide loading screen and update search results if currently on the search panel and no query present
+							if (!displayBookmarkPanel && vm.view.current === vm.view.views.search && !vm.search.query) {
 								hideLoading();
-
-								// Update search results if currently on the search panel and no query present
-								if (!displayBookmarkPanel && vm.view.current === vm.view.views.search && !vm.search.query) {
-									displayDefaultSearchState();
-								}
+								displayDefaultSearchState();
 							}
 						});
 				});
