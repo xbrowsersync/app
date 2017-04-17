@@ -949,9 +949,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		
 		var getPageKeywords = function() { 
 			// Get open graph tag values 
-			var keywords = [];
-			for (var i = 0; i < metaTagsArr.length; i++) {
-				var currentTag = metaTagsArr[i];
+			var currentTag, i, keywords = [];
+			for (i = 0; i < metaTagsArr.length; i++) {
+				currentTag = metaTagsArr[i];
 				if (!!currentTag.getAttribute('property') && 
 					!!currentTag.getAttribute('property').trim().match(/VIDEO\:TAG$/i) && 
 					!!currentTag.getAttribute('content')) {
@@ -960,13 +960,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			}
 			
 			// Get meta tag values 
-			for (var i = 0; i < metaTagsArr.length; i++) {
-				var currentTag = metaTagsArr[i];
+			for (i = 0; i < metaTagsArr.length; i++) {
+				currentTag = metaTagsArr[i];
 				if (!!currentTag.getAttribute('name') && 
 					currentTag.getAttribute('name').toUpperCase().trim() === 'KEYWORDS' && 
 					!!currentTag.getAttribute('content')) {
 					   var metaKeywords = currentTag.getAttribute('content').split(',');
-					   for (var i = 0; i < metaKeywords.length; i++) {
+					   for (i = 0; i < metaKeywords.length; i++) {
 						   var currentKeyword = metaKeywords[i];
 						   if (!!currentKeyword && !!currentKeyword.trim()) {
 							   keywords.push(currentKeyword.trim());

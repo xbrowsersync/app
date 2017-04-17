@@ -456,10 +456,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "A required function has not been implemented and is causing xBrowserSync to not function correctly."
 		},
 		"error_FailedGetPageMetadata_Title" : {
-			"message":  "Retrieve metadata failed"
+			"message":  "Couldn't retrieve web page metadata"
 		},
 		"error_FailedGetPageMetadata_Message" : {
-			"message":  "URL is invalid or web page did not load properly."
+			"message":  "Try sharing the URL again or enter metadata manually."
 		},
 		"error_SyncInterrupted_Title" : {
 			"message":  "Sync interrupted"
@@ -957,7 +957,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return false;
 	};
 
-	var checkForSharedLink = function(data) {
+	var checkForSharedUrl = function(data) {
 		var deferred = $q.defer();
 		
 		if (vm.platformName === vm.globals.Platforms.Android) {
@@ -989,22 +989,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			);
 		}
 		else if (vm.platformName === vm.globals.Platforms.IOS) {
-			// Process requested url if sync is enabled
-			if (!!data && !!globals.SyncEnabled.Get()) {
-				var requestedUrl = utility.ParseUrl(data);
-
-				// Check requested url scheme is valid
-				if (!!requestedUrl && !!requestedUrl.searchObject && !!requestedUrl.searchObject.url && 
-					'/' + requestedUrl.hostname === globals.URL.Bookmarks && requestedUrl.pathname === globals.URL.Current) {
-					// Set shared url to current url
-					var sharedUrl = decodeURIComponent(requestedUrl.searchObject.url);
-
-					// Return the shared url
-					deferred.resolve(sharedUrl);
-				}
-				else {
-					deferred.resolve();
-				}
+			// If current url is set, return it
+			if (!!currentUrl) {
+				deferred.resolve(currentUrl);
 			}
 			else {
 				deferred.resolve();
@@ -1067,8 +1054,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					hideLoading();
 					displayDefaultSearchState();
 					
-					// Check if a link was shared
-					return checkForSharedLink();
+					// Check if a url was shared
+					return checkForSharedUrl();
 				})
 				.then(function(sharedUrl) {
 					if (!sharedUrl) {
@@ -1154,18 +1141,18 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		}
 	};
 
-	var handleSharedIosUrl = function(url) {
-		// TODO: Update so that shared url handled in deviceReady/resume
-		checkForSharedLink(url)
-			.then(function(sharedUrl) {
-				if (!!sharedUrl) {
-					// Set shared link url to current url
-					currentUrl = sharedUrl;
+	var handleSharedIosUrl = function(sharedUrl) {
+		// Process requested url if sync is enabled
+		if (!!sharedUrl && !!globals.SyncEnabled.Get()) {
+			var url = utility.ParseUrl(sharedUrl);
 
-					// Display bookmark panel
-					vm.view.change(vm.view.views.bookmark);
-				}
-			});
+			// Check url scheme is valid
+			if (!!url && !!url.searchObject && !!url.searchObject.url && 
+				'/' + url.hostname === globals.URL.Bookmarks && url.pathname === globals.URL.Current) {
+				// Set shared url to current url
+				currentUrl = decodeURIComponent(url.searchObject.url);
+			}
+		}
 	};
 
 	var introPanel8_Android_Next_Click = function() {
@@ -1205,18 +1192,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					return sync(vm, { type: globals.SyncType.Pull });
 				})
 				.then(function() {
-					// Check if a link was shared
-					return checkForSharedLink();
+					// Check if a url was shared
+					return checkForSharedUrl();
 				})
 				.then(function(sharedUrl) {
 					if (!sharedUrl) {
 						return;
 					}
 
-					// Set shared link url to current url and display bookmark panel
+					// Set shared url to current url and display bookmark panel
 					currentUrl = sharedUrl;
-
-					// 
 					vm.view.change(vm.view.views.bookmark);
 				})
 				.catch(function(err) {
