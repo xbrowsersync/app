@@ -801,7 +801,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 
 	var openUrl = function(url) {
-		// TODO: Check why iOS displays warning toast when opening a link
 		cordova.InAppBrowser.open(url, '_system');
 	};
 	
@@ -980,10 +979,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						else {
 							// Can't use it so remove the intent
 							window.plugins.webintent.removeExtra(window.plugins.webintent.EXTRA_TEXT);
+							deferred.resolve();
 						}
 					}
-
-					deferred.resolve();
+					else {
+						deferred.resolve();
+					}
 				}
 			);
 		}
@@ -1050,48 +1051,43 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 		// If synced, refresh synced bookmarks and display all
 		if (!!globals.SyncEnabled.Get()) {
-			// Check if a link was shared
-			checkForSharedLink()
+			displayLoading();
+			
+			// Check if bookmarks need updating
+			bookmarks.CheckForUpdates()
+				.then(function(updatesAvailable) {
+					if (!updatesAvailable) {
+						return;
+					}
+
+					// Get bookmark updates
+					return sync(vm, { type: globals.SyncType.Pull });
+				})
+				.then(function() {
+					hideLoading();
+					displayDefaultSearchState();
+					
+					// Check if a link was shared
+					return checkForSharedLink();
+				})
 				.then(function(sharedUrl) {
-					if (!!sharedUrl) {
-						// Set shared link url to current url
-						currentUrl = sharedUrl;
-
-						// Display bookmark panel
-						vm.view.change(vm.view.views.bookmark);
+					if (!sharedUrl) {
+						return;
 					}
-					else {
-						displayLoading();
-					}
+					
+					// Set shared link url to current url and display bookmark panel
+					currentUrl = sharedUrl;
+					vm.view.change(vm.view.views.bookmark);
+				})
+				.catch(function(err) {
+					// Log error
+					utility.LogMessage(
+						moduleName, 'deviceReady', utility.LogType.Error,
+						JSON.stringify(err));
 
-					// Check if bookmarks need updating
-					bookmarks.CheckForUpdates()
-						.then(function(updatesAvailable) {
-							if (!updatesAvailable) {
-								return;
-							}
-
-							// Get bookmark updates
-							return sync(vm, { type: globals.SyncType.Pull });
-						})
-						.catch(function(err) {
-							// Log error
-							utility.LogMessage(
-								moduleName, 'deviceReady', utility.LogType.Error,
-								JSON.stringify(err));
-
-							// Display alert
-							var errMessage = utility.GetErrorMessageFromException(err);
-							vm.alert.display(errMessage.title, errMessage.message);
-						})
-						.finally(function() {
-							if (!sharedUrl) {
-								hideLoading();
-
-								// Display bookmarks if on search panel
-								displayDefaultSearchState();
-							}
-						});
+					// Display alert
+					var errMessage = utility.GetErrorMessageFromException(err);
+					vm.alert.display(errMessage.title, errMessage.message);
 				});
 		}
 
@@ -1159,6 +1155,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 
 	var handleSharedIosUrl = function(url) {
+		// TODO: Update so that shared url handled in deviceReady/resume
 		checkForSharedLink(url)
 			.then(function(sharedUrl) {
 				if (!!sharedUrl) {
@@ -1192,51 +1189,52 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		
 		// Check for bookmarks updates
 		if (!!globals.SyncEnabled.Get()) {
-			// Check if a link was shared
-			checkForSharedLink()
-				.then(function(sharedUrl) {
-					displayBookmarkPanel = !!sharedUrl;
+			// Check if bookmarks need updating
+			bookmarks.CheckForUpdates()
+				.then(function(updatesAvailable) {
+					if (!updatesAvailable) {
+						return;
+					}
 					
-					if (!!displayBookmarkPanel) {
-						// Set shared link url to current url
-						currentUrl = sharedUrl;
-
-						// Display bookmark panel
-						vm.view.change(vm.view.views.bookmark);
+					// Display loading screen if currently on the search panel and no query present
+					if (vm.view.current === vm.view.views.search && !vm.search.query) {
+						displayLoading();
 					}
 
-					// Check if bookmarks need updating
-					bookmarks.CheckForUpdates()
-						.then(function(updatesAvailable) {
-							if (!updatesAvailable) {
-								return;
-							}
-							
-							// Display loading screen if currently on the search panel and no query present
-							if (!displayBookmarkPanel && vm.view.current === vm.view.views.search && !vm.search.query) {
-								displayLoading();
-							}
+					// Get bookmark updates
+					return sync(vm, { type: globals.SyncType.Pull });
+				})
+				.then(function() {
+					// Check if a link was shared
+					return checkForSharedLink();
+				})
+				.then(function(sharedUrl) {
+					if (!sharedUrl) {
+						return;
+					}
 
-							// Get bookmark updates
-							return sync(vm, { type: globals.SyncType.Pull });
-						})
-						.catch(function(err) {
-							// Log error
-							utility.LogMessage(
-								moduleName, 'resume', utility.LogType.Error,
-								JSON.stringify(err));
+					// Set shared link url to current url and display bookmark panel
+					currentUrl = sharedUrl;
 
-							// Display alert
-							var errMessage = utility.GetErrorMessageFromException(err);
-							vm.alert.display(errMessage.title, errMessage.message);
-						})
-						.finally(function() {
-							// Hide loading screen and update search results if currently on the search panel and no query present
-							if (!displayBookmarkPanel && vm.view.current === vm.view.views.search && !vm.search.query) {
-								hideLoading();
-								displayDefaultSearchState();
-							}
-						});
+					// 
+					vm.view.change(vm.view.views.bookmark);
+				})
+				.catch(function(err) {
+					// Log error
+					utility.LogMessage(
+						moduleName, 'resume', utility.LogType.Error,
+						JSON.stringify(err));
+
+					// Display alert
+					var errMessage = utility.GetErrorMessageFromException(err);
+					vm.alert.display(errMessage.title, errMessage.message);
+				})
+				.finally(function() {
+					// Hide loading screen and update search results if currently on the search panel and no query present
+					if (!displayBookmarkPanel && vm.view.current === vm.view.views.search && !vm.search.query) {
+						hideLoading();
+						displayDefaultSearchState();
+					}
 				});
 		}
 	};

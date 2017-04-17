@@ -927,7 +927,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
     };
 
 	var getCurrentPageMetadata = function() { 
-		var parser, html, title, description, tagElements, tags;
+		var parser, html;
 		
 		// Get all meta tags
 		parser = new DOMParser();
