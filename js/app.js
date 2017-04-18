@@ -1149,7 +1149,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             });
         }
         
-        bookmarks.Search(queryData)
+        bookmarks.Search(queryData, vm.search.results)
             .then(function(results) {
                 vm.search.scrollDisplayMoreEnabled = false;
                 vm.search.resultsDisplayed = vm.search.batchResultsNum;

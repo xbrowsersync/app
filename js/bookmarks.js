@@ -131,7 +131,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         }
 	};
 
-	var getLookahead = function(word, bookmarks, canceller, tagsOnly) {
+	var getLookahead = function(word, bookmarksToSearch, canceller, tagsOnly) {
         var getBookmarks;
         var deferred = $q.defer();
         
@@ -139,9 +139,9 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             return deferred.resolve();
         }
         
-        if (!!bookmarks && bookmarks.length > 0) {
+        if (!!bookmarksToSearch && bookmarksToSearch.length > 0) {
             // Use supplied bookmarks
-            getBookmarks = $q.resolve(bookmarks);
+            getBookmarks = $q.resolve(bookmarksToSearch);
         }
         else {
             // Get cached synced bookmarks
@@ -297,13 +297,23 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         return getCachedBookmarks(bookmarks);
     };
     
-    var searchBookmarks = function(query) {
+    var searchBookmarks = function(query, bookmarksToSearch) {
+        var getBookmarks;
+        
         if (!query) {
             query = { keywords: [] };
         }
 
-        // Get cached synced bookmarks
-        return getCachedBookmarks()
+        if (!!bookmarksToSearch && bookmarksToSearch.length > 0) {
+            // Use supplied bookmarks
+            getBookmarks = $q.resolve(bookmarksToSearch);
+        }
+        else {
+            // Get cached synced bookmarks
+            getBookmarks = getCachedBookmarks();
+        }
+
+        getBookmarks
             .then(function(bookmarks) {
                 var results;
                 
