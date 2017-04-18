@@ -297,23 +297,13 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         return getCachedBookmarks(bookmarks);
     };
     
-    var searchBookmarks = function(query, bookmarksToSearch) {
-        var getBookmarks;
-        
+    var searchBookmarks = function(query) {
         if (!query) {
             query = { keywords: [] };
         }
 
-        if (!!bookmarksToSearch && bookmarksToSearch.length > 0) {
-            // Use supplied bookmarks
-            getBookmarks = $q.resolve(bookmarksToSearch);
-        }
-        else {
-            // Get cached synced bookmarks
-            getBookmarks = getCachedBookmarks();
-        }
-
-        getBookmarks
+        // Get cached synced bookmarks
+        return getCachedBookmarks()
             .then(function(bookmarks) {
                 var results;
                 
@@ -495,9 +485,8 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         if (!wordsToClean) {
             return;
         }
-        
-        // Remove all non alphanumerics and spaces and return as array
-        var cleanWords = wordsToClean.toLowerCase().replace(/[^a-z0-9\s]/g, '');
+
+        var cleanWords = wordsToClean.toLowerCase().replace(/['"]/g, '');
         var cleanWordsArr = _.compact(cleanWords.split(/\s/)); 
         return cleanWordsArr;
     };

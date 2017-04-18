@@ -1135,7 +1135,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
         if (!!vm.search.query) {
             // Iterate query words to form query data object
-            _.each(vm.search.query.split(/[\s]+/), function (queryWord) {
+            var queryWords = vm.search.query.split(/[\s]+/);
+            _.each(queryWords, function (queryWord) {
                 // Add query word as url if query is in url format, otherwise add to keywords
                 if (!queryData.url && queryWord.trim().match(urlRegex)) {
                     queryData.url = queryWord.trim();
@@ -1149,7 +1150,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             });
         }
         
-        bookmarks.Search(queryData, vm.search.results)
+        bookmarks.Search(queryData)
             .then(function(results) {
                 vm.search.scrollDisplayMoreEnabled = false;
                 vm.search.resultsDisplayed = vm.search.batchResultsNum;
