@@ -77,10 +77,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "<h4>Searching your bookmarks</h4><p>Your bookmarks are displayed with the most recent showing first. To search your bookmarks, simply enter some keywords or a URL and the list will be filtered to display only those bookmarks that are relevant to your query.</p><p>You can also share, modify or delete bookmarks from the search results by long pressing on a search result.</p>"
 		},
 		"introPanel8_Message": {
-			"message": "<h4>Adding a bookmark</h4><p>You can add a new bookmark by either sharing a URL to the xBrowserSync app from your favourite browser app, or by clicking on the bookmark icon above the search box to add a bookmark manually.</p><p>When sharing a bookmark, the title, description and tags will be populated for you automatically, otherwise a description and tags to help find the bookmark more easily when searching.</p>"
+			"message": "<h4>Adding a bookmark</h4><p>Add new bookmarks by either sharing a URL to the xBrowserSync app from your favourite apps (browsers, YouTube, Spotify and any other app that shares URLs), or by pressing the bookmark icon to add a bookmark manually.</p><p>When sharing a bookmark the title, description and tags will be retrieved for you, otherwise manually add a description and tags to ensure better search results.</p>"
 		},
 		"introPanel9_Message": {
-			"message": "<h4>Bookmark from your browser</h4><p>In order to add bookmarks directly from your browser, you will first need to enable sharing to xBrowserSync.</p><p>In your browser app, tap the share button to bring up the share sheet, slide to the right and tap the More option. Enable the xBrowserSync activity and tap Done to save your changes. From now on you can tap xBrowserSync on the share sheet to add the current webpage to xBrowserSync.</p>"
+			"message": "<h4>Bookmark from your favourite apps</h4><p>In order to add bookmarks directly from other apps, you will first need to enable sharing to xBrowserSync.</p><p>In your chosen app, tap the share button to bring up the share sheet, slide to the right and tap the More option. Enable the xBrowserSync activity and tap Done to save your changes. From now on you can tap xBrowserSync on the share sheet to add the current item as a bookmark in xBrowserSync.</p>"
 		},
 		"introPanel10_Message": {
 			"message": "<h4>Remember to back up</h4><p>xBrowserSync services are run voluntarily, plus servers can break and go wrong so please look after your data and make sure to keep backups.</p><p>Open the Settings panel and in the Back up and restore tab you can back up your unencrypted synced data to a local file, which can then restored at a later date should you need to.</p>"
@@ -640,7 +640,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		}
 		
 		var callback = function(pageContent, err) {
-			var parser, html, title, description, tagElements, tags;
+			var parser, html;
 
 			// Check html content was returned
 			if (!!err || !pageContent) {
@@ -1008,6 +1008,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 									// Remove the intent
 									window.plugins.webintent.removeExtra(window.plugins.webintent.EXTRA_TEXT);
 
+									// Check the URL is valid
+									if (!!url && !utility.ParseUrl(url)) {
+										return deferred.reject({ code: globals.ErrorCodes.InvalidUrlScheme });
+									}
+
 									// Return the shared url
 									return deferred.resolve(url);
 								});
@@ -1027,6 +1032,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		else if (vm.platformName === vm.globals.Platforms.IOS) {
 			// If current url is set, return it
 			if (!!currentUrl) {
+				// Check the URL is valid
+				if (!utility.ParseUrl(currentUrl)) {
+					currentUrl = null;
+					return deferred.reject({ code: globals.ErrorCodes.InvalidUrlScheme });
+				}
+				
 				deferred.resolve(currentUrl);
 			}
 			else {
@@ -1129,6 +1140,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 								displayDefaultSearchState();
 							}
 						});
+				})
+				.catch(function(err) {
+					// Display alert
+					var errMessage = utility.GetErrorMessageFromException(err);
+					vm.alert.display(errMessage.title, errMessage.message);
 				});
 		}
 
@@ -1206,6 +1222,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				// Set shared url to current url
 				currentUrl = decodeURIComponent(url.searchObject.url);
 			}
+			else {
+				currentUrl = sharedUrl;
+			}
 		}
 	};
 
@@ -1276,6 +1295,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 								displayDefaultSearchState();
 							}
 						});
+				})
+				.catch(function(err) {
+					// Display alert
+					var errMessage = utility.GetErrorMessageFromException(err);
+					vm.alert.display(errMessage.title, errMessage.message);
 				});
 		}
 	};
