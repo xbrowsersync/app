@@ -1009,12 +1009,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 									window.plugins.webintent.removeExtra(window.plugins.webintent.EXTRA_TEXT);
 
 									// Check the URL is valid
-									if (!!url && !utility.ParseUrl(url)) {
+									var match = (!!url) ? url.match(globals.Regex.Url) : null;
+									if (!match || match.length === 0) {
 										return deferred.reject({ code: globals.ErrorCodes.InvalidUrlScheme });
 									}
 
 									// Return the shared url
-									return deferred.resolve(url);
+									return deferred.resolve(match[0]);
 								});
 						}
 						else {
