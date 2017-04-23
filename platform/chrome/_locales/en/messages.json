@@ -368,6 +368,12 @@
 	"error_NoDataFound_Message" : {
 		"message":  "Double check your xBrowserSync ID and secret and try again."
 	},
+	"error_IdRemoved_Title" : {
+		"message":  "Data removed due to inactivity"
+	},
+	"error_IdRemoved_Message" : {
+		"message":  "Create a new ID and restore your data from a backup."
+	},
 	"error_NoDataToRestore_Title" : {
 		"message":  "No data to restore"
 	},

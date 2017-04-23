@@ -156,6 +156,12 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 
 			getLatestUpdates()
 				.catch(function(err) {
+					// If ID was removed disable sync
+					if (err.code === globals.ErrorCodes.NoDataFound) {
+						err.code = globals.ErrorCodes.IdRemoved;
+						globals.SyncEnabled.Set(false);
+					}
+					
 					// Log error
 					utility.LogMessage(
 						moduleName, 'handleAlarm', utility.LogType.Error,

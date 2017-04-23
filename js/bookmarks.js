@@ -276,11 +276,15 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
     
     var queueSync = function(syncData) {
         var deferred = $q.defer();
+
+        // If new sync ensure sync queue is clear
+        if (!globals.SyncEnabled.Get()) {
+            syncQueue = [];
+        }
         
+        // Add sync to queue
         if (!!syncData) {
             syncData.deferred = deferred;
-            
-            // Add sync to queue
             syncQueue.push(syncData);
         }
 
@@ -678,6 +682,12 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 }
             })
             .catch(function (err) {
+                // If ID was removed disable sync
+                if (!!globals.SyncEnabled.Get() && err.code === globals.ErrorCodes.NoDataFound) {
+                    err.code = globals.ErrorCodes.IdRemoved;
+                    globals.SyncEnabled.Set(false);
+                }
+                
                 // Handle network error
                 if (!!globals.Network.Disconnected.Get()) {
                     // If the user was committing an update add failed sync back to beginning of queue and 

@@ -556,10 +556,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
         
         var deferred = $q.defer();
+        var loadMetadataDeferred = $q.defer();
         
-        // Display loading overlay 
-        var displayLoadingPanelTimeout = platform.Interface.Loading.Show(true);
-
         // Check if current url is a bookmark
         bookmarks.IncludesCurrentPage()
             .then(function(result) {
@@ -573,26 +571,31 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     return deferred.resolve();
                 }
                 else {
-                    // Otherwise get page metadata for current url
-                    return platform.GetPageMetadata();
+                    // Otherwise display loading overlay  and get page metadata for current url
+                    platform.Interface.Loading.Show('retrievingMetadata', loadMetadataDeferred);
+                    return platform.GetPageMetadata(loadMetadataDeferred)
+                        .then(function(metadata) {
+                            // Display add bookmark form
+                            vm.bookmark.displayUpdateForm = false;
+
+                            // Set current bookmark properties
+                            var bookmark = new bookmarks.XBookmark(
+                                null, 
+                                metadata.url, 
+                                null,
+                                null);
+                            vm.bookmark.current = bookmark;
+                            
+                            if (!!metadata) {
+                                // Set form properties to url metadata
+                                bookmark.title = metadata.title;
+                                bookmark.description = metadata.description;
+                                bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
+                            }
+
+                            return deferred.resolve();
+                    });
                 }
-            })
-            .then(function(metadata) {
-                    if (!metadata) {
-                        return;
-                    }
-                    
-                    // Set form properties to url metadata
-                    var bookmark = new bookmarks.XBookmark(
-                        metadata.title, 
-                        metadata.url, 
-                        metadata.description,
-                        utility.GetTagArrayFromText(metadata.tags));
-                    vm.bookmark.current = bookmark;
-                    
-                    // Display add bookmark form
-                    vm.bookmark.displayUpdateForm = false;
-                    return deferred.resolve();
             })
             .catch(function(err) {
                 // Set bookmark url
@@ -615,7 +618,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 return deferred.resolve();
             })
             .finally(function() {
-                platform.Interface.Loading.Hide(displayLoadingPanelTimeout);
+                platform.Interface.Loading.Hide('retrievingMetadata');
             });
         
         return deferred.promise;
@@ -815,6 +818,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Set new service form url default value to current service url
                 vm.settings.service.newServiceUrl = vm.settings.service.url();
                 break;
+            default:
+                deferred.resolve();
+                break;
         }
         
         return deferred.promise;
@@ -888,12 +894,23 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     setBookmarkStatus();
                 }
                 else {
-                    errMessage = utility.GetErrorMessageFromException(response.error);
-                    vm.alert.display(errMessage.title, errMessage.message, 'danger');
+                    // If ID was removed disable sync and display login panel
+                    if (!!response.error && response.error.code === globals.ErrorCodes.IdRemoved) {
+                        globals.SyncEnabled.Set(false);
+                        vm.view.change(vm.view.views.login)
+                            .finally(function() {
+                                errMessage = utility.GetErrorMessageFromException(response.error);
+                                vm.alert.display(errMessage.title, errMessage.message, 'danger');
+                            });
+                    }
+                    else {
+                        errMessage = utility.GetErrorMessageFromException(response.error);
+                        vm.alert.display(errMessage.title, errMessage.message, 'danger');
 
-                    // If data out of sync, refresh sync
-                    if (!!response.error && !!response.error.code && response.error.code === globals.ErrorCodes.DataOutOfSync) {
-                        platform.Sync(vm.sync.asyncChannel, { type: globals.SyncType.Pull });
+                        // If data out of sync, refresh sync
+                        if (!!response.error && response.error.code === globals.ErrorCodes.DataOutOfSync) {
+                            platform.Sync(vm.sync.asyncChannel, { type: globals.SyncType.Pull });
+                        }
                     }
                 }
 

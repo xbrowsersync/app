@@ -89,6 +89,10 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 				errorMessage.title = platform.GetConstant(globals.Constants.Error_NoDataFound_Title);
 				errorMessage.message = platform.GetConstant(globals.Constants.Error_NoDataFound_Message);
 				break;
+			case globals.ErrorCodes.IdRemoved:
+				errorMessage.title = platform.GetConstant(globals.Constants.Error_IdRemoved_Title);
+				errorMessage.message = platform.GetConstant(globals.Constants.Error_IdRemoved_Message);
+				break;
 			case globals.ErrorCodes.InvalidData:
 				errorMessage.title = platform.GetConstant(globals.Constants.Error_InvalidData_Title);
 				errorMessage.message = platform.GetConstant(globals.Constants.Error_InvalidData_Message); 
