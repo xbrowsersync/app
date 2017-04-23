@@ -63,7 +63,7 @@
     <engine name="android" spec="~5.2.2" />
     <engine name="ios" spec="~4.2.1" />
     <preference name="orientation" value="portrait" />
-    <preference name="CustomInAppBrowserUserAgent" value="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36" />
+    <preference name="CustomInAppBrowserUserAgent" value="Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" />
     <preference name="KeyboardDisplayRequiresUserAction" value="false" />
     <preference name="WebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />

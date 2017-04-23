@@ -13,7 +13,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
  * Platform variables
  * ------------------------------------------------------------------------------------ */
 
-	var moduleName = 'xBrowserSync.App.PlatformImplementation', vm;
+	var moduleName = 'xBrowserSync.App.PlatformImplementation', vm, loadingId;
 	var bookmarksBarId = '1', otherBookmarksId = '2';
 
 
@@ -451,15 +451,31 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return $q.all([clearOtherBookmarks.promise, clearBookmarksBar.promise]);
 	};
 
-	var displayLoading = function(delay) {
-		if (!delay) {
-			vm.working = true;
+	var displayLoading = function(id, deferred) {
+		var timeout;
+		
+		// Return if loading overlay already displayed
+		if (!!loadingId) {
 			return;
 		}
 		
-		return $timeout(function() {
-			vm.working = true;
-		}, 500);
+		switch (id) {
+			// Loading bookmark metadata, wait a moment before displaying loading overlay
+			case 'retrievingMetadata':
+				timeout = $timeout(function() {
+					vm.working = true;
+				}, 500);
+				break;
+			// Display default overlay
+			default:
+				timeout = $timeout(function() {
+					vm.working = true;
+				});
+				break;
+		}
+
+		loadingId = id;
+		return timeout;
 	};
 	
 	var getAsyncChannel = function(syncCallback) {
@@ -595,11 +611,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         return deferred.promise;
     };
 
-	var hideLoading = function(timeout) {
+	var hideLoading = function(id, timeout) {
 		if (!!timeout) {
 			$timeout.cancel(timeout);
 		}
-		vm.working = false;
+		
+		// Hide loading overlay if supplied if matches current
+		if (!loadingId || id === loadingId) {
+			vm.working = false;
+			loadingId = null;
+		}
 	};
 
 	var init = function(viewModel, scope) {
@@ -945,7 +966,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			} 
 			
 			return null;
-		}; 
+		};
 		
 		var getPageKeywords = function() { 
 			// Get open graph tag values 
@@ -981,7 +1002,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			} 
 			
 			return null; 
-		}; 
+		};
 		
 		var getPageTitle = function() { 
 			for (var i = 0; i < metaTagsArr.length; i++) {
@@ -993,14 +1014,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			} 
 			
 			return document.title;
-		}; 
+		};
 	
 		var metadata = { 
 			title: getPageTitle(), 
 			url: document.location.href, 
 			description: getPageDescription(), 
 			tags: getPageKeywords() 
-		}; 
+		};
 	
 		return metadata; 
 	};

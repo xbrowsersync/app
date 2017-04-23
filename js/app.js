@@ -555,8 +555,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             return $q.resolve();
         }
         
-        var deferred = $q.defer();
-        var loadMetadataDeferred = $q.defer();
+        var deferred = $q.defer(), loadMetadataDeferred = $q.defer(), timeout;
         
         // Check if current url is a bookmark
         bookmarks.IncludesCurrentPage()
@@ -571,8 +570,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     return deferred.resolve();
                 }
                 else {
-                    // Otherwise display loading overlay  and get page metadata for current url
-                    platform.Interface.Loading.Show('retrievingMetadata', loadMetadataDeferred);
+                    // Otherwise display loading overlay and get page metadata for current url
+                    timeout = platform.Interface.Loading.Show('retrievingMetadata', loadMetadataDeferred);
                     return platform.GetPageMetadata(loadMetadataDeferred)
                         .then(function(metadata) {
                             // Display add bookmark form
@@ -618,7 +617,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 return deferred.resolve();
             })
             .finally(function() {
-                platform.Interface.Loading.Hide('retrievingMetadata');
+                platform.Interface.Loading.Hide('retrievingMetadata', timeout);
             });
         
         return deferred.promise;

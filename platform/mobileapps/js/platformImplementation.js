@@ -583,6 +583,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 
 	var displayLoading = function(id, deferred) {
+		var timeout;
+		
 		// Return if loading overlay already displayed
 		if (!!loadingId) {
 			return;
@@ -591,7 +593,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		switch (id) {
 			// Loading bookmark metadata, display cancellable overlay
 			case 'retrievingMetadata':
-				$timeout(function() {
+				timeout = $timeout(function() {
 					SpinnerDialog.show(null, platform.GetConstant(globals.Constants.GetPageMetadata_Message), function () {
 						deferred.resolve({ url: currentUrl });
 					});
@@ -599,13 +601,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				break;
 			// Display default overlay
 			default:
-				$timeout(function() {
+				timeout = $timeout(function() {
 					SpinnerPlugin.activityStart(getConstant(globals.Constants.Working_Title), { dimBackground: true });
 				});
 				break;
 		}
 
 		loadingId = id;
+		return timeout;
 	};
 
 	var getBookmarks = function() {
@@ -636,19 +639,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			return $q.resolve({ url: 'http://' });
 		}
 		
-		// Otherwise get metadata for current url
-        var metadata = {
-			title: null,
-			url: currentUrl,
-			description: null,
-			tags: null
-		};
-
 		var callback = function(pageContent, err) {
-			// Close InAppBrowser
-			inAppBrowser.close();
-			inAppBrowser = null;
-			
+			var parser, html, title, description, tagElements, tags;
+
 			// Check html content was returned
 			if (!!err || !pageContent) {
 				// Log error
@@ -664,11 +657,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				return deferred.reject(errObj);
 			}
 
-			// Reset current url
-			currentUrl = null;
-
-			var parser, html, title, description, tagElements, tags;
-
 			// Extract metadata properties
 			parser = new DOMParser();
 			html = parser.parseFromString(pageContent, 'text/html');
@@ -676,60 +664,83 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			// Get all meta tags
 			var metaTagsArr = html.getElementsByTagName('meta');
 
-			// Get page title
-			title = _.find(metaTagsArr, function(tag) { 
-				return (!!tag.getAttribute('property') && tag.getAttribute('property').toUpperCase() === 'OG:TITLE' && !!tag.getAttribute('content')) || 
-					   (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase() === 'TWITTER:TITLE' && !!tag.getAttribute('content')); 
-			}); 
-			
-			if (!!title) {
-				metadata.title = title.getAttribute('content');
-			} 
-			else { 
-				metadata.title = html.title || '';
-			} 
-
-			// Get page description
-			description = _.find(metaTagsArr, function(tag) { 
-				return (!!tag.getAttribute('property') && tag.getAttribute('property').toUpperCase() === 'OG:DESCRIPTION' && !!tag.getAttribute('content')) ||
-					   (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase() === 'TWITTER:DESCRIPTION' && !!tag.getAttribute('content')) ||
-					   (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase() === 'DESCRIPTION' && !!tag.getAttribute('content'));
-			});
-
-			if (!!description) {
-				metadata.description = utility.StripTags(description.getAttribute('content'));
-			}
-
-			// Get page tags
-			tagElements = _.filter(metaTagsArr, function(tag) { 
-				return !!tag.getAttribute('property') && 
-					   !!tag.getAttribute('property').match(/video\:tag$/i) &&
-					   !!tag.getAttribute('content');
-			}); 
-
-			if (!!tagElements && tagElements.length > 0) {
-				tags = '';
+			var getPageDescription = function() { 
+				for (var i = 0; i < metaTagsArr.length; i++) {
+					var currentTag = metaTagsArr[i];
+					if ((!!currentTag.getAttribute('property') && currentTag.getAttribute('property').toUpperCase().trim() === 'OG:DESCRIPTION' && !!currentTag.getAttribute('content')) ||
+					(!!currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'TWITTER:DESCRIPTION' && !!currentTag.getAttribute('content')) ||
+					(!!currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'DESCRIPTION' && !!currentTag.getAttribute('content'))) {
+						return (!!currentTag.getAttribute('content')) ? currentTag.getAttribute('content').trim() : '';
+					}
+				} 
 				
-				for (var i = 0; i < tagElements.length; i++) {
-					tags += tagElements[i].getAttribute('content') + ',';
+				return null;
+			};
+			
+			var getPageKeywords = function() { 
+				// Get open graph tag values 
+				var currentTag, i, keywords = [];
+				for (i = 0; i < metaTagsArr.length; i++) {
+					currentTag = metaTagsArr[i];
+					if (!!currentTag.getAttribute('property') && 
+						!!currentTag.getAttribute('property').trim().match(/VIDEO\:TAG$/i) && 
+						!!currentTag.getAttribute('content')) {
+						keywords.push(currentTag.getAttribute('content').trim());
+					}
 				}
+				
+				// Get meta tag values 
+				for (i = 0; i < metaTagsArr.length; i++) {
+					currentTag = metaTagsArr[i];
+					if (!!currentTag.getAttribute('name') && 
+						currentTag.getAttribute('name').toUpperCase().trim() === 'KEYWORDS' && 
+						!!currentTag.getAttribute('content')) {
+						var metaKeywords = currentTag.getAttribute('content').split(',');
+						for (i = 0; i < metaKeywords.length; i++) {
+							var currentKeyword = metaKeywords[i];
+							if (!!currentKeyword && !!currentKeyword.trim()) {
+								keywords.push(currentKeyword.trim());
+							}
+						}
+						break;
+					}
+				}
+				
+				if (keywords.length > 0) { 
+					return keywords.join();
+				} 
+				
+				return null; 
+			};
+			
+			var getPageTitle = function() { 
+				for (var i = 0; i < metaTagsArr.length; i++) {
+					var tag = metaTagsArr[i];
+					if ((!!tag.getAttribute('property') && tag.getAttribute('property').toUpperCase().trim() === 'OG:TITLE' && !!tag.getAttribute('content')) || 
+					(!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase().trim() === 'TWITTER:TITLE' && !!tag.getAttribute('content'))) {
+						return (!!tag.getAttribute('content')) ? tag.getAttribute('content').trim() : '';
+					}
+				} 
+				
+				return html.title;
+			};
+		
+			var metadata = { 
+				title: getPageTitle(),
+				url: currentUrl,
+				description: getPageDescription(),
+				tags: getPageKeywords()
+			};
 
-				metadata.tags = tags;
-			}
-
-			// Get meta tag values
-			tagElements = _.find(metaTagsArr, function(tag) { 
-				return !!tag.getAttribute('name') && 
-					   tag.getAttribute('name').toUpperCase() === 'KEYWORDS' &&
-					   !!tag.getAttribute('content');
-			}); 
-
-			if (!!tagElements) {
-				metadata.tags = tagElements.getAttribute('content');
-			}
+			// Reset current url
+			currentUrl = null;
 
 			// Return metadata
 			deferred.resolve(metadata);
+
+			// Close InAppBrowser
+			inAppBrowser.close();
+			inAppBrowser = null;
 		};
 
 		deferred = deferred || $q.defer();
@@ -763,7 +774,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return deferred.promise;
     };
 
-	var hideLoading = function(id) {
+	var hideLoading = function(id, timeout) {
+		if (!!timeout) {
+			$timeout.cancel(timeout);
+		}
+		
 		// Hide loading panels if supplied if matches current
 		if (!loadingId || id === loadingId) {
 			SpinnerPlugin.activityStop();
