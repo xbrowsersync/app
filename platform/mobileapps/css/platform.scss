@@ -287,16 +287,6 @@ body {
 }
 
 #settings-panel {
-    .backup-restore-panel #restoreForm {
-        #backupContentsPanel {
-            display: none;
-        }
-
-        #backupFilePanel {
-            display: block;
-        }
-    }
-
     .sync-panel {
         #id {
             @media (min-device-height: $height-mobile-large) {

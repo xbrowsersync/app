@@ -149,7 +149,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Find a bookmark"
 		},
 		"noBookmarks_Message" : {
-			"message":  "You currently have no bookmarks to display.<br/><br/>Start adding bookmarks easily by sharing web pages from your favourite browser app."
+			"message":  "You currently have no bookmarks to display.<br/><br/>Start bookmarking web pages, videos, music and more from your favourite apps by sharing them to xBrowserSync."
 		},
 		"noSearchResults_Message" : {
 			"message":  "No bookmarks found"
@@ -484,6 +484,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"error_FailedBackupData_Title" : {
 			"message":  "Backup failed"
 		},
+		"error_FailedGetDataToRestore_Title" : {
+			"message":  "Browse files failed"
+		},
+		"error_FailedRestoreData_Title" : {
+			"message":  "Unable to read the selected file"
+		},
 		"error_InvalidUrlScheme_Title": {
 			"message":  "Only URLs can be shared to xBrowserSync"
 		}
@@ -536,43 +542,42 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				var dateString = year + month + day + hour + minute;
 				var fileName = 'xBrowserSyncBackup_' + dateString + '.txt';
 
-				var onError = function() {
+				var saveBackupFileError = function() {
 					return deferred.reject({ code: globals.ErrorCodes.FailedBackupData });
 				};
-				
-				// Get/Create xBrowserSync dir in persistent storage location and save export file
-				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) { 
-					fs.root.getDirectory('xBrowserSync', { create: true }, function (dirEntry) {
-						dirEntry.getFile(fileName, { create: true }, function (fileEntry) {
-							fileEntry.createWriter(function (fileWriter) {
-								// Save export file
-								fileWriter.write(JSON.stringify(data));
-								
-								fileWriter.onwriteend = function() {
-									// Display message
-									var platformStr = (vm.platformName === globals.Platforms.IOS) ? 
-										constants.backupSuccess_IOS_Message : 
-										constants.backupSuccess_Android_Message;
-									var message = platformStr.message.replace(
-										'{fileName}',
-										fileEntry.name);
-									
-									$scope.$apply(function() {
-										vm.settings.backupRestoreResult = message;
-									});
 
-									return deferred.resolve();
-								};
+				// Set backup file storage location to synced app data on iOS and external storage on Android
+				var storageLocation = (vm.platformName === globals.Platforms.IOS) ? cordova.file.syncedDataDirectory : cordova.file.externalDataDirectory;
+				
+				// Save backup file to storage location
+				window.resolveLocalFileSystemURL(storageLocation, function (dirEntry) {
+					dirEntry.getFile(fileName, { create: true }, function (fileEntry) {
+						fileEntry.createWriter(function (fileWriter) {
+							// Save export file
+							fileWriter.write(JSON.stringify(data));
+							
+							fileWriter.onwriteend = function() {
+								var platformStr = (vm.platformName === globals.Platforms.IOS) ? 
+									constants.backupSuccess_IOS_Message : 
+									constants.backupSuccess_Android_Message;
+								var message = platformStr.message.replace(
+									'{fileName}',
+									fileEntry.name);
 								
-								fileWriter.onerror = onError;
-							},
-							onError);
+								$scope.$apply(function() {
+									vm.settings.backupRestoreResult = message;
+								});
+
+								return deferred.resolve();
+							};
+							
+							fileWriter.onerror = saveBackupFileError;
 						},
-						onError);
+						saveBackupFileError);
 					},
-					onError);
+					saveBackupFileError);
 				},
-				onError);
+				saveBackupFileError);
 			});
 		
 		return deferred.promise;
@@ -826,8 +831,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Set clear search button to display all bookmarks
 		vm.search.displayDefaultState = displayDefaultSearchState;
 
-		// Set backup file change event
-		document.getElementById('backupFile').addEventListener('change', backupFile_Change, false);
+		// Enable select file to restore
+		vm.settings.fileRestoreEnabled = true;
 
 		// Increase search results timeout to avoid display lag
 		vm.settings.getSearchResultsDelay = 500;
@@ -879,8 +884,77 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
     };
 
     var selectBackupFile = function() {
-		// Open file dialog
-		document.querySelector('#backupFile').click();
+		// Open select file dialog
+		if (vm.platformName === vm.globals.Platforms.Android) {
+			document.querySelector('#backupFile').click();
+		}
+		else if (vm.platformName === vm.globals.Platforms.IOS) {
+			var getPickedFileError = function() {
+				var err = { code: globals.ErrorCodes.FailedRestoreData };
+				
+				// Log error
+				utility.LogMessage(
+					moduleName, 'getPickedFileError', utility.LogType.Error,
+					JSON.stringify(err));
+
+				// Display alert
+				var errMessage = utility.GetErrorMessageFromException(err);
+				vm.alert.display(errMessage.title, errMessage.message);
+			}
+			
+			var pickFileSuccess = function(selectedFilePath) {
+				// Get directory and file name within temp folder
+				var selectedFileProps = selectedFilePath.replace(cordova.file.tempDirectory.substring(7), '').split('/');
+				var fileDir = selectedFileProps[0];
+				var fileName = selectedFileProps[1];
+				
+				// Read the file data
+				window.requestFileSystem(window.TEMPORARY, 0, function(fs) {
+					fs.root.getDirectory(fileDir, { create: false }, function(dirEntry) {
+						dirEntry.getFile(fileName, { create: false}, function(fileEntry) {
+							fileEntry.file(function(file) {
+								var reader = new FileReader();
+						
+								reader.onloadend = function() {
+									// Set the backup file data to restore
+									var data = this.result;
+									vm.settings.backupFileName = fileName;
+									$scope.$apply(function() {
+										vm.settings.dataToRestore = data;
+									});
+								};
+						
+								reader.readAsText(file);
+							},
+							getPickedFileError);
+						},
+						getPickedFileError);
+					},
+					getPickedFileError);
+				},
+				getPickedFileError);
+			}
+
+			var pickFileFailed = function(err) {
+				if (!err || err === 'canceled') {
+					return;
+				}
+				
+				var err = { code: globals.ErrorCodes.FailedGetDataToRestore };
+				
+				// Log error
+				utility.LogMessage(
+					moduleName, 'pickFileFailed', utility.LogType.Error,
+					JSON.stringify(err));
+
+				// Display alert
+				var errMessage = utility.GetErrorMessageFromException(err);
+				vm.alert.display(errMessage.title, errMessage.message);
+			}
+			
+			// Use iOS file picker plugin to allow user to select file from iCloud
+			FilePicker.pickFile(pickFileSuccess, pickFileFailed, 'public.data');
+		}
     };
 
     var shareBookmark = function(bookmark) {
@@ -944,7 +1018,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
  * Private functions
  * ------------------------------------------------------------------------------------ */
 
-	var backupFile_Change = function(event) {
+	var backupFile_Change_Android = function(event) {
 		var fileInput = document.getElementById('backupFile');
 		
 		if (fileInput.files.length > 0) {
@@ -1054,6 +1128,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 	var displayDefaultSearchState = function() {
         // Clear search and display all bookmarks
+		document.activeElement.blur();
 		vm.search.query = null;
         vm.search.lookahead = null;
         vm.search.results = null;
@@ -1070,10 +1145,20 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Set network online event
 		document.addEventListener('online', handleNetworkReconnected, false);
 
-		// Don't display iOS specific help panels
+		// Platform-specific configs
 		if (vm.platformName === vm.globals.Platforms.Android) {
+			// Don't display iOS specific help panels
 			vm.events.introPanel8_Next_Click = introPanel8_Android_Next_Click;
 			vm.events.introPanel10_Prev_Click = introPanel10_Android_Prev_Click;
+
+			// Set backup file change event
+			document.getElementById('backupFile').addEventListener('change', backupFile_Change_Android, false);
+		}
+		else if (vm.platformName === vm.globals.Platforms.IOS) {
+			// On iOS check if FilePicker is available, otherwise disable file restore
+			FilePicker.isAvailable(function(isAvailable) {
+				vm.settings.fileRestoreEnabled = isAvailable;
+			});
 		}
 
 		// Use toasts for alerts

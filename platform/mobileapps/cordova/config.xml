@@ -70,7 +70,6 @@
     <preference name="AndroidLaunchMode" value="singleTask" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
     <preference name="iosPersistentFileLocation" value="Compatibility" />
-    <preference name="BackupWebStorage" value="none" />
     <preference name="ShowSplashScreenSpinner" value="true" />
     <plugin name="cordova-plugin-inappbrowser" spec="1.5.0" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
@@ -91,4 +90,5 @@
     <plugin name="cordova-plugin-network-information" spec="~1.3.1" />
     <plugin name="com.virtualartifacts.webintent" spec="https://github.com/florentvaldelievre/virtualartifacts-webIntent.git" />
     <plugin name="com.greybax.spinnerdialog" spec="~1.0.8" />
+    <plugin name="com.jcesarmobile.filepicker" spec="https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin.git" />
 </widget>

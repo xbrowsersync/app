@@ -237,6 +237,8 @@ xBrowserSync.App.Global = function(platform) {
             Error_ScanFailed_Title: 'error_ScanFailed_Title',
             Error_ShareFailed_Title: 'error_ShareFailed_Title',
             Error_FailedBackupData_Title: 'error_FailedBackupData_Title',
+            Error_FailedGetDataToRestore_Title: 'error_FailedGetDataToRestore_Title',
+            Error_FailedRestoreData_Title: 'error_FailedRestoreData_Title',
             Error_InvalidUrlScheme_Title: 'error_InvalidUrlScheme_Title'
         },
         DisableEventListeners: {
@@ -340,6 +342,8 @@ xBrowserSync.App.Global = function(platform) {
             FailedScanID: 10302,
             FailedShareBookmark: 10303,
             FailedBackupData: 10304,
+            FailedGetDataToRestore: 10305,
+            FailedRestoreData: 10306,
             InvalidUrlScheme: 10400,
             NotImplemented: 10500
         },

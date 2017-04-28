@@ -195,6 +195,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             displaySyncBookmarksToolbarConfirmation: false,
             displaySyncDataUsage: false,
             displaySyncOptions: true,
+            fileRestoreEnabled: false,
             getSearchLookaheadDelay: 50,
             getSearchResultsDelay: 250,
 			id: function(value) {
@@ -1192,14 +1193,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             });
     };
 
-    var searchForm_SearchText_Autocomplete = function() {
-        vm.search.query += vm.search.lookahead;
-        searchForm_SearchText_Change();
-        $timeout(function() {
-            document.querySelector('input[name=txtSearch]').focus();
-        });
-    };
-
     var searchForm_Clear_Click = function() {
         vm.search.displayDefaultState();
     };
@@ -1228,6 +1221,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
     var searchForm_ScanCode_Click = function() {
         platform.ScanID();
+    };
+
+    var searchForm_SearchText_Autocomplete = function() {
+        vm.search.query += vm.search.lookahead;
+        searchForm_SearchText_Change();
+        $timeout(function() {
+            document.querySelector('input[name=txtSearch]').focus();
+        });
     };
     
     var searchForm_SearchText_Change = function() {
@@ -1318,6 +1319,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var searchForm_SearchText_KeyDown = function(event) {
         // If user pressed enter and search text present
         if (event.keyCode === 13) {
+            document.activeElement.blur();
+
             if (!!vm.search.getSearchResultsTimeout) {
                 $timeout.cancel(vm.search.getSearchResultsTimeout);
                 vm.search.getSearchResultsTimeout = null;

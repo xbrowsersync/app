@@ -637,11 +637,11 @@
                         
                         <div id="restoreForm" class="animate-fade" data-ng-show="vm.settings.displayRestoreForm && !vm.settings.displayRestoreConfirmation">
                             <p>{{ vm.platform.GetConstant(vm.globals.Constants.RestoreForm_Message) }}</p>
-                            <div id="backupContentsPanel">
+                            <div id="backupContentsPanel" ng-hide="vm.settings.fileRestoreEnabled">
                                 <label for="dataToRestore" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.DataToRestore_Label) }}</label>
                                 <textarea data-ng-model="vm.settings.dataToRestore" class="form-control" rows="3" tabindex="11"></textarea>
                             </div>
-                            <div id="backupFilePanel">
+                            <div id="backupFilePanel" ng-show="vm.settings.fileRestoreEnabled">
                                 <div class="buttons">
                                     <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_SelectBackupFile_Click()" tabindex="11">
                                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_SelectBackupFile_Label) }}

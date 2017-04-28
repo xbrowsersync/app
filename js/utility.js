@@ -130,6 +130,12 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 			case globals.ErrorCodes.FailedBackupData:
 				errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedBackupData_Title);
 				break;
+			case globals.ErrorCodes.FailedGetDataToRestore:
+				errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedGetDataToRestore_Title);
+				break;
+			case globals.ErrorCodes.FailedRestoreData:
+				errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedRestoreData_Title);
+				break;
 			case globals.ErrorCodes.InvalidUrlScheme:
 				errorMessage.title = platform.GetConstant(globals.Constants.Error_InvalidUrlScheme_Title);
 				break;
