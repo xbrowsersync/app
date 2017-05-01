@@ -232,6 +232,10 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					chrome.runtime.getManifest().version) {
 					// If extension has been updated, display about panel 
 					globals.DisplayAboutOnStartup.Set(true);
+					
+					// TODO: Remove for >v1.2.2
+					globals.SyncEnabled.Set(false);
+					displayAlert('xBrowserSync updated to v1.2.2', 'Sync has been disabled when applying this update. Re-enable sync to start syncing your data again.');
 				}
 				break;
 		}

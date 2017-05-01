@@ -63,16 +63,16 @@ xBrowserSync.App.Global = function(platform) {
                 }
             }
         },
-        ClientSecret: {
+        Password: {
             Get: function() {
                 return platform.LocalStorage.Get(
-                    'xBrowserSync-clientSecret');
+                    'xBrowserSync-password');
             },
             Set: function(value) {
                 value = (!value) ? '' : value.trim();
                 
                 platform.LocalStorage.Set(
-                    'xBrowserSync-clientSecret', 
+                    'xBrowserSync-password', 
                     value);
             }
         },
@@ -115,13 +115,15 @@ xBrowserSync.App.Global = function(platform) {
             IntroPanel11_Message: 'introPanel11_Message',
             IntroPanel12_Message: 'introPanel12_Message',
             IntroPanel13_Message: 'introPanel13_Message',
-			Field_ClientSecret_Label: 'field_ClientSecret_Label',
-			Field_ClientSecret_Description: 'field_ClientSecret_Description',
+			Field_Password_Label: 'field_Password_Label',
+			Field_Password_Description: 'field_Password_Description',
 			Field_Id_Label: 'field_Id_Label',
 			Field_Id_Description: 'field_Id_Description',
 			Button_ScanCode_Label: 'button_ScanCode_Label',
-            Button_Sync_Enable_Label: 'button_Sync_Enable_Label',
-			Button_Sync_Disable_Label: 'button_Sync_Disable_Label',
+			Button_DisableSync_Label: 'button_DisableSync_Label',
+            Button_EnableSync_Label: 'button_EnableSync_Label',
+            Button_ExistingSync_Label: 'button_ExistingSync_Label',
+            Button_NewSync_Label: 'button_NewSync_Label',
 			ConfirmSync_Title: 'confirmSync_Title',
 			ConfirmSync_Message: 'confirmSync_Message',
 			Button_Confirm_Label: 'button_Confirm_Label',
@@ -145,6 +147,7 @@ xBrowserSync.App.Global = function(platform) {
 			ConfirmUpdateServiceUrl_Message: 'confirmUpdateServiceUrl_Message',
 			BackupRestore_Title: 'backupRestore_Title',
             BackupRestore_Message: 'backupRestore_Message',
+            BackupRestore_NotAvailable_Message: 'backupRestore_NotAvailable_Message',
             BackupRestore_NotSynced_Message: 'backupRestore_NotSynced_Message',
 			Button_Backup_Label: 'button_Backup_Label',
 			Button_Restore_Label: 'button_Restore_Label',

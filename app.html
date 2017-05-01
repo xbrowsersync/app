@@ -65,11 +65,11 @@
                         <h4>{{ vm.platform.GetConstant(vm.globals.Constants.AboutPanel_Title) }} {{ vm.globals.AppVersion }}</h4>
                         <ul>
                             <li>Added: iOS and Android apps released.</li>
+                            <li>Added: More intuitive sync/login panel.</li>
                             <li>Fixed: New bookmark descriptions are shortened to 300 characters to the nearest word.</li>
                             <li>Fixed: For Chrome extension, "Connection Lost" warnings are no longer shown when checking for updates in the background.</li>
                             <li>Fixed: Instances where some bookmarks have duplicate IDs.</li>
                             <li>Fixed: Bug where bookmarks with no title set don't display their URL host instead.</li>
-                            <li>Fixed: Appropriate message now displayed if ID is removed by the service due to inactivity.</li>
                         </ul>
                         <p class="text-center">
                             <a href="https://github.com/xBrowserSync/App/releases" class="new-tab">
@@ -249,24 +249,10 @@
                     </div>
                 </div>
                 <div id="intro-panel-12" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 12" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.events.introPanel12_Next_Click()" hm-swiperight="vm.events.introPanel12_Prev_Click()">
+                     hm-swiperight="vm.events.introPanel12_Prev_Click()">
                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.IntroPanel12_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel12_Prev_Click()">
-                            <i class="fa fa-step-backward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
-                        </button>
-                        <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}" data-ng-click="vm.events.introPanel12_Next_Click()">
-                            <i class="fa fa-step-forward" aria-hidden="true"></i>
-                            <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
-                        </button>
-                    </div>
-                </div>
-                <div id="intro-panel-13" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 13" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swiperight="vm.events.introPanel13_Prev_Click()">
-                    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.IntroPanel13_Message)"></div>
-                    <div class="buttons">
-                        <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel13_Prev_Click()">
                             <i class="fa fa-step-backward" aria-hidden="true"></i>
                             <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
                         </button>
@@ -274,33 +260,60 @@
                 </div>
             </div>
             <form name="vm.syncForm" class="animate-fade" data-ng-hide="vm.sync.displaySyncConfirmation" novalidate>
-                <label class="sr-only" for="txtClientSecret">{{ vm.platform.GetConstant(vm.globals.Constants.Field_ClientSecret_Label) }}</label>
-                <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtClientSecret.$invalid]">
-                    <input name="txtClientSecret" data-ng-model="vm.settings.secret" type="password" class="form-control" data-ng-change="vm.events.syncForm_ClientSecret_Change()"
-                           data-ng-model-options="{ getterSetter: true }" data-ng-disabled="vm.sync.enabled()" maxlength="150"
-                           placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Field_ClientSecret_Description) }}" tabindex="1" />
-                    <div class="progress" data-ng-hide="!vm.settings.secret()">
-                        <div class="progress-bar" role="progressbar" data-ng-style="{ width: (vm.settings.secretComplexity.complexity === 0) ? '100%' : vm.settings.secretComplexity.complexity + '%' }" data-ng-class="{
-                            'progress-bar-warning': vm.settings.secretComplexity.complexity > 25 && vm.settings.secretComplexity.complexity < 50,
-                            'progress-bar-success': vm.settings.secretComplexity.complexity > 50 && vm.settings.secretComplexity.complexity <= 100
-                            }">
+                <div class="login-form-new animate-fade" data-ng-show="vm.settings.displayNewSyncPanel">
+                    <label class="sr-only" for="txtPassword">{{ vm.platform.GetConstant(vm.globals.Constants.Field_Password_Label) }}</label>
+                    <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
+                        <input name="txtPassword" data-ng-model="vm.settings.secret" type="password" class="form-control" data-ng-change="vm.events.syncForm_Password_Change()"
+                            data-ng-model-options="{ getterSetter: true }" data-ng-disabled="vm.sync.enabled()" maxlength="150"
+                            placeholder="Enter an encryption password" tabindex="1" />
+                        <div class="progress" data-ng-hide="!vm.settings.secret()">
+                            <div class="progress-bar" role="progressbar" data-ng-style="{ width: (vm.settings.secretComplexity.complexity === 0) ? '100%' : vm.settings.secretComplexity.complexity + '%' }" data-ng-class="{
+                                'progress-bar-warning': vm.settings.secretComplexity.complexity > 25 && vm.settings.secretComplexity.complexity < 50,
+                                'progress-bar-success': vm.settings.secretComplexity.complexity > 50 && vm.settings.secretComplexity.complexity <= 100
+                                }">
+                            </div>
                         </div>
+                        <div class="progress-bar-background"></div>
                     </div>
-                    <div class="progress-bar-background"></div>
+                    <div id="syncButtonPanel" class="text-center">
+                        <button id="btnSync" type="submit" class="btn btn-default" data-ng-disabled="!vm.sync.validateLogin()" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
+                            {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
+                        </button>
+                        <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_ExistingSync_Click()" tabindex="5">
+                            {{ vm.platform.GetConstant(vm.globals.Constants.Button_ExistingSync_Label) }}
+                        </button>
+                    </div>
                 </div>
-                <label class="sr-only" for="txtId">{{ vm.platform.GetConstant(vm.globals.Constants.Field_Id_Label) }}</label>
-                <div class="form-group">
-                    <button type="button" class="btn btn-icon btn-scanCode" data-ng-hide="vm.settings.id()" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ScanCode_Label) }}" data-ng-click="vm.events.searchForm_ScanCode_Click()">
-                        <i class="fa fa-qrcode" aria-hidden="true"></i>
-                    </button>
-                    <input name="txtId" data-ng-model="vm.settings.id" class="form-control" data-ng-model-options="{ getterSetter: true }"
-                           data-ng-disabled="vm.sync.enabled()" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Field_Id_Description) }}" 
-                           maxlength="32" tabindex="2" />
-                </div>
-                <div id="syncButtonPanel" class="text-center">
-                    <button id="btnSync" type="submit" class="btn btn-default" data-ng-disabled="!vm.sync.validateLogin()" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
-                        {{ vm.platform.GetConstant(vm.globals.Constants.Button_Sync_Enable_Label) }}
-                    </button>
+                <div class="login-form-existing animate-fade" data-ng-hide="vm.settings.displayNewSyncPanel">
+                    <label class="sr-only" for="txtId">{{ vm.platform.GetConstant(vm.globals.Constants.Field_Id_Label) }}</label>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-icon btn-scanCode" data-ng-hide="vm.settings.id()" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ScanCode_Label) }}" data-ng-click="vm.events.searchForm_ScanCode_Click()">
+                            <i class="fa fa-qrcode" aria-hidden="true"></i>
+                        </button>
+                        <input name="txtId" data-ng-model="vm.settings.id" class="form-control" data-ng-model-options="{ getterSetter: true }" data-ng-disabled="vm.sync.enabled()" placeholder="Your xBrowserSync ID" maxlength="32" tabindex="1" />
+                    </div>
+                    <label class="sr-only" for="txtPassword">{{ vm.platform.GetConstant(vm.globals.Constants.Field_Password_Label) }}</label>
+                    <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
+                        <input name="txtPassword" data-ng-model="vm.settings.secret" type="password" class="form-control" data-ng-change="vm.events.syncForm_Password_Change()"
+                            data-ng-model-options="{ getterSetter: true }" data-ng-disabled="vm.sync.enabled()" maxlength="150"
+                            placeholder="Your encryption password" tabindex="2" />
+                        <div class="progress" data-ng-hide="!vm.settings.secret()">
+                            <div class="progress-bar" role="progressbar" data-ng-style="{ width: (vm.settings.secretComplexity.complexity === 0) ? '100%' : vm.settings.secretComplexity.complexity + '%' }" data-ng-class="{
+                                'progress-bar-warning': vm.settings.secretComplexity.complexity > 25 && vm.settings.secretComplexity.complexity < 50,
+                                'progress-bar-success': vm.settings.secretComplexity.complexity > 50 && vm.settings.secretComplexity.complexity <= 100
+                                }">
+                            </div>
+                        </div>
+                        <div class="progress-bar-background"></div>
+                    </div>
+                    <div id="syncButtonPanel" class="text-center">
+                        <button id="btnSync" type="submit" class="btn btn-default" data-ng-disabled="!vm.sync.validateLogin()" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
+                            {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
+                        </button>
+                        <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_NewSync_Click()" tabindex="5">
+                            {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
+                        </button>
+                    </div>
                 </div>
             </form>
             <div class="confirm well well-sm animate-fade" data-ng-show="vm.sync.displaySyncConfirmation">
@@ -352,7 +365,7 @@
                 </h4>
                 <div class="list-group" data-ng-show="vm.search.results.length > 0" infinite-scroll="vm.events.searchForm_SearchResults_Scroll()" infinite-scroll-container="'.search-results-panel'">
                     <div class="list-group-item search-result-item" data-bookmark-id="{{ result.id }}" data-ng-class="{ true: 'animate-' + result.class }[!!result.class]" data-ng-repeat="result in vm.search.results | limitTo:vm.search.resultsDisplayed track by result.id">
-                        <div class="menu" hm-tap="vm.events.searchForm_SelectBookmark_Press($event)">
+                        <div class="menu animate-fade" data-ng-show="vm.search.selectedBookmark === result.id" data-ng-blur="vm.events.searchForm_SelectBookmark_Press(null, $event)" tabindex="-1">
                             <div class="buttons">
                                 <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}" hm-tap="vm.events.searchForm_ShareBookmark_Click(result)">
                                     <i class="fa fa-share-alt" aria-hidden="true"></i>
@@ -368,7 +381,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="overlay" hm-tap="vm.events.openUrl($event, result.url)" hm-press="vm.events.searchForm_SelectBookmark_Press($event)"></div>
+                        <div class="overlay" hm-tap="vm.events.openUrl($event, result.url)" hm-press="vm.events.searchForm_SelectBookmark_Press(result.id, $event)"></div>
                         <a href="{{ result.url }}" data-ng-click="vm.events.openUrl($event)" tabindex="{{ $index + 1 }}" data-ng-keydown="vm.events.searchForm_SearchResult_KeyDown($event)">
                             <h4 class="list-group-item-heading" data-ng-if="result.title">{{ result.title }}</h4>
                             <h4 class="list-group-item-heading" data-ng-if="!result.title">{{ vm.utility.GetHostFromUrl(result.url) }}</h4>
@@ -502,7 +515,7 @@
                                 {{ vm.platform.GetConstant(vm.globals.Constants.SyncPanel_DisplaySyncOptions_Label) }}
                             </button>
                             <button class="btn btn-default" data-ng-click="vm.events.syncForm_DisableSync_Click()" tabindex="6">
-                                {{ vm.platform.GetConstant(vm.globals.Constants.Button_Sync_Disable_Label) }}
+                                {{ vm.platform.GetConstant(vm.globals.Constants.Button_DisableSync_Label) }}
                             </button>
                         </div>
                     </div>
@@ -618,12 +631,13 @@
                     <i class="fa fa-arrow-down"></i>
                 </h4>
                 <div class="panel-content" data-ng-show="!vm.sync.enabled() && vm.platformName !== vm.globals.Platforms.Chrome && vm.settings.visiblePanel === vm.settings.panels.backupRestore">
-                    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.BackupRestore_NotSynced_Message)"></div>
+                    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.BackupRestore_NotAvailable_Message)"></div>
                 </div>
-                <div class="panel-content" data-ng-show="vm.sync.enabled() && vm.settings.visiblePanel === vm.settings.panels.backupRestore">
+                <div class="panel-content" data-ng-show="(vm.sync.enabled() || vm.platformName === vm.globals.Platforms.Chrome) && vm.settings.visiblePanel === vm.settings.panels.backupRestore">
                     <div class="animate-fade" data-ng-hide="vm.settings.backupRestoreResult">
                         <div class="animate-fade" data-ng-hide="vm.settings.displayRestoreForm">
                             <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.BackupRestore_Message)"></div>
+                            <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.BackupRestore_NotSynced_Message)" data-ng-show="!vm.sync.enabled()"></div>
                             <div class="buttons">
                                 <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_Backup_Click()" tabindex="9">
                                     {{ vm.platform.GetConstant(vm.globals.Constants.Button_Backup_Label) }}
@@ -637,11 +651,11 @@
                         
                         <div id="restoreForm" class="animate-fade" data-ng-show="vm.settings.displayRestoreForm && !vm.settings.displayRestoreConfirmation">
                             <p>{{ vm.platform.GetConstant(vm.globals.Constants.RestoreForm_Message) }}</p>
-                            <div id="backupContentsPanel" ng-hide="vm.settings.fileRestoreEnabled">
+                            <div id="backupContentsPanel">
                                 <label for="dataToRestore" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.DataToRestore_Label) }}</label>
                                 <textarea data-ng-model="vm.settings.dataToRestore" class="form-control" rows="3" tabindex="11"></textarea>
                             </div>
-                            <div id="backupFilePanel" ng-show="vm.settings.fileRestoreEnabled">
+                            <div id="backupFilePanel">
                                 <div class="buttons">
                                     <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_SelectBackupFile_Click()" tabindex="11">
                                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_SelectBackupFile_Label) }}

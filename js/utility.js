@@ -22,12 +22,12 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 	
 	var decryptData = function(data, errorCallback) {
 		// Decrypt using AES
-		return CryptoJS.AES.decrypt(data, globals.ClientSecret.Get()).toString(CryptoJS.enc.Utf8);
+		return CryptoJS.AES.decrypt(data, globals.Password.Get()).toString(CryptoJS.enc.Utf8);
 	};
 	
 	var encryptData = function(data, errorCallback) {
 		// Encrypt using AES
-		return CryptoJS.AES.encrypt(data, globals.ClientSecret.Get()).toString();
+		return CryptoJS.AES.encrypt(data, globals.Password.Get()).toString();
 	};
 
 	var getErrorMessageFromException = function(err) {

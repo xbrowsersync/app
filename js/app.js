@@ -104,9 +104,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             introPanel10_Prev_Click: introPanel10_Prev_Click,
             introPanel11_Next_Click: introPanel11_Next_Click,
             introPanel11_Prev_Click: introPanel11_Prev_Click,
-            introPanel12_Next_Click: introPanel12_Next_Click,
             introPanel12_Prev_Click: introPanel12_Prev_Click,
-            introPanel13_Prev_Click: introPanel13_Prev_Click,
             openUrl: openUrl,
             queueSync: queueSync,
             searchForm_Clear_Click: searchForm_Clear_Click,
@@ -123,10 +121,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             syncPanel_SyncBookmarksToolbar_Click: syncPanel_SyncBookmarksToolbar_Click,
             syncPanel_SyncBookmarksToolbar_Confirm: syncPanel_SyncBookmarksToolbar_Confirm,
             syncForm_CancelSyncConfirmation_Click: syncForm_CancelSyncConfirmation_Click,
-            syncForm_ClientSecret_Change: syncForm_ClientSecret_Change,
+            syncForm_Password_Change: syncForm_Password_Change,
             syncForm_ConfirmSync_Click: startSyncing,
             syncForm_DisableSync_Click: syncForm_DisableSync_Click,
             syncForm_EnableSync_Click: syncForm_EnableSync_Click,
+            syncForm_ExistingSync_Click: syncForm_ExistingSync_Click,
+            syncForm_NewSync_Click: syncForm_NewSync_Click,
             syncPanel_DisplayDataUsage_Click: syncPanel_DisplayDataUsage_Click,
             syncPanel_DisplaySyncOptions_Click: syncPanel_DisplaySyncOptions_Click,
             searchForm_ToggleBookmark_Click: searchForm_ToggleBookmark_Click,
@@ -178,6 +178,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             query: null,
             results: null,
             resultsDisplayed: 10,
+            selectedBookmark: null,
             scrollDisplayMoreEnabled: true
         };
         
@@ -189,6 +190,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 return checkRestoreData(vm.settings.dataToRestore);
             },
             displayCancelSyncConfirmation: false,
+            displayNewSyncPanel: true,
 			displayQRCode: false,
             displayRestoreConfirmation: false,
             displayRestoreForm: false,
@@ -210,8 +212,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             },
 			secret: function(value) {
                 return arguments.length ? 
-                    globals.ClientSecret.Set(value) : 
-                    globals.ClientSecret.Get();
+                    globals.Password.Set(value) : 
+                    globals.Password.Get();
             },
             secretComplexity: null,
             service: {
@@ -732,6 +734,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 document.querySelector('textarea[name="bookmarkDescription"]').style.height = null;
                 vm.bookmark.displayUpdateForm = false;
                 break;
+            case vm.view.views.search:
+                vm.search.selectedBookmark = null;
+                break;
             case vm.view.views.settings:
                 vm.settings.visiblePanel = vm.settings.panels.sync;
                 vm.settings.displayCancelSyncConfirmation = false;
@@ -765,6 +770,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // Initialise new view
         switch(view) {
+            case vm.view.views.login:
+                // Display new sync panel depending on if ID is set
+                vm.settings.displayNewSyncPanel = !globals.Id.Get();
+                deferred.resolve();
+                break;
             case vm.view.views.search:
                 vm.search.displayDefaultState();
                 $timeout(function() {
@@ -957,7 +967,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Platform-specific initation
         platform.Init(vm, $scope);
         
-        // Display intro animation if required
+        // Display new sync panel depending on if ID is set
+        vm.settings.displayNewSyncPanel = !globals.Id.Get();
+        
+        // Set intro animation visibility
         if (vm.view.current === vm.view.views.login && !!vm.introduction.displayIntro()) {
             introPanel_DisplayIntro();
         }
@@ -1079,16 +1092,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.introduction.displayPanel(10);
     };
 
-    var introPanel12_Next_Click = function() {
-        vm.introduction.displayPanel(13);
-    };
-
     var introPanel12_Prev_Click = function() {
         vm.introduction.displayPanel(11);
-    };
-
-    var introPanel13_Prev_Click = function() {
-        vm.introduction.displayPanel(12);
     };
     
     var openUrl = function(event, url) {
@@ -1117,7 +1122,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 	var restoreData = function(data, restoreCallback) {
 		// Set ID and client secret if sync not enabled
         if (!globals.SyncEnabled.Get()) {
-            globals.ClientSecret.Set('');
+            globals.Password.Set('');
             vm.settings.secretComplexity = null;
             
             if (!!data.xBrowserSync.id) {
@@ -1443,19 +1448,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         } 
     };
     
-    var searchForm_SelectBookmark_Press = function(event) {
+    var searchForm_SelectBookmark_Press = function(bookmarkId, event) {
         event.preventDefault();
-
-        var bookmarkItem = event.target.parentNode;
-        var isActive = _.contains(bookmarkItem.classList, 'active');
-
-        _.each(document.querySelectorAll('.list-group-item.active'), function(obj) { 
-            obj.classList.remove('active');
-        });
-
-        if (!isActive) {
-            bookmarkItem.classList.add('active');
-        }
+        
+        // Display menu for selected bookmark
+        vm.search.selectedBookmark = bookmarkId;
+        
     };
     
     var searchForm_ToggleBookmark_Click = function() {
@@ -1534,7 +1532,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.view.change(vm.view.views.login);
     };
 
-    var syncForm_ClientSecret_Change = function() {
+    var syncForm_Password_Change = function() {
         // Update client secret complexity value
     	if (!!vm.settings.secret()) {
         	vm.settings.secretComplexity = complexify(vm.settings.secret());
@@ -1556,20 +1554,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         syncForm_CancelSyncConfirmation_Click();
     };
-    
-    var syncForm_EnableSync_Click = function() {
-		// If ID provided, display confirmation panel
-        if (!!globals.Id.Get()) {
-            vm.sync.displaySyncConfirmation = true;
-            $timeout(function() {
-                document.querySelector('#btnSync_Confirm').focus();
-            });
-        }
-        else {
-            // Otherwise start syncing
-            startSyncing();
-        }
-	};
 
     var syncPanel_DisplayDataUsage_Click = function() {
         // Reset values
@@ -1641,6 +1625,30 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         });
     };
     
+    var syncForm_EnableSync_Click = function() {
+		// If ID provided, display confirmation panel
+        if (!!globals.Id.Get()) {
+            vm.sync.displaySyncConfirmation = true;
+            $timeout(function() {
+                document.querySelector('#btnSync_Confirm').focus();
+            });
+        }
+        else {
+            // Otherwise start syncing
+            startSyncing();
+        }
+	};
+
+    var syncForm_ExistingSync_Click = function() {
+        vm.settings.displayNewSyncPanel = false;
+    };
+
+    var syncForm_NewSync_Click = function() {
+        vm.settings.displayNewSyncPanel = true;
+        globals.Id.Set(null);
+        globals.Password.Set(null);
+    };
+    
     var syncPanel_SyncBookmarksToolbar_Click = function() {
         // If sync not enabled or user just clicked to disable toolbar sync, return
         if (!globals.SyncEnabled.Get() || !globals.SyncBookmarksToolbar.Get()) {
@@ -1709,7 +1717,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.settings.service.url(url);
         
         // Remove saved client secret and ID
-        globals.ClientSecret.Set('');
+        globals.Password.Set('');
         vm.settings.secretComplexity = null;
         globals.Id.Set('');
         

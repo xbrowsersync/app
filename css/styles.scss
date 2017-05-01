@@ -36,7 +36,7 @@ body {
 
     h1 {
         background: url("../img/logo.svg") 50% 40% no-repeat;
-        background-size: 70%;
+        background-size: 60%;
         position: absolute;
         top: 0;
         bottom: 0;
@@ -551,6 +551,19 @@ body {
         border-bottom: none;
     }
 
+    #btnSync {
+        margin-right: 0.5em;
+    }
+
+    .form-group {
+        position: relative;
+
+        input {
+            font-size: 1.1em;
+            padding: 10px 20px 9px;
+        }
+    }
+
     .intro-panel {
         height: 18em;
         margin-bottom: 15px;
@@ -597,8 +610,8 @@ body {
         }
     }
 
-    .form-group {
-        position: relative;
+    .login-form-new {
+        margin-top: 3em;
     }
     
     .secret-form-group {
@@ -771,13 +784,6 @@ body {
                 }
             }
 
-            &.active {
-                .menu {
-                    @include animation(animate-fade-in 0.2s linear);
-                    display: block;
-                }
-            }
-
             &.animate-added {
                 &.ng-enter {
                     @include animation(animate-fold-down-slide-in 0.5s ease-out);
@@ -832,6 +838,7 @@ body {
                 background-color: rgba(8,48,57,0.9);
                 text-align: center;
                 z-index: 60;
+                outline: none;
 
                 &:before {
                     content: '';
@@ -872,7 +879,6 @@ body {
             }
 
             .menu, .overlay {
-                display: none;
                 position: absolute;
                 width: 100%;
                 height: 100%;
@@ -882,6 +888,7 @@ body {
             }
 
             .overlay {
+                display: none;
                 opacity: 0;
                 z-index: 50;
             }
@@ -889,7 +896,7 @@ body {
         
         .list-group-item-heading {
             color: $colour-text2;
-            font-size: 1.3em;
+            font-size: 1.2em;
             font-weight: normal;
             line-height: 1.1em;
             margin-bottom: 5px;
@@ -901,6 +908,7 @@ body {
         }
         
         .description {
+            font-size: 0.9em;
             font-style: italic;
             margin-bottom: 5px;
         }

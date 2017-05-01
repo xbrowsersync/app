@@ -712,7 +712,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
     
     var sync_handleBoth = function(syncData) {
         // Check secret and bookmarks ID are present
-		if (!globals.ClientSecret.Get() || !globals.Id.Get()) {
+		if (!globals.Password.Get() || !globals.Id.Get()) {
 			globals.SyncEnabled.Set(false);
             return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
@@ -890,7 +890,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         }
         
         // Check secret and bookmarks ID are present
-		if (!globals.ClientSecret.Get() || !globals.Id.Get()) {
+		if (!globals.Password.Get() || !globals.Id.Get()) {
 			globals.SyncEnabled.Set(false);
             return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
@@ -952,7 +952,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         
         if (!syncData.changeInfo) {
             // Check secret is present
-            if (!globals.ClientSecret.Get()) {
+            if (!globals.Password.Get()) {
                 globals.SyncEnabled.Set(false);
                 return $q.reject({ code: globals.ErrorCodes.MissingClientData });
             }
@@ -967,7 +967,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             }
 
             // Check secret and bookmarks ID are present
-            if (!globals.ClientSecret.Get() || !globals.Id.Get()) {
+            if (!globals.Password.Get() || !globals.Id.Get()) {
                 globals.SyncEnabled.Set(false);
                 return $q.reject({ code: globals.ErrorCodes.MissingClientData });
             }
