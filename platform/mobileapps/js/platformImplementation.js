@@ -152,7 +152,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Find a bookmark"
 		},
 		"noBookmarks_Message" : {
-			"message":  "You currently have no bookmarks to display.<br/><br/>Start bookmarking web pages, videos, music and more from your favourite apps by sharing them to xBrowserSync."
+			"message":  "You currently have no bookmarks.<br/><br/>Start bookmarking web pages, videos, music and more from your favourite apps by sharing them to xBrowserSync."
 		},
 		"noSearchResults_Message" : {
 			"message":  "No bookmarks found"
@@ -233,10 +233,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  ""
 		},
 		"backupSuccess_Android_Message" : {
-			"message":  "Your synced data has been unencrypted and saved to {fileName} in the xBrowserSync folder on external storage root (if available, otherwise check internal storage)."
+			"message":  "Backup file {fileName} saved to internal storage."
 		},
 		"backupSuccess_IOS_Message" : {
-			"message":  "Your synced data has been unencrypted and saved to {fileName} in the xBrowserSync folder in Documents."
+			"message":  "Backup file {fileName} saved to Documents folder."
 		},
 		"restoreSuccess_Message" : {
 			"message":  "Your data has been restored."
@@ -553,7 +553,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				};
 
 				// Set backup file storage location to synced app data on iOS and external storage on Android
-				var storageLocation = (vm.platformName === globals.Platforms.IOS) ? cordova.file.syncedDataDirectory : cordova.file.externalDataDirectory;
+				var storageLocation = (vm.platformName === globals.Platforms.IOS) ? cordova.file.syncedDataDirectory : cordova.file.externalRootDirectory;
 				
 				// Save backup file to storage location
 				window.resolveLocalFileSystemURL(storageLocation, function (dirEntry) {
@@ -906,7 +906,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				// Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
 				vm.alert.display(errMessage.title, errMessage.message);
-			}
+			};
 			
 			var pickFileSuccess = function(selectedFilePath) {
 				// Get directory and file name within temp folder
@@ -939,14 +939,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					getPickedFileError);
 				},
 				getPickedFileError);
-			}
+			};
 
 			var pickFileFailed = function(err) {
 				if (!err || err === 'canceled') {
 					return;
 				}
 				
-				var err = { code: globals.ErrorCodes.FailedGetDataToRestore };
+				err = { code: globals.ErrorCodes.FailedGetDataToRestore };
 				
 				// Log error
 				utility.LogMessage(
@@ -956,7 +956,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				// Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
 				vm.alert.display(errMessage.title, errMessage.message);
-			}
+			};
 			
 			// Use iOS file picker plugin to allow user to select file from iCloud
 			FilePicker.pickFile(pickFileSuccess, pickFileFailed, 'public.data');
@@ -1050,6 +1050,17 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		currentUrl = null;
 		vm.view.displayMainView();
     };
+
+	var checkForDeletedSync = function(err) {
+		// If ID was removed disable sync and delete saved ID and password
+		if (err.code === globals.ErrorCodes.NoDataFound) {
+			err.code = globals.ErrorCodes.IdRemoved;
+			globals.SyncEnabled.Set(false);
+			globals.ID.Set(null);
+			globals.Password.Set(null);
+			vm.view.change(vm.view.views.login);
+		}
+	};
 
 	var checkForInterruptedSync = function () {
 		// Check if a sync was interrupted
@@ -1209,11 +1220,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						})
 						.catch(function(err) {
 							// If ID was removed disable sync, otherwise display search panel
-							if (err.code === globals.ErrorCodes.NoDataFound) {
-								err.code = globals.ErrorCodes.IdRemoved;
-								globals.SyncEnabled.Set(false);
-								vm.view.change(vm.view.views.login);
-							}
+							checkForDeletedSync(err);
 							
 							// Log error
 							utility.LogMessage(
@@ -1338,6 +1345,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 	var resume = function() {
 		if (!!globals.SyncEnabled.Get()) {
+			// Deselect bookmark
+			vm.search.selectedBookmark = null;
+			
 			// Check if a url was shared
 			checkForSharedUrl()
 				.then(function(sharedUrl) {
@@ -1364,11 +1374,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						})
 						.catch(function(err) {
 							// If ID was removed disable sync, otherwise display search panel
-							if (err.code === globals.ErrorCodes.NoDataFound) {
-								err.code = globals.ErrorCodes.IdRemoved;
-								globals.SyncEnabled.Set(false);
-								vm.view.change(vm.view.views.login);
-							}
+							checkForDeletedSync(err);
 							
 							// Log error
 							utility.LogMessage(

@@ -126,7 +126,7 @@ body {
 #about-panel { 
     h1 {
         @media (min-device-height: $height-mobile-medium) {
-            background-size: 50%;
+            background-size: 47%;
         }
     }
 }
@@ -287,6 +287,12 @@ body {
 }
 
 #settings-panel {
+    .backup-restore-panel {
+        #backupContentsPanel {
+            display: none;
+        }
+    }
+    
     .sync-panel {
         #id {
             @media (min-device-height: $height-mobile-large) {

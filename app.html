@@ -15,7 +15,9 @@
 
 <body>
     <div class="container">
-        <div class="background"></div>
+        <div class="background"> 
+            <div class="background-img" ng-show="vm.view.current === vm.view.views.login"></div> 
+        </div>
         
         <div id="working-panel" data-ng-show="vm.working" data-ng-cloak>
             <div class="content">
@@ -276,7 +278,7 @@
                         <div class="progress-bar-background"></div>
                     </div>
                     <div id="syncButtonPanel" class="text-center">
-                        <button id="btnSync" type="submit" class="btn btn-default" data-ng-disabled="!vm.sync.validateLogin()" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
+                        <button id="btnSync" type="submit" class="btn btn-default" data-ng-disabled="!vm.settings.secret()" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
                         </button>
                         <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_ExistingSync_Click()" tabindex="5">
@@ -307,7 +309,7 @@
                         <div class="progress-bar-background"></div>
                     </div>
                     <div id="syncButtonPanel" class="text-center">
-                        <button id="btnSync" type="submit" class="btn btn-default" data-ng-disabled="!vm.sync.validateLogin()" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
+                        <button id="btnSync" type="submit" class="btn btn-default" data-ng-disabled="!vm.settings.id() || !vm.settings.secret()" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
                         </button>
                         <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_NewSync_Click()" tabindex="5">
@@ -651,7 +653,7 @@
                         
                         <div id="restoreForm" class="animate-fade" data-ng-show="vm.settings.displayRestoreForm && !vm.settings.displayRestoreConfirmation">
                             <p>{{ vm.platform.GetConstant(vm.globals.Constants.RestoreForm_Message) }}</p>
-                            <div id="backupContentsPanel">
+                            <div id="backupContentsPanel" data-ng-class="{ true: 'has-error' }[ !!vm.settings.dataToRestore && !vm.settings.dataToRestoreIsValid() ]">
                                 <label for="dataToRestore" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.DataToRestore_Label) }}</label>
                                 <textarea data-ng-model="vm.settings.dataToRestore" class="form-control" rows="3" tabindex="11"></textarea>
                             </div>

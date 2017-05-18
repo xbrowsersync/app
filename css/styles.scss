@@ -221,6 +221,20 @@ body {
         width: 100%;
         z-index: -100;
         @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
+
+        .background-img { 
+            display: block; 
+            width: 400%; 
+            height: 200%; 
+            background: url(../img/bg.png); 
+            background-size: 800px; 
+            background-position: -255px 80px; 
+            background-repeat: repeat; 
+            position: absolute; 
+            top: -479px; 
+            left: -10px; 
+            @include animation(animate-scroll 120s linear infinite);
+        }
     }
     
     .confirm {
@@ -559,8 +573,8 @@ body {
         position: relative;
 
         input {
-            font-size: 1.1em;
-            padding: 10px 20px 9px;
+            font-size: 1.2em;
+            padding: 8px 20px 9px;
         }
     }
 
@@ -627,7 +641,7 @@ body {
             margin: 0;
             z-index: 10;
             box-shadow: none;
-            height: 2.8em;
+            height: 40px;
             width: 100%;
             background-color: transparent;
             border: solid 2px $colour-text1;
@@ -884,7 +898,6 @@ body {
                 height: 100%;
                 border-radius: $border-radius;
                 @include css-prefix(user-select, none);
-                touch-action: none;
             }
 
             .overlay {

@@ -2,9 +2,17 @@
 @import 'mixins.scss';
 @import 'animations.scss';
 
-.view {
-    width: 320px;
-    height: 480px;
+body {
+    .background {
+        .background-img {
+            @include animation(none);
+        }
+    }
+
+    .view {
+        width: 320px;
+        height: 480px;
+    }
 }
 
 #search-panel {
@@ -19,5 +27,13 @@
 
     .search-results-panel {
         max-height: 410px;
+    }
+}
+
+#settings-panel {
+    .backup-restore-panel {
+        #backupFilePanel {
+            display: none;
+        }
     }
 }

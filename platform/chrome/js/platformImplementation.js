@@ -591,21 +591,24 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					return deferred.resolve(metadata);
 				}
 
-				// Grab metadata from current page
-				chrome.tabs.executeScript(null, { 
-						code: "(" + getCurrentPageMetadata.toString() + ")();" 
-					}, 
-					function(response) {  
-						if (!!response && response.length >= 0) {
-							var currentPageMetadata = response[0];
-
-							metadata.title = currentPageMetadata.title;
-							metadata.description = utility.StripTags(currentPageMetadata.description);
-							metadata.tags = currentPageMetadata.tags;
+				// Add listener to receive page metadata from content script
+                chrome.runtime.onMessage.addListener(function(message, sender) {
+					if (message.command === globals.Commands.GetPageMetadata) {
+						if (!!message.metadata) {
+							metadata.title = message.metadata.title;
+							metadata.description = utility.StripTags(message.metadata.description);
+							metadata.tags = message.metadata.tags;
 						}
 						
 						deferred.resolve(metadata);
-					});
+					}
+				});
+
+				// Run content script to return page metadata
+				chrome.tabs.executeScript(null, { file: 'js/content.js' }, function() {
+					// If error, resolve deferred
+					deferred.resolve(metadata);
+				});
         });
         
         return deferred.promise;
@@ -851,31 +854,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		});
 	};
 
-	var getLocalBookmark = function(localBookmarkId) {
-		var deferred = $q.defer();
-		
-		try {
-			chrome.bookmarks.getSubTree(localBookmarkId, function(results) {
-				if (!!results[0]) {
-					deferred.resolve(results[0]);
-				}
-				else {
-					deferred.reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
-				}
-			});
-		}
-		catch (err) {
-			// Log error
-			utility.LogMessage(
-				moduleName, 'getLocalBookmark', utility.LogType.Error,
-				JSON.stringify(err));
-			
-			deferred.reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
-		}
-		
-		return deferred.promise;
-	};
-
 	var findXBookmarkUsingLocalBookmarkId = function(localBookmarkId, xBookmarks) {
         var deferred = $q.defer();
         var indexTree = [];
@@ -947,83 +925,29 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         return deferred.promise;
     };
 
-	var getCurrentPageMetadata = function() { 
-		var parser, html;
+	var getLocalBookmark = function(localBookmarkId) {
+		var deferred = $q.defer();
 		
-		// Get all meta tags
-		parser = new DOMParser();
-		html = parser.parseFromString(document.head.outerHTML, 'text/html');
-		var metaTagsArr = html.getElementsByTagName('meta');
+		try {
+			chrome.bookmarks.getSubTree(localBookmarkId, function(results) {
+				if (!!results[0]) {
+					deferred.resolve(results[0]);
+				}
+				else {
+					deferred.reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
+				}
+			});
+		}
+		catch (err) {
+			// Log error
+			utility.LogMessage(
+				moduleName, 'getLocalBookmark', utility.LogType.Error,
+				JSON.stringify(err));
+			
+			deferred.reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
+		}
 		
-		var getPageDescription = function() { 
-			for (var i = 0; i < metaTagsArr.length; i++) {
-				var currentTag = metaTagsArr[i];
-				if ((!!currentTag.getAttribute('property') && currentTag.getAttribute('property').toUpperCase().trim() === 'OG:DESCRIPTION' && !!currentTag.getAttribute('content')) ||
-				   (!!currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'TWITTER:DESCRIPTION' && !!currentTag.getAttribute('content')) ||
-				   (!!currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'DESCRIPTION' && !!currentTag.getAttribute('content'))) {
-					   return (!!currentTag.getAttribute('content')) ? currentTag.getAttribute('content').trim() : '';
-				   }
-			} 
-			
-			return null;
-		};
-		
-		var getPageKeywords = function() { 
-			// Get open graph tag values 
-			var currentTag, i, keywords = [];
-			for (i = 0; i < metaTagsArr.length; i++) {
-				currentTag = metaTagsArr[i];
-				if (!!currentTag.getAttribute('property') && 
-					!!currentTag.getAttribute('property').trim().match(/VIDEO\:TAG$/i) && 
-					!!currentTag.getAttribute('content')) {
-					   keywords.push(currentTag.getAttribute('content').trim());
-				   }
-			}
-			
-			// Get meta tag values 
-			for (i = 0; i < metaTagsArr.length; i++) {
-				currentTag = metaTagsArr[i];
-				if (!!currentTag.getAttribute('name') && 
-					currentTag.getAttribute('name').toUpperCase().trim() === 'KEYWORDS' && 
-					!!currentTag.getAttribute('content')) {
-					   var metaKeywords = currentTag.getAttribute('content').split(',');
-					   for (i = 0; i < metaKeywords.length; i++) {
-						   var currentKeyword = metaKeywords[i];
-						   if (!!currentKeyword && !!currentKeyword.trim()) {
-							   keywords.push(currentKeyword.trim());
-						   }
-					   }
-					   break;
-				   }
-			}
-			
-			if (keywords.length > 0) { 
-				return keywords.join();
-			} 
-			
-			return null; 
-		};
-		
-		var getPageTitle = function() { 
-			for (var i = 0; i < metaTagsArr.length; i++) {
-				var tag = metaTagsArr[i];
-				if ((!!tag.getAttribute('property') && tag.getAttribute('property').toUpperCase().trim() === 'OG:TITLE' && !!tag.getAttribute('content')) || 
-				   (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase().trim() === 'TWITTER:TITLE' && !!tag.getAttribute('content'))) {
-					   return (!!tag.getAttribute('content')) ? tag.getAttribute('content').trim() : '';
-				   }
-			} 
-			
-			return document.title;
-		};
-	
-		var metadata = { 
-			title: getPageTitle(), 
-			url: document.location.href, 
-			description: getPageDescription(), 
-			tags: getPageKeywords() 
-		};
-	
-		return metadata; 
+		return deferred.promise;
 	};
 	
 	var getLocalBookmarksAsXBookmarks = function(localBookmarks) {

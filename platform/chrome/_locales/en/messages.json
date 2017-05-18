@@ -134,6 +134,9 @@
 	"field_Search_Description" : {
 		"message":  "Start typing to find bookmarks or just hit Enter..."
 	},
+	"noBookmarks_Message" : {
+		"message":  "You have no bookmarks, go add some!"
+	},
 	"noSearchResults_Message" : {
 		"message":  "No bookmarks found"
 	},
@@ -141,7 +144,7 @@
 		"message":  "Share bookmark with"
 	},
 	"shareBookmark_Title": {
-		"message":  "shared via xBrowserSync"
+		"message":  "shared from xBrowserSync"
 	},
 	"syncBookmarksToolbarConfirmation_Message": {
 		"message":  "<p>Enabling syncing of the bookmarks bar will replace the bookmarks currently in the bookmarks bar with your synced bookmarks. OK to proceed?</p>"
@@ -210,7 +213,7 @@
 		"message":  "Back"
 	},
 	"backupSuccess_Message" : {
-		"message":  "Your unencrypted data has been saved to {fileName}. Check downloaded files for the location."
+		"message":  "Saved backup file {fileName}."
 	},
 	"backupSuccess_Android_Message" : {
 		"message":  ""

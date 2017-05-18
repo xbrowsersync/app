@@ -247,9 +247,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 return arguments.length ? 
                     globals.IsSyncing.Set(value) : 
                     globals.IsSyncing.Get();
-            },
-            validateLogin: function() {
-                return !!vm.settings.secret();
             }
 		};
 
@@ -304,7 +301,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
             })
             .finally(function() {
-                platform.Interface.Loading.Hide();
+                $timeout(function() {
+                    platform.Interface.Loading.Hide();
+                });
             });
 	};
     

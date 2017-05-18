@@ -33,6 +33,15 @@
     }
 }
 
+@include keyframes(animate-scroll) { 
+    0% { 
+        transform: translate3d(0, 0, 0); 
+    } 
+    100% { 
+        transform: translate3d(-800px, 479px, 0); 
+    } 
+}
+
 @include keyframes(animate-slide-in) {
     0% {
         @include css-prefix(transform, translateX(105%));
