@@ -1330,7 +1330,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.search.getSearchResultsTimeout = null;
             }
             
+            // Get search results
             searchBookmarks();
+
+            // Return focus to search box
+            $timeout(function() {
+                document.querySelector('input[name=txtSearch]').focus();
+            });
+
             return;
         }
         
