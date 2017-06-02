@@ -11,28 +11,26 @@
   "bugs": {
     "url": "https://github.com/xBrowserSync/App/issues"
   },
-  "dependencies": {
-    "angular": "1.5.x",
-    "angular-animate": "1.5.x",
-    "angular-complexify": "0.3.x",
-    "angular-hammer": "2.2.x",
-    "angular-sanitize": "1.5.x",
-    "bootstrap": "3.3.x",
-    "circle-chart": "1.0.x",
-    "crypto-js": "3.1.x",
-    "font-awesome": "4.6.x",
-    "hammerjs": "2.0.x",
-    "ng-infinite-scroll": "1.3.x",
-    "qrious": "2.1.x",
-    "underscore": "1.8.x"
-  },
   "devDependencies": {
-    "cordova": "7.0.x",
-    "jshint": "2.9.x",
-    "minify": "2.0.x",
-    "npm-build-tools": "2.2.x",
-    "node-sass": "3.7.x",
-    "uglify-js": "2.7.x"
+    "angular": "^1.6.4",
+    "angular-animate": "^1.6.4",
+    "angular-complexify": "^0.3.7",
+    "angular-hammer": "^2.2.0",
+    "angular-sanitize": "^1.6.4",
+    "bootstrap": "^3.3.7",
+    "circle-chart": "^1.0.0",
+    "cordova": "^7.0.1",
+    "crypto-js": "^3.1.8",
+    "font-awesome": "^4.7.0",
+    "hammerjs": "^2.0.8",
+    "jshint": "^2.9.4",
+    "minify": "^2.0.14",
+    "ng-infinite-scroll": "^1.3.0",
+    "npm-build-tools": "^2.2.5",
+    "node-sass": "^4.5.3",
+    "qrious": "^4.0.0",
+    "uglify-js": "^3.0.15",
+    "underscore": "^1.8.3"
   },
   "config": {
     "platformPath": ""
@@ -40,9 +38,9 @@
   "scripts": {
     "test": "npm run lint",
     "lint": "jshint .",
-    "prebuild:chrome": "echo 'Clearing old build...' & npm run clearprevbuild",
-    "build:chrome": "echo 'Building chrome extension...' & npm run commonbuildsteps --xbrowsersync-app:platformPath=platform/chrome",
-    "postbuild:chrome": "echo 'Build complete.'",
+    "prebuild:chrome": "echo Clearing old build... & npm run clearprevbuild",
+    "build:chrome": "echo Building chrome extension... & echo test",
+    "postbuild:chrome": "echo Build complete.",
     "prebuild:webapp": "echo 'Clearing old build...' & npm run clearprevbuild",
     "build:webapp": "echo 'Building web app...' & npm run commonbuildsteps --xbrowsersync-app:platformPath=platform/webapp",
     "postbuild:webapp": "echo 'Build complete.'",
