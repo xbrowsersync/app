@@ -60,15 +60,17 @@ body {
     }
     
     a {
-        color: $colour-link;
-        transition: all, ease-in, 0.2s;
+        color: inherit;
+        transition: all, ease-in-out, 0.2s;
         cursor: pointer;
+        border-bottom: 1px dotted #fff;
         
         &.active,
         &:active,
         &:focus,
         &:hover {
             color: $colour-link-highlight;
+            border-bottom-color: $colour-link-highlight;
             text-decoration: none;
             outline: 0;
         }
@@ -89,7 +91,7 @@ body {
                 border-color: $colour-text1;
                 border-width: 2px;
                 border-radius: $border-radius;
-                transition: all, ease-in, 0.2s;
+                transition: all, ease-in-out, 0.2s;
                 box-shadow: none;
                 padding: 6px 15px 7px;
                 
@@ -121,7 +123,7 @@ body {
                 background: none;
                 color: $colour-text2;
                 padding: 0;
-                transition: all, ease-in, 0.2s;
+                transition: all, ease-in-out, 0.2s;
                 box-shadow: none;
                 border-radius: 0;
                 border-bottom: solid 1px transparent;
@@ -142,7 +144,7 @@ body {
 
                 i {
                     opacity: 0.4;
-                    transition: all, ease-in, 0.2s;
+                    transition: all, ease-in-out, 0.2s;
                 }
             }
 
@@ -233,7 +235,7 @@ body {
             position: absolute; 
             top: -479px; 
             left: -10px; 
-            @include animation(animate-scroll 120s linear infinite);
+            @include animation(animate-scroll 120s ease-in-out infinite);
         }
     }
     
@@ -263,6 +265,10 @@ body {
     .float-nowrap {
         width: 200%;
         overflow: auto;
+    }
+
+    .float-right {
+        float: right;
     }
 
     .form-control {
@@ -481,29 +487,9 @@ body {
     }
 
     .links {
+        font-size: 1.1em;
         width: 60%;
         margin: 0 auto 20px;
-
-        a {
-            color: $colour-text2;
-            opacity: 0.5;
-
-            &.active,
-            &:active,
-            &:active:focus,
-            &:hover {
-                opacity: 1;
-                text-decoration: none;
-            }
-
-            &:focus {
-                text-decoration: underline;
-            }
-            
-            &.right {
-                float: right;
-            }
-        }
     }
 
     .well {
@@ -555,6 +541,14 @@ body {
 }
 
 #login-panel {
+    #syncButtonPanel button {
+        background-color: rgba(237, 254, 255, 0.3);
+
+        &:not([disabled]):active, &:not([disabled]):hover {
+            background-color: $colour-text1;
+        }
+    }
+    
     .btn-scanCode {
         display: none;
         font-size: 1.8em;
@@ -563,10 +557,6 @@ body {
         right: 20px;
         z-index: 55;
         border-bottom: none;
-    }
-
-    #btnSync {
-        margin-right: 0.5em;
     }
 
     .form-group {
@@ -591,6 +581,8 @@ body {
             left: 0;
             padding: 20px 30px;
             overflow: hidden;
+            font-size: 0.9em;
+            line-height: 1.4em;
 
             & > div {
                 position: relative;
@@ -624,8 +616,24 @@ body {
         }
     }
 
+    .login-form-existing {
+        #btnSync {
+            margin-right: 0.5em;
+        }
+    }
+
     .login-form-new {
         margin-top: 3em;
+
+        #syncButtonPanel {
+            a {
+                font-size: 1.1em;
+            }
+            
+            #btnSync {
+                margin-bottom: 12px;
+            }
+        }
     }
     
     .secret-form-group {
@@ -800,7 +808,7 @@ body {
 
             &.animate-added {
                 &.ng-enter {
-                    @include animation(animate-fold-down-slide-in 0.5s ease-out);
+                    @include animation(animate-fold-down-slide-in 0.5s ease-in-out);
 
                     &.ng-enter-active {
                         transform: translateX(0%);
@@ -814,7 +822,7 @@ body {
                 &.ng-enter,
                 &.ng-leave,
                 &.ng-move {
-                    @include animation(animate-slide-out-fold-up 0.5s ease-out);
+                    @include animation(animate-slide-out-fold-up 0.5s ease-in-out);
 
                     &.ng-enter-active,
                     &.ng-leave-active,
@@ -913,7 +921,7 @@ body {
             font-weight: normal;
             line-height: 1.1em;
             margin-bottom: 5px;
-            transition: all, ease-in, 0.2s;
+            transition: all, ease-in-out, 0.2s;
         }
         
         .list-group-item-text {
@@ -962,8 +970,16 @@ body {
 
 #bookmark-panel {
     textarea {
-        height: 14em;
-        min-height: 7.5em;
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        position: absolute;
+    }
+
+    .bookmark-form-panel, #bookmarkForm {
+        display: flex;
+        flex-flow: column;
+        height: 100%;
     }
 
     .btn-delete-bookmark {
@@ -981,38 +997,15 @@ body {
         display: none;
     }
 
-    .tags-form-group {
-        position: relative;
-        border-radius: $border-radius;
-        background-color: $colour-text1;
-        overflow: hidden;
-        
-        input {
-            text-transform: lowercase;
-            position: relative;
-            z-index: 50;
-            background: transparent; 
-        }
-
-        .lookahead-container {
-            left: 20px;
-            
-            .lookahead {
-                padding: 10px 0;
-                background-color: transparent;
-            }
-
-            .measure {
-                text-transform: lowercase;
-            }
-        }
+    .buttons {
+        margin: 0 0 5px;
     }
-    
-    .tags {
+
+    .tags-container {
         overflow-y: auto;
         overflow-x: hidden;
-        max-height: 60px;
-        margin: 10px 0 15px;
+        max-height: 6em;
+        margin-bottom: 10px;
         
         .label {
             display: block;
@@ -1041,10 +1034,43 @@ body {
             }
             
             i {
+                transition: color, ease-in-out, 0.2s;
                 font-size: 0.9em;
                 opacity: 0.5;
             }
         }
+    }
+    
+    .tags-input-container {
+        position: relative;
+        border-radius: $border-radius;
+        background-color: $colour-text1;
+        overflow: hidden;
+        
+        input {
+            text-transform: lowercase;
+            position: relative;
+            z-index: 50;
+            background: transparent; 
+        }
+
+        .lookahead-container {
+            left: 20px;
+            
+            .lookahead {
+                padding: 10px 0;
+                background-color: transparent;
+            }
+
+            .measure {
+                text-transform: lowercase;
+            }
+        }
+    }
+    
+    .textarea-container {
+        flex: 1 1 auto;
+        position: relative;
     }
 }
 
@@ -1066,7 +1092,7 @@ body {
             
             &:hover {
                 i {
-                    transition: all, ease-in, 0.2s;
+                    transition: all, ease-in-out, 0.2s;
                     opacity: 1;
                 }
             }
@@ -1094,7 +1120,7 @@ body {
         }
         
         .panel-content {
-            padding: 0 20px;
+            padding: 20px 0;
             height: 17em;
         }
     }
@@ -1220,6 +1246,7 @@ body {
                 font-size: 1.2em;
                 line-height: 1.2em;
                 max-width: 90%;
+                border-bottom-color: $colour-text2;
             }
 
             .status-url-panel {

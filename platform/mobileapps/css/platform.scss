@@ -272,7 +272,7 @@ body {
         display: inline-block;
     }
     
-    .tags {
+    .tags-container {
         .label {
             font-size: 1em;
             padding: 12px 15px;
@@ -281,7 +281,7 @@ body {
         }
     }
 
-    .tags-form-group .lookahead-container .lookahead:after {
+    .tags-input-container .lookahead-container .lookahead:after {
         font-size: 0.9em;
     }
 }
@@ -350,25 +350,7 @@ body, body .container, #about-panel, #search-panel  {
 }
 
 #bookmark-panel {
-    textarea {
-        height: 14em;
-
-        @media (min-device-height: $height-mobile-medium) {
-            height: 15.5em;
-        }
-
-        @media (min-device-height: $height-mobile-large) {
-            height: 16em;
-        }
-    }
-
-    .tags {
-        max-height: 5.5em;
-
-        @media (min-device-height: $height-mobile-medium) {
-            max-height: 6em;
-        }
-        
+    .tags-container {
         @media (min-device-height: $height-mobile-large) {
             max-height: 8em;
         }

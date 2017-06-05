@@ -60,7 +60,7 @@
             <div class="bottom">
                 <div class="links">
                     <a href="https://www.xbrowsersync.org/" class="new-tab">{{ vm.platform.GetConstant(vm.globals.Constants.AboutPanel_WebsiteLink_Label) }}</a>
-                    <a href="https://github.com/xBrowserSync/" class="new-tab right">{{ vm.platform.GetConstant(vm.globals.Constants.AboutPanel_GitHubLink_Label) }}</a>
+                    <a href="https://github.com/xBrowserSync/" class="new-tab float-right">{{ vm.platform.GetConstant(vm.globals.Constants.AboutPanel_GitHubLink_Label) }}</a>
                 </div>
                 <div class="well well-sm dark">
                     <div class="contents">
@@ -279,11 +279,13 @@
                     </div>
                     <div id="syncButtonPanel" class="text-center">
                         <button id="btnSync" type="submit" class="btn btn-default" data-ng-disabled="!vm.settings.secret()" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
-                            {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
+                            {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
                         </button>
-                        <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_ExistingSync_Click()" tabindex="5">
-                            {{ vm.platform.GetConstant(vm.globals.Constants.Button_ExistingSync_Label) }}
-                        </button>
+                        <div>
+                            <a href="#" data-ng-click="vm.events.syncForm_ExistingSync_Click()" tabindex="5">
+                                {{ vm.platform.GetConstant(vm.globals.Constants.Button_ExistingSync_Label) }}
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="login-form-existing animate-fade" data-ng-hide="vm.settings.displayNewSyncPanel">
@@ -313,7 +315,7 @@
                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
                         </button>
                         <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_NewSync_Click()" tabindex="5">
-                            {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
+                            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Back_Label) }}
                         </button>
                     </div>
                 </div>
@@ -403,49 +405,49 @@
         </div>
         
         <div id="bookmark-panel" class="view animate-fade" data-ng-show="vm.view.current === vm.view.views.bookmark" data-ng-cloak>
-            <div class="header-panel clearfix">
-                <h2>
-                    {{ (vm.bookmark.displayUpdateForm) ? vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Title_Edit) : vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Title_Add) }}
-                </h2>
-                <button class="btn btn-icon btn-close" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}" data-ng-click="vm.events.bookmarkPanel_Close_Click()"  tabindex="1000">
-                    <i class="fa fa-times-circle" aria-hidden="true"></i>
-                    <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}</span>
-                </button>
-            </div>
             <div class="bookmark-form-panel animate-fade">
+                <div class="header-panel clearfix">
+                    <h2>
+                        {{ (vm.bookmark.displayUpdateForm) ? vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Title_Edit) : vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Title_Add) }}
+                    </h2>
+                    <button class="btn btn-icon btn-close" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}" data-ng-click="vm.events.bookmarkPanel_Close_Click()"  tabindex="1000">
+                        <i class="fa fa-times-circle" aria-hidden="true"></i>
+                        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}</span>
+                    </button>
+                </div>
                 <form id="bookmarkForm" name="vm.bookmarkForm" novalidate>
                     <div class="form-group" data-ng-class="{ true: 'has-error' }[vm.bookmarkForm.bookmarkTitle.$touched && vm.bookmarkForm.bookmarkTitle.$invalid]">
                         <label for="bookmarkTitle" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Title_Label) }}</label>
                         <input type="text" class="form-control" name="bookmarkTitle" data-ng-model="vm.bookmark.current.title" maxlength="255" tabindex="1"
-                               placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Title_Label) }}">
+                                placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Title_Label) }}">
                     </div>
                     <div class="form-group" data-ng-class="{ true: 'has-error' }[vm.bookmarkForm.bookmarkUrl.$touched && vm.bookmarkForm.bookmarkUrl.$invalid]">
                         <label for="bookmarkUrl" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Url_Label) }}</label>
                         <input type="text" class="form-control" name="bookmarkUrl" placeholder="http(s)://..." data-ng-model="vm.bookmark.current.url" 
-                               data-ng-change="vm.events.bookmarkForm_BookmarkUrl_Change()" maxlength="255" tabindex="2"
-                               placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Url_Label) }}" required>
+                                data-ng-change="vm.events.bookmarkForm_BookmarkUrl_Change()" maxlength="255" tabindex="2"
+                                placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Url_Label) }}" required>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group textarea-container">
                         <label for="bookmarkDescription" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Description_Label) }}</label>
                         <textarea class="form-control" name="bookmarkDescription" rows="3" data-ng-model="vm.bookmark.current.description" data-ng-change="vm.events.bookmarkForm_BookmarkDescription_Change()"
-                                  tabindex="3" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Description_Label) }}"></textarea>
+                                    tabindex="3" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Description_Label) }}"></textarea>
                     </div>
-                    <div class="form-group tags-form-group">
+                    <div class="form-group tags-input-container">
                         <label for="bookmarkTags" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Tags_Label) }}</label>
-                            <input type="text" class="form-control" name="bookmarkTags" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Tags_Placeholder) }}" maxlength="50" tabindex="4"
-                                   data-ng-model="vm.bookmark.tagText" data-ng-change="vm.events.bookmarkForm_BookmarkTags_Change()" data-ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" data-ng-trim="false">
-                            <div class="lookahead-container">
-                                <span class="measure" data-ng-bind-html="vm.bookmark.tagTextMeasure"></span>
-                                <span class="lookahead" data-ng-bind-html="vm.bookmark.tagLookahead" data-ng-show="vm.bookmark.tagLookahead" data-ng-click="vm.events.bookmarkForm_BookmarkTags_Click()"></span>
-                            </div>
+                        <input type="text" class="form-control" name="bookmarkTags" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Field_Tags_Placeholder) }}" maxlength="50" tabindex="4"
+                               data-ng-model="vm.bookmark.tagText" data-ng-change="vm.events.bookmarkForm_BookmarkTags_Change()" data-ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" data-ng-trim="false">
+                        <div class="lookahead-container">
+                            <span class="measure" data-ng-bind-html="vm.bookmark.tagTextMeasure"></span>
+                            <span class="lookahead" data-ng-bind-html="vm.bookmark.tagLookahead" data-ng-show="vm.bookmark.tagLookahead" data-ng-click="vm.events.bookmarkForm_BookmarkTags_Click()"></span>
                         </div>
-                        <div class="tags clearfix" data-ng-show="vm.bookmark.current.tags.length > 0">
-                            <button class="label label-default" data-ng-repeat="tag in vm.bookmark.current.tags track by $index" data-ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
-                                {{ tag }}
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                                <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Button_RemoveTag_Label) }}</span>
-                            </button>
-                        </div>
+                    </div>
+                    <div class="form-group tags-container clearfix" data-ng-show="vm.bookmark.current.tags.length > 0">
+                        <button class="label label-default" data-ng-repeat="tag in vm.bookmark.current.tags track by $index" data-ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
+                            {{ tag }}
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                            <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Button_RemoveTag_Label) }}</span>
+                        </button>
+                    </div>
                     <div class="buttons">
                         <button type="submit" class="btn btn-default" data-ng-show="!vm.bookmark.displayUpdateForm" data-ng-click="vm.events.bookmarkForm_CreateBookmark_Click()" tabindex="6">
                             {{ vm.platform.GetConstant(vm.globals.Constants.BookmarkPanel_Button_AddBookmark_Label) }}

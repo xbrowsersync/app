@@ -491,7 +491,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             return tag;
         });
 
-        bookmarkForm_ResizeDescriptionField();
         vm.bookmark.tagText = '';
         vm.bookmark.tagLookahead = '';
         document.querySelector('input[name="bookmarkTags"]').focus();
@@ -627,22 +626,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var bookmarkForm_RemoveTag_Click = function(tag) {
         vm.bookmark.current.tags = _.without(vm.bookmark.current.tags, tag);
-        bookmarkForm_ResizeDescriptionField();
         document.querySelector('#bookmarkForm input[name="bookmarkTags"]').focus();
-    };
-
-    var bookmarkForm_ResizeDescriptionField = function() {
-        $timeout(function() {
-            var descriptionField = document.querySelector('textarea[name="bookmarkDescription"]');
-            var container = document.querySelector('.container');
-            var lessHeight = container.scrollHeight - container.offsetHeight;
-
-            if (lessHeight > 0) {
-                // Remove the height of the tags area container the description field
-                var newHeight = descriptionField.offsetHeight - lessHeight - 15;
-                descriptionField.style.height = newHeight + 'px';
-            }
-        });
     };
     
     var bookmarkForm_UpdateBookmark_Click = function() {
@@ -790,11 +774,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         // Save url to compare for changes
                         vm.bookmark.originalUrl = vm.bookmark.current.url;
 
-                        // Resize description field to account for tags
-                        bookmarkForm_ResizeDescriptionField();
                         $timeout(function() {
-                            bookmarkForm_ResizeDescriptionField();
-                            
                             // Don't focus on title field for mobile apps unless not sharing a bookmark
                             if ((vm.platformName !== vm.globals.Platforms.Android &&
                                 vm.platformName !== vm.globals.Platforms.IOS) ||
@@ -1647,6 +1627,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
     var syncForm_ExistingSync_Click = function() {
         vm.settings.displayNewSyncPanel = false;
+        return false;
     };
 
     var syncForm_NewSync_Click = function() {
