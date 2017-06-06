@@ -797,7 +797,7 @@ body {
 
             &.animate-added {
                 &.ng-enter {
-                    @include animation(animate-fold-down-slide-in 0.5s linear);
+                    @include animation(animate-fold-down-slide-in 0.5s ease);
 
                     &.ng-enter-active {
                         transform: translateX(0%);
@@ -811,7 +811,7 @@ body {
                 &.ng-enter,
                 &.ng-leave,
                 &.ng-move {
-                    @include animation(animate-slide-out-fold-up 0.5s linear);
+                    @include animation(animate-slide-out-fold-up 0.5s ease);
 
                     &.ng-enter-active,
                     &.ng-leave-active,
