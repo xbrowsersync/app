@@ -180,20 +180,6 @@ body {
         }
     }
 
-    .login-form-existing {
-        #btnSync {
-            margin-right: 0;
-        }
-
-        .btn-back {
-            display: none;
-        }
-
-        .link-btn-container {
-            display: block;
-        }
-    }
-
     .secret-form-group {
         .progress, .progress-bar-background {
             @media (min-device-height: $height-mobile-medium) {

@@ -314,11 +314,8 @@
                         <button id="btnSync" type="submit" class="btn btn-default" data-ng-disabled="!vm.settings.id() || !vm.settings.secret()" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
                         </button>
-                        <button type="button" class="btn btn-default btn-back" data-ng-click="vm.events.syncForm_NewSync_Click()" tabindex="5">
-                            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Back_Label) }}
-                        </button>
                     </div>
-                    <div class="form-group text-center link-btn-container">
+                    <div class="form-group text-center">
                         <a href="#" data-ng-click="vm.events.syncForm_NewSync_Click()" tabindex="5">
                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
                         </a>
