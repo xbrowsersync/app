@@ -108,10 +108,6 @@ body {
         margin-left: 5px;
     }
 
-    .view {
-        height: 100vh;
-    }
-
     .well {
         .btn.btn-default {
             color: $colour-text2;
@@ -153,13 +149,11 @@ body {
 
 #login-panel {
     input {
+        padding: 10px 20px 7px;
+        
         @media (min-device-height: $height-mobile-medium) {
             font-size: 1.1em;
         }
-    }
-
-    form .form-group {
-        margin-bottom: 1.5em;
     }
 
     .btn-scanCode {
@@ -167,8 +161,6 @@ body {
     }
     
     .intro-panel {
-        margin-bottom: 25px;
-        
         & > div {
             @media (min-device-height: $height-mobile-large) {
                 padding: 25px 35px;
@@ -325,6 +317,11 @@ body {
     .tags-input-container .lookahead-container .lookahead:after {
         font-size: 0.9em;
     }
+
+    .textarea-container {
+        flex: 1 1 36em;
+        max-height: 12em;
+    }
 }
 
 #settings-panel {
@@ -382,24 +379,8 @@ body {
 
 /* Heights */
 
-body, body .container, #about-panel, #search-panel  {
+body, body .container, .view  {
     height: 100%;
-}
-
-.view {
-    height: auto;
-}
-
-#bookmark-panel {
-    .tags-container {
-        @media (min-device-height: $height-mobile-large) {
-            max-height: 8em;
-        }
-
-        @media (min-device-height: $height-mobile-xlarge) {
-            max-height: 10em;
-        }
-    }
 }
 
 #login-panel {

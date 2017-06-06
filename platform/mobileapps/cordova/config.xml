@@ -68,6 +68,8 @@
     <preference name="Suppresses3DTouchGesture" value="false" />
     <preference name="AndroidLaunchMode" value="singleTask" />
     <preference name="ShowSplashScreenSpinner" value="true" />
+    <engine name="ios" spec="^4.4.0" />
+    <engine name="android" spec="^6.2.3" />
     <plugin name="bundle-cordova-webintent" spec="https://github.com/COMLINE-AG/bundle-cordova-webintent.git" />
     <plugin name="com.greybax.spinnerdialog" spec="https://github.com/greybax/cordova-plugin-native-spinner" />
     <plugin name="com.jcesarmobile.filepicker" spec="https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin.git" />
@@ -88,6 +90,5 @@
     <plugin name="phonegap-plugin-barcodescanner" spec="^6.0.6">
         <variable name="CAMERA_USAGE_DESCRIPTION" value="To scan xBrowserSync QR codes" />
     </plugin>
-    <engine name="ios" spec="~4.4.0" />
-    <engine name="android" spec="~6.2.3" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="https://github.com/Arkanite/SocialSharing-PhoneGap-Plugin.git" />
 </widget>

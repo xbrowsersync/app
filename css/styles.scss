@@ -555,8 +555,9 @@ body {
         display: none;
         font-size: 1.8em;
         position: absolute;
-        top: 0.1em;
         right: 20px;
+        line-height: 1em;
+        padding: 9px 0 7px;
         z-index: 55;
         border-bottom: none;
     }
@@ -806,7 +807,7 @@ body {
 
             &.animate-added {
                 &.ng-enter {
-                    @include animation(animate-fold-down-slide-in 0.5s ease-in-out);
+                    @include animation(animate-fold-down-slide-in 0.5s linear);
 
                     &.ng-enter-active {
                         transform: translateX(0%);
@@ -820,7 +821,7 @@ body {
                 &.ng-enter,
                 &.ng-leave,
                 &.ng-move {
-                    @include animation(animate-slide-out-fold-up 0.5s ease-in-out);
+                    @include animation(animate-slide-out-fold-up 0.5s linear);
 
                     &.ng-enter-active,
                     &.ng-leave-active,
@@ -1002,7 +1003,6 @@ body {
     .tags-container {
         overflow-y: auto;
         overflow-x: hidden;
-        max-height: 6em;
         margin-bottom: 10px;
         
         .label {
@@ -1040,6 +1040,7 @@ body {
     }
     
     .tags-input-container {
+        flex: 0 0 auto;
         position: relative;
         border-radius: $border-radius;
         background-color: $colour-text1;
@@ -1067,9 +1068,8 @@ body {
     }
     
     .textarea-container {
-        flex: 1 1 auto;
+        flex: 1 1 30em;
         position: relative;
-        max-height: 15em;
     }
 }
 

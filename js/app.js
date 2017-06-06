@@ -742,6 +742,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 if (!vm.introduction.displayIntro()) {
                     vm.introduction.displayPanel();
                 }
+
+                // Display new sync panel depending on if ID is set
+                if (!!globals.Id.Get()) {
+                    vm.settings.displayNewSyncPanel = false;
+                }
                 
                 vm.sync.displaySyncConfirmation = false;
                 if (vm.syncForm) {
@@ -755,11 +760,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // Initialise new view
         switch(view) {
-            case vm.view.views.login:
-                // Display new sync panel depending on if ID is set
-                vm.settings.displayNewSyncPanel = !globals.Id.Get();
-                deferred.resolve();
-                break;
             case vm.view.views.search:
                 vm.search.displayDefaultState();
                 $timeout(function() {
