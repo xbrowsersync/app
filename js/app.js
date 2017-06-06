@@ -68,7 +68,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             backupRestoreForm_Restore_Click: backupRestoreForm_Restore_Click,
             backupRestoreForm_SelectBackupFile_Click: backupRestoreForm_SelectBackupFile_Click,
             bookmarkForm_BookmarkDescription_Change: bookmarkForm_BookmarkDescription_Change,
-            bookmarkForm_BookmarkTags_Autocomplete: bookmarkForm_BookmarkTags_Autocomplete,
             bookmarkForm_BookmarkTags_Change: bookmarkForm_BookmarkTags_Change,
             bookmarkForm_BookmarkTags_Click: bookmarkForm_BookmarkTags_Click,
             bookmarkForm_BookmarkTags_KeyDown: bookmarkForm_BookmarkTags_KeyDown,
@@ -327,9 +326,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.settings.displayRestoreConfirmation = true;
         
         // Focus on confirm button
-        $timeout(function() {
-            document.querySelector('#btn_ConfirmRestore').focus();
-        });
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+            $timeout(function() {
+                document.querySelector('#btn_ConfirmRestore').focus();
+            });
+        }
     };
 	
 	var backupRestoreForm_Restore_Click = function(data) {
@@ -354,12 +355,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var bookmarkForm_BookmarkDescription_Change = function() {
         // Limit the bookmark description to the max length
         vm.bookmark.current.description = utility.TrimToNearestWord(vm.bookmark.current.description, globals.Bookmarks.DescriptionMaxLength);
-    };
-
-    var bookmarkForm_BookmarkTags_Autocomplete = function() {
-        vm.bookmark.tagText += vm.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
-        bookmarkForm_BookmarkTags_Change();
-        document.querySelector('input[name="bookmarkTags"]').focus();
     };
     
     var bookmarkForm_BookmarkTags_Change = function() {
@@ -400,7 +395,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var bookmarkForm_BookmarkTags_Click = function() {
         vm.bookmark.tagText += vm.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
         bookmarkForm_CreateTags_Click();
-        document.querySelector('input[name="bookmarkTags"]').focus();
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+            document.querySelector('input[name="bookmarkTags"]').focus();
+        }
     };
     
     var bookmarkForm_BookmarkTags_KeyDown = function(event) {
@@ -415,7 +412,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             case ((event.keyCode === 9 || event.keyCode === 39) && !!vm.bookmark.tagLookahead):
                 // Add lookahead to search query
                 event.preventDefault();
-                bookmarkForm_BookmarkTags_Autocomplete();
+                vm.bookmark.tagText += vm.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
+                bookmarkForm_BookmarkTags_Change();
+                if (!utility.IsMobilePlatform(vm.platformName)) {
+                    document.querySelector('input[name="bookmarkTags"]').focus();
+                }
                 break;
         }
     };
@@ -474,8 +475,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.view.change(vm.view.views.search)
             .then(function() {
                 // Add new bookmark into search results on mobile apps
-                if (vm.platformName === vm.globals.Platforms.Android ||
-                    vm.platformName === vm.globals.Platforms.IOS) {
+                if (utility.IsMobilePlatform(vm.platformName)) {
                     bookmarkToCreate.class = 'added';
                     $timeout(function() {
                         vm.search.results.unshift(bookmarkToCreate);
@@ -493,7 +493,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
         vm.bookmark.tagText = '';
         vm.bookmark.tagLookahead = '';
-        document.querySelector('input[name="bookmarkTags"]').focus();
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+            document.querySelector('input[name="bookmarkTags"]').focus();
+        }
     };
     
     var bookmarkForm_DeleteBookmark_Click = function() {
@@ -521,8 +523,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             })
             .then(function() {
                 // Find and delete the deleted bookmark element in the search results on mobile apps
-                if (vm.platformName === vm.globals.Platforms.Android ||
-                    vm.platformName === vm.globals.Platforms.IOS) {
+                if (utility.IsMobilePlatform(vm.platformName)) {
                     if (!!vm.search.results && vm.search.results.length >= 0) {
                         var deletedBookmarkIndex = _.findIndex(vm.search.results, function(result) { 
                             return result.id === bookmarkToDelete.id; 
@@ -626,7 +627,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var bookmarkForm_RemoveTag_Click = function(tag) {
         vm.bookmark.current.tags = _.without(vm.bookmark.current.tags, tag);
-        document.querySelector('#bookmarkForm input[name="bookmarkTags"]').focus();
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+            document.querySelector('#bookmarkForm input[name="bookmarkTags"]').focus();
+        }
     };
     
     var bookmarkForm_UpdateBookmark_Click = function() {
@@ -668,8 +671,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             })
             .then(function() {
                 // Find and update the updated bookmark element in the search results on mobile apps
-                if (vm.platformName === vm.globals.Platforms.Android ||
-                    vm.platformName === vm.globals.Platforms.IOS) {
+                if (utility.IsMobilePlatform(vm.platformName)) {
                     if (!!vm.search.results && vm.search.results.length >= 0) {
                         var updatedBookmarkIndex = _.findIndex(vm.search.results, function(result) { 
                             return result.id === bookmarkToUpdate.id;
@@ -776,8 +778,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
                         $timeout(function() {
                             // Don't focus on title field for mobile apps unless not sharing a bookmark
-                            if ((vm.platformName !== vm.globals.Platforms.Android &&
-                                vm.platformName !== vm.globals.Platforms.IOS) ||
+                            if ((!utility.IsMobilePlatform(vm.platformName)) ||
                                 vm.bookmark.current.url === 'http://') {
                                 document.querySelector('input[name="bookmarkTitle"]').focus();
                             }
@@ -844,9 +845,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.search.results = null;
 
         // Focus on search box
-        $timeout(function() {
-            document.querySelector('input[name=txtSearch]').focus();
-        }, 100);
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+            $timeout(function() {
+                document.querySelector('input[name=txtSearch]').focus();
+            }, 100);
+        }
     };
     
     var displayQRCode_Click = function() {
@@ -915,9 +918,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.settings.dataToRestore = '';
                     vm.settings.backupRestoreResult = platform.GetConstant(globals.Constants.RestoreSuccess_Message);
                     
-                    $timeout(function() {
-                        document.querySelector('#btn_RestoreComplete').focus();
-                    });
+                    if (!utility.IsMobilePlatform(vm.platformName)) {
+                        $timeout(function() {
+                            document.querySelector('#btn_RestoreComplete').focus();
+                        });
+                    }
                 }
                 else {
                     errMessage = utility.GetErrorMessageFromException(response.error);
@@ -1210,9 +1215,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var searchForm_SearchText_Autocomplete = function() {
         vm.search.query += vm.search.lookahead;
         searchForm_SearchText_Change();
-        $timeout(function() {
-            document.querySelector('input[name=txtSearch]').focus();
-        });
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+            $timeout(function() {
+                document.querySelector('input[name=txtSearch]').focus();
+            });
+        }
     };
     
     var searchForm_SearchText_Change = function() {
@@ -1532,9 +1539,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // If sync is in progress, display confirmation
         if (!!globals.IsSyncing.Get()) {
             vm.settings.service.displayCancelSyncConfirmation = true;
-            $timeout(function() {
-                document.querySelector('#btnCancelSync_Confirm').focus();
-            });
+            if (!utility.IsMobilePlatform(vm.platformName)) {
+                $timeout(function() {
+                    document.querySelector('#btnCancelSync_Confirm').focus();
+                });
+            }
             return;
         }
         
@@ -1599,25 +1608,31 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.alert.display(errMessage.title, errMessage.message, 'danger');
                 });
             
-            document.querySelector('#syncDataUsage-Panel .btn-back').focus();
+            if (!utility.IsMobilePlatform(vm.platformName)) {
+                document.querySelector('#syncDataUsage-Panel .btn-back').focus();
+            }
         });
     };
 
     var syncPanel_DisplaySyncOptions_Click = function() {
         vm.settings.displaySyncOptions = true;
 
-        $timeout(function() {
-            document.querySelector('#syncOptions-Panel .btn-back').focus();
-        });
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+            $timeout(function() {
+                document.querySelector('#syncOptions-Panel .btn-back').focus();
+            });
+        }
     };
     
     var syncForm_EnableSync_Click = function() {
 		// If ID provided, display confirmation panel
         if (!!globals.Id.Get()) {
             vm.sync.displaySyncConfirmation = true;
-            $timeout(function() {
-                document.querySelector('#btnSync_Confirm').focus();
-            });
+            if (!utility.IsMobilePlatform(vm.platformName)) {
+                $timeout(function() {
+                    document.querySelector('#btnSync_Confirm').focus();
+                });
+            }
         }
         else {
             // Otherwise start syncing
@@ -1762,9 +1777,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             if (!!globals.SyncEnabled.Get()) {
                 // Display confirmation panel
                 vm.settings.service.displayUpdateServiceUrlConfirmation = true;
-                $timeout(function() {
-                    document.querySelector('#btnUpdateServiceUrl_Confirm').focus();
-                });
+                if (!utility.IsMobilePlatform(vm.platformName)) {
+                    $timeout(function() {
+                        document.querySelector('#btnUpdateServiceUrl_Confirm').focus();
+                    });
+                }
             }
             else {
                 // Update service status and message

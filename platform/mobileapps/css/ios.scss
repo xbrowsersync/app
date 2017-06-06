@@ -1,4 +1,6 @@
 @import 'variables.scss';
+@import 'mixins.scss';
+@import 'animations.scss';
 
 #about-panel, #login-panel, #search-panel, #bookmark-panel, #settings-panel {
     padding-top: 30px;

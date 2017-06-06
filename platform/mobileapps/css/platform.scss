@@ -1,4 +1,6 @@
 @import 'variables.scss';
+@import 'mixins.scss';
+@import 'animations.scss';
 
 @font-face {
   font-family: 'FontAwesome';
@@ -10,6 +12,11 @@
     url('#{$fa-font-path}/fontawesome-webfont.svg') format('svg');
   font-weight: normal;
   font-style: normal;
+}
+
+* {		
+    @include css-prefix(user-select, none);		
+    @include css-prefix(touch-callout, none);		
 }
 
 body {
@@ -76,6 +83,11 @@ body {
         }
     }
 
+    input, textarea {		
+        @include css-prefix(user-select, text);		
+        @include css-prefix(touch-callout, default);		
+    }
+
     textarea.form-control {
         padding: 10px 20px;
     }
@@ -94,6 +106,10 @@ body {
         font-family: "FontAwesome";
         font-size: 0.7em;
         margin-left: 5px;
+    }
+
+    .view {
+        height: 100vh;
     }
 
     .well {
@@ -126,7 +142,7 @@ body {
 #about-panel { 
     h1 {
         @media (min-device-height: $height-mobile-medium) {
-            background-size: 47%;
+            background-size: 50%;
         }
     }
 }
@@ -142,11 +158,17 @@ body {
         }
     }
 
+    form .form-group {
+        margin-bottom: 1.5em;
+    }
+
     .btn-scanCode {
         display: block;
     }
     
     .intro-panel {
+        margin-bottom: 25px;
+        
         & > div {
             @media (min-device-height: $height-mobile-large) {
                 padding: 25px 35px;
@@ -163,6 +185,20 @@ body {
                     margin-right: 12px;
                 }
             }
+        }
+    }
+
+    .login-form-existing {
+        #btnSync {
+            margin-right: 0;
+        }
+
+        .btn-back {
+            display: none;
+        }
+
+        .link-btn-container {
+            display: block;
         }
     }
 
@@ -235,25 +271,30 @@ body {
         }
     }
 
-    .search-results-panel .list-group-item {
-        margin: 0 0 15px 0;
+    .search-results-panel {
+        overflow-y: scroll;
+        @include css-prefix(overflow-scrolling, touch);
 
-        &.active:hover, &:hover {
-            .list-group-item-heading {
-                color: $colour-text2;
+        .list-group-item {
+            margin: 0 0 15px 0;
+
+            &.active:hover, &:hover {
+                .list-group-item-heading {
+                    color: $colour-text2;
+                }
             }
-        }
 
-        a {
-            padding: 15px 20px;
-        }
+            a {
+                padding: 15px 20px;
+            }
 
-        .btn-edit-bookmark {
-            display: none!important;
-        }
+            .btn-edit-bookmark {
+                display: none!important;
+            }
 
-        .overlay {
-            display: block;
+            .overlay {
+                display: block;
+            }
         }
     }
 
@@ -361,11 +402,11 @@ body, body .container, #about-panel, #search-panel  {
     }
 }
 
-#login-panel .intro-panel {
-    height: 18em;
-
-    @media (min-device-height: $height-mobile-medium) {
-        height: 19em;
+#login-panel {
+    .intro-panel {
+        @media (min-device-height: $height-mobile-medium) {
+            height: 19em;
+        }
     }
 }
 

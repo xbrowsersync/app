@@ -1,52 +1,55 @@
 {
-    "name": "com.xbrowsersync",
-    "version": "1.2.2",
-    "displayName": "xBrowserSync",
-    "cordova": {
-        "platforms": [
-            "android",
-            "ios"
-        ],
-        "plugins": {
-            "com.greybax.spinnerdialog": {},
-            "com.jcesarmobile.filepicker": {},
-            "com.virtualartifacts.webintent": {},
-            "cordova-plugin-customurlscheme": {
-                "URL_SCHEME": "xbrowsersync",
-                "ANDROID_SCHEME": " ",
-                "ANDROID_HOST": " ",
-                "ANDROID_PATHPREFIX": "/"
-            },
-            "cordova-plugin-file": {},
-            "cordova-plugin-inappbrowser": {},
-            "cordova-plugin-network-information": {},
-            "cordova-plugin-spinner": {},
-            "cordova-plugin-splashscreen": {},
-            "cordova-plugin-whitelist": {},
-            "cordova-plugin-x-socialsharing": {},
-            "cordova-plugin-x-toast": {},
-            "ionic-plugin-keyboard": {},
-            "phonegap-plugin-barcodescanner": {
-                "CAMERA_USAGE_DESCRIPTION": "To scan xBrowserSync QR codes"
-            }
-        }
-    },
-    "dependencies": {
-        "com.greybax.spinnerdialog": "~1.0.8",
-        "com.jcesarmobile.filepicker": "https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin.git",
-        "com.virtualartifacts.webintent": "https://github.com/florentvaldelievre/virtualartifacts-webIntent.git",
-        "cordova-android": "^6.2.3",
-        "cordova-ios": "^4.4.0",
-        "cordova-plugin-customurlscheme": "https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin.git",
-        "cordova-plugin-file": "~4.3.0",
-        "cordova-plugin-inappbrowser": "1.5.0",
-        "cordova-plugin-network-information": "~1.3.1",
-        "cordova-plugin-spinner": "~1.1.0",
-        "cordova-plugin-splashscreen": "~4.0.0",
-        "cordova-plugin-whitelist": "1",
-        "cordova-plugin-x-socialsharing": "~5.1.3",
-        "cordova-plugin-x-toast": "~2.5.2",
-        "ionic-plugin-keyboard": "~2.2.1",
-        "phonegap-plugin-barcodescanner": "~6.0.3"
+  "name": "com.xbrowsersync",
+  "version": "1.2.2",
+  "displayName": "xBrowserSync",
+  "cordova": {
+    "platforms": [
+      "android",
+      "ios"
+    ],
+    "plugins": {
+      "cordova-plugin-customurlscheme": {
+        "URL_SCHEME": "xbrowsersync",
+        "ANDROID_SCHEME": " ",
+        "ANDROID_HOST": " ",
+        "ANDROID_PATHPREFIX": "/"
+      },
+      "cordova-plugin-file": {},
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-spinner": {},
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-x-toast": {},
+      "ionic-plugin-keyboard": {},
+      "phonegap-plugin-barcodescanner": {
+        "CAMERA_USAGE_DESCRIPTION": "To scan xBrowserSync QR codes"
+      },
+      "com.greybax.spinnerdialog": {},
+      "com.jcesarmobile.filepicker": {},
+      "bundle-cordova-webintent": {}
     }
+  },
+  "dependencies": {
+    "Bundle-Cordova-Webintent": "git+https://github.com/COMLINE-AG/bundle-cordova-webintent.git",
+    "FilePicker-Phonegap-iOS-Plugin": "git+https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin.git",
+    "bundle-cordova-webintent": "https://github.com/COMLINE-AG/bundle-cordova-webintent.git",
+    "com.greybax.spinnerdialog": "https://github.com/greybax/cordova-plugin-native-spinner",
+    "com.jcesarmobile.filepicker": "https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin.git",
+    "cordova-ios": "^4.4.0",
+    "cordova-plugin-compat": "^1.1.0",
+    "cordova-plugin-customurlscheme": "git+https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin.git",
+    "cordova-plugin-file": "^4.3.3",
+    "cordova-plugin-inappbrowser": "^1.7.1",
+    "cordova-plugin-native-spinner": "git+https://github.com/greybax/cordova-plugin-native-spinner.git",
+    "cordova-plugin-network-information": "^1.3.3",
+    "cordova-plugin-spinner": "^1.1.0",
+    "cordova-plugin-splashscreen": "^4.0.3",
+    "cordova-plugin-whitelist": "^1.3.2",
+    "cordova-plugin-x-socialsharing": "^5.1.8",
+    "cordova-plugin-x-toast": "^2.6.0",
+    "es6-promise-plugin": "file:node_modules/es6-promise-plugin",
+    "ionic-plugin-keyboard": "^2.2.1",
+    "phonegap-plugin-barcodescanner": "^6.0.6"
+  }
 }

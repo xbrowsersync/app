@@ -263,8 +263,8 @@
             </div>
             <form name="vm.syncForm" class="animate-fade" data-ng-hide="vm.sync.displaySyncConfirmation" novalidate>
                 <div class="login-form-new animate-fade" data-ng-show="vm.settings.displayNewSyncPanel">
-                    <label class="sr-only" for="txtPassword">{{ vm.platform.GetConstant(vm.globals.Constants.Field_Password_Label) }}</label>
                     <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
+                        <label class="sr-only" for="txtPassword">{{ vm.platform.GetConstant(vm.globals.Constants.Field_Password_Label) }}</label>
                         <input name="txtPassword" data-ng-model="vm.settings.secret" type="password" class="form-control" data-ng-change="vm.events.syncForm_Password_Change()"
                             data-ng-model-options="{ getterSetter: true }" data-ng-disabled="vm.sync.enabled()" maxlength="150"
                             placeholder="Enter an encryption password" tabindex="1" />
@@ -277,27 +277,27 @@
                         </div>
                         <div class="progress-bar-background"></div>
                     </div>
-                    <div id="syncButtonPanel" class="text-center">
+                    <div class="form-group text-center">
                         <button id="btnSync" type="submit" class="btn btn-default" data-ng-disabled="!vm.settings.secret()" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
                         </button>
-                        <div>
-                            <a href="#" data-ng-click="vm.events.syncForm_ExistingSync_Click()" tabindex="5">
-                                {{ vm.platform.GetConstant(vm.globals.Constants.Button_ExistingSync_Label) }}
-                            </a>
-                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <a href="#" data-ng-click="vm.events.syncForm_ExistingSync_Click()" tabindex="5">
+                            {{ vm.platform.GetConstant(vm.globals.Constants.Button_ExistingSync_Label) }}
+                        </a>
                     </div>
                 </div>
                 <div class="login-form-existing animate-fade" data-ng-hide="vm.settings.displayNewSyncPanel">
-                    <label class="sr-only" for="txtId">{{ vm.platform.GetConstant(vm.globals.Constants.Field_Id_Label) }}</label>
                     <div class="form-group">
+                        <label class="sr-only" for="txtId">{{ vm.platform.GetConstant(vm.globals.Constants.Field_Id_Label) }}</label>
                         <button type="button" class="btn btn-icon btn-scanCode" data-ng-hide="vm.settings.id()" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ScanCode_Label) }}" data-ng-click="vm.events.searchForm_ScanCode_Click()">
                             <i class="fa fa-qrcode" aria-hidden="true"></i>
                         </button>
                         <input name="txtId" data-ng-model="vm.settings.id" class="form-control" data-ng-model-options="{ getterSetter: true }" data-ng-disabled="vm.sync.enabled()" placeholder="Your xBrowserSync ID" maxlength="32" tabindex="1" />
                     </div>
-                    <label class="sr-only" for="txtPassword">{{ vm.platform.GetConstant(vm.globals.Constants.Field_Password_Label) }}</label>
                     <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
+                        <label class="sr-only" for="txtPassword">{{ vm.platform.GetConstant(vm.globals.Constants.Field_Password_Label) }}</label>
                         <input name="txtPassword" data-ng-model="vm.settings.secret" type="password" class="form-control" data-ng-change="vm.events.syncForm_Password_Change()"
                             data-ng-model-options="{ getterSetter: true }" data-ng-disabled="vm.sync.enabled()" maxlength="150"
                             placeholder="Your encryption password" tabindex="2" />
@@ -310,13 +310,18 @@
                         </div>
                         <div class="progress-bar-background"></div>
                     </div>
-                    <div id="syncButtonPanel" class="text-center">
+                    <div class="form-group text-center">
                         <button id="btnSync" type="submit" class="btn btn-default" data-ng-disabled="!vm.settings.id() || !vm.settings.secret()" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
                         </button>
-                        <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_NewSync_Click()" tabindex="5">
+                        <button type="button" class="btn btn-default btn-back" data-ng-click="vm.events.syncForm_NewSync_Click()" tabindex="5">
                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_Back_Label) }}
                         </button>
+                    </div>
+                    <div class="form-group text-center link-btn-container">
+                        <a href="#" data-ng-click="vm.events.syncForm_NewSync_Click()" tabindex="5">
+                            {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
+                        </a>
                     </div>
                 </div>
             </form>

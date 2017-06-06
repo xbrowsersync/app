@@ -84,7 +84,7 @@ body {
             &.btn-default {
                 font-size: 1.2em;
                 font-weight: 800;
-                background-color: transparent;
+                background-color: rgba(237, 254, 255, 0.3);
                 color: $colour-text1;
                 outline: none;
                 min-width: 60px;
@@ -113,7 +113,7 @@ body {
                 &[disabled] {
                     opacity: 0.5;
                     cursor: default;
-                    background-color: transparent;
+                    background-color: rgba(237, 254, 255, 0.3);
                     border-color: $colour-text1;
                     color: $colour-text1;
                 }
@@ -489,7 +489,7 @@ body {
     .links {
         font-size: 1.1em;
         width: 60%;
-        margin: 0 auto 20px;
+        margin: 0 auto 1.5em;
     }
 
     .well {
@@ -541,11 +541,13 @@ body {
 }
 
 #login-panel {
-    #syncButtonPanel button {
-        background-color: rgba(237, 254, 255, 0.3);
-
-        &:not([disabled]):active, &:not([disabled]):hover {
-            background-color: $colour-text1;
+    form {
+        position: relative;
+        
+        & > div {
+            position: absolute;
+            top: 0px;
+            width: 100%;
         }
     }
     
@@ -581,7 +583,7 @@ body {
             left: 0;
             padding: 20px 30px;
             overflow: hidden;
-            font-size: 0.9em;
+            font-size: 0.95em;
             line-height: 1.4em;
 
             & > div {
@@ -620,19 +622,15 @@ body {
         #btnSync {
             margin-right: 0.5em;
         }
+
+        .link-btn-container {
+            display: none;
+        }
     }
 
     .login-form-new {
-        margin-top: 3em;
-
-        #syncButtonPanel {
-            a {
-                font-size: 1.1em;
-            }
-            
-            #btnSync {
-                margin-bottom: 12px;
-            }
+        a {
+            font-size: 1.1em;
         }
     }
     
@@ -1071,6 +1069,7 @@ body {
     .textarea-container {
         flex: 1 1 auto;
         position: relative;
+        max-height: 15em;
     }
 }
 
@@ -1120,7 +1119,7 @@ body {
         }
         
         .panel-content {
-            padding: 20px 0;
+            padding: 10px 20px 20px;
             height: 17em;
         }
     }

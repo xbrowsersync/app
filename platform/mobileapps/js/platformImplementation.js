@@ -866,7 +866,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         var options = {
 			'preferFrontCamera': false, 
 			'showFlipCameraButton': false, 
-			'prompt': getConstant(vm.globals.Constants.Button_ScanCode_Label), 
+			'prompt': getConstant(globals.Constants.Button_ScanCode_Label), 
 			'formats': 'QR_CODE' 
 		};
 
@@ -891,10 +891,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
     var selectBackupFile = function() {
 		// Open select file dialog
-		if (vm.platformName === vm.globals.Platforms.Android) {
+		if (vm.platformName === globals.Platforms.Android) {
 			document.querySelector('#backupFile').click();
 		}
-		else if (vm.platformName === vm.globals.Platforms.IOS) {
+		else if (vm.platformName === globals.Platforms.IOS) {
 			var getPickedFileError = function() {
 				var err = { code: globals.ErrorCodes.FailedRestoreData };
 				
@@ -965,9 +965,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
     var shareBookmark = function(bookmark) {
         var options = {
-			subject: bookmark.title + ' (' + getConstant(vm.globals.Constants.ShareBookmark_Title) + ')', 
+			subject: bookmark.title + ' (' + getConstant(globals.Constants.ShareBookmark_Title) + ')', 
 			url: bookmark.url,
-			chooserTitle: getConstant(vm.globals.Constants.ShareBookmark_Prompt)
+			chooserTitle: getConstant(globals.Constants.ShareBookmark_Prompt)
 		};
 			
 		var onError = function(err) {
@@ -1087,7 +1087,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	var checkForSharedUrl = function(data) {
 		var deferred = $q.defer();
 		
-		if (vm.platformName === vm.globals.Platforms.Android) {
+		if (vm.platformName === globals.Platforms.Android) {
 			// If there is a current intent, retrieve it
 			window.plugins.webintent.hasExtra(window.plugins.webintent.EXTRA_TEXT,
 				function(has) {
@@ -1121,7 +1121,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				}
 			);
 		}
-		else if (vm.platformName === vm.globals.Platforms.IOS) {
+		else if (vm.platformName === globals.Platforms.IOS) {
 			// If current url is set, return it
 			if (!!currentUrl) {
 				// Check the URL is valid
@@ -1143,6 +1143,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return deferred.promise;
 	};
 
+	var checkForTextInputBlur = function(event) {
+		if (!isTextInput(event.target) && isTextInput(document.activeElement)) {
+			document.activeElement.blur();
+		}
+	};
+
 	var displayDefaultSearchState = function() {
         // Clear search and display all bookmarks
 		document.activeElement.blur();
@@ -1162,8 +1168,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Set network online event
 		document.addEventListener('online', handleNetworkReconnected, false);
 
+		// Blur focus (and hide keyboard) when pressing out of text fields
+		document.addEventListener('touchstart', checkForTextInputBlur, false);
+
 		// Platform-specific configs
-		if (vm.platformName === vm.globals.Platforms.Android) {
+		if (vm.platformName === globals.Platforms.Android) {
 			// Don't display iOS specific help panels
 			vm.events.introPanel7_Next_Click = introPanel7_Android_Next_Click;
 			vm.events.introPanel9_Prev_Click = introPanel9_Android_Prev_Click;
@@ -1171,7 +1180,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			// Set backup file change event
 			document.getElementById('backupFile').addEventListener('change', backupFile_Change_Android, false);
 		}
-		else if (vm.platformName === vm.globals.Platforms.IOS) {
+		else if (vm.platformName === globals.Platforms.IOS) {
 			// On iOS check if FilePicker is available, otherwise disable file restore
 			FilePicker.isAvailable(function(isAvailable) {
 				vm.settings.fileRestoreEnabled = isAvailable;
@@ -1321,9 +1330,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				// Set shared url to current url
 				currentUrl = decodeURIComponent(url.searchObject.url);
 			}
-			else {
-				currentUrl = sharedUrl;
-			}
 		}
 	};
 
@@ -1341,6 +1347,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 	var introPanel12_Prev_Click = function() {
 		vm.introduction.displayPanel(10);
+	};
+
+	var isTextInput = function(node) {
+		return ['INPUT', 'TEXTAREA'].indexOf(node.nodeName) !== -1;
 	};
 
 	var resume = function() {

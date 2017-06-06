@@ -184,6 +184,10 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
         return tags;
     };
 
+	var isMobilePlatform = function(platformName) {
+		return platformName === globals.Platforms.Android || platformName === globals.Platforms.IOS;
+	};
+
 	var logMessage = function(moduleName, functionName, messageType, message) {
 		switch (messageType) {
 			case logType.Error:
@@ -255,6 +259,7 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		GetHostFromUrl: getHostFromUrl,
 		GetStringSizeInBytes: getStringSizeInBytes,
 		GetTagArrayFromText: getTagArrayFromText,
+		IsMobilePlatform: isMobilePlatform,
 		LogMessage: logMessage,
 		LogType: logType,
 		ParseUrl: parseUrl,
