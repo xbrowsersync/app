@@ -135,14 +135,6 @@ body {
     }
 }
 
-#about-panel { 
-    h1 {
-        @media (min-device-height: $height-mobile-medium) {
-            background-size: 50%;
-        }
-    }
-}
-
 #working-panel .content p {
     display: none;
 }
@@ -156,7 +148,7 @@ body {
         }
     }
 
-    .btn-scanCode {
+    .btn-scan {
         display: block;
     }
     
@@ -305,7 +297,7 @@ body {
     }
 
     .textarea-container {
-        flex: 1 1 36em;
+        flex: 1 0 36em;
         max-height: 12em;
     }
 }

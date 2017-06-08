@@ -160,7 +160,28 @@ body {
         }
     }
 
+    input:not([type]).form-control, input[type="password"].form-control, input[type="text"].form-control {
+        font-size: 1em;
+        background-color: $colour-text1; 
+        color: $colour-text2;
+        height: auto;
+        padding: 10px 20px;
+        resize: none;
+        border: none;
+        border-radius: $border-radius;
+        box-shadow: none;
+        @include placeholder {
+            color: $colour-text2;
+            opacity: 0.4;
+        }
+
+        &:focus {
+            box-shadow: none;
+        }
+    }
+
     textarea.form-control {
+        @extend input:not([type]).form-control;
         padding: 8px 13px;
         border-radius: 15px;
     }
@@ -238,6 +259,39 @@ body {
             @include animation(animate-scroll 120s ease-in-out infinite);
         }
     }
+
+    .checkbox {
+        width: 30px;
+        height: 5px;
+        border-radius: 5px;
+        position: relative;
+        background: $colour-text2;
+
+        input {
+            display: none;
+
+            &[type=checkbox]:checked + label {
+                left: 16px;
+                background: $colour-link-highlight;
+            }
+        }
+
+        label {
+            display: block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            transition: all .3s ease;
+            cursor: pointer;
+            position: absolute;
+            top: -5px;
+            left: -1px;
+            background: $colour-link;
+            min-height: 0;
+            min-width: 0;
+            padding: 0;
+        }
+    }
     
     .confirm {
         p {
@@ -271,32 +325,12 @@ body {
         float: right;
     }
 
-    .form-control {
-        font-size: 1em;
-        background-color: $colour-text1; 
-        color: $colour-text2;
-        height: auto;
-        padding: 10px 20px;
-        resize: none;
-        border: none;
-        border-radius: $border-radius;
-        box-shadow: none;
-        @include placeholder {
-            color: $colour-text2;
-            opacity: 0.4;
-        }
-
-        &:focus {
-            box-shadow: none;
-        }
-    }
-
     .has-error {
         .form-control {
             box-shadow: none;
-            color: $colour-danger;
+            color: $colour-danger!important;
             @include placeholder {
-                color: $colour-danger;
+                color: $colour-danger!important;
                 opacity: 0.7;
             }
 
@@ -318,7 +352,7 @@ body {
         button {
             font-size: 1.1em;
 
-            &.btn-about, &.btn-close, &.btn-settings {
+            &.btn-close, &.btn-settings {
                 float: right;
             }
 
@@ -354,8 +388,12 @@ body {
         }
     }
 
+    .margin-bottom-0 {
+        margin-bottom: 0!important;
+    }
+
     .margin-bottom-15 {
-        margin-bottom: 15px;
+        margin-bottom: 15px!important;
     }
     
     .overflow-ellipses {
@@ -413,6 +451,10 @@ body {
             color: $colour-text1;
         }
 
+        input:not([type]).form-control, input[type="text"].form-control {
+            border: solid 1px $colour-text2;
+        }
+
         .btn.btn-default {
             color: $colour-text2;
             border-color: $colour-text2;
@@ -435,71 +477,14 @@ body {
     
         .confirm {
             margin-bottom: 0;
-        }
 
-        .form-control {
-            border: solid 1px $colour-text2;
-        }
-    }
-}
+            button {
+                margin-right: 0.5em;
 
-#about-panel {
-    display: table;
-    width: 100%;
-
-    h1 {
-        margin-top: 1.25em;
-        background-position: 50% 0;
-        background-size: 40%;
-    }
-
-    h4 {
-        text-align: center;
-    }
-
-    ul {
-        padding-left: 0;
-        margin-bottom: 15px;
-        list-style: none;
-
-        li {
-            padding-left: 20px;
-            margin-bottom: 10px;
-            position: relative;
-
-            &:before {
-                content: "\f069";
-                font-family: FontAwesome;
-                font-size: 0.8em;
-                position: absolute;
-                left: 0;
+                &:last-child {
+                    margin-right: 0;
+                }
             }
-        }
-    }
-
-    .header-panel {
-        position: absolute;
-        left: 0;
-        z-index: 10;
-        width: 100%;
-        margin-bottom: 0;
-        padding: 0 10px;
-    }
-
-    .links {
-        font-size: 1.1em;
-        width: 60%;
-        margin: 0 auto 1.5em;
-    }
-
-    .well {
-        position: relative;
-        z-index: 50;
-        
-        .contents {
-            height: 45vh;
-            overflow-y: auto;
-            font-size: 0.9em;
         }
     }
 }
@@ -550,8 +535,12 @@ body {
             width: 100%;
         }
     }
+
+    .btn-new-sync {
+        text-transform: capitalize;
+    }
     
-    .btn-scanCode {
+    .btn-scan {
         display: none;
         font-size: 1.8em;
         position: absolute;
@@ -958,6 +947,9 @@ body {
 }
 
 #bookmark-panel {
+    display: flex;
+    flex-flow: column;
+    
     textarea {
         height: 100%;
         width: 100%;
@@ -965,7 +957,7 @@ body {
         position: absolute;
     }
 
-    .bookmark-form-panel, #bookmarkForm {
+    #bookmarkForm {
         display: flex;
         flex-flow: column;
         height: 100%;
@@ -1058,224 +1050,53 @@ body {
     }
     
     .textarea-container {
-        flex: 1 1 30em;
+        flex: 1 0 9.5em;
         position: relative;
     }
 }
 
 #settings-panel {
-    .header-panel {
-        .btn-about {
-            margin-right: 10px;
+    display: flex;
+    flex-flow: column;
+
+    a {
+        border-bottom-color: $colour-text2;
+
+        &.active,
+        &:active,
+        &:focus,
+        &:hover {
+            border-bottom-color: $colour-link-highlight;
         }
     }
-    
-    .well {
-        padding: 0;
-        overflow: hidden;
-        
-        h4 {
-            padding: 15px 20px;
+
+    .about-panel {
+        .acknowledgements {
             margin-bottom: 0;
-            cursor: pointer;
-            
-            &:hover {
-                i {
-                    transition: all, ease-in-out, 0.2s;
-                    opacity: 1;
-                }
-            }
-            
-            &.active {
-                cursor: auto;
-                
-                &:hover i {
-                    opacity: 0;
-                }
-                
-                i {
-                    opacity: 0;
-                }
-            }
-            
-            i {
-                opacity: 0.4;
-                float: right;
-            }
         }
         
-        .input-group, textarea {
-            margin-bottom: 20px;
+        .github-url, .issues-url {
+            @extend .form-control-url;
         }
-        
-        .panel-content {
-            padding: 10px 20px 20px;
-            height: 17em;
-        }
-    }
-    
-    .sync-panel {
-        .buttons {
-            margin: 2em 0;
-            white-space: normal;
 
-            button {
-                margin-bottom: 10px;
-            }
-        }
-        
-        .chart-panel {
-            position: relative;
-            margin-top: 15px;
+        .latest-updates {
+            padding-left: 0;
+            margin-bottom: 15px;
+            list-style: none;
+            font-size: 0.9em;
 
-            %bar {
-                width: $loader-bar-width;
-                height: $loader-bar-height;
-                background-color: $loader-bar-color;
-                border-radius: $loader-bar-radius;
-            }
+            li {
+                padding-left: 15px;
+                margin-bottom: 5px;
+                line-height: 1.2em;
+                position: relative;
 
-            .loader {
-                position: absolute;
-                top: 3.3em;
-                left: 50%;
-                margin-left: -2px;
-                @include animation(animate-loader 1s ease 0.1s infinite);
-                @extend %bar;
-                
-                &:before,
-                &:after {
-                    content: "";
+                &:before {
+                    content: "\f005";
+                    font-family: FontAwesome;
+                    font-size: 0.8em;
                     position: absolute;
-                    display: block;
-                    @extend %bar;
-                    top: 50%;
-                    transform: translateY(-1 * $loader-bar-height / 2) translateZ(0);
-                }
-  
-                &:before {
-                    left: -1 * ($loader-bar-width + $loader-bar-width/2);
-                    @include animation(animate-loader 1s ease 0s infinite);
-                }
-
-                &:after {
-                    left: $loader-bar-width + $loader-bar-width/2;
-                    @include animation(animate-loader 1s ease 0.2s infinite);
-                }
-            }
-
-            #chart {
-                height: 8em;
-                width: 8em;
-                margin: auto;
-            }
-
-            .values {
-                position: absolute;
-                width: 5em;
-                top: 50%;
-                left: 50%;
-                margin: -1.1em 0 0 -2.5em;
-
-                .percent {
-                    font-size: 2.5em;
-                }
-
-                .max {
-                    display: block;
-                    line-height: 1em;
-                }
-            }
-        }
-
-        .checkbox {
-            margin: 20px 0;
-            font-size: 1.3em;
-            text-align: center;
-
-            input {
-                margin-top: 0;
-                position: relative;
-            }
-
-            label {
-                font-weight: normal;
-                font-size: 0.9em;
-                line-height: 0.9em;
-                margin-bottom: 0;
-            }
-        }
-
-        #id {
-            display: block;
-            font-size: 1.1em;
-        }
-
-        .btn-qrcode {
-            display: block;
-            margin: 5px auto 0;
-
-            i {
-                font-size: 2.5em;                
-            }
-        }
-    }
-    
-    .status-panel {
-        .status-display {
-            i {
-                font-size: 1.2em;
-                line-height: 1.2em;
-                position: relative;
-                margin-right: 2px;
-                vertical-align: top;
-            }
-            
-            .status-url {
-                font-size: 1.2em;
-                line-height: 1.2em;
-                max-width: 90%;
-                border-bottom-color: $colour-text2;
-            }
-
-            .status-url-panel {
-                text-align: center;
-                padding-top: 15px;
-            }
-            
-            span.label {
-                font-size: 90%;
-            }
-            
-            p.status-message {
-                color: $colour-bg1;
-                margin: 10px 0 0;
-                max-height: 7em;
-                overflow-y: auto;
-                font-style: italic;
-                quotes: '\201c' '\201d';
-
-                &:before {
-                    content: open-quote;
-                }
-
-                &:after {
-                    content: close-quote;
-                }
-            }
-            
-            button {
-                margin-top: 20px;
-            }
-        }
-
-
-        .update-service-url {
-            .form-control.ng-invalid {
-                color: $colour-danger;
-                @include placeholder {
-                    color: $colour-danger;
-                    opacity: 0.7;
+                    left: 0;
                 }
             }
         }
@@ -1284,9 +1105,14 @@ body {
     .backup-restore-panel {
         #restoreForm {
             textarea {
+                @extend textarea.form-control;
+                position: static;
+                width: 100%;
+                height: 12em!important;
+                margin-bottom: 15px;
+                border: 1px solid $colour-text2!important;
                 font-family: "courier new", sans-serif;
-                font-size: 0.8em;
-                height: 115px;
+                font-size: 0.8em!important;
             }
 
             #backupFilePanel {
@@ -1309,8 +1135,156 @@ body {
             }
         }
     }
+
+    .form-group {
+        position: relative;
+        margin-bottom: 20px;
+
+        a, p, span, ul {
+            font-size: 0.95em;
+        }
+
+        label {
+            margin-bottom: 0;
+            line-height: 1.45em;
+        }
+
+        .description {
+            color: $colour-link;
+        }
+
+        .form-control {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: auto;
+            width: auto;
+            padding: 0;
+            color: $colour-text2;
+            font-size: 1.06em;
+            line-height: 1.25em;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            transition: none;
+
+            .checkbox {
+                top: -3px;
+            }
+        }
+
+        .form-control-url {
+            position: relative;
+            display: block;
+            text-align: right;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+    }
+
+    .panel-container {
+        overflow-y: auto;
+    }
+
+    .status-panel {
+        .progress {
+            height: 5px;
+            border-radius: 5px;
+            box-shadow: none;
+            background-color: $colour-text2;
+            position: relative;
+            overflow: visible;
+
+            .max, .used {
+                font-size: 0.8em;
+                position: absolute;
+                top: 5px;
+                height: 1.5em;
+            }
+
+            .max {
+                right: 0;
+                color: $colour-text2;
+            }
+
+            .progress-bar {
+                background-color: $colour-bg2;
+                box-shadow: none;
+                transition: width 0.5s ease;
+            }
+
+            .used {
+                color: $colour-bg2;
+                left: 0;
+            }
+        }
+
+        .service-message {
+            max-height: 7em;
+            overflow-y: auto;
+            font-style: italic;
+            quotes: '\201c' '\201d';
+            text-align: center;
+
+            &:before {
+                content: open-quote;
+            }
+
+            &:after {
+                content: close-quote;
+            }
+        }
+
+        .service-url {
+            @extend .form-control-url;
+        }
+
+        .update-service-url {
+            input:not([type]).form-control {
+                @extend input:not([type]).form-control;
+                position: static;
+                width: 100%;
+                margin-bottom: 15px;
+                border: 1px solid $colour-text2!important;
+
+                &.ng-invalid {
+                    color: $colour-danger;
+                    @include placeholder {
+                        color: $colour-danger;
+                        opacity: 0.7;
+                    }
+                }
+            }
+        }
+    }
     
-    .backup-restore-panel, #restoreForm, .confirm {
-        margin-bottom: 0;
+    .sync-panel {
+        .buttons {
+            margin: 2em 0;
+            white-space: normal;
+
+            button {
+                margin-bottom: 10px;
+            }
+        }
+
+        .id-url {
+            @extend .form-control-url;
+        }
+    }
+    
+    .well {
+        padding: 0;
+        overflow: hidden;
+        
+        h4 {
+            padding: 15px 20px;
+            margin-bottom: 0;
+        }
+        
+        .panel-content {
+            padding: 0 20px 20px;
+        }
     }
 }

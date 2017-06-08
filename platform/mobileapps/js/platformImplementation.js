@@ -22,32 +22,20 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"description": {
 			"message": "Browser syncing as it should be: secure, anonymous and free! Sync your bookmarks across your browsers and devices with xBrowserSync in one click, no sign up required."
 		},
-		"bookmarksToolbarTitle": {
+		"containers_Toolbar_Title": {
 			"message": "Bookmarks bar"
 		},
-		"bookmarksOtherTitle": {
+		"containers_Other_Title": {
 			"message": "Other bookmarks"
 		},
-		"tooltipSyncEnabled": {
+		"tooltipSyncEnabled_Label": {
 			"message": "sync enabled"
 		},
-		"tooltipWorking": {
+		"tooltipWorking_Label": {
 			"message": "syncing..."
 		},
 		"button_Help_Label": {
 			"message": "Display help"
-		},
-		"aboutPanel_Title" : {
-			"message": "What’s new in version"
-		},
-		"aboutPanel_WebsiteLink_Label" : {
-			"message": "Website"
-		},
-		"aboutPanel_GitHubLink_Label" : {
-			"message": "Git Hub Repos"
-		},
-		"aboutPanel_VersionHistoryLink_Label" : {
-			"message": "Full release history"
 		},
 		"button_Next_Label": {
 			"message": "Next"
@@ -55,44 +43,41 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"button_Previous_Label": {
 			"message": "Previous"
 		},
-		"introPanel1_Message": {
+		"login_introPanel1_Message": {
 			"message": "<h4>Welcome</h4><p>Thanks for using xBrowserSync — browser syncing as it should be: secure, anonymous and free!</p><p>Take some time to read through the following pages to get aquainted with xBrowserSync’s features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
 		},
-		"introPanel2_Message": {
+		"login_introPanel2_Message": {
 			"message": "<h4>Syncing for the first time</h4><p>Your data is encrypted before it is synced so you’ll need to enter an encryption password first. Make it strong but also memorable, if you forget it you won’t be able to retrieve your synced data (and there are no reminders!).</p><p>Then simply click the Sync button and that’s it — you’re synced and ready to start adding bookmarks.</p>"
 		},
-		"introPanel3_Message": {
+		"login_introPanel3_Message": {
 			"message": "<h4>Already synced (got an ID)</h4><p>When you create a new sync you are given a new xBrowserSync ID which you can use along with your encryption password to sync to your existing data.</p><p>Once synced you can view your ID in the Settings panel along with the corresponding QR code for syncing to your data on your mobile devices.</p>"
 		},
-		"introPanel4_Message": {
+		"login_introPanel4_Message": {
 			"message": "<h4>Syncing to another service</h4><p>By default your data is synced to the official xBrowserSync service, though anyone can <a href='https://github.com/xBrowserSync/API' class='new-tab'>run their own xBrowserSync service</a>, either for private use (for ultimate security and privacy) or to make available for public use so that more people can enjoy xBrowserSync.</p><p>Check the available <a href='https://www.xbrowsersync.org/#status' class='new-tab'>xBrowserSync services</a> and switch your active service in the Settings panel.</p>"
 		},
-		"introPanel5_Message": {
+		"login_introPanel5_Message": {
 			"message": "<h4>New service, new ID</h4><p>IDs are service-specific. When you create a sync with a service, the xBrowserSync ID you are given can only be used with that service.</p><p>Whenever you change services you must create a new sync, you’ll then receive a new ID for use with that service (you can then restore your backed-up data after creating the new sync).</p>"
 		},
-		"introPanel6_Message": {
+		"login_introPanel6_Message": {
 			"message": "<h4>Searching your bookmarks</h4><p>Your bookmarks are displayed with the most recent showing first. To search your bookmarks, simply enter some keywords or a URL and the list will be filtered to display only those bookmarks that are relevant to your query.</p><p>You can also share, modify or delete bookmarks from the search results by long pressing on a search result.</p>"
 		},
-		"introPanel7_Message": {
+		"login_introPanel7_Message": {
 			"message": "<h4>Adding a bookmark</h4><p>Add new bookmarks by either sharing a URL to the xBrowserSync app from your favourite apps (browsers, YouTube, Spotify and any other app that shares URLs), or by pressing the bookmark icon to add a bookmark manually.</p><p>When sharing a bookmark the title, description and tags will be retrieved for you, otherwise manually add a description and tags to ensure better search results.</p>"
 		},
-		"introPanel8_Message": {
+		"login_introPanel8_Message": {
 			"message": "<h4>Bookmark from your favourite apps</h4><p>In order to add bookmarks directly from other apps, you will first need to enable sharing to xBrowserSync.</p><p>In your chosen app, tap the share button to bring up the share sheet, slide to the right and tap the More option. Enable the xBrowserSync activity and tap Done to save your changes. From now on you can tap xBrowserSync on the share sheet to add the current item as a bookmark in xBrowserSync.</p>"
 		},
-		"introPanel9_Message": {
+		"login_introPanel9_Message": {
 			"message": "<h4>Remember to back up</h4><p>xBrowserSync services are run voluntarily, plus servers can break and go wrong so please look after your data and make sure to keep backups.</p><p>Open the Settings panel and in the Back up and restore tab you can back up your unencrypted synced data to a local file, which can then restored at a later date should you need to.</p>"
 		},
-		"introPanel10_Message": {
+		"login_introPanel10_Message": {
 			"message": "<h4>Got desktop?</h4><p>Sync your xBrowserSync data with your desktop browser using the xBrowserSync browser extension, available for Chrome and with Firefox support coming soon.</p>"
 		},
-		"introPanel11_Message": {
+		"login_introPanel11_Message": {
 			"message": ""
 		},
-		"introPanel12_Message": {
-			"message": "<h4>Noticed an issue?</h4><p>If you’ve found a bug in xBrowserSync or would like to request a new feature, head on over to Git Hub and <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>submit an issue</a>.</p><p>Calling all coders! If you would like to help make xBrowserSync better, go ahead and fork the <a href='https://github.com/xBrowserSync/App' class='new-tab'>xBrowserSync Git Hub repo</a> and submit a pull request.</p>"
-		},
-		"button_About_Label": {
-			"message": "About"
+		"login_introPanel12_Message": {
+			"message": "<h4>Noticed an issue?</h4><p>If you’ve found a bug in xBrowserSync or would like to request a new feature, head on over to GitHub and <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>submit an issue</a>.</p><p>Calling all coders! If you would like to help make xBrowserSync better, go ahead and fork the <a href='https://github.com/xBrowserSync/App' class='new-tab'>xBrowserSync GitHub repo</a> and submit a pull request.</p>"
 		},
 		"button_Settings_Label": {
 			"message": "Settings"
@@ -109,16 +94,19 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"button_ShareBookmark_Label": {
 			"message": "Share bookmark"
 		},
-		"field_Password_Label": {
-			"message": "Secret"
+		"login_PasswordField_Label": {
+			"message": "Encryption password"
 		},
-		"field_Password_Description": {
-			"message": "Your secret word or phrase"
+		"login_PasswordField_New_Description": {
+			"message": "Enter an encryption password"
 		},
-		"field_Id_Label": {
+		"login_PasswordField_Existing_Description": {
+			"message": "Your encryption password"
+		},
+		"login_IdField_Label": {
 			"message": "ID"
 		},
-		"field_Id_Description": {
+		"login_IdField_Description": {
 			"message": "Your xBrowserSync ID (optional)"
 		},
 		"button_ScanCode_Label": {
@@ -136,10 +124,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"button_NewSync_Label": {
 			"message": "Create New Sync"
 		},
-		"confirmSync_Title" : {
+		"login_ConfirmSync_Title" : {
 			"message":  "Create new sync?"
 		},
-		"confirmSync_Message" : {
+		"login_ConfirmSync_Message" : {
 			"message":  "No xBrowserSync ID has been provided so a new sync will be created for you. OK to proceed?"
 		},
 		"button_Confirm_Label" : {
@@ -148,67 +136,157 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"button_Deny_Label" : {
 			"message":  "No"
 		},
-		"field_Search_Description" : {
+		"search_Field_Description" : {
 			"message":  "Find a bookmark"
 		},
-		"noBookmarks_Message" : {
+		"search_NoBookmarks_Message" : {
 			"message":  "You currently have no bookmarks.<br/><br/>Start bookmarking web pages, videos, music and more from your favourite apps by sharing them to xBrowserSync."
 		},
-		"noSearchResults_Message" : {
+		"search_NoResults_Message" : {
 			"message":  "No bookmarks found"
 		},
-		"shareBookmark_Prompt": {
+		"shareBookmark_Message": {
 			"message":  "Share bookmark with"
 		},
-		"shareBookmark_Title": {
+		"bookmarkShared_Message": {
 			"message":  "shared via xBrowserSync"
 		},
-		"syncBookmarksToolbarConfirmation_Message": {
-			"message":  "<p>Enabling syncing of the bookmarks bar will replace the bookmarks currently in the bookmarks bar with your synced bookmarks. OK to proceed?</p>"
+		"settings_Sync_SyncToolbarConfirmation_Message": {
+			"message":  "<p>Enabling syncing of the bookmarks bar will replace the bookmarks currently in the bookmarks bar with your synced bookmarks.</p><p>OK to proceed?</p>"
 		},
-		"cancelSyncConfirmation_Message": {
-			"message":  "<p>There is currently a sync in progress, if you proceed your local synced data will be incomplete. OK to proceed?</p>"
+		"settings_Sync_ConfirmCancelSync_Message": {
+			"message":  "<p>There is currently a sync in progress, if you proceed your local synced data will be incomplete.</p><p>OK to proceed?</p>"
 		},
-		"serviceStatus_Label" : {
+		"settings_Sync_Id_Description": {
+			"message": "Use your ID to sync on other devices (click for QR code)."
+		},
+		"settings_Sync_SyncToolbar_Description": {
+			"message": "Disable this setting if you wish to display local bookmarks in the bookmarks bar rather than synced bookmarks. Useful when syncing to multiple browsers."
+		},
+		"settings_Service_ServiceUrl_Label": {
+			"message": "Url"
+		},
+		"settings_Service_ServiceUrl_Description": {
+			"message": "xBrowserSync service currently in use."
+		},
+		"settings_Service_Status_Label": {
+			"message": "Status"
+		},
+		"settings_Service_Status_Description": {
+			"message": "Current service status."
+		},
+		"settings_Service_ServiceMessage_Label": {
+			"message": "Service message"
+		},
+		"settings_Service_ApiVersion_Label": {
+			"message": "API version"
+		},
+		"settings_Service_ApiVersion_Description": {
+			"message": "xBrowserSync API version used by the service."
+		},
+		"settings_Service_ChangeService_Label": {
+			"message": "Change service"
+		},
+		"settings_Service_ChangeService_Description": {
+			"message": "Switch to a different xBrowserSync service."
+		},
+		"settings_BackupRestore_Backup_Label": {
+			"message": "Back up"
+		},
+		"settings_BackupRestore_BackupLocal_Description": {
+			"message": "Back up local browser data to a file."
+		},
+		"settings_BackupRestore_BackupSynced_Description": {
+			"message": "Back up synced data to a file."
+		},
+		"settings_BackupRestore_Restore_Label": {
+			"message": "Restore"
+		},
+		"settings_BackupRestore_RestoreLocal_Description": {
+			"message": "Restore local browser data from a backup."
+		},
+		"settings_BackupRestore_RestoreSynced_Description": {
+			"message": "Restore synced data from a backup."
+		},
+		"settings_About_Title" : {
+			"message":  "About"
+		},
+		"settings_About_AppVersion_Label": {
+			"message": "Version"
+		},
+		"settings_About_AppVersion_Description": {
+			"message": "xBrowserSync extension version number."
+		},
+		"settings_About_Updates_Label": {
+			"message": "Latest updates"
+		},
+		"settings_About_Updates_Link_Label": {
+			"message": "Full release history"
+		},
+		"settings_About_Updates_Description": {
+			"message": "Notable updates for this version."
+		},
+		"settings_About_Updates_ListHtml": {
+			"message": "<li>Added: iOS and Android apps released.</li><li>Added: New more intuitive sync/login panel.</li><li>Added: New settings panel layout.</li><li>Fixed: Bookmark descriptions are now shortened to 300 characters to the nearest word.</li><li>Fixed: \"Connection Lost\" warnings are no longer shown when checking for updates in the background.</li><li>Fixed: Intermittent duplicate bookmarks IDs.</li><li>Fixed: Titleless bookmarks now display their URL host as a title.</li>"
+		},
+		"settings_About_Website_Label": {
+			"message": "Website"
+		},
+		"settings_About_Website_Description": {
+			"message": "xBrowserSync website URL."
+		},
+		"settings_About_GitHub_Label": {
+			"message": "GitHub"
+		},
+		"settings_About_GitHub_Description": {
+			"message": "xBrowserSync is open-source! Check out the source code and contribute to the project by creating a pull request."
+		},
+		"settings_About_Issues_Label": {
+			"message": "Issues tracker / feature requests"
+		},
+		"settings_About_Issues_Description": {
+			"message": "Raise an issue with the extension or request a new feature."
+		},
+		"settings_About_Acknowledgements_Label": {
+			"message": "Acknowledgements"
+		},
+		"settings_About_Acknowledgements_Description": {
+			"message": "xBrowserSync would not be possible without these open-source libraries (and their depedencies) and the talented devs who give up their free time to make them possible. Respect."
+		},
+		"settings_Service_Title" : {
 			"message":  "Service"
 		},
-		"serviceStatus_NoNewSyncs" : {
-			"message":  "Online but not accepting new syncs"
+		"settings_Service_Status_NoNewSyncs" : {
+			"message":  "Not accepting new syncs"
 		},
-		"serviceStatus_Online" : {
+		"settings_Service_Status_Online" : {
 			"message":  "Online"
 		},
-		"serviceStatus_Offline" : {
+		"settings_Service_Status_Offline" : {
 			"message":  "Offline"
 		},
 		"button_UpdateServiceUrl_Label" : {
 			"message":  "Change Service"
 		},
-		"updateServiceUrlForm_Message" : {
-			"message":  "Enter the URL of an alternative xBrowserSync service. You can check the list of public xBrowserSync services <a href='https://www.xbrowsersync.org/#status' class='new-tab'>here</a>."
+		"settings_Service_UpdateForm_Message" : {
+			"message":  "Enter the URL of an alternative xBrowserSync service. Browse the list of public xBrowserSync services <a href='https://www.xbrowsersync.org/#status' class='new-tab'>here</a>."
 		},
-		"updateServiceUrlForm_Placeholder" : {
+		"settings_Service_UpdateForm_Field_Description" : {
 			"message":  "xBrowserSync service URL"
 		},
-		"button_UpdateServiceUrl_Submit_Label" : {
+		"button_Update_Label" : {
 			"message":  "Update"
 		},
 		"button_Cancel_Label" : {
 			"message":  "Cancel"
 		},
-		"confirmUpdateServiceUrl_Message": {
-			"message":  "<p>After changing the service, the current sync will be disabled and you’ll need to create a new sync.</p><p>If you have previously created a sync using this service and would like to retrieve your data, you can use the xBrowserSync ID provided at the time. OK to proceed?</p>"
+		"settings_Service_UpdateForm_Confirm_Message": {
+			"message":  "<p>After changing the service, the current sync will be disabled and you’ll need to create a new sync.</p><p>If you have previously created a sync using this service and would like to retrieve your data, you can use the xBrowserSync ID provided at the time.</p><p>OK to proceed?</p>"
 		},
-		"backupRestore_Title" : {
+		"settings_BackupRestore_Title" : {
 			"message":  "Back up and restore"
 		},
-		"backupRestore_Message" : {
-			"message":  "<p>Back up your xBrowserSync data or restore from a previous backup.</p>"
-		},
-		"backupRestore_NotSynced_Message": {
-			"message": ""
-		},
-		"backupRestore_NotAvailable_Message": {
+		"settings_BackupRestore_NotAvailable_Message": {
 			"message": "<p>Back up and restore will be available here once you are synced.</p>"
 		},
 		"button_Backup_Label" : {
@@ -229,22 +307,22 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"button_Back_Label" : {
 			"message":  "Back"
 		},
-		"backupSuccess_Message" : {
+		"settings_BackupRestore_BackupSuccess_Message" : {
 			"message":  ""
 		},
-		"backupSuccess_Android_Message" : {
+		"settings_BackupRestore_BackupSuccess_Android_Message" : {
 			"message":  "Backup file {fileName} saved to internal storage."
 		},
-		"backupSuccess_IOS_Message" : {
+		"settings_BackupRestore_BackupSuccess_IOS_Message" : {
 			"message":  "Backup file {fileName} saved to Documents folder."
 		},
-		"restoreSuccess_Message" : {
+		"settings_BackupRestore_RestoreSuccess_Message" : {
 			"message":  "Your data has been restored."
 		},
-		"restoreForm_Message" : {
+		"settings_BackupRestore_RestoreForm_Message" : {
 			"message":  "Select an xBrowserSync backup file to restore."
 		},
-		"dataToRestore_Label" : {
+		"settings_BackupRestore_RestoreForm_DataField_Label" : {
 			"message":  "Paste backup data"
 		},
 		"button_SelectBackupFile_Label" : {
@@ -259,74 +337,65 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"button_RestoreData_Ready_Label" : {
 			"message":  "Ready to Restore"
 		},
-		"syncPanel_Title" : {
+		"settings_Sync_Title" : {
 			"message":  "Sync"
 		},
-		"syncPanel_Message" : {
-			"message":  "<p>Sync settings will be available here once you are synced.</p>"
+		"settings_Sync_NotAvailable_Message" : {
+			"message":  "Sync settings will be available here once you are synced."
 		},
-		"syncPanel_Id_Label" : {
-			"message":  "Your xBrowserSync ID"
+		"settings_Sync_Id_Label" : {
+			"message":  "Sync ID"
 		},
-		"syncPanel_DisplayQRCode_Label" : {
+		"settings_Sync_DisplayQRCode_Message" : {
 			"message":  "Display QR code"
 		},
-		"syncPanel_DisplayDataUsage_Label" : {
-			"message": "Data Usage"
+		"settings_Service_DataUsage_Label" : {
+			"message": "Data usage"
 		},
-		"syncPanel_DisplaySyncOptions_Label" : {
-			"message": "Sync Options"
-		},
-		"syncPanel_SyncBookmarksToolbar_Label" : {
+		"settings_Sync_SyncToolbar_Label" : {
 			"message":  "Include bookmarks bar"
 		},
-		"syncDataUsagePanel_Message" : {
-			"message":  "Current sync data usage"
+		"settings_Service_DataUsage_Description" : {
+			"message":  "How much of the sync data allowed by the service are you using."
 		},
-		"confirmRestore_Sync_Message" : {
-			"message":  "The data being restored will overwrite your synced data. OK to proceed?"
+		"settings_BackupRestore_ConfirmRestore_Sync_Message" : {
+			"message":  "<p>The data being restored will overwrite your synced data.</p><p>OK to proceed?</p>"
 		},
-		"confirmRestore_NoSync_Message" : {
-			"message":  "As sync is currently disabled, the data being restored will overwrite the local browser data. OK to proceed?"
+		"settings_BackupRestore_ConfirmRestore_NoSync_Message" : {
+			"message":  "<p>As sync is currently disabled, the data being restored will overwrite the local browser data.</p><p>OK to proceed?</p>"
 		},
-		"bookmarkPanel_Title_Add" : {
+		"bookmark_Title_Add" : {
 			"message":  "Add bookmark"
 		},
-		"bookmarkPanel_Title_Edit" : {
+		"bookmark_Title_Edit" : {
 			"message":  "Edit bookmark"
 		},
-		"bookmarkPanel_Field_Title_Label": {
+		"bookmark_TitleField_Label": {
 			"message": "Title"
 		},
-		"bookmarkPanel_Field_Url_Label": {
+		"bookmark_UrlField_Label": {
 			"message": "URL"
 		},
-		"bookmarkPanel_Field_Description_Label": {
+		"bookmark_DescriptionField_Label": {
 			"message": "Description"
 		},
-		"bookmarkPanel_Field_Tags_Label": {
+		"bookmark_TagsField_Label": {
 			"message": "Tags"
 		},
-		"bookmarkPanel_Field_Tags_Placeholder": {
+		"bookmark_TagsField_Description": {
 			"message": "tag 1, tag 2, tag 3, etc..."
 		},
-		"bookmarkPanel_Button_AddTags_Label": {
+		"button_AddTags_Label": {
 			"message": "Add"
 		},
-		"bookmarkPanel_Button_RemoveTag_Label": {
+		"button_DeleteTag_Label": {
 			"message": "Remove tag"
 		},
-		"bookmarkPanel_Button_AddBookmark_Label": {
-			"message": "Add Bookmark"
-		},
-		"bookmarkPanel_Button_DeleteBookmark_Label": {
+		"button_Delete_Label": {
 			"message": "Delete"
 		},
-		"bookmarkPanel_Button_ShareBookmark_Label": {
+		"button_Share_Label": {
 			"message": "Share"
-		},
-		"bookmarkPanel_Button_UpdateBookmark_Label": {
-			"message": "Update"
 		},
 		"working_Title" : {
 			"message":  "Working on it..."
@@ -340,7 +409,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"connRestored_Message" : {
 			"message":  "Your xBrowserSync changes have been synced."
 		},
-		"getPageMetadata_Message" : {
+		"bookmark_Metadata_Message" : {
 			"message":  "Retrieving bookmark metadata, touch to cancel."
 		},
 		"error_Default_Title" : {
@@ -564,14 +633,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 							
 							fileWriter.onwriteend = function() {
 								var platformStr = (vm.platformName === globals.Platforms.IOS) ? 
-									constants.backupSuccess_IOS_Message : 
-									constants.backupSuccess_Android_Message;
+									constants.settings_BackupRestore_BackupSuccess_IOS_Message : 
+									constants.settings_BackupRestore_BackupSuccess_Android_Message;
 								var message = platformStr.message.replace(
 									'{fileName}',
 									fileEntry.name);
 								
 								$scope.$apply(function() {
-									vm.settings.backupRestoreResult = message;
+									vm.settings.backupCompletedMessage = message;
 								});
 
 								return deferred.resolve();
@@ -605,7 +674,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			// Loading bookmark metadata, display cancellable overlay
 			case 'retrievingMetadata':
 				timeout = $timeout(function() {
-					SpinnerDialog.show(null, platform.GetConstant(globals.Constants.GetPageMetadata_Message), function () {
+					SpinnerDialog.show(null, platform.GetConstant(globals.Constants.Bookmark_Metadata_Message), function () {
 						deferred.resolve({ url: currentUrl });
 					});
 				}, 500);
@@ -965,9 +1034,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
     var shareBookmark = function(bookmark) {
         var options = {
-			subject: bookmark.title + ' (' + getConstant(globals.Constants.ShareBookmark_Title) + ')', 
+			subject: bookmark.title + ' (' + getConstant(globals.Constants.ShareBookmark_Message) + ')', 
 			url: bookmark.url,
-			chooserTitle: getConstant(globals.Constants.ShareBookmark_Prompt)
+			chooserTitle: getConstant(globals.Constants.ShareBookmark_Message)
 		};
 			
 		var onError = function(err) {

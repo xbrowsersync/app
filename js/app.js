@@ -46,22 +46,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             tagText: null
         };
         
-        vm.domElements = {
-            btnRestoreData: function() {
-                if (!vm.settings.dataToRestore) {
-                    return platform.GetConstant(globals.Constants.Button_RestoreData_Label);
-                }
-                
-                if (!vm.settings.dataToRestoreIsValid()) {
-                    return platform.GetConstant(globals.Constants.Button_RestoreData_Invalid_Label);
-                }
-                
-                return platform.GetConstant(globals.Constants.Button_RestoreData_Ready_Label);
-            }
-        };
-        
         vm.events = {
-            aboutPanel_Close_Click: aboutPanel_Close_Click,
             backupRestoreForm_Backup_Click: backupRestoreForm_Backup_Click,
             backupRestoreForm_DisplayRestoreForm_Click: backupRestoreForm_DisplayRestoreForm_Click,
             backupRestoreForm_DisplayRestoreConfirmation_Click: backupRestoreForm_DisplayRestoreConfirmation_Click,
@@ -126,7 +111,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             syncForm_EnableSync_Click: syncForm_EnableSync_Click,
             syncForm_ExistingSync_Click: syncForm_ExistingSync_Click,
             syncForm_NewSync_Click: syncForm_NewSync_Click,
-            syncPanel_DisplayDataUsage_Click: syncPanel_DisplayDataUsage_Click,
+            syncPanel_DisplayDataUsage_Click: displayDataUsage,
             syncPanel_DisplaySyncOptions_Click: syncPanel_DisplaySyncOptions_Click,
             searchForm_ToggleBookmark_Click: searchForm_ToggleBookmark_Click,
             updateServiceUrlForm_Cancel_Click: updateServiceUrlForm_Cancel_Click,
@@ -182,8 +167,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         };
         
 		vm.settings = {
+            backupCompletedMessage: null,
             backupFileName: null,
-			backupRestoreResult: null,
+			restoreCompletedMessage: null,
             dataToRestore: null,
             dataToRestoreIsValid: function() {
                 return checkRestoreData(vm.settings.dataToRestore);
@@ -194,8 +180,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             displayRestoreConfirmation: false,
             displayRestoreForm: false,
             displaySyncBookmarksToolbarConfirmation: false,
-            displaySyncDataUsage: false,
             displaySyncOptions: true,
+            displayUpdateServiceUrlConfirmation: false,
+            displayUpdateServiceUrlForm: false,
             fileRestoreEnabled: false,
             getSearchLookaheadDelay: 50,
             getSearchResultsDelay: 250,
@@ -216,8 +203,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             },
             secretComplexity: null,
             service: {
-                displayUpdateServiceUrlConfirmation: false,
-                displayUpdateServiceUrlForm: false,
+                apiVersion: '',
+                maxSyncSize: 0,
                 newServiceUrl: '',
                 status: globals.ServiceStatus.Online,
                 statusMessage: '',
@@ -227,11 +214,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         globals.URL.Host.Get();
                 }
             },
-            syncDataChart: null,
-            syncDataMax: null,
-            syncDataUsed: null,
-            panels: { sync: 0, serviceStatus: 1, backupRestore: 2 },
-            visiblePanel: 0
+            syncDataSize: null,
+            syncDataUsed: null
 		};
 		
 		vm.sync = {
@@ -251,10 +235,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
 		vm.view = {
 			current: (function() {
-                if (!!globals.DisplayAboutOnStartup.Get()) {
-                    return 4;
-                }
-
                 return globals.SyncEnabled.Get() ? 1 : 0;
             }()),
             change: changeView,
@@ -266,7 +246,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.view.change(vm.view.views.login);
                 }
             },
-            views: { login: 0, search: 1, bookmark: 2, settings: 3, about: 4 }
+            views: { login: 0, search: 1, bookmark: 2, settings: 3 }
 		};
         
         // Initialise the app
@@ -278,13 +258,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
  * Private functions
  * ------------------------------------------------------------------------------------ */
 	
-	var aboutPanel_Close_Click = function() {
-        // Turn off display about on startup
-        globals.DisplayAboutOnStartup.Set(false);
-        vm.view.displayMainView();
-    };
-    
-    var backupRestoreForm_Backup_Click = function() {
+	var backupRestoreForm_Backup_Click = function() {
 		// Display loading overlay
         platform.Interface.Loading.Show();
         
@@ -302,6 +276,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             .finally(function() {
                 $timeout(function() {
                     platform.Interface.Loading.Hide();
+
+                    // Focus on done button
+                    if (!utility.IsMobilePlatform(vm.platformName)) {
+                        document.querySelector('.btn-done').focus();
+                    }
                 });
             });
 	};
@@ -310,7 +289,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Display restore form 
         document.querySelector('#backupFile').value = null;
         vm.settings.backupFileName = null;
-        vm.settings.backupRestoreResult = null;
+        vm.settings.restoreCompletedMessage = null;
         vm.settings.displayRestoreConfirmation = false;
         vm.settings.dataToRestore = '';
         vm.settings.displayRestoreForm = true;
@@ -323,18 +302,19 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var backupRestoreForm_DisplayRestoreConfirmation_Click = function() {
         // Display restore confirmation 
+        vm.settings.displayRestoreForm = false;
         vm.settings.displayRestoreConfirmation = true;
         
         // Focus on confirm button
         if (!utility.IsMobilePlatform(vm.platformName)) {
             $timeout(function() {
-                document.querySelector('#btn_ConfirmRestore').focus();
+                document.querySelector('.btn-confirm-restore').focus();
             });
         }
     };
 	
-	var backupRestoreForm_Restore_Click = function(data) {
-		if (!data) {
+	var backupRestoreForm_Restore_Click = function() {
+		if (!vm.settings.dataToRestore) {
             // Display alert
             vm.alert.display(
                 platform.GetConstant(globals.Constants.Error_NoDataToRestore_Title),
@@ -345,7 +325,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
         
         // Start restore
-        restoreData(JSON.parse(data));
+        restoreData(JSON.parse(vm.settings.dataToRestore));
 	};
 
     var backupRestoreForm_SelectBackupFile_Click = function() {
@@ -723,19 +703,20 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.search.selectedBookmark = null;
                 break;
             case vm.view.views.settings:
-                vm.settings.visiblePanel = vm.settings.panels.sync;
                 vm.settings.displayCancelSyncConfirmation = false;
                 vm.settings.displayQRCode = false;
-                vm.settings.displaySyncDataUsage = false;
                 vm.settings.displayRestoreConfirmation = false;
                 vm.settings.displayRestoreForm = false;
                 vm.settings.displaySyncBookmarksToolbarConfirmation = false;  
-                vm.settings.service.displayUpdateServiceUrlConfirmation = false;
-                vm.settings.service.displayUpdateServiceUrlForm = false;
+                vm.settings.displayUpdateServiceUrlConfirmation = false;
+                vm.settings.displayUpdateServiceUrlForm = false;
+                vm.updateServiceUrlForm.$setPristine();
+                vm.updateServiceUrlForm.$setUntouched();
                 updateServiceUrlForm_SetValidity(true);
                 document.querySelector('#backupFile').value = null;
                 vm.settings.backupFileName = null;
-                vm.settings.backupRestoreResult = null;
+                vm.settings.backupCompletedMessage = null;
+                vm.settings.restoreCompletedMessage = null;
                 vm.settings.dataToRestore = '';
                 break;
             case vm.view.views.login:
@@ -789,11 +770,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             case vm.view.views.settings:
                 vm.settings.displaySyncOptions = !globals.SyncEnabled.Get();
                 
-                // Get service status
+                // Get service status and display service info
                 api.CheckServiceStatus()
                     .then(function(serviceInfo) {
-                        // Set service info
                         setServiceInformation(serviceInfo);
+                        displayDataUsage();
                     })
                     .catch(function(err) {
                         // Log error
@@ -807,6 +788,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 
                 // Set new service form url default value to current service url
                 vm.settings.service.newServiceUrl = vm.settings.service.url();
+
+                // Scroll to top
+                $timeout(function() {
+                    document.querySelector('#settings-panel .panel-container').scrollTop = 0;
+                });
                 break;
             default:
                 deferred.resolve();
@@ -827,16 +813,38 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 					validData = true;
 				}
 			}
-			catch(err) {
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'checkRestoreData', utility.LogType.Error,
-                    JSON.stringify(err));
-            }
+			catch(err) { }
 		}
 		
 		return validData;
 	};
+
+    var displayDataUsage = function() {
+        vm.settings.syncDataSize = null;
+        vm.settings.syncDataUsed = null;
+        
+        // Return if not synced
+        if (!globals.SyncEnabled.Get()) {
+            return;
+        }
+        
+        // Get  bookmarks sync size and calculate sync data percentage used
+        bookmarks.SyncSize()
+            .then(function(bookmarksSyncSize) {                
+                vm.settings.syncDataSize = bookmarksSyncSize / 1024;
+                vm.settings.syncDataUsed = (vm.settings.syncDataSize / vm.settings.service.maxSyncSize) * 100;
+            })
+            .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'syncPanel_DisplayDataUsage_Click', utility.LogType.Error,
+                    JSON.stringify(err));
+                
+                // Display alert
+                var errMessage = utility.GetErrorMessageFromException(err);
+                vm.alert.display(errMessage.title, errMessage.message, 'danger');
+            });
+    };
 
     var displayDefaultSearchState = function() {
         // Clear search and results
@@ -916,11 +924,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.settings.displayRestoreForm = false;
                     vm.settings.displayRestoreConfirmation = false;
                     vm.settings.dataToRestore = '';
-                    vm.settings.backupRestoreResult = platform.GetConstant(globals.Constants.RestoreSuccess_Message);
+                    vm.settings.restoreCompletedMessage = platform.GetConstant(globals.Constants.Settings_BackupRestore_RestoreSuccess_Message);
                     
                     if (!utility.IsMobilePlatform(vm.platformName)) {
                         $timeout(function() {
-                            document.querySelector('#btn_RestoreComplete').focus();
+                            document.querySelector('.btn-done').focus();
                         });
                     }
                 }
@@ -1510,6 +1518,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var setServiceInformation = function(serviceInfo) {
         vm.settings.service.status = serviceInfo.status;
         vm.settings.service.statusMessage = serviceInfo.message;
+        vm.settings.service.maxSyncSize = serviceInfo.maxSyncSize / 1024;
+        vm.settings.service.apiVersion = serviceInfo.version;
     };
 
     var startSyncing = function() {
@@ -1541,77 +1551,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             vm.settings.service.displayCancelSyncConfirmation = true;
             if (!utility.IsMobilePlatform(vm.platformName)) {
                 $timeout(function() {
-                    document.querySelector('#btnCancelSync_Confirm').focus();
+                    document.querySelector('.btn-confirm-disable-sync').focus();
                 });
             }
             return;
         }
         
         syncForm_CancelSyncConfirmation_Click();
-    };
-
-    var syncPanel_DisplayDataUsage_Click = function() {
-        // Reset values
-        vm.settings.syncDataUsed = null;
-        vm.settings.syncDataMax = null;
-        vm.settings.displaySyncDataUsage = true;
-
-        if (!!vm.settings.syncDataChart) {
-            vm.settings.syncDataChart.update({ dataUsed: 0 });
-        }
-
-        $timeout(function() {
-            if (!vm.settings.syncDataChart) {
-                // Display new chart
-                vm.settings.syncDataChart = new CircleChart({
-                    $container: document.querySelector('#chart'),
-                    ringProportion: 0.39,
-                    staticTotal: true,
-                    total: 100,
-                    middleCircleColor: '#EDFEFF',
-                    background: '#083039',
-                    definition: [{
-                        name: 'dataUsed',
-                        value: 0,
-                        color: '#35C6E8'
-                    }]
-                });
-            }
-            
-            // Get service info and bookmarks sync size
-            $q.all([
-                api.CheckServiceStatus(),
-                bookmarks.SyncSize()
-            ])
-                .then(function(result) {
-                    var serviceInfo = result[0];
-                    var bookmarksSyncSize = result[1];
-                    
-                    // Calculate sync data percentage used and display chart 
-                    var percentUsed = (bookmarksSyncSize / serviceInfo.maxSyncSize) * 100;
-
-                    // Set view model values
-                    vm.settings.syncDataUsed = (percentUsed > 100) ? 100 : Math.round(percentUsed);
-                    vm.settings.syncDataMax = Math.round(serviceInfo.maxSyncSize / 1024);
-
-                    // Update chart
-                    vm.settings.syncDataChart.update({ dataUsed: percentUsed });
-                })
-                .catch(function(err) {
-                    // Log error
-                    utility.LogMessage(
-                        moduleName, 'syncPanel_DisplayDataUsage_Click', utility.LogType.Error,
-                        JSON.stringify(err));
-                    
-                    // Display alert
-                    var errMessage = utility.GetErrorMessageFromException(err);
-                    vm.alert.display(errMessage.title, errMessage.message, 'danger');
-                });
-            
-            if (!utility.IsMobilePlatform(vm.platformName)) {
-                document.querySelector('#syncDataUsage-Panel .btn-back').focus();
-            }
-        });
     };
 
     var syncPanel_DisplaySyncOptions_Click = function() {
@@ -1630,7 +1576,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             vm.sync.displaySyncConfirmation = true;
             if (!utility.IsMobilePlatform(vm.platformName)) {
                 $timeout(function() {
-                    document.querySelector('#btnSync_Confirm').focus();
+                    document.querySelector('.btn-confirm-enable-sync').focus();
                 });
             }
         }
@@ -1658,9 +1604,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
         
         // Otherwise, display sync confirmation
-        vm.settings.service.displaySyncBookmarksToolbarConfirmation = true;
+        globals.SyncBookmarksToolbar.Set(false);
+        vm.settings.displaySyncBookmarksToolbarConfirmation = true;
         $timeout(function() {
-            document.querySelector('#btnSyncBookmarksToolbar_Confirm').focus();
+            document.querySelector('.btn-confirm-sync-toolbar').focus();
         });
     };
     
@@ -1670,23 +1617,17 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             return;
         }
         
-        var syncData = {};
-        syncData.type = (!globals.Id.Get()) ? globals.SyncType.Push : globals.SyncType.Pull;
-        
-        // Hide sync confirmation
-        vm.settings.service.displaySyncBookmarksToolbarConfirmation = false;
+        // Enable setting and hide sync confirmation
+        globals.SyncBookmarksToolbar.Set(true);
+        vm.settings.displaySyncBookmarksToolbarConfirmation = false;
         
         // Display loading overlay
         platform.Interface.Loading.Show();
         
         // Start sync with no callback action
+        var syncData = {};
+        syncData.type = (!globals.Id.Get()) ? globals.SyncType.Push : globals.SyncType.Pull;
         platform.Sync(vm.sync.asyncChannel, syncData, globals.Commands.NoCallback);
-    };
-
-    var updateServiceUrlForm_Cancel_Click = function() {
-        vm.settings.service.displayUpdateServiceUrlForm = false;
-        vm.settings.service.newServiceUrl = vm.settings.service.url();
-        updateServiceUrlForm_SetValidity(true);
     };
 
     var updateServiceUrlForm_CheckServiceUrl = function(url, callback) {
@@ -1707,6 +1648,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 platform.Interface.Loading.Hide();
             });
     };
+
+    var updateServiceUrlForm_Cancel_Click = function() {
+        // Hide form and scroll to top of section
+        vm.settings.displayUpdateServiceUrlForm = false;
+        document.querySelector('.status-panel h4').scrollIntoView();
+    };
     
     var updateServiceUrlForm_Confirm_Click = function() {
         // Check service url
@@ -1725,7 +1672,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // Update service status
         api.CheckServiceStatus()
-            .then(setServiceInformation)
+            .then(function(serviceInfo) {
+                setServiceInformation(serviceInfo);
+                displayDataUsage();
+
+                // Scroll to top of section
+                document.querySelector('.status-panel h4').scrollIntoView();
+            })
             .catch(function(err) {
                 // Log error
                 utility.LogMessage(
@@ -1737,18 +1690,21 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // Reset view
         vm.settings.service.displayCancelSyncConfirmation = false;
-        vm.settings.service.displayUpdateServiceUrlConfirmation = false;
-        vm.settings.service.displayUpdateServiceUrlForm = false;
+        vm.settings.displayUpdateServiceUrlConfirmation = false;
+        vm.settings.displayUpdateServiceUrlForm = false;
         vm.settings.service.newServiceUrl = vm.settings.service.url();
         updateServiceUrlForm_SetValidity(true);
     };
     
     var updateServiceUrlForm_Display_Click = function() {
+        // Reset form
+        vm.updateServiceUrlForm.$setPristine();
+        vm.updateServiceUrlForm.$setUntouched();
+        vm.settings.service.newServiceUrl = vm.settings.service.url();
+        updateServiceUrlForm_SetValidity(true);
+        
         // Display update form panel
-        vm.settings.service.displayUpdateServiceUrlForm = true;
-
-        // Check service url
-        updateServiceUrlForm_CheckServiceUrl(vm.settings.service.newServiceUrl);
+        vm.settings.displayUpdateServiceUrlForm = true;
         
         // Focus on url field
         $timeout(function() {
@@ -1765,7 +1721,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // Return if the form is not valid
 		if (!vm.updateServiceUrlForm.txtServiceUrl.$valid) {
-			document.querySelector('[name=txtServiceUrl]').focus();
+			document.querySelector('input[name=txtServiceUrl]').focus();
             return;
 		}
 
@@ -1776,18 +1732,16 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         updateServiceUrlForm_CheckServiceUrl(vm.settings.service.newServiceUrl, function(response) {
             if (!!globals.SyncEnabled.Get()) {
                 // Display confirmation panel
-                vm.settings.service.displayUpdateServiceUrlConfirmation = true;
+                vm.settings.displayUpdateServiceUrlForm = false;
+                vm.settings.displayUpdateServiceUrlConfirmation = true;
+
                 if (!utility.IsMobilePlatform(vm.platformName)) {
                     $timeout(function() {
-                        document.querySelector('#btnUpdateServiceUrl_Confirm').focus();
+                        document.querySelector('.btn-confirm-update-service-url').focus();
                     });
                 }
             }
             else {
-                // Update service status and message
-                setServiceInformation(response);
-                
-                // Update service url
                 updateServiceUrlForm_Confirm_Click();
             }
         });

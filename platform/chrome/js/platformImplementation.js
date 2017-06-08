@@ -128,11 +128,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				backupLink.click();
                 
                 // Display message
-                var message = platform.GetConstant(globals.Constants.BackupSuccess_Message).replace(
+                var message = platform.GetConstant(globals.Constants.Settings_BackupRestore_BackupSuccess_Message).replace(
                     '{fileName}',
                     fileName);
                 
-                vm.settings.backupRestoreResult = message;
+                vm.settings.backupCompletedMessage = message;
 			});
 	};
 	
@@ -451,6 +451,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return $q.all([clearOtherBookmarks.promise, clearBookmarksBar.promise]);
 	};
 
+	var displayAboutOnStartup = function() {
+        globals.DisplayAboutOnStartup.Set(false);
+		vm.view.change(vm.view.views.settings)
+			.then(function() {
+				document.querySelector('.about-panel h4').scrollIntoView();
+			});
+    };
+
 	var displayLoading = function(id, deferred) {
 		var timeout;
 		
@@ -643,6 +651,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
             });
         });
 
+		// Display About panel after upgrade
+		if (globals.DisplayAboutOnStartup.Get()) {
+			displayAboutOnStartup();
+		}
+
 		// Focus on search box
 		if (viewModel.view.current === viewModel.view.views.search) {
 			$timeout(function() {
@@ -753,11 +766,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		
 		if (!!globals.IsSyncing.Get()) {
 			iconPath = 'img/browser-action-working.png';
-			tooltip += ' - ' + getConstant(globals.Constants.TooltipWorking);
+			tooltip += ' - ' + getConstant(globals.Constants.TooltipWorking_Label);
 		}
 		else if (!!globals.SyncEnabled.Get()) {
 			iconPath = 'img/browser-action-on.png';
-			tooltip += ' - ' + getConstant(globals.Constants.TooltipSyncEnabled);
+			tooltip += ' - ' + getConstant(globals.Constants.TooltipSyncEnabled_Label);
 		}
 		else {
 			iconPath = 'img/browser-action-off.png';
