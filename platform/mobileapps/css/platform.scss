@@ -396,14 +396,7 @@ body, body .container, .view  {
     }
 }
 
-#settings-panel .well .panel-content {
-    height: 16.7em;
-
-    @media (min-device-height: $height-mobile-medium) {
-        height: 18.3em;
-    }
-
-    @media (min-device-height: $height-mobile-large) {
-        height: 18.5em;
-    }
+#settings-panel .panel-container {
+    overflow-y: visible;
+    margin-bottom: 16px;
 }

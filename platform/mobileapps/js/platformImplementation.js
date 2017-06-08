@@ -107,7 +107,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "ID"
 		},
 		"login_IdField_Description": {
-			"message": "Your xBrowserSync ID (optional)"
+			"message": "Your xBrowserSync ID"
 		},
 		"button_ScanCode_Label": {
 			"message": "Scan your xBrowserSync ID"
@@ -122,7 +122,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "Got an ID?"
 		},
 		"button_NewSync_Label": {
-			"message": "Create New Sync"
+			"message": "Create new sync"
 		},
 		"login_ConfirmSync_Title" : {
 			"message":  "Create new sync?"
@@ -149,7 +149,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Share bookmark with"
 		},
 		"bookmarkShared_Message": {
-			"message":  "shared via xBrowserSync"
+			"message":  "shared from xBrowserSync"
 		},
 		"settings_Sync_SyncToolbarConfirmation_Message": {
 			"message":  "<p>Enabling syncing of the bookmarks bar will replace the bookmarks currently in the bookmarks bar with your synced bookmarks.</p><p>OK to proceed?</p>"
@@ -215,7 +215,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "Version"
 		},
 		"settings_About_AppVersion_Description": {
-			"message": "xBrowserSync extension version number."
+			"message": "xBrowserSync app version number."
 		},
 		"settings_About_Updates_Label": {
 			"message": "Latest updates"
@@ -239,13 +239,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "GitHub"
 		},
 		"settings_About_GitHub_Description": {
-			"message": "xBrowserSync is open-source! Check out the source code and contribute to the project by creating a pull request."
+			"message": "xBrowserSync is open-source — dig through the code and contribute to the project by creating a pull request."
 		},
 		"settings_About_Issues_Label": {
 			"message": "Issues tracker / feature requests"
 		},
 		"settings_About_Issues_Description": {
-			"message": "Raise an issue with the extension or request a new feature."
+			"message": "Raise an issue with the app or request a new feature."
 		},
 		"settings_About_Acknowledgements_Label": {
 			"message": "Acknowledgements"
@@ -287,7 +287,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Back up and restore"
 		},
 		"settings_BackupRestore_NotAvailable_Message": {
-			"message": "<p>Back up and restore will be available here once you are synced.</p>"
+			"message": "Back up and restore will be available here once you are synced."
 		},
 		"button_Backup_Label" : {
 			"message":  "Back Up"
@@ -894,6 +894,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         };
 		document.getElementsByTagName('head')[0].appendChild(script);
 
+		// Load fastclick
+		document.addEventListener('DOMContentLoaded', function() {
+			FastClick.attach(document.body);
+		}, false);
+
 		// Set async channel to view model
 		vm.sync.asyncChannel = vm;
 
@@ -1274,23 +1279,17 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						currentUrl = sharedUrl;
 						vm.view.change(vm.view.views.bookmark);
 					}
-					else {
-						// Display search results if currently on the search panel and no query present
-						if (vm.view.current === vm.view.views.search && !vm.search.query) {
-							displayDefaultSearchState();
-						}
-					}
 
+					// Show loading overlay if currently on the search panel and no query present
+					if (vm.view.current === vm.view.views.search && !vm.search.query) {
+						displayLoading('checkingForUpdates');
+					}
+					
 					// Check if bookmarks need updating
 					bookmarks.CheckForUpdates()
 						.then(function(updatesAvailable) {
 							if (!updatesAvailable) {
 								return;
-							}
-
-							// Show loading overlay if currently on the search panel and no query present
-							if (vm.view.current === vm.view.views.search && !vm.search.query) {
-								displayLoading('checkingForUpdates');
 							}
 
 							// Get bookmark updates

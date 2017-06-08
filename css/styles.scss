@@ -256,7 +256,7 @@ body {
             position: absolute; 
             top: -479px; 
             left: -10px; 
-            @include animation(animate-scroll 120s ease-in-out infinite);
+            @include animation(animate-scroll 150s linear infinite);
         }
     }
 
@@ -1084,6 +1084,8 @@ body {
             margin-bottom: 15px;
             list-style: none;
             font-size: 0.9em;
+            max-height: 8em;
+            overflow-y: auto;
 
             li {
                 padding-left: 15px;

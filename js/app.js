@@ -1477,8 +1477,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Set bookmark form properties to selected bookmark
         vm.bookmark.current = bookmark;
         
-        // Display update bookmark panel
-        vm.view.change(vm.view.views.bookmark);
+        // Display bookmark panel with slight delay to avoid focussing on description field
+        $timeout(function() {
+            vm.view.change(vm.view.views.bookmark);            
+        }, 100);
     };
     
     var setBookmarkStatus = function() {

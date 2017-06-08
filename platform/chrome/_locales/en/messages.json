@@ -222,7 +222,7 @@
 		"message": "GitHub"
 	},
 	"settings_About_GitHub_Description": {
-		"message": "xBrowserSync is open-source! Check out the source code and contribute to the project by creating a pull request."
+		"message": "xBrowserSync is open-source — dig through the code and contribute to the project by creating a pull request."
 	},
 	"settings_About_Issues_Label": {
 		"message": "Issues tracker / feature requests"

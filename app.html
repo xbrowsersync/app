@@ -519,15 +519,15 @@
                             <div class="form-group">
                                 <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Label) }}</label>
                                 <div class="form-control">
-                                    <span class="text-success" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Online">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Online) }}</span>
-                                    <span class="text-danger" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Offline">>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Offline) }}</span>
-                                    <span class="text-warning" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs">>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_NoNewSyncs) }}</span>
+                                    <span class="text-success animate-fade" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Online">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Online) }}</span>
+                                    <span class="text-danger animate-fade" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Offline">>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Offline) }}</span>
+                                    <span class="text-warning animate-fade" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs">>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_NoNewSyncs) }}</span>
                                 </div>
                                 <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Description) }}</p>
                             </div>
                             <div class="form-group" data-ng-if="!!vm.settings.service.statusMessage && (vm.settings.service.status === vm.globals.ServiceStatus.Online || vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs)">
                                 <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_ServiceMessage_Label) }}</label>
-                                <p class="description service-message">{{ vm.settings.service.statusMessage }}</p>
+                                <p class="description service-message animate-fade" data-ng-show="!!vm.settings.service.statusMessage">{{ vm.settings.service.statusMessage }}</p>
                             </div>
                             <div class="form-group" data-ng-if="vm.settings.service.status === vm.globals.ServiceStatus.Online || vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs">
                                 <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_ApiVersion_Label) }}</label>
