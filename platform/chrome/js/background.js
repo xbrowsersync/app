@@ -233,9 +233,9 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					// If extension has been updated, display about panel 
 					globals.DisplayAboutOnStartup.Set(true);
 					
-					// TODO: Remove for >v1.2.2
+					// TODO: Remove for >v1.3.0
 					globals.SyncEnabled.Set(false);
-					displayAlert('xBrowserSync updated to v1.2.2', 'Sync had to be disabled to apply this update. Re-enable sync to start syncing your data again.');
+					displayAlert('xBrowserSync updated to v1.3.0', 'Sync had to be disabled to apply this update. Re-enable sync to start syncing your data again.');
 				}
 				break;
 		}
