@@ -17,13 +17,30 @@ CD into the source directory and install the package and dependencies using NPM:
 	$ cd ./platform/mobileapps/cordova
 	$ cordova prepare
 
+# Post-install iOS configuration (Mac only)
+
+In order to build the iOS app to include iCloud and Share Sheet integration, there are a few manual config steps in Xcode that need to be completed.
+
+1. Run Xcode and open the xBrowserSync project file in `platform/mobileapps/cordova/platforms/ios/`.
+2. In xBrowserSync target Capabilities, enable iCloud and check the iCloud Documents service. The container should resolve automatically using your provisioning profile (see [FilePicker Phonegap iOS Plugin](https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin) for more information). 
+3. Create a new target, select Share Extension and name it 'shareExt' (use the Swift language).
+4. In the shareExt folder, add a new blank file called 'Action.js'.
+5. Set the Target Membership of Resouces/Images.xcassets to include shareExt.
+6. In shareExt target Build Settings, in the Asset Catalog Compiler – Options section, set Asset Catalog App Icon Set Name to 'AppIcon' (the shareExt icon should now appear as the xBrowserSync icon).
+7. Also in shareExt Build Settings, if you're using Xcode version 8 or higher, set Use Legacy Swift Language Version to Yes.
+8. If you're using Xcode version 7, in shareExt Build Phases add CordovaLib to Target Dependencies.
+
 # Building
 
 Run a build for the desired platform:
 
 	$ npm run build:[platform]
 
-Replace [platform] with the name of the desired platform to build (corresponding to a folder name in the [platform](https://github.com/xBrowserSync/App/tree/master/platform/) folder). The app code will be output to the 'build' folder.
+Replace [platform] with the name of the desired platform to build (corresponding to a folder name in the [platform](https://github.com/xBrowserSync/App/tree/master/platform/) folder). The app code will be output to the 'build' folder. Available platforms:
+
+- android
+- chrome
+- ios
 
 # Issues
 
