@@ -16,7 +16,7 @@
 <body>
     <div class="container">
         <div class="background"> 
-            <div class="background-img" ng-show="vm.view.current === vm.view.views.login"></div> 
+            <div class="background-img" data-ng-show="vm.view.current === vm.view.views.login"></div> 
         </div>
         
         <div id="working-panel" data-ng-show="vm.working" data-ng-cloak>
@@ -246,7 +246,7 @@
                         </button>
                     </div>
                     <div class="form-group text-center">
-                        <a href="#" data-ng-click="vm.events.syncForm_ExistingSync_Click()" tabindex="5">
+                        <a data-ng-click="vm.events.syncForm_ExistingSync_Click()" href="" tabindex="5">
                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_ExistingSync_Label) }}
                         </a>
                     </div>
@@ -279,7 +279,7 @@
                         </button>
                     </div>
                     <div class="form-group text-center">
-                        <a href="#" data-ng-click="vm.events.syncForm_NewSync_Click()" tabindex="5">
+                        <a data-ng-click="vm.events.syncForm_NewSync_Click()" href="" tabindex="5">
                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
                         </a>
                     </div>
@@ -334,7 +334,7 @@
                     {{ vm.platform.GetConstant(vm.globals.Constants.Search_NoResults_Message) }}
                 </h4>
                 <div class="list-group" data-ng-show="vm.search.results.length > 0" infinite-scroll="vm.events.searchForm_SearchResults_Scroll()" infinite-scroll-container="'.search-results-panel'">
-                    <div class="list-group-item search-result-item" data-bookmark-id="{{ result.id }}" data-ng-class="{ true: 'animate-' + result.class }[!!result.class]" data-ng-repeat="result in vm.search.results | limitTo:vm.search.resultsDisplayed track by result.id">
+                    <div class="list-group-item search-result-item" data-bookmark-id="{{ result.id }}" data-ng-class="{ true: 'animate-' + result.class }[!!result.class]" data-ng-repeat="result in vm.search.results | limitTo:vm.search.resultsDisplayed track by result.id" data-ng-cloak>
                         <div class="menu animate-fade" data-ng-show="vm.search.selectedBookmark === result.id" data-ng-blur="vm.events.searchForm_SelectBookmark_Press(null, $event)" tabindex="-1">
                             <div class="buttons">
                                 <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}" hm-tap="vm.events.searchForm_ShareBookmark_Click(result)">
@@ -449,13 +449,13 @@
                             <div class="form-group">
                                 <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_Id_Label) }}</label>
                                 <div class="form-control overflow-ellipses id-url">
-                                    <a href="#" title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_DisplayQRCode_Message) }}" 
-                                    data-ng-click="vm.events.displayQRCode_Click()">{{ vm.settings.id() }}</a>
+                                    <a title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_DisplayQRCode_Message) }}" 
+                                    data-ng-click="vm.events.displayQRCode_Click()" href="" tabindex="1">{{ vm.settings.id() }}</a>
                                 </div>
                                 <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_Id_Description) }}</p>
                                 <div class="animate-fade" data-ng-hide="vm.settings.service.displayCancelSyncConfirmation">
                                     <div class="text-center">
-                                        <button class="btn btn-default" data-ng-click="vm.events.syncForm_DisableSync_Click()" tabindex="6">
+                                        <button class="btn btn-default" data-ng-click="vm.events.syncForm_DisableSync_Click()" tabindex="2">
                                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_DisableSync_Label) }}
                                         </button>
                                     </div>
@@ -463,10 +463,10 @@
                                 <div class="animate-fade confirm" data-ng-show="vm.settings.service.displayCancelSyncConfirmation">
                                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_ConfirmCancelSync_Message)"></div>
                                     <div class="text-center">
-                                        <button type="button" class="btn btn-default btn-confirm-disable-sync" data-ng-click="vm.events.syncForm_CancelSyncConfirmation_Click()" tabindex="4">
+                                        <button type="button" class="btn btn-default btn-confirm-disable-sync" data-ng-click="vm.events.syncForm_CancelSyncConfirmation_Click()" tabindex="3">
                                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
                                         </button>
-                                        <button type="button" class="btn btn-default" data-ng-click="vm.settings.service.displayCancelSyncConfirmation = false" tabindex="5">
+                                        <button type="button" class="btn btn-default" data-ng-click="vm.settings.service.displayCancelSyncConfirmation = false" tabindex="4">
                                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
                                         </button>
                                     </div>
@@ -480,7 +480,7 @@
                                 <div class="form-control">
                                     <div class="checkbox">
                                         <input id="syncBookmarksToolbar" type="checkbox" data-ng-model="vm.settings.syncBookmarksToolbar" data-ng-model-options="{ getterSetter: true }" 
-                                            data-ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Click()" />
+                                            data-ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Click()" tabindex="5" />
                                         <label for="syncBookmarksToolbar"></label>
                                     </div>
                                 </div>
@@ -488,10 +488,10 @@
                             <div class="animate-fade confirm" data-ng-show="vm.settings.displaySyncBookmarksToolbarConfirmation">
                                 <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_SyncToolbarConfirmation_Message)"></div>
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-default btn-confirm-sync-toolbar" data-ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Confirm()" tabindex="4">
+                                    <button type="button" class="btn btn-default btn-confirm-sync-toolbar" data-ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Confirm()" tabindex="6">
                                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
                                     </button>
-                                    <button type="button" class="btn btn-default" tabindex="5"
+                                    <button type="button" class="btn btn-default" tabindex="7"
                                             data-ng-click="vm.settings.syncBookmarksToolbar(false); vm.settings.displaySyncBookmarksToolbarConfirmation = false">
                                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
                                     </button>
@@ -507,11 +507,11 @@
                             <div class="form-group">
                                 <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_ServiceUrl_Label) }}</label>
                                 <div class="form-control overflow-ellipses service-url">
-                                    <a href="{{ vm.settings.service.url() }}" class="new-tab" title="{{ vm.settings.service.url() }}">{{ vm.settings.service.url() }}</a>
+                                    <a href="{{ vm.settings.service.url() }}" class="new-tab" title="{{ vm.settings.service.url() }}" tabindex="8">{{ vm.settings.service.url() }}</a>
                                 </div>
                                 <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_ServiceUrl_Description) }}</p>
                                 <div class="text-center">
-                                    <button class="btn btn-default" data-ng-click="vm.events.updateServiceUrlForm_Display_Click()" tabindex="5">
+                                    <button class="btn btn-default" data-ng-click="vm.events.updateServiceUrlForm_Display_Click()" tabindex="9">
                                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_UpdateServiceUrl_Label) }}
                                     </button>
                                 </div>
@@ -554,13 +554,13 @@
                                 <form name="vm.updateServiceUrlForm" data-ng-show="!vm.settings.displayUpdateServiceUrlConfirmation" novalidate>
                                     <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Message)"></p>
                                     <input name="txtServiceUrl" class="form-control" data-ng-model="vm.settings.service.newServiceUrl" data-ng-keypress="vm.events.updateServiceUrlForm_Update_KeyPress($event)"
-                                           placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Field_Description) }}" maxlength="128" tabindex="6" required />
+                                           placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Field_Description) }}" maxlength="128" tabindex="10" required />
                                     <div class="text-center">
                                         <button type="submit" class="btn btn-default" data-ng-disabled="!vm.updateServiceUrlForm.txtServiceUrl.$dirty || !vm.settings.service.newServiceUrl" 
-                                                data-ng-click="vm.events.updateServiceUrlForm_Update_Click()" tabindex="7">
+                                                data-ng-click="vm.events.updateServiceUrlForm_Update_Click()" tabindex="11">
                                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_Update_Label) }}
                                         </button>
-                                        <button type="button" class="btn btn-default" data-ng-click="vm.events.updateServiceUrlForm_Cancel_Click()" tabindex="8">
+                                        <button type="button" class="btn btn-default" data-ng-click="vm.events.updateServiceUrlForm_Cancel_Click()" tabindex="12">
                                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_Cancel_Label) }}
                                         </button>
                                     </div>
@@ -568,10 +568,10 @@
                                 <div class="animate-fade confirm" data-ng-show="vm.settings.displayUpdateServiceUrlConfirmation">
                                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Confirm_Message)"></div>
                                     <div class="text-center">
-                                        <button class="btn btn-default btn-confirm-update-service-url" data-ng-click="vm.events.updateServiceUrlForm_Confirm_Click()" tabindex="14">
+                                        <button class="btn btn-default btn-confirm-update-service-url" data-ng-click="vm.events.updateServiceUrlForm_Confirm_Click()" tabindex="13">
                                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
                                         </button>
-                                        <button type="reset" class="btn btn-default" data-ng-click="vm.settings.displayUpdateServiceUrlConfirmation = false" tabindex="15">
+                                        <button type="reset" class="btn btn-default" data-ng-click="vm.settings.displayUpdateServiceUrlConfirmation = false" tabindex="14">
                                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
                                         </button>
                                     </div>
@@ -591,26 +591,26 @@
                             <p class="description" data-ng-if="!vm.sync.enabled()">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_BackupLocal_Description) }}</p>
                             <p class="description" data-ng-if="vm.sync.enabled()">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_BackupSynced_Description) }}</p>
                             <div class="animate-fade text-center" data-ng-hide="vm.settings.backupCompletedMessage">
-                                <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_Backup_Click()" tabindex="9">
+                                <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_Backup_Click()" tabindex="15">
                                     {{ vm.platform.GetConstant(vm.globals.Constants.Button_Backup_Label) }}
                                 </button>
                             </div>
                             <div class="animate-fade confirm" data-ng-show="vm.settings.backupCompletedMessage">
                                 <p>{{ vm.settings.backupCompletedMessage }}</p>
                                 <div class="text-center">
-                                    <button class="btn btn-default btn-done" data-ng-click="vm.settings.backupCompletedMessage = null" tabindex="10">
+                                    <button class="btn btn-default btn-done" data-ng-click="vm.settings.backupCompletedMessage = null" tabindex="16">
                                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_Done_Label) }}
                                     </button>
                                 </div>
                             </div>
-                            <a id="backupLink" class="hidden"></a>
+                            <a id="backupLink" class="hidden" tabindex="-1"></a>
                         </div>
                         <div class="form-group margin-bottom-0">
                             <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Restore_Label) }}</label>
                             <p class="description" data-ng-if="!vm.sync.enabled()">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreLocal_Description) }}</p>
                             <p class="description" data-ng-if="vm.sync.enabled()">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreSynced_Description) }}</p>
                             <div class="animate-fade text-center" data-ng-hide="vm.settings.displayRestoreForm || vm.settings.displayRestoreConfirmation || vm.settings.restoreCompletedMessage">
-                                <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_DisplayRestoreForm_Click()" tabindex="10">
+                                <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_DisplayRestoreForm_Click()" tabindex="17">
                                     {{ vm.platform.GetConstant(vm.globals.Constants.Button_Restore_Label) }}
                                 </button>
                             </div>
@@ -618,27 +618,27 @@
                                 <p>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_Message) }}</p>
                                 <div id="backupContentsPanel" data-ng-class="{ true: 'has-error' }[ !!vm.settings.dataToRestore && !vm.settings.dataToRestoreIsValid() ]">
                                     <label for="dataToRestore" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_DataField_Label) }}</label>
-                                    <textarea data-ng-model="vm.settings.dataToRestore" class="form-control" rows="3" tabindex="11"></textarea>
+                                    <textarea data-ng-model="vm.settings.dataToRestore" class="form-control" rows="3" tabindex="18"></textarea>
                                 </div>
                                 <div id="backupFilePanel">
                                     <div class="text-center">
-                                        <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_SelectBackupFile_Click()" tabindex="11">
+                                        <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_SelectBackupFile_Click()" tabindex="19">
                                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_SelectBackupFile_Label) }}
                                         </button>
                                         <p data-ng-class="{ true: 'text-danger' }[ !vm.settings.dataToRestoreIsValid() ]">
                                             {{ vm.settings.backupFileName }}
                                         </p>
                                     </div>
-                                    <input id="backupFile" name="files[]" type="file" />
+                                    <input id="backupFile" name="files[]" type="file" tabindex="-1" />
                                 </div>
                                 <div class="text-center">
                                     <button class="btn btn-default" data-ng-disabled="!vm.settings.dataToRestoreIsValid()"
-                                            data-ng-click="vm.events.backupRestoreForm_DisplayRestoreConfirmation_Click()" tabindex="12">
+                                            data-ng-click="vm.events.backupRestoreForm_DisplayRestoreConfirmation_Click()" tabindex="20">
                                         <span data-ng-show="!vm.settings.dataToRestore">{{ vm.platform.GetConstant(vm.globals.Constants.Button_RestoreData_Label) }}</span>
                                         <span data-ng-show="vm.settings.dataToRestore && !vm.settings.dataToRestoreIsValid()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_RestoreData_Invalid_Label) }}</span>
                                         <span data-ng-show="vm.settings.dataToRestore && vm.settings.dataToRestoreIsValid()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_RestoreData_Ready_Label) }}</span>
                                     </button>
-                                    <button type="reset" class="btn btn-default" data-ng-click="vm.settings.displayRestoreForm = false" tabindex="13">
+                                    <button type="reset" class="btn btn-default" data-ng-click="vm.settings.displayRestoreForm = false" tabindex="21">
                                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_Cancel_Label) }}
                                     </button>
                                 </div>
@@ -647,10 +647,10 @@
                                 <div data-ng-if="vm.sync.enabled()" data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_ConfirmRestore_Sync_Message)"></div>
                                 <div data-ng-if="!vm.sync.enabled()" data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_ConfirmRestore_NoSync_Message)"></div>
                                 <div class="text-center">
-                                    <button class="btn btn-default btn-confirm-restore" data-ng-click="vm.events.backupRestoreForm_Restore_Click()" tabindex="14">
+                                    <button class="btn btn-default btn-confirm-restore" data-ng-click="vm.events.backupRestoreForm_Restore_Click()" tabindex="22">
                                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
                                     </button>
-                                    <button type="reset" class="btn btn-default" data-ng-click="vm.settings.displayRestoreConfirmation = false" tabindex="15">
+                                    <button type="reset" class="btn btn-default" data-ng-click="vm.settings.displayRestoreConfirmation = false" tabindex="23">
                                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
                                     </button>
                                 </div>
@@ -658,7 +658,7 @@
                             <div class="animate-fade confirm" data-ng-show="vm.settings.restoreCompletedMessage">
                                 <p>{{ vm.settings.restoreCompletedMessage }}</p>
                                 <div class="text-center">
-                                    <button class="btn btn-default btn-done" data-ng-click="vm.settings.restoreCompletedMessage = null" tabindex="10">
+                                    <button class="btn btn-default btn-done" data-ng-click="vm.settings.restoreCompletedMessage = null" tabindex="24">
                                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_Done_Label) }}
                                     </button>
                                 </div>
@@ -679,7 +679,7 @@
                         <div class="form-group">
                             <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Updates_Label) }}</label>
                             <div class="form-control overflow-ellipses service-url">
-                                <a href="https://github.com/xBrowserSync/App/releases" class="new-tab">
+                                <a href="https://github.com/xBrowserSync/App/releases" class="new-tab" tabindex="25">
                                     {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Updates_Link_Label) }}
                                 </a>
                             </div>
@@ -689,21 +689,21 @@
                         <div class="form-group">
                             <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Website_Label) }}</label>
                             <div class="form-control overflow-ellipses">
-                                <a href="https://www.xbrowsersync.org/" class="new-tab" title="https://www.xbrowsersync.org/">https://www.xbrowsersync.org/</a>
+                                <a href="https://www.xbrowsersync.org/" class="new-tab" title="https://www.xbrowsersync.org/" tabindex="26">https://www.xbrowsersync.org/</a>
                             </div>
                             <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Website_Description) }}</p>
                         </div>
                         <div class="form-group">
                             <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_GitHub_Label) }}</label>
                             <div class="form-control overflow-ellipses github-url">
-                                <a href="https://github.com/xBrowserSync/App" class="new-tab" title="https://github.com/xBrowserSync/App">https://github.com/xBrowserSync/App</a>
+                                <a href="https://github.com/xBrowserSync/App" class="new-tab" title="https://github.com/xBrowserSync/App" tabindex="27">https://github.com/xBrowserSync/App</a>
                             </div>
                             <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_GitHub_Description) }}</p>
                         </div>
                         <div class="form-group">
                             <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Issues_Label) }}</label>
                             <div class="form-control overflow-ellipses issues-url">
-                                <a href="https://github.com/xBrowserSync/App/issues" class="new-tab" title="https://github.com/xBrowserSync/App/issues">https://github.com/xBrowserSync/App/issues</a>
+                                <a href="https://github.com/xBrowserSync/App/issues" class="new-tab" title="https://github.com/xBrowserSync/App/issues" tabindex="28">https://github.com/xBrowserSync/App/issues</a>
                             </div>
                             <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Issues_Description) }}</p>
                         </div>
@@ -711,32 +711,32 @@
                             <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Acknowledgements_Label) }}</label>
                             <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Acknowledgements_Description) }}</p>
                             <ul class="list-inline acknowledgements">
-                                <li><a href="https://github.com/angular/angular.js" class="new-tab">angular.js</a></li>
-                                <li><a href="https://github.com/kraku/angular-complexify" class="new-tab">angular-complexify</a></li>
-                                <li><a href="https://github.com/RyanMullins/angular-hammer" class="new-tab">angular-hammer</a></li>
-                                <li><a href="https://github.com/phonegap/phonegap-plugin-barcodescanner" class="new-tab">BarcodeScanner PhoneGap Plugin</a></li>
-                                <li><a href="https://github.com/twbs/bootstrap" class="new-tab">bootstrap</a></li>
-                                <li><a href="https://cordova.apache.org/" class="new-tab">cordova</a></li>
-                                <li><a href="https://github.com/greybax/cordova-plugin-native-spinner" class="new-tab">cordova-plugin-native-spinner</a></li>
-                                <li><a href="https://github.com/elijahmanor/cross-var" class="new-tab">cross-var</a></li>
-                                <li><a href="https://github.com/brix/crypto-js" class="new-tab">crypto-js</a></li>
-                                <li><a href="https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin" class="new-tab">Custom URL scheme Cordova Plugin</a></li>
-                                <li><a href="https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin" class="new-tab">FilePicker Phonegap Plugin</a></li>
-                                <li><a href="https://github.com/FortAwesome/Font-Awesome" class="new-tab">font-awesome</a></li>
-                                <li><a href="https://github.com/hammerjs/hammer.js" class="new-tab">hammer.js</a></li>
-                                <li><a href="https://github.com/jshint/jshint" class="new-tab">jshint</a></li>
-                                <li><a href="https://github.com/ionic-team/ionic-plugin-keyboard" class="new-tab">Keyboard Cordova Plugin</a></li>
-                                <li><a href="https://github.com/coderaiser/minify" class="new-tab">minify</a></li>
-                                <li><a href="https://github.com/sroze/ngInfiniteScroll" class="new-tab">ng-infinite-scroll</a></li>
-                                <li><a href="https://www.npmjs.com/package/npm-build-tools" class="new-tab">npm-build-tools</a></li>
-                                <li><a href="https://github.com/sass/node-sass" class="new-tab">node-sass</a></li>
-                                <li><a href="https://github.com/neocotic/qrious" class="new-tab">qrious</a></li>
-                                <li><a href="https://github.com/Arkanite/SocialSharing-PhoneGap-Plugin" class="new-tab">Social Sharing PhoneGap Plugin</a></li>
-                                <li><a href="https://github.com/justin-credible/cordova-plugin-spinner" class="new-tab">Spinner Cordova Plugin</a></li>
-                                <li><a href="https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin" class="new-tab">Toast PhoneGap Plugin</a></li>
-                                <li><a href="https://github.com/mishoo/UglifyJS2" class="new-tab">uglifyjs</a></li>
-                                <li><a href="https://github.com/jashkenas/underscore" class="new-tab">underscore</a></li>
-                                <li><a href="https://github.com/COMLINE-AG/bundle-cordova-webintent" class="new-tab">WebIntent Android Cordova Plugin</a></li>
+                                <li><a href="https://github.com/angular/angular.js" class="new-tab" tabindex="29">angular.js</a></li>
+                                <li><a href="https://github.com/kraku/angular-complexify" class="new-tab" tabindex="30">angular-complexify</a></li>
+                                <li><a href="https://github.com/RyanMullins/angular-hammer" class="new-tab" tabindex="31">angular-hammer</a></li>
+                                <li><a href="https://github.com/phonegap/phonegap-plugin-barcodescanner" class="new-tab" tabindex="32">BarcodeScanner PhoneGap Plugin</a></li>
+                                <li><a href="https://github.com/twbs/bootstrap" class="new-tab" tabindex="33">bootstrap</a></li>
+                                <li><a href="https://cordova.apache.org/" class="new-tab" tabindex="34">cordova</a></li>
+                                <li><a href="https://github.com/greybax/cordova-plugin-native-spinner" class="new-tab" tabindex="35">cordova-plugin-native-spinner</a></li>
+                                <li><a href="https://github.com/elijahmanor/cross-var" class="new-tab" tabindex="36">cross-var</a></li>
+                                <li><a href="https://github.com/brix/crypto-js" class="new-tab" tabindex="37">crypto-js</a></li>
+                                <li><a href="https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin" class="new-tab" tabindex="38">Custom URL scheme Cordova Plugin</a></li>
+                                <li><a href="https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin" class="new-tab" tabindex="39">FilePicker Phonegap Plugin</a></li>
+                                <li><a href="https://github.com/FortAwesome/Font-Awesome" class="new-tab" tabindex="40">font-awesome</a></li>
+                                <li><a href="https://github.com/hammerjs/hammer.js" class="new-tab" tabindex="41">hammer.js</a></li>
+                                <li><a href="https://github.com/jshint/jshint" class="new-tab" tabindex="42">jshint</a></li>
+                                <li><a href="https://github.com/ionic-team/ionic-plugin-keyboard" class="new-tab" tabindex="43">Keyboard Cordova Plugin</a></li>
+                                <li><a href="https://github.com/coderaiser/minify" class="new-tab" tabindex="44">minify</a></li>
+                                <li><a href="https://github.com/sroze/ngInfiniteScroll" class="new-tab" tabindex="45">ng-infinite-scroll</a></li>
+                                <li><a href="https://www.npmjs.com/package/npm-build-tools" class="new-tab" tabindex="46">npm-build-tools</a></li>
+                                <li><a href="https://github.com/sass/node-sass" class="new-tab" tabindex="47">node-sass</a></li>
+                                <li><a href="https://github.com/neocotic/qrious" class="new-tab" tabindex="48">qrious</a></li>
+                                <li><a href="https://github.com/Arkanite/SocialSharing-PhoneGap-Plugin" class="new-tab" tabindex="49">Social Sharing PhoneGap Plugin</a></li>
+                                <li><a href="https://github.com/justin-credible/cordova-plugin-spinner" class="new-tab" tabindex="50">Spinner Cordova Plugin</a></li>
+                                <li><a href="https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin" class="new-tab" tabindex="51">Toast PhoneGap Plugin</a></li>
+                                <li><a href="https://github.com/mishoo/UglifyJS2" class="new-tab" tabindex="52">uglifyjs</a></li>
+                                <li><a href="https://github.com/jashkenas/underscore" class="new-tab" tabindex="53">underscore</a></li>
+                                <li><a href="https://github.com/evsienko/cordova-webintent" class="new-tab" tabindex="54">WebIntent Android Cordova Plugin</a></li>
                             </ul>
                         </div>
                     </div>

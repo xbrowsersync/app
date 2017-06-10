@@ -34,6 +34,10 @@ body {
     min-width: 320px;
     @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
 
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+        display: none !important;
+    }
+
     h1 {
         background: url("../img/logo.svg") 50% 40% no-repeat;
         background-size: 60%;

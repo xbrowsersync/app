@@ -655,11 +655,21 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		if (globals.DisplayAboutOnStartup.Get()) {
 			displayAboutOnStartup();
 		}
-
-		// Focus on search box
-		if (viewModel.view.current === viewModel.view.views.search) {
+		else {
+			// If logged in, focus on search box, otherwise focus on login field
 			$timeout(function() {
-				document.querySelector('input[name=txtSearch]').focus();
+				if (!!globals.SyncEnabled.Get()) {
+					document.querySelector('input[name=txtSearch]').focus();
+					
+				}
+				else {
+					if (!!vm.settings.displayNewSyncPanel) {
+						document.querySelector('.login-form-new input[name="txtPassword"]').focus();
+					}
+					else {
+						document.querySelector('.login-form-existing input[name="txtId"]').focus();
+					}
+				}
 			});
 		}
 	};

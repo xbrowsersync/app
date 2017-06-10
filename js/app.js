@@ -724,11 +724,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.introduction.displayPanel();
                 }
 
-                // Display new sync panel depending on if ID is set
-                if (!!globals.Id.Get()) {
-                    vm.settings.displayNewSyncPanel = false;
-                }
-                
                 vm.sync.displaySyncConfirmation = false;
                 if (vm.syncForm) {
                     vm.syncForm.$setPristine();
@@ -741,6 +736,22 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // Initialise new view
         switch(view) {
+            case vm.view.views.login:
+                // Display new sync panel depending on if ID is set
+                vm.settings.displayNewSyncPanel = !globals.Id.Get();
+                
+                // Focus on first input field
+                if (!utility.IsMobilePlatform(vm.platformName)) {
+                    $timeout(function() {
+                        if (!!vm.settings.displayNewSyncPanel) {
+                            document.querySelector('.login-form-new input[name="txtPassword"]').focus();
+                        }
+                        else {
+                            document.querySelector('.login-form-existing input[name="txtId"]').focus();
+                        }
+                    });
+                }
+                break;
             case vm.view.views.search:
                 vm.search.displayDefaultState();
                 $timeout(function() {
@@ -956,11 +967,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Reset network disconnected flag
         globals.Network.Disconnected.Set(false);
 
-        // Platform-specific initation
-        platform.Init(vm, $scope);
-        
         // Display new sync panel depending on if ID is set
         vm.settings.displayNewSyncPanel = !globals.Id.Get();
+        
+        // Platform-specific initation
+        platform.Init(vm, $scope);
         
         // Set intro animation visibility
         if (vm.view.current === vm.view.views.login && !!vm.introduction.displayIntro()) {
@@ -1590,13 +1601,24 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
     var syncForm_ExistingSync_Click = function() {
         vm.settings.displayNewSyncPanel = false;
-        return false;
+
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+            $timeout(function() {
+                document.querySelector('.login-form-existing input[name="txtId"]').focus();
+            });
+        }
     };
 
     var syncForm_NewSync_Click = function() {
         vm.settings.displayNewSyncPanel = true;
         globals.Id.Set(null);
         globals.Password.Set(null);
+
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+            $timeout(function() {
+                document.querySelector('.login-form-new input[name="txtPassword"]').focus();
+            });
+        }
     };
     
     var syncPanel_SyncBookmarksToolbar_Click = function() {

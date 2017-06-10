@@ -719,7 +719,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			return $q.resolve({ url: 'http://' });
 		}
 		
-		var callback = function(pageContent, err) {
+		var handleResponse = function(pageContent, err) {
 			var parser, html;
 
 			// Check html content was returned
@@ -824,32 +824,39 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		};
 
 		deferred = deferred || $q.defer();
-		var inAppBrowser = cordova.InAppBrowser.open(currentUrl, '_blank', 'location=yes,hidden=yes');
 
-		inAppBrowser.addEventListener('loaderror', function(err) {
-			if (!!err && !!err.code && err.code === -999) {
-				return;
-			}
+		// If network disconnected fail immediately, otherwise retrieve page metadata
+		if (!!globals.Network.Disconnected.Get()) {
+			handleResponse(null, "network disconnected");
+		}
+		else {
+			var inAppBrowser = cordova.InAppBrowser.open(currentUrl, '_blank', 'location=yes,hidden=yes');
+
+			inAppBrowser.addEventListener('loaderror', function(err) {
+				if (!!err && !!err.code && err.code === -999) {
+					return;
+				}
+				
+				handleResponse(null, err);
+			});
 			
-			callback(null, err);
-		});
-		
-		inAppBrowser.addEventListener('loadstop', function() {
-			// Remove invasive content and return doc html
-			inAppBrowser.executeScript({
-				code: 
-					"(function() { var elements = document.querySelectorAll('video,script'); for (var i = 0; i < elements.length; i++) { elements[i].parentNode.removeChild(elements[i]); } })();" +
-					"document.querySelector('html').outerHTML;"
-			},
-			callback);
-		});
+			inAppBrowser.addEventListener('loadstop', function() {
+				// Remove invasive content and return doc html
+				inAppBrowser.executeScript({
+					code: 
+						"(function() { var elements = document.querySelectorAll('video,script'); for (var i = 0; i < elements.length; i++) { elements[i].parentNode.removeChild(elements[i]); } })();" +
+						"document.querySelector('html').outerHTML;"
+				},
+				handleResponse);
+			});
 
-		// Time out metadata load after 10 secs
-		$timeout(function() {
-			if (deferred.promise.$$state.status === 0) {
-				callback(null, 'Timed out retrieving page metadata.');
-			}
-		}, 10000);
+			// Time out metadata load after 10 secs
+			$timeout(function() {
+				if (deferred.promise.$$state.status === 0) {
+					handleResponse(null, 'Timed out retrieving page metadata.');
+				}
+			}, 10000);
+		}
 
 		return deferred.promise;
     };
@@ -1239,6 +1246,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Set back button event
 		document.addEventListener('backbutton', handleBackButton, false);
 
+		// Set network offline event
+		document.addEventListener('online', handleNetworkDisconnected, false);
+		
 		// Set network online event
 		document.addEventListener('online', handleNetworkReconnected, false);
 
@@ -1304,9 +1314,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 								moduleName, 'deviceReady', utility.LogType.Error,
 								JSON.stringify(err));
 
-							// Display alert
-							var errMessage = utility.GetErrorMessageFromException(err);
-							vm.alert.display(errMessage.title, errMessage.message);
+							// Display alert if not retrieving bookmark metadata
+							if (!sharedUrl) {
+								var errMessage = utility.GetErrorMessageFromException(err);
+								vm.alert.display(errMessage.title, errMessage.message);
+							}
 						})
 						.finally(function() {
 							hideLoading('checkingForUpdates');
@@ -1378,6 +1390,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			event.preventDefault();
 			navigator.app.exitApp();
 		}
+	};
+
+	var handleNetworkDisconnected = function () {
+		globals.Network.Disconnected.Set(true);
 	};
 
 	var handleNetworkReconnected = function () {
@@ -1459,9 +1475,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 								moduleName, 'resume', utility.LogType.Error,
 								JSON.stringify(err));
 
-							// Display alert
-							var errMessage = utility.GetErrorMessageFromException(err);
-							vm.alert.display(errMessage.title, errMessage.message);
+							// Display alert if not retrieving bookmark metadata
+							if (!sharedUrl) {
+								var errMessage = utility.GetErrorMessageFromException(err);
+								vm.alert.display(errMessage.title, errMessage.message);
+							}
 						})
 						.finally(function() {
 							hideLoading('checkingForUpdates');
