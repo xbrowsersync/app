@@ -286,13 +286,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 	};
     
     var backupRestoreForm_DisplayRestoreForm_Click = function() {
-        // Display restore form 
-        document.querySelector('#backupFile').value = null;
+        // Display restore form
         vm.settings.backupFileName = null;
         vm.settings.restoreCompletedMessage = null;
         vm.settings.displayRestoreConfirmation = false;
         vm.settings.dataToRestore = '';
         vm.settings.displayRestoreForm = true;
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+            document.querySelector('#backupFile').value = null;
+        }
         
         // Focus in restore textarea
         $timeout(function() {
@@ -713,7 +715,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.updateServiceUrlForm.$setPristine();
                 vm.updateServiceUrlForm.$setUntouched();
                 updateServiceUrlForm_SetValidity(true);
-                document.querySelector('#backupFile').value = null;
+                if (!utility.IsMobilePlatform(vm.platformName)) {
+                    document.querySelector('#backupFile').value = null;
+                }
                 vm.settings.backupFileName = null;
                 vm.settings.backupCompletedMessage = null;
                 vm.settings.restoreCompletedMessage = null;
