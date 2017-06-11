@@ -655,12 +655,14 @@ body {
 }
 
 #search-panel {
+    padding: 10px 0 0 10px;
+
     .header-panel {
         margin-bottom: 0;
 
         .buttons {
             position: absolute;
-            right: 0;
+            right: 10px;
             top: -5px;
 
             button {
@@ -687,7 +689,7 @@ body {
             float: left;
             border-radius: $border-radius;
             background-color: $colour-text1;
-            width: calc(100% - 4.5em);
+            width: calc(100% - 5em);
             overflow: hidden;
 
             label {
@@ -745,7 +747,7 @@ body {
     .search-results-panel {
         height: 100%;
         overflow-y: auto;
-        padding: 0;
+        padding: 0 10px 0 0;
         margin-top: 10px;
         
         &.ng-hide {
@@ -1068,7 +1070,7 @@ body {
 #settings-panel {
     display: flex;
     flex-flow: column;
-    padding-bottom: 0;
+    padding: 10px 0 0 10px;
 
     a {
         border-bottom-color: $colour-text2;
@@ -1203,8 +1205,13 @@ body {
         }
     }
 
+    .header-panel {
+        padding-right: 10px;
+    }
+
     .panel-container {
         overflow-y: scroll;
+        padding-right: 10px;
     }
 
     .status-panel {
