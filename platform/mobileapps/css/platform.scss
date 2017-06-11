@@ -19,33 +19,34 @@
     @include css-prefix(touch-callout, none);		
 }
 
+body, body .container, .view  {
+    height: 100%;
+}
+
 body {
-    @media (min-device-height: $height-mobile-medium) {
+    -webkit-overflow-scrolling: touch;
+
+    @media (min-device-width: $width-mobile-small) {
         font-size: 15px;
     }
 
-    @media (min-device-height: $height-mobile-large) {
-        font-size: 16px;
+    @media (min-device-width: $width-mobile-medium) {
+        font-size: 17px;
     }
     
-    @media (min-device-height: $height-mobile-xlarge) {
-        font-size: 18px;
-        line-height: 1.35em;
+    @media (min-device-width: $width-mobile-large) {
+        font-size: 19px;
     }
 
     h1 {
         background-size: 5.5em;
         
-        @media (min-device-height: $height-mobile-large) {
+        @media (min-device-width: $width-mobile-large) {
             background-size: 6.5em;
         }
     }
 
     button.btn {
-        @media (min-device-height: $height-mobile-xlarge) {
-            font-size: 18px;
-        }
-
         &.btn-default {
             &:not([disabled]):active:hover {
                 background-color: $colour-text1;
@@ -98,7 +99,7 @@ body {
     }
 
     .header-panel {
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
 
     .lookahead-container .lookahead:after {
@@ -106,6 +107,12 @@ body {
         font-family: "FontAwesome";
         font-size: 0.7em;
         margin-left: 5px;
+    }
+
+    .view {
+        max-width: none;
+        width: 100%;
+        position: fixed;
     }
 
     .well {
@@ -140,27 +147,25 @@ body {
 }
 
 #login-panel {
-    input {
-        padding: 10px 20px 7px;
-        
-        @media (min-device-height: $height-mobile-medium) {
-            font-size: 1.1em;
-        }
-    }
-
     .btn-scan {
         display: block;
+    }
+
+    .form-group input {
+        @media (max-device-width: $width-mobile-medium - 1) {
+            font-size: 1.1em;
+        }
     }
     
     .intro-panel {
         & > div {
-            @media (min-device-height: $height-mobile-large) {
+            @media (min-device-width: $width-mobile-large) {
                 padding: 25px 35px;
             }
         }
 
         .buttons {
-            @media (min-device-height: $height-mobile-large) {
+            @media (min-device-width: $width-mobile-large) {
                 .btn-prev {
                     margin-left: 12px;
                 }
@@ -171,25 +176,11 @@ body {
             }
         }
     }
-
-    .secret-form-group {
-        .progress, .progress-bar-background {
-            @media (min-device-height: $height-mobile-medium) {
-                height: 2.85em;
-            }
-
-            @media (min-device-height: $height-mobile-large) {
-                height: 2.8em;
-            }
-            
-            @media (min-device-height: $height-mobile-xlarge) {
-                height: 2.65em;
-            }
-        }
-    }
 }
 
 #search-panel {
+    overflow: hidden;
+
     .header-panel {
         .buttons {
             height: 1.8em;
@@ -242,8 +233,8 @@ body {
     }
 
     .search-results-panel {
+        margin-top: 15px;        
         overflow-y: scroll;
-        @include css-prefix(overflow-scrolling, touch);
 
         .list-group-item {
             margin: 0 0 15px 0;
@@ -266,6 +257,10 @@ body {
                 display: block;
             }
         }
+
+        .list-group-item-heading {
+            transition: none;
+        }
     }
 
     .search-panel-background {
@@ -284,9 +279,10 @@ body {
     }
     
     .tags-container {
+        flex: 1 0;
+
         .label {
-            font-size: 1em;
-            padding: 12px 15px;
+            padding: 0.6em 1em;
             border-radius: 25px;
             margin: 0 6px 8px 0;
         }
@@ -297,8 +293,12 @@ body {
     }
 
     .textarea-container {
-        flex: 1 0 36em;
-        max-height: 12em;
+        flex: none;
+        height: 9em;
+
+        @media (min-device-width: $width-mobile-medium) {
+            height: 12em;
+        }
     }
 }
 
@@ -310,12 +310,6 @@ body {
     }
     
     .sync-panel {
-        #id {
-            @media (min-device-height: $height-mobile-large) {
-                font-size: 1.1em;
-            }
-        }
-        
         .btn-syncOptions {
             display: none;
         }
@@ -327,76 +321,9 @@ body {
         .checkbox {
             display: none;
         }
-        
-        .chart-panel {
-            @media (max-device-height: $height-mobile-medium) {
-                #chart {
-                    height: 7em;
-                    width: 7em;
-                }
-
-                .values {
-                    font-size: 0.8em;
-                    margin-top: -1.4em;
-                }
-            }
-
-            @media (min-device-height: $height-mobile-large) {
-                .values {
-                    margin-top: -1em;
-                }
-            }
-        }
 
         #syncDataUsage-Panel .buttons {
             margin-bottom: 0;
         }
     }
-}
-
-
-/* Heights */
-
-body, body .container, .view  {
-    height: 100%;
-}
-
-#login-panel {
-    .intro-panel {
-        @media (min-device-height: $height-mobile-medium) {
-            height: 19em;
-        }
-    }
-}
-
-#search-panel {
-    overflow: hidden;
-
-    .search-results-panel {
-        height: auto;
-        position: absolute;
-        top: 7.6em;
-        right: 10px;
-        left: 10px;
-        bottom: 0;
-        margin-top: 0;
-        padding-bottom: 15px;
-
-        @media (min-device-height: $height-mobile-medium) {
-            top: 7.3em;
-        }
-
-        @media (min-device-height: $height-mobile-large) {
-            top: 7.1em;
-        }
-
-        @media (min-device-height: $height-mobile-xlarge) {
-            top: 6.7em;
-        }
-    }
-}
-
-#settings-panel .panel-container {
-    overflow-y: visible;
-    margin-bottom: 16px;
 }

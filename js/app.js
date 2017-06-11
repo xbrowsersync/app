@@ -292,7 +292,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.settings.displayRestoreConfirmation = false;
         vm.settings.dataToRestore = '';
         vm.settings.displayRestoreForm = true;
-        if (!utility.IsMobilePlatform(vm.platformName)) {
+        if (vm.platformName !== globals.Platforms.IOS) {
             document.querySelector('#backupFile').value = null;
         }
         
@@ -715,7 +715,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.updateServiceUrlForm.$setPristine();
                 vm.updateServiceUrlForm.$setUntouched();
                 updateServiceUrlForm_SetValidity(true);
-                if (!utility.IsMobilePlatform(vm.platformName)) {
+                if (vm.platformName !== globals.Platforms.IOS) {
                     document.querySelector('#backupFile').value = null;
                 }
                 vm.settings.backupFileName = null;
@@ -784,25 +784,25 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 break;
             case vm.view.views.settings:
                 vm.settings.displaySyncOptions = !globals.SyncEnabled.Get();
+                vm.settings.service.newServiceUrl = vm.settings.service.url();
                 
                 // Get service status and display service info
-                api.CheckServiceStatus()
-                    .then(function(serviceInfo) {
-                        setServiceInformation(serviceInfo);
-                        displayDataUsage();
-                    })
-                    .catch(function(err) {
-                        // Log error
-                        utility.LogMessage(
-                            moduleName, 'changeView', utility.LogType.Error,
-                            JSON.stringify(err));
-                        
-                        vm.settings.service.status = globals.ServiceStatus.Offline;
-                    })
-                    .finally(deferred.resolve);
-                
-                // Set new service form url default value to current service url
-                vm.settings.service.newServiceUrl = vm.settings.service.url();
+                $timeout(function() {
+                    api.CheckServiceStatus()
+                        .then(function(serviceInfo) {
+                            setServiceInformation(serviceInfo);
+                            displayDataUsage();
+                        })
+                        .catch(function(err) {
+                            // Log error
+                            utility.LogMessage(
+                                moduleName, 'changeView', utility.LogType.Error,
+                                JSON.stringify(err));
+                            
+                            vm.settings.service.status = globals.ServiceStatus.Offline;
+                        })
+                        .finally(deferred.resolve);
+                }, 100);
 
                 // Scroll to top
                 $timeout(function() {
@@ -1495,7 +1495,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Display bookmark panel with slight delay to avoid focussing on description field
         $timeout(function() {
             vm.view.change(vm.view.views.bookmark);            
-        }, 100);
+        }, 500);
     };
     
     var setBookmarkStatus = function() {
@@ -1734,10 +1734,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Display update form panel
         vm.settings.displayUpdateServiceUrlForm = true;
         
-        // Focus on url field
         $timeout(function() {
+            // Focus on url field
             document.querySelector('input[name="txtServiceUrl"]').focus();            
-        });
+        }, 100);
     };
 
     var updateServiceUrlForm_SetValidity = function(isValid) {

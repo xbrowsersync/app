@@ -10,29 +10,6 @@
     }
 }
 
-@include keyframes (animate-loader) {
-    0% {
-        height: 4px;
-        margin-top: $loader-bar-height / 2 - 2px;
-        margin-bottom: $loader-bar-height / 2 - 2px;
-    }
-    50% {
-        height: 4px;
-        margin-top: $loader-bar-height / 2 - 2px;
-        margin-bottom: $loader-bar-height / 2 - 2px;
-    }
-    75% {
-        height: $loader-bar-height;
-        margin-top: 0px;
-        margin-bottom: 0px;
-    }
-    100% {
-        height: 4px;
-        margin-top: $loader-bar-height / 2 - 2px;
-        margin-bottom: $loader-bar-height / 2 - 2px;
-    }
-}
-
 @include keyframes(animate-scroll) { 
     0% { 
         transform: translate3d(0, 0, 0); 

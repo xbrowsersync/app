@@ -65,13 +65,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "<h4>Adding a bookmark</h4><p>Add new bookmarks by either sharing a URL to the xBrowserSync app from your favourite apps (browsers, YouTube, Spotify and any other app that shares URLs), or by pressing the bookmark icon to add a bookmark manually.</p><p>When sharing a bookmark the title, description and tags will be retrieved for you, otherwise manually add a description and tags to ensure better search results.</p>"
 		},
 		"login_introPanel8_Message": {
-			"message": "<h4>Bookmark from your favourite apps</h4><p>In order to add bookmarks directly from other apps, you will first need to enable sharing to xBrowserSync.</p><p>In your chosen app, tap the share button to bring up the share sheet, slide to the right and tap the More option. Enable the xBrowserSync activity and tap Done to save your changes. From now on you can tap xBrowserSync on the share sheet to add the current item as a bookmark in xBrowserSync.</p>"
-		},
-		"login_introPanel9_Message": {
 			"message": "<h4>Remember to back up</h4><p>xBrowserSync services are run voluntarily, plus servers can break and go wrong so please look after your data and make sure to keep backups.</p><p>Open the Settings panel and in the Back up and restore tab you can back up your unencrypted synced data to a local file, which can then restored at a later date should you need to.</p>"
 		},
-		"login_introPanel10_Message": {
+		"login_introPanel9_Message": {
 			"message": "<h4>Got desktop?</h4><p>Sync your xBrowserSync data with your desktop browser using the xBrowserSync browser extension, available for Chrome and with Firefox support coming soon.</p>"
+		},
+		"login_introPanel10_Message": {
+			"message": ""
 		},
 		"login_introPanel11_Message": {
 			"message": ""
@@ -911,7 +911,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 		// Set required events to mobile app handlers
 		vm.events.bookmarkPanel_Close_Click = bookmarkPanel_Close_Click;
-		vm.events.introPanel10_Next_Click = introPanel10_Next_Click;
+		vm.events.introPanel9_Next_Click = introPanel9_Next_Click;
 		vm.events.introPanel12_Prev_Click = introPanel12_Prev_Click;
 		vm.events.syncForm_EnableSync_Click = syncForm_EnableSync_Click;
 
@@ -1226,7 +1226,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 	var checkForTextInputBlur = function(event) {
 		if (!isTextInput(event.target) && isTextInput(document.activeElement)) {
-			document.activeElement.blur();
+			$timeout(function() {
+				document.activeElement.blur();
+			}, 100);
 		}
 	};
 
@@ -1257,10 +1259,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 		// Platform-specific configs
 		if (vm.platformName === globals.Platforms.Android) {
-			// Don't display iOS specific help panels
-			vm.events.introPanel7_Next_Click = introPanel7_Android_Next_Click;
-			vm.events.introPanel9_Prev_Click = introPanel9_Android_Prev_Click;
-
 			// Set backup file change event
 			document.getElementById('backupFile').addEventListener('change', backupFile_Change_Android, false);
 		}
@@ -1425,12 +1423,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		vm.introduction.displayPanel(7);
 	};
 
-	var introPanel10_Next_Click = function() {
+	var introPanel9_Next_Click = function() {
 		vm.introduction.displayPanel(12);
 	};
 
 	var introPanel12_Prev_Click = function() {
-		vm.introduction.displayPanel(10);
+		vm.introduction.displayPanel(9);
 	};
 
 	var isTextInput = function(node) {
