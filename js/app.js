@@ -45,6 +45,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             originalUrl: null,
             tagText: null
         };
+
+        vm.device = {
+            width: 0,
+            height: 0
+        }
         
         vm.events = {
             backupRestoreForm_Backup_Click: backupRestoreForm_Backup_Click,
@@ -169,6 +174,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		vm.settings = {
             backupCompletedMessage: null,
             backupFileName: null,
+            debugMode: false,
 			restoreCompletedMessage: null,
             dataToRestore: null,
             dataToRestoreIsValid: function() {
@@ -1163,6 +1169,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         var urlRegex = /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
 
         if (!!vm.search.query) {
+            if (vm.search.query.toLowerCase() === '#debug') {
+                vm.settings.debugMode = true;
+                vm.alert.display(platform.GetConstant(globals.Constants.DebugEnabled_Message), '', 'info');
+                return;
+            }
+
             // Iterate query words to form query data object
             var queryWords = vm.search.query.split(/[\s]+/);
             _.each(queryWords, function (queryWord) {

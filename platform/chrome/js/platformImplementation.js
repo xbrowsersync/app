@@ -640,6 +640,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 		// Set platform
 		vm.platformName = globals.Platforms.Chrome;
+
+		// Set device width and height
+        vm.device.width = document.querySelector('body').clientWidth;
+        vm.device.height = document.querySelector('body').clientHeight;
 		
 		// Enable event listeners
         globals.DisableEventListeners.Set(false);

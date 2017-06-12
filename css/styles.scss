@@ -52,9 +52,9 @@ body {
     h2 {
         font-size: 1.8em;
         font-weight: 800;
-        line-height: 30px;
+        line-height: 1.1em;
         float: left;
-        margin: 1px 0 5px 0;
+        margin: 0;
     }
     
     h4 {
@@ -348,16 +348,13 @@ body {
         position: relative;
         min-height: 1.8em;
         margin-bottom: 10px;
-        
-        h2 {
-            line-height: 0.8em;
-        }
 
         button {
             font-size: 1.1em;
 
             &.btn-close, &.btn-settings {
                 float: right;
+                margin: 0.2em 0.2em 0 0;
             }
 
             i {
@@ -394,6 +391,10 @@ body {
 
     .margin-bottom-0 {
         margin-bottom: 0!important;
+    }
+
+    .margin-bottom-10 {
+        margin-bottom: 10px!important;
     }
 
     .margin-bottom-15 {
@@ -540,6 +541,10 @@ body {
         }
     }
 
+    .btn-help {
+        margin: 0.2em 0 0 0.2em;
+    }
+
     .btn-new-sync {
         text-transform: capitalize;
     }
@@ -560,7 +565,7 @@ body {
 
         input {
             font-size: 1.2em;
-            padding: 0.45em 20px 0.55em;
+            padding: 0.45em 20px;
         }
     }
 
@@ -658,8 +663,6 @@ body {
     padding: 10px 0 0 10px;
 
     .header-panel {
-        margin-bottom: 0;
-
         .buttons {
             position: absolute;
             right: 10px;
@@ -775,10 +778,6 @@ body {
             margin: 0 0 10px 0;
             outline: none;
             overflow: hidden;
-            
-            &:last-child {
-                margin-bottom: 0;
-            }
         
             &:hover {
                 .btn-edit-bookmark {
@@ -792,10 +791,10 @@ body {
 
             &.animate-added {
                 &.ng-enter {
-                    @include animation(animate-fold-down-slide-in 0.5s ease);
+                    @include animation(animate-fold-down-slide-in 0.6s ease);
 
                     &.ng-enter-active {
-                        transform: translateX(0%);
+                        left: 0;
                         max-height: 250px;
                         margin-bottom: 15px;
                     }
@@ -806,12 +805,12 @@ body {
                 &.ng-enter,
                 &.ng-leave,
                 &.ng-move {
-                    @include animation(animate-slide-out-fold-up 0.5s ease);
+                    @include animation(animate-slide-out-fold-up 0.6s ease);
 
                     &.ng-enter-active,
                     &.ng-leave-active,
                     &.ng-move-active {
-                        transform: translateX(-105%);
+                        left: -105%;
                         max-height: 0px;
                         margin-bottom: 0px;
                         overflow: hidden;
@@ -943,10 +942,13 @@ body {
 
     .search-panel-background {
         display: none;
-        background: url("../img/logo.svg") 50% 0 no-repeat;
+        position: absolute;
+        flex: none;
+        background: url("../img/logo.svg") 50% 60% no-repeat;
         background-size: 15em;
+        top: 15em;
         height: 15em;
-        margin-top: 5em;
+        width: 100%;
         opacity: 0.15;
         z-index: -50;
     }
@@ -966,6 +968,7 @@ body {
     #bookmarkForm {
         display: flex;
         flex-flow: column;
+        height: 100%;
     }
 
     .btn-delete-bookmark {
@@ -1062,7 +1065,7 @@ body {
     }
     
     .textarea-container {
-        flex: 1 1 16em;
+        flex: 1 1 13em;
         position: relative;
     }
 }
@@ -1084,8 +1087,6 @@ body {
     }
 
     .about-panel {
-        margin-bottom: 15px!important;
-
         .acknowledgements {
             margin-bottom: 0;
             font-size: 0.8em;
@@ -1238,6 +1239,7 @@ body {
             .progress-bar {
                 background-color: $colour-bg2;
                 box-shadow: none;
+                transition: none;
             }
 
             .used {
@@ -1303,6 +1305,10 @@ body {
     .well {
         padding: 0;
         overflow: hidden;
+
+        &:last-child {
+            margin-bottom: 15px;
+        }
         
         h4 {
             padding: 15px 20px;

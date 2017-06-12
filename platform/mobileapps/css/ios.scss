@@ -2,20 +2,20 @@
 @import 'mixins.scss';
 @import 'animations.scss';
 
-#login-panel, #search-panel, #bookmark-panel, #settings-panel {
-    padding-top: 30px;
+body {
+    -webkit-overflow-scrolling: touch;
+
+    .view {
+        position: fixed;
+    }
 }
 
-#search-panel .search-results-panel {
-    @media (min-device-height: $height-mobile-medium) {
-        top: calc(7.3em + 20px);
+#bookmark-panel {
+    .tags-container {
+        flex: 1 0;
     }
+}
 
-    @media (min-device-height: $height-mobile-large) {
-        top: calc(7.1em + 20px);
-    }
-
-    @media (min-device-height: $height-mobile-xlarge) {
-        top: calc(6.7em + 20px);
-    }
+#login-panel, #search-panel, #bookmark-panel, #settings-panel {
+    padding-top: 30px;
 }

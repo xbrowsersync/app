@@ -19,9 +19,15 @@ body {
     width: 600px;
     height: auto;
 
-    .header-panel .search-form input {
-        @include placeholder {
-            font-size: 0.9em;
+    .header-panel {
+        button.btn-settings {
+            margin: 0;
+        }
+        
+        .search-form input {
+            @include placeholder {
+                font-size: 0.9em;
+            }
         }
     }
 

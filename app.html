@@ -48,7 +48,7 @@
         
         <div id="login-panel" class="view animate-fade" data-ng-show="vm.view.current === vm.view.views.login">
             <div class="header-panel clearfix">
-                <button class="btn btn-icon animate-fade" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}" 
+                <button class="btn btn-icon btn-help animate-fade" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}" 
                         data-ng-click="vm.events.introPanel_ShowHelp_Click()" data-ng-show="!vm.introduction.displayIntro() && !!vm.introduction.showLogo" tabindex="1000">
                     <i class="fa fa-question-circle" aria-hidden="true"></i>
                     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}</span>
@@ -240,7 +240,7 @@
                         </div>
                         <div class="progress-bar-background"></div>
                     </div>
-                    <div class="form-group text-center">
+                    <div class="form-group text-center margin-bottom-10">
                         <button type="submit" class="btn btn-default btn-new-sync" data-ng-disabled="!vm.settings.secret()" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
                         </button>
@@ -257,7 +257,7 @@
                         <button type="button" class="btn btn-icon btn-scan" data-ng-hide="vm.settings.id()" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ScanCode_Label) }}" data-ng-click="vm.events.searchForm_ScanCode_Click()">
                             <i class="fa fa-qrcode" aria-hidden="true"></i>
                         </button>
-                        <input name="txtId" data-ng-model="vm.settings.id" class="form-control" data-ng-model-options="{ getterSetter: true }" data-ng-disabled="vm.sync.enabled()" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Description) }}" maxlength="32" tabindex="1" />
+                        <input name="txtId" data-ng-model="vm.settings.id" class="form-control" data-ng-model-options="{ getterSetter: true }" data-ng-disabled="vm.sync.enabled()" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Description) }}" maxlength="32" autocapitalize="off" autocomplete="off" autocorrect="off" tabindex="1" />
                     </div>
                     <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
                         <label class="sr-only" for="txtPassword">{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
@@ -273,7 +273,7 @@
                         </div>
                         <div class="progress-bar-background"></div>
                     </div>
-                    <div class="form-group text-center">
+                    <div class="form-group text-center margin-bottom-10">
                         <button type="submit" class="btn btn-default" data-ng-disabled="!vm.settings.id() || !vm.settings.secret()" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
                         </button>
@@ -315,7 +315,7 @@
                 </div>
                 <div class="search-form">
                     <input class="form-control" name="txtSearch" maxlength="200" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Search_Field_Description) }}" data-ng-model="vm.search.query" 
-                           data-ng-change="vm.events.searchForm_SearchText_Change()" data-ng-keydown="vm.events.searchForm_SearchText_KeyDown($event)" data-ng-trim="false" autocomplete="off" tabindex="1" />
+                           data-ng-change="vm.events.searchForm_SearchText_Change()" data-ng-keydown="vm.events.searchForm_SearchText_KeyDown($event)" data-ng-trim="false" autocapitalize="off" autocomplete="off" autocorrect="off" tabindex="1" />
                     <label for="txtSearch"><i class="fa fa-search"></i></label>
                     <div class="lookahead-container">
                         <span class="measure" data-ng-bind-html="vm.search.queryMeasure"></span>
@@ -387,7 +387,7 @@
                     <label for="bookmarkUrl" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_UrlField_Label) }}</label>
                     <input type="text" class="form-control" name="bookmarkUrl" placeholder="http(s)://..." data-ng-model="vm.bookmark.current.url" 
                             data-ng-change="vm.events.bookmarkForm_BookmarkUrl_Change()" maxlength="255" tabindex="2"
-                            placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_UrlField_Label) }}" required>
+                            placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_UrlField_Label) }}" autocapitalize="off" autocomplete="off" autocorrect="off" required>
                 </div>
                 <div class="form-group textarea-container">
                     <label for="bookmarkDescription" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_DescriptionField_Label) }}</label>
@@ -397,7 +397,7 @@
                 <div class="form-group tags-input-container">
                     <label for="bookmarkTags" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TagsField_Label) }}</label>
                     <input type="text" class="form-control" name="bookmarkTags" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TagsField_Description) }}" maxlength="50" tabindex="4"
-                            data-ng-model="vm.bookmark.tagText" data-ng-change="vm.events.bookmarkForm_BookmarkTags_Change()" data-ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" data-ng-trim="false">
+                            data-ng-model="vm.bookmark.tagText" data-ng-change="vm.events.bookmarkForm_BookmarkTags_Change()" data-ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" data-ng-trim="false" autocapitalize="off" autocomplete="off" autocorrect="off">
                     <div class="lookahead-container">
                         <span class="measure" data-ng-bind-html="vm.bookmark.tagTextMeasure"></span>
                         <span class="lookahead" data-ng-bind-html="vm.bookmark.tagLookahead" data-ng-show="vm.bookmark.tagLookahead" data-ng-click="vm.events.bookmarkForm_BookmarkTags_Click()"></span>
@@ -411,16 +411,16 @@
                     </button>
                 </div>
                 <div class="buttons">
-                    <button type="submit" class="btn btn-default" data-ng-show="!vm.bookmark.displayUpdateForm" data-ng-click="vm.events.bookmarkForm_CreateBookmark_Click()" tabindex="6">
+                    <button type="submit" class="btn btn-default" data-ng-if="!vm.bookmark.displayUpdateForm" data-ng-click="vm.events.bookmarkForm_CreateBookmark_Click()" tabindex="6">
                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}
                     </button>
-                    <button type="submit" class="btn btn-default" data-ng-show="vm.bookmark.displayUpdateForm" data-ng-click="vm.events.bookmarkForm_UpdateBookmark_Click()" tabindex="6">
+                    <button type="submit" class="btn btn-default" data-ng-if="vm.bookmark.displayUpdateForm" data-ng-click="vm.events.bookmarkForm_UpdateBookmark_Click()" tabindex="6">
                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_Update_Label) }}
                     </button>
-                    <button type="button" class="btn btn-default btn-share-bookmark" data-ng-show="vm.bookmark.displayUpdateForm" data-ng-click="vm.events.bookmarkForm_ShareBookmark_Click(vm.bookmark.current)" tabindex="7">
+                    <button type="button" class="btn btn-default btn-share-bookmark" data-ng-if="vm.bookmark.displayUpdateForm" data-ng-click="vm.events.bookmarkForm_ShareBookmark_Click(vm.bookmark.current)" tabindex="7">
                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_Share_Label) }}
                     </button>
-                    <button type="button" class="btn btn-default btn-delete-bookmark" data-ng-show="vm.bookmark.displayUpdateForm" data-ng-click="vm.events.bookmarkForm_DeleteBookmark_Click()" tabindex="8">
+                    <button type="button" class="btn btn-default btn-delete-bookmark" data-ng-if="vm.bookmark.displayUpdateForm" data-ng-click="vm.events.bookmarkForm_DeleteBookmark_Click()" tabindex="8">
                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_Delete_Label) }}
                     </button>
                 </div>
@@ -524,14 +524,14 @@
                                 <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_ServiceMessage_Label) }}</label>
                                 <p class="description service-message animate-fade" data-ng-show="!!vm.settings.service.statusMessage">{{ vm.settings.service.statusMessage }}</p>
                             </div>
-                            <div class="form-group" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Online || vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs">
+                            <div class="form-group" data-ng-if="vm.settings.service.status === vm.globals.ServiceStatus.Online || vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs">
                                 <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_ApiVersion_Label) }}</label>
                                 <div class="form-control">
                                     <span>{{ vm.settings.service.apiVersion }}</span>
                                 </div>
                                 <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_ApiVersion_Description) }}</p>
                             </div>
-                            <div class="form-group" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Online || vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs">
+                            <div class="form-group" data-ng-if="vm.settings.service.status === vm.globals.ServiceStatus.Online || vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs">
                                 <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_DataUsage_Label) }}</label>
                                 <div class="form-control" data-ng-class="{ 'text-danger': vm.settings.syncDataUsed >= 90 }" data-ng-show="vm.settings.syncDataUsed !== null">{{ vm.settings.syncDataUsed | number : 0 }}%</div>                            
                                 <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_DataUsage_Description) }}</p>
@@ -549,7 +549,7 @@
                                 <form name="vm.updateServiceUrlForm" data-ng-show="!vm.settings.displayUpdateServiceUrlConfirmation" novalidate>
                                     <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Message)"></p>
                                     <input name="txtServiceUrl" class="form-control" data-ng-model="vm.settings.service.newServiceUrl" data-ng-keypress="vm.events.updateServiceUrlForm_Update_KeyPress($event)"
-                                           placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Field_Description) }}" maxlength="128" tabindex="10" required />
+                                           placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Field_Description) }}" maxlength="128" autocapitalize="off" autocomplete="off" autocorrect="off" tabindex="10" required />
                                     <div class="text-center">
                                         <button type="submit" class="btn btn-default" data-ng-disabled="!vm.updateServiceUrlForm.txtServiceUrl.$dirty || !vm.settings.service.newServiceUrl" 
                                                 data-ng-click="vm.events.updateServiceUrlForm_Update_Click()" tabindex="11">
@@ -580,7 +580,7 @@
                     <div class="panel-content">
                         <p class="description margin-bottom-0" data-ng-if="!vm.sync.enabled() && vm.utility.IsMobilePlatform(vm.platformName)"
                            data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_NotAvailable_Message)"></p>
-                        <div data-ng-if="vm.sync.enabled() || !vm.utility.IsMobilePlatform(vm.platformName)">
+                        <div data-ng-show="vm.sync.enabled() || !vm.utility.IsMobilePlatform(vm.platformName)">
                             <div class="form-group">
                                 <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Backup_Label) }}</label>
                                 <p class="description" data-ng-if="!vm.sync.enabled()">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_BackupLocal_Description) }}</p>
@@ -662,7 +662,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="about-panel well well-sm margin-bottom-0">
+                <div class="about-panel well well-sm">
                     <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Title) }}</h4>
                     <div class="panel-content">
                         <div class="form-group">
@@ -710,30 +710,47 @@
                                 <li><a href="https://github.com/angular/angular.js" class="new-tab" tabindex="29">angular.js</a></li>
                                 <li><a href="https://github.com/kraku/angular-complexify" class="new-tab" tabindex="30">angular-complexify</a></li>
                                 <li><a href="https://github.com/RyanMullins/angular-hammer" class="new-tab" tabindex="31">angular-hammer</a></li>
-                                <li><a href="https://github.com/phonegap/phonegap-plugin-barcodescanner" class="new-tab" tabindex="32">BarcodeScanner PhoneGap Plugin</a></li>
+                                <li><a href="https://github.com/phonegap/phonegap-plugin-barcodescanner" class="new-tab" tabindex="32">barcodescanner phonegap plugin</a></li>
                                 <li><a href="https://github.com/twbs/bootstrap" class="new-tab" tabindex="33">bootstrap</a></li>
                                 <li><a href="https://cordova.apache.org/" class="new-tab" tabindex="34">cordova</a></li>
                                 <li><a href="https://github.com/greybax/cordova-plugin-native-spinner" class="new-tab" tabindex="35">cordova-plugin-native-spinner</a></li>
                                 <li><a href="https://github.com/elijahmanor/cross-var" class="new-tab" tabindex="36">cross-var</a></li>
                                 <li><a href="https://github.com/brix/crypto-js" class="new-tab" tabindex="37">crypto-js</a></li>
-                                <li><a href="https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin" class="new-tab" tabindex="38">Custom URL scheme Cordova Plugin</a></li>
-                                <li><a href="https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin" class="new-tab" tabindex="39">FilePicker Phonegap Plugin</a></li>
+                                <li><a href="https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin" class="new-tab" tabindex="38">custom url scheme cordova plugin</a></li>
+                                <li><a href="https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin" class="new-tab" tabindex="39">filepicker phonegap plugin</a></li>
                                 <li><a href="https://github.com/FortAwesome/Font-Awesome" class="new-tab" tabindex="40">font-awesome</a></li>
                                 <li><a href="https://github.com/hammerjs/hammer.js" class="new-tab" tabindex="41">hammer.js</a></li>
                                 <li><a href="https://github.com/jshint/jshint" class="new-tab" tabindex="42">jshint</a></li>
-                                <li><a href="https://github.com/ionic-team/ionic-plugin-keyboard" class="new-tab" tabindex="43">Keyboard Cordova Plugin</a></li>
+                                <li><a href="https://github.com/ionic-team/ionic-plugin-keyboard" class="new-tab" tabindex="43">keyboard cordova plugin</a></li>
                                 <li><a href="https://github.com/coderaiser/minify" class="new-tab" tabindex="44">minify</a></li>
                                 <li><a href="https://github.com/sroze/ngInfiniteScroll" class="new-tab" tabindex="45">ng-infinite-scroll</a></li>
                                 <li><a href="https://www.npmjs.com/package/npm-build-tools" class="new-tab" tabindex="46">npm-build-tools</a></li>
                                 <li><a href="https://github.com/sass/node-sass" class="new-tab" tabindex="47">node-sass</a></li>
                                 <li><a href="https://github.com/neocotic/qrious" class="new-tab" tabindex="48">qrious</a></li>
-                                <li><a href="https://github.com/Arkanite/SocialSharing-PhoneGap-Plugin" class="new-tab" tabindex="49">Social Sharing PhoneGap Plugin</a></li>
-                                <li><a href="https://github.com/justin-credible/cordova-plugin-spinner" class="new-tab" tabindex="50">Spinner Cordova Plugin</a></li>
-                                <li><a href="https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin" class="new-tab" tabindex="51">Toast PhoneGap Plugin</a></li>
+                                <li><a href="https://github.com/Arkanite/SocialSharing-PhoneGap-Plugin" class="new-tab" tabindex="49">social sharing phonegap plugin</a></li>
+                                <li><a href="https://github.com/justin-credible/cordova-plugin-spinner" class="new-tab" tabindex="50">spinner cordova plugin</a></li>
+                                <li><a href="https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin" class="new-tab" tabindex="51">toast phonegap plugin</a></li>
                                 <li><a href="https://github.com/mishoo/UglifyJS2" class="new-tab" tabindex="52">uglifyjs</a></li>
                                 <li><a href="https://github.com/jashkenas/underscore" class="new-tab" tabindex="53">underscore</a></li>
-                                <li><a href="https://github.com/evsienko/cordova-webintent" class="new-tab" tabindex="54">WebIntent Android Cordova Plugin</a></li>
+                                <li><a href="https://github.com/evsienko/cordova-webintent" class="new-tab" tabindex="54">webintent android cordova plugin</a></li>
                             </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="debug-panel well well-sm" data-ng-if="vm.settings.debugMode">
+                    <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Debug_Title) }}</h4>
+                    <div class="panel-content">
+                        <div class="form-group">
+                            <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Debug_DeviceWidth_Label) }}</label>
+                            <div class="form-control">
+                                <span>{{ vm.device.width }}px</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Debug_DeviceHeight_Label) }}</label>
+                            <div class="form-control">
+                                <span>{{ vm.device.height }}px</span>
+                            </div>
                         </div>
                     </div>
                 </div>

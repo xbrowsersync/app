@@ -236,6 +236,18 @@
 	"settings_About_Acknowledgements_Description": {
 		"message": "xBrowserSync would not be possible without these open-source libraries (and their depedencies) and the talented devs who give up their free time to make them possible. Respect."
 	},
+	"settings_Debug_Title" : {
+		"message":  "Debug"
+	},
+	"settings_Debug_DeviceWidth_Label" : {
+		"message":  "Device width"
+	},
+	"settings_Debug_DeviceHeight_Label" : {
+		"message":  "Device height"
+	},
+	"debugEnabled_Message" : {
+		"message":  "Debug mode enabled"
+	},
 	"settings_Service_Title" : {
 		"message":  "Service"
 	},

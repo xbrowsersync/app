@@ -253,6 +253,18 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"settings_About_Acknowledgements_Description": {
 			"message": "xBrowserSync would not be possible without these open-source libraries (and their depedencies) and the talented devs who give up their free time to make them possible. Respect."
 		},
+		"settings_Debug_Title" : {
+			"message":  "Debug"
+		},
+		"settings_Debug_DeviceWidth_Label" : {
+			"message":  "Device width"
+		},
+		"settings_Debug_DeviceHeight_Label" : {
+			"message":  "Device height"
+		},
+		"debugEnabled_Message" : {
+			"message":  "Debug mode enabled"
+		},
 		"settings_Service_Title" : {
 			"message":  "Service"
 		},
@@ -1245,11 +1257,18 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Set platform
 		vm.platformName = cordova.platformId;
 		
+		// Set device width and height
+        vm.device.width = document.querySelector('body').clientWidth;
+        vm.device.height = document.querySelector('body').clientHeight;
+
+		// Reset network disconnected flag
+        globals.Network.Disconnected.Set(!utility.CheckConnection());
+		
 		// Set back button event
 		document.addEventListener('backbutton', handleBackButton, false);
 
 		// Set network offline event
-		document.addEventListener('online', handleNetworkDisconnected, false);
+		document.addEventListener('offline', handleNetworkDisconnected, false);
 		
 		// Set network online event
 		document.addEventListener('online', handleNetworkReconnected, false);
@@ -1288,44 +1307,51 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						vm.view.change(vm.view.views.bookmark);
 					}
 
-					// Show loading overlay if currently on the search panel and no query present
-					if (vm.view.current === vm.view.views.search && !vm.search.query) {
-						displayLoading('checkingForUpdates');
+					// Check if bookmarks need updating, return immediately if network is disconnected
+					var checkForUpdates;
+					if (!globals.Network.Disconnected.Get()) {
+						// Show loading overlay if currently on the search panel and no query present
+						if (vm.view.current === vm.view.views.search && !vm.search.query) {
+							displayLoading('checkingForUpdates');
+						}
+
+						checkForUpdates = bookmarks.CheckForUpdates();
+					}
+					else {
+						checkForUpdates = $q.reject({ code: globals.ErrorCodes.HttpRequestFailed });
 					}
 					
-					// Check if bookmarks need updating
-					bookmarks.CheckForUpdates()
-						.then(function(updatesAvailable) {
-							if (!updatesAvailable) {
-								return;
-							}
+					checkForUpdates.then(function(updatesAvailable) {
+						if (!updatesAvailable) {
+							return;
+						}
 
-							// Get bookmark updates
-							return sync(vm, { type: globals.SyncType.Pull });
-						})
-						.catch(function(err) {
-							// If ID was removed disable sync, otherwise display search panel
-							checkForDeletedSync(err);
-							
-							// Log error
-							utility.LogMessage(
-								moduleName, 'deviceReady', utility.LogType.Error,
-								JSON.stringify(err));
+						// Get bookmark updates
+						return sync(vm, { type: globals.SyncType.Pull });
+					})
+					.catch(function(err) {
+						// If ID was removed disable sync, otherwise display search panel
+						checkForDeletedSync(err);
+						
+						// Log error
+						utility.LogMessage(
+							moduleName, 'deviceReady', utility.LogType.Error,
+							JSON.stringify(err));
 
-							// Display alert if not retrieving bookmark metadata
-							if (!sharedUrl) {
-								var errMessage = utility.GetErrorMessageFromException(err);
-								vm.alert.display(errMessage.title, errMessage.message);
-							}
-						})
-						.finally(function() {
-							hideLoading('checkingForUpdates');
-							
-							// Display updated search results if currently on the search panel and no query present
-							if (vm.view.current === vm.view.views.search && !vm.search.query) {
-								displayDefaultSearchState();
-							}
-						});
+						// Display alert if not retrieving bookmark metadata
+						if (!sharedUrl) {
+							var errMessage = utility.GetErrorMessageFromException(err);
+							vm.alert.display(errMessage.title, errMessage.message);
+						}
+					})
+					.finally(function() {
+						hideLoading('checkingForUpdates');
+						
+						// Display updated search results if currently on the search panel and no query present
+						if (vm.view.current === vm.view.views.search && !vm.search.query) {
+							displayDefaultSearchState();
+						}
+					});
 				})
 				.catch(function(err) {
 					// Display alert
@@ -1363,14 +1389,36 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					return;
 				}
 
+				// Show loading overlay if currently on the search panel and no query present
+				if (vm.view.current === vm.view.views.search && !vm.search.query) {
+					displayLoading('checkingForUpdates');
+				}
+
 				// Get bookmark updates
 				return sync(vm, { type: globals.SyncType.Pull });
 			})
 			.catch(function(err) {
+				// If ID was removed disable sync, otherwise display search panel
+				checkForDeletedSync(err);
+				
 				// Log error
 				utility.LogMessage(
 					moduleName, 'getLatestUpdates', utility.LogType.Error,
 					JSON.stringify(err));
+
+				// Display alert if not retrieving bookmark metadata
+				if (!sharedUrl) {
+					var errMessage = utility.GetErrorMessageFromException(err);
+					vm.alert.display(errMessage.title, errMessage.message);
+				}
+			})
+			.finally(function() {
+				hideLoading('checkingForUpdates');
+
+				// Update search results if currently on the search panel and no query present
+				if (vm.view.current === vm.view.views.search && !vm.search.query) {
+					displayDefaultSearchState();
+				}
 			});
 	};
 
@@ -1436,6 +1484,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 
 	var resume = function() {
+		// Reset network disconnected flag
+        globals.Network.Disconnected.Set(!utility.CheckConnection());
+
 		if (!!globals.SyncEnabled.Get()) {
 			// Deselect bookmark
 			vm.search.selectedBookmark = null;
@@ -1449,44 +1500,51 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						vm.view.change(vm.view.views.bookmark);
 					}
 
-					// Check if bookmarks need updating
-					bookmarks.CheckForUpdates()
-						.then(function(updatesAvailable) {
-							if (!updatesAvailable) {
-								return;
-							}
-							
-							// Show loading overlay if currently on the search panel and no query present
-							if (vm.view.current === vm.view.views.search && !vm.search.query) {
-								displayLoading('checkingForUpdates');
-							}
+					// Check if bookmarks need updating, return immediately if network is disconnected
+					var checkForUpdates;
+					if (!globals.Network.Disconnected.Get()) {
+						checkForUpdates = bookmarks.CheckForUpdates();
+					}
+					else {
+						checkForUpdates = $q.reject({ code: globals.ErrorCodes.HttpRequestFailed });
+					}
+					
+					checkForUpdates.then(function(updatesAvailable) {
+						if (!updatesAvailable) {
+							return;
+						}
+						
+						// Show loading overlay if currently on the search panel and no query present
+						if (vm.view.current === vm.view.views.search && !vm.search.query) {
+							displayLoading('checkingForUpdates');
+						}
 
-							// Get bookmark updates
-							return sync(vm, { type: globals.SyncType.Pull });
-						})
-						.catch(function(err) {
-							// If ID was removed disable sync, otherwise display search panel
-							checkForDeletedSync(err);
-							
-							// Log error
-							utility.LogMessage(
-								moduleName, 'resume', utility.LogType.Error,
-								JSON.stringify(err));
+						// Get bookmark updates
+						return sync(vm, { type: globals.SyncType.Pull });
+					})
+					.catch(function(err) {
+						// If ID was removed disable sync, otherwise display search panel
+						checkForDeletedSync(err);
+						
+						// Log error
+						utility.LogMessage(
+							moduleName, 'resume', utility.LogType.Error,
+							JSON.stringify(err));
 
-							// Display alert if not retrieving bookmark metadata
-							if (!sharedUrl) {
-								var errMessage = utility.GetErrorMessageFromException(err);
-								vm.alert.display(errMessage.title, errMessage.message);
-							}
-						})
-						.finally(function() {
-							hideLoading('checkingForUpdates');
+						// Display alert if not retrieving bookmark metadata
+						if (!sharedUrl) {
+							var errMessage = utility.GetErrorMessageFromException(err);
+							vm.alert.display(errMessage.title, errMessage.message);
+						}
+					})
+					.finally(function() {
+						hideLoading('checkingForUpdates');
 
-							// Update search results if currently on the search panel and no query present
-							if (vm.view.current === vm.view.views.search && !vm.search.query) {
-								displayDefaultSearchState();
-							}
-						});
+						// Update search results if currently on the search panel and no query present
+						if (vm.view.current === vm.view.views.search && !vm.search.query) {
+							displayDefaultSearchState();
+						}
+					});
 				})
 				.catch(function(err) {
 					// Display alert
