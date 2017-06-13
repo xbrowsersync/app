@@ -49,7 +49,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.device = {
             width: function() { return document.querySelector('body').clientWidth; },
             height: function() { return document.querySelector('body').clientHeight; }
-        }
+        };
         
         vm.events = {
             backupRestoreForm_Backup_Click: backupRestoreForm_Backup_Click,
@@ -464,6 +464,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             .then(function() {
                 // Add new bookmark into search results on mobile apps
                 if (utility.IsMobilePlatform(vm.platformName)) {
+                    bookmarkToCreate.id = bookmarks.GetNewBookmarkId(vm.search.results);
                     bookmarkToCreate.class = 'added';
                     $timeout(function() {
                         vm.search.results.unshift(bookmarkToCreate);

@@ -227,7 +227,7 @@ body {
         height: 100%;
         width: 100%;
         z-index: -100;
-        @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
+        background: transparent;
 
         .background-img { 
             display: block; 
@@ -461,7 +461,8 @@ body {
             border-color: $colour-text2;
             font-weight: normal;
             border-width: 1px;
-            font-size: 1.1em;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
 
             &:not([disabled]):active,
             &:not([disabled]):hover {
@@ -1228,7 +1229,7 @@ body {
                 @extend input:not([type]).form-control;
                 position: static;
                 width: 100%;
-                margin-bottom: 15px;
+                margin: 15px 0;
                 border: 1px solid $colour-text2!important;
 
                 &.ng-invalid {

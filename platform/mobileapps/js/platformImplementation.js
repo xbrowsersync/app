@@ -1086,8 +1086,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				if (!!initialSyncFailed) {
 					vm.alert.display(platform.GetConstant(globals.Constants.ConnRestored_Title), platform.GetConstant(globals.Constants.ConnRestored_Message));
 
-					// Update search results if currently on the search panel and no query present
-					if (vm.view.current === vm.view.views.search && !vm.search.query) {
+					// Update search results if currently on the search panel
+					if (vm.view.current === vm.view.views.search) {
 						displayDefaultSearchState();
 					}
 				}
@@ -1306,11 +1306,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					// Check if bookmarks need updating, return immediately if network is disconnected
 					var checkForUpdates;
 					if (!globals.Network.Disconnected.Get()) {
-						// Show loading overlay if currently on the search panel and no query present
-						if (vm.view.current === vm.view.views.search && !vm.search.query) {
-							displayLoading('checkingForUpdates');
-						}
-
 						checkForUpdates = bookmarks.CheckForUpdates();
 					}
 					else {
@@ -1320,6 +1315,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					checkForUpdates.then(function(updatesAvailable) {
 						if (!updatesAvailable) {
 							return;
+						}
+
+						// Show loading overlay if currently on the search panel and no query present
+						if (vm.view.current === vm.view.views.search) {
+							displayLoading('syncingUpdates');
 						}
 
 						// Get bookmark updates
@@ -1341,10 +1341,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						}
 					})
 					.finally(function() {
-						hideLoading('checkingForUpdates');
-						
-						// Display updated search results if currently on the search panel and no query present
-						if (vm.view.current === vm.view.views.search && !vm.search.query) {
+						hideLoading('syncingUpdates');
+
+						// Update search results if currently on the search panel
+						if (vm.view.current === vm.view.views.search) {
 							displayDefaultSearchState();
 						}
 					});
@@ -1375,19 +1375,19 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 	var getLatestUpdates = function() {
 		// Exit if sync isn't enabled or event listeners disabled
-		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
-			return;
+		if (!globals.SyncEnabled.Get()) {
+			return $q.resolve();
 		}
 
-		bookmarks.CheckForUpdates()
+		return bookmarks.CheckForUpdates()
 			.then(function(updatesAvailable) {
 				if (!updatesAvailable) {
 					return;
 				}
 
 				// Show loading overlay if currently on the search panel and no query present
-				if (vm.view.current === vm.view.views.search && !vm.search.query) {
-					displayLoading('checkingForUpdates');
+				if (vm.view.current === vm.view.views.search) {
+					displayLoading('syncingUpdates');
 				}
 
 				// Get bookmark updates
@@ -1409,10 +1409,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				}
 			})
 			.finally(function() {
-				hideLoading('checkingForUpdates');
+				hideLoading('syncingUpdates');
 
-				// Update search results if currently on the search panel and no query present
-				if (vm.view.current === vm.view.views.search && !vm.search.query) {
+				// Update search results if currently on the search panel
+				if (vm.view.current === vm.view.views.search) {
 					displayDefaultSearchState();
 				}
 			});
@@ -1441,7 +1441,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	var handleNetworkReconnected = function () {
 		// If a previous sync failed due to lost connection, check for updates now
 		if (!!globals.Network.Disconnected.Get()) {
-			getLatestUpdates();
+			getLatestUpdates()
+				.then(function() {
+					// Update search results if currently on the search panel
+					if (vm.view.current === vm.view.views.search) {
+						displayDefaultSearchState();
+					}
+				});
 		}
 	};
 
@@ -1511,8 +1517,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						}
 						
 						// Show loading overlay if currently on the search panel and no query present
-						if (vm.view.current === vm.view.views.search && !vm.search.query) {
-							displayLoading('checkingForUpdates');
+						if (vm.view.current === vm.view.views.search) {
+							displayLoading('syncingUpdates');
 						}
 
 						// Get bookmark updates
@@ -1534,10 +1540,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						}
 					})
 					.finally(function() {
-						hideLoading('checkingForUpdates');
+						hideLoading('syncingUpdates');
 
-						// Update search results if currently on the search panel and no query present
-						if (vm.view.current === vm.view.views.search && !vm.search.query) {
+						// Update search results if currently on the search panel
+						if (vm.view.current === vm.view.views.search) {
 							displayDefaultSearchState();
 						}
 					});

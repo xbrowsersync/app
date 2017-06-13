@@ -9,7 +9,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, utility) { 
     'use strict';
     
-    var moduleName = 'xBrowserSync.App.Bookmarks', syncQueue = [];
+    var moduleName = 'xBrowserSync.App.Bookmarks', syncQueue = [], initialSyncFailedRetrySuccess = false;
 
 /* ------------------------------------------------------------------------------------
  * Public functions
@@ -674,11 +674,14 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         syncPromise
             // Resolve original sync deferred
             .then(function() {
-                deferredToResolve.resolve(currentSync.initialSyncFailed);
-
-                // If there are items in the queue call sync
+                // Sync next item in the queue otherwise resolve the deferred
                 if (syncQueue.length > 0) {
-                    $timeout(sync);
+                    initialSyncFailedRetrySuccess = (!initialSyncFailedRetrySuccess && !!currentSync.initialSyncFailed) ? true : initialSyncFailedRetrySuccess;
+                    $timeout(function() { sync(deferredToResolve); });
+                }
+                else {
+                    deferredToResolve.resolve(initialSyncFailedRetrySuccess);
+                    initialSyncFailedRetrySuccess = false;
                 }
             })
             .catch(function (err) {
