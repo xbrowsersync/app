@@ -139,13 +139,48 @@ body {
     }
 }
 
-#working-panel .content p {
-    display: none;
+#bookmark-panel {
+    .btn-share-bookmark {
+        display: inline-block;
+    }
+    
+    .tags-container {
+        flex: 0 1 auto;
+
+        .label {
+            padding: 0.6em 1em;
+            border-radius: 25px;
+            margin: 0 6px 8px 0;
+        }
+    }
+
+    .tags-input-container .lookahead-container .lookahead:after {
+        font-size: 0.9em;
+    }
+
+    .textarea-container {
+        flex: none;
+        height: 9em;
+
+        @media (min-device-width: $width-mobile-medium) {
+            height: 11em;
+        }
+    }
 }
 
 #login-panel {
     .btn-scan {
         display: block;
+
+        i {
+            @media (max-device-width: $width-mobile-medium - 1) {
+                font-size: 2em;
+            }
+        }
+        
+        @media (max-device-width: $width-mobile-medium - 1) {
+            top: 0.35em;
+        }
     }
 
     .form-group input {
@@ -173,6 +208,14 @@ body {
             }
         }
     }
+
+    .secret-form-group {
+        .progress, .progress-bar-background {
+            @media (max-device-width: $width-mobile-medium - 1) {
+                height: 2.5em;
+            }
+        }
+    }
 }
 
 #search-panel {
@@ -185,11 +228,9 @@ body {
         margin-bottom: 0;
 
         .buttons {
-            height: 1.8em;
-
             @media (max-device-width: $height-mobile-small - 1) {
                 position: static;
-                margin: 0 0 15px;
+                margin: 0 0 5px;
             }
 
             @media (min-device-width: $height-mobile-small) {
@@ -200,28 +241,29 @@ body {
                 display: block;
             }
 
-            button {
-                &.btn-toggle-bookmark {
-                    right: 1.1em;
-                    
-                    @media (max-device-width: $width-tablet) {
-                        float: left;
-                        margin: 0.2em 0 0 0.2em;
-                    }
+            .btn-settings {
+                float: right;
+            }
+            
+            .btn-toggle-bookmark {
+                right: 1.1em;
+                
+                @media (max-device-width: $width-tablet) {
+                    float: left;
+                }
 
-                    i:before {
-                        content: "\f02e";
-                    }
+                i:before {
+                    content: "\f02e";
+                }
 
-                    i:after {
-                        content: "\f067";
-                        font-size: 0.35em;
-                        color: $colour-bg2;
-                        position: relative;
-                        top: -0.9em;
-                        left: -1.4em;
-                        opacity: 1;
-                    }
+                i:after {
+                    content: "\f067";
+                    font-size: 0.35em;
+                    color: $colour-bg2;
+                    position: relative;
+                    top: -0.9em;
+                    left: -1.4em;
+                    opacity: 1;
                 }
             }
         }
@@ -238,6 +280,10 @@ body {
         margin-top: 15px;
         padding-right: 0;
         overflow-y: scroll;
+
+        & > h4 {
+            margin: 10px;
+        }
 
         .list-group-item {
             margin: 0 0 15px 0;
@@ -275,35 +321,6 @@ body {
     }
 }
 
-#bookmark-panel {
-    .btn-share-bookmark {
-        display: inline-block;
-    }
-    
-    .tags-container {
-        flex: 0 1 auto;
-
-        .label {
-            padding: 0.6em 1em;
-            border-radius: 25px;
-            margin: 0 6px 8px 0;
-        }
-    }
-
-    .tags-input-container .lookahead-container .lookahead:after {
-        font-size: 0.9em;
-    }
-
-    .textarea-container {
-        flex: none;
-        height: 9em;
-
-        @media (min-device-width: $width-mobile-medium) {
-            height: 11em;
-        }
-    }
-}
-
 #settings-panel {
     .backup-restore-panel {
         #backupContentsPanel {
@@ -328,4 +345,8 @@ body {
             margin-bottom: 0;
         }
     }
+}
+
+#working-panel .content p {
+    display: none;
 }

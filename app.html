@@ -64,7 +64,7 @@
                     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Title) }}</span>
                 </h1>
                 <div id="intro-panel-1" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 1" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.events.introPanel1_Next_Click()">
+                     data-hm-swipeleft="vm.events.introPanel1_Next_Click()">
                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel1_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}" data-ng-click="vm.events.introPanel1_Next_Click()">
@@ -74,7 +74,7 @@
                     </div>
                 </div>
                 <div id="intro-panel-2" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 2" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.events.introPanel2_Next_Click()" hm-swiperight="vm.events.introPanel2_Prev_Click()">
+                     data-hm-swipeleft="vm.events.introPanel2_Next_Click()" data-hm-swiperight="vm.events.introPanel2_Prev_Click()">
                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel2_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel2_Prev_Click()">
@@ -88,7 +88,7 @@
                     </div>
                 </div>
                 <div id="intro-panel-3" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 3" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.events.introPanel3_Next_Click()" hm-swiperight="vm.events.introPanel3_Prev_Click()">
+                     data-hm-swipeleft="vm.events.introPanel3_Next_Click()" data-hm-swiperight="vm.events.introPanel3_Prev_Click()">
                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel3_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel3_Prev_Click()">
@@ -102,7 +102,7 @@
                     </div>
                 </div>
                 <div id="intro-panel-4" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 4" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.events.introPanel4_Next_Click()" hm-swiperight="vm.events.introPanel4_Prev_Click()">
+                     data-hm-swipeleft="vm.events.introPanel4_Next_Click()" data-hm-swiperight="vm.events.introPanel4_Prev_Click()">
                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel4_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel4_Prev_Click()">
@@ -116,7 +116,7 @@
                     </div>
                 </div>
                 <div id="intro-panel-5" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 5" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.events.introPanel5_Next_Click()" hm-swiperight="vm.events.introPanel5_Prev_Click()">
+                     data-hm-swipeleft="vm.events.introPanel5_Next_Click()" data-hm-swiperight="vm.events.introPanel5_Prev_Click()">
                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel5_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel5_Prev_Click()">
@@ -130,7 +130,7 @@
                     </div>
                 </div>
                 <div id="intro-panel-6" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 6" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.events.introPanel6_Next_Click()" hm-swiperight="vm.events.introPanel6_Prev_Click()">
+                     data-hm-swipeleft="vm.events.introPanel6_Next_Click()" data-hm-swiperight="vm.events.introPanel6_Prev_Click()">
                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel6_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel6_Prev_Click()">
@@ -144,7 +144,7 @@
                     </div>
                 </div>
                 <div id="intro-panel-7" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 7" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                    hm-swipeleft="vm.events.introPanel7_Next_Click()" hm-swiperight="vm.events.introPanel7_Prev_Click()">
+                    data-hm-swipeleft="vm.events.introPanel7_Next_Click()" data-hm-swiperight="vm.events.introPanel7_Prev_Click()">
                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel7_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel7_Prev_Click()">
@@ -158,7 +158,7 @@
                     </div>
                 </div>
                 <div id="intro-panel-8" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 8" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.events.introPanel8_Next_Click()" hm-swiperight="vm.events.introPanel8_Prev_Click()">
+                     data-hm-swipeleft="vm.events.introPanel8_Next_Click()" data-hm-swiperight="vm.events.introPanel8_Prev_Click()">
                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel8_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel8_Prev_Click()">
@@ -172,7 +172,7 @@
                     </div>
                 </div>
                 <div id="intro-panel-9" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 9" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.events.introPanel9_Next_Click()" hm-swiperight="vm.events.introPanel9_Prev_Click()">
+                     data-hm-swipeleft="vm.events.introPanel9_Next_Click()" data-hm-swiperight="vm.events.introPanel9_Prev_Click()">
                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel9_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel9_Prev_Click()">
@@ -186,7 +186,7 @@
                     </div>
                 </div>
                 <div id="intro-panel-10" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 10" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.events.introPanel10_Next_Click()" hm-swiperight="vm.events.introPanel10_Prev_Click()">
+                     data-hm-swipeleft="vm.events.introPanel10_Next_Click()" data-hm-swiperight="vm.events.introPanel10_Prev_Click()">
                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel10_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel10_Prev_Click()">
@@ -200,7 +200,7 @@
                     </div>
                 </div>
                 <div id="intro-panel-11" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 11" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swipeleft="vm.events.introPanel11_Next_Click()" hm-swiperight="vm.events.introPanel11_Prev_Click()">
+                     data-hm-swipeleft="vm.events.introPanel11_Next_Click()" data-hm-swiperight="vm.events.introPanel11_Prev_Click()">
                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel11_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel11_Prev_Click()">
@@ -214,7 +214,7 @@
                     </div>
                 </div>
                 <div id="intro-panel-12" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 12" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-                     hm-swiperight="vm.events.introPanel12_Prev_Click()">
+                     data-hm-swiperight="vm.events.introPanel12_Prev_Click()">
                     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel12_Message)"></div>
                     <div class="buttons">
                         <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel12_Prev_Click()">
@@ -240,7 +240,7 @@
                         </div>
                         <div class="progress-bar-background"></div>
                     </div>
-                    <div class="form-group text-center margin-bottom-10">
+                    <div class="form-group text-center">
                         <button type="submit" class="btn btn-default btn-new-sync" data-ng-disabled="!vm.settings.secret()" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
                         </button>
@@ -273,7 +273,7 @@
                         </div>
                         <div class="progress-bar-background"></div>
                     </div>
-                    <div class="form-group text-center margin-bottom-10">
+                    <div class="form-group text-center">
                         <button type="submit" class="btn btn-default" data-ng-disabled="!vm.settings.id() || !vm.settings.secret()" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
                         </button>
@@ -301,7 +301,7 @@
         
         <div id="search-panel" class="view animate-fade" data-ng-show="vm.view.current === vm.view.views.search">
             <div class="header-panel clearfix">
-                <div class="buttons">
+                <div class="buttons clearfix">
                     <button class="btn btn-icon btn-toggle-bookmark" data-ng-class="{ 'active': vm.bookmark.active }" title="{{ vm.bookmark.active ? vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) : vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}" 
                             data-ng-click="vm.events.searchForm_ToggleBookmark_Click()" tabindex="1000">
                         <i class="fa" aria-hidden="true"></i>
@@ -331,25 +331,25 @@
                 <h4 data-ng-show="!!vm.search.query && vm.search.results.length === 0">
                     {{ vm.platform.GetConstant(vm.globals.Constants.Search_NoResults_Message) }}
                 </h4>
-                <div class="list-group" data-ng-show="vm.search.results.length > 0" infinite-scroll="vm.events.searchForm_SearchResults_Scroll()" infinite-scroll-container="'.search-results-panel'">
+                <div class="list-group" data-ng-show="vm.search.results.length > 0" data-infinite-scroll="vm.events.searchForm_SearchResults_Scroll()" data-infinite-scroll-container="'.search-results-panel'">
                     <div class="list-group-item search-result-item" data-bookmark-id="{{ result.id }}" data-ng-class="{ true: 'animate-' + result.class }[!!result.class]" data-ng-repeat="result in vm.search.results | limitTo:vm.search.resultsDisplayed track by result.id">
                         <div class="menu animate-fade" data-ng-show="vm.search.selectedBookmark === result.id" data-ng-blur="vm.events.searchForm_SelectBookmark_Press(null, $event)" tabindex="-1">
                             <div class="buttons">
-                                <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}" hm-tap="vm.events.searchForm_ShareBookmark_Click(result)">
+                                <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}" data-hm-tap="vm.events.searchForm_ShareBookmark_Click(result)">
                                     <i class="fa fa-share-alt" aria-hidden="true"></i>
                                     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}</span>
                                 </button>
-                                <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}" hm-tap="vm.events.searchForm_UpdateBookmark_Click(result)">
+                                <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}" data-hm-tap="vm.events.searchForm_UpdateBookmark_Click(result)">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}</span>
                                 </button>
-                                <button class="btn btn-icon btn-delete-bookmark" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_DeleteBookmark_Label) }}" hm-tap="vm.events.searchForm_DeleteBookmark_Click($event, result)">
+                                <button class="btn btn-icon btn-delete-bookmark" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_DeleteBookmark_Label) }}" data-hm-tap="vm.events.searchForm_DeleteBookmark_Click($event, result)">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_DeleteBookmark_Label) }}</span>
                                 </button>
                             </div>
                         </div>
-                        <div class="overlay" hm-tap="vm.events.openUrl($event, result.url)" hm-press="vm.events.searchForm_SelectBookmark_Press(result.id, $event)"></div>
+                        <div class="overlay" data-hm-tap="vm.events.openUrl($event, result.url)" data-hm-press="vm.events.searchForm_SelectBookmark_Press(result.id, $event)"></div>
                         <a href="{{ result.url }}" data-ng-click="vm.events.openUrl($event)" tabindex="{{ $index + 1 }}" data-ng-keydown="vm.events.searchForm_SearchResult_KeyDown($event)">
                             <h4 class="list-group-item-heading" data-ng-if="result.title">{{ result.title }}</h4>
                             <h4 class="list-group-item-heading" data-ng-if="!result.title">{{ vm.utility.GetHostFromUrl(result.url) }}</h4>
@@ -743,13 +743,13 @@
                         <div class="form-group">
                             <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Debug_DeviceWidth_Label) }}</label>
                             <div class="form-control">
-                                <span>{{ vm.device.width }}px</span>
+                                <span>{{ vm.device.width() }}px</span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Debug_DeviceHeight_Label) }}</label>
                             <div class="form-control">
-                                <span>{{ vm.device.height }}px</span>
+                                <span>{{ vm.device.height() }}px</span>
                             </div>
                         </div>
                     </div>

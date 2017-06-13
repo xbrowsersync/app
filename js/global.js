@@ -63,6 +63,9 @@ xBrowserSync.App.Global = function(platform) {
                 }
             }
         },
+        Debug: {
+            ActivationKeyword: '#debug'
+        },
         Password: {
             Get: function() {
                 return platform.LocalStorage.Get(

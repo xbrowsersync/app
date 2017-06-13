@@ -3,7 +3,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 /* ------------------------------------------------------------------------------------
  * Class name:  xBrowserSync.App.PlatformImplementation 
- * Description: Implements xBrowserSync.App.Platform for web app.
+ * Description: Implements xBrowserSync.App.Platform for mobile apps.
  * ------------------------------------------------------------------------------------ */
 
 xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeout, platform, globals, utility, bookmarks) {
@@ -1256,10 +1256,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	var deviceReady = function() {
 		// Set platform
 		vm.platformName = cordova.platformId;
-		
-		// Set device width and height
-        vm.device.width = document.querySelector('body').clientWidth;
-        vm.device.height = document.querySelector('body').clientHeight;
 
 		// Reset network disconnected flag
         globals.Network.Disconnected.Set(!utility.CheckConnection());

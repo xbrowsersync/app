@@ -11,7 +11,7 @@ body {
 
     .view {
         width: 320px;
-        height: 510px;
+        height: 520px;
     }
 }
 
@@ -20,14 +20,10 @@ body {
     height: auto;
 
     .header-panel {
+        margin-bottom: 10px;
+        
         button.btn-settings {
             margin: 0;
-        }
-        
-        .search-form input {
-            @include placeholder {
-                font-size: 0.9em;
-            }
         }
     }
 

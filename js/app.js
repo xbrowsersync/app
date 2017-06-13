@@ -47,8 +47,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         };
 
         vm.device = {
-            width: 0,
-            height: 0
+            width: function() { return document.querySelector('body').clientWidth; },
+            height: function() { return document.querySelector('body').clientHeight; }
         }
         
         vm.events = {
@@ -451,7 +451,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             bookmarkForm_CreateTags_Click();
         }
         
-        // Add the new bookmark and sync
+        // Sync changes
         platform.Sync(vm.sync.asyncChannel, {
             type: globals.SyncType.Both,
             changeInfo: { 
@@ -467,6 +467,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     bookmarkToCreate.class = 'added';
                     $timeout(function() {
                         vm.search.results.unshift(bookmarkToCreate);
+
+                        // Update cache with modified bookmarks
+                        bookmarks.RefreshCache(vm.search.results);
                     });
                 }
             });
@@ -492,7 +495,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Get current page url
 		platform.GetCurrentUrl()
             .then(function(currentUrl) {
-                // Delete the bookmark
+                // Sync changes
                 platform.Sync(vm.sync.asyncChannel, {
                     type: globals.SyncType.Both,
                     changeInfo: { 
@@ -521,6 +524,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                             vm.search.results[deletedBookmarkIndex].class = 'deleted';
                             $timeout(function() {
                                 vm.search.results.splice(deletedBookmarkIndex, 1);
+
+                                // Update cache with modified bookmarks
+                                bookmarks.RefreshCache(vm.search.results);
                             });
                         }
                     }
@@ -640,7 +646,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Get current page url
 		platform.GetCurrentUrl()
             .then(function(currentUrl) {
-                // Update the bookmark
+                // Sync changes
                 platform.Sync(vm.sync.asyncChannel, {
                     type: globals.SyncType.Both,
                     changeInfo: { 
@@ -668,6 +674,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         if (updatedBookmarkIndex >= 0) {
                             $timeout(function() {
                                 vm.search.results[updatedBookmarkIndex] = bookmarkToUpdate;
+
+                                // Update cache with modified bookmarks
+                                bookmarks.RefreshCache(vm.search.results);
                             });
                         }
                     }
@@ -1169,7 +1178,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         var urlRegex = /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
 
         if (!!vm.search.query) {
-            if (vm.search.query.toLowerCase() === '#debug') {
+            // Check for debug mode keyword
+            if (vm.search.query.trim().toLowerCase() === globals.Debug.ActivationKeyword) {
                 vm.settings.debugMode = true;
                 vm.alert.display(platform.GetConstant(globals.Constants.DebugEnabled_Message), '', 'info');
                 return;
@@ -1238,6 +1248,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.search.results[deletedBookmarkIndex].class = 'deleted';
                 $timeout(function() {
                     vm.search.results.splice(deletedBookmarkIndex, 1);
+
+                    // Update cache with modified bookmarks
+                    bookmarks.RefreshCache(vm.search.results);
                 });
             }
         }

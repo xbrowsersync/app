@@ -221,27 +221,6 @@ body {
         }
     }
 
-    .bottom {
-        position: relative;
-        display: table-cell;
-        vertical-align: bottom;
-    }
-    
-    .buttons {
-        text-align: center;
-        margin-top: 15px;
-        position: relative;
-        white-space: nowrap;
-
-        button {
-            margin-right: 10px;
-
-            &:last-child {
-                margin-right: 0;
-            }
-        }
-    }
-
     .background {
         position: fixed;
         height: 100%;
@@ -261,6 +240,27 @@ body {
             top: -479px; 
             left: -10px; 
             @include animation(animate-scroll 150s linear infinite);
+        }
+    }
+
+    .bottom {
+        position: relative;
+        display: table-cell;
+        vertical-align: bottom;
+    }
+    
+    .buttons {
+        text-align: center;
+        margin-top: 15px;
+        position: relative;
+        white-space: nowrap;
+
+        button {
+            margin-right: 10px;
+
+            &:last-child {
+                margin-right: 0;
+            }
         }
     }
 
@@ -346,18 +346,14 @@ body {
     
     .header-panel {
         position: relative;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
 
         button {
-            font-size: 1.1em;
+            font-size: 1.8em;
+            line-height: 1.25em;
 
             &.btn-close, &.btn-settings {
                 float: right;
-                margin: 0.2em 0.2em 0 0;
-            }
-
-            i {
-                font-size: 1.6em;
             }
         }
     }
@@ -378,7 +374,7 @@ body {
             z-index: 60;
             line-height: 1.43;
             color: $colour-link;
-            background-color: $colour-text1;
+            background-color: transparent;
             @include css-prefix(user-select, none);
         }
         
@@ -493,39 +489,115 @@ body {
     }
 }
 
-#working-panel {
-    display: table;
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    z-index: 1000;
+#bookmark-panel {
+    display: flex;
+    flex-flow: column;
     
-    .content {
-        display: table-cell;
-        position: relative;
-        vertical-align: middle;
-        text-align: center;
-        z-index: 110;
-        padding-bottom: 20px;
-        
-        h3 {
-            margin-top: 0;
-            color: $colour-link-highlight;
+    textarea {
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        position: absolute;
+    }
+
+    #bookmarkForm {
+        display: flex;
+        flex-flow: column;
+        height: 100%;
+    }
+
+    .btn-delete-bookmark {
+        background-color: $colour-danger;
+
+        &:not([disabled]):active,
+        &:not([disabled]):hover {
+            background-color: $colour-text1;
+            color: $colour-danger;
+            border-color: $colour-text1;
         }
     }
-}
 
-#qr-panel {
-    @extend #working-panel;
+    .btn-share-bookmark {
+        display: none;
+    }
 
-    #qr {
-        cursor: pointer;
-        position: absolute;
-        z-index: 110;
-        left: 50%;
-        top: 50%;
-        margin: -55px 0 0 -55px;
-        border: solid 10px white;
+    .buttons {
+        margin: 0 0 5px;
+    }
+
+    .buttons, .form-group, .header-panel {
+        flex: none;
+    }
+
+    .tags-container {
+        flex: 0 1 auto;
+        overflow-y: auto;
+        overflow-x: hidden;
+        
+        .label {
+            display: block;
+            float: left;
+            margin: 0px 5px 5px 0;
+            color: $colour-text1;
+            background-color: $colour-text2;
+            border: 0;
+            border-radius: 10px;
+            font-size: 0.9em;
+            font-weight: normal;
+            text-transform: capitalize;
+            padding: 6px 8px;
+
+            &:focus {
+                outline: none;
+            }
+            
+            &:hover {
+                cursor: pointer;
+                
+                i {
+                    color: $colour-link-highlight;
+                    opacity: 1;
+                }
+            }
+            
+            i {
+                transition: color, ease-in-out, 0.2s;
+                font-size: 0.9em;
+                opacity: 0.5;
+            }
+        }
+    }
+    
+    .tags-input-container {
+        position: relative;
+        border-radius: $border-radius;
+        background-color: $colour-text1;
+        overflow: hidden;
+        
+        input {
+            text-transform: lowercase;
+            position: relative;
+            z-index: 50;
+            background: transparent; 
+        }
+
+        .lookahead-container {
+            left: 20px;
+            
+            .lookahead {
+                padding: 10px 0;
+                background-color: transparent;
+            }
+
+            .measure {
+                text-transform: lowercase;
+            }
+        }
+    }
+    
+    .textarea-container {
+        flex: 1 1 13em;
+        position: relative;
     }
 }
 
@@ -540,37 +612,37 @@ body {
         }
     }
 
-    .btn-help {
-        margin: 0.2em 0 0 0.2em;
-    }
-
     .btn-new-sync {
         text-transform: capitalize;
     }
     
     .btn-scan {
         display: none;
-        font-size: 1.8em;
         position: absolute;
-        right: 20px;
-        line-height: 1em;
-        padding: 9px 0 7px;
+        top: 0.5em;
+        right: 1.3em;
         z-index: 55;
         border-bottom: none;
+
+        i {
+            font-size: 2.5em;
+        }
     }
 
     .form-group {
         position: relative;
+        margin-bottom: 1.2em;
 
         input {
             font-size: 1.2em;
-            padding: 0.45em 20px;
+            padding: 0 1em;
+            line-height: 2.3em;   
         }
     }
 
     .intro-panel {
         height: 18em;
-        margin-bottom: 15px;
+        margin-bottom: 1.2em;
         overflow: hidden;
         position: relative;
     
@@ -629,17 +701,20 @@ body {
             background: transparent;
         }
 
-        .progress {
+        .progress, .progress-bar-background {
             position: absolute;
             top: 0;
-            margin: 0;
-            z-index: 10;
-            box-shadow: none;
-            height: 2.8em;
+            height: 2.75em;
             width: 100%;
+            border-radius: $border-radius;
+        }
+
+        .progress {
+            box-shadow: none;
             background-color: transparent;
             border: solid 2px $colour-text1;
             border-radius: $border-radius;
+            z-index: 10;
 
             .progress-bar {
                 box-shadow: none;
@@ -649,11 +724,6 @@ body {
             
         .progress-bar-background {
             background-color: $colour-text1;
-            height: 2.8em;
-            width: 100%;
-            position: absolute;
-            top: 0;
-            border-radius: $border-radius;
         }
     }
 }
@@ -665,20 +735,23 @@ body {
         .buttons {
             position: absolute;
             right: 10px;
-            top: -5px;
+            top: 0.25em;
+            margin-top: 0;
 
-            button {
-                &.btn-toggle-bookmark {
-                    right: 1.5em;
+            .btn-settings {
+                float: none;
+            }
+            
+            .btn-toggle-bookmark {
+                margin-right: 0.25em;
 
+                i:before {
+                    content: "\f097";
+                }
+                
+                &.active {
                     i:before {
-                        content: "\f097";
-                    }
-                    
-                    &.active {
-                        i:before {
-                            content: "\f02e";
-                        }
+                        content: "\f02e";
                     }
                 }
             }
@@ -702,17 +775,18 @@ body {
             }
             
             i {
-                font-size: 1.25em;
-                line-height: 2.2em;
                 opacity: 0.4;
+                font-size: 1.3em;
+                line-height: 2em;
             }
             
             input {
                 position: relative;
                 z-index: 50;
                 height: auto;
-                padding: 5px 40px 5px 40px;
-                font-size: 1.5em;
+                padding: 0 1.9em;
+                font-size: 1.4em;
+                line-height: 1.85em;
                 background: transparent;
             }
 
@@ -730,15 +804,13 @@ body {
             }
             
             .lookahead-container {
-                left: 40px;
+                left: 2.65em;
                 width: calc(100% - 80px);
                 overflow: hidden;
                 
                 .lookahead {
-                    font-size: 1.5em;
-                    padding: 5px 0;
-                    margin-left: 1px;
-                    text-indent: -1px;
+                    font-size: 1.4em;
+                    line-height: 1.85em;
                 }
             }
         }
@@ -758,7 +830,7 @@ body {
             font-size: 1.4em;
             font-weight: normal;
             text-align: center;
-            margin: 10px;
+            margin: 0 10px 10px;
             position: relative;
             z-index: 10;
         }
@@ -951,122 +1023,6 @@ body {
     }
 }
 
-#bookmark-panel {
-    display: flex;
-    flex-flow: column;
-    
-    textarea {
-        height: 100%;
-        width: 100%;
-        box-sizing: border-box;
-        position: absolute;
-    }
-
-    #bookmarkForm {
-        display: flex;
-        flex-flow: column;
-        height: 100%;
-    }
-
-    .btn-delete-bookmark {
-        background-color: $colour-danger;
-
-        &:not([disabled]):active,
-        &:not([disabled]):hover {
-            background-color: $colour-text1;
-            color: $colour-danger;
-            border-color: $colour-text1;
-        }
-    }
-
-    .btn-share-bookmark {
-        display: none;
-    }
-
-    .buttons {
-        margin: 0;
-    }
-
-    .buttons, .form-group {
-        flex: none;
-    }
-
-    .header-panel {
-        flex: none;
-    }
-
-    .tags-container {
-        flex: 0 1 auto;
-        overflow-y: auto;
-        overflow-x: hidden;
-        
-        .label {
-            display: block;
-            float: left;
-            margin: 0px 5px 5px 0;
-            color: $colour-text1;
-            background-color: $colour-text2;
-            border: 0;
-            border-radius: 10px;
-            font-size: 0.9em;
-            font-weight: normal;
-            text-transform: capitalize;
-            padding: 6px 8px;
-
-            &:focus {
-                outline: none;
-            }
-            
-            &:hover {
-                cursor: pointer;
-                
-                i {
-                    color: $colour-link-highlight;
-                    opacity: 1;
-                }
-            }
-            
-            i {
-                transition: color, ease-in-out, 0.2s;
-                font-size: 0.9em;
-                opacity: 0.5;
-            }
-        }
-    }
-    
-    .tags-input-container {
-        position: relative;
-        border-radius: $border-radius;
-        background-color: $colour-text1;
-        overflow: hidden;
-        
-        input {
-            text-transform: lowercase;
-            position: relative;
-            z-index: 50;
-            background: transparent; 
-        }
-
-        .lookahead-container {
-            left: 20px;
-            
-            .lookahead {
-                padding: 10px 0;
-                background-color: transparent;
-            }
-
-            .measure {
-                text-transform: lowercase;
-            }
-        }
-    }
-    
-    .textarea-container {
-        flex: 1 1 13em;
-        position: relative;
-    }
-}
-
 #settings-panel {
     display: flex;
     flex-flow: column;
@@ -1182,7 +1138,7 @@ body {
             padding: 0;
             color: $colour-text2;
             font-size: 1.06em;
-            line-height: 1.25em;
+            line-height: 1.35em;
             border: 0;
             border-radius: 0;
             background: transparent;
@@ -1315,6 +1271,42 @@ body {
         
         .panel-content {
             padding: 0 20px 20px;
+        }
+    }
+}
+
+#qr-panel {
+    @extend #working-panel;
+
+    #qr {
+        cursor: pointer;
+        position: absolute;
+        z-index: 110;
+        left: 50%;
+        top: 50%;
+        margin: -55px 0 0 -55px;
+        border: solid 10px white;
+    }
+}
+
+#working-panel {
+    display: table;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 1000;
+    
+    .content {
+        display: table-cell;
+        position: relative;
+        vertical-align: middle;
+        text-align: center;
+        z-index: 110;
+        padding-bottom: 20px;
+        
+        h3 {
+            margin-top: 0;
+            color: $colour-link-highlight;
         }
     }
 }
