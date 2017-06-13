@@ -10,12 +10,6 @@ body {
     }
 }
 
-#bookmark-panel {
-    .tags-container {
-        flex: 1 0;
-    }
-}
-
 #login-panel, #search-panel, #bookmark-panel, #settings-panel {
-    padding-top: 30px;
+    padding-top: 25px;
 }

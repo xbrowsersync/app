@@ -346,7 +346,6 @@ body {
     
     .header-panel {
         position: relative;
-        min-height: 1.8em;
         margin-bottom: 10px;
 
         button {
@@ -669,8 +668,6 @@ body {
             top: -5px;
 
             button {
-                height: 1.8em;
-
                 &.btn-toggle-bookmark {
                     right: 1.5em;
 
@@ -987,10 +984,10 @@ body {
     }
 
     .buttons {
-        margin: 0 0 5px;
+        margin: 0;
     }
 
-    .form-group {
+    .buttons, .form-group {
         flex: none;
     }
 
@@ -1207,6 +1204,7 @@ body {
     }
 
     .header-panel {
+        flex: none;
         padding-right: 10px;
     }
 

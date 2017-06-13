@@ -59,6 +59,8 @@
         <splash height="2208" src="res/screen/ios/Default-736h.png" width="1242" />
         <splash height="1242" src="res/screen/ios/Default-Landscape-736h.png" width="2208" />
     </platform>
+    <engine name="android" spec="^6.2.3" />
+    <engine name="ios" spec="^4.4.0" />
     <preference name="orientation" value="portrait" />
     <preference name="CustomInAppBrowserUserAgent" value="Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" />
     <preference name="KeyboardDisplayRequiresUserAction" value="false" />
@@ -68,8 +70,7 @@
     <preference name="Suppresses3DTouchGesture" value="false" />
     <preference name="AndroidLaunchMode" value="singleTask" />
     <preference name="ShowSplashScreenSpinner" value="true" />
-    <engine name="android" spec="^6.2.3" />
-    <engine name="ios" spec="^4.4.0" />
+    <preference name="BackupWebStorage" value="none" />
     <plugin name="bundle-cordova-webintent" spec="https://github.com/COMLINE-AG/bundle-cordova-webintent.git" />
     <plugin name="com.greybax.spinnerdialog" spec="https://github.com/greybax/cordova-plugin-native-spinner" />
     <plugin name="com.jcesarmobile.filepicker" spec="https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin.git" />

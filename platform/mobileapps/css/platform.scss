@@ -31,15 +31,19 @@ body {
     @media (min-device-width: $width-mobile-medium) {
         font-size: 16px;
     }
-    
+
     @media (min-device-width: $width-mobile-large) {
+        font-size: 17px;
+    }
+    
+    @media (min-device-width: $width-mobile-xlarge) {
         font-size: 18px;
     }
 
     h1 {
         background-size: 5.5em;
         
-        @media (min-device-width: $width-mobile-large) {
+        @media (min-device-width: $width-mobile-xlarge) {
             background-size: 6.5em;
         }
     }
@@ -94,10 +98,6 @@ body {
     .alert {
         position: absolute;
         z-index: 200;
-    }
-
-    .header-panel {
-        margin-bottom: 10px;
     }
 
     .lookahead-container .lookahead:after {
@@ -156,13 +156,13 @@ body {
     
     .intro-panel {
         & > div {
-            @media (min-device-width: $width-mobile-large) {
+            @media (min-device-width: $width-mobile-xlarge) {
                 padding: 25px 35px;
             }
         }
 
         .buttons {
-            @media (min-device-width: $width-mobile-large) {
+            @media (min-device-width: $width-mobile-xlarge) {
                 .btn-prev {
                     margin-left: 12px;
                 }
@@ -201,8 +201,6 @@ body {
             }
 
             button {
-                bottom: auto;
-
                 &.btn-toggle-bookmark {
                     right: 1.1em;
                     
