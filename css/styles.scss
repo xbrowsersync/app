@@ -97,7 +97,8 @@ body {
                 border-radius: $border-radius;
                 transition: all, ease-in-out, 0.2s;
                 box-shadow: none;
-                padding: 6px 15px 7px;
+                padding: 0 1em 0.1em;
+                line-height: 1.95em;
                 
                 &:not([disabled]):active,
                 &:not([disabled]):hover {
@@ -767,7 +768,7 @@ body {
 
             label {
                 position: absolute;
-                top: 0;
+                top: -1px;
                 left: 15px;
                 color: $colour-text2;
                 z-index: 60;
