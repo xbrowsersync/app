@@ -378,20 +378,20 @@
                         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}</span>
                     </button>
                 </div>
-                <div class="form-group" data-ng-class="{ true: 'has-error' }[vm.bookmarkForm.bookmarkTitle.$touched && vm.bookmarkForm.bookmarkTitle.$invalid]">
+                <div class="form-group">
                     <label for="bookmarkTitle" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TitleField_Label) }}</label>
                     <input type="text" class="form-control" name="bookmarkTitle" data-ng-model="vm.bookmark.current.title" maxlength="255" tabindex="1"
                             placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TitleField_Label) }}">
                 </div>
-                <div class="form-group" data-ng-class="{ true: 'has-error' }[vm.bookmarkForm.bookmarkUrl.$touched && vm.bookmarkForm.bookmarkUrl.$invalid]">
+                <div class="form-group" data-ng-class="{ true: 'has-error' }[vm.bookmarkForm.bookmarkUrl.$dirty && vm.bookmarkForm.bookmarkUrl.$invalid]">
                     <label for="bookmarkUrl" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_UrlField_Label) }}</label>
                     <input type="text" class="form-control" name="bookmarkUrl" placeholder="http(s)://..." data-ng-model="vm.bookmark.current.url" 
-                            data-ng-change="vm.events.bookmarkForm_BookmarkUrl_Change()" maxlength="255" tabindex="2"
+                            data-ng-change="vm.events.bookmarkForm_BookmarkUrl_Change()" maxlength="2000" tabindex="2"
                             placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_UrlField_Label) }}" autocapitalize="off" autocomplete="off" autocorrect="off" required>
                 </div>
                 <div class="form-group textarea-container">
                     <label for="bookmarkDescription" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_DescriptionField_Label) }}</label>
-                    <textarea class="form-control" name="bookmarkDescription" rows="3" data-ng-model="vm.bookmark.current.description" data-ng-change="vm.events.bookmarkForm_BookmarkDescription_Change()"
+                    <textarea class="form-control" name="bookmarkDescription" rows="3" data-ng-model="vm.bookmark.current.description" data-ng-keydown="vm.events.bookmarkForm_BookmarkDescription_Change()"
                                 tabindex="3" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_DescriptionField_Label) }}"></textarea>
                 </div>
                 <div class="form-group tags-input-container">
@@ -411,10 +411,11 @@
                     </button>
                 </div>
                 <div class="buttons">
-                    <button type="submit" class="btn btn-default" data-ng-if="!vm.bookmark.displayUpdateForm" data-ng-click="vm.events.bookmarkForm_CreateBookmark_Click()" tabindex="6">
+                    <button type="submit" class="btn btn-default" data-ng-if="!vm.bookmark.displayUpdateForm" data-ng-disabled="!!vm.bookmarkForm.$invalid"
+                            data-ng-click="vm.events.bookmarkForm_CreateBookmark_Click()" tabindex="6">
                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}
                     </button>
-                    <button type="submit" class="btn btn-default" data-ng-if="vm.bookmark.displayUpdateForm" data-ng-click="vm.events.bookmarkForm_UpdateBookmark_Click()" tabindex="6">
+                    <button type="submit" class="btn btn-default" data-ng-if="vm.bookmark.displayUpdateForm" data-ng-disabled="!vm.bookmarkForm.$dirty || !!vm.bookmarkForm.$invalid" data-ng-click="vm.events.bookmarkForm_UpdateBookmark_Click()" tabindex="6">
                         {{ vm.platform.GetConstant(vm.globals.Constants.Button_Update_Label) }}
                     </button>
                     <button type="button" class="btn btn-default btn-share-bookmark" data-ng-if="vm.bookmark.displayUpdateForm" data-ng-click="vm.events.bookmarkForm_ShareBookmark_Click(vm.bookmark.current)" tabindex="7">
@@ -548,10 +549,12 @@
                             <div class="animate-fade update-service-url confirm" data-ng-show="vm.settings.displayUpdateServiceUrlForm || vm.settings.displayUpdateServiceUrlConfirmation">
                                 <form name="vm.updateServiceUrlForm" data-ng-show="!vm.settings.displayUpdateServiceUrlConfirmation" novalidate>
                                     <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Message)"></p>
-                                    <input name="txtServiceUrl" class="form-control" data-ng-model="vm.settings.service.newServiceUrl" data-ng-keypress="vm.events.updateServiceUrlForm_Update_KeyPress($event)"
-                                           placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Field_Description) }}" maxlength="128" autocapitalize="off" autocomplete="off" autocorrect="off" tabindex="10" required />
+                                    <div class="form-group" data-ng-class="{ true: 'has-error' }[vm.updateServiceUrlForm.newServiceUrl.$dirty && vm.updateServiceUrlForm.newServiceUrl.$invalid]">
+                                        <input name="newServiceUrl" class="form-control" data-ng-model="vm.settings.service.newServiceUrl" data-ng-change="vm.events.updateServiceUrlForm_NewServiceUrl_Change()"
+                                               placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Field_Description) }}" maxlength="128" autocapitalize="off" autocomplete="off" autocorrect="off" tabindex="10" required />
+                                    </div>
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-default" data-ng-disabled="!vm.updateServiceUrlForm.txtServiceUrl.$dirty || !vm.settings.service.newServiceUrl" 
+                                        <button type="submit" class="btn btn-default" data-ng-disabled="!vm.updateServiceUrlForm.newServiceUrl.$dirty || !!vm.updateServiceUrlForm.newServiceUrl.$error.InvalidServiceUrl" 
                                                 data-ng-click="vm.events.updateServiceUrlForm_Update_Click()" tabindex="11">
                                             {{ vm.platform.GetConstant(vm.globals.Constants.Button_Update_Label) }}
                                         </button>

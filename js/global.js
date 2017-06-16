@@ -596,7 +596,7 @@ xBrowserSync.App.Global = function(platform) {
             Current: '/current',
             LastUpdated: '/lastUpdated',
             ServiceInformation: '/info',
-            Regex: /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/ig,
+            Regex: /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/i,
             ProtocolRegex: /^https?:\/\//i
         }
     };

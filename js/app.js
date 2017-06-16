@@ -122,8 +122,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             updateServiceUrlForm_Cancel_Click: updateServiceUrlForm_Cancel_Click,
             updateServiceUrlForm_Confirm_Click: updateServiceUrlForm_Confirm_Click,
             updateServiceUrlForm_Display_Click: updateServiceUrlForm_Display_Click,
-            updateServiceUrlForm_Update_Click: updateServiceUrlForm_Update_Click,
-            updateServiceUrlForm_Update_KeyPress: updateServiceUrlForm_Update_KeyPress
+            updateServiceUrlForm_NewServiceUrl_Change: updateServiceUrlForm_NewServiceUrl_Change,
+            updateServiceUrlForm_Update_Click: updateServiceUrlForm_Update_Click
         };
 
         vm.introduction = {
@@ -342,7 +342,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var bookmarkForm_BookmarkDescription_Change = function() {
         // Limit the bookmark description to the max length
-        vm.bookmark.current.description = utility.TrimToNearestWord(vm.bookmark.current.description, globals.Bookmarks.DescriptionMaxLength);
+        $timeout(function() {
+            vm.bookmark.current.description = utility.TrimToNearestWord(vm.bookmark.current.description, globals.Bookmarks.DescriptionMaxLength);
+        });
     };
     
     var bookmarkForm_BookmarkTags_Change = function() {
@@ -410,43 +412,27 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
     
     var bookmarkForm_BookmarkUrl_Change = function() {
-        // Reset invalid service validator
-        vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', true);
-
         var isValid = true;
         
         if (!vm.bookmark.current.url) {
             isValid = false;
         }
         else {
-            // Check for protocol
-            var validProtocolMatches = globals.URL.ProtocolRegex.exec(vm.bookmark.current.url);
-            if (!validProtocolMatches || validProtocolMatches.length <= 0) {
-                vm.bookmark.current.url = 'http://' + vm.bookmark.current.url;
-            }
-            
             // Check url is valid
-            var validUrlMatches = globals.URL.Regex.exec(vm.bookmark.current.url);
-            if (!validUrlMatches || validUrlMatches.length <= 0) {
-                isValid = false;
-            }
+            isValid = globals.URL.Regex.test(vm.bookmark.current.url);
         }
 
-        if (!isValid) {
-            vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', false);
-        }
+        // Set invalid service validator
+        vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', isValid);
     };
     
     var bookmarkForm_CreateBookmark_Click = function() {
         var bookmarkToCreate = vm.bookmark.current;
-        
-        // Validate url
-        bookmarkForm_BookmarkUrl_Change();
-        
-        if (!vm.bookmarkForm.$valid) {
-			document.querySelector('#bookmarkForm .ng-invalid').focus();
-            return;
-		}
+
+        // Check for protocol
+        if (!!vm.bookmark.current.url && !!vm.bookmark.current.url.trim() && !globals.URL.ProtocolRegex.test(vm.bookmark.current.url)) {
+            vm.bookmark.current.url = 'http://' + vm.bookmark.current.url;
+        }
 
         // Add tags if tag text present
         if (!!vm.bookmark.tagText && vm.bookmark.tagText.length > 0) {
@@ -485,6 +471,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             return tag;
         });
 
+        vm.bookmarkForm.$setDirty();
         vm.bookmark.tagText = '';
         vm.bookmark.tagLookahead = '';
         if (!utility.IsMobilePlatform(vm.platformName)) {
@@ -624,6 +611,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var bookmarkForm_RemoveTag_Click = function(tag) {
         vm.bookmark.current.tags = _.without(vm.bookmark.current.tags, tag);
+        vm.bookmarkForm.$setDirty();
         if (!utility.IsMobilePlatform(vm.platformName)) {
             document.querySelector('#bookmarkForm input[name="bookmarkTags"]').focus();
         }
@@ -632,14 +620,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var bookmarkForm_UpdateBookmark_Click = function() {
         var bookmarkToUpdate = vm.bookmark.current;
         
-        // Validate url
-        bookmarkForm_BookmarkUrl_Change();
-        
-        // Return if the form is not valid
-		if (!vm.bookmarkForm.$valid) {
-			document.querySelector('#bookmarkForm .ng-invalid').focus();
-            return;
-		}
+        // Check for protocol
+        if (!!vm.bookmark.current.url && !!vm.bookmark.current.url.trim() && !globals.URL.ProtocolRegex.test(vm.bookmark.current.url)) {
+            vm.bookmark.current.url = 'http://' + vm.bookmark.current.url;
+        }
 
         // Add tags if tag text present
         if (!!vm.bookmark.tagText && vm.bookmark.tagText.length > 0) {
@@ -732,7 +716,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.settings.displayUpdateServiceUrlForm = false;
                 vm.updateServiceUrlForm.$setPristine();
                 vm.updateServiceUrlForm.$setUntouched();
-                updateServiceUrlForm_SetValidity(true);
+                vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
+                vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidServiceUrl', true);
                 if (vm.platformName !== globals.Platforms.IOS) {
                     document.querySelector('#backupFile').value = null;
                 }
@@ -1191,8 +1176,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             var queryWords = vm.search.query.split(/[\s,]+/);
             _.each(queryWords, function (queryWord) {
                 // Add query word as url if query is in url format, otherwise add to keywords
-                var urlMatches = globals.URL.Regex.exec(queryWord.trim());
-                if (!queryData.url && !!urlMatches && urlMatches.length > 0) {
+                var urlTest = globals.URL.Regex.test(queryWord.trim());
+                if (!queryData.url && !!urlTest) {
                     queryData.url = queryWord.trim();
                 }
                 else {
@@ -1688,6 +1673,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
     var updateServiceUrlForm_CheckServiceUrl = function(url, callback) {
         url = url.replace(/\/$/, '');
+        
+        // Display loading overlay
+        var loadingTimeout = platform.Interface.Loading.Show('checkingNewServiceUrl');
+
         return api.CheckServiceStatus(url)
             .then(callback)
             .catch(function(err) {
@@ -1697,11 +1686,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     JSON.stringify(err));
                 
                 // Set form as invalid and focus on url field
-                updateServiceUrlForm_SetValidity(false);
-                document.querySelector('[name=txtServiceUrl]').focus();
+                vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', false);
+                vm.updateServiceUrlForm.newServiceUrl.$setPristine()
+                document.querySelector('[name=newServiceUrl]').focus();
             })
             .finally(function() {
-                platform.Interface.Loading.Hide();
+                platform.Interface.Loading.Hide('checkingNewServiceUrl', loadingTimeout);
             });
     };
 
@@ -1749,7 +1739,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.settings.displayUpdateServiceUrlConfirmation = false;
         vm.settings.displayUpdateServiceUrlForm = false;
         vm.settings.service.newServiceUrl = vm.settings.service.url();
-        updateServiceUrlForm_SetValidity(true);
+        vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
+        vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidServiceUrl', true);
     };
     
     var updateServiceUrlForm_Display_Click = function() {
@@ -1757,33 +1748,35 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.updateServiceUrlForm.$setPristine();
         vm.updateServiceUrlForm.$setUntouched();
         vm.settings.service.newServiceUrl = vm.settings.service.url();
-        updateServiceUrlForm_SetValidity(true);
+        vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
+        vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidServiceUrl', true);
         
         // Display update form panel
         vm.settings.displayUpdateServiceUrlForm = true;
         
         $timeout(function() {
             // Focus on url field
-            document.querySelector('input[name="txtServiceUrl"]').focus();            
+            document.querySelector('input[name="newServiceUrl"]').focus();            
         }, 100);
     };
 
-    var updateServiceUrlForm_SetValidity = function(isValid) {
-        vm.updateServiceUrlForm.txtServiceUrl.$setValidity('InvalidService', isValid);
+    var updateServiceUrlForm_NewServiceUrl_Change = function(event) {
+        // Clear invalid service error
+        vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
+
+        // Check for a valid service url
+        vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidServiceUrl', globals.URL.Regex.test(vm.settings.service.newServiceUrl));
     };
 	
 	var updateServiceUrlForm_Update_Click = function() {
-        updateServiceUrlForm_SetValidity(true);
+        // Clear invalid service error
+        vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
         
-        // Return if the form is not valid
-		if (!vm.updateServiceUrlForm.txtServiceUrl.$valid) {
-			document.querySelector('input[name=txtServiceUrl]').focus();
-            return;
-		}
+        // Check for protocol
+        if (!!vm.settings.service.newServiceUrl && !!vm.settings.service.newServiceUrl.trim() && !globals.URL.ProtocolRegex.test(vm.settings.service.newServiceUrl)) {
+            vm.settings.service.newServiceUrl = 'https://' + vm.settings.service.newServiceUrl;
+        }
 
-        // Display loading overlay
-        platform.Interface.Loading.Show();
-        
         // Check service url
         updateServiceUrlForm_CheckServiceUrl(vm.settings.service.newServiceUrl, function(response) {
             if (!!globals.SyncEnabled.Get()) {
@@ -1801,10 +1794,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 updateServiceUrlForm_Confirm_Click();
             }
         });
-    };
-
-    var updateServiceUrlForm_Update_KeyPress = function(event) {
-        updateServiceUrlForm_SetValidity(true);
     };
 	
 	// Call constructor

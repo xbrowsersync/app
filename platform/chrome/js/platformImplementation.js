@@ -459,7 +459,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			});
     };
 
-	var displayLoading = function(id, deferred) {
+	var displayLoading = function(id) {
 		var timeout;
 		
 		// Return if loading overlay already displayed
@@ -468,6 +468,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		}
 		
 		switch (id) {
+			// Checking updated service url, wait a moment before displaying loading overlay
+			case 'checkingNewServiceUrl':
+				timeout = $timeout(function() {
+					vm.working = true;
+				}, 100);
+				break;
 			// Loading bookmark metadata, wait a moment before displaying loading overlay
 			case 'retrievingMetadata':
 				timeout = $timeout(function() {
