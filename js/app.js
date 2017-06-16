@@ -419,13 +419,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             isValid = false;
         }
         else {
-            if (vm.bookmark.current.url.toLowerCase()[0] !== 'h') {
+            // Check for protocol
+            var validProtocolMatches = globals.URL.ProtocolRegex.exec(vm.bookmark.current.url);
+            if (!validProtocolMatches || validProtocolMatches.length <= 0) {
                 vm.bookmark.current.url = 'http://' + vm.bookmark.current.url;
             }
             
             // Check url is valid
-            var matches = vm.bookmark.current.url.match(/^https?:\/\/\w+/i);        
-            if (!matches || matches.length <= 0) {
+            var validUrlMatches = globals.URL.Regex.exec(vm.bookmark.current.url);
+            if (!validUrlMatches || validUrlMatches.length <= 0) {
                 isValid = false;
             }
         }
@@ -1176,7 +1178,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             url: null,
             keywords: []
         };
-        var urlRegex = /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
 
         if (!!vm.search.query) {
             // Check for debug mode keyword
@@ -1187,10 +1188,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             }
 
             // Iterate query words to form query data object
-            var queryWords = vm.search.query.split(/[\s]+/);
+            var queryWords = vm.search.query.split(/[\s,]+/);
             _.each(queryWords, function (queryWord) {
                 // Add query word as url if query is in url format, otherwise add to keywords
-                if (!queryData.url && queryWord.trim().match(urlRegex)) {
+                var urlMatches = globals.URL.Regex.exec(queryWord.trim());
+                if (!queryData.url && !!urlMatches && urlMatches.length > 0) {
                     queryData.url = queryWord.trim();
                 }
                 else {

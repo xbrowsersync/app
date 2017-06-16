@@ -97,8 +97,8 @@ body {
                 border-radius: $border-radius;
                 transition: all, ease-in-out, 0.2s;
                 box-shadow: none;
-                padding: 0 1em 0.1em;
-                line-height: 1.95em;
+                padding: 0 1em;
+                line-height: 2.1em;
                 
                 &:not([disabled]):active,
                 &:not([disabled]):hover {
@@ -598,8 +598,9 @@ body {
     }
     
     .textarea-container {
-        flex: 1 1 13em;
+        flex: 1 1 auto;
         position: relative;
+        min-height: 10em;
     }
 }
 
