@@ -92,12 +92,13 @@
 }
 
 .animate-fade {
-    &.ng-hide {
+    &.ng-hide, &.ng-leave.ng-leave-active {
         opacity: 0!important;
     }
     
-    &.ng-hide-remove {
-        transition: opacity, linear, 0.3s;
+    &.ng-hide-remove, &.ng-leave {
+        transition: opacity, linear, 0.2s;
+        z-index: 20;
     }
 }
 

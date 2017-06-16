@@ -546,6 +546,6 @@
 		"message":  "Only URLs can be shared to xBrowserSync"
 	},
 	"settings_About_Updates_ListHtml": {
-		"message": "<li>iOS and Android apps released!</li><li>(Chrome) New, more intuitive sync/login panel.</li><li>(Chrome) New settings panel layout.</li><li>Bookmark descriptions are now shortened to 300 characters to the nearest word.</li><li>(Chrome) “Connection Lost” warnings are no longer shown when checking for updates in the background.</li><li>Search queries now allow commas between keywords.</li><li>Fixed bug with intermittent duplicate bookmarks IDs.</li><li>Titleless bookmarks now display their URL host as a title.</li><li>Many, many more minor enhancements and bug fixes.</li>"
+		"message": "<li>iOS and Android apps released!</li><li>Redesigned, more intuitive sync/login panel and settings panel.</li><li>Search queries now allow commas between keywords.</li><li>Titleless bookmarks now display their URL host as a title.</li><li>Bookmark descriptions are now shortened to 300 characters to the nearest word.</li><li>“Connection Lost” warnings are no longer shown when checking for updates in the background.</li><li>Many, many more minor enhancements and bug fixes.</li>"
 	}
 }

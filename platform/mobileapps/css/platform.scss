@@ -219,14 +219,9 @@ body {
 }
 
 #search-panel {
-    display: flex;
-    flex-flow: column;
     padding: 10px 10px 0;
 
     .header-panel {
-        flex: none;
-        margin-bottom: 0;
-
         .buttons {
             @media (max-device-width: $height-mobile-small - 1) {
                 position: static;
@@ -276,10 +271,8 @@ body {
     }
 
     .search-results-panel {
-        flex: 0 1 100%;
         margin-top: 15px;
         padding-right: 0;
-        overflow-y: scroll;
 
         & > h4 {
             margin: 10px;

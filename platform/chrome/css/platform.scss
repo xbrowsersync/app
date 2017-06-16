@@ -3,14 +3,30 @@
 @import 'animations.scss';
 
 body {
+    transition: width 0.1s, height 0.1s;
+    transition-timing-function: ease;
+    width: 320px;
+
+    &.search-view {
+        width: 600px;
+
+        .container {
+            height: 4em;
+        }
+    }
+
+    &.search-results-view {
+        @extend .search-view;
+        height: 520px;
+    }
+    
     .background {
         .background-img {
             @include animation(none);
         }
     }
 
-    .view {
-        width: 320px;
+    .container {
         height: 520px;
     }
 
@@ -20,19 +36,12 @@ body {
 }
 
 #search-panel {
-    width: 600px;
-    height: auto;
-
     .header-panel {
         margin-bottom: 10px;
         
         button.btn-settings {
             margin: 0;
         }
-    }
-
-    .search-results-panel {
-        max-height: 410px;
     }
 }
 

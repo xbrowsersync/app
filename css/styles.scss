@@ -34,10 +34,6 @@ body {
     min-width: 320px;
     @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
 
-    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-        display: none !important;
-    }
-
     h1 {
         background: url("../img/logo.svg") 50% 40% no-repeat;
         background-size: 60%;
@@ -430,8 +426,12 @@ body {
     
     .view {
         padding: 10px;
-        max-width: $width-tablet;
+        width: 100%;
+        height: 100%;
         margin: 0 auto;
+        position: absolute;
+        z-index: 10;
+        @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
     }
         
     .well {
@@ -732,9 +732,14 @@ body {
 }
 
 #search-panel {
+    display: flex;
+    flex-flow: column;
     padding: 10px 0 0 10px;
 
     .header-panel {
+        flex: none;
+        margin-bottom: 0;
+
         .buttons {
             position: absolute;
             right: 10px;
@@ -820,10 +825,9 @@ body {
     }
     
     .search-results-panel {
-        height: 100%;
+        flex: 0 1 100%;
         overflow-y: auto;
         padding: 0 10px 0 0;
-        margin-top: 10px;
         
         &.ng-hide {
             margin-top: 0;
@@ -1125,7 +1129,7 @@ body {
 
         label {
             margin-bottom: 0;
-            line-height: 1.45em;
+            line-height: 1.5em;
         }
 
         .description {

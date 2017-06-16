@@ -750,11 +750,18 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Focus on first input field
                 if (!utility.IsMobilePlatform(vm.platformName)) {
                     $timeout(function() {
+                        var inputField;
                         if (!!vm.settings.displayNewSyncPanel) {
-                            document.querySelector('.login-form-new input[name="txtPassword"]').focus();
+                            inputField = document.querySelector('.login-form-new input[name="txtPassword"]');
+                            if (!!inputField) {
+                                inputField.focus();
+                            }
                         }
                         else {
-                            document.querySelector('.login-form-existing input[name="txtId"]').focus();
+                            inputField = document.querySelector('.login-form-existing input[name="txtId"]');
+                            if (!!inputField) {
+                                inputField.focus();
+                            }
                         }
                     });
                 }
@@ -809,7 +816,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
                 // Scroll to top
                 $timeout(function() {
-                    document.querySelector('#settings-panel .panel-container').scrollTop = 0;
+                    var panelContents = document.querySelector('#settings-panel .panel-container');
+                    if (!!panelContents) {
+                        panelContents.scrollTop = 0;
+                    }
                 });
                 break;
             default:
