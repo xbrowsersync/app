@@ -13,7 +13,11 @@
     <script src="js/app-initialise.js"></script>
 </head>
 
-<body data-ng-class="[{ true: 'search-view' }[ vm.view.current === vm.view.views.search && !vm.search.results ],{ true: 'search-results-view' }[ vm.view.current === vm.view.views.search && vm.search.results.length > 0 ]]">
+<body data-ng-class="[
+    { true: 'search-view' }[ vm.view.current === vm.view.views.search && !vm.search.results ],
+    { true: 'search-no-results-view' }[ vm.view.current === vm.view.views.search && vm.search.results.length === 0 ],
+    { true: 'search-results-view' }[ vm.view.current === vm.view.views.search && vm.search.results.length > 0 ]
+    ]">
     <div class="container">
         <div id="working-panel" data-ng-show="vm.working">
             <div class="content">
@@ -50,5 +54,7 @@
 
         <div id="settings-panel" data-ng-include="'./views/settings.html'" data-ng-if="vm.view.current === vm.view.views.settings" class="view animate-fade"></div>
     </div>
+
+    <input id="backupFile" class="hidden" name="files[]" type="file" tabindex="-1" />
 </body>
 </html>

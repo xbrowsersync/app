@@ -693,14 +693,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Reset current view
         switch(vm.view.current) {
             case vm.view.views.bookmark:
-                vm.bookmarkForm.$setPristine();
-                vm.bookmarkForm.$setUntouched();
-                vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', true);
                 vm.bookmark.current = null;
                 vm.bookmark.tagText = null;
                 vm.bookmark.tagTextMeasure = null;
                 vm.bookmark.tagLookahead = null;
-                document.querySelector('textarea[name="bookmarkDescription"]').style.height = null;
                 vm.bookmark.displayUpdateForm = false;
                 break;
             case vm.view.views.search:
@@ -714,10 +710,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.settings.displaySyncBookmarksToolbarConfirmation = false;  
                 vm.settings.displayUpdateServiceUrlConfirmation = false;
                 vm.settings.displayUpdateServiceUrlForm = false;
-                vm.updateServiceUrlForm.$setPristine();
-                vm.updateServiceUrlForm.$setUntouched();
-                vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
-                vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidServiceUrl', true);
                 if (vm.platformName !== globals.Platforms.IOS) {
                     document.querySelector('#backupFile').value = null;
                 }
@@ -813,14 +805,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         })
                         .finally(deferred.resolve);
                 }, 100);
-
-                // Scroll to top
-                $timeout(function() {
-                    var panelContents = document.querySelector('#settings-panel .panel-container');
-                    if (!!panelContents) {
-                        panelContents.scrollTop = 0;
-                    }
-                });
                 break;
             default:
                 deferred.resolve();

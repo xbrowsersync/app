@@ -686,7 +686,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			// Checking updated service url, wait a moment before displaying loading overlay
 			case 'checkingNewServiceUrl':
 				timeout = $timeout(function() {
-					vm.working = true;
+					SpinnerPlugin.activityStart(getConstant(globals.Constants.Working_Title), { dimBackground: true });
 				}, 100);
 				break;
 			// Loading bookmark metadata, display cancellable overlay
@@ -899,7 +899,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		$scope = scope;
 
 		// Set window height
-		var e = window;
+		/*var e = window;
 		var a = 'inner';
 		if (!('innerWidth' in window))
 		{
@@ -907,7 +907,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			e = document.documentElement || document.body;
 		}
 		document.querySelector('html').style.height = e[a + 'Height'] + 'px';
-		document.querySelector('.background').style.height = e[a + 'Height'] + 'px';
+		document.querySelector('.background').style.height = e[a + 'Height'] + 'px';*/
 
 		// Load cordova.js
 		var script = document.createElement('script');
@@ -1307,6 +1307,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						// Set shared url to current url and display bookmark panel
 						currentUrl = sharedUrl;
 						vm.view.change(vm.view.views.bookmark);
+					}
+					else {
+						displayDefaultSearchState();
 					}
 
 					// Check if bookmarks need updating, return immediately if network is disconnected

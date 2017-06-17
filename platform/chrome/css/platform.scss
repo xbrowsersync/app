@@ -21,6 +21,11 @@ body {
         }
     }
 
+    &.search-no-results-view {
+        @extend .search-view;
+        height: calc(#{$search-window-height} + 2.2em);
+    }
+
     &.search-results-view {
         @extend .search-view;
         height: $window-height;
