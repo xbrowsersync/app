@@ -899,7 +899,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		$scope = scope;
 
 		// Set window height
-		/*var e = window;
+		var e = window;
 		var a = 'inner';
 		if (!('innerWidth' in window))
 		{
@@ -907,7 +907,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			e = document.documentElement || document.body;
 		}
 		document.querySelector('html').style.height = e[a + 'Height'] + 'px';
-		document.querySelector('.background').style.height = e[a + 'Height'] + 'px';*/
 
 		// Load cordova.js
 		var script = document.createElement('script');
@@ -918,11 +917,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			document.addEventListener('resume', resume, false);
         };
 		document.getElementsByTagName('head')[0].appendChild(script);
-
-		// Load fastclick
-		document.addEventListener('DOMContentLoaded', function() {
-			FastClick.attach(document.body);
-		}, false);
 
 		// Set async channel to view model
 		vm.sync.asyncChannel = vm;
@@ -1092,10 +1086,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				if (!!initialSyncFailed) {
 					vm.alert.display(platform.GetConstant(globals.Constants.ConnRestored_Title), platform.GetConstant(globals.Constants.ConnRestored_Message));
 
-					// Update search results if currently on the search panel
-					if (vm.view.current === vm.view.views.search) {
-						displayDefaultSearchState();
-					}
+					// Update search results
+					displayDefaultSearchState();
 				}
 				
 				vm.events.handleSyncResponse({ command: syncData.command, success: true, syncData: syncData });
@@ -1251,7 +1243,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 
 	var displayDefaultSearchState = function() {
-        // Clear search and display all bookmarks
+        if (vm.view.current !== vm.view.views.search) {
+			return;
+		}
+		
+		// Clear search and display all bookmarks
 		document.activeElement.blur();
 		vm.search.query = null;
         vm.search.lookahead = null;
@@ -1352,10 +1348,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					.finally(function() {
 						hideLoading('syncingUpdates');
 
-						// Update search results if currently on the search panel
-						if (vm.view.current === vm.view.views.search) {
-							displayDefaultSearchState();
-						}
+						// Update search results
+						displayDefaultSearchState();
 					});
 				})
 				.catch(function(err) {
@@ -1420,10 +1414,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			.finally(function() {
 				hideLoading('syncingUpdates');
 
-				// Update search results if currently on the search panel
-				if (vm.view.current === vm.view.views.search) {
-					displayDefaultSearchState();
-				}
+				// Update search results
+				displayDefaultSearchState();
 			});
 	};
 
@@ -1452,10 +1444,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		if (!!globals.Network.Disconnected.Get()) {
 			getLatestUpdates()
 				.then(function() {
-					// Update search results if currently on the search panel
-					if (vm.view.current === vm.view.views.search) {
-						displayDefaultSearchState();
-					}
+					// Update search results
+					refreshSearchResults();
 				});
 		}
 	};
@@ -1493,6 +1483,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	var isTextInput = function(node) {
 		return ['INPUT', 'TEXTAREA'].indexOf(node.nodeName) !== -1;
 	};
+	
+	var refreshSearchResults = function() {
+        if (vm.view.current !== vm.view.views.search) {
+			return;
+		}
+		
+		// Refresh search results
+		document.activeElement.blur();
+		vm.search.execute();
+	};
 
 	var resume = function() {
 		// Reset network disconnected flag
@@ -1525,7 +1525,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 							return;
 						}
 						
-						// Show loading overlay if currently on the search panel and no query present
+						// Show loading overlay if currently on the search panel
 						if (vm.view.current === vm.view.views.search) {
 							displayLoading('syncingUpdates');
 						}
@@ -1551,10 +1551,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					.finally(function() {
 						hideLoading('syncingUpdates');
 
-						// Update search results if currently on the search panel
-						if (vm.view.current === vm.view.views.search) {
-							displayDefaultSearchState();
-						}
+						// Update search results
+						refreshSearchResults();
 					});
 				})
 				.catch(function(err) {
@@ -1569,7 +1567,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Don't display confirmation before syncing
 		vm.events.syncForm_ConfirmSync_Click();
 	};
-	
 	
 	// Call constructor
 	return new MobileAppsImplementation();

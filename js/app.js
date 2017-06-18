@@ -424,6 +424,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
         // Set invalid service validator
         vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', isValid);
+        vm.bookmarkForm.bookmarkUrl.$setDirty();
     };
     
     var bookmarkForm_CreateBookmark_Click = function() {
@@ -433,6 +434,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if (!!vm.bookmark.current.url && !!vm.bookmark.current.url.trim() && !globals.URL.ProtocolRegex.test(vm.bookmark.current.url)) {
             vm.bookmark.current.url = 'http://' + vm.bookmark.current.url;
         }
+
+        // Validate url
+        bookmarkForm_BookmarkUrl_Change();
+        
+        if (!vm.bookmarkForm.$valid) {
+			document.querySelector('#bookmarkForm .ng-invalid').focus();
+            return;
+		}
 
         // Add tags if tag text present
         if (!!vm.bookmark.tagText && vm.bookmark.tagText.length > 0) {

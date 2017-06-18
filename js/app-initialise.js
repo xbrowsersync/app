@@ -11,6 +11,17 @@ xBrowserSync.App.UI.config(['$animateProvider', function($animateProvider) {
     $animateProvider.classNameFilter(/animate\-|search\-result\-item/);
 }]);
 
+xBrowserSync.App.UI.run(['$templateRequest', function($templateRequest) {
+    // Pre-load templates
+    $templateRequest('./views/login.html', true);
+    $templateRequest('./views/search.html', true);
+    $templateRequest('./views/bookmark.html', true);
+    $templateRequest('./views/settings.html', true);
+
+    // Remove 300ms delay for mobile clicks
+    FastClick.attach(document.body);
+}]);
+
 // Add platform service
 xBrowserSync.App.Platform.$inject = ['$q'];
 xBrowserSync.App.UI.factory('platform', xBrowserSync.App.Platform);
