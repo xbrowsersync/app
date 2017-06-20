@@ -1,4 +1,14 @@
-@include keyframes(animate-flash) {
+@include keyframes(animation-fade-in) {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@include keyframes(animation-fade-out) {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@include keyframes(animation-flash) {
     0% {
         opacity: 0;
     }
@@ -10,7 +20,7 @@
     }
 }
 
-@include keyframes(animate-scroll) { 
+@include keyframes(animation-scroll) { 
     0% { 
         transform: translate3d(0, 0, 0); 
     } 
@@ -19,7 +29,7 @@
     } 
 }
 
-@include keyframes(animate-slide-in) {
+@include keyframes(animation-slide-in) {
     0% {
         left: 105%;
     }
@@ -28,7 +38,7 @@
     }
 }
 
-@include keyframes(animate-slide-out) {
+@include keyframes(animation-slide-out) {
     0% {
         left: 0;
     }
@@ -37,7 +47,7 @@
     }
 }
 
-@include keyframes(animate-fold-down-slide-in) {
+@include keyframes(animation-fold-down-slide-in) {
     0% {
         left: -105%;
         max-height: 0px;
@@ -55,7 +65,7 @@
     }
 }
 
-@include keyframes(animate-slide-out-fold-up) {
+@include keyframes(animation-slide-out-fold-up) {
     0% {
         left: 0;
         max-height: 250px;
@@ -73,7 +83,7 @@
     }
 }
 
-@include keyframes(animate-reverse-slide-in) {
+@include keyframes(animation-reverse-slide-in) {
     0% {
         left: -105%;
     }
@@ -82,7 +92,7 @@
     }
 }
 
-@include keyframes(animate-reverse-slide-out) {
+@include keyframes(animation-reverse-slide-out) {
     0% {
         left: 0;
     }
@@ -92,13 +102,12 @@
 }
 
 .animate-fade {
-    &.ng-hide, &.ng-leave.ng-leave-active {
+    &.ng-hide {
         opacity: 0!important;
     }
     
-    &.ng-hide-remove, &.ng-leave {
-        transition: opacity, linear, 0.3s;
-        z-index: 20;
+    &.ng-hide-remove {
+        @include animation(animation-fade-in 0.2s linear);
     }
 }
 
@@ -108,7 +117,7 @@
     }
     
     &.ng-hide-remove {
-        transition: opacity, linear, 0.7s;
+        @include animation(animation-fade-in 0.7s linear);
     }
 }
 
@@ -118,7 +127,7 @@
     }
     
     &.ng-hide-add {
-        transition: opacity, linear, 0.2s;
+        @include animation(animation-fade-out 0.2s linear);
     }
 }
 
@@ -128,30 +137,30 @@
     }
     
     &.ng-hide-add {
-        transition: opacity, linear, 0.7s;
+        @include animation(animation-fade-out 0.7s linear);
     }
 }
 
 .animate-flash {
-    @include animation(animate-flash 0.8s linear infinite);
+    @include animation(animation-flash 0.8s linear infinite);
 }
 
 .animate-slide {       
     &.ng-hide-add {
-        @include animation(animate-slide-out 0.2s ease);
+        @include animation(animation-slide-out 0.2s ease);
     }
 
     &.ng-hide-remove {
-        @include animation(animate-slide-in 0.2s ease);
+        @include animation(animation-slide-in 0.2s ease);
     }
 
     &.reverse {
         &.ng-hide-add {
-            @include animation(animate-reverse-slide-out 0.2s ease);
+            @include animation(animation-reverse-slide-out 0.2s ease);
         }
 
         &.ng-hide-remove {
-            @include animation(animate-reverse-slide-in 0.2s ease);
+            @include animation(animation-reverse-slide-in 0.2s ease);
         }
     }
 }

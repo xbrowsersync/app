@@ -26,6 +26,10 @@
 	font-style: italic;
 }
 
+* {
+    box-shadow: none!important;
+}
+
 body {
     font-family: $font-stack;
     color: $colour-text1;
@@ -92,7 +96,6 @@ body {
                 border-width: 2px;
                 border-radius: $border-radius;
                 transition: all, ease-in-out, 0.2s;
-                box-shadow: none;
                 padding: 0 1em;
                 line-height: 2.1em;
                 
@@ -125,7 +128,6 @@ body {
                 color: $colour-text2;
                 padding: 0;
                 transition: all, ease-in-out, 0.2s;
-                box-shadow: none;
                 border-radius: 0;
                 border-bottom: solid 1px transparent;
                 
@@ -155,7 +157,6 @@ body {
             &:active:focus,
             &:focus,
             &:hover {
-                box-shadow: none;
                 outline: 0;
             }
         }
@@ -170,14 +171,9 @@ body {
         resize: none;
         border: none;
         border-radius: $border-radius;
-        box-shadow: none;
         @include placeholder {
             color: $colour-text2;
             opacity: 0.4;
-        }
-
-        &:focus {
-            box-shadow: none;
         }
     }
 
@@ -236,7 +232,7 @@ body {
             position: absolute; 
             top: -479px; 
             left: -10px; 
-            @include animation(animate-scroll 150s linear infinite);
+            @include animation(animation-scroll 150s linear infinite);
         }
     }
 
@@ -328,15 +324,10 @@ body {
 
     .has-error {
         .form-control {
-            box-shadow: none;
             color: $colour-danger!important;
             @include placeholder {
                 color: $colour-danger!important;
                 opacity: 0.7;
-            }
-
-            &:focus {
-                box-shadow: none;
             }
         }
     }
@@ -425,19 +416,41 @@ body {
     }
     
     .view {
-        padding: 10px;
-        width: 100%;
-        height: 100%;
-        margin: 0 auto;
         position: absolute;
+        height: 100%;
+        width: 100%;
         z-index: 10;
-        @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
+
+        &.active {
+            z-index: 20;
+        }
+
+        .view-content {
+            height: 100%;
+            padding: 10px;
+            margin: 0 auto;
+            z-index: 10;
+            @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
+
+            &.ng-enter, &.ng-leave {
+                display: block!important;
+            }
+
+            &.ng-enter {
+                @include animation(animation-fade-in 0.1s linear);
+                z-index: 10!important;
+            }
+
+            &.ng-leave {
+                @include animation(animation-fade-out 0.1s linear);
+                z-index: 20;
+            }
+        }
     }
         
     .well {
         background-color: $colour-text1;
         color: $colour-text2;
-        box-shadow: none;
         border-radius: $border-radius;
         border: none;
         padding: 15px 20px;
@@ -492,9 +505,11 @@ body {
 }
 
 #bookmark-panel {
-    display: flex;
-    flex-flow: column;
-    
+    & > div {
+        display: flex;
+        flex-flow: column;
+    }
+
     textarea {
         height: 100%;
         width: 100%;
@@ -605,6 +620,10 @@ body {
 }
 
 #login-panel {
+    & > div {
+        background: transparent;
+    }
+
     form {
         position: relative;
         
@@ -713,14 +732,12 @@ body {
         }
 
         .progress {
-            box-shadow: none;
             background-color: transparent;
             border: solid 2px $colour-text1;
             border-radius: $border-radius;
             z-index: 10;
 
             .progress-bar {
-                box-shadow: none;
                 background-color: $colour-danger;                
             }
         }
@@ -732,31 +749,32 @@ body {
 }
 
 #search-panel {
-    display: flex;
-    flex-flow: column;
-    padding: 10px 0 0 10px;
+    .view-content {
+        display: flex;
+        flex-flow: column;
+        padding: 10px 0 0 10px;
+    }
 
     .header-panel {
         flex: none;
+        display: flex;
+        flex-direction: row-reverse;
+        padding-right: 10px;
         margin-bottom: 0;
 
-        .buttons {
-            position: absolute;
-            right: 10px;
-            top: 0.25em;
-            margin-top: 0;
+        .btn {
+            flex: none;
+            margin-right: 10px;
 
-            .btn-settings {
+            &:last-child {
+                margin-right: 0;
+            }
+
+            &.btn-settings {
                 float: none;
             }
             
-            .btn-toggle-bookmark {
-                margin-right: 0.25em;
-
-                i:before {
-                    content: "\f097";
-                }
-                
+            &.btn-toggle-bookmark {
                 &.active {
                     i:before {
                         content: "\f02e";
@@ -766,12 +784,11 @@ body {
         }
         
         .search-form {
+            flex: 0 1 100%;
             position: relative;
-            float: left;
             border-radius: $border-radius;
             background-color: $colour-text1;
-            width: calc(100% - 5em);
-            overflow: hidden;
+            margin-right: 10px;
 
             label {
                 position: absolute;
@@ -867,7 +884,7 @@ body {
 
             &.animate-added {
                 &.ng-enter {
-                    @include animation(animate-fold-down-slide-in 0.6s ease);
+                    @include animation(animation-fold-down-slide-in 0.6s ease);
 
                     &.ng-enter-active {
                         left: 0;
@@ -881,7 +898,7 @@ body {
                 &.ng-enter,
                 &.ng-leave,
                 &.ng-move {
-                    @include animation(animate-slide-out-fold-up 0.6s ease);
+                    @include animation(animation-slide-out-fold-up 0.6s ease);
 
                     &.ng-enter-active,
                     &.ng-leave-active,
@@ -1031,9 +1048,11 @@ body {
 }
 
 #settings-panel {
-    display: flex;
-    flex-flow: column;
-    padding: 10px 0 0 10px;
+    & > div {
+        display: flex;
+        flex-flow: column;
+        padding: 10px 0 0 10px;
+    }
 
     a {
         border-bottom-color: $colour-text2;
@@ -1145,7 +1164,6 @@ body {
             border: 0;
             border-radius: 0;
             background: transparent;
-            box-shadow: none;
             transition: none;
 
             .checkbox {
@@ -1176,7 +1194,6 @@ body {
         .progress {
             height: 5px;
             border-radius: 5px;
-            box-shadow: none;
             background-color: $colour-text2;
             position: relative;
             overflow: visible;
@@ -1195,7 +1212,6 @@ body {
 
             .progress-bar {
                 background-color: $colour-bg2;
-                box-shadow: none;
                 transition: none;
             }
 

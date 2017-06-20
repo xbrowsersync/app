@@ -583,7 +583,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                             if (!!metadata) {
                                 // Set form properties to url metadata
                                 bookmark.title = metadata.title;
-                                bookmark.description = metadata.description;
+                                bookmark.description = utility.TrimToNearestWord(metadata.description, globals.Bookmarks.DescriptionMaxLength);
                                 bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
                             }
 
@@ -1508,10 +1508,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Set bookmark form properties to selected bookmark
         vm.bookmark.current = bookmark;
         
-        // Display bookmark panel with slight delay to avoid focussing on description field
-        $timeout(function() {
-            vm.view.change(vm.view.views.bookmark);            
-        }, 500);
+        // On mobiles, display bookmark panel with slight delay to avoid focussing on description field
+        if (utility.IsMobilePlatform(vm.platformName)) {
+            $timeout(function() {
+                vm.view.change(vm.view.views.bookmark);
+            }, 500);
+        }
+        else {
+            vm.view.change(vm.view.views.bookmark);
+        }
     };
     
     var setBookmarkStatus = function() {

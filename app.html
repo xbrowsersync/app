@@ -46,13 +46,21 @@
             <p data-ng-bind-html="vm.alert.message"></p>
         </div>
 
-        <div id="login-panel" data-ng-include="'./views/login.html'" data-ng-if="vm.view.current === vm.view.views.login" class="view animate-fade"></div>
+        <div id="login-panel" class="view" ng-class="{ 'active': vm.view.current === vm.view.views.login }">
+            <div class="view-content" data-ng-include="'./views/login.html'" data-ng-if="vm.view.current === vm.view.views.login"></div>
+        </div>
 
-        <div id="search-panel" data-ng-include="'./views/search.html'" data-ng-if="vm.view.current === vm.view.views.search" class="view animate-fade"></div>
+        <div id="search-panel" class="view" ng-class="{ 'active': vm.view.current === vm.view.views.search }">
+            <div class="view-content" data-ng-include="'./views/search.html'" data-ng-if="vm.view.current === vm.view.views.search"></div>
+        </div>
 
-        <div id="bookmark-panel" data-ng-include="'./views/bookmark.html'" data-ng-if="vm.view.current === vm.view.views.bookmark" class="view animate-fade"></div>
+        <div id="bookmark-panel" class="view" ng-class="{ 'active': vm.view.current === vm.view.views.bookmark }">
+            <div class="view-content" data-ng-include="'./views/bookmark.html'" data-ng-if="vm.view.current === vm.view.views.bookmark"></div>
+        </div>
 
-        <div id="settings-panel" data-ng-include="'./views/settings.html'" data-ng-if="vm.view.current === vm.view.views.settings" class="view animate-fade"></div>
+        <div id="settings-panel" class="view" ng-class="{ 'active': vm.view.current === vm.view.views.settings }">
+            <div class="view-content" data-ng-include="'./views/settings.html'" data-ng-if="vm.view.current === vm.view.views.settings"></div>
+        </div>
     </div>
 
     <input id="backupFile" class="hidden" name="files[]" type="file" tabindex="-1" />

@@ -1,16 +1,14 @@
 <div class="header-panel clearfix">
-    <div class="buttons clearfix">
-        <button class="btn btn-icon btn-toggle-bookmark" data-ng-class="{ 'active': vm.bookmark.active }" title="{{ vm.bookmark.active ? vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) : vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}" 
-                data-ng-click="vm.events.searchForm_ToggleBookmark_Click()" tabindex="1000">
-            <i class="fa" aria-hidden="true"></i>
-            <span class="sr-only" data-ng-if="vm.bookmark.active">{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}</span>
-            <span class="sr-only" data-ng-if="!vm.bookmark.active">{{ vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}</span>
-        </button>
-        <button class="btn btn-icon btn-settings" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}" data-ng-click="vm.view.change(vm.view.views.settings)" tabindex="1002">
-            <i class="fa fa-cog" aria-hidden="true"></i>
-            <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}</span>
-        </button>
-    </div>
+    <button class="btn btn-icon btn-settings" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}" data-ng-click="vm.view.change(vm.view.views.settings)" tabindex="1002">
+        <i class="fa fa-cog" aria-hidden="true"></i>
+        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}</span>
+    </button>
+    <button class="btn btn-icon btn-toggle-bookmark" data-ng-class="{ 'active': vm.bookmark.active }" title="{{ vm.bookmark.active ? vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) : vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}" 
+            data-ng-click="vm.events.searchForm_ToggleBookmark_Click()" tabindex="1000">
+        <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+        <span class="sr-only" data-ng-if="vm.bookmark.active">{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}</span>
+        <span class="sr-only" data-ng-if="!vm.bookmark.active">{{ vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}</span>
+    </button>
     <div class="search-form">
         <input class="form-control" name="txtSearch" maxlength="200" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Search_Field_Description) }}" data-ng-model="vm.search.query" 
                 data-ng-change="vm.events.searchForm_SearchText_Change()" data-ng-keydown="vm.events.searchForm_SearchText_KeyDown($event)" data-ng-trim="false" autocapitalize="off" autocomplete="off" autocorrect="off" tabindex="1" />

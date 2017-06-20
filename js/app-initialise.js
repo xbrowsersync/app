@@ -8,7 +8,7 @@ xBrowserSync.App.UI.config(['$compileProvider', function($compileProvider) {
 
 // Restrict animations to elements with class prefix "animate-"
 xBrowserSync.App.UI.config(['$animateProvider', function($animateProvider) {
-    $animateProvider.classNameFilter(/animate\-|search\-result\-item/);
+    $animateProvider.classNameFilter(/animate\-|search\-result\-item|view\-content/);
 }]);
 
 xBrowserSync.App.UI.run(['$templateRequest', function($templateRequest) {

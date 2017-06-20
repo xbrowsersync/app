@@ -898,7 +898,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		vm = viewModel;
 		$scope = scope;
 
-		// Set window height
+		// Set window and panel heights
 		var e = window;
 		var a = 'inner';
 		if (!('innerWidth' in window))
@@ -907,6 +907,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			e = document.documentElement || document.body;
 		}
 		document.querySelector('html').style.height = e[a + 'Height'] + 'px';
+		document.querySelector('.view').style.height = e[a + 'Height'] + 'px';
 
 		// Load cordova.js
 		var script = document.createElement('script');
