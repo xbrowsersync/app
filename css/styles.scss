@@ -432,18 +432,8 @@ body {
             z-index: 10;
             @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
 
-            &.ng-enter, &.ng-leave {
-                display: block!important;
-            }
-
             &.ng-enter {
                 @include animation(animation-fade-in 0.1s linear);
-                z-index: 10!important;
-            }
-
-            &.ng-leave {
-                @include animation(animation-fade-out 0.1s linear);
-                z-index: 20;
             }
         }
     }
@@ -749,31 +739,11 @@ body {
 }
 
 #search-panel {
-    .view-content {
-        display: flex;
-        flex-flow: column;
-        padding: 10px 0 0 10px;
-    }
-
     .header-panel {
-        flex: none;
-        display: flex;
-        flex-direction: row-reverse;
         padding-right: 10px;
         margin-bottom: 0;
 
         .btn {
-            flex: none;
-            margin-right: 10px;
-
-            &:last-child {
-                margin-right: 0;
-            }
-
-            &.btn-settings {
-                float: none;
-            }
-            
             &.btn-toggle-bookmark {
                 &.active {
                     i:before {
@@ -845,6 +815,7 @@ body {
         flex: 0 1 100%;
         overflow-y: auto;
         padding: 0 10px 0 0;
+        margin-top: 10px;
         
         &.ng-hide {
             margin-top: 0;

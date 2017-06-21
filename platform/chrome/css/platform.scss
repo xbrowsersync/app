@@ -47,11 +47,32 @@ body {
 }
 
 #search-panel {
-    .header-panel {
-        margin-bottom: 10px;
-        
-        button.btn-settings {
-            margin: 0;
+    .view-content {
+        display: flex;
+        flex-flow: column;
+        padding: 10px 0 0 10px;
+    
+        .header-panel {
+            flex: none;
+            display: flex;
+            flex-direction: row-reverse;
+            
+            .btn {
+                flex: none;
+
+                &.btn-settings {
+                    float: none;
+                }
+
+                &.btn-toggle-bookmark {
+                    margin-right: 10px;
+                }
+            }
+
+            .search-form {
+                flex: 0 1 100%;
+                margin-right: 10px;
+            }
         }
     }
 }

@@ -107,6 +107,20 @@ body {
         margin-left: 5px;
     }
 
+    .view {
+        .view-content {
+            &.ng-enter {
+                @include animation(animation-fade-in 0.2s linear);
+                z-index: 10!important;
+            }
+
+            &.ng-leave {
+                @include animation(animation-fade-out 0.2s linear);
+                z-index: 20;
+            }
+        }
+    }
+
     .well {
         .btn.btn-default {
             color: $colour-text2;
@@ -216,95 +230,78 @@ body {
 #search-panel {
     padding: 10px 10px 0;
 
-    .header-panel {
-        .buttons {
-            @media (max-device-width: $height-mobile-small - 1) {
-                position: static;
-                margin: 0 0 5px;
-            }
+    .view-content {
+        padding: 10px 0;
 
-            @media (min-device-width: $height-mobile-small) {
-                display: none;
-            }
+        .header-panel {
+            padding-right: 0;
 
-            @media (min-device-width: $width-tablet) {
-                display: block;
-            }
+            .btn {
+                &.btn-toggle-bookmark {
+                    i:before {
+                        content: "\f02e";
+                    }
 
-            .btn-settings {
-                float: right;
-            }
-            
-            .btn-toggle-bookmark {
-                right: 1.1em;
-                
-                @media (max-device-width: $width-tablet) {
-                    float: left;
-                }
-
-                i:before {
-                    content: "\f02e";
-                }
-
-                i:after {
-                    content: "\f067";
-                    font-size: 0.35em;
-                    color: $colour-bg2;
-                    position: relative;
-                    top: -0.9em;
-                    left: -1.4em;
-                    opacity: 1;
+                    i:after {
+                        content: "\f067";
+                        font-size: 0.35em;
+                        color: $colour-bg2;
+                        position: relative;
+                        top: -0.9em;
+                        left: -1.4em;
+                        opacity: 1;
+                    }
                 }
             }
-        }
 
-        .search-form {
-            @media (max-device-width: $width-tablet - 1) {
+            .search-form {
                 width: 100%;
+                margin-top: 5px;
             }
         }
-    }
 
-    .search-results-panel {
-        margin-top: 15px;
-        padding-right: 0;
+        .search-results-panel {
+            margin-top: 15px;
+            padding-right: 0;
+            height: 100%;
 
-        & > h4 {
-            margin: 10px;
-        }
+            & > h4 {
+                margin: 10px;
+            }
 
-        .list-group-item {
-            margin: 0 0 15px 0;
+            .list-group-item {
+                margin: 0 0 15px 0;
 
-            &.active:hover, &:hover {
-                .list-group-item-heading {
-                    color: $colour-text2;
+                &.active:hover, &:hover {
+                    .list-group-item-heading {
+                        color: $colour-text2;
+                    }
+                }
+
+                a {
+                    padding: 15px 20px;
+                }
+
+                .btn-edit-bookmark {
+                    display: none!important;
+                }
+
+                .overlay {
+                    display: block;
                 }
             }
 
-            a {
-                padding: 15px 20px;
-            }
-
-            .btn-edit-bookmark {
-                display: none!important;
-            }
-
-            .overlay {
-                display: block;
+            .list-group-item-heading {
+                transition: none;
             }
         }
 
-        .list-group-item-heading {
-            transition: none;
-        }
-    }
+        .search-panel-background {
+            display: block;
 
-    .search-panel-background {
-        display: block;
-
-        @media (min-device-width: $height-mobile-small) and (orientation:landscape) {
-            background-size: 20%;
+            @media (min-device-width: $height-mobile-small) and (orientation:landscape) {
+                background-size: 20%;
+            }
         }
     }
 }
