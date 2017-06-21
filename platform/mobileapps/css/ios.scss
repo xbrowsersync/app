@@ -13,3 +13,9 @@ body {
 #login-panel, #search-panel, #bookmark-panel, #settings-panel {
     padding-top: 25px;
 }
+
+#search-panel {
+    .view-content {
+        padding: 10px 0;
+    }
+}
