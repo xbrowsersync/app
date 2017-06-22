@@ -575,7 +575,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Unable to read the selected file"
 		},
 		"error_InvalidUrlScheme_Title": {
-			"message":  "Only URLs can be shared to xBrowserSync"
+			"message":  "Unable to retrieve shared bookmark URL."
+		},
+		"error_FailedShareUrlNotSynced_Title": {
+			"message":  "You must be synced to add a bookmark."
 		},
 		"settings_About_Updates_ListHtml": {
 			"message": "<li>iOS and Android apps released!</li><li>Redesigned, more intuitive sync/login panel and settings panel.</li><li>Search queries now allow commas between keywords.</li><li>Titleless bookmarks now display their URL host as a title.</li><li>Bookmark descriptions are now shortened to 300 characters to the nearest word.</li><li>“Connection Lost” warnings are no longer shown when checking for updates in the background.</li><li>Many, many more minor enhancements and bug fixes.</li>"
@@ -1204,6 +1207,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						else {
 							// Can't use it so remove the intent
 							window.plugins.webintent.removeExtra(window.plugins.webintent.EXTRA_TEXT);
+
+							// Display alert
+							vm.alert.display(null, getConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title));
+
 							deferred.resolve();
 						}
 					}
@@ -1452,16 +1459,32 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 
 	var handleSharedIosUrl = function(sharedUrl) {
-		// Process requested url if sync is enabled
-		if (!!sharedUrl && !!globals.SyncEnabled.Get()) {
-			var url = utility.ParseUrl(sharedUrl);
+		var regex = new RegExp('^' + globals.URL.CustomScheme + globals.URL.Bookmarks + globals.URL.Current, 'i');
+		if (!!sharedUrl && !regex.test(sharedUrl)) {
+			// User clicked on a normal link, return
+			return;
+		}
 
-			// Check url scheme is valid
-			if (!!url && !!url.searchObject && !!url.searchObject.url && 
-				'/' + url.hostname === globals.URL.Bookmarks && url.pathname === globals.URL.Current) {
-				// Set shared url to current url
-				currentUrl = decodeURIComponent(url.searchObject.url);
-			}
+		if (!globals.SyncEnabled.Get()) {
+			// Not synced, display alert and return
+			vm.alert.display(null, getConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title));
+			return
+		}
+
+		if (!sharedUrl) {
+			// Not, display alert and return
+			vm.alert.display(null, getConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title));
+			return
+		}
+
+		var url = utility.ParseUrl(sharedUrl);
+		if (!!url && !!url.searchObject && !!url.searchObject.url) {
+			// Set shared url to current url
+			currentUrl = decodeURIComponent(url.searchObject.url);
+		}
+		else {
+			// No shared url found
+			vm.alert.display(null, getConstant(globals.Constants.Error_InvalidUrlScheme_Title));
 		}
 	};
 

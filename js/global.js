@@ -272,7 +272,8 @@ xBrowserSync.App.Global = function(platform) {
             Error_FailedBackupData_Title: 'error_FailedBackupData_Title',
             Error_FailedGetDataToRestore_Title: 'error_FailedGetDataToRestore_Title',
             Error_FailedRestoreData_Title: 'error_FailedRestoreData_Title',
-            Error_InvalidUrlScheme_Title: 'error_InvalidUrlScheme_Title'
+            Error_InvalidUrlScheme_Title: 'error_InvalidUrlScheme_Title',
+            Error_FailedShareUrlNotSynced_Title: 'error_FailedShareUrlNotSynced_Title'
         },
         DisableEventListeners: {
             Get: function() {
@@ -596,8 +597,9 @@ xBrowserSync.App.Global = function(platform) {
             Current: '/current',
             LastUpdated: '/lastUpdated',
             ServiceInformation: '/info',
-            Regex: /^(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/i,
-            ProtocolRegex: /^\w+:\/\//i
+            Regex: /^(\w+:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/i,
+            ProtocolRegex: /^\w+:\/\//i,
+            CustomScheme: 'xbrowsersync:/'
         }
     };
     

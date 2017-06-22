@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>xBrowserSync</string>
+	<string>Add Bookmark</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -25,14 +25,7 @@
 		<key>NSExtensionAttributes</key>
 		<dict>
 			<key>NSExtensionActivationRule</key>
-			<dict>
-				<key>NSExtensionActivationSupportsText</key>
-				<true/>
-				<key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
-				<integer>1</integer>
-			</dict>
-			<key>NSExtensionJavaScriptPreprocessingFile</key>
-			<string>Action</string>
+			<string>SUBQUERY(extensionItems, $extensionItem, SUBQUERY($extensionItem.attachments, $attachment, SUBQUERY($attachment.registeredTypeIdentifiers, $uti, $uti UTI-CONFORMS-TO "public.url" AND NOT $uti UTI-CONFORMS-TO "public.file-url").@count &gt;= 1).@count &gt;= 1).@count &gt;= 1</string>
 		</dict>
 		<key>NSExtensionMainStoryboard</key>
 		<string>MainInterface</string>
