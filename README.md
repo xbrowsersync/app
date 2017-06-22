@@ -23,12 +23,9 @@ In order to build the iOS app to include iCloud and Share Sheet integration, the
 
 1. Run Xcode and open the xBrowserSync project file in `platform/mobileapps/cordova/platforms/ios/`.
 2. In xBrowserSync target Capabilities, enable iCloud and check the iCloud Documents service. The container should resolve automatically using your provisioning profile (see [FilePicker Phonegap iOS Plugin](https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin) for more information). 
-3. Create a new target, select Share Extension and name it 'shareExt' (use the Swift language).
-4. In the shareExt folder, add a new blank file called 'Action.js'.
-5. Set the Target Membership of Resouces/Images.xcassets to include shareExt.
-6. In shareExt target Build Settings, in the Asset Catalog Compiler – Options section, set Asset Catalog App Icon Set Name to 'AppIcon' (the shareExt icon should now appear as the xBrowserSync icon).
-7. Also in shareExt Build Settings, if you're using Xcode version 8 or higher, set Use Legacy Swift Language Version to Yes.
-8. If you're using Xcode version 7, in shareExt Build Phases add CordovaLib to Target Dependencies.
+3. Create a new target, select Share Extension then set the Product Name to 'addBookmark' and click Finish.
+4. Set the Target Membership of Resouces/Images.xcassets to include addBookmark.
+5. In addBookmark target Build Settings, in the Asset Catalog Compiler – Options section, set Asset Catalog App Icon Set Name to 'AppIcon' (the target's icon should now appear as the xBrowserSync icon).
 
 # Building
 
