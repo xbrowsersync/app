@@ -1302,30 +1302,33 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			return;
 		}
 
-		// If synced, refresh synced bookmarks and display all
-		if (!!globals.SyncEnabled.Get()) {
-			// Check if a url was shared
-			checkForSharedUrl()
-				.then(function(sharedUrl) {
-					if (!!sharedUrl) {
-						// Set shared url to current url and display bookmark panel
-						currentUrl = sharedUrl;
-						vm.view.change(vm.view.views.bookmark);
-					}
-					else {
-						displayDefaultSearchState();
-					}
+		// Check if a url was shared
+		checkForSharedUrl()
+			.then(function(sharedUrl) {
+				if (!globals.SyncEnabled.Get()) {
+					return;
+				}
+				
+				if (!!sharedUrl) {
+					// Set shared url to current url and display bookmark panel
+					currentUrl = sharedUrl;
+					vm.view.change(vm.view.views.bookmark);
+				}
+				else {
+					displayDefaultSearchState();
+				}
 
-					// Check if bookmarks need updating, return immediately if network is disconnected
-					var checkForUpdates;
-					if (!globals.Network.Disconnected.Get()) {
-						checkForUpdates = bookmarks.CheckForUpdates();
-					}
-					else {
-						checkForUpdates = $q.reject({ code: globals.ErrorCodes.HttpRequestFailed });
-					}
-					
-					checkForUpdates.then(function(updatesAvailable) {
+				// Check if bookmarks need updating, return immediately if network is disconnected
+				var checkForUpdates;
+				if (!globals.Network.Disconnected.Get()) {
+					checkForUpdates = bookmarks.CheckForUpdates();
+				}
+				else {
+					checkForUpdates = $q.reject({ code: globals.ErrorCodes.HttpRequestFailed });
+				}
+				
+				checkForUpdates
+					.then(function(updatesAvailable) {
 						if (!updatesAvailable) {
 							return;
 						}
@@ -1359,13 +1362,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						// Update search results
 						displayDefaultSearchState();
 					});
-				})
-				.catch(function(err) {
-					// Display alert
-					var errMessage = utility.GetErrorMessageFromException(err);
-					vm.alert.display(errMessage.title, errMessage.message);
-				});
-		}
+			})
+			.catch(function(err) {
+				// Display alert
+				var errMessage = utility.GetErrorMessageFromException(err);
+				vm.alert.display(errMessage.title, errMessage.message);
+			});
 
 		// Check for updates regularly
 		$interval(function() {
@@ -1522,29 +1524,33 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Reset network disconnected flag
         globals.Network.Disconnected.Set(!utility.CheckConnection());
 
-		if (!!globals.SyncEnabled.Get()) {
-			// Deselect bookmark
-			vm.search.selectedBookmark = null;
-			
-			// Check if a url was shared
-			checkForSharedUrl()
-				.then(function(sharedUrl) {
-					if (!!sharedUrl) {
-						// Set shared url to current url and display bookmark panel
-						currentUrl = sharedUrl;
-						vm.view.change(vm.view.views.bookmark);
-					}
+		// Deselect bookmark
+		vm.search.selectedBookmark = null;
+		
+		// Check if a url was shared
+		checkForSharedUrl()
+			.then(function(sharedUrl) {
+				if (!globals.SyncEnabled.Get()) {
+					return;
+				}
+				
+				if (!!sharedUrl) {
+					// Set shared url to current url and display bookmark panel
+					currentUrl = sharedUrl;
+					vm.view.change(vm.view.views.bookmark);
+				}
 
-					// Check if bookmarks need updating, return immediately if network is disconnected
-					var checkForUpdates;
-					if (!globals.Network.Disconnected.Get()) {
-						checkForUpdates = bookmarks.CheckForUpdates();
-					}
-					else {
-						checkForUpdates = $q.reject({ code: globals.ErrorCodes.HttpRequestFailed });
-					}
-					
-					checkForUpdates.then(function(updatesAvailable) {
+				// Check if bookmarks need updating, return immediately if network is disconnected
+				var checkForUpdates;
+				if (!globals.Network.Disconnected.Get()) {
+					checkForUpdates = bookmarks.CheckForUpdates();
+				}
+				else {
+					checkForUpdates = $q.reject({ code: globals.ErrorCodes.HttpRequestFailed });
+				}
+				
+				checkForUpdates
+					.then(function(updatesAvailable) {
 						if (!updatesAvailable) {
 							return;
 						}
@@ -1578,13 +1584,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						// Update search results
 						refreshSearchResults();
 					});
-				})
-				.catch(function(err) {
-					// Display alert
-					var errMessage = utility.GetErrorMessageFromException(err);
-					vm.alert.display(errMessage.title, errMessage.message);
-				});
-		}
+			})
+			.catch(function(err) {
+				// Display alert
+				var errMessage = utility.GetErrorMessageFromException(err);
+				vm.alert.display(errMessage.title, errMessage.message);
+			});
 	};
 
 	var syncForm_EnableSync_Click = function() {
