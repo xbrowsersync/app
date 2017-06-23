@@ -48,12 +48,9 @@ body {
 
 #search-panel {
     .view-content {
-        display: flex;
-        flex-flow: column;
         padding: 10px 0 0 10px;
     
         .header-panel {
-            flex: none;
             display: flex;
             flex-direction: row-reverse;
             
