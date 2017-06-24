@@ -156,8 +156,11 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 			case globals.ErrorCodes.FailedRestoreData:
 				errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedRestoreData_Title);
 				break;
-			case globals.ErrorCodes.InvalidUrlScheme:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_InvalidUrlScheme_Title);
+			case globals.ErrorCodes.FailedShareUrl:
+				errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedShareUrl_Title);
+				break;
+			case globals.ErrorCodes.FailedShareUrlNotSynced:
+				errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title);
 				break;
             default:
 				errorMessage.title = platform.GetConstant(globals.Constants.Error_Default_Title);

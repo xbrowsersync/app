@@ -50,25 +50,25 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "<h4>Syncing for the first time</h4><p>Your data is encrypted before it is synced so you’ll need to enter an encryption password first. Make it strong but also memorable, if you forget it you won’t be able to retrieve your synced data (and there are no reminders!).</p><p>Then simply click the Sync button and that’s it — you’re synced and ready to start adding bookmarks.</p>"
 		},
 		"login_introPanel3_Message": {
-			"message": "<h4>Already synced (got an ID)</h4><p>When you create a new sync you are given a new xBrowserSync ID which you can use along with your encryption password to sync to your existing data.</p><p>Once synced you can view your ID in the Settings panel along with the corresponding QR code for syncing to your data on your mobile devices.</p>"
+			"message": "<h4>Already synced (got an ID)</h4><p>When you create a new sync you are given a unique xBrowserSync ID which you can use along with your password to sync your data on other devices.</p><p>Once synced you can view your ID in the Settings panel along with a handy QR code to scan when syncing on mobile devices.</p>"
 		},
 		"login_introPanel4_Message": {
-			"message": "<h4>Syncing to another service</h4><p>By default your data is synced to the official xBrowserSync service, though anyone can <a href='https://github.com/xBrowserSync/API' class='new-tab'>run their own xBrowserSync service</a>, either for private use (for ultimate security and privacy) or to make available for public use so that more people can enjoy xBrowserSync.</p><p>Check the available <a href='https://www.xbrowsersync.org/#status' class='new-tab'>xBrowserSync services</a> and switch your active service in the Settings panel.</p>"
+			"message": "<h4>Syncing to another service</h4><p>By default your data is synced to the official xBrowserSync service, though anyone can <a href='https://github.com/xBrowserSync/API' class='new-tab'>run their own xBrowserSync service</a>, either for private use (for ultimate security and privacy) or to make available for public use so that more people can enjoy xBrowserSync.</p><p>Check the available <a href='https://www.xbrowsersync.org/#status' class='new-tab'>xBrowserSync services</a> and switch services in the Settings panel.</p>"
 		},
 		"login_introPanel5_Message": {
-			"message": "<h4>New service, new ID</h4><p>IDs are service-specific. When you create a sync with a service, the xBrowserSync ID you are given can only be used with that service.</p><p>Whenever you change services you must create a new sync, you’ll then receive a new ID for use with that service (you can then restore your backed-up data after creating the new sync).</p>"
+			"message": "<h4>New service, new ID</h4><p>Your xBrowserSync ID will only work with the service on which it was first synced.</p><p>Whenever you change services you must create a new sync and receive a new ID. Don’t worry, it’s easy to move your synced data by backing it up using the former service and simply restoring it on the latter.</p>"
 		},
 		"login_introPanel6_Message": {
-			"message": "<h4>Searching your bookmarks</h4><p>Your bookmarks are displayed with the most recent showing first. To search your bookmarks, simply enter some keywords or a URL and the list will be filtered to display only those bookmarks that are relevant to your query.</p><p>You can also share, modify or delete bookmarks from the search results by long pressing on a search result.</p>"
+			"message": "<h4>Searching your bookmarks</h4><p>Once synced, your bookmarks are displayed in chronological order when you open xBrowserSync. Searching is as easy as typing some keywords or a URL in the search box.</p><p>Long pressing on a bookmark will allow you to directly share, modify or delete the bookmark.</p>"
 		},
 		"login_introPanel7_Message": {
-			"message": "<h4>Adding a bookmark</h4><p>Add new bookmarks by either sharing a URL to the xBrowserSync app from your favourite apps (browsers, YouTube, Spotify and any other app that shares URLs), or by pressing the bookmark icon to add a bookmark manually.</p><p>When sharing a bookmark the title, description and tags will be retrieved for you, otherwise manually add a description and tags to ensure better search results.</p>"
+			"message": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be automatically fetched for you, otherwise add them manually to ensure better search results.</p>"
 		},
 		"login_introPanel8_Message": {
-			"message": "<h4>Remember to back up</h4><p>xBrowserSync services are run voluntarily, plus servers can break and go wrong so please look after your data and make sure to keep backups.</p><p>Open the Settings panel and in the Back up and restore tab you can back up your unencrypted synced data to a local file, which can then restored at a later date should you need to.</p>"
+			"message": "<h4>Remember to back up</h4><p>Nothing in life is 100% certain (especially web servers) so please look after your data and make sure to take backups.</p><p>You can do this easily in the Settings panel, you can back up your unencrypted data to a local file which can then restored at a later date should you need to.</p>"
 		},
 		"login_introPanel9_Message": {
-			"message": "<h4>Got desktop?</h4><p>Sync your xBrowserSync data with your desktop browser using the xBrowserSync browser extension, available for Chrome and with Firefox support coming soon.</p>"
+			"message": "<h4>Got desktop?</h4><p>Sync your xBrowserSync data with your desktop browser using the xBrowserSync web extension, currently available for Chrome and with Firefox support coming very soon.</p>"
 		},
 		"login_introPanel10_Message": {
 			"message": ""
@@ -419,7 +419,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Your xBrowserSync changes have been synced."
 		},
 		"bookmark_Metadata_Message" : {
-			"message":  "Retrieving bookmark metadata, touch to cancel."
+			"message":  "Fetching bookmark properties, touch to cancel."
 		},
 		"error_Default_Title" : {
 			"message":  "Something went wrong"
@@ -431,7 +431,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Connection lost"
 		},
 		"error_HttpRequestFailed_Message" : {
-			"message":  "Couldn’t connect to the xBrowserSync service, check the service status in the Settings panel."
+			"message":  "Couldn’t connect to the xBrowserSync service."
 		},
 		"error_HttpRequestFailedWhileUpdating_Title" : {
 			"message":  "Connection lost"
@@ -574,11 +574,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"error_FailedRestoreData_Title" : {
 			"message":  "Unable to read the selected file"
 		},
-		"error_InvalidUrlScheme_Title": {
-			"message":  "Unable to retrieve shared bookmark URL."
+		"error_FailedShareUrl_Title": {
+			"message":  "Unable to retrieve shared bookmark URL"
 		},
 		"error_FailedShareUrlNotSynced_Title": {
-			"message":  "You must be synced to add a bookmark."
+			"message":  "You must be synced to add a bookmark"
 		},
 		"settings_About_Updates_ListHtml": {
 			"message": "<li>iOS and Android apps released!</li><li>Redesigned, more intuitive sync/login panel and settings panel.</li><li>Search queries now allow commas between keywords.</li><li>Titleless bookmarks now display their URL host as a title.</li><li>Bookmark descriptions are now shortened to 300 characters to the nearest word.</li><li>“Connection Lost” warnings are no longer shown when checking for updates in the background.</li><li>Many, many more minor enhancements and bug fixes.</li>"
@@ -689,21 +689,22 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			// Checking updated service url, wait a moment before displaying loading overlay
 			case 'checkingNewServiceUrl':
 				timeout = $timeout(function() {
-					SpinnerPlugin.activityStart(getConstant(globals.Constants.Working_Title), { dimBackground: true });
+					SpinnerDialog.show(null, getConstant(globals.Constants.Working_Title), false, { overlayOpacity: 0.75 });
 				}, 100);
 				break;
 			// Loading bookmark metadata, display cancellable overlay
 			case 'retrievingMetadata':
+				var cancel = function() {
+					deferred.resolve({ url: currentUrl });
+				};
 				timeout = $timeout(function() {
-					SpinnerDialog.show(null, platform.GetConstant(globals.Constants.Bookmark_Metadata_Message), function () {
-						deferred.resolve({ url: currentUrl });
-					});
+					SpinnerDialog.show(null, getConstant(globals.Constants.Bookmark_Metadata_Message), cancel, { overlayOpacity: 0.75 });
 				}, 500);
 				break;
 			// Display default overlay
 			default:
 				timeout = $timeout(function() {
-					SpinnerPlugin.activityStart(getConstant(globals.Constants.Working_Title), { dimBackground: true });
+					SpinnerDialog.show(null, getConstant(globals.Constants.Working_Title), false, { overlayOpacity: 0.75 });
 				});
 				break;
 		}
@@ -887,11 +888,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			$timeout.cancel(timeout);
 		}
 		
-		// Hide loading panels if supplied if matches current
+		// Hide loading panel if supplied if matches current
 		if (!loadingId || id === loadingId) {
-			SpinnerPlugin.activityStop();
 			SpinnerDialog.hide();
-
 			loadingId = null;
 		}
 	};
@@ -941,7 +940,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		vm.settings.getSearchResultsDelay = 500;
 
 		// Attach event handler for iOS Share activity
-		window.handleOpenURL = handleSharedIosUrl;
+		window.handleOpenURL = handleSharedUrlIos;
 	};
 
 	var openUrl = function(url) {
@@ -1179,7 +1178,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return false;
 	};
 
-	var checkForSharedUrl = function(data) {
+	var checkForSharedUrl = function() {
 		var deferred = $q.defer();
 		
 		if (vm.platformName === globals.Platforms.Android) {
@@ -1197,7 +1196,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 									// Check the URL is valid
 									var match = (!!url) ? url.match(globals.Regex.Url) : null;
 									if (!match || match.length === 0) {
-										return deferred.reject({ code: globals.ErrorCodes.InvalidUrlScheme });
+										return deferred.reject({ code: globals.ErrorCodes.FailedShareUrl });
 									}
 
 									// Return the shared url
@@ -1223,13 +1222,25 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		else if (vm.platformName === globals.Platforms.IOS) {
 			// If current url is set, return it
 			if (!!currentUrl) {
-				// Check the URL is valid
-				if (!utility.ParseUrl(currentUrl)) {
-					currentUrl = null;
-					return deferred.reject({ code: globals.ErrorCodes.InvalidUrlScheme });
-				}
-				
-				deferred.resolve(currentUrl);
+				switch (currentUrl) {
+					case 'NOSHAREDURL':
+						currentUrl = null;
+						deferred.reject({ code: globals.ErrorCodes.FailedShareUrl });
+						break;
+					case 'NOTSYNCED':
+						currentUrl = null;
+						deferred.reject({ code: globals.ErrorCodes.FailedShareUrlNotSynced });
+						break;
+					default:
+						// Check the URL is valid
+						if (!utility.ParseUrl(currentUrl)) {
+							currentUrl = null;
+							deferred.reject({ code: globals.ErrorCodes.FailedShareUrl });
+						}
+						else {
+							deferred.resolve(currentUrl);
+						}
+				}				
 			}
 			else {
 				deferred.resolve();
@@ -1460,7 +1471,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		}
 	};
 
-	var handleSharedIosUrl = function(sharedUrl) {
+	var handleSharedUrlIos = function(sharedUrl) {
 		var regex = new RegExp('^' + globals.URL.CustomScheme + globals.URL.Bookmarks + globals.URL.Current, 'i');
 		if (!!sharedUrl && !regex.test(sharedUrl)) {
 			// User clicked on a normal link, return
@@ -1469,14 +1480,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 		if (!globals.SyncEnabled.Get()) {
 			// Not synced, display alert and return
-			vm.alert.display(null, getConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title));
-			return
-		}
-
-		if (!sharedUrl) {
-			// Not, display alert and return
-			vm.alert.display(null, getConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title));
-			return
+			currentUrl = "NOTSYNCED";
+			return;
 		}
 
 		var url = utility.ParseUrl(sharedUrl);
@@ -1486,7 +1491,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		}
 		else {
 			// No shared url found
-			vm.alert.display(null, getConstant(globals.Constants.Error_InvalidUrlScheme_Title));
+			currentUrl = "NOSHAREDURL";
 		}
 	};
 

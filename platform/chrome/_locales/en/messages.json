@@ -33,28 +33,28 @@
 		"message": "<h4>Syncing for the first time</h4><p>Your data is encrypted before it is synced so you’ll need to enter an encryption password first. Make it strong but also memorable, if you forget it you won’t be able to retrieve your synced data (and there are no reminders!).</p><p>Then simply click the Sync button and that’s it — you’re synced and ready to start adding bookmarks.</p>"
 	},
 	"login_introPanel3_Message": {
-		"message": "<h4>Already synced (got an ID)</h4><p>When you create a new sync you are given a new xBrowserSync ID which you can use along with your encryption password to sync to your existing data.</p><p>Once synced you can view your ID in the Settings panel along with the corresponding QR code for syncing to your data on your mobile devices.</p>"
+		"message": "<h4>Already synced (got an ID)</h4><p>When you create a new sync you are given a unique xBrowserSync ID which you can use along with your password to sync your data on other devices.</p><p>Once synced you can view your ID in the Settings panel along with a handy QR code to scan when syncing on mobile devices.</p>"
 	},
 	"login_introPanel4_Message": {
-		"message": "<h4>Syncing to another service</h4><p>By default your data is synced to the official xBrowserSync service, though anyone can <a href='https://github.com/xBrowserSync/API' class='new-tab'>run their own xBrowserSync service</a>, either for private use (for ultimate security and privacy) or to make available for public use so that more people can enjoy xBrowserSync.</p><p>Check the available <a href='https://www.xbrowsersync.org/#status' class='new-tab'>xBrowserSync services</a> and switch your active service in the Settings panel.</p>"
+		"message": "<h4>Syncing to another service</h4><p>By default your data is synced to the official xBrowserSync service, though anyone can <a href='https://github.com/xBrowserSync/API' class='new-tab'>run their own xBrowserSync service</a>, either for private use (for ultimate security and privacy) or to make available for public use so that more people can enjoy xBrowserSync.</p><p>Check the available <a href='https://www.xbrowsersync.org/#status' class='new-tab'>xBrowserSync services</a> and switch services in the Settings panel.</p>"
 	},
 	"login_introPanel5_Message": {
-		"message": "<h4>New service, new ID</h4><p>IDs are service-specific. When you create a sync with a service, the xBrowserSync ID you are given can only be used with that service.</p><p>Whenever you change services you must create a new sync, you’ll then receive a new ID for use with that service (you can then restore your backed-up data after creating the new sync).</p>"
+		"message": "<h4>New service, new ID</h4><p>Your xBrowserSync ID will only work with the service on which it was first synced.</p><p>Whenever you change services you must create a new sync and receive a new ID. Don’t worry, it’s easy to move your synced data by backing it up using the former service and simply restoring it on the latter.</p>"
 	},
 	"login_introPanel6_Message": {
-		"message": "<h4>Searching your bookmarks</h4><p>Once synced, simply press the enter key to display your bookmarks with the most recent showing first. To search, enter some keywords or a URL and the list will be filtered to display only those bookmarks that are relevant to your query.</p><p>Hover over a bookmark and click the pen icon to edit or delete the bookmark.</p>"
+		"message": "<h4>Searching your bookmarks</h4><p>Once synced, simply press the enter key to display your bookmarks in chronological order. Searching is as easy as typing some keywords or a URL in the search box.</p><p>Hover over a bookmark and click the pen icon to edit or delete the bookmark.</p>"
 	},
 	"login_introPanel7_Message": {
 		"message": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel and then add/modify the bookmark’s title, description and tags metadata — providing good metadata means more relevant results when searching.</p><p>Alternatively, simply click the browser’s bookmark button and xBrowserSync will automatically add metadata for you!</p>"
 	},
 	"login_introPanel8_Message": {
-		"message": "<h4>Native features supported</h4><p>Feel free to use your browser’s native bookmarking features, any changes you make will be synced automatically in the background.</p><p>xBrowserSync will respect your existing bookmarks hierarchy, continue to organise your bookmark folders as you normally would.</p>"
+		"message": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p>"
 	},
 	"login_introPanel9_Message": {
-		"message": "<h4>Remember to back up</h4><p>Please look after your data and make sure to take backups.</p><p>You can back up your synced data to a local file in the Settings panel, and also restore from a back up any time you need to.</p><p>This is also useful when switching services — to migrate your synced bookmarks data simply restore your backed up bookmarks after syncing to the new service.</p>"
+		"message": "<h4>Remember to back up</h4><p>Nothing in life is 100% certain (especially web servers) so please look after your data and make sure to take backups.</p><p>You can do this easily in the Settings panel, you can back up your unencrypted data to a local file which can then restored at a later date should you need to.</p>"
 	},
 	"login_introPanel10_Message": {
-		"message": "<h4>Shortcut xBrowserSync</h4><p>To access xBrowserSync quickly, assign a keyboard shortcut to activate the extension then just pres enter or start typing to search your bookmarks.</p><p>Browse to chrome://extensions/, the keyboard shortcuts option is at the bottom of the page."
+		"message": "<h4>Shortcut xBrowserSync</h4><p>To search your bookmarks quickly, assign a keyboard shortcut to activate the extension then just pres enter or start typing to search your bookmarks.</p><p>Browse to chrome://extensions/, the keyboard shortcuts option is at the bottom of the page."
 	},
 	"login_introPanel11_Message": {
 		"message": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync mobile app, available on the iOS and Android app stores.</p>"

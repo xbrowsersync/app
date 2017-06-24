@@ -272,7 +272,7 @@ xBrowserSync.App.Global = function(platform) {
             Error_FailedBackupData_Title: 'error_FailedBackupData_Title',
             Error_FailedGetDataToRestore_Title: 'error_FailedGetDataToRestore_Title',
             Error_FailedRestoreData_Title: 'error_FailedRestoreData_Title',
-            Error_InvalidUrlScheme_Title: 'error_InvalidUrlScheme_Title',
+            Error_FailedShareUrl_Title: 'error_FailedShareUrl_Title',
             Error_FailedShareUrlNotSynced_Title: 'error_FailedShareUrlNotSynced_Title'
         },
         DisableEventListeners: {
@@ -378,7 +378,8 @@ xBrowserSync.App.Global = function(platform) {
             FailedBackupData: 10304,
             FailedGetDataToRestore: 10305,
             FailedRestoreData: 10306,
-            InvalidUrlScheme: 10400,
+            FailedShareUrl: 10400,
+            FailedShareUrlNotSynced: 10401,
             NotImplemented: 10500
         },
         Id: {
