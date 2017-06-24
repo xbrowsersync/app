@@ -35,7 +35,6 @@ body {
     color: $colour-text1;
     font-size: 14px;
     line-height: 1.25em;
-    min-width: 320px;
     @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
 
     h1 {

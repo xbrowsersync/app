@@ -15,12 +15,6 @@
         <icon density="xhdpi" src="res/icon/android/xhdpi.png" />
         <icon density="xxhdpi" src="res/icon/android/xxhdpi.png" />
         <icon density="xxxhdpi" src="res/icon/android/xxxhdpi.png" />
-        <splash density="land-hdpi" src="res/screen/android/splash-land-hdpi.png" />
-        <splash density="land-ldpi" src="res/screen/android/splash-land-ldpi.png" />
-        <splash density="land-mdpi" src="res/screen/android/splash-land-mdpi.png" />
-        <splash density="land-xhdpi" src="res/screen/android/splash-land-xhdpi.png" />
-        <splash density="land-xxhdpi" src="res/screen/android/splash-land-xxhdpi.png" />
-        <splash density="land-xxxhdpi" src="res/screen/android/splash-land-xxxhdpi.png" />
         <splash density="port-hdpi" src="res/screen/android/splash-port-hdpi.png" />
         <splash density="port-ldpi" src="res/screen/android/splash-port-ldpi.png" />
         <splash density="port-mdpi" src="res/screen/android/splash-port-mdpi.png" />
@@ -50,14 +44,9 @@
         <icon height="167" src="res/icon/ios/icon-83.5@2x.png" width="167" />
         <splash height="480" src="res/screen/ios/Default~iphone.png" width="320" />
         <splash height="960" src="res/screen/ios/Default@2x~iphone.png" width="640" />
-        <splash height="1024" src="res/screen/ios/Default-Portrait~ipad.png" width="768" />
-        <splash height="2048" src="res/screen/ios/Default-Portrait@2x~ipad.png" width="1536" />
-        <splash height="768" src="res/screen/ios/Default-Landscape~ipad.png" width="1024" />
-        <splash height="1536" src="res/screen/ios/Default-Landscape@2x~ipad.png" width="2048" />
         <splash height="1136" src="res/screen/ios/Default-568h@2x~iphone.png" width="640" />
         <splash height="1334" src="res/screen/ios/Default-667h.png" width="750" />
         <splash height="2208" src="res/screen/ios/Default-736h.png" width="1242" />
-        <splash height="1242" src="res/screen/ios/Default-Landscape-736h.png" width="2208" />
     </platform>
     <engine name="android" spec="^6.2.3" />
     <engine name="ios" spec="^4.4.0" />
@@ -69,7 +58,7 @@
     <preference name="SuppressesLongPressGesture" value="false" />
     <preference name="Suppresses3DTouchGesture" value="false" />
     <preference name="AndroidLaunchMode" value="singleTask" />
-    <preference name="ShowSplashScreenSpinner" value="true" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="BackupWebStorage" value="none" />
     <plugin name="bundle-cordova-webintent" spec="https://github.com/COMLINE-AG/bundle-cordova-webintent.git" />
     <plugin name="com.greybax.spinnerdialog" spec="https://github.com/greybax/cordova-plugin-native-spinner" />
