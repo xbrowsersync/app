@@ -859,7 +859,7 @@ body {
 
                 &.animate-added {
                     &.ng-enter {
-                        @include animation(animation-fold-down-slide-in 0.6s ease);
+                        @include animation(animation-fold-down-slide-in 1.2s ease);
 
                         &.ng-enter-active {
                             left: 0;
@@ -873,7 +873,7 @@ body {
                     &.ng-enter,
                     &.ng-leave,
                     &.ng-move {
-                        @include animation(animation-slide-out-fold-up 0.6s ease);
+                        @include animation(animation-slide-out-fold-up 1.2s ease);
 
                         &.ng-enter-active,
                         &.ng-leave-active,
@@ -1071,6 +1071,21 @@ body {
                     font-size: 0.8em;
                     position: absolute;
                     left: 0;
+                }
+            }
+        }
+
+        .message-log {
+            max-height: 12em;
+            overflow-y: auto;
+
+            ul {
+                margin: 5px 0 0 0;
+                padding-left: 15px;
+
+                li {
+                    font-family: 'courier new';
+                    font-size: 0.85em;
                 }
             }
         }

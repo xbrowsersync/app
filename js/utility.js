@@ -213,15 +213,15 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 
 	var logMessage = function(moduleName, functionName, messageType, message) {
 		switch (messageType) {
-			case logType.Error:
+			case globals.LogType.Error:
 				messageType = 'ERROR';
 				console.error(moduleName + ':' + functionName + ', ' + messageType + ': ' + message);
 				break;
-			case logType.Warning:
+			case globals.LogType.Warning:
 				messageType = 'WARNING';
 				console.warn(moduleName + ':' + functionName + ', ' + messageType + ': ' + message);
 				break;
-			case logType.Info:
+			case globals.LogType.Info:
 				/* falls through */
 			default:
 				messageType = 'INFO';
@@ -229,8 +229,6 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 				break;
 		}
 	};
-
-	var logType = { Info: 0, Warning: 1, Error: 2};
 
 	var parseUrl = function(url) {
 		var parser = document.createElement('a'),
@@ -285,7 +283,6 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		GetTagArrayFromText: getTagArrayFromText,
 		IsMobilePlatform: isMobilePlatform,
 		LogMessage: logMessage,
-		LogType: logType,
 		ParseUrl: parseUrl,
 		StripTags: stripTags,
 		TrimToNearestWord: trimToNearestWord

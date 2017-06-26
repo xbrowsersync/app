@@ -323,6 +323,14 @@
                     <span>{{ vm.device.height() }}px</span>
                 </div>
             </div>
+            <div class="form-group">
+                <label>Message log</label>
+                <div class="message-log">
+                    <ul data-ng-if="vm.device.messageLog.length > 0">
+                        <li data-ng-repeat="message in vm.device.messageLog">{{ message }}</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>

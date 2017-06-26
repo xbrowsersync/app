@@ -113,7 +113,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                     catch (err) { 
                         // Log error
                         utility.LogMessage(
-                            moduleName, 'exportBookmarks', utility.LogType.Error,
+                            moduleName, 'exportBookmarks', globals.LogType.Warning,
                             JSON.stringify(err));
                         
                         return $q.reject({ code: globals.ErrorCodes.InvalidData });
@@ -175,7 +175,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 
                 // Log error
                 utility.LogMessage(
-                    moduleName, 'getLookahead', utility.LogType.Error,
+                    moduleName, 'getLookahead', globals.LogType.Warning,
                     JSON.stringify(err));
                 
                 deferred.reject(err);
@@ -382,7 +382,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                     catch (err) { 
                         // Log error
                         utility.LogMessage(
-                            moduleName, 'getCachedBookmarks', utility.LogType.Error,
+                            moduleName, 'getCachedBookmarks', globals.LogType.Warning,
                             'Error decrypting cached bookmarks data; ' + JSON.stringify(err));
                         
                         return $q.reject({ code: globals.ErrorCodes.InvalidData });
@@ -405,7 +405,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                             catch (err) { 
                                 // Log error
                                 utility.LogMessage(
-                                    moduleName, 'getCachedBookmarks', utility.LogType.Error,
+                                    moduleName, 'getCachedBookmarks', globals.LogType.Warning,
                                     'Error decrypting synced bookmarks data; ' + JSON.stringify(err));
                                 
                                 return $q.reject({ code: globals.ErrorCodes.InvalidData });
@@ -750,7 +750,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                             catch (err) { 
                                 // Log error
                                 utility.LogMessage(
-                                    moduleName, 'sync_handleBoth', utility.LogType.Error,
+                                    moduleName, 'sync_handleBoth', globals.LogType.Warning,
                                     'Error creating bookmark; ' + JSON.stringify(err));
                                 
                                 return $q.reject({ code: globals.ErrorCodes.InvalidData });
@@ -795,7 +795,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                             catch (err) { 
                                 // Log error
                                 utility.LogMessage(
-                                    moduleName, 'sync_handleBoth', utility.LogType.Error,
+                                    moduleName, 'sync_handleBoth', globals.LogType.Warning,
                                     'Error updating bookmark; ' + JSON.stringify(err));
                                 
                                 return $q.reject({ code: globals.ErrorCodes.InvalidData });
@@ -835,7 +835,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                             catch (err) { 
                                 // Log error
                                 utility.LogMessage(
-                                    moduleName, 'sync_handleBoth', utility.LogType.Error,
+                                    moduleName, 'sync_handleBoth', globals.LogType.Warning,
                                     'Error deleting bookmark; ' + JSON.stringify(err));
                                 
                                 return $q.reject({ code: globals.ErrorCodes.InvalidData });
@@ -914,7 +914,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 catch (err) { 
                     // Log error
                     utility.LogMessage(
-                        moduleName, 'sync_handlePull', utility.LogType.Error,
+                        moduleName, 'sync_handlePull', globals.LogType.Warning,
                         JSON.stringify(err));
                     
                     return $q.reject({ code: globals.ErrorCodes.InvalidData });
@@ -995,7 +995,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                     catch (err) { 
                         // Log error
                         utility.LogMessage(
-                            moduleName, 'sync_handlePush', utility.LogType.Error,
+                            moduleName, 'sync_handlePush', globals.LogType.Warning,
                             JSON.stringify(err));
                         
                         return $q.reject({ code: globals.ErrorCodes.InvalidData });

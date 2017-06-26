@@ -56,7 +56,7 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
             .catch(function(err) {
                 // Log error
                 utility.LogMessage(
-                    moduleName, 'createBookmarks', utility.LogType.Error,
+                    moduleName, 'createBookmarks', globals.LogType.Warning,
                     JSON.stringify(err));
                 
                 return $q.reject(getErrorCodeFromHttpError(err));
@@ -93,7 +93,7 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 				
 				// Log error
                 utility.LogMessage(
-                    moduleName, 'getBookmarks', utility.LogType.Error,
+                    moduleName, 'getBookmarks', globals.LogType.Warning,
                     JSON.stringify(err));
                 
                 return $q.reject(getErrorCodeFromHttpError(err));
@@ -122,7 +122,7 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
             .catch(function(err) {
                 // Log error
                 utility.LogMessage(
-                    moduleName, 'getBookmarksLastUpdated', utility.LogType.Error,
+                    moduleName, 'getBookmarksLastUpdated', globals.LogType.Warning,
                     JSON.stringify(err));
                 
                 return $q.reject(getErrorCodeFromHttpError(err));
@@ -156,7 +156,7 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
             .catch(function(err) {
                 // Log error
                 utility.LogMessage(
-                    moduleName, 'updateBookmarks', utility.LogType.Error,
+                    moduleName, 'updateBookmarks', globals.LogType.Warning,
                     JSON.stringify(err));
                 
                 return $q.reject(getErrorCodeFromHttpError(err));
@@ -237,7 +237,7 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
             .catch(function(err) {
                 // Log error
                 utility.LogMessage(
-                    moduleName, 'getServiceInformation', utility.LogType.Error,
+                    moduleName, 'getServiceInformation', globals.LogType.Warning,
                     JSON.stringify(err));
                 
                 return $q.reject(getErrorCodeFromHttpError(err));

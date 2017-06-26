@@ -403,7 +403,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
                     catch (err) {
                         // Log error
 						utility.LogMessage(
-							moduleName, 'clearBookmarks', utility.LogType.Error,
+							moduleName, 'clearBookmarks', globals.LogType.Warning,
 							'Error clearing other bookmarks; ' + JSON.stringify(err));
 							
 						return reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
@@ -432,7 +432,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
                         catch (err) {
                             // Log error
 							utility.LogMessage(
-								moduleName, 'clearBookmarks', utility.LogType.Error,
+								moduleName, 'clearBookmarks', globals.LogType.Warning,
 								'Error clearing bookmarks bar; ' + JSON.stringify(err));
 							
 							return reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
@@ -718,7 +718,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				catch (err) {
 					// Log error
 					utility.LogMessage(
-						moduleName, 'populateBookmarks', utility.LogType.Error,
+						moduleName, 'populateBookmarks', globals.LogType.Warning,
 						'Error populating xBrowserSync bookmarks in other bookmarks; ' + JSON.stringify(err));
 					
 					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
@@ -740,7 +740,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				catch (err) {
 					// Log error
 					utility.LogMessage(
-						moduleName, 'populateBookmarks', utility.LogType.Error,
+						moduleName, 'populateBookmarks', globals.LogType.Warning,
 						'Error populating other bookmarks; ' + JSON.stringify(err));
 					
 					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
@@ -762,7 +762,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
                 catch (err) {
                     // Log error
 					utility.LogMessage(
-						moduleName, 'populateBookmarks', utility.LogType.Error,
+						moduleName, 'populateBookmarks', globals.LogType.Warning,
 						'Error populating bookmarks bar; ' + JSON.stringify(err));
 					
 					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
@@ -844,7 +844,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		catch(err) {
 			// Log error
 			utility.LogMessage(
-				moduleName, 'createLocalBookmark', utility.LogType.Error,
+				moduleName, 'createLocalBookmark', globals.LogType.Warning,
 				JSON.stringify(err));
 			
 			deferred.reject({ code: globals.ErrorCodes.FailedCreateLocalBookmarks });
@@ -970,7 +970,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		catch (err) {
 			// Log error
 			utility.LogMessage(
-				moduleName, 'getLocalBookmark', utility.LogType.Error,
+				moduleName, 'getLocalBookmark', globals.LogType.Warning,
 				JSON.stringify(err));
 			
 			deferred.reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });

@@ -699,7 +699,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				};
 				timeout = $timeout(function() {
 					SpinnerDialog.show(null, getConstant(globals.Constants.Bookmark_Metadata_Message), cancel, { overlayOpacity: 0.75 });
-				}, 500);
+				}, 250);
 				break;
 			// Display default overlay
 			default:
@@ -748,7 +748,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			if (!!err || !pageContent) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'getPageMetadata', utility.LogType.Error,
+					moduleName, 'getPageMetadata', globals.LogType.Warning,
 					JSON.stringify(err));
 				
 				var errObj = { code: globals.ErrorCodes.FailedGetPageMetadata, url: currentUrl };
@@ -940,7 +940,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		vm.settings.getSearchResultsDelay = 500;
 
 		// Attach event handler for iOS Share activity
-		window.handleOpenURL = handleSharedUrlIos;
+		/*$timeout(function() {
+			window.handleOpenURL = handleSharedUrlIos;
+		}, 2000);*/
 	};
 
 	var openUrl = function(url) {
@@ -996,7 +998,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				
 				// Log error
 				utility.LogMessage(
-					moduleName, 'getPickedFileError', utility.LogType.Error,
+					moduleName, 'getPickedFileError', globals.LogType.Warning,
 					JSON.stringify(err));
 
 				// Display alert
@@ -1046,7 +1048,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				
 				// Log error
 				utility.LogMessage(
-					moduleName, 'pickFileFailed', utility.LogType.Error,
+					moduleName, 'pickFileFailed', globals.LogType.Warning,
 					JSON.stringify(err));
 
 				// Display alert
@@ -1098,10 +1100,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'sync', utility.LogType.Error,
+					moduleName, 'sync', globals.LogType.Warning,
 					JSON.stringify(err));
 				utility.LogMessage(
-					moduleName, 'sync', utility.LogType.Info,
+					moduleName, 'sync', globals.LogType.Info,
 					'syncData: ' + JSON.stringify(syncData));
 				
 				// Don't display another alert if sync retry failed
@@ -1180,6 +1182,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 	var checkForSharedUrl = function() {
 		var deferred = $q.defer();
+		vm.device.messageLog.push("checkForSharedUrl");
 		
 		if (vm.platformName === globals.Platforms.Android) {
 			// If there is a current intent, retrieve it
@@ -1220,31 +1223,35 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			);
 		}
 		else if (vm.platformName === globals.Platforms.IOS) {
-			// If current url is set, return it
-			if (!!currentUrl) {
-				switch (currentUrl) {
-					case 'NOSHAREDURL':
-						currentUrl = null;
-						deferred.reject({ code: globals.ErrorCodes.FailedShareUrl });
-						break;
-					case 'NOTSYNCED':
-						currentUrl = null;
-						deferred.reject({ code: globals.ErrorCodes.FailedShareUrlNotSynced });
-						break;
-					default:
-						// Check the URL is valid
-						if (!utility.ParseUrl(currentUrl)) {
+			$timeout(function() {
+				// If current url is set, return it
+				if (!!currentUrl) {
+					vm.device.messageLog.push("currentUrl found: " + currentUrl);
+					switch (currentUrl) {
+						case 'NOSHAREDURL':
 							currentUrl = null;
 							deferred.reject({ code: globals.ErrorCodes.FailedShareUrl });
-						}
-						else {
-							deferred.resolve(currentUrl);
-						}
-				}				
-			}
-			else {
-				deferred.resolve();
-			}
+							break;
+						case 'NOTSYNCED':
+							currentUrl = null;
+							deferred.reject({ code: globals.ErrorCodes.FailedShareUrlNotSynced });
+							break;
+						default:
+							// Check the URL is valid
+							if (!utility.ParseUrl(currentUrl)) {
+								currentUrl = null;
+								deferred.reject({ code: globals.ErrorCodes.FailedShareUrl });
+							}
+							else {
+								deferred.resolve(currentUrl);
+							}
+					}				
+				}
+				else {
+					vm.device.messageLog.push("currentUrl empty");
+					deferred.resolve();
+				}
+			}, 250);
 		}
 		else {
 			deferred.resolve();
@@ -1299,6 +1306,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			document.getElementById('backupFile').addEventListener('change', backupFile_Change_Android, false);
 		}
 		else if (vm.platformName === globals.Platforms.IOS) {
+			// Attach event handler for iOS Share activity
+			window.handleOpenURL = handleSharedUrlIos;
+			
 			// On iOS check if FilePicker is available, otherwise disable file restore
 			FilePicker.isAvailable(function(isAvailable) {
 				vm.settings.fileRestoreEnabled = isAvailable;
@@ -1358,7 +1368,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						
 						// Log error
 						utility.LogMessage(
-							moduleName, 'deviceReady', utility.LogType.Error,
+							moduleName, 'deviceReady', globals.LogType.Warning,
 							JSON.stringify(err));
 
 						// Display alert if not retrieving bookmark metadata
@@ -1423,7 +1433,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				
 				// Log error
 				utility.LogMessage(
-					moduleName, 'getLatestUpdates', utility.LogType.Error,
+					moduleName, 'getLatestUpdates', globals.LogType.Warning,
 					JSON.stringify(err));
 
 				// Display alert if not retrieving bookmark metadata
@@ -1488,6 +1498,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		if (!!url && !!url.searchObject && !!url.searchObject.url) {
 			// Set shared url to current url
 			currentUrl = decodeURIComponent(url.searchObject.url);
+			vm.device.messageLog.push("Shared URL: " + currentUrl);
 		}
 		else {
 			// No shared url found
@@ -1574,7 +1585,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						
 						// Log error
 						utility.LogMessage(
-							moduleName, 'resume', utility.LogType.Error,
+							moduleName, 'resume', globals.LogType.Warning,
 							JSON.stringify(err));
 
 						// Display alert if not retrieving bookmark metadata

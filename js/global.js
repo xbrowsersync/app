@@ -443,6 +443,11 @@ xBrowserSync.App.Global = function(platform) {
                     value);
             }
         },
+        LogType: {
+            Info: 0, 
+            Warning: 1, 
+            Error: 2
+        },
         LookaheadMinChars: 1,
         MetadataCollection: {
             Get: function() {

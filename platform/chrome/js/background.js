@@ -60,7 +60,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'changeBookmark', utility.LogType.Error,
+					moduleName, 'changeBookmark', globals.LogType.Warning,
 					JSON.stringify(err));
 				
 				// Display alert
@@ -100,7 +100,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'createBookmark', utility.LogType.Error,
+					moduleName, 'createBookmark', globals.LogType.Warning,
 					JSON.stringify(err));
 				
 				// Display alert
@@ -164,7 +164,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					
 					// Log error
 					utility.LogMessage(
-						moduleName, 'handleAlarm', utility.LogType.Error,
+						moduleName, 'handleAlarm', globals.LogType.Warning,
 						JSON.stringify(err));
 					
 					// Don't display alert if sync failed due to network connection
@@ -271,7 +271,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'moveBookmark', utility.LogType.Error,
+					moduleName, 'moveBookmark', globals.LogType.Warning,
 					JSON.stringify(err));
 				
 				// Display alert
@@ -302,7 +302,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'removeBookmark', utility.LogType.Error,
+					moduleName, 'removeBookmark', globals.LogType.Warning,
 					JSON.stringify(err));
 				
 				// Display alert
@@ -364,7 +364,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'startup', utility.LogType.Error,
+					moduleName, 'startup', globals.LogType.Warning,
 					JSON.stringify(err));
 				
 				// Display alert
@@ -396,7 +396,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					catch (err) {
 						// Log error
 						utility.LogMessage(
-							moduleName, 'syncBookmarks', utility.LogType.Error,
+							moduleName, 'syncBookmarks', globals.LogType.Warning,
 							'Error posting message to async channel; ' + JSON.stringify(err));
 					}
 				}
@@ -404,10 +404,10 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'syncBookmarks', utility.LogType.Error,
+					moduleName, 'syncBookmarks', globals.LogType.Warning,
 					'Error syncing bookmarks; ' + JSON.stringify(err));
 				utility.LogMessage(
-					moduleName, 'syncBookmarks', utility.LogType.Info,
+					moduleName, 'syncBookmarks', globals.LogType.Info,
 					'syncData: ' + JSON.stringify(syncData));
 
 				if (!!command) {
@@ -417,7 +417,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					catch (err2) {
 						// Log error
 						utility.LogMessage(
-							moduleName, 'syncBookmarks', utility.LogType.Error,
+							moduleName, 'syncBookmarks', globals.LogType.Warning,
 							'Error posting message to async channel; ' + JSON.stringify(err2));
 					}
 				}
