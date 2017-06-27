@@ -1,5 +1,8 @@
 var xBrowserSync = xBrowserSync || {};
 xBrowserSync.App = xBrowserSync.App || {};
+var SpinnerDialog = {};
+SpinnerDialog.hide = function() {};
+SpinnerDialog.show = function() {};
 
 /* ------------------------------------------------------------------------------------
  * Class name:  xBrowserSync.App.PlatformImplementation 

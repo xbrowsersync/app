@@ -295,14 +295,6 @@ body {
                 transition: none;
             }
         }
-
-        .search-panel-background {
-            display: block;
-
-            @media (min-device-width: $height-mobile-small) and (orientation:landscape) {
-                background-size: 20%;
-            }
-        }
     }
 }
 

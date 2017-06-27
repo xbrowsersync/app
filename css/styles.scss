@@ -353,20 +353,21 @@ body {
         position: absolute;
         top: 0;
         width: 200%;
+        overflow: auto;
+        white-space: nowrap;
         
-        .lookahead {
-            cursor: pointer;
+        .lookahead, .measure {
+            display: inline-block;
             position: relative;
-            float: left;
             z-index: 60;
             line-height: 1.43;
             color: $colour-link;
             background-color: transparent;
+            cursor: pointer;
             @include css-prefix(user-select, none);
         }
-        
+
         .measure {
-            @extend .lookahead;
             visibility: hidden;
         }
     }
@@ -591,6 +592,7 @@ body {
             left: 20px;
             
             .lookahead {
+                left: -0.2em;
                 padding: 10px 0;
                 background-color: transparent;
             }
@@ -805,11 +807,14 @@ body {
                 .lookahead-container {
                     left: 2.65em;
                     width: calc(100% - 80px);
-                    overflow: hidden;
                     
-                    .lookahead {
+                    .lookahead, .measure {
                         font-size: 1.4em;
                         line-height: 1.85em;
+                    }
+
+                    .lookahead {
+                        left: -0.15em;
                     }
                 }
             }
@@ -1006,19 +1011,6 @@ body {
                     margin-bottom: 0;
                 }
             }
-        }
-
-        .search-panel-background {
-            display: none;
-            position: absolute;
-            flex: none;
-            background: url("../img/logo.svg") 50% 60% no-repeat;
-            background-size: 15em;
-            top: 15em;
-            height: 15em;
-            width: 100%;
-            opacity: 0.15;
-            z-index: -50;
         }
     }
 }
