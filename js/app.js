@@ -829,6 +829,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 deferred.resolve();
                 break;
         }
+
+        // Attach events to new tab links
+        $timeout(function() {
+            setNewTabLinks();
+        });
         
         return deferred.promise;
     };
@@ -997,11 +1002,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if (vm.view.current === vm.view.views.login && !!vm.introduction.displayIntro()) {
             introPanel_DisplayIntro();
         }
-        
-        // Attach events to new tab links
-        $timeout(function() {
-            setNewTabLinks();
-        });
 
         // Check if current page is a bookmark
         setBookmarkStatus();
