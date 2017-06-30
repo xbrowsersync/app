@@ -352,13 +352,14 @@ body {
     .lookahead-container {
         position: absolute;
         top: 0;
-        width: 200%;
-        overflow: auto;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
         white-space: nowrap;
         
         .lookahead, .measure {
-            display: inline-block;
-            position: relative;
+            display: block;
+            position: absolute;
             z-index: 60;
             line-height: 1.43;
             color: $colour-link;
@@ -368,6 +369,7 @@ body {
         }
 
         .measure {
+            left: 0;
             visibility: hidden;
         }
     }
@@ -591,13 +593,8 @@ body {
         .lookahead-container {
             left: 20px;
             
-            .lookahead {
-                left: -0.2em;
-                padding: 10px 0;
-                background-color: transparent;
-            }
-
-            .measure {
+            .lookahead, .measure {
+                line-height: 2.87em;
                 text-transform: lowercase;
             }
         }
@@ -811,10 +808,6 @@ body {
                     .lookahead, .measure {
                         font-size: 1.4em;
                         line-height: 1.85em;
-                    }
-
-                    .lookahead {
-                        left: -0.15em;
                     }
                 }
             }

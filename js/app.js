@@ -378,6 +378,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         lookahead = (!!lookahead) ? lookahead.substring(word.length) : null;
                         vm.bookmark.tagLookahead = lookahead.replace(/\s/g, '&nbsp;');
                         vm.bookmark.tagTextMeasure = vm.bookmark.tagText.replace(/\s/g, '&nbsp;');
+                        vm.bookmark.tagLookahead = null;
+
+                        // Set position of lookahead element
+                        $timeout(function() {
+                            var lookaheadElement = document.querySelector('#bookmark-panel .lookahead-container .lookahead');
+                            var measureElement = document.querySelector('#bookmark-panel .lookahead-container .measure');
+                            lookaheadElement.style.left = (measureElement.offsetLeft + measureElement.offsetWidth) + 'px';
+                            vm.bookmark.tagLookahead = lookahead.replace(/\s/g, '&nbsp;');
+                        });
                     }
                 });
         }
@@ -1316,8 +1325,16 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         if (!!lookahead && word.toLowerCase() === lastWord.toLowerCase()) {
                             // Trim word from lookahead
                             lookahead = (!!lookahead) ? lookahead.substring(word.length) : null;
-                            vm.search.lookahead = lookahead.replace(/\s/g, '&nbsp;');
                             vm.search.queryMeasure = vm.search.query.replace(/\s/g, '&nbsp;');
+                            vm.search.lookahead = null;
+
+                            // Set position of lookahead element
+                            $timeout(function() {
+                                var lookaheadElement = document.querySelector('#search-panel .lookahead-container .lookahead');
+                                var measureElement = document.querySelector('#search-panel .lookahead-container .measure');
+                                lookaheadElement.style.left = (measureElement.offsetLeft + measureElement.offsetWidth) + 'px';
+                                vm.search.lookahead = lookahead.replace(/\s/g, '&nbsp;');
+                            });
                         }
 
                         vm.search.cancelGetBookmarksRequest = null;
