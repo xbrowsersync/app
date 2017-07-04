@@ -71,7 +71,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your reponsibility so be smart and make sure to take backups.</p><p>You can do this easily in the Settings panel, you can back up your unencrypted data to a local file which can then restored at a later date should you need to.</p>"
 		},
 		"login_introPanel9_Message": {
-			"message": "<h4>Got desktop?</h4><p>Sync your xBrowserSync data with your desktop browser using the xBrowserSync web extension, currently available for Chrome and with Firefox support coming very soon.</p>"
+			"message": "<h4>Got desktop?</h4><p>Sync your bookmarks across desktop and mobile devices by using the xBrowserSync desktop browser web extension alongside the mobile app.</p><p>Currently available for Chrome via the <a href='https://chrome.google.com/webstore/detail/xbrowsersync/lcbjdhceifofjlpecfpeimnnphbcjgnc' class='new-tab'>Chrome Web Store</a> and with Firefox support coming very soon.</p>"
 		},
 		"login_introPanel10_Message": {
 			"message": ""
