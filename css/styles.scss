@@ -39,7 +39,7 @@ body {
 
     h1 {
         background: url("../img/logo.svg") 50% 40% no-repeat;
-        background-size: 60%;
+        background-size: 5.5em;
         position: absolute;
         top: 0;
         bottom: 0;
@@ -174,6 +174,10 @@ body {
             color: $colour-text2;
             opacity: 0.4;
         }
+    }
+
+    p {
+        margin: 0 0 0.75em;
     }
 
     textarea.form-control {
@@ -333,7 +337,7 @@ body {
     
     .header-panel {
         position: relative;
-        margin-bottom: 5px;
+        margin-bottom: 0.35em;
 
         button {
             font-size: 1.8em;
@@ -429,7 +433,7 @@ body {
 
         .view-content {
             height: 100%;
-            padding: 10px;
+            padding: 0.75em;
             margin: 0 auto;
             z-index: 10;
             @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
@@ -443,10 +447,10 @@ body {
     .well {
         background-color: $colour-text1;
         color: $colour-text2;
-        border-radius: $border-radius;
+        border-radius: 1.5em;
         border: none;
-        padding: 15px 20px;
-        margin-bottom: 15px;
+        padding: 1em 1.25em;
+        margin-bottom: 1em;
     
         &:last-child {
             margin-bottom: 0;
@@ -661,7 +665,7 @@ body {
             height: 100%;
             width: 100%;
             left: 0;
-            padding: 20px 30px;
+            padding: 1.5em 2em;
             overflow: hidden;
             font-size: 0.95em;
             line-height: 1.4em;
@@ -687,12 +691,12 @@ body {
             }
 
             .btn-prev {
-                margin-left: 10px;
+                margin-left: 0.6em;
                 float: left;
             }
             
             .btn-next {
-                margin-right: 10px;
+                margin-right: 0.6em;
                 float: right;
             }
         }
@@ -1012,7 +1016,7 @@ body {
     & > div {
         display: flex;
         flex-flow: column;
-        padding: 10px 0 0 10px;
+        padding: 0.75em 0 0 0.75em;
     }
 
     a {
@@ -1045,8 +1049,8 @@ body {
             overflow-y: auto;
 
             li {
-                padding-left: 15px;
-                margin-bottom: 5px;
+                padding-left: 1.2em;
+                margin-bottom: 0.3em;
                 line-height: 1.2em;
                 position: relative;
 
@@ -1065,8 +1069,8 @@ body {
             overflow-y: auto;
 
             ul {
-                margin: 5px 0 0 0;
-                padding-left: 15px;
+                margin: 0.3em 0 0 0;
+                padding-left: 1.2em;
 
                 li {
                     font-family: 'courier new';
@@ -1108,7 +1112,7 @@ body {
 
     .form-group {
         position: relative;
-        margin-bottom: 20px;
+        margin-bottom: 1em;
 
         &:last-child {
             margin-bottom: 0;
@@ -1158,18 +1162,18 @@ body {
 
     .header-panel {
         flex: none;
-        padding-right: 10px;
+        padding-right: 0.75em;
     }
 
     .panel-container {
         overflow-y: scroll;
-        padding-right: 10px;
+        padding-right: 0.75em;
     }
 
     .status-panel {
         .progress {
-            height: 5px;
-            border-radius: 5px;
+            height: 0.35em;
+            border-radius: 1em;
             background-color: $colour-text2;
             position: relative;
             overflow: visible;
@@ -1177,7 +1181,7 @@ body {
             .max, .used {
                 font-size: 0.8em;
                 position: absolute;
-                top: 5px;
+                top: 0.35em;
                 height: 1.5em;
             }
 
@@ -1260,12 +1264,12 @@ body {
         }
         
         h4 {
-            padding: 15px 20px;
+            padding: 0.75em 1em;
             margin-bottom: 0;
         }
         
         .panel-content {
-            padding: 0 20px 20px;
+            padding: 0 1.25em 1em;
         }
     }
 }
