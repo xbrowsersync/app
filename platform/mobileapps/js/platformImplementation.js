@@ -86,16 +86,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "Settings"
 		},
 		"button_AddBookmark_Label": {
-			"message": "Add bookmark"
+			"message": "Add Bookmark"
 		},
 		"button_DeleteBookmark_Label": {
-			"message": "Delete bookmark"
+			"message": "Delete Bookmark"
 		},
 		"button_EditBookmark_Label": {
-			"message": "Edit bookmark"
+			"message": "Edit Bookmark"
 		},
 		"button_ShareBookmark_Label": {
-			"message": "Share bookmark"
+			"message": "Share Bookmark"
 		},
 		"login_PasswordField_Label": {
 			"message": "Encryption password"

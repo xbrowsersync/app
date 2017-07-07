@@ -40,6 +40,16 @@ body {
         font-size: 18px;
     }
 
+    a {
+        &:focus,
+        &:hover {
+            color: $colour-text1;
+            border-bottom-color: #fff;
+            text-decoration: none;
+            outline: 0;
+        }
+    }
+
     h1 {
         background-size: 5.5em;
         

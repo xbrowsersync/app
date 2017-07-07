@@ -17,12 +17,6 @@
   filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#{$startColor}', endColorStr='#{$endColor}');
 }
 
-@mixin hide-text{
-  font: 0/0 a;
-  text-shadow: none;
-  color: transparent;
-}
-
 @mixin keyframes($animation-name) {
   @-webkit-keyframes #{$animation-name} {
     @content;
@@ -61,12 +55,4 @@
   &:-ms-input-placeholder {
     @content;
   }
-}
-
-@mixin pre-wrap {
-  white-space: pre-wrap;
-  white-space: -moz-pre-wrap;
-  white-space: -pre-pre-wrap;
-  white-space: -o-pre-wrap;
-  word-wrap: break-word;
 }
