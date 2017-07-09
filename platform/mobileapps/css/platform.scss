@@ -40,17 +40,24 @@ body {
         font-size: 18px;
     }
     
-    @media (min-device-width: $width-tablet) {
-        font-size: 28px;
+    @media (min-device-width: $width-tablet-small) {
+        font-size: 26px;
+    }
+    
+    @media (min-device-width: $width-tablet-large) {
+        font-size: 34px;
     }
 
     a {
         &:focus,
         &:hover {
             color: $colour-text1;
-            border-bottom-color: #fff;
-            text-decoration: none;
-            outline: 0;
+            border-bottom-color: $colour-text1;
+        }
+
+        &:active {
+            color: $colour-link-highlight;
+            border-bottom-color: $colour-link-highlight;
         }
     }
 
@@ -59,7 +66,7 @@ body {
             background-size: 6.5em;
         }
 
-        @media (min-device-width: $width-tablet) {
+        @media (min-device-width: $width-tablet-small) {
             background-size: 11em;
         }
     }
@@ -101,7 +108,7 @@ body {
             }
         }
 
-        @media (min-device-width: $width-tablet) {
+        @media (min-device-width: $width-tablet-small) {
             font-size: 23px;
         }
     }
@@ -112,7 +119,7 @@ body {
     }
 
     textarea.form-control {
-        padding: 10px 20px;
+        padding: 0.5em 1em;
     }
 
     .alert {
@@ -184,8 +191,8 @@ body {
 
         .label {
             padding: 0.6em 1em;
-            border-radius: 25px;
-            margin: 0 6px 8px 0;
+            border-radius: $border-radius-input;
+            margin: 0 0.5em 0.6em 0;
         }
     }
 
@@ -218,23 +225,44 @@ body {
         }
     }
 
-    .form-group input {
-        @media (max-device-width: $width-mobile-medium - 1) {
-            font-size: 1.1em;
+    .form-group {
+        input {
+            @media (max-device-width: $width-mobile-medium - 1) {
+                font-size: 1.1em;
+            }
+        }
+
+        @media (min-device-width: $width-tablet-small) {
+            max-width: 21em;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+
+    .intro-panel {
+        @media (min-device-width: $width-tablet-small) {
+            height: 18.5em;
+            max-width: 21em;
+            margin-left: auto;
+            margin-right: auto;
         }
     }
 
     .secret-form-group {
         .progress, .progress-bar-background {
-            @media (max-device-width: $width-mobile-medium - 1) {
-                height: 2.5em;
+            @media (min-device-width: $width-tablet-small) {
+                max-width: 17.5em;
+                margin-left: auto;
+                margin-right: auto;
+                left: 0;
+                right: 0;
             }
         }
     }
 }
 
 #search-panel {
-    padding: 10px 10px 0;
+    padding: 0.75em 0.75em 0;
 
     .view-content {
         padding: 0;
@@ -262,12 +290,12 @@ body {
 
             .search-form {
                 width: 100%;
-                margin-top: 5px;
+                margin-top: 0.35em;
             }
         }
 
         .search-results-panel {
-            margin-top: 15px;
+            margin-top: 0.75em;
             padding-right: 0;
             height: 100%;
 
@@ -276,7 +304,7 @@ body {
             }
 
             .list-group-item {
-                margin: 0 0 15px 0;
+                margin: 0 0 0.75em 0;
 
                 &.active:hover, &:hover {
                     .list-group-item-heading {
@@ -285,7 +313,7 @@ body {
                 }
 
                 a {
-                    padding: 15px 20px;
+                    padding: 1em 1.25em;
                 }
 
                 .btn-edit-bookmark {
@@ -310,6 +338,21 @@ body {
             display: none;
         }
     }
+
+    .form-group {
+        a {
+            &:focus,
+            &:hover {
+                color: $colour-text2;
+                border-bottom-color: $colour-text2;
+            }
+
+            &:active {
+                color: $colour-link-highlight;
+                border-bottom-color: $colour-link-highlight;
+            }
+        }
+    }
     
     .sync-panel {
         .btn-syncOptions {
@@ -326,6 +369,12 @@ body {
 
         #syncDataUsage-Panel .buttons {
             margin-bottom: 0;
+        }
+    }
+
+    .well:last-child {
+        @media (min-device-width: $width-tablet-small) {
+            margin-bottom: 0.75em;
         }
     }
 }

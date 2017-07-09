@@ -90,10 +90,10 @@ body {
                 background-color: rgba(237, 254, 255, 0.3);
                 color: $colour-text1;
                 outline: none;
-                min-width: 60px;
+                min-width: 5em;
                 border-color: $colour-text1;
-                border-width: 2px;
-                border-radius: $border-radius;
+                border-width: 0.1em;
+                border-radius: $border-radius-input;
                 transition: all, ease-in-out, 0.2s;
                 padding: 0 1em;
                 line-height: 2.1em;
@@ -166,10 +166,10 @@ body {
         background-color: $colour-text1; 
         color: $colour-text2;
         height: auto;
-        padding: 10px 20px;
+        padding: 0.5em 1em;
         resize: none;
         border: none;
-        border-radius: $border-radius;
+        border-radius: $border-radius-input;
         @include placeholder {
             color: $colour-text2;
             opacity: 0.4;
@@ -182,13 +182,12 @@ body {
 
     textarea.form-control {
         @extend input:not([type]).form-control;
-        padding: 8px 13px;
-        border-radius: 15px;
+        border-radius: 1.1em;
     }
     
     .alert {
         width: 100%;
-        max-width: $width-tablet;
+        max-width: $width-tablet-small;
         border: none;
         border-radius: 0;
         padding: 10px 10px 15px;
@@ -325,6 +324,10 @@ body {
         float: right;
     }
 
+    .form-group {
+        margin-bottom: 0.75em;
+    }
+
     .has-error {
         .form-control {
             color: $colour-danger!important;
@@ -355,7 +358,6 @@ body {
     
     .lookahead-container {
         position: absolute;
-        top: 0;
         width: 100%;
         height: 100%;
         overflow: hidden;
@@ -373,7 +375,6 @@ body {
         }
 
         .measure {
-            left: 0;
             visibility: hidden;
         }
     }
@@ -447,7 +448,7 @@ body {
     .well {
         background-color: $colour-text1;
         color: $colour-text2;
-        border-radius: 1.5em;
+        border-radius: $border-radius-well;
         border: none;
         padding: 1em 1.25em;
         margin-bottom: 1em;
@@ -583,7 +584,7 @@ body {
     
     .tags-input-container {
         position: relative;
-        border-radius: $border-radius;
+        border-radius: $border-radius-input;
         background-color: $colour-text1;
         overflow: hidden;
         
@@ -595,10 +596,10 @@ body {
         }
 
         .lookahead-container {
-            left: 20px;
+            top: 0.5em;
+            left: 1em;
             
             .lookahead, .measure {
-                line-height: 2.87em;
                 text-transform: lowercase;
             }
         }
@@ -633,7 +634,7 @@ body {
     .btn-scan {
         display: none;
         position: absolute;
-        top: 0.5em;
+        top: 0.35em;
         right: 1.3em;
         z-index: 55;
         border-bottom: none;
@@ -649,8 +650,7 @@ body {
 
         input {
             font-size: 1.2em;
-            padding: 0 1em;
-            line-height: 2.3em;   
+            line-height: 1.3em;   
         }
     }
 
@@ -718,15 +718,15 @@ body {
         .progress, .progress-bar-background {
             position: absolute;
             top: 0;
-            height: 2.75em;
+            font-size: 1.2em;
+            height: 2.1em;
             width: 100%;
-            border-radius: $border-radius;
+            border-radius: $border-radius-input;
         }
 
         .progress {
             background-color: transparent;
-            border: solid 2px $colour-text1;
-            border-radius: $border-radius;
+            border: solid 0.1em $colour-text1;
             z-index: 10;
 
             .progress-bar {
@@ -763,14 +763,14 @@ body {
             .search-form {
                 flex: 0 1 100%;
                 position: relative;
-                border-radius: $border-radius;
+                border-radius: $border-radius-well;
                 background-color: $colour-text1;
                 margin-right: 10px;
 
                 label {
                     position: absolute;
-                    top: -1px;
-                    left: 15px;
+                    top: 0.65em;
+                    left: 0.9em;
                     color: $colour-text2;
                     z-index: 60;
                     margin-bottom: 0;
@@ -778,25 +778,22 @@ body {
                 
                 i {
                     opacity: 0.4;
-                    font-size: 1.3em;
-                    line-height: 2em;
+                    font-size: 1.2em;
                 }
                 
                 input {
                     position: relative;
                     z-index: 50;
-                    height: auto;
-                    padding: 0 1.9em;
+                    padding: 0.25em 1.8em;
                     font-size: 1.4em;
-                    line-height: 1.85em;
                     background: transparent;
                 }
 
                 .btn-clear {
                     position: absolute;
-                    top: 0;
-                    right: 15px;
-                    font-size: 1em;
+                    top: 0.55em;
+                    right: 0.75em;
+                    font-size: 1.2em;
                     z-index: 55;
                     border-bottom: none;
 
@@ -806,13 +803,10 @@ body {
                 }
                 
                 .lookahead-container {
-                    left: 2.65em;
-                    width: calc(100% - 80px);
-                    
-                    .lookahead, .measure {
-                        font-size: 1.4em;
-                        line-height: 1.85em;
-                    }
+                    font-size: 1.4em;
+                    top: 0.25em;
+                    left: 1.8em;
+                    width: calc(100% - 1.8em);
                 }
             }
         }
@@ -821,7 +815,7 @@ body {
             flex: 0 1 100%;
             overflow-y: auto;
             padding: 0 10px 0 0;
-            margin-top: 10px;
+            margin-top: 0.75em;
             
             &.ng-hide {
                 margin-top: 0;
@@ -843,7 +837,7 @@ body {
             .list-group-item {
                 background: $colour-text1;
                 border: none;
-                border-radius: $border-radius;
+                border-radius: $border-radius-well;
                 padding: 0;
                 margin: 0 0 10px 0;
                 outline: none;
@@ -889,9 +883,10 @@ body {
                 }
                 
                 a {
-                    border-radius: $border-radius;
+                    border-radius: $border-radius-well;
                     padding: 12px 30px 12px 20px;
                     display: block;
+                    border-bottom: none;
                     @include css-prefix(user-select, none);
 
                     &:focus {
@@ -957,7 +952,7 @@ body {
                     position: absolute;
                     width: 100%;
                     height: 100%;
-                    border-radius: $border-radius;
+                    border-radius: $border-radius-well;
                     @include css-prefix(user-select, none);
                 }
 
@@ -973,7 +968,7 @@ body {
                 font-size: 1.2em;
                 font-weight: normal;
                 line-height: 1.1em;
-                margin-bottom: 5px;
+                margin-bottom: 0.2em;
                 transition: all, ease-in-out, 0.2s;
             }
             
@@ -984,7 +979,7 @@ body {
             .description {
                 font-size: 0.9em;
                 font-style: italic;
-                margin-bottom: 5px;
+                margin-bottom: 0.2em;
             }
             
             .url {
@@ -1172,33 +1167,31 @@ body {
 
     .status-panel {
         .progress {
-            height: 0.35em;
+            height: 0.4em;
             border-radius: 1em;
             background-color: $colour-text2;
             position: relative;
-            overflow: visible;
-
-            .max, .used {
-                font-size: 0.8em;
-                position: absolute;
-                top: 0.35em;
-                height: 1.5em;
-            }
-
-            .max {
-                right: 0;
-                color: $colour-text2;
-            }
 
             .progress-bar {
                 background-color: $colour-bg2;
                 transition: none;
             }
+        }
 
-            .used {
-                color: $colour-bg2;
-                left: 0;
-            }
+        .max, .used {
+            font-size: 0.8em;
+            position: absolute;
+            bottom: -1.5em;
+        }
+
+        .max {
+            right: 0;
+            color: $colour-text2;
+        }
+
+        .used {
+            color: $colour-bg2;
+            left: 0;
         }
 
         .service-message {

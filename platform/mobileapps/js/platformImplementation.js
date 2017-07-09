@@ -1279,6 +1279,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Clear search and display all bookmarks
 		document.activeElement.blur();
 		vm.search.query = null;
+		vm.search.queryMeasure = null;
         vm.search.lookahead = null;
         vm.search.results = null;
 		vm.search.execute();

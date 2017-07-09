@@ -107,9 +107,9 @@
                     <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_DataUsage_Description) }}</p>
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" data-ng-style=" { 'width': vm.settings.syncDataUsed + '%' }"></div>
-                        <span class="used" data-ng-show="vm.settings.syncDataSize !== null">{{ vm.settings.syncDataSize | number : 0 }}kB</span>
-                        <span class="max" data-ng-show="vm.settings.service.maxSyncSize !== null">{{ vm.settings.service.maxSyncSize | number : 0 }}kB</span>
                     </div>
+                    <span class="used" data-ng-show="vm.settings.syncDataSize !== null">{{ vm.settings.syncDataSize | number : 0 }}kB</span>
+                    <span class="max" data-ng-show="vm.settings.service.maxSyncSize !== null">{{ vm.settings.service.maxSyncSize | number : 0 }}kB</span>
                 </div>
             </div>
             <div class="form-group" data-ng-show="vm.settings.displayUpdateServiceUrlForm || vm.settings.displayUpdateServiceUrlConfirmation">

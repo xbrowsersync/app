@@ -885,6 +885,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var displayDefaultSearchState = function() {
         // Clear search and results
         vm.search.query = null;
+        vm.search.queryMeasure = null;
         vm.search.lookahead = null;
         vm.search.results = null;
 
@@ -1262,7 +1263,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
 
     var searchForm_SearchText_Autocomplete = function() {
-        vm.search.query += vm.search.lookahead;
+        vm.search.query = vm.search.query + '' + vm.search.lookahead;
         searchForm_SearchText_Change();
         if (!utility.IsMobilePlatform(vm.platformName)) {
             $timeout(function() {
