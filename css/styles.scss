@@ -360,6 +360,7 @@ body {
         position: absolute;
         width: 100%;
         height: 100%;
+        line-height: 1.42857143;
         overflow: hidden;
         white-space: nowrap;
         
@@ -367,7 +368,6 @@ body {
             display: block;
             position: absolute;
             z-index: 60;
-            line-height: 1.43;
             color: $colour-link;
             background-color: transparent;
             cursor: pointer;
@@ -719,7 +719,7 @@ body {
             position: absolute;
             top: 0;
             font-size: 1.2em;
-            height: 2.1em;
+            height: 2.3em;
             width: 100%;
             border-radius: $border-radius-input;
         }
@@ -1167,14 +1167,16 @@ body {
 
     .status-panel {
         .progress {
-            height: 0.4em;
+            height: 0.45em;
             border-radius: 1em;
             background-color: $colour-text2;
-            position: relative;
+            overflow: visible;
 
             .progress-bar {
                 background-color: $colour-bg2;
                 transition: none;
+                border-bottom-left-radius: 1em;
+                border-top-left-radius: 1em;
             }
         }
 

@@ -1333,7 +1333,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                             $timeout(function() {
                                 var lookaheadElement = document.querySelector('#search-panel .lookahead-container .lookahead');
                                 var measureElement = document.querySelector('#search-panel .lookahead-container .measure');
-                                lookaheadElement.style.left = (measureElement.offsetLeft + measureElement.offsetWidth) + 'px';
+                                lookaheadElement.style.left = (measureElement.offsetLeft + measureElement.getBoundingClientRect().width) + 'px';
                                 vm.search.lookahead = lookahead.replace(/\s/g, '&nbsp;');
                             });
                         }

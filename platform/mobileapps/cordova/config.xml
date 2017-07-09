@@ -47,7 +47,7 @@
         <splash src="res/screen/ios/Default@3x~universal~comany.png" />
     </platform>
     <engine name="android" spec="^6.2.3" />
-    <engine name="ios" spec="~4.4.0" />
+    <engine name="ios" spec="^4.4.0" />
     <preference name="orientation" value="portrait" />
     <preference name="CustomInAppBrowserUserAgent" value="Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" />
     <preference name="KeyboardDisplayRequiresUserAction" value="false" />
@@ -61,6 +61,7 @@
     <plugin name="bundle-cordova-webintent" spec="https://github.com/COMLINE-AG/bundle-cordova-webintent.git" />
     <plugin name="com.greybax.spinnerdialog" spec="https://github.com/greybax/cordova-plugin-native-spinner" />
     <plugin name="com.jcesarmobile.filepicker" spec="https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin.git" />
+    <plugin name="cordova-plugin-console" spec="^1.0.7" />
     <plugin name="cordova-plugin-customurlscheme" spec="git+https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin.git">
         <variable name="URL_SCHEME" value="xbrowsersync" />
         <variable name="ANDROID_SCHEME" value=" " />
@@ -78,5 +79,4 @@
     <plugin name="phonegap-plugin-barcodescanner" spec="^6.0.6">
         <variable name="CAMERA_USAGE_DESCRIPTION" value="To scan xBrowserSync QR codes" />
     </plugin>
-    <plugin name="cordova-plugin-console" spec="^1.0.7" />
 </widget>
