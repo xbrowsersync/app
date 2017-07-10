@@ -164,13 +164,13 @@
                     </div>
                     <div class="animate-fade confirm" data-ng-show="vm.settings.backupCompletedMessage">
                         <p>{{ vm.settings.backupCompletedMessage }}</p>
+                        <p class="text-center"><a id="backupLink" tabindex="15"></a></p>
                         <div class="text-center">
                             <button class="btn btn-default btn-done" data-ng-click="vm.settings.backupCompletedMessage = null" tabindex="16">
                                 {{ vm.platform.GetConstant(vm.globals.Constants.Button_Done_Label) }}
                             </button>
                         </div>
                     </div>
-                    <a id="backupLink" class="hidden" tabindex="-1"></a>
                 </div>
                 <div class="form-group">
                     <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Restore_Label) }}</label>

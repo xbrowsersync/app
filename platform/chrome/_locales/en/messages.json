@@ -300,7 +300,7 @@
 		"message":  "Back"
 	},
 	"settings_BackupRestore_BackupSuccess_Message" : {
-		"message":  "Saved backup file {fileName}."
+		"message":  "If the backup file does not download automatically, right click on the link below and 'Save link as...'."
 	},
 	"settings_BackupRestore_RestoreSuccess_Message" : {
 		"message":  "Your data has been restored."
@@ -543,6 +543,6 @@
 		"message":  "Backup failed"
 	},
 	"settings_About_Updates_ListHtml": {
-		"message": "<li>iOS and Android apps released!</li><li>Redesigned, more intuitive sync/login panel and settings panel.</li><li>Cleaned up extension dependencies for smaller footprint and faster loading.</li><li>Search queries now allow commas between keywords.</li><li>Titleless bookmarks now display their URL host as a title.</li><li>Bookmark descriptions are now shortened to 300 characters to the nearest word.</li><li>“Connection Lost” warnings are no longer shown when checking for updates in the background.</li><li>Many, many more minor enhancements and bug fixes.</li>"
+		"message": "<li>iOS and Android apps released!</li><li>Redesigned, more intuitive sync/login panel and settings panel.</li><li>Cleaned up extension dependencies for smaller footprint and faster loading.</li><li>Added support for bookmarklets.</li><li>Search queries now allow commas between keywords.</li><li>Titleless bookmarks now display their URL host as a title.</li><li>Bookmark descriptions are now shortened to 300 characters to the nearest word.</li><li>“Connection Lost” warnings are no longer shown when checking for updates in the background.</li><li>Many, many more minor enhancements and bug fixes.</li>"
 	}
 }

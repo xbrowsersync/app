@@ -429,7 +429,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
         else {
             // Check url is valid
-            isValid = globals.URL.Regex.test(vm.bookmark.current.url);
+            isValid = globals.URL.Regex.test(vm.bookmark.current.url) || globals.URL.BookmarkletRegex.test(vm.bookmark.current.url);
         }
 
         // Set invalid service validator
@@ -441,7 +441,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         var bookmarkToCreate = vm.bookmark.current;
 
         // Check for protocol
-        if (!!vm.bookmark.current.url && !!vm.bookmark.current.url.trim() && !globals.URL.ProtocolRegex.test(vm.bookmark.current.url)) {
+        if (!!vm.bookmark.current.url && 
+            !!vm.bookmark.current.url.trim() && 
+            !globals.URL.BookmarkletRegex.test(vm.bookmark.current.url) &&
+            !globals.URL.ProtocolRegex.test(vm.bookmark.current.url)) {
             vm.bookmark.current.url = 'http://' + vm.bookmark.current.url;
         }
 
@@ -640,7 +643,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         var bookmarkToUpdate = vm.bookmark.current;
         
         // Check for protocol
-        if (!!vm.bookmark.current.url && !!vm.bookmark.current.url.trim() && !globals.URL.ProtocolRegex.test(vm.bookmark.current.url)) {
+        if (!!vm.bookmark.current.url && 
+            !!vm.bookmark.current.url.trim() && 
+            !globals.URL.BookmarkletRegex.test(vm.bookmark.current.url) &&
+            !globals.URL.ProtocolRegex.test(vm.bookmark.current.url)) {
             vm.bookmark.current.url = 'http://' + vm.bookmark.current.url;
         }
 

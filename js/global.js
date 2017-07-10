@@ -599,6 +599,7 @@ xBrowserSync.App.Global = function(platform) {
                         value);
                 }
             },
+            BookmarkletRegex: /^(javascript:)(.+)/i,
             Bookmarks: '/bookmarks',
             Current: '/current',
             LastUpdated: '/lastUpdated',

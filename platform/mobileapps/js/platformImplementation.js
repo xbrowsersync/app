@@ -584,7 +584,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "You must be synced to add a bookmark"
 		},
 		"settings_About_Updates_ListHtml": {
-			"message": "<li>iOS and Android apps released!</li><li>Redesigned, more intuitive sync/login panel and settings panel.</li><li>Search queries now allow commas between keywords.</li><li>Titleless bookmarks now display their URL host as a title.</li><li>Bookmark descriptions are now shortened to 300 characters to the nearest word.</li><li>“Connection Lost” warnings are no longer shown when checking for updates in the background.</li><li>Many, many more minor enhancements and bug fixes.</li>"
+			"message": "<li>iOS and Android apps released!</li><li>Redesigned, more intuitive sync/login panel and settings panel.</li><li>Cleaned up extension dependencies for smaller footprint and faster loading.</li><li>Added support for bookmarklets.</li><li>Search queries now allow commas between keywords.</li><li>Titleless bookmarks now display their URL host as a title.</li><li>Bookmark descriptions are now shortened to 300 characters to the nearest word.</li><li>“Connection Lost” warnings are no longer shown when checking for updates in the background.</li><li>Many, many more minor enhancements and bug fixes.</li>"
 		}
 	};
 
@@ -941,15 +941,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 		// Increase search results timeout to avoid display lag
 		vm.settings.getSearchResultsDelay = 500;
-
-		// Attach event handler for iOS Share activity
-		/*$timeout(function() {
-			window.handleOpenURL = handleSharedUrlIos;
-		}, 2000);*/
 	};
 
 	var openUrl = function(url) {
-		cordova.InAppBrowser.open(url, '_system');
+		// Open the url if this is not a bookmarklet
+		if (!globals.URL.BookmarkletRegex.test(url)) {
+			cordova.InAppBrowser.open(url, '_system');
+		}
 	};
 	
 	var populateBookmarks = function(xBookmarks) {

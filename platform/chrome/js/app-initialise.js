@@ -4,6 +4,7 @@ xBrowserSync.App.UI = angular.module('xBrowserSync.App.UI', ['ngSanitize', 'ngAn
 // Disable debug info
 xBrowserSync.App.UI.config(['$compileProvider', function($compileProvider) {
     $compileProvider.debugInfoEnabled(false);
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|javascript):/);
 }]);
 
 // Restrict animations to elements with class prefix "animate-"

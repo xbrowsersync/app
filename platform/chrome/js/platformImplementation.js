@@ -123,16 +123,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				// Trigger download 
                 var backupLink = document.getElementById('backupLink');
                 var fileName = 'xBrowserSyncBackup_' + dateString + '.txt';
-                backupLink.setAttribute('download', fileName);
-				backupLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(data)));
+                var file = new Blob([JSON.stringify(data)], { type: 'text/plain' });
+				backupLink.href = URL.createObjectURL(file);
+				backupLink.innerHTML = fileName;
+				backupLink.download = fileName;
 				backupLink.click();
                 
                 // Display message
-                var message = platform.GetConstant(globals.Constants.Settings_BackupRestore_BackupSuccess_Message).replace(
-                    '{fileName}',
-                    fileName);
-                
-                vm.settings.backupCompletedMessage = message;
+                vm.settings.backupCompletedMessage = platform.GetConstant(globals.Constants.Settings_BackupRestore_BackupSuccess_Message);
 			});
 	};
 	
@@ -681,6 +679,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 
 	var openUrl = function(url) {
+		// If this is a bookmarklet, execute it and return
+		if (!!globals.URL.BookmarkletRegex.test(url)) {
+			return eval(url.replace(globals.URL.BookmarkletRegex, '$2'));
+		}
+		
 		// Get current tab
         chrome.tabs.query(
             { currentWindow: true, active: true },

@@ -23,6 +23,7 @@
       "js": ["js/content.js"]
     }
   ],
+  "content_security_policy": "object-src 'self'; script-src 'self' 'unsafe-eval';",
   "permissions": [
     "activeTab",
     "alarms",
