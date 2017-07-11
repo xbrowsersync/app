@@ -20,87 +20,6 @@
     }
 }
 
-@include keyframes(animation-scroll) { 
-    0% { 
-        transform: translate3d(0, 0, 0); 
-    } 
-    100% { 
-        transform: translate3d(-800px, 479px, 0); 
-    } 
-}
-
-@include keyframes(animation-slide-in) {
-    0% {
-        left: 105%;
-    }
-    100% {
-        left: 0;
-    }
-}
-
-@include keyframes(animation-slide-out) {
-    0% {
-        left: 0;
-    }
-    100% {
-        left: -105%;
-    }
-}
-
-@include keyframes(animation-fold-down-slide-in) {
-    0% {
-        left: -105%;
-        max-height: 0px;
-        margin-bottom: 0px;
-    }
-    40% {
-        left: -105%;
-        max-height: 250px;
-        margin-bottom: 15px;
-    }
-    100% {
-        left: 0;
-        max-height: 250px;
-        margin-bottom: 15px;
-    }
-}
-
-@include keyframes(animation-slide-out-fold-up) {
-    0% {
-        left: 0;
-        max-height: 250px;
-        margin-bottom: 15px;
-    }
-    60% {
-        left: -105%;
-        max-height: 250px;
-        margin-bottom: 15px;
-    }
-    100% {
-        left: -105%;
-        max-height: 0px;
-        margin-bottom: 0px;
-    }
-}
-
-@include keyframes(animation-reverse-slide-in) {
-    0% {
-        left: -105%;
-    }
-    100% {
-        left: 0;
-    }
-}
-
-@include keyframes(animation-reverse-slide-out) {
-    0% {
-        left: 0;
-    }
-    100% {
-        left: 105%;
-    }
-}
-
 .animate-fade {
     &.ng-hide {
         opacity: 0!important;
@@ -143,24 +62,4 @@
 
 .animate-flash {
     @include animation(animation-flash 0.8s linear infinite);
-}
-
-.animate-slide {       
-    &.ng-hide-add {
-        @include animation(animation-slide-out 0.2s ease);
-    }
-
-    &.ng-hide-remove {
-        @include animation(animation-slide-in 0.2s ease);
-    }
-
-    &.reverse {
-        &.ng-hide-add {
-            @include animation(animation-reverse-slide-out 0.2s ease);
-        }
-
-        &.ng-hide-remove {
-            @include animation(animation-reverse-slide-in 0.2s ease);
-        }
-    }
 }

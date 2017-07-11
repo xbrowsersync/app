@@ -25,12 +25,6 @@ body {
             padding-bottom: 0;
         }
     }
-    
-    .background {
-        .background-img {
-            @include animation(none);
-        }
-    }
 
     .container {
         height: auto;
