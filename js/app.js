@@ -269,7 +269,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 	
 	var animate_addBookmark = function(selector) {
         var tl = new TimelineLite({
-            delay:  0.2
+            delay:  0.1
         });
         
         tl.add(TweenMax.set(selector, { 
@@ -278,7 +278,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             marginBottom: 0
         }));
         
-        tl.add(TweenMax.to(selector, 0.4, {
+        tl.add(TweenMax.to(selector, 0.25, {
             maxHeight: '250px',
             marginBottom: '0.75em',
             force3D: true,
@@ -294,7 +294,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
     var animate_removeBookmark = function(selector, onComplete) {
         var tl = new TimelineLite({
-            delay:  0.2,
+            delay:  0.1,
             onComplete: onComplete
         });
         
@@ -304,7 +304,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             ease: Power4.easeInOut
         }));
         
-        tl.add(TweenMax.to(selector, 0.4, {
+        tl.add(TweenMax.to(selector, 0.25, {
             maxHeight: 0,
             marginBottom: 0,
             force3D: true,
@@ -1084,11 +1084,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Display new sync panel depending on if ID is set
         vm.settings.displayNewSyncPanel = !globals.Id.Get();
 
-        // Platform-specific initation
-        platform.Init(vm, $scope);
-
         // Display login/search panel
         vm.view.displayMainView();
+        
+        // Platform-specific initation
+        platform.Init(vm, $scope);
         
         // Check if current page is a bookmark
         setBookmarkStatus();
