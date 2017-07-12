@@ -221,11 +221,21 @@ body {
         height: 100%;
         width: 100%;
         z-index: -100;
-        margin: -0.75em 0 0 -0.75em;
-        background: url(../img/bg.png);
-        background-size: 50em;
-        background-position: 0 0;
-        background-repeat: repeat;
+        background: transparent;
+
+        .background-img { 
+            display: block; 
+            width: 400%; 
+            height: 200%; 
+            background: url(../img/bg.png); 
+            background-size: 800px; 
+            background-position: -255px 80px; 
+            background-repeat: repeat; 
+            position: absolute; 
+            top: -479px; 
+            left: -10px; 
+            @include animation(animation-scroll 150s linear infinite);
+        }
     }
 
     .bottom {
@@ -654,7 +664,7 @@ body {
             position: absolute;
             height: 100%;
             width: 100%;
-            left: 105%;
+            left: 0;
             padding: 1.5em 2em;
             overflow: hidden;
             font-size: 0.95em;
@@ -840,6 +850,35 @@ body {
 
                     .list-group-item-heading {
                         color: $colour-link-highlight;
+                    }
+                }
+
+                &.animate-added {
+                    &.ng-enter {
+                        @include animation(animation-fold-down-slide-in 1.2s ease);
+
+                        &.ng-enter-active {
+                            left: 0;
+                            max-height: 250px;
+                            margin-bottom: 15px;
+                        }
+                    }
+                }
+                
+                &.animate-deleted {
+                    &.ng-enter,
+                    &.ng-leave,
+                    &.ng-move {
+                        @include animation(animation-slide-out-fold-up 1.2s ease);
+
+                        &.ng-enter-active,
+                        &.ng-leave-active,
+                        &.ng-move-active {
+                            left: -105%;
+                            max-height: 0px;
+                            margin-bottom: 0px;
+                            overflow: hidden;
+                        }
                     }
                 }
                 

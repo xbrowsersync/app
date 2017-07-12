@@ -134,22 +134,20 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     globals.DisplayIntro.Get();
             },
             displayPanel: function(panelToDisplay) {
-                vm.introduction.showLogo = (!panelToDisplay) ? true : false;                
-                panelToDisplay = panelToDisplay || 0;
-                var currentPanelSelector = '#intro-panel-' + vm.introduction.currentPanel;
-                var newPanelSelector = '#intro-panel-' + panelToDisplay;
-                
-                if (panelToDisplay >= vm.introduction.currentPanel && 
-                    panelToDisplay !== vm.introduction.currentPanel) {
-                    animate_slide(currentPanelSelector, '-105%');
+                if (!panelToDisplay || panelToDisplay > vm.introduction.currentPanel) {
+                    var panels = document.querySelectorAll('.intro-panel > div');
+
+                    for (var i = 0; i < panels.length; i++) {
+                        panels[i].classList.remove('reverse');
+                    }
                 }
                 else if (panelToDisplay < vm.introduction.currentPanel) {
-                    animate_slide(currentPanelSelector, '105%');
+                    document.querySelector('#intro-panel-' + vm.introduction.currentPanel).classList.add('reverse');
+                    document.querySelector('#intro-panel-' + panelToDisplay).classList.add('reverse');
                 }
-
-                animate_slide(newPanelSelector, '0');
                 
-                vm.introduction.currentPanel = panelToDisplay;
+                vm.introduction.showLogo = (!panelToDisplay) ? true : false;                
+                vm.introduction.currentPanel = (!panelToDisplay) ? 0 : panelToDisplay;
             },
             showLogo: true,
             currentPanel: 0
@@ -267,76 +265,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
  * Private functions
  * ------------------------------------------------------------------------------------ */
 	
-	var animate_addBookmark = function(selector) {
-        var tl = new TimelineLite({
-            delay:  0.1
-        });
-        
-        tl.add(TweenMax.set(selector, { 
-            left: '-105%', 
-            maxHeight: 0, 
-            marginBottom: 0
-        }));
-        
-        tl.add(TweenMax.to(selector, 0.25, {
-            maxHeight: '250px',
-            marginBottom: '0.75em',
-            force3D: true,
-            ease: Power4.easeInOut
-        }));
-
-        tl.add(TweenMax.to(selector, 0.3, {
-            left: 0,
-            force3D: true,
-            ease: Power4.easeInOut
-        }));
-    };
-
-    var animate_removeBookmark = function(selector, onComplete) {
-        var tl = new TimelineLite({
-            delay:  0.1,
-            onComplete: onComplete
-        });
-        
-        tl.add(TweenMax.to(selector, 0.3, {
-            left: '-105%',
-            force3D: true,
-            ease: Power4.easeInOut
-        }));
-        
-        tl.add(TweenMax.to(selector, 0.25, {
-            maxHeight: 0,
-            marginBottom: 0,
-            force3D: true,
-            ease: Power4.easeInOut
-        }));
-    };
-    
-    var animate_background = function() {
-        TweenMax.to('.background', 100, {
-            repeat: -1,
-            backgroundPosition: '-50em 30em',
-            force3D: true,
-            rotation: 0.01,
-            z: 0.01,
-            autoRound: false,
-            ease: Linear.easeNone
-        });
-    };
-
-    var animate_slide = function(selector, leftValue) {
-        TweenMax.to(selector, 0.2, {
-            repeat: 0,
-            left: leftValue,
-            force3D: true,
-            rotation: 0.01,
-            z: 0.01,
-            autoRound: false,
-            ease: Linear.easeNone
-        });
-    };
-
-    var backupRestoreForm_Backup_Click = function() {
+	var backupRestoreForm_Backup_Click = function() {
 		// Display loading overlay
         platform.Interface.Loading.Show();
         
@@ -546,13 +475,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Add new bookmark into search results on mobile apps
                 if (utility.IsMobilePlatform(vm.platformName)) {
                     bookmarkToCreate.id = bookmarks.GetNewBookmarkId(vm.search.results);
-
+                    bookmarkToCreate.class = 'added';
                     $timeout(function() {
-                        // Add bookmark to collection and animate
                         vm.search.results.unshift(bookmarkToCreate);
-                        $timeout(function() {
-                            animate_addBookmark('[data-bookmark-id="' + bookmarkToCreate.id + '"]');
-                        });
 
                         // Update cache with modified bookmarks
                         bookmarks.RefreshCache(vm.search.results);
@@ -608,15 +533,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         });
 
                         if (deletedBookmarkIndex >= 0) {
+                            vm.search.results[deletedBookmarkIndex].class = 'deleted';
                             $timeout(function() {
-                                // Animate removing bookmark
-                                animate_removeBookmark('[data-bookmark-id="' + bookmarkToDelete.id + '"]', function() {
-                                    // Remove bookmark from collection
-                                    vm.search.results.splice(deletedBookmarkIndex, 1);
+                                vm.search.results.splice(deletedBookmarkIndex, 1);
 
-                                    // Update cache with modified bookmarks
-                                    bookmarks.RefreshCache(vm.search.results);
-                                });
+                                // Update cache with modified bookmarks
+                                bookmarks.RefreshCache(vm.search.results);
                             });
                         }
                     }
@@ -822,6 +744,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.settings.dataToRestore = '';
                 break;
             case vm.view.views.login:
+                if (!vm.introduction.displayIntro()) {
+                    vm.introduction.displayPanel();
+                }
+
                 vm.sync.displaySyncConfirmation = false;
                 if (vm.syncForm) {
                     vm.syncForm.$setPristine();
@@ -835,16 +761,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Initialise new view
         switch(view) {
             case vm.view.views.login:
-                vm.introduction.showLogo = true;
-                $timeout(animate_background);
-                
                 // Display new sync panel depending on if ID is set
                 vm.settings.displayNewSyncPanel = !globals.Id.Get();
-
-                // Set intro animation visibility
-                if (!!vm.introduction.displayIntro()) {
-                    introPanel_DisplayIntro();
-                }
                 
                 // Focus on first input field
                 if (!utility.IsMobilePlatform(vm.platformName)) {
@@ -1083,13 +1001,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
         // Display new sync panel depending on if ID is set
         vm.settings.displayNewSyncPanel = !globals.Id.Get();
-
-        // Display login/search panel
-        vm.view.displayMainView();
         
         // Platform-specific initation
         platform.Init(vm, $scope);
         
+        // Set intro animation visibility
+        if (vm.view.current === vm.view.views.login && !!vm.introduction.displayIntro()) {
+            introPanel_DisplayIntro();
+        }
+
         // Check if current page is a bookmark
         setBookmarkStatus();
     };
@@ -1333,15 +1253,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if (!!vm.search.results && vm.search.results.length > 0) {
             var deletedBookmarkIndex = _.findIndex(vm.search.results, function(result) { return result.id === bookmark.id; });
             if (deletedBookmarkIndex >= 0) {
+                vm.search.results[deletedBookmarkIndex].class = 'deleted';
                 $timeout(function() {
-                    // Animate removing bookmark
-                    animate_removeBookmark('[data-bookmark-id="' + bookmark.id + '"]', function() {
-                        // Remove bookmark from collection
-                        vm.search.results.splice(deletedBookmarkIndex, 1);
+                    vm.search.results.splice(deletedBookmarkIndex, 1);
 
-                        // Update cache with modified bookmarks
-                        bookmarks.RefreshCache(vm.search.results);
-                    });
+                    // Update cache with modified bookmarks
+                    bookmarks.RefreshCache(vm.search.results);
                 });
             }
         }

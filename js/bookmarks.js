@@ -763,6 +763,9 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                             var newBookmark = syncData.changeInfo.bookmark;
                             newBookmark.id = getNewBookmarkId(bookmarksToUpdate);
 
+                            // Remove unwanted properties
+                            if (!!newBookmark.class) { delete newBookmark.class; }
+                            
                             // Add new bookmark to xBrowserSync group
                             xbsContainer.children.push(newBookmark);
                             
@@ -800,6 +803,9 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
 
                             var bookmarkToUpdate = syncData.changeInfo.bookmark;
 
+                            // Remove unwanted properties
+                            if (!!bookmarkToUpdate.class) { delete bookmarkToUpdate.class; }
+                            
                             // Update bookmark
                             bookmarksToUpdate = recursiveUpdate(bookmarksToUpdate, bookmarkToUpdate);
                             
