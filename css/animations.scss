@@ -20,13 +20,13 @@
     }
 }
 
-@include keyframes(animation-scroll) { 
-    0% { 
-        transform: translate3d(0, 0, 0); 
-    } 
-    100% { 
-        transform: translate3d(-800px, 479px, 0); 
-    } 
+@include keyframes(animation-scroll) {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-50em, 30em, 0);
+    }
 }
 
 @include keyframes(animation-slide-in) {
@@ -55,26 +55,26 @@
     }
     40% {
         left: -105%;
-        max-height: 250px;
-        margin-bottom: 15px;
+        max-height: 17em;
+        margin-bottom: 0.75em;
     }
     100% {
         left: 0;
-        max-height: 250px;
-        margin-bottom: 15px;
+        max-height: 17em;
+        margin-bottom: 0.75em;
     }
 }
 
 @include keyframes(animation-slide-out-fold-up) {
     0% {
         left: 0;
-        max-height: 250px;
-        margin-bottom: 15px;
+        max-height: 17em;
+        margin-bottom: 0.75em;
     }
     60% {
         left: -105%;
-        max-height: 250px;
-        margin-bottom: 15px;
+        max-height: 17em;
+        margin-bottom: 0.75em;
     }
     100% {
         left: -105%;

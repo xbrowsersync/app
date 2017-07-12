@@ -28,6 +28,7 @@
 
 * {
     box-shadow: none!important;
+    outline: none!important;
 }
 
 body {
@@ -89,7 +90,6 @@ body {
                 font-weight: 800;
                 background-color: rgba(237, 254, 255, 0.3);
                 color: $colour-text1;
-                outline: none;
                 min-width: 5em;
                 border-color: $colour-text1;
                 border-width: 0.1em;
@@ -218,22 +218,22 @@ body {
 
     .background {
         position: fixed;
+        top: 0;
+        left: 0;
         height: 100%;
         width: 100%;
-        z-index: -100;
-        background: transparent;
 
         .background-img { 
-            display: block; 
-            width: 400%; 
-            height: 200%; 
-            background: url(../img/bg.png); 
-            background-size: 800px; 
-            background-position: -255px 80px; 
-            background-repeat: repeat; 
-            position: absolute; 
-            top: -479px; 
-            left: -10px; 
+            display: block;
+            width: 100em;
+            height: 200%;
+            background: url(../img/bg.png);
+            background-size: 50em;
+            background-position: 0 0;
+            background-repeat: repeat;
+            position: absolute;
+            top: -30em;
+            z-index: 0;
             @include animation(animation-scroll 150s linear infinite);
         }
     }
@@ -560,10 +560,6 @@ body {
             font-weight: normal;
             text-transform: capitalize;
             padding: 6px 8px;
-
-            &:focus {
-                outline: none;
-            }
             
             &:hover {
                 cursor: pointer;
@@ -613,17 +609,14 @@ body {
 }
 
 #login-panel {
-    & > div {
-        background: transparent;
-    }
-
     form {
         position: relative;
         
         & > div {
             position: absolute;
-            top: 0px;
+            top: 0;
             width: 100%;
+            z-index: 10;
         }
     }
 
@@ -644,6 +637,11 @@ body {
         }
     }
 
+    .confirm {
+        position: relative;
+        z-index: 10;
+    }
+
     .form-group {
         position: relative;
         margin-bottom: 1.2em;
@@ -654,11 +652,16 @@ body {
         }
     }
 
+    .header-panel {
+        z-index: 10;
+    }
+    
     .intro-panel {
         height: 18em;
         margin-bottom: 1.2em;
         overflow: hidden;
         position: relative;
+        z-index: 10;
     
         & > div {
             position: absolute;
@@ -744,6 +747,7 @@ body {
     .view-content {
         display: flex;
         flex-flow: column;
+        padding: 0.75em 0 0 0.75em;
 
         .header-panel {
             flex: none;
@@ -839,9 +843,7 @@ body {
                 border: none;
                 border-radius: $border-radius-well;
                 padding: 0;
-                margin: 0 0 10px 0;
-                outline: none;
-                overflow: hidden;
+                margin: 0 0 0.75em 0;
             
                 &:hover {
                     .btn-edit-bookmark {
@@ -854,32 +856,19 @@ body {
                 }
 
                 &.animate-added {
-                    &.ng-enter {
-                        @include animation(animation-fold-down-slide-in 1.2s ease);
+                    @include animation(animation-fold-down-slide-in 0.75s cubic-bezier(0.770, 0.000, 0.175, 1.000) forwards);
 
-                        &.ng-enter-active {
-                            left: 0;
-                            max-height: 250px;
-                            margin-bottom: 15px;
-                        }
+                    &.ng-enter-active,
+                    &.ng-leave-active,
+                    &.ng-move-active {
+                        left: 0;
+                        max-height: 17em;
+                        margin-bottom: 0.75em;
                     }
                 }
                 
                 &.animate-deleted {
-                    &.ng-enter,
-                    &.ng-leave,
-                    &.ng-move {
-                        @include animation(animation-slide-out-fold-up 1.2s ease);
-
-                        &.ng-enter-active,
-                        &.ng-leave-active,
-                        &.ng-move-active {
-                            left: -105%;
-                            max-height: 0px;
-                            margin-bottom: 0px;
-                            overflow: hidden;
-                        }
-                    }
+                    @include animation(animation-slide-out-fold-up 0.75s cubic-bezier(0.770, 0.000, 0.175, 1.000) forwards);
                 }
                 
                 a {
@@ -907,8 +896,8 @@ body {
                 .menu {
                     background-color: rgba(8,48,57,0.9);
                     text-align: center;
+                    border-radius: $border-radius-well;
                     z-index: 60;
-                    outline: none;
 
                     &:before {
                         content: '';
@@ -952,7 +941,6 @@ body {
                     position: absolute;
                     width: 100%;
                     height: 100%;
-                    border-radius: $border-radius-well;
                     @include css-prefix(user-select, none);
                 }
 
@@ -1008,12 +996,6 @@ body {
 }
 
 #settings-panel {
-    & > div {
-        display: flex;
-        flex-flow: column;
-        padding: 0.75em 0 0 0.75em;
-    }
-
     a {
         border-bottom-color: $colour-text2;
 
@@ -1248,6 +1230,12 @@ body {
         .id-url {
             @extend .form-control-url;
         }
+    }
+
+    .view-content {
+        display: flex;
+        flex-flow: column;
+        padding: 0.75em 0 0 0.75em;
     }
     
     .well {

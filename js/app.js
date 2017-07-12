@@ -474,13 +474,20 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             .then(function() {
                 // Add new bookmark into search results on mobile apps
                 if (utility.IsMobilePlatform(vm.platformName)) {
-                    bookmarkToCreate.id = bookmarks.GetNewBookmarkId(vm.search.results);
-                    bookmarkToCreate.class = 'added';
+                    var bookmarkToCreateClone = JSON.parse(JSON.stringify(bookmarkToCreate));
+                    bookmarkToCreateClone.id = bookmarks.GetNewBookmarkId(vm.search.results);
+                    bookmarkToCreateClone.class = 'added';
                     $timeout(function() {
-                        vm.search.results.unshift(bookmarkToCreate);
+                        // Add bookmark to results
+                        vm.search.results.unshift(bookmarkToCreateClone);
 
-                        // Update cache with modified bookmarks
-                        bookmarks.RefreshCache(vm.search.results);
+                        $timeout(function() {
+                            // Remove animation class
+                            delete bookmarkToCreateClone.class;
+                            
+                            // Update cache with modified bookmarks
+                            bookmarks.RefreshCache(vm.search.results);
+                        }, 750);
                     });
                 }
             });
@@ -535,11 +542,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         if (deletedBookmarkIndex >= 0) {
                             vm.search.results[deletedBookmarkIndex].class = 'deleted';
                             $timeout(function() {
+                                // Remove bookmark from results
                                 vm.search.results.splice(deletedBookmarkIndex, 1);
-
+                                
                                 // Update cache with modified bookmarks
                                 bookmarks.RefreshCache(vm.search.results);
-                            });
+                            }, 750);
                         }
                     }
                 }
@@ -725,7 +733,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.bookmark.displayUpdateForm = false;
                 break;
             case vm.view.views.search:
+                vm.search.lookahead = null;
                 vm.search.selectedBookmark = null;
+                vm.search.query = null;
+                vm.search.queryMeasure = null;
+                
+                // Clear search results for non-mobile platforms
+                if (!utility.IsMobilePlatform(vm.platformName)) {
+                    vm.search.results = null;
+                }
                 break;
             case vm.view.views.settings:
                 vm.settings.displayCancelSyncConfirmation = false;
@@ -784,13 +800,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 }
                 break;
             case vm.view.views.search:
-                vm.search.displayDefaultState();
                 $timeout(function() {
-                    platform.Interface.Refresh();
-                    $timeout(function() {
-                        deferred.resolve();
-                    }, 100);
-                });
+                    // Focus on search box
+                    if (!utility.IsMobilePlatform(vm.platformName)) {
+                        document.querySelector('input[name=txtSearch]').focus();
+                    }
+
+                    deferred.resolve();
+                }, 100);
                 break;
             case vm.view.views.bookmark:
                 // Set bookmark form properties
@@ -837,9 +854,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
 
         // Attach events to new tab links
-        $timeout(function() {
-            setNewTabLinks();
-        });
+        $timeout(setNewTabLinks);
         
         return deferred.promise;
     };
@@ -925,12 +940,17 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         globals.SyncEnabled.Set(true);
                     }
 
+                    // Refresh interface/icon
+                    $timeout(platform.Interface.Refresh);
+                    
                     // Disable the intro animation
                     vm.introduction.displayIntro(false);
                     
                     // If initial sync, switch to search panel
                     if (vm.view.current === vm.view.views.login) {
-                    	vm.view.change(vm.view.views.search);
+                    	vm.search.results = null;
+                        vm.view.change(vm.view.views.search)
+                            .then(vm.search.displayDefaultState());
                     }
 
                     // Update bookmark icon
@@ -1253,12 +1273,16 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if (!!vm.search.results && vm.search.results.length > 0) {
             var deletedBookmarkIndex = _.findIndex(vm.search.results, function(result) { return result.id === bookmark.id; });
             if (deletedBookmarkIndex >= 0) {
-                vm.search.results[deletedBookmarkIndex].class = 'deleted';
+                vm.search.selectedBookmark = null;
                 $timeout(function() {
-                    vm.search.results.splice(deletedBookmarkIndex, 1);
+                    vm.search.results[deletedBookmarkIndex].class = 'deleted';
+                    $timeout(function() {
+                        // Remove bookmark from results
+                        vm.search.results.splice(deletedBookmarkIndex, 1);
 
-                    // Update cache with modified bookmarks
-                    bookmarks.RefreshCache(vm.search.results);
+                        // Update cache with modified bookmarks
+                        bookmarks.RefreshCache(vm.search.results);
+                    }, 750);
                 });
             }
         }

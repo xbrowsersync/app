@@ -1261,14 +1261,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return deferred.promise;
 	};
 
-	var checkForTextInputBlur = function(event) {
-		if (!isTextInput(event.target) && isTextInput(document.activeElement)) {
-			$timeout(function() {
-				document.activeElement.blur();
-			}, 100);
-		}
-	};
-
 	var displayDefaultSearchState = function() {
         if (vm.view.current !== vm.view.views.search) {
 			return;
@@ -1279,7 +1271,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		vm.search.query = null;
 		vm.search.queryMeasure = null;
         vm.search.lookahead = null;
-        vm.search.results = null;
 		vm.search.execute();
     };
 
@@ -1299,8 +1290,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Set network online event
 		document.addEventListener('online', handleNetworkReconnected, false);
 
-		// Blur focus (and hide keyboard) when pressing out of text fields
-		document.addEventListener('touchstart', checkForTextInputBlur, false);
+		// Set touchstart event
+		document.addEventListener('touchstart', handleTouchStart, false);
 
 		// Platform-specific configs
 		if (vm.platformName === globals.Platforms.Android) {
@@ -1505,6 +1496,19 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		else {
 			// No shared url found
 			currentUrl = "NOSHAREDURL";
+		}
+	};
+
+	var handleTouchStart = function(event) {
+		// Blur focus (and hide keyboard) when pressing out of text fields
+		if (!isTextInput(event.target) && isTextInput(document.activeElement)) {
+			$timeout(function() {
+				document.activeElement.blur();
+			}, 100);
+		}
+		// Deselect selected bookmark
+		else if (!!vm.search.selectedBookmark) {
+			vm.search.selectedBookmark = null;
 		}
 	};
 

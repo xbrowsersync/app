@@ -262,11 +262,9 @@ body {
 }
 
 #search-panel {
-    padding: 0.75em 0.75em 0;
-
     .view-content {
-        padding: 0;
-
+        padding-right: 0.75em;
+        
         .header-panel {
             padding-right: 0;
 
@@ -304,8 +302,6 @@ body {
             }
 
             .list-group-item {
-                margin: 0 0 0.75em 0;
-
                 &.active:hover, &:hover {
                     .list-group-item-heading {
                         color: $colour-text2;

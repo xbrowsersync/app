@@ -1,7 +1,3 @@
-<div class="background"> 
-    <div class="background-img" data-ng-if="vm.view.current === vm.view.views.login"></div>
-</div>
-
 <div class="header-panel clearfix">
     <button class="btn btn-icon btn-help animate-fade" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}" 
             data-ng-click="vm.events.introPanel_ShowHelp_Click()" data-ng-show="!vm.introduction.displayIntro() && !!vm.introduction.showLogo" tabindex="1000">
@@ -251,4 +247,7 @@
             {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
         </button>
     </div>
+</div>
+<div class="background"> 
+    <div class="background-img" data-ng-if="vm.view.current === vm.view.views.login"></div>
 </div>
