@@ -856,19 +856,19 @@ body {
                 }
 
                 &.animate-added {
-                    @include animation(animation-fold-down-slide-in 0.75s cubic-bezier(0.770, 0.000, 0.175, 1.000) forwards);
+                    @include animation(animation-fade-in 0.5s linear forwards);
+                }
+                
+                &.animate-deleted {
+                    @include animation(animation-fade-out 0.5s linear forwards);
 
                     &.ng-enter-active,
                     &.ng-leave-active,
                     &.ng-move-active {
-                        left: 0;
-                        max-height: 17em;
-                        margin-bottom: 0.75em;
+                        opacity: 0;
+                        max-height: 0;
+                        margin-bottom: 0;
                     }
-                }
-                
-                &.animate-deleted {
-                    @include animation(animation-slide-out-fold-up 0.75s cubic-bezier(0.770, 0.000, 0.175, 1.000) forwards);
                 }
                 
                 a {

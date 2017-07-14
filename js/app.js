@@ -487,7 +487,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                             
                             // Update cache with modified bookmarks
                             bookmarks.RefreshCache(vm.search.results);
-                        }, 750);
+                        }, 500);
                     });
                 }
             });
@@ -547,7 +547,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                                 
                                 // Update cache with modified bookmarks
                                 bookmarks.RefreshCache(vm.search.results);
-                            }, 750);
+                            }, 500);
                         }
                     }
                 }
@@ -1282,7 +1282,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
                         // Update cache with modified bookmarks
                         bookmarks.RefreshCache(vm.search.results);
-                    }, 750);
+                    }, 500);
                 });
             }
         }
