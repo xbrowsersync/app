@@ -1311,6 +1311,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Use toasts for alerts
 		vm.alert.display = displayToast;
 
+		vm.view.displayMainView()
+            .then(function(currentView) {
+                if (currentView === vm.view.views.search) {
+                    displayDefaultSearchState();
+                }
+            });
+
 		// Check if a sync was interrupted
 		if (checkForInterruptedSync()) {
 			return;
@@ -1327,9 +1334,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					// Set shared url to current url and display bookmark panel
 					currentUrl = sharedUrl;
 					vm.view.change(vm.view.views.bookmark);
-				}
-				else {
-					displayDefaultSearchState();
 				}
 
 				// Check if bookmarks need updating, return immediately if network is disconnected

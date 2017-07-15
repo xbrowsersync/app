@@ -247,10 +247,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             change: changeView,
             displayMainView: function() {
                 if (!!globals.SyncEnabled.Get()) {
-                    vm.view.change(vm.view.views.search);
+                    return vm.view.change(vm.view.views.search);
                 }
                 else {
-                    vm.view.change(vm.view.views.login);
+                    return vm.view.change(vm.view.views.login);
                 }
             },
             views: { login: 0, search: 1, bookmark: 2, settings: 3 }
@@ -488,7 +488,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                             // Update cache with modified bookmarks
                             bookmarks.RefreshCache(vm.search.results);
                         }, 500);
-                    });
+                    }, 300);
                 }
             });
     };
@@ -798,6 +798,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         }
                     });
                 }
+
+                deferred.resolve(view);
                 break;
             case vm.view.views.search:
                 $timeout(function() {
@@ -805,8 +807,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     if (!utility.IsMobilePlatform(vm.platformName)) {
                         document.querySelector('input[name=txtSearch]').focus();
                     }
-
-                    deferred.resolve();
+                    deferred.resolve(view);
                 }, 100);
                 break;
             case vm.view.views.bookmark:
@@ -822,7 +823,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                                 vm.bookmark.current.url === 'http://') {
                                 document.querySelector('input[name="bookmarkTitle"]').focus();
                             }
-                            return deferred.resolve();
+                            deferred.resolve(view);
                         }, 100);
                     });
                 break;
@@ -845,11 +846,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                             
                             vm.settings.service.status = globals.ServiceStatus.Offline;
                         })
-                        .finally(deferred.resolve);
+                        .finally(function() {
+                            deferred.resolve(view);
+                        });
                 }, 100);
                 break;
             default:
-                deferred.resolve();
+                deferred.resolve(view);
                 break;
         }
 

@@ -856,11 +856,11 @@ body {
                 }
 
                 &.animate-added {
-                    @include animation(animation-fade-in 0.5s linear forwards);
+                    @include animation(animation-fade-in 0.75s ease-in forwards);
                 }
                 
                 &.animate-deleted {
-                    @include animation(animation-fade-out 0.5s linear forwards);
+                    @include animation(animation-fade-out 0.75s ease-in forwards);
 
                     &.ng-enter-active,
                     &.ng-leave-active,
