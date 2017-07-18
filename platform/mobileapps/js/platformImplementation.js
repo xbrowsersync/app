@@ -440,7 +440,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Connection lost"
 		},
 		"error_HttpRequestFailedWhileUpdating_Message" : {
-			"message":  "Your sync will be retried automatically when connection is restored."
+			"message":  "Sync will be retried automatically when connection is restored."
 		},
 		"error_TooManyRequests_Title" : {
 			"message":  "Slow down"
@@ -1311,12 +1311,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Use toasts for alerts
 		vm.alert.display = displayToast;
 
-		vm.view.displayMainView()
-            .then(function(currentView) {
-                if (currentView === vm.view.views.search) {
-                    displayDefaultSearchState();
-                }
-            });
+		// Display default search results if sync enabled
+		if (!globals.SyncEnabled.Get()) {
+			displayDefaultSearchState();
+		}
 
 		// Check if a sync was interrupted
 		if (checkForInterruptedSync()) {

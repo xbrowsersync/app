@@ -411,7 +411,7 @@
 		"message":  "Connection lost"
 	},
 	"error_HttpRequestFailedWhileUpdating_Message" : {
-		"message":  "Your sync will be retried automatically when connection is restored."
+		"message":  "Sync will be retried automatically when connection is restored."
 	},
 	"error_TooManyRequests_Title" : {
 		"message":  "Slow down!"

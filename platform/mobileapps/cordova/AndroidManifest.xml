@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:host=" " android:pathPrefix="/" android:scheme=" " />
             </intent-filter>
-            <intent-filter>		
+            <intent-filter android:label="Add Bookmark">
                 <action android:name="android.intent.action.SEND" />		
                 <category android:name="android.intent.category.DEFAULT" />		
                 <data android:mimeType="text/plain" />		
