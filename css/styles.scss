@@ -856,19 +856,11 @@ body {
                 }
 
                 &.animate-added {
-                    @include animation(animation-fade-in 0.75s ease-in forwards);
+                    @include animation(animation-add-bookmark 1s ease-in forwards);
                 }
                 
                 &.animate-deleted {
-                    @include animation(animation-fade-out 0.75s ease-in forwards);
-
-                    &.ng-enter-active,
-                    &.ng-leave-active,
-                    &.ng-move-active {
-                        opacity: 0;
-                        max-height: 0;
-                        margin-bottom: 0;
-                    }
+                    @include animation(animation-delete-bookmark 1s ease-in forwards);
                 }
                 
                 a {

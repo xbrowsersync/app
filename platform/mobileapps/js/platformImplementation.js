@@ -1312,7 +1312,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		vm.alert.display = displayToast;
 
 		// Display default search results if sync enabled
-		if (!globals.SyncEnabled.Get()) {
+		if (!!globals.SyncEnabled.Get()) {
 			displayDefaultSearchState();
 		}
 
