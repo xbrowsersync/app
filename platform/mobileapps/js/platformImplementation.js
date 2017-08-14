@@ -1573,7 +1573,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					checkForUpdates = $q.reject({ code: globals.ErrorCodes.HttpRequestFailed });
 				}
 				
-				checkForUpdates
+				return checkForUpdates
 					.then(function(updatesAvailable) {
 						if (!updatesAvailable) {
 							return;
@@ -1585,7 +1585,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						}
 
 						// Get bookmark updates
-						return sync(vm, { type: globals.SyncType.Pull });
+						return sync(vm, { type: globals.SyncType.Pull })
+							.then(function() {
+								// Update search results if currently on the search panel and no query entered
+								if (vm.view.current === vm.view.views.search && !vm.search.query) {
+									refreshSearchResults();
+								}
+							});
 					})
 					.catch(function(err) {
 						// If ID was removed disable sync, otherwise display search panel
@@ -1596,23 +1602,15 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 							moduleName, 'resume', globals.LogType.Warning,
 							JSON.stringify(err));
 
-						// Display alert if not retrieving bookmark metadata
-						if (!sharedUrl) {
+						// Don't display alert if url was shared or if network error encountered
+						if (!sharedUrl && err.code !== globals.ErrorCodes.HttpRequestFailed) {
 							var errMessage = utility.GetErrorMessageFromException(err);
 							vm.alert.display(errMessage.title, errMessage.message);
 						}
 					})
 					.finally(function() {
 						hideLoading('syncingUpdates');
-
-						// Update search results
-						refreshSearchResults();
 					});
-			})
-			.catch(function(err) {
-				// Display alert
-				var errMessage = utility.GetErrorMessageFromException(err);
-				vm.alert.display(errMessage.title, errMessage.message);
 			});
 	};
 
