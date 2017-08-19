@@ -247,11 +247,50 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"settings_About_Issues_Description": {
 			"message": "Raise an issue with the app or request a new feature."
 		},
+		"settings_About_MobileApps_Label": {
+			"message": "Mobile apps"
+		},
+		"settings_About_MobileApps_Description": {
+			"message": "Get the xBrowserSync mobile app, available now for Android or iOS."
+		},
+		"settings_About_MobileApps_Android_Label": {
+			"message": "Android"
+		},
+		"settings_About_MobileApps_Android_Link_Title": {
+			"message": "Get it on Google Play"
+		},
+		"settings_About_MobileApps_iOS_Label": {
+			"message": "iOS"
+		},
+		"settings_About_MobileApps_iOS_Link_Title": {
+			"message": "Get it on the App Store"
+		},
+		"settings_About_WebExtensions_Label": {
+			"message": "Web extensions"
+		},
+		"settings_About_WebExtensions_Description": {
+			"message": "Get the xBrowserSync desktop browser extension, available now for Chrome."
+		},
+		"settings_About_WebExtensions_Chrome_Label": {
+			"message": "Chrome"
+		},
+		"settings_About_WebExtensions_Chrome_Link_Title": {
+			"message": "Get it on the Chrome Web Store"
+		},
 		"settings_About_Acknowledgements_Label": {
 			"message": "Acknowledgements"
 		},
 		"settings_About_Acknowledgements_Description": {
 			"message": "xBrowserSync would not be possible without these open-source libraries (and their depedencies) and the talented devs who give up their free time to make them possible. Respect."
+		},
+		"settings_About_Contributions_Label": {
+			"message": "Contributions"
+		},
+		"settings_About_Contributions_Description": {
+			"message": "If you enjoy using xBrowserSync and would like to contribute some BTC towards the development and running costs."
+		},
+		"settings_About_Contributions_Link_Title": {
+			"message": "Send BTC to 1QEpmSt2hqnskxGRav9SNaRrJo5E9pGpGy"
 		},
 		"settings_Debug_Title" : {
 			"message":  "Debug"

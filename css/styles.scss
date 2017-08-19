@@ -1004,8 +1004,25 @@ body {
             margin-bottom: 0;
             font-size: 0.8em;
         }
+
+        .app-links {
+            text-align: center;
+
+            a {
+                margin-right: 2em;
+                border-bottom: none!important;
+
+                &::last-child {
+                    margin-right: 0;
+                }
+            }
+
+            img {
+                height: 4em;
+            }
+        }
         
-        .github-url, .issues-url {
+        .github-url, .issues-url, .contribute-link {
             @extend .form-control-url;
         }
 
