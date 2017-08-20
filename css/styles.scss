@@ -1007,13 +1007,31 @@ body {
 
         .app-links {
             text-align: center;
+            height: 4em;
 
             a {
                 margin-right: 2em;
                 border-bottom: none!important;
+                display: inline-block;
+                height: 4em;
 
-                &::last-child {
+                &:last-child {
                     margin-right: 0;
+                }
+
+                &.android {
+                    background: url("../img/android.svg") no-repeat;
+                    width: 2.7em;                    
+                }
+
+                &.chrome {
+                    background: url("../img/chrome.svg") no-repeat;
+                    width: 2.7em;                    
+                }
+
+                &.ios {
+                    background: url("../img/ios.svg") no-repeat;
+                    width: 2.7em;                    
                 }
             }
 

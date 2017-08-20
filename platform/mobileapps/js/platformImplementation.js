@@ -253,26 +253,17 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"settings_About_MobileApps_Description": {
 			"message": "Get the xBrowserSync mobile app, available now for Android or iOS."
 		},
-		"settings_About_MobileApps_Android_Label": {
-			"message": "Android"
-		},
 		"settings_About_MobileApps_Android_Link_Title": {
 			"message": "Get it on Google Play"
-		},
-		"settings_About_MobileApps_iOS_Label": {
-			"message": "iOS"
 		},
 		"settings_About_MobileApps_iOS_Link_Title": {
 			"message": "Get it on the App Store"
 		},
 		"settings_About_WebExtensions_Label": {
-			"message": "Web extensions"
+			"message": "Web extension"
 		},
 		"settings_About_WebExtensions_Description": {
 			"message": "Get the xBrowserSync desktop browser extension, available now for Chrome."
-		},
-		"settings_About_WebExtensions_Chrome_Label": {
-			"message": "Chrome"
 		},
 		"settings_About_WebExtensions_Chrome_Link_Title": {
 			"message": "Get it on the Chrome Web Store"

@@ -278,21 +278,15 @@
                 <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_MobileApps_Label) }}</label>
                 <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_MobileApps_Description) }}</p>
                 <ul class="list-inline app-links">
-                    <a href="https://play.google.com/store/apps/details?id=com.xBrowserSync.android" class="new-tab" title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_MobileApps_Android_Link_Title) }}">
-                        <img src="../img/android.svg" alt="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_MobileApps_Android_Label) }}">
-                    </a>
-                    <a href="https://itunes.apple.com/gb/app/xbrowsersync/id1186064613?mt=8" class="new-tab" title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_MobileApps_iOS_Link_Title) }}">
-                        <img src="../img/ios.svg" alt="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_MobileApps_iOS_Label) }}">
-                    </a>
+                    <a href="https://play.google.com/store/apps/details?id=com.xBrowserSync.android" class="new-tab android" title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_MobileApps_Android_Link_Title) }}"></a>
+                    <a href="https://itunes.apple.com/gb/app/xbrowsersync/id1186064613?mt=8" class="new-tab ios" title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_MobileApps_iOS_Link_Title) }}"></a>
                 </ul>
             </div>
             <div class="form-group" data-ng-if="!!vm.utility.IsMobilePlatform(vm.platformName)">
                 <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_WebExtensions_Label) }}</label>
                 <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_WebExtensions_Description) }}</p>
                 <ul class="list-inline app-links">
-                    <a href="https://chrome.google.com/webstore/detail/xbrowsersync/lcbjdhceifofjlpecfpeimnnphbcjgnc?hl=en-GB" class="new-tab" title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_WebExtensions_Chrome_Link_Title) }}">
-                        <img src="../img/chrome.svg" alt="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_WebExtensions_Chrome_Label) }}">
-                    </a>
+                    <a href="https://chrome.google.com/webstore/detail/xbrowsersync/lcbjdhceifofjlpecfpeimnnphbcjgnc?hl=en-GB" class="new-tab chrome" title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_WebExtensions_Chrome_Link_Title) }}"></a>
                 </ul>
             </div>
             <div class="form-group">
