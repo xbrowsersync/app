@@ -331,6 +331,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"settings_BackupRestore_NotAvailable_Message": {
 			"message": "Back up and restore will be available here once you are synced."
 		},
+		"settings_BackupRestore_ICloudNotAvailable_Message": {
+			"message": "Sign in to iCloud to enable back up and restore."
+		},
 		"button_Backup_Label" : {
 			"message":  "Back Up"
 		},
@@ -356,7 +359,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Backup file {fileName} saved to internal storage."
 		},
 		"settings_BackupRestore_BackupSuccess_IOS_Message" : {
-			"message":  "Backup file {fileName} saved to Documents folder."
+			"message":  "Backup file {fileName} saved to iCloud."
 		},
 		"settings_BackupRestore_RestoreSuccess_Message" : {
 			"message":  "Your data has been restored."
@@ -669,8 +672,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					return deferred.reject({ code: globals.ErrorCodes.FailedBackupData });
 				};
 
-				// Set backup file storage location to synced app data on iOS and external storage on Android
-				var storageLocation = (vm.platformName === globals.Platforms.IOS) ? cordova.file.syncedDataDirectory : cordova.file.externalRootDirectory;
+				// Set backup file storage location to Documents on iOS and external storage on Android
+				var storageLocation = (vm.platformName === globals.Platforms.IOS) ? cordova.file.documentsDirectory : cordova.file.externalRootDirectory;
 				
 				// Save backup file to storage location
 				window.resolveLocalFileSystemURL(storageLocation, function (dirEntry) {
@@ -678,8 +681,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						fileEntry.createWriter(function (fileWriter) {
 							// Save export file
 							fileWriter.write(JSON.stringify(data));
-							
-							fileWriter.onwriteend = function() {
+
+							var success = function() { 
 								var platformStr = (vm.platformName === globals.Platforms.IOS) ? 
 									constants.settings_BackupRestore_BackupSuccess_IOS_Message : 
 									constants.settings_BackupRestore_BackupSuccess_Android_Message;
@@ -690,8 +693,27 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 								$scope.$apply(function() {
 									vm.settings.backupCompletedMessage = message;
 								});
-
-								return deferred.resolve();
+								
+								deferred.resolve();
+							};
+							
+							fileWriter.onwriteend = function() {
+								if (vm.platformName === globals.Platforms.IOS) {
+									// Sync export file to iCloud
+									iCloudDocStorage.syncToCloud(
+										fileEntry.nativeURL, 
+										success,
+										function(err) {
+											$scope.$apply(function() {
+												vm.settings.backupCompletedMessage = "Unable to save backup file to iCloud.";
+											});
+											
+											deferred.reject({ code: globals.ErrorCodes.FailedBackupData });
+										});
+								}
+								else {
+									success();
+								}
 							};
 							
 							fileWriter.onerror = saveBackupFileError;
@@ -1331,8 +1353,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		else if (vm.platformName === globals.Platforms.IOS) {
 			// Attach event handler for iOS Share activity
 			window.handleOpenURL = handleSharedUrlIos;
+
+			// Initialise iCloud Document Storage
+			initICloudDocStorage();
 			
-			// On iOS check if FilePicker is available, otherwise disable file restore
+			// Check if FilePicker is available, otherwise disable file restore
 			FilePicker.isAvailable(function(isAvailable) {
 				vm.settings.fileRestoreEnabled = isAvailable;
 			});
@@ -1544,6 +1569,22 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		}
 	};
 
+	var initICloudDocStorage = function() {
+		iCloudDocStorage.initUbiquitousContainer(
+			null,
+			function() { 
+				$scope.$apply(function() {
+					vm.settings.iCloudNotAvailable = false;
+				});
+			},
+			function() {
+				$scope.$apply(function() {
+					vm.settings.iCloudNotAvailable = true;
+				});
+			}
+		);
+	};
+
 	var introPanel7_Android_Next_Click = function() {
 		vm.introduction.displayPanel(9);
 	};
@@ -1642,6 +1683,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						hideLoading('syncingUpdates');
 					});
 			});
+		
+		// Initialise iCloud Document Storage
+		if (vm.platformName === globals.Platforms.IOS) {
+			initICloudDocStorage();
+		}
 	};
 
 	var syncForm_EnableSync_Click = function() {

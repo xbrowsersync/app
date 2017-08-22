@@ -193,6 +193,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             fileRestoreEnabled: false,
             getSearchLookaheadDelay: 50,
             getSearchResultsDelay: 250,
+            iCloudNotAvailable: false,
 			id: function(value) {
                 return arguments.length ? 
                     globals.Id.Set(value) : 

@@ -311,6 +311,9 @@
 	"settings_BackupRestore_NotAvailable_Message": {
 		"message": "Back up and restore will be available here once you are synced."
 	},
+	"settings_BackupRestore_ICloudNotAvailable_Message": {
+		"message": "Sign in to iCloud to enable back up and restore."
+	},
 	"button_Backup_Label" : {
 		"message":  "Back Up"
 	},

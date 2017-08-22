@@ -152,7 +152,9 @@
         <div class="panel-content">
             <p class="description margin-bottom-0" data-ng-if="!vm.sync.enabled() && vm.utility.IsMobilePlatform(vm.platformName)"
                 data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_NotAvailable_Message)"></p>
-            <div data-ng-show="vm.sync.enabled() || !vm.utility.IsMobilePlatform(vm.platformName)">
+            <p class="description margin-bottom-0" data-ng-if="vm.sync.enabled() && vm.platformName === vm.globals.Platforms.IOS && vm.settings.iCloudNotAvailable"
+                data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_ICloudNotAvailable_Message)"></p>
+            <div data-ng-show="(vm.sync.enabled() && !vm.settings.iCloudNotAvailable) || !vm.utility.IsMobilePlatform(vm.platformName)">
                 <div class="form-group">
                     <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Backup_Label) }}</label>
                     <p class="description" data-ng-if="!vm.sync.enabled()">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_BackupLocal_Description) }}</p>
@@ -294,37 +296,40 @@
                 <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Acknowledgements_Description) }}</p>
                 <ul class="list-inline acknowledgements">
                     <li><a href="https://github.com/angular/angular.js" class="new-tab" tabindex="29">angular.js</a></li>
-                    <li><a href="https://github.com/kraku/angular-complexify" class="new-tab" tabindex="30">angular-complexify</a></li>
-                    <li><a href="https://github.com/RyanMullins/angular-hammer" class="new-tab" tabindex="31">angular-hammer</a></li>
-                    <li><a href="https://github.com/phonegap/phonegap-plugin-barcodescanner" class="new-tab" tabindex="32">barcodescanner phonegap plugin</a></li>
-                    <li><a href="https://github.com/twbs/bootstrap" class="new-tab" tabindex="33">bootstrap</a></li>
-                    <li><a href="https://cordova.apache.org/" class="new-tab" tabindex="34">cordova</a></li>
-                    <li><a href="https://github.com/greybax/cordova-plugin-native-spinner" class="new-tab" tabindex="35">cordova-plugin-native-spinner</a></li>
-                    <li><a href="https://github.com/elijahmanor/cross-var" class="new-tab" tabindex="36">cross-var</a></li>
-                    <li><a href="https://github.com/brix/crypto-js" class="new-tab" tabindex="37">crypto-js</a></li>
-                    <li><a href="https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin" class="new-tab" tabindex="38">custom url scheme cordova plugin</a></li>
-                    <li><a href="https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin" class="new-tab" tabindex="39">filepicker phonegap plugin</a></li>
-                    <li><a href="https://github.com/FortAwesome/Font-Awesome" class="new-tab" tabindex="40">font-awesome</a></li>
-                    <li><a href="https://github.com/hammerjs/hammer.js" class="new-tab" tabindex="41">hammer.js</a></li>
-                    <li><a href="https://github.com/jshint/jshint" class="new-tab" tabindex="42">jshint</a></li>
-                    <li><a href="https://github.com/ionic-team/ionic-plugin-keyboard" class="new-tab" tabindex="43">keyboard cordova plugin</a></li>
-                    <li><a href="https://github.com/coderaiser/minify" class="new-tab" tabindex="44">minify</a></li>
-                    <li><a href="https://github.com/sroze/ngInfiniteScroll" class="new-tab" tabindex="45">ng-infinite-scroll</a></li>
-                    <li><a href="https://www.npmjs.com/package/npm-build-tools" class="new-tab" tabindex="46">npm-build-tools</a></li>
-                    <li><a href="https://github.com/sass/node-sass" class="new-tab" tabindex="47">node-sass</a></li>
-                    <li><a href="https://github.com/neocotic/qrious" class="new-tab" tabindex="48">qrious</a></li>
-                    <li><a href="https://github.com/Arkanite/SocialSharing-PhoneGap-Plugin" class="new-tab" tabindex="49">social sharing phonegap plugin</a></li>
-                    <li><a href="https://github.com/justin-credible/cordova-plugin-spinner" class="new-tab" tabindex="50">spinner cordova plugin</a></li>
-                    <li><a href="https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin" class="new-tab" tabindex="51">toast phonegap plugin</a></li>
-                    <li><a href="https://github.com/mishoo/UglifyJS2" class="new-tab" tabindex="52">uglifyjs</a></li>
-                    <li><a href="https://github.com/jashkenas/underscore" class="new-tab" tabindex="53">underscore</a></li>
-                    <li><a href="https://github.com/evsienko/cordova-webintent" class="new-tab" tabindex="54">webintent android cordova plugin</a></li>
+                    <li><a href="https://github.com/kraku/angular-complexify" class="new-tab">angular-complexify</a></li>
+                    <li><a href="https://github.com/RyanMullins/angular-hammer" class="new-tab">angular-hammer</a></li>
+                    <li><a href="https://github.com/phonegap/phonegap-plugin-barcodescanner" class="new-tab">barcodescanner phonegap plugin</a></li>
+                    <li><a href="https://github.com/twbs/bootstrap" class="new-tab">bootstrap</a></li>
+                    <li><a href="https://cordova.apache.org/" class="new-tab">cordova</a></li>
+                    <li><a href="https://github.com/akofman/cordova-plugin-add-swift-support" class="new-tab">cordova-plugin-add-swift-support</a></li>
+                    <li><a href="https://github.com/nero120/cordova-plugin-icloud-document-storage" class="new-tab">cordova-plugin-icloud-document-storage</a></li>
+                    <li><a href="https://github.com/greybax/cordova-plugin-native-spinner" class="new-tab">cordova-plugin-native-spinner</a></li>
+                    <li><a href="https://github.com/mircoc/cordova-plugin-settings-hook" class="new-tab">cordova-plugin-settings-hook</a></li>
+                    <li><a href="https://github.com/elijahmanor/cross-var" class="new-tab">cross-var</a></li>
+                    <li><a href="https://github.com/brix/crypto-js" class="new-tab">crypto-js</a></li>
+                    <li><a href="https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin" class="new-tab">custom url scheme cordova plugin</a></li>
+                    <li><a href="https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin" class="new-tab">filepicker phonegap plugin</a></li>
+                    <li><a href="https://github.com/FortAwesome/Font-Awesome" class="new-tab">font-awesome</a></li>
+                    <li><a href="https://github.com/hammerjs/hammer.js" class="new-tab">hammer.js</a></li>
+                    <li><a href="https://github.com/jshint/jshint" class="new-tab">jshint</a></li>
+                    <li><a href="https://github.com/ionic-team/ionic-plugin-keyboard" class="new-tab">keyboard cordova plugin</a></li>
+                    <li><a href="https://github.com/coderaiser/minify" class="new-tab">minify</a></li>
+                    <li><a href="https://github.com/sroze/ngInfiniteScroll" class="new-tab">ng-infinite-scroll</a></li>
+                    <li><a href="https://www.npmjs.com/package/npm-build-tools" class="new-tab">npm-build-tools</a></li>
+                    <li><a href="https://github.com/sass/node-sass" class="new-tab">node-sass</a></li>
+                    <li><a href="https://github.com/neocotic/qrious" class="new-tab">qrious</a></li>
+                    <li><a href="https://github.com/Arkanite/SocialSharing-PhoneGap-Plugin" class="new-tab">social sharing phonegap plugin</a></li>
+                    <li><a href="https://github.com/justin-credible/cordova-plugin-spinner" class="new-tab">spinner cordova plugin</a></li>
+                    <li><a href="https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin" class="new-tab">toast phonegap plugin</a></li>
+                    <li><a href="https://github.com/mishoo/UglifyJS2" class="new-tab">uglifyjs</a></li>
+                    <li><a href="https://github.com/jashkenas/underscore" class="new-tab">underscore</a></li>
+                    <li><a href="https://github.com/evsienko/cordova-webintent" class="new-tab">webintent android cordova plugin</a></li>
                 </ul>
             </div>
             <div class="form-group">
                 <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Contributions_Label) }}</label>
                 <div class="form-control overflow-ellipses contribute-link">
-                    <a href="bitcoin:1QEpmSt2hqnskxGRav9SNaRrJo5E9pGpGy" title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Contributions_Link_Title) }}" tabindex="55">1QEpmSt2hqnskxGRav9SNaRrJo5E9pGpGy</a>
+                    <a href="bitcoin:1QEpmSt2hqnskxGRav9SNaRrJo5E9pGpGy" title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Contributions_Link_Title) }}">1QEpmSt2hqnskxGRav9SNaRrJo5E9pGpGy</a>
                 </div>
                 <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Contributions_Description) }}</p>
             </div>

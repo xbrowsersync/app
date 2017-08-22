@@ -23,7 +23,7 @@ xBrowserSync.App.Global = function(platform) {
             }
         },
         ApiVersion: '1.0.x',
-        AppVersion: '1.3.0',
+        AppVersion: '1.3.1',
         Bookmarks: {
             DescriptionMaxLength: 300,
             OtherContainerName: '_other_',
@@ -192,6 +192,7 @@ xBrowserSync.App.Global = function(platform) {
 			Settings_Service_UpdateForm_Confirm_Message: 'settings_Service_UpdateForm_Confirm_Message',
 			Settings_BackupRestore_Title: 'settings_BackupRestore_Title',
             Settings_BackupRestore_NotAvailable_Message: 'settings_BackupRestore_NotAvailable_Message',
+            Settings_BackupRestore_ICloudNotAvailable_Message: 'settings_BackupRestore_ICloudNotAvailable_Message',
 			Button_Backup_Label: 'button_Backup_Label',
 			Button_Restore_Label: 'button_Restore_Label',
 			Button_Done_Label: 'button_Done_Label',
