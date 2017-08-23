@@ -986,6 +986,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             // After restoring bookmarks
             case globals.Commands.RestoreBookmarks:
                 if (response.success) {
+                    // Refresh data usage
+                    displayDataUsage();
+
+                    // Update current bookmark status
                     setBookmarkStatus();
                     
                     vm.settings.displayRestoreForm = false;
@@ -997,6 +1001,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         $timeout(function() {
                             document.querySelector('.btn-done').focus();
                         });
+                    }
+                    else {
+                        // Refresh search results
+                        vm.search.displayDefaultState();
                     }
                 }
                 else {

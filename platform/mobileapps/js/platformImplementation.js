@@ -352,6 +352,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"button_Back_Label" : {
 			"message":  "Back"
 		},
+		"settings_BackupRestore_BackupFailed_IOS_Message" : {
+			"message":  "Backup file {fileName} saved to iCloud."
+		},
 		"settings_BackupRestore_BackupSuccess_Message" : {
 			"message":  ""
 		},
@@ -359,7 +362,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Backup file {fileName} saved to internal storage."
 		},
 		"settings_BackupRestore_BackupSuccess_IOS_Message" : {
-			"message":  "Backup file {fileName} saved to iCloud."
+			"message":  "Unable to save backup file to iCloud."
 		},
 		"settings_BackupRestore_RestoreSuccess_Message" : {
 			"message":  "Your data has been restored."
@@ -705,7 +708,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 										success,
 										function(err) {
 											$scope.$apply(function() {
-												vm.settings.backupCompletedMessage = "Unable to save backup file to iCloud.";
+												vm.settings.backupCompletedMessage = constants.settings_BackupRestore_BackupFailed_IOS_Message;
 											});
 											
 											deferred.reject({ code: globals.ErrorCodes.FailedBackupData });

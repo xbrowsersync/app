@@ -88,7 +88,7 @@ body {
             &.btn-default {
                 font-size: 1.2em;
                 font-weight: 800;
-                background-color: rgba(237, 254, 255, 0.3);
+                background-color: rgba($colour-text1, 0.3);
                 color: $colour-text1;
                 min-width: 5em;
                 border-color: $colour-text1;
@@ -116,7 +116,7 @@ body {
                 &[disabled] {
                     opacity: 0.5;
                     cursor: default;
-                    background-color: rgba(237, 254, 255, 0.3);
+                    background-color: rgba($colour-text1, 0.3);
                     border-color: $colour-text1;
                     color: $colour-text1;
                 }
@@ -186,13 +186,15 @@ body {
     }
     
     .alert {
+        position: fixed;
+        z-index: 50;
         width: 100%;
         max-width: $width-tablet-small;
         border: none;
         border-radius: 0;
         padding: 10px 10px 15px;
         margin: 0 auto;
-        background-color: $colour-danger;
+        background-color: rgba($colour-danger, 0.9);
         border: none;
         color: $colour-text1;
         
@@ -648,7 +650,8 @@ body {
 
         input {
             font-size: 1.2em;
-            line-height: 1.3em;   
+            line-height: 1.3em;
+            padding: .5em 0 .5em .9em;
         }
     }
 
@@ -886,7 +889,7 @@ body {
                 }
 
                 .menu {
-                    background-color: rgba(8,48,57,0.9);
+                    background-color: rgba($colour-text2, 0.9);
                     text-align: center;
                     border-radius: $border-radius-well;
                     z-index: 60;
