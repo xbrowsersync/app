@@ -739,9 +739,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.search.query = null;
                 vm.search.queryMeasure = null;
                 
-                // Clear search results for non-mobile platforms
+                // Clear search results for non-mobile platforms, otherwise refresh search
                 if (!utility.IsMobilePlatform(vm.platformName)) {
                     vm.search.results = null;
+                }
+                else {
+                    $timeout(vm.search.execute);
                 }
                 break;
             case vm.view.views.settings:
@@ -1004,7 +1007,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     }
                     else {
                         // Refresh search results
-                        vm.search.displayDefaultState();
+                        vm.search.query = null;
+                        vm.search.queryMeasure = null;
+                        vm.search.lookahead = null;
+                        vm.search.execute();
                     }
                 }
                 else {
