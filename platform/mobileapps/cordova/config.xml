@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-packageName="com.xBrowserSync.android" id="com.xBrowserSync" ios-CFBundleIdentifier="com.xBrowserSync.ios" version="1.3.1" android-versionCode="13101" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-packageName="com.xBrowserSync.android" android-versionCode="13101" id="com.xBrowserSync" ios-CFBundleIdentifier="com.xBrowserSync.ios" version="1.3.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>xBrowserSync</name>
     <description>Browser syncing as it should be: secure, anonymous and free!</description>
     <author email="admin@xbrowsersync.org" href="https://www.xbrowsersync.org" />
@@ -73,8 +73,6 @@
     <engine name="android" spec="^6.2.3" />
     <engine name="ios" spec="^4.4.0" />
     <plugin name="bundle-cordova-webintent" spec="https://github.com/COMLINE-AG/bundle-cordova-webintent.git" />
-    <plugin name="com.greybax.spinnerdialog" spec="https://github.com/greybax/cordova-plugin-native-spinner" />
-    <plugin name="com.jcesarmobile.filepicker" spec="https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin.git" />
     <plugin name="cordova-plugin-add-swift-support" spec="^1.7.0" />
     <plugin name="cordova-plugin-console" spec="^1.0.7" />
     <plugin name="cordova-plugin-customurlscheme" spec="git+https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin.git">
@@ -84,8 +82,10 @@
         <variable name="ANDROID_PATHPREFIX" value="/" />
     </plugin>
     <plugin name="cordova-plugin-file" spec="^4.3.3" />
+    <plugin name="cordova-plugin-filepicker" spec="git+https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin.git" />
     <plugin name="cordova-plugin-icloud-document-storage" spec="git+https://github.com/nero120/cordova-plugin-icloud-document-storage.git" />
     <plugin name="cordova-plugin-inappbrowser" spec="^1.7.1" />
+    <plugin name="cordova-plugin-native-spinner" spec="git+https://github.com/greybax/cordova-plugin-native-spinner.git" />
     <plugin name="cordova-plugin-network-information" spec="^1.3.3" />
     <plugin name="cordova-plugin-settings-hook" spec="^0.2.7" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />

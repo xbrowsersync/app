@@ -25,21 +25,19 @@
                 "CAMERA_USAGE_DESCRIPTION": "To scan xBrowserSync QR codes"
             },
             "bundle-cordova-webintent": {},
-            "com.greybax.spinnerdialog": {},
-            "com.jcesarmobile.filepicker": {},
             "cordova-plugin-x-socialsharing": {},
             "cordova-plugin-console": {},
             "cordova-plugin-add-swift-support": {},
             "cordova-plugin-settings-hook": {},
-            "cordova-plugin-icloud-document-storage": {}
+            "cordova-plugin-icloud-document-storage": {},
+            "cordova-plugin-native-spinner": {},
+            "cordova-plugin-filepicker": {}
         }
     },
     "dependencies": {
         "Bundle-Cordova-Webintent": "git+https://github.com/COMLINE-AG/bundle-cordova-webintent.git",
         "FilePicker-Phonegap-iOS-Plugin": "git+https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin.git",
         "bundle-cordova-webintent": "https://github.com/COMLINE-AG/bundle-cordova-webintent.git",
-        "com.greybax.spinnerdialog": "https://github.com/greybax/cordova-plugin-native-spinner",
-        "com.jcesarmobile.filepicker": "https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin.git",
         "cordova-android": "^6.2.3",
         "cordova-ios": "^4.4.0",
         "cordova-plugin-add-swift-support": "^1.7.0",
@@ -47,6 +45,7 @@
         "cordova-plugin-console": "^1.0.7",
         "cordova-plugin-customurlscheme": "git+https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin.git",
         "cordova-plugin-file": "^4.3.3",
+        "cordova-plugin-filepicker": "git+https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin.git",
         "cordova-plugin-icloud-document-storage": "git+https://github.com/nero120/cordova-plugin-icloud-document-storage.git",
         "cordova-plugin-inappbrowser": "^1.7.1",
         "cordova-plugin-native-spinner": "git+https://github.com/greybax/cordova-plugin-native-spinner.git",
