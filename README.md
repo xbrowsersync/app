@@ -23,12 +23,12 @@ In order to build the iOS app to include iCloud and Share Sheet integration, the
 
 1. Run Xcode and open the xBrowserSync project file in `platform/mobileapps/cordova/platforms/ios/`.
 2. In xBrowserSync target Capabilities tab, enable iCloud, disable the Key-value storage option and enable iCloud Documents option. The container should resolve automatically using your provisioning profile (see [FilePicker Phonegap iOS Plugin](https://github.com/jcesarmobile/FilePicker-Phonegap-iOS-Plugin) for more information).
-3. In xBrowserSync target Buid Settings tab, set Swift Language Version to 'Swift 3'.
-4. Create a new target, select Share Extension then set the Product Name to 'addBookmark' and click Finish.
-5. Set the Target Membership of Resouces/Images.xcassets to include addBookmark.
-6. In addBookmark target Info tab, set Bundle display name to 'Add Bookmark'.
-7. In addBookmark target Build Settings tab, in the Asset Catalog Compiler – Options section, set Asset Catalog App Icon Set Name to 'AppIcon' (the target's icon should now appear as the xBrowserSync icon).
-8. In addBookmark target Build Phases tab, expand Target Dependencies and add CordovaLib.
+3. Create a new target, select Share Extension then set the Product Name to 'addBookmark' and click Finish.
+4. Set the Target Membership of Resouces/Images.xcassets to include addBookmark.
+7. In addBookmark target Info tab, set Bundle display name to 'Add Bookmark'.
+8. In addBookmark target Build Settings tab, in the Asset Catalog Compiler – Options section, set Asset Catalog App Icon Set Name to 'AppIcon' (the target's icon should now appear as the xBrowserSync icon).
+9. In addBookmark target Build Settings tab, in the Build Options section, set Always Embed Swift Standard Libraries to 'No'.
+10. In addBookmark target Build Phases tab, expand Target Dependencies and add CordovaLib.
 
 # Building
 
