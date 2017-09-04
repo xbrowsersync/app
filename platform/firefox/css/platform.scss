@@ -1,0 +1,86 @@
+@import 'variables.scss';
+@import 'mixins.scss';
+@import 'animations.scss';
+
+$window-width: 320px;
+$window-height: 520px;
+$search-window-width: 600px;
+$search-window-height: 4em;
+
+body {
+    transition: width 0.1s, height 0.1s;
+    transition-timing-function: ease;
+    width: $window-width;
+
+    &.search-view {
+        width: $search-window-width;
+        height: $search-window-height;
+
+        .container {
+            height: $search-window-height;
+        }
+    }
+
+    &.search-no-results-view {
+        @extend .search-view;
+        height: calc(#{$search-window-height} + 2.2em);
+    }
+
+    &.search-results-view {
+        @extend .search-view;
+        height: $window-height;
+    }
+    
+    .background {
+        .background-img {
+            @include animation(none);
+        }
+    }
+
+    .container {
+        height: $window-height;
+    }
+
+    .well .btn.btn-default {
+        font-size: 1.1em;
+    }
+}
+
+#search-panel {
+    .view-content {
+        display: flex;
+        flex-flow: column;
+        padding: 10px 0 0 10px;
+    
+        .header-panel {
+            flex: none;
+            display: flex;
+            flex-direction: row-reverse;
+            
+            .btn {
+                flex: none;
+
+                &.btn-settings {
+                    float: none;
+                }
+
+                &.btn-toggle-bookmark {
+                    margin-right: 10px;
+                }
+            }
+
+            .search-form {
+                flex: 0 1 100%;
+                margin-right: 10px;
+            }
+        }
+    }
+}
+
+#settings-panel {
+    .backup-restore-panel {
+        #backupFilePanel {
+            display: none;
+        }
+    }
+}

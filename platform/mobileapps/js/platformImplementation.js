@@ -1334,7 +1334,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		vm.platformName = cordova.platformId;
 
 		// Reset network disconnected flag
-        globals.Network.Disconnected.Set(!utility.CheckConnection());
+        globals.Network.Disconnected.Set(!utility.IsNetworkConnected());
 		
 		// Set back button event
 		document.addEventListener('backbutton', handleBackButton, false);
@@ -1620,7 +1620,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 	var resume = function() {
 		// Reset network disconnected flag
-        globals.Network.Disconnected.Set(!utility.CheckConnection());
+        globals.Network.Disconnected.Set(!utility.IsNetworkConnected());
 
 		// Deselect bookmark
 		vm.search.selectedBookmark = null;
