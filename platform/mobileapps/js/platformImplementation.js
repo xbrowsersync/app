@@ -572,7 +572,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "xBrowserSync folder changed"
 		},
 		"error_ContainerChanged_Message" : {
-			"message": "Changing, deleting or moving xBrowserSync application folders can cause issues, sync has been disabled. Re-enable sync to restore bookmarks."
+			"message": "Changing, deleting or moving xBrowserSync folders can cause issues, sync has been disabled. Re-enable sync to restore bookmarks."
 		},
 		"error_BrowserImportBookmarksNotSupported_Title" : {
 			"message":  "Importing not supported"
@@ -807,7 +807,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				// Log error
 				utility.LogMessage(
 					moduleName, 'getPageMetadata', globals.LogType.Warning,
-					JSON.stringify(err));
+					err ? err.stack || JSON.stringify(err) : null);
 				
 				var errObj = { code: globals.ErrorCodes.FailedGetPageMetadata, url: currentUrl };
 
@@ -907,7 +907,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 		// If network disconnected fail immediately, otherwise retrieve page metadata
 		if (!!globals.Network.Disconnected.Get()) {
-			handleResponse(null, "network disconnected");
+			handleResponse(null, 'Network disconnected.');
 		}
 		else {
 			var inAppBrowser = cordova.InAppBrowser.open(currentUrl, '_blank', 'location=yes,hidden=yes');
@@ -1157,7 +1157,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				// Log error
 				utility.LogMessage(
 					moduleName, 'sync', globals.LogType.Warning,
-					JSON.stringify(err));
+					err.stack);
 				utility.LogMessage(
 					moduleName, 'sync', globals.LogType.Info,
 					'syncData: ' + JSON.stringify(syncData));
@@ -1422,7 +1422,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						// Log error
 						utility.LogMessage(
 							moduleName, 'deviceReady', globals.LogType.Warning,
-							JSON.stringify(err));
+							err.stack);
 
 						// Display alert if not retrieving bookmark metadata
 						if (!sharedUrl) {
@@ -1487,7 +1487,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				// Log error
 				utility.LogMessage(
 					moduleName, 'getLatestUpdates', globals.LogType.Warning,
-					JSON.stringify(err));
+					err.stack);
 
 				// Display alert if not retrieving bookmark metadata
 				if (!sharedUrl) {
@@ -1674,7 +1674,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						// Log error
 						utility.LogMessage(
 							moduleName, 'resume', globals.LogType.Warning,
-							JSON.stringify(err));
+							err.stack);
 
 						// Don't display alert if url was shared or if network error encountered
 						if (!sharedUrl && err.code !== globals.ErrorCodes.HttpRequestFailed) {

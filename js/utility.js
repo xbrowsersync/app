@@ -196,6 +196,7 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 	};
 	
 	var logMessage = function(moduleName, functionName, messageType, message) {
+		message = message || 'An unspecified error occurred.';
 		switch (messageType) {
 			case globals.LogType.Error:
 				messageType = 'ERROR';

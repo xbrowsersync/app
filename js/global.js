@@ -26,9 +26,13 @@ xBrowserSync.App.Global = function(platform) {
         AppVersion: '1.4.0',
         Bookmarks: {
             DescriptionMaxLength: 300,
-            OtherContainerName: '_other_',
-            ToolbarContainerName: '_toolbar_',
-            xBrowserSyncContainerName: '_xBrowserSync_'
+            MenuContainerName: '[xbs] Menu',
+            MobileContainerName: '[xbs] Mobile',
+            OtherContainerName: '[xbs] Other',
+            RootContainerName: 'root',
+            ToolbarContainerName: '[xbs] Toolbar',
+            UnfiledContainerName: '[xbs] Unfiled',
+            UnfiledContainerNameOld: '_xBrowserSync_'
         },
         Cache: {
             Bookmarks: {

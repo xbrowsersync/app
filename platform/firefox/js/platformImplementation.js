@@ -14,7 +14,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
  * ------------------------------------------------------------------------------------ */
 
 	var moduleName = 'xBrowserSync.App.PlatformImplementation', vm, loadingId;
-	var menuBookmarksId = 'menu________', mobileBookmarksId = 'mobile______', otherBookmarksId = 'unfiled_____', toolbarBookmarksId = 'toolbar_____';
+	var menuBookmarksId = 'menu________',
+		mobileBookmarksId = 'mobile______',
+		otherBookmarksId = 'unfiled_____',
+		rootBookmarkId = 'root________',
+		toolbarBookmarksId = 'toolbar_____';
 
 
 /* ------------------------------------------------------------------------------------
@@ -97,12 +101,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						bookmark.id = idCounter; 
 						idCounter++; 
 					} 
-		
-					_.each(bookmark.children, addIdToBookmark); 
+					
+					if (bookmark.children) {
+						_.each(bookmark.children, addIdToBookmark);
+					}
 				}; 
 				_.each(xBookmarks, addIdToBookmark);
 
-				return xBookmarks;
+				return deferred.resolve(xBookmarks);
 			});
     
 			return deferred.promise;
@@ -156,8 +162,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			.then(function(results) {
 				var findParentXBookmark = results[0];
             
-				// Check if the Toolbar container was found and Toolbar sync is disabled
-				if (!!findParentXBookmark.container && findParentXBookmark.container.title === globals.Bookmarks.ToolbarContainerName && !globals.SyncBookmarksToolbar.Get()) {
+				// Do not sync the change if the bookmark's container is the toolbar and toolbar sync is disabled,
+				// or if the bookmark's container is root
+				if (findParentXBookmark.container && (
+					findParentXBookmark.container.title === globals.Bookmarks.ToolbarContainerName && !globals.SyncBookmarksToolbar.Get() ||
+					findParentXBookmark.container.title === globals.Bookmarks.RootContainerName)) {
 					return deferred.resolve({
 						bookmarks: xBookmarks
 					});
@@ -385,10 +394,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 	
 	var clearBookmarks = function() {
-		var clearOtherBookmarks, clearBookmarksBar;
-		
-		// Clear Other bookmarks
-		clearOtherBookmarks = browser.bookmarks.getChildren(otherBookmarksId)
+		var clearMenu, clearMobile, clearOthers, clearToolbar;
+
+		// Clear menu bookmarks
+		clearMenu = browser.bookmarks.getChildren(menuBookmarksId)
 			.then(function(results) {
 				var promises = [];
 				
@@ -404,14 +413,58 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				// Log error
 				utility.LogMessage(
 					moduleName, 'clearBookmarks', utility.LogType.Error,
-					'Error clearing other bookmarks; ' + JSON.stringify(err));
+					'Error clearing menu bookmarks; ' + err.stack);
 					
 				return $q.reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
 			});
 		
-		// Clear bookmarks toolbar
+		// Clear mobile bookmarks
+		clearMobile = browser.bookmarks.getChildren(mobileBookmarksId)
+			.then(function(results) {
+				var promises = [];
+				
+				if (!!results) {
+					for (var i = 0; i < results.length; i++) {
+						promises.push(browser.bookmarks.removeTree(results[i].id));
+					}
+				}
+
+				return $q.all(promises);
+			})
+			.catch(function(err) {
+				// Log error
+				utility.LogMessage(
+					moduleName, 'clearBookmarks', utility.LogType.Error,
+					'Error clearing mobile bookmarks; ' + err.stack);
+					
+				return $q.reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
+			});
+		
+		// Clear Other bookmarks
+		clearOthers = browser.bookmarks.getChildren(otherBookmarksId)
+			.then(function(results) {
+				var promises = [];
+				
+				if (!!results) {
+					for (var i = 0; i < results.length; i++) {
+						promises.push(browser.bookmarks.removeTree(results[i].id));
+					}
+				}
+
+				return $q.all(promises);
+			})
+			.catch(function(err) {
+				// Log error
+				utility.LogMessage(
+					moduleName, 'clearBookmarks', utility.LogType.Error,
+					'Error clearing other bookmarks; ' + err.stack);
+					
+				return $q.reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
+			});
+		
+		// Clear toolbar
 		if (globals.SyncBookmarksToolbar.Get()) {
-				clearBookmarksBar = browser.bookmarks.getChildren(toolbarBookmarksId)
+				clearToolbar = browser.bookmarks.getChildren(toolbarBookmarksId)
 					.then(function(results) {
 						var promises = [];
 
@@ -427,16 +480,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						// Log error
 						utility.LogMessage(
 							moduleName, 'clearBookmarks', utility.LogType.Error,
-							'Error clearing bookmarks toolbar; ' + JSON.stringify(err));
+							'Error clearing toolbar; ' + err.stack);
 						
 						return reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
 					});
 		}
 		else {
-			clearBookmarksBar = $q.resolve();
+			clearToolbar = $q.resolve();
 		}
 			
-		return $q.all([clearOtherBookmarks.promise, clearBookmarksBar.promise]);
+		return $q.all([clearMenu.promise, clearMobile.promise, clearOthers.promise, clearToolbar.promise]);
 	};
 
 	var displayAboutOnStartup = function() {
@@ -491,19 +544,18 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 	
 	var getBookmarks = function(addBookmarkIds) {
-		var getOtherBookmarks, getToolbarBookmarks;
+		var getOtherBookmarks, getToolbarBookmarks, getMenuBookmarks, getMobileBookmarks;
 		addBookmarkIds = addBookmarkIds || true;
 
-		// Get Other bookmarks
+		// Get other bookmarks
 		getOtherBookmarks = getLocalBookmark(otherBookmarksId)
 			.then(function(otherBookmarks) {
 				if (!!otherBookmarks.children && otherBookmarks.children.length > 0) {
-					var xBookmarks = getLocalBookmarksAsXBookmarks(otherBookmarks.children);
-					return xBookmarks;
+					return getLocalBookmarksAsXBookmarks(otherBookmarks.children);
 				}
 			});
 
-		// Get bookmarks bar
+		// Get toolbar bookmarks
         getToolbarBookmarks = getLocalBookmark(toolbarBookmarksId)
 			.then(function(toolbarBookmarks) {
 				if (!globals.SyncBookmarksToolbar.Get()) {
@@ -511,35 +563,64 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				}
 				
 				if (!!toolbarBookmarks.children && toolbarBookmarks.children.length > 0) {
-					var xBookmarks = getLocalBookmarksAsXBookmarks(toolbarBookmarks.children);
-					return xBookmarks;
+					return getLocalBookmarksAsXBookmarks(toolbarBookmarks.children);
 				}
 			});
 		
-		return $q.all([getOtherBookmarks, getToolbarBookmarks])
+		// Get menu bookmarks
+		getMenuBookmarks = getLocalBookmark(menuBookmarksId)
+			.then(function(menuBookmarks) {
+				if (!!menuBookmarks.children && menuBookmarks.children.length > 0) {
+					return getLocalBookmarksAsXBookmarks(menuBookmarks.children);
+				}
+			});
+		
+		// Get mobile bookmarks
+		getMobileBookmarks = getLocalBookmark(mobileBookmarksId)
+			.then(function(mobileBookmarks) {
+				if (!!mobileBookmarks.children && mobileBookmarks.children.length > 0) {
+					return getLocalBookmarksAsXBookmarks(mobileBookmarks.children);
+				}
+			});
+		
+		return $q.all([getOtherBookmarks, getToolbarBookmarks, getMenuBookmarks, getMobileBookmarks])
 			.then(function(results) {
 				var otherBookmarks = results[0];
 				var toolbarBookmarks = results[1];
+				var menuBookmarks = results[2];
+				var mobileBookmarks = results[3];
 				var xBookmarks = [];
 
-				// Add xBrowserSync container if bookmarks present
-				var xbsBookmarks = bookmarks.GetXBrowserSyncContainer(otherBookmarks, false);
-				if (!!xbsBookmarks && xbsBookmarks.children.length > 0) {
-					var xbsContainer = bookmarks.GetXBrowserSyncContainer(xBookmarks, true);
-					xbsContainer.children = xbsBookmarks.children;
+				// Add unfiled container if bookmarks present
+				var unfiledBookmarks = bookmarks.GetContainer(globals.Bookmarks.UnfiledContainerName, otherBookmarks, false);
+				if (!!unfiledBookmarks && unfiledBookmarks.children.length > 0) {
+					var unfiledContainer = bookmarks.GetContainer(globals.Bookmarks.UnfiledContainerName, xBookmarks, true);
+					unfiledContainer.children = unfiledBookmarks.children;
 				}
 
 				// Add other container if bookmarks present
-				var otherBookmarksExcXbs = _.reject(otherBookmarks, function(bookmark) { return bookmark.title === globals.Bookmarks.xBrowserSyncContainerName; });
-				if (!!otherBookmarksExcXbs && otherBookmarksExcXbs.length > 0) {
-					var otherContainer = bookmarks.GetOtherContainer(xBookmarks, true);
-					otherContainer.children = otherBookmarksExcXbs;
+				var otherBookmarksExcUnfiled = _.reject(otherBookmarks, function(bookmark) { return bookmark.title === globals.Bookmarks.UnfiledContainerName; });
+				if (!!otherBookmarksExcUnfiled && otherBookmarksExcUnfiled.length > 0) {
+					var otherContainer = bookmarks.GetContainer(globals.Bookmarks.OtherContainerName, xBookmarks, true);
+					otherContainer.children = otherBookmarksExcUnfiled;
 				}
 
 				// Add toolbar container if bookmarks present
 				if (!!toolbarBookmarks && toolbarBookmarks.length > 0) {
-					var toolbarContainer = bookmarks.GetToolbarContainer(xBookmarks, true);
+					var toolbarContainer = bookmarks.GetContainer(globals.Bookmarks.ToolbarContainerName, xBookmarks, true);
 					toolbarContainer.children = toolbarBookmarks;
+				}
+
+				// Add menu container if bookmarks present
+				if (!!menuBookmarks && menuBookmarks.length > 0) {
+					var menuContainer = bookmarks.GetContainer(globals.Bookmarks.MenuContainerName, xBookmarks, true);
+					menuContainer.children = menuBookmarks;
+				}
+
+				// Add mobile container if bookmarks present
+				if (!!mobileBookmarks && mobileBookmarks.length > 0) {
+					var mobileContainer = bookmarks.GetContainer(globals.Bookmarks.MobileContainerName, xBookmarks, true);
+					mobileContainer.children = mobileBookmarks;
 				}
 
 				// Add unique ids
@@ -671,26 +752,28 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 	
 	var populateBookmarks = function(xBookmarks) {
-		var populateToolbar, populateOther, populateXbs;
+		var populateUnfiled, populateOther, populateToolbar, populateMenu, populateMobile;
 		
 		// Get containers
-		var otherContainer = bookmarks.GetOtherContainer(xBookmarks);
-		var toolbarContainer = bookmarks.GetToolbarContainer(xBookmarks);
-		var xbsContainer = bookmarks.GetXBrowserSyncContainer(xBookmarks);
+		var menuContainer = bookmarks.GetContainer(globals.Bookmarks.MenuContainerName, xBookmarks);
+		var mobileContainer = bookmarks.GetContainer(globals.Bookmarks.MobileContainerName, xBookmarks);
+		var otherContainer = bookmarks.GetContainer(globals.Bookmarks.OtherContainerName, xBookmarks);
+		var toolbarContainer = bookmarks.GetContainer(globals.Bookmarks.ToolbarContainerName, xBookmarks);
+		var unfiledContainer = bookmarks.GetContainer(globals.Bookmarks.UnfiledContainerName, xBookmarks);
 		
-		// Populate xBrowserSync bookmarks in other bookmarks
-		populateXbs = $q(function(resolve, reject) {
-			if (!!xbsContainer && xbsContainer.children.length > 0) {
+		// Create unfiled bookmarks in other bookmarks
+		populateUnfiled = $q(function(resolve, reject) {
+			if (!!unfiledContainer && unfiledContainer.children.length > 0) {
 				try {
-					chrome.bookmarks.get(otherBookmarksId, function(results) {
-						createLocalBookmarksFromXBookmarks(otherBookmarksId, [xbsContainer], resolve, reject);
+					browser.bookmarks.get(otherBookmarksId, function(results) {
+						createLocalBookmarksFromXBookmarks(otherBookmarksId, [unfiledContainer], resolve, reject);
 					});
 				}
 				catch (err) {
 					// Log error
 					utility.LogMessage(
 						moduleName, 'populateBookmarks', utility.LogType.Error,
-						'Error populating xBrowserSync bookmarks in other bookmarks; ' + JSON.stringify(err));
+						'Error populating unfiled; ' + err.stack);
 					
 					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
 				}
@@ -700,11 +783,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			}
 		});
 		
-		// Populate other bookmarks
+		// Create other bookmarks
 		populateOther = $q(function(resolve, reject) {
 			if (!!otherContainer && otherContainer.children.length > 0) {
 				try {
-					chrome.bookmarks.get(otherBookmarksId, function(results) {
+					browser.bookmarks.get(otherBookmarksId, function(results) {
 						createLocalBookmarksFromXBookmarks(otherBookmarksId, otherContainer.children, resolve, reject);
 					});
 				}
@@ -712,7 +795,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					// Log error
 					utility.LogMessage(
 						moduleName, 'populateBookmarks', utility.LogType.Error,
-						'Error populating other bookmarks; ' + JSON.stringify(err));
+						'Error populating other bookmarks; ' + err.stack);
 					
 					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
 				}
@@ -722,11 +805,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			}
 		});
 
-		// Populate bookmarks bar
+		// Create toolbar bookmarks
 		populateToolbar = $q(function(resolve, reject) {
 			if (globals.SyncBookmarksToolbar.Get() && !!toolbarContainer && toolbarContainer.children.length > 0) {
 				try {
-                    chrome.bookmarks.get(toolbarBookmarksId, function(results) {
+                    browser.bookmarks.get(toolbarBookmarksId, function(results) {
                         createLocalBookmarksFromXBookmarks(toolbarBookmarksId, toolbarContainer.children, resolve, reject);
                     });
                 }
@@ -734,7 +817,51 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
                     // Log error
 					utility.LogMessage(
 						moduleName, 'populateBookmarks', utility.LogType.Error,
-						'Error populating bookmarks bar; ' + JSON.stringify(err));
+						'Error populating toolbar; ' + err.stack);
+					
+					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
+                }
+			}
+			else {
+				resolve();
+			}
+		});
+
+		// Create menu bookmarks
+		populateMenu = $q(function(resolve, reject) {
+			if (!!menuContainer && menuContainer.children.length > 0) {
+				try {
+                    browser.bookmarks.get(menuBookmarksId, function(results) {
+                        createLocalBookmarksFromXBookmarks(menuBookmarksId, menuContainer.children, resolve, reject);
+                    });
+                }
+                catch (err) {
+                    // Log error
+					utility.LogMessage(
+						moduleName, 'populateBookmarks', utility.LogType.Error,
+						'Error populating menu; ' + err.stack);
+					
+					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
+                }
+			}
+			else {
+				resolve();
+			}
+		});
+
+		// Create mobile bookmarks
+		populateMobile = $q(function(resolve, reject) {
+			if (!!mobileContainer && mobileContainer.children.length > 0) {
+				try {
+                    browser.bookmarks.get(mobileBookmarksId, function(results) {
+                        createLocalBookmarksFromXBookmarks(mobileBookmarksId, mobileContainer.children, resolve, reject);
+                    });
+                }
+                catch (err) {
+                    // Log error
+					utility.LogMessage(
+						moduleName, 'populateBookmarks', utility.LogType.Error,
+						'Error populating mobile; ' + err.stack);
 					
 					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
                 }
@@ -744,7 +871,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			}
 		});
 		
-		return $q.all([populateXbs, populateOther, populateToolbar]);
+		return $q.all([populateUnfiled, populateOther, populateToolbar, populateMenu, populateMobile]);
 	};
 	
 	var refreshInterface = function() {
@@ -763,8 +890,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			iconPath = 'img/browser-action-off.png';
 		}
         
-		chrome.browserAction.setIcon({ path: iconPath });
-		chrome.browserAction.setTitle({ title: tooltip });
+		browser.browserAction.setIcon({ path: iconPath });
+		browser.browserAction.setTitle({ title: tooltip });
 	};
 	
 	var setInLocalStorage = function(itemName, itemValue) {
@@ -782,9 +909,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
  * ------------------------------------------------------------------------------------ */
     
 	var checkForLocalContainer = function(localBookmark) {
-        var localContainers = [ 
-            { id: toolbarBookmarksId, xBookmarkTitle: globals.Bookmarks.ToolbarContainerName },
-            { id: otherBookmarksId, xBookmarkTitle: globals.Bookmarks.OtherContainerName } 
+        var localContainers = [
+			{ id: menuBookmarksId, xBookmarkTitle: globals.Bookmarks.MenuContainerName },
+            { id: mobileBookmarksId, xBookmarkTitle: globals.Bookmarks.MobileContainerName },
+			{ id: otherBookmarksId, xBookmarkTitle: globals.Bookmarks.OtherContainerName },
+			{ id: rootBookmarkId, xBookmarkTitle: globals.Bookmarks.RootContainerName },
+            { id: toolbarBookmarksId, xBookmarkTitle: globals.Bookmarks.ToolbarContainerName }
         ];
 		
 		// Check if the bookmark id is a local container
@@ -792,23 +922,24 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
         // If the bookmark is not a local container, check if it is an xBrowserSync container
         if (!localContainer && bookmarks.IsBookmarkContainer(localBookmark)) {
-            localContainer = { id: localBookmark.id, xBookmarkTitle: globals.Bookmarks.xBrowserSyncContainerName };
+            localContainer = { id: localBookmark.id, xBookmarkTitle: globals.Bookmarks.UnfiledContainerName };
         }
 
         return localContainer;
     };
 
-    var createLocalBookmark = function(parentId, title, url) {
+    var createLocalBookmark = function(parentId, title, url, index) {
 		var deferred = $q.defer();
 		
 		try {
 			var newLocalBookmark = {
+				index: index,
 				parentId: parentId,
 				title: title,
 				url: url
 			};
 			
-			chrome.bookmarks.create(newLocalBookmark, function(result) {
+			browser.bookmarks.create(newLocalBookmark, function(result) {
 				deferred.resolve(result);
 			});
 		}
@@ -816,7 +947,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			// Log error
 			utility.LogMessage(
 				moduleName, 'createLocalBookmark', utility.LogType.Error,
-				JSON.stringify(err));
+				err.stack);
 			
 			deferred.reject({ code: globals.ErrorCodes.FailedCreateLocalBookmarks });
 		}
@@ -827,7 +958,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
     var createLocalBookmarksFromXBookmarks = function(parentId, xBookmarks, success, failed) {
 		(function step(i, callback) {
 			if (i < xBookmarks.length) {
-				createLocalBookmark(parentId, xBookmarks[i].title, xBookmarks[i].url).then(
+				createLocalBookmark(parentId, xBookmarks[i].title, xBookmarks[i].url, i).then(
 					function(newLocalBookmark) {
 						var xBookmark = xBookmarks[i];
 						
@@ -870,22 +1001,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
                     // If the local bookmark is a container, use the index tree to get the xBookmark
                     var localContainer = checkForLocalContainer(localBookmark);
                     if (!!localContainer) {
-                        var container;
-
-                        // Get the xBookmark that corresponds to the container
-                        switch(localContainer.xBookmarkTitle) {
-                            case globals.Bookmarks.OtherContainerName:
-                                container = bookmarks.GetOtherContainer(xBookmarks, true);
-                                break;
-                            case globals.Bookmarks.ToolbarContainerName:
-                                container = bookmarks.GetToolbarContainer(xBookmarks, true);
-                                break;
-                            case globals.Bookmarks.xBrowserSyncContainerName:
-                                container = bookmarks.GetXBrowserSyncContainer(xBookmarks, true);
-                                break;
-                            default:
-                                return deferred.reject({ code: globals.ErrorCodes.XBookmarkNotFound });
-                        }
+                        if (localContainer.xBookmarkTitle === globals.Bookmarks.RootContainerName) {
+							return deferred.resolve({
+								container: {
+									title: globals.Bookmarks.RootContainerName
+								}
+							});
+						}
+						
+						// Get the xBookmark that corresponds to the container
+						var container = bookmarks.GetContainer(localContainer.xBookmarkTitle, xBookmarks, true);
 
                         // Follow the index tree from the container to find the required xBookmark
                         var currentXBookmark = container;                        
@@ -930,7 +1055,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 		browser.bookmarks.getSubTree(localBookmarkId)
 			.then(function(results) {
-				if (!!results[0]) {
+				if (results && results.length > 0) {
 					deferred.resolve(results[0]);
 				}
 			})
@@ -943,11 +1068,18 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		var xBookmarks = [];
 		
 		for (var i = 0; i < localBookmarks.length; i++) {
-			var newXBookmark = new bookmarks.XBookmark(localBookmarks[i].title, localBookmarks[i].url);
+			var currentLocalBookmark = localBookmarks[i];
 			
-			// If this is a folder and has chldren, process them
-			if (!!localBookmarks[i].children && localBookmarks[i].children.length > 0) {
-				newXBookmark.children = getLocalBookmarksAsXBookmarks(localBookmarks[i].children);
+			// Do not sync separators
+			if (currentLocalBookmark.type === 'separator') {
+				continue;
+			}
+			
+			var newXBookmark = new bookmarks.XBookmark(currentLocalBookmark.title, currentLocalBookmark.url);
+			
+			// If this is a folder and has children, process them
+			if (!!currentLocalBookmark.children && currentLocalBookmark.children.length > 0) {
+				newXBookmark.children = getLocalBookmarksAsXBookmarks(currentLocalBookmark.children);
 			}
 			
 			xBookmarks.push(newXBookmark);
@@ -959,12 +1091,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	var getNumContainersBeforeBookmarkIndex = function(parentId, bookmarkIndex) {
 		return getLocalBookmark(parentId)
 			.then(function(localBookmark) {
-				var bookmarks = localBookmark.children.slice(0, bookmarkIndex);
-				var containers = _.filter(bookmarks, function(bookmark) { 
-					return bookmark.title === globals.Bookmarks.OtherContainerName || 
-						   bookmark.title === globals.Bookmarks.ToolbarContainerName ||
-						   bookmark.title === globals.Bookmarks.xBrowserSyncContainerName;
+				var preceedingBookmarks = _.filter(localBookmark.children, function(bookmark) {
+					return bookmark.index < bookmarkIndex;
 				});
+				var containers = _.filter(preceedingBookmarks, bookmarks.IsBookmarkContainer);
 				
 				if (!!containers) {
 					return containers.length;
@@ -983,10 +1113,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		
 		// If parent is Other bookmarks, check Other bookmarks children for containers
 		if (!!changedBookmark.parentId && changedBookmark.parentId === otherBookmarksId) {
-			var xbsContainer = bookmarks.GetXBrowserSyncContainer(xBookmarks, false);
+			var unfiledContainer = bookmarks.GetContainer(globals.Bookmarks.UnfiledContainerName, xBookmarks, false);
 
 			return $q.all([
-				xBookmarkIsChildOfLocalBookmarkById(xbsContainer, otherBookmarksId)
+				xBookmarkIsChildOfLocalBookmarkById(unfiledContainer, otherBookmarksId)
 			])
 				.then(function(results) {
 					var xbsContainerFound = results[0];

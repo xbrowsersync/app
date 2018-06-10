@@ -58,8 +58,8 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'changeBookmark', utility.LogType.Error,
-					JSON.stringify(err));
+					moduleName, 'changeBookmark', globals.LogType.Warning,
+					err.stack);
 				
 				// Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
@@ -98,8 +98,8 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'createBookmark', utility.LogType.Error,
-					JSON.stringify(err));
+					moduleName, 'createBookmark', globals.LogType.Warning,
+					err.stack);
 				
 				// Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
@@ -112,7 +112,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			});
 	};
 	
-	var displayAlert = function(title, message) {
+	var displayAlert = function(title, message, callback) {
 		var options = {
 			type: 'basic',
 			title: title,
@@ -120,7 +120,11 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			iconUrl: 'img/notification-icon.png'
 		};
 		
-		browser.notifications.create('xBrowserSync-notification', options);
+		if (!callback) {
+			callback = null;
+		}
+		
+		browser.notifications.create('xBrowserSync-notification', options, callback);
 	};
 
 	var getLatestUpdates = function() {
@@ -158,8 +162,8 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					
 					// Log error
 					utility.LogMessage(
-						moduleName, 'handleAlarm', utility.LogType.Error,
-						JSON.stringify(err));
+						moduleName, 'handleAlarm', globals.LogType.Warning,
+						err.stack);
 					
 					// Don't display alert if sync failed due to network connection
 					if (err.code === globals.ErrorCodes.HttpRequestFailed || 
@@ -171,15 +175,6 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					var errMessage = utility.GetErrorMessageFromException(err);
 					displayAlert(errMessage.title, errMessage.message);
 				});
-		}
-	};
-	
-	var handleImport = function() {
-		if (!!globals.SyncEnabled.Get()) {
-			// Display alert so that user knows to create new sync
-			displayAlert(
-				platform.GetConstant(globals.Constants.Error_BrowserImportBookmarksNotSupported_Title), 
-				platform.GetConstant(globals.Constants.Error_BrowserImportBookmarksNotSupported_Message));
 		}
 	};
 	
@@ -214,8 +209,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		switch(details.reason) {
 			case "install":
 				// On install, register alarm
-				browser.alarms.clear(globals.Alarm.Name.Get())
-				.then(function() {
+				browser.alarms.clear(globals.Alarm.Name.Get(), function() {
 					browser.alarms.create(
 						globals.Alarm.Name.Get(), {
 							periodInMinutes: globals.Alarm.Period.Get()
@@ -262,8 +256,8 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'moveBookmark', utility.LogType.Error,
-					JSON.stringify(err));
+					moduleName, 'moveBookmark', globals.LogType.Warning,
+					err.stack);
 				
 				// Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
@@ -293,8 +287,8 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'removeBookmark', utility.LogType.Error,
-					JSON.stringify(err));
+					moduleName, 'removeBookmark', globals.LogType.Warning,
+					err.stack);
 				
 				// Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
@@ -355,8 +349,8 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'startup', utility.LogType.Error,
-					JSON.stringify(err));
+					moduleName, 'startup', globals.LogType.Warning,
+					err.stack);
 				
 				// Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
@@ -387,18 +381,18 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					catch (err) {
 						// Log error
 						utility.LogMessage(
-							moduleName, 'syncBookmarks', utility.LogType.Error,
-							'Error posting message to async channel; ' + JSON.stringify(err));
+							moduleName, 'syncBookmarks', globals.LogType.Warning,
+							'Error posting message to async channel; ' + err.stack);
 					}
 				}
 			})
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'syncBookmarks', utility.LogType.Error,
-					'Error syncing bookmarks; ' + JSON.stringify(err));
+					moduleName, 'syncBookmarks', globals.LogType.Warning,
+					'Error syncing bookmarks; ' + err.stack);
 				utility.LogMessage(
-					moduleName, 'syncBookmarks', utility.LogType.Info,
+					moduleName, 'syncBookmarks', globals.LogType.Info,
 					'syncData: ' + JSON.stringify(syncData));
 
 				if (!!command) {
@@ -408,7 +402,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 					catch (err2) {
 						// Log error
 						utility.LogMessage(
-							moduleName, 'syncBookmarks', utility.LogType.Error,
+							moduleName, 'syncBookmarks', globals.LogType.Warning,
 							'Error posting message to async channel; ' + JSON.stringify(err2));
 					}
 				}
@@ -423,44 +417,44 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 };
 
 // Initialise the angular app
-xBrowserSync.App.ChromeBackground = angular.module('xBrowserSync.App.ChromeBackground', []);
+xBrowserSync.App.FirefoxBackground = angular.module('xBrowserSync.App.FirefoxBackground', []);
 
 // Disable debug info
-xBrowserSync.App.ChromeBackground.config(['$compileProvider', function($compileProvider) {
+xBrowserSync.App.FirefoxBackground.config(['$compileProvider', function($compileProvider) {
 $compileProvider.debugInfoEnabled(false);
 }]);
 
 // Add platform service
 xBrowserSync.App.Platform.$inject = ['$q'];
-xBrowserSync.App.ChromeBackground.factory('platform', xBrowserSync.App.Platform);
+xBrowserSync.App.FirefoxBackground.factory('platform', xBrowserSync.App.Platform);
 
 // Add global service
 xBrowserSync.App.Global.$inject = ['platform'];
-xBrowserSync.App.ChromeBackground.factory('globals', xBrowserSync.App.Global);
+xBrowserSync.App.FirefoxBackground.factory('globals', xBrowserSync.App.Global);
 
 // Add httpInterceptor service
 xBrowserSync.App.HttpInterceptor.$inject = ['$q', 'globals'];
-xBrowserSync.App.ChromeBackground.factory('httpInterceptor', xBrowserSync.App.HttpInterceptor);
-xBrowserSync.App.ChromeBackground.config(['$httpProvider', function($httpProvider) {
+xBrowserSync.App.FirefoxBackground.factory('httpInterceptor', xBrowserSync.App.HttpInterceptor);
+xBrowserSync.App.FirefoxBackground.config(['$httpProvider', function($httpProvider) {
 $httpProvider.interceptors.push('httpInterceptor');
 }]);
 
 // Add utility service
 xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'globals'];
-xBrowserSync.App.ChromeBackground.factory('utility', xBrowserSync.App.Utility);
+xBrowserSync.App.FirefoxBackground.factory('utility', xBrowserSync.App.Utility);
 
 // Add api service
 xBrowserSync.App.API.$inject = ['$http', '$q', 'globals', 'utility'];
-xBrowserSync.App.ChromeBackground.factory('api', xBrowserSync.App.API);
+xBrowserSync.App.FirefoxBackground.factory('api', xBrowserSync.App.API);
 
 // Add bookmarks service
 xBrowserSync.App.Bookmarks.$inject = ['$q', '$timeout', 'platform', 'globals', 'api', 'utility'];
-xBrowserSync.App.ChromeBackground.factory('bookmarks', xBrowserSync.App.Bookmarks);
+xBrowserSync.App.FirefoxBackground.factory('bookmarks', xBrowserSync.App.Bookmarks);
 
 // Add platform implementation service
 xBrowserSync.App.PlatformImplementation.$inject = ['$http', '$interval', '$q', '$timeout', 'platform', 'globals', 'utility', 'bookmarks'];
-xBrowserSync.App.ChromeBackground.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
+xBrowserSync.App.FirefoxBackground.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add background module
 xBrowserSync.App.Background.$inject = ['$q', 'platform', 'globals', 'utility', 'bookmarks', 'platformImplementation'];
-xBrowserSync.App.ChromeBackground.controller('Controller', xBrowserSync.App.Background);
+xBrowserSync.App.FirefoxBackground.controller('Controller', xBrowserSync.App.Background);

@@ -540,7 +540,7 @@
 		"message": "xBrowserSync folder changed"
 	},
 	"error_ContainerChanged_Message" : {
-		"message": "Changing, deleting or moving xBrowserSync application folders can cause issues, sync has been disabled. Re-enable sync to restore bookmarks."
+		"message": "Changing, deleting or moving xBrowserSync folders can cause issues, sync has been disabled. Re-enable sync to restore bookmarks."
 	},
 	"error_BrowserImportBookmarksNotSupported_Title" : {
 		"message":  "Importing not supported"

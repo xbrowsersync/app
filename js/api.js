@@ -57,7 +57,7 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
                 // Log error
                 utility.LogMessage(
                     moduleName, 'createBookmarks', globals.LogType.Warning,
-                    JSON.stringify(err));
+                    err.stack);
                 
                 return $q.reject(getErrorCodeFromHttpError(err));
             });
@@ -94,7 +94,7 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 				// Log error
                 utility.LogMessage(
                     moduleName, 'getBookmarks', globals.LogType.Warning,
-                    JSON.stringify(err));
+                    err.stack);
                 
                 return $q.reject(getErrorCodeFromHttpError(err));
             });
@@ -123,7 +123,7 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
                 // Log error
                 utility.LogMessage(
                     moduleName, 'getBookmarksLastUpdated', globals.LogType.Warning,
-                    JSON.stringify(err));
+                    err.stack);
                 
                 return $q.reject(getErrorCodeFromHttpError(err));
             });
@@ -157,7 +157,7 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
                 // Log error
                 utility.LogMessage(
                     moduleName, 'updateBookmarks', globals.LogType.Warning,
-                    JSON.stringify(err));
+                    err.stack);
                 
                 return $q.reject(getErrorCodeFromHttpError(err));
             });
@@ -238,7 +238,7 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
                 // Log error
                 utility.LogMessage(
                     moduleName, 'getServiceInformation', globals.LogType.Warning,
-                    JSON.stringify(err));
+                    err.stack);
                 
                 return $q.reject(getErrorCodeFromHttpError(err));
             });

@@ -3,7 +3,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 /* ------------------------------------------------------------------------------------
  * Class name:	xBrowserSync.App.Content
- * Description:	Firefox content script that accesses page metadata and returns it to the
+ * Description:	Content script that accesses page metadata and returns it to the
  *              xBrowserSync extension.
  * ------------------------------------------------------------------------------------ */
 
@@ -85,7 +85,12 @@ xBrowserSync.App.Content = function() {
             description: getPageDescription(),
             tags: getPageKeywords()
         };
-		return metadata;
+        
+        // Return metadata to caller
+        browser.runtime.sendMessage({
+            command: 4,
+            metadata: metadata
+        });
 	};
 	
 	// Call constructor

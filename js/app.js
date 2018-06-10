@@ -275,7 +275,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Log error
                 utility.LogMessage(
                     moduleName, 'backupRestoreForm_Backup_Click', globals.LogType.Warning,
-                    JSON.stringify(err));
+                    err.stack);
                 
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
@@ -557,7 +557,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Log error
                 utility.LogMessage(
                     moduleName, 'bookmarkForm_DeleteBookmark_Click', globals.LogType.Warning,
-                    JSON.stringify(err));
+                    err.stack);
                 
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
@@ -625,7 +625,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Log error
                 utility.LogMessage(
                     moduleName, 'bookmarkForm_Init', globals.LogType.Warning,
-                    JSON.stringify(err));
+                    err.stack);
                 
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
@@ -707,7 +707,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Log error
                 utility.LogMessage(
                     moduleName, 'bookmarkForm_UpdateBookmark_Click', globals.LogType.Warning,
-                    JSON.stringify(err));
+                    err.stack);
                 
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
@@ -846,7 +846,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                             // Log error
                             utility.LogMessage(
                                 moduleName, 'changeView', globals.LogType.Warning,
-                                JSON.stringify(err));
+                                err.stack);
                             
                             vm.settings.service.status = globals.ServiceStatus.Offline;
                         })
@@ -902,7 +902,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Log error
                 utility.LogMessage(
                     moduleName, 'syncPanel_DisplayDataUsage_Click', globals.LogType.Warning,
-                    JSON.stringify(err));
+                    err.stack);
                 
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
@@ -1263,7 +1263,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Log error
                 utility.LogMessage(
                     moduleName, 'searchBookmarks', globals.LogType.Warning,
-                    JSON.stringify(err));
+                    err.stack);
                 
                 vm.search.results = null;
 
@@ -1392,7 +1392,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         // Log error
                         utility.LogMessage(
                             moduleName, 'searchForm_SearchText_Change', globals.LogType.Warning,
-                            JSON.stringify(err));
+                            err.stack);
                         
                         // Display alert
                         var errMessage = utility.GetErrorMessageFromException(err);
@@ -1600,7 +1600,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Log error
                 utility.LogMessage(
                     moduleName, 'setBookmarkStatus', globals.LogType.Warning,
-                    JSON.stringify(err));
+                    err.stack);
                 
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
@@ -1758,7 +1758,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Log error
                 utility.LogMessage(
                     moduleName, 'updateServiceUrlForm_CheckServiceUrl', globals.LogType.Warning,
-                    JSON.stringify(err));
+                    err.stack);
                 
                 // Set form as invalid and focus on url field
                 vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', false);
@@ -1804,7 +1804,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Log error
                 utility.LogMessage(
                     moduleName, 'updateServiceUrlForm_Confirm_Click', globals.LogType.Warning,
-                    JSON.stringify(err));
+                    err.stack);
                 
                 vm.settings.service.status = globals.ServiceStatus.Offline;
             });
