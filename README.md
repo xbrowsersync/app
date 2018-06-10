@@ -1,4 +1,4 @@
-# xBrowserSync: App [![Build Status](https://travis-ci.org/xBrowserSync/App.svg?branch=master)](https://travis-ci.org/xBrowserSync/App)
+# xBrowserSync: App [![Build Status](https://travis-ci.org/xBrowserSync/App.svg?branch=v1.4.0)](https://travis-ci.org/xBrowserSync/App)
 
 xBrowserSync is a free tool for syncing browser data between different browsers and devices, built for privacy and anonymity. For full details, see [www.xbrowsersync.org](https://www.xbrowsersync.org/).
 
