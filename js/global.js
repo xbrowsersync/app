@@ -22,7 +22,7 @@ xBrowserSync.App.Global = function(platform) {
                 }
             }
         },
-        ApiVersion: '1.0.x',
+        ApiVersion: '1.1.3',
         AppVersion: '1.4.0',
         Bookmarks: {
             DescriptionMaxLength: 300,
@@ -380,11 +380,12 @@ xBrowserSync.App.Global = function(platform) {
             FailedRemoveLocalBookmarks: 10104,            
             NoDataFound: 10105,
             IdRemoved: 10106,
-            InvalidData: 10107,
-            UpdatedBookmarkNotFound: 10108,
-            XBookmarkNotFound: 10109,
-            ContainerChanged: 10110,
-            DataOutOfSync: 10111,
+            PasswordRemoved: 10107,
+            InvalidData: 10108,
+            UpdatedBookmarkNotFound: 10109,
+            XBookmarkNotFound: 10110,
+            ContainerChanged: 10111,
+            DataOutOfSync: 10112,
             NoStatus: 10200,
             FailedGetPageMetadata: 10300,
             FailedSaveBackup: 10301,
@@ -582,6 +583,19 @@ xBrowserSync.App.Global = function(platform) {
             Pull: 2,
             Both: 3
         },
+        SyncVersion: {
+            Get: function() {
+                return platform.LocalStorage.Get(
+                    'xBrowserSync-syncVersion');
+            },
+            Set: function(value) {
+                value = (!value) ? '' : value.trim();
+                
+                platform.LocalStorage.Set(
+                    'xBrowserSync-syncVersion', 
+                    value);
+            }
+        },
         Title: {
             Get: function() {
                 return 'xBrowserSync';
@@ -618,6 +632,7 @@ xBrowserSync.App.Global = function(platform) {
             Bookmarks: '/bookmarks',
             Current: '/current',
             LastUpdated: '/lastUpdated',
+            Version: '/version',
             ServiceInformation: '/info',
             Regex: /^(\w+:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/i,
             ProtocolRegex: /^\w+:\/\//i,

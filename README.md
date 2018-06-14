@@ -1,14 +1,20 @@
-# xBrowserSync: App [![Build Status](https://travis-ci.org/xBrowserSync/App.svg?branch=v1.4.0)](https://travis-ci.org/xBrowserSync/App)
+# xBrowserSync
+## Web extensions and mobile apps
+
+[![Build Status](https://travis-ci.org/xBrowserSync/App.svg)](https://travis-ci.org/xBrowserSync/App) [![Dependencies](https://david-dm.org/xBrowserSync/App/status.svg)](https://david-dm.org/xBrowserSync/App) [![Dev Dependencies](https://david-dm.org/xBrowserSync/App/dev-status.svg)](https://david-dm.org/xBrowserSync/App?type=dev) [![GitHub license](https://img.shields.io/github/license/xBrowserSync/App.svg)](https://github.com/xBrowserSync/App/blob/master/LICENSE.md)
+
+[![GitHub forks](https://img.shields.io/github/forks/xBrowserSync/App.svg?style=social&label=Fork)](https://github.com/xBrowserSync/App/fork)
+[![GitHub stars](https://img.shields.io/github/stars/xBrowserSync/App.svg?style=social&label=Star)](https://github.com/xBrowserSync/App)
 
 xBrowserSync is a free tool for syncing browser data between different browsers and devices, built for privacy and anonymity. For full details, see [www.xbrowsersync.org](https://www.xbrowsersync.org/).
 
 This repository contains the source code for the client applications (browser extensions and mobile apps) that are used for syncing to an xBrowserSync service. You can get the official releases of the xBrowserSync clients from the various app stores, but if you'd like to build the apps yourself you can do so here.
 
-# Prerequisites
+## Prerequisites
 
 - NPM. It's bundled with [Node.js](https://nodejs.org/) so [download and install it](https://nodejs.org/en/download/) for your platform.
 
-# Installation
+## Installation
 
 CD into the source directory and install the package and dependencies using NPM:
 
@@ -17,7 +23,7 @@ CD into the source directory and install the package and dependencies using NPM:
 	$ cd ./platform/mobileapps/cordova
 	$ cordova prepare
 
-# Post-install iOS configuration (Mac only)
+## Post-install iOS configuration (Mac only)
 
 In order to build the iOS app to include iCloud and Share Sheet integration, there are a few manual config steps in Xcode that need to be completed.
 
@@ -30,7 +36,7 @@ In order to build the iOS app to include iCloud and Share Sheet integration, the
 7. In addBookmark target Build Settings tab, in the Build Options section, set Always Embed Swift Standard Libraries to 'No'.
 8. In addBookmark target Build Phases tab, expand Target Dependencies and add CordovaLib.
 
-# Building
+## Building
 
 Run a build for the desired platform:
 
@@ -43,10 +49,10 @@ Replace [platform] with the name of the desired platform to build (corresponding
 - firefox
 - ios
 
-# Issues
+## Issues
 
 If you've found a bug or wish to request a new feature, please submit it [here](https://github.com/xBrowserSync/App/issues/).
 
-# Translation
+## Translation
 
 If you would like to help with translating xBrowserSync into another language, please [get in touch](https://www.xbrowsersync.org/#contact).

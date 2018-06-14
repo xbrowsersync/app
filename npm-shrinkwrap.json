@@ -1016,6 +1016,11 @@
       "integrity": "sha1-ibTRmasr7kneFk6gK4nORi1xt2c=",
       "dev": true
     },
+    "base64-js": {
+      "version": "1.3.0",
+      "resolved": "https://registry.npmjs.org/base64-js/-/base64-js-1.3.0.tgz",
+      "integrity": "sha512-ccav/yGvoa80BQDljCxsmmQ3Xvx60/UpBIij5QN21W3wBi/hhIC9OoO+KLpu9IJTS9j4DRVJ3aDDF9cMSoa2lw=="
+    },
     "bcrypt-pbkdf": {
       "version": "1.0.1",
       "resolved": "https://registry.npmjs.org/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.1.tgz",
@@ -1289,9 +1294,9 @@
       }
     },
     "crypto-js": {
-      "version": "3.1.8",
-      "resolved": "https://registry.npmjs.org/crypto-js/-/crypto-js-3.1.8.tgz",
-      "integrity": "sha1-cV8HC/YBTyrpkqmLOSkli3E/CNU="
+      "version": "3.1.9-1",
+      "resolved": "https://registry.npmjs.org/crypto-js/-/crypto-js-3.1.9-1.tgz",
+      "integrity": "sha1-/aGedh/Ad+Af+/3G6f38WeiAbNg="
     },
     "css-b64-images": {
       "version": "0.2.5",
@@ -2826,6 +2831,11 @@
         "pseudomap": "^1.0.2",
         "yallist": "^2.1.2"
       }
+    },
+    "lzutf8": {
+      "version": "0.5.0",
+      "resolved": "https://registry.npmjs.org/lzutf8/-/lzutf8-0.5.0.tgz",
+      "integrity": "sha512-ch9VRlR+/grxv7BJmWeTBlcwY/S8Yg2BQWJAXIUPiYQJONLoOnKZYt3ZCrBMgyYRlFLFw0VJ4DNP0QQas+UG1w=="
     },
     "map-obj": {
       "version": "1.0.1",

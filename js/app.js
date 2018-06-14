@@ -204,12 +204,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     globals.SyncBookmarksToolbar.Set(value) : 
                     globals.SyncBookmarksToolbar.Get();
             },
-			secret: function(value) {
-                return arguments.length ? 
-                    globals.Password.Set(value) : 
-                    globals.Password.Get();
-            },
-            secretComplexity: null,
+			secret: null,
+            secretComplexity: {},
             service: {
                 apiVersion: '',
                 maxSyncSize: 0,
@@ -485,9 +481,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         $timeout(function() {
                             // Remove animation class
                             delete bookmarkToCreateClone.class;
-                            
-                            // Update cache with modified bookmarks
-                            bookmarks.RefreshCache(vm.search.results);
                         }, 500);
                     }, 300);
                 }
@@ -545,9 +538,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                             $timeout(function() {
                                 // Remove bookmark from results
                                 vm.search.results.splice(deletedBookmarkIndex, 1);
-                                
-                                // Update cache with modified bookmarks
-                                bookmarks.RefreshCache(vm.search.results);
                             }, 500);
                         }
                     }
@@ -695,10 +685,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         if (updatedBookmarkIndex >= 0) {
                             $timeout(function() {
                                 vm.search.results[updatedBookmarkIndex] = bookmarkToUpdate;
-
-                                // Update cache with modified bookmarks
-                                bookmarks.RefreshCache(vm.search.results);
-                            });
+                            }, 500);
                         }
                     }
                 }
@@ -1179,19 +1166,20 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         return false;
     };
 	
-	var queueSync = function() {
-        var syncData = {};
-        syncData.type = (!globals.Id.Get()) ? globals.SyncType.Push : globals.SyncType.Pull; 
-
+	var queueSync = function(syncType) {
         // Start sync
-        platform.Sync(vm.sync.asyncChannel, syncData);
+        platform.Sync(
+            vm.sync.asyncChannel,
+            {
+                type: syncType
+            });
     };
 	
 	var restoreData = function(data, restoreCallback) {
 		// Set ID and client secret if sync not enabled
         if (!globals.SyncEnabled.Get()) {
-            globals.Password.Set('');
-            vm.settings.secretComplexity = null;
+            globals.Password.Set(null);
+            vm.settings.secretComplexity = {};
             
             if (!!data.xBrowserSync.id) {
                 globals.Id.Set(data.xBrowserSync.id);
@@ -1297,9 +1285,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     $timeout(function() {
                         // Remove bookmark from results
                         vm.search.results.splice(deletedBookmarkIndex, 1);
-
-                        // Update cache with modified bookmarks
-                        bookmarks.RefreshCache(vm.search.results);
                     }, 500);
                 });
             }
@@ -1628,25 +1613,87 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
 
     var startSyncing = function() {
+        var syncType;
+
+        // Display loading panel
         vm.sync.displaySyncConfirmation = false;
         platform.Interface.Loading.Show();
-        queueSync();
+        
+        // Clear the current cached password
+        globals.Password.Set(null);
+        
+        var getSyncId = $q(function(resolve, reject) {
+            // If a sync ID has not been supplied, get a new one
+            if (!globals.Id.Get()) {
+                // Set sync type for create new sync
+                syncType = globals.SyncType.Push;
+                
+                // Get new sync ID
+                api.CreateNewSync()
+                    .then(function(newSync) {
+                        // Add sync data to cache and return
+                        globals.Id.Set(newSync.id);
+                        globals.SyncVersion.Set(newSync.version);
+                        resolve(newSync.id);
+                    })
+                    .catch(reject);
+            }
+            else {
+                // Set sync type for retrieve existing sync
+                syncType = globals.SyncType.Pull;
+
+                // Retrieve sync version for existing id
+                api.GetBookmarksVersion()
+                    .then(function(response) {
+                        // Add sync version to cache and return current sync ID
+                        globals.SyncVersion.Set(response.version);
+                        resolve(globals.Id.Get());
+                    })
+                    .catch(reject);
+            }
+        })
+        
+        getSyncId.then(function(syncId) {
+            // Generate a password hash, cache it then queue the sync
+            return utility.GetPasswordHash(vm.settings.secret, syncId);
+        })
+            .then(function(passwordHash) {
+                globals.Password.Set(passwordHash);
+                queueSync(syncType);
+            })
+            .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'startSyncing', globals.LogType.Warning,
+                    err.stack);
+                
+                // Display alert
+                var errMessage = utility.GetErrorMessageFromException(err);
+                vm.alert.display(errMessage.title, errMessage.message, 'danger');
+            });
     };
 
     var syncForm_CancelSyncConfirmation_Click = function() {
         // TODO: Ensure any sync messaging or process is cancelled also
         globals.IsSyncing.Set(false);
         globals.SyncEnabled.Set(false);
+        
+        // Clear cached data
+        globals.Password.Set(null);
+        globals.SyncVersion.Set(null);
+        globals.Cache.Bookmarks.Set(null);
+
+        // Switch to login panel
         vm.view.change(vm.view.views.login);
     };
 
     var syncForm_Password_Change = function() {
         // Update client secret complexity value
-    	if (!!vm.settings.secret()) {
-        	vm.settings.secretComplexity = complexify(vm.settings.secret());
+    	if (vm.settings.secret) {
+        	vm.settings.secretComplexity = complexify(vm.settings.secret);
     	}
     	else {
-    		vm.settings.secretComplexity = null;
+    		vm.settings.secretComplexity = {};
     	}
     };
 
@@ -1664,20 +1711,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         syncForm_CancelSyncConfirmation_Click();
     };
-
-    var syncPanel_DisplaySyncOptions_Click = function() {
-        vm.settings.displaySyncOptions = true;
-
-        if (!utility.IsMobilePlatform(vm.platformName)) {
-            $timeout(function() {
-                document.querySelector('#syncOptions-Panel .btn-back').focus();
-            });
-        }
-    };
     
     var syncForm_EnableSync_Click = function() {
-		// If ID provided, display confirmation panel
-        if (!!globals.Id.Get()) {
+        if (globals.Id.Get()) {
+            // Display overwrite data confirmation panel
             vm.sync.displaySyncConfirmation = true;
             if (!utility.IsMobilePlatform(vm.platformName)) {
                 $timeout(function() {
@@ -1686,7 +1723,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             }
         }
         else {
-            // Otherwise start syncing
+            // If no ID provided start syncing
             startSyncing();
         }
 	};
@@ -1709,6 +1746,16 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if (!utility.IsMobilePlatform(vm.platformName)) {
             $timeout(function() {
                 document.querySelector('.login-form-new input[name="txtPassword"]').focus();
+            });
+        }
+    };
+
+    var syncPanel_DisplaySyncOptions_Click = function() {
+        vm.settings.displaySyncOptions = true;
+
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+            $timeout(function() {
+                document.querySelector('#syncOptions-Panel .btn-back').focus();
             });
         }
     };
@@ -1787,9 +1834,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.settings.service.url(url);
         
         // Remove saved client secret and ID
-        globals.Password.Set('');
-        vm.settings.secretComplexity = null;
-        globals.Id.Set('');
+        globals.Id.Set(null);
+        globals.Password.Set(null);
+        vm.settings.secretComplexity = {};
         
         // Update service status
         api.CheckServiceStatus()

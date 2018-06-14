@@ -29,15 +29,9 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 			});
 	};
 	
-	var createBookmarks = function(encryptedBookmarks) {
-		// Check secret is present
-		if (!globals.Password.Get()) {
-			globals.SyncEnabled.Set(false);
-			return $q.reject({ code: globals.ErrorCodes.MissingClientData });
-		}
-		
+	var createNewSync = function() {
 		var data = { 
-			bookmarks: encryptedBookmarks
+			version: globals.AppVersion
 		};
 		
 		return $http.post(globals.URL.Host.Get() + globals.URL.Bookmarks,
@@ -46,12 +40,11 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 				// Reset network disconnected flag
 				globals.Network.Disconnected.Set(false);
 
-				if (!!response && !!response.data) {
-					return response.data;
-				}
-				else {
+				if (!response || !response.data || !response.data.id) {
 					return $q.reject({ code: globals.ErrorCodes.NoDataFound });
 				}
+
+				return response.data;
 			})
             .catch(function(err) {
                 // Log error
@@ -123,6 +116,35 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
                 // Log error
                 utility.LogMessage(
                     moduleName, 'getBookmarksLastUpdated', globals.LogType.Warning,
+                    err.stack);
+                
+                return $q.reject(getErrorCodeFromHttpError(err));
+            });
+	};
+
+	var getBookmarksVersion = function() {
+		// Check sync ID is present
+		if (!globals.Id.Get()) {
+			globals.SyncEnabled.Set(false);
+			return $q.reject({ code: globals.ErrorCodes.MissingClientData });
+		}
+		
+		return $http.get(globals.URL.Host.Get() + globals.URL.Bookmarks + 
+			'/' + globals.Id.Get() + globals.URL.Version)
+            .then(function(response) {
+				// Reset network disconnected flag
+				globals.Network.Disconnected.Set(false);
+
+				if (!response || !response.data) {
+					return response;
+				}
+				
+				return response.data;
+			})
+            .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'getBookmarksVersion', globals.LogType.Warning,
                     err.stack);
                 
                 return $q.reject(getErrorCodeFromHttpError(err));
@@ -246,9 +268,10 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
    
 	return {
 		CheckServiceStatus: checkServiceStatus,
+		CreateNewSync: createNewSync,
 		GetBookmarks: getBookmarks,
-		CreateBookmarks: createBookmarks,
-		UpdateBookmarks: updateBookmarks,
-		GetBookmarksLastUpdated: getBookmarksLastUpdated
+		GetBookmarksLastUpdated: getBookmarksLastUpdated,
+		GetBookmarksVersion: getBookmarksVersion,
+		UpdateBookmarks: updateBookmarks
 	};
 };

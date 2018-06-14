@@ -7,7 +7,9 @@ xBrowserSync.App = xBrowserSync.App || {};
  * ------------------------------------------------------------------------------------ */
 
 xBrowserSync.App.Utility = function($q, platform, globals) { 
-    'use strict';
+	'use strict';
+	
+	var moduleName = 'xBrowserSync.App.Utility';
 
 /* ------------------------------------------------------------------------------------
  * Public functions
@@ -19,15 +21,191 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 			element && closest(element.parentNode, predicate)
 		);
 	};
-	
-	var decryptData = function(data, errorCallback) {
-		// Decrypt using AES
-		return CryptoJS.AES.decrypt(data, globals.Password.Get()).toString(CryptoJS.enc.Utf8);
+
+	var concatUint8Arrays = function concatUint8Arrays(firstArr, secondArr) {
+		firstArr = firstArr || new Uint8Array();
+		secondArr = secondArr || new Uint8Array();
+		
+		var totalLength = firstArr.length + secondArr.length;
+		var result = new Uint8Array(totalLength);
+		result.set(firstArr, 0);
+		result.set(secondArr, firstArr.length);
+		return result;
+	};
+
+	var decryptData = function(encryptedData) {
+		// Determine which decryption method to use based on sync version
+		if (!globals.SyncVersion.Get()) {
+			return decryptData_v1(encryptedData);
+		}
+
+		return decryptData_v2(encryptedData);
+	};
+
+	var decryptData_v1 = function(encryptedData) {
+		// If no data provided, return an empty string
+		if (!encryptedData) {
+			return $q.resolve('');
+		}
+		
+		// Ensure password is in local storage
+		if (!globals.Password.Get()) {
+			return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
+		}
+		
+		return $q(function(resolve, reject) {
+			try {
+				// Decrypt using legacy crypto-js AES
+				var decryptedData = CryptoJS.AES.decrypt(encryptedData, globals.Password.Get()).toString(CryptoJS.enc.Utf8);
+
+				if (!decryptedData) {
+					throw new Error('Unable to decrypt data.');
+				}
+
+				resolve(decryptedData);
+			}
+			catch (err) {
+				// Log error
+				logMessage(
+					moduleName, 'decryptData_v1', globals.LogType.Warning,
+					err.stack);
+				
+				reject({ code: globals.ErrorCodes.InvalidData });
+			}
+		});
 	};
 	
-	var encryptData = function(data, errorCallback) {
-		// Encrypt using AES
-		return CryptoJS.AES.encrypt(data, globals.Password.Get()).toString();
+	var decryptData_v2 = function(encryptedData) {
+		// If no data provided, return an empty string
+		if (!encryptedData) {
+			return $q.resolve('');
+		}
+		
+		// Ensure both id and password are in local storage
+		if (!globals.Id.Get()) {
+			return $q.reject({ code: globals.ErrorCodes.IdRemoved });
+		}
+		if (!globals.Password.Get()) {
+			return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
+		}
+
+		// Retrieve the hashed password from local storage and convert to bytes
+		var keyData = base64js.toByteArray(globals.Password.Get());
+
+		// Convert base64 encoded encrypted data to bytes and extract initialization vector
+		var encryptedBytes = base64js.toByteArray(encryptedData);
+		var iv = encryptedBytes.slice(0, 16);
+		var encryptedDataBytes = encryptedBytes.slice(16).buffer;
+		
+		// Generate a cryptokey using the stored password hash for decryption
+		return crypto.subtle.importKey('raw', keyData, { name: 'AES-GCM', iv: iv }, false, ['decrypt'])
+			.then(function(key) {				
+				// Convert base64 encoded encrypted data to bytes
+				return crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, key, encryptedDataBytes);
+			})
+			.then(function(decryptedBytes) {
+				if (!decryptedBytes) {
+					throw new Error('Unable to decrypt data.');
+				}
+				
+				// Uncompress the decrypted data and return
+				var decryptedData = LZUTF8.decompress(new Uint8Array(decryptedBytes));
+				return decryptedData;
+			})
+			.catch(function(err) {
+				// Log error
+				logMessage(
+					moduleName, 'decryptData_v2', globals.LogType.Warning,
+					err.stack);
+				
+				return $q.reject({ code: globals.ErrorCodes.InvalidData });
+			});
+	};
+
+	var encryptData = function(data) {
+		// Determine which encryption method to use based on sync version
+		if (!globals.SyncVersion.Get()) {
+			return encryptData_v1(data);
+		}
+
+		return encryptData_v2(data);
+	};
+
+	var encryptData_v1 = function(data) {
+		// If no data provided, return an empty string
+		if (!data) {
+			return $q.resolve('');
+		}
+		
+		// Ensure password is in local storage
+		if (!globals.Password.Get()) {
+			return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
+		}
+
+		return $q(function(resolve, reject) {
+			try {
+				// Encrypt using legacy crypto-js AES
+				var encryptedData = CryptoJS.AES.encrypt(data, globals.Password.Get()).toString();
+
+				if (!encryptedData) {
+					throw new Error('Unable to encrypt data.');
+				}
+
+				resolve(encryptedData);
+			}
+			catch (err) {
+				// Log error
+				logMessage(
+					moduleName, 'encryptData_v1', globals.LogType.Warning,
+					err.stack);
+				
+				reject({ code: globals.ErrorCodes.InvalidData });
+			}
+		});
+	};
+
+	var encryptData_v2 = function(data) {
+		// If no data provided, return an empty string
+		if (!data) {
+			return $q.resolve('');
+		}
+		
+		// Ensure both id and password are in local storage
+		if (!globals.Id.Get()) {
+			return $q.reject({ code: globals.ErrorCodes.IdRemoved });
+		}
+		if (!globals.Password.Get()) {
+			return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
+		}
+		
+		// Retrieve the hashed password from local storage and convert to bytes
+		var keyData = base64js.toByteArray(globals.Password.Get());
+		
+		// Generate a random 16 byte initialization vector
+		var iv = crypto.getRandomValues(new Uint8Array(16));
+
+		// Generate a new cryptokey using the stored password hash
+		return crypto.subtle.importKey('raw', keyData, { name: 'AES-GCM', iv: iv }, false, ['encrypt'])
+			.then(function(key) {
+				// Compress the data before encryption
+				var compressedData = LZUTF8.compress(data);
+
+				// Encrypt the data using AES
+				return crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, key, compressedData);
+			})
+			.then(function(encryptedData) {
+				// Combine initialization vector and encrypted data and return as base64 encoded string
+				var combinedData = concatUint8Arrays(iv, new Uint8Array(encryptedData));
+				return base64js.fromByteArray(combinedData);
+			})
+			.catch(function(err) {
+				// Log error
+				logMessage(
+					moduleName, 'encryptData_v2', globals.LogType.Warning,
+					err.stack);
+				
+				return $q.reject({ code: globals.ErrorCodes.InvalidData });
+			});
 	};
 
 	var getErrorMessageFromException = function(err) {
@@ -160,8 +338,42 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		return hyperlinkElement.host;
 	};
 
-	var getStringSizeInBytes = function(str) {
-		return encodeURI(str).split(/%..|./).length - 1;
+	var getPasswordHash = function(password, salt) {
+		// If old sync version, don't hash password for legacy encryption
+		if (!globals.SyncVersion.Get()) {
+			return $q.resolve(password);
+		}
+		
+		var encoder = new TextEncoder('utf-8');
+		
+		// Generate a new cryptokey using the stored password hash
+		var keyData = encoder.encode(password);
+		return crypto.subtle.importKey('raw', keyData, { name: 'PBKDF2' }, false, ['deriveKey'])
+			.then(function(importedKey) {
+				// Run the key through PBKDF2 with many iterations using the provided salt
+				var encodedSalt = encoder.encode(salt);
+				return crypto.subtle.deriveKey(
+					{
+					  name: 'PBKDF2',
+					  salt: encodedSalt,
+					  iterations: 100000,
+					  hash: 'SHA-256'
+					},
+					importedKey,
+					{ name: 'AES-GCM', length: 256 },
+					true,
+					['encrypt', 'decrypt']
+				   );
+			})
+			.then(function(derivedKey) {
+				// Export the hashed key
+				return crypto.subtle.exportKey('raw', derivedKey);
+			})
+			.then(function(exportedKey) {
+				// Convert exported key to base64 encoded string and return
+				var base64Key = base64js.fromByteArray(new Uint8Array(exportedKey));
+				return base64Key;
+			});
 	};
 
 	var getTagArrayFromText = function(tagText) {
@@ -255,7 +467,6 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		var trimmedText = text.substring(0, text.lastIndexOf(' ', limit)) + '\u2026';
   		return trimmedText;
 	};
-
 	
 	return {
 		Closest: closest,
@@ -263,8 +474,8 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		EncryptData: encryptData,
 		GetErrorMessageFromException: getErrorMessageFromException,
 		GetHostFromUrl: getHostFromUrl,
-		GetStringSizeInBytes: getStringSizeInBytes,
 		GetTagArrayFromText: getTagArrayFromText,
+		GetPasswordHash: getPasswordHash,
 		IsMobilePlatform: isMobilePlatform,
 		IsNetworkConnected: isNetworkConnected,
 		LogMessage: logMessage,

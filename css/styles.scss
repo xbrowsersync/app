@@ -712,15 +712,15 @@ body {
         a {
             font-size: 1.1em;
         }
-    }
-    
-    .secret-form-group {
-        input {
+
+        .secret-form-group input {
             position: relative;
             z-index: 20;
             background: transparent;
         }
-
+    }
+    
+    .secret-form-group {
         .progress, .progress-bar-background {
             position: absolute;
             top: 0;

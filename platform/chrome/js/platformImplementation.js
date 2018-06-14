@@ -14,7 +14,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
  * ------------------------------------------------------------------------------------ */
 
 	var moduleName = 'xBrowserSync.App.PlatformImplementation', vm, loadingId;
-	var bookmarksBarId = '1', otherBookmarksId = '2';
+	var toolbarBookmarksId = '1', otherBookmarksId = '2';
 
 
 /* ------------------------------------------------------------------------------------
@@ -106,7 +106,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				}; 
 				_.each(xBookmarks, addIdToBookmark);
 
-				return deferred.resolve(xBookmarks);
+				return xBookmarks;
 			});
     };
 	
@@ -419,7 +419,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		clearBookmarksBar = $q(function(resolve, reject) {
 			if (globals.SyncBookmarksToolbar.Get()) {
 				try {
-                    chrome.bookmarks.getChildren(bookmarksBarId, function(results) {
+                    chrome.bookmarks.getChildren(toolbarBookmarksId, function(results) {
                         try {
                             if (!!results) {
                                 for (var i = 0; i < results.length; i++) {
@@ -509,35 +509,33 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 	
 	var getBookmarks = function(addBookmarkIds) {
-		var getOtherBookmarks, getBookmarksBar;
+		var getOtherBookmarks, getToolbarBookmarks;
 		addBookmarkIds = addBookmarkIds || true;
 
 		// Get Other bookmarks
 		getOtherBookmarks = getLocalBookmark(otherBookmarksId)
 			.then(function(otherBookmarks) {
-				if (otherBookmarks.children.length > 0) {
-					var xBookmarks = getLocalBookmarksAsXBookmarks(otherBookmarks.children);
-					return xBookmarks;
+				if (!!otherBookmarks.children && otherBookmarks.children.length > 0) {
+					return getLocalBookmarksAsXBookmarks(otherBookmarks.children);
 				}
 			});
 
 		// Get bookmarks bar
-        getBookmarksBar = getLocalBookmark(bookmarksBarId)
-			.then(function(bookmarksBar) {
+        getToolbarBookmarks = getLocalBookmark(toolbarBookmarksId)
+			.then(function(toolbarBookmarks) {
 				if (!globals.SyncBookmarksToolbar.Get()) {
 					return;
 				}
 				
-				if (bookmarksBar.children.length > 0) {
-					var xBookmarks = getLocalBookmarksAsXBookmarks(bookmarksBar.children);
-					return xBookmarks;
+				if (!!toolbarBookmarks.children && toolbarBookmarks.children.length > 0) {
+					return getLocalBookmarksAsXBookmarks(toolbarBookmarks.children);
 				}
 			});
 		
-		return $q.all([getOtherBookmarks, getBookmarksBar])
+		return $q.all([getOtherBookmarks, getToolbarBookmarks])
 			.then(function(results) {
 				var otherBookmarks = results[0];
-				var bookmarksBar = results[1];
+				var toolbarBookmarks = results[1];
 				var xBookmarks = [];
 
 				// Add unfiled container if bookmarks present
@@ -555,9 +553,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				}
 
 				// Add toolbar container if bookmarks present
-				if (!!bookmarksBar && bookmarksBar.length > 0) {
+				if (!!toolbarBookmarks && toolbarBookmarks.length > 0) {
 					var toolbarContainer = bookmarks.GetContainer(globals.Bookmarks.ToolbarContainerName, xBookmarks, true);
-					toolbarContainer.children = bookmarksBar;
+					toolbarContainer.children = toolbarBookmarks;
 				}
 
 				// Add unique ids
@@ -761,8 +759,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		populateToolbar = $q(function(resolve, reject) {
 			if (globals.SyncBookmarksToolbar.Get() && !!toolbarContainer && toolbarContainer.children.length > 0) {
 				try {
-                    chrome.bookmarks.get(bookmarksBarId, function(results) {
-                        createLocalBookmarksFromXBookmarks(bookmarksBarId, toolbarContainer.children, resolve, reject);
+                    chrome.bookmarks.get(toolbarBookmarksId, function(results) {
+                        createLocalBookmarksFromXBookmarks(toolbarBookmarksId, toolbarContainer.children, resolve, reject);
                     });
                 }
                 catch (err) {
@@ -818,7 +816,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
     
 	var checkForLocalContainer = function(localBookmark) {
         var localContainers = [ 
-            { id: bookmarksBarId, xBookmarkTitle: globals.Bookmarks.ToolbarContainerName },
+            { id: toolbarBookmarksId, xBookmarkTitle: globals.Bookmarks.ToolbarContainerName },
             { id: otherBookmarksId, xBookmarkTitle: globals.Bookmarks.OtherContainerName } 
         ];
 		
