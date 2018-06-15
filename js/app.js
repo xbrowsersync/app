@@ -1645,8 +1645,16 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Retrieve sync version for existing id
                 api.GetBookmarksVersion()
                     .then(function(response) {
+                        // If no sync version is set, upgrade the sync
+                        if (!response.version) {
+                            syncType = globals.SyncType.Upgrade;
+                        }
+
+                        return response.version;
+                    })
+                    .then(function(syncVersion) {
                         // Add sync version to cache and return current sync ID
-                        globals.SyncVersion.Set(response.version);
+                        globals.SyncVersion.Set(syncVersion);
                         resolve(globals.Id.Get());
                     })
                     .catch(reject);

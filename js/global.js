@@ -581,7 +581,8 @@ xBrowserSync.App.Global = function(platform) {
         SyncType: { 
             Push: 1, 
             Pull: 2,
-            Both: 3
+            Both: 3,
+            Upgrade: 4
         },
         SyncVersion: {
             Get: function() {

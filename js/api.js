@@ -151,7 +151,7 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
             });
 	};
 	
-	var updateBookmarks = function(encryptedBookmarks) {
+	var updateBookmarks = function(encryptedBookmarks, updateSyncVersion) {
 		// Check secret and sync ID are present
 		if (!globals.Password.Get() || !globals.Id.Get()) {
 			globals.SyncEnabled.Set(false);
@@ -161,6 +161,11 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 		var data = { 
 			bookmarks: encryptedBookmarks
 		};
+
+		// If updating sync version, set as current app version
+		if (updateSyncVersion) {
+			data.version = globals.AppVersion;
+		}
 		
 		return $http.put(globals.URL.Host.Get() + globals.URL.Bookmarks + '/' + globals.Id.Get(),
 			JSON.stringify(data))
