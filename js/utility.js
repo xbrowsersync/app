@@ -123,48 +123,6 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 	};
 
 	var encryptData = function(data) {
-		// Determine which encryption method to use based on sync version
-		if (!globals.SyncVersion.Get()) {
-			return encryptData_v1(data);
-		}
-
-		return encryptData_v2(data);
-	};
-
-	var encryptData_v1 = function(data) {
-		// If no data provided, return an empty string
-		if (!data) {
-			return $q.resolve('');
-		}
-		
-		// Ensure password is in local storage
-		if (!globals.Password.Get()) {
-			return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
-		}
-
-		return $q(function(resolve, reject) {
-			try {
-				// Encrypt using legacy crypto-js AES
-				var encryptedData = CryptoJS.AES.encrypt(data, globals.Password.Get()).toString();
-
-				if (!encryptedData) {
-					throw new Error('Unable to encrypt data.');
-				}
-
-				resolve(encryptedData);
-			}
-			catch (err) {
-				// Log error
-				logMessage(
-					moduleName, 'encryptData_v1', globals.LogType.Warning,
-					err.stack);
-				
-				reject({ code: globals.ErrorCodes.InvalidData });
-			}
-		});
-	};
-
-	var encryptData_v2 = function(data) {
 		// If no data provided, return an empty string
 		if (!data) {
 			return $q.resolve('');
