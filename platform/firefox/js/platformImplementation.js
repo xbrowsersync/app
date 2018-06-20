@@ -25,7 +25,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
  * Constructor
  * ------------------------------------------------------------------------------------ */
     
-	var ChromeImplementation = function() {
+	var FirefoxImplementation = function() {
 		// Inject required platform implementation functions
 		platform.BackupData = backupData;
 		platform.Bookmarks.AddIds = addIdsToBookmarks;
@@ -147,18 +147,21 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		var createInfo = args[1];
 		var changedBookmarkIndex;
 		
-		// Check new bookmark doesn't have the same name as a container
-		if (bookmarks.IsBookmarkContainer(createInfo)) {
-			// Disable sync
-			globals.SyncEnabled.Set(false);
-			return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
-		}
-
-		// Get local bookmark's parent's corresponding xBookmark and container
-		// Check if any containers are before the changed bookmark that would throw off index
-		$q.all([
-			findXBookmarkUsingLocalBookmarkId(createInfo.parentId, xBookmarks), 
-			getNumContainersBeforeBookmarkIndex(createInfo.parentId, createInfo.index)])
+		// Check if created bookmark is a container
+		wasContainerChanged(createInfo, xBookmarks)
+			.then(function(createdBookmarkIsContainer) {
+				if (!!createdBookmarkIsContainer) {
+					// Disable sync
+					globals.SyncEnabled.Set(false);
+					return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
+				}
+		
+				// Get local bookmark's parent's corresponding xBookmark and container
+				// Check if any containers are before the changed bookmark that would throw off index
+				return $q.all([
+					findXBookmarkUsingLocalBookmarkId(createInfo.parentId, xBookmarks), 
+					getNumContainersBeforeBookmarkIndex(createInfo.parentId, createInfo.index)]);
+			})
 			.then(function(results) {
 				var findParentXBookmark = results[0];
             
@@ -725,7 +728,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						document.querySelector('.login-form-new input[name="txtPassword"]').focus();
 					}
 					else {
-						document.querySelector('.login-form-existing input[name="txtId"]').focus();
+						// Focus on password field if id already set
+						var inputField = globals.Id.Get() ?
+							document.querySelector('.login-form-existing input[name="txtPassword"]') :
+							document.querySelector('.login-form-existing input[name="txtId"]');
+						if (!!inputField) {
+							inputField.focus();
+						}
 					}
 				}
 			}, 500);
@@ -1113,44 +1122,45 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		
 		// If parent is Other bookmarks, check Other bookmarks children for containers
 		if (!!changedBookmark.parentId && changedBookmark.parentId === otherBookmarksId) {
-			var unfiledContainer = bookmarks.GetContainer(globals.Bookmarks.UnfiledContainerName, xBookmarks, false);
+			return $q(function(resolve, reject) {
+				try {
+					browser.bookmarks.getChildren(otherBookmarksId, function(children) {
+						// Get all bookmarks in other bookmarks that are xBrowserSync containers
+						var localContainers = children.filter(function(x) {
+							return x.title.indexOf(globals.Bookmarks.ContainerPrefix) === 0;
+						});
+						var containersCount = 0;
+						var checksFailed = false;
 
-			return $q.all([
-				xBookmarkIsChildOfLocalBookmarkById(unfiledContainer, otherBookmarksId)
-			])
-				.then(function(results) {
-					var xbsContainerFound = results[0];
+						// Check each container present only appears once
+						var unfiledContainer = bookmarks.GetContainer(globals.Bookmarks.UnfiledContainerName, xBookmarks, false);
+						if (unfiledContainer) {
+							containersCount++;
+							var count = localContainers.filter(function(x) {
+								return x.title === globals.Bookmarks.UnfiledContainerName;
+							}).length;
+							checksFailed = count !== 1 ? true : checksFailed;
+						}
 
-					if (!!xbsContainerFound) {
-						return true;
-					}
-					
-					return false;
-				});
+						// Check number of containers match and return result
+						checksFailed = containersCount !== localContainers.length ? true : checksFailed;
+						resolve(checksFailed);
+					});
+				}
+				catch (err) {
+					// Log error
+					utility.LogMessage(
+						moduleName, 'wasContainerChanged', globals.LogType.Warning,
+						'Error getting local containers; ' + err.stack);
+						
+					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
+				}
+			});
 		}
 
 		return $q.resolve(false);
 	};
-
-	var xBookmarkIsChildOfLocalBookmarkById = function(xBookmark, localBookmarkId) {
-		// If xBookmark is null or has no children, return
-		if (!xBookmark || !xBookmark.children || xBookmark.children.length === 0) {
-			return $q.resolve(false);
-		}
-		
-		// Find xBookmark in local bookmarks children
-		return getLocalBookmark(localBookmarkId)
-			.then(function(localBookmark) {
-				var result = _.findWhere(localBookmark.children, { title: xBookmark.title });
-				if (!result) {
-					return true;
-				}
-				else {
-					return false;
-				}
-			});
-	};
 	
 	// Call constructor
-	return new ChromeImplementation();
+	return new FirefoxImplementation();
 };

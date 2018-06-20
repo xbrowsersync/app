@@ -35,7 +35,9 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		
 		chrome.bookmarks.onMoved.addListener(moveBookmark);
 		
-		chrome.bookmarks.onImportBegan.addListener(handleImport);
+		chrome.bookmarks.onImportBegan.addListener(handleImportBegan);
+
+		chrome.bookmarks.onImportEnded.addListener(handleImportEnded);
 	};
 
 
@@ -180,12 +182,25 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		}
 	};
 	
-	var handleImport = function() {
+	var handleImportBegan = function() {
 		if (!!globals.SyncEnabled.Get()) {
-			// Display alert so that user knows to create new sync
-			displayAlert(
-				platform.GetConstant(globals.Constants.Error_BrowserImportBookmarksNotSupported_Title), 
-				platform.GetConstant(globals.Constants.Error_BrowserImportBookmarksNotSupported_Message));
+			globals.DisableEventListeners.Set(true);
+			
+			// Log error
+			utility.LogMessage(
+				moduleName, 'handleImportBegan', globals.LogType.Warning,
+				'Bookmarks import started.');
+		}
+	};
+	
+	var handleImportEnded = function() {
+		if (!!globals.SyncEnabled.Get()) {
+			globals.DisableEventListeners.Set(false);
+			
+			// Log error
+			utility.LogMessage(
+				moduleName, 'handleImportEnded', globals.LogType.Warning,
+				'Bookmarks import ended.');
 		}
 	};
 	
@@ -313,16 +328,19 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 	};
 	
 	var restoreBookmarks = function(restoreData) {
-        $q(function(resolve, reject) {
+		$q(function(resolve, reject) {
+			// Upgrade containers to use current container names
+			var upgradedBookmarks = bookmarks.UpgradeContainers(restoreData.bookmarks || []);
+
 			// If bookmarks don't have unique ids, add new ids
-			if (!bookmarks.CheckBookmarksHaveUniqueIds(restoreData.bookmarks)) {
-				platform.Bookmarks.AddIds(restoreData.bookmarks)
+			if (!bookmarks.CheckBookmarksHaveUniqueIds(upgradedBookmarks)) {
+				platform.Bookmarks.AddIds(upgradedBookmarks)
 					.then(function(updatedBookmarks) {
 						resolve(updatedBookmarks);
 					});
 			}
 			else {
-				resolve(restoreData.bookmarks);
+				resolve(upgradedBookmarks);
 			}
 		})
 			.then(function(bookmarks) {
@@ -374,7 +392,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		
 		// Start sync
 		return bookmarks.Sync(syncData)
-			.then(function(initialSyncFailed) {
+			.then(function(bookmarks, initialSyncFailed) {
 				// Reset network disconnected flag
 				globals.Network.Disconnected.Set(false);
 
@@ -387,7 +405,11 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 				
 				if (!!command) {
 					try {
-						asyncChannel.postMessage({ command: command, success: true });
+						asyncChannel.postMessage({
+							command: command,
+							bookmarks: bookmarks,
+							success: true
+						});
 					}
 					catch (err) {
 						// Log error

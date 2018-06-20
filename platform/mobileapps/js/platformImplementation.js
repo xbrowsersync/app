@@ -574,12 +574,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"error_ContainerChanged_Message" : {
 			"message": "Changing, deleting or moving xBrowserSync folders can cause issues, sync has been disabled. Re-enable sync to restore bookmarks."
 		},
-		"error_BrowserImportBookmarksNotSupported_Title" : {
-			"message":  "Importing not supported"
-		},
-		"error_BrowserImportBookmarksNotSupported_Message" : {
-			"message":  "Browser import bookmarks functionality is not supported in xBrowserSync. Create a new sync to sync your newly imported bookmarks."
-		},
 		"error_NotImplemented_Title" : {
 			"message":  "Function not implemented"
 		},
@@ -1139,7 +1133,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 		// Start sync
 		return bookmarks.Sync(syncData)
-			.then(function(initialSyncFailed) {
+			.then(function(bookmarks, initialSyncFailed) {
 				// Reset network disconnected flag
 				globals.Network.Disconnected.Set(false);
 
@@ -1151,7 +1145,11 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					displayDefaultSearchState();
 				}
 				
-				vm.events.handleSyncResponse({ command: syncData.command, success: true, syncData: syncData });
+				vm.events.handleSyncResponse({
+					command: syncData.command,
+					bookmarks: bookmarks,
+					success: true,
+					syncData: syncData });
 			})
 			.catch(function(err) {
 				// Log error

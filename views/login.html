@@ -176,6 +176,7 @@
     </div>
 </div>
 <form name="vm.syncForm" class="animate-fade" data-ng-hide="vm.sync.displaySyncConfirmation" novalidate>
+    <button type="submit" style="display:none" data-ng-click="vm.events.syncForm_Submit_Click()" tabindex="-1">Submit</button>
     <div class="login-form-new animate-fade" data-ng-show="vm.settings.displayNewSyncPanel">
         <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
             <label class="sr-only" for="txtPassword">{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
@@ -192,7 +193,7 @@
             <div class="progress-bar-background"></div>
         </div>
         <div class="form-group text-center">
-            <button type="submit" class="btn btn-default btn-new-sync" data-ng-disabled="!vm.settings.secret || !vm.settings.secretComplexity.valid" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
+            <button type="button" class="btn btn-default btn-new-sync" data-ng-disabled="!vm.settings.secret || !vm.settings.secretComplexity.valid" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
                 {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
             </button>
         </div>
@@ -216,7 +217,7 @@
                 placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Existing_Description) }}" tabindex="2" />
         </div>
         <div class="form-group text-center">
-            <button type="submit" class="btn btn-default" data-ng-disabled="!vm.settings.id() || !vm.settings.secret" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
+            <button type="button" class="btn btn-default btn-existing-sync" data-ng-disabled="!vm.settings.id() || !vm.settings.secret" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
                 {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
             </button>
         </div>

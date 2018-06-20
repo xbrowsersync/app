@@ -142,12 +142,16 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 				return response.data;
 			})
             .catch(function(err) {
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'getBookmarksVersion', globals.LogType.Warning,
-                    err.stack);
+				var errObj = getErrorCodeFromHttpError(err);
+				
+				// Log the error if not invalid ID
+				if (errObj.code !== globals.ErrorCodes.NoDataFound) {
+					utility.LogMessage(
+						moduleName, 'getBookmarksVersion', globals.LogType.Warning,
+						err.stack);
+				}
                 
-                return $q.reject(getErrorCodeFromHttpError(err));
+                return $q.reject(errObj);
             });
 	};
 	

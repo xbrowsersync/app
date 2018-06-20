@@ -542,12 +542,6 @@
 	"error_ContainerChanged_Message" : {
 		"message": "Modifier, supprimer ou déplacer les dossiers d'application de xBrowserSync peut causer des problèmes, la synchronisation a donc été désactivée. Réactivez la synchronisation pour restaurer vos favoris."
 	},
-	"error_BrowserImportBookmarksNotSupported_Title" : {
-		"message":  "Import non supporté"
-	},
-	"error_BrowserImportBookmarksNotSupported_Message" : {
-		"message":  "La fonctionnalité d'import de favoris du navigateur n'est pas supporté par xBrowserSync. Créez une nouvelle synchronisation pour synchroniser vos favoris nouvellements importés."
-	},
 	"error_NotImplemented_Title" : {
 		"message":  "Fonction non implémentée"
 	},

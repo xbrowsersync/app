@@ -34,6 +34,10 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		browser.bookmarks.onChanged.addListener(changeBookmark);
 		
 		browser.bookmarks.onMoved.addListener(moveBookmark);
+		
+		browser.bookmarks.onImportBegan.addListener(handleImportBegan);
+
+		browser.bookmarks.onImportEnded.addListener(handleImportEnded);
 	};
 
 
@@ -178,6 +182,28 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		}
 	};
 	
+	var handleImportBegan = function() {
+		if (!!globals.SyncEnabled.Get()) {
+			globals.DisableEventListeners.Set(true);
+			
+			// Log error
+			utility.LogMessage(
+				moduleName, 'handleImportBegan', globals.LogType.Warning,
+				'Bookmarks import started.');
+		}
+	};
+	
+	var handleImportEnded = function() {
+		if (!!globals.SyncEnabled.Get()) {
+			globals.DisableEventListeners.Set(false);
+			
+			// Log error
+			utility.LogMessage(
+				moduleName, 'handleImportEnded', globals.LogType.Warning,
+				'Bookmarks import ended.');
+		}
+	};
+	
 	var handleMessage = function(msg) {
 		switch (msg.command) {
 			// Trigger bookmarks sync
@@ -302,16 +328,19 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 	};
 	
 	var restoreBookmarks = function(restoreData) {
-        $q(function(resolve, reject) {
+		$q(function(resolve, reject) {
+			// Upgrade containers to use current container names
+			var upgradedBookmarks = bookmarks.UpgradeContainers(restoreData.bookmarks || []);
+
 			// If bookmarks don't have unique ids, add new ids
-			if (!bookmarks.CheckBookmarksHaveUniqueIds(restoreData.bookmarks)) {
-				platform.Bookmarks.AddIds(restoreData.bookmarks)
+			if (!bookmarks.CheckBookmarksHaveUniqueIds(upgradedBookmarks)) {
+				platform.Bookmarks.AddIds(upgradedBookmarks)
 					.then(function(updatedBookmarks) {
 						resolve(updatedBookmarks);
 					});
 			}
 			else {
-				resolve(restoreData.bookmarks);
+				resolve(upgradedBookmarks);
 			}
 		})
 			.then(function(bookmarks) {
@@ -363,7 +392,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		
 		// Start sync
 		return bookmarks.Sync(syncData)
-			.then(function(initialSyncFailed) {
+			.then(function(bookmarks, initialSyncFailed) {
 				// Reset network disconnected flag
 				globals.Network.Disconnected.Set(false);
 
@@ -376,7 +405,11 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 				
 				if (!!command) {
 					try {
-						asyncChannel.postMessage({ command: command, success: true });
+						asyncChannel.postMessage({
+							command: command,
+							bookmarks: bookmarks,
+							success: true
+						});
 					}
 					catch (err) {
 						// Log error
