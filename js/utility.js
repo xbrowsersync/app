@@ -365,22 +365,27 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		return window.navigator.onLine;
 	};
 	
+	var logError = function(moduleName, functionName, err, message) {
+		if (!err.stack) {
+			return;
+		}
+		
+		message = message ? message + '\n' + err.stack : err.stack;
+		logMessage(moduleName, functionName, globals.LogType.Error, message + '\n' + err.stack);
+	};
+	
 	var logMessage = function(moduleName, functionName, messageType, message) {
-		message = message || 'An unspecified error occurred.';
 		switch (messageType) {
 			case globals.LogType.Error:
-				messageType = 'ERROR';
-				console.error(moduleName + ':' + functionName + ', ' + messageType + ': ' + message);
+				console.error(moduleName + '.' + functionName + ': ' + message);
 				break;
 			case globals.LogType.Warning:
-				messageType = 'WARNING';
-				console.warn(moduleName + ':' + functionName + ', ' + messageType + ': ' + message);
+				console.warn(moduleName + '.' + functionName + ': ' + message);
 				break;
 			case globals.LogType.Info:
 				/* falls through */
 			default:
-				messageType = 'INFO';
-				console.info(moduleName + ':' + functionName + ', ' + messageType + ': ' + message);
+				console.info(moduleName + '.' + functionName + ': ' + message);
 				break;
 		}
 	};
@@ -436,6 +441,7 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		GetPasswordHash: getPasswordHash,
 		IsMobilePlatform: isMobilePlatform,
 		IsNetworkConnected: isNetworkConnected,
+		LogError: logError,
 		LogMessage: logMessage,
 		ParseUrl: parseUrl,
 		StripTags: stripTags,

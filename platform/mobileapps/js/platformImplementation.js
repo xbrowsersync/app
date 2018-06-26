@@ -509,10 +509,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Re-enable sync and try again."
 		},
 		"error_NoDataFound_Title" : {
-			"message":  "No data found"
+			"message":  "Invalid Sync ID"
 		},
 		"error_NoDataFound_Message" : {
-			"message":  "Double check your xBrowserSync ID and password and try again."
+			"message":  "No sync exists for this ID. Double check your xBrowserSync ID and the service URL you are syncing to and try again."
 		},
 		"error_IdRemoved_Title" : {
 			"message":  "Data removed due to inactivity"

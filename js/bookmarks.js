@@ -58,14 +58,13 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         // Check if bookmarks have been updated
         return api.GetBookmarksLastUpdated()
             .then(function(data) {
-                if (!data || !data.lastUpdated) {
-                    return $q.reject({ code: globals.ErrorCodes.NoDataFound });
-                }
-                
-                var lastUpdated = new Date(data.lastUpdated);
-                
                 // If last updated is different the date in local storage, refresh bookmarks
+                var lastUpdated = new Date(data.lastUpdated);
                 return !globals.LastUpdated.Get() || globals.LastUpdated.Get().getTime() !== lastUpdated.getTime();
+            })
+            .catch(function(err) {
+                utility.LogError(moduleName, 'checkForUpdates', err);
+                return $q.reject(err);
             });
 	};
 
@@ -95,16 +94,16 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                     };
                     
                     return exportData;
+                })
+                .catch(function(err) {
+                    utility.LogError(moduleName, 'exportBookmarks', err);
+                    return $q.reject(err);
                 });
         }
         else {
             // Otherwise, export synced data
             return api.GetBookmarks()
                 .then(function(data) {
-                    if (!data || !data.lastUpdated) {
-                        return $q.reject({ code: globals.ErrorCodes.NoDataFound });
-                    }
-                    
                     // Decrypt bookmarks
                     return utility.DecryptData(data.bookmarks);
                 })
@@ -119,6 +118,10 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                     };
                     
                     return exportData;
+                })
+                .catch(function(err) {
+                    utility.LogError(moduleName, 'exportBookmarks', err);
+                    return $q.reject(err);
                 });
         }
 	};
@@ -178,11 +181,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                     return;
                 }
                 
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'getLookahead', globals.LogType.Warning,
-                    err.stack);
-                
+                utility.LogError(moduleName, 'getLookahead', err);
                 deferred.reject(err);
             });
         
@@ -208,6 +207,10 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 var encryptedBookmarks = globals.Cache.Bookmarks.Get();
                 var sizeInBytes = (new TextEncoder('utf-8')).encode(encryptedBookmarks).byteLength;
                 return sizeInBytes;
+            })
+            .catch(function(err) {
+                utility.LogError(moduleName, 'getSyncSize', err);
+                return $q.reject(err);
             });
     };
 
@@ -238,6 +241,10 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
 
                         return $q.resolve(result);
                     });
+            })
+            .catch(function(err) {
+                utility.LogError(moduleName, 'isCurrentPageABookmark', err);
+                return $q.reject(err);
             });
     };
     
@@ -284,6 +291,10 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                     .value();
                 
                 return results;
+            })
+            .catch(function(err) {
+                utility.LogError(moduleName, 'searchBookmarks', err);
+                return $q.reject(err);
             });
     };
 	
@@ -293,6 +304,10 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             .then(function() {
                 // Populate new bookmarks
                 return platform.Bookmarks.Populate(bookmarks);
+            })
+            .catch(function(err) {
+                utility.LogError(moduleName, 'setBookmarks', err);
+                return $q.reject(err);
             });
     };
 
@@ -353,10 +368,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             // Get synced bookmarks
             getEncryptedBookmarks = api.GetBookmarks(canceller)
                 .then(function(data) {
-                    if (!data || !data.lastUpdated) {
-                        return $q.reject({ code: globals.ErrorCodes.NoDataFound });
-                    }
-
                     return data.bookmarks;
                 });
         }
@@ -375,11 +386,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 return bookmarks;
             })
             .catch(function(err) {
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'getCachedBookmarks', globals.LogType.Warning,
-                    'Error decrypting bookmarks; ' + err.stack);
-                
+                utility.LogError(moduleName, 'getCachedBookmarks', err);
                 return $q.reject({ code: globals.ErrorCodes.InvalidData });
             });
     };
@@ -680,7 +687,8 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                         return;
                     }
                 }
-                    
+                
+                utility.LogError(moduleName, 'sync', err);
                 deferredToResolve.reject(err);
             })
             .finally(function() {
@@ -709,10 +717,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 case globals.UpdateType.Create:
                     syncPromise = api.GetBookmarks()
                         .then(function(data) {
-                            if (!data || !data.lastUpdated) {
-                                return $q.reject({ code: globals.ErrorCodes.NoDataFound });
-                            }
-
                             // Check if data is out of sync
                             var lastUpdated = new Date(data.lastUpdated);
                             if (globals.LastUpdated.Get().getTime() !== lastUpdated.getTime()) {
@@ -742,10 +746,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 case globals.UpdateType.Update:
                     syncPromise = api.GetBookmarks()
                         .then(function(data) {
-                            if (!data || !data.lastUpdated) {
-                                return $q.reject({ code: globals.ErrorCodes.NoDataFound });
-                            }
-
                             // Check if data is out of sync
                             var lastUpdated = new Date(data.lastUpdated);
                             if (globals.LastUpdated.Get().getTime() !== lastUpdated.getTime()) {
@@ -769,10 +769,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 case globals.UpdateType.Delete:
                     syncPromise = api.GetBookmarks()
                         .then(function(data) {
-                            if (!data || !data.lastUpdated) {
-                                return $q.reject({ code: globals.ErrorCodes.NoDataFound });
-                            }
-
                             // Check if data is out of sync
                             var lastUpdated = new Date(data.lastUpdated);
                             if (globals.LastUpdated.Get().getTime() !== lastUpdated.getTime()) {
@@ -818,15 +814,13 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 ]);
             })
             .then(function(data) {
-                if (!data || !data[0] || !data[0].lastUpdated) {
-                    return $q.reject({ code: globals.ErrorCodes.NoDataFound });
-                }
-                
-                // Update cached last updated date
+                // Update cached last updated date and return decrypted bookmarks
                 globals.LastUpdated.Set(data[0].lastUpdated);
-
-                // Return decrypted bookmarks
                 return bookmarks;
+            })
+            .catch(function(err) {
+                utility.LogError(moduleName, 'sync_handleBoth', err);
+                return $q.reject(err);
             });
     };
     
@@ -847,10 +841,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         // Get synced bookmarks
         return api.GetBookmarks()
             .then(function(data) {
-                if (!data || !data.lastUpdated) {
-                    return $q.reject({ code: globals.ErrorCodes.NoDataFound });
-                }
-
                 encryptedBookmarks = data.bookmarks;
                 lastUpdated = data.lastUpdated;
                 
@@ -887,6 +877,10 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
 
                 // Return decrypted bookmarks
                 return bookmarks;
+            })
+            .catch(function(err) {
+                utility.LogError(moduleName, 'sync_handlePull', err);
+                return $q.reject(err);
             });
     };
     
@@ -912,10 +906,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             // Get synced bookmarks and decrypt
             getBookmarks = api.GetBookmarks()
                 .then(function(data) {
-                    if (!data || !data.lastUpdated) {
-                        return $q.reject({ code: globals.ErrorCodes.NoDataFound });
-                    }
-
                     // Check if data is out of sync
                     var lastUpdated = new Date(data.lastUpdated);
                     if (globals.LastUpdated.Get().getTime() !== lastUpdated.getTime()) {
@@ -974,15 +964,15 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 return api.UpdateBookmarks(encryptedBookmarks);
             })
             .then(function(data) {
-                if (!data.lastUpdated) {
-                    return $q.reject({ code: globals.ErrorCodes.NoDataFound });
-                }
-            
                 // Update cached last updated date
                 globals.LastUpdated.Set(data.lastUpdated);
 
                 // Return decrypted bookmarks
                 return bookmarks;
+            })
+            .catch(function(err) {
+                utility.LogError(moduleName, 'sync_handlePush', err);
+                return $q.reject(err);
             });
     };
     
@@ -998,10 +988,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         // Get synced bookmarks and decrypt
         return api.GetBookmarks()
             .then(function(data) {
-                if (!data) {
-                    return $q.reject({ code: globals.ErrorCodes.NoDataFound });
-                }
-
                 // Decrypt bookmarks
                 return utility.DecryptData(data.bookmarks);
             })
@@ -1029,12 +1015,12 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 return api.UpdateBookmarks(encryptedBookmarks, true);
             })
             .then(function(data) {
-                if (!data.lastUpdated) {
-                    return $q.reject({ code: globals.ErrorCodes.NoDataFound });
-                }
-            
                 // Update cached last updated date
                 globals.LastUpdated.Set(data.lastUpdated);
+            })
+            .catch(function(err) {
+                utility.LogError(moduleName, 'sync_handleUpgrade', err);
+                return $q.reject(err);
             });
     };
 

@@ -188,7 +188,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			
 			// Log error
 			utility.LogMessage(
-				moduleName, 'handleImportBegan', globals.LogType.Warning,
+				moduleName, 'handleImportBegan', globals.LogType.Info,
 				'Bookmarks import started.');
 		}
 	};
@@ -199,7 +199,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 			
 			// Log error
 			utility.LogMessage(
-				moduleName, 'handleImportEnded', globals.LogType.Warning,
+				moduleName, 'handleImportEnded', globals.LogType.Info,
 				'Bookmarks import ended.');
 		}
 	};

@@ -1686,7 +1686,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             })
             .catch(function(err) {
                 // Clear cached data
-                vm.settings.secret = null;
                 globals.Password.Set(null);
                 globals.SyncVersion.Set(null);
                 globals.Cache.Bookmarks.Set(null);
