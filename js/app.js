@@ -202,7 +202,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             },
             syncBookmarksToolbar: function(value) {
                 return arguments.length ? 
-                    globals.SyncBookmarksToolbar.Set(value) : 
+                    syncPanel_SyncBookmarksToolbar_Click(value) : 
                     globals.SyncBookmarksToolbar.Get();
             },
 			secret: null,
@@ -1806,14 +1806,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
     };
     
-    var syncPanel_SyncBookmarksToolbar_Click = function() {
-        // If sync not enabled or user just clicked to disable toolbar sync, return
-        if (!globals.SyncEnabled.Get() || !globals.SyncBookmarksToolbar.Get()) {
+    var syncPanel_SyncBookmarksToolbar_Click = function(value) {
+        // If sync not enabled or user just clicked to disable toolbar sync, update stored value and return
+        if (!globals.SyncEnabled.Get() || !value) {
+            globals.SyncBookmarksToolbar.Set(value);
             return;
         }
         
         // Otherwise, display sync confirmation
-        globals.SyncBookmarksToolbar.Set(false);
         vm.settings.displaySyncBookmarksToolbarConfirmation = true;
         $timeout(function() {
             document.querySelector('.btn-confirm-sync-toolbar').focus();
