@@ -1,6 +1,7 @@
 $font-roboto:        		'Roboto Condensed';
 $font-roboto-path:  		'../fonts/roboto/';
-$font-stack:        		$font-roboto, sans-serif;
+$font-stack-regular:        $font-roboto, sans-serif;
+$font-stack-code:        	Consolas, Menlo, 'Courier New', monospace;
 $fa-font-path:              '../fonts/font-awesome';
 
 $colour-bg1:				#01AB8A;

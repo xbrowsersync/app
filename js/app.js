@@ -996,6 +996,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
                     // Update current bookmark status
                     setBookmarkStatus();
+
+                    // Updated cached decrypted bookmarks
+                    bookmarks.UpdateCache(response.bookmarks);
                     
                     vm.settings.displayRestoreForm = false;
                     vm.settings.displayRestoreConfirmation = false;

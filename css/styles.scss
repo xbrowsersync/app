@@ -32,7 +32,7 @@
 }
 
 body {
-    font-family: $font-stack;
+    font-family: $font-stack-regular;
     color: $colour-text1;
     font-size: 14px;
     line-height: 1.25em;
@@ -1080,7 +1080,7 @@ body {
                 padding-left: 1.2em;
 
                 li {
-                    font-family: 'courier new';
+                    font-family: $font-stack-code;
                     font-size: 0.85em;
                 }
             }
@@ -1096,7 +1096,7 @@ body {
                 height: 12em!important;
                 margin-bottom: 15px;
                 border: 1px solid $colour-text2!important;
-                font-family: "courier new", sans-serif;
+                font-family: $font-stack-code;
                 font-size: 0.8em!important;
             }
 
