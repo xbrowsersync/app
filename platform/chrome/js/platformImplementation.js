@@ -1100,29 +1100,25 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				var localContainers = results.filter(function(x) { return x; });
 				
 				// Reorder each local container to top of parent
-				return localContainers.reduce(function(chain, localContainer, index) {
-					return chain.then(function(chainResult) {
-						var promise = $q(function(resolve, reject) {
-							try {
-								chrome.bookmarks.move(
-									localContainer.id,
-									{
-										index: index,
-										parentId: localContainer.parentId
-									}, 
-									function(results) {
-										resolve();
-									}
-								);
-							}
-							catch (ex) {
-								reject(ex);
-							}
-						});
-						
-						return chainResult.concat([ promise ]);
+				return $q.all(localContainers.map(function(localContainer, index) {
+					return $q(function(resolve, reject) {
+						try {
+							chrome.bookmarks.move(
+								localContainer.id,
+								{
+									index: index,
+									parentId: localContainer.parentId
+								}, 
+								function(results) {
+									resolve();
+								}
+							);
+						}
+						catch (ex) {
+							reject(ex);
+						}
 					});
-				}, $q.resolve([]));
+				}));
 			})
 	};
 

@@ -297,19 +297,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 return $q.reject(err);
             });
     };
-	
-	var setBookmarks = function(bookmarks) {
-		// Clear current bookmarks
-		return platform.Bookmarks.Clear()
-            .then(function() {
-                // Populate new bookmarks
-                return platform.Bookmarks.Populate(bookmarks);
-            })
-            .catch(function(err) {
-                utility.LogError(moduleName, 'setBookmarks', err);
-                return $q.reject(err);
-            });
-    };
 
     var updateCache = function(bookmarks, encryptedBookmarks) {
         if (bookmarks) {
@@ -352,6 +339,16 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
 /* ------------------------------------------------------------------------------------
  * Private functions
  * ------------------------------------------------------------------------------------ */
+
+    var cleanWords = function (wordsToClean) {
+        if (!wordsToClean) {
+            return;
+        }
+
+        var cleanWords = wordsToClean.toLowerCase().replace(/['"]/g, '');
+        var cleanWordsArr = _.compact(cleanWords.split(/\s/)); 
+        return cleanWordsArr;
+    };
     
     var getCachedBookmarks = function(canceller) {
         var encryptedBookmarks, getEncryptedBookmarks;
@@ -455,16 +452,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         }
 
         return _.difference(bookmarks, removeArr);
-    };
-
-    var cleanWords = function (wordsToClean) {
-        if (!wordsToClean) {
-            return;
-        }
-
-        var cleanWords = wordsToClean.toLowerCase().replace(/['"]/g, '');
-        var cleanWordsArr = _.compact(cleanWords.split(/\s/)); 
-        return cleanWordsArr;
     };
 	
 	var searchBookmarksByKeywords = function (bookmarksToSearch, keywords, results) {
@@ -593,6 +580,19 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         });
         
         return results;
+    };
+	
+	var setBookmarks = function(bookmarks) {
+		// Clear current bookmarks
+		return platform.Bookmarks.Clear()
+            .then(function() {
+                // Populate new bookmarks
+                return platform.Bookmarks.Populate(bookmarks);
+            })
+            .catch(function(err) {
+                utility.LogError(moduleName, 'setBookmarks', err);
+                return $q.reject(err);
+            });
     };
     
     var sync = function(deferredToResolve) {
@@ -1058,7 +1058,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         IncludesCurrentPage: isCurrentPageABookmark,
 		IsBookmarkContainer: isBookmarkContainer,
         Search: searchBookmarks,
-        Set: setBookmarks,
 		Sync: queueSync,
         SyncSize: getSyncSize,
         UpdateCache: updateCache,

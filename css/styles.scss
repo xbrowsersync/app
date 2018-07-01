@@ -236,7 +236,7 @@ body {
             position: absolute;
             top: -30em;
             z-index: 0;
-            @include animation(animation-scroll 150s linear infinite);
+            @include animation(animation-scroll 100s linear infinite);
         }
     }
 

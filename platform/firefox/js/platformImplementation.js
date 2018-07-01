@@ -748,7 +748,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				var activeTab = tabs[0];
 				
 				// Open url in current tab if new
-				if (!!activeTab.url && activeTab.url.startsWith('chrome://newtab')) {
+				if (!!activeTab.url && activeTab.url.startsWith('about:newtab')) {
 					
 					browser.tabs.update(activeTab.id, { url: url }, function() {
 						window.close();
@@ -997,22 +997,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		if (!title) {
 			return $q.resolve();
 		}
-		
-		return $q(function(resolve, reject) {
-			try {
-				chrome.bookmarks.search({ title: title }, function(results) {
-					var localBookmark;
-					if (results.length > 0) {
-						localBookmark = results.shift();
-					}
-					
-					resolve(localBookmark);
-				});
-			}
-			catch (ex) {
-				reject(ex);
-			}
-		});
+
+		return browser.bookmarks.search({ title: title })
+			.then(function(results) {
+				var localBookmark;
+				if (results.length > 0) {
+					localBookmark = results.shift();
+				}
+				
+				return localBookmark;
+			});
 	};
 
 	var findXBookmarkUsingLocalBookmarkId = function(localBookmarkId, xBookmarks) {
@@ -1147,29 +1141,15 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				var localContainers = results.filter(function(x) { return x; });
 				
 				// Reorder each local container to top of parent
-				return localContainers.reduce(function(chain, localContainer, index) {
-					return chain.then(function(chainResult) {
-						var promise = $q(function(resolve, reject) {
-							try {
-								chrome.bookmarks.move(
-									localContainer.id,
-									{
-										index: index,
-										parentId: localContainer.parentId
-									}, 
-									function(results) {
-										resolve();
-									}
-								);
-							}
-							catch (ex) {
-								reject(ex);
-							}
-						});
-						
-						return chainResult.concat([ promise ]);
-					});
-				}, $q.resolve([]));
+				return $q.all(localContainers.map(function(localContainer, index) {
+					return browser.bookmarks.move(
+						localContainer.id,
+						{
+							index: index,
+							parentId: localContainer.parentId
+						}
+					);
+				}));
 			})
 	};
 

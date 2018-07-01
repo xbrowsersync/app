@@ -30,12 +30,6 @@ body {
         @extend .search-view;
         height: $window-height;
     }
-    
-    .background {
-        .background-img {
-            @include animation(none);
-        }
-    }
 
     .container {
         height: $window-height;

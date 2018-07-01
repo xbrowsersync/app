@@ -34,10 +34,6 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		browser.bookmarks.onChanged.addListener(changeBookmark);
 		
 		browser.bookmarks.onMoved.addListener(moveBookmark);
-		
-		browser.bookmarks.onImportBegan.addListener(handleImportBegan);
-
-		browser.bookmarks.onImportEnded.addListener(handleImportEnded);
 	};
 
 
@@ -182,28 +178,6 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 		}
 	};
 	
-	var handleImportBegan = function() {
-		if (!!globals.SyncEnabled.Get()) {
-			globals.DisableEventListeners.Set(true);
-			
-			// Log error
-			utility.LogMessage(
-				moduleName, 'handleImportBegan', globals.LogType.Info,
-				'Bookmarks import started.');
-		}
-	};
-	
-	var handleImportEnded = function() {
-		if (!!globals.SyncEnabled.Get()) {
-			globals.DisableEventListeners.Set(false);
-			
-			// Log error
-			utility.LogMessage(
-				moduleName, 'handleImportEnded', globals.LogType.Info,
-				'Bookmarks import ended.');
-		}
-	};
-	
 	var handleMessage = function(msg) {
 		switch (msg.command) {
 			// Trigger bookmarks sync
@@ -328,7 +302,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 	};
 	
 	var restoreBookmarks = function(restoreData) {
-		$q(function(resolve, reject) {
+		$q(function(resolve) {
 			// Upgrade containers to use current container names
 			var upgradedBookmarks = bookmarks.UpgradeContainers(restoreData.bookmarks || []);
 
@@ -343,8 +317,8 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 				resolve(upgradedBookmarks);
 			}
 		})
-			.then(function(bookmarks) {
-				restoreData.bookmarks = bookmarks;
+			.then(function(bookmarksToRestore) {
+				restoreData.bookmarks = bookmarksToRestore;
 				syncBookmarks(restoreData, globals.Commands.RestoreBookmarks);				
 			});
 	};

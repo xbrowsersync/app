@@ -1197,6 +1197,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		// Set ID and client secret if sync not enabled
         if (!globals.SyncEnabled.Get()) {
             globals.Password.Set(null);
+            vm.settings.secret = null;
             vm.settings.secretComplexity = {};
             
             if (!!data.xBrowserSync.id) {
@@ -1714,6 +1715,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         
         // Clear cached data
         vm.settings.secret = null;
+        vm.settings.secretComplexity = {};
         globals.Password.Set(null);
         globals.SyncVersion.Set(null);
         globals.Cache.Bookmarks.Set(null);
@@ -1779,6 +1781,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         globals.Id.Set(null);
         globals.Password.Set(null);
         vm.settings.secret = null;
+        vm.settings.secretComplexity = {};
 
         if (!utility.IsMobilePlatform(vm.platformName)) {
             $timeout(function() {
@@ -1885,6 +1888,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Remove saved client secret and ID
         globals.Id.Set(null);
         globals.Password.Set(null);
+        vm.settings.secret = null;
         vm.settings.secretComplexity = {};
         
         // Update service status
