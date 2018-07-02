@@ -281,6 +281,9 @@
 	"settings_Service_Status_NoNewSyncs" : {
 		"message":  "Impossible d'accepter les nouvelles synchronisations"
 	},
+	"settings_Service_Status_Error": {
+		"message":  "Error"
+	},
 	"settings_Service_Status_Online" : {
 		"message":  "Online"
 	},
@@ -304,6 +307,15 @@
 	},
 	"settings_Service_UpdateForm_Confirm_Message": {
 		"message":  "<p>Après le changement de service, la synchronisation sera désactivée et vous devrez créer une nouvelle synchronisation.</p><p>Si vous avez déjà créer une synchronisation avec ce service et voulez récupérer vos données, utilisez l'ID xBrowserSync utilisé à l'époque.</p><p>OK pour continuer ?</p>"
+	},
+	"settings_Service_UpdateForm_InvalidService_Label": {
+		"message":  "Not a valid xBrowserSync service."
+	},
+	"settings_Service_UpdateForm_ServiceVersionNotSupported_Label": {
+		"message":  "The xBrowserSync service is running an API version that is not supported by this app version."
+	},
+	"settings_Service_UpdateForm_ServiceOffline_Label": {
+		"message":  "The xBrowserSync service is offline."
 	},
 	"settings_BackupRestore_Title" : {
 		"message":  "Sauvegarder et restaurer"
@@ -535,6 +547,18 @@
 	},
 	"error_OutOfSync_Message" : {
 		"message":  "Les données locales n'étaient pas synchronisées mais ont été mises à jour. Pourtant votre dernière modification n'a pas été synchronisée donc vous devrez refaire cette modification."
+	},
+	"error_ApiInvalid_Title" : {
+		"message":  "Invalid xBrowserSync service"
+	},
+	"error_ApiInvalid_Message" : {
+		"message":  "The selected service URL is not pointing to a valid xBrowserSync service."
+	},
+	"error_ApiVersionNotSupported_Title" : {
+		"message":  "Service not supported"
+	},
+	"error_ApiVersionNotSupported_Message" : {
+		"message":  "The xBrowserSync service is running an API version that is not supported by this app version."
 	},
 	"error_ContainerChanged_Title" : {
 		"message": "Le dossier xBrowserSync a été modifié"

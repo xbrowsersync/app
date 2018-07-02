@@ -846,7 +846,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                                 moduleName, 'changeView', globals.LogType.Warning,
                                 err.stack);
                             
-                            vm.settings.service.status = globals.ServiceStatus.Offline;
+                            if (err && err.code === globals.ErrorCodes.ApiOffline) {
+                                vm.settings.service.status = globals.ServiceStatus.Offline;
+                            }
+                            else {
+                                vm.settings.service.status = globals.ServiceStatus.Error;
+                            }
                         })
                         .finally(function() {
                             deferred.resolve(view);
@@ -1638,52 +1643,48 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.sync.displaySyncConfirmation = false;
         var loadingTimeout = platform.Interface.Loading.Show();
         
-        // Clear the current cached password
-        globals.Password.Set(null);
-        
-        var getSyncId = $q(function(resolve, reject) {
-            // If a sync ID has not been supplied, get a new one
-            if (!globals.Id.Get()) {
-                // Set sync type for create new sync
-                syncType = globals.SyncType.Push;
+        // Check service status
+        api.CheckServiceStatus()
+            .then(function() {
+                // Clear the current cached password
+                globals.Password.Set(null);
                 
-                // Get new sync ID
-                api.CreateNewSync()
-                    .then(function(newSync) {
-                        // Add sync data to cache and return
-                        globals.Id.Set(newSync.id);
-                        globals.SyncVersion.Set(newSync.version);
-                        resolve(newSync.id);
-                    })
-                    .catch(reject);
-            }
-            else {
-                // Set sync type for retrieve existing sync
-                syncType = globals.SyncType.Pull;
+                // If a sync ID has not been supplied, get a new one
+                if (!globals.Id.Get()) {
+                    // Set sync type for create new sync
+                    syncType = globals.SyncType.Push;
+                    
+                    // Get new sync ID
+                    return api.CreateNewSync()
+                        .then(function(newSync) {
+                            // Add sync data to cache and return
+                            globals.Id.Set(newSync.id);
+                            globals.SyncVersion.Set(newSync.version);
+                            return newSync.id;
+                        });
+                }
+                else {
+                    // Set sync type for retrieve existing sync
+                    syncType = globals.SyncType.Pull;
 
-                // Retrieve sync version for existing id
-                api.GetBookmarksVersion()
-                    .then(function(response) {
-                        // If no sync version is set, upgrade the sync
-                        if (!response.version) {
-                            syncType = globals.SyncType.Upgrade;
-                        }
+                    // Retrieve sync version for existing id
+                    return api.GetBookmarksVersion()
+                        .then(function(response) {
+                            // If no sync version is set, upgrade the sync
+                            if (!response.version) {
+                                syncType = globals.SyncType.Upgrade;
+                            }
 
-                        return response.version;
-                    })
-                    .then(function(syncVersion) {
-                        // Add sync version to cache and return current sync ID
-                        globals.SyncVersion.Set(syncVersion);
-                        resolve(globals.Id.Get());
-                    })
-                    .catch(reject);
-            }
-        })
-        
-        getSyncId.then(function(syncId) {
-            // Generate a password hash, cache it then queue the sync
-            return utility.GetPasswordHash(vm.settings.secret, syncId);
-        })
+                            // Add sync version to cache and return current sync ID
+                            globals.SyncVersion.Set(response.version);
+                            resolve(globals.Id.Get());
+                        });
+                }
+            })
+            .then(function(syncId) {
+                // Generate a password hash, cache it then queue the sync
+                return utility.GetPasswordHash(vm.settings.secret, syncId);
+            })
             .then(function(passwordHash) {
                 globals.Password.Set(passwordHash);
                 return queueSync(syncType);
@@ -1845,30 +1846,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         platform.Sync(vm.sync.asyncChannel, syncData, globals.Commands.NoCallback);
     };
 
-    var updateServiceUrlForm_CheckServiceUrl = function(url, callback) {
-        url = url.replace(/\/$/, '');
-        
-        // Display loading overlay
-        var loadingTimeout = platform.Interface.Loading.Show('checkingNewServiceUrl');
-
-        return api.CheckServiceStatus(url)
-            .then(callback)
-            .catch(function(err) {
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'updateServiceUrlForm_CheckServiceUrl', globals.LogType.Warning,
-                    err.stack);
-                
-                // Set form as invalid and focus on url field
-                vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', false);
-                vm.updateServiceUrlForm.newServiceUrl.$setPristine()
-                document.querySelector('[name=newServiceUrl]').focus();
-            })
-            .finally(function() {
-                platform.Interface.Loading.Hide('checkingNewServiceUrl', loadingTimeout);
-            });
-    };
-
     var updateServiceUrlForm_Cancel_Click = function() {
         // Hide form and scroll to top of section
         vm.settings.displayUpdateServiceUrlForm = false;
@@ -1915,60 +1892,98 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.settings.displayUpdateServiceUrlForm = false;
         vm.settings.service.newServiceUrl = vm.settings.service.url();
         vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
-        vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidServiceUrl', true);
+        vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceOffline', true);
+        vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', true);
     };
     
     var updateServiceUrlForm_Display_Click = function() {
         // Reset form
         vm.updateServiceUrlForm.$setPristine();
-        vm.updateServiceUrlForm.$setUntouched();
         vm.settings.service.newServiceUrl = vm.settings.service.url();
         vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
-        vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidServiceUrl', true);
+        vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceOffline', true);
+        vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', true);
         
         // Display update form panel
         vm.settings.displayUpdateServiceUrlForm = true;
-        
-        $timeout(function() {
-            // Focus on url field
-            document.querySelector('input[name="newServiceUrl"]').focus();            
-        }, 100);
+
+        // Validate service url
+        updateServiceUrlForm_ValidateServiceUrl()
+            .finally(function() {
+                // Focus on url field
+                document.querySelector('input[name="newServiceUrl"]').focus();
+            });
     };
 
     var updateServiceUrlForm_NewServiceUrl_Change = function(event) {
-        // Clear invalid service error
-        vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
-
-        // Check for a valid service url
-        vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidServiceUrl', globals.URL.Regex.test(vm.settings.service.newServiceUrl));
+        // Reset form if field is invalid
+        if (vm.updateServiceUrlForm.newServiceUrl.$invalid) {
+            vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
+            vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceOffline', true);
+            vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', true);
+        }
     };
 	
 	var updateServiceUrlForm_Update_Click = function() {
-        // Clear invalid service error
-        vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
-        
         // Check for protocol
         if (!!vm.settings.service.newServiceUrl && !!vm.settings.service.newServiceUrl.trim() && !globals.URL.ProtocolRegex.test(vm.settings.service.newServiceUrl)) {
             vm.settings.service.newServiceUrl = 'https://' + vm.settings.service.newServiceUrl;
         }
 
-        // Check service url
-        updateServiceUrlForm_CheckServiceUrl(vm.settings.service.newServiceUrl, function(response) {
-            if (!!globals.SyncEnabled.Get()) {
-                // Display confirmation panel
-                vm.settings.displayUpdateServiceUrlForm = false;
-                vm.settings.displayUpdateServiceUrlConfirmation = true;
-
-                if (!utility.IsMobilePlatform(vm.platformName)) {
-                    $timeout(function() {
-                        document.querySelector('.btn-confirm-update-service-url').focus();
-                    });
+        // Validate service url
+        return updateServiceUrlForm_ValidateServiceUrl()
+            .then(function(serviceInfo) {
+                if (!!globals.SyncEnabled.Get()) {
+                    // Display confirmation panel
+                    vm.settings.displayUpdateServiceUrlForm = false;
+                    vm.settings.displayUpdateServiceUrlConfirmation = true;
+    
+                    if (!utility.IsMobilePlatform(vm.platformName)) {
+                        $timeout(function() {
+                            document.querySelector('.btn-confirm-update-service-url').focus();
+                        });
+                    }
                 }
-            }
-            else {
-                updateServiceUrlForm_Confirm_Click();
-            }
-        });
+                else {
+                    updateServiceUrlForm_Confirm_Click();
+                }
+            });
+    };
+
+    var updateServiceUrlForm_ValidateServiceUrl = function() {
+        // Display loading overlay
+        var loadingTimeout = platform.Interface.Loading.Show('checkingNewServiceUrl');
+        
+        // Check service url status
+        var url = vm.settings.service.newServiceUrl.replace(/\/$/, '');
+        return api.CheckServiceStatus(url)
+            .catch(function(err) {
+                // Log error
+                utility.LogMessage(
+                    moduleName, 'updateServiceUrlForm_Update_Click', globals.LogType.Warning,
+                    err.stack);
+                
+                if (err && err.code != null) {
+                    switch (err.code) {
+                        case globals.ErrorCodes.ApiOffline:
+                            vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceOffline', false);
+                            break;
+                        case globals.ErrorCodes.ApiVersionNotSupported:
+                            vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', false);
+                            break;
+                        default:
+                            vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', false);                            
+                    }
+                }
+                
+                // Focus on url field
+                document.querySelector('input[name=newServiceUrl]').focus();
+
+                return $q.reject(err);
+            })
+            .finally(function() {
+                platform.Interface.Loading.Hide('checkingNewServiceUrl', loadingTimeout);
+            });
     };
 	
 	// Call constructor

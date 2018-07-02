@@ -362,10 +362,12 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks
 	};
 	
 	var syncBookmarks = function(syncData, command) {
-		var networkPreviouslyDisconnected = globals.Network.Disconnected.Get();
-		
-		// Start sync
-		return bookmarks.Sync(syncData)
+		// Check service status
+		return api.CheckServiceStatus()
+			.then(function() {
+				// Start sync
+				return bookmarks.Sync(syncData);
+			})
 			.then(function(bookmarks, initialSyncFailed) {
 				// Reset network disconnected flag
 				globals.Network.Disconnected.Set(false);

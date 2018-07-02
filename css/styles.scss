@@ -338,6 +338,13 @@ body {
                 opacity: 0.7;
             }
         }
+
+        .validation {
+            color: $colour-danger!important;
+            font-size: 0.9em;
+            line-height: 1.2em;
+            margin-top: -10px;
+        }
     }
     
     .header-panel {
@@ -1235,14 +1242,6 @@ body {
                 width: 100%;
                 margin: 15px 0;
                 border: 1px solid $colour-text2!important;
-
-                &.ng-invalid {
-                    color: $colour-danger;
-                    @include placeholder {
-                        color: $colour-danger;
-                        opacity: 0.7;
-                    }
-                }
             }
         }
     }

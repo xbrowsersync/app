@@ -32,16 +32,27 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 				// Reset network disconnected flag
 				globals.Network.Disconnected.Set(false);
 				
-				// Check response data is valid before returning
 				var data = response.data;
-				if (!data || data.status === null) {
-					return $q.reject({ code: globals.ErrorCodes.NoStatus });
+				
+				// Check service is a valid xBrowserSync API
+				if (!data || data.status === null || data.version === null) {
+					return $q.reject({ code: globals.ErrorCodes.ApiInvalid });
 				}
+
+				// Check service is online
+                if (data.status === globals.ServiceStatus.Offline) {
+                    return $q.reject({ code: globals.ErrorCodes.ApiOffline });
+                }
+
+                // Check service version is supported by this client
+                if (compareVersions(data.version, globals.ApiVersion) < 0) {
+                    return $q.reject({ code: globals.ErrorCodes.ApiVersionNotSupported });
+                }
 
 				return data;
 			})
             .catch(function(err) {
-                utility.LogError(moduleName, 'getServiceInformation', err);
+                utility.LogError(moduleName, 'checkServiceStatus', err);
 				return $q.reject(err.status === undefined ?
 					err : getErrorCodeFromHttpError(err));
             });

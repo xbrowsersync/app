@@ -395,6 +395,11 @@
         "graceful-readlink": ">= 1.0.0"
       }
     },
+    "compare-versions": {
+      "version": "3.3.0",
+      "resolved": "https://registry.npmjs.org/compare-versions/-/compare-versions-3.3.0.tgz",
+      "integrity": "sha512-MAAAIOdi2s4Gl6rZ76PNcUa9IOYB+5ICdT41o5uMRf09aEu/F9RK+qhe8RjXNPwcTjGV7KU7h2P/fljThFVqyQ=="
+    },
     "concat-map": {
       "version": "0.0.1",
       "resolved": "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz",

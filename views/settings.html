@@ -83,6 +83,7 @@
                 <div class="form-group">
                     <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Label) }}</label>
                     <div class="form-control">
+                        <span class="text-danger animate-fade" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Error">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Error) }}</span>
                         <span class="text-success animate-fade" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Online">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Online) }}</span>
                         <span class="text-danger animate-fade" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Offline">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Offline) }}</span>
                         <span class="text-warning animate-fade" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_NoNewSyncs) }}</span>
@@ -117,12 +118,17 @@
                 <div class="animate-fade update-service-url confirm" data-ng-show="vm.settings.displayUpdateServiceUrlForm || vm.settings.displayUpdateServiceUrlConfirmation">
                     <form name="vm.updateServiceUrlForm" data-ng-show="!vm.settings.displayUpdateServiceUrlConfirmation" novalidate>
                         <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Message)"></p>
-                        <div class="form-group" data-ng-class="{ true: 'has-error' }[vm.updateServiceUrlForm.newServiceUrl.$dirty && vm.updateServiceUrlForm.newServiceUrl.$invalid]">
+                        <div class="form-group" data-ng-class="{ 'has-error': vm.updateServiceUrlForm.newServiceUrl.$invalid }">
                             <input name="newServiceUrl" class="form-control" data-ng-model="vm.settings.service.newServiceUrl" data-ng-change="vm.events.updateServiceUrlForm_NewServiceUrl_Change()"
-                                    placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Field_Description) }}" maxlength="128" autocapitalize="off" autocomplete="off" autocorrect="off" tabindex="10" required />
+                                   placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Field_Description) }}" maxlength="128" autocapitalize="off" autocomplete="off" autocorrect="off" tabindex="10" required />
+                            <div class="validation" data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$invalid">
+                                <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.InvalidService">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_InvalidService_Label) }}</span>
+                                <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.ServiceOffline">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_ServiceOffline_Label) }}</span>
+                                <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.ServiceVersionNotSupported">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_ServiceVersionNotSupported_Label) }}</span>
+                            </div>
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-default" data-ng-disabled="!vm.updateServiceUrlForm.newServiceUrl.$dirty || !!vm.updateServiceUrlForm.newServiceUrl.$error.InvalidServiceUrl" 
+                            <button type="submit" class="btn btn-default" data-ng-disabled="!vm.updateServiceUrlForm.newServiceUrl.$dirty || vm.updateServiceUrlForm.newServiceUrl.$invalid" 
                                     data-ng-click="vm.events.updateServiceUrlForm_Update_Click()" tabindex="11">
                                 {{ vm.platform.GetConstant(vm.globals.Constants.Button_Update_Label) }}
                             </button>

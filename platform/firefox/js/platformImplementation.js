@@ -512,6 +512,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		}
 		
 		switch (id) {
+			// Checking updated service url, wait a moment before displaying loading overlay
+			case 'checkingNewServiceUrl':
+				timeout = $timeout(function() {
+					vm.working = true;
+				}, 100);
+				break;
 			// Loading bookmark metadata, wait a moment before displaying loading overlay
 			case 'retrievingMetadata':
 				timeout = $timeout(function() {
