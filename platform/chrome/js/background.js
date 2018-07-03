@@ -7,7 +7,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  *              listens for sync requests.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Background = function($q, platform, globals, utility, bookmarks) {
+xBrowserSync.App.Background = function($q, platform, globals, utility, api, bookmarks) {
     'use strict';
 	
 	var asyncChannel, moduleName = 'xBrowserSync.App.Background', networkErrorDetected = false, checkForUpdatesAttempts = 0, disconnectedAlertDisplayed = false;
@@ -465,5 +465,5 @@ xBrowserSync.App.PlatformImplementation.$inject = ['$http', '$interval', '$q', '
 xBrowserSync.App.ChromeBackground.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add background module
-xBrowserSync.App.Background.$inject = ['$q', 'platform', 'globals', 'utility', 'bookmarks', 'platformImplementation'];
+xBrowserSync.App.Background.$inject = ['$q', 'platform', 'globals', 'utility', 'api', 'bookmarks', 'platformImplementation'];
 xBrowserSync.App.ChromeBackground.controller('Controller', xBrowserSync.App.Background);

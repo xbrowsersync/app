@@ -1677,7 +1677,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
                             // Add sync version to cache and return current sync ID
                             globals.SyncVersion.Set(response.version);
-                            resolve(globals.Id.Get());
+                            return globals.Id.Get();
                         });
                 }
             })
