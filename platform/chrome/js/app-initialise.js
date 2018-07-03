@@ -1,5 +1,11 @@
 // Initialise the angular app
-xBrowserSync.App.UI = angular.module('xBrowserSync.App.UI', ['ngSanitize', 'ngAnimate', 'angular-complexify', 'angular.filter', 'infinite-scroll']);
+xBrowserSync.App.UI = angular.module('xBrowserSync.App.UI', [
+    'angular-complexify', 
+    'angular.filter', 
+    'infinite-scroll',
+    'ngAnimate',
+    'ngSanitize'
+]);
 
 // Disable debug info
 xBrowserSync.App.UI.config(['$compileProvider', function($compileProvider) {
