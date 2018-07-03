@@ -31,6 +31,14 @@
       "resolved": "https://registry.npmjs.org/angular-complexify/-/angular-complexify-0.3.7.tgz",
       "integrity": "sha1-iSR5EQY8XoOAjH8lhmewWbA7oBQ="
     },
+    "angular-filter": {
+      "version": "0.5.17",
+      "resolved": "https://registry.npmjs.org/angular-filter/-/angular-filter-0.5.17.tgz",
+      "integrity": "sha1-YMDHOA/UWHLLjxCAHP4H4VQGKTU=",
+      "requires": {
+        "angular": "*"
+      }
+    },
     "angular-hammer": {
       "version": "2.2.0",
       "resolved": "https://registry.npmjs.org/angular-hammer/-/angular-hammer-2.2.0.tgz",

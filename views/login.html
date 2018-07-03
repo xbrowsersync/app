@@ -176,26 +176,43 @@
     </div>
 </div>
 <form name="vm.syncForm" class="animate-fade" data-ng-hide="vm.sync.displaySyncConfirmation" novalidate>
-    <button type="submit" style="display:none" data-ng-click="vm.events.syncForm_Submit_Click()" tabindex="-1">Submit</button>
+    <button type="submit" class="hidden" data-ng-click="vm.events.syncForm_Submit_Click()" tabindex="-1"></button>
     <div class="login-form-new animate-fade" data-ng-show="vm.settings.displayNewSyncPanel">
-        <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
-            <label class="sr-only" for="txtPassword">{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
-            <input name="txtPassword" data-ng-model="vm.settings.secret" type="password" class="form-control" data-ng-change="vm.events.syncForm_Password_Change()"
-                data-ng-disabled="vm.sync.enabled()" maxlength="150"
-                placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_New_Description) }}" tabindex="1" />
-            <div class="progress" data-ng-hide="!vm.settings.secret">
-                <div class="progress-bar" role="progressbar" data-ng-style="{ width: (vm.settings.secretComplexity.complexity === 0) ? '100%' : vm.settings.secretComplexity.complexity + '%' }" data-ng-class="{
-                    'progress-bar-warning': vm.settings.secretComplexity.complexity > 25 && vm.settings.secretComplexity.complexity < 50,
-                    'progress-bar-success': vm.settings.secretComplexity.complexity > 50 && vm.settings.secretComplexity.complexity <= 100
-                    }">
-                </div>
+        <div class="animate-fade" data-ng-show="vm.sync.displayPasswordConfirmation">
+            <div class="form-group secret-form-group">
+                <label class="sr-only" for="txtPasswordConfirmation">{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}</label>
+                <input name="txtPasswordConfirmation" data-ng-model="vm.sync.secretConfirmation" type="password" class="form-control" maxlength="150"
+                    placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}" tabindex="2" />
             </div>
-            <div class="progress-bar-background"></div>
+            <div class="form-group buttons">
+                <button type="button" class="btn btn-default btn-new-sync" data-ng-disabled="vm.sync.secretConfirmation !== vm.sync.secret" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="3">
+                    {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
+                </button>
+                <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_NewSync_Click()" tabindex="4">
+                    {{ vm.platform.GetConstant(vm.globals.Constants.Button_Back_Label) }}
+                </button>
+            </div>
         </div>
-        <div class="form-group text-center">
-            <button type="button" class="btn btn-default btn-new-sync" data-ng-disabled="!vm.settings.secret || !vm.settings.secretComplexity.valid" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
-                {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
-            </button>
+        <div class="animate-fade" data-ng-hide="vm.sync.displayPasswordConfirmation">
+            <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
+                <label class="sr-only" for="txtPassword">{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
+                <input name="txtPassword" data-ng-model="vm.sync.secret" type="password" class="form-control" data-ng-change="vm.events.syncForm_Password_Change()"
+                    data-ng-disabled="vm.sync.enabled()" maxlength="150"
+                    placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_New_Description) }}" tabindex="1" />
+                <div class="progress" data-ng-hide="!vm.sync.secret">
+                    <div class="progress-bar" role="progressbar" data-ng-style="{ width: (vm.sync.secretComplexity.complexity === 0) ? '100%' : vm.sync.secretComplexity.complexity + '%' }" data-ng-class="{
+                        'progress-bar-warning': vm.sync.secretComplexity.complexity > 25 && vm.sync.secretComplexity.complexity < 50,
+                        'progress-bar-success': vm.sync.secretComplexity.complexity > 50 && vm.sync.secretComplexity.complexity <= 100
+                        }">
+                    </div>
+                </div>
+                <div class="progress-bar-background"></div>
+            </div>
+            <div class="form-group text-center">
+                <button type="button" class="btn btn-default btn-confirm-password" data-ng-disabled="!vm.sync.secret || !vm.sync.secretComplexity.valid" data-ng-click="vm.events.syncForm_ConfirmPassword_Click()" tabindex="4">
+                    {{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}
+                </button>
+            </div>
         </div>
         <div class="form-group text-center">
             <a data-ng-click="vm.events.syncForm_ExistingSync_Click()" href="" tabindex="5">
@@ -213,12 +230,12 @@
         </div>
         <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
             <label class="sr-only" for="txtPassword">{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
-            <input name="txtPassword" data-ng-model="vm.settings.secret" type="password" class="form-control" data-ng-disabled="vm.sync.enabled()" maxlength="150"
+            <input name="txtPassword" data-ng-model="vm.sync.secret" type="password" class="form-control" data-ng-disabled="vm.sync.enabled()" maxlength="150"
                 placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Existing_Description) }}" tabindex="2" />
         </div>
         <div class="form-group text-center">
-            <button type="button" class="btn btn-default btn-existing-sync" data-ng-disabled="!vm.settings.id() || !vm.settings.secret" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
-                {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
+            <button type="button" class="btn btn-default btn-existing-sync" data-ng-disabled="!vm.settings.id() || !vm.sync.secret" data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
+                {{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}
             </button>
         </div>
         <div class="form-group text-center">
@@ -233,7 +250,7 @@
     <p>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmSync_Message) }}</p>
     <div class="buttons">
         <button type="button" class="btn btn-default btn-confirm-enable-sync" data-ng-click="vm.events.syncForm_ConfirmSync_Click()" tabindex="4">
-            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
         </button>
         <button type="button" class="btn btn-default" data-ng-click="vm.sync.displaySyncConfirmation = false" tabindex="5">
             {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}

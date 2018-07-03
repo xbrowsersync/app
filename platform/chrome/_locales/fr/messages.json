@@ -77,6 +77,9 @@
 	"button_ShareBookmark_Label": {
 		"message": "Partager le favori"
 	},
+	"login_PasswordConfirmationField_Label": {
+		"message": "Confirm password"
+	},
 	"login_PasswordField_Label": {
 		"message": "Mot de passe de chiffrement"
 	},
@@ -283,6 +286,9 @@
 	},
 	"settings_Service_Status_Error": {
 		"message":  "Error"
+	},
+	"Settings_Service_Status_Loading": {
+		"message":  "Checking..."
 	},
 	"settings_Service_Status_Online" : {
 		"message":  "Online"

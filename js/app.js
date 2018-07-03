@@ -112,6 +112,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             syncPanel_SyncBookmarksToolbar_Confirm: syncPanel_SyncBookmarksToolbar_Confirm,
             syncForm_CancelSyncConfirmation_Click: syncForm_CancelSyncConfirmation_Click,
             syncForm_Password_Change: syncForm_Password_Change,
+            syncForm_ConfirmPassword_Click: syncForm_ConfirmPassword_Click,
             syncForm_ConfirmSync_Click: startSyncing,
             syncForm_DisableSync_Click: syncForm_DisableSync_Click,
             syncForm_EnableSync_Click: syncForm_EnableSync_Click,
@@ -205,13 +206,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     syncPanel_SyncBookmarksToolbar_Click(value) : 
                     globals.SyncBookmarksToolbar.Get();
             },
-			secret: null,
-            secretComplexity: {},
             service: {
                 apiVersion: '',
                 maxSyncSize: 0,
                 newServiceUrl: '',
-                status: globals.ServiceStatus.Online,
+                status: null,
                 statusMessage: '',
                 url: function(value) {
                     return arguments.length ? 
@@ -225,6 +224,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		
 		vm.sync = {
 			asyncChannel: undefined,
+            displayPasswordConfirmation: false,
             displaySyncConfirmation: false,
             enabled: function(value) {
                 return arguments.length ? 
@@ -235,7 +235,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 return arguments.length ? 
                     globals.IsSyncing.Set(value) : 
                     globals.IsSyncing.Get();
-            }
+            },
+            secret: null,
+            secretComplexity: {},            
+            secretConfirmation: null,
 		};
 
 		vm.view = {
@@ -763,7 +766,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.introduction.displayPanel();
                 }
 
+                vm.sync.displayPasswordConfirmation = false;
                 vm.sync.displaySyncConfirmation = false;
+                vm.sync.secretConfirmation = null;
                 if (vm.syncForm) {
                     vm.syncForm.$setPristine();
                     vm.syncForm.$setUntouched();
@@ -784,7 +789,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     $timeout(function() {
                         var inputField;
                         if (!!vm.settings.displayNewSyncPanel) {
-                            inputField = document.querySelector('.login-form-new input[name="txtPassword"]');
+                            inputField = document.querySelector('input[name="txtPassword"]');
                             if (!!inputField) {
                                 inputField.focus();
                             }
@@ -792,8 +797,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         else {
                             // Focus on password field if id already set
                             inputField = globals.Id.Get() ?
-                                document.querySelector('.login-form-existing input[name="txtPassword"]') :
-                                document.querySelector('.login-form-existing input[name="txtId"]');
+                                document.querySelector('input[name="txtPassword"]') :
+                                document.querySelector('input[name="txtId"]');
                             if (!!inputField) {
                                 inputField.focus();
                             }
@@ -832,6 +837,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             case vm.view.views.settings:
                 vm.settings.displaySyncOptions = !globals.SyncEnabled.Get();
                 vm.settings.service.newServiceUrl = vm.settings.service.url();
+                vm.settings.service.status = null;
                 
                 // Get service status and display service info
                 $timeout(function() {
@@ -1202,8 +1208,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 		// Set ID and client secret if sync not enabled
         if (!globals.SyncEnabled.Get()) {
             globals.Password.Set(null);
-            vm.settings.secret = null;
-            vm.settings.secretComplexity = {};
+            vm.sync.secret = null;
+            vm.sync.secretComplexity = {};
             
             if (!!data.xBrowserSync.id) {
                 globals.Id.Set(data.xBrowserSync.id);
@@ -1683,7 +1689,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             })
             .then(function(syncId) {
                 // Generate a password hash, cache it then queue the sync
-                return utility.GetPasswordHash(vm.settings.secret, syncId);
+                return utility.GetPasswordHash(vm.sync.secret, syncId);
             })
             .then(function(passwordHash) {
                 globals.Password.Set(passwordHash);
@@ -1715,8 +1721,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         globals.SyncEnabled.Set(false);
         
         // Clear cached data
-        vm.settings.secret = null;
-        vm.settings.secretComplexity = {};
+        vm.sync.secret = null;
+        vm.sync.secretComplexity = {};
         globals.Password.Set(null);
         globals.SyncVersion.Set(null);
         globals.Cache.Bookmarks.Set(null);
@@ -1725,14 +1731,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.view.change(vm.view.views.login);
     };
 
-    var syncForm_Password_Change = function() {
-        // Update client secret complexity value
-    	if (vm.settings.secret) {
-        	vm.settings.secretComplexity = complexify(vm.settings.secret);
-    	}
-    	else {
-    		vm.settings.secretComplexity = {};
-    	}
+    var syncForm_ConfirmPassword_Click = function() {
+        vm.sync.displayPasswordConfirmation = true;
+
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+            $timeout(function() {
+                document.querySelector('input[name="txtPasswordConfirmation"]').focus();
+            }, 100);
+        }
     };
 
     var syncForm_DisableSync_Click = function() {
@@ -1768,34 +1774,51 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
     var syncForm_ExistingSync_Click = function() {
         vm.settings.displayNewSyncPanel = false;
-        vm.settings.secret = null;
+        vm.sync.secret = null;
 
         if (!utility.IsMobilePlatform(vm.platformName)) {
             $timeout(function() {
-                document.querySelector('.login-form-existing input[name="txtId"]').focus();
-            });
+                document.querySelector('input[name="txtId"]').focus();
+            }, 100);
         }
     };
 
     var syncForm_NewSync_Click = function() {
         vm.settings.displayNewSyncPanel = true;
+        vm.sync.displayPasswordConfirmation = false;
         globals.Id.Set(null);
         globals.Password.Set(null);
-        vm.settings.secret = null;
-        vm.settings.secretComplexity = {};
+        vm.sync.secret = null;
+        vm.sync.secretConfirmation = null;
+        vm.sync.secretComplexity = {};
 
         if (!utility.IsMobilePlatform(vm.platformName)) {
             $timeout(function() {
-                document.querySelector('.login-form-new input[name="txtPassword"]').focus();
-            });
+                document.querySelector('input[name="txtPassword"]').focus();
+            }, 100);
         }
+    };
+
+    var syncForm_Password_Change = function() {
+        // Update client secret complexity value
+    	if (vm.sync.secret) {
+        	vm.sync.secretComplexity = complexify(vm.sync.secret);
+    	}
+    	else {
+    		vm.sync.secretComplexity = {};
+    	}
     };
 
     var syncForm_Submit_Click = function() {
         $timeout(function() {
             // Handle enter key press for login form
             if (vm.settings.displayNewSyncPanel) {
-                document.querySelector('.login-form-new .btn-new-sync').click();
+                if (vm.sync.displayPasswordConfirmation) {
+                    document.querySelector('.login-form-new .btn-new-sync').click();
+                }
+                else {
+                    document.querySelector('.login-form-new .btn-confirm-password').click();
+                }
             }
             else {
                 document.querySelector('.login-form-existing .btn-existing-sync').click();
@@ -1865,8 +1888,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Remove saved client secret and ID
         globals.Id.Set(null);
         globals.Password.Set(null);
-        vm.settings.secret = null;
-        vm.settings.secretComplexity = {};
+        vm.sync.secret = null;
+        vm.sync.secretComplexity = {};
         
         // Update service status
         api.CheckServiceStatus()

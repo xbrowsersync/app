@@ -30,7 +30,7 @@
 		"message": "<h4>Welcome</h4><p>Thanks for using xBrowserSync — browser syncing as it should be: secure, anonymous and free!</p><p>Take some time to read through the following pages to get aquainted with xBrowserSync’s features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
 	},
 	"login_introPanel2_Message": {
-		"message": "<h4>Syncing for the first time</h4><p>Before you can sync your browser data it needs to be encrypted so that only you can read it. Enter an encryption password — make it strong but also memorable, there are no resets or reminders so if you forget it you won’t be able to decrypt your synced data.</p><p>Once you click the Sync button you’re synced and ready to start adding bookmarks.</p>"
+		"message": "<h4>Syncing for the first time</h4><p>Before you can sync your browser data it must be encrypted so that only you can read it. Enter an encryption password — make it strong but also memorable, there are no resets or reminders so if you forget it you won’t be able to decrypt your synced data.</p><p>Once you click the Sync button your data will be encrypted and synced.</p>"
 	},
 	"login_introPanel3_Message": {
 		"message": "<h4>Already synced (got an ID)</h4><p>When you create a new sync you are given a unique xBrowserSync ID which you can use along with your password to sync your data on other devices. Your anonymity is ensured as no personal data is collected or stored with your synced data.</p><p>Once synced you can view your ID in the Settings panel. Click it to reveal a handy QR code to scan when syncing on mobile devices.</p>"
@@ -76,6 +76,9 @@
 	},
 	"button_ShareBookmark_Label": {
 		"message": "Share Bookmark"
+	},
+	"login_PasswordConfirmationField_Label": {
+		"message": "Confirm password"
 	},
 	"login_PasswordField_Label": {
 		"message": "Encryption password"
@@ -283,6 +286,9 @@
 	},
 	"settings_Service_Status_Error": {
 		"message":  "Error"
+	},
+	"Settings_Service_Status_Loading": {
+		"message":  "Checking..."
 	},
 	"settings_Service_Status_Online" : {
 		"message":  "Online"

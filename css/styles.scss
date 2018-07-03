@@ -720,7 +720,7 @@ body {
             font-size: 1.1em;
         }
 
-        .secret-form-group input {
+        input[name=txtPassword] {
             position: relative;
             z-index: 20;
             background: transparent;
@@ -1233,6 +1233,10 @@ body {
 
         .service-url {
             @extend .form-control-url;
+        }
+
+        .status-text {
+            color: $colour-link;
         }
 
         .update-service-url {
