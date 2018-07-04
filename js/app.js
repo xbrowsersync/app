@@ -789,7 +789,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     $timeout(function() {
                         var inputField;
                         if (!!vm.settings.displayNewSyncPanel) {
-                            inputField = document.querySelector('input[name="txtPassword"]');
+                            inputField = document.querySelector('.login-form-new input[name="txtPassword"]');
                             if (!!inputField) {
                                 inputField.focus();
                             }
@@ -797,7 +797,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         else {
                             // Focus on password field if id already set
                             inputField = globals.Id.Get() ?
-                                document.querySelector('input[name="txtPassword"]') :
+                                document.querySelector('.login-form-existing input[name="txtPassword"]') :
                                 document.querySelector('input[name="txtId"]');
                             if (!!inputField) {
                                 inputField.focus();
@@ -1794,7 +1794,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
         if (!utility.IsMobilePlatform(vm.platformName)) {
             $timeout(function() {
-                document.querySelector('input[name="txtPassword"]').focus();
+                document.querySelector('.login-form-new input[name="txtPassword"]').focus();
             }, 100);
         }
     };

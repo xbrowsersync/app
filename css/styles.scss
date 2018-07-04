@@ -656,9 +656,14 @@ body {
         margin-bottom: 1.2em;
 
         input {
-            font-size: 1.2em;
+            font-family: $font-stack-code;
+            font-size: 1.1em;
             line-height: 1.3em;
             padding: .5em 0 .5em .9em;
+            @include placeholder {
+                font-family: $font-stack-regular;
+                font-size: 1.1em;
+            }
         }
     }
 
@@ -715,11 +720,19 @@ body {
         }
     }
 
-    .login-form-new {
+    .login-form-new, .login-form-existing {
         a {
-            font-size: 1.1em;
+            &.active,
+            &:active,
+            &:focus,
+            &:hover {
+                color: $colour-text2;
+                border-bottom-color: $colour-text2;
+            }
         }
-
+    }
+    
+    .login-form-new {
         input[name=txtPassword] {
             position: relative;
             z-index: 20;
