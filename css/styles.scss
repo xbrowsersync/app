@@ -1275,6 +1275,8 @@ body {
 
         .id-url {
             @extend .form-control-url;
+            font-family: $font-stack-code;
+            font-size: 1.05em;
         }
     }
 
