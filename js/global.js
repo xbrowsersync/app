@@ -326,31 +326,6 @@ xBrowserSync.App.Global = function(platform) {
                     value);
             }
         },
-        DisplayAboutOnStartup: {
-            Get: function() {
-                var value;
-                
-                value = platform.LocalStorage.Get(
-                    'xBrowserSync-displayAboutOnStartup');
-                
-                if (!value) {
-                    return false;
-                }
-                else {
-                    if (value === 'true') {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-            },
-            Set: function(value) {
-                platform.LocalStorage.Set(
-                    'xBrowserSync-displayAboutOnStartup', 
-                    value);
-            }
-        },
         DisplayIntro: {
             Get: function() {
                 var value;
@@ -614,6 +589,13 @@ xBrowserSync.App.Global = function(platform) {
         Title: {
             Get: function() {
                 return 'xBrowserSync';
+            }
+        },
+        UpdateMessage: {
+            Get: function(syncEnabled) {
+                var message = 'This update includes support for Firefox, stronger encryption and much more!';
+                message += syncEnabled ? '\n\nYour current sync has been disabled, re-enable sync to complete the update process.' : '';
+                return message;
             }
         },
         UpdateType: {

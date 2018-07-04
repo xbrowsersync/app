@@ -495,14 +495,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return $q.all([clearMenu.promise, clearMobile.promise, clearOthers.promise, clearToolbar.promise]);
 	};
 
-	var displayAboutOnStartup = function() {
-        globals.DisplayAboutOnStartup.Set(false);
-		vm.view.change(vm.view.views.settings)
-			.then(function() {
-				document.querySelector('.about-panel h4').scrollIntoView();
-			});
-    };
-
 	var displayLoading = function(id, deferred) {
 		var timeout;
 		
@@ -718,33 +710,27 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
             });
         });
 
-		// Display About panel after upgrade
-		if (globals.DisplayAboutOnStartup.Get()) {
-			displayAboutOnStartup();
-		}
-		else {
-			// If logged in, focus on search box, otherwise focus on login field
-			$timeout(function() {
-				if (!!globals.SyncEnabled.Get()) {
-					document.querySelector('input[name=txtSearch]').focus();
-					
+		// If logged in, focus on search box, otherwise focus on login field
+		$timeout(function() {
+			if (!!globals.SyncEnabled.Get()) {
+				document.querySelector('input[name=txtSearch]').focus();
+				
+			}
+			else {
+				if (!!vm.settings.displayNewSyncPanel) {
+					document.querySelector('.login-form-new input[name="txtPassword"]').focus();
 				}
 				else {
-					if (!!vm.settings.displayNewSyncPanel) {
-						document.querySelector('.login-form-new input[name="txtPassword"]').focus();
-					}
-					else {
-						// Focus on password field if id already set
-						var inputField = globals.Id.Get() ?
-							document.querySelector('.login-form-existing input[name="txtPassword"]') :
-							document.querySelector('.login-form-existing input[name="txtId"]');
-						if (!!inputField) {
-							inputField.focus();
-						}
+					// Focus on password field if id already set
+					var inputField = globals.Id.Get() ?
+						document.querySelector('.login-form-existing input[name="txtPassword"]') :
+						document.querySelector('.login-form-existing input[name="txtId"]');
+					if (!!inputField) {
+						inputField.focus();
 					}
 				}
-			}, 500);
-		}
+			}
+		}, 500);
 	};
 
 	var openUrl = function(url) {

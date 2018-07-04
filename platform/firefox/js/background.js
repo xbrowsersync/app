@@ -207,7 +207,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
 	
 	var install = function(details) {
 		switch(details.reason) {
-			case "install":
+			case 'install':
 				// On install, register alarm
 				browser.alarms.clear(globals.Alarm.Name.Get(), function() {
 					browser.alarms.create(
@@ -216,11 +216,14 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
 						});
 				});
 				break;
-			case "update":
-				if (!!details.previousVersion && 
+			case 'update':
+				if (details.previousVersion && 
 					details.previousVersion !== browser.runtime.getManifest().version) {
-					// If extension has been updated, display about panel 
-					globals.DisplayAboutOnStartup.Set(true);
+					// If extension has been updated, display alert and disable sync
+					displayAlert(
+						'xBrowserSync updated to ' + browser.runtime.getManifest().version,
+						globals.UpdateMessage.Get(globals.SyncEnabled.Get()));
+						globals.SyncEnabled.Set(false);
 				}
 				break;
 		}
