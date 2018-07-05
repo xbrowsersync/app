@@ -133,6 +133,8 @@ xBrowserSync.App.Global = function(platform) {
             Button_NewSync_Label: 'button_NewSync_Label',
 			Login_ConfirmSync_Title: 'login_ConfirmSync_Title',
 			Login_ConfirmSync_Message: 'login_ConfirmSync_Message',
+			Login_UpgradeSync_Title: 'login_UpgradeSync_Title',
+			Login_UpgradeSync_Message: 'login_UpgradeSync_Message',
 			Button_Confirm_Label: 'button_Confirm_Label',
 			Button_Deny_Label: 'button_Deny_Label',
 			Search_Field_Description: 'search_Field_Description',

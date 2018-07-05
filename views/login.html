@@ -175,7 +175,7 @@
         </div>
     </div>
 </div>
-<form name="vm.syncForm" class="animate-fade" data-ng-hide="vm.sync.displaySyncConfirmation" novalidate>
+<form name="vm.syncForm" class="animate-fade" data-ng-hide="vm.sync.displaySyncConfirmation || vm.sync.displayUpgradeConfirmation" novalidate>
     <button type="submit" class="hidden" data-ng-click="vm.events.syncForm_Submit_Click()" tabindex="-1"></button>
     <div class="login-form-new animate-fade" data-ng-show="vm.settings.displayNewSyncPanel">
         <div class="animate-fade" data-ng-show="vm.sync.displayPasswordConfirmation">
@@ -250,9 +250,21 @@
     <p>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmSync_Message) }}</p>
     <div class="buttons">
         <button type="button" class="btn btn-default btn-confirm-enable-sync" data-ng-click="vm.events.syncForm_ConfirmSync_Click()" tabindex="4">
-            {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
         </button>
         <button type="button" class="btn btn-default" data-ng-click="vm.sync.displaySyncConfirmation = false" tabindex="5">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
+        </button>
+    </div>
+</div>
+<div class="confirm confirm-upgrade well well-sm animate-fade" data-ng-show="vm.sync.displayUpgradeConfirmation">
+    <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_UpgradeSync_Title) }}</h4>
+    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_UpgradeSync_Message)"></div>
+    <div class="buttons">
+        <button type="button" class="btn btn-default btn-confirm-enable-sync" data-ng-click="vm.events.syncForm_UpgradeSync_Click()" tabindex="4">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
+        </button>
+        <button type="button" class="btn btn-default" data-ng-click="vm.sync.displayUpgradeConfirmation = false" tabindex="5">
             {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
         </button>
     </div>

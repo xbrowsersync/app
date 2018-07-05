@@ -136,6 +136,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"login_ConfirmSync_Message" : {
 			"message":  "No xBrowserSync ID has been provided so a new sync will be created for you. OK to proceed?"
 		},
+		"login_UpgradeSync_Title" : {
+			"message":  "Ready to upgrade sync?"
+		},
+		"login_UpgradeSync_Message" : {
+			"message":  "<p>Your sync data needs to be upgraded to enable sync on this version of the xBrowserSync app.</p><p>After the upgrade, you will not be able to enable sync on older app versions with this xBrowserSync ID.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
+		},
 		"button_Confirm_Label" : {
 			"message":  "Yes"
 		},

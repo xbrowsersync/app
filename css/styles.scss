@@ -461,6 +461,7 @@ body {
         border: none;
         padding: 1em 1.25em;
         margin-bottom: 1em;
+        box-shadow: 0.6875rem 1.3125rem 4.125rem rgba(0, 0, 0, 0.25)!important;
     
         &:last-child {
             margin-bottom: 0;
@@ -649,6 +650,10 @@ body {
     .confirm {
         position: relative;
         z-index: 10;
+
+        &.confirm-upgrade {
+            margin-top: -6.5em;
+        }
     }
 
     .form-group {
@@ -1187,14 +1192,17 @@ body {
         }
     }
 
+    .header-panel, .panel-container {
+        padding-left: 0.75em;
+        padding-right: 0.75em;
+    }
+
     .header-panel {
         flex: none;
-        padding-right: 0.75em;
     }
 
     .panel-container {
         overflow-y: scroll;
-        padding-right: 0.75em;
     }
 
     .status-panel {
@@ -1283,7 +1291,7 @@ body {
     .view-content {
         display: flex;
         flex-flow: column;
-        padding: 0.75em 0 0 0.75em;
+        padding: 0.75em 0 0 0;
     }
     
     .well {

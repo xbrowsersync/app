@@ -119,6 +119,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             syncForm_ExistingSync_Click: syncForm_ExistingSync_Click,
             syncForm_NewSync_Click: syncForm_NewSync_Click,
             syncForm_Submit_Click: syncForm_Submit_Click,
+            syncForm_UpgradeSync_Click: syncForm_UpgradeSync_Click,
             syncPanel_DisplayDataUsage_Click: displayDataUsage,
             syncPanel_DisplaySyncOptions_Click: syncPanel_DisplaySyncOptions_Click,
             searchForm_ToggleBookmark_Click: searchForm_ToggleBookmark_Click,
@@ -226,6 +227,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 			asyncChannel: undefined,
             displayPasswordConfirmation: false,
             displaySyncConfirmation: false,
+            displayUpgradeConfirmation: false,
             enabled: function(value) {
                 return arguments.length ? 
                     globals.SyncEnabled.Set(value) : 
@@ -239,6 +241,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             secret: null,
             secretComplexity: {},            
             secretConfirmation: null,
+            upgradeConfirmed: false
 		};
 
 		vm.view = {
@@ -768,7 +771,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
                 vm.sync.displayPasswordConfirmation = false;
                 vm.sync.displaySyncConfirmation = false;
+                vm.sync.displayUpgradeConfirmation = false;
+                vm.sync.secret = null;
                 vm.sync.secretConfirmation = null;
+                vm.sync.upgradeConfirmed = false;
                 if (vm.syncForm) {
                     vm.syncForm.$setPristine();
                     vm.syncForm.$setUntouched();
@@ -979,6 +985,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     setBookmarkStatus();
                 }
                 else {
+                    // Disable upgrade confirmed flag
+                    vm.sync.upgradeConfirmed = false;
+                    
                     // If ID was removed disable sync and display login panel
                     if (!!response.error && response.error.code === globals.ErrorCodes.IdRemoved) {
                         globals.SyncEnabled.Set(false);
@@ -1647,6 +1656,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
         // Display loading panel
         vm.sync.displaySyncConfirmation = false;
+        vm.sync.displayUpgradeConfirmation = false;
         var loadingTimeout = platform.Interface.Loading.Show();
         
         // Check service status
@@ -1676,9 +1686,16 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     // Retrieve sync version for existing id
                     return api.GetBookmarksVersion()
                         .then(function(response) {
-                            // If no sync version is set, upgrade the sync
+                            // If no sync version is set, confirm upgrade
                             if (!response.version) {
-                                syncType = globals.SyncType.Upgrade;
+                                if (vm.sync.upgradeConfirmed) {
+                                    syncType = globals.SyncType.Upgrade;
+                                }
+                                else {
+                                    platform.Interface.Loading.Hide(null, loadingTimeout);
+                                    vm.sync.displayUpgradeConfirmation = true;
+                                    return;
+                                }
                             }
 
                             // Add sync version to cache and return current sync ID
@@ -1688,14 +1705,21 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 }
             })
             .then(function(syncId) {
+                if (!syncId) {
+                    return;
+                }
+                
                 // Generate a password hash, cache it then queue the sync
-                return utility.GetPasswordHash(vm.sync.secret, syncId);
-            })
-            .then(function(passwordHash) {
-                globals.Password.Set(passwordHash);
-                return queueSync(syncType);
+                return utility.GetPasswordHash(vm.sync.secret, syncId)    
+                    .then(function(passwordHash) {
+                        globals.Password.Set(passwordHash);
+                        return queueSync(syncType);
+                    });
             })
             .catch(function(err) {
+                // Disable upgrade confirmed flag
+                vm.sync.upgradeConfirmed = false;
+                
                 // Clear cached data
                 globals.Password.Set(null);
                 globals.SyncVersion.Set(null);
@@ -1825,6 +1849,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             }
         });
     }
+
+    var syncForm_UpgradeSync_Click = function() {
+        vm.sync.upgradeConfirmed = true;
+        startSyncing();
+    };
 
     var syncPanel_DisplaySyncOptions_Click = function() {
         vm.settings.displaySyncOptions = true;
