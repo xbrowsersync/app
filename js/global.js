@@ -634,7 +634,7 @@ xBrowserSync.App.Global = function(platform) {
             Version: '/version',
             ServiceInformation: '/info',
             Regex: /^(\w+:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/i,
-            ProtocolRegex: /^\w+:\/\//i,
+            ProtocolRegex: /^\w+:.*$/,
             CustomScheme: 'xbrowsersync:/'
         }
     };

@@ -298,16 +298,6 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		return errorMessage;
 	};
 
-	var getHostFromUrl = function(url) {
-		if (!url) {
-			return '';
-		}
-		
-		var hyperlinkElement = document.createElement('a');
-		hyperlinkElement.href = url;
-		return hyperlinkElement.host;
-	};
-
 	var getPasswordHash = function(password, salt) {
 		// If old sync version, don't hash password for legacy encryption
 		if (!globals.SyncVersion.Get()) {
@@ -448,7 +438,6 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		DecryptData: decryptData,
 		EncryptData: encryptData,
 		GetErrorMessageFromException: getErrorMessageFromException,
-		GetHostFromUrl: getHostFromUrl,
 		GetTagArrayFromText: getTagArrayFromText,
 		GetPasswordHash: getPasswordHash,
 		IsMobilePlatform: isMobilePlatform,

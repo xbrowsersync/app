@@ -43,7 +43,10 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             descriptionFieldOriginalHeight: null,
             displayUpdateForm : false,
             originalUrl: null,
-            tagText: null
+            tagText: null,
+            urlAsTitle: function(url) {
+                return url.replace(/^https?:\/\//i, '');
+            }
         };
 
         vm.device = {
@@ -62,7 +65,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             bookmarkForm_BookmarkTags_Change: bookmarkForm_BookmarkTags_Change,
             bookmarkForm_BookmarkTags_Click: bookmarkForm_BookmarkTags_Click,
             bookmarkForm_BookmarkTags_KeyDown: bookmarkForm_BookmarkTags_KeyDown,
-            bookmarkForm_BookmarkUrl_Change: bookmarkForm_BookmarkUrl_Change,
             bookmarkForm_CreateBookmark_Click: bookmarkForm_CreateBookmark_Click,
             bookmarkForm_CreateTags_Click: bookmarkForm_CreateTags_Click,
             bookmarkForm_DeleteBookmark_Click: bookmarkForm_DeleteBookmark_Click,
@@ -425,59 +427,31 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
     };
     
-    var bookmarkForm_BookmarkUrl_Change = function() {
-        var isValid = true;
-        
-        if (!vm.bookmark.current.url) {
-            isValid = false;
-        }
-        else {
-            // Check url is valid
-            isValid = globals.URL.Regex.test(vm.bookmark.current.url) || globals.URL.BookmarkletRegex.test(vm.bookmark.current.url);
-        }
-
-        // Set invalid service validator
-        vm.bookmarkForm.bookmarkUrl.$setValidity('InvalidUrl', isValid);
-        vm.bookmarkForm.bookmarkUrl.$setDirty();
-    };
-    
     var bookmarkForm_CreateBookmark_Click = function() {
         var bookmarkToCreate = vm.bookmark.current;
 
-        // Get current page url
+        // Check for protocol
+        if (!globals.URL.ProtocolRegex.test(bookmarkToCreate.url)) {
+            bookmarkToCreate.url = 'http://' + bookmarkToCreate.url;
+        }
+
+        // Add tags if tag text present
+        if (!!vm.bookmark.tagText && vm.bookmark.tagText.length > 0) {
+            bookmarkForm_CreateTags_Click();
+        }
+        
+        // Sync changes
+        platform.Sync(vm.sync.asyncChannel, {
+            type: globals.SyncType.Both,
+            changeInfo: { 
+                type: globals.UpdateType.Create, 
+                bookmark: bookmarkToCreate
+            }
+        });
+
+        // Set bookmark active status if current bookmark is current page
 		platform.GetCurrentUrl()
             .then(function(currentUrl) {
-                // Check for protocol
-                if (!!bookmarkToCreate.url && 
-                    !!bookmarkToCreate.url.trim() && 
-                    !globals.URL.BookmarkletRegex.test(bookmarkToCreate.url) &&
-                    !globals.URL.ProtocolRegex.test(bookmarkToCreate.url)) {
-                    bookmarkToCreate.url = 'http://' + bookmarkToCreate.url;
-                }
-
-                // Validate url
-                bookmarkForm_BookmarkUrl_Change();
-                
-                if (!vm.bookmarkForm.$valid) {
-                    document.querySelector('#bookmarkForm .ng-invalid').focus();
-                    return;
-                }
-
-                // Add tags if tag text present
-                if (!!vm.bookmark.tagText && vm.bookmark.tagText.length > 0) {
-                    bookmarkForm_CreateTags_Click();
-                }
-                
-                // Sync changes
-                platform.Sync(vm.sync.asyncChannel, {
-                    type: globals.SyncType.Both,
-                    changeInfo: { 
-                        type: globals.UpdateType.Create, 
-                        bookmark: bookmarkToCreate
-                    }
-                });
-
-                // Set bookmark active status if current bookmark is current page 
                 vm.bookmark.active = currentUrl && currentUrl.toUpperCase() === bookmarkToCreate.url.toUpperCase();
                 
                 vm.view.change(vm.view.views.search)
@@ -518,20 +492,19 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     
     var bookmarkForm_DeleteBookmark_Click = function() {
         var bookmarkToDelete = vm.bookmark.current;
+
+        // Sync changes
+        platform.Sync(vm.sync.asyncChannel, {
+            type: globals.SyncType.Both,
+            changeInfo: { 
+                type: globals.UpdateType.Delete, 
+                id: bookmarkToDelete.id
+            }
+        });
         
-        // Get current page url
+        // Set bookmark active status if current bookmark is current page
 		platform.GetCurrentUrl()
             .then(function(currentUrl) {
-                // Sync changes
-                platform.Sync(vm.sync.asyncChannel, {
-                    type: globals.SyncType.Both,
-                    changeInfo: { 
-                        type: globals.UpdateType.Delete, 
-                        id: bookmarkToDelete.id
-                    }
-                });
-                
-                // Set bookmark active status if current bookmark is current page 
                 if (!!currentUrl && currentUrl.toUpperCase() === vm.bookmark.originalUrl.toUpperCase()) {
                     vm.bookmark.active = false;
                 }
@@ -656,10 +629,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         var bookmarkToUpdate = vm.bookmark.current;
         
         // Check for protocol
-        if (!!bookmarkToUpdate.url && 
-            !!bookmarkToUpdate.url.trim() && 
-            !globals.URL.BookmarkletRegex.test(bookmarkToUpdate.url) &&
-            !globals.URL.ProtocolRegex.test(bookmarkToUpdate.url)) {
+        if (!globals.URL.ProtocolRegex.test(bookmarkToUpdate.url)) {
             bookmarkToUpdate.url = 'http://' + bookmarkToUpdate.url;
         }
 
@@ -668,19 +638,18 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             bookmarkForm_CreateTags_Click();
         }
         
-        // Get current page url
+        // Sync changes
+        platform.Sync(vm.sync.asyncChannel, {
+            type: globals.SyncType.Both,
+            changeInfo: { 
+                type: globals.UpdateType.Update, 
+                bookmark: bookmarkToUpdate
+            }
+        });
+        
+        // Set bookmark active status if current bookmark is current page
 		platform.GetCurrentUrl()
             .then(function(currentUrl) {
-                // Sync changes
-                platform.Sync(vm.sync.asyncChannel, {
-                    type: globals.SyncType.Both,
-                    changeInfo: { 
-                        type: globals.UpdateType.Update, 
-                        bookmark: bookmarkToUpdate
-                    }
-                });
-
-                // Set bookmark active status if current bookmark is current page 
                 if (currentUrl && currentUrl.toUpperCase() === vm.bookmark.originalUrl.toUpperCase()) {
                     vm.bookmark.active = currentUrl && currentUrl.toUpperCase() === bookmarkToUpdate.url.toUpperCase();
                 }
@@ -1261,8 +1230,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             var queryWords = vm.search.query.split(/[\s,]+/);
             _.each(queryWords, function (queryWord) {
                 // Add query word as url if query is in url format, otherwise add to keywords
-                var urlTest = globals.URL.Regex.test(queryWord.trim());
-                if (!queryData.url && !!urlTest) {
+                if (!queryData.url && globals.URL.Regex.test(queryWord.trim())) {
                     queryData.url = queryWord.trim();
                 }
                 else {

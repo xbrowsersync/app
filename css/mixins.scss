@@ -56,3 +56,15 @@
     @content;
   }
 }
+
+@mixin text-overflow-ellipsis {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: normal;
+  white-space: nowrap;
+
+  &:hover {
+    color: $colour-link-highlight;
+  }
+}

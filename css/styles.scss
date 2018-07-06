@@ -399,13 +399,6 @@ body {
     .margin-bottom-15 {
         margin-bottom: 15px!important;
     }
-    
-    .overflow-ellipses {
-        display: inline-block;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
 
     .progress-bar-success {
         background-color: $colour-success!important;
@@ -652,7 +645,7 @@ body {
         z-index: 10;
 
         &.confirm-upgrade {
-            margin-top: -6.5em;
+            margin-top: -18vh;
         }
     }
 
@@ -875,7 +868,9 @@ body {
             
                 &:hover {
                     .btn-edit-bookmark {
-                        display: block;
+                        i {
+                            opacity: 0.4;
+                        }
                     }
 
                     .list-group-item-heading {
@@ -906,11 +901,20 @@ body {
                 }
                 
                 .btn-edit-bookmark {
-                    display: none;
                     position: absolute;
-                    top: 7px;
+                    top: 10px;
                     right: 10px;
-                    padding: 5px;
+                    font-size: 1.2em;
+
+                    &:hover {
+                        i {
+                            opacity: 1;
+                        }
+                    }
+
+                    i {
+                        opacity: 0;
+                    }
                 }
 
                 .menu {
@@ -978,6 +982,7 @@ body {
                 line-height: 1.1em;
                 margin-bottom: 0.2em;
                 transition: all, ease-in-out, 0.2s;
+                @include text-overflow-ellipsis;
             }
             
             .list-group-item-text {
@@ -1068,8 +1073,9 @@ body {
             }
         }
         
-        .github-url, .issues-url, .contribute-link {
+        .github-url, .issues-url, .contribute-url, .website-url {
             @extend .form-control-url;
+            @include text-overflow-ellipsis;
         }
 
         .latest-updates {
@@ -1254,6 +1260,7 @@ body {
 
         .service-url {
             @extend .form-control-url;
+            @include text-overflow-ellipsis;
         }
 
         .status-text {
