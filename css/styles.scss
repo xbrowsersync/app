@@ -563,20 +563,22 @@ body {
             font-weight: normal;
             text-transform: capitalize;
             padding: 6px 8px;
+            max-width: 100%;
+            @include text-overflow-ellipsis;
             
             &:hover {
                 cursor: pointer;
+                color: $colour-text1;
                 
                 i {
                     color: $colour-link-highlight;
-                    opacity: 1;
                 }
             }
             
             i {
                 transition: color, ease-in-out, 0.2s;
                 font-size: 0.9em;
-                opacity: 0.5;
+                color: $colour-link;
             }
         }
     }

@@ -369,7 +369,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Display lookahead if word length exceeds minimum
         if (!!lastWord && lastWord.length > globals.LookaheadMinChars) {
             // Get tags lookahead
-            bookmarks.GetLookahead(lastWord.toLowerCase(), null, null, true)
+            bookmarks.GetLookahead(lastWord.toLowerCase(), null, null, true, vm.bookmark.current.tags)
                 .then(function(results) {
                     if (!results) {
                         return;

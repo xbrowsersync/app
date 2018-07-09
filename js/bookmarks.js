@@ -139,7 +139,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         return container;
     };
 
-	var getLookahead = function(word, bookmarksToSearch, canceller, tagsOnly) {
+	var getLookahead = function(word, bookmarksToSearch, canceller, tagsOnly, exclusions) {
         var getBookmarks;
         var deferred = $q.defer();
         
@@ -161,6 +161,11 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             .then(function(bookmarks) {
                 // Get lookaheads
                 var lookaheads = searchBookmarksForLookaheads(bookmarks, word, tagsOnly);
+
+                // Remove exclusions from lookaheads
+                if (exclusions) {
+                    lookaheads = _.difference(lookaheads, exclusions); 
+                }
                 
                 if (lookaheads.length === 0) {
                     deferred.resolve(null);
