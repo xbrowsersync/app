@@ -651,16 +651,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
     
     var getPageMetadata = function() {
-        var deferred = $q.defer();
-		
-		// Get current tab
-        browser.tabs.query({ currentWindow: true, active: true })
+        // Get current tab
+        return browser.tabs.query({ currentWindow: true, active: true })
             .then(function(tabs) {
 				var activeTab = tabs[0];
 				
 				// Exit if this is a firefox settings page
 				if (activeTab.url.toLowerCase().startsWith('about:')) {
-					return deferred.resolve(new bookmarks.XBookmark(null, activeTab.url));
+					return new bookmarks.XBookmark(null, activeTab.url);
 				}
 
 				// Run content script to return page metadata
@@ -668,17 +666,14 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					.then(function(results) {
 						if (!!results && results.length > 0) {
 							var pageMetadata = results[0];
-							deferred.resolve(new bookmarks.XBookmark(
+							return new bookmarks.XBookmark(
 								pageMetadata.title, 
 								pageMetadata.url, 
 								pageMetadata.description, 
-								pageMetadata.tags));
+								pageMetadata.tags);
 						}
 					});
-        	})
-			.catch(deferred.reject);
-
-		return deferred.promise;
+        	});
     };
 
 	var hideLoading = function(id, timeout) {

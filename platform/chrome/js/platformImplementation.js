@@ -593,34 +593,28 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		
 		// Get current tab
         chrome.tabs.query(
-            { currentWindow: true, active: true },
+            { active: true, currentWindow: true, windowType: 'normal' },
             function(tabs) {
                 var activeTab = tabs[0];
-				metadata.url = activeTab.url;
 				
 				// Exit if this is a chrome url
 				if (activeTab.url.toLowerCase().startsWith('chrome://')) {
-					return deferred.resolve(metadata);
+					return deferred.resolve(new bookmarks.XBookmark(null, activeTab.url));
 				}
 
-				// Add listener to receive page metadata from content script
-                chrome.runtime.onMessage.addListener(function(message, sender) {
-					if (message.command === globals.Commands.GetPageMetadata) {
-						if (!!message.metadata) {
-							metadata.title = message.metadata.title;
-							metadata.description = utility.StripTags(message.metadata.description);
-							metadata.tags = message.metadata.tags;
-						}
-						
+				// Run content script to return page metadata
+				chrome.tabs.executeScript(
+					activeTab.id,
+					{ allFrames: false, file: 'js/content.js' },
+					function(results) {
+						var metadata = new bookmarks.XBookmark(
+							results[0].title, 
+							results[0].url, 
+							results[0].description, 
+							results[0].tags);
 						deferred.resolve(metadata);
 					}
-				});
-
-				// Run content script to return page metadata
-				chrome.tabs.executeScript(null, { file: 'js/content.js' }, function() {
-					// If error, resolve deferred
-					deferred.resolve(metadata);
-				});
+				);
         });
         
         return deferred.promise;

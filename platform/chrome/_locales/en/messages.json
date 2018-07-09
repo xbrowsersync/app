@@ -413,6 +413,9 @@
 	"connRestored_Message" : {
 		"message":  "Your xBrowserSync changes have been synced."
 	},
+	"notification_Upgrade_Message": {
+		"message": "xBrowserSync updated to"
+	},
 	"error_Default_Title" : {
 		"message":  "Something went wrong"
 	},

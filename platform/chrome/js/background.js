@@ -78,23 +78,23 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
             return;
 		}
 
-		// Get current page metadata from local storage
-		var metadataColl = globals.MetadataCollection.Get();
-		var metadata = _.findWhere(metadataColl, { url: bookmark.url });
+		// Get page metadata from current tab
+		platform.GetPageMetadata()
+			.then(function(metadata) {
+				// Add metadata if provided
+				if (metadata) {
+					bookmark.description = utility.StripTags(metadata.description);
+					bookmark.tags =	utility.GetTagArrayFromText(metadata.tags);
+				}
 
-		// Add metadata if provided
-		if (!!metadata) {
-			bookmark.description = utility.StripTags(metadata.description);
-			bookmark.tags =	utility.GetTagArrayFromText(metadata.tags);
-		}
-	
-		syncBookmarks({
-			type: globals.SyncType.Push,
-			changeInfo: { 
-				type: globals.UpdateType.Create, 
-				data: [id, bookmark]
-			}
-		})
+				return syncBookmarks({
+					type: globals.SyncType.Push,
+					changeInfo: { 
+						type: globals.UpdateType.Create, 
+						data: [id, bookmark]
+					}
+				});
+			})
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
@@ -192,16 +192,6 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
 			case globals.Commands.RestoreBookmarks:
 				restoreBookmarks(msg);
 				break;
-			// Store current page metadata
-			case globals.Commands.GetPageMetadata:
-				if (!!msg.metadata && !!msg.metadata.url) {
-					var metadataColl = globals.MetadataCollection.Get(); 
-					if (!_.findWhere(metadataColl, { url: msg.metadata.url })) {
-						metadataColl.push(msg.metadata);
-						globals.MetadataCollection.Set(metadataColl);
-					}
-				}
-				break;
 		}
 	};
 	
@@ -219,9 +209,13 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
 			case 'update':
 				if (details.previousVersion && 
 					details.previousVersion !== chrome.runtime.getManifest().version) {
+					// Remove obsolete cached page metadata
+					localStorage.removeItem('xBrowserSync-metadataColl');
+
 					// If extension has been updated, display alert and disable sync
 					displayAlert(
-						'xBrowserSync updated to ' + chrome.runtime.getManifest().version,
+						platform.GetConstant(globals.Constants.Notification_Upgrade_Message) + ' ' +
+						chrome.runtime.getManifest().version,
 						globals.UpdateMessage.Get(globals.SyncEnabled.Get()));
 						globals.SyncEnabled.Set(false);
 				}
@@ -327,9 +321,6 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
 	};
 	
 	var startup = function() {
-		// Clear metadata collection
-		globals.MetadataCollection.Set(null);
-		
 		// Check if a sync was interrupted
 		if (!!globals.IsSyncing.Get()) {
 			globals.IsSyncing.Set(false);

@@ -442,6 +442,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"connRestored_Message" : {
 			"message":  "Your xBrowserSync changes have been synced."
 		},
+		"notification_Upgrade_Message": {
+			"message": "xBrowserSync updated to"
+		},
 		"bookmark_Metadata_Message" : {
 			"message":  "Fetching bookmark properties, touch to cancel."
 		},

@@ -89,8 +89,7 @@ xBrowserSync.App.Global = function(platform) {
         Commands: {
             SyncBookmarks: 1,
             RestoreBookmarks: 2,
-            NoCallback: 3,
-            GetPageMetadata: 4
+            NoCallback: 3
         },
         Constants: {
             Title: 'title',
@@ -232,6 +231,7 @@ xBrowserSync.App.Global = function(platform) {
             Working_Message: 'working_Message',
             ConnRestored_Title: 'connRestored_Title',
             ConnRestored_Message: 'connRestored_Message',
+            Notification_Upgrade_Message: 'notification_Upgrade_Message',
             Bookmark_Metadata_Message: 'bookmark_Metadata_Message',
             Error_Default_Title: 'error_Default_Title',
             Error_Default_Message: 'error_Default_Message',
@@ -441,20 +441,6 @@ xBrowserSync.App.Global = function(platform) {
             Error: 2
         },
         LookaheadMinChars: 1,
-        MetadataCollection: {
-            Get: function() {
-                var metadata = platform.LocalStorage.Get(
-                    'xBrowserSync-metadataColl');
-                return (!metadata) ? [] : JSON.parse(metadata);
-            },
-            Set: function(value) {
-                value = (!value) ? '' : JSON.stringify(value);
-                
-                platform.LocalStorage.Set(
-                    'xBrowserSync-metadataColl', 
-                    value);
-            }
-        },
         Network: {
             Disconnected: {
                 Get: function() {

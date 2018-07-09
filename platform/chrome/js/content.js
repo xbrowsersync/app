@@ -70,12 +70,6 @@
 		tags: getPageKeywords()
 	};
 
-	// Send metadata to background script to be cached
-	chrome.runtime.sendMessage({
-		command: 4,
-		metadata: metadata
-	});
-
 	// Return metadata to caller
 	return metadata;
 })();
