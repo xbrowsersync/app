@@ -749,6 +749,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				else {
 					browser.tabs.create({ 'url': url });
 				}
+
+				// Close the extension window
+				window.close();
         });
 	};
 	

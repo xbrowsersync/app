@@ -190,12 +190,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"settings_Service_ServiceMessage_Label": {
 			"message": "Service message"
 		},
-		"settings_Service_ApiVersion_Label": {
-			"message": "API version"
-		},
-		"settings_Service_ApiVersion_Description": {
-			"message": "xBrowserSync API version used by the service."
-		},
 		"settings_Service_ChangeService_Label": {
 			"message": "Change service"
 		},
@@ -227,61 +221,28 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "Version"
 		},
 		"settings_About_AppVersion_Description": {
-			"message": "xBrowserSync app version number."
+			"message": "xBrowserSync client version number."
 		},
-		"settings_About_Updates_Label": {
-			"message": "Latest updates"
+		"settings_About_ReleaseNotes_Label": {
+			"message": "View Release Notes"
 		},
-		"settings_About_Updates_Link_Label": {
-			"message": "Full release history"
+		"settings_About_FAQs_Label": {
+			"message": "FAQs"
 		},
-		"settings_About_Updates_Description": {
-			"message": "Notable updates for this version."
+		"settings_About_FAQs_Description": {
+			"message": "Got a question or having an issue? The answer might be in the FAQs."
 		},
-		"settings_About_Website_Label": {
-			"message": "Website"
-		},
-		"settings_About_Website_Description": {
-			"message": "xBrowserSync website URL."
-		},
-		"settings_About_GitHub_Label": {
-			"message": "GitHub"
-		},
-		"settings_About_GitHub_Description": {
-			"message": "xBrowserSync is open-source — dig through the code and contribute to the project by creating a pull request."
+		"settings_About_ViewFAQs_Label": {
+			"message": "View FAQs"
 		},
 		"settings_About_Issues_Label": {
-			"message": "Issues tracker / feature requests"
+			"message": "Issues tracker"
 		},
 		"settings_About_Issues_Description": {
-			"message": "Raise an issue with the app or request a new feature."
+			"message": "Raise an issue to report a bug or request a new feature."
 		},
-		"settings_About_MobileApps_Label": {
-			"message": "Mobile apps"
-		},
-		"settings_About_MobileApps_Description": {
-			"message": "Get the xBrowserSync mobile app, available now for Android or iOS."
-		},
-		"settings_About_MobileApps_Android_Link_Title": {
-			"message": "Get it on Google Play"
-		},
-		"settings_About_MobileApps_iOS_Link_Title": {
-			"message": "Get it on the App Store"
-		},
-		"settings_About_WebExtensions_Label": {
-			"message": "Web extension"
-		},
-		"settings_About_WebExtensions_Description": {
-			"message": "Get the xBrowserSync desktop browser extension, available now for Chrome."
-		},
-		"settings_About_WebExtensions_Chrome_Link_Title": {
-			"message": "Get it on the Chrome Web Store"
-		},
-		"settings_About_Acknowledgements_Label": {
-			"message": "Acknowledgements"
-		},
-		"settings_About_Acknowledgements_Description": {
-			"message": "xBrowserSync would not be possible without these open-source libraries (and their depedencies) and the talented devs who give up their free time to make them possible. Respect."
+		"settings_About_RaiseIssue_Label": {
+			"message": "Raise Issue"
 		},
 		"settings_About_Contributions_Label": {
 			"message": "Contributions"
@@ -289,8 +250,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"settings_About_Contributions_Description": {
 			"message": "If you enjoy using xBrowserSync and would like to contribute some BTC towards the development and running costs."
 		},
-		"settings_About_Contributions_Link_Title": {
-			"message": "Send BTC to 1QEpmSt2hqnskxGRav9SNaRrJo5E9pGpGy"
+		"settings_About_Contribute_Label": {
+			"message": "Become a Patron"
 		},
 		"settings_Debug_Title" : {
 			"message":  "Debug"
@@ -648,9 +609,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		},
 		"error_FailedShareUrlNotSynced_Title": {
 			"message":  "You must be synced to add a bookmark"
-		},
-		"settings_About_Updates_ListHtml": {
-			"message": "<li>iOS and Android apps released!</li><li>Redesigned, more intuitive sync/login panel and settings panel.</li><li>Cleaned up extension dependencies for smaller footprint and faster loading.</li><li>Added support for bookmarklets.</li><li>Search queries now allow commas between keywords.</li><li>Titleless bookmarks now display their URL host as a title.</li><li>Bookmark descriptions are now shortened to 300 characters to the nearest word.</li><li>“Connection Lost” warnings are no longer shown when checking for updates in the background.</li><li>Many, many more minor enhancements and bug fixes.</li>"
 		}
 	};
 

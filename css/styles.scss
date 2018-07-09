@@ -552,8 +552,7 @@ body {
         overflow-x: hidden;
         
         .label {
-            display: block;
-            float: left;
+            display: inline-block;
             margin: 0px 5px 5px 0;
             color: $colour-text1;
             background-color: $colour-text2;
@@ -563,7 +562,7 @@ body {
             font-weight: normal;
             text-transform: capitalize;
             padding: 6px 8px;
-            max-width: 100%;
+            max-width: 99%;
             @include text-overflow-ellipsis;
             
             &:hover {

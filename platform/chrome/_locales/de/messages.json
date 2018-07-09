@@ -170,12 +170,6 @@
 	"settings_Service_ServiceMessage_Label": {
 		"message": "Dienst-Meldungen"
 	},
-	"settings_Service_ApiVersion_Label": {
-		"message": "API Version"
-	},
-	"settings_Service_ApiVersion_Description": {
-		"message": "API Version, die der xBrowserSync Dienst verwendet."
-	},
 	"settings_Service_ChangeService_Label": {
 		"message": "Dienst ändern"
 	},
@@ -209,26 +203,17 @@
 	"settings_About_AppVersion_Description": {
 		"message": "Versionsnummer der xBrowserSync Erweiterung."
 	},
-	"settings_About_Updates_Label": {
-		"message": "Letzte Updates"
+	"settings_About_ReleaseNotes_Label": {
+		"message": "View Release Notes"
 	},
-	"settings_About_Updates_Link_Label": {
-		"message": "Vollständige Release Historie"
+	"settings_About_FAQs_Label": {
+		"message": "FAQs"
 	},
-	"settings_About_Updates_Description": {
-		"message": "Erwähnenswerte Updates für diese Version."
+	"settings_About_FAQs_Description": {
+		"message": "Got a question or having an issue? The answer might be in the FAQs."
 	},
-	"settings_About_Website_Label": {
-		"message": "Website"
-	},
-	"settings_About_Website_Description": {
-		"message": "xBrowserSync Website URL."
-	},
-	"settings_About_GitHub_Label": {
-		"message": "GitHub"
-	},
-	"settings_About_GitHub_Description": {
-		"message": "xBrowserSync ist Open-Source — Wühlen Sie sich durch den Code und wirken Sie an dem Projekt mit indem Sie einen Pull Request erstellen."
+	"settings_About_ViewFAQs_Label": {
+		"message": "View FAQs"
 	},
 	"settings_About_Issues_Label": {
 		"message": "Problem-Tracker / Feature Requests"
@@ -236,32 +221,8 @@
 	"settings_About_Issues_Description": {
 		"message": "Melden Sie ein Problem mit der Erweiterung oder erstellen Sie einen neuen Feature Request."
 	},
-	"settings_About_MobileApps_Label": {
-		"message": "Mobile Apps"
-	},
-	"settings_About_MobileApps_Description": {
-		"message": "Holen Sie sich die xBrowserSync Mobil-App, jetzt verfügbar für Android und iOS."
-	},
-	"settings_About_MobileApps_Android_Link_Title": {
-		"message": "Bei Google Play"
-	},
-	"settings_About_MobileApps_iOS_Link_Title": {
-		"message": "Im App Store"
-	},
-	"settings_About_WebExtensions_Label": {
-		"message": "Web-Erweiterung"
-	},
-	"settings_About_WebExtensions_Description": {
-		"message": "Holen Sie sich die xBrowserSync Desktop-Browser-Erweiterung für Chrome."
-	},
-	"settings_About_WebExtensions_Chrome_Link_Title": {
-		"message": "Erhältlich im Chrome Web Store"
-	},
-	"settings_About_Acknowledgements_Label": {
-		"message": "Vereinbarungen"
-	},
-	"settings_About_Acknowledgements_Description": {
-		"message": "xBrowserSync wäre ohne die folgenden Open-Source Bibliotheken (und ihre Abhängigkeiten) und den talentierten Entwicklern, die ihre Freizeit dafür opfern, nicht möglich. Respekt!"
+	"settings_About_RaiseIssue_Label": {
+		"message": "Raise Issue"
 	},
 	"settings_About_Contributions_Label": {
 		"message": "Mitwirken"
@@ -269,8 +230,8 @@
 	"settings_About_Contributions_Description": {
 		"message": "Wenn Sie xBrowserSync mögen und mit BTC die Entwicklungs- und Betriebskosten unterstützen möchten."
 	},
-	"settings_About_Contributions_Link_Title": {
-		"message": "Senden Sie BTC an 1QEpmSt2hqnskxGRav9SNaRrJo5E9pGpGy"
+	"settings_About_Contribute_Label": {
+		"message": "Become a Patron"
 	},
 	"settings_Debug_Title": {
 		"message": "Debug"
@@ -604,8 +565,5 @@
 	},
 	"error_FailedBackupData_Title": {
 		"message": "Sicherung fehlgeschlagen"
-	},
-	"settings_About_Updates_ListHtml": {
-		"message": "<li><a href='https://itunes.apple.com/gb/app/xbrowsersync/id1186064613?mt=8' class='new-tab'>iOS</a> und <a href='https://play.google.com/store/apps/details?id=com.xBrowserSync.android' class='new-tab'>Android</a> Apps freigegeben!</li><li>Neu designte und intuitivere Sync/Anmelde- und Einstellungs-Panel.</li><li>Die Abhängigkeiten wurden aufgeräumt, damit die Erweiterung schlanker ist und schneller lädt.</li><li>Unterstützung für Bookmarklets hinzugefügt.</li><li>Suchanfragen unterstützen nun Kommata zwischen den Schlüsselwörtern.</li><li>Lesezeichen ohne Benennung zeigen jetzt den URL-Host im Titel.</li><li>Lesezeichen-Beschreibungen wurden auf 300 Zeichen gekürzt.</li><li>“Verbindung verloren” Warnungen werden nicht mehr angezeigt, wenn im Hintergrund auf Updates geprüft wird.</li><li>Viele, viele kleinere Verbesserungen und Fehlerbereinigungen.</li>"
 	}
 }

@@ -170,12 +170,6 @@
 	"settings_Service_ServiceMessage_Label": {
 		"message": "Message service"
 	},
-	"settings_Service_ApiVersion_Label": {
-		"message": "API version"
-	},
-	"settings_Service_ApiVersion_Description": {
-		"message": "version d'API xBrowserSync utilisée par le service."
-	},
 	"settings_Service_ChangeService_Label": {
 		"message": "Changer de service"
 	},
@@ -209,26 +203,17 @@
 	"settings_About_AppVersion_Description": {
 		"message": "Numéro de version de l'extension xBrowserSync."
 	},
-	"settings_About_Updates_Label": {
-		"message": "Dernières mises à jour"
+	"settings_About_ReleaseNotes_Label": {
+		"message": "View Release Notes"
 	},
-	"settings_About_Updates_Link_Label": {
-		"message": "Historique complet des versions"
+	"settings_About_FAQs_Label": {
+		"message": "FAQs"
 	},
-	"settings_About_Updates_Description": {
-		"message": "Mises à jour notables de cette version."
+	"settings_About_FAQs_Description": {
+		"message": "Got a question or having an issue? The answer might be in the FAQs."
 	},
-	"settings_About_Website_Label": {
-		"message": "Website"
-	},
-	"settings_About_Website_Description": {
-		"message": "URL du site xBrowserSync."
-	},
-	"settings_About_GitHub_Label": {
-		"message": "GitHub"
-	},
-	"settings_About_GitHub_Description": {
-		"message": "xBrowserSync est open-source — creusez à travers le code et contribuez au projet en faisant des pull requests."
+	"settings_About_ViewFAQs_Label": {
+		"message": "View FAQs"
 	},
 	"settings_About_Issues_Label": {
 		"message": "Tracker de problèmes / demandes de fonctionnalités"
@@ -236,32 +221,8 @@
 	"settings_About_Issues_Description": {
 		"message": "Ouvrir un ticket sur un problème de l'extension ou faire une demande d'évolution."
 	},
-	"settings_About_MobileApps_Label": {
-		"message": "Applications mobiles"
-	},
-	"settings_About_MobileApps_Description": {
-		"message": "Obtenir l'app mobile xBrowserSync, disponible pour le moment pour Android et iOS."
-	},
-	"settings_About_MobileApps_Android_Link_Title": {
-		"message": "Obtenir sur Google Play"
-	},
-	"settings_About_MobileApps_iOS_Link_Title": {
-		"message": "Obtenir sur l'App Store"
-	},
-	"settings_About_WebExtensions_Label": {
-		"message": "Extension Web"
-	},
-	"settings_About_WebExtensions_Description": {
-		"message": "Obtenir l'extension de navigateur xBrowserSync, disponible pour le moment pour Chrome."
-	},
-	"settings_About_WebExtensions_Chrome_Link_Title": {
-		"message": "Obtenir sur le Chrome Web Store"
-	},
-	"settings_About_Acknowledgements_Label": {
-		"message": "Reconnaissances"
-	},
-	"settings_About_Acknowledgements_Description": {
-		"message": "xBrowserSync ne serait pas possible sans ces bibliothèques open-source (et leurs dépendances) et les talentueux devs qui ont donné de leur temps libre pour les rendre possible. Respect."
+	"settings_About_RaiseIssue_Label": {
+		"message": "Raise Issue"
 	},
 	"settings_About_Contributions_Label": {
 		"message": "Contributions"
@@ -269,8 +230,8 @@
 	"settings_About_Contributions_Description": {
 		"message": "Si vous aimez xBrowserSync et voulez contribuer et envoyer quelques BTC pour le développement et les coûts de fonctionnement."
 	},
-	"settings_About_Contributions_Link_Title": {
-		"message": "Envoyez les BTC à 1QEpmSt2hqnskxGRav9SNaRrJo5E9pGpGy"
+	"settings_About_Contribute_Label": {
+		"message": "Become a Patron"
 	},
 	"settings_Debug_Title" : {
 		"message":  "Debug"
@@ -604,8 +565,5 @@
 	},
 	"error_FailedBackupData_Title" : {
 		"message":  "Sauvegarde échouée"
-	},
-	"settings_About_Updates_ListHtml": {
-		"message": "<li><a href='https://itunes.apple.com/gb/app/xbrowsersync/id1186064613?mt=8' class='new-tab'>iOS</a> et <a href='https://play.google.com/store/apps/details?id=com.xBrowserSync.android' class='new-tab'>Android</a> enfin prêtes !</li><li>Refaites graphiquement, des écrans de login/synchro/paramètres plus intuitifs.</li><li>Suppression des dépendances obsolètes pour réduire la taille de l'extension et accélerer son chargement.</li><li>Ajout du support pour les bookmarklets.</li><li>Les requêtes de recherche autorisent maintenant les virgules entre les mots-clés.</li><li>Les favoris sans titre affichent maintenant leur URL comme titre.</li><li>La description des favoris est maintenant réduite à 300 caractères au mot le plus près.</li><li>Les avertissements “Connexion perdue” ne sont plus affichés lors de la recherche de mise à jour en arrière plan.</li><li>Plein, plein d'améliorations et de corrections de bugs mineurs.</li>"
 	}
 }
