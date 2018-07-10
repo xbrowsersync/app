@@ -652,7 +652,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
     
     var getPageMetadata = function() {
         // Get current tab
-        return browser.tabs.query({ currentWindow: true, active: true })
+        return browser.tabs.query({ active: true, currentWindow: true })
             .then(function(tabs) {
 				var activeTab = tabs[0];
 				

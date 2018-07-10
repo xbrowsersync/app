@@ -592,9 +592,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         var metadata = {};
 		
 		// Get current tab
-        chrome.tabs.query(
-            { active: true, currentWindow: true, windowType: 'normal' },
-            function(tabs) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
                 var activeTab = tabs[0];
 				
 				// Exit if this is a chrome url

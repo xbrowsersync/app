@@ -18,17 +18,11 @@
   "background": {
     "page": "background.html"
   },
-  "content_scripts": [
-    {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": ["js/content.js"]
-    }
-  ],
   "content_security_policy": "object-src 'self'; script-src 'self' 'unsafe-eval';",
   "permissions": [
     "<all_urls>",
     "activeTab",
-    "alarms",    
+    "alarms",
     "bookmarks",
     "notifications",
     "tabs"
