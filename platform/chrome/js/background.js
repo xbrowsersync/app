@@ -199,12 +199,24 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
 		switch(details.reason) {
 			case 'install':
 				// On install, register alarm
-				chrome.alarms.clear(globals.Alarm.Name.Get(), function() {
-					chrome.alarms.create(
-						globals.Alarm.Name.Get(), {
-							periodInMinutes: globals.Alarm.Period.Get()
-						});
-				});
+				try {
+					chrome.alarms.clear(globals.Alarm.Name.Get(), function() {
+						chrome.alarms.create(
+							globals.Alarm.Name.Get(), {
+								periodInMinutes: globals.Alarm.Period.Get()
+							});
+					});
+				}
+				catch (err) {
+					// Log error
+					utility.LogMessage(
+						moduleName, 'install', globals.LogType.Warning,
+						err.stack);
+					
+					// Display alert
+					var errMessage = utility.GetErrorMessageFromException({ code: globals.ErrorCodes.InstallFailed });
+					displayAlert(errMessage.title, errMessage.message);
+				}
 				break;
 			case 'update':
 				if (details.previousVersion && 
