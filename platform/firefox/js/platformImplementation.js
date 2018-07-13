@@ -27,6 +27,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
     
 	var FirefoxImplementation = function() {
 		// Inject required platform implementation functions
+		platform.AutomaticUpdates.Start = startAutoUpdates;
+		platform.AutomaticUpdates.Stop = stopAutoUpdates;
 		platform.BackupData = backupData;
 		platform.Bookmarks.AddIds = addIdsToBookmarks;
 		platform.Bookmarks.Clear = clearBookmarks;
@@ -152,7 +154,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			.then(function(createdBookmarkIsContainer) {
 				if (!!createdBookmarkIsContainer) {
 					// Disable sync
-					globals.SyncEnabled.Set(false);
+					bookmarks.DisableSync();
 					return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
 				}
 		
@@ -221,7 +223,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			.then(function(changedBookmarkIsContainer) {
 				if (!!changedBookmarkIsContainer) {
 					// Disable sync
-					globals.SyncEnabled.Set(false);
+					bookmarks.DisableSync();
 					return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
 				}
 		
@@ -349,7 +351,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			.then(function(changedBookmarkIsContainer) {
 				if (!!changedBookmarkIsContainer) {
 					// Disable sync
-					globals.SyncEnabled.Set(false);
+					bookmarks.DisableSync();
 					return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
 				}
 				
@@ -415,7 +417,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'clearBookmarks', utility.LogType.Error,
+					moduleName, 'clearBookmarks', globals.LogType.Error,
 					'Error clearing menu bookmarks; ' + err.stack);
 					
 				return $q.reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
@@ -437,7 +439,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'clearBookmarks', utility.LogType.Error,
+					moduleName, 'clearBookmarks', globals.LogType.Error,
 					'Error clearing mobile bookmarks; ' + err.stack);
 					
 				return $q.reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
@@ -459,7 +461,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
-					moduleName, 'clearBookmarks', utility.LogType.Error,
+					moduleName, 'clearBookmarks', globals.LogType.Error,
 					'Error clearing other bookmarks; ' + err.stack);
 					
 				return $q.reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
@@ -482,7 +484,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					.catch(function(err) {
 						// Log error
 						utility.LogMessage(
-							moduleName, 'clearBookmarks', utility.LogType.Error,
+							moduleName, 'clearBookmarks', globals.LogType.Error,
 							'Error clearing toolbar; ' + err.stack);
 						
 						return reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
@@ -769,7 +771,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				catch (err) {
 					// Log error
 					utility.LogMessage(
-						moduleName, 'populateBookmarks', utility.LogType.Error,
+						moduleName, 'populateBookmarks', globals.LogType.Error,
 						'Error populating unfiled bookmarks; ' + err.stack);
 					
 					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
@@ -791,7 +793,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				catch (err) {
 					// Log error
 					utility.LogMessage(
-						moduleName, 'populateBookmarks', utility.LogType.Error,
+						moduleName, 'populateBookmarks', globals.LogType.Error,
 						'Error populating other bookmarks; ' + err.stack);
 					
 					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
@@ -813,7 +815,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
                 catch (err) {
                     // Log error
 					utility.LogMessage(
-						moduleName, 'populateBookmarks', utility.LogType.Error,
+						moduleName, 'populateBookmarks', globals.LogType.Error,
 						'Error populating toolbar; ' + err.stack);
 					
 					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
@@ -835,7 +837,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
                 catch (err) {
                     // Log error
 					utility.LogMessage(
-						moduleName, 'populateBookmarks', utility.LogType.Error,
+						moduleName, 'populateBookmarks', globals.LogType.Error,
 						'Error populating menu; ' + err.stack);
 					
 					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
@@ -857,7 +859,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
                 catch (err) {
                     // Log error
 					utility.LogMessage(
-						moduleName, 'populateBookmarks', utility.LogType.Error,
+						moduleName, 'populateBookmarks', globals.LogType.Error,
 						'Error populating mobile; ' + err.stack);
 					
 					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
@@ -894,6 +896,29 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	
 	var setInLocalStorage = function(itemName, itemValue) {
 		localStorage.setItem(itemName, itemValue);
+	};
+
+	var startAutoUpdates = function() {
+		// Register alarm
+		return browser.alarms.clear(globals.Alarm.Name.Get())
+			.then(function() {
+				return browser.alarms.create(
+					globals.Alarm.Name.Get(), {
+						periodInMinutes: globals.Alarm.Period.Get()
+					});
+			})
+			.catch(function(err) {
+				// Log error
+				utility.LogMessage(
+					moduleName, 'startAutoUpdates', globals.LogType.Warning,
+					'Error registering alarm; ' + err.stack);
+					
+				return $q.reject({ code: globals.ErrorCodes.FailedRegisterAutoUpdates });
+			});
+	};
+
+	var stopAutoUpdates = function() {
+		browser.alarms.clear(globals.Alarm.Name.Get());
 	};
 	
 	var sync = function(asyncChannel, syncData, command) {
@@ -944,7 +969,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		catch(err) {
 			// Log error
 			utility.LogMessage(
-				moduleName, 'createLocalBookmark', utility.LogType.Error,
+				moduleName, 'createLocalBookmark', globals.LogType.Error,
 				err.stack);
 			
 			deferred.reject({ code: globals.ErrorCodes.FailedCreateLocalBookmarks });

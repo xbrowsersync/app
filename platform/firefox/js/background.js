@@ -157,7 +157,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
 					// If ID was removed disable sync
 					if (err.code === globals.ErrorCodes.NoDataFound) {
 						err.code = globals.ErrorCodes.IdRemoved;
-						globals.SyncEnabled.Set(false);
+						bookmarks.DisableSync();
 					}
 					
 					// Log error
@@ -197,35 +197,14 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
 	
 	var install = function(details) {
 		switch(details.reason) {
-			case 'install':
-				// On install, register alarm
-				browser.alarms.clear(globals.Alarm.Name.Get())
-					.then(function() {
-						return browser.alarms.create(
-							globals.Alarm.Name.Get(), {
-								periodInMinutes: globals.Alarm.Period.Get()
-							});
-					})
-					.catch(function(err) {
-						// Log error
-						utility.LogMessage(
-							moduleName, 'install', globals.LogType.Warning,
-							err.stack);
-						
-						// Display alert
-						var errMessage = utility.GetErrorMessageFromException({ code: globals.ErrorCodes.InstallFailed });
-						displayAlert(errMessage.title, errMessage.message);
-					});
-				break;
 			case 'update':
 				if (details.previousVersion && 
 					details.previousVersion !== browser.runtime.getManifest().version) {
-					// If extension has been updated, display alert and disable sync
+					// If extension has been updated display alert
 					displayAlert(
 						platform.GetConstant(globals.Constants.Notification_Upgrade_Message) + ' ' +
 						browser.runtime.getManifest().version,
-						globals.UpdateMessage.Get(globals.SyncEnabled.Get()));
-						globals.SyncEnabled.Set(false);
+						globals.UpdateMessage.Get());
 				}
 				break;
 		}
@@ -334,7 +313,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
 			globals.IsSyncing.Set(false);
 			
 			// Disable sync
-			globals.SyncEnabled.Set(false);
+			bookmarks.DisableSync();
 			
 			// Display alert
 			displayAlert(

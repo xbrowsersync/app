@@ -230,11 +230,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             displayPasswordConfirmation: false,
             displaySyncConfirmation: false,
             displayUpgradeConfirmation: false,
-            enabled: function(value) {
-                return arguments.length ? 
-                    globals.SyncEnabled.Set(value) : 
-                    globals.SyncEnabled.Get();
-            },
+            enabled: globals.SyncEnabled.Get,
             inProgress: function(value) {
                 return arguments.length ? 
                     globals.IsSyncing.Set(value) : 
@@ -742,6 +738,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.sync.displaySyncConfirmation = false;
                 vm.sync.displayUpgradeConfirmation = false;
                 vm.sync.secret = null;
+                vm.sync.secretComplexity = {};
                 vm.sync.secretConfirmation = null;
                 vm.sync.upgradeConfirmed = false;
                 if (vm.syncForm) {
@@ -929,11 +926,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 platform.Interface.Loading.Hide();
                 
                 if (response.success) {
-                    // Enable sync
-                    if (!globals.SyncEnabled.Get()) {
-                        globals.SyncEnabled.Set(true);
-                    }
-
                     // Refresh interface/icon
                     $timeout(platform.Interface.Refresh);
                     
@@ -959,7 +951,6 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     
                     // If ID was removed disable sync and display login panel
                     if (!!response.error && response.error.code === globals.ErrorCodes.IdRemoved) {
-                        globals.SyncEnabled.Set(false);
                         vm.view.change(vm.view.views.login)
                             .finally(function() {
                                 errMessage = utility.GetErrorMessageFromException(response.error);
@@ -1710,14 +1701,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     var syncForm_CancelSyncConfirmation_Click = function() {
         // TODO: Ensure any sync messaging or process is cancelled also
         globals.IsSyncing.Set(false);
-        globals.SyncEnabled.Set(false);
-        
-        // Clear cached data
-        vm.sync.secret = null;
-        vm.sync.secretComplexity = {};
-        globals.Password.Set(null);
-        globals.SyncVersion.Set(null);
-        globals.Cache.Bookmarks.Set(null);
+        bookmarks.DisableSync();
 
         // Switch to login panel
         vm.view.change(vm.view.views.login);
@@ -1877,7 +1861,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         var url = vm.settings.service.newServiceUrl.replace(/\/$/, '');
         
         // Disable sync
-        vm.sync.enabled(false);
+        bookmarks.DisableSync();
         
         // Update the service URL
         vm.settings.service.url(url);

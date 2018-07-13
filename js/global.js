@@ -372,7 +372,7 @@ xBrowserSync.App.Global = function(platform) {
             FailedRestoreData: 10306,
             FailedShareUrl: 10400,
             FailedShareUrlNotSynced: 10401,
-            InstallFailed: 10500,
+            FailedRegisterAutoUpdates: 10500,
             NotImplemented: 10600
         },
         Id: {

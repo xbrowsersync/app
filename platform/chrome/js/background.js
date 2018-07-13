@@ -157,7 +157,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
 					// If ID was removed disable sync
 					if (err.code === globals.ErrorCodes.NoDataFound) {
 						err.code = globals.ErrorCodes.IdRemoved;
-						globals.SyncEnabled.Set(false);
+						bookmarks.DisableSync();
 					}
 					
 					// Log error
@@ -197,27 +197,6 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
 	
 	var install = function(details) {
 		switch(details.reason) {
-			case 'install':
-				// On install, register alarm
-				try {
-					chrome.alarms.clear(globals.Alarm.Name.Get(), function() {
-						chrome.alarms.create(
-							globals.Alarm.Name.Get(), {
-								periodInMinutes: globals.Alarm.Period.Get()
-							});
-					});
-				}
-				catch (err) {
-					// Log error
-					utility.LogMessage(
-						moduleName, 'install', globals.LogType.Warning,
-						err.stack);
-					
-					// Display alert
-					var errMessage = utility.GetErrorMessageFromException({ code: globals.ErrorCodes.InstallFailed });
-					displayAlert(errMessage.title, errMessage.message);
-				}
-				break;
 			case 'update':
 				if (details.previousVersion && 
 					details.previousVersion !== chrome.runtime.getManifest().version) {
@@ -229,7 +208,7 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
 						platform.GetConstant(globals.Constants.Notification_Upgrade_Message) + ' ' +
 						chrome.runtime.getManifest().version,
 						globals.UpdateMessage.Get(globals.SyncEnabled.Get()));
-						globals.SyncEnabled.Set(false);
+						bookmarks.DisableSync();
 				}
 				break;
 		}

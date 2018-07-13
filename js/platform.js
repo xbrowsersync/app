@@ -23,6 +23,10 @@ xBrowserSync.App.Platform = function($q) {
 	};
     
 	return {
+		AutomaticUpdates: {
+			Start: notImplemented,
+			Stop: notImplemented
+		},
 		BackupData: notImplemented,
 		Bookmarks: {
 			AddIds: notImplemented,

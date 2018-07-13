@@ -63,10 +63,23 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 return !globals.LastUpdated.Get() || globals.LastUpdated.Get().getTime() !== lastUpdated.getTime();
             })
             .catch(function(err) {
+                // Check if sync should be disabled
+                checkIfDisableSync();
+                
                 utility.LogError(moduleName, 'checkForUpdates', err);
                 return $q.reject(err);
             });
-	};
+    };
+    
+    var disableSync = function() {
+        globals.SyncEnabled.Set(false);
+        platform.AutomaticUpdates.Stop();
+
+        // Clear cached data
+        globals.Password.Set(null);
+        globals.SyncVersion.Set(null);
+        globals.Cache.Bookmarks.Set(null);
+    };
 
     var eachBookmark = function(bookmarks, iteratee) {
         // Run the iteratee function for every bookmark
@@ -345,6 +358,21 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
  * Private functions
  * ------------------------------------------------------------------------------------ */
 
+    var checkIfDisableSync = function() {
+        if (globals.SyncEnabled.Get() && (
+            err.code === globals.ErrorCodes.ContainerChanged ||
+            err.code === globals.ErrorCodes.IdRemoved ||
+            err.code === globals.ErrorCodes.MissingClientData ||
+            err.code === globals.ErrorCodes.NoDataFound ||
+            err.code === globals.ErrorCodes.TooManyRequests)) {
+            disableSync();
+            
+            if (err.code === globals.ErrorCodes.NoDataFound) {
+                err.code = globals.ErrorCodes.IdRemoved;
+            }
+        }
+    };
+ 
     var cleanWords = function (wordsToClean) {
         if (!wordsToClean) {
             return;
@@ -353,6 +381,13 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         var cleanWords = wordsToClean.toLowerCase().replace(/['"]/g, '');
         var cleanWordsArr = _.compact(cleanWords.split(/\s/)); 
         return cleanWordsArr;
+    };
+
+    var enableSync = function() {
+        return platform.AutomaticUpdates.Start()
+            .then(function() {
+                globals.SyncEnabled.Set(true);
+            });
     };
     
     var getCachedBookmarks = function(canceller) {
@@ -621,9 +656,9 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         
         globals.IsSyncing.Set(true);
 
-        var syncPromise;
 
         // Process sync
+        var syncPromise;
         switch(currentSync.type) {
             // Push bookmarks to xBrowserSync service
             case globals.SyncType.Push:
@@ -653,16 +688,26 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         // If deferred was not provided, use current sync's deferred.
         deferredToResolve = deferredToResolve || currentSync.deferred;
         
+        var syncedBookmarks;
         syncPromise
-            // Resolve original sync deferred
             .then(function(bookmarks) {
+                syncedBookmarks = bookmarks;
+
+                // If syncing for the first time or re-syncing, set sync as enabled
+                if (!globals.SyncEnabled.Get()) {
+                    return enableSync();
+                }
+
+                // TODO: check if this falls through
+            })
+            .then(function() {
                 // Sync next item in the queue otherwise resolve the deferred
                 if (syncQueue.length > 0) {
                     initialSyncFailedRetrySuccess = (!initialSyncFailedRetrySuccess && !!currentSync.initialSyncFailed) ? true : initialSyncFailedRetrySuccess;
                     $timeout(function() { sync(deferredToResolve); });
                 }
                 else {
-                    deferredToResolve.resolve(bookmarks, initialSyncFailedRetrySuccess);
+                    deferredToResolve.resolve(syncedBookmarks, initialSyncFailedRetrySuccess);
                     initialSyncFailedRetrySuccess = false;
                 }
             })
@@ -673,10 +718,11 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                     globals.Password.Set(null);
                 }
 
-                // If ID was removed disable sync
-                if (!!globals.SyncEnabled.Get() && err.code === globals.ErrorCodes.NoDataFound) {
+                // Check if sync should be disabled
+                checkIfDisableSync();
+                
+                if (globals.SyncEnabled.Get() && err.code === globals.ErrorCodes.NoDataFound) {
                     err.code = globals.ErrorCodes.IdRemoved;
-                    globals.SyncEnabled.Set(false);
                 }
                 
                 // Handle network error
@@ -707,7 +753,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
 
         // Check secret and bookmarks ID are present
 		if (!globals.Password.Get() || !globals.Id.Get()) {
-			globals.SyncEnabled.Set(false);
+			disableSync();
             return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
         
@@ -839,7 +885,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         
         // Check secret and bookmarks ID are present
 		if (!globals.Password.Get() || !globals.Id.Get()) {
-			globals.SyncEnabled.Set(false);
+			disableSync();
             return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
         
@@ -894,7 +940,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         
         // Check secret and sync ID are present
         if (!globals.Password.Get() || !globals.Id.Get()) {
-            globals.SyncEnabled.Set(false);
+            disableSync();
             return $q.reject({ code: globals.ErrorCodes.MissingClientData });
         }
         
@@ -986,7 +1032,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
         
         // Check secret and sync ID are present
         if (!globals.Password.Get() || !globals.Id.Get()) {
-            globals.SyncEnabled.Set(false);
+            disableSync();
             return $q.reject({ code: globals.ErrorCodes.MissingClientData });
         }
             
@@ -1055,6 +1101,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
 	var self = {
         CheckBookmarksHaveUniqueIds: checkBookmarksHaveUniqueIds,
         CheckForUpdates: checkForUpdates,
+        DisableSync: disableSync,
         Each: eachBookmark,
 		Export: exportBookmarks,
         GetContainer: getContainer,

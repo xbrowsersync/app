@@ -622,6 +622,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
     
 	var MobileAppsImplementation = function() {
 		// Inject required platform implementation functions
+		platform.AutomaticUpdates.Start = startAutoUpdates;
+		platform.AutomaticUpdates.Stop = stopAutoUpdates;
 		platform.BackupData = backupData;
 		platform.Bookmarks.Clear = clearBookmarks;
 		platform.Bookmarks.Get = getBookmarks;
@@ -1124,6 +1126,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		// Display share sheet
 		window.plugins.socialsharing.shareWithOptions(options, null, onError);
     };
+
+	var startAutoUpdates = function() {
+		return $q.resolve();
+	};
+
+	var stopAutoUpdates = function() {
+	};
 	
 	var sync = function(vm, syncData, command) {
 		syncData.command = (!!command) ? command : globals.Commands.SyncBookmarks;
@@ -1198,24 +1207,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		vm.view.displayMainView();
     };
 
-	var checkForDeletedSync = function(err) {
-		// If ID was removed disable sync and delete saved ID and password
-		if (err.code === globals.ErrorCodes.NoDataFound) {
-			err.code = globals.ErrorCodes.IdRemoved;
-			globals.SyncEnabled.Set(false);
-			globals.ID.Set(null);
-			globals.Password.Set(null);
-			vm.view.change(vm.view.views.login);
-		}
-	};
-
 	var checkForInterruptedSync = function () {
 		// Check if a sync was interrupted
 		if (!!globals.IsSyncing.Get()) {
 			globals.IsSyncing.Set(false);
 			
 			// Disable sync
-			globals.SyncEnabled.Set(false);
+			bookmarks.DisableSync();
 
 			// Display login panel
 			vm.view.displayMainView();
@@ -1365,7 +1363,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		vm.alert.display = displayToast;
 
 		// Display default search results if sync enabled
-		if (!!globals.SyncEnabled.Get()) {
+		if (globals.SyncEnabled.Get()) {
 			displayDefaultSearchState();
 		}
 
@@ -1410,9 +1408,15 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 						// Get bookmark updates
 						return sync(vm, { type: globals.SyncType.Pull });
 					})
+					.then(function() {
+						// Update search results
+						displayDefaultSearchState();
+					})
 					.catch(function(err) {
-						// If ID was removed disable sync, otherwise display search panel
-						checkForDeletedSync(err);
+						// If sync was disabled, display login panel
+						if (!globals.SyncEnabled.Get()) {
+							vm.view.change(vm.view.views.login);
+						}
 						
 						// Log error
 						utility.LogMessage(
@@ -1427,9 +1431,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					})
 					.finally(function() {
 						hideLoading('syncingUpdates');
-
-						// Update search results
-						displayDefaultSearchState();
 					});
 			})
 			.catch(function(err) {
@@ -1456,7 +1457,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 
 	var getLatestUpdates = function() {
-		// Exit if sync isn't enabled or event listeners disabled
 		if (!globals.SyncEnabled.Get()) {
 			return $q.resolve();
 		}
@@ -1475,9 +1475,15 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				// Get bookmark updates
 				return sync(vm, { type: globals.SyncType.Pull });
 			})
+			.then(function() {
+				// Update search results
+				displayDefaultSearchState();
+			})
 			.catch(function(err) {
-				// If ID was removed disable sync, otherwise display search panel
-				checkForDeletedSync(err);
+				// If sync was disabled, display login panel
+				if (!globals.SyncEnabled.Get()) {
+					vm.view.change(vm.view.views.login);
+				}
 				
 				// Log error
 				utility.LogMessage(
@@ -1492,9 +1498,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			})
 			.finally(function() {
 				hideLoading('syncingUpdates');
-
-				// Update search results
-				displayDefaultSearchState();
 			});
 	};
 
@@ -1663,8 +1666,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 							});
 					})
 					.catch(function(err) {
-						// If ID was removed disable sync, otherwise display search panel
-						checkForDeletedSync(err);
+						// If sync was disabled, display login panel
+						if (!globals.SyncEnabled.Get()) {
+							vm.view.change(vm.view.views.login);
+						}
 						
 						// Log error
 						utility.LogMessage(

@@ -87,7 +87,6 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 	var getBookmarks = function(canceller) {
 		// Check secret and sync ID are present
 		if (!globals.Password.Get() || !globals.Id.Get()) {
-			globals.SyncEnabled.Set(false);
 			return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
 		
@@ -124,7 +123,6 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 	var getBookmarksLastUpdated = function() {
 		// Check secret and sync ID are present
 		if (!globals.Password.Get() || !globals.Id.Get()) {
-			globals.SyncEnabled.Set(false);
 			return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
 		
@@ -152,7 +150,6 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 	var getBookmarksVersion = function() {
 		// Check sync ID is present
 		if (!globals.Id.Get()) {
-			globals.SyncEnabled.Set(false);
 			return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
 		
@@ -180,7 +177,6 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 	var updateBookmarks = function(encryptedBookmarks, updateSyncVersion) {
 		// Check secret and sync ID are present
 		if (!globals.Password.Get() || !globals.Id.Get()) {
-			globals.SyncEnabled.Set(false);
 			return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
 		
@@ -244,7 +240,6 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 			// 429 Too Many Requests: daily new sync limit reached
 			case 429:
 				err.code = globals.ErrorCodes.TooManyRequests;
-				globals.SyncEnabled.Set(false); // Disable sync				
 				break;
 			// -1: No network connection
 			case -1:

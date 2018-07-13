@@ -23,6 +23,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
     
 	var ChromeImplementation = function() {
 		// Inject required platform implementation functions
+		platform.AutomaticUpdates.Start = startAutoUpdates;
+		platform.AutomaticUpdates.Stop = stopAutoUpdates;
 		platform.BackupData = backupData;
 		platform.Bookmarks.AddIds = addIdsToBookmarks;
 		platform.Bookmarks.Clear = clearBookmarks;
@@ -150,8 +152,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		wasContainerChanged(createInfo, xBookmarks)
 			.then(function(createdBookmarkIsContainer) {
 				if (!!createdBookmarkIsContainer) {
-					// Disable sync
-					globals.SyncEnabled.Set(false);
 					return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
 				}
 		
@@ -216,8 +216,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		wasContainerChanged(removeInfo.node, xBookmarks)
 			.then(function(changedBookmarkIsContainer) {
 				if (!!changedBookmarkIsContainer) {
-					// Disable sync
-					globals.SyncEnabled.Set(false);
 					return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
 				}
 		
@@ -344,8 +342,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			})
 			.then(function(changedBookmarkIsContainer) {
 				if (!!changedBookmarkIsContainer) {
-					// Disable sync
-					globals.SyncEnabled.Set(false);
 					return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
 				}
 				
@@ -840,6 +836,35 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	
 	var setInLocalStorage = function(itemName, itemValue) {
 		localStorage.setItem(itemName, itemValue);
+	};
+
+	var startAutoUpdates = function() {
+		return $q(function(resolve, reject) {
+			// Register alarm
+			try {
+				chrome.alarms.clear(globals.Alarm.Name.Get(), function() {
+					chrome.alarms.create(
+						globals.Alarm.Name.Get(), {
+							periodInMinutes: globals.Alarm.Period.Get()
+						}
+					);
+
+					resolve();
+				});
+			}
+			catch (err) {
+				// Log error
+				utility.LogMessage(
+					moduleName, 'startAutoUpdates', globals.LogType.Warning,
+					'Error registering alarm; ' + err.stack);
+					
+				return reject({ code: globals.ErrorCodes.FailedRegisterAutoUpdates });
+			}
+		});
+	};
+
+	var stopAutoUpdates = function() {
+		chrome.alarms.clear(globals.Alarm.Name.Get());
 	};
 	
 	var sync = function(asyncChannel, syncData, command) {
