@@ -1063,11 +1063,17 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             .then(function(encryptedBookmarks) {                
                 // Update cached bookmarks, synced bookmarks and sync version
                 updateCache(bookmarks, encryptedBookmarks);
-                return api.UpdateBookmarks(encryptedBookmarks, true);
+
+                // Sync provided bookmarks and set local bookmarks
+                return $q.all([
+                    api.UpdateBookmarks(encryptedBookmarks, true),
+                    setBookmarks(bookmarks)
+                ]);
             })
             .then(function(data) {
-                // Update cached last updated date
-                globals.LastUpdated.Set(data.lastUpdated);
+                // Update cached last updated date and return decrypted bookmarks
+                globals.LastUpdated.Set(data[0].lastUpdated);
+                return bookmarks;
             })
             .catch(function(err) {
                 utility.LogError(moduleName, 'sync_handleUpgrade', err);
