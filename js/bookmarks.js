@@ -64,7 +64,11 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             })
             .catch(function(err) {
                 // Check if sync should be disabled
-                checkIfDisableSync();
+                checkIfDisableSync(err);
+
+                if (globals.SyncEnabled.Get() && err.code === globals.ErrorCodes.NoDataFound) {
+                    err.code = globals.ErrorCodes.IdRemoved;
+                }
                 
                 utility.LogError(moduleName, 'checkForUpdates', err);
                 return $q.reject(err);
@@ -358,7 +362,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
  * Private functions
  * ------------------------------------------------------------------------------------ */
 
-    var checkIfDisableSync = function() {
+    var checkIfDisableSync = function(err) {
         if (globals.SyncEnabled.Get() && (
             err.code === globals.ErrorCodes.ContainerChanged ||
             err.code === globals.ErrorCodes.IdRemoved ||
@@ -366,10 +370,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             err.code === globals.ErrorCodes.NoDataFound ||
             err.code === globals.ErrorCodes.TooManyRequests)) {
             disableSync();
-            
-            if (err.code === globals.ErrorCodes.NoDataFound) {
-                err.code = globals.ErrorCodes.IdRemoved;
-            }
         }
     };
  
@@ -719,7 +719,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 }
 
                 // Check if sync should be disabled
-                checkIfDisableSync();
+                checkIfDisableSync(err);
                 
                 if (globals.SyncEnabled.Get() && err.code === globals.ErrorCodes.NoDataFound) {
                     err.code = globals.ErrorCodes.IdRemoved;
