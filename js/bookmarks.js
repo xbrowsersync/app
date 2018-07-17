@@ -64,7 +64,11 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             })
             .catch(function(err) {
                 // Check if sync should be disabled
-                checkIfDisableSync();
+                checkIfDisableSync(err);
+
+                if (globals.SyncEnabled.Get() && err.code === globals.ErrorCodes.NoDataFound) {
+                    err.code = globals.ErrorCodes.IdRemoved;
+                }
                 
                 utility.LogError(moduleName, 'checkForUpdates', err);
                 return $q.reject(err);
@@ -358,7 +362,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
  * Private functions
  * ------------------------------------------------------------------------------------ */
 
-    var checkIfDisableSync = function() {
+    var checkIfDisableSync = function(err) {
         if (globals.SyncEnabled.Get() && (
             err.code === globals.ErrorCodes.ContainerChanged ||
             err.code === globals.ErrorCodes.IdRemoved ||
@@ -366,10 +370,6 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             err.code === globals.ErrorCodes.NoDataFound ||
             err.code === globals.ErrorCodes.TooManyRequests)) {
             disableSync();
-            
-            if (err.code === globals.ErrorCodes.NoDataFound) {
-                err.code = globals.ErrorCodes.IdRemoved;
-            }
         }
     };
  
@@ -719,7 +719,7 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
                 }
 
                 // Check if sync should be disabled
-                checkIfDisableSync();
+                checkIfDisableSync(err);
                 
                 if (globals.SyncEnabled.Get() && err.code === globals.ErrorCodes.NoDataFound) {
                     err.code = globals.ErrorCodes.IdRemoved;
@@ -1063,11 +1063,17 @@ xBrowserSync.App.Bookmarks = function($q, $timeout, platform, globals, api, util
             .then(function(encryptedBookmarks) {                
                 // Update cached bookmarks, synced bookmarks and sync version
                 updateCache(bookmarks, encryptedBookmarks);
-                return api.UpdateBookmarks(encryptedBookmarks, true);
+
+                // Sync provided bookmarks and set local bookmarks
+                return $q.all([
+                    api.UpdateBookmarks(encryptedBookmarks, true),
+                    setBookmarks(bookmarks)
+                ]);
             })
             .then(function(data) {
-                // Update cached last updated date
-                globals.LastUpdated.Set(data.lastUpdated);
+                // Update cached last updated date and return decrypted bookmarks
+                globals.LastUpdated.Set(data[0].lastUpdated);
+                return bookmarks;
             })
             .catch(function(err) {
                 utility.LogError(moduleName, 'sync_handleUpgrade', err);

@@ -17,8 +17,6 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
  * ------------------------------------------------------------------------------------ */
  
 	var Background = function() {
-		browser.runtime.onInstalled.addListener(install);
-		
 		browser.runtime.onStartup.addListener(startup);
 
 		browser.runtime.onConnect.addListener(listenForMessages);
@@ -191,21 +189,6 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
 			// Trigger bookmarks restore
 			case globals.Commands.RestoreBookmarks:
 				restoreBookmarks(msg);
-				break;
-		}
-	};
-	
-	var install = function(details) {
-		switch(details.reason) {
-			case 'update':
-				if (details.previousVersion && 
-					details.previousVersion !== browser.runtime.getManifest().version) {
-					// If extension has been updated display alert
-					displayAlert(
-						platform.GetConstant(globals.Constants.Notification_Upgrade_Message) + ' ' +
-						browser.runtime.getManifest().version,
-						globals.UpdateMessage.Get());
-				}
 				break;
 		}
 	};
