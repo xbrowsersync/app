@@ -23,7 +23,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "xBrowserSync"
 		},
 		"description": {
-			"message": "Browser syncing as it should be: secure, anonymous and free! Sync your bookmarks across your browsers and devices with xBrowserSync in one click, no sign up required."
+			"message": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
 		},
 		"containers_Toolbar_Title": {
 			"message": "Bookmarks bar"
@@ -245,10 +245,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "Raise Issue"
 		},
 		"settings_About_Contributions_Label": {
-			"message": "Contributions"
+			"message": "Support xBrowserSync"
 		},
 		"settings_About_Contributions_Description": {
-			"message": "If you enjoy using xBrowserSync and would like to contribute some BTC towards the development and running costs."
+			"message": "If you enjoy using xBrowserSync and would like to support the project, consider becoming a patron."
 		},
 		"settings_About_Contribute_Label": {
 			"message": "Become a Patron"
@@ -299,7 +299,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Cancel"
 		},
 		"settings_Service_UpdateForm_Confirm_Message": {
-			"message":  "<p>After changing the service, the current sync will be disabled and you’ll need to create a new sync.</p><p>If you have previously created a sync using this service and would like to retrieve your data, you can use the xBrowserSync ID provided at the time.</p><p>OK to proceed?</p>"
+			"message":  "<p>After changing the service, the current sync will be disabled and you'll need to create a new sync.</p><p>If you have previously created a sync using this service and would like to retrieve your data, you can use the xBrowserSync ID provided at the time.</p><p>OK to proceed?</p>"
 		},
 		"settings_Service_UpdateForm_InvalidService_Label": {
 			"message":  "Not a valid xBrowserSync service."
@@ -389,7 +389,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Include bookmarks bar"
 		},
 		"settings_Service_DataUsage_Description" : {
-			"message":  "How much of the sync data allowed by the service are you using."
+			"message":  "How much of the data limit for this service is your current sync using."
 		},
 		"settings_BackupRestore_ConfirmRestore_Sync_Message" : {
 			"message":  "<p>The data being restored will overwrite your synced data.</p><p>OK to proceed?</p>"
@@ -458,7 +458,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Connection lost"
 		},
 		"error_HttpRequestFailed_Message" : {
-			"message":  "Couldn’t connect to the xBrowserSync service."
+			"message":  "Couldn’t connect to the xBrowserSync service, check the service status in the Settings panel."
 		},
 		"error_HttpRequestFailedWhileUpdating_Title" : {
 			"message":  "Connection lost"
@@ -467,7 +467,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Sync will be retried automatically when connection is restored."
 		},
 		"error_TooManyRequests_Title" : {
-			"message":  "Slow down"
+			"message":  "Slow down!"
 		},
 		"error_TooManyRequests_Message" : {
 			"message":  "Too many requests sent, sync has been disabled. Re-enable sync to resume syncing."
@@ -581,7 +581,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "A required function has not been implemented and is causing xBrowserSync to not function correctly."
 		},
 		"error_FailedGetPageMetadata_Title" : {
-			"message":  "Couldn’t retrieve bookmark metadata"
+			"message":  "Couldn’t get URL metadata"
 		},
 		"error_FailedGetPageMetadata_Message" : {
 			"message":  "Try sharing the URL again or enter metadata manually."

@@ -225,10 +225,10 @@
 		"message": "Raise Issue"
 	},
 	"settings_About_Contributions_Label": {
-		"message": "Contributions"
+		"message": "Support xBrowserSync"
 	},
 	"settings_About_Contributions_Description": {
-		"message": "If you enjoy using xBrowserSync and would like to contribute some BTC towards the development and running costs."
+		"message": "If you enjoy using xBrowserSync and would like to support the project, consider becoming a patron."
 	},
 	"settings_About_Contribute_Label": {
 		"message": "Become a Patron"
