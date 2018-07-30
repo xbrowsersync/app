@@ -206,8 +206,8 @@
         <div class="progress" data-ng-hide="!vm.sync.secret">
           <div class="progress-bar" role="progressbar" data-ng-style="{ width: (vm.sync.secretComplexity.complexity === 0) ? '100%' : vm.sync.secretComplexity.complexity + '%' }"
             data-ng-class="{
-                        'progress-bar-warning': vm.sync.secretComplexity.complexity > 25 && vm.sync.secretComplexity.complexity < 50,
-                        'progress-bar-success': vm.sync.secretComplexity.complexity > 50 && vm.sync.secretComplexity.complexity <= 100
+                        'progress-bar-warning': vm.sync.secretComplexity.complexity >= 20 && vm.sync.secretComplexity.complexity < 40,
+                        'progress-bar-success': vm.sync.secretComplexity.complexity >= 40
                         }">
           </div>
         </div>
