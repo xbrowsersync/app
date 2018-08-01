@@ -582,7 +582,7 @@ xBrowserSync.App.Global = function(platform) {
         URL: {
             Host: {
                 Get: function() {
-                    var defaultUrl = 'https://api-beta.xbrowsersync.org';
+                    var defaultUrl = 'https://api.xbrowsersync.org';
                     var urlHost = platform.LocalStorage.Get(
                         'xBrowserSync-urlHost');
                     
