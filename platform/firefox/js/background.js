@@ -313,6 +313,13 @@ xBrowserSync.App.Background = function($q, platform, globals, utility, api, book
 		
 		// Check for updates to synced bookmarks
 		bookmarks.CheckForUpdates()
+			.then(function(updatesAvailable) {
+				if (!updatesAvailable) {
+					return;
+				}
+
+				return syncBookmarks({ type: globals.SyncType.Pull });
+			})
 			.catch(function(err) {
 				// Log error
 				utility.LogMessage(
