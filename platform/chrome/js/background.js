@@ -10,29 +10,86 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Background = function ($q, platform, globals, utility, api, bookmarks) {
 	'use strict';
 
-	var asyncChannel, moduleName = 'xBrowserSync.App.Background', networkErrorDetected = false, checkForUpdatesAttempts = 0, disconnectedAlertDisplayed = false;
+	var vm, asyncChannel, moduleName = 'xBrowserSync.App.Background', networkErrorDetected = false, checkForUpdatesAttempts = 0, disconnectedAlertDisplayed = false;
 
 	/* ------------------------------------------------------------------------------------
 	 * Constructor
 	 * ------------------------------------------------------------------------------------ */
 
 	var Background = function () {
-		chrome.runtime.onInstalled.addListener(install);
+		vm = this;
 
-		chrome.runtime.onStartup.addListener(startup);
+		vm.install = function (details) {
+			if (!details) {
+				return;
+			}
+			
+			switch (details.reason) {
+				case 'update':
+					if (details.previousVersion &&
+						details.previousVersion !== chrome.runtime.getManifest().version) {
+						// Remove obsolete cached page metadata
+						localStorage.removeItem('xBrowserSync-metadataColl');
+
+						// If extension has been updated, display alert and disable sync
+						displayAlert(
+							platform.GetConstant(globals.Constants.Notification_Upgrade_Message) + ' ' +
+							chrome.runtime.getManifest().version,
+							globals.UpdateMessage.Get(globals.SyncEnabled.Get()));
+						bookmarks.DisableSync();
+					}
+					break;
+			}
+		};
+
+		vm.startup = function () {
+			// Check if a sync was interrupted
+			if (!!globals.IsSyncing.Get()) {
+				globals.IsSyncing.Set(false);
+
+				// Disable sync
+				globals.SyncEnabled.Set(false);
+
+				// Display alert
+				displayAlert(
+					platform.GetConstant(globals.Constants.Error_SyncInterrupted_Title),
+					platform.GetConstant(globals.Constants.Error_SyncInterrupted_Message));
+
+				return;
+			}
+
+			// Exit if sync isn't enabled or event listeners disabled
+			if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
+				return;
+			}
+
+			// Check for updates to synced bookmarks
+			bookmarks.CheckForUpdates()
+				.then(function (updatesAvailable) {
+					if (!updatesAvailable) {
+						return;
+					}
+
+					return syncBookmarks({ type: globals.SyncType.Pull });
+				})
+				.catch(function (err) {
+					// Log error
+					utility.LogMessage(
+						moduleName, 'startup', globals.LogType.Warning,
+						err.stack);
+
+					// Display alert
+					var errMessage = utility.GetErrorMessageFromException(err);
+					displayAlert(errMessage.title, errMessage.message);
+				});
+		};
 
 		chrome.runtime.onConnect.addListener(listenForMessages);
-
 		chrome.runtime.onMessage.addListener(handleMessage);
-
 		chrome.alarms.onAlarm.addListener(handleAlarm);
-
 		chrome.bookmarks.onCreated.addListener(createBookmark);
-
 		chrome.bookmarks.onRemoved.addListener(removeBookmark);
-
 		chrome.bookmarks.onChanged.addListener(changeBookmark);
-
 		chrome.bookmarks.onMoved.addListener(moveBookmark);
 	};
 
@@ -195,25 +252,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 		}
 	};
 
-	var install = function (details) {
-		switch (details.reason) {
-			case 'update':
-				if (details.previousVersion &&
-					details.previousVersion !== chrome.runtime.getManifest().version) {
-					// Remove obsolete cached page metadata
-					localStorage.removeItem('xBrowserSync-metadataColl');
-
-					// If extension has been updated, display alert and disable sync
-					displayAlert(
-						platform.GetConstant(globals.Constants.Notification_Upgrade_Message) + ' ' +
-						chrome.runtime.getManifest().version,
-						globals.UpdateMessage.Get(globals.SyncEnabled.Get()));
-					bookmarks.DisableSync();
-				}
-				break;
-		}
-	};
-
 	var listenForMessages = function (port) {
 		if (port.name !== globals.Title.Get()) {
 			return;
@@ -308,48 +346,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 			.then(function (bookmarksToRestore) {
 				restoreData.bookmarks = bookmarksToRestore;
 				syncBookmarks(restoreData, globals.Commands.RestoreBookmarks);
-			});
-	};
-
-	var startup = function () {
-		// Check if a sync was interrupted
-		if (!!globals.IsSyncing.Get()) {
-			globals.IsSyncing.Set(false);
-
-			// Disable sync
-			globals.SyncEnabled.Set(false);
-
-			// Display alert
-			displayAlert(
-				platform.GetConstant(globals.Constants.Error_SyncInterrupted_Title),
-				platform.GetConstant(globals.Constants.Error_SyncInterrupted_Message));
-
-			return;
-		}
-
-		// Exit if sync isn't enabled or event listeners disabled
-		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
-			return;
-		}
-
-		// Check for updates to synced bookmarks
-		bookmarks.CheckForUpdates()
-			.then(function(updatesAvailable) {
-				if (!updatesAvailable) {
-					return;
-				}
-
-				return syncBookmarks({ type: globals.SyncType.Pull });
-			})
-			.catch(function (err) {
-				// Log error
-				utility.LogMessage(
-					moduleName, 'startup', globals.LogType.Warning,
-					err.stack);
-
-				// Display alert
-				var errMessage = utility.GetErrorMessageFromException(err);
-				displayAlert(errMessage.title, errMessage.message);
 			});
 	};
 
@@ -459,3 +455,11 @@ xBrowserSync.App.ChromeBackground.factory('platformImplementation', xBrowserSync
 // Add background module
 xBrowserSync.App.Background.$inject = ['$q', 'platform', 'globals', 'utility', 'api', 'bookmarks', 'platformImplementation'];
 xBrowserSync.App.ChromeBackground.controller('Controller', xBrowserSync.App.Background);
+
+// Set synchronous event handlers
+chrome.runtime.onInstalled.addListener(function () {
+	document.querySelector('#install').click();
+});
+chrome.runtime.onStartup.addListener(function () {
+	document.querySelector('#startup').click();
+});
