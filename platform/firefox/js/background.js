@@ -201,11 +201,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 	var handleAlarm = function (alarm) {
 		// When alarm fires check for sync updates
 		if (alarm && alarm.name === globals.Alarm.Name.Get()) {
-			// Exit if sync isn't enabled or event listeners disabled
-			if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
-				return;
-			}
-
 			getLatestUpdates()
 				.catch(function (err) {
 					// If ID was removed disable sync

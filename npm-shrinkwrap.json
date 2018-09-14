@@ -2847,6 +2847,11 @@
         "hoek": "2.x.x"
       }
     },
+    "source-code-pro": {
+      "version": "2.30.1",
+      "resolved": "https://registry.npmjs.org/source-code-pro/-/source-code-pro-2.30.1.tgz",
+      "integrity": "sha512-nuXnTwI2qKk8b8qaEohX8VaOG7XaElctlWAIGTC9PxkO3xkPJxhJO4EbfdaUgVWnbcsK8qr4un9aq9EhxKUBxQ=="
+    },
     "source-map": {
       "version": "0.5.7",
       "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.5.7.tgz",
@@ -3102,6 +3107,11 @@
       "integrity": "sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=",
       "dev": true,
       "optional": true
+    },
+    "typeface-roboto-condensed": {
+      "version": "0.0.54",
+      "resolved": "https://registry.npmjs.org/typeface-roboto-condensed/-/typeface-roboto-condensed-0.0.54.tgz",
+      "integrity": "sha512-1o6p2h4VGqGKQmhjNUli1jY6EHpUobRCYZilhJJ50WtANOy2jKnhIDudDYSj2TcY2VRGFXVm8xRjct3iUkhS7A=="
     },
     "uglify-js": {
       "version": "3.4.4",

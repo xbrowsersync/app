@@ -72,9 +72,6 @@
     <preference name="BackupWebStorage" value="none" />
     <preference name="UseSwiftLanguageVersion" value="3" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
-    <plugin name="cordova-plugin-icloud-document-storage" spec="git+https://github.com/nero120/cordova-plugin-icloud-document-storage.git" />
-    <plugin name="cordova-plugin-add-swift-support" spec="^1.7.2" />
-    <plugin name="cordova-plugin-console" spec="^1.1.0" />
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
     <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
     <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
@@ -94,7 +91,9 @@
         <variable name="ANDROID_PATHPREFIX" value="/" />
     </plugin>
     <plugin name="cordova-plugin-filepicker" spec="^1.1.5" />
-    <plugin name="cordova-plugin-webintent2" spec="~1.0.4" />
-    <engine name="android" spec="~6.4.0" />
-    <engine name="ios" spec="~4.5.5" />
+    <plugin name="cordova-plugin-add-swift-support" spec="^1.7.2" />
+    <plugin name="cordova-plugin-icloud-document-storage" spec="https://github.com/nero120/cordova-plugin-icloud-document-storage" />
+    <plugin name="bundle-cordova-webintent" spec="https://github.com/COMLINE-AG/bundle-cordova-webintent.git" />
+    <engine name="android" spec="^6.4.0" />
+    <engine name="ios" spec="^4.5.5" />
 </widget>

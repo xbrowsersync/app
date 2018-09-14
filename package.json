@@ -28,6 +28,8 @@
     "lzutf8": "^0.5.0",
     "ng-infinite-scroll": "^1.3.0",
     "qrious": "^4.0.0",
+    "source-code-pro": "^2.30.1",
+    "typeface-roboto-condensed": "0.0.54",
     "underscore": "^1.9.0"
   },
   "devDependencies": {
@@ -54,7 +56,7 @@
     "build:ios": "echo Building iOS app... & cross-env PLATFORM_PATH=platform/mobileapps npm run copyfiles & npm run commonbuildsteps",
     "postbuild:ios": "npm run iosbuildsteps",
     "clearprevbuild": "n-clean build",
-    "copyfiles": "cross-env-shell \"n-copy --source $PLATFORM_PATH --destination build \\\"*\\\" \\\"**/*\\\"\" && n-copy --source . --destination build \"app.html\" \"css/*\" \"img/*\" \"fonts/*\" \"views/*\" && n-copy --source fonts --destination build/fonts \"**/*\" && n-copy --source node_modules/font-awesome/fonts --destination build/fonts/font-awesome \"**/*\"",
+    "copyfiles": "cross-env-shell \"n-copy --source $PLATFORM_PATH --destination build \\\"*\\\" \\\"**/*\\\"\" && n-copy --source . --destination build \"app.html\" \"css/*\" \"img/*\" \"views/*\" && n-copy --source node_modules/font-awesome/fonts --destination build/fonts/font-awesome \"**/*\" && n-copy --source node_modules/source-code-pro/WOFF2/OTF --destination build/fonts/source-code-pro \"**/*\" && n-copy --source node_modules/typeface-roboto-condensed/files --destination build/fonts/roboto-condensed \"**/*\"",
     "commonbuildsteps": "npm run compilecss && npm run bundlecss && npm run minifycryptojs && npm run bundleappscripts",
     "compilecss": "node-sass build/css/font-awesome.scss build/css/font-awesome.css -q & node-sass build/css/styles.scss build/css/styles.css -q & node-sass build/css/platform.scss build/css/platform.css -q",
     "bundlecss": "minify build/css/font-awesome.css node_modules/bootstrap/dist/css/bootstrap.min.css build/css/styles.css build/css/platform.css | n-pipe build/css/styles.min.css",
