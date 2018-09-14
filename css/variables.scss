@@ -1,7 +1,8 @@
-$font-roboto:        		'Roboto Condensed';
-$font-roboto-path:  		'../fonts/roboto/';
-$font-stack-regular:        $font-roboto, sans-serif;
-$font-stack-code:        	Consolas, Menlo, 'Courier New', monospace;
+$font-path:  		        '../fonts';
+$font-roboto-condensed:		'Roboto Condensed';
+$font-source-code-pro:		'Source Code Pro';
+$font-stack-regular:        $font-roboto-condensed, sans-serif;
+$font-stack-code:        	$font-source-code-pro, 'Courier New', monospace;
 $fa-font-path:              '../fonts/font-awesome';
 
 $colour-bg1:				#01AB8A;

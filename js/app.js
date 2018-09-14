@@ -753,8 +753,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         // Initialise new view
         switch(view) {
             case vm.view.views.login:
-                // Display new sync panel depending on if ID is set
-                vm.settings.displayNewSyncPanel = !globals.Id.Get();
+                // If not on a mobile platform, display new sync panel depending on if ID is set
+                vm.settings.displayNewSyncPanel = utility.IsMobilePlatform(vm.platformName) ? false : !globals.Id.Get();
                 
                 // Focus on first input field
                 if (!utility.IsMobilePlatform(vm.platformName)) {

@@ -211,6 +211,8 @@ body {
 }
 
 #login-panel {
+    height: 100%!important;
+
     .btn-scan {
         display: block;
 
@@ -227,8 +229,10 @@ body {
 
     .form-group {
         input {
+            font-size: 0.97em;
+
             @media (max-device-width: $width-mobile-medium - 1) {
-                font-size: 1.1em;
+                font-size: 0.94em;
             }
         }
 
@@ -248,6 +252,16 @@ body {
         }
     }
 
+    .login-form-new {
+        & > div {
+            display: none;
+        }
+
+        .get-sync-id, .toggle-form {
+            display: block;
+        }
+    }
+
     .secret-form-group {
         .progress, .progress-bar-background {
             @media (min-device-width: $width-tablet-small) {
@@ -263,11 +277,14 @@ body {
 
 #search-panel {
     .view-content {
-        padding-right: 0.75em;
+        padding: 0.75em 0 0;
+        
+        .header-panel, .search-results-panel {
+            padding-left: 0.75em;
+            padding-right: 0.75em;
+        }
         
         .header-panel {
-            padding-right: 0;
-
             .btn {
                 &.btn-toggle-bookmark {
                     i:before {
@@ -293,8 +310,6 @@ body {
         }
 
         .search-results-panel {
-            margin-top: 0.75em;
-            padding-right: 0;
             height: 100%;
 
             & > h4 {

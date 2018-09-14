@@ -5,11 +5,9 @@
 $window-width: 320px;
 $window-height: 520px;
 $search-window-width: 600px;
-$search-window-height: 4em;
+$search-window-height: 4.2em;
 
 body {
-    transition: width 0.1s, height 0.1s;
-    transition-timing-function: ease;
     width: $window-width;
 
     &.search-view {
@@ -23,7 +21,7 @@ body {
 
     &.search-no-results-view {
         @extend .search-view;
-        height: calc(#{$search-window-height} + 2.2em);
+        height: calc(#{$search-window-height} + 2.5em);
     }
 
     &.search-results-view {
@@ -42,12 +40,7 @@ body {
 
 #search-panel {
     .view-content {
-        display: flex;
-        flex-flow: column;
-        padding: 10px 0 0 10px;
-    
         .header-panel {
-            flex: none;
             display: flex;
             flex-direction: row-reverse;
             

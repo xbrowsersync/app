@@ -106,6 +106,8 @@ xBrowserSync.App.Global = function(platform) {
 			Button_Help_Label: 'button_Help_Label',
 			Button_Next_Label: 'button_Next_Label',
 			Button_Previous_Label: 'button_Previous_Label',
+            Login_GetSyncId_Title: 'login_GetSyncId_Title',
+            Login_GetSyncId_Message: 'login_GetSyncId_Message',
             Login_introPanel1_Message: 'login_introPanel1_Message',
             Login_introPanel2_Message: 'login_introPanel2_Message',
             Login_introPanel3_Message: 'login_introPanel3_Message',

@@ -26,6 +26,12 @@
 	"button_Previous_Label": {
 		"message": "Précédent"
 	},
+	"login_GetSyncId_Title": {
+		"message": "Need a sync ID?"
+	},
+	"login_GetSyncId_Message": {
+		"message": "Download the xBrowserSync extension for your desktop browser (available from the Chrome Web Store or addons.mozilla.org) and create a new sync, then scan your sync ID QR code here to access your synced data."
+	},
 	"login_introPanel1_Message": {
 		"message": "<h4>Bienvenue</h4><p>Merci d'utiliser xBrowserSync — La synchronisation de favoris telle qu'elle devrait être: sécurisée, anonyme et gratuite!</p><p>Prenez le temps de lire les pages suivantes pour vous familiariser avec les fonctionnalités xBrowserSync. Plus d'informations sont disponibles dans la <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQ</a>.</p>"
 	},

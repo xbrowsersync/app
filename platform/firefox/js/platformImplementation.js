@@ -494,7 +494,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			clearToolbar = $q.resolve();
 		}
 			
-		return $q.all([clearMenu.promise, clearMobile.promise, clearOthers.promise, clearToolbar.promise]);
+		return $q.all([clearMenu, clearMobile, clearOthers, clearToolbar]);
 	};
 
 	var displayLoading = function(id, deferred) {

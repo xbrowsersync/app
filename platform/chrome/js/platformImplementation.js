@@ -395,23 +395,24 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		clearOtherBookmarks = $q(function(resolve, reject) {
 			try {
                 chrome.bookmarks.getChildren(otherBookmarksId, function(results) {
-                    try {
-                        if (!!results) {
-                            for (var i = 0; i < results.length; i++) {
-                                chrome.bookmarks.removeTree(results[i].id);
-                            }
-                            
-                            return resolve();
-                        }
-                    }
-                    catch (err) {
-                        // Log error
-						utility.LogMessage(
-							moduleName, 'clearBookmarks', globals.LogType.Warning,
-							'Error clearing other bookmarks; ' + err.stack);
-							
-						return reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
-                    }
+					var promises = [];
+					
+					if (!!results) {
+						for (var i = 0; i < results.length; i++) {
+							promises.push(deleteLocalBookmarksTree(results[i].id));
+						}
+						
+						return $q.all(promises)
+							.then(resolve)
+							.catch(function(err) {
+								// Log error
+								utility.LogMessage(
+									moduleName, 'clearBookmarks', globals.LogType.Warning,
+									'Error clearing other bookmarks; ' + err.stack);
+									
+								return reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
+							});
+					}
                 });
             }
             catch (err) {
@@ -424,23 +425,24 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			if (globals.SyncBookmarksToolbar.Get()) {
 				try {
                     chrome.bookmarks.getChildren(toolbarBookmarksId, function(results) {
-                        try {
-                            if (!!results) {
-                                for (var i = 0; i < results.length; i++) {
-                                    chrome.bookmarks.removeTree(results[i].id);
-                                }
-                                
-                                return resolve();
-                            }
-                        }
-                        catch (err) {
-                            // Log error
-							utility.LogMessage(
-								moduleName, 'clearBookmarks', globals.LogType.Warning,
-								'Error clearing bookmarks bar; ' + err.stack);
-							
-							return reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
-                        }
+                        var promises = [];
+					
+						if (!!results) {
+							for (var i = 0; i < results.length; i++) {
+								promises.push(deleteLocalBookmarksTree(results[i].id));
+							}
+					
+							return $q.all(promises)
+								.then(resolve)
+								.catch(function(err) {
+									// Log error
+									utility.LogMessage(
+										moduleName, 'clearBookmarks', globals.LogType.Warning,
+										'Error clearing bookmarks bar; ' + err.stack);
+										
+									return reject({ code: globals.ErrorCodes.FailedRemoveLocalBookmarks });
+								});
+						}
                     });
                 }
                 catch (err) {
@@ -452,7 +454,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			}
 		});
 			
-		return $q.all([clearOtherBookmarks.promise, clearBookmarksBar.promise]);
+		return $q.all([clearOtherBookmarks, clearBookmarksBar]);
 	};
 
 	var displayLoading = function(id) {
@@ -950,6 +952,19 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			success();
 		});
 	};
+
+	var deleteLocalBookmarksTree = function(localBookmarkId) {
+		return $q(function(resolve, reject) {
+			try {
+				chrome.bookmarks.removeTree(localBookmarkId, function() {
+					resolve();
+				});
+			}
+			catch (ex) {
+				reject(ex);
+			}
+		});
+	}
 
 	var findLocalBookmarkByTitle = function(title) {
 		if (!title) {

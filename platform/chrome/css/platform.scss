@@ -5,39 +5,32 @@
 $window-width: 320px;
 $window-height: 520px;
 $search-window-width: 600px;
-$search-window-height: 4em;
+$search-window-height: 4.2em;
 
 body {
-    transition: width 0.1s ease;
     width: $window-width;
 
-    &.search-view, &.search-no-results-view {
+    &.search-view {
         width: $search-window-width;
+        height: $search-window-height;
+
+        .container {
+            height: $search-window-height;
+        }
+    }
+
+    &.search-no-results-view {
+        @extend .search-view;
+        height: calc(#{$search-window-height} + 2.5em);
     }
 
     &.search-results-view {
         @extend .search-view;
-        max-height: 600px;
-    }
-
-    &.search-results-view, &.search-no-results-view {
-        #search-panel {
-            padding-bottom: 0;
-        }
+        height: $window-height;
     }
 
     .container {
-        height: auto;
-    }
-
-    .view {
-        position: static;
         height: $window-height;
-        display: none;
-
-        &.active {
-            display: block;
-        }
     }
 
     .well .btn.btn-default {
@@ -46,12 +39,7 @@ body {
 }
 
 #search-panel {
-    height: auto;
-    padding-bottom: 10px;
-
     .view-content {
-        padding: 10px 0 0 10px;
-    
         .header-panel {
             display: flex;
             flex-direction: row-reverse;
@@ -72,10 +60,6 @@ body {
                 flex: 0 1 100%;
                 margin-right: 10px;
             }
-        }
-
-        .search-results-panel {
-            max-height: calc(#{$window-height} - #{$search-window-height});
         }
     }
 }
