@@ -50,7 +50,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "Need a sync ID?"
 		},
 		"login_GetSyncId_Message": {
-			"message": "Download the xBrowserSync extension for your desktop browser (available from the Chrome Web Store or addons.mozilla.org) and create a new sync, then scan your sync ID QR code here to access your synced data."
+			"message": "Download the xBrowserSync extension for your desktop browser (available for Chrome and Firefox) and create a new sync, then scan your sync ID QR code here to access your synced data."
 		},
 		"login_introPanel1_Message": {
 			"message": "<h4>Welcome</h4><p>Thanks for using xBrowserSync — browser syncing as it should be: secure, anonymous and free!</p><p>Take some time to read through the following pages to get aquainted with xBrowserSync’s features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"

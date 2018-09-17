@@ -18,12 +18,12 @@ xBrowserSync.App.Global = function(platform) {
             },
             Period: {
                 Get: function() {
-                    return 15;
+                    return 1;
                 }
             }
         },
         ApiVersion: '1.1.3',
-        AppVersion: '1.4.0',
+        AppVersion: '1.4.0 BETA (c)',
         Bookmarks: {
             ContainerPrefix: '[xbs]',
             DescriptionMaxLength: 300,

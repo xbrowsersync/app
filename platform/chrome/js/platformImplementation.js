@@ -379,8 +379,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				changedBookmarkIndex = updatedLocalBookmark.index - numContainers;
 				var bookmarkToUpdate = findParentXBookmark.xBookmark.children[changedBookmarkIndex];
 
-				bookmarkToUpdate.title = updateInfo.title;
-				bookmarkToUpdate.url = updateInfo.url;
+				bookmarkToUpdate.title = updateInfo.title !== undefined ? updateInfo.title : bookmarkToUpdate.title;
+				bookmarkToUpdate.url = updateInfo.url !== undefined ? updateInfo.url : bookmarkToUpdate.url;
 				return deferred.resolve({ bookmarks: xBookmarks });
 			})
 			.catch(deferred.reject);
