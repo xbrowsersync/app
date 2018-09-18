@@ -2,28 +2,13 @@
 @import 'mixins.scss';
 @import 'animations.scss';
 
-@font-face {
-  font-family: 'FontAwesome';
-  src: url('#{$fa-font-path}/fontawesome-webfont.eot');
-  src: url('#{$fa-font-path}/fontawesome-webfont.eot') format('embedded-opentype'),
-    url('#{$fa-font-path}/fontawesome-webfont.woff2') format('woff2'),
-    url('#{$fa-font-path}/fontawesome-webfont.woff') format('woff'),
-    url('#{$fa-font-path}/fontawesome-webfont.ttf') format('truetype'),
-    url('#{$fa-font-path}/fontawesome-webfont.svg') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
 * {		
     @include css-prefix(user-select, none);		
     @include css-prefix(touch-callout, none);		
 }
 
-body, body .container, .view  {
-    height: 100%;
-}
-
 body {
+    height: 100%;
     font-size: 16px;
 
     @media (min-width: $width-mobile-large) {
@@ -66,11 +51,11 @@ body {
     }
 
     h1 {
-        @media (min-device-width: $width-mobile-xlarge) {
+        @media (min-width: $width-mobile-xlarge) {
             background-size: 6.5em;
         }
 
-        @media (min-device-width: $width-tablet-small) {
+        @media (min-width: $width-tablet-small) {
             background-size: 11em;
         }
     }
@@ -112,7 +97,7 @@ body {
             }
         }
 
-        @media (min-device-width: $width-tablet-small) {
+        @media (min-width: $width-tablet-small) {
             font-size: 23px;
         }
     }
@@ -208,38 +193,36 @@ body {
         flex: none;
         height: 9em;
 
-        @media (min-device-width: $width-mobile-medium) {
+        @media (min-width: $width-mobile-medium) {
             height: 11em;
         }
     }
 }
 
 #login-panel {
-    height: 100%!important;
-
     .btn-scan {
         display: block;
 
         i {
-            @media (max-device-width: $width-mobile-medium - 1) {
+            @media (max-width: $width-mobile-medium - 1) {
                 font-size: 2em;
             }
         }
         
-        @media (max-device-width: $width-mobile-medium - 1) {
+        @media (max-width: $width-mobile-medium - 1) {
             top: 0.35em;
         }
     }
 
     .form-group {
         input {
-            @media (max-width: $width-mobile-large) {
+            @media (max-width: $width-mobile-small) {
                 font-size: 0.87em;
                 padding: .65em 0 .7em .9em;
             }
         }
 
-        @media (min-device-width: $width-tablet-small) {
+        @media (min-width: $width-tablet-small) {
             max-width: 21em;
             margin-left: auto;
             margin-right: auto;
@@ -253,7 +236,7 @@ body {
             }
         }
         
-        @media (min-device-width: $width-tablet-small) {
+        @media (min-width: $width-tablet-small) {
             height: 18.5em;
             max-width: 21em;
             margin-left: auto;
@@ -271,7 +254,7 @@ body {
         }
 
         .well  {
-            @media (max-width: $width-mobile-large) {
+            @media (max-width: $width-mobile-small) {
                 font-size: 0.9em;
             }
         }
@@ -279,7 +262,7 @@ body {
 
     .secret-form-group {
         .progress, .progress-bar-background {
-            @media (min-device-width: $width-tablet-small) {
+            @media (min-width: $width-tablet-small) {
                 max-width: 17.5em;
                 margin-left: auto;
                 margin-right: auto;
@@ -394,7 +377,7 @@ body {
         }
 
         .form-group .id-url {
-            @media (max-width: $width-mobile-large) {
+            @media (max-width: $width-mobile-small) {
                 font-size: 0.89em;
             }
         }
@@ -405,7 +388,7 @@ body {
     }
 
     .well:last-child {
-        @media (min-device-width: $width-tablet-small) {
+        @media (min-width: $width-tablet-small) {
             margin-bottom: 0.75em;
         }
     }

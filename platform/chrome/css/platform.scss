@@ -22,11 +22,19 @@ body {
     &.search-no-results-view {
         @extend .search-view;
         height: calc(#{$search-window-height} + 2.5em);
+
+        .container {
+            height: calc(#{$search-window-height} + 2.5em);
+        }
     }
 
     &.search-results-view {
         @extend .search-view;
         height: $window-height;
+
+        .container {
+            height: $window-height;
+        }
     }
 
     .container {

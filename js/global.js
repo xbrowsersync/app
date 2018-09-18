@@ -227,7 +227,7 @@ xBrowserSync.App.Global = function(platform) {
             Bookmark_TagsField_Label: 'bookmark_TagsField_Label',
             Bookmark_TagsField_Description: 'bookmark_TagsField_Description',
             Bookmark_BookmarkForm_Required_Label: 'bookmark_BookmarkForm_Required_Label',
-            Bookmark_BookmarkForm_Exists_Label: 'Bookmark_BookmarkForm_Exists_Label',
+            Bookmark_BookmarkForm_Exists_Label: 'bookmark_BookmarkForm_Exists_Label',
             Button_AddTags_Label: 'button_AddTags_Label',
             Button_DeleteTag_Label: 'button_DeleteTag_Label',
             Button_Delete_Label: 'button_Delete_Label',
