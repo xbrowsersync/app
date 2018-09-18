@@ -119,6 +119,8 @@
                 placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Field_Description) }}"
                 maxlength="128" spellcheck="false" tabindex="10" required />
               <div class="validation" data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$invalid">
+                <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.required">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Required_Label) }}
+                </span>
                 <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.InvalidService">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_InvalidService_Label) }}
                 </span>
                 <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.ServiceOffline">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_ServiceOffline_Label) }}

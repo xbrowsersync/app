@@ -65,6 +65,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             bookmarkForm_BookmarkTags_Change: bookmarkForm_BookmarkTags_Change,
             bookmarkForm_BookmarkTags_Click: bookmarkForm_BookmarkTags_Click,
             bookmarkForm_BookmarkTags_KeyDown: bookmarkForm_BookmarkTags_KeyDown,
+            bookmarkForm_BookmarkUrl_Change: bookmarkForm_BookmarkUrl_Change,
             bookmarkForm_CreateBookmark_Click: bookmarkForm_CreateBookmark_Click,
             bookmarkForm_CreateTags_Click: bookmarkForm_CreateTags_Click,
             bookmarkForm_DeleteBookmark_Click: bookmarkForm_DeleteBookmark_Click,
@@ -422,51 +423,69 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 break;
         }
     };
+
+    var bookmarkForm_BookmarkUrl_Change = function() {
+        // Reset form if field is invalid
+        if (vm.bookmarkForm.bookmarkUrl.$invalid) {
+            vm.bookmarkForm.bookmarkUrl.$setValidity('Exists', true);
+        }
+    };
     
     var bookmarkForm_CreateBookmark_Click = function() {
-        var bookmarkToCreate = vm.bookmark.current;
+        // Add tags if tag text present
+        if (!!vm.bookmark.tagText && vm.bookmark.tagText.length > 0) {
+            bookmarkForm_CreateTags_Click();
+        }
+
+        // Clone current bookmark object
+        var bookmarkToCreate = utility.DeepCopy(vm.bookmark.current);
 
         // Check for protocol
         if (!globals.URL.ProtocolRegex.test(bookmarkToCreate.url)) {
             bookmarkToCreate.url = 'http://' + bookmarkToCreate.url;
         }
 
-        // Add tags if tag text present
-        if (!!vm.bookmark.tagText && vm.bookmark.tagText.length > 0) {
-            bookmarkForm_CreateTags_Click();
-        }
+        // Validate the new bookmark
+        bookmarkForm_ValidateBookmark(bookmarkToCreate)
+            .then(function(isValid) {
+                if (!isValid) {
+                    // Bookmark URL exists, display validation error
+                    vm.bookmarkForm.bookmarkUrl.$setValidity('Exists', false);
+                    return;
+                }
         
-        // Sync changes
-        platform.Sync(vm.sync.asyncChannel, {
-            type: globals.SyncType.Both,
-            changeInfo: { 
-                type: globals.UpdateType.Create, 
-                bookmark: bookmarkToCreate
-            }
-        });
+                // Sync changes
+                platform.Sync(vm.sync.asyncChannel, {
+                    type: globals.SyncType.Both,
+                    changeInfo: { 
+                        type: globals.UpdateType.Create, 
+                        bookmark: bookmarkToCreate
+                    }
+                });
 
-        // Set bookmark active status if current bookmark is current page
-		platform.GetCurrentUrl()
-            .then(function(currentUrl) {
-                vm.bookmark.active = currentUrl && currentUrl.toUpperCase() === bookmarkToCreate.url.toUpperCase();
-                
-                vm.view.change(vm.view.views.search)
-                    .then(function() {
-                        // Add new bookmark into search results on mobile apps
-                        if (utility.IsMobilePlatform(vm.platformName)) {
-                            var bookmarkToCreateClone = JSON.parse(JSON.stringify(bookmarkToCreate));
-                            bookmarkToCreateClone.id = bookmarks.GetNewBookmarkId(vm.search.results);
-                            bookmarkToCreateClone.class = 'added';
-                            $timeout(function() {
-                                // Add bookmark to results
-                                vm.search.results.unshift(bookmarkToCreateClone);
-
-                                $timeout(function() {
-                                    // Remove animation class
-                                    delete bookmarkToCreateClone.class;
-                                }, 500);
-                            }, 300);
-                        }
+                // Set bookmark active status if current bookmark is current page
+                platform.GetCurrentUrl()
+                    .then(function(currentUrl) {
+                        vm.bookmark.active = currentUrl && currentUrl.toUpperCase() === bookmarkToCreate.url.toUpperCase();
+                        
+                        vm.view.change(vm.view.views.search)
+                            .then(function() {
+                                // Add new bookmark into search results on mobile apps
+                                if (utility.IsMobilePlatform(vm.platformName)) {
+                                    var bookmarkToCreateClone = JSON.parse(JSON.stringify(bookmarkToCreate));
+                                    bookmarkToCreateClone.id = bookmarks.GetNewBookmarkId(vm.search.results);
+                                    bookmarkToCreateClone.class = 'added';
+                                    $timeout(function() {
+                                        // Add bookmark to results
+                                        vm.search.results.unshift(bookmarkToCreateClone);
+        
+                                        $timeout(function() {
+                                            // Remove animation class
+                                            delete bookmarkToCreateClone.class;
+                                        }, 500);
+                                    }, 300);
+                                }
+                            });
                     });
             });
     };
@@ -622,62 +641,88 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
     
     var bookmarkForm_UpdateBookmark_Click = function() {
-        var bookmarkToUpdate = vm.bookmark.current;
-        
-        // Check for protocol
-        if (!globals.URL.ProtocolRegex.test(bookmarkToUpdate.url)) {
-            bookmarkToUpdate.url = 'http://' + bookmarkToUpdate.url;
-        }
-
         // Add tags if tag text present
         if (!!vm.bookmark.tagText && vm.bookmark.tagText.length > 0) {
             bookmarkForm_CreateTags_Click();
         }
         
-        // Sync changes
-        platform.Sync(vm.sync.asyncChannel, {
-            type: globals.SyncType.Both,
-            changeInfo: { 
-                type: globals.UpdateType.Update, 
-                bookmark: bookmarkToUpdate
-            }
-        });
-        
-        // Set bookmark active status if current bookmark is current page
-		platform.GetCurrentUrl()
-            .then(function(currentUrl) {
-                if (currentUrl && currentUrl.toUpperCase() === vm.bookmark.originalUrl.toUpperCase()) {
-                    vm.bookmark.active = currentUrl && currentUrl.toUpperCase() === bookmarkToUpdate.url.toUpperCase();
-                }
-                
-                // Display the search panel
-                return vm.view.change(vm.view.views.search);
-            })
-            .then(function() {
-                // Find and update the updated bookmark element in the search results on mobile apps
-                if (utility.IsMobilePlatform(vm.platformName)) {
-                    if (!!vm.search.results && vm.search.results.length >= 0) {
-                        var updatedBookmarkIndex = _.findIndex(vm.search.results, function(result) { 
-                            return result.id === bookmarkToUpdate.id;
-                        });
+        // Clone current bookmark object
+        var bookmarkToUpdate = utility.DeepCopy(vm.bookmark.current);
 
-                        if (updatedBookmarkIndex >= 0) {
-                            $timeout(function() {
-                                vm.search.results[updatedBookmarkIndex] = bookmarkToUpdate;
-                            }, 500);
-                        }
-                    }
+        // Check for protocol
+        if (!globals.URL.ProtocolRegex.test(bookmarkToUpdate.url)) {
+            bookmarkToUpdate.url = 'http://' + bookmarkToUpdate.url;
+        }
+
+        // Validate the new bookmark
+        bookmarkForm_ValidateBookmark(bookmarkToUpdate)
+            .then(function(isValid) {
+                if (!isValid) {
+                    // Bookmark URL exists, display validation error
+                    vm.bookmarkForm.bookmarkUrl.$setValidity('Exists', false);
+                    return;
                 }
-            })
-            .catch(function(err) {
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'bookmarkForm_UpdateBookmark_Click', globals.LogType.Warning,
-                    err.stack);
+
+                // Sync changes
+                platform.Sync(vm.sync.asyncChannel, {
+                    type: globals.SyncType.Both,
+                    changeInfo: { 
+                        type: globals.UpdateType.Update, 
+                        bookmark: bookmarkToUpdate
+                    }
+                });
                 
-                // Display alert
-                var errMessage = utility.GetErrorMessageFromException(err);
-                vm.alert.display(errMessage.title, errMessage.message, 'danger');
+                // Set bookmark active status if current bookmark is current page
+                platform.GetCurrentUrl()
+                    .then(function(currentUrl) {
+                        if (currentUrl && currentUrl.toUpperCase() === vm.bookmark.originalUrl.toUpperCase()) {
+                            vm.bookmark.active = currentUrl && currentUrl.toUpperCase() === bookmarkToUpdate.url.toUpperCase();
+                        }
+                        
+                        // Display the search panel
+                        return vm.view.change(vm.view.views.search);
+                    })
+                    .then(function() {
+                        // Find and update the updated bookmark element in the search results on mobile apps
+                        if (utility.IsMobilePlatform(vm.platformName)) {
+                            if (!!vm.search.results && vm.search.results.length >= 0) {
+                                var updatedBookmarkIndex = _.findIndex(vm.search.results, function(result) { 
+                                    return result.id === bookmarkToUpdate.id;
+                                });
+
+                                if (updatedBookmarkIndex >= 0) {
+                                    $timeout(function() {
+                                        vm.search.results[updatedBookmarkIndex] = bookmarkToUpdate;
+                                    }, 500);
+                                }
+                            }
+                        }
+                    })
+                    .catch(function(err) {
+                        // Log error
+                        utility.LogMessage(
+                            moduleName, 'bookmarkForm_UpdateBookmark_Click', globals.LogType.Warning,
+                            err.stack);
+                        
+                        // Display alert
+                        var errMessage = utility.GetErrorMessageFromException(err);
+                        vm.alert.display(errMessage.title, errMessage.message, 'danger');
+                    });
+            });
+    };
+
+    var bookmarkForm_ValidateBookmark = function(bookmarkToValidate) {
+        // Skip validation if URL is unmodified
+        if (bookmarkToValidate.url === vm.bookmark.originalUrl) {
+            return $q.resolve(true);
+        }
+        
+        // Check if bookmark url already exists
+        return bookmarks.Search({
+            url: bookmarkToValidate.url
+        })
+            .then(function(results) {
+                return results.length === 0;
             });
     };
 

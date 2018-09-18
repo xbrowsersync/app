@@ -122,6 +122,15 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 			});
 	};
 
+	var deepCopy = function(obj) {
+		return (!obj || (typeof obj !== 'object'))?obj:
+			(_.isString(obj))?String.prototype.slice.call(obj):
+			(_.isDate(obj))?new Date(obj.valueOf()):
+			(_.isFunction(obj.clone))?obj.clone():
+			(_.isArray(obj)) ? _.map(obj, function(t){return deepCopy(t)}):
+			_.mapObject(obj, function(val, key) {return deepCopy(val)});
+	};
+
 	var encryptData = function(data) {
 		// If no data provided, return an empty string
 		if (!data) {
@@ -437,6 +446,7 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 		Closest: closest,
 		DecryptData: decryptData,
 		EncryptData: encryptData,
+		DeepCopy: deepCopy,
 		GetErrorMessageFromException: getErrorMessageFromException,
 		GetTagArrayFromText: getTagArrayFromText,
 		GetPasswordHash: getPasswordHash,

@@ -222,7 +222,7 @@
     </div>
     <div class="get-sync-id well well-sm animate-fade">
       <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_GetSyncId_Title) }}</h4>
-      <p>{{ vm.platform.GetConstant(vm.globals.Constants.Login_GetSyncId_Message) }}</p>
+      <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_GetSyncId_Message)"></p>
     </div>
     <div class="form-group toggle-form">
       <a data-ng-click="vm.events.syncForm_ExistingSync_Click()" href="" tabindex="5">

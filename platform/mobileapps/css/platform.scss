@@ -24,27 +24,21 @@ body, body .container, .view  {
 }
 
 body {
-    @media (min-device-width: $width-mobile-small) {
-        font-size: 15px;
-    }
+    font-size: 16px;
 
-    @media (min-device-width: $width-mobile-medium) {
-        font-size: 16px;
-    }
-
-    @media (min-device-width: $width-mobile-large) {
+    @media (min-width: $width-mobile-large) {
         font-size: 17px;
     }
     
-    @media (min-device-width: $width-mobile-xlarge) {
+    @media (min-width: $width-mobile-xlarge) {
         font-size: 18px;
     }
     
-    @media (min-device-width: $width-tablet-small) {
+    @media (min-width: $width-tablet-small) {
         font-size: 26px;
     }
     
-    @media (min-device-width: $width-tablet-large) {
+    @media (min-width: $width-tablet-large) {
         font-size: 34px;
     }
 
@@ -58,6 +52,16 @@ body {
         &:active {
             color: $colour-link-highlight;
             border-bottom-color: $colour-link-highlight;
+        }
+
+        a {
+            &.active,
+            &:active,
+            &:focus,
+            &:hover {
+                color: inherit;
+                border-bottom-color: inherit;
+            }
         }
     }
 
@@ -229,10 +233,9 @@ body {
 
     .form-group {
         input {
-            font-size: 0.97em;
-
-            @media (max-device-width: $width-mobile-medium - 1) {
-                font-size: 0.94em;
+            @media (max-width: $width-mobile-large) {
+                font-size: 0.87em;
+                padding: .65em 0 .7em .9em;
             }
         }
 
@@ -244,6 +247,12 @@ body {
     }
 
     .intro-panel {
+        & > div {
+            @media (max-width: $width-mobile-large) {
+                font-size: 0.9em;
+            }
+        }
+        
         @media (min-device-width: $width-tablet-small) {
             height: 18.5em;
             max-width: 21em;
@@ -259,6 +268,12 @@ body {
 
         .get-sync-id, .toggle-form {
             display: block;
+        }
+
+        .well  {
+            @media (max-width: $width-mobile-large) {
+                font-size: 0.9em;
+            }
         }
     }
 
@@ -376,6 +391,12 @@ body {
         
         .checkbox {
             display: none;
+        }
+
+        .form-group .id-url {
+            @media (max-width: $width-mobile-large) {
+                font-size: 0.89em;
+            }
         }
 
         #syncDataUsage-Panel .buttons {

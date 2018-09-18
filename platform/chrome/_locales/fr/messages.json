@@ -30,7 +30,7 @@
 		"message": "Need a sync ID?"
 	},
 	"login_GetSyncId_Message": {
-		"message": "Download the xBrowserSync extension for your desktop browser (available for Chrome and Firefox) and create a new sync, then scan your sync ID QR code here to access your synced data."
+		"message": "Download the xBrowserSync desktop browser extension available for Chrome and Firefox, create a new sync and then scan your sync ID QR code on the previous screen."
 	},
 	"login_introPanel1_Message": {
 		"message": "<h4>Bienvenue</h4><p>Merci d'utiliser xBrowserSync — La synchronisation de favoris telle qu'elle devrait être: sécurisée, anonyme et gratuite!</p><p>Prenez le temps de lire les pages suivantes pour vous familiariser avec les fonctionnalités xBrowserSync. Plus d'informations sont disponibles dans la <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQ</a>.</p>"
@@ -287,14 +287,17 @@
 	"settings_Service_UpdateForm_Confirm_Message": {
 		"message":  "<p>Après le changement de service, la synchronisation sera désactivée et vous devrez créer une nouvelle synchronisation.</p><p>Si vous avez déjà créer une synchronisation avec ce service et voulez récupérer vos données, utilisez l'ID xBrowserSync utilisé à l'époque.</p><p>OK pour continuer ?</p>"
 	},
+	"settings_Service_UpdateForm_Required_Label": {
+		"message":  "xBrowserSync service URL is required"
+	},
 	"settings_Service_UpdateForm_InvalidService_Label": {
-		"message":  "Not a valid xBrowserSync service."
+		"message":  "Not a valid xBrowserSync service"
 	},
 	"settings_Service_UpdateForm_ServiceVersionNotSupported_Label": {
-		"message":  "The xBrowserSync service is running an API version that is not supported by this app version."
+		"message":  "This service is running an unsupported API version"
 	},
 	"settings_Service_UpdateForm_ServiceOffline_Label": {
-		"message":  "The xBrowserSync service is offline."
+		"message":  "This service is currently offline"
 	},
 	"settings_BackupRestore_Title" : {
 		"message":  "Sauvegarder et restaurer"
@@ -394,6 +397,12 @@
 	},
 	"bookmark_TagsField_Description": {
 		"message": "tag 1, tag 2, tag 3, etc..."
+	},
+	"bookmark_BookmarkForm_Required_Label": {
+		"message": "Bookmark URL is required"
+	},
+	"bookmark_BookmarkForm_Exists_Label": {
+		"message": "URL has already been bookmarked"
 	},
 	"button_AddTags_Label": {
 		"message": "Ajouter"
@@ -540,7 +549,7 @@
 		"message":  "Service not supported"
 	},
 	"error_ApiVersionNotSupported_Message" : {
-		"message":  "The xBrowserSync service is running an API version that is not supported by this app version."
+		"message":  "This service is running an unsupported API version"
 	},
 	"error_ContainerChanged_Title" : {
 		"message": "Le dossier xBrowserSync a été modifié"

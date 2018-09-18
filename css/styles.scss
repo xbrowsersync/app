@@ -344,10 +344,15 @@ body {
         }
 
         .validation {
-            color: $colour-danger!important;
-            font-size: 0.9em;
+            color: rgba($colour-danger, 0.75)!important;
+            font-size: .8em;
             line-height: 1.2em;
-            margin-top: -10px;
+            position: absolute;
+            bottom: -0.5em;
+            right: 1.3em;
+            background: $colour-text1;
+            padding: 0 0.3em;
+            border-radius: $border-radius-well;
         }
     }
     
@@ -467,6 +472,21 @@ body {
         &.dark {
             background-color: $colour-text2;
             color: $colour-text1;
+
+            a {
+                border-bottom-color: $colour-text1;
+
+                &.active,
+                &:active,
+                &:focus,
+                &:hover {
+                    border-bottom-color: $colour-link-highlight;
+                }
+            }
+        }
+
+        a {
+            border-bottom-color: $colour-text2;
         }
 
         input:not([type]).form-control, input[type="text"].form-control {
@@ -525,6 +545,10 @@ body {
         display: flex;
         flex-flow: column;
         height: 100%;
+
+        .form-group {
+            position: relative;
+        }
     }
 
     .btn-delete-bookmark {

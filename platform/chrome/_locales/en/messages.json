@@ -30,10 +30,10 @@
 		"message": "Need a sync ID?"
 	},
 	"login_GetSyncId_Message": {
-		"message": "Download the xBrowserSync extension for your desktop browser (available for Chrome and Firefox) and create a new sync, then scan your sync ID QR code here to access your synced data."
+		"message": "Download the xBrowserSync desktop browser extension available for Chrome and Firefox, create a new sync and then scan your sync ID QR code on the previous screen."
 	},
 	"login_introPanel1_Message": {
-		"message": "<h4>Welcome</h4><p>Thanks for using xBrowserSync — browser syncing as it should be: secure, anonymous and free!</p><p>Take some time to read through the following pages to get aquainted with xBrowserSync’s features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
+		"message": "<h4>Welcome</h4><p>Thank you for choosing xBrowserSync! Before you begin, take some time to read through the following pages to get aquainted with xBrowserSync’s features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p><p>As xBrowserSync modifies your local browser data, we recommend you back up your bookmarks and disable any existing browser sync services to avoid potential conflicts.</p>"
 	},
 	"login_introPanel2_Message": {
 		"message": "<h4>Syncing for the first time</h4><p>Before you can sync your browser data it must be encrypted so that only you can read it. Enter an encryption password — make it strong but also memorable, there are no resets or reminders so if you forget it you won’t be able to decrypt your synced data.</p><p>Once you click the Sync button your data will be encrypted and synced.</p>"
@@ -287,14 +287,17 @@
 	"settings_Service_UpdateForm_Confirm_Message": {
 		"message":  "<p>After changing the service, the current sync will be disabled and you'll need to create a new sync.</p><p>If you have previously created a sync using this service and would like to retrieve your data, you can use the xBrowserSync ID provided at the time.</p><p>OK to proceed?</p>"
 	},
+	"settings_Service_UpdateForm_Required_Label": {
+		"message":  "xBrowserSync service URL is required"
+	},
 	"settings_Service_UpdateForm_InvalidService_Label": {
-		"message":  "Not a valid xBrowserSync service."
+		"message":  "Not a valid xBrowserSync service"
 	},
 	"settings_Service_UpdateForm_ServiceVersionNotSupported_Label": {
-		"message":  "The xBrowserSync service is running an API version that is not supported by this app version."
+		"message":  "This service is running an unsupported API version"
 	},
 	"settings_Service_UpdateForm_ServiceOffline_Label": {
-		"message":  "The xBrowserSync service is offline."
+		"message":  "This service is currently offline"
 	},
 	"settings_BackupRestore_Title" : {
 		"message":  "Back up and restore"
@@ -394,6 +397,12 @@
 	},
 	"bookmark_TagsField_Description": {
 		"message": "tag 1, tag 2, tag 3, etc..."
+	},
+	"bookmark_BookmarkForm_Required_Label": {
+		"message": "Bookmark URL is required"
+	},
+	"bookmark_BookmarkForm_Exists_Label": {
+		"message": "URL has already been bookmarked"
 	},
 	"button_AddTags_Label": {
 		"message": "Add"
@@ -540,7 +549,7 @@
 		"message":  "Service not supported"
 	},
 	"error_ApiVersionNotSupported_Message" : {
-		"message":  "The xBrowserSync service is running an API version that is not supported by this app version."
+		"message":  "This service is running an unsupported API version"
 	},
 	"error_ContainerChanged_Title" : {
 		"message": "xBrowserSync folder changed"

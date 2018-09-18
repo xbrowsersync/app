@@ -50,16 +50,16 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message": "Need a sync ID?"
 		},
 		"login_GetSyncId_Message": {
-			"message": "Download the xBrowserSync extension for your desktop browser (available for Chrome and Firefox) and create a new sync, then scan your sync ID QR code here to access your synced data."
+			"message": "<a href='https://www.xbrowsersync.org/#download' class='new-tab'>Download</a> the xBrowserSync desktop browser extension available for Chrome and Firefox, create a new sync and then scan your sync ID QR code on the previous screen."
 		},
 		"login_introPanel1_Message": {
-			"message": "<h4>Welcome</h4><p>Thanks for using xBrowserSync — browser syncing as it should be: secure, anonymous and free!</p><p>Take some time to read through the following pages to get aquainted with xBrowserSync’s features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
+			"message": "<h4>Welcome</h4><p>Thank you for choosing xBrowserSync!</p><p>Before you begin, take some time to read through the following pages to get aquainted with xBrowserSync’s features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
 		},
 		"login_introPanel2_Message": {
-			"message": "<h4>Syncing for the first time</h4><p>Before you can sync your browser data it must be encrypted so that only you can read it. Enter an encryption password — make it strong but also memorable, there are no resets or reminders so if you forget it you won’t be able to decrypt your synced data.</p><p>Once you click the Sync button your data will be encrypted and synced.</p>"
+			"message": "<h4>Syncing for the first time</h4><p>First things first, head over to your desktop browser and <a href='https://www.xbrowsersync.org/#download' class='new-tab'>download</a> the xBrowserSync extension (available for Chrome and Firefox).</p><p>When you create a new sync, your existing browser data will be encrypted locally and synced, and you will receive a sync ID which you can use here in this app to access your synced data.</p>"
 		},
 		"login_introPanel3_Message": {
-			"message": "<h4>Already synced (got an ID)</h4><p>When you create a new sync you are given a unique xBrowserSync ID which you can use along with your password to sync your data on other devices. Your anonymity is ensured as no personal data is collected or stored with your synced data.</p><p>Once synced you can view your ID in the Settings panel. Tap it to reveal a handy QR code to scan when syncing on mobile devices.</p>"
+			"message": "<h4>Already synced (got an ID)</h4><p>When you create a new sync you are given a unique xBrowserSync ID which you can use along with your password to sync your data on other devices. Your anonymity is ensured as no personal data is collected or stored with your synced data.</p><p>Once synced you can view your ID in the Settings panel.</p>"
 		},
 		"login_introPanel4_Message": {
 			"message": "<h4>Syncing to another service</h4><p>By default your data is synced to the official xBrowserSync service, though anyone can <a href='https://github.com/xBrowserSync/API' class='new-tab'>run their own xBrowserSync service</a>, either for private use (for ultimate security and privacy) or to make available for public use so that more people can enjoy xBrowserSync.</p><p>Check the available <a href='https://www.xbrowsersync.org/#status' class='new-tab'>xBrowserSync services</a> and switch services in the Settings panel.</p>"
@@ -307,14 +307,17 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		"settings_Service_UpdateForm_Confirm_Message": {
 			"message":  "<p>After changing the service, the current sync will be disabled and you'll need to create a new sync.</p><p>If you have previously created a sync using this service and would like to retrieve your data, you can use the xBrowserSync ID provided at the time.</p><p>OK to proceed?</p>"
 		},
+		"settings_Service_UpdateForm_Required_Label": {
+			"message":  "xBrowserSync service URL is required"
+		},
 		"settings_Service_UpdateForm_InvalidService_Label": {
-			"message":  "Not a valid xBrowserSync service."
+			"message":  "Not a valid xBrowserSync service"
 		},
 		"settings_Service_UpdateForm_ServiceVersionNotSupported_Label": {
-			"message":  "The xBrowserSync service is running an API version that is not supported by this app version."
+			"message":  "This service is running an unsupported API version"
 		},
 		"settings_Service_UpdateForm_ServiceOffline_Label": {
-			"message":  "The xBrowserSync service is offline."
+			"message":  "This service is currently offline"
 		},
 		"settings_BackupRestore_Title" : {
 			"message":  "Back up and restore"
@@ -423,6 +426,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		},
 		"bookmark_TagsField_Description": {
 			"message": "tag 1, tag 2, tag 3, etc..."
+		},
+		"bookmark_BookmarkForm_Required_Label": {
+			"message": "Bookmark URL is required"
+		},
+		"bookmark_BookmarkForm_Exists_Label": {
+			"message": "URL has already been bookmarked"
 		},
 		"button_AddTags_Label": {
 			"message": "Add"
@@ -572,7 +581,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Service not supported"
 		},
 		"error_ApiVersionNotSupported_Message" : {
-			"message":  "The xBrowserSync service is running an API version that is not supported by this app version."
+			"message":  "This service is running an unsupported API version"
 		},
 		"error_ContainerChanged_Title" : {
 			"message": "xBrowserSync folder changed"
