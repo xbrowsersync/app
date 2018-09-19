@@ -590,7 +590,7 @@ body {
         overflow-x: hidden;
         
         .label {
-            display: inline-block;
+            display: inline-flex;
             margin: 0px 5px 5px 0;
             color: $colour-text1;
             background-color: $colour-text2;
@@ -599,9 +599,8 @@ body {
             font-size: 0.9em;
             font-weight: normal;
             text-transform: capitalize;
-            padding: 6px 8px;
+            line-height: 1.3em;
             max-width: 99%;
-            @include text-overflow-ellipsis;
             
             &:hover {
                 cursor: pointer;
@@ -616,6 +615,15 @@ body {
                 transition: color, ease-in-out, 0.2s;
                 font-size: 0.9em;
                 color: $colour-link;
+                margin: 0.25em 0 0 0.25em;
+            }
+
+            span {
+                @include text-overflow-ellipsis;
+
+                &:hover {
+                    color: inherit;
+                }
             }
         }
     }
