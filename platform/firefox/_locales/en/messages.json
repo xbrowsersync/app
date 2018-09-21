@@ -126,7 +126,13 @@
 		"message":  "Ready to upgrade sync?"
 	},
 	"login_UpgradeSync_Message" : {
-		"message":  "<p>Your sync data needs to be upgraded to enable sync on this version of the xBrowserSync app.</p><p>After the upgrade, you will not be able to enable sync on older app versions with this xBrowserSync ID.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
+		"message":  "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
+	},
+	"login_Updated_Message": {
+		"message":  "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
+	},
+	"login_Updated_Title": {
+		"message":  "Updated to v"
 	},
 	"button_Confirm_Label" : {
 		"message":  "Yes"
@@ -372,7 +378,7 @@
 		"message":  "How much of the data limit for this service is your current sync using."
 	},
 	"settings_BackupRestore_ConfirmRestore_Sync_Message" : {
-		"message":  "<p>As sync is currently enabled, the data being restored will overwrite your xBrowserSync synced data.</p><p>To restore data to the local browser only, disable sync before restoring.</p><p>OK to proceed?</p>"
+		"message":  "<p>As sync is currently enabled, the data being restored will overwrite your synced data.</p><p>To restore data to the local browser only, disable sync before restoring.</p><p>OK to proceed?</p>"
 	},
 	"settings_BackupRestore_ConfirmRestore_NoSync_Message" : {
 		"message":  "<p>As sync is currently disabled, the data being restored will overwrite the local browser data.</p><p>OK to proceed?</p>"
@@ -427,9 +433,6 @@
 	},
 	"connRestored_Message" : {
 		"message":  "Your xBrowserSync changes have been synced."
-	},
-	"notification_Upgrade_Message": {
-		"message": "xBrowserSync updated to"
 	},
 	"error_Default_Title" : {
 		"message":  "Something went wrong"

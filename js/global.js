@@ -34,7 +34,6 @@ xBrowserSync.App.Global = function(platform) {
             RootContainerName: 'root',
             ToolbarContainerName: '[xbs] Toolbar',
             ToolbarContainerNameOld: '_toolbar_',
-            UnfiledContainerName: '[xbs] Unfiled',
             UnfiledContainerNameOld: '_xBrowserSync_'
         },
         Cache: {
@@ -135,7 +134,9 @@ xBrowserSync.App.Global = function(platform) {
 			Login_ConfirmSync_Title: 'login_ConfirmSync_Title',
 			Login_ConfirmSync_Message: 'login_ConfirmSync_Message',
 			Login_UpgradeSync_Title: 'login_UpgradeSync_Title',
-			Login_UpgradeSync_Message: 'login_UpgradeSync_Message',
+            Login_UpgradeSync_Message: 'login_UpgradeSync_Message',
+            Login_Updated_Message: 'login_Updated_Message',
+            Login_Updated_Title: 'login_Updated_Title',
 			Button_Confirm_Label: 'button_Confirm_Label',
 			Button_Deny_Label: 'button_Deny_Label',
 			Search_Field_Description: 'search_Field_Description',
@@ -236,7 +237,6 @@ xBrowserSync.App.Global = function(platform) {
             Working_Message: 'working_Message',
             ConnRestored_Title: 'connRestored_Title',
             ConnRestored_Message: 'connRestored_Message',
-            Notification_Upgrade_Message: 'notification_Upgrade_Message',
             Bookmark_Metadata_Message: 'bookmark_Metadata_Message',
             Error_Default_Title: 'error_Default_Title',
             Error_Default_Message: 'error_Default_Message',
@@ -341,6 +341,31 @@ xBrowserSync.App.Global = function(platform) {
             Set: function(value) {
                 platform.LocalStorage.Set(
                     'xBrowserSync-displayIntro', 
+                    value);
+            }
+        },
+        DisplayUpdated: {
+            Get: function() {
+                var value;
+                
+                value = platform.LocalStorage.Get(
+                    'xBrowserSync-displayUpdated');
+                
+                if (!value) {
+                    return false;
+                }
+                else {
+                    if (value === 'true') {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            },
+            Set: function(value) {
+                platform.LocalStorage.Set(
+                    'xBrowserSync-displayUpdated', 
                     value);
             }
         },
@@ -569,13 +594,6 @@ xBrowserSync.App.Global = function(platform) {
         Title: {
             Get: function() {
                 return 'xBrowserSync';
-            }
-        },
-        UpdateMessage: {
-            Get: function(syncEnabled) {
-                var message = 'This update includes support for Firefox, stronger encryption and much more!';
-                message += syncEnabled ? '\n\nYour current sync has been disabled, re-enable sync to complete the update process.' : '';
-                return message;
             }
         },
         UpdateType: {

@@ -256,7 +256,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     return vm.view.change(vm.view.views.login);
                 }
             },
-            views: { login: 0, search: 1, bookmark: 2, settings: 3 }
+            views: { login: 0, search: 1, bookmark: 2, settings: 3, updated: 4 }
 		};
         
         // Initialise the app
@@ -791,6 +791,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     vm.syncForm.$setUntouched();
                 }
                 break;
+            case vm.view.views.updated:
+                globals.DisplayUpdated.Set(false);
+                break;
         }
 
         vm.view.current = view;           
@@ -879,6 +882,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         .finally(function() {
                             deferred.resolve(view);
                         });
+                }, 100);
+                break;
+            case vm.view.views.updated:
+                $timeout(function() {
+                    // Focus on release notes button
+                    if (!utility.IsMobilePlatform(vm.platformName)) {
+                        document.querySelector('#releaseNotesBtn').focus();
+                    }
+                    deferred.resolve(view);
                 }, 100);
                 break;
             default:
@@ -1068,10 +1080,17 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         globals.Network.Disconnected.Set(false);
 
         // Display new sync panel depending on if ID is set
-        vm.settings.displayNewSyncPanel = !globals.Id.Get();
+        if (vm.view.current === vm.view.views.login) {
+            vm.settings.displayNewSyncPanel = !globals.Id.Get();
+        }
         
         // Platform-specific initation
         platform.Init(vm, $scope);
+
+        // Display updated panel if flag set
+        if (globals.DisplayUpdated.Get()) {
+            changeView(vm.view.views.updated);
+        }
         
         // Set intro animation visibility
         if (vm.view.current === vm.view.views.login && !!vm.introduction.displayIntro()) {

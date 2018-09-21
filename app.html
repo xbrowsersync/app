@@ -60,6 +60,10 @@
         <div id="settings-panel" class="view" ng-class="{ 'active': vm.view.current === vm.view.views.settings }">
             <div class="view-content" data-ng-include="'./views/settings.html'" data-ng-if="vm.view.current === vm.view.views.settings"></div>
         </div>
+
+        <div id="updated-panel" class="view" ng-class="{ 'active': vm.view.current === vm.view.views.updated }">
+            <div class="view-content" data-ng-include="'./views/updated.html'" data-ng-if="vm.view.current === vm.view.views.updated"></div>
+        </div>
     </div>
 
     <input id="backupFile" class="hidden" name="files[]" type="file" tabindex="-1" />

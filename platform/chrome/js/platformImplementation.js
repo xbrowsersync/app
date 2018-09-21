@@ -15,6 +15,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 	var moduleName = 'xBrowserSync.App.PlatformImplementation', vm, loadingId;
 	var toolbarBookmarksId = '1', otherBookmarksId = '2';
+	var unsupportedContainers = [
+		globals.Bookmarks.MenuContainerName,
+		globals.Bookmarks.MobileContainerName
+	];
 
 
 /* ------------------------------------------------------------------------------------
@@ -536,18 +540,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				var toolbarBookmarks = results[1];
 				var xBookmarks = [];
 
-				// Add unfiled container if bookmarks present
-				var unfiledBookmarks = bookmarks.GetContainer(globals.Bookmarks.UnfiledContainerName, otherBookmarks, false);
-				if (!!unfiledBookmarks && unfiledBookmarks.children.length > 0) {
-					var unfiledContainer = bookmarks.GetContainer(globals.Bookmarks.UnfiledContainerName, xBookmarks, true);
-					unfiledContainer.children = unfiledBookmarks.children;
-				}
-
 				// Add other container if bookmarks present
-				var otherBookmarksExcXbs = _.reject(otherBookmarks, function(bookmark) { return bookmark.title === globals.Bookmarks.UnfiledContainerName; });
-				if (!!otherBookmarksExcXbs && otherBookmarksExcXbs.length > 0) {
+				if (!!otherBookmarks && otherBookmarks.length > 0) {
 					var otherContainer = bookmarks.GetContainer(globals.Bookmarks.OtherContainerName, xBookmarks, true);
-					otherContainer.children = otherBookmarksExcXbs;
+					otherContainer.children = otherBookmarks;
 				}
 
 				// Add toolbar container if bookmarks present
@@ -693,36 +689,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 	
 	var populateBookmarks = function(xBookmarks) {
-		var populateToolbar, populateOther, populateXbs;
+		var populateToolbar, populateOther;
 		
 		// Get containers
 		var menuContainer = bookmarks.GetContainer(globals.Bookmarks.MenuContainerName, xBookmarks);
 		var mobileContainer = bookmarks.GetContainer(globals.Bookmarks.MobileContainerName, xBookmarks);
 		var otherContainer = bookmarks.GetContainer(globals.Bookmarks.OtherContainerName, xBookmarks);
 		var toolbarContainer = bookmarks.GetContainer(globals.Bookmarks.ToolbarContainerName, xBookmarks);
-		var unfiledContainer = bookmarks.GetContainer(globals.Bookmarks.UnfiledContainerName, xBookmarks);
-		
-		// Populate unfiled bookmarks in other bookmarks
-		var populateUnfiled = $q(function(resolve, reject) {
-			if (!!unfiledContainer && unfiledContainer.children.length > 0) {
-				try {
-					chrome.bookmarks.get(otherBookmarksId, function(results) {
-						createLocalBookmarksFromXBookmarks(otherBookmarksId, [unfiledContainer], resolve, reject);
-					});
-				}
-				catch (err) {
-					// Log error
-					utility.LogMessage(
-						moduleName, 'populateBookmarks', globals.LogType.Warning,
-						'Error populating unfiled; ' + err.stack);
-					
-					return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
-				}
-			}
-			else {
-				resolve();
-			}
-		});
 		
 		// Populate menu bookmarks in other bookmarks
 		var populateMenu = $q(function(resolve, reject) {
@@ -812,8 +785,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			}
 		});
 		
-		return $q.all([populateUnfiled, populateMenu, populateMobile, populateOther, populateToolbar])
-			.then(reorderLocalContainers);
+		return $q.all([populateMenu, populateMobile, populateOther, populateToolbar]).then(reorderLocalContainers);
 	};
 	
 	var refreshInterface = function() {
@@ -886,14 +858,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         ];
 		
 		// Check if the bookmark id is a local container
-        var localContainer = _.findWhere(localContainers, { id: localBookmark.id });
-
-        // If the bookmark is not a local container, check if it is an xBrowserSync container
-        if (!localContainer && bookmarks.IsBookmarkContainer(localBookmark)) {
-            localContainer = { id: localBookmark.id, xBookmarkTitle: globals.Bookmarks.UnfiledContainerName };
-        }
-
-        return localContainer;
+        return _.findWhere(localContainers, { id: localBookmark.id });
     };
 
     var createLocalBookmark = function(parentId, title, url, index) {
@@ -1105,14 +1070,8 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 	};
 
 	var reorderLocalContainers = function() {
-		var containers = [
-			globals.Bookmarks.MenuContainerName,
-			globals.Bookmarks.MobileContainerName,
-			globals.Bookmarks.UnfiledContainerName
-		];
-
 		// Get local containers
-		return $q.all(containers.map(findLocalBookmarkByTitle))
+		return $q.all(unsupportedContainers.map(findLocalBookmarkByTitle))
 			.then(function(results) {
 				// Remove falsy results
 				var localContainers = results.filter(function(x) { return x; });
@@ -1152,8 +1111,10 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				try {
 					chrome.bookmarks.getChildren(otherBookmarksId, function(children) {
 						// Get all bookmarks in other bookmarks that are xBrowserSync containers
+						var regex = new RegExp('^' + unsupportedContainers.join('|'));
 						var localContainers = children.filter(function(x) {
-							return x.title.indexOf(globals.Bookmarks.ContainerPrefix) === 0;
+							//return x.title.indexOf(globals.Bookmarks.ContainerPrefix) === 0;
+							return regex.test(x.title);
 						});
 						var containersCount = 0;
 						var checksFailed = false;
@@ -1173,15 +1134,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 							containersCount++;
 							var count = localContainers.filter(function(x) {
 								return x.title === globals.Bookmarks.MobileContainerName;
-							}).length;
-							checksFailed = count !== 1 ? true : checksFailed;
-						}
-
-						var unfiledContainer = bookmarks.GetContainer(globals.Bookmarks.UnfiledContainerName, xBookmarks, false);
-						if (unfiledContainer) {
-							containersCount++;
-							var count = localContainers.filter(function(x) {
-								return x.title === globals.Bookmarks.UnfiledContainerName;
 							}).length;
 							checksFailed = count !== 1 ? true : checksFailed;
 						}

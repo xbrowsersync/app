@@ -28,11 +28,8 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 				case 'update':
 					if (details.previousVersion &&
 						details.previousVersion !== chrome.runtime.getManifest().version) {
-						// If extension has been updated, display alert and disable sync
-						displayAlert(
-							platform.GetConstant(globals.Constants.Notification_Upgrade_Message) + ' ' +
-							chrome.runtime.getManifest().version,
-							globals.UpdateMessage.Get(globals.SyncEnabled.Get()));
+						// If extension has been updated, display updated message and disable sync
+						globals.DisplayUpdated.Set(true);
 						bookmarks.DisableSync();
 					}
 					break;

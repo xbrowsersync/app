@@ -499,6 +499,10 @@ body {
             border-bottom-color: $colour-text2;
         }
 
+        h4 {
+            text-align: center;
+        }
+
         input:not([type]).form-control, input[type="text"].form-control {
             border: solid 1px $colour-text2;
         }
@@ -658,7 +662,7 @@ body {
     }
 }
 
-#login-panel {
+#login-panel, #updated-panel {
     form {
         position: relative;
         
@@ -692,7 +696,7 @@ body {
         z-index: 10;
 
         &.confirm-upgrade {
-            margin-top: -18vh;
+            margin-top: -4.7em;
         }
     }
 
@@ -1393,6 +1397,16 @@ body {
         top: 50%;
         margin: -55px 0 0 -55px;
         border: solid 10px white;
+    }
+}
+
+#updated-panel {
+    .confirm-updated {
+        margin-top: -0.1em;
+    }
+
+    .header-panel {
+        visibility: hidden;
     }
 }
 

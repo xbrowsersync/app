@@ -146,7 +146,13 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 			"message":  "Ready to upgrade sync?"
 		},
 		"login_UpgradeSync_Message" : {
-			"message":  "<p>Your sync data needs to be upgraded to enable sync on this version of the xBrowserSync app.</p><p>After the upgrade, you will not be able to enable sync on older app versions with this xBrowserSync ID.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
+			"message":  "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
+		},
+		"login_Updated_Message": {
+			"message":  "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
+		},
+		"login_Updated_Title": {
+			"message":  "Updated to v"
 		},
 		"button_Confirm_Label" : {
 			"message":  "Yes"
@@ -456,9 +462,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		},
 		"connRestored_Message" : {
 			"message":  "Your xBrowserSync changes have been synced."
-		},
-		"notification_Upgrade_Message": {
-			"message": "xBrowserSync updated to"
 		},
 		"bookmark_Metadata_Message" : {
 			"message":  "Fetching bookmark properties, touch to cancel."
