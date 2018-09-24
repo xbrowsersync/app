@@ -990,6 +990,9 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         };
 		document.getElementsByTagName('head')[0].appendChild(script);
 
+		// Check stored app version for upgrade
+		checkForUpgrade();
+
 		// Set async channel to view model
 		vm.sync.asyncChannel = vm;
 
@@ -1325,6 +1328,18 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		}
 
 		return deferred.promise;
+	};
+
+	var checkForUpgrade = function() {
+		// Disable sync and display updated message if stored app version older than current
+		var storedVersion = globals.MobileAppVersion.Get();
+		if (storedVersion && compareVersions(storedVersion, globals.AppVersion) < 0) {
+			globals.SyncEnabled.Set(false);
+			globals.DisplayUpdated.Set(true);
+		}
+		
+		// Update stored version to current app version
+		globals.MobileAppVersion.Set(globals.AppVersion);
 	};
 
 	var displayDefaultSearchState = function() {

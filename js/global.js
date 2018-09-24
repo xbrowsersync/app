@@ -472,6 +472,19 @@ xBrowserSync.App.Global = function(platform) {
             Error: 2
         },
         LookaheadMinChars: 1,
+        MobileAppVersion: {
+            Get: function() {
+                return platform.LocalStorage.Get(
+                    'xBrowserSync-mobileAppVersion') || '1.3.1';
+            },
+            Set: function(value) {
+                value = (!value) ? '' : value.trim();
+                
+                platform.LocalStorage.Set(
+                    'xBrowserSync-mobileAppVersion', 
+                    value);
+            }
+        },
         Network: {
             Disconnected: {
                 Get: function() {
