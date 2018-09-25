@@ -54,7 +54,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             height: function() { return document.querySelector('body').clientHeight; },
             messageLog: []
         };
-        
+
         vm.events = {
             backupRestoreForm_Backup_Click: backupRestoreForm_Backup_Click,
             backupRestoreForm_DisplayRestoreForm_Click: backupRestoreForm_DisplayRestoreForm_Click,
@@ -126,6 +126,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             syncPanel_DisplayDataUsage_Click: displayDataUsage,
             syncPanel_DisplaySyncOptions_Click: syncPanel_DisplaySyncOptions_Click,
             searchForm_ToggleBookmark_Click: searchForm_ToggleBookmark_Click,
+            updatedPanel_ReleaseNotes_Click: updatedPanel_ReleaseNotes_Click,
             updateServiceUrlForm_Cancel_Click: updateServiceUrlForm_Cancel_Click,
             updateServiceUrlForm_Confirm_Click: updateServiceUrlForm_Confirm_Click,
             updateServiceUrlForm_Display_Click: updateServiceUrlForm_Display_Click,
@@ -1214,11 +1215,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
     };
     
     var openUrl = function(event, url) {
-        if (!!event.preventDefault) { 
+        if (event && event.preventDefault) { 
             event.preventDefault();
         }
 
-        if (!!url) {
+        if (url) {
             platform.OpenUrl(url);
         }
         else {
@@ -1912,6 +1913,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         var syncData = {};
         syncData.type = (!globals.Id.Get()) ? globals.SyncType.Push : globals.SyncType.Pull;
         platform.Sync(vm.sync.asyncChannel, syncData, globals.Commands.NoCallback);
+    };
+
+    var updatedPanel_ReleaseNotes_Click = function() {
+        vm.events.openUrl(null, globals.ReleaseNotesUrlStem + globals.AppVersion);
+        vm.view.displayMainView();
     };
 
     var updateServiceUrlForm_Cancel_Click = function() {

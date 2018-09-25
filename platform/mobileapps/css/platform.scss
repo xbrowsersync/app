@@ -204,13 +204,13 @@ body {
         display: block;
 
         i {
-            @media (max-width: $width-mobile-medium - 1) {
+            @media (max-width: $width-mobile-medium) {
                 font-size: 2em;
             }
         }
         
-        @media (max-width: $width-mobile-medium - 1) {
-            top: 0.35em;
+        @media (max-width: $width-mobile-medium) {
+            top: 0.4em;
         }
     }
 
@@ -231,7 +231,7 @@ body {
 
     .intro-panel {
         & > div {
-            @media (max-width: $width-mobile-large) {
+            @media (max-height: $height-mobile-medium) {
                 font-size: 0.9em;
             }
         }
@@ -254,7 +254,7 @@ body {
         }
 
         .well  {
-            @media (max-width: $width-mobile-small) {
+            @media (max-height: $height-mobile-medium) {
                 font-size: 0.9em;
             }
         }
@@ -377,7 +377,7 @@ body {
         }
 
         .form-group .id-url {
-            @media (max-width: $width-mobile-small) {
+            @media (max-height: $height-mobile-medium) {
                 font-size: 0.89em;
             }
         }
@@ -391,6 +391,12 @@ body {
         @media (min-width: $width-tablet-small) {
             margin-bottom: 0.75em;
         }
+    }
+}
+
+#updated-panel .confirm-updated {
+    @media (max-height: $height-mobile-medium) {
+        margin-top: -2.5em;
     }
 }
 

@@ -10,6 +10,7 @@
     <platform name="android">
         <hook src="hooks/AddIntents.js" type="after_prepare" />
         <allow-intent href="market:*" />
+        <preference name="android-targetSdkVersion" value="26" />
         <icon density="ldpi" src="res/icon/android/ldpi.png" />
         <icon density="mdpi" src="res/icon/android/mdpi.png" />
         <icon density="hdpi" src="res/icon/android/hdpi.png" />

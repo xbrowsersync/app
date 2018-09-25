@@ -990,9 +990,6 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
         };
 		document.getElementsByTagName('head')[0].appendChild(script);
 
-		// Check stored app version for upgrade
-		checkForUpgrade();
-
 		// Set async channel to view model
 		vm.sync.asyncChannel = vm;
 
@@ -1010,6 +1007,12 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 
 		// Increase search results timeout to avoid display lag
 		vm.settings.getSearchResultsDelay = 500;
+		
+		// Display existing sync panel by default
+		vm.settings.displayNewSyncPanel = false;
+
+		// Check stored app version for upgrade
+		checkForUpgrade();
 	};
 
 	var openUrl = function(url) {

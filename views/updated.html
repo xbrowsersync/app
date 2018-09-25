@@ -21,7 +21,7 @@
   <p>{{ vm.platform.GetConstant(vm.globals.Constants.Login_Updated_Message) }}</p>
   <div class="buttons">
     <button id="releaseNotesBtn" type="button" class="btn btn-default" tabindex="1"
-      data-ng-click="vm.events.openUrl($event, 'https://github.com/xBrowserSync/App/releases/tag/v' + vm.globals.AppVersion)">
+      data-ng-click="vm.events.updatedPanel_ReleaseNotes_Click()">
       {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_ReleaseNotes_Label) }}
     </button>
     <button type="button" class="btn btn-default" tabindex="2"
