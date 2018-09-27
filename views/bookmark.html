@@ -18,10 +18,10 @@
     <label for="bookmarkUrl" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_UrlField_Label) }}</label>
     <input type="text" class="form-control" name="bookmarkUrl" placeholder="URL" data-ng-model="vm.bookmark.current.url" data-ng-change="vm.events.bookmarkForm_BookmarkUrl_Change()"
       maxlength="2000" spellcheck="false" autocomplete="off" tabindex="2" required placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_UrlField_Label) }}">
-    <div class="validation" data-ng-if="vm.bookmarkForm.bookmarkUrl.$error.required">
+    <div class="validation" data-ng-if="vm.bookmark.current && vm.bookmarkForm.bookmarkUrl.$error.required">
       {{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_BookmarkForm_Required_Label) }}
     </div>
-    <div class="validation" data-ng-if="vm.bookmarkForm.bookmarkUrl.$error.Exists">
+    <div class="validation" data-ng-if="vm.bookmark.current && vm.bookmarkForm.bookmarkUrl.$error.Exists">
       {{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_BookmarkForm_Exists_Label) }}
     </div>
   </div>
