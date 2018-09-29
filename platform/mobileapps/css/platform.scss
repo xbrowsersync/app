@@ -214,6 +214,14 @@ body {
         }
     }
 
+    .confirm.confirm-upgrade {
+        margin-top: -3em;
+        
+        @media (max-height: $height-mobile-medium) {
+            margin-top: -7em;
+        }
+    }
+
     .form-group {
         input {
             @media (max-width: $width-mobile-small) {

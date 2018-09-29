@@ -656,7 +656,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
 
         // Validate the new bookmark
-        bookmarkForm_ValidateBookmark(bookmarkToUpdate)
+        bookmarkForm_ValidateBookmark(bookmarkToUpdate, vm.bookmark.originalUrl)
             .then(function(isValid) {
                 if (!isValid) {
                     // Bookmark URL exists, display validation error
@@ -712,9 +712,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             });
     };
 
-    var bookmarkForm_ValidateBookmark = function(bookmarkToValidate) {
+    var bookmarkForm_ValidateBookmark = function(bookmarkToValidate, originalUrl) {
         // Skip validation if URL is unmodified
-        if (bookmarkToValidate.url === vm.bookmark.originalUrl) {
+        if (originalUrl && bookmarkToValidate.url.toUpperCase() === originalUrl.toUpperCase()) {
             return $q.resolve(true);
         }
         
