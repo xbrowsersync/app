@@ -32,12 +32,15 @@ xBrowserSync.App.Platform = function($q) {
 			AddIds: notImplemented,
 			Clear: notImplemented,
 			Created: notImplemented,
+			CreateSingle: notImplemented,
 			Deleted: notImplemented,
+			DeleteSingle: notImplemented,
 			Get: notImplemented,
 			Moved: notImplemented,
             Populate: notImplemented,
 			Share: notImplemented,
-			Updated: notImplemented
+			Updated: notImplemented,
+			UpdateSingle: notImplemented
 		},
 		GetConstant: notImplemented,
         GetCurrentUrl: notImplemented,
