@@ -477,7 +477,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return findLocalBookmarkByPath(pathToTarget.slice(1))
 			.then(function(bookmarkToDelete) {
 				if (!bookmarkToDelete) {
-					return $q.reject();
+					return $q.reject({ code: globals.ErrorCodes.UpdatedBookmarkNotFound });
 				}
 				
 				return deleteLocalBookmarksTree(bookmarkToDelete.id);
@@ -874,7 +874,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return findLocalBookmarkByPath(pathToTarget.slice(1))
 			.then(function(localBookmarkToUpdate) {
 				if (!localBookmarkToUpdate) {
-					return $q.reject();
+					return $q.reject({ code: globals.ErrorCodes.UpdatedBookmarkNotFound });
 				}
 				
 				return updateLocalBookmark(localBookmarkToUpdate.id, updatedBookmark.title, updatedBookmark.url);
@@ -969,7 +969,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		var container = path.shift().bookmark;
 		if (!bookmarks.XBookmarkIsContainer(container)) {
 			// First path item should always be a container
-			return $q.reject();
+			return $q.reject({ code: globals.ErrorCodes.UpdatedBookmarkNotFound });
 		}
 
 		// Check if container is unsupported in this browser
@@ -985,7 +985,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 					}
 					else {
 						// Unable to find local container folder 
-						reject();
+						reject({ code: globals.ErrorCodes.UpdatedBookmarkNotFound });
 					}
 				});
 			});
@@ -1008,23 +1008,40 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 				if (path.length === 0) {
 					return bookmarkTree;
 				}
-				
-				// Follow path to target local bookmark
-				return path.reduce(function(treePosition, pathCurrent) {
-					if (!treePosition) {
-						return;
-					}
-					
-					// Return the child at the matching index
-					var localBookmarkIndex = pathCurrent.index;
-					if (treePosition.id === otherBookmarksId) {
-						// TODO: offset pathCurrent.index by any existing containers
-					}
 
-					return treePosition.children.find(function(x) {
-						return x.index === localBookmarkIndex;
-					});
-				}, bookmarkTree);
+				return utility.AsyncReduce(bookmarkTree, path,
+					function(treePosition, pathCurrent) {
+						return $q(function(resolve, reject) {
+							if (!treePosition) {
+								return resolve();
+							}
+							
+							// If the current position is other bookmarks, 
+							// check for any existing container folders that would throw off the target index
+							var getLocalBookmarkIndex;
+							if (treePosition.id === otherBookmarksId) {
+								getLocalBookmarkIndex = getNumContainersBeforeBookmarkIndex(treePosition.id, pathCurrent.index)
+									.then(function(numContainers) {
+										// Adjust the index by the number of container folders
+										return pathCurrent.index + numContainers;
+									});
+							}
+							else {
+								getLocalBookmarkIndex = $q.resolve(pathCurrent.index);
+							}
+							
+							return getLocalBookmarkIndex
+								.then(function(localBookmarkIndex) {
+									// Return the child at the matching index
+									var targetChild = treePosition.children.find(function(x) {
+										return x.index === localBookmarkIndex;
+									});
+									return resolve(targetChild);
+								})
+								.catch(reject);
+						});
+					}
+				);
 			});
 	};
 
@@ -1161,7 +1178,7 @@ xBrowserSync.App.PlatformImplementation = function($http, $interval, $q, $timeou
 		return getLocalBookmarkTreeById(parentId)
 			.then(function(localBookmark) {
 				var preceedingBookmarks = _.filter(localBookmark.children, function(bookmark) {
-					return bookmark.index < bookmarkIndex;
+					return bookmark.index <= bookmarkIndex;
 				});
 				var containers = _.filter(preceedingBookmarks, bookmarks.XBookmarkIsContainer);
 				

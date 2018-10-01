@@ -15,7 +15,15 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
  * Public functions
  * ------------------------------------------------------------------------------------ */
  
-	var closest = function(element, predicate) {
+	var asyncReduce = function(initialValue, itemArray, iterator) {
+		return itemArray.reduce(function(promiseChain, currentItem) {
+			return promiseChain.then(function(prevResult) {
+				return iterator(prevResult, currentItem);
+			});
+		}, $q.resolve(initialValue));
+	};
+ 
+ 	var closest = function(element, predicate) {
 		// Find closest element where predicate is true 
 		return predicate(element) ? element : (
 			element && closest(element.parentNode, predicate)
@@ -443,6 +451,7 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 	};
 	
 	return {
+		AsyncReduce: asyncReduce,
 		Closest: closest,
 		DecryptData: decryptData,
 		EncryptData: encryptData,
