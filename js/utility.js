@@ -333,7 +333,7 @@ xBrowserSync.App.Utility = function($q, platform, globals) {
 					{
 					  name: 'PBKDF2',
 					  salt: encodedSalt,
-					  iterations: 100000,
+					  iterations: 250000,
 					  hash: 'SHA-256'
 					},
 					importedKey,
