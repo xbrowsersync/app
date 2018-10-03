@@ -294,27 +294,39 @@
       </div>
     </div>
   </div>
-  <div class="debug-panel well well-sm" data-ng-if="vm.settings.debugMode">
+  <div class="debug-panel well well-sm">
     <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Debug_Title) }}</h4>
     <div class="panel-content">
       <div class="form-group">
-        <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Debug_DeviceWidth_Label) }}</label>
+        <label>{{ vm.platform.GetConstant(vm.globals.Constants.DebugEnabled_Message) }}</label>
         <div class="form-control">
-          <span>{{ vm.device.width() }}px</span>
+          <div class="checkbox">
+            <input id="enableDebugMode" type="checkbox" data-ng-model="vm.settings.debugMode" data-ng-model-options="{ getterSetter: true }"
+            />
+            <label for="enableDebugMode"></label>
+          </div>
         </div>
       </div>
-      <div class="form-group">
-        <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Debug_DeviceHeight_Label) }}</label>
-        <div class="form-control">
-          <span>{{ vm.device.height() }}px</span>
+      <div class="animate-fade" data-ng-if="vm.settings.debugMode()">
+        <div class="form-group">
+          <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Debug_DeviceWidth_Label) }}</label>
+          <div class="form-control">
+            <span>{{ vm.device.width() }}px</span>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label>Message log</label>
-        <div class="message-log">
-          <ul data-ng-if="vm.device.messageLog.length > 0">
-            <li data-ng-repeat="message in vm.device.messageLog">{{ message }}</li>
-          </ul>
+        <div class="form-group">
+          <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Debug_DeviceHeight_Label) }}</label>
+          <div class="form-control">
+            <span>{{ vm.device.height() }}px</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Message log</label>
+          <div class="message-log">
+            <ul data-ng-if="vm.settings.messageLog().length > 0">
+              <li data-ng-repeat="message in vm.settings.messageLog() track by $index">{{ message }}</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

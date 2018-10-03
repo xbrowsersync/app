@@ -20,12 +20,10 @@
   <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_Updated_Title) + vm.globals.AppVersion }}</h4>
   <p>{{ vm.platform.GetConstant(vm.globals.Constants.Login_Updated_Message) }}</p>
   <div class="buttons">
-    <button id="releaseNotesBtn" type="button" class="btn btn-default" tabindex="1"
-      data-ng-click="vm.events.updatedPanel_ReleaseNotes_Click()">
+    <button id="releaseNotesBtn" type="button" class="btn btn-default" tabindex="1" data-ng-click="vm.events.updatedPanel_ReleaseNotes_Click()">
       {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_ReleaseNotes_Label) }}
     </button>
-    <button type="button" class="btn btn-default" tabindex="2"
-      data-ng-click="vm.view.displayMainView()">
+    <button type="button" class="btn btn-default" tabindex="2" data-ng-click="vm.view.displayMainView()">
       {{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}
     </button>
   </div>

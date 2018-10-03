@@ -6,53 +6,52 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Main angular controller class for the app.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platform, globals, api, utility, bookmarks, platformImplementation) { 
-	'use strict';    
+xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platform, globals, api, utility, bookmarks, platformImplementation) {
+    'use strict';
     var vm, moduleName = 'xBrowserSync.App.Controller';
-    
-/* ------------------------------------------------------------------------------------
- * Constructor
- * ------------------------------------------------------------------------------------ */
- 
-    var BrowserAction = function() {
+
+    /* ------------------------------------------------------------------------------------
+     * Constructor
+     * ------------------------------------------------------------------------------------ */
+
+    var BrowserAction = function () {
         vm = this;
         vm.globals = globals;
         vm.platform = platform;
-        vm.utility = utility; 
+        vm.utility = utility;
         vm.scope = $scope;
 
         vm.working = false;
-		
-		vm.alert = {
-			show: false,
-			title: '',
-			message: '',
-			type: '',
-			display: function(title, message, alertType) {
-				vm.alert.title = title;
-				vm.alert.message = message;
-				vm.alert.type = alertType;
-				vm.alert.show = true;
-			}
-		};
-        
+
+        vm.alert = {
+            show: false,
+            title: '',
+            message: '',
+            type: '',
+            display: function (title, message, alertType) {
+                vm.alert.title = title;
+                vm.alert.message = message;
+                vm.alert.type = alertType;
+                vm.alert.show = true;
+            }
+        };
+
         vm.bookmark = {
             active: false,
             current: null,
             currentUrl: null,
             descriptionFieldOriginalHeight: null,
-            displayUpdateForm : false,
+            displayUpdateForm: false,
             originalUrl: null,
             tagText: null,
-            urlAsTitle: function(url) {
+            urlAsTitle: function (url) {
                 return url.replace(/^https?:\/\//i, '');
             }
         };
 
         vm.device = {
-            width: function() { return document.querySelector('body').clientWidth; },
-            height: function() { return document.querySelector('body').clientHeight; },
-            messageLog: []
+            width: function () { return document.querySelector('body').clientWidth; },
+            height: function () { return document.querySelector('body').clientHeight; }
         };
 
         vm.events = {
@@ -135,12 +134,12 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         };
 
         vm.introduction = {
-            displayIntro: function(value) {
-                return arguments.length ? 
-                    globals.DisplayIntro.Set(value) : 
+            displayIntro: function (value) {
+                return arguments.length ?
+                    globals.DisplayIntro.Set(value) :
                     globals.DisplayIntro.Get();
             },
-            displayPanel: function(panelToDisplay) {
+            displayPanel: function (panelToDisplay) {
                 if (!panelToDisplay || panelToDisplay > vm.introduction.currentPanel) {
                     var panels = document.querySelectorAll('.intro-panel > div');
 
@@ -152,8 +151,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     document.querySelector('#intro-panel-' + vm.introduction.currentPanel).classList.add('reverse');
                     document.querySelector('#intro-panel-' + panelToDisplay).classList.add('reverse');
                 }
-                
-                vm.introduction.showLogo = (!panelToDisplay) ? true : false;                
+
+                vm.introduction.showLogo = (!panelToDisplay) ? true : false;
                 vm.introduction.currentPanel = (!panelToDisplay) ? 0 : panelToDisplay;
             },
             showLogo: true,
@@ -161,7 +160,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         };
 
         vm.platformName = null;
-        
+
         vm.search = {
             batchResultsNum: 10,
             cancelGetBookmarksRequest: null,
@@ -178,19 +177,22 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             selectedBookmark: null,
             scrollDisplayMoreEnabled: true
         };
-        
-		vm.settings = {
+
+        vm.settings = {
             backupCompletedMessage: null,
             backupFileName: null,
-            debugMode: false,
-			restoreCompletedMessage: null,
+            debugMode: function (value) {
+                return arguments.length ?
+                    globals.Debug.Enabled.Set(value) :
+                    globals.Debug.Enabled.Get();
+            },
             dataToRestore: null,
-            dataToRestoreIsValid: function() {
+            dataToRestoreIsValid: function () {
                 return checkRestoreData(vm.settings.dataToRestore);
             },
             displayCancelSyncConfirmation: false,
             displayNewSyncPanel: true,
-			displayQRCode: false,
+            displayQRCode: false,
             displayRestoreConfirmation: false,
             displayRestoreForm: false,
             displaySyncBookmarksToolbarConfirmation: false,
@@ -201,55 +203,61 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             getSearchLookaheadDelay: 50,
             getSearchResultsDelay: 250,
             iCloudNotAvailable: false,
-			id: function(value) {
-                return arguments.length ? 
-                    globals.Id.Set(value) : 
+            id: function (value) {
+                return arguments.length ?
+                    globals.Id.Set(value) :
                     globals.Id.Get();
             },
-            syncBookmarksToolbar: function(value) {
-                return arguments.length ? 
-                    syncPanel_SyncBookmarksToolbar_Click(value) : 
-                    globals.SyncBookmarksToolbar.Get();
+            messageLog: function (value) {
+                return arguments.length ?
+                    globals.Debug.MessageLog.Set(value) :
+                    globals.Debug.MessageLog.Get();
             },
+            restoreCompletedMessage: null,
             service: {
                 apiVersion: '',
                 maxSyncSize: 0,
                 newServiceUrl: '',
                 status: null,
                 statusMessage: '',
-                url: function(value) {
-                    return arguments.length ? 
-                        globals.URL.Host.Set(value) : 
+                url: function (value) {
+                    return arguments.length ?
+                        globals.URL.Host.Set(value) :
                         globals.URL.Host.Get();
                 }
             },
+            syncBookmarksToolbar: function (value) {
+                return arguments.length ?
+                    syncPanel_SyncBookmarksToolbar_Click(value) :
+                    globals.SyncBookmarksToolbar.Get();
+            },
             syncDataSize: null,
             syncDataUsed: null
-		};
-		
-		vm.sync = {
-			asyncChannel: undefined,
+        };
+
+        vm.sync = {
+            asyncChannel: undefined,
             displayPasswordConfirmation: false,
             displaySyncConfirmation: false,
             displayUpgradeConfirmation: false,
             enabled: globals.SyncEnabled.Get,
-            inProgress: function(value) {
-                return arguments.length ? 
-                    globals.IsSyncing.Set(value) : 
+            inProgress: function (value) {
+                return arguments.length ?
+                    globals.IsSyncing.Set(value) :
                     globals.IsSyncing.Get();
             },
             secret: null,
-            secretComplexity: {},            
+            secretComplexity: {},
             secretConfirmation: null,
             upgradeConfirmed: false
-		};
+        };
 
-		vm.view = {
-			current: (function() {
+        vm.view = {
+            current: (function () {
                 return globals.SyncEnabled.Get() ? 1 : 0;
             }()),
             change: changeView,
-            displayMainView: function() {
+            displayMainView: function () {
                 if (!!globals.SyncEnabled.Get()) {
                     return vm.view.change(vm.view.views.search);
                 }
@@ -258,34 +266,29 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 }
             },
             views: { login: 0, search: 1, bookmark: 2, settings: 3, updated: 4 }
-		};
-        
+        };
+
         // Initialise the app
         init();
     };
-        
-        
-/* ------------------------------------------------------------------------------------
- * Private functions
- * ------------------------------------------------------------------------------------ */
-	
-	var backupRestoreForm_Backup_Click = function() {
-		// Display loading overlay
+
+
+    /* ------------------------------------------------------------------------------------
+     * Private functions
+     * ------------------------------------------------------------------------------------ */
+
+    var backupRestoreForm_Backup_Click = function () {
+        // Display loading overlay
         platform.Interface.Loading.Show();
-        
+
         platform.BackupData()
-            .catch(function(err) {
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'backupRestoreForm_Backup_Click', globals.LogType.Warning,
-                    err.stack);
-                
+            .catch(function (err) {
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
             })
-            .finally(function() {
-                $timeout(function() {
+            .finally(function () {
+                $timeout(function () {
                     platform.Interface.Loading.Hide();
 
                     // Focus on done button
@@ -294,9 +297,9 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     }
                 });
             });
-	};
-    
-    var backupRestoreForm_DisplayRestoreForm_Click = function() {
+    };
+
+    var backupRestoreForm_DisplayRestoreForm_Click = function () {
         // Display restore form
         vm.settings.backupFileName = null;
         vm.settings.restoreCompletedMessage = null;
@@ -306,53 +309,53 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if (vm.platformName !== globals.Platforms.IOS) {
             document.querySelector('#backupFile').value = null;
         }
-        
+
         // Focus in restore textarea
-        $timeout(function() {
+        $timeout(function () {
             document.querySelector('#restoreForm textarea').select();
         });
     };
-    
-    var backupRestoreForm_DisplayRestoreConfirmation_Click = function() {
+
+    var backupRestoreForm_DisplayRestoreConfirmation_Click = function () {
         // Display restore confirmation 
         vm.settings.displayRestoreForm = false;
         vm.settings.displayRestoreConfirmation = true;
-        
+
         // Focus on confirm button
         if (!utility.IsMobilePlatform(vm.platformName)) {
-            $timeout(function() {
+            $timeout(function () {
                 document.querySelector('.btn-confirm-restore').focus();
             });
         }
     };
-	
-	var backupRestoreForm_Restore_Click = function() {
-		if (!vm.settings.dataToRestore) {
+
+    var backupRestoreForm_Restore_Click = function () {
+        if (!vm.settings.dataToRestore) {
             // Display alert
             vm.alert.display(
                 platform.GetConstant(globals.Constants.Error_NoDataToRestore_Title),
-                platform.GetConstant(globals.Constants.Error_NoDataToRestore_Message), 
+                platform.GetConstant(globals.Constants.Error_NoDataToRestore_Message),
                 'danger');
-            
+
             return;
         }
-        
+
         // Start restore
         restoreData(JSON.parse(vm.settings.dataToRestore));
-	};
+    };
 
-    var backupRestoreForm_SelectBackupFile_Click = function() {
+    var backupRestoreForm_SelectBackupFile_Click = function () {
         platform.SelectFile();
-    }; 
-    
-    var bookmarkForm_BookmarkDescription_Change = function() {
+    };
+
+    var bookmarkForm_BookmarkDescription_Change = function () {
         // Limit the bookmark description to the max length
-        $timeout(function() {
+        $timeout(function () {
             vm.bookmark.current.description = utility.TrimToNearestWord(vm.bookmark.current.description, globals.Bookmarks.DescriptionMaxLength);
         });
     };
-    
-    var bookmarkForm_BookmarkTags_Change = function() {
+
+    var bookmarkForm_BookmarkTags_Change = function () {
         vm.alert.show = false;
         vm.bookmark.tagLookahead = null;
 
@@ -368,14 +371,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if (!!lastWord && lastWord.length > globals.LookaheadMinChars) {
             // Get tags lookahead
             bookmarks.GetLookahead(lastWord.toLowerCase(), null, null, true, vm.bookmark.current.tags)
-                .then(function(results) {
+                .then(function (results) {
                     if (!results) {
                         return;
                     }
-                    
+
                     var lookahead = results[0];
-                    var word =  results[1];
-                    
+                    var word = results[1];
+
                     // Display lookahead
                     if (!!lookahead && word.toLowerCase() === lastWord.toLowerCase()) {
                         // Trim word from lookahead
@@ -385,7 +388,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         vm.bookmark.tagLookahead = null;
 
                         // Set position of lookahead element
-                        $timeout(function() {
+                        $timeout(function () {
                             var lookaheadElement = document.querySelector('#bookmark-panel .lookahead-container .lookahead');
                             var measureElement = document.querySelector('#bookmark-panel .lookahead-container .measure');
                             lookaheadElement.style.left = (measureElement.offsetLeft + measureElement.offsetWidth) + 'px';
@@ -396,15 +399,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
     };
 
-    var bookmarkForm_BookmarkTags_Click = function() {
+    var bookmarkForm_BookmarkTags_Click = function () {
         vm.bookmark.tagText += vm.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
         bookmarkForm_CreateTags_Click();
         if (!utility.IsMobilePlatform(vm.platformName)) {
             document.querySelector('input[name="bookmarkTags"]').focus();
         }
     };
-    
-    var bookmarkForm_BookmarkTags_KeyDown = function(event) {
+
+    var bookmarkForm_BookmarkTags_KeyDown = function (event) {
         switch (true) {
             // If user pressed Enter
             case (event.keyCode === 13):
@@ -425,14 +428,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
     };
 
-    var bookmarkForm_BookmarkUrl_Change = function() {
+    var bookmarkForm_BookmarkUrl_Change = function () {
         // Reset form if field is invalid
         if (vm.bookmarkForm.bookmarkUrl.$invalid) {
             vm.bookmarkForm.bookmarkUrl.$setValidity('Exists', true);
         }
     };
-    
-    var bookmarkForm_CreateBookmark_Click = function() {
+
+    var bookmarkForm_CreateBookmark_Click = function () {
         // Add tags if tag text present
         if (!!vm.bookmark.tagText && vm.bookmark.tagText.length > 0) {
             bookmarkForm_CreateTags_Click();
@@ -448,39 +451,39 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
         // Validate the new bookmark
         bookmarkForm_ValidateBookmark(bookmarkToCreate)
-            .then(function(isValid) {
+            .then(function (isValid) {
                 if (!isValid) {
                     // Bookmark URL exists, display validation error
                     vm.bookmarkForm.bookmarkUrl.$setValidity('Exists', false);
                     return;
                 }
-        
+
                 // Sync changes
                 platform.Sync(vm.sync.asyncChannel, {
                     type: globals.SyncType.Both,
-                    changeInfo: { 
-                        type: globals.UpdateType.Create, 
+                    changeInfo: {
+                        type: globals.UpdateType.Create,
                         bookmark: bookmarkToCreate
                     }
                 });
 
                 // Set bookmark active status if current bookmark is current page
                 platform.GetCurrentUrl()
-                    .then(function(currentUrl) {
+                    .then(function (currentUrl) {
                         vm.bookmark.active = currentUrl && currentUrl.toUpperCase() === bookmarkToCreate.url.toUpperCase();
-                        
+
                         vm.view.change(vm.view.views.search)
-                            .then(function() {
+                            .then(function () {
                                 // Add new bookmark into search results on mobile apps
                                 if (utility.IsMobilePlatform(vm.platformName)) {
                                     var bookmarkToCreateClone = JSON.parse(JSON.stringify(bookmarkToCreate));
                                     bookmarkToCreateClone.id = bookmarks.GetNewBookmarkId(vm.search.results);
                                     bookmarkToCreateClone.class = 'added';
-                                    $timeout(function() {
+                                    $timeout(function () {
                                         // Add bookmark to results
                                         vm.search.results.unshift(bookmarkToCreateClone);
-        
-                                        $timeout(function() {
+
+                                        $timeout(function () {
                                             // Remove animation class
                                             delete bookmarkToCreateClone.class;
                                         }, 500);
@@ -490,11 +493,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     });
             });
     };
-    
-    var bookmarkForm_CreateTags_Click = function() {
+
+    var bookmarkForm_CreateTags_Click = function () {
         // Clean and sort tags and add them to tag array
-        var newTags = utility.GetTagArrayFromText(vm.bookmark.tagText);        
-        vm.bookmark.current.tags = _.sortBy(_.union(newTags, vm.bookmark.current.tags), function(tag) {
+        var newTags = utility.GetTagArrayFromText(vm.bookmark.tagText);
+        vm.bookmark.current.tags = _.sortBy(_.union(newTags, vm.bookmark.current.tags), function (tag) {
             return tag;
         });
 
@@ -505,40 +508,40 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             document.querySelector('input[name="bookmarkTags"]').focus();
         }
     };
-    
-    var bookmarkForm_DeleteBookmark_Click = function() {
+
+    var bookmarkForm_DeleteBookmark_Click = function () {
         var bookmarkToDelete = vm.bookmark.current;
 
         // Sync changes
         platform.Sync(vm.sync.asyncChannel, {
             type: globals.SyncType.Both,
-            changeInfo: { 
-                type: globals.UpdateType.Delete, 
+            changeInfo: {
+                type: globals.UpdateType.Delete,
                 id: bookmarkToDelete.id
             }
         });
-        
+
         // Set bookmark active status if current bookmark is current page
-		platform.GetCurrentUrl()
-            .then(function(currentUrl) {
+        platform.GetCurrentUrl()
+            .then(function (currentUrl) {
                 if (!!currentUrl && currentUrl.toUpperCase() === vm.bookmark.originalUrl.toUpperCase()) {
                     vm.bookmark.active = false;
                 }
-                
+
                 // Display the search panel
                 return vm.view.change(vm.view.views.search);
             })
-            .then(function() {
+            .then(function () {
                 // Find and delete the deleted bookmark element in the search results on mobile apps
                 if (utility.IsMobilePlatform(vm.platformName)) {
                     if (!!vm.search.results && vm.search.results.length >= 0) {
-                        var deletedBookmarkIndex = _.findIndex(vm.search.results, function(result) { 
-                            return result.id === bookmarkToDelete.id; 
+                        var deletedBookmarkIndex = _.findIndex(vm.search.results, function (result) {
+                            return result.id === bookmarkToDelete.id;
                         });
 
                         if (deletedBookmarkIndex >= 0) {
                             vm.search.results[deletedBookmarkIndex].class = 'deleted';
-                            $timeout(function() {
+                            $timeout(function () {
                                 // Remove bookmark from results
                                 vm.search.results.splice(deletedBookmarkIndex, 1);
                             }, 500);
@@ -546,35 +549,30 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     }
                 }
             })
-            .catch(function(err) {
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'bookmarkForm_DeleteBookmark_Click', globals.LogType.Warning,
-                    err.stack);
-                
+            .catch(function (err) {
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
             });
     };
 
-    var bookmarkForm_Init = function() {
+    var bookmarkForm_Init = function () {
         // If form properties already set, return 
         if (!!vm.bookmark.current) {
             vm.bookmark.displayUpdateForm = true;
             return $q.resolve();
         }
-        
+
         var deferred = $q.defer(), loadMetadataDeferred = $q.defer(), timeout;
-        
+
         // Check if current url is a bookmark
         bookmarks.IncludesCurrentPage()
-            .then(function(result) {
-				if (!!result) {
+            .then(function (result) {
+                if (!!result) {
                     // Remove search score and set current bookmark to result
                     delete result.score;
                     vm.bookmark.current = result;
-                    
+
                     // Display update bookmark form and return
                     vm.bookmark.displayUpdateForm = true;
                     return deferred.resolve();
@@ -583,18 +581,18 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     // Otherwise display loading overlay and get page metadata for current url
                     timeout = platform.Interface.Loading.Show('retrievingMetadata', loadMetadataDeferred);
                     return platform.GetPageMetadata(loadMetadataDeferred)
-                        .then(function(metadata) {
+                        .then(function (metadata) {
                             // Display add bookmark form
                             vm.bookmark.displayUpdateForm = false;
 
                             // Set current bookmark properties
                             var bookmark = new bookmarks.XBookmark(
-                                null, 
-                                metadata.url, 
+                                null,
+                                metadata.url,
                                 null,
                                 null);
                             vm.bookmark.current = bookmark;
-                            
+
                             if (!!metadata) {
                                 // Set form properties to url metadata
                                 bookmark.title = metadata.title;
@@ -603,50 +601,45 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                             }
 
                             return deferred.resolve();
-                    });
+                        });
                 }
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 // Set bookmark url
                 if (!!err && !!err.url) {
                     var bookmark = new bookmarks.XBookmark(
-                        '', 
+                        '',
                         err.url);
                     vm.bookmark.current = bookmark;
                 }
-                
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'bookmarkForm_Init', globals.LogType.Warning,
-                    err.stack);
-                
+
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
 
                 return deferred.resolve();
             })
-            .finally(function() {
+            .finally(function () {
                 platform.Interface.Loading.Hide('retrievingMetadata', timeout);
             });
-        
+
         return deferred.promise;
     };
-    
-    var bookmarkForm_RemoveTag_Click = function(tag) {
+
+    var bookmarkForm_RemoveTag_Click = function (tag) {
         vm.bookmark.current.tags = _.without(vm.bookmark.current.tags, tag);
         vm.bookmarkForm.$setDirty();
         if (!utility.IsMobilePlatform(vm.platformName)) {
             document.querySelector('#bookmarkForm input[name="bookmarkTags"]').focus();
         }
     };
-    
-    var bookmarkForm_UpdateBookmark_Click = function() {
+
+    var bookmarkForm_UpdateBookmark_Click = function () {
         // Add tags if tag text present
         if (!!vm.bookmark.tagText && vm.bookmark.tagText.length > 0) {
             bookmarkForm_CreateTags_Click();
         }
-        
+
         // Clone current bookmark object
         var bookmarkToUpdate = utility.DeepCopy(vm.bookmark.current);
 
@@ -657,7 +650,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
         // Validate the new bookmark
         bookmarkForm_ValidateBookmark(bookmarkToUpdate, vm.bookmark.originalUrl)
-            .then(function(isValid) {
+            .then(function (isValid) {
                 if (!isValid) {
                     // Bookmark URL exists, display validation error
                     vm.bookmarkForm.bookmarkUrl.$setValidity('Exists', false);
@@ -667,44 +660,39 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 // Sync changes
                 platform.Sync(vm.sync.asyncChannel, {
                     type: globals.SyncType.Both,
-                    changeInfo: { 
-                        type: globals.UpdateType.Update, 
+                    changeInfo: {
+                        type: globals.UpdateType.Update,
                         bookmark: bookmarkToUpdate
                     }
                 });
-                
+
                 // Set bookmark active status if current bookmark is current page
                 platform.GetCurrentUrl()
-                    .then(function(currentUrl) {
+                    .then(function (currentUrl) {
                         if (currentUrl && currentUrl.toUpperCase() === vm.bookmark.originalUrl.toUpperCase()) {
                             vm.bookmark.active = currentUrl && currentUrl.toUpperCase() === bookmarkToUpdate.url.toUpperCase();
                         }
-                        
+
                         // Display the search panel
                         return vm.view.change(vm.view.views.search);
                     })
-                    .then(function() {
+                    .then(function () {
                         // Find and update the updated bookmark element in the search results on mobile apps
                         if (utility.IsMobilePlatform(vm.platformName)) {
                             if (!!vm.search.results && vm.search.results.length >= 0) {
-                                var updatedBookmarkIndex = _.findIndex(vm.search.results, function(result) { 
+                                var updatedBookmarkIndex = _.findIndex(vm.search.results, function (result) {
                                     return result.id === bookmarkToUpdate.id;
                                 });
 
                                 if (updatedBookmarkIndex >= 0) {
-                                    $timeout(function() {
+                                    $timeout(function () {
                                         vm.search.results[updatedBookmarkIndex] = bookmarkToUpdate;
                                     }, 500);
                                 }
                             }
                         }
                     })
-                    .catch(function(err) {
-                        // Log error
-                        utility.LogMessage(
-                            moduleName, 'bookmarkForm_UpdateBookmark_Click', globals.LogType.Warning,
-                            err.stack);
-                        
+                    .catch(function (err) {
                         // Display alert
                         var errMessage = utility.GetErrorMessageFromException(err);
                         vm.alert.display(errMessage.title, errMessage.message, 'danger');
@@ -712,32 +700,32 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             });
     };
 
-    var bookmarkForm_ValidateBookmark = function(bookmarkToValidate, originalUrl) {
+    var bookmarkForm_ValidateBookmark = function (bookmarkToValidate, originalUrl) {
         // Skip validation if URL is unmodified
         if (originalUrl && bookmarkToValidate.url.toUpperCase() === originalUrl.toUpperCase()) {
             return $q.resolve(true);
         }
-        
+
         // Check if bookmark url already exists
         return bookmarks.Search({
             url: bookmarkToValidate.url
         })
-            .then(function(results) {
+            .then(function (results) {
                 return results.length === 0;
             });
     };
 
-    var bookmarkPanel_Close_Click = function() {
+    var bookmarkPanel_Close_Click = function () {
         vm.view.displayMainView();
     };
 
-    var changeView = function(view) {
+    var changeView = function (view) {
         var deferred = $q.defer();
         vm.alert.show = false;
         platform.Interface.Loading.Hide();
-        
+
         // Reset current view
-        switch(vm.view.current) {
+        switch (vm.view.current) {
             case vm.view.views.bookmark:
                 vm.bookmark.current = null;
                 vm.bookmark.tagText = null;
@@ -750,7 +738,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.search.selectedBookmark = null;
                 vm.search.query = null;
                 vm.search.queryMeasure = null;
-                
+
                 // Clear search results for non-mobile platforms, otherwise refresh search
                 if (!utility.IsMobilePlatform(vm.platformName)) {
                     vm.search.results = null;
@@ -764,7 +752,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.settings.displayQRCode = false;
                 vm.settings.displayRestoreConfirmation = false;
                 vm.settings.displayRestoreForm = false;
-                vm.settings.displaySyncBookmarksToolbarConfirmation = false;  
+                vm.settings.displaySyncBookmarksToolbarConfirmation = false;
                 vm.settings.displayUpdateServiceUrlConfirmation = false;
                 vm.settings.displayUpdateServiceUrlForm = false;
                 if (vm.platformName !== globals.Platforms.IOS) {
@@ -797,17 +785,17 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 break;
         }
 
-        vm.view.current = view;           
-        
+        vm.view.current = view;
+
         // Initialise new view
-        switch(view) {
+        switch (view) {
             case vm.view.views.login:
                 // If not on a mobile platform, display new sync panel depending on if ID is set
                 vm.settings.displayNewSyncPanel = utility.IsMobilePlatform(vm.platformName) ? false : !globals.Id.Get();
-                
+
                 // Focus on first input field
                 if (!utility.IsMobilePlatform(vm.platformName)) {
-                    $timeout(function() {
+                    $timeout(function () {
                         var inputField;
                         if (!!vm.settings.displayNewSyncPanel) {
                             inputField = document.querySelector('.login-form-new input[name="txtPassword"]');
@@ -830,7 +818,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 deferred.resolve(view);
                 break;
             case vm.view.views.search:
-                $timeout(function() {
+                $timeout(function () {
                     // Focus on search box
                     if (!utility.IsMobilePlatform(vm.platformName)) {
                         document.querySelector('input[name=txtSearch]').focus();
@@ -841,11 +829,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             case vm.view.views.bookmark:
                 // Set bookmark form properties
                 bookmarkForm_Init()
-                    .then(function() {
+                    .then(function () {
                         // Save url to compare for changes
                         vm.bookmark.originalUrl = vm.bookmark.current.url;
 
-                        $timeout(function() {
+                        $timeout(function () {
                             // Don't focus on title field for mobile apps unless not sharing a bookmark
                             if ((!utility.IsMobilePlatform(vm.platformName)) ||
                                 vm.bookmark.current.url === 'http://') {
@@ -859,20 +847,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 vm.settings.displaySyncOptions = !globals.SyncEnabled.Get();
                 vm.settings.service.newServiceUrl = vm.settings.service.url();
                 vm.settings.service.status = null;
-                
+
                 // Get service status and display service info
-                $timeout(function() {
+                $timeout(function () {
                     api.CheckServiceStatus()
-                        .then(function(serviceInfo) {
+                        .then(function (serviceInfo) {
                             setServiceInformation(serviceInfo);
                             displayDataUsage();
                         })
-                        .catch(function(err) {
-                            // Log error
-                            utility.LogMessage(
-                                moduleName, 'changeView', globals.LogType.Warning,
-                                err.stack);
-                            
+                        .catch(function (err) {
                             if (err && err.code === globals.ErrorCodes.ApiOffline) {
                                 vm.settings.service.status = globals.ServiceStatus.Offline;
                             }
@@ -880,13 +863,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                                 vm.settings.service.status = globals.ServiceStatus.Error;
                             }
                         })
-                        .finally(function() {
+                        .finally(function () {
                             deferred.resolve(view);
                         });
                 }, 100);
                 break;
             case vm.view.views.updated:
-                $timeout(function() {
+                $timeout(function () {
                     // Focus on release notes button
                     if (!utility.IsMobilePlatform(vm.platformName)) {
                         document.querySelector('#releaseNotesBtn').focus();
@@ -901,55 +884,50 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
         // Attach events to new tab links
         $timeout(setNewTabLinks);
-        
+
         return deferred.promise;
     };
-	
-	var checkRestoreData = function(data) {
-		var validData = false;
-		
-		if (!!data) {
-			try {
-				data = JSON.parse(data);
-				
-				if (!!data.xBrowserSync && !!data.xBrowserSync.bookmarks) {
-					validData = true;
-				}
-			}
-			catch(err) { }
-		}
-		
-		return validData;
-	};
 
-    var displayDataUsage = function() {
+    var checkRestoreData = function (data) {
+        var validData = false;
+
+        if (!!data) {
+            try {
+                data = JSON.parse(data);
+
+                if (!!data.xBrowserSync && !!data.xBrowserSync.bookmarks) {
+                    validData = true;
+                }
+            }
+            catch (err) { }
+        }
+
+        return validData;
+    };
+
+    var displayDataUsage = function () {
         vm.settings.syncDataSize = null;
         vm.settings.syncDataUsed = null;
-        
+
         // Return if not synced
         if (!globals.SyncEnabled.Get()) {
             return;
         }
-        
+
         // Get  bookmarks sync size and calculate sync data percentage used
         bookmarks.SyncSize()
-            .then(function(bookmarksSyncSize) {                
+            .then(function (bookmarksSyncSize) {
                 vm.settings.syncDataSize = bookmarksSyncSize / 1024;
                 vm.settings.syncDataUsed = (vm.settings.syncDataSize / vm.settings.service.maxSyncSize) * 100;
             })
-            .catch(function(err) {
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'syncPanel_DisplayDataUsage_Click', globals.LogType.Warning,
-                    err.stack);
-                
+            .catch(function (err) {
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
             });
     };
 
-    var displayDefaultSearchState = function() {
+    var displayDefaultSearchState = function () {
         // Clear search and results
         vm.search.query = null;
         vm.search.queryMeasure = null;
@@ -958,13 +936,13 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
         // Focus on search box
         if (!utility.IsMobilePlatform(vm.platformName)) {
-            $timeout(function() {
+            $timeout(function () {
                 document.querySelector('input[name=txtSearch]').focus();
             }, 100);
         }
     };
-    
-    var displayQRCode_Click = function() {
+
+    var displayQRCode_Click = function () {
         // Generate new QR code
         new QRious({
             element: document.getElementById('qr'),
@@ -973,26 +951,26 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
         vm.settings.displayQRCode = true;
     };
-    
-    var handleSyncResponse = function(response) {
+
+    var handleSyncResponse = function (response) {
         var errMessage;
-        
-        switch(response.command) {
+
+        switch (response.command) {
             // After syncing bookmarks
             case globals.Commands.SyncBookmarks:
                 // Hide loading panel
                 platform.Interface.Loading.Hide();
-                
+
                 if (response.success) {
                     // Refresh interface/icon
                     $timeout(platform.Interface.Refresh);
-                    
+
                     // Disable the intro animation
                     vm.introduction.displayIntro(false);
-                    
+
                     // If initial sync, switch to search panel
                     if (vm.view.current === vm.view.views.login) {
-                    	vm.search.results = null;
+                        vm.search.results = null;
                         vm.view.change(vm.view.views.search)
                             .then(vm.search.displayDefaultState());
                     }
@@ -1006,11 +984,11 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 else {
                     // Disable upgrade confirmed flag
                     vm.sync.upgradeConfirmed = false;
-                    
+
                     // If ID was removed disable sync and display login panel
                     if (!!response.error && response.error.code === globals.ErrorCodes.IdRemoved) {
                         vm.view.change(vm.view.views.login)
-                            .finally(function() {
+                            .finally(function () {
                                 errMessage = utility.GetErrorMessageFromException(response.error);
                                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
                             });
@@ -1037,14 +1015,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
                     // Updated cached decrypted bookmarks
                     bookmarks.UpdateCache(response.bookmarks);
-                    
+
                     vm.settings.displayRestoreForm = false;
                     vm.settings.displayRestoreConfirmation = false;
                     vm.settings.dataToRestore = '';
                     vm.settings.restoreCompletedMessage = platform.GetConstant(globals.Constants.Settings_BackupRestore_RestoreSuccess_Message);
-                    
+
                     if (!utility.IsMobilePlatform(vm.platformName)) {
-                        $timeout(function() {
+                        $timeout(function () {
                             document.querySelector('.btn-done').focus();
                         });
                     }
@@ -1060,23 +1038,23 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     errMessage = utility.GetErrorMessageFromException(response.error);
                     vm.alert.display(errMessage.title, errMessage.message, 'danger');
                 }
-                
+
                 platform.Interface.Loading.Hide();
                 break;
             case globals.Commands.NoCallback:
-                /* falls through */
+            /* falls through */
             default:
                 if (!response.success) {
                     errMessage = utility.GetErrorMessageFromException(response.error);
                     vm.alert.display(errMessage.title, errMessage.message, 'danger');
                 }
-                
+
                 platform.Interface.Loading.Hide();
                 break;
         }
     };
 
-    var init = function() {
+    var init = function () {
         // Reset network disconnected flag
         globals.Network.Disconnected.Set(false);
 
@@ -1084,7 +1062,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if (vm.view.current === vm.view.views.login) {
             vm.settings.displayNewSyncPanel = !globals.Id.Get();
         }
-        
+
         // Platform-specific initation
         platform.Init(vm, $scope);
 
@@ -1092,7 +1070,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         if (globals.DisplayUpdated.Get()) {
             changeView(vm.view.views.updated);
         }
-        
+
         // Set intro animation visibility
         if (vm.view.current === vm.view.views.login && !!vm.introduction.displayIntro()) {
             introPanel_DisplayIntro();
@@ -1102,120 +1080,120 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         setBookmarkStatus();
     };
 
-    var introPanel_DisplayIntro = function() {
+    var introPanel_DisplayIntro = function () {
         vm.introduction.showLogo = false;
 
-        $timeout(function() {
+        $timeout(function () {
             vm.introduction.showLogo = true;
 
-            $timeout(function() {
+            $timeout(function () {
                 vm.introduction.showLogo = false;
 
-                $timeout(function() {
+                $timeout(function () {
                     vm.introduction.displayPanel(1);
                 }, 1000);
             }, 3000);
         }, 1000);
     };
 
-    var introPanel_ShowHelp_Click = function() {
+    var introPanel_ShowHelp_Click = function () {
         vm.introduction.showLogo = false;
-        
-        $timeout(function() {
+
+        $timeout(function () {
             vm.introduction.displayPanel(1);
         }, 500);
     };
 
-    var introPanel1_Next_Click = function() {
+    var introPanel1_Next_Click = function () {
         vm.introduction.displayPanel(2);
     };
 
-    var introPanel2_Next_Click = function() {
+    var introPanel2_Next_Click = function () {
         vm.introduction.displayPanel(3);
     };
 
-    var introPanel2_Prev_Click = function() {
+    var introPanel2_Prev_Click = function () {
         vm.introduction.displayPanel(1);
     };
 
-    var introPanel3_Next_Click = function() {
+    var introPanel3_Next_Click = function () {
         vm.introduction.displayPanel(4);
     };
 
-    var introPanel3_Prev_Click = function() {
+    var introPanel3_Prev_Click = function () {
         vm.introduction.displayPanel(2);
     };
 
-    var introPanel4_Next_Click = function() {
+    var introPanel4_Next_Click = function () {
         vm.introduction.displayPanel(5);
     };
 
-    var introPanel4_Prev_Click = function() {
+    var introPanel4_Prev_Click = function () {
         vm.introduction.displayPanel(3);
     };
 
-    var introPanel5_Next_Click = function() {
+    var introPanel5_Next_Click = function () {
         vm.introduction.displayPanel(6);
     };
 
-    var introPanel5_Prev_Click = function() {
+    var introPanel5_Prev_Click = function () {
         vm.introduction.displayPanel(4);
     };
 
-    var introPanel6_Next_Click = function() {
+    var introPanel6_Next_Click = function () {
         vm.introduction.displayPanel(7);
     };
 
-    var introPanel6_Prev_Click = function() {
+    var introPanel6_Prev_Click = function () {
         vm.introduction.displayPanel(5);
     };
 
-    var introPanel7_Next_Click = function() {
+    var introPanel7_Next_Click = function () {
         vm.introduction.displayPanel(8);
     };
 
-    var introPanel7_Prev_Click = function() {
+    var introPanel7_Prev_Click = function () {
         vm.introduction.displayPanel(6);
     };
 
-    var introPanel8_Next_Click = function() {
+    var introPanel8_Next_Click = function () {
         vm.introduction.displayPanel(9);
     };
 
-    var introPanel8_Prev_Click = function() {
+    var introPanel8_Prev_Click = function () {
         vm.introduction.displayPanel(7);
     };
 
-    var introPanel9_Next_Click = function() {
+    var introPanel9_Next_Click = function () {
         vm.introduction.displayPanel(10);
     };
 
-    var introPanel9_Prev_Click = function() {
+    var introPanel9_Prev_Click = function () {
         vm.introduction.displayPanel(8);
     };
 
-    var introPanel10_Next_Click = function() {
+    var introPanel10_Next_Click = function () {
         vm.introduction.displayPanel(11);
     };
 
-    var introPanel10_Prev_Click = function() {
+    var introPanel10_Prev_Click = function () {
         vm.introduction.displayPanel(9);
     };
 
-    var introPanel11_Next_Click = function() {
+    var introPanel11_Next_Click = function () {
         vm.introduction.displayPanel(12);
     };
 
-    var introPanel11_Prev_Click = function() {
+    var introPanel11_Prev_Click = function () {
         vm.introduction.displayPanel(10);
     };
 
-    var introPanel12_Prev_Click = function() {
+    var introPanel12_Prev_Click = function () {
         vm.introduction.displayPanel(11);
     };
-    
-    var openUrl = function(event, url) {
-        if (event && event.preventDefault) { 
+
+    var openUrl = function (event, url) {
+        if (event && event.preventDefault) {
             event.preventDefault();
         }
 
@@ -1228,8 +1206,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
         return false;
     };
-	
-	var queueSync = function(syncType) {
+
+    var queueSync = function (syncType) {
         // Start sync
         platform.Sync(
             vm.sync.asyncChannel,
@@ -1237,23 +1215,23 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 type: syncType
             });
     };
-	
-	var restoreData = function(data, restoreCallback) {
-		// Set ID and client secret if sync not enabled
+
+    var restoreData = function (data, restoreCallback) {
+        // Set ID and client secret if sync not enabled
         if (!globals.SyncEnabled.Get()) {
             globals.Password.Set(null);
             vm.sync.secret = null;
             vm.sync.secretComplexity = {};
-            
+
             if (!!data.xBrowserSync.id) {
                 globals.Id.Set(data.xBrowserSync.id);
             }
-		}
-        
+        }
+
         var bookmarksToRestore = data.xBrowserSync.bookmarks;
-        
-		// Return if no bookmarks found
-		if (!bookmarksToRestore) {
+
+        // Return if no bookmarks found
+        if (!bookmarksToRestore) {
             return restoreCallback();
         }
 
@@ -1263,25 +1241,18 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         var syncData = {};
         syncData.type = (!globals.SyncEnabled.Get()) ? globals.SyncType.Pull : globals.SyncType.Both;
         syncData.bookmarks = bookmarksToRestore;
-        
+
         // Start restore
         platform.Sync(vm.sync.asyncChannel, syncData, globals.Commands.RestoreBookmarks);
-	};
-    
-    var searchBookmarks = function() {
+    };
+
+    var searchBookmarks = function () {
         var queryData = {
             url: null,
             keywords: []
         };
 
         if (!!vm.search.query) {
-            // Check for debug mode keyword
-            if (vm.search.query.trim().toLowerCase() === globals.Debug.ActivationKeyword) {
-                vm.settings.debugMode = true;
-                vm.alert.display(platform.GetConstant(globals.Constants.DebugEnabled_Message), '', 'info');
-                return;
-            }
-
             // Iterate query words to form query data object
             var queryWords = vm.search.query.split(/[\s,]+/);
             _.each(queryWords, function (queryWord) {
@@ -1297,25 +1268,20 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 }
             });
         }
-        
+
         bookmarks.Search(queryData)
-            .then(function(results) {
+            .then(function (results) {
                 vm.search.scrollDisplayMoreEnabled = false;
                 vm.search.resultsDisplayed = vm.search.batchResultsNum;
                 vm.search.results = results;
 
                 // Scroll to top of search results
-                $timeout(function() {
+                $timeout(function () {
                     document.querySelector('.search-results-panel').scrollTop = 0;
                     vm.search.scrollDisplayMoreEnabled = true;
                 });
             })
-            .catch(function(err) {
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'searchBookmarks', globals.LogType.Warning,
-                    err.stack);
-                
+            .catch(function (err) {
                 vm.search.results = null;
 
                 // Display alert
@@ -1324,28 +1290,28 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             });
     };
 
-    var searchForm_Clear_Click = function() {
+    var searchForm_Clear_Click = function () {
         vm.search.displayDefaultState();
     };
 
-    var searchForm_DeleteBookmark_Click = function(event, bookmark) {
+    var searchForm_DeleteBookmark_Click = function (event, bookmark) {
         // Delete the bookmark
         platform.Sync(vm.sync.asyncChannel, {
             type: globals.SyncType.Both,
-            changeInfo: { 
-                type: globals.UpdateType.Delete, 
+            changeInfo: {
+                type: globals.UpdateType.Delete,
                 id: bookmark.id
             }
         });
-        
+
         // Find and remove the deleted bookmark element in the search results
         if (!!vm.search.results && vm.search.results.length > 0) {
-            var deletedBookmarkIndex = _.findIndex(vm.search.results, function(result) { return result.id === bookmark.id; });
+            var deletedBookmarkIndex = _.findIndex(vm.search.results, function (result) { return result.id === bookmark.id; });
             if (deletedBookmarkIndex >= 0) {
                 vm.search.selectedBookmark = null;
-                $timeout(function() {
+                $timeout(function () {
                     vm.search.results[deletedBookmarkIndex].class = 'deleted';
-                    $timeout(function() {
+                    $timeout(function () {
                         // Remove bookmark from results
                         vm.search.results.splice(deletedBookmarkIndex, 1);
                     }, 500);
@@ -1354,23 +1320,23 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
     };
 
-    var searchForm_ScanCode_Click = function() {
+    var searchForm_ScanCode_Click = function () {
         platform.ScanID();
     };
 
-    var searchForm_SearchText_Autocomplete = function() {
+    var searchForm_SearchText_Autocomplete = function () {
         vm.search.query = vm.search.query + '' + vm.search.lookahead;
         searchForm_SearchText_Change();
         if (!utility.IsMobilePlatform(vm.platformName)) {
-            $timeout(function() {
+            $timeout(function () {
                 document.querySelector('input[name=txtSearch]').focus();
             });
         }
     };
-    
-    var searchForm_SearchText_Change = function() {
+
+    var searchForm_SearchText_Change = function () {
         vm.alert.show = false;
-        
+
         // Clear timeouts
         if (!!vm.search.getSearchLookaheadTimeout) {
             $timeout.cancel(vm.search.getSearchLookaheadTimeout);
@@ -1381,7 +1347,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             $timeout.cancel(vm.search.getSearchResultsTimeout);
             vm.search.getSearchResultsTimeout = null;
         }
-        
+
         // No query, clear results
         if (!vm.search.query.trim()) {
             vm.search.displayDefaultState();
@@ -1392,33 +1358,33 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         var queryWords = vm.search.query.split(/[\s]+/);
         var lastWord = _.last(queryWords);
         var getLookahead;
-        
+
         // Display lookahead if word length exceed minimum
         if (!!lastWord && lastWord.length > globals.LookaheadMinChars) {
             // Get lookahead after delay
-            vm.search.getSearchLookaheadTimeout = $timeout(function() {
+            vm.search.getSearchLookaheadTimeout = $timeout(function () {
                 // Enable searching animation if bookmark cache is empty
                 if (!globals.Cache.Bookmarks.Get()) {
                     searchForm_ToggleSearchingAnimation(true);
                 }
-                
+
                 // Cancel any exist http request to get bookmarks and refresh deferred
-                if (!!vm.search.cancelGetBookmarksRequest && 
+                if (!!vm.search.cancelGetBookmarksRequest &&
                     vm.search.cancelGetBookmarksRequest.promise.$$state.status === 0) {
                     vm.search.cancelGetBookmarksRequest.resolve();
                 }
                 vm.search.cancelGetBookmarksRequest = $q.defer();
-                
+
                 getLookahead = bookmarks.GetLookahead(lastWord.toLowerCase(), vm.search.results, vm.search.cancelGetBookmarksRequest.promise)
-                    .then(function(results) {
+                    .then(function (results) {
                         if (!results) {
                             vm.search.lookahead = null;
                             return;
                         }
 
                         var lookahead = results[0];
-                        var word =  results[1];
-                        
+                        var word = results[1];
+
                         if (!!lookahead && word.toLowerCase() === lastWord.toLowerCase()) {
                             // Trim word from lookahead
                             lookahead = (!!lookahead) ? lookahead.substring(word.length) : null;
@@ -1426,7 +1392,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                             vm.search.lookahead = null;
 
                             // Set position of lookahead element
-                            $timeout(function() {
+                            $timeout(function () {
                                 var lookaheadElement = document.querySelector('#search-panel .lookahead-container .lookahead');
                                 var measureElement = document.querySelector('#search-panel .lookahead-container .measure');
                                 lookaheadElement.style.left = (measureElement.offsetLeft + measureElement.getBoundingClientRect().width) + 'px';
@@ -1436,23 +1402,18 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
                         vm.search.cancelGetBookmarksRequest = null;
                     })
-                    .catch(function(err) {
-                        // Log error
-                        utility.LogMessage(
-                            moduleName, 'searchForm_SearchText_Change', globals.LogType.Warning,
-                            err.stack);
-                        
+                    .catch(function (err) {
                         // Display alert
                         var errMessage = utility.GetErrorMessageFromException(err);
                         vm.alert.display(errMessage.title, errMessage.message, 'danger');
                     })
-                    .finally(function() {
+                    .finally(function () {
                         searchForm_ToggleSearchingAnimation(false);
                     });
             }, vm.settings.getSearchLookaheadDelay);
-            
+
             // Execute search after timeout and once lookahead request is finished
-            vm.search.getSearchResultsTimeout = $timeout(function() {
+            vm.search.getSearchResultsTimeout = $timeout(function () {
                 getLookahead.then(searchBookmarks);
             }, vm.settings.getSearchResultsDelay);
         }
@@ -1460,8 +1421,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             vm.search.lookahead = null;
         }
     };
-    
-    var searchForm_SearchText_KeyDown = function(event) {
+
+    var searchForm_SearchText_KeyDown = function (event) {
         // If user pressed enter and search text present
         if (event.keyCode === 13) {
             document.activeElement.blur();
@@ -1470,18 +1431,18 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                 $timeout.cancel(vm.search.getSearchResultsTimeout);
                 vm.search.getSearchResultsTimeout = null;
             }
-            
+
             // Get search results
             searchBookmarks();
 
             // Return focus to search box
-            $timeout(function() {
+            $timeout(function () {
                 document.querySelector('input[name=txtSearch]').focus();
             });
 
             return;
         }
-        
+
         // If user pressed down arrow and search results present
         if (event.keyCode === 40 && !!vm.search.results && vm.search.results.length > 0) {
             // Focus on first search result
@@ -1489,7 +1450,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             document.querySelector('.search-results-panel .list-group').firstElementChild.children[2].focus();
             return;
         }
-        
+
         // If user pressed tab or right arrow key and lookahead present
         if ((event.keyCode === 9 || event.keyCode === 39) && !!vm.search.lookahead) {
             // Add lookahead to search query
@@ -1498,15 +1459,15 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             return;
         }
     };
-    
-    var searchForm_SearchResult_KeyDown = function(event) {
+
+    var searchForm_SearchResult_KeyDown = function (event) {
         var currentIndex, newIndex;
-        
+
         switch (true) {
             // Up arrow
             case (event.keyCode === 38):
                 event.preventDefault();
-            
+
                 if (!!event.target.parentElement.previousElementSibling) {
                     // Focus on previous result
                     event.target.parentElement.previousElementSibling.children[2].focus();
@@ -1515,65 +1476,65 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                     // Focus on search box
                     document.querySelector('input[name=txtSearch]').focus();
                 }
-                
+
                 break;
             // Down arrow
             case (event.keyCode === 40):
                 event.preventDefault();
-            
+
                 if (!!event.target.parentElement.nextElementSibling) {
                     // Focus on next result
                     event.target.parentElement.nextElementSibling.children[2].focus();
                 }
-                
+
                 break;
             // Page up
             case (event.keyCode === 33):
                 event.preventDefault();
-            
+
                 // Focus on result 6 down from current
                 currentIndex = _.indexOf(event.target.parentElement.parentElement.children, event.target.parentElement);
                 newIndex = currentIndex - 6;
-                
+
                 if (newIndex < 0) {
                     event.target.parentElement.parentElement.firstElementChild.children[2].focus();
                 }
                 else {
                     event.target.parentElement.parentElement.children[newIndex].children[2].focus();
                 }
-                
+
                 break;
             // Page down
             case (event.keyCode === 34):
                 event.preventDefault();
-                
+
                 // Focus on result 6 down from current
                 currentIndex = _.indexOf(event.target.parentElement.parentElement.children, event.target.parentElement);
                 newIndex = currentIndex + 6;
-                
+
                 if (event.target.parentElement.parentElement.children.length < newIndex) {
                     event.target.parentElement.parentElement.lastElementChild.children[2].focus();
                 }
                 else {
                     event.target.parentElement.parentElement.children[newIndex].children[2].focus();
                 }
-                
+
                 break;
             // Home
             case (event.keyCode === 36):
                 event.preventDefault();
-            
+
                 // Focus on first result
                 event.target.parentElement.parentElement.firstElementChild.children[2].focus();
-                
+
                 break;
             // End
             case (event.keyCode === 35):
                 event.preventDefault();
-            
+
                 // Focus on last result
                 event.target.parentElement.parentElement.lastElementChild.children[2].focus();
-                
+
                 break;
             // Backspace
             case (event.keyCode === 8):
@@ -1587,30 +1548,30 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         }
     };
 
-    var searchForm_SearchResults_Scroll = function() {
+    var searchForm_SearchResults_Scroll = function () {
         if (!!vm.search.results && vm.search.results.length > 0 && !!vm.search.scrollDisplayMoreEnabled) {
             // Display next batch of results
             vm.search.resultsDisplayed += vm.search.batchResultsNum;
             vm.search.results = vm.search.results;
-        } 
+        }
     };
-    
-    var searchForm_SelectBookmark_Press = function(bookmarkId, event) {
+
+    var searchForm_SelectBookmark_Press = function (bookmarkId, event) {
         event.preventDefault();
-        
+
         // Display menu for selected bookmark
         vm.search.selectedBookmark = bookmarkId;
-        
+
     };
-    
-    var searchForm_ToggleBookmark_Click = function() {
+
+    var searchForm_ToggleBookmark_Click = function () {
         // Display bookmark panel
         vm.view.change(vm.view.views.bookmark);
     };
-    
-    var searchForm_ToggleSearchingAnimation = function(active) {
+
+    var searchForm_ToggleSearchingAnimation = function (active) {
         var searchIcon = document.querySelector('.search-form i');
-        
+
         if (active) {
             searchIcon.classList.add("animate-flash");
         }
@@ -1618,14 +1579,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             searchIcon.classList.remove("animate-flash");
         }
     };
-    
-    var searchForm_UpdateBookmark_Click = function(bookmark) {
+
+    var searchForm_UpdateBookmark_Click = function (bookmark) {
         // Set bookmark form properties to selected bookmark
         vm.bookmark.current = bookmark;
-        
+
         // On mobiles, display bookmark panel with slight delay to avoid focussing on description field
         if (utility.IsMobilePlatform(vm.platformName)) {
-            $timeout(function() {
+            $timeout(function () {
                 vm.view.change(vm.view.views.bookmark);
             }, 500);
         }
@@ -1633,70 +1594,65 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             vm.view.change(vm.view.views.bookmark);
         }
     };
-    
-    var setBookmarkStatus = function() {
+
+    var setBookmarkStatus = function () {
         if (!globals.SyncEnabled.Get()) {
             return $q.resolve();
         }
 
         // If current page is a bookmark, actvate bookmark icon
         bookmarks.IncludesCurrentPage()
-            .then(function(result) {
-				vm.bookmark.active = !!result;
+            .then(function (result) {
+                vm.bookmark.active = !!result;
             })
-            .catch(function(err) {
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'setBookmarkStatus', globals.LogType.Warning,
-                    err.stack);
-                
+            .catch(function (err) {
                 // Display alert
                 var errMessage = utility.GetErrorMessageFromException(err);
                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
             });
     };
 
-    var setNewTabLinks = function() {
+    var setNewTabLinks = function () {
         var links = document.querySelectorAll('a.new-tab');
-        var onClickEvent = function() {
+        var onClickEvent = function () {
             return openUrl({ currentTarget: { href: this.href } });
         };
-        
+
         for (var i = 0; i < links.length; i++) {
             var link = links[i];
             link.onclick = onClickEvent;
         }
     };
 
-    var setServiceInformation = function(serviceInfo) {
+    var setServiceInformation = function (serviceInfo) {
         vm.settings.service.status = serviceInfo.status;
         vm.settings.service.statusMessage = serviceInfo.message;
         vm.settings.service.maxSyncSize = serviceInfo.maxSyncSize / 1024;
         vm.settings.service.apiVersion = serviceInfo.version;
     };
 
-    var startSyncing = function() {
+    var startSyncing = function () {
         var syncType;
 
         // Display loading panel
         vm.sync.displaySyncConfirmation = false;
         vm.sync.displayUpgradeConfirmation = false;
         var loadingTimeout = platform.Interface.Loading.Show();
-        
+
         // Check service status
         api.CheckServiceStatus()
-            .then(function() {
+            .then(function () {
                 // Clear the current cached password
                 globals.Password.Set(null);
-                
+
                 // If a sync ID has not been supplied, get a new one
                 if (!globals.Id.Get()) {
                     // Set sync type for create new sync
                     syncType = globals.SyncType.Push;
-                    
+
                     // Get new sync ID
                     return api.CreateNewSync()
-                        .then(function(newSync) {
+                        .then(function (newSync) {
                             // Add sync data to cache and return
                             globals.Id.Set(newSync.id);
                             globals.SyncVersion.Set(newSync.version);
@@ -1709,7 +1665,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
                     // Retrieve sync version for existing id
                     return api.GetBookmarksVersion()
-                        .then(function(response) {
+                        .then(function (response) {
                             // If no sync version is set, confirm upgrade
                             if (!response.version) {
                                 if (vm.sync.upgradeConfirmed) {
@@ -1728,32 +1684,27 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                         });
                 }
             })
-            .then(function(syncId) {
+            .then(function (syncId) {
                 if (!syncId) {
                     return;
                 }
-                
+
                 // Generate a password hash, cache it then queue the sync
-                return utility.GetPasswordHash(vm.sync.secret, syncId)    
-                    .then(function(passwordHash) {
+                return utility.GetPasswordHash(vm.sync.secret, syncId)
+                    .then(function (passwordHash) {
                         globals.Password.Set(passwordHash);
                         return queueSync(syncType);
                     });
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 // Disable upgrade confirmed flag
                 vm.sync.upgradeConfirmed = false;
-                
+
                 // Clear cached data
                 globals.Password.Set(null);
                 globals.SyncVersion.Set(null);
                 globals.Cache.Bookmarks.Set(null);
-                
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'startSyncing', globals.LogType.Warning,
-                    err.stack);
-                
+
                 // Hide loading panel
                 platform.Interface.Loading.Hide(null, loadingTimeout);
 
@@ -1763,7 +1714,7 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             });
     };
 
-    var syncForm_CancelSyncConfirmation_Click = function() {
+    var syncForm_CancelSyncConfirmation_Click = function () {
         // TODO: Ensure any sync messaging or process is cancelled also
         globals.IsSyncing.Set(false);
         bookmarks.DisableSync();
@@ -1772,37 +1723,37 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.view.change(vm.view.views.login);
     };
 
-    var syncForm_ConfirmPassword_Click = function() {
+    var syncForm_ConfirmPassword_Click = function () {
         vm.sync.displayPasswordConfirmation = true;
 
         if (!utility.IsMobilePlatform(vm.platformName)) {
-            $timeout(function() {
+            $timeout(function () {
                 document.querySelector('input[name="txtPasswordConfirmation"]').focus();
             }, 100);
         }
     };
 
-    var syncForm_DisableSync_Click = function() {
+    var syncForm_DisableSync_Click = function () {
         // If sync is in progress, display confirmation
         if (!!globals.IsSyncing.Get()) {
             vm.settings.service.displayCancelSyncConfirmation = true;
             if (!utility.IsMobilePlatform(vm.platformName)) {
-                $timeout(function() {
+                $timeout(function () {
                     document.querySelector('.btn-confirm-disable-sync').focus();
                 });
             }
             return;
         }
-        
+
         syncForm_CancelSyncConfirmation_Click();
     };
-    
-    var syncForm_EnableSync_Click = function() {
+
+    var syncForm_EnableSync_Click = function () {
         if (globals.Id.Get()) {
             // Display overwrite data confirmation panel
             vm.sync.displaySyncConfirmation = true;
             if (!utility.IsMobilePlatform(vm.platformName)) {
-                $timeout(function() {
+                $timeout(function () {
                     document.querySelector('.btn-confirm-enable-sync').focus();
                 });
             }
@@ -1811,20 +1762,20 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             // If no ID provided start syncing
             startSyncing();
         }
-	};
+    };
 
-    var syncForm_ExistingSync_Click = function() {
+    var syncForm_ExistingSync_Click = function () {
         vm.settings.displayNewSyncPanel = false;
         vm.sync.secret = null;
 
         if (!utility.IsMobilePlatform(vm.platformName)) {
-            $timeout(function() {
+            $timeout(function () {
                 document.querySelector('input[name="txtId"]').focus();
             }, 100);
         }
     };
 
-    var syncForm_NewSync_Click = function() {
+    var syncForm_NewSync_Click = function () {
         vm.settings.displayNewSyncPanel = true;
         vm.sync.displayPasswordConfirmation = false;
         globals.Id.Set(null);
@@ -1834,24 +1785,24 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.sync.secretComplexity = {};
 
         if (!utility.IsMobilePlatform(vm.platformName)) {
-            $timeout(function() {
+            $timeout(function () {
                 document.querySelector('.login-form-new input[name="txtPassword"]').focus();
             }, 100);
         }
     };
 
-    var syncForm_Password_Change = function() {
+    var syncForm_Password_Change = function () {
         // Update client secret complexity value
-    	if (vm.sync.secret) {
-        	vm.sync.secretComplexity = complexify(vm.sync.secret);
-    	}
-    	else {
-    		vm.sync.secretComplexity = {};
-    	}
+        if (vm.sync.secret) {
+            vm.sync.secretComplexity = complexify(vm.sync.secret);
+        }
+        else {
+            vm.sync.secretComplexity = {};
+        }
     };
 
-    var syncForm_Submit_Click = function() {
-        $timeout(function() {
+    var syncForm_Submit_Click = function () {
+        $timeout(function () {
             // Handle enter key press for login form
             if (vm.settings.displayNewSyncPanel) {
                 if (vm.sync.displayPasswordConfirmation) {
@@ -1867,99 +1818,95 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         });
     }
 
-    var syncForm_UpgradeSync_Click = function() {
+    var syncForm_UpgradeSync_Click = function () {
         vm.sync.upgradeConfirmed = true;
         startSyncing();
     };
 
-    var syncPanel_DisplaySyncOptions_Click = function() {
+    var syncPanel_DisplaySyncOptions_Click = function () {
         vm.settings.displaySyncOptions = true;
 
         if (!utility.IsMobilePlatform(vm.platformName)) {
-            $timeout(function() {
+            $timeout(function () {
                 document.querySelector('#syncOptions-Panel .btn-back').focus();
             });
         }
     };
-    
-    var syncPanel_SyncBookmarksToolbar_Click = function(value) {
+
+    var syncPanel_SyncBookmarksToolbar_Click = function (value) {
         // If sync not enabled or user just clicked to disable toolbar sync, update stored value and return
         if (!globals.SyncEnabled.Get() || !value) {
             globals.SyncBookmarksToolbar.Set(value);
             return;
         }
-        
+
         // Otherwise, display sync confirmation
         vm.settings.displaySyncBookmarksToolbarConfirmation = true;
-        $timeout(function() {
+        $timeout(function () {
             document.querySelector('.btn-confirm-sync-toolbar').focus();
         });
     };
-    
-    var syncPanel_SyncBookmarksToolbar_Confirm = function() {
+
+    var syncPanel_SyncBookmarksToolbar_Confirm = function () {
         // If sync not enabled, return
         if (!globals.SyncEnabled.Get()) {
             return;
         }
-        
+
         // Enable setting and hide sync confirmation
         globals.SyncBookmarksToolbar.Set(true);
         vm.settings.displaySyncBookmarksToolbarConfirmation = false;
-        
+
         // Display loading overlay
         platform.Interface.Loading.Show();
-        
+
         // Start sync with no callback action
         var syncData = {};
         syncData.type = (!globals.Id.Get()) ? globals.SyncType.Push : globals.SyncType.Pull;
         platform.Sync(vm.sync.asyncChannel, syncData, globals.Commands.NoCallback);
     };
 
-    var updatedPanel_ReleaseNotes_Click = function() {
+    var updatedPanel_ReleaseNotes_Click = function () {
         vm.events.openUrl(null, globals.ReleaseNotesUrlStem + globals.AppVersion);
         vm.view.displayMainView();
     };
 
-    var updateServiceUrlForm_Cancel_Click = function() {
+    var updateServiceUrlForm_Cancel_Click = function () {
         // Hide form and scroll to top of section
         vm.settings.displayUpdateServiceUrlForm = false;
         document.querySelector('.status-panel h4').scrollIntoView();
     };
-    
-    var updateServiceUrlForm_Confirm_Click = function() {
+
+    var updateServiceUrlForm_Confirm_Click = function () {
         // Check service url
         var url = vm.settings.service.newServiceUrl.replace(/\/$/, '');
-        
+
         // Disable sync
         bookmarks.DisableSync();
-        
+
         // Update the service URL
         vm.settings.service.url(url);
-        
+
         // Remove saved client secret and ID
         globals.Id.Set(null);
         globals.Password.Set(null);
         vm.sync.secret = null;
         vm.sync.secretComplexity = {};
-        
+
         // Update service status
         api.CheckServiceStatus()
-            .then(function(serviceInfo) {
+            .then(function (serviceInfo) {
                 setServiceInformation(serviceInfo);
                 displayDataUsage();
 
                 // Scroll to top of section
                 document.querySelector('.status-panel h4').scrollIntoView();
             })
-            .catch(function(err) {
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'updateServiceUrlForm_Confirm_Click', globals.LogType.Warning,
-                    err.stack);
-                
+            .catch(function (err) {
+                utility.LogMessage(globals.LogType.Info, err);
                 vm.settings.service.status = globals.ServiceStatus.Offline;
             });
-        
+
         // Reset view
         vm.settings.service.displayCancelSyncConfirmation = false;
         vm.settings.displayUpdateServiceUrlConfirmation = false;
@@ -1969,27 +1916,27 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
         vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceOffline', true);
         vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', true);
     };
-    
-    var updateServiceUrlForm_Display_Click = function() {
+
+    var updateServiceUrlForm_Display_Click = function () {
         // Reset form
         vm.updateServiceUrlForm.$setPristine();
         vm.settings.service.newServiceUrl = vm.settings.service.url();
         vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
         vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceOffline', true);
         vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', true);
-        
+
         // Display update form panel
         vm.settings.displayUpdateServiceUrlForm = true;
 
         // Validate service url
         updateServiceUrlForm_ValidateServiceUrl()
-            .finally(function() {
+            .finally(function () {
                 // Focus on url field
                 document.querySelector('input[name="newServiceUrl"]').focus();
             });
     };
 
-    var updateServiceUrlForm_NewServiceUrl_Change = function(event) {
+    var updateServiceUrlForm_NewServiceUrl_Change = function (event) {
         // Reset form if field is invalid
         if (vm.updateServiceUrlForm.newServiceUrl.$invalid) {
             vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
@@ -1997,8 +1944,8 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', true);
         }
     };
-	
-	var updateServiceUrlForm_Update_Click = function() {
+
+    var updateServiceUrlForm_Update_Click = function () {
         // Check for protocol
         if (!!vm.settings.service.newServiceUrl && !!vm.settings.service.newServiceUrl.trim() && !globals.URL.ProtocolRegex.test(vm.settings.service.newServiceUrl)) {
             vm.settings.service.newServiceUrl = 'https://' + vm.settings.service.newServiceUrl;
@@ -2006,14 +1953,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
 
         // Validate service url
         return updateServiceUrlForm_ValidateServiceUrl()
-            .then(function(serviceInfo) {
+            .then(function (serviceInfo) {
                 if (!!globals.SyncEnabled.Get()) {
                     // Display confirmation panel
                     vm.settings.displayUpdateServiceUrlForm = false;
                     vm.settings.displayUpdateServiceUrlConfirmation = true;
-    
+
                     if (!utility.IsMobilePlatform(vm.platformName)) {
-                        $timeout(function() {
+                        $timeout(function () {
                             document.querySelector('.btn-confirm-update-service-url').focus();
                         });
                     }
@@ -2024,19 +1971,14 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
             });
     };
 
-    var updateServiceUrlForm_ValidateServiceUrl = function() {
+    var updateServiceUrlForm_ValidateServiceUrl = function () {
         // Display loading overlay
         var loadingTimeout = platform.Interface.Loading.Show('checkingNewServiceUrl');
-        
+
         // Check service url status
         var url = vm.settings.service.newServiceUrl.replace(/\/$/, '');
         return api.CheckServiceStatus(url)
-            .catch(function(err) {
-                // Log error
-                utility.LogMessage(
-                    moduleName, 'updateServiceUrlForm_Update_Click', globals.LogType.Warning,
-                    err.stack);
-                
+            .catch(function (err) {
                 if (err && err.code != null) {
                     switch (err.code) {
                         case globals.ErrorCodes.ApiOffline:
@@ -2046,20 +1988,20 @@ xBrowserSync.App.Controller = function($scope, $q, $timeout, complexify, platfor
                             vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', false);
                             break;
                         default:
-                            vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', false);                            
+                            vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', false);
                     }
                 }
-                
+
                 // Focus on url field
                 document.querySelector('input[name=newServiceUrl]').focus();
 
                 return $q.reject(err);
             })
-            .finally(function() {
+            .finally(function () {
                 platform.Interface.Loading.Hide('checkingNewServiceUrl', loadingTimeout);
             });
     };
-	
-	// Call constructor
+
+    // Call constructor
     return new BrowserAction();
 };

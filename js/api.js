@@ -6,66 +6,66 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description:	Responsible for communicating with the xBrowserSync API service.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.API = function($http, $q, globals, utility) {
-    'use strict';
+xBrowserSync.App.API = function ($http, $q, globals, utility) {
+	'use strict';
 
 	var moduleName = 'xBrowserSync.App.API';
-    
-/* ------------------------------------------------------------------------------------
- * Public functions
- * ------------------------------------------------------------------------------------ */
-	
-	var checkServiceStatus = function(url) {
+
+	/* ------------------------------------------------------------------------------------
+	 * Public functions
+	 * ------------------------------------------------------------------------------------ */
+
+	var checkServiceStatus = function (url) {
 		if (!url) {
 			url = globals.URL.Host.Get() + globals.URL.ServiceInformation;
 		}
 		else {
 			url = url + globals.URL.ServiceInformation;
 		}
-		
+
 		return $http({
 			method: 'GET',
 			url: url,
 			timeout: 3000,
 		})
-        	.then(function(response) {
+			.then(function (response) {
 				// Reset network disconnected flag
 				globals.Network.Disconnected.Set(false);
-				
+
 				var data = response.data;
-				
+
 				// Check service is a valid xBrowserSync API
 				if (!data || data.status === null || data.version === null) {
 					return $q.reject({ code: globals.ErrorCodes.ApiInvalid });
 				}
 
 				// Check service is online
-                if (data.status === globals.ServiceStatus.Offline) {
-                    return $q.reject({ code: globals.ErrorCodes.ApiOffline });
-                }
+				if (data.status === globals.ServiceStatus.Offline) {
+					return $q.reject({ code: globals.ErrorCodes.ApiOffline });
+				}
 
-                // Check service version is supported by this client
-                if (compareVersions(data.version, globals.ApiVersion) < 0) {
-                    return $q.reject({ code: globals.ErrorCodes.ApiVersionNotSupported });
-                }
+				// Check service version is supported by this client
+				if (compareVersions(data.version, globals.ApiVersion) < 0) {
+					return $q.reject({ code: globals.ErrorCodes.ApiVersionNotSupported });
+				}
 
 				return data;
 			})
-            .catch(function(err) {
-                utility.LogError(moduleName, 'checkServiceStatus', err);
+			.catch(function (err) {
+				utility.LogMessage(globals.LogType.Info, err);
 				return $q.reject(err.status === undefined ?
 					err : getErrorCodeFromHttpError(err));
-            });
+			});
 	};
-	
-	var createNewSync = function() {
-		var data = { 
+
+	var createNewSync = function () {
+		var data = {
 			version: globals.AppVersion
 		};
-		
+
 		return $http.post(globals.URL.Host.Get() + globals.URL.Bookmarks,
 			JSON.stringify(data))
-            .then(function(response) {
+			.then(function (response) {
 				// Reset network disconnected flag
 				globals.Network.Disconnected.Set(false);
 
@@ -77,22 +77,22 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 
 				return data;
 			})
-            .catch(function(err) {
-                utility.LogError(moduleName, 'createBookmarks', err);
-                return $q.reject(err.status === undefined ?
+			.catch(function (err) {
+				utility.LogMessage(globals.LogType.Info, err);
+				return $q.reject(err.status === undefined ?
 					err : getErrorCodeFromHttpError(err));
-            });
+			});
 	};
-	
-	var getBookmarks = function(canceller) {
+
+	var getBookmarks = function (canceller) {
 		// Check secret and sync ID are present
 		if (!globals.Password.Get() || !globals.Id.Get()) {
 			return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
-		
-		return $http.get(globals.URL.Host.Get() + globals.URL.Bookmarks + '/' + globals.Id.Get(), 
-						 { timeout: canceller })
-            .then(function(response) {
+
+		return $http.get(globals.URL.Host.Get() + globals.URL.Bookmarks + '/' + globals.Id.Get(),
+			{ timeout: canceller })
+			.then(function (response) {
 				// Reset network disconnected flag
 				globals.Network.Disconnected.Set(false);
 
@@ -101,11 +101,11 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 				if (!data || !data.lastUpdated) {
 					return $q.reject({ code: globals.ErrorCodes.NoDataFound });
 				}
-				
+
 				return data;
 			})
-            .catch(function(err) {
-                // Return if request was cancelled
+			.catch(function (err) {
+				// Return if request was cancelled
 				if (err.config &&
 					err.config.timeout &&
 					err.config.timeout.$$state &&
@@ -113,22 +113,22 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 					err.config.timeout.$$state.status === 1) {
 					return $q.reject({ code: globals.ErrorCodes.HttpRequestCancelled });
 				}
-				
-				utility.LogError(moduleName, 'getBookmarks', err);
-                return $q.reject(err.status === undefined ?
+
+				utility.LogMessage(globals.LogType.Info, err);
+				return $q.reject(err.status === undefined ?
 					err : getErrorCodeFromHttpError(err));
-            });
+			});
 	};
 
-	var getBookmarksLastUpdated = function() {
+	var getBookmarksLastUpdated = function () {
 		// Check secret and sync ID are present
 		if (!globals.Password.Get() || !globals.Id.Get()) {
 			return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
-		
-		return $http.get(globals.URL.Host.Get() + globals.URL.Bookmarks + 
+
+		return $http.get(globals.URL.Host.Get() + globals.URL.Bookmarks +
 			'/' + globals.Id.Get() + globals.URL.LastUpdated)
-            .then(function(response) {
+			.then(function (response) {
 				// Reset network disconnected flag
 				globals.Network.Disconnected.Set(false);
 
@@ -137,25 +137,25 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 				if (!data || !data.lastUpdated) {
 					return $q.reject({ code: globals.ErrorCodes.NoDataFound });
 				}
-				
+
 				return data;
 			})
-            .catch(function(err) {
-                utility.LogError(moduleName, 'getBookmarksLastUpdated', err);
-                return $q.reject(err.status === undefined ?
+			.catch(function (err) {
+				utility.LogMessage(globals.LogType.Info, err);
+				return $q.reject(err.status === undefined ?
 					err : getErrorCodeFromHttpError(err));
-            });
+			});
 	};
 
-	var getBookmarksVersion = function() {
+	var getBookmarksVersion = function () {
 		// Check sync ID is present
 		if (!globals.Id.Get()) {
 			return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
-		
-		return $http.get(globals.URL.Host.Get() + globals.URL.Bookmarks + 
+
+		return $http.get(globals.URL.Host.Get() + globals.URL.Bookmarks +
 			'/' + globals.Id.Get() + globals.URL.Version)
-            .then(function(response) {
+			.then(function (response) {
 				// Reset network disconnected flag
 				globals.Network.Disconnected.Set(false);
 
@@ -164,23 +164,23 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 				if (!data) {
 					return $q.reject({ code: globals.ErrorCodes.NoDataFound });
 				}
-				
+
 				return data;
 			})
-            .catch(function(err) {
-                utility.LogError(moduleName, 'getBookmarksVersion', err);
-                return $q.reject(err.status === undefined ?
+			.catch(function (err) {
+				utility.LogMessage(globals.LogType.Info, err);
+				return $q.reject(err.status === undefined ?
 					err : getErrorCodeFromHttpError(err));
-            });
+			});
 	};
-	
-	var updateBookmarks = function(encryptedBookmarks, updateSyncVersion) {
+
+	var updateBookmarks = function (encryptedBookmarks, updateSyncVersion) {
 		// Check secret and sync ID are present
 		if (!globals.Password.Get() || !globals.Id.Get()) {
 			return $q.reject({ code: globals.ErrorCodes.MissingClientData });
 		}
-		
-		var data = { 
+
+		var data = {
 			bookmarks: encryptedBookmarks
 		};
 
@@ -188,10 +188,10 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 		if (updateSyncVersion) {
 			data.version = globals.AppVersion;
 		}
-		
+
 		return $http.put(globals.URL.Host.Get() + globals.URL.Bookmarks + '/' + globals.Id.Get(),
 			JSON.stringify(data))
-            .then(function(response) {
+			.then(function (response) {
 				// Reset network disconnected flag
 				globals.Network.Disconnected.Set(false);
 
@@ -200,28 +200,28 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 				if (!data || !data.lastUpdated) {
 					return $q.reject({ code: globals.ErrorCodes.NoDataFound });
 				}
-				
+
 				return data;
 			})
-            .catch(function(err) {
-                utility.LogError(moduleName, 'updateBookmarks', err);
-                return $q.reject(err.status === undefined ?
+			.catch(function (err) {
+				utility.LogMessage(globals.LogType.Info, err);
+				return $q.reject(err.status === undefined ?
 					err : getErrorCodeFromHttpError(err));
-            });
+			});
 	};
-    
-    
-/* ------------------------------------------------------------------------------------
- * Private functions
- * ------------------------------------------------------------------------------------ */
-    
-    var getErrorCodeFromHttpError = function(httpErr) {
-        // Reset network disconnected flag
+
+
+	/* ------------------------------------------------------------------------------------
+	 * Private functions
+	 * ------------------------------------------------------------------------------------ */
+
+	var getErrorCodeFromHttpError = function (httpErr) {
+		// Reset network disconnected flag
 		globals.Network.Disconnected.Set(false);
-       
-        var err = {};
-        switch (httpErr.status) {
-            // 405 Method Not Allowed: server not accepting new syncs
+
+		var err = {};
+		switch (httpErr.status) {
+			// 405 Method Not Allowed: server not accepting new syncs
 			case 405:
 				err.code = globals.ErrorCodes.NotAcceptingNewSyncs;
 				break;
@@ -244,15 +244,15 @@ xBrowserSync.App.API = function($http, $q, globals, utility) {
 			// -1: No network connection
 			case -1:
 				globals.Network.Disconnected.Set(true);
-				/* falls through */
+			/* falls through */
 			// Otherwise generic request failed
 			default:
-                err.code = globals.ErrorCodes.HttpRequestFailed;
-        }
-       
-        return err;
-    };
-   
+				err.code = globals.ErrorCodes.HttpRequestFailed;
+		}
+
+		return err;
+	};
+
 	return {
 		CheckServiceStatus: checkServiceStatus,
 		CreateNewSync: createNewSync,

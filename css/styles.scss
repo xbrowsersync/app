@@ -1214,6 +1214,21 @@ body {
         }
     }
 
+    .debug-panel {
+        .message-log > ul {
+            font-family: $font-stack-code;
+            font-size: 0.7em;
+            line-height: 1.2em;
+            list-style: none;
+            margin-bottom: 0;
+            padding-left: 0;
+            word-wrap: normal;
+            white-space: nowrap;
+            overflow: auto;
+            max-height: 30vh;
+        }
+    }
+
     .form-group {
         position: relative;
         margin-bottom: 1em;

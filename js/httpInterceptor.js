@@ -6,13 +6,13 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description:	Adds Accept-Version HTTP header to all requests.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.HttpInterceptor = function($q, globals) {
-    'use strict';
-    
-/* ------------------------------------------------------------------------------------
- * Public functions
- * ------------------------------------------------------------------------------------ */
-	
+xBrowserSync.App.HttpInterceptor = function ($q, globals) {
+	'use strict';
+
+	/* ------------------------------------------------------------------------------------
+	 * Public functions
+	 * ------------------------------------------------------------------------------------ */
+
 	var httpInterceptor = function () {
 		// Intercept the all http requests
 		return {
@@ -27,6 +27,6 @@ xBrowserSync.App.HttpInterceptor = function($q, globals) {
 			}
 		};
 	};
-   
+
 	return httpInterceptor();
 };

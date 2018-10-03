@@ -23,7 +23,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 			if (!details) {
 				return;
 			}
-			
+
 			switch (details.reason) {
 				case 'update':
 					if (details.previousVersion &&
@@ -70,11 +70,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 					return syncBookmarks({ type: globals.SyncType.Pull });
 				})
 				.catch(function (err) {
-					// Log error
-					utility.LogMessage(
-						moduleName, 'startup', globals.LogType.Warning,
-						err.stack);
-
 					// Display alert
 					var errMessage = utility.GetErrorMessageFromException(err);
 					displayAlert(errMessage.title, errMessage.message);
@@ -110,11 +105,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 			}
 		})
 			.catch(function (err) {
-				// Log error
-				utility.LogMessage(
-					moduleName, 'changeBookmark', globals.LogType.Warning,
-					err.stack);
-
 				// Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
 				displayAlert(errMessage.title, errMessage.message);
@@ -150,11 +140,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 				});
 			})
 			.catch(function (err) {
-				// Log error
-				utility.LogMessage(
-					moduleName, 'createBookmark', globals.LogType.Warning,
-					err.stack);
-
 				// Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
 				displayAlert(errMessage.title, errMessage.message);
@@ -208,11 +193,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 						err.code = globals.ErrorCodes.IdRemoved;
 						bookmarks.DisableSync();
 					}
-
-					// Log error
-					utility.LogMessage(
-						moduleName, 'handleAlarm', globals.LogType.Warning,
-						err.stack);
 
 					// Don't display alert if sync failed due to network connection
 					if (err.code === globals.ErrorCodes.HttpRequestFailed ||
@@ -272,11 +252,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 			}
 		})
 			.catch(function (err) {
-				// Log error
-				utility.LogMessage(
-					moduleName, 'moveBookmark', globals.LogType.Warning,
-					err.stack);
-
 				// Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
 				displayAlert(errMessage.title, errMessage.message);
@@ -303,11 +278,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 			}
 		})
 			.catch(function (err) {
-				// Log error
-				utility.LogMessage(
-					moduleName, 'removeBookmark', globals.LogType.Warning,
-					err.stack);
-
 				// Display alert
 				var errMessage = utility.GetErrorMessageFromException(err);
 				displayAlert(errMessage.title, errMessage.message);
@@ -359,7 +329,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 						platform.GetConstant(globals.Constants.ConnRestored_Message));
 				}
 
-				if (!!command) {
+				if (command) {
 					try {
 						asyncChannel.postMessage({
 							command: command,
@@ -367,37 +337,23 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 							success: true
 						});
 					}
-					catch (err) {
-						// Log error
-						utility.LogMessage(
-							moduleName, 'syncBookmarks', globals.LogType.Warning,
-							'Error posting message to async channel; ' + err.stack);
-					}
+					catch (err) { }
 				}
 			})
 			.catch(function (err) {
-				// Log error
-				utility.LogMessage(
-					moduleName, 'syncBookmarks', globals.LogType.Warning,
-					'Error syncing bookmarks; ' + err.stack);
-				utility.LogMessage(
-					moduleName, 'syncBookmarks', globals.LogType.Info,
-					'syncData: ' + JSON.stringify(syncData));
+				if (err && err.code) {
+					utility.LogMessage(globals.LogType.Info, 'Sync error: ' + err.code);
+				}
 
-				if (!!command) {
+				if (command) {
 					try {
 						asyncChannel.postMessage({ command: command, success: false, error: err });
 					}
-					catch (err2) {
-						// Log error
-						utility.LogMessage(
-							moduleName, 'syncBookmarks', globals.LogType.Warning,
-							'Error posting message to async channel; ' + JSON.stringify(err2));
-					}
+					catch (innerErr) { }
 				}
-				else {
-					throw err;
-				}
+			})
+			.finally(function () {
+				utility.LogMessage(globals.LogType.Info, 'Sync data: ' + JSON.stringify(syncData));
 			});
 	};
 

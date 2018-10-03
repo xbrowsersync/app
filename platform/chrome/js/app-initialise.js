@@ -1,24 +1,24 @@
 // Initialise the angular app
 xBrowserSync.App.UI = angular.module('xBrowserSync.App.UI', [
-    'angular-complexify', 
-    'angular.filter', 
+    'angular-complexify',
+    'angular.filter',
     'infinite-scroll',
     'ngAnimate',
     'ngSanitize'
 ]);
 
 // Disable debug info
-xBrowserSync.App.UI.config(['$compileProvider', function($compileProvider) {
+xBrowserSync.App.UI.config(['$compileProvider', function ($compileProvider) {
     $compileProvider.debugInfoEnabled(false);
     $compileProvider.aHrefSanitizationWhitelist(/^\w+:.*$/);
 }]);
 
 // Restrict animations to elements with class prefix "animate-"
-xBrowserSync.App.UI.config(['$animateProvider', function($animateProvider) {
+xBrowserSync.App.UI.config(['$animateProvider', function ($animateProvider) {
     $animateProvider.classNameFilter(/animate\-|view\-content/);
 }]);
 
-xBrowserSync.App.UI.run(['$templateRequest', function($templateRequest) {
+xBrowserSync.App.UI.run(['$templateRequest', function ($templateRequest) {
     // Pre-load templates
     $templateRequest('./views/login.html', true);
     $templateRequest('./views/search.html', true);
@@ -37,8 +37,8 @@ xBrowserSync.App.UI.factory('globals', xBrowserSync.App.Global);
 // Add httpInterceptor service
 xBrowserSync.App.HttpInterceptor.$inject = ['$q', 'globals'];
 xBrowserSync.App.UI.factory('httpInterceptor', xBrowserSync.App.HttpInterceptor);
-xBrowserSync.App.UI.config(['$httpProvider', function($httpProvider) {
-$httpProvider.interceptors.push('httpInterceptor');
+xBrowserSync.App.UI.config(['$httpProvider', function ($httpProvider) {
+    $httpProvider.interceptors.push('httpInterceptor');
 }]);
 
 // Add utility service

@@ -9,19 +9,19 @@ xBrowserSync.App = xBrowserSync.App || {};
  *              platform/chrome//platformImplementation.js.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Platform = function($q) {
-    'use strict';
-	
-	var notImplemented = function() {
+xBrowserSync.App.Platform = function ($q) {
+	'use strict';
+
+	var notImplemented = function () {
 		function NotImplementedException() {
 			this.name = 'NotImplementedException';
 			this.code = 10400;
 		}
-		
+
 		// Throw not implemented exception
 		throw new NotImplementedException();
 	};
-    
+
 	return {
 		AutomaticUpdates: {
 			Start: notImplemented,
@@ -37,14 +37,14 @@ xBrowserSync.App.Platform = function($q) {
 			DeleteSingle: notImplemented,
 			Get: notImplemented,
 			Moved: notImplemented,
-            Populate: notImplemented,
+			Populate: notImplemented,
 			Share: notImplemented,
 			Updated: notImplemented,
 			UpdateSingle: notImplemented
 		},
 		GetConstant: notImplemented,
-        GetCurrentUrl: notImplemented,
-        GetPageMetadata: notImplemented,
+		GetCurrentUrl: notImplemented,
+		GetPageMetadata: notImplemented,
 		Init: notImplemented,
 		Interface: {
 			Loading: {
@@ -57,7 +57,7 @@ xBrowserSync.App.Platform = function($q) {
 			Get: notImplemented,
 			Set: notImplemented
 		},
-		OpenUrl: notImplemented, 
+		OpenUrl: notImplemented,
 		ScanID: notImplemented,
 		SelectFile: notImplemented,
 		Sync: notImplemented

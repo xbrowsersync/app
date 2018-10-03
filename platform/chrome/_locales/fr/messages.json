@@ -254,6 +254,9 @@
 	"settings_Debug_DeviceHeight_Label" : {
 		"message":  "Hauteur du périphérique"
 	},
+	"debugDisabled_Message" : {
+		"message":  "Debug mode disabled"
+	},
 	"debugEnabled_Message" : {
 		"message":  "Debug mode activé"
 	},

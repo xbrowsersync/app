@@ -11,8 +11,8 @@
   </div>
   <div class="form-group">
     <label for="bookmarkTitle" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TitleField_Label) }}</label>
-    <input type="text" class="form-control" name="bookmarkTitle" data-ng-model="vm.bookmark.current.title" maxlength="255" autocomplete="off" tabindex="1"
-      placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TitleField_Label) }}">
+    <input type="text" class="form-control" name="bookmarkTitle" data-ng-model="vm.bookmark.current.title" maxlength="255" autocomplete="off"
+      tabindex="1" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TitleField_Label) }}">
   </div>
   <div class="form-group" data-ng-class="{ true: 'has-error' }[vm.bookmarkForm.bookmarkUrl.$dirty && vm.bookmarkForm.bookmarkUrl.$invalid]">
     <label for="bookmarkUrl" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_UrlField_Label) }}</label>
