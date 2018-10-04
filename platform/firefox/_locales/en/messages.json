@@ -54,7 +54,7 @@
 		"message": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s bookmark button as normal and xBrowserSync will automatically add the bookmark’s default properties.</p>"
 	},
 	"login_introPanel8_Message": {
-		"message": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p>"
+		"message": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features, any changes you make will be synced automatically in the background (Firefox’s native bookmark tags are not yet supported however).</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p>"
 	},
 	"login_introPanel9_Message": {
 		"message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your reponsibility so be smart and make sure to take backups.</p><p>You can do this easily in the Settings panel, you can back up your unencrypted data to a local file which can then restored at a later date should you need to.</p>"

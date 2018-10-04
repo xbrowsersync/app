@@ -1953,7 +1953,11 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
 
         // Validate service url
         return updateServiceUrlForm_ValidateServiceUrl()
-            .then(function (serviceInfo) {
+            .then(function (isValid) {
+                if (!isValid) {
+                    return;
+                }
+
                 if (!!globals.SyncEnabled.Get()) {
                     // Display confirmation panel
                     vm.settings.displayUpdateServiceUrlForm = false;
@@ -1978,6 +1982,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         // Check service url status
         var url = vm.settings.service.newServiceUrl.replace(/\/$/, '');
         return api.CheckServiceStatus(url)
+            .then(function (serviceInfo) {
+                return !!serviceInfo;
+            })
             .catch(function (err) {
                 if (err && err.code != null) {
                     switch (err.code) {
@@ -1991,11 +1998,12 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
                             vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', false);
                     }
                 }
+                else {
+                    vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', false);
+                }
 
                 // Focus on url field
                 document.querySelector('input[name=newServiceUrl]').focus();
-
-                return $q.reject(err);
             })
             .finally(function () {
                 platform.Interface.Loading.Hide('checkingNewServiceUrl', loadingTimeout);
