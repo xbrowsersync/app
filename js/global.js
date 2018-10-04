@@ -4,38 +4,44 @@ xBrowserSync.App = xBrowserSync.App || {};
 /* ------------------------------------------------------------------------------------
  * Class name:	xBrowserSync.App.Global
  * Description:	Defines global properties used across all platforms.
- * ------------------------------------------------------------------------------------ */ 
+ * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Global = function(platform) {
+xBrowserSync.App.Global = function (platform) {
     'use strict';
 
-	var Global = {
+    var Global = {
         Alarm: {
             Name: {
-                Get: function() {
+                Get: function () {
                     return 'xBrowserSync-alarm';
                 }
             },
             Period: {
-                Get: function() {
-                    return 5;
+                Get: function () {
+                    return 15;
                 }
             }
         },
-        ApiVersion: '1.0.x',
-        AppVersion: '1.3.1',
+        ApiVersion: '1.1.3',
+        AppVersion: '1.4.0',
         Bookmarks: {
+            ContainerPrefix: '[xbs]',
             DescriptionMaxLength: 300,
-            OtherContainerName: '_other_',
-            ToolbarContainerName: '_toolbar_',
-            xBrowserSyncContainerName: '_xBrowserSync_'
+            MenuContainerName: '[xbs] Menu',
+            MobileContainerName: '[xbs] Mobile',
+            OtherContainerName: '[xbs] Other',
+            OtherContainerNameOld: '_other_',
+            RootContainerName: 'root',
+            ToolbarContainerName: '[xbs] Toolbar',
+            ToolbarContainerNameOld: '_toolbar_',
+            UnfiledContainerNameOld: '_xBrowserSync_'
         },
         Cache: {
             Bookmarks: {
-                Get: function() {
+                Get: function () {
                     var bookmarks = platform.LocalStorage.Get(
                         'xBrowserSync-cachedBookmarks');
-                    
+
                     if (!!bookmarks) {
                         try {
                             bookmarks = JSON.parse(bookmarks);
@@ -44,62 +50,100 @@ xBrowserSync.App.Global = function(platform) {
                             bookmarks = null;
                         }
                     }
-                    
+
                     return bookmarks;
                 },
-                Set: function(value) {
+                Set: function (value) {
                     var bookmarks = '';
-                    
+
                     if (!!value) {
                         try {
                             bookmarks = JSON.stringify(value);
                         }
                         catch (err) { }
                     }
-                    
+
                     platform.LocalStorage.Set(
-                        'xBrowserSync-cachedBookmarks', 
+                        'xBrowserSync-cachedBookmarks',
                         bookmarks);
                 }
             }
         },
         Debug: {
-            ActivationKeyword: '#debug'
+            Enabled: {
+                Get: function () {
+                    var value = platform.LocalStorage.Get(
+                        'xBrowserSync-debugModeEnabled');
+
+                    var returnVal = true;
+                    if (!value || value !== 'true') {
+                        returnVal = false;
+                        platform.LocalStorage.Set(
+                            'xBrowserSync-debugMessageLog',
+                            '[]');
+                    }
+
+                    return returnVal;
+                },
+                Set: function (value) {
+                    platform.LocalStorage.Set(
+                        'xBrowserSync-debugModeEnabled',
+                        value);
+                }
+            },
+            MessageLog: {
+                Get: function () {
+                    var messageLogStr = platform.LocalStorage.Get(
+                        'xBrowserSync-debugMessageLog');
+                    var messageLog = messageLogStr ? JSON.parse(messageLogStr) : [];
+                    return messageLog;
+                },
+                Set: function (value) {
+                    var messageLogStr = platform.LocalStorage.Get(
+                        'xBrowserSync-debugMessageLog');
+                    var messageLog = messageLogStr ? JSON.parse(messageLogStr) : [];
+                    messageLog.unshift(value);
+                    platform.LocalStorage.Set(
+                        'xBrowserSync-debugMessageLog',
+                        JSON.stringify(messageLog));
+                }
+            }
         },
         Password: {
-            Get: function() {
+            Get: function () {
                 return platform.LocalStorage.Get(
                     'xBrowserSync-password');
             },
-            Set: function(value) {
+            Set: function (value) {
                 value = (!value) ? '' : value.trim();
-                
+
                 platform.LocalStorage.Set(
-                    'xBrowserSync-password', 
+                    'xBrowserSync-password',
                     value);
             }
         },
         Commands: {
             SyncBookmarks: 1,
             RestoreBookmarks: 2,
-            NoCallback: 3,
-            GetPageMetadata: 4
+            NoCallback: 3
         },
         Constants: {
             Title: 'title',
-			Description: 'description',
-			Containers_Toolbar_Title: 'containers_Toolbar_Title',
+            Description: 'description',
+            Containers_Toolbar_Title: 'containers_Toolbar_Title',
             Containers_Other_Title: 'containers_Other_Title',
-			TooltipSyncEnabled_Label: 'tooltipSyncEnabled_Label',
-			TooltipWorking_Label: 'tooltipWorking_Label',
+            TooltipSyncEnabled_Label: 'tooltipSyncEnabled_Label',
+            TooltipWorking_Label: 'tooltipWorking_Label',
             Button_Settings_Label: 'button_Settings_Label',
-			Button_AddBookmark_Label: 'button_AddBookmark_Label',
-			Button_DeleteBookmark_Label: 'button_DeleteBookmark_Label',
+            Button_AddBookmark_Label: 'button_AddBookmark_Label',
+            Button_DeleteBookmark_Label: 'button_DeleteBookmark_Label',
             Button_EditBookmark_Label: 'button_EditBookmark_Label',
             Button_ShareBookmark_Label: 'button_ShareBookmark_Label',
-			Button_Help_Label: 'button_Help_Label',
-			Button_Next_Label: 'button_Next_Label',
-			Button_Previous_Label: 'button_Previous_Label',
+            Button_Help_Label: 'button_Help_Label',
+            Button_Next_Label: 'button_Next_Label',
+            Button_Previous_Label: 'button_Previous_Label',
+            Login_GetSyncId_Title: 'login_GetSyncId_Title',
+            Login_GetSyncId_Message: 'login_GetSyncId_Message',
             Login_introPanel1_Message: 'login_introPanel1_Message',
             Login_introPanel2_Message: 'login_introPanel2_Message',
             Login_introPanel3_Message: 'login_introPanel3_Message',
@@ -113,21 +157,26 @@ xBrowserSync.App.Global = function(platform) {
             Login_introPanel11_Message: 'login_introPanel11_Message',
             Login_introPanel12_Message: 'login_introPanel12_Message',
             IntroPanel13_Message: 'introPanel13_Message',
-			Login_PasswordField_Label: 'login_PasswordField_Label',
-			Login_PasswordField_Existing_Description: 'login_PasswordField_Existing_Description',
+            Login_PasswordConfirmationField_Label: 'login_PasswordConfirmationField_Label',
+            Login_PasswordField_Label: 'login_PasswordField_Label',
+            Login_PasswordField_Existing_Description: 'login_PasswordField_Existing_Description',
             Login_PasswordField_New_Description: 'login_PasswordField_New_Description',
-			Login_IdField_Label: 'login_IdField_Label',
-			Login_IdField_Description: 'login_IdField_Description',
-			Button_ScanCode_Label: 'button_ScanCode_Label',
-			Button_DisableSync_Label: 'button_DisableSync_Label',
+            Login_IdField_Label: 'login_IdField_Label',
+            Login_IdField_Description: 'login_IdField_Description',
+            Button_ScanCode_Label: 'button_ScanCode_Label',
+            Button_DisableSync_Label: 'button_DisableSync_Label',
             Button_EnableSync_Label: 'button_EnableSync_Label',
             Button_ExistingSync_Label: 'button_ExistingSync_Label',
             Button_NewSync_Label: 'button_NewSync_Label',
-			Login_ConfirmSync_Title: 'login_ConfirmSync_Title',
-			Login_ConfirmSync_Message: 'login_ConfirmSync_Message',
-			Button_Confirm_Label: 'button_Confirm_Label',
-			Button_Deny_Label: 'button_Deny_Label',
-			Search_Field_Description: 'search_Field_Description',
+            Login_ConfirmSync_Title: 'login_ConfirmSync_Title',
+            Login_ConfirmSync_Message: 'login_ConfirmSync_Message',
+            Login_UpgradeSync_Title: 'login_UpgradeSync_Title',
+            Login_UpgradeSync_Message: 'login_UpgradeSync_Message',
+            Login_Updated_Message: 'login_Updated_Message',
+            Login_Updated_Title: 'login_Updated_Title',
+            Button_Confirm_Label: 'button_Confirm_Label',
+            Button_Deny_Label: 'button_Deny_Label',
+            Search_Field_Description: 'search_Field_Description',
             Search_NoBookmarks_Message: 'search_NoBookmarks_Message',
             Search_NoResults_Message: 'search_NoResults_Message',
             ShareBookmark_Message: 'shareBookmark_Message',
@@ -141,8 +190,6 @@ xBrowserSync.App.Global = function(platform) {
             Settings_Service_Status_Label: 'settings_Service_Status_Label',
             Settings_Service_Status_Description: 'settings_Service_Status_Description',
             Settings_Service_ServiceMessage_Label: 'settings_Service_ServiceMessage_Label',
-            Settings_Service_ApiVersion_Label: 'settings_Service_ApiVersion_Label',
-            Settings_Service_ApiVersion_Description: 'settings_Service_ApiVersion_Description',
             Settings_Service_ChangeService_Label: 'settings_Service_ChangeService_Label',
             Settings_Service_ChangeService_Description: 'settings_Service_ChangeService_Description',
             Settings_BackupRestore_Backup_Label: 'settings_BackupRestore_Backup_Label',
@@ -154,65 +201,60 @@ xBrowserSync.App.Global = function(platform) {
             Settings_About_Title: 'settings_About_Title',
             Settings_About_AppVersion_Label: 'settings_About_AppVersion_Label',
             Settings_About_AppVersion_Description: 'settings_About_AppVersion_Description',
-            Settings_About_Updates_Label: 'settings_About_Updates_Label',
-            Settings_About_Updates_Link_Label: 'settings_About_Updates_Link_Label',
-            Settings_About_Updates_Description: 'settings_About_Updates_Description',
-            Settings_About_Updates_ListHtml: 'settings_About_Updates_ListHtml',
-            Settings_About_Website_Label: 'settings_About_Website_Label',
-            Settings_About_Website_Description: 'settings_About_Website_Description',
-	        Settings_About_GitHub_Label: 'settings_About_GitHub_Label',
-            Settings_About_GitHub_Description: 'settings_About_GitHub_Description',
+            Settings_About_ReleaseNotes_Label: 'settings_About_ReleaseNotes_Label',
+            Settings_About_FAQs_Label: 'settings_About_FAQs_Label',
+            Settings_About_FAQs_Description: 'settings_About_FAQs_Description',
+            Settings_About_ViewFAQs_Label: 'settings_About_ViewFAQs_Label',
             Settings_About_Issues_Label: 'settings_About_Issues_Label',
             Settings_About_Issues_Description: 'settings_About_Issues_Description',
-            Settings_About_MobileApps_Label: 'settings_About_MobileApps_Label',
-            Settings_About_MobileApps_Description: 'settings_About_MobileApps_Description',
-            Settings_About_MobileApps_Android_Link_Title: 'settings_About_MobileApps_Android_Link_Title',
-            Settings_About_MobileApps_iOS_Link_Title: 'settings_About_MobileApps_iOS_Link_Title',
-            Settings_About_WebExtensions_Label: 'settings_About_WebExtensions_Label',
-            Settings_About_WebExtensions_Description: 'settings_About_WebExtensions_Description',
-            Settings_About_WebExtensions_Chrome_Link_Title: 'settings_About_WebExtensions_Chrome_Link_Title',
-            Settings_About_Acknowledgements_Label: 'settings_About_Acknowledgements_Label',
-            Settings_About_Acknowledgements_Description: 'settings_About_Acknowledgements_Description',
+            Settings_About_RaiseIssue_Label: 'settings_About_RaiseIssue_Label',
             Settings_About_Contributions_Label: 'settings_About_Contributions_Label',
             Settings_About_Contributions_Description: 'settings_About_Contributions_Description',
-            Settings_About_Contributions_Link_Title: 'settings_About_Contributions_Link_Title',
+            Settings_About_Contribute_Label: 'settings_About_Contribute_Label',
             Settings_Debug_Title: 'settings_Debug_Title',
             Settings_Debug_DeviceWidth_Label: 'settings_Debug_DeviceWidth_Label',
             Settings_Debug_DeviceHeight_Label: 'settings_Debug_DeviceHeight_Label',
+            DebugDisabled_Message: 'debugDisabled_Message',
             DebugEnabled_Message: 'debugEnabled_Message',
             Settings_Service_Title: 'settings_Service_Title',
             Settings_Service_Status_NoNewSyncs: 'settings_Service_Status_NoNewSyncs',
-			Settings_Service_Status_Online: 'settings_Service_Status_Online',
-			Settings_Service_Status_Offline: 'settings_Service_Status_Offline',
-			Button_UpdateServiceUrl_Label: 'button_UpdateServiceUrl_Label',
-			Settings_Service_UpdateForm_Message: 'settings_Service_UpdateForm_Message',
-			Settings_Service_UpdateForm_Field_Description: 'settings_Service_UpdateForm_Field_Description',
-			Button_Update_Label: 'button_Update_Label',
-			Button_Cancel_Label: 'button_Cancel_Label',
-			Settings_Service_UpdateForm_Confirm_Message: 'settings_Service_UpdateForm_Confirm_Message',
-			Settings_BackupRestore_Title: 'settings_BackupRestore_Title',
+            Settings_Service_Status_Error: 'settings_Service_Status_Error',
+            Settings_Service_Status_Loading: 'settings_Service_Status_Loading',
+            Settings_Service_Status_Online: 'settings_Service_Status_Online',
+            Settings_Service_Status_Offline: 'settings_Service_Status_Offline',
+            Button_UpdateServiceUrl_Label: 'button_UpdateServiceUrl_Label',
+            Settings_Service_UpdateForm_Message: 'settings_Service_UpdateForm_Message',
+            Settings_Service_UpdateForm_Field_Description: 'settings_Service_UpdateForm_Field_Description',
+            Button_Update_Label: 'button_Update_Label',
+            Button_Cancel_Label: 'button_Cancel_Label',
+            Settings_Service_UpdateForm_Confirm_Message: 'settings_Service_UpdateForm_Confirm_Message',
+            Settings_Service_UpdateForm_Required_Label: 'settings_Service_UpdateForm_Required_Label',
+            Settings_Service_UpdateForm_InvalidService_Label: 'settings_Service_UpdateForm_InvalidService_Label',
+            Settings_Service_UpdateForm_ServiceVersionNotSupported_Label: 'settings_Service_UpdateForm_ServiceVersionNotSupported_Label',
+            Settings_Service_UpdateForm_ServiceOffline_Label: 'settings_Service_UpdateForm_ServiceOffline_Label',
+            Settings_BackupRestore_Title: 'settings_BackupRestore_Title',
             Settings_BackupRestore_NotAvailable_Message: 'settings_BackupRestore_NotAvailable_Message',
             Settings_BackupRestore_ICloudNotAvailable_Message: 'settings_BackupRestore_ICloudNotAvailable_Message',
-			Button_Backup_Label: 'button_Backup_Label',
-			Button_Restore_Label: 'button_Restore_Label',
-			Button_Done_Label: 'button_Done_Label',
-			Button_Clear_Label: 'button_Clear_Label',
+            Button_Backup_Label: 'button_Backup_Label',
+            Button_Restore_Label: 'button_Restore_Label',
+            Button_Done_Label: 'button_Done_Label',
+            Button_Clear_Label: 'button_Clear_Label',
             Button_Close_Label: 'button_Close_Label',
             Button_Back_Label: 'button_Back_Label',
-			Settings_BackupRestore_BackupSuccess_Message: 'settings_BackupRestore_BackupSuccess_Message',
-			Settings_BackupRestore_RestoreSuccess_Message: 'settings_BackupRestore_RestoreSuccess_Message',
-			Settings_BackupRestore_RestoreForm_Message: 'settings_BackupRestore_RestoreForm_Message',
-			Settings_BackupRestore_RestoreForm_DataField_Label: 'settings_BackupRestore_RestoreForm_DataField_Label',
+            Settings_BackupRestore_BackupSuccess_Message: 'settings_BackupRestore_BackupSuccess_Message',
+            Settings_BackupRestore_RestoreSuccess_Message: 'settings_BackupRestore_RestoreSuccess_Message',
+            Settings_BackupRestore_RestoreForm_Message: 'settings_BackupRestore_RestoreForm_Message',
+            Settings_BackupRestore_RestoreForm_DataField_Label: 'settings_BackupRestore_RestoreForm_DataField_Label',
             Button_SelectBackupFile_Label: 'button_SelectBackupFile_Label',
-			Button_RestoreData_Label: 'button_RestoreData_Label',
-			Button_RestoreData_Invalid_Label: 'button_RestoreData_Invalid_Label',
-			Button_RestoreData_Ready_Label: 'button_RestoreData_Ready_Label',
-			Settings_Sync_Title: 'settings_Sync_Title',
+            Button_RestoreData_Label: 'button_RestoreData_Label',
+            Button_RestoreData_Invalid_Label: 'button_RestoreData_Invalid_Label',
+            Button_RestoreData_Ready_Label: 'button_RestoreData_Ready_Label',
+            Settings_Sync_Title: 'settings_Sync_Title',
             Settings_Sync_NotAvailable_Message: 'settings_Sync_NotAvailable_Message',
             Settings_Sync_Id_Label: 'settings_Sync_Id_Label',
             Settings_Sync_DisplayQRCode_Message: 'settings_Sync_DisplayQRCode_Message',
             Settings_Service_DataUsage_Label: 'settings_Service_DataUsage_Label',
-			Settings_Sync_SyncToolbar_Label: 'settings_Sync_SyncToolbar_Label',
+            Settings_Sync_SyncToolbar_Label: 'settings_Sync_SyncToolbar_Label',
             Settings_Service_DataUsage_Description: 'settings_Service_DataUsage_Description',
             Settings_BackupRestore_ConfirmRestore_Sync_Message: 'settings_BackupRestore_ConfirmRestore_Sync_Message',
             Settings_BackupRestore_ConfirmRestore_NoSync_Message: 'settings_BackupRestore_ConfirmRestore_NoSync_Message',
@@ -223,6 +265,8 @@ xBrowserSync.App.Global = function(platform) {
             Bookmark_DescriptionField_Label: 'bookmark_DescriptionField_Label',
             Bookmark_TagsField_Label: 'bookmark_TagsField_Label',
             Bookmark_TagsField_Description: 'bookmark_TagsField_Description',
+            Bookmark_BookmarkForm_Required_Label: 'bookmark_BookmarkForm_Required_Label',
+            Bookmark_BookmarkForm_Exists_Label: 'bookmark_BookmarkForm_Exists_Label',
             Button_AddTags_Label: 'button_AddTags_Label',
             Button_DeleteTag_Label: 'button_DeleteTag_Label',
             Button_Delete_Label: 'button_Delete_Label',
@@ -240,7 +284,7 @@ xBrowserSync.App.Global = function(platform) {
             Error_HttpRequestFailedWhileUpdating_Message: 'error_HttpRequestFailedWhileUpdating_Message',
             Error_TooManyRequests_Title: 'error_TooManyRequests_Title',
             Error_TooManyRequests_Message: 'error_TooManyRequests_Message',
-			Error_RequestEntityTooLarge_Title: 'error_RequestEntityTooLarge_Title',
+            Error_RequestEntityTooLarge_Title: 'error_RequestEntityTooLarge_Title',
             Error_RequestEntityTooLarge_Message: 'error_RequestEntityTooLarge_Message',
             Error_NotAcceptingNewSyncs_Title: 'error_NotAcceptingNewSyncs_Title',
             Error_NotAcceptingNewSyncs_Message: 'error_NotAcceptingNewSyncs_Message',
@@ -248,32 +292,34 @@ xBrowserSync.App.Global = function(platform) {
             Error_DailyNewSyncLimitReached_Message: 'error_DailyNewSyncLimitReached_Message',
             Error_MissingClientData_Title: 'error_MissingClientData_Title',
             Error_MissingClientData_Message: 'error_MissingClientData_Message',
-			Error_NoDataFound_Title: 'error_NoDataFound_Title',
-			Error_NoDataFound_Message: 'error_NoDataFound_Message',
-			Error_IdRemoved_Title: 'error_IdRemoved_Title',
-			Error_IdRemoved_Message: 'error_IdRemoved_Message',
-			Error_NoDataToRestore_Title: 'error_NoDataToRestore_Title',
-			Error_NoDataToRestore_Message: 'error_NoDataToRestore_Message',
-			Error_FailedGetLocalBookmarks_Title: 'error_FailedGetLocalBookmarks_Title',
-			Error_FailedGetLocalBookmarks_Message: 'error_FailedGetLocalBookmarks_Message',
+            Error_NoDataFound_Title: 'error_NoDataFound_Title',
+            Error_NoDataFound_Message: 'error_NoDataFound_Message',
+            Error_IdRemoved_Title: 'error_IdRemoved_Title',
+            Error_IdRemoved_Message: 'error_IdRemoved_Message',
+            Error_NoDataToRestore_Title: 'error_NoDataToRestore_Title',
+            Error_NoDataToRestore_Message: 'error_NoDataToRestore_Message',
+            Error_FailedGetLocalBookmarks_Title: 'error_FailedGetLocalBookmarks_Title',
+            Error_FailedGetLocalBookmarks_Message: 'error_FailedGetLocalBookmarks_Message',
             Error_FailedCreateLocalBookmarks_Title: 'error_FailedCreateLocalBookmarks_Title',
             Error_FailedCreateLocalBookmarks_Message: 'error_FailedCreateLocalBookmarks_Message',
-			Error_FailedRemoveLocalBookmarks_Title: 'error_FailedRemoveLocalBookmarks_Title',
-			Error_FailedRemoveLocalBookmarks_Message: 'error_FailedRemoveLocalBookmarks_Message',
-			Error_InvalidData_Title: 'error_InvalidData_Title',
-			Error_InvalidData_Message: 'error_InvalidData_Message',
-			Error_LastChangeNotSynced_Title: 'error_LastChangeNotSynced_Title',
-			Error_LastChangeNotSynced_Message: 'error_LastChangeNotSynced_Message',
+            Error_FailedRemoveLocalBookmarks_Title: 'error_FailedRemoveLocalBookmarks_Title',
+            Error_FailedRemoveLocalBookmarks_Message: 'error_FailedRemoveLocalBookmarks_Message',
+            Error_InvalidData_Title: 'error_InvalidData_Title',
+            Error_InvalidData_Message: 'error_InvalidData_Message',
+            Error_LastChangeNotSynced_Title: 'error_LastChangeNotSynced_Title',
+            Error_LastChangeNotSynced_Message: 'error_LastChangeNotSynced_Message',
             Error_BookmarkNotFound_Title: 'error_BookmarkNotFound_Title',
-			Error_BookmarkNotFound_Message: 'error_BookmarkNotFound_Message',
+            Error_BookmarkNotFound_Message: 'error_BookmarkNotFound_Message',
             Error_OutOfSync_Title: 'error_OutOfSync_Title',
-			Error_OutOfSync_Message: 'error_OutOfSync_Message',
+            Error_OutOfSync_Message: 'error_OutOfSync_Message',
+            Error_ApiInvalid_Title: 'error_ApiInvalid_Title',
+            Error_ApiInvalid_Message: 'error_ApiInvalid_Message',
+            Error_ApiVersionNotSupported_Title: 'error_ApiVersionNotSupported_Title',
+            Error_ApiVersionNotSupported_Message: 'error_ApiVersionNotSupported_Message',
             Error_ContainerChanged_Title: 'error_ContainerChanged_Title',
             Error_ContainerChanged_Message: 'error_ContainerChanged_Message',
-            Error_BrowserImportBookmarksNotSupported_Title: 'error_BrowserImportBookmarksNotSupported_Title',
-			Error_BrowserImportBookmarksNotSupported_Message: 'error_BrowserImportBookmarksNotSupported_Message',
             Error_NotImplemented_Title: 'error_NotImplemented_Title',
-			Error_NotImplemented_Message: 'error_NotImplemented_Message',
+            Error_NotImplemented_Message: 'error_NotImplemented_Message',
             Error_FailedGetPageMetadata_Title: 'error_FailedGetPageMetadata_Title',
             Error_FailedGetPageMetadata_Message: 'error_FailedGetPageMetadata_Message',
             Error_SyncInterrupted_Title: 'error_SyncInterrupted_Title',
@@ -287,12 +333,12 @@ xBrowserSync.App.Global = function(platform) {
             Error_FailedShareUrlNotSynced_Title: 'error_FailedShareUrlNotSynced_Title'
         },
         DisableEventListeners: {
-            Get: function() {
+            Get: function () {
                 var value;
-                
+
                 value = platform.LocalStorage.Get(
                     'xBrowserSync-disableEventListeners');
-                
+
                 if (!value) {
                     return false;
                 }
@@ -305,44 +351,19 @@ xBrowserSync.App.Global = function(platform) {
                     }
                 }
             },
-            Set: function(value) {
+            Set: function (value) {
                 platform.LocalStorage.Set(
-                    'xBrowserSync-disableEventListeners', 
-                    value);
-            }
-        },
-        DisplayAboutOnStartup: {
-            Get: function() {
-                var value;
-                
-                value = platform.LocalStorage.Get(
-                    'xBrowserSync-displayAboutOnStartup');
-                
-                if (!value) {
-                    return false;
-                }
-                else {
-                    if (value === 'true') {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-            },
-            Set: function(value) {
-                platform.LocalStorage.Set(
-                    'xBrowserSync-displayAboutOnStartup', 
+                    'xBrowserSync-disableEventListeners',
                     value);
             }
         },
         DisplayIntro: {
-            Get: function() {
+            Get: function () {
                 var value;
-                
+
                 value = platform.LocalStorage.Get(
                     'xBrowserSync-displayIntro');
-                
+
                 if (!value) {
                     return true;
                 }
@@ -355,67 +376,19 @@ xBrowserSync.App.Global = function(platform) {
                     }
                 }
             },
-            Set: function(value) {
+            Set: function (value) {
                 platform.LocalStorage.Set(
-                    'xBrowserSync-displayIntro', 
+                    'xBrowserSync-displayIntro',
                     value);
             }
         },
-        ErrorCodes: {
-            HttpRequestFailed: 10000,
-            HttpRequestFailedWhileUpdating: 10001,
-            HttpRequestCancelled: 10002,
-            TooManyRequests: 10003,
-            RequestEntityTooLarge: 10004,
-            NotAcceptingNewSyncs: 10005,
-            DailyNewSyncLimitReached: 10006,
-            MissingClientData: 10100, 
-            AmbiguousSyncRequest: 10101,
-            FailedGetLocalBookmarks: 10102,
-            FailedCreateLocalBookmarks: 10103,
-            FailedRemoveLocalBookmarks: 10104,            
-            NoDataFound: 10105,
-            IdRemoved: 10106,
-            InvalidData: 10107,
-            UpdatedBookmarkNotFound: 10108,
-            XBookmarkNotFound: 10109,
-            ContainerChanged: 10110,
-            DataOutOfSync: 10111,
-            NoStatus: 10200,
-            FailedGetPageMetadata: 10300,
-            FailedSaveBackup: 10301,
-            FailedScanID: 10302,
-            FailedShareBookmark: 10303,
-            FailedBackupData: 10304,
-            FailedGetDataToRestore: 10305,
-            FailedRestoreData: 10306,
-            FailedShareUrl: 10400,
-            FailedShareUrlNotSynced: 10401,
-            NotImplemented: 10500
-        },
-        Id: {
-            Get: function() {
-                var value = platform.LocalStorage.Get(
-                    'xBrowserSync-Id');
-                value = (value === '' || value === 'null') ? null : value;
-                
-                return value;
-            },
-            Set: function(value) {
-                value = (!value) ? '' : value.trim();
-                
-                platform.LocalStorage.Set(
-                    'xBrowserSync-Id', 
-                    value);
-            }
-        },
-        IsSyncing: {
-            Get: function() {
+        DisplayUpdated: {
+            Get: function () {
                 var value;
-                
+
                 value = platform.LocalStorage.Get(
-                    'xBrowserSync-isSyncing');
-                
+                    'xBrowserSync-displayUpdated');
+
                 if (!value) {
                     return false;
                 }
@@ -428,19 +401,97 @@ xBrowserSync.App.Global = function(platform) {
                     }
                 }
             },
-            Set: function(value) {
+            Set: function (value) {
                 platform.LocalStorage.Set(
-                    'xBrowserSync-isSyncing', 
+                    'xBrowserSync-displayUpdated',
                     value);
-                
+            }
+        },
+        ErrorCodes: {
+            HttpRequestFailed: 10000,
+            HttpRequestFailedWhileUpdating: 10001,
+            HttpRequestCancelled: 10002,
+            TooManyRequests: 10003,
+            RequestEntityTooLarge: 10004,
+            NotAcceptingNewSyncs: 10005,
+            DailyNewSyncLimitReached: 10006,
+            MissingClientData: 10100,
+            AmbiguousSyncRequest: 10101,
+            FailedGetLocalBookmarks: 10102,
+            FailedCreateLocalBookmarks: 10103,
+            FailedRemoveLocalBookmarks: 10104,
+            FailedUpdateLocalBookmarks: 10105,
+            NoDataFound: 10106,
+            IdRemoved: 10107,
+            PasswordRemoved: 10108,
+            InvalidData: 10109,
+            UpdatedBookmarkNotFound: 10110,
+            XBookmarkNotFound: 10111,
+            ContainerChanged: 10112,
+            DataOutOfSync: 10113,
+            ApiInvalid: 10200,
+            ApiOffline: 10201,
+            ApiVersionNotSupported: 10202,
+            FailedGetPageMetadata: 10300,
+            FailedSaveBackup: 10301,
+            FailedScanID: 10302,
+            FailedShareBookmark: 10303,
+            FailedBackupData: 10304,
+            FailedGetDataToRestore: 10305,
+            FailedRestoreData: 10306,
+            FailedShareUrl: 10400,
+            FailedShareUrlNotSynced: 10401,
+            FailedRegisterAutoUpdates: 10500,
+            NotImplemented: 10600
+        },
+        Id: {
+            Get: function () {
+                var value = platform.LocalStorage.Get(
+                    'xBrowserSync-Id');
+                value = (value === '' || value === 'null') ? null : value;
+
+                return value;
+            },
+            Set: function (value) {
+                value = (!value) ? '' : value.trim();
+
+                platform.LocalStorage.Set(
+                    'xBrowserSync-Id',
+                    value);
+            }
+        },
+        IsSyncing: {
+            Get: function () {
+                var value;
+
+                value = platform.LocalStorage.Get(
+                    'xBrowserSync-isSyncing');
+
+                if (!value) {
+                    return false;
+                }
+                else {
+                    if (value === 'true') {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            },
+            Set: function (value) {
+                platform.LocalStorage.Set(
+                    'xBrowserSync-isSyncing',
+                    value);
+
                 platform.Interface.Refresh();
             }
         },
         LastUpdated: {
-            Get: function() {
+            Get: function () {
                 var lastUpdatedVal = platform.LocalStorage.Get(
                     'xBrowserSync-lastUpdated');
-                
+
                 if (!!lastUpdatedVal) {
                     return new Date(lastUpdatedVal);
                 }
@@ -448,40 +499,39 @@ xBrowserSync.App.Global = function(platform) {
                     return null;
                 }
             },
-            Set: function(value) {
+            Set: function (value) {
                 platform.LocalStorage.Set(
-                    'xBrowserSync-lastUpdated', 
+                    'xBrowserSync-lastUpdated',
                     value);
             }
         },
         LogType: {
-            Info: 0, 
-            Warning: 1, 
+            Info: 0,
+            Warning: 1,
             Error: 2
         },
         LookaheadMinChars: 1,
-        MetadataCollection: {
-            Get: function() {
-                var metadata = platform.LocalStorage.Get(
-                    'xBrowserSync-metadataColl');
-                return (!metadata) ? [] : JSON.parse(metadata);
+        MobileAppVersion: {
+            Get: function () {
+                return platform.LocalStorage.Get(
+                    'xBrowserSync-mobileAppVersion') || '1.3.1';
             },
-            Set: function(value) {
-                value = (!value) ? '' : JSON.stringify(value);
-                
+            Set: function (value) {
+                value = (!value) ? '' : value.trim();
+
                 platform.LocalStorage.Set(
-                    'xBrowserSync-metadataColl', 
+                    'xBrowserSync-mobileAppVersion',
                     value);
             }
         },
         Network: {
             Disconnected: {
-                Get: function() {
+                Get: function () {
                     var value;
-                    
+
                     value = platform.LocalStorage.Get(
                         'xBrowserSync-networkDisconnected');
-                    
+
                     if (!value) {
                         return true;
                     }
@@ -494,9 +544,9 @@ xBrowserSync.App.Global = function(platform) {
                         }
                     }
                 },
-                Set: function(value) {
+                Set: function (value) {
                     platform.LocalStorage.Set(
-                        'xBrowserSync-networkDisconnected', 
+                        'xBrowserSync-networkDisconnected',
                         value);
                 }
             }
@@ -506,22 +556,24 @@ xBrowserSync.App.Global = function(platform) {
             Chrome: 'chrome',
             IOS: 'ios'
         },
-        Regex : {
+        Regex: {
             Url: /(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i
         },
+        ReleaseNotesUrlStem: 'https://github.com/xBrowserSync/App/releases/tag/v',
         SyncPollTimeout: 100,
         ServiceStatus: {
+            Error: -1,
             Online: 1,
             Offline: 2,
             NoNewSyncs: 3
         },
         SyncBookmarksToolbar: {
-            Get: function() {
+            Get: function () {
                 var value;
-                
+
                 value = platform.LocalStorage.Get(
                     'xBrowserSync-syncBookmarksToolbar');
-                
+
                 if (!value) {
                     return true;
                 }
@@ -534,19 +586,19 @@ xBrowserSync.App.Global = function(platform) {
                     }
                 }
             },
-            Set: function(value) {
+            Set: function (value) {
                 platform.LocalStorage.Set(
-                    'xBrowserSync-syncBookmarksToolbar', 
+                    'xBrowserSync-syncBookmarksToolbar',
                     value);
             }
         },
         SyncEnabled: {
-            Get: function() {
+            Get: function () {
                 var value;
-                
+
                 value = platform.LocalStorage.Get(
                     'xBrowserSync-syncEnabled');
-                
+
                 if (!value) {
                     return false;
                 }
@@ -559,27 +611,41 @@ xBrowserSync.App.Global = function(platform) {
                     }
                 }
             },
-            Set: function(value) {
+            Set: function (value) {
                 platform.LocalStorage.Set(
-                    'xBrowserSync-syncEnabled', 
+                    'xBrowserSync-syncEnabled',
                     value);
-                
+
                 // Reset network disconnected flag
                 platform.LocalStorage.Set(
-                    'xBrowserSync-networkDisconnected', 
+                    'xBrowserSync-networkDisconnected',
                     false);
-                
+
                 // Update icon
                 platform.Interface.Refresh();
             }
         },
-        SyncType: { 
-            Push: 1, 
+        SyncType: {
+            Push: 1,
             Pull: 2,
-            Both: 3
+            Both: 3,
+            Upgrade: 4
+        },
+        SyncVersion: {
+            Get: function () {
+                return platform.LocalStorage.Get(
+                    'xBrowserSync-syncVersion');
+            },
+            Set: function (value) {
+                value = (!value) ? '' : value.trim();
+
+                platform.LocalStorage.Set(
+                    'xBrowserSync-syncVersion',
+                    value);
+            }
         },
         Title: {
-            Get: function() {
+            Get: function () {
                 return 'xBrowserSync';
             }
         },
@@ -591,22 +657,22 @@ xBrowserSync.App.Global = function(platform) {
         },
         URL: {
             Host: {
-                Get: function() {
+                Get: function () {
                     var defaultUrl = 'https://api.xbrowsersync.org';
                     var urlHost = platform.LocalStorage.Get(
                         'xBrowserSync-urlHost');
-                    
+
                     urlHost = (urlHost === null || urlHost === undefined) ?
                         defaultUrl :
                         urlHost;
-                    
+
                     return urlHost;
                 },
-                Set: function(value) {
+                Set: function (value) {
                     value = (!value) ? '' : value;
-                    
+
                     platform.LocalStorage.Set(
-                        'xBrowserSync-urlHost', 
+                        'xBrowserSync-urlHost',
                         value);
                 }
             },
@@ -614,12 +680,13 @@ xBrowserSync.App.Global = function(platform) {
             Bookmarks: '/bookmarks',
             Current: '/current',
             LastUpdated: '/lastUpdated',
+            Version: '/version',
             ServiceInformation: '/info',
             Regex: /^(\w+:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/i,
-            ProtocolRegex: /^\w+:\/\//i,
+            ProtocolRegex: /^\w+:.*$/,
             CustomScheme: 'xbrowsersync:/'
         }
     };
-    
+
     return Global;
 };

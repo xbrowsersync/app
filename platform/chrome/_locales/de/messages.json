@@ -1,0 +1,593 @@
+{
+	"title": {
+		"message": "xBrowserSync"
+	},
+	"description": {
+		"message": "Browser-Synchronisierung wie sie sein soll: Sicher, anonym und kostenlos! Synchronisierung von Lesezeichen über Browser- und Gerätegrenzen hinweg, keine Anmeldung erforderlich."
+	},
+	"containers_Toolbar_Title": {
+		"message": "Lesezeichen-Symbolleiste"
+	},
+	"containers_Other_Title": {
+		"message": "Andere Lesezeichen"
+	},
+	"tooltipSyncEnabled_Label": {
+		"message": "Synchronisierung aktiv"
+	},
+	"tooltipWorking_Label": {
+		"message": "Synchronisie .."
+	},
+	"button_Help_Label": {
+		"message": "Hilfe anzeigen"
+	},
+	"button_Next_Label": {
+		"message": "Weiter"
+	},
+	"button_Previous_Label": {
+		"message": "Zurück"
+	},
+	"login_GetSyncId_Title": {
+		"message": "Need a sync ID?"
+	},
+	"login_GetSyncId_Message": {
+		"message": "Download the xBrowserSync desktop browser extension available for Chrome and Firefox, create a new sync and then scan your sync ID QR code on the previous screen."
+	},
+	"login_introPanel1_Message": {
+		"message": "<h4>Willkommen</h4><p>Danke, dass Sie xBrowserSync benutzen — Browser-Synchronisierung wie sie sein soll: Sicher, anonym und kostenlos!</p><p>Nehmen Sie sich etwas Zeit, um sich mit den Features von xBrowserSync’s vertraut zu machen. Weitere Informationen finden SIe in den <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQ</a>.</p>"
+	},
+	"login_introPanel2_Message": {
+		"message": "<h4>Erste Synchronisierung</h4><p>Bevor Ihre Browserdaten synchronisiert werden können, müssen sie verschlüsselt werden, so dass sie nur von Ihnen gelesen werden können. Verschlüssellungspasswort eingeben — verwenden Sie ein starkes und leicht zu merkendes Passwort, es gibt keine Erinnerungen; wenn Sie es vergessen, werden Sie nicht mehr in der Lage sein, die Daten zu entschlüsseln.</p><p>Sobald Sie den Sync-Button angeklickt haben, läuft die Synchronisierung und Sie können Lesezeichen hinzufügen.</p>"
+	},
+	"login_introPanel3_Message": {
+		"message": "<h4>Schon synchronisiert (Sie haben eine ID)</h4><p>Wenn Sie einen neuen Sync erstellen, erhalten Sie eine eindeutige xBrowserSync ID die Sie, zusmammen mit Ihrem Passwort, verwenden können, um Ihre Daten auf verschiedenen Geräten zu synchronisieren. Ihre Anonymität ist sichergestellt, es werden keine persönlichen Daten gesammelt und mit den synchronisierten Daten gespeichert.</p><p>Einmal synchronisiert, können Sie Ihre ID in den Einstellungen einsehen. Tippen Sie darauf, um einen einfach zu handhabenden QR-Code anzuzeigen, um ihn auf Ihrem Mobilgerät einzuscannen.</p>"
+	},
+	"login_introPanel4_Message": {
+		"message": "<h4>Mit einem anderen Dienst synchronisieren</h4><p>Standardmäßig werden Ihre Daten mit dem offiziellen xBrowserSync Dienst synchronisiert, obwohle jeder seinen eigenen <a href='https://github.com/xBrowserSync/API' class='new-tab'>xBrowserSync Dienst</a> betreiben kann, sowohl für den privaten Gebrauch (für ultimative Sicherheit und Privatsphäre) oder um ihn öffentlich zu betreiben, so dass mehr Menschen sich an xBrowserSync erfreuen können.</p><p>Prüfen Sie die verfügbaren <a href='https://www.xbrowsersync.org/#status' class='new-tab'>xBrowserSync Dienste</a> und wechseln Sie den Dienst in den Einstellungen.</p>"
+	},
+	"login_introPanel5_Message": {
+		"message": "<h4>Neuer Dienst, neue ID</h4><p>Ihre xBrowserSync ID funktioniert nur mit dem Dienst, von dem sie erzeugt wurde.</p><p>Wenn Sie den Dienst wechseln, müssen Sie einen neuen Sync erstellen und erhalten eine neue ID. Sie können Ihre bereits synchronisierten Daten umziehen, indem Sie im alten Dienst eine Datensicherung erstellen und diese auf dem neuen Dienst einspielen nachdem die Synchronisierung eingerichtet ist.</p>"
+	},
+	"login_introPanel6_Message": {
+		"message": "<h4>Lesezeichen durchsuchen</h4><p>Einmal synchronisiert drücken Sie einfach die Eingabetaste, um Ihre Lesezeichen in chronologischer Reihenfolge anzuzeigen. Oder tippen Sie Schlüsselwörter oder eine URL um die Lesezeichen zu durchsuchen.</p><p>Fahren Sie mit der Maus über ein Lesezeichen und klicken Sie auf den Stift, um ein Lesezeichen zu bearbeiten oder zu löschen.</p>"
+	},
+	"login_introPanel7_Message": {
+		"message": "<h4>Lesezeichen hinzufügen</h4><p>Lesezeichen können leicht zu xBrowserSync hinzugefügt werden mit jeder Anwendung, die URLs teilt, zum Beispiel Browser, YouTube, Spotify und viele andere.</p><p>Die Eigenschaften des Lesezeichens werden für Sie ermittelt; anderenfalls fügen Sie eine Beschreibung und Schlüsselwörter hinzu, um bessere Suchergebnisse zu erhalten.</p>"
+	},
+	"login_introPanel8_Message": {
+		"message": "<h4>Browsereigene Features unterstützt</h4><p>Sie können die Browsereigenen Lesezeichenfunktionen weiterhin nutzen. Alle Änderungen werden automatisch im Hintergrund synchronisiert.</p><p>Falls Sie Ihre Lesezeichen mit Ordnern organisiert haben, ist das kein Problem. xBrowserSync wird die vorhandene Ordnerstruktur beibehalten.</p>"
+	},
+	"login_introPanel9_Message": {
+		"message": "<h4>Sicherung nicht vergessen</h4><pWenn Sie xBrowserSync verwenden, liegt die Verwantwortung für Datensicherungen in Ihrer Hand.</p><p>Sie können das einfach in den Einstellungen durchführen. Sie können Ihre unverschlüsselten Daten in eine lokale Datei sichern, die jederzeit wiederhergestellt werden kann.</p>"
+	},
+	"login_introPanel10_Message": {
+		"message": "<h4>Tastaturkürzel xBrowserSync</h4><p>Um Ihre Lesezeichen schnell durchsuchen zu können, fügen Sie ein Tastaturkürzel zum Aufruf der Erweiterung hiunzu.</p><p>Rufen Sie chrome://extensions/ auf. Die Tastaturkürzel finden Sie dann links oben im Hamburgermenü."
+	},
+	"login_introPanel11_Message": {
+		"message": "<h4>Verwenden Sie MobilApps</h4><p>Greifen Sie von unterwegs auf Ihre Lesezeichen mit der xBrowserSync MobilApp zu, die Sie in den iOS und Android App Stores finden.</p>"
+	},
+	"login_introPanel12_Message": {
+		"message": "<h4>Problem gefunden?</h4><p>Falls Sie einen Fehler in xBrowserSync gefunden haben oder sich ein bestimmtes Feature wünschen, gehen Sie zu GitHub und <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>melden Sie ein Problem</a>.</p><p>Ein Aufruf an alle Programmierer! Wenn Sie xBrowserSync verbessern möchten, erstellen Sie einen Fork von dem<a href='https://github.com/xBrowserSync/App' class='new-tab'>xBrowserSync GitHub Repo</a> und senden Sie einen Pull Request.</p>"
+	},
+	"button_Settings_Label": {
+		"message": "Einstellungen"
+	},
+	"button_AddBookmark_Label": {
+		"message": "Lesezeichen hinzufügen"
+	},
+	"button_DeleteBookmark_Label": {
+		"message": "Lesezeichen löschen"
+	},
+	"button_EditBookmark_Label": {
+		"message": "Lesezeichen bearbeiten"
+	},
+	"button_ShareBookmark_Label": {
+		"message": "Lesezeichen teilen"
+	},
+	"login_PasswordConfirmationField_Label": {
+		"message": "Confirm password"
+	},
+	"login_PasswordField_Label": {
+		"message": "Verschlüssellungspasswort"
+	},
+	"login_PasswordField_New_Description": {
+		"message": "Verschlüssellungspasswort eingeben"
+	},
+	"login_PasswordField_Existing_Description": {
+		"message": "Ihr Verschlüssellungspasswort"
+	},
+	"login_IdField_Label": {
+		"message": "ID"
+	},
+	"login_IdField_Description": {
+		"message": "Ihre xBrowserSync ID"
+	},
+	"button_ScanCode_Label": {
+		"message": "Suche Ihre xBrowserSync ID"
+	},
+	"button_DisableSync_Label": {
+		"message": "Synchronisierung deaktivieren"
+	},
+	"button_EnableSync_Label": {
+		"message": "Sync"
+	},
+	"button_ExistingSync_Label": {
+		"message": "Haben Sie bereits eine ID?"
+	},
+	"button_NewSync_Label": {
+		"message": "Neuen Sync erstellen"
+	},
+	"login_ConfirmSync_Title": {
+		"message": "Broswerdaten überschreiben?"
+	},
+	"login_ConfirmSync_Message": {
+		"message": "Die xBrowserSync-Daten werden Ihre lokalen Browser-Daten überschreiben. OK zum Fortsetzen?"
+	},
+	"login_UpgradeSync_Title" : {
+		"message":  "Ready to upgrade sync?"
+	},
+	"login_UpgradeSync_Message" : {
+		"message":  "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
+	},
+	"login_Updated_Message": {
+		"message":  "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
+	},
+	"login_Updated_Title": {
+		"message":  "Updated to v"
+	},
+	"button_Confirm_Label": {
+		"message": "Ja"
+	},
+	"button_Deny_Label": {
+		"message": "Nein"
+	},
+	"search_Field_Description": {
+		"message": "Einfach tippen, um nach Lesezeichen zu suchen oder Eingabetaste .."
+	},
+	"search_NoBookmarks_Message": {
+		"message": "Sie haben keine Lesezeichen. Fügen Sie welche hinzu!"
+	},
+	"search_NoResults_Message": {
+		"message": "Keine Lesezeichen gefunden"
+	},
+	"shareBookmark_Message": {
+		"message": "Lesezeichen teilen mit"
+	},
+	"bookmarkShared_Message": {
+		"message": "geteilt von xBrowserSync"
+	},
+	"settings_Sync_SyncToolbarConfirmation_Message": {
+		"message": "<p>Das Synchronisieren der Lesezeichen-Symbolleiste wird alle Lesezeichen in der Symbolleiste mit den synchronisierten Lesezeichen ersetzen.</p><p>OK zum Fortsetzen?</p>"
+	},
+	"settings_Sync_ConfirmCancelSync_Message": {
+		"message": "<p>Die Synchronisation läuft gerade. Wenn Sie fortfahren werden Ihre lokalen Daten unvollständig sein.</p><p>OK zum Fortsetzen?</p>"
+	},
+	"settings_Sync_Id_Description": {
+		"message": "Benutzen Sie Ihre ID, um mit anderen Geräten zu synchronisieren (Klick für QR-Code)."
+	},
+	"settings_Sync_SyncToolbar_Description": {
+		"message": "Deaktivieren Sie diese Einstellung wenn Sie in der Symbolleiste die Lesezeichen nur lokal verwalten und nicht synchronisieren möchten. Das kann hilfreich sein, wenn Sie verschiedene Browser synchronisieren."
+	},
+	"settings_Service_ServiceUrl_Label": {
+		"message": "Url"
+	},
+	"settings_Service_ServiceUrl_Description": {
+		"message": "xBrowserSync Dienst aktuell aktiv."
+	},
+	"settings_Service_Status_Label": {
+		"message": "Status"
+	},
+	"settings_Service_Status_Description": {
+		"message": "Aktueller Dienst-Status."
+	},
+	"settings_Service_ServiceMessage_Label": {
+		"message": "Dienst-Meldungen"
+	},
+	"settings_Service_ChangeService_Label": {
+		"message": "Dienst ändern"
+	},
+	"settings_Service_ChangeService_Description": {
+		"message": "Zu einem anderen xBrowserSync Dienst wechseln."
+	},
+	"settings_BackupRestore_Backup_Label": {
+		"message": "Backup"
+	},
+	"settings_BackupRestore_BackupLocal_Description": {
+		"message": "Sichern der lokalen Browser-Daten in eine Datei."
+	},
+	"settings_BackupRestore_BackupSynced_Description": {
+		"message": "Sichern der synchronisierten Daten in eine Datei."
+	},
+	"settings_BackupRestore_Restore_Label": {
+		"message": "Wiederherstellen"
+	},
+	"settings_BackupRestore_RestoreLocal_Description": {
+		"message": "Wiederherstellen der lokal Browser-Daten aus einem Backup."
+	},
+	"settings_BackupRestore_RestoreSynced_Description": {
+		"message": "Wiederherstellen synchronisierter Daten aus einem Backup."
+	},
+	"settings_About_Title": {
+		"message": "Über"
+	},
+	"settings_About_AppVersion_Label": {
+		"message": "Version"
+	},
+	"settings_About_AppVersion_Description": {
+		"message": "Versionsnummer der xBrowserSync Erweiterung."
+	},
+	"settings_About_ReleaseNotes_Label": {
+		"message": "View Release Notes"
+	},
+	"settings_About_FAQs_Label": {
+		"message": "FAQs"
+	},
+	"settings_About_FAQs_Description": {
+		"message": "Got a question or having an issue? The answer might be in the FAQs."
+	},
+	"settings_About_ViewFAQs_Label": {
+		"message": "View FAQs"
+	},
+	"settings_About_Issues_Label": {
+		"message": "Problem-Tracker / Feature Requests"
+	},
+	"settings_About_Issues_Description": {
+		"message": "Melden Sie ein Problem mit der Erweiterung oder erstellen Sie einen neuen Feature Request."
+	},
+	"settings_About_RaiseIssue_Label": {
+		"message": "Raise Issue"
+	},
+	"settings_About_Contributions_Label": {
+		"message": "Mitwirken"
+	},
+	"settings_About_Contributions_Description": {
+		"message": "Wenn Sie xBrowserSync mögen und mit BTC die Entwicklungs- und Betriebskosten unterstützen möchten."
+	},
+	"settings_About_Contribute_Label": {
+		"message": "Become a Patron"
+	},
+	"settings_Debug_Title": {
+		"message": "Debug"
+	},
+	"settings_Debug_DeviceWidth_Label": {
+		"message": "Gerätebreite"
+	},
+	"settings_Debug_DeviceHeight_Label": {
+		"message": "Gerätehöhe"
+	},
+	"debugDisabled_Message" : {
+		"message":  "Debug mode disabled"
+	},
+	"debugEnabled_Message": {
+		"message": "Debugmodus aktiviert"
+	},
+	"settings_Service_Title": {
+		"message": "Dienst"
+	},
+	"settings_Service_Status_NoNewSyncs": {
+		"message": "Akzeptiert keine neuen Syncs"
+	},
+	"settings_Service_Status_Error": {
+		"message":  "Error"
+	},
+	"Settings_Service_Status_Loading": {
+		"message":  "Checking..."
+	},
+	"settings_Service_Status_Online": {
+		"message": "Online"
+	},
+	"settings_Service_Status_Offline": {
+		"message": "Offline"
+	},
+	"button_UpdateServiceUrl_Label": {
+		"message": "Dienst ändern"
+	},
+	"settings_Service_UpdateForm_Message": {
+		"message": "Geben Sie die URL eines alternativen xBrowserSync Dienstes an. Durchsuchen Sie die Liste der öffentlichen xBrowserSync Dienste <a href='https://www.xbrowsersync.org/#status' class='new-tab'>hier</a>."
+	},
+	"settings_Service_UpdateForm_Field_Description": {
+		"message": "xBrowserSync Dienst URL"
+	},
+	"button_Update_Label": {
+		"message": "Update"
+	},
+	"button_Cancel_Label": {
+		"message": "Abbruch"
+	},
+	"settings_Service_UpdateForm_Confirm_Message": {
+		"message": "<p>Nachdem der Dienst geändert wurde, wird der aktuelle Sync deaktiviert und Sie müssen einen neuen erstellen.</p><p>Wenn Sie mit diesem Dienst früher schon mal einen Sync eingerichtet hatten und auf die Daten zugreifen möchten, können Sie die frühere xBrowserSync ID verwenden.</p><p>OK zum Fortsetzen?</p>"
+	},
+	"settings_Service_UpdateForm_Required_Label": {
+		"message":  "xBrowserSync service URL is required"
+	},
+	"settings_Service_UpdateForm_InvalidService_Label": {
+		"message":  "Not a valid xBrowserSync service"
+	},
+	"settings_Service_UpdateForm_ServiceVersionNotSupported_Label": {
+		"message":  "This service is running an unsupported API version"
+	},
+	"settings_Service_UpdateForm_ServiceOffline_Label": {
+		"message":  "This service is currently offline"
+	},
+	"settings_BackupRestore_Title": {
+		"message": "Sichern und Wiederherstellen"
+	},
+	"settings_BackupRestore_NotAvailable_Message": {
+		"message": "Sichern und Wiederherstellen ist hier verfügbar, sobald einmal synchronisiert wurde."
+	},
+	"settings_BackupRestore_ICloudNotAvailable_Message": {
+		"message": "Bei iCloud anmelden, um Sichern and Wiederherstellen zu aktivieren."
+	},
+	"button_Backup_Label": {
+		"message": "Sichern"
+	},
+	"button_Restore_Label": {
+		"message": "Wiederherstellen"
+	},
+	"button_Done_Label": {
+		"message": "Fertig"
+	},
+	"button_Clear_Label": {
+		"message": "Löschen"
+	},
+	"button_Close_Label": {
+		"message": "Schließen"
+	},
+	"button_Back_Label": {
+		"message": "Zurück"
+	},
+	"settings_BackupRestore_BackupSuccess_Message": {
+		"message": "Wenn die Sicherung nicht automatisch heruntergeladen wird, Klicken Sie mit der rechten Maustaste auf den unten stehen den Link und wählen Sie 'Link speichern unter ..'."
+	},
+	"settings_BackupRestore_RestoreSuccess_Message": {
+		"message": "Ihren Daten wurden wiederhergestellt."
+	},
+	"settings_BackupRestore_RestoreForm_Message": {
+		"message": "Kopieren der Inhalte der Sicherungsdatei zur Wiederherstellung."
+	},
+	"settings_BackupRestore_RestoreForm_DataField_Label": {
+		"message": "Sicherungsdaten einfügen"
+	},
+	"button_SelectBackupFile_Label": {
+		"message": "Datei auswählen"
+	},
+	"button_RestoreData_Label": {
+		"message": "Daten wiederherstellen"
+	},
+	"button_RestoreData_Invalid_Label": {
+		"message": "Ungültige Daten"
+	},
+	"button_RestoreData_Ready_Label": {
+		"message": "Bereit zur Wiederherstellung"
+	},
+	"settings_Sync_Title": {
+		"message": "Sync"
+	},
+	"settings_Sync_NotAvailable_Message": {
+		"message": "Sync Einstellungen sind hier verfügbar, sobald einmal synchronisiert wurde."
+	},
+	"settings_Sync_Id_Label": {
+		"message": "Sync ID"
+	},
+	"settings_Sync_DisplayQRCode_Message": {
+		"message": "QR-Code anzeigen"
+	},
+	"settings_Service_DataUsage_Label": {
+		"message": "Datennutzung"
+	},
+	"settings_Sync_SyncToolbar_Label": {
+		"message": "Lesezeichen-Symbolleiste einschließen"
+	},
+	"settings_Service_DataUsage_Description": {
+		"message": "Sync-Datenmenge, die der Dienst, den Sie nutzen, gestattet."
+	},
+	"settings_BackupRestore_ConfirmRestore_Sync_Message": {
+		"message": "<p>Die wiederherzustellenden Daten werden Ihre synchronisierten Daten überschreiben.</p><p>OK zum Fortsetzen?</p>"
+	},
+	"settings_BackupRestore_ConfirmRestore_NoSync_Message": {
+		"message": "<p>As sync is currently disabled, the data being restored will overwrite the local browser data.</p><p>OK zum Fortsetzen?</p>"
+	},
+	"bookmark_Title_Add": {
+		"message": "Lesezeichen hinzufügen"
+	},
+	"bookmark_Title_Edit": {
+		"message": "Lesezeichen bearbeiten"
+	},
+	"bookmark_TitleField_Label": {
+		"message": "Title"
+	},
+	"bookmark_UrlField_Label": {
+		"message": "URL"
+	},
+	"bookmark_DescriptionField_Label": {
+		"message": "Beschreibung"
+	},
+	"bookmark_TagsField_Label": {
+		"message": "Schlüsselwörter"
+	},
+	"bookmark_TagsField_Description": {
+		"message": "Schlüsselwort 1, Schlüsselwort 2, Schlüsselwort 3, etc."
+	},
+	"bookmark_BookmarkForm_Required_Label": {
+		"message": "Bookmark URL is required"
+	},
+	"bookmark_BookmarkForm_Exists_Label": {
+		"message": "URL has already been bookmarked"
+	},
+	"button_AddTags_Label": {
+		"message": "Hinzufügen"
+	},
+	"button_DeleteTag_Label": {
+		"message": "Schlüsselwort entfernen"
+	},
+	"button_Delete_Label": {
+		"message": "Löschen"
+	},
+	"button_Share_Label": {
+		"message": "Teilen"
+	},
+	"working_Title": {
+		"message": "Arbeite .."
+	},
+	"working_Message": {
+		"message": "Fenster noch nicht schließen."
+	},
+	"connRestored_Title": {
+		"message": "Verbindung wiederhergestellt"
+	},
+	"connRestored_Message": {
+		"message": "Ihre xBrowserSync Änderungen wurden synchronisiert."
+	},
+	"error_Default_Title": {
+		"message": "Etwas ist schief gelaufen"
+	},
+	"error_Default_Message": {
+		"message": "Wenn das Problem weiterhin besteht, melden Sie es unter github.com/xBrowserSync/App."
+	},
+	"error_HttpRequestFailed_Title": {
+		"message": "Verbindung verloren"
+	},
+	"error_HttpRequestFailed_Message": {
+		"message": "Konnte keine Verbindung zum xBrowserSync Dienst herstellen. Prüfen Sie den Dienst-Status in den Einstellungen."
+	},
+	"error_HttpRequestFailedWhileUpdating_Title": {
+		"message": "Verbindung verloren"
+	},
+	"error_HttpRequestFailedWhileUpdating_Message": {
+		"message": "Die Synchronisierung wird automatisch wieder aufgenommen, sobald die Verbindung wiederhergestellt ist."
+	},
+	"error_TooManyRequests_Title": {
+		"message": "Langsamer!"
+	},
+	"error_TooManyRequests_Message": {
+		"message": "Zu viele Anforderungen gesendet. Die Synchronisierung wurde deaktiviert. Zum Fortsetzen wieder aktivieren."
+	},
+	"error_RequestEntityTooLarge_Title": {
+		"message": "Zulässige Synchronisierungsdatenmenge überschritten"
+	},
+	"error_RequestEntityTooLarge_Message": {
+		"message": "Unable to sync your data as it exceeds the size limit set by the xBrowserSync Dienst. Remove some old bookmarks and try again or switch to a different xBrowserSync Dienst that allows for larger syncs."
+	},
+	"error_NotAcceptingNewSyncs_Title": {
+		"message": "Dienst Akzeptiert keine neuen Syncs"
+	},
+	"error_NotAcceptingNewSyncs_Message": {
+		"message": "Die Daten können nicht synchronisiert werden, da der aktuelle xBrowserSync Dienst keine neuen Syncs mehr akzeptiert. Falls Sie bei diesem Dienst bereits einen Sync erstellt haben, geben Sie Ihre xBrowserSync ID an oder wechseln Sie zu einem alternativen Dienst."
+	},
+	"error_DailyNewSyncLimitReached_Title": {
+		"message": "Das tägliche Limit für neue Syncs wurde erreicht."
+	},
+	"error_DailyNewSyncLimitReached_Message": {
+		"message": "Es kann kein neuer Sync erstellt werden, da Sie Ihr tägliches Limit für neue Syncs auf diesem xBrowserSync Dienst erreicht haben. Synchronisieren Sie mit einer existierenden xBrowserSync ID, wählen Sie eine anderen Dienst oder versuchen Sie es morgen wieder."
+	},
+	"error_MissingClientData_Title": {
+		"message": "xBrowserSync ID oder Passwort fehlt"
+	},
+	"error_MissingClientData_Message": {
+		"message": "Sync wieder aktivieren und neu versuchen."
+	},
+	"error_NoDataFound_Title": {
+		"message": "Ungültige Sync ID"
+	},
+	"error_NoDataFound_Message": {
+		"message": "Für diese ID existiert kein Sync. Prüfen Sie Ihre xBrowserSync ID und die Dienst URL und versuchen Sie es erneut."
+	},
+	"error_IdRemoved_Title": {
+		"message": "Aufgrund von Inaktivität wurden die Daten entfernt"
+	},
+	"error_IdRemoved_Message": {
+		"message": "Erstellen Sie eine neue ID und stellen Sie die Daten aus einem Backup wieder her."
+	},
+	"error_NoDataToRestore_Title": {
+		"message": "Keine Daten zum Wiederherstellen"
+	},
+	"error_NoDataToRestore_Message": {
+		"message": "Stellen Sie sicher, dass Sie eine gültige xBrowserSync Sicherung angegeben haben."
+	},
+	"error_FailedGetLocalBookmarks_Title": {
+		"message": "Die lokalen Lesezeichen konnten nicht ermittelt werden"
+	},
+	"error_FailedGetLocalBookmarks_Message": {
+		"message": "Beim Versuch die lokalen Lesezeichen zu ermitteln ist ein Fehler aufgetreten."
+	},
+	"error_FailedCreateLocalBookmarks_Title": {
+		"message": "Es konnten keine Lesezeichen erstellt werden"
+	},
+	"error_FailedCreateLocalBookmarks_Message": {
+		"message": "Beim Versuch ein lokales Lesezeichen zu erstellen ist ein Fehler aufgetreten."
+	},
+	"error_FailedRemoveLocalBookmarks_Title": {
+		"message": "Ein Lesezeichen konnten nicht überschrieben werden"
+	},
+	"error_FailedRemoveLocalBookmarks_Message": {
+		"message": "Beim Versuch ein lokales Lesezeichen zu überschreiben ist ein Fehler aufgetreten."
+	},
+	"error_InvalidData_Title": {
+		"message": "Die xBrowserSync Daten konnten nicht entschlüsselt werden"
+	},
+	"error_InvalidData_Message": {
+		"message": "Stellen Sie sicher, dass Ihr Verschlüssellungspasswort mit dem identisch ist, dass Sie bei der Erstellung des Sync angegeben haben."
+	},
+	"error_LastChangeNotSynced_Title": {
+		"message": "Die letzte Änderung wurde nicht synchronisiert"
+	},
+	"error_LastChangeNotSynced_Message": {
+		"message": "Die letzte Änderung wurde aufgrund eines Lesezeichenkonflikts nicht synchronisiert. Es wäre eine gute Idee, vor dem erneuten Versuch den Sync zu deaktivieren und wieder zu aktivieren."
+	},
+	"error_BookmarkNotFound_Title": {
+		"message": "Lesezeichen nicht gefunden"
+	},
+	"error_BookmarkNotFound_Message": {
+		"message": "Es sieht so aus, als wären Ihre Lesezeichen nicht mehr synchron. Es wäre eine gute Idee, vor dem erneuten Versuch den Sync zu deaktivieren und wieder zu aktivieren."
+	},
+	"error_OutOfSync_Title": {
+		"message": "Daten nicht mehr synchron"
+	},
+	"error_OutOfSync_Message": {
+		"message": "Die lokalen Daten sind nicht mehr synchron. Ihre letzte Änderung wurde nicht synchronisiert, so dass Sie diese Änderung nochmal ausführen müssen."
+	},
+	"error_ApiInvalid_Title" : {
+		"message":  "Invalid xBrowserSync service"
+	},
+	"error_ApiInvalid_Message" : {
+		"message":  "The selected service URL is not pointing to a valid xBrowserSync service."
+	},
+	"error_ApiVersionNotSupported_Title" : {
+		"message":  "Service not supported"
+	},
+	"error_ApiVersionNotSupported_Message" : {
+		"message":  "This service is running an unsupported API version"
+	},
+	"error_ContainerChanged_Title": {
+		"message": "xBrowserSync Ordner geändert"
+	},
+	"error_ContainerChanged_Message": {
+		"message": "Das Ändern, Löschen oder Verschieben des xBrowserSync Ordners kann Probleme verursachen. Der Sync wurde deaktiviert. Aktivieren Sie ihn wieder, um Lesezeichen wiederherzustellen."
+	},
+	"error_NotImplemented_Title": {
+		"message": "Funktion nicht implementiert"
+	},
+	"error_NotImplemented_Message": {
+		"message": "Eine benötigte Funktion wurde noch nicht implementiert und bewirkt, dass xBrowserSync nicht korrekt arbeitet."
+	},
+	"error_FailedGetPageMetadata_Title": {
+		"message": "Couldn’t get URL metadata"
+	},
+	"error_FailedGetPageMetadata_Message": {
+		"message": "URL is invalid or webpage data could not be retrieved."
+	},
+	"error_SyncInterrupted_Title": {
+		"message": "Sync unterbrochen"
+	},
+	"error_SyncInterrupted_Message": {
+		"message": "Eine Rücksynchronisation wurde unterbrochen und ist nicht komplett. Reaktivieren Sie den Sync, um Ihre synchronisierten Daten wiederherzustellen."
+	},
+	"error_ScanFailed_Title": {
+		"message": "Scan fehlgeschlagen"
+	},
+	"error_ShareFailed_Title": {
+		"message": "Teilen fehlgeschlagen"
+	},
+	"error_FailedBackupData_Title": {
+		"message": "Sicherung fehlgeschlagen"
+	}
+}

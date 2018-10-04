@@ -8,6 +8,7 @@
   },
   "default_locale": "en",
   "browser_action": {
+    "browser_style": false,
     "default_icon": {
         "19": "img/browser-action-off.png"
     },

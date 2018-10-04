@@ -3,7 +3,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 /* ------------------------------------------------------------------------------------
  * Class name:	xBrowserSync.App.Background
- * Description:	Initialises Chrome background required functionality; registers events; 
+ * Description:	Initialises Firefox background required functionality; registers events; 
  *              listens for sync requests.
  * ------------------------------------------------------------------------------------ */
 
@@ -28,9 +28,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 				case 'update':
 					if (details.previousVersion &&
 						details.previousVersion !== chrome.runtime.getManifest().version) {
-						// Remove obsolete cached page metadata
-						localStorage.removeItem('xBrowserSync-metadataColl');
-
 						// If extension has been updated, display updated message and disable sync
 						globals.DisplayUpdated.Set(true);
 						bookmarks.DisableSync();
@@ -45,7 +42,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 				globals.IsSyncing.Set(false);
 
 				// Disable sync
-				globals.SyncEnabled.Set(false);
+				bookmarks.DisableSync();
 
 				// Display alert
 				displayAlert(
@@ -76,13 +73,13 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 				});
 		};
 
-		chrome.runtime.onConnect.addListener(listenForMessages);
-		chrome.runtime.onMessage.addListener(handleMessage);
-		chrome.alarms.onAlarm.addListener(handleAlarm);
-		chrome.bookmarks.onCreated.addListener(createBookmark);
-		chrome.bookmarks.onRemoved.addListener(removeBookmark);
-		chrome.bookmarks.onChanged.addListener(changeBookmark);
-		chrome.bookmarks.onMoved.addListener(moveBookmark);
+		browser.runtime.onConnect.addListener(listenForMessages);
+		browser.runtime.onMessage.addListener(handleMessage);
+		browser.alarms.onAlarm.addListener(handleAlarm);
+		browser.bookmarks.onCreated.addListener(createBookmark);
+		browser.bookmarks.onRemoved.addListener(removeBookmark);
+		browser.bookmarks.onChanged.addListener(changeBookmark);
+		browser.bookmarks.onMoved.addListener(moveBookmark);
 	};
 
 
@@ -163,7 +160,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 			callback = null;
 		}
 
-		chrome.notifications.create('xBrowserSync-notification', options, callback);
+		browser.notifications.create('xBrowserSync-notification', options, callback);
 	};
 
 	var getLatestUpdates = function () {
@@ -362,47 +359,47 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 };
 
 // Initialise the angular app
-xBrowserSync.App.ChromeBackground = angular.module('xBrowserSync.App.ChromeBackground', []);
+xBrowserSync.App.FirefoxBackground = angular.module('xBrowserSync.App.FirefoxBackground', []);
 
 // Disable debug info
-xBrowserSync.App.ChromeBackground.config(['$compileProvider', function ($compileProvider) {
+xBrowserSync.App.FirefoxBackground.config(['$compileProvider', function ($compileProvider) {
 	$compileProvider.debugInfoEnabled(false);
 }]);
 
 // Add platform service
 xBrowserSync.App.Platform.$inject = ['$q'];
-xBrowserSync.App.ChromeBackground.factory('platform', xBrowserSync.App.Platform);
+xBrowserSync.App.FirefoxBackground.factory('platform', xBrowserSync.App.Platform);
 
 // Add global service
 xBrowserSync.App.Global.$inject = ['platform'];
-xBrowserSync.App.ChromeBackground.factory('globals', xBrowserSync.App.Global);
+xBrowserSync.App.FirefoxBackground.factory('globals', xBrowserSync.App.Global);
 
 // Add httpInterceptor service
 xBrowserSync.App.HttpInterceptor.$inject = ['$q', 'globals'];
-xBrowserSync.App.ChromeBackground.factory('httpInterceptor', xBrowserSync.App.HttpInterceptor);
-xBrowserSync.App.ChromeBackground.config(['$httpProvider', function ($httpProvider) {
+xBrowserSync.App.FirefoxBackground.factory('httpInterceptor', xBrowserSync.App.HttpInterceptor);
+xBrowserSync.App.FirefoxBackground.config(['$httpProvider', function ($httpProvider) {
 	$httpProvider.interceptors.push('httpInterceptor');
 }]);
 
 // Add utility service
 xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'globals'];
-xBrowserSync.App.ChromeBackground.factory('utility', xBrowserSync.App.Utility);
+xBrowserSync.App.FirefoxBackground.factory('utility', xBrowserSync.App.Utility);
 
 // Add api service
 xBrowserSync.App.API.$inject = ['$http', '$q', 'globals', 'utility'];
-xBrowserSync.App.ChromeBackground.factory('api', xBrowserSync.App.API);
+xBrowserSync.App.FirefoxBackground.factory('api', xBrowserSync.App.API);
 
 // Add bookmarks service
 xBrowserSync.App.Bookmarks.$inject = ['$q', '$timeout', 'platform', 'globals', 'api', 'utility'];
-xBrowserSync.App.ChromeBackground.factory('bookmarks', xBrowserSync.App.Bookmarks);
+xBrowserSync.App.FirefoxBackground.factory('bookmarks', xBrowserSync.App.Bookmarks);
 
 // Add platform implementation service
 xBrowserSync.App.PlatformImplementation.$inject = ['$http', '$interval', '$q', '$timeout', 'platform', 'globals', 'utility', 'bookmarks'];
-xBrowserSync.App.ChromeBackground.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
+xBrowserSync.App.FirefoxBackground.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add background module
 xBrowserSync.App.Background.$inject = ['$q', 'platform', 'globals', 'utility', 'api', 'bookmarks', 'platformImplementation'];
-xBrowserSync.App.ChromeBackground.controller('Controller', xBrowserSync.App.Background);
+xBrowserSync.App.FirefoxBackground.controller('Controller', xBrowserSync.App.Background);
 
 // Set synchronous event handlers
 chrome.runtime.onInstalled.addListener(function () {

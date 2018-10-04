@@ -1,0 +1,33 @@
+<div class="header-panel clearfix">
+  <button class="btn btn-icon btn-help animate-fade" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}"
+    data-ng-click="vm.events.introPanel_ShowHelp_Click()" data-ng-show="!vm.introduction.displayIntro() && !!vm.introduction.showLogo"
+    tabindex="1000">
+    <i class="fa fa-question-circle" aria-hidden="true"></i>
+    <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}</span>
+  </button>
+  <button class="btn btn-icon btn-settings" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}"
+    data-ng-click="vm.view.change(vm.view.views.settings)" tabindex="1001">
+    <i class="fa fa-cog" aria-hidden="true"></i>
+    <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}</span>
+  </button>
+</div>
+<div class="intro-panel">
+  <h1 class="animate-fade-out">
+    <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Title) }}</span>
+  </h1>
+</div>
+<div class="confirm confirm-updated well well-sm animate-fade">
+  <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_Updated_Title) + vm.globals.AppVersion }}</h4>
+  <p>{{ vm.platform.GetConstant(vm.globals.Constants.Login_Updated_Message) }}</p>
+  <div class="buttons">
+    <button id="releaseNotesBtn" type="button" class="btn btn-default" tabindex="1" data-ng-click="vm.events.updatedPanel_ReleaseNotes_Click()">
+      {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_ReleaseNotes_Label) }}
+    </button>
+    <button type="button" class="btn btn-default" tabindex="2" data-ng-click="vm.view.displayMainView()">
+      {{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}
+    </button>
+  </div>
+</div>
+<div class="background">
+  <div class="background-img"></div>
+</div>

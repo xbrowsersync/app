@@ -1,4 +1,6 @@
 (function () {
+	'use strict';
+
 	var metaTagsArr = document.getElementsByTagName('meta');
 
 	var getPageDescription = function () {
@@ -69,6 +71,12 @@
 		description: getPageDescription(),
 		tags: getPageKeywords()
 	};
+
+	// Send metadata to background script to be cached
+	browser.runtime.sendMessage({
+		command: 4,
+		metadata: metadata
+	});
 
 	// Return metadata to caller
 	return metadata;

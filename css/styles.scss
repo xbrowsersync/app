@@ -3,28 +3,40 @@
 @import 'animations.scss';
 
 @font-face {
-    font-family: $font-roboto;
-    src: url($font-roboto-path + 'Roboto-Condensed.ttf');
+    font-family: $font-roboto-condensed;
+    src: url($font-path + '/roboto-condensed/roboto-condensed-latin-400.woff2') format('woff2');
 }
 
 @font-face {
-    font-family: $font-roboto;
-    src: url($font-roboto-path + 'Roboto-BoldCondensed.ttf');
+    font-family: $font-roboto-condensed;
+    src: url($font-path + '/roboto-condensed/roboto-condensed-latin-700.woff2') format('woff2');
 	font-weight: bold;
 }
 
 @font-face {
-    font-family: $font-roboto;
-    src: url($font-roboto-path + 'Roboto-CondensedItalic.ttf');
+    font-family: $font-roboto-condensed;
+    src: url($font-path + '/roboto-condensed/roboto-condensed-latin-400italic.woff2') format('woff2');
 	font-style: italic;
 }
 
 @font-face {
-    font-family: $font-roboto;
-    src: url($font-roboto-path + 'Roboto-BoldCondensedItalic.ttf');
+    font-family: $font-roboto-condensed;
+    src: url($font-path + '/roboto-condensed/roboto-condensed-latin-700italic.woff2') format('woff2');
 	font-weight: bold;
 	font-style: italic;
 }
+
+@font-face {
+    font-family: $font-source-code-pro;
+    src: url($font-path + '/source-code-pro/SourceCodePro-Regular.otf.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: $font-font-awesome;
+    src: url($font-path + '/font-awesome/fontawesome-webfont.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+  }
 
 * {
     box-shadow: none!important;
@@ -32,11 +44,10 @@
 }
 
 body {
-    font-family: $font-stack;
+    font-family: $font-stack-regular;
     color: $colour-text1;
     font-size: 14px;
     line-height: 1.25em;
-    @include background-gradient(20deg, $colour-bg1, 0, $colour-bg2, 100%);
 
     h1 {
         background: url("../img/logo.svg") 50% 40% no-repeat;
@@ -236,7 +247,7 @@ body {
             position: absolute;
             top: -30em;
             z-index: 0;
-            @include animation(animation-scroll 150s linear infinite);
+            @include animation(animation-scroll 100s linear infinite);
         }
     }
 
@@ -301,7 +312,10 @@ body {
     }
     
     .container {
+        height: 100%;
         width: 100%;
+        position: relative;
+        overflow-y: auto;
         padding: 0;
         margin: 0;
     }
@@ -337,6 +351,18 @@ body {
                 color: $colour-danger!important;
                 opacity: 0.7;
             }
+        }
+
+        .validation {
+            color: rgba($colour-danger, 0.75)!important;
+            font-size: .8em;
+            line-height: 1.2em;
+            position: absolute;
+            bottom: -0.5em;
+            right: 1.3em;
+            background: $colour-text1;
+            padding: 0 0.3em;
+            border-radius: $border-radius-well;
         }
     }
     
@@ -391,13 +417,6 @@ body {
 
     .margin-bottom-15 {
         margin-bottom: 15px!important;
-    }
-    
-    .overflow-ellipses {
-        display: inline-block;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
 
     .progress-bar-success {
@@ -454,6 +473,7 @@ body {
         border: none;
         padding: 1em 1.25em;
         margin-bottom: 1em;
+        @include box-shadow;
     
         &:last-child {
             margin-bottom: 0;
@@ -462,6 +482,25 @@ body {
         &.dark {
             background-color: $colour-text2;
             color: $colour-text1;
+
+            a {
+                border-bottom-color: $colour-text1;
+
+                &.active,
+                &:active,
+                &:focus,
+                &:hover {
+                    border-bottom-color: $colour-link-highlight;
+                }
+            }
+        }
+
+        a {
+            border-bottom-color: $colour-text2;
+        }
+
+        h4 {
+            text-align: center;
         }
 
         input:not([type]).form-control, input[type="text"].form-control {
@@ -520,6 +559,10 @@ body {
         display: flex;
         flex-flow: column;
         height: 100%;
+
+        .form-group {
+            position: relative;
+        }
     }
 
     .btn-delete-bookmark {
@@ -551,8 +594,7 @@ body {
         overflow-x: hidden;
         
         .label {
-            display: block;
-            float: left;
+            display: inline-flex;
             margin: 0px 5px 5px 0;
             color: $colour-text1;
             background-color: $colour-text2;
@@ -561,21 +603,31 @@ body {
             font-size: 0.9em;
             font-weight: normal;
             text-transform: capitalize;
-            padding: 6px 8px;
+            line-height: 1.3em;
+            max-width: 99%;
             
             &:hover {
                 cursor: pointer;
+                color: $colour-text1;
                 
                 i {
                     color: $colour-link-highlight;
-                    opacity: 1;
                 }
             }
             
             i {
                 transition: color, ease-in-out, 0.2s;
                 font-size: 0.9em;
-                opacity: 0.5;
+                color: $colour-link;
+                margin: 0.25em 0 0 0.25em;
+            }
+
+            span {
+                @include text-overflow-ellipsis;
+
+                &:hover {
+                    color: inherit;
+                }
             }
         }
     }
@@ -610,7 +662,7 @@ body {
     }
 }
 
-#login-panel {
+#login-panel, #updated-panel {
     form {
         position: relative;
         
@@ -642,16 +694,28 @@ body {
     .confirm {
         position: relative;
         z-index: 10;
+
+        &.confirm-upgrade {
+            margin-top: -4.7em;
+        }
     }
 
     .form-group {
         position: relative;
         margin-bottom: 1.2em;
 
+        &:last-child {
+            margin-bottom: 0;
+        }
+
         input {
-            font-size: 1.2em;
-            line-height: 1.3em;
+            font-family: $font-stack-code;
+            line-height: 1.45em;
             padding: .5em 0 .5em .9em;
+            @include placeholder {
+                font-family: $font-stack-regular;
+                font-size: 1.2em;
+            }
         }
     }
 
@@ -675,6 +739,7 @@ body {
             overflow: hidden;
             font-size: 0.95em;
             line-height: 1.4em;
+            box-shadow: none!important;
 
             & > div {
                 position: relative;
@@ -708,19 +773,31 @@ body {
         }
     }
 
-    .login-form-new {
+    .login-form-new, .login-form-existing {
         a {
-            font-size: 1.1em;
+            &.active,
+            &:active,
+            &:focus,
+            &:hover {
+                color: $colour-text2;
+                border-bottom-color: $colour-text2;
+            }
         }
     }
     
-    .secret-form-group {
-        input {
+    .login-form-new {
+        input[name=txtPassword] {
             position: relative;
             z-index: 20;
             background: transparent;
         }
 
+        .get-sync-id {
+            display: none;
+        }
+    }
+    
+    .secret-form-group {
         .progress, .progress-bar-background {
             position: absolute;
             top: 0;
@@ -744,6 +821,11 @@ body {
             background-color: $colour-text1;
         }
     }
+
+    .toggle-form {
+        text-align: center;
+        margin-top: 1.2em;
+    }
 }
 
 #search-panel {
@@ -756,6 +838,7 @@ body {
             flex: none;
             padding-right: 10px;
             margin-bottom: 0;
+            padding-bottom: 0.75em;
 
             .btn {
                 &.btn-toggle-bookmark {
@@ -820,9 +903,9 @@ body {
         
         .search-results-panel {
             flex: 0 1 100%;
+            overflow-x: visible;
             overflow-y: auto;
             padding: 0 10px 0 0;
-            margin-top: 0.75em;
             
             &.ng-hide {
                 margin-top: 0;
@@ -832,7 +915,7 @@ body {
                 font-size: 1.4em;
                 font-weight: normal;
                 text-align: center;
-                margin: 0 10px 10px;
+                margin: 2px 10px 10px;
                 position: relative;
                 z-index: 10;
             }
@@ -847,10 +930,13 @@ body {
                 border-radius: $border-radius-well;
                 padding: 0;
                 margin: 0 0 0.75em 0;
+                @include box-shadow;
             
                 &:hover {
                     .btn-edit-bookmark {
-                        display: block;
+                        i {
+                            opacity: 0.4;
+                        }
                     }
 
                     .list-group-item-heading {
@@ -881,11 +967,20 @@ body {
                 }
                 
                 .btn-edit-bookmark {
-                    display: none;
                     position: absolute;
-                    top: 7px;
+                    top: 10px;
                     right: 10px;
-                    padding: 5px;
+                    font-size: 1.2em;
+
+                    &:hover {
+                        i {
+                            opacity: 1;
+                        }
+                    }
+
+                    i {
+                        opacity: 0;
+                    }
                 }
 
                 .menu {
@@ -953,6 +1048,7 @@ body {
                 line-height: 1.1em;
                 margin-bottom: 0.2em;
                 transition: all, ease-in-out, 0.2s;
+                @include text-overflow-ellipsis;
             }
             
             .list-group-item-text {
@@ -1043,8 +1139,9 @@ body {
             }
         }
         
-        .github-url, .issues-url, .contribute-link {
+        .github-url, .issues-url, .contribute-url, .website-url {
             @extend .form-control-url;
+            @include text-overflow-ellipsis;
         }
 
         .latest-updates {
@@ -1080,7 +1177,7 @@ body {
                 padding-left: 1.2em;
 
                 li {
-                    font-family: 'courier new';
+                    font-family: $font-stack-code;
                     font-size: 0.85em;
                 }
             }
@@ -1096,7 +1193,7 @@ body {
                 height: 12em!important;
                 margin-bottom: 15px;
                 border: 1px solid $colour-text2!important;
-                font-family: "courier new", sans-serif;
+                font-family: $font-stack-code;
                 font-size: 0.8em!important;
             }
 
@@ -1114,6 +1211,21 @@ body {
                     width: 100%;
                 }
             }
+        }
+    }
+
+    .debug-panel {
+        .message-log > ul {
+            font-family: $font-stack-code;
+            font-size: 0.7em;
+            line-height: 1.2em;
+            list-style: none;
+            margin-bottom: 0;
+            padding-left: 0;
+            word-wrap: normal;
+            white-space: nowrap;
+            overflow: auto;
+            max-height: 30vh;
         }
     }
 
@@ -1167,14 +1279,17 @@ body {
         }
     }
 
+    .header-panel, .panel-container {
+        padding-left: 0.75em;
+        padding-right: 0.75em;
+    }
+
     .header-panel {
         flex: none;
-        padding-right: 0.75em;
     }
 
     .panel-container {
         overflow-y: scroll;
-        padding-right: 0.75em;
     }
 
     .status-panel {
@@ -1226,6 +1341,11 @@ body {
 
         .service-url {
             @extend .form-control-url;
+            @include text-overflow-ellipsis;
+        }
+
+        .status-text {
+            color: $colour-link;
         }
 
         .update-service-url {
@@ -1235,14 +1355,6 @@ body {
                 width: 100%;
                 margin: 15px 0;
                 border: 1px solid $colour-text2!important;
-
-                &.ng-invalid {
-                    color: $colour-danger;
-                    @include placeholder {
-                        color: $colour-danger;
-                        opacity: 0.7;
-                    }
-                }
             }
         }
     }
@@ -1259,13 +1371,15 @@ body {
 
         .id-url {
             @extend .form-control-url;
+            font-family: $font-stack-code;
+            font-size: 0.97em;
         }
     }
 
     .view-content {
         display: flex;
         flex-flow: column;
-        padding: 0.75em 0 0 0.75em;
+        padding: 0.75em 0 0 0;
     }
     
     .well {
@@ -1298,6 +1412,16 @@ body {
         top: 50%;
         margin: -55px 0 0 -55px;
         border: solid 10px white;
+    }
+}
+
+#updated-panel {
+    .confirm-updated {
+        margin-top: -0.1em;
+    }
+
+    .header-panel {
+        visibility: hidden;
     }
 }
 

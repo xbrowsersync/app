@@ -366,7 +366,7 @@
 		"message":  "Sync settings will be available here once you are synced."
 	},
 	"settings_Sync_Id_Label" : {
-		"message":  "xBrowserSync ID"
+		"message":  "Sync ID"
 	},
 	"settings_Sync_DisplayQRCode_Message" : {
 		"message":  "Display QR code"
@@ -378,7 +378,7 @@
 		"message":  "Include bookmarks bar"
 	},
 	"settings_Service_DataUsage_Description" : {
-		"message":  "How much of the sync data allowed by the service are you using."
+		"message":  "How much of the data limit for this service is your current sync using."
 	},
 	"settings_BackupRestore_ConfirmRestore_Sync_Message" : {
 		"message":  "<p>As sync is currently enabled, the data being restored will overwrite your synced data.</p><p>To restore data to the local browser only, disable sync before restoring.</p><p>OK to proceed?</p>"
