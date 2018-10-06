@@ -676,15 +676,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		// Export bookmarks
 		bookmarks.Export()
 			.then(function (data) {
-				var date = new Date();
-				var minute = ('0' + date.getMinutes()).slice(-2);
-				var hour = ('0' + date.getHours()).slice(-2);
-				var day = ('0' + date.getDate()).slice(-2);
-				var month = ('0' + (date.getMonth() + 1)).slice(-2);
-				var year = date.getFullYear();
-				var dateString = year + month + day + hour + minute;
-				var fileName = 'xBrowserSyncBackup_' + dateString + '.txt';
-
+				var fileName = utility.GetBackupFileName();
 				var saveBackupFileError = function () {
 					return deferred.reject({ code: globals.ErrorCodes.FailedBackupData });
 				};

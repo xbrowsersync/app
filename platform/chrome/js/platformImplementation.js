@@ -128,17 +128,9 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		// Export bookmarks
 		return bookmarks.Export()
 			.then(function (data) {
-				var date = new Date();
-				var minute = ('0' + date.getMinutes()).slice(-2);
-				var hour = ('0' + date.getHours()).slice(-2);
-				var day = ('0' + date.getDate()).slice(-2);
-				var month = ('0' + (date.getMonth() + 1)).slice(-2);
-				var year = date.getFullYear();
-				var dateString = year + month + day + hour + minute;
-
 				// Trigger download 
 				var backupLink = document.getElementById('backupLink');
-				var fileName = 'xBrowserSyncBackup_' + dateString + '.txt';
+				var fileName = utility.GetBackupFileName();
 				var file = new Blob([JSON.stringify(data)], { type: 'text/plain' });
 				backupLink.href = URL.createObjectURL(file);
 				backupLink.innerHTML = fileName;

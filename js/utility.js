@@ -173,6 +173,18 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 			});
 	};
 
+	var getBackupFileName = function () {
+		var date = new Date();
+		var minute = ('0' + date.getMinutes()).slice(-2);
+		var hour = ('0' + date.getHours()).slice(-2);
+		var day = ('0' + date.getDate()).slice(-2);
+		var month = ('0' + (date.getMonth() + 1)).slice(-2);
+		var year = date.getFullYear();
+		var dateString = year + month + day + hour + minute;
+		var fileName = 'xBrowserSyncBackup_' + dateString + '.json';
+		return fileName;
+	};
+
 	var getErrorMessageFromException = function (err) {
 		var errorMessage = {
 			title: '',
@@ -463,6 +475,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 		DecryptData: decryptData,
 		EncryptData: encryptData,
 		DeepCopy: deepCopy,
+		GetBackupFileName: getBackupFileName,
 		GetErrorMessageFromException: getErrorMessageFromException,
 		GetTagArrayFromText: getTagArrayFromText,
 		GetPasswordHash: getPasswordHash,
