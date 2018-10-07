@@ -794,6 +794,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	};
 
 	var getPageMetadata = function (deferred) {
+		var inAppBrowser, inAppBrowserTimeout
+		
 		// If current url not set, return with default url
 		if (!currentUrl) {
 			return $q.resolve({ url: 'http://' });
@@ -808,6 +810,12 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		var handleResponse = function (pageContent, err) {
 			var parser, html;
 
+			// Cancel timeout
+			if (inAppBrowserTimeout) {
+				$timeout.cancel(inAppBrowserTimeout);
+                inAppBrowserTimeout = null;
+			}
+
 			// Check html content was returned
 			if (err || !pageContent) {
 				if (err) {
@@ -819,7 +827,14 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 				// Reset current url
 				currentUrl = null;
 
-				return deferred.reject(errObj);
+				// Return error
+				deferred.reject(errObj);
+
+				// Close InAppBrowser
+				inAppBrowser.close();
+				inAppBrowser = null;
+
+				return;
 			}
 
 			// Extract metadata properties
@@ -915,7 +930,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 			handleResponse(null, 'Network disconnected.');
 		}
 		else {
-			var inAppBrowser = cordova.InAppBrowser.open(currentUrl, '_blank', 'location=yes,hidden=yes');
+			inAppBrowser = cordova.InAppBrowser.open(currentUrl, '_blank', 'location=yes,hidden=yes');
 
 			inAppBrowser.addEventListener('loaderror', function (err) {
 				if (!!err && !!err.code && err.code === -999) {
@@ -932,15 +947,15 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 						"(function() { var elements = document.querySelectorAll('video,script'); for (var i = 0; i < elements.length; i++) { elements[i].parentNode.removeChild(elements[i]); } })();" +
 						"document.querySelector('html').outerHTML;"
 				},
-					handleResponse);
+				handleResponse);
 			});
 
 			// Time out metadata load after 10 secs
-			$timeout(function () {
+			inAppBrowserTimeout = $timeout(function () {
 				if (deferred.promise.$$state.status === 0) {
 					handleResponse(null, 'Timed out retrieving page metadata.');
 				}
-			}, 10000);
+			}, 20000);
 		}
 
 		return deferred.promise;
@@ -1252,7 +1267,10 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 							window.plugins.webintent.getExtra(window.plugins.webintent.EXTRA_TEXT,
 								function (url) {
 									// Remove the intent
-									window.plugins.webintent.removeExtra(window.plugins.webintent.EXTRA_TEXT);
+									window.plugins.webintent.removeExtra(
+										window.plugins.webintent.EXTRA_TEXT,
+										function () { }
+									);
 
 									// Check the URL is valid
 									var match = (!!url) ? url.match(globals.Regex.Url) : null;
@@ -1266,7 +1284,10 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 						}
 						else {
 							// Can't use it so remove the intent
-							window.plugins.webintent.removeExtra(window.plugins.webintent.EXTRA_TEXT);
+							window.plugins.webintent.removeExtra(
+								window.plugins.webintent.EXTRA_TEXT,
+								function () { }
+							);
 
 							// Display alert
 							vm.alert.display(null, getConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title));
