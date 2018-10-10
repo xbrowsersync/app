@@ -647,9 +647,12 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		platform.AutomaticUpdates.Stop = stopAutoUpdates;
 		platform.BackupData = backupData;
 		platform.Bookmarks.Clear = clearBookmarks;
+		platform.Bookmarks.CreateSingle = createSingle;
+		platform.Bookmarks.DeleteSingle = deleteSingle;
 		platform.Bookmarks.Get = getBookmarks;
 		platform.Bookmarks.Populate = populateBookmarks;
 		platform.Bookmarks.Share = shareBookmark;
+		platform.Bookmarks.UpdateSingle = updateSingle;
 		platform.GetConstant = getConstant;
 		platform.GetCurrentUrl = getCurrentUrl;
 		platform.GetPageMetadata = getPageMetadata;
@@ -738,6 +741,14 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	};
 
 	var clearBookmarks = function () {
+		return $q.resolve();
+	};
+
+	var createSingle = function () {
+		return $q.resolve();
+	};
+
+	var deleteSingle = function () {
 		return $q.resolve();
 	};
 
@@ -1026,7 +1037,10 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	var openUrl = function (url) {
 		// Open the url if this is not a bookmarklet
 		if (!globals.URL.BookmarkletRegex.test(url)) {
-			cordova.InAppBrowser.open(url, '_system');
+			OpenUrlExt.open(url, function () { }, function (err) {
+				utility.LogMessage(globals.LogType.Info,
+					'Unable to open url' + (url ? (' ' + url + ': ') : ': ') + (err.stack));
+			});
 		}
 	};
 
@@ -1197,6 +1211,10 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 			.finally(function () {
 				utility.LogMessage(globals.LogType.Info, 'Sync data: ' + JSON.stringify(syncData));
 			});
+	};
+
+	var updateSingle = function () {
+		return $q.resolve();
 	};
 
 

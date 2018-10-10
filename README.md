@@ -33,8 +33,7 @@ In order to build the iOS app to include iCloud and Share Sheet integration, the
 4. Set the Target Membership of Resouces/Images.xcassets to include addBookmark.
 5. In addBookmark target Info tab, set Bundle display name to 'Add Bookmark'.
 6. In addBookmark target Build Settings tab, in the Asset Catalog Compiler – Options section, set Asset Catalog App Icon Set Name to 'AppIcon' (the target's icon should now appear as the xBrowserSync icon).
-7. In addBookmark target Build Settings tab, in the Build Options section, set Always Embed Swift Standard Libraries to 'No'.
-8. In addBookmark target Build Phases tab, expand Target Dependencies and add CordovaLib.
+7. In addBookmark target Build Phases tab, expand Target Dependencies and add CordovaLib.
 
 ## Building
 

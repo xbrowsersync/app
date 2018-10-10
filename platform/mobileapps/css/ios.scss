@@ -2,14 +2,18 @@
 @import 'mixins.scss';
 @import 'animations.scss';
 
+html, body .view {
+    height: 100%!important;
+}
+
 body {
     -webkit-overflow-scrolling: touch;
 
     .view {
         position: fixed;
-    }
-}
 
-#login-panel, #search-panel, #bookmark-panel, #settings-panel {
-    padding-top: 1em;
+        .view-content {
+            padding-top: 1.5em!important;
+        }
+    }
 }

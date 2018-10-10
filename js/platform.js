@@ -15,7 +15,7 @@ xBrowserSync.App.Platform = function ($q) {
 	var notImplemented = function () {
 		function NotImplementedException() {
 			this.name = 'NotImplementedException';
-			this.code = 10400;
+			this.code = 10600;
 		}
 
 		// Throw not implemented exception

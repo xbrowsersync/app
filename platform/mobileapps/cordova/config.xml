@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-packageName="com.xBrowserSync.android" android-versionCode="14001" id="com.xBrowserSync" ios-CFBundleIdentifier="com.xBrowserSync.ios" version="1.4.0" 
-    xmlns="http://www.w3.org/ns/widgets" 
-    xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-packageName="com.xBrowserSync.android" android-versionCode="14001" id="com.xBrowserSync" ios-CFBundleIdentifier="com.xBrowserSync.ios" version="1.4.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>xBrowserSync</name>
     <description>Browser syncing as it should be: secure, anonymous and free!</description>
     <author email="admin@xbrowsersync.org" href="https://www.xbrowsersync.org" />
@@ -99,4 +97,5 @@
     <plugin name="bundle-cordova-webintent" spec="https://github.com/COMLINE-AG/bundle-cordova-webintent.git" />
     <engine name="android" spec="^6.4.0" />
     <engine name="ios" spec="^4.5.5" />
+    <plugin name="it.almaviva.openurlext" spec="~1.0.0" />
 </widget>
