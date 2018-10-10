@@ -1361,7 +1361,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	var checkForUpgrade = function () {
 		// Disable sync and display updated message if stored app version older than current
 		var storedVersion = globals.MobileAppVersion.Get();
-		if (storedVersion && compareVersions(storedVersion, globals.AppVersion) < 0) {
+		if (!globals.DisplayIntro.Get() && compareVersions(storedVersion, globals.AppVersion) < 0) {
 			globals.SyncEnabled.Set(false);
 			globals.DisplayUpdated.Set(true);
 		}
