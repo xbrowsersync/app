@@ -95,7 +95,7 @@
     <plugin name="cordova-plugin-add-swift-support" spec="^1.7.2" />
     <plugin name="cordova-plugin-icloud-document-storage" spec="https://github.com/nero120/cordova-plugin-icloud-document-storage" />
     <plugin name="bundle-cordova-webintent" spec="https://github.com/COMLINE-AG/bundle-cordova-webintent.git" />
+    <plugin name="cordova-plugin-openurlext" spec="~1.0.1" />
     <engine name="android" spec="^6.4.0" />
     <engine name="ios" spec="^4.5.5" />
-    <plugin name="it.almaviva.openurlext" spec="~1.0.0" />
 </widget>

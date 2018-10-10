@@ -31,7 +31,7 @@
       "cordova-plugin-add-swift-support": {},
       "cordova-plugin-icloud-document-storage": {},
       "bundle-cordova-webintent": {},
-      "it.almaviva.openurlext": {}
+      "cordova-plugin-openurlext": {}
     }
   },
   "dependencies": {
