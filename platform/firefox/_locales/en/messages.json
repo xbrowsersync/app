@@ -33,7 +33,7 @@
 		"message": "Download the xBrowserSync desktop browser extension available for Chrome and Firefox, create a new sync and then scan your sync ID QR code on the previous screen."
 	},
 	"login_introPanel1_Message": {
-		"message": "<h4>Welcome</h4><p>Thank you for choosing xBrowserSync! Before you begin, take some time to read through the following pages to get aquainted with xBrowserSync’s features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p><p>As xBrowserSync modifies your local browser data, we recommend you back up your bookmarks and disable any existing browser sync services to avoid potential conflicts.</p>"
+		"message": "<h4>Welcome</h4><p>Thank you for choosing xBrowserSync! Before you begin, take some time to read through the following pages to get aquainted with xBrowserSync’s features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p><p>Important: xBrowserSync modifies your browser data! Before syncing, please back up your bookmarks and disable any existing browser sync services to avoid conflicts.</p>"
 	},
 	"login_introPanel2_Message": {
 		"message": "<h4>Syncing for the first time</h4><p>Before you can sync your browser data it must be encrypted so that only you can read it. Enter an encryption password — make it strong but also memorable, there are no resets or reminders so if you forget it you won’t be able to decrypt your synced data.</p><p>Once you click the Sync button your data will be encrypted and synced.</p>"
@@ -54,13 +54,13 @@
 		"message": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s bookmark button as normal and xBrowserSync will automatically add the bookmark’s default properties.</p>"
 	},
 	"login_introPanel8_Message": {
-		"message": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features, any changes you make will be synced automatically in the background (Firefox’s native bookmark tags are not yet supported however).</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p>"
+		"message": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p>"
 	},
 	"login_introPanel9_Message": {
-		"message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your reponsibility so be smart and make sure to take backups.</p><p>You can do this easily in the Settings panel, you can back up your unencrypted data to a local file which can then restored at a later date should you need to.</p>"
+		"message": "<h4>Native tags not supported</h4><p>As Firefox does not yet support accessing native bookmark tags, any existing tags will be lost when syncing, and tags added via xBrowserSync will not be saved as native tags.</p><p>Before syncing for the first time ensure you back up your bookmarks using Firefox's natve backup functionality. Support for restoring from Firefox backup json files will be added in a future version of xBrowserSync.</p>"
 	},
 	"login_introPanel10_Message": {
-		"message": "<h4>Shortcut xBrowserSync</h4><p>To search your bookmarks quickly, assign a keyboard shortcut to activate the extension then just press Enter or start typing to search your bookmarks.</p><p>Browse to chrome://extensions/, the keyboard shortcuts option is at the bottom of the page."
+		"message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your reponsibility so be smart and make sure to take backups.</p><p>You can do this easily in the Settings panel, you can back up your unencrypted data to a local file which can then restored at a later date should you need to.</p>"
 	},
 	"login_introPanel11_Message": {
 		"message": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync mobile app, available on the iOS and Android app stores.</p>"

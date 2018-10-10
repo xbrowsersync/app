@@ -33,7 +33,7 @@
 		"message": "Download the xBrowserSync desktop browser extension available for Chrome and Firefox, create a new sync and then scan your sync ID QR code on the previous screen."
 	},
 	"login_introPanel1_Message": {
-		"message": "<h4>Welcome</h4><p>Thank you for choosing xBrowserSync! Before you begin, take some time to read through the following pages to get aquainted with xBrowserSync’s features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p><p>As xBrowserSync modifies your local browser data, we recommend you back up your bookmarks and disable any existing browser sync services to avoid potential conflicts.</p>"
+		"message": "<h4>Welcome</h4><p>Thank you for choosing xBrowserSync! Before you begin, take some time to read through the following pages to get aquainted with xBrowserSync’s features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p><p>As xBrowserSync modifies your local browser data, we recommend you back up your bookmarks and disable any existing browser sync services to avoid conflicts.</p>"
 	},
 	"login_introPanel2_Message": {
 		"message": "<h4>Syncing for the first time</h4><p>Before you can sync your browser data it must be encrypted so that only you can read it. Enter an encryption password — make it strong but also memorable, there are no resets or reminders so if you forget it you won’t be able to decrypt your synced data.</p><p>Once you click the Sync button your data will be encrypted and synced.</p>"
