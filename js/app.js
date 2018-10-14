@@ -306,9 +306,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         vm.settings.displayRestoreConfirmation = false;
         vm.settings.dataToRestore = '';
         vm.settings.displayRestoreForm = true;
-        if (vm.platformName !== globals.Platforms.IOS) {
-            document.querySelector('#backupFile').value = null;
-        }
+        document.querySelector('#backupFile').value = null;
 
         // Focus in restore textarea
         $timeout(function () {
@@ -755,9 +753,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
                 vm.settings.displaySyncBookmarksToolbarConfirmation = false;
                 vm.settings.displayUpdateServiceUrlConfirmation = false;
                 vm.settings.displayUpdateServiceUrlForm = false;
-                if (vm.platformName !== globals.Platforms.IOS) {
-                    document.querySelector('#backupFile').value = null;
-                }
+                document.querySelector('#backupFile').value = null;
                 vm.settings.backupFileName = null;
                 vm.settings.backupCompletedMessage = null;
                 vm.settings.restoreCompletedMessage = null;

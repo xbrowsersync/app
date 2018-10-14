@@ -63,7 +63,7 @@
 		"message": "<h4>Tastaturkürzel xBrowserSync</h4><p>Um Ihre Lesezeichen schnell durchsuchen zu können, fügen Sie ein Tastaturkürzel zum Aufruf der Erweiterung hiunzu.</p><p>Rufen Sie chrome://extensions/ auf. Die Tastaturkürzel finden Sie dann links oben im Hamburgermenü."
 	},
 	"login_introPanel11_Message": {
-		"message": "<h4>Verwenden Sie MobilApps</h4><p>Greifen Sie von unterwegs auf Ihre Lesezeichen mit der xBrowserSync MobilApp zu, die Sie in den iOS und Android App Stores finden.</p>"
+		"message": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on Google Play store, <a href='https://fdroid.xbrowsersync.org/' class='new-tab'>F-Droid</a> or <a href='https://github.com/xBrowserSync/App/releases' class='new-tab'>direct download</a>.</p>"
 	},
 	"login_introPanel12_Message": {
 		"message": "<h4>Problem gefunden?</h4><p>Falls Sie einen Fehler in xBrowserSync gefunden haben oder sich ein bestimmtes Feature wünschen, gehen Sie zu GitHub und <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>melden Sie ein Problem</a>.</p><p>Ein Aufruf an alle Programmierer! Wenn Sie xBrowserSync verbessern möchten, erstellen Sie einen Fork von dem<a href='https://github.com/xBrowserSync/App' class='new-tab'>xBrowserSync GitHub Repo</a> und senden Sie einen Pull Request.</p>"
@@ -313,9 +313,6 @@
 	},
 	"settings_BackupRestore_NotAvailable_Message": {
 		"message": "Sichern und Wiederherstellen ist hier verfügbar, sobald einmal synchronisiert wurde."
-	},
-	"settings_BackupRestore_ICloudNotAvailable_Message": {
-		"message": "Bei iCloud anmelden, um Sichern and Wiederherstellen zu aktivieren."
 	},
 	"button_Backup_Label": {
 		"message": "Sichern"

@@ -160,8 +160,6 @@
     <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Title) }}</h4>
     <div class="panel-content">
       <p class="description margin-bottom-0" data-ng-if="!vm.sync.enabled() && vm.utility.IsMobilePlatform(vm.platformName)" data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_NotAvailable_Message)"></p>
-      <p class="description margin-bottom-0" data-ng-if="vm.sync.enabled() && vm.platformName === vm.globals.Platforms.IOS && vm.settings.iCloudNotAvailable"
-        data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_ICloudNotAvailable_Message)"></p>
       <div data-ng-show="(vm.sync.enabled() && !vm.settings.iCloudNotAvailable) || !vm.utility.IsMobilePlatform(vm.platformName)">
         <div class="form-group">
           <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Backup_Label) }}</label>

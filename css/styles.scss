@@ -1099,73 +1099,9 @@ body {
     }
 
     .about-panel {
-        .acknowledgements {
-            margin-bottom: 0;
-            font-size: 0.8em;
-        }
-
-        .app-links {
-            text-align: center;
-            height: 4em;
-
-            a {
-                margin-right: 2em;
-                border-bottom: none!important;
-                display: inline-block;
-                height: 4em;
-
-                &:last-child {
-                    margin-right: 0;
-                }
-
-                &.android {
-                    background: url("../img/android.svg") no-repeat;
-                    width: 2.7em;                    
-                }
-
-                &.chrome {
-                    background: url("../img/chrome.svg") no-repeat;
-                    width: 2.7em;                    
-                }
-
-                &.ios {
-                    background: url("../img/ios.svg") no-repeat;
-                    width: 2.7em;                    
-                }
-            }
-
-            img {
-                height: 4em;
-            }
-        }
-        
         .github-url, .issues-url, .contribute-url, .website-url {
             @extend .form-control-url;
             @include text-overflow-ellipsis;
-        }
-
-        .latest-updates {
-            padding-left: 0;
-            margin-bottom: 15px;
-            list-style: none;
-            font-size: 0.9em;
-            max-height: 8em;
-            overflow-y: auto;
-
-            li {
-                padding-left: 1.2em;
-                margin-bottom: 0.3em;
-                line-height: 1.2em;
-                position: relative;
-
-                &:before {
-                    content: "\f005";
-                    font-family: FontAwesome;
-                    font-size: 0.8em;
-                    position: absolute;
-                    left: 0;
-                }
-            }
         }
 
         .message-log {

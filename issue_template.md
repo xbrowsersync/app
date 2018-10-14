@@ -20,7 +20,7 @@ Tell us what should happen
 Tell us what happens instead
 
 ### Client app information
-**App Platform:** (Chrome, Firefox, iOS, etc) 
+**App Platform:** (Chrome, Firefox, etc) 
 
 **App Platform Version:** 
 

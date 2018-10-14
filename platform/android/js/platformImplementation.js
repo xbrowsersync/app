@@ -334,9 +334,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		"settings_BackupRestore_NotAvailable_Message": {
 			"message": "Back up and restore will be available here once you are synced."
 		},
-		"settings_BackupRestore_ICloudNotAvailable_Message": {
-			"message": "Sign in to iCloud to enable back up and restore."
-		},
 		"button_Backup_Label": {
 			"message": "Back Up"
 		},
@@ -355,17 +352,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		"button_Back_Label": {
 			"message": "Back"
 		},
-		"settings_BackupRestore_BackupFailed_IOS_Message": {
-			"message": "Unable to save backup file to iCloud."
-		},
 		"settings_BackupRestore_BackupSuccess_Message": {
-			"message": ""
-		},
-		"settings_BackupRestore_BackupSuccess_Android_Message": {
 			"message": "Backup file {fileName} saved to internal storage."
-		},
-		"settings_BackupRestore_BackupSuccess_IOS_Message": {
-			"message": "Backup file {fileName} saved to iCloud."
 		},
 		"settings_BackupRestore_RestoreSuccess_Message": {
 			"message": "Your data has been restored."
@@ -641,7 +629,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	 * Constructor
 	 * ------------------------------------------------------------------------------------ */
 
-	var MobileAppsImplementation = function () {
+	var AndroidImplementation = function () {
 		// Inject required platform implementation functions
 		platform.AutomaticUpdates.Start = startAutoUpdates;
 		platform.AutomaticUpdates.Stop = stopAutoUpdates;
@@ -684,8 +672,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 					return deferred.reject({ code: globals.ErrorCodes.FailedBackupData });
 				};
 
-				// Set backup file storage location to Documents on iOS and external storage on Android
-				var storageLocation = (vm.platformName === globals.Platforms.IOS) ? cordova.file.documentsDirectory : cordova.file.externalRootDirectory;
+				// Set backup file storage location to external storage
+				var storageLocation = cordova.file.externalRootDirectory;
 
 				// Save backup file to storage location
 				window.resolveLocalFileSystemURL(storageLocation, function (dirEntry) {
@@ -695,10 +683,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 							fileWriter.write(JSON.stringify(data));
 
 							var success = function () {
-								var platformStr = (vm.platformName === globals.Platforms.IOS) ?
-									constants.settings_BackupRestore_BackupSuccess_IOS_Message :
-									constants.settings_BackupRestore_BackupSuccess_Android_Message;
-								var message = platformStr.message.replace(
+								var message = constants.settings_BackupRestore_BackupSuccess_Message.message.replace(
 									'{fileName}',
 									fileEntry.name);
 
@@ -710,31 +695,16 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 							};
 
 							fileWriter.onwriteend = function () {
-								if (vm.platformName === globals.Platforms.IOS) {
-									// Sync export file to iCloud
-									iCloudDocStorage.syncToCloud(
-										fileEntry.nativeURL,
-										success,
-										function (err) {
-											$scope.$apply(function () {
-												vm.settings.backupCompletedMessage = constants.settings_BackupRestore_BackupFailed_IOS_Message;
-											});
-
-											deferred.reject({ code: globals.ErrorCodes.FailedBackupData });
-										});
-								}
-								else {
-									success();
-								}
+								success();
 							};
 
 							fileWriter.onerror = saveBackupFileError;
 						},
-							saveBackupFileError);
-					},
 						saveBackupFileError);
-				},
+					},
 					saveBackupFileError);
+				},
+				saveBackupFileError);
 			});
 
 		return deferred.promise;
@@ -1084,68 +1054,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
 	var selectBackupFile = function () {
 		// Open select file dialog
-		if (vm.platformName === globals.Platforms.Android) {
-			document.querySelector('#backupFile').click();
-		}
-		else if (vm.platformName === globals.Platforms.IOS) {
-			var getPickedFileError = function () {
-				utility.LogError(new Error('getPickedFileError'));
-				var errObj = { code: globals.ErrorCodes.FailedRestoreData };
-
-				// Display alert
-				var errMessage = utility.GetErrorMessageFromException(errObj);
-				vm.alert.display(errMessage.title, errMessage.message);
-			};
-
-			var pickFileSuccess = function (selectedFilePath) {
-				// Get directory and file name within temp folder
-				var selectedFileProps = selectedFilePath.replace(cordova.file.tempDirectory.substring(7), '').split('/');
-				var fileDir = selectedFileProps[0];
-				var fileName = selectedFileProps[1];
-
-				// Read the file data
-				window.requestFileSystem(window.TEMPORARY, 0, function (fs) {
-					fs.root.getDirectory(fileDir, { create: false }, function (dirEntry) {
-						dirEntry.getFile(fileName, { create: false }, function (fileEntry) {
-							fileEntry.file(function (file) {
-								var reader = new FileReader();
-
-								reader.onloadend = function () {
-									// Set the backup file data to restore
-									var data = this.result;
-									vm.settings.backupFileName = fileName;
-									$scope.$apply(function () {
-										vm.settings.dataToRestore = data;
-									});
-								};
-
-								reader.readAsText(file);
-							},
-								getPickedFileError);
-						},
-							getPickedFileError);
-					},
-						getPickedFileError);
-				},
-					getPickedFileError);
-			};
-
-			var pickFileFailed = function (err) {
-				if (!err || err === 'canceled') {
-					return;
-				}
-
-				utility.LogError(new Error('pickFileFailed'));
-				var errObj = { code: globals.ErrorCodes.FailedGetDataToRestore };
-
-				// Display alert
-				var errMessage = utility.GetErrorMessageFromException(errObj);
-				vm.alert.display(errMessage.title, errMessage.message);
-			};
-
-			// Use iOS file picker plugin to allow user to select file from iCloud
-			FilePicker.pickFile(pickFileSuccess, pickFileFailed, 'public.data');
-		}
+		document.querySelector('#backupFile').click();
 	};
 
 	var shareBookmark = function (bookmark) {
@@ -1275,85 +1184,48 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		var deferred = $q.defer();
 		utility.LogMessage(globals.LogType.Info, 'checkForSharedUrl');
 
-		if (vm.platformName === globals.Platforms.Android) {
-			// If there is a current intent, retrieve it
-			window.plugins.webintent.hasExtra(window.plugins.webintent.EXTRA_TEXT,
-				function (has) {
-					if (!!has) {
-						// Only use the intent if sync is enabled
-						if (!!globals.SyncEnabled.Get()) {
-							window.plugins.webintent.getExtra(window.plugins.webintent.EXTRA_TEXT,
-								function (url) {
-									// Remove the intent
-									window.plugins.webintent.removeExtra(
-										window.plugins.webintent.EXTRA_TEXT,
-										function () { }
-									);
+		// If there is a current intent, retrieve it
+		window.plugins.webintent.hasExtra(window.plugins.webintent.EXTRA_TEXT,
+			function (has) {
+				if (!!has) {
+					// Only use the intent if sync is enabled
+					if (!!globals.SyncEnabled.Get()) {
+						window.plugins.webintent.getExtra(window.plugins.webintent.EXTRA_TEXT,
+							function (url) {
+								// Remove the intent
+								window.plugins.webintent.removeExtra(
+									window.plugins.webintent.EXTRA_TEXT,
+									function () { }
+								);
 
-									// Check the URL is valid
-									var match = (!!url) ? url.match(globals.Regex.Url) : null;
-									if (!match || match.length === 0) {
-										return deferred.reject({ code: globals.ErrorCodes.FailedShareUrl });
-									}
+								// Check the URL is valid
+								var match = (!!url) ? url.match(globals.Regex.Url) : null;
+								if (!match || match.length === 0) {
+									return deferred.reject({ code: globals.ErrorCodes.FailedShareUrl });
+								}
 
-									// Return the shared url
-									return deferred.resolve(match[0]);
-								});
-						}
-						else {
-							// Can't use it so remove the intent
-							window.plugins.webintent.removeExtra(
-								window.plugins.webintent.EXTRA_TEXT,
-								function () { }
-							);
-
-							// Display alert
-							vm.alert.display(null, getConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title));
-
-							deferred.resolve();
-						}
+								// Return the shared url
+								return deferred.resolve(match[0]);
+							});
 					}
 					else {
+						// Can't use it so remove the intent
+						window.plugins.webintent.removeExtra(
+							window.plugins.webintent.EXTRA_TEXT,
+							function () { }
+						);
+
+						// Display alert
+						vm.alert.display(null, getConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title));
+
 						deferred.resolve();
 					}
 				}
-			);
-		}
-		else if (vm.platformName === globals.Platforms.IOS) {
-			$timeout(function () {
-				// If current url is set, return it
-				if (!!currentUrl) {
-					utility.LogMessage(globals.LogType.Info, 'currentUrl found: ' + currentUrl);
-
-					switch (currentUrl) {
-						case 'NOSHAREDURL':
-							currentUrl = null;
-							deferred.reject({ code: globals.ErrorCodes.FailedShareUrl });
-							break;
-						case 'NOTSYNCED':
-							currentUrl = null;
-							deferred.reject({ code: globals.ErrorCodes.FailedShareUrlNotSynced });
-							break;
-						default:
-							// Check the URL is valid
-							if (!utility.ParseUrl(currentUrl)) {
-								currentUrl = null;
-								deferred.reject({ code: globals.ErrorCodes.FailedShareUrl });
-							}
-							else {
-								deferred.resolve(currentUrl);
-							}
-					}
-				}
 				else {
-					utility.LogMessage(globals.LogType.Info, 'currentUrl empty');
 					deferred.resolve();
 				}
-			}, 250);
-		}
-		else {
-			deferred.resolve();
-		}
+			}
+		);
 
 		return deferred.promise;
 	};
@@ -1402,24 +1274,9 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		// Set touchstart event
 		document.addEventListener('touchstart', handleTouchStart, false);
 
-		// Platform-specific configs
-		if (vm.platformName === globals.Platforms.Android) {
-			// Set backup file change event
-			document.getElementById('backupFile').addEventListener('change', backupFile_Change_Android, false);
-		}
-		else if (vm.platformName === globals.Platforms.IOS) {
-			// Attach event handler for iOS Share activity
-			window.handleOpenURL = handleSharedUrlIos;
-
-			// Initialise iCloud Document Storage
-			initICloudDocStorage();
-
-			// Check if FilePicker is available, otherwise disable file restore
-			FilePicker.isAvailable(function (isAvailable) {
-				vm.settings.fileRestoreEnabled = isAvailable;
-			});
-		}
-
+		// Set backup file change event
+		document.getElementById('backupFile').addEventListener('change', backupFile_Change_Android, false);
+		
 		// Use toasts for alerts
 		vm.alert.display = displayToast;
 
@@ -1583,31 +1440,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		}
 	};
 
-	var handleSharedUrlIos = function (sharedUrl) {
-		var regex = new RegExp('^' + globals.URL.CustomScheme + globals.URL.Bookmarks + globals.URL.Current, 'i');
-		if (!!sharedUrl && !regex.test(sharedUrl)) {
-			// User clicked on a normal link, return
-			return;
-		}
-
-		if (!globals.SyncEnabled.Get()) {
-			// Not synced, display alert and return
-			currentUrl = "NOTSYNCED";
-			return;
-		}
-
-		var url = utility.ParseUrl(sharedUrl);
-		if (!!url && !!url.searchObject && !!url.searchObject.url) {
-			// Set shared url to current url
-			currentUrl = decodeURIComponent(url.searchObject.url);
-			utility.LogMessage(globals.LogType.Info, 'Shared URL: ' + currentUrl);
-		}
-		else {
-			// No shared url found
-			currentUrl = "NOSHAREDURL";
-		}
-	};
-
 	var handleTouchStart = function (event) {
 		// Blur focus (and hide keyboard) when pressing out of text fields
 		if (!isTextInput(event.target) && isTextInput(document.activeElement)) {
@@ -1732,11 +1564,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 						hideLoading('syncingUpdates');
 					});
 			});
-
-		// Initialise iCloud Document Storage
-		if (vm.platformName === globals.Platforms.IOS) {
-			initICloudDocStorage();
-		}
 	};
 
 	var syncForm_EnableSync_Click = function () {
@@ -1745,5 +1572,5 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	};
 
 	// Call constructor
-	return new MobileAppsImplementation();
+	return new AndroidImplementation();
 };

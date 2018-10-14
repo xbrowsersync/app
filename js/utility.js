@@ -379,7 +379,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 	};
 
 	var isMobilePlatform = function (platformName) {
-		return platformName === globals.Platforms.Android || platformName === globals.Platforms.IOS;
+		return platformName === globals.Platforms.Android;
 	};
 
 	var isNetworkConnected = function () {

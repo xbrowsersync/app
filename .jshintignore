@@ -1,5 +1,5 @@
 /build
 /node_modules
 /js/qrcode.js
-/platform/mobileapps/cordova
+/platform/android/cordova
 /platform/hello

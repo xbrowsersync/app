@@ -63,7 +63,7 @@
 		"message": "<h4>Raccourci xBrowserSync</h4><p>Pour chercher vos favoris rapidement, assignez un raccourci clavier pour activer l'extension et tapez juste Entrée ou commencez à saisir du texte pour chercher parmi vos favoris.</p><p>Allez dans chrome://extensions/, l'option des raccourcis clavier est en bas de la page."
 	},
 	"login_introPanel11_Message": {
-		"message": "<h4>Soyez mobile</h4><p>Accédez vos favoris synchronisés de partout avec l'application mobile xBrowserSync, disponible sur les stores iOS et Android.</p>"
+		"message": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on Google Play store, <a href='https://fdroid.xbrowsersync.org/' class='new-tab'>F-Droid</a> or <a href='https://github.com/xBrowserSync/App/releases' class='new-tab'>direct download</a>.</p>"
 	},
 	"login_introPanel12_Message": {
 		"message": "<h4>Vous avez trouvé un problème ?</h4><p>Si vous avez trouvé un bug dans xBrowserSync ou voulez demander une nouvelle fonctionnalité, allez sur GitHub et <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>soumettez un problème (issue)</a>.</p><p>Appel à tous les développeurs! Si vous voulez aider à améliorer xBrowserSync, allez-y et forkez le repo GitHub <a href='https://github.com/xBrowserSync/App' class='new-tab'>xBrowserSync</a> et soumettez une pull request.</p>"
@@ -313,9 +313,6 @@
 	},
 	"settings_BackupRestore_NotAvailable_Message": {
 		"message": "Sauvegarder et restaurer seront accessibles une fois que vous serez synchronisés."
-	},
-	"settings_BackupRestore_ICloudNotAvailable_Message": {
-		"message": "Se logguer sur iCloud pour permettrer la sauvegarde et la restauration."
 	},
 	"button_Backup_Label" : {
 		"message":  "Sauvegarde"
