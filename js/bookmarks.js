@@ -1067,7 +1067,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
     var upgradeContainers = function (bookmarks) {
         // Upgrade containers to use current container names
-        var otherContainer = getContainer(globals.Bookmarks.OtherContainerNameOld, bookmarks);
+        var otherContainer = getContainer(globals.Bookmarks.OtherContainerNameOld, bookmarks, true);
         if (otherContainer) {
             otherContainer.title = globals.Bookmarks.OtherContainerName;
         }

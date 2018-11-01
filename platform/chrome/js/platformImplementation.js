@@ -1099,8 +1099,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	var getLocalBookmarkTreeById = function (localBookmarkId) {
 		var deferred = $q.defer();
 
-		utility.LogMessage(globals.LogType.Info, 'getLocalBookmarkTreeById: ' + localBookmarkId);
-
 		try {
 			chrome.bookmarks.getSubTree(localBookmarkId, function (results) {
 				if (!!results[0]) {
