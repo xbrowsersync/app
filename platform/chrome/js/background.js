@@ -28,12 +28,8 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 				case 'update':
 					if (details.previousVersion &&
 						details.previousVersion !== chrome.runtime.getManifest().version) {
-						// Remove obsolete cached page metadata
-						localStorage.removeItem('xBrowserSync-metadataColl');
-
-						// If extension has been updated, display updated message and disable sync
+						// If extension has been updated display updated message
 						globals.DisplayUpdated.Set(true);
-						bookmarks.DisableSync();
 					}
 					break;
 			}
