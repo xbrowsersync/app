@@ -48,11 +48,11 @@
     </button>
   </div>
   <div class="buttons">
-    <button type="button" class="btn btn-default" data-ng-if="!vm.bookmark.displayUpdateForm" data-ng-disabled="!!vm.bookmarkForm.$invalid"
+    <button type="button" class="btn btn-default" data-ng-if="!vm.bookmark.displayUpdateForm" data-ng-disabled="vm.bookmarkForm.$invalid"
       data-ng-click="vm.events.bookmarkForm_CreateBookmark_Click()" tabindex="6">
       {{ vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}
     </button>
-    <button type="button" class="btn btn-default" data-ng-if="vm.bookmark.displayUpdateForm" data-ng-disabled="!vm.bookmarkForm.$dirty || !!vm.bookmarkForm.$invalid"
+    <button type="button" class="btn btn-default" data-ng-if="vm.bookmark.displayUpdateForm" data-ng-disabled="!vm.bookmarkForm.$dirty || vm.bookmarkForm.$invalid"
       data-ng-click="vm.events.bookmarkForm_UpdateBookmark_Click()" tabindex="6">
       {{ vm.platform.GetConstant(vm.globals.Constants.Button_Update_Label) }}
     </button>

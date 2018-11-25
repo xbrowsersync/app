@@ -50,7 +50,7 @@ xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'globals'];
 xBrowserSync.App.UI.factory('utility', xBrowserSync.App.Utility);
 
 // Add api service
-xBrowserSync.App.API.$inject = ['$http', '$q', 'globals', 'utility'];
+xBrowserSync.App.API.$inject = ['$http', '$q', 'platform', 'globals', 'utility'];
 xBrowserSync.App.UI.factory('api', xBrowserSync.App.API);
 
 // Add bookmarks service

@@ -536,7 +536,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
 	var getAsyncChannel = function (syncCallback) {
 		// Configure async messaging channel
-		var asyncChannel = browser.runtime.connect({ name: globals.Title.Get() });
+		var asyncChannel = browser.runtime.connect({ name: globals.Title });
 
 		// Begin listening for sync messages
 		asyncChannel.onMessage.addListener(function (msg) {
@@ -860,12 +860,13 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
 	var startAutoUpdates = function () {
 		// Register alarm
-		return browser.alarms.clear(globals.Alarm.Name.Get())
+		return browser.alarms.clear(globals.Alarm.Name)
 			.then(function () {
 				return browser.alarms.create(
-					globals.Alarm.Name.Get(), {
-						periodInMinutes: globals.Alarm.Period.Get()
-					});
+					globals.Alarm.Name, {
+						periodInMinutes: globals.Alarm.Period
+					}
+				);
 			})
 			.catch(function (err) {
 				utility.LogError(err);
@@ -874,7 +875,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	};
 
 	var stopAutoUpdates = function () {
-		browser.alarms.clear(globals.Alarm.Name.Get());
+		browser.alarms.clear(globals.Alarm.Name);
 	};
 
 	var sync = function (asyncChannel, syncData, command) {

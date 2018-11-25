@@ -1037,7 +1037,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 			// Set result as id
 			if (!!result && !!result.text) {
 				$scope.$apply(function () {
-					vm.settings.id(result.text);
+					vm.sync.id = result.text;
+					platform.LocalStorage.Set(globals.CacheKeys.SyncId, result.text);
 				});
 			}
 		};
@@ -1232,14 +1233,26 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
 	var checkForUpgrade = function () {
 		// Disable sync and display updated message if stored app version older than current
-		var storedVersion = globals.MobileAppVersion.Get();
-		if (!globals.DisplayIntro.Get() && compareVersions(storedVersion, globals.AppVersion) < 0) {
-			globals.SyncEnabled.Set(false);
-			globals.DisplayUpdated.Set(true);
-		}
+		return platform.LocalStorage.Get([
+			globals.CacheKeys.DisplayIntro,
+			globals.CacheKeys.MobileAppVersion
+		])
+			.then(function (cachedData) {
+				var displayIntro = cachedData[globals.CacheKeys.DisplayIntro];
+				var mobileAppVersion = cachedData[globals.CacheKeys.MobileAppVersion];
 
-		// Update stored version to current app version
-		globals.MobileAppVersion.Set(globals.AppVersion);
+				// If upgrade is available disable sync and display updated panel
+				if (!displayIntro && compareVersions(mobileAppVersion, globals.AppVersion) < 0) {
+					return $q.all([
+						globals.SyncEnabled.Set(false),
+						globals.DisplayUpdated.Set(true)
+					]);
+				}
+			})
+			.then(function () {
+				// Update stored version to current app version
+				return platform.LocalStorage.Set(globals.CacheKeys.MobileAppVersion, globals.AppVersion);
+			});
 	};
 
 	var displayDefaultSearchState = function () {

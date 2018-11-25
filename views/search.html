@@ -27,14 +27,14 @@
     </button>
   </div>
 </div>
-<div class="search-results-panel" data-ng-show="!!vm.search.results">
+<div class="search-results-panel" data-ng-show="vm.search.results">
   <h4 data-ng-show="!vm.search.query && vm.search.results.length === 0" data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Search_NoBookmarks_Message)"></h4>
-  <h4 data-ng-show="!!vm.search.query && vm.search.results.length === 0">
+  <h4 data-ng-show="vm.search.query && vm.search.results.length === 0">
     {{ vm.platform.GetConstant(vm.globals.Constants.Search_NoResults_Message) }}
   </h4>
   <div class="list-group" data-ng-show="vm.search.results.length > 0" data-infinite-scroll="vm.events.searchForm_SearchResults_Scroll()"
     data-infinite-scroll-container="'.search-results-panel'">
-    <div class="list-group-item" data-bookmark-id="{{ result.id }}" data-ng-class="{ true: 'animate-' + result.class }[!!result.class]"
+    <div class="list-group-item" data-bookmark-id="{{ result.id }}" data-ng-class="{ true: 'animate-' + result.class }[result.class]"
       data-ng-repeat="result in vm.search.results | limitTo:vm.search.resultsDisplayed track by result.id">
       <div class="menu animate-fade" data-ng-show="vm.search.selectedBookmark === result.id" data-ng-blur="vm.events.searchForm_SelectBookmark_Press(null, $event)"
         tabindex="-1">

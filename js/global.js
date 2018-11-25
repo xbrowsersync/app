@@ -11,16 +11,8 @@ xBrowserSync.App.Global = function (platform) {
 
     var Global = {
         Alarm: {
-            Name: {
-                Get: function () {
-                    return 'xBrowserSync-alarm';
-                }
-            },
-            Period: {
-                Get: function () {
-                    return 15;
-                }
-            }
+            Name: 'xBrowserSync-alarm',
+            Period: 15
         },
         ApiVersion: '1.1.3',
         AppVersion: '1.4.1',
@@ -36,91 +28,23 @@ xBrowserSync.App.Global = function (platform) {
             ToolbarContainerNameOld: '_toolbar_',
             UnfiledContainerNameOld: '_xBrowserSync_'
         },
-        Cache: {
-            Bookmarks: {
-                Get: function () {
-                    var bookmarks = platform.LocalStorage.Get(
-                        'xBrowserSync-cachedBookmarks');
-
-                    if (!!bookmarks) {
-                        try {
-                            bookmarks = JSON.parse(bookmarks);
-                        }
-                        catch (err) {
-                            bookmarks = null;
-                        }
-                    }
-
-                    return bookmarks;
-                },
-                Set: function (value) {
-                    var bookmarks = '';
-
-                    if (!!value) {
-                        try {
-                            bookmarks = JSON.stringify(value);
-                        }
-                        catch (err) { }
-                    }
-
-                    platform.LocalStorage.Set(
-                        'xBrowserSync-cachedBookmarks',
-                        bookmarks);
-                }
-            }
-        },
-        Debug: {
-            Enabled: {
-                Get: function () {
-                    var value = platform.LocalStorage.Get(
-                        'xBrowserSync-debugModeEnabled');
-
-                    var returnVal = true;
-                    if (!value || value !== 'true') {
-                        returnVal = false;
-                        platform.LocalStorage.Set(
-                            'xBrowserSync-debugMessageLog',
-                            '[]');
-                    }
-
-                    return returnVal;
-                },
-                Set: function (value) {
-                    platform.LocalStorage.Set(
-                        'xBrowserSync-debugModeEnabled',
-                        value);
-                }
-            },
-            MessageLog: {
-                Get: function () {
-                    var messageLogStr = platform.LocalStorage.Get(
-                        'xBrowserSync-debugMessageLog');
-                    var messageLog = messageLogStr ? JSON.parse(messageLogStr) : [];
-                    return messageLog;
-                },
-                Set: function (value) {
-                    var messageLogStr = platform.LocalStorage.Get(
-                        'xBrowserSync-debugMessageLog');
-                    var messageLog = messageLogStr ? JSON.parse(messageLogStr) : [];
-                    messageLog.unshift(value);
-                    platform.LocalStorage.Set(
-                        'xBrowserSync-debugMessageLog',
-                        JSON.stringify(messageLog));
-                }
-            }
-        },
-        Password: {
-            Get: function () {
-                return platform.LocalStorage.Get(
-                    'xBrowserSync-password');
-            },
-            Set: function (value) {
-                value = (!value) ? '' : value.trim();
-
-                platform.LocalStorage.Set(
-                    'xBrowserSync-password',
-                    value);
-            }
+        CacheKeys: {
+            Bookmarks: 'bookmarks',
+            DebugMessageLog: 'debugMessageLog',
+            DebugMode: 'debugMode',
+            DisableEventListeners: 'disableEventListeners',
+            DisplayIntro: 'displayIntro',
+            DisplayUpdated: 'displayUpdated',
+            IsSyncing: 'isSyncing',
+            LastUpdated: 'lastUpdated',
+            MobileAppVersion: 'mobileAppVersion',
+            NetworkDisconnected: 'networkDisconnected',
+            Password: 'password',
+            ServiceUrl: 'serviceUrl',
+            SyncBookmarksToolbar: 'syncBookmarksToolbar',
+            SyncEnabled: 'syncEnabled',
+            SyncId: 'syncId',
+            SyncVersion: 'syncVersion'
         },
         Commands: {
             SyncBookmarks: 1,
@@ -356,31 +280,6 @@ xBrowserSync.App.Global = function (platform) {
                     value);
             }
         },
-        DisplayIntro: {
-            Get: function () {
-                var value;
-
-                value = platform.LocalStorage.Get(
-                    'xBrowserSync-displayIntro');
-
-                if (!value) {
-                    return true;
-                }
-                else {
-                    if (value === 'true') {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-            },
-            Set: function (value) {
-                platform.LocalStorage.Set(
-                    'xBrowserSync-displayIntro',
-                    value);
-            }
-        },
         DisplayUpdated: {
             Get: function () {
                 var value;
@@ -486,43 +385,12 @@ xBrowserSync.App.Global = function (platform) {
                 platform.Interface.Refresh();
             }
         },
-        LastUpdated: {
-            Get: function () {
-                var lastUpdatedVal = platform.LocalStorage.Get(
-                    'xBrowserSync-lastUpdated');
-
-                if (!!lastUpdatedVal) {
-                    return new Date(lastUpdatedVal);
-                }
-                else {
-                    return null;
-                }
-            },
-            Set: function (value) {
-                platform.LocalStorage.Set(
-                    'xBrowserSync-lastUpdated',
-                    value);
-            }
-        },
         LogType: {
             Info: 0,
             Warning: 1,
             Error: 2
         },
         LookaheadMinChars: 1,
-        MobileAppVersion: {
-            Get: function () {
-                return platform.LocalStorage.Get(
-                    'xBrowserSync-mobileAppVersion') || '1.4.0';
-            },
-            Set: function (value) {
-                value = (!value) ? '' : value.trim();
-
-                platform.LocalStorage.Set(
-                    'xBrowserSync-mobileAppVersion',
-                    value);
-            }
-        },
         Network: {
             Disconnected: {
                 Get: function () {
@@ -629,24 +497,7 @@ xBrowserSync.App.Global = function (platform) {
             Both: 3,
             Upgrade: 4
         },
-        SyncVersion: {
-            Get: function () {
-                return platform.LocalStorage.Get(
-                    'xBrowserSync-syncVersion');
-            },
-            Set: function (value) {
-                value = (!value) ? '' : value.trim();
-
-                platform.LocalStorage.Set(
-                    'xBrowserSync-syncVersion',
-                    value);
-            }
-        },
-        Title: {
-            Get: function () {
-                return 'xBrowserSync';
-            }
-        },
+        Title: 'xBrowserSync',
         UpdateType: {
             Create: 1,
             Delete: 2,
@@ -654,35 +505,15 @@ xBrowserSync.App.Global = function (platform) {
             Move: 4
         },
         URL: {
-            Host: {
-                Get: function () {
-                    var defaultUrl = 'https://api.xbrowsersync.org';
-                    var urlHost = platform.LocalStorage.Get(
-                        'xBrowserSync-urlHost');
-
-                    urlHost = (urlHost === null || urlHost === undefined) ?
-                        defaultUrl :
-                        urlHost;
-
-                    return urlHost;
-                },
-                Set: function (value) {
-                    value = (!value) ? '' : value;
-
-                    platform.LocalStorage.Set(
-                        'xBrowserSync-urlHost',
-                        value);
-                }
-            },
             BookmarkletRegex: /^(javascript:)(.+)/i,
             Bookmarks: '/bookmarks',
             Current: '/current',
+            DefaultServiceUrl: 'https://api.xbrowsersync.org',
             LastUpdated: '/lastUpdated',
             Version: '/version',
             ServiceInformation: '/info',
             Regex: /^(\w+:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/i,
-            ProtocolRegex: /^\w+:.*$/,
-            CustomScheme: 'xbrowsersync:/'
+            ProtocolRegex: /^\w+:.*$/
         }
     };
 

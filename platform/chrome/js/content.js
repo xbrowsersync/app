@@ -4,10 +4,10 @@
 	var getPageDescription = function () {
 		for (var i = 0; i < metaTagsArr.length; i++) {
 			var currentTag = metaTagsArr[i];
-			if ((!!currentTag.getAttribute('property') && currentTag.getAttribute('property').toUpperCase().trim() === 'OG:DESCRIPTION' && !!currentTag.getAttribute('content')) ||
-				(!!currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'TWITTER:DESCRIPTION' && !!currentTag.getAttribute('content')) ||
-				(!!currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'DESCRIPTION' && !!currentTag.getAttribute('content'))) {
-				return (!!currentTag.getAttribute('content')) ? currentTag.getAttribute('content').trim() : '';
+			if ((currentTag.getAttribute('property') && currentTag.getAttribute('property').toUpperCase().trim() === 'OG:DESCRIPTION' && currentTag.getAttribute('content')) ||
+				(currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'TWITTER:DESCRIPTION' && currentTag.getAttribute('content')) ||
+				(currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'DESCRIPTION' && currentTag.getAttribute('content'))) {
+				return (currentTag.getAttribute('content')) ? currentTag.getAttribute('content').trim() : '';
 			}
 		}
 
@@ -19,9 +19,9 @@
 		var currentTag, i, keywords = [];
 		for (i = 0; i < metaTagsArr.length; i++) {
 			currentTag = metaTagsArr[i];
-			if (!!currentTag.getAttribute('property') &&
-				!!currentTag.getAttribute('property').trim().match(/VIDEO\:TAG$/i) &&
-				!!currentTag.getAttribute('content')) {
+			if (currentTag.getAttribute('property') &&
+				currentTag.getAttribute('property').trim().match(/VIDEO\:TAG$/i) &&
+				currentTag.getAttribute('content')) {
 				keywords.push(currentTag.getAttribute('content').trim());
 			}
 		}
@@ -29,13 +29,13 @@
 		// Get meta tag values 
 		for (i = 0; i < metaTagsArr.length; i++) {
 			currentTag = metaTagsArr[i];
-			if (!!currentTag.getAttribute('name') &&
+			if (currentTag.getAttribute('name') &&
 				currentTag.getAttribute('name').toUpperCase().trim() === 'KEYWORDS' &&
-				!!currentTag.getAttribute('content')) {
+				currentTag.getAttribute('content')) {
 				var metaKeywords = currentTag.getAttribute('content').split(',');
 				for (i = 0; i < metaKeywords.length; i++) {
 					var currentKeyword = metaKeywords[i];
-					if (!!currentKeyword && !!currentKeyword.trim()) {
+					if (currentKeyword && currentKeyword.trim()) {
 						keywords.push(currentKeyword.trim());
 					}
 				}
@@ -53,9 +53,9 @@
 	var getPageTitle = function () {
 		for (var i = 0; i < metaTagsArr.length; i++) {
 			var tag = metaTagsArr[i];
-			if ((!!tag.getAttribute('property') && tag.getAttribute('property').toUpperCase().trim() === 'OG:TITLE' && !!tag.getAttribute('content')) ||
-				(!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase().trim() === 'TWITTER:TITLE' && !!tag.getAttribute('content'))) {
-				return (!!tag.getAttribute('content')) ? tag.getAttribute('content').trim() : '';
+			if ((tag.getAttribute('property') && tag.getAttribute('property').toUpperCase().trim() === 'OG:TITLE' && tag.getAttribute('content')) ||
+				(tag.getAttribute('name') && tag.getAttribute('name').toUpperCase().trim() === 'TWITTER:TITLE' && tag.getAttribute('content'))) {
+				return (tag.getAttribute('content')) ? tag.getAttribute('content').trim() : '';
 			}
 		}
 

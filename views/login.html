@@ -1,6 +1,6 @@
 <div class="header-panel clearfix">
   <button class="btn btn-icon btn-help animate-fade" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}"
-    data-ng-click="vm.events.introPanel_ShowHelp_Click()" data-ng-show="!vm.introduction.displayIntro() && !!vm.introduction.showLogo"
+    data-ng-click="vm.events.introPanel_ShowHelp_Click()" data-ng-show="!vm.introduction.displayIntro && vm.introduction.showLogo"
     tabindex="1000">
     <i class="fa fa-question-circle" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}</span>
@@ -12,7 +12,7 @@
   </button>
 </div>
 <div class="intro-panel">
-  <h1 class="animate-fade-out" data-ng-show="!!vm.introduction.showLogo" data-ng-class="{ true: 'animate-fade-long animate-fade-out-long' }[vm.introduction.displayIntro()]">
+  <h1 class="animate-fade-out" data-ng-show="vm.introduction.showLogo" data-ng-class="{ true: 'animate-fade-long animate-fade-out-long' }[vm.introduction.displayIntro]">
     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Title) }}</span>
   </h1>
   <div id="intro-panel-1" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 1" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
@@ -201,7 +201,7 @@
       <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
         <label class="sr-only" for="txtPassword">{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
         <input name="txtPassword" data-ng-model="vm.sync.secret" type="password" class="form-control" data-ng-change="vm.events.syncForm_Password_Change()"
-          data-ng-disabled="vm.sync.enabled()" maxlength="150" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_New_Description) }}"
+          data-ng-disabled="vm.sync.enabled" maxlength="150" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_New_Description) }}"
           tabindex="1" />
         <div class="progress" data-ng-hide="!vm.sync.secret">
           <div class="progress-bar" role="progressbar" data-ng-style="{ width: (vm.sync.secretComplexity.complexity === 0) ? '100%' : vm.sync.secretComplexity.complexity + '%' }"
@@ -233,22 +233,22 @@
   <div class="login-form-existing animate-fade" data-ng-hide="vm.settings.displayNewSyncPanel">
     <div class="form-group">
       <label class="sr-only" for="txtId">{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Label) }}</label>
-      <button type="button" class="btn btn-icon btn-scan" data-ng-hide="vm.settings.id()" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ScanCode_Label) }}"
+      <button type="button" class="btn btn-icon btn-scan" data-ng-hide="vm.sync.id" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ScanCode_Label) }}"
         data-ng-click="vm.events.searchForm_ScanCode_Click()">
         <i class="fa fa-qrcode" aria-hidden="true"></i>
       </button>
-      <input name="txtId" data-ng-model="vm.settings.id" class="form-control" data-ng-model-options="{ getterSetter: true }" data-ng-disabled="vm.sync.enabled()"
+      <input name="txtId" data-ng-model="vm.sync.id" class="form-control" data-ng-disabled="vm.sync.enabled"
         placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Description) }}" maxlength="32" spellcheck="false"
         tabindex="1" />
     </div>
     <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
       <label class="sr-only" for="txtPassword">{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
-      <input name="txtPassword" data-ng-model="vm.sync.secret" type="password" class="form-control" data-ng-disabled="vm.sync.enabled()"
+      <input name="txtPassword" data-ng-model="vm.sync.secret" type="password" class="form-control" data-ng-disabled="vm.sync.enabled"
         maxlength="150" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Existing_Description) }}"
         tabindex="2" />
     </div>
     <div class="form-group text-center">
-      <button type="button" class="btn btn-default btn-existing-sync" data-ng-disabled="!vm.settings.id() || !vm.sync.secret" data-ng-click="vm.events.syncForm_EnableSync_Click()"
+      <button type="button" class="btn btn-default btn-existing-sync" data-ng-disabled="!vm.sync.id || !vm.sync.secret" data-ng-click="vm.events.syncForm_EnableSync_Click()"
         tabindex="4">
         {{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}
       </button>

@@ -43,11 +43,14 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 
 	var decryptData = function (encryptedData) {
 		// Determine which decryption method to use based on sync version
-		if (!globals.SyncVersion.Get()) {
-			return decryptData_v1(encryptedData);
-		}
+		return platform.LocalStorage.Get(globals.CacheKeys.SyncVersion)
+			.then(function (syncVersion) {
+				if (!syncVersion) {
+					return decryptData_v1(encryptedData);
+				}
 
-		return decryptData_v2(encryptedData);
+				return decryptData_v2(encryptedData);
+			});
 	};
 
 	var decryptData_v1 = function (encryptedData) {
@@ -57,51 +60,57 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 		}
 
 		// Ensure password is in local storage
-		if (!globals.Password.Get()) {
-			return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
-		}
-
-		return $q(function (resolve, reject) {
-			try {
-				// Decrypt using legacy crypto-js AES
-				var decryptedData = CryptoJS.AES.decrypt(encryptedData, globals.Password.Get()).toString(CryptoJS.enc.Utf8);
-
-				if (!decryptedData) {
-					throw new Error('Unable to decrypt data.');
+		return platform.LocalStorage.Get(globals.CacheKeys.Password)
+			.then(function (password) {
+				if (!password) {
+					return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
 				}
 
-				resolve(decryptedData);
-			}
-			catch (err) {
-				reject({ code: globals.ErrorCodes.InvalidData });
-			}
-		});
+				// Decrypt using legacy crypto-js AES
+				var decryptedData = CryptoJS.AES.decrypt(encryptedData, password).toString(CryptoJS.enc.Utf8);
+				if (!decryptedData) {
+					return $q.reject({ code: globals.ErrorCodes.InvalidData });
+				}
+
+				return decryptedData;
+			});
 	};
 
 	var decryptData_v2 = function (encryptedData) {
+		var encryptedDataBytes, iv;
+
 		// If no data provided, return an empty string
 		if (!encryptedData) {
 			return $q.resolve('');
 		}
 
 		// Ensure both id and password are in local storage
-		if (!globals.Id.Get()) {
-			return $q.reject({ code: globals.ErrorCodes.IdRemoved });
-		}
-		if (!globals.Password.Get()) {
-			return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
-		}
+		return platform.LocalStorage.Get([
+			globals.CacheKeys.Password,
+			globals.CacheKeys.SyncId
+		])
+			.then(function (cachedData) {
+				var password = cachedData[globals.CacheKeys.Password];
+				var syncId = cachedData[globals.CacheKeys.SyncId];
 
-		// Retrieve the hashed password from local storage and convert to bytes
-		var keyData = base64js.toByteArray(globals.Password.Get());
+				if (!syncId) {
+					return $q.reject({ code: globals.ErrorCodes.IdRemoved });
+				}
+				if (!password) {
+					return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
+				}
 
-		// Convert base64 encoded encrypted data to bytes and extract initialization vector
-		var encryptedBytes = base64js.toByteArray(encryptedData);
-		var iv = encryptedBytes.slice(0, 16);
-		var encryptedDataBytes = encryptedBytes.slice(16).buffer;
+				// Retrieve the hashed password from local storage and convert to bytes
+				var keyData = base64js.toByteArray(password);
 
-		// Generate a cryptokey using the stored password hash for decryption
-		return crypto.subtle.importKey('raw', keyData, { name: 'AES-GCM', iv: iv }, false, ['decrypt'])
+				// Convert base64 encoded encrypted data to bytes and extract initialization vector
+				var encryptedBytes = base64js.toByteArray(encryptedData);
+				iv = encryptedBytes.slice(0, 16);
+				encryptedDataBytes = encryptedBytes.slice(16).buffer;
+
+				// Generate a cryptokey using the stored password hash for decryption
+				return crypto.subtle.importKey('raw', keyData, { name: 'AES-GCM', iv: iv }, false, ['decrypt']);
+			})
 			.then(function (key) {
 				// Convert base64 encoded encrypted data to bytes
 				return crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, key, encryptedDataBytes);
@@ -134,27 +143,38 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 	};
 
 	var encryptData = function (data) {
+		var iv;
+
 		// If no data provided, return an empty string
 		if (!data) {
 			return $q.resolve('');
 		}
 
 		// Ensure both id and password are in local storage
-		if (!globals.Id.Get()) {
-			return $q.reject({ code: globals.ErrorCodes.IdRemoved });
-		}
-		if (!globals.Password.Get()) {
-			return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
-		}
+		return platform.LocalStorage.Get([
+			globals.CacheKeys.Password,
+			globals.CacheKeys.SyncId
+		])
+			.then(function (cachedData) {
+				var password = cachedData[globals.CacheKeys.Password];
+				var syncId = cachedData[globals.CacheKeys.SyncId];
 
-		// Retrieve the hashed password from local storage and convert to bytes
-		var keyData = base64js.toByteArray(globals.Password.Get());
+				if (!syncId) {
+					return $q.reject({ code: globals.ErrorCodes.IdRemoved });
+				}
+				if (!password) {
+					return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
+				}
 
-		// Generate a random 16 byte initialization vector
-		var iv = crypto.getRandomValues(new Uint8Array(16));
+				// Retrieve the hashed password from local storage and convert to bytes
+				var keyData = base64js.toByteArray(password);
 
-		// Generate a new cryptokey using the stored password hash
-		return crypto.subtle.importKey('raw', keyData, { name: 'AES-GCM', iv: iv }, false, ['encrypt'])
+				// Generate a random 16 byte initialization vector
+				iv = crypto.getRandomValues(new Uint8Array(16));
+
+				// Generate a new cryptokey using the stored password hash
+				return crypto.subtle.importKey('raw', keyData, { name: 'AES-GCM', iv: iv }, false, ['encrypt']);
+			})
 			.then(function (key) {
 				// Compress the data before encryption
 				var compressedData = LZUTF8.compress(data);
@@ -318,19 +338,23 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 	};
 
 	var getPasswordHash = function (password, salt) {
-		// If old sync version, don't hash password for legacy encryption
-		if (!globals.SyncVersion.Get()) {
-			return $q.resolve(password);
-		}
-
 		var encoder = new TextEncoder('utf-8');
+		var encodedSalt = encoder.encode(salt);
 
-		// Generate a new cryptokey using the stored password hash
-		var keyData = encoder.encode(password);
-		return crypto.subtle.importKey('raw', keyData, { name: 'PBKDF2' }, false, ['deriveKey'])
+		// Get cached sync version
+		return platform.LocalStorage.Get(globals.CacheKeys.SyncVersion)
+			.then(function (syncVersion) {
+				// If old sync version, don't hash password for legacy encryption
+				if (!syncVersion) {
+					return $q.resolve(password);
+				}
+
+				// Generate a new cryptokey using the stored password hash
+				var keyData = encoder.encode(password);
+				return crypto.subtle.importKey('raw', keyData, { name: 'PBKDF2' }, false, ['deriveKey']);
+			})
 			.then(function (importedKey) {
 				// Run the key through PBKDF2 with many iterations using the provided salt
-				var encodedSalt = encoder.encode(salt);
 				return crypto.subtle.deriveKey(
 					{
 						name: 'PBKDF2',
@@ -352,6 +376,15 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 				// Convert exported key to base64 encoded string and return
 				var base64Key = base64js.fromByteArray(new Uint8Array(exportedKey));
 				return base64Key;
+			});
+	};
+
+	var getServiceUrl = function () {
+		// Get service url from local storage
+		return platform.LocalStorage.Get(globals.CacheKeys.ServiceUrl)
+			.then(function (cachedServiceUrl) {
+				// If no service url cached, use default
+				return cachedServiceUrl || globals.URL.DefaultServiceUrl;
 			});
 	};
 
@@ -395,31 +428,40 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 	};
 
 	var logMessage = function (messageType, message) {
-		var messageLogText;
-		
-		switch (messageType) {
-			case globals.LogType.Error:
-				messageLogText = 'ERROR: ';
-				console.error(message);
-				break;
-			case globals.LogType.Warning:
-				messageLogText = 'WARNING: ';
-				console.warn(message);
-				break;
-			case globals.LogType.Info:
-			/* falls through */
-			default:
-				messageLogText = 'INFO: ';
-				if (globals.Debug.Enabled.Get()) {
-					console.info(message);
-				}
-				break;
-		}
+		return platform.LocalStorage.Get([
+			globals.CacheKeys.DebugMessageLog,
+			globals.CacheKeys.DebugMode
+		])
+			.then(function (cachedData) {
+				var messageLogText;
+				var debugMessageLog = cachedData[globals.CacheKeys.DebugMessageLog] || [];
+				var debugModeEnabled = cachedData[globals.CacheKeys.DebugMode];
 
-		if (globals.Debug.Enabled.Get()) {
-			messageLogText += message.stack || message;
-			globals.Debug.MessageLog.Set(messageLogText);
-		}
+				switch (messageType) {
+					case globals.LogType.Error:
+						messageLogText = 'ERROR: ';
+						console.error(message);
+						break;
+					case globals.LogType.Warning:
+						messageLogText = 'WARNING: ';
+						console.warn(message);
+						break;
+					case globals.LogType.Info:
+					/* falls through */
+					default:
+						messageLogText = 'INFO: ';
+						if (debugModeEnabled) {
+							console.info(message);
+						}
+						break;
+				}
+
+				if (debugModeEnabled) {
+					messageLogText += message.stack || message;
+					debugMessageLog.unshift(messageLogText);
+					return platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog, debugMessageLog);
+				}
+			});
 	};
 
 	var parseUrl = function (url) {
@@ -447,13 +489,20 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 	};
 
 	var stripTags = function (str) {
-		return (!!str) ? str.replace(/<(?:.|\n)*?>/gm, '') : str;
+		return str ? str.replace(/<(?:.|\n)*?>/gm, '') : str;
 	};
 
 	var toggleDebugMode = function () {
-		var debugModeEnabled = !globals.Debug.Enabled.Get();
-		globals.Debug.Enabled.Set(debugModeEnabled);
-		return debugModeEnabled;
+		var toggledValue;
+
+		return platform.LocalStorage.Get(globals.CacheKeys.DebugMode)
+			.then(function (debugModeEnabled) {
+				toggledValue = !debugModeEnabled;
+				return platform.LocalStorage.Set(globals.CacheKeys.DebugMode, toggledValue);
+			})
+			.then(function () {
+				return toggledValue;
+			});
 	};
 
 	var trimToNearestWord = function (text, limit) {
@@ -477,6 +526,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 		DeepCopy: deepCopy,
 		GetBackupFileName: getBackupFileName,
 		GetErrorMessageFromException: getErrorMessageFromException,
+		GetServiceUrl: getServiceUrl,
 		GetTagArrayFromText: getTagArrayFromText,
 		GetPasswordHash: getPasswordHash,
 		IsMobilePlatform: isMobilePlatform,

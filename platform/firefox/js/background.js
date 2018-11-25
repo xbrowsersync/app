@@ -181,7 +181,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 
 	var handleAlarm = function (alarm) {
 		// When alarm fires check for sync updates
-		if (alarm && alarm.name === globals.Alarm.Name.Get()) {
+		if (alarm && alarm.name === globals.Alarm.Name) {
 			getLatestUpdates()
 				.catch(function (err) {
 					// If ID was removed disable sync
@@ -221,7 +221,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 	};
 
 	var listenForMessages = function (port) {
-		if (port.name !== globals.Title.Get()) {
+		if (port.name !== globals.Title) {
 			return;
 		}
 
@@ -385,7 +385,7 @@ xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'globals'];
 xBrowserSync.App.FirefoxBackground.factory('utility', xBrowserSync.App.Utility);
 
 // Add api service
-xBrowserSync.App.API.$inject = ['$http', '$q', 'globals', 'utility'];
+xBrowserSync.App.API.$inject = ['$http', '$q', 'platform', 'globals', 'utility'];
 xBrowserSync.App.FirefoxBackground.factory('api', xBrowserSync.App.API);
 
 // Add bookmarks service

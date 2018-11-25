@@ -29,46 +29,58 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 					if (details.previousVersion &&
 						details.previousVersion !== chrome.runtime.getManifest().version) {
 						// If extension has been updated display updated message
-						globals.DisplayUpdated.Set(true);
+						platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, true);
 					}
 					break;
 			}
 		};
 
 		vm.startup = function () {
-			// Check if a sync was interrupted
-			if (!!globals.IsSyncing.Get()) {
-				globals.IsSyncing.Set(false);
+			var disableEventListeners, isSyncing, syncEnabled;
 
-				// Disable sync
-				globals.SyncEnabled.Set(false);
+			platform.LocalStorage.Get([
+				globals.CacheKeys.DisableEventListeners,
+				globals.CacheKeys.IsSyncing,
+				globals.CacheKeys.SyncEnabled
+			])
+				.then(function (cachedData) {
+					disableEventListeners = cachedData[globals.CacheKeys.DisableEventListeners];
+					isSyncing = cachedData[globals.CacheKeys.IsSyncing];
+					syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
 
-				// Display alert
-				displayAlert(
-					platform.GetConstant(globals.Constants.Error_SyncInterrupted_Title),
-					platform.GetConstant(globals.Constants.Error_SyncInterrupted_Message));
+					// Check if a sync was interrupted
+					if (isSyncing) {
+						// Disable sync
+						platform.LocalStorage.Set(globals.CacheKeys.IsSyncing, false);
+						platform.LocalStorage.Set(globals.CacheKeys.SyncEnabled, false);
 
-				return;
-			}
+						// Display alert
+						displayAlert(
+							platform.GetConstant(globals.Constants.Error_SyncInterrupted_Title),
+							platform.GetConstant(globals.Constants.Error_SyncInterrupted_Message));
 
-			// Exit if sync isn't enabled or event listeners disabled
-			if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
-				return;
-			}
-
-			// Check for updates to synced bookmarks
-			bookmarks.CheckForUpdates()
-				.then(function (updatesAvailable) {
-					if (!updatesAvailable) {
 						return;
 					}
 
-					return syncBookmarks({ type: globals.SyncType.Pull });
-				})
-				.catch(function (err) {
-					// Display alert
-					var errMessage = utility.GetErrorMessageFromException(err);
-					displayAlert(errMessage.title, errMessage.message);
+					// Exit if sync isn't enabled or event listeners disabled
+					if (disableEventListeners || !syncEnabled) {
+						return;
+					}
+
+					// Check for updates to synced bookmarks
+					bookmarks.CheckForUpdates()
+						.then(function (updatesAvailable) {
+							if (!updatesAvailable) {
+								return;
+							}
+
+							return syncBookmarks({ type: globals.SyncType.Pull });
+						})
+						.catch(function (err) {
+							// Display alert
+							var errMessage = utility.GetErrorMessageFromException(err);
+							displayAlert(errMessage.title, errMessage.message);
+						});
 				});
 		};
 
@@ -88,62 +100,76 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 
 	var changeBookmark = function (id, changeInfo) {
 		// Exit if sync isn't enabled or event listeners disabled
-		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
-			return;
-		}
-
-		// Sync updates
-		syncBookmarks({
-			type: globals.SyncType.Push,
-			changeInfo: {
-				type: globals.UpdateType.Update,
-				data: [id, changeInfo]
-			}
-		})
-			.catch(function (err) {
-				// Display alert
-				var errMessage = utility.GetErrorMessageFromException(err);
-				displayAlert(errMessage.title, errMessage.message);
-
-				// If data out of sync, refresh sync
-				if (!!err && !!err.code && err.code === globals.ErrorCodes.DataOutOfSync) {
-					syncBookmarks({ type: globals.SyncType.Pull });
+		platform.LocalStorage.Get([
+			globals.CacheKeys.DisableEventListeners,
+			globals.CacheKeys.SyncEnabled
+		])
+			.then(function (cachedData) {
+				if (cachedData[globals.CacheKeys.DisableEventListeners] ||
+					!cachedData[globals.CacheKeys.SyncEnabled]) {
+					return;
 				}
+
+				// Sync updates
+				syncBookmarks({
+					type: globals.SyncType.Push,
+					changeInfo: {
+						type: globals.UpdateType.Update,
+						data: [id, changeInfo]
+					}
+				})
+					.catch(function (err) {
+						// Display alert
+						var errMessage = utility.GetErrorMessageFromException(err);
+						displayAlert(errMessage.title, errMessage.message);
+
+						// If data out of sync, refresh sync
+						if (err && err.code && err.code === globals.ErrorCodes.DataOutOfSync) {
+							syncBookmarks({ type: globals.SyncType.Pull });
+						}
+					});
 			});
 	};
 
 	var createBookmark = function (id, bookmark) {
 		// Exit if sync isn't enabled or event listeners disabled
-		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
-			return;
-		}
-
-		// Get page metadata from current tab
-		platform.GetPageMetadata()
-			.then(function (metadata) {
-				// Add metadata if provided
-				if (metadata) {
-					bookmark.description = utility.StripTags(metadata.description);
-					bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
+		platform.LocalStorage.Get([
+			globals.CacheKeys.DisableEventListeners,
+			globals.CacheKeys.SyncEnabled
+		])
+			.then(function (cachedData) {
+				if (cachedData[globals.CacheKeys.DisableEventListeners] ||
+					!cachedData[globals.CacheKeys.SyncEnabled]) {
+					return;
 				}
 
-				return syncBookmarks({
-					type: globals.SyncType.Push,
-					changeInfo: {
-						type: globals.UpdateType.Create,
-						data: [id, bookmark]
-					}
-				});
-			})
-			.catch(function (err) {
-				// Display alert
-				var errMessage = utility.GetErrorMessageFromException(err);
-				displayAlert(errMessage.title, errMessage.message);
+				// Get page metadata from current tab
+				platform.GetPageMetadata()
+					.then(function (metadata) {
+						// Add metadata if provided
+						if (metadata) {
+							bookmark.description = utility.StripTags(metadata.description);
+							bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
+						}
 
-				// If data out of sync, refresh sync
-				if (!!err && !!err.code && err.code === globals.ErrorCodes.DataOutOfSync) {
-					syncBookmarks({ type: globals.SyncType.Pull });
-				}
+						return syncBookmarks({
+							type: globals.SyncType.Push,
+							changeInfo: {
+								type: globals.UpdateType.Create,
+								data: [id, bookmark]
+							}
+						});
+					})
+					.catch(function (err) {
+						// Display alert
+						var errMessage = utility.GetErrorMessageFromException(err);
+						displayAlert(errMessage.title, errMessage.message);
+
+						// If data out of sync, refresh sync
+						if (err && err.code && err.code === globals.ErrorCodes.DataOutOfSync) {
+							syncBookmarks({ type: globals.SyncType.Pull });
+						}
+					});
 			});
 	};
 
@@ -164,24 +190,31 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 
 	var getLatestUpdates = function () {
 		// Exit if sync isn't enabled or event listeners disabled
-		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
-			return;
-		}
-
-		return bookmarks.CheckForUpdates()
-			.then(function (updatesAvailable) {
-				if (!updatesAvailable) {
+		platform.LocalStorage.Get([
+			globals.CacheKeys.DisableEventListeners,
+			globals.CacheKeys.SyncEnabled
+		])
+			.then(function (cachedData) {
+				if (cachedData[globals.CacheKeys.DisableEventListeners] ||
+					!cachedData[globals.CacheKeys.SyncEnabled]) {
 					return;
 				}
 
-				// Get bookmark updates
-				return syncBookmarks({ type: globals.SyncType.Pull });
+				return bookmarks.CheckForUpdates()
+					.then(function (updatesAvailable) {
+						if (!updatesAvailable) {
+							return;
+						}
+
+						// Get bookmark updates
+						return syncBookmarks({ type: globals.SyncType.Pull });
+					});
 			});
 	};
 
 	var handleAlarm = function (alarm) {
 		// When alarm fires check for sync updates
-		if (alarm && alarm.name === globals.Alarm.Name.Get()) {
+		if (alarm && alarm.name === globals.Alarm.Name) {
 			getLatestUpdates()
 				.catch(function (err) {
 					// If ID was removed disable sync
@@ -221,7 +254,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 	};
 
 	var listenForMessages = function (port) {
-		if (port.name !== globals.Title.Get()) {
+		if (port.name !== globals.Title) {
 			return;
 		}
 
@@ -235,53 +268,67 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 
 	var moveBookmark = function (id, moveInfo) {
 		// Exit if sync isn't enabled or event listeners disabled
-		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
-			return;
-		}
-
-		// Sync updates
-		syncBookmarks({
-			type: globals.SyncType.Push,
-			changeInfo: {
-				type: globals.UpdateType.Move,
-				data: [id, moveInfo]
-			}
-		})
-			.catch(function (err) {
-				// Display alert
-				var errMessage = utility.GetErrorMessageFromException(err);
-				displayAlert(errMessage.title, errMessage.message);
-
-				// If data out of sync, refresh sync
-				if (!!err && !!err.code && err.code === globals.ErrorCodes.DataOutOfSync) {
-					syncBookmarks({ type: globals.SyncType.Pull });
+		platform.LocalStorage.Get([
+			globals.CacheKeys.DisableEventListeners,
+			globals.CacheKeys.SyncEnabled
+		])
+			.then(function (cachedData) {
+				if (cachedData[globals.CacheKeys.DisableEventListeners] ||
+					!cachedData[globals.CacheKeys.SyncEnabled]) {
+					return;
 				}
+
+				// Sync updates
+				syncBookmarks({
+					type: globals.SyncType.Push,
+					changeInfo: {
+						type: globals.UpdateType.Move,
+						data: [id, moveInfo]
+					}
+				})
+					.catch(function (err) {
+						// Display alert
+						var errMessage = utility.GetErrorMessageFromException(err);
+						displayAlert(errMessage.title, errMessage.message);
+
+						// If data out of sync, refresh sync
+						if (err && err.code && err.code === globals.ErrorCodes.DataOutOfSync) {
+							syncBookmarks({ type: globals.SyncType.Pull });
+						}
+					});
 			});
 	};
 
 	var removeBookmark = function (id, removeInfo) {
 		// Exit if sync isn't enabled or event listeners disabled
-		if (!globals.SyncEnabled.Get() || globals.DisableEventListeners.Get()) {
-			return;
-		}
-
-		// Sync updates
-		syncBookmarks({
-			type: globals.SyncType.Push,
-			changeInfo: {
-				type: globals.UpdateType.Delete,
-				data: [id, removeInfo]
-			}
-		})
-			.catch(function (err) {
-				// Display alert
-				var errMessage = utility.GetErrorMessageFromException(err);
-				displayAlert(errMessage.title, errMessage.message);
-
-				// If data out of sync, refresh sync
-				if (!!err && !!err.code && err.code === globals.ErrorCodes.DataOutOfSync) {
-					syncBookmarks({ type: globals.SyncType.Pull });
+		platform.LocalStorage.Get([
+			globals.CacheKeys.DisableEventListeners,
+			globals.CacheKeys.SyncEnabled
+		])
+			.then(function (cachedData) {
+				if (cachedData[globals.CacheKeys.DisableEventListeners] ||
+					!cachedData[globals.CacheKeys.SyncEnabled]) {
+					return;
 				}
+
+				// Sync updates
+				syncBookmarks({
+					type: globals.SyncType.Push,
+					changeInfo: {
+						type: globals.UpdateType.Delete,
+						data: [id, removeInfo]
+					}
+				})
+					.catch(function (err) {
+						// Display alert
+						var errMessage = utility.GetErrorMessageFromException(err);
+						displayAlert(errMessage.title, errMessage.message);
+
+						// If data out of sync, refresh sync
+						if (err && err.code && err.code === globals.ErrorCodes.DataOutOfSync) {
+							syncBookmarks({ type: globals.SyncType.Pull });
+						}
+					});
 			});
 	};
 
@@ -315,11 +362,8 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 				return bookmarks.Sync(syncData);
 			})
 			.then(function (bookmarks, initialSyncFailed) {
-				// Reset network disconnected flag
-				globals.Network.Disconnected.Set(false);
-
 				// If this sync initially failed, alert the user and refresh search results
-				if (!!initialSyncFailed) {
+				if (initialSyncFailed) {
 					displayAlert(
 						platform.GetConstant(globals.Constants.ConnRestored_Title),
 						platform.GetConstant(globals.Constants.ConnRestored_Message));
@@ -385,7 +429,7 @@ xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'globals'];
 xBrowserSync.App.ChromeBackground.factory('utility', xBrowserSync.App.Utility);
 
 // Add api service
-xBrowserSync.App.API.$inject = ['$http', '$q', 'globals', 'utility'];
+xBrowserSync.App.API.$inject = ['$http', '$q', 'platform', 'globals', 'utility'];
 xBrowserSync.App.ChromeBackground.factory('api', xBrowserSync.App.API);
 
 // Add bookmarks service
