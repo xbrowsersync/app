@@ -1,10 +1,10 @@
 # xBrowserSync
 ## Web extensions and mobile apps
 
-[![Build Status](https://travis-ci.org/xBrowserSync/App.svg)](https://travis-ci.org/xBrowserSync/App) [![Dependencies](https://david-dm.org/xBrowserSync/App/status.svg)](https://david-dm.org/xBrowserSync/App) [![Dev Dependencies](https://david-dm.org/xBrowserSync/App/dev-status.svg)](https://david-dm.org/xBrowserSync/App?type=dev) [![GitHub license](https://img.shields.io/github/license/xBrowserSync/App.svg)](https://github.com/xBrowserSync/App/blob/master/LICENSE.md)
+[![Build Status](https://travis-ci.org/xbrowsersync/app.svg)](https://travis-ci.org/xbrowsersync/app) [![Dependencies](https://david-dm.org/xbrowsersync/app/status.svg)](https://david-dm.org/xbrowsersync/app) [![Dev Dependencies](https://david-dm.org/xbrowsersync/app/dev-status.svg)](https://david-dm.org/xbrowsersync/app?type=dev) [![GitHub license](https://img.shields.io/github/license/xbrowsersync/app.svg)](https://github.com/xbrowsersync/app/blob/master/LICENSE.md)
 
-[![GitHub forks](https://img.shields.io/github/forks/xBrowserSync/App.svg?style=social&label=Fork)](https://github.com/xBrowserSync/App/fork)
-[![GitHub stars](https://img.shields.io/github/stars/xBrowserSync/App.svg?style=social&label=Star)](https://github.com/xBrowserSync/App)
+[![GitHub forks](https://img.shields.io/github/forks/xbrowsersync/app.svg?style=social&label=Fork)](https://github.com/xbrowsersync/app/fork)
+[![GitHub stars](https://img.shields.io/github/stars/xbrowsersync/app.svg?style=social&label=Star)](https://github.com/xbrowsersync/app)
 
 xBrowserSync is a free tool for syncing browser data between different browsers and devices, built for privacy and anonymity. For full details, see [www.xbrowsersync.org](https://www.xbrowsersync.org/).
 
@@ -29,7 +29,7 @@ Run a build for the desired platform:
 
 	$ npm run build:[platform]
 
-Replace [platform] with the name of the desired platform to build (corresponding to a folder name in the [platform](https://github.com/xBrowserSync/App/tree/master/platform/) folder). The app code will be output to the 'build' folder. Available platforms:
+Replace [platform] with the name of the desired platform to build (corresponding to a folder name in the [platform](https://github.com/xbrowsersync/app/tree/master/platform/) folder). The app code will be output to the 'build' folder. Available platforms:
 
 - android
 - chrome
@@ -37,7 +37,7 @@ Replace [platform] with the name of the desired platform to build (corresponding
 
 ## Issues
 
-If you've found a bug or wish to request a new feature, please submit it [here](https://github.com/xBrowserSync/App/issues/).
+If you've found a bug or wish to request a new feature, please submit it [here](https://github.com/xbrowsersync/app/issues/).
 
 ## Translation
 
