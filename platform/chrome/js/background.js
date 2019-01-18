@@ -190,7 +190,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 
 	var getLatestUpdates = function () {
 		// Exit if sync isn't enabled or event listeners disabled
-		platform.LocalStorage.Get([
+		return platform.LocalStorage.Get([
 			globals.CacheKeys.DisableEventListeners,
 			globals.CacheKeys.SyncEnabled
 		])

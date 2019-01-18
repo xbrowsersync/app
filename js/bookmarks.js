@@ -51,7 +51,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     };
 
     var checkForUpdates = function () {
-        var lastUpdated, syncEnabled;
+        var cachedLastUpdated, syncEnabled;
 
         // Check if there are unsynced local updates
         if (syncQueue.length > 0) {
@@ -63,15 +63,18 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
             globals.CacheKeys.SyncEnabled
         ])
             .then(function (cachedData) {
-                lastUpdated = cachedData[globals.CacheKeys.LastUpdated];
                 syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
+                
+                // Get last updated date from local cache
+                cachedLastUpdated = new Date(cachedData[globals.CacheKeys.LastUpdated]);
 
                 // Check if bookmarks have been updated
                 return api.GetBookmarksLastUpdated();
             })
             .then(function (data) {
                 // If last updated is different the date in local storage, refresh bookmarks
-                return !lastUpdated || lastUpdated.getTime() !== (new Date(data.lastUpdated)).getTime();
+                var remoteLastUpdated = new Date(data.lastUpdated);
+                return !cachedLastUpdated || cachedLastUpdated.getTime() !== remoteLastUpdated.getTime();
             })
             .catch(function (err) {
                 // Check if sync should be disabled
@@ -97,7 +100,11 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
             platform.LocalStorage.Set(globals.CacheKeys.Password),
             platform.LocalStorage.Set(globals.CacheKeys.SyncEnabled, false),
             platform.LocalStorage.Set(globals.CacheKeys.SyncVersion)
-        ]);
+        ])
+            .then(function() {
+                // Refresh interface/icon
+                $timeout(platform.Interface.Refresh);
+            });
     };
 
     var eachBookmark = function (bookmarks, iteratee) {
@@ -932,7 +939,9 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                         // Sync provided bookmarks and set local bookmarks
                         return $q.all([
                             api.UpdateBookmarks(encryptedBookmarks),
-                            isRestore ? refreshLocalBookmarks(bookmarks) : updateLocalBookmarks(updateLocalBookmarksInfo)
+                            syncData.command === globals.Commands.RestoreBookmarks ?
+                                refreshLocalBookmarks(bookmarks) :
+                                updateLocalBookmarks(updateLocalBookmarksInfo)
                         ]);
                     });
             })
@@ -1207,7 +1216,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
     var upgradeContainers = function (bookmarks) {
         // Upgrade containers to use current container names
-        var otherContainer = getContainer(globals.Bookmarks.OtherContainerNameOld, bookmarks, true);
+        var otherContainer = getContainer(globals.Bookmarks.OtherContainerNameOld, bookmarks);
         if (otherContainer) {
             otherContainer.title = globals.Bookmarks.OtherContainerName;
         }

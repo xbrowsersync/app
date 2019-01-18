@@ -255,56 +255,6 @@ xBrowserSync.App.Global = function (platform) {
             Error_FailedShareUrl_Title: 'error_FailedShareUrl_Title',
             Error_FailedShareUrlNotSynced_Title: 'error_FailedShareUrlNotSynced_Title'
         },
-        DisableEventListeners: {
-            Get: function () {
-                var value;
-
-                value = platform.LocalStorage.Get(
-                    'xBrowserSync-disableEventListeners');
-
-                if (!value) {
-                    return false;
-                }
-                else {
-                    if (value === 'true') {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-            },
-            Set: function (value) {
-                platform.LocalStorage.Set(
-                    'xBrowserSync-disableEventListeners',
-                    value);
-            }
-        },
-        DisplayUpdated: {
-            Get: function () {
-                var value;
-
-                value = platform.LocalStorage.Get(
-                    'xBrowserSync-displayUpdated');
-
-                if (!value) {
-                    return false;
-                }
-                else {
-                    if (value === 'true') {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-            },
-            Set: function (value) {
-                platform.LocalStorage.Set(
-                    'xBrowserSync-displayUpdated',
-                    value);
-            }
-        },
         ErrorCodes: {
             HttpRequestFailed: 10000,
             HttpRequestFailedWhileUpdating: 10001,
@@ -342,82 +292,12 @@ xBrowserSync.App.Global = function (platform) {
             FailedRegisterAutoUpdates: 10500,
             NotImplemented: 10600
         },
-        Id: {
-            Get: function () {
-                var value = platform.LocalStorage.Get(
-                    'xBrowserSync-Id');
-                value = (value === '' || value === 'null') ? null : value;
-
-                return value;
-            },
-            Set: function (value) {
-                value = (!value) ? '' : value.trim();
-
-                platform.LocalStorage.Set(
-                    'xBrowserSync-Id',
-                    value);
-            }
-        },
-        IsSyncing: {
-            Get: function () {
-                var value;
-
-                value = platform.LocalStorage.Get(
-                    'xBrowserSync-isSyncing');
-
-                if (!value) {
-                    return false;
-                }
-                else {
-                    if (value === 'true') {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-            },
-            Set: function (value) {
-                platform.LocalStorage.Set(
-                    'xBrowserSync-isSyncing',
-                    value);
-
-                platform.Interface.Refresh();
-            }
-        },
         LogType: {
             Info: 0,
             Warning: 1,
             Error: 2
         },
         LookaheadMinChars: 1,
-        Network: {
-            Disconnected: {
-                Get: function () {
-                    var value;
-
-                    value = platform.LocalStorage.Get(
-                        'xBrowserSync-networkDisconnected');
-
-                    if (!value) {
-                        return true;
-                    }
-                    else {
-                        if (value === 'true') {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
-                    }
-                },
-                Set: function (value) {
-                    platform.LocalStorage.Set(
-                        'xBrowserSync-networkDisconnected',
-                        value);
-                }
-            }
-        },
         Platforms: {
             Android: 'android',
             Chrome: 'chrome'
@@ -432,64 +312,6 @@ xBrowserSync.App.Global = function (platform) {
             Online: 1,
             Offline: 2,
             NoNewSyncs: 3
-        },
-        SyncBookmarksToolbar: {
-            Get: function () {
-                var value;
-
-                value = platform.LocalStorage.Get(
-                    'xBrowserSync-syncBookmarksToolbar');
-
-                if (!value) {
-                    return true;
-                }
-                else {
-                    if (value === 'true') {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-            },
-            Set: function (value) {
-                platform.LocalStorage.Set(
-                    'xBrowserSync-syncBookmarksToolbar',
-                    value);
-            }
-        },
-        SyncEnabled: {
-            Get: function () {
-                var value;
-
-                value = platform.LocalStorage.Get(
-                    'xBrowserSync-syncEnabled');
-
-                if (!value) {
-                    return false;
-                }
-                else {
-                    if (value === 'true') {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                }
-            },
-            Set: function (value) {
-                platform.LocalStorage.Set(
-                    'xBrowserSync-syncEnabled',
-                    value);
-
-                // Reset network disconnected flag
-                platform.LocalStorage.Set(
-                    'xBrowserSync-networkDisconnected',
-                    false);
-
-                // Update icon
-                platform.Interface.Refresh();
-            }
         },
         SyncType: {
             Push: 1,
