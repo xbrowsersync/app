@@ -53,8 +53,11 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 			.catch(function (err) {
 				utility.LogMessage(globals.LogType.Info, err);
 
-				if (err.status) {
-					return getErrorCodeFromHttpError(err);
+				if (err.status != null) {
+					return getErrorCodeFromHttpError(err)
+						.then(function (errObj) {
+							return $q.reject(errObj);
+						});
 				}
 				else {
 					return $q.reject(err);

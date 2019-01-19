@@ -975,120 +975,109 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     };
 
     var handleSyncResponse = function (response) {
-        return platform.LocalStorage.Get([
-			globals.CacheKeys.Password,
-			globals.CacheKeys.SyncEnabled,
-			globals.CacheKeys.SyncId
-        ])
-            .then(function (cachedData) {
-                vm.sync.secret = cachedData[globals.CacheKeys.Password];
-                vm.sync.enabled = cachedData[globals.CacheKeys.SyncEnabled];
-                vm.sync.id = cachedData[globals.CacheKeys.SyncId];
+        var errMessage;
 
-                var errMessage;
+        switch (response.command) {
+            // After syncing bookmarks
+            case globals.Commands.SyncBookmarks:
+                // Hide loading panel
+                platform.Interface.Loading.Hide();
 
-                switch (response.command) {
-                    // After syncing bookmarks
-                    case globals.Commands.SyncBookmarks:
-                        // Hide loading panel
-                        platform.Interface.Loading.Hide();
-        
-                        if (response.success) {
-                            // Refresh interface/icon
-                            $timeout(platform.Interface.Refresh);
-        
-                            // Disable the intro animation
-                            vm.introduction.displayIntro = false;
-                            platform.LocalStorage.Set(globals.CacheKeys.DisplayIntro, false)
-                                .then(function () {
-                                    // If initial sync, switch to search panel
-                                    if (vm.view.current === vm.view.views.login) {
-                                        vm.search.results = null;
-                                        return changeView(vm.view.views.search);
-                                    }
-                                })
-                                .then(function () {
-                                    vm.search.displayDefaultState();
-                                });
-        
-                            // Updated cached decrypted bookmarks
-                            bookmarks.UpdateCache(response.bookmarks);
-        
-                            // Update bookmark icon
-                            setBookmarkStatus();
-                        }
-                        else {
-                            // Disable upgrade confirmed flag
-                            vm.sync.upgradeConfirmed = false;
-        
-                            // If ID was removed disable sync and display login panel
-                            if (response.error && response.error.code === globals.ErrorCodes.IdRemoved) {
-                                changeView(vm.view.views.login)
-                                    .finally(function () {
-                                        errMessage = utility.GetErrorMessageFromException(response.error);
-                                        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-                                    });
+                if (response.success) {
+                    // Refresh interface/icon
+                    $timeout(platform.Interface.Refresh);
+
+                    // Disable the intro animation
+                    vm.introduction.displayIntro = false;
+                    platform.LocalStorage.Set(globals.CacheKeys.DisplayIntro, false)
+                        .then(function () {
+                            // If initial sync, switch to search panel
+                            if (vm.view.current === vm.view.views.login) {
+                                vm.search.results = null;
+                                return changeView(vm.view.views.search);
                             }
-                            else {
+                        })
+                        .then(function () {
+                            vm.search.displayDefaultState();
+                        });
+
+                    // Updated cached decrypted bookmarks
+                    bookmarks.UpdateCache(response.bookmarks);
+
+                    // Update bookmark icon
+                    setBookmarkStatus();
+                }
+                else {
+                    // Disable upgrade confirmed flag
+                    vm.sync.upgradeConfirmed = false;
+
+                    // If ID was removed disable sync and display login panel
+                    if (response.error && response.error.code === globals.ErrorCodes.IdRemoved) {
+                        changeView(vm.view.views.login)
+                            .finally(function () {
                                 errMessage = utility.GetErrorMessageFromException(response.error);
                                 vm.alert.display(errMessage.title, errMessage.message, 'danger');
-        
-                                // If data out of sync, refresh sync
-                                if (response.error && response.error.code === globals.ErrorCodes.DataOutOfSync) {
-                                    platform.Sync(vm.sync.asyncChannel, { type: globals.SyncType.Pull });
-                                }
-                            }
+                            });
+                    }
+                    else {
+                        errMessage = utility.GetErrorMessageFromException(response.error);
+                        vm.alert.display(errMessage.title, errMessage.message, 'danger');
+
+                        // If data out of sync, refresh sync
+                        if (response.error && response.error.code === globals.ErrorCodes.DataOutOfSync) {
+                            platform.Sync(vm.sync.asyncChannel, { type: globals.SyncType.Pull });
                         }
-                        break;
-                    // After restoring bookmarks
-                    case globals.Commands.RestoreBookmarks:
-                        if (response.success) {
-                            // Refresh data usage
-                            displayDataUsage();
-        
-                            // Update current bookmark status
-                            setBookmarkStatus();
-        
-                            // Updated cached decrypted bookmarks
-                            bookmarks.UpdateCache(response.bookmarks);
-        
-                            vm.settings.displayRestoreForm = false;
-                            vm.settings.displayRestoreConfirmation = false;
-                            vm.settings.dataToRestore = '';
-                            vm.settings.restoreCompletedMessage = platform.GetConstant(globals.Constants.Settings_BackupRestore_RestoreSuccess_Message);
-        
-                            if (!utility.IsMobilePlatform(vm.platformName)) {
-                                $timeout(function () {
-                                    document.querySelector('.btn-done').focus();
-                                });
-                            }
-                            else {
-                                // Refresh search results
-                                vm.search.query = null;
-                                vm.search.queryMeasure = null;
-                                vm.search.lookahead = null;
-                                vm.search.execute();
-                            }
-                        }
-                        else {
-                            errMessage = utility.GetErrorMessageFromException(response.error);
-                            vm.alert.display(errMessage.title, errMessage.message, 'danger');
-                        }
-        
-                        platform.Interface.Loading.Hide();
-                        break;
-                    case globals.Commands.NoCallback:
-                    /* falls through */
-                    default:
-                        if (!response.success) {
-                            errMessage = utility.GetErrorMessageFromException(response.error);
-                            vm.alert.display(errMessage.title, errMessage.message, 'danger');
-                        }
-        
-                        platform.Interface.Loading.Hide();
-                        break;
+                    }
                 }
-            });
+                break;
+            // After restoring bookmarks
+            case globals.Commands.RestoreBookmarks:
+                if (response.success) {
+                    // Refresh data usage
+                    displayDataUsage();
+
+                    // Update current bookmark status
+                    setBookmarkStatus();
+
+                    // Updated cached decrypted bookmarks
+                    bookmarks.UpdateCache(response.bookmarks);
+
+                    vm.settings.displayRestoreForm = false;
+                    vm.settings.displayRestoreConfirmation = false;
+                    vm.settings.dataToRestore = '';
+                    vm.settings.restoreCompletedMessage = platform.GetConstant(globals.Constants.Settings_BackupRestore_RestoreSuccess_Message);
+
+                    if (!utility.IsMobilePlatform(vm.platformName)) {
+                        $timeout(function () {
+                            document.querySelector('.btn-done').focus();
+                        });
+                    }
+                    else {
+                        // Refresh search results
+                        vm.search.query = null;
+                        vm.search.queryMeasure = null;
+                        vm.search.lookahead = null;
+                        vm.search.execute();
+                    }
+                }
+                else {
+                    errMessage = utility.GetErrorMessageFromException(response.error);
+                    vm.alert.display(errMessage.title, errMessage.message, 'danger');
+                }
+
+                platform.Interface.Loading.Hide();
+                break;
+            case globals.Commands.NoCallback:
+            /* falls through */
+            default:
+                if (!response.success) {
+                    errMessage = utility.GetErrorMessageFromException(response.error);
+                    vm.alert.display(errMessage.title, errMessage.message, 'danger');
+                }
+
+                platform.Interface.Loading.Hide();
+                break;
+        }
     };
 
     var init = function () {
