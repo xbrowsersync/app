@@ -92,7 +92,10 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 				utility.LogMessage(globals.LogType.Info, err);
 
 				if (err.status) {
-					return getErrorCodeFromHttpError(err);
+					return getErrorCodeFromHttpError(err)
+						.then(function (errObj) {
+							return $q.reject(errObj);
+						});
 				}
 				else {
 					return $q.reject(err);
@@ -147,7 +150,10 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 				utility.LogMessage(globals.LogType.Info, err);
 
 				if (err.status) {
-					return getErrorCodeFromHttpError(err);
+					return getErrorCodeFromHttpError(err)
+						.then(function (errObj) {
+							return $q.reject(errObj);
+						});
 				}
 				else {
 					return $q.reject(err);
@@ -193,7 +199,10 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 				utility.LogMessage(globals.LogType.Info, err);
 
 				if (err.status) {
-					return getErrorCodeFromHttpError(err);
+					return getErrorCodeFromHttpError(err)
+						.then(function (errObj) {
+							return $q.reject(errObj);
+						});
 				}
 				else {
 					return $q.reject(err);
@@ -225,7 +234,10 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 				utility.LogMessage(globals.LogType.Info, err);
 
 				if (err.status) {
-					return getErrorCodeFromHttpError(err);
+					return getErrorCodeFromHttpError(err)
+						.then(function (errObj) {
+							return $q.reject(errObj);
+						});
 				}
 				else {
 					return $q.reject(err);
@@ -280,7 +292,10 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 				utility.LogMessage(globals.LogType.Info, err);
 
 				if (err.status) {
-					return getErrorCodeFromHttpError(err);
+					return getErrorCodeFromHttpError(err)
+						.then(function (errObj) {
+							return $q.reject(errObj);
+						});
 				}
 				else {
 					return $q.reject(err);

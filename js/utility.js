@@ -427,6 +427,10 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 		logMessage(globals.LogType.Error, err);
 	};
 
+	var logInfo = function (message) {
+		logMessage(globals.LogType.Info, message);
+	};
+
 	var logMessage = function (messageType, message) {
 		return platform.LocalStorage.Get([
 			globals.CacheKeys.DebugMessageLog,
@@ -462,6 +466,10 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 					return platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog, debugMessageLog);
 				}
 			});
+	};
+
+	var logWarning = function (message) {
+		logMessage(globals.LogType.Warning, message);
 	};
 
 	var parseUrl = function (url) {
@@ -532,7 +540,9 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 		IsMobilePlatform: isMobilePlatform,
 		IsNetworkConnected: isNetworkConnected,
 		LogError: logError,
+		LogInfo: logInfo,
 		LogMessage: logMessage,
+		LogWarning: logWarning,
 		ParseUrl: parseUrl,
 		StripTags: stripTags,
 		ToggleDebugMode: toggleDebugMode,

@@ -6,10 +6,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/xBrowserSync/App.git"
+    "url": "https://github.com/xbrowsersync/app.git"
   },
   "bugs": {
-    "url": "https://github.com/xBrowserSync/App/issues"
+    "url": "https://github.com/xbrowsersync/app/issues"
   },
   "dependencies": {
     "angular": "^1.7.4",

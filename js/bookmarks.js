@@ -707,7 +707,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                     return;
                 }
 
-                platform.LocalStorage.Set(globals.CacheKeys.IsSyncing, true)
+                return platform.LocalStorage.Set(globals.CacheKeys.IsSyncing, true)
                     .then(function () {
                         // Process sync
                         var syncPromise;
@@ -796,12 +796,11 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                                         }
 
                                         // Handle network error
-                                        // TODO: test this
                                         return platform.LocalStorage.Get(globals.CacheKeys.NetworkDisconnected);
                                     })
                                     .then(function (networkDisconnected) {
                                         if (networkDisconnected) {
-                                            // If the user was committing an update add failed sync back to beginning of queue and 
+                                            // If the user was committing an update, add failed sync back to beginning of queue and 
                                             // return specific error code
                                             if (currentSync.type !== globals.SyncType.Pull) {
                                                 currentSync.initialSyncFailed = true;
@@ -828,7 +827,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     };
 
     var sync_handleBoth = function (syncData) {
-        var bookmarks, getBookmarksToSync, lastUpdated, updateLocalBookmarksInfo;
+        var bookmarks, getBookmarksToSync, cachedLastUpdated, updateLocalBookmarksInfo;
 
         return platform.LocalStorage.Get([
             globals.CacheKeys.Password,
@@ -837,18 +836,19 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         ])
             .then(function (cachedData) {
                 var password = cachedData[globals.CacheKeys.Password];
-                lastUpdated = cachedData[globals.CacheKeys.LastUpdated];
                 var syncId = cachedData[globals.CacheKeys.SyncId];
 
-                // Check secret and bookmarks ID are present
+                // Check for cached sync ID and password
                 if (!password || !syncId) {
                     return disableSync()
                         .then(function () {
                             return $q.reject({ code: globals.ErrorCodes.MissingClientData });
                         });
                 }
-            })
-            .then(function () {
+
+                // Get last updated date from local cache
+                cachedLastUpdated = new Date(cachedData[globals.CacheKeys.LastUpdated]);
+            
                 if (syncData.bookmarks) {
                     // Sync with provided bookmarks
                     getBookmarksToSync = $q.resolve(syncData.bookmarks || []);
@@ -860,7 +860,8 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                     getBookmarksToSync = api.GetBookmarks()
                         .then(function (data) {
                             // Check if data is out of sync
-                            if (lastUpdated.getTime() !== (new Date(data.lastUpdated)).getTime()) {
+                            var remoteLastUpdated = new Date(data.lastUpdated);
+                            if (cachedLastUpdated.getTime() !== remoteLastUpdated.getTime()) {
                                 return $q.reject({ code: globals.ErrorCodes.DataOutOfSync });
                             }
 
@@ -1034,18 +1035,20 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
             globals.CacheKeys.SyncId
         ])
             .then(function (cachedData) {
-                var lastUpdated = cachedData[globals.CacheKeys.LastUpdated];
                 var password = cachedData[globals.CacheKeys.Password];
                 var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
                 var syncId = cachedData[globals.CacheKeys.SyncId];
 
-                // Check secret and sync ID are present
+                // Check for cached sync ID and password
                 if (!password || !syncId) {
                     return disableSync()
                         .then(function () {
                             return $q.reject({ code: globals.ErrorCodes.MissingClientData });
                         });
                 }
+
+                // Get last updated date from local cache
+                var cachedLastUpdated = new Date(cachedData[globals.CacheKeys.LastUpdated]);
 
                 if (!syncData.changeInfo) {
                     // New sync, get local bookmarks
@@ -1061,7 +1064,8 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                     getBookmarks = api.GetBookmarks()
                         .then(function (data) {
                             // Check if data is out of sync
-                            if (lastUpdated.getTime() !== (new Date(data.lastUpdated)).getTime()) {
+                            var remoteLastUpdated = new Date(data.lastUpdated);
+                            if (cachedLastUpdated.getTime() !== remoteLastUpdated.getTime()) {
                                 return $q.reject({ code: globals.ErrorCodes.DataOutOfSync });
                             }
 

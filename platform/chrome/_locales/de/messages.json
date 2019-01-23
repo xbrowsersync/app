@@ -42,7 +42,7 @@
 		"message": "<h4>Schon synchronisiert (Sie haben eine ID)</h4><p>Wenn Sie einen neuen Sync erstellen, erhalten Sie eine eindeutige xBrowserSync ID die Sie, zusmammen mit Ihrem Passwort, verwenden können, um Ihre Daten auf verschiedenen Geräten zu synchronisieren. Ihre Anonymität ist sichergestellt, es werden keine persönlichen Daten gesammelt und mit den synchronisierten Daten gespeichert.</p><p>Einmal synchronisiert, können Sie Ihre ID in den Einstellungen einsehen. Tippen Sie darauf, um einen einfach zu handhabenden QR-Code anzuzeigen, um ihn auf Ihrem Mobilgerät einzuscannen.</p>"
 	},
 	"login_introPanel4_Message": {
-		"message": "<h4>Mit einem anderen Dienst synchronisieren</h4><p>Standardmäßig werden Ihre Daten mit dem offiziellen xBrowserSync Dienst synchronisiert, obwohle jeder seinen eigenen <a href='https://github.com/xBrowserSync/API' class='new-tab'>xBrowserSync Dienst</a> betreiben kann, sowohl für den privaten Gebrauch (für ultimative Sicherheit und Privatsphäre) oder um ihn öffentlich zu betreiben, so dass mehr Menschen sich an xBrowserSync erfreuen können.</p><p>Prüfen Sie die verfügbaren <a href='https://www.xbrowsersync.org/#status' class='new-tab'>xBrowserSync Dienste</a> und wechseln Sie den Dienst in den Einstellungen.</p>"
+		"message": "<h4>Mit einem anderen Dienst synchronisieren</h4><p>Standardmäßig werden Ihre Daten mit dem offiziellen xBrowserSync Dienst synchronisiert, obwohle jeder seinen eigenen <a href='https://github.com/xbrowsersync/api' class='new-tab'>xBrowserSync Dienst</a> betreiben kann, sowohl für den privaten Gebrauch (für ultimative Sicherheit und Privatsphäre) oder um ihn öffentlich zu betreiben, so dass mehr Menschen sich an xBrowserSync erfreuen können.</p><p>Prüfen Sie die verfügbaren <a href='https://www.xbrowsersync.org/#status' class='new-tab'>xBrowserSync Dienste</a> und wechseln Sie den Dienst in den Einstellungen.</p>"
 	},
 	"login_introPanel5_Message": {
 		"message": "<h4>Neuer Dienst, neue ID</h4><p>Ihre xBrowserSync ID funktioniert nur mit dem Dienst, von dem sie erzeugt wurde.</p><p>Wenn Sie den Dienst wechseln, müssen Sie einen neuen Sync erstellen und erhalten eine neue ID. Sie können Ihre bereits synchronisierten Daten umziehen, indem Sie im alten Dienst eine Datensicherung erstellen und diese auf dem neuen Dienst einspielen nachdem die Synchronisierung eingerichtet ist.</p>"
@@ -63,10 +63,10 @@
 		"message": "<h4>Tastaturkürzel xBrowserSync</h4><p>Um Ihre Lesezeichen schnell durchsuchen zu können, fügen Sie ein Tastaturkürzel zum Aufruf der Erweiterung hiunzu.</p><p>Rufen Sie chrome://extensions/ auf. Die Tastaturkürzel finden Sie dann links oben im Hamburgermenü."
 	},
 	"login_introPanel11_Message": {
-		"message": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on Google Play store, <a href='https://fdroid.xbrowsersync.org/' class='new-tab'>F-Droid</a> or <a href='https://github.com/xBrowserSync/App/releases' class='new-tab'>direct download</a>.</p>"
+		"message": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on Google Play store, <a href='https://fdroid.xbrowsersync.org/' class='new-tab'>F-Droid</a> or <a href='https://github.com/xbrowsersync/app/releases' class='new-tab'>direct download</a>.</p>"
 	},
 	"login_introPanel12_Message": {
-		"message": "<h4>Problem gefunden?</h4><p>Falls Sie einen Fehler in xBrowserSync gefunden haben oder sich ein bestimmtes Feature wünschen, gehen Sie zu GitHub und <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>melden Sie ein Problem</a>.</p><p>Ein Aufruf an alle Programmierer! Wenn Sie xBrowserSync verbessern möchten, erstellen Sie einen Fork von dem<a href='https://github.com/xBrowserSync/App' class='new-tab'>xBrowserSync GitHub Repo</a> und senden Sie einen Pull Request.</p>"
+		"message": "<h4>Problem gefunden?</h4><p>Falls Sie einen Fehler in xBrowserSync gefunden haben oder sich ein bestimmtes Feature wünschen, gehen Sie zu GitHub und <a href='https://github.com/xbrowsersync/app/issues' class='new-tab'>melden Sie ein Problem</a>.</p><p>Ein Aufruf an alle Programmierer! Wenn Sie xBrowserSync verbessern möchten, erstellen Sie einen Fork von dem<a href='https://github.com/xbrowsersync/app' class='new-tab'>xBrowserSync GitHub Repo</a> und senden Sie einen Pull Request.</p>"
 	},
 	"button_Settings_Label": {
 		"message": "Einstellungen"
@@ -267,7 +267,7 @@
 		"message": "Akzeptiert keine neuen Syncs"
 	},
 	"settings_Service_Status_Error": {
-		"message":  "Error"
+		"message":  "Connection error"
 	},
 	"Settings_Service_Status_Loading": {
 		"message":  "Checking..."
@@ -438,7 +438,7 @@
 		"message": "Etwas ist schief gelaufen"
 	},
 	"error_Default_Message": {
-		"message": "Wenn das Problem weiterhin besteht, melden Sie es unter github.com/xBrowserSync/App."
+		"message": "Wenn das Problem weiterhin besteht, melden Sie es unter github.com/xbrowsersync/app."
 	},
 	"error_HttpRequestFailed_Title": {
 		"message": "Verbindung verloren"
