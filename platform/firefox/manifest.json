@@ -25,6 +25,8 @@
     "alarms",
     "bookmarks",
     "notifications",
-    "tabs"
+    "storage",
+    "tabs",
+    "unlimitedStorage"
   ]
 }

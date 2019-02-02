@@ -57,7 +57,7 @@
               tabindex="6">
               {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
             </button>
-            <button type="button" class="btn btn-default" tabindex="7" data-ng-click="vm.settings.syncBookmarksToolbar(false); vm.settings.displaySyncBookmarksToolbarConfirmation = false">
+            <button type="button" class="btn btn-default" tabindex="7" data-ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Cancel()">
               {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
             </button>
           </div>

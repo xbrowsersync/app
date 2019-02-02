@@ -112,6 +112,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
             searchForm_ShareBookmark_Click: platform.Bookmarks.Share,
             searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
             syncPanel_SyncBookmarksToolbar_Click: syncPanel_SyncBookmarksToolbar_Click,
+            syncPanel_SyncBookmarksToolbar_Cancel: syncPanel_SyncBookmarksToolbar_Cancel,
             syncPanel_SyncBookmarksToolbar_Confirm: syncPanel_SyncBookmarksToolbar_Confirm,
             syncForm_CancelSyncConfirmation_Click: syncForm_CancelSyncConfirmation_Click,
             syncForm_Password_Change: syncForm_Password_Change,
@@ -811,13 +812,13 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
                         deferred.resolve(view);
                         break;
                     case vm.view.views.search:
-                        $timeout(function () {
                             // Focus on search box
                             if (!utility.IsMobilePlatform(vm.platformName)) {
-                                document.querySelector('input[name=txtSearch]').focus();
+                                $timeout(function () {
+                                    document.querySelector('input[name=txtSearch]').focus();
+                                }, 200);
                             }
                             deferred.resolve(view);
-                        }, 100);
                         break;
                     case vm.view.views.bookmark:
                         // Set bookmark form properties
@@ -858,8 +859,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
                                 // Get service status and display service info
                                 api.CheckServiceStatus()
                                     .then(function (serviceInfo) {
-                                        setServiceInformation(serviceInfo);
-                                        displayDataUsage();
+                                        $timeout(function () {
+                                            setServiceInformation(serviceInfo);
+                                            displayDataUsage();
+                                        });
                                     })
                                     .catch(function (err) {
                                         if (err && err.code === globals.ErrorCodes.ApiOffline) {
@@ -887,12 +890,13 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
                         deferred.resolve(view);
                         break;
                 }
+            });
 
+        return deferred.promise
+            .then(function () {
                 // Attach events to new tab links
                 $timeout(setNewTabLinks);
             });
-
-        return deferred.promise;
     };
 
     var checkRestoreData = function (data) {
@@ -984,9 +988,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
                 platform.Interface.Loading.Hide();
 
                 if (response.success) {
-                    // Refresh interface/icon
-                    $timeout(platform.Interface.Refresh);
-
                     // Disable the intro animation
                     vm.introduction.displayIntro = false;
                     platform.LocalStorage.Set(globals.CacheKeys.DisplayIntro, false)
@@ -1809,7 +1810,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
 
     var syncForm_DisableSync_Click = function () {
         // If sync is in progress, display confirmation
-        platform.LocalStorage.Get(globals.CacheKeys.IsSyncing)
+        bookmarks.IsSyncing()
             .then(function (isSyncing) {
                 if (isSyncing) {
                     vm.settings.service.displayCancelSyncConfirmation = true;
@@ -1934,6 +1935,11 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
                     document.querySelector('.btn-confirm-sync-toolbar').focus();
                 });
             });
+    };
+
+    var syncPanel_SyncBookmarksToolbar_Cancel = function () {
+        vm.settings.displaySyncBookmarksToolbarConfirmation = false;
+        vm.settings.syncBookmarksToolbar = false;
     };
 
     var syncPanel_SyncBookmarksToolbar_Confirm = function () {

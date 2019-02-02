@@ -185,9 +185,12 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 						displayAlert(errMessage.title, errMessage.message);
 
 						// Local bookmarks now out of sync so refresh sync
-						if (err.code !== globals.ErrorCodes.HttpRequestFailedWhileUpdating) {
-							return syncBookmarks({ type: globals.SyncType.Pull });
-						}
+						return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+							.then(function (syncEnabled) {
+								if (syncEnabled && err.code !== globals.ErrorCodes.HttpRequestFailedWhileUpdating) {
+									return syncBookmarks({ type: globals.SyncType.Pull });
+								}
+							});
 					});
 			});
 	};
@@ -226,13 +229,13 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 	var onStartupHandler = function () {
 		var isSyncing, syncEnabled;
 
-		platform.LocalStorage.Get([
-			globals.CacheKeys.IsSyncing,
-			globals.CacheKeys.SyncEnabled
+		$q.all([
+			bookmarks.IsSyncing(),
+			platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
 		])
-			.then(function (cachedData) {
-				isSyncing = cachedData[globals.CacheKeys.IsSyncing];
-				syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
+			.then(function (data) {
+				isSyncing = data[0];
+				syncEnabled = data[1];
 
 				// Check if a sync was interrupted
 				if (isSyncing) {

@@ -211,21 +211,19 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
 	var bookmarksDeleted = function (xBookmarks, args) {
 		var removeInfo = args[1];
-		var changedBookmarkIndex, deletedLocalBookmarkParent;
+		var changedBookmarkIndex;
 		var deferred = $q.defer();
 
 		// Check if changed bookmark is a container
 		wasContainerChanged(removeInfo.node, xBookmarks)
 			.then(function (changedBookmarkIsContainer) {
+				// If container deleted disable sync
 				if (changedBookmarkIsContainer) {
-					return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
+					return bookmarks.DisableSync()
+						.then(function () {
+							return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
+						});
 				}
-
-				// Get deleted local bookmark's parent
-				return getLocalBookmarkTreeById(removeInfo.parentId);
-			})
-			.then(function (localBookmark) {
-				deletedLocalBookmarkParent = localBookmark;
 
 				// Get local bookmark's parent's corresponding xBookmark and container
 				// Check if any containers are before the changed bookmark that would throw off index
@@ -334,7 +332,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	var bookmarksUpdated = function (xBookmarks, args) {
 		var id = args[0];
 		var updateInfo = args[1];
-		var updatedLocalBookmark, updatedLocalBookmarkParent, changedBookmarkIndex;
+		var updatedLocalBookmark, changedBookmarkIndex;
 		var deferred = $q.defer();
 
 		// Get updated local bookmark
@@ -346,15 +344,13 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 				return wasContainerChanged(updatedLocalBookmark, xBookmarks);
 			})
 			.then(function (changedBookmarkIsContainer) {
+				// If container changed disable sync
 				if (changedBookmarkIsContainer) {
-					return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
+					return bookmarks.DisableSync()
+						.then(function () {
+							return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
+						});
 				}
-
-				// Get updated local bookmark parent
-				return getLocalBookmarkTreeById(updatedLocalBookmark.parentId);
-			})
-			.then(function (localBookmark) {
-				updatedLocalBookmarkParent = localBookmark;
 
 				// Get local bookmark's parent's corresponding xBookmark and container
 				// Check if any containers are before the changed bookmark that would throw off index
@@ -397,10 +393,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	};
 
 	var clearBookmarks = function () {
-		var clearOtherBookmarks, clearBookmarksBar;
-
 		// Clear Other bookmarks
-		clearOtherBookmarks = $q(function (resolve, reject) {
+		var clearOthers = $q(function (resolve, reject) {
 			try {
 				chrome.bookmarks.getChildren(otherBookmarksId, function (results) {
 					var promises = [];
@@ -425,8 +419,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 			}
 		});
 
-		// Clear Bookmarks bar
-		clearBookmarksBar = bookmarks.GetSyncBookmarksToolbar()
+		// Clear bookmarks toolbar if enabled
+		var clearToolbar = bookmarks.GetSyncBookmarksToolbar()
 			.then(function (syncBookmarksToolbar) {
 				if (syncBookmarksToolbar) {
 					return $q(function (resolve, reject) {
@@ -456,7 +450,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 				}
 			})
 
-		return $q.all([clearOtherBookmarks, clearBookmarksBar]);
+		return $q.all([clearOthers, clearToolbar]);
 	};
 
 	var createSingle = function (bookmarkToCreate, pathToTarget) {
@@ -533,15 +527,15 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		addBookmarkIds = addBookmarkIds || true;
 
 		// Get Other bookmarks
-		getOtherBookmarks = getLocalBookmarkTreeById(otherBookmarksId)
+		var getOtherBookmarks = getLocalBookmarkTreeById(otherBookmarksId)
 			.then(function (otherBookmarks) {
 				if (otherBookmarks.children && otherBookmarks.children.length > 0) {
 					return getLocalBookmarksAsXBookmarks(otherBookmarks.children);
 				}
 			});
 
-		// Get bookmarks bar
-		getToolbarBookmarks = $q.all([
+		// Get toolbar bookmarks if enabled
+		var getToolbarBookmarks = $q.all([
 			bookmarks.GetSyncBookmarksToolbar(),
 			getLocalBookmarkTreeById(toolbarBookmarksId)
 		])
@@ -621,7 +615,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
 	var getPageMetadata = function () {
 		var deferred = $q.defer();
-		var metadata = {};
 
 		// Get current tab
 		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -704,8 +697,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	};
 
 	var populateBookmarks = function (xBookmarks) {
-		var populateToolbar, populateOther;
-
 		// Get containers
 		var menuContainer = bookmarks.GetContainer(globals.Bookmarks.MenuContainerName, xBookmarks);
 		var mobileContainer = bookmarks.GetContainer(globals.Bookmarks.MobileContainerName, xBookmarks);
@@ -769,7 +760,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 			}
 		});
 
-		// Populate bookmarks bar
+		// Populate bookmarks toolbar if enabled
 		var populateToolbar = bookmarks.GetSyncBookmarksToolbar()
 			.then(function (syncBookmarksToolbar) {
 				if (syncBookmarksToolbar && toolbarContainer && toolbarContainer.children.length > 0) {
@@ -782,7 +773,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 						catch (err) {
 							utility.LogMessage(globals.LogType.Info, 'Error occurred populating toolbar');
 							utility.LogError(err);
-							return reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
+							reject({ code: globals.ErrorCodes.FailedGetLocalBookmarks });
 						}
 					});
 				}
@@ -795,13 +786,13 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		var iconPath;
 		var tooltip = getConstant(globals.Constants.Title);
 
-		platform.LocalStorage.Get([
-			globals.CacheKeys.IsSyncing,
-			globals.CacheKeys.SyncEnabled
+		$q.all([
+			bookmarks.IsSyncing(),
+			platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
 		])
-			.then(function (cachedData) {
-				var isSyncing = cachedData[globals.CacheKeys.IsSyncing];
-				var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
+			.then(function (data) {
+				var isSyncing = data[0];
+				var syncEnabled = data[1];
 
 				if (isSyncing) {
 					iconPath = 'img/browser-action-working.png';

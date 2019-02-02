@@ -351,31 +351,31 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 
 				// Generate a new cryptokey using the stored password hash
 				var keyData = encoder.encode(password);
-				return crypto.subtle.importKey('raw', keyData, { name: 'PBKDF2' }, false, ['deriveKey']);
-			})
-			.then(function (importedKey) {
-				// Run the key through PBKDF2 with many iterations using the provided salt
-				return crypto.subtle.deriveKey(
-					{
-						name: 'PBKDF2',
-						salt: encodedSalt,
-						iterations: 250000,
-						hash: 'SHA-256'
-					},
-					importedKey,
-					{ name: 'AES-GCM', length: 256 },
-					true,
-					['encrypt', 'decrypt']
-				);
-			})
-			.then(function (derivedKey) {
-				// Export the hashed key
-				return crypto.subtle.exportKey('raw', derivedKey);
-			})
-			.then(function (exportedKey) {
-				// Convert exported key to base64 encoded string and return
-				var base64Key = base64js.fromByteArray(new Uint8Array(exportedKey));
-				return base64Key;
+				return crypto.subtle.importKey('raw', keyData, { name: 'PBKDF2' }, false, ['deriveKey'])
+					.then(function (importedKey) {
+						// Run the key through PBKDF2 with many iterations using the provided salt
+						return crypto.subtle.deriveKey(
+							{
+								name: 'PBKDF2',
+								salt: encodedSalt,
+								iterations: 250000,
+								hash: 'SHA-256'
+							},
+							importedKey,
+							{ name: 'AES-GCM', length: 256 },
+							true,
+							['encrypt', 'decrypt']
+						);
+					})
+					.then(function (derivedKey) {
+						// Export the hashed key
+						return crypto.subtle.exportKey('raw', derivedKey);
+					})
+					.then(function (exportedKey) {
+						// Convert exported key to base64 encoded string and return
+						var base64Key = base64js.fromByteArray(new Uint8Array(exportedKey));
+						return base64Key;
+					});
 			});
 	};
 
