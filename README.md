@@ -1,10 +1,10 @@
 # xBrowserSync
 ## Web extensions and mobile apps
 
-[![Build Status](https://travis-ci.org/xBrowserSync/App.svg)](https://travis-ci.org/xBrowserSync/App) [![Dependencies](https://david-dm.org/xBrowserSync/App/status.svg)](https://david-dm.org/xBrowserSync/App) [![Dev Dependencies](https://david-dm.org/xBrowserSync/App/dev-status.svg)](https://david-dm.org/xBrowserSync/App?type=dev) [![GitHub license](https://img.shields.io/github/license/xBrowserSync/App.svg)](https://github.com/xbrowsersync/app/blob/master/LICENSE.md)
+[![Build Status](https://travis-ci.org/xbrowsersync/app.svg)](https://travis-ci.org/xbrowsersync/app) [![Dependencies](https://david-dm.org/xbrowsersync/app/status.svg)](https://david-dm.org/xbrowsersync/app) [![Dev Dependencies](https://david-dm.org/xbrowsersync/app/dev-status.svg)](https://david-dm.org/xbrowsersync/app?type=dev) [![GitHub license](https://img.shields.io/github/license/xbrowsersync/app.svg)](https://github.com/xbrowsersync/app/blob/master/LICENSE.md)
 
-[![GitHub forks](https://img.shields.io/github/forks/xBrowserSync/App.svg?style=social&label=Fork)](https://github.com/xbrowsersync/app/fork)
-[![GitHub stars](https://img.shields.io/github/stars/xBrowserSync/App.svg?style=social&label=Star)](https://github.com/xbrowsersync/app)
+[![GitHub forks](https://img.shields.io/github/forks/xbrowsersync/app.svg?style=social&label=Fork)](https://github.com/xbrowsersync/app/fork)
+[![GitHub stars](https://img.shields.io/github/stars/xbrowsersync/app.svg?style=social&label=Star)](https://github.com/xbrowsersync/app)
 
 xBrowserSync is a free tool for syncing browser data between different browsers and devices, built for privacy and anonymity. For full details, see [www.xbrowsersync.org](https://www.xbrowsersync.org/).
 
