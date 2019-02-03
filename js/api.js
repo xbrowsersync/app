@@ -9,8 +9,6 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 	'use strict';
 
-	var moduleName = 'xBrowserSync.App.API';
-
 	/* ------------------------------------------------------------------------------------
 	 * Public functions
 	 * ------------------------------------------------------------------------------------ */

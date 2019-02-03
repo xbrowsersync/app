@@ -9,11 +9,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeout, platform, globals, utility, bookmarks) {
 	'use strict';
 
-	/* ------------------------------------------------------------------------------------
-	 * Platform variables
-	 * ------------------------------------------------------------------------------------ */
-
-	var moduleName = 'xBrowserSync.App.PlatformImplementation', vm, loadingId;
+	var vm, loadingId;
 	var menuBookmarksId = 'menu________',
 		mobileBookmarksId = 'mobile______',
 		otherBookmarksId = 'unfiled_____',

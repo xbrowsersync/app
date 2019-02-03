@@ -46,7 +46,7 @@
             <div class="checkbox">
               <input id="syncBookmarksToolbar" type="checkbox" data-ng-model="vm.settings.syncBookmarksToolbar" data-ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Click()"
                 tabindex="5" />
-              <label for="syncBookmarksToolbar"></label>
+              <label for="syncBookmarksToolbar" data-ng-class="{ 'animate': vm.animations.enabled }"></label>
             </div>
           </div>
         </div>
@@ -300,7 +300,7 @@
           <div class="checkbox">
             <input id="enableDebugMode" type="checkbox" data-ng-model="vm.settings.debugMode" data-ng-click="vm.events.debugPanel_EnableDebugMode_Click()"
             />
-            <label for="enableDebugMode"></label>
+            <label for="enableDebugMode" data-ng-class="{ 'animate': vm.animations.enabled }"></label>
           </div>
         </div>
       </div>

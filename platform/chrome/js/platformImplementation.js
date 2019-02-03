@@ -9,11 +9,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeout, platform, globals, utility, bookmarks) {
 	'use strict';
 
-	/* ------------------------------------------------------------------------------------
-	 * Platform variables
-	 * ------------------------------------------------------------------------------------ */
-
-	var moduleName = 'xBrowserSync.App.PlatformImplementation', vm, loadingId;
+	var vm, loadingId;
 	var toolbarBookmarksId = '1', otherBookmarksId = '2';
 	var unsupportedContainers = [
 		globals.Bookmarks.MenuContainerName,

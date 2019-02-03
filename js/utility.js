@@ -9,8 +9,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Utility = function ($q, platform, globals) {
 	'use strict';
 
-	var moduleName = 'xBrowserSync.App.Utility';
-
+	
 	/* ------------------------------------------------------------------------------------
 	 * Public functions
 	 * ------------------------------------------------------------------------------------ */

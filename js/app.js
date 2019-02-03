@@ -8,7 +8,9 @@ xBrowserSync.App = xBrowserSync.App || {};
 
 xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platform, globals, api, utility, bookmarks, platformImplementation) {
     'use strict';
-    var vm, moduleName = 'xBrowserSync.App.Controller';
+
+    var vm;
+
 
     /* ------------------------------------------------------------------------------------
      * Constructor
@@ -34,6 +36,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
                 vm.alert.type = alertType;
                 vm.alert.show = true;
             }
+        };
+
+        vm.animations = {
+            enabled: true
         };
 
         vm.bookmark = {
@@ -125,7 +131,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
             syncForm_Submit_Click: syncForm_Submit_Click,
             syncForm_UpgradeSync_Click: syncForm_UpgradeSync_Click,
             syncPanel_DisplayDataUsage_Click: displayDataUsage,
-            syncPanel_DisplaySyncOptions_Click: syncPanel_DisplaySyncOptions_Click,
             searchForm_ToggleBookmark_Click: searchForm_ToggleBookmark_Click,
             updatedPanel_ReleaseNotes_Click: updatedPanel_ReleaseNotes_Click,
             updateServiceUrlForm_Cancel_Click: updateServiceUrlForm_Cancel_Click,
@@ -190,7 +195,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
             displayRestoreConfirmation: false,
             displayRestoreForm: false,
             displaySyncBookmarksToolbarConfirmation: false,
-            displaySyncOptions: true,
             displayUpdateServiceUrlConfirmation: false,
             displayUpdateServiceUrlForm: false,
             fileRestoreEnabled: false,
@@ -519,76 +523,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
             });
     };
 
-    var bookmarkForm_Init = function () {
-        // If form properties already set, return 
-        if (vm.bookmark.current) {
-            vm.bookmark.displayUpdateForm = true;
-            return $q.resolve();
-        }
-
-        var deferred = $q.defer(), loadMetadataDeferred = $q.defer(), timeout;
-
-        // Check if current url is a bookmark
-        bookmarks.IncludesCurrentPage()
-            .then(function (result) {
-                if (result) {
-                    // Remove search score and set current bookmark to result
-                    delete result.score;
-                    vm.bookmark.current = result;
-
-                    // Display update bookmark form and return
-                    vm.bookmark.displayUpdateForm = true;
-                    return deferred.resolve();
-                }
-                else {
-                    // Otherwise display loading overlay and get page metadata for current url
-                    timeout = platform.Interface.Loading.Show('retrievingMetadata', loadMetadataDeferred);
-                    return platform.GetPageMetadata(loadMetadataDeferred)
-                        .then(function (metadata) {
-                            // Display add bookmark form
-                            vm.bookmark.displayUpdateForm = false;
-
-                            // Set current bookmark properties
-                            var bookmark = new bookmarks.XBookmark(
-                                null,
-                                metadata.url,
-                                null,
-                                null);
-                            vm.bookmark.current = bookmark;
-
-                            if (metadata) {
-                                // Set form properties to url metadata
-                                bookmark.title = metadata.title;
-                                bookmark.description = utility.TrimToNearestWord(metadata.description, globals.Bookmarks.DescriptionMaxLength);
-                                bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
-                            }
-
-                            return deferred.resolve();
-                        });
-                }
-            })
-            .catch(function (err) {
-                // Set bookmark url
-                if (err && err.url) {
-                    var bookmark = new bookmarks.XBookmark(
-                        '',
-                        err.url);
-                    vm.bookmark.current = bookmark;
-                }
-
-                // Display alert
-                var errMessage = utility.GetErrorMessageFromException(err);
-                vm.alert.display(errMessage.title, errMessage.message, 'danger');
-
-                return deferred.resolve();
-            })
-            .finally(function () {
-                platform.Interface.Loading.Hide('retrievingMetadata', timeout);
-            });
-
-        return deferred.promise;
-    };
-
     var bookmarkForm_RemoveTag_Click = function (tag) {
         vm.bookmark.current.tags = _.without(vm.bookmark.current.tags, tag);
         vm.bookmarkForm.$setDirty();
@@ -693,209 +627,289 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         ]);
     };
 
-    var changeView = function (view) {
-        var deferred = $q.defer();
+    var init_bookmarkView = function () {
+        var loadMetadataDeferred = $q.defer();
+        var timeout;
+        
+        vm.bookmark.tagText = null;
+        vm.bookmark.tagTextMeasure = null;
+        vm.bookmark.tagLookahead = null;
+        vm.bookmark.displayUpdateForm = false;
+
+        // TODO: Test clearing current bookmark
+        // If form properties already set, return
+        /*if (vm.bookmark.current) {
+            vm.bookmark.displayUpdateForm = true;
+            return $q.resolve();
+        }*/
+
+        // Check if current url is a bookmark
+        return bookmarks.IncludesCurrentPage()
+            .then(function (bookmarkedCurrentPage) {
+                if (bookmarkedCurrentPage) {
+                    // Remove search score and set current bookmark to result
+                    delete bookmarkedCurrentPage.score;
+                    vm.bookmark.current = bookmarkedCurrentPage;
+
+                    // Display update bookmark form and return
+                    vm.bookmark.displayUpdateForm = true;
+                    return $q.resolve();
+                }
+
+                // Display loading overlay and get page metadata for current url
+                timeout = platform.Interface.Loading.Show('retrievingMetadata', loadMetadataDeferred);
+                return platform.GetPageMetadata(loadMetadataDeferred)
+                    .then(function (metadata) {
+                        // Display add bookmark form
+                        vm.bookmark.displayUpdateForm = false;
+
+                        // Set current bookmark properties
+                        var bookmark = new bookmarks.XBookmark(
+                            null,
+                            metadata.url,
+                            null,
+                            null);
+                        vm.bookmark.current = bookmark;
+
+                        if (metadata) {
+                            // Set form properties to url metadata
+                            bookmark.title = metadata.title;
+                            bookmark.description = utility.TrimToNearestWord(metadata.description, globals.Bookmarks.DescriptionMaxLength);
+                            bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
+                        }
+                    });
+            })
+            .then(function () {
+                // Save url to compare for changes
+                vm.bookmark.originalUrl = vm.bookmark.current.url;
+
+                $timeout(function () {
+                    // Don't focus on title field for mobile apps unless not sharing a bookmark
+                    if ((!utility.IsMobilePlatform(vm.platformName)) ||
+                        vm.bookmark.current.url === 'http://') {
+                        document.querySelector('input[name="bookmarkTitle"]').focus();
+                    }
+                }, 100);
+            })
+            .catch(function (err) {
+                // Set bookmark url
+                if (err && err.url) {
+                    var bookmark = new bookmarks.XBookmark(
+                        '',
+                        err.url);
+                    vm.bookmark.current = bookmark;
+                }
+
+                // Display alert
+                var errMessage = utility.GetErrorMessageFromException(err);
+                vm.alert.display(errMessage.title, errMessage.message, 'danger');
+            })
+            .finally(function () {
+                platform.Interface.Loading.Hide('retrievingMetadata', timeout);
+            });
+    };
+
+    var init_loginView = function () {
+        vm.sync.displayPasswordConfirmation = false;
+        vm.sync.displaySyncConfirmation = false;
+        vm.sync.displayUpgradeConfirmation = false;
+        vm.sync.secret = null;
+        vm.sync.secretComplexity = {};
+        vm.sync.secretConfirmation = null;
+        vm.sync.upgradeConfirmed = false;
+        if (vm.syncForm) {
+            vm.syncForm.$setPristine();
+            vm.syncForm.$setUntouched();
+        }
 
         // Get cached sync data
-        platform.LocalStorage.Get([
-            globals.CacheKeys.DebugMode,
+        return platform.LocalStorage.Get([
             globals.CacheKeys.DisplayIntro,
             globals.CacheKeys.SyncEnabled,
             globals.CacheKeys.SyncId
         ])
             .then(function (cachedData) {
-                var debugMode = cachedData[globals.CacheKeys.DebugMode];
                 var displayIntro = cachedData[globals.CacheKeys.DisplayIntro];
                 var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
                 var syncId = cachedData[globals.CacheKeys.SyncId];
                 
-                vm.alert.show = false;
-                vm.introduction.displayIntro = !!displayIntro;                
-                vm.settings.debugMode = !!debugMode;
-                vm.settings.displaySyncOptions = !syncEnabled;
+                vm.introduction.displayIntro = !!displayIntro;
+                vm.sync.enabled = !!syncEnabled;                
                 vm.sync.id = syncId;
-                vm.sync.enabled = !!syncEnabled;
 
-                // Hide loading panel
-                platform.Interface.Loading.Hide();
+                // If not on a mobile platform, display new sync panel depending on if ID is set
+                vm.settings.displayNewSyncPanel = utility.IsMobilePlatform(vm.platformName) ? false : !syncId;
 
-                // Reset current view
-                switch (vm.view.current) {
-                    case vm.view.views.bookmark:
-                        vm.bookmark.current = null;
-                        vm.bookmark.tagText = null;
-                        vm.bookmark.tagTextMeasure = null;
-                        vm.bookmark.tagLookahead = null;
-                        vm.bookmark.displayUpdateForm = false;
-                        break;
-                    case vm.view.views.search:
-                        vm.search.lookahead = null;
-                        vm.search.selectedBookmark = null;
-                        vm.search.query = null;
-                        vm.search.queryMeasure = null;
-
-                        // Clear search results for non-mobile platforms, otherwise refresh search
-                        if (!utility.IsMobilePlatform(vm.platformName)) {
-                            vm.search.results = null;
+                // Focus on first input field
+                if (!utility.IsMobilePlatform(vm.platformName)) {
+                    $timeout(function () {
+                        var inputField;
+                        if (vm.settings.displayNewSyncPanel) {
+                            inputField = document.querySelector('.login-form-new input[name="txtPassword"]');
+                            if (inputField) {
+                                inputField.focus();
+                            }
                         }
                         else {
-                            $timeout(vm.search.execute);
+                            // Focus on password field if id already set
+                            inputField = syncId ?
+                                document.querySelector('.login-form-existing input[name="txtPassword"]') :
+                                document.querySelector('input[name="txtId"]');
+                            if (inputField) {
+                                inputField.focus();
+                            }
                         }
-                        break;
-                    case vm.view.views.settings:
-                        vm.settings.displayCancelSyncConfirmation = false;
-                        vm.settings.displayQRCode = false;
-                        vm.settings.displayRestoreConfirmation = false;
-                        vm.settings.displayRestoreForm = false;
-                        vm.settings.displaySyncBookmarksToolbarConfirmation = false;
-                        vm.settings.displayUpdateServiceUrlConfirmation = false;
-                        vm.settings.displayUpdateServiceUrlForm = false;
-                        document.querySelector('#backupFile').value = null;
-                        vm.settings.backupFileName = null;
-                        vm.settings.backupCompletedMessage = null;
-                        vm.settings.restoreCompletedMessage = null;
-                        vm.settings.dataToRestore = '';
-                        break;
-                    case vm.view.views.login:
-                        vm.sync.displayPasswordConfirmation = false;
-                        vm.sync.displaySyncConfirmation = false;
-                        vm.sync.displayUpgradeConfirmation = false;
-                        vm.sync.secret = null;
-                        vm.sync.secretComplexity = {};
-                        vm.sync.secretConfirmation = null;
-                        vm.sync.upgradeConfirmed = false;
-                        if (vm.syncForm) {
-                            vm.syncForm.$setPristine();
-                            vm.syncForm.$setUntouched();
-                        }
-                        break;
-                    case vm.view.views.updated:
-                        platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, false);
-                        break;
+                    });
                 }
 
-                vm.view.current = view;
-
-                // Initialise new view
-                switch (view) {
-                    case vm.view.views.login:
-                        // If not on a mobile platform, display new sync panel depending on if ID is set
-                        vm.settings.displayNewSyncPanel = utility.IsMobilePlatform(vm.platformName) ? false : !syncId;
-
-                        // Focus on first input field
-                        if (!utility.IsMobilePlatform(vm.platformName)) {
-                            $timeout(function () {
-                                var inputField;
-                                if (vm.settings.displayNewSyncPanel) {
-                                    inputField = document.querySelector('.login-form-new input[name="txtPassword"]');
-                                    if (inputField) {
-                                        inputField.focus();
-                                    }
-                                }
-                                else {
-                                    // Focus on password field if id already set
-                                    inputField = syncId ?
-                                        document.querySelector('.login-form-existing input[name="txtPassword"]') :
-                                        document.querySelector('input[name="txtId"]');
-                                    if (inputField) {
-                                        inputField.focus();
-                                    }
-                                }
-                            });
-                        }
-
-                        // Check whether to display intro animation
-                        if (!displayIntro) {
-                            vm.introduction.displayPanel();
-                        }
-
-                        deferred.resolve(view);
-                        break;
-                    case vm.view.views.search:
-                            // Focus on search box
-                            if (!utility.IsMobilePlatform(vm.platformName)) {
-                                $timeout(function () {
-                                    document.querySelector('input[name=txtSearch]').focus();
-                                }, 200);
-                            }
-                            deferred.resolve(view);
-                        break;
-                    case vm.view.views.bookmark:
-                        // Set bookmark form properties
-                        bookmarkForm_Init()
-                            .then(function () {
-                                // Save url to compare for changes
-                                vm.bookmark.originalUrl = vm.bookmark.current.url;
-
-                                $timeout(function () {
-                                    // Don't focus on title field for mobile apps unless not sharing a bookmark
-                                    if ((!utility.IsMobilePlatform(vm.platformName)) ||
-                                        vm.bookmark.current.url === 'http://') {
-                                        document.querySelector('input[name="bookmarkTitle"]').focus();
-                                    }
-                                    deferred.resolve(view);
-                                }, 100);
-                            });
-                        break;
-                    case vm.view.views.settings:
-                        vm.settings.service.status = null;
-
-                        // Get current service url and sync bookmarks toolbar setting from cache
-                        $q.all([
-                            bookmarks.GetSyncBookmarksToolbar(),
-                            platform.LocalStorage.Get(globals.CacheKeys.DebugMessageLog),
-                            utility.GetServiceUrl(),
-                        ])
-                            .then(function (cachedData) {
-                                var syncBookmarksToolbar = cachedData[0];
-                                var debugMessageLog = cachedData[1];
-                                var serviceUrl = cachedData[2];
-
-                                vm.settings.messageLog = debugMessageLog;
-                                vm.settings.service.url = serviceUrl;
-                                vm.settings.service.newServiceUrl = serviceUrl;
-                                vm.settings.syncBookmarksToolbar = syncBookmarksToolbar;
-
-                                // Get service status and display service info
-                                api.CheckServiceStatus()
-                                    .then(function (serviceInfo) {
-                                        $timeout(function () {
-                                            setServiceInformation(serviceInfo);
-                                            displayDataUsage();
-                                        });
-                                    })
-                                    .catch(function (err) {
-                                        if (err && err.code === globals.ErrorCodes.ApiOffline) {
-                                            vm.settings.service.status = globals.ServiceStatus.Offline;
-                                        }
-                                        else {
-                                            vm.settings.service.status = globals.ServiceStatus.Error;
-                                        }
-                                    })
-                                    .finally(function () {
-                                        deferred.resolve(view);
-                                    });
-                            });
-                        break;
-                    case vm.view.views.updated:
-                        $timeout(function () {
-                            // Focus on release notes button
-                            if (!utility.IsMobilePlatform(vm.platformName)) {
-                                document.querySelector('#releaseNotesBtn').focus();
-                            }
-                            deferred.resolve(view);
-                        }, 100);
-                        break;
-                    default:
-                        deferred.resolve(view);
-                        break;
+                // Check whether to display intro animation
+                if (!displayIntro) {
+                    vm.introduction.displayPanel();
                 }
             });
+    };
 
-        return deferred.promise
+    var init_searchView = function () {
+        vm.search.lookahead = null;
+        vm.search.selectedBookmark = null;
+        vm.search.query = null;
+        vm.search.queryMeasure = null;
+
+        // Clear search results for non-mobile platforms, otherwise refresh search
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+            vm.search.results = null;
+        }
+        else {
+            $timeout(vm.search.execute);
+        }
+
+        // Focus on search box
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+            $timeout(function () {
+                document.querySelector('input[name=txtSearch]').focus();
+            }, 200);
+        }
+
+        return $q.resolve();
+    };
+
+    var init_settingsView = function () {
+        vm.settings.displayCancelSyncConfirmation = false;
+        vm.settings.displayQRCode = false;
+        vm.settings.displayRestoreConfirmation = false;
+        vm.settings.displayRestoreForm = false;
+        vm.settings.displaySyncBookmarksToolbarConfirmation = false;
+        vm.settings.displayUpdateServiceUrlConfirmation = false;
+        vm.settings.displayUpdateServiceUrlForm = false;
+        document.querySelector('#backupFile').value = null;
+        vm.settings.backupFileName = null;
+        vm.settings.backupCompletedMessage = null;
+        vm.settings.restoreCompletedMessage = null;
+        vm.settings.dataToRestore = '';
+        vm.settings.service.status = null;
+
+        // Get current service url and sync bookmarks toolbar setting from cache
+        return $q.all([
+            bookmarks.GetSyncBookmarksToolbar(),
+            platform.LocalStorage.Get([
+                globals.CacheKeys.DebugMessageLog,
+                globals.CacheKeys.SyncEnabled,
+                globals.CacheKeys.SyncId
+            ]),
+            utility.GetServiceUrl(),
+        ])
+            .then(function (cachedData) {
+                var syncBookmarksToolbar = cachedData[0];
+                var debugMessageLog = cachedData[1][globals.CacheKeys.DebugMessageLog];
+                var syncEnabled = cachedData[1][globals.CacheKeys.SyncEnabled];
+                var syncId = cachedData[1][globals.CacheKeys.SyncId];
+                var serviceUrl = cachedData[2];
+
+                vm.settings.messageLog = debugMessageLog;
+                vm.settings.service.url = serviceUrl;
+                vm.settings.service.newServiceUrl = serviceUrl;
+                vm.settings.syncBookmarksToolbar = syncBookmarksToolbar;
+                vm.sync.enabled = !!syncEnabled;
+                vm.sync.id = syncId;
+
+                // Get service status and display service info
+                return api.CheckServiceStatus()
+                    .then(function (serviceInfo) {
+                        $timeout(function () {
+                            setServiceInformation(serviceInfo);
+                            displayDataUsage();
+                        });
+                    })
+                    .catch(function (err) {
+                        if (err && err.code === globals.ErrorCodes.ApiOffline) {
+                            vm.settings.service.status = globals.ServiceStatus.Offline;
+                        }
+                        else {
+                            vm.settings.service.status = globals.ServiceStatus.Error;
+                        }
+                    });
+            });
+    };
+
+    var init_updatedView = function () {
+        return $q.all([
+            platform.LocalStorage.Get(globals.CacheKeys.DisplayIntro),
+            platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, false)
+        ])
+            .then(function (cachedData) {
+                vm.introduction.displayIntro = !!cachedData[0];
+                
+                $timeout(function () {
+                    // Focus on release notes button
+                    if (!utility.IsMobilePlatform(vm.platformName)) {
+                        document.querySelector('#releaseNotesBtn').focus();
+                    }
+                }, 100);
+            });
+    };
+
+    var changeView = function (view) {
+        var initNewView;
+
+        // Hide loading panel
+        platform.Interface.Loading.Hide();
+                
+        // Hide any alert messages
+        vm.alert.show = false;
+
+        // Disable animations
+        vm.animations.enabled = false;
+        
+        // Initialise new view
+        vm.view.current = view;
+        switch (view) {
+            case vm.view.views.bookmark:
+                initNewView = init_bookmarkView();
+                break;
+            case vm.view.views.search:
+                initNewView = init_searchView();
+                break;
+            case vm.view.views.settings:
+                initNewView = init_settingsView();
+                break;
+            case vm.view.views.updated:
+                initNewView = init_updatedView();
+                break;
+            case vm.view.views.login:
+            default:
+                initNewView = init_loginView();
+                break;
+        }
+
+        return initNewView
             .then(function () {
                 // Attach events to new tab links
                 $timeout(setNewTabLinks);
+                return view;
+            })
+            .finally(function () {
+                // Re-enable animations
+                vm.animations.enabled = true;
             });
     };
 
@@ -1903,16 +1917,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     var syncForm_UpgradeSync_Click = function () {
         vm.sync.upgradeConfirmed = true;
         startSyncing();
-    };
-
-    var syncPanel_DisplaySyncOptions_Click = function () {
-        vm.settings.displaySyncOptions = true;
-
-        if (!utility.IsMobilePlatform(vm.platformName)) {
-            $timeout(function () {
-                document.querySelector('#syncOptions-Panel .btn-back').focus();
-            });
-        }
     };
 
     var syncPanel_SyncBookmarksToolbar_Click = function () {

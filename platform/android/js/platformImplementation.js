@@ -12,10 +12,6 @@ SpinnerDialog.show = function () { };
 xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeout, platform, globals, utility, bookmarks) {
 	'use strict';
 
-	/* ------------------------------------------------------------------------------------
-	 * Platform variables
-	 * ------------------------------------------------------------------------------------ */
-
 	var $scope, autoUpdatesInterval, currentUrl, loadingId, vm;
 
 	var constants = {

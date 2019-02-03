@@ -293,7 +293,6 @@ body {
             width: 15px;
             height: 15px;
             border-radius: 50%;
-            transition: all .3s ease;
             cursor: pointer;
             position: absolute;
             top: -5px;
@@ -302,6 +301,10 @@ body {
             min-height: 0;
             min-width: 0;
             padding: 0;
+
+            &.animate {
+                transition: all .1s ease;
+            }
         }
     }
     
