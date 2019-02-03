@@ -16,7 +16,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	 * Platform variables
 	 * ------------------------------------------------------------------------------------ */
 
-	var $scope, currentUrl, loadingId, moduleName = 'xBrowserSync.App.PlatformImplementation', vm;
+	var $scope, autoUpdatesInterval, currentUrl, loadingId, vm;
 
 	var constants = {
 		"title": {
@@ -907,7 +907,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		deferred = deferred || $q.defer();
 
 		// If network disconnected fail immediately, otherwise retrieve page metadata
-		if (!!globals.Network.Disconnected.Get()) {
+		if (!utility.isNetworkConnected()) {
 			handleResponse(null, 'Network disconnected.');
 		}
 		else {
@@ -1076,23 +1076,32 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	};
 
 	var startAutoUpdates = function () {
+		// Check for updates at intervals
+		autoUpdatesInterval = $interval(getLatestUpdates, globals.Alarm.Period * 60000);
 		return $q.resolve();
 	};
 
 	var stopAutoUpdates = function () {
+		if (!autoUpdatesInterval) {
+			return;
+		}
+
+		// Cancel interval
+		$interval.cancel(autoUpdatesInterval);
+		autoUpdatesInterval = undefined;
 	};
 
 	var sync = function (vm, syncData, command) {
-		syncData.command = (!!command) ? command : globals.Commands.SyncBookmarks;
+		syncData.command = (command) ? command : globals.Commands.SyncBookmarks;
 
 		// Start sync
 		return bookmarks.Sync(syncData)
 			.then(function (bookmarks, initialSyncFailed) {
 				// Reset network disconnected flag
-				globals.Network.Disconnected.Set(false);
+				platform.LocalStorage.Set(globals.CacheKeys.NetworkDisconnected, false);
 
 				// If this sync initially failed, alert the user and refresh search results
-				if (!!initialSyncFailed) {
+				if (initialSyncFailed) {
 					vm.alert.display(platform.GetConstant(globals.Constants.ConnRestored_Title), platform.GetConstant(globals.Constants.ConnRestored_Message));
 
 					// Update search results
@@ -1117,6 +1126,14 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 				}
 
 				vm.events.handleSyncResponse({ command: syncData.command, success: false, error: err });
+
+				// If sync was disabled, display login panel
+				platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+					.then(function (syncEnabled) {
+						if (!syncEnabled) {
+							vm.view.change(vm.view.views.login);
+						}
+					});
 			})
 			.finally(function () {
 				utility.LogMessage(globals.LogType.Info, 'Sync data: ' + JSON.stringify(syncData));
@@ -1160,37 +1177,35 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	};
 
 	var checkForInterruptedSync = function () {
-		// Check if a sync was interrupted
-		if (!!globals.IsSyncing.Get()) {
-			globals.IsSyncing.Set(false);
-
-			// Disable sync
-			bookmarks.DisableSync();
-
-			// Display login panel
-			vm.view.displayMainView();
-
-			// Display alert
-			vm.alert.display(
-				getConstant(globals.Constants.Error_SyncInterrupted_Title),
-				getConstant(globals.Constants.Error_SyncInterrupted_Message));
-
-			return true;
-		}
-
-		return false;
+		return platform.LocalStorage.Get(globals.CacheKeys.IsSyncing)
+			.then(function (isSyncing) {
+				// Check if a sync was interrupted
+				if (isSyncing) {
+					// Display login panel
+					vm.view.displayMainView();
+					
+					// Disable sync
+					return bookmarks.DisableSync()
+						.then(function () {
+							// Display alert
+							displayAlert(
+								getConstant(globals.Constants.Error_SyncInterrupted_Title),
+								getConstant(globals.Constants.Error_SyncInterrupted_Message));
+						});
+				}
+			});
 	};
 
-	var checkForSharedUrl = function () {
+	var checkForSharedUrl = function (syncEnabled) {
 		var deferred = $q.defer();
 		utility.LogMessage(globals.LogType.Info, 'checkForSharedUrl');
 
 		// If there is a current intent, retrieve it
 		window.plugins.webintent.hasExtra(window.plugins.webintent.EXTRA_TEXT,
 			function (has) {
-				if (!!has) {
+				if (has) {
 					// Only use the intent if sync is enabled
-					if (!!globals.SyncEnabled.Get()) {
+					if (syncEnabled) {
 						window.plugins.webintent.getExtra(window.plugins.webintent.EXTRA_TEXT,
 							function (url) {
 								// Remove the intent
@@ -1218,7 +1233,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
 						// Display alert
 						vm.alert.display(null, getConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title));
-
 						deferred.resolve();
 					}
 				}
@@ -1244,8 +1258,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 				// If upgrade is available disable sync and display updated panel
 				if (!displayIntro && compareVersions(mobileAppVersion, globals.AppVersion) < 0) {
 					return $q.all([
-						globals.SyncEnabled.Set(false),
-						globals.DisplayUpdated.Set(true)
+						platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, true),
+            			bookmarks.DisableSync()
 					]);
 				}
 			})
@@ -1272,9 +1286,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		// Set platform
 		vm.platformName = cordova.platformId;
 
-		// Reset network disconnected flag
-		globals.Network.Disconnected.Set(!utility.IsNetworkConnected());
-
 		// Set back button event
 		document.addEventListener('backbutton', handleBackButton, false);
 
@@ -1293,32 +1304,36 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		// Use toasts for alerts
 		vm.alert.display = displayToast;
 
-		// Display default search results if sync enabled
-		if (globals.SyncEnabled.Get()) {
-			displayDefaultSearchState();
-		}
+		// Reset network disconnected flag
+		var networkDisconnected = !utility.IsNetworkConnected();
+		platform.LocalStorage.Set(globals.CacheKeys.NetworkDisconnected, networkDisconnected)
 
 		// Check if a sync was interrupted
-		if (checkForInterruptedSync()) {
-			return;
-		}
-
-		// Check if a url was shared
-		checkForSharedUrl()
-			.then(function (sharedUrl) {
-				if (!globals.SyncEnabled.Get()) {
-					return;
+		checkForInterruptedSync()
+			.then(function () {
+				return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled);
+			})
+			.then(function (syncEnabled) {
+				// If sync enabled start regular updates check and display default search results
+				if (syncEnabled) {
+					startAutoUpdates();
+					displayDefaultSearchState();
 				}
 
-				if (!!sharedUrl) {
-					// Set shared url to current url and display bookmark panel
-					currentUrl = sharedUrl;
-					vm.view.change(vm.view.views.bookmark);
-				}
-
+				// Check if a url was shared
+				return checkForSharedUrl(syncEnabled)
+					.then(function (sharedUrl) {
+						if (syncEnabled && sharedUrl) {
+							// Set shared url to current url and display bookmark panel
+							currentUrl = sharedUrl;
+							return vm.view.change(vm.view.views.bookmark);
+						}
+					});
+			})
+			.then(function () {
 				// Check if bookmarks need updating, return immediately if network is disconnected
 				var checkForUpdates;
-				if (!globals.Network.Disconnected.Get()) {
+				if (!networkDisconnected) {
 					checkForUpdates = bookmarks.CheckForUpdates();
 				}
 				else {
@@ -1339,16 +1354,9 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 						// Get bookmark updates
 						return sync(vm, { type: globals.SyncType.Pull });
 					})
-					.then(function () {
-						// Update search results
-						displayDefaultSearchState();
-					})
+					// Update search results
+					.then(displayDefaultSearchState)
 					.catch(function (err) {
-						// If sync was disabled, display login panel
-						if (!globals.SyncEnabled.Get()) {
-							vm.view.change(vm.view.views.login);
-						}
-
 						// Display alert if not retrieving bookmark metadata
 						if (!sharedUrl) {
 							var errMessage = utility.GetErrorMessageFromException(err);
@@ -1364,15 +1372,10 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 				var errMessage = utility.GetErrorMessageFromException(err);
 				vm.alert.display(errMessage.title, errMessage.message);
 			});
-
-		// Check for updates regularly
-		$interval(function () {
-			getLatestUpdates();
-		}, globals.Alarm.Period.Get() * 60000);
 	};
 
 	var displayToast = function (title, description) {
-		var message = (!!title) ? title + '. ' + description : description;
+		var message = (title) ? title + '. ' + description : description;
 
 		window.plugins.toast.showWithOptions({
 			message: message,
@@ -1383,10 +1386,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	};
 
 	var getLatestUpdates = function () {
-		if (!globals.SyncEnabled.Get()) {
-			return $q.resolve();
-		}
-
 		return bookmarks.CheckForUpdates()
 			.then(function (updatesAvailable) {
 				if (!updatesAvailable) {
@@ -1401,22 +1400,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 				// Get bookmark updates
 				return sync(vm, { type: globals.SyncType.Pull });
 			})
-			.then(function () {
-				// Update search results
-				displayDefaultSearchState();
-			})
-			.catch(function (err) {
-				// If sync was disabled, display login panel
-				if (!globals.SyncEnabled.Get()) {
-					vm.view.change(vm.view.views.login);
-				}
-
-				// Display alert if not retrieving bookmark metadata
-				if (!sharedUrl) {
-					var errMessage = utility.GetErrorMessageFromException(err);
-					vm.alert.display(errMessage.title, errMessage.message);
-				}
-			})
+			// Update search results
+			.then(displayDefaultSearchState)
 			.finally(function () {
 				hideLoading('syncingUpdates');
 			});
@@ -1439,18 +1424,25 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	};
 
 	var handleNetworkDisconnected = function () {
-		globals.Network.Disconnected.Set(true);
+		platform.LocalStorage.Set(globals.CacheKeys.NetworkDisconnected, true);
 	};
 
 	var handleNetworkReconnected = function () {
 		// If a previous sync failed due to lost connection, check for updates now
-		if (!!globals.Network.Disconnected.Get()) {
-			getLatestUpdates()
-				.then(function () {
-					// Update search results
-					refreshSearchResults();
-				});
-		}
+		platform.LocalStorage.Get([
+			globals.CacheKeys.NetworkDisconnected,
+			globals.CacheKeys.SyncEnabled
+		])
+			.then(function (cachedData) {
+				networkDisconnected = cachedData[globals.CacheKeys.NetworkDisconnected];
+				syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
+
+				if (syncEnabled && networkDisconnected) {
+					getLatestUpdates()
+						// Update search results
+						.then(refreshSearchResults);
+				}
+			});
 	};
 
 	var handleTouchStart = function (event) {
@@ -1513,20 +1505,31 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	};
 
 	var resume = function () {
-		// Reset network disconnected flag
-		globals.Network.Disconnected.Set(!utility.IsNetworkConnected());
+		var sharedUrl, syncEnabled;
+		var networkDisconnected = !utility.IsNetworkConnected();
 
-		// Deselect bookmark
-		vm.search.selectedBookmark = null;
+		// Check if sync enalbed and reset network disconnected flag
+		$q.all([
+			platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled),
+			platform.LocalStorage.Set(globals.CacheKeys.NetworkDisconnected, networkDisconnected)
+		])
+			.then(function (cachedData) {
+				syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
+				
+				// Deselect bookmark
+				vm.search.selectedBookmark = null;
 
-		// Check if a url was shared
-		checkForSharedUrl()
-			.then(function (sharedUrl) {
-				if (!globals.SyncEnabled.Get()) {
+				// Check if a url was shared
+				return checkForSharedUrl(syncEnabled);
+			})
+			.then(function (checkForSharedUrlResponse) {
+				sharedUrl = checkForSharedUrlResponse;
+
+				if (!syncEnabled) {
 					return;
 				}
 
-				if (!!sharedUrl) {
+				if (sharedUrl) {
 					// Set shared url to current url and display bookmark panel
 					currentUrl = sharedUrl;
 					vm.view.change(vm.view.views.bookmark);
@@ -1534,7 +1537,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
 				// Check if bookmarks need updating, return immediately if network is disconnected
 				var checkForUpdates;
-				if (!globals.Network.Disconnected.Get()) {
+				if (!networkDisconnected) {
 					checkForUpdates = bookmarks.CheckForUpdates();
 				}
 				else {
@@ -1561,22 +1564,17 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 								}
 							});
 					})
-					.catch(function (err) {
-						// If sync was disabled, display login panel
-						if (!globals.SyncEnabled.Get()) {
-							vm.view.change(vm.view.views.login);
-						}
-
-						// Don't display alert if url was shared or if network error encountered
-						if (!sharedUrl && err.code !== globals.ErrorCodes.HttpRequestFailed) {
-							var errMessage = utility.GetErrorMessageFromException(err);
-							vm.alert.display(errMessage.title, errMessage.message);
-						}
-					})
 					.finally(function () {
 						hideLoading('syncingUpdates');
 					});
-			});
+			})
+			.catch(function (err) {
+				// Don't display alert if url was shared or if network error encountered
+				if (!sharedUrl && err.code !== globals.ErrorCodes.HttpRequestFailed) {
+					var errMessage = utility.GetErrorMessageFromException(err);
+					vm.alert.display(errMessage.title, errMessage.message);
+				}
+			})
 	};
 
 	var syncForm_EnableSync_Click = function () {
