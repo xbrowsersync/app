@@ -678,7 +678,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                     var hostMatch = bookmark.url.toLowerCase().match(/^(https?:\/\/)?(www\.)?([^\/]+)/);
                     if (hostMatch) {
                         bookmarkWords.push(hostMatch[0]);
-                        bookmarkWords.push((!!hostMatch[2]) ? hostMatch[2] + hostMatch[3] : hostMatch[3]);
+                        bookmarkWords.push(hostMatch[2] ? hostMatch[2] + hostMatch[3] : hostMatch[3]);
                         if (hostMatch[2]) {
                             bookmarkWords.push(hostMatch[3]);
                         }

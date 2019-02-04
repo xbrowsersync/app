@@ -7,8 +7,10 @@
   <button class="btn btn-icon btn-toggle-bookmark" data-ng-class="{ 'active': vm.bookmark.active }" title="{{ vm.bookmark.active ? vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) : vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}"
     data-ng-click="vm.events.searchForm_ToggleBookmark_Click()" tabindex="1000">
     <i class="fa fa-bookmark-o" aria-hidden="true"></i>
-    <span class="sr-only" data-ng-if="vm.bookmark.active">{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}</span>
-    <span class="sr-only" data-ng-if="!vm.bookmark.active">{{ vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}</span>
+    <span class="sr-only" data-ng-if="vm.bookmark.active">{{
+      vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}</span>
+    <span class="sr-only" data-ng-if="!vm.bookmark.active">{{
+      vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}</span>
   </button>
   <div class="search-form">
     <input class="form-control" name="txtSearch" maxlength="200" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Search_Field_Description) }}"
@@ -19,7 +21,8 @@
     </label>
     <div class="lookahead-container">
       <span class="measure" data-ng-bind-html="vm.search.queryMeasure"></span>
-      <span class="lookahead" data-ng-show="vm.search.lookahead" data-ng-click="vm.events.searchForm_SearchText_Autocomplete()">{{ vm.search.lookahead }}</span>
+      <span class="lookahead" data-ng-show="vm.search.lookahead" data-ng-click="vm.events.searchForm_SearchText_Autocomplete()">{{
+        vm.search.lookahead }}</span>
     </div>
     <button class="btn btn-icon btn-clear" data-ng-show="vm.search.query" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Clear_Label) }}"
       data-ng-click="vm.events.searchForm_Clear_Click()">
@@ -39,11 +42,13 @@
       <div class="menu animate-fade" data-ng-show="vm.search.selectedBookmark === result.id" data-ng-blur="vm.events.searchForm_SelectBookmark_Press(null, $event)"
         tabindex="-1">
         <div class="buttons">
-          <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}" data-hm-tap="vm.events.searchForm_ShareBookmark_Click(result)">
+          <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}"
+            data-hm-tap="vm.events.searchForm_ShareBookmark_Click(result)">
             <i class="fa fa-share-alt" aria-hidden="true"></i>
             <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}</span>
           </button>
-          <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}" data-hm-tap="vm.events.searchForm_UpdateBookmark_Click(result)">
+          <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}"
+            data-hm-tap="vm.events.searchForm_UpdateBookmark_Click(result)">
             <i class="fa fa-pencil" aria-hidden="true"></i>
             <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}</span>
           </button>

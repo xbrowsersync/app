@@ -9,6 +9,7 @@ $search-window-height: 4.2em;
 
 body {
     width: $window-width;
+    transition: width linear .1s;
 
     &.search-view {
         width: $search-window-width;
@@ -35,6 +36,10 @@ body {
         .container {
             height: $window-height;
         }
+    }
+
+    .background {
+        min-height: $window-height;
     }
 
     .container {

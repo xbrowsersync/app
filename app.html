@@ -1,15 +1,16 @@
 <!doctype html>
 <html data-ng-app="xBrowserSync.App.UI" data-ng-controller="Controller as vm">
+
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="Content-Security-Policy" content="default-src data: 'self' 'unsafe-inline' gap://ready; connect-src *; object-src 'self'; script-src 'self' 'unsafe-eval';">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, viewport-fit=cover">
-    <title data-ng-bind="vm.platform.GetConstant(vm.globals.Constants.Title)"></title>
-    <link rel="stylesheet" href="css/styles.min.css" />
-    <script src="js/app.min.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Security-Policy" content="default-src data: 'self' 'unsafe-inline' gap://ready; connect-src *; object-src 'self'; script-src 'self' 'unsafe-eval';">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, viewport-fit=cover">
+  <title data-ng-bind="vm.platform.GetConstant(vm.globals.Constants.Title)"></title>
+  <link rel="stylesheet" href="css/styles.min.css" />
+  <script src="js/app.min.js"></script>
 </head>
 
 <body data-ng-class="[
@@ -17,55 +18,60 @@
     { true: 'search-no-results-view' }[ vm.view.current === vm.view.views.search && vm.search.results.length === 0 ],
     { true: 'search-results-view' }[ vm.view.current === vm.view.views.search && vm.search.results.length > 0 ]
     ]">
-    <div class="container">
-        <div id="working-panel" data-ng-show="vm.working">
-            <div class="content">
-                <h3>{{ vm.platform.GetConstant(vm.globals.Constants.Working_Title) }}</h3>
-                <p>{{ vm.platform.GetConstant(vm.globals.Constants.Working_Message) }}</p>
-            </div>
-            <div class="darken"></div>
-        </div>
+  <div class="container">
+    <div id="working-panel" class="animate" data-ng-show="vm.working" data-ng-cloak>
+      <div class="content">
+        <h3>{{ vm.platform.GetConstant(vm.globals.Constants.Working_Title) }}</h3>
+        <p>{{ vm.platform.GetConstant(vm.globals.Constants.Working_Message) }}</p>
+      </div>
+    </div>
 
-        <div id="qr-panel" data-ng-show="vm.settings.displayQRCode" data-ng-click="vm.settings.displayQRCode = false">
-            <canvas id="qr" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}"></canvas>
-            <div class="darken"></div>
-        </div>
-        
-        <div class="alert animate-fade animate-fade-out" role="alert" data-ng-show="vm.alert.show" data-ng-cloak
-             data-ng-class="{
+    <div id="qr-panel" class="animate" data-ng-show="vm.settings.displayQRCode" data-ng-click="vm.settings.displayQRCode = false"
+      data-ng-cloak>
+      <canvas id="qr" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}"></canvas>
+    </div>
+
+    <div class="alert animate-fade animate-fade-out" role="alert" data-ng-show="vm.alert.show" data-ng-cloak
+      data-ng-class="{
              'alert-success': vm.alert.type === 'success',
              'info': vm.alert.type === 'info',
              'warning': vm.alert.type === 'warning',
              'alert-danger': vm.alert.type === 'danger' }">
-            <button class="btn btn-icon btn-close" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}" data-ng-click="vm.alert.show = false"  tabindex="1000">
-                <i class="fa fa-times-circle" aria-hidden="true"></i>
-                <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}</span>
-            </button>
-            <h4 data-ng-bind-html="vm.alert.title"></h4>
-            <p data-ng-bind-html="vm.alert.message"></p>
-        </div>
-
-        <div id="login-panel" class="view" ng-class="{ 'active': vm.view.current === vm.view.views.login }">
-            <div class="view-content" data-ng-include="'./views/login.html'" data-ng-if="vm.view.current === vm.view.views.login"></div>
-        </div>
-
-        <div id="search-panel" class="view" ng-class="{ 'active': vm.view.current === vm.view.views.search }">
-            <div class="view-content" data-ng-include="'./views/search.html'" data-ng-if="vm.view.current === vm.view.views.search"></div>
-        </div>
-
-        <div id="bookmark-panel" class="view" ng-class="{ 'active': vm.view.current === vm.view.views.bookmark }">
-            <div class="view-content" data-ng-include="'./views/bookmark.html'" data-ng-if="vm.view.current === vm.view.views.bookmark"></div>
-        </div>
-
-        <div id="settings-panel" class="view" ng-class="{ 'active': vm.view.current === vm.view.views.settings }">
-            <div class="view-content" data-ng-include="'./views/settings.html'" data-ng-if="vm.view.current === vm.view.views.settings"></div>
-        </div>
-
-        <div id="updated-panel" class="view" ng-class="{ 'active': vm.view.current === vm.view.views.updated }">
-            <div class="view-content" data-ng-include="'./views/updated.html'" data-ng-if="vm.view.current === vm.view.views.updated"></div>
-        </div>
+      <button class="btn btn-icon btn-close" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}"
+        data-ng-click="vm.alert.show = false" tabindex="1000">
+        <i class="fa fa-times-circle" aria-hidden="true"></i>
+        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}</span>
+      </button>
+      <h4 data-ng-bind-html="vm.alert.title"></h4>
+      <p data-ng-bind-html="vm.alert.message"></p>
     </div>
 
-    <input id="backupFile" class="hidden" name="files[]" type="file" tabindex="-1" />
+    <div id="login-panel" class="view" data-ng-if="vm.view.current === vm.view.views.login">
+      <div class="view-content animate" data-ng-include="'./views/login.html'"></div>
+    </div>
+
+    <div id="search-panel" class="view" data-ng-if="vm.view.current === vm.view.views.search">
+      <div class="view-content animate" data-ng-include="'./views/search.html'"></div>
+    </div>
+
+    <div id="bookmark-panel" class="view" data-ng-if="vm.view.current === vm.view.views.bookmark">
+      <div class="view-content animate" data-ng-include="'./views/bookmark.html'"></div>
+    </div>
+
+    <div id="settings-panel" class="view" data-ng-if="vm.view.current === vm.view.views.settings">
+      <div class="view-content animate" data-ng-include="'./views/settings.html'"></div>
+    </div>
+
+    <div id="updated-panel" class="view" data-ng-if="vm.view.current === vm.view.views.updated">
+      <div class="view-content animate" data-ng-include="'./views/updated.html'"></div>
+    </div>
+  </div>
+
+  <div class="background">
+    <div class="background-img" data-ng-if="vm.view.current === vm.view.views.login || vm.view.current === vm.view.views.updated"></div>
+  </div>
+
+  <input id="backupFile" class="hidden" name="files[]" type="file" tabindex="-1" />
 </body>
+
 </html>

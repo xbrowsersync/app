@@ -573,7 +573,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 					return;
 				}
 
-				if (!!toolbarBookmarks.children && toolbarBookmarks.children.length > 0) {
+				if (toolbarBookmarks.children && toolbarBookmarks.children.length > 0) {
 					return getLocalBookmarksAsXBookmarks(toolbarBookmarks.children);
 				}
 			});
@@ -1162,7 +1162,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 			var newXBookmark = new bookmarks.XBookmark(currentLocalBookmark.title, currentLocalBookmark.url);
 
 			// If this is a folder and has children, process them
-			if (!!currentLocalBookmark.children && currentLocalBookmark.children.length > 0) {
+			if (currentLocalBookmark.children && currentLocalBookmark.children.length > 0) {
 				newXBookmark.children = getLocalBookmarksAsXBookmarks(currentLocalBookmark.children);
 			}
 
@@ -1180,7 +1180,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 				});
 				var containers = _.filter(preceedingBookmarks, bookmarks.XBookmarkIsContainer);
 
-				if (!!containers) {
+				if (containers) {
 					return containers.length;
 				}
 				else {

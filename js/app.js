@@ -231,7 +231,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         };
 
         vm.view = {
-            current: 0,
+            current: undefined,
             change: changeView,
             displayMainView: displayMainView,
             views: { login: 0, search: 1, bookmark: 2, settings: 3, updated: 4 }
@@ -627,7 +627,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         ]);
     };
 
-    var init_bookmarkView = function () {
+    var init_bookmarkView = function (bookmarkToUpdate) {
         var loadMetadataDeferred = $q.defer();
         var timeout;
         
@@ -636,12 +636,12 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         vm.bookmark.tagLookahead = null;
         vm.bookmark.displayUpdateForm = false;
 
-        // TODO: Test clearing current bookmark
-        // If form properties already set, return
-        /*if (vm.bookmark.current) {
+        // If bookmark to update provided, set to current and return
+        if (bookmarkToUpdate) {
+            vm.bookmark.current = bookmarkToUpdate;
             vm.bookmark.displayUpdateForm = true;
             return $q.resolve();
-        }*/
+        }
 
         // Check if current url is a bookmark
         return bookmarks.IncludesCurrentPage()
@@ -733,8 +733,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
                 var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
                 var syncId = cachedData[globals.CacheKeys.SyncId];
                 
-                vm.introduction.displayIntro = !!displayIntro;
-                vm.sync.enabled = !!syncEnabled;                
+                vm.introduction.displayIntro = displayIntro;
+                vm.sync.enabled = syncEnabled;                
                 vm.sync.id = syncId;
 
                 // If not on a mobile platform, display new sync panel depending on if ID is set
@@ -763,8 +763,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
                 }
 
                 // Check whether to display intro animation
-                if (!displayIntro) {
-                    vm.introduction.displayPanel();
+                if (displayIntro) {
+                    introPanel_DisplayIntro();
                 }
             });
     };
@@ -813,6 +813,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
             bookmarks.GetSyncBookmarksToolbar(),
             platform.LocalStorage.Get([
                 globals.CacheKeys.DebugMessageLog,
+                globals.CacheKeys.DebugMode,
                 globals.CacheKeys.SyncEnabled,
                 globals.CacheKeys.SyncId
             ]),
@@ -820,17 +821,26 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         ])
             .then(function (cachedData) {
                 var syncBookmarksToolbar = cachedData[0];
-                var debugMessageLog = cachedData[1][globals.CacheKeys.DebugMessageLog];
+                var debugMode = cachedData[1][globals.CacheKeys.DebugMode];
                 var syncEnabled = cachedData[1][globals.CacheKeys.SyncEnabled];
                 var syncId = cachedData[1][globals.CacheKeys.SyncId];
                 var serviceUrl = cachedData[2];
 
-                vm.settings.messageLog = debugMessageLog;
+                vm.settings.debugMode = debugMode;
                 vm.settings.service.url = serviceUrl;
                 vm.settings.service.newServiceUrl = serviceUrl;
                 vm.settings.syncBookmarksToolbar = syncBookmarksToolbar;
-                vm.sync.enabled = !!syncEnabled;
+                vm.sync.enabled = syncEnabled;
                 vm.sync.id = syncId;
+
+                $timeout(function () {
+                    if (debugMode) {
+                        platform.LocalStorage.Get(globals.CacheKeys.DebugMessageLog)
+                            .then(function (debugMessageLog) {
+                                vm.settings.messageLog = debugMessageLog;
+                            });
+                    }
+                });
 
                 // Get service status and display service info
                 return api.CheckServiceStatus()
@@ -857,7 +867,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
             platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, false)
         ])
             .then(function (cachedData) {
-                vm.introduction.displayIntro = !!cachedData[0];
+                vm.introduction.displayIntro = cachedData[0];
                 
                 $timeout(function () {
                     // Focus on release notes button
@@ -868,7 +878,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
             });
     };
 
-    var changeView = function (view) {
+    var changeView = function (view, viewData) {
         var initNewView;
 
         // Hide loading panel
@@ -884,20 +894,20 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         vm.view.current = view;
         switch (view) {
             case vm.view.views.bookmark:
-                initNewView = init_bookmarkView();
+                initNewView = init_bookmarkView(viewData);
                 break;
             case vm.view.views.search:
-                initNewView = init_searchView();
+                initNewView = init_searchView(viewData);
                 break;
             case vm.view.views.settings:
-                initNewView = init_settingsView();
+                initNewView = init_settingsView(viewData);
                 break;
             case vm.view.views.updated:
-                initNewView = init_updatedView();
+                initNewView = init_updatedView(viewData);
                 break;
             case vm.view.views.login:
             default:
-                initNewView = init_loginView();
+                initNewView = init_loginView(viewData);
                 break;
         }
 
@@ -986,6 +996,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         // Generate new QR code
         new QRious({
             element: document.getElementById('qr'),
+            level: 'Q',
+            size: 150,
             value: vm.sync.id
         });
 
@@ -1096,48 +1108,29 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     };
 
     var init = function () {
-        var displayUpdated, syncEnabled, syncId;
-
         // Platform-specific initation
         return platform.Init(vm, $scope)
             .then(function () {
-                // Reset network disconnected flag
-                return platform.LocalStorage.Set(globals.CacheKeys.NetworkDisconnected, false);
-            })
-            .then(function () {
-                // Get cached data
+                // Check if sync enabled
                 return platform.LocalStorage.Get([
                     globals.CacheKeys.DisplayUpdated,
-                    globals.CacheKeys.SyncEnabled,
-                    globals.CacheKeys.SyncId
+                    globals.CacheKeys.SyncEnabled
                 ]);
             })
-            .then(function (cachedData) {
-                displayUpdated = cachedData[globals.CacheKeys.DisplayUpdated];
-                syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
-                syncId = cachedData[globals.CacheKeys.SyncId];
-
-                // Set initial view based on if sync is curretly enabled
-                return changeView(syncEnabled ? vm.view.views.search : vm.view.views.login);
+            .then(function (cachedData) {    
+                var displayUpdated = cachedData[globals.CacheKeys.DisplayUpdated];
+                var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
+                
+                // Set initial view
+                return changeView(displayUpdated ? vm.view.views.updated : 
+                  syncEnabled ? vm.view.views.search : vm.view.views.login);
             })
             .then(function () {
-                // Display new sync panel depending on if ID is set
-                if (vm.view.current === vm.view.views.login) {
-                    vm.settings.displayNewSyncPanel = !syncId;
-                }
-
-                // Display updated panel if flag set
-                if (displayUpdated) {
-                    changeView(vm.view.views.updated);
-                }
-
-                // Set intro animation visibility
-                if (vm.view.current === vm.view.views.login && vm.introduction.displayIntro) {
-                    introPanel_DisplayIntro();
-                }
-
                 // Check if current page is a bookmark
                 setBookmarkStatus();
+
+                // Reset network disconnected flag
+                return platform.LocalStorage.Set(globals.CacheKeys.NetworkDisconnected, false);
             });
     };
 
@@ -1652,18 +1645,15 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         }
     };
 
-    var searchForm_UpdateBookmark_Click = function (bookmark) {
-        // Set bookmark form properties to selected bookmark
-        vm.bookmark.current = bookmark;
-
+    var searchForm_UpdateBookmark_Click = function (bookmarkToUpdate) {
         // On mobiles, display bookmark panel with slight delay to avoid focussing on description field
         if (utility.IsMobilePlatform(vm.platformName)) {
             $timeout(function () {
-                changeView(vm.view.views.bookmark);
+                changeView(vm.view.views.bookmark, bookmarkToUpdate);
             }, 500);
         }
         else {
-            changeView(vm.view.views.bookmark);
+            changeView(vm.view.views.bookmark, bookmarkToUpdate);
         }
     };
 

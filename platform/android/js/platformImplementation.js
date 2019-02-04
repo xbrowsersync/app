@@ -722,7 +722,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		var timeout;
 
 		// Return if loading overlay already displayed
-		if (!!loadingId) {
+		if (loadingId) {
 			return;
 		}
 
@@ -910,7 +910,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 			inAppBrowser = cordova.InAppBrowser.open(currentUrl, '_blank', 'location=yes,hidden=yes');
 
 			inAppBrowser.addEventListener('loaderror', function (err) {
-				if (!!err && !!err.code && err.code === -999) {
+				if (err && err.code && err.code === -999) {
 					return;
 				}
 
@@ -939,7 +939,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	};
 
 	var hideLoading = function (id, timeout) {
-		if (!!timeout) {
+		if (timeout) {
 			$timeout.cancel(timeout);
 		}
 
@@ -962,8 +962,10 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 			a = 'client';
 			e = document.documentElement || document.body;
 		}
-		document.querySelector('html').style.height = e[a + 'Height'] + 'px';
-		document.querySelector('.view').style.height = e[a + 'Height'] + 'px';
+		var height = e[a + 'Height'] + 'px';
+		document.querySelector('html').style.height = height;
+		document.querySelector('.view').style.height = height;
+		document.querySelector('.background').style.minHeight = height;
 
 		// Load cordova.js
 		var script = document.createElement('script');
@@ -1031,7 +1033,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
 		var onSuccess = function (result) {
 			// Set result as id
-			if (!!result && !!result.text) {
+			if (result && result.text) {
 				$scope.$apply(function () {
 					vm.sync.id = result.text;
 					platform.LocalStorage.Set(globals.CacheKeys.SyncId, result.text);
@@ -1211,7 +1213,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 								);
 
 								// Check the URL is valid
-								var match = (!!url) ? url.match(globals.Regex.Url) : null;
+								var match = url ? url.match(globals.Regex.Url) : null;
 								if (!match || match.length === 0) {
 									return deferred.reject({ code: globals.ErrorCodes.FailedShareUrl });
 								}
@@ -1449,7 +1451,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 			}, 100);
 		}
 		// Deselect selected bookmark
-		else if (!!vm.search.selectedBookmark) {
+		else if (vm.search.selectedBookmark) {
 			vm.search.selectedBookmark = null;
 		}
 	};

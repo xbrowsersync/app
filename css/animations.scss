@@ -8,6 +8,18 @@
     to { opacity: 0; }
 }
 
+@include keyframes(animation-change-view) {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 @include keyframes(animation-add-bookmark) {
     0% {
         opacity: 0;
