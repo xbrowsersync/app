@@ -23,6 +23,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
 	var ChromeImplementation = function () {
 		// Inject required platform implementation functions
+		platform.AutomaticUpdates.NextUpdate = getAutoUpdatesNextRun;
 		platform.AutomaticUpdates.Start = startAutoUpdates;
 		platform.AutomaticUpdates.Stop = stopAutoUpdates;
 		platform.BackupData = backupData;
@@ -516,6 +517,19 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		});
 
 		return asyncChannel;
+	};
+
+	var getAutoUpdatesNextRun = function () {
+		return $q(function (resolve, reject) {
+			chrome.alarms.get(globals.Alarm.Name, function (alarm) {
+				if (!alarm) {
+					return resolve();
+				}
+
+				var date = new Date(alarm.scheduledTime);
+				resolve(date.getHours() + ':' + date.getMinutes());
+			});
+		});
 	};
 
 	var getBookmarks = function (addBookmarkIds) {

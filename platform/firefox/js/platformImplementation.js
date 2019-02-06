@@ -24,6 +24,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
 	var FirefoxImplementation = function () {
 		// Inject required platform implementation functions
+		platform.AutomaticUpdates.NextUpdate = getAutoUpdatesNextRun;
 		platform.AutomaticUpdates.Start = startAutoUpdates;
 		platform.AutomaticUpdates.Stop = stopAutoUpdates;
 		platform.BackupData = backupData;
@@ -547,6 +548,18 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 		});
 
 		return asyncChannel;
+	};
+
+	var getAutoUpdatesNextRun = function () {
+		return browser.alarms.get(globals.Alarm.Name)
+			.then(function (alarm) {
+			if (!alarm) {
+				return;
+			}
+
+			var date = new Date(alarm.scheduledTime);
+			return date.getHours() + ':' + date.getMinutes();
+		});
 	};
 
 	var getBookmarks = function (addBookmarkIds) {

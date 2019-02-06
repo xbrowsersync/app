@@ -24,6 +24,7 @@ xBrowserSync.App.Platform = function ($q) {
 
 	return {
 		AutomaticUpdates: {
+			NextUpdate: notImplemented,
 			Start: notImplemented,
 			Stop: notImplemented
 		},

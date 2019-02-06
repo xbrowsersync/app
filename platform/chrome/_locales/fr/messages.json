@@ -116,6 +116,9 @@
 	"button_NewSync_Label": {
 		"message": "Créer une nouvelle synchro"
 	},
+	"Button_SyncUpdates_Label": {
+		"message": "Sync Updates"
+	},
 	"login_ConfirmSync_Title" : {
 		"message":  "Ecraser les données du navigateur?"
 	},
@@ -164,6 +167,12 @@
 	"settings_Sync_Id_Description": {
 		"message": "Utilisez votre ID pour synchroniser sur d'autres périphériques (cliquez pour un QR code)."
 	},
+  "settings_Sync_UpdatesAvailable_False_Message": {
+    "message": "Local sync data is up to date."
+  },
+  "settings_Sync_UpdatesAvailable_True_Message": {
+    "message": "Sync updates available, next sync at"
+  },
 	"settings_Sync_SyncToolbar_Description": {
 		"message": "Désactiver ce paramètre si vous souhaitez afficher les favoris locaux dans la barre de favoris plutôt que les favoris synchronisés. Utile lorsque vous synchronisez à travers des navigateurs différents."
 	},

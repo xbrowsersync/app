@@ -210,7 +210,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     };
 
     var getIsSyncing = function () {
-        if (isSyncing === null) {
+        if (isSyncing == null) {
             return platform.LocalStorage.Get(globals.CacheKeys.IsSyncing)
                 .then(function (cachedIsSyncing) {
                     return setIsSyncing(cachedIsSyncing);

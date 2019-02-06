@@ -32,7 +32,7 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 				data = response.data;
 
 				// Check service is a valid xBrowserSync API
-				if (!data || data.status === null || data.version === null) {
+				if (!data || data.status == null || data.version == null) {
 					return $q.reject({ code: globals.ErrorCodes.ApiInvalid });
 				}
 

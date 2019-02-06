@@ -20,10 +20,21 @@
         </div>
         <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_Id_Description) }}</p>
         <div class="animate-fade" data-ng-hide="vm.settings.service.displayCancelSyncConfirmation">
-          <div class="text-center">
+          <div class="buttons">
+            <button class="btn btn-default" data-ng-click="vm.events.syncForm_SyncUpdates_Click()" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)"
+              data-ng-disabled="!vm.sync.updatesAvailable" tabindex="2">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Button_SyncUpdates_Label) }}
+            </button>
             <button class="btn btn-default" data-ng-click="vm.events.syncForm_DisableSync_Click()" tabindex="2">
               {{ vm.platform.GetConstant(vm.globals.Constants.Button_DisableSync_Label) }}
             </button>
+          </div>
+          <div class="updates-available" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
+            <p data-ng-if="vm.sync.updatesAvailable === false">{{
+              vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_UpdatesAvailable_False_Message) }}</p>
+            <p data-ng-if="vm.sync.updatesAvailable === true">{{
+              vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_UpdatesAvailable_True_Message) }} {{
+              vm.sync.nextAutoUpdate }}.</p>
           </div>
         </div>
         <div class="animate-fade confirm" data-ng-show="vm.settings.service.displayCancelSyncConfirmation">
