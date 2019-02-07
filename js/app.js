@@ -611,7 +611,12 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       url: bookmarkToValidate.url
     })
       .then(function (results) {
-        return results.length === 0;
+        // Filter search results for bookmarks wuth matching urls
+        var duplicateBookmarks = results.filter(function (b) {
+          return b.url.toUpperCase() === bookmarkToValidate.url.toUpperCase();
+        });
+        
+        return duplicateBookmarks.length === 0;
       });
   };
 
@@ -640,51 +645,53 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     vm.bookmark.displayUpdateForm = false;
 
     // If bookmark to update provided, set to current and return
-    if (bookmarkToUpdate) {
-      vm.bookmark.current = bookmarkToUpdate;
-      vm.bookmark.displayUpdateForm = true;
-      return $q.resolve();
-    }
+    return $q(function (resolve, reject) {
+      if (bookmarkToUpdate) {
+        vm.bookmark.displayUpdateForm = true;
+        return resolve(bookmarkToUpdate);
+      }
 
-    // Check if current url is a bookmark
-    return bookmarks.IncludesCurrentPage()
-      .then(function (bookmarkedCurrentPage) {
-        if (bookmarkedCurrentPage) {
-          // Remove search score and set current bookmark to result
-          delete bookmarkedCurrentPage.score;
-          vm.bookmark.current = bookmarkedCurrentPage;
+      // Check if current url is a bookmark
+      return bookmarks.IncludesCurrentPage()
+        .then(function (bookmarkedCurrentPage) {
+          if (bookmarkedCurrentPage) {
+            // Remove search score and set current bookmark to result
+            delete bookmarkedCurrentPage.score;
 
-          // Display update bookmark form and return
-          vm.bookmark.displayUpdateForm = true;
-          return $q.resolve();
-        }
+            // Display update bookmark form and return
+            vm.bookmark.displayUpdateForm = true;
+            return resolve(bookmarkedCurrentPage);
+          }
 
-        // Display loading overlay and get page metadata for current url
-        timeout = platform.Interface.Loading.Show('retrievingMetadata', loadMetadataDeferred);
-        return platform.GetPageMetadata(loadMetadataDeferred)
-          .then(function (metadata) {
-            // Display add bookmark form
-            vm.bookmark.displayUpdateForm = false;
+          // Display loading overlay and get page metadata for current url
+          timeout = platform.Interface.Loading.Show('retrievingMetadata', loadMetadataDeferred);
+          return platform.GetPageMetadata(loadMetadataDeferred)
+            .then(function (metadata) {
+              // Display add bookmark form
+              vm.bookmark.displayUpdateForm = false;
 
-            // Set current bookmark properties
-            var bookmark = new bookmarks.XBookmark(
-              null,
-              metadata.url,
-              null,
-              null);
-            vm.bookmark.current = bookmark;
+              // Set current bookmark properties
+              var bookmark = new bookmarks.XBookmark(
+                null,
+                metadata.url,
+                null,
+                null);
 
-            if (metadata) {
-              // Set form properties to url metadata
-              bookmark.title = metadata.title;
-              bookmark.description = utility.TrimToNearestWord(metadata.description, globals.Bookmarks.DescriptionMaxLength);
-              bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
-            }
-          });
+              if (metadata) {
+                // Set form properties to url metadata
+                bookmark.title = metadata.title;
+                bookmark.description = utility.TrimToNearestWord(metadata.description, globals.Bookmarks.DescriptionMaxLength);
+                bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
+              }
+
+              resolve(bookmark);
+            });
+        })
       })
-      .then(function () {
+      .then(function (bookmark) {
         // Save url to compare for changes
-        vm.bookmark.originalUrl = vm.bookmark.current.url;
+        vm.bookmark.current = bookmark;
+        vm.bookmark.originalUrl = bookmark.url;
 
         $timeout(function () {
           // Don't focus on title field for mobile apps unless not sharing a bookmark
@@ -693,23 +700,23 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
             document.querySelector('input[name="bookmarkTitle"]').focus();
           }
         }, 100);
-      })
-      .catch(function (err) {
-        // Set bookmark url
-        if (err && err.url) {
-          var bookmark = new bookmarks.XBookmark(
-            '',
-            err.url);
-          vm.bookmark.current = bookmark;
-        }
+    })
+    .catch(function (err) {
+      // Set bookmark url
+      if (err && err.url) {
+        var bookmark = new bookmarks.XBookmark(
+          '',
+          err.url);
+        vm.bookmark.current = bookmark;
+      }
 
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      })
-      .finally(function () {
-        platform.Interface.Loading.Hide('retrievingMetadata', timeout);
-      });
+      // Display alert
+      var errMessage = utility.GetErrorMessageFromException(err);
+      vm.alert.display(errMessage.title, errMessage.message, 'danger');
+    })
+    .finally(function () {
+      platform.Interface.Loading.Hide('retrievingMetadata', timeout);
+    });
   };
 
   var init_loginView = function () {
@@ -851,6 +858,13 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
               }
               else {
                 vm.sync.updatesAvailable = false;                
+              }
+            })
+            .catch(function (err) {
+              // Don't display alert if sync failed due to network connection
+              if (err.code !== globals.ErrorCodes.HttpRequestFailed) {
+                var errMessage = utility.GetErrorMessageFromException(err);
+                displayAlert(errMessage.title, errMessage.message);
               }
             });
         }
