@@ -198,7 +198,7 @@ body {
     
     .alert {
         position: fixed;
-        z-index: 50;
+        z-index: 100;
         width: 100%;
         max-width: $width-tablet-small;
         border: none;
@@ -208,6 +208,19 @@ body {
         background-color: rgba($colour-danger, 0.9);
         border: none;
         color: $colour-text1;
+
+        @media (min-width: $width-mobile-small + 1) {
+            font-size: 0.9em;
+
+            h4 {
+                margin-bottom: 4px;
+            }
+
+            p {
+                @include text-overflow-ellipsis;
+                max-width: 95%;
+            }
+        }
         
         a {
             color: $colour-link-highlight;
@@ -219,6 +232,11 @@ body {
             font-size: 1.2em;
             line-height: 1.2em;
 
+            @media (min-width: $width-mobile-small + 1) {
+                font-size: 1.5em;
+                line-height: 2em;
+            }
+
             &:focus {
                 border-bottom-color: $colour-text1;
             }
@@ -226,6 +244,10 @@ body {
             i {
                 opacity: 0.7;
             }
+        }
+
+        p:hover {
+            color: $colour-text1;
         }
     }
 

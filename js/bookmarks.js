@@ -64,7 +64,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         ])
             .then(function (cachedData) {
                 syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
-                
+
                 // Get last updated date from local cache
                 cachedLastUpdated = new Date(cachedData[globals.CacheKeys.LastUpdated]);
 
@@ -104,7 +104,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
             platform.LocalStorage.Set(globals.CacheKeys.SyncEnabled, false),
             platform.LocalStorage.Set(globals.CacheKeys.SyncVersion)
         ])
-            .then(function() {
+            .then(function () {
                 // Refresh interface/icon
                 $timeout(platform.Interface.Refresh);
             });
@@ -287,16 +287,16 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     };
 
     var getSyncBookmarksToolbar = function () {
-		// Get setting from local storage
-		return platform.LocalStorage.Get(globals.CacheKeys.SyncBookmarksToolbar)
-			.then(function (syncBookmarksToolbar) {
+        // Get setting from local storage
+        return platform.LocalStorage.Get(globals.CacheKeys.SyncBookmarksToolbar)
+            .then(function (syncBookmarksToolbar) {
                 // Set default value to true
                 if (syncBookmarksToolbar == null) {
                     syncBookmarksToolbar = true;
                 }
-                
-				return syncBookmarksToolbar;
-			});
+
+                return syncBookmarksToolbar;
+            });
     };
 
     var getSyncSize = function () {
@@ -707,7 +707,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
             .then(function () {
                 // Refresh interface/icon
                 $timeout(platform.Interface.Refresh);
-                
+
                 return isSyncing;
             });
     };
@@ -819,16 +819,16 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                                     err.code = globals.ErrorCodes.IdRemoved;
                                 }
 
-                                // If the user was committing an update, add failed sync back to beginning of queue and 
-                                // return specific error code
-                                else if (currentSync.type !== globals.SyncType.Pull) {
+                                // If request failed when user was committing an update, 
+                                // add sync back to beginning of queue and return specific error code
+                                else if (err.code === globals.ErrorCodes.HttpRequestFailed &&
+                                    currentSync.type !== globals.SyncType.Pull) {
                                     currentSync.initialSyncFailed = true;
                                     syncQueue.unshift(currentSync);
                                     deferredToResolve.reject({
                                         code: globals.ErrorCodes.HttpRequestFailedWhileUpdating
                                     });
-                                    // TODO: Incorrect alert message displayed, no auto re-attempt
-                            }
+                                }
 
                                 deferredToResolve.reject(err);
                             });
@@ -865,7 +865,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
                 // Get last updated date from local cache
                 cachedLastUpdated = new Date(cachedData[globals.CacheKeys.LastUpdated]);
-            
+
                 if (syncData.bookmarks) {
                     // Sync with provided bookmarks
                     getBookmarksToSync = $q.resolve(syncData.bookmarks || []);
@@ -895,12 +895,12 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                         case globals.UpdateType.Create:
                             getBookmarksToSync
                                 .then(function (bookmarksToUpdate) {
-                                    // Add new id to new bookmark
+                                    // Get or create other bookmarks container
+                                    var otherContainer = getContainer(globals.Bookmarks.OtherContainerName, bookmarksToUpdate, true);                                    
+                                    
+                                    // Give new bookmark an id and add to container
                                     var newBookmark = syncData.changeInfo.bookmark;
                                     newBookmark.id = getNewBookmarkId(bookmarksToUpdate);
-
-                                    // Add new bookmark to unfiled container
-                                    var otherContainer = getContainer(globals.Bookmarks.OtherContainerName, bookmarksToUpdate, true);
                                     otherContainer.children.push(newBookmark);
 
                                     // Get path info for updating local bookmarks

@@ -80,13 +80,18 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, api, boo
 	};
 
 	var getLatestUpdates = function () {
-		// Exit if sync isn't enabled or event listeners disabled
-		return platform.LocalStorage.Get([
-			globals.CacheKeys.DisableEventListeners,
-			globals.CacheKeys.SyncEnabled
+		// Exit if currently syncing, sync isn't enabled or event listeners disabled
+		return $q.all([
+			bookmarks.IsSyncing(),
+			platform.LocalStorage.Get([
+				globals.CacheKeys.DisableEventListeners,
+				globals.CacheKeys.SyncEnabled
+			])
 		])
-			.then(function (cachedData) {
-				if (cachedData[globals.CacheKeys.DisableEventListeners] ||
+			.then(function (data) {
+				var isSyncing = data[0];
+				var cachedData = data[1];
+				if (isSyncing || cachedData[globals.CacheKeys.DisableEventListeners] ||
 					!cachedData[globals.CacheKeys.SyncEnabled]) {
 					return;
 				}
