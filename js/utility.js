@@ -7,544 +7,565 @@ xBrowserSync.App = xBrowserSync.App || {};
  * ------------------------------------------------------------------------------------ */
 
 xBrowserSync.App.Utility = function ($q, platform, globals) {
-	'use strict';
+  'use strict';
 
-	
+
 	/* ------------------------------------------------------------------------------------
 	 * Public functions
 	 * ------------------------------------------------------------------------------------ */
 
-	var asyncReduce = function (initialValue, itemArray, iterator) {
-		return itemArray.reduce(function (promiseChain, currentItem) {
-			return promiseChain.then(function (prevResult) {
-				return iterator(prevResult, currentItem);
-			});
-		}, $q.resolve(initialValue));
-	};
+  var asyncReduce = function (initialValue, itemArray, iterator) {
+    return itemArray.reduce(function (promiseChain, currentItem) {
+      return promiseChain.then(function (prevResult) {
+        return iterator(prevResult, currentItem);
+      });
+    }, $q.resolve(initialValue));
+  };
 
-	var closest = function (element, predicate) {
-		// Find closest element where predicate is true 
-		return predicate(element) ? element : (
-			element && closest(element.parentNode, predicate)
-		);
-	};
+  var closest = function (element, predicate) {
+    // Find closest element where predicate is true 
+    return predicate(element) ? element : (
+      element && closest(element.parentNode, predicate)
+    );
+  };
 
-	var concatUint8Arrays = function concatUint8Arrays(firstArr, secondArr) {
-		firstArr = firstArr || new Uint8Array();
-		secondArr = secondArr || new Uint8Array();
+  var concatUint8Arrays = function concatUint8Arrays(firstArr, secondArr) {
+    firstArr = firstArr || new Uint8Array();
+    secondArr = secondArr || new Uint8Array();
 
-		var totalLength = firstArr.length + secondArr.length;
-		var result = new Uint8Array(totalLength);
-		result.set(firstArr, 0);
-		result.set(secondArr, firstArr.length);
-		return result;
-	};
+    var totalLength = firstArr.length + secondArr.length;
+    var result = new Uint8Array(totalLength);
+    result.set(firstArr, 0);
+    result.set(secondArr, firstArr.length);
+    return result;
+  };
 
-	var decryptData = function (encryptedData) {
-		// Determine which decryption method to use based on sync version
-		return platform.LocalStorage.Get(globals.CacheKeys.SyncVersion)
-			.then(function (syncVersion) {
-				if (!syncVersion) {
-					return decryptData_v1(encryptedData);
-				}
+  var decryptData = function (encryptedData) {
+    // Determine which decryption method to use based on sync version
+    return platform.LocalStorage.Get(globals.CacheKeys.SyncVersion)
+      .then(function (syncVersion) {
+        if (!syncVersion) {
+          return decryptData_v1(encryptedData);
+        }
 
-				return decryptData_v2(encryptedData);
-			});
-	};
+        return decryptData_v2(encryptedData);
+      })
+      .catch(function (err) {
+        logInfo('Decryption failed: ' + err.message);
+        return $q.reject({ code: globals.ErrorCodes.InvalidData });
+      });
+  };
 
-	var decryptData_v1 = function (encryptedData) {
-		// If no data provided, return an empty string
-		if (!encryptedData) {
-			return $q.resolve('');
-		}
+  var decryptData_v1 = function (encryptedData) {
+    // If no data provided, return an empty string
+    if (!encryptedData) {
+      return $q.resolve('');
+    }
 
-		// Ensure password is in local storage
-		return platform.LocalStorage.Get(globals.CacheKeys.Password)
-			.then(function (password) {
-				if (!password) {
-					return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
-				}
+    // Ensure password is in local storage
+    return platform.LocalStorage.Get(globals.CacheKeys.Password)
+      .then(function (password) {
+        if (!password) {
+          return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
+        }
 
-				// Decrypt using legacy crypto-js AES
-				var decryptedData = CryptoJS.AES.decrypt(encryptedData, password).toString(CryptoJS.enc.Utf8);
-				if (!decryptedData) {
-					return $q.reject({ code: globals.ErrorCodes.InvalidData });
-				}
+        // Decrypt using legacy crypto-js AES
+        var decryptedData = CryptoJS.AES.decrypt(encryptedData, password).toString(CryptoJS.enc.Utf8);
+        if (!decryptedData) {
+          return $q.reject({ code: globals.ErrorCodes.InvalidData });
+        }
 
-				return decryptedData;
-			});
-	};
+        return decryptedData;
+      });
+  };
 
-	var decryptData_v2 = function (encryptedData) {
-		var encryptedDataBytes, iv;
+  var decryptData_v2 = function (encryptedData) {
+    var encryptedDataBytes, iv;
 
-		// If no data provided, return an empty string
-		if (!encryptedData) {
-			return $q.resolve('');
-		}
+    // If no data provided, return an empty string
+    if (!encryptedData) {
+      return $q.resolve('');
+    }
 
-		// Ensure both id and password are in local storage
-		return platform.LocalStorage.Get([
-			globals.CacheKeys.Password,
-			globals.CacheKeys.SyncId
-		])
-			.then(function (cachedData) {
-				var password = cachedData[globals.CacheKeys.Password];
-				var syncId = cachedData[globals.CacheKeys.SyncId];
+    // Ensure both id and password are in local storage
+    return platform.LocalStorage.Get([
+      globals.CacheKeys.Password,
+      globals.CacheKeys.SyncId
+    ])
+      .then(function (cachedData) {
+        var password = cachedData[globals.CacheKeys.Password];
+        var syncId = cachedData[globals.CacheKeys.SyncId];
 
-				if (!syncId) {
-					return $q.reject({ code: globals.ErrorCodes.IdRemoved });
-				}
-				if (!password) {
-					return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
-				}
+        if (!syncId) {
+          return $q.reject({ code: globals.ErrorCodes.SyncRemoved });
+        }
+        if (!password) {
+          return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
+        }
 
-				// Retrieve the hashed password from local storage and convert to bytes
-				var keyData = base64js.toByteArray(password);
+        // Retrieve the hashed password from local storage and convert to bytes
+        var keyData = base64js.toByteArray(password);
 
-				// Convert base64 encoded encrypted data to bytes and extract initialization vector
-				var encryptedBytes = base64js.toByteArray(encryptedData);
-				iv = encryptedBytes.slice(0, 16);
-				encryptedDataBytes = encryptedBytes.slice(16).buffer;
+        // Convert base64 encoded encrypted data to bytes and extract initialization vector
+        var encryptedBytes = base64js.toByteArray(encryptedData);
+        iv = encryptedBytes.slice(0, 16);
+        encryptedDataBytes = encryptedBytes.slice(16).buffer;
 
-				// Generate a cryptokey using the stored password hash for decryption
-				return crypto.subtle.importKey('raw', keyData, { name: 'AES-GCM', iv: iv }, false, ['decrypt']);
-			})
-			.then(function (key) {
-				// Convert base64 encoded encrypted data to bytes
-				return crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, key, encryptedDataBytes);
-			})
-			.then(function (decryptedBytes) {
-				if (!decryptedBytes) {
-					throw new Error('Unable to decrypt data.');
-				}
+        // Generate a cryptokey using the stored password hash for decryption
+        return crypto.subtle.importKey('raw', keyData, { name: 'AES-GCM', iv: iv }, false, ['decrypt']);
+      })
+      .then(function (key) {
+        // Convert base64 encoded encrypted data to bytes
+        return crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, key, encryptedDataBytes);
+      })
+      .then(function (decryptedBytes) {
+        if (!decryptedBytes) {
+          throw new Error('Unable to decrypt data.');
+        }
 
-				// Uncompress the decrypted data and return
-				var decryptedData = LZUTF8.decompress(new Uint8Array(decryptedBytes));
-				return decryptedData;
-			})
-			.catch(function (err) {
-				if (err && err.name !== 'OperationError') {
-					logError(err);
-				}
+        // Uncompress the decrypted data and return
+        var decryptedData = LZUTF8.decompress(new Uint8Array(decryptedBytes));
+        return decryptedData;
+      });
+  };
 
-				return $q.reject({ code: globals.ErrorCodes.InvalidData });
-			});
-	};
+  var deepCopy = function (obj) {
+    return (!obj || (typeof obj !== 'object')) ? obj :
+      (_.isString(obj)) ? String.prototype.slice.call(obj) :
+        (_.isDate(obj)) ? new Date(obj.valueOf()) :
+          (_.isFunction(obj.clone)) ? obj.clone() :
+            (_.isArray(obj)) ? _.map(obj, function (t) { return deepCopy(t) }) :
+              _.mapObject(obj, function (val, key) { return deepCopy(val) });
+  };
 
-	var deepCopy = function (obj) {
-		return (!obj || (typeof obj !== 'object')) ? obj :
-			(_.isString(obj)) ? String.prototype.slice.call(obj) :
-				(_.isDate(obj)) ? new Date(obj.valueOf()) :
-					(_.isFunction(obj.clone)) ? obj.clone() :
-						(_.isArray(obj)) ? _.map(obj, function (t) { return deepCopy(t) }) :
-							_.mapObject(obj, function (val, key) { return deepCopy(val) });
-	};
+  var encryptData = function (data) {
+    var iv;
 
-	var encryptData = function (data) {
-		var iv;
+    // If no data provided, return an empty string
+    if (!data) {
+      return $q.resolve('');
+    }
 
-		// If no data provided, return an empty string
-		if (!data) {
-			return $q.resolve('');
-		}
+    // Ensure both id and password are in local storage
+    return platform.LocalStorage.Get([
+      globals.CacheKeys.Password,
+      globals.CacheKeys.SyncId
+    ])
+      .then(function (cachedData) {
+        var password = cachedData[globals.CacheKeys.Password];
+        var syncId = cachedData[globals.CacheKeys.SyncId];
 
-		// Ensure both id and password are in local storage
-		return platform.LocalStorage.Get([
-			globals.CacheKeys.Password,
-			globals.CacheKeys.SyncId
-		])
-			.then(function (cachedData) {
-				var password = cachedData[globals.CacheKeys.Password];
-				var syncId = cachedData[globals.CacheKeys.SyncId];
+        if (!syncId) {
+          return $q.reject({ code: globals.ErrorCodes.SyncRemoved });
+        }
+        if (!password) {
+          return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
+        }
 
-				if (!syncId) {
-					return $q.reject({ code: globals.ErrorCodes.IdRemoved });
-				}
-				if (!password) {
-					return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
-				}
+        // Retrieve the hashed password from local storage and convert to bytes
+        var keyData = base64js.toByteArray(password);
 
-				// Retrieve the hashed password from local storage and convert to bytes
-				var keyData = base64js.toByteArray(password);
+        // Generate a random 16 byte initialization vector
+        iv = crypto.getRandomValues(new Uint8Array(16));
 
-				// Generate a random 16 byte initialization vector
-				iv = crypto.getRandomValues(new Uint8Array(16));
+        // Generate a new cryptokey using the stored password hash
+        return crypto.subtle.importKey('raw', keyData, { name: 'AES-GCM', iv: iv }, false, ['encrypt']);
+      })
+      .then(function (key) {
+        // Compress the data before encryption
+        var compressedData = LZUTF8.compress(data);
 
-				// Generate a new cryptokey using the stored password hash
-				return crypto.subtle.importKey('raw', keyData, { name: 'AES-GCM', iv: iv }, false, ['encrypt']);
-			})
-			.then(function (key) {
-				// Compress the data before encryption
-				var compressedData = LZUTF8.compress(data);
+        // Encrypt the data using AES
+        return crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, key, compressedData);
+      })
+      .then(function (encryptedData) {
+        // Combine initialization vector and encrypted data and return as base64 encoded string
+        var combinedData = concatUint8Arrays(iv, new Uint8Array(encryptedData));
+        return base64js.fromByteArray(combinedData);
+      })
+      .catch(function (err) {
+        logError(err, 'utility.encryptData');
+        return $q.reject({ code: globals.ErrorCodes.InvalidData });
+      });
+  };
 
-				// Encrypt the data using AES
-				return crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, key, compressedData);
-			})
-			.then(function (encryptedData) {
-				// Combine initialization vector and encrypted data and return as base64 encoded string
-				var combinedData = concatUint8Arrays(iv, new Uint8Array(encryptedData));
-				return base64js.fromByteArray(combinedData);
-			})
-			.catch(function (err) {
-				logError(err);
-				return $q.reject({ code: globals.ErrorCodes.InvalidData });
-			});
-	};
+  var get24hrTimeFromDate = function (date) {
+    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  };
 
-	var getBackupFileName = function () {
-		var date = new Date();
-		var minute = ('0' + date.getMinutes()).slice(-2);
-		var hour = ('0' + date.getHours()).slice(-2);
-		var day = ('0' + date.getDate()).slice(-2);
-		var month = ('0' + (date.getMonth() + 1)).slice(-2);
-		var year = date.getFullYear();
-		var dateString = year + month + day + hour + minute;
-		var fileName = 'xBrowserSyncBackup_' + dateString + '.json';
-		return fileName;
-	};
+  var getBackupFileName = function () {
+    var date = new Date();
+    var minute = ('0' + date.getMinutes()).slice(-2);
+    var hour = ('0' + date.getHours()).slice(-2);
+    var day = ('0' + date.getDate()).slice(-2);
+    var month = ('0' + (date.getMonth() + 1)).slice(-2);
+    var year = date.getFullYear();
+    var dateString = year + month + day + hour + minute;
+    var fileName = 'xBrowserSyncBackup_' + dateString + '.json';
+    return fileName;
+  };
 
-	var getErrorMessageFromException = function (err) {
-		var errorMessage = {
-			title: '',
-			message: ''
-		};
+  var getErrorMessageFromException = function (err) {
+    var errorMessage = {
+      title: '',
+      message: ''
+    };
 
-		if (!err || !err.code) {
-			errorMessage.title = platform.GetConstant(globals.Constants.Error_Default_Title);
-			errorMessage.message = platform.GetConstant(globals.Constants.Error_Default_Message);
-			return errorMessage;
-		}
+    if (!err || !err.code) {
+      errorMessage.title = platform.GetConstant(globals.Constants.Error_Default_Title);
+      errorMessage.message = platform.GetConstant(globals.Constants.Error_Default_Message);
+      return errorMessage;
+    }
 
-		err.details = (!err.details) ? '' : err.details;
+    err.details = (!err.details) ? '' : err.details;
 
-		switch (err.code) {
-			case globals.ErrorCodes.HttpRequestFailed:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_HttpRequestFailed_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_HttpRequestFailed_Message);
-				break;
-			case globals.ErrorCodes.HttpRequestFailedWhileUpdating:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_HttpRequestFailedWhileUpdating_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_HttpRequestFailedWhileUpdating_Message);
-				break;
-			case globals.ErrorCodes.TooManyRequests:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_TooManyRequests_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_TooManyRequests_Message);
-				break;
-			case globals.ErrorCodes.RequestEntityTooLarge:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_RequestEntityTooLarge_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_RequestEntityTooLarge_Message);
-				break;
-			case globals.ErrorCodes.NotAcceptingNewSyncs:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_NotAcceptingNewSyncs_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_NotAcceptingNewSyncs_Message);
-				break;
-			case globals.ErrorCodes.DailyNewSyncLimitReached:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_DailyNewSyncLimitReached_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_DailyNewSyncLimitReached_Message);
-				break;
-			case globals.ErrorCodes.MissingClientData:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_MissingClientData_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_MissingClientData_Message);
-				break;
-			case globals.ErrorCodes.FailedGetLocalBookmarks:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedGetLocalBookmarks_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_FailedGetLocalBookmarks_Message);
-				break;
-			case globals.ErrorCodes.FailedCreateLocalBookmarks:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedCreateLocalBookmarks_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_FailedCreateLocalBookmarks_Message);
-				break;
-			case globals.ErrorCodes.FailedRemoveLocalBookmarks:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedRemoveLocalBookmarks_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_FailedRemoveLocalBookmarks_Message);
-				break;
-			case globals.ErrorCodes.NoDataFound:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_NoDataFound_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_NoDataFound_Message);
-				break;
-			case globals.ErrorCodes.IdRemoved:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_IdRemoved_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_IdRemoved_Message);
-				break;
-			case globals.ErrorCodes.InvalidData:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_InvalidData_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_InvalidData_Message);
-				break;
-			case globals.ErrorCodes.UpdatedBookmarkNotFound:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_LastChangeNotSynced_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_LastChangeNotSynced_Message);
-				break;
-			case globals.ErrorCodes.XBookmarkNotFound:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_BookmarkNotFound_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_BookmarkNotFound_Message);
-				break;
-			case globals.ErrorCodes.ContainerChanged:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_ContainerChanged_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_ContainerChanged_Message);
-				break;
-			case globals.ErrorCodes.DataOutOfSync:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_OutOfSync_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_OutOfSync_Message);
-				break;
-			case globals.ErrorCodes.ApiInvalid:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_ApiInvalid_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_ApiInvalid_Message);
-				break;
-			case globals.ErrorCodes.ApiOffline:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_HttpRequestFailed_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_HttpRequestFailed_Message);
-				break;
-			case globals.ErrorCodes.ApiVersionNotSupported:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_ApiVersionNotSupported_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_ApiVersionNotSupported_Message);
-				break;
-			case globals.ErrorCodes.NotImplemented:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_NotImplemented_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_NotImplemented_Message);
-				break;
-			case globals.ErrorCodes.FailedGetPageMetadata:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedGetPageMetadata_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_FailedGetPageMetadata_Message);
-				break;
-			case globals.ErrorCodes.FailedScanID:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_ScanFailed_Title);
-				break;
-			case globals.ErrorCodes.FailedShareBookmark:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_ShareFailed_Title);
-				break;
-			case globals.ErrorCodes.FailedBackupData:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedBackupData_Title);
-				break;
-			case globals.ErrorCodes.FailedGetDataToRestore:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedGetDataToRestore_Title);
-				break;
-			case globals.ErrorCodes.FailedRestoreData:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedRestoreData_Title);
-				break;
-			case globals.ErrorCodes.FailedShareUrl:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedShareUrl_Title);
-				break;
-			case globals.ErrorCodes.FailedShareUrlNotSynced:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title);
-				break;
-			default:
-				errorMessage.title = platform.GetConstant(globals.Constants.Error_Default_Title);
-				errorMessage.message = platform.GetConstant(globals.Constants.Error_Default_Message);
-		}
+    switch (err.code) {
+      case globals.ErrorCodes.HttpRequestFailed:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_HttpRequestFailed_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_HttpRequestFailed_Message);
+        break;
+      case globals.ErrorCodes.HttpRequestFailedWhileUpdating:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_HttpRequestFailedWhileUpdating_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_HttpRequestFailedWhileUpdating_Message);
+        break;
+      case globals.ErrorCodes.TooManyRequests:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_TooManyRequests_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_TooManyRequests_Message);
+        break;
+      case globals.ErrorCodes.RequestEntityTooLarge:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_RequestEntityTooLarge_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_RequestEntityTooLarge_Message);
+        break;
+      case globals.ErrorCodes.NotAcceptingNewSyncs:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_NotAcceptingNewSyncs_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_NotAcceptingNewSyncs_Message);
+        break;
+      case globals.ErrorCodes.DailyNewSyncLimitReached:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_DailyNewSyncLimitReached_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_DailyNewSyncLimitReached_Message);
+        break;
+      case globals.ErrorCodes.MissingClientData:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_MissingClientData_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_MissingClientData_Message);
+        break;
+      case globals.ErrorCodes.FailedGetLocalBookmarks:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedGetLocalBookmarks_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_FailedGetLocalBookmarks_Message);
+        break;
+      case globals.ErrorCodes.FailedCreateLocalBookmarks:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedCreateLocalBookmarks_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_FailedCreateLocalBookmarks_Message);
+        break;
+      case globals.ErrorCodes.FailedRemoveLocalBookmarks:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedRemoveLocalBookmarks_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_FailedRemoveLocalBookmarks_Message);
+        break;
+      case globals.ErrorCodes.NoDataFound:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_NoDataFound_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_NoDataFound_Message);
+        break;
+      case globals.ErrorCodes.SyncRemoved:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_SyncRemoved_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_SyncRemoved_Message);
+        break;
+      case globals.ErrorCodes.InvalidData:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_InvalidData_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_InvalidData_Message);
+        break;
+      case globals.ErrorCodes.UpdatedBookmarkNotFound:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_LastChangeNotSynced_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_LastChangeNotSynced_Message);
+        break;
+      case globals.ErrorCodes.XBookmarkNotFound:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_BookmarkNotFound_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_BookmarkNotFound_Message);
+        break;
+      case globals.ErrorCodes.ContainerChanged:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_ContainerChanged_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_ContainerChanged_Message);
+        break;
+      case globals.ErrorCodes.DataOutOfSync:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_OutOfSync_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_OutOfSync_Message);
+        break;
+      case globals.ErrorCodes.ApiInvalid:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_ApiInvalid_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_ApiInvalid_Message);
+        break;
+      case globals.ErrorCodes.ApiOffline:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_HttpRequestFailed_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_HttpRequestFailed_Message);
+        break;
+      case globals.ErrorCodes.ApiVersionNotSupported:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_ApiVersionNotSupported_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_ApiVersionNotSupported_Message);
+        break;
+      case globals.ErrorCodes.NotImplemented:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_NotImplemented_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_NotImplemented_Message);
+        break;
+      case globals.ErrorCodes.FailedGetPageMetadata:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedGetPageMetadata_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_FailedGetPageMetadata_Message);
+        break;
+      case globals.ErrorCodes.FailedScanID:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_ScanFailed_Title);
+        break;
+      case globals.ErrorCodes.FailedShareBookmark:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_ShareFailed_Title);
+        break;
+      case globals.ErrorCodes.FailedBackupData:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedBackupData_Title);
+        break;
+      case globals.ErrorCodes.FailedGetDataToRestore:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedGetDataToRestore_Title);
+        break;
+      case globals.ErrorCodes.FailedRestoreData:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedRestoreData_Title);
+        break;
+      case globals.ErrorCodes.FailedShareUrl:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedShareUrl_Title);
+        break;
+      case globals.ErrorCodes.FailedShareUrlNotSynced:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title);
+        break;
+      default:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_Default_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_Default_Message);
+    }
 
-		return errorMessage;
-	};
+    return errorMessage;
+  };
 
-	var getPasswordHash = function (password, salt) {
-		var encoder = new TextEncoder('utf-8');
-		var encodedSalt = encoder.encode(salt);
+  var getPasswordHash = function (password, salt) {
+    var encoder = new TextEncoder('utf-8');
+    var encodedSalt = encoder.encode(salt);
 
-		// Get cached sync version
-		return platform.LocalStorage.Get(globals.CacheKeys.SyncVersion)
-			.then(function (syncVersion) {
-				// If old sync version, don't hash password for legacy encryption
-				if (!syncVersion) {
-					return $q.resolve(password);
-				}
+    // Get cached sync version
+    return platform.LocalStorage.Get(globals.CacheKeys.SyncVersion)
+      .then(function (syncVersion) {
+        // If old sync version, don't hash password for legacy encryption
+        if (!syncVersion) {
+          return $q.resolve(password);
+        }
 
-				// Generate a new cryptokey using the stored password hash
-				var keyData = encoder.encode(password);
-				return crypto.subtle.importKey('raw', keyData, { name: 'PBKDF2' }, false, ['deriveKey'])
-					.then(function (importedKey) {
-						// Run the key through PBKDF2 with many iterations using the provided salt
-						return crypto.subtle.deriveKey(
-							{
-								name: 'PBKDF2',
-								salt: encodedSalt,
-								iterations: 250000,
-								hash: 'SHA-256'
-							},
-							importedKey,
-							{ name: 'AES-GCM', length: 256 },
-							true,
-							['encrypt', 'decrypt']
-						);
-					})
-					.then(function (derivedKey) {
-						// Export the hashed key
-						return crypto.subtle.exportKey('raw', derivedKey);
-					})
-					.then(function (exportedKey) {
-						// Convert exported key to base64 encoded string and return
-						var base64Key = base64js.fromByteArray(new Uint8Array(exportedKey));
-						return base64Key;
-					});
-			});
-	};
+        // Generate a new cryptokey using the stored password hash
+        var keyData = encoder.encode(password);
+        return crypto.subtle.importKey('raw', keyData, { name: 'PBKDF2' }, false, ['deriveKey'])
+          .then(function (importedKey) {
+            // Run the key through PBKDF2 with many iterations using the provided salt
+            return crypto.subtle.deriveKey(
+              {
+                name: 'PBKDF2',
+                salt: encodedSalt,
+                iterations: 250000,
+                hash: 'SHA-256'
+              },
+              importedKey,
+              { name: 'AES-GCM', length: 256 },
+              true,
+              ['encrypt', 'decrypt']
+            );
+          })
+          .then(function (derivedKey) {
+            // Export the hashed key
+            return crypto.subtle.exportKey('raw', derivedKey);
+          })
+          .then(function (exportedKey) {
+            // Convert exported key to base64 encoded string and return
+            var base64Key = base64js.fromByteArray(new Uint8Array(exportedKey));
+            return base64Key;
+          });
+      });
+  };
 
-	var getServiceUrl = function () {
-		// Get service url from local storage
-		return platform.LocalStorage.Get(globals.CacheKeys.ServiceUrl)
-			.then(function (cachedServiceUrl) {
-				// If no service url cached, use default
-				return cachedServiceUrl || globals.URL.DefaultServiceUrl;
-			});
-	};
+  var getServiceUrl = function () {
+    // Get service url from local storage
+    return platform.LocalStorage.Get(globals.CacheKeys.ServiceUrl)
+      .then(function (cachedServiceUrl) {
+        // If no service url cached, use default
+        return cachedServiceUrl || globals.URL.DefaultServiceUrl;
+      });
+  };
 
-	var getTagArrayFromText = function (tagText) {
-		if (!tagText) {
-			return null;
-		}
+  var getTagArrayFromText = function (tagText) {
+    if (!tagText) {
+      return null;
+    }
 
-		// Conver to lowercase and split tags into array
-		var tags = tagText.toLowerCase().replace(/['"]/g, '').split(',');
+    // Conver to lowercase and split tags into array
+    var tags = tagText.toLowerCase().replace(/['"]/g, '').split(',');
 
-		// Clean and sort tags
-		tags = _.chain(tags)
-			.map(function (tag) {
-				return tag.trim();
-			})
-			.compact()
-			.uniq()
-			.sortBy(function (tag) {
-				return tag;
-			})
-			.value();
+    // Clean and sort tags
+    tags = _.chain(tags)
+      .map(function (tag) {
+        return tag.trim();
+      })
+      .compact()
+      .uniq()
+      .sortBy(function (tag) {
+        return tag;
+      })
+      .value();
 
-		return tags;
-	};
+    return tags;
+  };
 
-	var isMobilePlatform = function (platformName) {
-		return platformName === globals.Platforms.Android;
-	};
+  var isMobilePlatform = function (platformName) {
+    return platformName === globals.Platforms.Android;
+  };
 
-	var isNetworkConnected = function () {
-		return window.navigator.onLine;
-	};
+  var isNetworkConnected = function () {
+    return window.navigator.onLine;
+  };
 
-	var logError = function (err) {
-		if (!err || !(err instanceof Error)) {
-			return;
-		}
+  var logError = function (err, message) {
+    var errMessage;
 
-		logMessage(globals.LogType.Error, err);
-	};
+    if (!err) {
+      return;
+    }
 
-	var logInfo = function (message) {
-		logMessage(globals.LogType.Info, message);
-	};
+    if (err instanceof Error) {
+      errMessage = err.message;
+    }
+    else if (err.code) {
+      var codeName = _.findKey(globals.ErrorCodes, function (key) { return key === err.code; });
+      errMessage = '[' + err.code + '] ' + codeName;
+    }
+    message = message ? message + ': ' + errMessage : errMessage;
 
-	var logMessage = function (messageType, message) {
-		return platform.LocalStorage.Get([
-			globals.CacheKeys.DebugMessageLog,
-			globals.CacheKeys.DebugMode
-		])
-			.then(function (cachedData) {
-				var messageLogText;
-				var debugMessageLog = cachedData[globals.CacheKeys.DebugMessageLog] || [];
-				var debugModeEnabled = cachedData[globals.CacheKeys.DebugMode];
+    logMessage(globals.LogType.Error, message, err);
+  };
 
-				switch (messageType) {
-					case globals.LogType.Error:
-						messageLogText = 'ERROR: ';
-						console.error(message);
-						break;
-					case globals.LogType.Warning:
-						messageLogText = 'WARNING: ';
-						console.warn(message);
-						break;
-					case globals.LogType.Info:
-					/* falls through */
-					default:
-						messageLogText = 'INFO: ';
-						if (debugModeEnabled) {
-							console.info(message);
-						}
-						break;
-				}
+  var logInfo = function (message) {
+    logMessage(globals.LogType.Info, message);
+  };
 
-				if (debugModeEnabled) {
-					messageLogText += message.stack || message;
-					debugMessageLog.unshift(messageLogText);
-					return platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog, debugMessageLog);
-				}
-			});
-	};
+  var logMessage = function (messageType, message, err) {
+    return platform.LocalStorage.Get([
+      globals.CacheKeys.DebugMessageLog,
+      globals.CacheKeys.DebugMode
+    ])
+      .then(function (cachedData) {
+        var messageLogText;
+        var debugMessageLog = cachedData[globals.CacheKeys.DebugMessageLog] || [];
+        var debugModeEnabled = cachedData[globals.CacheKeys.DebugMode];
 
-	var logWarning = function (message) {
-		logMessage(globals.LogType.Warning, message);
-	};
+        switch (messageType) {
+          case globals.LogType.Error:
+            messageLogText = 'ERROR: ';
+            if (err instanceof Error) {
+              console.error(message, err);
+            }
+            else if (err.stack) {
+              console.error(message, err.stack);
+            }
+            else {
+              console.error(message);
+            }
+            break;
+          case globals.LogType.Warning:
+            messageLogText = 'WARNING: ';
+            console.warn(message);
+            break;
+          case globals.LogType.Info:
+          /* falls through */
+          default:
+            messageLogText = 'INFO: ';
+            if (debugModeEnabled) {
+              console.info(message);
+            }
+            break;
+        }
 
-	var parseUrl = function (url) {
-		var parser = document.createElement('a'),
-			searchObject = {},
-			queries, split, i;
+        if (debugModeEnabled) {
+          messageLogText += message.stack || message;
+          debugMessageLog.unshift(messageLogText);
+          return platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog, debugMessageLog);
+        }
+      });
+  };
 
-		parser.href = url;
-		queries = parser.search.replace(/^\?/, '').split('&');
-		for (i = 0; i < queries.length; i++) {
-			split = queries[i].split('=');
-			searchObject[split[0]] = split[1];
-		}
+  var logWarning = function (message) {
+    logMessage(globals.LogType.Warning, message);
+  };
 
-		return {
-			protocol: parser.protocol,
-			host: parser.host,
-			hostname: parser.hostname,
-			port: parser.port,
-			pathname: parser.pathname,
-			search: parser.search,
-			searchObject: searchObject,
-			hash: parser.hash
-		};
-	};
+  var parseUrl = function (url) {
+    var parser = document.createElement('a'),
+      searchObject = {},
+      queries, split, i;
 
-	var stripTags = function (str) {
-		return str ? str.replace(/<(?:.|\n)*?>/gm, '') : str;
-	};
+    parser.href = url;
+    queries = parser.search.replace(/^\?/, '').split('&');
+    for (i = 0; i < queries.length; i++) {
+      split = queries[i].split('=');
+      searchObject[split[0]] = split[1];
+    }
 
-	var toggleDebugMode = function () {
-		var toggledValue;
+    return {
+      protocol: parser.protocol,
+      host: parser.host,
+      hostname: parser.hostname,
+      port: parser.port,
+      pathname: parser.pathname,
+      search: parser.search,
+      searchObject: searchObject,
+      hash: parser.hash
+    };
+  };
 
-		return platform.LocalStorage.Get(globals.CacheKeys.DebugMode)
-			.then(function (debugModeEnabled) {
-				toggledValue = !debugModeEnabled;
-				return platform.LocalStorage.Set(globals.CacheKeys.DebugMode, toggledValue);
-			})
-			.then(function () {
-				return toggledValue;
-			});
-	};
+  var stripTags = function (str) {
+    return str ? str.replace(/<(?:.|\n)*?>/gm, '') : str;
+  };
 
-	var trimToNearestWord = function (text, limit) {
-		if (!text) { return ''; }
+  var toggleDebugMode = function () {
+    var toggledValue;
 
-		text = text.trim();
+    return platform.LocalStorage.Get(globals.CacheKeys.DebugMode)
+      .then(function (debugModeEnabled) {
+        toggledValue = !debugModeEnabled;
+        return platform.LocalStorage.Set(globals.CacheKeys.DebugMode, toggledValue);
+      })
+      .then(function () {
+        return toggledValue;
+      });
+  };
 
-		if (limit >= text.length) {
-			return text;
-		}
+  var trimToNearestWord = function (text, limit) {
+    if (!text) { return ''; }
 
-		var trimmedText = text.substring(0, text.lastIndexOf(' ', limit)) + '\u2026';
-		return trimmedText;
-	};
+    text = text.trim();
 
-	return {
-		AsyncReduce: asyncReduce,
-		Closest: closest,
-		DecryptData: decryptData,
-		EncryptData: encryptData,
-		DeepCopy: deepCopy,
-		GetBackupFileName: getBackupFileName,
-		GetErrorMessageFromException: getErrorMessageFromException,
-		GetServiceUrl: getServiceUrl,
-		GetTagArrayFromText: getTagArrayFromText,
-		GetPasswordHash: getPasswordHash,
-		IsMobilePlatform: isMobilePlatform,
-		IsNetworkConnected: isNetworkConnected,
-		LogError: logError,
-		LogInfo: logInfo,
-		LogMessage: logMessage,
-		LogWarning: logWarning,
-		ParseUrl: parseUrl,
-		StripTags: stripTags,
-		ToggleDebugMode: toggleDebugMode,
-		TrimToNearestWord: trimToNearestWord
-	};
+    if (limit >= text.length) {
+      return text;
+    }
+
+    var trimmedText = text.substring(0, text.lastIndexOf(' ', limit)) + '\u2026';
+    return trimmedText;
+  };
+
+  return {
+    AsyncReduce: asyncReduce,
+    Closest: closest,
+    DecryptData: decryptData,
+    EncryptData: encryptData,
+    DeepCopy: deepCopy,
+    Get24hrTimeFromDate: get24hrTimeFromDate,
+    GetBackupFileName: getBackupFileName,
+    GetErrorMessageFromException: getErrorMessageFromException,
+    GetServiceUrl: getServiceUrl,
+    GetTagArrayFromText: getTagArrayFromText,
+    GetPasswordHash: getPasswordHash,
+    IsMobilePlatform: isMobilePlatform,
+    IsNetworkConnected: isNetworkConnected,
+    LogError: logError,
+    LogInfo: logInfo,
+    LogMessage: logMessage,
+    LogWarning: logWarning,
+    ParseUrl: parseUrl,
+    StripTags: stripTags,
+    ToggleDebugMode: toggleDebugMode,
+    TrimToNearestWord: trimToNearestWord
+  };
 };

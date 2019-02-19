@@ -19,7 +19,7 @@
             data-ng-click="vm.events.displayQRCode_Click()" href="" tabindex="1">{{ vm.sync.id }}</a>
         </div>
         <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_Id_Description) }}</p>
-        <div class="animate-fade" data-ng-hide="vm.settings.service.displayCancelSyncConfirmation">
+        <div class="animate-fade" data-ng-hide="vm.settings.displayCancelSyncConfirmation">
           <div class="buttons">
             <button class="btn btn-default" data-ng-click="vm.events.syncForm_SyncUpdates_Click()" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)"
               data-ng-disabled="!vm.sync.updatesAvailable" tabindex="2">
@@ -37,14 +37,14 @@
               vm.sync.nextAutoUpdate }}.</p>
           </div>
         </div>
-        <div class="animate-fade confirm" data-ng-show="vm.settings.service.displayCancelSyncConfirmation">
+        <div class="animate-fade confirm" data-ng-show="vm.settings.displayCancelSyncConfirmation">
           <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_ConfirmCancelSync_Message)"></div>
           <div class="text-center">
-            <button type="button" class="btn btn-default btn-confirm-disable-sync" data-ng-click="vm.events.syncForm_CancelSyncConfirmation_Click()"
+            <button type="button" class="btn btn-default btn-confirm-disable-sync" data-ng-click="vm.events.syncForm_DisableSync_Click()"
               tabindex="3">
               {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
             </button>
-            <button type="button" class="btn btn-default" data-ng-click="vm.settings.service.displayCancelSyncConfirmation = false"
+            <button type="button" class="btn btn-default" data-ng-click="vm.settings.displayCancelSyncConfirmation = false"
               tabindex="4">
               {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
             </button>

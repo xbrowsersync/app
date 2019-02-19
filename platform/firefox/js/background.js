@@ -7,348 +7,409 @@ xBrowserSync.App = xBrowserSync.App || {};
  *              listens for sync requests.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Background = function ($q, platform, globals, utility, api, bookmarks) {
-	'use strict';
+xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmarks) {
+  'use strict';
 
-	var vm, asyncChannel;
+  var vm;
 
 	/* ------------------------------------------------------------------------------------
 	 * Constructor
 	 * ------------------------------------------------------------------------------------ */
 
-	var Background = function () {
-		vm = this;
-		vm.install = onInstallHandler;
-		vm.startup = onStartupHandler;
-		browser.runtime.onConnect.addListener(listenForMessages);
-		browser.runtime.onMessage.addListener(onMessageHandler);
-		browser.alarms.onAlarm.addListener(onAlarmHandler);
-		browser.bookmarks.onCreated.addListener(function () { onBookmarkEventHandler(createBookmark, arguments); });
-		browser.bookmarks.onRemoved.addListener(function () { onBookmarkEventHandler(removeBookmark, arguments); });
-		browser.bookmarks.onChanged.addListener(function () { onBookmarkEventHandler(changeBookmark, arguments); });
-		browser.bookmarks.onMoved.addListener(function () { onBookmarkEventHandler(moveBookmark, arguments); });
-	};
+  var Background = function () {
+    vm = this;
+    vm.install = onInstallHandler;
+    vm.startup = onStartupHandler;
+    browser.runtime.onMessage.addListener(onMessageHandler);
+    browser.alarms.onAlarm.addListener(onAlarmHandler);
+    browser.bookmarks.onCreated.addListener(function () { onBookmarkEventHandler(createBookmark, arguments); });
+    browser.bookmarks.onRemoved.addListener(function () { onBookmarkEventHandler(removeBookmark, arguments); });
+    browser.bookmarks.onChanged.addListener(function () { onBookmarkEventHandler(changeBookmark, arguments); });
+    browser.bookmarks.onMoved.addListener(function () { onBookmarkEventHandler(moveBookmark, arguments); });
+  };
 
 
 	/* ------------------------------------------------------------------------------------
 	 * Private functions
 	 * ------------------------------------------------------------------------------------ */
 
-	var changeBookmark = function (id, changeInfo) {
-		return syncBookmarks({
-			type: globals.SyncType.Push,
-			changeInfo: {
-				type: globals.UpdateType.Update,
-				data: [id, changeInfo]
-			}
-		});
-	};
+  var changeBookmark = function (id, changeInfo) {
+    utility.LogInfo('onChanged event detected.');
+    return $q(function (resolve, reject) {
+      syncBookmarks({
+        type: globals.SyncType.Push,
+        changeInfo: {
+          type: globals.UpdateType.Update,
+          data: [id, changeInfo]
+        }
+      }, function (response) {
+        if (response.success) {
+          resolve(response.bookmarks);
+        }
+        else {
+          reject(response.error);
+        }
+      });
+    });
+  };
 
-	var createBookmark = function (id, bookmark) {
-		// Get page metadata from current tab
-		return platform.GetPageMetadata()
-			.then(function (metadata) {
-				// Add metadata if provided
-				if (metadata) {
-					bookmark.description = utility.StripTags(metadata.description);
-					bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
-				}
+  var createBookmark = function (id, bookmark) {
+    utility.LogInfo('onCreated event detected.');
 
-				return syncBookmarks({
-					type: globals.SyncType.Push,
-					changeInfo: {
-						type: globals.UpdateType.Create,
-						data: [id, bookmark]
-					}
-				});
-			});
-	};
+    // Get page metadata from current tab
+    return platform.GetPageMetadata()
+      .then(function (metadata) {
+        // Add metadata if provided
+        if (metadata) {
+          bookmark.description = utility.StripTags(metadata.description);
+          bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
+        }
 
-	var displayAlert = function (title, message, callback) {
-		var options = {
-			type: 'basic',
-			title: title,
-			message: message,
-			iconUrl: 'img/notification-icon.png'
-		};
+        return $q(function (resolve, reject) {
+          syncBookmarks({
+            type: globals.SyncType.Push,
+            changeInfo: {
+              type: globals.UpdateType.Create,
+              data: [id, bookmark]
+            }
+          }, function (response) {
+            if (response.success) {
+              resolve(response.bookmarks);
+            }
+            else {
+              reject(response.error);
+            }
+          });
+        });
+      });
+  };
 
-		if (!callback) {
-			callback = null;
-		}
+  var displayAlert = function (title, message, callback) {
+    var options = {
+      type: 'basic',
+      title: title,
+      message: message,
+      iconUrl: 'img/notification-icon.png'
+    };
 
-		browser.notifications.create('xBrowserSync-notification', options, callback);
-	};
+    if (!callback) {
+      callback = null;
+    }
 
-	var getLatestUpdates = function () {
-		// Exit if sync isn't enabled or event listeners disabled
-		return $q.all([
-			bookmarks.IsSyncing(),
-			platform.LocalStorage.Get([
-				globals.CacheKeys.DisableEventListeners,
-				globals.CacheKeys.SyncEnabled
-			])
-		])
-			.then(function (data) {
-				var isSyncing = data[0];
-				var cachedData = data[1];
-				if (isSyncing || cachedData[globals.CacheKeys.DisableEventListeners] ||
-					!cachedData[globals.CacheKeys.SyncEnabled]) {
-					return;
-				}
+    browser.notifications.create('xBrowserSync-notification', options, callback);
+  };
 
-				return bookmarks.CheckForUpdates()
-					.then(function (updatesAvailable) {
-						if (!updatesAvailable) {
-							return;
-						}
+  var getCurrentSync = function (sendResponse) {
+    sendResponse({
+      currentSync: bookmarks.GetCurrentSync(),
+      success: true
+    });
+  };
 
-						// Get bookmark updates
-						return syncBookmarks({ type: globals.SyncType.Pull });
-					});
-			});
-	};
+  var getLatestUpdates = function () {
+    // Exit if currently syncing
+    var currentSync = bookmarks.GetCurrentSync();
+    if (currentSync) {
+      return $q.resolve();
+    }
 
-	var listenForMessages = function (port) {
-		if (port.name !== globals.Title) {
-			return;
-		}
+    // Exit if sync isn't enabled or event listeners disabled
+    return platform.LocalStorage.Get([
+      globals.CacheKeys.DisableEventListeners,
+      globals.CacheKeys.SyncEnabled
+    ])
+      .then(function (cachedData) {
+        if (cachedData[globals.CacheKeys.DisableEventListeners] ||
+          !cachedData[globals.CacheKeys.SyncEnabled]) {
+          return;
+        }
 
-		asyncChannel = port;
+        utility.LogInfo('Checking for updates.');
 
-		// Listen for messages to initiate syncing
-		asyncChannel.onMessage.addListener(function (msg) {
-			onMessageHandler(msg)
-				.catch(function (err) {
-					// Return if known error
-					if (err.code) {
-						return;
-					}
-					
-					utility.LogInfo('Unhandled error: ' + err ? err.code || err.message : 'no error obj provided');
-					if (err) {
-						utility.LogError(err);
-					}
-				});
-		});
-	};
+        return bookmarks.CheckForUpdates()
+          .then(function (updatesAvailable) {
+            if (!updatesAvailable) {
+              return;
+            }
 
-	var moveBookmark = function (id, moveInfo) {
-		return syncBookmarks({
-			type: globals.SyncType.Push,
-			changeInfo: {
-				type: globals.UpdateType.Move,
-				data: [id, moveInfo]
-			}
-		});
-	};
+            utility.LogInfo('Updates found, retrieving latest sync data.');
 
-	var onAlarmHandler = function (alarm) {
-		// When alarm fires check for sync updates
-		if (alarm && alarm.name === globals.Alarm.Name) {
-			getLatestUpdates()
-				.catch(function (err) {
-					// If ID was removed disable sync
-					if (err.code === globals.ErrorCodes.NoDataFound) {
-						err.code = globals.ErrorCodes.IdRemoved;
-						bookmarks.DisableSync();
-					}
+            // Get bookmark updates
+            return $q(function (resolve, reject) {
+              syncBookmarks({
+                type: globals.SyncType.Pull
+              }, function (response) {
+                if (response.success) {
+                  resolve(response.bookmarks);
+                }
+                else {
+                  reject(response.error);
+                }
+              });
+            });
+          });
+      });
+  };
 
-					// Don't display alert if sync failed due to network connection
-					if (err.code === globals.ErrorCodes.HttpRequestFailed ||
-						err.code === globals.ErrorCodes.HttpRequestFailedWhileUpdating) {
-						return;
-					}
+  var moveBookmark = function (id, moveInfo) {
+    utility.LogInfo('onMoved event detected.');
+    return $q(function (resolve, reject) {
+      syncBookmarks({
+        type: globals.SyncType.Push,
+        changeInfo: {
+          type: globals.UpdateType.Move,
+          data: [id, moveInfo]
+        }
+      }, function (response) {
+        if (response.success) {
+          resolve(response.bookmarks);
+        }
+        else {
+          reject(response.error);
+        }
+      });
+    });
+  };
 
-					// Display alert
-					var errMessage = utility.GetErrorMessageFromException(err);
-					displayAlert(errMessage.title, errMessage.message);
-				});
-		}
-	};
+  var onAlarmHandler = function (alarm) {
+    // When alarm fires check for sync updates
+    if (alarm && alarm.name === globals.Alarm.Name) {
+      getLatestUpdates()
+        .catch(function (err) {
+          utility.LogError(err, 'background.onAlarmHandler');
 
-	var onBookmarkEventHandler = function (syncFunction, args) {
-		// Exit if sync isn't enabled or event listeners disabled
-		return platform.LocalStorage.Get([
-			globals.CacheKeys.DisableEventListeners,
-			globals.CacheKeys.SyncEnabled
-		])
-			.then(function (cachedData) {
-				if (cachedData[globals.CacheKeys.DisableEventListeners] ||
-					!cachedData[globals.CacheKeys.SyncEnabled]) {
-					return;
-				}
+          // If ID was removed disable sync
+          if (err.code === globals.ErrorCodes.NoDataFound) {
+            err.code = globals.ErrorCodes.SyncRemoved;
+            bookmarks.DisableSync();
+          }
 
-				return syncFunction.apply(this, args)
-					.catch (function (err) {
-						if (err instanceof Error) {
-							utility.LogInfo('Unhandled error: ' + err.message);
-							utility.LogError(err);
-						}
-						
-						// Display alert
-						var errMessage = utility.GetErrorMessageFromException(err);
-						displayAlert(errMessage.title, errMessage.message);
+          // Don't display alert if sync failed due to network connection
+          if (err.code === globals.ErrorCodes.HttpRequestFailed ||
+            err.code === globals.ErrorCodes.HttpRequestFailedWhileUpdating) {
+            return;
+          }
 
-						// Local bookmarks now out of sync so refresh sync
-						return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
-							.then(function (syncEnabled) {
-								if (syncEnabled && err.code !== globals.ErrorCodes.HttpRequestFailedWhileUpdating) {
-									return syncBookmarks({ type: globals.SyncType.Pull });
-								}
-							});
-					});
-			});
-	};
+          // Display alert
+          var errMessage = utility.GetErrorMessageFromException(err);
+          displayAlert(errMessage.title, errMessage.message);
+        });
+    }
+  };
 
-	var onInstallHandler = function (details) {
-		switch (true) {
-			// Extension updated
-			case details && details.reason === 'update':
-				if (details.previousVersion &&
-					details.previousVersion !== browser.runtime.getManifest().version) {
-					// If extension has been updated display updated message
-					platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, true);
-				}
-				break;
-			// Extension reloaded
-			case !details:
-				onStartupHandler();
-				break;
-		}
-	};
+  var onBookmarkEventHandler = function (syncFunction, args) {
+    // Exit if sync isn't enabled or event listeners disabled
+    platform.LocalStorage.Get([
+      globals.CacheKeys.DisableEventListeners,
+      globals.CacheKeys.SyncEnabled
+    ])
+      .then(function (cachedData) {
+        if (cachedData[globals.CacheKeys.DisableEventListeners] ||
+          !cachedData[globals.CacheKeys.SyncEnabled]) {
+          return;
+        }
 
-	var onMessageHandler = function (msg) {
-		switch (msg.command) {
-			// Trigger bookmarks sync
-			case globals.Commands.SyncBookmarks:
-				return syncBookmarks(msg, globals.Commands.SyncBookmarks);
-			// Trigger bookmarks sync with no callback
-			case globals.Commands.NoCallback:
-				return syncBookmarks(msg, globals.Commands.NoCallback);
-			// Trigger bookmarks restore
-			case globals.Commands.RestoreBookmarks:
-				return restoreBookmarks(msg);
-		}
-	};
+        return syncFunction.apply(this, args)
+          .catch(function (err) {
+            // Display alert
+            var errMessage = utility.GetErrorMessageFromException(err);
+            displayAlert(errMessage.title, errMessage.message);
+          });
+      });
+  };
 
-	var onStartupHandler = function () {
-		var isSyncing, syncEnabled;
+  var onInstallHandler = function (details) {
+    var currentVersion = browser.runtime.getManifest().version;
 
-		platform.LocalStorage.Get([
-			globals.CacheKeys.IsSyncing,
-			globals.CacheKeys.SyncEnabled
-		])
-			.then(function (cachedData) {
-				isSyncing = cachedData[globals.CacheKeys.IsSyncing];
-				syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
+    // Check for upgrade
+    if (details && details.reason === 'update' &&
+      details.previousVersion && details.previousVersion !== currentVersion) {
+      upgradeExtension(currentVersion);
+    }
 
-				// Check if a sync was interrupted
-				if (isSyncing) {
-					// Disable sync
-					return bookmarks.DisableSync()
-						.then(function () {
-							// Display alert
-							displayAlert(
-								platform.GetConstant(globals.Constants.Error_SyncInterrupted_Title),
-								platform.GetConstant(globals.Constants.Error_SyncInterrupted_Message));
-						});
-				}
+    // Run startup
+    onStartupHandler();
+  };
 
-				// Exit if sync not enabled
-				if (!syncEnabled) {
-					return;
-				}
+  var onMessageHandler = function (request, sender, sendResponse) {
+    var commandName = _.findKey(globals.Commands, function (key) { return key === request.command; });
+    utility.LogInfo('background.onMessageHandler: ' + commandName);
 
-				// Check for updates to synced bookmarks
-				bookmarks.CheckForUpdates()
-					.then(function (updatesAvailable) {
-						if (!updatesAvailable) {
-							return;
-						}
+    switch (request.command) {
+      // Trigger bookmarks sync
+      case globals.Commands.SyncBookmarks:
+        syncBookmarks(request, sendResponse);
+        break;
+      // Trigger bookmarks restore
+      case globals.Commands.RestoreBookmarks:
+        restoreBookmarks(request, sendResponse);
+        break;
+      // Get current sync in progress
+      case globals.Commands.GetCurrentSync:
+        getCurrentSync(sendResponse);
+        break;
+    }
 
-						return syncBookmarks({ type: globals.SyncType.Pull });
-					})
-					.catch(function (err) {
-						// Display alert
-						var errMessage = utility.GetErrorMessageFromException(err);
-						displayAlert(errMessage.title, errMessage.message);
-					});
-			});
-	};
+    // Enable async response
+    return true;
+  };
 
-	var removeBookmark = function (id, removeInfo) {
-		return syncBookmarks({
-			type: globals.SyncType.Push,
-			changeInfo: {
-				type: globals.UpdateType.Delete,
-				data: [id, removeInfo]
-			}
-		});
-	};
+  var onStartupHandler = function () {
+    var syncEnabled;
 
-	var restoreBookmarks = function (restoreData) {
-		return $q(function (resolve) {
-			// Upgrade containers to use current container names
-			var upgradedBookmarks = bookmarks.UpgradeContainers(restoreData.bookmarks || []);
+    $q.all([
+      platform.LocalStorage.Get(),
+      platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog)
+    ])
+      .then(function (data) {
+        var cachedData = data[0];
+        syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
 
-			// If bookmarks don't have unique ids, add new ids
-			if (!bookmarks.CheckBookmarksHaveUniqueIds(upgradedBookmarks)) {
-				platform.Bookmarks.AddIds(upgradedBookmarks)
-					.then(function (updatedBookmarks) {
-						resolve(updatedBookmarks);
-					});
-			}
-			else {
-				resolve(upgradedBookmarks);
-			}
-		})
-			.then(function (bookmarksToRestore) {
-				restoreData.bookmarks = bookmarksToRestore;
-				return syncBookmarks(restoreData, globals.Commands.RestoreBookmarks);
-			});
-	};
+        utility.LogInfo('Starting up.');
+        cachedData.appVersion = globals.AppVersion;
+        utility.LogInfo(_.omit(
+          cachedData,
+          globals.CacheKeys.Bookmarks,
+          globals.CacheKeys.DebugMessageLog,
+          globals.CacheKeys.Password
+        ));
 
-	var syncBookmarks = function (syncData, command) {
-		// Start sync
-		return bookmarks.Sync(syncData)
-			.then(function (bookmarks, initialSyncFailed) {
-				// If this sync initially failed, alert the user and refresh search results
-				if (initialSyncFailed) {
-					displayAlert(
-						platform.GetConstant(globals.Constants.ConnRestored_Title),
-						platform.GetConstant(globals.Constants.ConnRestored_Message));
-				}
+        // Refresh interface
+        platform.Interface.Refresh(syncEnabled);
 
-				if (command) {
-					try {
-						asyncChannel.postMessage({
-							command: command,
-							bookmarks: bookmarks,
-							success: true
-						});
-					}
-					catch (err) { }
-				}
-			})
-			.catch(function (err) {
-				utility.LogMessage(globals.LogType.Info, 'Sync error: ' + err ? err.code || err.message : 'no error obj provided');
+        // Exit if sync not enabled
+        if (!syncEnabled) {
+          return;
+        }
 
-				if (command) {
-					try {
-						asyncChannel.postMessage({ command: command, success: false, error: err });
-					}
-					catch (innerErr) { }
-				}
+        // Start auto updates
+        platform.AutomaticUpdates.Start()
+          // Check for updates to synced bookmarks
+          .then(bookmarks.CheckForUpdates)
+          .then(function (updatesAvailable) {
+            if (!updatesAvailable) {
+              return;
+            }
 
-				return $q.reject(err);
-			})
-			.finally(function () {
-				utility.LogMessage(globals.LogType.Info, 'Sync data: ' + JSON.stringify(syncData));
-			});
-	};
+            return $q(function (resolve, reject) {
+              syncBookmarks({
+                type: globals.SyncType.Pull
+              }, function (response) {
+                if (response.success) {
+                  resolve(response.bookmarks);
+                }
+                else {
+                  reject(response.error);
+                }
+              });
+            });
+          })
+          .catch(function (err) {
+            utility.LogError(err, 'background.onStartupHandler');
 
-	// Call constructor
-	return new Background();
+            // Display alert
+            var errMessage = utility.GetErrorMessageFromException(err);
+            displayAlert(errMessage.title, errMessage.message);
+          });
+      });
+  };
+
+  var removeBookmark = function (id, removeInfo) {
+    utility.LogInfo('onRemoved event detected.');
+    return $q(function (resolve, reject) {
+      syncBookmarks({
+        type: globals.SyncType.Push,
+        changeInfo: {
+          type: globals.UpdateType.Delete,
+          data: [id, removeInfo]
+        }
+      }, function (response) {
+        if (response.success) {
+          resolve(response.bookmarks);
+        }
+        else {
+          reject(response.error);
+        }
+      });
+    });
+  };
+
+  var restoreBookmarks = function (restoreData, sendResponse) {
+    sendResponse = sendResponse || function () { };
+
+    return $q(function (resolve) {
+      // Upgrade containers to use current container names
+      var upgradedBookmarks = bookmarks.UpgradeContainers(restoreData.bookmarks || []);
+
+      // If bookmarks don't have unique ids, add new ids
+      if (!bookmarks.CheckBookmarksHaveUniqueIds(upgradedBookmarks)) {
+        platform.Bookmarks.AddIds(upgradedBookmarks)
+          .then(function (updatedBookmarks) {
+            resolve(updatedBookmarks);
+          });
+      }
+      else {
+        resolve(upgradedBookmarks);
+      }
+    })
+      .then(function (bookmarksToRestore) {
+        restoreData.bookmarks = bookmarksToRestore;
+        return syncBookmarks(restoreData, sendResponse);
+      });
+  };
+
+  var syncBookmarks = function (syncData, sendResponse) {
+    syncData.uniqueId = (new Date()).getTime();
+    sendResponse = sendResponse || function () { };
+
+    // Start sync
+    return bookmarks.Sync(syncData)
+      .then(function (bookmarks) {
+        try {
+          sendResponse({ bookmarks: bookmarks, success: true });
+        }
+        catch (err) { }
+
+        try {
+          // Send a message in case the user closed the extension
+          browser.runtime.sendMessage({
+            command: globals.Commands.SyncFinished,
+            success: true,
+            uniqueId: syncData.uniqueId
+          }, function () { });
+        }
+        catch (err) { }
+      })
+      .catch(function (err) {
+        try {
+          sendResponse({ error: err, success: false });
+        }
+        catch (err) { }
+
+        try {
+          // Send a message in case the user closed the extension
+          browser.runtime.sendMessage({
+            command: globals.Commands.SyncFinished,
+            error: err,
+            success: false
+          }, function () { });
+        }
+        catch (err) { }
+      });
+  };
+
+  var upgradeExtension = function () {
+    utility.LogInfo('Upgrading to ' + newVersion);
+
+    // Clear message log and set update panel to show
+    $q.all([
+      platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog),
+      platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, true)
+    ]);
+  };
+
+  // Call constructor
+  return new Background();
 };
 
 // Initialise the angular app
@@ -356,7 +417,7 @@ xBrowserSync.App.FirefoxBackground = angular.module('xBrowserSync.App.FirefoxBac
 
 // Disable debug info
 xBrowserSync.App.FirefoxBackground.config(['$compileProvider', function ($compileProvider) {
-	$compileProvider.debugInfoEnabled(false);
+  $compileProvider.debugInfoEnabled(false);
 }]);
 
 // Add platform service
@@ -371,7 +432,7 @@ xBrowserSync.App.FirefoxBackground.factory('globals', xBrowserSync.App.Global);
 xBrowserSync.App.HttpInterceptor.$inject = ['$q', 'globals'];
 xBrowserSync.App.FirefoxBackground.factory('httpInterceptor', xBrowserSync.App.HttpInterceptor);
 xBrowserSync.App.FirefoxBackground.config(['$httpProvider', function ($httpProvider) {
-	$httpProvider.interceptors.push('httpInterceptor');
+  $httpProvider.interceptors.push('httpInterceptor');
 }]);
 
 // Add utility service
@@ -391,13 +452,13 @@ xBrowserSync.App.PlatformImplementation.$inject = ['$http', '$interval', '$q', '
 xBrowserSync.App.FirefoxBackground.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add background module
-xBrowserSync.App.Background.$inject = ['$q', 'platform', 'globals', 'utility', 'api', 'bookmarks', 'platformImplementation'];
+xBrowserSync.App.Background.$inject = ['$q', 'platform', 'globals', 'utility', 'bookmarks', 'platformImplementation'];
 xBrowserSync.App.FirefoxBackground.controller('Controller', xBrowserSync.App.Background);
 
 // Set synchronous event handlers
 browser.runtime.onInstalled.addListener(function () {
-	document.querySelector('#install').click();
+  document.querySelector('#install').click();
 });
 browser.runtime.onStartup.addListener(function () {
-	document.querySelector('#startup').click();
+  document.querySelector('#startup').click();
 });

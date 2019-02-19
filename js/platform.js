@@ -10,57 +10,61 @@ xBrowserSync.App = xBrowserSync.App || {};
  * ------------------------------------------------------------------------------------ */
 
 xBrowserSync.App.Platform = function ($q) {
-	'use strict';
+  'use strict';
 
-	var notImplemented = function () {
-		function NotImplementedException() {
-			this.name = 'NotImplementedException';
-			this.code = 10600;
-		}
+  var notImplemented = function () {
+    function NotImplementedException() {
+      this.name = 'NotImplementedException';
+      this.code = 10600;
+    }
 
-		// Throw not implemented exception
-		throw new NotImplementedException();
-	};
+    // Throw not implemented exception
+    throw new NotImplementedException();
+  };
 
-	return {
-		AutomaticUpdates: {
-			NextUpdate: notImplemented,
-			Start: notImplemented,
-			Stop: notImplemented
-		},
-		BackupData: notImplemented,
-		Bookmarks: {
-			AddIds: notImplemented,
-			Clear: notImplemented,
-			Created: notImplemented,
-			CreateSingle: notImplemented,
-			Deleted: notImplemented,
-			DeleteSingle: notImplemented,
-			Get: notImplemented,
-			Moved: notImplemented,
-			Populate: notImplemented,
-			Share: notImplemented,
-			Updated: notImplemented,
-			UpdateSingle: notImplemented
-		},
-		GetConstant: notImplemented,
-		GetCurrentUrl: notImplemented,
-		GetPageMetadata: notImplemented,
-		Init: notImplemented,
-		Interface: {
-			Loading: {
-				Hide: notImplemented,
-				Show: notImplemented
-			},
-			Refresh: notImplemented
-		},
-		LocalStorage: {
-			Get: notImplemented,
-			Set: notImplemented
-		},
-		OpenUrl: notImplemented,
-		ScanID: notImplemented,
-		SelectFile: notImplemented,
-		Sync: notImplemented
-	};
+  return {
+    AutomaticUpdates: {
+      NextUpdate: notImplemented,
+      Start: notImplemented,
+      Stop: notImplemented
+    },
+    BackupData: notImplemented,
+    Bookmarks: {
+      AddIds: notImplemented,
+      Clear: notImplemented,
+      Created: notImplemented,
+      CreateSingle: notImplemented,
+      Deleted: notImplemented,
+      DeleteSingle: notImplemented,
+      Get: notImplemented,
+      Moved: notImplemented,
+      Populate: notImplemented,
+      Share: notImplemented,
+      Updated: notImplemented,
+      UpdateSingle: notImplemented
+    },
+    GetConstant: notImplemented,
+    GetCurrentUrl: notImplemented,
+    GetPageMetadata: notImplemented,
+    Init: notImplemented,
+    Interface: {
+      Loading: {
+        Hide: notImplemented,
+        Show: notImplemented
+      },
+      Refresh: notImplemented
+    },
+    LocalStorage: {
+      Get: notImplemented,
+      Set: notImplemented
+    },
+    OpenUrl: notImplemented,
+    ScanID: notImplemented,
+    SelectFile: notImplemented,
+    Sync: {
+      Await: notImplemented,
+      Current: notImplemented,
+      Execute: notImplemented
+    }
+  };
 };

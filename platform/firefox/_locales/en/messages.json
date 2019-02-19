@@ -497,10 +497,10 @@
 	"error_NoDataFound_Message" : {
 		"message":  "No sync exists for this ID. Double check your xBrowserSync ID and the service URL you are syncing to and try again."
 	},
-	"error_IdRemoved_Title" : {
+	"error_SyncRemoved_Title" : {
 		"message":  "Data removed due to inactivity"
 	},
-	"error_IdRemoved_Message" : {
+	"error_SyncRemoved_Message" : {
 		"message":  "Create a new ID and restore your data from a backup."
 	},
 	"error_NoDataToRestore_Title" : {

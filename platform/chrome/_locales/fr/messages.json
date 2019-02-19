@@ -497,10 +497,10 @@
 	"error_NoDataFound_Message" : {
 		"message":  "Vérifiez de nouveau votre ID xBrowserSync et votre mot de passe et essayez de nouveau."
 	},
-	"error_IdRemoved_Title" : {
+	"error_SyncRemoved_Title" : {
 		"message":  "Données supprimées pour cause d'inactivité"
 	},
-	"error_IdRemoved_Message" : {
+	"error_SyncRemoved_Message" : {
 		"message":  "Créez un nouvel ID et restaurez vos données depuis une sauvegarder."
 	},
 	"error_NoDataToRestore_Title" : {
