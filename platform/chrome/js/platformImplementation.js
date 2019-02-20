@@ -26,7 +26,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     platform.AutomaticUpdates.NextUpdate = getAutoUpdatesNextRun;
     platform.AutomaticUpdates.Start = startAutoUpdates;
     platform.AutomaticUpdates.Stop = stopAutoUpdates;
-    platform.BackupData = backupData;
     platform.Bookmarks.AddIds = addIdsToBookmarks;
     platform.Bookmarks.Clear = clearBookmarks;
     platform.Bookmarks.Created = bookmarksCreated;
@@ -38,6 +37,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     platform.Bookmarks.Populate = populateBookmarks;
     platform.Bookmarks.Updated = bookmarksUpdated;
     platform.Bookmarks.UpdateSingle = updateSingle;
+    platform.DownloadFile = downloadFile;
     platform.GetConstant = getConstant;
     platform.GetCurrentUrl = getCurrentUrl;
     platform.GetPageMetadata = getPageMetadata;
@@ -142,25 +142,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       // Listen for messages
       chrome.runtime.onMessage.addListener(awaitSyncListener);
     });
-  };
-
-  var backupData = function () {
-    // Export bookmarks
-    return bookmarks.Export()
-      .then(function (data) {
-        // Trigger download 
-        var backupLink = document.getElementById('backupLink');
-        var fileName = utility.GetBackupFileName();
-        var file = new Blob([JSON.stringify(data)], { type: 'text/plain' });
-        backupLink.href = URL.createObjectURL(file);
-        backupLink.innerHTML = fileName;
-        backupLink.download = fileName;
-        backupLink.click();
-
-        // Display message
-        utility.LogInfo('Backup created: ' + fileName);
-        vm.settings.backupCompletedMessage = platform.GetConstant(globals.Constants.Settings_BackupRestore_BackupSuccess_Message);
-      });
   };
 
   var bookmarksCreated = function (xBookmarks, args) {
@@ -531,6 +512,36 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
     loadingId = id;
     return timeout;
+  };
+
+  var downloadFile = function (fileName, textContents, linkId) {
+    if (!fileName) {
+      throw new Error('File name not supplied.');
+    }
+
+    var downloadLink;
+    if (linkId) {
+      downloadLink = document.getElementById(linkId);
+    }
+    else {
+      downloadLink = document.createElement('a');
+      downloadLink.style.display = 'none';
+      document.body.appendChild(downloadLink);
+    }
+
+    if (!downloadLink) {
+      throw new Error('Link element not found.');
+    }
+
+    var file = new Blob([textContents], { type: 'text/plain' });
+    downloadLink.href = URL.createObjectURL(file);
+    downloadLink.innerHTML = fileName;
+    downloadLink.download = fileName;
+    downloadLink.click();
+
+    if (!linkId) {
+      document.body.removeChild(downloadLink);
+    }
   };
 
   var executeSync = function (syncData, command) {

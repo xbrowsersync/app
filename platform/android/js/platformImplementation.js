@@ -243,15 +243,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     "settings_About_ViewFAQs_Label": {
       "message": "View FAQs"
     },
-    "settings_About_Issues_Label": {
-      "message": "Issues tracker"
-    },
-    "settings_About_Issues_Description": {
-      "message": "Raise an issue to report a bug or request a new feature."
-    },
-    "settings_About_RaiseIssue_Label": {
-      "message": "Raise Issue"
-    },
     "settings_About_Contributions_Label": {
       "message": "Support xBrowserSync"
     },
@@ -261,20 +252,29 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     "settings_About_Contribute_Label": {
       "message": "Become a Patron"
     },
-    "settings_Debug_Title": {
-      "message": "Debug"
+    "settings_Issues_Title": {
+      "message": "Issues"
     },
-    "settings_Debug_DeviceWidth_Label": {
-      "message": "Device width"
+    "settings_Issues_Tracker_Label": {
+      "message": "Issues tracker"
     },
-    "settings_Debug_DeviceHeight_Label": {
-      "message": "Device height"
+    "settings_Issues_Tracker_Description": {
+      "message": "Raise an issue to report a bug or request a new feature."
     },
-    "debugDisabled_Message": {
-      "message": "Debug mode disabled"
+    "settings_Issues_RaiseIssue_Label": {
+      "message": "Raise Issue"
     },
-    "debugEnabled_Message": {
-      "message": "Debug mode enabled"
+    "settings_Issues_Log_Label": {
+      "message": "Application log"
+    },
+    "settings_Issues_Log_Description": {
+      "message": "Download and include the application log when you log an issue."
+    },
+    "settings_Issues_DownloadLog_Label": {
+      "message": "Download Log"
+    },
+    "settings_Issues_LogDownloaded_Message": {
+      "message":  "If the log file does not download automatically, right click on the link below and 'Save link as...'."
     },
     "settings_Service_Title": {
       "message": "Service"

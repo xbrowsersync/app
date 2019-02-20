@@ -28,7 +28,6 @@ xBrowserSync.App.Platform = function ($q) {
       Start: notImplemented,
       Stop: notImplemented
     },
-    BackupData: notImplemented,
     Bookmarks: {
       AddIds: notImplemented,
       Clear: notImplemented,
@@ -43,6 +42,7 @@ xBrowserSync.App.Platform = function ($q) {
       Updated: notImplemented,
       UpdateSingle: notImplemented
     },
+    DownloadFile: notImplemented,
     GetConstant: notImplemented,
     GetCurrentUrl: notImplemented,
     GetPageMetadata: notImplemented,

@@ -48,11 +48,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       urlAsTitle: displayUrlAsBookmarkTitle
     };
 
-    vm.device = {
-      width: function () { return document.querySelector('body').clientWidth; },
-      height: function () { return document.querySelector('body').clientHeight; }
-    };
-
     vm.events = {
       backupRestoreForm_Backup_Click: backupRestoreForm_Backup_Click,
       backupRestoreForm_DisplayRestoreForm_Click: backupRestoreForm_DisplayRestoreForm_Click,
@@ -71,8 +66,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       bookmarkForm_ShareBookmark_Click: platform.Bookmarks.Share,
       bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
       bookmarkPanel_Close_Click: bookmarkPanel_Close_Click,
-      debugPanel_EnableDebugMode_Click: debugPanel_EnableDebugMode_Click,
       displayQRCode_Click: displayQRCode_Click,
+      debugPanel_DownloadLogFile_Click: debugPanel_DownloadLogFile_Click,
       introPanel_ShowHelp_Click: introPanel_ShowHelp_Click,
       introPanel1_Next_Click: introPanel1_Next_Click,
       introPanel2_Next_Click: introPanel2_Next_Click,
@@ -161,7 +156,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     vm.settings = {
       backupCompletedMessage: undefined,
       backupFileName: undefined,
-      debugMode: false,
       dataToRestore: undefined,
       dataToRestoreIsValid: validateDataToRestore,
       displayCancelSyncConfirmation: false,
@@ -172,11 +166,11 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       displaySyncBookmarksToolbarConfirmation: false,
       displayUpdateServiceUrlConfirmation: false,
       displayUpdateServiceUrlForm: false,
+      downloadLogCompletedMessage: undefined,
       fileRestoreEnabled: false,
       getSearchLookaheadDelay: 50,
       getSearchResultsDelay: 250,
       iCloudNotAvailable: false,
-      messageLog: [],
       restoreCompletedMessage: undefined,
       service: {
         apiVersion: '',
@@ -227,16 +221,16 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     // Display loading overlay
     platform.Interface.Loading.Show();
 
-    platform.BackupData()
+    downloadBackupFile()
       .catch(function (err) {
         // Display alert
         var errMessage = utility.GetErrorMessageFromException(err);
         vm.alert.display(errMessage.title, errMessage.message, 'danger');
       })
       .finally(function () {
-        $timeout(function () {
-          platform.Interface.Loading.Hide();
+        platform.Interface.Loading.Hide();
 
+        $timeout(function () {
           // Focus on done button
           if (!utility.IsMobilePlatform(vm.platformName)) {
             document.querySelector('.btn-done').focus();
@@ -676,15 +670,26 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     return validData;
   };
 
-  var debugPanel_EnableDebugMode_Click = function () {
-    var debugModeEnabled = !vm.settings.debugMode;
-    vm.settings.debugMode = debugModeEnabled;
-    vm.settings.messageLog = [];
+  var debugPanel_DownloadLogFile_Click = function () {
+    // Display loading overlay
+    platform.Interface.Loading.Show();
 
-    return $q.all([
-      platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog),
-      platform.LocalStorage.Set(globals.CacheKeys.DebugMode, debugModeEnabled)
-    ]);
+    downloadLogFile()
+      .catch(function (err) {
+        // Display alert
+        var errMessage = utility.GetErrorMessageFromException(err);
+        vm.alert.display(errMessage.title, errMessage.message, 'danger');
+      })
+      .finally(function () {
+        platform.Interface.Loading.Hide();
+        
+        $timeout(function () {
+          // Focus on done button
+          if (!utility.IsMobilePlatform(vm.platformName)) {
+            document.querySelector('.btn-done').focus();
+          }
+        });
+      });
   };
 
   var displayAlert = function (title, message, alertType) {
@@ -779,6 +784,30 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
 
   var displayUrlAsBookmarkTitle = function (url) {
     return url.replace(/^https?:\/\//i, '');
+  };
+
+  var downloadBackupFile = function () {
+    // Export bookmarks
+    return bookmarks.Export()
+      .then(function (data) {
+        // Trigger download
+        platform.DownloadFile(utility.GetBackupFileName(), JSON.stringify(data), 'backupLink');
+
+        // Display message
+        vm.settings.backupCompletedMessage = platform.GetConstant(globals.Constants.Settings_BackupRestore_BackupSuccess_Message);
+      });
+  };
+
+  var downloadLogFile = function () {
+    // Get cached message log
+    return platform.LocalStorage.Get(globals.CacheKeys.DebugMessageLog)
+      .then(function (debugMessageLog) {
+        // Trigger download
+        platform.DownloadFile(utility.GetLogFileName(), debugMessageLog.join('\r\n'), 'downloadLogFileLink');
+
+        // Display message
+        vm.settings.downloadLogCompletedMessage = platform.GetConstant(globals.Constants.Settings_Issues_LogDownloaded_Message);
+      });
   };
 
   var init = function () {
@@ -1004,6 +1033,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     document.querySelector('#backupFile').value = null;
     vm.settings.backupFileName = null;
     vm.settings.backupCompletedMessage = null;
+    vm.settings.downloadLogCompletedMessage = null;
     vm.settings.restoreCompletedMessage = null;
     vm.settings.dataToRestore = '';
     vm.settings.service.status = null;
@@ -1015,7 +1045,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       bookmarks.GetSyncBookmarksToolbar(),
       platform.LocalStorage.Get([
         globals.CacheKeys.DebugMessageLog,
-        globals.CacheKeys.DebugMode,
         globals.CacheKeys.SyncEnabled,
         globals.CacheKeys.SyncId
       ]),
@@ -1023,12 +1052,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     ])
       .then(function (cachedData) {
         var syncBookmarksToolbar = cachedData[0];
-        var debugMode = cachedData[1][globals.CacheKeys.DebugMode];
         var syncEnabled = cachedData[1][globals.CacheKeys.SyncEnabled];
         var syncId = cachedData[1][globals.CacheKeys.SyncId];
         var serviceUrl = cachedData[2];
 
-        vm.settings.debugMode = debugMode;
         vm.settings.service.url = serviceUrl;
         vm.settings.service.newServiceUrl = serviceUrl;
         vm.settings.syncBookmarksToolbar = syncBookmarksToolbar;
@@ -1058,15 +1085,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
               }
             });
         }
-
-        $timeout(function () {
-          if (debugMode) {
-            platform.LocalStorage.Get(globals.CacheKeys.DebugMessageLog)
-              .then(function (debugMessageLog) {
-                vm.settings.messageLog = debugMessageLog;
-              });
-          }
-        });
 
         // Get service status and display service info
         return api.CheckServiceStatus()

@@ -255,25 +255,27 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var onStartupHandler = function () {
-    var syncEnabled;
+    var cachedData, syncEnabled;
 
     $q.all([
       platform.LocalStorage.Get(),
       platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog)
     ])
       .then(function (data) {
-        var cachedData = data[0];
+        cachedData = data[0];
         syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
-
-        utility.LogInfo('Starting up.');
+        return utility.LogInfo('Starting up.');
+      })
+      .then(function () {
         cachedData.appVersion = globals.AppVersion;
-        utility.LogInfo(_.omit(
+        return utility.LogInfo(_.omit(
           cachedData,
           globals.CacheKeys.Bookmarks,
           globals.CacheKeys.DebugMessageLog,
           globals.CacheKeys.Password
         ));
-
+      })
+      .then(function () {
         // Refresh interface
         platform.Interface.Refresh(syncEnabled);
 

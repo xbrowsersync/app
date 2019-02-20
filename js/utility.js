@@ -51,8 +51,11 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         return decryptData_v2(encryptedData);
       })
       .catch(function (err) {
-        logInfo('Decryption failed: ' + err.message);
-        return $q.reject({ code: globals.ErrorCodes.InvalidData });
+        logInfo('Decryption failed.');
+        return $q.reject({
+          code: globals.ErrorCodes.InvalidData,
+          stack: err.stack
+        });
       });
   };
 
@@ -184,8 +187,11 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         return base64js.fromByteArray(combinedData);
       })
       .catch(function (err) {
-        logError(err, 'utility.encryptData');
-        return $q.reject({ code: globals.ErrorCodes.InvalidData });
+        logInfo('Encryption failed.');
+        return $q.reject({
+          code: globals.ErrorCodes.InvalidData,
+          stack: err.stack
+        });
       });
   };
 
@@ -194,15 +200,23 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   };
 
   var getBackupFileName = function () {
-    var date = new Date();
+    var fileName = 'xBrowserSyncBackup_' + getDateTimeString(new Date()) + '.json';
+    return fileName;
+  };
+
+  var getDateTimeString = function (date) {
+    if (!date) {
+      return '';
+    }
+    
+    var ms = ('00' + date.getMilliseconds()).slice(-3);
+    var second = ('0' + date.getSeconds()).slice(-2);
     var minute = ('0' + date.getMinutes()).slice(-2);
     var hour = ('0' + date.getHours()).slice(-2);
     var day = ('0' + date.getDate()).slice(-2);
     var month = ('0' + (date.getMonth() + 1)).slice(-2);
     var year = date.getFullYear();
-    var dateString = year + month + day + hour + minute;
-    var fileName = 'xBrowserSyncBackup_' + dateString + '.json';
-    return fileName;
+    return year + month + day + hour + minute + second + ms;
   };
 
   var getErrorMessageFromException = function (err) {
@@ -337,6 +351,11 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     return errorMessage;
   };
 
+  var getLogFileName = function () {
+    var fileName = 'xBrowserSyncLog_' + getDateTimeString(new Date()) + '.txt';
+    return fileName;
+  };
+
   var getPasswordHash = function (password, salt) {
     var encoder = new TextEncoder('utf-8');
     var encodedSalt = encoder.encode(salt);
@@ -423,11 +442,11 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     var errMessage;
 
     if (!err) {
-      return;
+      return $q.resolve();
     }
 
     if (err instanceof Error) {
-      errMessage = err.message;
+      errMessage = err.message || err.name;
     }
     else if (err.code) {
       var codeName = _.findKey(globals.ErrorCodes, function (key) { return key === err.code; });
@@ -435,26 +454,26 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     }
     message = message ? message + ': ' + errMessage : errMessage;
 
-    logMessage(globals.LogType.Error, message, err);
+    return logMessage(globals.LogType.Error, message, err);
   };
 
   var logInfo = function (message) {
-    logMessage(globals.LogType.Info, message);
+    if (!message) {
+      return $q.resolve();
+    }
+    
+    return logMessage(globals.LogType.Trace, message);
   };
 
   var logMessage = function (messageType, message, err) {
-    return platform.LocalStorage.Get([
-      globals.CacheKeys.DebugMessageLog,
-      globals.CacheKeys.DebugMode
-    ])
-      .then(function (cachedData) {
-        var messageLogText;
-        var debugMessageLog = cachedData[globals.CacheKeys.DebugMessageLog] || [];
-        var debugModeEnabled = cachedData[globals.CacheKeys.DebugMode];
+    return platform.LocalStorage.Get(globals.CacheKeys.DebugMessageLog)
+      .then(function (debugMessageLog) {
+        var messageLogText = getDateTimeString(new Date()) + '\t';
+        var debugMessageLog = debugMessageLog || [];
 
         switch (messageType) {
           case globals.LogType.Error:
-            messageLogText = 'ERROR: ';
+            messageLogText += '[error]\t';
             if (err instanceof Error) {
               console.error(message, err);
             }
@@ -465,30 +484,32 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
               console.error(message);
             }
             break;
-          case globals.LogType.Warning:
-            messageLogText = 'WARNING: ';
+          case globals.LogType.Warn:
+            messageLogText += '[warn]\t';
             console.warn(message);
             break;
-          case globals.LogType.Info:
+          case globals.LogType.Trace:
           /* falls through */
           default:
-            messageLogText = 'INFO: ';
-            if (debugModeEnabled) {
-              console.info(message);
-            }
-            break;
+            messageLogText += '[trace]\t';
+            console.info(message);
         }
 
-        if (debugModeEnabled) {
-          messageLogText += message.stack || message;
-          debugMessageLog.unshift(messageLogText);
-          return platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog, debugMessageLog);
+        messageLogText += typeof(message) === 'object' ? JSON.stringify(message) : message;
+        if (err && err.stack) {
+          messageLogText += '\t' + err.stack.replace(/\s+/g, ' ');
         }
+        debugMessageLog.push(messageLogText);
+        return platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog, debugMessageLog);
       });
   };
 
   var logWarning = function (message) {
-    logMessage(globals.LogType.Warning, message);
+    if (!message) {
+      return $q.resolve();
+    }
+    
+    return logMessage(globals.LogType.Warn, message);
   };
 
   var parseUrl = function (url) {
@@ -519,19 +540,6 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     return str ? str.replace(/<(?:.|\n)*?>/gm, '') : str;
   };
 
-  var toggleDebugMode = function () {
-    var toggledValue;
-
-    return platform.LocalStorage.Get(globals.CacheKeys.DebugMode)
-      .then(function (debugModeEnabled) {
-        toggledValue = !debugModeEnabled;
-        return platform.LocalStorage.Set(globals.CacheKeys.DebugMode, toggledValue);
-      })
-      .then(function () {
-        return toggledValue;
-      });
-  };
-
   var trimToNearestWord = function (text, limit) {
     if (!text) { return ''; }
 
@@ -553,7 +561,9 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     DeepCopy: deepCopy,
     Get24hrTimeFromDate: get24hrTimeFromDate,
     GetBackupFileName: getBackupFileName,
+    GetDateTimeString: getDateTimeString,
     GetErrorMessageFromException: getErrorMessageFromException,
+    GetLogFileName: getLogFileName,
     GetServiceUrl: getServiceUrl,
     GetTagArrayFromText: getTagArrayFromText,
     GetPasswordHash: getPasswordHash,
@@ -561,11 +571,9 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     IsNetworkConnected: isNetworkConnected,
     LogError: logError,
     LogInfo: logInfo,
-    LogMessage: logMessage,
     LogWarning: logWarning,
     ParseUrl: parseUrl,
     StripTags: stripTags,
-    ToggleDebugMode: toggleDebugMode,
     TrimToNearestWord: trimToNearestWord
   };
 };

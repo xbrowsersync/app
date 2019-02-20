@@ -12,9 +12,7 @@ xBrowserSync.App.Global = function (platform) {
   var Global = {
     Alarm: {
       Name: 'xBrowserSync-alarm',
-      // TODO: remove
-      //Period: 15
-      Period: 1
+      Period: 15
     },
     ApiVersion: '1.1.3',
     AppVersion: '1.4.1',
@@ -33,7 +31,6 @@ xBrowserSync.App.Global = function (platform) {
     CacheKeys: {
       Bookmarks: 'bookmarks',
       DebugMessageLog: 'debugMessageLog',
-      DebugMode: 'debugMode',
       DisableEventListeners: 'disableEventListeners',
       DisplayIntro: 'displayIntro',
       DisplayUpdated: 'displayUpdated',
@@ -134,17 +131,17 @@ xBrowserSync.App.Global = function (platform) {
       Settings_About_FAQs_Label: 'settings_About_FAQs_Label',
       Settings_About_FAQs_Description: 'settings_About_FAQs_Description',
       Settings_About_ViewFAQs_Label: 'settings_About_ViewFAQs_Label',
-      Settings_About_Issues_Label: 'settings_About_Issues_Label',
-      Settings_About_Issues_Description: 'settings_About_Issues_Description',
-      Settings_About_RaiseIssue_Label: 'settings_About_RaiseIssue_Label',
       Settings_About_Contributions_Label: 'settings_About_Contributions_Label',
       Settings_About_Contributions_Description: 'settings_About_Contributions_Description',
       Settings_About_Contribute_Label: 'settings_About_Contribute_Label',
-      Settings_Debug_Title: 'settings_Debug_Title',
-      Settings_Debug_DeviceWidth_Label: 'settings_Debug_DeviceWidth_Label',
-      Settings_Debug_DeviceHeight_Label: 'settings_Debug_DeviceHeight_Label',
-      DebugDisabled_Message: 'debugDisabled_Message',
-      DebugEnabled_Message: 'debugEnabled_Message',
+      Settings_Issues_Title: 'settings_Issues_Title',
+      Settings_Issues_Tracker_Label: 'settings_Issues_Tracker_Label',
+      Settings_Issues_Tracker_Description: 'settings_Issues_Tracker_Description',
+      Settings_Issues_RaiseIssue_Label: 'settings_Issues_RaiseIssue_Label',
+      Settings_Issues_Log_Label: 'settings_Issues_Log_Label',
+      Settings_Issues_Log_Description: 'settings_Issues_Log_Description',
+      Settings_Issues_DownloadLog_Label: 'settings_Issues_DownloadLog_Label',
+      Settings_Issues_LogDownloaded_Message: 'settings_Issues_LogDownloaded_Message',
       Settings_Service_Title: 'settings_Service_Title',
       Settings_Service_Status_NoNewSyncs: 'settings_Service_Status_NoNewSyncs',
       Settings_Service_Status_Error: 'settings_Service_Status_Error',
@@ -298,8 +295,8 @@ xBrowserSync.App.Global = function (platform) {
       NotImplemented: 10600
     },
     LogType: {
-      Info: 0,
-      Warning: 1,
+      Trace: 0,
+      Warn: 1,
       Error: 2
     },
     LookaheadMinChars: 1,
