@@ -28,7 +28,7 @@
 
     <div id="qr-panel" class="animate" data-ng-show="vm.settings.displayQRCode" data-ng-click="vm.settings.displayQRCode = false"
       data-ng-cloak>
-      <canvas id="qr" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}"></canvas>
+      <div id="qr" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}"></div>
     </div>
 
     <div class="alert animate-fade animate-fade-out" role="alert" data-ng-show="vm.alert.show" data-ng-cloak

@@ -16,7 +16,7 @@
         <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_Id_Label) }}</label>
         <div class="form-control id-url">
           <a title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_DisplayQRCode_Message) }}"
-            data-ng-click="vm.events.displayQRCode_Click()" href="" tabindex="1">{{ vm.sync.id }}</a>
+            data-ng-click="vm.events.displayQRCode(vm.sync.id)" href="" tabindex="1">{{ vm.sync.id }}</a>
         </div>
         <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_Id_Description) }}</p>
         <div class="animate-fade" data-ng-hide="vm.settings.displayCancelSyncConfirmation">
@@ -313,7 +313,7 @@
         <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_Log_Description) }}</p>
         <div class="animate-fade text-center" data-ng-hide="vm.settings.downloadLogCompletedMessage">
           <button type="button" class="btn btn-default" data-ng-click="vm.events.debugPanel_DownloadLogFile_Click()">
-              {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_DownloadLog_Label) }}
+            {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_DownloadLog_Label) }}
           </button>
         </div>
         <div class="animate-fade confirm" data-ng-show="vm.settings.downloadLogCompletedMessage">
@@ -361,10 +361,13 @@
         <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Contributions_Label) }}</label>
         <p class="description">{{
           vm.platform.GetConstant(vm.globals.Constants.Settings_About_Contributions_Description) }}</p>
-        <div class="text-center">
+        <div class="buttons">
           <button type="button" class="btn btn-default" data-ng-click="vm.events.openUrl($event, 'http://www.patreon.com/xbrowsersync')"
             tabindex="27">
-            {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Contribute_Label) }}
+            {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Patreon_Label) }}
+          </button>
+          <button type="button" class="btn btn-default" data-ng-click="vm.events.displayQRCode(vm.globals.BtcAddress)" tabindex="28">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Bitcoin_Label) }}
           </button>
         </div>
       </div>

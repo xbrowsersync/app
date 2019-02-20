@@ -1164,6 +1164,14 @@ body {
     }
   }
 
+  .buttons {
+    margin: 0;
+
+    button {
+      margin-bottom: 10px;
+    }
+  }
+
   .form-group {
     position: relative;
     margin-bottom: 1em;
@@ -1300,14 +1308,6 @@ body {
   }
 
   .sync-panel {
-    .buttons {
-      margin: 0;
-
-      button {
-        margin-bottom: 10px;
-      }
-    }
-
     .updates-available {
       @extend .description;
       font-size: .9em;
@@ -1351,7 +1351,6 @@ body {
   #qr {
     cursor: pointer;
     z-index: 110;
-    border: solid 10px white;
   }
 }
 

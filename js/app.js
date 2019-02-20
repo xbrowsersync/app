@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Main angular controller class for the app.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platform, globals, api, utility, bookmarks, platformImplementation) {
+xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platform, globals, api, utility, bookmarks) {
   'use strict';
 
   var vm;
@@ -66,7 +66,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       bookmarkForm_ShareBookmark_Click: platform.Bookmarks.Share,
       bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
       bookmarkPanel_Close_Click: bookmarkPanel_Close_Click,
-      displayQRCode_Click: displayQRCode_Click,
+      displayQRCode: displayQRCode,
       debugPanel_DownloadLogFile_Click: debugPanel_DownloadLogFile_Click,
       introPanel_ShowHelp_Click: introPanel_ShowHelp_Click,
       introPanel1_Next_Click: introPanel1_Next_Click,
@@ -770,15 +770,22 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       });
   };
 
-  var displayQRCode_Click = function () {
-    // Generate new QR code
-    new QRious({
-      element: document.getElementById('qr'),
-      level: 'Q',
-      size: 150,
-      value: vm.sync.id
+  var displayQRCode = function (value) {
+    if (!value) {
+      return
+    }
+    
+    // Generate new QR code from the supplied value
+    var qrcode = new QRCode({
+      content: value,
+      padding: 4,
+      width: 200,
+      height: 200,
+      color: '#000000',
+      background: '#ffffff',
+      ecl: 'M'
     });
-
+    document.getElementById('qr').innerHTML = qrcode.svg();
     vm.settings.displayQRCode = true;
   };
 

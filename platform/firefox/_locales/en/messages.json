@@ -240,10 +240,13 @@
 		"message": "Support xBrowserSync"
 	},
 	"settings_About_Contributions_Description": {
-		"message": "If you enjoy using xBrowserSync and would like to support the project, consider becoming a patron."
+		"message": "If you enjoy using xBrowserSync consider supporting the project."
 	},
-	"settings_About_Contribute_Label": {
-		"message": "Become a Patron"
+	"settings_About_Bitcoin_Label": {
+		"message": "Donate BTC"
+	},
+	"settings_About_Patreon_Label": {
+		"message": "Via Patron"
 	},
 	"settings_Issues_Title": {
 		"message": "Issues"

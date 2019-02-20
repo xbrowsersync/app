@@ -240,10 +240,13 @@
     "message": "Mitwirken"
   },
   "settings_About_Contributions_Description": {
-    "message": "Wenn Sie xBrowserSync mögen und mit BTC die Entwicklungs- und Betriebskosten unterstützen möchten."
+    "message": "If you enjoy using xBrowserSync consider supporting the project."
   },
-  "settings_About_Contribute_Label": {
-    "message": "Become a Patron"
+	"settings_About_Bitcoin_Label": {
+		"message": "Donate BTC"
+	},
+  "settings_About_Patreon_Label": {
+    "message": "Via Patron"
   },
 	"settings_Issues_Title": {
 		"message": "Issues"

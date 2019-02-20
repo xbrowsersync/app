@@ -28,6 +28,7 @@ xBrowserSync.App.Global = function (platform) {
       ToolbarContainerNameOld: '_toolbar_',
       UnfiledContainerNameOld: '_xBrowserSync_'
     },
+    BtcAddress: '1QEpmSt2hqnskxGRav9SNaRrJo5E9pGpGy',
     CacheKeys: {
       Bookmarks: 'bookmarks',
       DebugMessageLog: 'debugMessageLog',
@@ -133,7 +134,8 @@ xBrowserSync.App.Global = function (platform) {
       Settings_About_ViewFAQs_Label: 'settings_About_ViewFAQs_Label',
       Settings_About_Contributions_Label: 'settings_About_Contributions_Label',
       Settings_About_Contributions_Description: 'settings_About_Contributions_Description',
-      Settings_About_Contribute_Label: 'settings_About_Contribute_Label',
+      Settings_About_Bitcoin_Label: 'settings_About_Bitcoin_Label',
+      Settings_About_Patreon_Label: 'settings_About_Patreon_Label',
       Settings_Issues_Title: 'settings_Issues_Title',
       Settings_Issues_Tracker_Label: 'settings_Issues_Tracker_Label',
       Settings_Issues_Tracker_Description: 'settings_Issues_Tracker_Description',
