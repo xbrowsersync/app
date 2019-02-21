@@ -34,7 +34,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
 	 * ------------------------------------------------------------------------------------ */
 
   var changeBookmark = function (id, changeInfo) {
-    utility.LogInfo('onChanged event detected.');
+    utility.LogInfo('onChanged event detected');
     return $q(function (resolve, reject) {
       syncBookmarks({
         type: globals.SyncType.Push,
@@ -54,7 +54,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var createBookmark = function (id, bookmark) {
-    utility.LogInfo('onCreated event detected.');
+    utility.LogInfo('onCreated event detected');
 
     // Get page metadata from current tab
     return platform.GetPageMetadata()
@@ -125,7 +125,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
           return;
         }
 
-        utility.LogInfo('Checking for updates.');
+        utility.LogInfo('Checking for updates');
 
         return bookmarks.CheckForUpdates()
           .then(function (updatesAvailable) {
@@ -133,7 +133,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
               return;
             }
 
-            utility.LogInfo('Updates found, retrieving latest sync data.');
+            utility.LogInfo('Updates found, retrieving latest sync data');
 
             // Get bookmark updates
             return $q(function (resolve, reject) {
@@ -153,7 +153,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var moveBookmark = function (id, moveInfo) {
-    utility.LogInfo('onMoved event detected.');
+    utility.LogInfo('onMoved event detected');
     return $q(function (resolve, reject) {
       syncBookmarks({
         type: globals.SyncType.Push,
@@ -221,15 +221,18 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
 
   var onInstallHandler = function (details) {
     var currentVersion = browser.runtime.getManifest().version;
+    var doUpgrade = $q.resolve();
 
     // Check for upgrade
     if (details && details.reason === 'update' &&
       details.previousVersion && details.previousVersion !== currentVersion) {
-      upgradeExtension(currentVersion);
+      doUpgrade = upgradeExtension(details.previousVersion, currentVersion);
     }
 
-    // Run startup
-    onStartupHandler();
+    doUpgrade.then(function () {
+      // Run startup
+      onStartupHandler(false);
+    });
   };
 
   var onMessageHandler = function (request, sender, sendResponse) {
@@ -255,17 +258,18 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
     return true;
   };
 
-  var onStartupHandler = function () {
+  var onStartupHandler = function (clearLog) {
     var cachedData, syncEnabled;
+    clearLog = clearLog == null ? true : clearLog;
 
     $q.all([
       platform.LocalStorage.Get(),
-      platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog)
+      clearLog ? platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog) : $q.resolve()
     ])
       .then(function (data) {
         cachedData = data[0];
         syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
-        return utility.LogInfo('Starting up.');
+        return utility.LogInfo('Starting up');
       })
       .then(function () {
         cachedData.appVersion = globals.AppVersion;
@@ -318,7 +322,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var removeBookmark = function (id, removeInfo) {
-    utility.LogInfo('onRemoved event detected.');
+    utility.LogInfo('onRemoved event detected');
     return $q(function (resolve, reject) {
       syncBookmarks({
         type: globals.SyncType.Push,
@@ -401,14 +405,28 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
       });
   };
 
-  var upgradeExtension = function () {
-    utility.LogInfo('Upgrading to ' + newVersion);
+  var upgradeExtension = function (oldVersion, newVersion) {
+    return platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog)
+      .then(function () {
+        return utility.LogInfo('Upgrading from ' + oldVersion + ' to ' + newVersion);
+      })
+      .then(function () {
+        // For v1.4.1, convert local storage items to storage API
+        if (newVersion === '1.4.1' && compareVersions(oldVersion, newVersion) < 0) {
+          return utility.ConvertLocalStorageToStorageApi();
+        }
+      })
+      .then(function () {
+        // Set update panel to show
+        return platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, true);
+      })
+      .catch(function (err) {
+        utility.LogError(err, 'background.upgradeExtension');
 
-    // Clear message log and set update panel to show
-    $q.all([
-      platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog),
-      platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, true)
-    ]);
+        // Display alert
+        var errMessage = utility.GetErrorMessageFromException(err);
+        displayAlert(errMessage.title, errMessage.message);
+      });
   };
 
   // Call constructor

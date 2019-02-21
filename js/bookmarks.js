@@ -107,7 +107,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       platform.LocalStorage.Set(globals.CacheKeys.SyncVersion)
     ])
       .then(function () {
-        utility.LogInfo('Sync disabled.');
+        utility.LogInfo('Sync disabled');
 
         // Refresh interface/icon
         $timeout(platform.Interface.Refresh);
@@ -462,7 +462,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   };
 
   var enableSync = function () {
-    utility.LogInfo('Sync enabled.');
+    utility.LogInfo('Sync enabled');
     return $q.all([
       platform.LocalStorage.Set(globals.CacheKeys.SyncEnabled, true),
       platform.AutomaticUpdates.Start()
@@ -812,7 +812,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
               return queueSync({ type: globals.SyncType.Pull })
                 .then(function () {
-                  utility.LogInfo('Local sync data refreshed.');
+                  utility.LogInfo('Local sync data refreshed');
                   deferredToResolve.reject(err)
                 })
                 .catch(deferredToResolve.reject);

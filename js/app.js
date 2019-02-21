@@ -682,7 +682,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       })
       .finally(function () {
         platform.Interface.Loading.Hide();
-        
+
         $timeout(function () {
           // Focus on done button
           if (!utility.IsMobilePlatform(vm.platformName)) {
@@ -774,7 +774,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     if (!value) {
       return
     }
-    
+
     // Generate new QR code from the supplied value
     var qrcode = new QRCode({
       content: value,
@@ -1877,7 +1877,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
   };
 
   var syncForm_DisableSync_Click = function () {
-    utility.LogInfo('User disabled sync.');
+    utility.LogInfo('User disabled sync');
 
     // Disable sync and switch to login panel
     vm.sync.enabled = false;

@@ -417,7 +417,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       }
     })
       .catch(function (err) {
-        utility.LogInfo('Error clearing other bookmarks.');
+        utility.LogInfo('Error clearing other bookmarks');
         throw err;
       });
 
@@ -446,7 +446,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
             }
           })
             .catch(function (err) {
-              utility.LogInfo('Error clearing bookmarks toolbar.');
+              utility.LogInfo('Error clearing bookmarks toolbar');
               throw err;
             });
         }
@@ -751,7 +751,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
           });
         }
         catch (err) {
-          utility.LogInfo('Error populating bookmarks menu.');
+          utility.LogInfo('Error populating bookmarks menu');
           throw err;
         }
       }
@@ -769,7 +769,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
           });
         }
         catch (err) {
-          utility.LogInfo('Error populating mobile bookmarks.');
+          utility.LogInfo('Error populating mobile bookmarks');
           throw err;
         }
       }
@@ -787,7 +787,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
           });
         }
         catch (err) {
-          utility.LogInfo('Error populating other bookmarks.');
+          utility.LogInfo('Error populating other bookmarks');
           throw err;
         }
       }
@@ -807,7 +807,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
               });
             }
             catch (err) {
-              utility.LogInfo('Error populating bookmarks toolbar.');
+              utility.LogInfo('Error populating bookmarks toolbar');
               throw err;
             }
           });

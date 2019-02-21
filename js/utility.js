@@ -40,6 +40,44 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     return result;
   };
 
+  var convertLocalStorageToStorageApi = function () {
+    var deferred = $q.defer();
+
+    var syncEnabled = JSON.parse(localStorage.getItem('xBrowserSync-syncEnabled'));
+    if (syncEnabled) {
+      var displayIntro = JSON.parse(localStorage.getItem('xBrowserSync-displayIntro'));
+      var lastUpdated = localStorage.getItem('xBrowserSync-lastUpdated');
+      var password = localStorage.getItem('xBrowserSync-password');
+      var serviceUrl = localStorage.getItem('xBrowserSync-urlHost');
+      var syncBookmarksToolbar = localStorage.getItem('xBrowserSync-syncBookmarksToolbar');
+      var syncId = localStorage.getItem('xBrowserSync-Id');
+      var syncVersion = localStorage.getItem('xBrowserSync-syncVersion');
+
+      // Set cached data
+      $q.all([
+        platform.LocalStorage.Set(globals.CacheKeys.DisplayIntro, displayIntro),
+        platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, lastUpdated),
+        platform.LocalStorage.Set(globals.CacheKeys.Password, password),
+        platform.LocalStorage.Set(globals.CacheKeys.ServiceUrl, serviceUrl),
+        platform.LocalStorage.Set(globals.CacheKeys.SyncBookmarksToolbar, syncBookmarksToolbar),
+        platform.LocalStorage.Set(globals.CacheKeys.SyncEnabled, syncEnabled),
+        platform.LocalStorage.Set(globals.CacheKeys.SyncId, syncId),
+        platform.LocalStorage.Set(globals.CacheKeys.SyncVersion, syncVersion)
+      ])
+        .then(deferred.resolve)
+        .catch(deferred.reject);
+    }
+    else {
+      deferred.resolve();
+    }
+
+    return deferred.promise
+      .finally(function () {
+        // Clear local storage
+        _.keys(localStorage).forEach(function (key) { return localStorage.removeItem(key); });
+      });
+  };
+
   var decryptData = function (encryptedData) {
     // Determine which decryption method to use based on sync version
     return platform.LocalStorage.Get(globals.CacheKeys.SyncVersion)
@@ -208,7 +246,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     if (!date) {
       return '';
     }
-    
+
     var ms = ('00' + date.getMilliseconds()).slice(-3);
     var second = ('0' + date.getSeconds()).slice(-2);
     var minute = ('0' + date.getMinutes()).slice(-2);
@@ -461,7 +499,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     if (!message) {
       return $q.resolve();
     }
-    
+
     return logMessage(globals.LogType.Trace, message);
   };
 
@@ -495,7 +533,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
             console.info(message);
         }
 
-        messageLogText += typeof(message) === 'object' ? JSON.stringify(message) : message;
+        messageLogText += typeof (message) === 'object' ? JSON.stringify(message) : message;
         if (err && err.stack) {
           messageLogText += '\t' + err.stack.replace(/\s+/g, ' ');
         }
@@ -508,7 +546,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     if (!message) {
       return $q.resolve();
     }
-    
+
     return logMessage(globals.LogType.Warn, message);
   };
 
@@ -556,6 +594,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   return {
     AsyncReduce: asyncReduce,
     Closest: closest,
+    ConvertLocalStorageToStorageApi: convertLocalStorageToStorageApi,
     DecryptData: decryptData,
     EncryptData: encryptData,
     DeepCopy: deepCopy,
