@@ -643,19 +643,19 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
   };
 
   var getCurrentUrl = function () {
-    var deferred = $q.defer();
-
-    // Get current tab
-    chrome.tabs.query(
-      { currentWindow: true, active: true },
-      function (tabs) {
-        var activeTab = tabs[0];
-        var url = activeTab.url;
-
-        deferred.resolve(url);
-      });
-
-    return deferred.promise;
+    return $q(function (resolve, reject) {
+      try {
+        // Get current tab
+        chrome.tabs.query(
+          { currentWindow: true, active: true },
+          function (tabs) {
+            resolve(tabs[0].url);
+          });
+      }
+      catch (err) {
+        reject(err);
+      }
+    });
   };
 
   var getFromLocalStorage = function (storageKeys) {
@@ -677,33 +677,18 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
   };
 
   var getPageMetadata = function () {
-    var deferred = $q.defer();
-
-    // Get current tab
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      var activeTab = tabs[0];
-
-      // Exit if this is a chrome url
-      if (activeTab.url.toLowerCase().startsWith('chrome://')) {
-        return deferred.resolve(new bookmarks.XBookmark(null, activeTab.url));
+    return $q(function (resolve, reject) {
+      try {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+          chrome.tabs.sendMessage(tabs[0].id, { command: globals.Commands.GetPageMetadata }, function (response) {
+            resolve(response);
+          });
+        });
       }
-
-      // Run content script to return page metadata
-      chrome.tabs.executeScript(
-        activeTab.id,
-        { allFrames: false, file: 'js/content.js' },
-        function (results) {
-          var metadata = new bookmarks.XBookmark(
-            results[0].title,
-            results[0].url,
-            results[0].description,
-            results[0].tags);
-          deferred.resolve(metadata);
-        }
-      );
+      catch (err) {
+        reject(err);
+      }
     });
-
-    return deferred.promise;
   };
 
   var hideLoading = function (id, timeout) {

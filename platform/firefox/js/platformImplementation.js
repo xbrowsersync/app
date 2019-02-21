@@ -713,26 +713,15 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
   };
 
   var getPageMetadata = function () {
-    // Get current tab
-    return browser.tabs.query({ active: true, currentWindow: true })
-      .then(function (tabs) {
-        var activeTab = tabs[0];
-
-        // Exit if this is a firefox settings page
-        if (activeTab.url.toLowerCase().startsWith('about:')) {
-          return new bookmarks.XBookmark(null, activeTab.url);
-        }
-
-        // Run content script to return page metadata
-        return browser.tabs.executeScript(activeTab.id, { allFrames: false, file: '/js/content.js' })
-          .then(function (results) {
-            return bookmarks.XBookmark(
-              results[0].title,
-              results[0].url,
-              results[0].description,
-              results[0].tags);
+    return $q(function (resolve, reject) {
+      browser.tabs.query({ active: true, currentWindow: true })
+        .then(function (tabs) {
+          return browser.tabs.sendMessage(tabs[0].id, { command: globals.Commands.GetPageMetadata }, function (response) {
+            resolve(response);
           });
-      });
+        })
+        .catch(reject);
+    });
   };
 
   var hideLoading = function (id, timeout) {

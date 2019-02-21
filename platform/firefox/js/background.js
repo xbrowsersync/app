@@ -61,6 +61,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
       .then(function (metadata) {
         // Add metadata if provided
         if (metadata) {
+          bookmark.title = utility.StripTags(metadata.title);
           bookmark.description = utility.StripTags(metadata.description);
           bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
         }

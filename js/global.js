@@ -49,7 +49,8 @@ xBrowserSync.App.Global = function (platform) {
       SyncBookmarks: 1,
       RestoreBookmarks: 2,
       GetCurrentSync: 3,
-      SyncFinished: 4
+      SyncFinished: 4,
+      GetPageMetadata: 5
     },
     Constants: {
       Title: 'title',
