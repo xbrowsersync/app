@@ -2,12 +2,12 @@
   <button class="btn btn-icon btn-help animate-fade" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}"
     data-ng-click="vm.events.introPanel_ShowHelp_Click()" data-ng-show="!vm.introduction.displayIntro && vm.introduction.showLogo"
     tabindex="1000">
-    <i class="fa fa-question-circle" aria-hidden="true"></i>
+    <i class="fas fa-question-circle" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}</span>
   </button>
   <button class="btn btn-icon btn-settings" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}"
     data-ng-click="vm.view.change(vm.view.views.settings)" tabindex="1001">
-    <i class="fa fa-cog" aria-hidden="true"></i>
+    <i class="fas fa-cog" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}</span>
   </button>
 </div>

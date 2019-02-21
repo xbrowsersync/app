@@ -25,12 +25,6 @@
   font-family: $font-source-code-pro;
   src: url($font-path + '/source-code-pro/SourceCodePro-Regular.otf.woff2') format('woff2');
 }
-@font-face {
-  font-family: $font-font-awesome;
-  src: url($font-path + '/font-awesome/fontawesome-webfont.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
 
 * {
   box-shadow: none!important;
@@ -395,12 +389,15 @@ body {
     margin-bottom: .35em;
 
     button {
-      font-size: 1.8em;
-      line-height: 1.25em;
+      font-size: 1.5em;
 
       &.btn-close,
       &.btn-settings {
         float: right;
+      }
+
+      i {
+        vertical-align: middle;
       }
     }
   }
@@ -868,8 +865,8 @@ body {
       .btn {
         &.btn-toggle-bookmark {
           &.active {
-            i:before {
-              content: "\f02e";
+            i {
+              font-weight: 900;
             }
           }
         }
@@ -979,7 +976,7 @@ body {
 
         a {
           border-radius: $border-radius-well;
-          padding: 12px 30px 12px 20px;
+          padding: 12px 0 12px 20px;
           display: block;
           border-bottom: none;
           @include css-prefix(user-select, none);
@@ -994,8 +991,8 @@ body {
         .btn-edit-bookmark {
           position: absolute;
           top: 10px;
-          right: 10px;
-          font-size: 1.2em;
+          right: 16px;
+          font-size: 1.1em;
 
           &:hover {
             i {
@@ -1073,12 +1070,14 @@ body {
         font-weight: normal;
         line-height: 1.1em;
         margin-bottom: .2em;
+        margin-right: 40px;
         transition: all, ease-in-out, .2s;
         @include text-overflow-ellipsis;
       }
 
       .list-group-item-text {
         color: $colour-text2;
+        margin-right: 20px;
       }
 
       .description {

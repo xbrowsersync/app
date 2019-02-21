@@ -2,7 +2,7 @@
   <h2>{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}</h2>
   <button class="btn btn-icon btn-close" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}"
     data-ng-click="vm.view.displayMainView()" tabindex="1001">
-    <i class="fa fa-times-circle" aria-hidden="true"></i>
+    <i class="fas fa-times-circle" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}</span>
   </button>
 </div>
@@ -366,8 +366,9 @@
             tabindex="27">
             {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Patreon_Label) }}
           </button>
-          <button type="button" class="btn btn-default" data-ng-click="vm.events.displayQRCode(vm.globals.BtcAddress)" tabindex="28">
-              {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Bitcoin_Label) }}
+          <button type="button" class="btn btn-default" data-ng-click="vm.events.displayQRCode(vm.globals.BtcAddress)"
+            tabindex="28">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Bitcoin_Label) }}
           </button>
         </div>
       </div>

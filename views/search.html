@@ -1,12 +1,12 @@
 <div class="header-panel clearfix">
   <button class="btn btn-icon btn-settings" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}"
     data-ng-click="vm.view.change(vm.view.views.settings)" tabindex="1002">
-    <i class="fa fa-cog" aria-hidden="true"></i>
+    <i class="fas fa-cog" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}</span>
   </button>
   <button class="btn btn-icon btn-toggle-bookmark" data-ng-class="{ 'active': vm.bookmark.active }" title="{{ vm.bookmark.active ? vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) : vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}"
     data-ng-click="vm.events.searchForm_ToggleBookmark_Click()" tabindex="1000">
-    <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+    <i class="far fa-bookmark" aria-hidden="true"></i>
     <span class="sr-only" data-ng-if="vm.bookmark.active">{{
       vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}</span>
     <span class="sr-only" data-ng-if="!vm.bookmark.active">{{
@@ -17,7 +17,7 @@
       data-ng-model="vm.search.query" data-ng-change="vm.events.searchForm_SearchText_Change()" data-ng-keydown="vm.events.searchForm_SearchText_KeyDown($event)"
       data-ng-trim="false" spellcheck="false" autocomplete="off" tabindex="1" />
     <label for="txtSearch">
-      <i class="fa fa-search"></i>
+      <i class="fas fa-search"></i>
     </label>
     <div class="lookahead-container">
       <span class="measure" data-ng-bind-html="vm.search.queryMeasure"></span>
@@ -26,7 +26,7 @@
     </div>
     <button class="btn btn-icon btn-clear" data-ng-show="vm.search.query" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Clear_Label) }}"
       data-ng-click="vm.events.searchForm_Clear_Click()">
-      <i class="fa fa-times-circle" aria-hidden="true"></i>
+      <i class="fas fa-times-circle" aria-hidden="true"></i>
     </button>
   </div>
 </div>
@@ -44,17 +44,17 @@
         <div class="buttons">
           <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}"
             data-hm-tap="vm.events.searchForm_ShareBookmark_Click(result)">
-            <i class="fa fa-share-alt" aria-hidden="true"></i>
+            <i class="fas fa-share-alt" aria-hidden="true"></i>
             <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}</span>
           </button>
           <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}"
             data-hm-tap="vm.events.searchForm_UpdateBookmark_Click(result)">
-            <i class="fa fa-pencil" aria-hidden="true"></i>
+            <i class="fas fa-edit" aria-hidden="true"></i>
             <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}</span>
           </button>
           <button class="btn btn-icon btn-delete-bookmark" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_DeleteBookmark_Label) }}"
             data-hm-tap="vm.events.searchForm_DeleteBookmark_Click($event, result)">
-            <i class="fa fa-trash" aria-hidden="true"></i>
+            <i class="fas fa-trash" aria-hidden="true"></i>
             <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_DeleteBookmark_Label) }}</span>
           </button>
         </div>
@@ -70,7 +70,7 @@
       </a>
       <button class="btn btn-icon btn-edit-bookmark" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}"
         data-ng-click="vm.events.searchForm_UpdateBookmark_Click(result)">
-        <i class="fa fa-pencil" aria-hidden="true"></i>
+        <i class="fas fa-edit" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}</span>
       </button>
     </div>

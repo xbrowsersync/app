@@ -7,7 +7,7 @@
       }}</h2>
     <button class="btn btn-icon btn-close" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}"
       data-ng-click="vm.events.bookmarkPanel_Close_Click()" tabindex="1000">
-      <i class="fa fa-times-circle" aria-hidden="true"></i>
+      <i class="fas fa-times-circle" aria-hidden="true"></i>
       <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}</span>
     </button>
   </div>
@@ -52,7 +52,7 @@
   <div class="form-group tags-container clearfix" data-ng-show="vm.bookmark.current.tags.length > 0">
     <button class="label label-default" data-ng-repeat="tag in vm.bookmark.current.tags track by $index" data-ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
       <span>{{ tag }}</span>
-      <i class="fa fa-times" aria-hidden="true"></i>
+      <i class="fas fa-times" aria-hidden="true"></i>
       <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_DeleteTag_Label) }}</span>
     </button>
   </div>

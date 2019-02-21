@@ -12,6 +12,7 @@
     "url": "https://github.com/xbrowsersync/app/issues"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.7.2",
     "angular": "^1.7.7",
     "angular-animate": "^1.7.7",
     "angular-complexify": "^0.3.7",
@@ -23,7 +24,6 @@
     "compare-versions": "^3.4.0",
     "crypto-js": "^3.1.9-1",
     "fastclick": "^1.0.6",
-    "font-awesome": "^4.7.0",
     "hammerjs": "^2.0.8",
     "lzutf8": "^0.5.5",
     "ng-infinite-scroll": "^1.3.0",
@@ -53,7 +53,7 @@
     "build:android": "echo Building Android app... & cross-env PLATFORM_PATH=platform/android npm run copyfiles && npm run commonbuildsteps",
     "postbuild:android": "npm run androidbuildsteps",
     "clearprevbuild": "n-clean build",
-    "copyfiles": "cross-env-shell \"n-copy --source $PLATFORM_PATH --destination build \\\"*\\\" \\\"**/*\\\"\" && n-copy --source . --destination build \"app.html\" \"css/*\" \"img/*\" \"views/*\" && n-copy --source node_modules/font-awesome/fonts --destination build/fonts/font-awesome \"**/*\" && n-copy --source node_modules/source-code-pro/WOFF2/OTF --destination build/fonts/source-code-pro \"**/*\" && n-copy --source node_modules/typeface-roboto-condensed/files --destination build/fonts/roboto-condensed \"**/*\"",
+    "copyfiles": "cross-env-shell \"n-copy --source $PLATFORM_PATH --destination build \\\"*\\\" \\\"**/*\\\"\" && n-copy --source . --destination build \"app.html\" \"css/*\" \"img/*\" \"views/*\" && n-copy --source node_modules/@fortawesome/fontawesome-free/webfonts --destination build/fonts/font-awesome \"**/*\" && n-copy --source node_modules/source-code-pro/WOFF2/OTF --destination build/fonts/source-code-pro \"**/*\" && n-copy --source node_modules/typeface-roboto-condensed/files --destination build/fonts/roboto-condensed \"**/*\"",
     "commonbuildsteps": "npm run compilecss && npm run bundlecss && npm run minifycryptojs && npm run bundleappscripts",
     "compilecss": "node-sass build/css/font-awesome.scss build/css/font-awesome.css -q & node-sass build/css/styles.scss build/css/styles.css -q & node-sass build/css/platform.scss build/css/platform.css -q",
     "bundlecss": "minify build/css/font-awesome.css node_modules/bootstrap/dist/css/bootstrap.min.css build/css/styles.css build/css/platform.css | n-pipe build/css/styles.min.css",
