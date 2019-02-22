@@ -680,7 +680,12 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     return $q(function (resolve, reject) {
       try {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-          chrome.tabs.sendMessage(tabs[0].id, { command: globals.Commands.GetPageMetadata }, function (response) {
+          var activeTab = tabs[0];
+          chrome.tabs.sendMessage(activeTab.id, { command: globals.Commands.GetPageMetadata }, function (response) {
+            // If no metadata returned, use the info from the active tab
+            response = response || {};
+            response.title = response.title || activeTab.title;
+            response.url = response.url || activeTab.url;
             resolve(response);
           });
         });

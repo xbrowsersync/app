@@ -713,15 +713,17 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
   };
 
   var getPageMetadata = function () {
-    return $q(function (resolve, reject) {
-      browser.tabs.query({ active: true, currentWindow: true })
-        .then(function (tabs) {
-          return browser.tabs.sendMessage(tabs[0].id, { command: globals.Commands.GetPageMetadata }, function (response) {
-            resolve(response);
-          });
-        })
-        .catch(reject);
-    });
+    return browser.tabs.query({ active: true, currentWindow: true })
+      .then(function (tabs) {
+        var activeTab = tabs[0];
+        return browser.tabs.sendMessage(activeTab.id, { command: globals.Commands.GetPageMetadata }, function (response) {
+          // If no metadata returned, use the info from the active tab
+          response = response || {};
+          response.title = response.title || activeTab.title;
+          response.url = response.url || activeTab.url;
+          return response;
+        });
+      });
   };
 
   var hideLoading = function (id, timeout) {
