@@ -247,7 +247,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       "message": "Support xBrowserSync"
     },
     "settings_About_Contributions_Description": {
-		  "message": "If you enjoy using xBrowserSync consider supporting the project."
+      "message": "If you enjoy using xBrowserSync consider supporting the project."
     },
     "settings_About_Bitcoin_Label": {
       "message": "Donate BTC"
@@ -277,7 +277,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       "message": "Download Log"
     },
     "settings_Issues_LogDownloaded_Message": {
-      "message":  "If the log file does not download automatically, right click on the link below and 'Save link as...'."
+      "message": "If the log file does not download automatically, right click on the link below and 'Save link as...'."
     },
     "settings_Service_Title": {
       "message": "Service"
@@ -440,6 +440,9 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     },
     "button_Share_Label": {
       "message": "Share"
+    },
+    "button_ClearTags_Label": {
+      "message": "Clear tags"
     },
     "working_Title": {
       "message": "Working on it..."

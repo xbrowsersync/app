@@ -1,30 +1,7 @@
 @import 'variables.scss';
+@import 'fonts.scss';
 @import 'mixins.scss';
 @import 'animations.scss';
-@font-face {
-  font-family: $font-roboto-condensed;
-  src: url($font-path + '/roboto-condensed/roboto-condensed-latin-400.woff2') format('woff2');
-}
-@font-face {
-  font-family: $font-roboto-condensed;
-  src: url($font-path + '/roboto-condensed/roboto-condensed-latin-700.woff2') format('woff2');
-  font-weight: bold;
-}
-@font-face {
-  font-family: $font-roboto-condensed;
-  src: url($font-path + '/roboto-condensed/roboto-condensed-latin-400italic.woff2') format('woff2');
-  font-style: italic;
-}
-@font-face {
-  font-family: $font-roboto-condensed;
-  src: url($font-path + '/roboto-condensed/roboto-condensed-latin-700italic.woff2') format('woff2');
-  font-weight: bold;
-  font-style: italic;
-}
-@font-face {
-  font-family: $font-source-code-pro;
-  src: url($font-path + '/source-code-pro/SourceCodePro-Regular.otf.woff2') format('woff2');
-}
 
 * {
   box-shadow: none!important;
@@ -32,6 +9,7 @@
 }
 
 body {
+  background-color: red!important;
   font-family: $font-stack-regular;
   color: $colour-text1;
   font-size: 14px;
@@ -331,6 +309,7 @@ body {
   .container {
     height: 100%;
     width: 100%;
+    max-width: 100%;
     position: relative;
     overflow-y: auto;
     padding: 0;
@@ -402,15 +381,10 @@ body {
     }
   }
 
-  .input-group {
-    margin-bottom: 15px;
-  }
-
   .lookahead-container {
     position: absolute;
     width: 100%;
     height: 100%;
-    line-height: 1.42857143;
     overflow: hidden;
     white-space: nowrap;
 
@@ -418,6 +392,9 @@ body {
     .measure {
       display: block;
       position: absolute;
+      padding-top: .25em;
+      padding-bottom: .25em;
+      line-height: 1.25em;
       z-index: 60;
       color: $colour-link;
       background-color: transparent;
@@ -564,6 +541,10 @@ body {
     flex-flow: column;
   }
 
+  input[type="text"] {
+    width: 100%;
+  }
+  
   textarea {
     height: 100%;
     width: 100%;
@@ -611,22 +592,23 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
 
-    .label {
+    .badge {
       display: inline-flex;
+      align-items: center;
       margin: 0 5px 5px 0;
-      color: $colour-text1;
+      color: rgba($colour-text1, 0.9);
       background-color: $colour-text2;
       border: 0;
-      border-radius: 10px;
       font-size: .9em;
       font-weight: normal;
       text-transform: capitalize;
-      line-height: 1.3em;
+      line-height: 1.2em;
       max-width: 99%;
+      padding-top: .25em;
+      padding-bottom: .35em;
 
       &:hover {
         cursor: pointer;
-        color: $colour-text1;
 
         i {
           color: $colour-link-highlight;
@@ -634,13 +616,13 @@ body {
       }
 
       i {
-        transition: color, ease-in-out, .2s;
         font-size: .9em;
+        transition: color, ease-in-out, .2s;
         color: $colour-link;
-        margin: .25em 0 0 .25em;
       }
 
       span {
+        margin-right: 0.3em;
         @include text-overflow-ellipsis;
 
         &:hover {
@@ -661,14 +643,27 @@ body {
       position: relative;
       z-index: 50;
       background: transparent;
+      padding-right: 2.2em;
+    }
+
+    .btn-clear {
+      position: absolute;
+      top: 0;
+      right: .75em;
+      font-size: 1.1em;
+      line-height: 2.1em;
+      z-index: 55;
+      border-bottom: none;
     }
 
     .lookahead-container {
-      top: .5em;
+      top: 0;
       left: 1em;
 
       .lookahead,
       .measure {
+        padding-top: .5em;
+        padding-bottom: .5em;
         text-transform: lowercase;
       }
     }
@@ -729,9 +724,10 @@ body {
     }
 
     input {
+      width: 100%;
       font-family: $font-stack-code;
       line-height: 1.45em;
-      padding: .5em 0 .5em .9em;
+      padding: .5em .9em;
       @include placeholder {
         font-family: $font-stack-regular;
         font-size: 1.2em;
@@ -854,12 +850,13 @@ body {
   .view-content {
     display: flex;
     flex-flow: column;
-    padding: .75em 0 0 .75em;
+    padding: 0 0 0 .75em;
 
     .header-panel {
       flex: none;
-      padding-right: 10px;
       margin-bottom: 0;
+      padding-top: .75em;
+      padding-right: 10px;
       padding-bottom: .75em;
 
       .btn {
@@ -899,13 +896,15 @@ body {
           padding: .25em 1.8em;
           font-size: 1.4em;
           background: transparent;
+          width: 100%;
         }
 
         .btn-clear {
           position: absolute;
-          top: .55em;
+          top: 0;
           right: .75em;
-          font-size: 1.2em;
+          font-size: 1.1em;
+          line-height: 2.2em;
           z-index: 55;
           border-bottom: none;
 
@@ -916,7 +915,7 @@ body {
 
         .lookahead-container {
           font-size: 1.4em;
-          top: .25em;
+          top: 0;
           left: 1.8em;
           width: calc(100% - 1.8em);
         }
@@ -1211,7 +1210,7 @@ body {
       transition: none;
 
       .checkbox {
-        top: -3px;
+        top: 0.5em;
       }
     }
 
@@ -1244,6 +1243,7 @@ body {
       border-radius: 1em;
       background-color: $colour-text2;
       overflow: visible;
+      margin-bottom: 1em;
 
       .progress-bar {
         background-color: $colour-bg2;
@@ -1300,7 +1300,6 @@ body {
         @extend input:not([type]).form-control;
         position: static;
         width: 100%;
-        margin: 15px 0;
         border: 1px solid $colour-text2!important;
       }
     }

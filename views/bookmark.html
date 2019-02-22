@@ -1,5 +1,5 @@
 <form id="bookmarkForm" name="vm.bookmarkForm" novalidate>
-  <button type="submit" class="hidden" tabindex="-1"></button>
+  <button type="submit" class="d-none" tabindex="-1"></button>
   <div class="header-panel clearfix">
     <h2 data-ng-if="vm.bookmark.displayUpdateForm">{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_Title_Edit)
       }}</h2>
@@ -46,11 +46,15 @@
     <div class="lookahead-container">
       <span class="measure" data-ng-bind-html="vm.bookmark.tagTextMeasure"></span>
       <span class="lookahead" data-ng-bind-html="vm.bookmark.tagLookahead" data-ng-show="vm.bookmark.tagLookahead"
-        data-ng-click="vm.events.bookmarkForm_BookmarkTags_Click()"></span>
+        data-ng-click="vm.events.bookmarkForm_BookmarkTags_Lookahead_Click ()"></span>
     </div>
+    <button class="btn btn-icon btn-clear" data-ng-show="vm.bookmark.current.tags.length > 0" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ClearTags_Label) }}"
+      data-ng-click="vm.events.bookmarkForm_BookmarkTags_ClearAll_Click()">
+      <i class="fas fa-trash-alt" aria-hidden="true"></i>
+    </button>
   </div>
   <div class="form-group tags-container clearfix" data-ng-show="vm.bookmark.current.tags.length > 0">
-    <button class="label label-default" data-ng-repeat="tag in vm.bookmark.current.tags track by $index" data-ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
+    <button class="badge badge-pill" data-ng-repeat="tag in vm.bookmark.current.tags track by $index" data-ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
       <span>{{ tag }}</span>
       <i class="fas fa-times" aria-hidden="true"></i>
       <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_DeleteTag_Label) }}</span>

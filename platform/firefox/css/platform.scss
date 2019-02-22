@@ -5,7 +5,7 @@
 $window-width: 320px;
 $window-height: 520px;
 $search-window-width: 600px;
-$search-window-height: 4.2em;
+$search-window-height: 4em;
 
 body {
     width: $window-width;
@@ -15,7 +15,7 @@ body {
         width: $search-window-width;
         height: $search-window-height;
 
-        .container {
+        .container, #search-panel .header-panel {
             height: $search-window-height;
         }
     }

@@ -100,10 +100,9 @@
         <div class="form-group">
           <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Label) }}</label>
           <div class="form-control status-text">
-            <span data-ng-show="vm.settings.service.status == null">{{
-              vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}</span>
-            <span class="text-danger" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Error">{{
-              vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Error) }}</span>
+            <div data-ng-show="vm.settings.service.status == null" class="spinner-border spinner-border-sm" role="status">
+              <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}</span>
+            </div>
             <span class="text-success" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Online">{{
               vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Online) }}</span>
             <span class="text-danger" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Offline">{{

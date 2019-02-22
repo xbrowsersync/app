@@ -242,36 +242,36 @@
   "settings_About_Contributions_Description": {
     "message": "If you enjoy using xBrowserSync consider supporting the project."
   },
-	"settings_About_Bitcoin_Label": {
-		"message": "Donate BTC"
-	},
+  "settings_About_Bitcoin_Label": {
+    "message": "Donate BTC"
+  },
   "settings_About_Patreon_Label": {
     "message": "Via Patron"
   },
-	"settings_Issues_Title": {
-		"message": "Issues"
-	},
-	"settings_Issues_Tracker_Label": {
-		"message": "Issues tracker"
-	},
-	"settings_Issues_Tracker_Description": {
-		"message": "Raise an issue to report a bug or request a new feature."
-	},
-	"settings_Issues_RaiseIssue_Label": {
-		"message": "Raise Issue"
-	},
-	"settings_Issues_Log_Label": {
-		"message": "Application log"
-	},
-	"settings_Issues_Log_Description": {
-		"message": "Download and include the application log when you log an issue."
-	},
-	"settings_Issues_DownloadLog_Label": {
-		"message": "Download Log"
-	},
-	"settings_Issues_LogDownloaded_Message": {
-		"message":  "If the log file does not download automatically, right click on the link below and 'Save link as...'."
-	},
+  "settings_Issues_Title": {
+    "message": "Issues"
+  },
+  "settings_Issues_Tracker_Label": {
+    "message": "Issues tracker"
+  },
+  "settings_Issues_Tracker_Description": {
+    "message": "Raise an issue to report a bug or request a new feature."
+  },
+  "settings_Issues_RaiseIssue_Label": {
+    "message": "Raise Issue"
+  },
+  "settings_Issues_Log_Label": {
+    "message": "Application log"
+  },
+  "settings_Issues_Log_Description": {
+    "message": "Download and include the application log when you log an issue."
+  },
+  "settings_Issues_DownloadLog_Label": {
+    "message": "Download Log"
+  },
+  "settings_Issues_LogDownloaded_Message": {
+    "message": "If the log file does not download automatically, right click on the link below and 'Save link as...'."
+  },
   "settings_Service_Title": {
     "message": "Dienst"
   },
@@ -433,6 +433,9 @@
   },
   "button_Share_Label": {
     "message": "Teilen"
+  },
+  "button_ClearTags_Label": {
+    "message": "Clear tags"
   },
   "working_Title": {
     "message": "Arbeite .."

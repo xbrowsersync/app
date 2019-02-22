@@ -199,6 +199,7 @@ xBrowserSync.App.Global = function (platform) {
       Button_DeleteTag_Label: 'button_DeleteTag_Label',
       Button_Delete_Label: 'button_Delete_Label',
       Button_Share_Label: 'button_Share_Label',
+      Button_ClearTags_Label: 'button_ClearTags_Label',
       Working_Title: 'working_Title',
       Working_Message: 'working_Message',
       ConnRestored_Title: 'connRestored_Title',

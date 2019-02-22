@@ -200,7 +200,7 @@
 </div>
 <form name="vm.syncForm" class="animate-fade" data-ng-hide="vm.sync.displaySyncConfirmation || vm.sync.displayUpgradeConfirmation"
   novalidate>
-  <button type="submit" class="hidden" data-ng-click="vm.events.syncForm_Submit_Click()" tabindex="-1"></button>
+  <button type="submit" class="d-none" data-ng-click="vm.events.syncForm_Submit_Click()" tabindex="-1"></button>
   <div class="login-form-new animate-fade" data-ng-show="vm.settings.displayNewSyncPanel">
     <div class="animate-fade" data-ng-show="vm.sync.displayPasswordConfirmation">
       <div class="form-group secret-form-group">

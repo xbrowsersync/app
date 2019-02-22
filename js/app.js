@@ -56,7 +56,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       backupRestoreForm_SelectBackupFile_Click: backupRestoreForm_SelectBackupFile_Click,
       bookmarkForm_BookmarkDescription_Change: bookmarkForm_BookmarkDescription_Change,
       bookmarkForm_BookmarkTags_Change: bookmarkForm_BookmarkTags_Change,
-      bookmarkForm_BookmarkTags_Click: bookmarkForm_BookmarkTags_Click,
+      bookmarkForm_BookmarkTags_ClearAll_Click: bookmarkForm_BookmarkTags_ClearAll_Click,
+      bookmarkForm_BookmarkTags_Lookahead_Click: bookmarkForm_BookmarkTags_Lookahead_Click,
       bookmarkForm_BookmarkTags_KeyDown: bookmarkForm_BookmarkTags_KeyDown,
       bookmarkForm_BookmarkUrl_Change: bookmarkForm_BookmarkUrl_Change,
       bookmarkForm_CreateBookmark_Click: bookmarkForm_CreateBookmark_Click,
@@ -337,7 +338,15 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     }
   };
 
-  var bookmarkForm_BookmarkTags_Click = function () {
+  var bookmarkForm_BookmarkTags_ClearAll_Click = function () {
+    vm.bookmark.current.tags = [];
+    vm.bookmarkForm.$setDirty();
+    if (!utility.IsMobilePlatform(vm.platformName)) {
+      document.querySelector('input[name="bookmarkTags"]').focus();
+    }
+  };
+
+  var bookmarkForm_BookmarkTags_Lookahead_Click = function () {
     vm.bookmark.tagText += vm.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
     bookmarkForm_CreateTags_Click();
     if (!utility.IsMobilePlatform(vm.platformName)) {
@@ -354,7 +363,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         bookmarkForm_CreateTags_Click();
         break;
       // If user pressed tab or right arrow key and lookahead present
-      case ((event.keyCode === 9 || event.keyCode === 39) && vm.bookmark.tagLookahead):
+      case ((event.keyCode === 9 || event.keyCode === 39) && !!vm.bookmark.tagLookahead):
         // Add lookahead to search query
         event.preventDefault();
         vm.bookmark.tagText += vm.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
