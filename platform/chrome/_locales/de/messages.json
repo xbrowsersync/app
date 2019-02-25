@@ -332,6 +332,9 @@
   "button_Restore_Label": {
     "message": "Wiederherstellen"
   },
+  "button_Saving_Label": {
+    "message": "Saving..."
+  },
   "button_Done_Label": {
     "message": "Fertig"
   },
@@ -438,10 +441,7 @@
     "message": "Clear tags"
   },
   "working_Title": {
-    "message": "Arbeite .."
-  },
-  "working_Message": {
-    "message": "Fenster noch nicht schließen."
+    "message": "Syncing..."
   },
   "connRestored_Title": {
     "message": "Verbindung wiederhergestellt"

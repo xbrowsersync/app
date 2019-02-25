@@ -143,7 +143,8 @@
             <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Message)"></p>
             <div class="form-group" data-ng-class="{ 'has-error': vm.updateServiceUrlForm.newServiceUrl.$invalid }">
               <input name="newServiceUrl" class="form-control" data-ng-model="vm.settings.service.newServiceUrl"
-                data-ng-change="vm.events.updateServiceUrlForm_NewServiceUrl_Change()" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Field_Description) }}"
+                data-ng-change="vm.events.updateServiceUrlForm_NewServiceUrl_Change()" data-ng-readonly="vm.settings.validatingServiceUrl"
+                placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Field_Description) }}"
                 maxlength="128" spellcheck="false" tabindex="10" required />
               <div class="validation" data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$invalid">
                 <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.required">{{
@@ -162,9 +163,15 @@
               </div>
             </div>
             <div class="text-center">
-              <button type="submit" class="btn btn-default" data-ng-disabled="!vm.updateServiceUrlForm.newServiceUrl.$dirty || vm.updateServiceUrlForm.newServiceUrl.$invalid"
-                data-ng-click="vm.events.updateServiceUrlForm_Update_Click()" tabindex="11">
-                {{ vm.platform.GetConstant(vm.globals.Constants.Button_Update_Label) }}
+              <button type="submit" class="btn btn-default" data-ng-click="vm.events.updateServiceUrlForm_Update_Click()"
+                tabindex="11" data-ng-disabled="!vm.updateServiceUrlForm.newServiceUrl.$dirty || vm.updateServiceUrlForm.newServiceUrl.$invalid || vm.settings.validatingServiceUrl">
+                <span class="spinner-border spinner-border-sm" data-ng-show="vm.settings.validatingServiceUrl" role="status"
+                  aria-hidden="true"></span>
+                <span data-ng-show="vm.settings.validatingServiceUrl">{{
+                  vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}
+                </span>
+                <span data-ng-hide="vm.settings.validatingServiceUrl">{{
+                  vm.platform.GetConstant(vm.globals.Constants.Button_Update_Label) }}</span>
               </button>
               <button type="button" class="btn btn-default" data-ng-click="vm.events.updateServiceUrlForm_Cancel_Click()"
                 tabindex="12">
@@ -202,8 +209,15 @@
           <p class="description" data-ng-if="vm.sync.enabled">{{
             vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_BackupSynced_Description) }}</p>
           <div class="animate-fade text-center" data-ng-hide="vm.settings.backupCompletedMessage">
-            <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_Backup_Click()" tabindex="15">
-              {{ vm.platform.GetConstant(vm.globals.Constants.Button_Backup_Label) }}
+            <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_Backup_Click()" tabindex="15"
+              data-ng-disabled="vm.settings.savingBackup">
+              <span class="spinner-border spinner-border-sm" data-ng-show="vm.settings.savingBackup" role="status"
+                aria-hidden="true"></span>
+              <span data-ng-show="vm.settings.savingBackup">{{
+                vm.platform.GetConstant(vm.globals.Constants.Button_Saving_Label) }}
+              </span>
+              <span data-ng-hide="vm.settings.savingBackup">{{
+                vm.platform.GetConstant(vm.globals.Constants.Button_Backup_Label) }}</span>
             </button>
           </div>
           <div class="animate-fade confirm" data-ng-show="vm.settings.backupCompletedMessage">
@@ -311,8 +325,16 @@
         <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_Log_Label) }}</label>
         <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_Log_Description) }}</p>
         <div class="animate-fade text-center" data-ng-hide="vm.settings.downloadLogCompletedMessage">
-          <button type="button" class="btn btn-default" data-ng-click="vm.events.debugPanel_DownloadLogFile_Click()">
-            {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_DownloadLog_Label) }}
+          <button type="button" class="btn btn-default" data-ng-click="vm.events.debugPanel_DownloadLogFile_Click()"
+            data-ng-disabled="vm.settings.savingLog">
+            <span class="spinner-border spinner-border-sm" data-ng-show="vm.settings.savingLog" role="status"
+              aria-hidden="true"></span>
+            <span data-ng-show="vm.settings.savingLog">{{
+              vm.platform.GetConstant(vm.globals.Constants.Button_Saving_Label) }}
+            </span>
+            <span data-ng-hide="vm.settings.savingLog">{{
+              vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_DownloadLog_Label) }}
+            </span>
           </button>
         </div>
         <div class="animate-fade confirm" data-ng-show="vm.settings.downloadLogCompletedMessage">

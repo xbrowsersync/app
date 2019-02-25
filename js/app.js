@@ -173,6 +173,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       getSearchResultsDelay: 250,
       iCloudNotAvailable: false,
       restoreCompletedMessage: undefined,
+      savingBackup: false,
+      savingLog: false,
       service: {
         apiVersion: '',
         maxSyncSize: 0,
@@ -183,7 +185,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       },
       syncBookmarksToolbar: true,
       syncDataSize: undefined,
-      syncDataUsed: undefined
+      syncDataUsed: undefined,
+      validatingServiceUrl: false
     };
 
     vm.sync = {
@@ -219,8 +222,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
    * ------------------------------------------------------------------------------------ */
 
   var backupRestoreForm_Backup_Click = function () {
-    // Display loading overlay
-    platform.Interface.Loading.Show();
+    vm.settings.savingBackup = true;
 
     downloadBackupFile()
       .catch(function (err) {
@@ -229,9 +231,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         vm.alert.display(errMessage.title, errMessage.message, 'danger');
       })
       .finally(function () {
-        platform.Interface.Loading.Hide();
-
         $timeout(function () {
+          vm.settings.savingBackup = false;
+
           // Focus on done button
           if (!utility.IsMobilePlatform(vm.platformName)) {
             document.querySelector('.btn-done').focus();
@@ -680,8 +682,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
   };
 
   var debugPanel_DownloadLogFile_Click = function () {
-    // Display loading overlay
-    platform.Interface.Loading.Show();
+    vm.settings.savingLog = true;
 
     downloadLogFile()
       .catch(function (err) {
@@ -690,9 +691,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         vm.alert.display(errMessage.title, errMessage.message, 'danger');
       })
       .finally(function () {
-        platform.Interface.Loading.Hide();
-
         $timeout(function () {
+          vm.settings.savingLog = false;
+
           // Focus on done button
           if (!utility.IsMobilePlatform(vm.platformName)) {
             document.querySelector('.btn-done').focus();
@@ -896,8 +897,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
             return resolve(bookmarkedCurrentPage);
           }
 
-          // Display loading overlay and get page metadata for current url
-          timeout = platform.Interface.Loading.Show('retrievingMetadata', loadMetadataDeferred);
+          // Display loading on mobiles and get page metadata for current url
+          timeout = utility.IsMobilePlatform(vm.platformName) ?
+            platform.Interface.Loading.Show('retrievingMetadata', loadMetadataDeferred) : null;
           return platform.GetPageMetadata(loadMetadataDeferred)
             .then(function (metadata) {
               // Display add bookmark form
@@ -1052,7 +1054,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     vm.settings.downloadLogCompletedMessage = null;
     vm.settings.restoreCompletedMessage = null;
     vm.settings.dataToRestore = '';
+    vm.settings.savingBackup = false;
+    vm.settings.savingLog = false;
     vm.settings.service.status = null;
+    vm.settings.validatingServiceUrl = false;
     vm.sync.updatesAvailable = undefined;
     vm.sync.nextAutoUpdate = undefined;
 
@@ -2169,8 +2174,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
   };
 
   var updateServiceUrlForm_ValidateServiceUrl = function () {
-    // Display loading overlay
-    var loadingTimeout = platform.Interface.Loading.Show('checkingNewServiceUrl');
+    var timeout = $timeout(function () {
+      vm.settings.validatingServiceUrl = true;
+    }, 100);
 
     // Check service url status
     var url = vm.settings.service.newServiceUrl.replace(/\/$/, '');
@@ -2201,7 +2207,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         return false;
       })
       .finally(function () {
-        platform.Interface.Loading.Hide('checkingNewServiceUrl', loadingTimeout);
+        $timeout.cancel(timeout);
+        $timeout(function () {
+          vm.settings.validatingServiceUrl = false;
+        });
       });
   };
 

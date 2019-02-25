@@ -339,6 +339,9 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     "button_Restore_Label": {
       "message": "Restore"
     },
+    "button_Saving_Label": {
+      "message": "Saving..."
+    },
     "button_Done_Label": {
       "message": "Done"
     },
@@ -445,10 +448,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       "message": "Clear tags"
     },
     "working_Title": {
-      "message": "Working on it..."
-    },
-    "working_Message": {
-      "message": "Don’t close the window yet."
+      "message": "Syncing..."
     },
     "connRestored_Title": {
       "message": "Connection restored"

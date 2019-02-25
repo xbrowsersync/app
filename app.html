@@ -20,10 +20,10 @@
     ]">
   <div class="container">
     <div id="working-panel" class="animate" data-ng-show="vm.working" data-ng-cloak>
-      <div class="content">
-        <h3>{{ vm.platform.GetConstant(vm.globals.Constants.Working_Title) }}</h3>
-        <p>{{ vm.platform.GetConstant(vm.globals.Constants.Working_Message) }}</p>
+      <div class="spinner-border" role="status">
+        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Working_Title) }}</span>
       </div>
+      <h3>{{ vm.platform.GetConstant(vm.globals.Constants.Working_Title) }}</h3>
     </div>
 
     <div id="qr-panel" class="animate" data-ng-show="vm.settings.displayQRCode" data-ng-click="vm.settings.displayQRCode = false"

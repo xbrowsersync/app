@@ -9,7 +9,6 @@
 }
 
 body {
-  background-color: red!important;
   font-family: $font-stack-regular;
   color: $colour-text1;
   font-size: 14px;
@@ -136,6 +135,14 @@ body {
       &:focus,
       &:hover {
         outline: 0;
+      }
+
+      .spinner-border-sm {
+        border-width: .15em;
+        height: 0.75rem;
+        width: 0.75rem;
+        vertical-align: baseline;
+        margin-right: 0.1em;
       }
     }
   }
@@ -394,7 +401,6 @@ body {
       position: absolute;
       padding-top: .25em;
       padding-bottom: .25em;
-      line-height: 1.25em;
       z-index: 60;
       color: $colour-link;
       background-color: transparent;
@@ -897,6 +903,7 @@ body {
           font-size: 1.4em;
           background: transparent;
           width: 100%;
+          line-height: 1.35em;
         }
 
         .btn-clear {
@@ -918,6 +925,10 @@ body {
           top: 0;
           left: 1.8em;
           width: calc(100% - 1.8em);
+
+          .lookahead, .measure {
+            line-height: 1.35em;
+          }
         }
       }
     }
@@ -1352,16 +1363,6 @@ body {
   }
 }
 
-#updated-panel {
-  .confirm-updated {
-    margin-top: -0.1em;
-  }
-
-  .header-panel {
-    visibility: hidden;
-  }
-}
-
 #qr-panel,
 #working-panel {
   position: fixed;
@@ -1381,5 +1382,32 @@ body {
   h3 {
     margin-top: 0;
     color: $colour-link-highlight;
+  }
+}
+
+#updated-panel {
+  .confirm-updated {
+    margin-top: -0.1em;
+  }
+
+  .header-panel {
+    visibility: hidden;
+  }
+}
+
+#working-panel {
+  h3 {
+    color: $colour-link-highlight;
+    font-size: 1.1em;
+    margin-top: 0.2em;
+  }
+
+  .spinner-border {
+    border-color: $colour-link-highlight;
+    border-right-color: transparent;
+    position: absolute;
+    width: 30vw;
+    height: 30vw;
+    animation: spinner-border 1s linear infinite;
   }
 }

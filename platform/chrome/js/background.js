@@ -101,10 +101,13 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var getCurrentSync = function (sendResponse) {
-    sendResponse({
-      currentSync: bookmarks.GetCurrentSync(),
-      success: true
-    });
+    try {
+      sendResponse({
+        currentSync: bookmarks.GetCurrentSync(),
+        success: true
+      });
+    }
+    catch (err) { };
   };
 
   var getLatestUpdates = function () {
@@ -374,27 +377,27 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         try {
           sendResponse({ bookmarks: bookmarks, success: true });
         }
-        catch (err) { }
+        catch (err) { };
 
-        // Send a message in case the user closed the extension
+        // Send a message in case the user closed the extension window
         chrome.runtime.sendMessage({
           command: globals.Commands.SyncFinished,
           success: true,
           uniqueId: syncData.uniqueId
-        }, function () { });
+        });
       })
       .catch(function (err) {
         try {
           sendResponse({ error: err, success: false });
         }
-        catch (err) { }
+        catch (err) { };
 
-        // Send a message in case the user closed the extension
+        // Send a message in case the user closed the extension window
         chrome.runtime.sendMessage({
           command: globals.Commands.SyncFinished,
           error: err,
           success: false
-        }, function () { });
+        });
       });
   };
 
