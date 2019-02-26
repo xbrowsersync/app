@@ -1372,7 +1372,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(8, 48, 57, 0.8);
+  background-color: rgba(8, 48, 57, 0.9);
   @include animation(animation-fade-in 0.1s linear);
 
   &.ng-hide {
@@ -1399,7 +1399,7 @@ body {
   h3 {
     color: $colour-link-highlight;
     font-size: 1.1em;
-    margin-top: 0.2em;
+    margin: 0.2em;
   }
 
   .spinner-border {

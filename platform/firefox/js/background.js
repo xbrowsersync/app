@@ -179,18 +179,18 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
     if (alarm && alarm.name === globals.Alarm.Name) {
       getLatestUpdates()
         .catch(function (err) {
+          // Don't display alert if sync failed due to network connection
+          if (err.code === globals.ErrorCodes.HttpRequestFailed ||
+            err.code === globals.ErrorCodes.HttpRequestFailedWhileUpdating) {
+            return;
+          }
+
           utility.LogError(err, 'background.onAlarmHandler');
 
           // If ID was removed disable sync
           if (err.code === globals.ErrorCodes.NoDataFound) {
             err.code = globals.ErrorCodes.SyncRemoved;
             bookmarks.DisableSync();
-          }
-
-          // Don't display alert if sync failed due to network connection
-          if (err.code === globals.ErrorCodes.HttpRequestFailed ||
-            err.code === globals.ErrorCodes.HttpRequestFailedWhileUpdating) {
-            return;
           }
 
           // Display alert
@@ -314,11 +314,16 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
             });
           })
           .catch(function (err) {
-            utility.LogError(err, 'background.onStartupHandler');
-
             // Display alert
             var errMessage = utility.GetErrorMessageFromException(err);
             displayAlert(errMessage.title, errMessage.message);
+
+            // Don't log error if request failed
+            if (err.code === globals.ErrorCodes.HttpRequestFailed) {
+              return;
+            }
+
+            utility.LogError(err, 'background.onStartupHandler');
           });
       });
   };

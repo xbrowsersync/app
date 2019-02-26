@@ -315,36 +315,46 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
   var getErrorCodeFromHttpError = function (httpErr, errStack) {
     var getErrorCodePromise;
 
-    switch (httpErr.status) {
-      // 405 Method Not Allowed: server not accepting new syncs
-      case 405:
-        getErrorCodePromise = $q.resolve(globals.ErrorCodes.NotAcceptingNewSyncs);
-        break;
-      // 406 Not Acceptable: daily new sync limit reached
-      case 406:
-        getErrorCodePromise = $q.resolve(globals.ErrorCodes.DailyNewSyncLimitReached);
-        break;
-      // 409 Conflict: invalid id
-      case 409:
-        getErrorCodePromise = $q.resolve(globals.ErrorCodes.NoDataFound);
-        break;
-      // 413 Request Entity Too Large: sync data size exceeds server limit
-      case 413:
-        getErrorCodePromise = $q.resolve(globals.ErrorCodes.RequestEntityTooLarge);
-        break;
-      // 429 Too Many Requests: daily new sync limit reached
-      case 429:
-        getErrorCodePromise = $q.resolve(globals.ErrorCodes.TooManyRequests);
-        break;
-      // -1: No network connection
-      case -1:
-        getErrorCodePromise = platform.LocalStorage.Set(globals.CacheKeys.NetworkDisconnected, true)
-          .then(function () {
-            return globals.ErrorCodes.HttpRequestFailed;
-          });
-      // Otherwise generic request failed
-      default:
-        getErrorCodePromise = $q.resolve(globals.ErrorCodes.HttpRequestFailed);
+    if (!httpErr) {
+      getErrorCodePromise = $q.resolve(-1);
+    }
+
+    // If service offline handle as request failed
+    if (httpErr.data && httpErr.data.code === 'ServiceNotAvailableException') {
+      getErrorCodePromise = $q.resolve(globals.ErrorCodes.HttpRequestFailed);
+    }
+    else {
+      switch (httpErr.status) {
+        // 405 Method Not Allowed: server not accepting new syncs
+        case 405:
+          getErrorCodePromise = $q.resolve(globals.ErrorCodes.NotAcceptingNewSyncs);
+          break;
+        // 406 Not Acceptable: daily new sync limit reached
+        case 406:
+          getErrorCodePromise = $q.resolve(globals.ErrorCodes.DailyNewSyncLimitReached);
+          break;
+        // 409 Conflict: invalid id
+        case 409:
+          getErrorCodePromise = $q.resolve(globals.ErrorCodes.NoDataFound);
+          break;
+        // 413 Request Entity Too Large: sync data size exceeds server limit
+        case 413:
+          getErrorCodePromise = $q.resolve(globals.ErrorCodes.RequestEntityTooLarge);
+          break;
+        // 429 Too Many Requests: daily new sync limit reached
+        case 429:
+          getErrorCodePromise = $q.resolve(globals.ErrorCodes.TooManyRequests);
+          break;
+        // -1: No network connection
+        case -1:
+          getErrorCodePromise = platform.LocalStorage.Set(globals.CacheKeys.NetworkDisconnected, true)
+            .then(function () {
+              return globals.ErrorCodes.HttpRequestFailed;
+            });
+        // Otherwise generic request failed
+        default:
+          getErrorCodePromise = $q.resolve(globals.ErrorCodes.HttpRequestFailed);
+      }
     }
 
     return getErrorCodePromise

@@ -945,6 +945,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
   };
 
   var createLocalBookmarksFromXBookmarks = function (parentId, xBookmarks) {
+    var createChildBookmarksPromises = [];
+
     // Create bookmarks at the top level of the supplied array
     return xBookmarks.reduce(function (p, xBookmark) {
       return p.then(function () {
@@ -952,11 +954,14 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
           .then(function (newLocalBookmark) {
             // If the bookmark has children, recurse
             if (xBookmark.children && xBookmark.children.length > 0) {
-              return createLocalBookmarksFromXBookmarks(newLocalBookmark.id, xBookmark.children);
+              createChildBookmarksPromises.push(createLocalBookmarksFromXBookmarks(newLocalBookmark.id, xBookmark.children));
             }
           });
       });
-    }, $q.resolve());
+    }, $q.resolve())
+      .then(function () {
+        return $q.all(createChildBookmarksPromises);
+      });
   };
 
   var deleteLocalBookmarksTree = function (localBookmarkId) {
