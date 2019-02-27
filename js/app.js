@@ -1316,10 +1316,19 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
   var restoreData = function (data) {
     var syncEnabled;
 
+    // Display loading overlay
+    platform.Interface.Loading.Show();
+
     platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
       .then(function (cachedSyncEnabled) {
         syncEnabled = cachedSyncEnabled;
 
+        // If synced, check service status before starting restore
+        if (syncEnabled) {
+          return api.CheckServiceStatus();
+        }
+      })
+      .then(function () {
         // Set ID and password if sync not enabled
         if (!syncEnabled) {
           vm.sync.password = null;
@@ -1339,9 +1348,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
           return;
         }
 
-        // Display loading overlay
-        platform.Interface.Loading.Show();
-
         // Start restore
         return queueSync({
           bookmarks: bookmarksToRestore,
@@ -1353,7 +1359,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         // Display alert
         var errMessage = utility.GetErrorMessageFromException(err);
         vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      });
+      })
+      .finally(platform.Interface.Loading.Hide);
   };
 
   var searchBookmarks = function () {
