@@ -16,6 +16,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     rootBookmarkId = 'root________',
     toolbarBookmarksId = 'toolbar_____';
   var unsupportedContainers = [];
+  var unsupportedBookmarkUrl = 'about:newtab';
 
 
 	/* ------------------------------------------------------------------------------------
@@ -42,6 +43,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     platform.GetConstant = getConstant;
     platform.GetCurrentUrl = getCurrentUrl;
     platform.GetPageMetadata = getPageMetadata;
+    platform.GetSupportedUrl = getSupportedUrl;
     platform.Init = init;
     platform.Interface.Loading.Hide = hideLoading;
     platform.Interface.Loading.Show = displayLoading;
@@ -713,6 +715,10 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     });
   };
 
+  var getSupportedUrl = function (url) {
+    return localBookmarkUrlIsSupported(url) ? url : unsupportedBookmarkUrl;
+  };
+
   var hideLoading = function (id, timeout) {
     if (timeout) {
       $timeout.cancel(timeout);
@@ -734,9 +740,10 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
   };
 
   var openUrl = function (url) {
-    // If this is a bookmarklet, execute it and return
-    if (globals.URL.BookmarkletRegex.test(url)) {
-      return eval(url.replace(globals.URL.BookmarkletRegex, '$2'));
+    // Check url is supported
+    if (!localBookmarkUrlIsSupported(url)) {
+      utility.LogInfo('Attempted to navigate to unsupported url: ' + url);
+      url = unsupportedBookmarkUrl;
     }
 
     // Get current tab
@@ -922,6 +929,12 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       title: title,
       url: url
     };
+
+    // Check that the url is supported
+    if (!localBookmarkUrlIsSupported(url)) {
+      utility.LogInfo('Bookmark url unsupported: ' + url);
+      newLocalBookmark.url = unsupportedBookmarkUrl;
+    }
 
     return browser.bookmarks.create(newLocalBookmark)
       .catch(function (err) {
@@ -1185,6 +1198,15 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       });
   };
 
+  var localBookmarkUrlIsSupported = function (url) {
+    if (!url) {
+      return true;
+    }
+    
+    var supportedRegex = /^(?!chrome)\w+:/i;
+    return supportedRegex.test(url);
+  };
+
   var reorderLocalContainers = function () {
     // Get local containers
     return $q.all(unsupportedContainers.map(findLocalBookmarkByTitle))
@@ -1210,6 +1232,12 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       title: title,
       url: url
     };
+
+    // Check that the url is supported
+    if (!localBookmarkUrlIsSupported(url)) {
+      utility.LogInfo('Bookmark url unsupported: ' + url);
+      updateInfo.url = unsupportedBookmarkUrl;
+    }
 
     return browser.bookmarks.update(localBookmarkId, updateInfo)
       .catch(function (err) {

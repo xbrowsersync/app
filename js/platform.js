@@ -46,6 +46,7 @@ xBrowserSync.App.Platform = function ($q) {
     GetConstant: notImplemented,
     GetCurrentUrl: notImplemented,
     GetPageMetadata: notImplemented,
+    GetSupportedUrl: notImplemented,
     Init: notImplemented,
     Interface: {
       Loading: {

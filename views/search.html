@@ -60,7 +60,7 @@
         </div>
       </div>
       <div class="overlay" data-hm-tap="vm.events.openUrl($event, result.url)" data-hm-press="vm.events.searchForm_SelectBookmark_Press(result.id, $event)"></div>
-      <a href="{{ result.url }}" data-ng-click="vm.events.openUrl($event)" tabindex="{{ $index + 1 }}" data-ng-keydown="vm.events.searchForm_SearchResult_KeyDown($event)">
+      <a href="{{ vm.platform.GetSupportedUrl(result.url) }}" data-ng-click="vm.events.openUrl($event)" tabindex="{{ $index + 1 }}" data-ng-keydown="vm.events.searchForm_SearchResult_KeyDown($event)">
         <h4 class="list-group-item-heading" data-ng-if="result.title">{{ result.title }}</h4>
         <h4 class="list-group-item-heading" data-ng-if="!result.title">{{ vm.bookmark.urlAsTitle(result.url) }}</h4>
         <div class="list-group-item-text">
