@@ -56,10 +56,9 @@ xBrowserSync.App.Global = function (platform) {
     Constants: {
       Title: 'title',
       Description: 'description',
-      Containers_Toolbar_Title: 'containers_Toolbar_Title',
-      Containers_Other_Title: 'containers_Other_Title',
-      TooltipSyncEnabled_Label: 'tooltipSyncEnabled_Label',
-      TooltipWorking_Label: 'tooltipWorking_Label',
+      Tooltip_NotSynced_Label: 'tooltip_NotSynced_Label',
+      Tooltip_Synced_Label: 'tooltip_Synced_Label',
+      Tooltip_Syncing_Label: 'tooltip_Syncing_Label',
       Button_Settings_Label: 'button_Settings_Label',
       Button_AddBookmark_Label: 'button_AddBookmark_Label',
       Button_DeleteBookmark_Label: 'button_DeleteBookmark_Label',

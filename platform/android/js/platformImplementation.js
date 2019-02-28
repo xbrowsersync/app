@@ -21,17 +21,14 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     "description": {
       "message": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
     },
-    "containers_Toolbar_Title": {
-      "message": "Bookmarks bar"
+    "tooltip_NotSynced_Label": {
+      "message": "not synced"
     },
-    "containers_Other_Title": {
-      "message": "Other bookmarks"
+    "tooltip_Synced_Label": {
+      "message": "synced"
     },
-    "tooltipSyncEnabled_Label": {
-      "message": "sync enabled"
-    },
-    "tooltipWorking_Label": {
-      "message": "syncing..."
+    "tooltip_Syncing_Label": {
+      "message": "syncing"
     },
     "button_Help_Label": {
       "message": "Display help"

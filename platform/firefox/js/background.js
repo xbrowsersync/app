@@ -107,7 +107,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
       type: 'basic',
       title: title,
       message: message,
-      iconUrl: 'img/notification-icon.png'
+      iconUrl: 'img/notification.png'
     };
 
     if (!callback) {

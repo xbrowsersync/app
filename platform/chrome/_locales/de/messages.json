@@ -5,17 +5,14 @@
   "description": {
     "message": "Browser-Synchronisierung wie sie sein soll: Sicher, anonym und kostenlos! Synchronisierung von Lesezeichen über Browser- und Gerätegrenzen hinweg, keine Anmeldung erforderlich."
   },
-  "containers_Toolbar_Title": {
-    "message": "Lesezeichen-Symbolleiste"
+  "tooltip_NotSynced_Label": {
+    "message": "not synced"
   },
-  "containers_Other_Title": {
-    "message": "Andere Lesezeichen"
+  "tooltip_Synced_Label": {
+    "message": "synced"
   },
-  "tooltipSyncEnabled_Label": {
-    "message": "Synchronisierung aktiv"
-  },
-  "tooltipWorking_Label": {
-    "message": "Synchronisie .."
+  "tooltip_Syncing_Label": {
+    "message": "syncing"
   },
   "button_Help_Label": {
     "message": "Hilfe anzeigen"

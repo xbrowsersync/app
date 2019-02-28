@@ -97,7 +97,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     syncQueue = [];
 
     // Reset syncing flag
-    setIsSyncing(false);
+    setIsSyncing();
 
     // Clear cached data
     return $q.all([
@@ -702,16 +702,20 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     return results;
   };
 
-  var setIsSyncing = function (newIsSyncing) {
+  var setIsSyncing = function (syncType) {
     // Update class variable
-    isSyncing = newIsSyncing;
+    isSyncing = syncType != null;
+  
+    // Refresh interface with current sync type
+    if (syncType != null) {
+      platform.Interface.Refresh(null, syncType);
+      return $q.resolve();
+    }
 
-    // Refresh interface/icon
+    // Get cached sync enabled value and refresh interface
     return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
-        $timeout(function () {
-          platform.Interface.Refresh(syncEnabled, newIsSyncing);
-        });
+        platform.Interface.Refresh(syncEnabled);
       });
   };
 
@@ -725,7 +729,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     currentSync = syncQueue.shift();
 
     // Enable syncing flag
-    setIsSyncing(true);
+    setIsSyncing(currentSync.type);
 
     // Process sync
     var syncPromise;
@@ -847,7 +851,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         currentSync = null;
 
         // Reset syncing flag
-        setIsSyncing(false);
+        setIsSyncing();
       });
   };
 

@@ -5,17 +5,14 @@
   "description": {
     "message": "La synchronisation de navigateur telle qu'elle devrait être: sécurisée, anonyme et gratuite! Synchronisez vos favoris entre vos navigateurs et appareils, sans création de compte requise."
   },
-  "containers_Toolbar_Title": {
-    "message": "Barre de favoris"
+  "tooltip_NotSynced_Label": {
+    "message": "not synced"
   },
-  "containers_Other_Title": {
-    "message": "Autres favoris"
+  "tooltip_Synced_Label": {
+    "message": "synced"
   },
-  "tooltipSyncEnabled_Label": {
-    "message": "synchronisation activée"
-  },
-  "tooltipWorking_Label": {
-    "message": "synchronisation..."
+  "tooltip_Syncing_Label": {
+    "message": "syncing"
   },
   "button_Help_Label": {
     "message": "Afficher l'aide"

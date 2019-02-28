@@ -854,20 +854,21 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       });
   };
 
-  var refreshInterface = function (syncEnabled, isSyncing) {
+  var refreshInterface = function (syncEnabled, syncType) {
     var iconPath;
     var tooltip = getConstant(globals.Constants.Title);
 
-    if (isSyncing) {
-      iconPath = 'img/browser-action-working.png';
-      tooltip += ' - ' + getConstant(globals.Constants.TooltipWorking_Label);
+    if (syncType) {
+      iconPath =  syncType === globals.SyncType.Pull ? 'img/downloading.png' : 'img/uploading.png';
+      tooltip += ' (' + getConstant(globals.Constants.Tooltip_Syncing_Label) + ')';
     }
     else if (syncEnabled) {
-      iconPath = 'img/browser-action-on.png';
-      tooltip += ' - ' + getConstant(globals.Constants.TooltipSyncEnabled_Label);
+      iconPath = 'img/synced.png';
+      tooltip += ' (' + getConstant(globals.Constants.Tooltip_Synced_Label) + ')';
     }
     else {
-      iconPath = 'img/browser-action-off.png';
+      iconPath = 'img/notsynced.png';
+      tooltip += ' (' + getConstant(globals.Constants.Tooltip_NotSynced_Label) + ')';
     }
 
     browser.browserAction.setIcon({ path: iconPath });
