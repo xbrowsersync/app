@@ -40,6 +40,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     platform.Bookmarks.Updated = bookmarksUpdated;
     platform.Bookmarks.UpdateSingle = updateSingle;
     platform.DownloadFile = downloadFile;
+    platform.EventListeners.Enable = enableEventListeners;
+    platform.EventListeners.Disable = disableEventListeners;
     platform.GetConstant = getConstant;
     platform.GetCurrentUrl = getCurrentUrl;
     platform.GetPageMetadata = getPageMetadata;
@@ -62,10 +64,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	 * ------------------------------------------------------------------------------------ */
 
   var addIdsToBookmarks = function (xBookmarks) {
-    var deferred = $q.defer();
-
     // Get all bookmarks into array
-    browser.bookmarks.getTree()
+    return browser.bookmarks.getTree()
       .then(function (bookmarkTreeNodes) {
         var allBookmarks = [];
 
@@ -112,10 +112,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
         };
         _.each(xBookmarks, addIdToBookmark);
 
-        return deferred.resolve(xBookmarks);
+        return xBookmarks;
       });
-
-    return deferred.promise;
   };
 
   var awaitSync = function (uniqueId) {
@@ -151,8 +149,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     wasContainerChanged(createInfo, xBookmarks)
       .then(function (createdBookmarkIsContainer) {
         if (createdBookmarkIsContainer) {
-          // Disable sync
-          bookmarks.DisableSync();
           return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
         }
 
@@ -204,7 +200,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
         }
 
         // Add the new bookmark to the parent's children at the correct index
-        var numContainers = results[1];
         changedBookmarkIndex = createInfo.index - numContainers;
         findParentXBookmark.xBookmark.children.splice(changedBookmarkIndex, 0, newXBookmark);
 
@@ -217,7 +212,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
   var bookmarksDeleted = function (xBookmarks, args) {
     var removeInfo = args[1];
-    var changedBookmarkIndex, deletedLocalBookmarkParent;
+    var changedBookmarkIndex;
     var deferred = $q.defer();
 
     // Check if changed bookmark is a container
@@ -481,7 +476,18 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       });
   };
 
-  var displayLoading = function (id, deferred) {
+  var disableEventListeners = function () {
+    return browser.runtime.sendMessage({
+      command: globals.Commands.DisableEventListeners
+    })
+      .then(function (response) {
+        if (!response.success) {
+          throw response.error;
+        }
+      });
+  };
+
+  var displayLoading = function (id) {
     var timeout;
 
     // Return if loading overlay already displayed
@@ -521,7 +527,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
     var downloadLink;
     if (linkId) {
-      downloadLink = document.getElementById('backupLink');
+      downloadLink = document.getElementById(linkId);
     }
     else {
       downloadLink = document.createElement('a');
@@ -542,6 +548,17 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     if (!linkId) {
       document.body.removeChild(downloadLink);
     }
+  };
+
+  var enableEventListeners = function () {
+    return browser.runtime.sendMessage({
+      command: globals.Commands.EnableEventListeners
+    })
+      .then(function (response) {
+        if (!response.success) {
+          throw response.error;
+        }
+      });
   };
 
   var executeSync = function (syncData, command) {
@@ -835,7 +852,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
         utility.LogInfo('Local population completed in ' + ((populateEndTime - populateStartTime) / 1000) + 's');
         return reorderLocalContainers();
       });
-
   };
 
   var refreshInterface = function (syncEnabled, isSyncing) {

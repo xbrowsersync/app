@@ -225,11 +225,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     vm.settings.savingBackup = true;
 
     downloadBackupFile()
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      })
+      .catch(displayAlertErrorHandler)
       .finally(function () {
         $timeout(function () {
           vm.settings.savingBackup = false;
@@ -444,11 +440,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
             }
           });
       })
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      });
+      .catch(displayAlertErrorHandler);
   };
 
   var bookmarkForm_CreateTags_Click = function () {
@@ -510,11 +502,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
           }
         }
       })
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      });
+      .catch(displayAlertErrorHandler);
   };
 
   var bookmarkForm_RemoveTag_Click = function (tag) {
@@ -588,11 +576,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
             }
           });
       })
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      });
+      .catch(displayAlertErrorHandler);
   };
 
   var bookmarkForm_ValidateBookmark = function (bookmarkToValidate, originalUrl) {
@@ -685,11 +669,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     vm.settings.savingLog = true;
 
     downloadLogFile()
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      })
+      .catch(displayAlertErrorHandler)
       .finally(function () {
         $timeout(function () {
           vm.settings.savingLog = false;
@@ -702,6 +682,14 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       });
   };
 
+  var disableSync = function () {
+    // Disable sync and event listeners
+    return $q.all([
+      bookmarks.DisableSync(),
+      platform.EventListeners.Disable()
+    ]);
+  };
+
   var displayAlert = function (title, message, alertType) {
     $timeout(function () {
       vm.alert.title = title;
@@ -709,6 +697,11 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       vm.alert.type = alertType;
       vm.alert.show = true;
     });
+  };
+
+  var displayAlertErrorHandler = function (err) {
+    var errMessage = utility.GetErrorMessageFromException(err);
+    vm.alert.display(errMessage.title, errMessage.message, 'danger');
   };
 
   var displayDataUsage = function () {
@@ -728,11 +721,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
             vm.settings.syncDataSize = bookmarksSyncSize / 1024;
             vm.settings.syncDataUsed = (vm.settings.syncDataSize / vm.settings.service.maxSyncSize) * 100;
           })
-          .catch(function (err) {
-            // Display alert
-            var errMessage = utility.GetErrorMessageFromException(err);
-            vm.alert.display(errMessage.title, errMessage.message, 'danger');
-          });
+          .catch(displayAlertErrorHandler);
       });
   };
 
@@ -1275,13 +1264,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
           return bookmarks.UpdateCache(syncedBookmarks);
         }
       })
-      .catch(function (err) {
-        // If data out of sync, refresh sync
-        if (err && err.code === globals.ErrorCodes.DataOutOfSync) {
-          queueSync({ type: globals.SyncType.Pull });
-        }
-        return $q.reject(err);
-      })
       .finally(function () {
         platform.Interface.Loading.Hide();
       });
@@ -1355,11 +1337,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         }, globals.Commands.RestoreBookmarks)
           .then(restoreBookmarksSuccess);
       })
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      })
+      .catch(displayAlertErrorHandler)
       .finally(platform.Interface.Loading.Hide);
   };
 
@@ -1420,11 +1398,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         id: bookmark.id
       }
     })
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      });
+      .catch(displayAlertErrorHandler);
 
     // Find and remove the deleted bookmark element in the search results
     if (vm.search.results && vm.search.results.length > 0) {
@@ -1527,11 +1501,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
 
             vm.search.cancelGetBookmarksRequest = null;
           })
-          .catch(function (err) {
-            // Display alert
-            var errMessage = utility.GetErrorMessageFromException(err);
-            vm.alert.display(errMessage.title, errMessage.message, 'danger');
-          })
+          .catch(displayAlertErrorHandler)
           .finally(function () {
             searchForm_ToggleSearchingAnimation(false);
           });
@@ -1729,11 +1699,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
           .then(function (result) {
             vm.bookmark.active = !!result;
           })
-          .catch(function (err) {
-            // Display alert
-            var errMessage = utility.GetErrorMessageFromException(err);
-            vm.alert.display(errMessage.title, errMessage.message, 'danger');
-          });
+          .catch(displayAlertErrorHandler);
       });
   };
 
@@ -1898,12 +1864,12 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
   };
 
   var syncForm_DisableSync_Click = function () {
-    utility.LogInfo('User disabled sync');
-
     // Disable sync and switch to login panel
-    vm.sync.enabled = false;
-    bookmarks.DisableSync();
-    changeView(vm.view.views.login);
+    disableSync()
+      .then(function () {
+        return changeView(vm.view.views.login);
+      })
+      .catch(displayAlertErrorHandler);
   };
 
   var syncForm_EnableSync_Click = function () {
@@ -1984,11 +1950,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     // Pull updates
     queueSync({ type: globals.SyncType.Pull })
       .then(syncBookmarksSuccess)
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      })
+      .catch(displayAlertErrorHandler);
   };
 
   var syncForm_UpgradeSync_Click = function () {
@@ -2048,11 +2010,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
         return queueSync({
           type: !syncId ? globals.SyncType.Push : globals.SyncType.Pull
         })
-          .catch(function (err) {
-            // Display alert
-            var errMessage = utility.GetErrorMessageFromException(err);
-            vm.alert.display(errMessage.title, errMessage.message, 'danger');
-          });
+          .catch(displayAlertErrorHandler);
       });
   };
 
@@ -2075,7 +2033,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     vm.sync.enabled = false;
     vm.sync.password = null;
     vm.sync.passwordComplexity = {};
-    bookmarks.DisableSync()
+    disableSync()
       .then(function () {
         // Update the service URL
         vm.settings.service.url = url;

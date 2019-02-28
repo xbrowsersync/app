@@ -39,6 +39,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     platform.Bookmarks.Updated = bookmarksUpdated;
     platform.Bookmarks.UpdateSingle = updateSingle;
     platform.DownloadFile = downloadFile;
+    platform.EventListeners.Enable = enableEventListeners;
+    platform.EventListeners.Disable = disableEventListeners;
     platform.GetConstant = getConstant;
     platform.GetCurrentUrl = getCurrentUrl;
     platform.GetPageMetadata = getPageMetadata;
@@ -68,8 +70,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
           return resolve(results);
         });
       }
-      catch (ex) {
-        reject(ex);
+      catch (err) {
+        reject(err);
       }
     })
       .then(function (bookmarkTreeNodes) {
@@ -444,7 +446,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
     return $q.all([clearOthers, clearToolbar])
       .catch(function (err) {
-        return reject({
+        return $q.reject({
           code: globals.ErrorCodes.FailedRemoveLocalBookmarks,
           stack: err.stack
         });
@@ -469,6 +471,21 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
         return deleteLocalBookmarksTree(bookmarkToDelete.id);
       });
+  };
+
+  var disableEventListeners = function () {
+    return $q(function (resolve, reject) {
+      chrome.runtime.sendMessage({
+        command: globals.Commands.DisableEventListeners
+      }, function (response) {
+        if (response.success) {
+          resolve();
+        }
+        else {
+          reject(response.error);
+        }
+      });
+    });
   };
 
   var displayLoading = function (id) {
@@ -534,6 +551,21 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     }
   };
 
+  var enableEventListeners = function () {
+    return $q(function (resolve, reject) {
+      chrome.runtime.sendMessage({
+        command: globals.Commands.EnableEventListeners
+      }, function (response) {
+        if (response.success) {
+          resolve();
+        }
+        else {
+          reject(response.error);
+        }
+      });
+    });
+  };
+
   var executeSync = function (syncData, command) {
     syncData.command = command || globals.Commands.SyncBookmarks;
     return $q(function (resolve, reject) {
@@ -564,7 +596,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     var getOtherBookmarks, getToolbarBookmarks;
     addBookmarkIds = addBookmarkIds || true;
 
-    // Get Other bookmarks
+    // Get other bookmarks
     var getOtherBookmarks = getLocalBookmarkTreeById(otherBookmarksId)
       .then(function (otherBookmarks) {
         if (otherBookmarks.children && otherBookmarks.children.length > 0) {
@@ -718,8 +750,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     }
 
     // Get current tab
-    chrome.tabs.query(
-      { currentWindow: true, active: true },
+    chrome.tabs.query({ currentWindow: true, active: true },
       function (tabs) {
         var activeTab = tabs[0];
 
@@ -1088,8 +1119,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
           resolve(localBookmark);
         });
       }
-      catch (ex) {
-        reject(ex);
+      catch (err) {
+        reject(err);
       }
     });
   };
@@ -1249,8 +1280,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
                 }
               );
             }
-            catch (ex) {
-              reject(ex);
+            catch (err) {
+              reject(err);
             }
           });
         }));

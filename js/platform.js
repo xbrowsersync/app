@@ -43,6 +43,10 @@ xBrowserSync.App.Platform = function ($q) {
       UpdateSingle: notImplemented
     },
     DownloadFile: notImplemented,
+    EventListeners: {
+      Enable: notImplemented,
+      Disable: notImplemented
+    },
     GetConstant: notImplemented,
     GetCurrentUrl: notImplemented,
     GetPageMetadata: notImplemented,

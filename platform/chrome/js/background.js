@@ -22,10 +22,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
     vm.startup = onStartupHandler;
     chrome.runtime.onMessage.addListener(onMessageHandler);
     chrome.alarms.onAlarm.addListener(onAlarmHandler);
-    chrome.bookmarks.onCreated.addListener(function () { onBookmarkEventHandler(createBookmark, arguments); });
-    chrome.bookmarks.onRemoved.addListener(function () { onBookmarkEventHandler(removeBookmark, arguments); });
-    chrome.bookmarks.onChanged.addListener(function () { onBookmarkEventHandler(changeBookmark, arguments); });
-    chrome.bookmarks.onMoved.addListener(function () { onBookmarkEventHandler(moveBookmark, arguments); });
   };
 
 
@@ -85,6 +81,27 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
       });
   };
 
+  var disableEventListeners = function (sendResponse) {
+    sendResponse = sendResponse || function () { };
+    var response = {
+      success: true
+    };
+
+    try {
+      chrome.bookmarks.onCreated.removeListener(onCreatedHandler);
+      chrome.bookmarks.onRemoved.removeListener(onRemovedHandler);
+      chrome.bookmarks.onChanged.removeListener(onChangedHandler);
+      chrome.bookmarks.onMoved.removeListener(onMovedHandler);
+    }
+    catch (err) {
+      utility.LogInfo('Failed to disable event listeners');
+      response.error = err;
+      response.success = false;
+    }
+
+    sendResponse(response);
+  };
+
   var displayAlert = function (title, message, callback) {
     var options = {
       type: 'basic',
@@ -100,6 +117,38 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
     chrome.notifications.create('xBrowserSync-notification', options, callback);
   };
 
+  var enableEventListeners = function (sendResponse) {
+    sendResponse = sendResponse || function () { };
+    var response = {
+      success: true
+    };
+
+    $q(function (resolve, reject) {
+      disableEventListeners(function (disableResponse) {
+        if (disableResponse.success) {
+          resolve();
+        }
+        else {
+          reject(disableResponse.error);
+        }
+      })
+    })
+      .then(function () {
+        chrome.bookmarks.onCreated.addListener(onCreatedHandler);
+        chrome.bookmarks.onRemoved.addListener(onRemovedHandler);
+        chrome.bookmarks.onChanged.addListener(onChangedHandler);
+        chrome.bookmarks.onMoved.addListener(onMovedHandler);
+      })
+      .catch(function (err) {
+        utility.LogInfo('Failed to enable event listeners');
+        response.error = err;
+        response.success = false;
+      })
+      .finally(function () {
+        sendResponse(response);
+      });
+  };
+
   var getCurrentSync = function (sendResponse) {
     try {
       sendResponse({
@@ -107,7 +156,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         success: true
       });
     }
-    catch (err) { };
+    catch (err) { }
   };
 
   var getLatestUpdates = function () {
@@ -117,18 +166,12 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
       return $q.resolve();
     }
 
-    // Exit if sync isn't enabled or event listeners disabled
-    return platform.LocalStorage.Get([
-      globals.CacheKeys.DisableEventListeners,
-      globals.CacheKeys.SyncEnabled
-    ])
-      .then(function (cachedData) {
-        if (cachedData[globals.CacheKeys.DisableEventListeners] ||
-          !cachedData[globals.CacheKeys.SyncEnabled]) {
+    // Exit if sync not enabled
+    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+      .then(function (syncEnabled) {
+        if (!syncEnabled) {
           return;
         }
-
-        utility.LogInfo('Checking for updates');
 
         return bookmarks.CheckForUpdates()
           .then(function (updatesAvailable) {
@@ -202,24 +245,20 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var onBookmarkEventHandler = function (syncFunction, args) {
-    // Exit if sync isn't enabled or event listeners disabled
-    platform.LocalStorage.Get([
-      globals.CacheKeys.DisableEventListeners,
-      globals.CacheKeys.SyncEnabled
-    ])
-      .then(function (cachedData) {
-        if (cachedData[globals.CacheKeys.DisableEventListeners] ||
-          !cachedData[globals.CacheKeys.SyncEnabled]) {
-          return;
-        }
-
-        return syncFunction.apply(this, args)
-          .catch(function (err) {
-            // Display alert
-            var errMessage = utility.GetErrorMessageFromException(err);
-            displayAlert(errMessage.title, errMessage.message);
-          });
+    return syncFunction.apply(this, args)
+      .catch(function (err) {
+        // Display alert
+        var errMessage = utility.GetErrorMessageFromException(err);
+        displayAlert(errMessage.title, errMessage.message);
       });
+  };
+
+  var onChangedHandler = function () {
+    onBookmarkEventHandler(changeBookmark, arguments);
+  };
+
+  var onCreatedHandler = function () {
+    onBookmarkEventHandler(createBookmark, arguments);
   };
 
   var onInstallHandler = function (details) {
@@ -239,9 +278,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var onMessageHandler = function (message, sender, sendResponse) {
-    var commandName = _.findKey(globals.Commands, function (key) { return key === message.command; });
-    utility.LogInfo('background.onMessageHandler: ' + commandName);
-
     switch (message.command) {
       // Trigger bookmarks sync
       case globals.Commands.SyncBookmarks:
@@ -255,10 +291,31 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
       case globals.Commands.GetCurrentSync:
         getCurrentSync(sendResponse);
         break;
+      // Enable event listeners
+      case globals.Commands.EnableEventListeners:
+        enableEventListeners(sendResponse);
+        break;
+      // Disable event listeners
+      case globals.Commands.DisableEventListeners:
+        disableEventListeners(sendResponse);
+        break;
+      // Unknown command
+      default:
+        var err = new Error('Unknown command: ' + message.command);
+        utility.LogError(err);
+        sendResponse({ success: false, error: err });
     }
 
     // Enable async response
     return true;
+  };
+
+  var onMovedHandler = function () {
+    onBookmarkEventHandler(moveBookmark, arguments);
+  };
+
+  var onRemovedHandler = function () {
+    onBookmarkEventHandler(removeBookmark, arguments);
   };
 
   var onStartupHandler = function () {
@@ -291,14 +348,27 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
           return;
         }
 
-        // Start auto updates
-        platform.AutomaticUpdates.Start()
+        // Enable event listeners
+        return $q(function (resolve, reject) {
+          enableEventListeners(function (response) {
+            if (response.success) {
+              resolve();
+            }
+            else {
+              reject(response.error);
+            }
+          })
+        })
+          // Start auto updates
+          .then(platform.AutomaticUpdates.Start)
           // Check for updates to synced bookmarks
           .then(bookmarks.CheckForUpdates)
           .then(function (updatesAvailable) {
             if (!updatesAvailable) {
               return;
             }
+
+            utility.LogInfo('Updates found, retrieving latest sync data');
 
             return $q(function (resolve, reject) {
               syncBookmarks({
@@ -351,21 +421,31 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   var restoreBookmarks = function (restoreData, sendResponse) {
     sendResponse = sendResponse || function () { };
 
-    return $q(function (resolve) {
-      // Upgrade containers to use current container names
-      var upgradedBookmarks = bookmarks.UpgradeContainers(restoreData.bookmarks || []);
-
-      // If bookmarks don't have unique ids, add new ids
-      if (!bookmarks.CheckBookmarksHaveUniqueIds(upgradedBookmarks)) {
-        platform.Bookmarks.AddIds(upgradedBookmarks)
-          .then(function (updatedBookmarks) {
-            resolve(updatedBookmarks);
-          });
-      }
-      else {
-        resolve(upgradedBookmarks);
-      }
+    return $q(function (resolve, reject) {
+      disableEventListeners(function (response) {
+        if (response.success) {
+          resolve();
+        }
+        else {
+          reject(response.error);
+        }
+      })
     })
+      .then(function () {
+        // Upgrade containers to use current container names
+        var upgradedBookmarks = bookmarks.UpgradeContainers(restoreData.bookmarks || []);
+
+        // If bookmarks don't have unique ids, add new ids
+        if (!bookmarks.CheckBookmarksHaveUniqueIds(upgradedBookmarks)) {
+          return platform.Bookmarks.AddIds(upgradedBookmarks)
+            .then(function (updatedBookmarks) {
+              return updatedBookmarks;
+            });
+        }
+        else {
+          return upgradedBookmarks;
+        }
+      })
       .then(function (bookmarksToRestore) {
         restoreData.bookmarks = bookmarksToRestore;
         return syncBookmarks(restoreData, sendResponse);
@@ -376,13 +456,42 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
     syncData.uniqueId = (new Date()).getTime();
     sendResponse = sendResponse || function () { };
 
-    // Start sync
-    return bookmarks.Sync(syncData)
+    // Disable event listeners if sync will affect local bookmarks
+    var checkEventListeners = syncData.type === globals.SyncType.Pull || syncData.type === globals.SyncType.Both ?
+      $q(function (resolve, reject) {
+        disableEventListeners(function (response) {
+          if (response.success) {
+            resolve();
+          }
+          else {
+            reject(response.error);
+          }
+        })
+      }) : 
+      $q.resolve();
+    
+    return checkEventListeners
+      .then(function () {
+        // Start sync
+        return bookmarks.Sync(syncData)
+          .catch(function (err) {
+            // If local data out of sync, queue refresh sync
+            if (err && err.code === globals.ErrorCodes.DataOutOfSync) {
+              return syncBookmarks({ type: globals.SyncType.Pull })
+                .then(function () {
+                  utility.LogInfo('Local sync data refreshed');
+                  return $q.reject(err);
+                });
+            }
+
+            return $q.reject(err);
+          });
+      })
       .then(function (bookmarks) {
         try {
           sendResponse({ bookmarks: bookmarks, success: true });
         }
-        catch (err) { };
+        catch (err) { }
 
         // Send a message in case the user closed the extension window
         chrome.runtime.sendMessage({
@@ -395,13 +504,42 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         try {
           sendResponse({ error: err, success: false });
         }
-        catch (err) { };
+        catch (err) { }
 
         // Send a message in case the user closed the extension window
         chrome.runtime.sendMessage({
           command: globals.Commands.SyncFinished,
           error: err,
           success: false
+        });
+      })
+      .finally(function () {
+        // Enable event listeners if they were disabled
+        if (syncData.type === globals.SyncType.Pull || syncData.type === globals.SyncType.Both) {
+          return toggleEventListeners();
+        }
+      });
+  };
+
+  var toggleEventListeners = function () {
+    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+      .then(function (syncEnabled) {
+        return $q(function (resolve, reject) {
+          var callback = function (response) {
+            if (response.success) {
+              resolve();
+            }
+            else {
+              reject(response.error);
+            }
+          };
+
+          if (syncEnabled) {
+            return enableEventListeners(callback);
+          }
+          else {
+            return disableEventListeners(callback);
+          }
         });
       });
   };

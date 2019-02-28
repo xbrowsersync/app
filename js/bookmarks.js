@@ -347,7 +347,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         }
 
         var syncType = _.findKey(globals.SyncType, function (key) { return key === syncData.type; });
-        utility.LogInfo('Sync ' + syncData.uniqueId + ' (' + syncType.toLowerCase() + ') queued. ' + syncQueue.length + ' sync(s) queued.');
+        utility.LogInfo('Sync ' + syncData.uniqueId + ' (' + syncType.toLowerCase() + ') queued (' + syncQueue.length + ' waiting to sync)');
 
         // Trigger sync
         sync();
@@ -736,24 +736,15 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         break;
       // Overwrite local bookmarks
       case globals.SyncType.Pull:
-        syncPromise = platform.LocalStorage.Set(globals.CacheKeys.DisableEventListeners, true)
-          .then(function () {
-            return sync_handlePull(currentSync);
-          });
+        syncPromise = sync_handlePull(currentSync);
         break;
       // Sync to service and overwrite local bookmarks
       case globals.SyncType.Both:
-        syncPromise = platform.LocalStorage.Set(globals.CacheKeys.DisableEventListeners, true)
-          .then(function () {
-            return sync_handleBoth(currentSync);
-          });
+        syncPromise = sync_handleBoth(currentSync);
         break;
       // Upgrade sync to current version
       case globals.SyncType.Upgrade:
-        syncPromise = platform.LocalStorage.Set(globals.CacheKeys.DisableEventListeners, true)
-          .then(function () {
-            return sync_handleUpgrade(currentSync);
-          });
+        syncPromise = sync_handleUpgrade(currentSync);
         break;
       // Ambiguous sync
       default:
@@ -791,7 +782,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
           }
       })*/
       .then(function () {
-        utility.LogInfo('Sync ' + currentSync.uniqueId + ' completed. ' + syncQueue.length + ' sync(s) remaining.');
+        utility.LogInfo('Sync ' + currentSync.uniqueId + ' completed (' + syncQueue.length + ' waiting to sync)');
         deferredToResolve.resolve(bookmarks);
         $timeout(sync);
       })
@@ -802,22 +793,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         utility.LogError(err, 'bookmarks.sync');
 
         return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
-          .then(function (cachedSyncEnabled) {
-            syncEnabled = cachedSyncEnabled;
-
-            // If local data out of sync, queue refresh sync
-            if (err && err.code === globals.ErrorCodes.DataOutOfSync) {
-              // Reset syncing flag
-              setIsSyncing(false);
-
-              return queueSync({ type: globals.SyncType.Pull })
-                .then(function () {
-                  utility.LogInfo('Local sync data refreshed');
-                  deferredToResolve.reject(err)
-                })
-                .catch(deferredToResolve.reject);
-            }
-
+          .then(function (syncEnabled) {
             // If error occurred whilst creating new sync, remove cached sync ID and password
             if (currentSync.type === globals.SyncType.Push && !currentSync.changeInfo) {
               clearCachedData = $q.all([
@@ -872,9 +848,6 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
         // Reset syncing flag
         setIsSyncing(false);
-
-        // Enable event listeners
-        return platform.LocalStorage.Set(globals.CacheKeys.DisableEventListeners, false);
       });
   };
 

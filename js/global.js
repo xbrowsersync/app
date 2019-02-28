@@ -32,7 +32,6 @@ xBrowserSync.App.Global = function (platform) {
     CacheKeys: {
       Bookmarks: 'bookmarks',
       DebugMessageLog: 'debugMessageLog',
-      DisableEventListeners: 'disableEventListeners',
       DisplayIntro: 'displayIntro',
       DisplayUpdated: 'displayUpdated',
       LastUpdated: 'lastUpdated',
@@ -50,7 +49,9 @@ xBrowserSync.App.Global = function (platform) {
       RestoreBookmarks: 2,
       GetCurrentSync: 3,
       SyncFinished: 4,
-      GetPageMetadata: 5
+      GetPageMetadata: 5,
+      EnableEventListeners: 6,
+      DisableEventListeners: 7
     },
     Constants: {
       Title: 'title',
