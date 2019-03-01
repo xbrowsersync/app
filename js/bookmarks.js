@@ -1021,26 +1021,37 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       .then(function (decryptedData) {
         bookmarks = JSON.parse(decryptedData);
 
-        // If bookmarks don't have unique ids, add new ids and re-sync
+        // If bookmarks don't have unique ids, add new ids and queue sync
         var hasUniqueIds = checkBookmarksHaveUniqueIds(bookmarks);
+        var addUniqueIds = $q.resolve();
         if (!hasUniqueIds) {
-          return platform.Bookmarks.AddIds(bookmarks)
-            .then(function (bookmarksWithIds) {
-              // TODO: test this
+          utility.LogInfo('Unique ids check failed, re-adding ids');
+          addUniqueIds = platform.Bookmarks.AddIds(bookmarks)
+            .then(function (bookmarksWithNewIds) {
+              bookmarks = bookmarksWithNewIds;
+
+              // Decrypt bookmarks
+              return utility.EncryptData(JSON.stringify(bookmarks));
+            })
+            .then(function (encryptedBookmarksWithNewIds) {
+              encryptedBookmarks = encryptedBookmarksWithNewIds;
+              
               // Queue sync for bookmarks with ids
-              return queueSync({
-                bookmarks: bookmarksWithIds,
+              queueSync({
+                bookmarks: bookmarks,
                 type: globals.SyncType.Push
               })
-                .then(function () {
-                  return bookmarksWithIds;
+                .catch(function (err) {
+                  utility.LogError(err, 'bookmarks.sync_handlePull');
                 });
             });
         }
-        else {
-          // Update cached bookmarks and return
-          return updateCache(bookmarks, encryptedBookmarks);
-        }
+
+        return addUniqueIds
+          .then(function () {
+            // Update cached bookmarks and return
+            return updateCache(bookmarks, encryptedBookmarks);
+          });
       })
       .then(function (bookmarksToSet) {
         // Update browser bookmarks

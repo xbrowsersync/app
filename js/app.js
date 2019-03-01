@@ -1969,6 +1969,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
 
         // If sync not enabled or user just clicked to disable toolbar sync, update stored value and return
         if (!syncEnabled || syncBookmarksToolbar) {
+          utility.LogInfo('Toolbar sync ' + (!syncBookmarksToolbar ? 'enabled' : 'disabled'));
           return platform.LocalStorage.Set(globals.CacheKeys.SyncBookmarksToolbar, !syncBookmarksToolbar);
         }
 
@@ -1986,25 +1987,30 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
   };
 
   var syncPanel_SyncBookmarksToolbar_Confirm = function () {
+    var syncId;
+
     platform.LocalStorage.Get([
       globals.CacheKeys.SyncEnabled,
       globals.CacheKeys.SyncId
     ])
       .then(function (cachedData) {
         var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
-        var syncId = cachedData[globals.CacheKeys.SyncId];
+        syncId = cachedData[globals.CacheKeys.SyncId];
 
         // If sync not enabled, return
         if (!syncEnabled) {
           return;
-        }
+        }        
 
-        // Enable setting and hide sync confirmation
-        platform.LocalStorage.Set(globals.CacheKeys.SyncBookmarksToolbar, true);
+        // Hide sync confirmation and display loading overlay
         vm.settings.displaySyncBookmarksToolbarConfirmation = false;
-
-        // Display loading overlay
         platform.Interface.Loading.Show();
+
+        // Enable setting in cache
+        return platform.LocalStorage.Set(globals.CacheKeys.SyncBookmarksToolbar, true);
+      })
+      .then(function () {
+        utility.LogInfo('Toolbar sync enabled');
 
         // Start sync with no callback action
         return queueSync({

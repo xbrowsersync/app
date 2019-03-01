@@ -55,8 +55,8 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
     // Get page metadata from current tab
     return platform.GetPageMetadata()
       .then(function (metadata) {
-        // Add metadata if provided
-        if (metadata) {
+        // Add metadata if bookmark is current tab location
+        if (metadata && bookmark.url === metadata.url) {
           bookmark.title = utility.StripTags(metadata.title);
           bookmark.description = utility.StripTags(metadata.description);
           bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
@@ -302,7 +302,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
       // Unknown command
       default:
         var err = new Error('Unknown command: ' + message.command);
-        utility.LogError(err);
+        utility.LogError(err, 'background.onMessageHandler');
         sendResponse({ success: false, error: err });
     }
 

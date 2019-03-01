@@ -23,7 +23,6 @@ xBrowserSync.App.Global = function (platform) {
       MobileContainerName: '[xbs] Mobile',
       OtherContainerName: '[xbs] Other',
       OtherContainerNameOld: '_other_',
-      RootContainerName: 'root',
       ToolbarContainerName: '[xbs] Toolbar',
       ToolbarContainerNameOld: '_toolbar_',
       UnfiledContainerNameOld: '_xBrowserSync_'
