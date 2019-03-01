@@ -432,6 +432,14 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       bookmark.title === globals.Bookmarks.ToolbarContainerName);
   };
 
+  var xBookmarkIsSeparator = function (bookmark) {
+    if (!bookmark) {
+      return false;
+    }
+    
+    return /^\-{3,}$/.test(bookmark.title) && (!bookmark.children || bookmark.children.length === 0);
+  };
+
 
   /* ------------------------------------------------------------------------------------
    * Private functions
@@ -1307,7 +1315,8 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     UpdateCache: updateCache,
     UpgradeContainers: upgradeContainers,
     XBookmark: xBookmark,
-    XBookmarkIsContainer: xBookmarkIsContainer
+    XBookmarkIsContainer: xBookmarkIsContainer,
+    XBookmarkIsSeparator: xBookmarkIsSeparator
   };
   return self;
 };

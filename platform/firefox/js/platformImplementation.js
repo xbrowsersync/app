@@ -10,6 +10,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
   'use strict';
 
   var vm, loadingId,
+      separatorTypeName = 'separator',
       menuBookmarksTitle = 'Bookmarks Menu',
       mobileBookmarksTitle = 'Mobile Bookmarks',
       otherBookmarksTitle = 'Other Bookmarks',
@@ -183,13 +184,15 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
           });
         }
 
-        // Create new bookmark
-        var newXBookmark = new bookmarks.XBookmark(
-          createInfo.title,
-          createInfo.url || null,
-          createInfo.description,
-          createInfo.tags,
-          createInfo.children);
+        // Create new bookmark/separator
+        var newXBookmark = createInfo.type === separatorTypeName ?
+          new bookmarks.XBookmark(globals.Bookmarks.SeparatorTitle) :
+          new bookmarks.XBookmark(
+            createInfo.title,
+            createInfo.url || null,
+            createInfo.description,
+            createInfo.tags,
+            createInfo.children);
 
         if (createInfo.newId) {
           // Use new id supplied
@@ -301,8 +304,10 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
         movedLocalBookmark = localBookmark;
 
         // Update args bookmark properties
-        deleteArgs[1].node.title = movedLocalBookmark.title;
-        deleteArgs[1].node.url = movedLocalBookmark.url;
+        if (movedLocalBookmark.type !== separatorTypeName) {
+          deleteArgs[1].node.title = movedLocalBookmark.title;
+          deleteArgs[1].node.url = movedLocalBookmark.url;
+        }
 
         // Remove from old parent
         return bookmarksDeleted(xBookmarks, deleteArgs);
@@ -312,13 +317,19 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
         var removedBookmark = results.removedBookmark;
 
         // Update args bookmark properties
-        createArgs[1].title = movedLocalBookmark.title;
-        createArgs[1].url = movedLocalBookmark.url;
-        if (removedBookmark) {
+        if (removedBookmark && bookmarks.XBookmarkIsSeparator(removedBookmark)) {
           createArgs[1].newId = removedBookmark.id;
-          createArgs[1].children = removedBookmark.children;
-          createArgs[1].description = removedBookmark.description;
-          createArgs[1].tags = removedBookmark.tags;
+          createArgs[1].type = separatorTypeName;
+        }
+        else {
+          createArgs[1].title = movedLocalBookmark.title;
+          createArgs[1].url = movedLocalBookmark.url;
+          if (removedBookmark) {
+            createArgs[1].newId = removedBookmark.id;
+            createArgs[1].children = removedBookmark.children;
+            createArgs[1].description = removedBookmark.description;
+            createArgs[1].tags = removedBookmark.tags;
+          }
         }
 
         // Create under new parent
@@ -1014,7 +1025,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     // Create bookmarks at the top level of the supplied array
     return xBookmarks.reduce(function (p, xBookmark) {
       return p.then(function () {
-        return createLocalBookmark(parentId, xBookmark.title, xBookmark.url)
+        return bookmarks.XBookmarkIsSeparator(xBookmark) ?
+          createLocalSeparator(parentId) : createLocalBookmark(parentId, xBookmark.title, xBookmark.url)
           .then(function (newLocalBookmark) {
             // If the bookmark has children, recurse
             if (xBookmark.children && xBookmark.children.length > 0) {
@@ -1025,6 +1037,22 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     }, $q.resolve())
       .then(function () {
         return $q.all(createChildBookmarksPromises);
+      });
+  };
+
+  var createLocalSeparator = function (parentId) {
+    var newLocalSeparator = {
+      parentId: parentId,
+      type: separatorTypeName
+    };
+
+    return browser.bookmarks.create(newLocalSeparator)
+      .catch(function (err) {
+        utility.LogInfo('Failed to create local separator');
+        return $q.reject({
+          code: globals.ErrorCodes.FailedCreateLocalBookmarks,
+          stack: err.stack
+        });
       });
   };
 
@@ -1260,13 +1288,11 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
     for (var i = 0; i < localBookmarks.length; i++) {
       var currentLocalBookmark = localBookmarks[i];
-
-      // Do not sync separators
-      if (currentLocalBookmark.type === 'separator') {
-        continue;
-      }
-
-      var newXBookmark = new bookmarks.XBookmark(currentLocalBookmark.title, currentLocalBookmark.url);
+      
+      // Check if current local bookmark is a separator
+      var newXBookmark = currentLocalBookmark.type === separatorTypeName ?
+        new bookmarks.XBookmark(globals.Bookmarks.SeparatorTitle) :
+        new bookmarks.XBookmark(currentLocalBookmark.title, currentLocalBookmark.url);
 
       // If this is a folder and has children, process them
       if (currentLocalBookmark.children && currentLocalBookmark.children.length > 0) {
