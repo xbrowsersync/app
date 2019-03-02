@@ -224,22 +224,25 @@
       <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
         <label class="sr-only" for="txtPassword">{{
           vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
-        <input name="txtPassword" data-ng-model="vm.sync.password" type="password" class="form-control" data-ng-change="vm.events.syncForm_Password_Change()"
+        <input name="txtPassword" data-ng-model="vm.sync.password" type="password" class="form-control" data-zxcvbn="vm.sync.passwordComplexity"
           data-ng-disabled="vm.sync.enabled" maxlength="150" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_New_Description) }}"
           tabindex="1" />
-        <div class="progress" data-ng-hide="!vm.sync.password">
-          <div class="progress-bar" role="progressbar" data-ng-style="{ width: (vm.sync.passwordComplexity.complexity === 0) ? '100%' : vm.sync.passwordComplexity.complexity + '%' }"
+        <div class="validation" data-ng-if="vm.sync.passwordComplexity.feedback.warning">
+          {{ vm.sync.passwordComplexity.feedback.warning }}
+        </div>
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" data-ng-style="{ width: !vm.sync.password ? 0 : (((vm.sync.passwordComplexity.score + 1) / 5) * 100) + '%' }"
             data-ng-class="{
-                        'progress-bar-warning': vm.sync.passwordComplexity.complexity >= 20 && vm.sync.passwordComplexity.complexity < 40,
-                        'progress-bar-success': vm.sync.passwordComplexity.complexity >= 40
-                        }">
+              'progress-bar-warning': vm.sync.passwordComplexity.score > 1 && vm.sync.passwordComplexity.score < 4,
+              'progress-bar-success': vm.sync.passwordComplexity.score === 4
+              }">
           </div>
         </div>
         <div class="progress-bar-background"></div>
       </div>
       <div class="form-group text-center">
-        <button type="button" class="btn btn-default btn-confirm-password" data-ng-disabled="!vm.sync.password || !vm.sync.passwordComplexity.valid"
-          data-ng-click="vm.events.syncForm_ConfirmPassword_Click()" tabindex="4">
+        <button type="button" class="btn btn-default btn-confirm-password" data-ng-disabled="!vm.sync.password" tabindex="4"
+          data-ng-click="vm.events.syncForm_ConfirmPassword_Click()">
           {{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}
         </button>
       </div>

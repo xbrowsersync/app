@@ -1,10 +1,10 @@
 // Initialise the angular app
 xBrowserSync.App.UI = angular.module('xBrowserSync.App.UI', [
-  'angular-complexify',
   'angular.filter',
   'infinite-scroll',
   'ngAnimate',
-  'ngSanitize'
+  'ngSanitize',
+  'zxcvbn'
 ]);
 
 // Disable debug info
@@ -58,5 +58,5 @@ xBrowserSync.App.PlatformImplementation.$inject = ['$http', '$interval', '$q', '
 xBrowserSync.App.UI.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add main controller
-xBrowserSync.App.Controller.$inject = ['$scope', '$q', '$timeout', 'Complexify', 'platform', 'globals', 'api', 'utility', 'bookmarks', 'platformImplementation'];
+xBrowserSync.App.Controller.$inject = ['$scope', '$q', '$timeout', 'platform', 'globals', 'api', 'utility', 'bookmarks', 'platformImplementation'];
 xBrowserSync.App.UI.controller('Controller', xBrowserSync.App.Controller);

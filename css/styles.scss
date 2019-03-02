@@ -346,6 +346,20 @@ body {
 
   .form-group {
     margin-bottom: .75em;
+
+    .validation {
+      color: rgba($colour-danger, 0.75)!important;
+      font-size: .8em;
+      line-height: 1.2em;
+      position: absolute;
+      top: 2.5em;
+      right: 1.3em;
+      background: $colour-text1;
+      padding: 0 .3em;
+      z-index: 20;
+      max-width: 90%;
+      border-radius: 0.75em;
+    }
   }
 
   .has-error {
@@ -355,18 +369,6 @@ body {
         color: $colour-danger!important;
         opacity: .7;
       }
-    }
-
-    .validation {
-      color: rgba($colour-danger, 0.75)!important;
-      font-size: .8em;
-      line-height: 1.2em;
-      position: absolute;
-      bottom: -0.5em;
-      right: 1.3em;
-      background: $colour-text1;
-      padding: 0 .3em;
-      border-radius: $border-radius-well;
     }
   }
 
@@ -723,7 +725,6 @@ body {
 
   .form-group {
     position: relative;
-    margin-bottom: 1.2em;
 
     &:last-child {
       margin-bottom: 0;
@@ -821,6 +822,8 @@ body {
   }
 
   .secret-form-group {
+    margin-bottom: 2em;
+    
     .progress,
     .progress-bar-background {
       position: absolute;

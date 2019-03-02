@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Main angular controller class for the app.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platform, globals, api, utility, bookmarks) {
+xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals, api, utility, bookmarks) {
   'use strict';
 
   var vm;
@@ -108,7 +108,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       syncPanel_SyncBookmarksToolbar_Click: syncPanel_SyncBookmarksToolbar_Click,
       syncPanel_SyncBookmarksToolbar_Cancel: syncPanel_SyncBookmarksToolbar_Cancel,
       syncPanel_SyncBookmarksToolbar_Confirm: syncPanel_SyncBookmarksToolbar_Confirm,
-      syncForm_Password_Change: syncForm_Password_Change,
       syncForm_ConfirmPassword_Click: syncForm_ConfirmPassword_Click,
       syncForm_ConfirmSync_Click: startSyncing,
       syncForm_DisableSync_Click: syncForm_DisableSync_Click,
@@ -198,7 +197,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       id: undefined,
       inProgress: false,
       nextAutoUpdate: undefined,
-      password: undefined,
+      password: '',
       passwordComplexity: {},
       passwordConfirmation: undefined,
       updatesAvailable: undefined,
@@ -948,7 +947,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     vm.sync.displayPasswordConfirmation = false;
     vm.sync.displaySyncConfirmation = false;
     vm.sync.displayUpgradeConfirmation = false;
-    vm.sync.password = null;
+    vm.sync.password = '';
     vm.sync.passwordComplexity = {};
     vm.sync.passwordConfirmation = null;
     vm.sync.upgradeConfirmed = false;
@@ -1313,7 +1312,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       .then(function () {
         // Set ID and password if sync not enabled
         if (!syncEnabled) {
-          vm.sync.password = null;
+          vm.sync.password = '';
           vm.sync.passwordComplexity = {};
 
           return $q.all([
@@ -1890,7 +1889,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
 
   var syncForm_ExistingSync_Click = function () {
     vm.settings.displayNewSyncPanel = false;
-    vm.sync.password = null;
+    vm.sync.password = '';
 
     if (!utility.IsMobilePlatform(vm.platformName)) {
       $timeout(function () {
@@ -1905,7 +1904,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
     platform.LocalStorage.Set(globals.CacheKeys.SyncId);
     platform.LocalStorage.Set(globals.CacheKeys.Password);
     vm.sync.id = null;
-    vm.sync.password = null;
+    vm.sync.password = '';
     vm.sync.passwordConfirmation = null;
     vm.sync.passwordComplexity = {};
 
@@ -1913,16 +1912,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
       $timeout(function () {
         document.querySelector('.login-form-new input[name="txtPassword"]').focus();
       }, 100);
-    }
-  };
-
-  var syncForm_Password_Change = function () {
-    // Update password complexity value
-    if (vm.sync.password) {
-      vm.sync.passwordComplexity = complexify(vm.sync.password);
-    }
-    else {
-      vm.sync.passwordComplexity = {};
     }
   };
 
@@ -2037,7 +2026,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, complexify, platfo
 
     // Disable sync
     vm.sync.enabled = false;
-    vm.sync.password = null;
+    vm.sync.password = '';
     vm.sync.passwordComplexity = {};
     disableSync()
       .then(function () {
