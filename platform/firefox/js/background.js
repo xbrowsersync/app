@@ -515,12 +515,8 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         })
           .catch(function () { });
       })
-      .finally(function () {
-        // Enable event listeners if they were disabled
-        if (syncData.type === globals.SyncType.Pull || syncData.type === globals.SyncType.Both) {
-          return toggleEventListeners();
-        }
-      });
+      // Enable event listeners if required
+      .finally(toggleEventListeners);
   };
 
   var toggleEventListeners = function () {
