@@ -1,16 +1,16 @@
 <!doctype html>
-<html>
+<html data-ng-app="xBrowserSync.App.ChromeBackground" data-ng-controller="Controller as vm" data-ng-csp>
 
 <head>
   <meta charset="utf-8">
+  <script src="js/background.min.js"></script>
 </head>
 
-<body data-ng-app="xBrowserSync.App.ChromeBackground">
-  <div data-ng-controller="Controller as vm">
+<body>
+  <div>
     <button id="install" data-ng-click="vm.install()"></button>
     <button id="startup" data-ng-click="vm.startup()"></button>
   </div>
-  <script src="js/background.min.js"></script>
 </body>
 
 </html>

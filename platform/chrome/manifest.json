@@ -10,7 +10,7 @@
   "default_locale": "en",
   "browser_action": {
     "default_icon": {
-      "32": "img/notsynced.png" 
+      "32": "img/notsynced.png"
     },
     "default_popup": "app.html",
     "default_title": "__MSG_title__"
@@ -28,7 +28,7 @@
       ]
     }
   ],
-  "content_security_policy": "object-src 'self'; script-src 'self' 'unsafe-eval';",
+  "content_security_policy": "connect-src *; default-src 'none'; font-src 'self' data:; img-src 'self' data:; script-src 'self'; style-src 'self';",
   "permissions": [
     "alarms",
     "bookmarks",

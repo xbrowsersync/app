@@ -1,12 +1,9 @@
 <!doctype html>
-<html data-ng-app="xBrowserSync.App.UI" data-ng-controller="Controller as vm">
+<html data-ng-app="xBrowserSync.App.UI" data-ng-controller="Controller as vm" data-ng-csp>
 
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta http-equiv="Content-Security-Policy" content="default-src data: 'self' 'unsafe-inline' gap://ready; connect-src *; object-src 'self'; script-src 'self' 'unsafe-eval';">
   <meta name="format-detection" content="telephone=no">
-  <meta name="msapplication-tap-highlight" content="no">
   <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, viewport-fit=cover">
   <title data-ng-bind="vm.platform.GetConstant(vm.globals.Constants.Title)"></title>
   <link rel="stylesheet" href="css/styles.min.css" />
