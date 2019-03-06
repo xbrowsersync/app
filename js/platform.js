@@ -64,6 +64,11 @@ xBrowserSync.App.Platform = function ($q) {
       Set: notImplemented
     },
     OpenUrl: notImplemented,
+    Permissions: {
+      Check: notImplemented,
+      Remove: notImplemented,
+      Request: notImplemented
+    },
     ScanID: notImplemented,
     SelectFile: notImplemented,
     Sync: {

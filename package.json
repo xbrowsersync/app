@@ -54,7 +54,7 @@
     "build:android": "echo Building Android app... & cross-env PLATFORM_PATH=platform/android npm run copyfiles && npm run commonbuildsteps",
     "postbuild:android": "npm run androidbuildsteps",
     "clearprevbuild": "n-clean build",
-    "copyfiles": "cross-env-shell \"n-copy --source $PLATFORM_PATH --destination build \\\"*\\\" \\\"**/*\\\"\" && n-copy --source . --destination build \"app.html\" \"css/*\" \"img/*\" \"views/*\"",
+    "copyfiles": "cross-env-shell \"n-copy --source $PLATFORM_PATH --destination build \\\"*\\\" \\\"**/*\\\"\" && n-copy --source . --destination build \"app.html\" \"css/*\" \"img/*\" \"js/getPageMetadata.js\" \"views/*\"",
     "commonbuildsteps": "npm run compilecss && npm run bundlecss && npm run minifycryptojs && npm run bundleappscripts",
     "compilecss": "node-sass build/css/bootstrap.scss build/css/bootstrap.css -q & node-sass build/css/font-awesome.scss build/css/font-awesome.css -q & node-sass build/css/fonts.scss build/css/fonts.css -q & node-sass build/css/styles.scss build/css/styles.css -q & node-sass build/css/platform.scss build/css/platform.css -q",
     "bundlecss": "minify build/css/font-awesome.css build/css/bootstrap.css build/css/fonts.css build/css/styles.css build/css/platform.css | n-pipe build/css/styles.min.css",

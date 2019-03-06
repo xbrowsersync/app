@@ -71,11 +71,5 @@
     };
   };
 
-  chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    if (request.command !== 5) {
-      return;
-    }
-
-    sendResponse(getPageMetadata());
-  });
+  return getPageMetadata();
 })();

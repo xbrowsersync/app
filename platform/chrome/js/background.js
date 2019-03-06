@@ -52,8 +52,8 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   var createBookmark = function (id, bookmark) {
     utility.LogInfo('onCreated event detected');
 
-    // Get page metadata from current tab
-    return platform.GetPageMetadata()
+    // Get page metadata from current tab if permission has been granted
+    return platform.GetPageMetadata(true)
       .then(function (metadata) {
         // Add metadata if bookmark is current tab location
         if (metadata && bookmark.url === metadata.url) {
@@ -546,9 +546,12 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         return utility.LogInfo('Upgrading from ' + oldVersion + ' to ' + newVersion);
       })
       .then(function () {
-        // For v1.4.1, convert local storage items to storage API
+        // For v1.4.1, convert local storage items to storage API and display permissions panel
         if (newVersion === '1.4.1' && compareVersions(oldVersion, newVersion) < 0) {
-          return utility.ConvertLocalStorageToStorageApi();
+          return $q[
+            utility.ConvertLocalStorageToStorageApi(),
+            platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, true)
+          ];
         }
       })
       .then(function () {

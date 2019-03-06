@@ -10,13 +10,17 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
   'use strict';
 
   var vm, loadingId,
-      otherBookmarksTitle = 'Other bookmarks',
-      toolbarBookmarksTitle = 'Bookmarks bar',
-      unsupportedContainers = [
-        globals.Bookmarks.MenuContainerName,
-        globals.Bookmarks.MobileContainerName
-      ],
-      unsupportedBookmarkUrl = 'chrome://newtab/';
+    contentScriptUrl = 'js/getPageMetadata.js',
+    optionalPermissions = {
+      origins: ['http://*/', 'https://*/']
+    },
+    otherBookmarksTitle = 'Other bookmarks',
+    toolbarBookmarksTitle = 'Bookmarks bar',
+    unsupportedContainers = [
+      globals.Bookmarks.MenuContainerName,
+      globals.Bookmarks.MobileContainerName
+    ],
+    unsupportedBookmarkUrl = 'chrome://newtab/';
 
 
 	/* ------------------------------------------------------------------------------------
@@ -53,6 +57,9 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     platform.LocalStorage.Get = getFromLocalStorage;
     platform.LocalStorage.Set = setInLocalStorage;
     platform.OpenUrl = openUrl;
+    platform.Permissions.Check = checkPermissions;
+    platform.Permissions.Remove = removePermissions;
+    platform.Permissions.Request = requestPermissions;
     platform.Sync.Await = awaitSync;
     platform.Sync.Current = getCurrentSync;
     platform.Sync.Execute = executeSync;
@@ -91,8 +98,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
           // Check allBookmarks for index 
           bookmarkId = _.findIndex(allBookmarks, function (sortedBookmark) {
             return bookmarks.XBookmarkIsContainer(bookmark) ?
-            sortedBookmark.title === getEquivalentLocalContainerName(bookmark.title) :
-            sortedBookmark.title === bookmark.title &&
+              sortedBookmark.title === getEquivalentLocalContainerName(bookmark.title) :
+              sortedBookmark.title === bookmark.title &&
               sortedBookmark.url === bookmark.url &&
               !sortedBookmark.assigned;
           });
@@ -169,8 +176,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
         var syncBookmarksToolbar = results[2];
 
         // Check if the Toolbar container was found and Toolbar sync is disabled
-        if (findParentXBookmark.container && 
-            findParentXBookmark.container.title === globals.Bookmarks.ToolbarContainerName && !syncBookmarksToolbar) {
+        if (findParentXBookmark.container &&
+          findParentXBookmark.container.title === globals.Bookmarks.ToolbarContainerName && !syncBookmarksToolbar) {
           utility.LogInfo('Not syncing toolbar');
           return deferred.resolve({
             bookmarks: xBookmarks
@@ -431,7 +438,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
               utility.LogInfo('Not clearing toolbar');
               return;
             }
-              
+
             return $q(function (resolve, reject) {
               try {
                 chrome.bookmarks.getChildren(toolbarBookmarksId, function (results) {
@@ -460,6 +467,20 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
           stack: err.stack
         });
       });
+  };
+
+  var checkPermissions = function () {
+    return $q(function (resolve) {
+      try {
+        // Check if extension has optional permissions
+        chrome.permissions.contains(optionalPermissions, function (hasPermissions) {
+          resolve(hasPermissions);
+        });
+      }
+      catch (err) {
+        reject(err);
+      }
+    });
   };
 
   var createSingle = function (bookmarkToCreate, pathToTarget) {
@@ -694,7 +715,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       }
     });
   };
-  
+
   var getFromLocalStorage = function (storageKeys) {
     return $q(function (resolve, reject) {
       try {
@@ -713,24 +734,66 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     });
   };
 
-  var getPageMetadata = function () {
+  var getPageMetadata = function (shouldCheckPermissions) {
+    var activeTab;
+
     return $q(function (resolve, reject) {
       try {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-          var activeTab = tabs[0];
-          chrome.tabs.sendMessage(activeTab.id, { command: globals.Commands.GetPageMetadata }, function (response) {
-            // If no metadata returned, use the info from the active tab
-            response = response || {};
-            response.title = response.title || activeTab.title;
-            response.url = response.url || activeTab.url;
-            resolve(response);
-          });
+          activeTab = tabs[0];
+          resolve();
         });
       }
       catch (err) {
         reject(err);
       }
-    });
+    })
+      .then(function () {
+        // If not checking permissions, return
+        if (shouldCheckPermissions !== true) {
+          return $q.resolve(true);
+        }
+
+        // Check if extension has permissions to read active tab content
+        return checkPermissions()
+          .then(function (hasPermissions) {
+            if (!hasPermissions) {
+              utility.LogInfo('Do not have permission to read active tab content');
+            }
+            return hasPermissions;
+          });
+      })
+      .then(function (getMetadata) {
+        // Default metadata to the info from the active tab
+        var metadata = {
+          title: activeTab.title,
+          url: activeTab.url
+        };
+
+        return $q(function (resolve, reject) {
+          // If unable to get metadata return default
+          if (!getMetadata) {
+            resolve(metadata);
+            return;
+          }
+
+          try {
+            chrome.tabs.executeScript(activeTab.id, { file: contentScriptUrl }, function (response) {
+              if (response && response.length > 0) {
+                metadata = response[0];
+              }
+
+              // If no metadata returned, use the info from the active tab
+              metadata.title = metadata.title || activeTab.title;
+              metadata.url = metadata.url || activeTab.url;
+              resolve(metadata);
+            });
+          }
+          catch (err) {
+            reject(err);
+          }
+        });
+      });
   };
 
   var getSupportedUrl = function (url) {
@@ -909,6 +972,39 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
     chrome.browserAction.setIcon({ path: iconPath });
     chrome.browserAction.setTitle({ title: tooltip });
+  };
+
+  var removePermissions = function () {
+    return $q(function (resolve) {
+      try {
+        // Remove optional permissions
+        chrome.permissions.remove(optionalPermissions, function (removed) {
+          if (!removed) {
+            throw new Error(chrome.runtime.lastError || 'Permissions not removed');
+          }
+          utility.LogInfo('Optional permissions removed');
+          resolve();
+        });
+      }
+      catch (err) {
+        reject(err);
+      }
+    });
+  };
+
+  var requestPermissions = function () {
+    return $q(function (resolve) {
+      try {
+        // Request optional permissions
+        chrome.permissions.request(optionalPermissions, function (granted) {
+          utility.LogInfo('Optional permissions ' + (!granted ? 'not ' : '') + 'granted');
+          resolve(granted);
+        });
+      }
+      catch (err) {
+        reject(err);
+      }
+    });
   };
 
   var setInLocalStorage = function (storageKey, value) {

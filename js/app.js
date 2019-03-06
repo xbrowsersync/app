@@ -93,6 +93,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       introPanel11_Prev_Click: introPanel11_Prev_Click,
       introPanel12_Prev_Click: introPanel12_Prev_Click,
       openUrl: openUrl,
+      permissions_Revoke_Click: permissions_Revoke_Click,
+      permissions_Request_Click: permissions_Request_Click,
+      permissionsPanel_RequestPermissions_Click: permissionsPanel_RequestPermissions_Click,
       queueSync: queueSync,
       searchForm_Clear_Click: searchForm_Clear_Click,
       searchForm_DeleteBookmark_Click: searchForm_DeleteBookmark_Click,
@@ -170,6 +173,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       fileRestoreEnabled: false,
       getSearchLookaheadDelay: 50,
       getSearchResultsDelay: 250,
+      readWebsiteDataPermissionsGranted: false,
       iCloudNotAvailable: false,
       restoreCompletedMessage: undefined,
       savingBackup: false,
@@ -208,7 +212,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       current: undefined,
       change: changeView,
       displayMainView: displayMainView,
-      views: { login: 0, search: 1, bookmark: 2, settings: 3, updated: 4 }
+      views: { login: 0, search: 1, bookmark: 2, settings: 3, updated: 4, permissions: 5 }
     };
 
     // Initialise the app
@@ -620,6 +624,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       case vm.view.views.bookmark:
         initNewView = init_bookmarkView(viewData);
         break;
+      case vm.view.views.permissions:
+        initNewView = init_permissionsView(viewData);
+        break;
       case vm.view.views.search:
         initNewView = init_searchView(viewData);
         break;
@@ -757,13 +764,25 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var displayMainView = function () {
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
-      .then(function (syncEnabled) {
-        if (syncEnabled) {
-          return changeView(vm.view.views.search);
-        }
-        else {
-          return changeView(vm.view.views.login);
+    return platform.LocalStorage.Get([
+        globals.CacheKeys.DisplayPermissions,
+        globals.CacheKeys.DisplayUpdated,
+        globals.CacheKeys.SyncEnabled
+      ])
+      .then(function (cachedData) {
+        var displayPermissions = cachedData[globals.CacheKeys.DisplayPermissions];
+        var displayUpdated = cachedData[globals.CacheKeys.DisplayUpdated];
+        var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
+
+        switch (true) {
+          case displayUpdated:
+            return changeView(vm.view.views.updated);
+          case displayPermissions:
+            return changeView(vm.view.views.permissions);
+          case syncEnabled:
+            return changeView(vm.view.views.search);
+          default:
+            return changeView(vm.view.views.login);
         }
       });
   };
@@ -820,14 +839,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     platform.Init(vm, $scope);
 
     // Check if sync enabled
-    return $q.all([
-      platform.Sync.Current(),
-      platform.LocalStorage.Get(globals.CacheKeys.DisplayUpdated)
-    ])
-      .then(function (data) {
-        var currentSync = data[0];
-        var displayUpdated = data[1];
-
+    return platform.Sync.Current()
+      .then(function (currentSync) {
         // Check if a sync is currently in progress
         if (currentSync) {
           utility.LogInfo('Waiting for sync: ' + currentSync.uniqueId);
@@ -839,7 +852,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         }
 
         // Set initial view
-        return displayUpdated ? changeView(vm.view.views.updated) : displayMainView();
+        return displayMainView();
       })
       // Check if current page is a bookmark
       .then(setBookmarkStatus)
@@ -1003,6 +1016,17 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       });
   };
 
+  var init_permissionsView = function () {
+    $timeout(function () {
+      // Focus on first button
+      if (!utility.IsMobilePlatform(vm.platformName)) {
+        document.querySelector('.buttons > button').focus();
+      }
+    }, 100);
+
+    return $q.resolve();
+  };
+
   var init_searchView = function () {
     vm.search.lookahead = null;
     vm.search.selectedBookmark = null;
@@ -1040,6 +1064,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     vm.settings.backupFileName = null;
     vm.settings.backupCompletedMessage = null;
     vm.settings.downloadLogCompletedMessage = null;
+    vm.settings.readWebsiteDataPermissionsGranted = false;
     vm.settings.restoreCompletedMessage = null;
     vm.settings.dataToRestore = '';
     vm.settings.savingBackup = false;
@@ -1058,18 +1083,21 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         globals.CacheKeys.SyncId
       ]),
       utility.GetServiceUrl(),
+      platform.Permissions.Check()
     ])
-      .then(function (cachedData) {
-        var syncBookmarksToolbar = cachedData[0];
-        var syncEnabled = cachedData[1][globals.CacheKeys.SyncEnabled];
-        var syncId = cachedData[1][globals.CacheKeys.SyncId];
-        var serviceUrl = cachedData[2];
+      .then(function (data) {
+        var syncBookmarksToolbar = data[0];
+        var syncEnabled = data[1][globals.CacheKeys.SyncEnabled];
+        var syncId = data[1][globals.CacheKeys.SyncId];
+        var serviceUrl = data[2];
+        var readWebsiteDataPermissionsGranted = data[3];
 
         vm.settings.service.url = serviceUrl;
         vm.settings.service.newServiceUrl = serviceUrl;
         vm.settings.syncBookmarksToolbar = syncBookmarksToolbar;
         vm.sync.enabled = syncEnabled;
         vm.sync.id = syncId;
+        vm.settings.readWebsiteDataPermissionsGranted = readWebsiteDataPermissionsGranted;
 
         // Check for available sync updates on non-mobile platforms
         if (syncEnabled && !utility.IsMobilePlatform(vm.platformName)) {
@@ -1118,9 +1146,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     return platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, false)
       .then(function () {
         $timeout(function () {
-          // Focus on release notes button
+          // Focus on first button
           if (!utility.IsMobilePlatform(vm.platformName)) {
-            document.querySelector('#releaseNotesBtn').focus();
+            document.querySelector('.buttons > button').focus();
           }
         }, 100);
       });
@@ -1252,6 +1280,30 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     }
 
     return false;
+  };
+
+  var permissions_Revoke_Click = function () {
+    platform.Permissions.Remove()
+      .then(function () {
+        vm.settings.readWebsiteDataPermissionsGranted = false;
+      })
+      .catch(displayAlertErrorHandler);
+  };
+
+  var permissions_Request_Click = function () {
+    platform.Permissions.Request()
+      .then(function (granted) {
+        vm.settings.readWebsiteDataPermissionsGranted = granted;
+      })
+      .catch(displayAlertErrorHandler);
+  };
+
+  var permissionsPanel_RequestPermissions_Click = function () {
+    $q.all([
+      platform.Permissions.Request(),
+      platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, false)
+    ])
+      .finally(vm.view.displayMainView);
   };
 
   var queueSync = function (syncData, command) {
@@ -1744,6 +1796,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
           // Get new sync ID
           return api.CreateNewSync()
             .then(function (newSync) {
+              utility.LogInfo('New sync id created: ' + newSync.id);
+              
               // Add sync data to cache and return
               return $q.all([
                 platform.LocalStorage.Set(globals.CacheKeys.SyncId, newSync.id),
@@ -1755,6 +1809,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
             });
         }
         else {
+          utility.LogInfo('Syncing to existing id: ' + vm.sync.id);
+          
           // Set sync type for retrieve existing sync
           syncType = globals.SyncType.Pull;
 

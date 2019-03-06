@@ -198,6 +198,35 @@
       </div>
     </div>
   </div>
+  <div class="permissions-panel well well-sm">
+    <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_Title) }}</h4>
+    <div class="panel-content">
+      <div class="animate-fade">
+        <div class="form-group">
+          <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Title) }}</label>
+          <div class="form-control">
+            <span class="text-success animate-fade" data-ng-show="vm.settings.readWebsiteDataPermissionsGranted">{{
+              vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Granted_Label)
+              }}</span>
+            <span class="text-danger animate-fade" data-ng-show="!vm.settings.readWebsiteDataPermissionsGranted">{{
+              vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_NotGranted_Label)
+              }}</span>
+          </div>
+          <p class="description" data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Description)"></p>
+          <div class="text-center animate-fade" data-ng-show="vm.settings.readWebsiteDataPermissionsGranted">
+            <button class="btn btn-default" data-ng-click="vm.events.permissions_Revoke_Click()">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Button_Permissions_Remove_Label) }}
+            </button>
+          </div>
+          <div class="text-center animate-fade" data-ng-hide="vm.settings.readWebsiteDataPermissionsGranted">
+            <button class="btn btn-default" data-ng-click="vm.events.permissions_Request_Click()">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Button_Permissions_Add_Label) }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="backup-restore-panel well well-sm">
     <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Title) }}</h4>
     <div class="panel-content">
@@ -366,7 +395,7 @@
         <div class="text-center">
           <button type="button" class="btn btn-default" data-ng-click="vm.events.openUrl($event, vm.globals.ReleaseNotesUrlStem + vm.globals.AppVersion)"
             tabindex="25">
-            {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_ReleaseNotes_Label) }}
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_ReleaseNotes_Label) }}
           </button>
         </div>
       </div>

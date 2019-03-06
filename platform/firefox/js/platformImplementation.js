@@ -10,6 +10,10 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
   'use strict';
 
   var vm, loadingId,
+      contentScriptUrl = 'js/getPageMetadata.js',
+      optionalPermissions = {
+        origins: ['http://*/', 'https://*/']
+      },
       separatorTypeName = 'separator',
       menuBookmarksTitle = 'Bookmarks Menu',
       mobileBookmarksTitle = 'Mobile Bookmarks',
@@ -53,6 +57,9 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     platform.LocalStorage.Get = getFromLocalStorage;
     platform.LocalStorage.Set = setInLocalStorage;
     platform.OpenUrl = openUrl;
+    platform.Permissions.Check = checkPermissions;
+    platform.Permissions.Remove = removePermissions;
+    platform.Permissions.Request = requestPermissions;
     platform.Sync.Await = awaitSync;
     platform.Sync.Current = getCurrentSync;
     platform.Sync.Execute = executeSync;
@@ -482,6 +489,13 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       });
   };
 
+  var checkPermissions = function () {
+    // TODO: Uncomment when Firefox supports requesting optional permissions
+    // Check if extension has optional permissions
+    //return browser.permissions.contains(optionalPermissions);
+    return $q.resolve(true);
+  };
+
   var createSingle = function (bookmarkToCreate, pathToTarget) {
     // Get parent local bookmark id from path and create local bookmark
     return findLocalBookmarkByPath(pathToTarget.slice(1, pathToTarget.length - 1))
@@ -738,33 +752,51 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       });
   };
 
-  var getPageMetadata = function () {
-    return $q(function (resolve, reject) {
-      browser.tabs.query({ active: true, currentWindow: true })
-        .then(function (tabs) {
-          var activeTab = tabs[0];
-          return browser.tabs.sendMessage(activeTab.id, { command: globals.Commands.GetPageMetadata })
-            .then(function (response) {
-              // If no metadata returned go to catch block
-              if (!response) {
-                throw Error();
-              }
+  var getPageMetadata = function (shouldCheckPermissions) {
+    var activeTab;
 
-              // Use the info from the active tab if title or url missing
-              response.title = response.title || activeTab.title;
-              response.url = response.url || activeTab.url;
-              resolve(response);
-            })
-            .catch(function () {
-              // If no metadata returned, use the info from the active tab
-              resolve({
-                title: activeTab.title,
-                url: activeTab.url
-              });
-            });
-        })
-        .catch(reject);
-    });
+    return browser.tabs.query({ active: true, currentWindow: true })
+      .then(function (tabs) {
+        activeTab = tabs[0];
+
+        // If not checking permissions, return
+        if (shouldCheckPermissions !== true) {
+          return true;
+        }
+
+        // Check if extension has permissions to read active tab content
+        return checkPermissions()
+          .then(function (hasPermissions) {
+            if (!hasPermissions) {
+              utility.LogInfo('Do not have permission to read active tab content');
+            }
+            return hasPermissions;
+          });
+      })
+      .then(function (getMetadata) {
+        // Default metadata to the info from the active tab
+        var metadata = {
+          title: activeTab.title,
+          url: activeTab.url
+        };
+
+        // If unable to get metadata return default
+        if (!getMetadata) {
+          return metadata;
+        }
+
+        return browser.tabs.executeScript(activeTab.id, { file: contentScriptUrl })
+          .then(function (response) {
+            if (response && response.length > 0) {
+              metadata = response[0];
+            }
+
+            // If no metadata returned, use the info from the active tab
+            metadata.title = metadata.title || activeTab.title;
+            metadata.url = metadata.url || activeTab.url;
+            return metadata;
+          });
+      });
   };
 
   var getSupportedUrl = function (url) {
@@ -922,6 +954,29 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
     browser.browserAction.setIcon({ path: iconPath });
     browser.browserAction.setTitle({ title: tooltip });
+  };
+
+  var removePermissions = function () {
+    // Remove optional permissions
+    return browser.permissions.remove(optionalPermissions)
+      .then(function (removed) {
+        if (!removed) {
+          throw new Error('Optional permissions not removed');
+        }
+        utility.LogInfo('Optional permissions removed');
+      });
+  };
+
+  var requestPermissions = function () {
+    // Request optional permissions
+    return browser.permissions.request(optionalPermissions)
+      .then(function (granted) {
+        utility.LogInfo('Optional permissions ' + (!granted ? 'not ' : '') + 'granted');
+        return granted;
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
   };
 
   var setInLocalStorage = function (storageKey, value) {

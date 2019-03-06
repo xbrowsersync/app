@@ -65,10 +65,15 @@
     <div id="updated-panel" class="view" data-ng-if="vm.view.current === vm.view.views.updated">
       <div class="view-content animate" data-ng-include="'./views/updated.html'"></div>
     </div>
+
+    <div id="permissions-panel" class="view" data-ng-if="vm.view.current === vm.view.views.permissions">
+      <div class="view-content animate" data-ng-include="'./views/permissions.html'"></div>
+    </div>
   </div>
 
   <div class="background">
-    <div class="background-img" data-ng-if="!vm.view.current || vm.view.current === vm.view.views.login || vm.view.current === vm.view.views.updated"></div>
+    <div class="background-img" data-ng-if="!vm.view.current || vm.view.current === vm.view.views.login || 
+      vm.view.current === vm.view.views.permissions || vm.view.current === vm.view.views.updated"></div>
   </div>
 
   <input id="backupFile" class="d-none" name="files[]" type="file" tabindex="-1" />

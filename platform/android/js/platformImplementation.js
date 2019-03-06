@@ -141,11 +141,17 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     "login_UpgradeSync_Message": {
       "message": "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
     },
-    "login_Updated_Message": {
+    "updated_Message": {
       "message": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
     },
-    "login_Updated_Title": {
+    "updated_Title": {
       "message": "Updated to v"
+    },
+    "permissions_Message": {
+      "message": "<p>xBrowserSync automatically enriches bookmarks added via the browser’s Add Bookmark button with available metadata. To enable this, xBrowserSync <a href='https://www.xbrowsersync.org/?id=25#faqs' class='new-tab'>requires additional permissions</a> to be able to read visited website data. Please indicate when prompted if you are happy to grant them.</p><p>If at any time you change your mind, you can add or remove these permissions in the Settings panel.</p>"
+    },
+    "permissions_Title": {
+      "message": "Optional permissions"
     },
     "button_Confirm_Label": {
       "message": "Yes"
@@ -228,7 +234,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     "settings_About_AppVersion_Description": {
       "message": "xBrowserSync client version number."
     },
-    "settings_About_ReleaseNotes_Label": {
+    "button_ReleaseNotes_Label": {
       "message": "View Release Notes"
     },
     "settings_About_FAQs_Label": {
@@ -275,6 +281,27 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     },
     "settings_Issues_LogDownloaded_Message": {
       "message": "If the log file does not download automatically, right click on the link below and 'Save link as...'."
+    },
+    "settings_Permissions_Title": {
+      "message": "Optional permissions"
+    },
+    "settings_Permissions_ReadWebsiteData_Title": {
+      "message": "Read website data"
+    },
+    "settings_Permissions_ReadWebsiteData_Description": {
+      "message": "Required to automatically add metadata to bookmarks when using the browser’s native bookmark button (<a href='https://www.xbrowsersync.org/?id=25#faqs' class='new-tab'>more info</a>)."
+    },
+    "settings_Permissions_ReadWebsiteData_Granted_Label": {
+      "message": "Granted"
+    },
+    "settings_Permissions_ReadWebsiteData_NotGranted_Label": {
+      "message": "Not granted"
+    },
+    "button_Permissions_Remove_Label": {
+      "message": "Remove permissions"
+    },
+    "button_Permissions_Add_Label": {
+      "message": "Grant permissions"
     },
     "settings_Service_Title": {
       "message": "Service"
@@ -347,6 +374,9 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     },
     "button_Close_Label": {
       "message": "Close"
+    },
+    "button_Continue_Label": {
+      "message": "Continue"
     },
     "button_Back_Label": {
       "message": "Back"

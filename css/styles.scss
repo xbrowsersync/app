@@ -15,14 +15,11 @@ body {
   line-height: 1.25em;
 
   h1 {
-    background: url("../img/logo.svg") 50% 40% no-repeat;
-    background-size: 5.5em;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
+    @extend .logo;
+    font-size: inherit;
+    height: 14em;
+    margin: 0;
+    width: 100%;
   }
 
   h2 {
@@ -390,6 +387,10 @@ body {
     }
   }
 
+  .logo {
+    background: url("../img/logo.svg") 50% 0 no-repeat;
+  }
+
   .lookahead-container {
     position: absolute;
     width: 100%;
@@ -684,8 +685,7 @@ body {
   }
 }
 
-#login-panel,
-#updated-panel {
+#login-panel {
   form {
     position: relative;
 
@@ -747,6 +747,8 @@ body {
   }
 
   .intro-panel {
+    display: flex;
+    align-items: center;
     height: 18em;
     margin-bottom: 1.2em;
     overflow: hidden;
@@ -1388,13 +1390,17 @@ body {
   }
 }
 
-#updated-panel {
-  .confirm-updated {
-    margin-top: -0.1em;
+#updated-panel,
+#permissions-panel {
+  .logo {
+    @extend .logo;
+    flex: 0 1 14em;
+    margin: 1em 0 2em;
   }
-
-  .header-panel {
-    visibility: hidden;
+  
+  .view-content {
+    display: flex;
+    flex-direction: column;
   }
 }
 
