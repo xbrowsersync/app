@@ -759,6 +759,7 @@ body {
       position: absolute;
       height: 100%;
       width: 100%;
+      top: 0;
       left: 0;
       padding: 1.5em 2em;
       overflow: hidden;
@@ -1377,7 +1378,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(8, 48, 57, 0.9);
+  background-color: rgba(8, 48, 57, 0.8);
   @include animation(animation-fade-in 0.1s linear);
 
   &.ng-hide {

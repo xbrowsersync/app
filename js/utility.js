@@ -468,6 +468,10 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     return tags;
   };
 
+  var getUniqueishId = function () {
+    return window.crypto.getRandomValues(new Uint32Array(1))[0].toString(36);
+  };
+
   var isMobilePlatform = function (platformName) {
     return platformName === globals.Platforms.Android;
   };
@@ -606,6 +610,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     GetServiceUrl: getServiceUrl,
     GetTagArrayFromText: getTagArrayFromText,
     GetPasswordHash: getPasswordHash,
+    GetUniqueishId: getUniqueishId,
     IsMobilePlatform: isMobilePlatform,
     IsNetworkConnected: isNetworkConnected,
     LogError: logError,

@@ -970,8 +970,22 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       tooltip += ' (' + getConstant(globals.Constants.Tooltip_NotSynced_Label) + ')';
     }
 
-    chrome.browserAction.setIcon({ path: iconPath });
-    chrome.browserAction.setTitle({ title: tooltip });
+    return $q(function (resolve, reject) {
+      var iconUpdated = $q.defer();
+      var titleUpdated = $q.defer();
+
+      try {
+        chrome.browserAction.setIcon({ path: iconPath }, iconUpdated.resolve);
+        chrome.browserAction.setTitle({ title: tooltip }, titleUpdated.resolve);
+      }
+      catch (err) {
+        return reject(err);
+      }
+
+      $q.all([iconUpdated, titleUpdated])
+        .then(resolve)
+        .catch(reject);
+    });
   };
 
   var removePermissions = function () {

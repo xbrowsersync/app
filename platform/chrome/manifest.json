@@ -18,7 +18,7 @@
   "background": {
     "page": "background.html"
   },
-  "content_security_policy": "connect-src *; default-src 'none'; font-src 'self' data:; img-src 'self' data:; script-src 'self'; style-src 'self';",
+  "content_security_policy": "connect-src *; default-src 'none'; font-src 'self' data:; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline';",
   "permissions": [
     "activeTab",
     "alarms",
@@ -28,7 +28,7 @@
     "tabs",
     "unlimitedStorage"
   ],
-  "optional_permissions": [ 
+  "optional_permissions": [
     "http://*/",
     "https://*/"
   ]

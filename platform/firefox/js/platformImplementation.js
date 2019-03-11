@@ -10,17 +10,17 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
   'use strict';
 
   var vm, loadingId,
-      contentScriptUrl = 'js/getPageMetadata.js',
-      optionalPermissions = {
-        origins: ['http://*/', 'https://*/']
-      },
-      separatorTypeName = 'separator',
-      menuBookmarksTitle = 'Bookmarks Menu',
-      mobileBookmarksTitle = 'Mobile Bookmarks',
-      otherBookmarksTitle = 'Other Bookmarks',
-      toolbarBookmarksTitle = 'Bookmarks Toolbar',
-      unsupportedContainers = [],
-      unsupportedBookmarkUrl = 'about:newtab';
+    contentScriptUrl = 'js/getPageMetadata.js',
+    optionalPermissions = {
+      origins: ['http://*/', 'https://*/']
+    },
+    separatorTypeName = 'separator',
+    menuBookmarksTitle = 'Bookmarks Menu',
+    mobileBookmarksTitle = 'Mobile Bookmarks',
+    otherBookmarksTitle = 'Other Bookmarks',
+    toolbarBookmarksTitle = 'Bookmarks Toolbar',
+    unsupportedContainers = [],
+    unsupportedBookmarkUrl = 'about:newtab';
 
 
 	/* ------------------------------------------------------------------------------------
@@ -98,8 +98,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
           // Check allBookmarks for index 
           bookmarkId = _.findIndex(allBookmarks, function (sortedBookmark) {
             return bookmarks.XBookmarkIsContainer(bookmark) ?
-            sortedBookmark.title === getEquivalentLocalContainerName(bookmark.title) :
-            sortedBookmark.title === bookmark.title &&
+              sortedBookmark.title === getEquivalentLocalContainerName(bookmark.title) :
+              sortedBookmark.title === bookmark.title &&
               sortedBookmark.url === bookmark.url &&
               !sortedBookmark.assigned;
           });
@@ -176,8 +176,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
         var syncBookmarksToolbar = results[2];
 
         // Check if the Toolbar container was found and Toolbar sync is disabled
-        if (findParentXBookmark.container && 
-            findParentXBookmark.container.title === globals.Bookmarks.ToolbarContainerName && !syncBookmarksToolbar) {
+        if (findParentXBookmark.container &&
+          findParentXBookmark.container.title === globals.Bookmarks.ToolbarContainerName && !syncBookmarksToolbar) {
           utility.LogInfo('Not syncing toolbar');
           return deferred.resolve({
             bookmarks: xBookmarks
@@ -422,7 +422,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
         var mobileBookmarksId = localContainerIds[globals.Bookmarks.MobileContainerName];
         var otherBookmarksId = localContainerIds[globals.Bookmarks.OtherContainerName];
         var toolbarBookmarksId = localContainerIds[globals.Bookmarks.ToolbarContainerName];
-    
+
         // Clear menu bookmarks
         var clearMenu = browser.bookmarks.getChildren(menuBookmarksId)
           .then(function (results) {
@@ -490,9 +490,11 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
   };
 
   var checkPermissions = function () {
-    // TODO: Uncomment when Firefox supports requesting optional permissions
     // Check if extension has optional permissions
     //return browser.permissions.contains(optionalPermissions);
+
+    // TODO: Add this back once Firefox supports optional permissions
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=1533014
     return $q.resolve(true);
   };
 
@@ -913,7 +915,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
               utility.LogInfo('Not populating toolbar');
               return;
             }
-            
+
             if (toolbarContainer && toolbarContainer.children.length > 0) {
               return browser.bookmarks.get(toolbarBookmarksId)
                 .then(function (results) {
@@ -940,7 +942,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     var tooltip = getConstant(globals.Constants.Title);
 
     if (syncType) {
-      iconPath =  syncType === globals.SyncType.Pull ? 'img/downloading.png' : 'img/uploading.png';
+      iconPath = syncType === globals.SyncType.Pull ? 'img/downloading.png' : 'img/uploading.png';
       tooltip += ' (' + getConstant(globals.Constants.Tooltip_Syncing_Label) + ')';
     }
     else if (syncEnabled) {
@@ -952,8 +954,10 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       tooltip += ' (' + getConstant(globals.Constants.Tooltip_NotSynced_Label) + ')';
     }
 
-    browser.browserAction.setIcon({ path: iconPath });
-    browser.browserAction.setTitle({ title: tooltip });
+    return $q.all([
+      browser.browserAction.setIcon({ path: iconPath }),
+      browser.browserAction.setTitle({ title: tooltip })
+    ]);
   };
 
   var removePermissions = function () {
@@ -1082,12 +1086,12 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       return p.then(function () {
         return bookmarks.XBookmarkIsSeparator(xBookmark) ?
           createLocalSeparator(parentId) : createLocalBookmark(parentId, xBookmark.title, xBookmark.url)
-          .then(function (newLocalBookmark) {
-            // If the bookmark has children, recurse
-            if (xBookmark.children && xBookmark.children.length > 0) {
-              createChildBookmarksPromises.push(createLocalBookmarksFromXBookmarks(newLocalBookmark.id, xBookmark.children));
-            }
-          });
+            .then(function (newLocalBookmark) {
+              // If the bookmark has children, recurse
+              if (xBookmark.children && xBookmark.children.length > 0) {
+                createChildBookmarksPromises.push(createLocalBookmarksFromXBookmarks(newLocalBookmark.id, xBookmark.children));
+              }
+            });
       });
     }, $q.resolve())
       .then(function () {
@@ -1317,8 +1321,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
   var getLocalBookmarkTree = function (localBookmarkId) {
     var getTree = localBookmarkId != null ?
-          browser.bookmarks.getSubTree(localBookmarkId) :
-          browser.bookmarks.getTree();
+      browser.bookmarks.getSubTree(localBookmarkId) :
+      browser.bookmarks.getTree();
 
     return getTree
       .then(function (tree) {
@@ -1343,7 +1347,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
     for (var i = 0; i < localBookmarks.length; i++) {
       var currentLocalBookmark = localBookmarks[i];
-      
+
       // Check if current local bookmark is a separator
       var newXBookmark = currentLocalBookmark.type === separatorTypeName ?
         new bookmarks.XBookmark(globals.Bookmarks.SeparatorTitle) :
@@ -1401,7 +1405,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     if (!url) {
       return true;
     }
-    
+
     var supportedRegex = /^(?!chrome)\w+:/i;
     return supportedRegex.test(url);
   };

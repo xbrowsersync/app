@@ -765,10 +765,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
   var displayMainView = function () {
     return platform.LocalStorage.Get([
-        globals.CacheKeys.DisplayPermissions,
-        globals.CacheKeys.DisplayUpdated,
-        globals.CacheKeys.SyncEnabled
-      ])
+      globals.CacheKeys.DisplayPermissions,
+      globals.CacheKeys.DisplayUpdated,
+      globals.CacheKeys.SyncEnabled
+    ])
       .then(function (cachedData) {
         var displayPermissions = cachedData[globals.CacheKeys.DisplayPermissions];
         var displayUpdated = cachedData[globals.CacheKeys.DisplayUpdated];
@@ -814,10 +814,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     // Export bookmarks
     return bookmarks.Export()
       .then(function (data) {
-        // Trigger download
-        platform.DownloadFile(utility.GetBackupFileName(), JSON.stringify(data), 'backupLink');
-
-        // Display message
+        // Beautify json and download data
+        var beautifiedJson = JSON.stringify(data, null, 2);
+        platform.DownloadFile(utility.GetBackupFileName(), beautifiedJson, 'backupLink');
         vm.settings.backupCompletedMessage = platform.GetConstant(globals.Constants.Settings_BackupRestore_BackupSuccess_Message);
       });
   };
@@ -1797,7 +1796,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
           return api.CreateNewSync()
             .then(function (newSync) {
               utility.LogInfo('New sync id created: ' + newSync.id);
-              
+
               // Add sync data to cache and return
               return $q.all([
                 platform.LocalStorage.Set(globals.CacheKeys.SyncId, newSync.id),
@@ -1810,7 +1809,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         }
         else {
           utility.LogInfo('Syncing to existing id: ' + vm.sync.id);
-          
+
           // Set sync type for retrieve existing sync
           syncType = globals.SyncType.Pull;
 
@@ -2045,7 +2044,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         // If sync not enabled, return
         if (!syncEnabled) {
           return;
-        }        
+        }
 
         // Hide sync confirmation and display loading overlay
         vm.settings.displaySyncBookmarksToolbarConfirmation = false;

@@ -198,6 +198,16 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
       });
   };
 
+  var installExtension = function (currentVersion) {
+    // TODO: Add this back once Firefox supports optional permissions
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=1533014
+
+    //return platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, true)
+    //  .then(function () {
+    return utility.LogInfo('Installed v' + currentVersion);
+    //  })
+  };
+
   var moveBookmark = function (id, moveInfo) {
     utility.LogInfo('onMoved event detected');
     return $q(function (resolve, reject) {
@@ -263,18 +273,19 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
 
   var onInstallHandler = function (details) {
     var currentVersion = browser.runtime.getManifest().version;
-    var doUpgrade = $q.resolve();
+    var installOrUpgrade = $q.resolve();
 
-    // Check for upgrade
+    // Check for upgrade or do fresh install
     if (details && details.reason === 'update' &&
       details.previousVersion && details.previousVersion !== currentVersion) {
-      doUpgrade = upgradeExtension(details.previousVersion, currentVersion);
+      installOrUpgrade = upgradeExtension(details.previousVersion, currentVersion);
+    }
+    else {
+      installOrUpgrade = installExtension(currentVersion);
     }
 
-    doUpgrade.then(function () {
-      // Run startup
-      onStartupHandler();
-    });
+    // Run startup process after install/upgrade
+    installOrUpgrade.then(onStartupHandler);
   };
 
   var onMessageHandler = function (message, sender, sendResponse) {
@@ -453,7 +464,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var syncBookmarks = function (syncData, sendResponse) {
-    syncData.uniqueId = (new Date()).getTime();
     sendResponse = sendResponse || function () { };
 
     // Disable event listeners if sync will affect local bookmarks
@@ -467,9 +477,9 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
             reject(response.error);
           }
         })
-      }) : 
+      }) :
       $q.resolve();
-    
+
     return checkEventListeners
       .then(function () {
         // Start sync
@@ -545,7 +555,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   var upgradeExtension = function (oldVersion, newVersion) {
     return platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog)
       .then(function () {
-        return utility.LogInfo('Upgrading from ' + oldVersion + ' to ' + newVersion);
+        utility.LogInfo('Upgrading from ' + oldVersion + ' to ' + newVersion);
       })
       .then(function () {
         // For v1.4.1, convert local storage items to storage API
