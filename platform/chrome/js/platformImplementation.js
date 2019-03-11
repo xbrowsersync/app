@@ -807,10 +807,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
     // Hide loading overlay if supplied if matches current
     if (!loadingId || id === loadingId) {
-      $timeout(function () {
-        vm.working = false;
-        loadingId = null;
-      });
+      vm.working = false;
+      loadingId = null;
     }
   };
 

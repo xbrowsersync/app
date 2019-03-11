@@ -215,7 +215,7 @@
           data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="3">
           {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
         </button>
-        <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_NewSync_Click()" tabindex="4">
+        <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_ConfirmPassword_Back_Click()" tabindex="4">
           {{ vm.platform.GetConstant(vm.globals.Constants.Button_Back_Label) }}
         </button>
       </div>
@@ -252,7 +252,7 @@
       <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_GetSyncId_Message)"></p>
     </div>
     <div class="form-group toggle-form">
-      <a data-ng-click="vm.events.syncForm_ExistingSync_Click()" href="" tabindex="5">
+      <a data-ng-click="vm.events.syncForm_ExistingSync_Click()" href="#" tabindex="5">
         {{ vm.platform.GetConstant(vm.globals.Constants.Button_ExistingSync_Label) }}
       </a>
     </div>
@@ -281,8 +281,8 @@
         {{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}
       </button>
     </div>
-    <div class="form-group text-center">
-      <a data-ng-click="vm.events.syncForm_NewSync_Click()" href="" tabindex="5">
+    <div class="form-group toggle-form">
+      <a data-ng-click="vm.events.syncForm_NewSync_Click()" href="#" tabindex="5">
         {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
       </a>
     </div>

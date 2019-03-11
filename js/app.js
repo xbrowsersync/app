@@ -111,6 +111,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       syncPanel_SyncBookmarksToolbar_Click: syncPanel_SyncBookmarksToolbar_Click,
       syncPanel_SyncBookmarksToolbar_Cancel: syncPanel_SyncBookmarksToolbar_Cancel,
       syncPanel_SyncBookmarksToolbar_Confirm: syncPanel_SyncBookmarksToolbar_Confirm,
+      syncForm_ConfirmPassword_Back_Click: syncForm_ConfirmPassword_Back_Click,
       syncForm_ConfirmPassword_Click: syncForm_ConfirmPassword_Click,
       syncForm_ConfirmSync_Click: startSyncing,
       syncForm_DisableSync_Click: syncForm_DisableSync_Click,
@@ -1849,7 +1850,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
             platform.LocalStorage.Set(globals.CacheKeys.Password, passwordHash);
             return queueSync({ type: syncType });
           })
-          .then(syncBookmarksSuccess)
+          .then(function () {
+            return syncBookmarksSuccess(loadingTimeout);
+          })
           .catch(syncBookmarksFailed);
       })
       .catch(function (err) {
@@ -1894,17 +1897,27 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     }
   };
 
-  var syncBookmarksSuccess = function (response) {
+  var syncBookmarksSuccess = function (loadingTimeout) {
+    // Hide loading panel
+    platform.Interface.Loading.Hide(null, loadingTimeout);
+    
     // If initial sync, switch to search panel
-    if (vm.view.current !== vm.view.views.search) {
-      return changeView(vm.view.views.search);
-    }
-    else {
-      vm.search.displayDefaultState();
-    }
+    $timeout(function() {
+      if (vm.view.current !== vm.view.views.search) {
+        return changeView(vm.view.views.search);
+      }
+      else {
+        vm.search.displayDefaultState();
+      }
+    });
 
     // Update bookmark icon
     return setBookmarkStatus();
+  };
+
+  var syncForm_ConfirmPassword_Back_Click = function() {
+      vm.sync.displayPasswordConfirmation = false;
+      vm.sync.passwordConfirmation = null;
   };
 
   var syncForm_ConfirmPassword_Click = function () {
