@@ -491,13 +491,20 @@ body {
         &:active,
         &:focus,
         &:hover {
-          border-bottom-color: $colour-link-highlight;
+          border-bottom-color: inherit;
         }
       }
     }
 
     a {
       border-bottom-color: $colour-text2;
+
+      &.active,
+      &:active,
+      &:focus,
+      &:hover {
+        border-bottom-color: inherit;
+      }
     }
 
     h4 {
@@ -1135,7 +1142,7 @@ body {
     &:active,
     &:focus,
     &:hover {
-      border-bottom-color: $colour-link-highlight;
+      border-bottom-color: inherit;
     }
   }
 
@@ -1209,6 +1216,17 @@ body {
 
     .description {
       color: $colour-link;
+
+      a {
+        border-bottom-color: $colour-link;
+
+        &.active,
+        &:active,
+        &:focus,
+        &:hover {
+          border-bottom-color: inherit;
+        }
+      }
     }
 
     .form-control {

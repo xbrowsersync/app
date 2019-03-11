@@ -414,13 +414,13 @@
         <p class="description">{{
           vm.platform.GetConstant(vm.globals.Constants.Settings_About_Contributions_Description) }}</p>
         <div class="buttons">
-          <button type="button" class="btn btn-default" data-ng-click="vm.events.openUrl($event, 'http://www.patreon.com/xbrowsersync')"
+          <button type="button" class="btn btn-default" data-ng-click="vm.events.openUrl($event, 'https://liberapay.com/xbrowsersync/donate')"
             tabindex="27">
-            {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Patreon_Label) }}
+            {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Liberapay_Label) }}
           </button>
-          <button type="button" class="btn btn-default" data-ng-click="vm.events.displayQRCode(vm.globals.BtcAddress)"
+          <button type="button" class="btn btn-default" data-ng-click="vm.events.openUrl($event, 'https://commerce.coinbase.com/checkout/1bd7ccd2-00ed-49d9-8f8a-b55fb5240675')"
             tabindex="28">
-            {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Bitcoin_Label) }}
+            {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Cryptos_Label) }}
           </button>
         </div>
       </div>

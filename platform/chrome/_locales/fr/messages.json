@@ -245,11 +245,11 @@
   "settings_About_Contributions_Description": {
     "message": "If you enjoy using xBrowserSync consider supporting the project."
   },
-  "settings_About_Bitcoin_Label": {
-    "message": "Donate BTC"
+  "settings_About_Cryptos_Label": {
+    "message": "Donate Crypto"
   },
-  "settings_About_Patreon_Label": {
-    "message": "Via Patron"
+  "settings_About_Liberapay_Label": {
+    "message": "Via Liberapay"
   },
   "settings_Issues_Title": {
     "message": "Issues"
