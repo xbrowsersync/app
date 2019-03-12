@@ -1,593 +1,632 @@
 {
-	"title": {
-		"message": "xBrowserSync"
-	},
-	"description": {
-		"message": "La synchronisation de navigateur telle qu'elle devrait être: sécurisée, anonyme et gratuite! Synchronisez vos favoris entre vos navigateurs et appareils, sans création de compte requise."
-	},
-	"containers_Toolbar_Title": {
-		"message": "Barre de favoris"
-	},
-	"containers_Other_Title": {
-		"message": "Autres favoris"
-	},
-	"tooltipSyncEnabled_Label": {
-		"message": "synchronisation activée"
-	},
-	"tooltipWorking_Label": {
-		"message": "synchronisation..."
-	},
-	"button_Help_Label": {
-		"message": "Afficher l'aide"
-	},
-	"button_Next_Label": {
-		"message": "Suivant"
-	},
-	"button_Previous_Label": {
-		"message": "Précédent"
-	},
-	"login_GetSyncId_Title": {
-		"message": "Need a sync ID?"
-	},
-	"login_GetSyncId_Message": {
-		"message": "Download the xBrowserSync desktop browser extension available for Chrome and Firefox, create a new sync and then scan your sync ID QR code on the previous screen."
-	},
-	"login_introPanel1_Message": {
-		"message": "<h4>Bienvenue</h4><p>Merci d'utiliser xBrowserSync — La synchronisation de favoris telle qu'elle devrait être: sécurisée, anonyme et gratuite!</p><p>Prenez le temps de lire les pages suivantes pour vous familiariser avec les fonctionnalités xBrowserSync. Plus d'informations sont disponibles dans la <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQ</a>.</p>"
-	},
-	"login_introPanel2_Message": {
-		"message": "<h4>Synchronisation pour la première fois</h4><p>Avant que vous puissiez synchroniser les donnée de votre navigateur, elles doivent être chiffrées que que seulement vous puissiez les lire. Entrez un mot de passe de chiffrement — choisissez le complexe mais mémorisable, il n'y a aucun moyen de retrouver le mot de passe et si vous le perdez, vous ne pourrez plus jamais récupérer vos données synchronisées.</p><p>Une fois que vous cliquerez sur le bouton Synchroniser, vous serez synchronisés et prêt à ajouter des favoris.</p>"
-	},
-	"login_introPanel3_Message": {
-		"message": "<h4>Déjà synchronisé (vous avez un ID)</h4><p>Quand vous créez une nouvelle synchronisation, vous obtenez un ID xBrowserSync unique qui permet, accompagné de votre mot de passe, de synchroniser vos favoris à travers plusieurs ordinateurs/téléphones. Votre anonymité est assurée car aucune donnée personnelle n'est collectée ou stockée avec vos données synchronisées.</p><p>Une fois synchronisez, vous pouvez voir votre ID dans le panneau de Paramètres. Cliquez ici pour réveler un QR code utile à scanner lorsque vous êtes sur un téléphone.</p>"
-	},
-	"login_introPanel4_Message": {
-		"message": "<h4>Synchronisation sur un autre service</h4><p>Par défaut, vos données sont synchronisées sur le service officiel xBrowserSync, bien que chacun puisse faire tourner son propre <a href='https://github.com/xBrowserSync/API' class='new-tab'>service xBrowserSync</a>, soit pour un usage privé (pour une sécurité ultime et confidentialité) ou pour rendre disponible à l'usage public pour que plus de personnes puissent apprécier l'usage de xBrowserSync.</p><p>Vérifier les <a href='https://www.xbrowsersync.org/#status' class='new-tab'>services xBrowserSync</a> et changer de service dans le panneau des Paramètres.</p>"
-	},
-	"login_introPanel5_Message": {
-		"message": "<h4>Nouveau service, nouvel ID</h4><p>Votre ID xBrowserSync ne marchera que sur le service sur lequel il a été crée.</p><p>Si jamais vous changez de service, vous devez créer une nouvelle synchronisation et vous recevrez un nouvel ID. Vous pouver déplacer vos données synchronisées d'un ancien service vers un nouveau en faisant une sauvegarde et en le restaurant une fois synchronisé sur le nouveau service.</p>"
-	},
-	"login_introPanel6_Message": {
-		"message": "<h4>Chercher vos favoris</h4><p>Une fois synchronisé, tapez simplement sur Entrée pour afficher vos favoris dans l'ordre chronologique, ou tapez des mots ou une URL dans la boite de recherche pour chercher parmi vos favoris.</p><p>Passez la souris au dessus d'un favori et cliquez sur le bouton crayon pour éditer ou supprimer le favori.</p>"
-	},
-	"login_introPanel7_Message": {
-		"message": "<h4>Ajouter un favori</h4><p>Mettez en favori la page courante en cliquant sur l'icône favori du panneau de recherche. Les propriétés du favori seront préremplies pour vous, ou alors ajoutez une description et des tags pour assurer une meilleure recherche.</p><p>Ou bien, cliquez simplement sur le bouton favori du navigateur et xBrowserSync ajoutera automatiquement les propriétés par défaut aux favoris.</p>"
-	},
-	"login_introPanel8_Message": {
-		"message": "<h4>Fonctionnalités natives supportées</h4><p>Sentez-vous libre de continuer à utiliser les fonctionnalités natives de gestion de favoris de votre navigateur, chaque changement sera synchronisé automatiquement en tâche de fond.</p><p>Si vous avez organisé vos favoris dans des dossiers, pas de soucis, xBrowserSync conservera la hierarchie de vos favoris.</p>"
-	},
-	"login_introPanel9_Message": {
-		"message": "<h4>N'oubliez pas de faire des sauvegardes</h4><p>Lorsque vous utilisez xBrowserSync, vos donnés sont votre responsabilité donc soyez intelligents et soyez sûrs de faire des sauvegardes.</p><p>Vous pouvez faire cela facilement dans le panneau des Paramètres, vous pouvez sauvegarder vos données non chiffrées dans un fichier local qui pourra être restauré plus tard si vous en avez le besoin.</p>"
-	},
-	"login_introPanel10_Message": {
-		"message": "<h4>Raccourci xBrowserSync</h4><p>Pour chercher vos favoris rapidement, assignez un raccourci clavier pour activer l'extension et tapez juste Entrée ou commencez à saisir du texte pour chercher parmi vos favoris.</p><p>Allez dans chrome://extensions/, l'option des raccourcis clavier est en bas de la page."
-	},
-	"login_introPanel11_Message": {
-		"message": "<h4>Soyez mobile</h4><p>Accédez vos favoris synchronisés de partout avec l'application mobile xBrowserSync, disponible sur les stores iOS et Android.</p>"
-	},
-	"login_introPanel12_Message": {
-		"message": "<h4>Vous avez trouvé un problème ?</h4><p>Si vous avez trouvé un bug dans xBrowserSync ou voulez demander une nouvelle fonctionnalité, allez sur GitHub et <a href='https://github.com/xBrowserSync/App/issues' class='new-tab'>soumettez un problème (issue)</a>.</p><p>Appel à tous les développeurs! Si vous voulez aider à améliorer xBrowserSync, allez-y et forkez le repo GitHub <a href='https://github.com/xBrowserSync/App' class='new-tab'>xBrowserSync</a> et soumettez une pull request.</p>"
-	},
-	"button_Settings_Label": {
-		"message": "Paramètres"
-	},
-	"button_AddBookmark_Label": {
-		"message": "Ajouter un favori"
-	},
-	"button_DeleteBookmark_Label": {
-		"message": "Supprimer le favori"
-	},
-	"button_EditBookmark_Label": {
-		"message": "Editer le favori"
-	},
-	"button_ShareBookmark_Label": {
-		"message": "Partager le favori"
-	},
-	"login_PasswordConfirmationField_Label": {
-		"message": "Confirm password"
-	},
-	"login_PasswordField_Label": {
-		"message": "Mot de passe de chiffrement"
-	},
-	"login_PasswordField_New_Description": {
-		"message": "Entrez un mot de passe de chiffrement"
-	},
-	"login_PasswordField_Existing_Description": {
-		"message": "Votre mot de passe de chiffrement"
-	},
-	"login_IdField_Label": {
-		"message": "ID"
-	},
-	"login_IdField_Description": {
-		"message": "Votre ID xBrowserSync"
-	},
-	"button_ScanCode_Label": {
-		"message": "Scannez votre IDxBrowserSync"
-	},
-	"button_DisableSync_Label": {
-		"message": "Désactiver la synchronisation"
-	},
-	"button_EnableSync_Label": {
-		"message": "Synchroniser"
-	},
-	"button_ExistingSync_Label": {
-		"message": "Vous avez déjà un ID?"
-	},
-	"button_NewSync_Label": {
-		"message": "Créer une nouvelle synchro"
-	},
-	"login_ConfirmSync_Title" : {
-		"message":  "Ecraser les données du navigateur?"
-	},
-	"login_ConfirmSync_Message" : {
-		"message":  "Les données d'xBrowserSync vont écraser les données locales de votre navigateur. OK pour continuer?"
-	},
-	"login_UpgradeSync_Title" : {
-		"message":  "Ready to upgrade sync?"
-	},
-	"login_UpgradeSync_Message" : {
-		"message":  "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
-	},
-	"login_Updated_Message": {
-		"message":  "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
-	},
-	"login_Updated_Title": {
-		"message":  "Updated to v"
-	},
-	"button_Confirm_Label" : {
-		"message":  "Oui"
-	},
-	"button_Deny_Label" : {
-		"message":  "Non"
-	},
-	"search_Field_Description" : {
-		"message":  "Commencez à taper pour trouver des favoris ou tapez juste la touche Entrée..."
-	},
-	"search_NoBookmarks_Message" : {
-		"message":  "Vous n'avez pas de favoris, ajoutez-en quelques-uns!"
-	},
-	"search_NoResults_Message" : {
-		"message":  "Aucun favori trouvé"
-	},
-	"shareBookmark_Message": {
-		"message":  "Partager le favori avec"
-	},
-	"bookmarkShared_Message": {
-		"message":  "partagé depuis xBrowserSync"
-	},
-	"settings_Sync_SyncToolbarConfirmation_Message": {
-		"message":  "<p>Activer la synchro de la barre de favoris va remplacer les favoris actuellement dans la barre de favoris par vos favoris synchronisés.</p><p>OK pour continuer ?</p>"
-	},
-	"settings_Sync_ConfirmCancelSync_Message": {
-		"message":  "<p>Une synchronisation est en cours, si vous continuez, vos données locales seront incomplètes.</p><p>OK pour continuer ?</p>"
-	},
-	"settings_Sync_Id_Description": {
-		"message": "Utilisez votre ID pour synchroniser sur d'autres périphériques (cliquez pour un QR code)."
-	},
-	"settings_Sync_SyncToolbar_Description": {
-		"message": "Désactiver ce paramètre si vous souhaitez afficher les favoris locaux dans la barre de favoris plutôt que les favoris synchronisés. Utile lorsque vous synchronisez à travers des navigateurs différents."
-	},
-	"settings_Service_ServiceUrl_Label": {
-		"message": "Url"
-	},
-	"settings_Service_ServiceUrl_Description": {
-		"message": "Le service xBrowserSync est actuellement en cours d'utilisation."
-	},
-	"settings_Service_Status_Label": {
-		"message": "Statut"
-	},
-	"settings_Service_Status_Description": {
-		"message": "Statut actuel du service."
-	},
-	"settings_Service_ServiceMessage_Label": {
-		"message": "Message service"
-	},
-	"settings_Service_ChangeService_Label": {
-		"message": "Changer de service"
-	},
-	"settings_Service_ChangeService_Description": {
-		"message": "Changer vers un autre service xBrowserSync."
-	},
-	"settings_BackupRestore_Backup_Label": {
-		"message": "Sauvegarder"
-	},
-	"settings_BackupRestore_BackupLocal_Description": {
-		"message": "Sauvegarder les données locales dans un fichier."
-	},
-	"settings_BackupRestore_BackupSynced_Description": {
-		"message": "Sauvegarder les données synchronisées dans un fichier."
-	},
-	"settings_BackupRestore_Restore_Label": {
-		"message": "Restaurer"
-	},
-	"settings_BackupRestore_RestoreLocal_Description": {
-		"message": "Restaurer les données locales depuis une sauvegarde."
-	},
-	"settings_BackupRestore_RestoreSynced_Description": {
-		"message": "Restaurer les données synchronisées depuis une sauvegarder."
-	},
-	"settings_About_Title" : {
-		"message":  "A propos"
-	},
-	"settings_About_AppVersion_Label": {
-		"message": "Version"
-	},
-	"settings_About_AppVersion_Description": {
-		"message": "Numéro de version de l'extension xBrowserSync."
-	},
-	"settings_About_ReleaseNotes_Label": {
-		"message": "View Release Notes"
-	},
-	"settings_About_FAQs_Label": {
-		"message": "FAQs"
-	},
-	"settings_About_FAQs_Description": {
-		"message": "Got a question or having an issue? The answer might be in the FAQs."
-	},
-	"settings_About_ViewFAQs_Label": {
-		"message": "View FAQs"
-	},
-	"settings_About_Issues_Label": {
-		"message": "Tracker de problèmes / demandes de fonctionnalités"
-	},
-	"settings_About_Issues_Description": {
-		"message": "Ouvrir un ticket sur un problème de l'extension ou faire une demande d'évolution."
-	},
-	"settings_About_RaiseIssue_Label": {
-		"message": "Raise Issue"
-	},
-	"settings_About_Contributions_Label": {
-		"message": "Contributions"
-	},
-	"settings_About_Contributions_Description": {
-		"message": "Si vous aimez xBrowserSync et voulez contribuer et envoyer quelques BTC pour le développement et les coûts de fonctionnement."
-	},
-	"settings_About_Contribute_Label": {
-		"message": "Become a Patron"
-	},
-	"settings_Debug_Title" : {
-		"message":  "Debug"
-	},
-	"settings_Debug_DeviceWidth_Label" : {
-		"message":  "Largeur du périphérique"
-	},
-	"settings_Debug_DeviceHeight_Label" : {
-		"message":  "Hauteur du périphérique"
-	},
-	"debugDisabled_Message" : {
-		"message":  "Debug mode disabled"
-	},
-	"debugEnabled_Message" : {
-		"message":  "Debug mode activé"
-	},
-	"settings_Service_Title" : {
-		"message":  "Service"
-	},
-	"settings_Service_Status_NoNewSyncs" : {
-		"message":  "Impossible d'accepter les nouvelles synchronisations"
-	},
-	"settings_Service_Status_Error": {
-		"message":  "Error"
-	},
-	"Settings_Service_Status_Loading": {
-		"message":  "Checking..."
-	},
-	"settings_Service_Status_Online" : {
-		"message":  "Online"
-	},
-	"settings_Service_Status_Offline" : {
-		"message":  "Offline"
-	},
-	"button_UpdateServiceUrl_Label" : {
-		"message":  "Change Service"
-	},
-	"settings_Service_UpdateForm_Message" : {
-		"message":  "Entrez l'URL d'un service xBrowserSync alternatif. Parcourez la liste des services publics xBrowserSync <a href='https://www.xbrowsersync.org/#status' class='new-tab'>ici</a>."
-	},
-	"settings_Service_UpdateForm_Field_Description" : {
-		"message":  "URL de service xBrowserSync"
-	},
-	"button_Update_Label" : {
-		"message":  "Mise à jour"
-	},
-	"button_Cancel_Label" : {
-		"message":  "Annuler"
-	},
-	"settings_Service_UpdateForm_Confirm_Message": {
-		"message":  "<p>Après le changement de service, la synchronisation sera désactivée et vous devrez créer une nouvelle synchronisation.</p><p>Si vous avez déjà créer une synchronisation avec ce service et voulez récupérer vos données, utilisez l'ID xBrowserSync utilisé à l'époque.</p><p>OK pour continuer ?</p>"
-	},
-	"settings_Service_UpdateForm_Required_Label": {
-		"message":  "xBrowserSync service URL is required"
-	},
-	"settings_Service_UpdateForm_InvalidService_Label": {
-		"message":  "Not a valid xBrowserSync service"
-	},
-	"settings_Service_UpdateForm_ServiceVersionNotSupported_Label": {
-		"message":  "This service is running an unsupported API version"
-	},
-	"settings_Service_UpdateForm_ServiceOffline_Label": {
-		"message":  "This service is currently offline"
-	},
-	"settings_BackupRestore_Title" : {
-		"message":  "Sauvegarder et restaurer"
-	},
-	"settings_BackupRestore_NotAvailable_Message": {
-		"message": "Sauvegarder et restaurer seront accessibles une fois que vous serez synchronisés."
-	},
-	"settings_BackupRestore_ICloudNotAvailable_Message": {
-		"message": "Se logguer sur iCloud pour permettrer la sauvegarde et la restauration."
-	},
-	"button_Backup_Label" : {
-		"message":  "Sauvegarde"
-	},
-	"button_Restore_Label" : {
-		"message":  "Restaurer"
-	},
-	"button_Done_Label" : {
-		"message":  "Terminé"
-	},
-	"button_Clear_Label" : {
-		"message":  "Vider"
-	},
-	"button_Close_Label" : {
-		"message":  "Fermer"
-	},
-	"button_Back_Label" : {
-		"message":  "Retour"
-	},
-	"settings_BackupRestore_BackupSuccess_Message" : {
-		"message":  "Si la sauvegarde ne se télécharge pas automatiquement, faites bouton droit sur le lien ci-dessous et cliquez sur 'Sauvegarder le lien en tant que...'."
-	},
-	"settings_BackupRestore_RestoreSuccess_Message" : {
-		"message":  "Vos données ont été restaurées."
-	},
-	"settings_BackupRestore_RestoreForm_Message" : {
-		"message":  "Copier le contenu d'une sauvegarde dans un fichier de restauration."
-	},
-	"settings_BackupRestore_RestoreForm_DataField_Label" : {
-		"message":  "Copier les données de sauvegarde"
-	},
-	"button_SelectBackupFile_Label" : {
-		"message":  "Selectionner le Fichier"
-	},
-	"button_RestoreData_Label" : {
-		"message":  "Restaurer les données"
-	},
-	"button_RestoreData_Invalid_Label" : {
-		"message":  "Données invalides"
-	},
-	"button_RestoreData_Ready_Label" : {
-		"message":  "Prêt à Restaurer"
-	},
-	"settings_Sync_Title" : {
-		"message":  "Synchroniser"
-	},
-	"settings_Sync_NotAvailable_Message" : {
-		"message":  "Les paramètres de synchronisation seront disponibles une fois que vous serez synchronisés."
-	},
-	"settings_Sync_Id_Label" : {
-		"message":  "ID de synchronisation"
-	},
-	"settings_Sync_DisplayQRCode_Message" : {
-		"message":  "Afficher QR code"
-	},
-	"settings_Service_DataUsage_Label" : {
-		"message": "Usage de données"
-	},
-	"settings_Sync_SyncToolbar_Label" : {
-		"message":  "Inclure la barre de favoris"
-	},
-	"settings_Service_DataUsage_Description" : {
-		"message":  "Quantité de données utilisées sur le quota alloué par le service que vous utilisez."
-	},
-	"settings_BackupRestore_ConfirmRestore_Sync_Message" : {
-		"message":  "<p>Comme la synchro est actuellement activée, les données restaurées vont écraser les données synchronisés de xBrowserSync .</p><p>Pour restaurer vos données dans le navigateur locale seulement, désactivez la synchro avant de restaurer.</p><p>OK pour continuer ?</p>"
-	},
-	"settings_BackupRestore_ConfirmRestore_NoSync_Message" : {
-		"message":  "<p>Comme la synchro est actuellement désactivée, les données restaurées vont écraser les données locales du navigateur.</p><p>OK pour continuer ?</p>"
-	},
-	"bookmark_Title_Add" : {
-		"message":  "Ajouter un favori"
-	},
-	"bookmark_Title_Edit" : {
-		"message":  "Editer favori"
-	},
-	"bookmark_TitleField_Label": {
-		"message": "Titre"
-	},
-	"bookmark_UrlField_Label": {
-		"message": "URL"
-	},
-	"bookmark_DescriptionField_Label": {
-		"message": "Description"
-	},
-	"bookmark_TagsField_Label": {
-		"message": "Tags"
-	},
-	"bookmark_TagsField_Description": {
-		"message": "tag 1, tag 2, tag 3, etc..."
-	},
-	"bookmark_BookmarkForm_Required_Label": {
-		"message": "Bookmark URL is required"
-	},
-	"bookmark_BookmarkForm_Exists_Label": {
-		"message": "URL has already been bookmarked"
-	},
-	"button_AddTags_Label": {
-		"message": "Ajouter"
-	},
-	"button_DeleteTag_Label": {
-		"message": "Retirer tag"
-	},
-	"button_Delete_Label": {
-		"message": "Supprimer"
-	},
-	"button_Share_Label": {
-		"message": "Partager"
-	},
-	"working_Title" : {
-		"message":  "En cours..."
-	},
-	"working_Message" : {
-		"message":  "Ne fermez pas encore la fenêtre."
-	},
-	"connRestored_Title" : {
-		"message":  "Connexion restaurée"
-	},
-	"connRestored_Message" : {
-		"message":  "Vos modifications xBrowserSync ont été synchronisées."
-	},
-	"error_Default_Title" : {
-		"message":  "Quelque chose s'est mal passé"
-	},
-	"error_Default_Message" : {
-		"message":  "Si ce problème continue, créez un ticket ici github.com/xBrowserSync/App."
-	},
-	"error_HttpRequestFailed_Title" : {
-		"message":  "Connexion perdue"
-	},
-	"error_HttpRequestFailed_Message" : {
-		"message":  "Impossible de se connecter au service xBrowserSync, vérifiez le statut du service dans la panneau des Paramètres."
-	},
-	"error_HttpRequestFailedWhileUpdating_Title" : {
-		"message":  "Connexion perdue"
-	},
-	"error_HttpRequestFailedWhileUpdating_Message" : {
-		"message":  "La synchronisation sera retentée automatiquement lorsque la connexion sera restaurée."
-	},
-	"error_TooManyRequests_Title" : {
-		"message":  "Doucement !"
-	},
-	"error_TooManyRequests_Message" : {
-		"message":  "Trop de requêtes envoyées, la synchronisation a été désactivée. Re-activez la synchronisation manuellement."
-	},
-	"error_RequestEntityTooLarge_Title" : {
-		"message":  "Quota de données synchronisées dépassé"
-	},
-	"error_RequestEntityTooLarge_Message" : {
-		"message":  "Impossible de synchroniser vos données car vous excédez le quota alloué par le service xBrowserSync. Supprimer quelques vieux favoris et reessayez de nouveau, ou changez de vers un service xBrowserSync different qui permet des synchros plus larges."
-	},
-	"error_NotAcceptingNewSyncs_Title" : {
-		"message":  "Le Service n'accepte pas de nouvelles synchronisation"
-	},
-	"error_NotAcceptingNewSyncs_Message" : {
-		"message":  "Unable to sync as this xBrowserSync service is not currently accepting new syncs. If you have already created a sync using this service enter your xBrowserSync ID, or change to an alternative service."
-	},
-	"error_DailyNewSyncLimitReached_Title" : {
-		"message":  "Limite quotidienne de nouvelles synchronisations atteinte"
-	},
-	"error_DailyNewSyncLimitReached_Message" : {
-		"message":  "Impossible de créer une nouvelle synchronisation car vous avez atteint la limite de synchronisation quotidienne pour ce service xBrowserSync. Synchronisez avec un ID xBrowserSync existant, choisissez un service différent ou essayez de nouveau demain."
-	},
-	"error_MissingClientData_Title" : {
-		"message":  "ID ou mot de passe xBrowserSync manquant"
-	},
-	"error_MissingClientData_Message" : {
-		"message":  "Réactivez la synchronisation et retentez de nouveau."
-	},
-	"error_NoDataFound_Title" : {
-		"message":  "Aucune données trouvée"
-	},
-	"error_NoDataFound_Message" : {
-		"message":  "Vérifiez de nouveau votre ID xBrowserSync et votre mot de passe et essayez de nouveau."
-	},
-	"error_IdRemoved_Title" : {
-		"message":  "Données supprimées pour cause d'inactivité"
-	},
-	"error_IdRemoved_Message" : {
-		"message":  "Créez un nouvel ID et restaurez vos données depuis une sauvegarder."
-	},
-	"error_NoDataToRestore_Title" : {
-		"message":  "Aucune donnée à restaurer"
-	},
-	"error_NoDataToRestore_Message" : {
-		"message":  "Assurez vous d'avoir fourni une sauvegarde xBrowserSync valide avant de restaurer."
-	},
-	"error_FailedGetLocalBookmarks_Title" : {
-		"message":  "Impossible de récupérer les favoris locaux"
-	},
-	"error_FailedGetLocalBookmarks_Message" : {
-		"message":  "Une erreur est survenue en récupérant les favoris locaux."
-	},
-	"error_FailedCreateLocalBookmarks_Title" : {
-		"message":  "Impossible de créer les favoris"
-	},
-	"error_FailedCreateLocalBookmarks_Message" : {
-		"message":  "Une erreur est survenue en tentant de créer un favori local."
-	},
-	"error_FailedRemoveLocalBookmarks_Title" : {
-		"message":  "Impossible d'écraser les favoris"
-	},
-	"error_FailedRemoveLocalBookmarks_Message" : {
-		"message":  "Une erreur est survenue en tentant d'écraser les favoris locaux."
-	},
-	"error_InvalidData_Title" : {
-		"message":  "Impossible de déchiffrer les données xBrowserSync"
-	},
-	"error_InvalidData_Message" : {
-		"message":  "Assurez vous que le mot de passe de chiffrement est identique à celui utilisé lorsque vous avez crééz la synchronisation pour cet ID."
-	},
-	"error_LastChangeNotSynced_Title" : {
-		"message":  "Dernière modification non synchronisée"
-	},
-	"error_LastChangeNotSynced_Message" : {
-		"message":  "La dernière modification n'a pas été synchronisée à cause d'un conflit de favoris. Cela serait une bonne idée de désactiver et réactiver la synchronisation avant de continuer."
-	},
-	"error_BookmarkNotFound_Title" : {
-		"message":  "Favori non trouvé"
-	},
-	"error_BookmarkNotFound_Message" : {
-		"message":  "Il semblerait que vos favoris ne sont pas à jour. Cela serait une bonne idée de désactiver et réactiver la synchronisation avant de continuer."
-	},
-	"error_OutOfSync_Title" : {
-		"message":  "Données non synchronisées"
-	},
-	"error_OutOfSync_Message" : {
-		"message":  "Les données locales n'étaient pas synchronisées mais ont été mises à jour. Pourtant votre dernière modification n'a pas été synchronisée donc vous devrez refaire cette modification."
-	},
-	"error_ApiInvalid_Title" : {
-		"message":  "Invalid xBrowserSync service"
-	},
-	"error_ApiInvalid_Message" : {
-		"message":  "The selected service URL is not pointing to a valid xBrowserSync service."
-	},
-	"error_ApiVersionNotSupported_Title" : {
-		"message":  "Service not supported"
-	},
-	"error_ApiVersionNotSupported_Message" : {
-		"message":  "This service is running an unsupported API version"
-	},
-	"error_ContainerChanged_Title" : {
-		"message": "Le dossier xBrowserSync a été modifié"
-	},
-	"error_ContainerChanged_Message" : {
-		"message": "Modifier, supprimer ou déplacer les dossiers d'application de xBrowserSync peut causer des problèmes, la synchronisation a donc été désactivée. Réactivez la synchronisation pour restaurer vos favoris."
-	},
-	"error_NotImplemented_Title" : {
-		"message":  "Fonction non implémentée"
-	},
-	"error_NotImplemented_Message" : {
-		"message":  "Une fonction requise n'a pas été implémentée et ne permet pas à xBrowserSync de fonctionner correctement."
-	},
-	"error_FailedGetPageMetadata_Title" : {
-		"message":  "Impossible d'obtenir les metadate de l'URL"
-	},
-	"error_FailedGetPageMetadata_Message" : {
-		"message":  "L'URL est invalide ou les données de la page Web n'ont pas pu être récupérées."
-	},
-	"error_SyncInterrupted_Title" : {
-		"message":  "Synchronisation interrompue"
-	},
-	"error_SyncInterrupted_Message" : {
-		"message":  "Une précédente synchronisation a été interrompue et ne s'est pas complétée. Réactivez la synchronisation pour restaurer vos données synchronisées."
-	},
-	"error_ScanFailed_Title" : {
-		"message":  "Scan échoué"
-	},
-	"error_ShareFailed_Title" : {
-		"message":  "Partage échoué"
-	},
-	"error_FailedBackupData_Title" : {
-		"message":  "Sauvegarde échouée"
-	}
+  "title": {
+    "message": "xBrowserSync"
+  },
+  "description": {
+    "message": "La synchronisation de navigateur telle qu'elle devrait être: sécurisée, anonyme et gratuite! Synchronisez vos favoris entre vos navigateurs et appareils, sans création de compte requise."
+  },
+  "tooltip_NotSynced_Label": {
+    "message": "not synced"
+  },
+  "tooltip_Synced_Label": {
+    "message": "synced"
+  },
+  "tooltip_Syncing_Label": {
+    "message": "syncing"
+  },
+  "button_Help_Label": {
+    "message": "Afficher l'aide"
+  },
+  "button_Next_Label": {
+    "message": "Suivant"
+  },
+  "button_Previous_Label": {
+    "message": "Précédent"
+  },
+  "login_GetSyncId_Title": {
+    "message": "Need a sync ID?"
+  },
+  "login_GetSyncId_Message": {
+    "message": "Download the xBrowserSync desktop browser extension available for Chrome and Firefox, create a new sync and then scan your sync ID QR code on the previous screen."
+  },
+  "login_introPanel1_Message": {
+    "message": "<h4>Bienvenue</h4><p>Merci d'utiliser xBrowserSync — La synchronisation de favoris telle qu'elle devrait être: sécurisée, anonyme et gratuite!</p><p>Prenez le temps de lire les pages suivantes pour vous familiariser avec les fonctionnalités xBrowserSync. Plus d'informations sont disponibles dans la <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQ</a>.</p>"
+  },
+  "login_introPanel2_Message": {
+    "message": "<h4>Synchronisation pour la première fois</h4><p>Avant que vous puissiez synchroniser les donnée de votre navigateur, elles doivent être chiffrées que que seulement vous puissiez les lire. Entrez un mot de passe de chiffrement — choisissez le complexe mais mémorisable, il n'y a aucun moyen de retrouver le mot de passe et si vous le perdez, vous ne pourrez plus jamais récupérer vos données synchronisées.</p><p>Une fois que vous cliquerez sur le bouton Synchroniser, vous serez synchronisés et prêt à ajouter des favoris.</p>"
+  },
+  "login_introPanel3_Message": {
+    "message": "<h4>Déjà synchronisé (vous avez un ID)</h4><p>Quand vous créez une nouvelle synchronisation, vous obtenez un ID xBrowserSync unique qui permet, accompagné de votre mot de passe, de synchroniser vos favoris à travers plusieurs ordinateurs/téléphones. Votre anonymité est assurée car aucune donnée personnelle n'est collectée ou stockée avec vos données synchronisées.</p><p>Une fois synchronisez, vous pouvez voir votre ID dans le panneau de Paramètres. Cliquez ici pour réveler un QR code utile à scanner lorsque vous êtes sur un téléphone.</p>"
+  },
+  "login_introPanel4_Message": {
+    "message": "<h4>Synchronisation sur un autre service</h4><p>Par défaut, vos données sont synchronisées sur le service officiel xBrowserSync, bien que chacun puisse faire tourner son propre <a href='https://github.com/xbrowsersync/api' class='new-tab'>service xBrowserSync</a>, soit pour un usage privé (pour une sécurité ultime et confidentialité) ou pour rendre disponible à l'usage public pour que plus de personnes puissent apprécier l'usage de xBrowserSync.</p><p>Vérifier les <a href='https://www.xbrowsersync.org/#status' class='new-tab'>services xBrowserSync</a> et changer de service dans le panneau des Paramètres.</p>"
+  },
+  "login_introPanel5_Message": {
+    "message": "<h4>Nouveau service, nouvel ID</h4><p>Votre ID xBrowserSync ne marchera que sur le service sur lequel il a été crée.</p><p>Si jamais vous changez de service, vous devez créer une nouvelle synchronisation et vous recevrez un nouvel ID. Vous pouver déplacer vos données synchronisées d'un ancien service vers un nouveau en faisant une sauvegarde et en le restaurant une fois synchronisé sur le nouveau service.</p>"
+  },
+  "login_introPanel6_Message": {
+    "message": "<h4>Chercher vos favoris</h4><p>Une fois synchronisé, tapez simplement sur Entrée pour afficher vos favoris dans l'ordre chronologique, ou tapez des mots ou une URL dans la boite de recherche pour chercher parmi vos favoris.</p><p>Passez la souris au dessus d'un favori et cliquez sur le bouton crayon pour éditer ou supprimer le favori.</p>"
+  },
+  "login_introPanel7_Message": {
+    "message": "<h4>Ajouter un favori</h4><p>Mettez en favori la page courante en cliquant sur l'icône favori du panneau de recherche. Les propriétés du favori seront préremplies pour vous, ou alors ajoutez une description et des tags pour assurer une meilleure recherche.</p><p>Ou bien, cliquez simplement sur le bouton favori du navigateur et xBrowserSync ajoutera automatiquement les propriétés par défaut aux favoris.</p>"
+  },
+  "login_introPanel8_Message": {
+    "message": "<h4>Fonctionnalités natives supportées</h4><p>Sentez-vous libre de continuer à utiliser les fonctionnalités natives de gestion de favoris de votre navigateur, chaque changement sera synchronisé automatiquement en tâche de fond.</p><p>Si vous avez organisé vos favoris dans des dossiers, pas de soucis, xBrowserSync conservera la hierarchie de vos favoris.</p>"
+  },
+  "login_introPanel9_Message": {
+    "message": "<h4>N'oubliez pas de faire des sauvegardes</h4><p>Lorsque vous utilisez xBrowserSync, vos donnés sont votre responsabilité donc soyez intelligents et soyez sûrs de faire des sauvegardes.</p><p>Vous pouvez faire cela facilement dans le panneau des Paramètres, vous pouvez sauvegarder vos données non chiffrées dans un fichier local qui pourra être restauré plus tard si vous en avez le besoin.</p>"
+  },
+  "login_introPanel10_Message": {
+    "message": "<h4>Raccourci xBrowserSync</h4><p>Pour chercher vos favoris rapidement, assignez un raccourci clavier pour activer l'extension et tapez juste Entrée ou commencez à saisir du texte pour chercher parmi vos favoris.</p><p>Allez dans chrome://extensions/, l'option des raccourcis clavier est en bas de la page."
+  },
+  "login_introPanel11_Message": {
+    "message": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on Google Play store, <a href='https://fdroid.xbrowsersync.org/' class='new-tab'>F-Droid</a> or <a href='https://github.com/xbrowsersync/app/releases' class='new-tab'>direct download</a>.</p>"
+  },
+  "login_introPanel12_Message": {
+    "message": "<h4>Vous avez trouvé un problème ?</h4><p>Si vous avez trouvé un bug dans xBrowserSync ou voulez demander une nouvelle fonctionnalité, allez sur GitHub et <a href='https://github.com/xbrowsersync/app/issues' class='new-tab'>soumettez un problème (issue)</a>.</p><p>Appel à tous les développeurs! Si vous voulez aider à améliorer xBrowserSync, allez-y et forkez le repo GitHub <a href='https://github.com/xbrowsersync/app' class='new-tab'>xBrowserSync</a> et soumettez une pull request.</p>"
+  },
+  "button_Settings_Label": {
+    "message": "Paramètres"
+  },
+  "button_AddBookmark_Label": {
+    "message": "Ajouter un favori"
+  },
+  "button_DeleteBookmark_Label": {
+    "message": "Supprimer le favori"
+  },
+  "button_EditBookmark_Label": {
+    "message": "Editer le favori"
+  },
+  "button_ShareBookmark_Label": {
+    "message": "Partager le favori"
+  },
+  "login_PasswordConfirmationField_Label": {
+    "message": "Confirm password"
+  },
+  "login_PasswordField_Label": {
+    "message": "Mot de passe de chiffrement"
+  },
+  "login_PasswordField_New_Description": {
+    "message": "Entrez un mot de passe de chiffrement"
+  },
+  "login_PasswordField_Existing_Description": {
+    "message": "Votre mot de passe de chiffrement"
+  },
+  "login_IdField_Label": {
+    "message": "ID"
+  },
+  "login_IdField_Description": {
+    "message": "Votre ID xBrowserSync"
+  },
+  "button_ScanCode_Label": {
+    "message": "Scannez votre IDxBrowserSync"
+  },
+  "button_DisableSync_Label": {
+    "message": "Désactiver la synchronisation"
+  },
+  "button_EnableSync_Label": {
+    "message": "Synchroniser"
+  },
+  "button_ExistingSync_Label": {
+    "message": "Vous avez déjà un ID?"
+  },
+  "button_NewSync_Label": {
+    "message": "Créer une nouvelle synchro"
+  },
+  "Button_SyncUpdates_Label": {
+    "message": "Sync Updates"
+  },
+  "login_ConfirmSync_Title": {
+    "message": "Ecraser les données du navigateur?"
+  },
+  "login_ConfirmSync_Message": {
+    "message": "Les données d'xBrowserSync vont écraser les données locales de votre navigateur. OK pour continuer?"
+  },
+  "login_UpgradeSync_Title": {
+    "message": "Ready to upgrade sync?"
+  },
+  "login_UpgradeSync_Message": {
+    "message": "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
+  },
+  "updated_Message": {
+    "message": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
+  },
+  "updated_Title": {
+    "message": "Updated to v"
+  },
+  "permissions_Message": {
+    "message": "<p>xBrowserSync automatically enriches bookmarks added using the browser’s Add Bookmark button with available metadata. To enable this, xBrowserSync <a href='https://www.xbrowsersync.org/?id=25#faqs' class='new-tab'>requires additional permissions</a> to be able to read visited website data.</p><p>Please indicate if prompted if you are happy to grant these permissions, alternatively you can add or remove permissions at any time in the Settings panel.</p>"
+  },
+  "permissions_Title": {
+    "message": "Optional permissions"
+  },
+  "button_Confirm_Label": {
+    "message": "Oui"
+  },
+  "button_Deny_Label": {
+    "message": "Non"
+  },
+  "search_Field_Description": {
+    "message": "Commencez à taper pour trouver des favoris ou tapez juste la touche Entrée..."
+  },
+  "search_NoBookmarks_Message": {
+    "message": "Vous n'avez pas de favoris, ajoutez-en quelques-uns!"
+  },
+  "search_NoResults_Message": {
+    "message": "Aucun favori trouvé"
+  },
+  "shareBookmark_Message": {
+    "message": "Partager le favori avec"
+  },
+  "bookmarkShared_Message": {
+    "message": "partagé depuis xBrowserSync"
+  },
+  "settings_Sync_SyncToolbarConfirmation_Message": {
+    "message": "<p>Activer la synchro de la barre de favoris va remplacer les favoris actuellement dans la barre de favoris par vos favoris synchronisés.</p><p>OK pour continuer ?</p>"
+  },
+  "settings_Sync_ConfirmCancelSync_Message": {
+    "message": "<p>Une synchronisation est en cours, si vous continuez, vos données locales seront incomplètes.</p><p>OK pour continuer ?</p>"
+  },
+  "settings_Sync_Id_Description": {
+    "message": "Utilisez votre ID pour synchroniser sur d'autres périphériques (cliquez pour un QR code)."
+  },
+  "settings_Sync_UpdatesAvailable_False_Message": {
+    "message": "Local sync data is up to date."
+  },
+  "settings_Sync_UpdatesAvailable_True_Message": {
+    "message": "Sync updates available, next sync at"
+  },
+  "settings_Sync_SyncToolbar_Description": {
+    "message": "Désactiver ce paramètre si vous souhaitez afficher les favoris locaux dans la barre de favoris plutôt que les favoris synchronisés. Utile lorsque vous synchronisez à travers des navigateurs différents."
+  },
+  "settings_Service_ServiceUrl_Label": {
+    "message": "Url"
+  },
+  "settings_Service_ServiceUrl_Description": {
+    "message": "Le service xBrowserSync est actuellement en cours d'utilisation."
+  },
+  "settings_Service_Status_Label": {
+    "message": "Statut"
+  },
+  "settings_Service_Status_Description": {
+    "message": "Statut actuel du service."
+  },
+  "settings_Service_ServiceMessage_Label": {
+    "message": "Message service"
+  },
+  "settings_Service_ChangeService_Label": {
+    "message": "Changer de service"
+  },
+  "settings_Service_ChangeService_Description": {
+    "message": "Changer vers un autre service xBrowserSync."
+  },
+  "settings_BackupRestore_Backup_Label": {
+    "message": "Sauvegarder"
+  },
+  "settings_BackupRestore_BackupLocal_Description": {
+    "message": "Sauvegarder les données locales dans un fichier."
+  },
+  "settings_BackupRestore_BackupSynced_Description": {
+    "message": "Sauvegarder les données synchronisées dans un fichier."
+  },
+  "settings_BackupRestore_Restore_Label": {
+    "message": "Restaurer"
+  },
+  "settings_BackupRestore_RestoreLocal_Description": {
+    "message": "Restaurer les données locales depuis une sauvegarde."
+  },
+  "settings_BackupRestore_RestoreSynced_Description": {
+    "message": "Restaurer les données synchronisées depuis une sauvegarder."
+  },
+  "settings_About_Title": {
+    "message": "A propos"
+  },
+  "settings_About_AppVersion_Label": {
+    "message": "Version"
+  },
+  "settings_About_AppVersion_Description": {
+    "message": "Numéro de version de l'extension xBrowserSync."
+  },
+  "button_ReleaseNotes_Label": {
+    "message": "View Release Notes"
+  },
+  "settings_About_FAQs_Label": {
+    "message": "FAQs"
+  },
+  "settings_About_FAQs_Description": {
+    "message": "Got a question or having an issue? The answer might be in the FAQs."
+  },
+  "settings_About_ViewFAQs_Label": {
+    "message": "View FAQs"
+  },
+  "settings_About_Contributions_Label": {
+    "message": "Contributions"
+  },
+  "settings_About_Contributions_Description": {
+    "message": "If you enjoy using xBrowserSync consider supporting the project."
+  },
+  "settings_About_Cryptos_Label": {
+    "message": "Donate Crypto"
+  },
+  "settings_About_Liberapay_Label": {
+    "message": "Via Liberapay"
+  },
+  "settings_Issues_Title": {
+    "message": "Issues"
+  },
+  "settings_Issues_Tracker_Label": {
+    "message": "Issues tracker"
+  },
+  "settings_Issues_Tracker_Description": {
+    "message": "Raise an issue to report a bug or request a new feature."
+  },
+  "settings_Issues_RaiseIssue_Label": {
+    "message": "Raise Issue"
+  },
+  "settings_Issues_Log_Label": {
+    "message": "Application log"
+  },
+  "settings_Issues_Log_Description": {
+    "message": "Download and include the application log when you log an issue."
+  },
+  "settings_Issues_DownloadLog_Label": {
+    "message": "Download Log"
+  },
+  "settings_Issues_LogDownloaded_Message": {
+    "message": "If the log file does not download automatically, right click on the link below and 'Save link as...'."
+  },
+  "settings_Permissions_Title": {
+    "message": "Optional permissions"
+  },
+  "settings_Permissions_ReadWebsiteData_Title": {
+    "message": "Read website data"
+  },
+  "settings_Permissions_ReadWebsiteData_Description": {
+    "message": "Required to automatically add metadata to bookmarks when using the browser’s native bookmark button (<a href='https://www.xbrowsersync.org/?id=25#faqs' class='new-tab'>more info</a>)."
+  },
+  "settings_Permissions_ReadWebsiteData_Granted_Label": {
+    "message": "Granted"
+  },
+  "settings_Permissions_ReadWebsiteData_NotGranted_Label": {
+    "message": "Not granted"
+  },
+  "button_Permissions_Remove_Label": {
+    "message": "Remove permissions"
+  },
+  "button_Permissions_Add_Label": {
+    "message": "Grant permissions"
+  },
+  "settings_Service_Title": {
+    "message": "Service"
+  },
+  "settings_Service_Status_NoNewSyncs": {
+    "message": "Impossible d'accepter les nouvelles synchronisations"
+  },
+  "settings_Service_Status_Error": {
+    "message": "Connection error"
+  },
+  "Settings_Service_Status_Loading": {
+    "message": "Checking..."
+  },
+  "settings_Service_Status_Online": {
+    "message": "Online"
+  },
+  "settings_Service_Status_Offline": {
+    "message": "Offline"
+  },
+  "button_UpdateServiceUrl_Label": {
+    "message": "Change Service"
+  },
+  "settings_Service_UpdateForm_Message": {
+    "message": "Entrez l'URL d'un service xBrowserSync alternatif. Parcourez la liste des services publics xBrowserSync <a href='https://www.xbrowsersync.org/#status' class='new-tab'>ici</a>."
+  },
+  "settings_Service_UpdateForm_Field_Description": {
+    "message": "URL de service xBrowserSync"
+  },
+  "button_Update_Label": {
+    "message": "Mise à jour"
+  },
+  "button_Cancel_Label": {
+    "message": "Annuler"
+  },
+  "settings_Service_UpdateForm_Confirm_Message": {
+    "message": "<p>Après le changement de service, la synchronisation sera désactivée et vous devrez créer une nouvelle synchronisation.</p><p>Si vous avez déjà créer une synchronisation avec ce service et voulez récupérer vos données, utilisez l'ID xBrowserSync utilisé à l'époque.</p><p>OK pour continuer ?</p>"
+  },
+  "settings_Service_UpdateForm_Required_Label": {
+    "message": "xBrowserSync service URL is required"
+  },
+  "settings_Service_UpdateForm_InvalidService_Label": {
+    "message": "Not a valid xBrowserSync service"
+  },
+  "settings_Service_UpdateForm_ServiceVersionNotSupported_Label": {
+    "message": "This service is running an unsupported API version"
+  },
+  "settings_Service_UpdateForm_ServiceOffline_Label": {
+    "message": "This service is currently offline"
+  },
+  "settings_BackupRestore_Title": {
+    "message": "Sauvegarder et restaurer"
+  },
+  "settings_BackupRestore_NotAvailable_Message": {
+    "message": "Sauvegarder et restaurer seront accessibles une fois que vous serez synchronisés."
+  },
+  "button_Backup_Label": {
+    "message": "Sauvegarde"
+  },
+  "button_Restore_Label": {
+    "message": "Restaurer"
+  },
+  "button_Saving_Label": {
+    "message": "Saving..."
+  },
+  "button_Done_Label": {
+    "message": "Terminé"
+  },
+  "button_Clear_Label": {
+    "message": "Vider"
+  },
+  "button_Close_Label": {
+    "message": "Fermer"
+  },
+  "button_Continue_Label": {
+    "message": "Continue"
+  },
+  "button_Back_Label": {
+    "message": "Retour"
+  },
+  "settings_BackupRestore_BackupSuccess_Message": {
+    "message": "Si la sauvegarde ne se télécharge pas automatiquement, faites bouton droit sur le lien ci-dessous et cliquez sur 'Sauvegarder le lien en tant que...'."
+  },
+  "settings_BackupRestore_RestoreSuccess_Message": {
+    "message": "Vos données ont été restaurées."
+  },
+  "settings_BackupRestore_RestoreForm_Message": {
+    "message": "Copier le contenu d'une sauvegarde dans un fichier de restauration."
+  },
+  "settings_BackupRestore_RestoreForm_DataField_Label": {
+    "message": "Copier les données de sauvegarde"
+  },
+  "button_SelectBackupFile_Label": {
+    "message": "Selectionner le Fichier"
+  },
+  "button_RestoreData_Label": {
+    "message": "Restaurer les données"
+  },
+  "button_RestoreData_Invalid_Label": {
+    "message": "Données invalides"
+  },
+  "button_RestoreData_Ready_Label": {
+    "message": "Prêt à Restaurer"
+  },
+  "settings_Sync_Title": {
+    "message": "Synchroniser"
+  },
+  "settings_Sync_NotAvailable_Message": {
+    "message": "Les paramètres de synchronisation seront disponibles une fois que vous serez synchronisés."
+  },
+  "settings_Sync_Id_Label": {
+    "message": "ID de synchronisation"
+  },
+  "settings_Sync_DisplayQRCode_Message": {
+    "message": "Afficher QR code"
+  },
+  "settings_Service_DataUsage_Label": {
+    "message": "Usage de données"
+  },
+  "settings_Sync_SyncToolbar_Label": {
+    "message": "Inclure la barre de favoris"
+  },
+  "settings_Service_DataUsage_Description": {
+    "message": "Quantité de données utilisées sur le quota alloué par le service que vous utilisez."
+  },
+  "settings_BackupRestore_ConfirmRestore_Sync_Message": {
+    "message": "<p>Comme la synchro est actuellement activée, les données restaurées vont écraser les données synchronisés de xBrowserSync .</p><p>Pour restaurer vos données dans le navigateur locale seulement, désactivez la synchro avant de restaurer.</p><p>OK pour continuer ?</p>"
+  },
+  "settings_BackupRestore_ConfirmRestore_NoSync_Message": {
+    "message": "<p>Comme la synchro est actuellement désactivée, les données restaurées vont écraser les données locales du navigateur.</p><p>OK pour continuer ?</p>"
+  },
+  "bookmark_Title_Add": {
+    "message": "Ajouter un favori"
+  },
+  "bookmark_Title_Edit": {
+    "message": "Editer favori"
+  },
+  "bookmark_TitleField_Label": {
+    "message": "Titre"
+  },
+  "bookmark_UrlField_Label": {
+    "message": "URL"
+  },
+  "bookmark_DescriptionField_Label": {
+    "message": "Description"
+  },
+  "bookmark_TagsField_Label": {
+    "message": "Tags"
+  },
+  "bookmark_TagsField_Description": {
+    "message": "tag 1, tag 2, tag 3, etc..."
+  },
+  "bookmark_BookmarkForm_Required_Label": {
+    "message": "Bookmark URL is required"
+  },
+  "bookmark_BookmarkForm_Exists_Label": {
+    "message": "URL has already been bookmarked"
+  },
+  "button_AddTags_Label": {
+    "message": "Ajouter"
+  },
+  "button_DeleteTag_Label": {
+    "message": "Retirer tag"
+  },
+  "button_Delete_Label": {
+    "message": "Supprimer"
+  },
+  "button_Share_Label": {
+    "message": "Partager"
+  },
+  "button_ClearTags_Label": {
+    "message": "Clear tags"
+  },
+  "working_Title": {
+    "message": "Syncing..."
+  },
+  "connRestored_Title": {
+    "message": "Connexion restaurée"
+  },
+  "connRestored_Message": {
+    "message": "Vos modifications xBrowserSync ont été synchronisées."
+  },
+  "error_Default_Title": {
+    "message": "Quelque chose s'est mal passé"
+  },
+  "error_Default_Message": {
+    "message": "Si ce problème continue, créez un ticket ici github.com/xbrowsersync/app."
+  },
+  "error_HttpRequestFailed_Title": {
+    "message": "Connexion perdue"
+  },
+  "error_HttpRequestFailed_Message": {
+    "message": "Impossible de se connecter au service xBrowserSync, vérifiez le statut du service dans la panneau des Paramètres."
+  },
+  "error_HttpRequestFailedWhileUpdating_Title": {
+    "message": "Connexion perdue"
+  },
+  "error_HttpRequestFailedWhileUpdating_Message": {
+    "message": "La synchronisation sera retentée automatiquement lorsque la connexion sera restaurée."
+  },
+  "error_TooManyRequests_Title": {
+    "message": "Doucement !"
+  },
+  "error_TooManyRequests_Message": {
+    "message": "Trop de requêtes envoyées, la synchronisation a été désactivée. Re-activez la synchronisation manuellement."
+  },
+  "error_RequestEntityTooLarge_Title": {
+    "message": "Quota de données synchronisées dépassé"
+  },
+  "error_RequestEntityTooLarge_Message": {
+    "message": "Impossible de synchroniser vos données car vous excédez le quota alloué par le service xBrowserSync. Supprimer quelques vieux favoris et reessayez de nouveau, ou changez de vers un service xBrowserSync different qui permet des synchros plus larges."
+  },
+  "error_NotAcceptingNewSyncs_Title": {
+    "message": "Le Service n'accepte pas de nouvelles synchronisation"
+  },
+  "error_NotAcceptingNewSyncs_Message": {
+    "message": "Unable to sync as this xBrowserSync service is not currently accepting new syncs. If you have already created a sync using this service enter your xBrowserSync ID, or change to an alternative service."
+  },
+  "error_DailyNewSyncLimitReached_Title": {
+    "message": "Limite quotidienne de nouvelles synchronisations atteinte"
+  },
+  "error_DailyNewSyncLimitReached_Message": {
+    "message": "Impossible de créer une nouvelle synchronisation car vous avez atteint la limite de synchronisation quotidienne pour ce service xBrowserSync. Synchronisez avec un ID xBrowserSync existant, choisissez un service différent ou essayez de nouveau demain."
+  },
+  "error_MissingClientData_Title": {
+    "message": "ID ou mot de passe xBrowserSync manquant"
+  },
+  "error_MissingClientData_Message": {
+    "message": "Réactivez la synchronisation et retentez de nouveau."
+  },
+  "error_NoDataFound_Title": {
+    "message": "Aucune données trouvée"
+  },
+  "error_NoDataFound_Message": {
+    "message": "Vérifiez de nouveau votre ID xBrowserSync et votre mot de passe et essayez de nouveau."
+  },
+  "error_SyncRemoved_Title": {
+    "message": "Données supprimées pour cause d'inactivité"
+  },
+  "error_SyncRemoved_Message": {
+    "message": "Créez un nouvel ID et restaurez vos données depuis une sauvegarder."
+  },
+  "error_NoDataToRestore_Title": {
+    "message": "Aucune donnée à restaurer"
+  },
+  "error_NoDataToRestore_Message": {
+    "message": "Assurez vous d'avoir fourni une sauvegarde xBrowserSync valide avant de restaurer."
+  },
+  "error_FailedGetLocalBookmarks_Title": {
+    "message": "Impossible de récupérer les favoris locaux"
+  },
+  "error_FailedGetLocalBookmarks_Message": {
+    "message": "Une erreur est survenue en récupérant les favoris locaux."
+  },
+  "error_FailedCreateLocalBookmarks_Title": {
+    "message": "Impossible de créer les favoris"
+  },
+  "error_FailedCreateLocalBookmarks_Message": {
+    "message": "Une erreur est survenue en tentant de créer un favori local."
+  },
+  "error_FailedRemoveLocalBookmarks_Title": {
+    "message": "Impossible d'écraser les favoris"
+  },
+  "error_FailedRemoveLocalBookmarks_Message": {
+    "message": "Une erreur est survenue en tentant d'écraser les favoris locaux."
+  },
+  "error_InvalidData_Title": {
+    "message": "Impossible de déchiffrer les données xBrowserSync"
+  },
+  "error_InvalidData_Message": {
+    "message": "Assurez vous que le mot de passe de chiffrement est identique à celui utilisé lorsque vous avez crééz la synchronisation pour cet ID."
+  },
+  "error_LastChangeNotSynced_Title": {
+    "message": "Dernière modification non synchronisée"
+  },
+  "error_LastChangeNotSynced_Message": {
+    "message": "La dernière modification n'a pas été synchronisée à cause d'un conflit de favoris. Cela serait une bonne idée de désactiver et réactiver la synchronisation avant de continuer."
+  },
+  "error_BookmarkNotFound_Title": {
+    "message": "Favori non trouvé"
+  },
+  "error_BookmarkNotFound_Message": {
+    "message": "Il semblerait que vos favoris ne sont pas à jour. Cela serait une bonne idée de désactiver et réactiver la synchronisation avant de continuer."
+  },
+  "error_OutOfSync_Title": {
+    "message": "Données non synchronisées"
+  },
+  "error_OutOfSync_Message": {
+    "message": "Les données locales n'étaient pas synchronisées mais ont été mises à jour. Pourtant votre dernière modification n'a pas été synchronisée donc vous devrez refaire cette modification."
+  },
+  "error_ApiInvalid_Title": {
+    "message": "Invalid xBrowserSync service"
+  },
+  "error_ApiInvalid_Message": {
+    "message": "The selected service URL is not pointing to a valid xBrowserSync service."
+  },
+  "error_ApiVersionNotSupported_Title": {
+    "message": "Service not supported"
+  },
+  "error_ApiVersionNotSupported_Message": {
+    "message": "This service is running an unsupported API version"
+  },
+  "error_ContainerChanged_Title": {
+    "message": "Le dossier xBrowserSync a été modifié"
+  },
+  "error_ContainerChanged_Message": {
+    "message": "Modifier, supprimer ou déplacer les dossiers d'application de xBrowserSync peut causer des problèmes, la synchronisation a donc été désactivée. Réactivez la synchronisation pour restaurer vos favoris."
+  },
+  "error_NotImplemented_Title": {
+    "message": "Fonction non implémentée"
+  },
+  "error_NotImplemented_Message": {
+    "message": "Une fonction requise n'a pas été implémentée et ne permet pas à xBrowserSync de fonctionner correctement."
+  },
+  "error_FailedGetPageMetadata_Title": {
+    "message": "Impossible d'obtenir les metadate de l'URL"
+  },
+  "error_FailedGetPageMetadata_Message": {
+    "message": "L'URL est invalide ou les données de la page Web n'ont pas pu être récupérées."
+  },
+  "error_SyncInterrupted_Title": {
+    "message": "Synchronisation interrompue"
+  },
+  "error_SyncInterrupted_Message": {
+    "message": "Une précédente synchronisation a été interrompue et ne s'est pas complétée. Réactivez la synchronisation pour restaurer vos données synchronisées."
+  },
+  "error_ScanFailed_Title": {
+    "message": "Scan échoué"
+  },
+  "error_ShareFailed_Title": {
+    "message": "Partage échoué"
+  },
+  "error_FailedBackupData_Title": {
+    "message": "Sauvegarde échouée"
+  }
 }

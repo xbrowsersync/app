@@ -5,16 +5,17 @@
 $window-width: 320px;
 $window-height: 520px;
 $search-window-width: 600px;
-$search-window-height: 4.2em;
+$search-window-height: 4em;
 
 body {
     width: $window-width;
+    transition: width linear .1s;
 
     &.search-view {
         width: $search-window-width;
         height: $search-window-height;
 
-        .container {
+        .container, #search-panel .header-panel {
             height: $search-window-height;
         }
     }
@@ -35,6 +36,10 @@ body {
         .container {
             height: $window-height;
         }
+    }
+
+    .background {
+        min-height: $window-height;
     }
 
     .container {
@@ -77,5 +82,9 @@ body {
         #backupFilePanel {
             display: none;
         }
+    }
+
+    .permissions-panel {
+        display: none;
     }
 }

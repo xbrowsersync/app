@@ -1,26 +1,27 @@
 <div class="header-panel clearfix">
   <button class="btn btn-icon btn-help animate-fade" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}"
-    data-ng-click="vm.events.introPanel_ShowHelp_Click()" data-ng-show="!vm.introduction.displayIntro() && !!vm.introduction.showLogo"
+    data-ng-click="vm.events.introPanel_ShowHelp_Click()" data-ng-show="!vm.introduction.displayIntro && vm.introduction.showLogo"
     tabindex="1000">
-    <i class="fa fa-question-circle" aria-hidden="true"></i>
+    <i class="fas fa-question-circle" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}</span>
   </button>
   <button class="btn btn-icon btn-settings" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}"
     data-ng-click="vm.view.change(vm.view.views.settings)" tabindex="1001">
-    <i class="fa fa-cog" aria-hidden="true"></i>
+    <i class="fas fa-cog" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}</span>
   </button>
 </div>
 <div class="intro-panel">
-  <h1 class="animate-fade-out" data-ng-show="!!vm.introduction.showLogo" data-ng-class="{ true: 'animate-fade-long animate-fade-out-long' }[vm.introduction.displayIntro()]">
+  <h1 class="animate-fade-out" data-ng-show="vm.introduction.showLogo" data-ng-class="{ true: 'animate-fade-long animate-fade-out-long' }[vm.introduction.displayIntro]">
     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Title) }}</span>
   </h1>
   <div id="intro-panel-1" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 1" data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
     data-hm-swipeleft="vm.events.introPanel1_Next_Click()">
     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel1_Message)"></div>
     <div class="buttons">
-      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}" data-ng-click="vm.events.introPanel1_Next_Click()">
-        <i class="fa fa-step-forward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
+        data-ng-click="vm.events.introPanel1_Next_Click()">
+        <i class="fas fa-step-forward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
       </button>
     </div>
@@ -29,12 +30,14 @@
     data-hm-swipeleft="vm.events.introPanel2_Next_Click()" data-hm-swiperight="vm.events.introPanel2_Prev_Click()">
     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel2_Message)"></div>
     <div class="buttons">
-      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel2_Prev_Click()">
-        <i class="fa fa-step-backward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
+        data-ng-click="vm.events.introPanel2_Prev_Click()">
+        <i class="fas fa-step-backward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
       </button>
-      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}" data-ng-click="vm.events.introPanel2_Next_Click()">
-        <i class="fa fa-step-forward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
+        data-ng-click="vm.events.introPanel2_Next_Click()">
+        <i class="fas fa-step-forward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
       </button>
     </div>
@@ -43,12 +46,14 @@
     data-hm-swipeleft="vm.events.introPanel3_Next_Click()" data-hm-swiperight="vm.events.introPanel3_Prev_Click()">
     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel3_Message)"></div>
     <div class="buttons">
-      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel3_Prev_Click()">
-        <i class="fa fa-step-backward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
+        data-ng-click="vm.events.introPanel3_Prev_Click()">
+        <i class="fas fa-step-backward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
       </button>
-      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}" data-ng-click="vm.events.introPanel3_Next_Click()">
-        <i class="fa fa-step-forward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
+        data-ng-click="vm.events.introPanel3_Next_Click()">
+        <i class="fas fa-step-forward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
       </button>
     </div>
@@ -57,12 +62,14 @@
     data-hm-swipeleft="vm.events.introPanel4_Next_Click()" data-hm-swiperight="vm.events.introPanel4_Prev_Click()">
     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel4_Message)"></div>
     <div class="buttons">
-      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel4_Prev_Click()">
-        <i class="fa fa-step-backward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
+        data-ng-click="vm.events.introPanel4_Prev_Click()">
+        <i class="fas fa-step-backward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
       </button>
-      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}" data-ng-click="vm.events.introPanel4_Next_Click()">
-        <i class="fa fa-step-forward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
+        data-ng-click="vm.events.introPanel4_Next_Click()">
+        <i class="fas fa-step-forward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
       </button>
     </div>
@@ -71,12 +78,14 @@
     data-hm-swipeleft="vm.events.introPanel5_Next_Click()" data-hm-swiperight="vm.events.introPanel5_Prev_Click()">
     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel5_Message)"></div>
     <div class="buttons">
-      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel5_Prev_Click()">
-        <i class="fa fa-step-backward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
+        data-ng-click="vm.events.introPanel5_Prev_Click()">
+        <i class="fas fa-step-backward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
       </button>
-      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}" data-ng-click="vm.events.introPanel5_Next_Click()">
-        <i class="fa fa-step-forward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
+        data-ng-click="vm.events.introPanel5_Next_Click()">
+        <i class="fas fa-step-forward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
       </button>
     </div>
@@ -85,12 +94,14 @@
     data-hm-swipeleft="vm.events.introPanel6_Next_Click()" data-hm-swiperight="vm.events.introPanel6_Prev_Click()">
     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel6_Message)"></div>
     <div class="buttons">
-      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel6_Prev_Click()">
-        <i class="fa fa-step-backward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
+        data-ng-click="vm.events.introPanel6_Prev_Click()">
+        <i class="fas fa-step-backward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
       </button>
-      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}" data-ng-click="vm.events.introPanel6_Next_Click()">
-        <i class="fa fa-step-forward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
+        data-ng-click="vm.events.introPanel6_Next_Click()">
+        <i class="fas fa-step-forward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
       </button>
     </div>
@@ -99,12 +110,14 @@
     data-hm-swipeleft="vm.events.introPanel7_Next_Click()" data-hm-swiperight="vm.events.introPanel7_Prev_Click()">
     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel7_Message)"></div>
     <div class="buttons">
-      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel7_Prev_Click()">
-        <i class="fa fa-step-backward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
+        data-ng-click="vm.events.introPanel7_Prev_Click()">
+        <i class="fas fa-step-backward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
       </button>
-      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}" data-ng-click="vm.events.introPanel7_Next_Click()">
-        <i class="fa fa-step-forward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
+        data-ng-click="vm.events.introPanel7_Next_Click()">
+        <i class="fas fa-step-forward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
       </button>
     </div>
@@ -113,12 +126,14 @@
     data-hm-swipeleft="vm.events.introPanel8_Next_Click()" data-hm-swiperight="vm.events.introPanel8_Prev_Click()">
     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel8_Message)"></div>
     <div class="buttons">
-      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel8_Prev_Click()">
-        <i class="fa fa-step-backward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
+        data-ng-click="vm.events.introPanel8_Prev_Click()">
+        <i class="fas fa-step-backward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
       </button>
-      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}" data-ng-click="vm.events.introPanel8_Next_Click()">
-        <i class="fa fa-step-forward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
+        data-ng-click="vm.events.introPanel8_Next_Click()">
+        <i class="fas fa-step-forward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
       </button>
     </div>
@@ -127,12 +142,14 @@
     data-hm-swipeleft="vm.events.introPanel9_Next_Click()" data-hm-swiperight="vm.events.introPanel9_Prev_Click()">
     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel9_Message)"></div>
     <div class="buttons">
-      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel9_Prev_Click()">
-        <i class="fa fa-step-backward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
+        data-ng-click="vm.events.introPanel9_Prev_Click()">
+        <i class="fas fa-step-backward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
       </button>
-      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}" data-ng-click="vm.events.introPanel9_Next_Click()">
-        <i class="fa fa-step-forward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
+        data-ng-click="vm.events.introPanel9_Next_Click()">
+        <i class="fas fa-step-forward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
       </button>
     </div>
@@ -141,12 +158,14 @@
     data-hm-swipeleft="vm.events.introPanel10_Next_Click()" data-hm-swiperight="vm.events.introPanel10_Prev_Click()">
     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel10_Message)"></div>
     <div class="buttons">
-      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel10_Prev_Click()">
-        <i class="fa fa-step-backward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
+        data-ng-click="vm.events.introPanel10_Prev_Click()">
+        <i class="fas fa-step-backward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
       </button>
-      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}" data-ng-click="vm.events.introPanel10_Next_Click()">
-        <i class="fa fa-step-forward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
+        data-ng-click="vm.events.introPanel10_Next_Click()">
+        <i class="fas fa-step-forward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
       </button>
     </div>
@@ -155,12 +174,14 @@
     data-hm-swipeleft="vm.events.introPanel11_Next_Click()" data-hm-swiperight="vm.events.introPanel11_Prev_Click()">
     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel11_Message)"></div>
     <div class="buttons">
-      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel11_Prev_Click()">
-        <i class="fa fa-step-backward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
+        data-ng-click="vm.events.introPanel11_Prev_Click()">
+        <i class="fas fa-step-backward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
       </button>
-      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}" data-ng-click="vm.events.introPanel11_Next_Click()">
-        <i class="fa fa-step-forward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-next" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
+        data-ng-click="vm.events.introPanel11_Next_Click()">
+        <i class="fas fa-step-forward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
       </button>
     </div>
@@ -169,8 +190,9 @@
     data-hm-swiperight="vm.events.introPanel12_Prev_Click()">
     <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel12_Message)"></div>
     <div class="buttons">
-      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}" data-ng-click="vm.events.introPanel12_Prev_Click()">
-        <i class="fa fa-step-backward" aria-hidden="true"></i>
+      <button class="btn btn-icon btn-prev" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
+        data-ng-click="vm.events.introPanel12_Prev_Click()">
+        <i class="fas fa-step-backward" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
       </button>
     </div>
@@ -178,44 +200,53 @@
 </div>
 <form name="vm.syncForm" class="animate-fade" data-ng-hide="vm.sync.displaySyncConfirmation || vm.sync.displayUpgradeConfirmation"
   novalidate>
-  <button type="submit" class="hidden" data-ng-click="vm.events.syncForm_Submit_Click()" tabindex="-1"></button>
+  <button type="submit" class="d-none" data-ng-click="vm.events.syncForm_Submit_Click()" tabindex="-1"></button>
   <div class="login-form-new animate-fade" data-ng-show="vm.settings.displayNewSyncPanel">
     <div class="animate-fade" data-ng-show="vm.sync.displayPasswordConfirmation">
       <div class="form-group secret-form-group">
-        <label class="sr-only" for="txtPasswordConfirmation">{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}</label>
-        <input name="txtPasswordConfirmation" data-ng-model="vm.sync.secretConfirmation" type="password" class="form-control" maxlength="150"
-          placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}" tabindex="2"
-        />
+        <label class="sr-only" for="txtPasswordConfirmation">{{
+          vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}</label>
+        <input name="txtPasswordConfirmation" data-ng-model="vm.sync.passwordConfirmation" type="password" class="form-control"
+          maxlength="150" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}"
+          tabindex="2" />
       </div>
       <div class="form-group buttons">
-        <button type="button" class="btn btn-default btn-new-sync" data-ng-disabled="vm.sync.secretConfirmation !== vm.sync.secret"
+        <button type="button" class="btn btn-default btn-new-sync" data-ng-disabled="vm.sync.passwordConfirmation !== vm.sync.password"
           data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="3">
           {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
         </button>
-        <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_NewSync_Click()" tabindex="4">
+        <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_ConfirmPassword_Back_Click()"
+          tabindex="4">
           {{ vm.platform.GetConstant(vm.globals.Constants.Button_Back_Label) }}
         </button>
       </div>
     </div>
     <div class="animate-fade" data-ng-hide="vm.sync.displayPasswordConfirmation">
       <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
-        <label class="sr-only" for="txtPassword">{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
-        <input name="txtPassword" data-ng-model="vm.sync.secret" type="password" class="form-control" data-ng-change="vm.events.syncForm_Password_Change()"
-          data-ng-disabled="vm.sync.enabled()" maxlength="150" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_New_Description) }}"
+        <label class="sr-only" for="txtPassword">{{
+          vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
+        <input name="txtPassword" data-ng-model="vm.sync.password" type="password" class="form-control" data-zxcvbn="vm.sync.passwordComplexity"
+          data-ng-disabled="vm.sync.enabled" maxlength="150" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_New_Description) }}"
           tabindex="1" />
-        <div class="progress" data-ng-hide="!vm.sync.secret">
-          <div class="progress-bar" role="progressbar" data-ng-style="{ width: (vm.sync.secretComplexity.complexity === 0) ? '100%' : vm.sync.secretComplexity.complexity + '%' }"
+        <div class="validation" data-ng-if="vm.sync.password && ((vm.sync.passwordComplexity.feedback.suggestions && vm.sync.passwordComplexity.feedback.suggestions.length > 0) || 
+          vm.sync.passwordComplexity.feedback.warning)">
+          {{ vm.sync.passwordComplexity.feedback.warning ? vm.sync.passwordComplexity.feedback.warning :
+          vm.sync.passwordComplexity.feedback.suggestions.length > 0 ?
+          vm.sync.passwordComplexity.feedback.suggestions.slice(-1)[0] : '' }}
+        </div>
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" data-ng-style="{ width: !vm.sync.password ? 0 : (((vm.sync.passwordComplexity.score + 1) / 5) * 100) + '%' }"
             data-ng-class="{
-                        'progress-bar-warning': vm.sync.secretComplexity.complexity >= 20 && vm.sync.secretComplexity.complexity < 40,
-                        'progress-bar-success': vm.sync.secretComplexity.complexity >= 40
-                        }">
+              'progress-bar-warning': vm.sync.passwordComplexity.score > 1 && vm.sync.passwordComplexity.score < 4,
+              'progress-bar-success': vm.sync.passwordComplexity.score === 4
+              }">
           </div>
         </div>
         <div class="progress-bar-background"></div>
       </div>
       <div class="form-group text-center">
-        <button type="button" class="btn btn-default btn-confirm-password" data-ng-disabled="!vm.sync.secret || !vm.sync.secretComplexity.valid"
-          data-ng-click="vm.events.syncForm_ConfirmPassword_Click()" tabindex="4">
+        <button type="button" class="btn btn-default btn-confirm-password" data-ng-disabled="!vm.sync.password"
+          tabindex="4" data-ng-click="vm.events.syncForm_ConfirmPassword_Click()">
           {{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}
         </button>
       </div>
@@ -225,7 +256,7 @@
       <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_GetSyncId_Message)"></p>
     </div>
     <div class="form-group toggle-form">
-      <a data-ng-click="vm.events.syncForm_ExistingSync_Click()" href="" tabindex="5">
+      <a data-ng-click="vm.events.syncForm_ExistingSync_Click()" href="#" tabindex="5">
         {{ vm.platform.GetConstant(vm.globals.Constants.Button_ExistingSync_Label) }}
       </a>
     </div>
@@ -233,28 +264,29 @@
   <div class="login-form-existing animate-fade" data-ng-hide="vm.settings.displayNewSyncPanel">
     <div class="form-group">
       <label class="sr-only" for="txtId">{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Label) }}</label>
-      <button type="button" class="btn btn-icon btn-scan" data-ng-hide="vm.settings.id()" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ScanCode_Label) }}"
+      <button type="button" class="btn btn-icon btn-scan" data-ng-hide="vm.sync.id" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ScanCode_Label) }}"
         data-ng-click="vm.events.searchForm_ScanCode_Click()">
-        <i class="fa fa-qrcode" aria-hidden="true"></i>
+        <i class="fas fa-qrcode" aria-hidden="true"></i>
       </button>
-      <input name="txtId" data-ng-model="vm.settings.id" class="form-control" data-ng-model-options="{ getterSetter: true }" data-ng-disabled="vm.sync.enabled()"
-        placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Description) }}" maxlength="32" spellcheck="false"
-        tabindex="1" />
+      <input name="txtId" data-ng-model="vm.sync.id" class="form-control" data-ng-disabled="vm.sync.enabled"
+        placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Description) }}" maxlength="32"
+        spellcheck="false" tabindex="1" />
     </div>
     <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
-      <label class="sr-only" for="txtPassword">{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
-      <input name="txtPassword" data-ng-model="vm.sync.secret" type="password" class="form-control" data-ng-disabled="vm.sync.enabled()"
+      <label class="sr-only" for="txtPassword">{{
+        vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
+      <input name="txtPassword" data-ng-model="vm.sync.password" type="password" class="form-control" data-ng-disabled="vm.sync.enabled"
         maxlength="150" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Existing_Description) }}"
         tabindex="2" />
     </div>
     <div class="form-group text-center">
-      <button type="button" class="btn btn-default btn-existing-sync" data-ng-disabled="!vm.settings.id() || !vm.sync.secret" data-ng-click="vm.events.syncForm_EnableSync_Click()"
-        tabindex="4">
+      <button type="button" class="btn btn-default btn-existing-sync" data-ng-disabled="!vm.sync.id || !vm.sync.password"
+        data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="4">
         {{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}
       </button>
     </div>
-    <div class="form-group text-center">
-      <a data-ng-click="vm.events.syncForm_NewSync_Click()" href="" tabindex="5">
+    <div class="form-group toggle-form">
+      <a data-ng-click="vm.events.syncForm_NewSync_Click()" href="#" tabindex="5">
         {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
       </a>
     </div>
@@ -285,7 +317,4 @@
       {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
     </button>
   </div>
-</div>
-<div class="background">
-  <div class="background-img"></div>
 </div>
