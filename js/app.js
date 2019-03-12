@@ -2011,11 +2011,13 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
   var syncForm_SyncUpdates_Click = function () {
     // Display loading panel
-    platform.Interface.Loading.Show();
+    var loadingTimeout = platform.Interface.Loading.Show();
 
     // Pull updates
     queueSync({ type: globals.SyncType.Pull })
-      .then(syncBookmarksSuccess)
+      .then(function () {
+        return syncBookmarksSuccess(loadingTimeout);
+      })
       .catch(displayAlertErrorHandler);
   };
 

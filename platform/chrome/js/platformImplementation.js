@@ -790,7 +790,8 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
             });
           }
           catch (err) {
-            reject(err);
+            utility.LogError(err, 'platform.getPageMetadata');
+            resolve(metadata);
           }
         });
       });

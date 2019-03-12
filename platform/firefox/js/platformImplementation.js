@@ -797,6 +797,10 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
             metadata.title = metadata.title || activeTab.title;
             metadata.url = metadata.url || activeTab.url;
             return metadata;
+          })
+          .catch(function (err) {
+            utility.LogError(err, 'platform.getPageMetadata');
+            return metadata;
           });
       });
   };
