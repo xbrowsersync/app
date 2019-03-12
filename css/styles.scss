@@ -349,13 +349,13 @@ body {
       font-size: .8em;
       line-height: 1.2em;
       position: absolute;
-      top: 2.5em;
-      right: 1.3em;
+      top: 2.35em;
+      right: 1.2em;
       background: $colour-text1;
-      padding: 0 .3em;
+      padding: .1em .3em;
       z-index: 20;
       max-width: 90%;
-      border-radius: 0.75em;
+      border-radius: 1em;
     }
   }
 
@@ -575,6 +575,11 @@ body {
 
     .form-group {
       position: relative;
+    }
+
+    .validation {
+      top: 2.05em;
+      right: 1em;
     }
   }
 
@@ -1336,6 +1341,10 @@ body {
         position: static;
         width: 100%;
         border: 1px solid $colour-text2!important;
+      }
+
+      .validation span {
+        font-size: 1em;
       }
     }
   }

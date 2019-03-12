@@ -175,8 +175,8 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
       (_.isString(obj)) ? String.prototype.slice.call(obj) :
         (_.isDate(obj)) ? new Date(obj.valueOf()) :
           (_.isFunction(obj.clone)) ? obj.clone() :
-            (_.isArray(obj)) ? _.map(obj, function (t) { return deepCopy(t) }) :
-              _.mapObject(obj, function (val, key) { return deepCopy(val) });
+            (_.isArray(obj)) ? _.map(obj, function (t) { return deepCopy(t); }) :
+              _.mapObject(obj, function (val, key) { return deepCopy(val); });
   };
 
   var encryptData = function (data) {
@@ -508,10 +508,10 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   };
 
   var logMessage = function (messageType, message, err) {
-    return platform.LocalStorage.Get(globals.CacheKeys.DebugMessageLog)
+    return platform.LocalStorage.Get(globals.CacheKeys.TraceLog)
       .then(function (debugMessageLog) {
+        debugMessageLog = debugMessageLog || [];
         var messageLogText = getDateTimeString(new Date()) + '\t';
-        var debugMessageLog = debugMessageLog || [];
 
         switch (messageType) {
           case globals.LogType.Error:
@@ -542,7 +542,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
           messageLogText += '\t' + err.stack.replace(/\s+/g, ' ');
         }
         debugMessageLog.push(messageLogText);
-        return platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog, debugMessageLog);
+        return platform.LocalStorage.Set(globals.CacheKeys.TraceLog, debugMessageLog);
       });
   };
 

@@ -131,7 +131,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         else {
           reject(disableResponse.error);
         }
-      })
+      });
     })
       .then(function () {
         browser.bookmarks.onCreated.addListener(onCreatedHandler);
@@ -199,13 +199,17 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var installExtension = function (currentVersion) {
-    // TODO: Add this back once Firefox supports optional permissions
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=1533014
+    // Clear trace log and display permissions panel if not already dismissed
+    return platform.LocalStorage.Set(globals.CacheKeys.TraceLog)
 
-    //return platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, true)
-    //  .then(function () {
-    return utility.LogInfo('Installed v' + currentVersion);
-    //  })
+      // TODO: Add this back once Firefox supports optional permissions
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=1533014
+
+      //  return platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, true)
+      //})
+      .then(function () {
+        return utility.LogInfo('Installed v' + currentVersion);
+      });
   };
 
   var moveBookmark = function (id, moveInfo) {
@@ -334,7 +338,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
 
     $q.all([
       platform.LocalStorage.Get(),
-      platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog)
+      platform.LocalStorage.Set(globals.CacheKeys.TraceLog)
     ])
       .then(function (data) {
         cachedData = data[0];
@@ -345,8 +349,9 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         cachedData.appVersion = globals.AppVersion;
         return utility.LogInfo(_.omit(
           cachedData,
+          'debugMessageLog',
           globals.CacheKeys.Bookmarks,
-          globals.CacheKeys.DebugMessageLog,
+          globals.CacheKeys.TraceLog,
           globals.CacheKeys.Password
         ));
       })
@@ -368,7 +373,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
             else {
               reject(response.error);
             }
-          })
+          });
         })
           // Start auto updates
           .then(platform.AutomaticUpdates.Start)
@@ -440,7 +445,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         else {
           reject(response.error);
         }
-      })
+      });
     })
       .then(function () {
         // Upgrade containers to use current container names
@@ -476,7 +481,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
           else {
             reject(response.error);
           }
-        })
+        });
       }) :
       $q.resolve();
 
@@ -515,7 +520,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         try {
           sendResponse({ error: err, success: false });
         }
-        catch (err) { }
+        catch (err2) { }
 
         // Send a message in case the user closed the extension window
         browser.runtime.sendMessage({
@@ -553,13 +558,13 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var upgradeExtension = function (oldVersion, newVersion) {
-    return platform.LocalStorage.Set(globals.CacheKeys.DebugMessageLog)
+    return platform.LocalStorage.Set(globals.CacheKeys.TraceLog)
       .then(function () {
         utility.LogInfo('Upgrading from ' + oldVersion + ' to ' + newVersion);
       })
       .then(function () {
-        // For v1.4.1, convert local storage items to storage API
-        if (newVersion === '1.4.1' && compareVersions(oldVersion, newVersion) < 0) {
+        // For v1.5.0, convert local storage items to storage API
+        if (newVersion === '1.5.0' && compareVersions(oldVersion, newVersion) < 0) {
           return utility.ConvertLocalStorageToStorageApi();
         }
       })

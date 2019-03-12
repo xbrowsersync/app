@@ -583,7 +583,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
     var file = new Blob([textContents], { type: 'text/plain' });
     downloadLink.href = URL.createObjectURL(file);
-    downloadLink.innerHTML = fileName;
+    downloadLink.innerText = fileName;
     downloadLink.download = fileName;
     downloadLink.click();
 
@@ -1427,7 +1427,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
             }
           );
         }));
-      })
+      });
   };
 
   var updateLocalBookmark = function (localBookmarkId, title, url) {

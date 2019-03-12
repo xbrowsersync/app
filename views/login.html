@@ -215,7 +215,8 @@
           data-ng-click="vm.events.syncForm_EnableSync_Click()" tabindex="3">
           {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
         </button>
-        <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_ConfirmPassword_Back_Click()" tabindex="4">
+        <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_ConfirmPassword_Back_Click()"
+          tabindex="4">
           {{ vm.platform.GetConstant(vm.globals.Constants.Button_Back_Label) }}
         </button>
       </div>
@@ -227,8 +228,11 @@
         <input name="txtPassword" data-ng-model="vm.sync.password" type="password" class="form-control" data-zxcvbn="vm.sync.passwordComplexity"
           data-ng-disabled="vm.sync.enabled" maxlength="150" placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_New_Description) }}"
           tabindex="1" />
-        <div class="validation" data-ng-if="vm.sync.passwordComplexity.feedback.warning">
-          {{ vm.sync.passwordComplexity.feedback.warning }}
+        <div class="validation" data-ng-if="vm.sync.password && ((vm.sync.passwordComplexity.feedback.suggestions && vm.sync.passwordComplexity.feedback.suggestions.length > 0) || 
+          vm.sync.passwordComplexity.feedback.warning)">
+          {{ vm.sync.passwordComplexity.feedback.warning ? vm.sync.passwordComplexity.feedback.warning :
+          vm.sync.passwordComplexity.feedback.suggestions.length > 0 ?
+          vm.sync.passwordComplexity.feedback.suggestions.slice(-1)[0] : '' }}
         </div>
         <div class="progress">
           <div class="progress-bar" role="progressbar" data-ng-style="{ width: !vm.sync.password ? 0 : (((vm.sync.passwordComplexity.score + 1) / 5) * 100) + '%' }"
@@ -241,8 +245,8 @@
         <div class="progress-bar-background"></div>
       </div>
       <div class="form-group text-center">
-        <button type="button" class="btn btn-default btn-confirm-password" data-ng-disabled="!vm.sync.password" tabindex="4"
-          data-ng-click="vm.events.syncForm_ConfirmPassword_Click()">
+        <button type="button" class="btn btn-default btn-confirm-password" data-ng-disabled="!vm.sync.password"
+          tabindex="4" data-ng-click="vm.events.syncForm_ConfirmPassword_Click()">
           {{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}
         </button>
       </div>

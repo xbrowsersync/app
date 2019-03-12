@@ -351,6 +351,7 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
             .then(function () {
               return globals.ErrorCodes.HttpRequestFailed;
             });
+          break;
         // Otherwise generic request failed
         default:
           getErrorCodePromise = $q.resolve(globals.ErrorCodes.HttpRequestFailed);

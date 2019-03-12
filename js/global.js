@@ -15,7 +15,7 @@ xBrowserSync.App.Global = function (platform) {
       Period: 15
     },
     ApiVersion: '1.1.3',
-    AppVersion: '1.4.1',
+    AppVersion: '1.5.0',
     Bookmarks: {
       ContainerPrefix: '[xbs]',
       DescriptionMaxLength: 300,
@@ -28,10 +28,8 @@ xBrowserSync.App.Global = function (platform) {
       ToolbarContainerNameOld: '_toolbar_',
       UnfiledContainerNameOld: '_xBrowserSync_'
     },
-    BtcAddress: '1QEpmSt2hqnskxGRav9SNaRrJo5E9pGpGy',
     CacheKeys: {
       Bookmarks: 'bookmarks',
-      DebugMessageLog: 'debugMessageLog',
       DisplayIntro: 'displayIntro',
       DisplayPermissions: 'displayPermissions',
       DisplayUpdated: 'displayUpdated',
@@ -43,7 +41,8 @@ xBrowserSync.App.Global = function (platform) {
       SyncBookmarksToolbar: 'syncBookmarksToolbar',
       SyncEnabled: 'syncEnabled',
       SyncId: 'syncId',
-      SyncVersion: 'syncVersion'
+      SyncVersion: 'syncVersion',
+      TraceLog: 'traceLog'
     },
     Commands: {
       SyncBookmarks: 1,
@@ -351,8 +350,8 @@ xBrowserSync.App.Global = function (platform) {
       LastUpdated: '/lastUpdated',
       Version: '/version',
       ServiceInformation: '/info',
-      Regex: /^(\w+:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]+\.[a-z]+\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/i,
-      ProtocolRegex: /^\w+:.*$/
+      Regex: '^(\\w+://.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]+\\.[a-z]+\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$',
+      ProtocolRegex: '^\\w+:.*$'
     }
   };
 

@@ -225,7 +225,7 @@
     "message": "Version"
   },
   "settings_About_AppVersion_Description": {
-    "message": "xBrowserSync client version number."
+    "message": "Source code release version number."
   },
   "button_ReleaseNotes_Label": {
     "message": "View Release Notes"

@@ -232,7 +232,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       "message": "Version"
     },
     "settings_About_AppVersion_Description": {
-      "message": "xBrowserSync client version number."
+      "message": "Source code release version number."
     },
     "button_ReleaseNotes_Label": {
       "message": "View Release Notes"
@@ -804,7 +804,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
   };
 
   var getPageMetadata = function (deferred) {
-    var inAppBrowser, inAppBrowserTimeout
+    var inAppBrowser, inAppBrowserTimeout;
 
     // If current url not set, return with default url
     if (!currentUrl) {
@@ -1330,7 +1330,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
     // Reset network disconnected flag
     var networkDisconnected = !utility.IsNetworkConnected();
-    platform.LocalStorage.Set(globals.CacheKeys.NetworkDisconnected, networkDisconnected)
+    platform.LocalStorage.Set(globals.CacheKeys.NetworkDisconnected, networkDisconnected);
 
     // Check if a sync was interrupted
     checkForInterruptedSync()
@@ -1598,7 +1598,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
           var errMessage = utility.GetErrorMessageFromException(err);
           vm.alert.display(errMessage.title, errMessage.message);
         }
-      })
+      });
   };
 
   var syncForm_EnableSync_Click = function () {

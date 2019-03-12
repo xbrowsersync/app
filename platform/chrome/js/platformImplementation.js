@@ -572,7 +572,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
     var file = new Blob([textContents], { type: 'text/plain' });
     downloadLink.href = URL.createObjectURL(file);
-    downloadLink.innerHTML = fileName;
+    downloadLink.innerText = fileName;
     downloadLink.download = fileName;
     downloadLink.click();
 
@@ -1471,7 +1471,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
             }
           });
         }));
-      })
+      });
   };
 
   var updateLocalBookmark = function (localBookmarkId, title, url) {
@@ -1521,16 +1521,17 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
             chrome.bookmarks.getChildren(otherBookmarksId, function (children) {
               // Get all bookmarks in other bookmarks that are xBrowserSync containers
               var localContainers = children.filter(function (x) {
-                return unsupportedContainers.find(function (y) { return y === x.title });
+                return unsupportedContainers.find(function (y) { return y === x.title; });
               });
               var containersCount = 0;
               var checksFailed = false;
+              var count;
 
               // Check each container present only appears once
               var menuContainer = bookmarks.GetContainer(globals.Bookmarks.MenuContainerName, xBookmarks, false);
               if (menuContainer) {
                 containersCount++;
-                var count = localContainers.filter(function (x) {
+                count = localContainers.filter(function (x) {
                   return x.title === globals.Bookmarks.MenuContainerName;
                 }).length;
                 checksFailed = count !== 1 ? true : checksFailed;
@@ -1539,7 +1540,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
               var mobileContainer = bookmarks.GetContainer(globals.Bookmarks.MobileContainerName, xBookmarks, false);
               if (mobileContainer) {
                 containersCount++;
-                var count = localContainers.filter(function (x) {
+                count = localContainers.filter(function (x) {
                   return x.title === globals.Bookmarks.MobileContainerName;
                 }).length;
                 checksFailed = count !== 1 ? true : checksFailed;

@@ -394,7 +394,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     var bookmarkToCreate = utility.DeepCopy(vm.bookmark.current);
 
     // Check for protocol
-    if (!globals.URL.ProtocolRegex.test(bookmarkToCreate.url)) {
+    var protocolRegex = new RegExp(globals.URL.ProtocolRegex);
+    if (!protocolRegex.test(bookmarkToCreate.url)) {
       bookmarkToCreate.url = 'http://' + bookmarkToCreate.url;
     }
 
@@ -527,7 +528,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     var bookmarkToUpdate = utility.DeepCopy(vm.bookmark.current);
 
     // Check for protocol
-    if (!globals.URL.ProtocolRegex.test(bookmarkToUpdate.url)) {
+    var protocolRegex = new RegExp(globals.URL.ProtocolRegex);
+    if (!protocolRegex.test(bookmarkToUpdate.url)) {
       bookmarkToUpdate.url = 'http://' + bookmarkToUpdate.url;
     }
 
@@ -790,7 +792,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
   var displayQRCode = function (value) {
     if (!value) {
-      return
+      return;
     }
 
     // Generate new QR code from the supplied value
@@ -803,7 +805,14 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       background: '#ffffff',
       ecl: 'M'
     });
-    document.getElementById('qr').innerHTML = qrcode.svg();
+
+    // Add new qr code svg to qr container
+    var svg = new DOMParser().parseFromString(qrcode.svg(), 'text/xml').firstElementChild;
+    var qrContainer = document.getElementById('qr');
+    while (qrContainer.firstElementChild) {
+      qrContainer.removeChild(qrContainer.firstElementChild);
+    }
+    qrContainer.appendChild(svg);
     vm.settings.displayQRCode = true;
   };
 
@@ -824,7 +833,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
   var downloadLogFile = function () {
     // Get cached message log
-    return platform.LocalStorage.Get(globals.CacheKeys.DebugMessageLog)
+    return platform.LocalStorage.Get(globals.CacheKeys.TraceLog)
       .then(function (debugMessageLog) {
         // Trigger download
         platform.DownloadFile(utility.GetLogFileName(), debugMessageLog.join('\r\n'), 'downloadLogFileLink');
@@ -847,7 +856,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
           platform.Interface.Loading.Show();
           return platform.Sync.Await(currentSync.uniqueId)
             .then(function () {
-              return vm.view.change(vm.view.views.search)
+              return vm.view.change(vm.view.views.search);
             });
         }
 
@@ -922,7 +931,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
               resolve(bookmark);
             });
-        })
+        });
     })
       .then(function (bookmark) {
         // Save url to compare for changes
@@ -1052,7 +1061,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var init_settingsView = function () {
-    vm.settings.displayCancelSyncConfirmation
     vm.settings.displayCancelSyncConfirmation = false;
     vm.settings.displayQRCode = false;
     vm.settings.displayRestoreConfirmation = false;
@@ -1078,7 +1086,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     return $q.all([
       bookmarks.GetSyncBookmarksToolbar(),
       platform.LocalStorage.Get([
-        globals.CacheKeys.DebugMessageLog,
+        globals.CacheKeys.TraceLog,
         globals.CacheKeys.SyncEnabled,
         globals.CacheKeys.SyncId
       ]),
@@ -1397,13 +1405,14 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       url: undefined,
       keywords: []
     };
+    var urlRegex = new RegExp(globals.URL.Regex, 'i');
 
     if (vm.search.query) {
       // Iterate query words to form query data object
       var queryWords = vm.search.query.split(/[\s,]+/);
       _.each(queryWords, function (queryWord) {
         // Add query word as url if query is in url format, otherwise add to keywords
-        if (!queryData.url && globals.URL.Regex.test(queryWord.trim())) {
+        if (!queryData.url && urlRegex.test(queryWord.trim())) {
           queryData.url = queryWord.trim();
         }
         else {
@@ -1835,7 +1844,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
               ])
                 .then(function () {
                   return vm.sync.id;
-                })
+                });
             });
         }
       })
@@ -1900,9 +1909,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   var syncBookmarksSuccess = function (loadingTimeout) {
     // Hide loading panel
     platform.Interface.Loading.Hide(null, loadingTimeout);
-    
+
     // If initial sync, switch to search panel
-    $timeout(function() {
+    $timeout(function () {
       if (vm.view.current !== vm.view.views.search) {
         return changeView(vm.view.views.search);
       }
@@ -1915,9 +1924,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     return setBookmarkStatus();
   };
 
-  var syncForm_ConfirmPassword_Back_Click = function() {
-      vm.sync.displayPasswordConfirmation = false;
-      vm.sync.passwordConfirmation = null;
+  var syncForm_ConfirmPassword_Back_Click = function () {
+    vm.sync.displayPasswordConfirmation = false;
+    vm.sync.passwordConfirmation = null;
   };
 
   var syncForm_ConfirmPassword_Click = function () {
@@ -2169,7 +2178,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
   var updateServiceUrlForm_Update_Click = function () {
     // Check for protocol
-    if (vm.settings.service.newServiceUrl && vm.settings.service.newServiceUrl.trim() && !globals.URL.ProtocolRegex.test(vm.settings.service.newServiceUrl)) {
+    var protocolRegex = new RegExp(globals.URL.ProtocolRegex);
+    if (vm.settings.service.newServiceUrl && vm.settings.service.newServiceUrl.trim() && !protocolRegex.test(vm.settings.service.newServiceUrl)) {
       vm.settings.service.newServiceUrl = 'https://' + vm.settings.service.newServiceUrl;
     }
 

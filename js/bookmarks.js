@@ -195,7 +195,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
           tmp.path.unshift({ bookmark: tree, index: index });
           return tmp;
         }
-      };
+      }
       return {};
     }
   };
@@ -1289,7 +1289,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     bookmarks = removeEmptyContainers(bookmarks);
 
     return bookmarks;
-  }
+  };
 
   var self = {
     CheckBookmarksHaveUniqueIds: checkBookmarksHaveUniqueIds,
