@@ -196,7 +196,13 @@ body {
     }
 
     a {
-      color: $colour-link-highlight;
+      &.active,
+      &:active,
+      &:focus,
+      &:hover {
+        color: $colour-text2;
+        border-bottom-color: $colour-text2;
+      }
     }
 
     button.btn-close {
@@ -218,8 +224,12 @@ body {
       }
     }
 
-    p:hover {
-      color: $colour-text1;
+    p {
+      &:hover {
+        color: $colour-text1;
+      }
+
+      margin-bottom: 0;
     }
   }
 

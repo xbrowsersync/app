@@ -480,7 +480,7 @@
     "message": "Quelque chose s'est mal passé"
   },
   "error_Default_Message": {
-    "message": "Si ce problème continue, créez un ticket ici github.com/xbrowsersync/app."
+    "message": "Try again, if the problem recurs go ahead and <a href='https://github.com/xbrowsersync/app/issues' class='new-tab'>submit an issue</a>."
   },
   "error_HttpRequestFailed_Title": {
     "message": "Connexion perdue"
@@ -495,10 +495,10 @@
     "message": "La synchronisation sera retentée automatiquement lorsque la connexion sera restaurée."
   },
   "error_TooManyRequests_Title": {
-    "message": "Doucement !"
+    "message": "Service request limit hit"
   },
   "error_TooManyRequests_Message": {
-    "message": "Trop de requêtes envoyées, la synchronisation a été désactivée. Re-activez la synchronisation manuellement."
+    "message": "Sync has been disabled, re-enable sync to resume syncing."
   },
   "error_RequestEntityTooLarge_Title": {
     "message": "Quota de données synchronisées dépassé"
@@ -602,11 +602,11 @@
   "error_ContainerChanged_Message": {
     "message": "Modifier, supprimer ou déplacer les dossiers d'application de xBrowserSync peut causer des problèmes, la synchronisation a donc été désactivée. Réactivez la synchronisation pour restaurer vos favoris."
   },
-  "error_NotImplemented_Title": {
-    "message": "Fonction non implémentée"
+  "error_LocalContainerNotFound_Title": {
+    "message": "Unexpected bookmarks structure"
   },
-  "error_NotImplemented_Message": {
-    "message": "Une fonction requise n'a pas été implémentée et ne permet pas à xBrowserSync de fonctionner correctement."
+  "error_LocalContainerNotFound_Message": {
+    "message": "This could be caused by a corrupt browser profile. Try syncing with a fresh profile before importing any existing bookmarks."
   },
   "error_FailedGetPageMetadata_Title": {
     "message": "Impossible d'obtenir les metadate de l'URL"

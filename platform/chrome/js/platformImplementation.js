@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Implements xBrowserSync.App.Platform for Chrome extension.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeout, platform, globals, utility, bookmarks) {
+xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, platform, globals, utility, bookmarks) {
   'use strict';
 
   var vm, loadingId,
@@ -14,8 +14,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     optionalPermissions = {
       origins: ['http://*/', 'https://*/']
     },
-    otherBookmarksTitle = 'Other bookmarks',
-    toolbarBookmarksTitle = 'Bookmarks bar',
     unsupportedContainers = [
       globals.Bookmarks.MenuContainerName,
       globals.Bookmarks.MobileContainerName
@@ -71,9 +69,14 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 	 * ------------------------------------------------------------------------------------ */
 
   var addIdsToBookmarks = function (xBookmarks) {
-    // Get all bookmarks into array
-    return getLocalBookmarkTree()
-      .then(function (tree) {
+    // Get all local bookmarks into array
+    return $q.all([
+      getLocalBookmarkTree(),
+      getLocalContainerIds()
+    ])
+      .then(function (results) {
+        var tree = results[0];
+        var localContainerIds = results[1];
         var allBookmarks = [];
 
         // Get all local bookmarks into flat array
@@ -98,7 +101,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
           // Check allBookmarks for index 
           bookmarkId = _.findIndex(allBookmarks, function (sortedBookmark) {
             return bookmarks.XBookmarkIsContainer(bookmark) ?
-              sortedBookmark.title === getEquivalentLocalContainerName(bookmark.title) :
+              sortedBookmark.id === localContainerIds[bookmark.title] :
               sortedBookmark.title === bookmark.title &&
               sortedBookmark.url === bookmark.url &&
               !sortedBookmark.assigned;
@@ -411,7 +414,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
         var otherBookmarksId = localContainerIds[globals.Bookmarks.OtherContainerName];
         var toolbarBookmarksId = localContainerIds[globals.Bookmarks.ToolbarContainerName];
 
-        // Clear Other bookmarks
+        // Clear other bookmarks
         var clearOthers = $q(function (resolve, reject) {
           try {
             chrome.bookmarks.getChildren(otherBookmarksId, function (results) {
@@ -770,20 +773,23 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
           url: activeTab.url
         };
 
-        return $q(function (resolve, reject) {
+        return $q(function (resolve) {
           // If unable to get metadata return default
           if (!getMetadata) {
-            resolve(metadata);
-            return;
+            return resolve(metadata);
           }
 
           try {
             chrome.tabs.executeScript(activeTab.id, { file: contentScriptUrl }, function (response) {
-              if (response && response.length > 0) {
-                metadata = response[0];
+              if (!response) {
+                if (chrome.runtime.lastError) {
+                  utility.LogWarning('Unable to get metadata: ' + chrome.runtime.lastError.message);
+                }
+                return resolve(metadata);
               }
 
               // If no metadata returned, use the info from the active tab
+              metadata = response[0];
               metadata.title = metadata.title || activeTab.title;
               metadata.url = metadata.url || activeTab.url;
               resolve(metadata);
@@ -1345,15 +1351,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     return deferred.promise;
   };
 
-  var getEquivalentLocalContainerName = function (xBookmarkTitle) {
-    switch (xBookmarkTitle) {
-      case globals.Bookmarks.OtherContainerName:
-        return otherBookmarksTitle;
-      case globals.Bookmarks.ToolbarContainerName:
-        return toolbarBookmarksTitle;
-    }
-  };
-
   var getLocalBookmarkTree = function (localBookmarkId) {
     return $q(function (resolve, reject) {
       var callback = function (tree) {
@@ -1407,11 +1404,15 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     return getLocalBookmarkTree()
       .then(function (tree) {
         // Get the root child nodes
-        var rootChildren = tree.children;
-        var otherBookmarksNode = rootChildren.find(function (x) { return x.title === otherBookmarksTitle; });
-        var toolbarBookmarksNode = rootChildren.find(function (x) { return x.title === toolbarBookmarksTitle; });
+        var otherBookmarksNode = tree.children.find(function (x) { return x.id === '2'; });
+        var toolbarBookmarksNode = tree.children.find(function (x) { return x.id === '1'; });
 
-        // Return the ids
+        // Throw an error if a local container is not found
+        if (!otherBookmarksNode || !toolbarBookmarksNode) {
+          return $q.reject({ code: globals.ErrorCodes.LocalContainerNotFound });
+        }
+
+        // Return the container ids
         var results = {};
         results[globals.Bookmarks.OtherContainerName] = otherBookmarksNode.id;
         results[globals.Bookmarks.ToolbarContainerName] = toolbarBookmarksNode.id;
@@ -1512,7 +1513,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       .then(function (localContainerIds) {
         var otherBookmarksId = localContainerIds[globals.Bookmarks.OtherContainerName];
 
-        // If parent is Other bookmarks, check Other bookmarks children for containers
+        // If parent is other bookmarks, check other bookmarks children for containers
         if (changedBookmark.parentId !== otherBookmarksId) {
           return false;
         }

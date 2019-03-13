@@ -336,6 +336,10 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         errorMessage.title = platform.GetConstant(globals.Constants.Error_ContainerChanged_Title);
         errorMessage.message = platform.GetConstant(globals.Constants.Error_ContainerChanged_Message);
         break;
+      case globals.ErrorCodes.LocalContainerNotFound:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_LocalContainerNotFound_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_LocalContainerNotFound_Message);
+        break;
       case globals.ErrorCodes.DataOutOfSync:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_OutOfSync_Title);
         errorMessage.message = platform.GetConstant(globals.Constants.Error_OutOfSync_Message);
@@ -351,10 +355,6 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
       case globals.ErrorCodes.ApiVersionNotSupported:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_ApiVersionNotSupported_Title);
         errorMessage.message = platform.GetConstant(globals.Constants.Error_ApiVersionNotSupported_Message);
-        break;
-      case globals.ErrorCodes.NotImplemented:
-        errorMessage.title = platform.GetConstant(globals.Constants.Error_NotImplemented_Title);
-        errorMessage.message = platform.GetConstant(globals.Constants.Error_NotImplemented_Message);
         break;
       case globals.ErrorCodes.FailedGetPageMetadata:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedGetPageMetadata_Title);

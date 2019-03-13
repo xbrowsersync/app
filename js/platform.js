@@ -9,7 +9,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  *              platform/chrome//platformImplementation.js.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Platform = function ($q) {
+xBrowserSync.App.Platform = function () {
   'use strict';
 
   var notImplemented = function () {

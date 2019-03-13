@@ -9,7 +9,7 @@ SpinnerDialog.show = function () { };
  * Description: Implements xBrowserSync.App.Platform for mobile apps.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeout, platform, globals, utility, bookmarks) {
+xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, platform, globals, utility, bookmarks) {
   'use strict';
 
   var $scope, autoUpdatesInterval, currentUrl, loadingId, vm;
@@ -490,7 +490,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       "message": "Something went wrong"
     },
     "error_Default_Message": {
-      "message": "If this problem recurs, submit an issue at github.com/xbrowsersync/app."
+      "message": "Try again, if the problem recurs go ahead and <a href='https://github.com/xbrowsersync/app/issues' class='new-tab'>submit an issue</a>."
     },
     "error_HttpRequestFailed_Title": {
       "message": "Connection lost"
@@ -505,10 +505,10 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       "message": "Sync will be retried automatically when connection is restored."
     },
     "error_TooManyRequests_Title": {
-      "message": "Slow down!"
+      "message": "Service request limit hit"
     },
     "error_TooManyRequests_Message": {
-      "message": "Too many requests sent, sync has been disabled. Re-enable sync to resume syncing."
+      "message": "Sync has been disabled, re-enable sync to resume syncing."
     },
     "error_RequestEntityTooLarge_Title": {
       "message": "Sync data limit exceeded"
@@ -612,11 +612,11 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     "error_ContainerChanged_Message": {
       "message": "Changing, deleting or moving xBrowserSync folders can cause issues, sync has been disabled. Re-enable sync to restore bookmarks."
     },
-    "error_NotImplemented_Title": {
-      "message": "Function not implemented"
+    "error_LocalContainerNotFound_Title": {
+      "message": "Unexpected bookmarks structure"
     },
-    "error_NotImplemented_Message": {
-      "message": "A required function has not been implemented and is causing xBrowserSync to not function correctly."
+    "error_LocalContainerNotFound_Message": {
+      "message": "This could be caused by a corrupt browser profile. Try syncing with a fresh profile before importing any existing bookmarks."
     },
     "error_FailedGetPageMetadata_Title": {
       "message": "Couldn’t get URL metadata"

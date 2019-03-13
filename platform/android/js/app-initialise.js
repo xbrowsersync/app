@@ -1,33 +1,33 @@
 // Initialise the angular app
 xBrowserSync.App.UI = angular.module('xBrowserSync.App.UI', [
-    'angular.filter',
-    'hmTouchEvents',
-    'infinite-scroll',
-    'ngAnimate',
-    'ngSanitize',
-    'zxcvbn'
+  'angular.filter',
+  'hmTouchEvents',
+  'infinite-scroll',
+  'ngAnimate',
+  'ngSanitize',
+  'zxcvbn'
 ]);
 
 // Disable debug info
 xBrowserSync.App.UI.config(['$compileProvider', function ($compileProvider) {
-    $compileProvider.debugInfoEnabled(false);
-    $compileProvider.aHrefSanitizationWhitelist(/^\w+:.*$/);
+  $compileProvider.debugInfoEnabled(false);
+  $compileProvider.aHrefSanitizationWhitelist(/^\w+:.*$/);
 }]);
 
 // Restrict animations to elements with class prefix "animate-"
 xBrowserSync.App.UI.config(['$animateProvider', function ($animateProvider) {
-    $animateProvider.classNameFilter(/animate/);
+  $animateProvider.classNameFilter(/animate/);
 }]);
 
 xBrowserSync.App.UI.run(['$templateRequest', function ($templateRequest) {
-    // Pre-load templates
-    $templateRequest('./views/login.html', true);
-    $templateRequest('./views/search.html', true);
-    $templateRequest('./views/bookmark.html', true);
-    $templateRequest('./views/settings.html', true);
+  // Pre-load templates
+  $templateRequest('./views/login.html', true);
+  $templateRequest('./views/search.html', true);
+  $templateRequest('./views/bookmark.html', true);
+  $templateRequest('./views/settings.html', true);
 
-    // Remove 300ms delay for mobile clicks
-    FastClick.attach(document.body);
+  // Remove 300ms delay for mobile clicks
+  FastClick.attach(document.body);
 }]);
 
 // Add platform service
@@ -42,7 +42,7 @@ xBrowserSync.App.UI.factory('globals', xBrowserSync.App.Global);
 xBrowserSync.App.HttpInterceptor.$inject = ['$q', 'globals'];
 xBrowserSync.App.UI.factory('httpInterceptor', xBrowserSync.App.HttpInterceptor);
 xBrowserSync.App.UI.config(['$httpProvider', function ($httpProvider) {
-    $httpProvider.interceptors.push('httpInterceptor');
+  $httpProvider.interceptors.push('httpInterceptor');
 }]);
 
 // Add utility service
@@ -58,7 +58,7 @@ xBrowserSync.App.Bookmarks.$inject = ['$q', '$timeout', 'platform', 'globals', '
 xBrowserSync.App.UI.factory('bookmarks', xBrowserSync.App.Bookmarks);
 
 // Add platform implementation service
-xBrowserSync.App.PlatformImplementation.$inject = ['$http', '$interval', '$q', '$timeout', 'platform', 'globals', 'utility', 'bookmarks'];
+xBrowserSync.App.PlatformImplementation.$inject = ['$interval', '$q', '$timeout', 'platform', 'globals', 'utility', 'bookmarks'];
 xBrowserSync.App.UI.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add main controller

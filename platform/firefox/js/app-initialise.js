@@ -27,7 +27,6 @@ xBrowserSync.App.UI.run(['$templateRequest', function ($templateRequest) {
 }]);
 
 // Add platform service
-xBrowserSync.App.Platform.$inject = ['$q'];
 xBrowserSync.App.UI.factory('platform', xBrowserSync.App.Platform);
 
 // Add global service
@@ -54,7 +53,7 @@ xBrowserSync.App.Bookmarks.$inject = ['$q', '$timeout', 'platform', 'globals', '
 xBrowserSync.App.UI.factory('bookmarks', xBrowserSync.App.Bookmarks);
 
 // Add platform implementation service
-xBrowserSync.App.PlatformImplementation.$inject = ['$http', '$interval', '$q', '$timeout', 'platform', 'globals', 'utility', 'bookmarks'];
+xBrowserSync.App.PlatformImplementation.$inject = ['$interval', '$q', '$timeout', 'platform', 'globals', 'utility', 'bookmarks'];
 xBrowserSync.App.UI.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add main controller

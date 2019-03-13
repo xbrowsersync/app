@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Implements xBrowserSync.App.Platform for Firefox extension.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeout, platform, globals, utility, bookmarks) {
+xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, platform, globals, utility, bookmarks) {
   'use strict';
 
   var vm, loadingId,
@@ -15,10 +15,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
       origins: ['http://*/', 'https://*/']
     },
     separatorTypeName = 'separator',
-    menuBookmarksTitle = 'Bookmarks Menu',
-    mobileBookmarksTitle = 'Mobile Bookmarks',
-    otherBookmarksTitle = 'Other Bookmarks',
-    toolbarBookmarksTitle = 'Bookmarks Toolbar',
     unsupportedContainers = [],
     unsupportedBookmarkUrl = 'about:newtab';
 
@@ -72,8 +68,13 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
 
   var addIdsToBookmarks = function (xBookmarks) {
     // Get all bookmarks into array
-    return getLocalBookmarkTree()
-      .then(function (tree) {
+    return $q.all([
+      getLocalBookmarkTree(),
+      getLocalContainerIds()
+    ])
+      .then(function (results) {
+        var tree = results[0];
+        var localContainerIds = results[1];
         var allBookmarks = [];
 
         // Get all local bookmarks into flat array
@@ -98,7 +99,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
           // Check allBookmarks for index 
           bookmarkId = _.findIndex(allBookmarks, function (sortedBookmark) {
             return bookmarks.XBookmarkIsContainer(bookmark) ?
-              sortedBookmark.title === getEquivalentLocalContainerName(bookmark.title) :
+              sortedBookmark.id === localContainerIds[bookmark.title] :
               sortedBookmark.title === bookmark.title &&
               sortedBookmark.url === bookmark.url &&
               !sortedBookmark.assigned;
@@ -447,7 +448,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
             throw err;
           });
 
-        // Clear Other bookmarks
+        // Clear other bookmarks
         var clearOthers = browser.bookmarks.getChildren(otherBookmarksId)
           .then(function (results) {
             return $q.all(results.map(function (child) {
@@ -799,7 +800,7 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
             return metadata;
           })
           .catch(function (err) {
-            utility.LogError(err, 'platform.getPageMetadata');
+            utility.LogWarning('Unable to get metadata: ' + (err ? err.message : ''));
             return metadata;
           });
       });
@@ -1310,19 +1311,6 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     return deferred.promise;
   };
 
-  var getEquivalentLocalContainerName = function (xBookmarkTitle) {
-    switch (xBookmarkTitle) {
-      case globals.Bookmarks.MenuContainerName:
-        return menuBookmarksTitle;
-      case globals.Bookmarks.MobileContainerName:
-        return mobileBookmarksTitle;
-      case globals.Bookmarks.OtherContainerName:
-        return otherBookmarksTitle;
-      case globals.Bookmarks.ToolbarContainerName:
-        return toolbarBookmarksTitle;
-    }
-  };
-
   var getLocalBookmarkTree = function (localBookmarkId) {
     var getTree = localBookmarkId != null ?
       browser.bookmarks.getSubTree(localBookmarkId) :
@@ -1372,13 +1360,17 @@ xBrowserSync.App.PlatformImplementation = function ($http, $interval, $q, $timeo
     return getLocalBookmarkTree()
       .then(function (tree) {
         // Get the root child nodes
-        var rootChildren = tree.children;
-        var menuBookmarksNode = rootChildren.find(function (x) { return x.title === menuBookmarksTitle; });
-        var mobileBookmarksNode = rootChildren.find(function (x) { return x.title === mobileBookmarksTitle; });
-        var otherBookmarksNode = rootChildren.find(function (x) { return x.title === otherBookmarksTitle; });
-        var toolbarBookmarksNode = rootChildren.find(function (x) { return x.title === toolbarBookmarksTitle; });
+        var menuBookmarksNode = tree.children.find(function (x) { return x.id === 'menu________'; });
+        var mobileBookmarksNode = tree.children.find(function (x) { return x.id === 'mobile______'; });
+        var otherBookmarksNode = tree.children.find(function (x) { return x.id === 'unfiled_____'; });
+        var toolbarBookmarksNode = tree.children.find(function (x) { return x.id === 'toolbar_____'; });
 
-        // Return the ids
+        // Throw an error if a local container is not found
+        if (!menuBookmarksNode || !mobileBookmarksNode || !otherBookmarksNode || !toolbarBookmarksNode) {
+          return $q.reject({ code: globals.ErrorCodes.LocalContainerNotFound });
+        }
+
+        // Return the container ids
         var results = {};
         results[globals.Bookmarks.MenuContainerName] = menuBookmarksNode.id;
         results[globals.Bookmarks.MobileContainerName] = mobileBookmarksNode.id;
