@@ -1367,6 +1367,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
         // Throw an error if a local container is not found
         if (!menuBookmarksNode || !mobileBookmarksNode || !otherBookmarksNode || !toolbarBookmarksNode) {
+          if (!menuBookmarksNode) { utility.LogWarning('Missing container: menu bookmarks'); }
+          if (!mobileBookmarksNode) { utility.LogWarning('Missing container: mobile bookmarks'); }
+          if (!otherBookmarksNode) { utility.LogWarning('Missing container: other bookmarks'); }
+          if (!toolbarBookmarksNode) { utility.LogWarning('Missing container: toolbar bookmarks'); }
           return $q.reject({ code: globals.ErrorCodes.LocalContainerNotFound });
         }
 

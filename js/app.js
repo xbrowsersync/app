@@ -1783,7 +1783,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var startSyncing = function () {
-    var syncType;
+    var syncInfoMessage, syncType;
 
     // Display loading panel
     vm.sync.displaySyncConfirmation = false;
@@ -1805,7 +1805,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
           // Get new sync ID
           return api.CreateNewSync()
             .then(function (newSync) {
-              utility.LogInfo('New sync id created: ' + newSync.id);
+              syncInfoMessage = 'New sync id created: ' + newSync.id;
 
               // Add sync data to cache and return
               return $q.all([
@@ -1818,7 +1818,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
             });
         }
         else {
-          utility.LogInfo('Syncing to existing id: ' + vm.sync.id);
+          syncInfoMessage = 'Synced to existing id: ' + vm.sync.id;
 
           // Set sync type for retrieve existing sync
           syncType = globals.SyncType.Pull;
@@ -1860,6 +1860,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
             return queueSync({ type: syncType });
           })
           .then(function () {
+            utility.LogInfo(syncInfoMessage);
             return syncBookmarksSuccess(loadingTimeout);
           })
           .catch(syncBookmarksFailed);
