@@ -78,6 +78,31 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
       });
   };
 
+  var createBackupData = function (bookmarksData, syncId, serviceUrl) {
+    var data = {
+      xbrowsersync: {
+        date: getDateTimeString(new Date()),
+        sync: {}
+      }
+    };
+
+    // Add sync info if provided
+    if (syncId) {
+      data.xbrowsersync.sync = {
+        id: syncId,
+        service: {
+          type: 'xbrowsersync',
+          url: serviceUrl
+        }
+      };
+    }
+
+    // Add bookmarks data
+    data.xbrowsersync.sync.bookmarks = bookmarksData;
+
+    return data;
+  };
+
   var decryptData = function (encryptedData) {
     // Determine which decryption method to use based on sync version
     return platform.LocalStorage.Get(globals.CacheKeys.SyncVersion)
@@ -599,6 +624,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     AsyncReduce: asyncReduce,
     Closest: closest,
     ConvertLocalStorageToStorageApi: convertLocalStorageToStorageApi,
+    CreateBackupData: createBackupData,
     DecryptData: decryptData,
     EncryptData: encryptData,
     DeepCopy: deepCopy,

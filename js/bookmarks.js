@@ -129,28 +129,11 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   };
 
   var exportBookmarks = function () {
-    var syncEnabled, syncId;
-
-    return platform.LocalStorage.Get([
-      globals.CacheKeys.SyncEnabled,
-      globals.CacheKeys.SyncId
-    ])
-      .then(function (cachedData) {
-        syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
-        syncId = cachedData[globals.CacheKeys.SyncId];
-
+    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+      .then(function (syncEnabled) {
         // If sync is not enabled, export local browser data
         if (!syncEnabled) {
-          return platform.Bookmarks.Get(false)
-            .then(function (bookmarks) {
-              var exportData = {
-                xBrowserSync: {
-                  bookmarks: bookmarks
-                }
-              };
-
-              return exportData;
-            });
+          return platform.Bookmarks.Get(false);
         }
         else {
           // Otherwise, export synced data
@@ -160,16 +143,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
               return utility.DecryptData(data.bookmarks);
             })
             .then(function (decryptedData) {
-              var bookmarks = JSON.parse(decryptedData);
-
-              var exportData = {
-                xBrowserSync: {
-                  id: syncId,
-                  bookmarks: bookmarks
-                }
-              };
-
-              return exportData;
+              return JSON.parse(decryptedData);
             });
         }
       });
