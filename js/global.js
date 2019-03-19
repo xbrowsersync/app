@@ -344,14 +344,13 @@ xBrowserSync.App.Global = function (platform) {
       Move: 4
     },
     URL: {
-      BookmarkletRegex: /^(javascript:)(.+)/i,
       Bookmarks: '/bookmarks',
       Current: '/current',
       DefaultServiceUrl: 'https://api.xbrowsersync.org',
       LastUpdated: '/lastUpdated',
       Version: '/version',
       ServiceInformation: '/info',
-      Regex: '^(\\w+://.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]+\\.[a-z]+\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$',
+      Regex: '(\\w+://.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]+\\.[a-z]+\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)',
       ProtocolRegex: '^\\w+:.*$'
     }
   };

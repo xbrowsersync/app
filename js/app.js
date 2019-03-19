@@ -1417,7 +1417,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       url: undefined,
       keywords: []
     };
-    var urlRegex = new RegExp(globals.URL.Regex, 'i');
+    var urlRegex = new RegExp('^' + globals.URL.Regex + '$', 'i');
 
     if (vm.search.query) {
       // Iterate query words to form query data object
@@ -1788,8 +1788,23 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var setServiceInformation = function (serviceInfo) {
+    // Linkify service message
+    var message = serviceInfo.message;
+    if (message) {
+      var protocolRegex = new RegExp(globals.URL.ProtocolRegex);
+      var linkRegex = new RegExp(globals.URL.Regex, 'g');
+      _.each(message.match(linkRegex), function (match) {
+        var link = document.createElement('a');
+        link.innerText = match;
+        link.href = protocolRegex.test(match) ? match : 'http://' + match;
+        link.className = 'new-tab';
+        message = message.replace(match, link.outerHTML);
+      });
+      $timeout(setNewTabLinks);
+    }
+    
     vm.settings.service.status = serviceInfo.status;
-    vm.settings.service.statusMessage = serviceInfo.message;
+    vm.settings.service.statusMessage = message;
     vm.settings.service.maxSyncSize = serviceInfo.maxSyncSize / 1024;
     vm.settings.service.apiVersion = serviceInfo.version;
   };

@@ -117,8 +117,8 @@
         </div>
         <div class="form-group" data-ng-if="vm.settings.service.statusMessage && (vm.settings.service.status === vm.globals.ServiceStatus.Online || vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs)">
           <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_ServiceMessage_Label) }}</label>
-          <p class="description service-message animate-fade" data-ng-show="vm.settings.service.statusMessage">{{
-            vm.settings.service.statusMessage }}</p>
+          <p class="description service-message animate-fade" data-ng-show="vm.settings.service.statusMessage"
+            data-ng-bind-html="vm.settings.service.statusMessage"></p>
         </div>
         <div class="form-group" data-ng-if="vm.settings.service.status === vm.globals.ServiceStatus.Online || vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs">
           <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_DataUsage_Label) }}</label>

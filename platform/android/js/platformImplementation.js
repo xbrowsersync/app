@@ -1036,13 +1036,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var openUrl = function (url) {
-    // Open the url if this is not a bookmarklet
-    if (!globals.URL.BookmarkletRegex.test(url)) {
-      OpenUrlExt.open(url, function () { }, function (err) {
-        utility.LogInfo('Unable to open url' + (url ? (' ' + url + ': ') : ': '));
-        utility.LogError(err, 'platform.openUrl');
-      });
-    }
+    OpenUrlExt.open(url, function () { }, function (err) {
+      utility.LogInfo('Unable to open url' + (url ? (' ' + url + ': ') : ': '));
+      utility.LogError(err, 'platform.openUrl');
+    });
   };
 
   var populateBookmarks = function (xBookmarks) {
