@@ -566,10 +566,10 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
       .then(function () {
         // For v1.5.0, convert local storage items to storage API and display permissions panel
         if (newVersion === '1.5.0' && compareVersions(oldVersion, newVersion) < 0) {
-          return $q.all([
-            utility.ConvertLocalStorageToStorageApi(),
-            platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, true)
-          ]);
+          return utility.ConvertLocalStorageToStorageApi()
+            .then(function () {
+              return platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, true);
+            });
         }
       })
       .then(function () {
