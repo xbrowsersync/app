@@ -335,6 +335,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
 
   var onStartupHandler = function () {
     var cachedData, syncEnabled;
+    utility.LogInfo('Starting up');
 
     $q.all([
       platform.LocalStorage.Get(),
@@ -343,10 +344,10 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
       .then(function (data) {
         cachedData = data[0];
         syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
-        return utility.LogInfo('Starting up');
-      })
-      .then(function () {
+
+        // Add useful debug info to beginning of trace log
         cachedData.appVersion = globals.AppVersion;
+        cachedData.platform = _.omit(browserDetect(), 'versionNumber');
         return utility.LogInfo(_.omit(
           cachedData,
           'debugMessageLog',
