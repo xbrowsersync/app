@@ -116,7 +116,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
       .catch(function (err) {
         logInfo('Decryption failed.');
         return $q.reject({
-          code: globals.ErrorCodes.InvalidData,
+          code: globals.ErrorCodes.InvalidCredentials,
           stack: err.stack
         });
       });
@@ -138,7 +138,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         // Decrypt using legacy crypto-js AES
         var decryptedData = CryptoJS.AES.decrypt(encryptedData, password).toString(CryptoJS.enc.Utf8);
         if (!decryptedData) {
-          return $q.reject({ code: globals.ErrorCodes.InvalidData });
+          return $q.reject({ code: globals.ErrorCodes.InvalidCredentials });
         }
 
         return decryptedData;
@@ -252,7 +252,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
       .catch(function (err) {
         logInfo('Encryption failed.');
         return $q.reject({
-          code: globals.ErrorCodes.InvalidData,
+          code: globals.ErrorCodes.InvalidCredentials,
           stack: err.stack
         });
       });
@@ -338,16 +338,16 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         errorMessage.message = platform.GetConstant(globals.Constants.Error_FailedRemoveLocalBookmarks_Message);
         break;
       case globals.ErrorCodes.NoDataFound:
-        errorMessage.title = platform.GetConstant(globals.Constants.Error_NoDataFound_Title);
-        errorMessage.message = platform.GetConstant(globals.Constants.Error_NoDataFound_Message);
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_InvalidCredentials_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_InvalidCredentials_Message);
         break;
       case globals.ErrorCodes.SyncRemoved:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_SyncRemoved_Title);
         errorMessage.message = platform.GetConstant(globals.Constants.Error_SyncRemoved_Message);
         break;
-      case globals.ErrorCodes.InvalidData:
-        errorMessage.title = platform.GetConstant(globals.Constants.Error_InvalidData_Title);
-        errorMessage.message = platform.GetConstant(globals.Constants.Error_InvalidData_Message);
+      case globals.ErrorCodes.InvalidCredentials:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_InvalidCredentials_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_InvalidCredentials_Message);
         break;
       case globals.ErrorCodes.UpdatedBookmarkNotFound:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_LastChangeNotSynced_Title);

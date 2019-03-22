@@ -524,11 +524,11 @@
   "error_MissingClientData_Message": {
     "message": "Réactivez la synchronisation et retentez de nouveau."
   },
-  "error_NoDataFound_Title": {
-    "message": "Aucune données trouvée"
+  "error_InvalidCredentials_Title": {
+    "message": "Invalid Sync ID/Password"
   },
-  "error_NoDataFound_Message": {
-    "message": "Vérifiez de nouveau votre ID xBrowserSync et votre mot de passe et essayez de nouveau."
+  "error_InvalidCredentials_Message": {
+    "message": "Check your xBrowserSync ID and password, ensure the current service URL is where the sync was created and then try again."
   },
   "error_SyncRemoved_Title": {
     "message": "Données supprimées pour cause d'inactivité"
@@ -559,12 +559,6 @@
   },
   "error_FailedRemoveLocalBookmarks_Message": {
     "message": "Une erreur est survenue en tentant d'écraser les favoris locaux."
-  },
-  "error_InvalidData_Title": {
-    "message": "Impossible de déchiffrer les données xBrowserSync"
-  },
-  "error_InvalidData_Message": {
-    "message": "Assurez vous que le mot de passe de chiffrement est identique à celui utilisé lorsque vous avez crééz la synchronisation pour cet ID."
   },
   "error_LastChangeNotSynced_Title": {
     "message": "Dernière modification non synchronisée"

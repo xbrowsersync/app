@@ -524,11 +524,11 @@
   "error_MissingClientData_Message": {
     "message": "Re-enable sync and try again."
   },
-  "error_NoDataFound_Title": {
-    "message": "Invalid Sync ID"
+  "error_InvalidCredentials_Title": {
+    "message": "Invalid Sync ID/Password"
   },
-  "error_NoDataFound_Message": {
-    "message": "No sync exists for this ID. Double check your xBrowserSync ID and the service URL you are syncing to and try again."
+  "error_InvalidCredentials_Message": {
+    "message": "Check your xBrowserSync ID and password, ensure the current service URL is where the sync was created and then try again."
   },
   "error_SyncRemoved_Title": {
     "message": "Data removed due to inactivity"
@@ -559,12 +559,6 @@
   },
   "error_FailedRemoveLocalBookmarks_Message": {
     "message": "An error occurred when trying to overwrite local bookmarks."
-  },
-  "error_InvalidData_Title": {
-    "message": "Couldn’t decrypt xBrowserSync data"
-  },
-  "error_InvalidData_Message": {
-    "message": "Ensure your encryption password is identical to the one used when you created the sync for this ID."
   },
   "error_LastChangeNotSynced_Title": {
     "message": "Last change not synced"

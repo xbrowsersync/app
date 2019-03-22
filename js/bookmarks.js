@@ -492,9 +492,6 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         // Update cache and return decrypted bookmarks
         var bookmarks = decryptedBookmarks ? JSON.parse(decryptedBookmarks) : [];
         return updateCache(bookmarks, encryptedBookmarks);
-      })
-      .catch(function (err) {
-        return $q.reject({ code: globals.ErrorCodes.InvalidData });
       });
   };
 
