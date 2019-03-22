@@ -10,7 +10,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmarks) {
   'use strict';
 
-  var vm;
+  var vm, notificationClickHandlers = [];
 
 	/* ------------------------------------------------------------------------------------
 	 * Constructor
@@ -20,8 +20,10 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
     vm = this;
     vm.install = onInstallHandler;
     vm.startup = onStartupHandler;
-    chrome.runtime.onMessage.addListener(onMessageHandler);
     chrome.alarms.onAlarm.addListener(onAlarmHandler);
+    chrome.notifications.onClicked.addListener(onNotificationClicked);
+    chrome.notifications.onClosed.addListener(onNotificationClosed);
+    chrome.runtime.onMessage.addListener(onMessageHandler);
   };
 
 
@@ -197,19 +199,33 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
     sendResponse(response);
   };
 
-  var displayAlert = function (title, message, callback) {
+  var displayAlert = function (title, message) {
+    // Strip html tags from message
+    var urlRegex = new RegExp(globals.URL.Regex);
+    var matches = message.match(urlRegex);
+    var messageToDisplay = (!matches || matches.length === 0) ? message :
+      new DOMParser().parseFromString('<span>' + message + '</span>', 'text/xml').firstElementChild.textContent;
+
     var options = {
       type: 'basic',
       title: title,
-      message: message,
+      message: messageToDisplay,
       iconUrl: 'img/notification.png'
     };
 
-    if (!callback) {
-      callback = null;
-    }
-
-    chrome.notifications.create('xBrowserSync-notification', options, callback);
+    // Display notification
+    chrome.notifications.create(utility.GetUniqueishId(), options, function (notificationId) {
+      // If the message contains a url add a click handler
+      if (matches && matches.length > 0) {
+        var openUrlInNewTab = function () {
+          platform.OpenUrl(matches[0]);
+        };
+        notificationClickHandlers.push({
+          id: notificationId,
+          eventHandler: openUrlInNewTab
+        });
+      }
+    });
   };
 
   var enableEventListeners = function (sendResponse) {
@@ -425,6 +441,27 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
 
   var onMovedHandler = function () {
     onBookmarkEventHandler(moveBookmark, arguments);
+  };
+
+  var onNotificationClicked = function (notificationId) {
+    // Execute the event handler if one exists and then remove
+    var notificationClickHandler = notificationClickHandlers.find(function (x) {
+      return x.id === notificationId;
+    });
+    if (notificationClickHandler != null) {
+      notificationClickHandler.eventHandler();
+      chrome.notifications.clear(notificationId);
+    }
+  };
+
+  var onNotificationClosed = function (notificationId) {
+    // Remove the handler for this notification if one exists
+    var index = notificationClickHandlers.findIndex(function (x) {
+      return x.id === notificationId;
+    });
+    if (index >= 0) {
+      notificationClickHandlers.splice(index, 1);
+    }
   };
 
   var onRemovedHandler = function () {

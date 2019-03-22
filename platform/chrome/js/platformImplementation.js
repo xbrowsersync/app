@@ -864,21 +864,26 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       url = getNewTabUrl();
     }
 
-    // Get current tab
-    chrome.tabs.query({ currentWindow: true, active: true },
-      function (tabs) {
-        var activeTab = tabs[0];
-
-        // Open url in current tab if new
-        if (activeTab.url && activeTab.url.startsWith(getNewTabUrl())) {
-          chrome.tabs.update(activeTab.id, { url: url }, function () {
-            window.close();
-          });
-        }
-        else {
-          chrome.tabs.create({ 'url': url });
-        }
-      });
+    var openInNewTab = function () {
+      chrome.tabs.create({ 'url': url });
+    };
+    try {
+      chrome.tabs.query({ currentWindow: true, active: true },
+        function (tabs) {
+          // Open url in current tab if new
+          if (tabs && tabs.length > 0 && tabs[0].url && tabs[0].url.startsWith(getNewTabUrl())) {
+            chrome.tabs.update(tabs[0].id, { url: url }, function () {
+              window.close();
+            });
+          }
+          else {
+            openInNewTab();
+          }
+        });
+    }
+    catch (err) {
+      openInNewTab();
+    }
   };
 
   var populateBookmarks = function (xBookmarks) {

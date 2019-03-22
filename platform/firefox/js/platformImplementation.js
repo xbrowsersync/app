@@ -840,23 +840,28 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       url = getNewTabUrl();
     }
 
-    // Get current tab
+    var openInNewTab = function () {
+      chrome.tabs.create({ 'url': url });
+    };
     browser.tabs.query({ currentWindow: true, active: true })
       .then(function (tabs) {
-        var activeTab = tabs[0], tabAction;
-
         // Open url in current tab if new
-        if (activeTab.url && activeTab.url.startsWith(getNewTabUrl())) {
-          tabAction = browser.tabs.update(activeTab.id, { url: url });
+        if (tabs && tabs.length > 0 && tabs[0].url && tabs[0].url.startsWith(getNewTabUrl())) {
+          chrome.tabs.update(tabs[0].id, { url: url }, function () {
+            window.close();
+          });
         }
         else {
-          tabAction = browser.tabs.create({ 'url': url });
+          openInNewTab();
         }
 
         // Close the extension window
         tabAction.then(function () {
           window.close();
         });
+      })
+      .catch(function () {
+        openInNewTab();
       });
   };
 
