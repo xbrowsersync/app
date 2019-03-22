@@ -23,10 +23,11 @@ xBrowserSync.App.Global = function (platform) {
       MobileContainerName: '[xbs] Mobile',
       OtherContainerName: '[xbs] Other',
       OtherContainerNameOld: '_other_',
-      SeparatorTitle: '--------------------------------------------------',
+      HorizontalSeparatorTitle: '────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────',
       ToolbarContainerName: '[xbs] Toolbar',
       ToolbarContainerNameOld: '_toolbar_',
-      UnfiledContainerNameOld: '_xBrowserSync_'
+      UnfiledContainerNameOld: '_xBrowserSync_',
+      VerticalSeparatorTitle: '|'
     },
     CacheKeys: {
       Bookmarks: 'bookmarks',

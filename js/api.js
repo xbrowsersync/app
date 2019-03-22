@@ -17,8 +17,7 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
     var data;
 
     // Get current service url if not provided
-    var getServiceUrl = !url ? utility.GetServiceUrl() : $q.resolve(url);
-    return getServiceUrl
+    return (!url ? utility.GetServiceUrl() : $q.resolve(url))
       .then(function (serviceUrl) {
         // Request service info
         return $http({

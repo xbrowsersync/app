@@ -17,8 +17,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     unsupportedContainers = [
       globals.Bookmarks.MenuContainerName,
       globals.Bookmarks.MobileContainerName
-    ],
-    unsupportedBookmarkUrl = 'chrome://newtab/';
+    ];
 
 
 	/* ------------------------------------------------------------------------------------
@@ -37,6 +36,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Bookmarks.Deleted = bookmarksDeleted;
     platform.Bookmarks.DeleteSingle = deleteSingle;
     platform.Bookmarks.Get = getBookmarks;
+    platform.Bookmarks.LocalBookmarkInToolbar = localBookmarkInToolbar;
     platform.Bookmarks.Moved = bookmarksMoved;
     platform.Bookmarks.Populate = populateBookmarks;
     platform.Bookmarks.Updated = bookmarksUpdated;
@@ -46,6 +46,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.EventListeners.Disable = disableEventListeners;
     platform.GetConstant = getConstant;
     platform.GetCurrentUrl = getCurrentUrl;
+    platform.GetNewTabUrl = getNewTabUrl;
     platform.GetPageMetadata = getPageMetadata;
     platform.GetSupportedUrl = getSupportedUrl;
     platform.Init = init;
@@ -194,13 +195,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           });
         }
 
-        // Create new bookmark
-        var newXBookmark = new bookmarks.XBookmark(
-          createInfo.title,
-          createInfo.url || null,
-          createInfo.description,
-          createInfo.tags,
-          createInfo.children);
+        // Create new bookmark/separator
+        var newXBookmark = bookmarks.IsSeparator(createInfo) ? new bookmarks.XSeparator() :
+          new bookmarks.XBookmark(
+            createInfo.title,
+            createInfo.url || null,
+            createInfo.description,
+            createInfo.tags,
+            createInfo.children);
 
         if (createInfo.newId) {
           // Use new id supplied
@@ -400,6 +402,25 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
         bookmarkToUpdate.title = updateInfo.title !== undefined ? updateInfo.title : bookmarkToUpdate.title;
         bookmarkToUpdate.url = updateInfo.url !== undefined ? updateInfo.url : bookmarkToUpdate.url;
+
+        // If updated bookmark is a separator, convert xbookmark to separator
+        if (bookmarks.IsSeparator(bookmarkToUpdate)) {
+          // Create a new separator with same id
+          var separator = new bookmarks.XSeparator();
+          separator.id = bookmarkToUpdate.id;
+
+          // Clear existing properties
+          for (var prop in bookmarkToUpdate) {
+            if (bookmarkToUpdate.hasOwnProperty(prop)) {
+              delete bookmarkToUpdate[prop];
+            }
+          }
+
+          // Copy separator properties          
+          bookmarkToUpdate.id = separator.id;
+          bookmarkToUpdate.title = separator.title;
+        }
+
         return deferred.resolve({ bookmarks: xBookmarks });
       })
       .catch(deferred.reject);
@@ -737,6 +758,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     });
   };
 
+  var getNewTabUrl = function () {
+    return 'chrome://newtab/';
+  };
+
   var getPageMetadata = function (shouldCheckPermissions) {
     var activeTab;
 
@@ -804,7 +829,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var getSupportedUrl = function (url) {
-    return localBookmarkUrlIsSupported(url) ? url : unsupportedBookmarkUrl;
+    return localBookmarkUrlIsSupported(url) ? url : getNewTabUrl();
   };
 
   var hideLoading = function (id, timeout) {
@@ -825,11 +850,18 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     vm.platformName = globals.Platforms.Chrome;
   };
 
+  var localBookmarkInToolbar = function (localBookmark) {
+    return getLocalContainerIds()
+      .then(function (localContainerIds) {
+        return localBookmark.parentId === localContainerIds[globals.Bookmarks.ToolbarContainerName];
+      });
+  };
+
   var openUrl = function (url) {
     // Check url is supported
     if (!localBookmarkUrlIsSupported(url)) {
       utility.LogInfo('Attempted to navigate to unsupported url: ' + url);
-      url = unsupportedBookmarkUrl;
+      url = getNewTabUrl();
     }
 
     // Get current tab
@@ -838,7 +870,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         var activeTab = tabs[0];
 
         // Open url in current tab if new
-        if (activeTab.url && activeTab.url.startsWith('chrome://newtab')) {
+        if (activeTab.url && activeTab.url.startsWith(getNewTabUrl())) {
           chrome.tabs.update(activeTab.id, { url: url }, function () {
             window.close();
           });
@@ -869,7 +901,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           if (menuContainer && menuContainer.children.length > 0) {
             try {
               chrome.bookmarks.get(otherBookmarksId, function (results) {
-                createLocalBookmarksFromXBookmarks(otherBookmarksId, [menuContainer])
+                createLocalBookmarksFromXBookmarks(otherBookmarksId, [menuContainer], toolbarBookmarksId)
                   .then(resolve)
                   .catch(reject);
               });
@@ -889,7 +921,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           if (mobileContainer && mobileContainer.children.length > 0) {
             try {
               chrome.bookmarks.get(otherBookmarksId, function (results) {
-                createLocalBookmarksFromXBookmarks(otherBookmarksId, [mobileContainer])
+                createLocalBookmarksFromXBookmarks(otherBookmarksId, [mobileContainer], toolbarBookmarksId)
                   .then(resolve)
                   .catch(reject);
               });
@@ -909,7 +941,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           if (otherContainer && otherContainer.children.length > 0) {
             try {
               chrome.bookmarks.get(otherBookmarksId, function (results) {
-                createLocalBookmarksFromXBookmarks(otherBookmarksId, otherContainer.children)
+                createLocalBookmarksFromXBookmarks(otherBookmarksId, otherContainer.children, toolbarBookmarksId)
                   .then(resolve)
                   .catch(reject);
               });
@@ -936,7 +968,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
               return $q(function (resolve, reject) {
                 try {
                   chrome.bookmarks.get(toolbarBookmarksId, function (results) {
-                    createLocalBookmarksFromXBookmarks(toolbarBookmarksId, toolbarContainer.children)
+                    createLocalBookmarksFromXBookmarks(toolbarBookmarksId, toolbarContainer.children, toolbarBookmarksId)
                       .then(resolve)
                       .catch(reject);
                   });
@@ -1120,7 +1152,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     // Check that the url is supported
     if (!localBookmarkUrlIsSupported(url)) {
       utility.LogInfo('Bookmark url unsupported: ' + url);
-      newLocalBookmark.url = unsupportedBookmarkUrl;
+      newLocalBookmark.url = getNewTabUrl();
     }
 
     return $q(function (resolve, reject) {
@@ -1137,24 +1169,46 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     });
   };
 
-  var createLocalBookmarksFromXBookmarks = function (parentId, xBookmarks) {
+  var createLocalBookmarksFromXBookmarks = function (parentId, xBookmarks, localToolbarContainerId) {
     var createChildBookmarksPromises = [];
 
     // Create bookmarks at the top level of the supplied array
     return xBookmarks.reduce(function (p, xBookmark) {
       return p.then(function () {
-        return createLocalBookmark(parentId, xBookmark.title, xBookmark.url)
-          .then(function (newLocalBookmark) {
-            // If the bookmark has children, recurse
-            if (xBookmark.children && xBookmark.children.length > 0) {
-              createChildBookmarksPromises.push(createLocalBookmarksFromXBookmarks(newLocalBookmark.id, xBookmark.children));
-            }
-          });
+        return bookmarks.IsSeparator(xBookmark) ?
+          createLocalSeparator(parentId, localToolbarContainerId) : createLocalBookmark(parentId, xBookmark.title, xBookmark.url)
+            .then(function (newLocalBookmark) {
+              // If the bookmark has children, recurse
+              if (xBookmark.children && xBookmark.children.length > 0) {
+                createChildBookmarksPromises.push(createLocalBookmarksFromXBookmarks(newLocalBookmark.id, xBookmark.children), localToolbarContainerId);
+              }
+            });
       });
     }, $q.resolve())
       .then(function () {
         return $q.all(createChildBookmarksPromises);
       });
+  };
+
+  var createLocalSeparator = function (parentId, localToolbarContainerId) {
+    var newLocalSeparator = {
+      parentId: parentId,
+      title: parentId === localToolbarContainerId ? globals.Bookmarks.VerticalSeparatorTitle : globals.Bookmarks.HorizontalSeparatorTitle,
+      url: getNewTabUrl()
+    };
+
+    return $q(function (resolve, reject) {
+      try {
+        chrome.bookmarks.create(newLocalSeparator, resolve);
+      }
+      catch (err) {
+        utility.LogInfo('Failed to create local separator');
+        reject({
+          code: globals.ErrorCodes.FailedCreateLocalBookmarks,
+          stack: err.stack
+        });
+      }
+    });
   };
 
   var deleteLocalBookmarksTree = function (localBookmarkId) {
@@ -1387,11 +1441,15 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     var xBookmarks = [];
 
     for (var i = 0; i < localBookmarks.length; i++) {
-      var newXBookmark = new bookmarks.XBookmark(localBookmarks[i].title, localBookmarks[i].url);
+      var currentLocalBookmark = localBookmarks[i];
+
+      // Check if current local bookmark is a separator
+      var newXBookmark = bookmarks.IsSeparator(currentLocalBookmark) ? new bookmarks.XSeparator() :
+        new bookmarks.XBookmark(currentLocalBookmark.title, currentLocalBookmark.url);
 
       // If this is a folder and has children, process them
-      if (localBookmarks[i].children && localBookmarks[i].children.length > 0) {
-        newXBookmark.children = getLocalBookmarksAsXBookmarks(localBookmarks[i].children);
+      if (currentLocalBookmark.children && currentLocalBookmark.children.length > 0) {
+        newXBookmark.children = getLocalBookmarksAsXBookmarks(currentLocalBookmark.children);
       }
 
       xBookmarks.push(newXBookmark);
@@ -1487,7 +1545,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     // Check that the url is supported
     if (!localBookmarkUrlIsSupported(url)) {
       utility.LogInfo('Bookmark url unsupported: ' + url);
-      updateInfo.url = unsupportedBookmarkUrl;
+      updateInfo.url = getNewTabUrl();
     }
 
     return $q(function (resolve, reject) {

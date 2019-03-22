@@ -52,8 +52,8 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   var createBookmark = function (id, bookmark) {
     utility.LogInfo('onCreated event detected');
 
-    // Get page metadata from current tab if permission has been granted
-    return platform.GetPageMetadata(true)
+    // If bookmark is not folder, get page metadata from current tab
+    return (bookmark.url ? platform.GetPageMetadata(true) : $q.resolve())
       .then(function (metadata) {
         // Add metadata if bookmark is current tab location
         if (metadata && bookmark.url === metadata.url) {

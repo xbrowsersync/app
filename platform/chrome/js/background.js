@@ -31,37 +31,132 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
 
   var changeBookmark = function (id, changeInfo) {
     utility.LogInfo('onChanged event detected');
+
     return $q(function (resolve, reject) {
-      syncBookmarks({
-        type: globals.SyncType.Push,
-        changeInfo: {
-          type: globals.UpdateType.Update,
-          data: [id, changeInfo]
+      try {
+        chrome.bookmarks.get(id, resolve);
+      }
+      catch (err) {
+        reject(err);
+      }
+    })
+      .then(function (results) {
+        if (!results || results.length === 0) {
+          return;
         }
-      }, function (response) {
+
+        // If updated bookmark is separator update local bookmark properties
+        var bookmark = _.extend(results[0], changeInfo);
+        if (bookmarks.IsSeparator(bookmark)) {
+          // If bookmark is separator update local bookmark properties
+          return convertLocalBookmarkToSeparator(bookmark);
+        }
+      })
+      .then(function () {
+        return $q(function (resolve, reject) {
+          syncBookmarks({
+            type: globals.SyncType.Push,
+            changeInfo: {
+              type: globals.UpdateType.Update,
+              data: [id, changeInfo]
+            }
+          }, function (response) {
+            if (response.success) {
+              resolve(response.bookmarks);
+            }
+            else {
+              reject(response.error);
+            }
+          });
+        });
+      });
+  };
+
+  var convertLocalBookmarkToSeparator = function (bookmark) {
+    return $q(function (resolve, reject) {
+      disableEventListeners(function (response) {
         if (response.success) {
-          resolve(response.bookmarks);
+          resolve();
         }
         else {
           reject(response.error);
         }
+      })
+    })
+      .then(function () {
+        return platform.Bookmarks.LocalBookmarkInToolbar(bookmark)
+          .then(function (inToolbar) {
+            var title = inToolbar ? globals.Bookmarks.VerticalSeparatorTitle : globals.Bookmarks.HorizontalSeparatorTitle;
+            return $q(function (resolve, reject) {
+              try {
+                var separator = {
+                  index: bookmark.index,
+                  parentId: bookmark.parentId,
+                  title: title,
+                  url: platform.GetNewTabUrl()
+                };
+                chrome.bookmarks.remove(bookmark.id, function () {
+                  chrome.bookmarks.create(separator, resolve);
+                });
+              }
+              catch (err) {
+                return $q(function (resolve, reject) {
+                  enableEventListeners(function (response) {
+                    if (response.success) {
+                      resolve();
+                    }
+                    else {
+                      reject(response.error);
+                    }
+                  })
+                })
+                  .then(function () {
+                    reject(err);
+                  });
+              }
+            });
+          })
+      })
+      .finally(function () {
+        return $q(function (resolve, reject) {
+          enableEventListeners(function (response) {
+            if (response.success) {
+              resolve();
+            }
+            else {
+              reject(response.error);
+            }
+          })
+        });
       });
-    });
   };
 
   var createBookmark = function (id, bookmark) {
     utility.LogInfo('onCreated event detected');
 
-    // Get page metadata from current tab if permission has been granted
-    return platform.GetPageMetadata(true)
-      .then(function (metadata) {
-        // Add metadata if bookmark is current tab location
-        if (metadata && bookmark.url === metadata.url) {
-          bookmark.title = utility.StripTags(metadata.title);
-          bookmark.description = utility.StripTags(metadata.description);
-          bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
-        }
+    var preSyncSteps;
+    if (bookmarks.IsSeparator(bookmark)) {
+      // If bookmark is separator update local bookmark properties
+      preSyncSteps = convertLocalBookmarkToSeparator(bookmark);
+    }
+    else if (bookmark.url) {
+      // If bookmark is not folder, get page metadata from current tab
+      preSyncSteps = platform.GetPageMetadata(true)
+        .then(function (metadata) {
+          // Add metadata if bookmark is current tab location
+          if (metadata && bookmark.url === metadata.url) {
+            bookmark.title = utility.StripTags(metadata.title);
+            bookmark.description = utility.StripTags(metadata.description);
+            bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
+          }
+        });
+    }
+    else {
+      preSyncSteps = $q.resolve();
+    }
 
+    return preSyncSteps
+      .then(function () {
         return $q(function (resolve, reject) {
           syncBookmarks({
             type: globals.SyncType.Push,

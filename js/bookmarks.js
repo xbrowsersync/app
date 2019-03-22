@@ -303,6 +303,20 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       });
   };
 
+  var isSeparator = function (bookmark) {
+    if (!bookmark) {
+      return false;
+    }
+
+    // Bookmark is separator if title is dashes or designated separator title, has no url and no children,
+    // or type is separator (in FF)
+    var separatorRegex = new RegExp('^[-─]{1,}$');
+    return bookmark.type === 'separator' ||
+      ((separatorRegex.test(bookmark.title) || bookmark.title.indexOf(globals.Bookmarks.HorizontalSeparatorTitle) >= 0 || bookmark.title === globals.Bookmarks.VerticalSeparatorTitle) &&
+        (!bookmark.url || bookmark.url === platform.GetNewTabUrl()) &&
+        (!bookmark.children || bookmark.children.length === 0));
+  };
+
   var queueSync = function (syncData) {
     var deferred = $q.defer();
 
@@ -406,12 +420,10 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       bookmark.title === globals.Bookmarks.ToolbarContainerName);
   };
 
-  var xBookmarkIsSeparator = function (bookmark) {
-    if (!bookmark) {
-      return false;
-    }
-
-    return /^\-{3,}$/.test(bookmark.title) && (!bookmark.children || bookmark.children.length === 0);
+  var xSeparator = function () {
+    return {
+      title: '-'
+    };
   };
 
 
@@ -562,9 +574,9 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     }
 
     _.each(bookmarksToSearch, function (bookmark) {
-      if (!_.isUndefined(bookmark.children)) {
-        // This is a folder, search children
-        if (bookmark.children.length > 0) {
+      if (!bookmark.url) {
+        // If this is a folder, search children
+        if (bookmark.children && bookmark.children.length > 0) {
           searchBookmarksByKeywords(bookmark.children, keywords, results);
         }
       }
@@ -1278,6 +1290,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     GetNewBookmarkId: getNewBookmarkId,
     GetSyncBookmarksToolbar: getSyncBookmarksToolbar,
     IncludesCurrentPage: isCurrentPageABookmark,
+    IsSeparator: isSeparator,
     Search: searchBookmarks,
     Sync: queueSync,
     SyncSize: getSyncSize,
@@ -1285,7 +1298,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     UpgradeContainers: upgradeContainers,
     XBookmark: xBookmark,
     XBookmarkIsContainer: xBookmarkIsContainer,
-    XBookmarkIsSeparator: xBookmarkIsSeparator
+    XSeparator: xSeparator,
   };
   return self;
 };
