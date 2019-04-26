@@ -312,9 +312,12 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     // or type is separator (in FF)
     var separatorRegex = new RegExp('^[-─]{1,}$');
     return bookmark.type === 'separator' ||
-      ((separatorRegex.test(bookmark.title) || bookmark.title.indexOf(globals.Bookmarks.HorizontalSeparatorTitle) >= 0 || bookmark.title === globals.Bookmarks.VerticalSeparatorTitle) &&
+      bookmark.title && (
+        (separatorRegex.test(bookmark.title) || bookmark.title.indexOf(globals.Bookmarks.HorizontalSeparatorTitle) >= 0 ||
+          bookmark.title === globals.Bookmarks.VerticalSeparatorTitle) &&
         (!bookmark.url || bookmark.url === platform.GetNewTabUrl()) &&
-        (!bookmark.children || bookmark.children.length === 0));
+        (!bookmark.children || bookmark.children.length === 0)
+      );
   };
 
   var queueSync = function (syncData) {
@@ -952,18 +955,19 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         // Update cached bookmarks
         return updateCache(bookmarks, encryptedBookmarks)
           .then(function () {
-            // Sync provided bookmarks and set local bookmarks
-            return $q.all([
-              api.UpdateBookmarks(encryptedBookmarks),
-              syncData.command === globals.Commands.RestoreBookmarks ?
-                refreshLocalBookmarks(bookmarks) :
-                updateLocalBookmarks(updateLocalBookmarksInfo)
-            ]);
+            // Update local bookmarks
+            return syncData.command === globals.Commands.RestoreBookmarks ?
+              refreshLocalBookmarks(bookmarks) :
+              updateLocalBookmarks(updateLocalBookmarksInfo)
+          })
+          .then(function () {
+            // Update synced bookmarks
+            return api.UpdateBookmarks(encryptedBookmarks);
           });
       })
       .then(function (data) {
         // Update cached last updated date and return decrypted bookmarks
-        return platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, data[0].lastUpdated)
+        return platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, data.lastUpdated)
           .then(function () {
             return bookmarks;
           });

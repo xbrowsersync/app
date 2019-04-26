@@ -281,6 +281,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       return;
     }
 
+    // Hide restore confirmation
+    vm.settings.displayRestoreConfirmation = false;
+    vm.settings.displayRestoreForm = true;
+
     // Start restore
     restoreData(JSON.parse(vm.settings.dataToRestore));
   };
@@ -837,7 +841,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         var syncId = data[1][globals.CacheKeys.SyncId];
         var serviceUrl = data[2];
         var backupData = utility.CreateBackupData(bookmarksData, syncEnabled ? syncId : null, syncEnabled ? serviceUrl : null);
-        
+
         // Beautify json and download data
         var beautifiedJson = JSON.stringify(backupData, null, 2);
         platform.DownloadFile(utility.GetBackupFileName(), beautifiedJson, 'backupLink');
@@ -1335,7 +1339,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       .then(displayDataUsage)
       .then(function () {
         vm.settings.displayRestoreForm = false;
-        vm.settings.displayRestoreConfirmation = false;
         vm.settings.dataToRestore = '';
         vm.settings.restoreCompletedMessage = platform.GetConstant(globals.Constants.Settings_BackupRestore_RestoreSuccess_Message);
 
@@ -1802,7 +1805,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       });
       $timeout(setNewTabLinks);
     }
-    
+
     vm.settings.service.status = serviceInfo.status;
     vm.settings.service.statusMessage = message;
     vm.settings.service.maxSyncSize = serviceInfo.maxSyncSize / 1024;

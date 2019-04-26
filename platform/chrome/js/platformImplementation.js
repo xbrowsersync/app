@@ -1175,24 +1175,37 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var createLocalBookmarksFromXBookmarks = function (parentId, xBookmarks, localToolbarContainerId) {
-    var createChildBookmarksPromises = [];
+    var processError;
+    var createRecursive = function (parentId, xBookmarks, localToolbarContainerId) {
+      var createChildBookmarksPromises = [];
 
-    // Create bookmarks at the top level of the supplied array
-    return xBookmarks.reduce(function (p, xBookmark) {
-      return p.then(function () {
-        return bookmarks.IsSeparator(xBookmark) ?
-          createLocalSeparator(parentId, localToolbarContainerId) : createLocalBookmark(parentId, xBookmark.title, xBookmark.url)
-            .then(function (newLocalBookmark) {
-              // If the bookmark has children, recurse
-              if (xBookmark.children && xBookmark.children.length > 0) {
-                createChildBookmarksPromises.push(createLocalBookmarksFromXBookmarks(newLocalBookmark.id, xBookmark.children), localToolbarContainerId);
-              }
-            });
-      });
-    }, $q.resolve())
-      .then(function () {
-        return $q.all(createChildBookmarksPromises);
-      });
+      // Create bookmarks at the top level of the supplied array
+      return xBookmarks.reduce(function (p, xBookmark) {
+        return p.then(function () {
+          // If an error occurred during the recursive process, prevent any more bookmarks being created
+          if (processError) {
+            return $q.resolve();
+          }
+
+          return bookmarks.IsSeparator(xBookmark) ?
+            createLocalSeparator(parentId, localToolbarContainerId) : createLocalBookmark(parentId, xBookmark.title, xBookmark.url)
+              .then(function (newLocalBookmark) {
+                // If the bookmark has children, recurse
+                if (xBookmark.children && xBookmark.children.length > 0) {
+                  createChildBookmarksPromises.push(createRecursive(newLocalBookmark.id, xBookmark.children, localToolbarContainerId));
+                }
+              });
+        });
+      }, $q.resolve())
+        .then(function () {
+          return $q.all(createChildBookmarksPromises);
+        })
+        .catch(function (err) {
+          processError = err;
+          throw err;
+        });
+    };
+    return createRecursive(parentId, xBookmarks, localToolbarContainerId);
   };
 
   var createLocalSeparator = function (parentId, localToolbarContainerId) {
