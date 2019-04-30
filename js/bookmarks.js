@@ -89,6 +89,18 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       });
   };
 
+  var cleanBookmark = function (originalBookmark) {
+    // Create a copy of original
+    var copy = utility.DeepCopy(originalBookmark);
+
+    // Remove empty properties
+    var cleanedBookmark = _.pick(copy, function (x) {
+      return _.isArray(x) || _.isString(x) ? x.length > 0 : x != null;
+    });
+
+    return cleanedBookmark;
+  };
+
   var disableSync = function () {
     // Disable checking for sync updates
     platform.AutomaticUpdates.Stop();
@@ -129,6 +141,16 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   };
 
   var exportBookmarks = function () {
+    var cleanRecursive = function (bookmarks) {
+      return bookmarks.map(function (bookmark) {
+        var cleanedBookmark = cleanBookmark(bookmark);
+        if (_.isArray(cleanedBookmark.children)) {
+          cleanedBookmark.children = cleanRecursive(cleanedBookmark.children);
+        }
+        return cleanedBookmark;
+      });
+    };
+
     return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
         // If sync is not enabled, export local browser data
@@ -143,7 +165,9 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
               return utility.DecryptData(data.bookmarks);
             })
             .then(function (decryptedData) {
-              return JSON.parse(decryptedData);
+              // Clean exported bookmarks and return as json
+              var bookmarks = JSON.parse(decryptedData);
+              return cleanRecursive(bookmarks);
             });
         }
       });
@@ -958,7 +982,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
             // Update local bookmarks
             return syncData.command === globals.Commands.RestoreBookmarks ?
               refreshLocalBookmarks(bookmarks) :
-              updateLocalBookmarks(updateLocalBookmarksInfo)
+              updateLocalBookmarks(updateLocalBookmarksInfo);
           })
           .then(function () {
             // Update synced bookmarks
@@ -1281,6 +1305,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   var self = {
     CheckBookmarksHaveUniqueIds: checkBookmarksHaveUniqueIds,
     CheckForUpdates: checkForUpdates,
+    CleanBookmark: cleanBookmark,
     DisableSync: disableSync,
     Each: eachBookmark,
     Export: exportBookmarks,

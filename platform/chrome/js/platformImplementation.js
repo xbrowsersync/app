@@ -213,9 +213,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           newXBookmark.id = bookmarks.GetNewBookmarkId(xBookmarks);
         }
 
-        // Add the new bookmark to the parent's children at the correct index
+        // Clean bookmark and replace existing
+        var cleanedBookmark = bookmarks.CleanBookmark(newXBookmark);
+
+        // Add the cleaned bookmark to the parent's children at the correct index
         changedBookmarkIndex = createInfo.index - numContainers;
-        findParentXBookmark.xBookmark.children.splice(changedBookmarkIndex, 0, newXBookmark);
+        findParentXBookmark.xBookmark.children.splice(changedBookmarkIndex, 0, cleanedBookmark);
 
         return deferred.resolve({ bookmarks: xBookmarks });
       })
@@ -399,7 +402,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         // Otherwise, update bookmark at correct index
         changedBookmarkIndex = updatedLocalBookmark.index - numContainers;
         var bookmarkToUpdate = findParentXBookmark.xBookmark.children[changedBookmarkIndex];
-
         bookmarkToUpdate.title = updateInfo.title !== undefined ? updateInfo.title : bookmarkToUpdate.title;
         bookmarkToUpdate.url = updateInfo.url !== undefined ? updateInfo.url : bookmarkToUpdate.url;
 
@@ -420,6 +422,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           bookmarkToUpdate.id = separator.id;
           bookmarkToUpdate.title = separator.title;
         }
+
+        // Clean bookmark and replace existing
+        var cleanedBookmark = bookmarks.CleanBookmark(bookmarkToUpdate);
+        findParentXBookmark.xBookmark.children.forEach(function (current, i) {
+          if (current === bookmarkToUpdate) {
+            findParentXBookmark.xBookmark.children[i] = cleanedBookmark;
+          }
+        });
 
         return deferred.resolve({ bookmarks: xBookmarks });
       })

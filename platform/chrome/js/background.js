@@ -53,14 +53,17 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
           // If bookmark is separator update local bookmark properties
           return convertLocalBookmarkToSeparator(bookmark);
         }
+        else {
+          return bookmark;
+        }
       })
-      .then(function () {
+      .then(function (bookmark) {
         return $q(function (resolve, reject) {
           syncBookmarks({
             type: globals.SyncType.Push,
             changeInfo: {
               type: globals.UpdateType.Update,
-              data: [id, changeInfo]
+              data: [bookmark.id, bookmark]
             }
           }, function (response) {
             if (response.success) {
@@ -83,7 +86,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         else {
           reject(response.error);
         }
-      })
+      });
     })
       .then(function () {
         return platform.Bookmarks.LocalBookmarkInToolbar(bookmark)
@@ -110,14 +113,14 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
                     else {
                       reject(response.error);
                     }
-                  })
+                  });
                 })
                   .then(function () {
                     reject(err);
                   });
               }
             });
-          })
+          });
       })
       .finally(function () {
         return $q(function (resolve, reject) {
@@ -128,43 +131,45 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
             else {
               reject(response.error);
             }
-          })
+          });
         });
       });
   };
 
-  var createBookmark = function (id, bookmark) {
+  var createBookmark = function (id, createdBookmark) {
     utility.LogInfo('onCreated event detected');
 
     var preSyncSteps;
-    if (bookmarks.IsSeparator(bookmark)) {
+    if (bookmarks.IsSeparator(createdBookmark)) {
       // If bookmark is separator update local bookmark properties
-      preSyncSteps = convertLocalBookmarkToSeparator(bookmark);
+      preSyncSteps = convertLocalBookmarkToSeparator(createdBookmark);
     }
-    else if (bookmark.url) {
+    else if (createdBookmark.url) {
       // If bookmark is not folder, get page metadata from current tab
       preSyncSteps = platform.GetPageMetadata(true)
         .then(function (metadata) {
           // Add metadata if bookmark is current tab location
-          if (metadata && bookmark.url === metadata.url) {
-            bookmark.title = utility.StripTags(metadata.title);
-            bookmark.description = utility.StripTags(metadata.description);
-            bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
+          if (metadata && createdBookmark.url === metadata.url) {
+            createdBookmark.title = utility.StripTags(metadata.title);
+            createdBookmark.description = utility.StripTags(metadata.description);
+            createdBookmark.tags = utility.GetTagArrayFromText(metadata.tags);
           }
+
+          return createdBookmark;
         });
     }
     else {
-      preSyncSteps = $q.resolve();
+      preSyncSteps = $q.resolve(createdBookmark);
     }
 
     return preSyncSteps
-      .then(function () {
+      .then(function (bookmark) {
         return $q(function (resolve, reject) {
           syncBookmarks({
             type: globals.SyncType.Push,
             changeInfo: {
               type: globals.UpdateType.Create,
-              data: [id, bookmark]
+              data: [bookmark.id, bookmark]
             }
           }, function (response) {
             if (response.success) {

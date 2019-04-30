@@ -395,7 +395,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     }
 
     // Clone current bookmark object
-    var bookmarkToCreate = utility.DeepCopy(vm.bookmark.current);
+    var bookmarkToCreate = bookmarks.CleanBookmark(vm.bookmark.current);
 
     // Check for protocol
     var protocolRegex = new RegExp(globals.URL.ProtocolRegex);
@@ -529,7 +529,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     }
 
     // Clone current bookmark object
-    var bookmarkToUpdate = utility.DeepCopy(vm.bookmark.current);
+    var bookmarkToUpdate = bookmarks.CleanBookmark(vm.bookmark.current);
 
     // Check for protocol
     var protocolRegex = new RegExp(globals.URL.ProtocolRegex);
@@ -917,9 +917,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       return bookmarks.IncludesCurrentPage()
         .then(function (bookmarkedCurrentPage) {
           if (bookmarkedCurrentPage) {
-            // Remove search score and set current bookmark to result
-            delete bookmarkedCurrentPage.score;
-
             // Display update bookmark form and return
             vm.bookmark.displayUpdateForm = true;
             return resolve(bookmarkedCurrentPage);
@@ -952,6 +949,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         });
     })
       .then(function (bookmark) {
+        // Remove search score and set current bookmark to result
+        delete bookmark.score;
+
         // Save url to compare for changes
         vm.bookmark.current = bookmark;
         vm.bookmark.originalUrl = bookmark.url;
