@@ -19,6 +19,11 @@ This repository contains the source code for the browser web extensions and Andr
 CD into the source directory and install the package and dependencies using NPM:
 
 	$ npm install
+
+### Android
+
+You must follow the Cordova Android [installation guide](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html) in order to develop xBrowserSync for Android. Once that's done, run the following commands in the xBrowserSync source directory:
+
 	$ (sudo) npm install -g cordova
 	$ cd ./platform/android/cordova
 	$ cordova prepare
@@ -34,6 +39,20 @@ Replace [platform] with the name of the desired platform to build (corresponding
 - android
 - chrome
 - firefox
+
+### Running in Chrome
+
+Once you have built xBrowserSync for Chrome, browse to `chrome://extensions`, enable Developer mode, click "Load unpacked" and browse to `build` within the xBrowserSync source directory.
+
+Note: We recommend creating a new Chrome profile for testing so you do not affect your actual profile data.
+
+### Running in Firefox
+
+Use the [web-ext](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Getting_started_with_web-ext) tool for testing xBrowserSync in Firefox. Once that is installed and you have built xBrowserSync for Firefox, CD into `build` within the xBrowserSync source directory and run the following command:
+
+	$ web-ext run --verbose
+
+Firefox will open using a temporary profile and the xBrowserSync extension will be installed from the built source.
 
 ## Issues
 
