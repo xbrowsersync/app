@@ -74,7 +74,13 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       .then(function (data) {
         // If last updated is different the date in local storage, refresh bookmarks
         var remoteLastUpdated = new Date(data.lastUpdated);
-        return !cachedLastUpdated || cachedLastUpdated.getTime() < remoteLastUpdated.getTime();
+        var updatesAvailable = !cachedLastUpdated || cachedLastUpdated.getTime() < remoteLastUpdated.getTime();
+
+        if (updatesAvailable) {
+          utility.LogInfo('Updates available, local:' + (cachedLastUpdated ? cachedLastUpdated.toISOString() : 'none') + ' remote:' + remoteLastUpdated.toISOString());
+        }
+
+        return updatesAvailable;
       })
       .catch(function (err) {
         // Check if sync should be disabled
@@ -904,6 +910,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
               // Check if data is out of sync
               var remoteLastUpdated = new Date(data.lastUpdated);
               if (cachedLastUpdated.getTime() !== remoteLastUpdated.getTime()) {
+                utility.LogInfo('Local data out of sync, local:' + cachedLastUpdated.toISOString() + ' remote:' + remoteLastUpdated.toISOString());
                 return $q.reject({ code: globals.ErrorCodes.DataOutOfSync });
               }
 
@@ -1122,6 +1129,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
               // Check if data is out of sync
               var remoteLastUpdated = new Date(data.lastUpdated);
               if (cachedLastUpdated.getTime() !== remoteLastUpdated.getTime()) {
+                utility.LogInfo('Local data out of sync, local:' + cachedLastUpdated.toISOString() + ' remote:' + remoteLastUpdated.toISOString());
                 return $q.reject({ code: globals.ErrorCodes.DataOutOfSync });
               }
 

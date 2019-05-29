@@ -196,8 +196,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
               return;
             }
 
-            utility.LogInfo('Updates found, retrieving latest sync data');
-
             // Get bookmark updates
             return $q(function (resolve, reject) {
               syncBookmarks({
@@ -403,28 +401,14 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
           return;
         }
 
-        // Enable event listeners
-        return $q(function (resolve, reject) {
-          enableEventListeners(function (response) {
-            if (response.success) {
-              resolve();
-            }
-            else {
-              reject(response.error);
-            }
-          });
-        })
-          // Start auto updates
-          .then(platform.AutomaticUpdates.Start)
-          // Check for updates to synced bookmarks
-          .then(bookmarks.CheckForUpdates)
+        // Check for updates to synced bookmarks
+        return bookmarks.CheckForUpdates()
           .then(function (updatesAvailable) {
             if (!updatesAvailable) {
               return;
             }
 
-            utility.LogInfo('Updates found, retrieving latest sync data');
-
+            // Get bookmark updates
             return $q(function (resolve, reject) {
               syncBookmarks({
                 type: globals.SyncType.Pull
@@ -438,6 +422,21 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
               });
             });
           })
+          .then(function () {
+            // Enable event listeners
+            return $q(function (resolve, reject) {
+              enableEventListeners(function (response) {
+                if (response.success) {
+                  resolve();
+                }
+                else {
+                  reject(response.error);
+                }
+              });
+            });
+          })
+          // Start auto updates
+          .then(platform.AutomaticUpdates.Start)
           .catch(function (err) {
             // Display alert
             var errMessage = utility.GetErrorMessageFromException(err);
