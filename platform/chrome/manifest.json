@@ -18,6 +18,14 @@
   "background": {
     "page": "background.html"
   },
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+Space",
+        "mac": "MacCtrl+Space"
+      }
+    }
+  },
   "content_security_policy": "connect-src *; default-src 'none'; font-src 'self' data:; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline';",
   "permissions": [
     "activeTab",

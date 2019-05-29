@@ -1425,7 +1425,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       return true;
     }
 
-    var supportedRegex = /^(?!chrome)\w+:/i;
+    var supportedRegex = /^(?!chrome|data)\w+:/i;
     return supportedRegex.test(url);
   };
 
