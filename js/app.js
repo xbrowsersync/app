@@ -1360,6 +1360,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   var restoreData = function (backupData) {
     var syncEnabled;
 
+    utility.LogInfo('Restoring data');
+
     // Get required data from backup data 
     var bookmarksToRestore = backupData.xbrowsersync ?
       backupData.xbrowsersync.sync.bookmarks : backupData.xBrowserSync.bookmarks;

@@ -542,35 +542,11 @@
   "error_NoDataToRestore_Message": {
     "message": "Stellen Sie sicher, dass Sie eine gültige xBrowserSync Sicherung angegeben haben."
   },
-  "error_FailedGetLocalBookmarks_Title": {
-    "message": "Die lokalen Lesezeichen konnten nicht ermittelt werden"
+  "error_LocalSyncError_Title": {
+    "message": "Sync error"
   },
-  "error_FailedGetLocalBookmarks_Message": {
-    "message": "Beim Versuch die lokalen Lesezeichen zu ermitteln ist ein Fehler aufgetreten."
-  },
-  "error_FailedCreateLocalBookmarks_Title": {
-    "message": "Es konnten keine Lesezeichen erstellt werden"
-  },
-  "error_FailedCreateLocalBookmarks_Message": {
-    "message": "Beim Versuch ein lokales Lesezeichen zu erstellen ist ein Fehler aufgetreten."
-  },
-  "error_FailedRemoveLocalBookmarks_Title": {
-    "message": "Ein Lesezeichen konnten nicht überschrieben werden"
-  },
-  "error_FailedRemoveLocalBookmarks_Message": {
-    "message": "Beim Versuch ein lokales Lesezeichen zu überschreiben ist ein Fehler aufgetreten."
-  },
-  "error_LastChangeNotSynced_Title": {
-    "message": "Die letzte Änderung wurde nicht synchronisiert"
-  },
-  "error_LastChangeNotSynced_Message": {
-    "message": "Die letzte Änderung wurde aufgrund eines Lesezeichenkonflikts nicht synchronisiert. Es wäre eine gute Idee, vor dem erneuten Versuch den Sync zu deaktivieren und wieder zu aktivieren."
-  },
-  "error_BookmarkNotFound_Title": {
-    "message": "Lesezeichen nicht gefunden"
-  },
-  "error_BookmarkNotFound_Message": {
-    "message": "Es sieht so aus, als wären Ihre Lesezeichen nicht mehr synchron. Es wäre eine gute Idee, vor dem erneuten Versuch den Sync zu deaktivieren und wieder zu aktivieren."
+  "error_LocalSyncError_Message": {
+    "message": "An error occurred whilst syncing local changes. Your local bookmarks have been refreshed so you will need to redo the change."
   },
   "error_OutOfSync_Title": {
     "message": "Daten nicht mehr synchron"

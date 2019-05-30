@@ -9,6 +9,8 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Utility = function ($q, platform, globals) {
   'use strict';
 
+  var currentMessageQueueItem, messageQueue = [];
+
 
 	/* ------------------------------------------------------------------------------------
 	 * Public functions
@@ -325,18 +327,6 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         errorMessage.title = platform.GetConstant(globals.Constants.Error_MissingClientData_Title);
         errorMessage.message = platform.GetConstant(globals.Constants.Error_MissingClientData_Message);
         break;
-      case globals.ErrorCodes.FailedGetLocalBookmarks:
-        errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedGetLocalBookmarks_Title);
-        errorMessage.message = platform.GetConstant(globals.Constants.Error_FailedGetLocalBookmarks_Message);
-        break;
-      case globals.ErrorCodes.FailedCreateLocalBookmarks:
-        errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedCreateLocalBookmarks_Title);
-        errorMessage.message = platform.GetConstant(globals.Constants.Error_FailedCreateLocalBookmarks_Message);
-        break;
-      case globals.ErrorCodes.FailedRemoveLocalBookmarks:
-        errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedRemoveLocalBookmarks_Title);
-        errorMessage.message = platform.GetConstant(globals.Constants.Error_FailedRemoveLocalBookmarks_Message);
-        break;
       case globals.ErrorCodes.NoDataFound:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_InvalidCredentials_Title);
         errorMessage.message = platform.GetConstant(globals.Constants.Error_InvalidCredentials_Message);
@@ -348,14 +338,6 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
       case globals.ErrorCodes.InvalidCredentials:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_InvalidCredentials_Title);
         errorMessage.message = platform.GetConstant(globals.Constants.Error_InvalidCredentials_Message);
-        break;
-      case globals.ErrorCodes.UpdatedBookmarkNotFound:
-        errorMessage.title = platform.GetConstant(globals.Constants.Error_LastChangeNotSynced_Title);
-        errorMessage.message = platform.GetConstant(globals.Constants.Error_LastChangeNotSynced_Message);
-        break;
-      case globals.ErrorCodes.XBookmarkNotFound:
-        errorMessage.title = platform.GetConstant(globals.Constants.Error_BookmarkNotFound_Title);
-        errorMessage.message = platform.GetConstant(globals.Constants.Error_BookmarkNotFound_Message);
         break;
       case globals.ErrorCodes.ContainerChanged:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_ContainerChanged_Title);
@@ -405,6 +387,14 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         break;
       case globals.ErrorCodes.FailedShareUrlNotSynced:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title);
+        break;
+      case globals.ErrorCodes.FailedCreateLocalBookmarks:
+      case globals.ErrorCodes.FailedGetLocalBookmarks:
+      case globals.ErrorCodes.FailedRemoveLocalBookmarks:
+      case globals.ErrorCodes.LocalBookmarkNotFound:
+      case globals.ErrorCodes.XBookmarkNotFound:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_LocalSyncError_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_LocalSyncError_Message);
         break;
       default:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_Default_Title);
@@ -509,7 +499,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     var errMessage;
 
     if (!err) {
-      return $q.resolve();
+      return;
     }
 
     if (err instanceof Error) {
@@ -521,22 +511,36 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     }
     message = message ? message + ': ' + errMessage : errMessage;
 
-    return logMessage(globals.LogType.Error, message, err);
+    // Add message to queue and process
+    messageQueue.push([globals.LogType.Error, message, err]);
+    processMessageQueue();
   };
 
   var logInfo = function (message) {
     if (!message) {
-      return $q.resolve();
+      return;
     }
 
-    return logMessage(globals.LogType.Trace, message);
+    // Add message to queue and process
+    messageQueue.push([globals.LogType.Trace, message]);
+    processMessageQueue();
   };
 
-  var logMessage = function (messageType, message, err) {
+  var processMessageQueue = function () {
+    // Return if currently processing or no more messages to process
+    if (currentMessageQueueItem || messageQueue.length === 0) {
+      return;
+    }
+
+    currentMessageQueueItem = messageQueue.shift();
+    var messageType = currentMessageQueueItem[0];
+    var message = currentMessageQueueItem[1];
+    var err = currentMessageQueueItem[2];
+
     return platform.LocalStorage.Get(globals.CacheKeys.TraceLog)
       .then(function (debugMessageLog) {
         debugMessageLog = debugMessageLog || [];
-        var messageLogText = getDateTimeString(new Date()) + '\t';
+        var messageLogText = new Date().toISOString().replace(/[A-Z]/g, ' ').trim() + '\t';
 
         switch (messageType) {
           case globals.LogType.Error:
@@ -568,15 +572,22 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         }
         debugMessageLog.push(messageLogText);
         return platform.LocalStorage.Set(globals.CacheKeys.TraceLog, debugMessageLog);
+      })
+      .then(function () {
+        // Process remaining messages
+        currentMessageQueueItem = undefined;
+        processMessageQueue();
       });
   };
 
   var logWarning = function (message) {
     if (!message) {
-      return $q.resolve();
+      return;
     }
 
-    return logMessage(globals.LogType.Warn, message);
+    // Add message to queue and process
+    messageQueue.push([globals.LogType.Warn, message]);
+    processMessageQueue();
   };
 
   var parseUrl = function (url) {

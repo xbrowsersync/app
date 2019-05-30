@@ -542,35 +542,11 @@
   "error_NoDataToRestore_Message": {
     "message": "Assurez vous d'avoir fourni une sauvegarde xBrowserSync valide avant de restaurer."
   },
-  "error_FailedGetLocalBookmarks_Title": {
-    "message": "Impossible de récupérer les favoris locaux"
+  "error_LocalSyncError_Title": {
+    "message": "Sync error"
   },
-  "error_FailedGetLocalBookmarks_Message": {
-    "message": "Une erreur est survenue en récupérant les favoris locaux."
-  },
-  "error_FailedCreateLocalBookmarks_Title": {
-    "message": "Impossible de créer les favoris"
-  },
-  "error_FailedCreateLocalBookmarks_Message": {
-    "message": "Une erreur est survenue en tentant de créer un favori local."
-  },
-  "error_FailedRemoveLocalBookmarks_Title": {
-    "message": "Impossible d'écraser les favoris"
-  },
-  "error_FailedRemoveLocalBookmarks_Message": {
-    "message": "Une erreur est survenue en tentant d'écraser les favoris locaux."
-  },
-  "error_LastChangeNotSynced_Title": {
-    "message": "Dernière modification non synchronisée"
-  },
-  "error_LastChangeNotSynced_Message": {
-    "message": "La dernière modification n'a pas été synchronisée à cause d'un conflit de favoris. Cela serait une bonne idée de désactiver et réactiver la synchronisation avant de continuer."
-  },
-  "error_BookmarkNotFound_Title": {
-    "message": "Favori non trouvé"
-  },
-  "error_BookmarkNotFound_Message": {
-    "message": "Il semblerait que vos favoris ne sont pas à jour. Cela serait une bonne idée de désactiver et réactiver la synchronisation avant de continuer."
+  "error_LocalSyncError_Message": {
+    "message": "An error occurred whilst syncing local changes. Your local bookmarks have been refreshed so you will need to redo the change."
   },
   "error_OutOfSync_Title": {
     "message": "Données non synchronisées"

@@ -814,6 +814,9 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
         utility.LogInfo('Sync ' + currentSync.uniqueId + ' failed.');
         utility.LogError(err, 'bookmarks.sync');
+        if (currentSync.changeInfo) {
+          utility.LogInfo(currentSync.changeInfo);
+        }
 
         return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
           .then(function (syncEnabled) {

@@ -552,35 +552,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "error_NoDataToRestore_Message": {
       "message": "Ensure you have provided a valid xBrowserSync back up before restoring."
     },
-    "error_FailedGetLocalBookmarks_Title": {
-      "message": "Couldn’t get local bookmarks"
+    "error_LocalSyncError_Title": {
+      "message": "Sync error"
     },
-    "error_FailedGetLocalBookmarks_Message": {
-      "message": "An error occurred when trying to retrieve local bookmarks."
-    },
-    "error_FailedCreateLocalBookmarks_Title": {
-      "message": "Couldn’t create bookmarks"
-    },
-    "error_FailedCreateLocalBookmarks_Message": {
-      "message": "An error occurred when trying to create a local bookmark."
-    },
-    "error_FailedRemoveLocalBookmarks_Title": {
-      "message": "Couldn’t overwrite bookmark"
-    },
-    "error_FailedRemoveLocalBookmarks_Message": {
-      "message": "An error occurred when trying to overwrite local bookmarks."
-    },
-    "error_LastChangeNotSynced_Title": {
-      "message": "Last change not synced"
-    },
-    "error_LastChangeNotSynced_Message": {
-      "message": "The last change was not synced due to a bookmarks conflict. It would be a good idea to disable and re-enable sync before continuing."
-    },
-    "error_BookmarkNotFound_Title": {
-      "message": "Bookmark not found"
-    },
-    "error_BookmarkNotFound_Message": {
-      "message": "It looks like your bookmarks are out of sync. It would be a good idea to disable and re-enable sync before continuing."
+    "error_LocalSyncError_Message": {
+      "message": "An error occurred whilst syncing local changes. Your local bookmarks have been refreshed so you will need to redo the change."
     },
     "error_OutOfSync_Title": {
       "message": "Data out of sync"

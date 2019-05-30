@@ -188,7 +188,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         // Check if both container and parent bookmark were found
         if (!findParentXBookmark.container || !findParentXBookmark.xBookmark) {
           return $q.reject({
-            code: globals.ErrorCodes.UpdatedBookmarkNotFound
+            code: globals.ErrorCodes.LocalBookmarkNotFound
           });
         }
 
@@ -213,6 +213,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         // Clean bookmark and replace existing
         var cleanedBookmark = bookmarks.CleanBookmark(newXBookmark);
 
+        // TODO: indexes are unreliable, do not find xbookmarks using indexes
         // Add the cleaned bookmark to the parent's children at the correct index
         changedBookmarkIndex = createInfo.index - numContainers;
         findParentXBookmark.xBookmark.children.splice(changedBookmarkIndex, 0, cleanedBookmark);
@@ -264,13 +265,19 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         // Check if both container and parent bookmark were found
         if (!findParentXBookmark.container || !findParentXBookmark.xBookmark) {
           return $q.reject({
-            code: globals.ErrorCodes.UpdatedBookmarkNotFound
+            code: globals.ErrorCodes.LocalBookmarkNotFound
           });
         }
 
+        // TODO: indexes are unreliable, do not find xbookmarks using indexes
         // Otherwise, remove bookmark at the correct index from parent
         changedBookmarkIndex = removeInfo.index - numContainers;
         var removedBookmark = findParentXBookmark.xBookmark.children.splice(changedBookmarkIndex, 1)[0];
+        if (!removedBookmark) {
+          return $q.reject({
+            code: globals.ErrorCodes.LocalBookmarkNotFound
+          });
+        }
 
         return deferred.resolve({
           bookmarks: xBookmarks,
@@ -400,10 +407,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         // Check if both container and parent bookmark were found
         if (!findParentXBookmark.container || !findParentXBookmark.xBookmark) {
           return $q.reject({
-            code: globals.ErrorCodes.UpdatedBookmarkNotFound
+            code: globals.ErrorCodes.LocalBookmarkNotFound
           });
         }
 
+        // TODO: indexes are unreliable, do not find xbookmarks using indexes
         // Otherwise, update bookmark at correct index
         changedBookmarkIndex = updatedLocalBookmark.index - numContainers;
         var bookmarkToUpdate = findParentXBookmark.xBookmark.children[changedBookmarkIndex];
@@ -522,7 +530,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return findLocalBookmarkByPath(pathToTarget.slice(1))
       .then(function (bookmarkToDelete) {
         if (!bookmarkToDelete) {
-          return $q.reject({ code: globals.ErrorCodes.UpdatedBookmarkNotFound });
+          return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
         }
 
         return deleteLocalBookmarksTree(bookmarkToDelete.id);
@@ -1034,7 +1042,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return findLocalBookmarkByPath(pathToTarget.slice(1))
       .then(function (localBookmarkToUpdate) {
         if (!localBookmarkToUpdate) {
-          return $q.reject({ code: globals.ErrorCodes.UpdatedBookmarkNotFound });
+          return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
         }
 
         return updateLocalBookmark(localBookmarkToUpdate.id, updatedBookmark.title, updatedBookmark.url);
@@ -1156,7 +1164,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     var container = path.shift().bookmark;
     if (!bookmarks.XBookmarkIsContainer(container)) {
       // First path item should always be a container
-      return $q.reject({ code: globals.ErrorCodes.UpdatedBookmarkNotFound });
+      return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
     }
 
     // Get local container node ids
@@ -1180,7 +1188,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
               }
               else {
                 // Unable to find local container folder 
-                return $q.reject({ code: globals.ErrorCodes.UpdatedBookmarkNotFound });
+                return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
               }
             });
         }

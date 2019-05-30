@@ -223,7 +223,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
       //  return platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, true)
       //})
       .then(function () {
-        return utility.LogInfo('Installed v' + currentVersion);
+        utility.LogInfo('Installed v' + currentVersion);
       });
   };
 
@@ -384,15 +384,14 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         // Add useful debug info to beginning of trace log
         cachedData.appVersion = globals.AppVersion;
         cachedData.platform = _.omit(browserDetect(), 'versionNumber');
-        return utility.LogInfo(_.omit(
+        utility.LogInfo(_.omit(
           cachedData,
           'debugMessageLog',
           globals.CacheKeys.Bookmarks,
           globals.CacheKeys.TraceLog,
           globals.CacheKeys.Password
         ));
-      })
-      .then(function () {
+
         // Refresh interface
         platform.Interface.Refresh(syncEnabled);
 
@@ -529,10 +528,10 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         return bookmarks.Sync(syncData)
           .catch(function (err) {
             // If local data out of sync, queue refresh sync
-            if (err && err.code === globals.ErrorCodes.DataOutOfSync) {
+            if (shouldRefreshLocalBookmarksOnError(err)) {
+              utility.LogInfo('Refreshing local sync data');
               return syncBookmarks({ type: globals.SyncType.Pull })
                 .then(function () {
-                  utility.LogInfo('Local sync data refreshed');
                   return $q.reject(err);
                 });
             }
@@ -593,6 +592,16 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
           }
         });
       });
+  };
+
+  var shouldRefreshLocalBookmarksOnError = function (err) {
+    return err && (
+      err.code === globals.ErrorCodes.DataOutOfSync ||
+      err.code === globals.ErrorCodes.FailedCreateLocalBookmarks ||
+      err.code === globals.ErrorCodes.FailedGetLocalBookmarks ||
+      err.code === globals.ErrorCodes.FailedRemoveLocalBookmarks ||
+      err.code === globals.ErrorCodes.LocalBookmarkNotFound ||
+      err.code === globals.ErrorCodes.XBookmarkNotFound);
   };
 
   var upgradeExtension = function (oldVersion, newVersion) {
