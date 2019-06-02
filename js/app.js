@@ -119,6 +119,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       syncForm_ExistingSync_Click: syncForm_ExistingSync_Click,
       syncForm_NewSync_Click: syncForm_NewSync_Click,
       syncForm_Submit_Click: syncForm_Submit_Click,
+      syncForm_SyncId_Change: syncForm_SyncId_Change,
       syncForm_SyncUpdates_Click: syncForm_SyncUpdates_Click,
       syncForm_UpgradeSync_Click: syncForm_UpgradeSync_Click,
       syncPanel_DisplayDataUsage_Click: displayDataUsage,
@@ -1032,7 +1033,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
                 inputField.focus();
               }
             }
-          });
+          }, 100);
         }
 
         // Check whether to display intro animation, then disable for next time
@@ -2040,6 +2041,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         document.querySelector('.login-form-existing .btn-existing-sync').click();
       }
     });
+  };
+
+  var syncForm_SyncId_Change = function () {
+    platform.LocalStorage.Set(globals.CacheKeys.SyncId, vm.sync.id);
   };
 
   var syncForm_SyncUpdates_Click = function () {

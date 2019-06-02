@@ -270,7 +270,7 @@
       </button>
       <input name="txtId" data-ng-model="vm.sync.id" class="form-control" data-ng-disabled="vm.sync.enabled"
         placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Description) }}" maxlength="32"
-        spellcheck="false" tabindex="1" />
+        data-ng-change="vm.events.syncForm_SyncId_Change()" spellcheck="false" tabindex="1" />
     </div>
     <div class="form-group secret-form-group" data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
       <label class="sr-only" for="txtPassword">{{
