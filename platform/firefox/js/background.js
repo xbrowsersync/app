@@ -18,7 +18,10 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
 
   var Background = function () {
     vm = this;
-    vm.install = onInstallHandler;
+    vm.install = function (event) {
+      var details = angular.element(event.currentTarget).data('details');
+      onInstallHandler(details);
+    };
     vm.startup = onStartupHandler;
     browser.alarms.onAlarm.addListener(onAlarmHandler);
     browser.notifications.onClicked.addListener(onNotificationClicked);
@@ -295,12 +298,13 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
     var installOrUpgrade = $q.resolve();
 
     // Check for upgrade or do fresh install
-    if (details && details.reason === 'update' &&
-      details.previousVersion && details.previousVersion !== currentVersion) {
-      installOrUpgrade = upgradeExtension(details.previousVersion, currentVersion);
-    }
-    else {
+    if (details && details.reason === 'install') {
       installOrUpgrade = installExtension(currentVersion);
+    }
+    else if (details && details.reason === 'update' &&
+      details.previousVersion &&
+      compareVersions(details.previousVersion, currentVersion) === -1) {
+      installOrUpgrade = upgradeExtension(details.previousVersion, currentVersion);
     }
 
     // Run startup process after install/upgrade
@@ -676,7 +680,10 @@ xBrowserSync.App.Background.$inject = ['$q', 'platform', 'globals', 'utility', '
 xBrowserSync.App.FirefoxBackground.controller('Controller', xBrowserSync.App.Background);
 
 // Set synchronous event handlers
-browser.runtime.onInstalled.addListener(function () {
+browser.runtime.onInstalled.addListener(function (details) {
+  // Store event details as element data
+  var element = document.querySelector('#install');
+  angular.element(element).data('details', details);
   document.querySelector('#install').click();
 });
 browser.runtime.onStartup.addListener(function () {
