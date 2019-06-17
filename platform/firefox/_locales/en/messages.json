@@ -122,6 +122,12 @@
   "login_ConfirmSync_Message": {
     "message": "xBrowserSync will delete all local bookmarks data before restoring synced bookmarks. OK to proceed?"
   },
+  "login_DisableOtherSyncs_Title": {
+    "message": "Disable active browser sync tools"
+  },
+  "login_DisableOtherSyncs_Message": {
+    "message": "Syncing your browser data with xBrowserSync whilst other browser sync tools (such as <a href='https://support.mozilla.org/kb/remove-synced-device-firefox-accounts' class='new-tab'>Firefox Sync</a>) are active can lead to corrupted bookmarks. Please disable them before continuing."
+  },
   "login_UpgradeSync_Title": {
     "message": "Ready to upgrade sync?"
   },

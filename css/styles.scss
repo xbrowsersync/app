@@ -1,11 +1,11 @@
-@import 'variables.scss';
-@import 'fonts.scss';
-@import 'mixins.scss';
-@import 'animations.scss';
+@import "variables.scss";
+@import "fonts.scss";
+@import "mixins.scss";
+@import "animations.scss";
 
 * {
-  box-shadow: none!important;
-  outline: none!important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 body {
@@ -38,7 +38,7 @@ body {
 
   a {
     color: inherit;
-    transition: all, ease-in-out, .2s;
+    transition: all, ease-in-out, 0.2s;
     cursor: pointer;
     border-bottom: 1px dotted #fff;
 
@@ -65,9 +65,9 @@ body {
         color: $colour-text1;
         min-width: 5em;
         border-color: $colour-text1;
-        border-width: .1em;
+        border-width: 0.1em;
         border-radius: $border-radius-input;
-        transition: all, ease-in-out, .2s;
+        transition: all, ease-in-out, 0.2s;
         padding: 0 1em;
         line-height: 2.1em;
 
@@ -88,7 +88,7 @@ body {
         }
 
         &[disabled] {
-          opacity: .5;
+          opacity: 0.5;
           cursor: default;
           background-color: rgba($colour-text1, 0.3);
           border-color: $colour-text1;
@@ -100,7 +100,7 @@ body {
         background: none;
         color: $colour-text2;
         padding: 0;
-        transition: all, ease-in-out, .2s;
+        transition: all, ease-in-out, 0.2s;
         border-radius: 0;
         border-bottom: solid 1px transparent;
 
@@ -120,8 +120,8 @@ body {
         }
 
         i {
-          opacity: .4;
-          transition: all, ease-in-out, .2s;
+          opacity: 0.4;
+          transition: all, ease-in-out, 0.2s;
         }
       }
 
@@ -135,7 +135,7 @@ body {
       }
 
       .spinner-border-sm {
-        border-width: .15em;
+        border-width: 0.15em;
         height: 0.75rem;
         width: 0.75rem;
         vertical-align: baseline;
@@ -151,18 +151,18 @@ body {
     background-color: $colour-text1;
     color: $colour-text2;
     height: auto;
-    padding: .5em 1em;
+    padding: 0.5em 1em;
     resize: none;
     border: none;
     border-radius: $border-radius-input;
     @include placeholder {
       color: $colour-text2;
-      opacity: .4;
+      opacity: 0.4;
     }
   }
 
   p {
-    margin: 0 0 .75em;
+    margin: 0 0 0.75em;
   }
 
   textarea.form-control {
@@ -183,7 +183,7 @@ body {
     border: none;
     color: $colour-text1;
     @media (min-width: $width-mobile-small + 1) {
-      font-size: .9em;
+      font-size: 0.9em;
 
       h4 {
         margin-bottom: 4px;
@@ -220,7 +220,7 @@ body {
       }
 
       i {
-        opacity: .7;
+        opacity: 0.7;
       }
     }
 
@@ -288,7 +288,7 @@ body {
     input {
       display: none;
 
-      &[type=checkbox]:checked + label {
+      &[type="checkbox"]:checked + label {
         left: 16px;
         background: $colour-link-highlight;
       }
@@ -309,7 +309,7 @@ body {
       padding: 0;
 
       &.animate {
-        transition: all .1s ease;
+        transition: all 0.1s ease;
       }
     }
   }
@@ -338,7 +338,7 @@ body {
     top: 0;
     left: 0;
     z-index: 100;
-    opacity: .8;
+    opacity: 0.8;
     background: $colour-text2;
   }
 
@@ -352,17 +352,17 @@ body {
   }
 
   .form-group {
-    margin-bottom: .75em;
+    margin-bottom: 0.75em;
 
     .validation {
-      color: rgba($colour-danger, 0.75)!important;
-      font-size: .8em;
+      color: rgba($colour-danger, 0.75) !important;
+      font-size: 0.8em;
       line-height: 1.2em;
       position: absolute;
       top: 2.35em;
       right: 1.2em;
       background: $colour-text1;
-      padding: .1em .3em;
+      padding: 0.1em 0.3em;
       z-index: 20;
       max-width: 90%;
       border-radius: 1em;
@@ -371,17 +371,17 @@ body {
 
   .has-error {
     .form-control {
-      color: $colour-danger!important;
+      color: $colour-danger !important;
       @include placeholder {
-        color: $colour-danger!important;
-        opacity: .7;
+        color: $colour-danger !important;
+        opacity: 0.7;
       }
     }
   }
 
   .header-panel {
     position: relative;
-    margin-bottom: .35em;
+    margin-bottom: 0.35em;
 
     button {
       font-size: 1.5em;
@@ -412,8 +412,8 @@ body {
     .measure {
       display: block;
       position: absolute;
-      padding-top: .25em;
-      padding-bottom: .25em;
+      padding-top: 0.25em;
+      padding-bottom: 0.25em;
       z-index: 60;
       color: $colour-link;
       background-color: transparent;
@@ -439,27 +439,27 @@ body {
   }
 
   .progress-bar-success {
-    background-color: $colour-success!important;
+    background-color: $colour-success !important;
   }
 
   .progress-bar-warning {
-    background-color: $colour-warning!important;
+    background-color: $colour-warning !important;
   }
 
   .progress-bar-danger {
-    background-color: $colour-danger!important;
+    background-color: $colour-danger !important;
   }
 
   .text-success {
-    color: $colour-success!important;
+    color: $colour-success !important;
   }
 
   .text-warning {
-    color: $colour-warning!important;
+    color: $colour-warning !important;
   }
 
   .text-danger {
-    color: $colour-danger!important;
+    color: $colour-danger !important;
   }
 
   .view {
@@ -468,11 +468,11 @@ body {
 
     .view-content {
       height: 100%;
-      padding: .75em;
+      padding: 0.75em;
       margin: 0 auto;
 
       &.ng-enter {
-        @include animation(animation-change-view .2s linear);
+        @include animation(animation-change-view 0.2s linear);
       }
     }
   }
@@ -483,7 +483,7 @@ body {
     border-radius: $border-radius-well;
     border: none;
     padding: 1em 1.25em;
-    margin-bottom: 1em;
+    margin-bottom: 0.75em;
     @include box-shadow;
 
     &:last-child {
@@ -531,8 +531,8 @@ body {
       border-color: $colour-text2;
       font-weight: normal;
       border-width: 1px;
-      margin-top: .5em;
-      margin-bottom: .5em;
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
 
       &:not([disabled]):active,
       &:not([disabled]):hover {
@@ -551,7 +551,7 @@ body {
       margin-bottom: 0;
 
       button {
-        margin-right: .5em;
+        margin-right: 0.5em;
 
         &:last-child {
           margin-right: 0;
@@ -570,7 +570,7 @@ body {
   input[type="text"] {
     width: 100%;
   }
-  
+
   textarea {
     height: 100%;
     width: 100%;
@@ -630,13 +630,13 @@ body {
       color: rgba($colour-text1, 0.9);
       background-color: $colour-text2;
       border: 0;
-      font-size: .9em;
+      font-size: 0.9em;
       font-weight: normal;
       text-transform: capitalize;
       line-height: 1.2em;
       max-width: 99%;
-      padding-top: .25em;
-      padding-bottom: .35em;
+      padding-top: 0.25em;
+      padding-bottom: 0.35em;
 
       &:hover {
         cursor: pointer;
@@ -647,8 +647,8 @@ body {
       }
 
       i {
-        font-size: .9em;
-        transition: color, ease-in-out, .2s;
+        font-size: 0.9em;
+        transition: color, ease-in-out, 0.2s;
         color: $colour-link;
       }
 
@@ -680,7 +680,7 @@ body {
     .btn-clear {
       position: absolute;
       top: 0;
-      right: .75em;
+      right: 0.75em;
       font-size: 1.1em;
       line-height: 2.1em;
       z-index: 55;
@@ -693,8 +693,8 @@ body {
 
       .lookahead,
       .measure {
-        padding-top: .5em;
-        padding-bottom: .5em;
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
         text-transform: lowercase;
       }
     }
@@ -726,7 +726,7 @@ body {
   .btn-scan {
     display: none;
     position: absolute;
-    top: .35em;
+    top: 0.35em;
     right: 1.3em;
     z-index: 55;
     border-bottom: none;
@@ -737,12 +737,10 @@ body {
   }
 
   .confirm {
-    position: relative;
+    position: absolute;
+    width: calc(100% - 1.5em);
+    bottom: 0;
     z-index: 10;
-
-    &.confirm-upgrade {
-      margin-top: -4.7em;
-    }
   }
 
   .form-group {
@@ -756,7 +754,7 @@ body {
       width: 100%;
       font-family: $font-stack-code;
       line-height: 1.45em;
-      padding: .5em .9em;
+      padding: 0.5em 0.9em;
       @include placeholder {
         font-family: $font-stack-regular;
         font-size: 1.2em;
@@ -785,9 +783,9 @@ body {
       left: 0;
       padding: 1.5em 2em;
       overflow: hidden;
-      font-size: .95em;
+      font-size: 0.95em;
       line-height: 1.4em;
-      box-shadow: none!important;
+      box-shadow: none !important;
 
       & > div {
         position: relative;
@@ -810,12 +808,12 @@ body {
       }
 
       .btn-prev {
-        margin-left: .6em;
+        margin-left: 0.6em;
         float: left;
       }
 
       .btn-next {
-        margin-right: .6em;
+        margin-right: 0.6em;
         float: right;
       }
     }
@@ -835,7 +833,7 @@ body {
   }
 
   .login-form-new {
-    input[name=txtPassword] {
+    input[name="txtPassword"] {
       position: relative;
       z-index: 20;
       background: transparent;
@@ -848,7 +846,7 @@ body {
 
   .secret-form-group {
     margin-bottom: 2em;
-    
+
     .progress,
     .progress-bar-background {
       position: absolute;
@@ -861,7 +859,7 @@ body {
 
     .progress {
       background-color: transparent;
-      border: solid .1em $colour-text1;
+      border: solid 0.1em $colour-text1;
       z-index: 10;
 
       .progress-bar {
@@ -884,14 +882,14 @@ body {
   .view-content {
     display: flex;
     flex-flow: column;
-    padding: 0 0 0 .75em;
+    padding: 0 0 0 0.75em;
 
     .header-panel {
       flex: none;
       margin-bottom: 0;
-      padding-top: .75em;
+      padding-top: 0.75em;
       padding-right: 10px;
-      padding-bottom: .75em;
+      padding-bottom: 0.75em;
 
       .btn {
         &.btn-toggle-bookmark {
@@ -912,22 +910,22 @@ body {
 
         label {
           position: absolute;
-          top: .65em;
-          left: .9em;
+          top: 0.65em;
+          left: 0.9em;
           color: $colour-text2;
           z-index: 60;
           margin-bottom: 0;
         }
 
         i {
-          opacity: .4;
+          opacity: 0.4;
           font-size: 1.2em;
         }
 
         input {
           position: relative;
           z-index: 50;
-          padding: .25em 1.8em;
+          padding: 0.25em 1.8em;
           font-size: 1.4em;
           background: transparent;
           width: 100%;
@@ -937,7 +935,7 @@ body {
         .btn-clear {
           position: absolute;
           top: 0;
-          right: .75em;
+          right: 0.75em;
           font-size: 1.1em;
           line-height: 2.2em;
           z-index: 55;
@@ -954,7 +952,8 @@ body {
           left: 1.8em;
           width: calc(100% - 1.8em);
 
-          .lookahead, .measure {
+          .lookahead,
+          .measure {
             line-height: 1.35em;
           }
         }
@@ -988,13 +987,13 @@ body {
         border: none;
         border-radius: $border-radius-well;
         padding: 0;
-        margin: 0 0 .75em;
+        margin: 0 0 0.75em;
         @include box-shadow;
 
         &:hover {
           .btn-edit-bookmark {
             i {
-              opacity: .4;
+              opacity: 0.4;
             }
           }
 
@@ -1049,7 +1048,7 @@ body {
           z-index: 60;
 
           &:before {
-            content: '';
+            content: "";
             display: inline-block;
             height: 100%;
             vertical-align: middle;
@@ -1106,9 +1105,9 @@ body {
         font-size: 1.2em;
         font-weight: normal;
         line-height: 1.1em;
-        margin-bottom: .2em;
+        margin-bottom: 0.2em;
         margin-right: 40px;
-        transition: all, ease-in-out, .2s;
+        transition: all, ease-in-out, 0.2s;
         @include text-overflow-ellipsis;
       }
 
@@ -1118,13 +1117,13 @@ body {
       }
 
       .description {
-        font-size: .9em;
+        font-size: 0.9em;
         font-style: italic;
-        margin-bottom: .2em;
+        margin-bottom: 0.2em;
       }
 
       .url {
-        font-size: .9em;
+        font-size: 0.9em;
         color: $colour-link;
         white-space: nowrap;
         overflow: hidden;
@@ -1176,11 +1175,11 @@ body {
         @extend textarea.form-control;
         position: static;
         width: 100%;
-        height: 12em!important;
+        height: 12em !important;
         margin-bottom: 15px;
-        border: 1px solid $colour-text2!important;
+        border: 1px solid $colour-text2 !important;
         font-family: $font-stack-code;
-        font-size: .8em!important;
+        font-size: 0.8em !important;
       }
 
       #backupFilePanel {
@@ -1220,7 +1219,7 @@ body {
     p,
     span,
     ul {
-      font-size: .95em;
+      font-size: 0.95em;
     }
 
     label {
@@ -1274,8 +1273,8 @@ body {
 
   .header-panel,
   .panel-container {
-    padding-left: .75em;
-    padding-right: .75em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
   }
 
   .header-panel {
@@ -1288,7 +1287,7 @@ body {
 
   .status-panel {
     .progress {
-      height: .45em;
+      height: 0.45em;
       border-radius: 1em;
       background-color: $colour-text2;
       overflow: visible;
@@ -1304,7 +1303,7 @@ body {
 
     .max,
     .used {
-      font-size: .8em;
+      font-size: 0.8em;
       position: absolute;
       bottom: -1.5em;
     }
@@ -1323,7 +1322,7 @@ body {
       max-height: 7em;
       overflow-y: auto;
       font-style: italic;
-      quotes: '\201c' '\201d';
+      quotes: "\201c""\201d";
       text-align: center;
 
       &:before {
@@ -1349,7 +1348,7 @@ body {
         @extend input:not([type]).form-control;
         position: static;
         width: 100%;
-        border: 1px solid $colour-text2!important;
+        border: 1px solid $colour-text2 !important;
       }
 
       .validation span {
@@ -1361,7 +1360,7 @@ body {
   .sync-panel {
     .updates-available {
       @extend .description;
-      font-size: .9em;
+      font-size: 0.9em;
       text-align: center;
       font-style: italic;
     }
@@ -1369,14 +1368,14 @@ body {
     .id-url {
       @extend .form-control-url;
       font-family: $font-stack-code;
-      font-size: .97em;
+      font-size: 0.97em;
     }
   }
 
   .view-content {
     display: flex;
     flex-flow: column;
-    padding: .75em 0 0;
+    padding: 0.75em 0 0;
   }
 
   .well {
@@ -1388,7 +1387,7 @@ body {
     }
 
     h4 {
-      padding: .75em 1em;
+      padding: 0.75em 1em;
       margin-bottom: 0;
     }
 
@@ -1434,7 +1433,7 @@ body {
     flex: 0 1 14em;
     margin: 1em 0 2em;
   }
-  
+
   .view-content {
     display: flex;
     flex-direction: column;

@@ -118,6 +118,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       syncForm_EnableSync_Click: syncForm_EnableSync_Click,
       syncForm_ExistingSync_Click: syncForm_ExistingSync_Click,
       syncForm_NewSync_Click: syncForm_NewSync_Click,
+      syncForm_OtherSyncsDisabled_Click: syncForm_OtherSyncsDisabled_Click,
       syncForm_Submit_Click: syncForm_Submit_Click,
       syncForm_SyncId_Change: syncForm_SyncId_Change,
       syncForm_SyncUpdates_Click: syncForm_SyncUpdates_Click,
@@ -164,7 +165,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       dataToRestore: undefined,
       dataToRestoreIsValid: validateDataToRestore,
       displayCancelSyncConfirmation: false,
-      displayNewSyncPanel: true,
       displayQRCode: false,
       displayRestoreConfirmation: false,
       displayRestoreForm: false,
@@ -196,6 +196,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     vm.sync = {
       asyncChannel: undefined,
+      displayOtherSyncsWarning: false,
+      displayNewSyncPanel: true,
       displayPasswordConfirmation: false,
       displaySyncConfirmation: false,
       displayUpgradeConfirmation: false,
@@ -985,6 +987,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
   var init_loginView = function () {
     vm.introduction.displayIntro = false;
+    vm.sync.displayOtherSyncsWarning = false;
     vm.sync.displayPasswordConfirmation = false;
     vm.sync.displaySyncConfirmation = false;
     vm.sync.displayUpgradeConfirmation = false;
@@ -1000,40 +1003,55 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     // Get cached sync data
     return platform.LocalStorage.Get([
       globals.CacheKeys.DisplayIntro,
+      globals.CacheKeys.DisplayOtherSyncsWarning,
       globals.CacheKeys.SyncEnabled,
       globals.CacheKeys.SyncId
     ])
       .then(function (cachedData) {
         var displayIntro = cachedData[globals.CacheKeys.DisplayIntro];
+        var displayOtherSyncsWarning = cachedData[globals.CacheKeys.DisplayOtherSyncsWarning];
         var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
         var syncId = cachedData[globals.CacheKeys.SyncId];
 
         vm.sync.enabled = !!syncEnabled;
         vm.sync.id = syncId;
 
-        // If not on a mobile platform, display new sync panel depending on if ID is set
-        vm.settings.displayNewSyncPanel = utility.IsMobilePlatform(vm.platformName) ? false : !syncId;
+        // If not synced before, display warning to disable other sync tools
+        if (displayOtherSyncsWarning == null || displayOtherSyncsWarning === true) {
+          vm.sync.displayOtherSyncsWarning = true;
 
-        // Focus on first input field
-        if (!utility.IsMobilePlatform(vm.platformName)) {
+          // Focus on first button
           $timeout(function () {
-            var inputField;
-            if (vm.settings.displayNewSyncPanel) {
-              inputField = document.querySelector('.login-form-new input[name="txtPassword"]');
-              if (inputField) {
-                inputField.focus();
-              }
+            if (!utility.IsMobilePlatform(vm.platformName)) {
+              document.querySelector('.otherSyncsWarning .buttons > button').focus();
             }
-            else {
-              // Focus on password field if id already set
-              inputField = syncId ?
-                document.querySelector('.login-form-existing input[name="txtPassword"]') :
-                document.querySelector('input[name="txtId"]');
-              if (inputField) {
-                inputField.focus();
+          }, 150);
+        }
+        else {
+          // If not on a mobile platform, display new sync panel depending on if ID is set
+          vm.sync.displayNewSyncPanel = utility.IsMobilePlatform(vm.platformName) ? false : !syncId;
+
+          // Focus on first input field
+          if (!utility.IsMobilePlatform(vm.platformName)) {
+            $timeout(function () {
+              var inputField;
+              if (vm.sync.displayNewSyncPanel) {
+                inputField = document.querySelector('.login-form-new input[name="txtPassword"]');
+                if (inputField) {
+                  inputField.focus();
+                }
               }
-            }
-          }, 100);
+              else {
+                // Focus on password field if id already set
+                inputField = syncId ?
+                  document.querySelector('.login-form-existing input[name="txtPassword"]') :
+                  document.querySelector('input[name="txtId"]');
+                if (inputField) {
+                  inputField.focus();
+                }
+              }
+            }, 100);
+          }
         }
 
         // Check whether to display intro animation, then disable for next time
@@ -1158,8 +1176,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   var init_updatedView = function () {
     return platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, false)
       .then(function () {
+        // Focus on first button
         $timeout(function () {
-          // Focus on first button
           if (!utility.IsMobilePlatform(vm.platformName)) {
             document.querySelector('.buttons > button').focus();
           }
@@ -1820,6 +1838,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     // Display loading panel
     vm.sync.displaySyncConfirmation = false;
+    vm.sync.displayOtherSyncsWarning = false;
     vm.sync.displayUpgradeConfirmation = false;
     var loadingTimeout = platform.Interface.Loading.Show();
 
@@ -1999,7 +2018,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var syncForm_ExistingSync_Click = function () {
-    vm.settings.displayNewSyncPanel = false;
+    vm.sync.displayNewSyncPanel = false;
     vm.sync.password = '';
 
     if (!utility.IsMobilePlatform(vm.platformName)) {
@@ -2010,7 +2029,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var syncForm_NewSync_Click = function () {
-    vm.settings.displayNewSyncPanel = true;
+    vm.sync.displayNewSyncPanel = true;
     vm.sync.displayPasswordConfirmation = false;
     platform.LocalStorage.Set(globals.CacheKeys.SyncId);
     platform.LocalStorage.Set(globals.CacheKeys.Password);
@@ -2026,10 +2045,16 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     }
   };
 
+  var syncForm_OtherSyncsDisabled_Click = function () {
+    // Hide disable other syncs warning panel and update cache setting
+    vm.sync.displayOtherSyncsWarning = false;
+    platform.LocalStorage.Set(globals.CacheKeys.DisplayOtherSyncsWarning, false);
+  };
+
   var syncForm_Submit_Click = function () {
     $timeout(function () {
       // Handle enter key press for login form
-      if (vm.settings.displayNewSyncPanel) {
+      if (vm.sync.displayNewSyncPanel) {
         if (vm.sync.displayPasswordConfirmation) {
           document.querySelector('.login-form-new .btn-new-sync').click();
         }

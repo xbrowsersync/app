@@ -135,6 +135,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "login_ConfirmSync_Message": {
       "message": "No xBrowserSync ID has been provided so a new sync will be created for you. OK to proceed?"
     },
+    "login_DisableOtherSyncs_Title": {
+      "message": "Disable active browser sync tools"
+    },
+    "login_DisableOtherSyncs_Message": {
+      "message": "Syncing your browser data with xBrowserSync whilst other browser sync tools (such as <a href='https://support.google.com/chrome/answer/185277?co=GENIE.Platform=Desktop' class='new-tab'>Google Chrome Sync</a>) are active can lead to corrupted bookmarks. Please disable them before continuing."
+    },
     "login_UpgradeSync_Title": {
       "message": "Ready to upgrade sync?"
     },
@@ -999,7 +1005,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     vm.settings.getSearchResultsDelay = 500;
 
     // Display existing sync panel by default
-    vm.settings.displayNewSyncPanel = false;
+    vm.sync.displayNewSyncPanel = false;
 
     // Check stored app version for upgrade
     checkForUpgrade();
