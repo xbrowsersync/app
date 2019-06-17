@@ -73,42 +73,6 @@
   }
 }
 
-@include keyframes(animation-slide-in) {
-  0% {
-    left: 105%;
-  }
-  100% {
-    left: 0;
-  }
-}
-
-@include keyframes(animation-slide-out) {
-  0% {
-    left: 0;
-  }
-  100% {
-    left: -105%;
-  }
-}
-
-@include keyframes(animation-reverse-slide-in) {
-  0% {
-    left: -105%;
-  }
-  100% {
-    left: 0;
-  }
-}
-
-@include keyframes(animation-reverse-slide-out) {
-  0% {
-    left: 0;
-  }
-  100% {
-    left: 105%;
-  }
-}
-
 .animate-fade {
   &.ng-hide {
     opacity: 0 !important;
@@ -116,16 +80,6 @@
 
   &.ng-hide-remove {
     @include animation(animation-fade-in 0.2s linear);
-  }
-}
-
-.animate-fade-long {
-  &.ng-hide {
-    opacity: 0 !important;
-  }
-
-  &.ng-hide-remove {
-    @include animation(animation-fade-in 0.7s linear);
   }
 }
 
@@ -139,36 +93,6 @@
   }
 }
 
-.animate-fade-out-long {
-  &.ng-hide {
-    opacity: 0 !important;
-  }
-
-  &.ng-hide-add {
-    @include animation(animation-fade-out 0.7s linear);
-  }
-}
-
 .animate-flash {
   @include animation(animation-flash 0.8s linear infinite);
-}
-
-.animate-slide {
-  &.ng-hide-add {
-    @include animation(animation-slide-out 0.2s ease);
-  }
-
-  &.ng-hide-remove {
-    @include animation(animation-slide-in 0.2s ease);
-  }
-
-  &.reverse {
-    &.ng-hide-add {
-      @include animation(animation-reverse-slide-out 0.2s ease);
-    }
-
-    &.ng-hide-remove {
-      @include animation(animation-reverse-slide-in 0.2s ease);
-    }
-  }
 }

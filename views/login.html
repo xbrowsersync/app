@@ -1,8 +1,7 @@
 <div class="header-panel clearfix">
   <button class="btn btn-icon btn-help animate-fade"
     title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}"
-    data-ng-click="vm.events.introPanel_ShowHelp_Click()"
-    data-ng-show="!vm.introduction.displayIntro && vm.introduction.showLogo">
+    data-ng-click="vm.events.helpPanel_ShowHelp_Click()">
     <i class="fas fa-question-circle" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}</span>
   </button>
@@ -13,228 +12,7 @@
     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Settings_Label) }}</span>
   </button>
 </div>
-<div class="intro-panel">
-  <h1 class="animate-fade-out" data-ng-show="vm.introduction.showLogo"
-    data-ng-class="{ true: 'animate-fade-long animate-fade-out-long' }[vm.introduction.displayIntro]">
-    <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Title) }}</span>
-  </h1>
-  <div id="intro-panel-1" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 1"
-    data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-    data-hm-swipeleft="vm.events.introPanel1_Next_Click()">
-    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel1_Message)"></div>
-    <div class="buttons">
-      <button class="btn btn-icon btn-next"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
-        data-ng-click="vm.events.introPanel1_Next_Click()">
-        <i class="fas fa-step-forward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
-      </button>
-    </div>
-  </div>
-  <div id="intro-panel-2" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 2"
-    data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-    data-hm-swipeleft="vm.events.introPanel2_Next_Click()" data-hm-swiperight="vm.events.introPanel2_Prev_Click()">
-    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel2_Message)"></div>
-    <div class="buttons">
-      <button class="btn btn-icon btn-prev"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
-        data-ng-click="vm.events.introPanel2_Prev_Click()">
-        <i class="fas fa-step-backward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
-      </button>
-      <button class="btn btn-icon btn-next"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
-        data-ng-click="vm.events.introPanel2_Next_Click()">
-        <i class="fas fa-step-forward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
-      </button>
-    </div>
-  </div>
-  <div id="intro-panel-3" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 3"
-    data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-    data-hm-swipeleft="vm.events.introPanel3_Next_Click()" data-hm-swiperight="vm.events.introPanel3_Prev_Click()">
-    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel3_Message)"></div>
-    <div class="buttons">
-      <button class="btn btn-icon btn-prev"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
-        data-ng-click="vm.events.introPanel3_Prev_Click()">
-        <i class="fas fa-step-backward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
-      </button>
-      <button class="btn btn-icon btn-next"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
-        data-ng-click="vm.events.introPanel3_Next_Click()">
-        <i class="fas fa-step-forward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
-      </button>
-    </div>
-  </div>
-  <div id="intro-panel-4" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 4"
-    data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-    data-hm-swipeleft="vm.events.introPanel4_Next_Click()" data-hm-swiperight="vm.events.introPanel4_Prev_Click()">
-    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel4_Message)"></div>
-    <div class="buttons">
-      <button class="btn btn-icon btn-prev"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
-        data-ng-click="vm.events.introPanel4_Prev_Click()">
-        <i class="fas fa-step-backward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
-      </button>
-      <button class="btn btn-icon btn-next"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
-        data-ng-click="vm.events.introPanel4_Next_Click()">
-        <i class="fas fa-step-forward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
-      </button>
-    </div>
-  </div>
-  <div id="intro-panel-5" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 5"
-    data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-    data-hm-swipeleft="vm.events.introPanel5_Next_Click()" data-hm-swiperight="vm.events.introPanel5_Prev_Click()">
-    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel5_Message)"></div>
-    <div class="buttons">
-      <button class="btn btn-icon btn-prev"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
-        data-ng-click="vm.events.introPanel5_Prev_Click()">
-        <i class="fas fa-step-backward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
-      </button>
-      <button class="btn btn-icon btn-next"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
-        data-ng-click="vm.events.introPanel5_Next_Click()">
-        <i class="fas fa-step-forward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
-      </button>
-    </div>
-  </div>
-  <div id="intro-panel-6" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 6"
-    data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-    data-hm-swipeleft="vm.events.introPanel6_Next_Click()" data-hm-swiperight="vm.events.introPanel6_Prev_Click()">
-    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel6_Message)"></div>
-    <div class="buttons">
-      <button class="btn btn-icon btn-prev"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
-        data-ng-click="vm.events.introPanel6_Prev_Click()">
-        <i class="fas fa-step-backward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
-      </button>
-      <button class="btn btn-icon btn-next"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
-        data-ng-click="vm.events.introPanel6_Next_Click()">
-        <i class="fas fa-step-forward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
-      </button>
-    </div>
-  </div>
-  <div id="intro-panel-7" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 7"
-    data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-    data-hm-swipeleft="vm.events.introPanel7_Next_Click()" data-hm-swiperight="vm.events.introPanel7_Prev_Click()">
-    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel7_Message)"></div>
-    <div class="buttons">
-      <button class="btn btn-icon btn-prev"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
-        data-ng-click="vm.events.introPanel7_Prev_Click()">
-        <i class="fas fa-step-backward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
-      </button>
-      <button class="btn btn-icon btn-next"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
-        data-ng-click="vm.events.introPanel7_Next_Click()">
-        <i class="fas fa-step-forward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
-      </button>
-    </div>
-  </div>
-  <div id="intro-panel-8" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 8"
-    data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-    data-hm-swipeleft="vm.events.introPanel8_Next_Click()" data-hm-swiperight="vm.events.introPanel8_Prev_Click()">
-    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel8_Message)"></div>
-    <div class="buttons">
-      <button class="btn btn-icon btn-prev"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
-        data-ng-click="vm.events.introPanel8_Prev_Click()">
-        <i class="fas fa-step-backward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
-      </button>
-      <button class="btn btn-icon btn-next"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
-        data-ng-click="vm.events.introPanel8_Next_Click()">
-        <i class="fas fa-step-forward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
-      </button>
-    </div>
-  </div>
-  <div id="intro-panel-9" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 9"
-    data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-    data-hm-swipeleft="vm.events.introPanel9_Next_Click()" data-hm-swiperight="vm.events.introPanel9_Prev_Click()">
-    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel9_Message)"></div>
-    <div class="buttons">
-      <button class="btn btn-icon btn-prev"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
-        data-ng-click="vm.events.introPanel9_Prev_Click()">
-        <i class="fas fa-step-backward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
-      </button>
-      <button class="btn btn-icon btn-next"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
-        data-ng-click="vm.events.introPanel9_Next_Click()">
-        <i class="fas fa-step-forward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
-      </button>
-    </div>
-  </div>
-  <div id="intro-panel-10" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 10"
-    data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-    data-hm-swipeleft="vm.events.introPanel10_Next_Click()" data-hm-swiperight="vm.events.introPanel10_Prev_Click()">
-    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel10_Message)"></div>
-    <div class="buttons">
-      <button class="btn btn-icon btn-prev"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
-        data-ng-click="vm.events.introPanel10_Prev_Click()">
-        <i class="fas fa-step-backward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
-      </button>
-      <button class="btn btn-icon btn-next"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
-        data-ng-click="vm.events.introPanel10_Next_Click()">
-        <i class="fas fa-step-forward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
-      </button>
-    </div>
-  </div>
-  <div id="intro-panel-11" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 11"
-    data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-    data-hm-swipeleft="vm.events.introPanel11_Next_Click()" data-hm-swiperight="vm.events.introPanel11_Prev_Click()">
-    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel11_Message)"></div>
-    <div class="buttons">
-      <button class="btn btn-icon btn-prev"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
-        data-ng-click="vm.events.introPanel11_Prev_Click()">
-        <i class="fas fa-step-backward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
-      </button>
-      <button class="btn btn-icon btn-next"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}"
-        data-ng-click="vm.events.introPanel11_Next_Click()">
-        <i class="fas fa-step-forward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
-      </button>
-    </div>
-  </div>
-  <div id="intro-panel-12" class="well well-sm dark" data-ng-show="vm.introduction.currentPanel === 12"
-    data-ng-class="{ true: 'animate-slide' }[vm.view.current === vm.view.views.login]"
-    data-hm-swiperight="vm.events.introPanel12_Prev_Click()">
-    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_introPanel12_Message)"></div>
-    <div class="buttons">
-      <button class="btn btn-icon btn-prev"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}"
-        data-ng-click="vm.events.introPanel12_Prev_Click()">
-        <i class="fas fa-step-backward" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
-      </button>
-    </div>
-  </div>
-</div>
+<div class="logo"></div>
 <form name="vm.syncForm" class="animate-fade"
   data-ng-hide="vm.sync.displayOtherSyncsWarning || vm.sync.displaySyncConfirmation || vm.sync.displayUpgradeConfirmation"
   novalidate>
@@ -367,5 +145,125 @@
     <button type="button" class="btn btn-default" data-ng-click="vm.sync.displayUpgradeConfirmation = false">
       {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
     </button>
+  </div>
+</div>
+<div class="help-panel animate-fade" data-ng-show="vm.help.show">
+  <div id="help-panel-1" class="animate-fade" data-ng-show="vm.help.currentPanel === 1"
+    data-hm-swipeleft="vm.events.helpPanel1_Next_Click()">
+    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_helpPanel1_Message)"></div>
+    <div class="pagination">
+      <span class="next-link"><a href="#"
+          data-ng-click="vm.events.helpPanel1_Next_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</a></span>
+    </div>
+  </div>
+  <div id="help-panel-2" class="animate-fade" data-ng-show="vm.help.currentPanel === 2"
+    data-hm-swipeleft="vm.events.helpPanel2_Next_Click()" data-hm-swiperight="vm.events.helpPanel2_Prev_Click()">
+    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_helpPanel2_Message)"></div>
+    <div class="pagination">
+      <span class="prev-link"><a href="#"
+          data-ng-click="vm.events.helpPanel2_Prev_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</a></span>
+      <span class="next-link"><a href="#"
+          data-ng-click="vm.events.helpPanel2_Next_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</a></span>
+    </div>
+  </div>
+  <div id="help-panel-3" class="animate-fade" data-ng-show="vm.help.currentPanel === 3"
+    data-hm-swipeleft="vm.events.helpPanel3_Next_Click()" data-hm-swiperight="vm.events.helpPanel3_Prev_Click()">
+    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_helpPanel3_Message)"></div>
+    <div class="pagination">
+      <span class="prev-link"><a href="#"
+          data-ng-click="vm.events.helpPanel3_Prev_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</a></span>
+      <span class="next-link"><a href="#"
+          data-ng-click="vm.events.helpPanel3_Next_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</a></span>
+    </div>
+  </div>
+  <div id="help-panel-4" class="animate-fade" data-ng-show="vm.help.currentPanel === 4"
+    data-hm-swipeleft="vm.events.helpPanel4_Next_Click()" data-hm-swiperight="vm.events.helpPanel4_Prev_Click()">
+    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_helpPanel4_Message)"></div>
+    <div class="pagination">
+      <span class="prev-link"><a href="#"
+          data-ng-click="vm.events.helpPanel4_Prev_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</a></span>
+      <span class="next-link"><a href="#"
+          data-ng-click="vm.events.helpPanel4_Next_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</a></span>
+    </div>
+  </div>
+  <div id="help-panel-5" class="animate-fade" data-ng-show="vm.help.currentPanel === 5"
+    data-hm-swipeleft="vm.events.helpPanel5_Next_Click()" data-hm-swiperight="vm.events.helpPanel5_Prev_Click()">
+    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_helpPanel5_Message)"></div>
+    <div class="pagination">
+      <span class="prev-link"><a href="#"
+          data-ng-click="vm.events.helpPanel5_Prev_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</a></span>
+      <span class="next-link"><a href="#"
+          data-ng-click="vm.events.helpPanel5_Next_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</a></span>
+    </div>
+  </div>
+  <div id="help-panel-6" class="animate-fade" data-ng-show="vm.help.currentPanel === 6"
+    data-hm-swipeleft="vm.events.helpPanel6_Next_Click()" data-hm-swiperight="vm.events.helpPanel6_Prev_Click()">
+    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_helpPanel6_Message)"></div>
+    <div class="pagination">
+      <span class="prev-link"><a href="#"
+          data-ng-click="vm.events.helpPanel6_Prev_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</a></span>
+      <span class="next-link"><a href="#"
+          data-ng-click="vm.events.helpPanel6_Next_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</a></span>
+    </div>
+  </div>
+  <div id="help-panel-7" class="animate-fade" data-ng-show="vm.help.currentPanel === 7"
+    data-hm-swipeleft="vm.events.helpPanel7_Next_Click()" data-hm-swiperight="vm.events.helpPanel7_Prev_Click()">
+    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_helpPanel7_Message)"></div>
+    <div class="pagination">
+      <span class="prev-link"><a href="#"
+          data-ng-click="vm.events.helpPanel7_Prev_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</a></span>
+      <span class="next-link"><a href="#"
+          data-ng-click="vm.events.helpPanel7_Next_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</a></span>
+    </div>
+  </div>
+  <div id="help-panel-8" class="animate-fade" data-ng-show="vm.help.currentPanel === 8"
+    data-hm-swipeleft="vm.events.helpPanel8_Next_Click()" data-hm-swiperight="vm.events.helpPanel8_Prev_Click()">
+    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_helpPanel8_Message)"></div>
+    <div class="pagination">
+      <span class="prev-link"><a href="#"
+          data-ng-click="vm.events.helpPanel8_Prev_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</a></span>
+      <span class="next-link"><a href="#"
+          data-ng-click="vm.events.helpPanel8_Next_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</a></span>
+    </div>
+  </div>
+  <div id="help-panel-9" class="animate-fade" data-ng-show="vm.help.currentPanel === 9"
+    data-hm-swipeleft="vm.events.helpPanel9_Next_Click()" data-hm-swiperight="vm.events.helpPanel9_Prev_Click()">
+    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_helpPanel9_Message)"></div>
+    <div class="pagination">
+      <span class="prev-link"><a href="#"
+          data-ng-click="vm.events.helpPanel9_Prev_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</a></span>
+      <span class="next-link"><a href="#"
+          data-ng-click="vm.events.helpPanel9_Next_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</a></span>
+    </div>
+  </div>
+  <div id="help-panel-10" class="animate-fade" data-ng-show="vm.help.currentPanel === 10"
+    data-hm-swipeleft="vm.events.helpPanel10_Next_Click()" data-hm-swiperight="vm.events.helpPanel10_Prev_Click()">
+    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_helpPanel10_Message)"></div>
+    <div class="pagination">
+      <span class="prev-link"><a href="#"
+          data-ng-click="vm.events.helpPanel10_Prev_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</a></span>
+      <span class="next-link"><a href="#"
+          data-ng-click="vm.events.helpPanel10_Next_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</a></span>
+    </div>
+  </div>
+  <div id="help-panel-11" class="animate-fade" data-ng-show="vm.help.currentPanel === 11"
+    data-hm-swipeleft="vm.events.helpPanel11_Next_Click()" data-hm-swiperight="vm.events.helpPanel11_Prev_Click()">
+    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_helpPanel11_Message)"></div>
+    <div class="pagination">
+      <span class="prev-link"><a href="#"
+          data-ng-click="vm.events.helpPanel11_Prev_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</a></span>
+      <span class="next-link"><a href="#"
+          data-ng-click="vm.events.helpPanel11_Next_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</a></span>
+    </div>
+  </div>
+  <div id="help-panel-12" class="animate-fade" data-ng-show="vm.help.currentPanel === 12"
+    data-hm-swiperight="vm.events.helpPanel12_Prev_Click()">
+    <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_helpPanel12_Message)"></div>
+    <div class="pagination">
+      <span class="prev-link"><a href="#"
+          data-ng-click="vm.events.helpPanel12_Prev_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</a></span>
+      <a href="#"
+        data-ng-click="vm.help.show = false">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}</a>
+    </div>
   </div>
 </div>

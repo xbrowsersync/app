@@ -1,413 +1,418 @@
-@import 'variables.scss';
-@import 'mixins.scss';
-@import 'animations.scss';
+@import "variables.scss";
+@import "mixins.scss";
+@import "animations.scss";
 
-* {		
-    @include css-prefix(user-select, none);		
-    @include css-prefix(touch-callout, none);		
+* {
+  @include css-prefix(user-select, none);
+  @include css-prefix(touch-callout, none);
 }
 
 body {
-    height: 100%;
-    font-size: 16px;
+  height: 100%;
+  font-size: 16px;
 
-    @media (min-width: $width-mobile-large) {
-        font-size: 17px;
+  @media (min-width: $width-mobile-large) {
+    font-size: 17px;
+  }
+
+  @media (min-width: $width-mobile-xlarge) {
+    font-size: 18px;
+  }
+
+  @media (min-width: $width-tablet-small) {
+    font-size: 26px;
+  }
+
+  @media (min-width: $width-tablet-large) {
+    font-size: 34px;
+  }
+
+  a {
+    &:focus,
+    &:hover {
+      color: $colour-text1;
+      border-bottom-color: $colour-text1;
     }
-    
-    @media (min-width: $width-mobile-xlarge) {
-        font-size: 18px;
-    }
-    
-    @media (min-width: $width-tablet-small) {
-        font-size: 26px;
-    }
-    
-    @media (min-width: $width-tablet-large) {
-        font-size: 34px;
+
+    &:active {
+      color: $colour-link-highlight;
+      border-bottom-color: $colour-link-highlight;
     }
 
     a {
-        &:focus,
-        &:hover {
-            color: $colour-text1;
-            border-bottom-color: $colour-text1;
-        }
+      &.active,
+      &:active,
+      &:focus,
+      &:hover {
+        color: inherit;
+        border-bottom-color: inherit;
+      }
+    }
+  }
 
-        &:active {
-            color: $colour-link-highlight;
-            border-bottom-color: $colour-link-highlight;
-        }
-
-        a {
-            &.active,
-            &:active,
-            &:focus,
-            &:hover {
-                color: inherit;
-                border-bottom-color: inherit;
-            }
-        }
+  h1 {
+    @media (min-width: $width-mobile-xlarge) {
+      background-size: 6.5em;
     }
 
-    h1 {
-        @media (min-width: $width-mobile-xlarge) {
-            background-size: 6.5em;
-        }
+    @media (min-width: $width-tablet-small) {
+      background-size: 11em;
+    }
+  }
 
-        @media (min-width: $width-tablet-small) {
-            background-size: 11em;
-        }
+  button.btn {
+    &.btn-default {
+      &:not([disabled]):active:hover {
+        background-color: $colour-text1;
+        color: $colour-link-highlight;
+        border-color: $colour-text1;
+      }
+
+      &:not([disabled]):hover {
+        background-color: transparent;
+        color: $colour-text1;
+        border-color: $colour-text1;
+      }
+
+      &:not([disabled]):focus {
+        text-decoration: none;
+      }
     }
 
-    button.btn {
-        &.btn-default {
-            &:not([disabled]):active:hover {
-                background-color: $colour-text1;
-                color: $colour-link-highlight;
-                border-color: $colour-text1;
-            }
-            
-            &:not([disabled]):hover {
-                background-color: transparent;
-                color: $colour-text1;
-                border-color: $colour-text1;
-            }
-
-            &:not([disabled]):focus {
-                text-decoration: none;
-            }
-        }
-
-        &.btn-default:not([disabled]):focus {
-            text-decoration: none;
-        }
-
-        &.btn-icon {
-            &:active:hover {
-                i {
-                    opacity: 1;
-                }
-            }
-
-            &:hover {
-                i {
-                    opacity: 0.4;
-                }
-            }
-        }
-
-        @media (min-width: $width-tablet-small) {
-            font-size: 23px;
-        }
+    &.btn-default:not([disabled]):focus {
+      text-decoration: none;
     }
 
-    input, textarea {		
-        @include css-prefix(user-select, text);		
-        @include css-prefix(touch-callout, default);		
-    }
-
-    textarea.form-control {
-        padding: 0.5em 1em;
-    }
-
-    .alert {
-        position: absolute;
-        z-index: 200;
-    }
-
-    .header-panel {
-        button {
-            font-size: 1.8em;
+    &.btn-icon {
+      &:active:hover {
+        i {
+          opacity: 1;
         }
-    }
+      }
 
-    .lookahead-container .lookahead:after {
-        content: "\f0d0";
-        font-family: "FontAwesome";
-        font-size: 0.7em;
-        margin-left: 5px;
-    }
-
-    .view {
-        .view-content {
-            &.ng-enter {
-                @include animation(animation-fade-in 0.2s linear);
-                z-index: 10!important;
-            }
-
-            &.ng-leave {
-                @include animation(animation-fade-out 0.2s linear);
-                z-index: 20;
-            }
+      &:hover {
+        i {
+          opacity: 0.4;
         }
+      }
     }
 
-    .well {
-        .btn.btn-default {
-            color: $colour-text2;
-            border-color: $colour-text2;
-            font-weight: normal;
-            border-width: 1px;
-            font-size: 1em;
-
-            &:not([disabled]):active:hover {
-                background-color: $colour-text2;
-                color: $colour-link-highlight;
-                border-color: $colour-text2;
-            }
-
-            &:not([disabled]):hover {
-                background-color: transparent;
-                color: $colour-text2;
-                border-color: $colour-text2;
-            }
-        }
-        
-        .btn.btn-default {
-            font-size: 1em;
-        }
+    @media (min-width: $width-tablet-small) {
+      font-size: 23px;
     }
+  }
+
+  input,
+  textarea {
+    @include css-prefix(user-select, text);
+    @include css-prefix(touch-callout, default);
+  }
+
+  textarea.form-control {
+    padding: 0.5em 1em;
+  }
+
+  .alert {
+    position: absolute;
+    z-index: 200;
+  }
+
+  .header-panel {
+    button {
+      font-size: 1.8em;
+    }
+  }
+
+  .lookahead-container .lookahead:after {
+    content: "\f0d0";
+    font-family: "FontAwesome";
+    font-size: 0.7em;
+    margin-left: 5px;
+  }
+
+  .view {
+    .view-content {
+      &.ng-enter {
+        @include animation(animation-fade-in 0.2s linear);
+        z-index: 10 !important;
+      }
+
+      &.ng-leave {
+        @include animation(animation-fade-out 0.2s linear);
+        z-index: 20;
+      }
+    }
+  }
+
+  .well {
+    .btn.btn-default {
+      color: $colour-text2;
+      border-color: $colour-text2;
+      font-weight: normal;
+      border-width: 1px;
+      font-size: 1em;
+
+      &:not([disabled]):active:hover {
+        background-color: $colour-text2;
+        color: $colour-link-highlight;
+        border-color: $colour-text2;
+      }
+
+      &:not([disabled]):hover {
+        background-color: transparent;
+        color: $colour-text2;
+        border-color: $colour-text2;
+      }
+    }
+
+    .btn.btn-default {
+      font-size: 1em;
+    }
+  }
 }
 
 #bookmark-panel {
-    .btn-share-bookmark {
-        display: inline-block;
-    }
-    
-    .tags-container {
-        flex: 0 1 auto;
+  .btn-share-bookmark {
+    display: inline-block;
+  }
 
-        .label {
-            padding: 0.6em 1em;
-            border-radius: $border-radius-input;
-            margin: 0 0.5em 0.6em 0;
-        }
-    }
+  .tags-container {
+    flex: 0 1 auto;
 
-    .tags-input-container .lookahead-container .lookahead:after {
-        font-size: 0.9em;
+    .label {
+      padding: 0.6em 1em;
+      border-radius: $border-radius-input;
+      margin: 0 0.5em 0.6em 0;
     }
+  }
 
-    .textarea-container {
-        flex: none;
-        height: 9em;
+  .tags-input-container .lookahead-container .lookahead:after {
+    font-size: 0.9em;
+  }
 
-        @media (min-width: $width-mobile-medium) {
-            height: 11em;
-        }
+  .textarea-container {
+    flex: none;
+    height: 9em;
+
+    @media (min-width: $width-mobile-medium) {
+      height: 11em;
     }
+  }
 }
 
 #login-panel {
-    .btn-scan {
-        display: block;
+  .btn-scan {
+    display: block;
 
-        i {
-            @media (max-width: $width-mobile-medium) {
-                font-size: 2em;
-            }
-        }
-        
-        @media (max-width: $width-mobile-medium) {
-            top: 0.4em;
-        }
+    i {
+      @media (max-width: $width-mobile-medium) {
+        font-size: 2em;
+      }
     }
 
-    .confirm.confirm-upgrade {
-        margin-top: -3em;
-        
-        @media (max-height: $height-mobile-medium) {
-            margin-top: -7em;
-        }
+    @media (max-width: $width-mobile-medium) {
+      top: 0.4em;
+    }
+  }
+
+  .confirm.confirm-upgrade {
+    margin-top: -3em;
+
+    @media (max-height: $height-mobile-medium) {
+      margin-top: -7em;
+    }
+  }
+
+  .form-group {
+    input {
+      @media (max-width: $width-mobile-small) {
+        font-size: 0.87em;
+        padding: 0.65em 0 0.7em 0.9em;
+      }
     }
 
-    .form-group {
-        input {
-            @media (max-width: $width-mobile-small) {
-                font-size: 0.87em;
-                padding: .65em 0 .7em .9em;
-            }
-        }
+    @media (min-width: $width-tablet-small) {
+      max-width: 21em;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
 
-        @media (min-width: $width-tablet-small) {
-            max-width: 21em;
-            margin-left: auto;
-            margin-right: auto;
-        }
+  .help-panel {
+    & > div {
+      @media (max-height: $height-mobile-medium) {
+        font-size: 0.9em;
+      }
     }
 
-    .intro-panel {
-        & > div {
-            @media (max-height: $height-mobile-medium) {
-                font-size: 0.9em;
-            }
-        }
-        
-        @media (min-width: $width-tablet-small) {
-            height: 18.5em;
-            max-width: 21em;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    @media (min-width: $width-tablet-small) {
+      height: 18.5em;
+      max-width: 21em;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  .login-form-new {
+    & > div {
+      display: none;
     }
 
-    .login-form-new {
-        & > div {
-            display: none;
-        }
-
-        .get-sync-id, .toggle-form {
-            display: block;
-        }
-
-        .well  {
-            @media (max-height: $height-mobile-medium) {
-                font-size: 0.9em;
-            }
-        }
+    .get-sync-id,
+    .toggle-form {
+      display: block;
     }
 
-    .secret-form-group {
-        .progress, .progress-bar-background {
-            @media (min-width: $width-tablet-small) {
-                max-width: 17.5em;
-                margin-left: auto;
-                margin-right: auto;
-                left: 0;
-                right: 0;
-            }
-        }
+    .well {
+      @media (max-height: $height-mobile-medium) {
+        font-size: 0.9em;
+      }
     }
+  }
+
+  .secret-form-group {
+    .progress,
+    .progress-bar-background {
+      @media (min-width: $width-tablet-small) {
+        max-width: 17.5em;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+      }
+    }
+  }
 }
 
 #search-panel {
-    .view-content {
-        padding: 0.75em 0 0;
-        
-        .header-panel, .search-results-panel {
-            padding-left: 0.75em;
-            padding-right: 0.75em;
-        }
-        
-        .header-panel {
-            .btn {
-                &.btn-toggle-bookmark {
-                    i:before {
-                        content: "\f02e";
-                    }
+  .view-content {
+    padding: 0.75em 0 0;
 
-                    i:after {
-                        content: "\f067";
-                        font-size: 0.35em;
-                        color: $colour-bg2;
-                        position: relative;
-                        top: -0.9em;
-                        left: -1.4em;
-                        opacity: 1;
-                    }
-                }
-            }
-
-            .search-form {
-                width: 100%;
-                margin-top: 0.35em;
-            }
-        }
-
-        .search-results-panel {
-            height: 100%;
-
-            & > h4 {
-                margin: 10px;
-            }
-
-            .list-group-item {
-                &.active:hover, &:hover {
-                    .list-group-item-heading {
-                        color: $colour-text2;
-                    }
-                }
-
-                a {
-                    padding: 1em 1.25em;
-                }
-
-                .btn-edit-bookmark {
-                    display: none!important;
-                }
-
-                .overlay {
-                    display: block;
-                }
-            }
-
-            .list-group-item-heading {
-                transition: none;
-            }
-        }
+    .header-panel,
+    .search-results-panel {
+      padding-left: 0.75em;
+      padding-right: 0.75em;
     }
+
+    .header-panel {
+      .btn {
+        &.btn-toggle-bookmark {
+          i:before {
+            content: "\f02e";
+          }
+
+          i:after {
+            content: "\f067";
+            font-size: 0.35em;
+            color: $colour-bg2;
+            position: relative;
+            top: -0.9em;
+            left: -1.4em;
+            opacity: 1;
+          }
+        }
+      }
+
+      .search-form {
+        width: 100%;
+        margin-top: 0.35em;
+      }
+    }
+
+    .search-results-panel {
+      height: 100%;
+
+      & > h4 {
+        margin: 10px;
+      }
+
+      .list-group-item {
+        &.active:hover,
+        &:hover {
+          .list-group-item-heading {
+            color: $colour-text2;
+          }
+        }
+
+        a {
+          padding: 1em 1.25em;
+        }
+
+        .btn-edit-bookmark {
+          display: none !important;
+        }
+
+        .menu-background {
+          display: block;
+        }
+      }
+
+      .list-group-item-heading {
+        transition: none;
+      }
+    }
+  }
 }
 
 #settings-panel {
-    .backup-restore-panel {
-        #backupContentsPanel {
-            display: none;
-        }
+  .backup-restore-panel {
+    #backupContentsPanel {
+      display: none;
+    }
+  }
+
+  .form-group {
+    a {
+      &:focus,
+      &:hover {
+        color: $colour-text2;
+        border-bottom-color: $colour-text2;
+      }
+
+      &:active {
+        color: $colour-link-highlight;
+        border-bottom-color: $colour-link-highlight;
+      }
+    }
+  }
+
+  .sync-panel {
+    .btn-syncOptions {
+      display: none;
     }
 
-    .form-group {
-        a {
-            &:focus,
-            &:hover {
-                color: $colour-text2;
-                border-bottom-color: $colour-text2;
-            }
-
-            &:active {
-                color: $colour-link-highlight;
-                border-bottom-color: $colour-link-highlight;
-            }
-        }
-    }
-    
-    .sync-panel {
-        .btn-syncOptions {
-            display: none;
-        }
-        
-        .buttons {
-            margin: 15px 0;
-        }
-        
-        .checkbox {
-            display: none;
-        }
-
-        .form-group .id-url {
-            @media (max-height: $height-mobile-medium) {
-                font-size: 0.89em;
-            }
-        }
-
-        #syncDataUsage-Panel .buttons {
-            margin-bottom: 0;
-        }
+    .buttons {
+      margin: 15px 0;
     }
 
-    .well:last-child {
-        @media (min-width: $width-tablet-small) {
-            margin-bottom: 0.75em;
-        }
+    .checkbox {
+      display: none;
     }
+
+    .form-group .id-url {
+      @media (max-height: $height-mobile-medium) {
+        font-size: 0.89em;
+      }
+    }
+
+    #syncDataUsage-Panel .buttons {
+      margin-bottom: 0;
+    }
+  }
+
+  .well:last-child {
+    @media (min-width: $width-tablet-small) {
+      margin-bottom: 0.75em;
+    }
+  }
 }
 
 #updated-panel .confirm-updated {
-    @media (max-height: $height-mobile-medium) {
-        margin-top: -2.5em;
-    }
+  @media (max-height: $height-mobile-medium) {
+    margin-top: -2.5em;
+  }
 }
 
 #working-panel .content p {
-    display: none;
+  display: none;
 }

@@ -14,14 +14,6 @@ body {
   font-size: 14px;
   line-height: 1.25em;
 
-  h1 {
-    @extend .logo;
-    font-size: inherit;
-    height: 14em;
-    margin: 0;
-    width: 100%;
-  }
-
   h2 {
     font-size: 1.8em;
     font-weight: 800;
@@ -398,7 +390,9 @@ body {
   }
 
   .logo {
-    background: url("../img/logo.svg") 50% 0 no-repeat;
+    background: url("../img/logo.svg") 50% 2em no-repeat;
+    background-size: 15em;
+    flex: 0 1 20em;
   }
 
   .lookahead-container {
@@ -436,6 +430,24 @@ body {
 
   .margin-bottom-15 {
     margin-bottom: 15px !important;
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(8, 48, 57, 0.9);
+    @include animation(animation-fade-in 0.1s linear);
+
+    &.ng-hide {
+      @include animation(animation-fade-out 0.1s linear);
+    }
   }
 
   .progress-bar-success {
@@ -485,10 +497,6 @@ body {
     padding: 1em 1.25em;
     margin-bottom: 0.75em;
     @include box-shadow;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
 
     &.dark {
       background-color: $colour-text2;
@@ -737,9 +745,7 @@ body {
   }
 
   .confirm {
-    position: absolute;
-    width: calc(100% - 1.5em);
-    bottom: 0;
+    margin-bottom: 0;
     z-index: 10;
   }
 
@@ -766,55 +772,51 @@ body {
     z-index: 10;
   }
 
-  .intro-panel {
-    display: flex;
-    align-items: center;
-    height: 18em;
-    margin-bottom: 1.2em;
-    overflow: hidden;
-    position: relative;
-    z-index: 10;
+  .help-panel {
+    @extend .overlay;
+    padding: 2em;
 
     & > div {
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      top: 0;
-      left: 0;
-      padding: 1.5em 2em;
-      overflow: hidden;
-      font-size: 0.95em;
-      line-height: 1.4em;
-      box-shadow: none !important;
+      font-size: 1.1em;
+      line-height: 1.3em;
+    }
 
-      & > div {
-        position: relative;
-        z-index: 20;
+    h4 {
+      margin-bottom: 1.5em;
+      text-align: center;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2em;
+
+      .next-link,
+      .prev-link {
+        &:hover {
+          &:before,
+          &:after {
+            color: $colour-link-highlight;
+          }
+        }
+      }
+
+      .next-link:after {
+        content: "\203A";
+        margin-left: 0.2em;
+        transition: all, ease-in-out, 0.2s;
+      }
+
+      .prev-link:before {
+        content: "\2039";
+        margin-right: 0.2em;
+        transition: all, ease-in-out, 0.2s;
       }
     }
 
-    .buttons {
-      text-align: left;
-      margin: 0;
-      width: 100%;
-      position: absolute;
-      left: 0;
-      top: 45%;
-      z-index: 10;
-
-      button {
-        color: $colour-text1;
-        font-size: 1.2em;
-      }
-
-      .btn-prev {
-        margin-left: 0.6em;
-        float: left;
-      }
-
-      .btn-next {
-        margin-right: 0.6em;
-        float: right;
+    #help-panel-1 {
+      .pagination {
+        flex-direction: row-reverse;
       }
     }
   }
@@ -875,6 +877,11 @@ body {
   .toggle-form {
     text-align: center;
     margin-top: 1.2em;
+  }
+
+  .view-content {
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -1086,14 +1093,14 @@ body {
         }
 
         .menu,
-        .overlay {
+        .menu-background {
           position: absolute;
           width: 100%;
           height: 100%;
           @include css-prefix(user-select, none);
         }
 
-        .overlay {
+        .menu-background {
           display: none;
           opacity: 0;
           z-index: 50;
@@ -1382,10 +1389,6 @@ body {
     padding: 0;
     overflow: hidden;
 
-    &:last-child {
-      margin-bottom: 15px;
-    }
-
     h4 {
       padding: 0.75em 1em;
       margin-bottom: 0;
@@ -1406,19 +1409,7 @@ body {
 
 #qr-panel,
 #working-panel {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(8, 48, 57, 0.8);
-  @include animation(animation-fade-in 0.1s linear);
-
-  &.ng-hide {
-    @include animation(animation-fade-out 0.1s linear);
-  }
+  @extend .overlay;
 
   h3 {
     margin-top: 0;
@@ -1429,9 +1420,7 @@ body {
 #updated-panel,
 #permissions-panel {
   .logo {
-    @extend .logo;
-    flex: 0 1 14em;
-    margin: 1em 0 2em;
+    margin-top: 2.5em;
   }
 
   .view-content {

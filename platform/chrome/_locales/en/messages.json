@@ -29,40 +29,40 @@
   "login_GetSyncId_Message": {
     "message": "Download the xBrowserSync desktop browser extension available for Chrome and Firefox, create a new sync and then scan your sync ID QR code on the previous screen."
   },
-  "login_introPanel1_Message": {
+  "login_helpPanel1_Message": {
     "message": "<h4>Welcome</h4><p>Thank you for choosing xBrowserSync! Before you begin, take some time to read through the following pages to get aquainted with xBrowserSync’s features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p><p>As xBrowserSync modifies your local browser data, we recommend you back up your bookmarks and disable any existing browser sync services to avoid conflicts.</p>"
   },
-  "login_introPanel2_Message": {
+  "login_helpPanel2_Message": {
     "message": "<h4>Syncing for the first time</h4><p>Before you can sync your browser data it must be encrypted so that only you can read it. Enter an encryption password — make it strong but also memorable, there are no resets or reminders so if you forget it you won’t be able to decrypt your synced data.</p><p>Once you click the Sync button your data will be encrypted and synced.</p>"
   },
-  "login_introPanel3_Message": {
+  "login_helpPanel3_Message": {
     "message": "<h4>Already synced (got an ID)</h4><p>When you create a new sync you are given a unique xBrowserSync ID which you can use along with your password to sync your data on other devices. Your anonymity is ensured as no personal data is collected or stored with your synced data.</p><p>Once synced you can view your ID in the Settings panel. Click it to reveal a handy QR code to scan when syncing on mobile devices.</p>"
   },
-  "login_introPanel4_Message": {
+  "login_helpPanel4_Message": {
     "message": "<h4>Syncing to another service</h4><p>By default your data is synced to the official xBrowserSync service, though anyone can <a href='https://github.com/xbrowsersync/api' class='new-tab'>run their own xBrowserSync service</a>, either for private use (for ultimate security and privacy) or to make available for public use so that more people can enjoy xBrowserSync.</p><p>Check the available <a href='https://www.xbrowsersync.org/#status' class='new-tab'>xBrowserSync services</a> and switch services in the Settings panel.</p>"
   },
-  "login_introPanel5_Message": {
+  "login_helpPanel5_Message": {
     "message": "<h4>New service, new ID</h4><p>Your xBrowserSync ID will only work with the service on which it was created.</p><p>Whenever you change services you must create a new sync and then you’ll receive a new ID. You can move your existing synced data over from the old service by backing up on the old service and then restoring it once synced on the new service.</p>"
   },
-  "login_introPanel6_Message": {
+  "login_helpPanel6_Message": {
     "message": "<h4>Searching your bookmarks</h4><p>Once synced, simply press Enter to display your bookmarks in chronological order, or type some keywords or a URL in the search box to search your bookmarks.</p><p>Hover over a bookmark and click the pen icon to edit or delete the bookmark.</p>"
   },
-  "login_introPanel7_Message": {
+  "login_helpPanel7_Message": {
     "message": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s bookmark button as normal and xBrowserSync will automatically add the bookmark’s default properties.</p>"
   },
-  "login_introPanel8_Message": {
+  "login_helpPanel8_Message": {
     "message": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p>"
   },
-  "login_introPanel9_Message": {
+  "login_helpPanel9_Message": {
     "message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your reponsibility so be smart and make sure to take backups.</p><p>You can do this easily in the Settings panel, you can back up your unencrypted data to a local file which can then restored at a later date should you need to.</p>"
   },
-  "login_introPanel10_Message": {
+  "login_helpPanel10_Message": {
     "message": "<h4>Shortcut xBrowserSync</h4><p>To search your bookmarks quickly, assign a keyboard shortcut to activate the extension then just press Enter or start typing to search your bookmarks.</p><p>Browse to chrome://extensions/, the keyboard shortcuts option is at the bottom of the page."
   },
-  "login_introPanel11_Message": {
+  "login_helpPanel11_Message": {
     "message": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on Google Play store, <a href='https://fdroid.xbrowsersync.org/' class='new-tab'>F-Droid</a> or <a href='https://github.com/xbrowsersync/app/releases' class='new-tab'>direct download</a>.</p>"
   },
-  "login_introPanel12_Message": {
+  "login_helpPanel12_Message": {
     "message": "<h4>Noticed an issue?</h4><p>If you’ve found a bug in xBrowserSync or would like to request a new feature, head on over to GitHub and <a href='https://github.com/xbrowsersync/app/issues' class='new-tab'>submit an issue</a>.</p><p>Calling all coders! If you would like to help make xBrowserSync better, go ahead and fork the <a href='https://github.com/xbrowsersync/app' class='new-tab'>xBrowserSync GitHub repo</a> and submit a pull request.</p>"
   },
   "button_Settings_Label": {

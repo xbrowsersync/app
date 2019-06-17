@@ -45,40 +45,40 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "login_GetSyncId_Message": {
       "message": "<a href='https://www.xbrowsersync.org/#download' class='new-tab'>Download</a> the xBrowserSync desktop browser extension available for Chrome and Firefox, create a new sync and then scan your sync ID QR code on the previous screen."
     },
-    "login_introPanel1_Message": {
+    "login_helpPanel1_Message": {
       "message": "<h4>Welcome</h4><p>Thank you for choosing xBrowserSync!</p><p>Before you begin, take some time to read through the following pages to get aquainted with xBrowserSync’s features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
     },
-    "login_introPanel2_Message": {
+    "login_helpPanel2_Message": {
       "message": "<h4>Syncing for the first time</h4><p>First things first, head over to your desktop browser and <a href='https://www.xbrowsersync.org/#download' class='new-tab'>download</a> the xBrowserSync extension (available for Chrome and Firefox).</p><p>When you create a new sync, your existing browser data will be encrypted locally and synced, and you will receive a sync ID which you can use here in this app to access your synced data.</p>"
     },
-    "login_introPanel3_Message": {
+    "login_helpPanel3_Message": {
       "message": "<h4>Already synced (got an ID)</h4><p>When you create a new sync you are given a unique xBrowserSync ID which you can use along with your password to sync your data on other devices. Your anonymity is ensured as no personal data is collected or stored with your synced data.</p><p>Once synced you can view your ID in the Settings panel.</p>"
     },
-    "login_introPanel4_Message": {
+    "login_helpPanel4_Message": {
       "message": "<h4>Syncing to another service</h4><p>By default your data is synced to the official xBrowserSync service, though anyone can <a href='https://github.com/xbrowsersync/api' class='new-tab'>run their own xBrowserSync service</a>, either for private use (for ultimate security and privacy) or to make available for public use so that more people can enjoy xBrowserSync.</p><p>Check the available <a href='https://www.xbrowsersync.org/#status' class='new-tab'>xBrowserSync services</a> and switch services in the Settings panel.</p>"
     },
-    "login_introPanel5_Message": {
+    "login_helpPanel5_Message": {
       "message": "<h4>New service, new ID</h4><p>Your xBrowserSync ID will only work with the service on which it was created.</p><p>Whenever you change services you must create a new sync and then you’ll receive a new ID. You can move your existing synced data over from the old service by backing up on the old service and then restoring it once synced on the new service.</p>"
     },
-    "login_introPanel6_Message": {
+    "login_helpPanel6_Message": {
       "message": "<h4>Searching your bookmarks</h4><p>Once synced, your bookmarks are displayed in chronological order when you open xBrowserSync. Type some keywords or a URL in the search box to search your bookmarks.</p><p>Long pressing on a bookmark will allow you to directly share, modify or delete the bookmark.</p>"
     },
-    "login_introPanel7_Message": {
+    "login_helpPanel7_Message": {
       "message": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be fetched for you, otherwise add a description and some tags to ensure better search results.</p>"
     },
-    "login_introPanel8_Message": {
+    "login_helpPanel8_Message": {
       "message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your reponsibility so be smart and make sure to take backups.</p><p>You can do this easily in the Settings panel, you can back up your unencrypted data to a local file which can then restored at a later date should you need to.</p>"
     },
-    "login_introPanel9_Message": {
+    "login_helpPanel9_Message": {
       "message": "<h4>Got desktop?</h4><p>Sync your bookmarks across desktop and mobile devices by using the xBrowserSync desktop browser web extension alongside the mobile app.</p><p>Currently available for Chrome and Firefox, Opera support coming very soon.</p>"
     },
-    "login_introPanel10_Message": {
+    "login_helpPanel10_Message": {
       "message": ""
     },
-    "login_introPanel11_Message": {
+    "login_helpPanel11_Message": {
       "message": ""
     },
-    "login_introPanel12_Message": {
+    "login_helpPanel12_Message": {
       "message": "<h4>Noticed an issue?</h4><p>If you’ve found a bug in xBrowserSync or would like to request a new feature, head on over to GitHub and <a href='https://github.com/xbrowsersync/app/issues' class='new-tab'>submit an issue</a>.</p><p>Calling all coders! If you would like to help make xBrowserSync better, go ahead and fork the <a href='https://github.com/xbrowsersync/app' class='new-tab'>xBrowserSync GitHub repo</a> and submit a pull request.</p>"
     },
     "button_Settings_Label": {
@@ -991,8 +991,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
     // Set required events to mobile app handlers
     vm.events.bookmarkPanel_Close_Click = bookmarkPanel_Close_Click;
-    vm.events.introPanel9_Next_Click = introPanel9_Next_Click;
-    vm.events.introPanel12_Prev_Click = introPanel12_Prev_Click;
+    vm.events.helpPanel9_Next_Click = helpPanel9_Next_Click;
+    vm.events.helpPanel12_Prev_Click = helpPanel12_Prev_Click;
     vm.events.syncForm_EnableSync_Click = syncForm_EnableSync_Click;
 
     // Set clear search button to display all bookmarks
@@ -1244,16 +1244,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var checkForUpgrade = function () {
     // Disable sync and display updated message if stored app version older than current
-    return platform.LocalStorage.Get([
-      globals.CacheKeys.DisplayIntro,
-      globals.CacheKeys.MobileAppVersion
-    ])
-      .then(function (cachedData) {
-        var displayIntro = cachedData[globals.CacheKeys.DisplayIntro];
-        var mobileAppVersion = cachedData[globals.CacheKeys.MobileAppVersion];
-
+    return platform.LocalStorage.Get(globals.CacheKeys.MobileAppVersion)
+      .then(function (mobileAppVersion) {
         // If upgrade is available disable sync and display updated panel
-        if (!displayIntro && compareVersions(mobileAppVersion, globals.AppVersion) < 0) {
+        if (compareVersions(mobileAppVersion, globals.AppVersion) < 0) {
           return $q.all([
             platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, true),
             bookmarks.DisableSync()
@@ -1471,20 +1465,20 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     );
   };
 
-  var introPanel7_Android_Next_Click = function () {
-    vm.introduction.displayPanel(9);
+  var helpPanel7_Android_Next_Click = function () {
+    vm.help.displayPanel(9);
   };
 
-  var introPanel9_Android_Prev_Click = function () {
-    vm.introduction.displayPanel(7);
+  var helpPanel9_Android_Prev_Click = function () {
+    vm.help.displayPanel(7);
   };
 
-  var introPanel9_Next_Click = function () {
-    vm.introduction.displayPanel(12);
+  var helpPanel9_Next_Click = function () {
+    vm.help.displayPanel(12);
   };
 
-  var introPanel12_Prev_Click = function () {
-    vm.introduction.displayPanel(9);
+  var helpPanel12_Prev_Click = function () {
+    vm.help.displayPanel(9);
   };
 
   var isTextInput = function (node) {

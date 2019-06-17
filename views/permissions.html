@@ -3,7 +3,7 @@
   <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Permissions_Title) }}</h4>
   <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Permissions_Message)"></div>
   <div class="buttons">
-    <button type="button" class="btn btn-default" tabindex="1" data-ng-click="vm.events.permissionsPanel_RequestPermissions_Click()">
+    <button type="button" class="btn btn-default" data-ng-click="vm.events.permissionsPanel_RequestPermissions_Click()">
       {{ vm.platform.GetConstant(vm.globals.Constants.Button_Continue_Label) }}
     </button>
   </div>

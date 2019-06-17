@@ -69,29 +69,29 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       bookmarkPanel_Close_Click: bookmarkPanel_Close_Click,
       displayQRCode: displayQRCode,
       debugPanel_DownloadLogFile_Click: debugPanel_DownloadLogFile_Click,
-      introPanel_ShowHelp_Click: introPanel_ShowHelp_Click,
-      introPanel1_Next_Click: introPanel1_Next_Click,
-      introPanel2_Next_Click: introPanel2_Next_Click,
-      introPanel2_Prev_Click: introPanel2_Prev_Click,
-      introPanel3_Next_Click: introPanel3_Next_Click,
-      introPanel3_Prev_Click: introPanel3_Prev_Click,
-      introPanel4_Next_Click: introPanel4_Next_Click,
-      introPanel4_Prev_Click: introPanel4_Prev_Click,
-      introPanel5_Next_Click: introPanel5_Next_Click,
-      introPanel5_Prev_Click: introPanel5_Prev_Click,
-      introPanel6_Next_Click: introPanel6_Next_Click,
-      introPanel6_Prev_Click: introPanel6_Prev_Click,
-      introPanel7_Next_Click: introPanel7_Next_Click,
-      introPanel7_Prev_Click: introPanel7_Prev_Click,
-      introPanel8_Next_Click: introPanel8_Next_Click,
-      introPanel8_Prev_Click: introPanel8_Prev_Click,
-      introPanel9_Next_Click: introPanel9_Next_Click,
-      introPanel9_Prev_Click: introPanel9_Prev_Click,
-      introPanel10_Next_Click: introPanel10_Next_Click,
-      introPanel10_Prev_Click: introPanel10_Prev_Click,
-      introPanel11_Next_Click: introPanel11_Next_Click,
-      introPanel11_Prev_Click: introPanel11_Prev_Click,
-      introPanel12_Prev_Click: introPanel12_Prev_Click,
+      helpPanel_ShowHelp_Click: helpPanel_ShowHelp_Click,
+      helpPanel1_Next_Click: helpPanel1_Next_Click,
+      helpPanel2_Next_Click: helpPanel2_Next_Click,
+      helpPanel2_Prev_Click: helpPanel2_Prev_Click,
+      helpPanel3_Next_Click: helpPanel3_Next_Click,
+      helpPanel3_Prev_Click: helpPanel3_Prev_Click,
+      helpPanel4_Next_Click: helpPanel4_Next_Click,
+      helpPanel4_Prev_Click: helpPanel4_Prev_Click,
+      helpPanel5_Next_Click: helpPanel5_Next_Click,
+      helpPanel5_Prev_Click: helpPanel5_Prev_Click,
+      helpPanel6_Next_Click: helpPanel6_Next_Click,
+      helpPanel6_Prev_Click: helpPanel6_Prev_Click,
+      helpPanel7_Next_Click: helpPanel7_Next_Click,
+      helpPanel7_Prev_Click: helpPanel7_Prev_Click,
+      helpPanel8_Next_Click: helpPanel8_Next_Click,
+      helpPanel8_Prev_Click: helpPanel8_Prev_Click,
+      helpPanel9_Next_Click: helpPanel9_Next_Click,
+      helpPanel9_Prev_Click: helpPanel9_Prev_Click,
+      helpPanel10_Next_Click: helpPanel10_Next_Click,
+      helpPanel10_Prev_Click: helpPanel10_Prev_Click,
+      helpPanel11_Next_Click: helpPanel11_Next_Click,
+      helpPanel11_Prev_Click: helpPanel11_Prev_Click,
+      helpPanel12_Prev_Click: helpPanel12_Prev_Click,
       openUrl: openUrl,
       permissions_Revoke_Click: permissions_Revoke_Click,
       permissions_Request_Click: permissions_Request_Click,
@@ -133,11 +133,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       updateServiceUrlForm_Update_Click: updateServiceUrlForm_Update_Click
     };
 
-    vm.introduction = {
-      displayIntro: false,
-      displayPanel: displayIntroPanel,
-      showLogo: true,
-      currentPanel: 0
+    vm.help = {
+      currentPanel: 0,
+      displayPanel: displayHelpPanel,
+      show: false
     };
 
     vm.platformName = undefined;
@@ -757,21 +756,20 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     }
   };
 
-  var displayIntroPanel = function (panelToDisplay) {
-    if (!panelToDisplay || panelToDisplay > vm.introduction.currentPanel) {
-      var panels = document.querySelectorAll('.intro-panel > div');
+  var displayHelpPanel = function (panelToDisplay) {
+    if (!panelToDisplay || panelToDisplay > vm.help.currentPanel) {
+      var panels = document.querySelectorAll('.help-panel > div');
 
       for (var i = 0; i < panels.length; i++) {
         panels[i].classList.remove('reverse');
       }
     }
-    else if (panelToDisplay < vm.introduction.currentPanel) {
-      document.querySelector('#intro-panel-' + vm.introduction.currentPanel).classList.add('reverse');
-      document.querySelector('#intro-panel-' + panelToDisplay).classList.add('reverse');
+    else if (panelToDisplay < vm.help.currentPanel) {
+      document.querySelector('#help-panel-' + vm.help.currentPanel).classList.add('reverse');
+      document.querySelector('#help-panel-' + panelToDisplay).classList.add('reverse');
     }
 
-    vm.introduction.showLogo = (!panelToDisplay) ? true : false;
-    vm.introduction.currentPanel = (!panelToDisplay) ? 0 : panelToDisplay;
+    vm.help.currentPanel = (!panelToDisplay) ? 0 : panelToDisplay;
   };
 
   var displayMainView = function () {
@@ -986,7 +984,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var init_loginView = function () {
-    vm.introduction.displayIntro = false;
     vm.sync.displayOtherSyncsWarning = false;
     vm.sync.displayPasswordConfirmation = false;
     vm.sync.displaySyncConfirmation = false;
@@ -1002,13 +999,11 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     // Get cached sync data
     return platform.LocalStorage.Get([
-      globals.CacheKeys.DisplayIntro,
       globals.CacheKeys.DisplayOtherSyncsWarning,
       globals.CacheKeys.SyncEnabled,
       globals.CacheKeys.SyncId
     ])
       .then(function (cachedData) {
-        var displayIntro = cachedData[globals.CacheKeys.DisplayIntro];
         var displayOtherSyncsWarning = cachedData[globals.CacheKeys.DisplayOtherSyncsWarning];
         var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
         var syncId = cachedData[globals.CacheKeys.SyncId];
@@ -1052,12 +1047,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
               }
             }, 100);
           }
-        }
-
-        // Check whether to display intro animation, then disable for next time
-        if (displayIntro == null || displayIntro) {
-          platform.LocalStorage.Set(globals.CacheKeys.DisplayIntro, false);
-          introPanel_DisplayIntro();
         }
       });
   };
@@ -1185,117 +1174,97 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       });
   };
 
-  var introPanel_DisplayIntro = function () {
-    vm.introduction.displayIntro = true;
-    vm.introduction.showLogo = false;
-
-    $timeout(function () {
-      vm.introduction.showLogo = true;
-
-      $timeout(function () {
-        vm.introduction.showLogo = false;
-
-        $timeout(function () {
-          vm.introduction.displayPanel(1);
-        }, 1000);
-      }, 3000);
-    }, 1000);
+  var helpPanel_ShowHelp_Click = function () {
+    vm.help.show = true;
+    vm.help.displayPanel(1);
   };
 
-  var introPanel_ShowHelp_Click = function () {
-    vm.introduction.showLogo = false;
-
-    $timeout(function () {
-      vm.introduction.displayPanel(1);
-    }, 500);
+  var helpPanel1_Next_Click = function () {
+    vm.help.displayPanel(2);
   };
 
-  var introPanel1_Next_Click = function () {
-    vm.introduction.displayPanel(2);
+  var helpPanel2_Next_Click = function () {
+    vm.help.displayPanel(3);
   };
 
-  var introPanel2_Next_Click = function () {
-    vm.introduction.displayPanel(3);
+  var helpPanel2_Prev_Click = function () {
+    vm.help.displayPanel(1);
   };
 
-  var introPanel2_Prev_Click = function () {
-    vm.introduction.displayPanel(1);
+  var helpPanel3_Next_Click = function () {
+    vm.help.displayPanel(4);
   };
 
-  var introPanel3_Next_Click = function () {
-    vm.introduction.displayPanel(4);
+  var helpPanel3_Prev_Click = function () {
+    vm.help.displayPanel(2);
   };
 
-  var introPanel3_Prev_Click = function () {
-    vm.introduction.displayPanel(2);
+  var helpPanel4_Next_Click = function () {
+    vm.help.displayPanel(5);
   };
 
-  var introPanel4_Next_Click = function () {
-    vm.introduction.displayPanel(5);
+  var helpPanel4_Prev_Click = function () {
+    vm.help.displayPanel(3);
   };
 
-  var introPanel4_Prev_Click = function () {
-    vm.introduction.displayPanel(3);
+  var helpPanel5_Next_Click = function () {
+    vm.help.displayPanel(6);
   };
 
-  var introPanel5_Next_Click = function () {
-    vm.introduction.displayPanel(6);
+  var helpPanel5_Prev_Click = function () {
+    vm.help.displayPanel(4);
   };
 
-  var introPanel5_Prev_Click = function () {
-    vm.introduction.displayPanel(4);
+  var helpPanel6_Next_Click = function () {
+    vm.help.displayPanel(7);
   };
 
-  var introPanel6_Next_Click = function () {
-    vm.introduction.displayPanel(7);
+  var helpPanel6_Prev_Click = function () {
+    vm.help.displayPanel(5);
   };
 
-  var introPanel6_Prev_Click = function () {
-    vm.introduction.displayPanel(5);
+  var helpPanel7_Next_Click = function () {
+    vm.help.displayPanel(8);
   };
 
-  var introPanel7_Next_Click = function () {
-    vm.introduction.displayPanel(8);
+  var helpPanel7_Prev_Click = function () {
+    vm.help.displayPanel(6);
   };
 
-  var introPanel7_Prev_Click = function () {
-    vm.introduction.displayPanel(6);
+  var helpPanel8_Next_Click = function () {
+    vm.help.displayPanel(9);
   };
 
-  var introPanel8_Next_Click = function () {
-    vm.introduction.displayPanel(9);
+  var helpPanel8_Prev_Click = function () {
+    vm.help.displayPanel(7);
   };
 
-  var introPanel8_Prev_Click = function () {
-    vm.introduction.displayPanel(7);
+  var helpPanel9_Next_Click = function () {
+    vm.help.displayPanel(10);
   };
 
-  var introPanel9_Next_Click = function () {
-    vm.introduction.displayPanel(10);
+  var helpPanel9_Prev_Click = function () {
+    vm.help.displayPanel(8);
   };
 
-  var introPanel9_Prev_Click = function () {
-    vm.introduction.displayPanel(8);
+  var helpPanel10_Next_Click = function () {
+    vm.help.displayPanel(11);
   };
 
-  var introPanel10_Next_Click = function () {
-    vm.introduction.displayPanel(11);
+  var helpPanel10_Prev_Click = function () {
+    vm.help.displayPanel(9);
   };
 
-  var introPanel10_Prev_Click = function () {
-    vm.introduction.displayPanel(9);
+  var helpPanel11_Next_Click = function () {
+    vm.help.displayPanel(12);
   };
 
-  var introPanel11_Next_Click = function () {
-    vm.introduction.displayPanel(12);
+  var helpPanel11_Prev_Click = function () {
+    vm.help.displayPanel(10);
   };
 
-  var introPanel11_Prev_Click = function () {
-    vm.introduction.displayPanel(10);
-  };
-
-  var introPanel12_Prev_Click = function () {
-    vm.introduction.displayPanel(11);
+  var helpPanel12_Prev_Click = function () {
+    vm.help.displayPanel(11);
   };
 
   var openUrl = function (event, url) {

@@ -29,40 +29,40 @@
   "login_GetSyncId_Message": {
     "message": "Download the xBrowserSync desktop browser extension available for Chrome and Firefox, create a new sync and then scan your sync ID QR code on the previous screen."
   },
-  "login_introPanel1_Message": {
+  "login_helpPanel1_Message": {
     "message": "<h4>Bienvenue</h4><p>Merci d'utiliser xBrowserSync — La synchronisation de favoris telle qu'elle devrait être: sécurisée, anonyme et gratuite!</p><p>Prenez le temps de lire les pages suivantes pour vous familiariser avec les fonctionnalités xBrowserSync. Plus d'informations sont disponibles dans la <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQ</a>.</p>"
   },
-  "login_introPanel2_Message": {
+  "login_helpPanel2_Message": {
     "message": "<h4>Synchronisation pour la première fois</h4><p>Avant que vous puissiez synchroniser les donnée de votre navigateur, elles doivent être chiffrées que que seulement vous puissiez les lire. Entrez un mot de passe de chiffrement — choisissez le complexe mais mémorisable, il n'y a aucun moyen de retrouver le mot de passe et si vous le perdez, vous ne pourrez plus jamais récupérer vos données synchronisées.</p><p>Une fois que vous cliquerez sur le bouton Synchroniser, vous serez synchronisés et prêt à ajouter des favoris.</p>"
   },
-  "login_introPanel3_Message": {
+  "login_helpPanel3_Message": {
     "message": "<h4>Déjà synchronisé (vous avez un ID)</h4><p>Quand vous créez une nouvelle synchronisation, vous obtenez un ID xBrowserSync unique qui permet, accompagné de votre mot de passe, de synchroniser vos favoris à travers plusieurs ordinateurs/téléphones. Votre anonymité est assurée car aucune donnée personnelle n'est collectée ou stockée avec vos données synchronisées.</p><p>Une fois synchronisez, vous pouvez voir votre ID dans le panneau de Paramètres. Cliquez ici pour réveler un QR code utile à scanner lorsque vous êtes sur un téléphone.</p>"
   },
-  "login_introPanel4_Message": {
+  "login_helpPanel4_Message": {
     "message": "<h4>Synchronisation sur un autre service</h4><p>Par défaut, vos données sont synchronisées sur le service officiel xBrowserSync, bien que chacun puisse faire tourner son propre <a href='https://github.com/xbrowsersync/api' class='new-tab'>service xBrowserSync</a>, soit pour un usage privé (pour une sécurité ultime et confidentialité) ou pour rendre disponible à l'usage public pour que plus de personnes puissent apprécier l'usage de xBrowserSync.</p><p>Vérifier les <a href='https://www.xbrowsersync.org/#status' class='new-tab'>services xBrowserSync</a> et changer de service dans le panneau des Paramètres.</p>"
   },
-  "login_introPanel5_Message": {
+  "login_helpPanel5_Message": {
     "message": "<h4>Nouveau service, nouvel ID</h4><p>Votre ID xBrowserSync ne marchera que sur le service sur lequel il a été crée.</p><p>Si jamais vous changez de service, vous devez créer une nouvelle synchronisation et vous recevrez un nouvel ID. Vous pouver déplacer vos données synchronisées d'un ancien service vers un nouveau en faisant une sauvegarde et en le restaurant une fois synchronisé sur le nouveau service.</p>"
   },
-  "login_introPanel6_Message": {
+  "login_helpPanel6_Message": {
     "message": "<h4>Chercher vos favoris</h4><p>Une fois synchronisé, tapez simplement sur Entrée pour afficher vos favoris dans l'ordre chronologique, ou tapez des mots ou une URL dans la boite de recherche pour chercher parmi vos favoris.</p><p>Passez la souris au dessus d'un favori et cliquez sur le bouton crayon pour éditer ou supprimer le favori.</p>"
   },
-  "login_introPanel7_Message": {
+  "login_helpPanel7_Message": {
     "message": "<h4>Ajouter un favori</h4><p>Mettez en favori la page courante en cliquant sur l'icône favori du panneau de recherche. Les propriétés du favori seront préremplies pour vous, ou alors ajoutez une description et des tags pour assurer une meilleure recherche.</p><p>Ou bien, cliquez simplement sur le bouton favori du navigateur et xBrowserSync ajoutera automatiquement les propriétés par défaut aux favoris.</p>"
   },
-  "login_introPanel8_Message": {
+  "login_helpPanel8_Message": {
     "message": "<h4>Fonctionnalités natives supportées</h4><p>Sentez-vous libre de continuer à utiliser les fonctionnalités natives de gestion de favoris de votre navigateur, chaque changement sera synchronisé automatiquement en tâche de fond.</p><p>Si vous avez organisé vos favoris dans des dossiers, pas de soucis, xBrowserSync conservera la hierarchie de vos favoris.</p>"
   },
-  "login_introPanel9_Message": {
+  "login_helpPanel9_Message": {
     "message": "<h4>N'oubliez pas de faire des sauvegardes</h4><p>Lorsque vous utilisez xBrowserSync, vos donnés sont votre responsabilité donc soyez intelligents et soyez sûrs de faire des sauvegardes.</p><p>Vous pouvez faire cela facilement dans le panneau des Paramètres, vous pouvez sauvegarder vos données non chiffrées dans un fichier local qui pourra être restauré plus tard si vous en avez le besoin.</p>"
   },
-  "login_introPanel10_Message": {
+  "login_helpPanel10_Message": {
     "message": "<h4>Raccourci xBrowserSync</h4><p>Pour chercher vos favoris rapidement, assignez un raccourci clavier pour activer l'extension et tapez juste Entrée ou commencez à saisir du texte pour chercher parmi vos favoris.</p><p>Allez dans chrome://extensions/, l'option des raccourcis clavier est en bas de la page."
   },
-  "login_introPanel11_Message": {
+  "login_helpPanel11_Message": {
     "message": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on Google Play store, <a href='https://fdroid.xbrowsersync.org/' class='new-tab'>F-Droid</a> or <a href='https://github.com/xbrowsersync/app/releases' class='new-tab'>direct download</a>.</p>"
   },
-  "login_introPanel12_Message": {
+  "login_helpPanel12_Message": {
     "message": "<h4>Vous avez trouvé un problème ?</h4><p>Si vous avez trouvé un bug dans xBrowserSync ou voulez demander une nouvelle fonctionnalité, allez sur GitHub et <a href='https://github.com/xbrowsersync/app/issues' class='new-tab'>soumettez un problème (issue)</a>.</p><p>Appel à tous les développeurs! Si vous voulez aider à améliorer xBrowserSync, allez-y et forkez le repo GitHub <a href='https://github.com/xbrowsersync/app' class='new-tab'>xBrowserSync</a> et soumettez une pull request.</p>"
   },
   "button_Settings_Label": {
