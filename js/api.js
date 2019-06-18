@@ -242,18 +242,20 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
   };
 
   var updateBookmarks = function (encryptedBookmarks, updateSyncVersion) {
-    var data, password, syncId;
+    var data, password, cachedLastUpdated, syncId;
 
     // Check secret and sync ID are present
     return platform.LocalStorage.Get([
+      globals.CacheKeys.LastUpdated,
       globals.CacheKeys.Password,
       globals.CacheKeys.SyncId,
     ])
       .then(function (cachedData) {
+        cachedLastUpdated = cachedData[globals.CacheKeys.LastUpdated];
         password = cachedData[globals.CacheKeys.Password];
         syncId = cachedData[globals.CacheKeys.SyncId];
 
-        if (!password || !syncId) {
+        if (!cachedLastUpdated || !password || !syncId) {
           return $q.reject({ code: globals.ErrorCodes.MissingClientData });
         }
 
@@ -262,7 +264,8 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
       })
       .then(function (serviceUrl) {
         var data = {
-          bookmarks: encryptedBookmarks
+          bookmarks: encryptedBookmarks,
+          lastUpdated: cachedLastUpdated
         };
 
         // If updating sync version, set as current app version
@@ -332,9 +335,9 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
         case 406:
           getErrorCodePromise = $q.resolve(globals.ErrorCodes.DailyNewSyncLimitReached);
           break;
-        // 409 Conflict: invalid id
+        // 409 Conflict: sync conflict / invalid id
         case 409:
-          getErrorCodePromise = $q.resolve(globals.ErrorCodes.NoDataFound);
+          getErrorCodePromise = httpErr.data.code === 'SyncConflictException' ? $q.resolve(globals.ErrorCodes.DataOutOfSync) : $q.resolve(globals.ErrorCodes.NoDataFound);
           break;
         // 413 Request Entity Too Large: sync data size exceeds server limit
         case 413:

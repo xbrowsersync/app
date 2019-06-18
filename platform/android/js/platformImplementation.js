@@ -480,6 +480,15 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "button_ClearTags_Label": {
       "message": "Clear tags"
     },
+    "qr_Copied_Label": {
+      "message": "Copied!"
+    },
+    "qr_CopySyncId_Label": {
+      "message": "Copy Sync ID to clipboard"
+    },
+    "qr_Message": {
+      "message": "Scan this QR code using the xBrowserSync Android app to access your synced data on your mobile device."
+    },
     "working_Title": {
       "message": "Syncing..."
     },

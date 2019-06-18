@@ -23,9 +23,18 @@
       <h3>{{ vm.platform.GetConstant(vm.globals.Constants.Working_Title) }}</h3>
     </div>
 
-    <div id="qr-panel" class="animate" data-ng-show="vm.settings.displayQRCode" data-ng-click="vm.settings.displayQRCode = false"
-      data-ng-cloak>
-      <div id="qr" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}"></div>
+    <div id="qr-panel" class="animate" data-ng-show="vm.settings.displayQrPanel" data-ng-cloak>
+      <div id="qr"></div>
+      <p>{{ vm.platform.GetConstant(vm.globals.Constants.Qr_Message) }}</p>
+      <div class="buttons">
+        <button type="button" class="btn btn-default" data-ng-click="vm.events.qrPanel_CopySyncId_Click()"
+          data-ng-disabled="vm.settings.syncIdCopied">
+          {{ vm.settings.syncIdCopied ? vm.platform.GetConstant(vm.globals.Constants.Qr_Copied_Label) : vm.platform.GetConstant(vm.globals.Constants.Qr_CopySyncId_Label) }}
+        </button>
+        <button type="button" class="btn btn-default" data-ng-click="vm.events.qrPanel_Close_Click()">
+          {{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}
+        </button>
+      </div>
     </div>
 
     <div class="alert animate-fade animate-fade-out" role="alert" data-ng-show="vm.alert.show" data-ng-cloak
@@ -34,7 +43,8 @@
              'info': vm.alert.type === 'info',
              'warning': vm.alert.type === 'warning',
              'alert-danger': vm.alert.type === 'danger' }">
-      <button class="btn btn-icon btn-close" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}"
+      <button class="btn btn-icon btn-close"
+        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}"
         data-ng-click="vm.alert.show = false" tabindex="1000">
         <i class="fas fa-times-circle" aria-hidden="true"></i>
         <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}</span>

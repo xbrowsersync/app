@@ -67,7 +67,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       bookmarkForm_ShareBookmark_Click: platform.Bookmarks.Share,
       bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
       bookmarkPanel_Close_Click: bookmarkPanel_Close_Click,
-      displayQRCode: displayQRCode,
+      displayQrPanel: displayQrPanel,
       debugPanel_DownloadLogFile_Click: debugPanel_DownloadLogFile_Click,
       helpPanel_ShowHelp_Click: helpPanel_ShowHelp_Click,
       helpPanel1_Next_Click: helpPanel1_Next_Click,
@@ -96,6 +96,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       permissions_Revoke_Click: permissions_Revoke_Click,
       permissions_Request_Click: permissions_Request_Click,
       permissionsPanel_RequestPermissions_Click: permissionsPanel_RequestPermissions_Click,
+      qrPanel_Close_Click: qrPanel_Close_Click,
+      qrPanel_CopySyncId_Click: qrPanel_CopySyncId_Click,
       queueSync: queueSync,
       searchForm_Clear_Click: searchForm_Clear_Click,
       searchForm_DeleteBookmark_Click: searchForm_DeleteBookmark_Click,
@@ -164,7 +166,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       dataToRestore: undefined,
       dataToRestoreIsValid: validateDataToRestore,
       displayCancelSyncConfirmation: false,
-      displayQRCode: false,
+      displayQrPanel: false,
       displayRestoreConfirmation: false,
       displayRestoreForm: false,
       displaySyncBookmarksToolbarConfirmation: false,
@@ -190,6 +192,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       syncBookmarksToolbar: true,
       syncDataSize: undefined,
       syncDataUsed: undefined,
+      syncIdCopied: false,
       validatingServiceUrl: false
     };
 
@@ -796,7 +799,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       });
   };
 
-  var displayQRCode = function (value) {
+  var displayQrPanel = function (value) {
     if (!value) {
       return;
     }
@@ -819,7 +822,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       qrContainer.removeChild(qrContainer.firstElementChild);
     }
     qrContainer.appendChild(svg);
-    vm.settings.displayQRCode = true;
+    vm.settings.displayQrPanel = true;
   };
 
   var displayUrlAsBookmarkTitle = function (url) {
@@ -1088,7 +1091,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
   var init_settingsView = function () {
     vm.settings.displayCancelSyncConfirmation = false;
-    vm.settings.displayQRCode = false;
+    vm.settings.displayQrPanel = false;
     vm.settings.displayRestoreConfirmation = false;
     vm.settings.displayRestoreForm = false;
     vm.settings.displaySyncBookmarksToolbarConfirmation = false;
@@ -1304,6 +1307,29 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, false)
     ])
       .finally(vm.view.displayMainView);
+  };
+
+  var qrPanel_Close_Click = function () {
+    vm.settings.displayQrPanel = false;
+    $timeout(function () {
+      vm.settings.syncIdCopied = false;
+    }, 200);
+  };
+
+  var qrPanel_CopySyncId_Click = function () {
+    navigator.clipboard.writeText(vm.sync.id)
+      .then(function () {
+        $timeout(function () {
+          vm.settings.syncIdCopied = true;
+        });
+      })
+      .catch(function (err) {
+        utility.LogError(err, 'app.qrPanel_CopySyncId_Click');
+
+        // Display alert
+        var errMessage = utility.GetErrorMessageFromException(err);
+        vm.alert.display(errMessage.title, errMessage.message, 'danger');
+      });
   };
 
   var queueSync = function (syncData, command) {
@@ -1830,6 +1856,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
               // Add sync data to cache and return
               return $q.all([
+                platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, newSync.lastUpdated),
                 platform.LocalStorage.Set(globals.CacheKeys.SyncId, newSync.id),
                 platform.LocalStorage.Set(globals.CacheKeys.SyncVersion, newSync.version)
               ])
