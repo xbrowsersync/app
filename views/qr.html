@@ -1,0 +1,11 @@
+<div id="qr"></div>
+<p>{{ vm.platform.GetConstant(vm.globals.Constants.Qr_Message) }}</p>
+<div class="buttons">
+  <button type="button" class="btn btn-default" data-ng-click="vm.events.qrPanel_CopySyncId_Click()"
+    data-ng-disabled="vm.settings.syncIdCopied">
+    {{ vm.settings.syncIdCopied ? vm.platform.GetConstant(vm.globals.Constants.Qr_Copied_Label) : vm.platform.GetConstant(vm.globals.Constants.Qr_CopySyncId_Label) }}
+  </button>
+  <button type="button" class="btn btn-default" data-ng-click="vm.events.qrPanel_Close_Click()">
+    {{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}
+  </button>
+</div>

@@ -15,7 +15,7 @@
     "message": "syncing"
   },
   "button_Help_Label": {
-    "message": "Display help"
+    "message": "Help guide"
   },
   "button_Next_Label": {
     "message": "Next"
@@ -236,11 +236,11 @@
   "button_ReleaseNotes_Label": {
     "message": "View Release Notes"
   },
-  "settings_About_FAQs_Label": {
-    "message": "FAQs"
+  "settings_About_Help_Label": {
+    "message": "Help"
   },
-  "settings_About_FAQs_Description": {
-    "message": "Got a question or having an issue? The answer might be in the FAQs."
+  "settings_About_Help_Description": {
+    "message": "Got a question or having an issue? Make sure to read through the help guide, otherwise the answer may be in the FAQs."
   },
   "settings_About_ViewFAQs_Label": {
     "message": "View FAQs"

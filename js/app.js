@@ -1179,7 +1179,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
   var helpPanel_ShowHelp_Click = function () {
     vm.help.show = true;
-    vm.help.displayPanel(1);
+    $timeout(function () {
+      vm.help.displayPanel(1);
+    });
   };
 
   var helpPanel1_Next_Click = function () {

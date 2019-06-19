@@ -53,6 +53,7 @@ body {
       &.btn-default {
         font-size: 1.2em;
         font-weight: 800;
+        text-transform: capitalize;
         background-color: rgba($colour-text1, 0.3);
         color: $colour-text1;
         min-width: 5em;
@@ -772,55 +773,6 @@ body {
     z-index: 10;
   }
 
-  .help-panel {
-    @extend .overlay;
-    padding: 2em;
-
-    & > div {
-      font-size: 1.1em;
-      line-height: 1.3em;
-    }
-
-    h4 {
-      margin-bottom: 1.5em;
-      text-align: center;
-    }
-
-    .pagination {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 2em;
-
-      .next-link,
-      .prev-link {
-        &:hover {
-          &:before,
-          &:after {
-            color: $colour-link-highlight;
-          }
-        }
-      }
-
-      .next-link:after {
-        content: "\203A";
-        margin-left: 0.2em;
-        transition: all, ease-in-out, 0.2s;
-      }
-
-      .prev-link:before {
-        content: "\2039";
-        margin-right: 0.2em;
-        transition: all, ease-in-out, 0.2s;
-      }
-    }
-
-    #help-panel-1 {
-      .pagination {
-        flex-direction: row-reverse;
-      }
-    }
-  }
-
   .login-form-existing,
   .login-form-new {
     a {
@@ -1208,10 +1160,6 @@ body {
 
   .buttons {
     margin: 0;
-
-    button {
-      margin-bottom: 10px;
-    }
   }
 
   .form-group {
@@ -1423,7 +1371,56 @@ body {
   }
 }
 
+#help-panel {
+  padding: 2em;
+
+  & > div {
+    font-size: 1.1em;
+    line-height: 1.3em;
+  }
+
+  h4 {
+    margin-bottom: 1.5em;
+    text-align: center;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2em;
+
+    .next-link,
+    .prev-link {
+      &:hover {
+        &:before,
+        &:after {
+          color: $colour-link-highlight;
+        }
+      }
+    }
+
+    .next-link:after {
+      content: "\203A";
+      margin-left: 0.2em;
+      transition: all, ease-in-out, 0.2s;
+    }
+
+    .prev-link:before {
+      content: "\2039";
+      margin-right: 0.2em;
+      transition: all, ease-in-out, 0.2s;
+    }
+  }
+
+  #help-panel-1 {
+    .pagination {
+      flex-direction: row-reverse;
+    }
+  }
+}
+
 #qr-panel,
+#help-panel,
 #working-panel {
   @extend .overlay;
 

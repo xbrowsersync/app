@@ -16,26 +16,12 @@
     { true: 'search-results-view' }[ vm.view.current === vm.view.views.search && vm.search.results.length > 0 ]
     ]">
   <div class="container">
-    <div id="working-panel" class="animate" data-ng-show="vm.working" data-ng-cloak>
-      <div class="spinner-border" role="status">
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Working_Title) }}</span>
-      </div>
-      <h3>{{ vm.platform.GetConstant(vm.globals.Constants.Working_Title) }}</h3>
+    <div id="working-panel" class="animate" data-ng-include="'./views/working.html'" data-ng-show="vm.working"></div>
+
+    <div id="qr-panel" class="animate" data-ng-include="'./views/qr.html'" data-ng-show="vm.settings.displayQrPanel">
     </div>
 
-    <div id="qr-panel" class="animate" data-ng-show="vm.settings.displayQrPanel" data-ng-cloak>
-      <div id="qr"></div>
-      <p>{{ vm.platform.GetConstant(vm.globals.Constants.Qr_Message) }}</p>
-      <div class="buttons">
-        <button type="button" class="btn btn-default" data-ng-click="vm.events.qrPanel_CopySyncId_Click()"
-          data-ng-disabled="vm.settings.syncIdCopied">
-          {{ vm.settings.syncIdCopied ? vm.platform.GetConstant(vm.globals.Constants.Qr_Copied_Label) : vm.platform.GetConstant(vm.globals.Constants.Qr_CopySyncId_Label) }}
-        </button>
-        <button type="button" class="btn btn-default" data-ng-click="vm.events.qrPanel_Close_Click()">
-          {{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}
-        </button>
-      </div>
-    </div>
+    <div id="help-panel" class="animate" data-ng-include="'./views/help.html'" data-ng-show="vm.help.show"></div>
 
     <div class="alert animate-fade animate-fade-out" role="alert" data-ng-show="vm.alert.show" data-ng-cloak
       data-ng-class="{
