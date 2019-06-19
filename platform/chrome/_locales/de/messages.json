@@ -561,13 +561,13 @@
     "message": "Sync error"
   },
   "error_LocalSyncError_Message": {
-    "message": "An error occurred whilst syncing local changes. Your local bookmarks have been refreshed so you will need to redo the change."
+    "message": "An error occurred whilst syncing local changes. Your local bookmarks have now been refreshed so you may need to redo the previous change."
   },
   "error_OutOfSync_Title": {
     "message": "Daten nicht mehr synchron"
   },
   "error_OutOfSync_Message": {
-    "message": "Die lokalen Daten sind nicht mehr synchron. Ihre letzte Änderung wurde nicht synchronisiert, so dass Sie diese Änderung nochmal ausführen müssen."
+    "message": "Local data was out of sync but has now been refreshed. Your local bookmarks have now been refreshed so you may need to redo the previous change."
   },
   "error_ApiInvalid_Title": {
     "message": "Invalid xBrowserSync service"
@@ -585,7 +585,7 @@
     "message": "xBrowserSync Ordner geändert"
   },
   "error_ContainerChanged_Message": {
-    "message": "Das Ändern, Löschen oder Verschieben des xBrowserSync Ordners kann Probleme verursachen. Der Sync wurde deaktiviert. Aktivieren Sie ihn wieder, um Lesezeichen wiederherzustellen."
+    "message": "Modifying xBrowserSync ([xbs]) folders can cause sync issues. The previous change was not synced and your local bookmarks have been refreshed."
   },
   "error_LocalContainerNotFound_Title": {
     "message": "Unexpected bookmarks structure"

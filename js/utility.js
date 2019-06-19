@@ -498,22 +498,27 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   var logError = function (err, message) {
     var errMessage;
 
-    if (!err) {
+    // Return if no error supplied or has already been logged
+    if (!err || err.logged) {
       return;
     }
 
     if (err instanceof Error) {
-      errMessage = err.message || err.name;
+      errMessage = message ? message + ': ' : '';
     }
     else if (err.code) {
       var codeName = _.findKey(globals.ErrorCodes, function (key) { return key === err.code; });
-      errMessage = '[' + err.code + '] ' + codeName;
+      errMessage = message ? message + ': ' : '';
+      errMessage += '[' + err.code + '] ' + codeName;
     }
-    message = message ? message + ': ' + errMessage : errMessage;
 
-    // Add message to queue and process
-    messageQueue.push([globals.LogType.Error, message, err]);
+    // Output message to console, add to queue and process
+    logToConsole(globals.LogType.Error, errMessage, err);
+    messageQueue.push([globals.LogType.Error, errMessage, err]);
     processMessageQueue();
+
+    // Mark this error as logged to prevent duplication in logs
+    err.logged = true;
   };
 
   var logInfo = function (message) {
@@ -521,63 +526,33 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
       return;
     }
 
-    // Add message to queue and process
+    // Output message to console, add to queue and process
+    logToConsole(globals.LogType.Trace, message);
     messageQueue.push([globals.LogType.Trace, message]);
     processMessageQueue();
   };
 
-  var processMessageQueue = function () {
-    // Return if currently processing or no more messages to process
-    if (currentMessageQueueItem || messageQueue.length === 0) {
-      return;
+  var logToConsole = function (messageType, message, err) {
+    switch (messageType) {
+      case globals.LogType.Error:
+        if (err instanceof Error) {
+          console.error(message, err);
+        }
+        else if (err.stack) {
+          console.error(message, err.stack);
+        }
+        else {
+          console.error(message);
+        }
+        break;
+      case globals.LogType.Warn:
+        console.warn(message);
+        break;
+      case globals.LogType.Trace:
+      /* falls through */
+      default:
+        console.info(message);
     }
-
-    currentMessageQueueItem = messageQueue.shift();
-    var messageType = currentMessageQueueItem[0];
-    var message = currentMessageQueueItem[1];
-    var err = currentMessageQueueItem[2];
-
-    return platform.LocalStorage.Get(globals.CacheKeys.TraceLog)
-      .then(function (debugMessageLog) {
-        debugMessageLog = debugMessageLog || [];
-        var messageLogText = new Date().toISOString().replace(/[A-Z]/g, ' ').trim() + '\t';
-
-        switch (messageType) {
-          case globals.LogType.Error:
-            messageLogText += '[error]\t';
-            if (err instanceof Error) {
-              console.error(message, err);
-            }
-            else if (err.stack) {
-              console.error(message, err.stack);
-            }
-            else {
-              console.error(message);
-            }
-            break;
-          case globals.LogType.Warn:
-            messageLogText += '[warn]\t';
-            console.warn(message);
-            break;
-          case globals.LogType.Trace:
-          /* falls through */
-          default:
-            messageLogText += '[trace]\t';
-            console.info(message);
-        }
-
-        messageLogText += typeof (message) === 'object' ? JSON.stringify(message) : message;
-        if (err && err.stack) {
-          messageLogText += '\t' + err.stack.replace(/\s+/g, ' ');
-        }
-        debugMessageLog.push(messageLogText);
-        return platform.LocalStorage.Set(globals.CacheKeys.TraceLog, debugMessageLog);
-      })
-      .then(function () {
-        // Process remaining messages
-        currentMessageQueueItem = undefined;
-        processMessageQueue();
-      });
   };
 
   var logWarning = function (message) {
@@ -585,7 +560,8 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
       return;
     }
 
-    // Add message to queue and process
+    // Output message to console, add to queue and process
+    logToConsole(globals.LogType.Warn, message);
     messageQueue.push([globals.LogType.Warn, message]);
     processMessageQueue();
   };
@@ -612,6 +588,65 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
       searchObject: searchObject,
       hash: parser.hash
     };
+  };
+
+  var processMessageQueue = function () {
+    // Return if currently processing or no more messages to process
+    if (currentMessageQueueItem || messageQueue.length === 0) {
+      return;
+    }
+
+    currentMessageQueueItem = messageQueue.shift();
+    var messageType = currentMessageQueueItem[0];
+    var message = currentMessageQueueItem[1];
+    var err = currentMessageQueueItem[2];
+
+    //
+    var messageLogText = new Date().toISOString().replace(/[A-Z]/g, ' ').trim() + '\t';
+    switch (messageType) {
+      case globals.LogType.Error:
+        messageLogText += '[error]\t';
+        break;
+      case globals.LogType.Warn:
+        messageLogText += '[warn]\t';
+        break;
+      case globals.LogType.Trace:
+      /* falls through */
+      default:
+        messageLogText += '[trace]\t';
+    }
+
+    //
+    return platform.LocalStorage.Get(globals.CacheKeys.TraceLog)
+      .then(function (debugMessageLog) {
+        debugMessageLog = debugMessageLog || [];
+        messageLogText += typeof (message) === 'object' ? JSON.stringify(message) : message;
+        if (err && err.stack) {
+          messageLogText += '\t' + err.stack.replace(/\s+/g, ' ');
+        }
+        debugMessageLog.push(messageLogText);
+        return platform.LocalStorage.Set(globals.CacheKeys.TraceLog, debugMessageLog);
+      })
+      .then(function () {
+        // Process remaining messages
+        currentMessageQueueItem = undefined;
+        processMessageQueue();
+      });
+  };
+
+  var promiseWhile = function (data, condition, action) {
+    var whilst = function (data) {
+      return condition(data)
+        .then(function (conditionIsTrue) {
+          if (conditionIsTrue) {
+            return $q.resolve(data);
+          }
+
+          return action(data).then(whilst);
+        });
+    };
+
+    return whilst(data);
   };
 
   var stripTags = function (str) {
@@ -654,6 +689,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     LogInfo: logInfo,
     LogWarning: logWarning,
     ParseUrl: parseUrl,
+    PromiseWhile: promiseWhile,
     StripTags: stripTags,
     TrimToNearestWord: trimToNearestWord
   };

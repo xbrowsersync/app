@@ -1389,26 +1389,28 @@ body {
     justify-content: space-between;
     margin-top: 2em;
 
-    .next-link,
-    .prev-link {
-      &:hover {
-        &:before,
-        &:after {
-          color: $colour-link-highlight;
+    a {
+      position: relative;
+
+      &.next-link {
+        margin-right: 0.5em;
+  
+        span:after {
+          content: "\203A";
+          position: absolute;
+          right: -0.5em;
         }
       }
-    }
-
-    .next-link:after {
-      content: "\203A";
-      margin-left: 0.2em;
-      transition: all, ease-in-out, 0.2s;
-    }
-
-    .prev-link:before {
-      content: "\2039";
-      margin-right: 0.2em;
-      transition: all, ease-in-out, 0.2s;
+  
+      &.prev-link {
+        margin-left: 0.5em;
+        
+        span:before {
+          content: "\2039";
+          position: absolute;
+          left: -0.5em;
+        }
+      }
     }
   }
 
