@@ -114,7 +114,7 @@
     "message": "Créer une nouvelle synchro"
   },
   "Button_SyncUpdates_Label": {
-    "message": "Sync Updates"
+    "message": "Sync updates"
   },
   "login_ConfirmSync_Title": {
     "message": "Ecraser les données du navigateur?"
@@ -234,15 +234,15 @@
     "message": "Numéro de version de l'extension xBrowserSync."
   },
   "button_ReleaseNotes_Label": {
-    "message": "View Release Notes"
+    "message": "View release notes"
   },
-  "settings_About_Help_Label": {
+  "settings_Issues_Help_Label": {
     "message": "Help"
   },
-  "settings_About_Help_Description": {
+  "settings_Issues_Help_Description": {
     "message": "Got a question or having an issue? Make sure to read through the help guide, otherwise the answer may be in the FAQs."
   },
-  "settings_About_ViewFAQs_Label": {
+  "settings_Issues_ViewFAQs_Label": {
     "message": "View FAQs"
   },
   "settings_About_Contributions_Label": {
@@ -252,7 +252,7 @@
     "message": "If you enjoy using xBrowserSync consider supporting the project."
   },
   "settings_About_Cryptos_Label": {
-    "message": "Donate Crypto"
+    "message": "Donate crypto"
   },
   "settings_About_Liberapay_Label": {
     "message": "Via Liberapay"
@@ -264,10 +264,10 @@
     "message": "Issues tracker"
   },
   "settings_Issues_Tracker_Description": {
-    "message": "Raise an issue to report a bug or request a new feature."
+    "message": "Report an issue to report a bug or request a new feature."
   },
   "settings_Issues_RaiseIssue_Label": {
-    "message": "Raise Issue"
+    "message": "Report issue"
   },
   "settings_Issues_Log_Label": {
     "message": "Application log"
@@ -275,11 +275,17 @@
   "settings_Issues_Log_Description": {
     "message": "Download and include the application log when you log an issue."
   },
+  "settings_Issues_ClearLog_Label": {
+    "message": "Clear log"
+  },
   "settings_Issues_DownloadLog_Label": {
-    "message": "Download Log"
+    "message": "Download log"
   },
   "settings_Issues_LogDownloaded_Message": {
     "message": "If the log file does not download automatically, right click on the link below and 'Save link as...'."
+  },
+  "settings_Issues_LogSize_Label": {
+    "message": "Current log size"
   },
   "settings_Permissions_Title": {
     "message": "Optional permissions"

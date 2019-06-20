@@ -68,7 +68,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
       bookmarkPanel_Close_Click: bookmarkPanel_Close_Click,
       displayQrPanel: displayQrPanel,
-      debugPanel_DownloadLogFile_Click: debugPanel_DownloadLogFile_Click,
       helpPanel_ShowHelp_Click: helpPanel_ShowHelp_Click,
       helpPanel1_Next_Click: helpPanel1_Next_Click,
       helpPanel2_Next_Click: helpPanel2_Next_Click,
@@ -92,6 +91,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       helpPanel11_Next_Click: helpPanel11_Next_Click,
       helpPanel11_Prev_Click: helpPanel11_Prev_Click,
       helpPanel12_Prev_Click: helpPanel12_Prev_Click,
+      issuesPanel_ClearLog_Click: issuesPanel_ClearLog_Click,
+      issuesPanel_DownloadLogFile_Click: issuesPanel_DownloadLogFile_Click,
       openUrl: openUrl,
       permissions_Revoke_Click: permissions_Revoke_Click,
       permissions_Request_Click: permissions_Request_Click,
@@ -176,6 +177,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       fileRestoreEnabled: false,
       getSearchLookaheadDelay: 50,
       getSearchResultsDelay: 250,
+      logSize: undefined,
       readWebsiteDataPermissionsGranted: false,
       iCloudNotAvailable: false,
       restoreCompletedMessage: undefined,
@@ -684,23 +686,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     return validData;
   };
 
-  var debugPanel_DownloadLogFile_Click = function () {
-    vm.settings.savingLog = true;
-
-    downloadLogFile()
-      .catch(displayAlertErrorHandler)
-      .finally(function () {
-        $timeout(function () {
-          vm.settings.savingLog = false;
-
-          // Focus on done button
-          if (!utility.IsMobilePlatform(vm.platformName)) {
-            document.querySelector('.btn-done').focus();
-          }
-        });
-      });
-  };
-
   var disableSync = function () {
     // Disable sync and event listeners
     return $q.all([
@@ -1124,6 +1109,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     ])
       .then(function (data) {
         var syncBookmarksToolbar = data[0];
+        var traceLog = data[1][globals.CacheKeys.TraceLog];
         var syncEnabled = data[1][globals.CacheKeys.SyncEnabled];
         var syncId = data[1][globals.CacheKeys.SyncId];
         var serviceUrl = data[2];
@@ -1135,6 +1121,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         vm.sync.enabled = syncEnabled;
         vm.sync.id = syncId;
         vm.settings.readWebsiteDataPermissionsGranted = readWebsiteDataPermissionsGranted;
+        vm.settings.logSize = (new TextEncoder().encode(traceLog)).length;
 
         // Check for available sync updates on non-mobile platforms
         if (syncEnabled && !utility.IsMobilePlatform(vm.platformName)) {
@@ -1174,6 +1161,33 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
             document.querySelector('.buttons > button').focus();
           }
         }, 100);
+      });
+  };
+
+  var issuesPanel_ClearLog_Click = function () {
+    // Clear trace log
+    return platform.LocalStorage.Set(globals.CacheKeys.TraceLog)
+      .then(function () {
+        $timeout(function () {
+          vm.settings.logSize = 0;
+        });
+      });
+  };
+
+  var issuesPanel_DownloadLogFile_Click = function () {
+    vm.settings.savingLog = true;
+
+    downloadLogFile()
+      .catch(displayAlertErrorHandler)
+      .finally(function () {
+        $timeout(function () {
+          vm.settings.savingLog = false;
+
+          // Focus on done button
+          if (!utility.IsMobilePlatform(vm.platformName)) {
+            document.querySelector('.btn-done').focus();
+          }
+        });
       });
   };
 

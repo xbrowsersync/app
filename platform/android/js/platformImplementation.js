@@ -118,7 +118,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Scan your xBrowserSync ID"
     },
     "button_DisableSync_Label": {
-      "message": "Disable Sync"
+      "message": "Disable sync"
     },
     "button_EnableSync_Label": {
       "message": "Sync"
@@ -241,15 +241,15 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Source code release version number."
     },
     "button_ReleaseNotes_Label": {
-      "message": "View Release Notes"
+      "message": "View release notes"
     },
-    "settings_About_Help_Label": {
+    "settings_Issues_Help_Label": {
       "message": "Help"
     },
-    "settings_About_Help_Description": {
+    "settings_Issues_Help_Description": {
       "message": "Got a question or having an issue? Make sure to read through the help guide, otherwise the answer may be in the FAQs."
     },
-    "settings_About_ViewFAQs_Label": {
+    "settings_Issues_ViewFAQs_Label": {
       "message": "View FAQs"
     },
     "settings_About_Contributions_Label": {
@@ -259,7 +259,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "If you enjoy using xBrowserSync consider supporting the project."
     },
     "settings_About_Cryptos_Label": {
-      "message": "Donate Crypto"
+      "message": "Donate crypto"
     },
     "settings_About_Liberapay_Label": {
       "message": "Via Liberapay"
@@ -271,10 +271,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Issues tracker"
     },
     "settings_Issues_Tracker_Description": {
-      "message": "Raise an issue to report a bug or request a new feature."
+      "message": "Report an issue to report a bug or request a new feature."
     },
     "settings_Issues_RaiseIssue_Label": {
-      "message": "Raise Issue"
+      "message": "Report issue"
     },
     "settings_Issues_Log_Label": {
       "message": "Application log"
@@ -282,11 +282,17 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_Issues_Log_Description": {
       "message": "Download and include the application log when you log an issue."
     },
+    "settings_Issues_ClearLog_Label": {
+      "message": "Clear log"
+    },
     "settings_Issues_DownloadLog_Label": {
-      "message": "Download Log"
+      "message": "Download log"
     },
     "settings_Issues_LogDownloaded_Message": {
       "message": "If the log file does not download automatically, right click on the link below and 'Save link as...'."
+    },
+    "settings_Issues_LogSize_Label": {
+      "message": "Current log size"
     },
     "settings_Permissions_Title": {
       "message": "Optional permissions"
@@ -364,7 +370,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Back up and restore will be available here once you are synced."
     },
     "button_Backup_Label": {
-      "message": "Back Up"
+      "message": "Back up"
     },
     "button_Restore_Label": {
       "message": "Restore"
@@ -400,16 +406,16 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Paste backup data"
     },
     "button_SelectBackupFile_Label": {
-      "message": "Select File"
+      "message": "Select file"
     },
     "button_RestoreData_Label": {
-      "message": "Restore Data"
+      "message": "Restore data"
     },
     "button_RestoreData_Invalid_Label": {
-      "message": "Invalid Data"
+      "message": "Invalid data"
     },
     "button_RestoreData_Ready_Label": {
-      "message": "Ready to Restore"
+      "message": "Ready to restore"
     },
     "settings_Sync_Title": {
       "message": "Sync"

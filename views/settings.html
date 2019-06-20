@@ -371,6 +371,19 @@
     <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_Title) }}</h4>
     <div class="panel-content">
       <div class="form-group">
+        <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_Help_Label) }}</label>
+        <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_Help_Description) }}</p>
+        <div class="buttons">
+          <button type="button" class="btn btn-default" data-ng-click="vm.events.helpPanel_ShowHelp_Click()">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}
+          </button>
+          <button type="button" class="btn btn-default"
+            data-ng-click="vm.events.openUrl($event, 'https://www.xbrowsersync.org/#faqs')">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_ViewFAQs_Label) }}
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
         <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_Tracker_Label) }}</label>
         <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_Tracker_Description) }}
         </p>
@@ -384,18 +397,26 @@
       <div class="form-group">
         <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_Log_Label) }}</label>
         <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_Log_Description) }}</p>
-        <div class="animate-fade text-center" data-ng-hide="vm.settings.downloadLogCompletedMessage">
-          <button type="button" class="btn btn-default" data-ng-click="vm.events.debugPanel_DownloadLogFile_Click()"
-            data-ng-disabled="vm.settings.savingLog">
-            <span class="spinner-border spinner-border-sm" data-ng-show="vm.settings.savingLog" role="status"
-              aria-hidden="true"></span>
-            <span data-ng-show="vm.settings.savingLog">{{
-              vm.platform.GetConstant(vm.globals.Constants.Button_Saving_Label) }}
-            </span>
-            <span data-ng-hide="vm.settings.savingLog">{{
-              vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_DownloadLog_Label) }}
-            </span>
-          </button>
+        <div class="animate-fade" data-ng-hide="vm.settings.downloadLogCompletedMessage">
+          <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_LogSize_Label) }}:
+            {{ vm.settings.logSize | byteFmt : 2 }}</p>
+          <div class="buttons">
+            <button type="button" class="btn btn-default" data-ng-click="vm.events.issuesPanel_DownloadLogFile_Click()"
+              data-ng-disabled="vm.settings.savingLog || vm.settings.logSize === 0 || vm.settings.logSize == null">
+              <span class="spinner-border spinner-border-sm" data-ng-show="vm.settings.savingLog" role="status"
+                aria-hidden="true"></span>
+              <span
+                data-ng-show="vm.settings.savingLog">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Saving_Label) }}
+              </span>
+              <span
+                data-ng-hide="vm.settings.savingLog">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_DownloadLog_Label) }}
+              </span>
+            </button>
+            <button type="button" class="btn btn-default"
+              data-ng-disabled="vm.settings.logSize === 0 || vm.settings.logSize == null"
+              data-ng-click="vm.events.issuesPanel_ClearLog_Click()">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_ClearLog_Label) }}
+            </button>
+          </div>
         </div>
         <div class="animate-fade confirm" data-ng-show="vm.settings.downloadLogCompletedMessage">
           <p>{{ vm.settings.downloadLogCompletedMessage }}</p>
@@ -425,19 +446,6 @@
           <button type="button" class="btn btn-default"
             data-ng-click="vm.events.openUrl($event, vm.globals.ReleaseNotesUrlStem + vm.globals.AppVersion)">
             {{ vm.platform.GetConstant(vm.globals.Constants.Button_ReleaseNotes_Label) }}
-          </button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Help_Label) }}</label>
-        <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Help_Description) }}</p>
-        <div class="buttons">
-          <button type="button" class="btn btn-default" data-ng-click="vm.events.helpPanel_ShowHelp_Click()">
-            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}
-          </button>
-          <button type="button" class="btn btn-default"
-            data-ng-click="vm.events.openUrl($event, 'https://www.xbrowsersync.org/#faqs')">
-            {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_ViewFAQs_Label) }}
           </button>
         </div>
       </div>
