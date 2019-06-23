@@ -31,7 +31,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.AutomaticUpdates.Stop = stopAutoUpdates;
     platform.Bookmarks.AddIds = addIdsToBookmarks;
     platform.Bookmarks.Clear = clearBookmarks;
-    platform.Bookmarks.IsLocalBookmarkContainer = isLocalBookmarkContainer;
     platform.Bookmarks.Created = bookmarksCreated;
     platform.Bookmarks.CreateSingle = createSingle;
     platform.Bookmarks.Deleted = bookmarksDeleted;
@@ -662,33 +661,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     vm.platformName = globals.Platforms.Chrome;
   };
 
-  var isLocalBookmarkContainer = function (localBookmarkId) {
-    // Get local container node ids
-    return getLocalContainerIds()
-      .then(function (localContainerIds) {
-        var menuBookmarksId = localContainerIds[globals.Bookmarks.MenuContainerName];
-        var mobileBookmarksId = localContainerIds[globals.Bookmarks.MobileContainerName];
-        var otherBookmarksId = localContainerIds[globals.Bookmarks.OtherContainerName];
-        var toolbarBookmarksId = localContainerIds[globals.Bookmarks.ToolbarContainerName];
-        
-        var localContainers = [
-          { id: otherBookmarksId, xBookmarkTitle: globals.Bookmarks.OtherContainerName },
-          { id: toolbarBookmarksId, xBookmarkTitle: globals.Bookmarks.ToolbarContainerName }
-        ];
-
-        if (menuBookmarksId) {
-          localContainers.push({ id: menuBookmarksId, xBookmarkTitle: globals.Bookmarks.MenuContainerName });
-        }
-
-        if (mobileBookmarksId) {
-          localContainers.push({ id: mobileBookmarksId, xBookmarkTitle: globals.Bookmarks.MobileContainerName });
-        }
-
-        // Check if the bookmark id resolves to a local container
-        return _.findWhere(localContainers, { id: localBookmarkId });
-      });
-  };
-
   var localBookmarkInToolbar = function (localBookmark) {
     return getLocalContainerIds()
       .then(function (localContainerIds) {
@@ -1294,6 +1266,33 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         else {
           return 0;
         }
+      });
+  };
+
+  var isLocalBookmarkContainer = function (localBookmarkId) {
+    // Get local container node ids
+    return getLocalContainerIds()
+      .then(function (localContainerIds) {
+        var menuBookmarksId = localContainerIds[globals.Bookmarks.MenuContainerName];
+        var mobileBookmarksId = localContainerIds[globals.Bookmarks.MobileContainerName];
+        var otherBookmarksId = localContainerIds[globals.Bookmarks.OtherContainerName];
+        var toolbarBookmarksId = localContainerIds[globals.Bookmarks.ToolbarContainerName];
+        
+        var localContainers = [
+          { id: otherBookmarksId, xBookmarkTitle: globals.Bookmarks.OtherContainerName },
+          { id: toolbarBookmarksId, xBookmarkTitle: globals.Bookmarks.ToolbarContainerName }
+        ];
+
+        if (menuBookmarksId) {
+          localContainers.push({ id: menuBookmarksId, xBookmarkTitle: globals.Bookmarks.MenuContainerName });
+        }
+
+        if (mobileBookmarksId) {
+          localContainers.push({ id: mobileBookmarksId, xBookmarkTitle: globals.Bookmarks.MobileContainerName });
+        }
+
+        // Check if the bookmark id resolves to a local container
+        return _.findWhere(localContainers, { id: localBookmarkId });
       });
   };
 

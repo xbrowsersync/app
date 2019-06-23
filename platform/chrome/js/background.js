@@ -54,7 +54,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         
         changedBookmark = results[0];
         
-        // Get removed bookmark location info 
+        // Get changed bookmark location info 
         return platform.Bookmarks.GetLocalBookmarkLocationInfo(id);
       })
       .then(function (results) {
@@ -82,6 +82,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
           });
       });
     
+    // Queue sync
     return $q(function (resolve, reject) {
       syncBookmarks({
         type: globals.SyncType.Push,
@@ -306,7 +307,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
               return;
             }
 
-            // Get bookmark updates
+            // Queue sync
             return $q(function (resolve, reject) {
               syncBookmarks({
                 type: globals.SyncType.Pull
@@ -405,8 +406,8 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
           });
       });
     
+    // Queue sync
     return $q(function (resolve, reject) {
-      // Queue sync
       syncBookmarks({
         type: globals.SyncType.Push,
         changeInfo: prepareToSyncChanges
@@ -584,7 +585,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
               return;
             }
 
-            // Get bookmark updates
+            // Queue sync
             return $q(function (resolve, reject) {
               syncBookmarks({
                 type: globals.SyncType.Pull
@@ -628,8 +629,8 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var removeBookmark = function (id, removeInfo) {
-    var changeInfo;
     utility.LogInfo('onRemoved event detected');
+    var changeInfo;
     
     // Get removed bookmark location info 
     var prepareToSyncChanges = platform.Bookmarks.GetLocalBookmarkLocationInfo(removeInfo.parentId, [removeInfo.index])
@@ -700,6 +701,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         }
       })
       .then(function (bookmarksToRestore) {
+        // Queue sync
         restoreData.bookmarks = bookmarksToRestore;
         return syncBookmarks(restoreData, sendResponse);
       });
