@@ -154,9 +154,9 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     // Create a copy of original
     var copy = utility.DeepCopy(originalBookmark);
 
-    // Remove empty properties
-    var cleanedBookmark = _.pick(copy, function (x) {
-      return _.isArray(x) || _.isString(x) ? x.length > 0 : x != null;
+    // Remove empty properties, except for children array
+    var cleanedBookmark = _.pick(copy, function (value, key) {
+      return _.isArray(value) && key !== 'children' || _.isString(value) ? value.length > 0 : value != null;
     });
 
     return cleanedBookmark;
