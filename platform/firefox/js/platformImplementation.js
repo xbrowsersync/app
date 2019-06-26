@@ -165,10 +165,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var bookmarksMoved = function (xBookmarks, changeInfo) {
     // Remove synced bookmark if info supplied
-    return (changeInfo.indexPath ? bookmarks.RemoveExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks) : $q.resolve({ bookmarks: xBookmarks }))
+    return (changeInfo.syncChange ?
+      bookmarks.RemoveExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks) : 
+      bookmarks.GetExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks))
       .then(function (results) {
         // Create synced bookmark if target info supplied
-        return (changeInfo.targetInfo ? bookmarks.AddNewInXBookmarks(changeInfo.bookmark, changeInfo.targetInfo.container, changeInfo.targetInfo.indexPath, results.bookmarks) : $q.resolve(results));
+        return (changeInfo.targetInfo.syncChange ? bookmarks.AddNewInXBookmarks(results.bookmark, changeInfo.targetInfo.container, changeInfo.targetInfo.indexPath, results.bookmarks) : $q.resolve(results));
       });
   };
 

@@ -331,17 +331,8 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
           platform.Bookmarks.ShouldSyncLocalChanges(changeInfo.targetInfo)
         ])
           .then(function (results) {
-            if (!results[0] && !results[1]) {
-              return;
-            }
-            else if (!results[0]) {
-              delete changeInfo.container;
-              delete changeInfo.indexPath;
-            }
-            else if (!results[1]) {
-              delete changeInfo.targetInfo;
-            }
-
+            changeInfo.syncChange = results[0];
+            changeInfo.targetInfo.syncChange = results[1];
             return changeInfo;
           });
       });

@@ -41,7 +41,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
           createdBookmarkInfo.children);
         
       // Use id if supplied or create new id
-      newXBookmark.id = createdBookmarkInfo.newId || getNewBookmarkId(xBookmarks);
+      newXBookmark.id = createdBookmarkInfo.id || getNewBookmarkId(xBookmarks);
 
       // Clean bookmark and add at last index in path
       var cleanedBookmark = cleanBookmark(newXBookmark);
@@ -294,6 +294,41 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     return container;
   };
 
+  var getExistingInXBookmarks = function (containerName, indexPath, xBookmarks) {
+    var bookmark;
+    
+    try {
+      var container = getContainer(containerName, xBookmarks);
+      if (!container) {
+        throw new Error();
+      }
+
+      var parent = indexPath.slice(0, -1).reduce(function (previous, indexPathPosition) {
+        return previous.children[indexPathPosition];
+      }, container);
+      if (!parent) {
+        throw new Error();
+      }
+
+      // Return a copy of the specified bookmark
+      bookmark = utility.DeepCopy(parent.children[indexPath.slice().pop()]);
+      if (!bookmark) {
+        throw new Error();
+      }
+    }
+    catch (err) {
+      return $q.reject({
+        code: globals.ErrorCodes.XBookmarkNotFound,
+        stack: err.stack
+      });
+    }
+
+    return $q.resolve({
+      bookmark: bookmark,
+      bookmarks: xBookmarks
+    });
+  };
+
   var getLookahead = function (word, bookmarksToSearch, canceller, tagsOnly, exclusions) {
     var getBookmarks;
     var deferred = $q.defer();
@@ -451,8 +486,8 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   };
 
   var removeExistingInXBookmarks = function (containerName, indexPath, xBookmarks) {
-    var removedBookmark;
-    var updatedBookmarks = utility.DeepCopy(xBookmarks);        
+    var bookmark;
+    var updatedBookmarks = utility.DeepCopy(xBookmarks);
     
     try {
       var container = getContainer(containerName, updatedBookmarks);
@@ -467,8 +502,8 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         throw new Error();
       }
 
-      removedBookmark = parent.children.splice(indexPath.slice().pop(), 1)[0];
-      if (!removedBookmark) {
+      bookmark = parent.children.splice(indexPath.slice().pop(), 1)[0];
+      if (!bookmark) {
         throw new Error();
       }
     }
@@ -480,8 +515,8 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     }
 
     return $q.resolve({
-      bookmarks: updatedBookmarks,
-      removedBookmark: removedBookmark
+      bookmark: bookmark,
+      bookmarks: updatedBookmarks
     });
   };
 
@@ -1337,7 +1372,8 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                 case globals.UpdateType.Move:
                   return platform.Bookmarks.Moved(bookmarks, changeInfo)
                     .then(function (results) {
-                      return results.bookmarks;
+                      // Add bookmark ids if necessary, ids will be missing if move deletion was not synced
+                      return checkBookmarksHaveUniqueIds(results.bookmarks) ? $q.resolve(results.bookmarks) : platform.Bookmarks.AddIds(results.bookmarks);
                     });
                 // Ambiguous sync
                 default:
@@ -1443,22 +1479,31 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   };
 
   var updateLocalBookmarks = function (changeInfo) {
-    switch (changeInfo.type) {
-      // Create new local bookmark
-      case globals.UpdateType.Create:
-        return platform.Bookmarks.CreateSingle(changeInfo.pathInfo.result, changeInfo.pathInfo.path);
-      // Update existing local bookmark
-      case globals.UpdateType.Update:
-        return platform.Bookmarks.UpdateSingle(changeInfo.pathInfo.result, changeInfo.pathInfo.path);
-      // Delete existing local bookmark
-      case globals.UpdateType.Delete:
-        return platform.Bookmarks.DeleteSingle(changeInfo.pathInfo.path);
-      // Ambiguous sync
-      case !changeInfo:
-      /* falls through */
-      default:
-        return $q.reject({ code: globals.ErrorCodes.AmbiguousSyncRequest });
-    }
+    // Check if change is in toolbar and is syncing toolbar
+    return (changeInfo.pathInfo.path[1].bookmark.title === globals.Bookmarks.ToolbarContainerName ? 
+      getSyncBookmarksToolbar() : $q.resolve(true))
+      .then(function (doLocalUpdate) {
+        if (!doLocalUpdate) {
+          return;
+        }
+
+        switch (changeInfo.type) {
+          // Create new local bookmark
+          case globals.UpdateType.Create:
+            return platform.Bookmarks.CreateSingle(changeInfo.pathInfo.result, changeInfo.pathInfo.path);
+          // Update existing local bookmark
+          case globals.UpdateType.Update:
+            return platform.Bookmarks.UpdateSingle(changeInfo.pathInfo.result, changeInfo.pathInfo.path);
+          // Delete existing local bookmark
+          case globals.UpdateType.Delete:
+            return platform.Bookmarks.DeleteSingle(changeInfo.pathInfo.path);
+          // Ambiguous sync
+          case !changeInfo:
+          /* falls through */
+          default:
+            return $q.reject({ code: globals.ErrorCodes.AmbiguousSyncRequest });
+        }
+      });
   };
 
   var upgradeContainers = function (bookmarks) {
@@ -1503,6 +1548,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     GetBookmarks: getCachedBookmarks,
     GetContainer: getContainer,
     GetCurrentSync: getCurrentSync,
+    GetExistingInXBookmarks: getExistingInXBookmarks,
     GetLookahead: getLookahead,
     GetNewBookmarkId: getNewBookmarkId,
     GetSyncBookmarksToolbar: getSyncBookmarksToolbar,
