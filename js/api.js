@@ -41,7 +41,7 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
         }
 
         // Check service version is supported by this client
-        if (compareVersions(data.version, globals.ApiVersion) < 0) {
+        if (compareVersions(data.version, globals.MinApiVersion) < 0) {
           return $q.reject({ code: globals.ErrorCodes.ApiVersionNotSupported });
         }
 

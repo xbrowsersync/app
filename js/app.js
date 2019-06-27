@@ -405,8 +405,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     var bookmarkToCreate = bookmarks.CleanBookmark(vm.bookmark.current);
 
     // Check for protocol
-    var protocolRegex = new RegExp(globals.URL.ProtocolRegex);
-    if (!protocolRegex.test(bookmarkToCreate.url)) {
+    if (!(new RegExp(globals.URL.ProtocolRegex)).test(bookmarkToCreate.url)) {
       bookmarkToCreate.url = 'http://' + bookmarkToCreate.url;
     }
 
@@ -539,8 +538,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     var bookmarkToUpdate = bookmarks.CleanBookmark(vm.bookmark.current);
 
     // Check for protocol
-    var protocolRegex = new RegExp(globals.URL.ProtocolRegex);
-    if (!protocolRegex.test(bookmarkToUpdate.url)) {
+    if (!(new RegExp(globals.URL.ProtocolRegex)).test(bookmarkToUpdate.url)) {
       bookmarkToUpdate.url = 'http://' + bookmarkToUpdate.url;
     }
 
@@ -1826,12 +1824,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     // Linkify service message
     var message = serviceInfo.message;
     if (message) {
-      var protocolRegex = new RegExp(globals.URL.ProtocolRegex);
-      var linkRegex = new RegExp(globals.URL.Regex, 'g');
-      _.each(message.match(linkRegex), function (match) {
+      _.each(message.match(new RegExp(globals.URL.Regex, 'g')), function (match) {
         var link = document.createElement('a');
         link.innerText = match;
-        link.href = protocolRegex.test(match) ? match : 'http://' + match;
+        link.href = (new RegExp(globals.URL.ProtocolRegex)).test(match) ? match : 'http://' + match;
         link.className = 'new-tab';
         message = message.replace(match, link.outerHTML);
       });
@@ -2273,8 +2269,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
   var updateServiceUrlForm_Update_Click = function () {
     // Check for protocol
-    var protocolRegex = new RegExp(globals.URL.ProtocolRegex);
-    if (vm.settings.service.newServiceUrl && vm.settings.service.newServiceUrl.trim() && !protocolRegex.test(vm.settings.service.newServiceUrl)) {
+    if (vm.settings.service.newServiceUrl && vm.settings.service.newServiceUrl.trim() &&
+      !(new RegExp(globals.URL.ProtocolRegex)).test(vm.settings.service.newServiceUrl)) {
       vm.settings.service.newServiceUrl = 'https://' + vm.settings.service.newServiceUrl;
     }
 

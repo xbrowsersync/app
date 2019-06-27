@@ -14,7 +14,6 @@ xBrowserSync.App.Global = function (platform) {
       Name: 'xBrowserSync-alarm',
       Period: 15
     },
-    ApiVersion: '1.1.3',
     AppVersion: '1.5.0',
     Bookmarks: {
       ContainerPrefix: '[xbs]',
@@ -313,6 +312,7 @@ xBrowserSync.App.Global = function (platform) {
       Error: 2
     },
     LookaheadMinChars: 1,
+    MinApiVersion: '1.1.3',
     Platforms: {
       Android: 'android',
       Chrome: 'chrome'
@@ -349,7 +349,7 @@ xBrowserSync.App.Global = function (platform) {
       Version: '/version',
       ServiceInformation: '/info',
       Regex: '(\\w+://.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]+\\.[a-z]+\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)',
-      ProtocolRegex: '^\\w+:.*$'
+      ProtocolRegex: '^[\\w\-]+:'
     }
   };
 
