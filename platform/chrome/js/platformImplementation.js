@@ -304,6 +304,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       return;
     }
 
+    // Hide any alert messages
+    vm.alert.show = false;
+
     switch (id) {
       // Checking updated service url, wait a moment before displaying loading overlay
       case 'checkingNewServiceUrl':
@@ -649,6 +652,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     if (timeout) {
       $timeout.cancel(timeout);
     }
+
+    // Hide any alert messages
+    vm.alert.show = false;
 
     // Hide loading overlay if supplied if matches current
     if (!loadingId || id === loadingId) {

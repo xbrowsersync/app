@@ -601,7 +601,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "xBrowserSync folder changed"
     },
     "error_ContainerChanged_Message": {
-      "message": "Modifying xBrowserSync ([xbs]) folders can cause sync issues. The previous change was not synced and your local bookmarks have been refreshed."
+      "message": "Modifying xBrowserSync [xbs] folders can cause sync issues. The previous change was not synced and your local bookmarks have been refreshed."
     },
     "error_LocalContainerNotFound_Title": {
       "message": "Unexpected bookmarks structure"

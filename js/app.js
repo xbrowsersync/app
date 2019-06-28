@@ -308,7 +308,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var bookmarkForm_BookmarkTags_Change = function () {
-    vm.alert.show = false;
     vm.bookmark.tagLookahead = null;
 
     if (!vm.bookmark.tagText || !vm.bookmark.tagText.trim()) {
@@ -623,9 +622,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     // Hide loading panel
     platform.Interface.Loading.Hide();
-
-    // Hide any alert messages
-    vm.alert.show = false;
 
     // Disable animations
     vm.animations.enabled = false;

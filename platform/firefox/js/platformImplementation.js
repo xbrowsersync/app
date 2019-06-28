@@ -166,7 +166,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var bookmarksMoved = function (xBookmarks, changeInfo) {
     // Remove synced bookmark if info supplied
     return (changeInfo.syncChange ?
-      bookmarks.RemoveExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks) : 
+      bookmarks.RemoveExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks) :
       bookmarks.GetExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks))
       .then(function (results) {
         // Create synced bookmark if target info supplied
@@ -301,6 +301,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     if (loadingId) {
       return;
     }
+
+    // Hide any alert messages
+    vm.alert.show = false;
 
     switch (id) {
       // Checking updated service url, wait a moment before displaying loading overlay
@@ -549,7 +552,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         resolve(localBookmark.parentId);
       });
     };
-    
+
     return getLocalBookmarkTree()
       .then(function (tree) {
         // Return if local bookmark is not found in tree
@@ -557,7 +560,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         if (!localBookmark) {
           return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
         }
-        
+
         // Create the index path to the bookmark
         localBookmarkTree = tree;
         return utility.PromiseWhile(localBookmarkId, condition, action)
@@ -641,6 +644,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     if (timeout) {
       $timeout.cancel(timeout);
     }
+
+    // Hide any alert messages
+    vm.alert.show = false;
 
     // Hide loading overlay if supplied if matches current
     if (!loadingId || id === loadingId) {
@@ -1173,7 +1179,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         var mobileBookmarksId = localContainerIds[globals.Bookmarks.MobileContainerName];
         var otherBookmarksId = localContainerIds[globals.Bookmarks.OtherContainerName];
         var toolbarBookmarksId = localContainerIds[globals.Bookmarks.ToolbarContainerName];
-        
+
         var localContainers = [
           { id: menuBookmarksId, xBookmarkTitle: globals.Bookmarks.MenuContainerName },
           { id: mobileBookmarksId, xBookmarkTitle: globals.Bookmarks.MobileContainerName },
@@ -1191,7 +1197,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       return true;
     }
 
-    var supportedRegex = /^(?!chrome|data)\w+:/i;
+    var supportedRegex = /^(?!chrome|data)[\w\-]+:/i;
     return supportedRegex.test(url);
   };
 
