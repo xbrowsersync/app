@@ -372,6 +372,11 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
           return;
         }
 
+        // If negative target index, bookmark was moved above containers
+        if (locationInfo[1].indexPath[0] < 0) {
+          return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
+        }
+
         // Create change info
         changeInfo = {
           type: globals.UpdateType.Move,
