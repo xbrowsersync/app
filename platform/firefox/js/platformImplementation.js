@@ -1160,17 +1160,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var getNumContainersBeforeBookmarkIndex = function (parentId, bookmarkIndex) {
     return getLocalBookmarkTree(parentId)
       .then(function (localBookmark) {
-        var preceedingBookmarks = _.filter(localBookmark.children, function (bookmark) {
-          return bookmark.index <= bookmarkIndex;
-        });
-        var containers = _.filter(preceedingBookmarks, bookmarks.XBookmarkIsContainer);
-
-        if (containers) {
-          return containers.length;
-        }
-        else {
-          return 0;
-        }
+        // TODO: Refactor to account for given index
+        var numContainers = _.filter(localBookmark.children, bookmarks.XBookmarkIsContainer).length;
+        return numContainers;
       });
   };
 
