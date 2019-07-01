@@ -706,7 +706,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         // Populate menu bookmarks
         var populateMenu = $q.resolve();
         if (menuContainer && menuContainer.children.length > 0) {
-          populateMenu = browser.bookmarks.get(menuBookmarksId)
+          populateMenu = browser.bookmarks.getSubTree(menuBookmarksId)
             .then(function (results) {
               return createLocalBookmarksFromXBookmarks(menuBookmarksId, menuContainer.children);
             })
@@ -719,7 +719,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         // Populate mobile bookmarks
         var populateMobile = $q.resolve();
         if (mobileContainer && mobileContainer.children.length > 0) {
-          populateMobile = browser.bookmarks.get(mobileBookmarksId)
+          populateMobile = browser.bookmarks.getSubTree(mobileBookmarksId)
             .then(function (results) {
               return createLocalBookmarksFromXBookmarks(mobileBookmarksId, mobileContainer.children);
             })
@@ -732,7 +732,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         // Populate other bookmarks
         var populateOther = $q.resolve();
         if (otherContainer && otherContainer.children.length > 0) {
-          populateOther = browser.bookmarks.get(otherBookmarksId)
+          populateOther = browser.bookmarks.getSubTree(otherBookmarksId)
             .then(function (results) {
               return createLocalBookmarksFromXBookmarks(otherBookmarksId, otherContainer.children);
             })
@@ -751,7 +751,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             }
 
             if (toolbarContainer && toolbarContainer.children.length > 0) {
-              return browser.bookmarks.get(toolbarBookmarksId)
+              return browser.bookmarks.getSubTree(toolbarBookmarksId)
                 .then(function (results) {
                   return createLocalBookmarksFromXBookmarks(toolbarBookmarksId, toolbarContainer.children);
                 })

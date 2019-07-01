@@ -39,7 +39,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
     var changedBookmark, changeInfo, locationInfo;
 
     // Retrieve changed bookmark full info
-    var prepareToSyncChanges = browser.bookmarks.get(id)
+    var prepareToSyncChanges = browser.bookmarks.getSubTree(id)
       .then(function (results) {
         if (!results || results.length === 0) {
           return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
@@ -293,7 +293,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
     var changeInfo, movedBookmark;
 
     // Retrieve moved bookmark full info
-    var prepareToSyncChanges = browser.bookmarks.get(id)
+    var prepareToSyncChanges = browser.bookmarks.getSubTree(id)
       .then(function (results) {
         if (!results || results.length === 0) {
           return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });

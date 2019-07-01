@@ -41,7 +41,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
     // Retrieve changed bookmark full info
     var prepareToSyncChanges = $q(function (resolve, reject) {
       try {
-        chrome.bookmarks.get(id, resolve);
+        chrome.bookmarks.getSubTree(id, resolve);
       }
       catch (err) {
         reject(err);
@@ -51,9 +51,9 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         if (!results || results.length === 0) {
           return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
         }
-        
+
         changedBookmark = results[0];
-        
+
         // Get changed bookmark location info 
         return platform.Bookmarks.GetLocalBookmarkLocationInfo(id);
       })
@@ -62,7 +62,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
           return;
         }
         locationInfo = results;
-      
+
         // If updated bookmark is separator update local bookmark properties
         return (bookmarks.IsSeparator(changedBookmark) ? convertLocalBookmarkToSeparator(changedBookmark) : $q.resolve(changedBookmark))
           .then(function (bookmark) {
@@ -81,7 +81,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
             return doSync ? changeInfo : null;
           });
       });
-    
+
     // Queue sync
     return $q(function (resolve, reject) {
       syncBookmarks({
@@ -141,7 +141,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
           return;
         }
         locationInfo = results;
-    
+
         if (bookmarks.IsSeparator(createdBookmark)) {
           // If bookmark is separator update local bookmark properties
           return convertLocalBookmarkToSeparator(createdBookmark);
@@ -178,7 +178,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
             return doSync ? changeInfo : null;
           });
       });
-    
+
     // Queue sync
     return $q(function (resolve, reject) {
       syncBookmarks({
@@ -348,7 +348,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
     // Retrieve moved bookmark full info
     var prepareToSyncChanges = $q(function (resolve, reject) {
       try {
-        chrome.bookmarks.get(id, resolve);
+        chrome.bookmarks.getSubTree(id, resolve);
       }
       catch (err) {
         reject(err);
@@ -358,7 +358,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         if (!results || results.length === 0) {
           return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
         }
-        
+
         movedBookmark = results[0];
 
         // Get moved bookmark old and new location info 
@@ -401,7 +401,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
             return changeInfo;
           });
       });
-    
+
     // Queue sync
     return $q(function (resolve, reject) {
       syncBookmarks({
@@ -627,7 +627,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   var removeBookmark = function (id, removeInfo) {
     utility.LogInfo('onRemoved event detected');
     var changeInfo;
-    
+
     // Get removed bookmark location info 
     var prepareToSyncChanges = platform.Bookmarks.GetLocalBookmarkLocationInfo(removeInfo.parentId, [removeInfo.index])
       .then(function (locationInfo) {
@@ -651,7 +651,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
             return doSync ? changeInfo : null;
           });
       });
-    
+
     // Queue sync
     return $q(function (resolve, reject) {
       syncBookmarks({

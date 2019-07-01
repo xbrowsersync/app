@@ -159,7 +159,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var bookmarksCreated = function (xBookmarks, changeInfo) {
     // Create new bookmark id
     changeInfo.bookmark.id = bookmarks.GetNewBookmarkId(xBookmarks);
-    
+
     // Create synced bookmark
     return bookmarks.AddNewInXBookmarks(changeInfo.bookmark, changeInfo.container, changeInfo.indexPath, xBookmarks);
   };
@@ -727,7 +727,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         var populateMenu = $q(function (resolve, reject) {
           if (menuContainer && menuContainer.children.length > 0) {
             try {
-              chrome.bookmarks.get(otherBookmarksId, function (results) {
+              chrome.bookmarks.getSubTree(otherBookmarksId, function (results) {
                 createLocalBookmarksFromXBookmarks(otherBookmarksId, [menuContainer], toolbarBookmarksId)
                   .then(resolve)
                   .catch(reject);
@@ -747,7 +747,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         var populateMobile = $q(function (resolve, reject) {
           if (mobileContainer && mobileContainer.children.length > 0) {
             try {
-              chrome.bookmarks.get(otherBookmarksId, function (results) {
+              chrome.bookmarks.getSubTree(otherBookmarksId, function (results) {
                 createLocalBookmarksFromXBookmarks(otherBookmarksId, [mobileContainer], toolbarBookmarksId)
                   .then(resolve)
                   .catch(reject);
@@ -767,7 +767,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         var populateOther = $q(function (resolve, reject) {
           if (otherContainer && otherContainer.children.length > 0) {
             try {
-              chrome.bookmarks.get(otherBookmarksId, function (results) {
+              chrome.bookmarks.getSubTree(otherBookmarksId, function (results) {
                 createLocalBookmarksFromXBookmarks(otherBookmarksId, otherContainer.children, toolbarBookmarksId)
                   .then(resolve)
                   .catch(reject);
@@ -794,7 +794,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             if (toolbarContainer && toolbarContainer.children.length > 0) {
               return $q(function (resolve, reject) {
                 try {
-                  chrome.bookmarks.get(toolbarBookmarksId, function (results) {
+                  chrome.bookmarks.getSubTree(toolbarBookmarksId, function (results) {
                     createLocalBookmarksFromXBookmarks(toolbarBookmarksId, toolbarContainer.children, toolbarBookmarksId)
                       .then(resolve)
                       .catch(reject);
