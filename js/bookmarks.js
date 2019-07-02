@@ -1240,39 +1240,22 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         return utility.DecryptData(data.bookmarks);
       })
       .then(function (decryptedData) {
+        // Update cached bookmarks
         bookmarks = JSON.parse(decryptedData);
 
-        // If bookmarks don't have unique ids, add new ids and queue sync
-        var hasUniqueIds = checkBookmarksHaveUniqueIds(bookmarks);
-        var addUniqueIds = $q.resolve();
-        if (!hasUniqueIds) {
-          utility.LogInfo('Unique ids check failed, re-adding ids');
-          addUniqueIds = platform.Bookmarks.AddIds(bookmarks)
-            .then(function (bookmarksWithNewIds) {
-              bookmarks = bookmarksWithNewIds;
-
-              // Decrypt bookmarks
-              return utility.EncryptData(JSON.stringify(bookmarks));
-            })
-            .then(function (encryptedBookmarksWithNewIds) {
-              encryptedBookmarks = encryptedBookmarksWithNewIds;
-
-              // Queue sync for bookmarks with ids
-              queueSync({
-                bookmarks: bookmarks,
-                type: globals.SyncType.Push
-              })
-                .catch(function (err) {
-                  utility.LogError(err, 'bookmarks.sync_handlePull');
-                });
-            });
-        }
-
-        return addUniqueIds
-          .then(function () {
-            // Update cached bookmarks and return
-            return updateCache(bookmarks, encryptedBookmarks);
+        // Add new ids if bookmarks don't have unique ids
+        return !checkBookmarksHaveUniqueIds(bookmarks) && platform.Bookmarks.AddIds(bookmarks)
+          .then(function (bookmarksWithNewIds) {
+            // Encrypt bookmarks with new ids
+            bookmarks = bookmarksWithNewIds;
+            return utility.EncryptData(JSON.stringify(bookmarks));
+          })
+          .then(function (encryptedBookmarksWithNewIds) {
+            encryptedBookmarks = encryptedBookmarksWithNewIds;
           });
+      })
+      .then(function () {
+        return updateCache(bookmarks, encryptedBookmarks);
       })
       .then(function (bookmarksToSet) {
         // Update browser bookmarks
@@ -1344,7 +1327,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
             })
             .then(function (changeInfo) {
               if (!changeInfo) {
-                // If no change info then do not update bookmarks
+                // If no change info then do not update bookmarks (i.e. if not syncing bookmarks bar)
                 return;
               }
               
@@ -1387,7 +1370,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       })
       .then(function (result) {
         if (!result) {
-          // Return unchanged bookmarks
+          // No change info supplied so return unchanged bookmarks
           return bookmarks;
         }
         

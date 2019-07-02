@@ -390,6 +390,12 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
           }
         };
 
+        // If bookmark is separator update local bookmark properties
+        if (bookmarks.IsSeparator(movedBookmark)) {
+          return convertLocalBookmarkToSeparator(movedBookmark);
+        }
+      })
+      .then(function () {
         // Check if move changes (remove and add) should be synced
         return $q.all([
           platform.Bookmarks.ShouldSyncLocalChanges(changeInfo),

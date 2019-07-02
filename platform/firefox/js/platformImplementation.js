@@ -414,6 +414,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             if (otherBookmarks.children && otherBookmarks.children.length > 0) {
               return getLocalBookmarksAsXBookmarks(otherBookmarks.children);
             }
+          })
+          .then(function (xBookmarks) {
+            // Remove any unsupported container folders present
+            return xBookmarks.filter(function (x) {
+              return !unsupportedContainers.find(function (y) {
+                return y === x.title;
+              });
+            });
           });
 
         // Get toolbar bookmarks if enabled

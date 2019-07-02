@@ -412,6 +412,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     // Get local container node ids
     return getLocalContainerIds()
       .then(function (localContainerIds) {
+        var menuBookmarksId = localContainerIds[globals.Bookmarks.MenuContainerName];
+        var mobileBookmarksId = localContainerIds[globals.Bookmarks.MobileContainerName];
         var otherBookmarksId = localContainerIds[globals.Bookmarks.OtherContainerName];
         var toolbarBookmarksId = localContainerIds[globals.Bookmarks.ToolbarContainerName];
 
@@ -421,6 +423,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             if (otherBookmarks.children && otherBookmarks.children.length > 0) {
               return getLocalBookmarksAsXBookmarks(otherBookmarks.children);
             }
+          })
+          .then(function (xBookmarks) {
+            // Remove any unsupported container folders present
+            return xBookmarks.filter(function (x) {
+              return !unsupportedContainers.find(function (y) {
+                return y === x.title;
+              });
+            });
           });
 
         // Get toolbar bookmarks if enabled
@@ -441,11 +451,29 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             }
           });
 
-        return $q.all([getOtherBookmarks, getToolbarBookmarks]);
+        // Get menu bookmarks
+        var getMenuBookmarks = getLocalBookmarkTree(menuBookmarksId)
+          .then(function (menuBookmarks) {
+            if (menuBookmarks.children && menuBookmarks.children.length > 0) {
+              return getLocalBookmarksAsXBookmarks(menuBookmarks.children);
+            }
+          });
+
+        // Get mobile bookmarks
+        var getMobileBookmarks = getLocalBookmarkTree(mobileBookmarksId)
+          .then(function (mobileBookmarks) {
+            if (mobileBookmarks.children && mobileBookmarks.children.length > 0) {
+              return getLocalBookmarksAsXBookmarks(mobileBookmarks.children);
+            }
+          });
+
+          return $q.all([getOtherBookmarks, getToolbarBookmarks, getMenuBookmarks, getMobileBookmarks]);
       })
       .then(function (results) {
         var otherBookmarks = results[0];
         var toolbarBookmarks = results[1];
+        var menuBookmarks = results[2];
+        var mobileBookmarks = results[3];
         var xBookmarks = [];
 
         // Add other container if bookmarks present
@@ -458,6 +486,18 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         if (toolbarBookmarks && toolbarBookmarks.length > 0) {
           var toolbarContainer = bookmarks.GetContainer(globals.Bookmarks.ToolbarContainerName, xBookmarks, true);
           toolbarContainer.children = toolbarBookmarks;
+        }
+
+        // Add menu container if bookmarks present
+        if (menuBookmarks && menuBookmarks.length > 0) {
+          var menuContainer = bookmarks.GetContainer(globals.Bookmarks.MenuContainerName, xBookmarks, true);
+          menuContainer.children = menuBookmarks;
+        }
+
+        // Add mobile container if bookmarks present
+        if (mobileBookmarks && mobileBookmarks.length > 0) {
+          var mobileContainer = bookmarks.GetContainer(globals.Bookmarks.MobileContainerName, xBookmarks, true);
+          mobileContainer.children = mobileBookmarks;
         }
 
         // Add unique ids
