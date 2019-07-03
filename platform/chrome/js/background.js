@@ -35,7 +35,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
 	 * ------------------------------------------------------------------------------------ */
 
   var changeBookmark = function (id) {
-    utility.LogInfo('onChanged event detected');
     var changedBookmark, changeInfo, locationInfo;
 
     // Retrieve changed bookmark full info
@@ -131,7 +130,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var createBookmark = function (id, createdBookmark) {
-    utility.LogInfo('onCreated event detected');
     var changeInfo, locationInfo;
 
     // Get created bookmark location info
@@ -342,7 +340,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var moveBookmark = function (id, moveInfo) {
-    utility.LogInfo('onMoved event detected');
     var changeInfo, movedBookmark;
 
     // Retrieve moved bookmark full info
@@ -364,7 +361,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         // Get moved bookmark old and new location info 
         return $q.all([
           platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.oldParentId, [moveInfo.oldIndex]),
-          platform.Bookmarks.GetLocalBookmarkLocationInfo(id)
+          platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.parentId, [moveInfo.index])
         ]);
       })
       .then(function (locationInfo) {
@@ -462,10 +459,12 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var onChangedHandler = function () {
+    utility.LogInfo('onChanged event detected');
     onBookmarkEventHandler(changeBookmark, arguments);
   };
 
   var onCreatedHandler = function () {
+    utility.LogInfo('onCreated event detected');
     onBookmarkEventHandler(createBookmark, arguments);
   };
 
@@ -521,6 +520,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var onMovedHandler = function () {
+    utility.LogInfo('onMoved event detected');
     onBookmarkEventHandler(moveBookmark, arguments);
   };
 
@@ -546,6 +546,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var onRemovedHandler = function () {
+    utility.LogInfo('onRemoved event detected');
     onBookmarkEventHandler(removeBookmark, arguments);
   };
 
@@ -631,7 +632,6 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
   };
 
   var removeBookmark = function (id, removeInfo) {
-    utility.LogInfo('onRemoved event detected');
     var changeInfo;
 
     // Get removed bookmark location info 

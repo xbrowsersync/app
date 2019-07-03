@@ -420,17 +420,21 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         // Get other bookmarks
         var getOtherBookmarks = getLocalBookmarkTree(otherBookmarksId)
           .then(function (otherBookmarks) {
-            if (otherBookmarks.children && otherBookmarks.children.length > 0) {
-              return getLocalBookmarksAsXBookmarks(otherBookmarks.children);
+            if (!otherBookmarks.children || otherBookmarks.children.length === 0) {
+              return;
             }
-          })
-          .then(function (xBookmarks) {
+            
+            // Convert local bookmarks sub tree to xbookmarks
+            var xBookmarks = getLocalBookmarksAsXBookmarks(otherBookmarks.children);
+            
             // Remove any unsupported container folders present
-            return xBookmarks.filter(function (x) {
+            var xBookmarksWithoutContainers = xBookmarks.filter(function (x) {
               return !unsupportedContainers.find(function (y) {
                 return y === x.title;
               });
             });
+
+            return xBookmarksWithoutContainers;
           });
 
         // Get toolbar bookmarks if enabled
