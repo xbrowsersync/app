@@ -562,10 +562,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Check your xBrowserSync ID and password, ensure the current service URL is where the sync was created and then try again."
     },
     "error_SyncRemoved_Title": {
-      "message": "Data removed due to inactivity"
+      "message": "Sync data removed"
     },
     "error_SyncRemoved_Message": {
-      "message": "Create a new ID and restore your data from a backup."
+      "message": "Sync data no longer exists on the service, it may have been removed due to inactivity. Create a new sync and restore your data from a backup."
     },
     "error_NoDataToRestore_Title": {
       "message": "No data to restore"

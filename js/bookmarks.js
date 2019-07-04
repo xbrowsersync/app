@@ -41,7 +41,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
           createdBookmarkInfo.children);
         
       // Use id if supplied or create new id
-      newXBookmark.id = createdBookmarkInfo.id || getNewBookmarkId(xBookmarks);
+      newXBookmark.id = createdBookmarkInfo.id || getNewBookmarkId(xBookmarks, [container.id]);
 
       // Clean bookmark and add at last index in path
       var cleanedBookmark = cleanBookmark(newXBookmark);
@@ -83,8 +83,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       .countBy('id')
       .find(function (count) {
         return count > 1;
-      }
-      )
+      })
       .value();
 
     if (!_.isUndefined(duplicateIds)) {
@@ -382,14 +381,19 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     return deferred.promise;
   };
 
-  var getNewBookmarkId = function (bookmarks) {
+  var getNewBookmarkId = function (bookmarks, takenIds) {
     var highestId = 0;
+    takenIds = takenIds || [0];
 
+    // Check existing bookmarks for highest id
     eachBookmark(bookmarks, function (bookmark) {
       if (!_.isUndefined(bookmark.id) && bookmark.id > highestId) {
         highestId = bookmark.id;
       }
     });
+
+    // Compare highest id with supplied taken ids
+    highestId = _.max(takenIds) > highestId ? _.max(takenIds) : highestId;
 
     return highestId + 1;
   };
@@ -1355,8 +1359,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                 case globals.UpdateType.Move:
                   return platform.Bookmarks.Moved(bookmarks, changeInfo)
                     .then(function (results) {
-                      // Add bookmark ids if necessary, ids will be missing if move deletion was not synced
-                      return checkBookmarksHaveUniqueIds(results.bookmarks) ? $q.resolve(results.bookmarks) : platform.Bookmarks.AddIds(results.bookmarks);
+                      return results.bookmarks;
                     });
                 // Ambiguous sync
                 default:

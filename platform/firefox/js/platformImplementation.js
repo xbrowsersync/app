@@ -154,8 +154,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var bookmarksCreated = function (xBookmarks, changeInfo) {
-    // Create new bookmark id
-    changeInfo.bookmark.id = bookmarks.GetNewBookmarkId(xBookmarks);
+    // Remove native bookmark id
+    delete changeInfo.bookmark.id;
     
     // Create synced bookmark
     return bookmarks.AddNewInXBookmarks(changeInfo.bookmark, changeInfo.container, changeInfo.indexPath, xBookmarks);

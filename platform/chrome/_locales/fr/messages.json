@@ -552,10 +552,10 @@
     "message": "Check your xBrowserSync ID and password, ensure the current service URL is where the sync was created and then try again."
   },
   "error_SyncRemoved_Title": {
-    "message": "Données supprimées pour cause d'inactivité"
+    "message": "Sync data removed"
   },
   "error_SyncRemoved_Message": {
-    "message": "Créez un nouvel ID et restaurez vos données depuis une sauvegarder."
+    "message": "Sync data no longer exists on the service, it may have been removed due to inactivity. Create a new sync and restore your data from a backup."
   },
   "error_NoDataToRestore_Title": {
     "message": "Aucune donnée à restaurer"
