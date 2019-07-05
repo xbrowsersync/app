@@ -16,8 +16,8 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
    * ------------------------------------------------------------------------------------ */
 
   var addNewInXBookmarks = function (createdBookmarkInfo, containerName, indexPath, xBookmarks) {
-    var updatedBookmarks = utility.DeepCopy(xBookmarks);        
-    
+    var updatedBookmarks = utility.DeepCopy(xBookmarks);
+
     try {
       var container = getContainer(containerName, updatedBookmarks, true);
       if (!container) {
@@ -39,7 +39,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
           createdBookmarkInfo.description,
           createdBookmarkInfo.tags,
           createdBookmarkInfo.children);
-        
+
       // Use id if supplied or create new id
       newXBookmark.id = createdBookmarkInfo.id || getNewBookmarkId(xBookmarks, [container.id]);
 
@@ -225,8 +225,10 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
               return utility.DecryptData(data.bookmarks);
             })
             .then(function (decryptedData) {
+              // Remove empty containers
+              var bookmarks = removeEmptyContainers(JSON.parse(decryptedData));
+
               // Clean exported bookmarks and return as json
-              var bookmarks = JSON.parse(decryptedData);
               return cleanRecursive(bookmarks);
             });
         }
@@ -295,7 +297,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
   var getExistingInXBookmarks = function (containerName, indexPath, xBookmarks) {
     var bookmark;
-    
+
     try {
       var container = getContainer(containerName, xBookmarks);
       if (!container) {
@@ -492,7 +494,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   var removeExistingInXBookmarks = function (containerName, indexPath, xBookmarks) {
     var bookmark;
     var updatedBookmarks = utility.DeepCopy(xBookmarks);
-    
+
     try {
       var container = getContainer(containerName, updatedBookmarks);
       if (!container) {
@@ -569,8 +571,8 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   };
 
   var updateExistingInXBookmarks = function (changedBookmarkInfo, containerName, indexPath, xBookmarks) {
-    var updatedBookmarks = utility.DeepCopy(xBookmarks);        
-    
+    var updatedBookmarks = utility.DeepCopy(xBookmarks);
+
     try {
       var container = getContainer(containerName, updatedBookmarks);
       if (!container) {
@@ -1183,7 +1185,8 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       })
       .then(function (result) {
         // Remove empty containers then encrypt
-        bookmarks = removeEmptyContainers(result || []);
+        //bookmarks = removeEmptyContainers(result || []);
+        bookmarks = result || [];
         return utility.EncryptData(JSON.stringify(bookmarks));
       })
       .then(function (encryptedBookmarks) {
@@ -1334,7 +1337,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                 // If no change info then do not update bookmarks (i.e. if not syncing bookmarks bar)
                 return;
               }
-              
+
               // Handle local updates
               switch (changeInfo.type) {
                 // Create bookmark
@@ -1376,9 +1379,10 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
           // No change info supplied so return unchanged bookmarks
           return bookmarks;
         }
-        
+
         // Remove empty containers then encrypt
-        bookmarks = removeEmptyContainers(result || []);
+        //bookmarks = removeEmptyContainers(result || []);
+        bookmarks = result || [];
         return utility.EncryptData(JSON.stringify(bookmarks))
           .then(function (encryptedBookmarks) {
             // Update cached bookmarks and synced bookmarks
@@ -1466,7 +1470,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
   var updateLocalBookmarks = function (changeInfo) {
     // Check if change is in toolbar and is syncing toolbar
-    return (changeInfo.pathInfo.path[1].bookmark.title === globals.Bookmarks.ToolbarContainerName ? 
+    return (changeInfo.pathInfo.path[1].bookmark.title === globals.Bookmarks.ToolbarContainerName ?
       getSyncBookmarksToolbar() : $q.resolve(true))
       .then(function (doLocalUpdate) {
         if (!doLocalUpdate) {
@@ -1515,7 +1519,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     }
 
     // Remove empty containers
-    bookmarks = removeEmptyContainers(bookmarks);
+    //bookmarks = removeEmptyContainers(bookmarks);
 
     return bookmarks;
   };
