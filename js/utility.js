@@ -84,23 +84,20 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     var data = {
       xbrowsersync: {
         date: getDateTimeString(new Date()),
-        sync: {}
+        sync: {},
+        data: {}
       }
     };
 
     // Add sync info if provided
     if (syncId) {
-      data.xbrowsersync.sync = {
-        id: syncId,
-        service: {
-          type: 'xbrowsersync',
-          url: serviceUrl
-        }
-      };
+      data.xbrowsersync.sync.id = syncId;
+      data.xbrowsersync.sync.type = 'xbrowsersync';
+      data.xbrowsersync.sync.url = serviceUrl;
     }
 
     // Add bookmarks data
-    data.xbrowsersync.sync.bookmarks = bookmarksData;
+    data.xbrowsersync.data.bookmarks = bookmarksData;
 
     return data;
   };
@@ -381,6 +378,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         break;
       case globals.ErrorCodes.FailedRestoreData:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedRestoreData_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_FailedRestoreData_Message);
         break;
       case globals.ErrorCodes.FailedShareUrl:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedShareUrl_Title);

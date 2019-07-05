@@ -662,15 +662,15 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       });
   };
 
-  var checkRestoreData = function (data) {
+  var checkRestoreData = function (restoreData) {
     var validData = false;
 
-    if (data) {
+    if (restoreData) {
       try {
-        data = JSON.parse(data);
+        restoreData = JSON.parse(restoreData);
 
-        if ((data.xBrowserSync && data.xBrowserSync.bookmarks) ||
-          (data.xbrowsersync && data.xbrowsersync.sync.bookmarks)) {
+        if ((restoreData.xBrowserSync && restoreData.xBrowserSync.bookmarks) ||
+          (restoreData.xbrowsersync && restoreData.xbrowsersync.data)) {
           validData = true;
         }
       }
@@ -1382,15 +1382,36 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var restoreData = function (backupData) {
-    var syncEnabled;
+    var bookmarksToRestore, serviceUrl, syncId, syncEnabled;
 
     utility.LogInfo('Restoring data');
 
-    // Get required data from backup data 
-    var bookmarksToRestore = backupData.xbrowsersync ?
-      backupData.xbrowsersync.sync.bookmarks : backupData.xBrowserSync.bookmarks;
-    var serviceUrl = backupData.xbrowsersync ? backupData.xbrowsersync.sync.service.url : null;
-    var syncId = backupData.xbrowsersync ? backupData.xbrowsersync.sync.id : backupData.xBrowserSync.id;
+    try {
+      if (backupData.xbrowsersync) {
+        // Get data to restore from v1.5.0 backup
+        var data = backupData.xbrowsersync.data;
+        var sync = backupData.xbrowsersync.sync;
+        bookmarksToRestore = data ? data.bookmarks : null;
+        serviceUrl = sync ? sync.url : null;
+        syncId = sync ? sync.id : null;
+      }
+      else if (backupData.xBrowserSync) {
+        // Get data to restore from backups prior to v1.5.0
+        bookmarksToRestore = backupData.xBrowserSync.bookmarks;
+        syncId = backupData.xBrowserSync.id;
+      }
+      else {
+        // Data to restore invalid, throw error
+        var error = new Error('FailedRestoreData');
+        error.code = globals.ErrorCodes.FailedRestoreData;
+        throw error;
+      }
+    }
+    catch (err) {
+      utility.LogError(err, 'app.restoreData');
+      displayAlertErrorHandler(err);
+      return;
+    }
 
     // Display loading overlay
     platform.Interface.Loading.Show();
@@ -1399,18 +1420,12 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       .then(function (cachedSyncEnabled) {
         syncEnabled = cachedSyncEnabled;
 
-        // If synced, check service status before starting restore
-        if (syncEnabled) {
-          return api.CheckServiceStatus();
-        }
-      })
-      .then(function () {
-        // Update sync settings if sync not currently enabled
-        if (!syncEnabled) {
+        // If synced check service status before starting restore, otherwise restore sync settings
+        return syncEnabled ? api.CheckServiceStatus() : $q(function (resolve, reject) {
           // Clear current password and set sync ID if supplied
           vm.sync.password = '';
           vm.sync.passwordComplexity = {};
-          return $q.all([
+          $q.all([
             platform.LocalStorage.Set(globals.CacheKeys.Password),
             syncId ? platform.LocalStorage.Set(globals.CacheKeys.SyncId, syncId) : $q.resolve(),
             serviceUrl ? platform.LocalStorage.Set(globals.CacheKeys.ServiceUrl, serviceUrl) : $q.resolve()
@@ -1419,10 +1434,12 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
               // Update the service URL if supplied
               if (serviceUrl) {
                 vm.settings.service.url = serviceUrl;
-                return updateServicePanel();
+                updateServicePanel();
               }
-            });
-        }
+            })
+            .then(resolve)
+            .catch(reject);
+        });
       })
       .then(function () {
         // Return if no bookmarks found

@@ -636,6 +636,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "error_FailedRestoreData_Title": {
       "message": "Unable to read the selected file"
     },
+    "error_FailedRestoreData_Message": {
+      "message": ""
+    },
     "error_FailedShareUrl_Title": {
       "message": "Unable to retrieve shared bookmark URL"
     },

@@ -619,5 +619,11 @@
   },
   "error_FailedBackupData_Title": {
     "message": "Sauvegarde échouée"
+  },
+  "error_FailedRestoreData_Title": {
+    "message": "Unable to restore data"
+  },
+  "error_FailedRestoreData_Message": {
+    "message": "The backup data provided is not in an expected format."
   }
 }
