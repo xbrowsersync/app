@@ -68,6 +68,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
       bookmarkPanel_Close_Click: bookmarkPanel_Close_Click,
       displayQrPanel: displayQrPanel,
+      helpPanel_Close_Click: helpPanel_Close_Click,
       helpPanel_ShowHelp_Click: helpPanel_ShowHelp_Click,
       helpPanel1_Next_Click: helpPanel1_Next_Click,
       helpPanel2_Next_Click: helpPanel2_Next_Click,
@@ -128,6 +129,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       syncForm_UpgradeSync_Click: syncForm_UpgradeSync_Click,
       syncPanel_DisplayDataUsage_Click: displayDataUsage,
       searchForm_ToggleBookmark_Click: searchForm_ToggleBookmark_Click,
+      updatedPanel_Continue_Click: updatedPanel_Continue_Click,
       updatedPanel_ReleaseNotes_Click: updatedPanel_ReleaseNotes_Click,
       updateServiceUrlForm_Cancel_Click: updateServiceUrlForm_Cancel_Click,
       updateServiceUrlForm_Confirm_Click: updateServiceUrlForm_Confirm_Click,
@@ -138,8 +140,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     vm.help = {
       currentPanel: 0,
-      displayPanel: displayHelpPanel,
-      show: false
+      displayPanel: displayHelpPanel
     };
 
     vm.platformName = undefined;
@@ -220,7 +221,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       current: undefined,
       change: changeView,
       displayMainView: displayMainView,
-      views: { login: 0, search: 1, bookmark: 2, settings: 3, updated: 4, permissions: 5 }
+      views: { login: 0, search: 1, bookmark: 2, settings: 3, help: 4, support: 5, updated: 6, permissions: 7 }
     };
 
     // Initialise the app
@@ -632,17 +633,17 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       case vm.view.views.bookmark:
         initNewView = init_bookmarkView(viewData);
         break;
-      case vm.view.views.permissions:
-        initNewView = init_permissionsView(viewData);
-        break;
       case vm.view.views.search:
         initNewView = init_searchView(viewData);
         break;
       case vm.view.views.settings:
         initNewView = init_settingsView(viewData);
         break;
+      case vm.view.views.help:
+      case vm.view.views.permissions:
+      case vm.view.views.support:
       case vm.view.views.updated:
-        initNewView = init_updatedView(viewData);
+        initNewView = init_infoView(viewData);
         break;
       case vm.view.views.login:
       default:
@@ -766,10 +767,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
 
         switch (true) {
-          case displayUpdated:
-            return changeView(vm.view.views.updated);
           case displayPermissions:
             return changeView(vm.view.views.permissions);
+          case displayUpdated:
+            return changeView(vm.view.views.updated);
           case syncEnabled:
             return changeView(vm.view.views.search);
           default:
@@ -965,6 +966,20 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       });
   };
 
+  var init_infoView = function () {
+    $timeout(function () {
+      // Focus on button
+      if (!utility.IsMobilePlatform(vm.platformName)) {
+        var element = document.querySelector('.focused');
+        if (element) {
+          element.focus();
+        }
+      }
+    }, 150);
+
+    return $q.resolve();
+  };
+
   var init_loginView = function () {
     vm.sync.displayOtherSyncsWarning = false;
     vm.sync.displayPasswordConfirmation = false;
@@ -993,6 +1008,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         vm.sync.enabled = !!syncEnabled;
         vm.sync.id = syncId;
 
+        // If not on a mobile platform, display new sync panel depending on if ID is set
+        vm.sync.displayNewSyncPanel = utility.IsMobilePlatform(vm.platformName) ? false : !syncId;
+
         // If not synced before, display warning to disable other sync tools
         if (displayOtherSyncsWarning == null || displayOtherSyncsWarning === true) {
           vm.sync.displayOtherSyncsWarning = true;
@@ -1005,43 +1023,19 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
           }, 150);
         }
         else {
-          // If not on a mobile platform, display new sync panel depending on if ID is set
-          vm.sync.displayNewSyncPanel = utility.IsMobilePlatform(vm.platformName) ? false : !syncId;
-
-          // Focus on first input field
           if (!utility.IsMobilePlatform(vm.platformName)) {
             $timeout(function () {
-              var inputField;
-              if (vm.sync.displayNewSyncPanel) {
-                inputField = document.querySelector('.login-form-new input[name="txtPassword"]');
-                if (inputField) {
-                  inputField.focus();
-                }
-              }
-              else {
-                // Focus on password field if id already set
-                inputField = syncId ?
-                  document.querySelector('.login-form-existing input[name="txtPassword"]') :
-                  document.querySelector('input[name="txtId"]');
-                if (inputField) {
-                  inputField.focus();
-                }
+              // Focus on id field or password field if id already set
+              var inputField = syncId ?
+                document.querySelector('.active-login-form  input[name="txtPassword"]') :
+                document.querySelector('.active-login-form input[name="txtId"]');
+              if (inputField) {
+                inputField.focus();
               }
             }, 100);
           }
         }
       });
-  };
-
-  var init_permissionsView = function () {
-    $timeout(function () {
-      // Focus on first button
-      if (!utility.IsMobilePlatform(vm.platformName)) {
-        document.querySelector('.buttons > button').focus();
-      }
-    }, 100);
-
-    return $q.resolve();
   };
 
   var init_searchView = function () {
@@ -1146,18 +1140,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       });
   };
 
-  var init_updatedView = function () {
-    return platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, false)
-      .then(function () {
-        // Focus on first button
-        $timeout(function () {
-          if (!utility.IsMobilePlatform(vm.platformName)) {
-            document.querySelector('.buttons > button').focus();
-          }
-        }, 100);
-      });
-  };
-
   var issuesPanel_ClearLog_Click = function () {
     // Clear trace log
     return platform.LocalStorage.Set(globals.CacheKeys.TraceLog)
@@ -1185,11 +1167,13 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       });
   };
 
+  var helpPanel_Close_Click = function () {
+    vm.view.displayMainView();
+  };
+
   var helpPanel_ShowHelp_Click = function () {
-    vm.help.show = true;
-    $timeout(function () {
-      vm.help.displayPanel(1);
-    });
+    vm.help.currentPanel = 1;
+    vm.view.change(vm.view.views.help);
   };
 
   var helpPanel1_Next_Click = function () {
@@ -2070,6 +2054,13 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     // Hide disable other syncs warning panel and update cache setting
     vm.sync.displayOtherSyncsWarning = false;
     platform.LocalStorage.Set(globals.CacheKeys.DisplayOtherSyncsWarning, false);
+
+    // Focus on password field
+    if (!utility.IsMobilePlatform(vm.platformName)) {
+      $timeout(function () {
+        document.querySelector('.active-login-form input[name="txtPassword"]').focus();
+      }, 100);
+    }
   };
 
   var syncForm_Submit_Click = function () {
@@ -2170,6 +2161,11 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         })
           .catch(displayAlertErrorHandler);
       });
+  };
+
+  var updatedPanel_Continue_Click = function () {
+    platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, false);
+    vm.view.change(vm.view.views.support);
   };
 
   var updatedPanel_ReleaseNotes_Click = function () {

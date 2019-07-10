@@ -1,0 +1,21 @@
+<h4>{{ vm.platform.GetConstant(vm.globals.Constants.Support_Title) }}</h4>
+<div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Support_Message)"></div>
+<div class="buttons small">
+  <button type="button" class="btn btn-default"
+    data-ng-click="vm.events.openUrl($event, 'https://liberapay.com/xbrowsersync/donate')">
+    {{ vm.platform.GetConstant(vm.globals.Constants.Button_Liberapay_Label) }}
+  </button>
+  <button type="button" class="btn btn-default"
+    data-ng-click="vm.events.openUrl($event, 'https://www.patreon.com/xbrowsersync')">
+    {{ vm.platform.GetConstant(vm.globals.Constants.Button_Patreon_Label) }}
+  </button>
+  <button type="button" class="btn btn-default"
+    data-ng-click="vm.events.openUrl($event, 'https://commerce.coinbase.com/checkout/1bd7ccd2-00ed-49d9-8f8a-b55fb5240675')">
+    {{ vm.platform.GetConstant(vm.globals.Constants.Button_Cryptos_Label) }}
+  </button>
+</div>
+<div class="buttons">
+  <button type="button" class="btn btn-default focused" data-ng-click="vm.view.displayMainView()">
+    {{ vm.platform.GetConstant(vm.globals.Constants.Button_Continue_Label) }}
+  </button>
+</div>

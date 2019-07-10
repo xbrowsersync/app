@@ -148,10 +148,16 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
     },
     "updated_Message": {
-      "message": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
+      "message": "<p>xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes.</p>"
     },
     "updated_Title": {
       "message": "Updated to v"
+    },
+    "support_Message": {
+      "message": "<p>We want to make xBrowserSync the number one browser syncing tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all popular desktop browsers</li><li>Support syncing to other cloud services such as Nextcloud, Dropbox, etc</li><li>Translate into other languages</li><li>And much, much more!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains an effective tool in protecting our privacy and productivity against the rot of big tech!</p>"
+    },
+    "support_Title": {
+      "message": "Support xBrowserSync!"
     },
     "permissions_Message": {
       "message": "<p>xBrowserSync automatically enriches bookmarks added using the browser’s Add Bookmark button with available metadata. To enable this, xBrowserSync <a href='https://www.xbrowsersync.org/?id=25#faqs' class='new-tab'>requires additional permissions</a> to be able to read visited website data.</p><p>Please indicate if prompted if you are happy to grant these permissions, alternatively you can add or remove permissions at any time in the Settings panel.</p>"
@@ -243,6 +249,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "button_ReleaseNotes_Label": {
       "message": "View release notes"
     },
+    "button_Support_Label": {
+      "message": "Support info"
+    },
     "settings_Issues_Help_Label": {
       "message": "Help"
     },
@@ -252,17 +261,20 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_Issues_ViewFAQs_Label": {
       "message": "View FAQs"
     },
-    "settings_About_Contributions_Label": {
+    "settings_About_Support_Label": {
       "message": "Support xBrowserSync"
     },
-    "settings_About_Contributions_Description": {
+    "settings_About_Support_Description": {
       "message": "If you enjoy using xBrowserSync consider supporting the project."
     },
-    "settings_About_Cryptos_Label": {
-      "message": "Donate crypto"
+    "button_Cryptos_Label": {
+      "message": "Cryptos"
     },
-    "settings_About_Liberapay_Label": {
-      "message": "Via Liberapay"
+    "button_Liberapay_Label": {
+      "message": "Liberapay"
+    },
+    "button_Patreon_Label": {
+      "message": "Patreon"
     },
     "settings_Issues_Title": {
       "message": "Issues"
@@ -324,7 +336,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_Service_Status_Error": {
       "message": "Connection error"
     },
-    "Settings_Service_Status_Loading": {
+    "settings_Service_Status_Loading": {
       "message": "Checking..."
     },
     "settings_Service_Status_Online": {

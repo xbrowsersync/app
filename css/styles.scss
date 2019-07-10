@@ -443,12 +443,17 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(8, 48, 57, 0.9);
+    background-color: rgba(8, 48, 57, 0.5);
     @include animation(animation-fade-in 0.1s linear);
 
     &.ng-hide {
       @include animation(animation-fade-out 0.1s linear);
     }
+  }
+
+  .darker-overlay {
+    @extend .overlay;
+    background-color: rgba(8, 48, 57, 0.9)!important;
   }
 
   .progress-bar-success {
@@ -1348,46 +1353,46 @@ body {
   }
 }
 
-#qr-panel {
-  flex-direction: column;
-  padding: 2em;
+#information-panel {
+  @extend .overlay;
 
-  p {
+  h4 {
     text-align: center;
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
+    font-size: 1.5em;
   }
 
-  .buttons {
-    margin-top: 0;
-
-    button {
-      display: block;
-      margin: 1em auto 0;
-    }
-  }
-
-  #qr {
-    margin-bottom: 1em;
-  }
-}
-
-#help-panel {
-  padding: 2em;
-
-  & > div {
+  p, ul {
     font-size: 1.1em;
     line-height: 1.3em;
   }
 
-  h4 {
-    margin-bottom: 1.5em;
-    text-align: center;
+  ul {
+    margin-bottom: 0.75em;
+    padding-left: 1em;
   }
 
+  .buttons {
+    margin-top: 2em;
+
+    .btn {
+      font-size: 1.1em;
+    }
+  }
+
+  .view-content {
+    display: flex;
+    flex-direction: column;
+    padding: 2em;
+  }
+}
+
+#help-panel {
   .pagination {
     display: flex;
     justify-content: space-between;
     margin-top: 2em;
+    font-size: 1.1em;
 
     a {
       position: relative;
@@ -1421,30 +1426,50 @@ body {
   }
 }
 
-#qr-panel,
-#help-panel,
-#working-panel {
-  @extend .overlay;
+#qr-panel {
+  @extend .darker-overlay;
+  
+  flex-direction: column;
+  padding: 2em;
 
-  h3 {
+  p {
+    text-align: center;
+    margin-bottom: 1em;
+  }
+
+  .buttons {
     margin-top: 0;
-    color: $colour-link-highlight;
+
+    button {
+      display: block;
+      margin: 1em auto 0;
+    }
+  }
+
+  #qr {
+    margin-bottom: 1em;
   }
 }
 
-#updated-panel,
-#permissions-panel {
-  .logo {
-    margin-top: 2.5em;
+#support-panel {
+  h4 {
+    margin-bottom: 1em;
+  }
+  
+  p, ul {
+    font-size: 1em;
+    line-height: 1.25em;
   }
 
-  .view-content {
-    display: flex;
-    flex-direction: column;
+  .buttons.small {
+    font-size: 90%;
+    margin-top: 1em;
   }
 }
 
 #working-panel {
+  @extend .darker-overlay;
+
   h3 {
     color: $colour-link-highlight;
     font-size: 1.1em;

@@ -17,7 +17,8 @@
   data-ng-hide="vm.sync.displayOtherSyncsWarning || vm.sync.displaySyncConfirmation || vm.sync.displayUpgradeConfirmation"
   novalidate>
   <button type="submit" class="d-none" data-ng-click="vm.events.syncForm_Submit_Click()" tabindex="-1"></button>
-  <div class="login-form-new animate-fade" data-ng-show="vm.sync.displayNewSyncPanel">
+  <div class="login-form-new animate-fade" data-ng-class="{ 'active-login-form': vm.sync.displayNewSyncPanel }"
+    data-ng-show="vm.sync.displayNewSyncPanel">
     <div class="animate-fade" data-ng-show="vm.sync.displayPasswordConfirmation">
       <div class="form-group secret-form-group">
         <label class="sr-only" for="txtPasswordConfirmation">{{
@@ -79,7 +80,8 @@
       </a>
     </div>
   </div>
-  <div class="login-form-existing animate-fade" data-ng-hide="vm.sync.displayNewSyncPanel">
+  <div class="login-form-existing animate-fade" data-ng-class="{ 'active-login-form': !vm.sync.displayNewSyncPanel }"
+    data-ng-hide="vm.sync.displayNewSyncPanel">
     <div class="form-group">
       <label class="sr-only" for="txtId">{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Label) }}</label>
       <button type="button" class="btn btn-icon btn-scan" data-ng-hide="vm.sync.id"

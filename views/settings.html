@@ -440,8 +440,8 @@
         <div class="form-control">
           <span>{{ vm.globals.AppVersion }}</span>
         </div>
-        <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_AppVersion_Description)
-          }}</p>
+        <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_AppVersion_Description) }}
+        </p>
         <div class="text-center">
           <button type="button" class="btn btn-default"
             data-ng-click="vm.events.openUrl($event, vm.globals.ReleaseNotesUrlStem + vm.globals.AppVersion)">
@@ -450,17 +450,12 @@
         </div>
       </div>
       <div class="form-group">
-        <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Contributions_Label) }}</label>
-        <p class="description">{{
-          vm.platform.GetConstant(vm.globals.Constants.Settings_About_Contributions_Description) }}</p>
+        <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Support_Label) }}</label>
+        <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Support_Description) }}
+        </p>
         <div class="buttons">
-          <button type="button" class="btn btn-default"
-            data-ng-click="vm.events.openUrl($event, 'https://liberapay.com/xbrowsersync/donate')">
-            {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Liberapay_Label) }}
-          </button>
-          <button type="button" class="btn btn-default"
-            data-ng-click="vm.events.openUrl($event, 'https://commerce.coinbase.com/checkout/1bd7ccd2-00ed-49d9-8f8a-b55fb5240675')">
-            {{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Cryptos_Label) }}
+          <button type="button" class="btn btn-default" data-ng-click="vm.view.change(vm.view.views.support)">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Support_Label) }}
           </button>
         </div>
       </div>

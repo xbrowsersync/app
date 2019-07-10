@@ -21,8 +21,6 @@
     <div id="qr-panel" class="animate" data-ng-include="'./views/qr.html'" data-ng-show="vm.settings.displayQrPanel">
     </div>
 
-    <div id="help-panel" class="animate" data-ng-include="'./views/help.html'" data-ng-show="vm.help.show"></div>
-
     <div class="alert animate-fade animate-fade-out" role="alert" data-ng-show="vm.alert.show" data-ng-cloak
       data-ng-class="{
              'alert-success': vm.alert.type === 'success',
@@ -55,18 +53,31 @@
       <div class="view-content animate" data-ng-include="'./views/settings.html'"></div>
     </div>
 
-    <div id="updated-panel" class="view" data-ng-if="vm.view.current === vm.view.views.updated">
-      <div class="view-content animate" data-ng-include="'./views/updated.html'"></div>
-    </div>
+    <div id="information-panel" class="view" data-ng-if="vm.view.current === vm.view.views.support || 
+      vm.view.current === vm.view.views.updated || vm.view.current === vm.view.views.permissions ||
+      vm.view.current === vm.view.views.help">
+      <div id="help-panel" data-ng-if="vm.view.current === vm.view.views.help">
+        <div class="view-content animate" data-ng-include="'./views/help.html'"></div>
+      </div>
 
-    <div id="permissions-panel" class="view" data-ng-if="vm.view.current === vm.view.views.permissions">
-      <div class="view-content animate" data-ng-include="'./views/permissions.html'"></div>
+      <div id="support-panel" data-ng-if="vm.view.current === vm.view.views.support">
+        <div class="view-content animate" data-ng-include="'./views/support.html'"></div>
+      </div>
+
+      <div id="updated-panel" data-ng-if="vm.view.current === vm.view.views.updated">
+        <div class="view-content animate" data-ng-include="'./views/updated.html'"></div>
+      </div>
+
+      <div id="permissions-panel" data-ng-if="vm.view.current === vm.view.views.permissions">
+        <div class="view-content animate" data-ng-include="'./views/permissions.html'"></div>
+      </div>
     </div>
   </div>
 
   <div class="background">
     <div class="background-img" data-ng-if="!vm.view.current || vm.view.current === vm.view.views.login || 
-      vm.view.current === vm.view.views.permissions || vm.view.current === vm.view.views.updated"></div>
+    vm.view.current === vm.view.views.support || vm.view.current === vm.view.views.permissions || 
+    vm.view.current === vm.view.views.updated || vm.view.current === vm.view.views.help"></div>
   </div>
 
   <input id="backupFile" class="d-none" name="files[]" type="file" tabindex="-1" />

@@ -721,11 +721,11 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         utility.LogInfo('Upgrading from ' + oldVersion + ' to ' + newVersion);
       })
       .then(function () {
-        // For v1.5.0, convert local storage items to storage API
+        // For v1.5.0, convert local storage items to storage API and display info panels
         if (newVersion === '1.5.0' && compareVersions(oldVersion, newVersion) < 0) {
           return utility.ConvertLocalStorageToStorageApi()
             .then(function () {
-              return platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, true);
+              return platform.LocalStorage.Set(globals.CacheKeys.DisplayOtherSyncsWarning, true);
             });
         }
       })
