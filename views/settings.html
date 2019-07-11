@@ -258,8 +258,7 @@
         data-ng-if="!vm.sync.enabled && vm.utility.IsMobilePlatform(vm.platformName)"
         data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_NotAvailable_Message)">
       </p>
-      <div
-        data-ng-show="(vm.sync.enabled && !vm.settings.iCloudNotAvailable) || !vm.utility.IsMobilePlatform(vm.platformName)">
+      <div data-ng-show="vm.sync.enabled || !vm.utility.IsMobilePlatform(vm.platformName)">
         <div class="setting-group">
           <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Backup_Label) }}</label>
           <p class="description" data-ng-if="!vm.sync.enabled">{{
@@ -311,9 +310,13 @@
               </label>
               <div class="form-group" data-ng-class="{ 'has-error': vm.restoreForm.dataToRestore.$invalid }">
                 <textarea name="dataToRestore" data-ng-model="vm.settings.dataToRestore" class="form-control" rows="3"
-                  data-ng-change="vm.settings.dataToRestoreIsValid()" spellcheck="false"></textarea>
+                  data-ng-change="vm.events.backupRestoreForm_DataToRestore_Change()" spellcheck="false"></textarea>
                 <div class="validation" data-ng-if="vm.restoreForm.dataToRestore.$invalid">
-                  <span>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_Invalid_Label) }}
+                  <span data-ng-if="vm.restoreForm.dataToRestore.$error.InvalidData">
+                    {{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_Invalid_Label) }}
+                  </span>
+                  <span data-ng-if="vm.restoreForm.dataToRestore.$error.DuplicateIds">
+                    Duplicate bookmarks IDs detected
                   </span>
                 </div>
               </div>
@@ -331,7 +334,7 @@
             <div class="buttons">
               <button class="btn btn-default"
                 data-ng-disabled="!vm.settings.dataToRestore || vm.restoreForm.dataToRestore.$invalid"
-                data-ng-click="vm.events.backupRestoreForm_DisplayRestoreConfirmation_Click()">
+                data-ng-click="vm.events.backupRestoreForm_Restore_Click()">
                 {{ vm.platform.GetConstant(vm.globals.Constants.Button_RestoreData_Label) }}
               </button>
               <button type="reset" class="btn btn-default" data-ng-click="vm.settings.displayRestoreForm = false">
@@ -348,7 +351,7 @@
             </div>
             <div class="text-center">
               <button class="btn btn-default btn-confirm-restore"
-                data-ng-click="vm.events.backupRestoreForm_Restore_Click()">
+                data-ng-click="vm.events.backupRestoreForm_ConfirmRestore_Click()">
                 {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
               </button>
               <button type="reset" class="btn btn-default"

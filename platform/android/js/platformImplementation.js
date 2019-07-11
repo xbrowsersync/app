@@ -1482,22 +1482,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     }
   };
 
-  var initICloudDocStorage = function () {
-    iCloudDocStorage.initUbiquitousContainer(
-      null,
-      function () {
-        $scope.$apply(function () {
-          vm.settings.iCloudNotAvailable = false;
-        });
-      },
-      function () {
-        $scope.$apply(function () {
-          vm.settings.iCloudNotAvailable = true;
-        });
-      }
-    );
-  };
-
   var helpPanel7_Android_Next_Click = function () {
     vm.help.displayPanel(9);
   };

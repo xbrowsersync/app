@@ -50,8 +50,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     vm.events = {
       backupRestoreForm_Backup_Click: backupRestoreForm_Backup_Click,
+      backupRestoreForm_ConfirmRestore_Click: backupRestoreForm_ConfirmRestore_Click,
+      backupRestoreForm_DataToRestore_Change: backupRestoreForm_DataToRestore_Change,
       backupRestoreForm_DisplayRestoreForm_Click: backupRestoreForm_DisplayRestoreForm_Click,
-      backupRestoreForm_DisplayRestoreConfirmation_Click: backupRestoreForm_DisplayRestoreConfirmation_Click,
       backupRestoreForm_Restore_Click: backupRestoreForm_Restore_Click,
       backupRestoreForm_SelectBackupFile_Click: backupRestoreForm_SelectBackupFile_Click,
       bookmarkForm_BookmarkDescription_Change: bookmarkForm_BookmarkDescription_Change,
@@ -166,7 +167,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       backupCompletedMessage: undefined,
       backupFileName: undefined,
       dataToRestore: undefined,
-      dataToRestoreIsValid: validateDataToRestore,
       displayCancelSyncConfirmation: false,
       displayQrPanel: false,
       displayRestoreConfirmation: false,
@@ -180,7 +180,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       getSearchResultsDelay: 250,
       logSize: undefined,
       readWebsiteDataPermissionsGranted: false,
-      iCloudNotAvailable: false,
       restoreCompletedMessage: undefined,
       savingBackup: false,
       savingLog: false,
@@ -250,36 +249,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       });
   };
 
-  var backupRestoreForm_DisplayRestoreForm_Click = function () {
-    // Display restore form
-    vm.settings.backupFileName = null;
-    vm.settings.restoreCompletedMessage = null;
-    vm.settings.displayRestoreConfirmation = false;
-    vm.settings.dataToRestore = '';
-    vm.settings.displayRestoreForm = true;
-    document.querySelector('#backupFile').value = null;
-    vm.restoreForm.dataToRestore.$setValidity('InvalidData', true);
-
-    // Focus in restore textarea
-    $timeout(function () {
-      document.querySelector('#restoreForm textarea').select();
-    });
-  };
-
-  var backupRestoreForm_DisplayRestoreConfirmation_Click = function () {
-    // Display restore confirmation 
-    vm.settings.displayRestoreForm = false;
-    vm.settings.displayRestoreConfirmation = true;
-
-    // Focus on confirm button
-    if (!utility.IsMobilePlatform(vm.platformName)) {
-      $timeout(function () {
-        document.querySelector('.btn-confirm-restore').focus();
-      });
-    }
-  };
-
-  var backupRestoreForm_Restore_Click = function () {
+  var backupRestoreForm_ConfirmRestore_Click = function () {
     if (!vm.settings.dataToRestore) {
       // Display alert
       vm.alert.display(
@@ -296,6 +266,45 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     // Start restore
     restoreData(JSON.parse(vm.settings.dataToRestore));
+  };
+
+  var backupRestoreForm_DataToRestore_Change = function () {
+    vm.restoreForm.dataToRestore.$setValidity('DuplicateIds', true);
+    vm.restoreForm.dataToRestore.$setValidity('InvalidData', true);
+  };
+
+  var backupRestoreForm_DisplayRestoreForm_Click = function () {
+    // Display restore form
+    vm.settings.backupFileName = null;
+    vm.settings.restoreCompletedMessage = null;
+    vm.settings.displayRestoreConfirmation = false;
+    vm.settings.dataToRestore = '';
+    vm.settings.displayRestoreForm = true;
+    document.querySelector('#backupFile').value = null;
+    vm.restoreForm.dataToRestore.$setValidity('DuplicateIds', true);
+    vm.restoreForm.dataToRestore.$setValidity('InvalidData', true);
+
+    // Focus in restore textarea
+    $timeout(function () {
+      document.querySelector('#restoreForm textarea').select();
+    });
+  };
+
+  var backupRestoreForm_Restore_Click = function () {
+    if (!validateBackupData()) {
+      return;
+    }
+    
+    // Display restore confirmation 
+    vm.settings.displayRestoreForm = false;
+    vm.settings.displayRestoreConfirmation = true;
+
+    // Focus on confirm button
+    if (!utility.IsMobilePlatform(vm.platformName)) {
+      $timeout(function () {
+        document.querySelector('.btn-confirm-restore').focus();
+      });
+    }
   };
 
   var backupRestoreForm_SelectBackupFile_Click = function () {
@@ -2331,25 +2340,32 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       });
   };
 
-  var validateDataToRestore = function () {
-    var validData = false;
+  var validateBackupData = function () {
+    var xBookmarks, restoreData, validateData = false, validateUniqueIds = true;
 
+    // Check backup data structure
     if (vm.settings.dataToRestore) {
       try {
-        var restoreData = JSON.parse(vm.settings.dataToRestore);
-
-        if ((restoreData.xBrowserSync && restoreData.xBrowserSync.bookmarks) ||
-          (restoreData.xbrowsersync && restoreData.xbrowsersync.data)) {
-          validData = true;
-        }
+        restoreData = JSON.parse(vm.settings.dataToRestore);
+        xBookmarks = restoreData.xBrowserSync ? restoreData.xBrowserSync.bookmarks : 
+          restoreData.xbrowsersync ? restoreData.xbrowsersync.data : null;
+        validateData = !!xBookmarks;        
       }
       catch (err) { }
     }
     else {
-      validData = true;
+      validateData = true;
     }
 
-    vm.restoreForm.dataToRestore.$setValidity('InvalidData', validData);
+    vm.restoreForm.dataToRestore.$setValidity('InvalidData', validateData);
+
+    // Check for duplicate bookmark ids
+    if (validateData && xBookmarks) {
+      validateUniqueIds = bookmarks.CheckBookmarksHaveUniqueIds(xBookmarks);
+      vm.restoreForm.dataToRestore.$setValidity('DuplicateIds', validateUniqueIds);
+    }
+
+    return validateData && validateUniqueIds;
   };
 
   // Call constructor
