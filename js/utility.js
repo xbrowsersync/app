@@ -486,7 +486,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   };
 
   var getVersionTag = function () {
-    var versionTag = globals.AppVersion.replace(/(?<=\w+)\d+$/i, '');
+    var versionTag = globals.AppVersion.replace(/([a-z]+)\d+$/i, '$1');
     return versionTag;
   };
 
