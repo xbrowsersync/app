@@ -1014,13 +1014,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         else {
           if (!utility.IsMobilePlatform(vm.platformName)) {
             $timeout(function () {
-              // Focus on id field or password field if id already set
-              var inputField = syncId ?
-                document.querySelector('.active-login-form  input[name="txtPassword"]') :
-                document.querySelector('.active-login-form input[name="txtId"]');
-              if (inputField) {
-                inputField.focus();
-              }
+              // Focus on password field
+              document.querySelector('.active-login-form  input[name="txtPassword"]').focus();
             }, 100);
           }
         }
