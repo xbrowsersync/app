@@ -655,7 +655,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     return initNewView
       .then(function () {
         // Attach events to new tab links
-        $timeout(setNewTabLinks);
+        $timeout(setNewTabLinks, 100);
         return view;
       })
       .finally(function () {
