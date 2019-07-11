@@ -258,6 +258,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     vm.settings.dataToRestore = '';
     vm.settings.displayRestoreForm = true;
     document.querySelector('#backupFile').value = null;
+    vm.restoreForm.dataToRestore.$setValidity('InvalidData', true);
 
     // Focus in restore textarea
     $timeout(function () {
@@ -661,24 +662,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         // Re-enable animations
         vm.animations.enabled = true;
       });
-  };
-
-  var checkRestoreData = function (restoreData) {
-    var validData = false;
-
-    if (restoreData) {
-      try {
-        restoreData = JSON.parse(restoreData);
-
-        if ((restoreData.xBrowserSync && restoreData.xBrowserSync.bookmarks) ||
-          (restoreData.xbrowsersync && restoreData.xbrowsersync.data)) {
-          validData = true;
-        }
-      }
-      catch (err) { }
-    }
-
-    return validData;
   };
 
   var disableSync = function () {
@@ -2353,7 +2336,24 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var validateDataToRestore = function () {
-    return checkRestoreData(vm.settings.dataToRestore);
+    var validData = false;
+
+    if (vm.settings.dataToRestore) {
+      try {
+        var restoreData = JSON.parse(vm.settings.dataToRestore);
+
+        if ((restoreData.xBrowserSync && restoreData.xBrowserSync.bookmarks) ||
+          (restoreData.xbrowsersync && restoreData.xbrowsersync.data)) {
+          validData = true;
+        }
+      }
+      catch (err) { }
+    }
+    else {
+      validData = true;
+    }
+
+    vm.restoreForm.dataToRestore.$setValidity('InvalidData', validData);
   };
 
   // Call constructor

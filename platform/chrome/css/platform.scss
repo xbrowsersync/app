@@ -1,86 +1,76 @@
-@import 'variables.scss';
-@import 'mixins.scss';
-@import 'animations.scss';
+@import "variables.scss";
+@import "mixins.scss";
+@import "animations.scss";
 
 $window-width: 320px;
 $window-height: 520px;
 $search-window-width: 600px;
-$search-window-height: 4em;
+$search-window-height: 53px;
 
 body {
-    width: $window-width;
-    transition: width linear .1s;
+  width: $window-width;
+  transition: width linear 0.1s;
 
-    &.search-view {
-        width: $search-window-width;
-        height: $search-window-height;
+  &.search-view {
+    width: $search-window-width;
+    height: $search-window-height;
 
-        .container, #search-panel .header-panel {
-            height: $search-window-height;
-        }
+    .container,
+    #search-panel .header-panel {
+      height: $search-window-height;
     }
+  }
 
-    &.search-no-results-view {
-        @extend .search-view;
-        height: calc(#{$search-window-height} + 2.5em);
-
-        .container {
-            height: calc(#{$search-window-height} + 2.5em);
-        }
-    }
-
-    &.search-results-view {
-        @extend .search-view;
-        height: $window-height;
-
-        .container {
-            height: $window-height;
-        }
-    }
-
-    .background {
-        min-height: $window-height;
-    }
+  &.search-no-results-view {
+    @extend .search-view;
+    height: calc(#{$search-window-height} + 2.5rem);
 
     .container {
-        height: $window-height;
+      height: calc(#{$search-window-height} + 2.5rem);
     }
+  }
 
-    .well .btn.btn-default {
-        font-size: 1.1em;
+  &.search-results-view {
+    @extend .search-view;
+    height: $window-height;
+
+    .container {
+      height: $window-height;
     }
+  }
+
+  .background {
+    min-height: $window-height;
+  }
+
+  .container {
+    height: $window-height;
+  }
 }
 
 #search-panel {
-    .view-content {
-        .header-panel {
-            display: flex;
-            flex-direction: row-reverse;
-            
-            .btn {
-                flex: none;
+  .view-content {
+    .header-panel {
+      display: flex;
+      flex-direction: row-reverse;
 
-                &.btn-settings {
-                    float: none;
-                }
+      .btn {
+        flex: none;
 
-                &.btn-toggle-bookmark {
-                    margin-right: 10px;
-                }
-            }
-
-            .search-form {
-                flex: 0 1 100%;
-                margin-right: 10px;
-            }
+        &.btn-settings {
+          float: none;
         }
+
+        &.btn-toggle-bookmark {
+          margin-right: 0.5rem;
+        }
+      }
     }
+  }
 }
 
 #settings-panel {
-    .backup-restore-panel {
-        #backupFilePanel {
-            display: none;
-        }
-    }
+  .backup-restore-panel #restoreFilePanel {
+    display: none;
+  }
 }

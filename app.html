@@ -10,11 +10,10 @@
   <script src="js/app.min.js"></script>
 </head>
 
-<body data-ng-class="[
-    { true: 'search-view' }[ vm.view.current === vm.view.views.search && !vm.search.results ],
-    { true: 'search-no-results-view' }[ vm.view.current === vm.view.views.search && vm.search.results.length === 0 ],
-    { true: 'search-results-view' }[ vm.view.current === vm.view.views.search && vm.search.results.length > 0 ]
-    ]">
+<body data-ng-class="{
+  'search-view': vm.view.current === vm.view.views.search && !vm.search.results,
+  'search-no-results-view': vm.view.current === vm.view.views.search && vm.search.results.length === 0,
+  'search-results-view': vm.view.current === vm.view.views.search && vm.search.results.length > 0 }">
   <div class="container">
     <div id="working-panel" class="animate" data-ng-include="'./views/working.html'" data-ng-show="vm.working"></div>
 
@@ -23,10 +22,10 @@
 
     <div class="alert animate-fade animate-fade-out" role="alert" data-ng-show="vm.alert.show" data-ng-cloak
       data-ng-class="{
-             'alert-success': vm.alert.type === 'success',
-             'info': vm.alert.type === 'info',
-             'warning': vm.alert.type === 'warning',
-             'alert-danger': vm.alert.type === 'danger' }">
+        'alert-success': vm.alert.type === 'success',
+        'info': vm.alert.type === 'info',
+        'warning': vm.alert.type === 'warning',
+        'alert-danger': vm.alert.type === 'danger' }">
       <button class="btn btn-icon btn-close"
         title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}"
         data-ng-click="vm.alert.show = false" tabindex="1000">

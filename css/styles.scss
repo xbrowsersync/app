@@ -8,22 +8,24 @@
   outline: none !important;
 }
 
+:root {
+  font-size: 87.5%;
+}
+
 body {
   font-family: $font-stack-regular;
   color: $colour-text1;
-  font-size: 14px;
-  line-height: 1.25em;
+  line-height: 1.25rem;
 
   h2 {
-    font-size: 1.8em;
+    font-size: 1.8rem;
     font-weight: 800;
-    line-height: 1.1em;
     float: left;
     margin: 0;
   }
 
   h4 {
-    font-size: 1.3em;
+    font-size: 1.3rem;
     font-weight: 800;
     margin-top: 0;
   }
@@ -47,22 +49,21 @@ body {
 
   button {
     &.btn {
-      font-size: 14px;
       border-width: 0;
 
       &.btn-default {
-        font-size: 1.2em;
+        font-size: 1.2rem;
         font-weight: 800;
         text-transform: capitalize;
         background-color: rgba($colour-text1, 0.3);
         color: $colour-text1;
-        min-width: 5em;
+        min-width: 6rem;
         border-color: $colour-text1;
-        border-width: 0.1em;
+        border-width: 0.15rem;
         border-radius: $border-radius-input;
         transition: all, ease-in-out, 0.2s;
-        padding: 0 1em;
-        line-height: 2.1em;
+        padding: 0 1.2rem;
+        line-height: 2.5rem;
 
         &:not([disabled]):active,
         &:not([disabled]):hover {
@@ -128,39 +129,17 @@ body {
       }
 
       .spinner-border-sm {
-        border-width: 0.15em;
+        border-width: 0.15rem;
         height: 0.75rem;
         width: 0.75rem;
         vertical-align: baseline;
-        margin-right: 0.1em;
+        margin-right: 0.1rem;
       }
     }
   }
 
-  input:not([type]).form-control,
-  input[type="password"].form-control,
-  input[type="text"].form-control {
-    font-size: 1em;
-    background-color: $colour-text1;
-    color: $colour-text2;
-    height: auto;
-    padding: 0.5em 1em;
-    resize: none;
-    border: none;
-    border-radius: $border-radius-input;
-    @include placeholder {
-      color: $colour-text2;
-      opacity: 0.4;
-    }
-  }
-
   p {
-    margin: 0 0 0.75em;
-  }
-
-  textarea.form-control {
-    @extend input:not([type]).form-control;
-    border-radius: 1.1em;
+    margin: 0 0 0.75rem;
   }
 
   .alert {
@@ -170,16 +149,16 @@ body {
     max-width: $width-tablet-small;
     border: none;
     border-radius: 0;
-    padding: 10px 10px 15px;
     margin: 0 auto;
     background-color: rgba($colour-danger, 0.9);
     border: none;
     color: $colour-text1;
+
     @media (min-width: $width-mobile-small + 1) {
-      font-size: 0.9em;
+      font-size: 0.9rem;
 
       h4 {
-        margin-bottom: 4px;
+        margin-bottom: 0.5rem;
       }
 
       p {
@@ -201,11 +180,12 @@ body {
     button.btn-close {
       float: right;
       color: $colour-text1;
-      font-size: 1.2em;
-      line-height: 1.2em;
+      font-size: 1.2rem;
+      line-height: 1.7rem;
+
       @media (min-width: $width-mobile-small + 1) {
-        font-size: 1.5em;
-        line-height: 2em;
+        font-size: 1.5rem;
+        line-height: 2rem;
       }
 
       &:focus {
@@ -237,14 +217,14 @@ body {
 
     .background-img {
       display: block;
-      width: 100em;
+      width: 100rem;
       height: 200%;
       background: url("../img/bg.png");
-      background-size: 50em;
+      background-size: 50rem;
       background-position: 0 0;
       background-repeat: repeat;
       position: absolute;
-      top: -30em;
+      top: -30rem;
       z-index: 0;
       @include animation(animation-scroll 100s linear infinite);
     }
@@ -258,12 +238,11 @@ body {
 
   .buttons {
     text-align: center;
-    margin-top: 15px;
     position: relative;
     white-space: nowrap;
 
     button {
-      margin-right: 10px;
+      margin-right: 0.5rem;
 
       &:last-child {
         margin-right: 0;
@@ -272,30 +251,30 @@ body {
   }
 
   .checkbox {
-    width: 30px;
-    height: 5px;
-    border-radius: 5px;
+    width: 2rem;
+    height: 0.3rem;
     position: relative;
     background: $colour-text2;
+    border-radius: 2rem;
 
     input {
       display: none;
 
       &[type="checkbox"]:checked + label {
-        left: 16px;
+        left: 1.1rem;
         background: $colour-link-highlight;
       }
     }
 
     label {
       display: block;
-      width: 15px;
-      height: 15px;
+      width: 1rem;
+      height: 1rem;
       border-radius: 50%;
       cursor: pointer;
       position: absolute;
-      top: -5px;
-      left: -1px;
+      top: -0.35rem;
+      left: -0.1rem;
       background: $colour-link;
       min-height: 0;
       min-width: 0;
@@ -304,12 +283,6 @@ body {
       &.animate {
         transition: all 0.1s ease;
       }
-    }
-  }
-
-  .confirm {
-    p {
-      margin-bottom: 10px;
     }
   }
 
@@ -345,39 +318,53 @@ body {
   }
 
   .form-group {
-    margin-bottom: 0.75em;
+    position: relative;
+    margin-bottom: 1rem;
 
-    .validation {
-      color: rgba($colour-danger, 0.75) !important;
-      font-size: 0.8em;
-      line-height: 1.2em;
-      position: absolute;
-      top: 2.35em;
-      right: 1.2em;
-      background: $colour-text1;
-      padding: 0.1em 0.3em;
-      z-index: 20;
-      max-width: 90%;
-      border-radius: 1em;
-    }
-  }
-
-  .has-error {
-    .form-control {
-      color: $colour-danger !important;
-      @include placeholder {
-        color: $colour-danger !important;
-        opacity: 0.7;
+    &.has-error {
+      input,
+      textarea {
+        &.form-control {
+          border-color: $colour-danger !important;
+          color: $colour-danger !important;
+          @include placeholder {
+            color: $colour-danger !important;
+            opacity: 0.8 !important;
+          }
+        }
       }
+    }
+
+    input,
+    textarea {
+      &.form-control {
+        font-size: 1rem;
+        background-color: $colour-text1;
+        color: $colour-text2;
+        height: auto;
+        padding: 0.5rem 1rem;
+        resize: none;
+        border: 1px solid $colour-text1;
+        border-radius: $border-radius-input;
+        width: 100%;
+        @include placeholder {
+          color: $colour-text2;
+          opacity: 0.4;
+        }
+      }
+    }
+
+    textarea.form-control {
+      border-radius: 1.1rem;
     }
   }
 
   .header-panel {
     position: relative;
-    margin-bottom: 0.35em;
+    margin-bottom: 0.25rem;
 
     button {
-      font-size: 1.5em;
+      font-size: 1.5rem;
 
       &.btn-close,
       &.btn-settings {
@@ -391,9 +378,9 @@ body {
   }
 
   .logo {
-    background: url("../img/logo.svg") 50% 2em no-repeat;
-    background-size: 15em;
-    flex: 0 1 20em;
+    background: url("../img/logo.svg") 50% 2rem no-repeat;
+    background-size: 14rem;
+    flex: 0 1 19rem;
   }
 
   .lookahead-container {
@@ -407,8 +394,6 @@ body {
     .measure {
       display: block;
       position: absolute;
-      padding-top: 0.25em;
-      padding-bottom: 0.25em;
       z-index: 60;
       color: $colour-link;
       background-color: transparent;
@@ -423,14 +408,6 @@ body {
 
   .margin-bottom-0 {
     margin-bottom: 0 !important;
-  }
-
-  .margin-bottom-10 {
-    margin-bottom: 10px !important;
-  }
-
-  .margin-bottom-15 {
-    margin-bottom: 15px !important;
   }
 
   .overlay {
@@ -453,7 +430,7 @@ body {
 
   .darker-overlay {
     @extend .overlay;
-    background-color: rgba(8, 48, 57, 0.9)!important;
+    background-color: rgba(8, 48, 57, 0.9) !important;
   }
 
   .progress-bar-success {
@@ -480,13 +457,28 @@ body {
     color: $colour-danger !important;
   }
 
+  .validation {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+    position: absolute;
+    bottom: -0.8rem;
+    left: 50%;
+    transform: translate(-50%, 0);
+    white-space: nowrap;
+    color: #fff;
+    background: $colour-danger;
+    padding: 0.1rem 0.5rem 0.2rem;
+    z-index: 20;
+    border-radius: $border-radius-input;
+  }
+
   .view {
     height: 100%;
     width: 100%;
 
     .view-content {
       height: 100%;
-      padding: 0.75em;
+      padding: 0.75rem;
       margin: 0 auto;
 
       &.ng-enter {
@@ -500,8 +492,8 @@ body {
     color: $colour-text2;
     border-radius: $border-radius-well;
     border: none;
-    padding: 1em 1.25em;
-    margin-bottom: 0.75em;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
     @include box-shadow;
 
     &.dark {
@@ -535,18 +527,13 @@ body {
       text-align: center;
     }
 
-    input:not([type]).form-control,
-    input[type="text"].form-control {
-      border: solid 1px $colour-text2;
-    }
-
     .btn.btn-default {
       color: $colour-text2;
       border-color: $colour-text2;
       font-weight: normal;
-      border-width: 1px;
-      margin-top: 0.5em;
-      margin-bottom: 0.5em;
+      border-width: 0.1rem;
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
 
       &:not([disabled]):active,
       &:not([disabled]):hover {
@@ -565,10 +552,33 @@ body {
       margin-bottom: 0;
 
       button {
-        margin-right: 0.5em;
+        margin-right: 0.5rem;
 
         &:last-child {
           margin-right: 0;
+        }
+      }
+    }
+
+    .form-group {
+      &.has-error {
+        input,
+        textarea {
+          &.form-control {
+            border-color: $colour-danger !important;
+            color: $colour-danger !important;
+            @include placeholder {
+              color: $colour-danger !important;
+              opacity: 0.8 !important;
+            }
+          }
+        }
+      }
+
+      input,
+      textarea {
+        &.form-control {
+          border-color: $colour-text2 !important;
         }
       }
     }
@@ -587,7 +597,6 @@ body {
 
   textarea {
     height: 100%;
-    width: 100%;
     box-sizing: border-box;
     position: absolute;
   }
@@ -596,15 +605,6 @@ body {
     display: flex;
     flex-flow: column;
     height: 100%;
-
-    .form-group {
-      position: relative;
-    }
-
-    .validation {
-      top: 2.05em;
-      right: 1em;
-    }
   }
 
   .btn-delete-bookmark {
@@ -622,10 +622,6 @@ body {
     display: none;
   }
 
-  .buttons {
-    margin: 0 0 5px;
-  }
-
   .buttons,
   .form-group,
   .header-panel {
@@ -636,21 +632,20 @@ body {
     flex: 0 1 auto;
     overflow-y: auto;
     overflow-x: hidden;
+    margin-bottom: 0.5rem;
 
     .badge {
       display: inline-flex;
       align-items: center;
-      margin: 0 5px 5px 0;
+      margin: 0 0.5rem 0.5rem 0;
       color: rgba($colour-text1, 0.9);
       background-color: $colour-text2;
       border: 0;
-      font-size: 0.9em;
+      font-size: 0.85rem;
       font-weight: normal;
       text-transform: capitalize;
-      line-height: 1.2em;
+      line-height: 1.2rem;
       max-width: 99%;
-      padding-top: 0.25em;
-      padding-bottom: 0.35em;
 
       &:hover {
         cursor: pointer;
@@ -661,13 +656,12 @@ body {
       }
 
       i {
-        font-size: 0.9em;
         transition: color, ease-in-out, 0.2s;
         color: $colour-link;
       }
 
       span {
-        margin-right: 0.3em;
+        margin-right: 0.3rem;
         @include text-overflow-ellipsis;
 
         &:hover {
@@ -688,27 +682,27 @@ body {
       position: relative;
       z-index: 50;
       background: transparent;
-      padding-right: 2.2em;
+      padding-right: 2.2rem;
     }
 
     .btn-clear {
       position: absolute;
       top: 0;
-      right: 0.75em;
-      font-size: 1.1em;
-      line-height: 2.1em;
+      right: 0.75rem;
+      font-size: 1.1rem;
+      line-height: 2.3rem;
       z-index: 55;
       border-bottom: none;
     }
 
     .lookahead-container {
       top: 0;
-      left: 1em;
+      left: 1rem;
 
       .lookahead,
       .measure {
-        padding-top: 0.5em;
-        padding-bottom: 0.5em;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
         text-transform: lowercase;
       }
     }
@@ -717,7 +711,7 @@ body {
   .textarea-container {
     flex: 1 1 auto;
     position: relative;
-    min-height: 10em;
+    min-height: 10rem;
   }
 }
 
@@ -740,13 +734,13 @@ body {
   .btn-scan {
     display: none;
     position: absolute;
-    top: 0.35em;
-    right: 1.3em;
+    top: 0.35rem;
+    right: 1.3rem;
     z-index: 55;
     border-bottom: none;
 
     i {
-      font-size: 2.5em;
+      font-size: 2.5rem;
     }
   }
 
@@ -756,20 +750,14 @@ body {
   }
 
   .form-group {
-    position: relative;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-
     input {
       width: 100%;
       font-family: $font-stack-code;
-      line-height: 1.45em;
-      padding: 0.5em 0.9em;
+      line-height: 1.45rem;
+      padding: 0.5rem 0.9rem;
       @include placeholder {
         font-family: $font-stack-regular;
-        font-size: 1.2em;
+        font-size: 1.2rem;
       }
     }
   }
@@ -804,13 +792,13 @@ body {
   }
 
   .secret-form-group {
-    margin-bottom: 2em;
+    margin-bottom: 1.5rem;
 
     .progress,
     .progress-bar-background {
       position: absolute;
       top: 0;
-      font-size: 1.2em;
+      font-size: 1.2rem;
       height: 100%;
       width: 100%;
       border-radius: $border-radius-input;
@@ -818,7 +806,7 @@ body {
 
     .progress {
       background-color: transparent;
-      border: solid 0.1em $colour-text1;
+      border: solid 0.1rem $colour-text1;
       z-index: 10;
 
       .progress-bar {
@@ -833,7 +821,7 @@ body {
 
   .toggle-form {
     text-align: center;
-    margin-top: 1.2em;
+    margin-top: 1.5rem;
   }
 
   .view-content {
@@ -846,14 +834,13 @@ body {
   .view-content {
     display: flex;
     flex-flow: column;
-    padding: 0 0 0 0.75em;
+    padding: 0 0 0 0.75rem;
 
     .header-panel {
       flex: none;
       margin-bottom: 0;
-      padding-top: 0.75em;
-      padding-right: 10px;
-      padding-bottom: 0.75em;
+      padding: 0.75rem;
+      padding-left: 0;
 
       .btn {
         &.btn-toggle-bookmark {
@@ -870,38 +857,41 @@ body {
         position: relative;
         border-radius: $border-radius-well;
         background-color: $colour-text1;
-        margin-right: 10px;
+        margin-right: 0.5rem;
 
         label {
           position: absolute;
-          top: 0.65em;
-          left: 0.9em;
+          top: 0;
+          left: 0.75rem;
           color: $colour-text2;
           z-index: 60;
           margin-bottom: 0;
-        }
-
-        i {
           opacity: 0.4;
-          font-size: 1.2em;
+          font-size: 1.1rem;
+          line-height: 2.3rem;
         }
 
         input {
           position: relative;
           z-index: 50;
-          padding: 0.25em 1.8em;
-          font-size: 1.4em;
+          padding: 0 2rem;
+          font-size: 1.3rem;
           background: transparent;
           width: 100%;
-          line-height: 1.35em;
+          line-height: 2.3rem;
+          border: none;
+          @include placeholder {
+            color: $colour-text2;
+            opacity: 0.4;
+          }
         }
 
         .btn-clear {
           position: absolute;
           top: 0;
-          right: 0.75em;
-          font-size: 1.1em;
-          line-height: 2.2em;
+          right: 0.75rem;
+          font-size: 1.1rem;
+          line-height: 2.2rem;
           z-index: 55;
           border-bottom: none;
 
@@ -911,14 +901,14 @@ body {
         }
 
         .lookahead-container {
-          font-size: 1.4em;
+          font-size: 1.3rem;
           top: 0;
-          left: 1.8em;
-          width: calc(100% - 1.8em);
+          left: 2rem;
+          width: calc(100% - 4rem);
 
           .lookahead,
           .measure {
-            line-height: 1.35em;
+            line-height: 2.3rem;
           }
         }
       }
@@ -928,14 +918,14 @@ body {
       flex: 0 1 100%;
       overflow-x: visible;
       overflow-y: auto;
-      padding: 0 10px 0 0;
+      padding: 0 0.75rem 0 0;
 
       &.ng-hide {
         margin-top: 0;
       }
 
       & > h4 {
-        font-size: 1.4em;
+        font-size: 1.4rem;
         font-weight: normal;
         text-align: center;
         position: relative;
@@ -951,7 +941,7 @@ body {
         border: none;
         border-radius: $border-radius-well;
         padding: 0;
-        margin: 0 0 0.75em;
+        margin: 0 0 0.75rem;
         @include box-shadow;
 
         &:hover {
@@ -976,7 +966,7 @@ body {
 
         a {
           border-radius: $border-radius-well;
-          padding: 12px 0 12px 20px;
+          padding: 0.75rem 1rem;
           display: block;
           border-bottom: none;
           @include css-prefix(user-select, none);
@@ -990,9 +980,9 @@ body {
 
         .btn-edit-bookmark {
           position: absolute;
-          top: 10px;
-          right: 16px;
-          font-size: 1.1em;
+          top: 0.5rem;
+          right: 1rem;
+          font-size: 1.1rem;
 
           &:hover {
             i {
@@ -1028,11 +1018,11 @@ body {
               position: static;
               background-color: $colour-text1;
               color: $colour-text2;
-              font-size: 1.7em;
+              font-size: 1.5rem;
               border-radius: 100%;
-              width: 2em;
-              height: 2em;
-              margin-right: 20px;
+              width: 3rem;
+              height: 3rem;
+              margin-right: 1.75rem;
 
               &:last-child {
                 margin-right: 0;
@@ -1066,46 +1056,32 @@ body {
 
       .list-group-item-heading {
         color: $colour-text2;
-        font-size: 1.2em;
+        font-size: 1.2rem;
         font-weight: normal;
-        line-height: 1.1em;
-        margin-bottom: 0.2em;
-        margin-right: 40px;
+        line-height: 1.1rem;
+        margin-bottom: 0.2rem;
+        margin-right: 1.5rem;
         transition: all, ease-in-out, 0.2s;
         @include text-overflow-ellipsis;
       }
 
       .list-group-item-text {
         color: $colour-text2;
-        margin-right: 20px;
       }
 
       .description {
-        font-size: 0.9em;
+        font-size: 0.9rem;
         font-style: italic;
-        margin-bottom: 0.2em;
+        margin-bottom: 0.2rem;
       }
 
       .url {
-        font-size: 0.9em;
+        font-size: 0.85rem;
         color: $colour-link;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         width: 100%;
-      }
-
-      .well {
-        border: none;
-        text-align: center;
-        padding: 20px;
-        margin-bottom: 0;
-        color: $colour-link;
-
-        h4 {
-          font-size: 15px;
-          margin-bottom: 0;
-        }
       }
     }
   }
@@ -1123,68 +1099,48 @@ body {
     }
   }
 
-  .about-panel {
-    .contribute-url,
-    .github-url,
-    .issues-url,
-    .website-url {
-      @extend .form-control-url;
-      @include text-overflow-ellipsis;
-    }
-  }
-
   .backup-restore-panel {
     #restoreForm {
       textarea {
-        @extend textarea.form-control;
-        position: static;
-        width: 100%;
-        height: 12em !important;
-        margin-bottom: 15px;
-        border: 1px solid $colour-text2 !important;
+        height: 12rem;
         font-family: $font-stack-code;
-        font-size: 0.8em !important;
+        font-size: 0.8rem;
       }
 
-      #backupFilePanel {
+      #restoreFilePanel {
         button {
           margin-right: 0;
         }
 
         p {
-          margin-top: 15px;
-          min-height: 1.2em;
+          margin-top: 1rem;
+          min-height: 1.2rem;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
           width: 100%;
         }
       }
+
+      .validation {
+        bottom: -0.45rem;
+      }
     }
   }
 
-  .buttons {
-    margin: 0;
-  }
-
-  .form-group {
-    position: relative;
-    margin-bottom: 1em;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-
-    a,
-    p,
-    span,
-    ul {
-      font-size: 0.95em;
-    }
+  .setting-group {
+    @extend .form-group;
 
     label {
       margin-bottom: 0;
-      line-height: 1.5em;
+    }
+
+    p {
+      font-size: 0.95rem;
+    }
+
+    #backupLink {
+      font-size: 0.9rem;
     }
 
     .description {
@@ -1202,7 +1158,7 @@ body {
       }
     }
 
-    .form-control {
+    .setting-value {
       position: absolute;
       top: 0;
       right: 0;
@@ -1210,31 +1166,32 @@ body {
       width: auto;
       padding: 0;
       color: $colour-text2;
-      font-size: 1.06em;
-      line-height: 1.35em;
+      font-size: 1.06rem;
+      line-height: 1.35rem;
       border: 0;
       border-radius: 0;
       background: transparent;
       transition: none;
 
-      .checkbox {
-        top: 0.5em;
+      &.url {
+        position: relative;
+        display: block;
+        text-align: right;
+        width: 100%;
+        line-height: 1.5rem;
+        margin-bottom: 0.2rem;
       }
-    }
 
-    .form-control-url {
-      position: relative;
-      display: block;
-      text-align: right;
-      width: 100%;
-      margin-bottom: 5px;
+      .checkbox {
+        top: 0.5rem;
+      }
     }
   }
 
   .header-panel,
   .panel-container {
-    padding-left: 0.75em;
-    padding-right: 0.75em;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
   }
 
   .header-panel {
@@ -1247,25 +1204,25 @@ body {
 
   .status-panel {
     .progress {
-      height: 0.45em;
-      border-radius: 1em;
+      height: 0.45rem;
+      border-radius: 1rem;
       background-color: $colour-text2;
       overflow: visible;
-      margin-bottom: 1em;
+      margin-bottom: 2rem;
 
       .progress-bar {
         background-color: $colour-bg2;
         transition: none;
-        border-bottom-left-radius: 1em;
-        border-top-left-radius: 1em;
+        border-bottom-left-radius: 1rem;
+        border-top-left-radius: 1rem;
       }
     }
 
     .max,
     .used {
-      font-size: 0.8em;
+      font-size: 0.8rem;
       position: absolute;
-      bottom: -1.5em;
+      bottom: -1.25rem;
     }
 
     .max {
@@ -1279,7 +1236,7 @@ body {
     }
 
     .service-message {
-      max-height: 7em;
+      max-height: 7rem;
       overflow-y: auto;
       font-style: italic;
       quotes: "\201c""\201d";
@@ -1295,47 +1252,35 @@ body {
     }
 
     .service-url {
-      @extend .form-control-url;
+      @extend .url;
       @include text-overflow-ellipsis;
     }
 
     .status-text {
       color: $colour-link;
     }
-
-    .update-service-url {
-      input:not([type]).form-control {
-        @extend input:not([type]).form-control;
-        position: static;
-        width: 100%;
-        border: 1px solid $colour-text2 !important;
-      }
-
-      .validation span {
-        font-size: 1em;
-      }
-    }
   }
 
   .sync-panel {
     .updates-available {
       @extend .description;
-      font-size: 0.9em;
+      font-size: 0.9rem;
       text-align: center;
       font-style: italic;
     }
 
     .id-url {
-      @extend .form-control-url;
+      @extend .url;
       font-family: $font-stack-code;
-      font-size: 0.97em;
+      font-size: 0.92rem;
+      text-align: center !important;
     }
   }
 
   .view-content {
     display: flex;
     flex-flow: column;
-    padding: 0.75em 0 0;
+    padding: 0.75rem 0 0;
   }
 
   .well {
@@ -1343,12 +1288,16 @@ body {
     overflow: hidden;
 
     h4 {
-      padding: 0.75em 1em;
+      padding: 0.75rem 1rem;
       margin-bottom: 0;
     }
 
+    .btn.btn-default {
+      font-size: 1.1rem;
+    }
+
     .panel-content {
-      padding: 0 1.25em 1em;
+      padding: 0 1.25rem;
     }
   }
 }
@@ -1358,32 +1307,36 @@ body {
 
   h4 {
     text-align: center;
-    margin-bottom: 1.5em;
-    font-size: 1.5em;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
   }
 
-  p, ul {
-    font-size: 1.1em;
-    line-height: 1.3em;
+  p,
+  ul {
+    font-size: 1.1rem;
+    line-height: 1.3rem;
   }
 
   ul {
-    margin-bottom: 0.75em;
-    padding-left: 1em;
+    margin-bottom: 0.75rem;
+    padding-left: 1rem;
   }
 
   .buttons {
-    margin-top: 2em;
+    margin-top: 2rem;
 
-    .btn {
-      font-size: 1.1em;
+    &.small {
+      .btn {
+        font-size: 1rem;
+        padding: 0 0.9rem;
+      }
     }
   }
 
   .view-content {
     display: flex;
     flex-direction: column;
-    padding: 2em;
+    padding: 2rem;
   }
 }
 
@@ -1391,29 +1344,29 @@ body {
   .pagination {
     display: flex;
     justify-content: space-between;
-    margin-top: 2em;
-    font-size: 1.1em;
+    margin-top: 2rem;
+    font-size: 1.1rem;
 
     a {
       position: relative;
 
       &.next-link {
-        margin-right: 0.5em;
-  
+        margin-right: 0.5rem;
+
         span:after {
           content: "\203A";
           position: absolute;
-          right: -0.5em;
+          right: -0.5rem;
         }
       }
-  
+
       &.prev-link {
-        margin-left: 0.5em;
-        
+        margin-left: 0.5rem;
+
         span:before {
           content: "\2039";
           position: absolute;
-          left: -0.5em;
+          left: -0.5rem;
         }
       }
     }
@@ -1428,13 +1381,13 @@ body {
 
 #qr-panel {
   @extend .darker-overlay;
-  
+
   flex-direction: column;
-  padding: 2em;
+  padding: 2rem;
 
   p {
     text-align: center;
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
   }
 
   .buttons {
@@ -1442,28 +1395,29 @@ body {
 
     button {
       display: block;
-      margin: 1em auto 0;
+      margin: 1rem auto 0;
     }
   }
 
   #qr {
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
   }
 }
 
 #support-panel {
   h4 {
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
   }
-  
-  p, ul {
-    font-size: 1em;
-    line-height: 1.25em;
+
+  p,
+  ul {
+    font-size: 1rem;
+    line-height: 1.25rem;
   }
 
   .buttons.small {
     font-size: 90%;
-    margin-top: 1em;
+    margin-top: 1rem;
   }
 }
 
@@ -1472,8 +1426,8 @@ body {
 
   h3 {
     color: $colour-link-highlight;
-    font-size: 1.1em;
-    margin: 0.2em;
+    font-size: 1.1rem;
+    margin: 0.2rem;
   }
 
   .spinner-border {

@@ -417,6 +417,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_BackupRestore_RestoreForm_DataField_Label": {
       "message": "Paste backup data"
     },
+    "settings_BackupRestore_RestoreForm_Invalid_Label": {
+      "message": "Invalid xBrowserSync backup data"
+    },
     "button_SelectBackupFile_Label": {
       "message": "Select file"
     },
