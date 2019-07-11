@@ -445,8 +445,7 @@
         <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_AppVersion_Description) }}
         </p>
         <div class="text-center">
-          <button type="button" class="btn btn-default"
-            data-ng-click="vm.events.openUrl($event, vm.globals.ReleaseNotesUrlStem + vm.globals.AppVersion)">
+          <button type="button" class="btn btn-default" data-ng-click="vm.events.button_ReleaseNotes_Click()">
             {{ vm.platform.GetConstant(vm.globals.Constants.Button_ReleaseNotes_Label) }}
           </button>
         </div>

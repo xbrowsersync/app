@@ -67,6 +67,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       bookmarkForm_ShareBookmark_Click: platform.Bookmarks.Share,
       bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
       bookmarkPanel_Close_Click: bookmarkPanel_Close_Click,
+      button_ReleaseNotes_Click: button_ReleaseNotes_Click,
       displayQrPanel: displayQrPanel,
       helpPanel_Close_Click: helpPanel_Close_Click,
       helpPanel_ShowHelp_Click: helpPanel_ShowHelp_Click,
@@ -130,7 +131,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       syncPanel_DisplayDataUsage_Click: displayDataUsage,
       searchForm_ToggleBookmark_Click: searchForm_ToggleBookmark_Click,
       updatedPanel_Continue_Click: updatedPanel_Continue_Click,
-      updatedPanel_ReleaseNotes_Click: updatedPanel_ReleaseNotes_Click,
       updateServiceUrlForm_Cancel_Click: updateServiceUrlForm_Cancel_Click,
       updateServiceUrlForm_Confirm_Click: updateServiceUrlForm_Confirm_Click,
       updateServiceUrlForm_Display_Click: updateServiceUrlForm_Display_Click,
@@ -616,6 +616,12 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var bookmarkPanel_Close_Click = function () {
+    vm.view.displayMainView();
+  };
+
+  var button_ReleaseNotes_Click = function () {
+    var url = globals.ReleaseNotesUrlStem + utility.GetVersionTag();
+    vm.events.openUrl(null, url);
     vm.view.displayMainView();
   };
 
@@ -2149,11 +2155,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   var updatedPanel_Continue_Click = function () {
     platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, false);
     vm.view.change(vm.view.views.support);
-  };
-
-  var updatedPanel_ReleaseNotes_Click = function () {
-    vm.events.openUrl(null, globals.ReleaseNotesUrlStem + globals.AppVersion);
-    vm.view.displayMainView();
   };
 
   var updateServicePanel = function () {
