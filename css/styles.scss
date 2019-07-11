@@ -22,12 +22,14 @@ body {
     font-weight: 800;
     float: left;
     margin: 0;
+    line-height: 2.1rem;
   }
 
   h4 {
     font-size: 1.3rem;
     font-weight: 800;
     margin-top: 0;
+    line-height: 1.75rem;
   }
 
   a {
@@ -348,8 +350,7 @@ body {
         border-radius: $border-radius-input;
         width: 100%;
         @include placeholder {
-          color: $colour-text2;
-          opacity: 0.4;
+          color: $colour-link;
         }
       }
     }
@@ -683,6 +684,7 @@ body {
       z-index: 50;
       background: transparent;
       padding-right: 2.2rem;
+      border: none;
     }
 
     .btn-clear {
@@ -863,10 +865,9 @@ body {
           position: absolute;
           top: 0;
           left: 0.75rem;
-          color: $colour-text2;
+          color: $colour-link;
           z-index: 60;
           margin-bottom: 0;
-          opacity: 0.4;
           font-size: 1.1rem;
           line-height: 2.3rem;
         }
@@ -881,8 +882,7 @@ body {
           line-height: 2.3rem;
           border: none;
           @include placeholder {
-            color: $colour-text2;
-            opacity: 0.4;
+            color: $colour-link;
           }
         }
 
@@ -1058,7 +1058,7 @@ body {
         color: $colour-text2;
         font-size: 1.2rem;
         font-weight: normal;
-        line-height: 1.1rem;
+        line-height: 1.25rem;
         margin-bottom: 0.2rem;
         margin-right: 1.5rem;
         transition: all, ease-in-out, 0.2s;
@@ -1294,6 +1294,7 @@ body {
 
     .btn.btn-default {
       font-size: 1.1rem;
+      line-height: 2.3rem;
     }
 
     .panel-content {
@@ -1309,6 +1310,7 @@ body {
     text-align: center;
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
+    line-height: 1.8rem;
   }
 
   p,
@@ -1323,12 +1325,13 @@ body {
   }
 
   .buttons {
-    margin-top: 2rem;
+    margin-top: 1rem;
 
     &.small {
       .btn {
         font-size: 1rem;
-        padding: 0 0.9rem;
+        line-height: 2.1rem;
+        padding: 0 0.5rem;
       }
     }
   }
@@ -1416,8 +1419,14 @@ body {
   }
 
   .buttons.small {
-    font-size: 90%;
-    margin-top: 1rem;
+    margin: 0.5rem 0 1rem;
+  }
+}
+
+#updated-panel {
+  .buttons button {
+    display: block;
+    margin: 0 auto 1rem;
   }
 }
 
