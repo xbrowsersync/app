@@ -43,9 +43,9 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         if (!results || results.length === 0) {
           return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
         }
-        
+
         changedBookmark = results[0];
-        
+
         // Get changed bookmark location info 
         return platform.Bookmarks.GetLocalBookmarkLocationInfo(id);
       })
@@ -295,7 +295,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         if (!results || results.length === 0) {
           return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
         }
-        
+
         movedBookmark = results[0];
 
         // Get moved bookmark old and new location info 
@@ -626,15 +626,12 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         var upgradedBookmarks = bookmarks.UpgradeContainers(restoreData.bookmarks || []);
 
         // If bookmarks don't have unique ids, add new ids
-        if (!bookmarks.CheckBookmarksHaveUniqueIds(upgradedBookmarks)) {
-          return platform.Bookmarks.AddIds(upgradedBookmarks)
+        return !bookmarks.CheckBookmarksHaveUniqueIds(upgradedBookmarks) ?
+          platform.Bookmarks.AddIds(upgradedBookmarks)
             .then(function (updatedBookmarks) {
               return updatedBookmarks;
-            });
-        }
-        else {
-          return upgradedBookmarks;
-        }
+            }) :
+          upgradedBookmarks;
       })
       .then(function (bookmarksToRestore) {
         // Queue sync

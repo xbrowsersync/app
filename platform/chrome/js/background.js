@@ -692,15 +692,12 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         var upgradedBookmarks = bookmarks.UpgradeContainers(restoreData.bookmarks || []);
 
         // If bookmarks don't have unique ids, add new ids
-        if (!bookmarks.CheckBookmarksHaveUniqueIds(upgradedBookmarks)) {
-          return platform.Bookmarks.AddIds(upgradedBookmarks)
+        return !bookmarks.CheckBookmarksHaveUniqueIds(upgradedBookmarks) ?
+          platform.Bookmarks.AddIds(upgradedBookmarks)
             .then(function (updatedBookmarks) {
               return updatedBookmarks;
-            });
-        }
-        else {
-          return upgradedBookmarks;
-        }
+            }) :
+          upgradedBookmarks;
       })
       .then(function (bookmarksToRestore) {
         // Queue sync

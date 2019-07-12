@@ -95,17 +95,18 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           return bookmark.dateAdded;
         });
 
-        var idCounter = allBookmarks.length;
+        // Start the id counter one greater than the total number of bookmarks
+        var idCounter = allBookmarks.length + 1;
 
         // Add ids to containers' children 
         var addIdToBookmark = function (bookmark) {
           var bookmarkId;
 
-          // Check allBookmarks for index 
+          // Get the local index of the bookmark
           bookmarkId = _.findIndex(allBookmarks, function (sortedBookmark) {
             return bookmarks.XBookmarkIsContainer(bookmark) ?
               sortedBookmark.id === localContainerIds[bookmark.title] :
-              sortedBookmark.title === bookmark.title &&
+              sortedBookmark.title === (bookmark.title || '') &&
               sortedBookmark.url === bookmark.url &&
               !sortedBookmark.assigned;
           });
@@ -127,6 +128,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           }
         };
         _.each(xBookmarks, addIdToBookmark);
+
+        // Check that bookmarks now have unique ids
+        var bookmarksHaveUniqueIds = bookmarks.CheckBookmarksHaveUniqueIds(xBookmarks);
+        if (!bookmarksHaveUniqueIds) {
+          return $q.reject({ code: globals.ErrorCodes.DuplicateBookmarkIdsDetected });
+        }
 
         return xBookmarks;
       });

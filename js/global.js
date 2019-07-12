@@ -297,6 +297,7 @@ xBrowserSync.App.Global = function (platform) {
       ContainerChanged: 10112,
       LocalContainerNotFound: 10113,
       DataOutOfSync: 10114,
+      DuplicateBookmarkIdsDetected: 10115,
       ApiInvalid: 10200,
       ApiOffline: 10201,
       ApiVersionNotSupported: 10202,

@@ -62,31 +62,33 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   var checkBookmarksHaveUniqueIds = function (bookmarks) {
     // Find any bookmark without an id
     var bookmarksHaveIds = true;
-    self.Each(bookmarks, function (bookmark) {
+    eachBookmark(bookmarks, function (bookmark) {
       if (_.isUndefined(bookmark.id)) {
         bookmarksHaveIds = false;
       }
     });
 
     if (!bookmarksHaveIds) {
+      utility.LogWarning('Bookmarks missing ids.');
       return false;
     }
 
     // Get all local bookmarks into flat array
     var allBookmarks = [];
-    self.Each(bookmarks, function (bookmark) {
+    eachBookmark(bookmarks, function (bookmark) {
       allBookmarks.push(bookmark);
     });
 
     // Find a bookmark with a duplicate id
-    var duplicateIds = _.chain(allBookmarks)
+    var duplicateId = _.chain(allBookmarks)
       .countBy('id')
-      .find(function (count) {
+      .findKey(function (count) {
         return count > 1;
       })
       .value();
 
-    if (!_.isUndefined(duplicateIds)) {
+    if (!_.isUndefined(duplicateId)) {
+      utility.LogWarning('Duplicate bookmark id detected: ' + duplicateId);
       return false;
     }
 
@@ -1524,7 +1526,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     return bookmarks;
   };
 
-  var self = {
+  return {
     AddNewInXBookmarks: addNewInXBookmarks,
     CheckBookmarksHaveUniqueIds: checkBookmarksHaveUniqueIds,
     CheckIfRefreshSyncedDataOnError: checkIfRefreshSyncedDataOnError,
@@ -1555,5 +1557,4 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     XBookmarkIsContainer: xBookmarkIsContainer,
     XSeparator: xSeparator,
   };
-  return self;
 };
