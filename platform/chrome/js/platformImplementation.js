@@ -48,6 +48,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.EventListeners.Disable = disableEventListeners;
     platform.GetConstant = getConstant;
     platform.GetCurrentUrl = getCurrentUrl;
+    platform.GetHelpPages = getHelpPages;
     platform.GetNewTabUrl = getNewTabUrl;
     platform.GetPageMetadata = getPageMetadata;
     platform.GetSupportedUrl = getSupportedUrl;
@@ -553,6 +554,25 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         reject(err);
       }
     });
+  };
+
+  var getHelpPages = function () {
+    var pages = [
+      platform.GetConstant(globals.Constants.Help_Page1_Content),
+      platform.GetConstant(globals.Constants.Help_Page2_Desktop_Content),
+      platform.GetConstant(globals.Constants.Help_Page3_Content),
+      platform.GetConstant(globals.Constants.Help_Page4_Desktop_Content),
+      platform.GetConstant(globals.Constants.Help_Page5_Content),
+      platform.GetConstant(globals.Constants.Help_Page6_Desktop_Content),
+      platform.GetConstant(globals.Constants.Help_Page7_Desktop_Content),
+      platform.GetConstant(globals.Constants.Help_Page8_Chrome_Content),
+      platform.GetConstant(globals.Constants.Help_Page9_Content),
+      platform.GetConstant(globals.Constants.Help_Page10_Chrome_Content),
+      platform.GetConstant(globals.Constants.Help_Page11_Desktop_Content),
+      platform.GetConstant(globals.Constants.Help_Page12_Content)
+    ];
+
+    return pages;
   };
 
   var getFromLocalStorage = function (storageKeys) {

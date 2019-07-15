@@ -31,7 +31,7 @@
         <button type="button" class="btn btn-default btn-new-sync"
           data-ng-disabled="vm.sync.passwordConfirmation !== vm.sync.password"
           data-ng-click="vm.events.syncForm_EnableSync_Click()">
-          {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
+          {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
         </button>
         <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_ConfirmPassword_Back_Click()">
           {{ vm.platform.GetConstant(vm.globals.Constants.Button_Back_Label) }}
@@ -104,7 +104,7 @@
     <div class="form-group text-center">
       <button type="button" class="btn btn-default btn-existing-sync"
         data-ng-disabled="!vm.sync.id || !vm.sync.password" data-ng-click="vm.events.syncForm_EnableSync_Click()">
-        {{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}
+        {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
       </button>
     </div>
     <div class="form-group toggle-form">

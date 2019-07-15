@@ -49,6 +49,7 @@ xBrowserSync.App.Platform = function () {
     },
     GetConstant: notImplemented,
     GetCurrentUrl: notImplemented,
+    GetHelpPages: notImplemented,
     GetNewTabUrl: notImplemented,
     GetPageMetadata: notImplemented,
     GetSupportedUrl: notImplemented,

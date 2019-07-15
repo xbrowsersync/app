@@ -71,29 +71,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       button_ReleaseNotes_Click: button_ReleaseNotes_Click,
       displayQrPanel: displayQrPanel,
       helpPanel_Close_Click: helpPanel_Close_Click,
+      helpPanel_KeyDown: helpPanel_KeyDown,
       helpPanel_ShowHelp_Click: helpPanel_ShowHelp_Click,
-      helpPanel1_Next_Click: helpPanel1_Next_Click,
-      helpPanel2_Next_Click: helpPanel2_Next_Click,
-      helpPanel2_Prev_Click: helpPanel2_Prev_Click,
-      helpPanel3_Next_Click: helpPanel3_Next_Click,
-      helpPanel3_Prev_Click: helpPanel3_Prev_Click,
-      helpPanel4_Next_Click: helpPanel4_Next_Click,
-      helpPanel4_Prev_Click: helpPanel4_Prev_Click,
-      helpPanel5_Next_Click: helpPanel5_Next_Click,
-      helpPanel5_Prev_Click: helpPanel5_Prev_Click,
-      helpPanel6_Next_Click: helpPanel6_Next_Click,
-      helpPanel6_Prev_Click: helpPanel6_Prev_Click,
-      helpPanel7_Next_Click: helpPanel7_Next_Click,
-      helpPanel7_Prev_Click: helpPanel7_Prev_Click,
-      helpPanel8_Next_Click: helpPanel8_Next_Click,
-      helpPanel8_Prev_Click: helpPanel8_Prev_Click,
-      helpPanel9_Next_Click: helpPanel9_Next_Click,
-      helpPanel9_Prev_Click: helpPanel9_Prev_Click,
-      helpPanel10_Next_Click: helpPanel10_Next_Click,
-      helpPanel10_Prev_Click: helpPanel10_Prev_Click,
-      helpPanel11_Next_Click: helpPanel11_Next_Click,
-      helpPanel11_Prev_Click: helpPanel11_Prev_Click,
-      helpPanel12_Prev_Click: helpPanel12_Prev_Click,
       issuesPanel_ClearLog_Click: issuesPanel_ClearLog_Click,
       issuesPanel_DownloadLogFile_Click: issuesPanel_DownloadLogFile_Click,
       openUrl: openUrl,
@@ -140,8 +119,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     };
 
     vm.help = {
-      currentPanel: 0,
-      displayPanel: displayHelpPanel
+      currentPage: 0,
+      displayPage: displayHelpPage,
+      pages: undefined
     };
 
     vm.platformName = undefined;
@@ -294,7 +274,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     if (!validateBackupData()) {
       return;
     }
-    
+
     // Display restore confirmation 
     vm.settings.displayRestoreForm = false;
     vm.settings.displayRestoreConfirmation = true;
@@ -737,20 +717,12 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     }
   };
 
-  var displayHelpPanel = function (panelToDisplay) {
-    if (!panelToDisplay || panelToDisplay > vm.help.currentPanel) {
-      var panels = document.querySelectorAll('.help-panel > div');
-
-      for (var i = 0; i < panels.length; i++) {
-        panels[i].classList.remove('reverse');
-      }
-    }
-    else if (panelToDisplay < vm.help.currentPanel) {
-      document.querySelector('#help-panel-' + vm.help.currentPanel).classList.add('reverse');
-      document.querySelector('#help-panel-' + panelToDisplay).classList.add('reverse');
+  var displayHelpPage = function (panelToDisplay) {
+    if (panelToDisplay < 0 || panelToDisplay >= vm.help.pages.length) {
+      return;
     }
 
-    vm.help.currentPanel = (!panelToDisplay) ? 0 : panelToDisplay;
+    vm.help.currentPage = panelToDisplay || 0;
   };
 
   var displayMainView = function () {
@@ -1164,97 +1136,33 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     vm.view.displayMainView();
   };
 
+  var helpPanel_KeyDown = function (event) {
+    switch (true) {
+      // Escape key
+      case (event.keyCode === 27):
+        event.preventDefault();
+        vm.events.helpPanel_Close_Click();
+        break;
+      // Left arrow key
+      case (event.keyCode === 37):
+        event.preventDefault();
+        vm.help.displayPage(vm.help.currentPage - 1);
+        break;
+      // Right arrow key
+      case (event.keyCode === 39):
+        event.preventDefault();
+        vm.help.displayPage(vm.help.currentPage + 1);
+        break;
+    }
+  };
+
   var helpPanel_ShowHelp_Click = function () {
-    vm.help.currentPanel = 1;
+    vm.help.pages = platform.GetHelpPages();
+    vm.help.currentPage = 0;
     vm.view.change(vm.view.views.help);
-  };
-
-  var helpPanel1_Next_Click = function () {
-    vm.help.displayPanel(2);
-  };
-
-  var helpPanel2_Next_Click = function () {
-    vm.help.displayPanel(3);
-  };
-
-  var helpPanel2_Prev_Click = function () {
-    vm.help.displayPanel(1);
-  };
-
-  var helpPanel3_Next_Click = function () {
-    vm.help.displayPanel(4);
-  };
-
-  var helpPanel3_Prev_Click = function () {
-    vm.help.displayPanel(2);
-  };
-
-  var helpPanel4_Next_Click = function () {
-    vm.help.displayPanel(5);
-  };
-
-  var helpPanel4_Prev_Click = function () {
-    vm.help.displayPanel(3);
-  };
-
-  var helpPanel5_Next_Click = function () {
-    vm.help.displayPanel(6);
-  };
-
-  var helpPanel5_Prev_Click = function () {
-    vm.help.displayPanel(4);
-  };
-
-  var helpPanel6_Next_Click = function () {
-    vm.help.displayPanel(7);
-  };
-
-  var helpPanel6_Prev_Click = function () {
-    vm.help.displayPanel(5);
-  };
-
-  var helpPanel7_Next_Click = function () {
-    vm.help.displayPanel(8);
-  };
-
-  var helpPanel7_Prev_Click = function () {
-    vm.help.displayPanel(6);
-  };
-
-  var helpPanel8_Next_Click = function () {
-    vm.help.displayPanel(9);
-  };
-
-  var helpPanel8_Prev_Click = function () {
-    vm.help.displayPanel(7);
-  };
-
-  var helpPanel9_Next_Click = function () {
-    vm.help.displayPanel(10);
-  };
-
-  var helpPanel9_Prev_Click = function () {
-    vm.help.displayPanel(8);
-  };
-
-  var helpPanel10_Next_Click = function () {
-    vm.help.displayPanel(11);
-  };
-
-  var helpPanel10_Prev_Click = function () {
-    vm.help.displayPanel(9);
-  };
-
-  var helpPanel11_Next_Click = function () {
-    vm.help.displayPanel(12);
-  };
-
-  var helpPanel11_Prev_Click = function () {
-    vm.help.displayPanel(10);
-  };
-
-  var helpPanel12_Prev_Click = function () {
-    vm.help.displayPanel(11);
+    $timeout(function () {
+      document.querySelector('#help-page-container').focus();
+    }, 100);
   };
 
   var openUrl = function (event, url) {
@@ -2347,9 +2255,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     if (vm.settings.dataToRestore) {
       try {
         restoreData = JSON.parse(vm.settings.dataToRestore);
-        xBookmarks = restoreData.xBrowserSync ? restoreData.xBrowserSync.bookmarks : 
+        xBookmarks = restoreData.xBrowserSync ? restoreData.xBrowserSync.bookmarks :
           restoreData.xbrowsersync ? restoreData.xbrowsersync.data : null;
-        validateData = !!xBookmarks;        
+        validateData = !!xBookmarks;
       }
       catch (err) { }
     }
