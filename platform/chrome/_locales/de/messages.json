@@ -212,21 +212,6 @@
   "settings_Sync_SyncToolbar_Description": {
     "message": "Deaktivieren Sie diese Einstellung wenn Sie in der Symbolleiste die Lesezeichen nur lokal verwalten und nicht synchronisieren möchten. Das kann hilfreich sein, wenn Sie verschiedene Browser synchronisieren."
   },
-  "settings_Service_ServiceUrl_Label": {
-    "message": "Url"
-  },
-  "settings_Service_ServiceUrl_Description": {
-    "message": "xBrowserSync Dienst aktuell aktiv."
-  },
-  "settings_Service_Status_Label": {
-    "message": "Status"
-  },
-  "settings_Service_Status_Description": {
-    "message": "Aktueller Dienst-Status."
-  },
-  "settings_Service_ServiceMessage_Label": {
-    "message": "Dienst-Meldungen"
-  },
   "settings_Service_ChangeService_Label": {
     "message": "Dienst ändern"
   },

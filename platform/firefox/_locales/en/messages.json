@@ -212,21 +212,6 @@
   "settings_Sync_SyncToolbar_Description": {
     "message": "Disable this setting if you wish to display local bookmarks in the bookmarks bar rather than synced bookmarks. Useful when syncing to multiple browsers."
   },
-  "settings_Service_ServiceUrl_Label": {
-    "message": "Url"
-  },
-  "settings_Service_ServiceUrl_Description": {
-    "message": "xBrowserSync service currently in use."
-  },
-  "settings_Service_Status_Label": {
-    "message": "Status"
-  },
-  "settings_Service_Status_Description": {
-    "message": "Current service status."
-  },
-  "settings_Service_ServiceMessage_Label": {
-    "message": "Service message"
-  },
   "settings_Service_ChangeService_Label": {
     "message": "Change service"
   },

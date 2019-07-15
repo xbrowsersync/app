@@ -92,48 +92,46 @@
       <div class="animate-fade"
         data-ng-hide="vm.settings.displayUpdateServiceUrlForm || vm.settings.displayUpdateServiceUrlConfirmation">
         <div class="setting-group">
-          <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_ServiceUrl_Label) }}</label>
           <div class="setting-value service-url">
-            <a href="{{ vm.settings.service.url }}" class="new-tab" title="{{ vm.settings.service.url }}">{{
-              vm.settings.service.url }}</a>
-          </div>
-          <p class="description">{{
-            vm.platform.GetConstant(vm.globals.Constants.Settings_Service_ServiceUrl_Description) }}</p>
-          <div class="text-center">
-            <button class="btn btn-default" data-ng-click="vm.events.updateServiceUrlForm_Display_Click()">
-              {{ vm.platform.GetConstant(vm.globals.Constants.Button_UpdateServiceUrl_Label) }}
-            </button>
-          </div>
-        </div>
-        <div class="setting-group">
-          <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Label) }}</label>
-          <div class="setting-value status-text">
-            <div data-ng-show="vm.settings.service.status == null" class="spinner-border spinner-border-sm"
-              role="status">
-              <span
-                class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}</span>
+            <div class="url-text">
+              <a href="{{ vm.settings.service.url }}" class="new-tab" title="{{ vm.settings.service.url }}">
+                {{ vm.settings.service.url }}
+              </a>
             </div>
-            <span class="text-danger" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Error">{{
-              vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Error) }}</span>
-            <span class="text-success" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Online">{{
-              vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Online) }}</span>
-            <span class="text-danger" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Offline">{{
-              vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Offline) }}</span>
-            <span class="text-warning"
-              data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs">{{
-              vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_NoNewSyncs) }}</span>
+            <div class="service-status">
+              <div class="loading" data-ng-show="vm.settings.service.status === null"
+                title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}">
+                <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}</span>
+                <i class="fas fa-sync-alt" aria-hidden="true"></i>
+              </div>
+              <div data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Error"
+                title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Error) }}">
+                <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Error) }}</span>
+                <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
+              </div>
+              <div data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Online"
+                title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Online) }}">
+                <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Online) }}</span>
+                <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
+              </div>
+              <div data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Offline"
+                title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Offline) }}">
+                <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Offline) }}</span>
+                <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
+              </div>
+              <div data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs"
+                title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_NoNewSyncs) }}">
+                <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_NoNewSyncs) }}</span>
+                <i class="fas fa-exclamation-circle text-warning" aria-hidden="true"></i>
+              </div>
+            </div>
           </div>
-          <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Description)
-            }}</p>
+          <div data-ng-if="vm.settings.service.statusMessage && vm.settings.service.status !== vm.globals.ServiceStatus.Error">
+            <p class="description service-message animate-fade" data-ng-show="vm.settings.service.statusMessage"
+              data-ng-bind-html="vm.settings.service.statusMessage"></p>
+          </div>
         </div>
-        <div class="setting-group"
-          data-ng-if="vm.settings.service.statusMessage && (vm.settings.service.status === vm.globals.ServiceStatus.Online || vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs)">
-          <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_ServiceMessage_Label) }}</label>
-          <p class="description service-message animate-fade" data-ng-show="vm.settings.service.statusMessage"
-            data-ng-bind-html="vm.settings.service.statusMessage"></p>
-        </div>
-        <div class="setting-group"
-          data-ng-if="vm.settings.service.status === vm.globals.ServiceStatus.Online || vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs">
+        <div class="setting-group" data-ng-if="vm.sync.enabled && vm.settings.service.status !== vm.globals.ServiceStatus.Error">
           <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_DataUsage_Label) }}</label>
           <div class="setting-value" data-ng-class="{ 'text-danger': vm.settings.syncDataUsed >= 90 }"
             data-ng-show="vm.settings.syncDataUsed !== null">{{
@@ -148,6 +146,13 @@
             }}</span>
           <span class="max" data-ng-show="vm.settings.service.maxSyncSize !== null">{{ vm.settings.service.maxSyncSize
             | kbFmt : 0 }}</span>
+        </div>
+        <div class="setting-group">
+          <div class="buttons">
+            <button class="btn btn-default" data-ng-click="vm.events.updateServiceUrlForm_Display_Click()">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Button_UpdateServiceUrl_Label) }}
+            </button>
+          </div>
         </div>
       </div>
       <div class="setting-group"

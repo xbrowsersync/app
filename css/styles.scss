@@ -1173,15 +1173,6 @@ body {
       background: transparent;
       transition: none;
 
-      &.url {
-        position: relative;
-        display: block;
-        text-align: right;
-        width: 100%;
-        line-height: 1.5rem;
-        margin-bottom: 0.2rem;
-      }
-
       .checkbox {
         top: 0.5rem;
       }
@@ -1237,6 +1228,7 @@ body {
 
     .service-message {
       max-height: 7rem;
+      padding: 1px;
       overflow-y: auto;
       font-style: italic;
       quotes: "\201c""\201d";
@@ -1251,13 +1243,30 @@ body {
       }
     }
 
-    .service-url {
-      @extend .url;
-      @include text-overflow-ellipsis;
-    }
-
     .status-text {
       color: $colour-link;
+    }
+
+    .service-url {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+
+      .service-status {
+        font-size: 0.9rem;
+        padding-left: 0.4rem;
+        margin-top: 0.1rem;
+        
+        .loading i {
+          color: $colour-link;
+          animation: spinner-border 2s linear infinite;
+        }
+      }
+
+      .url-text {
+        @include text-overflow-ellipsis;
+      }
     }
   }
 
@@ -1270,10 +1279,14 @@ body {
     }
 
     .id-url {
-      @extend .url;
+      position: relative;
+      display: block;
+      text-align: center;
+      width: 100%;
+      line-height: 2rem;
+      margin-bottom: 0.2rem;
       font-family: $font-stack-code;
       font-size: 0.92rem;
-      text-align: center !important;
     }
   }
 

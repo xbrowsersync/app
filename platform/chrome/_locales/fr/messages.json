@@ -212,21 +212,6 @@
   "settings_Sync_SyncToolbar_Description": {
     "message": "Désactiver ce paramètre si vous souhaitez afficher les favoris locaux dans la barre de favoris plutôt que les favoris synchronisés. Utile lorsque vous synchronisez à travers des navigateurs différents."
   },
-  "settings_Service_ServiceUrl_Label": {
-    "message": "Url"
-  },
-  "settings_Service_ServiceUrl_Description": {
-    "message": "Le service xBrowserSync est actuellement en cours d'utilisation."
-  },
-  "settings_Service_Status_Label": {
-    "message": "Statut"
-  },
-  "settings_Service_Status_Description": {
-    "message": "Statut actuel du service."
-  },
-  "settings_Service_ServiceMessage_Label": {
-    "message": "Message service"
-  },
   "settings_Service_ChangeService_Label": {
     "message": "Changer de service"
   },
@@ -453,7 +438,7 @@
     "message": "Les paramètres de synchronisation seront disponibles une fois que vous serez synchronisés."
   },
   "settings_Sync_Id_Label": {
-    "message": "ID de synchronisation"
+    "message": "Sync ID"
   },
   "settings_Sync_DisplayQRCode_Message": {
     "message": "Afficher QR code"
