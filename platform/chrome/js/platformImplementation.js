@@ -558,7 +558,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var getHelpPages = function () {
     var pages = [
-      platform.GetConstant(globals.Constants.Help_Page1_Content),
+      platform.GetConstant(globals.Constants.Help_Page1_Chrome_Content),
       platform.GetConstant(globals.Constants.Help_Page2_Desktop_Content),
       platform.GetConstant(globals.Constants.Help_Page3_Content),
       platform.GetConstant(globals.Constants.Help_Page4_Desktop_Content),

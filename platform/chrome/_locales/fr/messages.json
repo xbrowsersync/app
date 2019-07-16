@@ -29,13 +29,19 @@
   "login_GetSyncId_Message": {
     "message": "Download the xBrowserSync desktop browser extension available for Chrome and Firefox, create a new sync and then scan your sync ID QR code on the previous screen."
   },
-  "help_Page1_Content": {
-    "message": "<h4>Welcome</h4><p>Thank you for choosing xBrowserSync! Before you begin, take some time to read through the following pages to get aquainted with xBrowserSync’s features. Futher information is available in the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p><p>As xBrowserSync modifies your local browser data, it is recommended that you back up your bookmarks and disable any active browser sync services to avoid conflicts.</p>"
+  "help_Page1_Chrome_Content": {
+    "message": "<h4>Welcome to xBrowserSync</h4><p>Browser syncing as it should be: secure, anonymous and free!</p><p>Before you begin, take some time to read through the following pages to familiarise yourself with xBrowserSync’s features, and if you have any questions be sure to check out the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p><p>As xBrowserSync modifies your local browser data, make sure to back up your browser data and disable any active browser sync services (such as <a href='https://support.google.com/chrome/answer/185277?co=GENIE.Platform=Desktop' class='new-tab'>Google Chrome Sync</a>) to avoid conflicts.</p>"
+  },
+  "help_Page1_Firefox_Content": {
+    "message": "<h4>Welcome to xBrowserSync</h4><p>Browser syncing as it should be: secure, anonymous and free!</p><p>Before you begin, take some time to read through the following pages to familiarise yourself with xBrowserSync’s features, and if you have any questions be sure to check out the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p><p>As xBrowserSync modifies your local browser data, make sure to back up your browser data and disable any active browser sync services (such as <a href='https://support.mozilla.org/kb/remove-synced-device-firefox-accounts' class='new-tab'>Firefox Sync</a>) to avoid conflicts.</p>"
+  },
+  "help_Page1_Android_Content": {
+    "message": "<h4>Welcome to xBrowserSync</h4><p>Browser syncing as it should be: secure, anonymous and free!</p><p>Before you begin, take some time to read through the following pages to familiarise yourself with xBrowserSync’s features, and if you have any questions be sure to check out the <a href='https://www.xbrowsersync.org/#faqs' class='new-tab'>FAQs</a>.</p>"
   },
   "help_Page2_Desktop_Content": {
     "message": "<h4>Syncing for the first time</h4><p>Before you can sync your browser data it must be encrypted so that only you can read it. Enter an encryption password, be sure to make it strong but also memorable — there are no resets or reminders so if you forget it you won’t be able to decrypt your synced data.</p><p>Once you click the Sync button your data will be encrypted and saved to the xBrowserSync service configured in the Settings panel.</p><p>Congratulations, you are now synced! Any changes you make to your local bookmarks will be synced automatically by xBrowserSync.</p>"
   },
-  "help_Page2_Mobile_Content": {
+  "help_Page2_Android_Content": {
     "message": "<h4>Syncing for the first time</h4><p>First things first, head over to your desktop browser and <a href='https://www.xbrowsersync.org/#download' class='new-tab'>download</a> the xBrowserSync extension (available for Chrome and Firefox).</p><p>When you create a new sync, your existing browser data will be encrypted locally and synced to the xBrowserSync service configured in the Settings panel.</p><p>Once you have synced your desktop browser data you can use your new sync ID to access your data here.</p>"
   },
   "help_Page3_Content": {
@@ -44,7 +50,7 @@
   "help_Page4_Desktop_Content": {
     "message": "<h4>Retrieving an existing sync</h4><p> Click on “Already got a sync ID?” to enter your existing sync ID and password. If you are synced to a different xBrowserSync service make sure it is configured in the Settings panel.</p><p>xBrowserSync will clear your local bookmarks before refreshing them from your synced data.</p>"
   },
-  "help_Page4_Mobile_Content": {
+  "help_Page4_Android_Content": {
     "message": "<h4>Retrieving an existing sync</h4><p> Click on “Already got a sync ID?” to enter your existing sync ID and password.</p><p>Rather than attempt to type the long sync ID, simply press the QR icon in the ID field and then scan the QR code for your sync ID (you can find it in the Settings panel of the desktop browser extension, click on your sync ID to reveal it).</p><p>If you are synced to a different xBrowserSync service make sure it is configured in the Settings panel.</p>"
   },
   "help_Page5_Content": {
@@ -53,13 +59,13 @@
   "help_Page6_Desktop_Content": {
     "message": "<h4>Searching your bookmarks</h4><p>Once synced, simply press Enter to display your recent bookmarks or type some keywords or a URL to search your bookmarks.</p><p>To edit or delete a bookmark, hover over the bookmark and click the now visible edit icon next to the bookmark’s title.</p>"
   },
-  "help_Page6_Mobile_Content": {
+  "help_Page6_Android_Content": {
     "message": "<h4>Searching your bookmarks</h4><p>Once synced, your bookmarks are displayed in chronological order when you open xBrowserSync. Type some keywords or a URL in the search box to search your bookmarks.</p><p>Long pressing on a bookmark will allow you to directly share, modify or delete the bookmark.</p>"
   },
   "help_Page7_Desktop_Content": {
     "message": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s bookmark button as normal and xBrowserSync will automatically populate the bookmark’s properties (optional permissions must be granted for this to work, check the Settings panel).</p>"
   },
-  "help_Page7_Mobile_Content": {
+  "help_Page7_Android_Content": {
     "message": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be fetched for you, otherwise add a description and some tags to ensure better search results.</p>"
   },
   "help_Page8_Chrome_Content": {
@@ -69,18 +75,18 @@
     "message": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks toolbar and bookmarks library, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p><p>Please note however, as Firefox’s bookmarks API does not yet support accessing native bookmark tags, any existing tags will be lost when syncing and tags added via xBrowserSync will not be saved as native tags.</p>"
   },
   "help_Page9_Content": {
-    "message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your reponsibility so be smart and make sure to take backups.</p><p>You can do this easily in the Settings panel, you can back up your unencrypted data to a local file which can then restored at a later date should you need to.</p>"
+    "message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your reponsibility so be smart and make sure to take backups.</p><p>You can do this easily in the Settings panel, you can back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
   },
   "help_Page10_Chrome_Content": {
-    "message": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension then just press Enter or start typing to search your bookmarks.</p><p>To change the shortcut, browse to chrome://extensions/, the keyboard shortcuts option is at the bottom of the page."
+    "message": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension, then simply press Enter to view your recent bookmarks or start typing to search.</p><p>To change the shortcut, browse to chrome://extensions/, the keyboard shortcuts option is at the bottom of the page."
   },
   "help_Page10_Firefox_Content": {
-    "message": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension then just press Enter or start typing to search your bookmarks.</p><p>To change the shortcut, browse to about:addons then click on “Manage Extension Shortcuts” in the Settings menu."
+    "message": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension, then simply press Enter to view your recent bookmarks or start typing to search.</p><p>To change the shortcut, browse to about:addons then click on “Manage Extension Shortcuts” in the Settings menu."
   },
   "help_Page11_Desktop_Content": {
     "message": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on Google Play store, <a href='https://apt.izzysoft.de/fdroid/index/apk/com.xBrowserSync.android' class='new-tab'>F-Droid</a> or <a href='https://github.com/xbrowsersync/app/releases' class='new-tab'>direct download</a>.</p>"
   },
-  "help_Page11_Mobile_Content": {
+  "help_Page11_Android_Content": {
     "message": "<h4>Got desktop?</h4><p>Sync your bookmarks across desktop and mobile devices by using the xBrowserSync desktop browser web extension alongside the mobile app.</p><p>Currently available for Chrome and Firefox, Opera support coming very soon.</p>"
   },
   "help_Page12_Content": {
