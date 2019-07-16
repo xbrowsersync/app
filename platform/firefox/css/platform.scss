@@ -11,9 +11,14 @@ body {
   width: $window-width;
   transition: width linear 0.1s;
 
+  &.normal-view {
+    .container {
+      height: $window-height;
+    }
+  }
+
   &.search-view {
     width: $search-window-width;
-    height: $search-window-height;
 
     .container,
     #search-panel .header-panel {
@@ -23,7 +28,6 @@ body {
 
   &.search-no-results-view {
     @extend .search-view;
-    height: calc(#{$search-window-height} + 2.5rem);
 
     .container {
       height: calc(#{$search-window-height} + 2.5rem);
@@ -32,7 +36,6 @@ body {
 
   &.search-results-view {
     @extend .search-view;
-    height: $window-height;
 
     .container {
       height: $window-height;
@@ -44,7 +47,7 @@ body {
   }
 
   .container {
-    height: $window-height;
+    min-height: $search-window-height;
   }
 
   .well .btn.btn-default {

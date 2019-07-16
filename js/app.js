@@ -696,7 +696,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         return bookmarks.SyncSize()
           .then(function (bookmarksSyncSize) {
             vm.settings.syncDataSize = bookmarksSyncSize / 1024;
-            vm.settings.syncDataUsed = (vm.settings.syncDataSize / vm.settings.service.maxSyncSize) * 100;
+            vm.settings.syncDataUsed = Math.ceil((vm.settings.syncDataSize / vm.settings.service.maxSyncSize) * 100);
           })
           .catch(displayAlertErrorHandler);
       });
@@ -1824,6 +1824,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
           .catch(syncBookmarksFailed);
       })
       .catch(function (err) {
+        // Hide loading panel
+        platform.Interface.Loading.Hide(null, loadingTimeout);
+
         // Disable upgrade confirmed flag
         vm.sync.upgradeConfirmed = false;
 
@@ -1877,7 +1880,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       else {
         vm.search.displayDefaultState();
       }
-    });
+    }, 100);
 
     // Update bookmark icon
     return setBookmarkStatus();
@@ -2115,22 +2118,17 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       })
       // Update service status
       .then(function () {
-        return api.CheckServiceStatus(url);
-      })
-      .then(function (serviceInfo) {
         utility.LogInfo('Service url changed to: ' + url);
-
-        // Refresh panel
-        setServiceInformation(serviceInfo);
-        displayDataUsage();
-
+        return updateServicePanel();
+      })
+      .then(function () {
         // Reset view
         vm.settings.displayCancelSyncConfirmation = false;
         vm.settings.displayUpdateServiceUrlConfirmation = false;
         vm.settings.displayUpdateServiceUrlForm = false;
         vm.settings.service.newServiceUrl = vm.settings.service.url;
         vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
-        vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceOffline', true);
+        vm.updateServiceUrlForm.newServiceUrl.$setValidity('RequestFailed', true);
         vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', true);
 
         // Scroll to top of section
@@ -2149,7 +2147,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     vm.updateServiceUrlForm.$setPristine();
     vm.settings.service.newServiceUrl = vm.settings.service.url;
     vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
-    vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceOffline', true);
+    vm.updateServiceUrlForm.newServiceUrl.$setValidity('RequestFailed', true);
     vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', true);
 
     // Display update form panel
@@ -2167,7 +2165,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     // Reset form if field is invalid
     if (vm.updateServiceUrlForm.newServiceUrl.$invalid) {
       vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
-      vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceOffline', true);
+      vm.updateServiceUrlForm.newServiceUrl.$setValidity('RequestFailed', true);
       vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', true);
     }
   };
@@ -2222,17 +2220,20 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         if (err && err.code != null) {
           switch (err.code) {
             case globals.ErrorCodes.ApiOffline:
-              vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceOffline', false);
-              break;
+              // If API is offline still allow setting as current service
+              return true;
             case globals.ErrorCodes.ApiVersionNotSupported:
               vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', false);
               break;
-            default:
+            case globals.ErrorCodes.InvalidService:
               vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', false);
+              break;
+            default:
+              vm.updateServiceUrlForm.newServiceUrl.$setValidity('RequestFailed', false);
           }
         }
         else {
-          vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', false);
+          vm.updateServiceUrlForm.newServiceUrl.$setValidity('RequestFailed', false);
         }
 
         // Focus on url field

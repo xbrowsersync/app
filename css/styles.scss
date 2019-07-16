@@ -16,6 +16,7 @@ body {
   font-family: $font-stack-regular;
   color: $colour-text1;
   line-height: 1.25rem;
+  overflow: hidden;
 
   h2 {
     font-size: 1.8rem;
@@ -136,6 +137,7 @@ body {
         width: 0.75rem;
         vertical-align: baseline;
         margin-right: 0.1rem;
+        @include spinner-colour($colour-text2);
       }
     }
   }
@@ -204,6 +206,10 @@ body {
         color: $colour-text1;
       }
 
+      margin-bottom: 0;
+    }
+
+    h4 {
       margin-bottom: 0;
     }
   }
@@ -293,6 +299,7 @@ body {
     width: 100%;
     max-width: 100%;
     position: relative;
+    overflow-x: hidden;
     overflow-y: auto;
     padding: 0;
     margin: 0;
@@ -444,6 +451,11 @@ body {
 
   .progress-bar-danger {
     background-color: $colour-danger !important;
+  }
+
+  .spinner-border {
+    animation-duration: 1s;
+    @include spinner-colour($colour-link-highlight);
   }
 
   .text-success {
@@ -1257,11 +1269,6 @@ body {
         font-size: 0.9rem;
         padding-left: 0.4rem;
         margin-top: 0.1rem;
-        
-        .loading i {
-          color: $colour-link;
-          animation: spinner-border 2s linear infinite;
-        }
       }
 
       .url-text {
@@ -1447,11 +1454,8 @@ body {
   }
 
   .spinner-border {
-    border-color: $colour-link-highlight;
-    border-right-color: transparent;
     position: absolute;
     width: 30vw;
     height: 30vw;
-    animation: spinner-border 1s linear infinite;
   }
 }

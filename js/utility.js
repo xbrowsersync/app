@@ -353,8 +353,8 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         errorMessage.message = platform.GetConstant(globals.Constants.Error_ApiInvalid_Message);
         break;
       case globals.ErrorCodes.ApiOffline:
-        errorMessage.title = platform.GetConstant(globals.Constants.Error_HttpRequestFailed_Title);
-        errorMessage.message = platform.GetConstant(globals.Constants.Error_HttpRequestFailed_Message);
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_ApiOffline_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_ApiOffline_Message);
         break;
       case globals.ErrorCodes.ApiVersionNotSupported:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_ApiVersionNotSupported_Title);

@@ -101,37 +101,44 @@
             <div class="service-status">
               <div class="loading" data-ng-show="vm.settings.service.status === null"
                 title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}">
-                <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}</span>
-                <i class="fas fa-sync-alt" aria-hidden="true"></i>
+                <span
+                  class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}</span>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
               </div>
               <div data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Error"
                 title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Error) }}">
-                <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Error) }}</span>
+                <span
+                  class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Error) }}</span>
                 <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
               </div>
               <div data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Online"
                 title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Online) }}">
-                <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Online) }}</span>
+                <span
+                  class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Online) }}</span>
                 <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
               </div>
               <div data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Offline"
                 title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Offline) }}">
-                <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Offline) }}</span>
+                <span
+                  class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Offline) }}</span>
                 <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
               </div>
               <div data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs"
                 title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_NoNewSyncs) }}">
-                <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_NoNewSyncs) }}</span>
+                <span
+                  class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_NoNewSyncs) }}</span>
                 <i class="fas fa-exclamation-circle text-warning" aria-hidden="true"></i>
               </div>
             </div>
           </div>
-          <div data-ng-if="vm.settings.service.statusMessage && vm.settings.service.status !== vm.globals.ServiceStatus.Error">
+          <div
+            data-ng-if="vm.settings.service.statusMessage && vm.settings.service.status !== vm.globals.ServiceStatus.Error">
             <p class="description service-message animate-fade" data-ng-show="vm.settings.service.statusMessage"
               data-ng-bind-html="vm.settings.service.statusMessage"></p>
           </div>
         </div>
-        <div class="setting-group" data-ng-if="vm.sync.enabled && vm.settings.service.status !== vm.globals.ServiceStatus.Error">
+        <div class="setting-group"
+          data-ng-if="vm.sync.enabled && vm.settings.service.status !== vm.globals.ServiceStatus.Error">
           <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_DataUsage_Label) }}</label>
           <div class="setting-value" data-ng-class="{ 'text-danger': vm.settings.syncDataUsed >= 90 }"
             data-ng-show="vm.settings.syncDataUsed !== null">{{
@@ -173,18 +180,17 @@
                 placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Field_Description) }}"
                 maxlength="128" spellcheck="false" required />
               <div class="validation" data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$invalid">
-                <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.required">{{
-                  vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Required_Label) }}
+                <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.required">
+                  {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Required_Label) }}
                 </span>
-                <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.InvalidService">{{
-                  vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_InvalidService_Label) }}
+                <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.InvalidService">
+                  {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_InvalidService_Label) }}
                 </span>
-                <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.ServiceOffline">{{
-                  vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_ServiceOffline_Label) }}
+                <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.RequestFailed">
+                  {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_RequestFailed_Label) }}
                 </span>
-                <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.ServiceVersionNotSupported">{{
-                  vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_ServiceVersionNotSupported_Label)
-                  }}
+                <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.ServiceVersionNotSupported">
+                  {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_ServiceVersionNotSupported_Label) }}
                 </span>
               </div>
             </div>

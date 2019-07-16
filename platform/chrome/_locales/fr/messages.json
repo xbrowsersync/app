@@ -368,11 +368,11 @@
   "settings_Service_UpdateForm_InvalidService_Label": {
     "message": "Not a valid xBrowserSync service"
   },
+  "settings_Service_UpdateForm_RequestFailed_Label": {
+    "message": "Unable to connect to the service"
+  },
   "settings_Service_UpdateForm_ServiceVersionNotSupported_Label": {
     "message": "This service is running an unsupported API version"
-  },
-  "settings_Service_UpdateForm_ServiceOffline_Label": {
-    "message": "This service is currently offline"
   },
   "settings_BackupRestore_Title": {
     "message": "Sauvegarder et restaurer"
@@ -552,7 +552,7 @@
     "message": "Le Service n'accepte pas de nouvelles synchronisation"
   },
   "error_NotAcceptingNewSyncs_Message": {
-    "message": "Unable to sync as this xBrowserSync service is not currently accepting new syncs. If you have already created a sync using this service enter your xBrowserSync ID, or change to an alternative service."
+    "message": "Unable to create a new sync as the service is not currently accepting new syncs. If you have already created a sync using this service enter your sync ID, or use a different service."
   },
   "error_DailyNewSyncLimitReached_Title": {
     "message": "Limite quotidienne de nouvelles synchronisations atteinte"
@@ -561,22 +561,22 @@
     "message": "Impossible de créer une nouvelle synchronisation car vous avez atteint la limite de synchronisation quotidienne pour ce service xBrowserSync. Synchronisez avec un ID xBrowserSync existant, choisissez un service différent ou essayez de nouveau demain."
   },
   "error_MissingClientData_Title": {
-    "message": "ID ou mot de passe xBrowserSync manquant"
+    "message": "Missing credentials"
   },
   "error_MissingClientData_Message": {
-    "message": "Réactivez la synchronisation et retentez de nouveau."
+    "message": "Unable to find stored credentials. Re-enable sync and try again."
   },
   "error_InvalidCredentials_Title": {
-    "message": "Invalid Sync ID/Password"
+    "message": "Invalid credentials"
   },
   "error_InvalidCredentials_Message": {
-    "message": "Check your xBrowserSync ID and password, ensure the current service URL is where the sync was created and then try again."
+    "message": "Check your sync ID and password, also make sure the current service is the same as where the sync was created."
   },
   "error_SyncRemoved_Title": {
-    "message": "Sync data removed"
+    "message": "Sync not found"
   },
   "error_SyncRemoved_Message": {
-    "message": "Sync data no longer exists on the service, it may have been removed due to inactivity. Create a new sync and restore your data from a backup."
+    "message": "The requested sync does not exist on the service, it may have been removed due to inactivity. Create a new sync and restore your data from a backup."
   },
   "error_NoDataToRestore_Title": {
     "message": "Aucune donnée à restaurer"
@@ -602,11 +602,17 @@
   "error_ApiInvalid_Message": {
     "message": "The selected service URL is not pointing to a valid xBrowserSync service."
   },
+  "error_ApiOffline_Title": {
+    "message": "Service offline"
+  },
+  "error_ApiOffline_Message": {
+    "message": "The service is currently offline. Check the service status in the Settings panel for more information or try again later."
+  },
   "error_ApiVersionNotSupported_Title": {
     "message": "Service not supported"
   },
   "error_ApiVersionNotSupported_Message": {
-    "message": "This service is running an unsupported API version"
+    "message": "This service is running an unsupported API version."
   },
   "error_ContainerChanged_Title": {
     "message": "Le dossier xBrowserSync a été modifié"
