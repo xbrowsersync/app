@@ -277,7 +277,7 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
     return platform.LocalStorage.Set(globals.CacheKeys.TraceLog)
 
       // TODO: Add this back once Firefox supports optional permissions
-      // https://bugzilla.mozilla.org/show_bug.cgi?id=1533014
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=1432083
 
       //  return platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, true)
       //})
