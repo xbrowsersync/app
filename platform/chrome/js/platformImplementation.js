@@ -800,7 +800,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
         // Populate menu bookmarks in other bookmarks
         var populateMenu = $q(function (resolve, reject) {
-          if (menuContainer && menuContainer.children.length > 0) {
+          if (menuContainer) {
             try {
               chrome.bookmarks.getSubTree(otherBookmarksId, function (results) {
                 createLocalBookmarksFromXBookmarks(otherBookmarksId, [menuContainer], toolbarBookmarksId)
@@ -820,7 +820,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
         // Populate mobile bookmarks in other bookmarks
         var populateMobile = $q(function (resolve, reject) {
-          if (mobileContainer && mobileContainer.children.length > 0) {
+          if (mobileContainer) {
             try {
               chrome.bookmarks.getSubTree(otherBookmarksId, function (results) {
                 createLocalBookmarksFromXBookmarks(otherBookmarksId, [mobileContainer], toolbarBookmarksId)
@@ -840,7 +840,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
         // Populate other bookmarks
         var populateOther = $q(function (resolve, reject) {
-          if (otherContainer && otherContainer.children.length > 0) {
+          if (otherContainer) {
             try {
               chrome.bookmarks.getSubTree(otherBookmarksId, function (results) {
                 createLocalBookmarksFromXBookmarks(otherBookmarksId, otherContainer.children, toolbarBookmarksId)
@@ -866,7 +866,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
               return;
             }
 
-            if (toolbarContainer && toolbarContainer.children.length > 0) {
+            if (toolbarContainer) {
               return $q(function (resolve, reject) {
                 try {
                   chrome.bookmarks.getSubTree(toolbarBookmarksId, function (results) {

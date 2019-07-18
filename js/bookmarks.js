@@ -1194,8 +1194,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         return getBookmarksToSync;
       })
       .then(function (result) {
-        // Remove empty containers then encrypt
-        //bookmarks = removeEmptyContainers(result || []);
+        // Encrypt bookmarks
         bookmarks = result || [];
         return utility.EncryptData(JSON.stringify(bookmarks));
       })
@@ -1390,8 +1389,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
           return bookmarks;
         }
 
-        // Remove empty containers then encrypt
-        //bookmarks = removeEmptyContainers(result || []);
+        // Encrypt bookmarks
         bookmarks = result || [];
         return utility.EncryptData(JSON.stringify(bookmarks))
           .then(function (encryptedBookmarks) {
@@ -1527,9 +1525,6 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       otherContainer.children = otherContainer.children || [];
       otherContainer.children.splice(0, 0, xbsContainer);
     }
-
-    // Remove empty containers
-    //bookmarks = removeEmptyContainers(bookmarks);
 
     return bookmarks;
   };
