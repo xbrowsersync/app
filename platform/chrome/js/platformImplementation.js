@@ -1379,7 +1379,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       return true;
     }
 
-    var supportedRegex = /^(?!about)[\w\-]+:/i;
+    var supportedRegex = /^[\w\-]+:/i;
     return supportedRegex.test(url);
   };
 

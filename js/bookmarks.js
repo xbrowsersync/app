@@ -594,7 +594,15 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         throw new Error();
       }
       bookmarkToUpdate.title = changedBookmarkInfo.title !== undefined ? changedBookmarkInfo.title : bookmarkToUpdate.title;
-      bookmarkToUpdate.url = changedBookmarkInfo.url !== undefined ? changedBookmarkInfo.url : bookmarkToUpdate.url;
+
+      // Update url accounting for unsupported urls
+      if (changedBookmarkInfo.url !== undefined &&
+        changedBookmarkInfo.url !== bookmarkToUpdate.url &&
+        (changedBookmarkInfo.url !== platform.GetNewTabUrl() ||
+          (changedBookmarkInfo.url === platform.GetNewTabUrl() &&
+            bookmarkToUpdate.url === platform.GetSupportedUrl(bookmarkToUpdate.url)))) {
+        bookmarkToUpdate.url = changedBookmarkInfo.url;
+      }
 
       // If updated bookmark is a separator, convert xbookmark to separator
       if (isSeparator(bookmarkToUpdate)) {
