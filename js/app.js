@@ -737,10 +737,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
 
         switch (true) {
-          case displayPermissions:
-            return changeView(vm.view.views.permissions);
           case displayUpdated:
             return changeView(vm.view.views.updated);
+          case displayPermissions:
+            return changeView(vm.view.views.permissions);
           case syncEnabled:
             return changeView(vm.view.views.search);
           default:

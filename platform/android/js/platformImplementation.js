@@ -175,7 +175,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
     },
     "updated_Message": {
-      "message": "<p>xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes.</p>"
+      "message": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
     },
     "updated_Title": {
       "message": "Updated to v"

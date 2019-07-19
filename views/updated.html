@@ -1,5 +1,5 @@
 <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Updated_Title) + vm.globals.AppVersion }}</h4>
-<div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Updated_Message)"></div>
+<p>{{ vm.platform.GetConstant(vm.globals.Constants.Updated_Message) }}</p>
 <div class="buttons">
   <button type="button" class="btn btn-default" data-ng-click="vm.events.button_ReleaseNotes_Click()">
     {{ vm.platform.GetConstant(vm.globals.Constants.Button_ReleaseNotes_Label) }}

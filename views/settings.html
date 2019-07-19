@@ -99,31 +99,32 @@
               </a>
             </div>
             <div class="service-status">
-              <div class="loading" data-ng-show="vm.settings.service.status === null"
+              <div class="loading animate-fade" data-ng-show="vm.settings.service.status === null"
                 title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}">
                 <span
                   class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}</span>
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
               </div>
-              <div data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Error"
+              <div class="animate-fade" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Error"
                 title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Error) }}">
                 <span
                   class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Error) }}</span>
                 <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
               </div>
-              <div data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Online"
+              <div class="animate-fade" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Online"
                 title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Online) }}">
                 <span
                   class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Online) }}</span>
                 <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
               </div>
-              <div data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Offline"
+              <div class="animate-fade" data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.Offline"
                 title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Offline) }}">
                 <span
                   class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Offline) }}</span>
                 <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
               </div>
-              <div data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs"
+              <div class="animate-fade"
+                data-ng-show="vm.settings.service.status === vm.globals.ServiceStatus.NoNewSyncs"
                 title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_NoNewSyncs) }}">
                 <span
                   class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_NoNewSyncs) }}</span>
@@ -238,12 +239,18 @@
         <div class="setting-group">
           <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Title) }}</label>
           <div class="setting-value">
-            <span class="text-success animate-fade" data-ng-show="vm.settings.readWebsiteDataPermissionsGranted">{{
-              vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Granted_Label)
-              }}</span>
-            <span class="text-danger animate-fade" data-ng-show="!vm.settings.readWebsiteDataPermissionsGranted">{{
-              vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_NotGranted_Label)
-              }}</span>
+            <div class="animate-fade" data-ng-show="vm.settings.readWebsiteDataPermissionsGranted"
+              title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Granted_Label) }}">
+              <span
+                class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Granted_Label) }}</span>
+              <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
+            </div>
+            <div class="animate-fade" data-ng-show="!vm.settings.readWebsiteDataPermissionsGranted"
+              title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_NotGranted_Label) }}">
+              <span
+                class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_NotGranted_Label) }}</span>
+              <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
+            </div>
           </div>
           <p class="description"
             data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Description)">

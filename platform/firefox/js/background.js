@@ -718,16 +718,19 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         utility.LogInfo('Upgrading from ' + oldVersion + ' to ' + newVersion);
       })
       .then(function () {
-        // For v1.5.0, convert local storage items to storage API and display info panels
-        if (newVersion === '1.5.0' && compareVersions(oldVersion, newVersion) < 0) {
-          return utility.ConvertLocalStorageToStorageApi()
-            .then(function () {
-              return platform.LocalStorage.Set(globals.CacheKeys.DisplayOtherSyncsWarning, true);
-            });
+        if (compareVersions(oldVersion, newVersion)) {
+          switch (true) {
+            // v1.5.0
+            case newVersion.indexOf('1.5.0') === 0:
+              return upgradeTo150();
+          }
         }
       })
       .then(function () {
-        // Set update panel to show
+        // Display alert and set update panel to show
+        displayAlert(
+          platform.GetConstant(globals.Constants.Updated_Title) + globals.AppVersion,
+          platform.GetConstant(globals.Constants.Updated_Message));
         return platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, true);
       })
       .catch(function (err) {
@@ -736,6 +739,15 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
         // Display alert
         var errMessage = utility.GetErrorMessageFromException(err);
         displayAlert(errMessage.title, errMessage.message);
+      });
+  };
+
+  var upgradeTo150 = function () {
+    // Convert local storage items to storage API
+    return utility.ConvertLocalStorageToStorageApi()
+      .then(function () {
+        // Set other syncs warning panel to display
+        return platform.LocalStorage.Set(globals.CacheKeys.DisplayOtherSyncsWarning, true);
       });
   };
 
