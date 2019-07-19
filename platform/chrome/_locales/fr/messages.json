@@ -215,8 +215,11 @@
   "settings_Sync_UpdatesAvailable_True_Message": {
     "message": "Sync updates available, next sync at"
   },
+  "settings_Sync_SyncToolbar_Label": {
+    "message": "Sync bookmarks toolbar"
+  },
   "settings_Sync_SyncToolbar_Description": {
-    "message": "Désactiver ce paramètre si vous souhaitez afficher les favoris locaux dans la barre de favoris plutôt que les favoris synchronisés. Utile lorsque vous synchronisez à travers des navigateurs différents."
+    "message": "Disable this setting to display different toolbar bookmarks across synced browers."
   },
   "settings_Service_ChangeService_Label": {
     "message": "Changer de service"
@@ -451,9 +454,6 @@
   },
   "settings_Service_DataUsage_Label": {
     "message": "Usage de données"
-  },
-  "settings_Sync_SyncToolbar_Label": {
-    "message": "Inclure la barre de favoris"
   },
   "settings_Service_DataUsage_Description": {
     "message": "Quantité de données utilisées sur le quota alloué par le service que vous utilisez."

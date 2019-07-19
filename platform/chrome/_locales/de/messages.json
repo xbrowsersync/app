@@ -215,8 +215,11 @@
   "settings_Sync_UpdatesAvailable_True_Message": {
     "message": "Sync updates available, next sync at"
   },
+  "settings_Sync_SyncToolbar_Label": {
+    "message": "Sync bookmarks toolbar"
+  },
   "settings_Sync_SyncToolbar_Description": {
-    "message": "Deaktivieren Sie diese Einstellung wenn Sie in der Symbolleiste die Lesezeichen nur lokal verwalten und nicht synchronisieren möchten. Das kann hilfreich sein, wenn Sie verschiedene Browser synchronisieren."
+    "message": "Disable this setting to display different toolbar bookmarks across synced browers."
   },
   "settings_Service_ChangeService_Label": {
     "message": "Dienst ändern"
@@ -451,9 +454,6 @@
   },
   "settings_Service_DataUsage_Label": {
     "message": "Datennutzung"
-  },
-  "settings_Sync_SyncToolbar_Label": {
-    "message": "Lesezeichen-Symbolleiste einschließen"
   },
   "settings_Service_DataUsage_Description": {
     "message": "Sync-Datenmenge, die der Dienst, den Sie nutzen, gestattet."

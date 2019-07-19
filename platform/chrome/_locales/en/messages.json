@@ -215,8 +215,11 @@
   "settings_Sync_UpdatesAvailable_True_Message": {
     "message": "Sync updates available, next sync at"
   },
+  "settings_Sync_SyncToolbar_Label": {
+    "message": "Sync bookmarks toolbar"
+  },
   "settings_Sync_SyncToolbar_Description": {
-    "message": "Disable this setting if you wish to display local bookmarks in the bookmarks bar rather than synced bookmarks. Useful when syncing to multiple browsers."
+    "message": "Disable this setting to display different toolbar bookmarks across synced browers."
   },
   "settings_Service_ChangeService_Label": {
     "message": "Change service"
@@ -451,9 +454,6 @@
   },
   "settings_Service_DataUsage_Label": {
     "message": "Data usage"
-  },
-  "settings_Sync_SyncToolbar_Label": {
-    "message": "Include bookmarks bar"
   },
   "settings_Service_DataUsage_Description": {
     "message": "How much of the sync data allowed by the service are you using."

@@ -222,8 +222,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_Sync_Id_Description": {
       "message": "Use your ID to sync on other devices (click for QR code)."
     },
+    "settings_Sync_SyncToolbar_Label": {
+      "message": "Sync bookmarks toolbar"
+    },
     "settings_Sync_SyncToolbar_Description": {
-      "message": "Disable this setting if you wish to display local bookmarks in the bookmarks bar rather than synced bookmarks. Useful when syncing to multiple browsers."
+      "message": "Disable this setting to display different toolbar bookmarks across synced browers."
     },
     "settings_Service_ChangeService_Label": {
       "message": "Change service"
@@ -458,9 +461,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     },
     "settings_Service_DataUsage_Label": {
       "message": "Data usage"
-    },
-    "settings_Sync_SyncToolbar_Label": {
-      "message": "Include bookmarks bar"
     },
     "settings_Service_DataUsage_Description": {
       "message": "How much of the data limit for this service is your current sync using."
