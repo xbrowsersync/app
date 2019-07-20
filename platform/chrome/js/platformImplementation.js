@@ -9,7 +9,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, platform, globals, utility, bookmarks) {
   'use strict';
 
-  var vm, loadingId,
+  var vm, loadingId, refreshInterfaceTimeout,
     contentScriptUrl = 'js/getPageMetadata.js',
     optionalPermissions = {
       origins: ['http://*/', 'https://*/']
@@ -903,37 +903,58 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var refreshInterface = function (syncEnabled, syncType) {
-    var iconPath;
-    var tooltip = getConstant(globals.Constants.Title);
+    var iconPath, newTitle = getConstant(globals.Constants.Title);
+    var syncingTitle = ' (' + getConstant(globals.Constants.Tooltip_Syncing_Label) + ')';
+    var syncedTitle = ' (' + getConstant(globals.Constants.Tooltip_Synced_Label) + ')';
+    var notSyncedTitle = ' (' + getConstant(globals.Constants.Tooltip_NotSynced_Label) + ')';
+
+    // Clear timeout
+    if (refreshInterfaceTimeout) {
+      $timeout.cancel(refreshInterfaceTimeout);
+      refreshInterfaceTimeout = null;
+    }
 
     if (syncType) {
       iconPath = syncType === globals.SyncType.Pull ? 'img/downloading.png' : 'img/uploading.png';
-      tooltip += ' (' + getConstant(globals.Constants.Tooltip_Syncing_Label) + ')';
+      newTitle += syncingTitle;
     }
     else if (syncEnabled) {
       iconPath = 'img/synced.png';
-      tooltip += ' (' + getConstant(globals.Constants.Tooltip_Synced_Label) + ')';
+      newTitle += syncedTitle;
     }
     else {
       iconPath = 'img/notsynced.png';
-      tooltip += ' (' + getConstant(globals.Constants.Tooltip_NotSynced_Label) + ')';
+      newTitle += notSyncedTitle;
     }
 
     return $q(function (resolve, reject) {
       var iconUpdated = $q.defer();
       var titleUpdated = $q.defer();
 
-      try {
-        chrome.browserAction.setIcon({ path: iconPath }, iconUpdated.resolve);
-        chrome.browserAction.setTitle({ title: tooltip }, titleUpdated.resolve);
-      }
-      catch (err) {
-        return reject(err);
-      }
+      chrome.browserAction.getTitle({}, function (currentTitle) {
+        // Don't do anything if browser action title hasn't changed 
+        if (newTitle === currentTitle) {
+          return resolve();
+        }
 
-      $q.all([iconUpdated, titleUpdated])
-        .then(resolve)
-        .catch(reject);
+        // Set a delay if finished syncing to prevent flickering when executing many syncs
+        if (currentTitle.indexOf(syncingTitle) > 0 && newTitle.indexOf(syncedTitle)) {
+          refreshInterfaceTimeout = $timeout(function () {
+            chrome.browserAction.setIcon({ path: iconPath });
+            chrome.browserAction.setTitle({ title: newTitle });
+          }, 350);
+          iconUpdated.resolve();
+          titleUpdated.resolve();
+        }
+        else {
+          chrome.browserAction.setIcon({ path: iconPath }, iconUpdated.resolve);
+          chrome.browserAction.setTitle({ title: newTitle }, titleUpdated.resolve);
+        }
+
+        $q.all([iconUpdated, titleUpdated])
+          .then(resolve)
+          .catch(reject);
+      });
     });
   };
 
