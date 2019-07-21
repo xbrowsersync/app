@@ -164,27 +164,34 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   };
 
   var disableSync = function () {
-    // Disable checking for sync updates
-    platform.AutomaticUpdates.Stop();
+    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+      .then(function (syncEnabled) {
+        if (!syncEnabled) {
+          return;
+        }
 
-    // Clear sync queue
-    syncQueue = [];
+        // Disable checking for sync updates
+        platform.AutomaticUpdates.Stop();
 
-    // Reset syncing flag
-    setIsSyncing();
+        // Clear sync queue
+        syncQueue = [];
 
-    // Clear cached data
-    return $q.all([
-      platform.LocalStorage.Set(globals.CacheKeys.Bookmarks),
-      platform.LocalStorage.Set(globals.CacheKeys.Password),
-      platform.LocalStorage.Set(globals.CacheKeys.SyncEnabled, false),
-      platform.LocalStorage.Set(globals.CacheKeys.SyncVersion)
-    ])
-      .then(function () {
-        utility.LogInfo('Sync disabled');
+        // Reset syncing flag
+        setIsSyncing();
 
-        // Refresh interface/icon
-        platform.Interface.Refresh();
+        // Clear cached data
+        return $q.all([
+          platform.LocalStorage.Set(globals.CacheKeys.Bookmarks),
+          platform.LocalStorage.Set(globals.CacheKeys.Password),
+          platform.LocalStorage.Set(globals.CacheKeys.SyncEnabled, false),
+          platform.LocalStorage.Set(globals.CacheKeys.SyncVersion)
+        ])
+          .then(function () {
+            utility.LogInfo('Sync disabled');
+
+            // Refresh interface/icon
+            platform.Interface.Refresh();
+          });
       });
   };
 

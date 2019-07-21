@@ -7,7 +7,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  *              listens for sync requests.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmarks) {
+xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility, bookmarks) {
   'use strict';
 
   var vm, notificationClickHandlers = [];
@@ -515,8 +515,31 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
           return;
         }
 
-        // Check for updates to synced bookmarks
-        return bookmarks.CheckForUpdates()
+        return $q(function (resolve, reject) {
+          // Check for updates to synced bookmarks
+          bookmarks.CheckForUpdates()
+            .then(resolve)
+            .catch(function (err) {
+              // If network disconnected, retry once
+              if (err.code !== globals.ErrorCodes.HttpRequestFailed) {
+                return reject(err);
+              }
+
+              utility.LogInfo('Connection to API failed, retrying in 10 seconds');
+              $timeout(function () {
+                platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+                  .then(function (syncEnabled) {
+                    if (!syncEnabled) {
+                      utility.LogInfo('Sync was disabled before retry attempted');
+                      return reject({ code: globals.ErrorCodes.HttpRequestCancelled });
+                    }
+
+                    bookmarks.CheckForUpdates().then(resolve).catch(reject);
+                  })
+                  .catch(reject);
+              }, 10000);
+            });
+        })
           .then(function (updatesAvailable) {
             if (!updatesAvailable) {
               return;
@@ -543,14 +566,14 @@ xBrowserSync.App.Background = function ($q, platform, globals, utility, bookmark
           // Start auto updates
           .then(platform.AutomaticUpdates.Start)
           .catch(function (err) {
+            // If check for updates was cancelled don't continue
+            if (err.code === globals.ErrorCodes.HttpRequestCancelled) {
+              return;
+            }
+
             // Display alert
             var errMessage = utility.GetErrorMessageFromException(err);
             displayAlert(errMessage.title, errMessage.message);
-
-            // Don't log error if request failed
-            if (err.code === globals.ErrorCodes.HttpRequestFailed) {
-              return;
-            }
 
             utility.LogError(err, 'background.onStartupHandler');
           });
@@ -795,7 +818,7 @@ xBrowserSync.App.PlatformImplementation.$inject = ['$interval', '$q', '$timeout'
 xBrowserSync.App.FirefoxBackground.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add background module
-xBrowserSync.App.Background.$inject = ['$q', 'platform', 'globals', 'utility', 'bookmarks', 'platformImplementation'];
+xBrowserSync.App.Background.$inject = ['$q', '$timeout', 'platform', 'globals', 'utility', 'bookmarks', 'platformImplementation'];
 xBrowserSync.App.FirefoxBackground.controller('Controller', xBrowserSync.App.Background);
 
 // Set synchronous event handlers
