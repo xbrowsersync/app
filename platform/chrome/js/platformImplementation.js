@@ -191,6 +191,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         bookmarks: xBookmarks
       }))
       .then(function (results) {
+        // Ensure a new bookmark id is created if not syncing the initial remove
+        if (!changeInfo.syncChange && changeInfo.targetInfo.syncChange) {
+          delete results.bookmark.id;
+        }
+
         // Create synced bookmark if target info supplied
         return (changeInfo.targetInfo.syncChange ?
           bookmarks.AddNewInXBookmarks(results.bookmark, changeInfo.targetInfo.container, changeInfo.targetInfo.indexPath, results.bookmarks) :
@@ -681,9 +686,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       }
     })
       .then(function () {
+        // If active tab empty, return
+        if (!activeTab) {
+          return false;
+        }
+
         // If not checking permissions, return
         if (shouldCheckPermissions !== true) {
-          return $q.resolve(true);
+          return true;
         }
 
         // Check if extension has permissions to read active tab content
@@ -697,7 +707,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       })
       .then(function (getMetadata) {
         // Default metadata to the info from the active tab
-        var metadata = {
+        var metadata = activeTab && {
           title: activeTab.title,
           url: activeTab.url
         };

@@ -201,7 +201,7 @@
     "message": "partagé depuis xBrowserSync"
   },
   "settings_Sync_SyncToolbarConfirmation_Message": {
-    "message": "<p>Activer la synchro de la barre de favoris va remplacer les favoris actuellement dans la barre de favoris par vos favoris synchronisés.</p><p>OK pour continuer ?</p>"
+    "message": "<p>Enabling this setting will replace the bookmarks currently in the bookmarks toolbar with your synced bookmarks.</p><p>OK to proceed?</p>"
   },
   "settings_Sync_ConfirmCancelSync_Message": {
     "message": "<p>Une synchronisation est en cours, si vous continuez, vos données locales seront incomplètes.</p><p>OK pour continuer ?</p>"

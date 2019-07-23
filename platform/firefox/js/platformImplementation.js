@@ -185,6 +185,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       bookmarks.RemoveExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks) :
       bookmarks.GetExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks))
       .then(function (results) {
+        // Ensure a new bookmark id is created if not syncing the initial remove
+        if (!changeInfo.syncChange && changeInfo.targetInfo.syncChange) {
+          delete results.bookmark.id;
+        }
+
         // Create synced bookmark if target info supplied
         return (changeInfo.targetInfo.syncChange ?
           bookmarks.AddNewInXBookmarks(results.bookmark, changeInfo.targetInfo.container, changeInfo.targetInfo.indexPath, results.bookmarks) :
@@ -643,6 +648,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
     return browser.tabs.query({ active: true, currentWindow: true })
       .then(function (tabs) {
+        // If active tab empty, return
+        if (!activeTab) {
+          return false;
+        }
+
         activeTab = tabs[0];
 
         // If not checking permissions, return
@@ -661,7 +671,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       })
       .then(function (getMetadata) {
         // Default metadata to the info from the active tab
-        var metadata = {
+        var metadata = activeTab && {
           title: activeTab.title,
           url: activeTab.url
         };

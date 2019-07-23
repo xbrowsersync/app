@@ -35,7 +35,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 	 * ------------------------------------------------------------------------------------ */
 
   var changeBookmark = function (id) {
-    var changedBookmark, changeInfo, locationInfo;
+    var changedBookmark, changeInfo, locationInfo, syncChange = $q.defer();
 
     // Retrieve changed bookmark full info
     var prepareToSyncChanges = $q(function (resolve, reject) {
@@ -58,6 +58,8 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       })
       .then(function (results) {
         if (!results) {
+          utility.LogWarning('Unable to retrieve local bookmark location info, not syncing this change');
+          syncChange.resolve(false);
           return;
         }
         locationInfo = results;
@@ -67,25 +69,30 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
           .then(function (bookmark) {
             // Create change info
             changeInfo = {
-              type: globals.UpdateType.Update,
               bookmark: bookmark,
               container: locationInfo.container,
-              indexPath: locationInfo.indexPath
+              indexPath: locationInfo.indexPath,
+              type: globals.UpdateType.Update
             };
 
             // Check if this change should be synced
             return platform.Bookmarks.ShouldSyncLocalChanges(changeInfo);
           })
           .then(function (doSync) {
-            return doSync ? changeInfo : null;
+            syncChange.resolve(doSync);
+            return changeInfo;
           });
+      })
+      .catch(function (err) {
+        syncChange.reject(err);
       });
 
     // Queue sync
     return $q(function (resolve, reject) {
       syncBookmarks({
-        type: globals.SyncType.Push,
-        changeInfo: prepareToSyncChanges
+        changeInfo: prepareToSyncChanges,
+        syncChange: syncChange.promise,
+        type: globals.SyncType.Push
       }, function (response) {
         if (response.success) {
           resolve(response.bookmarks);
@@ -130,23 +137,26 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var createBookmark = function (id, createdBookmark) {
-    var changeInfo, locationInfo;
+    var changeInfo, locationInfo, syncChange = $q.defer();
 
     // Get created bookmark location info
     var prepareToSyncChanges = platform.Bookmarks.GetLocalBookmarkLocationInfo(id)
       .then(function (results) {
         if (!results) {
+          utility.LogWarning('Unable to retrieve local bookmark location info, not syncing this change');
+          syncChange.resolve(false);
           return;
         }
         locationInfo = results;
 
+        var convertToSeparatorOrGetMetadata;
         if (bookmarks.IsSeparator(createdBookmark)) {
           // If bookmark is separator update local bookmark properties
-          return convertLocalBookmarkToSeparator(createdBookmark);
+          convertToSeparatorOrGetMetadata = convertLocalBookmarkToSeparator(createdBookmark);
         }
         else if (createdBookmark.url) {
           // If bookmark is not folder, get page metadata from current tab
-          return platform.GetPageMetadata(true)
+          convertToSeparatorOrGetMetadata = platform.GetPageMetadata(true)
             .then(function (metadata) {
               // Add metadata if bookmark is current tab location
               if (metadata && createdBookmark.url === metadata.url) {
@@ -158,30 +168,38 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
               return createdBookmark;
             });
         }
+        else {
+          convertToSeparatorOrGetMetadata = $q.resolve(createdBookmark);
+        }
 
-        return createdBookmark;
-      })
-      .then(function (bookmark) {
-        // Create change info
-        changeInfo = {
-          type: globals.UpdateType.Create,
-          bookmark: bookmark,
-          container: locationInfo.container,
-          indexPath: locationInfo.indexPath
-        };
+        return convertToSeparatorOrGetMetadata
+          .then(function (bookmark) {
+            // Create change info
+            changeInfo = {
+              bookmark: bookmark,
+              container: locationInfo.container,
+              indexPath: locationInfo.indexPath,
+              type: globals.UpdateType.Create
+            };
 
-        // Check if this change should be synced
-        return platform.Bookmarks.ShouldSyncLocalChanges(changeInfo)
+            // Check if this change should be synced
+            return platform.Bookmarks.ShouldSyncLocalChanges(changeInfo);
+          })
           .then(function (doSync) {
-            return doSync ? changeInfo : null;
+            syncChange.resolve(doSync);
+            return changeInfo;
           });
+      })
+      .catch(function (err) {
+        syncChange.reject(err);
       });
 
     // Queue sync
     return $q(function (resolve, reject) {
       syncBookmarks({
-        type: globals.SyncType.Push,
-        changeInfo: prepareToSyncChanges
+        changeInfo: prepareToSyncChanges,
+        syncChange: syncChange.promise,
+        type: globals.SyncType.Push
       }, function (response) {
         if (response.success) {
           resolve(response.bookmarks);
@@ -340,7 +358,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var moveBookmark = function (id, moveInfo) {
-    var changeInfo, movedBookmark;
+    var changeInfo, movedBookmark, syncChange = $q.defer();
 
     // Retrieve moved bookmark full info
     var prepareToSyncChanges = $q(function (resolve, reject) {
@@ -366,6 +384,8 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       })
       .then(function (locationInfo) {
         if (!locationInfo[0] || !locationInfo[1]) {
+          utility.LogWarning('Unable to retrieve local bookmark location info, not syncing this change');
+          syncChange.resolve(false);
           return;
         }
 
@@ -376,7 +396,6 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
         // Create change info
         changeInfo = {
-          type: globals.UpdateType.Move,
           bookmark: movedBookmark,
           container: locationInfo[0].container,
           indexPath: locationInfo[0].indexPath,
@@ -384,32 +403,36 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
             bookmark: movedBookmark,
             container: locationInfo[1].container,
             indexPath: locationInfo[1].indexPath
-          }
+          },
+          type: globals.UpdateType.Move
         };
 
         // If bookmark is separator update local bookmark properties
-        if (bookmarks.IsSeparator(movedBookmark)) {
-          return convertLocalBookmarkToSeparator(movedBookmark);
-        }
-      })
-      .then(function () {
-        // Check if move changes (remove and add) should be synced
-        return $q.all([
-          platform.Bookmarks.ShouldSyncLocalChanges(changeInfo),
-          platform.Bookmarks.ShouldSyncLocalChanges(changeInfo.targetInfo)
-        ])
+        return (bookmarks.IsSeparator(movedBookmark) ? convertLocalBookmarkToSeparator(movedBookmark) : $q.resolve())
+          .then(function () {
+            // Check if move changes (remove and add) should be synced
+            return $q.all([
+              platform.Bookmarks.ShouldSyncLocalChanges(changeInfo),
+              platform.Bookmarks.ShouldSyncLocalChanges(changeInfo.targetInfo)
+            ]);
+          })
           .then(function (results) {
             changeInfo.syncChange = results[0];
             changeInfo.targetInfo.syncChange = results[1];
+            syncChange.resolve(changeInfo.syncChange || changeInfo.targetInfo.syncChange);
             return changeInfo;
           });
+      })
+      .catch(function (err) {
+        syncChange.reject(err);
       });
 
     // Queue sync
     return $q(function (resolve, reject) {
       syncBookmarks({
-        type: globals.SyncType.Push,
-        changeInfo: prepareToSyncChanges
+        changeInfo: prepareToSyncChanges,
+        syncChange: syncChange.promise,
+        type: globals.SyncType.Push
       }, function (response) {
         if (response.success) {
           resolve(response.bookmarks);
@@ -655,12 +678,14 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var removeBookmark = function (id, removeInfo) {
-    var changeInfo;
+    var changeInfo, syncChange = $q.defer();
 
     // Get removed bookmark location info 
     var prepareToSyncChanges = platform.Bookmarks.GetLocalBookmarkLocationInfo(removeInfo.parentId, [removeInfo.index])
       .then(function (locationInfo) {
         if (!locationInfo) {
+          utility.LogWarning('Unable to retrieve local bookmark location info, not syncing this change');
+          syncChange.resolve(false);
           return;
         }
 
@@ -668,24 +693,29 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         var deletedBookmark = removeInfo.node;
         deletedBookmark.parentId = removeInfo.parentId;
         changeInfo = {
-          type: globals.UpdateType.Delete,
           bookmark: deletedBookmark,
           container: locationInfo.container,
-          indexPath: locationInfo.indexPath
+          indexPath: locationInfo.indexPath,
+          type: globals.UpdateType.Delete
         };
 
         // Check if this change should be synced
         return platform.Bookmarks.ShouldSyncLocalChanges(changeInfo)
           .then(function (doSync) {
-            return doSync ? changeInfo : null;
+            syncChange.resolve(doSync);
+            return changeInfo;
           });
+      })
+      .catch(function (err) {
+        syncChange.reject(err);
       });
 
     // Queue sync
     return $q(function (resolve, reject) {
       syncBookmarks({
-        type: globals.SyncType.Push,
-        changeInfo: prepareToSyncChanges
+        changeInfo: prepareToSyncChanges,
+        syncChange: syncChange.promise,
+        type: globals.SyncType.Push
       }, function (response) {
         if (response.success) {
           resolve(response.bookmarks);
@@ -857,6 +887,11 @@ xBrowserSync.App.ChromeBackground = angular.module('xBrowserSync.App.ChromeBackg
 // Disable debug info
 xBrowserSync.App.ChromeBackground.config(['$compileProvider', function ($compileProvider) {
   $compileProvider.debugInfoEnabled(false);
+}]);
+
+// Disable unhandled rejections error logging
+xBrowserSync.App.ChromeBackground.config(['$qProvider', function ($qProvider) {
+  $qProvider.errorOnUnhandledRejections(false);
 }]);
 
 // Add platform service

@@ -201,7 +201,7 @@
     "message": "geteilt von xBrowserSync"
   },
   "settings_Sync_SyncToolbarConfirmation_Message": {
-    "message": "<p>Das Synchronisieren der Lesezeichen-Symbolleiste wird alle Lesezeichen in der Symbolleiste mit den synchronisierten Lesezeichen ersetzen.</p><p>OK zum Fortsetzen?</p>"
+    "message": "<p>Enabling this setting will replace the bookmarks currently in the bookmarks toolbar with your synced bookmarks.</p><p>OK to proceed?</p>"
   },
   "settings_Sync_ConfirmCancelSync_Message": {
     "message": "<p>Die Synchronisation läuft gerade. Wenn Sie fortfahren werden Ihre lokalen Daten unvollständig sein.</p><p>OK zum Fortsetzen?</p>"

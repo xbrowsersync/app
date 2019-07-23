@@ -200,7 +200,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       current: undefined,
       change: changeView,
       displayMainView: displayMainView,
-      views: { login: 0, search: 1, bookmark: 2, settings: 3, help: 4, support: 5, updated: 6, permissions: 7 }
+      views: { login: 0, search: 1, bookmark: 2, settings: 3, help: 4, support: 5, updated: 6, permissions: 7, loading: 8 }
     };
 
     // Initialise the app
@@ -641,6 +641,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       case vm.view.views.updated:
         initNewView = init_infoView(viewData);
         break;
+      case vm.view.views.loading:
+        initNewView = init_loadingView(viewData);
+        break;
       case vm.view.views.login:
       default:
         initNewView = init_loginView(viewData);
@@ -825,8 +828,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         // Check if a sync is currently in progress
         if (currentSync) {
           utility.LogInfo('Waiting for sync: ' + currentSync.uniqueId);
-          platform.Interface.Loading.Show();
-          return platform.Sync.Await(currentSync.uniqueId)
+          return vm.view.change(vm.view.views.loading)
+            .then(function () {
+              return platform.Sync.Await(currentSync.uniqueId);
+            })
             .then(function () {
               return vm.view.change(vm.view.views.search);
             });
@@ -947,6 +952,11 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       }
     }, 150);
 
+    return $q.resolve();
+  };
+
+  var init_loadingView = function () {
+    platform.Interface.Loading.Show();
     return $q.resolve();
   };
 
