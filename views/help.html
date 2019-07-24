@@ -1,18 +1,20 @@
-<div id="help-page-container" data-ng-keydown="vm.events.helpPanel_KeyDown($event)" tabindex="0">
+<div id="help-page-container" data-ng-keydown="vm.events.helpPanel_KeyDown($event)"
+  data-hm-swipeleft="vm.events.helpPanel_PreviousPage()" data-hm-swiperight="vm.events.helpPanel_NextPage()"
+  tabindex="0">
   <div id="help-page-{{$index}}" class="animate-fade" data-ng-show="vm.help.currentPage === $index"
-    data-hm-swipeleft="vm.help.displayPage($index - 1)" data-hm-swiperight="vm.help.displayPage($index + 1)"
     data-ng-repeat="page in vm.help.pages track by $index">
     <div data-ng-bind-html="page"></div>
     <div class="pagination">
-      <a class="prev-link" href="#" data-ng-click="vm.help.displayPage($index - 1)"
-        data-ng-class="{ 'invisible': $index === 0 }">
+      <a class="prev-link" href="#" data-ng-click="vm.events.helpPanel_PreviousPage()"
+        data-ng-keydown="vm.events.helpPanel_KeyDown($event)" data-ng-class="{ 'invisible': $index === 0 }">
         <span>{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
       </a>
-      <a class="next-link" href="#" data-ng-click="vm.help.displayPage($index + 1)"
-        data-ng-hide="$index === vm.help.pages.length - 1">
+      <a class="next-link" href="#" data-ng-click="vm.events.helpPanel_NextPage()"
+        data-ng-keydown="vm.events.helpPanel_KeyDown($event)" data-ng-hide="$index === vm.help.pages.length - 1">
         <span>{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>
       </a>
-      <a href="#" data-ng-click="vm.events.helpPanel_Close_Click()" data-ng-show="$index === vm.help.pages.length - 1">
+      <a href="#" data-ng-click="vm.events.helpPanel_Close()" data-ng-keydown="vm.events.helpPanel_KeyDown($event)"
+        data-ng-show="$index === vm.help.pages.length - 1">
         <span>{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}</span>
       </a>
     </div>

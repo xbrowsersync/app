@@ -289,12 +289,20 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   var installExtension = function (currentVersion) {
     // Clear trace log and display permissions panel if not already dismissed
     return platform.LocalStorage.Set(globals.CacheKeys.TraceLog)
-
-      // TODO: Add this back once Firefox supports optional permissions
-      // https://bugzilla.mozilla.org/show_bug.cgi?id=1432083
-
-      //  return platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, true)
-      //})
+      .then(function () {
+        return $q.all([
+          platform.LocalStorage.Set(globals.CacheKeys.DisplayHelp, true),
+          // TODO: Add this back once Firefox supports optional permissions
+          // https://bugzilla.mozilla.org/show_bug.cgi?id=1432083
+          /*platform.LocalStorage.Get(globals.CacheKeys.DisplayPermissions)
+            .then(function (displayPermissions) {
+              if (displayPermissions === false) {
+                return;
+              }
+              return platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, true);
+            })*/
+        ]);
+      })
       .then(function () {
         utility.LogInfo('Installed v' + currentVersion);
       });

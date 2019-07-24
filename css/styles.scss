@@ -1364,32 +1364,43 @@ body {
 }
 
 #help-panel {
-  .pagination {
+  #help-page-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
-    font-size: 1.1rem;
+    align-items: center;
+    padding: 2rem;
 
-    a {
-      position: relative;
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+      font-size: 1.1rem;
 
-      &.next-link {
-        margin-right: 0.5rem;
+      a {
+        position: relative;
 
-        span:after {
-          content: "\203A";
-          position: absolute;
-          right: -0.5rem;
+        &.next-link {
+          margin-right: 0.5rem;
+
+          span:after {
+            content: "\203A";
+            position: absolute;
+            right: -0.5rem;
+          }
         }
-      }
 
-      &.prev-link {
-        margin-left: 0.5rem;
+        &.prev-link {
+          margin-left: 0.5rem;
 
-        span:before {
-          content: "\2039";
-          position: absolute;
-          left: -0.5rem;
+          span:before {
+            content: "\2039";
+            position: absolute;
+            left: -0.5rem;
+          }
         }
       }
     }

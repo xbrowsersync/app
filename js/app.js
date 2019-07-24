@@ -70,9 +70,11 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       bookmarkPanel_Close_Click: bookmarkPanel_Close_Click,
       button_ReleaseNotes_Click: button_ReleaseNotes_Click,
       displayQrPanel: displayQrPanel,
-      helpPanel_Close_Click: helpPanel_Close_Click,
+      helpPanel_Close: helpPanel_Close,
       helpPanel_KeyDown: helpPanel_KeyDown,
-      helpPanel_ShowHelp_Click: helpPanel_ShowHelp_Click,
+      helpPanel_NextPage: helpPanel_NextPage,
+      helpPanel_PreviousPage: helpPanel_PreviousPage,
+      helpPanel_ShowHelp: helpPanel_ShowHelp,
       issuesPanel_ClearLog_Click: issuesPanel_ClearLog_Click,
       issuesPanel_DownloadLogFile_Click: issuesPanel_DownloadLogFile_Click,
       openUrl: openUrl,
@@ -120,7 +122,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     vm.help = {
       currentPage: 0,
-      displayPage: displayHelpPage,
       pages: undefined
     };
 
@@ -726,15 +727,20 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     }
 
     vm.help.currentPage = panelToDisplay || 0;
+    $timeout(function () {
+      document.querySelector('#help-page-container').focus();
+    }, 100);
   };
 
   var displayMainView = function () {
     return platform.LocalStorage.Get([
+      globals.CacheKeys.DisplayHelp,
       globals.CacheKeys.DisplayPermissions,
       globals.CacheKeys.DisplayUpdated,
       globals.CacheKeys.SyncEnabled
     ])
       .then(function (cachedData) {
+        var displayHelp = cachedData[globals.CacheKeys.DisplayHelp];
         var displayPermissions = cachedData[globals.CacheKeys.DisplayPermissions];
         var displayUpdated = cachedData[globals.CacheKeys.DisplayUpdated];
         var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
@@ -744,6 +750,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
             return changeView(vm.view.views.updated);
           case displayPermissions:
             return changeView(vm.view.views.permissions);
+          case displayHelp:
+            return helpPanel_ShowHelp();
           case syncEnabled:
             return changeView(vm.view.views.search);
           default:
@@ -1142,7 +1150,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       });
   };
 
-  var helpPanel_Close_Click = function () {
+  var helpPanel_Close = function () {
     vm.view.displayMainView();
   };
 
@@ -1151,28 +1159,34 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       // Escape key
       case (event.keyCode === 27):
         event.preventDefault();
-        vm.events.helpPanel_Close_Click();
+        vm.events.helpPanel_Close();
         break;
       // Left arrow key
       case (event.keyCode === 37):
         event.preventDefault();
-        vm.help.displayPage(vm.help.currentPage - 1);
+        displayHelpPage(vm.help.currentPage - 1);
         break;
       // Right arrow key
       case (event.keyCode === 39):
         event.preventDefault();
-        vm.help.displayPage(vm.help.currentPage + 1);
+        displayHelpPage(vm.help.currentPage + 1);
         break;
     }
   };
 
-  var helpPanel_ShowHelp_Click = function () {
+  var helpPanel_NextPage = function () {
+    displayHelpPage(vm.help.currentPage + 1);
+  };
+
+  var helpPanel_PreviousPage = function () {
+    displayHelpPage(vm.help.currentPage - 1);
+  };
+
+  var helpPanel_ShowHelp = function () {
+    platform.LocalStorage.Set(globals.CacheKeys.DisplayHelp, false);
     vm.help.pages = platform.GetHelpPages();
-    vm.help.currentPage = 0;
     vm.view.change(vm.view.views.help);
-    $timeout(function () {
-      document.querySelector('#help-page-container').focus();
-    }, 100);
+    displayHelpPage();
   };
 
   var openUrl = function (event, url) {
@@ -1729,16 +1743,14 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var setServiceInformation = function (serviceInfo) {
-    // Linkify service message
-    var message = serviceInfo.message;
+    // Render markdown and add link classes to service message 
+    var message = serviceInfo.message ? marked(serviceInfo.message) : null;
     if (message) {
-      _.each(message.match(new RegExp(globals.URL.Regex, 'g')), function (match) {
-        var link = document.createElement('a');
-        link.innerText = match;
-        link.href = (new RegExp(globals.URL.ProtocolRegex)).test(match) ? match : 'http://' + match;
-        link.className = 'new-tab';
-        message = message.replace(match, link.outerHTML);
+      var messageDom = new DOMParser().parseFromString(message, 'text/html');
+      messageDom.querySelectorAll('a').forEach(function (hyperlink) {
+        hyperlink.className = 'new-tab';
       });
+      message = DOMPurify.sanitize(messageDom.body.firstElementChild.innerHTML);
       $timeout(setNewTabLinks);
     }
 

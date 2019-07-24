@@ -344,13 +344,16 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     // Clear trace log and display permissions panel if not already dismissed
     return platform.LocalStorage.Set(globals.CacheKeys.TraceLog)
       .then(function () {
-        return platform.LocalStorage.Get(globals.CacheKeys.DisplayPermissions);
-      })
-      .then(function (displayPermissions) {
-        if (displayPermissions === false) {
-          return;
-        }
-        return platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, true);
+        return $q.all([
+          platform.LocalStorage.Set(globals.CacheKeys.DisplayHelp, true),
+          platform.LocalStorage.Get(globals.CacheKeys.DisplayPermissions)
+            .then(function (displayPermissions) {
+              if (displayPermissions === false) {
+                return;
+              }
+              return platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, true);
+            })
+        ]);
       })
       .then(function () {
         utility.LogInfo('Installed v' + currentVersion);
