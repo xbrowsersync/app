@@ -579,7 +579,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       platform.GetConstant(globals.Constants.Help_Page4_Desktop_Content),
       platform.GetConstant(globals.Constants.Help_Page5_Content),
       platform.GetConstant(globals.Constants.Help_Page6_Desktop_Content),
-      platform.GetConstant(globals.Constants.Help_Page7_Desktop_Content),
+      platform.GetConstant(globals.Constants.Help_Page7_Chrome_Content),
       platform.GetConstant(globals.Constants.Help_Page8_Chrome_Content),
       platform.GetConstant(globals.Constants.Help_Page9_Content),
       platform.GetConstant(globals.Constants.Help_Page10_Chrome_Content),

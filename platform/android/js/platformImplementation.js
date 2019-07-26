@@ -46,31 +46,31 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "<a href='https://link.xbrowsersync.org/download' class='new-tab'>Download</a> the xBrowserSync desktop browser extension available for Chrome and Firefox, create a new sync and then scan your sync ID QR code on the previous screen."
     },
     "help_Page1_Chrome_Content": {
-      "message": "<h4>Welcome to xBrowserSync</h4><p>Browser syncing as it should be: secure, anonymous and free!</p><p>Before you begin, take some time to read through the following pages to familiarise yourself with xBrowserSync’s features (use the paging links below or the arrow keys to move between pages).</p><p>Please note, xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) please disable them to avoid conflicts.</p><p>If you have any further questions be sure to check out the <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>FAQs</a>.</p>"
+      "message": "<h4>Welcome to xBrowserSync</h4><p>Browser syncing as it should be: secure, anonymous and free!</p><p>Before you begin, take some time to read through the following pages to familiarise yourself with xBrowserSync’s features (use the paging links below or the arrow keys to move between pages).</p><p>Please note, xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) please disable them to avoid conflicts.</p><p>If you have any further questions be sure to check out the <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>FAQs</a>.</p>"
     },
     "help_Page1_Firefox_Content": {
-      "message": "<h4>Welcome to xBrowserSync</h4><p>Browser syncing as it should be: secure, anonymous and free!</p><p>Before you begin, take some time to read through the following pages to familiarise yourself with xBrowserSync’s features (use the paging links below or the arrow keys to move between pages).</p><p>Please note, xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) please disable them to avoid conflicts.</p><p>If you have any further questions be sure to check out the <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>FAQs</a>.</p>"
+      "message": "<h4>Welcome to xBrowserSync</h4><p>Browser syncing as it should be: secure, anonymous and free!</p><p>Before you begin, take some time to read through the following pages to familiarise yourself with xBrowserSync’s features (use the paging links below or the arrow keys to move between pages).</p><p>Please note, xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) please disable them to avoid conflicts.</p><p>If you have any further questions be sure to check out the <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>FAQs</a>.</p>"
     },
     "help_Page1_Android_Content": {
       "message": "<h4>Welcome to xBrowserSync</h4><p>Browser syncing as it should be: secure, anonymous and free!</p><p>Before you begin, take some time to read through the following pages to familiarise yourself with xBrowserSync’s features (use the paging links below or swipe to move between pages).</p><p>If you have any further questions be sure to check out the <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>FAQs</a>.</p>"
     },
     "help_Page2_Desktop_Content": {
-      "message": "<h4>Syncing for the first time</h4><p>Before you can sync your browser data it must be encrypted so that only you can read it. Enter an encryption password, be sure to make it strong but also memorable — there are no resets or reminders so if you forget it you won’t be able to decrypt your synced data.</p><p>Once you click the Sync button your data will be encrypted and saved to the xBrowserSync service configured in the Settings panel.</p><p>Congratulations, you are now synced! Any changes you make to your local bookmarks will be synced automatically by xBrowserSync.</p>"
+      "message": "<h4>Syncing for the first time</h4><p>Before you can sync your browser data it must be encrypted so that only you can read it. Enter an encryption password, be sure to make it strong but also memorable — there are no resets or reminders so if you forget it you won’t be able to access your synced data.</p><p>Once you click the Sync button your data will be encrypted and saved to the xBrowserSync service configured in the Settings panel.</p><p>Congratulations, you are now synced! Any changes you make to your local bookmarks will be synced automatically by xBrowserSync.</p>"
     },
     "help_Page2_Android_Content": {
       "message": "<h4>Syncing for the first time</h4><p>First things first, head over to your desktop browser and <a href='https://link.xbrowsersync.org/download' class='new-tab'>download</a> the xBrowserSync extension (available for Chrome and Firefox).</p><p>When you create a new sync, your existing browser data will be encrypted locally and synced to the xBrowserSync service configured in the Settings panel.</p><p>Once you have synced your desktop browser data you can use your new sync ID to access your data here.</p>"
     },
     "help_Page3_Content": {
-      "message": "<h4>Your Sync ID</h4><p>When you create a new sync you are given a unique sync ID which you can use along with your password to sync your data on other devices. Your anonymity is ensured as no personal data is collected or stored with your synced data.</p><p>This sync ID will only work with the xBrowserSync service on which it was created. Whenever you change services (via the Settings panel) you must create a new sync which will give you a new sync ID.</p><p>Once synced, you can view your sync ID in the Settings panel. Click it to reveal a handy QR code to scan when syncing on mobile devices.</p>"
+      "message": "<h4>Your sync ID</h4><p>When you create a new sync you are given a unique sync ID which you can use along with your password to sync your data on other devices. Your anonymity is ensured as no personal data is collected or stored with your synced data.</p><p>This sync ID will only work with the xBrowserSync service on which it was created. Whenever you change services (via the Settings panel) you must create a new sync which will give you a new sync ID.</p><p>Once synced, you can view your sync ID in the Settings panel. Click it to reveal a handy QR code to scan when syncing on mobile devices.</p>"
     },
     "help_Page4_Desktop_Content": {
-      "message": "<h4>Retrieving an existing sync</h4><p> Click on “Already got a sync ID?” to enter your existing sync ID and password. If you are synced to a different xBrowserSync service make sure it is configured in the Settings panel.</p><p>xBrowserSync will clear your local bookmarks before refreshing them from your synced data.</p>"
+      "message": "<h4>Syncing with your existing ID</h4><p>Click on “Already got a sync ID?” to enter your existing sync ID and password. If you are synced to a different xBrowserSync service make sure it is configured in the Settings panel.</p><p>xBrowserSync will download and decrypt your synced data from the service, then clear your local bookmarks before populating them from the synced data.</p><p>Whilst synced, any changes to your synced data will be detected in the background and  your local bookmarks will be updated automatically. You can also force updates manually in the Settings panel.</p>"
     },
     "help_Page4_Android_Content": {
-      "message": "<h4>Retrieving an existing sync</h4><p> Click on “Already got a sync ID?” to enter your existing sync ID and password.</p><p>Rather than attempt to type the long sync ID, simply press the QR icon in the ID field and then scan the QR code for your sync ID (you can find it in the Settings panel of the desktop browser extension, click on your sync ID to reveal it).</p><p>If you are synced to a different xBrowserSync service make sure it is configured in the Settings panel.</p>"
+      "message": "<h4>Syncing with your existing ID</h4><p>Click on “Already got a sync ID?” to enter your existing sync ID and password.</p><p>Rather than attempt to type the long sync ID, simply press the QR icon in the ID field and then scan the QR code for your sync ID (you can find it in the Settings panel of the desktop browser extension, click on your sync ID to reveal it).</p><p>If you are synced to a different xBrowserSync service make sure it is configured in the Settings panel.</p>"
     },
     "help_Page5_Content": {
-      "message": "<h4>Syncing to another service</h4><p>By default your data is synced to the official xBrowserSync service, though anyone can <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>run their own xBrowserSync service</a>, either for private use (for ultimate security and privacy) or to make available for public use so that more people can enjoy xBrowserSync.</p><p>Check the list of public <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>xBrowserSync services</a> and configure which service to sync to in the Settings panel.</p>"
+      "message": "<h4>Syncing to another service</h4><p>By default your data is synced to the <a href='https://link.xbrowsersync.org/api' class='new-tab'>official xBrowserSync service</a>, though anyone can <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>run their own xBrowserSync service</a>, either for private use (for ultimate security and privacy) or to make available for public use so that more people can enjoy xBrowserSync.</p><p>Check the list of public <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>xBrowserSync services</a> and configure which service to sync to in the Settings panel.</p>"
     },
     "help_Page6_Desktop_Content": {
       "message": "<h4>Searching your bookmarks</h4><p>Once synced, simply press Enter to display your recent bookmarks or type some keywords or a URL to search your bookmarks.</p><p>To edit or delete a bookmark, hover over the bookmark and click the now visible edit icon next to the bookmark’s title.</p>"
@@ -78,8 +78,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "help_Page6_Android_Content": {
       "message": "<h4>Searching your bookmarks</h4><p>Once synced, your bookmarks are displayed in chronological order when you open xBrowserSync. Type some keywords or a URL in the search box to search your bookmarks.</p><p>Long pressing on a bookmark will allow you to directly share, modify or delete the bookmark.</p>"
     },
-    "help_Page7_Desktop_Content": {
+    "help_Page7_Chrome_Content": {
       "message": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s bookmark button as normal and xBrowserSync will automatically populate the bookmark’s properties (optional permissions must be granted for this to work, check the Settings panel).</p>"
+    },
+    "help_Page7_Firefox_Content": {
+      "message": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s bookmark button as normal and xBrowserSync will automatically populate the bookmark’s properties.</p>"
     },
     "help_Page7_Android_Content": {
       "message": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be fetched for you, otherwise add a description and some tags to ensure better search results.</p>"
@@ -163,10 +166,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "No sync ID has been provided so a new sync will be created for you. OK to proceed?"
     },
     "login_DisableOtherSyncs_Title": {
-      "message": "Disable active browser sync tools"
+      "message": "Disable bookmark sync tools"
     },
     "login_DisableOtherSyncs_Message": {
-      "message": "Syncing your browser data with xBrowserSync whilst other browser sync tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) are active can lead to corrupted bookmarks. Please disable them before continuing."
+      "message": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing."
     },
     "login_UpgradeSync_Title": {
       "message": "Ready to upgrade sync?"
@@ -508,7 +511,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Copied!"
     },
     "qr_CopySyncId_Label": {
-      "message": "Copy Sync ID to clipboard"
+      "message": "Copy sync ID to clipboard"
     },
     "qr_Message": {
       "message": "Scan this QR code using the xBrowserSync Android app to access your synced data on your mobile device."
