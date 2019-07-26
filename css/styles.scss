@@ -1111,6 +1111,23 @@ body {
     }
   }
 
+  .about-panel {
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 0.5rem;
+
+      button {
+        margin-right: 0;
+
+        &#support {
+          text-transform: none;
+        }
+      }
+    }
+  }
+
   .backup-restore-panel {
     #restoreForm {
       textarea {

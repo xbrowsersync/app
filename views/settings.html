@@ -463,20 +463,12 @@
         <div class="setting-value">
           <span>{{ vm.globals.AppVersion }}</span>
         </div>
-        <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_AppVersion_Description) }}
-        </p>
-        <div class="text-center">
+        <div class="buttons">
           <button type="button" class="btn btn-default" data-ng-click="vm.events.button_ReleaseNotes_Click()">
             {{ vm.platform.GetConstant(vm.globals.Constants.Button_ReleaseNotes_Label) }}
           </button>
-        </div>
-      </div>
-      <div class="setting-group">
-        <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Support_Label) }}</label>
-        <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_About_Support_Description) }}
-        </p>
-        <div class="buttons">
-          <button type="button" class="btn btn-default" data-ng-click="vm.view.change(vm.view.views.support)">
+          <button id="support" type="button" class="btn btn-default"
+            data-ng-click="vm.view.change(vm.view.views.support)">
             {{ vm.platform.GetConstant(vm.globals.Constants.Button_Support_Label) }}
           </button>
         </div>

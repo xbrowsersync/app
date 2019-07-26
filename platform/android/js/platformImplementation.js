@@ -181,7 +181,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Updated to v"
     },
     "support_Message": {
-      "message": "<p>We want to make xBrowserSync the number one browser syncing tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all popular desktop browsers</li><li>Support syncing to other cloud services such as Nextcloud, Dropbox, etc</li><li>Translate into other languages</li><li>And much, much more!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains an effective tool in protecting our privacy and productivity against the rot of big tech!</p>"
+      "message": "<p>We want to make xBrowserSync the number one browser syncing tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all popular desktop browsers</li><li>Support syncing to other cloud services such as Nextcloud, Dropbox, etc</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/app-feature-requests' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains an effective tool in protecting our privacy and productivity against the rot of big tech!</p>"
     },
     "support_Title": {
       "message": "Support xBrowserSync!"
@@ -220,7 +220,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "<p>There is currently a sync in progress, if you proceed your local synced data will be incomplete.</p><p>OK to proceed?</p>"
     },
     "settings_Sync_Id_Description": {
-      "message": "Use your ID to sync on other devices (click for QR code)."
+      "message": "Use your sync ID to access your synced data on other devices."
     },
     "settings_Sync_SyncToolbar_Label": {
       "message": "Sync bookmarks toolbar"
@@ -258,14 +258,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_About_AppVersion_Label": {
       "message": "Version"
     },
-    "settings_About_AppVersion_Description": {
-      "message": "Source code release version number."
-    },
     "button_ReleaseNotes_Label": {
       "message": "View release notes"
     },
     "button_Support_Label": {
-      "message": "Support info"
+      "message": "Support xBrowserSync"
     },
     "settings_Issues_Help_Label": {
       "message": "Help"
@@ -275,12 +272,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     },
     "settings_Issues_ViewFAQs_Label": {
       "message": "View FAQs"
-    },
-    "settings_About_Support_Label": {
-      "message": "Support xBrowserSync"
-    },
-    "settings_About_Support_Description": {
-      "message": "If you enjoy using xBrowserSync consider supporting the project."
     },
     "button_Cryptos_Label": {
       "message": "Cryptos"
