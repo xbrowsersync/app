@@ -144,7 +144,7 @@
     "message": "Neuen Sync erstellen"
   },
   "Button_SyncUpdates_Label": {
-    "message": "Sync updates"
+    "message": "Update Sync"
   },
   "login_ConfirmSync_Title": {
     "message": "Broswerdaten überschreiben?"
@@ -213,7 +213,7 @@
     "message": "Use your sync ID to access your synced data on other devices."
   },
   "settings_Sync_UpdatesAvailable_False_Message": {
-    "message": "Synced data is up to date."
+    "message": "Sync is up to date."
   },
   "settings_Sync_UpdatesAvailable_True_Message": {
     "message": "Updates available, next sync at"
