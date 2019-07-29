@@ -93,6 +93,58 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     });
   };
 
+  var checkForUpdatesOnStartup = function () {
+    return $q(function (resolve, reject) {
+      // If network disconnected, skip update check
+      if (!utility.IsNetworkConnected()) {
+        return resolve(false);
+      }
+
+      // Check for updates to synced bookmarks
+      bookmarks.CheckForUpdates()
+        .then(resolve)
+        .catch(function (err) {
+          // If network disconnected, retry once
+          if (err.code !== globals.ErrorCodes.HttpRequestFailed) {
+            return reject(err);
+          }
+
+          utility.LogInfo('Connection to API failed, retrying check for sync updates momentarily');
+          $timeout(function () {
+            platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+              .then(function (syncEnabled) {
+                if (!syncEnabled) {
+                  utility.LogInfo('Sync was disabled before retry attempted');
+                  return reject({ code: globals.ErrorCodes.HttpRequestCancelled });
+                }
+
+                bookmarks.CheckForUpdates().then(resolve).catch(reject);
+              })
+              .catch(reject);
+          }, 5000);
+        });
+    })
+      .then(function (updatesAvailable) {
+        if (!updatesAvailable) {
+          return;
+        }
+
+        // Queue sync
+        return $q(function (resolve, reject) {
+          syncBookmarks({
+            type: globals.SyncType.Pull
+          }, function (response) {
+            if (response.success) {
+              resolve(response.bookmarks);
+            }
+            else {
+              reject(response.error);
+            }
+          });
+        });
+      });
+  };
+
   var createBookmark = function (id, createdBookmark) {
     var changeInfo, locationInfo, syncChange = $q.defer();
 
@@ -544,56 +596,12 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
           return;
         }
 
-        return $q(function (resolve, reject) {
-          // Check for updates to synced bookmarks
-          bookmarks.CheckForUpdates()
-            .then(resolve)
-            .catch(function (err) {
-              // If network disconnected, retry once
-              if (err.code !== globals.ErrorCodes.HttpRequestFailed) {
-                return reject(err);
-              }
-
-              utility.LogInfo('Connection to API failed, retrying in 10 seconds');
-              $timeout(function () {
-                platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
-                  .then(function (syncEnabled) {
-                    if (!syncEnabled) {
-                      utility.LogInfo('Sync was disabled before retry attempted');
-                      return reject({ code: globals.ErrorCodes.HttpRequestCancelled });
-                    }
-
-                    bookmarks.CheckForUpdates().then(resolve).catch(reject);
-                  })
-                  .catch(reject);
-              }, 10000);
-            });
-        })
-          .then(function (updatesAvailable) {
-            if (!updatesAvailable) {
-              return;
-            }
-
-            // Queue sync
-            return $q(function (resolve, reject) {
-              syncBookmarks({
-                type: globals.SyncType.Pull
-              }, function (response) {
-                if (response.success) {
-                  resolve(response.bookmarks);
-                }
-                else {
-                  reject(response.error);
-                }
-              });
-            });
-          })
-          .then(function () {
-            // Enable event listeners
-            return toggleEventListeners(true);
-          })
+        // Enable event listeners
+        return toggleEventListeners(true)
           // Start auto updates
           .then(platform.AutomaticUpdates.Start)
+          // Check for updates
+          .then(checkForUpdatesOnStartup)
           .catch(function (err) {
             // If check for updates was cancelled don't continue
             if (err.code === globals.ErrorCodes.HttpRequestCancelled) {
@@ -610,7 +618,6 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var refreshLocalSyncData = function () {
-    utility.LogInfo('Refreshing local sync data');
     return syncBookmarks({ type: globals.SyncType.Pull })
       .then(function () {
         utility.LogInfo('Local sync data refreshed');

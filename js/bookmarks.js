@@ -128,9 +128,9 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         return api.GetBookmarksLastUpdated();
       })
       .then(function (data) {
-        // If last updated is different the date in local storage, refresh bookmarks
+        // If last updated is different to the date in local storage, refresh bookmarks
         var remoteLastUpdated = new Date(data.lastUpdated);
-        var updatesAvailable = !cachedLastUpdated || cachedLastUpdated.getTime() < remoteLastUpdated.getTime();
+        var updatesAvailable = !cachedLastUpdated || cachedLastUpdated.getTime() !== remoteLastUpdated.getTime();
 
         if (updatesAvailable) {
           utility.LogInfo('Updates available, local:' + (cachedLastUpdated ? cachedLastUpdated.toISOString() : 'none') + ' remote:' + remoteLastUpdated.toISOString());
