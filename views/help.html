@@ -9,6 +9,7 @@
         data-ng-keydown="vm.events.helpPanel_KeyDown($event)" data-ng-class="{ 'invisible': $index === 0 }">
         <span>{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
       </a>
+      <span class="page-number">{{$index + 1}} / {{vm.help.pages.length}}</span>
       <a class="next-link" href="#" data-ng-click="vm.events.helpPanel_NextPage()"
         data-ng-keydown="vm.events.helpPanel_KeyDown($event)" data-ng-hide="$index === vm.help.pages.length - 1">
         <span>{{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}</span>

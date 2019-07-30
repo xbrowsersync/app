@@ -573,18 +573,19 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var getHelpPages = function () {
     var pages = [
-      platform.GetConstant(globals.Constants.Help_Page1_Chrome_Content),
-      platform.GetConstant(globals.Constants.Help_Page2_Desktop_Content),
-      platform.GetConstant(globals.Constants.Help_Page3_Content),
-      platform.GetConstant(globals.Constants.Help_Page4_Desktop_Content),
-      platform.GetConstant(globals.Constants.Help_Page5_Content),
-      platform.GetConstant(globals.Constants.Help_Page6_Desktop_Content),
-      platform.GetConstant(globals.Constants.Help_Page7_Chrome_Content),
-      platform.GetConstant(globals.Constants.Help_Page8_Chrome_Content),
-      platform.GetConstant(globals.Constants.Help_Page9_Content),
-      platform.GetConstant(globals.Constants.Help_Page10_Chrome_Content),
-      platform.GetConstant(globals.Constants.Help_Page11_Desktop_Content),
-      platform.GetConstant(globals.Constants.Help_Page12_Content)
+      platform.GetConstant(globals.Constants.Help_Page_Welcome_Desktop_Content),
+      platform.GetConstant(globals.Constants.Help_Page_BeforeYouBegin_Chrome_Content),
+      platform.GetConstant(globals.Constants.Help_Page_FirstSync_Desktop_Content),
+      platform.GetConstant(globals.Constants.Help_Page_SyncId_Content),
+      platform.GetConstant(globals.Constants.Help_Page_ExistingId_Desktop_Content),
+      platform.GetConstant(globals.Constants.Help_Page_Service_Content),
+      platform.GetConstant(globals.Constants.Help_Page_Searching_Desktop_Content),
+      platform.GetConstant(globals.Constants.Help_Page_AddingBookmarks_Chrome_Content),
+      platform.GetConstant(globals.Constants.Help_Page_NativeFeatures_Chrome_Content),
+      platform.GetConstant(globals.Constants.Help_Page_BackingUp_Content),
+      platform.GetConstant(globals.Constants.Help_Page_Shortcuts_Chrome_Content),
+      platform.GetConstant(globals.Constants.Help_Page_Mobile_Content),
+      platform.GetConstant(globals.Constants.Help_Page_FurtherSupport_Content)
     ];
 
     return pages;
