@@ -47,7 +47,6 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 
     var syncEnabled = JSON.parse(localStorage.getItem('xBrowserSync-syncEnabled'));
     if (syncEnabled) {
-      var displayIntro = JSON.parse(localStorage.getItem('xBrowserSync-displayIntro'));
       var lastUpdated = localStorage.getItem('xBrowserSync-lastUpdated');
       var password = localStorage.getItem('xBrowserSync-password');
       var serviceUrl = localStorage.getItem('xBrowserSync-urlHost');
@@ -57,7 +56,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
 
       // Set cached data
       $q.all([
-        platform.LocalStorage.Set(globals.CacheKeys.DisplayIntro, displayIntro),
+        platform.LocalStorage.Set(globals.CacheKeys.DisplayHelp, false),
         platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, lastUpdated),
         platform.LocalStorage.Set(globals.CacheKeys.Password, password),
         platform.LocalStorage.Set(globals.CacheKeys.ServiceUrl, serviceUrl),

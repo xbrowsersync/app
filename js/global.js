@@ -31,7 +31,6 @@ xBrowserSync.App.Global = function (platform) {
     CacheKeys: {
       Bookmarks: 'bookmarks',
       DisplayHelp: 'displayHelp',
-      DisplayIntro: 'displayIntro',
       DisplayOtherSyncsWarning: 'displayOtherSyncsWarning',
       DisplayPermissions: 'displayPermissions',
       DisplayUpdated: 'displayUpdated',
