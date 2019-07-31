@@ -99,18 +99,10 @@ body {
         padding: 0;
         transition: all, ease-in-out, 0.2s;
         border-radius: 0;
-        border-bottom: solid 1px transparent;
-
-        &:focus {
-          border-bottom-color: $colour-text2;
-        }
 
         &:active,
-        &:hover {
-          &:focus {
-            border-bottom-color: transparent;
-          }
-
+        &:hover,
+        &:focus {
           i {
             opacity: 1;
           }
@@ -190,10 +182,6 @@ body {
       @media (min-width: $width-mobile-small + 1) {
         font-size: 1.5rem;
         line-height: 2rem;
-      }
-
-      &:focus {
-        border-bottom-color: $colour-text1;
       }
 
       i {
@@ -660,7 +648,8 @@ body {
       line-height: 1.2rem;
       max-width: 99%;
 
-      &:hover {
+      &:hover,
+      &:focus {
         cursor: pointer;
 
         i {
@@ -706,7 +695,6 @@ body {
       font-size: 1.1rem;
       line-height: 2.3rem;
       z-index: 55;
-      border-bottom: none;
     }
 
     .lookahead-container {
@@ -751,7 +739,6 @@ body {
     top: 0.35rem;
     right: 1.3rem;
     z-index: 55;
-    border-bottom: none;
 
     i {
       font-size: 2.5rem;
@@ -905,7 +892,6 @@ body {
           font-size: 1.1rem;
           line-height: 2.2rem;
           z-index: 55;
-          border-bottom: none;
 
           &:hover i {
             opacity: 1;

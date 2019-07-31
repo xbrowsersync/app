@@ -677,17 +677,15 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
     return $q(function (resolve, reject) {
       try {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-          activeTab = tabs[0];
-          resolve();
-        });
+        chrome.tabs.query({ active: true, currentWindow: true }, resolve);
       }
       catch (err) {
         reject(err);
       }
     })
-      .then(function () {
+      .then(function (tabs) {
         // If active tab empty, return
+        activeTab = tabs && tabs[0];
         if (!activeTab) {
           return false;
         }

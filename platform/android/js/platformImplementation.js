@@ -82,10 +82,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "<h4>Searching your bookmarks</h4><p>Once synced, your bookmarks are displayed in chronological order when you open xBrowserSync. Type some keywords or a URL in the search box to search your bookmarks.</p><p>Long pressing on a bookmark will allow you to directly share, modify or delete the bookmark.</p>"
     },
     "help_Page_AddingBookmarks_Chrome_Content": {
-      "message": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s bookmark button as normal and xBrowserSync will automatically populate the bookmark’s properties (optional permissions must be granted for this to work, check the Settings panel).</p>"
+      "message": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s “Bookmark this page” button as normal and xBrowserSync will automatically populate the bookmark’s properties (optional permissions must be granted for this to work, check the Settings panel).</p>"
     },
     "help_Page_AddingBookmarks_Firefox_Content": {
-      "message": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s bookmark button as normal and xBrowserSync will automatically populate the bookmark’s properties.</p>"
+      "message": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s “Bookmark this page” button as normal and xBrowserSync will automatically populate the bookmark’s properties.</p>"
     },
     "help_Page_AddingBookmarks_Android_Content": {
       "message": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be fetched for you, otherwise add a description and some tags to ensure better search results.</p>"
@@ -112,7 +112,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "<h4>Got desktop?</h4><p>Sync your bookmarks across desktop and mobile devices by using the xBrowserSync desktop browser web extension alongside the mobile app.</p><p>Currently available for Chrome and Firefox, Opera support coming very soon.</p>"
     },
     "help_Page_FurtherSupport_Content": {
-      "message": "<h4>Further support</h4><p>You can find the answers to most common questions in the <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>FAQs</a>, also check the current <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>known issues</a> to see if your issue is listed there.</p><p>Otherwise, head on over to <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>GitHub</a> to log your issue or request a new feature.</p>"
+      "message": "<h4>Further support</h4><p>You can find the answers to most common questions in the <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>FAQs</a>, also check the current <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>known issues</a> to see if your issue is listed there.</p><p>Alternatively, use the <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>issue tracker</a> to report an issue or request a new feature.</p>"
     },
     "button_Settings_Label": {
       "message": "Settings"
@@ -313,7 +313,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Download log"
     },
     "settings_Issues_LogDownloaded_Message": {
-      "message": "If the log file does not download automatically, right click on the link below and 'Save link as...'."
+      "message": "If the log file does not download automatically, right click on the link below and “Save link as...”."
     },
     "settings_Issues_LogSize_Label": {
       "message": "Current log size"
@@ -325,7 +325,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Read website data"
     },
     "settings_Permissions_ReadWebsiteData_Description": {
-      "message": "Required to automatically add metadata to bookmarks when using the browser’s native bookmark button (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>more info</a>)."
+      "message": "Required to automatically add metadata to bookmarks when using the browser’s “Bookmark this page” button (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>more info</a>)."
     },
     "settings_Permissions_ReadWebsiteData_Granted_Label": {
       "message": "Granted"
@@ -535,7 +535,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Something went wrong"
     },
     "error_Default_Message": {
-      "message": "Try again, if the problem persists click <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>here</a> to report an issue."
+      "message": "Sorry about that, if the problem persists you can <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report an issue</a>."
     },
     "error_HttpRequestFailed_Title": {
       "message": "Connection lost"

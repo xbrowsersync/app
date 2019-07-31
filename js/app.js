@@ -924,10 +924,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         vm.bookmark.originalUrl = bookmark.url;
 
         $timeout(function () {
-          // Don't focus on title field for mobile apps unless not sharing a bookmark
-          if ((!utility.IsMobilePlatform(vm.platformName)) ||
-            vm.bookmark.current.url === 'http://') {
-            document.querySelector('input[name="bookmarkTitle"]').focus();
+          if (!utility.IsMobilePlatform(vm.platformName)) {
+            // Set initial focus
+            var element = document.querySelector('.focused');
+            element.select ? element.select() : element.focus();
           }
         }, 100);
       })

@@ -650,6 +650,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return browser.tabs.query({ active: true, currentWindow: true })
       .then(function (tabs) {
         // If active tab empty, return
+        activeTab = tabs && tabs[0];
         if (!activeTab) {
           return false;
         }
