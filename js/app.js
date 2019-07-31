@@ -927,7 +927,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
           if (!utility.IsMobilePlatform(vm.platformName)) {
             // Set initial focus
             var element = document.querySelector('.focused');
-            element.select ? element.select() : element.focus();
+            if (element.select) { element.select(); } else { element.focus(); }
           }
         }, 100);
       })
@@ -1846,9 +1846,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
           .catch(syncBookmarksFailed);
       })
       .catch(function (err) {
-        // Hide loading panel
-        platform.Interface.Loading.Hide(null, loadingTimeout);
-
         // Disable upgrade confirmed flag
         vm.sync.upgradeConfirmed = false;
 
@@ -1887,6 +1884,13 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       // Display alert
       errMessage = utility.GetErrorMessageFromException(err);
       vm.alert.display(errMessage.title, errMessage.message, 'danger');
+
+      // If creds were incorrect, focus on password field
+      if (err.code === globals.ErrorCodes.InvalidCredentials) {
+        $timeout(function () {
+          document.querySelector('.login-form-existing input[name="txtPassword"]').select();
+        }, 100);
+      }
     }
   };
 

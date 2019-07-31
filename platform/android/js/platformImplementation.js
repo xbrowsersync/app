@@ -39,6 +39,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "button_Previous_Label": {
       "message": "Previous"
     },
+    "button_Skip_Label": {
+      "message": "Skip"
+    },
     "login_GetSyncId_Title": {
       "message": "Need a sync ID?"
     },

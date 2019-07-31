@@ -5,8 +5,12 @@
     data-ng-repeat="page in vm.help.pages track by $index">
     <div data-ng-bind-html="page"></div>
     <div class="pagination">
+      <a href="#" data-ng-click="vm.events.helpPanel_Close()" data-ng-keydown="vm.events.helpPanel_KeyDown($event)"
+        data-ng-show="$index === 0">
+        <span>{{ vm.platform.GetConstant(vm.globals.Constants.Button_Skip_Label) }}</span>
+      </a>
       <a class="prev-link" href="#" data-ng-click="vm.events.helpPanel_PreviousPage()"
-        data-ng-keydown="vm.events.helpPanel_KeyDown($event)" data-ng-class="{ 'invisible': $index === 0 }">
+        data-ng-keydown="vm.events.helpPanel_KeyDown($event)" data-ng-hide="$index === 0">
         <span>{{ vm.platform.GetConstant(vm.globals.Constants.Button_Previous_Label) }}</span>
       </a>
       <span class="page-number">{{$index + 1}} / {{vm.help.pages.length}}</span>
