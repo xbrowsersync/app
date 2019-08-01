@@ -1,27 +1,34 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: Issue report
+about: Log an issue or bug with the xBrowserSync browser extensions or mobile app
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+<!--
+This is the bug tracker for the xBrowserSync browser extensions and mobile app. If you are running an xBrowserSync service and need to report a bug for it, please do so at https://github.com/xbrowsersync/api/issues/.
 
-**To Reproduce**
+Alternatively, if you are a user and need to report an issue with a particular xBrowserSync service, please send us a message instead using the contact form at https://www.xbrowsersync.org/contact/.
+
+Before you continue, please check the list of known issues (https://github.com/xbrowsersync/app/wiki/Known-issues) and the FAQs (https://www.xbrowsersync.org/#faqs). Otherwise, to make it possible for us to help you please fill out all of the information below.
+
+Thanks for using xBrowserSync!
+-->
+
+**Describe the issue you are experiencing**
+A clear and concise description of your issue:
+
+**How can To Reproduce**
 Steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
 4. See error
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
-
 **Screenshots**
-If applicable, add screenshots to help explain your problem.
+If applicable, add screenshots to help explain your problem:
 
 **Desktop (please complete the following information):**
  - OS: [e.g. iOS]
@@ -34,5 +41,11 @@ If applicable, add screenshots to help explain your problem.
  - Browser [e.g. stock browser, safari]
  - Version [e.g. 22]
 
-**Additional context**
-Add any other context about the problem here.
+**Application log:**
+<details>
+<summary>Log entries</summary>
+
+```
+Download the Application log from the Settings panel and paste the contents here.
+```
+</details>
