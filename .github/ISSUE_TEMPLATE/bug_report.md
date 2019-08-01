@@ -20,7 +20,7 @@ Thanks for using xBrowserSync!
 **Describe the issue you are experiencing**
 A clear and concise description of your issue:
 
-**How can To Reproduce**
+**How can the issue be reproduced?**
 Steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '....'
@@ -30,17 +30,23 @@ Steps to reproduce the behavior:
 **Screenshots**
 If applicable, add screenshots to help explain your problem:
 
-**Desktop (please complete the following information):**
+**Desktop browser**
+Please complete the following information for all affected desktop browsers:
+
  - OS: [e.g. Win10]
  - Browser [e.g. Chrome, Firefox]
  - Version [e.g. v1.5.0]
 
-**Smartphone (please complete the following information):**
+**Mobile device**
+Please complete the following information for all affected mobile devices:
+
  - Device: [e.g. Samsung Galaxy S10]
  - OS: [e.g. Android 9 Pie]
  - Version [e.g. v1.5.0]
 
-**Application log:**
+**Application log**
+Please include the logs from the affected clients:
+
 <details>
 <summary>Log entries</summary>
 
