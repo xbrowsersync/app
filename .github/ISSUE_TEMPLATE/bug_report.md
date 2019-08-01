@@ -8,11 +8,11 @@ assignees: ''
 ---
 
 <!--
-This is the bug tracker for the xBrowserSync browser extensions and mobile app. If you are running an xBrowserSync service and need to report a bug for it, please do so at https://github.com/xbrowsersync/api/issues/.
+This is the issue tracker for the xBrowserSync browser extensions and mobile app. If you would like to report an issue for the xBrowserSync API, please do so at https://github.com/xbrowsersync/api/issues/.
 
 Alternatively, if you are a user and need to report an issue with a particular xBrowserSync service, please send us a message instead using the contact form at https://www.xbrowsersync.org/contact/.
 
-Before you continue, please check the list of known issues (https://github.com/xbrowsersync/app/wiki/Known-issues) and the FAQs (https://www.xbrowsersync.org/#faqs). Otherwise, to make it possible for us to help you please fill out all of the information below.
+Before you continue, please check the list of known issues (https://github.com/xbrowsersync/app/wiki/Known-issues) and the FAQs (https://www.xbrowsersync.org/#faqs). Otherwise, please fill out all of the information below.
 
 Thanks for using xBrowserSync!
 -->
