@@ -102,48 +102,6 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   };
 
   var decryptData = function (encryptedData) {
-    // Determine which decryption method to use based on sync version
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncVersion)
-      .then(function (syncVersion) {
-        if (!syncVersion) {
-          return decryptData_v1(encryptedData);
-        }
-
-        return decryptData_v2(encryptedData);
-      })
-      .catch(function (err) {
-        logInfo('Decryption failed.');
-        return $q.reject({
-          code: globals.ErrorCodes.InvalidCredentials,
-          stack: err.stack
-        });
-      });
-  };
-
-  var decryptData_v1 = function (encryptedData) {
-    // If no data provided, return an empty string
-    if (!encryptedData) {
-      return $q.resolve('');
-    }
-
-    // Ensure password is in local storage
-    return platform.LocalStorage.Get(globals.CacheKeys.Password)
-      .then(function (password) {
-        if (!password) {
-          return $q.reject({ code: globals.ErrorCodes.PasswordRemoved });
-        }
-
-        // Decrypt using legacy crypto-js AES
-        var decryptedData = CryptoJS.AES.decrypt(encryptedData, password).toString(CryptoJS.enc.Utf8);
-        if (!decryptedData) {
-          return $q.reject({ code: globals.ErrorCodes.InvalidCredentials });
-        }
-
-        return decryptedData;
-      });
-  };
-
-  var decryptData_v2 = function (encryptedData) {
     var encryptedDataBytes, iv;
 
     // If no data provided, return an empty string
