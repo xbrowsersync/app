@@ -9,7 +9,7 @@
 }
 
 :root {
-  font-size: 87.5%;
+  font-size: 14px;
 }
 
 body {
@@ -213,15 +213,16 @@ body {
 
     .background-img {
       display: block;
-      width: 100rem;
-      height: 200%;
-      background: url("../img/bg.png");
+      position: absolute;
+      z-index: 0;
+      width: 300%;
+      height: 300%;
+      top: -200%;
+      background: url("../img/clouds.svg");
       background-size: 50rem;
       background-position: 0 0;
       background-repeat: repeat;
-      position: absolute;
-      top: -30rem;
-      z-index: 0;
+      opacity: 0.2;
       @include animation(animation-scroll 100s linear infinite);
     }
   }
@@ -374,12 +375,14 @@ body {
   }
 
   .logo {
-    background: url("../img/logo.svg") 50% 2rem no-repeat;
-    background-size: 14rem;
+    background: url("../img/logo.svg") 50% 1rem no-repeat;
+    background-size: 12rem;
     flex: 0 1 19rem;
   }
 
   .lookahead-container {
+    display: flex;
+    flex-direction: row;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -388,8 +391,6 @@ body {
 
     .lookahead,
     .measure {
-      display: block;
-      position: absolute;
       z-index: 60;
       color: $colour-link;
       background-color: transparent;
@@ -478,9 +479,10 @@ body {
     width: 100%;
 
     .view-content {
+      display: flex;
+      flex-direction: column;
       height: 100%;
       padding: 0.75rem;
-      margin: 0 auto;
 
       &.ng-enter {
         @include animation(animation-change-view 0.2s linear);
@@ -596,12 +598,6 @@ body {
     width: 100%;
   }
 
-  textarea {
-    height: 100%;
-    box-sizing: border-box;
-    position: absolute;
-  }
-
   #bookmarkForm {
     display: flex;
     flex-flow: column;
@@ -619,21 +615,22 @@ body {
     }
   }
 
-  .btn-share-bookmark {
-    display: none;
-  }
-
   .buttons,
   .form-group,
   .header-panel {
     flex: none;
   }
 
+  .mobile-landscape {
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
   .tags-container {
-    flex: 0 1 auto;
-    overflow-y: auto;
-    overflow-x: hidden;
-    margin-bottom: 0.5rem;
+    height: calc(100% - 3.1rem);
+    overflow: auto;
+    margin-bottom: 0;
+    margin-top: 1rem;
 
     .badge {
       display: inline-flex;
@@ -644,7 +641,6 @@ body {
       border: 0;
       font-size: 0.85rem;
       font-weight: normal;
-      text-transform: capitalize;
       line-height: 1.2rem;
       max-width: 99%;
 
@@ -678,6 +674,7 @@ body {
     border-radius: $border-radius-input;
     background-color: $colour-text1;
     overflow: hidden;
+    margin-bottom: 0;
 
     input {
       text-transform: lowercase;
@@ -711,9 +708,8 @@ body {
   }
 
   .textarea-container {
-    flex: 1 1 auto;
-    position: relative;
-    min-height: 10rem;
+    flex: 1 0 10rem;
+    display: flex;
   }
 }
 
@@ -729,20 +725,12 @@ body {
     }
   }
 
-  .btn-new-sync {
-    text-transform: capitalize;
-  }
-
   .btn-scan {
     display: none;
-    position: absolute;
-    top: 0.35rem;
-    right: 1.3rem;
-    z-index: 55;
+  }
 
-    i {
-      font-size: 2.5rem;
-    }
+  .btn-new-sync {
+    text-transform: capitalize;
   }
 
   .confirm {
@@ -755,7 +743,7 @@ body {
       width: 100%;
       font-family: $font-stack-code;
       line-height: 1.45rem;
-      padding: 0.5rem 0.9rem;
+      padding: 0.5rem 0.8rem;
       @include placeholder {
         font-family: $font-stack-regular;
         font-size: 1.2rem;
@@ -785,10 +773,6 @@ body {
       position: relative;
       z-index: 20;
       background: transparent;
-    }
-
-    .get-sync-id {
-      display: none;
     }
   }
 
@@ -823,11 +807,6 @@ body {
   .toggle-form {
     text-align: center;
     margin-top: 1.5rem;
-  }
-
-  .view-content {
-    display: flex;
-    flex-direction: column;
   }
 }
 
@@ -889,7 +868,7 @@ body {
           position: absolute;
           top: 0;
           right: 0.75rem;
-          font-size: 1.1rem;
+          font-size: 1.3rem;
           line-height: 2.2rem;
           z-index: 55;
 
@@ -935,22 +914,31 @@ body {
       }
 
       .list-group-item {
-        background: $colour-text1;
+        background-color: $colour-text1;
         border: none;
         border-radius: $border-radius-well;
         padding: 0;
         margin: 0 0 0.75rem;
         @include box-shadow;
 
+        &:focus,
         &:hover {
+          .list-group-item-heading {
+            color: $colour-text2;
+          }
+
+          .search-result-content {
+            background-color: rgba($colour-link-highlight, 0.15);
+          }
+        }
+
+        &:hover {
+          cursor: pointer;
+
           .btn-edit-bookmark {
             i {
               opacity: 0.4;
             }
-          }
-
-          .list-group-item-heading {
-            color: $colour-link-highlight;
           }
         }
 
@@ -962,23 +950,15 @@ body {
           @include animation(animation-delete-bookmark 1s ease-in forwards);
         }
 
-        a {
+        .search-result-content {
           border-radius: $border-radius-well;
           padding: 0.75rem 1rem;
-          display: block;
-          border-bottom: none;
-          @include css-prefix(user-select, none);
-
-          &:focus {
-            .list-group-item-heading {
-              color: $colour-link-highlight;
-            }
-          }
+          transition: background-color, ease-in-out, 0.2s;
         }
 
         .btn-edit-bookmark {
           position: absolute;
-          top: 0.5rem;
+          top: 0.75rem;
           right: 1rem;
           font-size: 1.1rem;
 
@@ -1056,10 +1036,9 @@ body {
         color: $colour-text2;
         font-size: 1.2rem;
         font-weight: normal;
-        line-height: 1.25rem;
-        margin-bottom: 0.2rem;
+        line-height: 1.75rem;
+        margin-bottom: 0;
         margin-right: 1.5rem;
-        transition: all, ease-in-out, 0.2s;
         @include text-overflow-ellipsis;
       }
 
@@ -1070,7 +1049,7 @@ body {
       .description {
         font-size: 0.9rem;
         font-style: italic;
-        margin-bottom: 0.2rem;
+        line-height: 1.15rem;
       }
 
       .url {
@@ -1147,7 +1126,7 @@ body {
     @extend .form-group;
 
     label {
-      margin-bottom: 0;
+      margin-bottom: 0.25rem;
     }
 
     p {
@@ -1430,6 +1409,8 @@ body {
   }
 
   #qr {
+    height: 14rem;
+    width: 14rem;
     margin-bottom: 1rem;
   }
 }

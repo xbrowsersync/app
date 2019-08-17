@@ -30,7 +30,7 @@
     "message": "Need a sync ID?"
   },
   "login_GetSyncId_Message": {
-    "message": "Download the xBrowserSync desktop browser extension available for Chrome and Firefox, create a new sync and then scan your sync ID QR code on the previous screen."
+    "message": "Download the xBrowserSync desktop browser extension and create a new sync to access your bookmarks here."
   },
   "help_Page_Welcome_Desktop_Content": {
     "message": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info).</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or the arrow keys to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>"
@@ -135,7 +135,7 @@
     "message": "Ihre sync ID"
   },
   "button_ScanCode_Label": {
-    "message": "Suche Ihre sync ID"
+    "message": "Scan ID"
   },
   "button_DisableSync_Label": {
     "message": "Synchronisierung deaktivieren"

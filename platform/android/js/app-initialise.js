@@ -21,13 +21,14 @@ xBrowserSync.App.UI.config(['$animateProvider', function ($animateProvider) {
 
 xBrowserSync.App.UI.run(['$templateRequest', function ($templateRequest) {
   // Pre-load templates
-  $templateRequest('./views/login.html', true);
-  $templateRequest('./views/search.html', true);
   $templateRequest('./views/bookmark.html', true);
+  $templateRequest('./views/help.html', true);
+  $templateRequest('./views/login.html', true);
+  $templateRequest('./views/qr.html', true);
+  $templateRequest('./views/search.html', true);
   $templateRequest('./views/settings.html', true);
-
-  // Remove 300ms delay for mobile clicks
-  FastClick.attach(document.body);
+  $templateRequest('./views/support.html', true);
+  $templateRequest('./views/updated.html', true);
 }]);
 
 // Add platform service

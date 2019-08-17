@@ -46,7 +46,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Need a sync ID?"
     },
     "login_GetSyncId_Message": {
-      "message": "<a href='https://link.xbrowsersync.org/download' class='new-tab'>Download</a> the xBrowserSync desktop browser extension available for Chrome and Firefox, create a new sync and then scan your sync ID QR code on the previous screen."
+      "message": "<a href='https://link.xbrowsersync.org/download' class='new-tab'>Download</a> the xBrowserSync desktop browser extension and create a new sync to access your bookmarks here."
     },
     "help_Page_Welcome_Desktop_Content": {
       "message": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info).</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or the arrow keys to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>"
@@ -151,7 +151,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Your sync ID"
     },
     "button_ScanCode_Label": {
-      "message": "Scan your sync ID"
+      "message": "Scan ID"
     },
     "button_DisableSync_Label": {
       "message": "Disable sync"
@@ -687,9 +687,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var AndroidImplementation = function () {
     // Inject required platform implementation functions
+    platform.AutomaticUpdates.NextUpdate = getAutoUpdatesNextRun;
     platform.AutomaticUpdates.Start = startAutoUpdates;
     platform.AutomaticUpdates.Stop = stopAutoUpdates;
-    platform.BackupData = backupData;
+    platform.Bookmarks.AddIds = addIdsToBookmarks;
     platform.Bookmarks.Clear = clearBookmarks;
     platform.Bookmarks.CreateSingle = createSingle;
     platform.Bookmarks.DeleteSingle = deleteSingle;
@@ -697,10 +698,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Bookmarks.Populate = populateBookmarks;
     platform.Bookmarks.Share = shareBookmark;
     platform.Bookmarks.UpdateSingle = updateSingle;
+    platform.DownloadFile = downloadFile;
     platform.GetConstant = getConstant;
     platform.GetCurrentUrl = getCurrentUrl;
     platform.GetHelpPages = getHelpPages;
     platform.GetPageMetadata = getPageMetadata;
+    platform.GetSupportedUrl = getSupportedUrl;
     platform.Init = init;
     platform.Interface.Loading.Show = displayLoading;
     platform.Interface.Loading.Hide = hideLoading;
@@ -710,7 +713,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.OpenUrl = openUrl;
     platform.ScanID = scanId;
     platform.SelectFile = selectBackupFile;
-    platform.Sync.Execute = sync;
+    platform.Sync.Await = awaitSync;
+    platform.Sync.Current = getCurrentSync;
+    platform.Sync.Execute = executeSync;
   };
 
 
@@ -718,53 +723,40 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 	 * Public functions
 	 * ------------------------------------------------------------------------------------ */
 
-  var backupData = function () {
-    var deferred = $q.defer();
-
-    // Export bookmarks
-    bookmarks.Export()
-      .then(function (data) {
-        var fileName = utility.GetBackupFileName();
-        var saveBackupFileError = function () {
-          return deferred.reject({ code: globals.ErrorCodes.FailedBackupData });
-        };
-
-        // Set backup file storage location to external storage
-        var storageLocation = cordova.file.externalRootDirectory;
-
-        // Save backup file to storage location
-        window.resolveLocalFileSystemURL(storageLocation, function (dirEntry) {
-          dirEntry.getFile(fileName, { create: true }, function (fileEntry) {
-            fileEntry.createWriter(function (fileWriter) {
-              // Save export file
-              fileWriter.write(JSON.stringify(data));
-
-              var success = function () {
-                var message = constants.settings_BackupRestore_BackupSuccess_Message.message.replace(
-                  '{fileName}',
-                  fileEntry.name);
-
-                $scope.$apply(function () {
-                  vm.settings.backupCompletedMessage = message;
-                });
-
-                deferred.resolve();
-              };
-
-              fileWriter.onwriteend = function () {
-                success();
-              };
-
-              fileWriter.onerror = saveBackupFileError;
-            },
-              saveBackupFileError);
-          },
-            saveBackupFileError);
-        },
-          saveBackupFileError);
+  var addIdsToBookmarks = function (xBookmarks) {
+    // TODO: test this
+    return $q(function (resolve, reject) {
+      // Start the id counter one greater than the total number of bookmarks
+      var idCounter = 1;
+      bookmarks.Each(xBookmarks, function () {
+        idCounter++;
       });
 
-    return deferred.promise;
+      // Add ids to containers' children 
+      var addIdToBookmark = function (bookmark) {
+        var bookmarkId = bookmark.id;
+
+        // Use index if found otherwise take id from counter and increment 
+        if (!bookmarkId) {
+          bookmark.id = idCounter;
+          idCounter++;
+        }
+      };
+      bookmarks.Each(xBookmarks, addIdToBookmark);
+
+      // Check that bookmarks now have unique ids
+      var bookmarksHaveUniqueIds = bookmarks.CheckBookmarksHaveUniqueIds(xBookmarks);
+      if (!bookmarksHaveUniqueIds) {
+        return reject({ code: globals.ErrorCodes.DuplicateBookmarkIdsDetected });
+      }
+
+      resolve(xBookmarks);
+    });
+  };
+
+  var awaitSync = function (uniqueId) {
+    // TODO: Check if needs to be implemented
+    return $q.resolve();
   };
 
   var clearBookmarks = function () {
@@ -815,12 +807,111 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return timeout;
   };
 
+  var downloadFile = function (fileName, textContents) {
+    if (!fileName) {
+      throw new Error('File name not supplied.');
+    }
+
+    var saveBackupFileError = function () {
+      return deferred.reject({ code: globals.ErrorCodes.FailedBackupData });
+    };
+
+    // Set backup file storage location to external storage
+    var storageLocation = cordova.file.externalRootDirectory;
+
+    // Save backup file to storage location
+    window.resolveLocalFileSystemURL(storageLocation, function (dirEntry) {
+      dirEntry.getFile(fileName, { create: true }, function (fileEntry) {
+        fileEntry.createWriter(function (fileWriter) {
+          // Save export file
+          fileWriter.write(JSON.stringify(textContents));
+
+          var success = function () {
+            var message = constants.settings_BackupRestore_BackupSuccess_Message.message.replace(
+              '{fileName}',
+              fileEntry.name);
+
+            $scope.$apply(function () {
+              vm.settings.backupCompletedMessage = message;
+            });
+
+            deferred.resolve();
+          };
+
+          fileWriter.onwriteend = function () {
+            success();
+          };
+
+          fileWriter.onerror = saveBackupFileError;
+        },
+          saveBackupFileError);
+      },
+        saveBackupFileError);
+    },
+      saveBackupFileError);
+  };
+
+  var executeSync = function (syncData, command) {
+    syncData.command = (command) ? command : globals.Commands.SyncBookmarks;
+
+    // Start sync
+    return bookmarks.Sync(syncData)
+      .then(function (bookmarks, initialSyncFailed) {
+        // If this sync initially failed, alert the user and refresh search results
+        if (initialSyncFailed) {
+          vm.alert.display(platform.GetConstant(globals.Constants.ConnRestored_Title), platform.GetConstant(globals.Constants.ConnRestored_Message));
+
+          // Update search results
+          displayDefaultSearchState();
+        }
+
+        /*vm.events.handleSyncResponse({
+          command: syncData.command,
+          bookmarks: bookmarks,
+          success: true,
+          syncData: syncData
+        });*/
+      })
+      .catch(function (err) {
+        // Don't display another alert if sync retry failed
+        if (!syncData.changeInfo && err.code === globals.ErrorCodes.HttpRequestFailedWhileUpdating) {
+          return;
+        }
+
+        //vm.events.handleSyncResponse({ command: syncData.command, success: false, error: err });
+
+        // If sync was disabled, display login panel
+        platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+          .then(function (syncEnabled) {
+            if (!syncEnabled) {
+              vm.view.change(vm.view.views.login);
+            }
+          });
+      });
+  };
+
+  var getAutoUpdatesNextRun = function () {
+    return $q(function (resolve, reject) {
+      chrome.alarms.get(globals.Alarm.Name, function (alarm) {
+        if (!alarm) {
+          return resolve();
+        }
+
+        resolve(utility.Get24hrTimeFromDate(new Date(alarm.scheduledTime)));
+      });
+    });
+  };
+
   var getBookmarks = function () {
     return $q.resolve();
   };
 
   var getConstant = function (constName) {
     return constants[constName].message;
+  };
+
+  var getCurrentSync = function () {
+    return $q.resolve(bookmarks.GetCurrentSync());
   };
 
   var getCurrentUrl = function () {
@@ -844,8 +935,38 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return pages;
   };
 
-  var getFromLocalStorage = function (itemName) {
-    return localStorage.getItem(itemName);
+  var getFromLocalStorage = function (storageKeys) {
+    return $q(function (resolve) {
+      // Remove non-data properties
+      var cachedData = _.omit(localStorage, 'clear', 'getItem', 'key', 'length', 'removeItem', 'setItem');
+
+      // Parse cached strings
+      var parsedData = Object.keys(cachedData).reduce(function (acc, current) {
+        try {
+          acc[current] = JSON.parse(cachedData[current]);
+        }
+        catch (err) {
+          acc[current] = cachedData[current];
+        }
+
+        return acc;
+      }, {});
+
+      // Filter by requested keys
+      var requestedData;
+      switch (true) {
+        case storageKeys == null:
+          requestedData = parsedData;
+          break;
+        case Array.isArray(storageKeys):
+          requestedData = _.pick(parsedData, storageKeys);
+          break;
+        default:
+          requestedData = parsedData[storageKeys];
+      }
+
+      resolve(requestedData);
+    });
   };
 
   var getPageMetadata = function (deferred) {
@@ -1016,6 +1137,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return deferred.promise;
   };
 
+  var getSupportedUrl = function (url) {
+    return url;
+  };
+
   var hideLoading = function (id, timeout) {
     if (timeout) {
       $timeout.cancel(timeout);
@@ -1033,17 +1158,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     vm = viewModel;
     $scope = scope;
 
-    // Set window and panel heights
-    var e = window;
-    var a = 'inner';
-    if (!('innerWidth' in window)) {
-      a = 'client';
-      e = document.documentElement || document.body;
-    }
-    var height = e[a + 'Height'] + 'px';
-    document.querySelector('html').style.height = height;
-    document.querySelector('.view').style.height = height;
-    document.querySelector('.background').style.minHeight = height;
+    // Set platform
+    vm.platformName = globals.Platforms.Android;
 
     // Load cordova.js
     var script = document.createElement('script');
@@ -1075,7 +1191,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     vm.sync.displayNewSyncPanel = false;
 
     // Check stored app version for upgrade
-    checkForUpgrade();
+    // TODO: uncomment
+    //checkForUpgrade();
+
+    deviceReady();
   };
 
   var openUrl = function (url) {
@@ -1086,14 +1205,25 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var populateBookmarks = function (xBookmarks) {
+    // Unused for this platform
     return $q.resolve();
   };
 
-  var refreshInterface = function () {
+  var refreshInterface = function (syncEnabled, syncType) {
+    // Unused for this platform
+    return $q.resolve();
   };
 
-  var setInLocalStorage = function (itemName, itemValue) {
-    localStorage.setItem(itemName, itemValue);
+  var setInLocalStorage = function (storageKey, value) {
+    return $q(function (resolve) {
+      if (value != null) {
+        localStorage.setItem(storageKey, typeof value === 'string' ? value : JSON.stringify(value));
+      }
+      else {
+        localStorage.removeItem(storageKey);
+      }
+      resolve();
+    });
   };
 
   var scanId = function () {
@@ -1160,48 +1290,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     // Cancel interval
     $interval.cancel(autoUpdatesInterval);
     autoUpdatesInterval = undefined;
-  };
-
-  var sync = function (vm, syncData, command) {
-    syncData.command = (command) ? command : globals.Commands.SyncBookmarks;
-
-    // Start sync
-    return bookmarks.Sync(syncData)
-      .then(function (bookmarks, initialSyncFailed) {
-        // Reset network disconnected flag
-        platform.LocalStorage.Set(globals.CacheKeys.NetworkDisconnected, false);
-
-        // If this sync initially failed, alert the user and refresh search results
-        if (initialSyncFailed) {
-          vm.alert.display(platform.GetConstant(globals.Constants.ConnRestored_Title), platform.GetConstant(globals.Constants.ConnRestored_Message));
-
-          // Update search results
-          displayDefaultSearchState();
-        }
-
-        vm.events.handleSyncResponse({
-          command: syncData.command,
-          bookmarks: bookmarks,
-          success: true,
-          syncData: syncData
-        });
-      })
-      .catch(function (err) {
-        // Don't display another alert if sync retry failed
-        if (!syncData.changeInfo && err.code === globals.ErrorCodes.HttpRequestFailedWhileUpdating) {
-          return;
-        }
-
-        vm.events.handleSyncResponse({ command: syncData.command, success: false, error: err });
-
-        // If sync was disabled, display login panel
-        platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
-          .then(function (syncEnabled) {
-            if (!syncEnabled) {
-              vm.view.change(vm.view.views.login);
-            }
-          });
-      });
   };
 
   var updateSingle = function () {
@@ -1341,8 +1429,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var deviceReady = function () {
-    // Set platform
-    vm.platformName = cordova.platformId;
+    utility.LogInfo('Starting up');
+
+    var test = $interval(function () { return; }, globals.Alarm.Period * 60000);
 
     // Set back button event
     document.addEventListener('backbutton', handleBackButton, false);
@@ -1365,6 +1454,31 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     // Reset network disconnected flag
     var networkDisconnected = !utility.IsNetworkConnected();
     platform.LocalStorage.Set(globals.CacheKeys.NetworkDisconnected, networkDisconnected);
+
+    // Log cached data
+    platform.LocalStorage.Get()
+      .then(function (cachedData) {
+        var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
+
+        // Add useful debug info to beginning of trace log
+        cachedData.appVersion = globals.AppVersion;
+        cachedData.platform = _.omit(browserDetect(), 'versionNumber');
+        utility.LogInfo(_.omit(
+          cachedData,
+          'debugMessageLog',
+          globals.CacheKeys.Bookmarks,
+          globals.CacheKeys.TraceLog,
+          globals.CacheKeys.Password
+        ));
+
+        // Exit if sync not enabled
+        if (!syncEnabled) {
+          return;
+        }
+      });
+
+    // TODO: remove
+    return;
 
     // Check if a sync was interrupted
     checkForInterruptedSync()
@@ -1410,7 +1524,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             }
 
             // Get bookmark updates
-            return sync(vm, { type: globals.SyncType.Pull });
+            return executeSync(vm, { type: globals.SyncType.Pull });
           })
           // Update search results
           .then(displayDefaultSearchState)
@@ -1435,12 +1549,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var displayToast = function (title, description) {
     var message = (title) ? title + '. ' + description : description;
 
-    window.plugins.toast.showWithOptions({
+    // TODO: uncomment
+    /*window.plugins.toast.showWithOptions({
       message: message,
       duration: 6000,
       position: 'bottom',
       addPixelsY: -50
-    });
+    });*/
   };
 
   var getLatestUpdates = function () {
@@ -1456,7 +1571,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         }
 
         // Get bookmark updates
-        return sync(vm, { type: globals.SyncType.Pull });
+        return executeSync(vm, { type: globals.SyncType.Pull });
       })
       // Update search results
       .then(displayDefaultSearchState)
@@ -1582,7 +1697,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             }
 
             // Get bookmark updates
-            return sync(vm, { type: globals.SyncType.Pull })
+            return executeSync(vm, { type: globals.SyncType.Pull })
               .then(function () {
                 // Update search results if currently on the search panel and no query entered
                 if (vm.view.current === vm.view.views.search && !vm.search.query) {

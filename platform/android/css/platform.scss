@@ -7,25 +7,54 @@
   @include css-prefix(touch-callout, none);
 }
 
-body {
-  height: 100%;
-  font-size: 16px;
-
-  @media (min-width: $width-mobile-large) {
-    font-size: 17px;
+:root {
+  @media (orientation: portrait) and (min-width: 321px) {
+    font-size: 16px;
   }
-
-  @media (min-width: $width-mobile-xlarge) {
+  @media (orientation: portrait) and (min-width: 411px) {
     font-size: 18px;
   }
-
-  @media (min-width: $width-tablet-small) {
+  @media (orientation: portrait) and (min-width: 480px) {
+    font-size: 20px;
+  }
+  @media (orientation: portrait) and (min-width: 600px) {
+    font-size: 22px;
+  }
+  @media (orientation: portrait) and (min-width: 760px) {
     font-size: 26px;
   }
-
-  @media (min-width: $width-tablet-large) {
-    font-size: 34px;
+  @media (orientation: portrait) and (min-width: 800px) {
+    font-size: 30px;
   }
+  @media (orientation: portrait) and (min-width: 900px) {
+    font-size: 32px;
+  }
+
+  @media (orientation: landscape) and (min-width: 720px) and (min-height: 361px) {
+    font-size: 16px;
+  }
+  @media (orientation: landscape) and (min-width: 813px) {
+    font-size: 18px;
+  }
+  @media (orientation: landscape) and (min-width: 900px) {
+    font-size: 20px;
+  }
+  @media (orientation: landscape) and (min-width: 960px) {
+    font-size: 22px;
+  }
+  @media (orientation: landscape) and (min-width: 980px) {
+    font-size: 24px;
+  }
+  @media (orientation: landscape) and (min-width: 1200px) {
+    font-size: 28px;
+  }
+  @media (orientation: landscape) and (min-width: 1280px) {
+    font-size: 32px;
+  }
+}
+
+body {
+  height: 100%;
 
   a {
     &:focus,
@@ -50,14 +79,9 @@ body {
     }
   }
 
-  h1 {
-    @media (min-width: $width-mobile-xlarge) {
-      background-size: 6.5em;
-    }
-
-    @media (min-width: $width-tablet-small) {
-      background-size: 11em;
-    }
+  h2 {
+    font-size: 2rem;
+    line-height: 2.3rem;
   }
 
   button.btn {
@@ -96,10 +120,6 @@ body {
         }
       }
     }
-
-    @media (min-width: $width-tablet-small) {
-      font-size: 23px;
-    }
   }
 
   input,
@@ -109,7 +129,7 @@ body {
   }
 
   textarea.form-control {
-    padding: 0.5em 1em;
+    padding: 0.5rem 1rem;
   }
 
   .alert {
@@ -117,17 +137,24 @@ body {
     z-index: 200;
   }
 
+  .container {
+    height: 100vh;
+  }
+
   .header-panel {
+    margin-bottom: 0.75rem;
+
     button {
-      font-size: 1.8em;
+      font-size: 1.8rem;
+      line-height: 2.3rem;
     }
   }
 
   .lookahead-container .lookahead:after {
-    content: "\f0d0";
-    font-family: "FontAwesome";
-    font-size: 0.7em;
-    margin-left: 5px;
+    margin-left: 0.5rem;
+    font-size: 1.1rem;
+    line-height: 2.3rem;
+    @include icon("\f0d0");
   }
 
   .view {
@@ -150,7 +177,7 @@ body {
       border-color: $colour-text2;
       font-weight: normal;
       border-width: 1px;
-      font-size: 1em;
+      font-size: 1rem;
 
       &:not([disabled]):active:hover {
         background-color: $colour-text2;
@@ -164,38 +191,58 @@ body {
         border-color: $colour-text2;
       }
     }
-
-    .btn.btn-default {
-      font-size: 1em;
-    }
   }
 }
 
 #bookmark-panel {
-  .btn-share-bookmark {
-    display: inline-block;
-  }
-
-  .tags-container {
-    flex: 0 1 auto;
-
-    .label {
-      padding: 0.6em 1em;
-      border-radius: $border-radius-input;
-      margin: 0 0.5em 0.6em 0;
+  .mobile-landscape {
+    @media (orientation: landscape) {
+      flex: 1 0 2.3rem;
+      display: flex;
+      flex-direction: row;
+      overflow: auto;
     }
   }
 
-  .tags-input-container .lookahead-container .lookahead:after {
-    font-size: 0.9em;
+  .tags-container {
+    .badge {
+      font-size: 1rem;
+      line-height: 1.3rem;
+    }
+
+    .label {
+      padding: 0.6rem 1rem;
+      border-radius: $border-radius-input;
+      margin: 0 0.5rem 0.6rem 0;
+    }
+
+    @media (orientation: landscape) {
+      flex: auto;
+      height: 100%;
+      max-height: none;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  .tags-input-container {
+    .lookahead-container .lookahead:after {
+      font-size: 0.9rem;
+      line-height: 1.25rem;
+    }
+
+    @media (orientation: landscape) {
+      height: 2.3rem;
+      width: 40%;
+      margin-right: 1rem;
+    }
   }
 
   .textarea-container {
-    flex: none;
-    height: 9em;
+    max-height: 15rem;
 
-    @media (min-width: $width-mobile-medium) {
-      height: 11em;
+    @media (orientation: landscape) {
+      flex: 1 0 4rem;
     }
   }
 }
@@ -203,95 +250,71 @@ body {
 #login-panel {
   .btn-scan {
     display: block;
+    position: absolute;
+    top: 0.35rem;
+    right: 1.3rem;
+    z-index: 55;
 
     i {
-      @media (max-width: $width-mobile-medium) {
-        font-size: 2em;
-      }
-    }
-
-    @media (max-width: $width-mobile-medium) {
-      top: 0.4em;
-    }
-  }
-
-  .confirm.confirm-upgrade {
-    margin-top: -3em;
-
-    @media (max-height: $height-mobile-medium) {
-      margin-top: -7em;
-    }
-  }
-
-  .form-group {
-    input {
-      @media (max-width: $width-mobile-small) {
-        font-size: 0.87em;
-        padding: 0.65em 0 0.7em 0.9em;
-      }
-    }
-
-    @media (min-width: $width-tablet-small) {
-      max-width: 21em;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  }
-
-  .help-panel {
-    & > div {
-      @media (max-height: $height-mobile-medium) {
-        font-size: 0.9em;
-      }
-    }
-
-    @media (min-width: $width-tablet-small) {
-      height: 18.5em;
-      max-width: 21em;
-      margin-left: auto;
-      margin-right: auto;
+      font-size: 1.8rem;
     }
   }
 
   .login-form-new {
-    & > div {
-      display: none;
-    }
-
-    .get-sync-id,
     .toggle-form {
       display: block;
     }
-
-    .well {
-      @media (max-height: $height-mobile-medium) {
-        font-size: 0.9em;
-      }
-    }
   }
 
-  .secret-form-group {
-    .progress,
-    .progress-bar-background {
-      @media (min-width: $width-tablet-small) {
-        max-width: 17.5em;
-        margin-left: auto;
-        margin-right: auto;
-        left: 0;
-        right: 0;
+  @media (orientation: landscape) {
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-grow: 1;
+
+      & > div {
+        position: initial;
+        width: 21rem;
       }
+    }
+
+    .header-panel {
+      position: absolute;
+      top: 0.75rem;
+      width: calc(100% - 1.5rem);
+    }
+
+    .logo {
+      height: 17rem;
+      flex: 1 12rem;
+    }
+
+    .view-content {
+      flex-direction: row;
+      align-items: center;
+      padding-top: 2rem;
+    }
+  }
+}
+
+#qr-panel {
+  #qr {
+    @media (orientation: landscape) {
+      height: 7rem;
+      width: 7rem;
     }
   }
 }
 
 #search-panel {
   .view-content {
-    padding: 0.75em 0 0;
+    padding-left: 0;
 
     .header-panel,
     .search-results-panel {
-      padding-left: 0.75em;
-      padding-right: 0.75em;
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
     }
 
     .header-panel {
@@ -303,11 +326,11 @@ body {
 
           i:after {
             content: "\f067";
-            font-size: 0.35em;
+            font-size: 0.35rem;
             color: $colour-bg2;
             position: relative;
-            top: -0.9em;
-            left: -1.4em;
+            top: -0.9rem;
+            left: -1.4rem;
             opacity: 1;
           }
         }
@@ -315,7 +338,14 @@ body {
 
       .search-form {
         width: 100%;
-        margin-top: 0.35em;
+        margin-top: 0.75rem;
+
+        @media (orientation: landscape) {
+          position: absolute;
+          top: 0.75rem;
+          margin: 0 2rem;
+          width: calc(100% - 6rem);
+        }
       }
     }
 
@@ -323,31 +353,32 @@ body {
       height: 100%;
 
       & > h4 {
-        margin: 10px;
+        margin: 1rem;
       }
 
       .list-group-item {
-        &.active:hover,
+        &:focus,
         &:hover {
           .list-group-item-heading {
             color: $colour-text2;
           }
-        }
 
-        a {
-          padding: 1em 1.25em;
-        }
-
-        .btn-edit-bookmark {
-          display: none !important;
+          .search-result-content {
+            background-color: initial;
+          }
         }
 
         .menu-background {
           display: block;
         }
+
+        .search-result-content {
+          padding: 0.75rem 1rem 1rem;
+        }
       }
 
       .list-group-item-heading {
+        margin-right: 0;
         transition: none;
       }
     }
@@ -355,12 +386,6 @@ body {
 }
 
 #settings-panel {
-  .backup-restore-panel {
-    #restoreContentsPanel {
-      display: none;
-    }
-  }
-
   .form-group {
     a {
       &:focus,
@@ -376,43 +401,11 @@ body {
     }
   }
 
-  .sync-panel {
-    .btn-syncOptions {
-      display: none;
-    }
-
-    .buttons {
-      margin: 15px 0;
-    }
-
-    .checkbox {
-      display: none;
-    }
-
-    .form-group .id-url {
-      @media (max-height: $height-mobile-medium) {
-        font-size: 0.89em;
-      }
-    }
-
-    #syncDataUsage-Panel .buttons {
-      margin-bottom: 0;
+  .sync-panel .id-url {
+    @media (orientation: landscape) {
+      position: absolute;
+      width: auto;
+      line-height: 1.35rem;
     }
   }
-
-  .well:last-child {
-    @media (min-width: $width-tablet-small) {
-      margin-bottom: 0.75em;
-    }
-  }
-}
-
-#updated-panel .confirm-updated {
-  @media (max-height: $height-mobile-medium) {
-    margin-top: -2.5em;
-  }
-}
-
-#working-panel .content p {
-  display: none;
 }

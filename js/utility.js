@@ -497,6 +497,10 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     return window.navigator.onLine;
   };
 
+  var isPlatform = function (currentPlatform, platformName) {
+    return currentPlatform === platformName;
+  };
+
   var logError = function (err, message) {
     var errMessage;
 
@@ -618,7 +622,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         messageLogText += '[trace]\t';
     }
 
-    //
+    // Add current message to log
     return platform.LocalStorage.Get(globals.CacheKeys.TraceLog)
       .then(function (debugMessageLog) {
         debugMessageLog = debugMessageLog || [];
@@ -688,6 +692,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     GetVersionTag: getVersionTag,
     IsMobilePlatform: isMobilePlatform,
     IsNetworkConnected: isNetworkConnected,
+    IsPlatform: isPlatform,
     LogError: logError,
     LogInfo: logInfo,
     LogWarning: logWarning,

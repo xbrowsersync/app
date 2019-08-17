@@ -19,62 +19,69 @@
   <button type="submit" class="d-none" data-ng-click="vm.events.syncForm_Submit_Click()" tabindex="-1"></button>
   <div class="login-form-new animate-fade" data-ng-class="{ 'active-login-form': vm.sync.displayNewSyncPanel }"
     data-ng-show="vm.sync.displayNewSyncPanel">
-    <div class="animate-fade" data-ng-show="vm.sync.displayPasswordConfirmation">
-      <div class="form-group secret-form-group">
-        <label class="sr-only" for="txtPasswordConfirmation">{{
+    <div data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
+      <div class="animate-fade" data-ng-show="vm.sync.displayPasswordConfirmation">
+        <div class="form-group secret-form-group">
+          <label class="sr-only" for="txtPasswordConfirmation">{{
           vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}</label>
-        <input name="txtPasswordConfirmation" data-ng-model="vm.sync.passwordConfirmation" type="password"
-          class="form-control" maxlength="150"
-          placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}" />
+          <input name="txtPasswordConfirmation" data-ng-model="vm.sync.passwordConfirmation" type="password"
+            class="form-control" maxlength="150"
+            placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}" />
+        </div>
+        <div class="form-group buttons">
+          <button type="button" class="btn btn-default btn-new-sync"
+            data-ng-disabled="vm.sync.passwordConfirmation !== vm.sync.password"
+            data-ng-click="vm.events.syncForm_EnableSync_Click()">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
+          </button>
+          <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_ConfirmPassword_Back_Click()">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Back_Label) }}
+          </button>
+        </div>
       </div>
-      <div class="form-group buttons">
-        <button type="button" class="btn btn-default btn-new-sync"
-          data-ng-disabled="vm.sync.passwordConfirmation !== vm.sync.password"
-          data-ng-click="vm.events.syncForm_EnableSync_Click()">
-          {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
-        </button>
-        <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_ConfirmPassword_Back_Click()">
-          {{ vm.platform.GetConstant(vm.globals.Constants.Button_Back_Label) }}
-        </button>
-      </div>
-    </div>
-    <div class="animate-fade" data-ng-hide="vm.sync.displayPasswordConfirmation">
-      <div class="form-group secret-form-group"
-        data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
-        <label class="sr-only" for="txtPassword">{{
+      <div class="animate-fade" data-ng-hide="vm.sync.displayPasswordConfirmation">
+        <div class="form-group secret-form-group"
+          data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
+          <label class="sr-only" for="txtPassword">{{
           vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
-        <input name="txtPassword" data-ng-model="vm.sync.password" type="password" class="form-control"
-          data-zxcvbn="vm.sync.passwordComplexity" data-ng-disabled="vm.sync.enabled" maxlength="150"
-          placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_New_Description) }}" />
-        <div class="validation" data-ng-if="vm.sync.password && ((vm.sync.passwordComplexity.feedback.suggestions && vm.sync.passwordComplexity.feedback.suggestions.length > 0) || 
+          <input name="txtPassword" data-ng-model="vm.sync.password" type="password" class="form-control"
+            data-zxcvbn="vm.sync.passwordComplexity" data-ng-disabled="vm.sync.enabled" maxlength="150"
+            placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_New_Description) }}" />
+          <div class="validation" data-ng-if="vm.sync.password && ((vm.sync.passwordComplexity.feedback.suggestions && vm.sync.passwordComplexity.feedback.suggestions.length > 0) || 
           vm.sync.passwordComplexity.feedback.warning)">
-          {{ vm.sync.passwordComplexity.feedback.warning ? vm.sync.passwordComplexity.feedback.warning :
+            {{ vm.sync.passwordComplexity.feedback.warning ? vm.sync.passwordComplexity.feedback.warning :
           vm.sync.passwordComplexity.feedback.suggestions.length > 0 ?
           vm.sync.passwordComplexity.feedback.suggestions.slice(-1)[0] : '' }}
-        </div>
-        <div class="progress">
-          <div class="progress-bar" role="progressbar"
-            data-ng-style="{ width: !vm.sync.password ? 0 : (((vm.sync.passwordComplexity.score + 1) / 5) * 100) + '%' }"
-            data-ng-class="{
+          </div>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar"
+              data-ng-style="{ width: !vm.sync.password ? 0 : (((vm.sync.passwordComplexity.score + 1) / 5) * 100) + '%' }"
+              data-ng-class="{
               'progress-bar-warning': vm.sync.passwordComplexity.score > 1 && vm.sync.passwordComplexity.score < 4,
               'progress-bar-success': vm.sync.passwordComplexity.score === 4
               }">
+            </div>
           </div>
+          <div class="progress-bar-background"></div>
         </div>
-        <div class="progress-bar-background"></div>
+        <div class="form-group text-center">
+          <button type="button" class="btn btn-default btn-confirm-password" data-ng-disabled="!vm.sync.password"
+            data-ng-click="vm.events.syncForm_ConfirmPassword_Click()">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}
+          </button>
+        </div>
       </div>
-      <div class="form-group text-center">
-        <button type="button" class="btn btn-default btn-confirm-password" data-ng-disabled="!vm.sync.password"
-          data-ng-click="vm.events.syncForm_ConfirmPassword_Click()">
-          {{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}
+    </div>
+    <div class="well well-sm" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)">
+      <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_GetSyncId_Title) }}</h4>
+      <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_GetSyncId_Message)"></p>
+      <div class="buttons">
+        <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_ExistingSync_Click()">
+          {{ vm.platform.GetConstant(vm.globals.Constants.Button_Continue_Label) }}
         </button>
       </div>
     </div>
-    <div class="get-sync-id well well-sm animate-fade">
-      <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_GetSyncId_Title) }}</h4>
-      <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_GetSyncId_Message)"></p>
-    </div>
-    <div class="form-group toggle-form">
+    <div class="form-group toggle-form" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
       <a data-ng-click="vm.events.syncForm_ExistingSync_Click()" href="#">
         {{ vm.platform.GetConstant(vm.globals.Constants.Button_ExistingSync_Label) }}
       </a>
@@ -82,30 +89,43 @@
   </div>
   <div class="login-form-existing animate-fade" data-ng-class="{ 'active-login-form': !vm.sync.displayNewSyncPanel }"
     data-ng-hide="vm.sync.displayNewSyncPanel">
-    <div class="form-group">
-      <label class="sr-only" for="txtId">{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Label) }}</label>
-      <button type="button" class="btn btn-icon btn-scan" data-ng-hide="vm.sync.id"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ScanCode_Label) }}"
-        data-ng-click="vm.events.searchForm_ScanCode_Click()">
-        <i class="fas fa-qrcode" aria-hidden="true"></i>
-      </button>
-      <input name="txtId" data-ng-model="vm.sync.id" class="form-control" data-ng-disabled="vm.sync.enabled"
-        placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Description) }}" maxlength="32"
-        data-ng-change="vm.events.syncForm_SyncId_Change()" spellcheck="false" />
-    </div>
-    <div class="form-group secret-form-group"
-      data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
-      <label class="sr-only" for="txtPassword">{{
+    <div
+      data-ng-show="!vm.utility.IsMobilePlatform(vm.platformName) || (vm.utility.IsMobilePlatform(vm.platformName) && vm.sync.id)">
+      <div class="form-group">
+        <label class="sr-only"
+          for="txtId">{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Label) }}</label>
+        <input name="txtId" data-ng-model="vm.sync.id" class="form-control" data-ng-disabled="vm.sync.enabled"
+          placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Description) }}" maxlength="32"
+          data-ng-change="vm.events.syncForm_SyncId_Change()" spellcheck="false" />
+      </div>
+      <div class="form-group secret-form-group"
+        data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
+        <label class="sr-only" for="txtPassword">{{
         vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
-      <input name="txtPassword" data-ng-model="vm.sync.password" type="password" class="form-control"
-        data-ng-disabled="vm.sync.enabled" maxlength="150"
-        placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Existing_Description) }}" />
+        <input name="txtPassword" data-ng-model="vm.sync.password" type="password" class="form-control"
+          data-ng-disabled="vm.sync.enabled" maxlength="150"
+          placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Existing_Description) }}" />
+      </div>
+      <div class="buttons">
+        <button type="button" class="btn btn-default btn-existing-sync"
+          data-ng-disabled="!vm.sync.id || !vm.sync.password" data-ng-click="vm.events.syncForm_EnableSync_Click()">
+          {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
+        </button>
+        <button type="button" class="btn btn-default" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)"
+          data-ng-click="vm.events.searchForm_ScanCode_Click()">
+          {{ vm.platform.GetConstant(vm.globals.Constants.Button_ScanCode_Label) }}
+        </button>
+      </div>
     </div>
-    <div class="form-group text-center">
-      <button type="button" class="btn btn-default btn-existing-sync"
-        data-ng-disabled="!vm.sync.id || !vm.sync.password" data-ng-click="vm.events.syncForm_EnableSync_Click()">
-        {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
-      </button>
+    <div class="well well-sm" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)" data-ng-show="!vm.sync.id">
+      <h4>Scan your sync ID</h4>
+      <p>Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a
+        QR code which you can scan here.</p>
+      <div class="buttons">
+        <button type="button" class="btn btn-default" data-ng-click="vm.events.searchForm_ScanCode_Click()">
+          {{ vm.platform.GetConstant(vm.globals.Constants.Button_ScanCode_Label) }}
+        </button>
+      </div>
     </div>
     <div class="form-group toggle-form">
       <a data-ng-click="vm.events.syncForm_NewSync_Click()" href="#">

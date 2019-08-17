@@ -52,18 +52,6 @@
   }
 }
 
-@include keyframes(animation-flash) {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
 @include keyframes(animation-scroll) {
   0% {
     transform: translate3d(0, 0, 0);
@@ -91,8 +79,4 @@
   &.ng-hide-add {
     @include animation(animation-fade-out 0.2s linear);
   }
-}
-
-.animate-flash {
-  @include animation(animation-flash 0.8s linear infinite);
 }

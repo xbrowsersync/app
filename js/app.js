@@ -300,15 +300,12 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var bookmarkForm_BookmarkTags_Change = function () {
-    vm.bookmark.tagLookahead = null;
-
     if (!vm.bookmark.tagText || !vm.bookmark.tagText.trim()) {
       return;
     }
 
     // Get last word of tag text
-    var matches = vm.bookmark.tagText.match(/[^,]+$/);
-    var lastWord = matches ? matches[0].trimLeft() : undefined;
+    var lastWord = _.last(vm.bookmark.tagText.split(','));
 
     // Display lookahead if word length exceeds minimum
     if (lastWord && lastWord.length > globals.LookaheadMinChars) {
@@ -316,29 +313,23 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       bookmarks.GetLookahead(lastWord.toLowerCase(), null, null, true, vm.bookmark.current.tags)
         .then(function (results) {
           if (!results) {
+            vm.bookmark.tagLookahead = null;
             return;
           }
 
           var lookahead = results[0];
           var word = results[1];
 
-          // Display lookahead
           if (lookahead && word.toLowerCase() === lastWord.toLowerCase()) {
-            // Trim word from lookahead
+            // Set lookahead after trimming word
             lookahead = lookahead ? lookahead.substring(word.length) : undefined;
-            vm.bookmark.tagLookahead = lookahead.replace(/\s/g, '&nbsp;');
             vm.bookmark.tagTextMeasure = vm.bookmark.tagText.replace(/\s/g, '&nbsp;');
-            vm.bookmark.tagLookahead = null;
-
-            // Set position of lookahead element
-            $timeout(function () {
-              var lookaheadElement = document.querySelector('#bookmark-panel .lookahead-container .lookahead');
-              var measureElement = document.querySelector('#bookmark-panel .lookahead-container .measure');
-              lookaheadElement.style.left = (measureElement.offsetLeft + measureElement.offsetWidth) + 'px';
-              vm.bookmark.tagLookahead = lookahead.replace(/\s/g, '&nbsp;');
-            });
+            vm.bookmark.tagLookahead = lookahead.replace(/\s/g, '&nbsp;');
           }
         });
+    }
+    else {
+      vm.bookmark.tagLookahead = null;
     }
   };
 
@@ -664,10 +655,13 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var disableSync = function () {
+    // Clear view model variables
+    vm.search.results = null;
+
     // Disable sync and event listeners
     return $q.all([
       bookmarks.DisableSync(),
-      platform.EventListeners.Disable()
+      !utility.IsMobilePlatform(vm.platformName) ? platform.EventListeners.Disable() : $q.resolve()
     ]);
   };
 
@@ -775,9 +769,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       background: '#ffffff',
       ecl: 'M'
     });
+    var svgString = qrcode.svg().replace('width="200" height="200"', 'viewBox="0, 0, 200, 200" preserveAspectRatio="xMidYMid meet"');
 
     // Add new qr code svg to qr container
-    var svg = new DOMParser().parseFromString(qrcode.svg(), 'text/xml').firstElementChild;
+    var svg = new DOMParser().parseFromString(svgString, 'text/xml').firstElementChild;
     var qrContainer = document.getElementById('qr');
     while (qrContainer.firstElementChild) {
       qrContainer.removeChild(qrContainer.firstElementChild);
@@ -999,19 +994,19 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         // If not on a mobile platform, display new sync panel depending on if ID is set
         vm.sync.displayNewSyncPanel = utility.IsMobilePlatform(vm.platformName) ? false : !syncId;
 
-        // If not synced before, display warning to disable other sync tools
-        if (displayOtherSyncsWarning == null || displayOtherSyncsWarning === true) {
-          vm.sync.displayOtherSyncsWarning = true;
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+          // If not synced before, display warning to disable other sync tools
+          if (displayOtherSyncsWarning == null || displayOtherSyncsWarning === true) {
+            vm.sync.displayOtherSyncsWarning = true;
 
-          // Focus on first button
-          $timeout(function () {
-            if (!utility.IsMobilePlatform(vm.platformName)) {
-              document.querySelector('.otherSyncsWarning .buttons > button').focus();
-            }
-          }, 150);
-        }
-        else {
-          if (!utility.IsMobilePlatform(vm.platformName)) {
+            // Focus on first button
+            $timeout(function () {
+              if (!utility.IsMobilePlatform(vm.platformName)) {
+                document.querySelector('.otherSyncsWarning .buttons > button').focus();
+              }
+            }, 150);
+          }
+          else {
             $timeout(function () {
               // Focus on password field
               document.querySelector('.active-login-form  input[name="txtPassword"]').focus();
@@ -1076,7 +1071,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         globals.CacheKeys.SyncId
       ]),
       utility.GetServiceUrl(),
-      platform.Permissions.Check()
+      utility.IsPlatform(globals.Platforms.Chrome) ? platform.Permissions.Check() : $q.resolve(false)
     ])
       .then(function (data) {
         var syncBookmarksToolbar = data[0];
@@ -1484,60 +1479,28 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     // Display lookahead if word length exceed minimum
     if (lastWord && lastWord.length > globals.LookaheadMinChars) {
-      // Get lookahead after delay
-      vm.search.getSearchLookaheadTimeout = $timeout(function () {
-        // Enable searching animation if bookmark cache is empty
-        platform.LocalStorage.Get(globals.CacheKeys.Bookmarks)
-          .then(function (cachedBookmarks) {
-            if (!cachedBookmarks) {
-              searchForm_ToggleSearchingAnimation(true);
-            }
-          });
+      // Get lookahead
+      getLookahead = bookmarks.GetLookahead(lastWord.toLowerCase(), vm.search.results)
+        .then(function (results) {
+          if (!results) {
+            vm.search.lookahead = null;
+            return;
+          }
 
-        // Cancel any exist http request to get bookmarks and refresh deferred
-        if (vm.search.cancelGetBookmarksRequest &&
-          vm.search.cancelGetBookmarksRequest.promise.$$state.status === 0) {
-          vm.search.cancelGetBookmarksRequest.resolve();
-        }
-        vm.search.cancelGetBookmarksRequest = $q.defer();
+          var lookahead = results[0];
+          var word = results[1];
 
-        getLookahead = bookmarks.GetLookahead(lastWord.toLowerCase(), vm.search.results, vm.search.cancelGetBookmarksRequest.promise)
-          .then(function (results) {
-            if (!results) {
-              vm.search.lookahead = null;
-              return;
-            }
+          if (lookahead && word.toLowerCase() === lastWord.toLowerCase()) {
+            // Set lookahead after trimming word
+            lookahead = lookahead ? lookahead.substring(word.length) : undefined;
+            vm.search.queryMeasure = vm.search.query.replace(/\s/g, '&nbsp;');
+            vm.search.lookahead = lookahead.replace(/\s/g, '&nbsp;');
+          }
 
-            var lookahead = results[0];
-            var word = results[1];
-
-            if (lookahead && word.toLowerCase() === lastWord.toLowerCase()) {
-              // Trim word from lookahead
-              lookahead = lookahead ? lookahead.substring(word.length) : undefined;
-              vm.search.queryMeasure = vm.search.query.replace(/\s/g, '&nbsp;');
-              vm.search.lookahead = null;
-
-              // Set position of lookahead element
-              $timeout(function () {
-                var lookaheadElement = document.querySelector('#search-panel .lookahead-container .lookahead');
-                var measureElement = document.querySelector('#search-panel .lookahead-container .measure');
-                lookaheadElement.style.left = (measureElement.offsetLeft + measureElement.getBoundingClientRect().width) + 'px';
-                vm.search.lookahead = lookahead.replace(/\s/g, '&nbsp;');
-              });
-            }
-
-            vm.search.cancelGetBookmarksRequest = null;
-          })
-          .catch(displayAlertErrorHandler)
-          .finally(function () {
-            searchForm_ToggleSearchingAnimation(false);
-          });
-      }, vm.settings.getSearchLookaheadDelay);
-
-      // Execute search after timeout and once lookahead request is finished
-      vm.search.getSearchResultsTimeout = $timeout(function () {
-        getLookahead.then(searchBookmarks);
-      }, vm.settings.getSearchResultsDelay);
+          vm.search.cancelGetBookmarksRequest = null;
+        })
+        .then(searchBookmarks)
+        .catch(displayAlertErrorHandler);
     }
     else {
       vm.search.lookahead = null;
@@ -1569,7 +1532,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     if (event.keyCode === 40 && vm.search.results && vm.search.results.length > 0) {
       // Focus on first search result
       event.preventDefault();
-      document.querySelector('.search-results-panel .list-group').firstElementChild.children[2].focus();
+      document.querySelector('.search-results-panel .list-group').firstElementChild.focus();
       return;
     }
 
@@ -1583,80 +1546,64 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var searchForm_SearchResult_KeyDown = function (event) {
-    var currentIndex, newIndex;
+    var currentIndex, newIndex, elementToFocus;
 
     switch (true) {
+      // Enter
+      case (event.keyCode === 13):
+        event.target.click();
+        break;
       // Up arrow
       case (event.keyCode === 38):
-        event.preventDefault();
-
-        if (event.target.parentElement.previousElementSibling) {
+        if (event.target.previousElementSibling) {
           // Focus on previous result
-          event.target.parentElement.previousElementSibling.children[2].focus();
+          elementToFocus = event.target.previousElementSibling;
         }
         else {
           // Focus on search box
-          document.querySelector('input[name=txtSearch]').focus();
+          elementToFocus = document.querySelector('input[name=txtSearch]');
         }
-
         break;
       // Down arrow
       case (event.keyCode === 40):
-        event.preventDefault();
-
-        if (event.target.parentElement.nextElementSibling) {
+        if (event.target.nextElementSibling) {
           // Focus on next result
-          event.target.parentElement.nextElementSibling.children[2].focus();
+          elementToFocus = event.target.nextElementSibling;
         }
-
         break;
       // Page up
       case (event.keyCode === 33):
-        event.preventDefault();
-
-        // Focus on result 6 down from current
-        currentIndex = _.indexOf(event.target.parentElement.parentElement.children, event.target.parentElement);
-        newIndex = currentIndex - 6;
-
+        // Focus on result 10 up from current
+        currentIndex = _.indexOf(event.target.parentElement.children, event.target);
+        newIndex = currentIndex - 10;
         if (newIndex < 0) {
-          event.target.parentElement.parentElement.firstElementChild.children[2].focus();
+          elementToFocus = event.target.parentElement.firstElementChild;
         }
         else {
-          event.target.parentElement.parentElement.children[newIndex].children[2].focus();
+          elementToFocus = event.target.parentElement.children[newIndex];
         }
-
         break;
       // Page down
       case (event.keyCode === 34):
-        event.preventDefault();
-
-        // Focus on result 6 down from current
-        currentIndex = _.indexOf(event.target.parentElement.parentElement.children, event.target.parentElement);
-        newIndex = currentIndex + 6;
-
-        if (event.target.parentElement.parentElement.children.length < newIndex) {
-          event.target.parentElement.parentElement.lastElementChild.children[2].focus();
+        // Focus on result 10 down from current
+        currentIndex = _.indexOf(event.target.parentElement.children, event.target);
+        newIndex = currentIndex + 10;
+        if (event.target.parentElement.children.length <= newIndex) {
+          elementToFocus = event.target.parentElement.lastElementChild;
         }
         else {
-          event.target.parentElement.parentElement.children[newIndex].children[2].focus();
+          elementToFocus = event.target.parentElement.children[newIndex];
         }
-
         break;
       // Home
       case (event.keyCode === 36):
-        event.preventDefault();
-
         // Focus on first result
-        event.target.parentElement.parentElement.firstElementChild.children[2].focus();
-
+        elementToFocus = event.target.parentElement.firstElementChild;
         break;
       // End
       case (event.keyCode === 35):
-        event.preventDefault();
-
         // Focus on last result
-        event.target.parentElement.parentElement.lastElementChild.children[2].focus();
-
+        elementToFocus = event.target.parentElement.lastElementChild;
         break;
       // Backspace
       case (event.keyCode === 8):
@@ -1665,8 +1612,13 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       // Numbers and letters
       case (event.keyCode > 47 && event.keyCode < 112):
         // Focus on search box
-        document.querySelector('input[name=txtSearch]').focus();
+        elementToFocus = document.querySelector('input[name=txtSearch]');
         break;
+    }
+
+    if (elementToFocus) {
+      event.preventDefault();
+      elementToFocus.focus();
     }
   };
 
@@ -1689,17 +1641,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   var searchForm_ToggleBookmark_Click = function () {
     // Display bookmark panel
     changeView(vm.view.views.bookmark);
-  };
-
-  var searchForm_ToggleSearchingAnimation = function (active) {
-    var searchIcon = document.querySelector('.search-form i');
-
-    if (active) {
-      searchIcon.classList.add("animate-flash");
-    }
-    else {
-      searchIcon.classList.remove("animate-flash");
-    }
   };
 
   var searchForm_UpdateBookmark_Click = function (bookmarkToUpdate) {

@@ -40,32 +40,34 @@
       data-ng-keydown="vm.events.bookmarkForm_BookmarkDescription_Change()"
       placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_DescriptionField_Label) }}"></textarea>
   </div>
-  <div class="form-group tags-input-container">
-    <label for="bookmarkTags" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TagsField_Label)
+  <div class="mobile-landscape">
+    <div class="form-group tags-input-container">
+      <label for="bookmarkTags" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TagsField_Label)
       }}</label>
-    <input type="text" class="form-control" name="bookmarkTags"
-      placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TagsField_Description) }}" maxlength="50"
-      data-ng-model="vm.bookmark.tagText" data-ng-change="vm.events.bookmarkForm_BookmarkTags_Change()"
-      data-ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" data-ng-trim="false" spellcheck="false"
-      autocomplete="off">
-    <div class="lookahead-container">
-      <span class="measure" data-ng-bind-html="vm.bookmark.tagTextMeasure"></span>
-      <span class="lookahead" data-ng-bind-html="vm.bookmark.tagLookahead" data-ng-show="vm.bookmark.tagLookahead"
-        data-ng-click="vm.events.bookmarkForm_BookmarkTags_Lookahead_Click ()"></span>
+      <input type="text" class="form-control" name="bookmarkTags"
+        placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TagsField_Description) }}" maxlength="50"
+        data-ng-model="vm.bookmark.tagText" data-ng-change="vm.events.bookmarkForm_BookmarkTags_Change()"
+        data-ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" data-ng-trim="false" spellcheck="false"
+        autocomplete="off">
+      <div class="lookahead-container">
+        <span class="measure" data-ng-bind-html="vm.bookmark.tagTextMeasure"></span>
+        <span class="lookahead" data-ng-bind-html="vm.bookmark.tagLookahead" data-ng-show="vm.bookmark.tagLookahead"
+          data-ng-click="vm.events.bookmarkForm_BookmarkTags_Lookahead_Click ()"></span>
+      </div>
+      <button class="btn btn-icon btn-clear" data-ng-show="vm.bookmark.current.tags.length > 0"
+        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ClearTags_Label) }}"
+        data-ng-click="vm.events.bookmarkForm_BookmarkTags_ClearAll_Click()">
+        <i class="fas fa-trash-alt" aria-hidden="true"></i>
+      </button>
     </div>
-    <button class="btn btn-icon btn-clear" data-ng-show="vm.bookmark.current.tags.length > 0"
-      title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ClearTags_Label) }}"
-      data-ng-click="vm.events.bookmarkForm_BookmarkTags_ClearAll_Click()">
-      <i class="fas fa-trash-alt" aria-hidden="true"></i>
-    </button>
-  </div>
-  <div class="form-group tags-container clearfix" data-ng-show="vm.bookmark.current.tags.length > 0">
-    <button class="badge badge-pill" data-ng-repeat="tag in vm.bookmark.current.tags track by $index"
-      data-ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
-      <span>{{ tag }}</span>
-      <i class="fas fa-times" aria-hidden="true"></i>
-      <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_DeleteTag_Label) }}</span>
-    </button>
+    <div class="form-group tags-container clearfix" data-ng-show="vm.bookmark.current.tags.length > 0">
+      <button class="badge badge-pill" data-ng-repeat="tag in vm.bookmark.current.tags track by $index"
+        data-ng-click="vm.events.bookmarkForm_RemoveTag_Click(tag)">
+        <span>{{ tag }}</span>
+        <i class="fas fa-times" aria-hidden="true"></i>
+        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_DeleteTag_Label) }}</span>
+      </button>
+    </div>
   </div>
   <div class="buttons">
     <button type="button" class="btn btn-default" data-ng-class="{ 'focused': !vm.bookmark.displayUpdateForm }"
@@ -78,7 +80,8 @@
       data-ng-click="vm.events.bookmarkForm_UpdateBookmark_Click()">
       {{ vm.platform.GetConstant(vm.globals.Constants.Button_Update_Label) }}
     </button>
-    <button type="button" class="btn btn-default btn-share-bookmark" data-ng-if="vm.bookmark.displayUpdateForm"
+    <button type="button" class="btn btn-default"
+      data-ng-if="vm.utility.IsMobilePlatform(vm.platformName) && vm.bookmark.displayUpdateForm"
       data-ng-click="vm.events.bookmarkForm_ShareBookmark_Click(vm.bookmark.current)">
       {{ vm.platform.GetConstant(vm.globals.Constants.Button_Share_Label) }}
     </button>
