@@ -342,7 +342,7 @@
                 </div>
               </div>
             </div>
-            <div id="restoreFilePanel">
+            <div id="restoreFilePanel" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)">
               <div class="buttons">
                 <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_SelectBackupFile_Click()">
                   {{ vm.platform.GetConstant(vm.globals.Constants.Button_SelectBackupFile_Label) }}

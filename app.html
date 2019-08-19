@@ -10,11 +10,7 @@
   <script src="js/app.min.js"></script>
 </head>
 
-<body data-ng-class="{
-  'normal-view': vm.view.current != null && vm.view.current !== vm.view.views.search,
-  'search-view': vm.view.current === vm.view.views.search && !vm.search.results,
-  'search-no-results-view': vm.view.current === vm.view.views.search && vm.search.results.length === 0,
-  'search-results-view': vm.view.current === vm.view.views.search && vm.search.results.length > 0 }">
+<body>
   <div class="container">
     <div id="working-panel" class="animate" data-ng-include="'./views/working.html'" data-ng-show="vm.working"></div>
 

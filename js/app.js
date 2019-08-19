@@ -722,7 +722,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     vm.help.currentPage = panelToDisplay || 0;
     $timeout(function () {
-      document.querySelector('#help-page-container').focus();
+      document.querySelector('#help-panel .view-content > div').focus();
     }, 100);
   };
 
