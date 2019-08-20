@@ -12,17 +12,17 @@
 
 <body>
   <div class="container">
-    <div id="working-panel" class="animate" data-ng-include="'./views/working.html'" data-ng-show="vm.working"></div>
+    <div id="working-panel" class="animate" data-ng-include="'./views/working.html'" data-ng-show="vm.working"
+      data-ng-class="{ 'darker-overlay': vm.view.current !== vm.view.views.loading }"></div>
 
     <div id="qr-panel" class="animate" data-ng-include="'./views/qr.html'" data-ng-show="vm.settings.displayQrPanel">
     </div>
 
-    <div class="alert animate-fade animate-fade-out" role="alert" data-ng-show="vm.alert.show" data-ng-cloak
-      data-ng-class="{
-        'alert-success': vm.alert.type === 'success',
-        'info': vm.alert.type === 'info',
-        'warning': vm.alert.type === 'warning',
-        'alert-danger': vm.alert.type === 'danger' }">
+    <div class="alert animate-fade animate-fade-out" role="alert" data-ng-show="vm.alert.show" data-ng-class="{
+      'alert-success': vm.alert.type === 'success',
+      'info': vm.alert.type === 'info',
+      'warning': vm.alert.type === 'warning',
+      'alert-danger': vm.alert.type === 'danger' }">
       <button class="btn btn-icon btn-close"
         title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}"
         data-ng-click="vm.alert.show = false" tabindex="1000">
@@ -49,9 +49,9 @@
       <div class="view-content animate" data-ng-include="'./views/settings.html'"></div>
     </div>
 
-    <div id="information-panel" class="view" data-ng-if="vm.view.current === vm.view.views.support || 
-      vm.view.current === vm.view.views.updated || vm.view.current === vm.view.views.permissions ||
-      vm.view.current === vm.view.views.help">
+    <div id="information-panel" class="view" data-ng-if="vm.view.current === vm.view.views.loading || 
+      vm.view.current === vm.view.views.support || vm.view.current === vm.view.views.updated || 
+      vm.view.current === vm.view.views.permissions || vm.view.current === vm.view.views.help">
       <div id="help-panel" data-ng-if="vm.view.current === vm.view.views.help">
         <div class="view-content animate" data-ng-include="'./views/help.html'"></div>
       </div>
