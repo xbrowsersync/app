@@ -214,12 +214,11 @@ body {
       display: block;
       position: absolute;
       z-index: 0;
-      width: 300%;
-      height: 300%;
-      top: -200%;
+      width: $bg-width * 10;
+      height: $bg-height * 10;
+      top: -$bg-height;
       background: url("../img/clouds.svg");
-      background-size: 50rem;
-      background-position: 0 0;
+      background-size: $bg-width $bg-height;
       background-repeat: repeat;
       opacity: 0.2;
       @include animation(animation-scroll 100s linear infinite);
