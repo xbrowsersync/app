@@ -266,6 +266,15 @@ body {
     }
   }
 
+  .logo {
+    background-size: 11rem;
+    flex: 0 1 17rem;
+  }
+
+  .well {
+    margin-bottom: 0;
+  }
+
   @media (orientation: landscape) {
     form {
       display: flex;
@@ -288,6 +297,8 @@ body {
     .logo {
       height: 17rem;
       flex: 1 12rem;
+      background-size: 13rem;
+      background-position-y: 50%;
     }
 
     .view-content {
@@ -402,6 +413,23 @@ body {
       position: absolute;
       width: auto;
       line-height: 1.35rem;
+    }
+  }
+}
+
+#scan-panel {
+  @media (orientation: landscape) {
+    h3 {
+      margin: 0;
+    }
+
+    .buttons {
+      flex: 0 5rem;
+    }
+
+    .target {
+      width: 10rem;
+      height: 10rem;
     }
   }
 }

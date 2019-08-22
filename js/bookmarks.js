@@ -252,7 +252,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     // Recursively iterate through all bookmarks until id match is found
     var bookmark = bookmarks.find(function (x) { return x.id === id; });
     if (!bookmark) {
-      bookmarks.forEach(function (x) {
+      _.each(bookmarks, function (x) {
         if (!bookmark) {
           bookmark = findBookmarkById(x.children, id);
         }
@@ -1535,7 +1535,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       toolbarContainer.title = globals.Bookmarks.ToolbarContainerName;
     }
 
-    var xbsContainerIndex = bookmarks.findIndex(function (x) {
+    var xbsContainerIndex = _.findIndex(bookmarks, function (x) {
       return x.title === globals.Bookmarks.UnfiledContainerNameOld;
     });
     if (xbsContainerIndex >= 0) {

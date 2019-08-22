@@ -75,7 +75,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     return deferred.promise
       .finally(function () {
         // Clear local storage
-        _.keys(localStorage).forEach(function (key) { return localStorage.removeItem(key); });
+        _.each(_.keys(localStorage), function (key) { return localStorage.removeItem(key); });
       });
   };
 
@@ -321,8 +321,8 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedGetPageMetadata_Title);
         errorMessage.message = platform.GetConstant(globals.Constants.Error_FailedGetPageMetadata_Message);
         break;
-      case globals.ErrorCodes.FailedScanID:
-        errorMessage.title = platform.GetConstant(globals.Constants.Error_ScanFailed_Title);
+      case globals.ErrorCodes.FailedScan:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_ScanFailed_Message);
         break;
       case globals.ErrorCodes.FailedShareBookmark:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_ShareFailed_Title);

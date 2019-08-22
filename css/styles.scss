@@ -218,7 +218,7 @@ body {
       height: $bg-height * 10;
       top: -$bg-height;
       background: url("../img/clouds.svg");
-      background-size: $bg-width $bg-height;
+      background-size: $bg-width;
       background-repeat: repeat;
       opacity: 0.2;
       @include animation(animation-scroll 100s linear infinite);
@@ -710,6 +710,9 @@ body {
 #login-panel {
   form {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     & > div {
       position: absolute;
@@ -751,6 +754,8 @@ body {
 
   .login-form-existing,
   .login-form-new {
+    max-width: 22rem;
+
     a {
       &.active,
       &:active,
@@ -1373,7 +1378,6 @@ body {
 
 #qr-panel {
   @extend .darker-overlay;
-
   flex-direction: column;
   padding: 2rem;
 
@@ -1434,5 +1438,56 @@ body {
     position: absolute;
     width: 30vw;
     height: 30vw;
+  }
+}
+
+#scan-panel {
+  h3 {
+    font-size: 1rem;
+    text-align: center;
+    margin: 1rem 0 0;
+  }
+
+  .buttons {
+    flex: 0 8rem;
+
+    button {
+      background-color: $colour-text1;
+      color: $colour-text2;
+      font-size: 2rem;
+      border-radius: 100%;
+      width: 4rem;
+      height: 4rem;
+      margin-right: 1.75rem;
+      transition: color, ease-in-out, 0.2s;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &.btn-delete-bookmark {
+        background-color: $colour-danger;
+      }
+
+      &.enabled {
+        color: $colour-warning;
+      }
+
+      i {
+        opacity: 1;
+      }
+    }
+  }
+
+  .target {
+    background: url("../img/scan.svg") 50% 50% no-repeat;
+    flex: 1;
+    width: 14rem;
+    height: 14rem;
+    opacity: 0.5;
+  }
+
+  .view-content {
+    align-items: center;
   }
 }

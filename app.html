@@ -68,9 +68,13 @@
         <div class="view-content animate" data-ng-include="'./views/permissions.html'"></div>
       </div>
     </div>
+
+    <div id="scan-panel" class="view" data-ng-if="vm.view.current === vm.view.views.scan">
+      <div class="view-content animate" data-ng-include="'./views/scan.html'"></div>
+    </div>
   </div>
 
-  <div class="background">
+  <div class="background" data-ng-if="vm.view.current !== vm.view.views.scan">
     <div class="background-img" data-ng-if="vm.view.current === vm.view.views.loading || vm.view.current === vm.view.views.login || 
       vm.view.current === vm.view.views.support || vm.view.current === vm.view.views.permissions || 
       vm.view.current === vm.view.views.updated || vm.view.current === vm.view.views.help">

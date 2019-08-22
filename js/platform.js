@@ -71,7 +71,11 @@ xBrowserSync.App.Platform = function () {
       Remove: notImplemented,
       Request: notImplemented
     },
-    ScanID: notImplemented,
+    Scanner: {
+      Start: notImplemented,
+      Stop: notImplemented,
+      ToggleLight: notImplemented
+    },
     SelectFile: notImplemented,
     Sync: {
       Await: notImplemented,

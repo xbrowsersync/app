@@ -137,6 +137,9 @@
   "button_ScanCode_Label": {
     "message": "Scan ID"
   },
+  "button_ToggleLight_Label": {
+    "message": "Toggle light"
+  },
   "button_DisableSync_Label": {
     "message": "Désactiver la synchronisation"
   },
@@ -148,6 +151,9 @@
   },
   "button_NewSync_Label": {
     "message": "Créer une nouvelle synchro"
+  },
+  "button_GetSyncId_Label": {
+    "message": "Get a Sync ID"
   },
   "Button_SyncUpdates_Label": {
     "message": "Update Sync"
@@ -169,6 +175,12 @@
   },
   "login_UpgradeSync_Message": {
     "message": "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
+  },
+  "login_ScanId_Title": {
+    "message": "Scan your sync ID"
+  },
+  "login_ScanId_Message": {
+    "message": "Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a QR code which you can scan here."
   },
   "updated_Message": {
     "message": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
@@ -208,6 +220,9 @@
   },
   "bookmarkShared_Message": {
     "message": "partagé depuis xBrowserSync"
+  },
+  "scan_Title": {
+    "message": "Scan your Sync ID QR code"
   },
   "settings_Sync_SyncToolbarConfirmation_Message": {
     "message": "<p>Enabling this setting will replace the bookmarks currently in the bookmarks toolbar with your synced bookmarks.</p><p>OK to proceed?</p>"
@@ -412,6 +427,9 @@
   },
   "button_Back_Label": {
     "message": "Retour"
+  },
+  "button_OK_Label": {
+    "message": "Got it"
   },
   "settings_BackupRestore_BackupSuccess_Message": {
     "message": "Si la sauvegarde ne se télécharge pas automatiquement, faites bouton droit sur le lien ci-dessous et cliquez sur 'Sauvegarder le lien en tant que...'."
@@ -644,8 +662,8 @@
   "error_SyncInterrupted_Message": {
     "message": "Une précédente synchronisation a été interrompue et ne s'est pas complétée. Réactivez la synchronisation pour restaurer vos données synchronisées."
   },
-  "error_ScanFailed_Title": {
-    "message": "Scan échoué"
+  "error_ScanFailed_Message": {
+    "message": "Scan failed. Check permission has been granted and try again."
   },
   "error_ShareFailed_Title": {
     "message": "Partage échoué"

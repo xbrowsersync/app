@@ -84,6 +84,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       qrPanel_Close_Click: qrPanel_Close_Click,
       qrPanel_CopySyncId_Click: qrPanel_CopySyncId_Click,
       queueSync: queueSync,
+      scanPanel_Cancel_Click: scanPanel_Cancel_Click,
+      scanPanel_ToggleLight_Click: scanPanel_ToggleLight_Click,
       searchForm_Clear_Click: searchForm_Clear_Click,
       searchForm_DeleteBookmark_Click: searchForm_DeleteBookmark_Click,
       searchForm_ScanCode_Click: searchForm_ScanCode_Click,
@@ -126,6 +128,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     };
 
     vm.platformName = undefined;
+
+    vm.scanner = {
+      lightEnabled: false
+    };
 
     vm.search = {
       batchResultsNum: 10,
@@ -180,7 +186,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     };
 
     vm.sync = {
-      asyncChannel: undefined,
       displayOtherSyncsWarning: false,
       displayNewSyncPanel: true,
       displayPasswordConfirmation: false,
@@ -201,7 +206,18 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       current: undefined,
       change: changeView,
       displayMainView: displayMainView,
-      views: { login: 0, search: 1, bookmark: 2, settings: 3, help: 4, support: 5, updated: 6, permissions: 7, loading: 8 }
+      views: {
+        login: 0,
+        search: 1,
+        bookmark: 2,
+        settings: 3,
+        help: 4,
+        support: 5,
+        updated: 6,
+        permissions: 7,
+        loading: 8,
+        scan: 9
+      }
     };
 
     // Initialise the app
@@ -1195,8 +1211,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     else {
       platform.OpenUrl(event.currentTarget.href);
     }
-
-    return false;
   };
 
   var permissions_Revoke_Click = function () {
@@ -1362,6 +1376,23 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       .finally(platform.Interface.Loading.Hide);
   };
 
+  var scanPanel_Cancel_Click = function () {
+    platform.Scanner.Stop()
+      .finally(displayMainView);
+  };
+
+  var scanPanel_ToggleLight_Click = function () {
+    platform.Scanner.ToggleLight()
+      .then(function (lightEnabled) {
+        vm.scanner.lightEnabled = lightEnabled;
+      })
+      .catch(function (err) {
+        // Display alert
+        var errMessage = utility.GetErrorMessageFromException(err);
+        vm.alert.display(errMessage.title, errMessage.message, 'danger');
+      });
+  };
+
   var searchBookmarks = function () {
     var queryData = {
       url: undefined,
@@ -1439,7 +1470,21 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var searchForm_ScanCode_Click = function () {
-    platform.ScanID();
+    platform.Scanner.Start()
+      .then(function (scannedId) {
+        vm.sync.id = scannedId;
+        platform.LocalStorage.Set(globals.CacheKeys.SyncId, scannedId);
+        $timeout(function () {
+          // Focus on password field
+          document.querySelector('.active-login-form  input[name="txtPassword"]').focus();
+        }, 200);
+      })
+      .catch(function (err) {
+        // Display alert
+        var errMessage = utility.GetErrorMessageFromException(err);
+        vm.alert.display(errMessage.title, err);
+      })
+      .finally(displayMainView);
   };
 
   var searchForm_SearchText_Autocomplete = function () {
@@ -1673,13 +1718,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
   var setNewTabLinks = function () {
     var links = document.querySelectorAll('a.new-tab');
-    var onClickEvent = function () {
-      return openUrl({ currentTarget: { href: this.href } });
-    };
-
     for (var i = 0; i < links.length; i++) {
       var link = links[i];
-      link.onclick = onClickEvent;
+      link.onclick = openUrl;
     }
   };
 
@@ -1688,7 +1729,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     var message = serviceInfo.message ? marked(serviceInfo.message) : null;
     if (message) {
       var messageDom = new DOMParser().parseFromString(message, 'text/html');
-      messageDom.querySelectorAll('a').forEach(function (hyperlink) {
+      _.each(messageDom.querySelectorAll('a'), function (hyperlink) {
         hyperlink.className = 'new-tab';
       });
       message = DOMPurify.sanitize(messageDom.body.firstElementChild.innerHTML);

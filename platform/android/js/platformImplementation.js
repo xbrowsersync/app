@@ -153,6 +153,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "button_ScanCode_Label": {
       "message": "Scan ID"
     },
+    "button_ToggleLight_Label": {
+      "message": "Toggle light"
+    },
     "button_DisableSync_Label": {
       "message": "Disable sync"
     },
@@ -164,6 +167,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     },
     "button_NewSync_Label": {
       "message": "Don’t have a sync ID?"
+    },
+    "button_GetSyncId_Label": {
+      "message": "Get a Sync ID"
     },
     "login_ConfirmSync_Title": {
       "message": "Create new sync?"
@@ -182,6 +188,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     },
     "login_UpgradeSync_Message": {
       "message": "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
+    },
+    "login_ScanId_Title": {
+      "message": "Scan your sync ID"
+    },
+    "login_ScanId_Message": {
+      "message": "Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a QR code which you can scan here."
     },
     "updated_Message": {
       "message": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
@@ -221,6 +233,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     },
     "bookmarkShared_Message": {
       "message": "shared from xBrowserSync"
+    },
+    "scan_Title": {
+      "message": "Scan your Sync ID QR code"
     },
     "settings_Sync_SyncToolbarConfirmation_Message": {
       "message": "<p>Enabling this setting will replace the bookmarks currently in the bookmarks toolbar with your synced bookmarks.</p><p>OK to proceed?</p>"
@@ -419,6 +434,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     },
     "button_Back_Label": {
       "message": "Back"
+    },
+    "button_OK_Label": {
+      "message": "Got it"
     },
     "settings_BackupRestore_BackupSuccess_Message": {
       "message": "Backup file {fileName} saved to internal storage."
@@ -654,8 +672,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "error_SyncInterrupted_Message": {
       "message": "A previous sync was interrupted and failed to complete. Re-enable sync to restore your synced data."
     },
-    "error_ScanFailed_Title": {
-      "message": "Scan failed"
+    "error_ScanFailed_Message": {
+      "message": "Scan failed. Check permission has been granted and try again."
     },
     "error_ShareFailed_Title": {
       "message": "Share failed"
@@ -711,7 +729,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.LocalStorage.Get = getFromLocalStorage;
     platform.LocalStorage.Set = setInLocalStorage;
     platform.OpenUrl = openUrl;
-    platform.ScanID = scanId;
+    platform.Scanner.Start = startScanning;
+    platform.Scanner.Stop = stopScanning;
+    platform.Scanner.ToggleLight = toggleLight;
     platform.SelectFile = selectBackupFile;
     platform.Sync.Await = awaitSync;
     platform.Sync.Current = getCurrentSync;
@@ -1167,12 +1187,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     script.onload = function () {
       // Bind to device events
       document.addEventListener('deviceready', deviceReady, false);
-      document.addEventListener('resume', resume, false);
+
+      // TODO: uncomment once intents working again
+      //document.addEventListener('resume', resume, false);
     };
     document.getElementsByTagName('head')[0].appendChild(script);
-
-    // Set async channel to view model
-    vm.sync.asyncChannel = vm;
 
     // Set required events to mobile app handlers
     vm.events.bookmarkPanel_Close_Click = bookmarkPanel_Close_Click;
@@ -1191,17 +1210,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     vm.sync.displayNewSyncPanel = false;
 
     // Check stored app version for upgrade
-    // TODO: uncomment
-    //checkForUpgrade();
-
-    deviceReady();
+    checkForUpgrade();
   };
 
   var openUrl = function (url) {
-    OpenUrlExt.open(url, function () { }, function (err) {
-      utility.LogInfo('Unable to open url' + (url ? (' ' + url + ': ') : ': '));
-      utility.LogError(err, 'platform.openUrl');
-    });
+    window.open(url, '_system', '');
   };
 
   var populateBookmarks = function (xBookmarks) {
@@ -1226,32 +1239,63 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     });
   };
 
-  var scanId = function () {
-    var options = {
-      'preferFrontCamera': false,
-      'showFlipCameraButton': false,
-      'prompt': getConstant(globals.Constants.Button_ScanCode_Label),
-      'formats': 'QR_CODE'
-    };
+  var startScanning = function () {
+    return $q(function (resolve, reject) {
+      QRScanner.prepare(function (err, status) {
+        if (err) {
+          var error = new Error(err._message || err.name || err.code);
+          utility.LogError(error, 'platform.startScanning');
+          return reject(error);
+        }
 
-    var onSuccess = function (result) {
-      // Set result as id
-      if (result && result.text) {
-        $scope.$apply(function () {
-          vm.sync.id = result.text;
-          platform.LocalStorage.Set(globals.CacheKeys.SyncId, result.text);
+        if (status.authorized) {
+          QRScanner.scan(function (err, scannedText) {
+            if (err) {
+              var error = new Error(err._message || err.name || err.code);
+              utility.LogError(error, 'platform.startScanning');
+              return reject(error);
+            }
+
+            QRScanner.pausePreview(function () {
+              $timeout(function () {
+                // TODO: Check if valid sync ID
+                utility.LogInfo('Scanned: ' + scannedText);
+
+                resolve(scannedText);
+                stopScanning();
+              }, 1000);
+            });
+          });
+
+          QRScanner.show(function () {
+            $timeout(function () {
+              vm.view.change(vm.view.views.scan);
+            }, 200);
+          });
+        } else {
+          var error = new Error('Not authorised');
+          utility.LogError(error, 'platform.startScanning');
+          reject(error);
+        }
+      });
+    })
+      .catch(function (err) {
+        return $q.reject({
+          code: globals.ErrorCodes.FailedScan,
+          stack: err.stack
         });
-      }
-    };
+      });
+  };
 
-    var onError = function (err) {
-      // Display alert
-      var errMessage = utility.GetErrorMessageFromException({ code: globals.ErrorCodes.FailedScanID });
-      vm.alert.display(errMessage.title, err);
-    };
-
-    // Activate barcode scanner
-    cordova.plugins.barcodeScanner.scan(onSuccess, onError, options);
+  var stopScanning = function () {
+    disableLight()
+      .catch(function () { })
+      .finally(function () {
+        QRScanner.hide(function () {
+          QRScanner.destroy();
+        });
+      });
+    return $q.resolve();
   };
 
   var selectBackupFile = function () {
@@ -1290,6 +1334,27 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     // Cancel interval
     $interval.cancel(autoUpdatesInterval);
     autoUpdatesInterval = undefined;
+  };
+
+  var toggleLight = function (switchOn) {
+    // If state was elected toggle light based on value
+    if (switchOn !== undefined) {
+      return (switchOn ? enableLight() : disableLight())
+        .then(function () {
+          return switchOn;
+        });
+    }
+
+    // Otherwise toggle light based on current state
+    return $q(function (resolve, reject) {
+      QRScanner.getStatus(function (status) {
+        (status.lightEnabled ? disableLight() : enableLight())
+          .then(function () {
+            resolve(!status.lightEnabled);
+          })
+          .catch(reject);
+      });
+    });
   };
 
   var updateSingle = function () {
@@ -1415,6 +1480,20 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
+  var disableLight = function () {
+    return $q(function (resolve, reject) {
+      QRScanner.disableLight(function (err) {
+        if (err) {
+          var error = new Error(err._message || err.name || err.code);
+          utility.LogError(error, 'platform.disableLight');
+          return reject(error);
+        }
+
+        resolve();
+      });
+    });
+  };
+
   var displayDefaultSearchState = function () {
     if (vm.view.current !== vm.view.views.search) {
       return;
@@ -1431,8 +1510,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var deviceReady = function () {
     utility.LogInfo('Starting up');
 
-    var test = $interval(function () { return; }, globals.Alarm.Period * 60000);
-
     // Set back button event
     document.addEventListener('backbutton', handleBackButton, false);
 
@@ -1448,8 +1525,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     // Set backup file change event
     document.getElementById('backupFile').addEventListener('change', backupFile_Change_Android, false);
 
-    // Use toasts for alerts
-    vm.alert.display = displayToast;
+    // TODO: Uncomment once snackbar plugin is re-added
+    // Use snackbar for alerts
+    //vm.alert.display = displayAlert;
 
     // Reset network disconnected flag
     var networkDisconnected = !utility.IsNetworkConnected();
@@ -1546,16 +1624,23 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
-  var displayToast = function (title, description) {
-    var message = (title) ? title + '. ' + description : description;
+  var displayAlert = function (title, description) {
+    var message = title ? title + '. ' + description : description;
+    cordova.plugins.snackbar.create(message, 'LONG', 'Dismiss', function () { });
+  };
 
-    // TODO: uncomment
-    /*window.plugins.toast.showWithOptions({
-      message: message,
-      duration: 6000,
-      position: 'bottom',
-      addPixelsY: -50
-    });*/
+  var enableLight = function () {
+    return $q(function (resolve, reject) {
+      QRScanner.enableLight(function (err) {
+        if (err) {
+          var error = new Error(err._message || err.name || err.code);
+          utility.LogError(error, 'platform.enableLight');
+          return reject(error);
+        }
+
+        resolve();
+      });
+    });
   };
 
   var getLatestUpdates = function () {
@@ -1607,8 +1692,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       globals.CacheKeys.SyncEnabled
     ])
       .then(function (cachedData) {
-        networkDisconnected = cachedData[globals.CacheKeys.NetworkDisconnected];
-        syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
+        var networkDisconnected = cachedData[globals.CacheKeys.NetworkDisconnected];
+        var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
 
         if (syncEnabled && networkDisconnected) {
           getLatestUpdates()
