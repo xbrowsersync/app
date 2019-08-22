@@ -54,6 +54,12 @@ Use the [web-ext](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebEx
 
 Firefox will open using a temporary profile and the xBrowserSync extension will be installed from the built source.
 
+### Compiling and running the Android app
+
+After running a platform build, in order to compile the apk file you'll need to run the relevant [cordova cli](https://cordova.apache.org/docs/en/latest/reference/cordova-cli/index.html) command. For example, to compile and run the app on a connected device, CD into `build/cordova` within the xBrowserSync source directory and run the following command:
+
+	$ cordova run android --device
+
 ## Issues
 
 If you’ve found a bug or wish to request a new feature, please submit it [here](https://github.com/xbrowsersync/app/issues/).
@@ -61,7 +67,3 @@ If you’ve found a bug or wish to request a new feature, please submit it [here
 ## Translation
 
 If you would like to help with translating xBrowserSync into another language, please [get in touch](https://www.xbrowsersync.org/#contact).
-
-## Support
-
-If you enjoy using xBrowserSync consider supporting the project via [Liberapay](https://liberapay.com/xbrowsersync/donate) or by [donating crypto](https://commerce.coinbase.com/checkout/1bd7ccd2-00ed-49d9-8f8a-b55fb5240675).
