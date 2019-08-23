@@ -15,6 +15,7 @@
     "com-darryncampbell-cordova-plugin-intent": "^1.1.8",
     "cordova-android": "^8.0.0",
     "cordova-plugin-customurlscheme": "^4.4.0",
+    "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-filepicker": "^1.1.6",
     "cordova-plugin-inappbrowser": "^3.1.0",
@@ -46,7 +47,8 @@
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-network-information": {},
       "cordova-plugin-nativestorage": {},
-      "cordova-plugin-whitelist": {}
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-device": {}
     },
     "platforms": [
       "android"

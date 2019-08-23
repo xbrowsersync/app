@@ -726,6 +726,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     // Set global variables
     vm = viewModel;
     vm.platformName = globals.Platforms.Firefox;
+
+    return $q.resolve();
   };
 
   var openUrl = function (url) {

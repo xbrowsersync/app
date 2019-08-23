@@ -764,6 +764,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     // Set global variables
     vm = viewModel;
     vm.platformName = globals.Platforms.Chrome;
+
+    return $q.resolve();
   };
 
   var localBookmarkInToolbar = function (localBookmark) {

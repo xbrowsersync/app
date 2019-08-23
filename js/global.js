@@ -29,14 +29,13 @@ xBrowserSync.App.Global = function (platform) {
       VerticalSeparatorTitle: '|'
     },
     CacheKeys: {
+      AppVersion: 'appVersion',
       Bookmarks: 'bookmarks',
       DisplayHelp: 'displayHelp',
       DisplayOtherSyncsWarning: 'displayOtherSyncsWarning',
       DisplayPermissions: 'displayPermissions',
       DisplayUpdated: 'displayUpdated',
       LastUpdated: 'lastUpdated',
-      MobileAppVersion: 'mobileAppVersion',
-      NetworkDisconnected: 'networkDisconnected',
       Password: 'password',
       ServiceUrl: 'serviceUrl',
       SyncBookmarksToolbar: 'syncBookmarksToolbar',
@@ -324,7 +323,8 @@ xBrowserSync.App.Global = function (platform) {
       FailedShareUrl: 10400,
       FailedShareUrlNotSynced: 10401,
       FailedRegisterAutoUpdates: 10500,
-      NotImplemented: 10600
+      LocalStorageNotAvailable: 10600,
+      NotImplemented: 10700
     },
     LogType: {
       Trace: 0,

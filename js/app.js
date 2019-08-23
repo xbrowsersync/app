@@ -733,7 +733,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
   var displayHelpPage = function (panelToDisplay) {
     if (panelToDisplay < 0 || panelToDisplay >= vm.help.pages.length) {
-      return;
+      return helpPanel_Close();
     }
 
     vm.help.currentPage = panelToDisplay || 0;
@@ -839,28 +839,29 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
   var init = function () {
     // Platform-specific initation
-    platform.Init(vm, $scope);
+    platform.Init(vm, $scope)
+      .then(function () {
+        // Check if sync enabled
+        return platform.Sync.Current()
+          .then(function (currentSync) {
+            // Check if a sync is currently in progress
+            if (currentSync) {
+              utility.LogInfo('Waiting for sync: ' + currentSync.uniqueId);
+              return vm.view.change(vm.view.views.loading)
+                .then(function () {
+                  return platform.Sync.Await(currentSync.uniqueId);
+                })
+                .then(function () {
+                  return vm.view.change(vm.view.views.search);
+                });
+            }
 
-    // Check if sync enabled
-    return platform.Sync.Current()
-      .then(function (currentSync) {
-        // Check if a sync is currently in progress
-        if (currentSync) {
-          utility.LogInfo('Waiting for sync: ' + currentSync.uniqueId);
-          return vm.view.change(vm.view.views.loading)
-            .then(function () {
-              return platform.Sync.Await(currentSync.uniqueId);
-            })
-            .then(function () {
-              return vm.view.change(vm.view.views.search);
-            });
-        }
-
-        // Set initial view
-        return displayMainView();
+            // Set initial view
+            return displayMainView();
+          })
+          // Check if current page is a bookmark
+          .then(setBookmarkStatus);
       })
-      // Check if current page is a bookmark
-      .then(setBookmarkStatus)
       .catch(function (err) {
         displayMainView()
           .then(function () {
@@ -868,10 +869,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
             var errMessage = utility.GetErrorMessageFromException(err);
             vm.alert.display(errMessage.title, errMessage.message, 'danger');
           });
-      })
-      .finally(function () {
-        // Reset network disconnected flag
-        return platform.LocalStorage.Set(globals.CacheKeys.NetworkDisconnected, false);
       });
   };
 

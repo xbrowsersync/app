@@ -302,11 +302,8 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 	 * ------------------------------------------------------------------------------------ */
 
   var apiRequestSucceeded = function (response) {
-    // Reset network disconnected flag
-    return platform.LocalStorage.Set(globals.CacheKeys.NetworkDisconnected, false)
-      .then(function () {
-        return response;
-      });
+    // TODO: Reset network disconnected flag
+    return $q.resolve(response);
   };
 
   var getErrorCodeFromHttpError = function (httpErr, errStack) {
@@ -347,10 +344,7 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
         break;
       // -1: No network connection
       case -1:
-        getErrorCodePromise = platform.LocalStorage.Set(globals.CacheKeys.NetworkDisconnected, true)
-          .then(function () {
-            return globals.ErrorCodes.HttpRequestFailed;
-          });
+        getErrorCodePromise = $q.resolve(globals.ErrorCodes.HttpRequestFailed);
         break;
       // Otherwise generic request failed
       default:
