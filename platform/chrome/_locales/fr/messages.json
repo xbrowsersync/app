@@ -401,8 +401,8 @@
   "settings_BackupRestore_Title": {
     "message": "Sauvegarder et restaurer"
   },
-  "settings_BackupRestore_NotAvailable_Message": {
-    "message": "Sauvegarder et restaurer seront accessibles une fois que vous serez synchronisés."
+  "settings_NotAvailable_Message": {
+    "message": "Settings available when sync is enabled."
   },
   "button_Backup_Label": {
     "message": "Sauvegarde"
@@ -463,9 +463,6 @@
   },
   "settings_Sync_Title": {
     "message": "Synchroniser"
-  },
-  "settings_Sync_NotAvailable_Message": {
-    "message": "Les paramètres de synchronisation seront disponibles une fois que vous serez synchronisés."
   },
   "settings_Sync_Id_Label": {
     "message": "Sync ID"

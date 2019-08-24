@@ -17,11 +17,14 @@
   <platform name="android">
     <allow-intent href="market:*" />
     <config-file target="AndroidManifest.xml" parent="/manifest/application/activity[@android:name='MainActivity']">
-      <intent-filter>
+      <intent-filter android:label="@string/intent_label">
         <action android:name="android.intent.action.SEND" />
         <category android:name="android.intent.category.DEFAULT" />
         <data android:mimeType="text/plain" />
       </intent-filter>
+    </config-file>
+    <config-file target="res/values/strings.xml" parent="/*">
+      <string name="intent_label">Add Bookmark</string>
     </config-file>
     <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:name='MainActivity']" mode="merge">
       <activity android:windowSoftInputMode="adjustPan" />
@@ -52,7 +55,7 @@
   <preference name="BackgroundColor" value="0xff303030"/>
   <preference name="android-minSdkVersion" value="23" />
   <preference name="AndroidLaunchMode" value="singleTask" />
-  <preference name="DisallowOverscroll" value="true" />
-  <preference name="LoadUrlTimeoutValue" value="10000"/>
+  <preference name="DisallowOverscroll" value="false" />
+  <preference name="LoadUrlTimeoutValue" value="5000"/>
   <preference name="OverrideUserAgent" value="Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" />
 </widget>

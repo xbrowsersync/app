@@ -408,8 +408,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_BackupRestore_Title": {
       "message": "Back up and restore"
     },
-    "settings_BackupRestore_NotAvailable_Message": {
-      "message": "Back up and restore will be available here once you are synced."
+    "settings_NotAvailable_Message": {
+      "message": "Settings available when sync is enabled."
     },
     "button_Backup_Label": {
       "message": "Back up"
@@ -470,9 +470,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     },
     "settings_Sync_Title": {
       "message": "Sync"
-    },
-    "settings_Sync_NotAvailable_Message": {
-      "message": "Sync settings will be available here once you are synced."
     },
     "settings_Sync_Id_Label": {
       "message": "Sync ID"

@@ -11,8 +11,8 @@
     <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_Title) }}</h4>
     <div class="panel-content">
       <div class="setting-group" data-ng-if="!vm.sync.enabled && vm.utility.IsMobilePlatform(vm.platformName)">
-        <p class="description"
-          data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_NotAvailable_Message)"></p>
+        <p class="description text-center"
+          data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_NotAvailable_Message)"></p>
       </div>
       <div class="setting-group" data-ng-if="vm.sync.enabled">
         <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_Id_Label) }}</label>
@@ -275,8 +275,8 @@
     <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Title) }}</h4>
     <div class="panel-content">
       <div class="setting-group" data-ng-if="!vm.sync.enabled && vm.utility.IsMobilePlatform(vm.platformName)">
-        <p class="description"
-          data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_NotAvailable_Message)">
+        <p class="description text-center"
+          data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_NotAvailable_Message)">
         </p>
       </div>
       <div data-ng-show="vm.sync.enabled || !vm.utility.IsMobilePlatform(vm.platformName)">

@@ -14,7 +14,6 @@
   "dependencies": {
     "com-darryncampbell-cordova-plugin-intent": "^1.1.8",
     "cordova-android": "^8.0.0",
-    "cordova-plugin-customurlscheme": "^4.4.0",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-filepicker": "^1.1.6",
@@ -37,12 +36,6 @@
         "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
       },
       "cordova-plugin-filepicker": {},
-      "cordova-plugin-customurlscheme": {
-        "URL_SCHEME": "xbs",
-        "ANDROID_SCHEME": " ",
-        "ANDROID_HOST": " ",
-        "ANDROID_PATHPREFIX": "/"
-      },
       "cordova-plugin-native-spinner": {},
       "com-darryncampbell-cordova-plugin-intent": {},
       "cordova-plugin-inappbrowser": {},
