@@ -155,7 +155,7 @@
   "button_GetSyncId_Label": {
     "message": "Get a Sync ID"
   },
-  "Button_SyncUpdates_Label": {
+  "button_SyncUpdates_Label": {
     "message": "Update Sync"
   },
   "login_ConfirmSync_Title": {
@@ -430,6 +430,9 @@
   },
   "button_OK_Label": {
     "message": "Got it"
+  },
+  "button_Dismiss_Label": {
+    "message": "Dismiss"
   },
   "settings_BackupRestore_BackupSuccess_Message": {
     "message": "Wenn die Sicherung nicht automatisch heruntergeladen wird, Klicken Sie mit der rechten Maustaste auf den unten stehen den Link und wählen Sie 'Link speichern unter ..'."

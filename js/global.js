@@ -231,6 +231,7 @@ xBrowserSync.App.Global = function (platform) {
       Button_Continue_Label: 'button_Continue_Label',
       Button_Back_Label: 'button_Back_Label',
       Button_OK_Label: 'button_OK_Label',
+      Button_Dismiss_Label: 'button_Dismiss_Label',
       Button_Update_Label: 'button_Update_Label',
       Button_Cancel_Label: 'button_Cancel_Label',
       Button_UpdateServiceUrl_Label: 'button_UpdateServiceUrl_Label',

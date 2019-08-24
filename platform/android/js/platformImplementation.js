@@ -438,6 +438,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "button_OK_Label": {
       "message": "Got it"
     },
+    "button_Dismiss_Label": {
+      "message": "Dismiss"
+    },
     "settings_BackupRestore_BackupSuccess_Message": {
       "message": "Backup file {fileName} saved to internal storage."
     },
@@ -879,7 +882,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       .then(function (bookmarks, initialSyncFailed) {
         // If this sync initially failed, alert the user and refresh search results
         if (initialSyncFailed) {
-          vm.alert.display(platform.GetConstant(globals.Constants.ConnRestored_Title), platform.GetConstant(globals.Constants.ConnRestored_Message));
+          vm.alert.display(getConstant(globals.Constants.ConnRestored_Title), getConstant(globals.Constants.ConnRestored_Message), 'danger');
 
           // Update search results
           displayDefaultSearchState();
@@ -940,16 +943,16 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var getHelpPages = function () {
     var pages = [
-      platform.GetConstant(globals.Constants.Help_Page_Welcome_Android_Content),
-      platform.GetConstant(globals.Constants.Help_Page_FirstSync_Android_Content),
-      platform.GetConstant(globals.Constants.Help_Page_SyncId_Content),
-      platform.GetConstant(globals.Constants.Help_Page_ExistingId_Android_Content),
-      platform.GetConstant(globals.Constants.Help_Page_Service_Content),
-      platform.GetConstant(globals.Constants.Help_Page_Searching_Android_Content),
-      platform.GetConstant(globals.Constants.Help_Page_AddingBookmarks_Android_Content),
-      platform.GetConstant(globals.Constants.Help_Page_BackingUp_Content),
-      platform.GetConstant(globals.Constants.Help_Page_Desktop_Content),
-      platform.GetConstant(globals.Constants.Help_Page_FurtherSupport_Content)
+      getConstant(globals.Constants.Help_Page_Welcome_Android_Content),
+      getConstant(globals.Constants.Help_Page_FirstSync_Android_Content),
+      getConstant(globals.Constants.Help_Page_SyncId_Content),
+      getConstant(globals.Constants.Help_Page_ExistingId_Android_Content),
+      getConstant(globals.Constants.Help_Page_Service_Content),
+      getConstant(globals.Constants.Help_Page_Searching_Android_Content),
+      getConstant(globals.Constants.Help_Page_AddingBookmarks_Android_Content),
+      getConstant(globals.Constants.Help_Page_BackingUp_Content),
+      getConstant(globals.Constants.Help_Page_Desktop_Content),
+      getConstant(globals.Constants.Help_Page_FurtherSupport_Content)
     ];
 
     return pages;
@@ -1341,7 +1344,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     var onError = function (err) {
       // Display alert
       var errMessage = utility.GetErrorMessageFromException({ code: globals.ErrorCodes.FailedShareBookmark });
-      vm.alert.display(errMessage.title, err);
+      vm.alert.display(errMessage.title, errMessage.message, 'danger');
     };
 
     // Display share sheet
@@ -1442,7 +1445,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           return bookmarks.DisableSync()
             .then(function () {
               // Display alert
-              displayAlert(
+              displaySnackbar(
                 getConstant(globals.Constants.Error_SyncInterrupted_Title),
                 getConstant(globals.Constants.Error_SyncInterrupted_Message));
             });
@@ -1485,7 +1488,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             );
 
             // Display alert
-            vm.alert.display(null, getConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title));
+            vm.alert.display(getConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title), null, 'danger');
             deferred.resolve();
           }
         }
@@ -1558,9 +1561,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     // Set backup file change event
     document.getElementById('backupFile').addEventListener('change', backupFile_Change_Android, false);
 
-    // TODO: Uncomment once snackbar plugin is re-added
     // Use snackbar for alerts
-    //vm.alert.display = displayAlert;
+    vm.alert.display = displaySnackbar;
 
     // Reset network disconnected flag
     var networkDisconnected = !utility.IsNetworkConnected();
@@ -1573,9 +1575,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       .catch(failure);
   };
 
-  var displayAlert = function (title, description) {
-    var message = title ? title + '. ' + description : description;
-    cordova.plugins.snackbar.create(message, 'LONG', 'Dismiss', function () { });
+  var displaySnackbar = function (title, description) {
+    cordova.plugins.snackbar.create(
+      _.compact([title, description]).join('. '),
+      'INDEFINITE',
+      getConstant(globals.Constants.Button_Dismiss_Label),
+      function () { });
   };
 
   var enableLight = function () {
@@ -1754,7 +1759,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             // Display alert if not retrieving bookmark metadata
             if (!sharedUrl) {
               var errMessage = utility.GetErrorMessageFromException(err);
-              vm.alert.display(errMessage.title, errMessage.message);
+              vm.alert.display(errMessage.title, errMessage.message, 'danger');
             }
           })
           .finally(function () {
@@ -1764,7 +1769,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       .catch(function (err) {
         // Display alert
         var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message);
+        vm.alert.display(errMessage.title, errMessage.message, 'danger');
       });
   };
 
@@ -1861,7 +1866,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         // Don't display alert if url was shared or if network error encountered
         if (!sharedUrl && err.code !== globals.ErrorCodes.HttpRequestFailed) {
           var errMessage = utility.GetErrorMessageFromException(err);
-          vm.alert.display(errMessage.title, errMessage.message);
+          vm.alert.display(errMessage.title, errMessage.message, 'danger');
         }
       });
   };

@@ -1479,7 +1479,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       .catch(function (err) {
         // Display alert
         var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, err);
+        vm.alert.display(errMessage.title, errMessage.message, 'danger');
       })
       .finally(displayMainView);
   };

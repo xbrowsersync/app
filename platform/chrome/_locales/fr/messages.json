@@ -155,7 +155,7 @@
   "button_GetSyncId_Label": {
     "message": "Get a Sync ID"
   },
-  "Button_SyncUpdates_Label": {
+  "button_SyncUpdates_Label": {
     "message": "Update Sync"
   },
   "login_ConfirmSync_Title": {
@@ -430,6 +430,9 @@
   },
   "button_OK_Label": {
     "message": "Got it"
+  },
+  "button_Dismiss_Label": {
+    "message": "Dismiss"
   },
   "settings_BackupRestore_BackupSuccess_Message": {
     "message": "Si la sauvegarde ne se télécharge pas automatiquement, faites bouton droit sur le lien ci-dessous et cliquez sur 'Sauvegarder le lien en tant que...'."
