@@ -55,7 +55,7 @@
   <preference name="BackgroundColor" value="0xff303030"/>
   <preference name="android-minSdkVersion" value="23" />
   <preference name="AndroidLaunchMode" value="singleTask" />
-  <preference name="DisallowOverscroll" value="false" />
+  <preference name="DisallowOverscroll" value="true" />
   <preference name="LoadUrlTimeoutValue" value="5000"/>
   <preference name="OverrideUserAgent" value="Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" />
 </widget>

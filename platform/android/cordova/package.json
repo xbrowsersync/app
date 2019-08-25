@@ -39,11 +39,11 @@
       "cordova-plugin-native-spinner": {},
       "com-darryncampbell-cordova-plugin-intent": {},
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-network-information": {},
       "cordova-plugin-nativestorage": {},
       "cordova-plugin-whitelist": {},
       "cordova-plugin-device": {},
-      "cordova-plugin-snackbar": {}
+      "cordova-plugin-snackbar": {},
+      "cordova-plugin-network-information": {}
     },
     "platforms": [
       "android"

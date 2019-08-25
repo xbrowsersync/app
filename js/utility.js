@@ -343,6 +343,9 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
       case globals.ErrorCodes.FailedShareUrlNotSynced:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title);
         break;
+      case globals.ErrorCodes.FailedRefreshBookmarks:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedRefreshBookmarks_Title);
+        break;
       case globals.ErrorCodes.FailedCreateLocalBookmarks:
       case globals.ErrorCodes.FailedGetLocalBookmarks:
       case globals.ErrorCodes.FailedRemoveLocalBookmarks:
@@ -452,7 +455,10 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   };
 
   var isNetworkConnected = function () {
-    return window.navigator.onLine;
+    return window.navigator.connection.type ?
+      (window.navigator.connection.type !== Connection.NONE &&
+        window.navigator.connection.type !== Connection.UNKNOWN) :
+      window.navigator.onLine;
   };
 
   var isPlatform = function (currentPlatform, platformName) {

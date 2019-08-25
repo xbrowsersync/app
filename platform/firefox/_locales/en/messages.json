@@ -676,5 +676,17 @@
   },
   "error_FailedRestoreData_Message": {
     "message": "The backup data provided is not in an expected format."
+  },
+  "error_FailedShareUrl_Title": {
+    "message": "Unable to retrieve shared bookmark URL"
+  },
+  "error_FailedShareUrlNotSynced_Title": {
+    "message": "You must be synced to add a bookmark"
+  },
+  "error_FailedRefreshBookmarks_Title": {
+    "message": "Couldn’t retrieve updates"
+  },
+  "error_NoConnection_Title": {
+    "message": "No service connection"
   }
 }

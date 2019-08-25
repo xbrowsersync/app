@@ -283,7 +283,9 @@ xBrowserSync.App.Global = function (platform) {
       Error_FailedRestoreData_Title: 'error_FailedRestoreData_Title',
       Error_FailedRestoreData_Message: 'error_FailedRestoreData_Message',
       Error_FailedShareUrl_Title: 'error_FailedShareUrl_Title',
-      Error_FailedShareUrlNotSynced_Title: 'error_FailedShareUrlNotSynced_Title'
+      Error_FailedShareUrlNotSynced_Title: 'error_FailedShareUrlNotSynced_Title',
+      Error_FailedRefreshBookmarks_Title: 'error_FailedRefreshBookmarks_Title',
+      Error_NoConnection_Title: 'error_NoConnection_Title'
     },
     ErrorCodes: {
       HttpRequestFailed: 10000,
@@ -320,6 +322,7 @@ xBrowserSync.App.Global = function (platform) {
       FailedBackupData: 10304,
       FailedGetDataToRestore: 10305,
       FailedRestoreData: 10306,
+      FailedRefreshBookmarks: 10307,
       FailedShareUrl: 10400,
       FailedShareUrlNotSynced: 10401,
       FailedRegisterAutoUpdates: 10500,
