@@ -408,11 +408,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return $q(function (resolve, reject) {
       chrome.runtime.sendMessage(syncData, function (response) {
         if (response.success) {
-          resolve(response.bookmarks);
+          return resolve(response.bookmarks);
         }
-        else {
-          reject(response.error);
-        }
+
+        reject(response.error);
       });
     });
   };
@@ -1383,7 +1382,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var getNumContainersBeforeBookmarkIndex = function (parentId, bookmarkIndex) {
     return getLocalBookmarkTree(parentId)
       .then(function (localBookmark) {
-        // TODO: Refactor to account for given index
         var numContainers = _.filter(localBookmark.children, bookmarks.XBookmarkIsContainer).length;
         return numContainers;
       });

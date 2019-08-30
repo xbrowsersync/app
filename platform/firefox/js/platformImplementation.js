@@ -398,11 +398,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     syncData.command = command || globals.Commands.SyncBookmarks;
     return browser.runtime.sendMessage(syncData)
       .then(function (response) {
-        if (!response.success) {
-          throw response.error;
+        if (response.success) {
+          return response.bookmarks;
         }
 
-        return response.bookmarks;
+        throw response.error;
       });
   };
 
@@ -1258,7 +1258,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var getNumContainersBeforeBookmarkIndex = function (parentId, bookmarkIndex) {
     return getLocalBookmarkTree(parentId)
       .then(function (localBookmark) {
-        // TODO: Refactor to account for given index
         var numContainers = _.filter(localBookmark.children, bookmarks.XBookmarkIsContainer).length;
         return numContainers;
       });

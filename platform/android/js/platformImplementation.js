@@ -12,7 +12,7 @@ SpinnerDialog.show = function () { };
 xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, platform, globals, utility, bookmarks) {
   'use strict';
 
-  var $scope, autoUpdatesInterval, currentUrl, loadingId, vm;
+  var $scope, currentUrl, loadingId, vm;
 
   var constants = {
     "title": {
@@ -543,11 +543,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "working_Title": {
       "message": "Syncing..."
     },
-    "connRestored_Title": {
-      "message": "Connection restored"
+    "workingOffline_Message": {
+      "message": "Working offline, any change will be synced once connection is restored."
     },
-    "connRestored_Message": {
-      "message": "Your xBrowserSync changes have been synced."
+    "uncommittedSyncsProcessed_Message": {
+      "message": "Connection to service restored, changes synced successfully."
     },
     "bookmark_Metadata_Message": {
       "message": "Fetching bookmark properties, touch to cancel."
@@ -559,16 +559,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Sorry about that, if the problem persists you can <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report an issue</a>."
     },
     "error_HttpRequestFailed_Title": {
-      "message": "Connection lost"
+      "message": "Connection to service lost"
     },
     "error_HttpRequestFailed_Message": {
-      "message": "Couldn’t connect to the xBrowserSync service, check the service status in the Settings panel."
-    },
-    "error_HttpRequestFailedWhileUpdating_Title": {
-      "message": "Connection lost"
-    },
-    "error_HttpRequestFailedWhileUpdating_Message": {
-      "message": "Sync will be retried automatically when connection is restored."
+      "message": "Check your network connection and try again."
     },
     "error_TooManyRequests_Title": {
       "message": "Service request limit hit"
@@ -630,22 +624,22 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "error_OutOfSync_Message": {
       "message": "Local data was out of sync but has now been refreshed. Your local bookmarks have now been refreshed so you may need to redo the previous change."
     },
-    "error_ApiInvalid_Title": {
+    "error_InvalidService_Title": {
       "message": "Invalid xBrowserSync service"
     },
-    "error_ApiInvalid_Message": {
-      "message": "The selected service URL is not pointing to a valid xBrowserSync service."
+    "error_InvalidService_Message": {
+      "message": "The service URL is not a valid xBrowserSync service."
     },
-    "error_ApiOffline_Title": {
+    "error_ServiceOffline_Title": {
       "message": "Service offline"
     },
-    "error_ApiOffline_Message": {
-      "message": "The service is currently offline. Check the service status in the Settings panel for more information or try again later."
+    "error_ServiceOffline_Message": {
+      "message": "The xBrowserSync service is currently offline, try again later."
     },
-    "error_ApiVersionNotSupported_Title": {
+    "error_UnsupportedServiceApiVersion_Title": {
       "message": "Service not supported"
     },
-    "error_ApiVersionNotSupported_Message": {
+    "error_UnsupportedServiceApiVersion_Message": {
       "message": "This service is running an unsupported API version."
     },
     "error_ContainerChanged_Title": {
@@ -665,12 +659,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     },
     "error_FailedGetPageMetadata_Message": {
       "message": "Try sharing the URL again or enter metadata manually."
-    },
-    "error_SyncInterrupted_Title": {
-      "message": "Sync interrupted"
-    },
-    "error_SyncInterrupted_Message": {
-      "message": "A previous sync was interrupted and failed to complete. Re-enable sync to restore your synced data."
     },
     "error_ScanFailed_Message": {
       "message": "Scan failed. Check permission has been granted and try again."
@@ -699,8 +687,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "error_FailedRefreshBookmarks_Title": {
       "message": "Couldn’t retrieve updates"
     },
-    "error_NoConnection_Title": {
-      "message": "No service connection"
+    "error_UncommittedSyncs_Title": {
+      "message": "Sync uncommitted"
+    },
+    "error_UncommittedSyncs_Message": {
+      "message": "Changes will be synced once connection to service is restored."
     }
   };
 
@@ -739,7 +730,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Scanner.Stop = stopScanning;
     platform.Scanner.ToggleLight = toggleLight;
     platform.SelectFile = selectBackupFile;
-    platform.Sync.Await = undefined;
+    platform.Sync.Await = awaitSync;
     platform.Sync.Current = getCurrentSync;
     platform.Sync.Execute = executeSync;
   };
@@ -778,6 +769,17 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
       resolve(xBookmarks);
     });
+  };
+
+  var awaitSync = function (syncToAwait) {
+    return bookmarks.Sync()
+      .then(function () {
+        return syncToAwait.deferred.promise;
+      })
+      .then(function () {
+        utility.LogInfo('Awaited sync complete: ' + syncToAwait.uniqueId);
+        return true;
+      });
   };
 
   var clearBookmarks = function () {
@@ -877,26 +879,15 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
     // Sync bookmarks
     return bookmarks.Sync(syncData)
-      .then(function (bookmarks, initialSyncFailed) {
-        // TODO: uncomment
-        // If this sync initially failed, alert the user and refresh search results
-        //if (initialSyncFailed) {
-        //  vm.alert.display(getConstant(globals.Constants.ConnRestored_Title), getConstant(globals.Constants.ConnRestored_Message), 'danger');
-
-        // Update search results
-        displayDefaultSearchState();
-        //}
-
-        return bookmarks;
-      })
+      .then(displayDefaultSearchState)
       .catch(function (err) {
-        // TODO: Test this
-        // Don't display another alert if sync retry failed
-        /*if (!syncData.changeInfo && err.code === globals.ErrorCodes.HttpRequestFailedWhileUpdating) {
+        // Display more informative message when sync uncommitted
+        if (err.code === globals.ErrorCodes.SyncUncommitted) {
+          displaySnackbar(getConstant(globals.Constants.Error_UncommittedSyncs_Message));
           return;
-        }*/
+        }
 
-        return $q.reject(err);
+        throw err;
       });
   };
 
@@ -1156,7 +1147,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     deferred = deferred || $q.defer();
 
     // If network disconnected fail immediately, otherwise retrieve page metadata
-    if (!utility.isNetworkConnected()) {
+    if (!utility.IsNetworkConnected()) {
       handleResponse(null, 'Network disconnected.');
     }
     else {
@@ -1260,17 +1251,17 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return $q(function (resolve, reject) {
       QRScanner.prepare(function (err, status) {
         if (err) {
-          var error = new Error(err._message || err.name || err.code);
-          utility.LogError(error, 'platform.startScanning');
-          return reject(error);
+          var authError = new Error(err._message || err.name || err.code);
+          utility.LogError(authError, 'platform.startScanning');
+          return reject(authError);
         }
 
         if (status.authorized) {
           QRScanner.scan(function (err, scannedText) {
             if (err) {
-              var error = new Error(err._message || err.name || err.code);
-              utility.LogError(error, 'platform.startScanning');
-              return reject(error);
+              var scanError = new Error(err._message || err.name || err.code);
+              utility.LogError(scanError, 'platform.startScanning');
+              return reject(scanError);
             }
 
             QRScanner.pausePreview(function () {
@@ -1290,9 +1281,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             }, 200);
           });
         } else {
-          var error = new Error('Not authorised');
-          utility.LogError(error, 'platform.startScanning');
-          reject(error);
+          var noAuthError = new Error('Not authorised');
+          utility.LogError(noAuthError, 'platform.startScanning');
+          reject(noAuthError);
         }
       });
     })
@@ -1338,20 +1329,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var startAutoUpdates = function () {
-    // TODO: is this needed?
-    // Check for updates at intervals
-    //autoUpdatesInterval = $interval(getLatestUpdates, globals.Alarm.Period * 60000);
     return $q.resolve();
   };
 
   var stopAutoUpdates = function () {
-    if (!autoUpdatesInterval) {
-      return;
-    }
 
-    // Cancel interval
-    $interval.cancel(autoUpdatesInterval);
-    autoUpdatesInterval = undefined;
   };
 
   var toggleLight = function (switchOn) {
@@ -1419,27 +1401,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
-  var checkForInterruptedSync = function () {
-    // TODO: Android: can we remove this?
-    return platform.LocalStorage.Get(globals.CacheKeys.IsSyncing)
-      .then(function (isSyncing) {
-        // Check if a sync was interrupted
-        if (isSyncing) {
-          // Display login panel
-          vm.view.displayMainView();
-
-          // Disable sync
-          return bookmarks.DisableSync()
-            .then(function () {
-              // Display alert
-              displaySnackbar(
-                getConstant(globals.Constants.Error_SyncInterrupted_Title),
-                getConstant(globals.Constants.Error_SyncInterrupted_Message));
-            });
-        }
-      });
-  };
-
   var checkForSharedUrl = function (syncEnabled) {
     var deferred = $q.defer();
 
@@ -1488,42 +1449,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return deferred.promise;
   };
 
-  var checkForUpdates = function () {
-    // Check if bookmarks need updating, return immediately if network is disconnected
-    bookmarks.CheckForUpdates()
-      .then(function (updatesAvailable) {
-        if (!updatesAvailable) {
-          return;
-        }
-
-        // Show loading overlay if currently on the search panel
-        if (vm.view.current === vm.view.views.search) {
-          displayLoading('syncingUpdates');
-        }
-
-        // Get bookmark updates
-        return executeSync({ type: globals.SyncType.Pull })
-          .then(function () {
-            // Update search results if currently on the search panel and no query entered
-            if (vm.view.current === vm.view.views.search && !vm.search.query) {
-              refreshSearchResults();
-            }
-          })
-          .catch(function (err) {
-            err.code = globals.ErrorCodes.FailedRefreshBookmarks;
-            return $q.reject(err);
-          });
-      })
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      })
-      .finally(function () {
-        hideLoading('syncingUpdates');
-      });
-  };
-
   var disableLight = function () {
     return $q(function (resolve, reject) {
       QRScanner.disableLight(function (err) {
@@ -1551,6 +1476,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     vm.search.execute();
   };
 
+  var displayErrorAlert = function (err) {
+    // Display alert
+    var errMessage = utility.GetErrorMessageFromException(err);
+    vm.alert.display(errMessage.title, errMessage.message, 'danger');
+  };
+
   var deviceReady = function (viewModel, scope, success, failure) {
     // Set global variables
     vm = viewModel;
@@ -1562,6 +1493,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     // Configure events
     document.addEventListener('backbutton', handleBackButton, false);
     document.addEventListener('touchstart', handleTouchStart, false);
+    document.addEventListener('offline', handleOffline, false);
+    document.addEventListener('online', handleOnline, false);
 
     // Set required events to mobile app handlers
     vm.events.bookmarkPanel_Close_Click = bookmarkPanel_Close_Click;
@@ -1594,7 +1527,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var displaySnackbar = function (title, description, level) {
-    var message = title ? title + '.' : description;
+    var message = (title || description).replace(/\.$/, '') + '.';
     var isError = level === 'danger';
 
     cordova.plugins.snackbar.create(
@@ -1619,24 +1552,35 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var getLatestUpdates = function () {
+    // Check if bookmarks need updating, return immediately if network is disconnected
     return bookmarks.CheckForUpdates()
       .then(function (updatesAvailable) {
         if (!updatesAvailable) {
           return;
         }
 
-        // Show loading overlay if currently on the search panel and no query present
+        // Show loading overlay if currently on the search panel
         if (vm.view.current === vm.view.views.search) {
-          displayLoading('syncingUpdates');
+          displayLoading();
         }
 
         // Get bookmark updates
-        return executeSync({ type: globals.SyncType.Pull });
+        return executeSync({ type: globals.SyncType.Pull })
+          .then(function () {
+            // Update search results if currently on the search panel and no query entered
+            if (vm.view.current === vm.view.views.search && !vm.search.query) {
+              refreshSearchResults();
+            }
+
+            return true;
+          })
+          .catch(function (err) {
+            err.code = globals.ErrorCodes.FailedRefreshBookmarks;
+            throw err;
+          });
       })
-      // Update search results
-      .then(displayDefaultSearchState)
       .finally(function () {
-        hideLoading('syncingUpdates');
+        hideLoading();
       });
   };
 
@@ -1654,6 +1598,58 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       event.preventDefault();
       navigator.app.exitApp();
     }
+  };
+
+  var handleOffline = function () {
+    utility.LogInfo('Offline');
+    displaySnackbar(getConstant(globals.Constants.WorkingOffline_Message));
+  };
+
+  var handleOnline = function (throwErrors) {
+    if (!utility.IsNetworkConnected()) {
+      return $q.resolve();
+    }
+
+    utility.LogInfo('Online');
+
+    // Check if sync enabled before checking for uncommited updates
+    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+      .then(function (syncEnabled) {
+        if (!syncEnabled) {
+          return;
+        }
+
+        // Commit any updates made whilst offline
+        return bookmarks.CheckForUncommittedSyncs()
+          .then(function (updatesSynced) {
+            if (updatesSynced) {
+              displaySnackbar(getConstant(globals.Constants.UncommittedSyncsProcessed_Message));
+            }
+            else {
+              // If no uncommitted updates, check for latest updates 
+              return getLatestUpdates();
+            }
+          })
+          .catch(function (err) {
+            // If local data out of sync, clear uncommitted syncs flag and refresh local data
+            if (bookmarks.CheckIfRefreshSyncedDataOnError(err)) {
+              platform.LocalStorage.Set(globals.CacheKeys.UncommittedSyncs);
+              return refreshLocalSyncData()
+                .then(function () {
+                  throw err;
+                });
+            }
+
+            throw err;
+          });
+      })
+      .catch(function (err) {
+        if (throwErrors === true) {
+          throw err;
+        }
+
+        displayErrorAlert(err);
+      });
   };
 
   var handleTouchStart = function (event) {
@@ -1711,17 +1707,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           return;
         }
 
-        // TODO: Add back in
-        // Check if a sync was interrupted
-        /*checkForInterruptedSync()*/
-        //.then(function () {
-
-        // If sync enabled start regular updates check and display default search results
-        if (syncEnabled) {
-          // TODO: do we need this?
-          //startAutoUpdates();
-          displayDefaultSearchState();
-        }
+        // Display default search results
+        displayDefaultSearchState();
 
         // Check if a url was shared
         // TODO: Add uncomment when intents working again
@@ -1734,19 +1721,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             }
           });*/
 
-        // If network is online, check for updates
-        if (utility.IsNetworkConnected()) {
-          $timeout(checkForUpdates);
-        }
-        else {
-          displaySnackbar(getConstant(globals.Constants.Error_NoConnection_Title));
-        }
+        // If network is online, commit any updates made whilst offline
+        handleOnline(true)
+          .catch(displayErrorAlert);
       })
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      });
+      .catch(displayErrorAlert);
   };
 
   var onUpgradeHandler = function (currentVersion, newVersion) {
@@ -1764,6 +1743,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           setInLocalStorage(globals.CacheKeys.AppVersion, newVersion),
           setInLocalStorage(globals.CacheKeys.DisplayUpdated, true)
         ]);
+      });
+  };
+
+  var refreshLocalSyncData = function () {
+    return executeSync({ type: globals.SyncType.Pull })
+      .then(function () {
+        utility.LogInfo('Local sync data refreshed');
       });
   };
 
@@ -1803,19 +1789,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           vm.view.change(vm.view.views.bookmark);
         }*/
 
-        // If network is online, check for updates
-        if (utility.IsNetworkConnected()) {
-          $timeout(checkForUpdates);
-        }
-        else {
-          displaySnackbar(getConstant(globals.Constants.Error_NoConnection_Title));
+        // Check if network is offline
+        if (!utility.IsNetworkConnected()) {
+          handleOffline();
         }
       })
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      });
+      .catch(displayErrorAlert);
   };
 
   var syncForm_EnableSync_Click = function () {

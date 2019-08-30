@@ -427,6 +427,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
             bookmark: bookmarkToCreate
           }
         })
+          .then(function (updatedBookmarks) {
+            // Update cached bookmarks
+            return bookmarks.UpdateCache(updatedBookmarks);
+          })
           .then(function () {
             // Set bookmark active status if current bookmark is current page
             return platform.GetCurrentUrl();
@@ -485,6 +489,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         id: bookmarkToDelete.id
       }
     })
+      .then(function (updatedBookmarks) {
+        // Update cached bookmarks
+        return bookmarks.UpdateCache(updatedBookmarks);
+      })
       .then(function () {
         // Set bookmark active status if current bookmark is current page
         return platform.GetCurrentUrl();
@@ -499,21 +507,21 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       })
       .then(function () {
         // Find and delete the deleted bookmark element in the search results on mobile apps
-        if (utility.IsMobilePlatform(vm.platformName)) {
-          if (vm.search.results && vm.search.results.length >= 0) {
-            var deletedBookmarkIndex = _.findIndex(vm.search.results, function (result) {
-              return result.id === bookmarkToDelete.id;
-            });
+        //if (utility.IsMobilePlatform(vm.platformName)) {
+        /*if (vm.search.results && vm.search.results.length >= 0) {
+          var deletedBookmarkIndex = _.findIndex(vm.search.results, function (result) {
+            return result.id === bookmarkToDelete.id;
+          });
 
-            if (deletedBookmarkIndex >= 0) {
-              vm.search.results[deletedBookmarkIndex].class = 'deleted';
-              $timeout(function () {
-                // Remove bookmark from results
-                vm.search.results.splice(deletedBookmarkIndex, 1);
-              }, 500);
-            }
+          if (deletedBookmarkIndex >= 0) {
+            vm.search.results[deletedBookmarkIndex].class = 'deleted';
+            $timeout(function () {
+              // Remove bookmark from results
+              vm.search.results.splice(deletedBookmarkIndex, 1);
+            }, 500);
           }
-        }
+        }*/
+        //}
       })
       .catch(displayAlertErrorHandler);
   };
@@ -560,6 +568,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
             bookmark: bookmarkToUpdate
           }
         })
+          .then(function (updatedBookmarks) {
+            // Update cached bookmarks
+            return bookmarks.UpdateCache(updatedBookmarks);
+          })
           .then(function () {
             // Set bookmark active status if current bookmark is current page
             return platform.GetCurrentUrl();
@@ -1020,9 +1032,11 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
             }, 150);
           }
           else {
+            // Focus on password field
             $timeout(function () {
-              // Focus on password field
-              document.querySelector('.active-login-form  input[name="txtPassword"]').focus();
+              if (!utility.IsMobilePlatform(vm.platformName)) {
+                document.querySelector('.active-login-form  input[name="txtPassword"]').focus();
+              }
             }, 100);
           }
         }
@@ -1084,7 +1098,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         globals.CacheKeys.SyncId
       ]),
       utility.GetServiceUrl(),
-      utility.IsPlatform(globals.Platforms.Chrome) ? platform.Permissions.Check() : $q.resolve(false)
+      utility.IsPlatform(vm.platformName, globals.Platforms.Chrome) ? platform.Permissions.Check() : $q.resolve(false)
     ])
       .then(function (data) {
         var syncBookmarksToolbar = data[0];
@@ -1119,10 +1133,14 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
             })
             .catch(function (err) {
               // Don't display alert if sync failed due to network connection
-              if (err.code !== globals.ErrorCodes.HttpRequestFailed) {
-                var errMessage = utility.GetErrorMessageFromException(err);
-                displayAlert(errMessage.title, errMessage.message);
+              if (utility.IsNetworkConnectionError(err) ||
+                err.code == globals.ErrorCodes.InvalidService ||
+                err.code == globals.ErrorCodes.ServiceOffline) {
+                return;
               }
+
+              var errMessage = utility.GetErrorMessageFromException(err);
+              displayAlert(errMessage.title, errMessage.message);
             });
         }
 
@@ -1260,11 +1278,18 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   var queueSync = function (syncData, command) {
     command = command || globals.Commands.SyncBookmarks;
     return platform.Sync.Execute(syncData, command)
-      .then(function (syncedBookmarks) {
-        if (command == globals.Commands.SyncBookmarks ||
-          command == globals.Commands.RestoreBookmarks) {
-          return bookmarks.UpdateCache(syncedBookmarks);
+      .catch(function (err) {
+        // If sync was processed but not committed (offline) catch the error but display an alert
+        if (err.code === globals.ErrorCodes.SyncUncommitted) {
+          $timeout(function () {
+            displayAlertErrorHandler(err);
+          }, 100);
+
+          // Return updated bookmarks
+          return err.bookmarks;
         }
+
+        throw err;
       })
       .finally(function () {
         platform.Interface.Loading.Hide();
@@ -1448,6 +1473,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         id: bookmark.id
       }
     })
+      .then(function (updatedBookmarks) {
+        // Update cached bookmarks
+        return bookmarks.UpdateCache(updatedBookmarks);
+      })
       .catch(displayAlertErrorHandler);
 
     // Find and remove the deleted bookmark element in the search results
@@ -1865,7 +1894,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       vm.alert.display(errMessage.title, errMessage.message, 'danger');
 
       // If creds were incorrect, focus on password field
-      if (err.code === globals.ErrorCodes.InvalidCredentials) {
+      if (err.code === globals.ErrorCodes.InvalidCredentials &&
+        !utility.IsMobilePlatform(vm.platformName)) {
         $timeout(function () {
           document.querySelector('.login-form-existing input[name="txtPassword"]').select();
         }, 100);
@@ -2086,7 +2116,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         });
       })
       .catch(function (err) {
-        if (err && err.code === globals.ErrorCodes.ApiOffline) {
+        if (err && err.code === globals.ErrorCodes.ServiceOffline) {
           vm.settings.service.status = globals.ServiceStatus.Offline;
         }
         else {
@@ -2224,10 +2254,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       .catch(function (err) {
         if (err && err.code != null) {
           switch (err.code) {
-            case globals.ErrorCodes.ApiOffline:
+            case globals.ErrorCodes.ServiceOffline:
               // If API is offline still allow setting as current service
               return true;
-            case globals.ErrorCodes.ApiVersionNotSupported:
+            case globals.ErrorCodes.UnsupportedServiceApiVersion:
               vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', false);
               break;
             case globals.ErrorCodes.InvalidService:

@@ -148,6 +148,13 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         // Uncompress the decrypted data and return
         var decryptedData = LZUTF8.decompress(new Uint8Array(decryptedBytes));
         return decryptedData;
+      })
+      .catch(function (err) {
+        logInfo('Decryption failed.');
+        return $q.reject({
+          code: globals.ErrorCodes.InvalidCredentials,
+          stack: err.stack
+        });
       });
   };
 
@@ -253,13 +260,10 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     err.details = (!err.details) ? '' : err.details;
 
     switch (err.code) {
+      case globals.ErrorCodes.NetworkOffline:
       case globals.ErrorCodes.HttpRequestFailed:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_HttpRequestFailed_Title);
         errorMessage.message = platform.GetConstant(globals.Constants.Error_HttpRequestFailed_Message);
-        break;
-      case globals.ErrorCodes.HttpRequestFailedWhileUpdating:
-        errorMessage.title = platform.GetConstant(globals.Constants.Error_HttpRequestFailedWhileUpdating_Title);
-        errorMessage.message = platform.GetConstant(globals.Constants.Error_HttpRequestFailedWhileUpdating_Message);
         break;
       case globals.ErrorCodes.TooManyRequests:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_TooManyRequests_Title);
@@ -305,17 +309,17 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         errorMessage.title = platform.GetConstant(globals.Constants.Error_OutOfSync_Title);
         errorMessage.message = platform.GetConstant(globals.Constants.Error_OutOfSync_Message);
         break;
-      case globals.ErrorCodes.ApiInvalid:
-        errorMessage.title = platform.GetConstant(globals.Constants.Error_ApiInvalid_Title);
-        errorMessage.message = platform.GetConstant(globals.Constants.Error_ApiInvalid_Message);
+      case globals.ErrorCodes.InvalidService:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_InvalidService_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_InvalidService_Message);
         break;
-      case globals.ErrorCodes.ApiOffline:
-        errorMessage.title = platform.GetConstant(globals.Constants.Error_ApiOffline_Title);
-        errorMessage.message = platform.GetConstant(globals.Constants.Error_ApiOffline_Message);
+      case globals.ErrorCodes.ServiceOffline:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_ServiceOffline_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_ServiceOffline_Message);
         break;
-      case globals.ErrorCodes.ApiVersionNotSupported:
-        errorMessage.title = platform.GetConstant(globals.Constants.Error_ApiVersionNotSupported_Title);
-        errorMessage.message = platform.GetConstant(globals.Constants.Error_ApiVersionNotSupported_Message);
+      case globals.ErrorCodes.UnsupportedServiceApiVersion:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_UnsupportedServiceApiVersion_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_UnsupportedServiceApiVersion_Message);
         break;
       case globals.ErrorCodes.FailedGetPageMetadata:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedGetPageMetadata_Title);
@@ -345,6 +349,10 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         break;
       case globals.ErrorCodes.FailedRefreshBookmarks:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedRefreshBookmarks_Title);
+        break;
+      case globals.ErrorCodes.SyncUncommitted:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_UncommittedSyncs_Title);
+        errorMessage.message = platform.GetConstant(globals.Constants.Error_UncommittedSyncs_Message);
         break;
       case globals.ErrorCodes.FailedCreateLocalBookmarks:
       case globals.ErrorCodes.FailedGetLocalBookmarks:
@@ -461,6 +469,10 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
       window.navigator.onLine;
   };
 
+  var isNetworkConnectionError = function (err) {
+    return err.code === globals.ErrorCodes.HttpRequestFailed || err.code === globals.ErrorCodes.NetworkOffline;
+  };
+
   var isPlatform = function (currentPlatform, platformName) {
     return currentPlatform === platformName;
   };
@@ -519,7 +531,6 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         console.warn(message);
         break;
       case globals.LogType.Trace:
-      /* falls through */
       default:
         console.info(message);
     }
@@ -581,7 +592,6 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         messageLogText += '[warn]\t';
         break;
       case globals.LogType.Trace:
-      /* falls through */
       default:
         messageLogText += '[trace]\t';
     }
@@ -656,6 +666,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     GetVersionTag: getVersionTag,
     IsMobilePlatform: isMobilePlatform,
     IsNetworkConnected: isNetworkConnected,
+    IsNetworkConnectionError: isNetworkConnectionError,
     IsPlatform: isPlatform,
     LogError: logError,
     LogInfo: logInfo,

@@ -104,7 +104,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       bookmarks.CheckForUpdates()
         .then(resolve)
         .catch(function (err) {
-          // If network disconnected, retry once
+          // If request failed, retry once
           if (err.code !== globals.ErrorCodes.HttpRequestFailed) {
             return reject(err);
           }
@@ -442,8 +442,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       getLatestUpdates()
         .catch(function (err) {
           // Don't display alert if sync failed due to network connection
-          if (err.code === globals.ErrorCodes.HttpRequestFailed ||
-            err.code === globals.ErrorCodes.HttpRequestFailedWhileUpdating) {
+          if (utility.IsNetworkConnectionError(err)) {
             return;
           }
 
@@ -465,8 +464,6 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   var onBookmarkEventHandler = function (syncFunction, args) {
     return syncFunction.apply(this, args)
       .catch(function (err) {
-        utility.LogError(err, 'background.onBookmarkEventHandler');
-
         // Display alert
         var errMessage = utility.GetErrorMessageFromException(err);
         displayAlert(errMessage.title, errMessage.message);

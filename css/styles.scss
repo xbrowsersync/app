@@ -153,7 +153,8 @@ body {
       font-size: 0.9rem;
 
       h4 {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0 !important;
+        margin-top: -0.4rem;
       }
 
       p {
@@ -180,7 +181,7 @@ body {
 
       @media (min-width: $width-mobile-small + 1) {
         font-size: 1.5rem;
-        line-height: 2rem;
+        line-height: 2.5rem;
       }
 
       i {
@@ -197,7 +198,7 @@ body {
     }
 
     h4 {
-      margin-bottom: 0;
+      margin-bottom: 0.5rem;
     }
   }
 
@@ -454,16 +455,15 @@ body {
   }
 
   .validation {
-    font-size: 0.8rem;
-    line-height: 1.2rem;
+    font-size: 0.7rem;
+    line-height: 1.1rem;
     position: absolute;
-    bottom: -0.8rem;
     left: 50%;
-    transform: translate(-50%, 0);
+    transform: translate(-50%, -50%);
     white-space: nowrap;
     color: #fff;
     background: $colour-danger;
-    padding: 0.1rem 0.5rem 0.2rem;
+    padding: 0 0.5rem;
     z-index: 20;
     border-radius: $border-radius-input;
   }

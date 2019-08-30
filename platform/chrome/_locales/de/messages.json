@@ -536,11 +536,11 @@
   "working_Title": {
     "message": "Syncing..."
   },
-  "connRestored_Title": {
-    "message": "Verbindung wiederhergestellt"
+  "workingOffline_Message": {
+    "message": "Working offline, any change will be synced once connection is restored."
   },
-  "connRestored_Message": {
-    "message": "Ihre xBrowserSync Änderungen wurden synchronisiert."
+  "uncommittedSyncsProcessed_Message": {
+    "message": "Connection to service restored, changes synced successfully."
   },
   "error_Default_Title": {
     "message": "Etwas ist schief gelaufen"
@@ -549,16 +549,10 @@
     "message": "Sorry about that, if the problem persists you can <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report an issue</a>."
   },
   "error_HttpRequestFailed_Title": {
-    "message": "Verbindung verloren"
+    "message": "Connection to service lost"
   },
   "error_HttpRequestFailed_Message": {
-    "message": "Konnte keine Verbindung zum xBrowserSync Dienst herstellen. Prüfen Sie den Dienst-Status in den Einstellungen."
-  },
-  "error_HttpRequestFailedWhileUpdating_Title": {
-    "message": "Verbindung verloren"
-  },
-  "error_HttpRequestFailedWhileUpdating_Message": {
-    "message": "Die Synchronisierung wird automatisch wieder aufgenommen, sobald die Verbindung wiederhergestellt ist."
+    "message": "Check your network connection and try again."
   },
   "error_TooManyRequests_Title": {
     "message": "Service request limit hit"
@@ -620,22 +614,22 @@
   "error_OutOfSync_Message": {
     "message": "Local data was out of sync but has now been refreshed. Your local bookmarks have now been refreshed so you may need to redo the previous change."
   },
-  "error_ApiInvalid_Title": {
+  "error_InvalidService_Title": {
     "message": "Invalid xBrowserSync service"
   },
-  "error_ApiInvalid_Message": {
-    "message": "The selected service URL is not pointing to a valid xBrowserSync service."
+  "error_InvalidService_Message": {
+    "message": "The service URL is not a valid xBrowserSync service."
   },
-  "error_ApiOffline_Title": {
+  "error_ServiceOffline_Title": {
     "message": "Service offline"
   },
-  "error_ApiOffline_Message": {
-    "message": "The service is currently offline. Check the service status in the Settings panel for more information or try again later."
+  "error_ServiceOffline_Message": {
+    "message": "The xBrowserSync service is currently offline, try again later."
   },
-  "error_ApiVersionNotSupported_Title": {
+  "error_UnsupportedServiceApiVersion_Title": {
     "message": "Service not supported"
   },
-  "error_ApiVersionNotSupported_Message": {
+  "error_UnsupportedServiceApiVersion_Message": {
     "message": "This service is running an unsupported API version."
   },
   "error_ContainerChanged_Title": {
@@ -655,12 +649,6 @@
   },
   "error_FailedGetPageMetadata_Message": {
     "message": "URL is invalid or webpage data could not be retrieved."
-  },
-  "error_SyncInterrupted_Title": {
-    "message": "Sync unterbrochen"
-  },
-  "error_SyncInterrupted_Message": {
-    "message": "Eine Rücksynchronisation wurde unterbrochen und ist nicht komplett. Reaktivieren Sie den Sync, um Ihre synchronisierten Daten wiederherzustellen."
   },
   "error_ScanFailed_Message": {
     "message": "Scan failed. Check permission has been granted and try again."
@@ -686,7 +674,10 @@
   "error_FailedRefreshBookmarks_Title": {
     "message": "Couldn’t retrieve updates"
   },
-  "error_NoConnection_Title": {
-    "message": "No service connection"
+  "error_UncommittedSyncs_Title": {
+    "message": "Sync uncommitted"
+  },
+  "error_UncommittedSyncs_Message": {
+    "message": "Changes will be synced once connection to service is restored."
   }
 }
