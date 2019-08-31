@@ -26,17 +26,13 @@
     <config-file target="res/values/strings.xml" parent="/*">
       <string name="intent_label">Add Bookmark</string>
     </config-file>
-    <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:name='MainActivity']" mode="merge">
-      <activity android:windowSoftInputMode="adjustPan" />
-    </edit-config>
-    <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:name='MainActivity']" mode="merge">
-      <activity android:theme="@style/AppTheme" />
-    </edit-config>
     <edit-config file="AndroidManifest.xml" target="/manifest/application" mode="merge">
       <application android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" />
     </edit-config>
-    <resource-file src="res/android/values/colors.xml" target="app/src/main/res/values/colors.xml" />
-    <resource-file src="res/android/values/styles.xml" target="app/src/main/res/values/styles.xml" />
+    <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:name='MainActivity']" mode="merge">
+      <activity android:theme="@style/AppTheme" android:windowSoftInputMode="adjustPan" />
+    </edit-config>
+    <resource-file src="res/android/drawable/app_background.xml" target="app/src/main/res/drawable/app_background.xml" />
     <resource-file src="res/android/drawable/ic_launcher_foreground.xml" target="app/src/main/res/drawable/ic_launcher_foreground.xml" />
     <resource-file src="res/android/drawable-v24/ic_launcher_background.xml" target="app/src/main/res/drawable-v24/ic_launcher_background.xml" />
     <resource-file src="res/android/mipmap-anydpi-v26/ic_launcher.xml" target="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" />
@@ -51,8 +47,9 @@
     <resource-file src="res/android/mipmap-xxhdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png" />
     <resource-file src="res/android/mipmap-xxxhdpi/ic_launcher.png" target="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
     <resource-file src="res/android/mipmap-xxxhdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" />
+    <resource-file src="res/android/values/colors.xml" target="app/src/main/res/values/colors.xml" />
+    <resource-file src="res/android/values/styles.xml" target="app/src/main/res/values/styles.xml" />
   </platform>
-  <preference name="BackgroundColor" value="0xff303030"/>
   <preference name="android-minSdkVersion" value="23" />
   <preference name="AndroidLaunchMode" value="singleTask" />
   <preference name="DisallowOverscroll" value="true" />
