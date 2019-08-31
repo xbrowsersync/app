@@ -92,6 +92,34 @@ body {
         }
       }
 
+      &.btn-fab {
+        background-color: $colour-text2;
+        color: $colour-text1;
+        font-size: 1.4rem;
+        border-radius: 100%;
+        width: 3.5rem;
+        height: 3.5rem;
+        padding: 0;
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14),
+          0 1px 18px 0 rgba(0, 0, 0, 0.12) !important;
+        transition: color, ease-in-out, 0.2s;
+        z-index: 10;
+
+        &.fixed {
+          position: fixed;
+          bottom: 1rem;
+          right: 1rem;
+        }
+      }
+
       &.btn-icon {
         background: none;
         color: $colour-text2;
@@ -917,6 +945,7 @@ body {
         border-radius: $border-radius-well;
         padding: 0;
         margin: 0 0 0.75rem;
+        max-height: 9rem;
         @include box-shadow;
 
         &:focus,
@@ -938,14 +967,6 @@ body {
               opacity: 0.4;
             }
           }
-        }
-
-        &.animate-added {
-          @include animation(animation-add-bookmark 1s ease-in forwards);
-        }
-
-        &.animate-deleted {
-          @include animation(animation-delete-bookmark 1s ease-in forwards);
         }
 
         .search-result-content {
@@ -972,7 +993,7 @@ body {
         }
 
         .menu {
-          background-color: rgba($colour-text2, 0.9);
+          background-color: rgba($colour-text2, 0.8);
           text-align: center;
           border-radius: $border-radius-well;
           z-index: 60;
@@ -990,26 +1011,17 @@ body {
             margin-top: 0;
 
             button {
-              display: inline-block;
               position: static;
+              margin-right: 1.75rem;
               background-color: $colour-text1;
               color: $colour-text2;
-              font-size: 1.5rem;
-              border-radius: 100%;
-              width: 3rem;
-              height: 3rem;
-              margin-right: 1.75rem;
 
               &:last-child {
                 margin-right: 0;
               }
 
               &.btn-delete-bookmark {
-                background-color: $colour-danger;
-              }
-
-              i {
-                opacity: 1;
+                color: $colour-danger;
               }
             }
           }
@@ -1452,18 +1464,7 @@ body {
     flex: 0 8rem;
 
     button {
-      background-color: $colour-text1;
-      color: $colour-text2;
-      font-size: 2rem;
-      border-radius: 100%;
-      width: 4rem;
-      height: 4rem;
       margin-right: 1.75rem;
-      transition: color, ease-in-out, 0.2s;
-
-      &:last-child {
-        margin-right: 0;
-      }
 
       &.btn-delete-bookmark {
         background-color: $colour-danger;
@@ -1471,10 +1472,6 @@ body {
 
       &.enabled {
         color: $colour-warning;
-      }
-
-      i {
-        opacity: 1;
       }
     }
   }

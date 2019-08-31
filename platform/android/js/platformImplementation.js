@@ -879,7 +879,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
     // Sync bookmarks
     return bookmarks.Sync(syncData)
-      .then(displayDefaultSearchState)
       .catch(function (err) {
         // Display more informative message when sync uncommitted
         if (err.code === globals.ErrorCodes.SyncUncommitted) {
@@ -1019,13 +1018,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
     // If current url not set, return with default url
     if (!currentUrl) {
-      return $q.resolve({ url: 'http://' });
+      return $q.resolve({ url: 'https://' });
     }
 
     // If current url is not valid, return with default url
     var matches = currentUrl.match(/^https?:\/\/\w+/i);
     if (!matches || matches.length <= 0) {
-      return $q.resolve({ url: 'http://' });
+      return $q.resolve({ url: 'https://' });
     }
 
     var handleResponse = function (pageContent, err) {

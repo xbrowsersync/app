@@ -1,12 +1,12 @@
 <h3>{{ vm.platform.GetConstant(vm.globals.Constants.Scan_Title) }}</h3>
 <div class="target"></div>
 <div class="buttons">
-  <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Cancel_Label) }}"
+  <button class="btn btn-fab" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Cancel_Label) }}"
     data-ng-class="{ 'enabled': vm.scanner.lightEnabled }" data-ng-click="vm.events.scanPanel_ToggleLight_Click()">
     <i class="fas fa-bolt" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Cancel_Label) }}</span>
   </button>
-  <button class="btn btn-icon" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Cancel_Label) }}"
+  <button class="btn btn-fab" title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Cancel_Label) }}"
     data-ng-click="vm.events.scanPanel_Cancel_Click()">
     <i class="fas fa-times" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Cancel_Label) }}</span>

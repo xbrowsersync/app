@@ -404,7 +404,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     // Check for protocol
     if (!(new RegExp(globals.URL.ProtocolRegex)).test(bookmarkToCreate.url)) {
-      bookmarkToCreate.url = 'http://' + bookmarkToCreate.url;
+      bookmarkToCreate.url = 'https://' + bookmarkToCreate.url;
     }
 
     // Validate the new bookmark
@@ -438,23 +438,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
           .then(function (currentUrl) {
             vm.bookmark.active = currentUrl && currentUrl.toUpperCase() === bookmarkToCreate.url.toUpperCase();
             return changeView(vm.view.views.search);
-          })
-          .then(function () {
-            // Add new bookmark into search results on mobile apps
-            if (utility.IsMobilePlatform(vm.platformName)) {
-              var bookmarkToCreateClone = JSON.parse(JSON.stringify(bookmarkToCreate));
-              bookmarkToCreateClone.id = bookmarks.GetNewBookmarkId(vm.search.results);
-              bookmarkToCreateClone.class = 'added';
-              $timeout(function () {
-                // Add bookmark to results
-                vm.search.results.unshift(bookmarkToCreateClone);
-
-                $timeout(function () {
-                  // Remove animation class
-                  delete bookmarkToCreateClone.class;
-                }, 500);
-              }, 300);
-            }
           });
       })
       .catch(displayAlertErrorHandler);
@@ -505,24 +488,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         // Display the search panel
         return changeView(vm.view.views.search);
       })
-      .then(function () {
-        // Find and delete the deleted bookmark element in the search results on mobile apps
-        //if (utility.IsMobilePlatform(vm.platformName)) {
-        /*if (vm.search.results && vm.search.results.length >= 0) {
-          var deletedBookmarkIndex = _.findIndex(vm.search.results, function (result) {
-            return result.id === bookmarkToDelete.id;
-          });
-
-          if (deletedBookmarkIndex >= 0) {
-            vm.search.results[deletedBookmarkIndex].class = 'deleted';
-            $timeout(function () {
-              // Remove bookmark from results
-              vm.search.results.splice(deletedBookmarkIndex, 1);
-            }, 500);
-          }
-        }*/
-        //}
-      })
       .catch(displayAlertErrorHandler);
   };
 
@@ -545,7 +510,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     // Check for protocol
     if (!(new RegExp(globals.URL.ProtocolRegex)).test(bookmarkToUpdate.url)) {
-      bookmarkToUpdate.url = 'http://' + bookmarkToUpdate.url;
+      bookmarkToUpdate.url = 'https://' + bookmarkToUpdate.url;
     }
 
     // Validate the new bookmark
@@ -583,22 +548,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
             // Display the search panel
             return changeView(vm.view.views.search);
-          })
-          .then(function () {
-            // Find and update the updated bookmark element in the search results on mobile apps
-            if (utility.IsMobilePlatform(vm.platformName)) {
-              if (vm.search.results && vm.search.results.length >= 0) {
-                var updatedBookmarkIndex = _.findIndex(vm.search.results, function (result) {
-                  return result.id === bookmarkToUpdate.id;
-                });
-
-                if (updatedBookmarkIndex >= 0) {
-                  $timeout(function () {
-                    vm.search.results[updatedBookmarkIndex] = bookmarkToUpdate;
-                  }, 500);
-                }
-              }
-            }
           });
       })
       .catch(displayAlertErrorHandler);
@@ -1465,7 +1414,22 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var searchForm_DeleteBookmark_Click = function (event, bookmark) {
-    // Delete the bookmark
+    // Find and remove the deleted bookmark element in the search results
+    if (vm.search.results && vm.search.results.length > 0) {
+      var deletedBookmarkIndex = _.findIndex(vm.search.results, function (result) { return result.id === bookmark.id; });
+      if (deletedBookmarkIndex >= 0) {
+        vm.search.results.splice(deletedBookmarkIndex, 1);
+      }
+      else {
+        // TODO: Convert to XError
+        var err = new Error('XBookmarkNotFound');
+        err.code = globals.ErrorCodes.XBookmarkNotFound;
+        utility.LogError(err, 'searchForm_DeleteBookmark_Click');
+        throw err;
+      }
+    }
+
+    // Sync the deletion
     queueSync({
       type: globals.SyncType.Both,
       changeInfo: {
@@ -1478,21 +1442,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         return bookmarks.UpdateCache(updatedBookmarks);
       })
       .catch(displayAlertErrorHandler);
-
-    // Find and remove the deleted bookmark element in the search results
-    if (vm.search.results && vm.search.results.length > 0) {
-      var deletedBookmarkIndex = _.findIndex(vm.search.results, function (result) { return result.id === bookmark.id; });
-      if (deletedBookmarkIndex >= 0) {
-        vm.search.selectedBookmark = null;
-        $timeout(function () {
-          vm.search.results[deletedBookmarkIndex].class = 'deleted';
-          $timeout(function () {
-            // Remove bookmark from results
-            vm.search.results.splice(deletedBookmarkIndex, 1);
-          }, 500);
-        });
-      }
-    }
   };
 
   var searchForm_ScanCode_Click = function () {
@@ -1706,7 +1655,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     // Display menu for selected bookmark
     vm.search.selectedBookmark = bookmarkId;
-
   };
 
   var searchForm_ToggleBookmark_Click = function () {

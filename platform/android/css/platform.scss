@@ -329,40 +329,11 @@ body {
     }
 
     .header-panel {
-      .btn {
-        &.btn-toggle-bookmark {
-          i:before {
-            content: "\f02e";
-          }
-
-          i:after {
-            content: "\f067";
-            font-size: 0.35rem;
-            color: $colour-bg2;
-            position: relative;
-            top: -0.9rem;
-            left: -1.4rem;
-            opacity: 1;
-          }
-        }
-      }
-
-      .search-form {
-        width: 100%;
-        margin-top: 0.75rem;
-
-        @media (orientation: landscape) {
-          position: absolute;
-          top: 0.75rem;
-          margin: 0 2rem;
-          width: calc(100% - 6rem);
-        }
-      }
+      display: flex;
+      flex-direction: row-reverse;
     }
 
     .search-results-panel {
-      height: 100%;
-
       & > h4 {
         margin: 1rem;
       }
@@ -377,6 +348,10 @@ body {
           .search-result-content {
             background-color: initial;
           }
+        }
+
+        &.ng-leave {
+          @include animation(animation-delete-bookmark 0.5s linear forwards);
         }
 
         .menu-background {

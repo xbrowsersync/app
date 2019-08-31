@@ -28,26 +28,23 @@
   }
 }
 
-@include keyframes(animation-add-bookmark) {
-  0% {
-    opacity: 0;
-  }
-  25% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 @include keyframes(animation-delete-bookmark) {
   0% {
     opacity: 1;
   }
-  75% {
+  40% {
+    margin-bottom: 0.75rem;
+    max-height: 9rem;
+    opacity: 0;
+  }
+  50% {
+    margin-bottom: 0.75rem;
+    max-height: 9rem;
     opacity: 0;
   }
   100% {
+    margin-bottom: 0;
+    max-height: 0;
     opacity: 0;
   }
 }
