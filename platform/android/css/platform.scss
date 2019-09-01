@@ -80,8 +80,8 @@ body {
   }
 
   h2 {
-    font-size: 2rem;
-    line-height: 2.3rem;
+    font-size: 1.6em;
+    line-height: 1em;
   }
 
   button.btn {
@@ -142,18 +142,18 @@ body {
   }
 
   .header-panel {
+    font-size: 1.5rem;
     margin-bottom: 0.75rem;
 
     button {
-      font-size: 1.8rem;
-      line-height: 2.3rem;
+      font-size: 1.5em;
+      line-height: 0.9em;
     }
   }
 
   .lookahead-container .lookahead:after {
     margin-left: 0.5rem;
-    font-size: 1.1rem;
-    line-height: 2.3rem;
+    font-size: 0.8em;
     @include icon("\f0d0");
   }
 

@@ -18,11 +18,11 @@ body {
   line-height: 1.25rem;
 
   h2 {
-    font-size: 1.8rem;
+    font-size: 1.5em;
     font-weight: 800;
+    line-height: 1.2em;
     float: left;
     margin: 0;
-    line-height: 2.1rem;
   }
 
   h4 {
@@ -381,10 +381,12 @@ body {
 
   .header-panel {
     position: relative;
+    font-size: 1.3rem;
     margin-bottom: 0.25rem;
 
     button {
-      font-size: 1.5rem;
+      font-size: 1.3em;
+      line-height: 1.2em;
 
       &.btn-close,
       &.btn-settings {
@@ -873,18 +875,18 @@ body {
           color: $colour-link;
           z-index: 60;
           margin-bottom: 0;
-          font-size: 1.1rem;
-          line-height: 2.3rem;
+          font-size: 0.9em;
+          line-height: 1.8em;
         }
 
         input {
           position: relative;
           z-index: 50;
-          padding: 0 2.2rem;
-          font-size: 1.3rem;
+          padding: 0 1.5em;
+          font-size: 1.1em;
           background: transparent;
           width: 100%;
-          line-height: 2.3rem;
+          line-height: 1.5em;
           border: none;
           @include placeholder {
             color: $colour-link;
@@ -894,9 +896,9 @@ body {
         .btn-clear {
           position: absolute;
           top: 0;
-          right: 0.75rem;
-          font-size: 1.3rem;
-          line-height: 2.2rem;
+          right: 0.5rem;
+          font-size: 1.1em;
+          line-height: 1.35em;
           z-index: 55;
 
           &:hover i {
@@ -905,14 +907,14 @@ body {
         }
 
         .lookahead-container {
-          font-size: 1.3rem;
+          font-size: 1.1em;
           top: 0;
-          left: 2.2rem;
-          width: calc(100% - 4rem);
+          left: 1.5em;
+          width: calc(100% - 3em);
 
           .lookahead,
           .measure {
-            line-height: 2.3rem;
+            line-height: 1.5em;
           }
         }
       }
@@ -1465,6 +1467,12 @@ body {
 
     button {
       margin-right: 1.75rem;
+      background-color: $colour-text1;
+      color: $colour-text2;
+
+      &:last-child {
+        margin-right: 0;
+      }
 
       &.btn-delete-bookmark {
         background-color: $colour-danger;
