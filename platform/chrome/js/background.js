@@ -295,7 +295,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       type: 'basic',
       title: title,
       message: messageToDisplay,
-      iconUrl: 'img/notification.png'
+      iconUrl: 'img/notification.svg'
     };
 
     // Display notification
