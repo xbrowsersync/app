@@ -33,6 +33,8 @@
       <activity android:theme="@style/AppTheme" android:windowSoftInputMode="adjustPan" />
     </edit-config>
     <resource-file src="res/android/drawable/app_background.xml" target="app/src/main/res/drawable/app_background.xml" />
+    <resource-file src="res/android/drawable/app_background_bg.xml" target="app/src/main/res/drawable/app_background_bg.xml" />
+    <resource-file src="res/android/drawable/app_background_fg.xml" target="app/src/main/res/drawable/app_background_fg.xml" />
     <resource-file src="res/android/drawable/ic_launcher_foreground.xml" target="app/src/main/res/drawable/ic_launcher_foreground.xml" />
     <resource-file src="res/android/drawable-v24/ic_launcher_background.xml" target="app/src/main/res/drawable-v24/ic_launcher_background.xml" />
     <resource-file src="res/android/mipmap-anydpi-v26/ic_launcher.xml" target="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" />
@@ -50,7 +52,7 @@
     <resource-file src="res/android/values/colors.xml" target="app/src/main/res/values/colors.xml" />
     <resource-file src="res/android/values/styles.xml" target="app/src/main/res/values/styles.xml" />
   </platform>
-  <preference name="android-minSdkVersion" value="23" />
+  <preference name="android-minSdkVersion" value="24" />
   <preference name="AndroidLaunchMode" value="singleTask" />
   <preference name="DisallowOverscroll" value="true" />
   <preference name="LoadUrlTimeoutValue" value="5000"/>
