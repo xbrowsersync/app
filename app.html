@@ -74,7 +74,7 @@
     </div>
   </div>
 
-  <div class="background" data-ng-if="vm.view.current !== vm.view.views.scan">
+  <div class="background" data-ng-if="vm.view.current !== undefined && vm.view.current !== vm.view.views.scan">
     <div class="background-img" data-ng-if="vm.view.current === vm.view.views.loading || vm.view.current === vm.view.views.login || 
       vm.view.current === vm.view.views.support || vm.view.current === vm.view.views.permissions || 
       vm.view.current === vm.view.views.updated || vm.view.current === vm.view.views.help">

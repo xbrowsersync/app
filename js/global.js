@@ -186,6 +186,7 @@ xBrowserSync.App.Global = function (platform) {
       Qr_CopySyncId_Label: 'qr_CopySyncId_Label',
       Qr_Message: 'qr_Message',
       Working_Title: 'working_Title',
+      WorkingOffline_Title: 'workingOffline_Title',
       WorkingOffline_Message: 'workingOffline_Message',
       UncommittedSyncsProcessed_Message: 'uncommittedSyncsProcessed_Message',
       Bookmark_Metadata_Message: 'bookmark_Metadata_Message',

@@ -543,8 +543,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "working_Title": {
       "message": "Syncing..."
     },
+    "workingOffline_Title": {
+      "message": "Working offline"
+    },
     "workingOffline_Message": {
-      "message": "Working offline, any change will be synced once connection is restored."
+      "message": "Any changes will be synced once connection is restored."
     },
     "uncommittedSyncsProcessed_Message": {
       "message": "Connection to service restored, changes synced successfully."
@@ -882,7 +885,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       .catch(function (err) {
         // Display more informative message when sync uncommitted
         if (err.code === globals.ErrorCodes.SyncUncommitted) {
-          displaySnackbar(getConstant(globals.Constants.Error_UncommittedSyncs_Message));
+          displaySnackbar(
+            getConstant(globals.Constants.Error_UncommittedSyncs_Title),
+            getConstant(globals.Constants.Error_UncommittedSyncs_Message)
+          );
           return;
         }
 
@@ -1525,15 +1531,43 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       .catch(failure);
   };
 
-  var displaySnackbar = function (title, description, level) {
-    var message = (title || description).replace(/\.$/, '') + '.';
+  var displaySnackbar = function (title, description, level, action, actionCallback) {
+    var text = (title ? title + '. ' + description : description).replace(/\.$/, '') + '.';
     var isError = level === 'danger';
+    var bgColor = null;
+    var textColor = null;
+    switch (level) {
+      case 'danger':
+        bgColor = '#ea3869';
+        textColor = '#ffffff';
+        break;
+      case 'success':
+        bgColor = '#30d278';
+        textColor = '#ffffff';
+        break;
+      case 'warning':
+        bgColor = '#30d278';
+        textColor = '#ffffff';
+        break;
+    }
+    var success = function (clicked) {
+      if (clicked && actionCallback) {
+        actionCallback();
+      }
+    };
+    var failure = function (errMessage) {
+      utility.LogError(new Error(errMessage), 'platform.displaySnackbar');
+    };
 
     cordova.plugins.snackbar.create(
-      message,
-      isError ? 'INDEFINITE' : 'LONG',
-      isError && getConstant(globals.Constants.Button_Dismiss_Label),
-      function () { });
+      text,
+      5000,
+      bgColor,
+      textColor,
+      3,
+      action,
+      success,
+      failure);
   };
 
   var enableLight = function () {
@@ -1601,7 +1635,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var handleOffline = function () {
     utility.LogInfo('Offline');
-    displaySnackbar(getConstant(globals.Constants.WorkingOffline_Message));
+    displaySnackbar(
+      getConstant(globals.Constants.WorkingOffline_Title),
+      getConstant(globals.Constants.WorkingOffline_Message)
+    );
   };
 
   var handleOnline = function (throwErrors) {
@@ -1622,7 +1659,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         return bookmarks.CheckForUncommittedSyncs()
           .then(function (updatesSynced) {
             if (updatesSynced) {
-              displaySnackbar(getConstant(globals.Constants.UncommittedSyncsProcessed_Message));
+              displaySnackbar(null, getConstant(globals.Constants.UncommittedSyncsProcessed_Message));
             }
             else {
               // If no uncommitted updates, check for latest updates 

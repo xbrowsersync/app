@@ -536,6 +536,9 @@
   "working_Title": {
     "message": "Syncing..."
   },
+  "workingOffline_Title": {
+    "message": "Working offline"
+  },
   "workingOffline_Message": {
     "message": "Working offline, any change will be synced once connection is restored."
   },
