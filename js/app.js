@@ -39,6 +39,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     vm.bookmark = {
       active: false,
+      addButtonDisabledUntilEditForm: false,
       current: undefined,
       currentUrl: undefined,
       descriptionFieldOriginalHeight: undefined,
@@ -95,7 +96,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       searchForm_SearchResult_KeyDown: searchForm_SearchResult_KeyDown,
       searchForm_SearchResults_Scroll: searchForm_SearchResults_Scroll,
       searchForm_SelectBookmark_Press: searchForm_SelectBookmark_Press,
-      searchForm_ShareBookmark_Click: platform.Bookmarks.Share,
+      searchForm_ShareBookmark_Click: searchForm_ShareBookmark_Click,
       searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
       syncPanel_SyncBookmarksToolbar_Click: syncPanel_SyncBookmarksToolbar_Click,
       syncPanel_SyncBookmarksToolbar_Cancel: syncPanel_SyncBookmarksToolbar_Cancel,
@@ -837,10 +838,11 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     var loadMetadataDeferred = $q.defer();
     var timeout;
 
+    vm.bookmark.addButtonDisabledUntilEditForm = false;
+    vm.bookmark.displayUpdateForm = false;
+    vm.bookmark.tagLookahead = null;
     vm.bookmark.tagText = null;
     vm.bookmark.tagTextMeasure = null;
-    vm.bookmark.tagLookahead = null;
-    vm.bookmark.displayUpdateForm = false;
 
     // If bookmark to update provided, set to current and return
     return $q(function (resolve, reject) {
@@ -850,12 +852,12 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       }
 
       // Check if current url is a bookmark
-      return bookmarks.IncludesCurrentPage()
-        .then(function (bookmarkedCurrentPage) {
-          if (bookmarkedCurrentPage) {
+      return bookmarks.FindCurrentUrlInBookmarks()
+        .then(function (bookmark) {
+          if (bookmark) {
             // Display update bookmark form and return
             vm.bookmark.displayUpdateForm = true;
-            return resolve(bookmarkedCurrentPage);
+            return resolve(bookmark);
           }
 
           // Display loading on mobiles and get page metadata for current url
@@ -866,21 +868,13 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
               // Display add bookmark form
               vm.bookmark.displayUpdateForm = false;
 
-              // Set current bookmark properties
-              var bookmark = new bookmarks.XBookmark(
-                null,
+              // Set bookmark form field values
+              var bookmarkFormFieldValues = new bookmarks.XBookmark(
+                metadata.title,
                 metadata.url,
-                null,
-                null);
-
-              if (metadata) {
-                // Set form properties to url metadata
-                bookmark.title = metadata.title;
-                bookmark.description = utility.TrimToNearestWord(metadata.description, globals.Bookmarks.DescriptionMaxLength);
-                bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
-              }
-
-              resolve(bookmark);
+                utility.TrimToNearestWord(metadata.description, globals.Bookmarks.DescriptionMaxLength),
+                utility.GetTagArrayFromText(metadata.tags));
+              resolve(bookmarkFormFieldValues);
             });
         });
     })
@@ -1165,8 +1159,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var openUrl = function (event, url) {
-    if (event && event.preventDefault) {
-      event.preventDefault();
+    if (event) {
+      if (event.preventDefault) { event.preventDefault(); }
+      if (event.srcEvent) { event.srcEvent.stopPropagation(); }
     }
 
     if (url) {
@@ -1348,8 +1343,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var scanPanel_Cancel_Click = function () {
-    platform.Scanner.Stop()
-      .finally(displayMainView);
+    displayMainView().then(platform.Scanner.Stop);
   };
 
   var scanPanel_ToggleLight_Click = function () {
@@ -1413,7 +1407,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     vm.search.displayDefaultState();
   };
 
-  var searchForm_DeleteBookmark_Click = function (event, bookmark) {
+  var searchForm_DeleteBookmark_Click = function (bookmark, event) {
+    event.srcEvent.stopPropagation();
+
     // Find and remove the deleted bookmark element in the search results
     if (vm.search.results && vm.search.results.length > 0) {
       var deletedBookmarkIndex = _.findIndex(vm.search.results, function (result) { return result.id === bookmark.id; });
@@ -1448,18 +1444,20 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     platform.Scanner.Start()
       .then(function (scannedId) {
         vm.sync.id = scannedId;
-        platform.LocalStorage.Set(globals.CacheKeys.SyncId, scannedId);
         $timeout(function () {
           // Focus on password field
           document.querySelector('.active-login-form  input[name="txtPassword"]').focus();
-        }, 200);
+        }, 500);
+        return platform.LocalStorage.Set(globals.CacheKeys.SyncId, scannedId);
       })
       .catch(function (err) {
         // Display alert
         var errMessage = utility.GetErrorMessageFromException(err);
         vm.alert.display(errMessage.title, errMessage.message, 'danger');
       })
-      .finally(displayMainView);
+      .finally(function () {
+        displayMainView().then(platform.Scanner.Stop);
+      });
   };
 
   var searchForm_SearchText_Autocomplete = function () {
@@ -1650,9 +1648,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     }
   };
 
-  var searchForm_SelectBookmark_Press = function (bookmarkId, event) {
-    event.preventDefault();
-
+  var searchForm_SelectBookmark_Press = function (bookmarkId) {
     // Display menu for selected bookmark
     vm.search.selectedBookmark = bookmarkId;
   };
@@ -1662,7 +1658,14 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     changeView(vm.view.views.bookmark);
   };
 
-  var searchForm_UpdateBookmark_Click = function (bookmarkToUpdate) {
+  var searchForm_ShareBookmark_Click = function (bookmarkToShare, event) {
+    event.srcEvent.stopPropagation();
+    platform.Bookmarks.Share(bookmarkToShare);
+  };
+
+  var searchForm_UpdateBookmark_Click = function (bookmarkToUpdate, event) {
+    if (event) { event.srcEvent.stopPropagation(); }
+
     // On mobiles, display bookmark panel with slight delay to avoid focussing on description field
     if (utility.IsMobilePlatform(vm.platformName)) {
       $timeout(function () {
@@ -1682,7 +1685,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         }
 
         // If current page is a bookmark, actvate bookmark icon
-        return bookmarks.IncludesCurrentPage()
+        return bookmarks.FindCurrentUrlInBookmarks()
           .then(function (result) {
             vm.bookmark.active = !!result;
           })

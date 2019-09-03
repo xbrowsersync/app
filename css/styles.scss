@@ -947,7 +947,6 @@ body {
         border-radius: $border-radius-well;
         padding: 0;
         margin: 0 0 0.75rem;
-        max-height: 9rem;
         @include box-shadow;
 
         &:focus,

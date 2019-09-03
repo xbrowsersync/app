@@ -336,6 +336,28 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     }
   };
 
+  var findCurrentUrlInBookmarks = function () {
+    var currentUrl;
+
+    // Check if current url is contained in bookmarks
+    return platform.GetCurrentUrl()
+      .then(function (result) {
+        if (!result) {
+          return;
+        }
+
+        currentUrl = result;
+        return searchBookmarks({ url: currentUrl })
+          .then(function (results) {
+            var result = _.find(results, function (bookmark) {
+              return bookmark.url.toLowerCase() === currentUrl.toLowerCase();
+            });
+
+            return $q.resolve(result);
+          });
+      });
+  };
+
   var getCurrentSync = function () {
     // If nothing on the queue, get the current sync in progress if exists, otherwise get the last
     // sync in the queue
@@ -482,28 +504,6 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         // Return size in bytes of cached encrypted bookmarks
         var sizeInBytes = (new TextEncoder('utf-8')).encode(cachedBookmarks).byteLength;
         return sizeInBytes;
-      });
-  };
-
-  var isCurrentPageABookmark = function () {
-    var currentUrl;
-
-    // Check if current url is contained in bookmarks
-    return platform.GetCurrentUrl()
-      .then(function (result) {
-        if (!result) {
-          return;
-        }
-
-        currentUrl = result;
-        return searchBookmarks({ url: currentUrl })
-          .then(function (results) {
-            var result = _.find(results, function (bookmark) {
-              return bookmark.url.toLowerCase() === currentUrl.toLowerCase();
-            });
-
-            return $q.resolve(result);
-          });
       });
   };
 
@@ -1558,6 +1558,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     Export: exportBookmarks,
     FindBookmarkById: findBookmarkById,
     FindBookmarkInTree: findBookmarkInTree,
+    FindCurrentUrlInBookmarks: findCurrentUrlInBookmarks,
     GetBookmarks: getCachedBookmarks,
     GetContainer: getContainer,
     GetCurrentSync: getCurrentSync,
@@ -1565,7 +1566,6 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     GetLookahead: getLookahead,
     GetNewBookmarkId: getNewBookmarkId,
     GetSyncBookmarksToolbar: getSyncBookmarksToolbar,
-    IncludesCurrentPage: isCurrentPageABookmark,
     IsSeparator: isSeparator,
     RemoveExistingInXBookmarks: removeExistingInXBookmarks,
     Search: searchBookmarks,

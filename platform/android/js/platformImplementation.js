@@ -815,6 +815,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       // Loading bookmark metadata, display cancellable overlay
       case 'retrievingMetadata':
         var cancel = function () {
+          vm.bookmark.addButtonDisabledUntilEditForm = true;
           deferred.resolve({ url: currentUrl });
         };
         timeout = $timeout(function () {
@@ -1024,12 +1025,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
     // If current url not set, return with default url
     if (!currentUrl) {
+      vm.bookmark.addButtonDisabledUntilEditForm = true;
       return $q.resolve({ url: 'https://' });
     }
 
     // If current url is not valid, return with default url
     var matches = currentUrl.match(/^https?:\/\/\w+/i);
     if (!matches || matches.length <= 0) {
+      vm.bookmark.addButtonDisabledUntilEditForm = true;
       return $q.resolve({ url: 'https://' });
     }
 
@@ -1275,7 +1278,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
                 utility.LogInfo('Scanned: ' + scannedText);
 
                 resolve(scannedText);
-                stopScanning();
               }, 1000);
             });
           });
@@ -1283,7 +1285,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           QRScanner.show(function () {
             $timeout(function () {
               vm.view.change(vm.view.views.scan);
-            }, 200);
+            }, 500);
           });
         } else {
           var noAuthError = new Error('Not authorised');
@@ -1500,6 +1502,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     document.addEventListener('touchstart', handleTouchStart, false);
     document.addEventListener('offline', handleOffline, false);
     document.addEventListener('online', handleOnline, false);
+    window.addEventListener('keyboardDidShow', handleKeyboardDidShow);
+    window.addEventListener('keyboardWillHide', handleKeyboardWillHide);
 
     // Set required events to mobile app handlers
     vm.events.bookmarkPanel_Close_Click = bookmarkPanel_Close_Click;
@@ -1533,21 +1537,20 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var displaySnackbar = function (title, description, level, action, actionCallback) {
     var text = (title ? title + '. ' + description : description).replace(/\.$/, '') + '.';
-    var isError = level === 'danger';
+    var textColor = '#ffffff';
     var bgColor = null;
-    var textColor = null;
     switch (level) {
       case 'danger':
         bgColor = '#ea3869';
-        textColor = '#ffffff';
         break;
       case 'success':
         bgColor = '#30d278';
-        textColor = '#ffffff';
         break;
       case 'warning':
         bgColor = '#30d278';
-        textColor = '#ffffff';
+        break;
+      default:
+        bgColor = '#083039';
         break;
     }
     var success = function (clicked) {
@@ -1631,6 +1634,17 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       event.preventDefault();
       navigator.app.exitApp();
     }
+  };
+
+  var handleKeyboardDidShow = function (event) {
+    document.body.style.height = 'calc(100% - ' + event.keyboardHeight + 'px)';
+    setTimeout(function () {
+      document.activeElement.scrollIntoViewIfNeeded();
+    }, 100);
+  };
+
+  var handleKeyboardWillHide = function () {
+    document.body.style.removeProperty('height');
   };
 
   var handleOffline = function () {

@@ -53,9 +53,20 @@
   }
 }
 
+html,
 body {
+  overflow: auto;
+}
+
+html,
+body,
+body .container {
   height: 100%;
+}
+
+body {
   background: transparent;
+  overflow: auto;
 
   a {
     &:focus,
@@ -138,10 +149,6 @@ body {
     z-index: 200;
   }
 
-  .container {
-    height: 100vh;
-  }
-
   .header-panel {
     font-size: 1.5rem;
     margin-bottom: 0.75rem;
@@ -197,8 +204,10 @@ body {
 
 #bookmark-panel {
   .mobile-landscape {
+    min-height: 2.3rem;
+
     @media (orientation: landscape) {
-      flex: 1 0 2.3rem;
+      flex: 1 0;
       display: flex;
       flex-direction: row;
       overflow: auto;
@@ -340,6 +349,8 @@ body {
       }
 
       .list-group-item {
+        max-height: 15rem;
+
         &:focus,
         &:hover {
           .list-group-item-heading {
