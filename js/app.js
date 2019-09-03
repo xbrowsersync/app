@@ -199,6 +199,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       password: '',
       passwordComplexity: {},
       passwordConfirmation: undefined,
+      showPassword: false,
       updatesAvailable: undefined,
       upgradeConfirmed: false
     };

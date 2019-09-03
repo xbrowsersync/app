@@ -426,6 +426,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "button_Clear_Label": {
       "message": "Clear"
     },
+    "button_ShowPassword_Label": {
+      "message": "Reveal password"
+    },
     "button_Close_Label": {
       "message": "Close"
     },

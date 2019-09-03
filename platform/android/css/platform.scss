@@ -55,13 +55,8 @@
 
 html,
 body {
-  overflow: auto;
-}
-
-html,
-body,
-body .container {
   height: 100%;
+  overflow: auto;
 }
 
 body {
@@ -157,6 +152,10 @@ body {
       font-size: 1.5em;
       line-height: 0.9em;
     }
+  }
+
+  .container {
+    height: 100vh;
   }
 
   .lookahead-container .lookahead:after {
@@ -258,18 +257,6 @@ body {
 }
 
 #login-panel {
-  .btn-scan {
-    display: block;
-    position: absolute;
-    top: 0.35rem;
-    right: 1.3rem;
-    z-index: 55;
-
-    i {
-      font-size: 1.8rem;
-    }
-  }
-
   .login-form-new {
     .toggle-form {
       display: block;

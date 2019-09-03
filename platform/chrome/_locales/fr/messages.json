@@ -419,6 +419,9 @@
   "button_Clear_Label": {
     "message": "Vider"
   },
+  "button_ShowPassword_Label": {
+    "message": "Reveal password"
+  },
   "button_Close_Label": {
     "message": "Fermer"
   },

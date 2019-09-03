@@ -752,12 +752,30 @@ body {
     }
   }
 
-  .btn-scan {
-    display: none;
-  }
-
   .btn-new-sync {
     text-transform: capitalize;
+  }
+
+  .btn-show-password {
+    position: absolute;
+    top: 0;
+    right: 0.75rem;
+    font-size: 1.5rem;
+    line-height: 2.6rem;
+    z-index: 55;
+
+    &:active,
+    &:focus {
+      i {
+        opacity: 0.4;
+      }
+    }
+
+    &:hover {
+      i {
+        opacity: 1;
+      }
+    }
   }
 
   .confirm {
@@ -794,6 +812,12 @@ body {
         color: $colour-text2;
         border-bottom-color: $colour-text2;
       }
+    }
+  }
+
+  .login-form-existing {
+    input[name="txtPassword"] {
+      padding-right: 2.7rem;
     }
   }
 

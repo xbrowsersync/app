@@ -102,9 +102,15 @@
         data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
         <label class="sr-only" for="txtPassword">{{
         vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
-        <input name="txtPassword" data-ng-model="vm.sync.password" type="password" class="form-control"
-          data-ng-disabled="vm.sync.enabled" maxlength="150"
+        <input class="form-control" name="txtPassword" data-ng-model="vm.sync.password"
+          type="{{ vm.sync.showPassword ? 'text' : 'password' }}" data-ng-disabled="vm.sync.enabled" maxlength="150"
           placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Existing_Description) }}" />
+        <button class="btn btn-icon btn-show-password" data-ng-show="vm.sync.password"
+          title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShowPassword_Label) }}"
+          data-ng-mousedown="vm.sync.showPassword = true" data-ng-mouseup="vm.sync.showPassword = false"
+          data-hm-press="vm.sync.showPassword = true" data-hm-pressup="vm.sync.showPassword = false">
+          <i class="fas fa-eye" aria-hidden="true"></i>
+        </button>
       </div>
       <div class="buttons">
         <button type="button" class="btn btn-default btn-existing-sync"

@@ -228,6 +228,7 @@ xBrowserSync.App.Global = function (platform) {
       Button_Saving_Label: 'button_Saving_Label',
       Button_Done_Label: 'button_Done_Label',
       Button_Clear_Label: 'button_Clear_Label',
+      Button_ShowPassword_Label: 'button_ShowPassword_Label',
       Button_Close_Label: 'button_Close_Label',
       Button_Continue_Label: 'button_Continue_Label',
       Button_Back_Label: 'button_Back_Label',
