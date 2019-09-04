@@ -429,10 +429,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
             bookmark: bookmarkToCreate
           }
         })
-          .then(function (updatedBookmarks) {
-            // Update cached bookmarks
-            return bookmarks.UpdateCache(updatedBookmarks);
-          })
           .then(function () {
             // Set bookmark active status if current bookmark is current page
             return platform.GetCurrentUrl();
@@ -474,10 +470,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         id: bookmarkToDelete.id
       }
     })
-      .then(function (updatedBookmarks) {
-        // Update cached bookmarks
-        return bookmarks.UpdateCache(updatedBookmarks);
-      })
       .then(function () {
         // Set bookmark active status if current bookmark is current page
         return platform.GetCurrentUrl();
@@ -535,10 +527,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
             bookmark: bookmarkToUpdate
           }
         })
-          .then(function (updatedBookmarks) {
-            // Update cached bookmarks
-            return bookmarks.UpdateCache(updatedBookmarks);
-          })
           .then(function () {
             // Set bookmark active status if current bookmark is current page
             return platform.GetCurrentUrl();
@@ -1434,10 +1422,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         id: bookmark.id
       }
     })
-      .then(function (updatedBookmarks) {
-        // Update cached bookmarks
-        return bookmarks.UpdateCache(updatedBookmarks);
-      })
       .catch(displayAlertErrorHandler);
   };
 
