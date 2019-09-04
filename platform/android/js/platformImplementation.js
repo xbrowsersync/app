@@ -1475,7 +1475,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var displayDefaultSearchState = function () {
     if (vm.view.current !== vm.view.views.search) {
-      return;
+      return $q.resolve();
     }
 
     // Clear search and display all bookmarks
@@ -1483,7 +1483,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     vm.search.query = null;
     vm.search.queryMeasure = null;
     vm.search.lookahead = null;
-    vm.search.execute();
+    return vm.search.execute();
   };
 
   var displayErrorAlert = function (err) {
@@ -1759,9 +1759,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         if (!syncEnabled) {
           return;
         }
-
-        // Display default search results
-        displayDefaultSearchState();
 
         // Check if a url was shared
         // TODO: Add uncomment when intents working again
