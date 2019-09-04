@@ -429,10 +429,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
             bookmark: bookmarkToCreate
           }
         })
-          .then(function (updatedBookmarks) {
-            // Update cached bookmarks
-            return bookmarks.UpdateCache(updatedBookmarks);
-          })
           .then(function () {
             // Set bookmark active status if current bookmark is current page
             return platform.GetCurrentUrl();
@@ -474,10 +470,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         id: bookmarkToDelete.id
       }
     })
-      .then(function (updatedBookmarks) {
-        // Update cached bookmarks
-        return bookmarks.UpdateCache(updatedBookmarks);
-      })
       .then(function () {
         // Set bookmark active status if current bookmark is current page
         return platform.GetCurrentUrl();
@@ -535,10 +527,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
             bookmark: bookmarkToUpdate
           }
         })
-          .then(function (updatedBookmarks) {
-            // Update cached bookmarks
-            return bookmarks.UpdateCache(updatedBookmarks);
-          })
           .then(function () {
             // Set bookmark active status if current bookmark is current page
             return platform.GetCurrentUrl();
@@ -692,6 +680,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         document.querySelector('input[name=txtSearch]').focus();
       }, 100);
     }
+
+    return $q.resolve();
   };
 
   var displayHelpPage = function (panelToDisplay) {
@@ -992,19 +982,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var init_searchView = function () {
-    vm.search.lookahead = null;
-    vm.search.selectedBookmark = null;
-    vm.search.query = null;
-    vm.search.queryMeasure = null;
-
-    // Clear search results for non-mobile platforms, otherwise refresh search
-    if (!utility.IsMobilePlatform(vm.platformName)) {
-      vm.search.results = null;
-    }
-    else {
-      $timeout(vm.search.execute);
-    }
-
     // Focus on search box
     if (!utility.IsMobilePlatform(vm.platformName)) {
       $timeout(function () {
@@ -1012,7 +989,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       }, 200);
     }
 
-    return $q.resolve();
+    // Reset search view
+    vm.search.selectedBookmark = null;
+    return displayDefaultSearchState();
   };
 
   var init_settingsView = function () {
@@ -1438,10 +1417,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         id: bookmark.id
       }
     })
-      .then(function (updatedBookmarks) {
-        // Update cached bookmarks
-        return bookmarks.UpdateCache(updatedBookmarks);
-      })
       .catch(displayAlertErrorHandler);
   };
 
