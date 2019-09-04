@@ -221,6 +221,15 @@
   "bookmarkShared_Message": {
     "message": "shared from xBrowserSync"
   },
+  "bookmarkCreated_Message": {
+    "message": "Bookmark created"
+  },
+  "bookmarkDeleted_Message": {
+    "message": "Bookmark deleted"
+  },
+  "bookmarkUpdated_Message": {
+    "message": "Bookmark updated"
+  },
   "scan_Title": {
     "message": "Scan your Sync ID QR code"
   },

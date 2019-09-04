@@ -234,6 +234,15 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "bookmarkShared_Message": {
       "message": "shared from xBrowserSync"
     },
+    "bookmarkCreated_Message": {
+      "message": "Bookmark created"
+    },
+    "bookmarkDeleted_Message": {
+      "message": "Bookmark deleted"
+    },
+    "bookmarkUpdated_Message": {
+      "message": "Bookmark updated"
+    },
     "scan_Title": {
       "message": "Scan your Sync ID QR code"
     },
@@ -871,6 +880,28 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
     // Sync bookmarks
     return bookmarks.Sync(syncData)
+      .then(function () {
+        if (syncData.changeInfo === undefined) {
+          return;
+        }
+        switch (true) {
+          case syncData.changeInfo.type === globals.UpdateType.Create:
+            $timeout(function () {
+              displaySnackbar(null, getConstant(globals.Constants.BookmarkCreated_Message));
+            }, 200);
+            break;
+          case syncData.changeInfo.type === globals.UpdateType.Delete:
+            $timeout(function () {
+              displaySnackbar(null, getConstant(globals.Constants.BookmarkDeleted_Message));
+            }, 200);
+            break;
+          case syncData.changeInfo.type === globals.UpdateType.Update:
+            $timeout(function () {
+              displaySnackbar(null, getConstant(globals.Constants.BookmarkUpdated_Message));
+            }, 200);
+            break;
+        }
+      })
       .catch(function (err) {
         // Display more informative message when sync uncommitted
         if (err.code === globals.ErrorCodes.SyncUncommitted) {
@@ -1459,10 +1490,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var displayDefaultSearchState = function () {
-    if (vm.view.current !== vm.view.views.search) {
-      return $q.resolve();
-    }
-
     // Clear search and display all bookmarks
     document.activeElement.blur();
     vm.search.query = null;

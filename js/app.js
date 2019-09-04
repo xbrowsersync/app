@@ -583,7 +583,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     vm.animations.enabled = false;
 
     // Initialise new view
-    vm.view.current = view;
     switch (view) {
       case vm.view.views.bookmark:
         initNewView = init_bookmarkView(viewData);
@@ -610,6 +609,10 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     }
 
     return initNewView
+      .then(function () {
+        // Display new view
+        vm.view.current = view;
+      })
       .then(function () {
         // Attach events to new tab links
         $timeout(setNewTabLinks, 100);
@@ -991,7 +994,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     // Reset search view
     vm.search.selectedBookmark = null;
-    return displayDefaultSearchState();
+    return vm.search.displayDefaultState();
   };
 
   var init_settingsView = function () {
@@ -1072,7 +1075,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         }
 
         // Update service status and display info
-        return updateServicePanel();
+        updateServicePanel();
       });
   };
 
