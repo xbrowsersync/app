@@ -358,6 +358,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       throw new Error('File name not supplied.');
     }
 
+    // Use provided hyperlink or create new one
     var downloadLink;
     if (linkId) {
       downloadLink = document.getElementById(linkId);
@@ -372,6 +373,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       throw new Error('Link element not found.');
     }
 
+    utility.LogInfo('Downloading file ' + fileName);
+
+    // Use hyperlink to trigger file download
     var file = new Blob([textContents], { type: 'text/plain' });
     downloadLink.href = URL.createObjectURL(file);
     downloadLink.innerText = fileName;
@@ -381,6 +385,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     if (!linkId) {
       document.body.removeChild(downloadLink);
     }
+
+    // Return message to be displayed
+    var message = getConstant(globals.Constants.DownloadFile_Success_Message);
+    return $q.resolve(message);
   };
 
   var enableEventListeners = function () {

@@ -323,9 +323,6 @@
   "settings_Issues_DownloadLog_Label": {
     "message": "Download log"
   },
-  "settings_Issues_LogDownloaded_Message": {
-    "message": "If the log file does not download automatically, right click on the link below and “Save link as...”."
-  },
   "settings_Issues_LogSize_Label": {
     "message": "Current log size"
   },
@@ -437,8 +434,8 @@
   "button_Dismiss_Label": {
     "message": "Dismiss"
   },
-  "settings_BackupRestore_BackupSuccess_Message": {
-    "message": "If the backup file does not download automatically, right click on the link below and “Save link as...”."
+  "downloadFile_Success_Message": {
+    "message": "If the file did not download automatically, right click on the link below and “Save link as...”."
   },
   "settings_BackupRestore_RestoreSuccess_Message": {
     "message": "Your data has been restored."
@@ -662,7 +659,7 @@
   "error_ShareFailed_Title": {
     "message": "Share failed"
   },
-  "error_FailedBackupData_Title": {
+  "error_FailedDownloadFile_Title": {
     "message": "Backup failed"
   },
   "error_FailedRestoreData_Title": {

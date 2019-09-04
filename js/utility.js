@@ -331,8 +331,8 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
       case globals.ErrorCodes.FailedShareBookmark:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_ShareFailed_Title);
         break;
-      case globals.ErrorCodes.FailedBackupData:
-        errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedBackupData_Title);
+      case globals.ErrorCodes.FailedDownloadFile:
+        errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedDownloadFile_Title);
         break;
       case globals.ErrorCodes.FailedGetDataToRestore:
         errorMessage.title = platform.GetConstant(globals.Constants.Error_FailedGetDataToRestore_Title);

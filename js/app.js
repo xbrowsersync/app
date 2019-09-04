@@ -783,8 +783,11 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
         // Beautify json and download data
         var beautifiedJson = JSON.stringify(backupData, null, 2);
-        platform.DownloadFile(utility.GetBackupFileName(), beautifiedJson, 'backupLink');
-        vm.settings.backupCompletedMessage = platform.GetConstant(globals.Constants.Settings_BackupRestore_BackupSuccess_Message);
+        return platform.DownloadFile(utility.GetBackupFileName(), beautifiedJson, 'backupLink');
+      })
+      .then(function (message) {
+        // Display message
+        vm.settings.backupCompletedMessage = message;
       });
   };
 
@@ -793,10 +796,11 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     return platform.LocalStorage.Get(globals.CacheKeys.TraceLog)
       .then(function (debugMessageLog) {
         // Trigger download
-        platform.DownloadFile(utility.GetLogFileName(), debugMessageLog.join('\r\n'), 'downloadLogFileLink');
-
+        return platform.DownloadFile(utility.GetLogFileName(), debugMessageLog.join('\r\n'), 'downloadLogFileLink');
+      })
+      .then(function (message) {
         // Display message
-        vm.settings.downloadLogCompletedMessage = platform.GetConstant(globals.Constants.Settings_Issues_LogDownloaded_Message);
+        vm.settings.downloadLogCompletedMessage = message;
       });
   };
 

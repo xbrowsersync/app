@@ -323,9 +323,6 @@
   "settings_Issues_DownloadLog_Label": {
     "message": "Download log"
   },
-  "settings_Issues_LogDownloaded_Message": {
-    "message": "If the log file does not download automatically, right click on the link below and “Save link as...”."
-  },
   "settings_Issues_LogSize_Label": {
     "message": "Current log size"
   },
@@ -437,8 +434,8 @@
   "button_Dismiss_Label": {
     "message": "Dismiss"
   },
-  "settings_BackupRestore_BackupSuccess_Message": {
-    "message": "Wenn die Sicherung nicht automatisch heruntergeladen wird, Klicken Sie mit der rechten Maustaste auf den unten stehen den Link und wählen Sie 'Link speichern unter ..'."
+  "downloadFile_Success_Message": {
+    "message": "If the file did not download automatically, right click on the link below and “Save link as...”."
   },
   "settings_BackupRestore_RestoreSuccess_Message": {
     "message": "Ihren Daten wurden wiederhergestellt."
@@ -662,7 +659,7 @@
   "error_ShareFailed_Title": {
     "message": "Teilen fehlgeschlagen"
   },
-  "error_FailedBackupData_Title": {
+  "error_FailedDownloadFile_Title": {
     "message": "Sicherung fehlgeschlagen"
   },
   "error_FailedRestoreData_Title": {

@@ -330,9 +330,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_Issues_DownloadLog_Label": {
       "message": "Download log"
     },
-    "settings_Issues_LogDownloaded_Message": {
-      "message": "If the log file does not download automatically, right click on the link below and “Save link as...”."
-    },
     "settings_Issues_LogSize_Label": {
       "message": "Current log size"
     },
@@ -444,8 +441,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "button_Dismiss_Label": {
       "message": "Dismiss"
     },
-    "settings_BackupRestore_BackupSuccess_Message": {
-      "message": "Backup file {fileName} saved to internal storage."
+    "downloadFile_Success_Message": {
+      "message": "File saved as {fileName}."
     },
     "settings_BackupRestore_RestoreSuccess_Message": {
       "message": "Your data has been restored."
@@ -672,7 +669,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "error_ShareFailed_Title": {
       "message": "Share failed"
     },
-    "error_FailedBackupData_Title": {
+    "error_FailedDownloadFile_Title": {
       "message": "Backup failed"
     },
     "error_FailedGetDataToRestore_Title": {
@@ -842,43 +839,31 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       throw new Error('File name not supplied.');
     }
 
-    var saveBackupFileError = function () {
-      return deferred.reject({ code: globals.ErrorCodes.FailedBackupData });
-    };
-
-    // Set backup file storage location to external storage
+    // Set file storage location to external storage root directory
     var storageLocation = cordova.file.externalRootDirectory;
 
-    // Save backup file to storage location
-    window.resolveLocalFileSystemURL(storageLocation, function (dirEntry) {
-      dirEntry.getFile(fileName, { create: true }, function (fileEntry) {
-        fileEntry.createWriter(function (fileWriter) {
-          // Save export file
-          fileWriter.write(JSON.stringify(textContents));
+    return $q(function (resolve, reject) {
+      var onError = function () {
+        return reject({ code: globals.ErrorCodes.FailedDownloadFile });
+      };
 
-          var success = function () {
-            var message = constants.settings_BackupRestore_BackupSuccess_Message.message.replace(
-              '{fileName}',
-              fileEntry.name);
+      utility.LogInfo('Downloading file ' + fileName);
 
-            $scope.$apply(function () {
-              vm.settings.backupCompletedMessage = message;
-            });
-
-            deferred.resolve();
-          };
-
-          fileWriter.onwriteend = function () {
-            success();
-          };
-
-          fileWriter.onerror = saveBackupFileError;
-        },
-          saveBackupFileError);
-      },
-        saveBackupFileError);
-    },
-      saveBackupFileError);
+      // Save file to storage location
+      window.resolveLocalFileSystemURL(storageLocation, function (dirEntry) {
+        dirEntry.getFile(fileName, { create: true }, function (fileEntry) {
+          fileEntry.createWriter(function (fileWriter) {
+            fileWriter.write(textContents);
+            fileWriter.onerror = onError;
+            fileWriter.onwriteend = function () {
+              // Return message to be displayed
+              var message = getConstant(globals.Constants.DownloadFile_Success_Message).replace('{fileName}', fileEntry.name);
+              resolve(message);
+            };
+          }, onError);
+        }, onError);
+      }, onError);
+    });
   };
 
   var executeSync = function (syncData, command) {
