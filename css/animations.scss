@@ -1,55 +1,26 @@
-@include keyframes(animation-fade-in) {
-  from {
-    opacity: 0;
+@mixin keyframes($animation-name) {
+  @-webkit-keyframes #{$animation-name} {
+    @content;
   }
-  to {
-    opacity: 1;
+
+  @-moz-keyframes #{$animation-name} {
+    @content;
+  }
+
+  @-ms-keyframes #{$animation-name} {
+    @content;
+  }
+
+  @-o-keyframes #{$animation-name} {
+    @content;
+  }
+
+  @keyframes #{$animation-name} {
+    @content;
   }
 }
 
-@include keyframes(animation-fade-out) {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@include keyframes(animation-change-view) {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@include keyframes(animation-delete-bookmark) {
-  0% {
-    opacity: 1;
-  }
-  40% {
-    margin-bottom: 0.75rem;
-    max-height: 9rem;
-    opacity: 0;
-  }
-  50% {
-    margin-bottom: 0.75rem;
-    max-height: 9rem;
-    opacity: 0;
-  }
-  100% {
-    margin-bottom: 0;
-    max-height: 0;
-    opacity: 0;
-  }
-}
-
-@include keyframes(animation-scroll) {
+@include keyframes(animation-clouds) {
   0% {
     transform: translate3d(0, 0, 0);
   }
@@ -58,22 +29,40 @@
   }
 }
 
-.animate-fade {
-  &.ng-hide {
-    opacity: 0 !important;
+@mixin animation-fade-in() {
+  &.ng-hide-remove {
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+
+    &.ng-hide-remove-active {
+      opacity: 1;
+    }
   }
 
-  &.ng-hide-remove {
-    @include animation(animation-fade-in 0.2s linear);
+  &.ng-enter {
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+
+    &.ng-enter-active {
+      opacity: 1;
+    }
+  }
+}
+
+.animate-fade-in {
+  @include animation-fade-in();
+}
+
+@mixin animation-fade-out() {
+  &.ng-hide-add {
+    transition: opacity 0.2s ease-in;
+
+    &.ng-hide-add-active {
+      opacity: 0;
+    }
   }
 }
 
 .animate-fade-out {
-  &.ng-hide {
-    opacity: 0 !important;
-  }
-
-  &.ng-hide-add {
-    @include animation(animation-fade-out 0.2s linear);
-  }
+  @include animation-fade-out();
 }

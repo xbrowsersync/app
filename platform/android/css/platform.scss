@@ -167,12 +167,10 @@ body {
   .view {
     .view-content {
       &.ng-enter {
-        @include animation(animation-fade-in 0.2s linear);
         z-index: 10 !important;
       }
 
       &.ng-leave {
-        @include animation(animation-fade-out 0.2s linear);
         z-index: 20;
       }
     }
@@ -336,8 +334,6 @@ body {
       }
 
       .list-group-item {
-        max-height: 15rem;
-
         &:focus,
         &:hover {
           .list-group-item-heading {
@@ -347,10 +343,6 @@ body {
           .search-result-content {
             background-color: initial;
           }
-        }
-
-        &.ng-leave {
-          @include animation(animation-delete-bookmark 0.5s linear forwards);
         }
 
         .menu-background {

@@ -56,7 +56,7 @@
       data-ng-repeat="result in vm.search.results | limitTo:vm.search.resultsDisplayed"
       data-hm-press="vm.utility.IsMobilePlatform(vm.platformName) && vm.events.searchForm_SelectBookmark_Press(result.id)"
       data-ng-keydown="vm.events.searchForm_SearchResult_KeyDown($event)" tabindex="{{ $index + 1 }}">
-      <div class="menu animate-fade" data-ng-show="vm.search.selectedBookmark === result.id" tabindex="-1">
+      <div class="menu animate-fade-in" data-ng-show="vm.search.selectedBookmark === result.id" tabindex="-1">
         <div class="buttons">
           <button class="btn btn-fab"
             title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}"

@@ -250,7 +250,7 @@ body {
       background-size: $bg-width;
       background-repeat: repeat;
       opacity: 0.2;
-      @include animation(animation-scroll 100s linear infinite);
+      @include animation(animation-clouds 100s linear infinite);
     }
   }
 
@@ -443,11 +443,8 @@ body {
     align-items: center;
     justify-content: center;
     background-color: rgba(8, 48, 57, 0.5);
-    @include animation(animation-fade-in 0.1s linear);
-
-    &.ng-hide {
-      @include animation(animation-fade-out 0.1s linear);
-    }
+    @include animation-fade-in();
+    @include animation-fade-out();
   }
 
   .darker-overlay {
@@ -485,8 +482,8 @@ body {
   }
 
   .validation {
-    font-size: 0.7rem;
-    line-height: 1.1rem;
+    font-size: 0.75rem;
+    line-height: 1.15rem;
     position: absolute;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -507,10 +504,7 @@ body {
       flex-direction: column;
       height: 100%;
       padding: 0.75rem;
-
-      &.ng-enter {
-        @include animation(animation-change-view 0.2s linear);
-      }
+      @include animation-fade-in();
     }
   }
 
@@ -971,6 +965,9 @@ body {
         border-radius: $border-radius-well;
         padding: 0;
         margin: 0 0 0.75rem;
+        max-height: 25rem;
+        overflow: hidden;
+        transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
         @include box-shadow;
 
         &:focus,
@@ -992,6 +989,12 @@ body {
               opacity: 0.4;
             }
           }
+        }
+
+        &.ng-leave {
+          margin-bottom: 0;
+          max-height: 0;
+          opacity: 0;
         }
 
         .search-result-content {

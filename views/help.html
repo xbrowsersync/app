@@ -1,6 +1,6 @@
 <div data-ng-keydown="vm.events.helpPanel_KeyDown($event)" data-hm-swipeleft="vm.events.helpPanel_NextPage()"
   data-hm-swiperight="vm.events.helpPanel_PreviousPage()" tabindex="0">
-  <div id="help-page-{{$index}}" class="animate-fade" data-ng-show="vm.help.currentPage === $index"
+  <div id="help-page-{{$index}}" class="animate-fade-in " data-ng-show="vm.help.currentPage === $index"
     data-ng-repeat="page in vm.help.pages track by $index">
     <div data-ng-bind-html="page"></div>
     <div class="pagination">

@@ -1,5 +1,5 @@
 <div class="header-panel clearfix">
-  <button class="btn btn-icon btn-help animate-fade"
+  <button class="btn btn-icon btn-help animate-fade-in "
     title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Help_Label) }}"
     data-ng-click="vm.events.helpPanel_ShowHelp()">
     <i class="fas fa-question-circle" aria-hidden="true"></i>
@@ -13,14 +13,14 @@
   </button>
 </div>
 <div class="logo"></div>
-<form name="vm.syncForm" class="animate-fade"
+<form name="vm.syncForm" class="animate-fade-in "
   data-ng-hide="vm.sync.displayOtherSyncsWarning || vm.sync.displaySyncConfirmation || vm.sync.displayUpgradeConfirmation"
   novalidate>
   <button type="submit" class="d-none" data-ng-click="vm.events.syncForm_Submit_Click()" tabindex="-1"></button>
-  <div class="login-form-new animate-fade" data-ng-class="{ 'active-login-form': vm.sync.displayNewSyncPanel }"
+  <div class="login-form-new animate-fade-in " data-ng-class="{ 'active-login-form': vm.sync.displayNewSyncPanel }"
     data-ng-show="vm.sync.displayNewSyncPanel">
     <div data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
-      <div class="animate-fade" data-ng-show="vm.sync.displayPasswordConfirmation">
+      <div class="animate-fade-in " data-ng-show="vm.sync.displayPasswordConfirmation">
         <div class="form-group secret-form-group">
           <label class="sr-only" for="txtPasswordConfirmation">{{
           vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}</label>
@@ -39,7 +39,7 @@
           </button>
         </div>
       </div>
-      <div class="animate-fade" data-ng-hide="vm.sync.displayPasswordConfirmation">
+      <div class="animate-fade-in " data-ng-hide="vm.sync.displayPasswordConfirmation">
         <div class="form-group secret-form-group"
           data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
           <label class="sr-only" for="txtPassword">{{
@@ -87,8 +87,8 @@
       </a>
     </div>
   </div>
-  <div class="login-form-existing animate-fade" data-ng-class="{ 'active-login-form': !vm.sync.displayNewSyncPanel }"
-    data-ng-hide="vm.sync.displayNewSyncPanel">
+  <div class="login-form-existing animate-fade-in "
+    data-ng-class="{ 'active-login-form': !vm.sync.displayNewSyncPanel }" data-ng-hide="vm.sync.displayNewSyncPanel">
     <div
       data-ng-show="!vm.utility.IsMobilePlatform(vm.platformName) || (vm.utility.IsMobilePlatform(vm.platformName) && vm.sync.id)">
       <div class="form-group">
@@ -142,7 +142,7 @@
     </div>
   </div>
 </form>
-<div class="confirm well well-sm animate-fade" data-ng-show="vm.sync.displaySyncConfirmation">
+<div class="confirm well well-sm animate-fade-in " data-ng-show="vm.sync.displaySyncConfirmation">
   <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmSync_Title) }}</h4>
   <p>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmSync_Message) }}</p>
   <div class="buttons">
@@ -155,7 +155,7 @@
     </button>
   </div>
 </div>
-<div class="otherSyncsWarning confirm well well-sm animate-fade" data-ng-show="vm.sync.displayOtherSyncsWarning">
+<div class="otherSyncsWarning confirm well well-sm animate-fade-in " data-ng-show="vm.sync.displayOtherSyncsWarning">
   <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_DisableOtherSyncs_Title) }}</h4>
   <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_DisableOtherSyncs_Message)"></p>
   <div class="buttons">
@@ -164,7 +164,7 @@
     </button>
   </div>
 </div>
-<div class="confirm well well-sm animate-fade" data-ng-show="vm.sync.displayUpgradeConfirmation">
+<div class="confirm well well-sm animate-fade-in " data-ng-show="vm.sync.displayUpgradeConfirmation">
   <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_UpgradeSync_Title) }}</h4>
   <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_UpgradeSync_Message)"></div>
   <div class="buttons">
