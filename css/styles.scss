@@ -498,13 +498,13 @@ body {
   .view {
     height: 100%;
     width: 100%;
+    @include animation-fade-in();
 
     .view-content {
       display: flex;
       flex-direction: column;
       height: 100%;
       padding: 0.75rem;
-      @include animation-fade-in();
     }
   }
 
@@ -967,7 +967,7 @@ body {
         margin: 0 0 0.75rem;
         max-height: 25rem;
         overflow: hidden;
-        transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
         @include box-shadow;
 
         &:focus,
@@ -991,7 +991,7 @@ body {
           }
         }
 
-        &.ng-leave {
+        &.ng-leave.ng-leave-active {
           margin-bottom: 0;
           max-height: 0;
           opacity: 0;

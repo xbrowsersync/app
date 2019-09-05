@@ -33,27 +33,27 @@
       <p data-ng-bind-html="vm.alert.message"></p>
     </div>
 
-    <div id="login-panel" class="view" data-ng-if="vm.view.current === vm.view.views.login">
-      <div class="view-content animate" data-ng-include="'./views/login.html'"></div>
+    <div id="login-panel" class="view animate" data-ng-if="vm.view.current === vm.view.views.login">
+      <div class="view-content" data-ng-include="'./views/login.html'"></div>
     </div>
 
-    <div id="search-panel" class="view" data-ng-if="vm.view.current === vm.view.views.search">
-      <div class="view-content animate" data-ng-include="'./views/search.html'"></div>
+    <div id="search-panel" class="view animate" data-ng-if="vm.view.current === vm.view.views.search">
+      <div class="view-content" data-ng-include="'./views/search.html'"></div>
     </div>
 
-    <div id="bookmark-panel" class="view" data-ng-if="vm.view.current === vm.view.views.bookmark">
-      <div class="view-content animate" data-ng-include="'./views/bookmark.html'"></div>
+    <div id="bookmark-panel" class="view animate" data-ng-if="vm.view.current === vm.view.views.bookmark">
+      <div class="view-content" data-ng-include="'./views/bookmark.html'"></div>
     </div>
 
-    <div id="settings-panel" class="view" data-ng-if="vm.view.current === vm.view.views.settings">
-      <div class="view-content animate" data-ng-include="'./views/settings.html'"></div>
+    <div id="settings-panel" class="view animate" data-ng-if="vm.view.current === vm.view.views.settings">
+      <div class="view-content" data-ng-include="'./views/settings.html'"></div>
     </div>
 
-    <div id="information-panel" class="view" data-ng-if="vm.view.current === vm.view.views.loading || 
+    <div id="information-panel" class="view animate" data-ng-if="vm.view.current === vm.view.views.loading || 
       vm.view.current === vm.view.views.support || vm.view.current === vm.view.views.updated || 
       vm.view.current === vm.view.views.permissions || vm.view.current === vm.view.views.help">
       <div id="help-panel" data-ng-if="vm.view.current === vm.view.views.help">
-        <div class="view-content animate" data-ng-include="'./views/help.html'"></div>
+        <div class="view-content" data-ng-include="'./views/help.html'"></div>
       </div>
 
       <div id="support-panel" data-ng-if="vm.view.current === vm.view.views.support">

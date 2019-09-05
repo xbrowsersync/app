@@ -771,36 +771,36 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   };
 
   var getCachedBookmarks = function (canceller) {
-    var cachedEncryptedBookmarks;
-
     // Get cached encrypted bookmarks from local storage
     return platform.LocalStorage.Get(globals.CacheKeys.Bookmarks)
       .then(function (cachedData) {
-        cachedEncryptedBookmarks = cachedData;
+        var cachedEncryptedBookmarks = cachedData;
 
         // Return unencrypted cached bookmarks from memory if encrypted bookmarks
         // in storage match cached encrypted bookmarks in memory
-        if (cachedEncryptedBookmarks && cachedEncryptedBookmarks === cachedBookmarks_encrypted) {
+        if (cachedEncryptedBookmarks && cachedBookmarks_encrypted && cachedEncryptedBookmarks === cachedBookmarks_encrypted) {
           return cachedBookmarks_plain;
         }
 
-        // If no bookmarks cached, get synced bookmarks
-        return api.GetBookmarks(canceller)
-          .then(function (response) {
-            var encryptedBookmarks = response.bookmarks;
+        // If encrypted bookmarks not cached in storage, get synced bookmarks
+        return (cachedEncryptedBookmarks ? $q.resolve(cachedEncryptedBookmarks) :
+          api.GetBookmarks(canceller)
+            .then(function (response) {
+              return response.bookmarks;
+            })
+        ).then(function (encryptedBookmarks) {
+          // Decrypt bookmarks
+          return utility.DecryptData(encryptedBookmarks)
+            .then(function (decryptedBookmarks) {
+              var bookmarks = decryptedBookmarks ? JSON.parse(decryptedBookmarks) : [];
 
-            // Decrypt bookmarks
-            return utility.DecryptData(encryptedBookmarks)
-              .then(function (decryptedBookmarks) {
-                var bookmarks = decryptedBookmarks ? JSON.parse(decryptedBookmarks) : [];
-
-                // Update cache with retrieved bookmarks data
-                return updateCachedBookmarks(bookmarks, encryptedBookmarks)
-                  .then(function () {
-                    return bookmarks;
-                  });
-              });
-          });
+              // Update cache with retrieved bookmarks data
+              return updateCachedBookmarks(bookmarks, encryptedBookmarks)
+                .then(function () {
+                  return bookmarks;
+                });
+            });
+        });
       });
   };
 
