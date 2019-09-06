@@ -105,7 +105,8 @@
         vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
         <input class="form-control" name="txtPassword" data-ng-model="vm.sync.password"
           type="{{ vm.sync.showPassword ? 'text' : 'password' }}" data-ng-disabled="vm.sync.enabled" maxlength="150"
-          placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Existing_Description) }}" />
+          placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Existing_Description) }}"
+          spellcheck="false" />
         <button class="btn btn-icon btn-show-password" data-ng-show="vm.sync.password"
           title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShowPassword_Label) }}"
           data-ng-mousedown="vm.sync.showPassword = true" data-hm-press="vm.sync.showPassword = true">
