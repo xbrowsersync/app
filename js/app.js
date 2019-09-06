@@ -33,10 +33,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       display: displayAlert
     };
 
-    vm.animations = {
-      enabled: true
-    };
-
     vm.bookmark = {
       active: false,
       addButtonDisabledUntilEditForm: false,
@@ -579,9 +575,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     // Hide loading panel
     platform.Interface.Loading.Hide();
 
-    // Disable animations
-    vm.animations.enabled = false;
-
     // Initialise new view
     switch (view) {
       case vm.view.views.bookmark:
@@ -617,10 +610,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         // Attach events to new tab links
         $timeout(setNewTabLinks, 100);
         return view;
-      })
-      .finally(function () {
-        // Re-enable animations
-        vm.animations.enabled = true;
       });
   };
 

@@ -18,19 +18,8 @@
     <div id="qr-panel" class="animate" data-ng-include="'./views/qr.html'" data-ng-show="vm.settings.displayQrPanel">
     </div>
 
-    <div class="alert animate-fade-in animate-fade-out" role="alert" data-ng-show="vm.alert.show" data-ng-class="{
-      'alert-success': vm.alert.type === 'success',
-      'info': vm.alert.type === 'info',
-      'warning': vm.alert.type === 'warning',
-      'alert-danger': vm.alert.type === 'danger' }">
-      <button class="btn btn-icon btn-close"
-        title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}"
-        data-ng-click="vm.alert.show = false" tabindex="1000">
-        <i class="fas fa-times-circle" aria-hidden="true"></i>
-        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}</span>
-      </button>
-      <h4 data-ng-bind-html="vm.alert.title"></h4>
-      <p data-ng-bind-html="vm.alert.message"></p>
+    <div id="alert-panel" data-ng-include="'./views/alert.html'"
+      data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
     </div>
 
     <div id="login-panel" class="view animate" data-ng-if="vm.view.current === vm.view.views.login">
