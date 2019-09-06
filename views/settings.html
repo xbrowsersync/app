@@ -135,13 +135,13 @@
             </div>
           </div>
           <div
-            data-ng-if="vm.settings.service.statusMessage && vm.settings.service.status !== vm.globals.ServiceStatus.Error">
+            data-ng-if="vm.settings.service.statusMessage && vm.settings.service.status !== undefined && vm.settings.service.status !== vm.globals.ServiceStatus.Error">
             <p class="description service-message animate-fade-in" data-ng-show="vm.settings.service.statusMessage"
               data-ng-bind-html="vm.settings.service.statusMessage"></p>
           </div>
         </div>
         <div class="setting-group"
-          data-ng-if="vm.sync.enabled && vm.settings.service.status !== vm.globals.ServiceStatus.Error">
+          data-ng-if="vm.sync.enabled && vm.settings.service.status !== undefined && vm.settings.service.status !== vm.globals.ServiceStatus.Error">
           <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_DataUsage_Label) }}</label>
           <div class="setting-value" data-ng-class="{ 'text-danger': vm.settings.syncDataUsed >= 90 }"
             data-ng-show="vm.settings.syncDataUsed !== null">{{
