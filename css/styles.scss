@@ -758,14 +758,14 @@ body {
     line-height: 2.6rem;
     z-index: 55;
 
-    &:active,
-    &:focus {
+    &:focus,
+    &:hover {
       i {
         opacity: 0.4;
       }
     }
 
-    &:hover {
+    &.active {
       i {
         opacity: 1;
       }

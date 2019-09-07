@@ -87,8 +87,7 @@
       </a>
     </div>
   </div>
-  <div class="login-form-existing animate-fade-in" data-ng-mouseup="vm.sync.showPassword = false"
-    data-hm-pressup="vm.sync.showPassword = false" data-ng-class="{ 'active-login-form': !vm.sync.displayNewSyncPanel }"
+  <div class="login-form-existing animate-fade-in" data-ng-class="{ 'active-login-form': !vm.sync.displayNewSyncPanel }"
     data-ng-hide="vm.sync.displayNewSyncPanel">
     <div
       data-ng-show="!vm.utility.IsMobilePlatform(vm.platformName) || (vm.utility.IsMobilePlatform(vm.platformName) && vm.sync.id)">
@@ -107,9 +106,10 @@
           type="{{ vm.sync.showPassword ? 'text' : 'password' }}" data-ng-disabled="vm.sync.enabled" maxlength="150"
           placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Existing_Description) }}"
           spellcheck="false" />
-        <button class="btn btn-icon btn-show-password" data-ng-show="vm.sync.password"
+        <button class="btn btn-icon btn-show-password" data-ng-class="{ 'active': vm.sync.showPassword }"
+          data-ng-show="vm.sync.password"
           title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShowPassword_Label) }}"
-          data-ng-mousedown="vm.sync.showPassword = true" data-hm-press="vm.sync.showPassword = true">
+          data-ng-click="vm.events.syncForm_ShowPassword_Click()">
           <i class="fas fa-eye" aria-hidden="true"></i>
         </button>
       </div>

@@ -105,6 +105,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       syncForm_ExistingSync_Click: syncForm_ExistingSync_Click,
       syncForm_NewSync_Click: syncForm_NewSync_Click,
       syncForm_OtherSyncsDisabled_Click: syncForm_OtherSyncsDisabled_Click,
+      syncForm_ShowPassword_Click: syncForm_ShowPassword_Click,
       syncForm_Submit_Click: syncForm_Submit_Click,
       syncForm_SyncId_Change: syncForm_SyncId_Change,
       syncForm_SyncUpdates_Click: syncForm_SyncUpdates_Click,
@@ -613,26 +614,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       });
   };
 
-  var configureShowPassword = function () {
-    var showPasswordBtn = document.querySelector('.btn-show-password');
-
-    // Prevent input field losing focus when show password button pressed
-    var stopLoseFocus = function (event) {
-      event.preventDefault();
-    };
-    showPasswordBtn.addEventListener('mousedown', stopLoseFocus);
-    showPasswordBtn.addEventListener('press', stopLoseFocus);
-
-    // Set selection to end of input field
-    var setSelection = function () {
-      $timeout(function () {
-        document.activeElement.selectionStart = document.activeElement.selectionEnd = document.activeElement.value.length;
-      });
-    };
-    showPasswordBtn.addEventListener('mouseup', setSelection);
-    showPasswordBtn.addEventListener('pressup', setSelection);
-  };
-
   var disableSync = function () {
     // Clear view model variables
     vm.search.results = null;
@@ -987,9 +968,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
               if (!utility.IsMobilePlatform(vm.platformName)) {
                 document.querySelector('.active-login-form  input[name="txtPassword"]').focus();
               }
-
-              // 
-              configureShowPassword();
             }, 100);
           }
         }
@@ -1946,6 +1924,11 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         document.querySelector('.active-login-form input[name="txtPassword"]').focus();
       }, 100);
     }
+  };
+
+  var syncForm_ShowPassword_Click = function () {
+    // Toggle show password
+    vm.sync.showPassword = !vm.sync.showPassword;
   };
 
   var syncForm_Submit_Click = function () {
