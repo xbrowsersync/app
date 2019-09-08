@@ -226,7 +226,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   };
 
   var getBackupFileName = function () {
-    var fileName = 'xBrowserSyncBackup_' + getDateTimeString(new Date()) + '.json';
+    var fileName = 'xbs_backup_' + getDateTimeString(new Date()) + '.json';
     return fileName;
   };
 
@@ -235,14 +235,13 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
       return '';
     }
 
-    var ms = ('00' + date.getMilliseconds()).slice(-3);
     var second = ('0' + date.getSeconds()).slice(-2);
     var minute = ('0' + date.getMinutes()).slice(-2);
     var hour = ('0' + date.getHours()).slice(-2);
     var day = ('0' + date.getDate()).slice(-2);
     var month = ('0' + (date.getMonth() + 1)).slice(-2);
     var year = date.getFullYear();
-    return year + month + day + hour + minute + second + ms;
+    return year + month + day + hour + minute + second;
   };
 
   var getErrorMessageFromException = function (err) {
@@ -371,7 +370,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   };
 
   var getLogFileName = function () {
-    var fileName = 'xBrowserSyncLog_' + getDateTimeString(new Date()) + '.txt';
+    var fileName = 'xbs_log_' + getDateTimeString(new Date()) + '.txt';
     return fileName;
   };
 
@@ -577,12 +576,13 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
       return;
     }
 
+    // Get the next log message to process
     currentMessageQueueItem = messageQueue.shift();
     var messageType = currentMessageQueueItem[0];
     var message = currentMessageQueueItem[1];
     var err = currentMessageQueueItem[2];
 
-    //
+    // Format the log message with current time stamp and log type
     var messageLogText = new Date().toISOString().replace(/[A-Z]/g, ' ').trim() + '\t';
     switch (messageType) {
       case globals.LogType.Error:
@@ -596,7 +596,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         messageLogText += '[trace]\t';
     }
 
-    // Add current message to log
+    // Add message text to log item and add to end of log
     return platform.LocalStorage.Get(globals.CacheKeys.TraceLog)
       .then(function (debugMessageLog) {
         debugMessageLog = debugMessageLog || [];
