@@ -29,9 +29,9 @@
       data-ng-change="vm.events.bookmarkForm_BookmarkUrl_Change()" maxlength="2000" spellcheck="false"
       autocomplete="off" required
       placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_UrlField_Label) }}">
-    <button class="btn btn-icon" data-ng-show="vm.bookmarkForm.bookmarkUrl.$dirty"
-      data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)"
-      title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ClearTags_Label) }}"
+    <button class="btn btn-icon" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)"
+      data-ng-show="vm.bookmark.current.url && vm.bookmarkForm.bookmarkUrl.$dirty"
+      title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_UpdateBookmarkProperties_Label) }}"
       data-ng-click="vm.events.bookmarkForm_GetMetadata_Click()">
       <i class="fas fa-cloud-download-alt" aria-hidden="true"></i>
     </button>

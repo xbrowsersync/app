@@ -537,6 +537,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "button_Share_Label": {
       "message": "Share"
     },
+    "button_UpdateBookmarkProperties_Label": {
+      "message": "Update bookmark properties"
+    },
     "button_ClearTags_Label": {
       "message": "Clear tags"
     },
@@ -561,8 +564,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "uncommittedSyncsProcessed_Message": {
       "message": "Connection to service restored, changes synced successfully."
     },
-    "bookmark_Metadata_Message": {
+    "getMetadata_Message": {
       "message": "Fetching bookmark properties, touch to cancel."
+    },
+    "getMetadata_Success_Message": {
+      "message": "Bookmark properties updated."
     },
     "error_Default_Title": {
       "message": "Something went wrong"
@@ -667,10 +673,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "This could be caused by a corrupt browser profile. Try syncing with a fresh profile before importing any existing bookmarks."
     },
     "error_FailedGetPageMetadata_Title": {
-      "message": "Couldn’t get URL metadata"
+      "message": "Couldn’t get bookmark properties"
     },
     "error_FailedGetPageMetadata_Message": {
-      "message": "Try sharing the URL again or enter metadata manually."
+      "message": "URL is invalid or webpage data could not be retrieved."
     },
     "error_ScanFailed_Message": {
       "message": "Scan failed. Check permission has been granted and try again."
@@ -828,7 +834,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           deferred.resolve({ url: currentUrl });
         };
         timeout = $timeout(function () {
-          SpinnerDialog.show(null, getConstant(globals.Constants.Bookmark_Metadata_Message), cancel);
+          SpinnerDialog.show(null, getConstant(globals.Constants.GetMetadata_Message), cancel);
         }, 250);
         break;
       // Display default overlay
@@ -887,17 +893,17 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         switch (true) {
           case syncData.changeInfo.type === globals.UpdateType.Create:
             $timeout(function () {
-              displaySnackbar(null, getConstant(globals.Constants.BookmarkCreated_Message));
+              vm.alert.display(null, getConstant(globals.Constants.BookmarkCreated_Message));
             }, 200);
             break;
           case syncData.changeInfo.type === globals.UpdateType.Delete:
             $timeout(function () {
-              displaySnackbar(null, getConstant(globals.Constants.BookmarkDeleted_Message));
+              vm.alert.display(null, getConstant(globals.Constants.BookmarkDeleted_Message));
             }, 200);
             break;
           case syncData.changeInfo.type === globals.UpdateType.Update:
             $timeout(function () {
-              displaySnackbar(null, getConstant(globals.Constants.BookmarkUpdated_Message));
+              vm.alert.display(null, getConstant(globals.Constants.BookmarkUpdated_Message));
             }, 200);
             break;
         }
@@ -905,7 +911,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       .catch(function (err) {
         // Display more informative message when sync uncommitted
         if (err.code === globals.ErrorCodes.SyncUncommitted) {
-          displaySnackbar(
+          vm.alert.display(
             getConstant(globals.Constants.Error_UncommittedSyncs_Title),
             getConstant(globals.Constants.Error_UncommittedSyncs_Message)
           );
@@ -1040,16 +1046,16 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var getPageMetadata = function (deferred) {
-    var inAppBrowser, inAppBrowserTimeout;
+    var inAppBrowser;
 
     // If current url not set, return with default url
-    if (!currentUrl) {
+    if (!vm.bookmark.current || !vm.bookmark.current.url) {
       vm.bookmark.addButtonDisabledUntilEditForm = true;
       return $q.resolve({ url: 'https://' });
     }
 
     // If current url is not valid, return with default url
-    var matches = currentUrl.match(/^https?:\/\/\w+/i);
+    var matches = vm.bookmark.current.url.match(/^https?:\/\/\w+/i);
     if (!matches || matches.length <= 0) {
       vm.bookmark.addButtonDisabledUntilEditForm = true;
       return $q.resolve({ url: 'https://' });
@@ -1058,30 +1064,22 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     var handleResponse = function (pageContent, err) {
       var parser, html;
 
-      // Cancel timeout
-      if (inAppBrowserTimeout) {
-        $timeout.cancel(inAppBrowserTimeout);
-        inAppBrowserTimeout = null;
-      }
-
       // Check html content was returned
       if (err || !pageContent) {
         if (err) {
           utility.LogError(err, 'platform.handleResponse');
         }
 
-        var errObj = { code: globals.ErrorCodes.FailedGetPageMetadata, url: currentUrl };
+        var errObj = { code: globals.ErrorCodes.FailedGetPageMetadata, url: vm.bookmark.current.url };
 
-        // Reset current url
-        currentUrl = null;
+        // Close InAppBrowser
+        if (inAppBrowser) {
+          inAppBrowser.close();
+          inAppBrowser = null;
+        }
 
         // Return error
         deferred.reject(errObj);
-
-        // Close InAppBrowser
-        inAppBrowser.close();
-        inAppBrowser = null;
-
         return;
       }
 
@@ -1155,40 +1153,41 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
       var metadata = {
         title: getPageTitle(),
-        url: currentUrl,
+        url: vm.bookmark.current.url,
         description: getPageDescription(),
         tags: getPageKeywords()
       };
 
-      // Reset current url
-      currentUrl = null;
+      // Close InAppBrowser
+      if (inAppBrowser) {
+        inAppBrowser.close();
+        inAppBrowser = null;
+      }
 
       // Return metadata
       deferred.resolve(metadata);
-
-      // Close InAppBrowser
-      inAppBrowser.close();
-      inAppBrowser = null;
     };
 
     deferred = deferred || $q.defer();
 
     // If network disconnected fail immediately, otherwise retrieve page metadata
     if (!utility.IsNetworkConnected()) {
-      handleResponse(null, 'Network disconnected.');
+      handleResponse(null, new Error('Network disconnected'));
     }
     else {
-      inAppBrowser = cordova.InAppBrowser.open(currentUrl, '_blank', 'location=yes,hidden=yes');
+      inAppBrowser = cordova.InAppBrowser.open(vm.bookmark.current.url, '_blank', 'hidden=yes');
 
-      inAppBrowser.addEventListener('loaderror', function (err) {
-        if (err && err.code && err.code === -999) {
-          return;
-        }
-
-        handleResponse(null, err);
+      inAppBrowser.addEventListener('loaderror', function (event) {
+        var errMessage = event && event.message ? event.message : 'Failed to load webpage';
+        handleResponse(null, new Error(errMessage));
       });
 
       inAppBrowser.addEventListener('loadstop', function () {
+        // Return if inAppBrowser has already been closed
+        if (!inAppBrowser) {
+          return;
+        }
+
         // Remove invasive content and return doc html
         inAppBrowser.executeScript({
           code:
@@ -1197,13 +1196,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         },
           handleResponse);
       });
-
-      // Time out metadata load after 10 secs
-      inAppBrowserTimeout = $timeout(function () {
-        if (deferred.promise.$$state.status === 0) {
-          handleResponse(null, 'Timed out retrieving page metadata.');
-        }
-      }, 20000);
     }
 
     return deferred.promise;
@@ -1664,7 +1656,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var handleOffline = function () {
     utility.LogInfo('Offline');
-    displaySnackbar(
+    vm.alert.display(
       getConstant(globals.Constants.WorkingOffline_Title),
       getConstant(globals.Constants.WorkingOffline_Message)
     );
@@ -1688,7 +1680,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         return bookmarks.CheckForUncommittedSyncs()
           .then(function (updatesSynced) {
             if (updatesSynced) {
-              displaySnackbar(null, getConstant(globals.Constants.UncommittedSyncsProcessed_Message));
+              vm.alert.display(null, getConstant(globals.Constants.UncommittedSyncsProcessed_Message));
             }
             else {
               // If no uncommitted updates, check for latest updates 

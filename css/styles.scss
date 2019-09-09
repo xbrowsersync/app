@@ -344,13 +344,15 @@ body {
 
     &.btn-icon-container {
       input {
-        padding-right: 2.5rem !important;
+        padding-right: 2.3rem !important;
       }
 
       .btn-icon {
         position: absolute;
-        top: 0;
-        right: 0.75rem;
+        top: 1px;
+        right: 1px;
+        height: 2.3rem;
+        width: 2.3rem;
         font-size: 1.1rem;
         line-height: 2.3rem;
         z-index: 55;
@@ -714,12 +716,13 @@ body {
       position: relative;
       z-index: 50;
       background: transparent;
-      border: none;
+      border: 1px solid $colour-text1;
     }
 
     .lookahead-container {
       top: 0;
       left: 1rem;
+      border: 1px solid $colour-text1;
 
       .lookahead,
       .measure {

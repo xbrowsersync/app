@@ -37,7 +37,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       active: false,
       addButtonDisabledUntilEditForm: false,
       current: undefined,
-      currentUrl: undefined,
       descriptionFieldOriginalHeight: undefined,
       displayUpdateForm: false,
       originalUrl: undefined,
@@ -489,6 +488,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         // Update bookmark metadata and set url field as pristine
         vm.bookmark.current = metadata;
         vm.bookmarkForm.bookmarkUrl.$setPristine();
+
+        // Display message
+        vm.alert.display(null, platform.GetConstant(globals.Constants.GetMetadata_Success_Message));
       })
       .catch(function (err) {
         // Display alert
@@ -860,7 +862,9 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
   var init_bookmarkView = function (bookmarkToUpdate) {
     vm.bookmark.addButtonDisabledUntilEditForm = false;
+    vm.bookmark.current = null;
     vm.bookmark.displayUpdateForm = false;
+    vm.bookmark.originalUrl = null;
     vm.bookmark.tagLookahead = null;
     vm.bookmark.tagText = null;
     vm.bookmark.tagTextMeasure = null;

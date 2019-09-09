@@ -530,6 +530,9 @@
   "button_Share_Label": {
     "message": "Partager"
   },
+  "button_UpdateBookmarkProperties_Label": {
+    "message": "Update bookmark properties"
+  },
   "button_ClearTags_Label": {
     "message": "Clear tags"
   },
@@ -553,6 +556,12 @@
   },
   "uncommittedSyncsProcessed_Message": {
     "message": "Connection to service restored, changes synced successfully."
+  },
+  "getMetadata_Message": {
+    "message": "Fetching bookmark properties, touch to cancel."
+  },
+  "getMetadata_Success_Message": {
+    "message": "Bookmark properties updated."
   },
   "error_Default_Title": {
     "message": "Quelque chose s'est mal passé"

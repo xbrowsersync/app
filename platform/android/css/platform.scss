@@ -113,6 +113,20 @@ body {
     &.btn-default:not([disabled]):focus {
       text-decoration: none;
     }
+
+    &.btn-icon {
+      &:active:hover {
+        i {
+          opacity: 1;
+        }
+      }
+
+      &:hover {
+        i {
+          opacity: 0.4;
+        }
+      }
+    }
   }
 
   input,
