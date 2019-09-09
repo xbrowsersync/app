@@ -19,13 +19,22 @@
       data-ng-class="{ 'focused': vm.bookmark.displayUpdateForm }" maxlength="255" autocomplete="off"
       placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TitleField_Label) }}">
   </div>
-  <div class="form-group" data-ng-class="{ true: 'has-error' }[vm.bookmarkForm.bookmarkUrl.$invalid]">
+  <div class="form-group" data-ng-class="{ 
+      'btn-icon-container': vm.utility.IsMobilePlatform(vm.platformName) && vm.bookmarkForm.bookmarkUrl.$dirty,
+      'has-error': vm.bookmarkForm.bookmarkUrl.$invalid
+    }">
     <label for="bookmarkUrl" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_UrlField_Label)
       }}</label>
     <input type="text" class="form-control" name="bookmarkUrl" placeholder="URL" data-ng-model="vm.bookmark.current.url"
       data-ng-change="vm.events.bookmarkForm_BookmarkUrl_Change()" maxlength="2000" spellcheck="false"
       autocomplete="off" required
       placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_UrlField_Label) }}">
+    <button class="btn btn-icon" data-ng-show="vm.bookmarkForm.bookmarkUrl.$dirty"
+      data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)"
+      title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ClearTags_Label) }}"
+      data-ng-click="vm.events.bookmarkForm_GetMetadata_Click()">
+      <i class="fas fa-cloud-download-alt" aria-hidden="true"></i>
+    </button>
     <div class="validation" data-ng-if="vm.bookmark.current && vm.bookmarkForm.bookmarkUrl.$error.required">
       {{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_BookmarkForm_Required_Label) }}
     </div>
@@ -54,7 +63,7 @@
         <span class="lookahead" data-ng-bind-html="vm.bookmark.tagLookahead" data-ng-show="vm.bookmark.tagLookahead"
           data-ng-click="vm.events.bookmarkForm_BookmarkTags_Lookahead_Click ()"></span>
       </div>
-      <button class="btn btn-icon btn-clear" data-ng-show="vm.bookmark.current.tags.length > 0"
+      <button class="btn btn-icon" data-ng-show="vm.bookmark.current.tags.length > 0"
         title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ClearTags_Label) }}"
         data-ng-click="vm.events.bookmarkForm_BookmarkTags_ClearAll_Click()">
         <i class="fas fa-trash-alt" aria-hidden="true"></i>

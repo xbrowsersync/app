@@ -342,6 +342,21 @@ body {
     position: relative;
     margin-bottom: 1rem;
 
+    &.btn-icon-container {
+      input {
+        padding-right: 2.5rem !important;
+      }
+
+      .btn-icon {
+        position: absolute;
+        top: 0;
+        right: 0.75rem;
+        font-size: 1.1rem;
+        line-height: 2.3rem;
+        z-index: 55;
+      }
+    }
+
     &.has-error {
       input,
       textarea {
@@ -688,7 +703,7 @@ body {
   }
 
   .tags-input-container {
-    position: relative;
+    @extend .btn-icon-container;
     border-radius: $border-radius-input;
     background-color: $colour-text1;
     overflow: hidden;
@@ -699,17 +714,7 @@ body {
       position: relative;
       z-index: 50;
       background: transparent;
-      padding-right: 2.2rem;
       border: none;
-    }
-
-    .btn-clear {
-      position: absolute;
-      top: 0;
-      right: 0.75rem;
-      font-size: 1.1rem;
-      line-height: 2.3rem;
-      z-index: 55;
     }
 
     .lookahead-container {

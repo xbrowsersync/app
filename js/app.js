@@ -61,6 +61,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       bookmarkForm_CreateBookmark_Click: bookmarkForm_CreateBookmark_Click,
       bookmarkForm_CreateTags_Click: bookmarkForm_CreateTags_Click,
       bookmarkForm_DeleteBookmark_Click: bookmarkForm_DeleteBookmark_Click,
+      bookmarkForm_GetMetadata_Click: bookmarkForm_GetMetadata_Click,
       bookmarkForm_RemoveTag_Click: bookmarkForm_RemoveTag_Click,
       bookmarkForm_ShareBookmark_Click: platform.Bookmarks.Share,
       bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
@@ -482,6 +483,41 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       .catch(displayAlertErrorHandler);
   };
 
+  var bookmarkForm_GetMetadata_Click = function () {
+    getMetadataForCurrentBookmarkUrl()
+      .then(function (metadata) {
+        // Update bookmark metadata and set url field as pristine
+        vm.bookmark.current = metadata;
+        vm.bookmarkForm.bookmarkUrl.$setPristine();
+      })
+      .catch(function (err) {
+        // Display alert
+        var errMessage = utility.GetErrorMessageFromException(err);
+        vm.alert.display(errMessage.title, errMessage.message, 'danger');
+      });
+  };
+
+  var getMetadataForCurrentBookmarkUrl = function () {
+    var loadMetadataDeferred = $q.defer();
+
+    // Display loading on mobiles and get page metadata for current url
+    var timeout = utility.IsMobilePlatform(vm.platformName) ?
+      platform.Interface.Loading.Show('retrievingMetadata', loadMetadataDeferred) : null;
+    return platform.GetPageMetadata(loadMetadataDeferred)
+      .then(function (metadata) {
+        // Return retrieved metadata as bookmark
+        var metadataAsBookmark = new bookmarks.XBookmark(
+          metadata.title,
+          metadata.url,
+          utility.TrimToNearestWord(metadata.description, globals.Bookmarks.DescriptionMaxLength),
+          utility.GetTagArrayFromText(metadata.tags));
+        return metadataAsBookmark;
+      })
+      .finally(function () {
+        platform.Interface.Loading.Hide('retrievingMetadata', timeout);
+      });
+  };
+
   var bookmarkForm_RemoveTag_Click = function (tag) {
     vm.bookmark.current.tags = _.without(vm.bookmark.current.tags, tag);
     vm.bookmarkForm.$setDirty();
@@ -823,9 +859,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var init_bookmarkView = function (bookmarkToUpdate) {
-    var loadMetadataDeferred = $q.defer();
-    var timeout;
-
     vm.bookmark.addButtonDisabledUntilEditForm = false;
     vm.bookmark.displayUpdateForm = false;
     vm.bookmark.tagLookahead = null;
@@ -849,20 +882,11 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
           }
 
           // Display loading on mobiles and get page metadata for current url
-          timeout = utility.IsMobilePlatform(vm.platformName) ?
-            platform.Interface.Loading.Show('retrievingMetadata', loadMetadataDeferred) : null;
-          return platform.GetPageMetadata(loadMetadataDeferred)
+          return getMetadataForCurrentBookmarkUrl()
             .then(function (metadata) {
               // Display add bookmark form
               vm.bookmark.displayUpdateForm = false;
-
-              // Set bookmark form field values
-              var bookmarkFormFieldValues = new bookmarks.XBookmark(
-                metadata.title,
-                metadata.url,
-                utility.TrimToNearestWord(metadata.description, globals.Bookmarks.DescriptionMaxLength),
-                utility.GetTagArrayFromText(metadata.tags));
-              resolve(bookmarkFormFieldValues);
+              resolve(metadata);
             });
         });
     })
@@ -894,9 +918,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         // Display alert
         var errMessage = utility.GetErrorMessageFromException(err);
         vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      })
-      .finally(function () {
-        platform.Interface.Loading.Hide('retrievingMetadata', timeout);
       });
   };
 
