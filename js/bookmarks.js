@@ -930,9 +930,20 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
               setIsSyncing()
             ])
               .then(function () {
+                if (!syncEnabled) {
+                  return;
+                }
+
                 // If no data found, sync has been removed
-                if (syncEnabled && err.code === globals.ErrorCodes.NoDataFound) {
+                if (err.code === globals.ErrorCodes.NoDataFound) {
                   err.code = globals.ErrorCodes.SyncRemoved;
+                }
+
+                // If local changes made, ensure sync queue is cleared
+                else if (currentSync.type !== globals.SyncType.Pull) {
+                  syncQueue = [];
+                  var lastUpdated = new Date().toISOString();
+                  platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, lastUpdated);
                 }
 
                 // Check if sync should be disabled

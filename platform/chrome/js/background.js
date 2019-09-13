@@ -39,12 +39,14 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
     // Retrieve changed bookmark full info
     var prepareToSyncChanges = $q(function (resolve, reject) {
-      try {
-        chrome.bookmarks.getSubTree(id, resolve);
-      }
-      catch (err) {
-        reject(err);
-      }
+      chrome.bookmarks.getSubTree(id, function (subTree) {
+        var apiError = checkForApiError();
+        if (apiError) {
+          return reject(apiError);
+        }
+
+        resolve(subTree);
+      });
     })
       .then(function (results) {
         if (!results || results.length === 0) {
@@ -104,6 +106,17 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     });
   };
 
+  var checkForApiError = function () {
+    var err;
+
+    if (chrome.runtime.lastError) {
+      err = new Error(chrome.runtime.lastError.message);
+      utility.LogError(err);
+    }
+
+    return err;
+  };
+
   var checkForUpdatesOnStartup = function () {
     return $q(function (resolve, reject) {
       // If network disconnected, skip update check
@@ -159,29 +172,35 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   var convertLocalBookmarkToSeparator = function (bookmark) {
     return toggleEventListeners(false)
       .then(function () {
-        return platform.Bookmarks.LocalBookmarkInToolbar(bookmark)
-          .then(function (inToolbar) {
-            var title = inToolbar ? globals.Bookmarks.VerticalSeparatorTitle : globals.Bookmarks.HorizontalSeparatorTitle;
-            return $q(function (resolve, reject) {
-              try {
-                var separator = {
-                  index: bookmark.index,
-                  parentId: bookmark.parentId,
-                  title: title,
-                  url: platform.GetNewTabUrl()
-                };
-                chrome.bookmarks.remove(bookmark.id, function () {
-                  chrome.bookmarks.create(separator, resolve);
-                });
+        return platform.Bookmarks.LocalBookmarkInToolbar(bookmark);
+      })
+      .then(function (inToolbar) {
+        var title = inToolbar ? globals.Bookmarks.VerticalSeparatorTitle : globals.Bookmarks.HorizontalSeparatorTitle;
+        return $q(function (resolve, reject) {
+          // Remove and recreate bookmark as a separator
+          var separator = {
+            index: bookmark.index,
+            parentId: bookmark.parentId,
+            title: title,
+            url: platform.GetNewTabUrl()
+          };
+
+          chrome.bookmarks.remove(bookmark.id, function () {
+            var apiError = checkForApiError();
+            if (apiError) {
+              return reject(apiError);
+            }
+
+            chrome.bookmarks.create(separator, function (createdBookmark) {
+              var apiError = checkForApiError();
+              if (apiError) {
+                return reject(apiError);
               }
-              catch (err) {
-                return toggleEventListeners(true)
-                  .then(function () {
-                    reject(err);
-                  });
-              }
+
+              resolve(createdBookmark);
             });
           });
+        });
       })
       .finally(function () {
         return toggleEventListeners(true);
@@ -269,17 +288,10 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       success: true
     };
 
-    try {
-      chrome.bookmarks.onCreated.removeListener(onCreatedHandler);
-      chrome.bookmarks.onRemoved.removeListener(onRemovedHandler);
-      chrome.bookmarks.onChanged.removeListener(onChangedHandler);
-      chrome.bookmarks.onMoved.removeListener(onMovedHandler);
-    }
-    catch (err) {
-      utility.LogInfo('Failed to disable event listeners');
-      response.error = err;
-      response.success = false;
-    }
+    chrome.bookmarks.onCreated.removeListener(onCreatedHandler);
+    chrome.bookmarks.onRemoved.removeListener(onRemovedHandler);
+    chrome.bookmarks.onChanged.removeListener(onChangedHandler);
+    chrome.bookmarks.onMoved.removeListener(onMovedHandler);
 
     sendResponse(response);
   };
@@ -417,12 +429,14 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
     // Retrieve moved bookmark full info
     var prepareToSyncChanges = $q(function (resolve, reject) {
-      try {
-        chrome.bookmarks.getSubTree(id, resolve);
-      }
-      catch (err) {
-        reject(err);
-      }
+      chrome.bookmarks.getSubTree(id, function (subTree) {
+        var apiError = checkForApiError();
+        if (apiError) {
+          return reject(apiError);
+        }
+
+        resolve(subTree);
+      });
     })
       .then(function (results) {
         if (!results || results.length === 0) {
