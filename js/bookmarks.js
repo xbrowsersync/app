@@ -69,7 +69,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     });
 
     if (!bookmarksHaveIds) {
-      utility.LogWarning('Bookmarks missing ids.');
+      utility.LogWarning('Bookmarks missing ids');
       return false;
     }
 
@@ -779,7 +779,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         // Return unencrypted cached bookmarks from memory if encrypted bookmarks
         // in storage match cached encrypted bookmarks in memory
         if (cachedEncryptedBookmarks && cachedBookmarks_encrypted && cachedEncryptedBookmarks === cachedBookmarks_encrypted) {
-          return cachedBookmarks_plain;
+          return utility.DeepCopy(cachedBookmarks_plain);
         }
 
         // If encrypted bookmarks not cached in storage, get synced bookmarks
@@ -1159,7 +1159,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   };
 
   var sync_handleBoth = function (syncData) {
-    var bookmarks, getBookmarksToSync, updateLocalBookmarksInfo;
+    var getBookmarksToSync, updateLocalBookmarksInfo;
 
     if (syncData.bookmarks) {
       // Sync with provided bookmarks
@@ -1230,14 +1230,10 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         bookmarks = bookmarks || [];
         return utility.EncryptData(JSON.stringify(bookmarks))
           .then(function (encryptedBookmarks) {
-            // Update cached bookmarks
-            return updateCachedBookmarks(bookmarks, encryptedBookmarks)
-              .then(function () {
-                // Update local bookmarks
-                return syncData.command === globals.Commands.RestoreBookmarks ?
-                  refreshLocalBookmarks(bookmarks) :
-                  updateLocalBookmarks(updateLocalBookmarksInfo);
-              })
+            // Update local bookmarks
+            return (syncData.command === globals.Commands.RestoreBookmarks ?
+              refreshLocalBookmarks(bookmarks) :
+              updateLocalBookmarks(updateLocalBookmarksInfo))
               .then(function () {
                 // Commit update to service
                 return api.UpdateBookmarks(encryptedBookmarks)
@@ -1251,8 +1247,11 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                   });
               })
               .then(function (response) {
-                // Update cached last updated date and return decrypted bookmarks
-                return platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, response.lastUpdated)
+                // Update cache and return decrypted bookmarks
+                return $q.all([
+                  updateCachedBookmarks(bookmarks, encryptedBookmarks),
+                  platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, response.lastUpdated)
+                ])
                   .then(function () {
                     return bookmarks;
                   });
@@ -1406,26 +1405,25 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         bookmarks = bookmarks || [];
         return utility.EncryptData(JSON.stringify(bookmarks))
           .then(function (encryptedBookmarks) {
-            // Update cached bookmarks and synced bookmarks
-            return updateCachedBookmarks(bookmarks, encryptedBookmarks)
-              .then(function () {
-                // Commit update to service
-                return api.UpdateBookmarks(encryptedBookmarks)
-                  .catch(function (err) {
-                    // If offline, attach updated bookmarks to error object
-                    if (err.code === globals.ErrorCodes.NetworkOffline) {
-                      err.bookmarks = bookmarks;
-                    }
-
-                    throw err;
-                  });
-              });
-          })
-          .then(function (response) {
-            // Update cached last updated date and return decrypted bookmarks
-            return platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, response.lastUpdated)
+            // Commit update to service
+            return api.UpdateBookmarks(encryptedBookmarks)
+              .then(function (response) {
+                // Update cached and return decrypted bookmarks
+                return $q.all([
+                  updateCachedBookmarks(bookmarks, encryptedBookmarks),
+                  platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, response.lastUpdated)
+                ]);
+              })
               .then(function () {
                 return bookmarks;
+              })
+              .catch(function (err) {
+                // If offline, attach updated bookmarks to error object
+                if (err.code === globals.ErrorCodes.NetworkOffline) {
+                  err.bookmarks = bookmarks;
+                }
+
+                throw err;
               });
           });
       });
@@ -1478,22 +1476,21 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         return utility.EncryptData(JSON.stringify(bookmarks));
       })
       .then(function (encryptedBookmarks) {
-        // Update cached bookmarks, synced bookmarks and sync version
-        return updateCachedBookmarks(bookmarks, encryptedBookmarks)
-          .then(function () {
-            // Sync provided bookmarks and set local bookmarks
+        // Sync provided bookmarks and set local bookmarks
+        return $q.all([
+          api.UpdateBookmarks(encryptedBookmarks, true),
+          refreshLocalBookmarks(bookmarks)
+        ])
+          .then(function (data) {
+            // Update cached last updated date and return decrypted bookmarks
             return $q.all([
-              api.UpdateBookmarks(encryptedBookmarks, true),
-              refreshLocalBookmarks(bookmarks)
+              updateCachedBookmarks(bookmarks, encryptedBookmarks),
+              platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, data[0].lastUpdated)
             ]);
+          })
+          .then(function () {
+            return bookmarks;
           });
-      })
-      .then(function (data) {
-        // Update cached last updated date and return decrypted bookmarks
-        return platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, data[0].lastUpdated);
-      })
-      .then(function () {
-        return bookmarks;
       });
   };
 

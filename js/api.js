@@ -26,7 +26,10 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
               method: 'GET',
               url: serviceUrl + globals.URL.ServiceInformation,
               timeout: 3000,
-            });
+            })
+              .catch(function (response) {
+                apiRequestFailed(new Error(getHttpErrorMessageFromHttpStatus(response.status)));
+              });
           })
           .then(apiRequestSucceeded)
           .then(function (response) {
@@ -34,31 +37,15 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 
             // Check service is a valid xBrowserSync API
             if (!data || data.status == null || data.version == null) {
-              return $q.reject({ code: globals.ErrorCodes.InvalidService });
+              apiRequestFailed(new Error(getHttpErrorMessageFromErrorCode(globals.ErrorCodes.InvalidService)));
             }
 
             // Check service version is supported by this client
             if (compareVersions(data.version, globals.MinApiVersion) < 0) {
-              return $q.reject({ code: globals.ErrorCodes.UnsupportedServiceApiVersion });
+              apiRequestFailed(new Error(getHttpErrorMessageFromErrorCode(globals.ErrorCodes.UnsupportedServiceApiVersion)));
             }
 
             return data;
-          })
-          .catch(function (err) {
-            if (err.status != null) {
-              var httpErr = new Error(err.status + ' ' + err.statusText);
-              return getErrorCodeFromHttpError(err, httpErr.stack)
-                .then(function (errObj) {
-                  var codeName = _.findKey(globals.ErrorCodes, function (key) { return key === errObj.code; });
-                  utility.LogInfo('Service error: ' + codeName);
-                  return $q.reject(errObj);
-                });
-            }
-            else {
-              var codeName = _.findKey(globals.ErrorCodes, function (key) { return key === err.code; });
-              utility.LogInfo('Service error: ' + codeName);
-              throw err;
-            }
           });
       });
   };
@@ -74,8 +61,10 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
               version: globals.AppVersion
             };
 
-            return $http.post(serviceUrl + globals.URL.Bookmarks,
-              JSON.stringify(data));
+            return $http.post(serviceUrl + globals.URL.Bookmarks, JSON.stringify(data))
+              .catch(function (response) {
+                apiRequestFailed(new Error(getHttpErrorMessageFromHttpStatus(response.status)), true);
+              });
           })
           .then(apiRequestSucceeded)
           .then(function (response) {
@@ -83,12 +72,11 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 
             // Check response data is valid before returning
             if (!data || !data.id || !data.lastUpdated || !data.version) {
-              return $q.reject({ code: globals.ErrorCodes.NoDataFound });
+              apiRequestFailed(new Error(getHttpErrorMessageFromErrorCode(globals.ErrorCodes.NoDataFound)));
             }
 
             return data;
-          })
-          .catch(apiRequestFailed);
+          });
       });
   };
 
@@ -113,8 +101,11 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
             // Get current service url
             return utility.GetServiceUrl()
               .then(function (serviceUrl) {
-                return $http.get(serviceUrl + globals.URL.Bookmarks + '/' + syncId,
-                  { timeout: canceller });
+                return $http.get(serviceUrl + globals.URL.Bookmarks + '/' + syncId, { timeout: canceller })
+                  .catch(function (response) {
+                    // TODO: check if cancelled
+                    apiRequestFailed(new Error(getHttpErrorMessageFromHttpStatus(response.status)), true);
+                  });
               })
               .then(apiRequestSucceeded)
               .then(function (response) {
@@ -122,22 +113,10 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 
                 // Check response data is valid before returning
                 if (!data || !data.lastUpdated) {
-                  return $q.reject({ code: globals.ErrorCodes.NoDataFound });
+                  apiRequestFailed(new Error(getHttpErrorMessageFromErrorCode(globals.ErrorCodes.NoDataFound)));
                 }
 
                 return data;
-              })
-              .catch(function (err) {
-                // Return if request was cancelled
-                if (err.config &&
-                  err.config.timeout &&
-                  err.config.timeout.$$state &&
-                  err.config.timeout.$$state.status &&
-                  err.config.timeout.$$state.status === 1) {
-                  return $q.reject({ code: globals.ErrorCodes.HttpRequestCancelled });
-                }
-
-                return apiRequestFailed(err);
               });
           });
       });
@@ -165,7 +144,10 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
             return utility.GetServiceUrl()
               .then(function (serviceUrl) {
                 return $http.get(serviceUrl + globals.URL.Bookmarks +
-                  '/' + syncId + globals.URL.LastUpdated);
+                  '/' + syncId + globals.URL.LastUpdated)
+                  .catch(function (response) {
+                    apiRequestFailed(new Error(getHttpErrorMessageFromHttpStatus(response.status)), true);
+                  });
               })
               .then(apiRequestSucceeded)
               .then(function (response) {
@@ -173,12 +155,11 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 
                 // Check response data is valid before returning
                 if (!data || !data.lastUpdated) {
-                  return $q.reject({ code: globals.ErrorCodes.NoDataFound });
+                  apiRequestFailed(new Error(getHttpErrorMessageFromErrorCode(globals.ErrorCodes.NoDataFound)));
                 }
 
                 return data;
-              })
-              .catch(apiRequestFailed);
+              });
           });
       });
   };
@@ -192,7 +173,10 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
         return utility.GetServiceUrl()
           .then(function (serviceUrl) {
             return $http.get(serviceUrl + globals.URL.Bookmarks +
-              '/' + syncId + globals.URL.Version);
+              '/' + syncId + globals.URL.Version)
+              .catch(function (response) {
+                apiRequestFailed(new Error(getHttpErrorMessageFromHttpStatus(response.status)), true);
+              });
           })
           .then(apiRequestSucceeded)
           .then(function (response) {
@@ -200,12 +184,11 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 
             // Check response data is valid before returning
             if (!data) {
-              return $q.reject({ code: globals.ErrorCodes.NoDataFound });
+              apiRequestFailed(new Error(getHttpErrorMessageFromErrorCode(globals.ErrorCodes.NoDataFound)));
             }
 
             return data;
-          })
-          .catch(apiRequestFailed);
+          });
       });
   };
 
@@ -242,8 +225,10 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
                   data.version = globals.AppVersion;
                 }
 
-                return $http.put(serviceUrl + globals.URL.Bookmarks + '/' + syncId,
-                  JSON.stringify(data));
+                return $http.put(serviceUrl + globals.URL.Bookmarks + '/' + syncId, JSON.stringify(data))
+                  .catch(function (response) {
+                    apiRequestFailed(new Error(getHttpErrorMessageFromHttpStatus(response.status)), true);
+                  });
               })
               .then(apiRequestSucceeded)
               .then(function (response) {
@@ -251,12 +236,11 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 
                 // Check response data is valid before returning
                 if (!data || !data.lastUpdated) {
-                  return $q.reject({ code: globals.ErrorCodes.NoDataFound });
+                  apiRequestFailed(new Error(getHttpErrorMessageFromErrorCode(globals.ErrorCodes.NoDataFound)));
                 }
 
                 return data;
-              })
-              .catch(apiRequestFailed);
+              });
           });
       });
   };
@@ -266,19 +250,16 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
 	 * Private functions
 	 * ------------------------------------------------------------------------------------ */
 
-  var apiRequestFailed = function (err) {
-    // Get error code from http response status
-    if (err.status != null) {
-      var httpErr = new Error(err.status + ' ' + err.statusText);
-      return getErrorCodeFromHttpError(err, httpErr.stack)
-        .then(function (errObj) {
-          // If 404 response, service is likely offline
-          if (errObj.code === globals.ErrorCodes.InvalidService) {
-            errObj.code = globals.ErrorCodes.ServiceOffline;
-          }
+  var apiRequestFailed = function (err, invalidServiceIsServiceOffline) {
+    utility.LogError(err);
 
-          return $q.reject(errObj);
-        });
+    // Get error code from code name in error message
+    var codeName = err.message.match(/\w+$/)[0];
+    err.code = globals.ErrorCodes[codeName];
+
+    // If 404 response, service is likely offline
+    if (invalidServiceIsServiceOffline && err.code === globals.ErrorCodes.InvalidService) {
+      err.code = globals.ErrorCodes.ServiceOffline;
     }
 
     throw err;
@@ -294,62 +275,64 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
         return resolve();
       }
 
+      utility.LogWarning('API request failed: Network offline');
       return reject({ code: globals.ErrorCodes.NetworkOffline });
     });
   };
 
-  var getErrorCodeFromHttpError = function (httpErr, errStack) {
-    var getErrorCodePromise;
-
-    if (!httpErr) {
-      getErrorCodePromise = $q.resolve(-1);
-    }
-
-    switch (httpErr.status) {
+  var getErrorCodeFromHttpStatus = function (httpStatus) {
+    var errorCode;
+    switch (httpStatus) {
       // 404 Not Found: service offline or not an xBrowserSync service
       case 404:
-        getErrorCodePromise = $q.resolve(globals.ErrorCodes.InvalidService);
+        errorCode = globals.ErrorCodes.InvalidService;
         break;
       // 405 Method Not Allowed: service not accepting new syncs
       case 405:
-        getErrorCodePromise = $q.resolve(globals.ErrorCodes.NotAcceptingNewSyncs);
+        errorCode = globals.ErrorCodes.NotAcceptingNewSyncs;
         break;
       // 406 Not Acceptable: daily new sync limit reached
       case 406:
-        getErrorCodePromise = $q.resolve(globals.ErrorCodes.DailyNewSyncLimitReached);
+        errorCode = globals.ErrorCodes.DailyNewSyncLimitReached;
         break;
       // 409 Conflict: sync conflict / invalid id
       case 409:
-        getErrorCodePromise = httpErr.data.code === 'SyncConflictException' ? $q.resolve(globals.ErrorCodes.DataOutOfSync) : $q.resolve(globals.ErrorCodes.NoDataFound);
+        // TODO: Fix this
+        errorCode = httpStatus.data.code === 'SyncConflictException' ? globals.ErrorCodes.DataOutOfSync : globals.ErrorCodes.NoDataFound;
         break;
       // 413 Request Entity Too Large: sync data size exceeds service limit
       case 413:
-        getErrorCodePromise = $q.resolve(globals.ErrorCodes.RequestEntityTooLarge);
+        errorCode = globals.ErrorCodes.RequestEntityTooLarge;
         break;
       // 429 Too Many Requests: daily new sync limit reached
       case 429:
-        getErrorCodePromise = $q.resolve(globals.ErrorCodes.TooManyRequests);
+        errorCode = globals.ErrorCodes.TooManyRequests;
         break;
       // 503 Service Unavailable: service offline
       case 503:
-        getErrorCodePromise = $q.resolve(globals.ErrorCodes.ServiceOffline);
+        errorCode = globals.ErrorCodes.ServiceOffline;
         break;
       // -1: No network connection
       case -1:
-        getErrorCodePromise = $q.resolve(globals.ErrorCodes.HttpRequestFailed);
+        errorCode = globals.ErrorCodes.HttpRequestFailed;
         break;
       // Otherwise generic request failed
       default:
-        getErrorCodePromise = $q.resolve(globals.ErrorCodes.HttpRequestFailed);
+        errorCode = globals.ErrorCodes.HttpRequestFailed;
     }
 
-    return getErrorCodePromise
-      .then(function (errorCode) {
-        return {
-          code: errorCode,
-          stack: errStack
-        };
-      });
+    return errorCode;
+  };
+
+  var getHttpErrorMessageFromErrorCode = function (errorCode) {
+    var codeName = _.findKey(globals.ErrorCodes, function (key) { return key === errorCode; });
+    var message = '[' + errorCode + '] ' + codeName;
+    return message;
+  };
+
+  var getHttpErrorMessageFromHttpStatus = function (httpStatus) {
+    var errorCode = getErrorCodeFromHttpStatus(httpStatus);
+    return getHttpErrorMessageFromErrorCode(errorCode);
   };
 
   return {

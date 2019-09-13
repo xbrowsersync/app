@@ -12,7 +12,7 @@ SpinnerDialog.show = function () { };
 xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, platform, globals, utility, bookmarks) {
   'use strict';
 
-  var $scope, currentUrl, loadingId, vm;
+  var $scope, currentPage, loadingId, sharedBookmark, vm;
 
   var constants = {
     "title": {
@@ -812,7 +812,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return $q.resolve();
   };
 
-  var displayLoading = function (id, deferred) {
+  var displayLoading = function (id, cancelledCallback) {
     var timeout;
 
     // Return if loading overlay already displayed
@@ -830,8 +830,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       // Loading bookmark metadata, display cancellable overlay
       case 'retrievingMetadata':
         var cancel = function () {
-          vm.bookmark.addButtonDisabledUntilEditForm = true;
-          deferred.resolve({ url: currentUrl });
+          SpinnerDialog.hide();
+          loadingId = null;
+          cancelledCallback();
         };
         timeout = $timeout(function () {
           SpinnerDialog.show(null, getConstant(globals.Constants.GetMetadata_Message), cancel);
@@ -948,7 +949,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var getCurrentUrl = function () {
-    return $q.resolve(currentUrl);
+    return $q.resolve(currentPage && currentPage.url);
   };
 
   var getHelpPages = function () {
@@ -1045,137 +1046,128 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return getCachedData;
   };
 
-  var getPageMetadata = function (deferred) {
-    var inAppBrowser;
-
-    // If current url not set, return with default url
-    if (!vm.bookmark.current || !vm.bookmark.current.url) {
-      vm.bookmark.addButtonDisabledUntilEditForm = true;
-      return $q.resolve({ url: 'https://' });
-    }
-
-    // If current url is not valid, return with default url
-    var matches = vm.bookmark.current.url.match(/^https?:\/\/\w+/i);
-    if (!matches || matches.length <= 0) {
-      vm.bookmark.addButtonDisabledUntilEditForm = true;
-      return $q.resolve({ url: 'https://' });
-    }
-
-    var handleResponse = function (pageContent, err) {
-      var parser, html;
-
-      // Check html content was returned
-      if (err || !pageContent) {
-        if (err) {
-          utility.LogError(err, 'platform.handleResponse');
-        }
-
-        var errObj = { code: globals.ErrorCodes.FailedGetPageMetadata, url: vm.bookmark.current.url };
-
-        // Close InAppBrowser
-        if (inAppBrowser) {
-          inAppBrowser.close();
-          inAppBrowser = null;
-        }
-
-        // Return error
-        deferred.reject(errObj);
-        return;
-      }
-
-      // Extract metadata properties
-      parser = new DOMParser();
-      html = parser.parseFromString(pageContent, 'text/html');
-
-      // Get all meta tags
-      var metaTagsArr = html.getElementsByTagName('meta');
-
-      var getPageDescription = function () {
-        for (var i = 0; i < metaTagsArr.length; i++) {
-          var currentTag = metaTagsArr[i];
-          if ((!!currentTag.getAttribute('property') && currentTag.getAttribute('property').toUpperCase().trim() === 'OG:DESCRIPTION' && !!currentTag.getAttribute('content')) ||
-            (!!currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'TWITTER:DESCRIPTION' && !!currentTag.getAttribute('content')) ||
-            (!!currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'DESCRIPTION' && !!currentTag.getAttribute('content'))) {
-            return (!!currentTag.getAttribute('content')) ? currentTag.getAttribute('content').trim() : '';
-          }
-        }
-
-        return null;
-      };
-
-      var getPageKeywords = function () {
-        // Get open graph tag values 
-        var currentTag, i, keywords = [];
-        for (i = 0; i < metaTagsArr.length; i++) {
-          currentTag = metaTagsArr[i];
-          if (!!currentTag.getAttribute('property') &&
-            !!currentTag.getAttribute('property').trim().match(/VIDEO\:TAG$/i) &&
-            !!currentTag.getAttribute('content')) {
-            keywords.push(currentTag.getAttribute('content').trim());
-          }
-        }
-
-        // Get meta tag values 
-        for (i = 0; i < metaTagsArr.length; i++) {
-          currentTag = metaTagsArr[i];
-          if (!!currentTag.getAttribute('name') &&
-            currentTag.getAttribute('name').toUpperCase().trim() === 'KEYWORDS' &&
-            !!currentTag.getAttribute('content')) {
-            var metaKeywords = currentTag.getAttribute('content').split(',');
-            for (i = 0; i < metaKeywords.length; i++) {
-              var currentKeyword = metaKeywords[i];
-              if (!!currentKeyword && !!currentKeyword.trim()) {
-                keywords.push(currentKeyword.trim());
-              }
-            }
-            break;
-          }
-        }
-
-        if (keywords.length > 0) {
-          return keywords.join();
-        }
-
-        return null;
-      };
-
-      var getPageTitle = function () {
-        for (var i = 0; i < metaTagsArr.length; i++) {
-          var tag = metaTagsArr[i];
-          if ((!!tag.getAttribute('property') && tag.getAttribute('property').toUpperCase().trim() === 'OG:TITLE' && !!tag.getAttribute('content')) ||
-            (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase().trim() === 'TWITTER:TITLE' && !!tag.getAttribute('content'))) {
-            return (!!tag.getAttribute('content')) ? tag.getAttribute('content').trim() : '';
-          }
-        }
-
-        return html.title;
-      };
-
-      var metadata = {
-        title: getPageTitle(),
-        url: vm.bookmark.current.url,
-        description: getPageDescription(),
-        tags: getPageKeywords()
-      };
-
-      // Close InAppBrowser
-      if (inAppBrowser) {
-        inAppBrowser.close();
-        inAppBrowser = null;
-      }
-
-      // Return metadata
-      deferred.resolve(metadata);
+  var getPageMetadata = function (url) {
+    var inAppBrowser, timeout;
+    var metadata = {
+      url: url
     };
 
-    deferred = deferred || $q.defer();
-
-    // If network disconnected fail immediately, otherwise retrieve page metadata
-    if (!utility.IsNetworkConnected()) {
-      handleResponse(null, new Error('Network disconnected'));
+    // Set default title as shared bookmark title
+    if (currentPage && url === currentPage.url) {
+      metadata.title = currentPage.title;
     }
-    else {
-      inAppBrowser = cordova.InAppBrowser.open(vm.bookmark.current.url, '_blank', 'hidden=yes');
+
+    return $q(function (resolve, reject) {
+      // Return if current url not set
+      if (!url) {
+        vm.bookmark.addButtonDisabledUntilEditForm = true;
+        return resolve();
+      }
+
+      // Return if current url is not valid
+      var matches = url.match(/^https?:\/\/\w+/i);
+      if (!matches || matches.length <= 0) {
+        vm.bookmark.addButtonDisabledUntilEditForm = true;
+        return resolve();
+      }
+
+      var handleResponse = function (pageContent, err) {
+        var parser, html;
+        platform.Interface.Loading.Hide('retrievingMetadata', timeout);
+
+        // Check html content was returned
+        if (err || !pageContent) {
+          if (err) {
+            utility.LogError(err, 'platform.handleResponse');
+          }
+          utility.LogWarning('Didn’t get page metadata');
+
+          // Return url
+          return resolve(metadata);
+        }
+
+        // Extract metadata properties
+        parser = new DOMParser();
+        html = parser.parseFromString(pageContent, 'text/html');
+
+        // Get all meta tags
+        var metaTagsArr = html.getElementsByTagName('meta');
+
+        var getPageDescription = function () {
+          for (var i = 0; i < metaTagsArr.length; i++) {
+            var currentTag = metaTagsArr[i];
+            if ((!!currentTag.getAttribute('property') && currentTag.getAttribute('property').toUpperCase().trim() === 'OG:DESCRIPTION' && !!currentTag.getAttribute('content')) ||
+              (!!currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'TWITTER:DESCRIPTION' && !!currentTag.getAttribute('content')) ||
+              (!!currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'DESCRIPTION' && !!currentTag.getAttribute('content'))) {
+              return (!!currentTag.getAttribute('content')) ? currentTag.getAttribute('content').trim() : '';
+            }
+          }
+
+          return null;
+        };
+
+        var getPageKeywords = function () {
+          // Get open graph tag values 
+          var currentTag, i, keywords = [];
+          for (i = 0; i < metaTagsArr.length; i++) {
+            currentTag = metaTagsArr[i];
+            if (!!currentTag.getAttribute('property') &&
+              !!currentTag.getAttribute('property').trim().match(/VIDEO\:TAG$/i) &&
+              !!currentTag.getAttribute('content')) {
+              keywords.push(currentTag.getAttribute('content').trim());
+            }
+          }
+
+          // Get meta tag values 
+          for (i = 0; i < metaTagsArr.length; i++) {
+            currentTag = metaTagsArr[i];
+            if (!!currentTag.getAttribute('name') &&
+              currentTag.getAttribute('name').toUpperCase().trim() === 'KEYWORDS' &&
+              !!currentTag.getAttribute('content')) {
+              var metaKeywords = currentTag.getAttribute('content').split(',');
+              for (i = 0; i < metaKeywords.length; i++) {
+                var currentKeyword = metaKeywords[i];
+                if (!!currentKeyword && !!currentKeyword.trim()) {
+                  keywords.push(currentKeyword.trim());
+                }
+              }
+              break;
+            }
+          }
+
+          if (keywords.length > 0) {
+            return keywords.join();
+          }
+
+          return null;
+        };
+
+        var getPageTitle = function () {
+          for (var i = 0; i < metaTagsArr.length; i++) {
+            var tag = metaTagsArr[i];
+            if ((!!tag.getAttribute('property') && tag.getAttribute('property').toUpperCase().trim() === 'OG:TITLE' && !!tag.getAttribute('content')) ||
+              (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase().trim() === 'TWITTER:TITLE' && !!tag.getAttribute('content'))) {
+              return (!!tag.getAttribute('content')) ? tag.getAttribute('content').trim() : '';
+            }
+          }
+
+          return html.title;
+        };
+
+        // Update metadata with retrieved page data and return
+        metadata.title = getPageTitle();
+        metadata.description = getPageDescription();
+        metadata.tags = getPageKeywords();
+        resolve(metadata);
+      };
+
+      // If network disconnected fail immediately, otherwise retrieve page metadata
+      if (!utility.IsNetworkConnected()) {
+        return handleResponse();
+      }
+
+      timeout = platform.Interface.Loading.Show('retrievingMetadata', handleResponse);
+      inAppBrowser = cordova.InAppBrowser.open(url, '_blank', 'hidden=yes');
 
       inAppBrowser.addEventListener('loaderror', function (event) {
         var errMessage = event && event.message ? event.message : 'Failed to load webpage';
@@ -1196,9 +1188,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         },
           handleResponse);
       });
-    }
-
-    return deferred.promise;
+    })
+      .finally(function () {
+        // Close InAppBrowser
+        if (inAppBrowser) {
+          inAppBrowser.close();
+          inAppBrowser = null;
+        }
+      });
   };
 
   var getSupportedUrl = function (url) {
@@ -1237,12 +1234,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     window.open(url, '_system', '');
   };
 
-  var populateBookmarks = function (xBookmarks) {
+  var populateBookmarks = function () {
     // Unused for this platform
     return $q.resolve();
   };
 
-  var refreshInterface = function (syncEnabled, syncType) {
+  var refreshInterface = function () {
     // Unused for this platform
     return $q.resolve();
   };
@@ -1405,10 +1402,73 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     }
   };
 
-  var bookmarkPanel_Close_Click = function () {
-    // Reset current url before switching to main view
-    currentUrl = null;
-    vm.view.displayMainView();
+  var checkForSharedBookmark = function () {
+    var bookmark = getSharedBookmark();
+    if (!bookmark) {
+      return $q.resolve();
+    }
+
+    // Set current page as shared bookmark and display bookmark panel
+    currentPage = bookmark;
+    return vm.view.change(vm.view.views.bookmark)
+      .finally(function () {
+        // Clear current page
+        currentPage = null;
+      });
+  };
+
+  var checkIfOnline = function () {
+    var isOnline = utility.IsNetworkConnected();
+
+    // If not online display an alert and return
+    if (!isOnline) {
+      utility.LogInfo('Offline');
+
+      vm.alert.display(
+        getConstant(globals.Constants.WorkingOffline_Title),
+        getConstant(globals.Constants.WorkingOffline_Message)
+      );
+
+      return $q.resolve(false);
+    }
+
+    utility.LogInfo('Online');
+
+    // Check if sync enabled before checking for uncommitted updates
+    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+      .then(function (syncEnabled) {
+        if (!syncEnabled) {
+          return true;
+        }
+
+        // Commit any updates made whilst offline
+        return bookmarks.CheckForUncommittedSyncs()
+          .then(function (updatesSynced) {
+            if (updatesSynced) {
+              vm.alert.display(null, getConstant(globals.Constants.UncommittedSyncsProcessed_Message));
+            }
+            else {
+              // If no uncommitted updates, check for latest updates 
+              return getLatestUpdates();
+            }
+          })
+          .then(function () {
+            return true;
+          })
+          .catch(function (err) {
+            // If local data out of sync, clear uncommitted syncs flag and refresh local data
+            if (bookmarks.CheckIfRefreshSyncedDataOnError(err)) {
+              platform.LocalStorage.Set(globals.CacheKeys.UncommittedSyncs);
+              return refreshLocalSyncData()
+                .then(function () {
+                  throw err;
+                });
+            }
+
+            throw err;
+          });
+      })
+      .catch(displayErrorAlert);
   };
 
   var checkForInstallOrUpgrade = function () {
@@ -1419,52 +1479,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
-  var checkForSharedUrl = function (syncEnabled) {
-    var deferred = $q.defer();
+  var getSharedBookmark = function () {
+    if (!sharedBookmark) {
+      return;
+    }
 
-    // If there is a current intent, retrieve it
-    window.plugins.webintent.hasExtra(window.plugins.webintent.EXTRA_TEXT,
-      function (has) {
-        if (has) {
-          // Only use the intent if sync is enabled
-          if (syncEnabled) {
-            window.plugins.webintent.getExtra(window.plugins.webintent.EXTRA_TEXT,
-              function (url) {
-                // Remove the intent
-                window.plugins.webintent.removeExtra(
-                  window.plugins.webintent.EXTRA_TEXT,
-                  function () { }
-                );
-
-                // Check the URL is valid
-                var match = url ? url.match(globals.Regex.Url) : null;
-                if (!match || match.length === 0) {
-                  return deferred.reject({ code: globals.ErrorCodes.FailedShareUrl });
-                }
-
-                // Return the shared url
-                return deferred.resolve(match[0]);
-              });
-          }
-          else {
-            // Can't use it so remove the intent
-            window.plugins.webintent.removeExtra(
-              window.plugins.webintent.EXTRA_TEXT,
-              function () { }
-            );
-
-            // Display alert
-            vm.alert.display(getConstant(globals.Constants.Error_FailedShareUrlNotSynced_Title), null, 'danger');
-            deferred.resolve();
-          }
-        }
-        else {
-          deferred.resolve();
-        }
-      }
-    );
-
-    return deferred.promise;
+    var bookmark = sharedBookmark;
+    sharedBookmark = null;
+    return bookmark;
   };
 
   var disableLight = function () {
@@ -1499,7 +1521,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var deviceReady = function (viewModel, scope, success, failure) {
     // Set global variables
     vm = viewModel;
-    $scope = scope;
+    $scope = scope; // TODO: do we still need this?
 
     // Set platform
     vm.platformName = globals.Platforms.Android;
@@ -1507,13 +1529,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     // Configure events
     document.addEventListener('backbutton', handleBackButton, false);
     document.addEventListener('touchstart', handleTouchStart, false);
-    document.addEventListener('offline', handleOffline, false);
-    document.addEventListener('online', handleOnline, false);
     window.addEventListener('keyboardDidShow', handleKeyboardDidShow);
     window.addEventListener('keyboardWillHide', handleKeyboardWillHide);
 
+    // Check if an intent started the app and detect future shared intents 
+    window.plugins.intentShim.getIntent(handleNewIntent, function () { });
+    window.plugins.intentShim.onIntent(handleNewIntent);
+
     // Set required events to mobile app handlers
-    vm.events.bookmarkPanel_Close_Click = bookmarkPanel_Close_Click;
     vm.events.syncForm_EnableSync_Click = syncForm_EnableSync_Click;
 
     // Set clear search button to display all bookmarks
@@ -1654,59 +1677,18 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     document.body.style.removeProperty('height');
   };
 
-  var handleOffline = function () {
-    utility.LogInfo('Offline');
-    vm.alert.display(
-      getConstant(globals.Constants.WorkingOffline_Title),
-      getConstant(globals.Constants.WorkingOffline_Message)
-    );
-  };
-
-  var handleOnline = function (throwErrors) {
-    if (!utility.IsNetworkConnected()) {
-      return $q.resolve();
+  var handleNewIntent = function (intent) {
+    if (!intent || !intent.extras) {
+      return;
     }
 
-    utility.LogInfo('Online');
+    utility.LogInfo('Detected new intent: ' + intent.extras['android.intent.extra.TEXT']);
 
-    // Check if sync enabled before checking for uncommited updates
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
-      .then(function (syncEnabled) {
-        if (!syncEnabled) {
-          return;
-        }
-
-        // Commit any updates made whilst offline
-        return bookmarks.CheckForUncommittedSyncs()
-          .then(function (updatesSynced) {
-            if (updatesSynced) {
-              vm.alert.display(null, getConstant(globals.Constants.UncommittedSyncsProcessed_Message));
-            }
-            else {
-              // If no uncommitted updates, check for latest updates 
-              return getLatestUpdates();
-            }
-          })
-          .catch(function (err) {
-            // If local data out of sync, clear uncommitted syncs flag and refresh local data
-            if (bookmarks.CheckIfRefreshSyncedDataOnError(err)) {
-              platform.LocalStorage.Set(globals.CacheKeys.UncommittedSyncs);
-              return refreshLocalSyncData()
-                .then(function () {
-                  throw err;
-                });
-            }
-
-            throw err;
-          });
-      })
-      .catch(function (err) {
-        if (throwErrors === true) {
-          throw err;
-        }
-
-        displayErrorAlert(err);
-      });
+    // Set shared bookmark with shared intent data
+    sharedBookmark = {
+      title: intent.extras['android.intent.extra.SUBJECT'],
+      url: intent.extras['android.intent.extra.TEXT']
+    };
   };
 
   var handleTouchStart = function (event) {
@@ -1741,9 +1723,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
     utility.LogInfo('Starting up');
 
+    // Prime bookmarks cache and retrieve cached data
+    var primeBookmarksCache = bookmarks.GetBookmarks().catch(function () { });
     return getFromLocalStorage()
       .then(function (cachedData) {
-        // Log cached data
         syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
 
         // Add useful debug info to beginning of trace log
@@ -1764,20 +1747,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           return;
         }
 
-        // Check if a url was shared
-        // TODO: Add uncomment when intents working again
-        /*return checkForSharedUrl(syncEnabled)
-          .then(function (sharedUrl) {
-            if (syncEnabled && sharedUrl) {
-              // Set shared url to current url and display bookmark panel
-              currentUrl = sharedUrl;
-              return vm.view.change(vm.view.views.bookmark);
-            }
-          });*/
-
         // If network is online, commit any updates made whilst offline
-        handleOnline(true)
-          .catch(displayErrorAlert);
+        checkIfOnline();
+
+        // Check if a bookmark was shared
+        return checkForSharedBookmark()
+          .then(function () {
+            return primeBookmarksCache;
+          });
       })
       .catch(displayErrorAlert);
   };
@@ -1818,35 +1795,21 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var resume = function () {
-    var sharedUrl;
-
     // Check if sync enabled and reset network disconnected flag
     platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
         // Deselect bookmark
         vm.search.selectedBookmark = null;
 
-        // TODO: Add uncomment when intents working again
-        // Check if a url was shared
-        /*return checkForSharedUrl(syncEnabled);
-      })
-      .then(function (checkForSharedUrlResponse) {
-        sharedUrl = checkForSharedUrlResponse;
-
         if (!syncEnabled) {
           return;
         }
 
-        if (sharedUrl) {
-          // Set shared url to current url and display bookmark panel
-          currentUrl = sharedUrl;
-          vm.view.change(vm.view.views.bookmark);
-        }*/
+        // If network is online, commit any updates made whilst offline
+        checkIfOnline();
 
-        // Check if network is offline
-        if (!utility.IsNetworkConnected()) {
-          handleOffline();
-        }
+        // Check if a bookmark was shared
+        return checkForSharedBookmark();
       })
       .catch(displayErrorAlert);
   };
