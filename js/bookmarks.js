@@ -412,7 +412,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     });
   };
 
-  var getLookahead = function (word, bookmarksToSearch, canceller, tagsOnly, exclusions) {
+  var getLookahead = function (word, bookmarksToSearch, tagsOnly, exclusions) {
     var getBookmarks;
     var deferred = $q.defer();
 
@@ -426,7 +426,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     }
     else {
       // Get cached bookmarks
-      getBookmarks = getCachedBookmarks(canceller);
+      getBookmarks = getCachedBookmarks();
     }
 
     // With bookmarks
@@ -770,7 +770,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     ]);
   };
 
-  var getCachedBookmarks = function (canceller) {
+  var getCachedBookmarks = function () {
     // Get cached encrypted bookmarks from local storage
     return platform.LocalStorage.Get(globals.CacheKeys.Bookmarks)
       .then(function (cachedData) {
@@ -784,7 +784,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
         // If encrypted bookmarks not cached in storage, get synced bookmarks
         return (cachedEncryptedBookmarks ? $q.resolve(cachedEncryptedBookmarks) :
-          api.GetBookmarks(canceller)
+          api.GetBookmarks()
             .then(function (response) {
               return response.bookmarks;
             })
@@ -873,7 +873,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                 }
               })
               .then(function () {
-                // If sync uncommitted throw error after setting flag in cache
+                // If sync not committed throw error after setting flag in cache
                 if (networkOffline) {
                   return platform.LocalStorage.Set(globals.CacheKeys.UncommittedSyncs, true)
                     .then(function () {

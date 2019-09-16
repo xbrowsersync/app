@@ -326,7 +326,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     // Display lookahead if word length exceeds minimum
     if (lastWord && lastWord.length > globals.LookaheadMinChars) {
       // Get tags lookahead
-      bookmarks.GetLookahead(lastWord.toLowerCase(), null, null, true, vm.bookmark.current.tags)
+      bookmarks.GetLookahead(lastWord.toLowerCase(), null, true, vm.bookmark.current.tags)
         .then(function (results) {
           if (!results) {
             vm.bookmark.tagLookahead = null;
@@ -1076,36 +1076,38 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         vm.settings.readWebsiteDataPermissionsGranted = readWebsiteDataPermissionsGranted;
         vm.settings.logSize = (new TextEncoder().encode(traceLog)).length;
 
-        // Check for available sync updates on non-mobile platforms
-        if (syncEnabled && !utility.IsMobilePlatform(vm.platformName)) {
-          $q.all([
-            bookmarks.CheckForUpdates(),
-            platform.AutomaticUpdates.NextUpdate()
-          ])
-            .then(function (data) {
-              if (data[0]) {
-                vm.sync.updatesAvailable = true;
-                vm.sync.nextAutoUpdate = data[1];
-              }
-              else {
-                vm.sync.updatesAvailable = false;
-              }
-            })
-            .catch(function (err) {
-              // Don't display alert if sync failed due to network connection
-              if (utility.IsNetworkConnectionError(err) ||
-                err.code == globals.ErrorCodes.InvalidService ||
-                err.code == globals.ErrorCodes.ServiceOffline) {
-                return;
-              }
+        $timeout(function () {
+          // Check for available sync updates on non-mobile platforms
+          if (syncEnabled && !utility.IsMobilePlatform(vm.platformName)) {
+            $q.all([
+              bookmarks.CheckForUpdates(),
+              platform.AutomaticUpdates.NextUpdate()
+            ])
+              .then(function (data) {
+                if (data[0]) {
+                  vm.sync.updatesAvailable = true;
+                  vm.sync.nextAutoUpdate = data[1];
+                }
+                else {
+                  vm.sync.updatesAvailable = false;
+                }
+              })
+              .catch(function (err) {
+                // Don't display alert if sync failed due to network connection
+                if (utility.IsNetworkConnectionError(err) ||
+                  err.code == globals.ErrorCodes.InvalidService ||
+                  err.code == globals.ErrorCodes.ServiceOffline) {
+                  return;
+                }
 
-              var errMessage = utility.GetErrorMessageFromException(err);
-              displayAlert(errMessage.title, errMessage.message);
-            });
-        }
+                var errMessage = utility.GetErrorMessageFromException(err);
+                displayAlert(errMessage.title, errMessage.message);
+              });
+          }
 
-        // Update service status and display info
-        updateServicePanel();
+          // Update service status and display info
+          updateServicePanel();
+        }, 100);
       });
   };
 
@@ -1433,21 +1435,17 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     vm.search.displayDefaultState();
   };
 
-  var searchForm_DeleteBookmark_Click = function (bookmark, event) {
-    event.srcEvent.stopPropagation();
+  var searchForm_DeleteBookmark_Click = function (event, bookmark) {
+    if (event) {
+      if (event.preventDefault) { event.preventDefault(); }
+      if (event.srcEvent) { event.srcEvent.stopPropagation(); }
+    }
 
     // Find and remove the deleted bookmark element in the search results
     if (vm.search.results && vm.search.results.length > 0) {
       var deletedBookmarkIndex = _.findIndex(vm.search.results, function (result) { return result.id === bookmark.id; });
       if (deletedBookmarkIndex >= 0) {
         vm.search.results.splice(deletedBookmarkIndex, 1);
-      }
-      else {
-        // TODO: Convert to XError
-        var err = new Error('XBookmarkNotFound');
-        err.code = globals.ErrorCodes.XBookmarkNotFound;
-        utility.LogError(err, 'searchForm_DeleteBookmark_Click');
-        throw err;
       }
     }
 
@@ -1680,13 +1678,19 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     changeView(vm.view.views.bookmark);
   };
 
-  var searchForm_ShareBookmark_Click = function (bookmarkToShare, event) {
-    event.srcEvent.stopPropagation();
+  var searchForm_ShareBookmark_Click = function (event, bookmarkToShare) {
+    if (event) {
+      if (event.preventDefault) { event.preventDefault(); }
+      if (event.srcEvent) { event.srcEvent.stopPropagation(); }
+    }
     platform.Bookmarks.Share(bookmarkToShare);
   };
 
-  var searchForm_UpdateBookmark_Click = function (bookmarkToUpdate, event) {
-    if (event) { event.srcEvent.stopPropagation(); }
+  var searchForm_UpdateBookmark_Click = function (event, bookmarkToUpdate) {
+    if (event) {
+      if (event.preventDefault) { event.preventDefault(); }
+      if (event.srcEvent) { event.srcEvent.stopPropagation(); }
+    }
 
     // On mobiles, display bookmark panel with slight delay to avoid focussing on description field
     if (utility.IsMobilePlatform(vm.platformName)) {
@@ -2270,7 +2274,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       try {
         restoreData = JSON.parse(vm.settings.dataToRestore);
         xBookmarks = restoreData.xBrowserSync ? restoreData.xBrowserSync.bookmarks :
-          restoreData.xbrowsersync ? restoreData.xbrowsersync.data : null;
+          restoreData.xbrowsersync && restoreData.xbrowsersync.data ?
+            restoreData.xbrowsersync.data.bookmarks : null;
         validateData = !!xBookmarks;
       }
       catch (err) { }

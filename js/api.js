@@ -80,7 +80,7 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
       });
   };
 
-  var getBookmarks = function (canceller) {
+  var getBookmarks = function () {
     var data, password, syncId;
 
     // Check secret and sync ID are present
@@ -101,9 +101,8 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
             // Get current service url
             return utility.GetServiceUrl()
               .then(function (serviceUrl) {
-                return $http.get(serviceUrl + globals.URL.Bookmarks + '/' + syncId, { timeout: canceller })
+                return $http.get(serviceUrl + globals.URL.Bookmarks + '/' + syncId)
                   .catch(function (response) {
-                    // TODO: check if cancelled
                     apiRequestFailed(new Error(getHttpErrorMessageFromHttpStatus(response.status)), true);
                   });
               })

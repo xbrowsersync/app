@@ -168,6 +168,7 @@ xBrowserSync.App.Global = function (platform) {
       Settings_BackupRestore_RestoreForm_Message: 'settings_BackupRestore_RestoreForm_Message',
       Settings_BackupRestore_RestoreForm_DataField_Label: 'settings_BackupRestore_RestoreForm_DataField_Label',
       Settings_BackupRestore_RestoreForm_Invalid_Label: 'settings_BackupRestore_RestoreForm_Invalid_Label',
+      Settings_BackupRestore_RestoreForm_DuplicateIds_Label: 'settings_BackupRestore_RestoreForm_DuplicateIds_Label',
       Settings_Sync_Title: 'settings_Sync_Title',
       Settings_Sync_Id_Label: 'settings_Sync_Id_Label',
       Settings_Sync_DisplayQRCode_Message: 'settings_Sync_DisplayQRCode_Message',

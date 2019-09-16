@@ -338,7 +338,7 @@
                     {{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_Invalid_Label) }}
                   </span>
                   <span data-ng-if="vm.restoreForm.dataToRestore.$error.DuplicateIds">
-                    Duplicate bookmarks IDs detected
+                    {{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_DuplicateIds_Label) }}
                   </span>
                 </div>
               </div>

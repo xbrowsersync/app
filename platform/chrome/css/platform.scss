@@ -44,3 +44,9 @@ body {
     }
   }
 }
+
+#settings-panel {
+  .backup-restore-panel #restoreForm .validation {
+    bottom: -0.75rem;
+  }
+}

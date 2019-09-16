@@ -924,7 +924,7 @@ body {
           top: 0;
           right: 0.5rem;
           font-size: 1.1em;
-          line-height: 1.35em;
+          line-height: 1.5em;
           z-index: 55;
 
           &:hover i {
@@ -975,7 +975,7 @@ body {
         margin: 0 0 0.75rem;
         max-height: 25rem;
         overflow: hidden;
-        transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+        transition: max-height 1s cubic-bezier(0, 1, 0, 1);
         @include box-shadow;
 
         &:focus,
@@ -1063,18 +1063,11 @@ body {
           }
         }
 
-        .menu,
-        .menu-background {
+        .menu {
           position: absolute;
           width: 100%;
           height: 100%;
           @include css-prefix(user-select, none);
-        }
-
-        .menu-background {
-          display: none;
-          opacity: 0;
-          z-index: 50;
         }
       }
 
@@ -1160,10 +1153,6 @@ body {
           text-overflow: ellipsis;
           width: 100%;
         }
-      }
-
-      .validation {
-        bottom: -0.45rem;
       }
     }
   }

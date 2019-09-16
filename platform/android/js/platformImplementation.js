@@ -465,6 +465,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_BackupRestore_RestoreForm_Invalid_Label": {
       "message": "Invalid xBrowserSync backup data"
     },
+    "settings_BackupRestore_RestoreForm_DuplicateIds_Label": {
+      "message": "Duplicate bookmarks IDs detected"
+    },
     "button_SelectBackupFile_Label": {
       "message": "Select file"
     },
@@ -706,10 +709,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Couldn’t retrieve updates"
     },
     "error_UncommittedSyncs_Title": {
-      "message": "Sync uncommitted"
+      "message": "Changes not synced"
     },
     "error_UncommittedSyncs_Message": {
-      "message": "Changes will be synced once connection to service is restored."
+      "message": "Sync will be committed once connection to service is restored."
     }
   };
 
