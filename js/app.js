@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Main angular controller class for the app.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals, api, utility, bookmarks) {
+xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, utility, bookmarks) {
   'use strict';
 
   var vm;
@@ -21,7 +21,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     vm.globals = globals;
     vm.platform = platform;
     vm.utility = utility;
-    vm.scope = $scope;
 
     vm.working = false;
 
@@ -46,6 +45,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
     vm.events = {
       backupRestoreForm_Backup_Click: backupRestoreForm_Backup_Click,
+      backupRestoreForm_BackupFile_Change: backupRestoreForm_BackupFile_Change,
       backupRestoreForm_ConfirmRestore_Click: backupRestoreForm_ConfirmRestore_Click,
       backupRestoreForm_DataToRestore_Change: backupRestoreForm_DataToRestore_Change,
       backupRestoreForm_DisplayRestoreForm_Click: backupRestoreForm_DisplayRestoreForm_Click,
@@ -246,6 +246,28 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
       });
   };
 
+  var backupRestoreForm_BackupFile_Change = function () {
+    var fileInput = document.getElementById('backupFile');
+
+    if (fileInput.files.length > 0) {
+      var file = fileInput.files[0];
+      vm.settings.backupFileName = file.name;
+      var reader = new FileReader();
+
+      reader.onload = (function (data) {
+        return function (event) {
+          $timeout(function () {
+            vm.settings.dataToRestore = event.target.result;
+            validateBackupData();
+          });
+        };
+      })(file);
+
+      // Read the backup file data
+      reader.readAsText(file);
+    }
+  };
+
   var backupRestoreForm_ConfirmRestore_Click = function () {
     if (!vm.settings.dataToRestore) {
       // Display alert
@@ -281,10 +303,12 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     vm.restoreForm.dataToRestore.$setValidity('DuplicateIds', true);
     vm.restoreForm.dataToRestore.$setValidity('InvalidData', true);
 
-    // Focus in restore textarea
-    $timeout(function () {
-      document.querySelector('#restoreForm textarea').select();
-    });
+    // Focus on restore textarea
+    if (!utility.IsMobilePlatform(vm.platformName)) {
+      $timeout(function () {
+        document.querySelector('#restoreForm textarea').select();
+      });
+    }
   };
 
   var backupRestoreForm_Restore_Click = function () {
@@ -305,7 +329,8 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
   };
 
   var backupRestoreForm_SelectBackupFile_Click = function () {
-    platform.SelectFile();
+    // Open select file dialog
+    document.querySelector('#backupFile').click();
   };
 
   var bookmarkForm_BookmarkDescription_Change = function () {
@@ -831,7 +856,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
 
   var init = function () {
     // Platform-specific initation
-    platform.Init(vm, $scope)
+    platform.Init(vm)
       .then(function () {
         // Check if a sync is currently in progress
         return platform.Sync.Current()
@@ -1035,7 +1060,6 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
     vm.settings.displaySyncBookmarksToolbarConfirmation = false;
     vm.settings.displayUpdateServiceUrlConfirmation = false;
     vm.settings.displayUpdateServiceUrlForm = false;
-    document.querySelector('#backupFile').value = null;
     vm.settings.backupFileName = null;
     vm.settings.backupCompletedMessage = null;
     vm.settings.downloadLogCompletedMessage = null;
@@ -1103,6 +1127,11 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
                 var errMessage = utility.GetErrorMessageFromException(err);
                 displayAlert(errMessage.title, errMessage.message);
               });
+          }
+
+          // Set backup file change event for mobile platforms
+          if (utility.IsMobilePlatform(vm.platformName)) {
+            document.getElementById('backupFile').addEventListener('change', vm.events.backupRestoreForm_BackupFile_Change, false);
           }
 
           // Update service status and display info
@@ -1466,6 +1495,7 @@ xBrowserSync.App.Controller = function ($scope, $q, $timeout, platform, globals,
         vm.sync.id = scannedId;
         $timeout(function () {
           // Focus on password field
+          // TODO: fix this
           document.querySelector('.active-login-form  input[name="txtPassword"]').focus();
         }, 500);
         return platform.LocalStorage.Set(globals.CacheKeys.SyncId, scannedId);

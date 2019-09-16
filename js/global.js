@@ -165,6 +165,7 @@ xBrowserSync.App.Global = function (platform) {
       Settings_NotAvailable_Message: 'settings_NotAvailable_Message',
       DownloadFile_Success_Message: 'downloadFile_Success_Message',
       Settings_BackupRestore_RestoreSuccess_Message: 'settings_BackupRestore_RestoreSuccess_Message',
+      Settings_BackupRestore_RestoreForm_BackupFile_Description: 'settings_BackupRestore_RestoreForm_BackupFile_Description',
       Settings_BackupRestore_RestoreForm_Message: 'settings_BackupRestore_RestoreForm_Message',
       Settings_BackupRestore_RestoreForm_DataField_Label: 'settings_BackupRestore_RestoreForm_DataField_Label',
       Settings_BackupRestore_RestoreForm_Invalid_Label: 'settings_BackupRestore_RestoreForm_Invalid_Label',

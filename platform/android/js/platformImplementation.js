@@ -12,7 +12,7 @@ SpinnerDialog.show = function () { };
 xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, platform, globals, utility, bookmarks) {
   'use strict';
 
-  var $scope, currentPage, loadingId, sharedBookmark, vm;
+  var currentPage, loadingId, sharedBookmark, vm;
 
   var constants = {
     "title": {
@@ -456,8 +456,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_BackupRestore_RestoreSuccess_Message": {
       "message": "Your data has been restored."
     },
+    "settings_BackupRestore_RestoreForm_BackupFile_Description": {
+      "message": "Select a backup file to restore..."
+    },
     "settings_BackupRestore_RestoreForm_Message": {
-      "message": "Select an xBrowserSync backup file to restore."
+      "message": "Copy the contents of a backup file to restore data."
     },
     "settings_BackupRestore_RestoreForm_DataField_Label": {
       "message": "Paste backup data"
@@ -750,7 +753,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Scanner.Start = startScanning;
     platform.Scanner.Stop = stopScanning;
     platform.Scanner.ToggleLight = toggleLight;
-    platform.SelectFile = selectBackupFile;
     platform.Sync.Await = awaitSync;
     platform.Sync.Current = getCurrentSync;
     platform.Sync.Execute = executeSync;
@@ -1217,7 +1219,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     }
   };
 
-  var init = function (viewModel, scope) {
+  var init = function (viewModel) {
     return $q(function (resolve, reject) {
       // Load cordova.js
       var script = document.createElement('script');
@@ -1225,7 +1227,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       script.onload = function () {
         // Bind to device events
         document.addEventListener('deviceready', function () {
-          deviceReady(viewModel, scope, resolve, reject);
+          deviceReady(viewModel, resolve, reject);
         }, false);
         document.addEventListener('resume', resume, false);
       };
@@ -1324,11 +1326,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return $q.resolve();
   };
 
-  var selectBackupFile = function () {
-    // Open select file dialog
-    document.querySelector('#backupFile').click();
-  };
-
   var shareBookmark = function (bookmark) {
     var options = {
       subject: bookmark.title + ' (' + getConstant(globals.Constants.ShareBookmark_Message) + ')',
@@ -1383,27 +1380,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 	/* ------------------------------------------------------------------------------------
 	 * Private functions
 	 * ------------------------------------------------------------------------------------ */
-
-  var backupFile_Change_Android = function (event) {
-    var fileInput = document.getElementById('backupFile');
-
-    if (fileInput.files.length > 0) {
-      var file = fileInput.files[0];
-      vm.settings.backupFileName = file.name;
-      var reader = new FileReader();
-
-      reader.onload = (function (data) {
-        return function (event) {
-          $scope.$apply(function () {
-            vm.settings.dataToRestore = event.target.result;
-          });
-        };
-      })(file);
-
-      // Read the backup file data
-      reader.readAsText(file);
-    }
-  };
 
   var checkForSharedBookmark = function () {
     var bookmark = getSharedBookmark();
@@ -1521,10 +1497,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     vm.alert.display(errMessage.title, errMessage.message, 'danger');
   };
 
-  var deviceReady = function (viewModel, scope, success, failure) {
+  var deviceReady = function (viewModel, success, failure) {
     // Set global variables
     vm = viewModel;
-    $scope = scope; // TODO: do we still need this?
 
     // Set platform
     vm.platformName = globals.Platforms.Android;
@@ -1553,9 +1528,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
     // Display existing sync panel by default
     vm.sync.displayNewSyncPanel = false;
-
-    // Set backup file change event
-    document.getElementById('backupFile').addEventListener('change', backupFile_Change_Android, false);
 
     // Use snackbar for alerts
     vm.alert.display = displaySnackbar;

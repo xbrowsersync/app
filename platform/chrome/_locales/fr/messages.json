@@ -449,8 +449,11 @@
   "settings_BackupRestore_RestoreSuccess_Message": {
     "message": "Vos données ont été restaurées."
   },
+  "settings_BackupRestore_RestoreForm_BackupFile_Description": {
+    "message": "Select a backup file to restore..."
+  },
   "settings_BackupRestore_RestoreForm_Message": {
-    "message": "Copier le contenu d'une sauvegarde dans un fichier de restauration."
+    "message": "Copy the contents of a backup file to restore data."
   },
   "settings_BackupRestore_RestoreForm_DataField_Label": {
     "message": "Copier les données de sauvegarde"

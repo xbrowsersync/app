@@ -63,5 +63,5 @@ xBrowserSync.App.PlatformImplementation.$inject = ['$interval', '$q', '$timeout'
 xBrowserSync.App.UI.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add main controller
-xBrowserSync.App.Controller.$inject = ['$scope', '$q', '$timeout', 'platform', 'globals', 'api', 'utility', 'bookmarks', 'platformImplementation'];
+xBrowserSync.App.Controller.$inject = ['$q', '$timeout', 'platform', 'globals', 'api', 'utility', 'bookmarks', 'platformImplementation'];
 xBrowserSync.App.UI.controller('Controller', xBrowserSync.App.Controller);

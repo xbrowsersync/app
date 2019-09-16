@@ -326,6 +326,10 @@ body {
     .header-panel {
       display: flex;
       flex-direction: row-reverse;
+
+      .search-form .btn-clear {
+        line-height: 1.35em;
+      }
     }
 
     .search-results-panel {

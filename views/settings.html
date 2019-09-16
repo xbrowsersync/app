@@ -325,14 +325,22 @@
           </div>
           <form id="restoreForm" name="vm.restoreForm" class="animate-fade-in confirm"
             data-ng-show="vm.settings.displayRestoreForm" novalidate>
-            <p>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_Message) }}</p>
-            <div id="restoreContentsPanel" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
+            <input id="backupFile" class="d-none" name="files[]" type="file" tabindex="-1" />
+            <p data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_Message) }}
+            </p>
+            <div>
               <label for="dataToRestore"
                 class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_DataField_Label) }}
               </label>
               <div class="form-group" data-ng-class="{ 'has-error': vm.restoreForm.dataToRestore.$invalid }">
-                <textarea name="dataToRestore" data-ng-model="vm.settings.dataToRestore" class="form-control" rows="3"
+                <input type="hidden" name="dataToRestore" data-ng-model="vm.settings.dataToRestore"></input>
+                <textarea data-ng-model="vm.settings.dataToRestore" class="form-control" rows="3"
+                  data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)"
                   data-ng-change="vm.events.backupRestoreForm_DataToRestore_Change()" spellcheck="false"></textarea>
+                <input data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)" type="text" class="form-control"
+                  data-ng-model="vm.settings.backupFileName" spellcheck="false" readonly
+                  placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_BackupFile_Description) }}"></input>
                 <div class="validation" data-ng-if="vm.restoreForm.dataToRestore.$invalid">
                   <span data-ng-if="vm.restoreForm.dataToRestore.$error.InvalidData">
                     {{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_Invalid_Label) }}
@@ -342,15 +350,10 @@
                   </span>
                 </div>
               </div>
-            </div>
-            <div id="restoreFilePanel" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)">
-              <div class="buttons">
+              <div class="buttons" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)">
                 <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_SelectBackupFile_Click()">
                   {{ vm.platform.GetConstant(vm.globals.Constants.Button_SelectBackupFile_Label) }}
                 </button>
-                <p data-ng-class="{ true: 'text-danger' }[ vm.restoreForm.dataToRestore.$invalid ]">
-                  {{ vm.settings.backupFileName }}
-                </p>
               </div>
             </div>
             <div class="buttons">

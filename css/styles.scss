@@ -1140,19 +1140,8 @@ body {
         font-size: 0.8rem;
       }
 
-      #restoreFilePanel {
-        button {
-          margin-right: 0;
-        }
-
-        p {
-          margin-top: 1rem;
-          min-height: 1.2rem;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          width: 100%;
-        }
+      .form-group {
+        margin-bottom: 0.4rem;
       }
     }
   }
