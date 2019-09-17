@@ -349,6 +349,8 @@
                     {{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_DuplicateIds_Label) }}
                   </span>
                 </div>
+                <span class="spinner-border spinner-border-sm" data-ng-show="vm.settings.validatingRestoreData"
+                  role="status" aria-hidden="true"></span>
               </div>
               <div class="buttons" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)">
                 <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_SelectBackupFile_Click()">

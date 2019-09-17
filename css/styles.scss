@@ -1134,6 +1134,10 @@ body {
 
   .backup-restore-panel {
     #restoreForm {
+      input[type="text"] {
+        padding-right: 2rem;
+      }
+
       textarea {
         height: 12rem;
         font-family: $font-stack-code;
@@ -1142,6 +1146,12 @@ body {
 
       .form-group {
         margin-bottom: 0.4rem;
+      }
+
+      .spinner-border {
+        position: absolute;
+        right: 0.75rem;
+        top: 0.6rem;
       }
     }
   }

@@ -181,6 +181,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       syncDataSize: undefined,
       syncDataUsed: undefined,
       syncIdCopied: false,
+      validatingRestoreData: false,
       validatingServiceUrl: false
     };
 
@@ -258,7 +259,16 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         return function (event) {
           $timeout(function () {
             vm.settings.dataToRestore = event.target.result;
-            validateBackupData();
+
+            // Reset validation interface
+            backupRestoreForm_DataToRestore_Change();
+            vm.settings.validatingRestoreData = true;
+
+            // Trigger restore data validation
+            $timeout(function () {
+              validateBackupData();
+              vm.settings.validatingRestoreData = false;
+            });
           });
         };
       })(file);
@@ -1069,6 +1079,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.settings.savingBackup = false;
     vm.settings.savingLog = false;
     vm.settings.service.status = null;
+    vm.settings.validatingRestoreData = false;
     vm.settings.validatingServiceUrl = false;
     vm.sync.updatesAvailable = undefined;
     vm.sync.nextAutoUpdate = undefined;
@@ -1440,7 +1451,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         $timeout(function () {
           document.querySelector('.search-results-panel').scrollTop = 0;
           vm.search.scrollDisplayMoreEnabled = true;
-        });
+        }, 200);
       })
       .catch(function (err) {
         vm.search.results = null;
@@ -1490,14 +1501,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var searchForm_ScanCode_Click = function () {
+    var scanSuccess = false;
+
     platform.Scanner.Start()
       .then(function (scannedId) {
+        scanSuccess = true;
         vm.sync.id = scannedId;
-        $timeout(function () {
-          // Focus on password field
-          // TODO: fix this
-          document.querySelector('.active-login-form  input[name="txtPassword"]').focus();
-        }, 500);
         return platform.LocalStorage.Set(globals.CacheKeys.SyncId, scannedId);
       })
       .catch(function (err) {
@@ -1506,7 +1515,18 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         vm.alert.display(errMessage.title, errMessage.message, 'danger');
       })
       .finally(function () {
-        displayMainView().then(platform.Scanner.Stop);
+        displayMainView()
+          .then(function () {
+            // Stop scanning
+            platform.Scanner.Stop();
+
+            // If ID was scanned focus on password field
+            if (scanSuccess) {
+              $timeout(function () {
+                document.querySelector('.active-login-form  input[name="txtPassword"]').focus();
+              });
+            }
+          });
       });
   };
 
@@ -2299,21 +2319,19 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   var validateBackupData = function () {
     var xBookmarks, restoreData, validateData = false, validateUniqueIds = true;
 
-    // Check backup data structure
-    if (vm.settings.dataToRestore) {
-      try {
-        restoreData = JSON.parse(vm.settings.dataToRestore);
-        xBookmarks = restoreData.xBrowserSync ? restoreData.xBrowserSync.bookmarks :
-          restoreData.xbrowsersync && restoreData.xbrowsersync.data ?
-            restoreData.xbrowsersync.data.bookmarks : null;
-        validateData = !!xBookmarks;
-      }
-      catch (err) { }
-    }
-    else {
-      validateData = true;
+    if (!vm.settings.dataToRestore) {
+      validateData = false;
     }
 
+    // Check backup data structure
+    try {
+      restoreData = JSON.parse(vm.settings.dataToRestore);
+      xBookmarks = restoreData.xBrowserSync ? restoreData.xBrowserSync.bookmarks :
+        restoreData.xbrowsersync && restoreData.xbrowsersync.data ?
+          restoreData.xbrowsersync.data.bookmarks : null;
+      validateData = !!xBookmarks;
+    }
+    catch (err) { }
     vm.restoreForm.dataToRestore.$setValidity('InvalidData', validateData);
 
     // Check for duplicate bookmark ids
