@@ -42,6 +42,7 @@ xBrowserSync.App.Platform = function () {
       Updated: notImplemented,
       UpdateSingle: notImplemented
     },
+    CopyToClipboard: notImplemented,
     DownloadFile: notImplemented,
     EventListeners: {
       Enable: notImplemented,

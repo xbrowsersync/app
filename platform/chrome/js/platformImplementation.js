@@ -43,6 +43,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Bookmarks.ShouldSyncLocalChanges = shouldSyncLocalChanges;
     platform.Bookmarks.Updated = bookmarksUpdated;
     platform.Bookmarks.UpdateSingle = updateSingle;
+    platform.CopyToClipboard = copyToClipboard;
     platform.DownloadFile = downloadFile;
     platform.EventListeners.Enable = enableEventListeners;
     platform.EventListeners.Disable = disableEventListeners;
@@ -285,6 +286,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         resolve(hasPermissions);
       });
     });
+  };
+
+  var copyToClipboard = function (textToCopy) {
+    return navigator.clipboard.writeText(textToCopy)
+      .catch(function (err) {
+        utility.LogError(err, 'platform.copyToClipboard');
+        throw err;
+      });
   };
 
   var createSingle = function (bookmarkToCreate, pathToTarget) {

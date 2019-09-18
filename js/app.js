@@ -1263,15 +1263,13 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var qrPanel_CopySyncId_Click = function () {
-    navigator.clipboard.writeText(vm.sync.id)
+    platform.CopyToClipboard(vm.sync.id)
       .then(function () {
         $timeout(function () {
           vm.settings.syncIdCopied = true;
         });
       })
       .catch(function (err) {
-        utility.LogError(err, 'app.qrPanel_CopySyncId_Click');
-
         // Display alert
         var errMessage = utility.GetErrorMessageFromException(err);
         vm.alert.display(errMessage.title, errMessage.message, 'danger');

@@ -737,6 +737,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Bookmarks.Populate = populateBookmarks;
     platform.Bookmarks.Share = shareBookmark;
     platform.Bookmarks.UpdateSingle = updateSingle;
+    platform.CopyToClipboard = copyToClipboard;
     platform.DownloadFile = downloadFile;
     platform.GetConstant = getConstant;
     platform.GetCurrentUrl = getCurrentUrl;
@@ -807,6 +808,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var clearBookmarks = function () {
     return $q.resolve();
+  };
+
+  var copyToClipboard = function (textToCopy) {
+    return $q(function (resolve, reject) {
+      cordova.plugins.clipboard.copy(textToCopy, resolve, reject);
+    });
   };
 
   var createSingle = function () {
