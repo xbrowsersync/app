@@ -1043,7 +1043,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
               if (!utility.IsMobilePlatform(vm.platformName)) {
                 document.querySelector('.active-login-form  input[name="txtPassword"]').focus();
               }
-            }, 100);
+            }, 150);
           }
         }
       });

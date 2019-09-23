@@ -462,7 +462,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   };
 
   var isNetworkConnected = function () {
-    return window.navigator.connection.type ?
+    return window.navigator.connection && window.navigator.connection.type ?
       (window.navigator.connection.type !== Connection.NONE &&
         window.navigator.connection.type !== Connection.UNKNOWN) :
       window.navigator.onLine;
