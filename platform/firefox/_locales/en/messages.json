@@ -36,7 +36,7 @@
     "message": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info).</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or the arrow keys to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>"
   },
   "help_Page_Welcome_Android_Content": {
-    "message": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info)..</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or swiping to move between pages.</p>"
+    "message": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info)..</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or swiping to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>"
   },
   "help_Page_BeforeYouBegin_Chrome_Content": {
     "message": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) please disable them to avoid conflicts.</p>"
@@ -45,22 +45,22 @@
     "message": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) please disable them to avoid conflicts.</p>"
   },
   "help_Page_FirstSync_Desktop_Content": {
-    "message": "<h4>Syncing for the first time</h4><p>xBrowserSync encrypts your browser data before it is transmitted over the internet to ensure that only you can read it. To start syncing, enter an encryption password. Be sure to make it strong but also memorable, there are no resets or reminders so if you forget it you won’t be able to access your synced data.</p><p>Once you click the Sync button your browser data will be encrypted and saved to the xBrowserSync service configured in the Settings panel.</p><p>Congratulations, you are now synced! Any changes you make to your local bookmarks will be synced automatically by xBrowserSync.</p>"
+    "message": "<h4>Syncing for the first time</h4><p>Before xBrowserSync can sync your browser data you will need to provide an encryption password. Be sure to make it strong but also memorable, there are no resets or reminders so if you forget it you won’t be able to access your synced data.</p><p>Your browser data will be encrypted using your password and saved to the active xBrowserSync service configured in the Settings panel.</p><p>Once synced, any changes you make to your local bookmarks will be synced automatically by xBrowserSync.</p>"
   },
   "help_Page_FirstSync_Android_Content": {
-    "message": "<h4>Syncing for the first time</h4><p>First things first, head over to your desktop browser and <a href='https://link.xbrowsersync.org/download' class='new-tab'>download</a> the xBrowserSync extension (available for Chrome and Firefox).</p><p>When you create a new sync, your existing browser data will be encrypted locally and synced to the xBrowserSync service configured in the Settings panel.</p><p>Once you have synced your desktop browser data you can use your new sync ID to access your data here.</p>"
+    "message": "<h4>Syncing for the first time</h4><p>xBrowserSync actively syncs your browser data between your desktop browsers (syncing to mobile browsers is not supported at this time), you can use this app to access your synced data on your Android mobile device.</p><p>If you have not already created a sync ID, head over to your desktop browser and <a href='https://link.xbrowsersync.org/download' class='new-tab'>download</a> the xBrowserSync extension (available for Chrome and Firefox). Once you have created a sync you can use your new sync ID within this app to access your data.</p>"
   },
   "help_Page_SyncId_Content": {
-    "message": "<h4>Your sync ID</h4><p>When you create a new sync you are given a unique sync ID which you can use along with your password to sync your data on other devices. Your anonymity is ensured as no personal data is collected or stored with your synced data, and as it is encrypted it cannot be read by anyone but yourself.</p><p>This sync ID will only work with the xBrowserSync service on which it was created. Whenever you change services (via the Settings panel) you must create a new sync which will give you a new sync ID.</p><p>Once synced, you can view your sync ID in the Settings panel. Click it to reveal a handy QR code to scan when syncing on mobile devices.</p>"
+    "message": "<h4>Your sync ID</h4><p>xBrowserSync ensures your privacy as no personal data is ever collected and your browser data is encrypted before being synced. To identify your synced data you are provided with an anonymous sync ID which can be used along with your password to sync your data on other browsers and devices.</p><p>Remember that your sync ID will only work with the xBrowserSync service on which it was created, when you change the active xBrowserSync service in the Settings panel you must create a new sync or use an existing sync ID created using that service.</p><p>Whenever you are synced you can view your sync ID in the Settings panel, click it to reveal a handy QR code to scan when syncing on mobile devices.</p>"
   },
   "help_Page_ExistingId_Desktop_Content": {
-    "message": "<h4>Syncing with your existing ID</h4><p>Click on “Already got a sync ID?” to enter your existing sync ID and password. If you are synced to a different xBrowserSync service make sure it is configured in the Settings panel.</p><p>xBrowserSync will retrieve and decrypt your encrypted data using your locally stored password, then clear your local bookmarks before re-populating them from the decrypted data.</p><p>Whilst synced, any changes to your synced data will be detected in the background and your local bookmarks will be updated automatically. You can also force updates manually in the Settings panel.</p>"
+    "message": "<h4>Syncing with your existing ID</h4><p>Click on “Already got a sync ID?” to enter your existing sync ID and password. If you are synced to a different xBrowserSync service make sure it is configured as the active service in the Settings panel.</p><p>xBrowserSync will retrieve and decrypt your encrypted data using your locally stored password, then clear your local bookmarks before re-populating them from the decrypted data.</p><p>When synced, xBrowserSync checks in the background every fifteen minutes for updates to your synced data and will automatically update your local bookmarks when required. You can also manually sync available updates to your synced data in the Settings panel.</p>"
   },
   "help_Page_ExistingId_Android_Content": {
-    "message": "<h4>Syncing with your existing ID</h4><p>Click on “Already got a sync ID?” to enter your existing sync ID and password.</p><p>Rather than attempt to type the long sync ID, simply press the QR icon in the ID field and then scan the QR code for your sync ID (you can find it in the Settings panel of the desktop browser extension, click on your sync ID to reveal it).</p><p>If you are synced to a different xBrowserSync service make sure it is configured in the Settings panel.</p><p>xBrowserSync will retrieve and decrypt your encrypted data using your locally stored password, then display your bookmarks for searching.</p>"
+    "message": "<h4>Syncing with your existing ID</h4><p>Start by scanning the sync ID QR code in the Settings panel of the xBrowserSync desktop browser extension (click on your sync ID to reveal it). Make sure you enter the same encryption password used when creating the sync otherwise xBrowserSync will not be able to decrypt your data.</p><p>Also, if you are synced to a different xBrowserSync service make sure it is the active service configured in the Settings panel.</p>"
   },
   "help_Page_Service_Content": {
-    "message": "<h4>Syncing to another service</h4><p>By default your data is synced to the <a href='https://link.xbrowsersync.org/api' class='new-tab'>official xBrowserSync service</a>, though anyone can <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>run their own xBrowserSync service</a>, either for private use (for ultimate security and privacy) or to make available for public use so that more people can enjoy xBrowserSync.</p><p>Check the list of public <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>xBrowserSync services</a> and configure which service to sync to in the Settings panel.</p>"
+    "message": "<h4>Syncing to another service</h4><p>By default your data is synced to the <a href='https://link.xbrowsersync.org/api' class='new-tab'>official xBrowserSync service</a>, but you can control where your data is synced if you do not want to use the default service.</p><p>Check the list of available <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>public xBrowserSync services</a> or <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>run your own service</a>, either for private use for ultimate security and privacy, or for public use so that more people can enjoy xBrowserSync.</p><p>At any time you can configure the active xBrowserSync service in the Settings panel.</p>"
   },
   "help_Page_Searching_Desktop_Content": {
     "message": "<h4>Searching your bookmarks</h4><p>Once synced, simply press Enter to display your recent bookmarks or type some keywords or a URL to search your bookmarks.</p><p>To edit or delete a bookmark, hover over the bookmark and click the now visible edit icon next to the bookmark’s title.</p>"
@@ -94,9 +94,6 @@
   },
   "help_Page_Mobile_Content": {
     "message": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a> store, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droid</a> or <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>direct download</a>.</p>"
-  },
-  "help_Page_Desktop_Content": {
-    "message": "<h4>Got desktop?</h4><p>Sync your bookmarks across desktop and mobile devices by using the xBrowserSync desktop browser web extension alongside the mobile app.</p><p>Currently available for Chrome and Firefox, Opera support coming very soon.</p>"
   },
   "help_Page_FurtherSupport_Content": {
     "message": "<h4>Further support</h4><p>You can find the answers to most common questions in the <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>FAQs</a>, also check the current <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>known issues</a> to see if your issue is listed there.</p><p>Alternatively, use the <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>issue tracker</a> to report an issue or request a new feature.</p>"
@@ -573,7 +570,7 @@
     "message": "Something went wrong"
   },
   "error_Default_Message": {
-    "message": "Sorry about that, if the problem persists you can <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report an issue</a>."
+    "message": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
   },
   "error_HttpRequestFailed_Title": {
     "message": "Connection to service lost"
@@ -591,19 +588,19 @@
     "message": "Sync data limit exceeded"
   },
   "error_RequestEntityTooLarge_Message": {
-    "message": "Unable to sync your data as it exceeds the size limit set by the xBrowserSync service. Remove some old bookmarks and try again or switch to a different xBrowserSync service that allows for larger syncs."
+    "message": "Delete some bookmarks and try again or switch to a service with a larger sync limit."
   },
   "error_NotAcceptingNewSyncs_Title": {
     "message": "Service not accepting new syncs"
   },
   "error_NotAcceptingNewSyncs_Message": {
-    "message": "Unable to create a new sync as the service is not currently accepting new syncs. If you have already created a sync using this service enter your sync ID, or use a different service."
+    "message": "Switch to a different service or try again later."
   },
   "error_DailyNewSyncLimitReached_Title": {
     "message": "Daily new sync limit reached"
   },
   "error_DailyNewSyncLimitReached_Message": {
-    "message": "Unable to create new sync as you have reached your daily new sync limit for this xBrowserSync service. Sync with an existing sync ID, choose a different service or try again tomorrow."
+    "message": "Sync to an existing sync ID, switch to a different service or try again tomorrow."
   },
   "error_MissingClientData_Title": {
     "message": "Missing credentials"
@@ -615,13 +612,13 @@
     "message": "Invalid credentials"
   },
   "error_InvalidCredentials_Message": {
-    "message": "Check your sync ID and password, also make sure the current service is the same as where the sync was created."
+    "message": "Check your sync ID and password, and ensure the active service is where the sync was created."
   },
   "error_SyncRemoved_Title": {
     "message": "Sync not found"
   },
   "error_SyncRemoved_Message": {
-    "message": "The requested sync does not exist on the service, it may have been removed due to inactivity. Create a new sync and restore your data from a backup."
+    "message": "The requested sync does not exist, it may have been removed due to inactivity."
   },
   "error_NoDataToRestore_Title": {
     "message": "No data to restore"
@@ -633,13 +630,13 @@
     "message": "Sync error"
   },
   "error_LocalSyncError_Message": {
-    "message": "An error occurred whilst syncing local changes. Your local bookmarks have now been refreshed so you may need to redo the previous change."
+    "message": "Local data has been refreshed, please redo previous unsynced changes."
   },
   "error_OutOfSync_Title": {
     "message": "Data out of sync"
   },
   "error_OutOfSync_Message": {
-    "message": "Local data was out of sync but has now been refreshed. Your local bookmarks have now been refreshed so you may need to redo the previous change."
+    "message": "Local data was out of sync and has now been refreshed. Please redo previous unsynced changes."
   },
   "error_InvalidService_Title": {
     "message": "Invalid xBrowserSync service"
@@ -663,13 +660,13 @@
     "message": "xBrowserSync folder changed"
   },
   "error_ContainerChanged_Message": {
-    "message": "Modifying xBrowserSync [xbs] folders can cause sync issues. The previous change was not synced and your local bookmarks have been refreshed."
+    "message": "Please avoid modifying [xbs] folders as it can cause sync issues."
   },
   "error_LocalContainerNotFound_Title": {
     "message": "Unexpected bookmarks structure"
   },
   "error_LocalContainerNotFound_Message": {
-    "message": "This could be caused by a corrupt browser profile. Try syncing with a fresh profile before importing any existing bookmarks."
+    "message": "Possible corrupt browser profile, try creating a new profile as it may resolve the issue."
   },
   "error_FailedGetPageMetadata_Title": {
     "message": "Couldn’t get bookmark properties"

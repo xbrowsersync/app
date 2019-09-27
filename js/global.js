@@ -83,7 +83,6 @@ xBrowserSync.App.Global = function (platform) {
       Help_Page_Shortcuts_Chrome_Content: 'help_Page_Shortcuts_Chrome_Content',
       Help_Page_Shortcuts_Firefox_Content: 'help_Page_Shortcuts_Firefox_Content',
       Help_Page_Mobile_Content: 'help_Page_Mobile_Content',
-      Help_Page_Desktop_Content: 'help_Page_Desktop_Content',
       Help_Page_FurtherSupport_Content: 'help_Page_FurtherSupport_Content',
       Login_PasswordConfirmationField_Label: 'login_PasswordConfirmationField_Label',
       Login_PasswordField_Label: 'login_PasswordField_Label',
