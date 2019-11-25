@@ -14,6 +14,8 @@ Alternatively, if you are a user and need to report an issue with a particular x
 
 Before you continue, please check the list of known issues (https://github.com/xbrowsersync/app/wiki/Known-issues) and the FAQs (https://www.xbrowsersync.org/#faqs). Otherwise, please fill out all of the information below.
 
+** Important note: I do not have time to chase people for information so if the form below is not completed adequately your issue will likely be closed without further consideration. Remember this is FOSS, if you're using it and want a bug to be fixed then do me the courtesy of completing the issue form properly.
+
 Thanks for using xBrowserSync!
 -->
 
