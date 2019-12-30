@@ -186,6 +186,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     };
 
     vm.sync = {
+      displayGetSyncIdPanel: true,
       displayOtherSyncsWarning: false,
       displayNewSyncPanel: true,
       displayPasswordConfirmation: false,
@@ -471,7 +472,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
             return changeView(vm.view.views.search);
           });
       })
-      .catch(displayAlertErrorHandler);
+      .catch(checkIfSyncDataRefreshedOnError);
   };
 
   var bookmarkForm_CreateTags_Click = function () {
@@ -515,7 +516,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         // Display the search panel
         return changeView(vm.view.views.search);
       })
-      .catch(displayAlertErrorHandler);
+      .catch(checkIfSyncDataRefreshedOnError);
   };
 
   var bookmarkForm_GetMetadata_Click = function () {
@@ -592,7 +593,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
             return changeView(vm.view.views.search);
           });
       })
-      .catch(displayAlertErrorHandler);
+      .catch(checkIfSyncDataRefreshedOnError);
   };
 
   var bookmarkForm_ValidateBookmark = function (bookmarkToValidate, originalUrl) {
@@ -652,9 +653,10 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         initNewView = init_loadingView(viewData);
         break;
       case vm.view.views.login:
-      default:
         initNewView = init_loginView(viewData);
         break;
+      default:
+        initNewView = $q.resolve();
     }
 
     return initNewView
@@ -667,6 +669,27 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         $timeout(setNewTabLinks, 100);
         return view;
       });
+  };
+
+  var checkIfSyncDataRefreshedOnError = function (err) {
+    // If data out of sync display main view
+    return (bookmarks.CheckIfRefreshSyncedDataOnError(err) ? displayMainView() : $q.resolve())
+      .then(function () {
+        displayAlertErrorHandler(err);
+      });
+  };
+
+  var convertPageMetadataToBookmark = function (metadata) {
+    if (!metadata) {
+      return;
+    }
+
+    var metadataAsBookmark = new bookmarks.XBookmark(
+      metadata.title,
+      metadata.url,
+      utility.TrimToNearestWord(metadata.description, globals.Bookmarks.DescriptionMaxLength),
+      utility.GetTagArrayFromText(metadata.tags));
+    return metadataAsBookmark;
   };
 
   var disableSync = function () {
@@ -842,26 +865,18 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       });
   };
 
+  var getMetadataForCurrentPage = function () {
+    return platform.GetPageMetadata(true)
+      .then(convertPageMetadataToBookmark);
+  };
+
   var getMetadataForUrl = function (url) {
     if (!url) {
       return $q.resolve();
     }
 
-    // TODO: Do Chrome/Firefox implementations need to be updated?
-    return platform.GetPageMetadata(url)
-      .then(function (metadata) {
-        if (!metadata) {
-          return;
-        }
-
-        // Return retrieved metadata as bookmark
-        var metadataAsBookmark = new bookmarks.XBookmark(
-          metadata.title,
-          metadata.url,
-          utility.TrimToNearestWord(metadata.description, globals.Bookmarks.DescriptionMaxLength),
-          utility.GetTagArrayFromText(metadata.tags));
-        return metadataAsBookmark;
-      });
+    return platform.GetPageMetadata(true, url)
+      .then(convertPageMetadataToBookmark);
   };
 
   var init = function () {
@@ -913,7 +928,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.bookmark.tagTextMeasure = null;
 
     // If bookmark to update provided, set to current and return
-    return $q(function (resolve, reject) {
+    return $q(function (resolve) {
       if (bookmarkToUpdate) {
         vm.bookmark.displayUpdateForm = true;
         return resolve(bookmarkToUpdate);
@@ -928,9 +943,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
             return resolve(bookmark);
           }
 
-          // Get bookmark metadata for current url
-          return platform.GetCurrentUrl()
-            .then(getMetadataForUrl)
+          // Get current page metadata as bookmark
+          return getMetadataForCurrentPage()
             .then(function (metadata) {
               // Display add bookmark form
               vm.bookmark.displayUpdateForm = false;
@@ -1022,10 +1036,15 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         vm.sync.enabled = !!syncEnabled;
         vm.sync.id = syncId;
 
-        // If not on a mobile platform, display new sync panel depending on if ID is set
-        vm.sync.displayNewSyncPanel = utility.IsMobilePlatform(vm.platformName) ? false : !syncId;
+        if (utility.IsMobilePlatform(vm.platformName)) {
+          // Set displayed panels for mobile platform
+          vm.sync.displayGetSyncIdPanel = !syncId;
+          vm.sync.displayNewSyncPanel = false;
+        }
+        else {
+          // Set displayed panels for browsers
+          vm.sync.displayNewSyncPanel = !syncId;
 
-        if (!utility.IsMobilePlatform(vm.platformName)) {
           // If not synced before, display warning to disable other sync tools
           if (displayOtherSyncsWarning == null || displayOtherSyncsWarning === true) {
             vm.sync.displayOtherSyncsWarning = true;
@@ -1278,16 +1297,14 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
   var queueSync = function (syncData, command) {
     command = command || globals.Commands.SyncBookmarks;
-    return platform.Sync.Execute(syncData, command)
+    return platform.Sync.Queue(syncData, command)
       .catch(function (err) {
         // If sync was processed but not committed (offline) catch the error but display an alert
         if (err.code === globals.ErrorCodes.SyncUncommitted) {
           $timeout(function () {
             displayAlertErrorHandler(err);
           }, 100);
-
-          // Return updated bookmarks
-          return err.bookmarks;
+          return;
         }
 
         throw err;
@@ -1297,7 +1314,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       });
   };
 
-  var restoreBookmarksSuccess = function (restoredBookmarks) {
+  var restoreBookmarksSuccess = function () {
     // Update current bookmark status
     return setBookmarkStatus()
       // Refresh data usage
@@ -1400,6 +1417,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var scanPanel_Cancel_Click = function () {
+    vm.sync.displayGetSyncIdPanel = false;
     displayMainView().then(platform.Scanner.Stop);
   };
 
@@ -1487,15 +1505,20 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       }
     }
 
-    // Sync the deletion
-    queueSync({
-      type: globals.SyncType.Both,
-      changeInfo: {
-        type: globals.UpdateType.Delete,
-        id: bookmark.id
-      }
-    })
-      .catch(displayAlertErrorHandler);
+    $timeout(function () {
+      // Display loading overlay
+      platform.Interface.Loading.Show();
+
+      // Sync changes
+      queueSync({
+        type: globals.SyncType.Both,
+        changeInfo: {
+          type: globals.UpdateType.Delete,
+          id: bookmark.id
+        }
+      })
+        .catch(checkIfSyncDataRefreshedOnError);
+    }, 1e3);
   };
 
   var searchForm_ScanCode_Click = function () {
@@ -2124,7 +2147,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       .then(function () {
         utility.LogInfo('Toolbar sync enabled');
 
-        // Start sync with no callback action
+        // Queue sync with no callback action
         return queueSync({
           type: !syncId ? globals.SyncType.Push : globals.SyncType.Pull
         })

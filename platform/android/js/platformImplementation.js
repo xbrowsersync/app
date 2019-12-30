@@ -12,7 +12,7 @@ SpinnerDialog.show = function () { };
 xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, platform, globals, utility, bookmarks) {
   'use strict';
 
-  var currentPage, loadingId, sharedBookmark, vm;
+  var backgroundSyncInterval, currentPage, loadingId, sharedBookmark, vm;
 
   var constants = {
     "title": {
@@ -564,9 +564,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "workingOffline_Message": {
       "message": "Any changes will be synced once connection is restored."
     },
-    "uncommittedSyncsProcessed_Message": {
-      "message": "Connection to service restored, changes synced successfully."
-    },
     "getMetadata_Message": {
       "message": "Fetching bookmark properties, touch to cancel."
     },
@@ -717,9 +714,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
 
-  /* ------------------------------------------------------------------------------------
-   * Constructor
-   * ------------------------------------------------------------------------------------ */
+	/* ------------------------------------------------------------------------------------
+	 * Constructor
+	 * ------------------------------------------------------------------------------------ */
 
   var AndroidImplementation = function () {
     // Inject required platform implementation functions
@@ -753,13 +750,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Scanner.ToggleLight = toggleLight;
     platform.Sync.Await = awaitSync;
     platform.Sync.Current = getCurrentSync;
-    platform.Sync.Execute = executeSync;
+    platform.Sync.Queue = queueSync;
   };
 
 
-  /* ------------------------------------------------------------------------------------
-   * Public functions
-   * ------------------------------------------------------------------------------------ */
+	/* ------------------------------------------------------------------------------------
+	 * Public functions
+	 * ------------------------------------------------------------------------------------ */
 
   var addIdsToBookmarks = function (xBookmarks) {
     // TODO: test this
@@ -793,7 +790,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var awaitSync = function (syncToAwait) {
-    return bookmarks.Sync()
+    return bookmarks.QueueSync()
       .then(function () {
         return syncToAwait.deferred.promise;
       })
@@ -891,47 +888,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     });
   };
 
-  var executeSync = function (syncData, command) {
-    syncData.command = command || globals.Commands.SyncBookmarks;
-
-    // Sync bookmarks
-    return bookmarks.Sync(syncData)
-      .then(function () {
-        if (syncData.changeInfo === undefined) {
-          return;
-        }
-        switch (true) {
-          case syncData.changeInfo.type === globals.UpdateType.Create:
-            $timeout(function () {
-              vm.alert.display(null, getConstant(globals.Constants.BookmarkCreated_Message));
-            }, 200);
-            break;
-          case syncData.changeInfo.type === globals.UpdateType.Delete:
-            $timeout(function () {
-              vm.alert.display(null, getConstant(globals.Constants.BookmarkDeleted_Message));
-            }, 200);
-            break;
-          case syncData.changeInfo.type === globals.UpdateType.Update:
-            $timeout(function () {
-              vm.alert.display(null, getConstant(globals.Constants.BookmarkUpdated_Message));
-            }, 200);
-            break;
-        }
-      })
-      .catch(function (err) {
-        // Display more informative message when sync uncommitted
-        if (err.code === globals.ErrorCodes.SyncUncommitted) {
-          vm.alert.display(
-            getConstant(globals.Constants.Error_UncommittedSyncs_Title),
-            getConstant(globals.Constants.Error_UncommittedSyncs_Message)
-          );
-          return;
-        }
-
-        throw err;
-      });
-  };
-
   var getAutoUpdatesNextRun = function () {
     return $q(function (resolve, reject) {
       chrome.alarms.get(globals.Alarm.Name, function (alarm) {
@@ -965,6 +921,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     var pages = [
       getConstant(globals.Constants.Help_Page_Welcome_Android_Content),
       getConstant(globals.Constants.Help_Page_FirstSync_Android_Content),
+      getConstant(globals.Constants.Help_Page_SyncId_Content),
       getConstant(globals.Constants.Help_Page_ExistingId_Android_Content),
       getConstant(globals.Constants.Help_Page_Service_Content),
       getConstant(globals.Constants.Help_Page_Searching_Android_Content),
@@ -1053,33 +1010,31 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return getCachedData;
   };
 
-  var getPageMetadata = function (url) {
+  var getPageMetadata = function (getFullMetadata, pageUrl) {
     var inAppBrowser, timeout;
+
+    // Set default metadata from provided page url or current page
     var metadata = {
-      url: url
+      title: currentPage ? currentPage.title : null,
+      url: pageUrl ? pageUrl : currentPage ? currentPage.url : null
     };
 
-    // Set default title as shared bookmark title
-    if (currentPage && url === currentPage.url) {
-      metadata.title = currentPage.title;
-    }
-
-    return $q(function (resolve, reject) {
-      // Return if current url not set
-      if (!url) {
+    return $q(function (resolve) {
+      // Return if no url set
+      if (!metadata.url) {
         vm.bookmark.addButtonDisabledUntilEditForm = true;
         return resolve();
       }
 
       // Return if current url is not valid
-      var matches = url.match(/^https?:\/\/\w+/i);
+      var matches = metadata.url.match(/^https?:\/\/\w+/i);
       if (!matches || matches.length <= 0) {
         vm.bookmark.addButtonDisabledUntilEditForm = true;
         return resolve();
       }
 
       var handleResponse = function (pageContent, err) {
-        var parser, html;
+        var parser;
         platform.Interface.Loading.Hide('retrievingMetadata', timeout);
 
         // Check html content was returned
@@ -1095,18 +1050,18 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
         // Extract metadata properties
         parser = new DOMParser();
-        html = parser.parseFromString(pageContent, 'text/html');
+        var document = parser.parseFromString(pageContent, 'text/html');
 
         // Get all meta tags
-        var metaTagsArr = html.getElementsByTagName('meta');
+        var metaTagsArr = document.getElementsByTagName('meta');
 
         var getPageDescription = function () {
           for (var i = 0; i < metaTagsArr.length; i++) {
             var currentTag = metaTagsArr[i];
-            if ((!!currentTag.getAttribute('property') && currentTag.getAttribute('property').toUpperCase().trim() === 'OG:DESCRIPTION' && !!currentTag.getAttribute('content')) ||
-              (!!currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'TWITTER:DESCRIPTION' && !!currentTag.getAttribute('content')) ||
-              (!!currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'DESCRIPTION' && !!currentTag.getAttribute('content'))) {
-              return (!!currentTag.getAttribute('content')) ? currentTag.getAttribute('content').trim() : '';
+            if ((currentTag.getAttribute('property') && currentTag.getAttribute('property').toUpperCase().trim() === 'OG:DESCRIPTION' && currentTag.getAttribute('content')) ||
+              (currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'TWITTER:DESCRIPTION' && currentTag.getAttribute('content')) ||
+              (currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'DESCRIPTION' && currentTag.getAttribute('content'))) {
+              return (currentTag.getAttribute('content')) ? currentTag.getAttribute('content').trim() : '';
             }
           }
 
@@ -1118,9 +1073,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           var currentTag, i, keywords = [];
           for (i = 0; i < metaTagsArr.length; i++) {
             currentTag = metaTagsArr[i];
-            if (!!currentTag.getAttribute('property') &&
-              !!currentTag.getAttribute('property').trim().match(/VIDEO\:TAG$/i) &&
-              !!currentTag.getAttribute('content')) {
+            if (currentTag.getAttribute('property') &&
+              currentTag.getAttribute('property').trim().match(/VIDEO\:TAG$/i) &&
+              currentTag.getAttribute('content')) {
               keywords.push(currentTag.getAttribute('content').trim());
             }
           }
@@ -1128,13 +1083,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           // Get meta tag values 
           for (i = 0; i < metaTagsArr.length; i++) {
             currentTag = metaTagsArr[i];
-            if (!!currentTag.getAttribute('name') &&
+            if (currentTag.getAttribute('name') &&
               currentTag.getAttribute('name').toUpperCase().trim() === 'KEYWORDS' &&
-              !!currentTag.getAttribute('content')) {
+              currentTag.getAttribute('content')) {
               var metaKeywords = currentTag.getAttribute('content').split(',');
               for (i = 0; i < metaKeywords.length; i++) {
                 var currentKeyword = metaKeywords[i];
-                if (!!currentKeyword && !!currentKeyword.trim()) {
+                if (currentKeyword && currentKeyword.trim()) {
                   keywords.push(currentKeyword.trim());
                 }
               }
@@ -1152,13 +1107,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         var getPageTitle = function () {
           for (var i = 0; i < metaTagsArr.length; i++) {
             var tag = metaTagsArr[i];
-            if ((!!tag.getAttribute('property') && tag.getAttribute('property').toUpperCase().trim() === 'OG:TITLE' && !!tag.getAttribute('content')) ||
-              (!!tag.getAttribute('name') && tag.getAttribute('name').toUpperCase().trim() === 'TWITTER:TITLE' && !!tag.getAttribute('content'))) {
-              return (!!tag.getAttribute('content')) ? tag.getAttribute('content').trim() : '';
+            if ((tag.getAttribute('property') && tag.getAttribute('property').toUpperCase().trim() === 'OG:TITLE' && tag.getAttribute('content')) ||
+              (tag.getAttribute('name') && tag.getAttribute('name').toUpperCase().trim() === 'TWITTER:TITLE' && tag.getAttribute('content'))) {
+              return (tag.getAttribute('content')) ? tag.getAttribute('content').trim() : '';
             }
           }
 
-          return html.title;
+          return document.title;
         };
 
         // Update metadata with retrieved page data and return
@@ -1174,7 +1129,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       }
 
       timeout = platform.Interface.Loading.Show('retrievingMetadata', handleResponse);
-      inAppBrowser = cordova.InAppBrowser.open(url, '_blank', 'hidden=yes');
+      inAppBrowser = cordova.InAppBrowser.open(metadata.url, '_blank', 'hidden=yes');
 
       inAppBrowser.addEventListener('loaderror', function (event) {
         var errMessage = event && event.message ? event.message : 'Failed to load webpage';
@@ -1229,9 +1184,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       script.onload = function () {
         // Bind to device events
         document.addEventListener('deviceready', function () {
-          deviceReady(viewModel, resolve, reject);
+          handleDeviceReady(viewModel, resolve, reject);
         }, false);
-        document.addEventListener('resume', resume, false);
+        document.addEventListener('resume', handleResume, false);
       };
       document.getElementsByTagName('head')[0].appendChild(script);
     });
@@ -1244,6 +1199,53 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var populateBookmarks = function () {
     // Unused for this platform
     return $q.resolve();
+  };
+
+  var queueSync = function (syncData, command) {
+    syncData.command = command || globals.Commands.SyncBookmarks;
+
+    // Add sync data to queue and run sync
+    return bookmarks.QueueSync(syncData)
+      .then(function () {
+        if (syncData.changeInfo === undefined) {
+          return;
+        }
+        switch (true) {
+          case syncData.changeInfo.type === globals.UpdateType.Create:
+            $timeout(function () {
+              vm.alert.display(null, getConstant(globals.Constants.BookmarkCreated_Message));
+            }, 200);
+            break;
+          case syncData.changeInfo.type === globals.UpdateType.Delete:
+            $timeout(function () {
+              vm.alert.display(null, getConstant(globals.Constants.BookmarkDeleted_Message));
+            }, 200);
+            break;
+          case syncData.changeInfo.type === globals.UpdateType.Update:
+            $timeout(function () {
+              vm.alert.display(null, getConstant(globals.Constants.BookmarkUpdated_Message));
+            }, 200);
+            break;
+        }
+      })
+      .catch(function (err) {
+        // If local data out of sync, queue refresh sync
+        return (bookmarks.CheckIfRefreshSyncedDataOnError(err) ? refreshLocalSyncData() : $q.resolve())
+          .then(function () {
+            // Check for uncommitted syncs
+            if (err.code === globals.ErrorCodes.SyncUncommitted) {
+              vm.alert.display(
+                getConstant(globals.Constants.Error_UncommittedSyncs_Title),
+                getConstant(globals.Constants.Error_UncommittedSyncs_Message)
+              );
+
+              enableBackgroundSync();
+              return;
+            }
+
+            throw err;
+          });
+      });
   };
 
   var refreshInterface = function () {
@@ -1379,9 +1381,17 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
 
-  /* ------------------------------------------------------------------------------------
-   * Private functions
-   * ------------------------------------------------------------------------------------ */
+	/* ------------------------------------------------------------------------------------
+	 * Private functions
+	 * ------------------------------------------------------------------------------------ */
+
+  var checkForInstallOrUpgrade = function () {
+    // Check for stored app version and compare it to current
+    return getFromLocalStorage(globals.CacheKeys.AppVersion)
+      .then(function (currentVersion) {
+        return currentVersion ? handleUpgrade(currentVersion, globals.AppVersion) : handleInstall(globals.AppVersion);
+      });
+  };
 
   var checkForSharedBookmark = function () {
     var bookmark = getSharedBookmark();
@@ -1398,76 +1408,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
-  var checkIfOnline = function () {
-    var isOnline = utility.IsNetworkConnected();
-
-    // If not online display an alert and return
-    if (!isOnline) {
-      utility.LogInfo('Offline');
-
-      vm.alert.display(
-        getConstant(globals.Constants.WorkingOffline_Title),
-        getConstant(globals.Constants.WorkingOffline_Message)
-      );
-
-      return $q.resolve(false);
-    }
-
-    utility.LogInfo('Online');
-
-    // Check if sync enabled before checking for uncommitted updates
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
-      .then(function (syncEnabled) {
-        if (!syncEnabled) {
-          return true;
-        }
-
-        // Commit any updates made whilst offline
-        return bookmarks.CheckForUncommittedSyncs()
-          .then(function (updatesSynced) {
-            if (updatesSynced) {
-              vm.alert.display(null, getConstant(globals.Constants.UncommittedSyncsProcessed_Message));
-            }
-            else {
-              // If no uncommitted updates, check for latest updates 
-              return getLatestUpdates();
-            }
-          })
-          .then(function () {
-            return true;
-          })
-          .catch(function (err) {
-            // If local data out of sync, clear uncommitted syncs flag and refresh local data
-            if (bookmarks.CheckIfRefreshSyncedDataOnError(err)) {
-              platform.LocalStorage.Set(globals.CacheKeys.UncommittedSyncs);
-              return refreshLocalSyncData()
-                .then(function () {
-                  throw err;
-                });
-            }
-
-            throw err;
-          });
-      })
-      .catch(displayErrorAlert);
-  };
-
-  var checkForInstallOrUpgrade = function () {
-    // Check for stored app version and compare it to current
-    return getFromLocalStorage(globals.CacheKeys.AppVersion)
-      .then(function (currentVersion) {
-        return currentVersion ? onUpgradeHandler(currentVersion, globals.AppVersion) : onInstallHandler(globals.AppVersion);
-      });
-  };
-
-  var getSharedBookmark = function () {
-    if (!sharedBookmark) {
+  var disableBackgroundSync = function () {
+    if (!backgroundSyncInterval) {
       return;
     }
 
-    var bookmark = sharedBookmark;
-    sharedBookmark = null;
-    return bookmark;
+    $interval.cancel(backgroundSyncInterval);
+    backgroundSyncInterval = null;
+    cordova.plugins.backgroundMode.disable();
   };
 
   var disableLight = function () {
@@ -1497,49 +1445,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     // Display alert
     var errMessage = utility.GetErrorMessageFromException(err);
     vm.alert.display(errMessage.title, errMessage.message, 'danger');
-  };
-
-  var deviceReady = function (viewModel, success, failure) {
-    // Set global variables
-    vm = viewModel;
-
-    // Set platform
-    vm.platformName = globals.Platforms.Android;
-
-    // Configure events
-    document.addEventListener('backbutton', handleBackButton, false);
-    document.addEventListener('touchstart', handleTouchStart, false);
-    window.addEventListener('keyboardDidShow', handleKeyboardDidShow);
-    window.addEventListener('keyboardWillHide', handleKeyboardWillHide);
-
-    // Check if an intent started the app and detect future shared intents 
-    window.plugins.intentShim.getIntent(handleNewIntent, function () { });
-    window.plugins.intentShim.onIntent(handleNewIntent);
-
-    // Set required events to mobile app handlers
-    vm.events.syncForm_EnableSync_Click = syncForm_EnableSync_Click;
-
-    // Set clear search button to display all bookmarks
-    vm.search.displayDefaultState = displayDefaultSearchState;
-
-    // Enable select file to restore
-    vm.settings.fileRestoreEnabled = true;
-
-    // Increase search results timeout to avoid display lag
-    vm.settings.getSearchResultsDelay = 500;
-
-    // Display existing sync panel by default
-    vm.sync.displayNewSyncPanel = false;
-
-    // Use snackbar for alerts
-    vm.alert.display = displaySnackbar;
-
-    // Check for upgrade or do fresh install
-    return checkForInstallOrUpgrade()
-      // Run startup process after install/upgrade
-      .then(onStartupHandler)
-      .then(success)
-      .catch(failure);
   };
 
   var displaySnackbar = function (title, description, level, action, actionCallback) {
@@ -1580,6 +1485,26 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       failure);
   };
 
+  var enableBackgroundSync = function () {
+    // Exit if background sync already enabled
+    if (backgroundSyncInterval) {
+      return;
+    }
+
+    // Keep app running in background
+    cordova.plugins.backgroundMode.enable();
+
+    // Try executing sync periodically
+    backgroundSyncInterval = $interval(function () {
+      // Only execute sync if app running in background
+      if (!cordova.plugins.backgroundMode.isActive()) {
+        return;
+      }
+
+      executeSync(true);
+    }, 120e3);
+  };
+
   var enableLight = function () {
     return $q(function (resolve, reject) {
       QRScanner.enableLight(function (err) {
@@ -1594,37 +1519,54 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     });
   };
 
-  var getLatestUpdates = function () {
-    // Check if bookmarks need updating, return immediately if network is disconnected
-    return bookmarks.CheckForUpdates()
-      .then(function (updatesAvailable) {
-        if (!updatesAvailable) {
-          return;
+  var executeSync = function (isBackgroundSync) {
+    // Display loading panel if not background sync
+    if (!isBackgroundSync) {
+      displayLoading();
+    }
+
+    // Sync bookmarks
+    return bookmarks.Sync(isBackgroundSync)
+      .then(function () {
+        // Disable background sync if sync successfull
+        if (isBackgroundSync) {
+          disableBackgroundSync();
         }
-
-        // Show loading overlay if currently on the search panel
-        if (vm.view.current === vm.view.views.search) {
-          displayLoading();
-        }
-
-        // Get bookmark updates
-        return executeSync({ type: globals.SyncType.Pull })
-          .then(function () {
-            // Update search results if currently on the search panel and no query entered
-            if (vm.view.current === vm.view.views.search && !vm.search.query) {
-              refreshSearchResults();
-            }
-
-            return true;
-          })
-          .catch(function (err) {
-            err.code = globals.ErrorCodes.FailedRefreshBookmarks;
-            throw err;
-          });
       })
-      .finally(function () {
-        hideLoading();
-      });
+      .catch(function (err) {
+        // Display alert if not background sync
+        if (!isBackgroundSync) {
+          displayErrorAlert(err);
+        }
+      })
+      .finally(hideLoading);
+  };
+
+  var executeSyncIfOnline = function () {
+    var isOnline = utility.IsNetworkConnected();
+
+    // If not online display an alert and return
+    if (!isOnline) {
+      vm.alert.display(
+        getConstant(globals.Constants.WorkingOffline_Title),
+        getConstant(globals.Constants.WorkingOffline_Message)
+      );
+
+      return $q.resolve(false);
+    }
+
+    // Sync bookmarks
+    return executeSync();
+  };
+
+  var getSharedBookmark = function () {
+    if (!sharedBookmark) {
+      return;
+    }
+
+    var bookmark = sharedBookmark;
+    sharedBookmark = null;
+    return bookmark;
   };
 
   var handleBackButton = function (event) {
@@ -1641,6 +1583,65 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       event.preventDefault();
       navigator.app.exitApp();
     }
+  };
+
+  var handleDeviceReady = function (viewModel, success, failure) {
+    // Set global variables
+    vm = viewModel;
+
+    // Set platform
+    vm.platformName = globals.Platforms.Android;
+
+    // Configure events
+    document.addEventListener('backbutton', handleBackButton, false);
+    document.addEventListener('touchstart', handleTouchStart, false);
+    window.addEventListener('keyboardDidShow', handleKeyboardDidShow);
+    window.addEventListener('keyboardWillHide', handleKeyboardWillHide);
+
+    // Check if an intent started the app and detect future shared intents 
+    window.plugins.intentShim.getIntent(handleNewIntent, function () { });
+    window.plugins.intentShim.onIntent(handleNewIntent);
+
+    // Enable app working in background to check for uncommitted syncs
+    cordova.plugins.backgroundMode.setDefaults({ hidden: true, silent: true });
+    cordova.plugins.backgroundMode.on('activate', function () {
+      cordova.plugins.backgroundMode.disableWebViewOptimizations();
+    });
+
+    // Set required events to mobile app handlers
+    vm.events.syncForm_EnableSync_Click = syncForm_EnableSync_Click;
+
+    // Set clear search button to display all bookmarks
+    vm.search.displayDefaultState = displayDefaultSearchState;
+
+    // Enable select file to restore
+    vm.settings.fileRestoreEnabled = true;
+
+    // Increase search results timeout to avoid display lag
+    vm.settings.getSearchResultsDelay = 500;
+
+    // Display existing sync panel by default
+    vm.sync.displayNewSyncPanel = false;
+
+    // Use snackbar for alerts
+    vm.alert.display = displaySnackbar;
+
+    // Check for upgrade or do fresh install
+    return checkForInstallOrUpgrade()
+      // Run startup process after install/upgrade
+      .then(handleStartup)
+      .then(success)
+      .catch(failure);
+  };
+
+  var handleInstall = function (installedVersion) {
+    return $q.all([
+      setInLocalStorage(globals.CacheKeys.AppVersion, installedVersion),
+      setInLocalStorage(globals.CacheKeys.DisplayHelp, true)
+    ])
+      .then(function () {
+        utility.LogInfo('Installed v' + installedVersion);
+      });
   };
 
   var handleKeyboardDidShow = function (event) {
@@ -1668,34 +1669,37 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     };
   };
 
-  var handleTouchStart = function (event) {
-    // Blur focus (and hide keyboard) when pressing out of text fields
-    if (!isTextInput(event.target) && isTextInput(document.activeElement)) {
-      $timeout(function () {
-        document.activeElement.blur();
-      }, 100);
-    }
-    // Deselect selected bookmark
-    else if (vm.search.selectedBookmark) {
-      vm.search.selectedBookmark = null;
-    }
+  var handleResume = function () {
+    // Check if sync enabled and reset network disconnected flag
+    platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+      .then(function (syncEnabled) {
+        // Deselect bookmark
+        vm.search.selectedBookmark = null;
+
+        if (!syncEnabled) {
+          return;
+        }
+
+        // Check if a bookmark was shared
+        checkForSharedBookmark();
+
+        // Run sync
+        return executeSyncIfOnline()
+          .then(function (isOnline) {
+            if (isOnline === false) {
+              return;
+            }
+
+            // Refresh search results if query not present
+            if (vm.view.current === vm.view.views.search && !vm.search.query) {
+              displayDefaultSearchState();
+            }
+          });
+      })
+      .catch(displayErrorAlert);
   };
 
-  var isTextInput = function (node) {
-    return ['INPUT', 'TEXTAREA'].indexOf(node.nodeName) !== -1;
-  };
-
-  var onInstallHandler = function (installedVersion) {
-    return $q.all([
-      setInLocalStorage(globals.CacheKeys.AppVersion, installedVersion),
-      setInLocalStorage(globals.CacheKeys.DisplayHelp, true)
-    ])
-      .then(function () {
-        utility.LogInfo('Installed v' + installedVersion);
-      });
-  };
-
-  var onStartupHandler = function () {
+  var handleStartup = function () {
     var syncEnabled;
 
     utility.LogInfo('Starting up');
@@ -1725,7 +1729,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         }
 
         // If network is online, commit any updates made whilst offline
-        checkIfOnline();
+        executeSyncIfOnline();
 
         // Check if a bookmark was shared
         return checkForSharedBookmark()
@@ -1736,7 +1740,20 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       .catch(displayErrorAlert);
   };
 
-  var onUpgradeHandler = function (currentVersion, newVersion) {
+  var handleTouchStart = function (event) {
+    // Blur focus (and hide keyboard) when pressing out of text fields
+    if (!isTextInput(event.target) && isTextInput(document.activeElement)) {
+      $timeout(function () {
+        document.activeElement.blur();
+      }, 100);
+    }
+    // Deselect selected bookmark
+    else if (vm.search.selectedBookmark) {
+      vm.search.selectedBookmark = null;
+    }
+  };
+
+  var handleUpgrade = function (currentVersion, newVersion) {
     if (compareVersions(currentVersion, newVersion) >= 0) {
       // No upgrade
       return;
@@ -1754,41 +1771,15 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
+  var isTextInput = function (node) {
+    return ['INPUT', 'TEXTAREA'].indexOf(node.nodeName) !== -1;
+  };
+
   var refreshLocalSyncData = function () {
-    return executeSync({ type: globals.SyncType.Pull })
+    return queueSync({ type: globals.SyncType.Pull })
       .then(function () {
         utility.LogInfo('Local sync data refreshed');
       });
-  };
-
-  var refreshSearchResults = function () {
-    if (vm.view.current !== vm.view.views.search) {
-      return;
-    }
-
-    // Refresh search results
-    document.activeElement.blur();
-    vm.search.execute();
-  };
-
-  var resume = function () {
-    // Check if sync enabled and reset network disconnected flag
-    platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
-      .then(function (syncEnabled) {
-        // Deselect bookmark
-        vm.search.selectedBookmark = null;
-
-        if (!syncEnabled) {
-          return;
-        }
-
-        // If network is online, commit any updates made whilst offline
-        checkIfOnline();
-
-        // Check if a bookmark was shared
-        return checkForSharedBookmark();
-      })
-      .catch(displayErrorAlert);
   };
 
   var syncForm_EnableSync_Click = function () {

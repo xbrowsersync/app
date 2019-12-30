@@ -52,7 +52,8 @@
     <resource-file src="res/android/values/colors.xml" target="app/src/main/res/values/colors.xml" />
     <resource-file src="res/android/values/styles.xml" target="app/src/main/res/values/styles.xml" />
   </platform>
-  <preference name="android-minSdkVersion" value="24" />
+  <preference name="android-minSdkVersion" value="26" />
+  <preference name="android-targetSdkVersion" value="28" />
   <preference name="AndroidLaunchMode" value="singleTask" />
   <preference name="DisallowOverscroll" value="true" />
   <preference name="LoadUrlTimeoutValue" value="5000"/>

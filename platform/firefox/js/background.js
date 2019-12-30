@@ -78,7 +78,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
     // Queue sync
     return $q(function (resolve, reject) {
-      syncBookmarks({
+      queueBookmarksSync({
         changeInfo: prepareToSyncChanges,
         syncChange: syncChange.promise,
         type: globals.SyncType.Push
@@ -131,7 +131,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
         // Queue sync
         return $q(function (resolve, reject) {
-          syncBookmarks({
+          queueBookmarksSync({
             type: globals.SyncType.Pull
           }, function (response) {
             if (response.success) {
@@ -159,7 +159,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         locationInfo = results;
 
         // If bookmark is not folder, get page metadata from current tab
-        return (createdBookmark.url ? platform.GetPageMetadata(true) : $q.resolve())
+        return (createdBookmark.url ? platform.GetPageMetadata() : $q.resolve())
           .then(function (metadata) {
             // Add metadata if bookmark is current tab location
             if (metadata && createdBookmark.url === metadata.url) {
@@ -193,7 +193,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
     // Queue sync
     return $q(function (resolve, reject) {
-      syncBookmarks({
+      queueBookmarksSync({
         changeInfo: prepareToSyncChanges,
         syncChange: syncChange.promise,
         type: globals.SyncType.Push
@@ -323,7 +323,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
             // Queue sync
             return $q(function (resolve, reject) {
-              syncBookmarks({
+              queueBookmarksSync({
                 type: globals.SyncType.Pull
               }, function (response) {
                 if (response.success) {
@@ -421,7 +421,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
     // Queue sync
     return $q(function (resolve, reject) {
-      syncBookmarks({
+      queueBookmarksSync({
         changeInfo: prepareToSyncChanges,
         syncChange: syncChange.promise,
         type: globals.SyncType.Push
@@ -500,9 +500,9 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
   var onMessageHandler = function (message, sender, sendResponse) {
     switch (message.command) {
-      // Trigger bookmarks sync
+      // Queue bookmarks sync
       case globals.Commands.SyncBookmarks:
-        syncBookmarks(message, sendResponse);
+        queueBookmarksSync(message, sendResponse);
         break;
       // Trigger bookmarks restore
       case globals.Commands.RestoreBookmarks:
@@ -614,8 +614,57 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       });
   };
 
+  var queueBookmarksSync = function (syncData, sendResponse) {
+    sendResponse = sendResponse || function () { };
+
+    // Disable event listeners if sync will affect local bookmarks
+    return (syncData.type === globals.SyncType.Pull || syncData.type === globals.SyncType.Both ?
+      toggleEventListeners(false) : $q.resolve())
+      .then(function () {
+        // Queue sync
+        return bookmarks.QueueSync(syncData)
+          .catch(function (err) {
+            // If local data out of sync, queue refresh sync
+            return (bookmarks.CheckIfRefreshSyncedDataOnError(err) ? refreshLocalSyncData() : $q.resolve())
+              .then(function () {
+                throw err;
+              });
+          });
+      })
+      .then(function (bookmarks) {
+        try {
+          sendResponse({ bookmarks: bookmarks, success: true });
+        }
+        catch (err) { }
+
+        // Send a message in case the user closed the extension window
+        browser.runtime.sendMessage({
+          command: globals.Commands.SyncFinished,
+          success: true,
+          uniqueId: syncData.uniqueId
+        })
+          .catch(function () { });
+      })
+      .catch(function (err) {
+        try {
+          sendResponse({ error: err, success: false });
+        }
+        catch (innerErr) { }
+
+        // Send a message in case the user closed the extension window
+        browser.runtime.sendMessage({
+          command: globals.Commands.SyncFinished,
+          error: err,
+          success: false
+        })
+          .catch(function () { });
+      })
+      // Enable event listeners if required
+      .finally(toggleEventListeners);
+  };
+
   var refreshLocalSyncData = function () {
-    return syncBookmarks({ type: globals.SyncType.Pull })
+    return queueBookmarksSync({ type: globals.SyncType.Pull })
       .then(function () {
         utility.LogInfo('Local sync data refreshed');
       });
@@ -656,7 +705,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
     // Queue sync
     return $q(function (resolve, reject) {
-      syncBookmarks({
+      queueBookmarksSync({
         changeInfo: prepareToSyncChanges,
         syncChange: syncChange.promise,
         type: globals.SyncType.Push
@@ -699,57 +748,8 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       .then(function (bookmarksToRestore) {
         // Queue sync
         restoreData.bookmarks = bookmarksToRestore;
-        return syncBookmarks(restoreData, sendResponse);
+        return queueBookmarksSync(restoreData, sendResponse);
       });
-  };
-
-  var syncBookmarks = function (syncData, sendResponse) {
-    sendResponse = sendResponse || function () { };
-
-    // Disable event listeners if sync will affect local bookmarks
-    return (syncData.type === globals.SyncType.Pull || syncData.type === globals.SyncType.Both ?
-      toggleEventListeners(false) : $q.resolve())
-      .then(function () {
-        // Start sync
-        return bookmarks.Sync(syncData)
-          .catch(function (err) {
-            // If local data out of sync, queue refresh sync
-            return (bookmarks.CheckIfRefreshSyncedDataOnError(err) ? refreshLocalSyncData() : $q.resolve())
-              .then(function () {
-                throw err;
-              });
-          });
-      })
-      .then(function (bookmarks) {
-        try {
-          sendResponse({ bookmarks: bookmarks, success: true });
-        }
-        catch (err) { }
-
-        // Send a message in case the user closed the extension window
-        browser.runtime.sendMessage({
-          command: globals.Commands.SyncFinished,
-          success: true,
-          uniqueId: syncData.uniqueId
-        })
-          .catch(function () { });
-      })
-      .catch(function (err) {
-        try {
-          sendResponse({ error: err, success: false });
-        }
-        catch (innerErr) { }
-
-        // Send a message in case the user closed the extension window
-        browser.runtime.sendMessage({
-          command: globals.Commands.SyncFinished,
-          error: err,
-          success: false
-        })
-          .catch(function () { });
-      })
-      // Enable event listeners if required
-      .finally(toggleEventListeners);
   };
 
   var toggleEventListeners = function (enable) {

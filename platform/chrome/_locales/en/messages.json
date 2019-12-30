@@ -557,9 +557,6 @@
   "workingOffline_Message": {
     "message": "Working offline, any change will be synced once connection is restored."
   },
-  "uncommittedSyncsProcessed_Message": {
-    "message": "Connection to service restored, changes synced successfully."
-  },
   "getMetadata_Message": {
     "message": "Fetching bookmark properties, touch to cancel."
   },

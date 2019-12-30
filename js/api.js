@@ -9,6 +9,8 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
   'use strict';
 
+  var skipOnlineCheck = false;
+
 	/* ------------------------------------------------------------------------------------
 	 * Public functions
 	 * ------------------------------------------------------------------------------------ */
@@ -191,7 +193,7 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
       });
   };
 
-  var updateBookmarks = function (encryptedBookmarks, updateSyncVersion) {
+  var updateBookmarks = function (encryptedBookmarks, updateSyncVersion, backgroundUpdate) {
     var data, password, cachedLastUpdated, syncId;
 
     // Check secret and sync ID are present
@@ -209,6 +211,8 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
           return $q.reject({ code: globals.ErrorCodes.MissingClientData });
         }
 
+        // If this is a background update, ensure online check is skipped until successfull request
+        skipOnlineCheck = !!backgroundUpdate;
         return checkNetworkIsOnline()
           .then(function () {
             // Get current service url
@@ -265,12 +269,13 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
   };
 
   var apiRequestSucceeded = function (response) {
+    skipOnlineCheck = false;
     return $q.resolve(response);
   };
 
   var checkNetworkIsOnline = function () {
     return $q(function (resolve, reject) {
-      if (utility.IsNetworkConnected()) {
+      if (skipOnlineCheck || utility.IsNetworkConnected()) {
         return resolve();
       }
 
@@ -282,6 +287,10 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
   var getErrorCodeFromHttpStatus = function (httpStatus) {
     var errorCode;
     switch (httpStatus) {
+      // 401 Unauthorized: sync data not found
+      case 401:
+        errorCode = globals.ErrorCodes.NoDataFound;
+        break;
       // 404 Not Found: service offline or not an xBrowserSync service
       case 404:
         errorCode = globals.ErrorCodes.InvalidService;
@@ -294,10 +303,9 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
       case 406:
         errorCode = globals.ErrorCodes.DailyNewSyncLimitReached;
         break;
-      // 409 Conflict: sync conflict / invalid id
+      // 409 Conflict: sync update conflict
       case 409:
-        // TODO: Fix this
-        errorCode = httpStatus.data.code === 'SyncConflictException' ? globals.ErrorCodes.DataOutOfSync : globals.ErrorCodes.NoDataFound;
+        errorCode = globals.ErrorCodes.DataOutOfSync;
         break;
       // 413 Request Entity Too Large: sync data size exceeds service limit
       case 413:

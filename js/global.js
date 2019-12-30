@@ -191,7 +191,6 @@ xBrowserSync.App.Global = function (platform) {
       Working_Title: 'working_Title',
       WorkingOffline_Title: 'workingOffline_Title',
       WorkingOffline_Message: 'workingOffline_Message',
-      UncommittedSyncsProcessed_Message: 'uncommittedSyncsProcessed_Message',
       GetMetadata_Message: 'getMetadata_Message',
       GetMetadata_Success_Message: 'getMetadata_Success_Message',
       Button_Settings_Label: 'button_Settings_Label',

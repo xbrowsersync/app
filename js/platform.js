@@ -81,7 +81,7 @@ xBrowserSync.App.Platform = function () {
     Sync: {
       Await: notImplemented,
       Current: notImplemented,
-      Execute: notImplemented
+      Queue: notImplemented
     }
   };
 };

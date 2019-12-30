@@ -65,7 +65,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Permissions.Request = requestPermissions;
     platform.Sync.Await = awaitSync;
     platform.Sync.Current = getCurrentSync;
-    platform.Sync.Execute = executeSync;
+    platform.Sync.Queue = queueSync;
   };
 
 
@@ -420,19 +420,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     });
   };
 
-  var executeSync = function (syncData, command) {
-    syncData.command = command || globals.Commands.SyncBookmarks;
-    return $q(function (resolve, reject) {
-      chrome.runtime.sendMessage(syncData, function (response) {
-        if (response.success) {
-          return resolve(response.bookmarks);
-        }
-
-        reject(response.error);
-      });
-    });
-  };
-
   var getAutoUpdatesNextRun = function () {
     return $q(function (resolve, reject) {
       chrome.alarms.get(globals.Alarm.Name, function (alarm) {
@@ -688,8 +675,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return 'chrome://newtab/';
   };
 
-  var getPageMetadata = function (shouldCheckPermissions) {
+  var getPageMetadata = function (getFullMetadata, pageUrl) {
     var activeTab;
+    getFullMetadata = getFullMetadata === undefined ? true : getFullMetadata;
 
     return $q(function (resolve, reject) {
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -702,27 +690,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
     })
       .then(function (tabs) {
-        // If active tab empty, return
+        // If active tab empty, throw error
         activeTab = tabs && tabs[0];
         if (!activeTab) {
-          return false;
+          return $q.reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
         }
 
-        // If not checking permissions, return
-        if (shouldCheckPermissions !== true) {
-          return true;
-        }
-
-        // Check if extension has permissions to read active tab content
-        return checkPermissions()
-          .then(function (hasPermissions) {
-            if (!hasPermissions) {
-              utility.LogInfo('Do not have permission to read active tab content');
-            }
-            return hasPermissions;
-          });
-      })
-      .then(function (getMetadata) {
         // Default metadata to the info from the active tab
         var metadata = activeTab && {
           title: activeTab.title,
@@ -730,13 +703,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         };
 
         // Don't get metadata if this is a chrome url
-        if (getMetadata) {
-          getMetadata = !(/chrome\:\/\//i).test(activeTab.url);
+        if (getFullMetadata) {
+          getFullMetadata = !(/chrome\:\/\//i).test(activeTab.url);
         }
 
         return $q(function (resolve) {
           // Return if not getting metadata
-          if (!getMetadata) {
+          if (!getFullMetadata) {
             return resolve(metadata);
           }
 
@@ -933,6 +906,19 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
+  var queueSync = function (syncData, command) {
+    syncData.command = command || globals.Commands.SyncBookmarks;
+    return $q(function (resolve, reject) {
+      chrome.runtime.sendMessage(syncData, function (response) {
+        if (response.success) {
+          return resolve(response.bookmarks);
+        }
+
+        reject(response.error);
+      });
+    });
+  };
+
   var refreshInterface = function (syncEnabled, syncType) {
     var iconPath, newTitle = getConstant(globals.Constants.Title);
     var syncingTitle = ' (' + getConstant(globals.Constants.Tooltip_Syncing_Label) + ')';
@@ -1084,8 +1070,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
         chrome.alarms.create(
           globals.Alarm.Name, {
-            periodInMinutes: globals.Alarm.Period
-          }
+          periodInMinutes: globals.Alarm.Period
+        }
         );
 
         resolve();

@@ -62,7 +62,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Permissions.Request = requestPermissions;
     platform.Sync.Await = awaitSync;
     platform.Sync.Current = getCurrentSync;
-    platform.Sync.Execute = executeSync;
+    platform.Sync.Queue = queueSync;
   };
 
 
@@ -411,18 +411,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
-  var executeSync = function (syncData, command) {
-    syncData.command = command || globals.Commands.SyncBookmarks;
-    return browser.runtime.sendMessage(syncData)
-      .then(function (response) {
-        if (response.success) {
-          return response.bookmarks;
-        }
-
-        throw response.error;
-      });
-  };
-
   var getAutoUpdatesNextRun = function () {
     return browser.alarms.get(globals.Alarm.Name)
       .then(function (alarm) {
@@ -661,42 +649,26 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return 'about:newtab';
   };
 
-  var getPageMetadata = function (shouldCheckPermissions) {
+  var getPageMetadata = function (getFullMetadata, pageUrl) {
     var activeTab;
+    getFullMetadata = getFullMetadata === undefined ? true : getFullMetadata;
 
     return browser.tabs.query({ active: true, currentWindow: true })
       .then(function (tabs) {
         // If active tab empty, return
         activeTab = tabs && tabs[0];
         if (!activeTab) {
-          return false;
+          return $q.reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
         }
 
-        activeTab = tabs[0];
-
-        // If not checking permissions, return
-        if (shouldCheckPermissions !== true) {
-          return true;
-        }
-
-        // Check if extension has permissions to read active tab content
-        return checkPermissions()
-          .then(function (hasPermissions) {
-            if (!hasPermissions) {
-              utility.LogInfo('Do not have permission to read active tab content');
-            }
-            return hasPermissions;
-          });
-      })
-      .then(function (getMetadata) {
         // Default metadata to the info from the active tab
         var metadata = activeTab && {
           title: activeTab.title,
           url: activeTab.url
         };
 
-        // If unable to get metadata return default
-        if (!getMetadata) {
+        // If not retrieving full metadata return with default
+        if (!getFullMetadata) {
           return metadata;
         }
 
@@ -852,6 +824,18 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
+  var queueSync = function (syncData, command) {
+    syncData.command = command || globals.Commands.SyncBookmarks;
+    return browser.runtime.sendMessage(syncData)
+      .then(function (response) {
+        if (response.success) {
+          return response.bookmarks;
+        }
+
+        throw response.error;
+      });
+  };
+
   var refreshInterface = function (syncEnabled, syncType) {
     var iconPath, newTitle = getConstant(globals.Constants.Title);
     var syncingTitle = ' (' + getConstant(globals.Constants.Tooltip_Syncing_Label) + ')';
@@ -971,8 +955,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       .then(function () {
         return browser.alarms.create(
           globals.Alarm.Name, {
-            periodInMinutes: globals.Alarm.Period
-          }
+          periodInMinutes: globals.Alarm.Period
+        }
         );
       })
       .catch(function (err) {

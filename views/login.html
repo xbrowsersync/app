@@ -89,8 +89,8 @@
   </div>
   <div class="login-form-existing animate-fade-in" data-ng-class="{ 'active-login-form': !vm.sync.displayNewSyncPanel }"
     data-ng-hide="vm.sync.displayNewSyncPanel">
-    <div
-      data-ng-show="!vm.utility.IsMobilePlatform(vm.platformName) || (vm.utility.IsMobilePlatform(vm.platformName) && vm.sync.id)">
+    <div data-ng-show="!vm.utility.IsMobilePlatform(vm.platformName) || 
+      (vm.utility.IsMobilePlatform(vm.platformName) && !vm.sync.displayGetSyncIdPanel)">
       <div class="form-group">
         <label class="sr-only"
           for="txtId">{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Label) }}</label>
@@ -124,7 +124,8 @@
         </button>
       </div>
     </div>
-    <div class="well well-sm" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)" data-ng-show="!vm.sync.id">
+    <div class="well well-sm" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)"
+      data-ng-show="vm.sync.displayGetSyncIdPanel">
       <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ScanId_Title) }}</h4>
       <p>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ScanId_Message) }}</p>
       <div class="buttons">
