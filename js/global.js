@@ -373,11 +373,12 @@ xBrowserSync.App.Global = function (platform) {
       Bookmarks: '/bookmarks',
       Current: '/current',
       DefaultServiceUrl: 'https://api.xbrowsersync.org',
+      HttpRegex: '^https?:\/\/\\w+',
       LastUpdated: '/lastUpdated',
-      Version: '/version',
+      ProtocolRegex: '^[\\w\-]+:',
       ServiceInformation: '/info',
-      Regex: '(\\w+://.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]+\\.[a-z]+\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)',
-      ProtocolRegex: '^[\\w\-]+:'
+      ValidUrlRegex: '(\\w+://.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]+\\.[a-z]+\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)',
+      Version: '/version'
     }
   };
 

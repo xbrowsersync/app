@@ -349,13 +349,25 @@ body {
 
       .btn-icon {
         position: absolute;
-        top: 1px;
-        right: 1px;
-        height: 2.3rem;
-        width: 2.3rem;
-        font-size: 1.1rem;
-        line-height: 2.3rem;
+        top: 0.3em;
+        right: 0.3em;
+        height: 2.1em;
+        width: 2.1em;
+        font-size: 1.04rem;
+        color: $colour-text1;
+        border-radius: 2rem;
+        background: #7db2be;
         z-index: 55;
+
+        &:active,
+        &:hover,
+        &:focus {
+          background: $colour-bg2;
+        }
+
+        i {
+          opacity: 1 !important;
+        }
       }
     }
 
@@ -639,6 +651,10 @@ body {
     height: 100%;
   }
 
+  .btn-icon-container .btn-icon {
+    font-size: 0.96rem !important;
+  }
+
   .btn-delete-bookmark {
     background-color: $colour-danger;
 
@@ -759,24 +775,10 @@ body {
   }
 
   .btn-show-password {
-    position: absolute;
-    top: 0;
-    right: 0.75rem;
-    font-size: 1.5rem;
-    line-height: 2.6rem;
-    z-index: 55;
-
-    &:focus,
-    &:hover {
-      i {
-        opacity: 0.4;
-      }
-    }
-
-    &.active {
-      i {
-        opacity: 1;
-      }
+    &.active:before {
+      position: absolute;
+      left: 0.4rem;
+      @include icon("\f715");
     }
   }
 
@@ -924,7 +926,7 @@ body {
           top: 0;
           right: 0.5rem;
           font-size: 1.1em;
-          line-height: 1.5em;
+          line-height: 1.35em;
           z-index: 55;
 
           &:hover i {

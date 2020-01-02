@@ -144,6 +144,18 @@ body {
     z-index: 200;
   }
 
+  .container {
+    height: 100vh;
+  }
+
+  .form-group {
+    &.btn-icon-container .btn-icon {
+      @media (orientation: portrait) and (max-width: 320px), (orientation: landscape) and (max-width: 719px) {
+        font-size: 0.96rem;
+      }
+    }
+  }
+
   .header-panel {
     font-size: 1.5rem;
     margin-bottom: 0.75rem;
@@ -154,13 +166,11 @@ body {
     }
   }
 
-  .container {
-    height: 100vh;
-  }
-
   .lookahead-container .lookahead:after {
-    margin-left: 0.5rem;
-    font-size: 0.8em;
+    position: relative;
+    top: -0.1em;
+    margin-left: 0.5em;
+    font-size: 0.6em;
     @include icon("\f0d0");
   }
 
@@ -200,6 +210,15 @@ body {
 }
 
 #bookmark-panel {
+  .btn-icon-container,
+  .tags-input-container {
+    .btn-icon {
+      @media (orientation: portrait) and (max-width: 320px), (orientation: landscape) and (max-width: 719px) {
+        font-size: 0.89rem !important;
+      }
+    }
+  }
+
   .mobile-landscape {
     min-height: 2.3rem;
 
@@ -326,10 +345,6 @@ body {
     .header-panel {
       display: flex;
       flex-direction: row-reverse;
-
-      .search-form .btn-clear {
-        line-height: 1.35em;
-      }
     }
 
     .search-results-panel {

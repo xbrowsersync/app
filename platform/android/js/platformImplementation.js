@@ -840,6 +840,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           loadingId = null;
           cancelledCallback();
         };
+        SpinnerDialog.hide();
         timeout = $timeout(function () {
           SpinnerDialog.show(null, getConstant(globals.Constants.GetMetadata_Message), cancel);
         }, 250);
@@ -1019,18 +1020,18 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       url: pageUrl ? pageUrl : currentPage ? currentPage.url : null
     };
 
-    return $q(function (resolve) {
+    return $q(function (resolve, reject) {
       // Return if no url set
       if (!metadata.url) {
         vm.bookmark.addButtonDisabledUntilEditForm = true;
         return resolve();
       }
 
-      // Return if current url is not valid
-      var matches = metadata.url.match(/^https?:\/\/\w+/i);
-      if (!matches || matches.length <= 0) {
-        vm.bookmark.addButtonDisabledUntilEditForm = true;
-        return resolve();
+      // If url was provided, check connection and is valid http url
+      var httpRegex = new RegExp(globals.URL.HttpRegex, 'i');
+      if (pageUrl && (!utility.IsNetworkConnected() || !httpRegex.test(pageUrl))) {
+        utility.LogWarning('Didn’t get page metadata');
+        return reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
       }
 
       var handleResponse = function (pageContent, err) {
@@ -1043,9 +1044,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             utility.LogError(err, 'platform.handleResponse');
           }
           utility.LogWarning('Didn’t get page metadata');
-
-          // Return url
-          return resolve(metadata);
+          return reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
         }
 
         // Extract metadata properties
@@ -1128,7 +1127,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         return handleResponse();
       }
 
-      timeout = platform.Interface.Loading.Show('retrievingMetadata', handleResponse);
+      var cancelledCallback = function () { resolve(metadata); };
+      timeout = platform.Interface.Loading.Show('retrievingMetadata', cancelledCallback);
       inAppBrowser = cordova.InAppBrowser.open(metadata.url, '_blank', 'hidden=yes');
 
       inAppBrowser.addEventListener('loaderror', function (event) {
@@ -1262,11 +1262,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       };
 
       if (value != null) {
-        //localStorage.setItem(storageKey, typeof value === 'string' ? value : JSON.stringify(value));
         NativeStorage.setItem(storageKey, value, resolve, errorCallback);
       }
       else {
-        //localStorage.removeItem(storageKey);
         NativeStorage.remove(storageKey, resolve, errorCallback);
       }
     });

@@ -351,7 +351,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     });
   };
 
-  var bookmarkForm_BookmarkTags_Change = function () {
+  var bookmarkForm_BookmarkTags_Change = function (event) {
+    // Get tag text from event data if provided
+    if (event && event.data) {
+      vm.bookmark.tagText = event.data;
+    }
+
     if (!vm.bookmark.tagText || !vm.bookmark.tagText.trim()) {
       return;
     }
@@ -522,6 +527,10 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   var bookmarkForm_GetMetadata_Click = function () {
     getMetadataForUrl(vm.bookmark.current.url)
       .then(function (metadata) {
+        if (!metadata || (!metadata.title && !metadata.description && !metadata.tags)) {
+          return;
+        }
+
         // Update bookmark metadata and set url field as pristine
         vm.bookmark.current.title = metadata.title || vm.bookmark.current.title;
         vm.bookmark.current.description = metadata.description || vm.bookmark.current.description;
@@ -967,10 +976,18 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         vm.bookmark.originalUrl = bookmark.url;
 
         $timeout(function () {
+          // Reset form
+          vm.bookmarkForm.$setPristine();
+          vm.bookmarkForm.$setUntouched();
+
           if (!utility.IsMobilePlatform(vm.platformName)) {
             // Set initial focus
             var element = document.querySelector('.focused');
             if (element.select) { element.select(); } else { element.focus(); }
+          }
+          else {
+            // Bind to input event in tags field
+            angular.element(document.querySelector('input[name=bookmarkTags]')).on('input', bookmarkForm_BookmarkTags_Change);
           }
         }, 100);
       })
@@ -986,7 +1003,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         // Display alert
         var errMessage = utility.GetErrorMessageFromException(err);
         vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      });
+      })
   };
 
   var init_infoView = function () {
@@ -1069,12 +1086,16 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var init_searchView = function () {
-    // Focus on search box
-    if (!utility.IsMobilePlatform(vm.platformName)) {
-      $timeout(function () {
+    $timeout(function () {
+      if (!utility.IsMobilePlatform(vm.platformName)) {
+        // Focus on search box
         document.querySelector('input[name=txtSearch]').focus();
-      }, 200);
-    }
+      }
+      else {
+        // Bind to input event in search box
+        angular.element(document.querySelector('input[name=txtSearch]')).on('input', searchForm_SearchText_Change);
+      }
+    }, 200);
 
     // Reset search view
     vm.search.selectedBookmark = null;
@@ -1438,7 +1459,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       url: undefined,
       keywords: []
     };
-    var urlRegex = new RegExp('^' + globals.URL.Regex + '$', 'i');
+    var urlRegex = new RegExp('^' + globals.URL.ValidUrlRegex + '$', 'i');
 
     if (vm.search.query) {
       // Iterate query words to form query data object
@@ -1561,8 +1582,13 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     }
   };
 
-  var searchForm_SearchText_Change = function () {
+  var searchForm_SearchText_Change = function (event) {
     vm.alert.show = false;
+
+    // Get query from event data if provided
+    if (event && event.data) {
+      vm.search.query = event.data;
+    }
 
     // Clear timeouts
     if (vm.search.getSearchLookaheadTimeout) {
@@ -1576,7 +1602,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     }
 
     // No query, clear results
-    if (!vm.search.query.trim()) {
+    if (!vm.search.query || !vm.search.query.trim()) {
       vm.search.displayDefaultState();
       return;
     }

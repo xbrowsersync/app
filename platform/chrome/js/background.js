@@ -310,7 +310,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
   var displayAlert = function (title, message) {
     // Strip html tags from message
-    var urlRegex = new RegExp(globals.URL.Regex);
+    var urlRegex = new RegExp(globals.URL.ValidUrlRegex);
     var matches = message.match(urlRegex);
     var messageToDisplay = (!matches || matches.length === 0) ? message :
       new DOMParser().parseFromString('<span>' + message + '</span>', 'text/xml').firstElementChild.textContent;

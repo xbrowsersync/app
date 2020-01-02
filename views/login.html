@@ -98,7 +98,7 @@
           placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Description) }}" maxlength="32"
           data-ng-change="vm.events.syncForm_SyncId_Change()" spellcheck="false" />
       </div>
-      <div class="form-group secret-form-group"
+      <div class="form-group secret-form-group btn-icon-container"
         data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
         <label class="sr-only" for="txtPassword">{{
         vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
