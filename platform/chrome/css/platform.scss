@@ -11,24 +11,9 @@ body {
     min-height: $window-height;
   }
 
-  .form-group {
-    &.btn-icon-container .btn-icon {
-      font-size: 0.96rem;
-    }
-  }
-
   .view {
     height: $window-height;
     width: $window-width;
-  }
-}
-
-#bookmark-panel {
-  .btn-icon-container,
-  .tags-input-container {
-    .btn-icon {
-      font-size: 0.89rem !important;
-    }
   }
 }
 

@@ -34,7 +34,7 @@ body {
 
   a {
     color: inherit;
-    transition: all, ease-in-out, 0.2s;
+    transition: all ease-in-out 0.2s;
     cursor: pointer;
     border-bottom: 1px dotted #fff;
 
@@ -63,7 +63,7 @@ body {
         border-color: $colour-text1;
         border-width: 0.15rem;
         border-radius: $border-radius-input;
-        transition: all, ease-in-out, 0.2s;
+        transition: all ease-in-out 0.2s;
         padding: 0 1.2rem;
         line-height: 2.5rem;
 
@@ -110,7 +110,7 @@ body {
         overflow: hidden;
         box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14),
           0 1px 18px 0 rgba(0, 0, 0, 0.12) !important;
-        transition: color, ease-in-out, 0.2s;
+        transition: color ease-in-out 0.2s;
         z-index: 10;
 
         &.fixed {
@@ -124,7 +124,7 @@ body {
         background: none;
         color: $colour-text2;
         padding: 0;
-        transition: all, ease-in-out, 0.2s;
+        transition: all ease-in-out 0.2s;
         border-radius: 0;
 
         &:active,
@@ -137,7 +137,7 @@ body {
 
         i {
           opacity: 0.4;
-          transition: all, ease-in-out, 0.2s;
+          transition: all ease-in-out 0.2s;
         }
       }
 
@@ -279,7 +279,7 @@ body {
     height: 0.3rem;
     position: relative;
     background: $colour-text2;
-    border-radius: 2rem;
+    border-radius: $border-radius-input;
 
     input {
       display: none;
@@ -349,23 +349,34 @@ body {
 
       .btn-icon {
         position: absolute;
-        top: 0.3em;
+        top: 50%;
         right: 0.3em;
+        margin-top: -1.05em;
         height: 2.1em;
         width: 2.1em;
-        font-size: 1.04rem;
+        font-size: 0.9em;
         color: $colour-text1;
-        border-radius: 2rem;
+        border-radius: $border-radius-input;
         background: #7db2be;
         z-index: 55;
 
-        &:active,
-        &:hover,
         &:focus {
+          border: 1px solid darken(#7db2be, 15%);
+
+          &:hover {
+            border: none;
+          }
+        }
+
+        &:hover {
           background: $colour-bg2;
         }
 
         i {
+          position: absolute;
+          top: 50%;
+          margin: auto;
+          transform: translate(-50%, -50%);
           opacity: 1 !important;
         }
       }
@@ -375,7 +386,7 @@ body {
       input,
       textarea {
         &.form-control {
-          border-color: $colour-danger !important;
+          border: 1px solid $colour-danger !important;
           color: $colour-danger !important;
           @include placeholder {
             color: $colour-danger !important;
@@ -391,11 +402,8 @@ body {
         font-size: 1rem;
         background-color: $colour-text1;
         color: $colour-text2;
-        height: auto;
-        padding: 0.5rem 1rem;
         resize: none;
-        border: 1px solid $colour-text1;
-        border-radius: $border-radius-input;
+        border: none;
         width: 100%;
         @include placeholder {
           color: $colour-link;
@@ -403,8 +411,16 @@ body {
       }
     }
 
+    input.form-control {
+      border-radius: $border-radius-input;
+      line-height: 2.4rem;
+      padding: 0 1rem;
+    }
+
     textarea.form-control {
       border-radius: 1.1rem;
+      line-height: 1.2rem;
+      padding: 0.5rem 1rem;
     }
   }
 
@@ -445,6 +461,7 @@ body {
 
     .lookahead,
     .measure {
+      margin: auto 0;
       z-index: 60;
       color: $colour-link;
       background-color: transparent;
@@ -628,7 +645,7 @@ body {
       input,
       textarea {
         &.form-control {
-          border-color: $colour-text2 !important;
+          border: 1px solid $colour-text2 !important;
         }
       }
     }
@@ -649,10 +666,6 @@ body {
     display: flex;
     flex-flow: column;
     height: 100%;
-  }
-
-  .btn-icon-container .btn-icon {
-    font-size: 0.96rem !important;
   }
 
   .btn-delete-bookmark {
@@ -705,7 +718,7 @@ body {
       }
 
       i {
-        transition: color, ease-in-out, 0.2s;
+        transition: color ease-in-out 0.2s;
         color: $colour-link;
       }
 
@@ -732,18 +745,14 @@ body {
       position: relative;
       z-index: 50;
       background: transparent;
-      border: 1px solid $colour-text1;
     }
 
     .lookahead-container {
       top: 0;
       left: 1rem;
-      border: 1px solid $colour-text1;
 
       .lookahead,
       .measure {
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
         text-transform: lowercase;
       }
     }
@@ -775,10 +784,17 @@ body {
   }
 
   .btn-show-password {
-    &.active:before {
+    &:before {
       position: absolute;
-      left: 0.4rem;
+      top: 50%;
+      margin: auto;
+      transform: translate(-50%, -50%);
+      transition: opacity ease-in-out 0.2s;
       @include icon("\f715");
+    }
+
+    &.active:before {
+      opacity: 0;
     }
   }
 
@@ -892,19 +908,20 @@ body {
       .search-form {
         flex: 0 1 100%;
         position: relative;
-        border-radius: $border-radius-well;
+        border-radius: $border-radius-input;
         background-color: $colour-text1;
         margin-right: 0.5rem;
+        margin-bottom: 0;
 
         label {
           position: absolute;
-          top: 0;
+          top: 50%;
           left: 0.75rem;
+          font-size: 0.85em;
+          margin-top: -0.5em;
+          margin-bottom: 0;
           color: $colour-link;
           z-index: 60;
-          margin-bottom: 0;
-          font-size: 0.8em;
-          line-height: 2.1em;
         }
 
         input {
@@ -922,16 +939,11 @@ body {
         }
 
         .btn-clear {
-          position: absolute;
-          top: 0;
-          right: 0.5rem;
-          font-size: 1.1em;
-          line-height: 1.35em;
-          z-index: 55;
-
-          &:hover i {
-            opacity: 1;
-          }
+          height: 1.7em;
+          width: 1.7em;
+          margin-top: -0.85em;
+          font-size: 0.7em;
+          line-height: 1.5em;
         }
 
         .lookahead-container {
@@ -939,11 +951,6 @@ body {
           top: 0;
           left: 1.5em;
           width: calc(100% - 3em);
-
-          .lookahead,
-          .measure {
-            line-height: 1.5em;
-          }
         }
       }
     }
@@ -1010,7 +1017,7 @@ body {
         .search-result-content {
           border-radius: $border-radius-well;
           padding: 0.5rem 1rem 0.75rem;
-          transition: background-color, ease-in-out, 0.2s;
+          transition: background-color ease-in-out 0.2s;
         }
 
         .btn-edit-bookmark {

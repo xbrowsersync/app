@@ -148,14 +148,6 @@ body {
     height: 100vh;
   }
 
-  .form-group {
-    &.btn-icon-container .btn-icon {
-      @media (orientation: portrait) and (max-width: 320px), (orientation: landscape) and (max-width: 719px) {
-        font-size: 0.96rem;
-      }
-    }
-  }
-
   .header-panel {
     font-size: 1.5rem;
     margin-bottom: 0.75rem;
@@ -167,10 +159,8 @@ body {
   }
 
   .lookahead-container .lookahead:after {
-    position: relative;
-    top: -0.1em;
-    margin-left: 0.5em;
-    font-size: 0.6em;
+    position: absolute;
+    margin-left: 0.25em;
     @include icon("\f0d0");
   }
 
@@ -210,15 +200,6 @@ body {
 }
 
 #bookmark-panel {
-  .btn-icon-container,
-  .tags-input-container {
-    .btn-icon {
-      @media (orientation: portrait) and (max-width: 320px), (orientation: landscape) and (max-width: 719px) {
-        font-size: 0.89rem !important;
-      }
-    }
-  }
-
   .mobile-landscape {
     min-height: 2.3rem;
 
@@ -252,11 +233,6 @@ body {
   }
 
   .tags-input-container {
-    .lookahead-container .lookahead:after {
-      font-size: 0.9rem;
-      line-height: 1.25rem;
-    }
-
     @media (orientation: landscape) {
       height: 2.3rem;
       width: 40%;
@@ -274,6 +250,12 @@ body {
 }
 
 #login-panel {
+  .form-group {
+    input {
+      font-size: 0.92em;
+    }
+  }
+
   .login-form-new {
     .toggle-form {
       display: block;
@@ -345,6 +327,16 @@ body {
     .header-panel {
       display: flex;
       flex-direction: row-reverse;
+
+      .search-form {
+        .btn-clear {
+          font-size: 0.7em;
+        }
+
+        .lookahead-container .lookahead:after {
+          font-size: 0.7em;
+        }
+      }
     }
 
     .search-results-panel {

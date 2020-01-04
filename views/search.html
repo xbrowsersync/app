@@ -15,7 +15,7 @@
     <span class="sr-only" data-ng-if="!vm.bookmark.active">{{
       vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}</span>
   </button>
-  <div class="search-form">
+  <div class="search-form form-group btn-icon-container">
     <input class="form-control" name="txtSearch" maxlength="200"
       placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Search_Field_Description) }}"
       data-ng-model="vm.search.query" data-ng-change="vm.events.searchForm_SearchText_Change()"
@@ -33,7 +33,7 @@
     <button class="btn btn-icon btn-clear" data-ng-show="vm.search.query"
       title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_Clear_Label) }}"
       data-ng-click="vm.events.searchForm_Clear_Click()">
-      <i class="fas fa-times-circle" aria-hidden="true"></i>
+      <i class="fas fa-times" aria-hidden="true"></i>
     </button>
   </div>
 </div>

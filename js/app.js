@@ -985,10 +985,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
             var element = document.querySelector('.focused');
             if (element.select) { element.select(); } else { element.focus(); }
           }
-          else {
-            // Bind to input event in tags field
-            angular.element(document.querySelector('input[name=bookmarkTags]')).on('input', bookmarkForm_BookmarkTags_Change);
-          }
         }, 100);
       })
       .catch(function (err) {
@@ -1086,16 +1082,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var init_searchView = function () {
-    $timeout(function () {
-      if (!utility.IsMobilePlatform(vm.platformName)) {
+    if (!utility.IsMobilePlatform(vm.platformName)) {
+      $timeout(function () {
         // Focus on search box
         document.querySelector('input[name=txtSearch]').focus();
-      }
-      else {
-        // Bind to input event in search box
-        angular.element(document.querySelector('input[name=txtSearch]')).on('input', searchForm_SearchText_Change);
-      }
-    }, 200);
+      }, 200);
+    }
 
     // Reset search view
     vm.search.selectedBookmark = null;
