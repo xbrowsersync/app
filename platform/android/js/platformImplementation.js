@@ -6,7 +6,7 @@ SpinnerDialog.show = function () { };
 
 /* ------------------------------------------------------------------------------------
  * Class name:  xBrowserSync.App.PlatformImplementation 
- * Description: Implements xBrowserSync.App.Platform for mobile apps.
+ * Description: Implements xBrowserSync.App.Platform for Android app.
  * ------------------------------------------------------------------------------------ */
 
 xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, platform, globals, utility, bookmarks) {
@@ -1471,6 +1471,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     var failure = function (errMessage) {
       utility.LogError(new Error(errMessage), 'platform.displaySnackbar');
     };
+
+    if (document.activeElement) {
+      document.activeElement.blur();
+    }
 
     cordova.plugins.snackbar.create(
       text,
