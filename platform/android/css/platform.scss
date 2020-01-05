@@ -92,36 +92,19 @@ body {
   }
 
   button.btn {
-    &.btn-default {
-      &:not([disabled]):active:hover {
-        background-color: $colour-text1;
-        color: $colour-link-highlight;
-        border-color: $colour-text1;
-      }
-
-      &:not([disabled]):hover {
+    &.btn-default:not([disabled]) {
+      &:hover,
+      &:focus {
         background-color: transparent;
         color: $colour-text1;
         border-color: $colour-text1;
-      }
-
-      &:not([disabled]):focus {
         text-decoration: none;
       }
     }
 
-    &.btn-default:not([disabled]):focus {
-      text-decoration: none;
-    }
-
     &.btn-icon {
-      &:active:hover {
-        i {
-          opacity: 1;
-        }
-      }
-
-      &:hover {
+      &:hover,
+      &:focus {
         i {
           opacity: 0.4;
         }
@@ -146,6 +129,18 @@ body {
 
   .container {
     height: 100vh;
+  }
+
+  .form-group {
+    &.btn-icon-container {
+      .btn-icon {
+        &:focus,
+        &:hover {
+          background-color: #7db2be;
+          border: none;
+        }
+      }
+    }
   }
 
   .header-panel {
@@ -177,23 +172,17 @@ body {
   }
 
   .well {
-    .btn.btn-default {
-      color: $colour-text2;
-      border-color: $colour-text2;
-      font-weight: normal;
-      border-width: 1px;
+    button.btn.btn-default {
       font-size: 1rem;
 
-      &:not([disabled]):active:hover {
-        background-color: $colour-text2;
-        color: $colour-link-highlight;
-        border-color: $colour-text2;
-      }
-
-      &:not([disabled]):hover {
-        background-color: transparent;
-        color: $colour-text2;
-        border-color: $colour-text2;
+      &:not([disabled]) {
+        &:hover,
+        &:focus {
+          background-color: transparent;
+          color: $colour-text2;
+          border-color: $colour-text2;
+          text-decoration: none;
+        }
       }
     }
   }
@@ -215,6 +204,13 @@ body {
     .badge {
       font-size: 1rem;
       line-height: 1.3rem;
+
+      &:focus,
+      &:hover {
+        i {
+          color: $colour-link;
+        }
+      }
     }
 
     .label {

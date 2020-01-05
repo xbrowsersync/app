@@ -637,7 +637,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Local data has been refreshed, please redo previous unsynced changes."
     },
     "error_OutOfSync_Title": {
-      "message": "Data out of sync"
+      "message": "Sync conflict detected"
     },
     "error_OutOfSync_Message": {
       "message": "Local data was out of sync and has now been refreshed. Please redo previous unsynced changes."
@@ -1570,7 +1570,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var handleBackButton = function (event) {
     if (vm.view.current === vm.view.views.bookmark ||
       vm.view.current === vm.view.views.settings ||
-      vm.view.current === vm.view.views.about
+      vm.view.current === vm.view.views.help ||
+      vm.view.current === vm.view.views.support ||
+      vm.view.current === vm.view.views.updated ||
+      vm.view.current === vm.view.views.scan
     ) {
       // Back to login/search panel
       event.preventDefault();

@@ -630,7 +630,7 @@
     "message": "Local data has been refreshed, please redo previous unsynced changes."
   },
   "error_OutOfSync_Title": {
-    "message": "Data out of sync"
+    "message": "Sync conflict detected"
   },
   "error_OutOfSync_Message": {
     "message": "Local data was out of sync and has now been refreshed. Please redo previous unsynced changes."

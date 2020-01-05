@@ -21,12 +21,19 @@
     data-ng-show="vm.sync.displayNewSyncPanel">
     <div data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
       <div class="animate-fade-in" data-ng-show="vm.sync.displayPasswordConfirmation">
-        <div class="form-group secret-form-group">
+        <div class="form-group secret-form-group btn-icon-container">
           <label class="sr-only" for="txtPasswordConfirmation">{{
           vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}</label>
-          <input name="txtPasswordConfirmation" data-ng-model="vm.sync.passwordConfirmation" type="password"
-            class="form-control" maxlength="150"
-            placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}" />
+          <input class="form-control" name="txtPasswordConfirmation" data-ng-model="vm.sync.passwordConfirmation"
+            type="{{ vm.sync.showPassword ? 'text' : 'password' }}" maxlength="150"
+            placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}"
+            spellcheck="false" />
+          <button class="btn btn-icon btn-show-password" data-ng-class="{ 'active': vm.sync.showPassword }"
+            data-ng-show="vm.sync.password"
+            title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShowPassword_Label) }}"
+            data-ng-click="vm.events.syncForm_ShowPassword_Click()">
+            <i class="fas fa-eye" aria-hidden="true"></i>
+          </button>
         </div>
         <div class="form-group buttons">
           <button type="button" class="btn btn-default btn-new-sync"
@@ -40,13 +47,20 @@
         </div>
       </div>
       <div class="animate-fade-in" data-ng-hide="vm.sync.displayPasswordConfirmation">
-        <div class="form-group secret-form-group"
+        <div class="form-group secret-form-group btn-icon-container"
           data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
           <label class="sr-only" for="txtPassword">{{
           vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
-          <input name="txtPassword" data-ng-model="vm.sync.password" type="password" class="form-control"
-            data-zxcvbn="vm.sync.passwordComplexity" data-ng-disabled="vm.sync.enabled" maxlength="150"
+          <input class="form-control" name="txtPassword" data-ng-model="vm.sync.password"
+            type="{{ vm.sync.showPassword ? 'text' : 'password' }}" data-zxcvbn="vm.sync.passwordComplexity"
+            data-ng-disabled="vm.sync.enabled" maxlength="150" spellcheck="false"
             placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_New_Description) }}" />
+          <button class="btn btn-icon btn-show-password" data-ng-class="{ 'active': vm.sync.showPassword }"
+            data-ng-show="vm.sync.password"
+            title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShowPassword_Label) }}"
+            data-ng-click="vm.events.syncForm_ShowPassword_Click()">
+            <i class="fas fa-eye" aria-hidden="true"></i>
+          </button>
           <div class="validation" data-ng-if="vm.sync.password && ((vm.sync.passwordComplexity.feedback.suggestions && vm.sync.passwordComplexity.feedback.suggestions.length > 0) || 
           vm.sync.passwordComplexity.feedback.warning)">
             {{ vm.sync.passwordComplexity.feedback.warning ? vm.sync.passwordComplexity.feedback.warning :

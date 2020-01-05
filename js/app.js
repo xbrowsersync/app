@@ -1029,6 +1029,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.sync.password = '';
     vm.sync.passwordComplexity = {};
     vm.sync.passwordConfirmation = null;
+    vm.sync.showPassword = false;
     vm.sync.upgradeConfirmed = false;
     if (vm.syncForm) {
       vm.syncForm.$setPristine();

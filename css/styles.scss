@@ -113,6 +113,11 @@ body {
         transition: color ease-in-out 0.2s;
         z-index: 10;
 
+        &:active {
+          background-color: $colour-link-highlight;
+          color: $colour-text1;
+        }
+
         &.fixed {
           position: fixed;
           bottom: 1rem;
@@ -357,7 +362,7 @@ body {
         font-size: 0.9em;
         color: $colour-text1;
         border-radius: $border-radius-input;
-        background: #7db2be;
+        background-color: #7db2be;
         z-index: 55;
 
         &:focus {
@@ -368,6 +373,7 @@ body {
           }
         }
 
+        &:active,
         &:hover {
           background: $colour-bg2;
         }
@@ -537,7 +543,7 @@ body {
     color: #fff;
     background: $colour-danger;
     padding: 0 0.5rem;
-    z-index: 20;
+    z-index: 60;
     border-radius: $border-radius-input;
   }
 
@@ -708,6 +714,7 @@ body {
       line-height: 1.2rem;
       max-width: 99%;
 
+      &:active,
       &:hover,
       &:focus {
         cursor: pointer;
@@ -734,7 +741,6 @@ body {
   }
 
   .tags-input-container {
-    @extend .btn-icon-container;
     border-radius: $border-radius-input;
     background-color: $colour-text1;
     overflow: hidden;
