@@ -263,31 +263,6 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     return bookmark;
   };
 
-  var findBookmarkInTree = function (id, tree, index) {
-    if (Array.isArray(tree)) {
-      tree = {
-        id: -1,
-        children: tree
-      };
-    }
-
-    if (tree.id === id) {
-      var path = [{ bookmark: tree, index: index }];
-      return { result: tree, path: path };
-    } else {
-      var children = tree.children || [];
-      for (var i = 0; i < children.length; i++) {
-        var child = children[i];
-        var tmp = findBookmarkInTree(id, child, i);
-        if (!_.isEmpty(tmp)) {
-          tmp.path.unshift({ bookmark: tree, index: index });
-          return tmp;
-        }
-      }
-      return {};
-    }
-  };
-
   var findCurrentUrlInBookmarks = function () {
     var currentUrl;
 
@@ -415,23 +390,6 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       });
 
     return deferred.promise;
-  };
-
-  var getNewBookmarkId = function (bookmarks, takenIds) {
-    var highestId = 0;
-    takenIds = takenIds || [0];
-
-    // Check existing bookmarks for highest id
-    eachBookmark(bookmarks, function (bookmark) {
-      if (!_.isUndefined(bookmark.id) && bookmark.id > highestId) {
-        highestId = bookmark.id;
-      }
-    });
-
-    // Compare highest id with supplied taken ids
-    highestId = _.max(takenIds) > highestId ? _.max(takenIds) : highestId;
-
-    return highestId + 1;
   };
 
   var getSyncBookmarksToolbar = function () {
@@ -710,6 +668,31 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     ]);
   };
 
+  var findBookmarkInTree = function (id, tree, index) {
+    if (Array.isArray(tree)) {
+      tree = {
+        id: -1,
+        children: tree
+      };
+    }
+
+    if (tree.id === id) {
+      var path = [{ bookmark: tree, index: index }];
+      return { result: tree, path: path };
+    } else {
+      var children = tree.children || [];
+      for (var i = 0; i < children.length; i++) {
+        var child = children[i];
+        var tmp = findBookmarkInTree(id, child, i);
+        if (!_.isEmpty(tmp)) {
+          tmp.path.unshift({ bookmark: tree, index: index });
+          return tmp;
+        }
+      }
+      return {};
+    }
+  };
+
   var getCachedBookmarks = function () {
     // Get cached encrypted bookmarks from local storage
     return platform.LocalStorage.Get(globals.CacheKeys.Bookmarks)
@@ -739,6 +722,23 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
             });
         });
       });
+  };
+
+  var getNewBookmarkId = function (bookmarks, takenIds) {
+    var highestId = 0;
+    takenIds = takenIds || [0];
+
+    // Check existing bookmarks for highest id
+    eachBookmark(bookmarks, function (bookmark) {
+      if (!_.isUndefined(bookmark.id) && bookmark.id > highestId) {
+        highestId = bookmark.id;
+      }
+    });
+
+    // Compare highest id with supplied taken ids
+    highestId = _.max(takenIds) > highestId ? _.max(takenIds) : highestId;
+
+    return parseInt(highestId) + 1;
   };
 
   var handleFailedSync = function (failedSync, err) {
@@ -1508,14 +1508,12 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     Each: eachBookmark,
     Export: exportBookmarks,
     FindBookmarkById: findBookmarkById,
-    FindBookmarkInTree: findBookmarkInTree,
     FindCurrentUrlInBookmarks: findCurrentUrlInBookmarks,
     GetBookmarks: getCachedBookmarks,
     GetContainer: getContainer,
     GetCurrentSync: getCurrentSync,
     GetExistingInXBookmarks: getExistingInXBookmarks,
     GetLookahead: getLookahead,
-    GetNewBookmarkId: getNewBookmarkId,
     GetSyncBookmarksToolbar: getSyncBookmarksToolbar,
     IsSeparator: isSeparator,
     QueueSync: queueSync,

@@ -147,6 +147,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "login_IdField_Description": {
       "message": "Your sync ID"
     },
+    "login_IdField_InvalidSyncId_Label": {
+      "message": "Not a valid sync ID"
+    },
     "button_ScanCode_Label": {
       "message": "Scan ID"
     },
@@ -759,34 +762,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 	 * ------------------------------------------------------------------------------------ */
 
   var addIdsToBookmarks = function (xBookmarks) {
-    // TODO: test this
-    return $q(function (resolve, reject) {
-      // Start the id counter one greater than the total number of bookmarks
-      var idCounter = 1;
-      bookmarks.Each(xBookmarks, function () {
-        idCounter++;
-      });
-
-      // Add ids to containers' children 
-      var addIdToBookmark = function (bookmark) {
-        var bookmarkId = bookmark.id;
-
-        // Use index if found otherwise take id from counter and increment 
-        if (!bookmarkId) {
-          bookmark.id = idCounter;
-          idCounter++;
-        }
-      };
-      bookmarks.Each(xBookmarks, addIdToBookmark);
-
-      // Check that bookmarks now have unique ids
-      var bookmarksHaveUniqueIds = bookmarks.CheckBookmarksHaveUniqueIds(xBookmarks);
-      if (!bookmarksHaveUniqueIds) {
-        return reject({ code: globals.ErrorCodes.DuplicateBookmarkIdsDetected });
-      }
-
-      resolve(xBookmarks);
-    });
+    // Implement this only for desktop platforms
+    return $q.resolve(xBookmarks);
   };
 
   var awaitSync = function (syncToAwait) {
@@ -1271,7 +1248,40 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var startScanning = function () {
+    vm.scanner.lightEnabled = false;
+    vm.scanner.invalidSyncId = false;
+
     return $q(function (resolve, reject) {
+      var waitForScan = function () {
+        $timeout(function () {
+          vm.scanner.invalidSyncId = false;
+        }, 100);
+
+        QRScanner.scan(function (err, scannedText) {
+          if (err) {
+            var scanError = new Error(err._message || err.name || err.code);
+            utility.LogError(scanError, 'platform.startScanning');
+            return reject(scanError);
+          }
+
+          QRScanner.pausePreview(function () {
+            utility.LogInfo('Scanned: ' + scannedText);
+
+            if (!utility.SyncIdIsValid(scannedText)) {
+              vm.scanner.invalidSyncId = true;
+              $timeout(function () {
+                QRScanner.resumePreview(waitForScan);
+              }, 3e3);
+              return;
+            }
+
+            $timeout(function () {
+              resolve(scannedText);
+            }, 1e3);
+          });
+        });
+      };
+
       QRScanner.prepare(function (err, status) {
         if (err) {
           var authError = new Error(err._message || err.name || err.code);
@@ -1280,26 +1290,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         }
 
         if (status.authorized) {
-          QRScanner.scan(function (err, scannedText) {
-            if (err) {
-              var scanError = new Error(err._message || err.name || err.code);
-              utility.LogError(scanError, 'platform.startScanning');
-              return reject(scanError);
-            }
-
-            QRScanner.pausePreview(function () {
-              $timeout(function () {
-                // TODO: Check if valid sync ID
-                utility.LogInfo('Scanned: ' + scannedText);
-
-                resolve(scannedText);
-              }, 1000);
-            });
-          });
-
           QRScanner.show(function () {
             $timeout(function () {
               vm.view.change(vm.view.views.scan);
+              waitForScan();
             }, 500);
           });
         } else {
@@ -1472,10 +1466,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       utility.LogError(new Error(errMessage), 'platform.displaySnackbar');
     };
 
+    // Ensure soft keyboard is hidden
     if (document.activeElement) {
       document.activeElement.blur();
     }
 
+    // Display snackbar
     cordova.plugins.snackbar.create(
       text,
       5000,

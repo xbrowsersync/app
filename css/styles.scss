@@ -34,12 +34,15 @@ body {
 
   a {
     color: inherit;
+    border-bottom: 1px dotted $colour-text1;
     transition: all ease-in-out 0.2s;
     cursor: pointer;
-    border-bottom: 1px dotted #fff;
 
-    &.active,
-    &:active,
+    &:active {
+      color: $colour-link-highlight !important;
+      border-bottom-color: $colour-link-highlight !important;
+    }
+
     &:focus,
     &:hover {
       color: $colour-link-highlight;
@@ -67,7 +70,12 @@ body {
         padding: 0 1.2rem;
         line-height: 2.5rem;
 
-        &:not([disabled]):active,
+        &:not([disabled]):active {
+          background-color: $colour-text1 !important;
+          color: $colour-link-highlight !important;
+          border-color: $colour-text1 !important;
+        }
+
         &:not([disabled]):hover {
           background-color: $colour-text1;
           color: $colour-link-highlight;
@@ -114,8 +122,8 @@ body {
         z-index: 10;
 
         &:active {
-          background-color: $colour-link-highlight;
-          color: $colour-text1;
+          background-color: $colour-link-highlight !important;
+          color: $colour-text1 !important;
         }
 
         &.fixed {
@@ -132,7 +140,12 @@ body {
         transition: all ease-in-out 0.2s;
         border-radius: 0;
 
-        &:active,
+        &:active {
+          i {
+            opacity: 1 !important;
+          }
+        }
+
         &:hover,
         &:focus {
           i {
@@ -146,8 +159,6 @@ body {
         }
       }
 
-      &.active,
-      &.active:focus,
       &:active,
       &:active:focus,
       &:focus,
@@ -197,7 +208,6 @@ body {
     }
 
     a {
-      &.active,
       &:active,
       &:focus,
       &:hover {
@@ -365,17 +375,20 @@ body {
         background-color: #7db2be;
         z-index: 55;
 
+        &:active {
+          background: $colour-bg2 !important;
+        }
+
+        &:hover {
+          background: $colour-bg2;
+        }
+
         &:focus {
           border: 1px solid darken(#7db2be, 15%);
 
           &:hover {
             border: none;
           }
-        }
-
-        &:active,
-        &:hover {
-          background: $colour-bg2;
         }
 
         i {
@@ -576,7 +589,6 @@ body {
       a {
         border-bottom-color: $colour-text1;
 
-        &.active,
         &:active,
         &:focus,
         &:hover {
@@ -586,13 +598,15 @@ body {
     }
 
     a {
-      border-bottom-color: $colour-text2;
+      &:active {
+        color: $colour-link-highlight !important;
+        border-bottom-color: $colour-link-highlight !important;
+      }
 
-      &.active,
-      &:active,
       &:focus,
       &:hover {
-        border-bottom-color: inherit;
+        color: $colour-link-highlight;
+        border-bottom-color: $colour-link-highlight;
       }
     }
 
@@ -608,7 +622,12 @@ body {
       margin-top: 0.5rem;
       margin-bottom: 0.5rem;
 
-      &:not([disabled]):active,
+      &:not([disabled]):active {
+        background-color: $colour-text2 !important;
+        color: $colour-link-highlight !important;
+        border-color: $colour-text2 !important;
+      }
+
       &:not([disabled]):hover {
         background-color: $colour-text2;
         color: $colour-link-highlight;
@@ -666,6 +685,7 @@ body {
 
   input[type="text"] {
     width: 100%;
+    text-overflow: ellipsis;
   }
 
   #bookmarkForm {
@@ -714,7 +734,12 @@ body {
       line-height: 1.2rem;
       max-width: 99%;
 
-      &:active,
+      &:active {
+        i {
+          color: $colour-link-highlight !important;
+        }
+      }
+
       &:hover,
       &:focus {
         cursor: pointer;
@@ -815,6 +840,7 @@ body {
       font-family: $font-stack-code;
       line-height: 1.45rem;
       padding: 0.5rem 0.8rem;
+      border: 1px solid $colour-text1;
       @include placeholder {
         font-family: $font-stack-regular;
         font-size: 1.2rem;
@@ -831,7 +857,6 @@ body {
     max-width: 22rem;
 
     a {
-      &.active,
       &:active,
       &:focus,
       &:hover {
@@ -1122,7 +1147,6 @@ body {
   a {
     border-bottom-color: $colour-text2;
 
-    &.active,
     &:active,
     &:focus,
     &:hover {
@@ -1192,7 +1216,6 @@ body {
       a {
         border-bottom-color: $colour-link;
 
-        &.active,
         &:active,
         &:focus,
         &:hover {
@@ -1528,6 +1551,18 @@ body {
     width: 14rem;
     height: 14rem;
     opacity: 0.5;
+
+    &.error {
+      background-image: url("../img/scan_error.svg");
+    }
+  }
+
+  .validation {
+    position: absolute;
+    top: 50%;
+    margin-top: -2.5em;
+    font-size: 1rem;
+    padding: 0.25em 1em;
   }
 
   .view-content {

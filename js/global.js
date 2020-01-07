@@ -90,6 +90,7 @@ xBrowserSync.App.Global = function (platform) {
       Login_PasswordField_New_Description: 'login_PasswordField_New_Description',
       Login_IdField_Label: 'login_IdField_Label',
       Login_IdField_Description: 'login_IdField_Description',
+      Login_IdField_InvalidSyncId_Label: 'login_IdField_InvalidSyncId_Label',
       Login_ConfirmSync_Title: 'login_ConfirmSync_Title',
       Login_ConfirmSync_Message: 'login_ConfirmSync_Message',
       Login_DisableOtherSyncs_Title: 'login_DisableOtherSyncs_Title',

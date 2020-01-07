@@ -633,6 +633,163 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     return str ? str.replace(/<(?:.|\n)*?>/gm, '') : str;
   };
 
+  var syncIdIsValid = function (syncId) {
+    if (!syncId) {
+      return false;
+    }
+
+    var hexStringToBytes = function (hexString) {
+      var bytes = new Uint8Array(hexString.length / 2);
+      for (var i = 0; i !== bytes.length; i++) {
+        bytes[i] = parseInt(hexString.substr(i * 2, 2), 16);
+      }
+      return bytes;
+    };
+
+    var bytesToGuidString = function (bytes) {
+      var _a;
+      var _b;
+      var _c;
+      var _d;
+      var _e;
+      var _f;
+      var _g;
+      var _h;
+      var _i;
+      var _j;
+      var _k;
+
+      if (bytes == null) {
+        return;
+      }
+      if (bytes.length != 16) {
+        return;
+      }
+
+      _a = ((bytes[3]) << 24) | ((bytes[2]) << 16) | ((bytes[1]) << 8) | bytes[0];
+      _b = (((bytes[5]) << 8) | bytes[4]);
+      _c = (((bytes[7]) << 8) | bytes[6]);
+      _d = bytes[8];
+      _e = bytes[9];
+      _f = bytes[10];
+      _g = bytes[11];
+      _h = bytes[12];
+      _i = bytes[13];
+      _j = bytes[14];
+      _k = bytes[15];
+
+      var hexToChar = function (a) {
+        a = a & 0xf;
+        return String.fromCharCode(((a > 9) ? a - 10 + 0x61 : a + 0x30));
+      };
+
+      var hexsToChars = function (guidChars, offset, a, b, hex) {
+        hex = hex === undefined ? false : hex;
+
+        if (hex) {
+          guidChars[offset++] = '0';
+          guidChars[offset++] = 'x';
+        }
+        guidChars[offset++] = hexToChar(a >> 4);
+        guidChars[offset++] = hexToChar(a);
+        if (hex) {
+          guidChars[offset++] = ',';
+          guidChars[offset++] = '0';
+          guidChars[offset++] = 'x';
+        }
+        guidChars[offset++] = hexToChar(b >> 4);
+        guidChars[offset++] = hexToChar(b);
+        return offset;
+      };
+
+      var _toString = function (format) {
+        if (format == null || format.length == 0)
+          format = "D";
+
+        var guidChars = [];
+        var offset = 0;
+        var dash = true;
+        var hex = false;
+
+        if (format.length != 1) {
+          // all acceptable format strings are of length 1
+          return null;
+        }
+
+        var formatCh = format[0];
+
+        if (formatCh == 'D' || formatCh == 'd') {
+          guidChars = new Array(36);
+        } else if (formatCh == 'N' || formatCh == 'n') {
+          guidChars = new Array(32);
+          dash = false;
+        } else if (formatCh == 'B' || formatCh == 'b') {
+          guidChars = new Array(38);
+          guidChars[offset++] = '{';
+          guidChars[37] = '}';
+        } else if (formatCh == 'P' || formatCh == 'p') {
+          guidChars = new Array(38);
+          guidChars[offset++] = '(';
+          guidChars[37] = ')';
+        } else if (formatCh == 'X' || formatCh == 'x') {
+          guidChars = new Array(68);
+          guidChars[offset++] = '{';
+          guidChars[67] = '}';
+          dash = false;
+          hex = true;
+        } else {
+          return null;
+        }
+
+        if (hex) {
+          // {0xdddddddd,0xdddd,0xdddd,{0xdd,0xdd,0xdd,0xdd,0xdd,0xdd,0xdd,0xdd}}
+          guidChars[offset++] = '0';
+          guidChars[offset++] = 'x';
+          offset = hexsToChars(guidChars, offset, _a >> 24, _a >> 16);
+          offset = hexsToChars(guidChars, offset, _a >> 8, _a);
+          guidChars[offset++] = ',';
+          guidChars[offset++] = '0';
+          guidChars[offset++] = 'x';
+          offset = hexsToChars(guidChars, offset, _b >> 8, _b);
+          guidChars[offset++] = ',';
+          guidChars[offset++] = '0';
+          guidChars[offset++] = 'x';
+          offset = hexsToChars(guidChars, offset, _c >> 8, _c);
+          guidChars[offset++] = ',';
+          guidChars[offset++] = '{';
+          offset = hexsToChars(guidChars, offset, _d, _e, true);
+          guidChars[offset++] = ',';
+          offset = hexsToChars(guidChars, offset, _f, _g, true);
+          guidChars[offset++] = ',';
+          offset = hexsToChars(guidChars, offset, _h, _i, true);
+          guidChars[offset++] = ',';
+          offset = hexsToChars(guidChars, offset, _j, _k, true);
+          guidChars[offset++] = '}';
+        } else {
+          // [{|(]dddddddd[-]dddd[-]dddd[-]dddd[-]dddddddddddd[}|)]
+          offset = hexsToChars(guidChars, offset, _a >> 24, _a >> 16);
+          offset = hexsToChars(guidChars, offset, _a >> 8, _a);
+          if (dash) guidChars[offset++] = '-';
+          offset = hexsToChars(guidChars, offset, _b >> 8, _b);
+          if (dash) guidChars[offset++] = '-';
+          offset = hexsToChars(guidChars, offset, _c >> 8, _c);
+          if (dash) guidChars[offset++] = '-';
+          offset = hexsToChars(guidChars, offset, _d, _e);
+          if (dash) guidChars[offset++] = '-';
+          offset = hexsToChars(guidChars, offset, _f, _g);
+          offset = hexsToChars(guidChars, offset, _h, _i);
+          offset = hexsToChars(guidChars, offset, _j, _k);
+        }
+
+        return guidChars.join('');
+      };
+
+      return _toString('D', null).split(',').join('');
+    };
+
+    return !!bytesToGuidString(hexStringToBytes(syncId));
+  };
+
   var trimToNearestWord = function (text, limit) {
     if (!text) { return ''; }
 
@@ -674,6 +831,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     ParseUrl: parseUrl,
     PromiseWhile: promiseWhile,
     StripTags: stripTags,
+    SyncIdIsValid: syncIdIsValid,
     TrimToNearestWord: trimToNearestWord
   };
 };

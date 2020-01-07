@@ -129,6 +129,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.platformName = undefined;
 
     vm.scanner = {
+      invalidSyncId: false,
       lightEnabled: false
     };
 
@@ -999,7 +1000,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         // Display alert
         var errMessage = utility.GetErrorMessageFromException(err);
         vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      })
+      });
   };
 
   var init_infoView = function () {
@@ -1032,6 +1033,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.sync.showPassword = false;
     vm.sync.upgradeConfirmed = false;
     if (vm.syncForm) {
+      vm.syncForm.txtId.$setValidity('InvalidSyncId', true);
       vm.syncForm.$setPristine();
       vm.syncForm.$setUntouched();
     }
@@ -2092,7 +2094,13 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var syncForm_SyncId_Change = function () {
-    platform.LocalStorage.Set(globals.CacheKeys.SyncId, vm.sync.id);
+    if (!vm.sync.id || utility.SyncIdIsValid(vm.sync.id)) {
+      vm.syncForm.txtId.$setValidity('InvalidSyncId', true);
+      platform.LocalStorage.Set(globals.CacheKeys.SyncId, vm.sync.id);
+    }
+    else {
+      vm.syncForm.txtId.$setValidity('InvalidSyncId', false);
+    }
   };
 
   var syncForm_SyncUpdates_Click = function () {

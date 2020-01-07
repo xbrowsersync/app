@@ -131,6 +131,9 @@
   "login_IdField_Description": {
     "message": "Ihre sync ID"
   },
+  "login_IdField_InvalidSyncId_Label": {
+    "message": "Not a valid sync ID"
+  },
   "button_ScanCode_Label": {
     "message": "Scan ID"
   },

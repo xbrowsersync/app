@@ -69,21 +69,6 @@ body {
       color: $colour-text1;
       border-bottom-color: $colour-text1;
     }
-
-    &:active {
-      color: $colour-link-highlight;
-      border-bottom-color: $colour-link-highlight;
-    }
-
-    a {
-      &.active,
-      &:active,
-      &:focus,
-      &:hover {
-        color: inherit;
-        border-bottom-color: inherit;
-      }
-    }
   }
 
   h2 {
@@ -95,7 +80,7 @@ body {
     &.btn-default:not([disabled]) {
       &:hover,
       &:focus {
-        background-color: transparent;
+        background-color: rgba($colour-text1, 0.3);
         color: $colour-text1;
         border-color: $colour-text1;
         text-decoration: none;
@@ -172,6 +157,14 @@ body {
   }
 
   .well {
+    a {
+      &:focus,
+      &:hover {
+        color: $colour-text2;
+        border-bottom-color: $colour-text2;
+      }
+    }
+
     button.btn.btn-default {
       font-size: 1rem;
 
@@ -368,11 +361,6 @@ body {
       &:hover {
         color: $colour-text2;
         border-bottom-color: $colour-text2;
-      }
-
-      &:active {
-        color: $colour-link-highlight;
-        border-bottom-color: $colour-link-highlight;
       }
     }
   }
