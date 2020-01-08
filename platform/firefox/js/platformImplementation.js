@@ -71,7 +71,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 	 * ------------------------------------------------------------------------------------ */
 
   var addIdsToBookmarks = function (xBookmarks) {
-    // Get all bookmarks into array
     return $q.all([
       getLocalBookmarkTree(),
       getLocalContainerIds()
@@ -128,10 +127,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         };
         _.each(xBookmarks, addIdToBookmark);
 
-        // Check that bookmarks now have unique ids
-        var bookmarksHaveUniqueIds = bookmarks.CheckBookmarksHaveUniqueIds(xBookmarks);
-        if (!bookmarksHaveUniqueIds) {
-          return $q.reject({ code: globals.ErrorCodes.DuplicateBookmarkIdsDetected });
+        // Check that bookmarks now have valid ids
+        var bookmarksHaveValidIds = bookmarks.ValidateBookmarkIds(xBookmarks);
+        if (!bookmarksHaveValidIds) {
+          return $q.reject({ code: globals.ErrorCodes.InvalidBookmarkIdsDetected });
         }
 
         return xBookmarks;

@@ -345,9 +345,6 @@
                   <span data-ng-if="vm.restoreForm.dataToRestore.$error.InvalidData">
                     {{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_Invalid_Label) }}
                   </span>
-                  <span data-ng-if="vm.restoreForm.dataToRestore.$error.DuplicateIds">
-                    {{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_DuplicateIds_Label) }}
-                  </span>
                 </div>
                 <span class="spinner-border spinner-border-sm" data-ng-show="vm.settings.validatingRestoreData"
                   role="status" aria-hidden="true"></span>

@@ -822,15 +822,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     })
       .then(function () {
         // Upgrade containers to use current container names
-        var upgradedBookmarks = bookmarks.UpgradeContainers(restoreData.bookmarks || []);
-
-        // If bookmarks don't have unique ids, add new ids
-        return !bookmarks.CheckBookmarksHaveUniqueIds(upgradedBookmarks) ?
-          platform.Bookmarks.AddIds(upgradedBookmarks)
-            .then(function (updatedBookmarks) {
-              return updatedBookmarks;
-            }) :
-          upgradedBookmarks;
+        return bookmarks.UpgradeContainers(restoreData.bookmarks || []);
       })
       .then(function (bookmarksToRestore) {
         // Queue sync

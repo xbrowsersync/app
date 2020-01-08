@@ -300,7 +300,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var backupRestoreForm_DataToRestore_Change = function () {
-    vm.restoreForm.dataToRestore.$setValidity('DuplicateIds', true);
     vm.restoreForm.dataToRestore.$setValidity('InvalidData', true);
   };
 
@@ -312,7 +311,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.settings.dataToRestore = '';
     vm.settings.displayRestoreForm = true;
     document.querySelector('#backupFile').value = null;
-    vm.restoreForm.dataToRestore.$setValidity('DuplicateIds', true);
     vm.restoreForm.dataToRestore.$setValidity('InvalidData', true);
 
     // Focus on restore textarea
@@ -2365,7 +2363,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var validateBackupData = function () {
-    var xBookmarks, restoreData, validateData = false, validateUniqueIds = true;
+    var xBookmarks, restoreData, validateData = false;
 
     if (!vm.settings.dataToRestore) {
       validateData = false;
@@ -2382,13 +2380,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     catch (err) { }
     vm.restoreForm.dataToRestore.$setValidity('InvalidData', validateData);
 
-    // Check for duplicate bookmark ids
-    if (validateData && xBookmarks) {
-      validateUniqueIds = bookmarks.CheckBookmarksHaveUniqueIds(xBookmarks);
-      vm.restoreForm.dataToRestore.$setValidity('DuplicateIds', validateUniqueIds);
-    }
-
-    return validateData && validateUniqueIds;
+    return validateData;
   };
 
   // Call constructor

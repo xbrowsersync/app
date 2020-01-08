@@ -468,9 +468,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_BackupRestore_RestoreForm_Invalid_Label": {
       "message": "Invalid xBrowserSync backup data"
     },
-    "settings_BackupRestore_RestoreForm_DuplicateIds_Label": {
-      "message": "Duplicate bookmarks IDs detected"
-    },
     "button_SelectBackupFile_Label": {
       "message": "Select file"
     },
