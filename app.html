@@ -26,7 +26,9 @@
       <div class="view-content" data-ng-include="'./views/login.html'"></div>
     </div>
 
-    <div id="search-panel" class="view animate" data-ng-if="vm.view.current === vm.view.views.search">
+    <div id="search-panel" class="view animate"
+      data-ng-class="{ 'search-bar-bottom': vm.settings.displaySearchBarBeneathResults }"
+      data-ng-if="vm.view.current === vm.view.views.search">
       <div class="view-content" data-ng-include="'./views/search.html'"></div>
     </div>
 

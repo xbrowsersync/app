@@ -417,6 +417,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_NotAvailable_Message": {
       "message": "Settings available when sync is enabled."
     },
+    "settings_Prefs_Title": {
+      "message": "Preferences"
+    },
+    "settings_Prefs_SearchBar_Label": {
+      "message": "Display search bar beneath results"
+    },
     "button_Backup_Label": {
       "message": "Back up"
     },

@@ -304,6 +304,20 @@ body {
 }
 
 #search-panel {
+  &.search-bar-bottom {
+    .view-content {
+      flex-direction: column-reverse;
+
+      .btn-fab.fixed {
+        bottom: 5rem;
+      }
+
+      .search-results-panel {
+        padding-top: 0.75rem;
+      }
+    }
+  }
+
   .view-content {
     padding-left: 0;
 

@@ -87,7 +87,7 @@
       </div>
     </div>
   </div>
-  <div class="status-panel well well-sm">
+  <div class="service-panel well well-sm">
     <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Title) }}</h4>
     <div class="panel-content">
       <div class="animate-fade-in"
@@ -391,6 +391,22 @@
                 {{ vm.platform.GetConstant(vm.globals.Constants.Button_Done_Label) }}
               </button>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="preferences-panel well well-sm" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)">
+    <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_Title) }}</h4>
+    <div class="panel-content">
+      <div class="setting-group">
+        <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_SearchBar_Label) }}</label>
+        <div class="setting-value">
+          <div class="checkbox">
+            <input id="displaySearchBarBeneathResults" type="checkbox"
+              data-ng-model="vm.settings.displaySearchBarBeneathResults"
+              data-ng-click="vm.events.settings_Prefs_DisplaySearchBar_Click()" />
+            <label for="displaySearchBarBeneathResults" data-ng-class="{ 'animate': true }"></label>
           </div>
         </div>
       </div>

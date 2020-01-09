@@ -78,6 +78,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       permissions_Revoke_Click: permissions_Revoke_Click,
       permissions_Request_Click: permissions_Request_Click,
       permissionsPanel_RequestPermissions_Click: permissionsPanel_RequestPermissions_Click,
+      settings_Prefs_DisplaySearchBar_Click: settings_Prefs_DisplaySearchBar_Click,
       qrPanel_Close_Click: qrPanel_Close_Click,
       qrPanel_CopySyncId_Click: qrPanel_CopySyncId_Click,
       queueSync: queueSync,
@@ -158,6 +159,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       displayQrPanel: false,
       displayRestoreConfirmation: false,
       displayRestoreForm: false,
+      displaySearchBarBeneathResults: false,
       displaySyncBookmarksToolbarConfirmation: false,
       displayUpdateServiceUrlConfirmation: false,
       displayUpdateServiceUrlForm: false,
@@ -891,6 +893,15 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     // Platform-specific initation
     platform.Init(vm)
       .then(function () {
+        // Get cached prefs from storage
+        return platform.LocalStorage.Get([globals.CacheKeys.DisplaySearchBarBeneathResults]);
+      })
+      .then(function (cachedPrefs) {
+        // Set cached prefs
+        vm.settings.displaySearchBarBeneathResults = cachedPrefs[globals.CacheKeys.DisplaySearchBarBeneathResults] != null ?
+          cachedPrefs[globals.CacheKeys.DisplaySearchBarBeneathResults] :
+          vm.settings.displaySearchBarBeneathResults;
+
         // Check if a sync is currently in progress
         return platform.Sync.Current()
           .then(function (currentSync) {
@@ -1835,6 +1846,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.settings.service.apiVersion = serviceInfo.version;
   };
 
+  var settings_Prefs_DisplaySearchBar_Click = function () {
+    // Update setting value and store in cache
+    var value = !vm.settings.displaySearchBarBeneathResults;
+    platform.LocalStorage.Set(globals.CacheKeys.DisplaySearchBarBeneathResults, value);
+  };
+
   var startSyncing = function () {
     var syncInfoMessage, syncType;
 
@@ -2206,7 +2223,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   var updateServiceUrlForm_Cancel_Click = function () {
     // Hide form and scroll to top of section
     vm.settings.displayUpdateServiceUrlForm = false;
-    document.querySelector('.status-panel h4').scrollIntoView();
+    document.querySelector('.service-panel h4').scrollIntoView();
   };
 
   var updateServiceUrlForm_Confirm_Click = function () {
@@ -2246,7 +2263,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
         // Scroll to top of section
         $timeout(function () {
-          document.querySelector('.status-panel h4').scrollIntoView();
+          document.querySelector('.service-panel h4').scrollIntoView();
         });
       })
       .catch(function (err) {
