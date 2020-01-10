@@ -39,9 +39,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "button_Previous_Label": {
       "message": "Previous"
     },
-    "button_Skip_Label": {
-      "message": "Skip"
-    },
     "login_GetSyncId_Title": {
       "message": "Need a sync ID?"
     },
@@ -729,7 +726,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.AutomaticUpdates.NextUpdate = getAutoUpdatesNextRun;
     platform.AutomaticUpdates.Start = startAutoUpdates;
     platform.AutomaticUpdates.Stop = stopAutoUpdates;
-    platform.Bookmarks.AddIds = addIdsToBookmarks;
     platform.Bookmarks.Clear = clearBookmarks;
     platform.Bookmarks.CreateSingle = createSingle;
     platform.Bookmarks.DeleteSingle = deleteSingle;
@@ -763,11 +759,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 	/* ------------------------------------------------------------------------------------
 	 * Public functions
 	 * ------------------------------------------------------------------------------------ */
-
-  var addIdsToBookmarks = function (xBookmarks) {
-    // Implement this only for desktop platforms
-    return $q.resolve(xBookmarks);
-  };
 
   var awaitSync = function (syncToAwait) {
     return bookmarks.QueueSync()

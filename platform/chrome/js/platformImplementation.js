@@ -29,7 +29,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.AutomaticUpdates.NextUpdate = getAutoUpdatesNextRun;
     platform.AutomaticUpdates.Start = startAutoUpdates;
     platform.AutomaticUpdates.Stop = stopAutoUpdates;
-    platform.Bookmarks.AddIds = addIdsToBookmarks;
     platform.Bookmarks.Clear = clearBookmarks;
     platform.Bookmarks.Created = bookmarksCreated;
     platform.Bookmarks.CreateSingle = createSingle;
@@ -72,73 +71,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 	/* ------------------------------------------------------------------------------------
 	 * Public functions
 	 * ------------------------------------------------------------------------------------ */
-
-  var addIdsToBookmarks = function (xBookmarks) {
-    return $q.all([
-      getLocalBookmarkTree(),
-      getLocalContainerIds()
-    ])
-      .then(function (results) {
-        var tree = results[0];
-        var localContainerIds = results[1];
-        var allBookmarks = [];
-
-        // Get all local bookmarks into flat array
-        bookmarks.Each([tree], function (bookmark) {
-          allBookmarks.push(bookmark);
-        });
-
-        // Remove the root
-        allBookmarks.shift();
-
-        // Sort by dateAdded asc 
-        allBookmarks = _.sortBy(allBookmarks, function (bookmark) {
-          return bookmark.dateAdded;
-        });
-
-        // Start the id counter one greater than the total number of bookmarks
-        var idCounter = allBookmarks.length + 1;
-
-        // Add ids to containers' children 
-        var addIdToBookmark = function (bookmark) {
-          var bookmarkId;
-
-          // Get the local index of the bookmark
-          bookmarkId = _.findIndex(allBookmarks, function (sortedBookmark) {
-            return bookmarks.XBookmarkIsContainer(bookmark) ?
-              sortedBookmark.id === localContainerIds[bookmark.title] :
-              sortedBookmark.title === (bookmark.title || '') &&
-              sortedBookmark.url === bookmark.url &&
-              !sortedBookmark.assigned;
-          });
-
-          // Use index if found otherwise take id from counter and increment 
-          if (!_.isUndefined(bookmarkId) && bookmarkId >= 0) {
-            bookmark.id = bookmarkId + 1;
-
-            // Mark this bookmark as assigned to prevent duplicate ids
-            allBookmarks[bookmarkId].assigned = true;
-          }
-          else {
-            bookmark.id = idCounter;
-            idCounter++;
-          }
-
-          if (bookmark.children) {
-            _.each(bookmark.children, addIdToBookmark);
-          }
-        };
-        _.each(xBookmarks, addIdToBookmark);
-
-        // Check that bookmarks now have valid ids
-        var bookmarksHaveValidIds = bookmarks.ValidateBookmarkIds(xBookmarks);
-        if (!bookmarksHaveValidIds) {
-          return $q.reject({ code: globals.ErrorCodes.InvalidBookmarkIdsDetected });
-        }
-
-        return xBookmarks;
-      });
-  };
 
   var awaitSync = function (uniqueId) {
     return $q(function (resolve, reject) {
@@ -433,6 +365,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var getBookmarks = function (addBookmarkIds) {
     addBookmarkIds = addBookmarkIds || true;
+    var allLocalBookmarks = [];
 
     // Get local container node ids
     return getLocalContainerIds()
@@ -449,6 +382,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
               if (!otherBookmarks.children || otherBookmarks.children.length === 0) {
                 return;
               }
+
+              // Add all bookmarks into flat array
+              bookmarks.Each(otherBookmarks.children, function (bookmark) {
+                allLocalBookmarks.push(bookmark);
+              });
 
               // Convert local bookmarks sub tree to xbookmarks
               var xBookmarks = getLocalBookmarksAsXBookmarks(otherBookmarks.children);
@@ -478,6 +416,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
               }
 
               if (toolbarBookmarks.children && toolbarBookmarks.children.length > 0) {
+                // Add all bookmarks into flat array
+                bookmarks.Each(toolbarBookmarks.children, function (bookmark) {
+                  allLocalBookmarks.push(bookmark);
+                });
+
                 return getLocalBookmarksAsXBookmarks(toolbarBookmarks.children);
               }
             });
@@ -508,33 +451,67 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         var menuBookmarks = results[2];
         var mobileBookmarks = results[3];
         var xBookmarks = [];
+        var otherContainer, toolbarContainer, menuContainer, mobileContainer;
 
         // Add other container if bookmarks present
         if (otherBookmarks && otherBookmarks.length > 0) {
-          var otherContainer = bookmarks.GetContainer(globals.Bookmarks.OtherContainerName, xBookmarks, true);
+          otherContainer = bookmarks.GetContainer(globals.Bookmarks.OtherContainerName, xBookmarks, true);
           otherContainer.children = otherBookmarks;
         }
 
         // Add toolbar container if bookmarks present
         if (toolbarBookmarks && toolbarBookmarks.length > 0) {
-          var toolbarContainer = bookmarks.GetContainer(globals.Bookmarks.ToolbarContainerName, xBookmarks, true);
+          toolbarContainer = bookmarks.GetContainer(globals.Bookmarks.ToolbarContainerName, xBookmarks, true);
           toolbarContainer.children = toolbarBookmarks;
         }
 
         // Add menu container if bookmarks present
         if (menuBookmarks && menuBookmarks.length > 0) {
-          var menuContainer = bookmarks.GetContainer(globals.Bookmarks.MenuContainerName, xBookmarks, true);
+          menuContainer = bookmarks.GetContainer(globals.Bookmarks.MenuContainerName, xBookmarks, true);
           menuContainer.children = menuBookmarks;
         }
 
         // Add mobile container if bookmarks present
         if (mobileBookmarks && mobileBookmarks.length > 0) {
-          var mobileContainer = bookmarks.GetContainer(globals.Bookmarks.MobileContainerName, xBookmarks, true);
+          mobileContainer = bookmarks.GetContainer(globals.Bookmarks.MobileContainerName, xBookmarks, true);
           mobileContainer.children = mobileBookmarks;
         }
 
-        // Add unique ids
-        return addIdsToBookmarks(xBookmarks);
+        // Filter containers from flat array of bookmarks
+        [otherContainer, toolbarContainer, menuContainer, mobileContainer].forEach(function (container) {
+          if (!container) {
+            return;
+          }
+
+          allLocalBookmarks = allLocalBookmarks.filter(function (bookmark) {
+            return bookmark.title !== container.title;
+          });
+        });
+
+        // Sort by date added asc 
+        allLocalBookmarks = allLocalBookmarks.sort(function (x, y) {
+          return x.dateAdded - y.dateAdded;
+        });
+
+        // Iterate local bookmarks to add unique bookmark ids in correct order 
+        allLocalBookmarks.forEach(function (localBookmark) {
+          bookmarks.Each(xBookmarks, function (xBookmark) {
+            if (!xBookmark.id && (
+              (!localBookmark.url && xBookmark.title === localBookmark.title) ||
+              (localBookmark.url && xBookmark.url === localBookmark.url))) {
+              xBookmark.id = bookmarks.GetNewBookmarkId(xBookmarks);
+            }
+          });
+        });
+
+        // Find and fix any bookmarks missing ids
+        bookmarks.Each(xBookmarks, function (xBookmark) {
+          if (!xBookmark.id) {
+            xBookmark.id = bookmarks.GetNewBookmarkId(xBookmarks);
+          }
+        });
+
+        return xBookmarks;
       });
   };
 
@@ -1095,9 +1072,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
 
-	/* ------------------------------------------------------------------------------------
-	 * Private functions
-	 * ------------------------------------------------------------------------------------ */
+  /* ------------------------------------------------------------------------------------
+   * Private functions
+   * ------------------------------------------------------------------------------------ */
 
   var checkForApiError = function () {
     var err;

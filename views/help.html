@@ -6,7 +6,7 @@
     <div class="pagination">
       <a href="#" data-ng-click="vm.events.helpPanel_Close()" data-ng-keydown="vm.events.helpPanel_KeyDown($event)"
         data-ng-show="$index === 0">
-        <span>{{ vm.platform.GetConstant(vm.globals.Constants.Button_Skip_Label) }}</span>
+        <span>{{ vm.platform.GetConstant(vm.globals.Constants.Button_OK_Label) }}</span>
       </a>
       <a class="prev-link" href="#" data-ng-click="vm.events.helpPanel_PreviousPage()"
         data-ng-keydown="vm.events.helpPanel_KeyDown($event)" data-ng-hide="$index === 0">
@@ -19,7 +19,7 @@
       </a>
       <a href="#" data-ng-click="vm.events.helpPanel_Close()" data-ng-keydown="vm.events.helpPanel_KeyDown($event)"
         data-ng-show="$index === vm.help.pages.length - 1">
-        <span>{{ vm.platform.GetConstant(vm.globals.Constants.Button_Close_Label) }}</span>
+        <span>{{ vm.platform.GetConstant(vm.globals.Constants.Button_OK_Label) }}</span>
       </a>
     </div>
   </div>

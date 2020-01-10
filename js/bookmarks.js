@@ -356,6 +356,23 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     return deferred.promise;
   };
 
+  var getNewBookmarkId = function (bookmarks, takenIds) {
+    var highestId = 0;
+    takenIds = takenIds || [0];
+
+    // Check existing bookmarks for highest id
+    eachBookmark(bookmarks, function (bookmark) {
+      if (!_.isUndefined(bookmark.id) && bookmark.id > highestId) {
+        highestId = bookmark.id;
+      }
+    });
+
+    // Compare highest id with supplied taken ids
+    highestId = _.max(takenIds) > highestId ? _.max(takenIds) : highestId;
+
+    return parseInt(highestId) + 1;
+  };
+
   var getSyncBookmarksToolbar = function () {
     // Get setting from local storage
     return platform.LocalStorage.Get(globals.CacheKeys.SyncBookmarksToolbar)
@@ -738,23 +755,6 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       });
   };
 
-  var getNewBookmarkId = function (bookmarks, takenIds) {
-    var highestId = 0;
-    takenIds = takenIds || [0];
-
-    // Check existing bookmarks for highest id
-    eachBookmark(bookmarks, function (bookmark) {
-      if (!_.isUndefined(bookmark.id) && bookmark.id > highestId) {
-        highestId = bookmark.id;
-      }
-    });
-
-    // Compare highest id with supplied taken ids
-    highestId = _.max(takenIds) > highestId ? _.max(takenIds) : highestId;
-
-    return parseInt(highestId) + 1;
-  };
-
   var handleFailedSync = function (failedSync, err) {
     var clearCachedData;
 
@@ -1011,6 +1011,36 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     return _.difference(bookmarks, removeArr);
   };
 
+  var repairBookmarkIds = function (bookmarks) {
+    var allBookmarks = [];
+    var idCounter = 1;
+
+    // Get all local bookmarks into flat array
+    eachBookmark(bookmarks, function (bookmark) {
+      allBookmarks.push(bookmark);
+    });
+
+    // Remove any invalid ids
+    allBookmarks.forEach(function (bookmark) {
+      if (typeof bookmark.id !== 'number') {
+        delete bookmark.id;
+      }
+    });
+
+    // Sort by id asc
+    allBookmarks = allBookmarks.sort(function (x, y) {
+      return x.id - y.id;
+    });
+
+    // Re-add ids
+    allBookmarks.forEach(function (bookmark) {
+      bookmark.id = idCounter;
+      idCounter++;
+    });
+
+    return bookmarks;
+  };
+
   var searchBookmarksByKeywords = function (bookmarksToSearch, keywords, results) {
     if (!results) {
       results = [];
@@ -1155,8 +1185,15 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
     if (syncData.bookmarks) {
       // Sync with provided bookmarks, validate bookmark ids
-      getBookmarksToSync = validateBookmarkIds(syncData.bookmarks) ?
-        $q.resolve(syncData.bookmarks) : platform.Bookmarks.AddIds(syncData.bookmarks);
+      getBookmarksToSync = $q(function (resolve) {
+        if (validateBookmarkIds(syncData.bookmarks)) {
+          resolve(syncData.bookmarks);
+        }
+        else {
+          var repairedBookmarks = repairBookmarkIds(syncData.bookmarks);
+          resolve(repairedBookmarks);
+        }
+      });
     }
     else {
       updateLocalBookmarksInfo = {
@@ -1253,8 +1290,18 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         // Update cached bookmarks
         bookmarks = JSON.parse(decryptedData);
 
-        // Add new ids if bookmarks don't have unique ids
-        return !validateBookmarkIds(bookmarks) && platform.Bookmarks.AddIds(bookmarks)
+        // Check bookmark ids are all valid
+        if (!validateBookmarkIds(bookmarks)) {
+          bookmarks = repairBookmarkIds(bookmarks);
+
+          // Encrypt bookmarks with new ids
+          return utility.EncryptData(JSON.stringify(bookmarks))
+            .then(function (encryptedBookmarksWithNewIds) {
+              encryptedBookmarks = encryptedBookmarksWithNewIds;
+            });
+        }
+
+        /*return !validateBookmarkIds(bookmarks) && repairBookmarkIds(bookmarks)
           .then(function (bookmarksWithValidIds) {
             // Encrypt bookmarks with new ids
             bookmarks = bookmarksWithValidIds;
@@ -1262,7 +1309,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
           })
           .then(function (encryptedBookmarksWithNewIds) {
             encryptedBookmarks = encryptedBookmarksWithNewIds;
-          });
+          });*/
       })
       .then(function () {
         return updateCachedBookmarks(bookmarks, encryptedBookmarks);
@@ -1528,6 +1575,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     GetCurrentSync: getCurrentSync,
     GetExistingInXBookmarks: getExistingInXBookmarks,
     GetLookahead: getLookahead,
+    GetNewBookmarkId: getNewBookmarkId,
     GetSyncBookmarksToolbar: getSyncBookmarksToolbar,
     IsSeparator: isSeparator,
     QueueSync: queueSync,

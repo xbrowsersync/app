@@ -29,7 +29,6 @@ xBrowserSync.App.Platform = function () {
       Stop: notImplemented
     },
     Bookmarks: {
-      AddIds: notImplemented,
       Clear: notImplemented,
       Created: notImplemented,
       CreateSingle: notImplemented,

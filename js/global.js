@@ -204,7 +204,6 @@ xBrowserSync.App.Global = function (platform) {
       Button_Help_Label: 'button_Help_Label',
       Button_Next_Label: 'button_Next_Label',
       Button_Previous_Label: 'button_Previous_Label',
-      Button_Skip_Label: 'button_Skip_Label',
       Button_ScanCode_Label: 'button_ScanCode_Label',
       Button_ToggleLight_Label: 'button_ToggleLight_Label',
       Button_DisableSync_Label: 'button_DisableSync_Label',
