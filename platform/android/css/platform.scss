@@ -347,20 +347,20 @@ body {
         margin: 1rem;
       }
 
-      .list-group-item {
+      .bookmark {
         &:focus,
         &:hover {
-          .list-group-item-heading {
+          .bookmark-heading {
             color: $colour-text2;
           }
 
-          .search-result-content {
+          .bookmark-content {
             background-color: initial;
           }
         }
       }
 
-      .list-group-item-heading {
+      .bookmark-heading {
         margin-right: 0;
         transition: none;
       }

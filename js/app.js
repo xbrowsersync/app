@@ -38,9 +38,9 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       current: undefined,
       descriptionFieldOriginalHeight: undefined,
       displayUpdateForm: false,
+      getTitleForDisplay: bookmarks.GetBookmarkTitleForDisplay,
       originalUrl: undefined,
-      tagText: undefined,
-      urlAsTitle: displayUrlAsBookmarkTitle
+      tagText: undefined
     };
 
     vm.events = {
@@ -114,6 +114,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       syncForm_UpgradeSync_Click: syncForm_UpgradeSync_Click,
       syncPanel_DisplayDataUsage_Click: displayDataUsage,
       searchForm_ToggleBookmark_Click: searchForm_ToggleBookmark_Click,
+      searchForm_ToggleView_Click: searchForm_ToggleView_Click,
       updatedPanel_Continue_Click: updatedPanel_Continue_Click,
       updateServiceUrlForm_Cancel_Click: updateServiceUrlForm_Cancel_Click,
       updateServiceUrlForm_Confirm_Click: updateServiceUrlForm_Confirm_Click,
@@ -136,8 +137,10 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
     vm.search = {
       batchResultsNum: 10,
+      bookmarkTree: undefined,
       cancelGetBookmarksRequest: undefined,
       displayDefaultState: displayDefaultSearchState,
+      displayTreeView: false,
       execute: searchBookmarks,
       getLookaheadTimeout: undefined,
       getSearchLookaheadTimeout: undefined,
@@ -541,11 +544,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         // Display message
         vm.alert.display(null, platform.GetConstant(globals.Constants.GetMetadata_Success_Message));
       })
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      });
+      .catch(displayAlertErrorHandler);
   };
 
   var bookmarkForm_RemoveTag_Click = function (tag) {
@@ -831,10 +830,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.settings.displayQrPanel = true;
   };
 
-  var displayUrlAsBookmarkTitle = function (url) {
-    return url.replace(/^https?:\/\//i, '');
-  };
-
   var downloadBackupFile = function () {
     // Get data for backup
     return $q.all([
@@ -931,8 +926,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         displayMainView()
           .then(function () {
             // Display alert
-            var errMessage = utility.GetErrorMessageFromException(err);
-            vm.alert.display(errMessage.title, errMessage.message, 'danger');
+            displayAlertErrorHandler(err);
           });
       });
   };
@@ -1007,8 +1001,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         }
 
         // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
+        displayAlertErrorHandler(err);
       });
   };
 
@@ -1102,6 +1095,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     }
 
     // Reset search view
+    vm.search.displayTreeView = false;
+    vm.search.bookmarkTree = null;
     vm.search.selectedBookmark = null;
     return vm.search.displayDefaultState();
   };
@@ -1179,8 +1174,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
                   return;
                 }
 
-                var errMessage = utility.GetErrorMessageFromException(err);
-                displayAlert(errMessage.title, errMessage.message);
+                // Otherwise display alert
+                displayAlertErrorHandler(err);
               });
           }
 
@@ -1313,11 +1308,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
           vm.settings.syncIdCopied = true;
         });
       })
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      });
+      .catch(displayAlertErrorHandler);
   };
 
   var queueSync = function (syncData, command) {
@@ -1451,11 +1442,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       .then(function (lightEnabled) {
         vm.scanner.lightEnabled = lightEnabled;
       })
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      });
+      .catch(displayAlertErrorHandler);
   };
 
   var searchBookmarks = function () {
@@ -1484,22 +1471,23 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
     return bookmarks.Search(queryData)
       .then(function (results) {
+        vm.search.displayTreeView = false;
         vm.search.scrollDisplayMoreEnabled = false;
         vm.search.resultsDisplayed = vm.search.batchResultsNum;
         vm.search.results = results;
 
         // Scroll to top of search results
         $timeout(function () {
-          document.querySelector('.search-results-panel').scrollTop = 0;
           vm.search.scrollDisplayMoreEnabled = true;
+          var resultsPanel = document.querySelector('.search-results-panel');
+          if (resultsPanel) {
+            resultsPanel.scrollTop = 0;
+          }
         }, 200);
       })
       .catch(function (err) {
         vm.search.results = null;
-
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
+        displayAlertErrorHandler(err);
       });
   };
 
@@ -1555,11 +1543,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         vm.sync.id = scannedId;
         return platform.LocalStorage.Set(globals.CacheKeys.SyncId, scannedId);
       })
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
-      })
+      .catch(displayAlertErrorHandler)
       .finally(function () {
         displayMainView()
           .then(function () {
@@ -1671,7 +1655,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     if (event.keyCode === 40 && vm.search.results && vm.search.results.length > 0) {
       // Focus on first search result
       event.preventDefault();
-      document.querySelector('.search-results-panel .list-group').firstElementChild.focus();
+      document.querySelector('.search-results-panel .bookmark-list').firstElementChild.focus();
       return;
     }
 
@@ -1690,7 +1674,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     switch (true) {
       // Enter
       case (event.keyCode === 13):
-        event.target.click();
+        event.target.querySelector('.bookmark-content').click();
         break;
       // Up arrow
       case (event.keyCode === 38):
@@ -1777,6 +1761,25 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   var searchForm_ToggleBookmark_Click = function () {
     // Display bookmark panel
     changeView(vm.view.views.bookmark);
+  };
+
+  var searchForm_ToggleView_Click = function () {
+    if (vm.search.displayTreeView) {
+      // Display default search results
+      searchBookmarks();
+      vm.search.displayDefaultState();
+    }
+    else {
+      // Initialise bookmark tree
+      vm.search.bookmarkTree = null;
+      bookmarks.GetBookmarks()
+        .then(function (results) {
+          // Display bookmark tree view
+          vm.search.bookmarkTree = results;
+          vm.search.displayTreeView = !vm.search.displayTreeView;
+        })
+        .catch(displayAlertErrorHandler);
+    }
   };
 
   var searchForm_ShareBookmark_Click = function (event, bookmarkToShare) {
@@ -1942,8 +1945,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         vm.sync.upgradeConfirmed = false;
 
         // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        vm.alert.display(errMessage.title, errMessage.message, 'danger');
+        displayAlertErrorHandler(err);
       })
       .finally(function () {
         // Hide loading panel
@@ -1968,14 +1970,13 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     if (err && err.code === globals.ErrorCodes.SyncRemoved) {
       return changeView(vm.view.views.login)
         .finally(function () {
-          errMessage = utility.GetErrorMessageFromException(err);
-          vm.alert.display(errMessage.title, errMessage.message, 'danger');
+          // Display alert
+          displayAlertErrorHandler(err);
         });
     }
     else {
       // Display alert
-      errMessage = utility.GetErrorMessageFromException(err);
-      vm.alert.display(errMessage.title, errMessage.message, 'danger');
+      displayAlertErrorHandler(err);
 
       // If creds were incorrect, focus on password field
       if (err.code === globals.ErrorCodes.InvalidCredentials &&

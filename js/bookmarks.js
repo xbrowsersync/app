@@ -268,6 +268,37 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     return container;
   };
 
+  var getBookmarkTitleForDisplay = function (bookmark) {
+    // If normal bookmark, return title or if blank url to display
+    if (bookmark.url) {
+      return bookmark.title ? bookmark.title : bookmark.url.replace(/^https?:\/\//i, '');
+    }
+
+    // Otherwise bookmark is a folder, return title if not a container
+    if (!xBookmarkIsContainer(bookmark)) {
+      return bookmark.title;
+    }
+
+    var containerTitle = undefined + '';
+
+    switch (bookmark.title) {
+      case globals.Bookmarks.MenuContainerName:
+        containerTitle = platform.GetConstant(globals.Constants.Bookmarks_Container_Menu_Title);
+        break;
+      case globals.Bookmarks.MobileContainerName:
+        containerTitle = platform.GetConstant(globals.Constants.Bookmarks_Container_Mobile_Title);
+        break;
+      case globals.Bookmarks.OtherContainerName:
+        containerTitle = platform.GetConstant(globals.Constants.Bookmarks_Container_Other_Title);
+        break;
+      case globals.Bookmarks.ToolbarContainerName:
+        containerTitle = platform.GetConstant(globals.Constants.Bookmarks_Container_Toolbar_Title);
+        break;
+    }
+
+    return containerTitle;
+  };
+
   var getExistingInXBookmarks = function (containerName, indexPath, xBookmarks) {
     var bookmark;
 
@@ -1571,6 +1602,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     FindBookmarkById: findBookmarkById,
     FindCurrentUrlInBookmarks: findCurrentUrlInBookmarks,
     GetBookmarks: getCachedBookmarks,
+    GetBookmarkTitleForDisplay: getBookmarkTitleForDisplay,
     GetContainer: getContainer,
     GetCurrentSync: getCurrentSync,
     GetExistingInXBookmarks: getExistingInXBookmarks,

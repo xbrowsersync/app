@@ -451,28 +451,29 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         var menuBookmarks = results[2];
         var mobileBookmarks = results[3];
         var xBookmarks = [];
+        var otherContainer, toolbarContainer, menuContainer, mobileContainer;
 
         // Add other container if bookmarks present
         if (otherBookmarks && otherBookmarks.length > 0) {
-          var otherContainer = bookmarks.GetContainer(globals.Bookmarks.OtherContainerName, xBookmarks, true);
+          otherContainer = bookmarks.GetContainer(globals.Bookmarks.OtherContainerName, xBookmarks, true);
           otherContainer.children = otherBookmarks;
         }
 
         // Add toolbar container if bookmarks present
         if (toolbarBookmarks && toolbarBookmarks.length > 0) {
-          var toolbarContainer = bookmarks.GetContainer(globals.Bookmarks.ToolbarContainerName, xBookmarks, true);
+          toolbarContainer = bookmarks.GetContainer(globals.Bookmarks.ToolbarContainerName, xBookmarks, true);
           toolbarContainer.children = toolbarBookmarks;
         }
 
         // Add menu container if bookmarks present
         if (menuBookmarks && menuBookmarks.length > 0) {
-          var menuContainer = bookmarks.GetContainer(globals.Bookmarks.MenuContainerName, xBookmarks, true);
+          menuContainer = bookmarks.GetContainer(globals.Bookmarks.MenuContainerName, xBookmarks, true);
           menuContainer.children = menuBookmarks;
         }
 
         // Add mobile container if bookmarks present
         if (mobileBookmarks && mobileBookmarks.length > 0) {
-          var mobileContainer = bookmarks.GetContainer(globals.Bookmarks.MobileContainerName, xBookmarks, true);
+          mobileContainer = bookmarks.GetContainer(globals.Bookmarks.MobileContainerName, xBookmarks, true);
           mobileContainer.children = mobileBookmarks;
         }
 

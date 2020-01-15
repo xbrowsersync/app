@@ -225,6 +225,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "search_NoResults_Message": {
       "message": "No bookmarks found"
     },
+    "search_FolderEmpty_Message": {
+      "message": "Folder empty"
+    },
     "shareBookmark_Message": {
       "message": "Share bookmark with"
     },
@@ -359,6 +362,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     },
     "button_Permissions_Add_Label": {
       "message": "Grant permissions"
+    },
+    "button_SearchResults_Label": {
+      "message": "Display search results"
+    },
+    "button_BookmarkTree_Label": {
+      "message": "Display bookmark tree"
     },
     "settings_Service_Title": {
       "message": "Service"
@@ -572,6 +581,18 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     },
     "getMetadata_Success_Message": {
       "message": "Bookmark properties updated."
+    },
+    "bookmarks_Container_Menu_Title": {
+      "message": "Menu bookmarks"
+    },
+    "bookmarks_Container_Mobile_Title": {
+      "message": "Mobile bookmarks"
+    },
+    "bookmarks_Container_Other_Title": {
+      "message": "Other bookmarks"
+    },
+    "bookmarks_Container_Toolbar_Title": {
+      "message": "Toolbar bookmarks"
     },
     "error_Default_Title": {
       "message": "Something went wrong"

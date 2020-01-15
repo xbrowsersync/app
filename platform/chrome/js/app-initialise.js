@@ -24,6 +24,7 @@ xBrowserSync.App.UI.run(['$templateRequest', function ($templateRequest) {
   $templateRequest('./views/search.html', true);
   $templateRequest('./views/bookmark.html', true);
   $templateRequest('./views/settings.html', true);
+  $templateRequest('./views/bookmarkTree.html', true);
 }]);
 
 // Add platform service
@@ -56,6 +57,23 @@ xBrowserSync.App.UI.factory('bookmarks', xBrowserSync.App.Bookmarks);
 // Add platform implementation service
 xBrowserSync.App.PlatformImplementation.$inject = ['$interval', '$q', '$timeout', 'platform', 'globals', 'utility', 'bookmarks'];
 xBrowserSync.App.UI.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
+
+// Add bookmark tree component
+xBrowserSync.App.Components.BookmarkTree.$inject = ['platform', 'globals', 'utility', 'bookmarks', 'platformImplementation'];
+xBrowserSync.App.UI.component('bookmarkTree', {
+  templateUrl: './views/bookmarkTree.html',
+  bindings: {
+    deleteBookmark: '&',
+    editBookmark: '&',
+    nodes: '=',
+    openUrl: '&',
+    platformName: '@',
+    selectBookmark: '&',
+    selectedBookmark: '<',
+    shareBookmark: '&',
+  },
+  controller: xBrowserSync.App.Components.BookmarkTree
+});
 
 // Add main controller
 xBrowserSync.App.Controller.$inject = ['$q', '$timeout', 'platform', 'globals', 'api', 'utility', 'bookmarks', 'platformImplementation'];

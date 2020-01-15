@@ -234,44 +234,6 @@
       </div>
     </div>
   </div>
-  <div class="permissions-panel well well-sm"
-    data-ng-if="vm.utility.IsPlatform(vm.platformName, vm.globals.Platforms.Chrome)">
-    <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_Title) }}</h4>
-    <div class="panel-content">
-      <div class="animate-fade-in">
-        <div class="setting-group">
-          <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Title) }}</label>
-          <div class="setting-value">
-            <div class="animate-fade-in" data-ng-show="vm.settings.readWebsiteDataPermissionsGranted"
-              title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Granted_Label) }}">
-              <span
-                class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Granted_Label) }}</span>
-              <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
-            </div>
-            <div class="animate-fade-in" data-ng-show="!vm.settings.readWebsiteDataPermissionsGranted"
-              title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_NotGranted_Label) }}">
-              <span
-                class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_NotGranted_Label) }}</span>
-              <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
-            </div>
-          </div>
-          <p class="description"
-            data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Description)">
-          </p>
-          <div class="text-center animate-fade-in" data-ng-show="vm.settings.readWebsiteDataPermissionsGranted">
-            <button class="btn btn-default" data-ng-click="vm.events.permissions_Revoke_Click()">
-              {{ vm.platform.GetConstant(vm.globals.Constants.Button_Permissions_Remove_Label) }}
-            </button>
-          </div>
-          <div class="text-center animate-fade-in" data-ng-hide="vm.settings.readWebsiteDataPermissionsGranted">
-            <button class="btn btn-default" data-ng-click="vm.events.permissions_Request_Click()">
-              {{ vm.platform.GetConstant(vm.globals.Constants.Button_Permissions_Add_Label) }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <div class="backup-restore-panel well well-sm">
     <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Title) }}</h4>
     <div class="panel-content">
@@ -407,6 +369,44 @@
               data-ng-model="vm.settings.displaySearchBarBeneathResults"
               data-ng-click="vm.events.settings_Prefs_DisplaySearchBar_Click()" />
             <label for="displaySearchBarBeneathResults" data-ng-class="{ 'animate': true }"></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="permissions-panel well well-sm"
+    data-ng-if="vm.utility.IsPlatform(vm.platformName, vm.globals.Platforms.Chrome)">
+    <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_Title) }}</h4>
+    <div class="panel-content">
+      <div class="animate-fade-in">
+        <div class="setting-group">
+          <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Title) }}</label>
+          <div class="setting-value">
+            <div class="animate-fade-in" data-ng-show="vm.settings.readWebsiteDataPermissionsGranted"
+              title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Granted_Label) }}">
+              <span
+                class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Granted_Label) }}</span>
+              <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
+            </div>
+            <div class="animate-fade-in" data-ng-show="!vm.settings.readWebsiteDataPermissionsGranted"
+              title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_NotGranted_Label) }}">
+              <span
+                class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_NotGranted_Label) }}</span>
+              <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
+            </div>
+          </div>
+          <p class="description"
+            data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Description)">
+          </p>
+          <div class="text-center animate-fade-in" data-ng-show="vm.settings.readWebsiteDataPermissionsGranted">
+            <button class="btn btn-default" data-ng-click="vm.events.permissions_Revoke_Click()">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Button_Permissions_Remove_Label) }}
+            </button>
+          </div>
+          <div class="text-center animate-fade-in" data-ng-hide="vm.settings.readWebsiteDataPermissionsGranted">
+            <button class="btn btn-default" data-ng-click="vm.events.permissions_Request_Click()">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Button_Permissions_Add_Label) }}
+            </button>
           </div>
         </div>
       </div>
