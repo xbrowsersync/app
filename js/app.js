@@ -1518,6 +1518,31 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       }
     }
 
+    // Find and remove the deleted bookmark element in the bookmark tree
+    if (vm.search.bookmarkTree && vm.search.bookmarkTree.length > 0) {
+      // Find parent of bookmark to delete
+      var parent, childIndex = -1;
+      bookmarks.Each(vm.search.bookmarkTree, function (current) {
+        if (!current.children || current.children.length === 0) {
+          return;
+        }
+
+        // Check children for target bookmark 
+        var index = current.children.findIndex(function (child) {
+          return child.id === bookmark.id;
+        });
+        if (index >= 0) {
+          parent = current;
+          childIndex = index;
+        }
+      });
+
+      // If target bookmark and parent were found, remove the bookmark
+      if (parent && childIndex >= 0) {
+        parent.children.splice(childIndex, 1);
+      }
+    }
+
     $timeout(function () {
       // Display loading overlay
       platform.Interface.Loading.Show();
@@ -1753,9 +1778,24 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     }
   };
 
-  var searchForm_SelectBookmark_Press = function (bookmarkId) {
+  var searchForm_SelectBookmark_Press = function (event, bookmarkId) {
+    if (event) {
+      if (event.preventDefault) { event.preventDefault(); }
+      if (event.srcEvent) { event.srcEvent.stopPropagation(); }
+    }
+
     // Display menu for selected bookmark
     vm.search.selectedBookmark = bookmarkId;
+  };
+
+  var searchForm_ShareBookmark_Click = function (event, bookmarkToShare) {
+    if (event) {
+      if (event.preventDefault) { event.preventDefault(); }
+      if (event.srcEvent) { event.srcEvent.stopPropagation(); }
+    }
+
+    // Trigger native share functionality
+    platform.Bookmarks.Share(bookmarkToShare);
   };
 
   var searchForm_ToggleBookmark_Click = function () {
@@ -1766,10 +1806,18 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   var searchForm_ToggleView_Click = function () {
     if (vm.search.displayTreeView) {
       // Display default search results
-      searchBookmarks();
+      if (!utility.IsMobilePlatform(vm.platformName)) {
+        searchBookmarks();
+      }
       vm.search.displayDefaultState();
     }
     else {
+      // Clear search and results
+      vm.search.query = null;
+      vm.search.queryMeasure = null;
+      vm.search.lookahead = null;
+      vm.search.results = null;
+
       // Initialise bookmark tree
       vm.search.bookmarkTree = null;
       bookmarks.GetBookmarks()
@@ -1780,14 +1828,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         })
         .catch(displayAlertErrorHandler);
     }
-  };
-
-  var searchForm_ShareBookmark_Click = function (event, bookmarkToShare) {
-    if (event) {
-      if (event.preventDefault) { event.preventDefault(); }
-      if (event.srcEvent) { event.srcEvent.stopPropagation(); }
-    }
-    platform.Bookmarks.Share(bookmarkToShare);
   };
 
   var searchForm_UpdateBookmark_Click = function (event, bookmarkToUpdate) {

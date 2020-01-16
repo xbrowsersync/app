@@ -21,7 +21,6 @@ xBrowserSync.App.Components.BookmarkTree = function (platform, globals, utility,
    * ------------------------------------------------------------------------------------ */
 
   function Controller() {
-    // TODO: Add to other platforms
     ctrl = this;
     ctrl.bookmarks = bookmarks;
     ctrl.globals = globals;

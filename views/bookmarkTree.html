@@ -1,68 +1,62 @@
-<div data-ng-repeat="bookmark in $ctrl.nodes">
-  <div class="bookmark separator" data-ng-if="$ctrl.bookmarks.IsSeparator(bookmark)"></div>
-  <div class="bookmark" data-ng-if="!$ctrl.bookmarks.IsSeparator(bookmark)"
-    data-ng-class="{ 'folder': !bookmark.url, 'open': bookmark.displayChildren, 'animate': $ctrl.selectedBookmark === bookmark.id }"
-    data-hm-press="$ctrl.utility.IsMobilePlatform($ctrl.platformName) && $ctrl.selectBookmark({ 'bookmarkId': bookmark.id })">
-    <div class="menu animate animate-fade-in" data-ng-show="$ctrl.selectedBookmark === bookmark.id" tabindex="-1">
-      <div class="buttons">
-        <button class="btn btn-fab"
-          title="{{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Button_ShareBookmark_Label) }}"
-          data-ng-click="$ctrl.shareBookmark({ 'event': event, 'bookmark': bookmark })">
-          <i class="fas fa-share-alt" aria-hidden="true"></i>
-          <span
-            class="sr-only">{{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Button_ShareBookmark_Label) }}</span>
-        </button>
-        <button class="btn btn-fab"
-          title="{{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Button_EditBookmark_Label) }}"
-          data-ng-click="$ctrl.editBookmark({ 'event': $event, 'bookmark': bookmark })">
-          <i class="fas fa-edit" aria-hidden="true"></i>
-          <span
-            class="sr-only">{{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Button_EditBookmark_Label) }}</span>
-        </button>
-        <button class="btn btn-fab btn-delete-bookmark"
-          title="{{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Button_DeleteBookmark_Label) }}"
-          data-ng-click="$ctrl.deleteBookmark({ 'event': $event, 'bookmark': bookmark })">
-          <i class="fas fa-trash" aria-hidden="true"></i>
-          <span
-            class="sr-only">{{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Button_DeleteBookmark_Label) }}</span>
-        </button>
-      </div>
-    </div>
-    <div class="bookmark-content" data-ng-if="bookmark.url"
-      data-ng-click="!$ctrl.utility.IsMobilePlatform($ctrl.platformName) && $ctrl.openUrl({ 'event': $event, 'url': bookmark.url })"
-      data-hm-tap="$ctrl.openUrl({ 'event': $event, 'url': bookmark.url })">
-      <h4 class="bookmark-heading" data-ng-if="bookmark.title">{{ bookmark.title }}</h4>
-      <h4 class="bookmark-heading" data-ng-if="!bookmark.title">
-        {{ $ctrl.bookmarks.GetBookmarkTitleForDisplay(bookmark) }}
-      </h4>
-      <div class="bookmark-text">
-        <div class="description">{{ bookmark.description }}</div>
-        <div class="url">{{ bookmark.url }}</div>
-      </div>
-    </div>
-    <div class="bookmark-content" data-ng-if="!bookmark.url">
-      <h4 class="bookmark-heading" data-ng-click="$ctrl.events.bookmark_Heading_Click($event, bookmark)"
-        data-ng-if="bookmark.title">{{ $ctrl.bookmarks.GetBookmarkTitleForDisplay(bookmark) }}</h4>
-      <div data-ng-if="bookmark.displayChildren">
-        <p class="empty" data-ng-if="!bookmark.children || bookmark.children.length === 0">
-          {{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Search_FolderEmpty_Message) }}
-        </p>
-        <bookmark-tree class="bookmark-list" nodes="bookmark.children" platform-name="$ctrl.platformName"
-          selected-bookmark="$ctrl.selectedBookmark"
-          edit-bookmark="$ctrl.editBookmark({ 'event': event, 'bookmark': bookmark })"
-          select-bookmark="$ctrl.selectBookmark({ 'bookmarkId': bookmarkId })"
-          share-bookmark="$ctrl.shareBookmark({ 'event': event, 'bookmark': bookmark })"
-          delete-bookmark="$ctrl.deleteBookmark({ 'event': event, 'bookmark': bookmark })"
-          open-url="$ctrl.openUrl({ 'event': event, 'url': url })">
-        </bookmark-tree>
-      </div>
-    </div>
-    <button class="btn btn-icon btn-edit-bookmark"
+<div class="bookmark" data-ng-repeat="bookmark in $ctrl.nodes"
+  data-ng-class="{ 'folder': !bookmark.url && !$ctrl.bookmarks.IsSeparator(bookmark), 'open': bookmark.displayChildren, 'animate': $ctrl.selectedBookmark === bookmark.id, 'separator': $ctrl.bookmarks.IsSeparator(bookmark) }"
+  data-hm-press="$ctrl.utility.IsMobilePlatform($ctrl.platformName) && bookmark.url && $ctrl.selectBookmark({ 'event': $event, 'bookmarkId': bookmark.id })">
+  <div class="menu"
+    data-ng-class="{ 'animate animate-fade-in': $ctrl.utility.IsMobilePlatform($ctrl.platformName) && bookmark.url && !$ctrl.bookmarks.IsSeparator(bookmark) }"
+    data-ng-if="$ctrl.utility.IsMobilePlatform($ctrl.platformName) && bookmark.url && !$ctrl.bookmarks.IsSeparator(bookmark)"
+    data-ng-show="$ctrl.selectedBookmark === bookmark.id">
+    <button class="btn btn-fab"
+      title="{{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Button_ShareBookmark_Label) }}"
+      data-ng-click="$ctrl.shareBookmark({ 'event': event, 'bookmark': bookmark })">
+      <i class="fas fa-share-alt" aria-hidden="true"></i>
+      <span class="sr-only">{{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Button_ShareBookmark_Label) }}</span>
+    </button>
+    <button class="btn btn-fab"
       title="{{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Button_EditBookmark_Label) }}"
-      data-ng-if="!$ctrl.utility.IsMobilePlatform($ctrl.platformName) && bookmark.url"
       data-ng-click="$ctrl.editBookmark({ 'event': $event, 'bookmark': bookmark })">
       <i class="fas fa-edit" aria-hidden="true"></i>
       <span class="sr-only">{{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Button_EditBookmark_Label) }}</span>
     </button>
+    <button class="btn btn-fab btn-delete-bookmark"
+      title="{{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Button_DeleteBookmark_Label) }}"
+      data-ng-click="$ctrl.deleteBookmark({ 'event': $event, 'bookmark': bookmark })">
+      <i class="fas fa-trash" aria-hidden="true"></i>
+      <span class="sr-only">{{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Button_DeleteBookmark_Label) }}</span>
+    </button>
   </div>
-</div>
+  <div class="bookmark-content" data-ng-if="bookmark.url && !$ctrl.bookmarks.IsSeparator(bookmark)"
+    data-ng-click="!$ctrl.utility.IsMobilePlatform($ctrl.platformName) && $ctrl.openUrl({ 'event': $event, 'url': bookmark.url })"
+    data-hm-tap="$ctrl.openUrl({ 'event': $event, 'url': bookmark.url })">
+    <h4 class="bookmark-heading" data-ng-if="bookmark.title">{{ bookmark.title }}</h4>
+    <h4 class="bookmark-heading" data-ng-if="!bookmark.title">
+      {{ $ctrl.bookmarks.GetBookmarkTitleForDisplay(bookmark) }}
+    </h4>
+    <div class="bookmark-text">
+      <div class="description">{{ bookmark.description }}</div>
+      <div class="url">{{ bookmark.url }}</div>
+    </div>
+  </div>
+  <div class="bookmark-content" data-ng-if="!bookmark.url && !$ctrl.bookmarks.IsSeparator(bookmark)">
+    <h4 class="bookmark-heading" data-ng-click="$ctrl.events.bookmark_Heading_Click($event, bookmark)"
+      data-ng-if="bookmark.title">{{ $ctrl.bookmarks.GetBookmarkTitleForDisplay(bookmark) }}</h4>
+    <div data-ng-if="bookmark.displayChildren">
+      <p class="empty" data-ng-if="!bookmark.children || bookmark.children.length === 0">
+        {{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Search_FolderEmpty_Message) }}
+      </p>
+      <bookmark-tree class="bookmark-list" nodes="bookmark.children" platform-name="$ctrl.platformName"
+        selected-bookmark="$ctrl.selectedBookmark"
+        edit-bookmark="$ctrl.editBookmark({ 'event': event, 'bookmark': bookmark })"
+        select-bookmark="$ctrl.selectBookmark({ 'event': event, 'bookmarkId': bookmarkId })"
+        share-bookmark="$ctrl.shareBookmark({ 'event': event, 'bookmark': bookmark })"
+        delete-bookmark="$ctrl.deleteBookmark({ 'event': event, 'bookmark': bookmark })"
+        open-url="$ctrl.openUrl({ 'event': event, 'url': url })">
+      </bookmark-tree>
+    </div>
+  </div>
+  <button class="btn btn-icon btn-edit-bookmark"
+    title="{{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Button_EditBookmark_Label) }}"
+    data-ng-if="!$ctrl.utility.IsMobilePlatform($ctrl.platformName) && bookmark.url &&!$ctrl.bookmarks.IsSeparator(bookmark)"
+    data-ng-click="$ctrl.editBookmark({ 'event': $event, 'bookmark': bookmark })">
+    <i class="fas fa-edit" aria-hidden="true"></i>
+    <span class="sr-only">{{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Button_EditBookmark_Label) }}</span>
+  </button>

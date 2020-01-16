@@ -308,18 +308,45 @@ body {
     .view-content {
       flex-direction: column-reverse;
 
-      .btn-fab.fixed {
-        bottom: 5rem;
-      }
-
+      .bookmark-tree-panel,
       .search-results-panel {
         padding-top: 0.75rem;
+      }
+
+      .btn-fab.fixed {
+        bottom: 5rem;
       }
     }
   }
 
   .view-content {
     padding-left: 0;
+
+    .bookmark-list .bookmark {
+      &:not(.folder) {
+        &:focus,
+        &:hover {
+          & > .bookmark-content {
+            background-color: $colour-text1;
+          }
+        }
+
+        & > .bookmark-content > .bookmark-heading {
+          margin-right: 0;
+          transition: none;
+        }
+      }
+
+      &.folder {
+        &.open > .bookmark-content > .bookmark-heading:after {
+          @include icon("\f106");
+        }
+
+        & > .bookmark-content > .bookmark-heading:after {
+          opacity: 0.6;
+        }
+      }
+    }
 
     .header-panel,
     .search-results-panel {
@@ -346,23 +373,11 @@ body {
       & > h4 {
         margin: 1rem;
       }
+    }
 
-      .bookmark {
-        &:focus,
-        &:hover {
-          .bookmark-heading {
-            color: $colour-text2;
-          }
-
-          .bookmark-content {
-            background-color: initial;
-          }
-        }
-      }
-
-      .bookmark-heading {
-        margin-right: 0;
-        transition: none;
+    @media all and (orientation: portrait) {
+      .bookmark-tree-panel .description {
+        @include text-overflow-ellipsis;
       }
     }
   }

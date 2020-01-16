@@ -65,30 +65,30 @@
     data-infinite-scroll="vm.events.searchForm_SearchResults_Scroll()"
     data-infinite-scroll-container="'.search-results-panel'">
     <div class="bookmark" data-ng-repeat="result in vm.search.results | limitTo:vm.search.resultsDisplayed"
-      data-hm-press="vm.utility.IsMobilePlatform(vm.platformName) && vm.events.searchForm_SelectBookmark_Press(result.id)"
+      data-hm-press="vm.utility.IsMobilePlatform(vm.platformName) && vm.events.searchForm_SelectBookmark_Press($event, result.id)"
       data-ng-keydown="vm.events.searchForm_SearchResult_KeyDown($event)"
       data-ng-class="{ 'animate': vm.search.selectedBookmark === result.id }" tabindex="{{ $index + 1 }}">
-      <div class="menu animate animate-fade-in" data-ng-show="vm.search.selectedBookmark === result.id" tabindex="-1">
-        <div class="buttons">
-          <button class="btn btn-fab"
-            title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}"
-            data-ng-click="vm.events.searchForm_ShareBookmark_Click($event, result)">
-            <i class="fas fa-share-alt" aria-hidden="true"></i>
-            <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}</span>
-          </button>
-          <button class="btn btn-fab"
-            title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}"
-            data-ng-click="vm.events.searchForm_UpdateBookmark_Click($event, result)">
-            <i class="fas fa-edit" aria-hidden="true"></i>
-            <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}</span>
-          </button>
-          <button class="btn btn-fab btn-delete-bookmark"
-            title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_DeleteBookmark_Label) }}"
-            data-ng-click="vm.events.searchForm_DeleteBookmark_Click($event, result)">
-            <i class="fas fa-trash" aria-hidden="true"></i>
-            <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_DeleteBookmark_Label) }}</span>
-          </button>
-        </div>
+      <div class="menu" data-ng-class="{ 'animate animate-fade-in': vm.utility.IsMobilePlatform(vm.platformName) }"
+        data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)"
+        data-ng-show="vm.search.selectedBookmark === result.id" tabindex="-1">
+        <button class="btn btn-fab"
+          title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}"
+          data-ng-click="vm.events.searchForm_ShareBookmark_Click($event, result)">
+          <i class="fas fa-share-alt" aria-hidden="true"></i>
+          <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShareBookmark_Label) }}</span>
+        </button>
+        <button class="btn btn-fab"
+          title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}"
+          data-ng-click="vm.events.searchForm_UpdateBookmark_Click($event, result)">
+          <i class="fas fa-edit" aria-hidden="true"></i>
+          <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_EditBookmark_Label) }}</span>
+        </button>
+        <button class="btn btn-fab btn-delete-bookmark"
+          title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_DeleteBookmark_Label) }}"
+          data-ng-click="vm.events.searchForm_DeleteBookmark_Click($event, result)">
+          <i class="fas fa-trash" aria-hidden="true"></i>
+          <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_DeleteBookmark_Label) }}</span>
+        </button>
       </div>
       <div class="bookmark-content"
         data-ng-click="!vm.utility.IsMobilePlatform(vm.platformName) && vm.events.openUrl($event, result.url)"
@@ -113,7 +113,7 @@
   <bookmark-tree class="bookmark-list" nodes="vm.search.bookmarkTree" platform-name="vm.platformName"
     selected-bookmark="vm.search.selectedBookmark"
     edit-bookmark="vm.events.searchForm_UpdateBookmark_Click(event, bookmark)"
-    select-bookmark="vm.events.searchForm_SelectBookmark_Press(bookmarkId)"
+    select-bookmark="vm.events.searchForm_SelectBookmark_Press(event, bookmarkId)"
     share-bookmark="vm.events.searchForm_ShareBookmark_Click(event, bookmark)"
     delete-bookmark="vm.events.searchForm_DeleteBookmark_Click(event, bookmark)"
     open-url="vm.events.openUrl(event, url)" data-ng-if="vm.search.bookmarkTree">

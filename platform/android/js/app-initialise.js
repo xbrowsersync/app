@@ -71,7 +71,7 @@ xBrowserSync.App.UI.component('bookmarkTree', {
     editBookmark: '&',
     nodes: '=',
     openUrl: '&',
-    platformName: '@',
+    platformName: '<',
     selectBookmark: '&',
     selectedBookmark: '<',
     shareBookmark: '&',

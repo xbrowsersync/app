@@ -109,10 +109,10 @@ body {
       &.btn-fab {
         background-color: $colour-text2;
         color: $colour-text1;
-        font-size: 1.4rem;
+        font-size: 1.5rem;
         border-radius: 100%;
-        width: 3.5rem;
-        height: 3.5rem;
+        width: 4rem;
+        height: 4rem;
         padding: 0;
         position: relative;
         display: inline-flex;
@@ -975,9 +975,7 @@ body {
             background-color: rgba($colour-text2, 0.3);
 
             & > .bookmark-heading {
-              font-size: 1.1rem;
               color: $colour-text1;
-              line-height: 1.5rem;
               padding-left: 1.75rem;
 
               &:before {
@@ -1078,45 +1076,27 @@ body {
         }
 
         .menu {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-evenly;
           background-color: rgba($colour-text2, 0.8);
           text-align: center;
           border-radius: $border-radius-well;
           z-index: 60;
+          @include css-prefix(user-select, none);
 
-          &:before {
-            content: "";
-            display: inline-block;
-            height: 100%;
-            vertical-align: middle;
-          }
+          button {
+            position: static;
+            background-color: $colour-text1;
+            color: $colour-text2;
 
-          .buttons {
-            display: inline-block;
-            vertical-align: middle;
-            margin-top: 0;
-
-            button {
-              position: static;
-              margin-right: 1.75rem;
-              background-color: $colour-text1;
-              color: $colour-text2;
-
-              &:last-child {
-                margin-right: 0;
-              }
-
-              &.btn-delete-bookmark {
-                color: $colour-danger;
-              }
+            &.btn-delete-bookmark {
+              color: $colour-danger;
             }
           }
-        }
-
-        .menu {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          @include css-prefix(user-select, none);
         }
       }
     }
