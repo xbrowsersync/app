@@ -996,7 +996,7 @@ body {
               &:hover {
                 cursor: pointer;
 
-                &:after {
+                &:not(.opening):after {
                   opacity: 0.6;
                 }
               }
@@ -1006,6 +1006,15 @@ body {
               margin: 0.25rem 0 0;
               text-align: center;
               font-style: italic;
+            }
+
+            .spinner-border {
+              position: absolute;
+              right: 1rem;
+              top: 0;
+              bottom: 0;
+              margin: auto;
+              opacity: 0.6;
             }
           }
         }

@@ -59,7 +59,7 @@ xBrowserSync.App.PlatformImplementation.$inject = ['$interval', '$q', '$timeout'
 xBrowserSync.App.UI.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add bookmark tree component
-xBrowserSync.App.Components.BookmarkTree.$inject = ['platform', 'globals', 'utility', 'bookmarks', 'platformImplementation'];
+xBrowserSync.App.Components.BookmarkTree.$inject = ['$timeout', 'platform', 'globals', 'utility', 'bookmarks', 'platformImplementation'];
 xBrowserSync.App.UI.component('bookmarkTree', {
   templateUrl: './views/bookmarkTree.html',
   bindings: {

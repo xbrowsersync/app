@@ -342,7 +342,7 @@ body {
           @include icon("\f106");
         }
 
-        & > .bookmark-content > .bookmark-heading:after {
+        & > .bookmark-content > .bookmark-heading:not(.opening):after {
           opacity: 0.6;
         }
       }

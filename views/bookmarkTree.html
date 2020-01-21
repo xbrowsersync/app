@@ -37,8 +37,12 @@
     </div>
   </div>
   <div class="bookmark-content" data-ng-if="!bookmark.url && !$ctrl.bookmarks.IsSeparator(bookmark)">
-    <h4 class="bookmark-heading" data-ng-click="$ctrl.events.bookmark_Heading_Click($event, bookmark)"
-      data-ng-if="bookmark.title">{{ $ctrl.bookmarks.GetBookmarkTitleForDisplay(bookmark) }}</h4>
+    <div class="spinner-border spinner-border-sm" data-ng-if="bookmark.open && !bookmark.displayChildren" role="status"
+      aria-hidden="true">
+    </div>
+    <h4 class="bookmark-heading" data-ng-class="{ 'opening': bookmark.open && !bookmark.displayChildren }"
+      data-ng-click="$ctrl.events.bookmark_Heading_Click($event, bookmark)" data-ng-if="bookmark.title">
+      {{ $ctrl.bookmarks.GetBookmarkTitleForDisplay(bookmark) }}</h4>
     <div data-ng-if="bookmark.displayChildren">
       <p class="empty" data-ng-if="!bookmark.children || bookmark.children.length === 0">
         {{ $ctrl.platform.GetConstant($ctrl.globals.Constants.Search_FolderEmpty_Message) }}

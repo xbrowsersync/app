@@ -7,7 +7,7 @@ xBrowserSync.App.Components = xBrowserSync.App.Components || {};
  * Description:	Reccursive component that displays bookmark tree view.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Components.BookmarkTree = function (platform, globals, utility, bookmarks) {
+xBrowserSync.App.Components.BookmarkTree = function ($timeout, platform, globals, utility, bookmarks) {
   'use strict';
 
 	/* ------------------------------------------------------------------------------------
@@ -55,7 +55,10 @@ xBrowserSync.App.Components.BookmarkTree = function (platform, globals, utility,
     }
 
     // Toggle display children for this folder
-    bookmark.displayChildren = !bookmark.displayChildren;
+    bookmark.open = !bookmark.open;
+    $timeout(function () {
+      bookmark.displayChildren = !bookmark.displayChildren;
+    });
   };
 
 
