@@ -58,7 +58,17 @@ xBrowserSync.App.Components.BookmarkTree = function ($timeout, platform, globals
     bookmark.open = !bookmark.open;
     $timeout(function () {
       bookmark.displayChildren = !bookmark.displayChildren;
-    });
+
+      // Close any open child folders
+      if (!bookmark.open) {
+        bookmarks.Each(bookmark.children, function (child) {
+          if (child.open) {
+            child.open = false;
+            child.displayChildren = false;
+          }
+        });
+      }
+    }, 100);
   };
 
 
