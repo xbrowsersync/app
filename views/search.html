@@ -28,11 +28,11 @@
     </span>
   </button>
   <div class="search-form form-group btn-icon-container">
-    <input class="form-control" name="txtSearch" maxlength="200"
+    <input type="text" class="form-control" name="txtSearch" maxlength="200"
       placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Search_Field_Description) }}"
       data-ng-model="vm.search.query" data-ng-change="vm.events.searchForm_SearchText_Change()"
-      data-ng-keydown="vm.events.searchForm_SearchText_KeyDown($event)" data-ng-trim="false" spellcheck="false"
-      autocomplete="off" tabindex="1" />
+      data-ng-keydown="vm.events.searchForm_SearchText_KeyDown($event)" data-ng-trim="false" autocapitalize="off"
+      autocomplete="off" autocorrect="off" spellcheck="false" tabindex="1" />
     <label for="txtSearch">
       <i class="fas fa-search"></i>
     </label>

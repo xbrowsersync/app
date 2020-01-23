@@ -26,8 +26,8 @@
     <label for="bookmarkUrl" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_UrlField_Label)
       }}</label>
     <input type="text" class="form-control" name="bookmarkUrl" placeholder="URL" data-ng-model="vm.bookmark.current.url"
-      data-ng-change="vm.events.bookmarkForm_BookmarkUrl_Change()" maxlength="2000" spellcheck="false"
-      autocomplete="off" required
+      data-ng-change="vm.events.bookmarkForm_BookmarkUrl_Change()" maxlength="2000" autocapitalize="off"
+      autocorrect="off" spellcheck="false" required
       placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_UrlField_Label) }}">
     <button class="btn btn-icon" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)"
       data-ng-show="vm.bookmark.current.url && vm.bookmarkForm.bookmarkUrl.$dirty"
@@ -56,8 +56,8 @@
       <input type="text" class="form-control" name="bookmarkTags"
         placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TagsField_Description) }}" maxlength="50"
         data-ng-model="vm.bookmark.tagText" data-ng-change="vm.events.bookmarkForm_BookmarkTags_Change()"
-        data-ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" data-ng-trim="false" spellcheck="false"
-        autocomplete="off">
+        data-ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" data-ng-trim="false" autocapitalize="off"
+        autocomplete="off" autocorrect="off">
       <div class="lookahead-container">
         <span class="measure" data-ng-bind-html="vm.bookmark.tagTextMeasure"></span>
         <span class="lookahead" data-ng-bind-html="vm.bookmark.tagLookahead" data-ng-show="vm.bookmark.tagLookahead"

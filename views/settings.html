@@ -179,7 +179,7 @@
                 data-ng-change="vm.events.updateServiceUrlForm_NewServiceUrl_Change()"
                 data-ng-readonly="vm.settings.validatingServiceUrl"
                 placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Field_Description) }}"
-                maxlength="128" spellcheck="false" required />
+                maxlength="128" autocapitalize="off" autocorrect="off" spellcheck="false" required />
               <div class="validation" data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$invalid">
                 <span data-ng-if="vm.updateServiceUrlForm.newServiceUrl.$error.required">
                   {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Required_Label) }}
@@ -297,9 +297,10 @@
                 <input type="hidden" name="dataToRestore" data-ng-model="vm.settings.dataToRestore"></input>
                 <textarea data-ng-model="vm.settings.dataToRestore" class="form-control" rows="3"
                   data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)"
-                  data-ng-change="vm.events.backupRestoreForm_DataToRestore_Change()" spellcheck="false"></textarea>
+                  data-ng-change="vm.events.backupRestoreForm_DataToRestore_Change()" autocapitalize="off"
+                  autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
                 <input data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)" type="text" class="form-control"
-                  data-ng-model="vm.settings.backupFileName" spellcheck="false" readonly
+                  data-ng-model="vm.settings.backupFileName" readonly
                   placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_BackupFile_Description) }}"></input>
                 <div class="validation" data-ng-if="vm.restoreForm.dataToRestore.$invalid">
                   <span data-ng-if="vm.restoreForm.dataToRestore.$error.InvalidData">
