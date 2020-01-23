@@ -356,6 +356,17 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         ]);
       })
       .then(function () {
+        // Get local bookmarks and save data state at install to local storage
+        return platform.Bookmarks.Get()
+          .then(function (localBookmarks) {
+            var data = {
+              bookmarks: localBookmarks,
+              date: new Date().toISOString()
+            };
+            return platform.LocalStorage.Set(globals.CacheKeys.InstallBackup, JSON.stringify(data));
+          });
+      })
+      .then(function () {
         utility.LogInfo('Installed v' + currentVersion);
       });
   };
@@ -581,6 +592,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
           cachedData,
           'debugMessageLog',
           globals.CacheKeys.Bookmarks,
+          globals.CacheKeys.InstallBackup,
           globals.CacheKeys.TraceLog,
           globals.CacheKeys.Password
         ));

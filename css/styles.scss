@@ -288,17 +288,18 @@ body {
   }
 
   .checkbox {
-    width: 2rem;
-    height: 0.3rem;
+    width: 2.5rem;
+    height: 1.3rem;
     position: relative;
     background: $colour-text2;
     border-radius: $border-radius-input;
+    padding: 0.15rem;
 
     input {
       display: none;
 
       &[type="checkbox"]:checked + label {
-        left: 1.1rem;
+        left: 1.35rem;
         background: $colour-link-highlight;
       }
     }
@@ -310,15 +311,15 @@ body {
       border-radius: 50%;
       cursor: pointer;
       position: absolute;
-      top: -0.35rem;
-      left: -0.1rem;
+      left: 0.15rem;
       background: $colour-link;
       min-height: 0;
       min-width: 0;
       padding: 0;
+      margin: 0 !important;
 
       &.animate {
-        transition: all 0.1s ease;
+        transition: all 0.25s ease;
       }
     }
   }
@@ -1115,6 +1116,12 @@ body {
       flex: 0 1 100%;
       overflow: auto;
       padding: 0 0.75rem;
+
+      & > h4 {
+        font-size: 1.4rem;
+        font-weight: normal;
+        text-align: center;
+      }
     }
 
     .header-panel {
@@ -1188,14 +1195,6 @@ body {
     .search-results-panel {
       &.ng-hide {
         margin-top: 0;
-      }
-
-      & > h4 {
-        font-size: 1.4rem;
-        font-weight: normal;
-        text-align: center;
-        position: relative;
-        z-index: 10;
       }
     }
   }
@@ -1296,10 +1295,6 @@ body {
       border-radius: 0;
       background: transparent;
       transition: none;
-
-      .checkbox {
-        top: 0.5rem;
-      }
     }
   }
 
@@ -1377,14 +1372,14 @@ body {
       justify-content: center;
       margin-bottom: 0.5rem;
 
+      & > a {
+        @include text-overflow-ellipsis;
+      }
+
       .service-status {
         font-size: 0.9rem;
         padding-left: 0.4rem;
         margin-top: 0.1rem;
-      }
-
-      .url-text {
-        @include text-overflow-ellipsis;
       }
     }
   }

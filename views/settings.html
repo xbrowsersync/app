@@ -39,11 +39,11 @@
               vm.sync.nextAutoUpdate }}.</p>
           </div>
         </div>
-        <div class="animate-fade-in confirm" data-ng-show="vm.settings.displayCancelSyncConfirmation">
+        <div class="confirm animate-fade-in" data-ng-show="vm.settings.displayCancelSyncConfirmation">
           <div
             data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_ConfirmCancelSync_Message)">
           </div>
-          <div class="text-center">
+          <div class="buttons">
             <button type="button" class="btn btn-default btn-confirm-disable-sync"
               data-ng-click="vm.events.syncForm_DisableSync_Click()">
               {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
@@ -69,11 +69,11 @@
             </div>
           </div>
         </div>
-        <div class="animate-fade-in confirm" data-ng-show="vm.settings.displaySyncBookmarksToolbarConfirmation">
+        <div class="confirm animate-fade-in" data-ng-show="vm.settings.displaySyncBookmarksToolbarConfirmation">
           <div
             data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_SyncToolbarConfirmation_Message)">
           </div>
-          <div class="text-center">
+          <div class="buttons">
             <button type="button" class="btn btn-default btn-confirm-sync-toolbar"
               data-ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Confirm()">
               {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
@@ -94,11 +94,9 @@
         data-ng-hide="vm.settings.displayUpdateServiceUrlForm || vm.settings.displayUpdateServiceUrlConfirmation">
         <div class="setting-group">
           <div class="setting-value service-url">
-            <div class="url-text">
-              <a href="{{ vm.settings.service.url }}" class="new-tab" title="{{ vm.settings.service.url }}">
-                {{ vm.settings.service.url }}
-              </a>
-            </div>
+            <a href="{{ vm.settings.service.url }}" class="new-tab" title="{{ vm.settings.service.url }}">
+              {{ vm.settings.service.url }}
+            </a>
             <div class="service-status">
               <div class="loading animate-fade-in" data-ng-show="vm.settings.service.status === null"
                 title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}">
@@ -197,7 +195,7 @@
                 </span>
               </div>
             </div>
-            <div class="text-center">
+            <div class="buttons">
               <button type="submit" class="btn btn-default"
                 data-ng-click="vm.events.updateServiceUrlForm_Update_Click()"
                 data-ng-disabled="!vm.updateServiceUrlForm.newServiceUrl.$dirty || vm.updateServiceUrlForm.newServiceUrl.$invalid || vm.settings.validatingServiceUrl">
@@ -215,11 +213,11 @@
               </button>
             </div>
           </form>
-          <div class="animate-fade-in confirm" data-ng-show="vm.settings.displayUpdateServiceUrlConfirmation">
+          <div class="confirm animate-fade-in" data-ng-show="vm.settings.displayUpdateServiceUrlConfirmation">
             <div
               data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Confirm_Message)">
             </div>
-            <div class="text-center">
+            <div class="buttons">
               <button class="btn btn-default btn-confirm-update-service-url"
                 data-ng-click="vm.events.updateServiceUrlForm_Confirm_Click()">
                 {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
@@ -242,14 +240,14 @@
           data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_NotAvailable_Message)">
         </p>
       </div>
-      <div data-ng-show="vm.sync.enabled || !vm.utility.IsMobilePlatform(vm.platformName)">
+      <div data-ng-if="vm.sync.enabled || !vm.utility.IsMobilePlatform(vm.platformName)">
         <div class="setting-group">
           <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Backup_Label) }}</label>
           <p class="description" data-ng-if="!vm.sync.enabled">{{
             vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_BackupLocal_Description) }}</p>
           <p class="description" data-ng-if="vm.sync.enabled">{{
             vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_BackupSynced_Description) }}</p>
-          <div class="animate-fade-in text-center" data-ng-hide="vm.settings.backupCompletedMessage">
+          <div class="buttons animate-fade-in" data-ng-hide="vm.settings.backupCompletedMessage">
             <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_Backup_Click()"
               data-ng-disabled="vm.settings.savingBackup">
               <span class="spinner-border spinner-border-sm" data-ng-show="vm.settings.savingBackup" role="status"
@@ -261,12 +259,12 @@
                 vm.platform.GetConstant(vm.globals.Constants.Button_Backup_Label) }}</span>
             </button>
           </div>
-          <div class="animate-fade-in confirm" data-ng-show="vm.settings.backupCompletedMessage">
+          <div class="confirm animate-fade-in" data-ng-show="vm.settings.backupCompletedMessage">
             <p>{{ vm.settings.backupCompletedMessage }}</p>
             <p class="text-center">
               <a id="backupLink"></a>
             </p>
-            <div class="text-center">
+            <div class="buttons">
               <button class="btn btn-default btn-done" data-ng-click="vm.settings.backupCompletedMessage = null">
                 {{ vm.platform.GetConstant(vm.globals.Constants.Button_Done_Label) }}
               </button>
@@ -279,13 +277,13 @@
             vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreLocal_Description) }}</p>
           <p class="description" data-ng-if="vm.sync.enabled">{{
             vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreSynced_Description) }}</p>
-          <div class="animate-fade-in text-center"
+          <div class="buttons animate-fade-in"
             data-ng-hide="vm.settings.displayRestoreForm || vm.settings.displayRestoreConfirmation || vm.settings.restoreCompletedMessage">
             <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_DisplayRestoreForm_Click()">
               {{ vm.platform.GetConstant(vm.globals.Constants.Button_Restore_Label) }}
             </button>
           </div>
-          <form id="restoreForm" name="vm.restoreForm" class="animate-fade-in confirm"
+          <form id="restoreForm" name="vm.restoreForm" class="confirm animate-fade-in"
             data-ng-show="vm.settings.displayRestoreForm" novalidate>
             <input id="backupFile" class="d-none" name="files[]" type="file" tabindex="-1" />
             <p data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
@@ -328,14 +326,14 @@
               </button>
             </div>
           </form>
-          <div class="animate-fade-in confirm" data-ng-show="vm.settings.displayRestoreConfirmation">
+          <div class="confirm animate-fade-in" data-ng-show="vm.settings.displayRestoreConfirmation">
             <div data-ng-if="vm.sync.enabled"
               data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_ConfirmRestore_Sync_Message)">
             </div>
             <div data-ng-if="!vm.sync.enabled"
               data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_ConfirmRestore_NoSync_Message)">
             </div>
-            <div class="text-center">
+            <div class="buttons">
               <button class="btn btn-default btn-confirm-restore"
                 data-ng-click="vm.events.backupRestoreForm_ConfirmRestore_Click()">
                 {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
@@ -346,10 +344,47 @@
               </button>
             </div>
           </div>
-          <div class="animate-fade-in confirm" data-ng-show="vm.settings.restoreCompletedMessage">
+          <div class="confirm animate-fade-in" data-ng-show="vm.settings.restoreCompletedMessage">
             <p>{{ vm.settings.restoreCompletedMessage }}</p>
-            <div class="text-center">
+            <div class="buttons">
               <button class="btn btn-default btn-done" data-ng-click="vm.settings.restoreCompletedMessage = null">
+                {{ vm.platform.GetConstant(vm.globals.Constants.Button_Done_Label) }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="setting-group" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
+          <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Revert_Label) }}</label>
+          <p class="description">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Revert_Description) }}</p>
+          <div class="buttons animate-fade-in"
+            data-ng-hide="vm.settings.displayRevertConfirmation || vm.settings.revertCompleted || vm.settings.revertUnavailable">
+            <button class="btn btn-default" data-ng-click="vm.events.backupRestoreForm_Revert_Click()">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Button_Revert_Label) }}
+            </button>
+          </div>
+          <div class="confirm animate-fade-in" data-ng-show="vm.settings.displayRevertConfirmation">
+            <div data-ng-bind-html="vm.settings.revertConfirmationMessage"></div>
+            <div class="buttons">
+              <button class="btn btn-default btn-confirm-restore"
+                data-ng-click="vm.events.backupRestoreForm_ConfirmRevert_Click()">
+                {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
+              </button>
+              <button type="reset" class="btn btn-default"
+                data-ng-click="vm.events.backupRestoreForm_CancelRevert_Click()">
+                {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
+              </button>
+            </div>
+          </div>
+          <div class="confirm animate-fade-in"
+            data-ng-show="vm.settings.revertCompleted || vm.settings.revertUnavailable">
+            <div></div>
+            <p data-ng-if="vm.settings.revertCompleted">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Revert_Completed_Label) }}</p>
+            <p data-ng-if="vm.settings.revertUnavailable">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Revert_Unavailable_Label) }}</p>
+            <div class="buttons">
+              <button class="btn btn-default btn-done" data-ng-click="vm.events.backupRestoreForm_CancelRevert_Click()">
                 {{ vm.platform.GetConstant(vm.globals.Constants.Button_Done_Label) }}
               </button>
             </div>
@@ -398,12 +433,12 @@
           <p class="description"
             data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Description)">
           </p>
-          <div class="text-center animate-fade-in" data-ng-show="vm.settings.readWebsiteDataPermissionsGranted">
+          <div class="buttons animate-fade-in" data-ng-show="vm.settings.readWebsiteDataPermissionsGranted">
             <button class="btn btn-default" data-ng-click="vm.events.permissions_Revoke_Click()">
               {{ vm.platform.GetConstant(vm.globals.Constants.Button_Permissions_Remove_Label) }}
             </button>
           </div>
-          <div class="text-center animate-fade-in" data-ng-hide="vm.settings.readWebsiteDataPermissionsGranted">
+          <div class="buttons animate-fade-in" data-ng-hide="vm.settings.readWebsiteDataPermissionsGranted">
             <button class="btn btn-default" data-ng-click="vm.events.permissions_Request_Click()">
               {{ vm.platform.GetConstant(vm.globals.Constants.Button_Permissions_Add_Label) }}
             </button>
@@ -432,7 +467,7 @@
         <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_Tracker_Label) }}</label>
         <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_Tracker_Description) }}
         </p>
-        <div class="text-center">
+        <div class="buttons">
           <button type="button" class="btn btn-default"
             data-ng-click="vm.events.openUrl($event, 'https://link.xbrowsersync.org/app-issues')">
             {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Issues_RaiseIssue_Label) }}
@@ -463,12 +498,12 @@
             </button>
           </div>
         </div>
-        <div class="animate-fade-in confirm" data-ng-show="vm.settings.downloadLogCompletedMessage">
+        <div class="confirm animate-fade-in" data-ng-show="vm.settings.downloadLogCompletedMessage">
           <p>{{ vm.settings.downloadLogCompletedMessage }}</p>
           <p class="text-center">
             <a id="downloadLogFileLink"></a>
           </p>
-          <div class="text-center">
+          <div class="buttons">
             <button class="btn btn-default btn-done" data-ng-click="vm.settings.downloadLogCompletedMessage = null">
               {{ vm.platform.GetConstant(vm.globals.Constants.Button_Done_Label) }}
             </button>

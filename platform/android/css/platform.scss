@@ -112,6 +112,20 @@ body {
     z-index: 200;
   }
 
+  .checkbox {
+    width: 3rem;
+    height: 1.5rem;
+
+    input[type="checkbox"]:checked + label {
+      left: 1.65rem;
+    }
+
+    label {
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+  }
+
   .container {
     height: 100vh;
   }

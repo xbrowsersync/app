@@ -278,6 +278,21 @@
   "settings_BackupRestore_RestoreSynced_Description": {
     "message": "Wiederherstellen synchronisierter Daten aus einem Backup."
   },
+  "settings_BackupRestore_Revert_Label": {
+    "message": "Revert"
+  },
+  "settings_BackupRestore_Revert_Description": {
+    "message": "Revert local browser data to initial installation state."
+  },
+  "settings_BackupRestore_Revert_Confirmation_Message": {
+    "message": "<p>If you continue, any active sync will be disabled and your local data will be reverted to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+  },
+  "settings_BackupRestore_Revert_Completed_Label": {
+    "message": "Your data has been reverted to initial installation state."
+  },
+  "settings_BackupRestore_Revert_Unavailable_Label": {
+    "message": "Installation state data not available, unable to revert."
+  },
   "settings_About_Title": {
     "message": "Über"
   },
@@ -550,6 +565,9 @@
   },
   "button_ClearTags_Label": {
     "message": "Clear tags"
+  },
+  "button_Revert_Label": {
+    "message": "Revert"
   },
   "qr_Copied_Label": {
     "message": "Copied!"

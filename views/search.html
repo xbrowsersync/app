@@ -56,8 +56,9 @@
   <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}</span>
 </button>
 <div class="search-results-panel" data-ng-if="!vm.search.displayTreeView" data-ng-show="vm.search.results">
-  <h4 data-ng-show="!vm.search.query && vm.search.results.length === 0"
-    data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Search_NoBookmarks_Message)"></h4>
+  <h4 data-ng-show="!vm.search.query && vm.search.results.length === 0">
+    {{ vm.platform.GetConstant(vm.globals.Constants.Search_NoBookmarks_Message) }}
+  </h4>
   <h4 data-ng-show="vm.search.query && vm.search.results.length === 0">
     {{ vm.platform.GetConstant(vm.globals.Constants.Search_NoResults_Message) }}
   </h4>
@@ -118,4 +119,7 @@
     delete-bookmark="vm.events.searchForm_DeleteBookmark_Click(event, bookmark)"
     open-url="vm.events.openUrl(event, url)" data-ng-if="vm.search.bookmarkTree">
   </bookmark-tree>
+  <h4 data-ng-if="!vm.search.bookmarkTree || vm.search.bookmarkTree.length === 0">
+    {{ vm.platform.GetConstant(vm.globals.Constants.Search_NoBookmarks_Message) }}
+  </h4>
 </div>

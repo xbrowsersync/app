@@ -46,10 +46,13 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.events = {
       backupRestoreForm_Backup_Click: backupRestoreForm_Backup_Click,
       backupRestoreForm_BackupFile_Change: backupRestoreForm_BackupFile_Change,
+      backupRestoreForm_CancelRevert_Click: backupRestoreForm_CancelRevert_Click,
       backupRestoreForm_ConfirmRestore_Click: backupRestoreForm_ConfirmRestore_Click,
+      backupRestoreForm_ConfirmRevert_Click: backupRestoreForm_ConfirmRevert_Click,
       backupRestoreForm_DataToRestore_Change: backupRestoreForm_DataToRestore_Change,
       backupRestoreForm_DisplayRestoreForm_Click: backupRestoreForm_DisplayRestoreForm_Click,
       backupRestoreForm_Restore_Click: backupRestoreForm_Restore_Click,
+      backupRestoreForm_Revert_Click: backupRestoreForm_Revert_Click,
       backupRestoreForm_SelectBackupFile_Click: backupRestoreForm_SelectBackupFile_Click,
       bookmarkForm_BookmarkDescription_Change: bookmarkForm_BookmarkDescription_Change,
       bookmarkForm_BookmarkTags_Change: bookmarkForm_BookmarkTags_Change,
@@ -162,6 +165,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       displayQrPanel: false,
       displayRestoreConfirmation: false,
       displayRestoreForm: false,
+      displayRevertConfirmation: false,
       displaySearchBarBeneathResults: false,
       displaySyncBookmarksToolbarConfirmation: false,
       displayUpdateServiceUrlConfirmation: false,
@@ -173,6 +177,9 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       logSize: undefined,
       readWebsiteDataPermissionsGranted: false,
       restoreCompletedMessage: undefined,
+      revertCompleted: false,
+      revertConfirmationMessage: undefined,
+      revertUnavailable: false,
       savingBackup: false,
       savingLog: false,
       service: {
@@ -346,6 +353,69 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   var backupRestoreForm_SelectBackupFile_Click = function () {
     // Open select file dialog
     document.querySelector('#backupFile').click();
+  };
+
+  var backupRestoreForm_Revert_Click = function () {
+    // Retrieve install backup from local storage
+    return platform.LocalStorage.Get(globals.CacheKeys.InstallBackup)
+      .then(function (installBackup) {
+        $timeout(function () {
+          if (!installBackup) {
+            vm.settings.revertUnavailable = true;
+            return;
+          }
+
+          var installBackupObj = JSON.parse(installBackup);
+          if (installBackupObj && installBackupObj.date && installBackupObj.bookmarks) {
+            var date = new Date(installBackupObj.date);
+            var confirmationMessage = platform.GetConstant(globals.Constants.Settings_BackupRestore_Revert_Confirmation_Message);
+            vm.settings.revertConfirmationMessage = confirmationMessage.replace('{date}', date.toLocaleDateString());
+            vm.settings.displayRevertConfirmation = true;
+          }
+          else {
+            vm.settings.revertUnavailable = true;
+          }
+        });
+      });
+  };
+
+  var backupRestoreForm_ConfirmRevert_Click = function () {
+    // Display loading overlay
+    platform.Interface.Loading.Show();
+
+    // Disable sync and restore local bookmarks to installation state
+    $q.all([
+      platform.LocalStorage.Get(globals.CacheKeys.InstallBackup),
+      disableSync()
+    ])
+      .then(function (response) {
+        var installBackupObj = JSON.parse(response[0]);
+        var installBackupDate = new Date(installBackupObj.date);
+        var bookmarksToRestore = installBackupObj.bookmarks;
+        utility.LogInfo('Reverting data to installation state from ' + installBackupDate.toISOString());
+
+        // Start restore
+        return queueSync({
+          bookmarks: bookmarksToRestore,
+          type: globals.SyncType.Pull
+        }, globals.Commands.RestoreBookmarks);
+      })
+      .then(function () {
+        $timeout(function () {
+          // Display completed message
+          vm.settings.displayRevertConfirmation = false;
+          vm.settings.revertCompleted = true;
+        });
+      })
+      .catch(displayAlertErrorHandler)
+      .finally(platform.Interface.Loading.Hide);
+  };
+
+  var backupRestoreForm_CancelRevert_Click = function () {
+    vm.settings.displayRevertConfirmation = false;
+    vm.settings.revertCompleted = false;
+    vm.settings.revertConfirmationMessage = null;
+    vm.settings.revertUnavailable = false;
   };
 
   var bookmarkForm_BookmarkDescription_Change = function () {
@@ -704,6 +774,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   var disableSync = function () {
     // Clear view model variables
     vm.search.results = null;
+    vm.sync.enabled = false;
 
     // Disable sync and event listeners
     return $q.all([
@@ -1106,6 +1177,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.settings.displayQrPanel = false;
     vm.settings.displayRestoreConfirmation = false;
     vm.settings.displayRestoreForm = false;
+    vm.settings.displayRevertConfirmation = false;
     vm.settings.displaySyncBookmarksToolbarConfirmation = false;
     vm.settings.displayUpdateServiceUrlConfirmation = false;
     vm.settings.displayUpdateServiceUrlForm = false;
@@ -1114,6 +1186,9 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.settings.downloadLogCompletedMessage = null;
     vm.settings.readWebsiteDataPermissionsGranted = false;
     vm.settings.restoreCompletedMessage = null;
+    vm.settings.revertCompleted = false;
+    vm.settings.revertConfirmationMessage = undefined;
+    vm.settings.revertUnavailable = false;
     vm.settings.dataToRestore = '';
     vm.settings.savingBackup = false;
     vm.settings.savingLog = false;
@@ -1822,9 +1897,11 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       vm.search.bookmarkTree = null;
       bookmarks.GetBookmarks()
         .then(function (results) {
-          // Display bookmark tree view
-          vm.search.bookmarkTree = results;
-          vm.search.displayTreeView = !vm.search.displayTreeView;
+          $timeout(function () {
+            // Display bookmark tree view
+            vm.search.bookmarkTree = results;
+            vm.search.displayTreeView = !vm.search.displayTreeView;
+          });
         })
         .catch(displayAlertErrorHandler);
     }
@@ -2177,6 +2254,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var syncPanel_SyncBookmarksToolbar_Click = function () {
+    // If confirmation message is currently displayed, hide it and return
+    if (vm.settings.displaySyncBookmarksToolbarConfirmation) {
+      vm.settings.displaySyncBookmarksToolbarConfirmation = false;
+      return;
+    }
+
     $q.all([
       bookmarks.GetSyncBookmarksToolbar(),
       platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
