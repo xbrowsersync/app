@@ -240,7 +240,7 @@
           data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_NotAvailable_Message)">
         </p>
       </div>
-      <div data-ng-if="vm.sync.enabled || !vm.utility.IsMobilePlatform(vm.platformName)">
+      <div data-ng-show="vm.sync.enabled || !vm.utility.IsMobilePlatform(vm.platformName)">
         <div class="setting-group">
           <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_Backup_Label) }}</label>
           <p class="description" data-ng-if="!vm.sync.enabled">{{

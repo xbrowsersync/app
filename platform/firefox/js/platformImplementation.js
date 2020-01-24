@@ -551,7 +551,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       platform.GetConstant(globals.Constants.Help_Page_Searching_Desktop_Content),
       platform.GetConstant(globals.Constants.Help_Page_AddingBookmarks_Firefox_Content),
       platform.GetConstant(globals.Constants.Help_Page_NativeFeatures_Firefox_Content),
-      platform.GetConstant(globals.Constants.Help_Page_BackingUp_Content),
+      platform.GetConstant(globals.Constants.Help_Page_BackingUp_Desktop_Content),
       platform.GetConstant(globals.Constants.Help_Page_Shortcuts_Firefox_Content),
       platform.GetConstant(globals.Constants.Help_Page_Mobile_Content),
       platform.GetConstant(globals.Constants.Help_Page_FurtherSupport_Content)
