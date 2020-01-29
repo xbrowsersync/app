@@ -1415,7 +1415,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var checkForInstallOrUpgrade = function () {
     // Check for stored app version and compare it to current
-    return getFromLocalStorage(globals.CacheKeys.AppVersion)
+    var mobileAppVersion = localStorage.getItem('xBrowserSync-mobileAppVersion');
+    return (mobileAppVersion ? $q.resolve(mobileAppVersion) : getFromLocalStorage(globals.CacheKeys.AppVersion))
       .then(function (currentVersion) {
         return currentVersion ? handleUpgrade(currentVersion, globals.AppVersion) : handleInstall(globals.AppVersion);
       });
@@ -1800,7 +1801,17 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return setInLocalStorage(globals.CacheKeys.TraceLog)
       .then(function () {
         utility.LogInfo('Upgrading from ' + currentVersion + ' to ' + newVersion);
-
+      })
+      .then(function () {
+        if (compareVersions(oldVersion, newVersion)) {
+          switch (true) {
+            // v1.5.1
+            case newVersion.indexOf('1.5.1') === 0:
+              return upgradeTo151();
+          }
+        }
+      })
+      .then(function () {
         return $q.all([
           setInLocalStorage(globals.CacheKeys.AppVersion, newVersion),
           setInLocalStorage(globals.CacheKeys.DisplayUpdated, true)
@@ -1822,6 +1833,42 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var syncForm_EnableSync_Click = function () {
     // Don't display confirmation before syncing
     vm.events.syncForm_ConfirmSync_Click();
+  };
+
+  var upgradeTo151 = function () {
+    // Convert local storage items to storage API
+    var deferred = $q.defer();
+
+    var syncEnabled = JSON.parse(localStorage.getItem('xBrowserSync-syncEnabled'));
+    if (syncEnabled) {
+      var lastUpdated = localStorage.getItem('xBrowserSync-lastUpdated');
+      var password = localStorage.getItem('xBrowserSync-password');
+      var serviceUrl = localStorage.getItem('xBrowserSync-urlHost');
+      var syncId = localStorage.getItem('xBrowserSync-Id');
+      var syncVersion = localStorage.getItem('xBrowserSync-syncVersion');
+
+      // Set cached data
+      $q.all([
+        platform.LocalStorage.Set(globals.CacheKeys.DisplayHelp, false),
+        platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, lastUpdated),
+        platform.LocalStorage.Set(globals.CacheKeys.Password, password),
+        platform.LocalStorage.Set(globals.CacheKeys.ServiceUrl, serviceUrl),
+        platform.LocalStorage.Set(globals.CacheKeys.SyncEnabled, syncEnabled),
+        platform.LocalStorage.Set(globals.CacheKeys.SyncId, syncId),
+        platform.LocalStorage.Set(globals.CacheKeys.SyncVersion, syncVersion)
+      ])
+        .then(deferred.resolve)
+        .catch(deferred.reject);
+    }
+    else {
+      deferred.resolve();
+    }
+
+    return deferred.promise
+      .finally(function () {
+        // Clear local storage
+        _.each(_.keys(localStorage), function (key) { return localStorage.removeItem(key); });
+      });
   };
 
   // Call constructor

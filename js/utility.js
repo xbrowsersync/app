@@ -42,43 +42,6 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
     return result;
   };
 
-  var convertLocalStorageToStorageApi = function () {
-    var deferred = $q.defer();
-
-    var syncEnabled = JSON.parse(localStorage.getItem('xBrowserSync-syncEnabled'));
-    if (syncEnabled) {
-      var lastUpdated = localStorage.getItem('xBrowserSync-lastUpdated');
-      var password = localStorage.getItem('xBrowserSync-password');
-      var serviceUrl = localStorage.getItem('xBrowserSync-urlHost');
-      var syncBookmarksToolbar = localStorage.getItem('xBrowserSync-syncBookmarksToolbar');
-      var syncId = localStorage.getItem('xBrowserSync-Id');
-      var syncVersion = localStorage.getItem('xBrowserSync-syncVersion');
-
-      // Set cached data
-      $q.all([
-        platform.LocalStorage.Set(globals.CacheKeys.DisplayHelp, false),
-        platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, lastUpdated),
-        platform.LocalStorage.Set(globals.CacheKeys.Password, password),
-        platform.LocalStorage.Set(globals.CacheKeys.ServiceUrl, serviceUrl),
-        platform.LocalStorage.Set(globals.CacheKeys.SyncBookmarksToolbar, syncBookmarksToolbar),
-        platform.LocalStorage.Set(globals.CacheKeys.SyncEnabled, syncEnabled),
-        platform.LocalStorage.Set(globals.CacheKeys.SyncId, syncId),
-        platform.LocalStorage.Set(globals.CacheKeys.SyncVersion, syncVersion)
-      ])
-        .then(deferred.resolve)
-        .catch(deferred.reject);
-    }
-    else {
-      deferred.resolve();
-    }
-
-    return deferred.promise
-      .finally(function () {
-        // Clear local storage
-        _.each(_.keys(localStorage), function (key) { return localStorage.removeItem(key); });
-      });
-  };
-
   var createBackupData = function (bookmarksData, syncId, serviceUrl) {
     var data = {
       xbrowsersync: {
@@ -806,7 +769,6 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   return {
     AsyncReduce: asyncReduce,
     Closest: closest,
-    ConvertLocalStorageToStorageApi: convertLocalStorageToStorageApi,
     CreateBackupData: createBackupData,
     DecryptData: decryptData,
     EncryptData: encryptData,
