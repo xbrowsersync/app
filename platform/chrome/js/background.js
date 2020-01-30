@@ -10,7 +10,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility, bookmarks) {
   'use strict';
 
-  var vm, notificationClickHandlers = [];
+  var vm, notificationClickHandlers = [], syncTimeout;
 
 	/* ------------------------------------------------------------------------------------
 	 * Constructor
@@ -102,7 +102,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         else {
           reject(response.error);
         }
-      });
+      }, false);
     });
   };
 
@@ -290,7 +290,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         else {
           reject(response.error);
         }
-      });
+      }, false);
     });
   };
 
@@ -532,7 +532,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         else {
           reject(response.error);
         }
-      });
+      }, false);
     });
   };
 
@@ -562,12 +562,23 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var onBookmarkEventHandler = function (syncFunction, args) {
-    return syncFunction.apply(this, args)
+    // Clear sync timeout
+    if (syncTimeout) {
+      $timeout.cancel(syncTimeout);
+    }
+
+    // Queue sync
+    syncFunction.apply(this, args)
       .catch(function (err) {
         // Display alert
         var errMessage = utility.GetErrorMessageFromException(err);
         displayAlert(errMessage.title, errMessage.message);
       });
+
+    // Execute sync after a delay
+    syncTimeout = $timeout(function () {
+      bookmarks.Sync();
+    }, 1e3);
   };
 
   var onChangedHandler = function () {
@@ -715,7 +726,8 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       });
   };
 
-  var queueBookmarksSync = function (syncData, sendResponse) {
+  var queueBookmarksSync = function (syncData, sendResponse, runSync) {
+    runSync = runSync === undefined ? true : runSync;
     sendResponse = sendResponse || function () { };
 
     // Disable event listeners if sync will affect local bookmarks
@@ -723,7 +735,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       toggleEventListeners(false) : $q.resolve())
       .then(function () {
         // Queue sync
-        return bookmarks.QueueSync(syncData)
+        return bookmarks.QueueSync(syncData, runSync)
           .catch(function (err) {
             // If local data out of sync, queue refresh sync
             return (bookmarks.CheckIfRefreshSyncedDataOnError(err) ? refreshLocalSyncData() : $q.resolve())
@@ -815,7 +827,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         else {
           reject(response.error);
         }
-      });
+      }, false);
     });
   };
 

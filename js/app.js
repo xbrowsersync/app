@@ -146,7 +146,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       displayTreeView: false,
       execute: searchBookmarks,
       getLookaheadTimeout: undefined,
-      getSearchLookaheadTimeout: undefined,
       getSearchResultsTimeout: undefined,
       lastWord: undefined,
       lookahead: undefined,
@@ -1676,12 +1675,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     // Get query from event data if provided
     if (event && event.data) {
       vm.search.query = event.data;
-    }
-
-    // Clear timeouts
-    if (vm.search.getSearchLookaheadTimeout) {
-      $timeout.cancel(vm.search.getSearchLookaheadTimeout);
-      vm.search.getSearchLookaheadTimeout = null;
     }
 
     if (vm.search.getSearchResultsTimeout) {

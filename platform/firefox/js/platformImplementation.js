@@ -114,8 +114,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
     // Remove synced bookmark if info supplied
     return (changeInfo.syncChange ?
-      bookmarks.RemoveExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks) :
-      bookmarks.GetExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks))
+      removeExistingInXBookmarksById(changeInfo.bookmark.id, xBookmarks) :
+      $q.resolve({ bookmark: changeInfo.bookmark, bookmarks: xBookmarks }))
       .then(function (results) {
         // Ensure a new bookmark id is created if not syncing the initial remove
         if (!changeInfo.syncChange && changeInfo.targetInfo.syncChange) {
@@ -914,9 +914,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     }
   };
 
-  var shouldSyncLocalChanges = function (changeInfo, xBookmarks) {
+  var shouldSyncLocalChanges = function (changeInfo) {
     // If changed bookmark is a container, disable sync
-    return wasContainerChanged(changeInfo.bookmark, xBookmarks)
+    return wasContainerChanged(changeInfo.bookmark)
       .then(function (changedBookmarkIsContainer) {
         if (changedBookmarkIsContainer) {
           return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
@@ -1280,6 +1280,37 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return supportedRegex.test(url);
   };
 
+  var removeExistingInXBookmarksById = function (id, xBookmarks) {
+    var bookmarkToRemove;
+    var updatedBookmarks = utility.DeepCopy(xBookmarks);
+
+    try {
+      bookmarks.Each(updatedBookmarks, function (bookmark) {
+        if (bookmark.children && bookmark.children.length > 0) {
+          var index = bookmark.children.findIndex(function (x) { return x.id === id; });
+          if (index >= 0) {
+            bookmarkToRemove = bookmark.children.splice(index, 1)[0];
+          }
+        }
+      });
+
+      if (!bookmarkToRemove) {
+        throw new Error();
+      }
+    }
+    catch (err) {
+      return $q.reject({
+        code: globals.ErrorCodes.XBookmarkNotFound,
+        stack: err.stack
+      });
+    }
+
+    return $q.resolve({
+      bookmark: bookmarkToRemove,
+      bookmarks: updatedBookmarks
+    });
+  };
+
   var reorderLocalContainers = function () {
     // Get local containers
     return $q.all(unsupportedContainers.map(findLocalBookmarkByTitle))
@@ -1322,7 +1353,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
-  var wasContainerChanged = function (changedBookmark, xBookmarks) {
+  var wasContainerChanged = function (changedBookmark) {
     // Check based on title
     return $q.resolve(bookmarks.XBookmarkIsContainer(changedBookmark));
   };
