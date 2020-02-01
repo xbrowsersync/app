@@ -404,7 +404,6 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         changeInfo = {
           container: locationInfo[0].container,
           indexPath: locationInfo[0].indexPath,
-          moveInfo: moveInfo,
           targetInfo: {
             container: locationInfo[1].container,
             indexPath: locationInfo[1].indexPath

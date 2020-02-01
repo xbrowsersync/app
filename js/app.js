@@ -1891,8 +1891,10 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       bookmarks.GetBookmarks()
         .then(function (results) {
           $timeout(function () {
-            // Display bookmark tree view
-            vm.search.bookmarkTree = results;
+            // Display bookmark tree view, sort containers
+            vm.search.bookmarkTree = results.sort(function (a, b) {
+              return b.title.localeCompare(a.title);
+            });
             vm.search.displayTreeView = !vm.search.displayTreeView;
           });
         })

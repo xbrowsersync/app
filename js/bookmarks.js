@@ -104,6 +104,35 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     return cleanedBookmark;
   };
 
+  var convertLocalBookmarkToXBookmark = function (localBookmark, xBookmarks, takenIds) {
+    takenIds = takenIds || [];
+
+    if (!localBookmark) {
+      return null;
+    }
+
+    var bookmark;
+    if (isSeparator(localBookmark)) {
+      bookmark = new xSeparator();
+    }
+    else {
+      bookmark = new xBookmark(localBookmark.title, localBookmark.url);
+    }
+
+    // Assign a unique id
+    bookmark.id = getNewBookmarkId(xBookmarks, takenIds);
+    takenIds.push(bookmark.id);
+
+    // Process children if any
+    if (localBookmark.children && localBookmark.children.length > 0) {
+      bookmark.children = localBookmark.children.map(function (childBookmark) {
+        return convertLocalBookmarkToXBookmark(childBookmark, xBookmarks, takenIds);
+      });
+    }
+
+    return bookmark;
+  };
+
   var disableSync = function () {
     return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
@@ -1596,6 +1625,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     CheckIfRefreshSyncedDataOnError: checkIfRefreshSyncedDataOnError,
     CheckForUpdates: checkForUpdates,
     CleanBookmark: cleanBookmark,
+    ConvertLocalBookmarkToXBookmark: convertLocalBookmarkToXBookmark,
     DisableSync: disableSync,
     Each: eachBookmark,
     Export: exportBookmarks,

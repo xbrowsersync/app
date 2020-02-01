@@ -448,32 +448,13 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var moveBookmark = function (id, moveInfo) {
-    var changeInfo, movedBookmark, syncChange = $q.defer();
+    var changeInfo, syncChange = $q.defer();
 
-    // Retrieve moved bookmark full info
-    var prepareToSyncChanges = $q(function (resolve, reject) {
-      chrome.bookmarks.getSubTree(id, function (subTree) {
-        var apiError = checkForApiError();
-        if (apiError) {
-          return reject(apiError);
-        }
-
-        resolve(subTree);
-      });
-    })
-      .then(function (results) {
-        if (!results || results.length === 0) {
-          return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
-        }
-
-        movedBookmark = results[0];
-
-        // Get moved bookmark old and new location info 
-        return $q.all([
-          platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.oldParentId, [moveInfo.oldIndex]),
-          platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.parentId, [moveInfo.index])
-        ]);
-      })
+    // Get moved bookmark old and new location info
+    var prepareToSyncChanges = $q.all([
+      platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.oldParentId, [moveInfo.oldIndex]),
+      platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.parentId, [moveInfo.index])
+    ])
       .then(function (locationInfo) {
         if (!locationInfo[0] || !locationInfo[1]) {
           utility.LogWarning('Unable to retrieve local bookmark location info, not syncing this change');
@@ -488,19 +469,39 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
         // Create change info
         changeInfo = {
-          bookmark: movedBookmark,
           container: locationInfo[0].container,
           indexPath: locationInfo[0].indexPath,
           targetInfo: {
-            bookmark: movedBookmark,
             container: locationInfo[1].container,
             indexPath: locationInfo[1].indexPath
           },
           type: globals.UpdateType.Move
         };
 
-        // If bookmark is separator update local bookmark properties
-        return (bookmarks.IsSeparator(movedBookmark) ? convertLocalBookmarkToSeparator(movedBookmark) : $q.resolve())
+        // Retrieve moved local bookmark by id
+        return $q(function (resolve, reject) {
+          chrome.bookmarks.getSubTree(id, function (subTree) {
+            var apiError = checkForApiError();
+            if (apiError) {
+              return reject(apiError);
+            }
+
+            resolve(subTree);
+          });
+        })
+          .then(function (results) {
+            if (!results || results.length === 0) {
+              utility.LogWarning('Unable to locate moved bookmark');
+              return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
+            }
+
+            // Add moved bookmark to change info 
+            changeInfo.bookmark = results[0];
+            changeInfo.targetInfo.bookmark = results[0];
+
+            // If bookmark is separator update local bookmark properties
+            return (bookmarks.IsSeparator(changeInfo.bookmark) ? convertLocalBookmarkToSeparator(changeInfo.bookmark) : $q.resolve());
+          })
           .then(function () {
             // Check if move changes (remove and add) should be synced
             return $q.all([

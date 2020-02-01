@@ -112,17 +112,25 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       return $q.resolve({ bookmarks: null });
     }
 
-    // Remove synced bookmark if info supplied
+    // Remove synced bookmark if syncing move from
     return (changeInfo.syncChange ?
       bookmarks.RemoveExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks) :
-      bookmarks.GetExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks))
+      $q(function (resolve) {
+        // If not syncing move from, create a new bookmark from local bookmark to avoid unsynced conflicts
+        var convertedBookmark = bookmarks.ConvertLocalBookmarkToXBookmark(changeInfo.bookmark, xBookmarks);
+        resolve({
+          bookmark: convertedBookmark,
+          bookmarks: xBookmarks
+        });
+      })
+    )
       .then(function (results) {
         // Ensure a new bookmark id is created if not syncing the initial remove
         if (!changeInfo.syncChange && changeInfo.targetInfo.syncChange) {
           delete results.bookmark.id;
         }
 
-        // Create synced bookmark if target info supplied
+        // Create synced bookmark if syncing move to
         return (changeInfo.targetInfo.syncChange ?
           bookmarks.AddNewInXBookmarks(results.bookmark, changeInfo.targetInfo.container, changeInfo.targetInfo.indexPath, results.bookmarks) :
           $q.resolve(results));
