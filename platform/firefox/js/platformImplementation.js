@@ -114,8 +114,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
     // Remove synced bookmark if info supplied
     return (changeInfo.syncChange ?
-      removeExistingInXBookmarksById(changeInfo.bookmark.id, xBookmarks) :
-      $q.resolve({ bookmark: changeInfo.bookmark, bookmarks: xBookmarks }))
+      bookmarks.RemoveExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks) :
+      bookmarks.GetExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks))
       .then(function (results) {
         // Ensure a new bookmark id is created if not syncing the initial remove
         if (!changeInfo.syncChange && changeInfo.targetInfo.syncChange) {
@@ -1278,37 +1278,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
     var supportedRegex = /^(?!chrome|data)[\w\-]+:/i;
     return supportedRegex.test(url);
-  };
-
-  var removeExistingInXBookmarksById = function (id, xBookmarks) {
-    var bookmarkToRemove;
-    var updatedBookmarks = utility.DeepCopy(xBookmarks);
-
-    try {
-      bookmarks.Each(updatedBookmarks, function (bookmark) {
-        if (bookmark.children && bookmark.children.length > 0) {
-          var index = bookmark.children.findIndex(function (x) { return x.id === id; });
-          if (index >= 0) {
-            bookmarkToRemove = bookmark.children.splice(index, 1)[0];
-          }
-        }
-      });
-
-      if (!bookmarkToRemove) {
-        throw new Error();
-      }
-    }
-    catch (err) {
-      return $q.reject({
-        code: globals.ErrorCodes.XBookmarkNotFound,
-        stack: err.stack
-      });
-    }
-
-    return $q.resolve({
-      bookmark: bookmarkToRemove,
-      bookmarks: updatedBookmarks
-    });
   };
 
   var reorderLocalContainers = function () {

@@ -10,7 +10,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility, bookmarks) {
   'use strict';
 
-  var vm, notificationClickHandlers = [], syncTimeout;
+  var vm, lastMoveInfo, notificationClickHandlers = [], syncTimeout;
 
 	/* ------------------------------------------------------------------------------------
 	 * Constructor
@@ -372,105 +372,90 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var moveBookmark = function (id, moveInfo) {
-    var changeInfo, newFolderCheck, syncChange = $q.defer(), xBookmarks;
+    var changeInfo, syncChange = $q.defer();
 
-    // If the bookmark being moved is a new folder, ignore this change but update the
-    // previous change to reflect the move
-    var previousChange = bookmarks.GetCurrentSync();
-    if (previousChange && previousChange.type === globals.SyncType.Push) {
-      newFolderCheck = previousChange.changeInfo.then(function (prevChangeInfo) {
-        if (prevChangeInfo.type === globals.UpdateType.Create &&
-          prevChangeInfo.bookmark.type === 'folder' &&
-          prevChangeInfo.bookmark.parentId === moveInfo.oldParentId &&
-          prevChangeInfo.bookmark.index === moveInfo.oldIndex) {
-          // Update the previous change's info so the folder is created at the correct index
-          prevChangeInfo.indexPath.splice(prevChangeInfo.indexPath.length - 1, 1, moveInfo.index);
-          return true;
-        }
-        return false;
-      });
+    // If this change is part of a multiple move, fix incorrect oldIndex value
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=1556427
+    if (lastMoveInfo && lastMoveInfo.oldParentId === moveInfo.oldParentId &&
+      lastMoveInfo.index === moveInfo.index &&
+      lastMoveInfo.oldIndex !== moveInfo.oldIndex) {
+      moveInfo.oldIndex = lastMoveInfo.oldIndex;
     }
-    else {
-      newFolderCheck = $q.resolve(false);
-    }
+    lastMoveInfo = moveInfo;
 
-    return newFolderCheck
-      .then(function (isNewFolder) {
-        if (isNewFolder) {
-          utility.LogInfo('Moved bookmark is a new folder, ignoring');
+    // Get moved bookmark old and new location info 
+    var prepareToSyncChanges = $q.all([
+      platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.oldParentId, [moveInfo.oldIndex]),
+      platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.parentId, [moveInfo.index])
+    ])
+      .then(function (locationInfo) {
+        if (!locationInfo[0] || !locationInfo[1]) {
+          utility.LogWarning('Unable to retrieve local bookmark location info, not syncing this change');
+          syncChange.resolve(false);
           return;
         }
 
-        // Get moved bookmark old and new location info 
-        var prepareToSyncChanges = $q.all([
-          platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.oldParentId, [moveInfo.oldIndex]),
-          platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.parentId, [moveInfo.index]),
-          bookmarks.GetBookmarks()
-        ])
-          .then(function (locationInfo) {
-            xBookmarks = locationInfo[2];
-            if (!locationInfo[0] || !locationInfo[1]) {
-              utility.LogWarning('Unable to retrieve local bookmark location info, not syncing this change');
-              syncChange.resolve(false);
-              return;
+        // If negative target index, bookmark was moved above containers
+        if (locationInfo[1].indexPath[0] < 0) {
+          return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
+        }
+
+        // Create change info
+        changeInfo = {
+          container: locationInfo[0].container,
+          indexPath: locationInfo[0].indexPath,
+          moveInfo: moveInfo,
+          targetInfo: {
+            container: locationInfo[1].container,
+            indexPath: locationInfo[1].indexPath
+          },
+          type: globals.UpdateType.Move
+        };
+
+        // Retrieve moved local bookmark by id
+        return browser.bookmarks.get(id)
+          .then(function (results) {
+            if (!results || results.length === 0) {
+              utility.LogWarning('Unable to locate moved bookmark');
+              return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
             }
 
-            // If negative target index, bookmark was moved above containers
-            if (locationInfo[1].indexPath[0] < 0) {
-              return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
-            }
+            // Add moved bookmark to change info 
+            changeInfo.bookmark = results[0];
+            changeInfo.targetInfo.bookmark = results[0];
 
-            // Create change info
-            changeInfo = {
-              container: locationInfo[0].container,
-              targetInfo: {
-                container: locationInfo[1].container,
-                indexPath: locationInfo[1].indexPath
-              },
-              type: globals.UpdateType.Move
-            };
-
-            // Get moved bookmark from synced bookmarks since it cannot be retrieved from local bookmarks due to Firefox bug
-            // https://bugzilla.mozilla.org/show_bug.cgi?id=1556427
-            return bookmarks.GetExistingInXBookmarks(locationInfo[0].container, locationInfo[0].indexPath, xBookmarks)
-              .then(function (results) {
-                // Add moved bookmark to change info 
-                changeInfo.bookmark = results.bookmark;
-                changeInfo.targetInfo.bookmark = results.bookmark;
-
-                // Check if move changes (remove and add) should be synced
-                return $q.all([
-                  platform.Bookmarks.ShouldSyncLocalChanges(changeInfo),
-                  platform.Bookmarks.ShouldSyncLocalChanges(changeInfo.targetInfo)
-                ]);
-              })
-              .then(function (results) {
-                changeInfo.syncChange = results[0];
-                changeInfo.targetInfo.syncChange = results[1];
-                syncChange.resolve(changeInfo.syncChange || changeInfo.targetInfo.syncChange);
-                return changeInfo;
-              });
+            // Check if move changes (remove and add) should be synced
+            return $q.all([
+              platform.Bookmarks.ShouldSyncLocalChanges(changeInfo),
+              platform.Bookmarks.ShouldSyncLocalChanges(changeInfo.targetInfo)
+            ]);
           })
-          .catch(function (err) {
-            syncChange.reject(err);
+          .then(function (results) {
+            changeInfo.syncChange = results[0];
+            changeInfo.targetInfo.syncChange = results[1];
+            syncChange.resolve(changeInfo.syncChange || changeInfo.targetInfo.syncChange);
+            return changeInfo;
           });
-
-        // Queue sync
-        return $q(function (resolve, reject) {
-          queueBookmarksSync({
-            changeInfo: prepareToSyncChanges,
-            syncChange: syncChange.promise,
-            type: globals.SyncType.Push
-          }, function (response) {
-            if (response.success) {
-              resolve(response.bookmarks);
-            }
-            else {
-              reject(response.error);
-            }
-          }, false);
-        });
+      })
+      .catch(function (err) {
+        syncChange.reject(err);
       });
+
+    // Queue sync
+    return $q(function (resolve, reject) {
+      queueBookmarksSync({
+        changeInfo: prepareToSyncChanges,
+        syncChange: syncChange.promise,
+        type: globals.SyncType.Push
+      }, function (response) {
+        if (response.success) {
+          resolve(response.bookmarks);
+        }
+        else {
+          reject(response.error);
+        }
+      }, false);
+    });
   };
 
   var onAlarmHandler = function (alarm) {
