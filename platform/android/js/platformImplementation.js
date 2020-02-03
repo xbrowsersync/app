@@ -1791,16 +1791,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     }
   };
 
-  var handleUpgrade = function (currentVersion, newVersion) {
-    if (compareVersions(currentVersion, newVersion) >= 0) {
-      // No upgrade
-      return;
-    }
-
+  var handleUpgrade = function (oldVersion, newVersion) {
     // Clear trace log
     return setInLocalStorage(globals.CacheKeys.TraceLog)
       .then(function () {
-        utility.LogInfo('Upgrading from ' + currentVersion + ' to ' + newVersion);
+        utility.LogInfo('Upgrading from ' + oldVersion + ' to ' + newVersion);
       })
       .then(function () {
         if (compareVersions(oldVersion, newVersion)) {
