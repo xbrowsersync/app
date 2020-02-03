@@ -1555,8 +1555,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var executeSync = function (isBackgroundSync) {
-    // Display loading panel if not background sync
-    if (!isBackgroundSync) {
+    // Display loading panel if not background sync and currently on the search view
+    if (!isBackgroundSync && vm.view.current === vm.view.views.search) {
       displayLoading();
     }
 
@@ -1792,6 +1792,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var handleUpgrade = function (oldVersion, newVersion) {
+    if (compareVersions(oldVersion, newVersion) === 0) {
+      // No upgrade
+      return $q.resolve();
+    }
+
     // Clear trace log
     return setInLocalStorage(globals.CacheKeys.TraceLog)
       .then(function () {
