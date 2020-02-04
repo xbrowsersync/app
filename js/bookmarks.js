@@ -25,7 +25,14 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       }
 
       var parent = indexPath.slice(0, -1).reduce(function (previous, indexPathPosition) {
-        return previous.children[indexPathPosition];
+        var potentialParent;
+        // If no folder is found at the specified index, keep increasing the index until a folder is found to
+        // account for situations when multiple bookmarks are moved into a sibling folder with a higher index
+        while ((!potentialParent || !potentialParent.children) && indexPathPosition < previous.children.length) {
+          potentialParent = previous.children[indexPathPosition];
+          indexPathPosition++;
+        }
+        return potentialParent;
       }, container);
       if (!parent) {
         throw new Error();
