@@ -25,14 +25,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       }
 
       var parent = indexPath.slice(0, -1).reduce(function (previous, indexPathPosition) {
-        var potentialParent;
-        // If no folder is found at the specified index, keep increasing the index until a folder is found to
-        // account for situations when multiple bookmarks are moved into a sibling folder with a higher index
-        while ((!potentialParent || !potentialParent.children) && indexPathPosition < previous.children.length) {
-          potentialParent = previous.children[indexPathPosition];
-          indexPathPosition++;
-        }
-        return potentialParent;
+        return previous.children[indexPathPosition];
       }, container);
       if (!parent) {
         throw new Error();
@@ -251,13 +244,22 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     }
 
     // Recursively iterate through all bookmarks until id match is found
-    var bookmark = bookmarks.find(function (x) { return x.id === id; });
-    if (!bookmark) {
+    var bookmark;
+    var index = bookmarks.findIndex(function (x) { return x.id === id; });
+    if (index === -1) {
       _.each(bookmarks, function (x) {
         if (!bookmark) {
           bookmark = findBookmarkById(x.children, id);
         }
       });
+    }
+    else {
+      bookmark = bookmarks[index];
+      // Set index as bookmark indexes in Firefox are unreliable!
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=1556427
+      if (bookmark.index != null) {
+        bookmark.index = index;
+      }
     }
 
     return bookmark;

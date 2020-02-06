@@ -904,9 +904,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       .then(function (granted) {
         utility.LogInfo('Optional permissions ' + (!granted ? 'not ' : '') + 'granted');
         return granted;
-      })
-      .catch(function (err) {
-        console.log(err);
       });
   };
 

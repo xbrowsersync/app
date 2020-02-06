@@ -10,7 +10,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility, bookmarks) {
   'use strict';
 
-  var vm, lastMoveInfo, notificationClickHandlers = [], syncTimeout;
+  var vm, notificationClickHandlers = [], syncTimeout;
 
 	/* ------------------------------------------------------------------------------------
 	 * Constructor
@@ -372,22 +372,23 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var moveBookmark = function (id, moveInfo) {
-    var changeInfo, syncChange = $q.defer();
+    var changeInfo, movedBookmark, syncChange = $q.defer();
 
-    // If this change is part of a multiple move, fix incorrect oldIndex value
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=1556427
-    if (lastMoveInfo && lastMoveInfo.oldParentId === moveInfo.oldParentId &&
-      lastMoveInfo.index === moveInfo.index &&
-      lastMoveInfo.oldIndex !== moveInfo.oldIndex) {
-      moveInfo.oldIndex = lastMoveInfo.oldIndex;
-    }
-    lastMoveInfo = moveInfo;
+    // Retrieve moved bookmark full info
+    var prepareToSyncChanges = browser.bookmarks.getSubTree(id)
+      .then(function (results) {
+        if (!results || results.length === 0) {
+          return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
+        }
 
-    // Get moved bookmark old and new location info 
-    var prepareToSyncChanges = $q.all([
-      platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.oldParentId, [moveInfo.oldIndex]),
-      platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.parentId, [moveInfo.index])
-    ])
+        movedBookmark = results[0];
+
+        // Get moved bookmark old and new location info 
+        return $q.all([
+          platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.oldParentId, [moveInfo.oldIndex]),
+          platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.parentId, [moveInfo.index])
+        ]);
+      })
       .then(function (locationInfo) {
         if (!locationInfo[0] || !locationInfo[1]) {
           utility.LogWarning('Unable to retrieve local bookmark location info, not syncing this change');
@@ -402,33 +403,22 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
         // Create change info
         changeInfo = {
+          bookmark: movedBookmark,
           container: locationInfo[0].container,
           indexPath: locationInfo[0].indexPath,
           targetInfo: {
+            bookmark: movedBookmark,
             container: locationInfo[1].container,
             indexPath: locationInfo[1].indexPath
           },
           type: globals.UpdateType.Move
         };
 
-        // Retrieve moved local bookmark by id
-        return browser.bookmarks.get(id)
-          .then(function (results) {
-            if (!results || results.length === 0) {
-              utility.LogWarning('Unable to locate moved bookmark');
-              return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
-            }
-
-            // Add moved bookmark to change info 
-            changeInfo.bookmark = results[0];
-            changeInfo.targetInfo.bookmark = results[0];
-
-            // Check if move changes (remove and add) should be synced
-            return $q.all([
-              platform.Bookmarks.ShouldSyncLocalChanges(changeInfo),
-              platform.Bookmarks.ShouldSyncLocalChanges(changeInfo.targetInfo)
-            ]);
-          })
+        // Check if move changes (remove and add) should be synced
+        return $q.all([
+          platform.Bookmarks.ShouldSyncLocalChanges(changeInfo),
+          platform.Bookmarks.ShouldSyncLocalChanges(changeInfo.targetInfo)
+        ])
           .then(function (results) {
             changeInfo.syncChange = results[0];
             changeInfo.targetInfo.syncChange = results[1];
@@ -453,7 +443,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         else {
           reject(response.error);
         }
-      }, false);
+      });
     });
   };
 
