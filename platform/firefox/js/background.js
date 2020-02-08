@@ -97,6 +97,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     return $q(function (resolve, reject) {
       // If network disconnected, skip update check
       if (!utility.IsNetworkConnected()) {
+        utility.LogInfo('Could not check for updates on startup, no connection');
         return resolve(false);
       }
 
@@ -454,6 +455,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         .catch(function (err) {
           // Don't display alert if sync failed due to network connection
           if (utility.IsNetworkConnectionError(err)) {
+            utility.LogInfo('Could not check for updates, no connection');
             return;
           }
 
@@ -670,15 +672,17 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
           .catch(function () { });
       })
       .catch(function (err) {
+        // Recreate error object since Firefox does not send the original properly
+        var errObj = { code: err.code, logged: err.logged };
         try {
-          sendResponse({ error: err, success: false });
+          sendResponse({ error: errObj, success: false });
         }
         catch (innerErr) { }
 
         // Send a message in case the user closed the extension window
         browser.runtime.sendMessage({
           command: globals.Commands.SyncFinished,
-          error: err,
+          error: errObj,
           success: false
         })
           .catch(function () { });

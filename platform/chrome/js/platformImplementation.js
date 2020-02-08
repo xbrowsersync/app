@@ -53,8 +53,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.GetPageMetadata = getPageMetadata;
     platform.GetSupportedUrl = getSupportedUrl;
     platform.Init = init;
-    platform.Interface.Loading.Hide = hideLoading;
-    platform.Interface.Loading.Show = displayLoading;
+    platform.Interface.Working.Hide = hideLoading;
+    platform.Interface.Working.Show = displayLoading;
     platform.Interface.Refresh = refreshInterface;
     platform.LocalStorage.Get = getFromLocalStorage;
     platform.LocalStorage.Set = setInLocalStorage;
@@ -282,19 +282,19 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       // Checking updated service url, wait a moment before displaying loading overlay
       case 'checkingNewServiceUrl':
         timeout = $timeout(function () {
-          vm.working = true;
+          vm.working.show = true;
         }, 100);
         break;
       // Loading bookmark metadata, wait a moment before displaying loading overlay
       case 'retrievingMetadata':
         timeout = $timeout(function () {
-          vm.working = true;
+          vm.working.show = true;
         }, 500);
         break;
       // Display default overlay
       default:
         timeout = $timeout(function () {
-          vm.working = true;
+          vm.working.show = true;
         });
         break;
     }
@@ -729,7 +729,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
     // Hide loading overlay if supplied if matches current
     if (!loadingId || id === loadingId) {
-      vm.working = false;
+      vm.working.show = false;
       loadingId = null;
     }
   };

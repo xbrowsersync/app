@@ -54,7 +54,7 @@
       <label for="bookmarkTags" class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TagsField_Label)
       }}</label>
       <input type="text" class="form-control" name="bookmarkTags"
-        placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TagsField_Description) }}" maxlength="50"
+        placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Bookmark_TagsField_Description) }}…" maxlength="50"
         data-ng-model="vm.bookmark.tagText" data-ng-change="vm.events.bookmarkForm_BookmarkTags_Change()"
         data-ng-keydown="vm.events.bookmarkForm_BookmarkTags_KeyDown($event)" data-ng-trim="false" autocapitalize="off"
         autocomplete="off" autocorrect="off">

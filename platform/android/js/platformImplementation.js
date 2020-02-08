@@ -397,7 +397,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Connection error"
     },
     "settings_Service_Status_Loading": {
-      "message": "Checking..."
+      "message": "Checking"
     },
     "settings_Service_Status_Online": {
       "message": "Online"
@@ -454,7 +454,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Restore"
     },
     "button_Saving_Label": {
-      "message": "Saving..."
+      "message": "Saving"
     },
     "button_Done_Label": {
       "message": "Done"
@@ -487,7 +487,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Your data has been restored."
     },
     "settings_BackupRestore_RestoreForm_BackupFile_Description": {
-      "message": "Select a backup file to restore..."
+      "message": "Select a backup file to restore"
     },
     "settings_BackupRestore_RestoreForm_Message": {
       "message": "Copy the contents of a backup file to restore data."
@@ -550,7 +550,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Tags"
     },
     "bookmark_TagsField_Description": {
-      "message": "tag 1, tag 2, tag 3, etc..."
+      "message": "tag 1, tag 2, tag 3, etc"
     },
     "bookmark_BookmarkForm_Required_Label": {
       "message": "Bookmark URL is required"
@@ -588,8 +588,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "qr_Message": {
       "message": "Scan this QR code using the xBrowserSync Android app to access your synced data on your mobile device."
     },
-    "working_Title": {
-      "message": "Syncing..."
+    "working_Restoring_Message": {
+      "message": "Restoring"
+    },
+    "working_Reverting_Message": {
+      "message": "Reverting"
+    },
+    "working_Syncing_Message": {
+      "message": "Syncing"
     },
     "workingOffline_Title": {
       "message": "Working offline"
@@ -783,8 +789,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.GetPageMetadata = getPageMetadata;
     platform.GetSupportedUrl = getSupportedUrl;
     platform.Init = init;
-    platform.Interface.Loading.Show = displayLoading;
-    platform.Interface.Loading.Hide = hideLoading;
+    platform.Interface.Working.Show = displayLoading;
+    platform.Interface.Working.Hide = hideLoading;
     platform.Interface.Refresh = refreshInterface;
     platform.LocalStorage.Get = getFromLocalStorage;
     platform.LocalStorage.Set = setInLocalStorage;
@@ -843,7 +849,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       // Checking updated service url, wait a moment before displaying loading overlay
       case 'checkingNewServiceUrl':
         timeout = $timeout(function () {
-          SpinnerDialog.show(null, getConstant(globals.Constants.Working_Title), true);
+          SpinnerDialog.show(null, getConstant(globals.Constants.Working_Syncing_Message), true);
         }, 100);
         break;
       // Loading bookmark metadata, display cancellable overlay
@@ -861,7 +867,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       // Display default overlay
       default:
         timeout = $timeout(function () {
-          SpinnerDialog.show(null, getConstant(globals.Constants.Working_Title), true);
+          SpinnerDialog.show(null, vm.working.message + '…', true);
         });
         break;
     }
@@ -1049,7 +1055,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
       var handleResponse = function (pageContent, err) {
         var parser;
-        platform.Interface.Loading.Hide('retrievingMetadata', timeout);
+        platform.Interface.Working.Hide('retrievingMetadata', timeout);
 
         // Check html content was returned
         if (err || !pageContent) {
@@ -1141,7 +1147,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       }
 
       var cancelledCallback = function () { resolve(metadata); };
-      timeout = platform.Interface.Loading.Show('retrievingMetadata', cancelledCallback);
+      timeout = platform.Interface.Working.Show('retrievingMetadata', cancelledCallback);
       inAppBrowser = cordova.InAppBrowser.open(metadata.url, '_blank', 'hidden=yes');
 
       inAppBrowser.addEventListener('loaderror', function (event) {
@@ -1766,14 +1772,15 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           return;
         }
 
-        // If network is online, commit any updates made whilst offline
-        executeSyncIfOnline();
-
-        // Check if a bookmark was shared
-        return checkForSharedBookmark()
-          .then(function () {
-            return primeBookmarksCache;
-          });
+        return $q.all([
+          // If network is online, commit any updates made whilst offline
+          executeSyncIfOnline(),
+          // Check if a bookmark was shared
+          checkForSharedBookmark()
+            .then(function () {
+              return primeBookmarksCache;
+            })
+        ]);
       })
       .catch(displayErrorAlert);
   };

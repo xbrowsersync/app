@@ -22,7 +22,10 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.platform = platform;
     vm.utility = utility;
 
-    vm.working = false;
+    vm.working = {
+      message: platform.GetConstant(globals.Constants.Working_Syncing_Message),
+      show: false
+    };
 
     vm.alert = {
       show: false,
@@ -380,7 +383,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
   var backupRestoreForm_ConfirmRevert_Click = function () {
     // Display loading overlay
-    platform.Interface.Loading.Show();
+    platform.Interface.Working.Show();
 
     // Disable sync and restore local bookmarks to installation state
     $q.all([
@@ -392,6 +395,9 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         var installBackupDate = new Date(installBackupObj.date);
         var bookmarksToRestore = installBackupObj.bookmarks;
         utility.LogInfo('Reverting data to installation state from ' + installBackupDate.toISOString());
+
+        // Set working message
+        vm.working.message = platform.GetConstant(globals.Constants.Working_Reverting_Message);
 
         // Start restore
         return queueSync({
@@ -407,7 +413,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         });
       })
       .catch(displayAlertErrorHandler)
-      .finally(platform.Interface.Loading.Hide);
+      .finally(platform.Interface.Working.Hide);
   };
 
   var backupRestoreForm_CancelRevert_Click = function () {
@@ -531,7 +537,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         }
 
         // Display loading overlay
-        platform.Interface.Loading.Show();
+        platform.Interface.Working.Show();
 
         // Sync changes
         return queueSync({
@@ -572,7 +578,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     var bookmarkToDelete = vm.bookmark.current;
 
     // Display loading overlay
-    platform.Interface.Loading.Show();
+    platform.Interface.Working.Show();
 
     // Sync changes
     queueSync({
@@ -648,7 +654,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         }
 
         // Display loading overlay
-        platform.Interface.Loading.Show();
+        platform.Interface.Working.Show();
 
         // Sync changes
         return queueSync({
@@ -708,7 +714,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     var initNewView;
 
     // Hide loading panel
-    platform.Interface.Loading.Hide();
+    platform.Interface.Working.Hide();
 
     // Initialise new view
     switch (view) {
@@ -1090,7 +1096,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var init_loadingView = function () {
-    platform.Interface.Loading.Show();
+    platform.Interface.Working.Show();
     return $q.resolve();
   };
 
@@ -1400,7 +1406,11 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         throw err;
       })
       .finally(function () {
-        platform.Interface.Loading.Hide();
+        // Hide working panel and restore default message
+        platform.Interface.Working.Hide();
+        $timeout(function () {
+          vm.working.message = platform.GetConstant(globals.Constants.Working_Syncing_Message);
+        }, 1e3);
       });
   };
 
@@ -1461,8 +1471,9 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       return;
     }
 
-    // Display loading overlay
-    platform.Interface.Loading.Show();
+    // Set working message and display loading overlay
+    vm.working.message = platform.GetConstant(globals.Constants.Working_Restoring_Message);
+    platform.Interface.Working.Show();
 
     platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
       .then(function (cachedSyncEnabled) {
@@ -1503,7 +1514,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
           .then(restoreBookmarksSuccess);
       })
       .catch(displayAlertErrorHandler)
-      .finally(platform.Interface.Loading.Hide);
+      .finally(platform.Interface.Working.Hide);
   };
 
   var scanPanel_Cancel_Click = function () {
@@ -1619,7 +1630,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
     $timeout(function () {
       // Display loading overlay
-      platform.Interface.Loading.Show();
+      platform.Interface.Working.Show();
 
       // Sync changes
       queueSync({
@@ -1974,7 +1985,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.sync.displaySyncConfirmation = false;
     vm.sync.displayOtherSyncsWarning = false;
     vm.sync.displayUpgradeConfirmation = false;
-    var loadingTimeout = platform.Interface.Loading.Show();
+    var loadingTimeout = platform.Interface.Working.Show();
 
     // Check service status
     api.CheckServiceStatus()
@@ -2061,7 +2072,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       })
       .finally(function () {
         // Hide loading panel
-        platform.Interface.Loading.Hide(null, loadingTimeout);
+        platform.Interface.Working.Hide(null, loadingTimeout);
       });
   };
 
@@ -2102,7 +2113,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
   var syncBookmarksSuccess = function (loadingTimeout) {
     // Hide loading panel
-    platform.Interface.Loading.Hide(null, loadingTimeout);
+    platform.Interface.Working.Hide(null, loadingTimeout);
 
     // If initial sync, switch to search panel
     $timeout(function () {
@@ -2233,7 +2244,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
   var syncForm_SyncUpdates_Click = function () {
     // Display loading panel
-    var loadingTimeout = platform.Interface.Loading.Show();
+    var loadingTimeout = platform.Interface.Working.Show();
 
     // Pull updates
     queueSync({ type: globals.SyncType.Pull })
@@ -2300,7 +2311,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
         // Hide sync confirmation and display loading overlay
         vm.settings.displaySyncBookmarksToolbarConfirmation = false;
-        platform.Interface.Loading.Show();
+        platform.Interface.Working.Show();
 
         // Enable setting in cache
         return platform.LocalStorage.Set(globals.CacheKeys.SyncBookmarksToolbar, true);

@@ -121,6 +121,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     return $q(function (resolve, reject) {
       // If network disconnected, skip update check
       if (!utility.IsNetworkConnected()) {
+        utility.LogInfo('Could not check for updates on startup, no connection');
         return resolve(false);
       }
 
@@ -544,6 +545,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         .catch(function (err) {
           // Don't display alert if sync failed due to network connection
           if (utility.IsNetworkConnectionError(err)) {
+            utility.LogInfo('Could not check for updates, no connection');
             return;
           }
 

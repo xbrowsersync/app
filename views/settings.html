@@ -252,7 +252,7 @@
               data-ng-disabled="vm.settings.savingBackup">
               <span class="spinner-border spinner-border-sm" data-ng-show="vm.settings.savingBackup" role="status"
                 aria-hidden="true"></span>
-              <span data-ng-show="vm.settings.savingBackup">{{
+              <span class="ellipsis" data-ng-show="vm.settings.savingBackup">{{
                 vm.platform.GetConstant(vm.globals.Constants.Button_Saving_Label) }}
               </span>
               <span data-ng-hide="vm.settings.savingBackup">{{
@@ -301,7 +301,7 @@
                   autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
                 <input data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)" type="text" class="form-control"
                   data-ng-model="vm.settings.backupFileName" readonly
-                  placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_BackupFile_Description) }}"></input>
+                  placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_BackupFile_Description) }}…"></input>
                 <div class="validation" data-ng-if="vm.restoreForm.dataToRestore.$invalid">
                   <span data-ng-if="vm.restoreForm.dataToRestore.$error.InvalidData">
                     {{ vm.platform.GetConstant(vm.globals.Constants.Settings_BackupRestore_RestoreForm_Invalid_Label) }}
@@ -486,7 +486,7 @@
               data-ng-disabled="vm.settings.savingLog || vm.settings.logSize === 0 || vm.settings.logSize == null">
               <span class="spinner-border spinner-border-sm" data-ng-show="vm.settings.savingLog" role="status"
                 aria-hidden="true"></span>
-              <span
+              <span class="ellipsis"
                 data-ng-show="vm.settings.savingLog">{{ vm.platform.GetConstant(vm.globals.Constants.Button_Saving_Label) }}
               </span>
               <span

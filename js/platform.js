@@ -55,7 +55,7 @@ xBrowserSync.App.Platform = function () {
     GetSupportedUrl: notImplemented,
     Init: notImplemented,
     Interface: {
-      Loading: {
+      Working: {
         Hide: notImplemented,
         Show: notImplemented
       },

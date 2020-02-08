@@ -12,7 +12,7 @@ xBrowserSync.App.Global = function (platform) {
   var Global = {
     Alarm: {
       Name: 'xBrowserSync-alarm',
-      Period: 15
+      Period: 1
     },
     AppVersion: '1.5.1',
     Bookmarks: {
@@ -199,7 +199,9 @@ xBrowserSync.App.Global = function (platform) {
       Qr_Copied_Label: 'qr_Copied_Label',
       Qr_CopySyncId_Label: 'qr_CopySyncId_Label',
       Qr_Message: 'qr_Message',
-      Working_Title: 'working_Title',
+      Working_Restoring_Message: 'working_Restoring_Message',
+      Working_Reverting_Message: 'working_Reverting_Message',
+      Working_Syncing_Message: 'working_Syncing_Message',
       WorkingOffline_Title: 'workingOffline_Title',
       WorkingOffline_Message: 'workingOffline_Message',
       GetMetadata_Message: 'getMetadata_Message',

@@ -343,6 +343,12 @@ body {
     background: $colour-text2;
   }
 
+  .ellipsis {
+    &:after {
+      content: "\2026";
+    }
+  }
+
   .float-nowrap {
     width: 200%;
     overflow: auto;
@@ -1557,6 +1563,8 @@ body {
   @extend .overlay;
 
   h3 {
+    @extend .ellipsis;
+
     color: $colour-link-highlight;
     font-size: 1.1rem;
     margin: 0.2rem;

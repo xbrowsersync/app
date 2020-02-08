@@ -207,7 +207,7 @@
     "message": "No"
   },
   "search_Field_Description": {
-    "message": "Start typing to find bookmarks or just hit Enter..."
+    "message": "Start typing to find bookmarks or just hit Enter"
   },
   "search_NoBookmarks_Message": {
     "message": "You have no bookmarks, go add some!"
@@ -390,7 +390,7 @@
     "message": "Connection error"
   },
   "settings_Service_Status_Loading": {
-    "message": "Checking..."
+    "message": "Checking"
   },
   "settings_Service_Status_Online": {
     "message": "Online"
@@ -447,7 +447,7 @@
     "message": "Restore"
   },
   "button_Saving_Label": {
-    "message": "Saving..."
+    "message": "Saving"
   },
   "button_Done_Label": {
     "message": "Done"
@@ -480,7 +480,7 @@
     "message": "Your data has been restored."
   },
   "settings_BackupRestore_RestoreForm_BackupFile_Description": {
-    "message": "Select a backup file to restore..."
+    "message": "Select a backup file to restore"
   },
   "settings_BackupRestore_RestoreForm_Message": {
     "message": "Copy the contents of a backup file to restore data."
@@ -543,7 +543,7 @@
     "message": "Tags"
   },
   "bookmark_TagsField_Description": {
-    "message": "tag 1, tag 2, tag 3, etc..."
+    "message": "tag 1, tag 2, tag 3, etc"
   },
   "bookmark_BookmarkForm_Required_Label": {
     "message": "Bookmark URL is required"
@@ -581,8 +581,14 @@
   "qr_Message": {
     "message": "Scan this QR code using the xBrowserSync Android app to access your synced data on your mobile device."
   },
-  "working_Title": {
-    "message": "Syncing..."
+  "working_Restoring_Message": {
+    "message": "Restoring"
+  },
+  "working_Reverting_Message": {
+    "message": "Reverting"
+  },
+  "working_Syncing_Message": {
+    "message": "Syncing"
   },
   "workingOffline_Title": {
     "message": "Working offline"
