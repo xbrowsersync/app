@@ -1,0 +1,4 @@
+- Added Firefox support.
+- Huge improvements to encryption: now uses native Web Crypto API rather than external cryptography library, key derivation uses PBKDF2 with 250,000 rounds of SHA-256, encryption uses AES-GCM with a random 16 byte IV and the user's random 32 char sync ID as a salt.
+- Data is now compressed before being encrypted reducing sync size by up to 60%.
+- Many, many more minor enhancements and bug fixes (see release notes in app for more details).

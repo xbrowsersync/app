@@ -1,0 +1,9 @@
+- Updated Android platform to include v1.5.0 changes, and:
+ 	- Add support for landscape orientation
+	- Fixed bug when fetching metadata after sharing bookmark
+	- Added get metadata button to bookmark panel
+	- Added ability to display search bar beneath search results
+	- Backup and log files are now saved to the Download folder
+- Added bookmark folder view to search panel
+- Added reveal password functionality on login panel
+- Many, many more minor enhancements and bug fixes
