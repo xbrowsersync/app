@@ -825,8 +825,6 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   };
 
   var handleFailedSync = function (failedSync, err) {
-    var clearCachedData;
-
     // If offline swallow error and place failed sync back on the queue
     if (err.code === globals.ErrorCodes.NetworkOffline) {
       utility.LogInfo('Sync ' + failedSync.uniqueId + ' not committed, network offline (' + syncQueue.length + ' waiting to sync)');
@@ -927,72 +925,75 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       return $q.resolve();
     }
 
-    // Get first sync in the queue
-    currentSync = syncQueue.shift();
+    var condition = function () {
+      return $q.resolve(syncQueue.length === 0);
+    };
 
-    // If syncChange flag set wait for resolution, otherwise proceed with sync
-    return (currentSync.syncChange || $q.resolve(true))
-      .then(function (syncChange) {
-        if (!syncChange) {
-          // Not syncing this change
-          return;
-        }
+    var action = function () {
+      // Get first sync in the queue
+      currentSync = syncQueue.shift();
 
-        utility.LogInfo('Processing sync ' + currentSync.uniqueId + (isBackgroundSync ? ' in background' : ''));
+      // If syncChange flag set wait for resolution, otherwise proceed with sync
+      return (currentSync.syncChange || $q.resolve(true))
+        .then(function (syncChange) {
+          if (!syncChange) {
+            // Not syncing this change
+            return;
+          }
 
-        // Enable syncing flag
-        return setIsSyncing(currentSync.type)
-          .then(function () {
-            // Process sync
-            switch (currentSync.type) {
-              // Push bookmarks to xBrowserSync service
-              case globals.SyncType.Push:
-                return sync_handlePush(currentSync);
-              // Overwrite local bookmarks
-              case globals.SyncType.Pull:
-                return sync_handlePull(currentSync);
-              // Sync to service and overwrite local bookmarks
-              case globals.SyncType.Both:
-                return sync_handleBoth(currentSync, isBackgroundSync);
-              // Upgrade sync to current version
-              case globals.SyncType.Upgrade:
-                return sync_handleUpgrade(currentSync);
-              // Ambiguous sync
-              default:
-                return $q.reject({ code: globals.ErrorCodes.AmbiguousSyncRequest });
-            }
-          })
-          .then(function () {
-            return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
-              .then(function (cachedSyncEnabled) {
-                syncEnabled = cachedSyncEnabled;
+          utility.LogInfo('Processing sync ' + currentSync.uniqueId + (isBackgroundSync ? ' in background' : ''));
 
-                // If syncing for the first time or re-syncing, set sync as enabled
-                if (!syncEnabled && currentSync.command !== globals.Commands.RestoreBookmarks) {
-                  return enableSync();
-                }
-              })
-              .then(function () {
-                utility.LogInfo('Sync ' + currentSync.uniqueId + ' committed (' + syncQueue.length + ' waiting to sync)');
-                currentSync.deferred.resolve();
+          // Enable syncing flag
+          return setIsSyncing(currentSync.type)
+            .then(function () {
+              // Process sync
+              switch (currentSync.type) {
+                // Push bookmarks to xBrowserSync service
+                case globals.SyncType.Push:
+                  return sync_handlePush(currentSync);
+                // Overwrite local bookmarks
+                case globals.SyncType.Pull:
+                  return sync_handlePull(currentSync);
+                // Sync to service and overwrite local bookmarks
+                case globals.SyncType.Both:
+                  return sync_handleBoth(currentSync, isBackgroundSync);
+                // Upgrade sync to current version
+                case globals.SyncType.Upgrade:
+                  return sync_handleUpgrade(currentSync);
+                // Ambiguous sync
+                default:
+                  return $q.reject({ code: globals.ErrorCodes.AmbiguousSyncRequest });
+              }
+            })
+            .then(function () {
+              return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+                .then(function (cachedSyncEnabled) {
+                  syncEnabled = cachedSyncEnabled;
 
-                // Reset syncing flag
-                return setIsSyncing();
-              });
-          });
-      })
-      .then(function () {
-        // TODO: Covert to promise while loop
-        // Trigger remaining syncs
-        $timeout(processSyncQueue);
-      })
-      .catch(function (err) {
-        return handleFailedSync(currentSync, err);
-      })
-      .finally(function () {
-        // Clear current sync
-        currentSync = null;
-      });
+                  // If syncing for the first time or re-syncing, set sync as enabled
+                  if (!syncEnabled && currentSync.command !== globals.Commands.RestoreBookmarks) {
+                    return enableSync();
+                  }
+                })
+                .then(function () {
+                  utility.LogInfo('Sync ' + currentSync.uniqueId + ' committed (' + syncQueue.length + ' waiting to sync)');
+                  currentSync.deferred.resolve();
+
+                  // Reset syncing flag
+                  return setIsSyncing();
+                });
+            });
+        })
+        .catch(function (err) {
+          return handleFailedSync(currentSync, err);
+        })
+        .finally(function () {
+          // Clear current sync
+          currentSync = null;
+        });
+    };
+
+    return utility.PromiseWhile(syncQueue, condition, action);
   };
 
   var recursiveDelete = function (bookmarks, id) {
