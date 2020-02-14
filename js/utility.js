@@ -425,9 +425,9 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   };
 
   var isNetworkConnected = function () {
-    return window.navigator.connection && window.navigator.connection.type ?
-      (window.navigator.connection.type !== Connection.NONE &&
-        window.navigator.connection.type !== Connection.UNKNOWN) :
+    return window.Connection && window.navigator.connection && window.navigator.connection.type ?
+      (window.navigator.connection.type !== window.Connection.NONE &&
+        window.navigator.connection.type !== window.Connection.UNKNOWN) :
       window.navigator.onLine;
   };
 

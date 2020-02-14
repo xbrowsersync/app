@@ -14,7 +14,7 @@ xBrowserSync.App.Global = function (platform) {
       Name: 'xBrowserSync-alarm',
       Period: 1
     },
-    AppVersion: '1.5.1',
+    AppVersion: '1.5.2-beta1',
     Bookmarks: {
       ContainerPrefix: '[xbs]',
       DescriptionMaxLength: 300,
@@ -391,7 +391,7 @@ xBrowserSync.App.Global = function (platform) {
     URL: {
       Bookmarks: '/bookmarks',
       Current: '/current',
-      DefaultServiceUrl: 'https://api.xbrowsersync.org',
+      DefaultServiceUrl: 'https://api-test.xbrowsersync.org',
       HttpRegex: '^https?:\/\/\\w+',
       LastUpdated: '/lastUpdated',
       ProtocolRegex: '^[\\w\-]+:',

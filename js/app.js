@@ -1486,8 +1486,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
           vm.sync.passwordComplexity = {};
           $q.all([
             platform.LocalStorage.Set(globals.CacheKeys.Password),
-            syncId ? platform.LocalStorage.Set(globals.CacheKeys.SyncId, syncId) : $q.resolve(),
-            serviceUrl ? platform.LocalStorage.Set(globals.CacheKeys.ServiceUrl, serviceUrl) : $q.resolve()
+            syncId ? platform.LocalStorage.Set(globals.CacheKeys.SyncId, syncId) : $q.resolve()
           ])
             .then(function () {
               // Update the service URL if supplied

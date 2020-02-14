@@ -1066,69 +1066,81 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           return reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
         }
 
-        // Extract metadata properties
+        // Extract metadata values
         parser = new DOMParser();
         var document = parser.parseFromString(pageContent, 'text/html');
-
-        // Get all meta tags
-        var metaTagsArr = document.getElementsByTagName('meta');
+        var txt = document.createElement('textarea');
 
         var getPageDescription = function () {
-          for (var i = 0; i < metaTagsArr.length; i++) {
-            var currentTag = metaTagsArr[i];
-            if ((currentTag.getAttribute('property') && currentTag.getAttribute('property').toUpperCase().trim() === 'OG:DESCRIPTION' && currentTag.getAttribute('content')) ||
-              (currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'TWITTER:DESCRIPTION' && currentTag.getAttribute('content')) ||
-              (currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'DESCRIPTION' && currentTag.getAttribute('content'))) {
-              return (currentTag.getAttribute('content')) ? currentTag.getAttribute('content').trim() : '';
-            }
+          var ogDescription = document.querySelector('meta[property="OG:DESCRIPTION"]') || document.querySelector('meta[property="og:description"]');
+          if (ogDescription && ogDescription.content) {
+            txt.innerHTML = ogDescription.content.trim();
+            return txt.value;
           }
 
-          return null;
+          var twitterDescription = document.querySelector('meta[name="TWITTER:DESCRIPTION"]') || document.querySelector('meta[name="twitter:description"]');
+          if (twitterDescription && twitterDescription.content) {
+            txt.innerHTML = twitterDescription.content.trim();
+            return txt.value;
+          }
+
+          var defaultDescription = document.querySelector('meta[name="DESCRIPTION"]') || document.querySelector('meta[name="description"]');
+          if (defaultDescription && defaultDescription.content) {
+            txt.innerHTML = defaultDescription.content.trim();
+            return txt.value;
+          }
+
+          return '';
         };
 
         var getPageKeywords = function () {
+          var keywords = [];
+
           // Get open graph tag values 
-          var currentTag, i, keywords = [];
-          for (i = 0; i < metaTagsArr.length; i++) {
-            currentTag = metaTagsArr[i];
-            if (currentTag.getAttribute('property') &&
-              currentTag.getAttribute('property').trim().match(/VIDEO\:TAG$/i) &&
-              currentTag.getAttribute('content')) {
-              keywords.push(currentTag.getAttribute('content').trim());
+          document.querySelectorAll('meta[property="OG:VIDEO:TAG"]').forEach(function (tag) {
+            if (tag && tag.content) {
+              keywords.push(tag.content.trim());
             }
-          }
+          });
+          document.querySelectorAll('meta[property="og:video:tag"]').forEach(function (tag) {
+            if (tag && tag.content) {
+              keywords.push(tag.content.trim());
+            }
+          });
 
           // Get meta tag values 
-          for (i = 0; i < metaTagsArr.length; i++) {
-            currentTag = metaTagsArr[i];
-            if (currentTag.getAttribute('name') &&
-              currentTag.getAttribute('name').toUpperCase().trim() === 'KEYWORDS' &&
-              currentTag.getAttribute('content')) {
-              var metaKeywords = currentTag.getAttribute('content').split(',');
-              for (i = 0; i < metaKeywords.length; i++) {
-                var currentKeyword = metaKeywords[i];
-                if (currentKeyword && currentKeyword.trim()) {
-                  keywords.push(currentKeyword.trim());
-                }
+          var metaKeywords = document.querySelector('meta[name="KEYWORDS"]') || document.querySelector('meta[name="keywords"]');
+          if (metaKeywords && metaKeywords.content) {
+            metaKeywords.content.split(',').forEach(function (keyword) {
+              if (keyword) {
+                keywords.push(keyword.trim());
               }
-              break;
-            }
+            });
           }
 
-          if (keywords.length > 0) {
-            return keywords.join();
+          // Remove duplicates
+          var uniqueKeywords = keywords.filter(function (value, index, self) {
+            return self.indexOf(value) === index;
+          });
+
+          if (uniqueKeywords.length > 0) {
+            return uniqueKeywords.join();
           }
 
           return null;
         };
 
         var getPageTitle = function () {
-          for (var i = 0; i < metaTagsArr.length; i++) {
-            var tag = metaTagsArr[i];
-            if ((tag.getAttribute('property') && tag.getAttribute('property').toUpperCase().trim() === 'OG:TITLE' && tag.getAttribute('content')) ||
-              (tag.getAttribute('name') && tag.getAttribute('name').toUpperCase().trim() === 'TWITTER:TITLE' && tag.getAttribute('content'))) {
-              return (tag.getAttribute('content')) ? tag.getAttribute('content').trim() : '';
-            }
+          var ogTitle = document.querySelector('meta[property="OG:TITLE"]') || document.querySelector('meta[property="og:title"]');
+          if (ogTitle && ogTitle.content) {
+            txt.innerHTML = ogTitle.content.trim();
+            return txt.value;
+          }
+
+          var twitterTitle = document.querySelector('meta[name="TWITTER:TITLE"]') || document.querySelector('meta[name="twitter:title"]');
+          if (twitterTitle && twitterTitle.content) {
+            txt.innerHTML = twitterTitle.content.trim();
+            return txt.value;
           }
 
           return document.title;
@@ -1810,19 +1822,17 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         utility.LogInfo('Upgrading from ' + oldVersion + ' to ' + newVersion);
       })
       .then(function () {
-        if (compareVersions(oldVersion, newVersion)) {
-          switch (true) {
-            // v1.5.1
-            case newVersion.indexOf('1.5.1') === 0:
-              return upgradeTo151();
-          }
-        }
-      })
-      .then(function () {
         return $q.all([
           setInLocalStorage(globals.CacheKeys.AppVersion, newVersion),
           setInLocalStorage(globals.CacheKeys.DisplayUpdated, true)
         ]);
+      })
+      .catch(function (err) {
+        utility.LogError(err, 'platform.handleUpgrade');
+
+        // Display alert
+        var errMessage = utility.GetErrorMessageFromException(err);
+        displayAlert(errMessage.title, errMessage.message);
       });
   };
 
@@ -1840,42 +1850,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var syncForm_EnableSync_Click = function () {
     // Don't display confirmation before syncing
     vm.events.syncForm_ConfirmSync_Click();
-  };
-
-  var upgradeTo151 = function () {
-    // Convert local storage items to storage API
-    var deferred = $q.defer();
-
-    var syncEnabled = JSON.parse(localStorage.getItem('xBrowserSync-syncEnabled'));
-    if (syncEnabled) {
-      var lastUpdated = localStorage.getItem('xBrowserSync-lastUpdated');
-      var password = localStorage.getItem('xBrowserSync-password');
-      var serviceUrl = localStorage.getItem('xBrowserSync-urlHost');
-      var syncId = localStorage.getItem('xBrowserSync-Id');
-      var syncVersion = localStorage.getItem('xBrowserSync-syncVersion');
-
-      // Set cached data
-      $q.all([
-        platform.LocalStorage.Set(globals.CacheKeys.DisplayHelp, false),
-        platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, lastUpdated),
-        platform.LocalStorage.Set(globals.CacheKeys.Password, password),
-        platform.LocalStorage.Set(globals.CacheKeys.ServiceUrl, serviceUrl),
-        platform.LocalStorage.Set(globals.CacheKeys.SyncEnabled, syncEnabled),
-        platform.LocalStorage.Set(globals.CacheKeys.SyncId, syncId),
-        platform.LocalStorage.Set(globals.CacheKeys.SyncVersion, syncVersion)
-      ])
-        .then(deferred.resolve)
-        .catch(deferred.reject);
-    }
-    else {
-      deferred.resolve();
-    }
-
-    return deferred.promise
-      .finally(function () {
-        // Clear local storage
-        _.each(_.keys(localStorage), function (key) { return localStorage.removeItem(key); });
-      });
   };
 
   // Call constructor
