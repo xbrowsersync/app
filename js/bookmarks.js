@@ -849,22 +849,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
     return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
-        // TODO: Move to UI
-        // If error occurred whilst creating new sync, remove cached sync ID and password
-        if (failedSync.type === globals.SyncType.Push && !failedSync.changeInfo) {
-          clearCachedData = $q.all([
-            platform.LocalStorage.Set(globals.CacheKeys.SyncId),
-            platform.LocalStorage.Set(globals.CacheKeys.Password)
-          ]);
-        }
-        else {
-          clearCachedData = $q.resolve();
-        }
-
-        return $q.all([
-          clearCachedData,
-          setIsSyncing()
-        ])
+        return setIsSyncing()
           .then(function () {
             if (!syncEnabled) {
               return;

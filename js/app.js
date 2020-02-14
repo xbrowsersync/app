@@ -537,7 +537,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         }
 
         // Display loading overlay
-        platform.Interface.Working.Show();
+        var loadingTimeout = platform.Interface.Working.Show();
 
         // Sync changes
         return queueSync({
@@ -549,11 +549,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         })
           .then(function () {
             // Set bookmark active status if current bookmark is current page
-            return platform.GetCurrentUrl();
-          })
-          .then(function (currentUrl) {
-            vm.bookmark.active = currentUrl && currentUrl.toUpperCase() === bookmarkToCreate.url.toUpperCase();
-            return changeView(vm.view.views.search);
+            return platform.GetCurrentUrl()
+              .then(function (currentUrl) {
+                // Update bookmark status and switch view
+                var bookmarkStatusActive = currentUrl && currentUrl.toUpperCase() === bookmarkToCreate.url.toUpperCase();
+                return syncBookmarksSuccess(loadingTimeout, bookmarkStatusActive);
+              });
           });
       })
       .catch(checkIfSyncDataRefreshedOnError);
@@ -578,7 +579,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     var bookmarkToDelete = vm.bookmark.current;
 
     // Display loading overlay
-    platform.Interface.Working.Show();
+    var loadingTimeout = platform.Interface.Working.Show();
 
     // Sync changes
     queueSync({
@@ -593,12 +594,9 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         return platform.GetCurrentUrl();
       })
       .then(function (currentUrl) {
-        if (currentUrl && currentUrl.toUpperCase() === vm.bookmark.originalUrl.toUpperCase()) {
-          vm.bookmark.active = false;
-        }
-
-        // Display the search panel
-        return changeView(vm.view.views.search);
+        // Update bookmark status and switch view
+        var bookmarkStatusActive = !(currentUrl && currentUrl.toUpperCase() === vm.bookmark.originalUrl.toUpperCase());
+        return syncBookmarksSuccess(loadingTimeout, bookmarkStatusActive);
       })
       .catch(checkIfSyncDataRefreshedOnError);
   };
@@ -996,7 +994,9 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
             return displayMainView();
           })
           // Check if current page is a bookmark
-          .then(setBookmarkStatus);
+          .then(function () {
+            return setBookmarkStatus();
+          });
       })
       .catch(function (err) {
         displayMainView()
@@ -1486,7 +1486,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
           vm.sync.passwordComplexity = {};
           $q.all([
             platform.LocalStorage.Set(globals.CacheKeys.Password),
-            syncId ? platform.LocalStorage.Set(globals.CacheKeys.SyncId, syncId) : $q.resolve()
+            syncId ? platform.LocalStorage.Set(globals.CacheKeys.SyncId, syncId) : $q.resolve(),
+            serviceUrl ? platform.LocalStorage.Set(globals.CacheKeys.ServiceUrl, serviceUrl) : $q.resolve()
           ])
             .then(function () {
               // Update the service URL if supplied
@@ -1929,7 +1930,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     }
   };
 
-  var setBookmarkStatus = function () {
+  var setBookmarkStatus = function (isActive) {
+    if (isActive !== undefined) {
+      vm.bookmark.active = isActive;
+      return $q.resolve();
+    }
+
     return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
         if (!syncEnabled) {
@@ -1978,7 +1984,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var startSyncing = function () {
-    var syncInfoMessage, syncType;
+    var syncData = {}, syncInfoMessage;
 
     // Display loading panel
     vm.sync.displaySyncConfirmation = false;
@@ -1996,7 +2002,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         // If a sync ID has not been supplied, get a new one
         if (!vm.sync.id) {
           // Set sync type for create new sync
-          syncType = globals.SyncType.Push;
+          syncData.type = globals.SyncType.Push;
 
           // Get new sync ID
           return api.CreateNewSync()
@@ -2018,7 +2024,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
           syncInfoMessage = 'Synced to existing id: ' + vm.sync.id;
 
           // Set sync type for retrieve existing sync
-          syncType = globals.SyncType.Pull;
+          syncData.type = globals.SyncType.Pull;
 
           // Retrieve sync version for existing id
           return api.GetBookmarksVersion(vm.sync.id)
@@ -2026,7 +2032,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
               // If no sync version is set, confirm upgrade
               if (!response.version) {
                 if (vm.sync.upgradeConfirmed) {
-                  syncType = globals.SyncType.Upgrade;
+                  syncData.type = globals.SyncType.Upgrade;
                 }
                 else {
                   vm.sync.displayUpgradeConfirmation = true;
@@ -2054,13 +2060,15 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         return utility.GetPasswordHash(vm.sync.password, syncId)
           .then(function (passwordHash) {
             platform.LocalStorage.Set(globals.CacheKeys.Password, passwordHash);
-            return queueSync({ type: syncType });
+            return queueSync(syncData);
           })
           .then(function () {
             utility.LogInfo(syncInfoMessage);
             return syncBookmarksSuccess(loadingTimeout);
           })
-          .catch(syncBookmarksFailed);
+          .catch(function (err) {
+            return syncBookmarksFailed(err, syncData);
+          });
       })
       .catch(function (err) {
         // Disable upgrade confirmed flag
@@ -2075,18 +2083,21 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       });
   };
 
-  var syncBookmarksFailed = function (err) {
-    var errMessage;
-
+  var syncBookmarksFailed = function (err, syncData) {
     // Disable upgrade confirmed flag
     vm.sync.upgradeConfirmed = false;
 
     // Clear cached data
-    platform.LocalStorage.Set([
+    var keys = [
       globals.CacheKeys.Bookmarks,
       globals.CacheKeys.Password,
       globals.CacheKeys.SyncVersion
-    ]);
+    ];
+    // If error occurred whilst creating new sync, remove cached sync ID and password
+    if (syncData.type === globals.SyncType.Push) {
+      keys.push(globals.CacheKeys.SyncId);
+    }
+    platform.LocalStorage.Set(keys);
 
     // If ID was removed disable sync and display login panel
     if (err && err.code === globals.ErrorCodes.SyncRemoved) {
@@ -2110,7 +2121,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     }
   };
 
-  var syncBookmarksSuccess = function (loadingTimeout) {
+  var syncBookmarksSuccess = function (loadingTimeout, bookmarkStatusActive) {
     // Hide loading panel
     platform.Interface.Working.Hide(null, loadingTimeout);
 
@@ -2125,7 +2136,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     }, 100);
 
     // Update bookmark icon
-    return setBookmarkStatus();
+    return setBookmarkStatus(bookmarkStatusActive);
   };
 
   var syncForm_ConfirmPassword_Back_Click = function () {
