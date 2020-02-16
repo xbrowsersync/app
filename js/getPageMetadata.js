@@ -2,23 +2,29 @@
   var getPageMetadata = function () {
     var txt = document.createElement('textarea');
 
+    var getDecodedTextValue = function (text) {
+      if (!text) {
+        return '';
+      }
+      var txt = document.createElement('textarea');
+      txt.innerHTML = text.trim();
+      return txt.value;
+    };
+
     var getPageDescription = function () {
       var ogDescription = document.querySelector('meta[property="OG:DESCRIPTION"]') || document.querySelector('meta[property="og:description"]');
       if (ogDescription && ogDescription.content) {
-        txt.innerHTML = ogDescription.content.trim();
-        return txt.value;
+        return getDecodedTextValue(ogDescription.content);
       }
 
       var twitterDescription = document.querySelector('meta[name="TWITTER:DESCRIPTION"]') || document.querySelector('meta[name="twitter:description"]');
       if (twitterDescription && twitterDescription.content) {
-        txt.innerHTML = twitterDescription.content.trim();
-        return txt.value;
+        return getDecodedTextValue(twitterDescription.content);
       }
 
       var defaultDescription = document.querySelector('meta[name="DESCRIPTION"]') || document.querySelector('meta[name="description"]');
       if (defaultDescription && defaultDescription.content) {
-        txt.innerHTML = defaultDescription.content.trim();
-        return txt.value;
+        return getDecodedTextValue(defaultDescription.content);
       }
 
       return '';
@@ -30,12 +36,12 @@
       // Get open graph tag values 
       document.querySelectorAll('meta[property="OG:VIDEO:TAG"]').forEach(function (tag) {
         if (tag && tag.content) {
-          keywords.push(tag.content.trim());
+          keywords.push(getDecodedTextValue(tag.content));
         }
       });
       document.querySelectorAll('meta[property="og:video:tag"]').forEach(function (tag) {
         if (tag && tag.content) {
-          keywords.push(tag.content.trim());
+          keywords.push(getDecodedTextValue(tag.content));
         }
       });
 
@@ -44,7 +50,7 @@
       if (metaKeywords && metaKeywords.content) {
         metaKeywords.content.split(',').forEach(function (keyword) {
           if (keyword) {
-            keywords.push(keyword.trim());
+            keywords.push(getDecodedTextValue(keyword));
           }
         });
       }
@@ -64,17 +70,15 @@
     var getPageTitle = function () {
       var ogTitle = document.querySelector('meta[property="OG:TITLE"]') || document.querySelector('meta[property="og:title"]');
       if (ogTitle && ogTitle.content) {
-        txt.innerHTML = ogTitle.content.trim();
-        return txt.value;
+        return getDecodedTextValue(ogTitle.content);
       }
 
       var twitterTitle = document.querySelector('meta[name="TWITTER:TITLE"]') || document.querySelector('meta[name="twitter:title"]');
       if (twitterTitle && twitterTitle.content) {
-        txt.innerHTML = twitterTitle.content.trim();
-        return txt.value;
+        return getDecodedTextValue(twitterTitle.content);
       }
 
-      return document.title;
+      return getDecodedTextValue(document.title);
     };
 
     return {
