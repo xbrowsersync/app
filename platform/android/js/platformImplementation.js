@@ -1453,6 +1453,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     currentPage = bookmark;
     return vm.view.change(vm.view.views.bookmark)
       .finally(function () {
+        // Set bookmark form fields to display default values
+        vm.bookmark.current = bookmark;
+        vm.bookmark.originalUrl = vm.bookmark.current.url;
+
         // Clear current page
         currentPage = null;
       });
@@ -1621,6 +1625,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     }
 
     var bookmark = sharedBookmark;
+    var txt = document.createElement('textarea');
+    txt.innerHTML = bookmark.title ? bookmark.title.trim() : '';
+    bookmark.title = txt.value;
     sharedBookmark = null;
     return bookmark;
   };
@@ -1739,9 +1746,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           return;
         }
 
-        // Check if a bookmark was shared
-        checkForSharedBookmark();
-
         // Run sync
         return executeSyncIfOnline()
           .then(function (isOnline) {
@@ -1753,6 +1757,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             if (vm.view.current === vm.view.views.search && !vm.search.query) {
               displayDefaultSearchState();
             }
+          })
+          .then(function () {
+            // Check if a bookmark was shared
+            return checkForSharedBookmark();
           });
       })
       .catch(displayErrorAlert);

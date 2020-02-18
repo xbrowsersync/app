@@ -1007,7 +1007,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       });
   };
 
-  var init_bookmarkView = function (bookmarkToUpdate) {
+  var init_bookmarkView = function (bookmark) {
     vm.bookmark.addButtonDisabledUntilEditForm = false;
     vm.bookmark.current = null;
     vm.bookmark.displayUpdateForm = false;
@@ -1016,45 +1016,48 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.bookmark.tagText = null;
     vm.bookmark.tagTextMeasure = null;
 
-    // If bookmark to update provided, set to current and return
     return $q(function (resolve) {
-      if (bookmarkToUpdate) {
+      // If bookmark to update provided, set to current and return
+      if (bookmark) {
         vm.bookmark.displayUpdateForm = true;
-        return resolve(bookmarkToUpdate);
+        return resolve(bookmark);
       }
 
       // Check if current url is a bookmark
       return bookmarks.FindCurrentUrlInBookmarks()
-        .then(function (bookmark) {
-          if (bookmark) {
+        .then(function (existingBookmark) {
+          if (existingBookmark) {
             // Display update bookmark form and return
             vm.bookmark.displayUpdateForm = true;
-            return resolve(bookmark);
+            return resolve(existingBookmark);
           }
 
-          // Get current page metadata as bookmark
-          return getMetadataForCurrentPage()
-            .then(function (metadata) {
-              // Display add bookmark form
-              vm.bookmark.displayUpdateForm = false;
-              resolve(metadata);
-            });
+          resolve();
         });
     })
-      .then(function (bookmark) {
-        if (bookmark) {
+      .then(function (bookmarkToUpdate) {
+        if (bookmarkToUpdate) {
           // Remove search score and set current bookmark to result
-          delete bookmark.score;
-        }
-        else {
-          // If no bookmark supplied, set to default url 
-          bookmark = { url: 'https://' };
+          delete bookmarkToUpdate.score;
+          vm.bookmark.current = bookmarkToUpdate;
+          vm.bookmark.originalUrl = bookmarkToUpdate.url;
+          return;
         }
 
-        // Save url to compare for changes
-        vm.bookmark.current = bookmark;
-        vm.bookmark.originalUrl = bookmark.url;
+        // Set default bookmark form values
+        vm.bookmark.current = { url: 'https://' };
+        vm.bookmark.originalUrl = vm.bookmark.current.url;
 
+        // Get current page metadata as bookmark
+        getMetadataForCurrentPage()
+          .then(function (currentPageMetadata) {
+            if (currentPageMetadata) {
+              vm.bookmark.current = currentPageMetadata;
+              vm.bookmark.originalUrl = currentPageMetadata.url;
+            }
+          });
+      })
+      .then(function () {
         $timeout(function () {
           // Reset form
           vm.bookmarkForm.$setPristine();
