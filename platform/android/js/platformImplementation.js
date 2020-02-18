@@ -1031,7 +1031,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var getPageMetadata = function (getFullMetadata, pageUrl) {
-    var inAppBrowser, timeout;
+    var inAppBrowser, loadUrlTimeout, timeout;
 
     // Set default metadata from provided page url or current page
     var metadata = {
@@ -1039,7 +1039,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       url: pageUrl ? pageUrl : currentPage ? currentPage.url : null
     };
 
-    return $q(function (resolve, reject) {
+    var promise = $q(function (resolve, reject) {
       // Return if no url set
       if (!metadata.url) {
         vm.bookmark.addButtonDisabledUntilEditForm = true;
@@ -1057,13 +1057,19 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         var parser;
         platform.Interface.Working.Hide('retrievingMetadata', timeout);
 
+        // Cancel timeout
+        if (loadUrlTimeout) {
+          $timeout.cancel(loadUrlTimeout);
+          loadUrlTimeout = null;
+        }
+
         // Check html content was returned
         if (err || !pageContent) {
           if (err) {
             utility.LogError(err, 'platform.handleResponse');
           }
           utility.LogWarning('Didn’t get page metadata');
-          return resolve(currentPage);
+          return reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
         }
 
         // Extract metadata values
@@ -1184,6 +1190,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         },
           handleResponse);
       });
+
+      // Time out metadata load after 10 secs
+      loadUrlTimeout = $timeout(function () {
+        if (promise.$$state.status === 0) {
+          handleResponse(null, new Error('Timed out loading URL'));
+        }
+      }, 10e3);
     })
       .finally(function () {
         // Close InAppBrowser
@@ -1192,6 +1205,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           inAppBrowser = null;
         }
       });
+
+    return promise;
   };
 
   var getSupportedUrl = function (url) {

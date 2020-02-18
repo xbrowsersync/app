@@ -1055,7 +1055,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
               vm.bookmark.current = currentPageMetadata;
               vm.bookmark.originalUrl = currentPageMetadata.url;
             }
-          });
+          })
+          .catch(displayAlertErrorHandler);
       })
       .then(function () {
         $timeout(function () {
