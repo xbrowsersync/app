@@ -10,7 +10,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility, bookmarks) {
   'use strict';
 
-  var vm, notificationClickHandlers = [], syncTimeout;
+  var vm, notificationClickHandlers = [], startUpInitiated = false, syncTimeout;
 
 	/* ------------------------------------------------------------------------------------
 	 * Constructor
@@ -19,14 +19,23 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   var Background = function () {
     vm = this;
     vm.install = function (event) {
+      if (startUpInitiated) {
+        return;
+      }
       var details = angular.element(event.currentTarget).data('details');
       onInstallHandler(details);
     };
-    vm.startup = onStartupHandler;
+    vm.startup = function () {
+      if (startUpInitiated) {
+        return;
+      }
+      onStartupHandler();
+    };
     chrome.alarms.onAlarm.addListener(onAlarmHandler);
     chrome.notifications.onClicked.addListener(onNotificationClicked);
     chrome.notifications.onClosed.addListener(onNotificationClosed);
     chrome.runtime.onMessage.addListener(onMessageHandler);
+    window.xBrowserSync.App.HandleMessage = onMessageHandler;
   };
 
 
@@ -171,7 +180,8 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var convertLocalBookmarkToSeparator = function (bookmark) {
-    return toggleEventListeners(false)
+    // Test if sync enabled check needed
+    return $q(function (resolve) { disableEventListeners(resolve); })
       .then(function () {
         return platform.Bookmarks.LocalBookmarkInToolbar(bookmark);
       })
@@ -204,7 +214,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         });
       })
       .finally(function () {
-        return toggleEventListeners(true);
+        return $q(function (resolve) { enableEventListeners(resolve); });
       });
   };
 
@@ -414,6 +424,25 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
               });
             });
           });
+      })
+      .catch(function (err) {
+        // Don't display alert if sync failed due to network connection
+        if (utility.IsNetworkConnectionError(err)) {
+          utility.LogInfo('Could not check for updates, no connection');
+          return;
+        }
+
+        utility.LogError(err, 'background.onAlarmHandler');
+
+        // If ID was removed disable sync
+        if (err.code === globals.ErrorCodes.NoDataFound) {
+          err.code = globals.ErrorCodes.SyncRemoved;
+          bookmarks.DisableSync();
+        }
+
+        // Display alert
+        var errMessage = utility.GetErrorMessageFromException(err);
+        displayAlert(errMessage.title, errMessage.message);
       });
   };
 
@@ -541,26 +570,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   var onAlarmHandler = function (alarm) {
     // When alarm fires check for sync updates
     if (alarm && alarm.name === globals.Alarm.Name) {
-      getLatestUpdates()
-        .catch(function (err) {
-          // Don't display alert if sync failed due to network connection
-          if (utility.IsNetworkConnectionError(err)) {
-            utility.LogInfo('Could not check for updates, no connection');
-            return;
-          }
-
-          utility.LogError(err, 'background.onAlarmHandler');
-
-          // If ID was removed disable sync
-          if (err.code === globals.ErrorCodes.NoDataFound) {
-            err.code = globals.ErrorCodes.SyncRemoved;
-            bookmarks.DisableSync();
-          }
-
-          // Display alert
-          var errMessage = utility.GetErrorMessageFromException(err);
-          displayAlert(errMessage.title, errMessage.message);
-        });
+      getLatestUpdates();
     }
   };
 
@@ -595,6 +605,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var onInstallHandler = function (details) {
+    startUpInitiated = true;
     var currentVersion = chrome.runtime.getManifest().version;
     var installOrUpgrade = $q.resolve();
 
@@ -633,6 +644,10 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       // Disable event listeners
       case globals.Commands.DisableEventListeners:
         disableEventListeners(sendResponse);
+        break;
+      // Sync finished
+      case globals.Commands.SyncFinished:
+        // Swallow the message, not used by background script
         break;
       // Unknown command
       default:
@@ -677,6 +692,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var onStartupHandler = function () {
+    startUpInitiated = true;
     var cachedData, syncEnabled;
     utility.LogInfo('Starting up');
 
@@ -700,7 +716,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
           globals.CacheKeys.Password
         ));
 
-        // Refresh interface
+        // Update browser action icon
         platform.Interface.Refresh(syncEnabled);
 
         // Exit if sync not enabled
@@ -708,23 +724,25 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
           return;
         }
 
-        // Enable event listeners
-        return toggleEventListeners(true)
-          // Start auto updates
-          .then(platform.AutomaticUpdates.Start)
-          // Check for updates
-          .then(checkForUpdatesOnStartup)
-          .catch(function (err) {
-            // If check for updates was cancelled don't continue
-            if (err.code === globals.ErrorCodes.HttpRequestCancelled) {
-              return;
-            }
+        // Enable sync
+        return bookmarks.EnableSync()
+          .then(function () {
+            // Check for updates after a slight delay to allow for initialising network connection
+            $timeout(function () {
+              checkForUpdatesOnStartup()
+                .catch(function (err) {
+                  // If check for updates was cancelled don't continue
+                  if (err.code === globals.ErrorCodes.HttpRequestCancelled) {
+                    return;
+                  }
 
-            // Display alert
-            var errMessage = utility.GetErrorMessageFromException(err);
-            displayAlert(errMessage.title, errMessage.message);
+                  // Display alert
+                  var errMessage = utility.GetErrorMessageFromException(err);
+                  displayAlert(errMessage.title, errMessage.message);
 
-            utility.LogError(err, 'background.onStartupHandler');
+                  utility.LogError(err, 'background.onStartupHandler');
+                });
+            }, 1e3);
           });
       });
   };
@@ -733,20 +751,8 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     runSync = runSync === undefined ? true : runSync;
     sendResponse = sendResponse || function () { };
 
-    // Disable event listeners if sync will affect local bookmarks
-    return (syncData.type === globals.SyncType.Pull || syncData.type === globals.SyncType.Both ?
-      toggleEventListeners(false) : $q.resolve())
-      .then(function () {
-        // Queue sync
-        return bookmarks.QueueSync(syncData, runSync)
-          .catch(function (err) {
-            // If local data out of sync, queue refresh sync
-            return (bookmarks.CheckIfRefreshSyncedDataOnError(err) ? refreshLocalSyncData() : $q.resolve())
-              .then(function () {
-                throw err;
-              });
-          });
-      })
+    // Queue sync
+    return bookmarks.QueueSync(syncData, runSync)
       .then(function (bookmarks) {
         try {
           sendResponse({ bookmarks: bookmarks, success: true });
@@ -754,27 +760,31 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         catch (err) { }
 
         // Send a message in case the user closed the extension window
-        chrome.runtime.sendMessage({
+        platform.SendMessage({
           command: globals.Commands.SyncFinished,
           success: true,
           uniqueId: syncData.uniqueId
-        });
+        })
+          .catch(function () { });
       })
       .catch(function (err) {
-        try {
-          sendResponse({ error: err, success: false });
-        }
-        catch (innerErr) { }
+        // If local data out of sync, queue refresh sync
+        return (bookmarks.CheckIfRefreshSyncedDataOnError(err) ? refreshLocalSyncData() : $q.resolve())
+          .then(function () {
+            try {
+              sendResponse({ error: err, success: false });
+            }
+            catch (innerErr) { }
 
-        // Send a message in case the user closed the extension window
-        chrome.runtime.sendMessage({
-          command: globals.Commands.SyncFinished,
-          error: err,
-          success: false
-        });
-      })
-      // Enable event listeners if required
-      .finally(toggleEventListeners);
+            // Send a message in case the user closed the extension window
+            platform.SendMessage({
+              command: globals.Commands.SyncFinished,
+              error: err,
+              success: false
+            })
+              .catch(function () { });
+          });
+      });
   };
 
   var refreshLocalSyncData = function () {
@@ -858,29 +868,6 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       });
   };
 
-  var toggleEventListeners = function (enable) {
-    return (enable == null ? platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled) : $q.resolve(enable))
-      .then(function (syncEnabled) {
-        return $q(function (resolve, reject) {
-          var callback = function (response) {
-            if (response.success) {
-              resolve();
-            }
-            else {
-              reject(response.error);
-            }
-          };
-
-          if (syncEnabled) {
-            return enableEventListeners(callback);
-          }
-          else {
-            return disableEventListeners(callback);
-          }
-        });
-      });
-  };
-
   var upgradeExtension = function (oldVersion, newVersion) {
     return platform.LocalStorage.Set(globals.CacheKeys.TraceLog)
       .then(function () {
@@ -923,7 +910,6 @@ xBrowserSync.App.Platform.$inject = ['$q'];
 xBrowserSync.App.ChromeBackground.factory('platform', xBrowserSync.App.Platform);
 
 // Add global service
-xBrowserSync.App.Global.$inject = ['platform'];
 xBrowserSync.App.ChromeBackground.factory('globals', xBrowserSync.App.Global);
 
 // Add httpInterceptor service

@@ -59,6 +59,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Permissions.Check = checkPermissions;
     platform.Permissions.Remove = removePermissions;
     platform.Permissions.Request = requestPermissions;
+    platform.SendMessage = sendMessage;
     platform.Sync.Await = awaitSync;
     platform.Sync.Current = getCurrentSync;
     platform.Sync.Queue = queueSync;
@@ -255,14 +256,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var disableEventListeners = function () {
-    return browser.runtime.sendMessage({
+    return sendMessage({
       command: globals.Commands.DisableEventListeners
-    })
-      .then(function (response) {
-        if (!response.success) {
-          throw response.error;
-        }
-      });
+    });
   };
 
   var displayLoading = function (id) {
@@ -340,14 +336,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var enableEventListeners = function () {
-    return browser.runtime.sendMessage({
+    return sendMessage({
       command: globals.Commands.EnableEventListeners
-    })
-      .then(function (response) {
-        if (!response.success) {
-          throw response.error;
-        }
-      });
+    });
   };
 
   var getAutoUpdatesNextRun = function () {
@@ -528,14 +519,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var getCurrentSync = function () {
-    return browser.runtime.sendMessage({
+    return sendMessage({
       command: globals.Commands.GetCurrentSync
     })
       .then(function (response) {
-        if (!response.success) {
-          throw response.error;
-        }
-
         return response.currentSync;
       });
   };
@@ -820,13 +807,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var queueSync = function (syncData, command) {
     syncData.command = command || globals.Commands.SyncBookmarks;
-    return browser.runtime.sendMessage(syncData)
+    return sendMessage(syncData)
       .then(function (response) {
-        if (response.success) {
-          return response.bookmarks;
-        }
-
-        throw response.error;
+        return response.bookmarks;
       });
   };
 
@@ -905,6 +888,33 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         utility.LogInfo('Optional permissions ' + (!granted ? 'not ' : '') + 'granted');
         return granted;
       });
+  };
+
+  var sendMessage = function (message) {
+    return $q(function (resolve, reject) {
+      browser.runtime.sendMessage(message)
+        .then(function (response) {
+          if (!response) {
+            return resolve();
+          }
+
+          if (!response.success) {
+            return reject(response.error);
+          }
+
+          resolve(response);
+        })
+        .catch(function (err) {
+          // If no message connection detected, check if background function can be called directly
+          if (err.message && err.message.toLowerCase().indexOf('could not establish connection') >= 0 &&
+            window.xBrowserSync.App.HandleMessage) {
+            return window.xBrowserSync.App.HandleMessage(message, null, resolve);
+          }
+
+          utility.LogWarning('Message listener not available');
+          reject(err);
+        });
+    });
   };
 
   var setInLocalStorage = function (storageKey, value) {

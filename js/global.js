@@ -6,13 +6,13 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description:	Defines global properties used across all platforms.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Global = function (platform) {
+xBrowserSync.App.Global = function () {
   'use strict';
 
   var Global = {
     Alarm: {
       Name: 'xBrowserSync-alarm',
-      Period: 1
+      Period: 15
     },
     AppVersion: '1.5.2',
     Bookmarks: {

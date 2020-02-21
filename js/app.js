@@ -779,11 +779,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.search.results = null;
     vm.sync.enabled = false;
 
-    // Disable sync and event listeners
-    return $q.all([
-      bookmarks.DisableSync(),
-      !utility.IsMobilePlatform(vm.platformName) ? platform.EventListeners.Disable() : $q.resolve()
-    ]);
+    // Disable sync
+    return bookmarks.DisableSync();
   };
 
   var displayAlert = function (title, message, alertType) {
@@ -980,9 +977,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
                 .then(function () {
                   return platform.Sync.Await(currentSync.uniqueId);
                 })
-                .then(function () {
-                  return vm.view.change(vm.view.views.search);
-                });
+                .then(syncBookmarksSuccess);
             }
 
             // Return here if view has already been set

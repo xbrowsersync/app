@@ -77,6 +77,7 @@ xBrowserSync.App.Platform = function () {
       ToggleLight: notImplemented
     },
     SelectFile: notImplemented,
+    SendMessage: notImplemented,
     Sync: {
       Await: notImplemented,
       Current: notImplemented,
