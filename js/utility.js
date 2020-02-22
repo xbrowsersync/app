@@ -113,7 +113,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         return decryptedData;
       })
       .catch(function (err) {
-        logInfo('Decryption failed.');
+        logInfo('Decryption failed');
         return $q.reject({
           code: globals.ErrorCodes.InvalidCredentials,
           stack: err.stack
@@ -176,7 +176,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         return base64js.fromByteArray(combinedData);
       })
       .catch(function (err) {
-        logInfo('Encryption failed.');
+        logInfo('Encryption failed');
         return $q.reject({
           code: globals.ErrorCodes.InvalidCredentials,
           stack: err.stack

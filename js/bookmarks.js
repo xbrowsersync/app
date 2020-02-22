@@ -512,7 +512,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
           syncQueue.push(syncToQueue);
 
           var syncType = _.findKey(globals.SyncType, function (key) { return key === syncToQueue.type; });
-          utility.LogInfo('Sync ' + syncToQueue.uniqueId + ' (' + syncType.toLowerCase() + ') queued (' + syncQueue.length + ' waiting to sync)');
+          utility.LogInfo('Sync ' + syncToQueue.uniqueId + ' (' + syncType.toLowerCase() + ') queued (' + syncQueue.length + ' queued)');
         }
 
         // Process queued syncs
@@ -831,7 +831,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
     // If offline swallow error and place failed sync back on the queue
     if (err.code === globals.ErrorCodes.NetworkOffline) {
-      utility.LogInfo('Sync ' + failedSync.uniqueId + ' not committed, network offline (' + syncQueue.length + ' waiting to sync)');
+      utility.LogInfo('Sync ' + failedSync.uniqueId + ' not committed, network offline (' + syncQueue.length + ' queued)');
       syncQueue.unshift(failedSync);
 
       // Return sync error back to process that queued the sync
@@ -843,7 +843,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     }
 
     // Otherwise handle failed sync
-    utility.LogInfo('Sync ' + failedSync.uniqueId + ' failed.');
+    utility.LogInfo('Sync ' + failedSync.uniqueId + ' failed');
     utility.LogError(err, 'bookmarks.sync');
     if (failedSync.changeInfo && failedSync.changeInfo.type) {
       utility.LogInfo(failedSync.changeInfo);
@@ -922,7 +922,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   };
 
   var processSyncQueue = function (isBackgroundSync) {
-    var syncEnabled;
+    var syncEnabled, updateRemote = false;
 
     // If a sync is in progress, retry later
     if (currentSync || syncQueue.length === 0) {
@@ -983,8 +983,13 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                   }
                 })
                 .then(function () {
-                  utility.LogInfo('Sync ' + currentSync.uniqueId + ' committed (' + syncQueue.length + ' waiting to sync)');
+                  utility.LogInfo('Sync ' + currentSync.uniqueId + ' committed (' + syncQueue.length + ' queued)');
                   currentSync.deferred.resolve();
+
+                  // Set flag if remote bookmarks data should be updated
+                  if (currentSync.type !== globals.SyncType.Pull) {
+                    updateRemote = true;
+                  }
 
                   // Reset syncing flag
                   return setIsSyncing();
@@ -992,6 +997,10 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
             });
         })
         .catch(function (err) {
+          // Clear update flag if local data will be refreshed 
+          if (checkIfRefreshSyncedDataOnError(err)) {
+            updateRemote = false;
+          }
           return handleFailedSync(currentSync, err);
         })
         .finally(function () {
@@ -1009,6 +1018,37 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       })
       .then(function () {
         return utility.PromiseWhile(syncQueue, condition, action);
+      })
+      .then(function () {
+        if (!updateRemote) {
+          return;
+        }
+
+        // Update remote bookmarks data
+        return platform.LocalStorage.Get(globals.CacheKeys.Bookmarks)
+          .then(function (encryptedBookmarks) {
+            // Decrypt cached bookmarks data
+            return utility.DecryptData(encryptedBookmarks)
+              .then(function (bookmarks) {
+                // Commit update to service
+                return api.UpdateBookmarks(encryptedBookmarks)
+                  .then(function (response) {
+                    return platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, response.lastUpdated)
+                      .then(function () {
+                        utility.LogInfo('Remote bookmarks data updated at ' + response.lastUpdated);
+                      });
+                  })
+                  .catch(function (err) {
+                    // If offline update cache and then throw error
+                    return (err.code === globals.ErrorCodes.NetworkOffline ?
+                      updateCachedBookmarks(bookmarks, encryptedBookmarks) :
+                      $q.resolve())
+                      .then(function () {
+                        throw err;
+                      });
+                  });
+              });
+          });
       })
       .finally(function () {
         return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
@@ -1315,24 +1355,6 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                 .finally(platform.EventListeners.Enable);
             })
               .then(function () {
-                // Commit update to service
-                return api.UpdateBookmarks(encryptedBookmarks, null, backgroundUpdate)
-                  .then(function (response) {
-                    return platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, response.lastUpdated);
-                  })
-                  .catch(function (err) {
-                    // If offline update cache and then throw error
-                    return (err.code === globals.ErrorCodes.NetworkOffline ?
-                      updateCachedBookmarks(bookmarks, encryptedBookmarks) :
-                      $q.resolve())
-                      .then(function () {
-                        // Save bookmarks with sync data to avoid reprocessing changes
-                        syncData.bookmarks = bookmarks;
-                        throw err;
-                      });
-                  });
-              })
-              .then(function () {
                 return updateCachedBookmarks(bookmarks, encryptedBookmarks);
               });
           });
@@ -1480,30 +1502,11 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         return getBookmarks;
       })
       .then(function (bookmarks) {
-        // Encrypt bookmarks
+        // Update local cached bookmarks
         bookmarks = bookmarks || [];
         return utility.EncryptData(JSON.stringify(bookmarks))
           .then(function (encryptedBookmarks) {
-            return $q.resolve()
-              .then(function () {
-                // Commit update to service
-                return api.UpdateBookmarks(encryptedBookmarks)
-                  .then(function (response) {
-                    return platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, response.lastUpdated);
-                  })
-                  .catch(function (err) {
-                    // If offline update cache and then throw error
-                    return (err.code === globals.ErrorCodes.NetworkOffline ?
-                      updateCachedBookmarks(bookmarks, encryptedBookmarks) :
-                      $q.resolve())
-                      .then(function () {
-                        throw err;
-                      });
-                  });
-              })
-              .then(function () {
-                return updateCachedBookmarks(bookmarks, encryptedBookmarks);
-              });
+            return updateCachedBookmarks(bookmarks, encryptedBookmarks);
           });
       });
   };
