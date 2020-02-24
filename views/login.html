@@ -25,7 +25,8 @@
           <label class="sr-only" for="txtPasswordConfirmation">{{
           vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}</label>
           <input class="form-control" name="txtPasswordConfirmation" data-ng-model="vm.sync.passwordConfirmation"
-            type="{{ vm.sync.showPassword ? 'text' : 'password' }}" maxlength="150"
+            type="{{ vm.sync.showPassword ? 'text' : 'password' }}" maxlength="150" autocapitalize="off"
+            autocorrect="off" spellcheck="false"
             placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}" />
           <button class="btn btn-icon btn-show-password" data-ng-class="{ 'active': vm.sync.showPassword }"
             data-ng-show="vm.sync.password"
@@ -52,7 +53,7 @@
           vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
           <input class="form-control" name="txtPassword" data-ng-model="vm.sync.password"
             type="{{ vm.sync.showPassword ? 'text' : 'password' }}" data-zxcvbn="vm.sync.passwordComplexity"
-            data-ng-disabled="vm.sync.enabled" maxlength="150"
+            data-ng-disabled="vm.sync.enabled" maxlength="150" autocapitalize="off" autocorrect="off" spellcheck="false"
             placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_New_Description) }}" />
           <button class="btn btn-icon btn-show-password" data-ng-class="{ 'active': vm.sync.showPassword }"
             data-ng-show="vm.sync.password"
@@ -123,6 +124,7 @@
         vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
         <input class="form-control" name="txtPassword" data-ng-model="vm.sync.password"
           type="{{ vm.sync.showPassword ? 'text' : 'password' }}" data-ng-disabled="vm.sync.enabled" maxlength="150"
+          autocapitalize="off" autocorrect="off" spellcheck="false"
           placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Existing_Description) }}" />
         <button class="btn btn-icon btn-show-password" data-ng-class="{ 'active': vm.sync.showPassword }"
           data-ng-show="vm.sync.password"
