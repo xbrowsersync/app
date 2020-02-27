@@ -319,6 +319,15 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     sendResponse(response);
   };
 
+  var disableSync = function (sendResponse) {
+    bookmarks.DisableSync()
+      .then(function () {
+        sendResponse({
+          success: true
+        });
+      });
+  };
+
   var displayAlert = function (title, message) {
     // Strip html tags from message
     var urlRegex = new RegExp(globals.URL.ValidUrlRegex);
@@ -444,6 +453,16 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         var errMessage = utility.GetErrorMessageFromException(err);
         displayAlert(errMessage.title, errMessage.message);
       });
+  };
+
+  var getSyncQueueLength = function (sendResponse) {
+    try {
+      sendResponse({
+        syncQueueLength: bookmarks.GetSyncQueueLength(),
+        success: true
+      });
+    }
+    catch (err) { }
   };
 
   var installExtension = function (currentVersion) {
@@ -637,6 +656,14 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       case globals.Commands.GetCurrentSync:
         getCurrentSync(sendResponse);
         break;
+      // Get current number of syncs on the queue
+      case globals.Commands.GetSyncQueueLength:
+        getSyncQueueLength(sendResponse);
+        break;
+      // Disable sync
+      case globals.Commands.DisableSync:
+        disableSync(sendResponse);
+        break;
       // Enable event listeners
       case globals.Commands.EnableEventListeners:
         enableEventListeners(sendResponse);
@@ -644,10 +671,6 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       // Disable event listeners
       case globals.Commands.DisableEventListeners:
         disableEventListeners(sendResponse);
-        break;
-      // Sync finished
-      case globals.Commands.SyncFinished:
-        // Swallow the message, not used by background script
         break;
       // Unknown command
       default:
@@ -758,14 +781,6 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
           sendResponse({ bookmarks: bookmarks, success: true });
         }
         catch (err) { }
-
-        // Send a message in case the user closed the extension window
-        platform.SendMessage({
-          command: globals.Commands.SyncFinished,
-          success: true,
-          uniqueId: syncData.uniqueId
-        })
-          .catch(function () { });
       })
       .catch(function (err) {
         // If local data out of sync, queue refresh sync
@@ -775,14 +790,6 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
               sendResponse({ error: err, success: false });
             }
             catch (innerErr) { }
-
-            // Send a message in case the user closed the extension window
-            platform.SendMessage({
-              command: globals.Commands.SyncFinished,
-              error: err,
-              success: false
-            })
-              .catch(function () { });
           });
       });
   };

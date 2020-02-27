@@ -2,3 +2,8 @@
   <span class="sr-only">{{ vm.working.message }}</span>
 </div>
 <h3>{{ vm.working.message }}</h3>
+<div class="buttons" data-ng-if="vm.working.displayCancelSyncButton">
+  <button type="button" class="btn btn-default" data-ng-click="vm.events.workingPanel_Cancel_Click()">
+    {{ vm.platform.GetConstant(vm.globals.Constants.Button_Cancel_Label) }}
+  </button>
+</div>

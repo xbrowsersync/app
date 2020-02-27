@@ -79,7 +79,6 @@ xBrowserSync.App.Platform = function () {
     SelectFile: notImplemented,
     SendMessage: notImplemented,
     Sync: {
-      Await: notImplemented,
       Current: notImplemented,
       Queue: notImplemented
     }

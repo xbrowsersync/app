@@ -1570,6 +1570,19 @@ body {
     margin: 0.2rem;
   }
 
+  .buttons {
+    position: absolute;
+    height: 50vh;
+    width: 50vw;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    .button {
+      position: absolute;
+    }
+  }
+
   .spinner-border {
     position: absolute;
     width: 30vw;

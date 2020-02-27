@@ -23,6 +23,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.utility = utility;
 
     vm.working = {
+      displayCancelSyncButton: false,
       message: platform.GetConstant(globals.Constants.Working_Syncing_Message),
       show: false
     };
@@ -126,7 +127,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       updateServiceUrlForm_Confirm_Click: updateServiceUrlForm_Confirm_Click,
       updateServiceUrlForm_Display_Click: updateServiceUrlForm_Display_Click,
       updateServiceUrlForm_NewServiceUrl_Change: updateServiceUrlForm_NewServiceUrl_Change,
-      updateServiceUrlForm_Update_Click: updateServiceUrlForm_Update_Click
+      updateServiceUrlForm_Update_Click: updateServiceUrlForm_Update_Click,
+      workingPanel_Cancel_Click: workingPanel_Cancel_Click
     };
 
     vm.help = {
@@ -775,12 +777,16 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var disableSync = function () {
-    // Clear view model variables
-    vm.search.results = null;
-    vm.sync.enabled = false;
-
-    // Disable sync
-    return bookmarks.DisableSync();
+    // Disable sync via background page
+    return platform.SendMessage({
+      command: globals.Commands.DisableSync
+    })
+      .then(function () {
+        vm.sync.enabled = false;
+        vm.sync.password = '';
+        vm.sync.passwordComplexity = {};
+      })
+      .catch(displayAlertErrorHandler);
   };
 
   var displayAlert = function (title, message, alertType) {
@@ -955,29 +961,64 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       .then(convertPageMetadataToBookmark);
   };
 
+  var getSyncQueueLength = function () {
+    // Get sync queue length via background page
+    return platform.SendMessage({
+      command: globals.Commands.GetSyncQueueLength
+    })
+      .then(function (response) {
+        return response.syncQueueLength;
+      })
+      .catch(displayAlertErrorHandler);
+  };
+
   var init = function () {
     // Platform-specific initation
     platform.Init(vm)
       .then(function () {
         // Get cached prefs from storage
-        return platform.LocalStorage.Get([globals.CacheKeys.DisplaySearchBarBeneathResults]);
+        return platform.LocalStorage.Get([
+          globals.CacheKeys.DisplaySearchBarBeneathResults,
+          globals.CacheKeys.SyncEnabled,
+          globals.CacheKeys.SyncId
+        ]);
       })
-      .then(function (cachedPrefs) {
-        // Set cached prefs
-        vm.settings.displaySearchBarBeneathResults = cachedPrefs[globals.CacheKeys.DisplaySearchBarBeneathResults] != null ?
-          cachedPrefs[globals.CacheKeys.DisplaySearchBarBeneathResults] :
+      .then(function (cachedData) {
+        // Set view model values
+        vm.settings.displaySearchBarBeneathResults = cachedData[globals.CacheKeys.DisplaySearchBarBeneathResults] != null ?
+          cachedData[globals.CacheKeys.DisplaySearchBarBeneathResults] :
           vm.settings.displaySearchBarBeneathResults;
+        vm.sync.enabled = !!cachedData[globals.CacheKeys.SyncEnabled];
+        vm.sync.id = cachedData[globals.CacheKeys.SyncId];
 
         // Check if a sync is currently in progress
         return platform.Sync.Current()
           .then(function (currentSync) {
             if (currentSync) {
-              utility.LogInfo('Waiting for sync: ' + currentSync.uniqueId);
+              utility.LogInfo('Waiting for syncs to finish...');
+
+              // Only display cancel button for push syncs
+              if (currentSync.type === globals.SyncType.Push) {
+                vm.working.displayCancelSyncButton = true;
+              }
+
+              // Display loading panel
               return vm.view.change(vm.view.views.loading)
+                .then(waitForSyncsToFinish)
                 .then(function () {
-                  return platform.Sync.Await(currentSync.uniqueId);
+                  return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled);
                 })
-                .then(syncBookmarksSuccess);
+                .then(function (syncEnabled) {
+                  // Check that user didn't cancel sync
+                  vm.sync.enabled = syncEnabled;
+                  if (vm.sync.enabled) {
+                    utility.LogInfo('Syncs finished, resuming');
+                    return syncBookmarksSuccess();
+                  }
+                })
+                .finally(function () {
+                  vm.working.displayCancelSyncButton = false;
+                });
             }
 
             // Return here if view has already been set
@@ -1115,28 +1156,16 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       vm.syncForm.$setUntouched();
     }
 
-    // Get cached sync data
-    return platform.LocalStorage.Get([
-      globals.CacheKeys.DisplayOtherSyncsWarning,
-      globals.CacheKeys.SyncEnabled,
-      globals.CacheKeys.SyncId
-    ])
-      .then(function (cachedData) {
-        var displayOtherSyncsWarning = cachedData[globals.CacheKeys.DisplayOtherSyncsWarning];
-        var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
-        var syncId = cachedData[globals.CacheKeys.SyncId];
-
-        vm.sync.enabled = !!syncEnabled;
-        vm.sync.id = syncId;
-
+    return platform.LocalStorage.Get(globals.CacheKeys.DisplayOtherSyncsWarning)
+      .then(function (displayOtherSyncsWarning) {
         if (utility.IsMobilePlatform(vm.platformName)) {
           // Set displayed panels for mobile platform
-          vm.sync.displayGetSyncIdPanel = !syncId;
+          vm.sync.displayGetSyncIdPanel = !vm.sync.id;
           vm.sync.displayNewSyncPanel = false;
         }
         else {
           // Set displayed panels for browsers
-          vm.sync.displayNewSyncPanel = !syncId;
+          vm.sync.displayNewSyncPanel = !vm.sync.id;
 
           // If not synced before, display warning to disable other sync tools
           if (displayOtherSyncsWarning == null || displayOtherSyncsWarning === true) {
@@ -1205,33 +1234,25 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     // Get current service url and sync bookmarks toolbar setting from cache
     return $q.all([
       bookmarks.GetSyncBookmarksToolbar(),
-      platform.LocalStorage.Get([
-        globals.CacheKeys.TraceLog,
-        globals.CacheKeys.SyncEnabled,
-        globals.CacheKeys.SyncId
-      ]),
+      platform.LocalStorage.Get(globals.CacheKeys.TraceLog),
       utility.GetServiceUrl(),
       utility.IsPlatform(vm.platformName, globals.Platforms.Chrome) ? platform.Permissions.Check() : $q.resolve(false)
     ])
       .then(function (data) {
         var syncBookmarksToolbar = data[0];
-        var traceLog = data[1][globals.CacheKeys.TraceLog];
-        var syncEnabled = data[1][globals.CacheKeys.SyncEnabled];
-        var syncId = data[1][globals.CacheKeys.SyncId];
+        var traceLog = data[1];
         var serviceUrl = data[2];
         var readWebsiteDataPermissionsGranted = data[3];
 
         vm.settings.service.url = serviceUrl;
         vm.settings.service.newServiceUrl = serviceUrl;
         vm.settings.syncBookmarksToolbar = syncBookmarksToolbar;
-        vm.sync.enabled = syncEnabled;
-        vm.sync.id = syncId;
         vm.settings.readWebsiteDataPermissionsGranted = readWebsiteDataPermissionsGranted;
         vm.settings.logSize = (new TextEncoder().encode(traceLog)).length;
 
         $timeout(function () {
           // Check for available sync updates on non-mobile platforms
-          if (syncEnabled && !utility.IsMobilePlatform(vm.platformName)) {
+          if (vm.sync.enabled && !utility.IsMobilePlatform(vm.platformName)) {
             $q.all([
               bookmarks.CheckForUpdates(),
               platform.AutomaticUpdates.NextUpdate()
@@ -2121,6 +2142,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var syncBookmarksSuccess = function (loadingTimeout, bookmarkStatusActive) {
+    vm.sync.enabled = true;
+
     // Hide loading panel
     platform.Interface.Working.Hide(null, loadingTimeout);
 
@@ -2370,9 +2393,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     var url = vm.settings.service.newServiceUrl.replace(/\/$/, '');
 
     // Disable sync
-    vm.sync.enabled = false;
-    vm.sync.password = '';
-    vm.sync.passwordComplexity = {};
     disableSync()
       .then(function () {
         // Update the service URL
@@ -2537,6 +2557,44 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.restoreForm.dataToRestore.$setValidity('InvalidData', validateData);
 
     return validateData;
+  };
+
+  var waitForSyncsToFinish = function () {
+    var condition = function (currentData) {
+      var currentSync = currentData[0];
+      var syncQueueLength = currentData[1];
+      return $q.resolve(currentSync == null && syncQueueLength === 0);
+    };
+
+    var action = function () {
+      return $q(function (resolve, reject) {
+        $timeout(function () {
+          $q.all([
+            platform.Sync.Current(),
+            getSyncQueueLength()
+          ])
+            .then(resolve)
+            .catch(reject);
+        }, 1e3);
+      });
+    };
+
+    // Periodically check sync queue until it is empty
+    return utility.PromiseWhile([], condition, action);
+  };
+
+  var workingPanel_Cancel_Click = function () {
+    utility.LogInfo('Cancelling sync');
+
+    return queueSync({
+      type: globals.SyncType.Cancel
+    })
+      .then(function () {
+        vm.sync.enabled = false;
+        vm.working.displayCancelSyncButton = false;
+      })
+      .then(displayMainView)
+      .catch(displayAlertErrorHandler);
   };
 
   // Call constructor

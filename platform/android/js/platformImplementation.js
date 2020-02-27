@@ -798,7 +798,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Scanner.Start = startScanning;
     platform.Scanner.Stop = stopScanning;
     platform.Scanner.ToggleLight = toggleLight;
-    platform.Sync.Await = awaitSync;
     platform.Sync.Current = getCurrentSync;
     platform.Sync.Queue = queueSync;
   };
@@ -807,17 +806,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 	/* ------------------------------------------------------------------------------------
 	 * Public functions
 	 * ------------------------------------------------------------------------------------ */
-
-  var awaitSync = function (syncToAwait) {
-    return bookmarks.QueueSync()
-      .then(function () {
-        return syncToAwait.deferred.promise;
-      })
-      .then(function () {
-        utility.LogInfo('Awaited sync complete: ' + syncToAwait.uniqueId);
-        return true;
-      });
-  };
 
   var clearBookmarks = function () {
     return $q.resolve();

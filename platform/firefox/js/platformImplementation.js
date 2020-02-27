@@ -60,7 +60,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Permissions.Remove = removePermissions;
     platform.Permissions.Request = requestPermissions;
     platform.SendMessage = sendMessage;
-    platform.Sync.Await = awaitSync;
     platform.Sync.Current = getCurrentSync;
     platform.Sync.Queue = queueSync;
   };
@@ -69,30 +68,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 	/* ------------------------------------------------------------------------------------
 	 * Public functions
 	 * ------------------------------------------------------------------------------------ */
-
-  var awaitSync = function (uniqueId) {
-    return $q(function (resolve, reject) {
-      var awaitSyncListener = function (message, sender, sendResponse) {
-        // Only listen for SyncFinished messages
-        if (message.command !== globals.Commands.SyncFinished || message.uniqueId !== uniqueId) {
-          return;
-        }
-
-        utility.LogInfo('Awaited sync complete: ' + message.uniqueId);
-        browser.runtime.onMessage.removeListener(awaitSyncListener);
-
-        if (message.success) {
-          resolve();
-        }
-        else {
-          reject(message.error);
-        }
-      };
-
-      // Listen for messages
-      browser.runtime.onMessage.addListener(awaitSyncListener);
-    });
-  };
 
   var bookmarksCreated = function (xBookmarks, changeInfo) {
     // Remove native bookmark id

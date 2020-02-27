@@ -51,10 +51,11 @@ xBrowserSync.App.Global = function () {
       SyncBookmarks: 1,
       RestoreBookmarks: 2,
       GetCurrentSync: 3,
-      SyncFinished: 4,
-      GetPageMetadata: 5,
-      EnableEventListeners: 6,
-      DisableEventListeners: 7
+      GetSyncQueueLength: 4,
+      DisableSync: 5,
+      GetPageMetadata: 6,
+      EnableEventListeners: 7,
+      DisableEventListeners: 8
     },
     Constants: {
       Title: 'title',
@@ -379,7 +380,8 @@ xBrowserSync.App.Global = function () {
       Push: 1,
       Pull: 2,
       Both: 3,
-      Upgrade: 4
+      Cancel: 4,
+      Upgrade: 5
     },
     Title: 'xBrowserSync',
     UpdateType: {
