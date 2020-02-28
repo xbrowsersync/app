@@ -46,7 +46,7 @@ xBrowserSync.App.UI.config(['$httpProvider', function ($httpProvider) {
 }]);
 
 // Add utility service
-xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'globals'];
+xBrowserSync.App.Utility.$inject = ['$http', '$q', 'platform', 'globals'];
 xBrowserSync.App.UI.factory('utility', xBrowserSync.App.Utility);
 
 // Add api service

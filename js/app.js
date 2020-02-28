@@ -85,6 +85,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       permissions_Revoke_Click: permissions_Revoke_Click,
       permissions_Request_Click: permissions_Request_Click,
       permissionsPanel_RequestPermissions_Click: permissionsPanel_RequestPermissions_Click,
+      settings_Prefs_CheckForAppUpdates_Click: settings_Prefs_CheckForAppUpdates_Click,
       settings_Prefs_DisplaySearchBar_Click: settings_Prefs_DisplaySearchBar_Click,
       qrPanel_Close_Click: qrPanel_Close_Click,
       qrPanel_CopySyncId_Click: qrPanel_CopySyncId_Click,
@@ -164,6 +165,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.settings = {
       backupCompletedMessage: undefined,
       backupFileName: undefined,
+      checkForAppUpdates: false,
       dataToRestore: undefined,
       displayCancelSyncConfirmation: false,
       displayQrPanel: false,
@@ -777,10 +779,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var disableSync = function () {
-    // Disable sync via background page
-    return platform.SendMessage({
-      command: globals.Commands.DisableSync
-    })
+    // Disable sync
+    return platform.Sync.Disable()
       .then(function () {
         vm.sync.enabled = false;
         vm.sync.password = '';
@@ -959,17 +959,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
     return platform.GetPageMetadata(true, url)
       .then(convertPageMetadataToBookmark);
-  };
-
-  var getSyncQueueLength = function () {
-    // Get sync queue length via background page
-    return platform.SendMessage({
-      command: globals.Commands.GetSyncQueueLength
-    })
-      .then(function (response) {
-        return response.syncQueueLength;
-      })
-      .catch(displayAlertErrorHandler);
   };
 
   var init = function () {
@@ -1234,16 +1223,21 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     // Get current service url and sync bookmarks toolbar setting from cache
     return $q.all([
       bookmarks.GetSyncBookmarksToolbar(),
-      platform.LocalStorage.Get(globals.CacheKeys.TraceLog),
+      platform.LocalStorage.Get([
+        globals.CacheKeys.CheckForAppUpdates,
+        globals.CacheKeys.TraceLog
+      ]),
       utility.GetServiceUrl(),
       utility.IsPlatform(vm.platformName, globals.Platforms.Chrome) ? platform.Permissions.Check() : $q.resolve(false)
     ])
       .then(function (data) {
         var syncBookmarksToolbar = data[0];
-        var traceLog = data[1];
+        var checkForAppUpdates = data[1][globals.CacheKeys.CheckForAppUpdates];
+        var traceLog = data[1][globals.CacheKeys.TraceLog];
         var serviceUrl = data[2];
         var readWebsiteDataPermissionsGranted = data[3];
 
+        vm.settings.checkForAppUpdates = checkForAppUpdates;
         vm.settings.service.url = serviceUrl;
         vm.settings.service.newServiceUrl = serviceUrl;
         vm.settings.syncBookmarksToolbar = syncBookmarksToolbar;
@@ -1997,6 +1991,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.settings.service.apiVersion = serviceInfo.version;
   };
 
+  var settings_Prefs_CheckForAppUpdates_Click = function () {
+    // Update setting value and store in cache
+    var value = !vm.settings.checkForAppUpdates;
+    platform.LocalStorage.Set(globals.CacheKeys.CheckForAppUpdates, value);
+  };
+
   var settings_Prefs_DisplaySearchBar_Click = function () {
     // Update setting value and store in cache
     var value = !vm.settings.displaySearchBarBeneathResults;
@@ -2086,6 +2086,10 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
             utility.LogInfo(syncInfoMessage);
             return syncBookmarksSuccess(loadingTimeout);
           })
+          .then(function () {
+            vm.sync.enabled = true;
+            vm.sync.id = syncId;
+          })
           .catch(function (err) {
             return syncBookmarksFailed(err, syncData);
           });
@@ -2142,8 +2146,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var syncBookmarksSuccess = function (loadingTimeout, bookmarkStatusActive) {
-    vm.sync.enabled = true;
-
     // Hide loading panel
     platform.Interface.Working.Hide(null, loadingTimeout);
 
@@ -2155,7 +2157,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       else {
         vm.search.displayDefaultState();
       }
-    }, 100);
+    }, 200);
 
     // Update bookmark icon
     return setBookmarkStatus(bookmarkStatusActive);
@@ -2178,10 +2180,10 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
   var syncForm_DisableSync_Click = function () {
     // Disable sync and switch to login panel
-    disableSync()
-      .then(function () {
-        return changeView(vm.view.views.login);
-      })
+    $q.all([
+      disableSync(),
+      changeView(vm.view.views.login)
+    ])
       .catch(displayAlertErrorHandler);
   };
 
@@ -2571,7 +2573,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         $timeout(function () {
           $q.all([
             platform.Sync.Current(),
-            getSyncQueueLength()
+            platform.Sync.GetQueueLength()
           ])
             .then(resolve)
             .catch(reject);

@@ -126,6 +126,21 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     return err;
   };
 
+  var checkForNewVersion = function () {
+    $timeout(function () {
+      utility.CheckForNewVersion()
+        .then(function (newVersion) {
+          if (!newVersion) {
+            return;
+          }
+
+          displayAlert(platform.GetConstant(globals.Constants.AppUpdateAvailable_Title),
+            platform.GetConstant(globals.Constants.AppUpdateAvailable_Message).replace('{version}', newVersion),
+            globals.ReleaseNotesUrlStem + newVersion.replace(/^v/, ''));
+        });
+    }, 5e3);
+  };
+
   var checkForUpdatesOnStartup = function () {
     return $q(function (resolve, reject) {
       // If network disconnected, skip update check
@@ -179,6 +194,18 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       });
   };
 
+  var checkPermsAndGetPageMetadata = function () {
+    return platform.Permissions.Check()
+      .then(function (hasPermissions) {
+        if (!hasPermissions) {
+          utility.LogInfo('Do not have permission to read active tab content');
+        }
+
+        // Depending on current perms, get full or partial page metadata
+        return hasPermissions ? platform.GetPageMetadata(true) : platform.GetPageMetadata(false);
+      });
+  };
+
   var convertLocalBookmarkToSeparator = function (bookmark) {
     // Test if sync enabled check needed
     return $q(function (resolve) { disableEventListeners(resolve); })
@@ -215,18 +242,6 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       })
       .finally(function () {
         return $q(function (resolve) { enableEventListeners(resolve); });
-      });
-  };
-
-  var checkPermsAndGetPageMetadata = function () {
-    return platform.Permissions.Check()
-      .then(function (hasPermissions) {
-        if (!hasPermissions) {
-          utility.LogInfo('Do not have permission to read active tab content');
-        }
-
-        // Depending on current perms, get full or partial page metadata
-        return hasPermissions ? platform.GetPageMetadata(true) : platform.GetPageMetadata(false);
       });
   };
 
@@ -328,7 +343,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       });
   };
 
-  var displayAlert = function (title, message) {
+  var displayAlert = function (title, message, url) {
     // Strip html tags from message
     var urlRegex = new RegExp(globals.URL.ValidUrlRegex);
     var matches = message.match(urlRegex);
@@ -344,10 +359,15 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
     // Display notification
     chrome.notifications.create(utility.GetUniqueishId(), options, function (notificationId) {
-      // If the message contains a url add a click handler
+      // Add a click handler to open url if provided or if the message contains a url
+      var urlToOpenOnClick = url;
       if (matches && matches.length > 0) {
+        urlToOpenOnClick = matches[0];
+      }
+
+      if (urlToOpenOnClick) {
         var openUrlInNewTab = function () {
-          platform.OpenUrl(matches[0]);
+          platform.OpenUrl(urlToOpenOnClick);
         };
         notificationClickHandlers.push({
           id: notificationId,
@@ -726,6 +746,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       .then(function (data) {
         cachedData = data[0];
         syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
+        var checkForAppUpdates = cachedData[globals.CacheKeys.CheckForAppUpdates];
 
         // Add useful debug info to beginning of trace log
         cachedData.appVersion = globals.AppVersion;
@@ -741,6 +762,11 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
         // Update browser action icon
         platform.Interface.Refresh(syncEnabled);
+
+        // Check for new app version
+        if (checkForAppUpdates) {
+          checkForNewVersion();
+        }
 
         // Exit if sync not enabled
         if (!syncEnabled) {
@@ -882,8 +908,9 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
         // Display alert and set update panel to show
         displayAlert(
-          platform.GetConstant(globals.Constants.Updated_Title) + globals.AppVersion,
-          platform.GetConstant(globals.Constants.Updated_Message));
+          platform.GetConstant(globals.Constants.AppUpdated_Title) + globals.AppVersion,
+          platform.GetConstant(globals.Constants.AppUpdated_Message),
+          globals.ReleaseNotesUrlStem + globals.AppVersion);
         return platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, true);
       })
       .catch(function (err) {
@@ -927,7 +954,7 @@ xBrowserSync.App.ChromeBackground.config(['$httpProvider', function ($httpProvid
 }]);
 
 // Add utility service
-xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'globals'];
+xBrowserSync.App.Utility.$inject = ['$http', '$q', 'platform', 'globals'];
 xBrowserSync.App.ChromeBackground.factory('utility', xBrowserSync.App.Utility);
 
 // Add api service

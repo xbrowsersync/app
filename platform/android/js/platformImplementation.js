@@ -21,6 +21,21 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "description": {
       "message": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
     },
+    "appUpdateAvailable_Android_Message": {
+      "message": "xBrowserSync {version} is available to download."
+    },
+    "appUpdateAvailable_Message": {
+      "message": "{version} is available to download, click here to view update."
+    },
+    "appUpdateAvailable_Title": {
+      "message": "xBrowserSync update available"
+    },
+    "appUpdated_Message": {
+      "message": "xBrowserSync has been updated with the latest features and fixes. Click for release notes."
+    },
+    "appUpdated_Title": {
+      "message": "Updated to v"
+    },
     "tooltip_NotSynced_Label": {
       "message": "not synced"
     },
@@ -194,12 +209,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     },
     "login_ScanId_Message": {
       "message": "Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a QR code which you can scan here."
-    },
-    "updated_Message": {
-      "message": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
-    },
-    "updated_Title": {
-      "message": "Updated to v"
     },
     "support_Message": {
       "message": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains an effective tool in protecting our privacy and productivity against the rot of big tech!</p>"
@@ -444,8 +453,17 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_Prefs_Title": {
       "message": "Preferences"
     },
+    "settings_Prefs_CheckForAppUpdates_Label": {
+      "message": "Check for app updates"
+    },
     "settings_Prefs_SearchBar_Label": {
       "message": "Display search bar beneath results"
+    },
+    "updated_Message": {
+      "message": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
+    },
+    "updated_Title": {
+      "message": "Updated to v"
     },
     "button_Backup_Label": {
       "message": "Back up"
@@ -578,6 +596,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     },
     "button_Revert_Label": {
       "message": "Revert"
+    },
+    "button_View_Label": {
+      "message": "View"
     },
     "qr_Copied_Label": {
       "message": "Copied!"
@@ -772,17 +793,19 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var AndroidImplementation = function () {
     // Inject required platform implementation functions
     platform.AutomaticUpdates.NextUpdate = getAutoUpdatesNextRun;
-    platform.AutomaticUpdates.Start = startAutoUpdates;
-    platform.AutomaticUpdates.Stop = stopAutoUpdates;
-    platform.Bookmarks.Clear = clearBookmarks;
-    platform.Bookmarks.CreateSingle = createSingle;
-    platform.Bookmarks.DeleteSingle = deleteSingle;
-    platform.Bookmarks.Get = getBookmarks;
-    platform.Bookmarks.Populate = populateBookmarks;
+    platform.AutomaticUpdates.Start = methodNotApplicable;
+    platform.AutomaticUpdates.Stop = methodNotApplicable;
+    platform.Bookmarks.Clear = methodNotApplicable;
+    platform.Bookmarks.CreateSingle = methodNotApplicable;
+    platform.Bookmarks.DeleteSingle = methodNotApplicable;
+    platform.Bookmarks.Get = methodNotApplicable;
+    platform.Bookmarks.Populate = methodNotApplicable;
     platform.Bookmarks.Share = shareBookmark;
-    platform.Bookmarks.UpdateSingle = updateSingle;
+    platform.Bookmarks.UpdateSingle = methodNotApplicable;
     platform.CopyToClipboard = copyToClipboard;
     platform.DownloadFile = downloadFile;
+    platform.EventListeners.Enable = methodNotApplicable;
+    platform.EventListeners.Disable = methodNotApplicable;
     platform.GetConstant = getConstant;
     platform.GetCurrentUrl = getCurrentUrl;
     platform.GetHelpPages = getHelpPages;
@@ -791,7 +814,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Init = init;
     platform.Interface.Working.Show = displayLoading;
     platform.Interface.Working.Hide = hideLoading;
-    platform.Interface.Refresh = refreshInterface;
+    platform.Interface.Refresh = methodNotApplicable;
     platform.LocalStorage.Get = getFromLocalStorage;
     platform.LocalStorage.Set = setInLocalStorage;
     platform.OpenUrl = openUrl;
@@ -799,6 +822,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Scanner.Stop = stopScanning;
     platform.Scanner.ToggleLight = toggleLight;
     platform.Sync.Current = getCurrentSync;
+    platform.Sync.Disable = disableSync;
+    platform.Sync.GetQueueLength = getSyncQueueLength;
     platform.Sync.Queue = queueSync;
   };
 
@@ -807,22 +832,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 	 * Public functions
 	 * ------------------------------------------------------------------------------------ */
 
-  var clearBookmarks = function () {
-    return $q.resolve();
-  };
-
   var copyToClipboard = function (textToCopy) {
     return $q(function (resolve, reject) {
       cordova.plugins.clipboard.copy(textToCopy, resolve, reject);
     });
   };
 
-  var createSingle = function () {
-    return $q.resolve();
-  };
-
-  var deleteSingle = function () {
-    return $q.resolve();
+  var disableSync = function () {
+    return bookmarks.DisableSync();
   };
 
   var displayLoading = function (id, cancelledCallback) {
@@ -896,51 +913,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     });
   };
 
-  var getAutoUpdatesNextRun = function () {
-    return $q(function (resolve, reject) {
-      chrome.alarms.get(globals.Alarm.Name, function (alarm) {
-        if (!alarm) {
-          return resolve();
-        }
-
-        resolve(utility.Get24hrTimeFromDate(new Date(alarm.scheduledTime)));
-      });
-    });
-  };
-
-  var getBookmarks = function () {
-    return $q.resolve();
-  };
-
-  var getConstant = function (constName) {
-    return constants[constName].message;
-  };
-
-  var getCurrentSync = function () {
-    // Platform doesnt support checking for syncs in progress on startup
-    return $q.resolve();
-  };
-
-  var getCurrentUrl = function () {
-    return $q.resolve(currentPage && currentPage.url);
-  };
-
-  var getHelpPages = function () {
-    var pages = [
-      getConstant(globals.Constants.Help_Page_Welcome_Android_Content),
-      getConstant(globals.Constants.Help_Page_FirstSync_Android_Content),
-      getConstant(globals.Constants.Help_Page_SyncId_Content),
-      getConstant(globals.Constants.Help_Page_ExistingId_Android_Content),
-      getConstant(globals.Constants.Help_Page_Service_Content),
-      getConstant(globals.Constants.Help_Page_Searching_Android_Content),
-      getConstant(globals.Constants.Help_Page_AddingBookmarks_Android_Content),
-      getConstant(globals.Constants.Help_Page_BackingUp_Android_Content),
-      getConstant(globals.Constants.Help_Page_FurtherSupport_Content)
-    ];
-
-    return pages;
-  };
-
   var getAllFromLocalStorage = function () {
     return $q(function (resolve, reject) {
       var cachedData = {};
@@ -975,6 +947,30 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
       NativeStorage.keys(success, failure);
     });
+  };
+
+  var getAutoUpdatesNextRun = function () {
+    return $q(function (resolve, reject) {
+      chrome.alarms.get(globals.Alarm.Name, function (alarm) {
+        if (!alarm) {
+          return resolve();
+        }
+
+        resolve(utility.Get24hrTimeFromDate(new Date(alarm.scheduledTime)));
+      });
+    });
+  };
+
+  var getConstant = function (constName) {
+    return constants[constName].message;
+  };
+
+  var getCurrentSync = function () {
+    return $q.resolve(bookmarks.GetCurrentSync());
+  };
+
+  var getCurrentUrl = function () {
+    return $q.resolve(currentPage && currentPage.url);
   };
 
   var getFromLocalStorage = function (storageKeys) {
@@ -1016,6 +1012,22 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     }
 
     return getCachedData;
+  };
+
+  var getHelpPages = function () {
+    var pages = [
+      getConstant(globals.Constants.Help_Page_Welcome_Android_Content),
+      getConstant(globals.Constants.Help_Page_FirstSync_Android_Content),
+      getConstant(globals.Constants.Help_Page_SyncId_Content),
+      getConstant(globals.Constants.Help_Page_ExistingId_Android_Content),
+      getConstant(globals.Constants.Help_Page_Service_Content),
+      getConstant(globals.Constants.Help_Page_Searching_Android_Content),
+      getConstant(globals.Constants.Help_Page_AddingBookmarks_Android_Content),
+      getConstant(globals.Constants.Help_Page_BackingUp_Android_Content),
+      getConstant(globals.Constants.Help_Page_FurtherSupport_Content)
+    ];
+
+    return pages;
   };
 
   var getPageMetadata = function (getFullMetadata, pageUrl) {
@@ -1201,6 +1213,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return url;
   };
 
+  var getSyncQueueLength = function () {
+    return $q.resolve(bookmarks.GetSyncQueueLength());
+  };
+
   var hideLoading = function (id, timeout) {
     if (timeout) {
       $timeout.cancel(timeout);
@@ -1229,13 +1245,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     });
   };
 
-  var openUrl = function (url) {
-    window.open(url, '_system', '');
-  };
-
-  var populateBookmarks = function () {
+  var methodNotApplicable = function () {
     // Unused for this platform
     return $q.resolve();
+  };
+
+  var openUrl = function (url) {
+    window.open(url, '_system', '');
   };
 
   var queueSync = function (syncData, command) {
@@ -1283,11 +1299,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             throw err;
           });
       });
-  };
-
-  var refreshInterface = function () {
-    // Unused for this platform
-    return $q.resolve();
   };
 
   var setInLocalStorage = function (storageKey, value) {
@@ -1399,14 +1410,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     window.plugins.socialsharing.shareWithOptions(options, null, onError);
   };
 
-  var startAutoUpdates = function () {
-    return $q.resolve();
-  };
-
-  var stopAutoUpdates = function () {
-
-  };
-
   var toggleLight = function (switchOn) {
     // If state was elected toggle light based on value
     if (switchOn !== undefined) {
@@ -1428,10 +1431,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     });
   };
 
-  var updateSingle = function () {
-    return $q.resolve();
-  };
-
 
 	/* ------------------------------------------------------------------------------------
 	 * Private functions
@@ -1444,6 +1443,25 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       .then(function (currentVersion) {
         return currentVersion ? handleUpgrade(currentVersion, globals.AppVersion) : handleInstall(globals.AppVersion);
       });
+  };
+
+  var checkForNewVersion = function () {
+    $timeout(function () {
+      utility.CheckForNewVersion()
+        .then(function (newVersion) {
+          if (!newVersion) {
+            return;
+          }
+
+          vm.alert.display(null,
+            platform.GetConstant(globals.Constants.AppUpdateAvailable_Android_Message).replace('{version}', newVersion),
+            null,
+            platform.GetConstant(globals.Constants.Button_View_Label),
+            function () {
+              platform.OpenUrl(globals.ReleaseNotesUrlStem + newVersion.replace(/^v/, ''));
+            });
+        });
+    }, 1e3);
   };
 
   var checkForSharedBookmark = function () {
@@ -1516,7 +1534,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         bgColor = '#30d278';
         break;
       case 'warning':
-        bgColor = '#30d278';
+        bgColor = '#bdc71b';
         break;
       default:
         bgColor = '#083039';
@@ -1779,6 +1797,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return getFromLocalStorage()
       .then(function (cachedData) {
         syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
+        var checkForAppUpdates = cachedData[globals.CacheKeys.CheckForAppUpdates];
 
         // Add useful debug info to beginning of trace log
         cachedData.platform = {
@@ -1792,6 +1811,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           globals.CacheKeys.TraceLog,
           globals.CacheKeys.Password
         ));
+
+        // Check for new app version
+        if (checkForAppUpdates) {
+          checkForNewVersion();
+        }
 
         // Exit if sync not enabled
         if (!syncEnabled) {

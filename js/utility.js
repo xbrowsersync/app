@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description:	Defines utility functions used across all platforms.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Utility = function ($q, platform, globals) {
+xBrowserSync.App.Utility = function ($http, $q, platform, globals) {
   'use strict';
 
   var currentMessageQueueItem, messageQueue = [];
@@ -22,6 +22,25 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         return iterator(prevResult, currentItem);
       });
     }, $q.resolve(initialValue));
+  };
+
+  var checkForNewVersion = function () {
+    if (!isNetworkConnected()) {
+      return $q.resolve();
+    }
+
+    // Get latest app version info
+    return $http.get(globals.ReleaseLatestUrl)
+      .then(function (response) {
+        var newVersion = response && response.data ? response.data.tag_name : null;
+        if (compareVersions.compare(newVersion, globals.AppVersion, '>')) {
+          logInfo(newVersion + ' update available');
+          return newVersion;
+        }
+      })
+      .catch(function () {
+        logInfo('Couldn’t check for new version');
+      });
   };
 
   var closest = function (element, predicate) {
@@ -769,6 +788,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   return {
     AsyncReduce: asyncReduce,
     Closest: closest,
+    CheckForNewVersion: checkForNewVersion,
     CreateBackupData: createBackupData,
     DecryptData: decryptData,
     EncryptData: encryptData,

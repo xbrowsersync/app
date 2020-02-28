@@ -5,6 +5,21 @@
   "description": {
     "message": "Browser-Synchronisierung wie sie sein soll: Sicher, anonym und kostenlos! Synchronisierung von Lesezeichen über Browser- und Gerätegrenzen hinweg, keine Anmeldung erforderlich."
   },
+  "appUpdateAvailable_Android_Message": {
+    "message": "xBrowserSync {version} is available to download."
+  },
+  "appUpdateAvailable_Message": {
+    "message": "{version} is available to download, click here to view update."
+  },
+  "appUpdateAvailable_Title": {
+    "message": "xBrowserSync update available"
+  },
+  "appUpdated_Message": {
+    "message": "xBrowserSync has been updated with the latest features and fixes. Click for release notes."
+  },
+  "appUpdated_Title": {
+    "message": "Updated to v"
+  },
   "tooltip_NotSynced_Label": {
     "message": "not synced"
   },
@@ -181,12 +196,6 @@
   },
   "login_ScanId_Message": {
     "message": "Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a QR code which you can scan here."
-  },
-  "updated_Message": {
-    "message": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
-  },
-  "updated_Title": {
-    "message": "Updated to v"
   },
   "support_Message": {
     "message": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains an effective tool in protecting our privacy and productivity against the rot of big tech!</p>"
@@ -437,8 +446,17 @@
   "settings_Prefs_Title": {
     "message": "Preferences"
   },
+  "settings_Prefs_CheckForAppUpdates_Label": {
+    "message": "Check for app updates"
+  },
   "settings_Prefs_SearchBar_Label": {
     "message": "Display search bar beneath results"
+  },
+  "updated_Message": {
+    "message": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
+  },
+  "updated_Title": {
+    "message": "Updated to v"
   },
   "button_Backup_Label": {
     "message": "Sichern"
@@ -571,6 +589,9 @@
   },
   "button_Revert_Label": {
     "message": "Revert"
+  },
+  "button_View_Label": {
+    "message": "View"
   },
   "qr_Copied_Label": {
     "message": "Copied!"

@@ -59,8 +59,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Permissions.Check = checkPermissions;
     platform.Permissions.Remove = removePermissions;
     platform.Permissions.Request = requestPermissions;
-    platform.SendMessage = sendMessage;
     platform.Sync.Current = getCurrentSync;
+    platform.Sync.Disable = disableSync;
+    platform.Sync.GetQueueLength = getSyncQueueLength;
     platform.Sync.Queue = queueSync;
   };
 
@@ -233,6 +234,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var disableEventListeners = function () {
     return sendMessage({
       command: globals.Commands.DisableEventListeners
+    });
+  };
+
+  var disableSync = function () {
+    return sendMessage({
+      command: globals.Commands.DisableSync
     });
   };
 
@@ -646,6 +653,15 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
+  var getSyncQueueLength = function () {
+    return sendMessage({
+      command: globals.Commands.GetSyncQueueLength
+    })
+      .then(function (response) {
+        return response.syncQueueLength;
+      });
+  };
+
   var getSupportedUrl = function (url) {
     return localBookmarkUrlIsSupported(url) ? url : getNewTabUrl();
   };
@@ -863,33 +879,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         utility.LogInfo('Optional permissions ' + (!granted ? 'not ' : '') + 'granted');
         return granted;
       });
-  };
-
-  var sendMessage = function (message) {
-    return $q(function (resolve, reject) {
-      browser.runtime.sendMessage(message)
-        .then(function (response) {
-          if (!response) {
-            return resolve();
-          }
-
-          if (!response.success) {
-            return reject(response.error);
-          }
-
-          resolve(response);
-        })
-        .catch(function (err) {
-          // If no message connection detected, check if background function can be called directly
-          if (err.message && err.message.toLowerCase().indexOf('could not establish connection') >= 0 &&
-            window.xBrowserSync.App.HandleMessage) {
-            return window.xBrowserSync.App.HandleMessage(message, null, resolve);
-          }
-
-          utility.LogWarning('Message listener not available');
-          reject(err);
-        });
-    });
   };
 
   var setInLocalStorage = function (storageKey, value) {
@@ -1288,6 +1277,33 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           );
         }));
       });
+  };
+
+  var sendMessage = function (message) {
+    return $q(function (resolve, reject) {
+      browser.runtime.sendMessage(message)
+        .then(function (response) {
+          if (!response) {
+            return resolve();
+          }
+
+          if (!response.success) {
+            return reject(response.error);
+          }
+
+          resolve(response);
+        })
+        .catch(function (err) {
+          // If no message connection detected, check if background function can be called directly
+          if (err.message && err.message.toLowerCase().indexOf('could not establish connection') >= 0 &&
+            window.xBrowserSync.App.HandleMessage) {
+            return window.xBrowserSync.App.HandleMessage(message, null, resolve);
+          }
+
+          utility.LogWarning('Message listener not available');
+          reject(err);
+        });
+    });
   };
 
   var updateLocalBookmark = function (localBookmarkId, title, url) {
