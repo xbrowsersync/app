@@ -1849,7 +1849,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var handleUpgrade = function (oldVersion, newVersion) {
-    if (compareVersions(oldVersion, newVersion) === 0) {
+    if (compareVersions.compare(oldVersion, newVersion, '=')) {
       // No upgrade
       return $q.resolve();
     }

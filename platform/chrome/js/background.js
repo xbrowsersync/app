@@ -654,7 +654,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     }
     else if (details && details.reason === 'update' &&
       details.previousVersion &&
-      compareVersions(details.previousVersion, currentVersion) === -1) {
+      compareVersions.compare(details.previousVersion, currentVersion, '<')) {
       installOrUpgrade = upgradeExtension(details.previousVersion, currentVersion);
     }
 
