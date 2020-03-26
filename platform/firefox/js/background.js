@@ -181,7 +181,12 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
           syncChange.resolve(false);
           return;
         }
+
         locationInfo = results;
+
+        // Firefox moves folders after adding them as last child, update bookmark location index to 
+        // account for this behaviour
+        locationInfo.indexPath[locationInfo.indexPath.length - 1] = createdBookmark.index;
 
         // If bookmark is not folder, get page metadata from current tab
         return (createdBookmark.url ? platform.GetPageMetadata() : $q.resolve())
