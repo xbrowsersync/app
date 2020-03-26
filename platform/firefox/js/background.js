@@ -10,7 +10,7 @@ xBrowserSync.App = xBrowserSync.App || {};
 xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility, bookmarks) {
   'use strict';
 
-  var vm, notificationClickHandlers = [], startUpInitiated = false, syncTimeout;
+  var vm, bookmarkEventsQueue = [], notificationClickHandlers = [], startUpInitiated = false, processBookmarkEventsTimeout;
 
 	/* ------------------------------------------------------------------------------------
 	 * Constructor
@@ -511,7 +511,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         else {
           reject(response.error);
         }
-      });
+      }, false);
     });
   };
 
@@ -523,23 +523,14 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var onBookmarkEventHandler = function (syncFunction, args) {
-    // Clear sync timeout
-    if (syncTimeout) {
-      $timeout.cancel(syncTimeout);
+    // Clear timeout
+    if (processBookmarkEventsTimeout) {
+      $timeout.cancel(processBookmarkEventsTimeout);
     }
 
-    // Queue sync
-    syncFunction.apply(this, args)
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        displayAlert(errMessage.title, errMessage.message);
-      });
-
-    // Execute sync after a delay
-    syncTimeout = $timeout(function () {
-      bookmarks.Sync();
-    }, 1e3);
+    // Add event to the queue and trigger processing after a slight delay
+    bookmarkEventsQueue.push(arguments);
+    processBookmarkEventsTimeout = $timeout(processBookmarkEventsQueue, 100);
   };
 
   var onChangedHandler = function () {
@@ -705,6 +696,37 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       });
   };
 
+  var processBookmarkEventsQueue = function () {
+    var doActionUntil = function () {
+      return $q.resolve(bookmarkEventsQueue.length === 0);
+    };
+
+    var action = function () {
+      // Get first event in the queue
+      var currentEvent = bookmarkEventsQueue.shift();
+      currentEvent[0].apply(this, currentEvent[1])
+        .catch(function (err) {
+          // Display alert
+          var errMessage = utility.GetErrorMessageFromException(err);
+          displayAlert(errMessage.title, errMessage.message);
+        });
+      return $q.resolve();
+    };
+
+    // Iterate through the queue and process the events
+    utility.PromiseWhile(bookmarkEventsQueue, doActionUntil, action)
+      .then(function () {
+        $timeout(function () {
+          bookmarks.Sync()
+            .catch(function (err) {
+              // Display alert
+              var errMessage = utility.GetErrorMessageFromException(err);
+              displayAlert(errMessage.title, errMessage.message);
+            });
+        }, 100);
+      });
+  };
+
   var queueBookmarksSync = function (syncData, sendResponse, runSync) {
     runSync = runSync === undefined ? true : runSync;
     sendResponse = sendResponse || function () { };
@@ -712,10 +734,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     // Queue sync
     return bookmarks.QueueSync(syncData, runSync)
       .then(function (bookmarks) {
-        try {
-          sendResponse({ bookmarks: bookmarks, success: true });
-        }
-        catch (err) { }
+        sendResponse({ bookmarks: bookmarks, success: true });
       })
       .catch(function (err) {
         // If local data out of sync, queue refresh sync
@@ -723,10 +742,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
           .then(function () {
             // Recreate error object since Firefox does not send the original properly
             var errObj = { code: err.code, logged: err.logged };
-            try {
-              sendResponse({ error: errObj, success: false });
-            }
-            catch (innerErr) { }
+            sendResponse({ error: errObj, success: false });
           });
       });
   };

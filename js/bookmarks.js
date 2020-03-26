@@ -937,7 +937,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       return $q.resolve();
     }
 
-    var condition = function () {
+    var doActionUntil = function () {
       return $q.resolve(syncQueue.length === 0);
     };
 
@@ -1031,7 +1031,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         }
       })
       .then(function () {
-        return utility.PromiseWhile(syncQueue, condition, action);
+        return utility.PromiseWhile(syncQueue, doActionUntil, action);
       })
       .then(function () {
         if (!updateRemote) {

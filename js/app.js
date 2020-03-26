@@ -2562,7 +2562,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var waitForSyncsToFinish = function () {
-    var condition = function (currentData) {
+    var doActionUntil = function (currentData) {
       var currentSync = currentData[0];
       var syncQueueLength = currentData[1];
       return $q.resolve(currentSync == null && syncQueueLength === 0);
@@ -2582,7 +2582,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     };
 
     // Periodically check sync queue until it is empty
-    return utility.PromiseWhile([], condition, action);
+    return utility.PromiseWhile([], doActionUntil, action);
   };
 
   var workingPanel_Cancel_Click = function () {

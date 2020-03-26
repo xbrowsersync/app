@@ -554,7 +554,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     var localBookmarkTree, containerId, containerName;
 
     // Create the condition check for the promise loop
-    var condition = function (id) {
+    var doActionUntil = function (id) {
       // Check if the current bookmark is a container
       return isLocalBookmarkContainer(id)
         .then(function (localContainer) {
@@ -576,6 +576,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           return reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
         }
         indexPath.unshift(localBookmark.index);
+
+        // Next process the parent
         resolve(localBookmark.parentId);
       });
     };
@@ -590,7 +592,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
         // Create the index path to the bookmark
         localBookmarkTree = tree;
-        return utility.PromiseWhile(localBookmarkId, condition, action)
+        return utility.PromiseWhile(localBookmarkId, doActionUntil, action)
           .then(function () {
             // Adjust child index of other bookmarks to account for any unsupported containers
             return getNumContainersBeforeBookmarkIndex(containerId, indexPath[0])
