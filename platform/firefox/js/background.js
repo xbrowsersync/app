@@ -335,6 +335,52 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       });
   };
 
+  var fixMultipleMoveOldIndexes = function () {
+    var processBatch = function (batch) {
+      // Adjust oldIndexes if bookmarks moved to different parent or to higher indexes
+      if (batch[0].parentId !== batch[0].oldParentId || batch[0].index > batch[0].oldIndex) {
+        for (var i = batch.length - 1; i >= 0; i--) {
+          batch[i].oldIndex = batch[i].oldIndex - i;
+        }
+      }
+
+      console.log(batch);
+    };
+
+    var finalBatch = bookmarkEventsQueue.reduce(function (currentBatch, currentEvent, currentIndex) {
+      // Check the current event is a move
+      if (currentEvent[0] === moveBookmark) {
+        // If no events in batch, add this as the first and continue
+        if (currentBatch.length === 0) {
+          currentBatch.push(currentEvent[1][1]);
+          return currentBatch;
+        }
+
+        // Otherwise check if this is part of the batch (will have same parent and index as first event)
+        var currentMoveInfo = currentEvent[1][1];
+        if (currentMoveInfo.parentId === currentBatch[0].parentId &&
+          (currentMoveInfo.index === currentBatch[0].index ||
+            currentMoveInfo.index === bookmarkEventsQueue[currentIndex - 1][1][1].index + 1)) {
+          currentBatch.push(currentMoveInfo);
+          return currentBatch;
+        }
+      }
+
+      if (currentBatch.length > 0) {
+        // Process current batch
+        processBatch(currentBatch);
+      }
+
+      // Return empty batch
+      return [];
+    }, []);
+
+    if (finalBatch.length > 0) {
+      // Process final batch
+      processBatch(finalBatch);
+    }
+  };
+
   var getCurrentSync = function (sendResponse) {
     try {
       sendResponse({
@@ -608,9 +654,10 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     return true;
   };
 
-  var onMovedHandler = function () {
+  var onMovedHandler = function (id, moveInfo) {
     utility.LogInfo('onMoved event detected');
     onBookmarkEventHandler(moveBookmark, arguments);
+    console.log(moveInfo);
   };
 
   var onNotificationClicked = function (notificationId) {
@@ -702,6 +749,10 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var processBookmarkEventsQueue = function () {
+    // Fix incorrect oldIndex values for multiple moves
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=1556427
+    fixMultipleMoveOldIndexes();
+
     var doActionUntil = function () {
       return $q.resolve(bookmarkEventsQueue.length === 0);
     };
