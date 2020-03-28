@@ -343,8 +343,6 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
           batch[i].oldIndex = batch[i].oldIndex - i;
         }
       }
-
-      console.log(batch);
     };
 
     var finalBatch = bookmarkEventsQueue.reduce(function (currentBatch, currentEvent, currentIndex) {
@@ -654,10 +652,9 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     return true;
   };
 
-  var onMovedHandler = function (id, moveInfo) {
+  var onMovedHandler = function () {
     utility.LogInfo('onMoved event detected');
     onBookmarkEventHandler(moveBookmark, arguments);
-    console.log(moveInfo);
   };
 
   var onNotificationClicked = function (notificationId) {
