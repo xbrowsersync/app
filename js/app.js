@@ -445,7 +445,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     }
 
     // Get last word of tag text
-    var lastWord = _.last(vm.bookmark.tagText.split(','));
+    var lastWord = _.last(vm.bookmark.tagText.split(",")).trimLeft();
 
     // Display lookahead if word length exceeds minimum
     if (lastWord && lastWord.length > globals.LookaheadMinChars) {
@@ -499,7 +499,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         break;
       // If user pressed tab or right arrow key and lookahead present
       case ((event.keyCode === 9 || event.keyCode === 39) && !!vm.bookmark.tagLookahead):
-        // Add lookahead to search query
+        // Add lookahead to tag text
         event.preventDefault();
         vm.bookmark.tagText += vm.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
         bookmarkForm_BookmarkTags_Change();
