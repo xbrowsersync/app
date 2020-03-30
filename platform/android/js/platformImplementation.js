@@ -1263,23 +1263,26 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         if (syncData.changeInfo === undefined) {
           return;
         }
-        switch (true) {
-          case syncData.changeInfo.type === globals.UpdateType.Create:
-            $timeout(function () {
-              vm.alert.display(null, getConstant(globals.Constants.BookmarkCreated_Message));
-            }, 200);
-            break;
-          case syncData.changeInfo.type === globals.UpdateType.Delete:
-            $timeout(function () {
-              vm.alert.display(null, getConstant(globals.Constants.BookmarkDeleted_Message));
-            }, 200);
-            break;
-          case syncData.changeInfo.type === globals.UpdateType.Update:
-            $timeout(function () {
-              vm.alert.display(null, getConstant(globals.Constants.BookmarkUpdated_Message));
-            }, 200);
-            break;
-        }
+        return $q.resolve(syncData.changeInfo)
+          .then(function (changeInfo) {
+            switch (true) {
+              case changeInfo.type === globals.UpdateType.Create:
+                $timeout(function () {
+                  vm.alert.display(null, getConstant(globals.Constants.BookmarkCreated_Message));
+                }, 200);
+                break;
+              case changeInfo.type === globals.UpdateType.Delete:
+                $timeout(function () {
+                  vm.alert.display(null, getConstant(globals.Constants.BookmarkDeleted_Message));
+                }, 200);
+                break;
+              case changeInfo.type === globals.UpdateType.Update:
+                $timeout(function () {
+                  vm.alert.display(null, getConstant(globals.Constants.BookmarkUpdated_Message));
+                }, 200);
+                break;
+            }
+          });
       })
       .catch(function (err) {
         // If local data out of sync, queue refresh sync

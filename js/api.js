@@ -279,7 +279,7 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
         return resolve();
       }
 
-      utility.LogWarning('API request failed: Network offline');
+      utility.LogWarning('API request failed: network offline');
       return reject({ code: globals.ErrorCodes.NetworkOffline });
     });
   };

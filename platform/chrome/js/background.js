@@ -145,7 +145,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     return $q(function (resolve, reject) {
       // If network disconnected, skip update check
       if (!utility.IsNetworkConnected()) {
-        utility.LogInfo('Could not check for updates on startup, no connection');
+        utility.LogInfo('Couldn’t check for updates on startup: network offline');
         return resolve(false);
       }
 
@@ -613,15 +613,15 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     }
   };
 
-  var onBookmarkEventHandler = function (syncFunction, args) {
+  var onBookmarkEventHandler = function () {
     // Clear timeout
     if (processBookmarkEventsTimeout) {
       $timeout.cancel(processBookmarkEventsTimeout);
     }
 
-    // Add event to the queue and trigger processing after a slight delay
+    // Add event to the queue and trigger processing after a delay
     bookmarkEventsQueue.push(arguments);
-    processBookmarkEventsTimeout = $timeout(processBookmarkEventsQueue, 100);
+    processBookmarkEventsTimeout = $timeout(processBookmarkEventsQueue, 1e3);
   };
 
   var onChangedHandler = function () {
@@ -810,34 +810,42 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         $timeout(function () {
           bookmarks.Sync()
             .catch(function (err) {
-              // Display alert
-              var errMessage = utility.GetErrorMessageFromException(err);
-              displayAlert(errMessage.title, errMessage.message);
+              // If local data out of sync, queue refresh sync
+              var errToDisplay = err;
+              return (bookmarks.CheckIfRefreshSyncedDataOnError(err) ? refreshLocalSyncData() : $q.resolve())
+                .catch(function (refreshErr) {
+                  errToDisplay = refreshErr;
+                })
+                .finally(function () {
+                  // Display alert
+                  var errMessage = utility.GetErrorMessageFromException(errToDisplay);
+                  displayAlert(errMessage.title, errMessage.message);
+                });
             });
         }, 100);
       });
   };
 
-  var queueBookmarksSync = function (syncData, sendResponse, runSync) {
+  var queueBookmarksSync = function (syncData, callback, runSync) {
     runSync = runSync === undefined ? true : runSync;
-    sendResponse = sendResponse || function () { };
+    callback = callback || function () { };
 
     // Queue sync
     return bookmarks.QueueSync(syncData, runSync)
       .then(function (bookmarks) {
-        sendResponse({ bookmarks: bookmarks, success: true });
+        callback({ bookmarks: bookmarks, success: true });
       })
       .catch(function (err) {
         // If local data out of sync, queue refresh sync
         return (bookmarks.CheckIfRefreshSyncedDataOnError(err) ? refreshLocalSyncData() : $q.resolve())
           .then(function () {
-            sendResponse({ error: err, success: false });
+            callback({ error: err, success: false });
           });
       });
   };
 
   var refreshLocalSyncData = function () {
-    return queueBookmarksSync({ type: globals.SyncType.Pull })
+    return bookmarks.QueueSync({ type: globals.SyncType.Pull })
       .then(function () {
         utility.LogInfo('Local sync data refreshed');
       });
