@@ -460,7 +460,9 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     return platform.LocalStorage.Set(globals.CacheKeys.TraceLog)
       .then(function () {
         return $q.all([
+          platform.LocalStorage.Set(globals.CacheKeys.CheckForAppUpdates, true),
           platform.LocalStorage.Set(globals.CacheKeys.DisplayHelp, true),
+          platform.LocalStorage.Set(globals.CacheKeys.SyncBookmarksToolbar, true),
           // TODO: Add this back once Firefox supports optional permissions
           // https://bugzilla.mozilla.org/show_bug.cgi?id=1432083
           /*platform.LocalStorage.Get(globals.CacheKeys.DisplayPermissions)

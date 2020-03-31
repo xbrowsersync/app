@@ -490,7 +490,9 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     return platform.LocalStorage.Set(globals.CacheKeys.TraceLog)
       .then(function () {
         return $q.all([
+          platform.LocalStorage.Set(globals.CacheKeys.CheckForAppUpdates, true),
           platform.LocalStorage.Set(globals.CacheKeys.DisplayHelp, true),
+          platform.LocalStorage.Set(globals.CacheKeys.SyncBookmarksToolbar, true),
           platform.LocalStorage.Get(globals.CacheKeys.DisplayPermissions)
             .then(function (displayPermissions) {
               if (displayPermissions === false) {

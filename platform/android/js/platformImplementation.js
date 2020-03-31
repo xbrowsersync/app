@@ -1733,6 +1733,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var handleInstall = function (installedVersion) {
     return $q.all([
       setInLocalStorage(globals.CacheKeys.AppVersion, installedVersion),
+      setInLocalStorage(globals.CacheKeys.CheckForAppUpdates, true),
       setInLocalStorage(globals.CacheKeys.DisplayHelp, true)
     ])
       .then(function () {
