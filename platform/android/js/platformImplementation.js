@@ -267,12 +267,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_Sync_Id_Description": {
       "message": "Use your sync ID to access your synced data on other devices."
     },
-    "settings_Sync_SyncToolbar_Label": {
-      "message": "Sync bookmarks toolbar"
-    },
-    "settings_Sync_SyncToolbar_Description": {
-      "message": "Disable this setting to display different toolbar bookmarks across synced browers."
-    },
     "settings_Service_ChangeService_Label": {
       "message": "Change service"
     },
@@ -453,11 +447,23 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_Prefs_Title": {
       "message": "Preferences"
     },
+    "settings_Prefs_SyncToolbar_Label": {
+      "message": "Sync bookmarks toolbar"
+    },
+    "settings_Prefs_SyncToolbar_Description": {
+      "message": "Disable this setting to display different toolbar bookmarks across synced browers."
+    },
     "settings_Prefs_CheckForAppUpdates_Label": {
       "message": "Check for app updates"
     },
+    "settings_Prefs_CheckForAppUpdates_Description": {
+      "message": "Be notified when a new version of xBrowserSync is available."
+    },
     "settings_Prefs_SearchBar_Label": {
-      "message": "Display search bar beneath results"
+      "message": "Alternative search view"
+    },
+    "settings_Prefs_SearchBar_Description": {
+      "message": "Display search bar beneath results."
     },
     "updated_Message": {
       "message": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."

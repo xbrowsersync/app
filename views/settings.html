@@ -55,36 +55,6 @@
           </div>
         </div>
       </div>
-      <div class="setting-group" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
-        <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_SyncToolbar_Label) }}</label>
-        <p class="description"
-          data-ng-class="{ 'margin-bottom-0': !vm.settings.displaySyncBookmarksToolbarConfirmation }">{{
-          vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_SyncToolbar_Description) }}</p>
-        <div class="animate-fade-in">
-          <div class="setting-value">
-            <div class="checkbox">
-              <input id="syncBookmarksToolbar" type="checkbox" data-ng-model="vm.settings.syncBookmarksToolbar"
-                data-ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Click()" />
-              <label for="syncBookmarksToolbar" data-ng-class="{ 'animate': true }"></label>
-            </div>
-          </div>
-        </div>
-        <div class="confirm animate-fade-in" data-ng-show="vm.settings.displaySyncBookmarksToolbarConfirmation">
-          <div
-            data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_SyncToolbarConfirmation_Message)">
-          </div>
-          <div class="buttons">
-            <button type="button" class="btn btn-default btn-confirm-sync-toolbar"
-              data-ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Confirm()">
-              {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
-            </button>
-            <button type="button" class="btn btn-default"
-              data-ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Cancel()">
-              {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
   <div class="service-panel well well-sm">
@@ -397,8 +367,40 @@
   <div class="preferences-panel well well-sm">
     <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_Title) }}</h4>
     <div class="panel-content">
+      <div class="setting-group" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
+        <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_SyncToolbar_Label) }}</label>
+        <p class="description">
+          {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_SyncToolbar_Description) }}
+        </p>
+        <div class="animate-fade-in">
+          <div class="setting-value">
+            <div class="checkbox">
+              <input id="syncBookmarksToolbar" type="checkbox" data-ng-model="vm.settings.syncBookmarksToolbar"
+                data-ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Click()" />
+              <label for="syncBookmarksToolbar" data-ng-class="{ 'animate': true }"></label>
+            </div>
+          </div>
+        </div>
+        <div class="confirm animate-fade-in" data-ng-show="vm.settings.displaySyncBookmarksToolbarConfirmation">
+          <div
+            data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_SyncToolbarConfirmation_Message)">
+          </div>
+          <div class="buttons">
+            <button type="button" class="btn btn-default btn-confirm-sync-toolbar"
+              data-ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Confirm()">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
+            </button>
+            <button type="button" class="btn btn-default"
+              data-ng-click="vm.events.syncPanel_SyncBookmarksToolbar_Cancel()">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
+            </button>
+          </div>
+        </div>
+      </div>
       <div class="setting-group" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)">
         <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_SearchBar_Label) }}</label>
+        <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_SearchBar_Description) }}
+        </p>
         <div class="setting-value">
           <div class="checkbox">
             <input id="displaySearchBarBeneathResults" type="checkbox"
@@ -410,6 +412,9 @@
       </div>
       <div class="setting-group">
         <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_CheckForAppUpdates_Label) }}</label>
+        <p class="description">
+          {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_CheckForAppUpdates_Description) }}
+        </p>
         <div class="setting-value">
           <div class="checkbox">
             <input id="checkForAppUpdates" type="checkbox" data-ng-model="vm.settings.checkForAppUpdates"
