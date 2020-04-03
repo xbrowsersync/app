@@ -471,8 +471,8 @@ body {
 
   .logo {
     background: url("../img/logo.svg") 50% 1rem no-repeat;
-    background-size: 12rem;
-    flex: 0 1 19rem;
+    background-size: 11.5rem;
+    flex: 0 0 17.5rem;
   }
 
   .lookahead-container {
@@ -535,6 +535,22 @@ body {
     background-color: $colour-danger !important;
   }
 
+  .service-message {
+    padding: 1px;
+    overflow-y: auto;
+    font-style: italic;
+    quotes: "\201c""\201d";
+    text-align: center;
+
+    &:before {
+      content: open-quote;
+    }
+
+    &:after {
+      content: close-quote;
+    }
+  }
+
   .spinner-border {
     animation-duration: 1s;
     @include spinner-colour($colour-link-highlight);
@@ -588,6 +604,21 @@ body {
     margin-bottom: 0.75rem;
     @include box-shadow;
 
+    a {
+      border-bottom-color: $colour-text2;
+
+      &:active {
+        color: $colour-link-highlight !important;
+        border-bottom-color: $colour-link-highlight !important;
+      }
+
+      &:focus,
+      &:hover {
+        color: $colour-link-highlight;
+        border-bottom-color: $colour-link-highlight;
+      }
+    }
+
     &.dark {
       background-color: $colour-text2;
       color: $colour-text1;
@@ -600,19 +631,6 @@ body {
         &:hover {
           border-bottom-color: inherit;
         }
-      }
-    }
-
-    a {
-      &:active {
-        color: $colour-link-highlight !important;
-        border-bottom-color: $colour-link-highlight !important;
-      }
-
-      &:focus,
-      &:hover {
-        color: $colour-link-highlight;
-        border-bottom-color: $colour-link-highlight;
       }
     }
 
@@ -648,6 +666,7 @@ body {
 
     .confirm {
       margin-bottom: 0;
+      width: 100%;
 
       button {
         margin-right: 0.5rem;
@@ -807,6 +826,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100%;
 
     & > div {
       position: absolute;
@@ -835,6 +855,20 @@ body {
     }
   }
 
+  .btn-validating {
+    background-color: $colour-text1;
+    border-color: $colour-text1;
+    color: $colour-bg2;
+    opacity: 1;
+
+    .spinner-border-sm {
+      border-color: $colour-bg2;
+      border-right-color: transparent;
+      height: 0.9rem;
+      width: 0.9rem;
+    }
+  }
+
   .confirm {
     margin-bottom: 0;
     z-index: 10;
@@ -849,7 +883,12 @@ body {
       border: 1px solid $colour-text1;
       @include placeholder {
         font-family: $font-stack-regular;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+      }
+
+      &[name="newServiceUrl"] {
+        font-family: $font-stack-regular;
+        font-size: 1.1rem;
       }
     }
   }
@@ -859,9 +898,14 @@ body {
   }
 
   .login-form-existing,
-  .login-form-new {
+  .login-form-new,
+  .update-service-panel {
+    height: 100%;
     max-width: 22rem;
+  }
 
+  .login-form-existing,
+  .login-form-new {
     a {
       &:active,
       &:focus,
@@ -914,9 +958,64 @@ body {
     }
   }
 
+  .selected-service {
+    display: inline-flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 0.75rem;
+
+    a {
+      @include text-overflow-ellipsis;
+    }
+
+    label {
+      white-space: nowrap;
+      flex: 0 0;
+      margin: 0 0.3rem 0 0;
+    }
+  }
+
   .toggle-form {
     text-align: center;
     margin-top: 1.5rem;
+  }
+
+  .update-service-panel {
+    .service-info {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 1rem 0.75rem;
+
+        li {
+          position: relative;
+          padding-left: 45%;
+          @include text-overflow-ellipsis;
+
+          label {
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            margin-bottom: 0;
+            color: $colour-text2 !important;
+          }
+        }
+      }
+
+      .service-message {
+        max-height: 5rem;
+        margin: 0 1rem 1rem;
+      }
+
+      .service-warning {
+        font-size: 0.9rem;
+        line-height: 1.2rem;
+      }
+    }
   }
 }
 
@@ -1318,13 +1417,23 @@ body {
     overflow-y: scroll;
   }
 
-  .service-panel {
+  .sync-panel {
+    .id-url {
+      position: relative;
+      display: block;
+      text-align: center;
+      width: 100%;
+      margin-bottom: 0.5rem;
+      font-family: $font-stack-code;
+      font-size: 0.92rem;
+    }
+
     .progress {
       height: 0.45rem;
       border-radius: 1rem;
       background-color: $colour-text2;
       overflow: visible;
-      margin-bottom: 2rem;
+      margin: 0.25rem 0 1.5rem;
 
       .progress-bar {
         background-color: $colour-bg2;
@@ -1338,7 +1447,7 @@ body {
     .used {
       font-size: 0.8rem;
       position: absolute;
-      bottom: -1.25rem;
+      margin-top: -1.5rem;
     }
 
     .max {
@@ -1353,19 +1462,6 @@ body {
 
     .service-message {
       max-height: 7rem;
-      padding: 1px;
-      overflow-y: auto;
-      font-style: italic;
-      quotes: "\201c""\201d";
-      text-align: center;
-
-      &:before {
-        content: open-quote;
-      }
-
-      &:after {
-        content: close-quote;
-      }
     }
 
     .status-text {
@@ -1388,25 +1484,12 @@ body {
         margin-top: 0.1rem;
       }
     }
-  }
 
-  .sync-panel {
     .updates-available {
       @extend .description;
       font-size: 0.9rem;
       text-align: center;
       font-style: italic;
-    }
-
-    .id-url {
-      position: relative;
-      display: block;
-      text-align: center;
-      width: 100%;
-      line-height: 2rem;
-      margin-bottom: 0.2rem;
-      font-family: $font-stack-code;
-      font-size: 0.92rem;
     }
   }
 

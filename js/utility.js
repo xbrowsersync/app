@@ -212,6 +212,18 @@ xBrowserSync.App.Utility = function ($http, $q, platform, globals) {
     return fileName;
   };
 
+  var getCountryNameFrom2LetterISOCode = function (isoCode) {
+    if (!isoCode) {
+      return null;
+    }
+
+    var country = Countries.countries[isoCode];
+    if (!country) {
+      logInfo('No country found matching ISO code: ' + isoCode);
+    }
+    return country.name;
+  };
+
   var getDateTimeString = function (date) {
     if (!date) {
       return '';
@@ -396,6 +408,24 @@ xBrowserSync.App.Utility = function ($http, $q, platform, globals) {
             return base64Key;
           });
       });
+  };
+
+  var getServiceStatusTextFromStatusCode = function (statusCode) {
+    if (statusCode == null) {
+      return null;
+    }
+
+    switch (statusCode) {
+      case globals.ServiceStatus.NoNewSyncs:
+        return platform.GetConstant(globals.Constants.Settings_Service_Status_NoNewSyncs);
+      case globals.ServiceStatus.Offline:
+        return platform.GetConstant(globals.Constants.Settings_Service_Status_Offline);
+      case globals.ServiceStatus.Online:
+        return platform.GetConstant(globals.Constants.Settings_Service_Status_Online);
+      case globals.ServiceStatus.Error:
+      default:
+        return platform.GetConstant(globals.Constants.Settings_Service_Status_Error);
+    }
   };
 
   var getServiceUrl = function () {
@@ -795,9 +825,11 @@ xBrowserSync.App.Utility = function ($http, $q, platform, globals) {
     DeepCopy: deepCopy,
     Get24hrTimeFromDate: get24hrTimeFromDate,
     GetBackupFileName: getBackupFileName,
+    GetCountryNameFrom2LetterISOCode: getCountryNameFrom2LetterISOCode,
     GetDateTimeString: getDateTimeString,
     GetErrorMessageFromException: getErrorMessageFromException,
     GetLogFileName: getLogFileName,
+    GetServiceStatusTextFromStatusCode: getServiceStatusTextFromStatusCode,
     GetServiceUrl: getServiceUrl,
     GetTagArrayFromText: getTagArrayFromText,
     GetPasswordHash: getPasswordHash,

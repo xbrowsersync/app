@@ -259,6 +259,12 @@ body {
     }
   }
 
+  .login-form-existing,
+  .login-form-new,
+  .update-service-panel {
+    height: auto;
+  }
+
   .login-form-new {
     .toggle-form {
       display: block;
@@ -267,7 +273,6 @@ body {
 
   .logo {
     background-size: 11rem;
-    flex: 0 1 17rem;
   }
 
   .well {
@@ -279,11 +284,12 @@ body {
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       flex-grow: 1;
 
       & > div {
         position: initial;
-        width: 21rem;
+        width: 22rem;
       }
     }
 
@@ -297,7 +303,7 @@ body {
       height: 17rem;
       flex: 1 12rem;
       background-size: 13rem;
-      background-position-y: 50%;
+      background-position: 90% 50%;
     }
 
     .view-content {
