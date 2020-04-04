@@ -631,7 +631,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Copy sync ID to clipboard"
     },
     "qr_Message": {
-      "message": "Scan this QR code using the xBrowserSync Android app to access your synced data on your mobile device."
+      "message": "Scan this QR code using the xBrowserSync Android app to connec to your synced data."
     },
     "working_Restoring_Message": {
       "message": "Restoring"
@@ -1353,7 +1353,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           vm.scanner.invalidSyncId = false;
         }, 100);
 
-        QRScanner.scan(function (err, scannedText) {
+        QRScanner.scan(function (err, scannedValue) {
           if (err) {
             var scanError = new Error(err._message || err.name || err.code);
             utility.LogError(scanError, 'platform.startScanning');
@@ -1361,9 +1361,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           }
 
           QRScanner.pausePreview(function () {
-            utility.LogInfo('Scanned: ' + scannedText);
+            utility.LogInfo('Scanned: ' + scannedValue);
+            var arrScannedValue = scannedValue.split(globals.QrCode.Delimiter);
+            var urlRegex = new RegExp('^' + globals.URL.ValidUrlRegex + '$', 'i');
 
-            if (!utility.SyncIdIsValid(scannedText)) {
+            // If scanned value is not value resume scanning
+            if (arrScannedValue.length < 2 ||
+              !utility.SyncIdIsValid(arrScannedValue[0]) ||
+              !urlRegex.test(arrScannedValue[1])) {
               vm.scanner.invalidSyncId = true;
               $timeout(function () {
                 QRScanner.resumePreview(waitForScan);
@@ -1372,7 +1377,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             }
 
             $timeout(function () {
-              resolve(scannedText);
+              resolve(scannedValue);
             }, 1e3);
           });
         });
@@ -1814,16 +1819,20 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var handleStartup = function () {
-    var syncEnabled;
+    var cachedBookmarks, syncEnabled;
 
     utility.LogInfo('Starting up');
 
-    // Prime bookmarks cache and retrieve cached data
-    var primeBookmarksCache = bookmarks.GetBookmarks().catch(function () { });
+    // Retrieve cached data
     return getFromLocalStorage()
       .then(function (cachedData) {
         syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
         var checkForAppUpdates = cachedData[globals.CacheKeys.CheckForAppUpdates];
+
+        // Prime bookmarks cache
+        if (syncEnabled) {
+          cachedBookmarks = bookmarks.GetBookmarks();
+        }
 
         // Add useful debug info to beginning of trace log
         cachedData.platform = {
@@ -1854,7 +1863,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           // Check if a bookmark was shared
           checkForSharedBookmark()
             .then(function () {
-              return primeBookmarksCache;
+              return cachedBookmarks;
             })
         ]);
       })

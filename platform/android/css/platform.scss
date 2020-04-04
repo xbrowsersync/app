@@ -287,9 +287,14 @@ body {
       justify-content: center;
       flex-grow: 1;
 
-      & > div {
-        position: initial;
-        width: 22rem;
+      .form-content {
+        display: flex;
+        justify-content: center;
+        height: auto;
+
+        & > div {
+          position: initial;
+        }
       }
     }
 
@@ -309,7 +314,6 @@ body {
     .view-content {
       flex-direction: row;
       align-items: center;
-      padding-top: 2rem;
     }
   }
 }

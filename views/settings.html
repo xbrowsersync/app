@@ -19,7 +19,7 @@
         <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_Id_Label) }}</label>
         <div class="setting-value id-url">
           <a title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_DisplayQRCode_Message) }}"
-            data-ng-click="vm.events.displayQrPanel(vm.sync.id)" href="">{{ vm.sync.id }}</a>
+            data-ng-click="vm.events.syncPanel_DisplayQrPanel_Click()" href="">{{ vm.sync.id }}</a>
         </div>
         <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Sync_Id_Description) }}</p>
       </div>

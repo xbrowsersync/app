@@ -624,7 +624,7 @@
     "message": "Copy sync ID to clipboard"
   },
   "qr_Message": {
-    "message": "Scan this QR code using the xBrowserSync Android app to access your synced data on your mobile device."
+    "message": "Scan this QR code using the xBrowserSync Android app to connec to your synced data."
   },
   "working_Restoring_Message": {
     "message": "Restoring"

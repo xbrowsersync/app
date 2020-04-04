@@ -828,11 +828,17 @@ body {
     align-items: center;
     height: 100%;
 
-    & > div {
-      position: absolute;
-      top: 0;
+    .form-content {
+      position: relative;
+      height: 100%;
       width: 100%;
-      z-index: 10;
+
+      & > div {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 10;
+      }
     }
   }
 
@@ -874,6 +880,22 @@ body {
     z-index: 10;
   }
 
+  .form-content,
+  .selected-service {
+    a {
+      &:active,
+      &:focus,
+      &:hover {
+        color: $colour-text2;
+        border-bottom-color: $colour-text2;
+      }
+    }
+
+    .confirm {
+      @extend .well;
+    }
+  }
+
   .form-group {
     input {
       width: 100%;
@@ -902,18 +924,6 @@ body {
   .update-service-panel {
     height: 100%;
     max-width: 22rem;
-  }
-
-  .login-form-existing,
-  .login-form-new {
-    a {
-      &:active,
-      &:focus,
-      &:hover {
-        color: $colour-text2;
-        border-bottom-color: $colour-text2;
-      }
-    }
   }
 
   .login-form-existing {
@@ -972,6 +982,28 @@ body {
       white-space: nowrap;
       flex: 0 0;
       margin: 0 0.3rem 0 0;
+    }
+
+    .service-status {
+      position: relative;
+      margin-left: 0.25rem;
+      top: 0.1rem;
+
+      .loading .spinner-border {
+        border-color: $colour-text1;
+        border-right-color: transparent;
+      }
+
+      .status-background {
+        position: absolute;
+        top: 0.2rem;
+        left: 0.1rem;
+        height: 0.8rem;
+        width: 0.8rem;
+        z-index: -1;
+        border-radius: 100%;
+        background-color: $colour-text1;
+      }
     }
   }
 
