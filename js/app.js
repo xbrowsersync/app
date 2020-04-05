@@ -947,21 +947,23 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     platform.Init(vm)
       .then(function () {
         // Get cached prefs from storage
-        return platform.LocalStorage.Get([
-          globals.CacheKeys.DisplaySearchBarBeneathResults,
-          globals.CacheKeys.ServiceUrl,
-          globals.CacheKeys.SyncEnabled,
-          globals.CacheKeys.SyncId
-        ]);
+        return $q.all([
+          platform.LocalStorage.Get([
+            globals.CacheKeys.DisplaySearchBarBeneathResults,
+            globals.CacheKeys.SyncEnabled,
+            globals.CacheKeys.SyncId
+          ]),
+          utility.GetServiceUrl()
+        ])
       })
       .then(function (cachedData) {
         // Set view model values
-        vm.settings.displaySearchBarBeneathResults = cachedData[globals.CacheKeys.DisplaySearchBarBeneathResults] != null ?
-          cachedData[globals.CacheKeys.DisplaySearchBarBeneathResults] :
+        vm.settings.displaySearchBarBeneathResults = cachedData[0][globals.CacheKeys.DisplaySearchBarBeneathResults] != null ?
+          cachedData[0][globals.CacheKeys.DisplaySearchBarBeneathResults] :
           vm.settings.displaySearchBarBeneathResults;
-        vm.sync.enabled = !!cachedData[globals.CacheKeys.SyncEnabled];
-        vm.sync.id = cachedData[globals.CacheKeys.SyncId];
-        vm.sync.service.url = cachedData[globals.CacheKeys.ServiceUrl];
+        vm.sync.enabled = !!cachedData[0][globals.CacheKeys.SyncEnabled];
+        vm.sync.id = cachedData[0][globals.CacheKeys.SyncId];
+        vm.sync.service.url = cachedData[1];
 
         // Check if a sync is currently in progress
         return platform.Sync.Current()
