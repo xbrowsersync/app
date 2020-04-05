@@ -217,7 +217,7 @@
         <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Message)">
         </p>
         <div class="form-group" data-ng-class="{ 'has-error': vm.syncForm.newServiceUrl.$invalid }">
-          <input name="newServiceUrl" class="form-control" data-ng-model="vm.sync.service.newServiceUrl"
+          <input name="newServiceUrl" class="form-control" data-ng-model="vm.sync.newService.url"
             data-ng-change="vm.events.syncForm_UpdateService_ServiceUrl_Change()"
             data-ng-readonly="vm.login.validatingServiceUrl"
             placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Field_Description) }}"
@@ -259,26 +259,27 @@
         data-ng-show="vm.login.displayUpdateServiceConfirmation">
         <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmUpdateService_Title) }}</h4>
         <p class="selected-service">
-          <a href="{{ vm.sync.service.newServiceUrl }}" class="new-tab"
-            title="{{ vm.sync.service.newServiceUrl }}">{{ vm.sync.service.newServiceUrl }}</a>
+          <a href="{{ vm.sync.newService.url }}" class="new-tab"
+            title="{{ vm.sync.newService.url }}">{{ vm.sync.newService.url }}</a>
         </p>
         <ul>
           <li
-            data-ng-class="{ 'text-danger': vm.sync.service.status === vm.globals.ServiceStatus.Offline || vm.sync.service.status === vm.globals.ServiceStatus.Error }">
+            data-ng-class="{ 'text-danger': vm.sync.newService.status === vm.globals.ServiceStatus.Offline || vm.sync.newService.status === vm.globals.ServiceStatus.Error }">
             <label>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmUpdateService_Status_Label) }}</label>
-            {{ vm.utility.GetServiceStatusTextFromStatusCode(vm.sync.service.status) }}
+            {{ vm.utility.GetServiceStatusTextFromStatusCode(vm.sync.newService.status) }}
           </li>
-          <li data-ng-if="vm.sync.service.location">
+          <li data-ng-if="vm.sync.newService.location">
             <label>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmUpdateService_Location_Label) }}</label>
-            {{ vm.utility.GetCountryNameFrom2LetterISOCode(vm.sync.service.location) }}</li>
+            {{ vm.utility.GetCountryNameFrom2LetterISOCode(vm.sync.newService.location) }}</li>
           <li>
             <label>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmUpdateService_MaxSyncSize_Label) }}</label>
-            {{ vm.sync.service.maxSyncSize | kbFmt : 0 }}</li>
+            {{ vm.sync.newService.maxSyncSize | kbFmt : 0 }}</li>
           <li>
             <label>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmUpdateService_ApiVersion_Label) }}</label>
-            {{ vm.sync.service.apiVersion }}</li>
+            {{ vm.sync.newService.apiVersion }}</li>
         </ul>
-        <p class="service-message" data-ng-if="vm.sync.service.message" data-ng-bind-html="vm.sync.service.message"></p>
+        <p class="service-message" data-ng-if="vm.sync.newService.message"
+          data-ng-bind-html="vm.sync.newService.message"></p>
         <p class="service-warning"
           data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmUpdateService_Warning)"></p>
         <div class="buttons">

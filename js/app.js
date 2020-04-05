@@ -214,6 +214,14 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       enabled: false,
       id: undefined,
       inProgress: false,
+      newService: {
+        apiVersion: '',
+        location: undefined,
+        maxSyncSize: 0,
+        message: '',
+        status: undefined,
+        url: undefined
+      },
       password: '',
       service: {
         apiVersion: '',
@@ -954,7 +962,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
             globals.CacheKeys.SyncId
           ]),
           utility.GetServiceUrl()
-        ])
+        ]);
       })
       .then(function (cachedData) {
         // Set view model values
@@ -1412,19 +1420,21 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       });
   };
 
-  var refreshServiceStatus = function () {
+  var refreshServiceStatus = function (serviceObj, serviceInfo) {
+    serviceObj = serviceObj || vm.sync.service;
+
     // Clear current status
-    vm.sync.service.status = null;
+    serviceObj.status = null;
 
     // Retrieve service info
-    return api.CheckServiceStatus()
-      .then(function (serviceInfo) {
-        if (!serviceInfo) {
+    return (serviceInfo ? $q.resolve(serviceInfo) : api.CheckServiceStatus())
+      .then(function (response) {
+        if (!response) {
           return;
         }
 
         // Render markdown and add link classes to service message 
-        var message = serviceInfo.message ? marked(serviceInfo.message) : null;
+        var message = response.message ? marked(response.message) : null;
         if (message) {
           var messageDom = new DOMParser().parseFromString(message, 'text/html');
           _.each(messageDom.querySelectorAll('a'), function (hyperlink) {
@@ -1434,18 +1444,18 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
           $timeout(setNewTabLinks);
         }
 
-        vm.sync.service.apiVersion = serviceInfo.version;
-        vm.sync.service.location = serviceInfo.location;
-        vm.sync.service.maxSyncSize = serviceInfo.maxSyncSize / 1024;
-        vm.sync.service.message = message;
-        vm.sync.service.status = serviceInfo.status;
+        serviceObj.apiVersion = response.version;
+        serviceObj.location = response.location;
+        serviceObj.maxSyncSize = response.maxSyncSize / 1024;
+        serviceObj.message = message;
+        serviceObj.status = response.status;
       })
       .catch(function (err) {
         if (err && err.code === globals.ErrorCodes.ServiceOffline) {
-          vm.sync.service.status = globals.ServiceStatus.Offline;
+          serviceObj.status = globals.ServiceStatus.Offline;
         }
         else {
-          vm.sync.service.status = globals.ServiceStatus.Error;
+          serviceObj.status = globals.ServiceStatus.Error;
         }
       });
   };
@@ -2323,7 +2333,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
   var syncForm_UpdateService_Click = function () {
     // Reset view
-    vm.sync.service.newServiceUrl = vm.sync.service.url;
+    vm.sync.newService.url = vm.sync.service.url;
     vm.login.displayUpdateServiceConfirmation = false;
     vm.login.displayUpdateServicePanel = true;
     vm.login.validatingServiceUrl = false;
@@ -2338,7 +2348,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
   var syncForm_UpdateService_Confirm_Click = function () {
     // Update saved credentials
-    var url = vm.sync.service.newServiceUrl.replace(/\/$/, '');
+    var url = vm.sync.newService.url.replace(/\/$/, '');
     return $q.all([
       updateServiceUrl(url),
       platform.LocalStorage.Set(globals.CacheKeys.SyncId),
@@ -2382,15 +2392,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     }, 150);
 
     // Check service url status
-    var url = vm.sync.service.newServiceUrl.replace(/\/$/, '');
+    var url = vm.sync.newService.url.replace(/\/$/, '');
     return api.CheckServiceStatus(url)
-      .then(function (serviceInfo) {
-        if (!serviceInfo) {
-          return false;
-        }
-
-        return true;
-      })
       .catch(function (err) {
         if (err && err.code != null) {
           switch (err.code) {
@@ -2425,18 +2428,22 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
   var syncForm_UpdateService_Update_Click = function () {
     // Check for protocol
-    if (vm.sync.service.newServiceUrl && vm.sync.service.newServiceUrl.trim() &&
-      !(new RegExp(globals.URL.ProtocolRegex)).test(vm.sync.service.newServiceUrl)) {
-      vm.sync.service.newServiceUrl = 'https://' + vm.sync.service.newServiceUrl;
+    if (vm.sync.newService.url && vm.sync.newService.url.trim() &&
+      !(new RegExp(globals.URL.ProtocolRegex)).test(vm.sync.newService.url)) {
+      vm.sync.newService.url = 'https://' + vm.sync.newService.url;
     }
 
     // Validate service url
     return syncForm_UpdateService_ServiceUrl_Validate()
-      .then(function (isValid) {
-        if (!isValid) {
+      .then(function (newServiceInfo) {
+        if (!newServiceInfo) {
           return;
         }
 
+        // Retrieve new service status
+        return refreshServiceStatus(vm.sync.newService, newServiceInfo);
+      })
+      .then(function () {
         // Display confirmation panel
         vm.login.displayUpdateServiceConfirmation = true;
 
