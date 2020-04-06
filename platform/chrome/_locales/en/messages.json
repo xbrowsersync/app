@@ -96,10 +96,10 @@
     "message": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks toolbar and bookmarks library, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p><p>Please note however, as Firefox’s bookmarks API does not yet support accessing native bookmark tags, any existing tags will be lost when syncing and tags added via xBrowserSync will not be saved as native tags.</p>"
   },
   "help_Page_BackingUp_Desktop_Content": {
-    "message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your reponsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time revert your data back to it’s original state from when xBrowserSync was installed.</p>"
+    "message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time revert your data back to it’s original state from when xBrowserSync was installed.</p>"
   },
   "help_Page_BackingUp_Android_Content": {
-    "message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your reponsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
+    "message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
   },
   "help_Page_Shortcuts_Chrome_Content": {
     "message": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension, then simply press Enter to view your recent bookmarks or start typing to search.</p><p>To change the shortcut, browse to chrome://extensions/shortcuts and update the available shortcuts under xBrowserSync."
@@ -462,7 +462,7 @@
     "message": "Sync bookmarks toolbar"
   },
   "settings_Prefs_SyncToolbar_Description": {
-    "message": "Disable this setting to display different toolbar bookmarks across synced browers."
+    "message": "Disable this setting to display different toolbar bookmarks across synced browsers."
   },
   "settings_Prefs_CheckForAppUpdates_Label": {
     "message": "Check for app updates"
@@ -624,7 +624,7 @@
     "message": "Copy sync ID to clipboard"
   },
   "qr_Message": {
-    "message": "Scan this QR code using the xBrowserSync Android app to connec to your synced data."
+    "message": "Scan this QR code using the xBrowserSync Android app to connect to your synced data."
   },
   "working_Restoring_Message": {
     "message": "Restoring"
