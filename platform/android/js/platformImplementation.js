@@ -190,7 +190,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Don’t have a sync ID?"
     },
     "button_GetSyncId_Label": {
-      "message": "Get a Sync ID"
+      "message": "Get a sync ID"
     },
     "login_ConfirmUpdateService_Title": {
       "message": "Sync to this service?"
@@ -280,13 +280,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Bookmark updated"
     },
     "scan_Title": {
-      "message": "Scan your Sync ID QR code"
+      "message": "Scan your sync ID QR code"
     },
     "settings_Prefs_SyncToolbarConfirmation_Message": {
       "message": "<p>Enabling this setting will replace the bookmarks currently in the bookmarks toolbar with your synced bookmarks.</p><p>OK to proceed?</p>"
     },
     "settings_Sync_Id_Description": {
-      "message": "Use your sync ID to access your synced data on other devices."
+      "message": "Use your sync ID to connect to your synced data on other devices (click to reveal QR code)."
     },
     "settings_BackupRestore_Backup_Label": {
       "message": "Back up"
