@@ -2441,18 +2441,18 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         }
 
         // Retrieve new service status
-        return refreshServiceStatus(vm.sync.newService, newServiceInfo);
-      })
-      .then(function () {
-        // Display confirmation panel
-        vm.login.displayUpdateServiceConfirmation = true;
+        return refreshServiceStatus(vm.sync.newService, newServiceInfo)
+          .then(function () {
+            // Display confirmation panel
+            vm.login.displayUpdateServiceConfirmation = true;
 
-        // Focus on first button
-        if (!utility.IsMobilePlatform(vm.platformName)) {
-          $timeout(function () {
-            document.querySelector('.update-service-panel .confirm .buttons > button').focus();
-          }, 150);
-        }
+            // Focus on first button
+            if (!utility.IsMobilePlatform(vm.platformName)) {
+              $timeout(function () {
+                document.querySelector('.update-service-panel .confirm .buttons > button').focus();
+              }, 150);
+            }
+          });
       });
   };
 
