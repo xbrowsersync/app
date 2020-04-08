@@ -325,6 +325,7 @@ body {
   }
 
   .container {
+    height: 100%;
     max-width: 100%;
     position: relative;
     padding: 0;
@@ -590,7 +591,6 @@ body {
     .view-content {
       display: flex;
       flex-direction: column;
-      height: 100%;
       padding: 0.75rem;
     }
   }
@@ -1391,6 +1391,20 @@ body {
     }
   }
 
+  .header-panel,
+  .panel-container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .header-panel {
+    flex: none;
+  }
+
+  .panel-container {
+    overflow-y: auto;
+  }
+
   .setting-group {
     @extend .form-group;
 
@@ -1428,27 +1442,11 @@ body {
       width: auto;
       padding: 0;
       color: $colour-text2;
-      font-size: 1.06rem;
-      line-height: 1.35rem;
       border: 0;
       border-radius: 0;
       background: transparent;
       transition: none;
     }
-  }
-
-  .header-panel,
-  .panel-container {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-  }
-
-  .header-panel {
-    flex: none;
-  }
-
-  .panel-container {
-    overflow-y: scroll;
   }
 
   .sync-panel {
@@ -1591,6 +1589,7 @@ body {
   .view-content {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     padding: 2rem;
   }
 }

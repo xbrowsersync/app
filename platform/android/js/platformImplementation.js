@@ -712,7 +712,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Invalid credentials"
     },
     "error_InvalidCredentials_Message": {
-      "message": "Check your sync ID and password, and ensure the active service is where the sync was created."
+      "message": "Check that your sync ID, password and service URL have been entered correctly."
     },
     "error_SyncRemoved_Title": {
       "message": "Sync not found"

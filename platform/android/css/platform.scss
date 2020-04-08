@@ -160,6 +160,8 @@ body {
 
   .view {
     .view-content {
+      height: 100%;
+
       &.ng-enter {
         z-index: 10 !important;
       }
@@ -240,6 +242,10 @@ body {
       height: 2.3rem;
       width: 40%;
       margin-right: 1rem;
+
+      input {
+        line-height: 2rem;
+      }
     }
   }
 
@@ -418,11 +424,13 @@ body {
     }
   }
 
-  .sync-panel .id-url {
-    @media (orientation: landscape) {
-      position: absolute;
-      width: auto;
-      line-height: 1.35rem;
+  .sync-panel {
+    .id-url,
+    .service-url {
+      @media (orientation: landscape) {
+        position: absolute;
+        width: auto;
+      }
     }
   }
 }
