@@ -17,7 +17,6 @@ xBrowserSync.App.HttpInterceptor = function ($q, globals) {
     // Intercept the all http requests
     return {
       'request': function (config) {
-        globals.ReleaseLatestUrl
         // Add the api version to the http Accept-Version header
         if (config.url !== globals.ReleaseLatestUrl) {
           config.headers['Accept-Version'] = globals.MinApiVersion;
