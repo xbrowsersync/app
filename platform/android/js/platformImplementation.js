@@ -21,6 +21,21 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "description": {
       "message": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
     },
+    "appUpdateAvailable_Android_Message": {
+      "message": "xBrowserSync {version} is available to download."
+    },
+    "appUpdateAvailable_Message": {
+      "message": "{version} is available to download, click here to view update."
+    },
+    "appUpdateAvailable_Title": {
+      "message": "xBrowserSync update available"
+    },
+    "appUpdated_Message": {
+      "message": "xBrowserSync has been updated with the latest features and fixes. Click for release notes."
+    },
+    "appUpdated_Title": {
+      "message": "Updated to v"
+    },
     "tooltip_NotSynced_Label": {
       "message": "not synced"
     },
@@ -64,16 +79,16 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "<h4>Syncing for the first time</h4><p>xBrowserSync actively syncs your browser data between your desktop browsers (syncing to mobile browsers is not supported at this time), you can use this app to access your synced data on your Android mobile device.</p><p>If you have not already created a sync ID, head over to your desktop browser and <a href='https://link.xbrowsersync.org/download' class='new-tab'>download</a> the xBrowserSync extension (available for Chrome and Firefox). Once you have created a sync you can use your new sync ID within this app to access your data.</p>"
     },
     "help_Page_SyncId_Content": {
-      "message": "<h4>Your sync ID</h4><p>xBrowserSync ensures your privacy as no personal data is ever collected and your browser data is encrypted before being synced. To identify your synced data you are provided with an anonymous sync ID which can be used along with your password to sync your data on other browsers and devices.</p><p>Remember that your sync ID will only work with the xBrowserSync service on which it was created, when you change the active xBrowserSync service in the Settings panel you must create a new sync or use an existing sync ID created using that service.</p><p>Whenever you are synced you can view your sync ID in the Settings panel, click it to reveal a handy QR code to scan when syncing on mobile devices.</p>"
+      "message": "<h4>Your sync ID</h4><p>xBrowserSync ensures your privacy as no personal data is ever collected and your browser data is encrypted before being synced. To identify your synced data you are provided with an anonymous sync ID which can be used along with your password to sync your data on other browsers and devices.</p><p>Remember that your sync ID will only work with the xBrowserSync service on which it was created, if you switch to a different xBrowserSync service you must create a new sync or use an existing sync ID created when previously synced to that service.</p><p>Whenever you are synced you can view your sync ID in the Settings panel, click it to reveal a handy QR code to scan when syncing on mobile devices.</p>"
     },
     "help_Page_ExistingId_Desktop_Content": {
-      "message": "<h4>Syncing with your existing ID</h4><p>Click on “Already got a sync ID?” to enter your existing sync ID and password. If you are synced to a different xBrowserSync service make sure it is configured as the active service in the Settings panel.</p><p>xBrowserSync will retrieve and decrypt your encrypted data using your locally stored password, then clear your local bookmarks before re-populating them from the decrypted data.</p><p>When synced, xBrowserSync checks in the background every fifteen minutes for updates to your synced data and will automatically update your local bookmarks when required. You can also manually sync available updates to your synced data in the Settings panel.</p>"
+      "message": "<h4>Syncing with your existing ID</h4><p>Click on “Already got a sync ID?” to enter your existing sync ID and password. If your sync ID was created on a service different to the one displayed then switch to that service before attempting to sync.</p><p>xBrowserSync will retrieve and decrypt your encrypted data using your locally stored password, then clear your local bookmarks before re-populating them from the decrypted data.</p><p>When synced, xBrowserSync checks in the background every fifteen minutes for updates to your synced data and will automatically update your local bookmarks when required. You can also manually sync available updates to your synced data in the Settings panel.</p>"
     },
     "help_Page_ExistingId_Android_Content": {
-      "message": "<h4>Syncing with your existing ID</h4><p>Start by scanning the sync ID QR code in the Settings panel of the xBrowserSync desktop browser extension (click on your sync ID to reveal it). Make sure you enter the same encryption password used when creating the sync otherwise xBrowserSync will not be able to decrypt your data.</p><p>Also, if you are synced to a different xBrowserSync service make sure it is the active service configured in the Settings panel.</p>"
+      "message": "<h4>Connecting to your synced data</h4><p>Open xBrowserSync on your desktop browser and click on your sync ID in the Settings panel to reveal a QR code.</p><p>Scan the code to populate the sync ID and service values, then simply enter your encryption password to connect the app to your synced data.</p><p>Ensure you enter the same encryption password used when creating the sync otherwise xBrowserSync will not be able to decrypt your data.</p>"
     },
     "help_Page_Service_Content": {
-      "message": "<h4>Syncing to another service</h4><p>By default your data is synced to the <a href='https://link.xbrowsersync.org/api' class='new-tab'>official xBrowserSync service</a>, but you can control where your data is synced if you do not want to use the default service.</p><p>Check the list of available <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>public xBrowserSync services</a> or <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>run your own service</a>, either for private use for ultimate security and privacy, or for public use so that more people can enjoy xBrowserSync.</p><p>At any time you can configure the active xBrowserSync service in the Settings panel.</p>"
+      "message": "<h4>Syncing to another service</h4><p>By default your data is synced to the <a href='https://link.xbrowsersync.org/api' class='new-tab'>official xBrowserSync service</a>, however if you would like to sync your data to an alternative xBrowserSync service you can switch the active service before syncing.</p><p>Check the list of available <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>public xBrowserSync services</a> or <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>run your own service</a>, either for private use for ultimate security and privacy, or for public use so that more people can enjoy xBrowserSync.</p><p><strong>Important:</strong> xBrowserSync services are run independently by volunteers. The service administrator takes no responsibility for your data so please remember to backup regularly.</p>"
     },
     "help_Page_Searching_Desktop_Content": {
       "message": "<h4>Searching your bookmarks</h4><p>Once synced, simply press Enter to display your recent bookmarks or type some keywords or a URL to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>To edit or delete a bookmark, hover over the bookmark and click the now visible edit icon next to the bookmark’s title.</p>"
@@ -97,10 +112,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks toolbar and bookmarks library, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p><p>Please note however, as Firefox’s bookmarks API does not yet support accessing native bookmark tags, any existing tags will be lost when syncing and tags added via xBrowserSync will not be saved as native tags.</p>"
     },
     "help_Page_BackingUp_Desktop_Content": {
-      "message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your reponsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time revert your data back to it’s original state from when xBrowserSync was installed.</p>"
+      "message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time revert your data back to it’s original state from when xBrowserSync was installed.</p>"
     },
     "help_Page_BackingUp_Android_Content": {
-      "message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your reponsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
+      "message": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
     },
     "help_Page_Shortcuts_Chrome_Content": {
       "message": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension, then simply press Enter to view your recent bookmarks or start typing to search.</p><p>To change the shortcut, browse to chrome://extensions/shortcuts and update the available shortcuts under xBrowserSync."
@@ -129,6 +144,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "button_ShareBookmark_Label": {
       "message": "Share Bookmark"
     },
+    "login_SelectedService_Label": {
+      "message": "Syncing to"
+    },
     "login_PasswordConfirmationField_Label": {
       "message": "Confirm password"
     },
@@ -150,6 +168,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "login_IdField_InvalidSyncId_Label": {
       "message": "Not a valid sync ID"
     },
+    "button_UpdateService_Label": {
+      "message": "Switch service"
+    },
     "button_ScanCode_Label": {
       "message": "Scan ID"
     },
@@ -169,7 +190,25 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Don’t have a sync ID?"
     },
     "button_GetSyncId_Label": {
-      "message": "Get a Sync ID"
+      "message": "Get a sync ID"
+    },
+    "login_ConfirmUpdateService_Title": {
+      "message": "Sync to this service?"
+    },
+    "login_ConfirmUpdateService_Warning": {
+      "message": "<strong>Important:</strong> xBrowserSync services are run independently by volunteers. The service administrator takes no responsibility for your data so please remember to backup regularly."
+    },
+    "login_ConfirmUpdateService_Status_Label": {
+      "message": "Status"
+    },
+    "login_ConfirmUpdateService_Location_Label": {
+      "message": "Location"
+    },
+    "login_ConfirmUpdateService_MaxSyncSize_Label": {
+      "message": "Max sync size"
+    },
+    "login_ConfirmUpdateService_ApiVersion_Label": {
+      "message": "API version"
     },
     "login_ConfirmSync_Title": {
       "message": "Create new sync?"
@@ -194,12 +233,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     },
     "login_ScanId_Message": {
       "message": "Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a QR code which you can scan here."
-    },
-    "updated_Message": {
-      "message": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
-    },
-    "updated_Title": {
-      "message": "Updated to v"
     },
     "support_Message": {
       "message": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains an effective tool in protecting our privacy and productivity against the rot of big tech!</p>"
@@ -247,28 +280,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Bookmark updated"
     },
     "scan_Title": {
-      "message": "Scan your Sync ID QR code"
+      "message": "Scan your sync ID QR code"
     },
-    "settings_Sync_SyncToolbarConfirmation_Message": {
+    "settings_Prefs_SyncToolbarConfirmation_Message": {
       "message": "<p>Enabling this setting will replace the bookmarks currently in the bookmarks toolbar with your synced bookmarks.</p><p>OK to proceed?</p>"
     },
-    "settings_Sync_ConfirmCancelSync_Message": {
-      "message": "<p>There is currently a sync in progress, if you proceed your local synced data will be incomplete.</p><p>OK to proceed?</p>"
-    },
     "settings_Sync_Id_Description": {
-      "message": "Use your sync ID to access your synced data on other devices."
-    },
-    "settings_Sync_SyncToolbar_Label": {
-      "message": "Sync bookmarks toolbar"
-    },
-    "settings_Sync_SyncToolbar_Description": {
-      "message": "Disable this setting to display different toolbar bookmarks across synced browers."
-    },
-    "settings_Service_ChangeService_Label": {
-      "message": "Change service"
-    },
-    "settings_Service_ChangeService_Description": {
-      "message": "Switch to a different xBrowserSync service."
+      "message": "Use your sync ID to connect to your synced data on other devices (click to reveal QR code)."
     },
     "settings_BackupRestore_Backup_Label": {
       "message": "Back up"
@@ -390,6 +408,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_Service_Title": {
       "message": "Service"
     },
+    "settings_Service_Status_Label": {
+      "message": "Service status"
+    },
     "settings_Service_Status_NoNewSyncs": {
       "message": "Not accepting new syncs"
     },
@@ -444,8 +465,29 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "settings_Prefs_Title": {
       "message": "Preferences"
     },
+    "settings_Prefs_SyncToolbar_Label": {
+      "message": "Sync bookmarks toolbar"
+    },
+    "settings_Prefs_SyncToolbar_Description": {
+      "message": "Disable this setting to display different toolbar bookmarks across synced browsers."
+    },
+    "settings_Prefs_CheckForAppUpdates_Label": {
+      "message": "Check for app updates"
+    },
+    "settings_Prefs_CheckForAppUpdates_Description": {
+      "message": "Be notified when a new version of xBrowserSync is available."
+    },
     "settings_Prefs_SearchBar_Label": {
-      "message": "Display search bar beneath results"
+      "message": "Alternative search view"
+    },
+    "settings_Prefs_SearchBar_Description": {
+      "message": "Display search bar beneath results."
+    },
+    "updated_Message": {
+      "message": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
+    },
+    "updated_Title": {
+      "message": "Updated to v"
     },
     "button_Backup_Label": {
       "message": "Back up"
@@ -579,6 +621,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     "button_Revert_Label": {
       "message": "Revert"
     },
+    "button_View_Label": {
+      "message": "View"
+    },
     "qr_Copied_Label": {
       "message": "Copied!"
     },
@@ -586,7 +631,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Copy sync ID to clipboard"
     },
     "qr_Message": {
-      "message": "Scan this QR code using the xBrowserSync Android app to access your synced data on your mobile device."
+      "message": "Scan this QR code using the xBrowserSync Android app to connect to your synced data."
     },
     "working_Restoring_Message": {
       "message": "Restoring"
@@ -667,7 +712,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       "message": "Invalid credentials"
     },
     "error_InvalidCredentials_Message": {
-      "message": "Check your sync ID and password, and ensure the active service is where the sync was created."
+      "message": "Check that your sync ID, password and service URL have been entered correctly."
     },
     "error_SyncRemoved_Title": {
       "message": "Sync not found"
@@ -772,17 +817,19 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var AndroidImplementation = function () {
     // Inject required platform implementation functions
     platform.AutomaticUpdates.NextUpdate = getAutoUpdatesNextRun;
-    platform.AutomaticUpdates.Start = startAutoUpdates;
-    platform.AutomaticUpdates.Stop = stopAutoUpdates;
-    platform.Bookmarks.Clear = clearBookmarks;
-    platform.Bookmarks.CreateSingle = createSingle;
-    platform.Bookmarks.DeleteSingle = deleteSingle;
-    platform.Bookmarks.Get = getBookmarks;
-    platform.Bookmarks.Populate = populateBookmarks;
+    platform.AutomaticUpdates.Start = methodNotApplicable;
+    platform.AutomaticUpdates.Stop = methodNotApplicable;
+    platform.Bookmarks.Clear = methodNotApplicable;
+    platform.Bookmarks.CreateSingle = methodNotApplicable;
+    platform.Bookmarks.DeleteSingle = methodNotApplicable;
+    platform.Bookmarks.Get = methodNotApplicable;
+    platform.Bookmarks.Populate = methodNotApplicable;
     platform.Bookmarks.Share = shareBookmark;
-    platform.Bookmarks.UpdateSingle = updateSingle;
+    platform.Bookmarks.UpdateSingle = methodNotApplicable;
     platform.CopyToClipboard = copyToClipboard;
     platform.DownloadFile = downloadFile;
+    platform.EventListeners.Enable = methodNotApplicable;
+    platform.EventListeners.Disable = methodNotApplicable;
     platform.GetConstant = getConstant;
     platform.GetCurrentUrl = getCurrentUrl;
     platform.GetHelpPages = getHelpPages;
@@ -791,15 +838,16 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Init = init;
     platform.Interface.Working.Show = displayLoading;
     platform.Interface.Working.Hide = hideLoading;
-    platform.Interface.Refresh = refreshInterface;
+    platform.Interface.Refresh = methodNotApplicable;
     platform.LocalStorage.Get = getFromLocalStorage;
     platform.LocalStorage.Set = setInLocalStorage;
     platform.OpenUrl = openUrl;
     platform.Scanner.Start = startScanning;
     platform.Scanner.Stop = stopScanning;
     platform.Scanner.ToggleLight = toggleLight;
-    platform.Sync.Await = awaitSync;
     platform.Sync.Current = getCurrentSync;
+    platform.Sync.Disable = disableSync;
+    platform.Sync.GetQueueLength = getSyncQueueLength;
     platform.Sync.Queue = queueSync;
   };
 
@@ -808,33 +856,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 	 * Public functions
 	 * ------------------------------------------------------------------------------------ */
 
-  var awaitSync = function (syncToAwait) {
-    return bookmarks.QueueSync()
-      .then(function () {
-        return syncToAwait.deferred.promise;
-      })
-      .then(function () {
-        utility.LogInfo('Awaited sync complete: ' + syncToAwait.uniqueId);
-        return true;
-      });
-  };
-
-  var clearBookmarks = function () {
-    return $q.resolve();
-  };
-
   var copyToClipboard = function (textToCopy) {
     return $q(function (resolve, reject) {
       cordova.plugins.clipboard.copy(textToCopy, resolve, reject);
     });
   };
 
-  var createSingle = function () {
-    return $q.resolve();
-  };
-
-  var deleteSingle = function () {
-    return $q.resolve();
+  var disableSync = function () {
+    return bookmarks.DisableSync();
   };
 
   var displayLoading = function (id, cancelledCallback) {
@@ -908,51 +937,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     });
   };
 
-  var getAutoUpdatesNextRun = function () {
-    return $q(function (resolve, reject) {
-      chrome.alarms.get(globals.Alarm.Name, function (alarm) {
-        if (!alarm) {
-          return resolve();
-        }
-
-        resolve(utility.Get24hrTimeFromDate(new Date(alarm.scheduledTime)));
-      });
-    });
-  };
-
-  var getBookmarks = function () {
-    return $q.resolve();
-  };
-
-  var getConstant = function (constName) {
-    return constants[constName].message;
-  };
-
-  var getCurrentSync = function () {
-    // Platform doesnt support checking for syncs in progress on startup
-    return $q.resolve();
-  };
-
-  var getCurrentUrl = function () {
-    return $q.resolve(currentPage && currentPage.url);
-  };
-
-  var getHelpPages = function () {
-    var pages = [
-      getConstant(globals.Constants.Help_Page_Welcome_Android_Content),
-      getConstant(globals.Constants.Help_Page_FirstSync_Android_Content),
-      getConstant(globals.Constants.Help_Page_SyncId_Content),
-      getConstant(globals.Constants.Help_Page_ExistingId_Android_Content),
-      getConstant(globals.Constants.Help_Page_Service_Content),
-      getConstant(globals.Constants.Help_Page_Searching_Android_Content),
-      getConstant(globals.Constants.Help_Page_AddingBookmarks_Android_Content),
-      getConstant(globals.Constants.Help_Page_BackingUp_Android_Content),
-      getConstant(globals.Constants.Help_Page_FurtherSupport_Content)
-    ];
-
-    return pages;
-  };
-
   var getAllFromLocalStorage = function () {
     return $q(function (resolve, reject) {
       var cachedData = {};
@@ -987,6 +971,30 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
       NativeStorage.keys(success, failure);
     });
+  };
+
+  var getAutoUpdatesNextRun = function () {
+    return $q(function (resolve, reject) {
+      chrome.alarms.get(globals.Alarm.Name, function (alarm) {
+        if (!alarm) {
+          return resolve();
+        }
+
+        resolve(utility.Get24hrTimeFromDate(new Date(alarm.scheduledTime)));
+      });
+    });
+  };
+
+  var getConstant = function (constName) {
+    return constants[constName].message;
+  };
+
+  var getCurrentSync = function () {
+    return $q.resolve(bookmarks.GetCurrentSync());
+  };
+
+  var getCurrentUrl = function () {
+    return $q.resolve(currentPage && currentPage.url);
   };
 
   var getFromLocalStorage = function (storageKeys) {
@@ -1030,8 +1038,22 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return getCachedData;
   };
 
+  var getHelpPages = function () {
+    var pages = [
+      getConstant(globals.Constants.Help_Page_Welcome_Android_Content),
+      getConstant(globals.Constants.Help_Page_FirstSync_Android_Content),
+      getConstant(globals.Constants.Help_Page_ExistingId_Android_Content),
+      getConstant(globals.Constants.Help_Page_Searching_Android_Content),
+      getConstant(globals.Constants.Help_Page_AddingBookmarks_Android_Content),
+      getConstant(globals.Constants.Help_Page_BackingUp_Android_Content),
+      getConstant(globals.Constants.Help_Page_FurtherSupport_Content)
+    ];
+
+    return pages;
+  };
+
   var getPageMetadata = function (getFullMetadata, pageUrl) {
-    var inAppBrowser, timeout;
+    var inAppBrowser, loadUrlTimeout, timeout;
 
     // Set default metadata from provided page url or current page
     var metadata = {
@@ -1039,7 +1061,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       url: pageUrl ? pageUrl : currentPage ? currentPage.url : null
     };
 
-    return $q(function (resolve, reject) {
+    var promise = $q(function (resolve, reject) {
       // Return if no url set
       if (!metadata.url) {
         vm.bookmark.addButtonDisabledUntilEditForm = true;
@@ -1057,6 +1079,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         var parser;
         platform.Interface.Working.Hide('retrievingMetadata', timeout);
 
+        // Cancel timeout
+        if (loadUrlTimeout) {
+          $timeout.cancel(loadUrlTimeout);
+          loadUrlTimeout = null;
+        }
+
         // Check html content was returned
         if (err || !pageContent) {
           if (err) {
@@ -1066,72 +1094,87 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           return reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
         }
 
-        // Extract metadata properties
+        // Extract metadata values
         parser = new DOMParser();
         var document = parser.parseFromString(pageContent, 'text/html');
 
-        // Get all meta tags
-        var metaTagsArr = document.getElementsByTagName('meta');
+        var getDecodedTextValue = function (text) {
+          if (!text) {
+            return '';
+          }
+          var txt = document.createElement('textarea');
+          txt.innerHTML = text.trim();
+          return txt.value;
+        };
 
         var getPageDescription = function () {
-          for (var i = 0; i < metaTagsArr.length; i++) {
-            var currentTag = metaTagsArr[i];
-            if ((currentTag.getAttribute('property') && currentTag.getAttribute('property').toUpperCase().trim() === 'OG:DESCRIPTION' && currentTag.getAttribute('content')) ||
-              (currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'TWITTER:DESCRIPTION' && currentTag.getAttribute('content')) ||
-              (currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'DESCRIPTION' && currentTag.getAttribute('content'))) {
-              return (currentTag.getAttribute('content')) ? currentTag.getAttribute('content').trim() : '';
-            }
+          var ogDescription = document.querySelector('meta[property="OG:DESCRIPTION"]') || document.querySelector('meta[property="og:description"]');
+          if (ogDescription && ogDescription.content) {
+            return getDecodedTextValue(ogDescription.content);
           }
 
-          return null;
+          var twitterDescription = document.querySelector('meta[name="TWITTER:DESCRIPTION"]') || document.querySelector('meta[name="twitter:description"]');
+          if (twitterDescription && twitterDescription.content) {
+            return getDecodedTextValue(twitterDescription.content);
+          }
+
+          var defaultDescription = document.querySelector('meta[name="DESCRIPTION"]') || document.querySelector('meta[name="description"]');
+          if (defaultDescription && defaultDescription.content) {
+            return getDecodedTextValue(defaultDescription.content);
+          }
+
+          return '';
         };
 
         var getPageKeywords = function () {
+          var keywords = [];
+
           // Get open graph tag values 
-          var currentTag, i, keywords = [];
-          for (i = 0; i < metaTagsArr.length; i++) {
-            currentTag = metaTagsArr[i];
-            if (currentTag.getAttribute('property') &&
-              currentTag.getAttribute('property').trim().match(/VIDEO\:TAG$/i) &&
-              currentTag.getAttribute('content')) {
-              keywords.push(currentTag.getAttribute('content').trim());
+          document.querySelectorAll('meta[property="OG:VIDEO:TAG"]').forEach(function (tag) {
+            if (tag && tag.content) {
+              keywords.push(getDecodedTextValue(tag.content));
             }
-          }
+          });
+          document.querySelectorAll('meta[property="og:video:tag"]').forEach(function (tag) {
+            if (tag && tag.content) {
+              keywords.push(getDecodedTextValue(tag.content));
+            }
+          });
 
           // Get meta tag values 
-          for (i = 0; i < metaTagsArr.length; i++) {
-            currentTag = metaTagsArr[i];
-            if (currentTag.getAttribute('name') &&
-              currentTag.getAttribute('name').toUpperCase().trim() === 'KEYWORDS' &&
-              currentTag.getAttribute('content')) {
-              var metaKeywords = currentTag.getAttribute('content').split(',');
-              for (i = 0; i < metaKeywords.length; i++) {
-                var currentKeyword = metaKeywords[i];
-                if (currentKeyword && currentKeyword.trim()) {
-                  keywords.push(currentKeyword.trim());
-                }
+          var metaKeywords = document.querySelector('meta[name="KEYWORDS"]') || document.querySelector('meta[name="keywords"]');
+          if (metaKeywords && metaKeywords.content) {
+            metaKeywords.content.split(',').forEach(function (keyword) {
+              if (keyword) {
+                keywords.push(getDecodedTextValue(keyword));
               }
-              break;
-            }
+            });
           }
 
-          if (keywords.length > 0) {
-            return keywords.join();
+          // Remove duplicates
+          var uniqueKeywords = keywords.filter(function (value, index, self) {
+            return self.indexOf(value) === index;
+          });
+
+          if (uniqueKeywords.length > 0) {
+            return uniqueKeywords.join();
           }
 
           return null;
         };
 
         var getPageTitle = function () {
-          for (var i = 0; i < metaTagsArr.length; i++) {
-            var tag = metaTagsArr[i];
-            if ((tag.getAttribute('property') && tag.getAttribute('property').toUpperCase().trim() === 'OG:TITLE' && tag.getAttribute('content')) ||
-              (tag.getAttribute('name') && tag.getAttribute('name').toUpperCase().trim() === 'TWITTER:TITLE' && tag.getAttribute('content'))) {
-              return (tag.getAttribute('content')) ? tag.getAttribute('content').trim() : '';
-            }
+          var ogTitle = document.querySelector('meta[property="OG:TITLE"]') || document.querySelector('meta[property="og:title"]');
+          if (ogTitle && ogTitle.content) {
+            return getDecodedTextValue(ogTitle.content);
           }
 
-          return document.title;
+          var twitterTitle = document.querySelector('meta[name="TWITTER:TITLE"]') || document.querySelector('meta[name="twitter:title"]');
+          if (twitterTitle && twitterTitle.content) {
+            return getDecodedTextValue(twitterTitle.content);
+          }
+
+          return getDecodedTextValue(document.title);
         };
 
         // Update metadata with retrieved page data and return
@@ -1169,6 +1212,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         },
           handleResponse);
       });
+
+      // Time out metadata load after 10 secs
+      loadUrlTimeout = $timeout(function () {
+        if (promise.$$state.status === 0) {
+          handleResponse(null, new Error('Timed out loading URL'));
+        }
+      }, 10e3);
     })
       .finally(function () {
         // Close InAppBrowser
@@ -1177,10 +1227,16 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           inAppBrowser = null;
         }
       });
+
+    return promise;
   };
 
   var getSupportedUrl = function (url) {
     return url;
+  };
+
+  var getSyncQueueLength = function () {
+    return $q.resolve(bookmarks.GetSyncQueueLength());
   };
 
   var hideLoading = function (id, timeout) {
@@ -1211,13 +1267,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     });
   };
 
-  var openUrl = function (url) {
-    window.open(url, '_system', '');
-  };
-
-  var populateBookmarks = function () {
+  var methodNotApplicable = function () {
     // Unused for this platform
     return $q.resolve();
+  };
+
+  var openUrl = function (url) {
+    window.open(url, '_system', '');
   };
 
   var queueSync = function (syncData, command) {
@@ -1229,23 +1285,26 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         if (syncData.changeInfo === undefined) {
           return;
         }
-        switch (true) {
-          case syncData.changeInfo.type === globals.UpdateType.Create:
-            $timeout(function () {
-              vm.alert.display(null, getConstant(globals.Constants.BookmarkCreated_Message));
-            }, 200);
-            break;
-          case syncData.changeInfo.type === globals.UpdateType.Delete:
-            $timeout(function () {
-              vm.alert.display(null, getConstant(globals.Constants.BookmarkDeleted_Message));
-            }, 200);
-            break;
-          case syncData.changeInfo.type === globals.UpdateType.Update:
-            $timeout(function () {
-              vm.alert.display(null, getConstant(globals.Constants.BookmarkUpdated_Message));
-            }, 200);
-            break;
-        }
+        return $q.resolve(syncData.changeInfo)
+          .then(function (changeInfo) {
+            switch (true) {
+              case changeInfo.type === globals.UpdateType.Create:
+                $timeout(function () {
+                  vm.alert.display(null, getConstant(globals.Constants.BookmarkCreated_Message));
+                }, 200);
+                break;
+              case changeInfo.type === globals.UpdateType.Delete:
+                $timeout(function () {
+                  vm.alert.display(null, getConstant(globals.Constants.BookmarkDeleted_Message));
+                }, 200);
+                break;
+              case changeInfo.type === globals.UpdateType.Update:
+                $timeout(function () {
+                  vm.alert.display(null, getConstant(globals.Constants.BookmarkUpdated_Message));
+                }, 200);
+                break;
+            }
+          });
       })
       .catch(function (err) {
         // If local data out of sync, queue refresh sync
@@ -1265,11 +1324,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             throw err;
           });
       });
-  };
-
-  var refreshInterface = function () {
-    // Unused for this platform
-    return $q.resolve();
   };
 
   var setInLocalStorage = function (storageKey, value) {
@@ -1299,7 +1353,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           vm.scanner.invalidSyncId = false;
         }, 100);
 
-        QRScanner.scan(function (err, scannedText) {
+        QRScanner.scan(function (err, scannedValue) {
           if (err) {
             var scanError = new Error(err._message || err.name || err.code);
             utility.LogError(scanError, 'platform.startScanning');
@@ -1307,9 +1361,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           }
 
           QRScanner.pausePreview(function () {
-            utility.LogInfo('Scanned: ' + scannedText);
+            utility.LogInfo('Scanned: ' + scannedValue);
+            var arrScannedValue = scannedValue.split(globals.QrCode.Delimiter);
+            var urlRegex = new RegExp('^' + globals.URL.ValidUrlRegex + '$', 'i');
 
-            if (!utility.SyncIdIsValid(scannedText)) {
+            // If scanned value is not value resume scanning
+            if (arrScannedValue.length < 2 ||
+              !utility.SyncIdIsValid(arrScannedValue[0]) ||
+              !urlRegex.test(arrScannedValue[1])) {
               vm.scanner.invalidSyncId = true;
               $timeout(function () {
                 QRScanner.resumePreview(waitForScan);
@@ -1318,7 +1377,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             }
 
             $timeout(function () {
-              resolve(scannedText);
+              resolve(scannedValue);
             }, 1e3);
           });
         });
@@ -1381,14 +1440,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     window.plugins.socialsharing.shareWithOptions(options, null, onError);
   };
 
-  var startAutoUpdates = function () {
-    return $q.resolve();
-  };
-
-  var stopAutoUpdates = function () {
-
-  };
-
   var toggleLight = function (switchOn) {
     // If state was elected toggle light based on value
     if (switchOn !== undefined) {
@@ -1410,10 +1461,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     });
   };
 
-  var updateSingle = function () {
-    return $q.resolve();
-  };
-
 
 	/* ------------------------------------------------------------------------------------
 	 * Private functions
@@ -1428,6 +1475,25 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
+  var checkForNewVersion = function () {
+    $timeout(function () {
+      utility.CheckForNewVersion()
+        .then(function (newVersion) {
+          if (!newVersion) {
+            return;
+          }
+
+          vm.alert.display(null,
+            platform.GetConstant(globals.Constants.AppUpdateAvailable_Android_Message).replace('{version}', newVersion),
+            null,
+            platform.GetConstant(globals.Constants.Button_View_Label),
+            function () {
+              platform.OpenUrl(globals.ReleaseNotesUrlStem + newVersion.replace(/^v/, ''));
+            });
+        });
+    }, 1e3);
+  };
+
   var checkForSharedBookmark = function () {
     var bookmark = getSharedBookmark();
     if (!bookmark) {
@@ -1438,6 +1504,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     currentPage = bookmark;
     return vm.view.change(vm.view.views.bookmark)
       .finally(function () {
+        // Set bookmark form fields to display default values
+        vm.bookmark.current = bookmark;
+        vm.bookmark.originalUrl = vm.bookmark.current.url;
+
         // Clear current page
         currentPage = null;
       });
@@ -1494,7 +1564,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         bgColor = '#30d278';
         break;
       case 'warning':
-        bgColor = '#30d278';
+        bgColor = '#bdc71b';
         break;
       default:
         bgColor = '#083039';
@@ -1606,6 +1676,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     }
 
     var bookmark = sharedBookmark;
+    var txt = document.createElement('textarea');
+    txt.innerHTML = bookmark.title ? bookmark.title.trim() : '';
+    bookmark.title = txt.value;
     sharedBookmark = null;
     return bookmark;
   };
@@ -1665,7 +1738,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     vm.settings.getSearchResultsDelay = 500;
 
     // Display existing sync panel by default
-    vm.sync.displayNewSyncPanel = false;
+    vm.login.displayNewSyncPanel = false;
 
     // Use snackbar for alerts
     vm.alert.display = displaySnackbar;
@@ -1681,6 +1754,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var handleInstall = function (installedVersion) {
     return $q.all([
       setInLocalStorage(globals.CacheKeys.AppVersion, installedVersion),
+      setInLocalStorage(globals.CacheKeys.CheckForAppUpdates, true),
       setInLocalStorage(globals.CacheKeys.DisplayHelp, true)
     ])
       .then(function () {
@@ -1724,9 +1798,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           return;
         }
 
-        // Check if a bookmark was shared
-        checkForSharedBookmark();
-
         // Run sync
         return executeSyncIfOnline()
           .then(function (isOnline) {
@@ -1738,21 +1809,30 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             if (vm.view.current === vm.view.views.search && !vm.search.query) {
               displayDefaultSearchState();
             }
+          })
+          .then(function () {
+            // Check if a bookmark was shared
+            return checkForSharedBookmark();
           });
       })
       .catch(displayErrorAlert);
   };
 
   var handleStartup = function () {
-    var syncEnabled;
+    var cachedBookmarks, syncEnabled;
 
     utility.LogInfo('Starting up');
 
-    // Prime bookmarks cache and retrieve cached data
-    var primeBookmarksCache = bookmarks.GetBookmarks().catch(function () { });
+    // Retrieve cached data
     return getFromLocalStorage()
       .then(function (cachedData) {
         syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
+        var checkForAppUpdates = cachedData[globals.CacheKeys.CheckForAppUpdates];
+
+        // Prime bookmarks cache
+        if (syncEnabled) {
+          cachedBookmarks = bookmarks.GetBookmarks();
+        }
 
         // Add useful debug info to beginning of trace log
         cachedData.platform = {
@@ -1767,6 +1847,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           globals.CacheKeys.Password
         ));
 
+        // Check for new app version
+        if (checkForAppUpdates) {
+          checkForNewVersion();
+        }
+
         // Exit if sync not enabled
         if (!syncEnabled) {
           return;
@@ -1778,7 +1863,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           // Check if a bookmark was shared
           checkForSharedBookmark()
             .then(function () {
-              return primeBookmarksCache;
+              return cachedBookmarks;
             })
         ]);
       })
@@ -1799,7 +1884,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var handleUpgrade = function (oldVersion, newVersion) {
-    if (compareVersions(oldVersion, newVersion) === 0) {
+    if (compareVersions.compare(oldVersion, newVersion, '=')) {
       // No upgrade
       return $q.resolve();
     }
@@ -1810,19 +1895,17 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         utility.LogInfo('Upgrading from ' + oldVersion + ' to ' + newVersion);
       })
       .then(function () {
-        if (compareVersions(oldVersion, newVersion)) {
-          switch (true) {
-            // v1.5.1
-            case newVersion.indexOf('1.5.1') === 0:
-              return upgradeTo151();
-          }
-        }
-      })
-      .then(function () {
         return $q.all([
           setInLocalStorage(globals.CacheKeys.AppVersion, newVersion),
           setInLocalStorage(globals.CacheKeys.DisplayUpdated, true)
         ]);
+      })
+      .catch(function (err) {
+        utility.LogError(err, 'platform.handleUpgrade');
+
+        // Display alert
+        var errMessage = utility.GetErrorMessageFromException(err);
+        displayAlert(errMessage.title, errMessage.message);
       });
   };
 
@@ -1840,42 +1923,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var syncForm_EnableSync_Click = function () {
     // Don't display confirmation before syncing
     vm.events.syncForm_ConfirmSync_Click();
-  };
-
-  var upgradeTo151 = function () {
-    // Convert local storage items to storage API
-    var deferred = $q.defer();
-
-    var syncEnabled = JSON.parse(localStorage.getItem('xBrowserSync-syncEnabled'));
-    if (syncEnabled) {
-      var lastUpdated = localStorage.getItem('xBrowserSync-lastUpdated');
-      var password = localStorage.getItem('xBrowserSync-password');
-      var serviceUrl = localStorage.getItem('xBrowserSync-urlHost');
-      var syncId = localStorage.getItem('xBrowserSync-Id');
-      var syncVersion = localStorage.getItem('xBrowserSync-syncVersion');
-
-      // Set cached data
-      $q.all([
-        platform.LocalStorage.Set(globals.CacheKeys.DisplayHelp, false),
-        platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, lastUpdated),
-        platform.LocalStorage.Set(globals.CacheKeys.Password, password),
-        platform.LocalStorage.Set(globals.CacheKeys.ServiceUrl, serviceUrl),
-        platform.LocalStorage.Set(globals.CacheKeys.SyncEnabled, syncEnabled),
-        platform.LocalStorage.Set(globals.CacheKeys.SyncId, syncId),
-        platform.LocalStorage.Set(globals.CacheKeys.SyncVersion, syncVersion)
-      ])
-        .then(deferred.resolve)
-        .catch(deferred.reject);
-    }
-    else {
-      deferred.resolve();
-    }
-
-    return deferred.promise
-      .finally(function () {
-        // Clear local storage
-        _.each(_.keys(localStorage), function (key) { return localStorage.removeItem(key); });
-      });
   };
 
   // Call constructor

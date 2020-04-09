@@ -15,7 +15,7 @@ xBrowserSync.App.Platform = function () {
   var notImplemented = function () {
     function NotImplementedException() {
       this.name = 'NotImplementedException';
-      this.code = 10600;
+      this.code = 10800;
     }
 
     // Throw not implemented exception
@@ -78,8 +78,9 @@ xBrowserSync.App.Platform = function () {
     },
     SelectFile: notImplemented,
     Sync: {
-      Await: notImplemented,
       Current: notImplemented,
+      Disable: notImplemented,
+      GetQueueLength: notImplemented,
       Queue: notImplemented
     }
   };

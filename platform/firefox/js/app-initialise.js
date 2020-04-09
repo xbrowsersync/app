@@ -30,7 +30,6 @@ xBrowserSync.App.UI.run(['$templateRequest', function ($templateRequest) {
 xBrowserSync.App.UI.factory('platform', xBrowserSync.App.Platform);
 
 // Add global service
-xBrowserSync.App.Global.$inject = ['platform'];
 xBrowserSync.App.UI.factory('globals', xBrowserSync.App.Global);
 
 // Add httpInterceptor service
@@ -41,7 +40,7 @@ xBrowserSync.App.UI.config(['$httpProvider', function ($httpProvider) {
 }]);
 
 // Add utility service
-xBrowserSync.App.Utility.$inject = ['$q', 'platform', 'globals'];
+xBrowserSync.App.Utility.$inject = ['$http', '$q', 'platform', 'globals'];
 xBrowserSync.App.UI.factory('utility', xBrowserSync.App.Utility);
 
 // Add api service

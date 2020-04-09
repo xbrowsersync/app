@@ -14,156 +14,288 @@
 </div>
 <div class="logo"></div>
 <form name="vm.syncForm" class="animate-fade-in"
-  data-ng-hide="vm.sync.displayOtherSyncsWarning || vm.sync.displaySyncConfirmation || vm.sync.displayUpgradeConfirmation"
+  data-ng-hide="vm.login.displayOtherSyncsWarning || vm.login.displaySyncConfirmation || vm.login.displayUpgradeConfirmation"
   novalidate>
   <button type="submit" class="d-none" data-ng-click="vm.events.syncForm_Submit_Click()" tabindex="-1"></button>
-  <div class="login-form-new animate-fade-in" data-ng-class="{ 'active-login-form': vm.sync.displayNewSyncPanel }"
-    data-ng-show="vm.sync.displayNewSyncPanel">
-    <div data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
-      <div class="animate-fade-in" data-ng-show="vm.sync.displayPasswordConfirmation">
-        <div class="form-group secret-form-group btn-icon-container">
-          <label class="sr-only" for="txtPasswordConfirmation">{{
-          vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}</label>
-          <input class="form-control" name="txtPasswordConfirmation" data-ng-model="vm.sync.passwordConfirmation"
-            type="{{ vm.sync.showPassword ? 'text' : 'password' }}" maxlength="150"
-            placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}" />
-          <button class="btn btn-icon btn-show-password" data-ng-class="{ 'active': vm.sync.showPassword }"
-            data-ng-show="vm.sync.password"
-            title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShowPassword_Label) }}"
-            data-ng-click="vm.events.syncForm_ShowPassword_Click()">
-            <i class="fas fa-eye" aria-hidden="true"></i>
-          </button>
+  <div class="selected-service animate-fade-in" data-ng-show="(!vm.utility.IsMobilePlatform(vm.platformName) && !vm.login.displayUpdateServicePanel) || 
+    (vm.utility.IsMobilePlatform(vm.platformName) && !vm.login.displayGetSyncIdPanel)">
+    <label>{{ vm.platform.GetConstant(vm.globals.Constants.Login_SelectedService_Label) }}</label>
+    <a href="{{ vm.sync.service.url }}" class="new-tab" title="{{ vm.sync.service.url }}">
+      {{ vm.sync.service.url }}
+    </a>
+    <div class="service-status">
+      <div class="loading animate-fade-in" data-ng-show="vm.sync.service.status === null"
+        title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}">
+        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}</span>
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      </div>
+      <div class="animate-fade-in" data-ng-show="vm.sync.service.status === vm.globals.ServiceStatus.Error"
+        title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Error) }}">
+        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Error) }}</span>
+        <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
+      </div>
+      <div class="animate-fade-in" data-ng-show="vm.sync.service.status === vm.globals.ServiceStatus.Online"
+        title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Online) }}">
+        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Online) }}</span>
+        <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
+      </div>
+      <div class="animate-fade-in" data-ng-show="vm.sync.service.status === vm.globals.ServiceStatus.Offline"
+        title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Offline) }}">
+        <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Offline) }}</span>
+        <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
+      </div>
+      <div class="animate-fade-in" data-ng-show="vm.sync.service.status === vm.globals.ServiceStatus.NoNewSyncs"
+        title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_NoNewSyncs) }}">
+        <span
+          class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_NoNewSyncs) }}</span>
+        <i class="fas fa-exclamation-circle text-warning" aria-hidden="true"></i>
+      </div>
+      <div class="status-background animate-fade-in" data-ng-show="vm.sync.service.status !== null"></div>
+    </div>
+  </div>
+  <div class="form-content">
+    <div class="login-form-new animate-fade-in" data-ng-class="{ 'active-login-form': vm.login.displayNewSyncPanel }"
+      data-ng-show="vm.login.displayNewSyncPanel && !vm.login.displayUpdateServicePanel">
+      <div data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
+        <div class="animate-fade-in" data-ng-hide="vm.login.displayPasswordConfirmation">
+          <div class="form-group secret-form-group btn-icon-container"
+            data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
+            <label class="sr-only" for="txtPassword">{{
+          vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
+            <input class="form-control" name="txtPassword" data-ng-model="vm.sync.password"
+              type="{{ vm.login.showPassword ? 'text' : 'password' }}" data-zxcvbn="vm.login.passwordComplexity"
+              data-ng-disabled="vm.sync.enabled" maxlength="150" autocapitalize="off" autocorrect="off"
+              spellcheck="false"
+              placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_New_Description) }}" />
+            <button class="btn btn-icon btn-show-password" data-ng-class="{ 'active': vm.login.showPassword }"
+              data-ng-show="vm.sync.password"
+              title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShowPassword_Label) }}"
+              data-ng-click="vm.events.syncForm_ShowPassword_Click()">
+              <i class="fas fa-eye" aria-hidden="true"></i>
+            </button>
+            <div class="validation" data-ng-if="vm.sync.password && ((vm.login.passwordComplexity.feedback.suggestions && vm.login.passwordComplexity.feedback.suggestions.length > 0) || 
+          vm.login.passwordComplexity.feedback.warning)">
+              {{ vm.login.passwordComplexity.feedback.warning ? vm.login.passwordComplexity.feedback.warning :
+          vm.login.passwordComplexity.feedback.suggestions.length > 0 ?
+          vm.login.passwordComplexity.feedback.suggestions.slice(-1)[0] : '' }}
+            </div>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar"
+                data-ng-style="{ width: !vm.sync.password ? 0 : (((vm.login.passwordComplexity.score + 1) / 5) * 100) + '%' }"
+                data-ng-class="{
+              'progress-bar-warning': vm.login.passwordComplexity.score > 1 && vm.login.passwordComplexity.score < 4,
+              'progress-bar-success': vm.login.passwordComplexity.score === 4
+              }">
+              </div>
+            </div>
+            <div class="progress-bar-background"></div>
+          </div>
+          <div class="buttons">
+            <button type="button" class="btn btn-default btn-confirm-password" data-ng-disabled="!vm.sync.password"
+              data-ng-click="vm.events.syncForm_ConfirmPassword_Click()">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}
+            </button>
+            <button type="button" class="btn btn-default" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)"
+              data-ng-click="vm.events.syncForm_UpdateService_Click()">
+              Switch service
+            </button>
+          </div>
         </div>
-        <div class="form-group buttons">
-          <button type="button" class="btn btn-default btn-new-sync"
-            data-ng-disabled="vm.sync.passwordConfirmation !== vm.sync.password"
-            data-ng-click="vm.events.syncForm_EnableSync_Click()">
-            {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
-          </button>
-          <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_ConfirmPassword_Back_Click()">
-            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Back_Label) }}
+        <div class="animate-fade-in" data-ng-show="vm.login.displayPasswordConfirmation">
+          <div class="form-group secret-form-group btn-icon-container">
+            <label class="sr-only" for="txtPasswordConfirmation">{{
+          vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}</label>
+            <input class="form-control" name="txtPasswordConfirmation" data-ng-model="vm.login.passwordConfirmation"
+              type="{{ vm.login.showPassword ? 'text' : 'password' }}" maxlength="150" autocapitalize="off"
+              autocorrect="off" spellcheck="false"
+              placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordConfirmationField_Label) }}" />
+            <button class="btn btn-icon btn-show-password" data-ng-class="{ 'active': vm.login.showPassword }"
+              data-ng-show="vm.sync.password"
+              title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShowPassword_Label) }}"
+              data-ng-click="vm.events.syncForm_ShowPassword_Click()">
+              <i class="fas fa-eye" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="form-group buttons">
+            <button type="button" class="btn btn-default btn-new-sync"
+              data-ng-disabled="vm.login.passwordConfirmation !== vm.sync.password"
+              data-ng-click="vm.events.syncForm_EnableSync_Click()">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
+            </button>
+            <button type="button" class="btn btn-default"
+              data-ng-click="vm.events.syncForm_ConfirmPassword_Back_Click()">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Button_Back_Label) }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="well well-sm" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)">
+        <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_GetSyncId_Title) }}</h4>
+        <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_GetSyncId_Message)"></p>
+        <div class="buttons">
+          <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_ExistingSync_Click()">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_OK_Label) }}
           </button>
         </div>
       </div>
-      <div class="animate-fade-in" data-ng-hide="vm.sync.displayPasswordConfirmation">
+      <div class="form-group toggle-form" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
+        <a data-ng-click="vm.events.syncForm_ExistingSync_Click()" href="#">
+          {{ vm.platform.GetConstant(vm.globals.Constants.Button_ExistingSync_Label) }}
+        </a>
+      </div>
+    </div>
+    <div class="login-form-existing animate-fade-in"
+      data-ng-class="{ 'active-login-form': !vm.login.displayNewSyncPanel }"
+      data-ng-hide="vm.login.displayNewSyncPanel || vm.login.displayUpdateServicePanel">
+      <div data-ng-show="!vm.utility.IsMobilePlatform(vm.platformName) || 
+      (vm.utility.IsMobilePlatform(vm.platformName) && !vm.login.displayGetSyncIdPanel)">
+        <div class="form-group" data-ng-class="{ 'has-error': vm.syncForm.txtId.$dirty && vm.syncForm.txtId.$invalid }">
+          <label class="sr-only"
+            for="txtId">{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Label) }}</label>
+          <input type="text" name="txtId" data-ng-model="vm.sync.id" class="form-control"
+            data-ng-disabled="vm.sync.enabled"
+            placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Description) }}" maxlength="32"
+            data-ng-change="vm.events.syncForm_SyncId_Change()" autocapitalize="off" autocorrect="off"
+            spellcheck="false" />
+          <div class="validation"
+            data-ng-if="vm.sync.id && vm.syncForm.txtId.$dirty && vm.syncForm.txtId.$error.InvalidSyncId">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_InvalidSyncId_Label) }}
+          </div>
+        </div>
         <div class="form-group secret-form-group btn-icon-container"
           data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
           <label class="sr-only" for="txtPassword">{{
-          vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
+        vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
           <input class="form-control" name="txtPassword" data-ng-model="vm.sync.password"
-            type="{{ vm.sync.showPassword ? 'text' : 'password' }}" data-zxcvbn="vm.sync.passwordComplexity"
-            data-ng-disabled="vm.sync.enabled" maxlength="150"
-            placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_New_Description) }}" />
-          <button class="btn btn-icon btn-show-password" data-ng-class="{ 'active': vm.sync.showPassword }"
+            type="{{ vm.login.showPassword ? 'text' : 'password' }}" data-ng-disabled="vm.sync.enabled" maxlength="150"
+            autocapitalize="off" autocorrect="off" spellcheck="false"
+            placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Existing_Description) }}" />
+          <button class="btn btn-icon btn-show-password" data-ng-class="{ 'active': vm.login.showPassword }"
             data-ng-show="vm.sync.password"
             title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShowPassword_Label) }}"
             data-ng-click="vm.events.syncForm_ShowPassword_Click()">
             <i class="fas fa-eye" aria-hidden="true"></i>
           </button>
-          <div class="validation" data-ng-if="vm.sync.password && ((vm.sync.passwordComplexity.feedback.suggestions && vm.sync.passwordComplexity.feedback.suggestions.length > 0) || 
-          vm.sync.passwordComplexity.feedback.warning)">
-            {{ vm.sync.passwordComplexity.feedback.warning ? vm.sync.passwordComplexity.feedback.warning :
-          vm.sync.passwordComplexity.feedback.suggestions.length > 0 ?
-          vm.sync.passwordComplexity.feedback.suggestions.slice(-1)[0] : '' }}
-          </div>
-          <div class="progress">
-            <div class="progress-bar" role="progressbar"
-              data-ng-style="{ width: !vm.sync.password ? 0 : (((vm.sync.passwordComplexity.score + 1) / 5) * 100) + '%' }"
-              data-ng-class="{
-              'progress-bar-warning': vm.sync.passwordComplexity.score > 1 && vm.sync.passwordComplexity.score < 4,
-              'progress-bar-success': vm.sync.passwordComplexity.score === 4
-              }">
-            </div>
-          </div>
-          <div class="progress-bar-background"></div>
         </div>
-        <div class="form-group text-center">
-          <button type="button" class="btn btn-default btn-confirm-password" data-ng-disabled="!vm.sync.password"
-            data-ng-click="vm.events.syncForm_ConfirmPassword_Click()">
-            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Next_Label) }}
+        <div class="buttons">
+          <button type="button" class="btn btn-default btn-existing-sync"
+            data-ng-disabled="!vm.sync.id || !vm.sync.password || vm.syncForm.$invalid"
+            data-ng-click="vm.events.syncForm_EnableSync_Click()">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
+          </button>
+          <button type="button" class="btn btn-default" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)"
+            data-ng-click="vm.events.syncForm_UpdateService_Click()">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_UpdateService_Label) }}
+          </button>
+          <button type="button" class="btn btn-default" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)"
+            data-ng-click="vm.events.syncForm_ScanCode_Click()">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_ScanCode_Label) }}
+          </button>
+        </div>
+      </div>
+      <div class="well well-sm" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)"
+        data-ng-show="vm.login.displayGetSyncIdPanel">
+        <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ScanId_Title) }}</h4>
+        <p>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ScanId_Message) }}</p>
+        <div class="buttons">
+          <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_ScanCode_Click()">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_ScanCode_Label) }}
+          </button>
+          <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_NewSync_Click()">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_GetSyncId_Label) }}
+          </button>
+        </div>
+      </div>
+      <div class="form-group toggle-form" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
+        <a data-ng-click="vm.events.syncForm_NewSync_Click()" href="#">
+          {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
+        </a>
+      </div>
+    </div>
+    <div class="update-service-panel animate-fade-in" data-ng-if="vm.login.displayUpdateServicePanel">
+      <div data-ng-hide="vm.login.displayUpdateServiceConfirmation">
+        <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Message)">
+        </p>
+        <div class="form-group" data-ng-class="{ 'has-error': vm.syncForm.newServiceUrl.$invalid }">
+          <input name="newServiceUrl" class="form-control" data-ng-model="vm.sync.newService.url"
+            data-ng-change="vm.events.syncForm_UpdateService_ServiceUrl_Change()"
+            data-ng-readonly="vm.login.validatingServiceUrl"
+            placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Field_Description) }}"
+            maxlength="128" autocapitalize="off" autocorrect="off" spellcheck="false" required />
+          <div class="validation" data-ng-if="vm.syncForm.newServiceUrl.$invalid">
+            <span data-ng-if="vm.syncForm.newServiceUrl.$error.required">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_Required_Label) }}
+            </span>
+            <span data-ng-if="vm.syncForm.newServiceUrl.$error.InvalidService">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_InvalidService_Label) }}
+            </span>
+            <span data-ng-if="vm.syncForm.newServiceUrl.$error.RequestFailed">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_RequestFailed_Label) }}
+            </span>
+            <span data-ng-if="vm.syncForm.newServiceUrl.$error.ServiceVersionNotSupported">
+              {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_UpdateForm_ServiceVersionNotSupported_Label) }}
+            </span>
+          </div>
+        </div>
+        <div class="buttons">
+          <button type="button" class="btn btn-default btn-update-service-url"
+            data-ng-click="vm.events.syncForm_UpdateService_Update_Click()"
+            data-ng-disabled="!vm.syncForm.newServiceUrl.$dirty || vm.syncForm.newServiceUrl.$invalid || vm.login.validatingServiceUrl"
+            data-ng-class="{ 'btn-validating': vm.login.validatingServiceUrl }">
+            <span class="spinner-border spinner-border-sm" data-ng-show="vm.login.validatingServiceUrl" role="status"
+              aria-hidden="true"></span>
+            <span data-ng-show="vm.login.validatingServiceUrl">{{
+          vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}
+            </span>
+            <span data-ng-hide="vm.login.validatingServiceUrl">{{
+          vm.platform.GetConstant(vm.globals.Constants.Button_Update_Label) }}</span>
+          </button>
+          <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_UpdateService_Cancel_Click()">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Cancel_Label) }}
+          </button>
+        </div>
+      </div>
+      <div class="confirm well well-sm animate-fade-in service-info"
+        data-ng-show="vm.login.displayUpdateServiceConfirmation">
+        <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmUpdateService_Title) }}</h4>
+        <p class="selected-service">
+          <a href="{{ vm.sync.newService.url }}" class="new-tab"
+            title="{{ vm.sync.newService.url }}">{{ vm.sync.newService.url }}</a>
+        </p>
+        <ul>
+          <li
+            data-ng-class="{ 'text-danger': vm.sync.newService.status === vm.globals.ServiceStatus.Offline || vm.sync.newService.status === vm.globals.ServiceStatus.Error }">
+            <label>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmUpdateService_Status_Label) }}</label>
+            {{ vm.utility.GetServiceStatusTextFromStatusCode(vm.sync.newService.status) }}
+          </li>
+          <li data-ng-if="vm.sync.newService.location">
+            <label>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmUpdateService_Location_Label) }}</label>
+            {{ vm.utility.GetCountryNameFrom2LetterISOCode(vm.sync.newService.location) }}</li>
+          <li>
+            <label>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmUpdateService_MaxSyncSize_Label) }}</label>
+            {{ vm.sync.newService.maxSyncSize | kbFmt : 0 }}</li>
+          <li>
+            <label>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmUpdateService_ApiVersion_Label) }}</label>
+            {{ vm.sync.newService.apiVersion }}</li>
+        </ul>
+        <p class="service-message" data-ng-if="vm.sync.newService.message"
+          data-ng-bind-html="vm.sync.newService.message"></p>
+        <p class="service-warning"
+          data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmUpdateService_Warning)"></p>
+        <div class="buttons">
+          <button type="button" class="btn btn-default"
+            data-ng-click="vm.events.syncForm_UpdateService_Confirm_Click()">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
+          </button>
+          <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_UpdateService_Cancel_Click()">
+            {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
           </button>
         </div>
       </div>
     </div>
-    <div class="well well-sm" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)">
-      <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_GetSyncId_Title) }}</h4>
-      <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_GetSyncId_Message)"></p>
-      <div class="buttons">
-        <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_ExistingSync_Click()">
-          {{ vm.platform.GetConstant(vm.globals.Constants.Button_OK_Label) }}
-        </button>
-      </div>
-    </div>
-    <div class="form-group toggle-form" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
-      <a data-ng-click="vm.events.syncForm_ExistingSync_Click()" href="#">
-        {{ vm.platform.GetConstant(vm.globals.Constants.Button_ExistingSync_Label) }}
-      </a>
-    </div>
-  </div>
-  <div class="login-form-existing animate-fade-in" data-ng-class="{ 'active-login-form': !vm.sync.displayNewSyncPanel }"
-    data-ng-hide="vm.sync.displayNewSyncPanel">
-    <div data-ng-show="!vm.utility.IsMobilePlatform(vm.platformName) || 
-      (vm.utility.IsMobilePlatform(vm.platformName) && !vm.sync.displayGetSyncIdPanel)">
-      <div class="form-group" data-ng-class="{ 'has-error': vm.syncForm.txtId.$dirty && vm.syncForm.txtId.$invalid }">
-        <label class="sr-only"
-          for="txtId">{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Label) }}</label>
-        <input type="text" name="txtId" data-ng-model="vm.sync.id" class="form-control"
-          data-ng-disabled="vm.sync.enabled"
-          placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_Description) }}" maxlength="32"
-          data-ng-change="vm.events.syncForm_SyncId_Change()" autocapitalize="off" autocorrect="off"
-          spellcheck="false" />
-        <div class="validation"
-          data-ng-if="vm.sync.id && vm.syncForm.txtId.$dirty && vm.syncForm.txtId.$error.InvalidSyncId">
-          {{ vm.platform.GetConstant(vm.globals.Constants.Login_IdField_InvalidSyncId_Label) }}
-        </div>
-      </div>
-      <div class="form-group secret-form-group btn-icon-container"
-        data-ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
-        <label class="sr-only" for="txtPassword">{{
-        vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Label) }}</label>
-        <input class="form-control" name="txtPassword" data-ng-model="vm.sync.password"
-          type="{{ vm.sync.showPassword ? 'text' : 'password' }}" data-ng-disabled="vm.sync.enabled" maxlength="150"
-          placeholder="{{ vm.platform.GetConstant(vm.globals.Constants.Login_PasswordField_Existing_Description) }}" />
-        <button class="btn btn-icon btn-show-password" data-ng-class="{ 'active': vm.sync.showPassword }"
-          data-ng-show="vm.sync.password"
-          title="{{ vm.platform.GetConstant(vm.globals.Constants.Button_ShowPassword_Label) }}"
-          data-ng-click="vm.events.syncForm_ShowPassword_Click()">
-          <i class="fas fa-eye" aria-hidden="true"></i>
-        </button>
-      </div>
-      <div class="buttons">
-        <button type="button" class="btn btn-default btn-existing-sync"
-          data-ng-disabled="!vm.sync.id || !vm.sync.password || vm.syncForm.$invalid"
-          data-ng-click="vm.events.syncForm_EnableSync_Click()">
-          {{ vm.platform.GetConstant(vm.globals.Constants.Button_EnableSync_Label) }}
-        </button>
-        <button type="button" class="btn btn-default" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)"
-          data-ng-click="vm.events.searchForm_ScanCode_Click()">
-          {{ vm.platform.GetConstant(vm.globals.Constants.Button_ScanCode_Label) }}
-        </button>
-      </div>
-    </div>
-    <div class="well well-sm" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)"
-      data-ng-show="vm.sync.displayGetSyncIdPanel">
-      <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ScanId_Title) }}</h4>
-      <p>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ScanId_Message) }}</p>
-      <div class="buttons">
-        <button type="button" class="btn btn-default" data-ng-click="vm.events.searchForm_ScanCode_Click()">
-          {{ vm.platform.GetConstant(vm.globals.Constants.Button_ScanCode_Label) }}
-        </button>
-        <button type="button" class="btn btn-default" data-ng-click="vm.events.syncForm_NewSync_Click()">
-          {{ vm.platform.GetConstant(vm.globals.Constants.Button_GetSyncId_Label) }}
-        </button>
-      </div>
-    </div>
-    <div class="form-group toggle-form" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
-      <a data-ng-click="vm.events.syncForm_NewSync_Click()" href="#">
-        {{ vm.platform.GetConstant(vm.globals.Constants.Button_NewSync_Label) }}
-      </a>
-    </div>
   </div>
 </form>
-<div class="confirm well well-sm animate-fade-in" data-ng-show="vm.sync.displaySyncConfirmation">
+<div class="confirm well well-sm animate-fade-in" data-ng-show="vm.login.displaySyncConfirmation">
   <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmSync_Title) }}</h4>
   <p>{{ vm.platform.GetConstant(vm.globals.Constants.Login_ConfirmSync_Message) }}</p>
   <div class="buttons">
@@ -171,12 +303,12 @@
       data-ng-click="vm.events.syncForm_ConfirmSync_Click()">
       {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
     </button>
-    <button type="button" class="btn btn-default" data-ng-click="vm.sync.displaySyncConfirmation = false">
+    <button type="button" class="btn btn-default" data-ng-click="vm.login.displaySyncConfirmation = false">
       {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
     </button>
   </div>
 </div>
-<div class="otherSyncsWarning confirm well well-sm animate-fade-in" data-ng-show="vm.sync.displayOtherSyncsWarning">
+<div class="otherSyncsWarning confirm well well-sm animate-fade-in" data-ng-show="vm.login.displayOtherSyncsWarning">
   <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_DisableOtherSyncs_Title) }}</h4>
   <p data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_DisableOtherSyncs_Message)"></p>
   <div class="buttons">
@@ -185,7 +317,7 @@
     </button>
   </div>
 </div>
-<div class="confirm well well-sm animate-fade-in" data-ng-show="vm.sync.displayUpgradeConfirmation">
+<div class="confirm well well-sm animate-fade-in" data-ng-show="vm.login.displayUpgradeConfirmation">
   <h4>{{ vm.platform.GetConstant(vm.globals.Constants.Login_UpgradeSync_Title) }}</h4>
   <div data-ng-bind-html="vm.platform.GetConstant(vm.globals.Constants.Login_UpgradeSync_Message)"></div>
   <div class="buttons">
@@ -193,7 +325,7 @@
       data-ng-click="vm.events.syncForm_UpgradeSync_Click()">
       {{ vm.platform.GetConstant(vm.globals.Constants.Button_Confirm_Label) }}
     </button>
-    <button type="button" class="btn btn-default" data-ng-click="vm.sync.displayUpgradeConfirmation = false">
+    <button type="button" class="btn btn-default" data-ng-click="vm.login.displayUpgradeConfirmation = false">
       {{ vm.platform.GetConstant(vm.globals.Constants.Button_Deny_Label) }}
     </button>
   </div>

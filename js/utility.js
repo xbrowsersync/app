@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description:	Defines utility functions used across all platforms.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Utility = function ($q, platform, globals) {
+xBrowserSync.App.Utility = function ($http, $q, platform, globals) {
   'use strict';
 
   var currentMessageQueueItem, messageQueue = [];
@@ -22,6 +22,25 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         return iterator(prevResult, currentItem);
       });
     }, $q.resolve(initialValue));
+  };
+
+  var checkForNewVersion = function () {
+    if (!isNetworkConnected()) {
+      return $q.resolve();
+    }
+
+    // Get latest app version info
+    return $http.get(globals.ReleaseLatestUrl)
+      .then(function (response) {
+        var newVersion = response && response.data ? response.data.tag_name : null;
+        if (compareVersions.compare(newVersion, globals.AppVersion, '>')) {
+          logInfo(newVersion + ' update available');
+          return newVersion;
+        }
+      })
+      .catch(function () {
+        logInfo('Couldn’t check for new version');
+      });
   };
 
   var closest = function (element, predicate) {
@@ -113,7 +132,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         return decryptedData;
       })
       .catch(function (err) {
-        logInfo('Decryption failed.');
+        logInfo('Decryption failed');
         return $q.reject({
           code: globals.ErrorCodes.InvalidCredentials,
           stack: err.stack
@@ -176,7 +195,7 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
         return base64js.fromByteArray(combinedData);
       })
       .catch(function (err) {
-        logInfo('Encryption failed.');
+        logInfo('Encryption failed');
         return $q.reject({
           code: globals.ErrorCodes.InvalidCredentials,
           stack: err.stack
@@ -191,6 +210,18 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   var getBackupFileName = function () {
     var fileName = 'xbs_backup_' + getDateTimeString(new Date()) + '.json';
     return fileName;
+  };
+
+  var getCountryNameFrom2LetterISOCode = function (isoCode) {
+    if (!isoCode) {
+      return null;
+    }
+
+    var country = Countries.countries[isoCode];
+    if (!country) {
+      logInfo('No country found matching ISO code: ' + isoCode);
+    }
+    return country.name;
   };
 
   var getDateTimeString = function (date) {
@@ -379,6 +410,24 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
       });
   };
 
+  var getServiceStatusTextFromStatusCode = function (statusCode) {
+    if (statusCode == null) {
+      return null;
+    }
+
+    switch (statusCode) {
+      case globals.ServiceStatus.NoNewSyncs:
+        return platform.GetConstant(globals.Constants.Settings_Service_Status_NoNewSyncs);
+      case globals.ServiceStatus.Offline:
+        return platform.GetConstant(globals.Constants.Settings_Service_Status_Offline);
+      case globals.ServiceStatus.Online:
+        return platform.GetConstant(globals.Constants.Settings_Service_Status_Online);
+      case globals.ServiceStatus.Error:
+      default:
+        return platform.GetConstant(globals.Constants.Settings_Service_Status_Error);
+    }
+  };
+
   var getServiceUrl = function () {
     // Get service url from local storage
     return platform.LocalStorage.Get(globals.CacheKeys.ServiceUrl)
@@ -425,9 +474,9 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   };
 
   var isNetworkConnected = function () {
-    return window.navigator.connection && window.navigator.connection.type ?
-      (window.navigator.connection.type !== Connection.NONE &&
-        window.navigator.connection.type !== Connection.UNKNOWN) :
+    return window.Connection && window.navigator.connection && window.navigator.connection.type ?
+      (window.navigator.connection.type !== window.Connection.NONE &&
+        window.navigator.connection.type !== window.Connection.UNKNOWN) :
       window.navigator.onLine;
   };
 
@@ -769,15 +818,18 @@ xBrowserSync.App.Utility = function ($q, platform, globals) {
   return {
     AsyncReduce: asyncReduce,
     Closest: closest,
+    CheckForNewVersion: checkForNewVersion,
     CreateBackupData: createBackupData,
     DecryptData: decryptData,
     EncryptData: encryptData,
     DeepCopy: deepCopy,
     Get24hrTimeFromDate: get24hrTimeFromDate,
     GetBackupFileName: getBackupFileName,
+    GetCountryNameFrom2LetterISOCode: getCountryNameFrom2LetterISOCode,
     GetDateTimeString: getDateTimeString,
     GetErrorMessageFromException: getErrorMessageFromException,
     GetLogFileName: getLogFileName,
+    GetServiceStatusTextFromStatusCode: getServiceStatusTextFromStatusCode,
     GetServiceUrl: getServiceUrl,
     GetTagArrayFromText: getTagArrayFromText,
     GetPasswordHash: getPasswordHash,

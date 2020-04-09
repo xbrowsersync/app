@@ -1,66 +1,84 @@
 (function () {
   var getPageMetadata = function () {
-    var metaTagsArr = document.getElementsByTagName('meta');
+    var txt = document.createElement('textarea');
+
+    var getDecodedTextValue = function (text) {
+      if (!text) {
+        return '';
+      }
+      var txt = document.createElement('textarea');
+      txt.innerHTML = text.trim();
+      return txt.value;
+    };
 
     var getPageDescription = function () {
-      for (var i = 0; i < metaTagsArr.length; i++) {
-        var currentTag = metaTagsArr[i];
-        if ((currentTag.getAttribute('property') && currentTag.getAttribute('property').toUpperCase().trim() === 'OG:DESCRIPTION' && currentTag.getAttribute('content')) ||
-          (currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'TWITTER:DESCRIPTION' && currentTag.getAttribute('content')) ||
-          (currentTag.getAttribute('name') && currentTag.getAttribute('name').toUpperCase().trim() === 'DESCRIPTION' && currentTag.getAttribute('content'))) {
-          return (currentTag.getAttribute('content')) ? currentTag.getAttribute('content').trim() : '';
-        }
+      var ogDescription = document.querySelector('meta[property="OG:DESCRIPTION"]') || document.querySelector('meta[property="og:description"]');
+      if (ogDescription && ogDescription.content) {
+        return getDecodedTextValue(ogDescription.content);
       }
 
-      return null;
+      var twitterDescription = document.querySelector('meta[name="TWITTER:DESCRIPTION"]') || document.querySelector('meta[name="twitter:description"]');
+      if (twitterDescription && twitterDescription.content) {
+        return getDecodedTextValue(twitterDescription.content);
+      }
+
+      var defaultDescription = document.querySelector('meta[name="DESCRIPTION"]') || document.querySelector('meta[name="description"]');
+      if (defaultDescription && defaultDescription.content) {
+        return getDecodedTextValue(defaultDescription.content);
+      }
+
+      return '';
     };
 
     var getPageKeywords = function () {
-      // Get open graph tag values
-      var currentTag, i, keywords = [];
-      for (i = 0; i < metaTagsArr.length; i++) {
-        currentTag = metaTagsArr[i];
-        if (currentTag.getAttribute('property') &&
-          currentTag.getAttribute('property').trim().match(/VIDEO\:TAG$/i) &&
-          currentTag.getAttribute('content')) {
-          keywords.push(currentTag.getAttribute('content').trim());
-        }
-      }
+      var keywords = [];
 
-      // Get meta tag values
-      for (i = 0; i < metaTagsArr.length; i++) {
-        currentTag = metaTagsArr[i];
-        if (currentTag.getAttribute('name') &&
-          currentTag.getAttribute('name').toUpperCase().trim() === 'KEYWORDS' &&
-          currentTag.getAttribute('content')) {
-          var metaKeywords = currentTag.getAttribute('content').split(',');
-          for (i = 0; i < metaKeywords.length; i++) {
-            var currentKeyword = metaKeywords[i];
-            if (currentKeyword && currentKeyword.trim()) {
-              keywords.push(currentKeyword.trim());
-            }
+      // Get open graph tag values 
+      document.querySelectorAll('meta[property="OG:VIDEO:TAG"]').forEach(function (tag) {
+        if (tag && tag.content) {
+          keywords.push(getDecodedTextValue(tag.content));
+        }
+      });
+      document.querySelectorAll('meta[property="og:video:tag"]').forEach(function (tag) {
+        if (tag && tag.content) {
+          keywords.push(getDecodedTextValue(tag.content));
+        }
+      });
+
+      // Get meta tag values 
+      var metaKeywords = document.querySelector('meta[name="KEYWORDS"]') || document.querySelector('meta[name="keywords"]');
+      if (metaKeywords && metaKeywords.content) {
+        metaKeywords.content.split(',').forEach(function (keyword) {
+          if (keyword) {
+            keywords.push(getDecodedTextValue(keyword));
           }
-          break;
-        }
+        });
       }
 
-      if (keywords.length > 0) {
-        return keywords.join();
+      // Remove duplicates
+      var uniqueKeywords = keywords.filter(function (value, index, self) {
+        return self.indexOf(value) === index;
+      });
+
+      if (uniqueKeywords.length > 0) {
+        return uniqueKeywords.join();
       }
 
       return null;
     };
 
     var getPageTitle = function () {
-      for (var i = 0; i < metaTagsArr.length; i++) {
-        var tag = metaTagsArr[i];
-        if ((tag.getAttribute('property') && tag.getAttribute('property').toUpperCase().trim() === 'OG:TITLE' && tag.getAttribute('content')) ||
-          (tag.getAttribute('name') && tag.getAttribute('name').toUpperCase().trim() === 'TWITTER:TITLE' && tag.getAttribute('content'))) {
-          return (tag.getAttribute('content')) ? tag.getAttribute('content').trim() : '';
-        }
+      var ogTitle = document.querySelector('meta[property="OG:TITLE"]') || document.querySelector('meta[property="og:title"]');
+      if (ogTitle && ogTitle.content) {
+        return getDecodedTextValue(ogTitle.content);
       }
 
-      return document.title;
+      var twitterTitle = document.querySelector('meta[name="TWITTER:TITLE"]') || document.querySelector('meta[name="twitter:title"]');
+      if (twitterTitle && twitterTitle.content) {
+        return getDecodedTextValue(twitterTitle.content);
+      }
+
+      return getDecodedTextValue(document.title);
     };
 
     return {

@@ -43,7 +43,7 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
             }
 
             // Check service version is supported by this client
-            if (compareVersions(data.version, globals.MinApiVersion) < 0) {
+            if (compareVersions.compare(data.version, globals.MinApiVersion, '<')) {
               apiRequestFailed(new Error(getHttpErrorMessageFromErrorCode(globals.ErrorCodes.UnsupportedServiceApiVersion)));
             }
 
@@ -279,7 +279,7 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
         return resolve();
       }
 
-      utility.LogWarning('API request failed: Network offline');
+      utility.LogWarning('API request failed: network offline');
       return reject({ code: globals.ErrorCodes.NetworkOffline });
     });
   };

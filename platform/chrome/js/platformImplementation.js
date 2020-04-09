@@ -62,8 +62,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Permissions.Check = checkPermissions;
     platform.Permissions.Remove = removePermissions;
     platform.Permissions.Request = requestPermissions;
-    platform.Sync.Await = awaitSync;
     platform.Sync.Current = getCurrentSync;
+    platform.Sync.Disable = disableSync;
+    platform.Sync.GetQueueLength = getSyncQueueLength;
     platform.Sync.Queue = queueSync;
   };
 
@@ -71,30 +72,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 	/* ------------------------------------------------------------------------------------
 	 * Public functions
 	 * ------------------------------------------------------------------------------------ */
-
-  var awaitSync = function (uniqueId) {
-    return $q(function (resolve, reject) {
-      var awaitSyncListener = function (message, sender, sendResponse) {
-        // Only listen for SyncFinished messages
-        if (message.command !== globals.Commands.SyncFinished || message.uniqueId !== uniqueId) {
-          return;
-        }
-
-        utility.LogInfo('Awaited sync complete: ' + message.uniqueId);
-        chrome.runtime.onMessage.removeListener(awaitSyncListener);
-
-        if (message.success) {
-          resolve();
-        }
-        else {
-          reject(message.error);
-        }
-      };
-
-      // Listen for messages
-      chrome.runtime.onMessage.addListener(awaitSyncListener);
-    });
-  };
 
   var bookmarksCreated = function (xBookmarks, changeInfo) {
     // Remove native bookmark id
@@ -253,17 +230,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var disableEventListeners = function () {
-    return $q(function (resolve, reject) {
-      chrome.runtime.sendMessage({
-        command: globals.Commands.DisableEventListeners
-      }, function (response) {
-        if (response.success) {
-          resolve();
-        }
-        else {
-          reject(response.error);
-        }
-      });
+    return sendMessage({
+      command: globals.Commands.DisableEventListeners
+    });
+  };
+
+  var disableSync = function () {
+    return sendMessage({
+      command: globals.Commands.DisableSync
     });
   };
 
@@ -342,17 +316,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var enableEventListeners = function () {
-    return $q(function (resolve, reject) {
-      chrome.runtime.sendMessage({
-        command: globals.Commands.EnableEventListeners
-      }, function (response) {
-        if (response.success) {
-          resolve();
-        }
-        else {
-          reject(response.error);
-        }
-      });
+    return sendMessage({
+      command: globals.Commands.EnableEventListeners
     });
   };
 
@@ -525,18 +490,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var getCurrentSync = function () {
-    return $q(function (resolve, reject) {
-      chrome.runtime.sendMessage({
-        command: globals.Commands.GetCurrentSync
-      }, function (response) {
-        if (response.success) {
-          resolve(response.currentSync);
-        }
-        else {
-          reject(response.error);
-        }
+    return sendMessage({
+      command: globals.Commands.GetCurrentSync
+    })
+      .then(function (response) {
+        return response.currentSync;
       });
-    });
   };
 
   var getCurrentUrl = function () {
@@ -560,9 +519,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       platform.GetConstant(globals.Constants.Help_Page_Welcome_Desktop_Content),
       platform.GetConstant(globals.Constants.Help_Page_BeforeYouBegin_Chrome_Content),
       platform.GetConstant(globals.Constants.Help_Page_FirstSync_Desktop_Content),
+      platform.GetConstant(globals.Constants.Help_Page_Service_Content),
       platform.GetConstant(globals.Constants.Help_Page_SyncId_Content),
       platform.GetConstant(globals.Constants.Help_Page_ExistingId_Desktop_Content),
-      platform.GetConstant(globals.Constants.Help_Page_Service_Content),
       platform.GetConstant(globals.Constants.Help_Page_Searching_Desktop_Content),
       platform.GetConstant(globals.Constants.Help_Page_AddingBookmarks_Chrome_Content),
       platform.GetConstant(globals.Constants.Help_Page_NativeFeatures_Chrome_Content),
@@ -598,7 +557,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     var localBookmarkTree, containerId, containerName;
 
     // Create the condition check for the promise loop
-    var condition = function (id) {
+    var doActionUntil = function (id) {
       // Check if the current bookmark is a container
       return isLocalBookmarkContainer(id)
         .then(function (localContainer) {
@@ -620,6 +579,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           return reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
         }
         indexPath.unshift(localBookmark.index);
+
+        // Next process the parent
         resolve(localBookmark.parentId);
       });
     };
@@ -634,7 +595,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
         // Create the index path to the bookmark
         localBookmarkTree = tree;
-        return utility.PromiseWhile(localBookmarkId, condition, action)
+        return utility.PromiseWhile(localBookmarkId, doActionUntil, action)
           .then(function () {
             // Adjust child index of other bookmarks to account for any unsupported containers
             return getNumContainersBeforeBookmarkIndex(containerId, indexPath[0])
@@ -712,6 +673,15 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             resolve(metadata);
           });
         });
+      });
+  };
+
+  var getSyncQueueLength = function () {
+    return sendMessage({
+      command: globals.Commands.GetSyncQueueLength
+    })
+      .then(function (response) {
+        return response.syncQueueLength;
       });
   };
 
@@ -889,15 +859,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var queueSync = function (syncData, command) {
     syncData.command = command || globals.Commands.SyncBookmarks;
-    return $q(function (resolve, reject) {
-      chrome.runtime.sendMessage(syncData, function (response) {
-        if (response.success) {
-          return resolve(response.bookmarks);
-        }
-
-        reject(response.error);
+    return sendMessage(syncData)
+      .then(function (response) {
+        return response.bookmarks;
       });
-    });
   };
 
   var refreshInterface = function (syncEnabled, syncType) {
@@ -1454,6 +1419,37 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           });
         }));
       });
+  };
+
+  var sendMessage = function (message) {
+    return $q(function (resolve, reject) {
+      chrome.runtime.sendMessage(message, function (response) {
+        // Check for runtime errors
+        if (chrome.runtime.lastError) {
+          // If no message connection detected, check if background function can be called directly
+          if (chrome.runtime.lastError.message.toLowerCase().indexOf('could not establish connection') >= 0) {
+            if (window.xBrowserSync.App.HandleMessage) {
+              return window.xBrowserSync.App.HandleMessage(message, null, resolve);
+            }
+
+            utility.LogWarning('Message listener not available');
+            return reject(err);
+          }
+
+          return reject(new Error(chrome.runtime.lastError.message));
+        }
+
+        if (!response) {
+          return resolve();
+        }
+
+        if (!response.success) {
+          return reject(response.error);
+        }
+
+        resolve(response);
+      });
+    });
   };
 
   var updateLocalBookmark = function (localBookmarkId, title, url) {

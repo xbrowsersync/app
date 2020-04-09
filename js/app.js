@@ -23,6 +23,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.utility = utility;
 
     vm.working = {
+      displayCancelSyncButton: false,
       message: platform.GetConstant(globals.Constants.Working_Syncing_Message),
       show: false
     };
@@ -72,7 +73,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       bookmarkForm_UpdateBookmark_Click: bookmarkForm_UpdateBookmark_Click,
       bookmarkPanel_Close_Click: bookmarkPanel_Close_Click,
       button_ReleaseNotes_Click: button_ReleaseNotes_Click,
-      displayQrPanel: displayQrPanel,
       helpPanel_Close: helpPanel_Close,
       helpPanel_KeyDown: helpPanel_KeyDown,
       helpPanel_NextPage: helpPanel_NextPage,
@@ -84,7 +84,11 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       permissions_Revoke_Click: permissions_Revoke_Click,
       permissions_Request_Click: permissions_Request_Click,
       permissionsPanel_RequestPermissions_Click: permissionsPanel_RequestPermissions_Click,
+      settings_Prefs_CheckForAppUpdates_Click: settings_Prefs_CheckForAppUpdates_Click,
       settings_Prefs_DisplaySearchBar_Click: settings_Prefs_DisplaySearchBar_Click,
+      settings_Prefs_SyncBookmarksToolbar_Cancel: settings_Prefs_SyncBookmarksToolbar_Cancel,
+      settings_Prefs_SyncBookmarksToolbar_Click: settings_Prefs_SyncBookmarksToolbar_Click,
+      settings_Prefs_SyncBookmarksToolbar_Confirm: settings_Prefs_SyncBookmarksToolbar_Confirm,
       qrPanel_Close_Click: qrPanel_Close_Click,
       qrPanel_CopySyncId_Click: qrPanel_CopySyncId_Click,
       queueSync: queueSync,
@@ -93,7 +97,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       searchForm_AddBookmark_Click: searchForm_AddBookmark_Click,
       searchForm_Clear_Click: searchForm_Clear_Click,
       searchForm_DeleteBookmark_Click: searchForm_DeleteBookmark_Click,
-      searchForm_ScanCode_Click: searchForm_ScanCode_Click,
       searchForm_SearchText_Autocomplete: searchForm_SearchText_Autocomplete,
       searchForm_SearchText_Change: searchForm_SearchText_Change,
       searchForm_SearchText_KeyDown: searchForm_SearchText_KeyDown,
@@ -102,9 +105,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       searchForm_SelectBookmark_Press: searchForm_SelectBookmark_Press,
       searchForm_ShareBookmark_Click: searchForm_ShareBookmark_Click,
       searchForm_UpdateBookmark_Click: searchForm_UpdateBookmark_Click,
-      syncPanel_SyncBookmarksToolbar_Click: syncPanel_SyncBookmarksToolbar_Click,
-      syncPanel_SyncBookmarksToolbar_Cancel: syncPanel_SyncBookmarksToolbar_Cancel,
-      syncPanel_SyncBookmarksToolbar_Confirm: syncPanel_SyncBookmarksToolbar_Confirm,
+      syncForm_ScanCode_Click: syncForm_ScanCode_Click,
       syncForm_ConfirmPassword_Back_Click: syncForm_ConfirmPassword_Back_Click,
       syncForm_ConfirmPassword_Click: syncForm_ConfirmPassword_Click,
       syncForm_ConfirmSync_Click: startSyncing,
@@ -117,21 +118,38 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       syncForm_Submit_Click: syncForm_Submit_Click,
       syncForm_SyncId_Change: syncForm_SyncId_Change,
       syncForm_SyncUpdates_Click: syncForm_SyncUpdates_Click,
+      syncForm_UpdateService_Cancel_Click: syncForm_UpdateService_Cancel_Click,
+      syncForm_UpdateService_Click: syncForm_UpdateService_Click,
+      syncForm_UpdateService_Confirm_Click: syncForm_UpdateService_Confirm_Click,
+      syncForm_UpdateService_ServiceUrl_Change: syncForm_UpdateService_ServiceUrl_Change,
+      syncForm_UpdateService_Update_Click: syncForm_UpdateService_Update_Click,
       syncForm_UpgradeSync_Click: syncForm_UpgradeSync_Click,
-      syncPanel_DisplayDataUsage_Click: displayDataUsage,
+      syncPanel_DisplayQrPanel_Click: displayQrPanel,
       searchForm_ToggleBookmark_Click: searchForm_ToggleBookmark_Click,
       searchForm_ToggleView_Click: searchForm_ToggleView_Click,
       updatedPanel_Continue_Click: updatedPanel_Continue_Click,
-      updateServiceUrlForm_Cancel_Click: updateServiceUrlForm_Cancel_Click,
-      updateServiceUrlForm_Confirm_Click: updateServiceUrlForm_Confirm_Click,
-      updateServiceUrlForm_Display_Click: updateServiceUrlForm_Display_Click,
-      updateServiceUrlForm_NewServiceUrl_Change: updateServiceUrlForm_NewServiceUrl_Change,
-      updateServiceUrlForm_Update_Click: updateServiceUrlForm_Update_Click
+      workingPanel_Cancel_Click: workingPanel_Cancel_Click
     };
 
     vm.help = {
       currentPage: 0,
       pages: undefined
+    };
+
+    vm.login = {
+      displayGetSyncIdPanel: true,
+      displayOtherSyncsWarning: false,
+      displayNewSyncPanel: true,
+      displayPasswordConfirmation: false,
+      displaySyncConfirmation: false,
+      displayUpdateServiceConfirmation: false,
+      displayUpdateServicePanel: false,
+      displayUpgradeConfirmation: false,
+      passwordComplexity: {},
+      passwordConfirmation: undefined,
+      showPassword: false,
+      upgradeConfirmed: false,
+      validatingServiceUrl: false
     };
 
     vm.platformName = undefined;
@@ -162,21 +180,20 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.settings = {
       backupCompletedMessage: undefined,
       backupFileName: undefined,
+      checkForAppUpdates: false,
       dataToRestore: undefined,
-      displayCancelSyncConfirmation: false,
       displayQrPanel: false,
       displayRestoreConfirmation: false,
       displayRestoreForm: false,
       displayRevertConfirmation: false,
       displaySearchBarBeneathResults: false,
       displaySyncBookmarksToolbarConfirmation: false,
-      displayUpdateServiceUrlConfirmation: false,
-      displayUpdateServiceUrlForm: false,
       downloadLogCompletedMessage: undefined,
       fileRestoreEnabled: false,
       getSearchLookaheadDelay: 50,
       getSearchResultsDelay: 250,
       logSize: undefined,
+      nextAutoUpdate: undefined,
       readWebsiteDataPermissionsGranted: false,
       restoreCompletedMessage: undefined,
       revertCompleted: false,
@@ -184,39 +201,36 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       revertUnavailable: false,
       savingBackup: false,
       savingLog: false,
-      service: {
-        apiVersion: '',
-        maxSyncSize: 0,
-        newServiceUrl: '',
-        status: undefined,
-        statusMessage: '',
-        url: undefined
-      },
       syncBookmarksToolbar: true,
-      syncDataSize: undefined,
-      syncDataUsed: undefined,
       syncIdCopied: false,
-      validatingRestoreData: false,
-      validatingServiceUrl: false
+      updatesAvailable: undefined,
+      validatingRestoreData: false
     };
 
     vm.sync = {
-      displayGetSyncIdPanel: true,
-      displayOtherSyncsWarning: false,
-      displayNewSyncPanel: true,
-      displayPasswordConfirmation: false,
-      displaySyncConfirmation: false,
-      displayUpgradeConfirmation: false,
+      dataSize: undefined,
+      dataUsed: undefined,
       enabled: false,
       id: undefined,
       inProgress: false,
-      nextAutoUpdate: undefined,
+      newService: {
+        apiVersion: '',
+        location: undefined,
+        maxSyncSize: 0,
+        message: '',
+        status: undefined,
+        url: undefined
+      },
       password: '',
-      passwordComplexity: {},
-      passwordConfirmation: undefined,
-      showPassword: false,
-      updatesAvailable: undefined,
-      upgradeConfirmed: false
+      service: {
+        apiVersion: '',
+        location: undefined,
+        maxSyncSize: 0,
+        message: '',
+        newServiceUrl: '',
+        status: undefined,
+        url: undefined
+      }
     };
 
     vm.view = {
@@ -441,7 +455,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     }
 
     // Get last word of tag text
-    var lastWord = _.last(vm.bookmark.tagText.split(','));
+    var lastWord = _.last(vm.bookmark.tagText.split(",")).trimLeft();
 
     // Display lookahead if word length exceeds minimum
     if (lastWord && lastWord.length > globals.LookaheadMinChars) {
@@ -495,7 +509,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         break;
       // If user pressed tab or right arrow key and lookahead present
       case ((event.keyCode === 9 || event.keyCode === 39) && !!vm.bookmark.tagLookahead):
-        // Add lookahead to search query
+        // Add lookahead to tag text
         event.preventDefault();
         vm.bookmark.tagText += vm.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
         bookmarkForm_BookmarkTags_Change();
@@ -537,7 +551,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         }
 
         // Display loading overlay
-        platform.Interface.Working.Show();
+        var loadingTimeout = platform.Interface.Working.Show();
 
         // Sync changes
         return queueSync({
@@ -549,11 +563,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         })
           .then(function () {
             // Set bookmark active status if current bookmark is current page
-            return platform.GetCurrentUrl();
-          })
-          .then(function (currentUrl) {
-            vm.bookmark.active = currentUrl && currentUrl.toUpperCase() === bookmarkToCreate.url.toUpperCase();
-            return changeView(vm.view.views.search);
+            return platform.GetCurrentUrl()
+              .then(function (currentUrl) {
+                // Update bookmark status and switch view
+                var bookmarkStatusActive = currentUrl && currentUrl.toUpperCase() === bookmarkToCreate.url.toUpperCase();
+                return syncBookmarksSuccess(loadingTimeout, bookmarkStatusActive);
+              });
           });
       })
       .catch(checkIfSyncDataRefreshedOnError);
@@ -578,7 +593,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     var bookmarkToDelete = vm.bookmark.current;
 
     // Display loading overlay
-    platform.Interface.Working.Show();
+    var loadingTimeout = platform.Interface.Working.Show();
 
     // Sync changes
     queueSync({
@@ -593,12 +608,9 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         return platform.GetCurrentUrl();
       })
       .then(function (currentUrl) {
-        if (currentUrl && currentUrl.toUpperCase() === vm.bookmark.originalUrl.toUpperCase()) {
-          vm.bookmark.active = false;
-        }
-
-        // Display the search panel
-        return changeView(vm.view.views.search);
+        // Update bookmark status and switch view
+        var bookmarkStatusActive = !(currentUrl && currentUrl.toUpperCase() === vm.bookmark.originalUrl.toUpperCase());
+        return syncBookmarksSuccess(loadingTimeout, bookmarkStatusActive);
       })
       .catch(checkIfSyncDataRefreshedOnError);
   };
@@ -750,7 +762,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       })
       .then(function () {
         // Attach events to new tab links
-        $timeout(setNewTabLinks, 100);
+        $timeout(setNewTabLinks, 150);
         return view;
       });
   };
@@ -777,15 +789,14 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var disableSync = function () {
-    // Clear view model variables
-    vm.search.results = null;
-    vm.sync.enabled = false;
-
-    // Disable sync and event listeners
-    return $q.all([
-      bookmarks.DisableSync(),
-      !utility.IsMobilePlatform(vm.platformName) ? platform.EventListeners.Disable() : $q.resolve()
-    ]);
+    // Disable sync
+    return platform.Sync.Disable()
+      .then(function () {
+        vm.sync.enabled = false;
+        vm.sync.password = '';
+        vm.login.passwordComplexity = {};
+      })
+      .catch(displayAlertErrorHandler);
   };
 
   var displayAlert = function (title, message, alertType) {
@@ -802,27 +813,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.alert.display(errMessage.title, errMessage.message, 'danger');
   };
 
-  var displayDataUsage = function () {
-    vm.settings.syncDataSize = null;
-    vm.settings.syncDataUsed = null;
-
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
-      .then(function (syncEnabled) {
-        // Return if not synced
-        if (!syncEnabled) {
-          return;
-        }
-
-        // Get  bookmarks sync size and calculate sync data percentage used
-        return bookmarks.SyncSize()
-          .then(function (bookmarksSyncSize) {
-            vm.settings.syncDataSize = bookmarksSyncSize / 1024;
-            vm.settings.syncDataUsed = Math.ceil((vm.settings.syncDataSize / vm.settings.service.maxSyncSize) * 100);
-          })
-          .catch(displayAlertErrorHandler);
-      });
-  };
-
   var displayDefaultSearchState = function () {
     // Clear search and results
     vm.search.query = null;
@@ -834,7 +824,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     if (!utility.IsMobilePlatform(vm.platformName)) {
       $timeout(function () {
         document.querySelector('input[name=txtSearch]').focus();
-      }, 100);
+      }, 150);
     }
 
     return $q.resolve();
@@ -848,7 +838,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.help.currentPage = panelToDisplay || 0;
     $timeout(function () {
       document.querySelector('#help-panel .view-content > div').focus();
-    }, 100);
+    }, 150);
   };
 
   var displayMainView = function () {
@@ -879,10 +869,9 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       });
   };
 
-  var displayQrPanel = function (value) {
-    if (!value) {
-      return;
-    }
+  var displayQrPanel = function () {
+    // Value for QR code should comprise of sync ID and service URL
+    var value = vm.sync.id + globals.QrCode.Delimiter + vm.sync.service.url;
 
     // Generate new QR code from the supplied value
     var qrcode = new QRCode({
@@ -965,25 +954,51 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     platform.Init(vm)
       .then(function () {
         // Get cached prefs from storage
-        return platform.LocalStorage.Get([globals.CacheKeys.DisplaySearchBarBeneathResults]);
+        return $q.all([
+          platform.LocalStorage.Get([
+            globals.CacheKeys.DisplaySearchBarBeneathResults,
+            globals.CacheKeys.SyncEnabled,
+            globals.CacheKeys.SyncId
+          ]),
+          utility.GetServiceUrl()
+        ]);
       })
-      .then(function (cachedPrefs) {
-        // Set cached prefs
-        vm.settings.displaySearchBarBeneathResults = cachedPrefs[globals.CacheKeys.DisplaySearchBarBeneathResults] != null ?
-          cachedPrefs[globals.CacheKeys.DisplaySearchBarBeneathResults] :
+      .then(function (cachedData) {
+        // Set view model values
+        vm.settings.displaySearchBarBeneathResults = cachedData[0][globals.CacheKeys.DisplaySearchBarBeneathResults] != null ?
+          cachedData[0][globals.CacheKeys.DisplaySearchBarBeneathResults] :
           vm.settings.displaySearchBarBeneathResults;
+        vm.sync.enabled = !!cachedData[0][globals.CacheKeys.SyncEnabled];
+        vm.sync.id = cachedData[0][globals.CacheKeys.SyncId];
+        vm.sync.service.url = cachedData[1];
 
         // Check if a sync is currently in progress
         return platform.Sync.Current()
           .then(function (currentSync) {
             if (currentSync) {
-              utility.LogInfo('Waiting for sync: ' + currentSync.uniqueId);
+              utility.LogInfo('Waiting for syncs to finish...');
+
+              // Only display cancel button for push syncs
+              if (currentSync.type === globals.SyncType.Push) {
+                vm.working.displayCancelSyncButton = true;
+              }
+
+              // Display loading panel
               return vm.view.change(vm.view.views.loading)
+                .then(waitForSyncsToFinish)
                 .then(function () {
-                  return platform.Sync.Await(currentSync.uniqueId);
+                  return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled);
                 })
-                .then(function () {
-                  return vm.view.change(vm.view.views.search);
+                .then(function (syncEnabled) {
+                  // Check that user didn't cancel sync
+                  vm.sync.enabled = syncEnabled;
+                  if (vm.sync.enabled) {
+                    utility.LogInfo('Syncs finished, resuming');
+                    return syncBookmarksSuccess();
+                  }
+                })
+                .finally(function () {
+                  vm.working.displayCancelSyncButton = false;
                 });
             }
 
@@ -996,7 +1011,9 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
             return displayMainView();
           })
           // Check if current page is a bookmark
-          .then(setBookmarkStatus);
+          .then(function () {
+            return setBookmarkStatus();
+          });
       })
       .catch(function (err) {
         displayMainView()
@@ -1004,10 +1021,11 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
             // Display alert
             displayAlertErrorHandler(err);
           });
-      });
+      })
+      .finally(refreshServiceStatus);
   };
 
-  var init_bookmarkView = function (bookmarkToUpdate) {
+  var init_bookmarkView = function (bookmark) {
     vm.bookmark.addButtonDisabledUntilEditForm = false;
     vm.bookmark.current = null;
     vm.bookmark.displayUpdateForm = false;
@@ -1016,45 +1034,49 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.bookmark.tagText = null;
     vm.bookmark.tagTextMeasure = null;
 
-    // If bookmark to update provided, set to current and return
     return $q(function (resolve) {
-      if (bookmarkToUpdate) {
+      // If bookmark to update provided, set to current and return
+      if (bookmark) {
         vm.bookmark.displayUpdateForm = true;
-        return resolve(bookmarkToUpdate);
+        return resolve(bookmark);
       }
 
       // Check if current url is a bookmark
       return bookmarks.FindCurrentUrlInBookmarks()
-        .then(function (bookmark) {
-          if (bookmark) {
+        .then(function (existingBookmark) {
+          if (existingBookmark) {
             // Display update bookmark form and return
             vm.bookmark.displayUpdateForm = true;
-            return resolve(bookmark);
+            return resolve(existingBookmark);
           }
 
-          // Get current page metadata as bookmark
-          return getMetadataForCurrentPage()
-            .then(function (metadata) {
-              // Display add bookmark form
-              vm.bookmark.displayUpdateForm = false;
-              resolve(metadata);
-            });
+          resolve();
         });
     })
-      .then(function (bookmark) {
-        if (bookmark) {
+      .then(function (bookmarkToUpdate) {
+        if (bookmarkToUpdate) {
           // Remove search score and set current bookmark to result
-          delete bookmark.score;
-        }
-        else {
-          // If no bookmark supplied, set to default url 
-          bookmark = { url: 'https://' };
+          delete bookmarkToUpdate.score;
+          vm.bookmark.current = bookmarkToUpdate;
+          vm.bookmark.originalUrl = bookmarkToUpdate.url;
+          return;
         }
 
-        // Save url to compare for changes
-        vm.bookmark.current = bookmark;
-        vm.bookmark.originalUrl = bookmark.url;
+        // Set default bookmark form values
+        vm.bookmark.current = { url: 'https://' };
+        vm.bookmark.originalUrl = vm.bookmark.current.url;
 
+        // Get current page metadata as bookmark
+        getMetadataForCurrentPage()
+          .then(function (currentPageMetadata) {
+            if (currentPageMetadata) {
+              vm.bookmark.current = currentPageMetadata;
+              vm.bookmark.originalUrl = currentPageMetadata.url;
+            }
+          })
+          .catch(displayAlertErrorHandler);
+      })
+      .then(function () {
         $timeout(function () {
           // Reset form
           vm.bookmarkForm.$setPristine();
@@ -1065,7 +1087,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
             var element = document.querySelector('.focused');
             if (element.select) { element.select(); } else { element.focus(); }
           }
-        }, 100);
+        }, 150);
       })
       .catch(function (err) {
         // Set bookmark url
@@ -1101,64 +1123,58 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var init_loginView = function () {
-    vm.sync.displayOtherSyncsWarning = false;
-    vm.sync.displayPasswordConfirmation = false;
-    vm.sync.displaySyncConfirmation = false;
-    vm.sync.displayUpgradeConfirmation = false;
+    vm.login.displayOtherSyncsWarning = false;
+    vm.login.displayPasswordConfirmation = false;
+    vm.login.displaySyncConfirmation = false;
+    vm.login.displayUpdateServiceConfirmation = false;
+    vm.login.displayUpdateServicePanel = false;
+    vm.login.displayUpgradeConfirmation = false;
+    vm.login.passwordComplexity = {};
+    vm.login.passwordConfirmation = null;
+    vm.login.showPassword = false;
+    vm.login.upgradeConfirmed = false;
+    vm.login.validatingServiceUrl = false;
     vm.sync.password = '';
-    vm.sync.passwordComplexity = {};
-    vm.sync.passwordConfirmation = null;
-    vm.sync.showPassword = false;
-    vm.sync.upgradeConfirmed = false;
     if (vm.syncForm) {
       vm.syncForm.txtId.$setValidity('InvalidSyncId', true);
       vm.syncForm.$setPristine();
       vm.syncForm.$setUntouched();
     }
 
-    // Get cached sync data
-    return platform.LocalStorage.Get([
-      globals.CacheKeys.DisplayOtherSyncsWarning,
-      globals.CacheKeys.SyncEnabled,
-      globals.CacheKeys.SyncId
-    ])
-      .then(function (cachedData) {
-        var displayOtherSyncsWarning = cachedData[globals.CacheKeys.DisplayOtherSyncsWarning];
-        var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
-        var syncId = cachedData[globals.CacheKeys.SyncId];
-
-        vm.sync.enabled = !!syncEnabled;
-        vm.sync.id = syncId;
-
+    return platform.LocalStorage.Get(globals.CacheKeys.DisplayOtherSyncsWarning)
+      .then(function (displayOtherSyncsWarning) {
         if (utility.IsMobilePlatform(vm.platformName)) {
           // Set displayed panels for mobile platform
-          vm.sync.displayGetSyncIdPanel = !syncId;
-          vm.sync.displayNewSyncPanel = false;
+          vm.login.displayGetSyncIdPanel = !vm.sync.id;
+          vm.login.displayNewSyncPanel = false;
         }
         else {
           // Set displayed panels for browsers
-          vm.sync.displayNewSyncPanel = !syncId;
+          vm.login.displayNewSyncPanel = !vm.sync.id;
 
           // If not synced before, display warning to disable other sync tools
           if (displayOtherSyncsWarning == null || displayOtherSyncsWarning === true) {
-            vm.sync.displayOtherSyncsWarning = true;
+            vm.login.displayOtherSyncsWarning = true;
 
             // Focus on first button
-            $timeout(function () {
-              if (!utility.IsMobilePlatform(vm.platformName)) {
+            if (!utility.IsMobilePlatform(vm.platformName)) {
+              $timeout(function () {
                 document.querySelector('.otherSyncsWarning .buttons > button').focus();
-              }
-            }, 150);
+              }, 150);
+            }
           }
           else {
-            $timeout(function () {
-              // Focus on password field
-              if (!utility.IsMobilePlatform(vm.platformName)) {
+            // Focus on password field
+            if (!utility.IsMobilePlatform(vm.platformName)) {
+              $timeout(function () {
                 document.querySelector('.active-login-form  input[name="txtPassword"]').focus();
-              }
-            }, 150);
+              }, 150);
+            }
           }
         }
+
+        // Refresh service info
+        refreshServiceStatus();
       });
   };
 
@@ -1167,7 +1183,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       $timeout(function () {
         // Focus on search box
         document.querySelector('input[name=txtSearch]').focus();
-      }, 200);
+      }, 150);
     }
 
     // Reset search view
@@ -1178,14 +1194,11 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var init_settingsView = function () {
-    vm.settings.displayCancelSyncConfirmation = false;
     vm.settings.displayQrPanel = false;
     vm.settings.displayRestoreConfirmation = false;
     vm.settings.displayRestoreForm = false;
     vm.settings.displayRevertConfirmation = false;
     vm.settings.displaySyncBookmarksToolbarConfirmation = false;
-    vm.settings.displayUpdateServiceUrlConfirmation = false;
-    vm.settings.displayUpdateServiceUrlForm = false;
     vm.settings.backupFileName = null;
     vm.settings.backupCompletedMessage = null;
     vm.settings.downloadLogCompletedMessage = null;
@@ -1197,53 +1210,45 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.settings.dataToRestore = '';
     vm.settings.savingBackup = false;
     vm.settings.savingLog = false;
-    vm.settings.service.status = null;
     vm.settings.validatingRestoreData = false;
-    vm.settings.validatingServiceUrl = false;
-    vm.sync.updatesAvailable = undefined;
-    vm.sync.nextAutoUpdate = undefined;
+    vm.settings.updatesAvailable = undefined;
+    vm.settings.nextAutoUpdate = undefined;
+    vm.sync.service.status = null;
 
     // Get current service url and sync bookmarks toolbar setting from cache
     return $q.all([
       bookmarks.GetSyncBookmarksToolbar(),
       platform.LocalStorage.Get([
-        globals.CacheKeys.TraceLog,
-        globals.CacheKeys.SyncEnabled,
-        globals.CacheKeys.SyncId
+        globals.CacheKeys.CheckForAppUpdates,
+        globals.CacheKeys.TraceLog
       ]),
-      utility.GetServiceUrl(),
       utility.IsPlatform(vm.platformName, globals.Platforms.Chrome) ? platform.Permissions.Check() : $q.resolve(false)
     ])
       .then(function (data) {
         var syncBookmarksToolbar = data[0];
+        var checkForAppUpdates = data[1][globals.CacheKeys.CheckForAppUpdates];
         var traceLog = data[1][globals.CacheKeys.TraceLog];
-        var syncEnabled = data[1][globals.CacheKeys.SyncEnabled];
-        var syncId = data[1][globals.CacheKeys.SyncId];
-        var serviceUrl = data[2];
-        var readWebsiteDataPermissionsGranted = data[3];
+        var readWebsiteDataPermissionsGranted = data[2];
 
-        vm.settings.service.url = serviceUrl;
-        vm.settings.service.newServiceUrl = serviceUrl;
+        vm.settings.checkForAppUpdates = checkForAppUpdates;
         vm.settings.syncBookmarksToolbar = syncBookmarksToolbar;
-        vm.sync.enabled = syncEnabled;
-        vm.sync.id = syncId;
         vm.settings.readWebsiteDataPermissionsGranted = readWebsiteDataPermissionsGranted;
         vm.settings.logSize = (new TextEncoder().encode(traceLog)).length;
 
         $timeout(function () {
           // Check for available sync updates on non-mobile platforms
-          if (syncEnabled && !utility.IsMobilePlatform(vm.platformName)) {
+          if (vm.sync.enabled && !utility.IsMobilePlatform(vm.platformName)) {
             $q.all([
               bookmarks.CheckForUpdates(),
               platform.AutomaticUpdates.NextUpdate()
             ])
               .then(function (data) {
                 if (data[0]) {
-                  vm.sync.updatesAvailable = true;
-                  vm.sync.nextAutoUpdate = data[1];
+                  vm.settings.updatesAvailable = true;
+                  vm.settings.nextAutoUpdate = data[1];
                 }
                 else {
-                  vm.sync.updatesAvailable = false;
+                  vm.settings.updatesAvailable = false;
                 }
               })
               .catch(function (err) {
@@ -1265,8 +1270,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
           }
 
           // Update service status and display info
-          updateServicePanel();
-        }, 100);
+          refreshServiceStatus().then(refreshSyncDataUsageMeter);
+        }, 150);
       });
   };
 
@@ -1378,7 +1383,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.settings.displayQrPanel = false;
     $timeout(function () {
       vm.settings.syncIdCopied = false;
-    }, 200);
+    }, 150);
   };
 
   var qrPanel_CopySyncId_Click = function () {
@@ -1399,7 +1404,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         if (err.code === globals.ErrorCodes.SyncUncommitted) {
           $timeout(function () {
             displayAlertErrorHandler(err);
-          }, 100);
+          }, 150);
           return;
         }
 
@@ -1414,11 +1419,74 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       });
   };
 
+  var refreshServiceStatus = function (serviceObj, serviceInfo) {
+    serviceObj = serviceObj || vm.sync.service;
+
+    // Clear current status
+    serviceObj.status = null;
+
+    // Retrieve service info
+    return (serviceInfo ? $q.resolve(serviceInfo) : api.CheckServiceStatus())
+      .then(function (response) {
+        if (!response) {
+          return;
+        }
+
+        // Render markdown and add link classes to service message 
+        var message = response.message ? marked(response.message) : null;
+        if (message) {
+          var messageDom = new DOMParser().parseFromString(message, 'text/html');
+          _.each(messageDom.querySelectorAll('a'), function (hyperlink) {
+            hyperlink.className = 'new-tab';
+          });
+          message = DOMPurify.sanitize(messageDom.body.firstElementChild.innerHTML);
+          $timeout(setNewTabLinks);
+        }
+
+        serviceObj.apiVersion = response.version;
+        serviceObj.location = response.location;
+        serviceObj.maxSyncSize = response.maxSyncSize / 1024;
+        serviceObj.message = message;
+        serviceObj.status = response.status;
+      })
+      .catch(function (err) {
+        if (err && err.code === globals.ErrorCodes.ServiceOffline) {
+          serviceObj.status = globals.ServiceStatus.Offline;
+        }
+        else {
+          serviceObj.status = globals.ServiceStatus.Error;
+        }
+      });
+  };
+
+  var refreshSyncDataUsageMeter = function () {
+    vm.sync.dataSize = null;
+    vm.sync.dataUsed = null;
+
+    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+      .then(function (syncEnabled) {
+        // Return if not synced
+        if (!syncEnabled) {
+          return;
+        }
+
+        // Get  bookmarks sync size and calculate sync data percentage used
+        return bookmarks.SyncSize()
+          .then(function (bookmarksSyncSize) {
+            $timeout(function () {
+              vm.sync.dataSize = bookmarksSyncSize / 1024;
+              vm.sync.dataUsed = Math.ceil((vm.sync.dataSize / vm.sync.service.maxSyncSize) * 150);
+            });
+          })
+          .catch(displayAlertErrorHandler);
+      });
+  };
+
   var restoreBookmarksSuccess = function () {
     // Update current bookmark status
     return setBookmarkStatus()
       // Refresh data usage
-      .then(displayDataUsage)
+      .then(refreshSyncDataUsageMeter)
       .then(function () {
         vm.settings.displayRestoreForm = false;
         vm.settings.dataToRestore = '';
@@ -1483,19 +1551,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         return syncEnabled ? api.CheckServiceStatus() : $q(function (resolve, reject) {
           // Clear current password and set sync ID if supplied
           vm.sync.password = '';
-          vm.sync.passwordComplexity = {};
+          vm.login.passwordComplexity = {};
           $q.all([
             platform.LocalStorage.Set(globals.CacheKeys.Password),
             syncId ? platform.LocalStorage.Set(globals.CacheKeys.SyncId, syncId) : $q.resolve(),
-            serviceUrl ? platform.LocalStorage.Set(globals.CacheKeys.ServiceUrl, serviceUrl) : $q.resolve()
+            serviceUrl ? updateServiceUrl(serviceUrl) : $q.resolve()
           ])
-            .then(function () {
-              // Update the service URL if supplied
-              if (serviceUrl) {
-                vm.settings.service.url = serviceUrl;
-                updateServicePanel();
-              }
-            })
             .then(resolve)
             .catch(reject);
         });
@@ -1518,7 +1579,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var scanPanel_Cancel_Click = function () {
-    vm.sync.displayGetSyncIdPanel = false;
+    vm.login.displayGetSyncIdPanel = false;
     displayMainView().then(platform.Scanner.Stop);
   };
 
@@ -1568,7 +1629,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
           if (resultsPanel) {
             resultsPanel.scrollTop = 0;
           }
-        }, 200);
+        }, 150);
       })
       .catch(function (err) {
         vm.search.results = null;
@@ -1644,14 +1705,20 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     }, 1e3);
   };
 
-  var searchForm_ScanCode_Click = function () {
+  var syncForm_ScanCode_Click = function () {
     var scanSuccess = false;
 
     platform.Scanner.Start()
-      .then(function (scannedId) {
+      .then(function (value) {
         scanSuccess = true;
-        vm.sync.id = scannedId;
-        return platform.LocalStorage.Set(globals.CacheKeys.SyncId, scannedId);
+
+        // Split the scanned value into it's components and update stored sync id and service values
+        var arrValue = value.split(globals.QrCode.Delimiter);
+        vm.sync.id = arrValue[0];
+        return $q.all([
+          platform.LocalStorage.Set(globals.CacheKeys.SyncId, arrValue[0]),
+          updateServiceUrl(arrValue[1])
+        ]);
       })
       .catch(displayAlertErrorHandler)
       .finally(function () {
@@ -1930,7 +1997,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     }
   };
 
-  var setBookmarkStatus = function () {
+  var setBookmarkStatus = function (isActive) {
+    if (isActive !== undefined) {
+      vm.bookmark.active = isActive;
+      return $q.resolve();
+    }
+
     return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
         if (!syncEnabled) {
@@ -1954,22 +2026,10 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     }
   };
 
-  var setServiceInformation = function (serviceInfo) {
-    // Render markdown and add link classes to service message 
-    var message = serviceInfo.message ? marked(serviceInfo.message) : null;
-    if (message) {
-      var messageDom = new DOMParser().parseFromString(message, 'text/html');
-      _.each(messageDom.querySelectorAll('a'), function (hyperlink) {
-        hyperlink.className = 'new-tab';
-      });
-      message = DOMPurify.sanitize(messageDom.body.firstElementChild.innerHTML);
-      $timeout(setNewTabLinks);
-    }
-
-    vm.settings.service.status = serviceInfo.status;
-    vm.settings.service.statusMessage = message;
-    vm.settings.service.maxSyncSize = serviceInfo.maxSyncSize / 1024;
-    vm.settings.service.apiVersion = serviceInfo.version;
+  var settings_Prefs_CheckForAppUpdates_Click = function () {
+    // Update setting value and store in cache
+    var value = !vm.settings.checkForAppUpdates;
+    platform.LocalStorage.Set(globals.CacheKeys.CheckForAppUpdates, value);
   };
 
   var settings_Prefs_DisplaySearchBar_Click = function () {
@@ -1979,12 +2039,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var startSyncing = function () {
-    var syncInfoMessage, syncType;
+    var syncData = {}, syncInfoMessage;
 
     // Display loading panel
-    vm.sync.displaySyncConfirmation = false;
-    vm.sync.displayOtherSyncsWarning = false;
-    vm.sync.displayUpgradeConfirmation = false;
+    vm.login.displaySyncConfirmation = false;
+    vm.login.displayOtherSyncsWarning = false;
+    vm.login.displayUpgradeConfirmation = false;
     var loadingTimeout = platform.Interface.Working.Show();
 
     // Check service status
@@ -1997,7 +2057,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         // If a sync ID has not been supplied, get a new one
         if (!vm.sync.id) {
           // Set sync type for create new sync
-          syncType = globals.SyncType.Push;
+          syncData.type = globals.SyncType.Push;
 
           // Get new sync ID
           return api.CreateNewSync()
@@ -2019,18 +2079,18 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
           syncInfoMessage = 'Synced to existing id: ' + vm.sync.id;
 
           // Set sync type for retrieve existing sync
-          syncType = globals.SyncType.Pull;
+          syncData.type = globals.SyncType.Pull;
 
           // Retrieve sync version for existing id
           return api.GetBookmarksVersion(vm.sync.id)
             .then(function (response) {
               // If no sync version is set, confirm upgrade
               if (!response.version) {
-                if (vm.sync.upgradeConfirmed) {
-                  syncType = globals.SyncType.Upgrade;
+                if (vm.login.upgradeConfirmed) {
+                  syncData.type = globals.SyncType.Upgrade;
                 }
                 else {
-                  vm.sync.displayUpgradeConfirmation = true;
+                  vm.login.displayUpgradeConfirmation = true;
                   return;
                 }
               }
@@ -2055,17 +2115,23 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         return utility.GetPasswordHash(vm.sync.password, syncId)
           .then(function (passwordHash) {
             platform.LocalStorage.Set(globals.CacheKeys.Password, passwordHash);
-            return queueSync({ type: syncType });
+            return queueSync(syncData);
           })
           .then(function () {
             utility.LogInfo(syncInfoMessage);
             return syncBookmarksSuccess(loadingTimeout);
           })
-          .catch(syncBookmarksFailed);
+          .then(function () {
+            vm.sync.enabled = true;
+            vm.sync.id = syncId;
+          })
+          .catch(function (err) {
+            return syncBookmarksFailed(err, syncData);
+          });
       })
       .catch(function (err) {
         // Disable upgrade confirmed flag
-        vm.sync.upgradeConfirmed = false;
+        vm.login.upgradeConfirmed = false;
 
         // Display alert
         displayAlertErrorHandler(err);
@@ -2076,18 +2142,21 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       });
   };
 
-  var syncBookmarksFailed = function (err) {
-    var errMessage;
-
+  var syncBookmarksFailed = function (err, syncData) {
     // Disable upgrade confirmed flag
-    vm.sync.upgradeConfirmed = false;
+    vm.login.upgradeConfirmed = false;
 
     // Clear cached data
-    platform.LocalStorage.Set([
+    var keys = [
       globals.CacheKeys.Bookmarks,
       globals.CacheKeys.Password,
       globals.CacheKeys.SyncVersion
-    ]);
+    ];
+    // If error occurred whilst creating new sync, remove cached sync ID and password
+    if (syncData.type === globals.SyncType.Push) {
+      keys.push(globals.CacheKeys.SyncId);
+    }
+    platform.LocalStorage.Set(keys);
 
     // If ID was removed disable sync and display login panel
     if (err && err.code === globals.ErrorCodes.SyncRemoved) {
@@ -2106,12 +2175,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         !utility.IsMobilePlatform(vm.platformName)) {
         $timeout(function () {
           document.querySelector('.login-form-existing input[name="txtPassword"]').select();
-        }, 100);
+        }, 150);
       }
     }
   };
 
-  var syncBookmarksSuccess = function (loadingTimeout) {
+  var syncBookmarksSuccess = function (loadingTimeout, bookmarkStatusActive) {
     // Hide loading panel
     platform.Interface.Working.Hide(null, loadingTimeout);
 
@@ -2123,40 +2192,40 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       else {
         vm.search.displayDefaultState();
       }
-    }, 100);
+    }, 150);
 
     // Update bookmark icon
-    return setBookmarkStatus();
+    return setBookmarkStatus(bookmarkStatusActive);
   };
 
   var syncForm_ConfirmPassword_Back_Click = function () {
-    vm.sync.displayPasswordConfirmation = false;
-    vm.sync.passwordConfirmation = null;
+    vm.login.displayPasswordConfirmation = false;
+    vm.login.passwordConfirmation = null;
   };
 
   var syncForm_ConfirmPassword_Click = function () {
-    vm.sync.displayPasswordConfirmation = true;
+    vm.login.displayPasswordConfirmation = true;
 
     if (!utility.IsMobilePlatform(vm.platformName)) {
       $timeout(function () {
         document.querySelector('input[name="txtPasswordConfirmation"]').focus();
-      }, 100);
+      }, 150);
     }
   };
 
   var syncForm_DisableSync_Click = function () {
     // Disable sync and switch to login panel
-    disableSync()
-      .then(function () {
-        return changeView(vm.view.views.login);
-      })
+    $q.all([
+      disableSync(),
+      changeView(vm.view.views.login)
+    ])
       .catch(displayAlertErrorHandler);
   };
 
   var syncForm_EnableSync_Click = function () {
     if (vm.sync.id) {
       // Display overwrite data confirmation panel
-      vm.sync.displaySyncConfirmation = true;
+      vm.login.displaySyncConfirmation = true;
       if (!utility.IsMobilePlatform(vm.platformName)) {
         $timeout(function () {
           document.querySelector('.btn-confirm-enable-sync').focus();
@@ -2170,56 +2239,60 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var syncForm_ExistingSync_Click = function () {
-    vm.sync.displayNewSyncPanel = false;
+    vm.login.displayNewSyncPanel = false;
     vm.sync.password = '';
 
     if (!utility.IsMobilePlatform(vm.platformName)) {
       $timeout(function () {
         document.querySelector('input[name="txtId"]').focus();
-      }, 100);
+      }, 150);
     }
   };
 
   var syncForm_NewSync_Click = function () {
-    vm.sync.displayNewSyncPanel = true;
-    vm.sync.displayPasswordConfirmation = false;
+    vm.login.displayNewSyncPanel = true;
+    vm.login.displayPasswordConfirmation = false;
     platform.LocalStorage.Set(globals.CacheKeys.SyncId);
     platform.LocalStorage.Set(globals.CacheKeys.Password);
     vm.sync.id = null;
     vm.sync.password = '';
-    vm.sync.passwordConfirmation = null;
-    vm.sync.passwordComplexity = {};
+    vm.syncForm.txtId.$setValidity('InvalidSyncId', true);
+    vm.login.passwordConfirmation = null;
+    vm.login.passwordComplexity = {};
 
     if (!utility.IsMobilePlatform(vm.platformName)) {
       $timeout(function () {
         document.querySelector('.login-form-new input[name="txtPassword"]').focus();
-      }, 100);
+      }, 150);
     }
   };
 
   var syncForm_OtherSyncsDisabled_Click = function () {
     // Hide disable other syncs warning panel and update cache setting
-    vm.sync.displayOtherSyncsWarning = false;
+    vm.login.displayOtherSyncsWarning = false;
     platform.LocalStorage.Set(globals.CacheKeys.DisplayOtherSyncsWarning, false);
 
     // Focus on password field
     if (!utility.IsMobilePlatform(vm.platformName)) {
       $timeout(function () {
         document.querySelector('.active-login-form input[name="txtPassword"]').focus();
-      }, 100);
+      }, 150);
     }
   };
 
   var syncForm_ShowPassword_Click = function () {
     // Toggle show password
-    vm.sync.showPassword = !vm.sync.showPassword;
+    vm.login.showPassword = !vm.login.showPassword;
   };
 
   var syncForm_Submit_Click = function () {
     $timeout(function () {
-      // Handle enter key press for login form
-      if (vm.sync.displayNewSyncPanel) {
-        if (vm.sync.displayPasswordConfirmation) {
+      // Handle enter key press
+      if (vm.login.displayUpdateServicePanel) {
+        document.querySelector('.update-service-panel .btn-update-service-url').click();
+      }
+      else if (vm.login.displayNewSyncPanel) {
+        if (vm.login.displayPasswordConfirmation) {
           document.querySelector('.login-form-new .btn-new-sync').click();
         }
         else {
@@ -2254,12 +2327,142 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       .catch(displayAlertErrorHandler);
   };
 
+  var syncForm_UpdateService_Cancel_Click = function () {
+    vm.login.displayUpdateServiceConfirmation = false;
+    vm.login.displayUpdateServicePanel = false;
+  };
+
+  var syncForm_UpdateService_Click = function () {
+    // Reset view
+    vm.sync.newService.url = vm.sync.service.url;
+    vm.login.displayUpdateServiceConfirmation = false;
+    vm.login.displayUpdateServicePanel = true;
+    vm.login.validatingServiceUrl = false;
+
+    // Validate service url
+    syncForm_UpdateService_ServiceUrl_Validate()
+      .finally(function () {
+        // Focus on url field
+        document.querySelector('.update-service-panel input').focus();
+      });
+  };
+
+  var syncForm_UpdateService_Confirm_Click = function () {
+    // Update saved credentials
+    var url = vm.sync.newService.url.replace(/\/$/, '');
+    return $q.all([
+      updateServiceUrl(url),
+      platform.LocalStorage.Set(globals.CacheKeys.SyncId),
+      platform.LocalStorage.Set(globals.CacheKeys.Password)
+    ])
+      .then(function () {
+        // Update view
+        vm.login.displayUpdateServicePanel = false;
+        vm.login.passwordComplexity = {};
+        vm.login.passwordConfirmation = null;
+        vm.sync.id = null;
+        vm.sync.password = '';
+        vm.syncForm.txtId.$setValidity('InvalidSyncId', true);
+        vm.syncForm.$setPristine();
+        vm.syncForm.$setUntouched();
+
+        // Focus on first field
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+          $timeout(function () {
+            document.querySelector('.active-login-form input').focus();
+          }, 150);
+        }
+      })
+      .catch(function (err) {
+        utility.LogError(err, 'app.syncForm_UpdateService_Update_Click');
+      });
+  };
+
+  var syncForm_UpdateService_ServiceUrl_Change = function (event) {
+    // Reset form if field is invalid
+    if (vm.syncForm.newServiceUrl.$invalid) {
+      vm.syncForm.newServiceUrl.$setValidity('InvalidService', true);
+      vm.syncForm.newServiceUrl.$setValidity('RequestFailed', true);
+      vm.syncForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', true);
+    }
+  };
+
+  var syncForm_UpdateService_ServiceUrl_Validate = function () {
+    var timeout = $timeout(function () {
+      vm.login.validatingServiceUrl = true;
+    }, 150);
+
+    // Check service url status
+    var url = vm.sync.newService.url.replace(/\/$/, '');
+    return api.CheckServiceStatus(url)
+      .catch(function (err) {
+        if (err && err.code != null) {
+          switch (err.code) {
+            case globals.ErrorCodes.ServiceOffline:
+              // If API is offline still allow setting as current service
+              return true;
+            case globals.ErrorCodes.UnsupportedServiceApiVersion:
+              vm.syncForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', false);
+              break;
+            case globals.ErrorCodes.InvalidService:
+              vm.syncForm.newServiceUrl.$setValidity('InvalidService', false);
+              break;
+            default:
+              vm.syncForm.newServiceUrl.$setValidity('RequestFailed', false);
+          }
+        }
+        else {
+          vm.syncForm.newServiceUrl.$setValidity('RequestFailed', false);
+        }
+
+        // Focus on url field
+        document.querySelector('input[name=newServiceUrl]').focus();
+        return false;
+      })
+      .finally(function () {
+        $timeout.cancel(timeout);
+        $timeout(function () {
+          vm.login.validatingServiceUrl = false;
+        });
+      });
+  };
+
+  var syncForm_UpdateService_Update_Click = function () {
+    // Check for protocol
+    if (vm.sync.newService.url && vm.sync.newService.url.trim() &&
+      !(new RegExp(globals.URL.ProtocolRegex)).test(vm.sync.newService.url)) {
+      vm.sync.newService.url = 'https://' + vm.sync.newService.url;
+    }
+
+    // Validate service url
+    return syncForm_UpdateService_ServiceUrl_Validate()
+      .then(function (newServiceInfo) {
+        if (!newServiceInfo) {
+          return;
+        }
+
+        // Retrieve new service status
+        return refreshServiceStatus(vm.sync.newService, newServiceInfo)
+          .then(function () {
+            // Display confirmation panel
+            vm.login.displayUpdateServiceConfirmation = true;
+
+            // Focus on first button
+            if (!utility.IsMobilePlatform(vm.platformName)) {
+              $timeout(function () {
+                document.querySelector('.update-service-panel .confirm .buttons > button').focus();
+              }, 150);
+            }
+          });
+      });
+  };
+
   var syncForm_UpgradeSync_Click = function () {
-    vm.sync.upgradeConfirmed = true;
+    vm.login.upgradeConfirmed = true;
     startSyncing();
   };
 
-  var syncPanel_SyncBookmarksToolbar_Click = function () {
+  var settings_Prefs_SyncBookmarksToolbar_Click = function () {
     // If confirmation message is currently displayed, hide it and return
     if (vm.settings.displaySyncBookmarksToolbarConfirmation) {
       vm.settings.displaySyncBookmarksToolbarConfirmation = false;
@@ -2288,12 +2491,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       });
   };
 
-  var syncPanel_SyncBookmarksToolbar_Cancel = function () {
+  var settings_Prefs_SyncBookmarksToolbar_Cancel = function () {
     vm.settings.displaySyncBookmarksToolbarConfirmation = false;
     vm.settings.syncBookmarksToolbar = false;
   };
 
-  var syncPanel_SyncBookmarksToolbar_Confirm = function () {
+  var settings_Prefs_SyncBookmarksToolbar_Confirm = function () {
     var syncId;
 
     platform.LocalStorage.Get([
@@ -2332,181 +2535,22 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.view.change(vm.view.views.support);
   };
 
-  var updateServicePanel = function () {
-    return api.CheckServiceStatus()
-      .then(function (serviceInfo) {
-        $timeout(function () {
-          setServiceInformation(serviceInfo);
-          displayDataUsage();
-        });
-      })
-      .catch(function (err) {
-        if (err && err.code === globals.ErrorCodes.ServiceOffline) {
-          vm.settings.service.status = globals.ServiceStatus.Offline;
-        }
-        else {
-          vm.settings.service.status = globals.ServiceStatus.Error;
-        }
-      });
-  };
-
-  var updateServiceUrlForm_Cancel_Click = function () {
-    // Hide form and scroll to top of section
-    vm.settings.displayUpdateServiceUrlForm = false;
-    document.querySelector('.service-panel h4').scrollIntoView();
-  };
-
-  var updateServiceUrlForm_Confirm_Click = function () {
-    // Check service url
-    var url = vm.settings.service.newServiceUrl.replace(/\/$/, '');
-
-    // Disable sync
-    vm.sync.enabled = false;
-    vm.sync.password = '';
-    vm.sync.passwordComplexity = {};
-    disableSync()
+  var updateServiceUrl = function (url) {
+    url = url.replace(/\/$/, '');
+    return platform.LocalStorage.Set(globals.CacheKeys.ServiceUrl, url)
       .then(function () {
-        // Update the service URL
-        vm.settings.service.url = url;
-
-        // Remove saved credentials
-        return $q.all([
-          platform.LocalStorage.Set(globals.CacheKeys.ServiceUrl, url),
-          platform.LocalStorage.Set(globals.CacheKeys.SyncId),
-          platform.LocalStorage.Set(globals.CacheKeys.Password)
-        ]);
-      })
-      // Update service status
-      .then(function () {
+        vm.sync.service.apiVersion = '';
+        vm.sync.service.location = null;
+        vm.sync.service.maxSyncSize = 0;
+        vm.sync.service.message = '';
+        vm.sync.service.status = null;
+        vm.sync.service.url = url;
         utility.LogInfo('Service url changed to: ' + url);
-        return updateServicePanel();
+
+        // Refresh service info
+        refreshServiceStatus();
       })
-      .then(function () {
-        // Reset view
-        vm.settings.displayCancelSyncConfirmation = false;
-        vm.settings.displayUpdateServiceUrlConfirmation = false;
-        vm.settings.displayUpdateServiceUrlForm = false;
-        vm.settings.service.newServiceUrl = vm.settings.service.url;
-        vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
-        vm.updateServiceUrlForm.newServiceUrl.$setValidity('RequestFailed', true);
-        vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', true);
-
-        // Scroll to top of section
-        $timeout(function () {
-          document.querySelector('.service-panel h4').scrollIntoView();
-        });
-      })
-      .catch(function (err) {
-        utility.LogError(err, 'app.updateServiceUrlForm_Confirm_Click');
-        vm.settings.service.status = globals.ServiceStatus.Offline;
-      });
-  };
-
-  var updateServiceUrlForm_Display_Click = function () {
-    // Reset form
-    vm.updateServiceUrlForm.$setPristine();
-    vm.settings.service.newServiceUrl = vm.settings.service.url;
-    vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
-    vm.updateServiceUrlForm.newServiceUrl.$setValidity('RequestFailed', true);
-    vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', true);
-
-    // Display update form panel
-    vm.settings.displayUpdateServiceUrlForm = true;
-
-    // Validate service url
-    updateServiceUrlForm_ValidateServiceUrl()
-      .finally(function () {
-        // Focus on url field
-        document.querySelector('input[name="newServiceUrl"]').focus();
-      });
-  };
-
-  var updateServiceUrlForm_NewServiceUrl_Change = function (event) {
-    // Reset form if field is invalid
-    if (vm.updateServiceUrlForm.newServiceUrl.$invalid) {
-      vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', true);
-      vm.updateServiceUrlForm.newServiceUrl.$setValidity('RequestFailed', true);
-      vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', true);
-    }
-  };
-
-  var updateServiceUrlForm_Update_Click = function () {
-    // Check for protocol
-    if (vm.settings.service.newServiceUrl && vm.settings.service.newServiceUrl.trim() &&
-      !(new RegExp(globals.URL.ProtocolRegex)).test(vm.settings.service.newServiceUrl)) {
-      vm.settings.service.newServiceUrl = 'https://' + vm.settings.service.newServiceUrl;
-    }
-
-    // Validate service url
-    return updateServiceUrlForm_ValidateServiceUrl()
-      .then(function (isValid) {
-        if (!isValid) {
-          return;
-        }
-
-        // Check if sync is enabled
-        return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
-          .then(function (syncEnabled) {
-            if (!syncEnabled) {
-              updateServiceUrlForm_Confirm_Click();
-              return;
-            }
-
-            // Display confirmation panel
-            vm.settings.displayUpdateServiceUrlForm = false;
-            vm.settings.displayUpdateServiceUrlConfirmation = true;
-
-            if (!utility.IsMobilePlatform(vm.platformName)) {
-              $timeout(function () {
-                document.querySelector('.btn-confirm-update-service-url').focus();
-              });
-            }
-          });
-      });
-  };
-
-  var updateServiceUrlForm_ValidateServiceUrl = function () {
-    var timeout = $timeout(function () {
-      vm.settings.validatingServiceUrl = true;
-    }, 100);
-
-    // Check service url status
-    var url = vm.settings.service.newServiceUrl.replace(/\/$/, '');
-    return api.CheckServiceStatus(url)
-      .then(function (serviceInfo) {
-        return !!serviceInfo;
-      })
-      .catch(function (err) {
-        if (err && err.code != null) {
-          switch (err.code) {
-            case globals.ErrorCodes.ServiceOffline:
-              // If API is offline still allow setting as current service
-              return true;
-            case globals.ErrorCodes.UnsupportedServiceApiVersion:
-              vm.updateServiceUrlForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', false);
-              break;
-            case globals.ErrorCodes.InvalidService:
-              vm.updateServiceUrlForm.newServiceUrl.$setValidity('InvalidService', false);
-              break;
-            default:
-              vm.updateServiceUrlForm.newServiceUrl.$setValidity('RequestFailed', false);
-          }
-        }
-        else {
-          vm.updateServiceUrlForm.newServiceUrl.$setValidity('RequestFailed', false);
-        }
-
-        // Focus on url field
-        document.querySelector('input[name=newServiceUrl]').focus();
-
-        return false;
-      })
-      .finally(function () {
-        $timeout.cancel(timeout);
-        $timeout(function () {
-          vm.settings.validatingServiceUrl = false;
-        });
-      });
+      .catch(displayAlertErrorHandler);
   };
 
   var validateBackupData = function () {
@@ -2528,6 +2572,44 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.restoreForm.dataToRestore.$setValidity('InvalidData', validateData);
 
     return validateData;
+  };
+
+  var waitForSyncsToFinish = function () {
+    var doActionUntil = function (currentData) {
+      var currentSync = currentData[0];
+      var syncQueueLength = currentData[1];
+      return $q.resolve(currentSync == null && syncQueueLength === 0);
+    };
+
+    var action = function () {
+      return $q(function (resolve, reject) {
+        $timeout(function () {
+          $q.all([
+            platform.Sync.Current(),
+            platform.Sync.GetQueueLength()
+          ])
+            .then(resolve)
+            .catch(reject);
+        }, 1e3);
+      });
+    };
+
+    // Periodically check sync queue until it is empty
+    return utility.PromiseWhile([], doActionUntil, action);
+  };
+
+  var workingPanel_Cancel_Click = function () {
+    utility.LogInfo('Cancelling sync');
+
+    return queueSync({
+      type: globals.SyncType.Cancel
+    })
+      .then(function () {
+        vm.sync.enabled = false;
+        vm.working.displayCancelSyncButton = false;
+      })
+      .then(displayMainView)
+      .catch(displayAlertErrorHandler);
   };
 
   // Call constructor

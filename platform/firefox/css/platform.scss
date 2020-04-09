@@ -2,28 +2,26 @@
 @import "mixins.scss";
 @import "animations.scss";
 
-$window-width: 320px;
-$window-height: 520px;
-$search-window-width: 600px;
-
 body {
-  .background {
-    min-height: $window-height;
-  }
+  overflow: hidden;
 
   .view {
-    height: $window-height;
-    width: $window-width;
+    width: 23rem;
+
+    .view-content {
+      height: 37rem;
+    }
   }
 }
 
 #search-panel {
   &.view {
     height: auto;
-    width: $search-window-width;
+    width: 38rem;
 
     .view-content {
-      max-height: $window-height;
+      height: auto;
+      max-height: 37rem;
 
       .header-panel {
         display: flex;

@@ -6,15 +6,15 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description:	Defines global properties used across all platforms.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Global = function (platform) {
+xBrowserSync.App.Global = function () {
   'use strict';
 
   var Global = {
     Alarm: {
       Name: 'xBrowserSync-alarm',
-      Period: 1
+      Period: 15
     },
-    AppVersion: '1.5.1',
+    AppVersion: '1.5.2',
     Bookmarks: {
       ContainerPrefix: '[xbs]',
       DescriptionMaxLength: 300,
@@ -31,6 +31,7 @@ xBrowserSync.App.Global = function (platform) {
     CacheKeys: {
       AppVersion: 'appVersion',
       Bookmarks: 'bookmarks',
+      CheckForAppUpdates: 'checkForAppUpdates',
       DisplayHelp: 'displayHelp',
       DisplayOtherSyncsWarning: 'displayOtherSyncsWarning',
       DisplayPermissions: 'displayPermissions',
@@ -51,14 +52,20 @@ xBrowserSync.App.Global = function (platform) {
       SyncBookmarks: 1,
       RestoreBookmarks: 2,
       GetCurrentSync: 3,
-      SyncFinished: 4,
-      GetPageMetadata: 5,
-      EnableEventListeners: 6,
-      DisableEventListeners: 7
+      GetSyncQueueLength: 4,
+      DisableSync: 5,
+      GetPageMetadata: 6,
+      EnableEventListeners: 7,
+      DisableEventListeners: 8
     },
     Constants: {
       Title: 'title',
       Description: 'description',
+      AppUpdateAvailable_Message: 'appUpdateAvailable_Message',
+      AppUpdateAvailable_Android_Message: 'appUpdateAvailable_Android_Message',
+      AppUpdateAvailable_Title: 'appUpdateAvailable_Title',
+      AppUpdated_Message: 'appUpdated_Message',
+      AppUpdated_Title: 'appUpdated_Title',
       Tooltip_NotSynced_Label: 'tooltip_NotSynced_Label',
       Tooltip_Synced_Label: 'tooltip_Synced_Label',
       Tooltip_Syncing_Label: 'tooltip_Syncing_Label',
@@ -87,6 +94,7 @@ xBrowserSync.App.Global = function (platform) {
       Help_Page_Shortcuts_Firefox_Content: 'help_Page_Shortcuts_Firefox_Content',
       Help_Page_Mobile_Content: 'help_Page_Mobile_Content',
       Help_Page_FurtherSupport_Content: 'help_Page_FurtherSupport_Content',
+      Login_SelectedService_Label: 'login_SelectedService_Label',
       Login_PasswordConfirmationField_Label: 'login_PasswordConfirmationField_Label',
       Login_PasswordField_Label: 'login_PasswordField_Label',
       Login_PasswordField_Existing_Description: 'login_PasswordField_Existing_Description',
@@ -94,6 +102,12 @@ xBrowserSync.App.Global = function (platform) {
       Login_IdField_Label: 'login_IdField_Label',
       Login_IdField_Description: 'login_IdField_Description',
       Login_IdField_InvalidSyncId_Label: 'login_IdField_InvalidSyncId_Label',
+      Login_ConfirmUpdateService_Title: 'login_ConfirmUpdateService_Title',
+      Login_ConfirmUpdateService_Warning: 'login_ConfirmUpdateService_Warning',
+      Login_ConfirmUpdateService_Status_Label: 'login_ConfirmUpdateService_Status_Label',
+      Login_ConfirmUpdateService_Location_Label: 'login_ConfirmUpdateService_Location_Label',
+      Login_ConfirmUpdateService_MaxSyncSize_Label: 'login_ConfirmUpdateService_MaxSyncSize_Label',
+      Login_ConfirmUpdateService_ApiVersion_Label: 'login_ConfirmUpdateService_ApiVersion_Label',
       Login_ConfirmSync_Title: 'login_ConfirmSync_Title',
       Login_ConfirmSync_Message: 'login_ConfirmSync_Message',
       Login_DisableOtherSyncs_Title: 'login_DisableOtherSyncs_Title',
@@ -102,8 +116,6 @@ xBrowserSync.App.Global = function (platform) {
       Login_UpgradeSync_Message: 'login_UpgradeSync_Message',
       Login_ScanId_Title: 'login_ScanId_Title',
       Login_ScanId_Message: 'login_ScanId_Message',
-      Updated_Message: 'updated_Message',
-      Updated_Title: 'updated_Title',
       Support_Title: 'support_Title',
       Support_Message: 'support_Message',
       Permissions_Message: 'permissions_Message',
@@ -118,15 +130,10 @@ xBrowserSync.App.Global = function (platform) {
       BookmarkDeleted_Message: 'bookmarkDeleted_Message',
       BookmarkUpdated_Message: 'bookmarkUpdated_Message',
       Scan_Title: 'scan_Title',
-      Settings_Sync_SyncToolbarConfirmation_Message: 'settings_Sync_SyncToolbarConfirmation_Message',
-      Settings_Sync_ConfirmCancelSync_Message: 'settings_Sync_ConfirmCancelSync_Message',
+      Settings_Prefs_SyncToolbarConfirmation_Message: 'settings_Prefs_SyncToolbarConfirmation_Message',
       Settings_Sync_Id_Description: 'settings_Sync_Id_Description',
       Settings_Sync_UpdatesAvailable_False_Message: 'settings_Sync_UpdatesAvailable_False_Message',
       Settings_Sync_UpdatesAvailable_True_Message: 'settings_Sync_UpdatesAvailable_True_Message',
-      Settings_Sync_SyncToolbar_Label: 'settings_Sync_SyncToolbar_Label',
-      Settings_Sync_SyncToolbar_Description: 'settings_Sync_SyncToolbar_Description',
-      Settings_Service_ChangeService_Label: 'settings_Service_ChangeService_Label',
-      Settings_Service_ChangeService_Description: 'settings_Service_ChangeService_Description',
       Settings_BackupRestore_Backup_Label: 'settings_BackupRestore_Backup_Label',
       Settings_BackupRestore_BackupLocal_Description: 'settings_BackupRestore_BackupLocal_Description',
       Settings_BackupRestore_BackupSynced_Description: 'settings_BackupRestore_BackupSynced_Description',
@@ -158,6 +165,7 @@ xBrowserSync.App.Global = function (platform) {
       Settings_Permissions_ReadWebsiteData_Granted_Label: 'settings_Permissions_ReadWebsiteData_Granted_Label',
       Settings_Permissions_ReadWebsiteData_NotGranted_Label: 'settings_Permissions_ReadWebsiteData_NotGranted_Label',
       Settings_Service_Title: 'settings_Service_Title',
+      Settings_Service_Status_Label: 'settings_Service_Status_Label',
       Settings_Service_Status_NoNewSyncs: 'settings_Service_Status_NoNewSyncs',
       Settings_Service_Status_Error: 'settings_Service_Status_Error',
       Settings_Service_Status_Loading: 'settings_Service_Status_Loading',
@@ -173,7 +181,14 @@ xBrowserSync.App.Global = function (platform) {
       Settings_BackupRestore_Title: 'settings_BackupRestore_Title',
       Settings_NotAvailable_Message: 'settings_NotAvailable_Message',
       Settings_Prefs_Title: 'settings_Prefs_Title',
+      Settings_Prefs_SyncToolbar_Label: 'settings_Prefs_SyncToolbar_Label',
+      Settings_Prefs_SyncToolbar_Description: 'settings_Prefs_SyncToolbar_Description',
+      Settings_Prefs_CheckForAppUpdates_Label: 'settings_Prefs_CheckForAppUpdates_Label',
+      Settings_Prefs_CheckForAppUpdates_Description: 'settings_Prefs_CheckForAppUpdates_Description',
       Settings_Prefs_SearchBar_Label: 'settings_Prefs_SearchBar_Label',
+      Settings_Prefs_SearchBar_Description: 'settings_Prefs_SearchBar_Description',
+      Updated_Message: 'updated_Message',
+      Updated_Title: 'updated_Title',
       DownloadFile_Success_Message: 'downloadFile_Success_Message',
       Settings_BackupRestore_RestoreSuccess_Message: 'settings_BackupRestore_RestoreSuccess_Message',
       Settings_BackupRestore_RestoreForm_BackupFile_Description: 'settings_BackupRestore_RestoreForm_BackupFile_Description',
@@ -214,6 +229,7 @@ xBrowserSync.App.Global = function (platform) {
       Button_Help_Label: 'button_Help_Label',
       Button_Next_Label: 'button_Next_Label',
       Button_Previous_Label: 'button_Previous_Label',
+      Button_UpdateService_Label: 'button_UpdateService_Label',
       Button_ScanCode_Label: 'button_ScanCode_Label',
       Button_ToggleLight_Label: 'button_ToggleLight_Label',
       Button_DisableSync_Label: 'button_DisableSync_Label',
@@ -258,6 +274,7 @@ xBrowserSync.App.Global = function (platform) {
       Button_SearchResults_Label: 'button_SearchResults_Label',
       Button_BookmarkTree_Label: 'button_BookmarkTree_Label',
       Button_Revert_Label: 'button_Revert_Label',
+      Button_View_Label: 'button_View_Label',
       Bookmarks_Container_Menu_Title: 'bookmarks_Container_Menu_Title',
       Bookmarks_Container_Mobile_Title: 'bookmarks_Container_Mobile_Title',
       Bookmarks_Container_Other_Title: 'bookmarks_Container_Other_Title',
@@ -364,10 +381,14 @@ xBrowserSync.App.Global = function (platform) {
       Chrome: 'chrome',
       Firefox: 'firefox'
     },
+    QrCode: {
+      Delimiter: '|$$|'
+    },
     Regex: {
       Url: /(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i
     },
     ReleaseNotesUrlStem: 'https://github.com/xbrowsersync/app/releases/tag/v',
+    ReleaseLatestUrl: 'https://api.github.com/repos/xbrowsersync/app/releases/latest',
     SyncPollTimeout: 2000,
     ServiceStatus: {
       Error: -1,
@@ -379,7 +400,8 @@ xBrowserSync.App.Global = function (platform) {
       Push: 1,
       Pull: 2,
       Both: 3,
-      Upgrade: 4
+      Cancel: 4,
+      Upgrade: 5
     },
     Title: 'xBrowserSync',
     UpdateType: {
@@ -396,7 +418,7 @@ xBrowserSync.App.Global = function (platform) {
       LastUpdated: '/lastUpdated',
       ProtocolRegex: '^[\\w\-]+:',
       ServiceInformation: '/info',
-      ValidUrlRegex: '(\\w+://.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]+\\.[a-z]+\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)',
+      ValidUrlRegex: '(\\w+://)?((www\\.)?[-a-zA-Z0-9@:%._\\+~#=]+\\.[a-z]+|(\\d{1,3}\\.){3}\\d{1,3})\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)',
       Version: '/version'
     }
   };

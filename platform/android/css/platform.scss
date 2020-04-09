@@ -160,6 +160,8 @@ body {
 
   .view {
     .view-content {
+      height: 100%;
+
       &.ng-enter {
         z-index: 10 !important;
       }
@@ -240,6 +242,10 @@ body {
       height: 2.3rem;
       width: 40%;
       margin-right: 1rem;
+
+      input {
+        line-height: 2rem;
+      }
     }
   }
 
@@ -259,6 +265,12 @@ body {
     }
   }
 
+  .login-form-existing,
+  .login-form-new,
+  .update-service-panel {
+    height: auto;
+  }
+
   .login-form-new {
     .toggle-form {
       display: block;
@@ -267,7 +279,6 @@ body {
 
   .logo {
     background-size: 11rem;
-    flex: 0 1 17rem;
   }
 
   .well {
@@ -279,11 +290,17 @@ body {
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       flex-grow: 1;
 
-      & > div {
-        position: initial;
-        width: 21rem;
+      .form-content {
+        display: flex;
+        justify-content: center;
+        height: auto;
+
+        & > div {
+          position: initial;
+        }
       }
     }
 
@@ -297,13 +314,12 @@ body {
       height: 17rem;
       flex: 1 12rem;
       background-size: 13rem;
-      background-position-y: 50%;
+      background-position: 90% 50%;
     }
 
     .view-content {
       flex-direction: row;
       align-items: center;
-      padding-top: 2rem;
     }
   }
 }
@@ -408,11 +424,13 @@ body {
     }
   }
 
-  .sync-panel .id-url {
-    @media (orientation: landscape) {
-      position: absolute;
-      width: auto;
-      line-height: 1.35rem;
+  .sync-panel {
+    .id-url,
+    .service-url {
+      @media (orientation: landscape) {
+        position: absolute;
+        width: auto;
+      }
     }
   }
 }
