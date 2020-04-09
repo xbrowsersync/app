@@ -124,7 +124,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       syncForm_UpdateService_ServiceUrl_Change: syncForm_UpdateService_ServiceUrl_Change,
       syncForm_UpdateService_Update_Click: syncForm_UpdateService_Update_Click,
       syncForm_UpgradeSync_Click: syncForm_UpgradeSync_Click,
-      syncPanel_DisplayDataUsage_Click: refreshSyncDataUsageMeter,
       syncPanel_DisplayQrPanel_Click: displayQrPanel,
       searchForm_ToggleBookmark_Click: searchForm_ToggleBookmark_Click,
       searchForm_ToggleView_Click: searchForm_ToggleView_Click,
@@ -1474,8 +1473,10 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         // Get  bookmarks sync size and calculate sync data percentage used
         return bookmarks.SyncSize()
           .then(function (bookmarksSyncSize) {
-            vm.sync.dataSize = bookmarksSyncSize / 1024;
-            vm.sync.dataUsed = Math.ceil((vm.sync.dataSize / vm.sync.service.maxSyncSize) * 150);
+            $timeout(function () {
+              vm.sync.dataSize = bookmarksSyncSize / 1024;
+              vm.sync.dataUsed = Math.ceil((vm.sync.dataSize / vm.sync.service.maxSyncSize) * 150);
+            });
           })
           .catch(displayAlertErrorHandler);
       });
