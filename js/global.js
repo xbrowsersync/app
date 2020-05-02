@@ -14,7 +14,7 @@ xBrowserSync.App.Global = function () {
       Name: 'xBrowserSync-alarm',
       Period: 15
     },
-    AppVersion: '1.5.2',
+    AppVersion: '1.5.3',
     Bookmarks: {
       ContainerPrefix: '[xbs]',
       DescriptionMaxLength: 300,

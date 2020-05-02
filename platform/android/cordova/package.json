@@ -1,7 +1,7 @@
 {
   "name": "com.xbrowsersync.android",
   "displayName": "xBrowserSync",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "xBrowserSync mobile app for Android.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
