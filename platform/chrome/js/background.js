@@ -31,10 +31,10 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       }
       onStartupHandler();
     };
-    chrome.alarms.onAlarm.addListener(onAlarmHandler);
-    chrome.notifications.onClicked.addListener(onNotificationClicked);
-    chrome.notifications.onClosed.addListener(onNotificationClosed);
-    chrome.runtime.onMessage.addListener(onMessageHandler);
+    browser.alarms.onAlarm.addListener(onAlarmHandler);
+    browser.notifications.onClicked.addListener(onNotificationClicked);
+    browser.notifications.onClosed.addListener(onNotificationClosed);
+    browser.runtime.onMessage.addListener(onMessageHandler);
     window.xBrowserSync.App.HandleMessage = onMessageHandler;
   };
 
@@ -47,16 +47,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     var changedBookmark, changeInfo, locationInfo, syncChange = $q.defer();
 
     // Retrieve changed bookmark full info
-    var prepareToSyncChanges = $q(function (resolve, reject) {
-      chrome.bookmarks.getSubTree(id, function (subTree) {
-        var apiError = checkForApiError();
-        if (apiError) {
-          return reject(apiError);
-        }
-
-        resolve(subTree);
-      });
-    })
+    var prepareToSyncChanges = browser.bookmarks.getSubTree(id)
       .then(function (results) {
         if (!results || results.length === 0) {
           return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
@@ -75,20 +66,16 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         }
         locationInfo = results;
 
-        // If updated bookmark is separator update local bookmark properties
-        return (bookmarks.IsSeparator(changedBookmark) ? convertLocalBookmarkToSeparator(changedBookmark) : $q.resolve(changedBookmark))
-          .then(function (bookmark) {
-            // Create change info
-            changeInfo = {
-              bookmark: bookmark,
-              container: locationInfo.container,
-              indexPath: locationInfo.indexPath,
-              type: globals.UpdateType.Update
-            };
+        // Create change info
+        changeInfo = {
+          bookmark: changedBookmark,
+          container: locationInfo.container,
+          indexPath: locationInfo.indexPath,
+          type: globals.UpdateType.Update
+        };
 
-            // Check if this change should be synced
-            return platform.Bookmarks.ShouldSyncLocalChanges(changeInfo);
-          })
+        // Check if this change should be synced
+        return platform.Bookmarks.ShouldSyncLocalChanges(changeInfo)
           .then(function (doSync) {
             syncChange.resolve(doSync);
             return changeInfo;
@@ -113,17 +100,6 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         }
       }, false);
     });
-  };
-
-  var checkForApiError = function () {
-    var err;
-
-    if (chrome.runtime.lastError) {
-      err = new Error(chrome.runtime.lastError.message);
-      utility.LogError(err);
-    }
-
-    return err;
   };
 
   var checkForNewVersion = function () {
@@ -207,38 +183,33 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var convertLocalBookmarkToSeparator = function (bookmark) {
-    // Test if sync enabled check needed
+    // Skip process if bookmark is already local separator
+    if (!bookmark || (bookmark.url === platform.GetNewTabUrl() &&
+      (bookmark.title === globals.Bookmarks.HorizontalSeparatorTitle ||
+        bookmark.title === globals.Bookmarks.VerticalSeparatorTitle))) {
+      return $q.resolve(bookmark);
+    }
+
+    // Disable event listeners and process conversion 
     return $q(function (resolve) { disableEventListeners(resolve); })
       .then(function () {
         return platform.Bookmarks.LocalBookmarkInToolbar(bookmark);
       })
       .then(function (inToolbar) {
         var title = inToolbar ? globals.Bookmarks.VerticalSeparatorTitle : globals.Bookmarks.HorizontalSeparatorTitle;
-        return $q(function (resolve, reject) {
-          // Remove and recreate bookmark as a separator
-          var separator = {
-            index: bookmark.index,
-            parentId: bookmark.parentId,
-            title: title,
-            url: platform.GetNewTabUrl()
-          };
 
-          chrome.bookmarks.remove(bookmark.id, function () {
-            var apiError = checkForApiError();
-            if (apiError) {
-              return reject(apiError);
-            }
+        // Remove and recreate bookmark as a separator
+        var separator = {
+          index: bookmark.index,
+          parentId: bookmark.parentId,
+          title: title,
+          url: platform.GetNewTabUrl()
+        };
 
-            chrome.bookmarks.create(separator, function (createdBookmark) {
-              var apiError = checkForApiError();
-              if (apiError) {
-                return reject(apiError);
-              }
-
-              resolve(createdBookmark);
-            });
+        return browser.bookmarks.remove(bookmark.id)
+          .then(function () {
+            return browser.bookmarks.create(separator);
           });
-        });
       })
       .finally(function () {
         return $q(function (resolve) { enableEventListeners(resolve); });
@@ -258,30 +229,18 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
         }
         locationInfo = results;
 
-        var convertToSeparatorOrGetMetadata;
-        if (bookmarks.IsSeparator(createdBookmark)) {
-          // If bookmark is separator update local bookmark properties
-          convertToSeparatorOrGetMetadata = convertLocalBookmarkToSeparator(createdBookmark);
-        }
-        else if (createdBookmark.url) {
-          // If bookmark is not folder, get page metadata from current tab
-          convertToSeparatorOrGetMetadata = checkPermsAndGetPageMetadata()
-            .then(function (metadata) {
-              // Add metadata if bookmark is current tab location
-              if (metadata && createdBookmark.url === metadata.url) {
-                createdBookmark.title = utility.StripTags(metadata.title);
-                createdBookmark.description = utility.StripTags(metadata.description);
-                createdBookmark.tags = utility.GetTagArrayFromText(metadata.tags);
-              }
+        // If bookmark is not folder or separator, get page metadata from current tab
+        return (createdBookmark.url && !bookmarks.IsSeparator(createdBookmark) ? checkPermsAndGetPageMetadata() : $q.resolve())
+          .then(function (metadata) {
+            // Add metadata if bookmark is current tab location
+            if (metadata && createdBookmark.url === metadata.url) {
+              createdBookmark.title = utility.StripTags(metadata.title);
+              createdBookmark.description = utility.StripTags(metadata.description);
+              createdBookmark.tags = utility.GetTagArrayFromText(metadata.tags);
+            }
 
-              return createdBookmark;
-            });
-        }
-        else {
-          convertToSeparatorOrGetMetadata = $q.resolve(createdBookmark);
-        }
-
-        return convertToSeparatorOrGetMetadata
+            return createdBookmark;
+          })
           .then(function (bookmark) {
             // Create change info
             changeInfo = {
@@ -326,12 +285,20 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       success: true
     };
 
-    chrome.bookmarks.onCreated.removeListener(onCreatedHandler);
-    chrome.bookmarks.onRemoved.removeListener(onRemovedHandler);
-    chrome.bookmarks.onChanged.removeListener(onChangedHandler);
-    chrome.bookmarks.onMoved.removeListener(onMovedHandler);
-
-    sendResponse(response);
+    $q.all([
+      browser.bookmarks.onCreated.removeListener(onCreatedHandler),
+      browser.bookmarks.onRemoved.removeListener(onRemovedHandler),
+      browser.bookmarks.onChanged.removeListener(onChangedHandler),
+      browser.bookmarks.onMoved.removeListener(onMovedHandler)
+    ])
+      .catch(function (err) {
+        utility.LogInfo('Failed to disable event listeners');
+        response.error = err;
+        response.success = false;
+      })
+      .finally(function () {
+        sendResponse(response);
+      });
   };
 
   var disableSync = function (sendResponse) {
@@ -358,23 +325,24 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     };
 
     // Display notification
-    chrome.notifications.create(utility.GetUniqueishId(), options, function (notificationId) {
-      // Add a click handler to open url if provided or if the message contains a url
-      var urlToOpenOnClick = url;
-      if (matches && matches.length > 0) {
-        urlToOpenOnClick = matches[0];
-      }
+    browser.notifications.create(utility.GetUniqueishId(), options)
+      .then(function (notificationId) {
+        // Add a click handler to open url if provided or if the message contains a url
+        var urlToOpenOnClick = url;
+        if (matches && matches.length > 0) {
+          urlToOpenOnClick = matches[0];
+        }
 
-      if (urlToOpenOnClick) {
-        var openUrlInNewTab = function () {
-          platform.OpenUrl(urlToOpenOnClick);
-        };
-        notificationClickHandlers.push({
-          id: notificationId,
-          eventHandler: openUrlInNewTab
-        });
-      }
-    });
+        if (urlToOpenOnClick) {
+          var openUrlInNewTab = function () {
+            platform.OpenUrl(urlToOpenOnClick);
+          };
+          notificationClickHandlers.push({
+            id: notificationId,
+            eventHandler: openUrlInNewTab
+          });
+        }
+      });
   };
 
   var enableEventListeners = function (sendResponse) {
@@ -394,10 +362,10 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       });
     })
       .then(function () {
-        chrome.bookmarks.onCreated.addListener(onCreatedHandler);
-        chrome.bookmarks.onRemoved.addListener(onRemovedHandler);
-        chrome.bookmarks.onChanged.addListener(onChangedHandler);
-        chrome.bookmarks.onMoved.addListener(onMovedHandler);
+        browser.bookmarks.onCreated.addListener(onCreatedHandler);
+        browser.bookmarks.onRemoved.addListener(onRemovedHandler);
+        browser.bookmarks.onChanged.addListener(onChangedHandler);
+        browser.bookmarks.onMoved.addListener(onMovedHandler);
       })
       .catch(function (err) {
         utility.LogInfo('Failed to enable event listeners');
@@ -519,13 +487,23 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var moveBookmark = function (id, moveInfo) {
-    var changeInfo, syncChange = $q.defer();
+    var changeInfo, movedBookmark, syncChange = $q.defer();
 
-    // Get moved bookmark old and new location info
-    var prepareToSyncChanges = $q.all([
-      platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.oldParentId, [moveInfo.oldIndex]),
-      platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.parentId, [moveInfo.index])
-    ])
+    // Retrieve moved bookmark full info
+    var prepareToSyncChanges = browser.bookmarks.getSubTree(id)
+      .then(function (results) {
+        if (!results || results.length === 0) {
+          return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
+        }
+
+        movedBookmark = results[0];
+
+        // Get moved bookmark old and new location info 
+        return $q.all([
+          platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.oldParentId, [moveInfo.oldIndex]),
+          platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.parentId, [moveInfo.index])
+        ]);
+      })
       .then(function (locationInfo) {
         if (!locationInfo[0] || !locationInfo[1]) {
           utility.LogWarning('Unable to retrieve local bookmark location info, not syncing this change');
@@ -540,52 +518,32 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
         // Create change info
         changeInfo = {
+          bookmark: movedBookmark,
           container: locationInfo[0].container,
           indexPath: locationInfo[0].indexPath,
           targetInfo: {
+            bookmark: movedBookmark,
             container: locationInfo[1].container,
             indexPath: locationInfo[1].indexPath
           },
           type: globals.UpdateType.Move
         };
 
-        // Retrieve moved local bookmark by id
-        return $q(function (resolve, reject) {
-          chrome.bookmarks.getSubTree(id, function (subTree) {
-            var apiError = checkForApiError();
-            if (apiError) {
-              return reject(apiError);
-            }
-
-            resolve(subTree);
-          });
-        })
-          .then(function (results) {
-            if (!results || results.length === 0) {
-              utility.LogWarning('Unable to locate moved bookmark');
-              return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
-            }
-
-            // Add moved bookmark to change info 
-            changeInfo.bookmark = results[0];
-            changeInfo.targetInfo.bookmark = results[0];
-
-            // If bookmark is separator update local bookmark properties
-            return (bookmarks.IsSeparator(changeInfo.bookmark) ? convertLocalBookmarkToSeparator(changeInfo.bookmark) : $q.resolve());
-          })
-          .then(function () {
-            // Check if move changes (remove and add) should be synced
-            return $q.all([
-              platform.Bookmarks.ShouldSyncLocalChanges(changeInfo),
-              platform.Bookmarks.ShouldSyncLocalChanges(changeInfo.targetInfo)
-            ]);
-          })
-          .then(function (results) {
-            changeInfo.syncChange = results[0];
-            changeInfo.targetInfo.syncChange = results[1];
-            syncChange.resolve(changeInfo.syncChange || changeInfo.targetInfo.syncChange);
-            return changeInfo;
-          });
+        // If bookmark is separator update local bookmark properties
+        return (bookmarks.IsSeparator(changeInfo.bookmark) ? convertLocalBookmarkToSeparator(changeInfo.bookmark) : $q.resolve());
+      })
+      .then(function () {
+        // Check if move changes (remove and add) should be synced
+        return $q.all([
+          platform.Bookmarks.ShouldSyncLocalChanges(changeInfo),
+          platform.Bookmarks.ShouldSyncLocalChanges(changeInfo.targetInfo)
+        ]);
+      })
+      .then(function (results) {
+        changeInfo.syncChange = results[0];
+        changeInfo.targetInfo.syncChange = results[1];
+        syncChange.resolve(changeInfo.syncChange || changeInfo.targetInfo.syncChange);
+        return changeInfo;
       })
       .catch(function (err) {
         syncChange.reject(err);
@@ -626,19 +584,47 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     processBookmarkEventsTimeout = $timeout(processBookmarkEventsQueue, 1e3);
   };
 
-  var onChangedHandler = function () {
+  var onChangedHandler = function (id) {
     utility.LogInfo('onChanged event detected');
-    onBookmarkEventHandler(changeBookmark, arguments);
+
+    // Get complete bookmark properties
+    browser.bookmarks.getSubTree(id)
+      .then(function (results) {
+        var changedBookmark = results[0];
+
+        // If bookmark is separator update local bookmark properties
+        return (bookmarks.IsSeparator(changedBookmark) ? convertLocalBookmarkToSeparator(changedBookmark) : $q.resolve(changedBookmark))
+          .then(function (bookmarkNode) {
+            // Handle event
+            onBookmarkEventHandler(changeBookmark, [bookmarkNode.id, bookmarkNode]);
+          });
+      })
+      .catch(function (err) {
+        // Display alert
+        var errMessage = utility.GetErrorMessageFromException(err);
+        displayAlert(errMessage.title, errMessage.message);
+      });
   };
 
-  var onCreatedHandler = function () {
+  var onCreatedHandler = function (id, createdBookmark) {
     utility.LogInfo('onCreated event detected');
-    onBookmarkEventHandler(createBookmark, arguments);
+
+    // If bookmark is separator update local bookmark properties
+    (bookmarks.IsSeparator(createdBookmark) ? convertLocalBookmarkToSeparator(createdBookmark) : $q.resolve(createdBookmark))
+      .then(function (bookmarkNode) {
+        // Handle event
+        onBookmarkEventHandler(createBookmark, [bookmarkNode.id, bookmarkNode]);
+      })
+      .catch(function (err) {
+        // Display alert
+        var errMessage = utility.GetErrorMessageFromException(err);
+        displayAlert(errMessage.title, errMessage.message);
+      });
   };
 
   var onInstallHandler = function (details) {
     startUpInitiated = true;
-    var currentVersion = chrome.runtime.getManifest().version;
+    var currentVersion = browser.runtime.getManifest().version;
     var installOrUpgrade = $q.resolve();
 
     // Check for upgrade or do fresh install
@@ -708,7 +694,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     });
     if (notificationClickHandler != null) {
       notificationClickHandler.eventHandler();
-      chrome.notifications.clear(notificationId);
+      browser.notifications.clear(notificationId);
     }
   };
 
@@ -1000,12 +986,12 @@ xBrowserSync.App.Background.$inject = ['$q', '$timeout', 'platform', 'globals', 
 xBrowserSync.App.ChromeBackground.controller('Controller', xBrowserSync.App.Background);
 
 // Set synchronous event handlers
-chrome.runtime.onInstalled.addListener(function (details) {
+browser.runtime.onInstalled.addListener(function (details) {
   // Store event details as element data
   var element = document.querySelector('#install');
   angular.element(element).data('details', details);
   document.querySelector('#install').click();
 });
-chrome.runtime.onStartup.addListener(function () {
+browser.runtime.onStartup.addListener(function () {
   document.querySelector('#startup').click();
 });

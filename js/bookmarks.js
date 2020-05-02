@@ -860,7 +860,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     utility.LogError(err, 'bookmarks.sync');
     if (failedSync.changeInfo) {
       failedSync.changeInfo.then(function (changeInfo) {
-        if (changeInfo.type) {
+        if (changeInfo && changeInfo.type) {
           utility.LogInfo(changeInfo);
         }
       });

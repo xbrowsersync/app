@@ -703,6 +703,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     var openInNewTab = function () {
       return browser.tabs.create({ 'url': url });
     };
+
     browser.tabs.query({ currentWindow: true, active: true })
       .then(function (tabs) {
         // Open url in current tab if new then close the extension window

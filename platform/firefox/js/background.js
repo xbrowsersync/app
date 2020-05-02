@@ -244,19 +244,20 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       success: true
     };
 
-    try {
-      browser.bookmarks.onCreated.removeListener(onCreatedHandler);
-      browser.bookmarks.onRemoved.removeListener(onRemovedHandler);
-      browser.bookmarks.onChanged.removeListener(onChangedHandler);
-      browser.bookmarks.onMoved.removeListener(onMovedHandler);
-    }
-    catch (err) {
-      utility.LogInfo('Failed to disable event listeners');
-      response.error = err;
-      response.success = false;
-    }
-
-    sendResponse(response);
+    $q.all([
+      browser.bookmarks.onCreated.removeListener(onCreatedHandler),
+      browser.bookmarks.onRemoved.removeListener(onRemovedHandler),
+      browser.bookmarks.onChanged.removeListener(onChangedHandler),
+      browser.bookmarks.onMoved.removeListener(onMovedHandler)
+    ])
+      .catch(function (err) {
+        utility.LogInfo('Failed to disable event listeners');
+        response.error = err;
+        response.success = false;
+      })
+      .finally(function () {
+        sendResponse(response);
+      });
   };
 
   var disableSync = function (sendResponse) {

@@ -809,8 +809,10 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var displayAlertErrorHandler = function (err) {
-    var errMessage = utility.GetErrorMessageFromException(err);
-    vm.alert.display(errMessage.title, errMessage.message, 'danger');
+    $timeout(function () {
+      var errMessage = utility.GetErrorMessageFromException(err);
+      vm.alert.display(errMessage.title, errMessage.message, 'danger');
+    });
   };
 
   var displayDefaultSearchState = function () {

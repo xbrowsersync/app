@@ -975,6 +975,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var getAutoUpdatesNextRun = function () {
     return $q(function (resolve, reject) {
+      // Fix this
       chrome.alarms.get(globals.Alarm.Name, function (alarm) {
         if (!alarm) {
           return resolve();
