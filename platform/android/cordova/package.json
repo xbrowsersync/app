@@ -12,8 +12,8 @@
   "author": "xBrowserSync",
   "license": "GPL-3.0-only",
   "dependencies": {
-    "com-darryncampbell-cordova-plugin-intent": "^1.1.8",
-    "cordova-android": "^8.0.0",
+    "com-darryncampbell-cordova-plugin-intent": "^2.0.0",
+    "cordova-android": "^8.1.0",
     "cordova-clipboard": "^1.3.0",
     "cordova-plugin-background-mode": "^0.7.3",
     "cordova-plugin-device": "^2.0.3",
@@ -24,20 +24,16 @@
     "cordova-plugin-native-spinner": "^1.1.3",
     "cordova-plugin-nativestorage": "^2.3.2",
     "cordova-plugin-network-information": "^2.0.2",
-    "cordova-plugin-qrscanner": "^3.0.1",
+    "cordova-plugin-qrscanner": "git+https://github.com/xbrowsersync/cordova-plugin-qrscanner.git",
     "cordova-plugin-snackbar": "git+https://github.com/xbrowsersync/cordova-plugin-snackbar.git",
     "cordova-plugin-whitelist": "1.3.4",
-    "cordova-plugin-x-socialsharing": "^5.4.7",
+    "cordova-plugin-x-socialsharing": "git+https://github.com/xbrowsersync/SocialSharing-PhoneGap-Plugin.git",
     "es6-promise-plugin": "^4.2.2"
   },
   "devDependencies": {},
   "cordova": {
     "plugins": {
-      "cordova-plugin-qrscanner": {},
       "cordova-plugin-file": {},
-      "cordova-plugin-x-socialsharing": {
-        "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
-      },
       "cordova-plugin-filepicker": {},
       "cordova-plugin-native-spinner": {},
       "com-darryncampbell-cordova-plugin-intent": {},
@@ -49,7 +45,11 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-inappbrowser": {},
       "cordova-clipboard": {},
-      "cordova-plugin-background-mode": {}
+      "cordova-plugin-background-mode": {},
+      "cordova-plugin-x-socialsharing": {
+        "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
+      },
+      "cordova-plugin-qrscanner": {}
     },
     "platforms": [
       "android"
