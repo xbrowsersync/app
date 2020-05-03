@@ -31,10 +31,6 @@ xBrowserSync.App.UI.run(['$templateRequest', function ($templateRequest) {
   $templateRequest('./views/updated.html', true);
 }]);
 
-// Add platform service
-xBrowserSync.App.Platform.$inject = ['$q'];
-xBrowserSync.App.UI.factory('platform', xBrowserSync.App.Platform);
-
 // Add global service
 xBrowserSync.App.UI.factory('globals', xBrowserSync.App.Global);
 
@@ -45,20 +41,27 @@ xBrowserSync.App.UI.config(['$httpProvider', function ($httpProvider) {
   $httpProvider.interceptors.push('httpInterceptor');
 }]);
 
+// Add platform service
+xBrowserSync.App.UI.factory('platform', xBrowserSync.App.Platform);
+
+// Add store service
+xBrowserSync.App.Store.$inject = ['$q'];
+xBrowserSync.App.UI.factory('store', xBrowserSync.App.Store);
+
 // Add utility service
-xBrowserSync.App.Utility.$inject = ['$http', '$q', 'platform', 'globals'];
+xBrowserSync.App.Utility.$inject = ['$http', '$q', 'platform', 'globals', 'store'];
 xBrowserSync.App.UI.factory('utility', xBrowserSync.App.Utility);
 
 // Add api service
-xBrowserSync.App.API.$inject = ['$http', '$q', 'platform', 'globals', 'utility'];
+xBrowserSync.App.API.$inject = ['$http', '$q', 'platform', 'globals', 'store', 'utility'];
 xBrowserSync.App.UI.factory('api', xBrowserSync.App.API);
 
 // Add bookmarks service
-xBrowserSync.App.Bookmarks.$inject = ['$q', '$timeout', 'platform', 'globals', 'api', 'utility'];
+xBrowserSync.App.Bookmarks.$inject = ['$q', '$timeout', 'platform', 'globals', 'store', 'api', 'utility'];
 xBrowserSync.App.UI.factory('bookmarks', xBrowserSync.App.Bookmarks);
 
 // Add platform implementation service
-xBrowserSync.App.PlatformImplementation.$inject = ['$interval', '$q', '$timeout', 'platform', 'globals', 'utility', 'bookmarks'];
+xBrowserSync.App.PlatformImplementation.$inject = ['$interval', '$q', '$timeout', 'platform', 'globals', 'store', 'utility', 'bookmarks'];
 xBrowserSync.App.UI.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add bookmark tree component
@@ -79,5 +82,5 @@ xBrowserSync.App.UI.component('bookmarkTree', {
 });
 
 // Add main controller
-xBrowserSync.App.Controller.$inject = ['$q', '$timeout', 'platform', 'globals', 'api', 'utility', 'bookmarks', 'platformImplementation'];
+xBrowserSync.App.Controller.$inject = ['$q', '$timeout', 'platform', 'globals', 'store', 'api', 'utility', 'bookmarks', 'platformImplementation'];
 xBrowserSync.App.UI.controller('Controller', xBrowserSync.App.Controller);

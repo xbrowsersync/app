@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description:	Defines utility functions used across all platforms.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Utility = function ($http, $q, platform, globals) {
+xBrowserSync.App.Utility = function ($http, $q, platform, globals, store) {
   'use strict';
 
   var currentMessageQueueItem, messageQueue = [];
@@ -92,7 +92,7 @@ xBrowserSync.App.Utility = function ($http, $q, platform, globals) {
     }
 
     // Ensure both id and password are in local storage
-    return platform.LocalStorage.Get([
+    return store.Get([
       globals.CacheKeys.Password,
       globals.CacheKeys.SyncId
     ])
@@ -158,7 +158,7 @@ xBrowserSync.App.Utility = function ($http, $q, platform, globals) {
     }
 
     // Ensure both id and password are in local storage
-    return platform.LocalStorage.Get([
+    return store.Get([
       globals.CacheKeys.Password,
       globals.CacheKeys.SyncId
     ])
@@ -373,7 +373,7 @@ xBrowserSync.App.Utility = function ($http, $q, platform, globals) {
     var encodedSalt = encoder.encode(salt);
 
     // Get cached sync version
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncVersion)
+    return store.Get(globals.CacheKeys.SyncVersion)
       .then(function (syncVersion) {
         // If old sync version, don't hash password for legacy encryption
         if (!syncVersion) {
@@ -430,7 +430,7 @@ xBrowserSync.App.Utility = function ($http, $q, platform, globals) {
 
   var getServiceUrl = function () {
     // Get service url from local storage
-    return platform.LocalStorage.Get(globals.CacheKeys.ServiceUrl)
+    return store.Get(globals.CacheKeys.ServiceUrl)
       .then(function (cachedServiceUrl) {
         // If no service url cached, use default
         return cachedServiceUrl || globals.URL.DefaultServiceUrl;
@@ -609,7 +609,7 @@ xBrowserSync.App.Utility = function ($http, $q, platform, globals) {
     }
 
     // Add message text to log item and add to end of log
-    return platform.LocalStorage.Get(globals.CacheKeys.TraceLog)
+    return store.Get(globals.CacheKeys.TraceLog)
       .then(function (debugMessageLog) {
         debugMessageLog = debugMessageLog || [];
         messageLogText += typeof (message) === 'object' ? JSON.stringify(message) : message;
@@ -617,7 +617,7 @@ xBrowserSync.App.Utility = function ($http, $q, platform, globals) {
           messageLogText += '\t' + err.stack.replace(/\s+/g, ' ');
         }
         debugMessageLog.push(messageLogText);
-        return platform.LocalStorage.Set(globals.CacheKeys.TraceLog, debugMessageLog);
+        return store.Set(globals.CacheKeys.TraceLog, debugMessageLog);
       })
       .then(function () {
         // Process remaining messages

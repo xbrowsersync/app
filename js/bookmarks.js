@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description:	Responsible for handling bookmark data.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, utility) {
+xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, store, api, utility) {
   'use strict';
 
   var cachedBookmarks_encrypted, cachedBookmarks_plain, currentSync, syncQueue = [];
@@ -71,7 +71,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   };
 
   var checkForUpdates = function () {
-    return platform.LocalStorage.Get(globals.CacheKeys.LastUpdated)
+    return store.Get(globals.CacheKeys.LastUpdated)
       .then(function (cachedData) {
         // Get last updated date from local cache
         var cachedLastUpdated = new Date(cachedData);
@@ -134,7 +134,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   };
 
   var disableSync = function () {
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+    return store.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
         if (!syncEnabled) {
           return;
@@ -152,10 +152,10 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
         // Clear cached data
         return $q.all([
-          platform.LocalStorage.Set(globals.CacheKeys.Bookmarks),
-          platform.LocalStorage.Set(globals.CacheKeys.Password),
-          platform.LocalStorage.Set(globals.CacheKeys.SyncEnabled, false),
-          platform.LocalStorage.Set(globals.CacheKeys.SyncVersion),
+          store.Set(globals.CacheKeys.Bookmarks),
+          store.Set(globals.CacheKeys.Password),
+          store.Set(globals.CacheKeys.SyncEnabled, false),
+          store.Set(globals.CacheKeys.SyncVersion),
           updateCachedBookmarks(null, null)
         ])
           .then(function () {
@@ -182,7 +182,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
   var enableSync = function () {
     return $q.all([
-      platform.LocalStorage.Set(globals.CacheKeys.SyncEnabled, true),
+      store.Set(globals.CacheKeys.SyncEnabled, true),
       platform.EventListeners.Enable(),
       platform.AutomaticUpdates.Start()
     ]);
@@ -190,7 +190,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
   var executeSync = function (isBackgroundSync) {
     // Check if sync enabled before running sync
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+    return store.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
         if (!syncEnabled) {
           return $q.reject(globals.ErrorCodes.SyncNotEnabled);
@@ -222,7 +222,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       });
     };
 
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+    return store.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
         // If sync is not enabled, export local browser data
         if (!syncEnabled) {
@@ -452,7 +452,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
   var getSyncBookmarksToolbar = function () {
     // Get setting from local storage
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncBookmarksToolbar)
+    return store.Get(globals.CacheKeys.SyncBookmarksToolbar)
       .then(function (syncBookmarksToolbar) {
         // Set default value to true
         if (syncBookmarksToolbar == null) {
@@ -470,7 +470,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   var getSyncSize = function () {
     return getCachedBookmarks()
       .then(function () {
-        return platform.LocalStorage.Get(globals.CacheKeys.Bookmarks);
+        return store.Get(globals.CacheKeys.Bookmarks);
       })
       .then(function (cachedBookmarks) {
         // Return size in bytes of cached encrypted bookmarks
@@ -500,7 +500,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     runSync = runSync === undefined ? true : runSync;
 
     return $q(function (resolve, reject) {
-      platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+      store.Get(globals.CacheKeys.SyncEnabled)
         .then(function (syncEnabled) {
           // If new sync ensure sync queue is clear
           if (!syncEnabled) {
@@ -814,7 +814,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
 
   var getCachedBookmarks = function () {
     // Get cached encrypted bookmarks from local storage
-    return platform.LocalStorage.Get(globals.CacheKeys.Bookmarks)
+    return store.Get(globals.CacheKeys.Bookmarks)
       .then(function (cachedData) {
         var cachedEncryptedBookmarks = cachedData;
 
@@ -866,7 +866,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       });
     }
 
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+    return store.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
         return setIsSyncing()
           .then(function () {
@@ -883,7 +883,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
             else if (failedSync.type !== globals.SyncType.Pull) {
               syncQueue = [];
               var lastUpdated = new Date().toISOString();
-              platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, lastUpdated);
+              store.Set(globals.CacheKeys.LastUpdated, lastUpdated);
             }
 
             // Check if sync should be disabled
@@ -990,7 +990,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
               }
             })
             .then(function () {
-              return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+              return store.Get(globals.CacheKeys.SyncEnabled)
                 .then(function (cachedSyncEnabled) {
                   syncEnabled = cachedSyncEnabled;
 
@@ -1029,7 +1029,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     };
 
     // Disable automatic updates whilst processing syncs
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+    return store.Get(globals.CacheKeys.SyncEnabled)
       .then(function (cachedSyncEnabled) {
         if (cachedSyncEnabled) {
           return platform.AutomaticUpdates.Stop();
@@ -1044,7 +1044,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         }
 
         // Update remote bookmarks data
-        return platform.LocalStorage.Get(globals.CacheKeys.Bookmarks)
+        return store.Get(globals.CacheKeys.Bookmarks)
           .then(function (encryptedBookmarks) {
             // Decrypt cached bookmarks data
             return utility.DecryptData(encryptedBookmarks)
@@ -1052,7 +1052,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                 // Commit update to service
                 return api.UpdateBookmarks(encryptedBookmarks)
                   .then(function (response) {
-                    return platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, response.lastUpdated)
+                    return store.Set(globals.CacheKeys.LastUpdated, response.lastUpdated)
                       .then(function () {
                         utility.LogInfo('Remote bookmarks data updated at ' + response.lastUpdated);
                       });
@@ -1079,7 +1079,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         currentSync = null;
 
         // Start auto updates if sync enabled
-        return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+        return store.Get(globals.CacheKeys.SyncEnabled)
           .then(function (cachedSyncEnabled) {
             if (cachedSyncEnabled) {
               return platform.AutomaticUpdates.Start();
@@ -1323,7 +1323,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
     }
 
     // Get cached sync enabled value and update browser action icon
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+    return store.Get(globals.CacheKeys.SyncEnabled)
       .then(platform.Interface.Refresh);
   };
 
@@ -1405,7 +1405,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       return refreshLocalBookmarks(syncData.bookmarks);
     }
 
-    return platform.LocalStorage.Get([
+    return store.Get([
       globals.CacheKeys.Password,
       globals.CacheKeys.SyncId
     ])
@@ -1459,12 +1459,12 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
       })
       .then(function () {
         // Update cached last updated date
-        return platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, lastUpdated);
+        return store.Set(globals.CacheKeys.LastUpdated, lastUpdated);
       });
   };
 
   var sync_handlePush = function (syncData) {
-    return platform.LocalStorage.Get([
+    return store.Get([
       globals.CacheKeys.LastUpdated,
       globals.CacheKeys.Password,
       globals.CacheKeys.SyncEnabled,
@@ -1556,7 +1556,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   var sync_handleUpgrade = function (syncData) {
     var password, syncId;
 
-    return platform.LocalStorage.Get([
+    return store.Get([
       globals.CacheKeys.Password,
       globals.CacheKeys.SyncId
     ])
@@ -1586,14 +1586,14 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
         bookmarks = upgradeContainers(bookmarks || []);
 
         // Set the sync version to the current app version
-        return platform.LocalStorage.Set(globals.CacheKeys.SyncVersion, globals.AppVersion)
+        return store.Set(globals.CacheKeys.SyncVersion, globals.AppVersion)
           .then(function () {
             // Generate a new password hash from the old clear text password and sync ID
             return utility.GetPasswordHash(password, syncId);
           })
           .then(function (passwordHash) {
             // Cache the new password hash and encrypt the data
-            return platform.LocalStorage.Set(globals.CacheKeys.Password, passwordHash);
+            return store.Set(globals.CacheKeys.Password, passwordHash);
           })
           .then(function () {
             return utility.EncryptData(JSON.stringify(bookmarks));
@@ -1612,7 +1612,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
                 // Update cached last updated date and return decrypted bookmarks
                 return $q.all([
                   updateCachedBookmarks(bookmarks, encryptedBookmarks),
-                  platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, data[0].lastUpdated)
+                  store.Set(globals.CacheKeys.LastUpdated, data[0].lastUpdated)
                 ]);
               });
           });
@@ -1622,7 +1622,7 @@ xBrowserSync.App.Bookmarks = function ($q, $timeout, platform, globals, api, uti
   var updateCachedBookmarks = function (unencryptedBookmarks, encryptedBookmarks) {
     if (encryptedBookmarks !== undefined) {
       // Update storage cache with new encrypted bookmarks
-      return platform.LocalStorage.Set(globals.CacheKeys.Bookmarks, encryptedBookmarks)
+      return store.Set(globals.CacheKeys.Bookmarks, encryptedBookmarks)
         .then(function () {
           // Update memory cached bookmarks
           cachedBookmarks_encrypted = encryptedBookmarks;

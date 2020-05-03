@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Implements xBrowserSync.App.Platform for Chrome extension.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, platform, globals, utility, bookmarks) {
+xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, platform, globals, store, utility, bookmarks) {
   'use strict';
 
   var vm, loadingId, refreshInterfaceTimeout,
@@ -56,8 +56,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Interface.Working.Hide = hideLoading;
     platform.Interface.Working.Show = displayLoading;
     platform.Interface.Refresh = refreshInterface;
-    platform.LocalStorage.Get = getFromLocalStorage;
-    platform.LocalStorage.Set = setInLocalStorage;
     platform.OpenUrl = openUrl;
     platform.Permissions.Check = checkPermissions;
     platform.Permissions.Remove = removePermissions;
@@ -500,18 +498,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return pages;
   };
 
-  var getFromLocalStorage = function (storageKeys) {
-    return browser.storage.local.get(storageKeys)
-      .then(function (storageItems) {
-        if (storageKeys == null || Array.isArray(storageKeys)) {
-          return storageItems;
-        }
-        else {
-          return storageItems[storageKeys];
-        }
-      });
-  };
-
   var getLocalBookmarkLocationInfo = function (localBookmarkId, initialIndexPath) {
     var indexPath = initialIndexPath || [];
     var localBookmarkTree, containerId, containerName;
@@ -731,7 +717,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         // Populate other bookmarks
         var populateOther = $q.resolve();
         if (otherContainer) {
-          var populateOther = browser.bookmarks.getSubTree(otherBookmarksId)
+          populateOther = browser.bookmarks.getSubTree(otherBookmarksId)
             .then(function (results) {
               return createLocalBookmarksFromXBookmarks(otherBookmarksId, otherContainer.children, toolbarBookmarksId);
             })
@@ -853,18 +839,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         utility.LogInfo('Optional permissions ' + (!granted ? 'not ' : '') + 'granted');
         return granted;
       });
-  };
-
-  var setInLocalStorage = function (storageKey, value) {
-    if (value != null) {
-      var storageObj = {};
-      storageObj[storageKey] = value;
-
-      return browser.storage.local.set(storageObj);
-    }
-    else {
-      return browser.storage.local.remove(storageKey);
-    }
   };
 
   var shouldSyncLocalChanges = function (changeInfo, xBookmarks) {

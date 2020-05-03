@@ -2,12 +2,12 @@ var xBrowserSync = xBrowserSync || {};
 xBrowserSync.App = xBrowserSync.App || {};
 
 /* ------------------------------------------------------------------------------------
- * Class name:	xBrowserSync.App.Background
+ * Class name:	xBrowserSync.App.BackgroundController
  * Description:	Initialises Chrome background required functionality; registers events; 
  *              listens for sync requests.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility, bookmarks) {
+xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, globals, store, utility, bookmarks) {
   'use strict';
 
   var vm, bookmarkEventsQueue = [], notificationClickHandlers = [], startUpInitiated = false, processBookmarkEventsTimeout;
@@ -136,7 +136,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
           utility.LogInfo('Connection to API failed, retrying check for sync updates momentarily');
           $timeout(function () {
-            platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+            store.Get(globals.CacheKeys.SyncEnabled)
               .then(function (syncEnabled) {
                 if (!syncEnabled) {
                   utility.LogInfo('Sync was disabled before retry attempted');
@@ -395,7 +395,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
     }
 
     // Exit if sync not enabled
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+    return store.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
         if (!syncEnabled) {
           return;
@@ -454,20 +454,14 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var installExtension = function (currentVersion) {
-    // Clear trace log and display permissions panel if not already dismissed
-    return platform.LocalStorage.Set(globals.CacheKeys.TraceLog)
+    // Initialise data storage
+    return store.Clear()
       .then(function () {
         return $q.all([
-          platform.LocalStorage.Set(globals.CacheKeys.CheckForAppUpdates, true),
-          platform.LocalStorage.Set(globals.CacheKeys.DisplayHelp, true),
-          platform.LocalStorage.Set(globals.CacheKeys.SyncBookmarksToolbar, true),
-          platform.LocalStorage.Get(globals.CacheKeys.DisplayPermissions)
-            .then(function (displayPermissions) {
-              if (displayPermissions === false) {
-                return;
-              }
-              return platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, true);
-            })
+          store.Set(globals.CacheKeys.CheckForAppUpdates, true),
+          store.Set(globals.CacheKeys.DisplayHelp, true),
+          store.Set(globals.CacheKeys.SyncBookmarksToolbar, true),
+          store.Set(globals.CacheKeys.DisplayPermissions, true)
         ]);
       })
       .then(function () {
@@ -478,7 +472,7 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
               bookmarks: localBookmarks,
               date: new Date().toISOString()
             };
-            return platform.LocalStorage.Set(globals.CacheKeys.InstallBackup, JSON.stringify(data));
+            return store.Set(globals.CacheKeys.InstallBackup, JSON.stringify(data));
           });
       })
       .then(function () {
@@ -715,15 +709,11 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
 
   var onStartupHandler = function () {
     startUpInitiated = true;
-    var cachedData, syncEnabled;
+    var syncEnabled;
     utility.LogInfo('Starting up');
 
-    $q.all([
-      platform.LocalStorage.Get(),
-      platform.LocalStorage.Set(globals.CacheKeys.TraceLog)
-    ])
-      .then(function (data) {
-        cachedData = data[0];
+    store.Get()
+      .then(function (cachedData) {
         syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
         var checkForAppUpdates = cachedData[globals.CacheKeys.CheckForAppUpdates];
 
@@ -914,16 +904,25 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
   };
 
   var upgradeExtension = function (oldVersion, newVersion) {
-    return platform.LocalStorage.Set(globals.CacheKeys.TraceLog)
+    return store.Set(globals.CacheKeys.TraceLog)
       .then(function () {
         utility.LogInfo('Upgrading from ' + oldVersion + ' to ' + newVersion);
-
+      })
+      .then(function () {
+        if (compareVersions(oldVersion, newVersion)) {
+          switch (true) {
+            case newVersion.indexOf('1.5.3') === 0:
+              return upgradeTo153();
+          }
+        }
+      })
+      .then(function () {
         // Display alert and set update panel to show
         displayAlert(
           platform.GetConstant(globals.Constants.AppUpdated_Title) + globals.AppVersion,
           platform.GetConstant(globals.Constants.AppUpdated_Message),
           globals.ReleaseNotesUrlStem + globals.AppVersion);
-        return platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, true);
+        return store.Set(globals.CacheKeys.DisplayUpdated, true);
       })
       .catch(function (err) {
         utility.LogError(err, 'background.upgradeExtension');
@@ -934,56 +933,76 @@ xBrowserSync.App.Background = function ($q, $timeout, platform, globals, utility
       });
   };
 
+  var upgradeTo153 = function () {
+    // Convert local storage items to IndexedDB
+    return browser.storage.local.get()
+      .then(function (cachedData) {
+        if (!cachedData || Object.keys(cachedData).length === 0) {
+          return;
+        }
+
+        return $q.all(Object.keys(cachedData).map(function (key) {
+          return store.Set(key, cachedData[key]);
+        }));
+      })
+      .then(function () {
+        return browser.storage.local.clear();
+      });
+  };
+
   // Call constructor
   return new Background();
 };
 
 // Initialise the angular app
-xBrowserSync.App.ChromeBackground = angular.module('xBrowserSync.App.ChromeBackground', []);
+xBrowserSync.App.Background = angular.module('xBrowserSync.App.Background', []);
 
 // Disable debug info
-xBrowserSync.App.ChromeBackground.config(['$compileProvider', function ($compileProvider) {
+xBrowserSync.App.Background.config(['$compileProvider', function ($compileProvider) {
   $compileProvider.debugInfoEnabled(false);
 }]);
 
 // Disable unhandled rejections error logging
-xBrowserSync.App.ChromeBackground.config(['$qProvider', function ($qProvider) {
+xBrowserSync.App.Background.config(['$qProvider', function ($qProvider) {
   $qProvider.errorOnUnhandledRejections(false);
 }]);
 
-// Add platform service
-xBrowserSync.App.Platform.$inject = ['$q'];
-xBrowserSync.App.ChromeBackground.factory('platform', xBrowserSync.App.Platform);
-
 // Add global service
-xBrowserSync.App.ChromeBackground.factory('globals', xBrowserSync.App.Global);
+xBrowserSync.App.Background.factory('globals', xBrowserSync.App.Global);
 
 // Add httpInterceptor service
 xBrowserSync.App.HttpInterceptor.$inject = ['$q', 'globals'];
-xBrowserSync.App.ChromeBackground.factory('httpInterceptor', xBrowserSync.App.HttpInterceptor);
-xBrowserSync.App.ChromeBackground.config(['$httpProvider', function ($httpProvider) {
+xBrowserSync.App.Background.factory('httpInterceptor', xBrowserSync.App.HttpInterceptor);
+xBrowserSync.App.Background.config(['$httpProvider', function ($httpProvider) {
   $httpProvider.interceptors.push('httpInterceptor');
 }]);
 
+// Add platform service
+xBrowserSync.App.Background.factory('platform', xBrowserSync.App.Platform);
+
+// Add store service
+xBrowserSync.App.Store.$inject = ['$q'];
+xBrowserSync.App.Background.factory('store', xBrowserSync.App.Store);
+
 // Add utility service
-xBrowserSync.App.Utility.$inject = ['$http', '$q', 'platform', 'globals'];
-xBrowserSync.App.ChromeBackground.factory('utility', xBrowserSync.App.Utility);
+xBrowserSync.App.Utility.$inject = ['$http', '$q', 'platform', 'globals', 'store'];
+xBrowserSync.App.Background.factory('utility', xBrowserSync.App.Utility);
 
 // Add api service
-xBrowserSync.App.API.$inject = ['$http', '$q', 'platform', 'globals', 'utility'];
-xBrowserSync.App.ChromeBackground.factory('api', xBrowserSync.App.API);
+xBrowserSync.App.API.$inject = ['$http', '$q', 'platform', 'globals', 'store', 'utility'];
+xBrowserSync.App.Background.factory('api', xBrowserSync.App.API);
 
 // Add bookmarks service
-xBrowserSync.App.Bookmarks.$inject = ['$q', '$timeout', 'platform', 'globals', 'api', 'utility'];
-xBrowserSync.App.ChromeBackground.factory('bookmarks', xBrowserSync.App.Bookmarks);
+xBrowserSync.App.Bookmarks.$inject = ['$q', '$timeout', 'platform', 'globals', 'store', 'api', 'utility'];
+xBrowserSync.App.Background.factory('bookmarks', xBrowserSync.App.Bookmarks);
 
 // Add platform implementation service
-xBrowserSync.App.PlatformImplementation.$inject = ['$interval', '$q', '$timeout', 'platform', 'globals', 'utility', 'bookmarks'];
-xBrowserSync.App.ChromeBackground.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
+xBrowserSync.App.PlatformImplementation.$inject = ['$interval', '$q', '$timeout', 'platform', 'globals', 'store', 'utility', 'bookmarks'];
+xBrowserSync.App.Background.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
-// Add background module
-xBrowserSync.App.Background.$inject = ['$q', '$timeout', 'platform', 'globals', 'utility', 'bookmarks', 'platformImplementation'];
-xBrowserSync.App.ChromeBackground.controller('Controller', xBrowserSync.App.Background);
+// Add background controller
+xBrowserSync.App.BackgroundController.$inject = ['$q', '$timeout', 'platform', 'globals', 'store', 'utility', 'bookmarks', 'platformImplementation'];
+xBrowserSync.App.Background.controller('Controller', xBrowserSync.App.BackgroundController);
 
 // Set synchronous event handlers
 browser.runtime.onInstalled.addListener(function (details) {

@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description:	Responsible for communicating with the xBrowserSync API service.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
+xBrowserSync.App.API = function ($http, $q, platform, globals, store, utility) {
   'use strict';
 
   var skipOnlineCheck = false;
@@ -86,7 +86,7 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
     var data, password, syncId;
 
     // Check secret and sync ID are present
-    return platform.LocalStorage.Get([
+    return store.Get([
       globals.CacheKeys.Password,
       globals.CacheKeys.SyncId,
     ])
@@ -127,7 +127,7 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
     var data, password, syncId;
 
     // Check secret and sync ID are present
-    return platform.LocalStorage.Get([
+    return store.Get([
       globals.CacheKeys.Password,
       globals.CacheKeys.SyncId,
     ])
@@ -197,7 +197,7 @@ xBrowserSync.App.API = function ($http, $q, platform, globals, utility) {
     var data, password, cachedLastUpdated, syncId;
 
     // Check secret and sync ID are present
-    return platform.LocalStorage.Get([
+    return store.Get([
       globals.CacheKeys.LastUpdated,
       globals.CacheKeys.Password,
       globals.CacheKeys.SyncId,

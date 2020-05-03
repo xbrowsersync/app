@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Main angular controller class for the app.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, utility, bookmarks) {
+xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, api, utility, bookmarks) {
   'use strict';
 
   var vm;
@@ -373,7 +373,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
   var backupRestoreForm_Revert_Click = function () {
     // Retrieve install backup from local storage
-    return platform.LocalStorage.Get(globals.CacheKeys.InstallBackup)
+    return store.Get(globals.CacheKeys.InstallBackup)
       .then(function (installBackup) {
         $timeout(function () {
           if (!installBackup) {
@@ -401,7 +401,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
     // Disable sync and restore local bookmarks to installation state
     $q.all([
-      platform.LocalStorage.Get(globals.CacheKeys.InstallBackup),
+      store.Get(globals.CacheKeys.InstallBackup),
       disableSync()
     ])
       .then(function (response) {
@@ -844,7 +844,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var displayMainView = function () {
-    return platform.LocalStorage.Get([
+    return store.Get([
       globals.CacheKeys.DisplayHelp,
       globals.CacheKeys.DisplayPermissions,
       globals.CacheKeys.DisplayUpdated,
@@ -901,7 +901,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     // Get data for backup
     return $q.all([
       bookmarks.Export(),
-      platform.LocalStorage.Get([
+      store.Get([
         globals.CacheKeys.SyncEnabled,
         globals.CacheKeys.SyncId
       ]),
@@ -926,7 +926,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
   var downloadLogFile = function () {
     // Get cached message log
-    return platform.LocalStorage.Get(globals.CacheKeys.TraceLog)
+    return store.Get(globals.CacheKeys.TraceLog)
       .then(function (debugMessageLog) {
         // Trigger download
         return platform.DownloadFile(utility.GetLogFileName(), debugMessageLog.join('\r\n'), 'downloadLogFileLink');
@@ -957,7 +957,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       .then(function () {
         // Get cached prefs from storage
         return $q.all([
-          platform.LocalStorage.Get([
+          store.Get([
             globals.CacheKeys.DisplaySearchBarBeneathResults,
             globals.CacheKeys.SyncEnabled,
             globals.CacheKeys.SyncId
@@ -989,7 +989,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
               return vm.view.change(vm.view.views.loading)
                 .then(waitForSyncsToFinish)
                 .then(function () {
-                  return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled);
+                  return store.Get(globals.CacheKeys.SyncEnabled);
                 })
                 .then(function (syncEnabled) {
                   // Check that user didn't cancel sync
@@ -1143,7 +1143,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       vm.syncForm.$setUntouched();
     }
 
-    return platform.LocalStorage.Get(globals.CacheKeys.DisplayOtherSyncsWarning)
+    return store.Get(globals.CacheKeys.DisplayOtherSyncsWarning)
       .then(function (displayOtherSyncsWarning) {
         if (utility.IsMobilePlatform(vm.platformName)) {
           // Set displayed panels for mobile platform
@@ -1220,7 +1220,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     // Get current service url and sync bookmarks toolbar setting from cache
     return $q.all([
       bookmarks.GetSyncBookmarksToolbar(),
-      platform.LocalStorage.Get([
+      store.Get([
         globals.CacheKeys.CheckForAppUpdates,
         globals.CacheKeys.TraceLog
       ]),
@@ -1279,7 +1279,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
   var issuesPanel_ClearLog_Click = function () {
     // Clear trace log
-    return platform.LocalStorage.Set(globals.CacheKeys.TraceLog)
+    return store.Set(globals.CacheKeys.TraceLog)
       .then(function () {
         $timeout(function () {
           vm.settings.logSize = 0;
@@ -1337,7 +1337,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var helpPanel_ShowHelp = function () {
-    platform.LocalStorage.Set(globals.CacheKeys.DisplayHelp, false);
+    store.Set(globals.CacheKeys.DisplayHelp, false);
     vm.help.pages = platform.GetHelpPages();
     vm.view.change(vm.view.views.help);
     displayHelpPage();
@@ -1376,7 +1376,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   var permissionsPanel_RequestPermissions_Click = function () {
     $q.all([
       platform.Permissions.Request(),
-      platform.LocalStorage.Set(globals.CacheKeys.DisplayPermissions, false)
+      store.Set(globals.CacheKeys.DisplayPermissions, false)
     ])
       .finally(vm.view.displayMainView);
   };
@@ -1465,7 +1465,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.sync.dataSize = null;
     vm.sync.dataUsed = null;
 
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+    return store.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
         // Return if not synced
         if (!syncEnabled) {
@@ -1545,7 +1545,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     vm.working.message = platform.GetConstant(globals.Constants.Working_Restoring_Message);
     platform.Interface.Working.Show();
 
-    platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+    store.Get(globals.CacheKeys.SyncEnabled)
       .then(function (cachedSyncEnabled) {
         syncEnabled = cachedSyncEnabled;
 
@@ -1555,8 +1555,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
           vm.sync.password = '';
           vm.login.passwordComplexity = {};
           $q.all([
-            platform.LocalStorage.Set(globals.CacheKeys.Password),
-            syncId ? platform.LocalStorage.Set(globals.CacheKeys.SyncId, syncId) : $q.resolve(),
+            store.Set(globals.CacheKeys.Password),
+            syncId ? store.Set(globals.CacheKeys.SyncId, syncId) : $q.resolve(),
             serviceUrl ? updateServiceUrl(serviceUrl) : $q.resolve()
           ])
             .then(resolve)
@@ -1718,7 +1718,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         var arrValue = value.split(globals.QrCode.Delimiter);
         vm.sync.id = arrValue[0];
         return $q.all([
-          platform.LocalStorage.Set(globals.CacheKeys.SyncId, arrValue[0]),
+          store.Set(globals.CacheKeys.SyncId, arrValue[0]),
           updateServiceUrl(arrValue[1])
         ]);
       })
@@ -2005,7 +2005,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
       return $q.resolve();
     }
 
-    return platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+    return store.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
         if (!syncEnabled) {
           return;
@@ -2031,13 +2031,13 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   var settings_Prefs_CheckForAppUpdates_Click = function () {
     // Update setting value and store in cache
     var value = !vm.settings.checkForAppUpdates;
-    platform.LocalStorage.Set(globals.CacheKeys.CheckForAppUpdates, value);
+    store.Set(globals.CacheKeys.CheckForAppUpdates, value);
   };
 
   var settings_Prefs_DisplaySearchBar_Click = function () {
     // Update setting value and store in cache
     var value = !vm.settings.displaySearchBarBeneathResults;
-    platform.LocalStorage.Set(globals.CacheKeys.DisplaySearchBarBeneathResults, value);
+    store.Set(globals.CacheKeys.DisplaySearchBarBeneathResults, value);
   };
 
   var startSyncing = function () {
@@ -2053,7 +2053,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     api.CheckServiceStatus()
       .then(function () {
         // Clear the current cached password
-        return platform.LocalStorage.Set(globals.CacheKeys.Password);
+        return store.Set(globals.CacheKeys.Password);
       })
       .then(function () {
         // If a sync ID has not been supplied, get a new one
@@ -2068,9 +2068,9 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
               // Add sync data to cache and return
               return $q.all([
-                platform.LocalStorage.Set(globals.CacheKeys.LastUpdated, newSync.lastUpdated),
-                platform.LocalStorage.Set(globals.CacheKeys.SyncId, newSync.id),
-                platform.LocalStorage.Set(globals.CacheKeys.SyncVersion, newSync.version)
+                store.Set(globals.CacheKeys.LastUpdated, newSync.lastUpdated),
+                store.Set(globals.CacheKeys.SyncId, newSync.id),
+                store.Set(globals.CacheKeys.SyncVersion, newSync.version)
               ])
                 .then(function () {
                   return newSync.id;
@@ -2099,8 +2099,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
               // Add sync version to cache and return current sync ID
               return $q.all([
-                platform.LocalStorage.Set(globals.CacheKeys.SyncId, vm.sync.id),
-                platform.LocalStorage.Set(globals.CacheKeys.SyncVersion, response.version)
+                store.Set(globals.CacheKeys.SyncId, vm.sync.id),
+                store.Set(globals.CacheKeys.SyncVersion, response.version)
               ])
                 .then(function () {
                   return vm.sync.id;
@@ -2116,7 +2116,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         // Generate a password hash, cache it then queue the sync
         return utility.GetPasswordHash(vm.sync.password, syncId)
           .then(function (passwordHash) {
-            platform.LocalStorage.Set(globals.CacheKeys.Password, passwordHash);
+            store.Set(globals.CacheKeys.Password, passwordHash);
             return queueSync(syncData);
           })
           .then(function () {
@@ -2158,7 +2158,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     if (syncData.type === globals.SyncType.Push) {
       keys.push(globals.CacheKeys.SyncId);
     }
-    platform.LocalStorage.Set(keys);
+    store.Set(keys);
 
     // If ID was removed disable sync and display login panel
     if (err && err.code === globals.ErrorCodes.SyncRemoved) {
@@ -2254,8 +2254,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   var syncForm_NewSync_Click = function () {
     vm.login.displayNewSyncPanel = true;
     vm.login.displayPasswordConfirmation = false;
-    platform.LocalStorage.Set(globals.CacheKeys.SyncId);
-    platform.LocalStorage.Set(globals.CacheKeys.Password);
+    store.Set(globals.CacheKeys.SyncId);
+    store.Set(globals.CacheKeys.Password);
     vm.sync.id = null;
     vm.sync.password = '';
     vm.syncForm.txtId.$setValidity('InvalidSyncId', true);
@@ -2272,7 +2272,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   var syncForm_OtherSyncsDisabled_Click = function () {
     // Hide disable other syncs warning panel and update cache setting
     vm.login.displayOtherSyncsWarning = false;
-    platform.LocalStorage.Set(globals.CacheKeys.DisplayOtherSyncsWarning, false);
+    store.Set(globals.CacheKeys.DisplayOtherSyncsWarning, false);
 
     // Focus on password field
     if (!utility.IsMobilePlatform(vm.platformName)) {
@@ -2310,7 +2310,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   var syncForm_SyncId_Change = function () {
     if (!vm.sync.id || utility.SyncIdIsValid(vm.sync.id)) {
       vm.syncForm.txtId.$setValidity('InvalidSyncId', true);
-      platform.LocalStorage.Set(globals.CacheKeys.SyncId, vm.sync.id);
+      store.Set(globals.CacheKeys.SyncId, vm.sync.id);
     }
     else {
       vm.syncForm.txtId.$setValidity('InvalidSyncId', false);
@@ -2354,8 +2354,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
     var url = vm.sync.newService.url.replace(/\/$/, '');
     return $q.all([
       updateServiceUrl(url),
-      platform.LocalStorage.Set(globals.CacheKeys.SyncId),
-      platform.LocalStorage.Set(globals.CacheKeys.Password)
+      store.Set(globals.CacheKeys.SyncId),
+      store.Set(globals.CacheKeys.Password)
     ])
       .then(function () {
         // Update view
@@ -2473,7 +2473,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
 
     $q.all([
       bookmarks.GetSyncBookmarksToolbar(),
-      platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+      store.Get(globals.CacheKeys.SyncEnabled)
     ])
       .then(function (cachedData) {
         var syncBookmarksToolbar = cachedData[0];
@@ -2482,7 +2482,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         // If sync not enabled or user just clicked to disable toolbar sync, update stored value and return
         if (!syncEnabled || syncBookmarksToolbar) {
           utility.LogInfo('Toolbar sync ' + (!syncBookmarksToolbar ? 'enabled' : 'disabled'));
-          return platform.LocalStorage.Set(globals.CacheKeys.SyncBookmarksToolbar, !syncBookmarksToolbar);
+          return store.Set(globals.CacheKeys.SyncBookmarksToolbar, !syncBookmarksToolbar);
         }
 
         // Otherwise, display sync confirmation
@@ -2501,7 +2501,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   var settings_Prefs_SyncBookmarksToolbar_Confirm = function () {
     var syncId;
 
-    platform.LocalStorage.Get([
+    store.Get([
       globals.CacheKeys.SyncEnabled,
       globals.CacheKeys.SyncId
     ])
@@ -2519,7 +2519,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
         platform.Interface.Working.Show();
 
         // Enable setting in cache
-        return platform.LocalStorage.Set(globals.CacheKeys.SyncBookmarksToolbar, true);
+        return store.Set(globals.CacheKeys.SyncBookmarksToolbar, true);
       })
       .then(function () {
         utility.LogInfo('Toolbar sync enabled');
@@ -2533,13 +2533,13 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, api, ut
   };
 
   var updatedPanel_Continue_Click = function () {
-    platform.LocalStorage.Set(globals.CacheKeys.DisplayUpdated, false);
+    store.Set(globals.CacheKeys.DisplayUpdated, false);
     vm.view.change(vm.view.views.support);
   };
 
   var updateServiceUrl = function (url) {
     url = url.replace(/\/$/, '');
-    return platform.LocalStorage.Set(globals.CacheKeys.ServiceUrl, url)
+    return store.Set(globals.CacheKeys.ServiceUrl, url)
       .then(function () {
         vm.sync.service.apiVersion = '';
         vm.sync.service.location = null;

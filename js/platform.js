@@ -61,10 +61,6 @@ xBrowserSync.App.Platform = function () {
       },
       Refresh: notImplemented
     },
-    LocalStorage: {
-      Get: notImplemented,
-      Set: notImplemented
-    },
     OpenUrl: notImplemented,
     Permissions: {
       Check: notImplemented,

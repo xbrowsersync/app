@@ -9,7 +9,7 @@ SpinnerDialog.show = function () { };
  * Description: Implements xBrowserSync.App.Platform for Android app.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, platform, globals, utility, bookmarks) {
+xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, platform, globals, store, utility, bookmarks) {
   'use strict';
 
   var backgroundSyncInterval, currentPage, loadingId, sharedBookmark, vm;
@@ -839,8 +839,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.Interface.Working.Show = displayLoading;
     platform.Interface.Working.Hide = hideLoading;
     platform.Interface.Refresh = methodNotApplicable;
-    platform.LocalStorage.Get = getFromLocalStorage;
-    platform.LocalStorage.Set = setInLocalStorage;
     platform.OpenUrl = openUrl;
     platform.Scanner.Start = startScanning;
     platform.Scanner.Stop = stopScanning;
@@ -937,7 +935,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     });
   };
 
-  var getAllFromLocalStorage = function () {
+  var getAllFromNativeStorage = function () {
     return $q(function (resolve, reject) {
       var cachedData = {};
 
@@ -948,7 +946,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           return resolve(null);
         }
 
-        utility.LogError(err, 'platform.getAllFromLocalStorage');
+        utility.LogError(err, 'platform.getAllFromNativeStorage');
         err.code = globals.ErrorCodes.FailedLocalStorage;
         reject(err);
       };
@@ -996,47 +994,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var getCurrentUrl = function () {
     return $q.resolve(currentPage && currentPage.url);
-  };
-
-  var getFromLocalStorage = function (storageKeys) {
-    var getItem = function (key) {
-      return $q(function (resolve, reject) {
-        var failure = function (err) {
-          err = err || new Error();
-          if (err.code === 2) {
-            // Item not found
-            return resolve(null);
-          }
-
-          utility.LogError(err, 'platform.getFromLocalStorage');
-          err.code = globals.ErrorCodes.FailedLocalStorage;
-          reject(err);
-        };
-
-        NativeStorage.getItem(key, resolve, failure);
-      });
-    };
-
-    // Filter by requested keys
-    var getCachedData;
-    switch (true) {
-      case storageKeys == null:
-        // No keys supplied, get all
-        getCachedData = getAllFromLocalStorage();
-        break;
-      case Array.isArray(storageKeys):
-        // Array of keys supplied, get all then filter
-        getCachedData = getAllFromLocalStorage()
-          .then(function (cachedData) {
-            return _.pick(cachedData, storageKeys);
-          });
-        break;
-      default:
-        // Single key supplied, get single item
-        getCachedData = getItem(storageKeys);
-    }
-
-    return getCachedData;
   };
 
   var getHelpPages = function () {
@@ -1327,23 +1284,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
-  var setInLocalStorage = function (storageKey, value) {
-    return $q(function (resolve, reject) {
-      var errorCallback = function (err) {
-        err = err || new Error();
-        err.code = globals.ErrorCodes.FailedLocalStorage;
-        reject(err);
-      };
-
-      if (value != null) {
-        NativeStorage.setItem(storageKey, value, resolve, errorCallback);
-      }
-      else {
-        NativeStorage.remove(storageKey, resolve, errorCallback);
-      }
-    });
-  };
-
   var startScanning = function () {
     vm.scanner.lightEnabled = false;
     vm.scanner.invalidSyncId = false;
@@ -1470,7 +1410,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var checkForInstallOrUpgrade = function () {
     // Check for stored app version and compare it to current
     var mobileAppVersion = localStorage.getItem('xBrowserSync-mobileAppVersion');
-    return (mobileAppVersion ? $q.resolve(mobileAppVersion) : getFromLocalStorage(globals.CacheKeys.AppVersion))
+    return (mobileAppVersion ? $q.resolve(mobileAppVersion) : store.Get(globals.CacheKeys.AppVersion))
       .then(function (currentVersion) {
         return currentVersion ? handleUpgrade(currentVersion, globals.AppVersion) : handleInstall(globals.AppVersion);
       });
@@ -1753,11 +1693,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var handleInstall = function (installedVersion) {
-    return $q.all([
-      setInLocalStorage(globals.CacheKeys.AppVersion, installedVersion),
-      setInLocalStorage(globals.CacheKeys.CheckForAppUpdates, true),
-      setInLocalStorage(globals.CacheKeys.DisplayHelp, true)
-    ])
+    return store.Clear()
+      .then(function () {
+        return $q.all([
+          store.Set(globals.CacheKeys.AppVersion, installedVersion),
+          store.Set(globals.CacheKeys.CheckForAppUpdates, true),
+          store.Set(globals.CacheKeys.DisplayHelp, true)
+        ]);
+      })
       .then(function () {
         utility.LogInfo('Installed v' + installedVersion);
       });
@@ -1790,7 +1733,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
   var handleResume = function () {
     // Check if sync enabled and reset network disconnected flag
-    platform.LocalStorage.Get(globals.CacheKeys.SyncEnabled)
+    store.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
         // Deselect bookmark
         vm.search.selectedBookmark = null;
@@ -1825,7 +1768,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     utility.LogInfo('Starting up');
 
     // Retrieve cached data
-    return getFromLocalStorage()
+    return store.Get()
       .then(function (cachedData) {
         syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
         var checkForAppUpdates = cachedData[globals.CacheKeys.CheckForAppUpdates];
@@ -1891,14 +1834,22 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     }
 
     // Clear trace log
-    return setInLocalStorage(globals.CacheKeys.TraceLog)
+    return store.Set(globals.CacheKeys.TraceLog)
       .then(function () {
         utility.LogInfo('Upgrading from ' + oldVersion + ' to ' + newVersion);
       })
       .then(function () {
+        if (compareVersions(oldVersion, newVersion)) {
+          switch (true) {
+            case newVersion.indexOf('1.5.3') === 0:
+              return upgradeTo153();
+          }
+        }
+      })
+      .then(function () {
         return $q.all([
-          setInLocalStorage(globals.CacheKeys.AppVersion, newVersion),
-          setInLocalStorage(globals.CacheKeys.DisplayUpdated, true)
+          store.Set(globals.CacheKeys.AppVersion, newVersion),
+          store.Set(globals.CacheKeys.DisplayUpdated, true)
         ]);
       })
       .catch(function (err) {
@@ -1924,6 +1875,23 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   var syncForm_EnableSync_Click = function () {
     // Don't display confirmation before syncing
     vm.events.syncForm_ConfirmSync_Click();
+  };
+
+  var upgradeTo153 = function () {
+    // Convert local storage items to IndexedDB
+    return getAllFromNativeStorage()
+      .then(function (cachedData) {
+        if (!cachedData || Object.keys(cachedData).length === 0) {
+          return;
+        }
+
+        return $q.all(Object.keys(cachedData).map(function (key) {
+          return store.Set(key, cachedData[key]);
+        }));
+      })
+      .then(function () {
+        return NativeStorage.clear();
+      });
   };
 
   // Call constructor
