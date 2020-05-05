@@ -26,9 +26,11 @@
     "countries-list": "^2.5.4",
     "dompurify": "^2.0.8",
     "hammerjs": "^2.0.8",
+    "jquery": "^1.9.1",
     "lzutf8": "^0.5.5",
     "marked": "^0.8.2",
     "ng-infinite-scroll": "^1.3.0",
+    "popper.js": "^1.16.0",
     "qrcode-svg": "^1.1.0",
     "source-code-pro": "^2.30.2",
     "typeface-roboto-condensed": "0.0.75",
@@ -38,7 +40,7 @@
   "devDependencies": {
     "cross-env": "^7.0.2",
     "jshint": "^2.11.0",
-    "minify": "^5.1.1",
+    "minify": "^4.1.3",
     "node-sass": "^4.13.1",
     "npm-build-tools": "^2.2.5",
     "uglify-js": "^3.8.1"
