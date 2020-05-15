@@ -60,7 +60,11 @@ xBrowserSync.App.Store = function ($q) {
       return $q.resolve();
     }
 
-    return value == null ? idbKeyval.del(key, getStore()) : idbKeyval.set(key, value, getStore());
+    return $q(function (resolve, reject) {
+      (value == null ? idbKeyval.del(key, getStore()) : idbKeyval.set(key, value, getStore()))
+        .then(resolve)
+        .catch(reject);
+    });
   };
 
   return store;

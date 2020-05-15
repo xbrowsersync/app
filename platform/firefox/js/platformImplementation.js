@@ -6,7 +6,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  * Description: Implements xBrowserSync.App.Platform for Firefox extension.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, platform, globals, store, utility, bookmarks) {
+xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, bookmarkIdMapper, bookmarks, globals, platform, store, utility) {
   'use strict';
 
   var vm, loadingId, refreshInterfaceTimeout,
@@ -27,16 +27,16 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.AutomaticUpdates.NextUpdate = getAutoUpdatesNextRun;
     platform.AutomaticUpdates.Start = startAutoUpdates;
     platform.AutomaticUpdates.Stop = stopAutoUpdates;
+    platform.Bookmarks.BuildIdMappings = buildIdMappings;
     platform.Bookmarks.Clear = clearBookmarks;
     platform.Bookmarks.Created = bookmarksCreated;
     platform.Bookmarks.CreateSingle = createSingle;
     platform.Bookmarks.Deleted = bookmarksDeleted;
     platform.Bookmarks.DeleteSingle = deleteSingle;
     platform.Bookmarks.Get = getBookmarks;
-    platform.Bookmarks.GetLocalBookmarkLocationInfo = getLocalBookmarkLocationInfo;
     platform.Bookmarks.Moved = bookmarksMoved;
     platform.Bookmarks.Populate = populateBookmarks;
-    platform.Bookmarks.ShouldSyncLocalChanges = shouldSyncLocalChanges;
+    platform.Bookmarks.ReorderContainers = reorderLocalContainers;
     platform.Bookmarks.Updated = bookmarksUpdated;
     platform.Bookmarks.UpdateSingle = updateSingle;
     platform.CopyToClipboard = copyToClipboard;
@@ -68,53 +68,335 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 	 * Public functions
 	 * ------------------------------------------------------------------------------------ */
 
-  var bookmarksCreated = function (xBookmarks, changeInfo) {
-    // Remove native bookmark id
-    delete changeInfo.bookmark.id;
-
-    // Create synced bookmark
-    return bookmarks.AddNewInXBookmarks(changeInfo.bookmark, changeInfo.container, changeInfo.indexPath, xBookmarks);
-  };
-
-  var bookmarksDeleted = function (xBookmarks, changeInfo) {
-    // Remove synced bookmark
-    return bookmarks.RemoveExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks);
-  };
-
-  var bookmarksMoved = function (xBookmarks, changeInfo) {
-    // Check if no need to sync either change
-    if (!changeInfo.syncChange && !changeInfo.targetInfo.syncChange) {
-      return $q.resolve({ bookmarks: null });
-    }
-
-    // Remove synced bookmark if syncing move from
-    return (changeInfo.syncChange ?
-      bookmarks.RemoveExistingInXBookmarks(changeInfo.container, changeInfo.indexPath, xBookmarks) :
-      $q(function (resolve) {
-        // If not syncing move from, create a new bookmark from local bookmark to avoid unsynced conflicts
-        var convertedBookmark = bookmarks.ConvertLocalBookmarkToXBookmark(changeInfo.bookmark, xBookmarks);
-        resolve({
-          bookmark: convertedBookmark,
-          bookmarks: xBookmarks
-        });
-      })
-    )
-      .then(function (results) {
-        // Ensure a new bookmark id is created if not syncing the initial remove
-        if (!changeInfo.syncChange && changeInfo.targetInfo.syncChange) {
-          delete results.bookmark.id;
+  var bookmarksCreated = function (xBookmarks, createInfo) {
+    // Check if the current bookmark is a container
+    return isLocalBookmarkContainer(createInfo.parentId)
+      .then(function (localContainer) {
+        if (localContainer) {
+          // Check container exists
+          var container = bookmarks.GetContainer(localContainer.xBookmarkTitle, xBookmarks, true);
+          return container.id;
         }
 
-        // Create synced bookmark if syncing move to
-        return (changeInfo.targetInfo.syncChange ?
-          bookmarks.AddNewInXBookmarks(results.bookmark, changeInfo.targetInfo.container, changeInfo.targetInfo.indexPath, results.bookmarks) :
-          $q.resolve(results));
+        // Get the synced parent id from id mappings and retrieve the synced parent bookmark
+        return bookmarkIdMapper.Get(createInfo.parentId)
+          .then(function (idMapping) {
+            if (!idMapping) {
+              // No mappings found, skip sync
+              utility.LogInfo('No id mapping found, skipping sync');
+              return;
+            }
+
+            return idMapping.syncedId;
+          });
+      })
+      .then(function (parentId) {
+        if (!parentId) {
+          return;
+        }
+
+        // Add new bookmark then check if the change should be synced
+        var newBookmarkInfo = angular.copy(createInfo);
+        newBookmarkInfo.parentId = parentId;
+        delete newBookmarkInfo.id;
+        return bookmarks.AddBookmark(newBookmarkInfo, xBookmarks)
+          .then(function (result) {
+            return shouldSyncLocalChanges(result.bookmark, result.bookmarks)
+              .then(function (syncChange) {
+                if (!syncChange) {
+                  return;
+                }
+
+                // Add new id mapping
+                var idMapping = bookmarkIdMapper.CreateMapping(result.bookmark.id, createInfo.id);
+                return bookmarkIdMapper.Add(idMapping)
+                  .then(function () {
+                    return result.bookmarks;
+                  });
+              });
+          });
       });
   };
 
-  var bookmarksUpdated = function (xBookmarks, changeInfo) {
-    // Update synced bookmark
-    return bookmarks.UpdateExistingInXBookmarks(changeInfo.bookmark, changeInfo.container, changeInfo.indexPath, xBookmarks);
+  var bookmarksDeleted = function (xBookmarks, deleteInfo) {
+    // Check if the deleted bookmark was an unsupported container
+    var isContainer = unsupportedContainers.filter(function (x) {
+      return x === deleteInfo.title;
+    }).length > 0;
+    if (isContainer) {
+      return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
+    }
+
+    // Get the synced bookmark id from delete info
+    return bookmarkIdMapper.Get(deleteInfo.id)
+      .then(function (idMapping) {
+        if (!idMapping) {
+          // No mappings found, skip sync
+          utility.LogInfo('No id mapping found, skipping sync');
+          return;
+        }
+
+        // Check if the change should be synced
+        var bookmarkToDelete = bookmarks.FindBookmarkById(xBookmarks, idMapping.syncedId);
+        return shouldSyncLocalChanges(bookmarkToDelete, xBookmarks)
+          .then(function (syncChange) {
+            if (!syncChange) {
+              return;
+            }
+
+            // Get all child bookmark mappings
+            var descendantsIds = bookmarks.GetIdsFromDescendants(bookmarkToDelete);
+
+            // Delete bookmark
+            return bookmarks.RemoveBookmarkById(idMapping.syncedId, xBookmarks)
+              .then(function (updatedBookmarks) {
+                // Remove all retrieved ids from mappings
+                var syncedIds = descendantsIds.concat([idMapping.syncedId]);
+                return bookmarkIdMapper.Remove(syncedIds)
+                  .then(function () {
+                    return updatedBookmarks;
+                  });
+              });
+          });
+      });
+  };
+
+  var bookmarksMoved = function (xBookmarks, moveInfo) {
+    var changesMade = false;
+
+    // Get the moved bookmark and new parent ids from id mappings or if container use the existing id
+    return $q.all([
+      bookmarkIdMapper.Get(moveInfo.id),
+      (isLocalBookmarkContainer(moveInfo.parentId)
+        .then(function (localContainer) {
+          if (localContainer) {
+            var container = bookmarks.GetContainer(localContainer.xBookmarkTitle, xBookmarks, true);
+            return { syncedId: container.id };
+          }
+          return bookmarkIdMapper.Get(moveInfo.parentId);
+        }))
+    ])
+      .then(function (idMappings) {
+        if (!idMappings[0] && !idMappings[1]) {
+          // No mappings found, skip sync
+          utility.LogInfo('No id mappings found, skipping sync');
+          return;
+        }
+
+        // Get the bookmark to be removed
+        return (!idMappings[0] ? createBookmarkFromLocalId(moveInfo.id, xBookmarks) : $q.resolve(bookmarks.FindBookmarkById(xBookmarks, idMappings[0].syncedId)))
+          .then(function (bookmarkToRemove) {
+            // If old parent is mapped, remove the moved bookmark
+            var removeBookmarkPromise;
+            if (!idMappings[0]) {
+              // Moved bookmark not mapped, skip remove
+              removeBookmarkPromise = $q.resolve(xBookmarks);
+            }
+            else {
+              // Check if change should be synced then remove the bookmark
+              removeBookmarkPromise = shouldSyncLocalChanges(bookmarkToRemove, xBookmarks)
+                .then(function (syncChange) {
+                  if (!syncChange) {
+                    return xBookmarks;
+                  }
+                  return bookmarks.RemoveBookmarkById(idMappings[0].syncedId, xBookmarks)
+                    .then(function (updatedBookmarks) {
+                      // Set flag to ensure update bookmarks are synced
+                      changesMade = true;
+                      return updatedBookmarks;
+                    });
+                });
+            }
+            return removeBookmarkPromise
+              .then(function (bookmarksAfterRemoval) {
+                var addBookmarkPromise;
+                if (!idMappings[1]) {
+                  // New parent not mapped, skip add
+                  addBookmarkPromise = $q.resolve(bookmarksAfterRemoval);
+                }
+                else {
+                  // Add the bookmark then check if change should be synced
+                  var newBookmarkInfo = angular.copy(bookmarkToRemove);
+                  newBookmarkInfo.parentId = idMappings[1].syncedId;
+                  addBookmarkPromise = getNumContainersBeforeBookmarkIndex(moveInfo.parentId, moveInfo.index)
+                    .then(function (numContainers) {
+                      // Adjust the target index by the number of container folders then add the bookmark
+                      newBookmarkInfo.index = moveInfo.index - numContainers;
+                      return bookmarks.AddBookmark(newBookmarkInfo, bookmarksAfterRemoval);
+                    })
+                    .then(function (result) {
+                      return shouldSyncLocalChanges(result.bookmark, result.bookmarks)
+                        .then(function (syncChange) {
+                          if (!syncChange) {
+                            return bookmarksAfterRemoval;
+                          }
+
+                          // Set flag to ensure update bookmarks are synced
+                          changesMade = true;
+
+                          // Add new id mapping for moved bookmark
+                          if (idMappings[0]) {
+                            // If moved bookmark was already mapped, no need to update id mappings
+                            return result.bookmarks;
+                          }
+                          var idMapping = bookmarkIdMapper.CreateMapping(result.bookmark.id, moveInfo.id);
+                          return bookmarkIdMapper.Add(idMapping)
+                            .then(function () {
+                              return result.bookmarks;
+                            });
+                        });
+                    });
+                }
+                return addBookmarkPromise;
+              })
+              .then(function (updatedBookmarks) {
+                if (!changesMade) {
+                  // No changes made, skip sync
+                  return;
+                }
+                return updatedBookmarks;
+              });
+          });
+      });
+  };
+
+  var bookmarksUpdated = function (xBookmarks, updateInfo) {
+    // Get the synced bookmark id from change info
+    return bookmarkIdMapper.Get(updateInfo.id)
+      .then(function (idMapping) {
+        if (!idMapping) {
+          // No mappings found, skip sync
+          utility.LogInfo('No id mapping found, skipping sync');
+          return;
+        }
+
+        // Check if the change should be synced
+        var bookmarkToUpdate = bookmarks.FindBookmarkById(xBookmarks, idMapping.syncedId);
+        return shouldSyncLocalChanges(bookmarkToUpdate, xBookmarks)
+          .then(function (syncChange) {
+            if (!syncChange) {
+              return;
+            }
+
+            // Update the bookmark with the update info
+            return bookmarks.UpdateBookmarkById(idMapping.syncedId, updateInfo, xBookmarks);
+          });
+      });
+  };
+
+  var buildIdMappings = function (syncedBookmarks) {
+    var mapIds = function (nodes, syncedBookmarks) {
+      return nodes.reduce(function (acc, val, index) {
+        // Create mapping for the current node
+        var mapping = bookmarkIdMapper.CreateMapping(syncedBookmarks[index].id, val.id);
+        acc.push(mapping);
+
+        // Process child nodes
+        return (val.children && val.children.length > 0) ? acc.concat(mapIds(val.children, syncedBookmarks[index].children)) : acc;
+      }, []);
+    };
+
+    // Get local container node ids
+    return getLocalContainerIds()
+      .then(function (localContainerIds) {
+        var menuBookmarksId = localContainerIds[globals.Bookmarks.MenuContainerName];
+        var mobileBookmarksId = localContainerIds[globals.Bookmarks.MobileContainerName];
+        var otherBookmarksId = localContainerIds[globals.Bookmarks.OtherContainerName];
+        var toolbarBookmarksId = localContainerIds[globals.Bookmarks.ToolbarContainerName];
+
+        // Map menu bookmarks
+        var getMenuBookmarks = menuBookmarksId == null ? $q.resolve([]) :
+          browser.bookmarks.getSubTree(menuBookmarksId)
+            .then(function (subTree) {
+              var menuBookmarks = subTree[0];
+              if (!menuBookmarks.children || menuBookmarks.children.length === 0) {
+                return [];
+              }
+
+              // Map ids between nodes and synced container children
+              var menuBookmarksContainer = syncedBookmarks.find(function (x) {
+                return x.title === globals.Bookmarks.MenuContainerName;
+              });
+              return !!menuBookmarksContainer && menuBookmarksContainer.children && menuBookmarksContainer.children.length > 0 ?
+                mapIds(menuBookmarks.children, menuBookmarksContainer.children) : [];
+            });
+
+        // Map mobile bookmarks
+        var getMobileBookmarks = mobileBookmarksId == null ? $q.resolve([]) :
+          browser.bookmarks.getSubTree(mobileBookmarksId)
+            .then(function (subTree) {
+              var mobileBookmarks = subTree[0];
+              if (!mobileBookmarks.children || mobileBookmarks.children.length === 0) {
+                return [];
+              }
+
+              // Map ids between nodes and synced container children
+              var mobileBookmarksContainer = syncedBookmarks.find(function (x) {
+                return x.title === globals.Bookmarks.MobileContainerName;
+              });
+              return !!mobileBookmarksContainer && mobileBookmarksContainer.children && mobileBookmarksContainer.children.length > 0 ?
+                mapIds(mobileBookmarks.children, mobileBookmarksContainer.children) : [];
+            });
+
+        // Map other bookmarks
+        var getOtherBookmarks = otherBookmarksId == null ? $q.resolve([]) :
+          browser.bookmarks.getSubTree(otherBookmarksId)
+            .then(function (subTree) {
+              var otherBookmarks = subTree[0];
+              if (!otherBookmarks.children || otherBookmarks.children.length === 0) {
+                return [];
+              }
+
+              // Remove any unsupported container folders present
+              var nodes = otherBookmarks.children.filter(function (x) {
+                return Object.values(localContainerIds).indexOf(x.id) < 0;
+              });
+
+              // Map ids between nodes and synced container children
+              var otherBookmarksContainer = syncedBookmarks.find(function (x) {
+                return x.title === globals.Bookmarks.OtherContainerName;
+              });
+              return !!otherBookmarksContainer && otherBookmarksContainer.children && otherBookmarksContainer.children.length > 0 ?
+                mapIds(nodes, otherBookmarksContainer.children) : [];
+            });
+
+        // Map toolbar bookmarks if enabled
+        var getToolbarBookmarks = toolbarBookmarksId == null ? $q.resolve([]) :
+          $q.all([
+            bookmarks.GetSyncBookmarksToolbar(),
+            browser.bookmarks.getSubTree(toolbarBookmarksId)
+          ])
+            .then(function (results) {
+              var syncBookmarksToolbar = results[0];
+              var toolbarBookmarks = results[1][0];
+
+              if (!syncBookmarksToolbar) {
+                return;
+              }
+
+              if (!toolbarBookmarks.children || toolbarBookmarks.children.length === 0) {
+                return [];
+              }
+
+              // Map ids between nodes and synced container children
+              var toolbarBookmarksContainer = syncedBookmarks.find(function (x) {
+                return x.title === globals.Bookmarks.ToolbarContainerName;
+              });
+              return !!toolbarBookmarksContainer && toolbarBookmarksContainer.children && toolbarBookmarksContainer.children.length > 0 ?
+                mapIds(toolbarBookmarks.children, toolbarBookmarksContainer.children) : [];
+            });
+
+        return $q.all([getMenuBookmarks, getMobileBookmarks, getOtherBookmarks, getToolbarBookmarks]);
+      })
+      .then(function (results) {
+        // Combine all mappings
+        var combinedMappings = results.reduce(function (acc, val) {
+          return acc.concat(val);
+        }, []);
+
+        // Save mappings
+        return bookmarkIdMapper.Set(combinedMappings);
+      });
   };
 
   var clearBookmarks = function () {
@@ -134,7 +416,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             }));
           })
           .catch(function (err) {
-            utility.LogInfo('Error clearing bookmarks menu');
+            utility.LogWarning('Error clearing bookmarks menu');
             throw err;
           });
 
@@ -146,7 +428,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             }));
           })
           .catch(function (err) {
-            utility.LogInfo('Error clearing mobile bookmarks');
+            utility.LogWarning('Error clearing mobile bookmarks');
             throw err;
           });
 
@@ -158,7 +440,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
             }));
           })
           .catch(function (err) {
-            utility.LogInfo('Error clearing other bookmarks');
+            utility.LogWarning('Error clearing other bookmarks');
             throw err;
           });
 
@@ -175,11 +457,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
                 return $q.all(results.map(function (child) {
                   return deleteLocalBookmarksTree(child.id);
                 }));
-              })
-              .catch(function (err) {
-                utility.LogInfo('Error clearing bookmarks toolbar');
-                throw err;
               });
+          })
+          .catch(function (err) {
+            utility.LogWarning('Error clearing bookmarks toolbar');
+            throw err;
           });
 
         return $q.all([clearMenu, clearMobile, clearOthers, clearToolbar]);
@@ -209,23 +491,35 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
-  var createSingle = function (bookmarkToCreate, pathToTarget) {
-    // Get parent local bookmark id from path and create local bookmark
-    return findLocalBookmarkByPath(pathToTarget.slice(1, pathToTarget.length - 1))
-      .then(function (parentLocalBookmark) {
-        return createLocalBookmark(parentLocalBookmark.id, bookmarkToCreate.title, bookmarkToCreate.url);
+  var createSingle = function (createInfo) {
+    // Create local bookmark in other bookmarks container
+    return getLocalContainerIds()
+      .then(function (localContainerIds) {
+        var otherBookmarksId = localContainerIds[globals.Bookmarks.OtherContainerName];
+        return createLocalBookmark(otherBookmarksId, createInfo.bookmark.title, createInfo.bookmark.url);
+      })
+      .then(function (newLocalBookmark) {
+        // Add id mapping for new bookmark
+        var idMapping = bookmarkIdMapper.CreateMapping(createInfo.bookmark.id, newLocalBookmark.id);
+        return bookmarkIdMapper.Add(idMapping);
       });
   };
 
-  var deleteSingle = function (pathToTarget) {
-    // Get local bookmark id from path and then delete
-    return findLocalBookmarkByPath(pathToTarget.slice(1))
-      .then(function (bookmarkToDelete) {
-        if (!bookmarkToDelete) {
-          return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
+  var deleteSingle = function (deleteInfo) {
+    // Get local bookmark id from id mappings
+    return bookmarkIdMapper.Get(null, deleteInfo.bookmark.id)
+      .then(function (idMapping) {
+        if (!idMapping) {
+          utility.LogWarning('No id mapping found for synced id \'' + deleteInfo.bookmark.id + '\'');
+          return;
         }
 
-        return deleteLocalBookmarksTree(bookmarkToDelete.id);
+        // Remove local bookmark
+        return deleteLocalBookmarksTree(idMapping.nativeId)
+          .then(function () {
+            // Remove id mapping
+            return bookmarkIdMapper.Remove(deleteInfo.bookmark.id);
+          });
       });
   };
 
@@ -344,10 +638,39 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         var otherBookmarksId = localContainerIds[globals.Bookmarks.OtherContainerName];
         var toolbarBookmarksId = localContainerIds[globals.Bookmarks.ToolbarContainerName];
 
+        // Get menu bookmarks
+        var getMenuBookmarks = menuBookmarksId == null ? $q.resolve() :
+          browser.bookmarks.getSubTree(menuBookmarksId)
+            .then(function (subTree) {
+              var menuBookmarks = subTree[0];
+              if (menuBookmarks.children && menuBookmarks.children.length > 0) {
+                // Add all bookmarks into flat array
+                bookmarks.Each(menuBookmarks.children, function (bookmark) {
+                  allLocalBookmarks.push(bookmark);
+                });
+                return getLocalBookmarksAsXBookmarks(menuBookmarks.children);
+              }
+            });
+
+        // Get mobile bookmarks
+        var getMobileBookmarks = mobileBookmarksId == null ? $q.resolve() :
+          browser.bookmarks.getSubTree(mobileBookmarksId)
+            .then(function (subTree) {
+              var mobileBookmarks = subTree[0];
+              if (mobileBookmarks.children && mobileBookmarks.children.length > 0) {
+                // Add all bookmarks into flat array
+                bookmarks.Each(mobileBookmarks.children, function (bookmark) {
+                  allLocalBookmarks.push(bookmark);
+                });
+                return getLocalBookmarksAsXBookmarks(mobileBookmarks.children);
+              }
+            });
+
         // Get other bookmarks
         var getOtherBookmarks = otherBookmarksId == null ? $q.resolve() :
-          getLocalBookmarkTree(otherBookmarksId)
-            .then(function (otherBookmarks) {
+          browser.bookmarks.getSubTree(otherBookmarksId)
+            .then(function (subTree) {
+              var otherBookmarks = subTree[0];
               if (!otherBookmarks.children || otherBookmarks.children.length === 0) {
                 return;
               }
@@ -374,11 +697,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         var getToolbarBookmarks = toolbarBookmarksId == null ? $q.resolve() :
           $q.all([
             bookmarks.GetSyncBookmarksToolbar(),
-            getLocalBookmarkTree(toolbarBookmarksId)
+            browser.bookmarks.getSubTree(toolbarBookmarksId)
           ])
             .then(function (results) {
               var syncBookmarksToolbar = results[0];
-              var toolbarBookmarks = results[1];
+              var toolbarBookmarks = results[1][0];
 
               if (!syncBookmarksToolbar) {
                 return;
@@ -394,41 +717,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
               }
             });
 
-        // Get menu bookmarks
-        var getMenuBookmarks = menuBookmarksId == null ? $q.resolve() :
-          getLocalBookmarkTree(menuBookmarksId)
-            .then(function (menuBookmarks) {
-              if (menuBookmarks.children && menuBookmarks.children.length > 0) {
-                // Add all bookmarks into flat array
-                bookmarks.Each(menuBookmarks.children, function (bookmark) {
-                  allLocalBookmarks.push(bookmark);
-                });
-
-                return getLocalBookmarksAsXBookmarks(menuBookmarks.children);
-              }
-            });
-
-        // Get mobile bookmarks
-        var getMobileBookmarks = mobileBookmarksId == null ? $q.resolve() :
-          getLocalBookmarkTree(mobileBookmarksId)
-            .then(function (mobileBookmarks) {
-              if (mobileBookmarks.children && mobileBookmarks.children.length > 0) {
-                // Add all bookmarks into flat array
-                bookmarks.Each(mobileBookmarks.children, function (bookmark) {
-                  allLocalBookmarks.push(bookmark);
-                });
-
-                return getLocalBookmarksAsXBookmarks(mobileBookmarks.children);
-              }
-            });
-
-        return $q.all([getOtherBookmarks, getToolbarBookmarks, getMenuBookmarks, getMobileBookmarks]);
+        return $q.all([getMenuBookmarks, getMobileBookmarks, getOtherBookmarks, getToolbarBookmarks]);
       })
       .then(function (results) {
-        var otherBookmarks = results[0];
-        var toolbarBookmarks = results[1];
-        var menuBookmarks = results[2];
-        var mobileBookmarks = results[3];
+        var menuBookmarks = results[0];
+        var mobileBookmarks = results[1];
+        var otherBookmarks = results[2];
+        var toolbarBookmarks = results[3];
         var xBookmarks = [];
         var otherContainer, toolbarContainer, menuContainer, mobileContainer;
 
@@ -535,67 +830,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     return pages;
   };
 
-  var getLocalBookmarkLocationInfo = function (localBookmarkId, initialIndexPath) {
-    var indexPath = initialIndexPath || [];
-    var localBookmarkTree, containerId, containerName;
-
-    // Create the condition check for the promise loop
-    var doActionUntil = function (id) {
-      // Check if the current bookmark is a container
-      return isLocalBookmarkContainer(id)
-        .then(function (localContainer) {
-          if (localContainer) {
-            // Retain the container info
-            containerId = id;
-            containerName = localContainer.xBookmarkTitle;
-          }
-          return !!localContainer;
-        });
-    };
-
-    // Create the action for the promise loop
-    var action = function (id) {
-      return $q(function (resolve, reject) {
-        // Find the current local bookmark in the tree, add it's index to the path then process it's parent
-        var localBookmark = bookmarks.FindBookmarkById(localBookmarkTree.children, id);
-        if (!localBookmark) {
-          return reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
-        }
-        indexPath.unshift(localBookmark.index);
-
-        // Next process the parent
-        resolve(localBookmark.parentId);
-      });
-    };
-
-    return getLocalBookmarkTree()
-      .then(function (tree) {
-        // Return if local bookmark is not found in tree
-        var localBookmark = bookmarks.FindBookmarkById(tree.children, localBookmarkId);
-        if (!localBookmark) {
-          return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
-        }
-
-        // Create the index path to the bookmark
-        localBookmarkTree = tree;
-        return utility.PromiseWhile(localBookmarkId, doActionUntil, action)
-          .then(function () {
-            // Adjust child index of other bookmarks to account for any unsupported containers
-            return getNumContainersBeforeBookmarkIndex(containerId, indexPath[0])
-              .then(function (numContainers) {
-                // Adjust the initial index by the number of containers
-                return [indexPath[0] - numContainers].concat(indexPath.slice(1));
-              });
-          })
-          .then(function (adjustedIndexPath) {
-            return {
-              container: containerName,
-              indexPath: adjustedIndexPath
-            };
-          });
-      });
-  };
-
   var getNewTabUrl = function () {
     return 'about:newtab';
   };
@@ -606,7 +840,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 
     return browser.tabs.query({ active: true, currentWindow: true })
       .then(function (tabs) {
-        // If active tab empty, return
+        // If active tab empty, throw error
         activeTab = tabs && tabs[0];
         if (!activeTab) {
           return $q.reject({ code: globals.ErrorCodes.FailedGetPageMetadata });
@@ -617,6 +851,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
           title: activeTab.title,
           url: activeTab.url
         };
+
+        // Don't get metadata if this is a firefox url
+        if (getFullMetadata) {
+          getFullMetadata = !(/^about\:/i).test(activeTab.url);
+        }
 
         // If not retrieving full metadata return with default
         if (!getFullMetadata) {
@@ -779,8 +1018,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         return $q.all([populateMenu, populateMobile, populateOther, populateToolbar]);
       })
       .then(function () {
-        var populateEndTime = new Date();
-        utility.LogInfo('Local population completed in ' + ((populateEndTime - populateStartTime) / 1000) + 's');
+        utility.LogInfo('Local bookmarks populated in ' + ((new Date() - populateStartTime) / 1000) + 's');
+        // Move local containers into the correct order
         return reorderLocalContainers();
       });
   };
@@ -870,16 +1109,20 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
-  var shouldSyncLocalChanges = function (changeInfo) {
-    // If changed bookmark is a container, disable sync
-    return wasContainerChanged(changeInfo.bookmark)
+  var shouldSyncLocalChanges = function (changedBookmark, xBookmarks) {
+    // Check if container was changed
+    return wasContainerChanged(changedBookmark, xBookmarks)
       .then(function (changedBookmarkIsContainer) {
         if (changedBookmarkIsContainer) {
           return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
         }
 
         // If container is Toolbar, check if Toolbar sync is disabled
-        return changeInfo.container === globals.Bookmarks.ToolbarContainerName ? bookmarks.GetSyncBookmarksToolbar() : $q.resolve(true);
+        var container = bookmarks.GetContainerByBookmarkId(changedBookmark.id, xBookmarks);
+        if (!container) {
+          return $q.reject({ code: globals.ErrorCodes.ContainerNotFound });
+        }
+        return container.title === globals.Bookmarks.ToolbarContainerName ? bookmarks.GetSyncBookmarksToolbar() : $q.resolve(true);
       })
       .then(function (syncBookmarksToolbar) {
         if (!syncBookmarksToolbar) {
@@ -913,15 +1156,17 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     browser.alarms.clear(globals.Alarm.Name);
   };
 
-  var updateSingle = function (updatedBookmark, pathToTarget) {
-    // Get local bookmark id from path and then update
-    return findLocalBookmarkByPath(pathToTarget.slice(1))
-      .then(function (localBookmarkToUpdate) {
-        if (!localBookmarkToUpdate) {
-          return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
+  var updateSingle = function (updateInfo) {
+    // Get local bookmark id from id mappings
+    return bookmarkIdMapper.Get(null, updateInfo.bookmark.id)
+      .then(function (idMapping) {
+        if (!idMapping) {
+          utility.LogWarning('No id mapping found for synced id \'' + updateInfo.bookmark.id + '\'');
+          return;
         }
 
-        return updateLocalBookmark(localBookmarkToUpdate.id, updatedBookmark.title, updatedBookmark.url);
+        // Update local bookmark
+        return updateLocalBookmark(idMapping.nativeId, updateInfo.bookmark.title, updateInfo.bookmark.url);
       });
   };
 
@@ -929,6 +1174,18 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
 	/* ------------------------------------------------------------------------------------
 	 * Private functions
 	 * ------------------------------------------------------------------------------------ */
+
+  var createBookmarkFromLocalId = function (id, xBookmarks) {
+    return browser.bookmarks.get(id)
+      .then(function (results) {
+        if (!results || results.length === 0) {
+          return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
+        }
+        var localBookmark = results[0];
+        var convertedBookmark = bookmarks.ConvertLocalBookmarkToXBookmark(localBookmark, xBookmarks);
+        return convertedBookmark;
+      });
+  };
 
   var createLocalBookmark = function (parentId, title, url, index) {
     var newLocalBookmark = {
@@ -1015,101 +1272,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
-  var findLocalBookmarkByPath = function (path) {
-    var menuBookmarksId, mobileBookmarksId, otherBookmarksId, toolbarBookmarksId;
-    var container = path.shift().bookmark;
-    if (!bookmarks.XBookmarkIsContainer(container)) {
-      // First path item should always be a container
-      return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
-    }
-
-    // Get local container node ids
-    return getLocalContainerIds()
-      .then(function (localContainerIds) {
-        menuBookmarksId = localContainerIds[globals.Bookmarks.MenuContainerName];
-        mobileBookmarksId = localContainerIds[globals.Bookmarks.MobileContainerName];
-        otherBookmarksId = localContainerIds[globals.Bookmarks.OtherContainerName];
-        toolbarBookmarksId = localContainerIds[globals.Bookmarks.ToolbarContainerName];
-
-        // Check if container is unsupported in this browser
-        var getLocalContainerIdPromise;
-        if (unsupportedContainers.find(function (x) { return x === container.title; })) {
-          // Container is unsupported, find folder under other bookmarks
-          getLocalContainerIdPromise = browser.bookmarks.getChildren(otherBookmarksId)
-            .then(function (children) {
-              var localContainer = children.find(function (x) { return x.title === container.title; });
-              if (localContainer) {
-                // Container folder found, return id
-                return localContainer.id;
-              }
-              else {
-                // Unable to find local container folder 
-                return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
-              }
-            });
-        }
-        else {
-          // Container is supported, return relevant id
-          switch (container.title) {
-            case globals.Bookmarks.MenuContainerName:
-              getLocalContainerIdPromise = $q.resolve(menuBookmarksId);
-              break;
-            case globals.Bookmarks.MobileContainerName:
-              getLocalContainerIdPromise = $q.resolve(mobileBookmarksId);
-              break;
-            case globals.Bookmarks.OtherContainerName:
-              getLocalContainerIdPromise = $q.resolve(otherBookmarksId);
-              break;
-            case globals.Bookmarks.ToolbarContainerName:
-              getLocalContainerIdPromise = $q.resolve(toolbarBookmarksId);
-              break;
-          }
-        }
-
-        return getLocalContainerIdPromise;
-      })
-      .then(getLocalBookmarkTree)
-      .then(function (bookmarkTree) {
-        if (path.length === 0) {
-          return bookmarkTree;
-        }
-
-        return utility.AsyncReduce(bookmarkTree, path,
-          function (treePosition, pathCurrent) {
-            return $q(function (resolve, reject) {
-              if (!treePosition) {
-                return resolve();
-              }
-
-              // If the current position is other bookmarks, 
-              // check for any existing container folders that would throw off the target index
-              var getLocalBookmarkIndex;
-              if (treePosition.id === otherBookmarksId) {
-                getLocalBookmarkIndex = getNumContainersBeforeBookmarkIndex(treePosition.id, pathCurrent.index)
-                  .then(function (numContainers) {
-                    // Adjust the index by the number of container folders
-                    return pathCurrent.index + numContainers;
-                  });
-              }
-              else {
-                getLocalBookmarkIndex = $q.resolve(pathCurrent.index);
-              }
-
-              return getLocalBookmarkIndex
-                .then(function (localBookmarkIndex) {
-                  // Return the child at the matching index
-                  var targetChild = treePosition.children.find(function (x) {
-                    return x.index === localBookmarkIndex;
-                  });
-                  return resolve(targetChild);
-                })
-                .catch(reject);
-            });
-          }
-        );
-      });
-  };
-
   var findLocalBookmarkByTitle = function (title) {
     if (!title) {
       return $q.resolve();
@@ -1123,29 +1285,6 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
         }
 
         return localBookmark;
-      });
-  };
-
-  var getLocalBookmarkTree = function (localBookmarkId) {
-    var getTree = localBookmarkId != null ?
-      browser.bookmarks.getSubTree(localBookmarkId) :
-      browser.bookmarks.getTree();
-
-    return getTree
-      .then(function (tree) {
-        if (!tree || tree.length < 1) {
-          return $q.reject();
-        }
-        return tree[0];
-      })
-      .catch(function (err) {
-        utility.LogInfo(
-          localBookmarkId != null ? 'Failed to get local bookmark tree at id: ' + localBookmarkId :
-            'Failed to get local bookmark tree');
-        return $q.reject({
-          code: globals.ErrorCodes.FailedGetLocalBookmarks,
-          stack: err.stack
-        });
       });
   };
 
@@ -1171,13 +1310,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var getLocalContainerIds = function () {
-    return getLocalBookmarkTree()
+    return browser.bookmarks.getTree()
       .then(function (tree) {
         // Get the root child nodes
-        var menuBookmarksNode = tree.children.find(function (x) { return x.id === 'menu________'; });
-        var mobileBookmarksNode = tree.children.find(function (x) { return x.id === 'mobile______'; });
-        var otherBookmarksNode = tree.children.find(function (x) { return x.id === 'unfiled_____'; });
-        var toolbarBookmarksNode = tree.children.find(function (x) { return x.id === 'toolbar_____'; });
+        var menuBookmarksNode = tree[0].children.find(function (x) { return x.id === 'menu________'; });
+        var mobileBookmarksNode = tree[0].children.find(function (x) { return x.id === 'mobile______'; });
+        var otherBookmarksNode = tree[0].children.find(function (x) { return x.id === 'unfiled_____'; });
+        var toolbarBookmarksNode = tree[0].children.find(function (x) { return x.id === 'toolbar_____'; });
 
         // Throw an error if a local container is not found
         if (!menuBookmarksNode || !mobileBookmarksNode || !otherBookmarksNode || !toolbarBookmarksNode) {
@@ -1199,10 +1338,22 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
   };
 
   var getNumContainersBeforeBookmarkIndex = function (parentId, bookmarkIndex) {
-    return getLocalBookmarkTree(parentId)
-      .then(function (localBookmark) {
-        var numContainers = _.filter(localBookmark.children, bookmarks.XBookmarkIsContainer).length;
-        return numContainers;
+    // Get local container node ids
+    return getLocalContainerIds()
+      .then(function (localContainerIds) {
+        // No containers to adjust for if parent is not other bookmarks
+        if (parentId !== localContainerIds[globals.Bookmarks.OtherContainerName]) {
+          return 0;
+        }
+
+        // Get parent bookmark and count containers
+        return browser.bookmarks.getSubTree(parentId)
+          .then(function (subTree) {
+            var numContainers = subTree[0].children.filter(function (child, index) {
+              return index < bookmarkIndex && bookmarks.XBookmarkIsContainer(child);
+            }).length;
+            return numContainers;
+          });
       });
   };
 
@@ -1305,9 +1456,67 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
       });
   };
 
-  var wasContainerChanged = function (changedBookmark) {
-    // Check based on title
-    return $q.resolve(bookmarks.XBookmarkIsContainer(changedBookmark));
+  var wasContainerChanged = function (changedBookmark, xBookmarks) {
+    return (xBookmarks ? $q.resolve(xBookmarks) : bookmarks.GetBookmarks())
+      .then(function (results) {
+        xBookmarks = results;
+
+        // Check based on title
+        if (bookmarks.XBookmarkIsContainer(changedBookmark)) {
+          return true;
+        }
+
+        // Get local container node ids
+        return getLocalContainerIds()
+          .then(function (localContainerIds) {
+            // If parent is other bookmarks, check other bookmarks children for containers
+            var otherBookmarksId = localContainerIds[globals.Bookmarks.OtherContainerName];
+            if (changedBookmark.parentId !== otherBookmarksId) {
+              return false;
+            }
+
+            return browser.bookmarks.getChildren(otherBookmarksId)
+              .then(function (children) {
+                // Get all bookmarks in other bookmarks that are xBrowserSync containers
+                var localContainers = children.filter(function (x) {
+                  return unsupportedContainers.find(function (y) { return y === x.title; });
+                });
+                var containersCount = 0;
+                var checksFailed = false;
+                var count;
+
+                // Check each container present only appears once
+                var menuContainer = bookmarks.GetContainer(globals.Bookmarks.MenuContainerName, xBookmarks, false);
+                if (menuContainer) {
+                  containersCount++;
+                  count = localContainers.filter(function (x) {
+                    return x.title === globals.Bookmarks.MenuContainerName;
+                  }).length;
+                  checksFailed = count !== 1 ? true : checksFailed;
+                }
+
+                var mobileContainer = bookmarks.GetContainer(globals.Bookmarks.MobileContainerName, xBookmarks, false);
+                if (mobileContainer) {
+                  containersCount++;
+                  count = localContainers.filter(function (x) {
+                    return x.title === globals.Bookmarks.MobileContainerName;
+                  }).length;
+                  checksFailed = count !== 1 ? true : checksFailed;
+                }
+
+                // Check number of containers match and return result
+                checksFailed = containersCount !== localContainers.length ? true : checksFailed;
+                return checksFailed;
+              })
+              .catch(function (err) {
+                utility.LogInfo('Failed to detect whether container changed: ' + JSON.stringify(changedBookmark));
+                return $q.reject({
+                  code: globals.ErrorCodes.FailedGetLocalBookmarks,
+                  stack: err.stack
+                });
+              });
+          });
+      });
   };
 
   // Call constructor

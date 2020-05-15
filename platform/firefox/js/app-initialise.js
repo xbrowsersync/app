@@ -43,6 +43,10 @@ xBrowserSync.App.UI.factory('platform', xBrowserSync.App.Platform);
 xBrowserSync.App.Store.$inject = ['$q'];
 xBrowserSync.App.UI.factory('store', xBrowserSync.App.Store);
 
+// Add bookmark id mapper service
+xBrowserSync.App.BookmarkIdMapper.$inject = ['$q', 'globals', 'store'];
+xBrowserSync.App.UI.factory('bookmarkIdMapper', xBrowserSync.App.BookmarkIdMapper);
+
 // Add utility service
 xBrowserSync.App.Utility.$inject = ['$http', '$q', 'platform', 'globals', 'store'];
 xBrowserSync.App.UI.factory('utility', xBrowserSync.App.Utility);
@@ -52,11 +56,11 @@ xBrowserSync.App.API.$inject = ['$http', '$q', 'platform', 'globals', 'store', '
 xBrowserSync.App.UI.factory('api', xBrowserSync.App.API);
 
 // Add bookmarks service
-xBrowserSync.App.Bookmarks.$inject = ['$q', '$timeout', 'platform', 'globals', 'store', 'api', 'utility'];
+xBrowserSync.App.Bookmarks.$inject = ['$q', '$timeout', 'api', 'globals', 'platform', 'store', 'utility'];
 xBrowserSync.App.UI.factory('bookmarks', xBrowserSync.App.Bookmarks);
 
 // Add platform implementation service
-xBrowserSync.App.PlatformImplementation.$inject = ['$interval', '$q', '$timeout', 'platform', 'globals', 'store', 'utility', 'bookmarks'];
+xBrowserSync.App.PlatformImplementation.$inject = ['$interval', '$q', '$timeout', 'bookmarkIdMapper', 'bookmarks', 'globals', 'platform', 'store', 'utility'];
 xBrowserSync.App.UI.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add bookmark tree component

@@ -29,14 +29,17 @@ xBrowserSync.App.Platform = function () {
       Stop: notImplemented
     },
     Bookmarks: {
+      BuildIdMappings: notImplemented,
       Clear: notImplemented,
       Created: notImplemented,
       CreateSingle: notImplemented,
       Deleted: notImplemented,
       DeleteSingle: notImplemented,
       Get: notImplemented,
+      LocalBookmarkInToolbar: notImplemented,
       Moved: notImplemented,
       Populate: notImplemented,
+      ReorderContainers: notImplemented,
       Share: notImplemented,
       Updated: notImplemented,
       UpdateSingle: notImplemented

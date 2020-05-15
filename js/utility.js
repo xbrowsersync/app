@@ -16,14 +16,6 @@ xBrowserSync.App.Utility = function ($http, $q, platform, globals, store) {
 	 * Public functions
 	 * ------------------------------------------------------------------------------------ */
 
-  var asyncReduce = function (initialValue, itemArray, iterator) {
-    return itemArray.reduce(function (promiseChain, currentItem) {
-      return promiseChain.then(function (prevResult) {
-        return iterator(prevResult, currentItem);
-      });
-    }, $q.resolve(initialValue));
-  };
-
   var checkForNewVersion = function () {
     if (!isNetworkConnected()) {
       return $q.resolve();
@@ -41,13 +33,6 @@ xBrowserSync.App.Utility = function ($http, $q, platform, globals, store) {
       .catch(function () {
         logInfo('Couldn’t check for new version');
       });
-  };
-
-  var closest = function (element, predicate) {
-    // Find closest element where predicate is true 
-    return predicate(element) ? element : (
-      element && closest(element.parentNode, predicate)
-    );
   };
 
   var concatUint8Arrays = function concatUint8Arrays(firstArr, secondArr) {
@@ -138,15 +123,6 @@ xBrowserSync.App.Utility = function ($http, $q, platform, globals, store) {
           stack: err.stack
         });
       });
-  };
-
-  var deepCopy = function (obj) {
-    return (!obj || (typeof obj !== 'object')) ? obj :
-      (_.isString(obj)) ? String.prototype.slice.call(obj) :
-        (_.isDate(obj)) ? new Date(obj.valueOf()) :
-          (_.isFunction(obj.clone)) ? obj.clone() :
-            (_.isArray(obj)) ? _.map(obj, function (t) { return deepCopy(t); }) :
-              _.mapObject(obj, function (val, key) { return deepCopy(val); });
   };
 
   var encryptData = function (data) {
@@ -816,13 +792,10 @@ xBrowserSync.App.Utility = function ($http, $q, platform, globals, store) {
   };
 
   return {
-    AsyncReduce: asyncReduce,
-    Closest: closest,
     CheckForNewVersion: checkForNewVersion,
     CreateBackupData: createBackupData,
     DecryptData: decryptData,
     EncryptData: encryptData,
-    DeepCopy: deepCopy,
     Get24hrTimeFromDate: get24hrTimeFromDate,
     GetBackupFileName: getBackupFileName,
     GetCountryNameFrom2LetterISOCode: getCountryNameFrom2LetterISOCode,

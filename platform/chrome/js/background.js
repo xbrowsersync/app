@@ -7,7 +7,7 @@ xBrowserSync.App = xBrowserSync.App || {};
  *              listens for sync requests.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, globals, store, utility, bookmarks) {
+xBrowserSync.App.BackgroundController = function ($q, $timeout, bookmarkIdMapper, bookmarks, globals, platform, store, utility) {
   'use strict';
 
   var vm, bookmarkEventsQueue = [], notificationClickHandlers = [], startUpInitiated = false, processBookmarkEventsTimeout;
@@ -43,63 +43,56 @@ xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, global
 	 * Private functions
 	 * ------------------------------------------------------------------------------------ */
 
-  var changeBookmark = function (id) {
-    var changedBookmark, changeInfo, locationInfo, syncChange = $q.defer();
-
-    // Retrieve changed bookmark full info
-    var prepareToSyncChanges = browser.bookmarks.getSubTree(id)
+  var changeBookmark = function (id, changes) {
+    // Retrieve full bookmark info
+    return browser.bookmarks.getSubTree(id)
       .then(function (results) {
-        if (!results || results.length === 0) {
-          return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
-        }
+        var changedBookmark = results[0];
 
-        changedBookmark = results[0];
+        // If bookmark is separator update local bookmark properties
+        (bookmarks.IsSeparator(changedBookmark) ? convertLocalBookmarkToSeparator(changedBookmark) : $q.resolve(changedBookmark))
+          .then(function (bookmarkNode) {
+            // If the bookmark was converted to a separator, update id mapping
+            var updateMappingPromise;
+            if (bookmarkNode.id !== id) {
+              updateMappingPromise = bookmarkIdMapper.Get(id)
+                .then(function (idMapping) {
+                  if (!idMapping) {
+                    return $q.reject({ code: globals.ErrorCodes.BookmarkMappingNotFound });
+                  }
 
-        // Get changed bookmark location info 
-        return platform.Bookmarks.GetLocalBookmarkLocationInfo(id);
-      })
-      .then(function (results) {
-        if (!results) {
-          utility.LogWarning('Unable to retrieve local bookmark location info, not syncing this change');
-          syncChange.resolve(false);
-          return;
-        }
-        locationInfo = results;
+                  return bookmarkIdMapper.Remove(idMapping.syncedId)
+                    .then(function () {
+                      var newMapping = bookmarkIdMapper.CreateMapping(idMapping.syncedId, bookmarkNode.id);
+                      return bookmarkIdMapper.Add(newMapping);
+                    });
+                });
+            }
+            else {
+              updateMappingPromise = $q.resolve();
+            }
+            return updateMappingPromise
+              .then(function () {
+                // Create change info
+                var changeInfo = {
+                  bookmark: bookmarkNode,
+                  type: globals.UpdateType.Update
+                };
 
-        // Create change info
-        changeInfo = {
-          bookmark: changedBookmark,
-          container: locationInfo.container,
-          indexPath: locationInfo.indexPath,
-          type: globals.UpdateType.Update
-        };
-
-        // Check if this change should be synced
-        return platform.Bookmarks.ShouldSyncLocalChanges(changeInfo)
-          .then(function (doSync) {
-            syncChange.resolve(doSync);
-            return changeInfo;
+                // Queue sync
+                queueBookmarksSync({
+                  changeInfo: changeInfo,
+                  type: globals.SyncType.Push
+                }, function (response) {
+                  if (!response.success) {
+                    // Display alert
+                    var errMessage = utility.GetErrorMessageFromException(response.error);
+                    displayAlert(errMessage.title, errMessage.message);
+                  }
+                }, false);
+              });
           });
-      })
-      .catch(function (err) {
-        syncChange.reject(err);
       });
-
-    // Queue sync
-    return $q(function (resolve, reject) {
-      queueBookmarksSync({
-        changeInfo: prepareToSyncChanges,
-        syncChange: syncChange.promise,
-        type: globals.SyncType.Push
-      }, function (response) {
-        if (response.success) {
-          resolve(response.bookmarks);
-        }
-        else {
-          reject(response.error);
-        }
-      }, false);
-    });
   };
 
   var checkForNewVersion = function () {
@@ -160,7 +153,7 @@ xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, global
             type: globals.SyncType.Pull
           }, function (response) {
             if (response.success) {
-              resolve(response.bookmarks);
+              resolve();
             }
             else {
               reject(response.error);
@@ -183,100 +176,78 @@ xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, global
   };
 
   var convertLocalBookmarkToSeparator = function (bookmark) {
-    // Skip process if bookmark is already local separator
-    if (!bookmark || (bookmark.url === platform.GetNewTabUrl() &&
-      (bookmark.title === globals.Bookmarks.HorizontalSeparatorTitle ||
-        bookmark.title === globals.Bookmarks.VerticalSeparatorTitle))) {
-      return $q.resolve(bookmark);
-    }
-
-    // Disable event listeners and process conversion 
-    return $q(function (resolve) { disableEventListeners(resolve); })
-      .then(function () {
-        return platform.Bookmarks.LocalBookmarkInToolbar(bookmark);
-      })
+    // Check if bookmark is in toolbar
+    return platform.Bookmarks.LocalBookmarkInToolbar(bookmark)
       .then(function (inToolbar) {
-        var title = inToolbar ? globals.Bookmarks.VerticalSeparatorTitle : globals.Bookmarks.HorizontalSeparatorTitle;
+        // Skip process if bookmark is not in toolbar and already local separator
+        if (bookmark.url === platform.GetNewTabUrl() &&
+          (!inToolbar && bookmark.title === globals.Bookmarks.HorizontalSeparatorTitle) ||
+          (inToolbar && bookmark.title === globals.Bookmarks.VerticalSeparatorTitle)) {
+          return bookmark;
+        }
 
-        // Remove and recreate bookmark as a separator
-        var separator = {
-          index: bookmark.index,
-          parentId: bookmark.parentId,
-          title: title,
-          url: platform.GetNewTabUrl()
-        };
-
-        return browser.bookmarks.remove(bookmark.id)
+        // Disable event listeners and process conversion 
+        return $q(function (resolve) { disableEventListeners(resolve); })
           .then(function () {
-            return browser.bookmarks.create(separator);
+            var title = inToolbar ? globals.Bookmarks.VerticalSeparatorTitle : globals.Bookmarks.HorizontalSeparatorTitle;
+
+            // If already a separator just update the title
+            if ((!inToolbar && bookmark.title === globals.Bookmarks.VerticalSeparatorTitle) ||
+              (inToolbar && bookmark.title === globals.Bookmarks.HorizontalSeparatorTitle)) {
+              return browser.bookmarks.update(bookmark.id, { title: title });
+            }
+
+            // Remove and recreate bookmark as a separator
+            var separator = {
+              index: bookmark.index,
+              parentId: bookmark.parentId,
+              title: title,
+              url: platform.GetNewTabUrl()
+            };
+            return browser.bookmarks.remove(bookmark.id)
+              .then(function () {
+                return browser.bookmarks.create(separator);
+              });
+          })
+          .finally(function () {
+            return $q(function (resolve) { enableEventListeners(resolve); });
           });
-      })
-      .finally(function () {
-        return $q(function (resolve) { enableEventListeners(resolve); });
       });
   };
 
   var createBookmark = function (id, createdBookmark) {
-    var changeInfo, locationInfo, syncChange = $q.defer();
-
-    // Get created bookmark location info
-    var prepareToSyncChanges = platform.Bookmarks.GetLocalBookmarkLocationInfo(id)
-      .then(function (results) {
-        if (!results) {
-          utility.LogWarning('Unable to retrieve local bookmark location info, not syncing this change');
-          syncChange.resolve(false);
-          return;
-        }
-        locationInfo = results;
+    // If bookmark is separator update local bookmark properties
+    return (bookmarks.IsSeparator(createdBookmark) ? convertLocalBookmarkToSeparator(createdBookmark) : $q.resolve(createdBookmark))
+      .then(function (bookmarkNode) {
+        // Create change info
+        var changeInfo = {
+          bookmark: bookmarkNode,
+          type: globals.UpdateType.Create
+        };
 
         // If bookmark is not folder or separator, get page metadata from current tab
-        return (createdBookmark.url && !bookmarks.IsSeparator(createdBookmark) ? checkPermsAndGetPageMetadata() : $q.resolve())
+        return (bookmarkNode.url && !bookmarks.IsSeparator(bookmarkNode) ? checkPermsAndGetPageMetadata() : $q.resolve())
           .then(function (metadata) {
             // Add metadata if bookmark is current tab location
-            if (metadata && createdBookmark.url === metadata.url) {
-              createdBookmark.title = utility.StripTags(metadata.title);
-              createdBookmark.description = utility.StripTags(metadata.description);
-              createdBookmark.tags = utility.GetTagArrayFromText(metadata.tags);
+            if (metadata && bookmarkNode.url === metadata.url) {
+              changeInfo.bookmark.title = utility.StripTags(metadata.title);
+              changeInfo.bookmark.description = utility.StripTags(metadata.description);
+              changeInfo.bookmark.tags = utility.GetTagArrayFromText(metadata.tags);
             }
 
-            return createdBookmark;
-          })
-          .then(function (bookmark) {
-            // Create change info
-            changeInfo = {
-              bookmark: bookmark,
-              container: locationInfo.container,
-              indexPath: locationInfo.indexPath,
-              type: globals.UpdateType.Create
-            };
-
-            // Check if this change should be synced
-            return platform.Bookmarks.ShouldSyncLocalChanges(changeInfo);
-          })
-          .then(function (doSync) {
-            syncChange.resolve(doSync);
-            return changeInfo;
+            // Queue sync
+            queueBookmarksSync({
+              changeInfo: changeInfo,
+              type: globals.SyncType.Push
+            }, function (response) {
+              if (!response.success) {
+                // Display alert
+                var errMessage = utility.GetErrorMessageFromException(response.error);
+                displayAlert(errMessage.title, errMessage.message);
+              }
+            }, false);
           });
-      })
-      .catch(function (err) {
-        syncChange.reject(err);
       });
-
-    // Queue sync
-    return $q(function (resolve, reject) {
-      queueBookmarksSync({
-        changeInfo: prepareToSyncChanges,
-        syncChange: syncChange.promise,
-        type: globals.SyncType.Push
-      }, function (response) {
-        if (response.success) {
-          resolve(response.bookmarks);
-        }
-        else {
-          reject(response.error);
-        }
-      }, false);
-    });
   };
 
   var disableEventListeners = function (sendResponse) {
@@ -413,7 +384,7 @@ xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, global
                 type: globals.SyncType.Pull
               }, function (response) {
                 if (response.success) {
-                  resolve(response.bookmarks);
+                  resolve();
                 }
                 else {
                   reject(response.error);
@@ -481,83 +452,55 @@ xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, global
   };
 
   var moveBookmark = function (id, moveInfo) {
-    var changeInfo, movedBookmark, syncChange = $q.defer();
-
-    // Retrieve moved bookmark full info
-    var prepareToSyncChanges = browser.bookmarks.getSubTree(id)
+    return browser.bookmarks.get(id)
       .then(function (results) {
-        if (!results || results.length === 0) {
-          return $q.reject({ code: globals.ErrorCodes.LocalBookmarkNotFound });
-        }
-
-        movedBookmark = results[0];
-
-        // Get moved bookmark old and new location info 
-        return $q.all([
-          platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.oldParentId, [moveInfo.oldIndex]),
-          platform.Bookmarks.GetLocalBookmarkLocationInfo(moveInfo.parentId, [moveInfo.index])
-        ]);
-      })
-      .then(function (locationInfo) {
-        if (!locationInfo[0] || !locationInfo[1]) {
-          utility.LogWarning('Unable to retrieve local bookmark location info, not syncing this change');
-          syncChange.resolve(false);
-          return;
-        }
-
-        // If negative target index, bookmark was moved above containers
-        if (locationInfo[1].indexPath[0] < 0) {
-          return $q.reject({ code: globals.ErrorCodes.ContainerChanged });
-        }
-
-        // Create change info
-        changeInfo = {
-          bookmark: movedBookmark,
-          container: locationInfo[0].container,
-          indexPath: locationInfo[0].indexPath,
-          targetInfo: {
-            bookmark: movedBookmark,
-            container: locationInfo[1].container,
-            indexPath: locationInfo[1].indexPath
-          },
-          type: globals.UpdateType.Move
-        };
+        var movedBookmark = results[0];
 
         // If bookmark is separator update local bookmark properties
-        return (bookmarks.IsSeparator(changeInfo.bookmark) ? convertLocalBookmarkToSeparator(changeInfo.bookmark) : $q.resolve());
-      })
-      .then(function () {
-        // Check if move changes (remove and add) should be synced
-        return $q.all([
-          platform.Bookmarks.ShouldSyncLocalChanges(changeInfo),
-          platform.Bookmarks.ShouldSyncLocalChanges(changeInfo.targetInfo)
-        ]);
-      })
-      .then(function (results) {
-        changeInfo.syncChange = results[0];
-        changeInfo.targetInfo.syncChange = results[1];
-        syncChange.resolve(changeInfo.syncChange || changeInfo.targetInfo.syncChange);
-        return changeInfo;
-      })
-      .catch(function (err) {
-        syncChange.reject(err);
-      });
+        return (bookmarks.IsSeparator(movedBookmark) ? convertLocalBookmarkToSeparator(movedBookmark) : $q.resolve(movedBookmark))
+          .then(function (bookmarkNode) {
+            // If the bookmark was converted to a separator, update id mapping
+            var updateMappingPromise;
+            if (bookmarkNode.id !== id) {
+              updateMappingPromise = bookmarkIdMapper.Get(id)
+                .then(function (idMapping) {
+                  if (!idMapping) {
+                    return $q.reject({ code: globals.ErrorCodes.BookmarkMappingNotFound });
+                  }
 
-    // Queue sync
-    return $q(function (resolve, reject) {
-      queueBookmarksSync({
-        changeInfo: prepareToSyncChanges,
-        syncChange: syncChange.promise,
-        type: globals.SyncType.Push
-      }, function (response) {
-        if (response.success) {
-          resolve(response.bookmarks);
-        }
-        else {
-          reject(response.error);
-        }
-      }, false);
-    });
+                  return bookmarkIdMapper.Remove(idMapping.syncedId)
+                    .then(function () {
+                      var newMapping = bookmarkIdMapper.CreateMapping(idMapping.syncedId, bookmarkNode.id);
+                      return bookmarkIdMapper.Add(newMapping);
+                    });
+                });
+            }
+            else {
+              updateMappingPromise = $q.resolve();
+            }
+            return updateMappingPromise
+              .then(function () {
+                // Create change info
+                var changeInfo = {
+                  bookmark: angular.copy(moveInfo),
+                  type: globals.UpdateType.Move
+                };
+                changeInfo.bookmark.id = id;
+
+                // Queue sync
+                queueBookmarksSync({
+                  changeInfo: changeInfo,
+                  type: globals.SyncType.Push
+                }, function (response) {
+                  if (!response.success) {
+                    // Display alert
+                    var errMessage = utility.GetErrorMessageFromException(response.error);
+                    displayAlert(errMessage.title, errMessage.message);
+                  }
+                }, false);
+              });
+          });
+      });
   };
 
   var onAlarmHandler = function (alarm) {
@@ -575,45 +518,17 @@ xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, global
 
     // Add event to the queue and trigger processing after a delay
     bookmarkEventsQueue.push(arguments);
-    processBookmarkEventsTimeout = $timeout(processBookmarkEventsQueue, 1e3);
+    processBookmarkEventsTimeout = $timeout(processBookmarkEventsQueue, 200);
   };
 
-  var onChangedHandler = function (id) {
+  var onChangedHandler = function () {
     utility.LogInfo('onChanged event detected');
-
-    // Get complete bookmark properties
-    browser.bookmarks.getSubTree(id)
-      .then(function (results) {
-        var changedBookmark = results[0];
-
-        // If bookmark is separator update local bookmark properties
-        return (bookmarks.IsSeparator(changedBookmark) ? convertLocalBookmarkToSeparator(changedBookmark) : $q.resolve(changedBookmark))
-          .then(function (bookmarkNode) {
-            // Handle event
-            onBookmarkEventHandler(changeBookmark, [bookmarkNode.id, bookmarkNode]);
-          });
-      })
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        displayAlert(errMessage.title, errMessage.message);
-      });
+    onBookmarkEventHandler(changeBookmark, arguments);
   };
 
-  var onCreatedHandler = function (id, createdBookmark) {
+  var onCreatedHandler = function () {
     utility.LogInfo('onCreated event detected');
-
-    // If bookmark is separator update local bookmark properties
-    (bookmarks.IsSeparator(createdBookmark) ? convertLocalBookmarkToSeparator(createdBookmark) : $q.resolve(createdBookmark))
-      .then(function (bookmarkNode) {
-        // Handle event
-        onBookmarkEventHandler(createBookmark, [bookmarkNode.id, bookmarkNode]);
-      })
-      .catch(function (err) {
-        // Display alert
-        var errMessage = utility.GetErrorMessageFromException(err);
-        displayAlert(errMessage.title, errMessage.message);
-      });
+    onBookmarkEventHandler(createBookmark, arguments);
   };
 
   var onInstallHandler = function (details) {
@@ -636,10 +551,30 @@ xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, global
   };
 
   var onMessageHandler = function (message, sender, sendResponse) {
+    var mapIdsBeforeSendResponse = function (callbackInfo) {
+      if (message.type === globals.SyncType.Push && callbackInfo && callbackInfo.success === true) {
+        return bookmarks.GetBookmarks()
+          .then(function (syncedBookmarks) {
+            return platform.Bookmarks.BuildIdMappings(syncedBookmarks);
+          })
+          .catch(function (err) {
+            return bookmarks.DisableSync()
+              .then(function () {
+                callbackInfo = { error: err, success: false };
+              });
+          })
+          .finally(function () {
+            sendResponse(callbackInfo);
+          });
+      }
+
+      sendResponse(callbackInfo);
+    };
+
     switch (message.command) {
       // Queue bookmarks sync
       case globals.Commands.SyncBookmarks:
-        queueBookmarksSync(message, sendResponse);
+        queueBookmarksSync(message, mapIdsBeforeSendResponse);
         break;
       // Trigger bookmarks restore
       case globals.Commands.RestoreBookmarks:
@@ -669,7 +604,7 @@ xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, global
       default:
         var err = new Error('Unknown command: ' + message.command);
         utility.LogError(err, 'background.onMessageHandler');
-        sendResponse({ success: false, error: err });
+        sendResponse({ error: err, success: false });
     }
 
     // Enable async response
@@ -712,7 +647,15 @@ xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, global
     var syncEnabled;
     utility.LogInfo('Starting up');
 
-    store.Get()
+    store.Get([
+      globals.CacheKeys.CheckForAppUpdates,
+      globals.CacheKeys.LastUpdated,
+      globals.CacheKeys.ServiceUrl,
+      globals.CacheKeys.SyncBookmarksToolbar,
+      globals.CacheKeys.SyncEnabled,
+      globals.CacheKeys.SyncId,
+      globals.CacheKeys.SyncVersion
+    ])
       .then(function (cachedData) {
         syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
         var checkForAppUpdates = cachedData[globals.CacheKeys.CheckForAppUpdates];
@@ -720,14 +663,14 @@ xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, global
         // Add useful debug info to beginning of trace log
         cachedData.appVersion = globals.AppVersion;
         cachedData.platform = _.omit(browserDetect(), 'versionNumber');
-        utility.LogInfo(_.omit(
-          cachedData,
-          'debugMessageLog',
-          globals.CacheKeys.Bookmarks,
-          globals.CacheKeys.InstallBackup,
-          globals.CacheKeys.TraceLog,
-          globals.CacheKeys.Password
-        ));
+        utility.LogInfo(Object.keys(cachedData)
+          .filter(function (e) {
+            return cachedData[e] != null;
+          })
+          .reduce(function (o, e) {
+            o[e] = cachedData[e];
+            return o;
+          }, {}));
 
         // Update browser action icon
         platform.Interface.Refresh(syncEnabled);
@@ -773,13 +716,7 @@ xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, global
     var action = function () {
       // Get first event in the queue
       var currentEvent = bookmarkEventsQueue.shift();
-      currentEvent[0].apply(this, currentEvent[1])
-        .catch(function (err) {
-          // Display alert
-          var errMessage = utility.GetErrorMessageFromException(err);
-          displayAlert(errMessage.title, errMessage.message);
-        });
-      return $q.resolve();
+      return currentEvent[0].apply(this, currentEvent[1]);
     };
 
     // Iterate through the queue and process the events
@@ -787,6 +724,16 @@ xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, global
       .then(function () {
         $timeout(function () {
           bookmarks.Sync()
+            .then(function (syncSuccess) {
+              if (!syncSuccess) {
+                return;
+              }
+
+              // Move local containers into the correct order
+              return platform.EventListeners.Disable()
+                .then(platform.Bookmarks.ReorderContainers)
+                .then(platform.EventListeners.Enable);
+            })
             .catch(function (err) {
               // If local data out of sync, queue refresh sync
               var errToDisplay = err;
@@ -810,8 +757,8 @@ xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, global
 
     // Queue sync
     return bookmarks.QueueSync(syncData, runSync)
-      .then(function (bookmarks) {
-        callback({ bookmarks: bookmarks, success: true });
+      .then(function () {
+        callback({ success: true });
       })
       .catch(function (err) {
         // If local data out of sync, queue refresh sync
@@ -830,53 +777,25 @@ xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, global
   };
 
   var removeBookmark = function (id, removeInfo) {
-    var changeInfo, syncChange = $q.defer();
-
-    // Get removed bookmark location info 
-    var prepareToSyncChanges = platform.Bookmarks.GetLocalBookmarkLocationInfo(removeInfo.parentId, [removeInfo.index])
-      .then(function (locationInfo) {
-        if (!locationInfo) {
-          utility.LogWarning('Unable to retrieve local bookmark location info, not syncing this change');
-          syncChange.resolve(false);
-          return;
-        }
-
-        // Create change info
-        var deletedBookmark = removeInfo.node;
-        deletedBookmark.parentId = removeInfo.parentId;
-        changeInfo = {
-          bookmark: deletedBookmark,
-          container: locationInfo.container,
-          indexPath: locationInfo.indexPath,
-          type: globals.UpdateType.Delete
-        };
-
-        // Check if this change should be synced
-        return platform.Bookmarks.ShouldSyncLocalChanges(changeInfo)
-          .then(function (doSync) {
-            syncChange.resolve(doSync);
-            return changeInfo;
-          });
-      })
-      .catch(function (err) {
-        syncChange.reject(err);
-      });
+    // Create change info
+    var changeInfo = {
+      bookmark: removeInfo.node,
+      type: globals.UpdateType.Delete
+    };
 
     // Queue sync
-    return $q(function (resolve, reject) {
-      queueBookmarksSync({
-        changeInfo: prepareToSyncChanges,
-        syncChange: syncChange.promise,
-        type: globals.SyncType.Push
-      }, function (response) {
-        if (response.success) {
-          resolve(response.bookmarks);
-        }
-        else {
-          reject(response.error);
-        }
-      }, false);
-    });
+    queueBookmarksSync({
+      changeInfo: changeInfo,
+      type: globals.SyncType.Push
+    }, function (response) {
+      if (!response.success) {
+        // Display alert
+        var errMessage = utility.GetErrorMessageFromException(response.error);
+        displayAlert(errMessage.title, errMessage.message);
+      }
+    }, false);
+
+    return $q.resolve();
   };
 
   var restoreBookmarks = function (restoreData, sendResponse) {
@@ -947,6 +866,19 @@ xBrowserSync.App.BackgroundController = function ($q, $timeout, platform, global
       })
       .then(function () {
         return browser.storage.local.clear();
+      })
+      .then(function () {
+        // If sync enabled, create id mappings
+        return store.Get(globals.CacheKeys.SyncEnabled)
+          .then(function (syncEnabled) {
+            if (!syncEnabled) {
+              return;
+            }
+            return bookmarks.GetBookmarks()
+              .then(function (cachedBookmarks) {
+                return platform.Bookmarks.BuildIdMappings(cachedBookmarks);
+              });
+          });
       });
   };
 
@@ -984,6 +916,10 @@ xBrowserSync.App.Background.factory('platform', xBrowserSync.App.Platform);
 xBrowserSync.App.Store.$inject = ['$q'];
 xBrowserSync.App.Background.factory('store', xBrowserSync.App.Store);
 
+// Add bookmark id mapper service
+xBrowserSync.App.BookmarkIdMapper.$inject = ['$q', 'globals', 'store'];
+xBrowserSync.App.Background.factory('bookmarkIdMapper', xBrowserSync.App.BookmarkIdMapper);
+
 // Add utility service
 xBrowserSync.App.Utility.$inject = ['$http', '$q', 'platform', 'globals', 'store'];
 xBrowserSync.App.Background.factory('utility', xBrowserSync.App.Utility);
@@ -993,15 +929,15 @@ xBrowserSync.App.API.$inject = ['$http', '$q', 'platform', 'globals', 'store', '
 xBrowserSync.App.Background.factory('api', xBrowserSync.App.API);
 
 // Add bookmarks service
-xBrowserSync.App.Bookmarks.$inject = ['$q', '$timeout', 'platform', 'globals', 'store', 'api', 'utility'];
+xBrowserSync.App.Bookmarks.$inject = ['$q', '$timeout', 'api', 'globals', 'platform', 'store', 'utility'];
 xBrowserSync.App.Background.factory('bookmarks', xBrowserSync.App.Bookmarks);
 
 // Add platform implementation service
-xBrowserSync.App.PlatformImplementation.$inject = ['$interval', '$q', '$timeout', 'platform', 'globals', 'store', 'utility', 'bookmarks'];
+xBrowserSync.App.PlatformImplementation.$inject = ['$interval', '$q', '$timeout', 'bookmarkIdMapper', 'bookmarks', 'globals', 'platform', 'store', 'utility'];
 xBrowserSync.App.Background.factory('platformImplementation', xBrowserSync.App.PlatformImplementation);
 
 // Add background controller
-xBrowserSync.App.BackgroundController.$inject = ['$q', '$timeout', 'platform', 'globals', 'store', 'utility', 'bookmarks', 'platformImplementation'];
+xBrowserSync.App.BackgroundController.$inject = ['$q', '$timeout', 'bookmarkIdMapper', 'bookmarks', 'globals', 'platform', 'store', 'utility', 'platformImplementation'];
 xBrowserSync.App.Background.controller('Controller', xBrowserSync.App.BackgroundController);
 
 // Set synchronous event handlers

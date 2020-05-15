@@ -9,7 +9,7 @@ SpinnerDialog.show = function () { };
  * Description: Implements xBrowserSync.App.Platform for Android app.
  * ------------------------------------------------------------------------------------ */
 
-xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, platform, globals, store, utility, bookmarks) {
+xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, bookmarkIdMapper, bookmarks, globals, platform, store, utility) {
   'use strict';
 
   var backgroundSyncInterval, currentPage, loadingId, sharedBookmark, vm;
@@ -819,6 +819,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, pla
     platform.AutomaticUpdates.NextUpdate = getAutoUpdatesNextRun;
     platform.AutomaticUpdates.Start = methodNotApplicable;
     platform.AutomaticUpdates.Stop = methodNotApplicable;
+    platform.Bookmarks.BuildIdMappings = methodNotApplicable;
     platform.Bookmarks.Clear = methodNotApplicable;
     platform.Bookmarks.CreateSingle = methodNotApplicable;
     platform.Bookmarks.DeleteSingle = methodNotApplicable;

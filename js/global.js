@@ -30,6 +30,7 @@ xBrowserSync.App.Global = function () {
     },
     CacheKeys: {
       AppVersion: 'appVersion',
+      BookmarkIdMappings: 'bookmarkIdMappings',
       Bookmarks: 'bookmarks',
       CheckForAppUpdates: 'checkForAppUpdates',
       DisplayHelp: 'displayHelp',
@@ -45,8 +46,7 @@ xBrowserSync.App.Global = function () {
       SyncEnabled: 'syncEnabled',
       SyncId: 'syncId',
       SyncVersion: 'syncVersion',
-      TraceLog: 'traceLog',
-      UncommittedSyncs: 'uncommittedSyncs'
+      TraceLog: 'traceLog'
     },
     Commands: {
       SyncBookmarks: 1,
@@ -347,10 +347,12 @@ xBrowserSync.App.Global = function () {
       InvalidCredentials: 10109,
       LocalBookmarkNotFound: 10110,
       XBookmarkNotFound: 10111,
-      ContainerChanged: 10112,
-      LocalContainerNotFound: 10113,
-      DataOutOfSync: 10114,
-      InvalidBookmarkIdsDetected: 10115,
+      ContainerNotFound: 10112,
+      ContainerChanged: 10113,
+      LocalContainerNotFound: 10114,
+      DataOutOfSync: 10115,
+      InvalidBookmarkIdsDetected: 10116,
+      BookmarkMappingNotFound: 10117,
       SyncUncommitted: 10200,
       InvalidService: 10300,
       UnsupportedServiceApiVersion: 10301,
