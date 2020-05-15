@@ -32,6 +32,7 @@
     <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:name='MainActivity']" mode="merge">
       <activity android:theme="@style/AppTheme" android:windowSoftInputMode="adjustPan" />
     </edit-config>
+    <hook type="before_build" src="scripts/beforeBuild.js" />
     <resource-file src="res/android/drawable/app_background.xml" target="app/src/main/res/drawable/app_background.xml" />
     <resource-file src="res/android/drawable/app_background_bg.xml" target="app/src/main/res/drawable/app_background_bg.xml" />
     <resource-file src="res/android/drawable/app_background_fg.xml" target="app/src/main/res/drawable/app_background_fg.xml" />
