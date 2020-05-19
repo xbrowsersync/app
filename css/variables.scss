@@ -2,12 +2,20 @@ $font-stack-regular: "Roboto Condensed", sans-serif;
 $font-stack-code: "Source Code Pro", "Courier New", monospace;
 $font-stack-icons: "Font Awesome 5 Free";
 
-$colour-bg1: #01ab8a;
-$colour-bg2: #35c6e8;
-$colour-text1: #edfeff;
-$colour-text2: #083039;
-$colour-link: #75959c;
-$colour-link-highlight: $colour-bg2;
+$colour-bg1-default: #01ab8a;
+$colour-bg2-default: #35c6e8;
+$colour-bg3-default: #edfeff;
+$colour-text1-default: #edfeff;
+$colour-text2-default: #083039;
+$colour-text3-default: #75959c;
+
+$colour-bg1-dark: #000;
+$colour-bg2-dark: #777;
+$colour-bg3-dark: #444;
+$colour-text1-dark: #eee;
+$colour-text2-dark: #ccc;
+$colour-text3-dark: #999;
+
 $colour-success: #30d278;
 $colour-warning: #bdc71b;
 $colour-danger: #ea3869;

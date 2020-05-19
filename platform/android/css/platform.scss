@@ -63,38 +63,9 @@ body {
   background: transparent;
   overflow: auto;
 
-  a {
-    &:focus,
-    &:hover {
-      color: $colour-text1;
-      border-bottom-color: $colour-text1;
-    }
-  }
-
   h2 {
     font-size: 1.6em;
     line-height: 1em;
-  }
-
-  button.btn {
-    &.btn-default:not([disabled]) {
-      &:hover,
-      &:focus {
-        background-color: rgba($colour-text1, 0.3);
-        color: $colour-text1;
-        border-color: $colour-text1;
-        text-decoration: none;
-      }
-    }
-
-    &.btn-icon {
-      &:hover,
-      &:focus {
-        i {
-          opacity: 0.4;
-        }
-      }
-    }
   }
 
   input,
@@ -123,18 +94,6 @@ body {
 
   .container {
     height: 100vh;
-  }
-
-  .form-group {
-    &.btn-icon-container {
-      .btn-icon {
-        &:focus,
-        &:hover {
-          background-color: #7db2be;
-          border: none;
-        }
-      }
-    }
   }
 
   .header-panel {
@@ -168,26 +127,8 @@ body {
   }
 
   .well {
-    a {
-      &:focus,
-      &:hover {
-        color: $colour-text2;
-        border-bottom-color: $colour-text2;
-      }
-    }
-
     button.btn.btn-default {
       font-size: 1rem;
-
-      &:not([disabled]) {
-        &:hover,
-        &:focus {
-          background-color: transparent;
-          color: $colour-text2;
-          border-color: $colour-text2;
-          text-decoration: none;
-        }
-      }
     }
   }
 }
@@ -208,13 +149,6 @@ body {
     .badge {
       font-size: 1rem;
       line-height: 1.3rem;
-
-      &:focus,
-      &:hover {
-        i {
-          color: $colour-link;
-        }
-      }
     }
 
     .label {
@@ -349,13 +283,6 @@ body {
 
     .bookmark-list .bookmark {
       &:not(.folder) {
-        &:focus,
-        &:hover {
-          & > .bookmark-content {
-            background-color: $colour-text1;
-          }
-        }
-
         & > .bookmark-content > .bookmark-heading {
           margin-right: 0;
           transition: none;
@@ -409,16 +336,6 @@ body {
 }
 
 #settings-panel {
-  .form-group {
-    a {
-      &:focus,
-      &:hover {
-        color: $colour-text2;
-        border-bottom-color: $colour-text2;
-      }
-    }
-  }
-
   .sync-panel {
     .id-url,
     .service-url {

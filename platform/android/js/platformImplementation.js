@@ -1408,6 +1408,26 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
 	 * Private functions
 	 * ------------------------------------------------------------------------------------ */
 
+  var checkForDarkTheme = function () {
+    // Check dark theme is supported
+    return $q(function (resolve, reject) {
+      cordova.plugins.ThemeDetection.isAvailable(resolve, reject);
+    })
+      .then(function (isAvailable) {
+        if (!isAvailable.value) {
+          return;
+        }
+
+        // Check dark theme is enabled
+        return $q(function (resolve, reject) {
+          cordova.plugins.ThemeDetection.isDarkModeEnabled(resolve, reject);
+        })
+          .then(function (isDarkModeEnabled) {
+            vm.settings.darkModeEnabled = isDarkModeEnabled.value;
+          });
+      });
+  };
+
   var checkForInstallOrUpgrade = function () {
     // Check for stored app version and compare it to current
     var mobileAppVersion = localStorage.getItem('xBrowserSync-mobileAppVersion');
@@ -1733,8 +1753,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
   };
 
   var handleResume = function () {
-    // Check if sync enabled and reset network disconnected flag
-    store.Get(globals.CacheKeys.SyncEnabled)
+    // Set theme
+    checkForDarkTheme()
+      .then(function () {
+        // Check if sync enabled and reset network disconnected flag
+        store.Get(globals.CacheKeys.SyncEnabled);
+      })
       .then(function (syncEnabled) {
         // Deselect bookmark
         vm.search.selectedBookmark = null;
@@ -1768,8 +1792,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
 
     utility.LogInfo('Starting up');
 
-    // Retrieve cached data
-    return store.Get()
+    // Set theme
+    return checkForDarkTheme()
+      .then(function () {
+        // Retrieve cached data
+        return store.Get();
+      })
       .then(function (cachedData) {
         syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
         var checkForAppUpdates = cachedData[globals.CacheKeys.CheckForAppUpdates];

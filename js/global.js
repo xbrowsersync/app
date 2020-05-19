@@ -33,6 +33,7 @@ xBrowserSync.App.Global = function () {
       BookmarkIdMappings: 'bookmarkIdMappings',
       Bookmarks: 'bookmarks',
       CheckForAppUpdates: 'checkForAppUpdates',
+      DarkModeEnabled: 'darkModeEnabled',
       DisplayHelp: 'displayHelp',
       DisplayOtherSyncsWarning: 'displayOtherSyncsWarning',
       DisplayPermissions: 'displayPermissions',

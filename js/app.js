@@ -86,6 +86,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
       permissionsPanel_RequestPermissions_Click: permissionsPanel_RequestPermissions_Click,
       settings_Prefs_CheckForAppUpdates_Click: settings_Prefs_CheckForAppUpdates_Click,
       settings_Prefs_DisplaySearchBar_Click: settings_Prefs_DisplaySearchBar_Click,
+      settings_Prefs_EnableDarkMode_Click: settings_Prefs_EnableDarkMode_Click,
       settings_Prefs_SyncBookmarksToolbar_Cancel: settings_Prefs_SyncBookmarksToolbar_Cancel,
       settings_Prefs_SyncBookmarksToolbar_Click: settings_Prefs_SyncBookmarksToolbar_Click,
       settings_Prefs_SyncBookmarksToolbar_Confirm: settings_Prefs_SyncBookmarksToolbar_Confirm,
@@ -180,6 +181,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
       backupCompletedMessage: undefined,
       backupFileName: undefined,
       checkForAppUpdates: false,
+      darkModeEnabled: false,
       dataToRestore: undefined,
       displayQrPanel: false,
       displayRestoreConfirmation: false,
@@ -839,7 +841,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
     vm.help.currentPage = panelToDisplay || 0;
     $timeout(function () {
       document.querySelector('#help-panel .view-content > div').focus();
-    }, 150);
+    });
   };
 
   var displayMainView = function () {
@@ -957,6 +959,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
         // Get cached prefs from storage
         return $q.all([
           store.Get([
+            globals.CacheKeys.DarkModeEnabled,
             globals.CacheKeys.DisplaySearchBarBeneathResults,
             globals.CacheKeys.SyncEnabled,
             globals.CacheKeys.SyncId
@@ -966,12 +969,13 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
       })
       .then(function (cachedData) {
         // Set view model values
-        vm.settings.displaySearchBarBeneathResults = cachedData[0][globals.CacheKeys.DisplaySearchBarBeneathResults] != null ?
-          cachedData[0][globals.CacheKeys.DisplaySearchBarBeneathResults] :
-          vm.settings.displaySearchBarBeneathResults;
+        vm.settings.displaySearchBarBeneathResults = !!cachedData[0][globals.CacheKeys.DisplaySearchBarBeneathResults];
         vm.sync.enabled = !!cachedData[0][globals.CacheKeys.SyncEnabled];
         vm.sync.id = cachedData[0][globals.CacheKeys.SyncId];
         vm.sync.service.url = cachedData[1];
+        if (cachedData[0][globals.CacheKeys.DarkModeEnabled] !== undefined) {
+          vm.settings.darkModeEnabled = cachedData[0][globals.CacheKeys.DarkModeEnabled];
+        }
 
         // Check if a sync is currently in progress
         return platform.Sync.Current()
@@ -2037,6 +2041,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
     // Update setting value and store in cache
     var value = !vm.settings.displaySearchBarBeneathResults;
     store.Set(globals.CacheKeys.DisplaySearchBarBeneathResults, value);
+  };
+
+  var settings_Prefs_EnableDarkMode_Click = function () {
+    // Update setting value and store in cache
+    var value = !vm.settings.darkModeEnabled;
+    store.Set(globals.CacheKeys.DarkModeEnabled, value);
   };
 
   var startSyncing = function () {

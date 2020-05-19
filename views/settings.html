@@ -300,6 +300,17 @@
           </div>
         </div>
       </div>
+      <div class="setting-group" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
+        <label>Enable dark mode</label>
+        <p class="description">Ideal for use in low-light environments.</p>
+        <div class="setting-value">
+          <div class="checkbox">
+            <input id="enableDarkMode" type="checkbox" data-ng-model="vm.settings.darkModeEnabled"
+              data-ng-click="vm.events.settings_Prefs_EnableDarkMode_Click()" />
+            <label for="enableDarkMode" data-ng-class="{ 'animate': true }"></label>
+          </div>
+        </div>
+      </div>
       <div class="setting-group" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)">
         <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_SearchBar_Label) }}</label>
         <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_SearchBar_Description) }}
