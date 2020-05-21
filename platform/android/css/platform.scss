@@ -63,6 +63,12 @@ body {
   background: transparent;
   overflow: auto;
 
+  a {
+    &:hover {
+      color: unset;
+    }
+  }
+
   h2 {
     font-size: 1.6em;
     line-height: 1em;
@@ -76,6 +82,10 @@ body {
 
   textarea.form-control {
     padding: 0.5rem 1rem;
+  }
+
+  .background {
+    @include animation-fade-in();
   }
 
   .checkbox {

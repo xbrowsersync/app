@@ -87,6 +87,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
       settings_Prefs_CheckForAppUpdates_Click: settings_Prefs_CheckForAppUpdates_Click,
       settings_Prefs_DisplaySearchBar_Click: settings_Prefs_DisplaySearchBar_Click,
       settings_Prefs_EnableDarkMode_Click: settings_Prefs_EnableDarkMode_Click,
+      settings_Prefs_DefaultToFolderView_Click: settings_Prefs_DefaultToFolderView_Click,
       settings_Prefs_SyncBookmarksToolbar_Cancel: settings_Prefs_SyncBookmarksToolbar_Cancel,
       settings_Prefs_SyncBookmarksToolbar_Click: settings_Prefs_SyncBookmarksToolbar_Click,
       settings_Prefs_SyncBookmarksToolbar_Confirm: settings_Prefs_SyncBookmarksToolbar_Confirm,
@@ -112,6 +113,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
       syncForm_DisableSync_Click: syncForm_DisableSync_Click,
       syncForm_EnableSync_Click: syncForm_EnableSync_Click,
       syncForm_ExistingSync_Click: syncForm_ExistingSync_Click,
+      syncForm_ManualEntry_Click: syncForm_ManualEntry_Click,
       syncForm_NewSync_Click: syncForm_NewSync_Click,
       syncForm_OtherSyncsDisabled_Click: syncForm_OtherSyncsDisabled_Click,
       syncForm_ShowPassword_Click: syncForm_ShowPassword_Click,
@@ -164,7 +166,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
       bookmarkTree: undefined,
       cancelGetBookmarksRequest: undefined,
       displayDefaultState: displayDefaultSearchState,
-      displayTreeView: false,
+      displayFolderView: false,
       execute: searchBookmarks,
       getLookaheadTimeout: undefined,
       getSearchResultsTimeout: undefined,
@@ -191,6 +193,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
       displaySyncBookmarksToolbarConfirmation: false,
       downloadLogCompletedMessage: undefined,
       fileRestoreEnabled: false,
+      defaultToFolderView: false,
       getSearchLookaheadDelay: 50,
       getSearchResultsDelay: 250,
       logSize: undefined,
@@ -793,6 +796,8 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
     // Disable sync
     return platform.Sync.Disable()
       .then(function () {
+        vm.sync.dataSize = null;
+        vm.sync.dataUsed = null;
         vm.sync.enabled = false;
         vm.sync.password = '';
         vm.login.passwordComplexity = {};
@@ -823,11 +828,19 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
     vm.search.lookahead = null;
     vm.search.results = null;
 
-    // Focus on search box
-    if (!utility.IsMobilePlatform(vm.platformName)) {
-      $timeout(function () {
-        document.querySelector('input[name=txtSearch]').focus();
-      }, 150);
+    if (vm.search.displayFolderView) {
+      // Initialise bookmark tree
+      vm.search.bookmarkTree = null;
+      bookmarks.GetBookmarks()
+        .then(function (results) {
+          $timeout(function () {
+            // Display bookmark tree view, sort containers
+            vm.search.bookmarkTree = results.sort(function (a, b) {
+              return b.title.localeCompare(a.title);
+            });
+          });
+        })
+        .catch(displayAlertErrorHandler);
     }
 
     return $q.resolve();
@@ -961,6 +974,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
           store.Get([
             globals.CacheKeys.DarkModeEnabled,
             globals.CacheKeys.DisplaySearchBarBeneathResults,
+            globals.CacheKeys.DefaultToFolderView,
             globals.CacheKeys.SyncEnabled,
             globals.CacheKeys.SyncId
           ]),
@@ -970,6 +984,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
       .then(function (cachedData) {
         // Set view model values
         vm.settings.displaySearchBarBeneathResults = !!cachedData[0][globals.CacheKeys.DisplaySearchBarBeneathResults];
+        vm.settings.defaultToFolderView = !!cachedData[0][globals.CacheKeys.DefaultToFolderView];
         vm.sync.enabled = !!cachedData[0][globals.CacheKeys.SyncEnabled];
         vm.sync.id = cachedData[0][globals.CacheKeys.SyncId];
         vm.sync.service.url = cachedData[1];
@@ -1140,11 +1155,11 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
     vm.login.upgradeConfirmed = false;
     vm.login.validatingServiceUrl = false;
     vm.sync.password = '';
-    if (vm.syncForm) {
-      vm.syncForm.txtId.$setValidity('InvalidSyncId', true);
-      vm.syncForm.$setPristine();
-      vm.syncForm.$setUntouched();
-    }
+
+    // Validate sync id if present
+    $timeout(function () {
+      syncForm_SyncId_Change();
+    }, 150);
 
     return store.Get(globals.CacheKeys.DisplayOtherSyncsWarning)
       .then(function (displayOtherSyncsWarning) {
@@ -1192,7 +1207,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
     }
 
     // Reset search view
-    vm.search.displayTreeView = false;
+    vm.search.displayFolderView = vm.settings.defaultToFolderView;
     vm.search.bookmarkTree = null;
     vm.search.selectedBookmark = null;
     return vm.search.displayDefaultState();
@@ -1218,7 +1233,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
     vm.settings.validatingRestoreData = false;
     vm.settings.updatesAvailable = undefined;
     vm.settings.nextAutoUpdate = undefined;
-    vm.sync.service.status = null;
 
     // Get current service url and sync bookmarks toolbar setting from cache
     return $q.all([
@@ -1465,9 +1479,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
   };
 
   var refreshSyncDataUsageMeter = function () {
-    vm.sync.dataSize = null;
-    vm.sync.dataUsed = null;
-
     return store.Get(globals.CacheKeys.SyncEnabled)
       .then(function (syncEnabled) {
         // Return if not synced
@@ -1622,7 +1633,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
 
     return bookmarks.Search(queryData)
       .then(function (results) {
-        vm.search.displayTreeView = false;
         vm.search.scrollDisplayMoreEnabled = false;
         vm.search.resultsDisplayed = vm.search.batchResultsNum;
         vm.search.results = results;
@@ -1652,7 +1662,16 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
   };
 
   var searchForm_Clear_Click = function () {
-    vm.search.displayDefaultState();
+    displayDefaultSearchState()
+      .then(function () {
+        // Display default search results
+        searchBookmarks();
+
+        // Focus on search box
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+          document.querySelector('input[name=txtSearch]').focus();
+        }
+      });
   };
 
   var searchForm_DeleteBookmark_Click = function (event, bookmark) {
@@ -1798,7 +1817,10 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
 
           vm.search.cancelGetBookmarksRequest = null;
         })
-        .then(searchBookmarks)
+        .then(function () {
+          vm.search.displayFolderView = false;
+          return searchBookmarks();
+        })
         .catch(displayAlertErrorHandler);
     }
     else {
@@ -1817,6 +1839,7 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
       }
 
       // Get search results
+      vm.search.displayFolderView = false;
       searchBookmarks();
 
       // Return focus to search box
@@ -1955,34 +1978,19 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
   };
 
   var searchForm_ToggleView_Click = function () {
-    if (vm.search.displayTreeView) {
-      // Display default search results
-      if (!utility.IsMobilePlatform(vm.platformName)) {
-        searchBookmarks();
-      }
-      vm.search.displayDefaultState();
-    }
-    else {
-      // Clear search and results
-      vm.search.query = null;
-      vm.search.queryMeasure = null;
-      vm.search.lookahead = null;
-      vm.search.results = null;
+    vm.search.displayFolderView = !vm.search.displayFolderView;
+    displayDefaultSearchState()
+      .then(function () {
+        // Display default search results
+        if (!vm.search.displayFolderView) {
+          searchBookmarks();
+        }
 
-      // Initialise bookmark tree
-      vm.search.bookmarkTree = null;
-      bookmarks.GetBookmarks()
-        .then(function (results) {
-          $timeout(function () {
-            // Display bookmark tree view, sort containers
-            vm.search.bookmarkTree = results.sort(function (a, b) {
-              return b.title.localeCompare(a.title);
-            });
-            vm.search.displayTreeView = !vm.search.displayTreeView;
-          });
-        })
-        .catch(displayAlertErrorHandler);
-    }
+        // Focus on search box
+        if (!utility.IsMobilePlatform(vm.platformName)) {
+          document.querySelector('input[name=txtSearch]').focus();
+        }
+      });
   };
 
   var searchForm_UpdateBookmark_Click = function (event, bookmarkToUpdate) {
@@ -2047,6 +2055,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
     // Update setting value and store in cache
     var value = !vm.settings.darkModeEnabled;
     store.Set(globals.CacheKeys.DarkModeEnabled, value);
+  };
+
+  var settings_Prefs_DefaultToFolderView_Click = function () {
+    // Update setting value and store in cache
+    var value = !vm.settings.defaultToFolderView;
+    store.Set(globals.CacheKeys.DefaultToFolderView, value);
   };
 
   var startSyncing = function () {
@@ -2258,6 +2272,10 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
         document.querySelector('input[name="txtId"]').focus();
       }, 150);
     }
+  };
+
+  var syncForm_ManualEntry_Click = function () {
+    vm.login.displayGetSyncIdPanel = false;
   };
 
   var syncForm_NewSync_Click = function () {

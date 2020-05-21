@@ -483,6 +483,21 @@ body {
     animation-duration: 1s;
   }
 
+  .status-icon {
+    position: relative;
+    z-index: 5;
+
+    .status-icon-bg {
+      position: absolute;
+      top: 0.2rem;
+      left: 0.1rem;
+      height: 0.8rem;
+      width: 0.8rem;
+      z-index: -1;
+      border-radius: 100%;
+    }
+  }
+
   .validation {
     font-size: 0.75rem;
     line-height: 1.15rem;
@@ -881,23 +896,12 @@ body {
       margin: 0 0.3rem 0 0;
     }
 
-    .service-status {
-      position: relative;
+    .status-icon {
       margin-left: 0.25rem;
       top: 0.1rem;
 
       .loading .spinner-border {
         border-right-color: transparent !important;
-      }
-
-      .status-background {
-        position: absolute;
-        top: 0.2rem;
-        left: 0.1rem;
-        height: 0.8rem;
-        width: 0.8rem;
-        z-index: -1;
-        border-radius: 100%;
       }
     }
   }
@@ -1444,10 +1448,8 @@ body {
         @include text-overflow-ellipsis;
       }
 
-      .service-status {
-        font-size: 0.9rem;
-        padding-left: 0.4rem;
-        margin-top: 0.1rem;
+      .status-icon {
+        margin: 0.1rem 0 0 0.25rem;
       }
     }
 

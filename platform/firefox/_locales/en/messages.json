@@ -176,6 +176,9 @@
   "button_GetSyncId_Label": {
     "message": "Get a sync ID"
   },
+  "button_ManualEntry_Label": {
+    "message": "Enter sync ID manually"
+  },
   "login_ConfirmUpdateService_Title": {
     "message": "Sync to this service?"
   },
@@ -470,11 +473,23 @@
   "settings_Prefs_CheckForAppUpdates_Description": {
     "message": "Be notified when a new version of xBrowserSync is available."
   },
+  "settings_Prefs_DefaultToFolderView_Label": {
+    "message": "Show bookmark folders"
+  },
+  "settings_Prefs_DefaultToFolderView_Description": {
+    "message": "Folder view is displayed by default."
+  },
   "settings_Prefs_SearchBar_Label": {
-    "message": "Alternative search view"
+    "message": "Switch search bar position"
   },
   "settings_Prefs_SearchBar_Description": {
-    "message": "Display search bar beneath results."
+    "message": "Show search bar beneath results."
+  },
+  "settings_Prefs_DarkMode_Label": {
+    "message": "Enable dark mode"
+  },
+  "settings_Prefs_DarkMode_Description": {
+    "message": "Ideal for use in low-light environments."
   },
   "updated_Message": {
     "message": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
@@ -552,7 +567,7 @@
     "message": "Sync ID"
   },
   "settings_Sync_DisplayQRCode_Message": {
-    "message": "Display QR code"
+    "message": "Show QR code"
   },
   "settings_Service_DataUsage_Label": {
     "message": "Data usage"

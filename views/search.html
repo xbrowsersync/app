@@ -15,15 +15,15 @@
     <span class="sr-only" data-ng-if="!vm.bookmark.active">{{
       vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}</span>
   </button>
-  <button class="btn btn-icon" title="{{ vm.search.displayTreeView ? vm.platform.GetConstant(vm.globals.Constants.Button_SearchResults_Label) : 
+  <button class="btn btn-icon" title="{{ vm.search.displayFolderView ? vm.platform.GetConstant(vm.globals.Constants.Button_SearchResults_Label) : 
       vm.platform.GetConstant(vm.globals.Constants.Button_BookmarkTree_Label) }}"
     data-ng-click="vm.events.searchForm_ToggleView_Click()" tabindex="1000">
-    <i class="fas fa-list animate-fade-in" data-ng-if="vm.search.displayTreeView" aria-hidden="true"></i>
-    <i class="fas fa-stream animate-fade-in" data-ng-if="!vm.search.displayTreeView" aria-hidden="true"></i>
-    <span class="sr-only" data-ng-if="vm.search.displayTreeView">
+    <i class="fas fa-list animate-fade-in" data-ng-if="vm.search.displayFolderView" aria-hidden="true"></i>
+    <i class="fas fa-stream animate-fade-in" data-ng-if="!vm.search.displayFolderView" aria-hidden="true"></i>
+    <span class="sr-only" data-ng-if="vm.search.displayFolderView">
       {{ vm.platform.GetConstant(vm.globals.Constants.Button_SearchResults_Label) }}
     </span>
-    <span class="sr-only" data-ng-if="!vm.search.displayTreeView">
+    <span class="sr-only" data-ng-if="!vm.search.displayFolderView">
       {{ vm.platform.GetConstant(vm.globals.Constants.Button_BookmarkTree_Label) }}
     </span>
   </button>
@@ -55,7 +55,7 @@
   <i class="far fa-bookmark" aria-hidden="true"></i>
   <span class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Button_AddBookmark_Label) }}</span>
 </button>
-<div class="search-results-panel" data-ng-if="!vm.search.displayTreeView" data-ng-show="vm.search.results">
+<div class="search-results-panel" data-ng-if="!vm.search.displayFolderView" data-ng-show="vm.search.results">
   <h4 data-ng-show="!vm.search.query && vm.search.results.length === 0">
     {{ vm.platform.GetConstant(vm.globals.Constants.Search_NoBookmarks_Message) }}
   </h4>
@@ -110,7 +110,7 @@
     </div>
   </div>
 </div>
-<div class="bookmark-tree-panel" data-ng-if="vm.search.displayTreeView">
+<div class="bookmark-tree-panel" data-ng-if="vm.search.displayFolderView">
   <bookmark-tree class="bookmark-list" nodes="vm.search.bookmarkTree" platform-name="vm.platformName"
     selected-bookmark="vm.search.selectedBookmark"
     edit-bookmark="vm.events.searchForm_UpdateBookmark_Click(event, bookmark)"

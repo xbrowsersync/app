@@ -357,12 +357,12 @@
       }
     }
 
-    .selected-service .service-status {
+    .selected-service .status-icon {
       .loading .spinner-border {
         border-color: $colour-bg3;
       }
 
-      .status-background {
+      .status-icon-bg {
         background-color: $colour-bg3;
       }
     }
@@ -700,6 +700,10 @@ body {
           }
         }
       }
+    }
+
+    .status-icon-bg {
+      background-color: $colour-text1-dark !important;
     }
 
     .well {

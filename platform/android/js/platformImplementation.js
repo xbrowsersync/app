@@ -192,6 +192,9 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
     "button_GetSyncId_Label": {
       "message": "Get a sync ID"
     },
+    "button_ManualEntry_Label": {
+      "message": "Enter sync ID manually"
+    },
     "login_ConfirmUpdateService_Title": {
       "message": "Sync to this service?"
     },
@@ -477,11 +480,23 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
     "settings_Prefs_CheckForAppUpdates_Description": {
       "message": "Be notified when a new version of xBrowserSync is available."
     },
+    "settings_Prefs_DefaultToFolderView_Label": {
+      "message": "Show bookmark folders"
+    },
+    "settings_Prefs_DefaultToFolderView_Description": {
+      "message": "Folder view is displayed by default."
+    },
     "settings_Prefs_SearchBar_Label": {
-      "message": "Alternative search view"
+      "message": "Switch search bar position"
     },
     "settings_Prefs_SearchBar_Description": {
-      "message": "Display search bar beneath results."
+      "message": "Show search bar beneath results."
+    },
+    "settings_Prefs_DarkMode_Label": {
+      "message": "Enable dark mode"
+    },
+    "settings_Prefs_DarkMode_Description": {
+      "message": "Ideal for use in low-light environments."
     },
     "updated_Message": {
       "message": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
@@ -559,7 +574,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
       "message": "Sync ID"
     },
     "settings_Sync_DisplayQRCode_Message": {
-      "message": "Display QR code"
+      "message": "Show QR code"
     },
     "settings_Service_DataUsage_Label": {
       "message": "Data usage"
@@ -874,11 +889,13 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
     }
 
     switch (id) {
-      // Checking updated service url, wait a moment before displaying loading overlay
-      case 'checkingNewServiceUrl':
+      // Display syncing dialog after a slight delay
+      case 'delayDisplayDialog':
         timeout = $timeout(function () {
-          SpinnerDialog.show(null, getConstant(globals.Constants.Working_Syncing_Message), true);
-        }, 100);
+          if (vm.view.current === vm.view.views.search) {
+            SpinnerDialog.show(null, vm.working.message + '…', true);
+          }
+        }, 250);
         break;
       // Loading bookmark metadata, display cancellable overlay
       case 'retrievingMetadata':
@@ -1425,7 +1442,8 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
           .then(function (isDarkModeEnabled) {
             vm.settings.darkModeEnabled = isDarkModeEnabled.value;
           });
-      });
+      })
+      .catch(displayErrorAlert);
   };
 
   var checkForInstallOrUpgrade = function () {
@@ -1499,13 +1517,11 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
     });
   };
 
-  var displayDefaultSearchState = function () {
-    // Clear search and display all bookmarks
-    document.activeElement.blur();
-    vm.search.query = null;
-    vm.search.queryMeasure = null;
-    vm.search.lookahead = null;
-    return vm.search.execute();
+  var displayDefaultSearchState = function (originalFunction) {
+    return originalFunction()
+      .then(function () {
+        return vm.search.execute();
+      });
   };
 
   var displayErrorAlert = function (err) {
@@ -1592,10 +1608,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
     });
   };
 
-  var executeSync = function (isBackgroundSync) {
+  var executeSync = function (isBackgroundSync, displayLoadingId) {
+    var displayLoadingTimeout;
+
     // Display loading panel if not background sync and currently on the search view
-    if (!isBackgroundSync && vm.view.current === vm.view.views.search) {
-      displayLoading();
+    if (!isBackgroundSync) {
+      displayLoadingTimeout = displayLoading(displayLoadingId);
     }
 
     // Sync bookmarks
@@ -1612,10 +1630,12 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
           displayErrorAlert(err);
         }
       })
-      .finally(hideLoading);
+      .finally(function () {
+        hideLoading(displayLoadingId, displayLoadingTimeout);
+      });
   };
 
-  var executeSyncIfOnline = function () {
+  var executeSyncIfOnline = function (displayLoadingId) {
     var isOnline = utility.IsNetworkConnected();
 
     // If not online display an alert and return
@@ -1629,7 +1649,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
     }
 
     // Sync bookmarks
-    return executeSync();
+    return executeSync(false, displayLoadingId);
   };
 
   var getSharedBookmark = function () {
@@ -1691,7 +1711,10 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
     vm.events.syncForm_EnableSync_Click = syncForm_EnableSync_Click;
 
     // Set clear search button to display all bookmarks
-    vm.search.displayDefaultState = displayDefaultSearchState;
+    var displayDefaultStateOriginal = vm.search.displayDefaultState;
+    vm.search.displayDefaultState = function () {
+      return displayDefaultSearchState(displayDefaultStateOriginal);
+    };
 
     // Enable select file to restore
     vm.settings.fileRestoreEnabled = true;
@@ -1754,93 +1777,99 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
 
   var handleResume = function () {
     // Set theme
-    checkForDarkTheme()
+    return checkForDarkTheme()
       .then(function () {
         // Check if sync enabled and reset network disconnected flag
-        store.Get(globals.CacheKeys.SyncEnabled);
-      })
-      .then(function (syncEnabled) {
-        // Deselect bookmark
-        vm.search.selectedBookmark = null;
+        store.Get(globals.CacheKeys.SyncEnabled)
+          .then(function (syncEnabled) {
+            // Deselect bookmark
+            vm.search.selectedBookmark = null;
 
-        if (!syncEnabled) {
-          return;
-        }
-
-        // Run sync
-        return executeSyncIfOnline()
-          .then(function (isOnline) {
-            if (isOnline === false) {
+            if (!syncEnabled) {
               return;
             }
 
-            // Refresh search results if query not present
-            if (vm.view.current === vm.view.views.search && !vm.search.query) {
-              displayDefaultSearchState();
-            }
+            // Run sync
+            return executeSyncIfOnline('delayDisplayDialog')
+              .then(function (isOnline) {
+                if (isOnline === false) {
+                  return;
+                }
+
+                // Refresh search results if query not present
+                if (vm.view.current === vm.view.views.search && !vm.search.query) {
+                  vm.search.displayDefaultState();
+                }
+              })
+              .then(function () {
+                // Check if a bookmark was shared
+                return checkForSharedBookmark();
+              });
           })
-          .then(function () {
-            // Check if a bookmark was shared
-            return checkForSharedBookmark();
-          });
-      })
-      .catch(displayErrorAlert);
+          .catch(displayErrorAlert);
+      });
   };
 
   var handleStartup = function () {
-    var cachedBookmarks, syncEnabled;
-
     utility.LogInfo('Starting up');
 
     // Set theme
     return checkForDarkTheme()
       .then(function () {
         // Retrieve cached data
-        return store.Get();
-      })
-      .then(function (cachedData) {
-        syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
-        var checkForAppUpdates = cachedData[globals.CacheKeys.CheckForAppUpdates];
+        return store.Get()
+          .then(function (cachedData) {
+            var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
+            var checkForAppUpdates = cachedData[globals.CacheKeys.CheckForAppUpdates];
 
-        // Prime bookmarks cache
-        if (syncEnabled) {
-          cachedBookmarks = bookmarks.GetBookmarks();
-        }
+            // Prime bookmarks cache
+            if (syncEnabled) {
+              bookmarks.GetBookmarks();
+            }
 
-        // Add useful debug info to beginning of trace log
-        cachedData.platform = {
-          name: device.platform,
-          device: device.manufacturer + ' ' + device.model
-        };
-        utility.LogInfo(_.omit(
-          cachedData,
-          'debugMessageLog',
-          globals.CacheKeys.Bookmarks,
-          globals.CacheKeys.TraceLog,
-          globals.CacheKeys.Password
-        ));
+            // Add useful debug info to beginning of trace log
+            cachedData.platform = {
+              name: device.platform,
+              device: device.manufacturer + ' ' + device.model
+            };
+            utility.LogInfo(_.omit(
+              cachedData,
+              'debugMessageLog',
+              globals.CacheKeys.Bookmarks,
+              globals.CacheKeys.TraceLog,
+              globals.CacheKeys.Password
+            ));
 
-        // Check for new app version
-        if (checkForAppUpdates) {
-          checkForNewVersion();
-        }
+            // Check for new app version
+            if (checkForAppUpdates) {
+              checkForNewVersion();
+            }
 
-        // Exit if sync not enabled
-        if (!syncEnabled) {
-          return;
-        }
+            // Exit if sync not enabled
+            if (!syncEnabled) {
+              return;
+            }
 
-        return $q.all([
-          // If network is online, commit any updates made whilst offline
-          executeSyncIfOnline(),
-          // Check if a bookmark was shared
-          checkForSharedBookmark()
-            .then(function () {
-              return cachedBookmarks;
-            })
-        ]);
-      })
-      .catch(displayErrorAlert);
+            // Run sync
+            executeSyncIfOnline('delayDisplayDialog')
+              .then(function (isOnline) {
+                if (isOnline === false) {
+                  return;
+                }
+
+                // Refresh search results if query not present
+                if (vm.view.current === vm.view.views.search && !vm.search.query) {
+                  vm.search.displayDefaultState();
+                }
+              })
+              .then(function () {
+                // Check if a bookmark was shared
+                return checkForSharedBookmark();
+              })
+              .catch(displayErrorAlert);
+          })
+          .catch(displayErrorAlert);
+      });
   };
 
   var handleTouchStart = function (event) {

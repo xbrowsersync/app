@@ -29,7 +29,7 @@
           <a href="{{ vm.sync.service.url }}" class="new-tab" title="{{ vm.sync.service.url }}">
             {{ vm.sync.service.url }}
           </a>
-          <div class="service-status">
+          <div class="status-icon">
             <div class="loading animate-fade-in" data-ng-show="vm.sync.service.status === null"
               title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_Loading) }}">
               <span
@@ -60,6 +60,7 @@
                 class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_Status_NoNewSyncs) }}</span>
               <i class="fas fa-exclamation-circle text-warning" aria-hidden="true"></i>
             </div>
+            <div class="status-icon-bg animate-fade-in" data-ng-show="vm.sync.service.status !== null"></div>
           </div>
         </div>
         <div
@@ -72,15 +73,15 @@
         data-ng-if="vm.sync.enabled && vm.sync.service.status !== undefined && vm.sync.service.status !== vm.globals.ServiceStatus.Error">
         <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Service_DataUsage_Label) }}</label>
         <div class="setting-value" data-ng-class="{ 'text-danger': vm.sync.dataUsed >= 90 }"
-          data-ng-show="vm.sync.dataUsed !== null">{{
+          data-ng-show="vm.sync.dataUsed != null">{{
           vm.sync.dataUsed | number : 0 }}%</div>
         <div class="progress">
           <div class="progress-bar" role="progressbar" data-ng-style=" { 'width': vm.sync.dataUsed + '%' }">
           </div>
         </div>
-        <span class="used" data-ng-show="vm.sync.dataSize !== null">{{ vm.sync.dataSize | kbFmt : 0
+        <span class="used" data-ng-show="vm.sync.dataSize != null">{{ vm.sync.dataSize | kbFmt : 0
           }}</span>
-        <span class="max" data-ng-show="vm.sync.service.maxSyncSize !== null">{{ vm.sync.service.maxSyncSize
+        <span class="max" data-ng-show="vm.sync.service.maxSyncSize != null">{{ vm.sync.service.maxSyncSize
           | kbFmt : 0 }}</span>
         <p class="description">{{
             vm.platform.GetConstant(vm.globals.Constants.Settings_Service_DataUsage_Description) }}</p>
@@ -300,17 +301,6 @@
           </div>
         </div>
       </div>
-      <div class="setting-group" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
-        <label>Enable dark mode</label>
-        <p class="description">Ideal for use in low-light environments.</p>
-        <div class="setting-value">
-          <div class="checkbox">
-            <input id="enableDarkMode" type="checkbox" data-ng-model="vm.settings.darkModeEnabled"
-              data-ng-click="vm.events.settings_Prefs_EnableDarkMode_Click()" />
-            <label for="enableDarkMode" data-ng-class="{ 'animate': true }"></label>
-          </div>
-        </div>
-      </div>
       <div class="setting-group" data-ng-if="vm.utility.IsMobilePlatform(vm.platformName)">
         <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_SearchBar_Label) }}</label>
         <p class="description">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_SearchBar_Description) }}
@@ -321,6 +311,31 @@
               data-ng-model="vm.settings.displaySearchBarBeneathResults"
               data-ng-click="vm.events.settings_Prefs_DisplaySearchBar_Click()" />
             <label for="displaySearchBarBeneathResults" data-ng-class="{ 'animate': true }"></label>
+          </div>
+        </div>
+      </div>
+      <div class="setting-group">
+        <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_DefaultToFolderView_Label) }}</label>
+        <p class="description">
+          {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_DefaultToFolderView_Description) }}
+        <div class="setting-value">
+          <div class="checkbox">
+            <input id="defaultToFolderView" type="checkbox" data-ng-model="vm.settings.defaultToFolderView"
+              data-ng-click="vm.events.settings_Prefs_DefaultToFolderView_Click()" />
+            <label for="defaultToFolderView" data-ng-class="{ 'animate': true }"></label>
+          </div>
+        </div>
+      </div>
+      <div class="setting-group" data-ng-if="!vm.utility.IsMobilePlatform(vm.platformName)">
+        <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_DarkMode_Label) }}</label>
+        <p class="description">
+          {{ vm.platform.GetConstant(vm.globals.Constants.Settings_Prefs_DarkMode_Description) }}
+        </p>
+        <div class="setting-value">
+          <div class="checkbox">
+            <input id="enableDarkMode" type="checkbox" data-ng-model="vm.settings.darkModeEnabled"
+              data-ng-click="vm.events.settings_Prefs_EnableDarkMode_Click()" />
+            <label for="enableDarkMode" data-ng-class="{ 'animate': true }"></label>
           </div>
         </div>
       </div>
@@ -346,18 +361,20 @@
       <div class="animate-fade-in">
         <div class="setting-group">
           <label>{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Title) }}</label>
-          <div class="setting-value">
+          <div class="setting-value status-icon">
             <div class="animate-fade-in" data-ng-show="vm.settings.readWebsiteDataPermissionsGranted"
               title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Granted_Label) }}">
               <span
                 class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_Granted_Label) }}</span>
               <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
+              <div class="status-icon-bg animate-fade-in"></div>
             </div>
             <div class="animate-fade-in" data-ng-show="!vm.settings.readWebsiteDataPermissionsGranted"
               title="{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_NotGranted_Label) }}">
               <span
                 class="sr-only">{{ vm.platform.GetConstant(vm.globals.Constants.Settings_Permissions_ReadWebsiteData_NotGranted_Label) }}</span>
               <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
+              <div class="status-icon-bg animate-fade-in"></div>
             </div>
           </div>
           <p class="description"
