@@ -1312,7 +1312,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
           vm.scanner.invalidSyncId = false;
         }, 100);
 
-        QRScanner.scan(function (err, scannedValue) {
+        QRScanner.scan(function (err, scannedText) {
           if (err) {
             var scanError = new Error(err._message || err.name || err.code);
             utility.LogError(scanError, 'platform.startScanning');
@@ -1320,14 +1320,14 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
           }
 
           QRScanner.pausePreview(function () {
-            utility.LogInfo('Scanned: ' + scannedValue);
-            var arrScannedValue = scannedValue.split(globals.QrCode.Delimiter);
-            var urlRegex = new RegExp('^' + globals.URL.ValidUrlRegex + '$', 'i');
+            utility.LogInfo('Scanned: ' + scannedText);
 
-            // If scanned value is not value resume scanning
-            if (arrScannedValue.length < 2 ||
-              !utility.SyncIdIsValid(arrScannedValue[0]) ||
-              !urlRegex.test(arrScannedValue[1])) {
+            var syncInfo;
+            try {
+              syncInfo = utility.DecodeQrCode(scannedText);
+            }
+            catch (err) {
+              // If scanned value is not value resume scanning
               vm.scanner.invalidSyncId = true;
               $timeout(function () {
                 QRScanner.resumePreview(waitForScan);
@@ -1336,7 +1336,7 @@ xBrowserSync.App.PlatformImplementation = function ($interval, $q, $timeout, boo
             }
 
             $timeout(function () {
-              resolve(scannedValue);
+              resolve(syncInfo);
             }, 1e3);
           });
         });

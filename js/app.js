@@ -886,12 +886,12 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
   };
 
   var displayQrPanel = function () {
-    // Value for QR code should comprise of sync ID and service URL
-    var value = vm.sync.id + globals.QrCode.Delimiter + vm.sync.service.url;
+    // QR code should encode sync info
+    var syncInfo = utility.CreateSyncInfoObject(vm.sync.id, vm.sync.service.url);
 
-    // Generate new QR code from the supplied value
+    // Generate QR code
     var qrcode = new QRCode({
-      content: value,
+      content: JSON.stringify(syncInfo),
       padding: 4,
       width: 200,
       height: 200,
@@ -1733,15 +1733,13 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
     var scanSuccess = false;
 
     platform.Scanner.Start()
-      .then(function (value) {
+      .then(function (scannedSyncInfo) {
+        // Update stored sync id and service values
         scanSuccess = true;
-
-        // Split the scanned value into it's components and update stored sync id and service values
-        var arrValue = value.split(globals.QrCode.Delimiter);
-        vm.sync.id = arrValue[0];
+        vm.sync.id = scannedSyncInfo.id;
         return $q.all([
-          store.Set(globals.CacheKeys.SyncId, arrValue[0]),
-          updateServiceUrl(arrValue[1])
+          store.Set(globals.CacheKeys.SyncId, scannedSyncInfo.id),
+          updateServiceUrl(scannedSyncInfo.url)
         ]);
       })
       .catch(displayAlertErrorHandler)

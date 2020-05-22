@@ -57,15 +57,48 @@ xBrowserSync.App.Utility = function ($http, $q, platform, globals, store) {
 
     // Add sync info if provided
     if (syncId) {
-      data.xbrowsersync.sync.id = syncId;
-      data.xbrowsersync.sync.type = 'xbrowsersync';
-      data.xbrowsersync.sync.url = serviceUrl;
+      data.xbrowsersync.sync = createSyncInfoObject(syncId, serviceUrl);
     }
 
     // Add bookmarks data
     data.xbrowsersync.data.bookmarks = bookmarksData;
 
     return data;
+  };
+
+  var createSyncInfoObject = function (syncId, serviceUrl) {
+    return {
+      id: syncId,
+      type: 'xbrowsersync',
+      url: serviceUrl
+    };
+  };
+
+  var decodeQrCode = function (qrCodeValue) {
+    var serviceUrl, syncId;
+    try {
+      // For v1.5.3 or later codes, expect sync info object
+      var syncInfo = JSON.parse(qrCodeValue);
+      syncId = syncInfo.id;
+      serviceUrl = syncInfo.url;
+    }
+    catch (err) {
+      // For pre-v1.5.3 codes, split the scanned value into it's components
+      var arr = qrCodeValue.split(globals.QrCode.Delimiter);
+      syncId = arr[0];
+      serviceUrl = arr[1];
+    }
+
+    // Validate decoded values
+    var urlRegex = new RegExp('^' + globals.URL.ValidUrlRegex + '$', 'i');
+    if (!syncIdIsValid(syncId) || (serviceUrl && !urlRegex.test(serviceUrl))) {
+      throw new Error('Invalid QR code');
+    }
+
+    return {
+      id: syncId,
+      url: serviceUrl
+    };
   };
 
   var decryptData = function (encryptedData) {
@@ -794,6 +827,8 @@ xBrowserSync.App.Utility = function ($http, $q, platform, globals, store) {
   return {
     CheckForNewVersion: checkForNewVersion,
     CreateBackupData: createBackupData,
+    CreateSyncInfoObject: createSyncInfoObject,
+    DecodeQrCode: decodeQrCode,
     DecryptData: decryptData,
     EncryptData: encryptData,
     Get24hrTimeFromDate: get24hrTimeFromDate,
