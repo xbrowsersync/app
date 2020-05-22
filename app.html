@@ -13,7 +13,8 @@
 <body data-ng-class="vm.settings.darkModeEnabled ? 'theme-dark' : 'theme-default'">
   <div class="container" data-ng-class="{ 'search': vm.view.current === vm.view.views.search }">
     <div id="working-panel" class="animate" data-ng-include="'./views/working.html'" data-ng-show="vm.working.show"
-      data-ng-class="{ 'darker-overlay': vm.view.current !== vm.view.views.loading }"></div>
+      data-ng-class="{ 'darker-overlay': vm.view.current !== vm.view.views.loading, 'fullsize': vm.view.current === vm.view.views.loading }">
+    </div>
 
     <div id="qr-panel" class="animate" data-ng-include="'./views/qr.html'" data-ng-show="vm.settings.displayQrPanel">
     </div>

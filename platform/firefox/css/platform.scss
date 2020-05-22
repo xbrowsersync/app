@@ -44,3 +44,11 @@ body {
     bottom: -0.75rem;
   }
 }
+
+#working-panel {
+  &.fullsize {
+    height: 37rem;
+    width: 23rem;
+    position: unset;
+  }
+}
