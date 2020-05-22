@@ -2042,25 +2042,99 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
   var settings_Prefs_CheckForAppUpdates_Click = function () {
     // Update setting value and store in cache
     var value = !vm.settings.checkForAppUpdates;
+    vm.settings.checkForAppUpdates = value;
     store.Set(globals.CacheKeys.CheckForAppUpdates, value);
   };
 
   var settings_Prefs_DisplaySearchBar_Click = function () {
     // Update setting value and store in cache
     var value = !vm.settings.displaySearchBarBeneathResults;
+    vm.settings.displaySearchBarBeneathResults = value;
     store.Set(globals.CacheKeys.DisplaySearchBarBeneathResults, value);
   };
 
   var settings_Prefs_EnableDarkMode_Click = function () {
     // Update setting value and store in cache
     var value = !vm.settings.darkModeEnabled;
+    vm.settings.darkModeEnabled = value;
     store.Set(globals.CacheKeys.DarkModeEnabled, value);
   };
 
   var settings_Prefs_DefaultToFolderView_Click = function () {
     // Update setting value and store in cache
     var value = !vm.settings.defaultToFolderView;
+    vm.settings.defaultToFolderView = value;
     store.Set(globals.CacheKeys.DefaultToFolderView, value);
+  };
+
+  var settings_Prefs_SyncBookmarksToolbar_Click = function () {
+    vm.settings.syncBookmarksToolbar = !vm.settings.syncBookmarksToolbar;
+
+    // If confirmation message is currently displayed, hide it and return
+    if (vm.settings.displaySyncBookmarksToolbarConfirmation) {
+      vm.settings.displaySyncBookmarksToolbarConfirmation = false;
+      return;
+    }
+
+    $q.all([
+      bookmarks.GetSyncBookmarksToolbar(),
+      store.Get(globals.CacheKeys.SyncEnabled)
+    ])
+      .then(function (cachedData) {
+        var syncBookmarksToolbar = cachedData[0];
+        var syncEnabled = cachedData[1];
+
+        // If sync not enabled or user just clicked to disable toolbar sync, update stored value and return
+        if (!syncEnabled || syncBookmarksToolbar) {
+          utility.LogInfo('Toolbar sync ' + (!syncBookmarksToolbar ? 'enabled' : 'disabled'));
+          return store.Set(globals.CacheKeys.SyncBookmarksToolbar, !syncBookmarksToolbar);
+        }
+
+        // Otherwise, display sync confirmation
+        vm.settings.displaySyncBookmarksToolbarConfirmation = true;
+        $timeout(function () {
+          document.querySelector('.btn-confirm-sync-toolbar').focus();
+        });
+      });
+  };
+
+  var settings_Prefs_SyncBookmarksToolbar_Cancel = function () {
+    vm.settings.displaySyncBookmarksToolbarConfirmation = false;
+    vm.settings.syncBookmarksToolbar = false;
+  };
+
+  var settings_Prefs_SyncBookmarksToolbar_Confirm = function () {
+    var syncId;
+
+    store.Get([
+      globals.CacheKeys.SyncEnabled,
+      globals.CacheKeys.SyncId
+    ])
+      .then(function (cachedData) {
+        var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
+        syncId = cachedData[globals.CacheKeys.SyncId];
+
+        // If sync not enabled, return
+        if (!syncEnabled) {
+          return;
+        }
+
+        // Hide sync confirmation and display loading overlay
+        vm.settings.displaySyncBookmarksToolbarConfirmation = false;
+        platform.Interface.Working.Show();
+
+        // Enable setting in cache
+        return store.Set(globals.CacheKeys.SyncBookmarksToolbar, true);
+      })
+      .then(function () {
+        utility.LogInfo('Toolbar sync enabled');
+
+        // Queue sync with no callback action
+        return queueSync({
+          type: !syncId ? globals.SyncType.Push : globals.SyncType.Pull
+        })
+          .catch(displayAlertErrorHandler);
+      });
   };
 
   var startSyncing = function () {
@@ -2489,74 +2563,6 @@ xBrowserSync.App.Controller = function ($q, $timeout, platform, globals, store, 
   var syncForm_UpgradeSync_Click = function () {
     vm.login.upgradeConfirmed = true;
     startSyncing();
-  };
-
-  var settings_Prefs_SyncBookmarksToolbar_Click = function () {
-    // If confirmation message is currently displayed, hide it and return
-    if (vm.settings.displaySyncBookmarksToolbarConfirmation) {
-      vm.settings.displaySyncBookmarksToolbarConfirmation = false;
-      return;
-    }
-
-    $q.all([
-      bookmarks.GetSyncBookmarksToolbar(),
-      store.Get(globals.CacheKeys.SyncEnabled)
-    ])
-      .then(function (cachedData) {
-        var syncBookmarksToolbar = cachedData[0];
-        var syncEnabled = cachedData[1];
-
-        // If sync not enabled or user just clicked to disable toolbar sync, update stored value and return
-        if (!syncEnabled || syncBookmarksToolbar) {
-          utility.LogInfo('Toolbar sync ' + (!syncBookmarksToolbar ? 'enabled' : 'disabled'));
-          return store.Set(globals.CacheKeys.SyncBookmarksToolbar, !syncBookmarksToolbar);
-        }
-
-        // Otherwise, display sync confirmation
-        vm.settings.displaySyncBookmarksToolbarConfirmation = true;
-        $timeout(function () {
-          document.querySelector('.btn-confirm-sync-toolbar').focus();
-        });
-      });
-  };
-
-  var settings_Prefs_SyncBookmarksToolbar_Cancel = function () {
-    vm.settings.displaySyncBookmarksToolbarConfirmation = false;
-    vm.settings.syncBookmarksToolbar = false;
-  };
-
-  var settings_Prefs_SyncBookmarksToolbar_Confirm = function () {
-    var syncId;
-
-    store.Get([
-      globals.CacheKeys.SyncEnabled,
-      globals.CacheKeys.SyncId
-    ])
-      .then(function (cachedData) {
-        var syncEnabled = cachedData[globals.CacheKeys.SyncEnabled];
-        syncId = cachedData[globals.CacheKeys.SyncId];
-
-        // If sync not enabled, return
-        if (!syncEnabled) {
-          return;
-        }
-
-        // Hide sync confirmation and display loading overlay
-        vm.settings.displaySyncBookmarksToolbarConfirmation = false;
-        platform.Interface.Working.Show();
-
-        // Enable setting in cache
-        return store.Set(globals.CacheKeys.SyncBookmarksToolbar, true);
-      })
-      .then(function () {
-        utility.LogInfo('Toolbar sync enabled');
-
-        // Queue sync with no callback action
-        return queueSync({
-          type: !syncId ? globals.SyncType.Push : globals.SyncType.Pull
-        })
-          .catch(displayAlertErrorHandler);
-      });
   };
 
   var updatedPanel_Continue_Click = function () {
