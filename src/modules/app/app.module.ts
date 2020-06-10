@@ -13,7 +13,7 @@ import ZxcvbnDirective from './zxcvbn.directive';
 import Globals from '../shared/globals';
 
 @NgModule({
-  declarations: [AppComponent, BookmarkTreeComponent],
+  declarations: [AppComponent, BookmarkTreeComponent, ZxcvbnDirective],
   id: 'AppModule',
   imports: [GlobalSharedModule, NgAnimate, NgFilter, NgInfiniteScroll, NgSanitize]
 })
@@ -51,5 +51,4 @@ export default class AppModule {}
       $templateRequest(`${Globals.PathToAssets}/updated.html`, true);
       $templateRequest(`${Globals.PathToAssets}/working.html`, true);
     }
-  ])
-  .directive('zxcvbn', ZxcvbnDirective.Factory);
+  ]);
