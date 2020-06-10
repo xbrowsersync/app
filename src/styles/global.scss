@@ -1,0 +1,1549 @@
+* {
+  box-shadow: none;
+  outline: none !important;
+}
+
+:root {
+  font-size: 14px;
+}
+
+body {
+  font-family: $font-stack-regular;
+  line-height: 1.25rem;
+  margin: 0;
+
+  h2 {
+    float: left;
+    font-size: 1.5em;
+    font-weight: 800;
+    line-height: 1.2em;
+    margin: 0;
+  }
+
+  h4 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    line-height: 1.75rem;
+    margin-top: 0;
+  }
+
+  a {
+    border-bottom-style: dotted;
+    border-bottom-width: 1px;
+    color: inherit;
+    cursor: pointer;
+    transition: all ease-in-out 0.2s;
+
+    &:focus,
+    &:hover {
+      outline: 0;
+      text-decoration: none;
+    }
+  }
+
+  button.btn {
+    border-width: 0;
+
+    &:active,
+    &:hover,
+    &:focus {
+      box-shadow: none;
+    }
+
+    &.btn-default {
+      border-radius: $border-radius-input;
+      border-width: 0.15rem;
+      font-size: 1.2rem;
+      font-weight: 800;
+      line-height: 2.5rem;
+      min-width: 6rem;
+      padding: 0 1.2rem;
+      text-transform: capitalize;
+      transition: all ease-in-out 0.2s;
+
+      &[disabled] {
+        cursor: default;
+        opacity: 0.5;
+      }
+
+      @media (hover: hover) {
+        &:not([disabled]):focus {
+          text-decoration: underline;
+
+          &:active,
+          &:hover {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+
+    &.btn-fab {
+      align-items: center;
+      border: none;
+      border-radius: 100%;
+      box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12) !important;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: inline-flex;
+      font-size: 1.5rem;
+      height: 4rem;
+      justify-content: center;
+      overflow: hidden;
+      padding: 0;
+      position: relative;
+      transition: color ease-in-out 0.2s;
+      width: 4rem;
+      z-index: 10;
+
+      &.fixed {
+        bottom: 1rem;
+        position: fixed;
+        right: 1rem;
+      }
+    }
+
+    &.btn-icon {
+      background: none;
+      border-radius: 0;
+      opacity: 0.5;
+      padding: 0;
+      transition: opacity ease-in-out 0.2s;
+
+      @media (hover: hover) {
+        &:active {
+          opacity: 1 !important;
+        }
+
+        &:hover,
+        &:focus {
+          opacity: 1;
+        }
+      }
+    }
+
+    &:active,
+    &:active:focus,
+    &:focus,
+    &:hover {
+      outline: 0;
+    }
+
+    .spinner-border-sm {
+      border-width: 0.15rem;
+      height: 0.75rem;
+      margin-right: 0.1rem;
+      vertical-align: baseline;
+      width: 0.75rem;
+    }
+  }
+
+  p {
+    margin: 0 0 0.75rem;
+  }
+
+  .alert {
+    border: none;
+    border: none;
+    border-radius: 0;
+    margin: 0 auto;
+    max-width: $width-tablet-small;
+    position: fixed;
+    width: 100%;
+    z-index: 1010;
+
+    button.btn-close {
+      float: right;
+      font-size: 1.2rem;
+      line-height: 1.7rem;
+
+      i {
+        opacity: 0.7;
+      }
+
+      @media (min-width: $width-mobile-small + 1) {
+        font-size: 1.5rem;
+        line-height: 2.5rem;
+      }
+    }
+
+    p {
+      margin-bottom: 0;
+    }
+
+    h4 {
+      margin-bottom: 0.5rem;
+    }
+
+    @media (min-width: $width-mobile-small + 1) {
+      font-size: 0.9rem;
+
+      h4 {
+        margin-bottom: 0 !important;
+        margin-top: -0.4rem;
+      }
+
+      p {
+        max-width: 95%;
+      }
+    }
+  }
+
+  .background {
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+
+    .background-img {
+      @include animation-clouds;
+
+      background: url('../../res/images/clouds.svg');
+      background-repeat: repeat;
+      background-size: $bg-width;
+      display: block;
+      height: $bg-height * 10;
+      opacity: 0.15;
+      position: absolute;
+      top: -$bg-height;
+      width: $bg-width * 10;
+      z-index: 0;
+    }
+  }
+
+  .bottom {
+    display: table-cell;
+    position: relative;
+    vertical-align: bottom;
+  }
+
+  .buttons {
+    position: relative;
+    text-align: center;
+    white-space: nowrap;
+
+    button {
+      margin-right: 0.5rem;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .checkbox {
+    border-radius: $border-radius-input;
+    cursor: pointer;
+    height: 1.3rem;
+    padding: 0.15rem;
+    position: relative;
+    width: 2.5rem;
+
+    input {
+      display: none;
+
+      &[type='checkbox']:checked + label {
+        left: 1.35rem;
+      }
+    }
+
+    label {
+      border-radius: 50%;
+      display: block;
+      height: 1rem;
+      left: 0.15rem;
+      margin: 0 !important;
+      min-height: 0;
+      min-width: 0;
+      padding: 0;
+      pointer-events: none;
+      position: absolute;
+      width: 1rem;
+
+      &.animate {
+        transition: all 0.25s ease;
+      }
+    }
+  }
+
+  .container {
+    height: 100%;
+    margin: 0;
+    max-width: 100%;
+    padding: 0;
+    position: relative;
+    z-index: 20;
+
+    &.search {
+      .alert p {
+        @include text-overflow-ellipsis;
+      }
+    }
+  }
+
+  .darken {
+    height: 100%;
+    left: 0;
+    opacity: 0.8;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+  }
+
+  .ellipsis {
+    &::after {
+      content: '\2026';
+    }
+  }
+
+  .float-nowrap {
+    overflow: auto;
+    width: 200%;
+  }
+
+  .float-right {
+    float: right;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+    position: relative;
+
+    &.btn-icon-container {
+      input {
+        padding-right: 2.3rem !important;
+      }
+
+      .btn-icon {
+        border-radius: $border-radius-input;
+        font-size: 0.9em;
+        height: 2.1em;
+        margin-top: -1.05em;
+        position: absolute;
+        right: 0.3em;
+        top: 50%;
+        width: 2.1em;
+        z-index: 55;
+
+        i {
+          margin: auto;
+          opacity: 1 !important;
+          position: absolute;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        @media (hover: hover) {
+          &:focus {
+            border-style: solid;
+            border-width: 1px;
+
+            &:hover {
+              border: none;
+            }
+          }
+        }
+      }
+    }
+
+    &.has-error {
+      input,
+      textarea {
+        &.form-control {
+          border-style: solid !important;
+          border-width: 1px !important;
+
+          &::placeholder {
+            opacity: 0.8 !important;
+          }
+        }
+      }
+    }
+
+    input,
+    textarea {
+      &.form-control {
+        border-style: solid;
+        border-width: 1px;
+        font-size: 1rem;
+        resize: none;
+        width: 100%;
+      }
+    }
+
+    input.form-control {
+      border-radius: $border-radius-input;
+      line-height: 2.4rem;
+      padding: 0 1rem;
+    }
+
+    textarea.form-control {
+      border-radius: 1.1rem;
+      line-height: 1.2rem;
+      padding: 0.5rem 1rem;
+    }
+  }
+
+  .header-panel {
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+    position: relative;
+
+    .btn-icon {
+      font-size: 1.3em;
+      height: 1em;
+      line-height: 1.2em;
+
+      &.btn-close,
+      &.btn-settings {
+        float: right;
+      }
+
+      i {
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .logo {
+    background-position-x: 50%;
+    background-position-y: 1rem;
+    background-repeat: no-repeat;
+    background-size: 11.5rem;
+    flex: 0 0 17.5rem;
+  }
+
+  .lookahead-container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 100%;
+
+    .lookahead,
+    .measure {
+      background-color: transparent;
+      cursor: pointer;
+      margin: auto 0;
+      user-select: none;
+      z-index: 60;
+    }
+
+    .measure {
+      visibility: hidden;
+    }
+  }
+
+  .margin-bottom-0 {
+    margin-bottom: 0 !important;
+  }
+
+  .overlay {
+    @include animation-fade-in();
+    @include animation-fade-out();
+
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  .darker-overlay {
+    @extend .overlay;
+  }
+
+  .service-message {
+    font-style: italic;
+    overflow-y: auto;
+    padding: 1px;
+    quotes: '\201c''\201d';
+    text-align: center;
+
+    &::before {
+      content: open-quote;
+    }
+
+    &::after {
+      content: close-quote;
+    }
+  }
+
+  .spinner-border {
+    animation-duration: 1s;
+  }
+
+  .status-icon {
+    position: relative;
+    z-index: 5;
+
+    .status-icon-bg {
+      border-radius: 100%;
+      height: 0.8rem;
+      left: 0.1rem;
+      position: absolute;
+      top: 0.2rem;
+      width: 0.8rem;
+      z-index: -1;
+    }
+  }
+
+  .validation {
+    border-radius: $border-radius-input;
+    font-size: 0.75rem;
+    left: 50%;
+    line-height: 1.15rem;
+    padding: 0 0.5rem;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    z-index: 60;
+  }
+
+  .view {
+    @include animation-fade-in();
+
+    height: 100%;
+    width: 100%;
+
+    .view-content {
+      display: flex;
+      flex-direction: column;
+      padding: 0.75rem;
+    }
+  }
+
+  .well {
+    @include box-shadow;
+
+    border: none;
+    border-radius: $border-radius-well;
+    margin-bottom: 0.75rem;
+    padding: 1rem 1.25rem;
+
+    h4 {
+      text-align: center;
+    }
+
+    .btn.btn-default {
+      border-width: 0.1rem;
+      font-weight: normal;
+      margin-bottom: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .confirm {
+      margin-bottom: 0;
+      width: 100%;
+
+      button {
+        margin-right: 0.5rem;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    .form-group {
+      &.has-error {
+        input,
+        textarea {
+          &.form-control {
+            &::placeholder {
+              opacity: 0.8 !important;
+            }
+          }
+        }
+      }
+
+      input,
+      textarea {
+        &.form-control {
+          border-style: solid !important;
+          border-width: 1px !important;
+        }
+      }
+    }
+  }
+}
+
+#bookmark-panel {
+  & > div {
+    display: flex;
+    flex-flow: column;
+  }
+
+  input[type='text'] {
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+
+  #bookmarkForm {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+  }
+
+  .buttons,
+  .form-group,
+  .header-panel {
+    flex: none;
+  }
+
+  .mobile-landscape {
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+
+  .tags-container {
+    height: calc(100% - 3.1rem);
+    margin-bottom: 0;
+    margin-top: 1rem;
+    overflow: auto;
+
+    .badge {
+      align-items: center;
+      border: 0;
+      display: inline-flex;
+      font-size: 0.85rem;
+      font-weight: normal;
+      line-height: 1.2rem;
+      margin: 0 0.5rem 0.5rem 0;
+      max-width: 99%;
+
+      i {
+        transition: color ease-in-out 0.2s;
+      }
+
+      span {
+        @include text-overflow-ellipsis;
+
+        margin-right: 0.3rem;
+
+        @media (hover: hover) {
+          &:hover {
+            color: inherit;
+          }
+        }
+      }
+
+      @media (hover: hover) {
+        &:hover,
+        &:focus {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .tags-input-container {
+    border-radius: $border-radius-input;
+    margin-bottom: 0;
+    overflow: hidden;
+
+    input {
+      background: transparent;
+      position: relative;
+      text-transform: lowercase;
+      z-index: 50;
+    }
+
+    .lookahead-container {
+      left: 1rem;
+      top: 0;
+
+      .lookahead,
+      .measure {
+        text-transform: lowercase;
+      }
+    }
+  }
+
+  .textarea-container {
+    display: flex;
+    flex: 1 0 10rem;
+  }
+}
+
+#help-panel {
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+
+    a {
+      position: relative;
+
+      &.next-link {
+        margin-right: 0.5rem;
+
+        span::after {
+          content: '\203A';
+          position: absolute;
+          right: -0.5rem;
+        }
+      }
+
+      &.prev-link {
+        margin-left: 0.5rem;
+
+        span::before {
+          content: '\2039';
+          left: -0.5rem;
+          position: absolute;
+        }
+      }
+    }
+  }
+}
+
+#information-panel {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+
+  h4 {
+    font-size: 1.5rem;
+    line-height: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  p,
+  ul {
+    font-size: 1.1rem;
+    line-height: 1.4rem;
+  }
+
+  ul {
+    margin-bottom: 0.75rem;
+    padding-left: 1rem;
+  }
+
+  .buttons {
+    margin-top: 1rem;
+
+    &.small {
+      .btn {
+        font-size: 1rem;
+        line-height: 2.1rem;
+        padding: 0 0.5rem;
+      }
+    }
+  }
+
+  .view-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+  }
+}
+
+#login-panel {
+  form {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+
+    .form-content {
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      position: relative;
+      width: 100%;
+
+      & > div {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 10;
+      }
+    }
+  }
+
+  .btn-new-sync {
+    text-transform: capitalize;
+  }
+
+  .btn-show-password {
+    &::before {
+      @include icon('\f715');
+
+      margin: auto;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity ease-in-out 0.2s;
+    }
+
+    &.active::before {
+      opacity: 0;
+    }
+  }
+
+  .btn-validating {
+    opacity: 1;
+
+    .spinner-border-sm {
+      border-right-color: transparent !important;
+      height: 0.9rem;
+      width: 0.9rem;
+    }
+  }
+
+  .confirm {
+    margin-bottom: 0;
+    z-index: 10;
+  }
+
+  .form-content,
+  .selected-service {
+    .confirm {
+      @extend .well;
+    }
+  }
+
+  .form-group {
+    input {
+      border-style: solid;
+      border-width: 1px;
+      font-family: $font-stack-code;
+      line-height: 1.45rem;
+      padding: 0.5rem 0.8rem;
+      width: 100%;
+      &::placeholder {
+        font-family: $font-stack-regular;
+        font-size: 1.1rem;
+      }
+
+      &[name='newServiceUrl'] {
+        font-family: $font-stack-regular;
+        font-size: 1.1rem;
+      }
+    }
+  }
+
+  .header-panel {
+    z-index: 10;
+  }
+
+  .login-form-existing,
+  .login-form-new,
+  .update-service-panel {
+    height: 100%;
+    max-width: 22rem;
+  }
+
+  .login-form-existing {
+    input[name='txtPassword'] {
+      padding-right: 2.7rem;
+    }
+  }
+
+  .login-form-new {
+    input[name='txtPassword'] {
+      background: transparent;
+      position: relative;
+      z-index: 20;
+    }
+  }
+
+  .secret-form-group {
+    margin-bottom: 1.5rem;
+
+    .progress,
+    .progress-bar-background {
+      border-radius: $border-radius-input;
+      font-size: 1.2rem;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+
+    .progress {
+      background-color: transparent;
+      border-style: solid;
+      border-width: 0.1rem;
+      z-index: 10;
+    }
+  }
+
+  .selected-service {
+    display: inline-flex;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    width: 100%;
+
+    a {
+      @include text-overflow-ellipsis;
+    }
+
+    label {
+      flex: 0 0;
+      margin: 0 0.3rem 0 0;
+      white-space: nowrap;
+    }
+
+    .status-icon {
+      margin-left: 0.25rem;
+      top: 0.1rem;
+
+      .loading .spinner-border {
+        border-right-color: transparent !important;
+      }
+    }
+  }
+
+  .toggle-form {
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+
+  .update-service-panel {
+    .service-info {
+      bottom: 0;
+      position: absolute;
+      width: 100%;
+
+      ul {
+        list-style: none;
+        margin: 0 1rem 0.75rem;
+        padding: 0;
+
+        li {
+          @include text-overflow-ellipsis;
+
+          padding-left: 40%;
+          position: relative;
+
+          label {
+            font-weight: bold;
+            left: 0;
+            margin-bottom: 0;
+            position: absolute;
+          }
+        }
+      }
+
+      .service-message {
+        margin: 0 1rem 1rem;
+        max-height: 5rem;
+      }
+
+      .service-warning {
+        font-size: 0.9rem;
+        line-height: 1.2rem;
+      }
+    }
+  }
+}
+
+#qr-panel {
+  @extend .darker-overlay;
+
+  flex-direction: column;
+  padding: 2rem;
+
+  p {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .buttons {
+    margin-top: 0;
+
+    button {
+      display: block;
+      margin: 1rem auto 0;
+    }
+  }
+
+  #qr {
+    height: 14rem;
+    margin-bottom: 1rem;
+    width: 14rem;
+  }
+}
+
+#scan-panel {
+  h3 {
+    font-size: 1rem;
+    margin: 1rem 0 0;
+    text-align: center;
+  }
+
+  .buttons {
+    flex: 0 8rem;
+
+    button {
+      margin-right: 1.75rem;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .target {
+    background: url('../../res/images/scan.svg') 50% 50% no-repeat;
+    flex: 1;
+    height: 14rem;
+    opacity: 0.5;
+    width: 14rem;
+
+    &.error {
+      background-image: url('../../res/images/scan_error.svg');
+    }
+  }
+
+  .validation {
+    font-size: 1rem;
+    margin-top: -2.5em;
+    padding: 0.25em 1em;
+    position: absolute;
+    top: 50%;
+  }
+
+  .view-content {
+    align-items: center;
+  }
+}
+
+#search-panel {
+  .view-content {
+    display: flex;
+    flex-flow: column;
+    padding: 0;
+
+    .bookmark-list {
+      .bookmark {
+        @include box-shadow;
+
+        border: none;
+        border-radius: $border-radius-well;
+        margin: 0 0 0.75rem;
+        max-height: 25rem;
+        overflow: hidden;
+        padding: 0;
+        position: relative;
+        transition: max-height 1s cubic-bezier(0, 1, 0, 1);
+
+        &.folder {
+          box-shadow: none;
+          max-height: none;
+          transition: background-color ease-in-out 0.2s;
+
+          &.open {
+            & > .bookmark-content > .bookmark-heading {
+              margin-bottom: 0.75rem;
+
+              &::before {
+                @include icon('\f07c');
+              }
+
+              @media (hover: hover) {
+                &:hover::after {
+                  @include icon('\f106');
+                }
+              }
+            }
+          }
+
+          & > .bookmark-content {
+            padding: 0.5rem 1rem;
+
+            & > .bookmark-heading {
+              margin-right: 0;
+              padding-left: 1.75rem;
+              padding-right: 1.5rem;
+
+              &::before {
+                @include icon('\f07b');
+                @include valign;
+
+                left: 0;
+              }
+
+              &::after {
+                @include icon('\f107');
+                @include valign;
+
+                font-size: 1.3em;
+                opacity: 0;
+                right: 0;
+              }
+
+              @media (hover: hover) {
+                &:hover {
+                  cursor: pointer;
+
+                  &:not(.opening)::after {
+                    opacity: 0.6;
+                  }
+                }
+              }
+            }
+
+            .empty {
+              font-style: italic;
+              margin: 0.25rem 0 0;
+              text-align: center;
+            }
+
+            .spinner-border {
+              @include valign;
+
+              opacity: 0.6;
+              right: 0;
+            }
+          }
+
+          @media (hover: hover) {
+            &:hover {
+              cursor: default;
+            }
+          }
+        }
+
+        &.ng-leave.ng-leave-active {
+          margin-bottom: 0;
+          max-height: 0;
+          opacity: 0;
+        }
+
+        &.separator {
+          box-shadow: none;
+          height: 0.5rem;
+
+          @media (hover: hover) {
+            &:hover {
+              cursor: default;
+            }
+          }
+        }
+
+        .bookmark-content {
+          border-radius: $border-radius-well;
+          padding: 0.5rem 1rem 0.75rem;
+          transition: background-color ease-in-out 0.2s;
+
+          .bookmark-heading {
+            @include text-overflow-ellipsis;
+
+            font-size: 1.2rem;
+            font-weight: normal;
+            line-height: 1.75rem;
+            margin-bottom: 0;
+            margin-right: 1.5rem;
+            position: relative;
+            transition: color ease-in-out 0.2s;
+          }
+
+          .bookmark-text {
+            .description {
+              font-size: 0.9rem;
+              font-style: italic;
+              line-height: 1.15rem;
+            }
+
+            .url {
+              font-size: 0.85rem;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              width: 100%;
+            }
+          }
+        }
+
+        .btn-edit-bookmark {
+          font-size: 1.1rem;
+          opacity: 0;
+          position: absolute;
+          right: 1rem;
+          top: 0.5rem;
+
+          @media (hover: hover) {
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+
+        .menu {
+          align-items: center;
+          border-radius: $border-radius-well;
+          display: flex;
+          height: 100%;
+          justify-content: space-evenly;
+          position: absolute;
+          text-align: center;
+          user-select: none;
+          width: 100%;
+          z-index: 60;
+
+          button {
+            position: static;
+          }
+        }
+
+        @media (hover: hover) {
+          &:hover {
+            cursor: pointer;
+
+            & > .btn-edit-bookmark {
+              opacity: 0.4;
+            }
+          }
+        }
+      }
+    }
+
+    .bookmark-tree-panel,
+    .search-results-panel {
+      flex: 0 1 100%;
+      overflow: auto;
+      padding: 0 0.75rem;
+
+      & > h4 {
+        font-size: 1.4rem;
+        font-weight: normal;
+        text-align: center;
+      }
+    }
+
+    .header-panel {
+      flex: none;
+      margin-bottom: 0;
+      padding: 0.75rem;
+
+      .btn {
+        &.btn-icon {
+          margin-left: 0.5rem;
+        }
+
+        &.btn-toggle-bookmark {
+          &.active {
+            i {
+              font-weight: 900;
+            }
+          }
+        }
+      }
+
+      .search-form {
+        border-radius: $border-radius-input;
+        flex: 0 1 100%;
+        margin-bottom: 0;
+        position: relative;
+
+        label {
+          font-size: 0.85em;
+          left: 0.75rem;
+          margin-bottom: 0;
+          margin-top: -0.5em;
+          position: absolute;
+          top: 50%;
+          z-index: 60;
+        }
+
+        input {
+          background: transparent;
+          border: none;
+          font-size: 1.1em;
+          line-height: 1.5em;
+          padding: 0 1.5em;
+          position: relative;
+          width: 100%;
+          z-index: 50;
+        }
+
+        .btn-clear {
+          font-size: 0.7em;
+          height: 1.7em;
+          line-height: 1.5em;
+          margin-top: -0.85em;
+          width: 1.7em;
+        }
+
+        .lookahead-container {
+          font-size: 1.1em;
+          left: 1.5em;
+          top: 0;
+          width: calc(100% - 3em);
+        }
+      }
+    }
+
+    .search-results-panel {
+      &.ng-hide {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+#settings-panel {
+  .about-panel {
+    .buttons {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      margin-top: 0.5rem;
+
+      button {
+        margin-right: 0;
+
+        &#support {
+          text-transform: none;
+        }
+      }
+    }
+  }
+
+  .backup-restore-panel {
+    #restoreForm {
+      input[type='text'] {
+        padding-right: 2rem;
+      }
+
+      textarea {
+        font-family: $font-stack-code;
+        font-size: 0.8rem;
+        height: 12rem;
+      }
+
+      .form-group {
+        margin-bottom: 0.4rem;
+      }
+
+      .spinner-border {
+        position: absolute;
+        right: 0.75rem;
+        top: 0.6rem;
+      }
+    }
+  }
+
+  .header-panel,
+  .panel-container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .header-panel {
+    flex: none;
+  }
+
+  .panel-container {
+    overflow-y: auto;
+  }
+
+  .setting-group {
+    @extend .form-group;
+
+    label {
+      margin-bottom: 0.25rem;
+    }
+
+    p {
+      font-size: 0.95rem;
+    }
+
+    #backupLink {
+      font-size: 0.9rem;
+    }
+
+    .description {
+      @media (hover: hover) {
+        a {
+          &:active,
+          &:focus,
+          &:hover {
+            border-bottom-color: inherit;
+          }
+        }
+      }
+    }
+
+    .setting-value {
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      height: auto;
+      padding: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      transition: none;
+      width: auto;
+    }
+  }
+
+  .sync-panel {
+    .id-url {
+      display: block;
+      font-family: $font-stack-code;
+      font-size: 0.92rem;
+      margin-bottom: 0.5rem;
+      position: relative;
+      text-align: center;
+      width: 100%;
+    }
+
+    .progress {
+      border-radius: 1rem;
+      height: 0.45rem;
+      margin: 0.25rem 0 1.5rem;
+      overflow: visible;
+
+      .progress-bar {
+        border-bottom-left-radius: 1rem;
+        border-top-left-radius: 1rem;
+        transition: none;
+      }
+    }
+
+    .max,
+    .used {
+      font-size: 0.8rem;
+      margin-top: -1.5rem;
+      position: absolute;
+    }
+
+    .max {
+      right: 0;
+    }
+
+    .used {
+      left: 0;
+    }
+
+    .service-message {
+      max-height: 7rem;
+    }
+
+    .service-url {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+      position: relative;
+
+      & > a {
+        @include text-overflow-ellipsis;
+      }
+
+      .status-icon {
+        margin: 0.1rem 0 0 0.25rem;
+      }
+    }
+
+    .updates-available {
+      @extend .description;
+
+      font-size: 0.9rem;
+      font-style: italic;
+      text-align: center;
+    }
+  }
+
+  .view-content {
+    padding: 0.75rem 0 0;
+  }
+
+  .well {
+    overflow: hidden;
+    padding: 0;
+
+    h4 {
+      margin-bottom: 0;
+      padding: 0.75rem 1rem;
+    }
+
+    .btn.btn-default {
+      font-size: 1.1rem;
+      line-height: 2.3rem;
+    }
+
+    .panel-content {
+      padding: 0 1.25rem;
+    }
+  }
+  @media (hover: hover) {
+    a {
+      &:active,
+      &:focus,
+      &:hover {
+        border-bottom-color: inherit;
+      }
+    }
+  }
+}
+
+#support-panel {
+  h4 {
+    margin-bottom: 1rem;
+  }
+
+  p,
+  ul {
+    font-size: 1rem;
+    line-height: 1.25rem;
+  }
+
+  .buttons.small {
+    margin: 0.5rem 0 1rem;
+  }
+}
+
+#updated-panel {
+  .buttons button {
+    display: block;
+    margin: 0 auto 1rem;
+  }
+}
+
+#working-panel {
+  @extend .overlay;
+
+  h3 {
+    @extend .ellipsis;
+
+    font-size: 1.1rem;
+    margin: 0.2rem;
+  }
+
+  .buttons {
+    align-items: flex-end;
+    display: flex;
+    height: 50vh;
+    justify-content: center;
+    position: absolute;
+    width: 50vw;
+
+    .button {
+      position: absolute;
+    }
+  }
+
+  .spinner-border {
+    height: 30vw;
+    position: absolute;
+    width: 30vw;
+  }
+}

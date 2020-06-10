@@ -1,0 +1,30 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "airbnb-typescript/base",
+    "plugin:prettier/recommended"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "project": "./tsconfig.eslint.json",
+    "sourceType": "module"
+  },
+  "rules": {
+    "@typescript-eslint/indent": "off",
+    "class-methods-use-this": "off",
+    "func-style": "warn",
+    "global-require": "off",
+    "lines-between-class-members": "off",
+    "import/no-dynamic-require": "off",
+    "no-nested-ternary": "off",
+    "no-undef": "error"
+  }
+}

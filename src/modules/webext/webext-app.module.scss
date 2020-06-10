@@ -1,0 +1,52 @@
+@import '../../styles/styles';
+
+body {
+  overflow: hidden;
+
+  .view {
+    width: 23rem;
+
+    .view-content {
+      height: 37rem;
+    }
+  }
+}
+
+#search-panel {
+  &.view {
+    height: auto;
+    width: 38rem;
+
+    .view-content {
+      height: auto;
+      max-height: 37rem;
+
+      .header-panel {
+        display: flex;
+        flex-direction: row-reverse;
+
+        .btn {
+          flex: none;
+
+          &.btn-settings {
+            float: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+#settings-panel {
+  .backup-restore-panel #restoreForm .validation {
+    bottom: -0.75rem;
+  }
+}
+
+#working-panel {
+  &.fullsize {
+    height: 37rem;
+    position: unset;
+    width: 23rem;
+  }
+}

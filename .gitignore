@@ -1,5 +1,6 @@
 .DS_Store
-node_modules/
-build/
-css/styles.css
 *.log
+build
+css/styles.css
+dist
+node_modules

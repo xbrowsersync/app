@@ -1,0 +1,63 @@
+<div data-ng-class="vm.settings.darkModeEnabled ? 'theme-dark' : 'theme-default'">
+  <div class="container" data-ng-class="{ 'search': vm.view.current === vm.view.views.search }">
+    <div id="working-panel" class="animate" data-ng-include="'./assets/working.html'" data-ng-show="vm.working.show"
+         data-ng-class="{ 'darker-overlay': vm.view.current !== vm.view.views.loading, 'fullsize': vm.view.current === vm.view.views.loading }">
+    </div>
+
+    <div id="qr-panel" class="animate" data-ng-include="'./assets/qr.html'" data-ng-show="vm.settings.displayQrPanel">
+    </div>
+
+    <div id="alert-panel" data-ng-include="'./assets/alert.html'"
+         data-ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)">
+    </div>
+
+    <div id="login-panel" class="view animate" data-ng-if="vm.view.current === vm.view.views.login">
+      <div class="view-content" data-ng-include="'./assets/login.html'"></div>
+    </div>
+
+    <div id="search-panel" class="view animate"
+         data-ng-class="{ 'search-bar-bottom': vm.settings.displaySearchBarBeneathResults }"
+         data-ng-if="vm.view.current === vm.view.views.search">
+      <div class="view-content" data-ng-include="'./assets/search.html'"></div>
+    </div>
+
+    <div id="bookmark-panel" class="view animate" data-ng-if="vm.view.current === vm.view.views.bookmark">
+      <div class="view-content" data-ng-include="'./assets/bookmark.html'"></div>
+    </div>
+
+    <div id="settings-panel" class="view animate" data-ng-if="vm.view.current === vm.view.views.settings">
+      <div class="view-content" data-ng-include="'./assets/settings.html'"></div>
+    </div>
+
+    <div id="information-panel" class="view animate" data-ng-if="vm.view.current === vm.view.views.loading || 
+      vm.view.current === vm.view.views.support || vm.view.current === vm.view.views.updated || 
+      vm.view.current === vm.view.views.permissions || vm.view.current === vm.view.views.help">
+      <div id="help-panel" data-ng-if="vm.view.current === vm.view.views.help">
+        <div class="view-content" data-ng-include="'./assets/help.html'"></div>
+      </div>
+
+      <div id="support-panel" data-ng-if="vm.view.current === vm.view.views.support">
+        <div class="view-content animate" data-ng-include="'./assets/support.html'"></div>
+      </div>
+
+      <div id="updated-panel" data-ng-if="vm.view.current === vm.view.views.updated">
+        <div class="view-content animate" data-ng-include="'./assets/updated.html'"></div>
+      </div>
+
+      <div id="permissions-panel" data-ng-if="vm.view.current === vm.view.views.permissions">
+        <div class="view-content animate" data-ng-include="'./assets/permissions.html'"></div>
+      </div>
+    </div>
+
+    <div id="scan-panel" class="view" data-ng-if="vm.view.current === vm.view.views.scan">
+      <div class="view-content" data-ng-include="'./assets/scan.html'"></div>
+    </div>
+  </div>
+
+  <div class="background animate" data-ng-if="vm.view.current !== undefined && vm.view.current !== vm.view.views.scan">
+    <div class="background-img" data-ng-if="vm.view.current === vm.view.views.loading || vm.view.current === vm.view.views.login || 
+      vm.view.current === vm.view.views.support || vm.view.current === vm.view.views.permissions || 
+      vm.view.current === vm.view.views.updated || vm.view.current === vm.view.views.help">
+    </div>
+  </div>
+</div>

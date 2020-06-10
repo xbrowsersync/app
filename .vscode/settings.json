@@ -1,11 +1,54 @@
 {
+  "[html]": {
+    "editor.defaultFormatter": "HookyQR.beautify"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": false
+  },
+  "[json]": {
+    "editor.defaultFormatter": "HookyQR.beautify"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "HookyQR.beautify"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": false
+  },
+  "beautify.language": {
+    "js": {
+      "ext": ["json"]
+    },
+    "html": ["html"]
+  },
+  "css.validate": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
   "editor.detectIndentation": false,
   "editor.formatOnSave": true,
   "editor.insertSpaces": true,
   "editor.tabSize": 2,
+  "eslint.alwaysShowStatus": true,
+  "eslint.enable": true,
+  "eslint.validate": ["javascript", "typescript"],
+  "files.eol": "\n",
   "git.ignoreLimitWarning": true,
+  "html.format.enable": false,
+  "html.format.endWithNewline": true,
+  "html.format.maxPreserveNewLines": 1,
+  "html.format.wrapAttributes": "aligned-multiple",
+  "html.format.wrapLineLength": 120,
+  "json.format.enable": false,
+  "scss.validate": false,
   "search.exclude": {
     "build": true,
     "node_modules": true
-  }
+  },
+  "stylelint.enable": true,
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }

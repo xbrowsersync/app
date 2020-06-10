@@ -1,0 +1,751 @@
+@mixin theme($colour-bg1, $colour-bg2, $colour-bg3, $colour-text1, $colour-text2, $colour-text3) {
+  & {
+    color: $colour-text1;
+
+    @media (hover: hover) {
+      a {
+        &:active {
+          border-bottom-color: $colour-bg2;
+          color: $colour-bg2;
+        }
+
+        &:focus,
+        &:hover {
+          border-bottom-color: $colour-bg2;
+          color: $colour-bg2;
+        }
+      }
+    }
+
+    button.btn {
+      &.btn-default {
+        background-color: rgba($colour-text1, 0.3);
+        border-color: $colour-bg3;
+        color: $colour-text1;
+
+        @media (hover: hover) {
+          &:not([disabled]):active {
+            background-color: $colour-text1;
+            border-color: $colour-text1;
+            color: $colour-bg2;
+          }
+
+          &:not([disabled]):hover {
+            background-color: $colour-bg3;
+            border-color: $colour-bg3;
+            color: $colour-bg2;
+          }
+        }
+
+        &[disabled] {
+          background-color: rgba($colour-bg3, 0.3);
+          border-color: $colour-bg3;
+          color: $colour-text1;
+        }
+      }
+
+      &.btn-fab {
+        background-color: $colour-text2;
+        color: $colour-text1;
+
+        @media (hover: hover) {
+          &:active {
+            background-color: $colour-bg2 !important;
+            color: $colour-text1 !important;
+          }
+        }
+      }
+
+      &.btn-icon {
+        color: $colour-text2;
+      }
+
+      .spinner-border-sm {
+        @include spinner-colour($colour-text2);
+      }
+    }
+
+    .alert {
+      background-color: rgba($colour-danger, 0.9);
+      color: $colour-text1;
+
+      @media (hover: hover) {
+        a {
+          &:active,
+          &:focus,
+          &:hover {
+            border-bottom-color: $colour-text2;
+            color: $colour-text2;
+          }
+        }
+      }
+
+      button.btn-close {
+        color: $colour-text1;
+      }
+
+      @media (hover: hover) {
+        p:hover {
+          color: $colour-text1;
+        }
+      }
+    }
+
+    .checkbox {
+      background: darken($colour-bg2, 50%);
+
+      input[type='checkbox'] {
+        & + label {
+          background: scale-color($colour-bg2, $lightness: -30%, $saturation: -70%);
+        }
+
+        &:checked + label {
+          background: $colour-bg2;
+        }
+      }
+    }
+
+    .form-group {
+      &.btn-icon-container {
+        .btn-icon {
+          background-color: $colour-text2;
+          color: $colour-bg3;
+
+          @media (hover: hover) {
+            &:focus {
+              border-color: darken($colour-text3, 15%);
+            }
+          }
+        }
+      }
+
+      &.has-error {
+        input,
+        textarea {
+          &.form-control {
+            border-color: $colour-danger !important;
+            color: $colour-danger !important;
+            &::placeholder {
+              color: $colour-danger !important;
+            }
+          }
+        }
+      }
+
+      input,
+      textarea {
+        &.form-control {
+          background-color: $colour-bg3;
+          border-color: $colour-bg3;
+          color: $colour-text2;
+          &::placeholder {
+            color: $colour-text3;
+          }
+        }
+      }
+    }
+
+    .lookahead-container {
+      .lookahead,
+      .measure {
+        color: $colour-text3;
+      }
+    }
+
+    .overlay {
+      background-color: rgba($colour-text2, 0.5);
+    }
+
+    .darker-overlay {
+      background-color: rgba($colour-text2, 0.9) !important;
+    }
+
+    .progress-bar-success {
+      background-color: $colour-success !important;
+    }
+
+    .progress-bar-warning {
+      background-color: $colour-warning !important;
+    }
+
+    .progress-bar-danger {
+      background-color: $colour-danger !important;
+    }
+
+    .spinner-border {
+      @include spinner-colour($colour-bg2);
+    }
+
+    .text-success {
+      color: $colour-success !important;
+    }
+
+    .text-warning {
+      color: $colour-warning !important;
+    }
+
+    .text-danger {
+      color: $colour-danger !important;
+    }
+
+    .validation {
+      background: $colour-danger;
+      color: $colour-text1;
+    }
+
+    .well {
+      background-color: $colour-bg3;
+      color: $colour-text2;
+
+      a {
+        border-bottom-color: unset;
+      }
+
+      &.dark {
+        background-color: $colour-text2;
+        color: $colour-text1;
+
+        a {
+          border-bottom-color: $colour-text1;
+
+          @media (hover: hover) {
+            &:active,
+            &:focus,
+            &:hover {
+              border-bottom-color: inherit;
+            }
+          }
+        }
+      }
+
+      .btn.btn-default {
+        border-color: $colour-text2;
+        color: $colour-text2;
+
+        @media (hover: hover) {
+          &:not([disabled]):active {
+            background-color: $colour-text2;
+            border-color: $colour-text2;
+            color: $colour-bg2;
+          }
+
+          &:not([disabled]):hover {
+            background-color: $colour-text2;
+            border-color: $colour-text2;
+            color: $colour-bg2;
+          }
+        }
+
+        &[disabled] {
+          border-color: $colour-text2;
+          color: $colour-text2;
+        }
+      }
+
+      .form-group {
+        &.has-error {
+          input,
+          textarea {
+            &.form-control {
+              border-color: $colour-danger !important;
+              color: $colour-danger !important;
+              &::placeholder {
+                color: $colour-danger !important;
+              }
+            }
+          }
+        }
+
+        input,
+        textarea {
+          &.form-control {
+            border-color: $colour-text2 !important;
+          }
+        }
+      }
+    }
+  }
+
+  #bookmark-panel {
+    .btn-delete-bookmark {
+      background-color: $colour-danger;
+      color: $colour-text1;
+
+      @media (hover: hover) {
+        &:not([disabled]):active,
+        &:not([disabled]):hover {
+          background-color: $colour-bg3;
+          border-color: $colour-bg3;
+          color: $colour-danger;
+        }
+      }
+    }
+
+    .tags-container {
+      .badge {
+        background-color: $colour-text2;
+        color: rgba($colour-text1, 0.9);
+
+        @media (hover: hover) {
+          &:active i {
+            color: $colour-bg2 !important;
+          }
+
+          &:hover,
+          &:focus {
+            i {
+              color: $colour-bg2;
+            }
+          }
+        }
+
+        i {
+          color: $colour-text3;
+        }
+      }
+    }
+
+    .tags-input-container {
+      background-color: $colour-bg3;
+    }
+  }
+
+  #information-panel {
+    background-color: rgba($colour-text2, 0.5);
+  }
+
+  #login-panel {
+    .btn-validating {
+      background-color: $colour-bg3;
+      border-color: $colour-bg3;
+      color: $colour-bg2;
+
+      .spinner-border-sm {
+        @include spinner-colour($colour-bg2);
+      }
+    }
+
+    .form-content,
+    .selected-service {
+      @media (hover: hover) {
+        a {
+          &:active,
+          &:focus,
+          &:hover {
+            border-bottom-color: $colour-text2;
+            color: $colour-text2;
+          }
+        }
+      }
+    }
+
+    .form-group input {
+      border-color: $colour-bg3;
+    }
+
+    .secret-form-group {
+      .progress {
+        border-color: $colour-bg3;
+
+        .progress-bar {
+          background-color: $colour-danger;
+        }
+      }
+
+      .progress-bar-background {
+        background-color: $colour-bg3;
+      }
+    }
+
+    .selected-service .status-icon {
+      .loading .spinner-border {
+        border-color: $colour-bg3;
+      }
+
+      .status-icon-bg {
+        background-color: $colour-bg3;
+      }
+    }
+
+    .update-service-panel ul li label {
+      color: $colour-text2 !important;
+    }
+  }
+
+  #scan-panel {
+    .buttons button {
+      background-color: $colour-bg3;
+      color: $colour-text2;
+
+      &.enabled {
+        color: $colour-warning;
+      }
+    }
+  }
+
+  #search-panel {
+    .view-content {
+      .bookmark-list .bookmark {
+        @media (hover: hover) {
+          &:focus,
+          &:hover {
+            & > .bookmark-content {
+              background-color: scale-color($colour-bg2, $lightness: 70%, $saturation: 50%);
+            }
+          }
+        }
+
+        &.folder {
+          color: $colour-text1;
+
+          & > .bookmark-content {
+            background-color: rgba($colour-text2, 0.3);
+
+            & > .bookmark-heading {
+              color: $colour-text1;
+
+              &::after {
+                color: $colour-bg2;
+              }
+            }
+          }
+        }
+
+        &.separator {
+          background-color: rgba($colour-text2, 0.15);
+        }
+
+        .bookmark-content {
+          background-color: $colour-bg3;
+
+          .bookmark-heading {
+            color: $colour-text2;
+          }
+
+          .bookmark-text {
+            color: $colour-text2;
+
+            .url {
+              color: $colour-text3;
+            }
+          }
+        }
+
+        .menu {
+          background-color: rgba($colour-text2, 0.8);
+
+          button {
+            background-color: $colour-bg3;
+            color: $colour-text2;
+
+            &.btn-delete-bookmark {
+              background-color: $colour-danger;
+              color: $colour-text1;
+            }
+          }
+        }
+      }
+
+      .header-panel .search-form {
+        background-color: $colour-bg3;
+
+        label {
+          color: $colour-text3;
+        }
+
+        input::placeholder {
+          color: $colour-text3;
+        }
+      }
+    }
+  }
+
+  #settings-panel {
+    .setting-group {
+      .description {
+        color: $colour-text3;
+      }
+
+      .setting-value {
+        color: $colour-text2;
+      }
+    }
+
+    .sync-panel {
+      .progress {
+        background-color: darken($colour-bg2, 50%);
+
+        .progress-bar {
+          background-color: $colour-bg2;
+        }
+      }
+
+      .max {
+        color: $colour-text2;
+      }
+
+      .used {
+        color: $colour-bg2;
+      }
+
+      .status-text {
+        color: $colour-text3;
+      }
+    }
+  }
+
+  #working-panel {
+    h3 {
+      color: $colour-bg2;
+    }
+  }
+}
+
+.theme-default {
+  @include theme(
+    $colour-bg1-default,
+    $colour-bg2-default,
+    $colour-bg3-default,
+    $colour-text1-default,
+    $colour-text2-default,
+    $colour-text3-default
+  );
+
+  .background {
+    @include background-gradient(20deg, $colour-bg1-default, 0, $colour-bg2-default, 100%);
+  }
+
+  .logo {
+    background-image: url('../../res/images/logo.svg');
+  }
+}
+
+.theme-dark {
+  @include theme(
+    $colour-bg1-dark,
+    $colour-bg2-dark,
+    $colour-bg3-dark,
+    $colour-text1-dark,
+    $colour-text2-dark,
+    $colour-text3-dark
+  );
+
+  button.btn {
+    &.btn-default {
+      background-color: rgba($colour-text1-dark, 0.3);
+      border-color: $colour-text2-dark;
+      color: $colour-text2-dark;
+
+      @media (hover: hover) {
+        &:not([disabled]):active {
+          background-color: $colour-text1-dark;
+          border-color: $colour-text2-dark;
+          color: $colour-text2-dark;
+        }
+
+        &:not([disabled]):hover {
+          background-color: $colour-text2-dark;
+          border-color: $colour-text2-dark;
+          color: $colour-bg3-dark;
+        }
+      }
+
+      &[disabled] {
+        background-color: rgba($colour-bg3-dark, 0.3);
+        border-color: $colour-text2-dark;
+        color: $colour-text2-dark;
+      }
+    }
+
+    &.btn-fab {
+      background-color: $colour-text3-dark;
+      color: $colour-text1-dark;
+    }
+  }
+
+  .background {
+    background: $colour-bg1-dark;
+  }
+
+  #bookmark-panel {
+    .btn-delete-bookmark {
+      @extend button.btn.btn-default;
+
+      background-color: $colour-danger;
+
+      @media (hover: hover) {
+        &:not([disabled]):hover {
+          color: $colour-danger;
+        }
+      }
+    }
+
+    .tags-container .badge {
+      background-color: $colour-bg3-dark;
+
+      @media (hover: hover) {
+        &:active i {
+          color: $colour-text2-dark !important;
+        }
+
+        &:hover,
+        &:focus {
+          i {
+            color: $colour-text2-dark;
+          }
+        }
+      }
+    }
+  }
+
+  .checkbox input[type='checkbox']:checked + label {
+    background: $colour-text3-dark;
+  }
+
+  .darker-overlay {
+    background-color: rgba(#222, 0.9) !important;
+  }
+
+  #help-panel,
+  #support-panel {
+    @media (hover: hover) {
+      a {
+        &:active,
+        &:focus,
+        &:hover {
+          border-bottom-color: $colour-text2-dark;
+          color: $colour-text2-dark;
+        }
+      }
+    }
+  }
+
+  #information-panel {
+    background-color: transparent;
+  }
+
+  .logo {
+    background-image: url('../../res/images/logo-dark.svg');
+  }
+
+  .overlay {
+    background-color: rgba(#222, 0.5);
+  }
+
+  #search-panel {
+    .view-content {
+      .bookmark-list .bookmark .menu {
+        background-color: rgba($colour-bg1-dark, 0.5);
+
+        button {
+          background-color: $colour-text3-dark;
+          color: $colour-text1-dark;
+        }
+      }
+
+      .bookmark-tree-panel {
+        & > .bookmark-list > .folder > .bookmark-content {
+          background-color: $colour-bg3-dark;
+
+          .bookmark {
+            @media (hover: hover) {
+              &:not(.folder) {
+                &:focus,
+                &:hover {
+                  & > .bookmark-content {
+                    background-color: rgba($colour-text3-dark, 0.6);
+                  }
+                }
+              }
+            }
+
+            & > .bookmark-content {
+              background-color: rgba($colour-text3-dark, 0.2);
+            }
+          }
+        }
+
+        .bookmark-content {
+          .bookmark-heading,
+          .bookmark-text {
+            color: $colour-text1-dark !important;
+
+            .url {
+              color: $colour-text2-dark !important;
+            }
+          }
+
+          .bookmark-heading::after {
+            color: rgba($colour-text1-dark, 0.6) !important;
+          }
+
+          .spinner-border-sm {
+            @include spinner-colour(rgba($colour-text1-dark, 0.6));
+          }
+        }
+      }
+
+      .search-results-panel .bookmark-list {
+        @media (hover: hover) {
+          .bookmark {
+            &:focus,
+            &:hover {
+              & > .bookmark-content {
+                background-color: lighten($colour-bg3-dark, 7%);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .status-icon-bg {
+    background-color: $colour-text1-dark !important;
+  }
+
+  .well {
+    @media (hover: hover) {
+      a {
+        &:active {
+          border-bottom-color: $colour-text1-dark;
+          color: $colour-text1-dark;
+        }
+
+        &:focus,
+        &:hover {
+          border-bottom-color: $colour-text1-dark;
+          color: $colour-text1-dark;
+        }
+      }
+    }
+
+    .btn.btn-default {
+      border-color: $colour-text1-dark;
+      color: $colour-text1-dark;
+
+      @media (hover: hover) {
+        &:not([disabled]):active {
+          color: $colour-bg3-dark;
+        }
+
+        &:not([disabled]):hover {
+          background-color: $colour-text1-dark;
+          border-color: $colour-text1-dark;
+          color: $colour-bg3-dark;
+        }
+      }
+    }
+  }
+
+  #working-panel {
+    h3 {
+      color: $colour-text3-dark;
+    }
+
+    .spinner-border {
+      border-color: $colour-text3-dark;
+      border-right-color: transparent;
+    }
+  }
+}

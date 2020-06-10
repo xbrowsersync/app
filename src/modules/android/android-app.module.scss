@@ -1,0 +1,372 @@
+@import '../../styles/styles';
+
+* {
+  user-select: none;
+}
+
+:root {
+  @media (orientation: portrait) and (min-width: 321px) {
+    font-size: 16px;
+  }
+  @media (orientation: portrait) and (min-width: 411px) {
+    font-size: 18px;
+  }
+  @media (orientation: portrait) and (min-width: 480px) {
+    font-size: 20px;
+  }
+  @media (orientation: portrait) and (min-width: 600px) {
+    font-size: 22px;
+  }
+  @media (orientation: portrait) and (min-width: 760px) {
+    font-size: 26px;
+  }
+  @media (orientation: portrait) and (min-width: 800px) {
+    font-size: 30px;
+  }
+  @media (orientation: portrait) and (min-width: 900px) {
+    font-size: 32px;
+  }
+
+  @media (orientation: landscape) and (min-width: 720px) and (min-height: 361px) {
+    font-size: 16px;
+  }
+  @media (orientation: landscape) and (min-width: 813px) {
+    font-size: 18px;
+  }
+  @media (orientation: landscape) and (min-width: 900px) {
+    font-size: 20px;
+  }
+  @media (orientation: landscape) and (min-width: 960px) {
+    font-size: 22px;
+  }
+  @media (orientation: landscape) and (min-width: 980px) {
+    font-size: 24px;
+  }
+  @media (orientation: landscape) and (min-width: 1200px) {
+    font-size: 28px;
+  }
+  @media (orientation: landscape) and (min-width: 1280px) {
+    font-size: 32px;
+  }
+}
+
+html,
+body {
+  height: 100%;
+  overflow: auto;
+}
+
+body {
+  background: transparent;
+  overflow: auto;
+
+  a {
+    &:hover {
+      color: unset;
+    }
+  }
+
+  h2 {
+    font-size: 1.6em;
+    line-height: 1em;
+  }
+
+  input,
+  textarea {
+    user-select: text;
+  }
+
+  textarea.form-control {
+    padding: 0.5rem 1rem;
+  }
+
+  .background {
+    @include animation-fade-in();
+  }
+
+  .checkbox {
+    height: 1.5rem;
+    width: 3rem;
+
+    input[type='checkbox']:checked + label {
+      left: 1.65rem;
+    }
+
+    label {
+      height: 1.2rem;
+      width: 1.2rem;
+    }
+  }
+
+  .container {
+    height: 100vh;
+  }
+
+  .header-panel {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+
+    button {
+      font-size: 1.5em;
+      line-height: 0.9em;
+    }
+  }
+
+  .lookahead-container .lookahead::after {
+    @include icon('\f0d0');
+
+    margin-left: 0.25em;
+    position: absolute;
+  }
+
+  .view {
+    .view-content {
+      height: 100%;
+
+      &.ng-enter {
+        z-index: 10 !important;
+      }
+
+      &.ng-leave {
+        z-index: 20;
+      }
+    }
+  }
+
+  .well {
+    button.btn.btn-default {
+      font-size: 1rem;
+    }
+  }
+}
+
+#bookmark-panel {
+  .mobile-landscape {
+    min-height: 2.3rem;
+
+    @media (orientation: landscape) {
+      display: flex;
+      flex: 1 0;
+      flex-direction: row;
+      overflow: auto;
+    }
+  }
+
+  .tags-container {
+    .badge {
+      font-size: 1rem;
+      line-height: 1.3rem;
+    }
+
+    .label {
+      border-radius: $border-radius-input;
+      margin: 0 0.5rem 0.6rem 0;
+      padding: 0.6rem 1rem;
+    }
+
+    @media (orientation: landscape) {
+      flex: auto;
+      height: 100%;
+      margin-bottom: 0;
+      margin-top: 0;
+      max-height: none;
+    }
+  }
+
+  .tags-input-container {
+    @media (orientation: landscape) {
+      height: 2.3rem;
+      margin-right: 1rem;
+      width: 40%;
+
+      input {
+        line-height: 2rem;
+      }
+    }
+  }
+
+  .textarea-container {
+    max-height: 15rem;
+
+    @media (orientation: landscape) {
+      flex: 1 0 4rem;
+    }
+  }
+}
+
+#login-panel {
+  .form-group {
+    input {
+      font-size: 0.92em;
+    }
+  }
+
+  .login-form-existing,
+  .login-form-new,
+  .update-service-panel {
+    height: auto;
+  }
+
+  .login-form-new {
+    .toggle-form {
+      display: block;
+    }
+  }
+
+  .logo {
+    background-size: 11rem;
+  }
+
+  .well {
+    margin-bottom: 0;
+  }
+
+  @media (orientation: landscape) {
+    form {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: center;
+
+      .form-content {
+        display: flex;
+        height: auto;
+        justify-content: center;
+
+        & > div {
+          position: initial;
+        }
+      }
+    }
+
+    .header-panel {
+      position: absolute;
+      top: 0.75rem;
+      width: calc(100% - 1.5rem);
+    }
+
+    .logo {
+      background-position: 90% 50%;
+      background-size: 13rem;
+      flex: 1 12rem;
+      height: 17rem;
+    }
+
+    .view-content {
+      align-items: center;
+      flex-direction: row;
+    }
+  }
+}
+
+#qr-panel {
+  #qr {
+    @media (orientation: landscape) {
+      height: 7rem;
+      width: 7rem;
+    }
+  }
+}
+
+#search-panel {
+  &.search-bar-bottom {
+    .view-content {
+      flex-direction: column-reverse;
+
+      .bookmark-tree-panel,
+      .search-results-panel {
+        padding-top: 0.75rem;
+      }
+
+      .btn-fab.fixed {
+        bottom: 5rem;
+      }
+    }
+  }
+
+  .view-content {
+    padding-left: 0;
+
+    .bookmark-list .bookmark {
+      &:not(.folder) {
+        & > .bookmark-content > .bookmark-heading {
+          margin-right: 0;
+          transition: none;
+        }
+      }
+
+      &.folder {
+        &.open > .bookmark-content > .bookmark-heading::after {
+          @include icon('\f106');
+        }
+
+        & > .bookmark-content > .bookmark-heading:not(.opening)::after {
+          opacity: 0.6;
+        }
+      }
+    }
+
+    .header-panel,
+    .search-results-panel {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+
+    .header-panel {
+      display: flex;
+      flex-direction: row-reverse;
+
+      .search-form {
+        .btn-clear {
+          font-size: 0.7em;
+        }
+
+        .lookahead-container .lookahead::after {
+          font-size: 0.7em;
+        }
+      }
+    }
+
+    .search-results-panel {
+      & > h4 {
+        margin: 1rem;
+      }
+    }
+
+    @media all and (orientation: portrait) {
+      .bookmark-tree-panel .description {
+        @include text-overflow-ellipsis;
+      }
+    }
+  }
+}
+
+#settings-panel {
+  .sync-panel {
+    .id-url,
+    .service-url {
+      @media (orientation: landscape) {
+        position: absolute;
+        width: auto;
+      }
+    }
+  }
+}
+
+#scan-panel {
+  @media (orientation: landscape) {
+    h3 {
+      margin: 0;
+    }
+
+    .buttons {
+      flex: 0 5rem;
+    }
+
+    .target {
+      height: 10rem;
+      width: 10rem;
+    }
+  }
+}
