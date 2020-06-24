@@ -1,0 +1,3 @@
+files:
+  - source: /res/strings/*.json
+    translation: /res/strings/%two_letters_code%.json
