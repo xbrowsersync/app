@@ -2,20 +2,21 @@
 <div data-ng-bind-html="vm.platformSvc.getConstant(vm.strings.support_Message)"></div>
 <div class="buttons small">
   <button type="button" class="btn btn-default"
-          data-ng-click="vm.openUrl($event, 'https://link.xbrowsersync.org/liberapay')">
+          data-ng-click="vm.utilitySvc.handleEvent(vm.openUrl, $event, 'https://link.xbrowsersync.org/liberapay')">
     {{ vm.platformSvc.getConstant(vm.strings.button_Liberapay_Label) }}
   </button>
   <button type="button" class="btn btn-default"
-          data-ng-click="vm.openUrl($event, 'https://link.xbrowsersync.org/patreon')">
+          data-ng-click="vm.utilitySvc.handleEvent(vm.openUrl, $event, 'https://link.xbrowsersync.org/patreon')">
     {{ vm.platformSvc.getConstant(vm.strings.button_Patreon_Label) }}
   </button>
   <button type="button" class="btn btn-default"
-          data-ng-click="vm.openUrl($event, 'https://link.xbrowsersync.org/cryptos')">
+          data-ng-click="vm.utilitySvc.handleEvent(vm.openUrl, $event, 'https://link.xbrowsersync.org/cryptos')">
     {{ vm.platformSvc.getConstant(vm.strings.button_Cryptos_Label) }}
   </button>
 </div>
 <div class="buttons">
-  <button type="button" class="btn btn-default focused" data-ng-click="vm.view.displayMainView()">
+  <button type="button" class="btn btn-default focused"
+          data-ng-click="vm.utilitySvc.handleEvent(vm.view.displayMainView)">
     {{ vm.platformSvc.getConstant(vm.strings.button_Continue_Label) }}
   </button>
 </div>

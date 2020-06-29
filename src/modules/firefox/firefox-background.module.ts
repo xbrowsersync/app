@@ -3,16 +3,14 @@
 import angular from 'angular';
 import { NgModule } from 'angular-ts-decorators';
 import { browser } from 'webextension-polyfill-ts';
-import FirefoxBackgroundComponent from './firefox-background.component';
+import FirefoxNativeBookmarksService from './firefox-native-bookmarks.service';
 import FirefoxPlatformService from './firefox-platform.service';
-import GlobalSharedModule from '../shared/global-shared.module';
-import BookmarkIdMapperService from '../webext/bookmark-id-mapper.service';
+import WebExtBackgroundModule from '../webext/webext-background.module';
 
 @NgModule({
-  declarations: [FirefoxBackgroundComponent],
   id: 'FirefoxBackgroundModule',
-  imports: [GlobalSharedModule],
-  providers: [BookmarkIdMapperService, FirefoxPlatformService]
+  imports: [WebExtBackgroundModule],
+  providers: [FirefoxNativeBookmarksService, FirefoxPlatformService]
 })
 export default class FirefoxBackgroundModule {}
 

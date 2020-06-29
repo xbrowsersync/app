@@ -11,58 +11,22 @@ import { Injectable } from 'angular-ts-decorators';
 import { browser } from 'webextension-polyfill-ts';
 import _ from 'underscore';
 import { autobind } from 'core-decorators';
-import BookmarkIdMapperService from '../webext/bookmark-id-mapper.service';
-import Globals from '../shared/globals';
-import StoreService from '../shared/store.service';
-import UtilityService from '../shared/utility.service';
-import BookmarkService from '../shared/bookmark.service';
 import Strings from '../../../res/strings/en.json';
+import {
+  FailedRemoveLocalBookmarksException,
+  FailedCreateLocalBookmarksException,
+  LocalContainerNotFoundException
+} from '../shared/exceptions/exception-types';
+import Globals from '../shared/globals';
 import WebExtPlatformService from '../webext/webext-platform.service';
 
 @autobind
 @Injectable('PlatformService')
 export default class FirefoxPlatformService extends WebExtPlatformService {
-  $interval: ng.IIntervalService;
-  $q: ng.IQService;
-  $timeout: ng.ITimeoutService;
-  bookmarkIdMapperSvc: BookmarkIdMapperService;
-  bookmarkSvc: BookmarkService;
-  storeSvc: StoreService;
-  utilitySvc: UtilityService;
-
   nativeConfigUrlRegex = /^about:/i;
   separatorTypeName = 'separator';
   supportedLocalBookmarkUrlRegex = /^(?!chrome|data)[\w-]+:/i;
   unsupportedContainers = [];
-
-  static $inject = [
-    '$interval',
-    '$q',
-    '$timeout',
-    'BookmarkIdMapperService',
-    'BookmarkService',
-    'StoreService',
-    'UtilityService'
-  ];
-  constructor(
-    $interval: ng.IIntervalService,
-    $q: ng.IQService,
-    $timeout: ng.ITimeoutService,
-    BookmarkIdMapperSvc: BookmarkIdMapperService,
-    BookmarkSvc: BookmarkService,
-    StoreSvc: StoreService,
-    UtilitySvc: UtilityService
-  ) {
-    super($interval, $q, $timeout, BookmarkIdMapperSvc, BookmarkSvc, StoreSvc, UtilitySvc);
-
-    this.$interval = $interval;
-    this.$q = $q;
-    this.$timeout = $timeout;
-    this.bookmarkIdMapperSvc = BookmarkIdMapperSvc;
-    this.bookmarkSvc = BookmarkSvc;
-    this.storeSvc = StoreSvc;
-    this.utilitySvc = UtilitySvc;
-  }
 
   bookmarks_Clear() {
     // Get local container node ids
@@ -84,7 +48,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
             );
           })
           .catch((err) => {
-            this.utilitySvc.logWarning('Error clearing bookmarks menu');
+            this.logSvc.logWarning('Error clearing bookmarks menu');
             throw err;
           });
 
@@ -99,7 +63,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
             );
           })
           .catch((err) => {
-            this.utilitySvc.logWarning('Error clearing mobile bookmarks');
+            this.logSvc.logWarning('Error clearing mobile bookmarks');
             throw err;
           });
 
@@ -114,7 +78,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
             );
           })
           .catch((err) => {
-            this.utilitySvc.logWarning('Error clearing other bookmarks');
+            this.logSvc.logWarning('Error clearing other bookmarks');
             throw err;
           });
 
@@ -123,7 +87,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
           .getSyncBookmarksToolbar()
           .then((syncBookmarksToolbar) => {
             if (!syncBookmarksToolbar) {
-              this.utilitySvc.logInfo('Not clearing toolbar');
+              this.logSvc.logInfo('Not clearing toolbar');
               return;
             }
             return browser.bookmarks.getChildren(toolbarBookmarksId).then((results) => {
@@ -135,16 +99,13 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
             });
           })
           .catch((err) => {
-            this.utilitySvc.logWarning('Error clearing bookmarks toolbar');
+            this.logSvc.logWarning('Error clearing bookmarks toolbar');
             throw err;
           });
         return this.$q.all([clearMenu, clearMobile, clearOthers, clearToolbar]);
       })
       .catch((err) => {
-        return this.$q.reject({
-          code: Globals.ErrorCodes.FailedRemoveLocalBookmarks,
-          stack: err.stack
-        });
+        throw new FailedRemoveLocalBookmarksException(null, err);
       });
   }
 
@@ -347,7 +308,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
               return this.createLocalBookmarksFromXBookmarks(menuBookmarksId, menuContainer.children);
             })
             .catch((err) => {
-              this.utilitySvc.logInfo('Error populating bookmarks menu.');
+              this.logSvc.logInfo('Error populating bookmarks menu.');
               throw err;
             });
         }
@@ -361,7 +322,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
               return this.createLocalBookmarksFromXBookmarks(mobileBookmarksId, mobileContainer.children);
             })
             .catch((err) => {
-              this.utilitySvc.logInfo('Error populating mobile bookmarks.');
+              this.logSvc.logInfo('Error populating mobile bookmarks.');
               throw err;
             });
         }
@@ -375,7 +336,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
               return this.createLocalBookmarksFromXBookmarks(otherBookmarksId, otherContainer.children);
             })
             .catch((err) => {
-              this.utilitySvc.logInfo('Error populating other bookmarks.');
+              this.logSvc.logInfo('Error populating other bookmarks.');
               throw err;
             });
         }
@@ -383,7 +344,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
         // Populate bookmarks toolbar if enabled
         const populateToolbar = this.bookmarkSvc.getSyncBookmarksToolbar().then((syncBookmarksToolbar) => {
           if (!syncBookmarksToolbar) {
-            this.utilitySvc.logInfo('Not populating toolbar');
+            this.logSvc.logInfo('Not populating toolbar');
             return;
           }
 
@@ -394,7 +355,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
                 return this.createLocalBookmarksFromXBookmarks(toolbarBookmarksId, toolbarContainer.children);
               })
               .catch((err) => {
-                this.utilitySvc.logInfo('Error populating bookmarks toolbar.');
+                this.logSvc.logInfo('Error populating bookmarks toolbar.');
                 throw err;
               });
           }
@@ -403,7 +364,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
         return this.$q.all([populateMenu, populateMobile, populateOther, populateToolbar]);
       })
       .then(() => {
-        this.utilitySvc.logInfo(
+        this.logSvc.logInfo(
           `Local bookmarks populated in ${((new Date() as any) - (populateStartTime as any)) / 1000}s`
         );
         // Move local containers into the correct order
@@ -418,11 +379,8 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
     };
 
     return browser.bookmarks.create(newLocalSeparator as any).catch((err) => {
-      this.utilitySvc.logInfo('Failed to create local separator');
-      return this.$q.reject({
-        code: Globals.ErrorCodes.FailedCreateLocalBookmarks,
-        stack: err.stack
-      });
+      this.logSvc.logInfo('Failed to create local separator');
+      throw new FailedCreateLocalBookmarksException(null, err);
     });
   }
 
@@ -465,18 +423,18 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
       // Throw an error if a local container is not found
       if (!menuBookmarksNode || !mobileBookmarksNode || !otherBookmarksNode || !toolbarBookmarksNode) {
         if (!menuBookmarksNode) {
-          this.utilitySvc.logWarning('Missing container: menu bookmarks');
+          this.logSvc.logWarning('Missing container: menu bookmarks');
         }
         if (!mobileBookmarksNode) {
-          this.utilitySvc.logWarning('Missing container: mobile bookmarks');
+          this.logSvc.logWarning('Missing container: mobile bookmarks');
         }
         if (!otherBookmarksNode) {
-          this.utilitySvc.logWarning('Missing container: other bookmarks');
+          this.logSvc.logWarning('Missing container: other bookmarks');
         }
         if (!toolbarBookmarksNode) {
-          this.utilitySvc.logWarning('Missing container: toolbar bookmarks');
+          this.logSvc.logWarning('Missing container: toolbar bookmarks');
         }
-        return this.$q.reject({ code: Globals.ErrorCodes.LocalContainerNotFound });
+        throw new LocalContainerNotFoundException();
       }
 
       // Return the container ids
@@ -491,13 +449,5 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
 
   getNewTabUrl() {
     return 'about:newtab';
-  }
-
-  init(viewModel) {
-    // Set global variables
-    this.vm = viewModel;
-    this.vm.platformName = Globals.Platforms.Firefox;
-
-    return this.$q.resolve();
   }
 }

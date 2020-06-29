@@ -2,7 +2,8 @@
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import Globals from '../shared/globals';
-import StoreService from '../shared/store.service';
+import StoreService from '../shared/store/store.service';
+import { BookmarkMappingNotFoundException } from '../shared/exceptions/exception-types';
 
 @autobind
 @Injectable('BookmarkIdMapperService')
@@ -104,10 +105,7 @@ export default class BookmarkIdMapperService {
         return this.set(idMappingsLessNative);
       })
       .catch((err) => {
-        return this.$q.reject({
-          code: Globals.ErrorCodes.BookmarkMappingNotFound,
-          stack: err.stack
-        });
+        throw new BookmarkMappingNotFoundException(null, err);
       });
   }
 

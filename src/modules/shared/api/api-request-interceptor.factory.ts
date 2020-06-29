@@ -6,7 +6,7 @@
 import { autobind } from 'core-decorators';
 import { IHttpInterceptor, IHttpInterceptorFactory } from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import Globals from './globals';
+import Globals from '../globals';
 
 @autobind
 @Injectable('ApiRequestInterceptorFactory')

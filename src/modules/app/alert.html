@@ -1,10 +1,9 @@
 <div class="alert animate-fade-in animate-fade-out" role="alert" data-ng-show="vm.alert.show" data-ng-class="{
-  'alert-success': vm.alert.type === 'success',
-  'info': vm.alert.type === 'info',
-  'warning': vm.alert.type === 'warning',
-  'alert-danger': vm.alert.type === 'danger' }">
+  'info': vm.alert.type === 1,
+  'warning': vm.alert.type === 2,
+  'alert-danger': vm.alert.type === 0 }">
   <button class="btn btn-icon btn-close" title="{{ vm.platformSvc.getConstant(vm.strings.button_Close_Label) }}"
-          data-ng-click="vm.alert.show = false" tabindex="1000">
+          data-ng-click="vm.utilitySvc.handleEvent(vm.closeAlert)" tabindex="1000">
     <i class="fas fa-times-circle" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_Close_Label) }}</span>
   </button>

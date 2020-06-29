@@ -1,30 +1,30 @@
 <div class="bookmark" data-ng-repeat="bookmark in vm.nodes"
      data-ng-class="{ 'folder': !bookmark.url && !vm.bookmarkSvc.isSeparator(bookmark), 'open': bookmark.displayChildren, 'animate': vm.selectedBookmark === bookmark.id, 'separator': vm.bookmarkSvc.isSeparator(bookmark) }"
-     data-hm-press="vm.utilitySvc.isMobilePlatform(vm.platformName) && bookmark.url && vm.selectBookmark({ 'event': $event, 'bookmarkId': bookmark.id })">
+     data-hm-press="vm.utilitySvc.isMobilePlatform(vm.platformName) && bookmark.url && vm.utilitySvc.handleEvent(vm.selectBookmark, { 'event': $event, 'bookmarkId': bookmark.id })">
   <div class="menu"
        data-ng-class="{ 'animate animate-fade-in': vm.utilitySvc.isMobilePlatform(vm.platformName) && bookmark.url && !vm.bookmarkSvc.isSeparator(bookmark) }"
        data-ng-if="vm.utilitySvc.isMobilePlatform(vm.platformName) && bookmark.url && !vm.bookmarkSvc.isSeparator(bookmark)"
        data-ng-show="vm.selectedBookmark === bookmark.id">
     <button class="btn btn-fab" title="{{ vm.platformSvc.getConstant(vm.strings.button_ShareBookmark_Label) }}"
-            data-ng-click="vm.shareBookmark({ 'event': event, 'bookmark': bookmark })">
+            data-ng-click="vm.utilitySvc.handleEvent(vm.shareBookmark, { 'event': event, 'bookmark': bookmark })">
       <i class="fas fa-share-alt" aria-hidden="true"></i>
       <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_ShareBookmark_Label) }}</span>
     </button>
     <button class="btn btn-fab" title="{{ vm.platformSvc.getConstant(vm.strings.button_EditBookmark_Label) }}"
-            data-ng-click="vm.editBookmark({ 'event': $event, 'bookmark': bookmark })">
+            data-ng-click="vm.utilitySvc.handleEvent(vm.editBookmark, { 'event': $event, 'bookmark': bookmark })">
       <i class="fas fa-edit" aria-hidden="true"></i>
       <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_EditBookmark_Label) }}</span>
     </button>
     <button class="btn btn-fab btn-delete-bookmark"
             title="{{ vm.platformSvc.getConstant(vm.strings.button_DeleteBookmark_Label) }}"
-            data-ng-click="vm.deleteBookmark({ 'event': $event, 'bookmark': bookmark })">
+            data-ng-click="vm.utilitySvc.handleEvent(vm.deleteBookmark, { 'event': $event, 'bookmark': bookmark })">
       <i class="fas fa-trash" aria-hidden="true"></i>
       <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_DeleteBookmark_Label) }}</span>
     </button>
   </div>
   <div class="bookmark-content" data-ng-if="bookmark.url && !vm.bookmarkSvc.isSeparator(bookmark)"
-       data-ng-click="!vm.utilitySvc.isMobilePlatform(vm.platformName) && vm.openUrl({ 'event': $event, 'url': bookmark.url })"
-       data-hm-tap="vm.openUrl({ 'event': $event, 'url': bookmark.url })">
+       data-ng-click="!vm.utilitySvc.isMobilePlatform(vm.platformName) && vm.utilitySvc.handleEvent(vm.openUrl, { 'event': $event, 'url': bookmark.url })"
+       data-hm-tap="vm.utilitySvc.handleEvent(vm.openUrl, { 'event': $event, 'url': bookmark.url })">
     <h4 class="bookmark-heading" data-ng-if="bookmark.title">{{ bookmark.title }}</h4>
     <h4 class="bookmark-heading" data-ng-if="!bookmark.title">
       {{ vm.bookmarkSvc.getBookmarkTitleForDisplay(bookmark) }}
@@ -36,7 +36,8 @@
   </div>
   <div class="bookmark-content" data-ng-if="!bookmark.url && !vm.bookmarkSvc.isSeparator(bookmark)">
     <h4 class="bookmark-heading" data-ng-class="{ 'opening': bookmark.open && !bookmark.displayChildren }"
-        data-ng-click="vm.bookmark_Heading_Click($event, bookmark)" data-ng-if="bookmark.title">
+        data-ng-click="vm.utilitySvc.handleEvent(vm.bookmark_Heading_Click, $event, bookmark)"
+        data-ng-if="bookmark.title">
       {{ vm.bookmarkSvc.getBookmarkTitleForDisplay(bookmark) }}
       <span data-ng-show="bookmark.open && !bookmark.displayChildren">
         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
@@ -60,7 +61,7 @@
   <button class="btn btn-icon btn-edit-bookmark"
           title="{{ vm.platformSvc.getConstant(vm.strings.button_EditBookmark_Label) }}"
           data-ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName) && bookmark.url &&!vm.bookmarkSvc.isSeparator(bookmark)"
-          data-ng-click="vm.editBookmark({ 'event': $event, 'bookmark': bookmark })">
+          data-ng-click="vm.utilitySvc.handleEvent(vm.editBookmark, { 'event': $event, 'bookmark': bookmark })">
     <i class="fas fa-edit" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_EditBookmark_Label) }}</span>
   </button>

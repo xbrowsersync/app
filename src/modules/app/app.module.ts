@@ -6,14 +6,14 @@ import NgFilter from 'angular-filter';
 import NgSanitize from 'angular-sanitize';
 import { NgModule } from 'angular-ts-decorators';
 import NgInfiniteScroll from 'ng-infinite-scroll';
-import AppComponent from './app.component';
 import BookmarkTreeComponent from './bookmark-tree.component';
 import GlobalSharedModule from '../shared/global-shared.module';
 import ZxcvbnDirective from './zxcvbn.directive';
 import Globals from '../shared/globals';
+import ExceptionHandlerService from '../shared/exceptions/exception-handler.service';
 
 @NgModule({
-  declarations: [AppComponent, BookmarkTreeComponent, ZxcvbnDirective],
+  declarations: [BookmarkTreeComponent, ZxcvbnDirective],
   id: 'AppModule',
   imports: [GlobalSharedModule, NgAnimate, NgFilter, NgInfiniteScroll, NgSanitize]
 })
@@ -51,4 +51,5 @@ export default class AppModule {}
       $templateRequest(`${Globals.PathToAssets}/updated.html`, true);
       $templateRequest(`${Globals.PathToAssets}/working.html`, true);
     }
-  ]);
+  ])
+  .factory('$exceptionHandler', ['$injector', 'AlertService', 'LogService', ExceptionHandlerService.Factory]);

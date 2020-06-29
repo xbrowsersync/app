@@ -4,25 +4,29 @@ import angular from 'angular';
 import { NgModule } from 'angular-ts-decorators';
 import { browser } from 'webextension-polyfill-ts';
 import BookmarkIdMapperService from './bookmark-id-mapper.service';
+import ExceptionHandlerService from '../shared/exceptions/exception-handler.service';
 import GlobalSharedModule from '../shared/global-shared.module';
 import WebExtBackgroundComponent from './webext-background.component';
+import WebExtBackgroundService from './webext-background.service';
 
 @NgModule({
   declarations: [WebExtBackgroundComponent],
   id: 'WebExtBackgroundModule',
   imports: [GlobalSharedModule],
-  providers: [BookmarkIdMapperService]
+  providers: [BookmarkIdMapperService, WebExtBackgroundService]
 })
 export default class WebExtBackgroundModule {}
 
-(WebExtBackgroundModule as NgModule).module.config([
-  '$compileProvider',
-  '$httpProvider',
-  ($compileProvider: ng.ICompileProvider, $httpProvider: ng.IHttpProvider) => {
-    $compileProvider.debugInfoEnabled(false);
-    $httpProvider.interceptors.push('ApiRequestInterceptorFactory');
-  }
-]);
+(WebExtBackgroundModule as NgModule).module
+  .config([
+    '$compileProvider',
+    '$httpProvider',
+    ($compileProvider: ng.ICompileProvider, $httpProvider: ng.IHttpProvider) => {
+      $compileProvider.debugInfoEnabled(false);
+      $httpProvider.interceptors.push('ApiRequestInterceptorFactory');
+    }
+  ])
+  .factory('$exceptionHandler', ['$injector', 'AlertService', 'LogService', ExceptionHandlerService.Factory]);
 
 // Set synchronous event handlers
 browser.runtime.onInstalled.addListener((details) => {

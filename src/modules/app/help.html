@@ -1,23 +1,26 @@
-<div data-ng-keydown="vm.helpPanel_KeyDown($event)" data-hm-swipeleft="vm.helpPanel_NextPage()"
-     data-hm-swiperight="vm.helpPanel_PreviousPage()" tabindex="0">
+<div data-ng-keydown="vm.utilitySvc.handleEvent(vm.helpPanel_KeyDown, $event)"
+     data-hm-swipeleft="vm.utilitySvc.handleEvent(vm.helpPanel_NextPage)"
+     data-hm-swiperight="vm.utilitySvc.handleEvent(vm.helpPanel_PreviousPage)" tabindex="0">
   <div id="help-page-{{$index}}" class="animate-fade-in" data-ng-show="vm.help.currentPage === $index"
        data-ng-repeat="page in vm.help.pages track by $index">
     <div data-ng-bind-html="page"></div>
     <div class="pagination">
-      <a href="#" data-ng-click="vm.helpPanel_Close()" data-ng-keydown="vm.helpPanel_KeyDown($event)"
-         data-ng-show="$index === 0">
+      <a href="#" data-ng-click="vm.utilitySvc.handleEvent(vm.helpPanel_Close)"
+         data-ng-keydown="vm.utilitySvc.handleEvent(vm.helpPanel_KeyDown, $event)" data-ng-show="$index === 0">
         <span>{{ vm.platformSvc.getConstant(vm.strings.button_OK_Label) }}</span>
       </a>
-      <a class="prev-link" href="#" data-ng-click="vm.helpPanel_PreviousPage()"
-         data-ng-keydown="vm.helpPanel_KeyDown($event)" data-ng-hide="$index === 0">
+      <a class="prev-link" href="#" data-ng-click="vm.utilitySvc.handleEvent(vm.helpPanel_PreviousPage)"
+         data-ng-keydown="vm.utilitySvc.handleEvent(vm.helpPanel_KeyDown, $event)" data-ng-hide="$index === 0">
         <span>{{ vm.platformSvc.getConstant(vm.strings.button_Previous_Label) }}</span>
       </a>
       <span class="page-number">{{$index + 1}} / {{vm.help.pages.length}}</span>
-      <a class="next-link" href="#" data-ng-click="vm.helpPanel_NextPage()"
-         data-ng-keydown="vm.helpPanel_KeyDown($event)" data-ng-hide="$index === vm.help.pages.length - 1">
+      <a class="next-link" href="#" data-ng-click="vm.utilitySvc.handleEvent(vm.helpPanel_NextPage)"
+         data-ng-keydown="vm.utilitySvc.handleEvent(vm.helpPanel_KeyDown, $event)"
+         data-ng-hide="$index === vm.help.pages.length - 1">
         <span>{{ vm.platformSvc.getConstant(vm.strings.button_Next_Label) }}</span>
       </a>
-      <a href="#" data-ng-click="vm.helpPanel_Close()" data-ng-keydown="vm.helpPanel_KeyDown($event)"
+      <a href="#" data-ng-click="vm.utilitySvc.handleEvent(vm.helpPanel_Close)"
+         data-ng-keydown="vm.utilitySvc.handleEvent(vm.helpPanel_KeyDown, $event)"
          data-ng-show="$index === vm.help.pages.length - 1">
         <span>{{ vm.platformSvc.getConstant(vm.strings.button_OK_Label) }}</span>
       </a>

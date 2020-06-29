@@ -20,13 +20,20 @@ import DOMPurify from 'dompurify';
 import marked from 'marked';
 import QRCode from 'qrcode-svg';
 import _ from 'underscore';
-import Globals from '../shared/globals';
-import StoreService from '../shared/store.service';
-import UtilityService from '../shared/utility.service';
-import Platform from '../shared/platform.interface';
-import BookmarkService from '../shared/bookmark.service.js';
-import ApiService from '../shared/api.service.js';
+import angular from 'angular';
+import PlatformService from '../../interfaces/platform-service.interface';
 import Strings from '../../../res/strings/en.json';
+import Alert from '../shared/alert/alert.interface';
+import AlertService from '../shared/alert/alert.service';
+import { AlertType } from '../shared/alert/alert-type.enum';
+import ApiService from '../shared/api/api.service.js';
+import BookmarkService from '../shared/bookmark/bookmark.service.js';
+import { ExceptionHandler } from '../shared/exceptions/exception-handler.interface';
+import * as Exceptions from '../shared/exceptions/exception-types';
+import Globals from '../shared/globals';
+import LogService from '../shared/log/log.service';
+import StoreService from '../shared/store/store.service';
+import UtilityService from '../shared/utility/utility.service';
 
 @autobind
 @Component({
@@ -35,11 +42,14 @@ import Strings from '../../../res/strings/en.json';
   template: require('./app.component.html')
 })
 export default class AppComponent {
+  $exceptionHandler: ExceptionHandler;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
+  alertSvc: AlertService;
   apiSvc: ApiService;
   bookmarkSvc: BookmarkService;
-  platformSvc: Platform;
+  logSvc: LogService;
+  platformSvc: PlatformService;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
@@ -47,8 +57,7 @@ export default class AppComponent {
     show: false,
     title: '',
     message: '',
-    type: '',
-    display: undefined
+    type: undefined
   };
   bookmark = {
     active: false,
@@ -68,6 +77,7 @@ export default class AppComponent {
     currentPage: 0,
     pages: undefined
   };
+  initialised = true;
   login = {
     displayGetSyncIdPanel: true,
     displayOtherSyncsWarning: false,
@@ -85,10 +95,6 @@ export default class AppComponent {
   };
   platformName: any;
   restoreForm: any;
-  scanner = {
-    invalidSyncId: false,
-    lightEnabled: false
-  };
   search = {
     batchResultsNum: 10,
     bookmarkTree: undefined,
@@ -182,6 +188,7 @@ export default class AppComponent {
       scan: 9
     }
   };
+  vm = this;
   working = {
     displayCancelSyncButton: false,
     message: undefined,
@@ -189,27 +196,38 @@ export default class AppComponent {
   };
 
   static $inject = [
+    '$exceptionHandler',
     '$q',
+    '$scope',
     '$timeout',
+    'AlertService',
     'ApiService',
     'BookmarkService',
+    'LogService',
     'PlatformService',
     'StoreService',
     'UtilityService'
   ];
   constructor(
+    $exceptionHandler: ng.IExceptionHandlerService,
     $q: ng.IQService,
+    $scope: ng.IScope,
     $timeout: ng.ITimeoutService,
+    AlertSvc: AlertService,
     ApiSvc: ApiService,
     BookmarkSvc: BookmarkService,
-    PlatformSvc: Platform,
+    LogSvc: LogService,
+    PlatformSvc: PlatformService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
   ) {
+    this.$exceptionHandler = $exceptionHandler;
     this.$q = $q;
     this.$timeout = $timeout;
+    this.alertSvc = AlertSvc;
     this.apiSvc = ApiSvc;
     this.bookmarkSvc = BookmarkSvc;
+    this.logSvc = LogSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
@@ -218,32 +236,49 @@ export default class AppComponent {
     this.restoreForm = {};
     this.syncForm = {};
 
-    this.alert.display = this.displayAlert;
-    this.bookmark.getTitleForDisplay = this.bookmarkSvc.getBookmarkTitleForDisplay;
-    this.search.displayDefaultState = this.displayDefaultSearchState;
-    this.search.execute = this.searchBookmarks;
-    this.view.change = this.changeView;
-    this.view.displayMainView = this.displayMainView;
-    this.working.message = this.platformSvc.getConstant(Strings.working_Syncing_Message);
+    $scope.$watch(
+      () => AlertSvc.currentAlert,
+      (newVal, oldVal) => {
+        if (newVal !== oldVal) {
+          this.displayAlert(newVal);
+        }
+      }
+    );
 
-    this.init();
+    $scope.$watch(
+      () => PlatformSvc.showAlert,
+      (newVal, oldVal) => {
+        if (newVal !== oldVal) {
+          this.alert.show = newVal;
+        }
+      }
+    );
+
+    $scope.$watch(
+      () => PlatformSvc.showWorking,
+      (newVal, oldVal) => {
+        if (newVal !== oldVal) {
+          this.working.show = newVal;
+        }
+      }
+    );
+
+    this.$timeout(this.init);
   }
 
   backupRestoreForm_Backup_Click() {
     this.settings.savingBackup = true;
 
-    this.downloadBackupFile()
-      .catch(this.displayAlertErrorHandler)
-      .finally(() => {
-        this.$timeout(() => {
-          this.settings.savingBackup = false;
+    return this.downloadBackupFile().finally(() => {
+      this.$timeout(() => {
+        this.settings.savingBackup = false;
 
-          // Focus on done button
-          if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
-            (document.querySelector('.btn-done') as HTMLButtonElement).focus();
-          }
-        });
+        // Focus on done button
+        if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+          (document.querySelector('.btn-done') as HTMLButtonElement).focus();
+        }
       });
+    });
   }
 
   backupRestoreForm_BackupFile_Change() {
@@ -280,12 +315,11 @@ export default class AppComponent {
   backupRestoreForm_ConfirmRestore_Click() {
     if (!this.settings.dataToRestore) {
       // Display alert
-      this.alert.display(
-        this.platformSvc.getConstant(Strings.error_NoDataToRestore_Title),
-        this.platformSvc.getConstant(Strings.error_NoDataToRestore_Message),
-        'danger'
-      );
-
+      this.displayAlert({
+        message: this.platformSvc.getConstant(Strings.error_NoDataToRestore_Message),
+        title: this.platformSvc.getConstant(Strings.error_NoDataToRestore_Title),
+        type: AlertType.Error
+      });
       return;
     }
 
@@ -294,7 +328,7 @@ export default class AppComponent {
     this.settings.displayRestoreForm = true;
 
     // Start restore
-    this.restoreData(JSON.parse(this.settings.dataToRestore));
+    return this.restoreData(JSON.parse(this.settings.dataToRestore));
   }
 
   backupRestoreForm_DataToRestore_Change() {
@@ -370,13 +404,13 @@ export default class AppComponent {
     this.platformSvc.interface_Working_Show();
 
     // Disable sync and restore local bookmarks to installation state
-    this.$q
+    return this.$q
       .all([this.storeSvc.get(Globals.CacheKeys.InstallBackup), this.disableSync()])
       .then((response) => {
         const installBackupObj = JSON.parse(response[0]);
         const installBackupDate = new Date(installBackupObj.date);
         const bookmarksToRestore = installBackupObj.bookmarks;
-        this.utilitySvc.logInfo(`Reverting data to installation state from ${installBackupDate.toISOString()}`);
+        this.logSvc.logInfo(`Reverting data to installation state from ${installBackupDate.toISOString()}`);
 
         // Set working message
         this.working.message = this.platformSvc.getConstant(Strings.working_Reverting_Message);
@@ -397,7 +431,6 @@ export default class AppComponent {
           this.settings.revertCompleted = true;
         });
       })
-      .catch(this.displayAlertErrorHandler)
       .finally(this.platformSvc.interface_Working_Hide);
   }
 
@@ -434,25 +467,26 @@ export default class AppComponent {
     // Display lookahead if word length exceeds minimum
     if (lastWord && lastWord.length > Globals.LookaheadMinChars) {
       // Get tags lookahead
-      this.bookmarkSvc.getLookahead(lastWord.toLowerCase(), null, true, this.bookmark.current.tags).then((results) => {
-        if (!results) {
-          this.bookmark.tagLookahead = null;
-          return;
-        }
+      return this.bookmarkSvc
+        .getLookahead(lastWord.toLowerCase(), null, true, this.bookmark.current.tags)
+        .then((results) => {
+          if (!results) {
+            this.bookmark.tagLookahead = null;
+            return;
+          }
 
-        let lookahead = results[0];
-        const word = results[1];
+          let lookahead = results[0];
+          const word = results[1];
 
-        if (lookahead && word.toLowerCase() === lastWord.toLowerCase()) {
-          // Set lookahead after trimming word
-          lookahead = lookahead ? lookahead.substring(word.length) : undefined;
-          this.bookmark.tagTextMeasure = this.bookmark.tagText.replace(/\s/g, '&nbsp;');
-          this.bookmark.tagLookahead = lookahead.replace(/\s/g, '&nbsp;');
-        }
-      });
-    } else {
-      this.bookmark.tagLookahead = null;
+          if (lookahead && word.toLowerCase() === lastWord.toLowerCase()) {
+            // Set lookahead after trimming word
+            lookahead = lookahead ? lookahead.substring(word.length) : undefined;
+            this.bookmark.tagTextMeasure = this.bookmark.tagText.replace(/\s/g, '&nbsp;');
+            this.bookmark.tagLookahead = lookahead.replace(/\s/g, '&nbsp;');
+          }
+        });
     }
+    this.bookmark.tagLookahead = null;
   }
 
   bookmarkForm_BookmarkTags_ClearAll_Click() {
@@ -514,7 +548,7 @@ export default class AppComponent {
     }
 
     // Validate the new bookmark
-    this.bookmarkForm_ValidateBookmark(bookmarkToCreate)
+    return this.bookmarkForm_ValidateBookmark(bookmarkToCreate)
       .then((isValid) => {
         if (!isValid) {
           // Bookmark URL exists, display validation error
@@ -541,7 +575,11 @@ export default class AppComponent {
           });
         });
       })
-      .catch(this.checkIfSyncDataRefreshedOnError);
+      .catch((err) => {
+        return this.checkIfSyncDataRefreshedOnError(err).then(() => {
+          throw err;
+        });
+      });
   }
 
   bookmarkForm_CreateTags_Click() {
@@ -566,7 +604,7 @@ export default class AppComponent {
     const loadingTimeout = this.platformSvc.interface_Working_Show();
 
     // Sync changes
-    this.queueSync({
+    return this.queueSync({
       type: Globals.SyncType.Both,
       changeInfo: {
         type: Globals.UpdateType.Delete,
@@ -584,26 +622,31 @@ export default class AppComponent {
         );
         return this.syncBookmarksSuccess(loadingTimeout, bookmarkStatusActive);
       })
-      .catch(this.checkIfSyncDataRefreshedOnError);
+      .catch((err) => {
+        return this.checkIfSyncDataRefreshedOnError(err).then(() => {
+          throw err;
+        });
+      });
   }
 
   bookmarkForm_GetMetadata_Click() {
-    this.getMetadataForUrl(this.bookmark.current.url)
-      .then((metadata) => {
-        if (!metadata || (!metadata.title && !metadata.description && !metadata.tags)) {
-          return;
-        }
+    return this.getMetadataForUrl(this.bookmark.current.url).then((metadata) => {
+      if (!metadata || (!metadata.title && !metadata.description && !metadata.tags)) {
+        return;
+      }
 
-        // Update bookmark metadata and set url field as pristine
-        this.bookmark.current.title = metadata.title || this.bookmark.current.title;
-        this.bookmark.current.description = metadata.description || this.bookmark.current.description;
-        this.bookmark.current.tags = metadata.tags || this.bookmark.current.tags;
-        this.bookmarkForm.bookmarkUrl.$setPristine();
+      // Update bookmark metadata and set url field as pristine
+      this.bookmark.current.title = metadata.title || this.bookmark.current.title;
+      this.bookmark.current.description = metadata.description || this.bookmark.current.description;
+      this.bookmark.current.tags = metadata.tags || this.bookmark.current.tags;
+      this.bookmarkForm.bookmarkUrl.$setPristine();
 
-        // Display message
-        this.displayAlert(null, this.platformSvc.getConstant(Strings.getMetadata_Success_Message));
-      })
-      .catch(this.displayAlertErrorHandler);
+      // Display alert
+      this.displayAlert({
+        message: this.platformSvc.getConstant(Strings.getMetadata_Success_Message),
+        type: AlertType.Information
+      });
+    });
   }
 
   bookmarkForm_RemoveTag_Click(tag) {
@@ -629,7 +672,7 @@ export default class AppComponent {
     }
 
     // Validate the new bookmark
-    this.bookmarkForm_ValidateBookmark(bookmarkToUpdate, this.bookmark.originalUrl)
+    return this.bookmarkForm_ValidateBookmark(bookmarkToUpdate, this.bookmark.originalUrl)
       .then((isValid) => {
         if (!isValid) {
           // Bookmark URL exists, display validation error
@@ -661,7 +704,11 @@ export default class AppComponent {
             return this.changeView(this.view.views.search);
           });
       })
-      .catch(this.checkIfSyncDataRefreshedOnError);
+      .catch((err) => {
+        return this.checkIfSyncDataRefreshedOnError(err).then(() => {
+          throw err;
+        });
+      });
   }
 
   bookmarkForm_ValidateBookmark(bookmarkToValidate, originalUrl?) {
@@ -686,13 +733,13 @@ export default class AppComponent {
   }
 
   bookmarkPanel_Close_Click() {
-    this.view.displayMainView();
+    return this.view.displayMainView();
   }
 
   button_ReleaseNotes_Click() {
     const url = Globals.ReleaseNotesUrlStem + this.utilitySvc.getVersionTag();
     this.openUrl(null, url);
-    this.view.displayMainView();
+    return this.view.displayMainView();
   }
 
   changeView(view, viewData?) {
@@ -728,25 +775,26 @@ export default class AppComponent {
         initNewView = this.$q.resolve();
     }
 
-    return initNewView
-      .then(() => {
-        // Display new view
-        this.view.current = view;
-      })
-      .then(() => {
-        // Attach events to new tab links
-        this.$timeout(this.setNewTabLinks, 150);
-        return view;
-      });
+    return initNewView.finally(() => {
+      // Display new view
+      this.view.current = view;
+
+      // Attach events to new tab links
+      this.$timeout(this.setNewTabLinks, 150);
+    });
   }
 
   checkIfSyncDataRefreshedOnError(err) {
     // If data out of sync display main view
     return (this.bookmarkSvc.checkIfRefreshSyncedDataOnError(err) ? this.displayMainView() : this.$q.resolve()).then(
       () => {
-        this.displayAlertErrorHandler(err);
+        return err;
       }
     );
+  }
+
+  closeAlert(): void {
+    this.alertSvc.clearCurrentAlert();
   }
 
   convertPageMetadataToBookmark(metadata) {
@@ -764,32 +812,26 @@ export default class AppComponent {
   }
 
   disableSync() {
-    // Disable sync
-    return this.platformSvc
-      .sync_Disable()
-      .then(() => {
-        this.sync.dataSize = null;
-        this.sync.dataUsed = null;
-        this.sync.enabled = false;
-        this.sync.password = '';
-        this.login.passwordComplexity = {};
-      })
-      .catch(this.displayAlertErrorHandler);
-  }
-
-  displayAlert(title, message, alertType?) {
-    this.$timeout(() => {
-      this.alert.title = title;
-      this.alert.message = message;
-      this.alert.type = alertType;
-      this.alert.show = true;
+    return this.platformSvc.sync_Disable().then(() => {
+      this.sync.dataSize = null;
+      this.sync.dataUsed = null;
+      this.sync.enabled = false;
+      this.sync.password = '';
+      this.login.passwordComplexity = {};
     });
   }
 
-  displayAlertErrorHandler(err) {
+  displayAlert(alert: Alert): void {
     this.$timeout(() => {
-      const errMessage = this.platformSvc.getErrorMessageFromException(err);
-      this.alert.display(errMessage.title, errMessage.message, 'danger');
+      if (!alert) {
+        this.alert.show = false;
+        return;
+      }
+
+      this.alert.title = alert.title;
+      this.alert.message = alert.message;
+      this.alert.type = alert.type;
+      this.alert.show = true;
     });
   }
 
@@ -803,17 +845,14 @@ export default class AppComponent {
     if (this.search.displayFolderView) {
       // Initialise bookmark tree
       this.search.bookmarkTree = null;
-      this.bookmarkSvc
-        .getCachedBookmarks()
-        .then((results) => {
-          this.$timeout(() => {
-            // Display bookmark tree view, sort containers
-            this.search.bookmarkTree = results.sort((a, b) => {
-              return b.title.localeCompare(a.title);
-            });
+      this.bookmarkSvc.getCachedBookmarks().then((results) => {
+        this.$timeout(() => {
+          // Display bookmark tree view, sort containers
+          this.search.bookmarkTree = results.sort((a, b) => {
+            return b.title.localeCompare(a.title);
           });
-        })
-        .catch(this.displayAlertErrorHandler);
+        });
+      });
     }
 
     return this.$q.resolve();
@@ -946,7 +985,7 @@ export default class AppComponent {
     return this.platformSvc.getPageMetadata(true, url).then(this.convertPageMetadataToBookmark);
   }
 
-  getServiceStatusTextFromStatusCode = (statusCode) => {
+  getServiceStatusTextFromStatusCode(statusCode) {
     if (statusCode == null) {
       return null;
     }
@@ -962,25 +1001,29 @@ export default class AppComponent {
       default:
         return this.platformSvc.getConstant(Strings.settings_Service_Status_Error);
     }
-  };
+  }
 
   init() {
-    // Platform-specific initation
-    this.platformSvc
-      .init(this)
-      .then(() => {
-        // Get cached prefs from storage
-        return this.$q.all([
-          this.storeSvc.get([
-            Globals.CacheKeys.DarkModeEnabled,
-            Globals.CacheKeys.DisplaySearchBarBeneathResults,
-            Globals.CacheKeys.DefaultToFolderView,
-            Globals.CacheKeys.SyncEnabled,
-            Globals.CacheKeys.SyncId
-          ]),
-          this.utilitySvc.getServiceUrl()
-        ]);
-      })
+    // Set vm defaults
+    this.bookmark.getTitleForDisplay = this.bookmarkSvc.getBookmarkTitleForDisplay;
+    this.search.displayDefaultState = this.displayDefaultSearchState;
+    this.search.execute = this.searchBookmarks;
+    this.view.change = this.changeView;
+    this.view.displayMainView = this.displayMainView;
+    this.working.message = this.platformSvc.getConstant(Strings.working_Syncing_Message);
+
+    // Get cached prefs from storage
+    return this.$q
+      .all([
+        this.storeSvc.get([
+          Globals.CacheKeys.DarkModeEnabled,
+          Globals.CacheKeys.DisplaySearchBarBeneathResults,
+          Globals.CacheKeys.DefaultToFolderView,
+          Globals.CacheKeys.SyncEnabled,
+          Globals.CacheKeys.SyncId
+        ]),
+        this.utilitySvc.getServiceUrl()
+      ])
       .then((cachedData) => {
         // Set view model values
         this.settings.displaySearchBarBeneathResults = !!cachedData[0][
@@ -995,56 +1038,47 @@ export default class AppComponent {
         }
 
         // Check if a sync is currently in progress
-        return (
-          this.platformSvc
-            .sync_Current()
-            .then((currentSync) => {
-              if (currentSync) {
-                this.utilitySvc.logInfo('Waiting for syncs to finish...');
+        return this.platformSvc.sync_Current().then((currentSync) => {
+          if (currentSync) {
+            this.logSvc.logInfo('Waiting for syncs to finish...');
 
-                // Only display cancel button for push syncs
-                if (currentSync.type === Globals.SyncType.Push) {
-                  this.working.displayCancelSyncButton = true;
+            // Only display cancel button for push syncs
+            if (currentSync.type === Globals.SyncType.Push) {
+              this.working.displayCancelSyncButton = true;
+            }
+
+            // Display loading panel
+            return this.view
+              .change(this.view.views.loading)
+              .then(this.waitForSyncsToFinish)
+              .then(() => {
+                return this.storeSvc.get(Globals.CacheKeys.SyncEnabled);
+              })
+              .then((syncEnabled) => {
+                // Check that user didn't cancel sync
+                this.sync.enabled = syncEnabled;
+                if (this.sync.enabled) {
+                  this.logSvc.logInfo('Syncs finished, resuming');
+                  return this.syncBookmarksSuccess();
                 }
+              })
+              .finally(() => {
+                this.working.displayCancelSyncButton = false;
+              });
+          }
 
-                // Display loading panel
-                return this.view
-                  .change(this.view.views.loading)
-                  .then(this.waitForSyncsToFinish)
-                  .then(() => {
-                    return this.storeSvc.get(Globals.CacheKeys.SyncEnabled);
-                  })
-                  .then((syncEnabled) => {
-                    // Check that user didn't cancel sync
-                    this.sync.enabled = syncEnabled;
-                    if (this.sync.enabled) {
-                      this.utilitySvc.logInfo('Syncs finished, resuming');
-                      return this.syncBookmarksSuccess();
-                    }
-                  })
-                  .finally(() => {
-                    this.working.displayCancelSyncButton = false;
-                  });
-              }
+          // Return here if view has already been set
+          if (this.view.current) {
+            return;
+          }
 
-              // Return here if view has already been set
-              if (this.view.current) {
-                return;
-              }
-
-              // Set initial view
-              return this.displayMainView();
-            })
-            // Check if current page is a bookmark
-            .then(() => {
-              return this.setBookmarkStatus();
-            })
-        );
+          // Set initial view
+          return this.displayMainView();
+        });
       })
       .catch((err) => {
         this.displayMainView().then(() => {
-          // Display alert
-          this.displayAlertErrorHandler(err);
+          throw err;
         });
       });
   }
@@ -1097,7 +1131,7 @@ export default class AppComponent {
               this.bookmark.originalUrl = currentPageMetadata.url;
             }
           })
-          .catch(this.displayAlertErrorHandler);
+          .catch(this.$exceptionHandler);
       })
       .then(() => {
         this.$timeout(() => {
@@ -1117,14 +1151,13 @@ export default class AppComponent {
         }, 150);
       })
       .catch((err) => {
-        // Set bookmark url
-        if (err && err.url) {
+        if (err.url) {
+          // Set bookmark url
           const bookmark = this.bookmarkSvc.xBookmark('', err.url);
           this.bookmark.current = bookmark;
         }
 
-        // Display alert
-        this.displayAlertErrorHandler(err);
+        throw err;
       });
   }
 
@@ -1241,9 +1274,7 @@ export default class AppComponent {
       .all([
         this.bookmarkSvc.getSyncBookmarksToolbar(),
         this.storeSvc.get([Globals.CacheKeys.CheckForAppUpdates, Globals.CacheKeys.TraceLog]),
-        this.utilitySvc.isPlatform(this.platformName, Globals.Platforms.Chrome)
-          ? this.platformSvc.permissions_Check()
-          : this.$q.resolve(false)
+        this.platformSvc.permissions_Check()
       ])
       .then((data) => {
         const syncBookmarksToolbar = data[0];
@@ -1270,17 +1301,16 @@ export default class AppComponent {
                 }
               })
               .catch((err) => {
-                // Don't display alert if sync failed due to network connection
+                // Swallow error if sync failed due to network connection
                 if (
                   this.utilitySvc.isNetworkConnectionError(err) ||
-                  err.code == Globals.ErrorCodes.InvalidService ||
-                  err.code == Globals.ErrorCodes.ServiceOffline
+                  err instanceof Exceptions.InvalidServiceException ||
+                  err instanceof Exceptions.ServiceOfflineException
                 ) {
                   return;
                 }
 
-                // Otherwise display alert
-                this.displayAlertErrorHandler(err);
+                throw err;
               });
           }
 
@@ -1309,22 +1339,20 @@ export default class AppComponent {
   issuesPanel_DownloadLogFile_Click() {
     this.settings.savingLog = true;
 
-    this.downloadLogFile()
-      .catch(this.displayAlertErrorHandler)
-      .finally(() => {
-        this.$timeout(() => {
-          this.settings.savingLog = false;
+    return this.downloadLogFile().finally(() => {
+      this.$timeout(() => {
+        this.settings.savingLog = false;
 
-          // Focus on done button
-          if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
-            (document.querySelector('.btn-done') as HTMLButtonElement).focus();
-          }
-        });
+        // Focus on done button
+        if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+          (document.querySelector('.btn-done') as HTMLButtonElement).focus();
+        }
       });
+    });
   }
 
   helpPanel_Close() {
-    this.view.displayMainView();
+    return this.view.displayMainView();
   }
 
   helpPanel_KeyDown(event) {
@@ -1362,7 +1390,7 @@ export default class AppComponent {
     this.displayHelpPage();
   }
 
-  openUrl(event, url) {
+  openUrl(event?, url?) {
     if (event) {
       if (event.preventDefault) {
         event.preventDefault();
@@ -1380,25 +1408,19 @@ export default class AppComponent {
   }
 
   permissions_Revoke_Click() {
-    this.platformSvc
-      .permissions_Remove()
-      .then(() => {
-        this.settings.readWebsiteDataPermissionsGranted = false;
-      })
-      .catch(this.displayAlertErrorHandler);
+    return this.platformSvc.permissions_Remove().then(() => {
+      this.settings.readWebsiteDataPermissionsGranted = false;
+    });
   }
 
   permissions_Request_Click() {
-    this.platformSvc
-      .permissions_Request()
-      .then((granted) => {
-        this.settings.readWebsiteDataPermissionsGranted = granted;
-      })
-      .catch(this.displayAlertErrorHandler);
+    return this.platformSvc.permissions_Request().then((granted) => {
+      this.settings.readWebsiteDataPermissionsGranted = granted;
+    });
   }
 
   permissionsPanel_RequestPermissions_Click() {
-    this.$q
+    return this.$q
       .all([this.platformSvc.permissions_Request(), this.storeSvc.set(Globals.CacheKeys.DisplayPermissions, false)])
       .finally(this.view.displayMainView);
   }
@@ -1411,14 +1433,11 @@ export default class AppComponent {
   }
 
   qrPanel_CopySyncId_Click() {
-    this.platformSvc
-      .copyToClipboard(this.sync.id)
-      .then(() => {
-        this.$timeout(() => {
-          this.settings.syncIdCopied = true;
-        });
-      })
-      .catch(this.displayAlertErrorHandler);
+    return this.platformSvc.copyToClipboard(this.sync.id).then(() => {
+      this.$timeout(() => {
+        this.settings.syncIdCopied = true;
+      });
+    });
   }
 
   queueSync(syncData, command?) {
@@ -1426,10 +1445,10 @@ export default class AppComponent {
     return this.platformSvc
       .sync_Queue(syncData, command)
       .catch((err) => {
-        // If sync was processed but not committed (offline) catch the error but display an alert
-        if (err.code === Globals.ErrorCodes.SyncUncommitted) {
+        // Swallow error if sync was processed but not committed (offline)
+        if (err instanceof Exceptions.SyncUncommittedException) {
           this.$timeout(() => {
-            this.displayAlertErrorHandler(err);
+            this.$exceptionHandler(err);
           }, 150);
           return;
         }
@@ -1476,7 +1495,7 @@ export default class AppComponent {
         serviceObj.status = response.status;
       })
       .catch((err) => {
-        if (err && err.code === Globals.ErrorCodes.ServiceOffline) {
+        if (err instanceof Exceptions.ServiceOfflineException) {
           serviceObj.status = Globals.ServiceStatus.Offline;
         } else {
           serviceObj.status = Globals.ServiceStatus.Error;
@@ -1492,44 +1511,36 @@ export default class AppComponent {
       }
 
       // Get  bookmarks sync size and calculate sync data percentage used
-      return this.bookmarkSvc
-        .getSyncSize()
-        .then((bookmarksSyncSize) => {
-          this.$timeout(() => {
-            this.sync.dataSize = bookmarksSyncSize / 1024;
-            this.sync.dataUsed = Math.ceil((this.sync.dataSize / this.sync.service.maxSyncSize) * 150);
-          });
-        })
-        .catch(this.displayAlertErrorHandler);
+      return this.bookmarkSvc.getSyncSize().then((bookmarksSyncSize) => {
+        this.$timeout(() => {
+          this.sync.dataSize = bookmarksSyncSize / 1024;
+          this.sync.dataUsed = Math.ceil((this.sync.dataSize / this.sync.service.maxSyncSize) * 150);
+        });
+      });
     });
   }
 
   restoreBookmarksSuccess() {
-    // Update current bookmark status
-    return (
-      this.setBookmarkStatus()
-        // Refresh data usage
-        .then(this.refreshSyncDataUsageMeter)
-        .then(() => {
-          this.settings.displayRestoreForm = false;
-          this.settings.dataToRestore = '';
-          this.settings.restoreCompletedMessage = this.platformSvc.getConstant(
-            Strings.settings_BackupRestore_RestoreSuccess_Message.key
-          );
+    // Refresh data usage
+    return this.refreshSyncDataUsageMeter().then(() => {
+      this.settings.displayRestoreForm = false;
+      this.settings.dataToRestore = '';
+      this.settings.restoreCompletedMessage = this.platformSvc.getConstant(
+        Strings.settings_BackupRestore_RestoreSuccess_Message.key
+      );
 
-          if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
-            this.$timeout(() => {
-              (document.querySelector('.btn-done') as HTMLButtonElement).focus();
-            });
-          } else {
-            // Refresh search results
-            this.search.query = null;
-            this.search.queryMeasure = null;
-            this.search.lookahead = null;
-            return this.search.execute();
-          }
-        })
-    );
+      if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+        this.$timeout(() => {
+          (document.querySelector('.btn-done') as HTMLButtonElement).focus();
+        });
+      } else {
+        // Refresh search results
+        this.search.query = null;
+        this.search.queryMeasure = null;
+        this.search.lookahead = null;
+        return this.search.execute();
+      }
+    });
   }
 
   restoreData(backupData) {
@@ -1538,37 +1549,29 @@ export default class AppComponent {
     let syncId;
     let syncEnabled;
 
-    this.utilitySvc.logInfo('Restoring data');
+    this.logSvc.logInfo('Restoring data');
 
-    try {
-      if (backupData.xbrowsersync) {
-        // Get data to restore from v1.5.0 backup
-        const data = backupData.xbrowsersync.data;
-        const sync = backupData.xbrowsersync.sync;
-        bookmarksToRestore = data ? data.bookmarks : null;
-        serviceUrl = sync ? sync.url : null;
-        syncId = sync ? sync.id : null;
-      } else if (backupData.xBrowserSync) {
-        // Get data to restore from backups prior to v1.5.0
-        bookmarksToRestore = backupData.xBrowserSync.bookmarks;
-        syncId = backupData.xBrowserSync.id;
-      } else {
-        // Data to restore invalid, throw error
-        const error = new Error('FailedRestoreData');
-        (error as any).code = Globals.ErrorCodes.FailedRestoreData;
-        throw error;
-      }
-    } catch (err) {
-      this.utilitySvc.logError(err, 'app.restoreData');
-      this.displayAlertErrorHandler(err);
-      return;
+    if (backupData.xbrowsersync) {
+      // Get data to restore from v1.5.0 backup
+      const data = backupData.xbrowsersync.data;
+      const sync = backupData.xbrowsersync.sync;
+      bookmarksToRestore = data ? data.bookmarks : null;
+      serviceUrl = sync ? sync.url : null;
+      syncId = sync ? sync.id : null;
+    } else if (backupData.xBrowserSync) {
+      // Get data to restore from backups prior to v1.5.0
+      bookmarksToRestore = backupData.xBrowserSync.bookmarks;
+      syncId = backupData.xBrowserSync.id;
+    } else {
+      // Data to restore invalid, throw error
+      throw new Exceptions.FailedRestoreDataException();
     }
 
     // Set working message and display loading overlay
     this.working.message = this.platformSvc.getConstant(Strings.working_Restoring_Message);
     this.platformSvc.interface_Working_Show();
 
-    this.storeSvc
+    return this.storeSvc
       .get(Globals.CacheKeys.SyncEnabled)
       .then((cachedSyncEnabled) => {
         syncEnabled = cachedSyncEnabled;
@@ -1605,22 +1608,7 @@ export default class AppComponent {
           Globals.Commands.RestoreBookmarks
         ).then(this.restoreBookmarksSuccess);
       })
-      .catch(this.displayAlertErrorHandler)
       .finally(this.platformSvc.interface_Working_Hide);
-  }
-
-  scanPanel_Cancel_Click() {
-    this.login.displayGetSyncIdPanel = false;
-    this.displayMainView().then(this.platformSvc.scanner_Stop);
-  }
-
-  scanPanel_ToggleLight_Click() {
-    this.platformSvc
-      .scanner_ToggleLight()
-      .then((lightEnabled) => {
-        this.scanner.lightEnabled = lightEnabled;
-      })
-      .catch(this.displayAlertErrorHandler);
   }
 
   searchBookmarks() {
@@ -1646,38 +1634,32 @@ export default class AppComponent {
       });
     }
 
-    return this.bookmarkSvc
-      .searchBookmarks(queryData)
-      .then((results) => {
-        this.search.scrollDisplayMoreEnabled = false;
-        this.search.resultsDisplayed = this.search.batchResultsNum;
-        this.search.results = results;
+    return this.bookmarkSvc.searchBookmarks(queryData).then((results) => {
+      this.search.scrollDisplayMoreEnabled = false;
+      this.search.resultsDisplayed = this.search.batchResultsNum;
+      this.search.results = results;
 
-        // Scroll to top of search results
-        this.$timeout(() => {
-          this.search.scrollDisplayMoreEnabled = true;
-          const resultsPanel = document.querySelector('.search-results-panel');
-          if (resultsPanel) {
-            resultsPanel.scrollTop = 0;
-          }
-        }, 150);
-      })
-      .catch((err) => {
-        this.search.results = null;
-        this.displayAlertErrorHandler(err);
-      });
+      // Scroll to top of search results
+      this.$timeout(() => {
+        this.search.scrollDisplayMoreEnabled = true;
+        const resultsPanel = document.querySelector('.search-results-panel');
+        if (resultsPanel) {
+          resultsPanel.scrollTop = 0;
+        }
+      }, 150);
+    });
   }
 
   searchForm_AddBookmark_Click() {
     // Display bookmark panel
-    this.changeView(this.view.views.bookmark).then(() => {
+    return this.changeView(this.view.views.bookmark).then(() => {
       // Disable add bookmark button by default
       this.bookmark.addButtonDisabledUntilEditForm = true;
     });
   }
 
   searchForm_Clear_Click() {
-    this.displayDefaultSearchState().then(() => {
+    return this.displayDefaultSearchState().then(() => {
       // Display default search results
       this.searchBookmarks();
 
@@ -1698,18 +1680,11 @@ export default class AppComponent {
       }
     }
 
-    // Find and remove the deleted bookmark element in the search results
-    if (this.search.results && this.search.results.length > 0) {
-      const deletedBookmarkIndex = _.findIndex<any>(this.search.results, (result) => {
-        return result.id === bookmark.id;
-      });
-      if (deletedBookmarkIndex >= 0) {
-        this.search.results.splice(deletedBookmarkIndex, 1);
-      }
-    }
+    let originalBookmarks;
+    if (this.search.displayFolderView) {
+      // Find and remove the deleted bookmark element in the bookmark tree
+      originalBookmarks = angular.copy(this.search.bookmarkTree);
 
-    // Find and remove the deleted bookmark element in the bookmark tree
-    if (this.search.bookmarkTree && this.search.bookmarkTree.length > 0) {
       // Find parent of bookmark to delete
       let parent;
       let childIndex = -1;
@@ -1732,6 +1707,16 @@ export default class AppComponent {
       if (parent && childIndex >= 0) {
         parent.children.splice(childIndex, 1);
       }
+    } else {
+      // Find and remove the deleted bookmark element in the search results
+      originalBookmarks = angular.copy(this.search.results);
+
+      const deletedBookmarkIndex = _.findIndex<any>(this.search.results, (result) => {
+        return result.id === bookmark.id;
+      });
+      if (deletedBookmarkIndex >= 0) {
+        this.search.results.splice(deletedBookmarkIndex, 1);
+      }
     }
 
     this.$timeout(() => {
@@ -1745,7 +1730,15 @@ export default class AppComponent {
           type: Globals.UpdateType.Delete,
           id: bookmark.id
         }
-      }).catch(this.checkIfSyncDataRefreshedOnError);
+      }).catch((err) => {
+        // Restore current bookmarks view and then handle error
+        if (this.search.displayFolderView) {
+          this.search.bookmarkTree = originalBookmarks;
+        } else {
+          this.search.results = originalBookmarks;
+        }
+        return this.checkIfSyncDataRefreshedOnError(err).then(this.$exceptionHandler);
+      });
     }, 1e3);
   }
 
@@ -1781,12 +1774,11 @@ export default class AppComponent {
     // Get last word of search query
     const queryWords = this.search.query.split(/[\s]+/);
     const lastWord = _.last<string>(queryWords);
-    let getLookahead;
 
     // Display lookahead if word length exceed minimum
     if (lastWord && lastWord.length > Globals.LookaheadMinChars) {
       // Get lookahead
-      getLookahead = this.bookmarkSvc
+      return this.bookmarkSvc
         .getLookahead(lastWord.toLowerCase(), this.search.results)
         .then((results) => {
           if (!results) {
@@ -1809,11 +1801,9 @@ export default class AppComponent {
         .then(() => {
           this.search.displayFolderView = false;
           return this.searchBookmarks();
-        })
-        .catch(this.displayAlertErrorHandler);
-    } else {
-      this.search.lookahead = null;
+        });
     }
+    this.search.lookahead = null;
   }
 
   searchForm_SearchText_KeyDown(event) {
@@ -1934,8 +1924,6 @@ export default class AppComponent {
     if (this.search.results && this.search.results.length > 0 && this.search.scrollDisplayMoreEnabled) {
       // Display next batch of results
       this.search.resultsDisplayed += this.search.batchResultsNum;
-      // TODO: is this needed?
-      // this.search.results = this.search.results;
     }
   }
 
@@ -1969,12 +1957,12 @@ export default class AppComponent {
 
   searchForm_ToggleBookmark_Click() {
     // Display bookmark panel
-    this.changeView(this.view.views.bookmark);
+    return this.changeView(this.view.views.bookmark);
   }
 
   searchForm_ToggleView_Click() {
     this.search.displayFolderView = !this.search.displayFolderView;
-    this.displayDefaultSearchState().then(() => {
+    return this.displayDefaultSearchState().then(() => {
       // Display default search results
       if (!this.search.displayFolderView) {
         this.searchBookmarks();
@@ -2007,25 +1995,11 @@ export default class AppComponent {
     }
   }
 
-  setBookmarkStatus(isActive?) {
-    if (isActive !== undefined) {
-      this.bookmark.active = isActive;
-      return this.$q.resolve();
-    }
-
-    return this.storeSvc.get(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
-      if (!syncEnabled) {
-        return;
-      }
-
-      // If current page is a bookmark, actvate bookmark icon
-      return this.bookmarkSvc
-        .findCurrentUrlInBookmarks()
-        .then((result) => {
-          this.bookmark.active = !!result;
-        })
-        .catch(this.displayAlertErrorHandler);
-    });
+  serviceIsOnline(): boolean {
+    return (
+      this.sync.service.status === Globals.ServiceStatus.NoNewSyncs ||
+      this.sync.service.status === Globals.ServiceStatus.Online
+    );
   }
 
   setNewTabLinks() {
@@ -2040,28 +2014,28 @@ export default class AppComponent {
     // Update setting value and store in cache
     const value = !this.settings.checkForAppUpdates;
     this.settings.checkForAppUpdates = value;
-    this.storeSvc.set(Globals.CacheKeys.CheckForAppUpdates, value);
+    return this.storeSvc.set(Globals.CacheKeys.CheckForAppUpdates, value);
   }
 
   settings_Prefs_DisplaySearchBar_Click() {
     // Update setting value and store in cache
     const value = !this.settings.displaySearchBarBeneathResults;
     this.settings.displaySearchBarBeneathResults = value;
-    this.storeSvc.set(Globals.CacheKeys.DisplaySearchBarBeneathResults, value);
+    return this.storeSvc.set(Globals.CacheKeys.DisplaySearchBarBeneathResults, value);
   }
 
   settings_Prefs_EnableDarkMode_Click() {
     // Update setting value and store in cache
     const value = !this.settings.darkModeEnabled;
     this.settings.darkModeEnabled = value;
-    this.storeSvc.set(Globals.CacheKeys.DarkModeEnabled, value);
+    return this.storeSvc.set(Globals.CacheKeys.DarkModeEnabled, value);
   }
 
   settings_Prefs_DefaultToFolderView_Click() {
     // Update setting value and store in cache
     const value = !this.settings.defaultToFolderView;
     this.settings.defaultToFolderView = value;
-    this.storeSvc.set(Globals.CacheKeys.DefaultToFolderView, value);
+    return this.storeSvc.set(Globals.CacheKeys.DefaultToFolderView, value);
   }
 
   settings_Prefs_SyncBookmarksToolbar_Click() {
@@ -2073,7 +2047,7 @@ export default class AppComponent {
       return;
     }
 
-    this.$q
+    return this.$q
       .all([this.bookmarkSvc.getSyncBookmarksToolbar(), this.storeSvc.get(Globals.CacheKeys.SyncEnabled)])
       .then((cachedData) => {
         const syncBookmarksToolbar = cachedData[0];
@@ -2081,7 +2055,7 @@ export default class AppComponent {
 
         // If sync not enabled or user just clicked to disable toolbar sync, update stored value and return
         if (!syncEnabled || syncBookmarksToolbar) {
-          this.utilitySvc.logInfo(`Toolbar sync ${!syncBookmarksToolbar ? 'enabled' : 'disabled'}`);
+          this.logSvc.logInfo(`Toolbar sync ${!syncBookmarksToolbar ? 'enabled' : 'disabled'}`);
           return this.storeSvc.set(Globals.CacheKeys.SyncBookmarksToolbar, !syncBookmarksToolbar);
         }
 
@@ -2101,7 +2075,7 @@ export default class AppComponent {
   settings_Prefs_SyncBookmarksToolbar_Confirm() {
     let syncId;
 
-    this.storeSvc
+    return this.storeSvc
       .get([Globals.CacheKeys.SyncEnabled, Globals.CacheKeys.SyncId])
       .then((cachedData) => {
         const syncEnabled = cachedData[Globals.CacheKeys.SyncEnabled];
@@ -2120,12 +2094,12 @@ export default class AppComponent {
         return this.storeSvc.set(Globals.CacheKeys.SyncBookmarksToolbar, true);
       })
       .then(() => {
-        this.utilitySvc.logInfo('Toolbar sync enabled');
+        this.logSvc.logInfo('Toolbar sync enabled');
 
         // Queue sync with no callback action
         return this.queueSync({
           type: !syncId ? Globals.SyncType.Push : Globals.SyncType.Pull
-        }).catch(this.displayAlertErrorHandler);
+        });
       });
   }
 
@@ -2140,7 +2114,7 @@ export default class AppComponent {
     const loadingTimeout = this.platformSvc.interface_Working_Show();
 
     // Check service status
-    this.apiSvc
+    return this.apiSvc
       .checkServiceStatus()
       .then(() => {
         // Clear the current cached password
@@ -2210,7 +2184,7 @@ export default class AppComponent {
             return this.queueSync(syncData);
           })
           .then(() => {
-            this.utilitySvc.logInfo(syncInfoMessage);
+            this.logSvc.logInfo(syncInfoMessage);
             return this.syncBookmarksSuccess(loadingTimeout);
           })
           .then(() => {
@@ -2225,8 +2199,7 @@ export default class AppComponent {
         // Disable upgrade confirmed flag
         this.login.upgradeConfirmed = false;
 
-        // Display alert
-        this.displayAlertErrorHandler(err);
+        throw err;
       })
       .finally(() => {
         // Hide loading panel
@@ -2247,22 +2220,20 @@ export default class AppComponent {
     this.storeSvc.set(keys);
 
     // If ID was removed disable sync and display login panel
-    if (err && err.code === Globals.ErrorCodes.SyncRemoved) {
+    if (err instanceof Exceptions.SyncRemovedException) {
       return this.changeView(this.view.views.login).finally(() => {
-        // Display alert
-        this.displayAlertErrorHandler(err);
+        this.$exceptionHandler(err);
       });
     }
 
-    // Display alert
-    this.displayAlertErrorHandler(err);
-
     // If creds were incorrect, focus on password field
-    if (err.code === Globals.ErrorCodes.InvalidCredentials && !this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (err instanceof Exceptions.InvalidCredentialsException && !this.utilitySvc.isMobilePlatform(this.platformName)) {
       this.$timeout(() => {
         (document.querySelector('.login-form-existing input[name="txtPassword"]') as HTMLInputElement).select();
       }, 150);
     }
+
+    throw err;
   }
 
   syncBookmarksSuccess(loadingTimeout?, bookmarkStatusActive?) {
@@ -2278,8 +2249,7 @@ export default class AppComponent {
       this.search.displayDefaultState();
     }, 150);
 
-    // Update bookmark icon
-    return this.setBookmarkStatus(bookmarkStatusActive);
+    return this.$q.resolve();
   }
 
   syncForm_ConfirmPassword_Back_Click() {
@@ -2299,7 +2269,7 @@ export default class AppComponent {
 
   syncForm_DisableSync_Click() {
     // Disable sync and switch to login panel
-    this.$q.all([this.disableSync(), this.changeView(this.view.views.login)]).catch(this.displayAlertErrorHandler);
+    return this.$q.all([this.disableSync(), this.changeView(this.view.views.login)]);
   }
 
   syncForm_EnableSync_Click() {
@@ -2363,36 +2333,6 @@ export default class AppComponent {
     }
   }
 
-  syncForm_ScanCode_Click() {
-    let scanSuccess = false;
-
-    this.platformSvc
-      .scanner_Start()
-      .then((scannedSyncInfo) => {
-        // Update stored sync id and service values
-        scanSuccess = true;
-        this.sync.id = scannedSyncInfo.id;
-        return this.$q.all([
-          this.storeSvc.set(Globals.CacheKeys.SyncId, scannedSyncInfo.id),
-          this.updateServiceUrl(scannedSyncInfo.url)
-        ]);
-      })
-      .catch(this.displayAlertErrorHandler)
-      .finally(() => {
-        this.displayMainView().then(() => {
-          // Stop scanning
-          this.platformSvc.scanner_Stop();
-
-          // If ID was scanned focus on password field
-          if (scanSuccess) {
-            this.$timeout(() => {
-              (document.querySelector('.active-login-form  input[name="txtPassword"]') as HTMLInputElement).focus();
-            });
-          }
-        });
-      });
-  }
-
   syncForm_ShowPassword_Click() {
     // Toggle show password
     this.login.showPassword = !this.login.showPassword;
@@ -2429,11 +2369,9 @@ export default class AppComponent {
     const loadingTimeout = this.platformSvc.interface_Working_Show();
 
     // Pull updates
-    this.queueSync({ type: Globals.SyncType.Pull })
-      .then(() => {
-        return this.syncBookmarksSuccess(loadingTimeout);
-      })
-      .catch(this.displayAlertErrorHandler);
+    return this.queueSync({ type: Globals.SyncType.Pull }).then(() => {
+      return this.syncBookmarksSuccess(loadingTimeout);
+    });
   }
 
   syncForm_UpdateService_Cancel_Click() {
@@ -2483,7 +2421,7 @@ export default class AppComponent {
         }
       })
       .catch((err) => {
-        this.utilitySvc.logError(err, 'app.syncForm_UpdateService_Update_Click');
+        this.logSvc.logError(err);
       });
   }
 
@@ -2506,22 +2444,18 @@ export default class AppComponent {
     return this.apiSvc
       .checkServiceStatus(url)
       .catch((err) => {
-        if (err && err.code != null) {
-          switch (err.code) {
-            case Globals.ErrorCodes.ServiceOffline:
-              // If API is offline still allow setting as current service
-              return true;
-            case Globals.ErrorCodes.UnsupportedServiceApiVersion:
-              this.syncForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', false);
-              break;
-            case Globals.ErrorCodes.InvalidService:
-              this.syncForm.newServiceUrl.$setValidity('InvalidService', false);
-              break;
-            default:
-              this.syncForm.newServiceUrl.$setValidity('RequestFailed', false);
-          }
-        } else {
-          this.syncForm.newServiceUrl.$setValidity('RequestFailed', false);
+        switch (err.constructor) {
+          case Exceptions.ServiceOfflineException:
+            // If API is offline still allow setting as current service
+            return true;
+          case Exceptions.UnsupportedApiVersionException:
+            this.syncForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', false);
+            break;
+          case Exceptions.InvalidServiceException:
+            this.syncForm.newServiceUrl.$setValidity('InvalidService', false);
+            break;
+          default:
+            this.syncForm.newServiceUrl.$setValidity('RequestFailed', false);
         }
 
         // Focus on url field
@@ -2579,21 +2513,18 @@ export default class AppComponent {
 
   updateServiceUrl(url) {
     url = url.replace(/\/$/, '');
-    return this.storeSvc
-      .set(Globals.CacheKeys.ServiceUrl, url)
-      .then(() => {
-        this.sync.service.apiVersion = '';
-        this.sync.service.location = null;
-        this.sync.service.maxSyncSize = 0;
-        this.sync.service.message = '';
-        this.sync.service.status = null;
-        this.sync.service.url = url;
-        this.utilitySvc.logInfo(`Service url changed to: ${url}`);
+    return this.storeSvc.set(Globals.CacheKeys.ServiceUrl, url).then(() => {
+      this.sync.service.apiVersion = '';
+      this.sync.service.location = null;
+      this.sync.service.maxSyncSize = 0;
+      this.sync.service.message = '';
+      this.sync.service.status = null;
+      this.sync.service.url = url;
+      this.logSvc.logInfo(`Service url changed to: ${url}`);
 
-        // Refresh service info
-        this.refreshServiceStatus();
-      })
-      .catch(this.displayAlertErrorHandler);
+      // Refresh service info
+      this.refreshServiceStatus();
+    });
   }
 
   validateBackupData() {
@@ -2643,7 +2574,7 @@ export default class AppComponent {
   }
 
   workingPanel_Cancel_Click() {
-    this.utilitySvc.logInfo('Cancelling sync');
+    this.logSvc.logInfo('Cancelling sync');
 
     return this.queueSync({
       type: Globals.SyncType.Cancel
@@ -2652,7 +2583,6 @@ export default class AppComponent {
         this.sync.enabled = false;
         this.working.displayCancelSyncButton = false;
       })
-      .then(this.displayMainView)
-      .catch(this.displayAlertErrorHandler);
+      .then(this.displayMainView);
   }
 }

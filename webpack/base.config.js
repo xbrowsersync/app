@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const Path = require('path');
 
 module.exports = {
+  devtool: 'inline-cheap-module-source-map',
   module: {
     rules: [
       { test: /\.ts$/, loader: 'ts-loader' },
@@ -36,6 +37,9 @@ module.exports = {
         loader: 'html-loader'
       }
     ]
+  },
+  optimization: {
+    minimize: false
   },
   output: {
     filename: '[name].js'

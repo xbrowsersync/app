@@ -5,9 +5,10 @@
 
 import { Component, Input, Output } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
-import Platform from '../shared/platform.interface';
-import UtilityService from '../shared/utility.service';
-import BookmarkService from '../shared/bookmark.service';
+import PlatformService from '../../interfaces/platform-service.interface';
+import UtilityService from '../shared/utility/utility.service';
+import BookmarkService from '../shared/bookmark/bookmark.service';
+import Strings from '../../../res/strings/en.json';
 
 @autobind
 @Component({
@@ -18,8 +19,10 @@ import BookmarkService from '../shared/bookmark.service';
 export default class BookmarkTreeComponent {
   $timeout: ng.ITimeoutService;
   bookmarkSvc: BookmarkService;
-  platformSvc: Platform;
+  platformSvc: PlatformService;
   utilitySvc: UtilityService;
+
+  strings = Strings;
 
   @Input('=') nodes: any;
   @Input() platformName: any;
@@ -35,7 +38,7 @@ export default class BookmarkTreeComponent {
   constructor(
     $timeout: ng.ITimeoutService,
     BookmarkSvc: BookmarkService,
-    PlatformSvc: Platform,
+    PlatformSvc: PlatformService,
     UtilitySvc: UtilityService
   ) {
     this.$timeout = $timeout;

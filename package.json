@@ -39,6 +39,7 @@
     "ng-infinite-scroll": "^1.3.0",
     "qrcode-svg": "^1.1.0",
     "source-code-pro": "^2.30.2",
+    "stacktrace-js": "^2.0.2",
     "typeface-roboto-condensed": "0.0.75",
     "underscore": "^1.10.2",
     "zxcvbn": "^4.4.2"
@@ -88,13 +89,13 @@
   "scripts": {
     "lint": "eslint ./src --ext .ts && stylelint \"./src/**/*.scss\"",
     "lint:fix": "eslint ./src --fix --ext .ts && stylelint \"./src/**/*.scss\" --fix",
-    "chromium:dev": "echo Building platform CHROMIUM to ./build/chromium and watching source files... && rimraf ./build/chromium && webpack app=./src/modules/chromium/chromium-app.module.ts background=./src/modules/chromium/chromium-background.module.ts webpage-metadata-collecter=./src/modules/webext/webpage-metadata-collecter.ts --output-path ./build/chromium/assets --config ./webpack/webext.config.js --mode development --devtool inline-source-map --watch",
+    "chromium:dev": "echo Building platform CHROMIUM to ./build/chromium and watching source files... && rimraf ./build/chromium && webpack app=./src/modules/chromium/chromium-app.module.ts background=./src/modules/chromium/chromium-background.module.ts webpage-metadata-collecter=./src/modules/webext/webpage-metadata-collecter.ts --output-path ./build/chromium/assets --config ./webpack/webext.config.js --mode development --watch",
     "chromium:package": "echo Packaging platform CHROMIUM... && rimraf ./build/chromium && webpack app=./src/modules/chromium/chromium-app.module.ts background=./src/modules/chromium/chromium-background.module.ts webpage-metadata-collecter=./src/modules/webext/webpage-metadata-collecter.ts --output-path ./build/chromium/assets --config ./webpack/webext.config.js --mode production && node ./scripts/update-build-number.js chromium && node ./scripts/create-zip-package.js chromium",
     "postchromium:package": "echo Package saved to ./dist",
-    "firefox:dev": "echo Building platform FIREFOX to ./build/firefox and watching source files... && rimraf ./build/firefox && webpack app=./src/modules/firefox/firefox-app.module.ts background=./src/modules/firefox/firefox-background.module.ts webpage-metadata-collecter=./src/modules/webext/webpage-metadata-collecter.ts --output-path ./build/firefox/assets --config ./webpack/webext.config.js --mode development --devtool inline-source-map --watch",
+    "firefox:dev": "echo Building platform FIREFOX to ./build/firefox and watching source files... && rimraf ./build/firefox && webpack app=./src/modules/firefox/firefox-app.module.ts background=./src/modules/firefox/firefox-background.module.ts webpage-metadata-collecter=./src/modules/webext/webpage-metadata-collecter.ts --output-path ./build/firefox/assets --config ./webpack/webext.config.js --mode development --watch",
     "firefox:package": "echo Packaging platform FIREFOX... && rimraf ./build/firefox && webpack app=./src/modules/firefox/firefox-app.module.ts background=./src/modules/firefox/firefox-background.module.ts webpage-metadata-collecter=./src/modules/webext/webpage-metadata-collecter.ts --output-path ./build/firefox/assets --config ./webpack/webext.config.js --mode production && node ./scripts/update-build-number.js firefox && node ./scripts/create-zip-package.js firefox",
     "postfirefox:package": "echo Package saved to ./dist",
-    "android:dev": "echo Building platform ANDROID to ./build/android and watching source files... && rimraf ./build/android && webpack app=./src/modules/android/android-app.module.ts --output-path ./build/android/www/assets --config ./webpack/android.config.js --mode development --devtool inline-source-map --watch",
+    "android:dev": "echo Building platform ANDROID to ./build/android and watching source files... && rimraf ./build/android && webpack app=./src/modules/android/android-app.module.ts --output-path ./build/android/www/assets --config ./webpack/android.config.js --mode development --watch",
     "android:package": "echo Packaging platform ANDROID... && rimraf ./build/android && webpack app=./src/modules/android/android-app.module.ts --output-path ./build/android/www/assets --config ./webpack/android.config.js --mode production && node ./scripts/update-build-number.js android && node ./scripts/create-apk-package.js",
     "postandroid:package": "echo Package saved to ./dist"
   }

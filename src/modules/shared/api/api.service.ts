@@ -1,0 +1,357 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-param-reassign */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
+import { Injectable } from 'angular-ts-decorators';
+import compareVersions from 'compare-versions';
+import { autobind } from 'core-decorators';
+import {
+  InvalidServiceException,
+  ServiceOfflineException,
+  NetworkOfflineException,
+  NoDataFoundException,
+  NotAcceptingNewSyncsException,
+  DailyNewSyncLimitReachedException,
+  DataOutOfSyncException,
+  RequestEntityTooLargeException,
+  TooManyRequestsException,
+  HttpRequestFailedException,
+  UnsupportedApiVersionException,
+  MissingClientDataException
+} from '../exceptions/exception-types';
+import Globals from '../globals';
+import StoreService from '../store/store.service';
+import UtilityService from '../utility/utility.service';
+
+@autobind
+@Injectable('ApiService')
+export default class ApiService {
+  $http: ng.IHttpService;
+  $q: ng.IQService;
+  storeSvc: StoreService;
+  utilitySvc: UtilityService;
+
+  skipOnlineCheck = false;
+
+  static $inject = ['$http', '$q', 'StoreService', 'UtilityService'];
+  constructor($http: ng.IHttpService, $q: ng.IQService, StoreSvc: StoreService, UtilitySvc: UtilityService) {
+    this.$http = $http;
+    this.$q = $q;
+    this.storeSvc = StoreSvc;
+    this.utilitySvc = UtilitySvc;
+  }
+
+  apiRequestSucceeded(response) {
+    this.skipOnlineCheck = false;
+    return this.$q.resolve(response);
+  }
+
+  checkNetworkIsOnline() {
+    return this.$q((resolve, reject) => {
+      if (this.skipOnlineCheck || this.utilitySvc.isNetworkConnected()) {
+        return resolve();
+      }
+      return reject(new NetworkOfflineException());
+    });
+  }
+
+  checkServiceStatus(url?) {
+    let data;
+
+    return this.checkNetworkIsOnline().then(() => {
+      // Get current service url if not provided
+      return (!url ? this.utilitySvc.getServiceUrl() : this.$q.resolve(url))
+        .then((serviceUrl) => {
+          // Request service info
+          return this.$http({
+            method: 'GET',
+            url: serviceUrl + Globals.URL.ServiceInformation,
+            timeout: 3000
+          }).catch((response) => {
+            throw this.getExceptionFromHttpResponse(response);
+          });
+        })
+        .then(this.apiRequestSucceeded)
+        .then((response) => {
+          data = response.data;
+
+          // Check service is a valid xBrowserSync API
+          if (!data || data.status == null || data.version == null) {
+            throw new InvalidServiceException();
+          }
+
+          // Check service version is supported by this client
+          if (compareVersions.compare(data.version, Globals.MinApiVersion, '<')) {
+            throw new UnsupportedApiVersionException();
+          }
+
+          return data;
+        });
+    });
+  }
+
+  createNewSync() {
+    return this.checkNetworkIsOnline()
+      .then(() => {
+        return this.utilitySvc
+          .getServiceUrl()
+          .then((serviceUrl) => {
+            const data = {
+              version: Globals.AppVersion
+            };
+
+            return this.$http.post(serviceUrl + Globals.URL.Bookmarks, JSON.stringify(data)).catch((response) => {
+              throw this.getExceptionFromHttpResponse(response);
+            });
+          })
+          .then(this.apiRequestSucceeded)
+          .then((response) => {
+            const { data } = response as any;
+
+            // Check response data is valid before returning
+            if (!data || !data.id || !data.lastUpdated || !data.version) {
+              throw new NoDataFoundException();
+            }
+
+            return data;
+          });
+      })
+      .catch((err) => {
+        if (err instanceof InvalidServiceException) {
+          throw new ServiceOfflineException();
+        }
+        throw err;
+      });
+  }
+
+  getBookmarks() {
+    let password;
+    let syncId;
+
+    // Check secret and sync ID are present
+    return this.storeSvc
+      .get([Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
+      .then((cachedData) => {
+        password = cachedData[Globals.CacheKeys.Password];
+        syncId = cachedData[Globals.CacheKeys.SyncId];
+
+        if (!password || !syncId) {
+          throw new MissingClientDataException();
+        }
+
+        return this.checkNetworkIsOnline().then(() => {
+          // Get current service url
+          return this.utilitySvc
+            .getServiceUrl()
+            .then((serviceUrl) => {
+              return this.$http.get(`${serviceUrl + Globals.URL.Bookmarks}/${syncId}`).catch((response) => {
+                throw this.getExceptionFromHttpResponse(response);
+              });
+            })
+            .then(this.apiRequestSucceeded)
+            .then((response) => {
+              const { data } = response;
+
+              // Check response data is valid before returning
+              if (!data || !data.lastUpdated) {
+                throw new NoDataFoundException();
+              }
+
+              return data;
+            });
+        });
+      })
+      .catch((err) => {
+        if (err instanceof InvalidServiceException) {
+          throw new ServiceOfflineException();
+        }
+        throw err;
+      });
+  }
+
+  getBookmarksLastUpdated() {
+    let password;
+    let syncId;
+
+    // Check secret and sync ID are present
+    return this.storeSvc
+      .get([Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
+      .then((cachedData) => {
+        password = cachedData[Globals.CacheKeys.Password];
+        syncId = cachedData[Globals.CacheKeys.SyncId];
+
+        if (!password || !syncId) {
+          throw new MissingClientDataException();
+        }
+
+        return this.checkNetworkIsOnline().then(() => {
+          // Get current service url
+          return this.utilitySvc
+            .getServiceUrl()
+            .then((serviceUrl) => {
+              return this.$http
+                .get(`${serviceUrl + Globals.URL.Bookmarks}/${syncId}${Globals.URL.LastUpdated}`)
+                .catch((response) => {
+                  throw this.getExceptionFromHttpResponse(response);
+                });
+            })
+            .then(this.apiRequestSucceeded)
+            .then((response) => {
+              const { data } = response;
+
+              // Check response data is valid before returning
+              if (!data || !data.lastUpdated) {
+                throw new NoDataFoundException();
+              }
+
+              return data;
+            });
+        });
+      })
+      .catch((err) => {
+        if (err instanceof InvalidServiceException) {
+          throw new ServiceOfflineException();
+        }
+        throw err;
+      });
+  }
+
+  getBookmarksVersion(syncId) {
+    return this.checkNetworkIsOnline()
+      .then(() => {
+        // Get current service url
+        return this.utilitySvc
+          .getServiceUrl()
+          .then((serviceUrl) => {
+            return this.$http
+              .get(`${serviceUrl + Globals.URL.Bookmarks}/${syncId}${Globals.URL.Version}`)
+              .catch((response) => {
+                throw this.getExceptionFromHttpResponse(response);
+              });
+          })
+          .then(this.apiRequestSucceeded)
+          .then((response) => {
+            const { data } = response;
+
+            // Check response data is valid before returning
+            if (!data) {
+              throw new NoDataFoundException();
+            }
+
+            return data;
+          });
+      })
+      .catch((err) => {
+        if (err instanceof InvalidServiceException) {
+          throw new ServiceOfflineException();
+        }
+        throw err;
+      });
+  }
+
+  getExceptionFromHttpResponse(response) {
+    let message;
+    if (response && response.data && response.data.message) {
+      message = response.data.message;
+    }
+
+    let exception;
+    switch (response.status) {
+      // 401 Unauthorized: sync data not found
+      case 401:
+        exception = new NoDataFoundException(message);
+        break;
+      // 404 Not Found: invalid service
+      case 404:
+        exception = new InvalidServiceException(message);
+        break;
+      // 405 Method Not Allowed: service not accepting new syncs
+      case 405:
+        exception = new NotAcceptingNewSyncsException(message);
+        break;
+      // 406 Not Acceptable: daily new sync limit reached
+      case 406:
+        exception = new DailyNewSyncLimitReachedException(message);
+        break;
+      // 409 Conflict: sync update conflict
+      case 409:
+        exception = new DataOutOfSyncException(message);
+        break;
+      // 413 Request Entity Too Large: sync data size exceeds service limit
+      case 413:
+        exception = new RequestEntityTooLargeException(message);
+        break;
+      // 429 Too Many Requests: daily new sync limit reached
+      case 429:
+        exception = new TooManyRequestsException(message);
+        break;
+      // 503 Service Unavailable: service offline
+      case 503:
+        exception = new ServiceOfflineException(message);
+        break;
+      // Otherwise generic request failed
+      default:
+        exception = new HttpRequestFailedException(message);
+    }
+
+    return exception;
+  }
+
+  updateBookmarks(encryptedBookmarks, updateSyncVersion?, backgroundUpdate?) {
+    // Check secret and sync ID are present
+    return this.storeSvc
+      .get([Globals.CacheKeys.LastUpdated, Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
+      .then((cachedData) => {
+        const cachedLastUpdated = cachedData[Globals.CacheKeys.LastUpdated];
+        const password = cachedData[Globals.CacheKeys.Password];
+        const syncId = cachedData[Globals.CacheKeys.SyncId];
+
+        if (!cachedLastUpdated || !password || !syncId) {
+          throw new MissingClientDataException();
+        }
+
+        // If this is a background update, ensure online check is skipped until successfull request
+        this.skipOnlineCheck = !!backgroundUpdate;
+        return this.checkNetworkIsOnline().then(() => {
+          // Get current service url
+          return this.utilitySvc
+            .getServiceUrl()
+            .then((serviceUrl) => {
+              const data = {
+                bookmarks: encryptedBookmarks,
+                lastUpdated: cachedLastUpdated,
+                version: undefined
+              };
+
+              // If updating sync version, set as current app version
+              if (updateSyncVersion) {
+                data.version = Globals.AppVersion;
+              }
+
+              return this.$http
+                .put(`${serviceUrl + Globals.URL.Bookmarks}/${syncId}`, JSON.stringify(data))
+                .catch((response) => {
+                  throw this.getExceptionFromHttpResponse(response);
+                });
+            })
+            .then(this.apiRequestSucceeded)
+            .then((response) => {
+              const { data } = response;
+
+              // Check response data is valid before returning
+              if (!data || !data.lastUpdated) {
+                throw new NoDataFoundException();
+              }
+
+              return data;
+            });
+        });
+      })
+      .catch((err) => {
+        if (err instanceof InvalidServiceException) {
+          throw new ServiceOfflineException();
+        }
+        throw err;
+      });
+  }
+}

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export default interface Platform {
+
+export default interface PlatformService {
   automaticUpdates_NextUpdate: any;
   automaticUpdates_Start: any;
   automaticUpdates_Stop: any;
@@ -23,23 +24,24 @@ export default interface Platform {
   eventListeners_Disable: any;
   getConstant: any;
   getCurrentUrl: any;
-  getErrorMessageFromException: any;
   getHelpPages: any;
   getNewTabUrl?: any;
   getPageMetadata: any;
   getSupportedUrl: any;
-  init: any;
   interface_Working_Hide: any;
   interface_Working_Show: any;
   interface_Refresh: any;
   openUrl: any;
-  permissions_Check?: any;
+  permissions_Check: any;
   permissions_Remove?: any;
   permissions_Request?: any;
+  refreshLocalSyncData: any;
   scanner_Start?: any;
   scanner_Stop?: any;
   scanner_ToggleLight?: any;
   selectFile?: any;
+  showAlert?: boolean;
+  showWorking?: boolean;
   sync_Current: any;
   sync_Disable: any;
   sync_DisplayConfirmation: () => boolean;

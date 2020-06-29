@@ -17,23 +17,42 @@ import * as countriesList from 'countries-list';
 import lzutf8 from 'lzutf8';
 import _ from 'underscore';
 import { autobind } from 'core-decorators';
-import Globals from './globals';
-import StoreService from './store.service';
+import { ExceptionHandler } from '../exceptions/exception-handler.interface';
+import {
+  InvalidCredentialsException,
+  HttpRequestFailedException,
+  NetworkOfflineException,
+  SyncRemovedException,
+  PasswordRemovedException
+} from '../exceptions/exception-types';
+import Globals from '../globals';
+import LogService from '../log/log.service';
+import StoreService from '../store/store.service';
 
 @autobind
 @Injectable('UtilityService')
 export default class UtilityService {
+  $exceptionHandler: ExceptionHandler;
   $http: ng.IHttpService;
   $q: ng.IQService;
+  $timeout: ng.ITimeoutService;
+  logSvc: LogService;
   storeSvc: StoreService;
 
-  currentMessageQueueItem: any;
-  messageQueue = [];
-
-  static $inject = ['$http', '$q', 'StoreService'];
-  constructor($http: ng.IHttpService, $q: ng.IQService, StoreSvc: StoreService) {
+  static $inject = ['$exceptionHandler', '$http', '$q', '$timeout', 'LogService', 'StoreService'];
+  constructor(
+    $exceptionHandler: ExceptionHandler,
+    $http: ng.IHttpService,
+    $q: ng.IQService,
+    $timeout: ng.ITimeoutService,
+    LogSvc: LogService,
+    StoreSvc: StoreService
+  ) {
+    this.$exceptionHandler = $exceptionHandler;
     this.$http = $http;
     this.$q = $q;
+    this.$timeout = $timeout;
+    this.logSvc = LogSvc;
     this.storeSvc = StoreSvc;
   }
 
@@ -51,11 +70,11 @@ export default class UtilityService {
         if (!compareVersions.compare(latestVersion, Globals.AppVersion, '>')) {
           return;
         }
-        this.logInfo(`${latestVersion} update available`);
+        this.logSvc.logInfo(`${latestVersion} update available`);
         return latestVersion;
       })
       .catch(() => {
-        this.logInfo('Couldn’t check for new version');
+        this.logSvc.logInfo('Couldn’t check for new version');
       });
   }
 
@@ -142,10 +161,10 @@ export default class UtilityService {
         const syncId = cachedData[Globals.CacheKeys.SyncId];
 
         if (!syncId) {
-          return this.$q.reject({ code: Globals.ErrorCodes.SyncRemoved });
+          throw new SyncRemovedException();
         }
         if (!password) {
-          return this.$q.reject({ code: Globals.ErrorCodes.PasswordRemoved });
+          throw new PasswordRemovedException();
         }
 
         // Retrieve the hashed password from local storage and convert to bytes
@@ -173,11 +192,8 @@ export default class UtilityService {
         return decryptedData;
       })
       .catch((err) => {
-        this.logInfo('Decryption failed');
-        return this.$q.reject({
-          code: Globals.ErrorCodes.InvalidCredentials,
-          stack: err.stack
-        });
+        this.logSvc.logWarning('Decryption failed');
+        throw new InvalidCredentialsException(null, err);
       });
   }
 
@@ -197,10 +213,10 @@ export default class UtilityService {
         const syncId = cachedData[Globals.CacheKeys.SyncId];
 
         if (!syncId) {
-          return this.$q.reject({ code: Globals.ErrorCodes.SyncRemoved });
+          throw new SyncRemovedException();
         }
         if (!password) {
-          return this.$q.reject({ code: Globals.ErrorCodes.PasswordRemoved });
+          throw new PasswordRemovedException();
         }
 
         // Retrieve the hashed password from local storage and convert to bytes
@@ -225,11 +241,8 @@ export default class UtilityService {
         return base64js.fromByteArray(combinedData);
       })
       .catch((err) => {
-        this.logInfo('Encryption failed');
-        return this.$q.reject({
-          code: Globals.ErrorCodes.InvalidCredentials,
-          stack: err.stack
-        });
+        this.logSvc.logWarning('Encryption failed');
+        throw new InvalidCredentialsException(null, err);
       });
   }
 
@@ -249,7 +262,7 @@ export default class UtilityService {
 
     const country = countriesList.countries[isoCode];
     if (!country) {
-      this.logInfo(`No country found matching ISO code: ${isoCode}`);
+      this.logSvc.logWarning(`No country found matching ISO code: ${isoCode}`);
     }
     return country.name;
   }
@@ -354,6 +367,17 @@ export default class UtilityService {
     return versionTag;
   }
 
+  handleEvent(eventHandler, ...args) {
+    try {
+      this.$q
+        .resolve()
+        .then(() => eventHandler(...args))
+        .catch(this.$exceptionHandler);
+    } catch (err) {
+      this.$exceptionHandler(err);
+    }
+  }
+
   isMobilePlatform(platformName) {
     return platformName === Globals.Platforms.Android;
   }
@@ -368,80 +392,11 @@ export default class UtilityService {
   }
 
   isNetworkConnectionError(err) {
-    return err.code === Globals.ErrorCodes.HttpRequestFailed || err.code === Globals.ErrorCodes.NetworkOffline;
+    return err instanceof HttpRequestFailedException || err instanceof NetworkOfflineException;
   }
 
   isPlatform(currentPlatform, platformName) {
     return currentPlatform === platformName;
-  }
-
-  logError(err, message?) {
-    let errMessage;
-
-    // Return if no error supplied or has already been logged
-    if (!err || err.logged) {
-      return;
-    }
-
-    if (err instanceof Error) {
-      errMessage = message ? `${message}: ` : '';
-    } else if (err.code) {
-      const codeName = _.findKey(Globals.ErrorCodes, (key) => {
-        return key === err.code;
-      });
-      errMessage = message ? `${message}: ` : '';
-      errMessage += `[${err.code}] ${codeName}`;
-    }
-
-    // Output message to console, add to queue and process
-    this.logToConsole(Globals.LogType.Error, errMessage, err);
-    this.messageQueue.push([Globals.LogType.Error, errMessage, err]);
-    this.processMessageQueue();
-
-    // Mark this error as logged to prevent duplication in logs
-    err.logged = true;
-  }
-
-  logInfo(message) {
-    if (!message) {
-      return;
-    }
-
-    // Output message to console, add to queue and process
-    this.logToConsole(Globals.LogType.Trace, message);
-    this.messageQueue.push([Globals.LogType.Trace, message]);
-    this.processMessageQueue();
-  }
-
-  logToConsole(messageType, message, err?) {
-    switch (messageType) {
-      case Globals.LogType.Error:
-        if (err instanceof Error) {
-          console.error(message, err);
-        } else if (err.stack) {
-          console.error(message, err.stack);
-        } else {
-          console.error(message);
-        }
-        break;
-      case Globals.LogType.Warn:
-        console.warn(message);
-        break;
-      case Globals.LogType.Trace:
-      default:
-        console.info(message);
-    }
-  }
-
-  logWarning(message) {
-    if (!message) {
-      return;
-    }
-
-    // Output message to console, add to queue and process
-    this.logToConsole(Globals.LogType.Warn, message);
-    this.messageQueue.push([Globals.LogType.Warn, message]);
-    this.processMessageQueue();
   }
 
   parseUrl(url) {
@@ -466,51 +421,6 @@ export default class UtilityService {
       searchObject,
       hash: parser.hash
     };
-  }
-
-  processMessageQueue(): angular.IPromise<void> {
-    // Return if currently processing or no more messages to process
-    if (this.currentMessageQueueItem || this.messageQueue.length === 0) {
-      return this.$q.resolve();
-    }
-
-    // Get the next log message to process
-    this.currentMessageQueueItem = this.messageQueue.shift();
-    const messageType = this.currentMessageQueueItem[0];
-    const message = this.currentMessageQueueItem[1];
-    const err = this.currentMessageQueueItem[2];
-
-    // Format the log message with current time stamp and log type
-    let messageLogText = `${new Date().toISOString().replace(/[A-Z]/g, ' ').trim()}\t`;
-    switch (messageType) {
-      case Globals.LogType.Error:
-        messageLogText += '[error]\t';
-        break;
-      case Globals.LogType.Warn:
-        messageLogText += '[warn]\t';
-        break;
-      case Globals.LogType.Trace:
-      default:
-        messageLogText += '[trace]\t';
-    }
-
-    // Add message text to log item and add to end of log
-    return this.storeSvc
-      .get(Globals.CacheKeys.TraceLog)
-      .then((debugMessageLog) => {
-        debugMessageLog = debugMessageLog || [];
-        messageLogText += typeof message === 'object' ? JSON.stringify(message) : message;
-        if (err && err.stack) {
-          messageLogText += `\t${err.stack.replace(/\s+/g, ' ')}`;
-        }
-        debugMessageLog.push(messageLogText);
-        return this.storeSvc.set(Globals.CacheKeys.TraceLog, debugMessageLog);
-      })
-      .then(() => {
-        // Process remaining messages
-        this.currentMessageQueueItem = undefined;
-        this.processMessageQueue();
-      });
   }
 
   promiseWhile(data, condition, action) {

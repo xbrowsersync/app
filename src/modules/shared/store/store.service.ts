@@ -3,29 +3,7 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import * as idbKeyval from 'idb-keyval';
 import { autobind } from 'core-decorators';
-
-export interface StoreContent {
-  appVersion: string;
-  bookmarkIdMappings: any;
-  bookmarks: any;
-  checkForAppUpdates: boolean;
-  darkModeEnabled: boolean;
-  displayHelp: boolean;
-  displayOtherSyncsWarning: boolean;
-  displayPermissions: boolean;
-  displaySearchBarBeneathResults: boolean;
-  displayUpdated: boolean;
-  defaultToFolderView: boolean;
-  installBackup: any;
-  lastUpdated: Date;
-  password: string;
-  serviceUrl: string;
-  syncBookmarksToolbar: boolean;
-  syncEnabled: boolean;
-  syncId: string;
-  syncVersion: string;
-  traceLog: any;
-}
+import StoreContent from './store-content.interface';
 
 @autobind
 @Injectable('StoreService')

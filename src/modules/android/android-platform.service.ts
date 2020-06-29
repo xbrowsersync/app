@@ -14,21 +14,35 @@ import { Injectable } from 'angular-ts-decorators';
 import _ from 'underscore';
 import { autobind } from 'core-decorators';
 import compareVersions from 'compare-versions';
-import Globals from '../shared/globals';
-import Platform from '../shared/platform.interface';
-import StoreService from '../shared/store.service';
-import UtilityService from '../shared/utility.service';
-import BookmarkService from '../shared/bookmark.service';
+import PlatformService from '../../interfaces/platform-service.interface';
 import Strings from '../../../res/strings/en.json';
+import BookmarkService from '../shared/bookmark/bookmark.service';
+import {
+  AndroidException,
+  FailedLocalStorageException,
+  I18nException,
+  FailedGetPageMetadataException,
+  SyncUncommittedException,
+  FailedDownloadFileException,
+  FailedScanException
+} from '../shared/exceptions/exception-types';
+import Globals from '../shared/globals';
+import StoreService from '../shared/store/store.service';
+import UtilityService from '../shared/utility/utility.service';
+import LogService from '../shared/log/log.service';
+import Alert from '../shared/alert/alert.interface';
+import { AlertType } from '../shared/alert/alert-type.enum';
 
 @autobind
 @Injectable('PlatformService')
-export default class AndroidPlatformService implements Platform {
+export default class AndroidPlatformService implements PlatformService {
+  $exceptionHandler: ng.IExceptionHandlerService;
   $http: ng.IHttpService;
   $interval: ng.IIntervalService;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   bookmarkSvc: BookmarkService;
+  logSvc: LogService;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
@@ -39,21 +53,35 @@ export default class AndroidPlatformService implements Platform {
   sharedBookmark: any;
   vm: any;
 
-  static $inject = ['$http', '$interval', '$q', '$timeout', 'BookmarkService', 'StoreService', 'UtilityService'];
+  static $inject = [
+    '$exceptionHandler',
+    '$http',
+    '$interval',
+    '$q',
+    '$timeout',
+    'BookmarkService',
+    'LogService',
+    'StoreService',
+    'UtilityService'
+  ];
   constructor(
+    $exceptionHandler: ng.IExceptionHandlerService,
     $http: ng.IHttpService,
     $interval: ng.IIntervalService,
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
     BookmarkSvc: BookmarkService,
+    LogSvc: LogService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
   ) {
+    this.$exceptionHandler = $exceptionHandler;
     this.$http = $http;
     this.$interval = $interval;
     this.$q = $q;
     this.$timeout = $timeout;
     this.bookmarkSvc = BookmarkSvc;
+    this.logSvc = LogSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
 
@@ -104,9 +132,7 @@ export default class AndroidPlatformService implements Platform {
     };
 
     const onError = (err) => {
-      // Display alert
-      const errMessage = this.getErrorMessageFromException({ code: Globals.ErrorCodes.FailedShareBookmark });
-      this.vm.alert.display(errMessage.title, errMessage.message, 'danger');
+      this.$exceptionHandler(err);
     };
 
     // Display share sheet
@@ -121,20 +147,18 @@ export default class AndroidPlatformService implements Platform {
     // Check dark theme is supported
     return this.$q((resolve, reject) => {
       window.cordova.plugins.ThemeDetection.isAvailable(resolve, reject);
-    })
-      .then((isAvailable: any) => {
-        if (!isAvailable.value) {
-          return;
-        }
+    }).then((isAvailable: any) => {
+      if (!isAvailable.value) {
+        return;
+      }
 
-        // Check dark theme is enabled
-        return this.$q((resolve, reject) => {
-          window.cordova.plugins.ThemeDetection.isDarkModeEnabled(resolve, reject);
-        }).then((isDarkModeEnabled: any) => {
-          this.vm.settings.darkModeEnabled = isDarkModeEnabled.value;
-        });
-      })
-      .catch(this.displayErrorAlert);
+      // Check dark theme is enabled
+      return this.$q((resolve, reject) => {
+        window.cordova.plugins.ThemeDetection.isDarkModeEnabled(resolve, reject);
+      }).then((isDarkModeEnabled: any) => {
+        this.vm.settings.darkModeEnabled = isDarkModeEnabled.value;
+      });
+    });
   }
 
   checkForInstallOrUpgrade() {
@@ -157,13 +181,13 @@ export default class AndroidPlatformService implements Platform {
           return;
         }
 
-        this.vm.alert.display(
+        this.vm.displaySnackbar(
           null,
           this.getConstant(Strings.appUpdateAvailable_Android_Message).replace('{version}', newVersion),
           null,
           this.getConstant(Strings.button_View_Label),
           () => {
-            this.openUrl(Globals.ReleaseNotesUrlStem + newVersion.replace(/^v/, ''));
+            this.openUrl(Globals.ReleaseNotesUrlStem + (newVersion as string).replace(/^v/, ''));
           }
         );
       });
@@ -208,62 +232,12 @@ export default class AndroidPlatformService implements Platform {
     return this.$q((resolve, reject) => {
       window.QRScanner.disableLight((err) => {
         if (err) {
-          const error = new Error(err._message || err.name || err.code);
-          this.utilitySvc.logError(error, 'platform.disableLight');
-          return reject(error);
+          return reject(new AndroidException(err._message || err.name || err.code));
         }
 
         resolve();
       });
     });
-  }
-
-  displayDefaultSearchState(originalFunction) {
-    return originalFunction().then(() => {
-      return this.vm.search.execute();
-    });
-  }
-
-  displayErrorAlert(err) {
-    // Display alert
-    const errMessage = this.getErrorMessageFromException(err);
-    this.vm.alert.display(errMessage.title, errMessage.message, 'danger');
-  }
-
-  displaySnackbar(title, description, level, action, actionCallback) {
-    const text = `${(title ? `${title}. ${description}` : description).replace(/\.$/, '')}.`;
-    const textColor = '#ffffff';
-    let bgColor = null;
-    switch (level) {
-      case 'danger':
-        bgColor = '#ea3869';
-        break;
-      case 'success':
-        bgColor = '#30d278';
-        break;
-      case 'warning':
-        bgColor = '#bdc71b';
-        break;
-      default:
-        bgColor = '#083039';
-        break;
-    }
-    const success = (clicked) => {
-      if (clicked && actionCallback) {
-        actionCallback();
-      }
-    };
-    const failure = (errMessage) => {
-      this.utilitySvc.logError(new Error(errMessage), 'platform.displaySnackbar');
-    };
-
-    // Ensure soft keyboard is hidden
-    if (document.activeElement) {
-      (document.activeElement as HTMLInputElement).blur();
-    }
-
-    // Display snackbar
-    window.cordova.plugins.snackbar.create(text, 5000, bgColor, textColor, 3, action, success, failure);
   }
 
   downloadFile(fileName, textContents) {
@@ -275,11 +249,11 @@ export default class AndroidPlatformService implements Platform {
     const storageLocation = `${window.cordova.file.externalRootDirectory}Download`;
 
     return this.$q((resolve, reject) => {
-      const onError = () => {
-        return reject({ code: Globals.ErrorCodes.FailedDownloadFile });
+      const onError = (err: Error) => {
+        return reject(new FailedDownloadFileException(null, err));
       };
 
-      this.utilitySvc.logInfo(`Downloading file ${fileName}`);
+      this.logSvc.logInfo(`Downloading file ${fileName}`);
 
       // Save file to storage location
       window.resolveLocalFileSystemURL(
@@ -334,9 +308,7 @@ export default class AndroidPlatformService implements Platform {
     return this.$q((resolve, reject) => {
       window.QRScanner.enableLight((err) => {
         if (err) {
-          const error = new Error(err._message || err.name || err.code);
-          this.utilitySvc.logError(error, 'platform.enableLight');
-          return reject(error);
+          return reject(new AndroidException(err._message || err.name || err.code));
         }
 
         resolve();
@@ -369,12 +341,6 @@ export default class AndroidPlatformService implements Platform {
           this.disableBackgroundSync();
         }
       })
-      .catch((err) => {
-        // Display alert if not background sync
-        if (!isBackgroundSync) {
-          this.displayErrorAlert(err);
-        }
-      })
       .finally(() => {
         this.interface_Working_Hide(displayLoadingId, displayLoadingTimeout);
       });
@@ -385,10 +351,10 @@ export default class AndroidPlatformService implements Platform {
 
     // If not online display an alert and return
     if (!isOnline) {
-      this.vm.alert.display(
-        this.getConstant(Strings.workingOffline_Title),
-        this.getConstant(Strings.workingOffline_Message)
-      );
+      this.vm.displayAlert({
+        message: this.getConstant(Strings.workingOffline_Message),
+        title: this.getConstant(Strings.workingOffline_Title)
+      } as Alert);
 
       return this.$q.resolve(false);
     }
@@ -410,9 +376,7 @@ export default class AndroidPlatformService implements Platform {
           return resolve(null);
         }
 
-        this.utilitySvc.logError(err, 'platform.getAllFromNativeStorage');
-        err.code = Globals.ErrorCodes.FailedLocalStorage;
-        reject(err);
+        reject(new FailedLocalStorageException(null, err));
       };
 
       const success = (keys) => {
@@ -441,131 +405,6 @@ export default class AndroidPlatformService implements Platform {
     });
   }
 
-  getErrorMessageFromException(err: any): any {
-    const errorMessage = {
-      title: '',
-      message: ''
-    };
-
-    if (!err || !err.code) {
-      errorMessage.title = this.getConstant(Strings.error_Default_Title);
-      errorMessage.message = this.getConstant(Strings.error_Default_Message);
-      return errorMessage;
-    }
-
-    err.details = !err.details ? '' : err.details;
-
-    switch (err.code) {
-      case Globals.ErrorCodes.NetworkOffline:
-      case Globals.ErrorCodes.HttpRequestFailed:
-        errorMessage.title = this.getConstant(Strings.error_HttpRequestFailed_Title);
-        errorMessage.message = this.getConstant(Strings.error_HttpRequestFailed_Message);
-        break;
-      case Globals.ErrorCodes.TooManyRequests:
-        errorMessage.title = this.getConstant(Strings.error_TooManyRequests_Title);
-        errorMessage.message = this.getConstant(Strings.error_TooManyRequests_Message);
-        break;
-      case Globals.ErrorCodes.RequestEntityTooLarge:
-        errorMessage.title = this.getConstant(Strings.error_RequestEntityTooLarge_Title);
-        errorMessage.message = this.getConstant(Strings.error_RequestEntityTooLarge_Message);
-        break;
-      case Globals.ErrorCodes.NotAcceptingNewSyncs:
-        errorMessage.title = this.getConstant(Strings.error_NotAcceptingNewSyncs_Title);
-        errorMessage.message = this.getConstant(Strings.error_NotAcceptingNewSyncs_Message);
-        break;
-      case Globals.ErrorCodes.DailyNewSyncLimitReached:
-        errorMessage.title = this.getConstant(Strings.error_DailyNewSyncLimitReached_Title);
-        errorMessage.message = this.getConstant(Strings.error_DailyNewSyncLimitReached_Message);
-        break;
-      case Globals.ErrorCodes.MissingClientData:
-        errorMessage.title = this.getConstant(Strings.error_MissingClientData_Title);
-        errorMessage.message = this.getConstant(Strings.error_MissingClientData_Message);
-        break;
-      case Globals.ErrorCodes.NoDataFound:
-        errorMessage.title = this.getConstant(Strings.error_InvalidCredentials_Title);
-        errorMessage.message = this.getConstant(Strings.error_InvalidCredentials_Message);
-        break;
-      case Globals.ErrorCodes.SyncRemoved:
-        errorMessage.title = this.getConstant(Strings.error_SyncRemoved_Title);
-        errorMessage.message = this.getConstant(Strings.error_SyncRemoved_Message);
-        break;
-      case Globals.ErrorCodes.InvalidCredentials:
-        errorMessage.title = this.getConstant(Strings.error_InvalidCredentials_Title);
-        errorMessage.message = this.getConstant(Strings.error_InvalidCredentials_Message);
-        break;
-      case Globals.ErrorCodes.ContainerChanged:
-        errorMessage.title = this.getConstant(Strings.error_ContainerChanged_Title);
-        errorMessage.message = this.getConstant(Strings.error_ContainerChanged_Message);
-        break;
-      case Globals.ErrorCodes.LocalContainerNotFound:
-        errorMessage.title = this.getConstant(Strings.error_LocalContainerNotFound_Title);
-        errorMessage.message = this.getConstant(Strings.error_LocalContainerNotFound_Message);
-        break;
-      case Globals.ErrorCodes.DataOutOfSync:
-        errorMessage.title = this.getConstant(Strings.error_OutOfSync_Title);
-        errorMessage.message = this.getConstant(Strings.error_OutOfSync_Message);
-        break;
-      case Globals.ErrorCodes.InvalidService:
-        errorMessage.title = this.getConstant(Strings.error_InvalidService_Title);
-        errorMessage.message = this.getConstant(Strings.error_InvalidService_Message);
-        break;
-      case Globals.ErrorCodes.ServiceOffline:
-        errorMessage.title = this.getConstant(Strings.error_ServiceOffline_Title);
-        errorMessage.message = this.getConstant(Strings.error_ServiceOffline_Message);
-        break;
-      case Globals.ErrorCodes.UnsupportedServiceApiVersion:
-        errorMessage.title = this.getConstant(Strings.error_UnsupportedServiceApiVersion_Title);
-        errorMessage.message = this.getConstant(Strings.error_UnsupportedServiceApiVersion_Message);
-        break;
-      case Globals.ErrorCodes.FailedGetPageMetadata:
-        errorMessage.title = this.getConstant(Strings.error_FailedGetPageMetadata_Title);
-        errorMessage.message = this.getConstant(Strings.error_FailedGetPageMetadata_Message);
-        break;
-      case Globals.ErrorCodes.FailedScan:
-        errorMessage.title = this.getConstant(Strings.error_ScanFailed_Message);
-        break;
-      case Globals.ErrorCodes.FailedShareBookmark:
-        errorMessage.title = this.getConstant(Strings.error_ShareFailed_Title);
-        break;
-      case Globals.ErrorCodes.FailedDownloadFile:
-        errorMessage.title = this.getConstant(Strings.error_FailedDownloadFile_Title);
-        break;
-      case Globals.ErrorCodes.FailedGetDataToRestore:
-        errorMessage.title = this.getConstant(Strings.error_FailedGetDataToRestore_Title);
-        break;
-      case Globals.ErrorCodes.FailedRestoreData:
-        errorMessage.title = this.getConstant(Strings.error_FailedRestoreData_Title);
-        errorMessage.message = this.getConstant(Strings.error_FailedRestoreData_Message);
-        break;
-      case Globals.ErrorCodes.FailedShareUrl:
-        errorMessage.title = this.getConstant(Strings.error_FailedShareUrl_Title);
-        break;
-      case Globals.ErrorCodes.FailedShareUrlNotSynced:
-        errorMessage.title = this.getConstant(Strings.error_FailedShareUrlNotSynced_Title);
-        break;
-      case Globals.ErrorCodes.FailedRefreshBookmarks:
-        errorMessage.title = this.getConstant(Strings.error_FailedRefreshBookmarks_Title);
-        break;
-      case Globals.ErrorCodes.SyncUncommitted:
-        errorMessage.title = this.getConstant(Strings.error_UncommittedSyncs_Title);
-        errorMessage.message = this.getConstant(Strings.error_UncommittedSyncs_Message);
-        break;
-      case Globals.ErrorCodes.FailedCreateLocalBookmarks:
-      case Globals.ErrorCodes.FailedGetLocalBookmarks:
-      case Globals.ErrorCodes.FailedRemoveLocalBookmarks:
-      case Globals.ErrorCodes.LocalBookmarkNotFound:
-      case Globals.ErrorCodes.XBookmarkNotFound:
-        errorMessage.title = this.getConstant(Strings.error_LocalSyncError_Title);
-        errorMessage.message = this.getConstant(Strings.error_LocalSyncError_Message);
-        break;
-      default:
-        errorMessage.title = this.getConstant(Strings.error_Default_Title);
-        errorMessage.message = this.getConstant(Strings.error_Default_Message);
-    }
-
-    return errorMessage;
-  }
-
   getConstant(stringObj: any): string {
     let stringVal = '';
 
@@ -574,7 +413,7 @@ export default class AndroidPlatformService implements Platform {
     }
 
     if (!stringVal) {
-      this.utilitySvc.logWarning('I18n string has no value');
+      throw new I18nException('I18n string has no value');
     }
 
     return stringVal;
@@ -621,8 +460,7 @@ export default class AndroidPlatformService implements Platform {
       // If url was provided, check connection and is valid http url
       const httpRegex = new RegExp(Globals.URL.HttpRegex, 'i');
       if (pageUrl && (!this.utilitySvc.isNetworkConnected() || !httpRegex.test(pageUrl))) {
-        this.utilitySvc.logWarning('Didn’t get page metadata');
-        return reject({ code: Globals.ErrorCodes.FailedGetPageMetadata });
+        return reject(new FailedGetPageMetadataException());
       }
 
       const handleResponse = (pageContent?, err?) => {
@@ -636,11 +474,7 @@ export default class AndroidPlatformService implements Platform {
 
         // Check html content was returned
         if (err || !pageContent) {
-          if (err) {
-            this.utilitySvc.logError(err, 'platform.handleResponse');
-          }
-          this.utilitySvc.logWarning('Didn’t get page metadata');
-          return reject({ code: Globals.ErrorCodes.FailedGetPageMetadata });
+          return reject(new FailedGetPageMetadataException(null, err));
         }
 
         // Extract metadata values
@@ -832,9 +666,6 @@ export default class AndroidPlatformService implements Platform {
     // Set global variables
     this.vm = viewModel;
 
-    // Set platform
-    this.vm.platformName = Globals.Platforms.Android;
-
     // Configure events
     document.addEventListener('backbutton', this.handleBackButton, false);
     document.addEventListener('touchstart', this.handleTouchStart, false);
@@ -851,29 +682,9 @@ export default class AndroidPlatformService implements Platform {
       window.cordova.plugins.backgroundMode.disableWebViewOptimizations();
     });
 
-    // Set clear search button to display all bookmarks
-    const displayDefaultStateOriginal = this.vm.search.displayDefaultState;
-    this.vm.search.displayDefaultState = () => {
-      return this.displayDefaultSearchState(displayDefaultStateOriginal);
-    };
-
-    // Enable select file to restore
-    this.vm.settings.fileRestoreEnabled = true;
-
-    // Increase search results timeout to avoid display lag
-    this.vm.settings.getSearchResultsDelay = 500;
-
-    // Display existing sync panel by default
-    this.vm.login.displayNewSyncPanel = false;
-
-    // Use snackbar for alerts
-    this.vm.alert.display = this.displaySnackbar;
-
-    // Load i18n strings
+    // Check for upgrade or do fresh install
     return (
-      this.initI18n()
-        // Check for upgrade or do fresh install
-        .then(this.checkForInstallOrUpgrade)
+      this.checkForInstallOrUpgrade()
         // Run startup process after install/upgrade
         .then(this.handleStartup)
         .then(success)
@@ -892,7 +703,7 @@ export default class AndroidPlatformService implements Platform {
         ]);
       })
       .then(() => {
-        this.utilitySvc.logInfo(`Installed v${installedVersion}`);
+        this.logSvc.logInfo(`Installed v${installedVersion}`);
       });
   }
 
@@ -912,7 +723,7 @@ export default class AndroidPlatformService implements Platform {
       return;
     }
 
-    this.utilitySvc.logInfo(`Detected new intent: ${intent.extras['android.intent.extra.TEXT']}`);
+    this.logSvc.logInfo(`Detected new intent: ${intent.extras['android.intent.extra.TEXT']}`);
 
     // Set shared bookmark with shared intent data
     this.sharedBookmark = {
@@ -925,98 +736,91 @@ export default class AndroidPlatformService implements Platform {
     // Set theme
     return this.checkForDarkTheme().then(() => {
       // Check if sync enabled and reset network disconnected flag
-      this.storeSvc
-        .get(Globals.CacheKeys.SyncEnabled)
-        .then((syncEnabled) => {
-          // Deselect bookmark
-          this.vm.search.selectedBookmark = null;
+      this.storeSvc.get(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+        // Deselect bookmark
+        this.vm.search.selectedBookmark = null;
 
-          if (!syncEnabled) {
-            return;
-          }
+        if (!syncEnabled) {
+          return;
+        }
 
-          // Run sync
-          return this.executeSyncIfOnline('delayDisplayDialog')
-            .then((isOnline) => {
-              if (isOnline === false) {
-                return;
-              }
+        // Run sync
+        return this.executeSyncIfOnline('delayDisplayDialog')
+          .then((isOnline) => {
+            if (isOnline === false) {
+              return;
+            }
 
-              // Refresh search results if query not present
-              if (this.vm.view.current === this.vm.view.views.search && !this.vm.search.query) {
-                this.vm.search.displayDefaultState();
-              }
-            })
-            .then(() => {
-              // Check if a bookmark was shared
-              return this.checkForSharedBookmark();
-            });
-        })
-        .catch(this.displayErrorAlert);
+            // Refresh search results if query not present
+            if (this.vm.view.current === this.vm.view.views.search && !this.vm.search.query) {
+              this.vm.search.displayDefaultState();
+            }
+          })
+          .then(() => {
+            // Check if a bookmark was shared
+            return this.checkForSharedBookmark();
+          });
+      });
     });
   }
 
   handleStartup() {
-    this.utilitySvc.logInfo('Starting up');
+    this.logSvc.logInfo('Starting up');
 
     // Set theme
     return this.checkForDarkTheme().then(() => {
       // Retrieve cached data
-      return this.storeSvc
-        .get()
-        .then((cachedData) => {
-          const syncEnabled = cachedData[Globals.CacheKeys.SyncEnabled];
-          const checkForAppUpdates = cachedData[Globals.CacheKeys.CheckForAppUpdates];
+      return this.storeSvc.get().then((cachedData) => {
+        const syncEnabled = cachedData[Globals.CacheKeys.SyncEnabled];
+        const checkForAppUpdates = cachedData[Globals.CacheKeys.CheckForAppUpdates];
 
-          // Prime bookmarks cache
-          if (syncEnabled) {
-            this.bookmarkSvc.getCachedBookmarks();
-          }
+        // Prime bookmarks cache
+        if (syncEnabled) {
+          this.bookmarkSvc.getCachedBookmarks();
+        }
 
-          // Add useful debug info to beginning of trace log
-          cachedData.platform = {
-            name: window.device.platform,
-            device: `${window.device.manufacturer} ${window.device.model}`
-          };
-          this.utilitySvc.logInfo(
-            _.omit(
-              cachedData,
-              'debugMessageLog',
-              Globals.CacheKeys.Bookmarks,
-              Globals.CacheKeys.TraceLog,
-              Globals.CacheKeys.Password
-            )
-          );
+        // Add useful debug info to beginning of trace log
+        cachedData.platform = {
+          name: window.device.platform,
+          device: `${window.device.manufacturer} ${window.device.model}`
+        };
+        this.logSvc.logInfo(
+          _.omit(
+            cachedData,
+            'debugMessageLog',
+            Globals.CacheKeys.Bookmarks,
+            Globals.CacheKeys.TraceLog,
+            Globals.CacheKeys.Password
+          )
+        );
 
-          // Check for new app version
-          if (checkForAppUpdates) {
-            this.checkForNewVersion();
-          }
+        // Check for new app version
+        if (checkForAppUpdates) {
+          this.checkForNewVersion();
+        }
 
-          // Exit if sync not enabled
-          if (!syncEnabled) {
-            return;
-          }
+        // Exit if sync not enabled
+        if (!syncEnabled) {
+          return;
+        }
 
-          // Run sync
-          this.executeSyncIfOnline('delayDisplayDialog')
-            .then((isOnline) => {
-              if (isOnline === false) {
-                return;
-              }
+        // Run sync
+        this.executeSyncIfOnline('delayDisplayDialog')
+          .then((isOnline) => {
+            if (isOnline === false) {
+              return;
+            }
 
-              // Refresh search results if query not present
-              if (this.vm.view.current === this.vm.view.views.search && !this.vm.search.query) {
-                this.vm.search.displayDefaultState();
-              }
-            })
-            .then(() => {
-              // Check if a bookmark was shared
-              return this.checkForSharedBookmark();
-            })
-            .catch(this.displayErrorAlert);
-        })
-        .catch(this.displayErrorAlert);
+            // Refresh search results if query not present
+            if (this.vm.view.current === this.vm.view.views.search && !this.vm.search.query) {
+              this.vm.search.displayDefaultState();
+            }
+          })
+          .then(() => {
+            // Check if a bookmark was shared
+            return this.checkForSharedBookmark();
+          });
+      });
     });
   }
 
@@ -1042,7 +846,7 @@ export default class AndroidPlatformService implements Platform {
     return this.storeSvc
       .set(Globals.CacheKeys.TraceLog)
       .then(() => {
-        this.utilitySvc.logInfo(`Upgrading from ${oldVersion} to ${newVersion}`);
+        this.logSvc.logInfo(`Upgrading from ${oldVersion} to ${newVersion}`);
       })
       .then(() => {
         if (compareVersions(oldVersion, newVersion)) {
@@ -1053,29 +857,13 @@ export default class AndroidPlatformService implements Platform {
         }
       })
       .then(() => {
-        return this.$q.all([
-          this.storeSvc.set(Globals.CacheKeys.AppVersion, newVersion),
-          this.storeSvc.set(Globals.CacheKeys.DisplayUpdated, true)
-        ]);
-      })
-      .catch((err) => {
-        this.utilitySvc.logError(err, 'platform.handleUpgrade');
-        this.displayErrorAlert(err);
+        return this.$q
+          .all([
+            this.storeSvc.set(Globals.CacheKeys.AppVersion, newVersion),
+            this.storeSvc.set(Globals.CacheKeys.DisplayUpdated, true)
+          ])
+          .then(() => {});
       });
-  }
-
-  init(viewModel) {
-    return this.$q((resolve, reject) => {
-      // Bind to device events
-      document.addEventListener(
-        'deviceready',
-        () => {
-          this.handleDeviceReady(viewModel, resolve, reject);
-        },
-        false
-      );
-      document.addEventListener('resume', this.handleResume, false);
-    });
   }
 
   initI18n() {
@@ -1085,24 +873,19 @@ export default class AndroidPlatformService implements Platform {
     })
       .then((language: any) => {
         if (!language && !language.value) {
-          this.utilitySvc.logWarning('Couldn’t get preferred language');
+          this.logSvc.logWarning('Couldn’t get preferred language');
           return;
         }
         i18nCode = language.value.split('-')[0];
       })
-      .catch((err) => {
-        this.utilitySvc.logError(err, 'platform.initI18n');
+      .then(() => {
+        return this.$http.get(`./assets/strings_${i18nCode}.json`).then((response) => {
+          this.i18nStrings = response.data;
+        });
       })
-      .finally(() => {
-        this.$http
-          .get(`./assets/strings_${i18nCode}.json`)
-          .then((response) => {
-            this.i18nStrings = response.data;
-          })
-          .catch((err) => {
-            this.utilitySvc.logWarning(`Couldn’t load i18n strings: ${i18nCode}`);
-            throw err;
-          });
+      .catch((err) => {
+        this.logSvc.logWarning(`Couldn’t load i18n strings: ${i18nCode}`);
+        throw err;
       });
   }
 
@@ -1176,20 +959,21 @@ export default class AndroidPlatformService implements Platform {
     window.open(url, '_system', '');
   }
 
+  permissions_Check() {
+    return this.methodNotApplicable();
+  }
+
   refreshLocalSyncData() {
-    return this.sync_Queue({ type: Globals.SyncType.Pull }).then(() => {
-      this.utilitySvc.logInfo('Local sync data refreshed');
-    });
+    return this.$q.resolve();
   }
 
   sync_DisplayConfirmation(): boolean {
     return false;
   }
 
-  sync_Queue(syncData, command?) {
-    syncData.command = command || Globals.Commands.SyncBookmarks;
-
+  sync_Queue(syncData, command = Globals.Commands.SyncBookmarks) {
     // Add sync data to queue and run sync
+    syncData.command = command;
     return this.bookmarkSvc
       .queueSync(syncData)
       .then(() => {
@@ -1200,17 +984,23 @@ export default class AndroidPlatformService implements Platform {
           switch (true) {
             case changeInfo.type === Globals.UpdateType.Create:
               this.$timeout(() => {
-                this.vm.alert.display(null, this.getConstant(Strings.bookmarkCreated_Message));
+                this.vm.displayAlert({
+                  message: this.getConstant(Strings.bookmarkCreated_Message)
+                } as Alert);
               }, 200);
               break;
             case changeInfo.type === Globals.UpdateType.Delete:
               this.$timeout(() => {
-                this.vm.alert.display(null, this.getConstant(Strings.bookmarkDeleted_Message));
+                this.vm.displayAlert({
+                  message: this.getConstant(Strings.bookmarkDeleted_Message)
+                } as Alert);
               }, 200);
               break;
             case changeInfo.type === Globals.UpdateType.Update:
               this.$timeout(() => {
-                this.vm.alert.display(null, this.getConstant(Strings.bookmarkUpdated_Message));
+                this.vm.displayAlert({
+                  message: this.getConstant(Strings.bookmarkUpdated_Message)
+                } as Alert);
               }, 200);
               break;
           }
@@ -1222,13 +1012,15 @@ export default class AndroidPlatformService implements Platform {
           ? this.refreshLocalSyncData()
           : this.$q.resolve()
         ).then(() => {
-          // Check for uncommitted syncs
-          if (err.code === Globals.ErrorCodes.SyncUncommitted) {
-            this.vm.alert.display(
-              this.getConstant(Strings.error_UncommittedSyncs_Title),
-              this.getConstant(Strings.error_UncommittedSyncs_Message)
-            );
-
+          // Add uncommitted syncs back to the queue and notify
+          if (err instanceof SyncUncommittedException) {
+            syncData.changeInfo = this.$q.resolve();
+            this.bookmarkSvc.queueSync(syncData, false);
+            this.logSvc.logInfo('Sync not committed: network offline');
+            this.vm.displayAlert({
+              message: this.getConstant(Strings.error_UncommittedSyncs_Message),
+              title: this.getConstant(Strings.error_UncommittedSyncs_Title)
+            } as Alert);
             this.enableBackgroundSync();
             return;
           }
@@ -1250,13 +1042,11 @@ export default class AndroidPlatformService implements Platform {
 
         window.QRScanner.scan((err, scannedText) => {
           if (err) {
-            const scanError = new Error(err._message || err.name || err.code);
-            this.utilitySvc.logError(scanError, 'platform.startScanning');
-            return reject(scanError);
+            return reject(new AndroidException(err._message || err.name || err.code));
           }
 
           window.QRScanner.pausePreview(() => {
-            this.utilitySvc.logInfo(`Scanned: ${scannedText}`);
+            this.logSvc.logInfo(`Scanned: ${scannedText}`);
 
             let syncInfo;
             try {
@@ -1279,9 +1069,7 @@ export default class AndroidPlatformService implements Platform {
 
       window.QRScanner.prepare((err, status) => {
         if (err) {
-          const authError = new Error(err._message || err.name || err.code);
-          this.utilitySvc.logError(authError, 'platform.startScanning');
-          return reject(authError);
+          return reject(new AndroidException(err._message || err.name || err.code));
         }
 
         if (status.authorized) {
@@ -1292,16 +1080,11 @@ export default class AndroidPlatformService implements Platform {
             }, 500);
           });
         } else {
-          const noAuthError = new Error('Not authorised');
-          this.utilitySvc.logError(noAuthError, 'platform.startScanning');
-          reject(noAuthError);
+          reject(new AndroidException('Camera use not authorised'));
         }
       });
     }).catch((err) => {
-      return this.$q.reject({
-        code: Globals.ErrorCodes.FailedScan,
-        stack: err.stack
-      });
+      throw new FailedScanException(null, err);
     });
   }
 
@@ -1316,7 +1099,7 @@ export default class AndroidPlatformService implements Platform {
     return this.$q.resolve();
   }
 
-  scanner_ToggleLight(switchOn) {
+  scanner_ToggleLight(switchOn?): ng.IPromise<boolean> {
     // If state was elected toggle light based on value
     if (switchOn !== undefined) {
       return (switchOn ? this.enableLight() : this.disableLight()).then(() => {

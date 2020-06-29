@@ -1,10 +1,11 @@
 <h4>{{ vm.platformSvc.getConstant(vm.strings.updated_Title) + vm.globals.AppVersion }}</h4>
 <p>{{ vm.platformSvc.getConstant(vm.strings.updated_Message) }}</p>
 <div class="buttons">
-  <button type="button" class="btn btn-default" data-ng-click="vm.button_ReleaseNotes_Click()">
+  <button type="button" class="btn btn-default" data-ng-click="vm.utilitySvc.handleEvent(vm.button_ReleaseNotes_Click)">
     {{ vm.platformSvc.getConstant(vm.strings.button_ReleaseNotes_Label) }}
   </button>
-  <button type="button" class="btn btn-default focused" data-ng-click="vm.updatedPanel_Continue_Click()">
+  <button type="button" class="btn btn-default focused"
+          data-ng-click="vm.utilitySvc.handleEvent(vm.updatedPanel_Continue_Click)">
     {{ vm.platformSvc.getConstant(vm.strings.button_Continue_Label) }}
   </button>
 </div>

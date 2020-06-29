@@ -25,6 +25,8 @@
     "lines-between-class-members": "off",
     "import/no-dynamic-require": "off",
     "no-nested-ternary": "off",
-    "no-undef": "error"
+    "no-param-reassign": "off",
+    "no-undef": "error",
+    "no-underscore-dangle": "off"
   }
 }

@@ -1,4 +1,4 @@
-<div data-ng-class="vm.settings.darkModeEnabled ? 'theme-dark' : 'theme-default'">
+<div data-ng-class="vm.settings.darkModeEnabled ? 'theme-dark' : 'theme-default'" data-ng-if="vm.initialised">
   <div class="container" data-ng-class="{ 'search': vm.view.current === vm.view.views.search }">
     <div id="working-panel" class="animate" data-ng-include="'./assets/working.html'" data-ng-show="vm.working.show"
          data-ng-class="{ 'darker-overlay': vm.view.current !== vm.view.views.loading, 'fullsize': vm.view.current === vm.view.views.loading }">

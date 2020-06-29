@@ -1,12 +1,12 @@
 <div class="header-panel clearfix">
   <button class="btn btn-icon btn-help animate-fade-in"
           title="{{ vm.platformSvc.getConstant(vm.strings.button_Help_Label) }}"
-          data-ng-click="vm.helpPanel_ShowHelp()">
+          data-ng-click="vm.utilitySvc.handleEvent(vm.helpPanel_ShowHelp)">
     <i class="fas fa-question-circle" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_Help_Label) }}</span>
   </button>
   <button class="btn btn-icon btn-settings" title="{{ vm.platformSvc.getConstant(vm.strings.button_Settings_Label) }}"
-          data-ng-click="vm.view.change(vm.view.views.settings)">
+          data-ng-click="vm.utilitySvc.handleEvent(vm.view.change, vm.view.views.settings)">
     <i class="fas fa-cog" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_Settings_Label) }}</span>
   </button>
@@ -15,7 +15,8 @@
 <form name="vm.syncForm" class="animate-fade-in"
       data-ng-hide="vm.login.displayOtherSyncsWarning || vm.login.displaySyncConfirmation || vm.login.displayUpgradeConfirmation"
       novalidate>
-  <button type="submit" class="d-none" data-ng-click="vm.syncForm_Submit_Click()" tabindex="-1"></button>
+  <button type="submit" class="d-none" data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_Submit_Click)"
+          tabindex="-1"></button>
   <div class="selected-service animate-fade-in" data-ng-show="(!vm.utilitySvc.isMobilePlatform(vm.platformName) && !vm.login.displayUpdateServicePanel) || 
     (vm.utilitySvc.isMobilePlatform(vm.platformName) && !vm.login.displayGetSyncIdPanel)">
     <label>{{ vm.platformSvc.getConstant(vm.strings.login_SelectedService_Label) }}</label>
@@ -68,7 +69,7 @@
             <button class="btn btn-icon btn-show-password" data-ng-class="{ 'active': vm.login.showPassword }"
                     data-ng-show="vm.sync.password"
                     title="{{ vm.platformSvc.getConstant(vm.strings.button_ShowPassword_Label) }}"
-                    data-ng-click="vm.syncForm_ShowPassword_Click()">
+                    data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_ShowPassword_Click)">
               <i class="fas fa-eye" aria-hidden="true"></i>
             </button>
             <div class="validation" data-ng-if="vm.sync.password && ((vm.login.passwordComplexity.feedback.suggestions && vm.login.passwordComplexity.feedback.suggestions.length > 0) || 
@@ -90,11 +91,11 @@
           </div>
           <div class="buttons">
             <button type="button" class="btn btn-default btn-confirm-password" data-ng-disabled="!vm.sync.password"
-                    data-ng-click="vm.syncForm_ConfirmPassword_Click()">
+                    data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_ConfirmPassword_Click)">
               {{ vm.platformSvc.getConstant(vm.strings.button_Next_Label) }}
             </button>
             <button type="button" class="btn btn-default" data-ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)"
-                    data-ng-click="vm.syncForm_UpdateService_Click()">
+                    data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_UpdateService_Click)">
               Switch service
             </button>
           </div>
@@ -110,23 +111,24 @@
             <button class="btn btn-icon btn-show-password" data-ng-class="{ 'active': vm.login.showPassword }"
                     data-ng-show="vm.sync.password"
                     title="{{ vm.platformSvc.getConstant(vm.strings.button_ShowPassword_Label) }}"
-                    data-ng-click="vm.syncForm_ShowPassword_Click()">
+                    data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_ShowPassword_Click)">
               <i class="fas fa-eye" aria-hidden="true"></i>
             </button>
           </div>
           <div class="form-group buttons">
             <button type="button" class="btn btn-default btn-new-sync"
                     data-ng-disabled="vm.login.passwordConfirmation !== vm.sync.password"
-                    data-ng-click="vm.syncForm_EnableSync_Click()">
+                    data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_EnableSync_Click)">
               {{ vm.platformSvc.getConstant(vm.strings.button_EnableSync_Label) }}
             </button>
-            <button type="button" class="btn btn-default" data-ng-click="vm.syncForm_ConfirmPassword_Back_Click()">
+            <button type="button" class="btn btn-default"
+                    data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_ConfirmPassword_Back_Click)">
               {{ vm.platformSvc.getConstant(vm.strings.button_Back_Label) }}
             </button>
           </div>
         </div>
         <div class="form-group toggle-form">
-          <a data-ng-click="vm.syncForm_ExistingSync_Click()" href="#">
+          <a data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_ExistingSync_Click)" href="#">
             {{ vm.platformSvc.getConstant(vm.strings.button_ExistingSync_Label) }}
           </a>
         </div>
@@ -136,7 +138,8 @@
           <h4>{{ vm.platformSvc.getConstant(vm.strings.login_GetSyncId_Title) }}</h4>
           <p data-ng-bind-html="vm.platformSvc.getConstant(vm.strings.login_GetSyncId_Message)"></p>
           <div class="buttons">
-            <button type="button" class="btn btn-default" data-ng-click="vm.syncForm_ExistingSync_Click()">
+            <button type="button" class="btn btn-default"
+                    data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_ExistingSync_Click)">
               {{ vm.platformSvc.getConstant(vm.strings.button_OK_Label) }}
             </button>
           </div>
@@ -170,27 +173,27 @@
           <button class="btn btn-icon btn-show-password" data-ng-class="{ 'active': vm.login.showPassword }"
                   data-ng-show="vm.sync.password"
                   title="{{ vm.platformSvc.getConstant(vm.strings.button_ShowPassword_Label) }}"
-                  data-ng-click="vm.syncForm_ShowPassword_Click()">
+                  data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_ShowPassword_Click)">
             <i class="fas fa-eye" aria-hidden="true"></i>
           </button>
         </div>
         <div class="buttons">
           <button type="button" class="btn btn-default btn-existing-sync"
                   data-ng-disabled="!vm.sync.id || !vm.sync.password || vm.syncForm.$invalid"
-                  data-ng-click="vm.syncForm_EnableSync_Click()">
+                  data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_EnableSync_Click)">
             {{ vm.platformSvc.getConstant(vm.strings.button_EnableSync_Label) }}
           </button>
           <button type="button" class="btn btn-default" data-ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)"
-                  data-ng-click="vm.syncForm_UpdateService_Click()">
+                  data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_UpdateService_Click)">
             {{ vm.platformSvc.getConstant(vm.strings.button_UpdateService_Label) }}
           </button>
           <button type="button" class="btn btn-default" data-ng-if="vm.utilitySvc.isMobilePlatform(vm.platformName)"
-                  data-ng-click="vm.syncForm_ScanCode_Click()">
+                  data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_ScanCode_Click)">
             {{ vm.platformSvc.getConstant(vm.strings.button_ScanCode_Label) }}
           </button>
         </div>
         <div class="form-group toggle-form" data-ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)">
-          <a data-ng-click="vm.syncForm_NewSync_Click()" href="#">
+          <a data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_NewSync_Click)" href="#">
             {{ vm.platformSvc.getConstant(vm.strings.button_NewSync_Label) }}
           </a>
         </div>
@@ -200,16 +203,18 @@
           <h4>{{ vm.platformSvc.getConstant(vm.strings.login_ScanId_Title) }}</h4>
           <p>{{ vm.platformSvc.getConstant(vm.strings.login_ScanId_Message) }}</p>
           <div class="buttons">
-            <button type="button" class="btn btn-default" data-ng-click="vm.syncForm_ScanCode_Click()">
+            <button type="button" class="btn btn-default"
+                    data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_ScanCode_Click)">
               {{ vm.platformSvc.getConstant(vm.strings.button_ScanCode_Label) }}
             </button>
-            <button type="button" class="btn btn-default" data-ng-click="vm.syncForm_NewSync_Click()">
+            <button type="button" class="btn btn-default"
+                    data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_NewSync_Click)">
               {{ vm.platformSvc.getConstant(vm.strings.button_GetSyncId_Label) }}
             </button>
           </div>
         </div>
         <div class="form-group toggle-form">
-          <a data-ng-click="vm.syncForm_ManualEntry_Click()" href="#">
+          <a data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_ManualEntry_Click)" href="#">
             {{ vm.platformSvc.getConstant(vm.strings.button_ManualEntry_Label) }}
           </a>
         </div>
@@ -242,8 +247,8 @@
         </div>
         <div class="buttons">
           <button type="button" class="btn btn-default btn-update-service-url"
-                  data-ng-click="vm.syncForm_UpdateService_Update_Click()"
-                  data-ng-disabled="!vm.syncForm.newServiceUrl.$dirty || vm.syncForm.newServiceUrl.$invalid || vm.login.validatingServiceUrl"
+                  data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_UpdateService_Update_Click)"
+                  data-ng-disabled="vm.sync.newService.url === vm.sync.service.url || vm.syncForm.newServiceUrl.$invalid || vm.login.validatingServiceUrl"
                   data-ng-class="{ 'btn-validating': vm.login.validatingServiceUrl }">
             <span class="spinner-border spinner-border-sm" data-ng-show="vm.login.validatingServiceUrl" role="status"
                   aria-hidden="true"></span>
@@ -253,7 +258,8 @@
             <span data-ng-hide="vm.login.validatingServiceUrl">{{
           vm.platformSvc.getConstant(vm.strings.button_Update_Label) }}</span>
           </button>
-          <button type="button" class="btn btn-default" data-ng-click="vm.syncForm_UpdateService_Cancel_Click()">
+          <button type="button" class="btn btn-default"
+                  data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_UpdateService_Cancel_Click)">
             {{ vm.platformSvc.getConstant(vm.strings.button_Cancel_Label) }}
           </button>
         </div>
@@ -287,10 +293,12 @@
         <p class="service-warning"
            data-ng-bind-html="vm.platformSvc.getConstant(vm.strings.login_ConfirmUpdateService_Warning)"></p>
         <div class="buttons">
-          <button type="button" class="btn btn-default" data-ng-click="vm.syncForm_UpdateService_Confirm_Click()">
+          <button type="button" class="btn btn-default"
+                  data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_UpdateService_Confirm_Click)">
             {{ vm.platformSvc.getConstant(vm.strings.button_Confirm_Label) }}
           </button>
-          <button type="button" class="btn btn-default" data-ng-click="vm.syncForm_UpdateService_Cancel_Click()">
+          <button type="button" class="btn btn-default"
+                  data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_UpdateService_Cancel_Click)">
             {{ vm.platformSvc.getConstant(vm.strings.button_Deny_Label) }}
           </button>
         </div>
@@ -302,7 +310,8 @@
   <h4>{{ vm.platformSvc.getConstant(vm.strings.login_ConfirmSync_Title) }}</h4>
   <p>{{ vm.platformSvc.getConstant(vm.strings.login_ConfirmSync_Message) }}</p>
   <div class="buttons">
-    <button type="button" class="btn btn-default btn-confirm-enable-sync" data-ng-click="vm.startSyncing()">
+    <button type="button" class="btn btn-default btn-confirm-enable-sync"
+            data-ng-click="vm.utilitySvc.handleEvent(vm.startSyncing)">
       {{ vm.platformSvc.getConstant(vm.strings.button_Confirm_Label) }}
     </button>
     <button type="button" class="btn btn-default" data-ng-click="vm.login.displaySyncConfirmation = false">
@@ -314,7 +323,8 @@
   <h4>{{ vm.platformSvc.getConstant(vm.strings.login_DisableOtherSyncs_Title) }}</h4>
   <p data-ng-bind-html="vm.platformSvc.getConstant(vm.strings.login_DisableOtherSyncs_Message)"></p>
   <div class="buttons">
-    <button type="button" class="btn btn-default" data-ng-click="vm.syncForm_OtherSyncsDisabled_Click()">
+    <button type="button" class="btn btn-default"
+            data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_OtherSyncsDisabled_Click)">
       {{ vm.platformSvc.getConstant(vm.strings.button_Continue_Label) }}
     </button>
   </div>
@@ -324,7 +334,7 @@
   <div data-ng-bind-html="vm.platformSvc.getConstant(vm.strings.login_UpgradeSync_Message)"></div>
   <div class="buttons">
     <button type="button" class="btn btn-default btn-confirm-enable-sync"
-            data-ng-click="vm.syncForm_UpgradeSync_Click()">
+            data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_UpgradeSync_Click)">
       {{ vm.platformSvc.getConstant(vm.strings.button_Confirm_Label) }}
     </button>
     <button type="button" class="btn btn-default" data-ng-click="vm.login.displayUpgradeConfirmation = false">

@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-plusplus */
 /* eslint-disable prefer-destructuring */
@@ -13,21 +14,27 @@ import angular from 'angular';
 import _ from 'underscore';
 import { autobind } from 'core-decorators';
 import BookmarkIdMapperService from './bookmark-id-mapper.service';
-import Globals from '../shared/globals';
-import Platform from '../shared/platform.interface';
-import StoreService from '../shared/store.service';
-import UtilityService from '../shared/utility.service';
-import BookmarkService from '../shared/bookmark.service';
+import PlatformService from '../../interfaces/platform-service.interface';
 import Strings from '../../../res/strings/en.json';
+import BookmarkService from '../shared/bookmark/bookmark.service';
+import Globals from '../shared/globals';
+import LogService from '../shared/log/log.service';
+import StoreService from '../shared/store/store.service';
+import UtilityService from '../shared/utility/utility.service';
+import * as Exceptions from '../shared/exceptions/exception-types';
+import WebExtBackgroundService from './webext-background.service';
 
 @autobind
 @Injectable('PlatformService')
-export default class WebExtPlatformService implements Platform {
+export default class WebExtPlatformService implements PlatformService {
+  $injector: ng.auto.IInjectorService;
   $interval: ng.IIntervalService;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
+  _backgroundSvc: WebExtBackgroundService;
   bookmarkIdMapperSvc: BookmarkIdMapperService;
   bookmarkSvc: BookmarkService;
+  logSvc: LogService;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
@@ -38,35 +45,52 @@ export default class WebExtPlatformService implements Platform {
     origins: ['http://*/', 'https://*/']
   };
   refreshInterfaceTimeout: any;
+  showAlert: boolean;
+  showWorking: boolean;
   supportedLocalBookmarkUrlRegex = /^[\w-]+:/i;
   unsupportedContainers = [Globals.Bookmarks.MenuContainerName, Globals.Bookmarks.MobileContainerName];
-  vm: any;
 
   static $inject = [
+    '$injector',
     '$interval',
     '$q',
     '$timeout',
     'BookmarkIdMapperService',
     'BookmarkService',
+    'LogService',
     'StoreService',
     'UtilityService'
   ];
   constructor(
+    $injector: ng.auto.IInjectorService,
     $interval: ng.IIntervalService,
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
     BookmarkIdMapperSvc: BookmarkIdMapperService,
     BookmarkSvc: BookmarkService,
+    LogSvc: LogService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
   ) {
+    this.$injector = $injector;
     this.$interval = $interval;
     this.$q = $q;
     this.$timeout = $timeout;
     this.bookmarkIdMapperSvc = BookmarkIdMapperSvc;
     this.bookmarkSvc = BookmarkSvc;
+    this.logSvc = LogSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
+
+    this.showAlert = false;
+    this.showWorking = false;
+  }
+
+  get backgroundSvc(): WebExtBackgroundService {
+    if (angular.isUndefined(this._backgroundSvc)) {
+      this._backgroundSvc = this.$injector.get('WebExtBackgroundService');
+    }
+    return this._backgroundSvc;
   }
 
   automaticUpdates_NextUpdate() {
@@ -89,10 +113,7 @@ export default class WebExtPlatformService implements Platform {
         });
       })
       .catch((err) => {
-        return this.$q.reject({
-          code: Globals.ErrorCodes.FailedRegisterAutoUpdates,
-          stack: err.stack
-        });
+        throw new Exceptions.FailedRegisterAutoUpdatesException(null, err);
       });
   }
 
@@ -250,7 +271,7 @@ export default class WebExtPlatformService implements Platform {
             );
           })
           .catch((err) => {
-            this.utilitySvc.logWarning('Error clearing other bookmarks');
+            this.logSvc.logWarning('Error clearing other bookmarks');
             throw err;
           });
 
@@ -259,7 +280,7 @@ export default class WebExtPlatformService implements Platform {
           .getSyncBookmarksToolbar()
           .then((syncBookmarksToolbar) => {
             if (!syncBookmarksToolbar) {
-              this.utilitySvc.logInfo('Not clearing toolbar');
+              this.logSvc.logInfo('Not clearing toolbar');
               return;
             }
 
@@ -272,17 +293,14 @@ export default class WebExtPlatformService implements Platform {
             });
           })
           .catch((err) => {
-            this.utilitySvc.logWarning('Error clearing bookmarks toolbar');
+            this.logSvc.logWarning('Error clearing bookmarks toolbar');
             throw err;
           });
 
         return this.$q.all([clearOthers, clearToolbar]);
       })
       .catch((err) => {
-        return this.$q.reject({
-          code: Globals.ErrorCodes.FailedRemoveLocalBookmarks,
-          stack: err.stack
-        });
+        throw new Exceptions.FailedRemoveLocalBookmarksException(null, err);
       });
   }
 
@@ -300,7 +318,7 @@ export default class WebExtPlatformService implements Platform {
         return this.bookmarkIdMapperSvc.get(createInfo.parentId).then((idMapping) => {
           if (!idMapping) {
             // No mappings found, skip sync
-            this.utilitySvc.logInfo('No id mapping found, skipping sync');
+            this.logSvc.logInfo('No id mapping found, skipping sync');
             return;
           }
 
@@ -353,14 +371,14 @@ export default class WebExtPlatformService implements Platform {
         return x === deleteInfo.title;
       }).length > 0;
     if (isContainer) {
-      return this.$q.reject({ code: Globals.ErrorCodes.ContainerChanged });
+      throw new Exceptions.ContainerChangedException();
     }
 
     // Get the synced bookmark id from delete info
     return this.bookmarkIdMapperSvc.get(deleteInfo.id).then((idMapping) => {
       if (!idMapping) {
         // No mappings found, skip sync
-        this.utilitySvc.logInfo('No id mapping found, skipping sync');
+        this.logSvc.logInfo('No id mapping found, skipping sync');
         return;
       }
 
@@ -390,7 +408,7 @@ export default class WebExtPlatformService implements Platform {
     // Get local bookmark id from id mappings
     return this.bookmarkIdMapperSvc.get(null, deleteInfo.bookmark.id).then((idMapping) => {
       if (!idMapping) {
-        this.utilitySvc.logWarning(`No id mapping found for synced id '${deleteInfo.bookmark.id}'`);
+        this.logSvc.logWarning(`No id mapping found for synced id '${deleteInfo.bookmark.id}'`);
         return;
       }
 
@@ -589,7 +607,7 @@ export default class WebExtPlatformService implements Platform {
       .then((idMappings) => {
         if (!idMappings[0] && !idMappings[1]) {
           // No mappings found, skip sync
-          this.utilitySvc.logInfo('No id mappings found, skipping sync');
+          this.logSvc.logInfo('No id mappings found, skipping sync');
           return;
         }
 
@@ -692,7 +710,7 @@ export default class WebExtPlatformService implements Platform {
               return this.createLocalBookmarksFromXBookmarks(otherBookmarksId, [menuContainer], toolbarBookmarksId);
             })
             .catch((err) => {
-              this.utilitySvc.logInfo('Error populating bookmarks menu.');
+              this.logSvc.logInfo('Error populating bookmarks menu.');
               throw err;
             });
         }
@@ -706,7 +724,7 @@ export default class WebExtPlatformService implements Platform {
               return this.createLocalBookmarksFromXBookmarks(otherBookmarksId, [mobileContainer], toolbarBookmarksId);
             })
             .catch((err) => {
-              this.utilitySvc.logInfo('Error populating mobile bookmarks.');
+              this.logSvc.logInfo('Error populating mobile bookmarks.');
               throw err;
             });
         }
@@ -724,7 +742,7 @@ export default class WebExtPlatformService implements Platform {
               );
             })
             .catch((err) => {
-              this.utilitySvc.logInfo('Error populating other bookmarks.');
+              this.logSvc.logInfo('Error populating other bookmarks.');
               throw err;
             });
         }
@@ -732,7 +750,7 @@ export default class WebExtPlatformService implements Platform {
         // Populate bookmarks toolbar if enabled
         const populateToolbar = this.bookmarkSvc.getSyncBookmarksToolbar().then((syncBookmarksToolbar) => {
           if (!syncBookmarksToolbar) {
-            this.utilitySvc.logInfo('Not populating toolbar');
+            this.logSvc.logInfo('Not populating toolbar');
             return;
           }
 
@@ -743,7 +761,7 @@ export default class WebExtPlatformService implements Platform {
                 return this.createLocalBookmarksFromXBookmarks(toolbarBookmarksId, toolbarContainer.children);
               })
               .catch((err) => {
-                this.utilitySvc.logInfo('Error populating bookmarks toolbar.');
+                this.logSvc.logInfo('Error populating bookmarks toolbar.');
                 throw err;
               });
           }
@@ -752,7 +770,7 @@ export default class WebExtPlatformService implements Platform {
         return this.$q.all([populateMenu, populateMobile, populateOther, populateToolbar]);
       })
       .then(() => {
-        this.utilitySvc.logInfo(
+        this.logSvc.logInfo(
           `Local bookmarks populated in ${((new Date() as any) - (populateStartTime as any)) / 1000}s`
         );
         // Move local containers into the correct order
@@ -785,7 +803,7 @@ export default class WebExtPlatformService implements Platform {
     return this.bookmarkIdMapperSvc.get(updateInfo.id).then((idMapping) => {
       if (!idMapping) {
         // No mappings found, skip sync
-        this.utilitySvc.logInfo('No id mapping found, skipping sync');
+        this.logSvc.logInfo('No id mapping found, skipping sync');
         return;
       }
 
@@ -806,7 +824,7 @@ export default class WebExtPlatformService implements Platform {
     // Get local bookmark id from id mappings
     return this.bookmarkIdMapperSvc.get(null, updateInfo.bookmark.id).then((idMapping) => {
       if (!idMapping) {
-        this.utilitySvc.logWarning(`No id mapping found for synced id '${updateInfo.bookmark.id}'`);
+        this.logSvc.logWarning(`No id mapping found for synced id '${updateInfo.bookmark.id}'`);
         return;
       }
 
@@ -816,16 +834,13 @@ export default class WebExtPlatformService implements Platform {
   }
 
   copyToClipboard(textToCopy) {
-    return navigator.clipboard.writeText(textToCopy).catch((err) => {
-      this.utilitySvc.logError(err, 'platform.copyToClipboard');
-      throw err;
-    });
+    return navigator.clipboard.writeText(textToCopy);
   }
 
   createBookmarkFromLocalId(id, xBookmarks): angular.IPromise<any> {
     return browser.bookmarks.get(id).then((results) => {
       if (!results || results.length === 0) {
-        return this.$q.reject({ code: Globals.ErrorCodes.LocalBookmarkNotFound });
+        throw new Exceptions.LocalBookmarkNotFoundException();
       }
       const localBookmark = results[0];
       const convertedBookmark = this.bookmarkSvc.convertLocalBookmarkToXBookmark(localBookmark, xBookmarks);
@@ -843,16 +858,13 @@ export default class WebExtPlatformService implements Platform {
 
     // Check that the url is supported
     if (!this.localBookmarkUrlIsSupported(url)) {
-      this.utilitySvc.logInfo(`Bookmark url unsupported: ${url}`);
+      this.logSvc.logInfo(`Bookmark url unsupported: ${url}`);
       newLocalBookmark.url = this.getNewTabUrl();
     }
 
     return browser.bookmarks.create(newLocalBookmark).catch((err) => {
-      this.utilitySvc.logInfo(`Failed to create local bookmark: ${JSON.stringify(newLocalBookmark)}`);
-      return this.$q.reject({
-        code: Globals.ErrorCodes.FailedCreateLocalBookmarks,
-        stack: err.stack
-      });
+      this.logSvc.logWarning(`Failed to create local bookmark: ${JSON.stringify(newLocalBookmark)}`);
+      throw new Exceptions.FailedCreateLocalBookmarksException(null, err);
     });
   }
 
@@ -904,21 +916,15 @@ export default class WebExtPlatformService implements Platform {
     };
 
     return browser.bookmarks.create(newLocalSeparator).catch((err) => {
-      this.utilitySvc.logInfo('Failed to create local separator');
-      return this.$q.reject({
-        code: Globals.ErrorCodes.FailedCreateLocalBookmarks,
-        stack: err.stack
-      });
+      this.logSvc.logInfo('Failed to create local separator');
+      throw new Exceptions.FailedCreateLocalBookmarksException(null, err);
     });
   }
 
   deleteLocalBookmarksTree(localBookmarkId) {
     return browser.bookmarks.removeTree(localBookmarkId).catch((err) => {
-      this.utilitySvc.logInfo(`Failed to delete local bookmark: ${localBookmarkId}`);
-      return this.$q.reject({
-        code: Globals.ErrorCodes.FailedRemoveLocalBookmarks,
-        stack: err.stack
-      });
+      this.logSvc.logInfo(`Failed to delete local bookmark: ${localBookmarkId}`);
+      throw new Exceptions.FailedRemoveLocalBookmarksException(null, err);
     });
   }
 
@@ -941,7 +947,7 @@ export default class WebExtPlatformService implements Platform {
       throw new Error('Link element not found.');
     }
 
-    this.utilitySvc.logInfo(`Downloading file ${fileName}`);
+    this.logSvc.logInfo(`Downloading file ${fileName}`);
 
     // Use hyperlink to trigger file download
     const file = new Blob([textContents], { type: 'text/plain' });
@@ -994,7 +1000,7 @@ export default class WebExtPlatformService implements Platform {
     }
 
     if (!stringVal) {
-      this.utilitySvc.logWarning('I18n string has no value');
+      this.logSvc.logWarning('I18n string has no value');
     }
 
     return stringVal;
@@ -1005,131 +1011,6 @@ export default class WebExtPlatformService implements Platform {
     return browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
       return tabs[0].url;
     });
-  }
-
-  getErrorMessageFromException(err: any): any {
-    const errorMessage = {
-      title: '',
-      message: ''
-    };
-
-    if (!err || !err.code) {
-      errorMessage.title = this.getConstant(Strings.error_Default_Title);
-      errorMessage.message = this.getConstant(Strings.error_Default_Message);
-      return errorMessage;
-    }
-
-    err.details = !err.details ? '' : err.details;
-
-    switch (err.code) {
-      case Globals.ErrorCodes.NetworkOffline:
-      case Globals.ErrorCodes.HttpRequestFailed:
-        errorMessage.title = this.getConstant(Strings.error_HttpRequestFailed_Title);
-        errorMessage.message = this.getConstant(Strings.error_HttpRequestFailed_Message);
-        break;
-      case Globals.ErrorCodes.TooManyRequests:
-        errorMessage.title = this.getConstant(Strings.error_TooManyRequests_Title);
-        errorMessage.message = this.getConstant(Strings.error_TooManyRequests_Message);
-        break;
-      case Globals.ErrorCodes.RequestEntityTooLarge:
-        errorMessage.title = this.getConstant(Strings.error_RequestEntityTooLarge_Title);
-        errorMessage.message = this.getConstant(Strings.error_RequestEntityTooLarge_Message);
-        break;
-      case Globals.ErrorCodes.NotAcceptingNewSyncs:
-        errorMessage.title = this.getConstant(Strings.error_NotAcceptingNewSyncs_Title);
-        errorMessage.message = this.getConstant(Strings.error_NotAcceptingNewSyncs_Message);
-        break;
-      case Globals.ErrorCodes.DailyNewSyncLimitReached:
-        errorMessage.title = this.getConstant(Strings.error_DailyNewSyncLimitReached_Title);
-        errorMessage.message = this.getConstant(Strings.error_DailyNewSyncLimitReached_Message);
-        break;
-      case Globals.ErrorCodes.MissingClientData:
-        errorMessage.title = this.getConstant(Strings.error_MissingClientData_Title);
-        errorMessage.message = this.getConstant(Strings.error_MissingClientData_Message);
-        break;
-      case Globals.ErrorCodes.NoDataFound:
-        errorMessage.title = this.getConstant(Strings.error_InvalidCredentials_Title);
-        errorMessage.message = this.getConstant(Strings.error_InvalidCredentials_Message);
-        break;
-      case Globals.ErrorCodes.SyncRemoved:
-        errorMessage.title = this.getConstant(Strings.error_SyncRemoved_Title);
-        errorMessage.message = this.getConstant(Strings.error_SyncRemoved_Message);
-        break;
-      case Globals.ErrorCodes.InvalidCredentials:
-        errorMessage.title = this.getConstant(Strings.error_InvalidCredentials_Title);
-        errorMessage.message = this.getConstant(Strings.error_InvalidCredentials_Message);
-        break;
-      case Globals.ErrorCodes.ContainerChanged:
-        errorMessage.title = this.getConstant(Strings.error_ContainerChanged_Title);
-        errorMessage.message = this.getConstant(Strings.error_ContainerChanged_Message);
-        break;
-      case Globals.ErrorCodes.LocalContainerNotFound:
-        errorMessage.title = this.getConstant(Strings.error_LocalContainerNotFound_Title);
-        errorMessage.message = this.getConstant(Strings.error_LocalContainerNotFound_Message);
-        break;
-      case Globals.ErrorCodes.DataOutOfSync:
-        errorMessage.title = this.getConstant(Strings.error_OutOfSync_Title);
-        errorMessage.message = this.getConstant(Strings.error_OutOfSync_Message);
-        break;
-      case Globals.ErrorCodes.InvalidService:
-        errorMessage.title = this.getConstant(Strings.error_InvalidService_Title);
-        errorMessage.message = this.getConstant(Strings.error_InvalidService_Message);
-        break;
-      case Globals.ErrorCodes.ServiceOffline:
-        errorMessage.title = this.getConstant(Strings.error_ServiceOffline_Title);
-        errorMessage.message = this.getConstant(Strings.error_ServiceOffline_Message);
-        break;
-      case Globals.ErrorCodes.UnsupportedServiceApiVersion:
-        errorMessage.title = this.getConstant(Strings.error_UnsupportedServiceApiVersion_Title);
-        errorMessage.message = this.getConstant(Strings.error_UnsupportedServiceApiVersion_Message);
-        break;
-      case Globals.ErrorCodes.FailedGetPageMetadata:
-        errorMessage.title = this.getConstant(Strings.error_FailedGetPageMetadata_Title);
-        errorMessage.message = this.getConstant(Strings.error_FailedGetPageMetadata_Message);
-        break;
-      case Globals.ErrorCodes.FailedScan:
-        errorMessage.title = this.getConstant(Strings.error_ScanFailed_Message);
-        break;
-      case Globals.ErrorCodes.FailedShareBookmark:
-        errorMessage.title = this.getConstant(Strings.error_ShareFailed_Title);
-        break;
-      case Globals.ErrorCodes.FailedDownloadFile:
-        errorMessage.title = this.getConstant(Strings.error_FailedDownloadFile_Title);
-        break;
-      case Globals.ErrorCodes.FailedGetDataToRestore:
-        errorMessage.title = this.getConstant(Strings.error_FailedGetDataToRestore_Title);
-        break;
-      case Globals.ErrorCodes.FailedRestoreData:
-        errorMessage.title = this.getConstant(Strings.error_FailedRestoreData_Title);
-        errorMessage.message = this.getConstant(Strings.error_FailedRestoreData_Message);
-        break;
-      case Globals.ErrorCodes.FailedShareUrl:
-        errorMessage.title = this.getConstant(Strings.error_FailedShareUrl_Title);
-        break;
-      case Globals.ErrorCodes.FailedShareUrlNotSynced:
-        errorMessage.title = this.getConstant(Strings.error_FailedShareUrlNotSynced_Title);
-        break;
-      case Globals.ErrorCodes.FailedRefreshBookmarks:
-        errorMessage.title = this.getConstant(Strings.error_FailedRefreshBookmarks_Title);
-        break;
-      case Globals.ErrorCodes.SyncUncommitted:
-        errorMessage.title = this.getConstant(Strings.error_UncommittedSyncs_Title);
-        errorMessage.message = this.getConstant(Strings.error_UncommittedSyncs_Message);
-        break;
-      case Globals.ErrorCodes.FailedCreateLocalBookmarks:
-      case Globals.ErrorCodes.FailedGetLocalBookmarks:
-      case Globals.ErrorCodes.FailedRemoveLocalBookmarks:
-      case Globals.ErrorCodes.LocalBookmarkNotFound:
-      case Globals.ErrorCodes.XBookmarkNotFound:
-        errorMessage.title = this.getConstant(Strings.error_LocalSyncError_Title);
-        errorMessage.message = this.getConstant(Strings.error_LocalSyncError_Message);
-        break;
-      default:
-        errorMessage.title = this.getConstant(Strings.error_Default_Title);
-        errorMessage.message = this.getConstant(Strings.error_Default_Message);
-    }
-
-    return errorMessage;
   }
 
   getHelpPages() {
@@ -1175,43 +1056,46 @@ export default class WebExtPlatformService implements Platform {
   }
 
   getLocalContainerIds() {
-    return browser.bookmarks.getTree().then((tree) => {
-      // Get the root child nodes
-      const otherBookmarksNode = tree[0].children.find((x) => {
-        return x.id === '2';
-      });
-      const toolbarBookmarksNode = tree[0].children.find((x) => {
-        return x.id === '1';
-      });
+    return this.$q
+      .resolve()
+      .then(() => browser.bookmarks.getTree())
+      .then((tree) => {
+        // Get the root child nodes
+        const otherBookmarksNode = tree[0].children.find((x) => {
+          return x.id === '2';
+        });
+        const toolbarBookmarksNode = tree[0].children.find((x) => {
+          return x.id === '1';
+        });
 
-      // Throw an error if a local container is not found
-      if (!otherBookmarksNode || !toolbarBookmarksNode) {
-        if (!otherBookmarksNode) {
-          this.utilitySvc.logWarning('Missing container: other bookmarks');
+        // Throw an error if a local container is not found
+        if (!otherBookmarksNode || !toolbarBookmarksNode) {
+          if (!otherBookmarksNode) {
+            this.logSvc.logWarning('Missing container: other bookmarks');
+          }
+          if (!toolbarBookmarksNode) {
+            this.logSvc.logWarning('Missing container: toolbar bookmarks');
+          }
+          throw new Exceptions.LocalContainerNotFoundException();
         }
-        if (!toolbarBookmarksNode) {
-          this.utilitySvc.logWarning('Missing container: toolbar bookmarks');
-        }
-        return this.$q.reject({ code: Globals.ErrorCodes.LocalContainerNotFound });
-      }
 
-      // Add containers to results
-      const results = {};
-      results[Globals.Bookmarks.OtherContainerName] = otherBookmarksNode.id;
-      results[Globals.Bookmarks.ToolbarContainerName] = toolbarBookmarksNode.id;
+        // Add containers to results
+        const results = {};
+        results[Globals.Bookmarks.OtherContainerName] = otherBookmarksNode.id;
+        results[Globals.Bookmarks.ToolbarContainerName] = toolbarBookmarksNode.id;
 
-      // Check for unsupported containers
-      const menuBookmarksNode = otherBookmarksNode.children.find((x) => {
-        return x.title === Globals.Bookmarks.MenuContainerName;
+        // Check for unsupported containers
+        const menuBookmarksNode = otherBookmarksNode.children.find((x) => {
+          return x.title === Globals.Bookmarks.MenuContainerName;
+        });
+        const mobileBookmarksNode = otherBookmarksNode.children.find((x) => {
+          return x.title === Globals.Bookmarks.MobileContainerName;
+        });
+        results[Globals.Bookmarks.MenuContainerName] = menuBookmarksNode ? menuBookmarksNode.id : undefined;
+        results[Globals.Bookmarks.MobileContainerName] = mobileBookmarksNode ? mobileBookmarksNode.id : undefined;
+
+        return results;
       });
-      const mobileBookmarksNode = otherBookmarksNode.children.find((x) => {
-        return x.title === Globals.Bookmarks.MobileContainerName;
-      });
-      results[Globals.Bookmarks.MenuContainerName] = menuBookmarksNode ? menuBookmarksNode.id : undefined;
-      results[Globals.Bookmarks.MobileContainerName] = mobileBookmarksNode ? mobileBookmarksNode.id : undefined;
-
-      return results;
-    });
   }
 
   getNewTabUrl() {
@@ -1236,15 +1120,13 @@ export default class WebExtPlatformService implements Platform {
     });
   }
 
-  getPageMetadata(getFullMetadata, pageUrl) {
+  getPageMetadata(getFullMetadata = true, pageUrl?): ng.IPromise<any> {
     let activeTab;
-    getFullMetadata = getFullMetadata === undefined ? true : getFullMetadata;
-
     return browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
       // If active tab empty, throw error
       activeTab = tabs && tabs[0];
       if (!activeTab) {
-        return this.$q.reject({ code: Globals.ErrorCodes.FailedGetPageMetadata });
+        throw new Exceptions.FailedGetPageMetadataException();
       }
 
       // Default metadata to the info from the active tab
@@ -1276,7 +1158,7 @@ export default class WebExtPlatformService implements Platform {
           return metadata;
         })
         .catch((err) => {
-          this.utilitySvc.logWarning(`Unable to get metadata: ${err ? err.message : ''}`);
+          this.logSvc.logWarning(`Unable to get metadata: ${err ? err.message : ''}`);
           return metadata;
         });
     });
@@ -1284,14 +1166,6 @@ export default class WebExtPlatformService implements Platform {
 
   getSupportedUrl(url) {
     return this.localBookmarkUrlIsSupported(url) ? url : this.getNewTabUrl();
-  }
-
-  init(viewModel) {
-    // Set global variables
-    this.vm = viewModel;
-    this.vm.platformName = Globals.Platforms.Chrome;
-
-    return this.$q.resolve();
   }
 
   interface_Refresh(syncEnabled, syncType) {
@@ -1355,14 +1229,12 @@ export default class WebExtPlatformService implements Platform {
     }
 
     // Hide any alert messages
-    this.vm.alert.show = false;
+    this.showAlert = false;
 
     // Hide loading overlay if supplied if matches current
     if (!this.loadingId || id === this.loadingId) {
-      this.$timeout(() => {
-        this.vm.working.show = false;
-        this.loadingId = null;
-      });
+      this.showWorking = false;
+      this.loadingId = null;
     }
   }
 
@@ -1375,19 +1247,19 @@ export default class WebExtPlatformService implements Platform {
     }
 
     // Hide any alert messages
-    this.vm.alert.show = false;
+    this.showAlert = false;
 
     switch (id) {
       // Loading bookmark metadata, wait a moment before displaying loading overlay
       case 'retrievingMetadata':
         timeout = this.$timeout(() => {
-          this.vm.working.show = true;
+          this.showWorking = true;
         }, 500);
         break;
       // Display default overlay
       default:
         timeout = this.$timeout(() => {
-          this.vm.working.show = true;
+          this.showWorking = true;
         });
         break;
     }
@@ -1433,7 +1305,7 @@ export default class WebExtPlatformService implements Platform {
   openUrl(url) {
     // Check url is supported
     if (!this.localBookmarkUrlIsSupported(url)) {
-      this.utilitySvc.logInfo(`Attempted to navigate to unsupported url: ${url}`);
+      this.logSvc.logInfo(`Attempted to navigate to unsupported url: ${url}`);
       url = this.getNewTabUrl();
     }
 
@@ -1456,21 +1328,29 @@ export default class WebExtPlatformService implements Platform {
 
   permissions_Check() {
     // Check if extension has optional permissions
-    return browser.permissions.contains(this.optionalPermissions);
+    return this.$q.resolve().then(() => {
+      return browser.permissions.contains(this.optionalPermissions);
+    });
   }
 
   permissions_Remove() {
     // Remove optional permissions
     return browser.permissions.remove(this.optionalPermissions).then(() => {
-      this.utilitySvc.logInfo('Optional permissions removed');
+      this.logSvc.logInfo('Optional permissions removed');
     });
   }
 
   permissions_Request() {
     // Request optional permissions
     return browser.permissions.request(this.optionalPermissions).then((granted) => {
-      this.utilitySvc.logInfo(`Optional permissions ${!granted ? 'not ' : ''}granted`);
+      this.logSvc.logInfo(`Optional permissions ${!granted ? 'not ' : ''}granted`);
       return granted;
+    });
+  }
+
+  refreshLocalSyncData() {
+    return this.sync_Queue({ type: Globals.SyncType.Pull }).then(() => {
+      this.logSvc.logInfo('Local sync data refreshed');
     });
   }
 
@@ -1495,33 +1375,22 @@ export default class WebExtPlatformService implements Platform {
   }
 
   sendMessage(message) {
-    return this.$q((resolve, reject) => {
-      browser.runtime
-        .sendMessage(message)
-        .then((response) => {
-          if (!response) {
-            return resolve();
-          }
+    let module;
+    try {
+      module = angular.module('WebExtBackgroundModule');
+    } catch (err) {}
 
-          if (!response.success) {
-            return reject(response.error);
-          }
+    let promise;
+    if (angular.isUndefined(module)) {
+      promise = browser.runtime.sendMessage(message);
+    } else {
+      promise = this.backgroundSvc.onMessage(message);
+    }
 
-          resolve(response);
-        })
-        .catch((err) => {
-          // If no message connection detected, check if background function can be called directly
-          if (
-            err.message &&
-            err.message.toLowerCase().indexOf('could not establish connection') >= 0 &&
-            (window as any).handleXBrowserSyncMessage
-          ) {
-            return (window as any).handleXBrowserSyncMessage(message, null, resolve);
-          }
-
-          this.utilitySvc.logWarning('Message listener not available');
-          reject(err);
-        });
+    return promise.catch((err) => {
+      const exception: Exceptions.Exception = new (<any>Exceptions)[err.message]();
+      exception.logged = true;
+      throw exception;
     });
   }
 
@@ -1530,13 +1399,13 @@ export default class WebExtPlatformService implements Platform {
     return this.wasContainerChanged(changedBookmark, xBookmarks)
       .then((changedBookmarkIsContainer) => {
         if (changedBookmarkIsContainer) {
-          return this.$q.reject({ code: Globals.ErrorCodes.ContainerChanged });
+          throw new Exceptions.ContainerChangedException();
         }
 
         // If container is Toolbar, check if Toolbar sync is disabled
         const container = this.bookmarkSvc.getContainerByBookmarkId(changedBookmark.id, xBookmarks);
         if (!container) {
-          return this.$q.reject({ code: Globals.ErrorCodes.ContainerNotFound });
+          throw new Exceptions.ContainerNotFoundException();
         }
         return container.title === Globals.Bookmarks.ToolbarContainerName
           ? this.bookmarkSvc.getSyncBookmarksToolbar()
@@ -1544,7 +1413,7 @@ export default class WebExtPlatformService implements Platform {
       })
       .then((syncBookmarksToolbar) => {
         if (!syncBookmarksToolbar) {
-          this.utilitySvc.logInfo('Not syncing toolbar');
+          this.logSvc.logInfo('Not syncing toolbar');
           return false;
         }
 
@@ -1555,8 +1424,6 @@ export default class WebExtPlatformService implements Platform {
   sync_Current() {
     return this.sendMessage({
       command: Globals.Commands.GetCurrentSync
-    }).then((response: any) => {
-      return response.currentSync;
     });
   }
 
@@ -1573,16 +1440,13 @@ export default class WebExtPlatformService implements Platform {
   sync_GetQueueLength() {
     return this.sendMessage({
       command: Globals.Commands.GetSyncQueueLength
-    }).then((response: any) => {
-      return response.syncQueueLength;
     });
   }
 
-  sync_Queue(syncData, command) {
-    syncData.command = command || Globals.Commands.SyncBookmarks;
-    return this.sendMessage(syncData).then((response: any) => {
-      return response.bookmarks;
-    });
+  sync_Queue(syncData, command = Globals.Commands.SyncBookmarks, runSync = true) {
+    syncData.command = command;
+    syncData.runSync = runSync;
+    return this.sendMessage(syncData);
   }
 
   updateLocalBookmark(localBookmarkId, title, url) {
@@ -1593,16 +1457,13 @@ export default class WebExtPlatformService implements Platform {
 
     // Check that the url is supported
     if (!this.localBookmarkUrlIsSupported(url)) {
-      this.utilitySvc.logInfo(`Bookmark url unsupported: ${url}`);
+      this.logSvc.logInfo(`Bookmark url unsupported: ${url}`);
       updateInfo.url = this.getNewTabUrl();
     }
 
     return browser.bookmarks.update(localBookmarkId, updateInfo).catch((err) => {
-      this.utilitySvc.logInfo(`Failed to update local bookmark: ${JSON.stringify(updateInfo)}`);
-      return this.$q.reject({
-        code: Globals.ErrorCodes.FailedUpdateLocalBookmarks,
-        stack: err.stack
-      });
+      this.logSvc.logInfo(`Failed to update local bookmark: ${JSON.stringify(updateInfo)}`);
+      throw new Exceptions.FailedUpdateLocalBookmarksException(null, err);
     });
   }
 
@@ -1664,11 +1525,8 @@ export default class WebExtPlatformService implements Platform {
             return checksFailed;
           })
           .catch((err) => {
-            this.utilitySvc.logInfo(`Failed to detect whether container changed: ${JSON.stringify(changedBookmark)}`);
-            return this.$q.reject({
-              code: Globals.ErrorCodes.FailedGetLocalBookmarks,
-              stack: err.stack
-            });
+            this.logSvc.logInfo(`Failed to detect whether container changed: ${JSON.stringify(changedBookmark)}`);
+            throw new Exceptions.FailedGetLocalBookmarksException(null, err);
           });
       });
     });

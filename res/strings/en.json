@@ -843,6 +843,10 @@
     "key": "button_View_Label",
     "message": "View"
   },
+  "button_Go_Label": {
+    "key": "button_Go_Label",
+    "message": "Go"
+  },
   "qr_Copied_Label": {
     "key": "qr_Copied_Label",
     "message": "Copied!"
@@ -873,7 +877,7 @@
   },
   "workingOffline_Message": {
     "key": "workingOffline_Message",
-    "message": "Working offline, any change will be synced once connection is restored."
+    "message": "Changes will be synced once connection is restored."
   },
   "getMetadata_Message": {
     "key": "getMetadata_Message",
@@ -985,7 +989,7 @@
   },
   "error_LocalSyncError_Message": {
     "key": "error_LocalSyncError_Message",
-    "message": "Local data has been refreshed, please redo previous unsynced changes."
+    "message": "Local data has been refreshed, please reapply last change."
   },
   "error_OutOfSync_Title": {
     "key": "error_OutOfSync_Title",
@@ -993,7 +997,7 @@
   },
   "error_OutOfSync_Message": {
     "key": "error_OutOfSync_Message",
-    "message": "Local data was out of sync and has now been refreshed. Please redo previous unsynced changes."
+    "message": "Local data was out of sync and has now been refreshed. Please reapply last change."
   },
   "error_InvalidService_Title": {
     "key": "error_InvalidService_Title",
