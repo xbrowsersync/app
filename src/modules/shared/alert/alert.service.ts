@@ -1,5 +1,5 @@
-import { autobind } from 'core-decorators';
 import { Injectable } from 'angular-ts-decorators';
+import { autobind } from 'core-decorators';
 import Alert from './alert.interface';
 
 @autobind
@@ -7,11 +7,11 @@ import Alert from './alert.interface';
 export default class AlertService {
   currentAlert: Alert;
 
-  clearCurrentAlert() {
+  clearCurrentAlert(): void {
     this.currentAlert = null;
   }
 
-  setCurrentAlert(alert: Alert) {
+  setCurrentAlert(alert: Alert): void {
     this.currentAlert = alert;
   }
 }

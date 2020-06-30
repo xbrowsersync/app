@@ -1,22 +1,12 @@
 import angular from 'angular';
-import { autobind } from 'core-decorators';
 import { Injectable } from 'angular-ts-decorators';
+import { autobind } from 'core-decorators';
 import stackTrace from 'stacktrace-js';
 import { Exception } from '../exceptions/exception-types';
-import StoreService from '../store/store.service';
 import Globals from '../globals';
-
-export enum LogLevel {
-  Error,
-  Trace,
-  Warn
-}
-
-interface LogQueueItem {
-  level: LogLevel;
-  message: object | string;
-  error?: Exception;
-}
+import LogLevel from './log-level.enum';
+import LogQueueItem from './log-queue-item.interface';
+import StoreService from '../store/store.service';
 
 @autobind
 @Injectable('LogService')
@@ -45,7 +35,7 @@ export default class LogService {
     this.logItemQueue.push(logItem);
   }
 
-  logError(error: Exception, message?: string) {
+  logError(error: Exception, message?: string): Promise<void> {
     // Return if no error supplied or has already been logged
     if (!error || error.logged) {
       return null;
@@ -54,7 +44,7 @@ export default class LogService {
     // Mark this error as logged to prevent duplication in logs
     error.logged = true;
 
-    return stackTrace.fromError(error).then((frames: stackTrace.StackFrame[]) => {
+    return stackTrace.fromError(error).then((frames) => {
       const stack = `${error.name}: ${error.message}\n${frames
         .map((f) => {
           return `\tat ${f.functionName} (${f.fileName}:${f.lineNumber}:${f.columnNumber})`;
@@ -101,7 +91,7 @@ export default class LogService {
     }
   }
 
-  logWarning(message: object | string) {
+  logWarning(message: object | string): void {
     if (!message) {
       return;
     }
@@ -140,7 +130,7 @@ export default class LogService {
 
     // Add message text to log item and add to end of log
     return this.storeSvc
-      .get(Globals.CacheKeys.TraceLog)
+      .get<string[]>(Globals.CacheKeys.TraceLog)
       .then((debugMessageLog) => {
         debugMessageLog = debugMessageLog || [];
         messageLogText += angular.isObject(this.currentLogQueueItem.message)

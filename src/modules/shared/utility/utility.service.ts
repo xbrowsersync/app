@@ -1,33 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable consistent-return */
-/* eslint-disable prefer-const */
-/* eslint-disable eqeqeq */
-/* eslint-disable no-bitwise */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-plusplus */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable no-param-reassign */
-
 import { Injectable } from 'angular-ts-decorators';
-import base64js from 'base64-js';
 import compareVersions from 'compare-versions';
-import * as countriesList from 'countries-list';
-import lzutf8 from 'lzutf8';
 import _ from 'underscore';
 import { autobind } from 'core-decorators';
-import { ExceptionHandler } from '../exceptions/exception-handler.interface';
-import {
-  InvalidCredentialsException,
-  HttpRequestFailedException,
-  NetworkOfflineException,
-  SyncRemovedException,
-  PasswordRemovedException
-} from '../exceptions/exception-types';
+import ExceptionHandler from '../exceptions/exception-handler.interface';
 import Globals from '../globals';
 import LogService from '../log/log.service';
+import NetworkService from '../network/network.service';
 import StoreService from '../store/store.service';
+import Url from '../../../interfaces/url.interface';
 
 @autobind
 @Injectable('UtilityService')
@@ -35,239 +15,50 @@ export default class UtilityService {
   $exceptionHandler: ExceptionHandler;
   $http: ng.IHttpService;
   $q: ng.IQService;
-  $timeout: ng.ITimeoutService;
   logSvc: LogService;
+  networkSvc: NetworkService;
   storeSvc: StoreService;
 
-  static $inject = ['$exceptionHandler', '$http', '$q', '$timeout', 'LogService', 'StoreService'];
+  static $inject = ['$exceptionHandler', '$http', '$q', 'LogService', 'NetworkService', 'StoreService'];
   constructor(
     $exceptionHandler: ExceptionHandler,
     $http: ng.IHttpService,
     $q: ng.IQService,
-    $timeout: ng.ITimeoutService,
     LogSvc: LogService,
+    NetworkSvc: NetworkService,
     StoreSvc: StoreService
   ) {
     this.$exceptionHandler = $exceptionHandler;
     this.$http = $http;
     this.$q = $q;
-    this.$timeout = $timeout;
     this.logSvc = LogSvc;
+    this.networkSvc = NetworkSvc;
     this.storeSvc = StoreSvc;
   }
 
-  checkForNewVersion() {
-    if (!this.isNetworkConnected()) {
-      return this.$q.resolve();
+  checkForNewVersion(): ng.IPromise<string> {
+    if (!this.networkSvc.isNetworkConnected()) {
+      return this.$q.resolve('');
     }
 
     // Get latest app version info
-    let latestVersion: string;
     return this.$http
-      .get(Globals.ReleaseLatestUrl)
+      .get<any>(Globals.ReleaseLatestUrl)
       .then((response) => {
-        latestVersion = response && response.data ? (response.data as any).tag_name : null;
+        const latestVersion = response && response.data ? response.data.tag_name : '';
         if (!compareVersions.compare(latestVersion, Globals.AppVersion, '>')) {
-          return;
+          return '';
         }
         this.logSvc.logInfo(`${latestVersion} update available`);
         return latestVersion;
       })
       .catch(() => {
         this.logSvc.logInfo('Couldn’t check for new version');
+        return '';
       });
   }
 
-  concatUint8Arrays(firstArr, secondArr) {
-    firstArr = firstArr || new Uint8Array();
-    secondArr = secondArr || new Uint8Array();
-
-    const totalLength = firstArr.length + secondArr.length;
-    const result = new Uint8Array(totalLength);
-    result.set(firstArr, 0);
-    result.set(secondArr, firstArr.length);
-    return result;
-  }
-
-  createBackupData(bookmarksData, syncId, serviceUrl) {
-    const data = {
-      xbrowsersync: {
-        date: this.getDateTimeString(new Date()),
-        sync: {},
-        data: {}
-      }
-    };
-
-    // Add sync info if provided
-    if (syncId) {
-      data.xbrowsersync.sync = this.createSyncInfoObject(syncId, serviceUrl);
-    }
-
-    // Add bookmarks data
-    (data.xbrowsersync.data as any).bookmarks = bookmarksData;
-
-    return data;
-  }
-
-  createSyncInfoObject(syncId, serviceUrl) {
-    return {
-      id: syncId,
-      type: 'xbrowsersync',
-      url: serviceUrl
-    };
-  }
-
-  decodeQrCode(qrCodeValue) {
-    let serviceUrl;
-    let syncId;
-    try {
-      // For v1.5.3 or later codes, expect sync info object
-      const syncInfo = JSON.parse(qrCodeValue);
-      syncId = syncInfo.id;
-      serviceUrl = syncInfo.url;
-    } catch (err) {
-      // For pre-v1.5.3 codes, split the scanned value into it's components
-      const arr = qrCodeValue.split(Globals.QrCode.Delimiter);
-      syncId = arr[0];
-      serviceUrl = arr[1];
-    }
-
-    // Validate decoded values
-    const urlRegex = new RegExp(`^${Globals.URL.ValidUrlRegex}$`, 'i');
-    if (!this.syncIdIsValid(syncId) || (serviceUrl && !urlRegex.test(serviceUrl))) {
-      throw new Error('Invalid QR code');
-    }
-
-    return {
-      id: syncId,
-      url: serviceUrl
-    };
-  }
-
-  decryptData(encryptedData) {
-    let encryptedDataBytes;
-    let iv;
-
-    // If no data provided, return an empty string
-    if (!encryptedData) {
-      return this.$q.resolve('');
-    }
-
-    // Ensure both id and password are in local storage
-    return this.storeSvc
-      .get([Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
-      .then((cachedData) => {
-        const password = cachedData[Globals.CacheKeys.Password];
-        const syncId = cachedData[Globals.CacheKeys.SyncId];
-
-        if (!syncId) {
-          throw new SyncRemovedException();
-        }
-        if (!password) {
-          throw new PasswordRemovedException();
-        }
-
-        // Retrieve the hashed password from local storage and convert to bytes
-        const keyData = base64js.toByteArray(password);
-
-        // Convert base64 encoded encrypted data to bytes and extract initialization vector
-        const encryptedBytes = base64js.toByteArray(encryptedData);
-        iv = encryptedBytes.slice(0, 16);
-        encryptedDataBytes = encryptedBytes.slice(16).buffer;
-
-        // Generate a cryptokey using the stored password hash for decryption
-        return (crypto.subtle.importKey as any)('raw', keyData, { name: 'AES-GCM', iv }, false, ['decrypt']);
-      })
-      .then((key) => {
-        // Convert base64 encoded encrypted data to bytes
-        return crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, encryptedDataBytes);
-      })
-      .then((decryptedBytes) => {
-        if (!decryptedBytes) {
-          throw new Error('Unable to decrypt data.');
-        }
-
-        // Uncompress the decrypted data and return
-        const decryptedData = lzutf8.decompress(new Uint8Array(decryptedBytes));
-        return decryptedData;
-      })
-      .catch((err) => {
-        this.logSvc.logWarning('Decryption failed');
-        throw new InvalidCredentialsException(null, err);
-      });
-  }
-
-  encryptData(data) {
-    let iv;
-
-    // If no data provided, return an empty string
-    if (!data) {
-      return this.$q.resolve('');
-    }
-
-    // Ensure both id and password are in local storage
-    return this.storeSvc
-      .get([Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
-      .then((cachedData) => {
-        const password = cachedData[Globals.CacheKeys.Password];
-        const syncId = cachedData[Globals.CacheKeys.SyncId];
-
-        if (!syncId) {
-          throw new SyncRemovedException();
-        }
-        if (!password) {
-          throw new PasswordRemovedException();
-        }
-
-        // Retrieve the hashed password from local storage and convert to bytes
-        const keyData = base64js.toByteArray(password);
-
-        // Generate a random 16 byte initialization vector
-        iv = crypto.getRandomValues(new Uint8Array(16));
-
-        // Generate a new cryptokey using the stored password hash
-        return (crypto.subtle.importKey as any)('raw', keyData, { name: 'AES-GCM', iv }, false, ['encrypt']);
-      })
-      .then((key) => {
-        // Compress the data before encryption
-        const compressedData = lzutf8.compress(data);
-
-        // Encrypt the data using AES
-        return crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, compressedData);
-      })
-      .then((encryptedData) => {
-        // Combine initialization vector and encrypted data and return as base64 encoded string
-        const combinedData = this.concatUint8Arrays(iv, new Uint8Array(encryptedData));
-        return base64js.fromByteArray(combinedData);
-      })
-      .catch((err) => {
-        this.logSvc.logWarning('Encryption failed');
-        throw new InvalidCredentialsException(null, err);
-      });
-  }
-
-  get24hrTimeFromDate(date) {
-    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-  }
-
-  getBackupFileName() {
-    const fileName = `xbs_backup_${this.getDateTimeString(new Date())}.json`;
-    return fileName;
-  }
-
-  getCountryNameFrom2LetterISOCode(isoCode) {
-    if (!isoCode) {
-      return null;
-    }
-
-    const country = countriesList.countries[isoCode];
-    if (!country) {
-      this.logSvc.logWarning(`No country found matching ISO code: ${isoCode}`);
-    }
-    return country.name;
-  }
-
-  getDateTimeString(date) {
+  getDateTimeString(date: Date): string {
     if (!date) {
       return '';
     }
@@ -281,61 +72,15 @@ export default class UtilityService {
     return year + month + day + hour + minute + second;
   }
 
-  getLogFileName() {
-    const fileName = `xbs_log_${this.getDateTimeString(new Date())}.txt`;
-    return fileName;
-  }
-
-  getPasswordHash(password, salt) {
-    const encoder = new TextEncoder();
-    const encodedSalt = encoder.encode(salt);
-
-    // Get cached sync version
-    return this.storeSvc.get(Globals.CacheKeys.SyncVersion).then((syncVersion) => {
-      // If old sync version, don't hash password for legacy encryption
-      if (!syncVersion) {
-        return this.$q.resolve(password);
-      }
-
-      // Generate a new cryptokey using the stored password hash
-      const keyData = encoder.encode(password);
-      return (crypto.subtle.importKey as any)('raw', keyData, { name: 'PBKDF2' }, false, ['deriveKey'])
-        .then((importedKey) => {
-          // Run the key through PBKDF2 with many iterations using the provided salt
-          return crypto.subtle.deriveKey(
-            {
-              name: 'PBKDF2',
-              salt: encodedSalt,
-              iterations: 250000,
-              hash: 'SHA-256'
-            },
-            importedKey,
-            { name: 'AES-GCM', length: 256 },
-            true,
-            ['encrypt', 'decrypt']
-          );
-        })
-        .then((derivedKey) => {
-          // Export the hashed key
-          return crypto.subtle.exportKey('raw', derivedKey);
-        })
-        .then((exportedKey) => {
-          // Convert exported key to base64 encoded string and return
-          const base64Key = base64js.fromByteArray(new Uint8Array(exportedKey));
-          return base64Key;
-        });
-    });
-  }
-
-  getServiceUrl() {
+  getServiceUrl(): ng.IPromise<string> {
     // Get service url from local storage
-    return this.storeSvc.get(Globals.CacheKeys.ServiceUrl).then((cachedServiceUrl) => {
+    return this.storeSvc.get<string>(Globals.CacheKeys.ServiceUrl).then((cachedServiceUrl) => {
       // If no service url cached, use default
       return cachedServiceUrl || Globals.URL.DefaultServiceUrl;
     });
   }
 
-  getTagArrayFromText(tagText: string) {
+  getTagArrayFromText(tagText: string): string[] {
     if (!tagText) {
       return null;
     }
@@ -358,16 +103,16 @@ export default class UtilityService {
     return tags;
   }
 
-  getUniqueishId() {
+  getUniqueishId(): string {
     return window.crypto.getRandomValues(new Uint32Array(1))[0].toString(36);
   }
 
-  getVersionTag() {
+  getVersionTag(): string {
     const versionTag = Globals.AppVersion.replace(/([a-z]+)\d+$/i, '$1');
     return versionTag;
   }
 
-  handleEvent(eventHandler, ...args) {
+  handleEvent(eventHandler: (...args) => any, ...args): void {
     try {
       this.$q
         .resolve()
@@ -378,36 +123,20 @@ export default class UtilityService {
     }
   }
 
-  isMobilePlatform(platformName) {
+  isMobilePlatform(platformName: string): boolean {
     return platformName === Globals.Platforms.Android;
   }
 
-  isNetworkConnected() {
-    return (window as any).Connection &&
-      (window.navigator as any).connection &&
-      (window.navigator as any).connection.type
-      ? (window.navigator as any).connection.type !== (window as any).Connection.NONE &&
-          (window.navigator as any).connection.type !== (window as any).Connection.UNKNOWN
-      : window.navigator.onLine;
-  }
-
-  isNetworkConnectionError(err) {
-    return err instanceof HttpRequestFailedException || err instanceof NetworkOfflineException;
-  }
-
-  isPlatform(currentPlatform, platformName) {
-    return currentPlatform === platformName;
-  }
-
-  parseUrl(url) {
+  parseUrl(url: string): Url {
     const searchObject = {};
     const parser = document.createElement('a');
     parser.href = url;
     const queries = parser.search.replace(/^\?/, '').split('&');
 
     let split;
-    for (let i = 0; i < queries.length; i++) {
+    for (let i = 0; i < queries.length; i += 1) {
       split = queries[i].split('=');
+      // eslint-disable-next-line prefer-destructuring
       searchObject[split[0]] = split[1];
     }
 
@@ -423,8 +152,8 @@ export default class UtilityService {
     };
   }
 
-  promiseWhile(data, condition, action) {
-    const whilst = (whilstData) => {
+  promiseWhile(data: any, condition: (data: any) => PromiseLike<any>, action: (data: any) => PromiseLike<any>) {
+    const whilst = (whilstData): PromiseLike<any> => {
       return condition(whilstData).then((conditionIsTrue) => {
         if (conditionIsTrue) {
           return this.$q.resolve(whilstData);
@@ -437,110 +166,99 @@ export default class UtilityService {
     return whilst(data);
   }
 
-  stripTags(str) {
-    return str ? str.replace(/<(?:.|\n)*?>/gm, '') : str;
+  stripTags(input: string): string {
+    return input ? input.replace(/<(?:.|\n)*?>/gm, '') : input;
   }
 
-  syncIdIsValid(syncId) {
+  syncIdIsValid(syncId: string): boolean {
     if (!syncId) {
       return false;
     }
 
-    const hexStringToBytes = (hexString) => {
+    const hexStringToBytes = (hexString: string): Uint8Array => {
       const bytes = new Uint8Array(hexString.length / 2);
-      for (let i = 0; i !== bytes.length; i++) {
+      for (let i = 0; i !== bytes.length; i += 1) {
         bytes[i] = parseInt(hexString.substr(i * 2, 2), 16);
       }
       return bytes;
     };
 
-    const bytesToGuidString = (bytes) => {
-      let _a;
-      let _b;
-      let _c;
-      let _d;
-      let _e;
-      let _f;
-      let _g;
-      let _h;
-      let _i;
-      let _j;
-      let _k;
-
+    const bytesToGuidString = (bytes: Uint8Array): string => {
       if (bytes == null) {
-        return;
-      }
-      if (bytes.length != 16) {
-        return;
+        return '';
       }
 
-      _a = (bytes[3] << 24) | (bytes[2] << 16) | (bytes[1] << 8) | bytes[0];
-      _b = (bytes[5] << 8) | bytes[4];
-      _c = (bytes[7] << 8) | bytes[6];
-      _d = bytes[8];
-      _e = bytes[9];
-      _f = bytes[10];
-      _g = bytes[11];
-      _h = bytes[12];
-      _i = bytes[13];
-      _j = bytes[14];
-      _k = bytes[15];
+      if (bytes.length !== 16) {
+        return '';
+      }
 
-      const hexToChar = (a) => {
+      const _a = (bytes[3] << 24) | (bytes[2] << 16) | (bytes[1] << 8) | bytes[0];
+      const _b = (bytes[5] << 8) | bytes[4];
+      const _c = (bytes[7] << 8) | bytes[6];
+      const _d = bytes[8];
+      const _e = bytes[9];
+      const _f = bytes[10];
+      const _g = bytes[11];
+      const _h = bytes[12];
+      const _i = bytes[13];
+      const _j = bytes[14];
+      const _k = bytes[15];
+
+      const hexToChar = (a: number): string => {
         a &= 0xf;
         return String.fromCharCode(a > 9 ? a - 10 + 0x61 : a + 0x30);
       };
 
-      const hexsToChars = (guidChars, offset, a, b, hex?) => {
+      const hexsToChars = (guidChars: any[], offset: number, a: number, b: number, hex?: boolean): number => {
         hex = hex === undefined ? false : hex;
 
         if (hex) {
-          guidChars[offset++] = '0';
-          guidChars[offset++] = 'x';
+          guidChars[(offset += 1)] = '0';
+          guidChars[(offset += 1)] = 'x';
         }
-        guidChars[offset++] = hexToChar(a >> 4);
-        guidChars[offset++] = hexToChar(a);
+        guidChars[(offset += 1)] = hexToChar(a >> 4);
+        guidChars[(offset += 1)] = hexToChar(a);
         if (hex) {
-          guidChars[offset++] = ',';
-          guidChars[offset++] = '0';
-          guidChars[offset++] = 'x';
+          guidChars[(offset += 1)] = ',';
+          guidChars[(offset += 1)] = '0';
+          guidChars[(offset += 1)] = 'x';
         }
-        guidChars[offset++] = hexToChar(b >> 4);
-        guidChars[offset++] = hexToChar(b);
+        guidChars[(offset += 1)] = hexToChar(b >> 4);
+        guidChars[(offset += 1)] = hexToChar(b);
         return offset;
       };
 
-      const _toString = (format) => {
-        if (format == null || format.length == 0) format = 'D';
+      const _toString = (format: string): string => {
+        if (format == null || format.length === 0) format = 'D';
 
         let guidChars = [];
         let offset = 0;
         let dash = true;
         let hex = false;
 
-        if (format.length != 1) {
+        if (format.length !== 1) {
           // all acceptable format strings are of length 1
           return null;
         }
 
         const formatCh = format[0];
 
-        if (formatCh == 'D' || formatCh == 'd') {
+        if (formatCh === 'D' || formatCh === 'd') {
           guidChars = new Array(36);
-        } else if (formatCh == 'N' || formatCh == 'n') {
+        } else if (formatCh === 'N' || formatCh === 'n') {
           guidChars = new Array(32);
           dash = false;
-        } else if (formatCh == 'B' || formatCh == 'b') {
+        } else if (formatCh === 'B' || formatCh === 'b') {
           guidChars = new Array(38);
-          guidChars[offset++] = '{';
+          guidChars[(offset += 1)] = '{';
           guidChars[37] = '}';
-        } else if (formatCh == 'P' || formatCh == 'p') {
+        } else if (formatCh === 'P' || formatCh === 'p') {
           guidChars = new Array(38);
-          guidChars[offset++] = '(';
+          guidChars[(offset += 1)] = '(';
           guidChars[37] = ')';
-        } else if (formatCh == 'X' || formatCh == 'x') {
+        } else if (formatCh === 'X' || formatCh === 'x') {
           guidChars = new Array(68);
-          guidChars[offset++] = '{';
+          guidChars[(offset += 1)] = '{';
           guidChars[67] = '}';
           dash = false;
           hex = true;
@@ -550,39 +268,39 @@ export default class UtilityService {
 
         if (hex) {
           // {0xdddddddd,0xdddd,0xdddd,{0xdd,0xdd,0xdd,0xdd,0xdd,0xdd,0xdd,0xdd}}
-          guidChars[offset++] = '0';
-          guidChars[offset++] = 'x';
+          guidChars[(offset += 1)] = '0';
+          guidChars[(offset += 1)] = 'x';
           offset = hexsToChars(guidChars, offset, _a >> 24, _a >> 16);
           offset = hexsToChars(guidChars, offset, _a >> 8, _a);
-          guidChars[offset++] = ',';
-          guidChars[offset++] = '0';
-          guidChars[offset++] = 'x';
+          guidChars[(offset += 1)] = ',';
+          guidChars[(offset += 1)] = '0';
+          guidChars[(offset += 1)] = 'x';
           offset = hexsToChars(guidChars, offset, _b >> 8, _b);
-          guidChars[offset++] = ',';
-          guidChars[offset++] = '0';
-          guidChars[offset++] = 'x';
+          guidChars[(offset += 1)] = ',';
+          guidChars[(offset += 1)] = '0';
+          guidChars[(offset += 1)] = 'x';
           offset = hexsToChars(guidChars, offset, _c >> 8, _c);
-          guidChars[offset++] = ',';
-          guidChars[offset++] = '{';
+          guidChars[(offset += 1)] = ',';
+          guidChars[(offset += 1)] = '{';
           offset = hexsToChars(guidChars, offset, _d, _e, true);
-          guidChars[offset++] = ',';
+          guidChars[(offset += 1)] = ',';
           offset = hexsToChars(guidChars, offset, _f, _g, true);
-          guidChars[offset++] = ',';
+          guidChars[(offset += 1)] = ',';
           offset = hexsToChars(guidChars, offset, _h, _i, true);
-          guidChars[offset++] = ',';
+          guidChars[(offset += 1)] = ',';
           offset = hexsToChars(guidChars, offset, _j, _k, true);
-          guidChars[offset++] = '}';
+          guidChars[(offset += 1)] = '}';
         } else {
           // [{|(]dddddddd[-]dddd[-]dddd[-]dddd[-]dddddddddddd[}|)]
           offset = hexsToChars(guidChars, offset, _a >> 24, _a >> 16);
           offset = hexsToChars(guidChars, offset, _a >> 8, _a);
-          if (dash) guidChars[offset++] = '-';
+          if (dash) guidChars[(offset += 1)] = '-';
           offset = hexsToChars(guidChars, offset, _b >> 8, _b);
-          if (dash) guidChars[offset++] = '-';
+          if (dash) guidChars[(offset += 1)] = '-';
           offset = hexsToChars(guidChars, offset, _c >> 8, _c);
-          if (dash) guidChars[offset++] = '-';
+          if (dash) guidChars[(offset += 1)] = '-';
           offset = hexsToChars(guidChars, offset, _d, _e);
-          if (dash) guidChars[offset++] = '-';
+          if (dash) guidChars[(offset += 1)] = '-';
           offset = hexsToChars(guidChars, offset, _f, _g);
           offset = hexsToChars(guidChars, offset, _h, _i);
           offset = hexsToChars(guidChars, offset, _j, _k);
@@ -597,7 +315,7 @@ export default class UtilityService {
     return !!bytesToGuidString(hexStringToBytes(syncId));
   }
 
-  trimToNearestWord(text, limit) {
+  trimToNearestWord(text: string, limit: number): string {
     if (!text) {
       return '';
     }

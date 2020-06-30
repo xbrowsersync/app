@@ -18,5 +18,5 @@ export default interface StoreContent {
   syncEnabled: boolean;
   syncId: string;
   syncVersion: string;
-  traceLog: any;
+  traceLog: string[];
 }

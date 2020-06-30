@@ -17,13 +17,14 @@ import angular from 'angular';
 import { autobind } from 'core-decorators';
 import ApiService from '../api/api.service';
 import Globals from '../globals';
-import { ExceptionHandler } from '../exceptions/exception-handler.interface';
+import ExceptionHandler from '../exceptions/exception-handler.interface';
 import * as Exceptions from '../exceptions/exception-types';
 import LogService from '../log/log.service';
 import PlatformService from '../../../interfaces/platform-service.interface';
 import Strings from '../../../../res/strings/en.json';
 import StoreService from '../store/store.service';
 import UtilityService from '../utility/utility.service';
+import CryptoService from '../crypto/crypto.service';
 
 @autobind
 @Injectable('BookmarkService')
@@ -33,6 +34,7 @@ export default class BookmarkService {
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   apiSvc: ApiService;
+  cryptoSvc: CryptoService;
   logSvc: LogService;
   _platformSvc: PlatformService;
   storeSvc: StoreService;
@@ -49,6 +51,7 @@ export default class BookmarkService {
     '$q',
     '$timeout',
     'ApiService',
+    'CryptoService',
     'LogService',
     'StoreService',
     'UtilityService'
@@ -59,6 +62,7 @@ export default class BookmarkService {
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
     ApiSvc: ApiService,
+    CryptoSvc: CryptoService,
     LogSvc: LogService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
@@ -68,6 +72,7 @@ export default class BookmarkService {
     this.$q = $q;
     this.$timeout = $timeout;
     this.apiSvc = ApiSvc;
+    this.cryptoSvc = CryptoSvc;
     this.logSvc = LogSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
@@ -112,20 +117,21 @@ export default class BookmarkService {
   }
 
   checkForUpdates() {
-    return this.storeSvc.get(Globals.CacheKeys.LastUpdated).then((cachedData) => {
+    return this.storeSvc.get<string>(Globals.CacheKeys.LastUpdated).then((storedLastUpdated) => {
       // Get last updated date from local cache
-      const cachedLastUpdated = new Date(cachedData);
+      const storedLastUpdatedDate = new Date(storedLastUpdated);
 
       // Check if bookmarks have been updated
       return this.apiSvc.getBookmarksLastUpdated().then((data) => {
         // If last updated is different to the date in local storage, refresh bookmarks
         const remoteLastUpdated = new Date(data.lastUpdated);
-        const updatesAvailable = !cachedLastUpdated || cachedLastUpdated.getTime() !== remoteLastUpdated.getTime();
+        const updatesAvailable =
+          !storedLastUpdatedDate || storedLastUpdatedDate.getTime() !== remoteLastUpdated.getTime();
 
         if (updatesAvailable) {
           this.logSvc.logInfo(
             `Updates available, local:${
-              cachedLastUpdated ? cachedLastUpdated.toISOString() : 'none'
+              storedLastUpdatedDate ? storedLastUpdatedDate.toISOString() : 'none'
             } remote:${remoteLastUpdated.toISOString()}`
           );
         }
@@ -210,7 +216,7 @@ export default class BookmarkService {
   }
 
   disableSync() {
-    return this.storeSvc.get(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
       if (!syncEnabled) {
         return;
       }
@@ -269,7 +275,7 @@ export default class BookmarkService {
 
   executeSync(isBackgroundSync?) {
     // Check if sync enabled before running sync
-    return this.storeSvc.get(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
       if (!syncEnabled) {
         throw new Exceptions.SyncDisabledException();
       }
@@ -300,7 +306,7 @@ export default class BookmarkService {
       });
     };
 
-    return this.storeSvc.get(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
       // If sync is not enabled, export local browser data
       if (!syncEnabled) {
         return this.platformSvc.bookmarks_Get(false);
@@ -311,7 +317,7 @@ export default class BookmarkService {
         .getBookmarks()
         .then((data) => {
           // Decrypt bookmarks
-          return this.utilitySvc.decryptData(data.bookmarks);
+          return this.cryptoSvc.decryptData(data.bookmarks);
         })
         .then((decryptedData) => {
           // Remove empty containers
@@ -425,28 +431,26 @@ export default class BookmarkService {
 
   getCachedBookmarks() {
     // Get cached encrypted bookmarks from local storage
-    return this.storeSvc.get(Globals.CacheKeys.Bookmarks).then((cachedData) => {
-      const cachedEncryptedBookmarks = cachedData;
-
+    return this.storeSvc.get<string>(Globals.CacheKeys.Bookmarks).then((encryptedBookmarksFromStore) => {
       // Return unencrypted cached bookmarks from memory if encrypted bookmarks
       // in storage match cached encrypted bookmarks in memory
       if (
-        cachedEncryptedBookmarks &&
+        encryptedBookmarksFromStore &&
         this.cachedBookmarks_encrypted &&
-        cachedEncryptedBookmarks === this.cachedBookmarks_encrypted
+        encryptedBookmarksFromStore === this.cachedBookmarks_encrypted
       ) {
         return angular.copy(this.cachedBookmarks_plain);
       }
 
       // If encrypted bookmarks not cached in storage, get synced bookmarks
-      return (cachedEncryptedBookmarks
-        ? this.$q.resolve(cachedEncryptedBookmarks)
+      return (encryptedBookmarksFromStore
+        ? this.$q.resolve(encryptedBookmarksFromStore)
         : this.apiSvc.getBookmarks().then((response) => {
             return response.bookmarks;
           })
       ).then((encryptedBookmarks) => {
         // Decrypt bookmarks
-        return this.utilitySvc.decryptData(encryptedBookmarks).then((decryptedBookmarks) => {
+        return this.cryptoSvc.decryptData(encryptedBookmarks).then((decryptedBookmarks) => {
           const bookmarks = decryptedBookmarks ? JSON.parse(decryptedBookmarks) : [];
 
           // Update cache with retrieved bookmarks data
@@ -583,7 +587,7 @@ export default class BookmarkService {
 
   getSyncBookmarksToolbar() {
     // Get setting from local storage
-    return this.storeSvc.get(Globals.CacheKeys.SyncBookmarksToolbar).then((syncBookmarksToolbar) => {
+    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncBookmarksToolbar).then((syncBookmarksToolbar) => {
       // Set default value to true
       if (syncBookmarksToolbar == null) {
         syncBookmarksToolbar = true;
@@ -600,11 +604,11 @@ export default class BookmarkService {
   getSyncSize() {
     return this.getCachedBookmarks()
       .then(() => {
-        return this.storeSvc.get(Globals.CacheKeys.Bookmarks);
+        return this.storeSvc.get<string>(Globals.CacheKeys.Bookmarks);
       })
-      .then((cachedBookmarks) => {
+      .then((encryptedBookmarks) => {
         // Return size in bytes of cached encrypted bookmarks
-        const sizeInBytes = new TextEncoder().encode(cachedBookmarks).byteLength;
+        const sizeInBytes = new TextEncoder().encode(encryptedBookmarks).byteLength;
         return sizeInBytes;
       });
   }
@@ -632,7 +636,7 @@ export default class BookmarkService {
         this.logSvc.logInfo(failedSync.changeInfo);
       }
       return this.storeSvc
-        .get(Globals.CacheKeys.SyncEnabled)
+        .get<boolean>(Globals.CacheKeys.SyncEnabled)
         .then((syncEnabled) => {
           return this.setIsSyncing()
             .then(() => {
@@ -791,7 +795,7 @@ export default class BookmarkService {
         })
         .then((syncChange = true) => {
           return this.storeSvc
-            .get(Globals.CacheKeys.SyncEnabled)
+            .get<boolean>(Globals.CacheKeys.SyncEnabled)
             .then((cachedSyncEnabled) => {
               syncEnabled = cachedSyncEnabled;
 
@@ -825,7 +829,7 @@ export default class BookmarkService {
 
     // Disable automatic updates whilst processing syncs
     return this.storeSvc
-      .get(Globals.CacheKeys.SyncEnabled)
+      .get<boolean>(Globals.CacheKeys.SyncEnabled)
       .then((cachedSyncEnabled) => {
         if (cachedSyncEnabled) {
           return this.platformSvc.automaticUpdates_Stop();
@@ -841,9 +845,9 @@ export default class BookmarkService {
         }
 
         // Update remote bookmarks data
-        return this.storeSvc.get(Globals.CacheKeys.Bookmarks).then((encryptedBookmarks) => {
+        return this.storeSvc.get<string>(Globals.CacheKeys.Bookmarks).then((encryptedBookmarks) => {
           // Decrypt cached bookmarks data
-          return this.utilitySvc.decryptData(encryptedBookmarks).then((bookmarksJson) => {
+          return this.cryptoSvc.decryptData(encryptedBookmarks).then((bookmarksJson) => {
             // Commit update to service
             return this.apiSvc
               .updateBookmarks(encryptedBookmarks)
@@ -853,7 +857,7 @@ export default class BookmarkService {
                 });
               })
               .catch((err) => {
-                // If offline update cache and then throw error
+                // If offline update cache and then throw errors
                 return (err instanceof Exceptions.NetworkOfflineException
                   ? (() => {
                       const bookmarks = JSON.parse(bookmarksJson);
@@ -879,7 +883,7 @@ export default class BookmarkService {
         this.currentSync = null;
 
         // Start auto updates if sync enabled
-        return this.storeSvc.get(Globals.CacheKeys.SyncEnabled).then((cachedSyncEnabled) => {
+        return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((cachedSyncEnabled) => {
           if (cachedSyncEnabled) {
             return this.platformSvc.automaticUpdates_Start();
           }
@@ -1218,7 +1222,7 @@ export default class BookmarkService {
     }
 
     // Get cached sync enabled value and update browser action icon
-    return this.storeSvc.get(Globals.CacheKeys.SyncEnabled).then(this.platformSvc.interface_Refresh);
+    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then(this.platformSvc.interface_Refresh);
   }
 
   sync_handleBoth(syncData, backgroundUpdate) {
@@ -1263,7 +1267,7 @@ export default class BookmarkService {
       return getBookmarksToSync.then((bookmarks) => {
         // Encrypt bookmarks
         bookmarks = bookmarks || [];
-        return this.utilitySvc.encryptData(JSON.stringify(bookmarks)).then((encryptedBookmarks) => {
+        return this.cryptoSvc.encryptData(JSON.stringify(bookmarks)).then((encryptedBookmarks) => {
           // Update local bookmarks
           return this.$q((resolve, reject) => {
             this.platformSvc
@@ -1307,12 +1311,9 @@ export default class BookmarkService {
 
     return this.storeSvc
       .get([Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
-      .then((cachedData) => {
-        const password = cachedData[Globals.CacheKeys.Password];
-        const syncId = cachedData[Globals.CacheKeys.SyncId];
-
+      .then((storeContent) => {
         // Check secret and bookmarks ID are present
-        if (!password || !syncId) {
+        if (!storeContent.password || !storeContent.syncId) {
           return this.disableSync().then(() => {
             throw new Exceptions.MissingClientDataException();
           });
@@ -1326,7 +1327,7 @@ export default class BookmarkService {
         lastUpdated = data.lastUpdated;
 
         // Decrypt bookmarks
-        return this.utilitySvc.decryptData(data.bookmarks);
+        return this.cryptoSvc.decryptData(data.bookmarks);
       })
       .then((decryptedData) => {
         // Update cached bookmarks
@@ -1337,7 +1338,7 @@ export default class BookmarkService {
           bookmarks = this.repairBookmarkIds(bookmarks);
 
           // Encrypt bookmarks with new ids
-          return this.utilitySvc.encryptData(JSON.stringify(bookmarks)).then((encryptedBookmarksWithNewIds) => {
+          return this.cryptoSvc.encryptData(JSON.stringify(bookmarks)).then((encryptedBookmarksWithNewIds) => {
             encryptedBookmarks = encryptedBookmarksWithNewIds;
           });
         }
@@ -1371,20 +1372,16 @@ export default class BookmarkService {
         Globals.CacheKeys.SyncEnabled,
         Globals.CacheKeys.SyncId
       ])
-      .then((cachedData) => {
-        const password = cachedData[Globals.CacheKeys.Password];
-        const syncEnabled = cachedData[Globals.CacheKeys.SyncEnabled];
-        const syncId = cachedData[Globals.CacheKeys.SyncId];
-
+      .then((storeContent) => {
         // Check for cached sync ID and password
-        if (!password || !syncId) {
+        if (!storeContent.password || !storeContent.syncId) {
           return this.disableSync().then(() => {
             throw new Exceptions.MissingClientDataException();
           });
         }
 
         // If this is a new sync, get local bookmarks and continue
-        if (!syncEnabled || !syncData.changeInfo) {
+        if (!storeContent.syncEnabled || !syncData.changeInfo) {
           return this.platformSvc.bookmarks_Get();
         }
 
@@ -1423,7 +1420,7 @@ export default class BookmarkService {
         }
 
         // Update local cached bookmarks
-        return this.utilitySvc
+        return this.cryptoSvc
           .encryptData(JSON.stringify(bookmarks))
           .then((encryptedBookmarks) => {
             return this.updateCachedBookmarks(bookmarks, encryptedBookmarks);
@@ -1436,73 +1433,66 @@ export default class BookmarkService {
   }
 
   sync_handleUpgrade(syncData) {
-    let password;
-    let syncId;
+    return this.storeSvc.get([Globals.CacheKeys.Password, Globals.CacheKeys.SyncId]).then((storeContent) => {
+      // Check secret and sync ID are present
+      if (!storeContent.password || !storeContent.syncId) {
+        return this.disableSync().then(() => {
+          throw new Exceptions.MissingClientDataException();
+        });
+      }
 
-    return this.storeSvc
-      .get([Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
-      .then((cachedData) => {
-        password = cachedData[Globals.CacheKeys.Password];
-        syncId = cachedData[Globals.CacheKeys.SyncId];
+      // Get synced bookmarks and decrypt
+      return this.apiSvc
+        .getBookmarks()
+        .then((data) => {
+          // Decrypt bookmarks
+          return this.cryptoSvc.decryptData(data.bookmarks);
+        })
+        .then((decryptedData) => {
+          let bookmarks = decryptedData ? JSON.parse(decryptedData) : null;
 
-        // Check secret and sync ID are present
-        if (!password || !syncId) {
-          return this.disableSync().then(() => {
-            throw new Exceptions.MissingClientDataException();
-          });
-        }
+          // Upgrade containers to use current container names
+          bookmarks = this.upgradeContainers(bookmarks || []);
 
-        // Get synced bookmarks and decrypt
-        return this.apiSvc.getBookmarks();
-      })
-      .then((data) => {
-        // Decrypt bookmarks
-        return this.utilitySvc.decryptData(data.bookmarks);
-      })
-      .then((decryptedData) => {
-        let bookmarks = decryptedData ? JSON.parse(decryptedData) : null;
-
-        // Upgrade containers to use current container names
-        bookmarks = this.upgradeContainers(bookmarks || []);
-
-        // Set the sync version to the current app version
-        return this.storeSvc
-          .set(Globals.CacheKeys.SyncVersion, Globals.AppVersion)
-          .then(() => {
-            // Generate a new password hash from the old clear text password and sync ID
-            return this.utilitySvc.getPasswordHash(password, syncId);
-          })
-          .then((passwordHash) => {
-            // Cache the new password hash and encrypt the data
-            return this.storeSvc.set(Globals.CacheKeys.Password, passwordHash);
-          })
-          .then(() => {
-            return this.utilitySvc.encryptData(JSON.stringify(bookmarks));
-          })
-          .then((encryptedBookmarks) => {
-            // Sync provided bookmarks and set local bookmarks
-            return this.$q
-              .all([
-                this.apiSvc.updateBookmarks(encryptedBookmarks, true),
-                this.platformSvc
-                  .eventListeners_Disable()
-                  .then(() => {
-                    return this.populateLocalBookmarks(bookmarks);
-                  })
-                  .then(() => {
-                    return this.platformSvc.bookmarks_BuildIdMappings(bookmarks);
-                  })
-                  .finally(this.platformSvc.eventListeners_Enable)
-              ])
-              .then((data) => {
-                // Update cached last updated date and return decrypted bookmarks
-                return this.$q.all([
-                  this.updateCachedBookmarks(bookmarks, encryptedBookmarks),
-                  this.storeSvc.set(Globals.CacheKeys.LastUpdated, data[0].lastUpdated)
-                ]);
-              });
-          });
-      });
+          // Set the sync version to the current app version
+          return this.storeSvc
+            .set(Globals.CacheKeys.SyncVersion, Globals.AppVersion)
+            .then(() => {
+              // Generate a new password hash from the old clear text password and sync ID
+              return this.cryptoSvc.getPasswordHash(storeContent.password, storeContent.syncId);
+            })
+            .then((passwordHash) => {
+              // Cache the new password hash and encrypt the data
+              return this.storeSvc.set(Globals.CacheKeys.Password, passwordHash);
+            })
+            .then(() => {
+              return this.cryptoSvc.encryptData(JSON.stringify(bookmarks));
+            })
+            .then((encryptedBookmarks) => {
+              // Sync provided bookmarks and set local bookmarks
+              return this.$q
+                .all([
+                  this.apiSvc.updateBookmarks(encryptedBookmarks, true),
+                  this.platformSvc
+                    .eventListeners_Disable()
+                    .then(() => {
+                      return this.populateLocalBookmarks(bookmarks);
+                    })
+                    .then(() => {
+                      return this.platformSvc.bookmarks_BuildIdMappings(bookmarks);
+                    })
+                    .finally(this.platformSvc.eventListeners_Enable)
+                ])
+                .then((data) => {
+                  // Update cached last updated date and return decrypted bookmarks
+                  return this.$q.all([
+                    this.updateCachedBookmarks(bookmarks, encryptedBookmarks),
+                    this.storeSvc.set(Globals.CacheKeys.LastUpdated, data[0].lastUpdated)
+                  ]);
+                });
+            });
+        });
+    });
   }
 
   updateBookmarkById(id, updateInfo, bookmarks) {

@@ -23,7 +23,7 @@ export default class BookmarkIdMapperService {
 
     // Add new mappings to existing mappings
     return this.storeSvc
-      .get(Globals.CacheKeys.BookmarkIdMappings)
+      .get<any[]>(Globals.CacheKeys.BookmarkIdMappings)
       .then((idMappings) => {
         return idMappings.concat(newMappingsArr);
       })
@@ -44,7 +44,7 @@ export default class BookmarkIdMapperService {
   }
 
   get(nativeId, syncedId?) {
-    return this.storeSvc.get(Globals.CacheKeys.BookmarkIdMappings).then((idMappings) => {
+    return this.storeSvc.get<any[]>(Globals.CacheKeys.BookmarkIdMappings).then((idMappings) => {
       // Find the requested mapping
       let mapping;
       if (nativeId != null) {

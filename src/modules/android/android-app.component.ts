@@ -4,11 +4,11 @@ import { Component } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import AndroidPlatformService from './android-platform.service';
 import AppComponent from '../app/app.component';
-import Alert from '../shared/alert/alert.interface';
-import Globals from '../shared/globals';
-import { AndroidException } from '../shared/exceptions/exception-types';
-import { AlertType } from '../shared/alert/alert-type.enum';
 import Strings from '../../../res/strings/en.json';
+import Alert from '../shared/alert/alert.interface';
+import AlertType from '../shared/alert/alert-type.enum';
+import { AndroidException } from '../shared/exceptions/exception-types';
+import Globals from '../shared/globals';
 
 @autobind
 @Component({

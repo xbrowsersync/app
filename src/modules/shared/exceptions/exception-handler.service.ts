@@ -6,7 +6,7 @@ import { autobind } from 'core-decorators';
 import { Injectable } from 'angular-ts-decorators';
 import Alert from '../alert/alert.interface';
 import AlertService from '../alert/alert.service';
-import { AlertType } from '../alert/alert-type.enum';
+import AlertType from '../alert/alert-type.enum';
 import * as Exceptions from './exception-types';
 import PlatformService from '../../../interfaces/platform-service.interface';
 import LogService from '../log/log.service';

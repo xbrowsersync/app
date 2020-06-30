@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import * as idbKeyval from 'idb-keyval';
@@ -18,11 +17,11 @@ export default class StoreService {
     this.$q = $q;
   }
 
-  clear(): angular.IPromise<void> {
+  clear(): Promise<void> {
     return idbKeyval.clear(this.getStore());
   }
 
-  get(keys?: IDBValidKey | IDBValidKey[]): angular.IPromise<any | StoreContent> {
+  get<T = StoreContent>(keys?: IDBValidKey | IDBValidKey[]): ng.IPromise<T> {
     // If no keys provided, get all keys from store
     return (!keys ? this.$q.resolve(idbKeyval.keys(this.getStore())) : this.$q.resolve(keys)).then((allKeys) => {
       // Ensure the keys param is an array before processing
@@ -39,7 +38,7 @@ export default class StoreService {
             const next = angular.copy(prev);
             next[current as string] = keyValues[index];
             return next;
-          }, {} as StoreContent);
+          }, {} as T);
         })
         .then((storeContent) => {
           // If result object only has one key, simply return the key value
@@ -55,16 +54,18 @@ export default class StoreService {
     return new idbKeyval.Store(this.dbName, this.storeName);
   }
 
-  remove(keys: string | string[]): angular.IPromise<unknown[]> {
+  remove(keys: string | string[]): ng.IPromise<void> {
     const keysArr = Array.isArray(keys) ? keys : [keys];
-    return this.$q.all(
-      keysArr.map((key) => {
-        return idbKeyval.del(key, this.getStore());
-      })
-    );
+    return this.$q
+      .all(
+        keysArr.map((key) => {
+          return idbKeyval.del(key, this.getStore());
+        })
+      )
+      .then(() => {});
   }
 
-  set(key: IDBValidKey, value?: any): angular.IPromise<void> {
+  set(key: IDBValidKey, value?: any): ng.IPromise<void> {
     if (!key) {
       return this.$q.resolve();
     }

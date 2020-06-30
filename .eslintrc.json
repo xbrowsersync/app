@@ -24,6 +24,7 @@
     "global-require": "off",
     "lines-between-class-members": "off",
     "import/no-dynamic-require": "off",
+    "no-bitwise": "off",
     "no-nested-ternary": "off",
     "no-param-reassign": "off",
     "no-undef": "error",

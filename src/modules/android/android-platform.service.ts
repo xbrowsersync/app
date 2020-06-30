@@ -10,28 +10,21 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-param-reassign */
 
+import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import _ from 'underscore';
 import { autobind } from 'core-decorators';
 import compareVersions from 'compare-versions';
 import PlatformService from '../../interfaces/platform-service.interface';
 import Strings from '../../../res/strings/en.json';
+import Alert from '../shared/alert/alert.interface';
 import BookmarkService from '../shared/bookmark/bookmark.service';
-import {
-  AndroidException,
-  FailedLocalStorageException,
-  I18nException,
-  FailedGetPageMetadataException,
-  SyncUncommittedException,
-  FailedDownloadFileException,
-  FailedScanException
-} from '../shared/exceptions/exception-types';
+import * as Exceptions from '../shared/exceptions/exception-types';
 import Globals from '../shared/globals';
 import StoreService from '../shared/store/store.service';
 import UtilityService from '../shared/utility/utility.service';
 import LogService from '../shared/log/log.service';
-import Alert from '../shared/alert/alert.interface';
-import { AlertType } from '../shared/alert/alert-type.enum';
+import NetworkService from '../shared/network/network.service';
 
 @autobind
 @Injectable('PlatformService')
@@ -43,6 +36,7 @@ export default class AndroidPlatformService implements PlatformService {
   $timeout: ng.ITimeoutService;
   bookmarkSvc: BookmarkService;
   logSvc: LogService;
+  networkSvc: NetworkService;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
@@ -61,6 +55,7 @@ export default class AndroidPlatformService implements PlatformService {
     '$timeout',
     'BookmarkService',
     'LogService',
+    'NetworkService',
     'StoreService',
     'UtilityService'
   ];
@@ -72,6 +67,7 @@ export default class AndroidPlatformService implements PlatformService {
     $timeout: ng.ITimeoutService,
     BookmarkSvc: BookmarkService,
     LogSvc: LogService,
+    NetworkSvc: NetworkService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
   ) {
@@ -82,6 +78,7 @@ export default class AndroidPlatformService implements PlatformService {
     this.$timeout = $timeout;
     this.bookmarkSvc = BookmarkSvc;
     this.logSvc = LogSvc;
+    this.networkSvc = NetworkSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
 
@@ -166,7 +163,7 @@ export default class AndroidPlatformService implements PlatformService {
     const mobileAppVersion = localStorage.getItem('xBrowserSync-mobileAppVersion');
     return (mobileAppVersion
       ? this.$q.resolve(mobileAppVersion)
-      : this.storeSvc.get(Globals.CacheKeys.AppVersion)
+      : this.storeSvc.get<string>(Globals.CacheKeys.AppVersion)
     ).then((currentVersion) => {
       return currentVersion
         ? this.handleUpgrade(currentVersion, Globals.AppVersion)
@@ -218,6 +215,33 @@ export default class AndroidPlatformService implements PlatformService {
     });
   }
 
+  decodeQrCode(qrCodeValue) {
+    let serviceUrl;
+    let syncId;
+    try {
+      // For v1.5.3 or later codes, expect sync info object
+      const syncInfo = JSON.parse(qrCodeValue);
+      syncId = syncInfo.id;
+      serviceUrl = syncInfo.url;
+    } catch (err) {
+      // For pre-v1.5.3 codes, split the scanned value into it's components
+      const arr = qrCodeValue.split(Globals.QrCode.Delimiter);
+      syncId = arr[0];
+      serviceUrl = arr[1];
+    }
+
+    // Validate decoded values
+    const urlRegex = new RegExp(`^${Globals.URL.ValidUrlRegex}$`, 'i');
+    if (!this.utilitySvc.syncIdIsValid(syncId) || (serviceUrl && !urlRegex.test(serviceUrl))) {
+      throw new Error('Invalid QR code');
+    }
+
+    return {
+      id: syncId,
+      url: serviceUrl
+    };
+  }
+
   disableBackgroundSync() {
     if (!this.backgroundSyncInterval) {
       return;
@@ -232,7 +256,7 @@ export default class AndroidPlatformService implements PlatformService {
     return this.$q((resolve, reject) => {
       window.QRScanner.disableLight((err) => {
         if (err) {
-          return reject(new AndroidException(err._message || err.name || err.code));
+          return reject(new Exceptions.AndroidException(err._message || err.name || err.code));
         }
 
         resolve();
@@ -250,7 +274,7 @@ export default class AndroidPlatformService implements PlatformService {
 
     return this.$q((resolve, reject) => {
       const onError = (err: Error) => {
-        return reject(new FailedDownloadFileException(null, err));
+        return reject(new Exceptions.FailedDownloadFileException(null, err));
       };
 
       this.logSvc.logInfo(`Downloading file ${fileName}`);
@@ -308,7 +332,7 @@ export default class AndroidPlatformService implements PlatformService {
     return this.$q((resolve, reject) => {
       window.QRScanner.enableLight((err) => {
         if (err) {
-          return reject(new AndroidException(err._message || err.name || err.code));
+          return reject(new Exceptions.AndroidException(err._message || err.name || err.code));
         }
 
         resolve();
@@ -347,7 +371,7 @@ export default class AndroidPlatformService implements PlatformService {
   }
 
   executeSyncIfOnline(displayLoadingId) {
-    const isOnline = this.utilitySvc.isNetworkConnected();
+    const isOnline = this.networkSvc.isNetworkConnected();
 
     // If not online display an alert and return
     if (!isOnline) {
@@ -376,7 +400,7 @@ export default class AndroidPlatformService implements PlatformService {
           return resolve(null);
         }
 
-        reject(new FailedLocalStorageException(null, err));
+        reject(new Exceptions.FailedLocalStorageException(null, err));
       };
 
       const success = (keys) => {
@@ -413,7 +437,7 @@ export default class AndroidPlatformService implements PlatformService {
     }
 
     if (!stringVal) {
-      throw new I18nException('I18n string has no value');
+      throw new Exceptions.I18nException('I18n string has no value');
     }
 
     return stringVal;
@@ -459,8 +483,8 @@ export default class AndroidPlatformService implements PlatformService {
 
       // If url was provided, check connection and is valid http url
       const httpRegex = new RegExp(Globals.URL.HttpRegex, 'i');
-      if (pageUrl && (!this.utilitySvc.isNetworkConnected() || !httpRegex.test(pageUrl))) {
-        return reject(new FailedGetPageMetadataException());
+      if (pageUrl && (!this.networkSvc.isNetworkConnected() || !httpRegex.test(pageUrl))) {
+        return reject(new Exceptions.FailedGetPageMetadataException());
       }
 
       const handleResponse = (pageContent?, err?) => {
@@ -474,7 +498,7 @@ export default class AndroidPlatformService implements PlatformService {
 
         // Check html content was returned
         if (err || !pageContent) {
-          return reject(new FailedGetPageMetadataException(null, err));
+          return reject(new Exceptions.FailedGetPageMetadataException(null, err));
         }
 
         // Extract metadata values
@@ -577,7 +601,7 @@ export default class AndroidPlatformService implements PlatformService {
       };
 
       // If network disconnected fail immediately, otherwise retrieve page metadata
-      if (!this.utilitySvc.isNetworkConnected()) {
+      if (!this.networkSvc.isNetworkConnected()) {
         return handleResponse();
       }
 
@@ -736,7 +760,7 @@ export default class AndroidPlatformService implements PlatformService {
     // Set theme
     return this.checkForDarkTheme().then(() => {
       // Check if sync enabled and reset network disconnected flag
-      this.storeSvc.get(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+      this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
         // Deselect bookmark
         this.vm.search.selectedBookmark = null;
 
@@ -769,38 +793,36 @@ export default class AndroidPlatformService implements PlatformService {
 
     // Set theme
     return this.checkForDarkTheme().then(() => {
-      // Retrieve cached data
-      return this.storeSvc.get().then((cachedData) => {
-        const syncEnabled = cachedData[Globals.CacheKeys.SyncEnabled];
-        const checkForAppUpdates = cachedData[Globals.CacheKeys.CheckForAppUpdates];
-
+      return this.storeSvc.get().then((storeContent) => {
         // Prime bookmarks cache
-        if (syncEnabled) {
+        if (storeContent.syncEnabled) {
           this.bookmarkSvc.getCachedBookmarks();
         }
 
         // Add useful debug info to beginning of trace log
-        cachedData.platform = {
+        const debugInfo = angular.copy(storeContent) as any;
+        debugInfo.platform = {
           name: window.device.platform,
           device: `${window.device.manufacturer} ${window.device.model}`
         };
         this.logSvc.logInfo(
-          _.omit(
-            cachedData,
-            'debugMessageLog',
-            Globals.CacheKeys.Bookmarks,
-            Globals.CacheKeys.TraceLog,
-            Globals.CacheKeys.Password
-          )
+          Object.keys(debugInfo)
+            .filter((key) => {
+              return debugInfo[key] != null;
+            })
+            .reduce((prev, current) => {
+              prev[current] = debugInfo[current];
+              return prev;
+            }, {})
         );
 
         // Check for new app version
-        if (checkForAppUpdates) {
+        if (storeContent.checkForAppUpdates) {
           this.checkForNewVersion();
         }
 
         // Exit if sync not enabled
-        if (!syncEnabled) {
+        if (!storeContent.syncEnabled) {
           return;
         }
 
@@ -1013,7 +1035,7 @@ export default class AndroidPlatformService implements PlatformService {
           : this.$q.resolve()
         ).then(() => {
           // Add uncommitted syncs back to the queue and notify
-          if (err instanceof SyncUncommittedException) {
+          if (err instanceof Exceptions.SyncUncommittedException) {
             syncData.changeInfo = this.$q.resolve();
             this.bookmarkSvc.queueSync(syncData, false);
             this.logSvc.logInfo('Sync not committed: network offline');
@@ -1042,7 +1064,7 @@ export default class AndroidPlatformService implements PlatformService {
 
         window.QRScanner.scan((err, scannedText) => {
           if (err) {
-            return reject(new AndroidException(err._message || err.name || err.code));
+            return reject(new Exceptions.AndroidException(err._message || err.name || err.code));
           }
 
           window.QRScanner.pausePreview(() => {
@@ -1050,7 +1072,7 @@ export default class AndroidPlatformService implements PlatformService {
 
             let syncInfo;
             try {
-              syncInfo = this.utilitySvc.decodeQrCode(scannedText);
+              syncInfo = this.decodeQrCode(scannedText);
             } catch (decodeQrCodeErr) {
               // If scanned value is not value resume scanning
               this.vm.scanner.invalidSyncId = true;
@@ -1069,7 +1091,7 @@ export default class AndroidPlatformService implements PlatformService {
 
       window.QRScanner.prepare((err, status) => {
         if (err) {
-          return reject(new AndroidException(err._message || err.name || err.code));
+          return reject(new Exceptions.AndroidException(err._message || err.name || err.code));
         }
 
         if (status.authorized) {
@@ -1080,11 +1102,11 @@ export default class AndroidPlatformService implements PlatformService {
             }, 500);
           });
         } else {
-          reject(new AndroidException('Camera use not authorised'));
+          reject(new Exceptions.AndroidException('Camera use not authorised'));
         }
       });
     }).catch((err) => {
-      throw new FailedScanException(null, err);
+      throw new Exceptions.FailedScanException(null, err);
     });
   }
 

@@ -20,6 +20,7 @@ import {
   MissingClientDataException
 } from '../exceptions/exception-types';
 import Globals from '../globals';
+import NetworkService from '../network/network.service';
 import StoreService from '../store/store.service';
 import UtilityService from '../utility/utility.service';
 
@@ -28,15 +29,23 @@ import UtilityService from '../utility/utility.service';
 export default class ApiService {
   $http: ng.IHttpService;
   $q: ng.IQService;
+  networkSvc: NetworkService;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
   skipOnlineCheck = false;
 
-  static $inject = ['$http', '$q', 'StoreService', 'UtilityService'];
-  constructor($http: ng.IHttpService, $q: ng.IQService, StoreSvc: StoreService, UtilitySvc: UtilityService) {
+  static $inject = ['$http', '$q', 'NetworkService', 'StoreService', 'UtilityService'];
+  constructor(
+    $http: ng.IHttpService,
+    $q: ng.IQService,
+    NetworkSvc: NetworkService,
+    StoreSvc: StoreService,
+    UtilitySvc: UtilityService
+  ) {
     this.$http = $http;
     this.$q = $q;
+    this.networkSvc = NetworkSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
   }
@@ -48,7 +57,7 @@ export default class ApiService {
 
   checkNetworkIsOnline() {
     return this.$q((resolve, reject) => {
-      if (this.skipOnlineCheck || this.utilitySvc.isNetworkConnected()) {
+      if (this.skipOnlineCheck || this.networkSvc.isNetworkConnected()) {
         return resolve();
       }
       return reject(new NetworkOfflineException());
@@ -125,17 +134,11 @@ export default class ApiService {
   }
 
   getBookmarks() {
-    let password;
-    let syncId;
-
     // Check secret and sync ID are present
     return this.storeSvc
       .get([Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
-      .then((cachedData) => {
-        password = cachedData[Globals.CacheKeys.Password];
-        syncId = cachedData[Globals.CacheKeys.SyncId];
-
-        if (!password || !syncId) {
+      .then((storeContent) => {
+        if (!storeContent.password || !storeContent.syncId) {
           throw new MissingClientDataException();
         }
 
@@ -144,9 +147,11 @@ export default class ApiService {
           return this.utilitySvc
             .getServiceUrl()
             .then((serviceUrl) => {
-              return this.$http.get(`${serviceUrl + Globals.URL.Bookmarks}/${syncId}`).catch((response) => {
-                throw this.getExceptionFromHttpResponse(response);
-              });
+              return this.$http
+                .get(`${serviceUrl + Globals.URL.Bookmarks}/${storeContent.syncId}`)
+                .catch((response) => {
+                  throw this.getExceptionFromHttpResponse(response);
+                });
             })
             .then(this.apiRequestSucceeded)
             .then((response) => {
@@ -170,17 +175,11 @@ export default class ApiService {
   }
 
   getBookmarksLastUpdated() {
-    let password;
-    let syncId;
-
     // Check secret and sync ID are present
     return this.storeSvc
       .get([Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
-      .then((cachedData) => {
-        password = cachedData[Globals.CacheKeys.Password];
-        syncId = cachedData[Globals.CacheKeys.SyncId];
-
-        if (!password || !syncId) {
+      .then((storeContent) => {
+        if (!storeContent.password || !storeContent.syncId) {
           throw new MissingClientDataException();
         }
 
@@ -190,7 +189,7 @@ export default class ApiService {
             .getServiceUrl()
             .then((serviceUrl) => {
               return this.$http
-                .get(`${serviceUrl + Globals.URL.Bookmarks}/${syncId}${Globals.URL.LastUpdated}`)
+                .get(`${serviceUrl + Globals.URL.Bookmarks}/${storeContent.syncId}${Globals.URL.LastUpdated}`)
                 .catch((response) => {
                   throw this.getExceptionFromHttpResponse(response);
                 });
@@ -301,12 +300,8 @@ export default class ApiService {
     // Check secret and sync ID are present
     return this.storeSvc
       .get([Globals.CacheKeys.LastUpdated, Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
-      .then((cachedData) => {
-        const cachedLastUpdated = cachedData[Globals.CacheKeys.LastUpdated];
-        const password = cachedData[Globals.CacheKeys.Password];
-        const syncId = cachedData[Globals.CacheKeys.SyncId];
-
-        if (!cachedLastUpdated || !password || !syncId) {
+      .then((storeContent) => {
+        if (!storeContent.lastUpdated || !storeContent.password || !storeContent.syncId) {
           throw new MissingClientDataException();
         }
 
@@ -319,7 +314,7 @@ export default class ApiService {
             .then((serviceUrl) => {
               const data = {
                 bookmarks: encryptedBookmarks,
-                lastUpdated: cachedLastUpdated,
+                lastUpdated: storeContent.lastUpdated,
                 version: undefined
               };
 
@@ -329,7 +324,7 @@ export default class ApiService {
               }
 
               return this.$http
-                .put(`${serviceUrl + Globals.URL.Bookmarks}/${syncId}`, JSON.stringify(data))
+                .put(`${serviceUrl + Globals.URL.Bookmarks}/${storeContent.syncId}`, JSON.stringify(data))
                 .catch((response) => {
                   throw this.getExceptionFromHttpResponse(response);
                 });

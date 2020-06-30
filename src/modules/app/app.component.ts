@@ -16,6 +16,7 @@
 
 import { Component } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
+import * as countriesList from 'countries-list';
 import DOMPurify from 'dompurify';
 import marked from 'marked';
 import QRCode from 'qrcode-svg';
@@ -25,13 +26,16 @@ import PlatformService from '../../interfaces/platform-service.interface';
 import Strings from '../../../res/strings/en.json';
 import Alert from '../shared/alert/alert.interface';
 import AlertService from '../shared/alert/alert.service';
-import { AlertType } from '../shared/alert/alert-type.enum';
+import AlertType from '../shared/alert/alert-type.enum';
 import ApiService from '../shared/api/api.service.js';
+import BackupRestoreService from '../shared/backup-restore/backup-restore.service';
 import BookmarkService from '../shared/bookmark/bookmark.service.js';
-import { ExceptionHandler } from '../shared/exceptions/exception-handler.interface';
+import CryptoService from '../shared/crypto/crypto.service';
+import ExceptionHandler from '../shared/exceptions/exception-handler.interface';
 import * as Exceptions from '../shared/exceptions/exception-types';
 import Globals from '../shared/globals';
 import LogService from '../shared/log/log.service';
+import NetworkService from '../shared/network/network.service';
 import StoreService from '../shared/store/store.service';
 import UtilityService from '../shared/utility/utility.service';
 
@@ -47,8 +51,11 @@ export default class AppComponent {
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
   apiSvc: ApiService;
+  backupRestoreSvc: BackupRestoreService;
   bookmarkSvc: BookmarkService;
+  cryptoSvc: CryptoService;
   logSvc: LogService;
+  networkSvc: NetworkService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
@@ -202,8 +209,11 @@ export default class AppComponent {
     '$timeout',
     'AlertService',
     'ApiService',
+    'BackupRestoreService',
     'BookmarkService',
+    'CryptoService',
     'LogService',
+    'NetworkService',
     'PlatformService',
     'StoreService',
     'UtilityService'
@@ -215,8 +225,11 @@ export default class AppComponent {
     $timeout: ng.ITimeoutService,
     AlertSvc: AlertService,
     ApiSvc: ApiService,
+    BackupRestoreSvc: BackupRestoreService,
     BookmarkSvc: BookmarkService,
+    CryptoSvc: CryptoService,
     LogSvc: LogService,
+    NetworkSvc: NetworkService,
     PlatformSvc: PlatformService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
@@ -226,8 +239,11 @@ export default class AppComponent {
     this.$timeout = $timeout;
     this.alertSvc = AlertSvc;
     this.apiSvc = ApiSvc;
+    this.backupRestoreSvc = BackupRestoreSvc;
     this.bookmarkSvc = BookmarkSvc;
+    this.cryptoSvc = CryptoSvc;
     this.logSvc = LogSvc;
+    this.networkSvc = NetworkSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
@@ -377,7 +393,7 @@ export default class AppComponent {
 
   backupRestoreForm_Revert_Click() {
     // Retrieve install backup from local storage
-    return this.storeSvc.get(Globals.CacheKeys.InstallBackup).then((installBackup) => {
+    return this.storeSvc.get<any>(Globals.CacheKeys.InstallBackup).then((installBackup) => {
       this.$timeout(() => {
         if (!installBackup) {
           this.settings.revertUnavailable = true;
@@ -405,7 +421,7 @@ export default class AppComponent {
 
     // Disable sync and restore local bookmarks to installation state
     return this.$q
-      .all([this.storeSvc.get(Globals.CacheKeys.InstallBackup), this.disableSync()])
+      .all([this.storeSvc.get<any>(Globals.CacheKeys.InstallBackup), this.disableSync()])
       .then((response) => {
         const installBackupObj = JSON.parse(response[0]);
         const installBackupDate = new Date(installBackupObj.date);
@@ -877,20 +893,15 @@ export default class AppComponent {
         Globals.CacheKeys.DisplayUpdated,
         Globals.CacheKeys.SyncEnabled
       ])
-      .then((cachedData) => {
-        const displayHelp = cachedData[Globals.CacheKeys.DisplayHelp];
-        const displayPermissions = cachedData[Globals.CacheKeys.DisplayPermissions];
-        const displayUpdated = cachedData[Globals.CacheKeys.DisplayUpdated];
-        const syncEnabled = cachedData[Globals.CacheKeys.SyncEnabled];
-
+      .then((storeContent) => {
         switch (true) {
-          case displayUpdated:
+          case storeContent.displayUpdated:
             return this.changeView(this.view.views.updated);
-          case displayPermissions:
+          case storeContent.displayPermissions:
             return this.changeView(this.view.views.permissions);
-          case displayHelp:
+          case storeContent.displayHelp:
             return this.helpPanel_ShowHelp();
-          case syncEnabled:
+          case storeContent.syncEnabled:
             return this.changeView(this.view.views.search);
           default:
             return this.changeView(this.view.views.login);
@@ -900,7 +911,7 @@ export default class AppComponent {
 
   displayQrPanel() {
     // QR code should encode sync info
-    const syncInfo = this.utilitySvc.createSyncInfoObject(this.sync.id, this.sync.service.url);
+    const syncInfo = this.backupRestoreSvc.createSyncInfoObject(this.sync.id, this.sync.service.url);
 
     // Generate QR code
     const qrcode = new QRCode({
@@ -936,10 +947,10 @@ export default class AppComponent {
       ])
       .then((data) => {
         const bookmarksData = data[0];
-        const syncEnabled = data[1][Globals.CacheKeys.SyncEnabled];
-        const syncId = data[1][Globals.CacheKeys.SyncId];
+        const syncEnabled = data[1].syncEnabled;
+        const syncId = data[1].syncId;
         const serviceUrl = data[2];
-        const backupData = this.utilitySvc.createBackupData(
+        const backupData = this.backupRestoreSvc.createBackupData(
           bookmarksData,
           syncEnabled ? syncId : null,
           syncEnabled ? serviceUrl : null
@@ -947,7 +958,7 @@ export default class AppComponent {
 
         // Beautify json and download data
         const beautifiedJson = JSON.stringify(backupData, null, 2);
-        return this.platformSvc.downloadFile(this.utilitySvc.getBackupFileName(), beautifiedJson, 'backupLink');
+        return this.platformSvc.downloadFile(this.backupRestoreSvc.getBackupFileName(), beautifiedJson, 'backupLink');
       })
       .then((message) => {
         // Display message
@@ -958,11 +969,11 @@ export default class AppComponent {
   downloadLogFile() {
     // Get cached message log
     return this.storeSvc
-      .get(Globals.CacheKeys.TraceLog)
+      .get<string[]>(Globals.CacheKeys.TraceLog)
       .then((debugMessageLog) => {
         // Trigger download
         return this.platformSvc.downloadFile(
-          this.utilitySvc.getLogFileName(),
+          this.getLogFileName(),
           debugMessageLog.join('\r\n'),
           'downloadLogFileLink'
         );
@@ -971,6 +982,23 @@ export default class AppComponent {
         // Display message
         this.settings.downloadLogCompletedMessage = message;
       });
+  }
+
+  getCountryNameFrom2LetterISOCode(isoCode) {
+    if (!isoCode) {
+      return null;
+    }
+
+    const country = countriesList.countries[isoCode];
+    if (!country) {
+      this.logSvc.logWarning(`No country found matching ISO code: ${isoCode}`);
+    }
+    return country.name;
+  }
+
+  getLogFileName() {
+    const fileName = `xbs_log_${this.utilitySvc.getDateTimeString(new Date())}.txt`;
+    return fileName;
   }
 
   getMetadataForCurrentPage() {
@@ -1026,16 +1054,12 @@ export default class AppComponent {
       ])
       .then((cachedData) => {
         // Set view model values
-        this.settings.displaySearchBarBeneathResults = !!cachedData[0][
-          Globals.CacheKeys.DisplaySearchBarBeneathResults
-        ];
-        this.settings.defaultToFolderView = !!cachedData[0][Globals.CacheKeys.DefaultToFolderView];
-        this.sync.enabled = !!cachedData[0][Globals.CacheKeys.SyncEnabled];
-        this.sync.id = cachedData[0][Globals.CacheKeys.SyncId];
+        this.settings.darkModeEnabled = !!cachedData[0].darkModeEnabled;
+        this.settings.displaySearchBarBeneathResults = !!cachedData[0].displaySearchBarBeneathResults;
+        this.settings.defaultToFolderView = !!cachedData[0].defaultToFolderView;
+        this.sync.enabled = !!cachedData[0].syncEnabled;
+        this.sync.id = cachedData[0].syncId;
         this.sync.service.url = cachedData[1];
-        if (cachedData[0][Globals.CacheKeys.DarkModeEnabled] !== undefined) {
-          this.settings.darkModeEnabled = cachedData[0][Globals.CacheKeys.DarkModeEnabled];
-        }
 
         // Check if a sync is currently in progress
         return this.platformSvc.sync_Current().then((currentSync) => {
@@ -1052,7 +1076,7 @@ export default class AppComponent {
               .change(this.view.views.loading)
               .then(this.waitForSyncsToFinish)
               .then(() => {
-                return this.storeSvc.get(Globals.CacheKeys.SyncEnabled);
+                return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled);
               })
               .then((syncEnabled) => {
                 // Check that user didn't cancel sync
@@ -1199,7 +1223,7 @@ export default class AppComponent {
       this.syncForm_SyncId_Change();
     }, 150);
 
-    return this.storeSvc.get(Globals.CacheKeys.DisplayOtherSyncsWarning).then((displayOtherSyncsWarning) => {
+    return this.storeSvc.get<boolean>(Globals.CacheKeys.DisplayOtherSyncsWarning).then((displayOtherSyncsWarning) => {
       if (this.utilitySvc.isMobilePlatform(this.platformName)) {
         // Set displayed panels for mobile platform
         this.login.displayGetSyncIdPanel = !this.sync.id;
@@ -1278,14 +1302,14 @@ export default class AppComponent {
       ])
       .then((data) => {
         const syncBookmarksToolbar = data[0];
-        const checkForAppUpdates = data[1][Globals.CacheKeys.CheckForAppUpdates];
-        const traceLog = data[1][Globals.CacheKeys.TraceLog];
+        const checkForAppUpdates = data[1].checkForAppUpdates;
+        const traceLog = data[1].traceLog;
         const readWebsiteDataPermissionsGranted = data[2];
 
         this.settings.checkForAppUpdates = checkForAppUpdates;
         this.settings.syncBookmarksToolbar = syncBookmarksToolbar;
         this.settings.readWebsiteDataPermissionsGranted = readWebsiteDataPermissionsGranted;
-        this.settings.logSize = new TextEncoder().encode(traceLog).length;
+        this.settings.logSize = new TextEncoder().encode(traceLog.join()).length;
 
         this.$timeout(() => {
           // Check for available sync updates on non-mobile platforms
@@ -1303,7 +1327,7 @@ export default class AppComponent {
               .catch((err) => {
                 // Swallow error if sync failed due to network connection
                 if (
-                  this.utilitySvc.isNetworkConnectionError(err) ||
+                  this.networkSvc.isNetworkConnectionError(err) ||
                   err instanceof Exceptions.InvalidServiceException ||
                   err instanceof Exceptions.ServiceOfflineException
                 ) {
@@ -1504,7 +1528,7 @@ export default class AppComponent {
   }
 
   refreshSyncDataUsageMeter() {
-    return this.storeSvc.get(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
       // Return if not synced
       if (!syncEnabled) {
         return;
@@ -1572,7 +1596,7 @@ export default class AppComponent {
     this.platformSvc.interface_Working_Show();
 
     return this.storeSvc
-      .get(Globals.CacheKeys.SyncEnabled)
+      .get<boolean>(Globals.CacheKeys.SyncEnabled)
       .then((cachedSyncEnabled) => {
         syncEnabled = cachedSyncEnabled;
 
@@ -2048,7 +2072,7 @@ export default class AppComponent {
     }
 
     return this.$q
-      .all([this.bookmarkSvc.getSyncBookmarksToolbar(), this.storeSvc.get(Globals.CacheKeys.SyncEnabled)])
+      .all([this.bookmarkSvc.getSyncBookmarksToolbar(), this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled)])
       .then((cachedData) => {
         const syncBookmarksToolbar = cachedData[0];
         const syncEnabled = cachedData[1];
@@ -2073,34 +2097,23 @@ export default class AppComponent {
   }
 
   settings_Prefs_SyncBookmarksToolbar_Confirm() {
-    let syncId;
+    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+      if (!syncEnabled) {
+        return;
+      }
 
-    return this.storeSvc
-      .get([Globals.CacheKeys.SyncEnabled, Globals.CacheKeys.SyncId])
-      .then((cachedData) => {
-        const syncEnabled = cachedData[Globals.CacheKeys.SyncEnabled];
-        syncId = cachedData[Globals.CacheKeys.SyncId];
+      // Hide sync confirmation and display loading overlay
+      this.settings.displaySyncBookmarksToolbarConfirmation = false;
+      this.platformSvc.interface_Working_Show();
 
-        // If sync not enabled, return
-        if (!syncEnabled) {
-          return;
-        }
-
-        // Hide sync confirmation and display loading overlay
-        this.settings.displaySyncBookmarksToolbarConfirmation = false;
-        this.platformSvc.interface_Working_Show();
-
-        // Enable setting in cache
-        return this.storeSvc.set(Globals.CacheKeys.SyncBookmarksToolbar, true);
-      })
-      .then(() => {
+      // Enable setting in cache
+      return this.storeSvc.set(Globals.CacheKeys.SyncBookmarksToolbar, true).then(() => {
         this.logSvc.logInfo('Toolbar sync enabled');
 
-        // Queue sync with no callback action
-        return this.queueSync({
-          type: !syncId ? Globals.SyncType.Push : Globals.SyncType.Pull
-        });
+        // Refresh local sync data
+        return this.queueSync({ type: Globals.SyncType.Pull });
       });
+    });
   }
 
   startSyncing() {
@@ -2177,7 +2190,7 @@ export default class AppComponent {
         }
 
         // Generate a password hash, cache it then queue the sync
-        return this.utilitySvc
+        return this.cryptoSvc
           .getPasswordHash(this.sync.password, syncId)
           .then((passwordHash) => {
             this.storeSvc.set(Globals.CacheKeys.Password, passwordHash);

@@ -99,7 +99,7 @@ export default class WebExtPlatformService implements PlatformService {
         return;
       }
 
-      return this.utilitySvc.get24hrTimeFromDate(new Date(alarm.scheduledTime));
+      return this.get24hrTimeFromDate(new Date(alarm.scheduledTime));
     });
   }
 
@@ -990,6 +990,10 @@ export default class WebExtPlatformService implements PlatformService {
 
       return localBookmark;
     });
+  }
+
+  get24hrTimeFromDate(date) {
+    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
   }
 
   getConstant(stringObj: any): string {

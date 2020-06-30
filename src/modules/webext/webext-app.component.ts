@@ -20,7 +20,7 @@ export default class WebExtAppComponent extends AppComponent {
       return this.$q.resolve();
     }
 
-    return this.storeSvc.get(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
       if (!syncEnabled) {
         return null;
       }

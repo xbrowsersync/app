@@ -24,15 +24,10 @@ import Strings from '../../../res/strings/en.json';
 import Alert from '../shared/alert/alert.interface';
 import AlertService from '../shared/alert/alert.service';
 import BookmarkService from '../shared/bookmark/bookmark.service';
-import {
-  HttpRequestFailedException,
-  HttpRequestCancelledException,
-  NoDataFoundException,
-  SyncRemovedException,
-  AmbiguousSyncRequestException
-} from '../shared/exceptions/exception-types';
+import * as Exceptions from '../shared/exceptions/exception-types';
 import Globals from '../shared/globals';
 import LogService from '../shared/log/log.service';
+import NetworkService from '../shared/network/network.service';
 import StoreService from '../shared/store/store.service';
 import UtilityService from '../shared/utility/utility.service';
 
@@ -46,6 +41,7 @@ export default class WebExtBackgroundService {
   bookmarkSvc: BookmarkService;
   logSvc: LogService;
   nativeBookmarksSvc: NativeBookmarksService;
+  networkSvc: NetworkService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
@@ -60,6 +56,7 @@ export default class WebExtBackgroundService {
     'BookmarkService',
     'LogService',
     'NativeBookmarksService',
+    'NetworkService',
     'PlatformService',
     'StoreService',
     'UtilityService'
@@ -72,6 +69,7 @@ export default class WebExtBackgroundService {
     BookmarkSvc: BookmarkService,
     LogSvc: LogService,
     NativeBookmarksSvc: NativeBookmarksService,
+    NetworkSvc: NetworkService,
     PlatformSvc: PlatformService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
@@ -83,6 +81,7 @@ export default class WebExtBackgroundService {
     this.bookmarkSvc = BookmarkSvc;
     this.logSvc = LogSvc;
     this.nativeBookmarksSvc = NativeBookmarksSvc;
+    this.networkSvc = NetworkSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
@@ -110,7 +109,7 @@ export default class WebExtBackgroundService {
   checkForUpdatesOnStartup() {
     return this.$q((resolve, reject) => {
       // If network disconnected, skip update check
-      if (!this.utilitySvc.isNetworkConnected()) {
+      if (!this.networkSvc.isNetworkConnected()) {
         this.logSvc.logInfo('Couldn’t check for updates on startup: network offline');
         return resolve(false);
       }
@@ -120,17 +119,17 @@ export default class WebExtBackgroundService {
         .checkForUpdates()
         .then(resolve)
         .catch((err) => {
-          if (!(err instanceof HttpRequestFailedException)) {
+          if (!(err instanceof Exceptions.HttpRequestFailedException)) {
             return reject(err);
           }
 
           // If request failed, retry once
           this.logSvc.logInfo('Connection to API failed, retrying check for sync updates momentarily');
           this.$timeout(() => {
-            this.storeSvc.get(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+            this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
               if (!syncEnabled) {
                 this.logSvc.logInfo('Sync was disabled before retry attempted');
-                return reject(new HttpRequestCancelledException());
+                return reject(new Exceptions.HttpRequestCancelledException());
               }
 
               this.bookmarkSvc.checkForUpdates().then(resolve).catch(reject);
@@ -194,7 +193,7 @@ export default class WebExtBackgroundService {
 
     // Exit if sync not enabled
     return this.storeSvc
-      .get(Globals.CacheKeys.SyncEnabled)
+      .get<boolean>(Globals.CacheKeys.SyncEnabled)
       .then((syncEnabled) => {
         if (!syncEnabled) {
           return;
@@ -213,15 +212,15 @@ export default class WebExtBackgroundService {
       })
       .catch((err) => {
         // Don't display alert if sync failed due to network connection
-        if (this.utilitySvc.isNetworkConnectionError(err)) {
+        if (this.networkSvc.isNetworkConnectionError(err)) {
           this.logSvc.logInfo('Could not check for updates, no connection');
           return;
         }
 
         // If ID was removed disable sync
-        if (err instanceof NoDataFoundException) {
+        if (err instanceof Exceptions.NoDataFoundException) {
           this.bookmarkSvc.disableSync();
-          throw new SyncRemovedException(null, err);
+          throw new Exceptions.SyncRemovedException(null, err);
         }
 
         throw err;
@@ -229,9 +228,7 @@ export default class WebExtBackgroundService {
   }
 
   init() {
-    let syncEnabled;
     this.logSvc.logInfo('Starting up');
-
     this.storeSvc
       .get([
         Globals.CacheKeys.CheckForAppUpdates,
@@ -242,34 +239,32 @@ export default class WebExtBackgroundService {
         Globals.CacheKeys.SyncId,
         Globals.CacheKeys.SyncVersion
       ])
-      .then((cachedData) => {
-        syncEnabled = cachedData[Globals.CacheKeys.SyncEnabled];
-        const checkForAppUpdates = cachedData[Globals.CacheKeys.CheckForAppUpdates];
-
+      .then((storeContent) => {
         // Add useful debug info to beginning of trace log
-        cachedData.appVersion = Globals.AppVersion;
-        cachedData.platform = _.omit(browserDetect(), 'versionNumber');
+        const debugInfo = angular.copy(storeContent) as any;
+        debugInfo.appVersion = Globals.AppVersion;
+        debugInfo.platform = _.omit(browserDetect(), 'versionNumber');
         this.logSvc.logInfo(
-          Object.keys(cachedData)
+          Object.keys(debugInfo)
             .filter((key) => {
-              return cachedData[key] != null;
+              return debugInfo[key] != null;
             })
             .reduce((prev, current) => {
-              prev[current] = cachedData[current];
+              prev[current] = debugInfo[current];
               return prev;
             }, {})
         );
 
         // Update browser action icon
-        this.platformSvc.interface_Refresh(syncEnabled);
+        this.platformSvc.interface_Refresh(storeContent.syncEnabled);
 
         // Check for new app version after a delay
-        if (checkForAppUpdates) {
+        if (storeContent.checkForAppUpdates) {
           this.$timeout(this.checkForNewVersion, 5e3);
         }
 
         // Exit if sync not enabled
-        if (!syncEnabled) {
+        if (!storeContent.syncEnabled) {
           return;
         }
 
@@ -407,7 +402,7 @@ export default class WebExtBackgroundService {
           break;
         // Unknown command
         default:
-          action = this.$q.reject(new AmbiguousSyncRequestException());
+          action = this.$q.reject(new Exceptions.AmbiguousSyncRequestException());
       }
 
       return action.then(resolve).catch(reject);
@@ -477,7 +472,7 @@ export default class WebExtBackgroundService {
       })
       .then(() => {
         // If sync enabled, create id mappings
-        return this.storeSvc.get(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+        return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
           if (!syncEnabled) {
             return;
           }

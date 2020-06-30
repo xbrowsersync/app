@@ -279,7 +279,7 @@
           </li>
           <li data-ng-if="vm.sync.newService.location">
             <label>{{ vm.platformSvc.getConstant(vm.strings.login_ConfirmUpdateService_Location_Label) }}</label>
-            {{ vm.utilitySvc.getCountryNameFrom2LetterISOCode(vm.sync.newService.location) }}</li>
+            {{ vm.getCountryNameFrom2LetterISOCode(vm.sync.newService.location) }}</li>
           <li>
             <label>{{ vm.platformSvc.getConstant(vm.strings.login_ConfirmUpdateService_MaxSyncSize_Label) }}</label>
             {{ vm.sync.newService.maxSyncSize | kbFmt : 0 }}</li>
