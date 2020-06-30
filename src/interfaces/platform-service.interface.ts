@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import WebpageMetadata from './webpage-metadata.interface';
+
 export default interface PlatformService {
   automaticUpdates_NextUpdate: any;
   automaticUpdates_Start: any;
@@ -26,7 +28,7 @@ export default interface PlatformService {
   getCurrentUrl: any;
   getHelpPages: any;
   getNewTabUrl?: any;
-  getPageMetadata: any;
+  getPageMetadata: (getFullMetadata?: boolean, pageUrl?: string) => ng.IPromise<WebpageMetadata>;
   getSupportedUrl: any;
   interface_Working_Hide: any;
   interface_Working_Show: any;

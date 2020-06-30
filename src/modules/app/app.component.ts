@@ -819,7 +819,7 @@ export default class AppComponent {
     this.alertSvc.clearCurrentAlert();
   }
 
-  convertPageMetadataToBookmark(metadata) {
+  convertPageMetadataToBookmark(metadata): any {
     if (!metadata) {
       return;
     }
@@ -1008,7 +1008,7 @@ export default class AppComponent {
 
   getMetadataForUrl(url) {
     if (!url) {
-      return this.$q.resolve();
+      return this.$q.resolve(null);
     }
 
     return this.platformSvc.getPageMetadata(true, url).then(this.convertPageMetadataToBookmark);

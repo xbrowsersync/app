@@ -28,6 +28,7 @@ import LogService from '../shared/log/log.service';
 import MessageCommand from '../shared/message-command.enum';
 import NetworkService from '../shared/network/network.service';
 import StoreKey from '../shared/store/store-key.enum';
+import WebpageMetadata from '../../interfaces/webpage-metadata.interface';
 
 @autobind
 @Injectable('PlatformService')
@@ -463,20 +464,18 @@ export default class AndroidPlatformService implements PlatformService {
     return pages;
   }
 
-  getPageMetadata(getFullMetadata, pageUrl) {
+  getPageMetadata(getFullMetadata = true, pageUrl: string): ng.IPromise<WebpageMetadata> {
     let inAppBrowser;
     let loadUrlTimeout;
     let timeout;
 
     // Set default metadata from provided page url or current page
-    const metadata = {
-      description: undefined,
+    const metadata: WebpageMetadata = {
       title: this.currentPage ? this.currentPage.title : null,
-      tags: undefined,
       url: pageUrl || (this.currentPage ? this.currentPage.url : null)
     };
 
-    const promise = this.$q((resolve, reject) => {
+    const promise = this.$q<WebpageMetadata>((resolve, reject) => {
       // Return if no url set
       if (!metadata.url) {
         this.vm.bookmark.addButtonDisabledUntilEditForm = true;

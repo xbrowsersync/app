@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import angular from 'angular';
 import { autobind } from 'core-decorators';
 import { Injectable } from 'angular-ts-decorators';

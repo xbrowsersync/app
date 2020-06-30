@@ -25,6 +25,7 @@ import UtilityService from '../shared/utility/utility.service';
 import * as Exceptions from '../shared/exceptions/exception';
 import SyncType from '../shared/sync-type.enum';
 import WebExtBackgroundService from './webext-background/webext-background.service';
+import WebpageMetadata from '../../interfaces/webpage-metadata.interface';
 
 @autobind
 @Injectable('PlatformService')
@@ -839,7 +840,7 @@ export default class WebExtPlatformService implements PlatformService {
     return navigator.clipboard.writeText(textToCopy);
   }
 
-  createBookmarkFromLocalId(id, xBookmarks): angular.IPromise<any> {
+  createBookmarkFromLocalId(id, xBookmarks): ng.IPromise<any> {
     return browser.bookmarks.get(id).then((results) => {
       if (!results || results.length === 0) {
         throw new Exceptions.LocalBookmarkNotFoundException();
@@ -1126,17 +1127,16 @@ export default class WebExtPlatformService implements PlatformService {
     });
   }
 
-  getPageMetadata(getFullMetadata = true, pageUrl?): ng.IPromise<any> {
-    let activeTab;
+  getPageMetadata(getFullMetadata = true, pageUrl?): ng.IPromise<WebpageMetadata> {
     return browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
       // If active tab empty, throw error
-      activeTab = tabs && tabs[0];
+      const activeTab = tabs && tabs[0];
       if (!activeTab) {
         throw new Exceptions.FailedGetPageMetadataException();
       }
 
       // Default metadata to the info from the active tab
-      let metadata = activeTab && {
+      let metadata: WebpageMetadata = activeTab && {
         title: activeTab.title,
         url: activeTab.url
       };

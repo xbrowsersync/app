@@ -1,10 +1,9 @@
 import { autobind } from 'core-decorators';
-
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import WebpageMetadata from '../../interfaces/webpage-metadata.interface';
 
 @autobind
 class WebpageMetadataCollecter {
-  static CollectMetadata() {
+  static CollectMetadata(): WebpageMetadata {
     const collecter = new WebpageMetadataCollecter();
     return {
       title: collecter.getPageTitle(),
@@ -14,7 +13,7 @@ class WebpageMetadataCollecter {
     };
   }
 
-  getDecodedTextValue(text) {
+  getDecodedTextValue(text: string): string {
     if (!text) {
       return '';
     }
@@ -23,7 +22,7 @@ class WebpageMetadataCollecter {
     return txt.value;
   }
 
-  getPageDescription() {
+  getPageDescription(): string {
     const ogDescription: HTMLMetaElement =
       document.querySelector('meta[property="OG:DESCRIPTION"]') ||
       document.querySelector('meta[property="og:description"]');
@@ -47,8 +46,8 @@ class WebpageMetadataCollecter {
     return '';
   }
 
-  getPageKeywords() {
-    const keywords = [];
+  getPageKeywords(): string {
+    const keywords: string[] = [];
 
     // Get open graph tag values
     document.querySelectorAll<HTMLMetaElement>('meta[property="OG:VIDEO:TAG"]').forEach((tag) => {
@@ -85,7 +84,7 @@ class WebpageMetadataCollecter {
     return null;
   }
 
-  getPageTitle() {
+  getPageTitle(): string {
     const ogTitle: HTMLMetaElement =
       document.querySelector('meta[property="OG:TITLE"]') || document.querySelector('meta[property="og:title"]');
     if (ogTitle && ogTitle.content) {

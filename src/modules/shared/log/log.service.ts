@@ -105,7 +105,7 @@ export default class LogService {
     this.processLogItemQueue();
   }
 
-  processLogItemQueue(): angular.IPromise<void> {
+  processLogItemQueue(): ng.IPromise<void> {
     // Return if currently processing or no more items to process
     if (this.currentLogQueueItem || this.logItemQueue.length === 0) {
       return Promise.resolve();

@@ -33,7 +33,7 @@ export default class FirefoxNativeBookmarksService extends ChromiumNativeBookmar
     // If bookmark is not folder or separator, get page metadata from current tab
     (createdBookmark.url && !this.bookmarkSvc.isSeparator(createdBookmark)
       ? this.platformSvc.getPageMetadata()
-      : this.$q.resolve()
+      : this.$q.resolve(null)
     ).then((metadata) => {
       // Add metadata if bookmark is current tab location
       if (metadata && createdBookmark.url === metadata.url) {

@@ -14,6 +14,11 @@ export default class CryptoService {
   logSvc: LogService;
   storeSvc: StoreService;
 
+  keyGenAlgorithm = 'PBKDF2';
+  keyGenIterations = 250000;
+  keyGenHashFunction = 'SHA-256';
+  encryptionAlgorithm = 'AES-GCM';
+
   static $inject = ['$q', 'LogService', 'StoreService'];
   constructor($q: ng.IQService, LogSvc: LogService, StoreSvc: StoreService) {
     this.$q = $q;
@@ -61,10 +66,10 @@ export default class CryptoService {
 
         // Generate a cryptokey using the stored password hash for decryption
         return crypto.subtle
-          .importKey('raw', keyData, { length: keyData.length, name: 'AES-GCM' }, false, ['decrypt'])
+          .importKey('raw', keyData, { length: keyData.length, name: this.encryptionAlgorithm }, false, ['decrypt'])
           .then((key) => {
             // Convert base64 encoded encrypted data to bytes
-            return crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, encryptedDataBytes);
+            return crypto.subtle.decrypt({ name: this.encryptionAlgorithm, iv }, key, encryptedDataBytes);
           })
           .then((decryptedBytes) => {
             if (!decryptedBytes) {
@@ -110,13 +115,13 @@ export default class CryptoService {
 
         // Generate a new cryptokey using the stored password hash
         return crypto.subtle
-          .importKey('raw', keyData, { length: keyData.length, name: 'AES-GCM' }, false, ['encrypt'])
+          .importKey('raw', keyData, { length: keyData.length, name: this.encryptionAlgorithm }, false, ['encrypt'])
           .then((key) => {
             // Compress the data before encryption
             const compressedData = lzutf8.compress(data);
 
             // Encrypt the data using AES
-            return crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, compressedData);
+            return crypto.subtle.encrypt({ name: this.encryptionAlgorithm, iv }, key, compressedData);
           })
           .then((encryptedData) => {
             // Combine initialization vector and encrypted data and return as base64 encoded string
@@ -130,7 +135,7 @@ export default class CryptoService {
       });
   }
 
-  getPasswordHash(password, salt) {
+  getPasswordHash(password: string, salt: string): ng.IPromise<string> {
     const encoder = new TextEncoder();
     const encodedSalt = encoder.encode(salt);
 
@@ -143,18 +148,19 @@ export default class CryptoService {
 
       // Generate a new cryptokey using the stored password hash
       const keyData = encoder.encode(password);
-      return (crypto.subtle.importKey as any)('raw', keyData, { name: 'PBKDF2' }, false, ['deriveKey'])
+      return crypto.subtle
+        .importKey('raw', keyData, { length: keyData.length, name: this.keyGenAlgorithm }, false, ['deriveKey'])
         .then((importedKey) => {
           // Run the key through PBKDF2 with many iterations using the provided salt
           return crypto.subtle.deriveKey(
             {
-              name: 'PBKDF2',
+              name: this.keyGenAlgorithm,
               salt: encodedSalt,
-              iterations: 250000,
-              hash: 'SHA-256'
+              iterations: this.keyGenIterations,
+              hash: this.keyGenHashFunction
             },
             importedKey,
-            { name: 'AES-GCM', length: 256 },
+            { name: this.encryptionAlgorithm, length: 256 },
             true,
             ['encrypt', 'decrypt']
           );
