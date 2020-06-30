@@ -1,6 +1,6 @@
 import { NgModule } from 'angular-ts-decorators';
 import AlertService from './alert/alert.service';
-import ApiService from './api/api.service';
+import XbrowsersyncApiService from './api/xbrowsersync-api/xbrowsersync-api.service';
 import ApiRequestInterceptorFactory from './api/api-request-interceptor.factory';
 import BackupRestoreService from './backup-restore/backup-restore.service';
 import BookmarkService from './bookmark/bookmark.service';
@@ -16,7 +16,6 @@ import UtilityService from './utility/utility.service';
   providers: [
     AlertService,
     ApiRequestInterceptorFactory,
-    ApiService,
     BackupRestoreService,
     BookmarkService,
     CryptoService,
@@ -24,7 +23,8 @@ import UtilityService from './utility/utility.service';
     LogService,
     NetworkService,
     StoreService,
-    UtilityService
+    UtilityService,
+    XbrowsersyncApiService
   ]
 })
 export default class GlobalSharedModule {}

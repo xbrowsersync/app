@@ -15,7 +15,7 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import _ from 'underscore';
-import ApiService from '../api/api.service';
+import ApiService from '../api/api-service.interface';
 import BookmarkChangeType from './bookmark-change-type.enum';
 import CryptoService from '../crypto/crypto.service';
 import ExceptionHandler from '../exceptions/exception-handler.interface';

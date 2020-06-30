@@ -32,15 +32,10 @@ export default {
   SyncPollTimeout: 2000,
   Title: 'xBrowserSync',
   URL: {
-    Bookmarks: '/bookmarks',
-    Current: '/current',
     DefaultServiceUrl: 'https://api.xbrowsersync.org',
     HttpRegex: '^https?://\\w+',
-    LastUpdated: '/lastUpdated',
     ProtocolRegex: '^[\\w-]+:',
-    ServiceInformation: '/info',
     ValidUrlRegex:
-      '(\\w+://)?((www\\.)?[-a-zA-Z0-9@:%._\\+~#=]+\\.[a-z]+|(\\d{1,3}\\.){3}\\d{1,3})\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)',
-    Version: '/version'
+      '(\\w+://)?((www\\.)?[-a-zA-Z0-9@:%._\\+~#=]+\\.[a-z]+|(\\d{1,3}\\.){3}\\d{1,3})\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)'
   }
 };

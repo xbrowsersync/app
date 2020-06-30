@@ -27,7 +27,7 @@ import Strings from '../../../res/strings/en.json';
 import Alert from '../shared/alert/alert.interface';
 import AlertService from '../shared/alert/alert.service';
 import AlertType from '../shared/alert/alert-type.enum';
-import ApiService from '../shared/api/api.service.js';
+import ApiService from '../shared/api/api-service.interface';
 import ApiServiceStatus from '../shared/api/api-service-status.enum';
 import BackupRestoreService from '../shared/backup-restore/backup-restore.service';
 import BookmarkService from '../shared/bookmark/bookmark.service.js';

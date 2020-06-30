@@ -11,7 +11,7 @@ export default interface StoreContent {
   displayUpdated: boolean;
   defaultToFolderView: boolean;
   installBackup: any;
-  lastUpdated: Date;
+  lastUpdated: string;
   password: string;
   serviceUrl: string;
   syncBookmarksToolbar: boolean;

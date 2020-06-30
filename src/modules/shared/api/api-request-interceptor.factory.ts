@@ -1,10 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
 import { autobind } from 'core-decorators';
-import { IHttpInterceptor, IHttpInterceptorFactory } from 'angular';
+import { IHttpInterceptor } from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import Globals from '../globals';
 
@@ -18,7 +13,7 @@ export default class ApiRequestInterceptorFactory implements IHttpInterceptor {
     this.$q = $q;
   }
 
-  request(config: ng.IRequestConfig) {
+  request(config: ng.IRequestConfig): ng.IRequestConfig | ng.IPromise<ng.IRequestConfig> {
     // Add the api version to the http Accept-Version header
     if (config.url !== Globals.ReleaseLatestUrl) {
       config.headers['Accept-Version'] = Globals.MinApiVersion;
