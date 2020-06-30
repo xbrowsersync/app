@@ -12,7 +12,7 @@ import LogService from '../shared/log/log.service';
 import MessageCommand from '../shared/message-command.enum';
 import SyncType from '../shared/sync-type.enum';
 import UtilityService from '../shared/utility/utility.service';
-import BookmarkIdMapperService from '../webext/bookmark-id-mapper.service';
+import BookmarkIdMapperService from '../webext/bookmark-id-mapper/bookmark-id-mapper.service';
 
 @autobind
 @Injectable('NativeBookmarksService')

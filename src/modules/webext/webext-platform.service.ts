@@ -13,7 +13,7 @@ import { browser } from 'webextension-polyfill-ts';
 import angular from 'angular';
 import _ from 'underscore';
 import { autobind } from 'core-decorators';
-import BookmarkIdMapperService from './bookmark-id-mapper.service';
+import BookmarkIdMapperService from './bookmark-id-mapper/bookmark-id-mapper.service';
 import PlatformService from '../../interfaces/platform-service.interface';
 import Strings from '../../../res/strings/en.json';
 import BookmarkService from '../shared/bookmark/bookmark.service';
@@ -24,7 +24,7 @@ import StoreService from '../shared/store/store.service';
 import UtilityService from '../shared/utility/utility.service';
 import * as Exceptions from '../shared/exceptions/exception';
 import SyncType from '../shared/sync-type.enum';
-import WebExtBackgroundService from './webext-background.service';
+import WebExtBackgroundService from './webext-background/webext-background.service';
 
 @autobind
 @Injectable('PlatformService')

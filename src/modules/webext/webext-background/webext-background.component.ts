@@ -1,7 +1,7 @@
 import { Component } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import WebExtBackgroundService from './webext-background.service';
-import AlertService from '../shared/alert/alert.service';
+import AlertService from '../../shared/alert/alert.service';
 
 @autobind
 @Component({

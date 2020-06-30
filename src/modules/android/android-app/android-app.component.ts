@@ -2,21 +2,21 @@
 
 import { Component } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
-import AndroidPlatformService from './android-platform.service';
-import AppComponent from '../app/app.component';
-import Strings from '../../../res/strings/en.json';
-import Alert from '../shared/alert/alert.interface';
-import AlertType from '../shared/alert/alert-type.enum';
-import { AndroidException } from '../shared/exceptions/exception';
-import Globals from '../shared/globals';
-import PlatformType from '../shared/platform-type.enum';
-import StoreKey from '../shared/store/store-key.enum';
+import AndroidPlatformService from '../android-platform.service';
+import AppComponent from '../../app/app.component';
+import Strings from '../../../../res/strings/en.json';
+import Alert from '../../shared/alert/alert.interface';
+import AlertType from '../../shared/alert/alert-type.enum';
+import { AndroidException } from '../../shared/exceptions/exception';
+import Globals from '../../shared/globals';
+import PlatformType from '../../shared/platform-type.enum';
+import StoreKey from '../../shared/store/store-key.enum';
 
 @autobind
 @Component({
   controllerAs: 'vm',
   selector: 'app',
-  template: require('../app/app.component.html')
+  template: require('../../app/app.component.html')
 })
 export default class AndroidAppComponent extends AppComponent {
   platformSvc: AndroidPlatformService;

@@ -1,7 +1,7 @@
 import angular from 'angular';
 import { NgModule } from 'angular-ts-decorators';
 import ChromiumNativeBookmarksService from './chromium-native-bookmarks.service';
-import WebExtBackgroundModule from '../webext/webext-background.module';
+import WebExtBackgroundModule from '../webext/webext-background/webext-background.module';
 import WebExtPlatformService from '../webext/webext-platform.service';
 
 @NgModule({

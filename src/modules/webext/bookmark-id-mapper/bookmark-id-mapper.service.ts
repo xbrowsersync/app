@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
-import { BookmarkMappingNotFoundException } from '../shared/exceptions/exception';
-import StoreService from '../shared/store/store.service';
-import StoreKey from '../shared/store/store-key.enum';
+import BookmarkIdMapping from './bookmark-id-mapping.interface';
+import { BookmarkMappingNotFoundException } from '../../shared/exceptions/exception';
+import StoreService from '../../shared/store/store.service';
+import StoreKey from '../../shared/store/store-key.enum';
 
 @autobind
 @Injectable('BookmarkIdMapperService')
@@ -17,13 +17,13 @@ export default class BookmarkIdMapperService {
     this.storeSvc = StoreSvc;
   }
 
-  add(newMappings) {
+  add(newMappings: BookmarkIdMapping | BookmarkIdMapping[]): ng.IPromise<void> {
     // Convert mappings to arrays if necessary
     const newMappingsArr = Array.isArray(newMappings) ? newMappings : [newMappings];
 
     // Add new mappings to existing mappings
     return this.storeSvc
-      .get<any[]>(StoreKey.BookmarkIdMappings)
+      .get<BookmarkIdMapping[]>(StoreKey.BookmarkIdMappings)
       .then((idMappings) => {
         return idMappings.concat(newMappingsArr);
       })
@@ -32,21 +32,21 @@ export default class BookmarkIdMapperService {
       });
   }
 
-  clear() {
+  clear(): ng.IPromise<void> {
     return this.storeSvc.remove(StoreKey.BookmarkIdMappings);
   }
 
-  createMapping(syncedId, nativeId?) {
+  createMapping(syncedId: number, nativeId?: string): BookmarkIdMapping {
     return {
       nativeId,
       syncedId
     };
   }
 
-  get(nativeId, syncedId?) {
-    return this.storeSvc.get<any[]>(StoreKey.BookmarkIdMappings).then((idMappings) => {
+  get(nativeId: string, syncedId?: number): ng.IPromise<BookmarkIdMapping> {
+    return this.storeSvc.get<BookmarkIdMapping[]>(StoreKey.BookmarkIdMappings).then((idMappings) => {
       // Find the requested mapping
-      let mapping;
+      let mapping: BookmarkIdMapping;
       if (nativeId != null) {
         mapping = idMappings.find((x) => {
           return x.nativeId === nativeId;
@@ -60,14 +60,14 @@ export default class BookmarkIdMapperService {
     });
   }
 
-  remove(syncedIds, nativeIds?) {
+  remove(syncedIds: number | number[], nativeIds?: string | string[]): ng.IPromise<void> {
     // Convert ids to arrays if necessary
     const syncedIdsArr = syncedIds != null ? (Array.isArray(syncedIds) ? syncedIds : [syncedIds]) : null;
     const nativeIdsArr = nativeIds != null ? (Array.isArray(nativeIds) ? nativeIds : [nativeIds]) : null;
 
     // Retrieve id mappings
     return this.storeSvc
-      .get(StoreKey.BookmarkIdMappings)
+      .get<BookmarkIdMapping[]>(StoreKey.BookmarkIdMappings)
       .then((idMappings) => {
         // Remove id mappings matching provided synced ids
         const idMappingsLessSynced =
@@ -91,7 +91,7 @@ export default class BookmarkIdMapperService {
             ? idMappingsLessSynced
             : nativeIdsArr.reduce((acc, val) => {
                 const indexToRemove = acc.findIndex((x) => {
-                  return x.nativeIds === val;
+                  return x.nativeId === val;
                 });
                 if (indexToRemove < 0) {
                   throw new Error('Bookmark ID mapping to remove could not be determined');
@@ -109,7 +109,7 @@ export default class BookmarkIdMapperService {
       });
   }
 
-  set(idMappings) {
+  set(idMappings: BookmarkIdMapping[]): ng.IPromise<void> {
     // Sort mappings then save to store
     const sortedMappings = idMappings.sort((a, b) => {
       return a.syncedId - b.syncedId;

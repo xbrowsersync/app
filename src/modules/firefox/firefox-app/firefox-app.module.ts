@@ -1,7 +1,7 @@
 import angular from 'angular';
 import { NgModule } from 'angular-ts-decorators';
-import FirefoxPlatformService from './firefox-platform.service';
-import WebExtAppModule from '../webext/webext-app.module';
+import FirefoxPlatformService from '../firefox-platform.service';
+import WebExtAppModule from '../../webext/webext-app/webext-app.module';
 import FirefoxAppComponent from './firefox-app.component';
 
 @NgModule({

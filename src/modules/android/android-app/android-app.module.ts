@@ -1,9 +1,9 @@
 import angular from 'angular';
 import 'angular-hammer';
 import { NgModule } from 'angular-ts-decorators';
-import AppModule from '../app/app.module';
+import AppModule from '../../app/app.module';
 import AndroidAppComponent from './android-app.component';
-import AndroidPlatformService from './android-platform.service';
+import AndroidPlatformService from '../android-platform.service';
 import './android-app.module.scss';
 
 @NgModule({

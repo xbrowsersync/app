@@ -17,22 +17,22 @@ import compareVersions from 'compare-versions';
 import { autobind } from 'core-decorators';
 import _ from 'underscore';
 import { browser } from 'webextension-polyfill-ts';
-import BookmarkIdMapperService from './bookmark-id-mapper.service';
-import NativeBookmarksService from '../../interfaces/native-bookmarks-service.interface';
-import PlatformService from '../../interfaces/platform-service.interface';
-import Strings from '../../../res/strings/en.json';
-import Alert from '../shared/alert/alert.interface';
-import AlertService from '../shared/alert/alert.service';
-import BookmarkService from '../shared/bookmark/bookmark.service';
-import * as Exceptions from '../shared/exceptions/exception';
-import Globals from '../shared/globals';
-import LogService from '../shared/log/log.service';
-import MessageCommand from '../shared/message-command.enum';
-import NetworkService from '../shared/network/network.service';
-import StoreService from '../shared/store/store.service';
-import StoreKey from '../shared/store/store-key.enum';
-import SyncType from '../shared/sync-type.enum';
-import UtilityService from '../shared/utility/utility.service';
+import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
+import NativeBookmarksService from '../../../interfaces/native-bookmarks-service.interface';
+import PlatformService from '../../../interfaces/platform-service.interface';
+import Strings from '../../../../res/strings/en.json';
+import Alert from '../../shared/alert/alert.interface';
+import AlertService from '../../shared/alert/alert.service';
+import BookmarkService from '../../shared/bookmark/bookmark.service';
+import * as Exceptions from '../../shared/exceptions/exception';
+import Globals from '../../shared/globals';
+import LogService from '../../shared/log/log.service';
+import MessageCommand from '../../shared/message-command.enum';
+import NetworkService from '../../shared/network/network.service';
+import StoreService from '../../shared/store/store.service';
+import StoreKey from '../../shared/store/store-key.enum';
+import SyncType from '../../shared/sync-type.enum';
+import UtilityService from '../../shared/utility/utility.service';
 
 @autobind
 @Injectable('WebExtBackgroundService')
