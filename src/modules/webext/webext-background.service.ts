@@ -24,11 +24,14 @@ import Strings from '../../../res/strings/en.json';
 import Alert from '../shared/alert/alert.interface';
 import AlertService from '../shared/alert/alert.service';
 import BookmarkService from '../shared/bookmark/bookmark.service';
-import * as Exceptions from '../shared/exceptions/exception-types';
+import * as Exceptions from '../shared/exceptions/exception';
 import Globals from '../shared/globals';
 import LogService from '../shared/log/log.service';
+import MessageCommand from '../shared/message-command.enum';
 import NetworkService from '../shared/network/network.service';
 import StoreService from '../shared/store/store.service';
+import StoreKey from '../shared/store/store-key.enum';
+import SyncType from '../shared/sync-type.enum';
 import UtilityService from '../shared/utility/utility.service';
 
 @autobind
@@ -126,7 +129,7 @@ export default class WebExtBackgroundService {
           // If request failed, retry once
           this.logSvc.logInfo('Connection to API failed, retrying check for sync updates momentarily');
           this.$timeout(() => {
-            this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+            this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
               if (!syncEnabled) {
                 this.logSvc.logInfo('Sync was disabled before retry attempted');
                 return reject(new Exceptions.HttpRequestCancelledException());
@@ -143,7 +146,7 @@ export default class WebExtBackgroundService {
 
       // Queue sync
       return this.platformSvc.sync_Queue({
-        type: Globals.SyncType.Pull
+        type: SyncType.Pull
       });
     });
   }
@@ -193,7 +196,7 @@ export default class WebExtBackgroundService {
 
     // Exit if sync not enabled
     return this.storeSvc
-      .get<boolean>(Globals.CacheKeys.SyncEnabled)
+      .get<boolean>(StoreKey.SyncEnabled)
       .then((syncEnabled) => {
         if (!syncEnabled) {
           return;
@@ -206,7 +209,7 @@ export default class WebExtBackgroundService {
 
           // Queue sync
           return this.platformSvc.sync_Queue({
-            type: Globals.SyncType.Pull
+            type: SyncType.Pull
           });
         });
       })
@@ -231,13 +234,13 @@ export default class WebExtBackgroundService {
     this.logSvc.logInfo('Starting up');
     this.storeSvc
       .get([
-        Globals.CacheKeys.CheckForAppUpdates,
-        Globals.CacheKeys.LastUpdated,
-        Globals.CacheKeys.ServiceUrl,
-        Globals.CacheKeys.SyncBookmarksToolbar,
-        Globals.CacheKeys.SyncEnabled,
-        Globals.CacheKeys.SyncId,
-        Globals.CacheKeys.SyncVersion
+        StoreKey.CheckForAppUpdates,
+        StoreKey.LastUpdated,
+        StoreKey.ServiceUrl,
+        StoreKey.SyncBookmarksToolbar,
+        StoreKey.SyncEnabled,
+        StoreKey.SyncId,
+        StoreKey.SyncVersion
       ])
       .then((storeContent) => {
         // Add useful debug info to beginning of trace log
@@ -282,10 +285,10 @@ export default class WebExtBackgroundService {
       .clear()
       .then(() => {
         return this.$q.all([
-          this.storeSvc.set(Globals.CacheKeys.CheckForAppUpdates, true),
-          this.storeSvc.set(Globals.CacheKeys.DisplayHelp, true),
-          this.storeSvc.set(Globals.CacheKeys.SyncBookmarksToolbar, true),
-          this.storeSvc.set(Globals.CacheKeys.DisplayPermissions, true)
+          this.storeSvc.set(StoreKey.CheckForAppUpdates, true),
+          this.storeSvc.set(StoreKey.DisplayHelp, true),
+          this.storeSvc.set(StoreKey.SyncBookmarksToolbar, true),
+          this.storeSvc.set(StoreKey.DisplayPermissions, true)
         ]);
       })
       .then(() => {
@@ -295,7 +298,7 @@ export default class WebExtBackgroundService {
             bookmarks: localBookmarks,
             date: new Date().toISOString()
           };
-          return this.storeSvc.set(Globals.CacheKeys.InstallBackup, JSON.stringify(data));
+          return this.storeSvc.set(StoreKey.InstallBackup, JSON.stringify(data));
         });
       })
       .then(() => {
@@ -357,9 +360,9 @@ export default class WebExtBackgroundService {
       let action;
       switch (message.command) {
         // Queue bookmarks sync
-        case Globals.Commands.SyncBookmarks:
+        case MessageCommand.SyncBookmarks:
           action = this.bookmarkSvc.queueSync(message, message.runSync).then(() => {
-            if (message.type !== Globals.SyncType.Push) {
+            if (message.type !== SyncType.Push) {
               return;
             }
 
@@ -377,27 +380,27 @@ export default class WebExtBackgroundService {
           });
           break;
         // Trigger bookmarks restore
-        case Globals.Commands.RestoreBookmarks:
+        case MessageCommand.RestoreBookmarks:
           action = this.restoreBookmarks(message);
           break;
         // Get current sync in progress
-        case Globals.Commands.GetCurrentSync:
+        case MessageCommand.GetCurrentSync:
           action = this.$q.resolve(this.bookmarkSvc.getCurrentSync());
           break;
         // Get current number of syncs on the queue
-        case Globals.Commands.GetSyncQueueLength:
+        case MessageCommand.GetSyncQueueLength:
           action = this.bookmarkSvc.getSyncQueueLength();
           break;
         // Disable sync
-        case Globals.Commands.DisableSync:
+        case MessageCommand.DisableSync:
           action = this.bookmarkSvc.disableSync();
           break;
         // Enable event listeners
-        case Globals.Commands.EnableEventListeners:
+        case MessageCommand.EnableEventListeners:
           action = this.nativeBookmarksSvc.enableEventListeners();
           break;
         // Disable event listeners
-        case Globals.Commands.DisableEventListeners:
+        case MessageCommand.DisableEventListeners:
           action = this.nativeBookmarksSvc.disableEventListeners();
           break;
         // Unknown command
@@ -429,7 +432,7 @@ export default class WebExtBackgroundService {
 
   upgradeExtension(oldVersion, newVersion) {
     return this.storeSvc
-      .set(Globals.CacheKeys.TraceLog)
+      .set(StoreKey.TraceLog)
       .then(() => {
         this.logSvc.logInfo(`Upgrading from ${oldVersion} to ${newVersion}`);
       })
@@ -448,7 +451,7 @@ export default class WebExtBackgroundService {
           title: this.platformSvc.getConstant(Strings.appUpdated_Title) + Globals.AppVersion
         };
         this.displayAlert(alert, Globals.ReleaseNotesUrlStem + Globals.AppVersion);
-        return this.storeSvc.set(Globals.CacheKeys.DisplayUpdated, true);
+        return this.storeSvc.set(StoreKey.DisplayUpdated, true);
       });
   }
 
@@ -472,7 +475,7 @@ export default class WebExtBackgroundService {
       })
       .then(() => {
         // If sync enabled, create id mappings
-        return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+        return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
           if (!syncEnabled) {
             return;
           }

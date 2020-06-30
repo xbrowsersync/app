@@ -19,9 +19,11 @@ import Strings from '../../../res/strings/en.json';
 import BookmarkService from '../shared/bookmark/bookmark.service';
 import Globals from '../shared/globals';
 import LogService from '../shared/log/log.service';
+import MessageCommand from '../shared/message-command.enum';
 import StoreService from '../shared/store/store.service';
 import UtilityService from '../shared/utility/utility.service';
-import * as Exceptions from '../shared/exceptions/exception-types';
+import * as Exceptions from '../shared/exceptions/exception';
+import SyncType from '../shared/sync-type.enum';
 import WebExtBackgroundService from './webext-background.service';
 
 @autobind
@@ -967,13 +969,13 @@ export default class WebExtPlatformService implements PlatformService {
 
   eventListeners_Disable() {
     return this.sendMessage({
-      command: Globals.Commands.DisableEventListeners
+      command: MessageCommand.DisableEventListeners
     });
   }
 
   eventListeners_Enable() {
     return this.sendMessage({
-      command: Globals.Commands.EnableEventListeners
+      command: MessageCommand.EnableEventListeners
     });
   }
 
@@ -1187,7 +1189,7 @@ export default class WebExtPlatformService implements PlatformService {
 
     if (syncType) {
       iconPath =
-        syncType === Globals.SyncType.Pull
+        syncType === SyncType.Pull
           ? `${Globals.PathToAssets}/downloading.png`
           : `${Globals.PathToAssets}/uploading.png`;
       newTitle += syncingTitle;
@@ -1353,7 +1355,7 @@ export default class WebExtPlatformService implements PlatformService {
   }
 
   refreshLocalSyncData() {
-    return this.sync_Queue({ type: Globals.SyncType.Pull }).then(() => {
+    return this.sync_Queue({ type: SyncType.Pull }).then(() => {
       this.logSvc.logInfo('Local sync data refreshed');
     });
   }
@@ -1427,13 +1429,13 @@ export default class WebExtPlatformService implements PlatformService {
 
   sync_Current() {
     return this.sendMessage({
-      command: Globals.Commands.GetCurrentSync
+      command: MessageCommand.GetCurrentSync
     });
   }
 
   sync_Disable() {
     return this.sendMessage({
-      command: Globals.Commands.DisableSync
+      command: MessageCommand.DisableSync
     });
   }
 
@@ -1443,11 +1445,11 @@ export default class WebExtPlatformService implements PlatformService {
 
   sync_GetQueueLength() {
     return this.sendMessage({
-      command: Globals.Commands.GetSyncQueueLength
+      command: MessageCommand.GetSyncQueueLength
     });
   }
 
-  sync_Queue(syncData, command = Globals.Commands.SyncBookmarks, runSync = true) {
+  sync_Queue(syncData, command = MessageCommand.SyncBookmarks, runSync = true) {
     syncData.command = command;
     syncData.runSync = runSync;
     return this.sendMessage(syncData);

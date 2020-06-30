@@ -1,4 +1,4 @@
-import { Exception } from '../exceptions/exception-types';
+import { Exception } from '../exceptions/exception';
 import LogLevel from './log-level.enum';
 
 export default interface LogQueueItem {

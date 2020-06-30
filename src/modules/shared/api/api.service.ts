@@ -5,23 +5,11 @@
 import { Injectable } from 'angular-ts-decorators';
 import compareVersions from 'compare-versions';
 import { autobind } from 'core-decorators';
-import {
-  InvalidServiceException,
-  ServiceOfflineException,
-  NetworkOfflineException,
-  NoDataFoundException,
-  NotAcceptingNewSyncsException,
-  DailyNewSyncLimitReachedException,
-  DataOutOfSyncException,
-  RequestEntityTooLargeException,
-  TooManyRequestsException,
-  HttpRequestFailedException,
-  UnsupportedApiVersionException,
-  MissingClientDataException
-} from '../exceptions/exception-types';
+import * as Exceptions from '../exceptions/exception';
 import Globals from '../globals';
 import NetworkService from '../network/network.service';
 import StoreService from '../store/store.service';
+import StoreKey from '../store/store-key.enum';
 import UtilityService from '../utility/utility.service';
 
 @autobind
@@ -60,7 +48,7 @@ export default class ApiService {
       if (this.skipOnlineCheck || this.networkSvc.isNetworkConnected()) {
         return resolve();
       }
-      return reject(new NetworkOfflineException());
+      return reject(new Exceptions.NetworkOfflineException());
     });
   }
 
@@ -86,12 +74,12 @@ export default class ApiService {
 
           // Check service is a valid xBrowserSync API
           if (!data || data.status == null || data.version == null) {
-            throw new InvalidServiceException();
+            throw new Exceptions.InvalidServiceException();
           }
 
           // Check service version is supported by this client
           if (compareVersions.compare(data.version, Globals.MinApiVersion, '<')) {
-            throw new UnsupportedApiVersionException();
+            throw new Exceptions.UnsupportedApiVersionException();
           }
 
           return data;
@@ -119,15 +107,15 @@ export default class ApiService {
 
             // Check response data is valid before returning
             if (!data || !data.id || !data.lastUpdated || !data.version) {
-              throw new NoDataFoundException();
+              throw new Exceptions.NoDataFoundException();
             }
 
             return data;
           });
       })
       .catch((err) => {
-        if (err instanceof InvalidServiceException) {
-          throw new ServiceOfflineException();
+        if (err instanceof Exceptions.InvalidServiceException) {
+          throw new Exceptions.ServiceOfflineException();
         }
         throw err;
       });
@@ -136,10 +124,10 @@ export default class ApiService {
   getBookmarks() {
     // Check secret and sync ID are present
     return this.storeSvc
-      .get([Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
+      .get([StoreKey.Password, StoreKey.SyncId])
       .then((storeContent) => {
         if (!storeContent.password || !storeContent.syncId) {
-          throw new MissingClientDataException();
+          throw new Exceptions.MissingClientDataException();
         }
 
         return this.checkNetworkIsOnline().then(() => {
@@ -159,7 +147,7 @@ export default class ApiService {
 
               // Check response data is valid before returning
               if (!data || !data.lastUpdated) {
-                throw new NoDataFoundException();
+                throw new Exceptions.NoDataFoundException();
               }
 
               return data;
@@ -167,8 +155,8 @@ export default class ApiService {
         });
       })
       .catch((err) => {
-        if (err instanceof InvalidServiceException) {
-          throw new ServiceOfflineException();
+        if (err instanceof Exceptions.InvalidServiceException) {
+          throw new Exceptions.ServiceOfflineException();
         }
         throw err;
       });
@@ -177,10 +165,10 @@ export default class ApiService {
   getBookmarksLastUpdated() {
     // Check secret and sync ID are present
     return this.storeSvc
-      .get([Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
+      .get([StoreKey.Password, StoreKey.SyncId])
       .then((storeContent) => {
         if (!storeContent.password || !storeContent.syncId) {
-          throw new MissingClientDataException();
+          throw new Exceptions.MissingClientDataException();
         }
 
         return this.checkNetworkIsOnline().then(() => {
@@ -200,7 +188,7 @@ export default class ApiService {
 
               // Check response data is valid before returning
               if (!data || !data.lastUpdated) {
-                throw new NoDataFoundException();
+                throw new Exceptions.NoDataFoundException();
               }
 
               return data;
@@ -208,8 +196,8 @@ export default class ApiService {
         });
       })
       .catch((err) => {
-        if (err instanceof InvalidServiceException) {
-          throw new ServiceOfflineException();
+        if (err instanceof Exceptions.InvalidServiceException) {
+          throw new Exceptions.ServiceOfflineException();
         }
         throw err;
       });
@@ -234,15 +222,15 @@ export default class ApiService {
 
             // Check response data is valid before returning
             if (!data) {
-              throw new NoDataFoundException();
+              throw new Exceptions.NoDataFoundException();
             }
 
             return data;
           });
       })
       .catch((err) => {
-        if (err instanceof InvalidServiceException) {
-          throw new ServiceOfflineException();
+        if (err instanceof Exceptions.InvalidServiceException) {
+          throw new Exceptions.ServiceOfflineException();
         }
         throw err;
       });
@@ -258,39 +246,39 @@ export default class ApiService {
     switch (response.status) {
       // 401 Unauthorized: sync data not found
       case 401:
-        exception = new NoDataFoundException(message);
+        exception = new Exceptions.NoDataFoundException(message);
         break;
       // 404 Not Found: invalid service
       case 404:
-        exception = new InvalidServiceException(message);
+        exception = new Exceptions.InvalidServiceException(message);
         break;
       // 405 Method Not Allowed: service not accepting new syncs
       case 405:
-        exception = new NotAcceptingNewSyncsException(message);
+        exception = new Exceptions.NotAcceptingNewSyncsException(message);
         break;
       // 406 Not Acceptable: daily new sync limit reached
       case 406:
-        exception = new DailyNewSyncLimitReachedException(message);
+        exception = new Exceptions.DailyNewSyncLimitReachedException(message);
         break;
       // 409 Conflict: sync update conflict
       case 409:
-        exception = new DataOutOfSyncException(message);
+        exception = new Exceptions.DataOutOfSyncException(message);
         break;
       // 413 Request Entity Too Large: sync data size exceeds service limit
       case 413:
-        exception = new RequestEntityTooLargeException(message);
+        exception = new Exceptions.RequestEntityTooLargeException(message);
         break;
       // 429 Too Many Requests: daily new sync limit reached
       case 429:
-        exception = new TooManyRequestsException(message);
+        exception = new Exceptions.TooManyRequestsException(message);
         break;
       // 503 Service Unavailable: service offline
       case 503:
-        exception = new ServiceOfflineException(message);
+        exception = new Exceptions.ServiceOfflineException(message);
         break;
       // Otherwise generic request failed
       default:
-        exception = new HttpRequestFailedException(message);
+        exception = new Exceptions.HttpRequestFailedException(message);
     }
 
     return exception;
@@ -299,10 +287,10 @@ export default class ApiService {
   updateBookmarks(encryptedBookmarks, updateSyncVersion?, backgroundUpdate?) {
     // Check secret and sync ID are present
     return this.storeSvc
-      .get([Globals.CacheKeys.LastUpdated, Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
+      .get([StoreKey.LastUpdated, StoreKey.Password, StoreKey.SyncId])
       .then((storeContent) => {
         if (!storeContent.lastUpdated || !storeContent.password || !storeContent.syncId) {
-          throw new MissingClientDataException();
+          throw new Exceptions.MissingClientDataException();
         }
 
         // If this is a background update, ensure online check is skipped until successfull request
@@ -335,7 +323,7 @@ export default class ApiService {
 
               // Check response data is valid before returning
               if (!data || !data.lastUpdated) {
-                throw new NoDataFoundException();
+                throw new Exceptions.NoDataFoundException();
               }
 
               return data;
@@ -343,8 +331,8 @@ export default class ApiService {
         });
       })
       .catch((err) => {
-        if (err instanceof InvalidServiceException) {
-          throw new ServiceOfflineException();
+        if (err instanceof Exceptions.InvalidServiceException) {
+          throw new Exceptions.ServiceOfflineException();
         }
         throw err;
       });

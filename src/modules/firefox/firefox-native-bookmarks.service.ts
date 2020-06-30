@@ -5,7 +5,7 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import ChromiumNativeBookmarksService from '../chromium/chromium-native-bookmarks.service';
-import Globals from '../shared/globals';
+import BookmarkChangeType from '../shared/bookmark/bookmark-change-type.enum';
 
 @autobind
 @Injectable('NativeBookmarksService')
@@ -14,7 +14,7 @@ export default class FirefoxNativeBookmarksService extends ChromiumNativeBookmar
     // Create change info
     const changeInfo = {
       bookmark: angular.copy(changes),
-      type: Globals.UpdateType.Update
+      type: BookmarkChangeType.Update
     };
     changeInfo.bookmark.id = id;
 
@@ -26,7 +26,7 @@ export default class FirefoxNativeBookmarksService extends ChromiumNativeBookmar
     // Create change info
     const changeInfo = {
       bookmark: angular.copy(createdBookmark),
-      type: Globals.UpdateType.Create
+      type: BookmarkChangeType.Create
     };
     changeInfo.bookmark.id = id;
 
@@ -97,7 +97,7 @@ export default class FirefoxNativeBookmarksService extends ChromiumNativeBookmar
     // Create change info
     const changeInfo = {
       bookmark: angular.copy(moveInfo),
-      type: Globals.UpdateType.Move
+      type: BookmarkChangeType.Move
     };
     changeInfo.bookmark.id = id;
 

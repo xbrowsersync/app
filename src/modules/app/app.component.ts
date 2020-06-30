@@ -28,15 +28,20 @@ import Alert from '../shared/alert/alert.interface';
 import AlertService from '../shared/alert/alert.service';
 import AlertType from '../shared/alert/alert-type.enum';
 import ApiService from '../shared/api/api.service.js';
+import ApiServiceStatus from '../shared/api/api-service-status.enum';
 import BackupRestoreService from '../shared/backup-restore/backup-restore.service';
 import BookmarkService from '../shared/bookmark/bookmark.service.js';
+import BookmarkChangeType from '../shared/bookmark/bookmark-change-type.enum';
 import CryptoService from '../shared/crypto/crypto.service';
 import ExceptionHandler from '../shared/exceptions/exception-handler.interface';
-import * as Exceptions from '../shared/exceptions/exception-types';
+import * as Exceptions from '../shared/exceptions/exception';
 import Globals from '../shared/globals';
 import LogService from '../shared/log/log.service';
+import MessageCommand from '../shared/message-command.enum';
 import NetworkService from '../shared/network/network.service';
 import StoreService from '../shared/store/store.service';
+import StoreKey from '../shared/store/store-key.enum';
+import SyncType from '../shared/sync-type.enum';
 import UtilityService from '../shared/utility/utility.service';
 
 @autobind
@@ -66,6 +71,7 @@ export default class AppComponent {
     message: '',
     type: undefined
   };
+  ApiServiceStatus = ApiServiceStatus;
   bookmark = {
     active: false,
     addButtonDisabledUntilEditForm: false,
@@ -393,7 +399,7 @@ export default class AppComponent {
 
   backupRestoreForm_Revert_Click() {
     // Retrieve install backup from local storage
-    return this.storeSvc.get<any>(Globals.CacheKeys.InstallBackup).then((installBackup) => {
+    return this.storeSvc.get<any>(StoreKey.InstallBackup).then((installBackup) => {
       this.$timeout(() => {
         if (!installBackup) {
           this.settings.revertUnavailable = true;
@@ -421,7 +427,7 @@ export default class AppComponent {
 
     // Disable sync and restore local bookmarks to installation state
     return this.$q
-      .all([this.storeSvc.get<any>(Globals.CacheKeys.InstallBackup), this.disableSync()])
+      .all([this.storeSvc.get<any>(StoreKey.InstallBackup), this.disableSync()])
       .then((response) => {
         const installBackupObj = JSON.parse(response[0]);
         const installBackupDate = new Date(installBackupObj.date);
@@ -435,9 +441,9 @@ export default class AppComponent {
         return this.queueSync(
           {
             bookmarks: bookmarksToRestore,
-            type: Globals.SyncType.Pull
+            type: SyncType.Pull
           },
-          Globals.Commands.RestoreBookmarks
+          MessageCommand.RestoreBookmarks
         );
       })
       .then(() => {
@@ -577,9 +583,9 @@ export default class AppComponent {
 
         // Sync changes
         return this.queueSync({
-          type: Globals.SyncType.Both,
+          type: SyncType.Both,
           changeInfo: {
-            type: Globals.UpdateType.Create,
+            type: BookmarkChangeType.Create,
             bookmark: bookmarkToCreate
           }
         }).then(() => {
@@ -621,9 +627,9 @@ export default class AppComponent {
 
     // Sync changes
     return this.queueSync({
-      type: Globals.SyncType.Both,
+      type: SyncType.Both,
       changeInfo: {
-        type: Globals.UpdateType.Delete,
+        type: BookmarkChangeType.Delete,
         id: bookmarkToDelete.id
       }
     })
@@ -701,9 +707,9 @@ export default class AppComponent {
 
         // Sync changes
         return this.queueSync({
-          type: Globals.SyncType.Both,
+          type: SyncType.Both,
           changeInfo: {
-            type: Globals.UpdateType.Update,
+            type: BookmarkChangeType.Update,
             bookmark: bookmarkToUpdate
           }
         })
@@ -887,12 +893,7 @@ export default class AppComponent {
 
   displayMainView() {
     return this.storeSvc
-      .get([
-        Globals.CacheKeys.DisplayHelp,
-        Globals.CacheKeys.DisplayPermissions,
-        Globals.CacheKeys.DisplayUpdated,
-        Globals.CacheKeys.SyncEnabled
-      ])
+      .get([StoreKey.DisplayHelp, StoreKey.DisplayPermissions, StoreKey.DisplayUpdated, StoreKey.SyncEnabled])
       .then((storeContent) => {
         switch (true) {
           case storeContent.displayUpdated:
@@ -942,7 +943,7 @@ export default class AppComponent {
     return this.$q
       .all([
         this.bookmarkSvc.exportBookmarks(),
-        this.storeSvc.get([Globals.CacheKeys.SyncEnabled, Globals.CacheKeys.SyncId]),
+        this.storeSvc.get([StoreKey.SyncEnabled, StoreKey.SyncId]),
         this.utilitySvc.getServiceUrl()
       ])
       .then((data) => {
@@ -969,7 +970,7 @@ export default class AppComponent {
   downloadLogFile() {
     // Get cached message log
     return this.storeSvc
-      .get<string[]>(Globals.CacheKeys.TraceLog)
+      .get<string[]>(StoreKey.TraceLog)
       .then((debugMessageLog) => {
         // Trigger download
         return this.platformSvc.downloadFile(
@@ -1019,13 +1020,13 @@ export default class AppComponent {
     }
 
     switch (statusCode) {
-      case Globals.ServiceStatus.NoNewSyncs:
+      case ApiServiceStatus.NoNewSyncs:
         return this.platformSvc.getConstant(Strings.settings_Service_Status_NoNewSyncs);
-      case Globals.ServiceStatus.Offline:
+      case ApiServiceStatus.Offline:
         return this.platformSvc.getConstant(Strings.settings_Service_Status_Offline);
-      case Globals.ServiceStatus.Online:
+      case ApiServiceStatus.Online:
         return this.platformSvc.getConstant(Strings.settings_Service_Status_Online);
-      case Globals.ServiceStatus.Error:
+      case ApiServiceStatus.Error:
       default:
         return this.platformSvc.getConstant(Strings.settings_Service_Status_Error);
     }
@@ -1044,11 +1045,11 @@ export default class AppComponent {
     return this.$q
       .all([
         this.storeSvc.get([
-          Globals.CacheKeys.DarkModeEnabled,
-          Globals.CacheKeys.DisplaySearchBarBeneathResults,
-          Globals.CacheKeys.DefaultToFolderView,
-          Globals.CacheKeys.SyncEnabled,
-          Globals.CacheKeys.SyncId
+          StoreKey.DarkModeEnabled,
+          StoreKey.DisplaySearchBarBeneathResults,
+          StoreKey.DefaultToFolderView,
+          StoreKey.SyncEnabled,
+          StoreKey.SyncId
         ]),
         this.utilitySvc.getServiceUrl()
       ])
@@ -1067,7 +1068,7 @@ export default class AppComponent {
             this.logSvc.logInfo('Waiting for syncs to finish...');
 
             // Only display cancel button for push syncs
-            if (currentSync.type === Globals.SyncType.Push) {
+            if (currentSync.type === SyncType.Push) {
               this.working.displayCancelSyncButton = true;
             }
 
@@ -1076,7 +1077,7 @@ export default class AppComponent {
               .change(this.view.views.loading)
               .then(this.waitForSyncsToFinish)
               .then(() => {
-                return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled);
+                return this.storeSvc.get<boolean>(StoreKey.SyncEnabled);
               })
               .then((syncEnabled) => {
                 // Check that user didn't cancel sync
@@ -1223,7 +1224,7 @@ export default class AppComponent {
       this.syncForm_SyncId_Change();
     }, 150);
 
-    return this.storeSvc.get<boolean>(Globals.CacheKeys.DisplayOtherSyncsWarning).then((displayOtherSyncsWarning) => {
+    return this.storeSvc.get<boolean>(StoreKey.DisplayOtherSyncsWarning).then((displayOtherSyncsWarning) => {
       if (this.utilitySvc.isMobilePlatform(this.platformName)) {
         // Set displayed panels for mobile platform
         this.login.displayGetSyncIdPanel = !this.sync.id;
@@ -1297,7 +1298,7 @@ export default class AppComponent {
     return this.$q
       .all([
         this.bookmarkSvc.getSyncBookmarksToolbar(),
-        this.storeSvc.get([Globals.CacheKeys.CheckForAppUpdates, Globals.CacheKeys.TraceLog]),
+        this.storeSvc.get([StoreKey.CheckForAppUpdates, StoreKey.TraceLog]),
         this.platformSvc.permissions_Check()
       ])
       .then((data) => {
@@ -1353,7 +1354,7 @@ export default class AppComponent {
 
   issuesPanel_ClearLog_Click() {
     // Clear trace log
-    return this.storeSvc.set(Globals.CacheKeys.TraceLog).then(() => {
+    return this.storeSvc.set(StoreKey.TraceLog).then(() => {
       this.$timeout(() => {
         this.settings.logSize = 0;
       });
@@ -1408,7 +1409,7 @@ export default class AppComponent {
   }
 
   helpPanel_ShowHelp() {
-    this.storeSvc.set(Globals.CacheKeys.DisplayHelp, false);
+    this.storeSvc.set(StoreKey.DisplayHelp, false);
     this.help.pages = this.platformSvc.getHelpPages();
     this.view.change(this.view.views.help);
     this.displayHelpPage();
@@ -1445,7 +1446,7 @@ export default class AppComponent {
 
   permissionsPanel_RequestPermissions_Click() {
     return this.$q
-      .all([this.platformSvc.permissions_Request(), this.storeSvc.set(Globals.CacheKeys.DisplayPermissions, false)])
+      .all([this.platformSvc.permissions_Request(), this.storeSvc.set(StoreKey.DisplayPermissions, false)])
       .finally(this.view.displayMainView);
   }
 
@@ -1465,7 +1466,7 @@ export default class AppComponent {
   }
 
   queueSync(syncData, command?) {
-    command = command || Globals.Commands.SyncBookmarks;
+    command = command || MessageCommand.SyncBookmarks;
     return this.platformSvc
       .sync_Queue(syncData, command)
       .catch((err) => {
@@ -1520,15 +1521,15 @@ export default class AppComponent {
       })
       .catch((err) => {
         if (err instanceof Exceptions.ServiceOfflineException) {
-          serviceObj.status = Globals.ServiceStatus.Offline;
+          serviceObj.status = ApiServiceStatus.Offline;
         } else {
-          serviceObj.status = Globals.ServiceStatus.Error;
+          serviceObj.status = ApiServiceStatus.Error;
         }
       });
   }
 
   refreshSyncDataUsageMeter() {
-    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
       // Return if not synced
       if (!syncEnabled) {
         return;
@@ -1596,7 +1597,7 @@ export default class AppComponent {
     this.platformSvc.interface_Working_Show();
 
     return this.storeSvc
-      .get<boolean>(Globals.CacheKeys.SyncEnabled)
+      .get<boolean>(StoreKey.SyncEnabled)
       .then((cachedSyncEnabled) => {
         syncEnabled = cachedSyncEnabled;
 
@@ -1609,8 +1610,8 @@ export default class AppComponent {
               this.login.passwordComplexity = {};
               this.$q
                 .all([
-                  this.storeSvc.set(Globals.CacheKeys.Password),
-                  syncId ? this.storeSvc.set(Globals.CacheKeys.SyncId, syncId) : this.$q.resolve(),
+                  this.storeSvc.set(StoreKey.Password),
+                  syncId ? this.storeSvc.set(StoreKey.SyncId, syncId) : this.$q.resolve(),
                   serviceUrl ? this.updateServiceUrl(serviceUrl) : this.$q.resolve()
                 ])
                 .then(resolve)
@@ -1627,9 +1628,9 @@ export default class AppComponent {
         return this.queueSync(
           {
             bookmarks: bookmarksToRestore,
-            type: !syncEnabled ? Globals.SyncType.Pull : Globals.SyncType.Both
+            type: !syncEnabled ? SyncType.Pull : SyncType.Both
           },
-          Globals.Commands.RestoreBookmarks
+          MessageCommand.RestoreBookmarks
         ).then(this.restoreBookmarksSuccess);
       })
       .finally(this.platformSvc.interface_Working_Hide);
@@ -1749,9 +1750,9 @@ export default class AppComponent {
 
       // Sync changes
       this.queueSync({
-        type: Globals.SyncType.Both,
+        type: SyncType.Both,
         changeInfo: {
-          type: Globals.UpdateType.Delete,
+          type: BookmarkChangeType.Delete,
           id: bookmark.id
         }
       }).catch((err) => {
@@ -2021,8 +2022,7 @@ export default class AppComponent {
 
   serviceIsOnline(): boolean {
     return (
-      this.sync.service.status === Globals.ServiceStatus.NoNewSyncs ||
-      this.sync.service.status === Globals.ServiceStatus.Online
+      this.sync.service.status === ApiServiceStatus.NoNewSyncs || this.sync.service.status === ApiServiceStatus.Online
     );
   }
 
@@ -2038,28 +2038,28 @@ export default class AppComponent {
     // Update setting value and store in cache
     const value = !this.settings.checkForAppUpdates;
     this.settings.checkForAppUpdates = value;
-    return this.storeSvc.set(Globals.CacheKeys.CheckForAppUpdates, value);
+    return this.storeSvc.set(StoreKey.CheckForAppUpdates, value);
   }
 
   settings_Prefs_DisplaySearchBar_Click() {
     // Update setting value and store in cache
     const value = !this.settings.displaySearchBarBeneathResults;
     this.settings.displaySearchBarBeneathResults = value;
-    return this.storeSvc.set(Globals.CacheKeys.DisplaySearchBarBeneathResults, value);
+    return this.storeSvc.set(StoreKey.DisplaySearchBarBeneathResults, value);
   }
 
   settings_Prefs_EnableDarkMode_Click() {
     // Update setting value and store in cache
     const value = !this.settings.darkModeEnabled;
     this.settings.darkModeEnabled = value;
-    return this.storeSvc.set(Globals.CacheKeys.DarkModeEnabled, value);
+    return this.storeSvc.set(StoreKey.DarkModeEnabled, value);
   }
 
   settings_Prefs_DefaultToFolderView_Click() {
     // Update setting value and store in cache
     const value = !this.settings.defaultToFolderView;
     this.settings.defaultToFolderView = value;
-    return this.storeSvc.set(Globals.CacheKeys.DefaultToFolderView, value);
+    return this.storeSvc.set(StoreKey.DefaultToFolderView, value);
   }
 
   settings_Prefs_SyncBookmarksToolbar_Click() {
@@ -2072,7 +2072,7 @@ export default class AppComponent {
     }
 
     return this.$q
-      .all([this.bookmarkSvc.getSyncBookmarksToolbar(), this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled)])
+      .all([this.bookmarkSvc.getSyncBookmarksToolbar(), this.storeSvc.get<boolean>(StoreKey.SyncEnabled)])
       .then((cachedData) => {
         const syncBookmarksToolbar = cachedData[0];
         const syncEnabled = cachedData[1];
@@ -2080,7 +2080,7 @@ export default class AppComponent {
         // If sync not enabled or user just clicked to disable toolbar sync, update stored value and return
         if (!syncEnabled || syncBookmarksToolbar) {
           this.logSvc.logInfo(`Toolbar sync ${!syncBookmarksToolbar ? 'enabled' : 'disabled'}`);
-          return this.storeSvc.set(Globals.CacheKeys.SyncBookmarksToolbar, !syncBookmarksToolbar);
+          return this.storeSvc.set(StoreKey.SyncBookmarksToolbar, !syncBookmarksToolbar);
         }
 
         // Otherwise, display sync confirmation
@@ -2097,7 +2097,7 @@ export default class AppComponent {
   }
 
   settings_Prefs_SyncBookmarksToolbar_Confirm() {
-    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
       if (!syncEnabled) {
         return;
       }
@@ -2107,11 +2107,11 @@ export default class AppComponent {
       this.platformSvc.interface_Working_Show();
 
       // Enable setting in cache
-      return this.storeSvc.set(Globals.CacheKeys.SyncBookmarksToolbar, true).then(() => {
+      return this.storeSvc.set(StoreKey.SyncBookmarksToolbar, true).then(() => {
         this.logSvc.logInfo('Toolbar sync enabled');
 
         // Refresh local sync data
-        return this.queueSync({ type: Globals.SyncType.Pull });
+        return this.queueSync({ type: SyncType.Pull });
       });
     });
   }
@@ -2131,13 +2131,13 @@ export default class AppComponent {
       .checkServiceStatus()
       .then(() => {
         // Clear the current cached password
-        return this.storeSvc.set(Globals.CacheKeys.Password);
+        return this.storeSvc.set(StoreKey.Password);
       })
       .then(() => {
         // If a sync ID has not been supplied, get a new one
         if (!this.sync.id) {
           // Set sync type for create new sync
-          syncData.type = Globals.SyncType.Push;
+          syncData.type = SyncType.Push;
 
           // Get new sync ID
           return this.apiSvc.createNewSync().then((newSync) => {
@@ -2146,9 +2146,9 @@ export default class AppComponent {
             // Add sync data to cache and return
             return this.$q
               .all([
-                this.storeSvc.set(Globals.CacheKeys.LastUpdated, newSync.lastUpdated),
-                this.storeSvc.set(Globals.CacheKeys.SyncId, newSync.id),
-                this.storeSvc.set(Globals.CacheKeys.SyncVersion, newSync.version)
+                this.storeSvc.set(StoreKey.LastUpdated, newSync.lastUpdated),
+                this.storeSvc.set(StoreKey.SyncId, newSync.id),
+                this.storeSvc.set(StoreKey.SyncVersion, newSync.version)
               ])
               .then(() => {
                 return newSync.id;
@@ -2159,14 +2159,14 @@ export default class AppComponent {
         syncInfoMessage = `Synced to existing id: ${this.sync.id}`;
 
         // Set sync type for retrieve existing sync
-        syncData.type = Globals.SyncType.Pull;
+        syncData.type = SyncType.Pull;
 
         // Retrieve sync version for existing id
         return this.apiSvc.getBookmarksVersion(this.sync.id).then((response) => {
           // If no sync version is set, confirm upgrade
           if (!response.version) {
             if (this.login.upgradeConfirmed) {
-              syncData.type = Globals.SyncType.Upgrade;
+              syncData.type = SyncType.Upgrade;
             } else {
               this.login.displayUpgradeConfirmation = true;
               return;
@@ -2176,8 +2176,8 @@ export default class AppComponent {
           // Add sync version to cache and return current sync ID
           return this.$q
             .all([
-              this.storeSvc.set(Globals.CacheKeys.SyncId, this.sync.id),
-              this.storeSvc.set(Globals.CacheKeys.SyncVersion, response.version)
+              this.storeSvc.set(StoreKey.SyncId, this.sync.id),
+              this.storeSvc.set(StoreKey.SyncVersion, response.version)
             ])
             .then(() => {
               return this.sync.id;
@@ -2193,7 +2193,7 @@ export default class AppComponent {
         return this.cryptoSvc
           .getPasswordHash(this.sync.password, syncId)
           .then((passwordHash) => {
-            this.storeSvc.set(Globals.CacheKeys.Password, passwordHash);
+            this.storeSvc.set(StoreKey.Password, passwordHash);
             return this.queueSync(syncData);
           })
           .then(() => {
@@ -2225,10 +2225,10 @@ export default class AppComponent {
     this.login.upgradeConfirmed = false;
 
     // Clear cached data
-    const keys = [Globals.CacheKeys.Bookmarks, Globals.CacheKeys.Password, Globals.CacheKeys.SyncVersion];
+    const keys = [StoreKey.Bookmarks, StoreKey.Password, StoreKey.SyncVersion];
     // If error occurred whilst creating new sync, remove cached sync ID and password
-    if (syncData.type === Globals.SyncType.Push) {
-      keys.push(Globals.CacheKeys.SyncId);
+    if (syncData.type === SyncType.Push) {
+      keys.push(StoreKey.SyncId);
     }
     this.storeSvc.set(keys);
 
@@ -2318,8 +2318,8 @@ export default class AppComponent {
   syncForm_NewSync_Click() {
     this.login.displayNewSyncPanel = true;
     this.login.displayPasswordConfirmation = false;
-    this.storeSvc.set(Globals.CacheKeys.SyncId);
-    this.storeSvc.set(Globals.CacheKeys.Password);
+    this.storeSvc.set(StoreKey.SyncId);
+    this.storeSvc.set(StoreKey.Password);
     this.sync.id = null;
     this.sync.password = '';
     this.syncForm.txtId.$setValidity('InvalidSyncId', true);
@@ -2336,7 +2336,7 @@ export default class AppComponent {
   syncForm_OtherSyncsDisabled_Click() {
     // Hide disable other syncs warning panel and update cache setting
     this.login.displayOtherSyncsWarning = false;
-    this.storeSvc.set(Globals.CacheKeys.DisplayOtherSyncsWarning, false);
+    this.storeSvc.set(StoreKey.DisplayOtherSyncsWarning, false);
 
     // Focus on password field
     if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
@@ -2371,7 +2371,7 @@ export default class AppComponent {
   syncForm_SyncId_Change() {
     if (!this.sync.id || this.utilitySvc.syncIdIsValid(this.sync.id)) {
       this.syncForm.txtId.$setValidity('InvalidSyncId', true);
-      this.storeSvc.set(Globals.CacheKeys.SyncId, this.sync.id);
+      this.storeSvc.set(StoreKey.SyncId, this.sync.id);
     } else {
       this.syncForm.txtId.$setValidity('InvalidSyncId', false);
     }
@@ -2382,7 +2382,7 @@ export default class AppComponent {
     const loadingTimeout = this.platformSvc.interface_Working_Show();
 
     // Pull updates
-    return this.queueSync({ type: Globals.SyncType.Pull }).then(() => {
+    return this.queueSync({ type: SyncType.Pull }).then(() => {
       return this.syncBookmarksSuccess(loadingTimeout);
     });
   }
@@ -2410,11 +2410,7 @@ export default class AppComponent {
     // Update saved credentials
     const url = this.sync.newService.url.replace(/\/$/, '');
     return this.$q
-      .all([
-        this.updateServiceUrl(url),
-        this.storeSvc.set(Globals.CacheKeys.SyncId),
-        this.storeSvc.set(Globals.CacheKeys.Password)
-      ])
+      .all([this.updateServiceUrl(url), this.storeSvc.set(StoreKey.SyncId), this.storeSvc.set(StoreKey.Password)])
       .then(() => {
         // Update view
         this.login.displayUpdateServicePanel = false;
@@ -2520,13 +2516,13 @@ export default class AppComponent {
   }
 
   updatedPanel_Continue_Click() {
-    this.storeSvc.set(Globals.CacheKeys.DisplayUpdated, false);
+    this.storeSvc.set(StoreKey.DisplayUpdated, false);
     this.view.change(this.view.views.support);
   }
 
   updateServiceUrl(url) {
     url = url.replace(/\/$/, '');
-    return this.storeSvc.set(Globals.CacheKeys.ServiceUrl, url).then(() => {
+    return this.storeSvc.set(StoreKey.ServiceUrl, url).then(() => {
       this.sync.service.apiVersion = '';
       this.sync.service.location = null;
       this.sync.service.maxSyncSize = 0;
@@ -2590,7 +2586,7 @@ export default class AppComponent {
     this.logSvc.logInfo('Cancelling sync');
 
     return this.queueSync({
-      type: Globals.SyncType.Cancel
+      type: SyncType.Cancel
     })
       .then(() => {
         this.sync.enabled = false;

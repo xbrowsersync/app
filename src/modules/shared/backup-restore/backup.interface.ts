@@ -1,4 +1,4 @@
-import ApiServiceType from '../api/api-service-type.interface';
+import ApiServiceType from '../api/api-service-type.enum';
 
 export default interface Backup {
   xbrowsersync: BackupRoot;

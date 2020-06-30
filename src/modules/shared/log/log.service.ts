@@ -2,11 +2,11 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import stackTrace from 'stacktrace-js';
-import { Exception } from '../exceptions/exception-types';
-import Globals from '../globals';
+import { Exception } from '../exceptions/exception';
 import LogLevel from './log-level.enum';
 import LogQueueItem from './log-queue-item.interface';
 import StoreService from '../store/store.service';
+import StoreKey from '../store/store-key.enum';
 
 @autobind
 @Injectable('LogService')
@@ -130,7 +130,7 @@ export default class LogService {
 
     // Add message text to log item and add to end of log
     return this.storeSvc
-      .get<string[]>(Globals.CacheKeys.TraceLog)
+      .get<string[]>(StoreKey.TraceLog)
       .then((debugMessageLog) => {
         debugMessageLog = debugMessageLog || [];
         messageLogText += angular.isObject(this.currentLogQueueItem.message)
@@ -140,7 +140,7 @@ export default class LogService {
           messageLogText += `${this.currentLogQueueItem.error.stack.replace(/\s+/g, ' ')}`;
         }
         debugMessageLog.push(messageLogText);
-        return this.storeSvc.set(Globals.CacheKeys.TraceLog, debugMessageLog);
+        return this.storeSvc.set(StoreKey.TraceLog, debugMessageLog);
       })
       .then(() => {
         // Process remaining messages

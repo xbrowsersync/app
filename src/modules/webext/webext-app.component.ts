@@ -1,6 +1,6 @@
 import { autobind } from 'core-decorators';
 import AppComponent from '../app/app.component';
-import Globals from '../shared/globals';
+import StoreKey from '../shared/store/store-key.enum';
 
 @autobind
 export default class WebExtAppComponent extends AppComponent {
@@ -20,7 +20,7 @@ export default class WebExtAppComponent extends AppComponent {
       return this.$q.resolve();
     }
 
-    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
       if (!syncEnabled) {
         return null;
       }

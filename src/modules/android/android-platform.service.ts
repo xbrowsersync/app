@@ -19,12 +19,15 @@ import PlatformService from '../../interfaces/platform-service.interface';
 import Strings from '../../../res/strings/en.json';
 import Alert from '../shared/alert/alert.interface';
 import BookmarkService from '../shared/bookmark/bookmark.service';
-import * as Exceptions from '../shared/exceptions/exception-types';
+import BookmarkChangeType from '../shared/bookmark/bookmark-change-type.enum';
+import * as Exceptions from '../shared/exceptions/exception';
 import Globals from '../shared/globals';
 import StoreService from '../shared/store/store.service';
 import UtilityService from '../shared/utility/utility.service';
 import LogService from '../shared/log/log.service';
+import MessageCommand from '../shared/message-command.enum';
 import NetworkService from '../shared/network/network.service';
+import StoreKey from '../shared/store/store-key.enum';
 
 @autobind
 @Injectable('PlatformService')
@@ -161,14 +164,13 @@ export default class AndroidPlatformService implements PlatformService {
   checkForInstallOrUpgrade() {
     // Check for stored app version and compare it to current
     const mobileAppVersion = localStorage.getItem('xBrowserSync-mobileAppVersion');
-    return (mobileAppVersion
-      ? this.$q.resolve(mobileAppVersion)
-      : this.storeSvc.get<string>(Globals.CacheKeys.AppVersion)
-    ).then((currentVersion) => {
-      return currentVersion
-        ? this.handleUpgrade(currentVersion, Globals.AppVersion)
-        : this.handleInstall(Globals.AppVersion);
-    });
+    return (mobileAppVersion ? this.$q.resolve(mobileAppVersion) : this.storeSvc.get<string>(StoreKey.AppVersion)).then(
+      (currentVersion) => {
+        return currentVersion
+          ? this.handleUpgrade(currentVersion, Globals.AppVersion)
+          : this.handleInstall(Globals.AppVersion);
+      }
+    );
   }
 
   checkForNewVersion() {
@@ -721,9 +723,9 @@ export default class AndroidPlatformService implements PlatformService {
       .clear()
       .then(() => {
         return this.$q.all([
-          this.storeSvc.set(Globals.CacheKeys.AppVersion, installedVersion),
-          this.storeSvc.set(Globals.CacheKeys.CheckForAppUpdates, true),
-          this.storeSvc.set(Globals.CacheKeys.DisplayHelp, true)
+          this.storeSvc.set(StoreKey.AppVersion, installedVersion),
+          this.storeSvc.set(StoreKey.CheckForAppUpdates, true),
+          this.storeSvc.set(StoreKey.DisplayHelp, true)
         ]);
       })
       .then(() => {
@@ -760,7 +762,7 @@ export default class AndroidPlatformService implements PlatformService {
     // Set theme
     return this.checkForDarkTheme().then(() => {
       // Check if sync enabled and reset network disconnected flag
-      this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+      this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
         // Deselect bookmark
         this.vm.search.selectedBookmark = null;
 
@@ -866,7 +868,7 @@ export default class AndroidPlatformService implements PlatformService {
 
     // Clear trace log
     return this.storeSvc
-      .set(Globals.CacheKeys.TraceLog)
+      .set(StoreKey.TraceLog)
       .then(() => {
         this.logSvc.logInfo(`Upgrading from ${oldVersion} to ${newVersion}`);
       })
@@ -880,10 +882,7 @@ export default class AndroidPlatformService implements PlatformService {
       })
       .then(() => {
         return this.$q
-          .all([
-            this.storeSvc.set(Globals.CacheKeys.AppVersion, newVersion),
-            this.storeSvc.set(Globals.CacheKeys.DisplayUpdated, true)
-          ])
+          .all([this.storeSvc.set(StoreKey.AppVersion, newVersion), this.storeSvc.set(StoreKey.DisplayUpdated, true)])
           .then(() => {});
       });
   }
@@ -993,7 +992,7 @@ export default class AndroidPlatformService implements PlatformService {
     return false;
   }
 
-  sync_Queue(syncData, command = Globals.Commands.SyncBookmarks) {
+  sync_Queue(syncData, command = MessageCommand.SyncBookmarks) {
     // Add sync data to queue and run sync
     syncData.command = command;
     return this.bookmarkSvc
@@ -1004,21 +1003,21 @@ export default class AndroidPlatformService implements PlatformService {
         }
         return this.$q.resolve(syncData.changeInfo).then((changeInfo) => {
           switch (true) {
-            case changeInfo.type === Globals.UpdateType.Create:
+            case changeInfo.type === BookmarkChangeType.Create:
               this.$timeout(() => {
                 this.vm.displayAlert({
                   message: this.getConstant(Strings.bookmarkCreated_Message)
                 } as Alert);
               }, 200);
               break;
-            case changeInfo.type === Globals.UpdateType.Delete:
+            case changeInfo.type === BookmarkChangeType.Delete:
               this.$timeout(() => {
                 this.vm.displayAlert({
                   message: this.getConstant(Strings.bookmarkDeleted_Message)
                 } as Alert);
               }, 200);
               break;
-            case changeInfo.type === Globals.UpdateType.Update:
+            case changeInfo.type === BookmarkChangeType.Update:
               this.$timeout(() => {
                 this.vm.displayAlert({
                   message: this.getConstant(Strings.bookmarkUpdated_Message)

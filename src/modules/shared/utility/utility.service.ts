@@ -1,13 +1,15 @@
 import { Injectable } from 'angular-ts-decorators';
 import compareVersions from 'compare-versions';
-import _ from 'underscore';
 import { autobind } from 'core-decorators';
+import _ from 'underscore';
 import ExceptionHandler from '../exceptions/exception-handler.interface';
 import Globals from '../globals';
+import Url from '../../../interfaces/url.interface';
 import LogService from '../log/log.service';
 import NetworkService from '../network/network.service';
+import PlatformType from '../platform-type.enum';
 import StoreService from '../store/store.service';
-import Url from '../../../interfaces/url.interface';
+import StoreKey from '../store/store-key.enum';
 
 @autobind
 @Injectable('UtilityService')
@@ -74,7 +76,7 @@ export default class UtilityService {
 
   getServiceUrl(): ng.IPromise<string> {
     // Get service url from local storage
-    return this.storeSvc.get<string>(Globals.CacheKeys.ServiceUrl).then((cachedServiceUrl) => {
+    return this.storeSvc.get<string>(StoreKey.ServiceUrl).then((cachedServiceUrl) => {
       // If no service url cached, use default
       return cachedServiceUrl || Globals.URL.DefaultServiceUrl;
     });
@@ -124,7 +126,7 @@ export default class UtilityService {
   }
 
   isMobilePlatform(platformName: string): boolean {
-    return platformName === Globals.Platforms.Android;
+    return platformName === PlatformType.Android;
   }
 
   parseUrl(url: string): Url {

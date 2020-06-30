@@ -5,9 +5,12 @@ import { browser } from 'webextension-polyfill-ts';
 import NativeBookmarksService from '../../interfaces/native-bookmarks-service.interface';
 import PlatformService from '../../interfaces/platform-service.interface';
 import BookmarkService from '../shared/bookmark/bookmark.service';
-import { BookmarkMappingNotFoundException, UnspecifiedException } from '../shared/exceptions/exception-types';
+import BookmarkChangeType from '../shared/bookmark/bookmark-change-type.enum';
+import * as Exceptions from '../shared/exceptions/exception';
 import Globals from '../shared/globals';
 import LogService from '../shared/log/log.service';
+import MessageCommand from '../shared/message-command.enum';
+import SyncType from '../shared/sync-type.enum';
 import UtilityService from '../shared/utility/utility.service';
 import BookmarkIdMapperService from '../webext/bookmark-id-mapper.service';
 
@@ -111,7 +114,7 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
         if (bookmarkNode.id !== id) {
           updateMappingPromise = this.bookmarkIdMapperSvc.get(id).then((idMapping) => {
             if (!idMapping) {
-              throw new BookmarkMappingNotFoundException();
+              throw new Exceptions.BookmarkMappingNotFoundException();
             }
 
             return this.bookmarkIdMapperSvc.remove(idMapping.syncedId).then(() => {
@@ -126,7 +129,7 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
           // Create change info
           const changeInfo = {
             bookmark: bookmarkNode,
-            type: Globals.UpdateType.Update
+            type: BookmarkChangeType.Update
           };
 
           // Queue sync
@@ -156,7 +159,7 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
       // Create change info
       const changeInfo = {
         bookmark: bookmarkNode,
-        type: Globals.UpdateType.Create
+        type: BookmarkChangeType.Create
       };
 
       // If bookmark is not folder or separator, get page metadata from current tab
@@ -187,7 +190,7 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
       })
       .catch((err) => {
         this.logSvc.logWarning('Failed to enable event listeners');
-        throw new UnspecifiedException(err.message);
+        throw new Exceptions.UnspecifiedException(err.message);
       });
   }
 
@@ -202,7 +205,7 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
       .then(() => {})
       .catch((err) => {
         this.logSvc.logWarning('Failed to disable event listeners');
-        throw new UnspecifiedException(err.message);
+        throw new Exceptions.UnspecifiedException(err.message);
       });
   }
 
@@ -223,7 +226,7 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
           if (bookmarkNode.id !== id) {
             updateMappingPromise = this.bookmarkIdMapperSvc.get(id).then((idMapping) => {
               if (!idMapping) {
-                throw new BookmarkMappingNotFoundException();
+                throw new Exceptions.BookmarkMappingNotFoundException();
               }
 
               return this.bookmarkIdMapperSvc.remove(idMapping.syncedId).then(() => {
@@ -238,7 +241,7 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
             // Create change info
             const changeInfo = {
               bookmark: angular.copy(moveInfo),
-              type: Globals.UpdateType.Move
+              type: BookmarkChangeType.Move
             };
             changeInfo.bookmark.id = id;
 
@@ -307,9 +310,9 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
   syncChange(changeInfo) {
     const syncData = {
       changeInfo,
-      type: Globals.SyncType.Push
+      type: SyncType.Push
     };
-    return this.platformSvc.sync_Queue(syncData, Globals.Commands.SyncBookmarks, false).catch(() => {
+    return this.platformSvc.sync_Queue(syncData, MessageCommand.SyncBookmarks, false).catch(() => {
       // Swallow error, sync errors thrown searately by processBookmarkEventsQueue
     });
   }
@@ -318,7 +321,7 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
     // Create change info
     const changeInfo = {
       bookmark: removeInfo.node,
-      type: Globals.UpdateType.Delete
+      type: BookmarkChangeType.Delete
     };
 
     // Queue sync

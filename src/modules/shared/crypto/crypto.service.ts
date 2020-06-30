@@ -1,11 +1,11 @@
 import { Injectable } from 'angular-ts-decorators';
 import base64js from 'base64-js';
-import lzutf8 from 'lzutf8';
 import { autobind } from 'core-decorators';
-import * as Exceptions from '../exceptions/exception-types';
-import Globals from '../globals';
+import lzutf8 from 'lzutf8';
+import * as Exceptions from '../exceptions/exception';
 import LogService from '../log/log.service';
 import StoreService from '../store/store.service';
+import StoreKey from '../store/store-key.enum';
 
 @autobind
 @Injectable('CryptoService')
@@ -39,7 +39,7 @@ export default class CryptoService {
 
     // Ensure both id and password are in local storage
     return this.storeSvc
-      .get([Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
+      .get([StoreKey.Password, StoreKey.SyncId])
       .then((storeContent) => {
         const { password } = storeContent;
         const { syncId } = storeContent;
@@ -90,7 +90,7 @@ export default class CryptoService {
 
     // Ensure both id and password are in local storage
     return this.storeSvc
-      .get([Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
+      .get([StoreKey.Password, StoreKey.SyncId])
       .then((storeContent) => {
         const { password } = storeContent;
         const { syncId } = storeContent;
@@ -135,7 +135,7 @@ export default class CryptoService {
     const encodedSalt = encoder.encode(salt);
 
     // Get cached sync version
-    return this.storeSvc.get<string>(Globals.CacheKeys.SyncVersion).then((syncVersion) => {
+    return this.storeSvc.get<string>(StoreKey.SyncVersion).then((syncVersion) => {
       // If old sync version, don't hash password for legacy encryption
       if (!syncVersion) {
         return this.$q.resolve(password);

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
-import Globals from '../shared/globals';
+import { BookmarkMappingNotFoundException } from '../shared/exceptions/exception';
 import StoreService from '../shared/store/store.service';
-import { BookmarkMappingNotFoundException } from '../shared/exceptions/exception-types';
+import StoreKey from '../shared/store/store-key.enum';
 
 @autobind
 @Injectable('BookmarkIdMapperService')
@@ -23,7 +23,7 @@ export default class BookmarkIdMapperService {
 
     // Add new mappings to existing mappings
     return this.storeSvc
-      .get<any[]>(Globals.CacheKeys.BookmarkIdMappings)
+      .get<any[]>(StoreKey.BookmarkIdMappings)
       .then((idMappings) => {
         return idMappings.concat(newMappingsArr);
       })
@@ -33,7 +33,7 @@ export default class BookmarkIdMapperService {
   }
 
   clear() {
-    return this.storeSvc.remove(Globals.CacheKeys.BookmarkIdMappings);
+    return this.storeSvc.remove(StoreKey.BookmarkIdMappings);
   }
 
   createMapping(syncedId, nativeId?) {
@@ -44,7 +44,7 @@ export default class BookmarkIdMapperService {
   }
 
   get(nativeId, syncedId?) {
-    return this.storeSvc.get<any[]>(Globals.CacheKeys.BookmarkIdMappings).then((idMappings) => {
+    return this.storeSvc.get<any[]>(StoreKey.BookmarkIdMappings).then((idMappings) => {
       // Find the requested mapping
       let mapping;
       if (nativeId != null) {
@@ -67,7 +67,7 @@ export default class BookmarkIdMapperService {
 
     // Retrieve id mappings
     return this.storeSvc
-      .get(Globals.CacheKeys.BookmarkIdMappings)
+      .get(StoreKey.BookmarkIdMappings)
       .then((idMappings) => {
         // Remove id mappings matching provided synced ids
         const idMappingsLessSynced =
@@ -114,6 +114,6 @@ export default class BookmarkIdMapperService {
     const sortedMappings = idMappings.sort((a, b) => {
       return a.syncedId - b.syncedId;
     });
-    return this.storeSvc.set(Globals.CacheKeys.BookmarkIdMappings, sortedMappings);
+    return this.storeSvc.set(StoreKey.BookmarkIdMappings, sortedMappings);
   }
 }

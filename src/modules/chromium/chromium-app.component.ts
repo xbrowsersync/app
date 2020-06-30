@@ -1,6 +1,6 @@
 import { Component } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
-import Globals from '../shared/globals';
+import PlatformType from '../shared/platform-type.enum';
 import WebExtAppComponent from '../webext/webext-app.component';
 
 @autobind
@@ -11,7 +11,7 @@ import WebExtAppComponent from '../webext/webext-app.component';
 })
 export default class ChromiumAppComponent extends WebExtAppComponent {
   init() {
-    this.platformName = Globals.Platforms.Chrome;
+    this.platformName = PlatformType.Chromium;
     return super.init();
   }
 }

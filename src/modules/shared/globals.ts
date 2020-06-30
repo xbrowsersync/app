@@ -18,51 +18,9 @@ export default {
     UnfiledContainerNameOld: '_xBrowserSync_',
     VerticalSeparatorTitle: '|'
   },
-  CacheKeys: {
-    AppVersion: 'appVersion',
-    BookmarkIdMappings: 'bookmarkIdMappings',
-    Bookmarks: 'bookmarks',
-    CheckForAppUpdates: 'checkForAppUpdates',
-    DarkModeEnabled: 'darkModeEnabled',
-    DisplayHelp: 'displayHelp',
-    DisplayOtherSyncsWarning: 'displayOtherSyncsWarning',
-    DisplayPermissions: 'displayPermissions',
-    DisplaySearchBarBeneathResults: 'displaySearchBarBeneathResults',
-    DisplayUpdated: 'displayUpdated',
-    DefaultToFolderView: 'defaultToFolderView',
-    InstallBackup: 'installBackup',
-    LastUpdated: 'lastUpdated',
-    Password: 'password',
-    ServiceUrl: 'serviceUrl',
-    SyncBookmarksToolbar: 'syncBookmarksToolbar',
-    SyncEnabled: 'syncEnabled',
-    SyncId: 'syncId',
-    SyncVersion: 'syncVersion',
-    TraceLog: 'traceLog'
-  },
-  Commands: {
-    SyncBookmarks: 1,
-    RestoreBookmarks: 2,
-    GetCurrentSync: 3,
-    GetSyncQueueLength: 4,
-    DisableSync: 5,
-    GetPageMetadata: 6,
-    EnableEventListeners: 7,
-    DisableEventListeners: 8
-  },
-  LogType: {
-    Trace: 0,
-    Warn: 1,
-    Error: 2
-  },
   LookaheadMinChars: 1,
   MinApiVersion: '1.1.3',
   PathToAssets: 'assets',
-  Platforms: {
-    Android: 'android',
-    Chrome: 'chrome',
-    Firefox: 'firefox'
-  },
   QrCode: {
     Delimiter: '|$$|'
   },
@@ -72,26 +30,7 @@ export default {
   ReleaseNotesUrlStem: 'https://github.com/xbrowsersync/app/releases/tag/v',
   ReleaseLatestUrl: 'https://api.github.com/repos/xbrowsersync/app/releases/latest',
   SyncPollTimeout: 2000,
-  ServiceStatus: {
-    Error: -1,
-    Online: 1,
-    Offline: 2,
-    NoNewSyncs: 3
-  },
-  SyncType: {
-    Push: 1,
-    Pull: 2,
-    Both: 3,
-    Cancel: 4,
-    Upgrade: 5
-  },
   Title: 'xBrowserSync',
-  UpdateType: {
-    Create: 1,
-    Delete: 2,
-    Update: 3,
-    Move: 4
-  },
   URL: {
     Bookmarks: '/bookmarks',
     Current: '/current',

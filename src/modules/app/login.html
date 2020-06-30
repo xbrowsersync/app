@@ -29,22 +29,22 @@
         <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.settings_Service_Status_Loading) }}</span>
         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
       </div>
-      <div class="animate-fade-in" data-ng-show="vm.sync.service.status === vm.globals.ServiceStatus.Error"
+      <div class="animate-fade-in" data-ng-show="vm.sync.service.status === vm.ApiServiceStatus.Error"
            title="{{ vm.platformSvc.getConstant(vm.strings.settings_Service_Status_Error) }}">
         <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.settings_Service_Status_Error) }}</span>
         <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
       </div>
-      <div class="animate-fade-in" data-ng-show="vm.sync.service.status === vm.globals.ServiceStatus.Online"
+      <div class="animate-fade-in" data-ng-show="vm.sync.service.status === vm.ApiServiceStatus.Online"
            title="{{ vm.platformSvc.getConstant(vm.strings.settings_Service_Status_Online) }}">
         <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.settings_Service_Status_Online) }}</span>
         <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
       </div>
-      <div class="animate-fade-in" data-ng-show="vm.sync.service.status === vm.globals.ServiceStatus.Offline"
+      <div class="animate-fade-in" data-ng-show="vm.sync.service.status === vm.ApiServiceStatus.Offline"
            title="{{ vm.platformSvc.getConstant(vm.strings.settings_Service_Status_Offline) }}">
         <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.settings_Service_Status_Offline) }}</span>
         <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
       </div>
-      <div class="animate-fade-in" data-ng-show="vm.sync.service.status === vm.globals.ServiceStatus.NoNewSyncs"
+      <div class="animate-fade-in" data-ng-show="vm.sync.service.status === vm.ApiServiceStatus.NoNewSyncs"
            title="{{ vm.platformSvc.getConstant(vm.strings.settings_Service_Status_NoNewSyncs) }}">
         <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.settings_Service_Status_NoNewSyncs) }}</span>
         <i class="fas fa-exclamation-circle text-warning" aria-hidden="true"></i>
@@ -273,7 +273,7 @@
         </p>
         <ul>
           <li
-              data-ng-class="{ 'text-danger': vm.sync.newService.status === vm.globals.ServiceStatus.Offline || vm.sync.newService.status === vm.globals.ServiceStatus.Error }">
+              data-ng-class="{ 'text-danger': vm.sync.newService.status === vm.ApiServiceStatus.Offline || vm.sync.newService.status === vm.ApiServiceStatus.Error }">
             <label>{{ vm.platformSvc.getConstant(vm.strings.login_ConfirmUpdateService_Status_Label) }}</label>
             {{ vm.sync.service.getStatusText(vm.sync.newService.status) }}
           </li>

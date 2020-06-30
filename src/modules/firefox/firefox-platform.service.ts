@@ -16,7 +16,7 @@ import {
   FailedRemoveLocalBookmarksException,
   FailedCreateLocalBookmarksException,
   LocalContainerNotFoundException
-} from '../shared/exceptions/exception-types';
+} from '../shared/exceptions/exception';
 import Globals from '../shared/globals';
 import WebExtPlatformService from '../webext/webext-platform.service';
 

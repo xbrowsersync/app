@@ -11,20 +11,24 @@
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { Injectable } from 'angular-ts-decorators';
-import _ from 'underscore';
 import angular from 'angular';
+import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
+import _ from 'underscore';
 import ApiService from '../api/api.service';
-import Globals from '../globals';
+import BookmarkChangeType from './bookmark-change-type.enum';
+import CryptoService from '../crypto/crypto.service';
 import ExceptionHandler from '../exceptions/exception-handler.interface';
-import * as Exceptions from '../exceptions/exception-types';
-import LogService from '../log/log.service';
+import * as Exceptions from '../exceptions/exception';
+import Globals from '../globals';
 import PlatformService from '../../../interfaces/platform-service.interface';
+import LogService from '../log/log.service';
+import MessageCommand from '../message-command.enum';
 import Strings from '../../../../res/strings/en.json';
 import StoreService from '../store/store.service';
+import StoreKey from '../store/store-key.enum';
+import SyncType from '../sync-type.enum';
 import UtilityService from '../utility/utility.service';
-import CryptoService from '../crypto/crypto.service';
 
 @autobind
 @Injectable('BookmarkService')
@@ -117,7 +121,7 @@ export default class BookmarkService {
   }
 
   checkForUpdates() {
-    return this.storeSvc.get<string>(Globals.CacheKeys.LastUpdated).then((storedLastUpdated) => {
+    return this.storeSvc.get<string>(StoreKey.LastUpdated).then((storedLastUpdated) => {
       // Get last updated date from local cache
       const storedLastUpdatedDate = new Date(storedLastUpdated);
 
@@ -216,7 +220,7 @@ export default class BookmarkService {
   }
 
   disableSync() {
-    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
       if (!syncEnabled) {
         return;
       }
@@ -234,11 +238,11 @@ export default class BookmarkService {
       // Clear cached sync data
       return this.$q
         .all([
-          this.storeSvc.remove(Globals.CacheKeys.BookmarkIdMappings),
-          this.storeSvc.remove(Globals.CacheKeys.Bookmarks),
-          this.storeSvc.remove(Globals.CacheKeys.Password),
-          this.storeSvc.remove(Globals.CacheKeys.SyncVersion),
-          this.storeSvc.set(Globals.CacheKeys.SyncEnabled, false),
+          this.storeSvc.remove(StoreKey.BookmarkIdMappings),
+          this.storeSvc.remove(StoreKey.Bookmarks),
+          this.storeSvc.remove(StoreKey.Password),
+          this.storeSvc.remove(StoreKey.SyncVersion),
+          this.storeSvc.set(StoreKey.SyncEnabled, false),
           this.updateCachedBookmarks(null, null)
         ])
         .then(() => {
@@ -267,7 +271,7 @@ export default class BookmarkService {
 
   enableSync() {
     return this.$q.all([
-      this.storeSvc.set(Globals.CacheKeys.SyncEnabled, true),
+      this.storeSvc.set(StoreKey.SyncEnabled, true),
       this.platformSvc.eventListeners_Enable(),
       this.platformSvc.automaticUpdates_Start()
     ]);
@@ -275,7 +279,7 @@ export default class BookmarkService {
 
   executeSync(isBackgroundSync?) {
     // Check if sync enabled before running sync
-    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
       if (!syncEnabled) {
         throw new Exceptions.SyncDisabledException();
       }
@@ -285,7 +289,7 @@ export default class BookmarkService {
         .then((updatesAvailable) => {
           if (updatesAvailable) {
             return this.queueSync({
-              type: Globals.SyncType.Pull
+              type: SyncType.Pull
             });
           }
         })
@@ -306,7 +310,7 @@ export default class BookmarkService {
       });
     };
 
-    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((syncEnabled) => {
+    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
       // If sync is not enabled, export local browser data
       if (!syncEnabled) {
         return this.platformSvc.bookmarks_Get(false);
@@ -431,7 +435,7 @@ export default class BookmarkService {
 
   getCachedBookmarks() {
     // Get cached encrypted bookmarks from local storage
-    return this.storeSvc.get<string>(Globals.CacheKeys.Bookmarks).then((encryptedBookmarksFromStore) => {
+    return this.storeSvc.get<string>(StoreKey.Bookmarks).then((encryptedBookmarksFromStore) => {
       // Return unencrypted cached bookmarks from memory if encrypted bookmarks
       // in storage match cached encrypted bookmarks in memory
       if (
@@ -587,7 +591,7 @@ export default class BookmarkService {
 
   getSyncBookmarksToolbar() {
     // Get setting from local storage
-    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncBookmarksToolbar).then((syncBookmarksToolbar) => {
+    return this.storeSvc.get<boolean>(StoreKey.SyncBookmarksToolbar).then((syncBookmarksToolbar) => {
       // Set default value to true
       if (syncBookmarksToolbar == null) {
         syncBookmarksToolbar = true;
@@ -604,7 +608,7 @@ export default class BookmarkService {
   getSyncSize() {
     return this.getCachedBookmarks()
       .then(() => {
-        return this.storeSvc.get<string>(Globals.CacheKeys.Bookmarks);
+        return this.storeSvc.get<string>(StoreKey.Bookmarks);
       })
       .then((encryptedBookmarks) => {
         // Return size in bytes of cached encrypted bookmarks
@@ -619,7 +623,7 @@ export default class BookmarkService {
       this.platformSvc.interface_Refresh();
 
       // If offline and sync is a change, swallow error and place failed sync back on the queue
-      if (err instanceof Exceptions.NetworkOfflineException && failedSync.type !== Globals.SyncType.Pull) {
+      if (err instanceof Exceptions.NetworkOfflineException && failedSync.type !== SyncType.Pull) {
         err = new Exceptions.SyncUncommittedException();
         return resolve(err);
       }
@@ -636,7 +640,7 @@ export default class BookmarkService {
         this.logSvc.logInfo(failedSync.changeInfo);
       }
       return this.storeSvc
-        .get<boolean>(Globals.CacheKeys.SyncEnabled)
+        .get<boolean>(StoreKey.SyncEnabled)
         .then((syncEnabled) => {
           return this.setIsSyncing()
             .then(() => {
@@ -650,9 +654,9 @@ export default class BookmarkService {
               }
 
               // If local changes made, clear sync queue and refresh sync data if necessary
-              else if (failedSync.type !== Globals.SyncType.Pull) {
+              else if (failedSync.type !== SyncType.Pull) {
                 this.syncQueue = [];
-                this.storeSvc.set(Globals.CacheKeys.LastUpdated, new Date().toISOString());
+                this.storeSvc.set(StoreKey.LastUpdated, new Date().toISOString());
                 if (this.checkIfRefreshSyncedDataOnError(err)) {
                   this.currentSync = null;
                   return this.platformSvc.refreshLocalSyncData().catch((refreshErr) => {
@@ -715,7 +719,7 @@ export default class BookmarkService {
     // Update bookmarks before syncing
     switch (changeInfo.type) {
       // Create bookmark
-      case Globals.UpdateType.Create:
+      case BookmarkChangeType.Create:
         // Get or create other bookmarks container
         const otherContainer = this.getContainer(Globals.Bookmarks.OtherContainerName, bookmarks, true);
 
@@ -727,13 +731,13 @@ export default class BookmarkService {
         returnInfo.container = otherContainer.title;
         break;
       // Update bookmark
-      case Globals.UpdateType.Update:
+      case BookmarkChangeType.Update:
         returnInfo.container = this.getContainerByBookmarkId(changeInfo.bookmark.id, bookmarks).title;
         bookmarks = this.recursiveUpdate(bookmarks, changeInfo.bookmark);
         returnInfo.bookmark = changeInfo.bookmark;
         break;
       // Delete bookmark
-      case Globals.UpdateType.Delete:
+      case BookmarkChangeType.Delete:
         returnInfo.container = this.getContainerByBookmarkId(changeInfo.id, bookmarks).title;
         this.recursiveDelete(bookmarks, changeInfo.id);
         returnInfo.bookmark = {
@@ -774,19 +778,19 @@ export default class BookmarkService {
           // Process sync
           switch (this.currentSync.type) {
             // Push bookmarks to xBrowserSync service
-            case Globals.SyncType.Push:
+            case SyncType.Push:
               return this.sync_handlePush(this.currentSync);
             // Overwrite local bookmarks
-            case Globals.SyncType.Pull:
+            case SyncType.Pull:
               return this.sync_handlePull(this.currentSync);
             // Sync to service and overwrite local bookmarks
-            case Globals.SyncType.Both:
+            case SyncType.Both:
               return this.sync_handleBoth(this.currentSync, isBackgroundSync);
             // Cancel current sync process
-            case Globals.SyncType.Cancel:
+            case SyncType.Cancel:
               return this.sync_handleCancel(this.currentSync);
             // Upgrade sync to current version
-            case Globals.SyncType.Upgrade:
+            case SyncType.Upgrade:
               return this.sync_handleUpgrade(this.currentSync);
             // Ambiguous sync
             default:
@@ -795,15 +799,15 @@ export default class BookmarkService {
         })
         .then((syncChange = true) => {
           return this.storeSvc
-            .get<boolean>(Globals.CacheKeys.SyncEnabled)
+            .get<boolean>(StoreKey.SyncEnabled)
             .then((cachedSyncEnabled) => {
               syncEnabled = cachedSyncEnabled;
 
               // If syncing for the first time or re-syncing, set sync as enabled
               if (
                 !syncEnabled &&
-                this.currentSync.command !== Globals.Commands.RestoreBookmarks &&
-                this.currentSync.type !== Globals.SyncType.Cancel
+                this.currentSync.command !== MessageCommand.RestoreBookmarks &&
+                this.currentSync.type !== SyncType.Cancel
               ) {
                 return this.enableSync().then(() => {
                   this.logSvc.logInfo('Sync enabled');
@@ -815,9 +819,9 @@ export default class BookmarkService {
               this.currentSync.deferred.resolve();
 
               // Set flag if remote bookmarks data should be updated
-              if (!syncChange || this.currentSync.type === Globals.SyncType.Cancel) {
+              if (!syncChange || this.currentSync.type === SyncType.Cancel) {
                 updateRemote = false;
-              } else if (this.currentSync.type !== Globals.SyncType.Pull) {
+              } else if (this.currentSync.type !== SyncType.Pull) {
                 updateRemote = true;
               }
 
@@ -829,7 +833,7 @@ export default class BookmarkService {
 
     // Disable automatic updates whilst processing syncs
     return this.storeSvc
-      .get<boolean>(Globals.CacheKeys.SyncEnabled)
+      .get<boolean>(StoreKey.SyncEnabled)
       .then((cachedSyncEnabled) => {
         if (cachedSyncEnabled) {
           return this.platformSvc.automaticUpdates_Stop();
@@ -845,14 +849,14 @@ export default class BookmarkService {
         }
 
         // Update remote bookmarks data
-        return this.storeSvc.get<string>(Globals.CacheKeys.Bookmarks).then((encryptedBookmarks) => {
+        return this.storeSvc.get<string>(StoreKey.Bookmarks).then((encryptedBookmarks) => {
           // Decrypt cached bookmarks data
           return this.cryptoSvc.decryptData(encryptedBookmarks).then((bookmarksJson) => {
             // Commit update to service
             return this.apiSvc
               .updateBookmarks(encryptedBookmarks)
               .then((response) => {
-                return this.storeSvc.set(Globals.CacheKeys.LastUpdated, response.lastUpdated).then(() => {
+                return this.storeSvc.set(StoreKey.LastUpdated, response.lastUpdated).then(() => {
                   this.logSvc.logInfo(`Remote bookmarks data updated at ${response.lastUpdated}`);
                 });
               })
@@ -883,7 +887,7 @@ export default class BookmarkService {
         this.currentSync = null;
 
         // Start auto updates if sync enabled
-        return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then((cachedSyncEnabled) => {
+        return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((cachedSyncEnabled) => {
           if (cachedSyncEnabled) {
             return this.platformSvc.automaticUpdates_Start();
           }
@@ -894,7 +898,7 @@ export default class BookmarkService {
   queueSync(syncToQueue, runSync = true) {
     return this.$q<any>((resolve, reject) => {
       this.storeSvc
-        .get(Globals.CacheKeys.SyncEnabled)
+        .get(StoreKey.SyncEnabled)
         .then((syncEnabled) => {
           // If new sync ensure sync queue is clear
           if (!syncEnabled) {
@@ -904,7 +908,7 @@ export default class BookmarkService {
           let queuedSync;
           if (syncToQueue) {
             // If sync is type cancel, clear queue first
-            if (syncToQueue.type === Globals.SyncType.Cancel) {
+            if (syncToQueue.type === SyncType.Cancel) {
               this.syncQueue = [];
             }
 
@@ -913,11 +917,7 @@ export default class BookmarkService {
             syncToQueue.deferred = queuedSync;
             syncToQueue.uniqueId = syncToQueue.uniqueId || this.utilitySvc.getUniqueishId();
             this.syncQueue.push(syncToQueue);
-
-            const syncType = _.findKey(Globals.SyncType, (key) => {
-              return key === syncToQueue.type;
-            });
-            this.logSvc.logInfo(`Sync ${syncToQueue.uniqueId} (${syncType.toLowerCase()}) queued`);
+            this.logSvc.logInfo(`Sync ${syncToQueue.uniqueId} (${syncToQueue.type}) queued`);
           }
 
           // Prepare sync promises to return and check if should also run sync
@@ -1222,7 +1222,7 @@ export default class BookmarkService {
     }
 
     // Get cached sync enabled value and update browser action icon
-    return this.storeSvc.get<boolean>(Globals.CacheKeys.SyncEnabled).then(this.platformSvc.interface_Refresh);
+    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then(this.platformSvc.interface_Refresh);
   }
 
   sync_handleBoth(syncData, backgroundUpdate) {
@@ -1273,7 +1273,7 @@ export default class BookmarkService {
             this.platformSvc
               .eventListeners_Disable()
               .then(() => {
-                return syncData.command === Globals.Commands.RestoreBookmarks
+                return syncData.command === MessageCommand.RestoreBookmarks
                   ? this.populateLocalBookmarks(bookmarks)
                   : this.updateLocalBookmarks(updateLocalBookmarksInfo);
               })
@@ -1284,7 +1284,7 @@ export default class BookmarkService {
             // Update bookmarks cache
             return this.updateCachedBookmarks(bookmarks, encryptedBookmarks).then((cachedBookmarks) => {
               // Build id mappings if this was a restore
-              if (syncData.command !== Globals.Commands.RestoreBookmarks) {
+              if (syncData.command !== MessageCommand.RestoreBookmarks) {
                 return;
               }
               return this.platformSvc.bookmarks_BuildIdMappings(cachedBookmarks);
@@ -1310,7 +1310,7 @@ export default class BookmarkService {
     }
 
     return this.storeSvc
-      .get([Globals.CacheKeys.Password, Globals.CacheKeys.SyncId])
+      .get([StoreKey.Password, StoreKey.SyncId])
       .then((storeContent) => {
         // Check secret and bookmarks ID are present
         if (!storeContent.password || !storeContent.syncId) {
@@ -1360,18 +1360,13 @@ export default class BookmarkService {
       })
       .then(() => {
         // Update cached last updated date
-        return this.storeSvc.set(Globals.CacheKeys.LastUpdated, lastUpdated);
+        return this.storeSvc.set(StoreKey.LastUpdated, lastUpdated);
       });
   }
 
   sync_handlePush(syncData) {
     return this.storeSvc
-      .get([
-        Globals.CacheKeys.LastUpdated,
-        Globals.CacheKeys.Password,
-        Globals.CacheKeys.SyncEnabled,
-        Globals.CacheKeys.SyncId
-      ])
+      .get([StoreKey.LastUpdated, StoreKey.Password, StoreKey.SyncEnabled, StoreKey.SyncId])
       .then((storeContent) => {
         // Check for cached sync ID and password
         if (!storeContent.password || !storeContent.syncId) {
@@ -1396,16 +1391,16 @@ export default class BookmarkService {
           // Update bookmarks data with local changes
           switch (syncData.changeInfo.type) {
             // Create bookmark
-            case Globals.UpdateType.Create:
+            case BookmarkChangeType.Create:
               return this.platformSvc.bookmarks_Created(bookmarks, syncData.changeInfo.bookmark);
             // Delete bookmark
-            case Globals.UpdateType.Delete:
+            case BookmarkChangeType.Delete:
               return this.platformSvc.bookmarks_Deleted(bookmarks, syncData.changeInfo.bookmark);
             // Update bookmark
-            case Globals.UpdateType.Update:
+            case BookmarkChangeType.Update:
               return this.platformSvc.bookmarks_Updated(bookmarks, syncData.changeInfo.bookmark);
             // Move bookmark
-            case Globals.UpdateType.Move:
+            case BookmarkChangeType.Move:
               return this.platformSvc.bookmarks_Moved(bookmarks, syncData.changeInfo.bookmark);
             // Ambiguous sync
             default:
@@ -1433,7 +1428,7 @@ export default class BookmarkService {
   }
 
   sync_handleUpgrade(syncData) {
-    return this.storeSvc.get([Globals.CacheKeys.Password, Globals.CacheKeys.SyncId]).then((storeContent) => {
+    return this.storeSvc.get([StoreKey.Password, StoreKey.SyncId]).then((storeContent) => {
       // Check secret and sync ID are present
       if (!storeContent.password || !storeContent.syncId) {
         return this.disableSync().then(() => {
@@ -1456,14 +1451,14 @@ export default class BookmarkService {
 
           // Set the sync version to the current app version
           return this.storeSvc
-            .set(Globals.CacheKeys.SyncVersion, Globals.AppVersion)
+            .set(StoreKey.SyncVersion, Globals.AppVersion)
             .then(() => {
               // Generate a new password hash from the old clear text password and sync ID
               return this.cryptoSvc.getPasswordHash(storeContent.password, storeContent.syncId);
             })
             .then((passwordHash) => {
               // Cache the new password hash and encrypt the data
-              return this.storeSvc.set(Globals.CacheKeys.Password, passwordHash);
+              return this.storeSvc.set(StoreKey.Password, passwordHash);
             })
             .then(() => {
               return this.cryptoSvc.encryptData(JSON.stringify(bookmarks));
@@ -1487,7 +1482,7 @@ export default class BookmarkService {
                   // Update cached last updated date and return decrypted bookmarks
                   return this.$q.all([
                     this.updateCachedBookmarks(bookmarks, encryptedBookmarks),
-                    this.storeSvc.set(Globals.CacheKeys.LastUpdated, data[0].lastUpdated)
+                    this.storeSvc.set(StoreKey.LastUpdated, data[0].lastUpdated)
                   ]);
                 });
             });
@@ -1542,7 +1537,7 @@ export default class BookmarkService {
   updateCachedBookmarks(unencryptedBookmarks, encryptedBookmarks) {
     if (encryptedBookmarks !== undefined) {
       // Update storage cache with new encrypted bookmarks
-      return this.storeSvc.set(Globals.CacheKeys.Bookmarks, encryptedBookmarks).then(() => {
+      return this.storeSvc.set(StoreKey.Bookmarks, encryptedBookmarks).then(() => {
         // Update memory cached bookmarks
         this.cachedBookmarks_encrypted = encryptedBookmarks;
         if (unencryptedBookmarks !== undefined) {
@@ -1572,13 +1567,13 @@ export default class BookmarkService {
 
       switch (updateInfo.type) {
         // Create new local bookmark
-        case Globals.UpdateType.Create:
+        case BookmarkChangeType.Create:
           return this.platformSvc.bookmarks_CreateSingle(updateInfo);
         // Update existing local bookmark
-        case Globals.UpdateType.Update:
+        case BookmarkChangeType.Update:
           return this.platformSvc.bookmarks_UpdateSingle(updateInfo);
         // Delete existing local bookmark
-        case Globals.UpdateType.Delete:
+        case BookmarkChangeType.Delete:
           return this.platformSvc.bookmarks_DeleteSingle(updateInfo);
         // Ambiguous sync
         case !updateInfo:

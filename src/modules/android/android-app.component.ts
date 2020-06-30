@@ -7,8 +7,10 @@ import AppComponent from '../app/app.component';
 import Strings from '../../../res/strings/en.json';
 import Alert from '../shared/alert/alert.interface';
 import AlertType from '../shared/alert/alert-type.enum';
-import { AndroidException } from '../shared/exceptions/exception-types';
+import { AndroidException } from '../shared/exceptions/exception';
 import Globals from '../shared/globals';
+import PlatformType from '../shared/platform-type.enum';
+import StoreKey from '../shared/store/store-key.enum';
 
 @autobind
 @Component({
@@ -86,7 +88,7 @@ export default class AndroidAppComponent extends AppComponent {
   }
 
   init() {
-    this.platformName = Globals.Platforms.Android;
+    this.platformName = PlatformType.Android;
 
     // Enable select file to restore
     this.vm.settings.fileRestoreEnabled = true;
@@ -141,7 +143,7 @@ export default class AndroidAppComponent extends AppComponent {
         scanSuccess = true;
         this.sync.id = scannedSyncInfo.id;
         return this.$q.all([
-          this.storeSvc.set(Globals.CacheKeys.SyncId, scannedSyncInfo.id),
+          this.storeSvc.set(StoreKey.SyncId, scannedSyncInfo.id),
           this.updateServiceUrl(scannedSyncInfo.url)
         ]);
       })
