@@ -3,9 +3,9 @@
 import angular from 'angular';
 import { NgModule } from 'angular-ts-decorators';
 import { browser } from 'webextension-polyfill-ts';
+import WebExtBackgroundModule from '../webext/webext-background/webext-background.module';
 import FirefoxNativeBookmarksService from './firefox-native-bookmarks.service';
 import FirefoxPlatformService from './firefox-platform.service';
-import WebExtBackgroundModule from '../webext/webext-background/webext-background.module';
 
 @NgModule({
   id: 'FirefoxBackgroundModule',

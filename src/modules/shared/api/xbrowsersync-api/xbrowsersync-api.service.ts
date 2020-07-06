@@ -1,24 +1,24 @@
 import { Injectable } from 'angular-ts-decorators';
 import compareVersions from 'compare-versions';
 import { autobind } from 'core-decorators';
+import * as Exceptions from '../../exceptions/exception';
+import Globals from '../../globals';
+import NetworkService from '../../network/network.service';
+import StoreKey from '../../store/store-key.enum';
+import StoreService from '../../store/store.service';
+import UtilityService from '../../utility/utility.service';
 import ApiCreateBookmarksRequest from '../api-create-bookmarks-request.interface';
 import ApiCreateBookmarksResponse from '../api-create-bookmarks-response.interface';
 import ApiGetBookmarksResponse from '../api-get-bookmarks-response.interface';
 import ApiGetLastUpdatedResponse from '../api-get-last-updated-response.interface';
 import ApiGetSyncVersionResponse from '../api-get-sync-version-response.interface';
-import ApiService from '../api-service.interface';
 import ApiServiceInfoResponse from '../api-service-info-response.interface';
+import ApiService from '../api-service.interface';
 import ApiUpdateBookmarksRequest from '../api-update-bookmarks-request.interface';
 import ApiUpdateBookmarksResponse from '../api-update-bookmarks-response.interface';
-import * as Exceptions from '../../exceptions/exception';
-import Globals from '../../globals';
-import NetworkService from '../../network/network.service';
-import StoreService from '../../store/store.service';
-import StoreKey from '../../store/store-key.enum';
-import UtilityService from '../../utility/utility.service';
 import XbrowsersyncApiErrorResponse from './xbrowsersync-api-error-response.interface';
-import XbrowsersyncApiServiceInfoResponse from './xbrowsersync-api-service-info-response.interface';
 import XbrowsersyncApiResource from './xbrowsersync-api-resource.enum';
+import XbrowsersyncApiServiceInfoResponse from './xbrowsersync-api-service-info-response.interface';
 
 @autobind
 @Injectable('ApiService')

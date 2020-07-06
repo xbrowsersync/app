@@ -7,11 +7,9 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
-    "skipLibCheck": true,
     "sourceMap": true,
     "strictFunctionTypes": true,
-    "target": "ESNext",
-    "typeRoots": ["node_modules/@types"]
+    "target": "ESNext"
   },
   "exclude": ["node_modules"],
   "include": ["src/**/*.ts"]

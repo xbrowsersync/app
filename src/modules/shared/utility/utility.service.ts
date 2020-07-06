@@ -1,15 +1,17 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+
 import { Injectable } from 'angular-ts-decorators';
 import compareVersions from 'compare-versions';
 import { autobind } from 'core-decorators';
 import _ from 'underscore';
+import Url from '../../../interfaces/url.interface';
 import ExceptionHandler from '../exceptions/exception-handler.interface';
 import Globals from '../globals';
-import Url from '../../../interfaces/url.interface';
 import LogService from '../log/log.service';
 import NetworkService from '../network/network.service';
 import PlatformType from '../platform-type.enum';
-import StoreService from '../store/store.service';
 import StoreKey from '../store/store-key.enum';
+import StoreService from '../store/store.service';
 
 @autobind
 @Injectable('UtilityService')
@@ -58,6 +60,10 @@ export default class UtilityService {
         this.logSvc.logInfo('Couldn’t check for new version');
         return '';
       });
+  }
+
+  filterFalsyValues(values: string[]): string[] {
+    return values.filter((x) => x);
   }
 
   getDateTimeString(date: Date): string {
@@ -154,8 +160,8 @@ export default class UtilityService {
     };
   }
 
-  promiseWhile(data: any, condition: (data: any) => PromiseLike<any>, action: (data: any) => PromiseLike<any>) {
-    const whilst = (whilstData): PromiseLike<any> => {
+  promiseWhile(data: any, condition: (data: any) => ng.IPromise<any>, action: (data: any) => ng.IPromise<any>) {
+    const whilst = (whilstData): ng.IPromise<any> => {
       return condition(whilstData).then((conditionIsTrue) => {
         if (conditionIsTrue) {
           return this.$q.resolve(whilstData);
@@ -166,6 +172,14 @@ export default class UtilityService {
     };
 
     return whilst(data);
+  }
+
+  splitTextIntoWords(text: string): string[] {
+    if (!text) {
+      return [];
+    }
+    const words = text.toLowerCase().replace(/['"]/g, '');
+    return this.filterFalsyValues(words.split(/\s/));
   }
 
   stripTags(input: string): string {

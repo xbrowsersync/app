@@ -17,17 +17,32 @@
     "project": "./tsconfig.eslint.json",
     "sourceType": "module"
   },
+  "plugins": ["simple-import-sort"],
   "rules": {
     "@typescript-eslint/indent": "off",
+    "@typescript-eslint/lines-between-class-members": "off",
     "class-methods-use-this": "off",
+    "consistent-return": "off",
     "func-style": "warn",
     "global-require": "off",
-    "lines-between-class-members": "off",
     "import/no-dynamic-require": "off",
+    "import/no-extraneous-dependencies": ["error", {
+      "devDependencies": true
+    }],
     "no-bitwise": "off",
+    "no-empty": "off",
     "no-nested-ternary": "off",
     "no-param-reassign": "off",
     "no-undef": "error",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "prefer-destructuring": "off",
+    "simple-import-sort/sort": [
+      "error",
+      {
+        "groups": [
+          ["^\\u0000", "^@?\\w", "^[^.]", "^\\."]
+        ]
+      }
+    ]
   }
 }

@@ -1,8 +1,8 @@
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import ApiServiceType from '../api/api-service-type.enum';
-import Backup, { BackupSync } from './backup.interface';
 import UtilityService from '../utility/utility.service';
+import Backup, { BackupSync } from './backup.interface';
 
 @autobind
 @Injectable('BackupRestoreService')

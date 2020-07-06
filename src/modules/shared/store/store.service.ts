@@ -1,7 +1,7 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import * as idbKeyval from 'idb-keyval';
 import { autobind } from 'core-decorators';
+import * as idbKeyval from 'idb-keyval';
 import StoreContent from './store-content.interface';
 
 @autobind
@@ -17,7 +17,7 @@ export default class StoreService {
     this.$q = $q;
   }
 
-  clear(): Promise<void> {
+  clear(): ng.IPromise<void> {
     return idbKeyval.clear(this.getStore());
   }
 

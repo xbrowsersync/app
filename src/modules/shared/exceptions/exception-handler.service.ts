@@ -1,13 +1,13 @@
 import angular from 'angular';
-import { autobind } from 'core-decorators';
 import { Injectable } from 'angular-ts-decorators';
+import { autobind } from 'core-decorators';
+import Strings from '../../../../res/strings/en.json';
+import PlatformService from '../../../interfaces/platform-service.interface';
+import AlertType from '../alert/alert-type.enum';
 import Alert from '../alert/alert.interface';
 import AlertService from '../alert/alert.service';
-import AlertType from '../alert/alert-type.enum';
-import * as Exceptions from './exception';
-import PlatformService from '../../../interfaces/platform-service.interface';
 import LogService from '../log/log.service';
-import Strings from '../../../../res/strings/en.json';
+import * as Exceptions from './exception';
 
 @autobind
 @Injectable('ExceptionHandler')
@@ -80,7 +80,7 @@ export default class ExceptionHandlerService {
         alertMessage.title = this.platformSvc.getConstant(Strings.error_ContainerChanged_Title);
         alertMessage.message = this.platformSvc.getConstant(Strings.error_ContainerChanged_Message);
         break;
-      case Exceptions.LocalContainerNotFoundException:
+      case Exceptions.ContainerNotFoundException:
         alertMessage.title = this.platformSvc.getConstant(Strings.error_LocalContainerNotFound_Title);
         alertMessage.message = this.platformSvc.getConstant(Strings.error_LocalContainerNotFound_Message);
         break;
@@ -133,10 +133,10 @@ export default class ExceptionHandlerService {
         alertMessage.title = this.platformSvc.getConstant(Strings.error_UncommittedSyncs_Title);
         alertMessage.message = this.platformSvc.getConstant(Strings.error_UncommittedSyncs_Message);
         break;
-      case Exceptions.FailedCreateLocalBookmarksException:
-      case Exceptions.FailedGetLocalBookmarksException:
-      case Exceptions.FailedRemoveLocalBookmarksException:
-      case Exceptions.LocalBookmarkNotFoundException:
+      case Exceptions.FailedCreateNativeBookmarksException:
+      case Exceptions.FailedGetNativeBookmarksException:
+      case Exceptions.FailedRemoveNativeBookmarksException:
+      case Exceptions.NativeBookmarkNotFoundException:
       case Exceptions.SyncedBookmarkNotFoundException:
         alertMessage.title = this.platformSvc.getConstant(Strings.error_LocalSyncError_Title);
         alertMessage.message = this.platformSvc.getConstant(Strings.error_LocalSyncError_Message);

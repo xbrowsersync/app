@@ -1,7 +1,7 @@
 import { NgModule } from 'angular-ts-decorators';
 import AlertService from './alert/alert.service';
-import XbrowsersyncApiService from './api/xbrowsersync-api/xbrowsersync-api.service';
 import ApiRequestInterceptorFactory from './api/api-request-interceptor.factory';
+import XbrowsersyncApiService from './api/xbrowsersync-api/xbrowsersync-api.service';
 import BackupRestoreService from './backup-restore/backup-restore.service';
 import BookmarkService from './bookmark/bookmark.service';
 import CryptoService from './crypto/crypto.service';

@@ -7,15 +7,8 @@ export default {
   Bookmarks: {
     ContainerPrefix: '[xbs]',
     DescriptionMaxLength: 300,
-    MenuContainerName: '[xbs] Menu',
-    MobileContainerName: '[xbs] Mobile',
-    OtherContainerName: '[xbs] Other',
-    OtherContainerNameOld: '_other_',
     HorizontalSeparatorTitle:
       '────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────',
-    ToolbarContainerName: '[xbs] Toolbar',
-    ToolbarContainerNameOld: '_toolbar_',
-    UnfiledContainerNameOld: '_xBrowserSync_',
     VerticalSeparatorTitle: '|'
   },
   LookaheadMinChars: 1,

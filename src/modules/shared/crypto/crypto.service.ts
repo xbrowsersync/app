@@ -4,8 +4,8 @@ import { autobind } from 'core-decorators';
 import lzutf8 from 'lzutf8';
 import * as Exceptions from '../exceptions/exception';
 import LogService from '../log/log.service';
-import StoreService from '../store/store.service';
 import StoreKey from '../store/store-key.enum';
+import StoreService from '../store/store.service';
 
 @autobind
 @Injectable('CryptoService')

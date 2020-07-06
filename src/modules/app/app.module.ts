@@ -6,11 +6,11 @@ import NgFilter from 'angular-filter';
 import NgSanitize from 'angular-sanitize';
 import { NgModule } from 'angular-ts-decorators';
 import NgInfiniteScroll from 'ng-infinite-scroll';
-import BookmarkTreeComponent from './bookmark-tree.component';
-import GlobalSharedModule from '../shared/global-shared.module';
-import ZxcvbnDirective from './zxcvbn.directive';
-import Globals from '../shared/globals';
 import ExceptionHandlerService from '../shared/exceptions/exception-handler.service';
+import GlobalSharedModule from '../shared/global-shared.module';
+import Globals from '../shared/globals';
+import BookmarkTreeComponent from './bookmark-tree.component';
+import ZxcvbnDirective from './zxcvbn.directive';
 
 @NgModule({
   declarations: [BookmarkTreeComponent, ZxcvbnDirective],

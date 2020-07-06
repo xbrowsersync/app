@@ -1,16 +1,14 @@
-/* eslint-disable @typescript-eslint/camelcase */
-
 import { Component } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
-import AndroidPlatformService from '../android-platform.service';
-import AppComponent from '../../app/app.component';
 import Strings from '../../../../res/strings/en.json';
-import Alert from '../../shared/alert/alert.interface';
+import AppComponent from '../../app/app.component';
 import AlertType from '../../shared/alert/alert-type.enum';
+import Alert from '../../shared/alert/alert.interface';
 import { AndroidException } from '../../shared/exceptions/exception';
 import Globals from '../../shared/globals';
 import PlatformType from '../../shared/platform-type.enum';
 import StoreKey from '../../shared/store/store-key.enum';
+import AndroidPlatformService from '../android-platform.service';
 
 @autobind
 @Component({
@@ -104,7 +102,7 @@ export default class AndroidAppComponent extends AppComponent {
       .initI18n()
       .then(() => {
         // Bind to cordova device events
-        return this.$q((resolve, reject) => {
+        return this.$q<void>((resolve, reject) => {
           document.addEventListener(
             'deviceready',
             () => {

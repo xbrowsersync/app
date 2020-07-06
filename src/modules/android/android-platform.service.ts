@@ -1,34 +1,27 @@
 /* eslint-disable no-case-declarations */
-/* eslint-disable default-case */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-plusplus */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable consistent-return */
-/* eslint-disable @typescript-eslint/camelcase */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable no-param-reassign */
 
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import _ from 'underscore';
-import { autobind } from 'core-decorators';
 import compareVersions from 'compare-versions';
-import PlatformService from '../../interfaces/platform-service.interface';
+import { autobind } from 'core-decorators';
 import Strings from '../../../res/strings/en.json';
+import I18nString from '../../interfaces/i18n-string.interface';
+import PlatformService from '../../interfaces/platform-service.interface';
+import Sync from '../../interfaces/sync.interface';
+import WebpageMetadata from '../../interfaces/webpage-metadata.interface';
 import Alert from '../shared/alert/alert.interface';
-import BookmarkService from '../shared/bookmark/bookmark.service';
 import BookmarkChangeType from '../shared/bookmark/bookmark-change-type.enum';
+import BookmarkMetadata from '../shared/bookmark/bookmark-metadata.interface';
+import Bookmark from '../shared/bookmark/bookmark.interface';
+import BookmarkService from '../shared/bookmark/bookmark.service';
 import * as Exceptions from '../shared/exceptions/exception';
 import Globals from '../shared/globals';
-import StoreService from '../shared/store/store.service';
-import UtilityService from '../shared/utility/utility.service';
 import LogService from '../shared/log/log.service';
 import MessageCommand from '../shared/message-command.enum';
 import NetworkService from '../shared/network/network.service';
 import StoreKey from '../shared/store/store-key.enum';
-import WebpageMetadata from '../../interfaces/webpage-metadata.interface';
+import StoreService from '../shared/store/store.service';
+import UtilityService from '../shared/utility/utility.service';
 
 @autobind
 @Injectable('PlatformService')
@@ -44,11 +37,11 @@ export default class AndroidPlatformService implements PlatformService {
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
-  backgroundSyncInterval: any;
-  currentPage: any;
-  i18nStrings: any;
-  loadingId: any;
-  sharedBookmark: any;
+  backgroundSyncInterval: ng.IPromise<void>;
+  currentPage: BookmarkMetadata;
+  i18nStrings: I18nString[];
+  loadingId: string;
+  sharedBookmark: BookmarkMetadata;
   vm: any;
 
   static $inject = [
@@ -89,50 +82,50 @@ export default class AndroidPlatformService implements PlatformService {
     this.i18nStrings = [];
   }
 
-  automaticUpdates_NextUpdate() {
-    return this.$q.resolve();
-  }
-
-  automaticUpdates_Start() {
+  automaticUpdates_NextUpdate(): ng.IPromise<string> {
     return this.methodNotApplicable();
   }
 
-  automaticUpdates_Stop() {
+  automaticUpdates_Start(): ng.IPromise<void> {
     return this.methodNotApplicable();
   }
 
-  bookmarks_BuildIdMappings() {
+  automaticUpdates_Stop(): ng.IPromise<void> {
     return this.methodNotApplicable();
   }
 
-  bookmarks_Clear() {
+  bookmarks_BuildIdMappings(): ng.IPromise<void> {
     return this.methodNotApplicable();
   }
 
-  bookmarks_CreateSingle() {
+  bookmarks_Clear(): ng.IPromise<void> {
     return this.methodNotApplicable();
   }
 
-  bookmarks_DeleteSingle() {
+  bookmarks_CreateSingle(): ng.IPromise<void> {
     return this.methodNotApplicable();
   }
 
-  bookmarks_Get() {
+  bookmarks_DeleteSingle(): ng.IPromise<void> {
     return this.methodNotApplicable();
   }
 
-  bookmarks_Populate() {
+  bookmarks_Get(): ng.IPromise<Bookmark[]> {
     return this.methodNotApplicable();
   }
 
-  bookmarks_Share(bookmark) {
+  bookmarks_Populate(): ng.IPromise<void> {
+    return this.methodNotApplicable();
+  }
+
+  bookmarks_Share(bookmark: Bookmark): void {
     const options = {
       subject: `${bookmark.title} (${this.getConstant(Strings.shareBookmark_Message)})`,
       url: bookmark.url,
       chooserTitle: this.getConstant(Strings.shareBookmark_Message)
     };
 
-    const onError = (err) => {
+    const onError = (err: Error) => {
       this.$exceptionHandler(err);
     };
 
@@ -140,13 +133,13 @@ export default class AndroidPlatformService implements PlatformService {
     window.plugins.socialsharing.shareWithOptions(options, null, onError);
   }
 
-  bookmarks_UpdateSingle() {
+  bookmarks_UpdateSingle(): ng.IPromise<void> {
     return this.methodNotApplicable();
   }
 
-  checkForDarkTheme() {
+  checkForDarkTheme(): ng.IPromise<void> {
     // Check dark theme is supported
-    return this.$q((resolve, reject) => {
+    return this.$q<void>((resolve, reject) => {
       window.cordova.plugins.ThemeDetection.isAvailable(resolve, reject);
     }).then((isAvailable: any) => {
       if (!isAvailable.value) {
@@ -154,7 +147,7 @@ export default class AndroidPlatformService implements PlatformService {
       }
 
       // Check dark theme is enabled
-      return this.$q((resolve, reject) => {
+      return this.$q<void>((resolve, reject) => {
         window.cordova.plugins.ThemeDetection.isDarkModeEnabled(resolve, reject);
       }).then((isDarkModeEnabled: any) => {
         this.vm.settings.darkModeEnabled = isDarkModeEnabled.value;
@@ -162,7 +155,7 @@ export default class AndroidPlatformService implements PlatformService {
     });
   }
 
-  checkForInstallOrUpgrade() {
+  checkForInstallOrUpgrade(): ng.IPromise<void> {
     // Check for stored app version and compare it to current
     const mobileAppVersion = localStorage.getItem('xBrowserSync-mobileAppVersion');
     return (mobileAppVersion ? this.$q.resolve(mobileAppVersion) : this.storeSvc.get<string>(StoreKey.AppVersion)).then(
@@ -174,7 +167,7 @@ export default class AndroidPlatformService implements PlatformService {
     );
   }
 
-  checkForNewVersion() {
+  checkForNewVersion(): void {
     this.$timeout(() => {
       this.utilitySvc.checkForNewVersion().then((newVersion) => {
         if (!newVersion) {
@@ -194,7 +187,7 @@ export default class AndroidPlatformService implements PlatformService {
     }, 1e3);
   }
 
-  checkForSharedBookmark() {
+  checkForSharedBookmark(): ng.IPromise<void> {
     const bookmark = this.getSharedBookmark();
     if (!bookmark) {
       return this.$q.resolve();
@@ -212,15 +205,15 @@ export default class AndroidPlatformService implements PlatformService {
     });
   }
 
-  copyToClipboard(textToCopy) {
-    return this.$q((resolve, reject) => {
-      window.cordova.plugins.clipboard.copy(textToCopy, resolve, reject);
-    });
+  copyTextToClipboard(text: string): ng.IPromise<void> {
+    return this.$q<void>((resolve, reject) => {
+      window.cordova.plugins.clipboard.copy(text, resolve, reject);
+    }).then(() => {});
   }
 
-  decodeQrCode(qrCodeValue) {
-    let serviceUrl;
-    let syncId;
+  decodeQrCode(qrCodeValue: string): any {
+    let serviceUrl: string;
+    let syncId: string;
     try {
       // For v1.5.3 or later codes, expect sync info object
       const syncInfo = JSON.parse(qrCodeValue);
@@ -245,7 +238,7 @@ export default class AndroidPlatformService implements PlatformService {
     };
   }
 
-  disableBackgroundSync() {
+  disableBackgroundSync(): void {
     if (!this.backgroundSyncInterval) {
       return;
     }
@@ -255,19 +248,18 @@ export default class AndroidPlatformService implements PlatformService {
     window.cordova.plugins.backgroundMode.disable();
   }
 
-  disableLight() {
-    return this.$q((resolve, reject) => {
-      window.QRScanner.disableLight((err) => {
+  disableLight(): ng.IPromise<void> {
+    return this.$q<void>((resolve, reject) => {
+      window.QRScanner.disableLight((err: any) => {
         if (err) {
           return reject(new Exceptions.AndroidException(err._message || err.name || err.code));
         }
-
         resolve();
       });
     });
   }
 
-  downloadFile(fileName, textContents) {
+  downloadFile(fileName: string, textContents: string): ng.IPromise<string> {
     if (!fileName) {
       throw new Error('File name not supplied.');
     }
@@ -311,7 +303,7 @@ export default class AndroidPlatformService implements PlatformService {
     });
   }
 
-  enableBackgroundSync() {
+  enableBackgroundSync(): void {
     // Exit if background sync already enabled
     if (this.backgroundSyncInterval) {
       return;
@@ -331,28 +323,27 @@ export default class AndroidPlatformService implements PlatformService {
     }, 120e3);
   }
 
-  enableLight() {
-    return this.$q((resolve, reject) => {
+  enableLight(): ng.IPromise<void> {
+    return this.$q<void>((resolve, reject) => {
       window.QRScanner.enableLight((err) => {
         if (err) {
           return reject(new Exceptions.AndroidException(err._message || err.name || err.code));
         }
-
         resolve();
       });
     });
   }
 
-  eventListeners_Disable() {
+  eventListeners_Disable(): ng.IPromise<void> {
     return this.methodNotApplicable();
   }
 
-  eventListeners_Enable() {
+  eventListeners_Enable(): ng.IPromise<void> {
     return this.methodNotApplicable();
   }
 
-  executeSync(isBackgroundSync, displayLoadingId?) {
-    let displayLoadingTimeout;
+  executeSync(isBackgroundSync = false, displayLoadingId?: string): ng.IPromise<void> {
+    let displayLoadingTimeout: ng.IPromise<void>;
 
     // Display loading panel if not background sync and currently on the search view
     if (!isBackgroundSync) {
@@ -373,7 +364,7 @@ export default class AndroidPlatformService implements PlatformService {
       });
   }
 
-  executeSyncIfOnline(displayLoadingId) {
+  executeSyncIfOnline(displayLoadingId): ng.IPromise<boolean> {
     const isOnline = this.networkSvc.isNetworkConnected();
 
     // If not online display an alert and return
@@ -392,29 +383,27 @@ export default class AndroidPlatformService implements PlatformService {
     });
   }
 
-  getAllFromNativeStorage() {
-    return this.$q((resolve, reject) => {
-      const cachedData = {};
+  getAllFromNativeStorage(): ng.IPromise<any> {
+    return this.$q<any>((resolve, reject) => {
+      const nativeStorageItems: any = {};
 
-      const failure = (err) => {
-        err = err || new Error();
-        if (err.code === 2) {
+      const failure = (err = new Error()) => {
+        if ((err as any).code === 2) {
           // Item not found
           return resolve(null);
         }
-
         reject(new Exceptions.FailedLocalStorageException(null, err));
       };
 
-      const success = (keys) => {
+      const success = (keys: string[]) => {
         this.$q
           .all(
             keys.map((key) => {
               return this.$q((resolveGetItem, rejectGetItem) => {
                 window.NativeStorage.getItem(
                   key,
-                  (result) => {
-                    cachedData[key] = result;
+                  (result: any) => {
+                    nativeStorageItems[key] = result;
                     resolveGetItem();
                   },
                   rejectGetItem
@@ -423,7 +412,7 @@ export default class AndroidPlatformService implements PlatformService {
             })
           )
           .then(() => {
-            resolve(cachedData);
+            resolve(nativeStorageItems);
           })
           .catch(failure);
       };
@@ -432,25 +421,25 @@ export default class AndroidPlatformService implements PlatformService {
     });
   }
 
-  getConstant(stringObj: any): string {
-    let stringVal = '';
+  getConstant(i18nString: I18nString): string {
+    let message = '';
 
-    if (stringObj && stringObj.key) {
-      stringVal = this.i18nStrings[stringObj.key];
+    if (i18nString && i18nString.key) {
+      message = this.i18nStrings[i18nString.key];
     }
 
-    if (!stringVal) {
+    if (!message) {
       throw new Exceptions.I18nException('I18n string has no value');
     }
 
-    return stringVal;
+    return message;
   }
 
-  getCurrentUrl() {
+  getCurrentUrl(): ng.IPromise<string> {
     return this.$q.resolve(this.currentPage && this.currentPage.url);
   }
 
-  getHelpPages() {
+  getHelpPages(): string[] {
     const pages = [
       this.getConstant(Strings.help_Page_Welcome_Android_Content),
       this.getConstant(Strings.help_Page_FirstSync_Android_Content),
@@ -464,10 +453,11 @@ export default class AndroidPlatformService implements PlatformService {
     return pages;
   }
 
-  getPageMetadata(getFullMetadata = true, pageUrl: string): ng.IPromise<WebpageMetadata> {
-    let inAppBrowser;
-    let loadUrlTimeout;
-    let timeout;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getPageMetadata(getFullMetadata = true, pageUrl?: string): ng.IPromise<WebpageMetadata> {
+    let inAppBrowser: any;
+    let loadUrlTimeout: ng.IPromise<void>;
+    let timeout: ng.IPromise<void>;
 
     // Set default metadata from provided page url or current page
     const metadata: WebpageMetadata = {
@@ -488,7 +478,7 @@ export default class AndroidPlatformService implements PlatformService {
         return reject(new Exceptions.FailedGetPageMetadataException());
       }
 
-      const handleResponse = (pageContent?, err?) => {
+      const handleResponse = (pageContent?: string, err?: Error): void => {
         this.interface_Working_Hide('retrievingMetadata', timeout);
 
         // Cancel timeout
@@ -506,7 +496,7 @@ export default class AndroidPlatformService implements PlatformService {
         const parser = new DOMParser();
         const document = parser.parseFromString(pageContent, 'text/html');
 
-        const getDecodedTextValue = (text) => {
+        const getDecodedTextValue = (text: string): string => {
           if (!text) {
             return '';
           }
@@ -515,7 +505,7 @@ export default class AndroidPlatformService implements PlatformService {
           return txt.value;
         };
 
-        const getPageDescription = () => {
+        const getPageDescription = (): string => {
           const ogDescription: HTMLMetaElement =
             document.querySelector('meta[property="OG:DESCRIPTION"]') ||
             document.querySelector('meta[property="og:description"]');
@@ -539,7 +529,7 @@ export default class AndroidPlatformService implements PlatformService {
           return '';
         };
 
-        const getPageKeywords = () => {
+        const getPageKeywords = (): string => {
           const keywords = [];
 
           // Get open graph tag values
@@ -577,7 +567,7 @@ export default class AndroidPlatformService implements PlatformService {
           return null;
         };
 
-        const getPageTitle = () => {
+        const getPageTitle = (): string => {
           const ogTitle: HTMLMetaElement =
             document.querySelector('meta[property="OG:TITLE"]') || document.querySelector('meta[property="og:title"]');
           if (ogTitle && ogTitle.content) {
@@ -606,13 +596,13 @@ export default class AndroidPlatformService implements PlatformService {
         return handleResponse();
       }
 
-      const cancelledCallback = () => {
+      const cancelledCallback = (): void => {
         resolve(metadata);
       };
       timeout = this.interface_Working_Show('retrievingMetadata', cancelledCallback);
       inAppBrowser = window.cordova.InAppBrowser.open(metadata.url, '_blank', 'hidden=yes');
 
-      inAppBrowser.addEventListener('loaderror', (event) => {
+      inAppBrowser.addEventListener('loaderror', (event: any) => {
         const errMessage = event && event.message ? event.message : 'Failed to load webpage';
         handleResponse(null, new Error(errMessage));
       });
@@ -651,7 +641,7 @@ export default class AndroidPlatformService implements PlatformService {
     return promise;
   }
 
-  getSharedBookmark() {
+  getSharedBookmark(): BookmarkMetadata {
     if (!this.sharedBookmark) {
       return;
     }
@@ -664,11 +654,11 @@ export default class AndroidPlatformService implements PlatformService {
     return bookmark;
   }
 
-  getSupportedUrl(url) {
+  getSupportedUrl(url: string): string {
     return url;
   }
 
-  handleBackButton(event) {
+  handleBackButton(event: Event): void {
     if (
       this.vm.view.current === this.vm.view.views.bookmark ||
       this.vm.view.current === this.vm.view.views.settings ||
@@ -687,7 +677,7 @@ export default class AndroidPlatformService implements PlatformService {
     }
   }
 
-  handleDeviceReady(viewModel, success, failure) {
+  handleDeviceReady(viewModel: any, success: () => any, failure: () => any): ng.IPromise<any> {
     // Set global variables
     this.vm = viewModel;
 
@@ -717,7 +707,7 @@ export default class AndroidPlatformService implements PlatformService {
     );
   }
 
-  handleInstall(installedVersion) {
+  handleInstall(installedVersion: string): ng.IPromise<void> {
     return this.storeSvc
       .clear()
       .then(() => {
@@ -732,18 +722,18 @@ export default class AndroidPlatformService implements PlatformService {
       });
   }
 
-  handleKeyboardDidShow(event) {
+  handleKeyboardDidShow(event: any): void {
     document.body.style.height = `calc(100% - ${event.keyboardHeight}px)`;
     setTimeout(() => {
       (document.activeElement as any).scrollIntoViewIfNeeded();
     }, 100);
   }
 
-  handleKeyboardWillHide() {
+  handleKeyboardWillHide(): void {
     document.body.style.removeProperty('height');
   }
 
-  handleNewIntent(intent) {
+  handleNewIntent(intent: any): void {
     if (!intent || !intent.extras) {
       return;
     }
@@ -757,7 +747,7 @@ export default class AndroidPlatformService implements PlatformService {
     };
   }
 
-  handleResume() {
+  handleResume(): ng.IPromise<void> {
     // Set theme
     return this.checkForDarkTheme().then(() => {
       // Check if sync enabled and reset network disconnected flag
@@ -789,7 +779,7 @@ export default class AndroidPlatformService implements PlatformService {
     });
   }
 
-  handleStartup() {
+  handleStartup(): ng.IPromise<void> {
     this.logSvc.logInfo('Starting up');
 
     // Set theme
@@ -847,9 +837,9 @@ export default class AndroidPlatformService implements PlatformService {
     });
   }
 
-  handleTouchStart(event) {
+  handleTouchStart(event: Event): void {
     // Blur focus (and hide keyboard) when pressing out of text fields
-    if (!this.isTextInput(event.target) && this.isTextInput(document.activeElement)) {
+    if (!this.isTextInput(event.target as Element) && this.isTextInput(document.activeElement)) {
       this.$timeout(() => {
         (document.activeElement as HTMLInputElement).blur();
       }, 100);
@@ -859,7 +849,7 @@ export default class AndroidPlatformService implements PlatformService {
     }
   }
 
-  handleUpgrade(oldVersion, newVersion) {
+  handleUpgrade(oldVersion: string, newVersion: string): ng.IPromise<void> {
     if (compareVersions.compare(oldVersion, newVersion, '=')) {
       // No upgrade
       return this.$q.resolve();
@@ -876,6 +866,7 @@ export default class AndroidPlatformService implements PlatformService {
           switch (true) {
             case newVersion.indexOf('1.5.3') === 0:
               return this.upgradeTo153();
+            default:
           }
         }
       })
@@ -886,12 +877,12 @@ export default class AndroidPlatformService implements PlatformService {
       });
   }
 
-  initI18n() {
+  initI18n(): ng.IPromise<void> {
     let i18nCode = 'en';
-    return this.$q<string>((resolve, reject) => {
+    return this.$q<any>((resolve, reject) => {
       navigator.globalization.getPreferredLanguage(resolve, reject);
     })
-      .then((language: any) => {
+      .then((language) => {
         if (!language && !language.value) {
           this.logSvc.logWarning('Couldn’t get preferred language');
           return;
@@ -899,7 +890,7 @@ export default class AndroidPlatformService implements PlatformService {
         i18nCode = language.value.split('-')[0];
       })
       .then(() => {
-        return this.$http.get(`./assets/strings_${i18nCode}.json`).then((response) => {
+        return this.$http.get<I18nString[]>(`./assets/strings_${i18nCode}.json`).then((response) => {
           this.i18nStrings = response.data;
         });
       })
@@ -909,11 +900,11 @@ export default class AndroidPlatformService implements PlatformService {
       });
   }
 
-  interface_Refresh() {
+  interface_Refresh(): ng.IPromise<void> {
     return this.methodNotApplicable();
   }
 
-  interface_Working_Hide(id, timeout) {
+  interface_Working_Hide(id?: string, timeout?: ng.IPromise<void>): void {
     if (timeout) {
       this.$timeout.cancel(timeout);
     }
@@ -925,8 +916,8 @@ export default class AndroidPlatformService implements PlatformService {
     }
   }
 
-  interface_Working_Show(id, cancelledCallback?) {
-    let timeout;
+  interface_Working_Show(id?: string, cancelledCallback?: () => void): ng.IPromise<void> {
+    let timeout: ng.IPromise<void>;
 
     // Return if loading overlay already displayed
     if (this.loadingId) {
@@ -966,24 +957,24 @@ export default class AndroidPlatformService implements PlatformService {
     return timeout;
   }
 
-  isTextInput(node) {
-    return ['INPUT', 'TEXTAREA'].indexOf(node.nodeName) !== -1;
+  isTextInput(element: Element): boolean {
+    return ['INPUT', 'TEXTAREA'].indexOf(element.nodeName) !== -1;
   }
 
-  methodNotApplicable() {
+  methodNotApplicable(): ng.IPromise<any> {
     // Unused for this platform
     return this.$q.resolve();
   }
 
-  openUrl(url) {
+  openUrl(url: string): void {
     window.open(url, '_system', '');
   }
 
-  permissions_Check() {
+  permissions_Check(): ng.IPromise<boolean> {
     return this.methodNotApplicable();
   }
 
-  refreshLocalSyncData() {
+  refreshLocalSyncData(): ng.IPromise<void> {
     return this.$q.resolve();
   }
 
@@ -991,16 +982,16 @@ export default class AndroidPlatformService implements PlatformService {
     return false;
   }
 
-  sync_Queue(syncData, command = MessageCommand.SyncBookmarks) {
+  sync_Queue(sync: Sync, command = MessageCommand.SyncBookmarks): ng.IPromise<any> {
     // Add sync data to queue and run sync
-    syncData.command = command;
+    sync.command = command;
     return this.bookmarkSvc
-      .queueSync(syncData)
+      .queueSync(sync)
       .then(() => {
-        if (syncData.changeInfo === undefined) {
+        if (sync.changeInfo === undefined) {
           return;
         }
-        return this.$q.resolve(syncData.changeInfo).then((changeInfo) => {
+        return this.$q.resolve(sync.changeInfo).then((changeInfo) => {
           switch (true) {
             case changeInfo.type === BookmarkChangeType.Create:
               this.$timeout(() => {
@@ -1023,6 +1014,7 @@ export default class AndroidPlatformService implements PlatformService {
                 } as Alert);
               }, 200);
               break;
+            default:
           }
         });
       })
@@ -1034,8 +1026,8 @@ export default class AndroidPlatformService implements PlatformService {
         ).then(() => {
           // Add uncommitted syncs back to the queue and notify
           if (err instanceof Exceptions.SyncUncommittedException) {
-            syncData.changeInfo = this.$q.resolve();
-            this.bookmarkSvc.queueSync(syncData, false);
+            sync.changeInfo = undefined;
+            this.bookmarkSvc.queueSync(sync, false);
             this.logSvc.logInfo('Sync not committed: network offline');
             this.vm.displayAlert({
               message: this.getConstant(Strings.error_UncommittedSyncs_Message),
@@ -1050,11 +1042,11 @@ export default class AndroidPlatformService implements PlatformService {
       });
   }
 
-  scanner_Start() {
+  scanner_Start(): ng.IPromise<any> {
     this.vm.scanner.lightEnabled = false;
     this.vm.scanner.invalidSyncId = false;
 
-    return this.$q((resolve, reject) => {
+    return this.$q<any>((resolve, reject) => {
       const waitForScan = () => {
         this.$timeout(() => {
           this.vm.scanner.invalidSyncId = false;
@@ -1068,7 +1060,7 @@ export default class AndroidPlatformService implements PlatformService {
           window.QRScanner.pausePreview(() => {
             this.logSvc.logInfo(`Scanned: ${scannedText}`);
 
-            let syncInfo;
+            let syncInfo: any;
             try {
               syncInfo = this.decodeQrCode(scannedText);
             } catch (decodeQrCodeErr) {
@@ -1108,7 +1100,7 @@ export default class AndroidPlatformService implements PlatformService {
     });
   }
 
-  scanner_Stop() {
+  scanner_Stop(): ng.IPromise<void> {
     this.disableLight()
       .catch(() => {})
       .finally(() => {
@@ -1119,7 +1111,7 @@ export default class AndroidPlatformService implements PlatformService {
     return this.$q.resolve();
   }
 
-  scanner_ToggleLight(switchOn?): ng.IPromise<boolean> {
+  scanner_ToggleLight(switchOn?: boolean): ng.IPromise<boolean> {
     // If state was elected toggle light based on value
     if (switchOn !== undefined) {
       return (switchOn ? this.enableLight() : this.disableLight()).then(() => {
@@ -1139,19 +1131,19 @@ export default class AndroidPlatformService implements PlatformService {
     });
   }
 
-  sync_Current() {
+  sync_Current(): ng.IPromise<Sync> {
     return this.$q.resolve(this.bookmarkSvc.getCurrentSync());
   }
 
-  sync_Disable() {
+  sync_Disable(): ng.IPromise<any> {
     return this.bookmarkSvc.disableSync();
   }
 
-  sync_GetQueueLength() {
+  sync_GetQueueLength(): ng.IPromise<number> {
     return this.$q.resolve(this.bookmarkSvc.getSyncQueueLength());
   }
 
-  upgradeTo153() {
+  upgradeTo153(): ng.IPromise<void> {
     // Convert local storage items to IndexedDB
     return this.getAllFromNativeStorage()
       .then((cachedData) => {

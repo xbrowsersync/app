@@ -3,16 +3,17 @@ import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import stackTrace from 'stacktrace-js';
 import { Exception } from '../exceptions/exception';
+import StoreKey from '../store/store-key.enum';
+import StoreService from '../store/store.service';
 import LogLevel from './log-level.enum';
 import LogQueueItem from './log-queue-item.interface';
-import StoreService from '../store/store.service';
-import StoreKey from '../store/store-key.enum';
 
 @autobind
 @Injectable('LogService')
 export default class LogService {
   $injector: ng.auto.IInjectorService;
   $log: ng.ILogService;
+  _$q: ng.IQService;
   _storeSvc: StoreService;
 
   currentLogQueueItem: LogQueueItem;
@@ -22,6 +23,13 @@ export default class LogService {
   constructor($injector: ng.auto.IInjectorService, $log: ng.ILogService) {
     this.$injector = $injector;
     this.$log = $log;
+  }
+
+  get $q(): ng.IQService {
+    if (angular.isUndefined(this._$q)) {
+      this._$q = this.$injector.get('$q');
+    }
+    return this._$q;
   }
 
   get storeSvc(): StoreService {
@@ -35,7 +43,7 @@ export default class LogService {
     this.logItemQueue.push(logItem);
   }
 
-  logError(error: Exception, message?: string): Promise<void> {
+  logError(error: Exception, message?: string): ng.IPromise<void> {
     // Return if no error supplied or has already been logged
     if (!error || error.logged) {
       return null;
@@ -44,6 +52,10 @@ export default class LogService {
     // Mark this error as logged to prevent duplication in logs
     error.logged = true;
 
+    // Output message to console
+    this.logToConsole(message, LogLevel.Error, error);
+
+    // Convert stack trace to show source files then add to queue and process
     return stackTrace.fromError(error).then((frames) => {
       const stack = `${error.name}: ${error.message}\n${frames
         .map((f) => {
@@ -51,9 +63,6 @@ export default class LogService {
         })
         .join('\n')}`;
       error.stack = stack;
-
-      // Output message to console, add to queue and process
-      this.logToConsole(message, LogLevel.Error, error);
       this.addLogItemToQueue({
         level: LogLevel.Error,
         message,
@@ -108,7 +117,7 @@ export default class LogService {
   processLogItemQueue(): ng.IPromise<void> {
     // Return if currently processing or no more items to process
     if (this.currentLogQueueItem || this.logItemQueue.length === 0) {
-      return Promise.resolve();
+      return this.$q.resolve();
     }
 
     // Get the next log item to process

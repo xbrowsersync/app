@@ -4,7 +4,7 @@ import StoreKey from '../../shared/store/store-key.enum';
 
 @autobind
 export default class WebExtAppComponent extends AppComponent {
-  init() {
+  init(): ng.IPromise<void> {
     // Run init then check if current page is a bookmark
     return super.init().then(this.setBookmarkStatus);
   }

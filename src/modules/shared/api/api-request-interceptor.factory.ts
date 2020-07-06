@@ -1,6 +1,6 @@
-import { autobind } from 'core-decorators';
 import { IHttpInterceptor } from 'angular';
 import { Injectable } from 'angular-ts-decorators';
+import { autobind } from 'core-decorators';
 import Globals from '../globals';
 
 @autobind

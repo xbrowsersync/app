@@ -10,7 +10,7 @@ import WebExtAppComponent from '../../webext/webext-app/webext-app.component';
   template: require('../../app/app.component.html')
 })
 export default class ChromiumAppComponent extends WebExtAppComponent {
-  init() {
+  init(): ng.IPromise<void> {
     this.platformName = PlatformType.Chromium;
     return super.init();
   }

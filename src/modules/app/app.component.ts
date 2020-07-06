@@ -11,9 +11,9 @@
 /* eslint-disable consistent-return */
 /* eslint-disable default-case */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
+import angular from 'angular';
 import { Component } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import * as countriesList from 'countries-list';
@@ -21,26 +21,27 @@ import DOMPurify from 'dompurify';
 import marked from 'marked';
 import QRCode from 'qrcode-svg';
 import _ from 'underscore';
-import angular from 'angular';
-import PlatformService from '../../interfaces/platform-service.interface';
 import Strings from '../../../res/strings/en.json';
+import PlatformService from '../../interfaces/platform-service.interface';
+import Sync from '../../interfaces/sync.interface';
+import AlertType from '../shared/alert/alert-type.enum';
 import Alert from '../shared/alert/alert.interface';
 import AlertService from '../shared/alert/alert.service';
-import AlertType from '../shared/alert/alert-type.enum';
-import ApiService from '../shared/api/api-service.interface';
 import ApiServiceStatus from '../shared/api/api-service-status.enum';
+import ApiService from '../shared/api/api-service.interface';
 import BackupRestoreService from '../shared/backup-restore/backup-restore.service';
-import BookmarkService from '../shared/bookmark/bookmark.service.js';
 import BookmarkChangeType from '../shared/bookmark/bookmark-change-type.enum';
+import BookmarkMetadata from '../shared/bookmark/bookmark-metadata.interface';
+import BookmarkService from '../shared/bookmark/bookmark.service.js';
 import CryptoService from '../shared/crypto/crypto.service';
-import ExceptionHandler from '../shared/exceptions/exception-handler.interface';
 import * as Exceptions from '../shared/exceptions/exception';
+import ExceptionHandler from '../shared/exceptions/exception-handler.interface';
 import Globals from '../shared/globals';
 import LogService from '../shared/log/log.service';
 import MessageCommand from '../shared/message-command.enum';
 import NetworkService from '../shared/network/network.service';
-import StoreService from '../shared/store/store.service';
 import StoreKey from '../shared/store/store-key.enum';
+import StoreService from '../shared/store/store.service';
 import SyncType from '../shared/sync-type.enum';
 import UtilityService from '../shared/utility/utility.service';
 
@@ -201,7 +202,7 @@ export default class AppComponent {
       scan: 9
     }
   };
-  vm = this;
+  vm: AppComponent = this;
   working = {
     displayCancelSyncButton: false,
     message: undefined,
@@ -410,7 +411,7 @@ export default class AppComponent {
         if (installBackupObj && installBackupObj.date && installBackupObj.bookmarks) {
           const date = new Date(installBackupObj.date);
           const confirmationMessage = this.platformSvc.getConstant(
-            Strings.settings_BackupRestore_Revert_Confirmation_Message.key
+            Strings.settings_BackupRestore_Revert_Confirmation_Message
           );
           this.settings.revertConfirmationMessage = confirmationMessage.replace('{date}', date.toLocaleDateString());
           this.settings.displayRevertConfirmation = true;
@@ -819,18 +820,17 @@ export default class AppComponent {
     this.alertSvc.clearCurrentAlert();
   }
 
-  convertPageMetadataToBookmark(metadata): any {
+  getPageMetadataAsBookmarkMetadata(metadata: any): BookmarkMetadata {
     if (!metadata) {
       return;
     }
 
-    const metadataAsBookmark = this.bookmarkSvc.xBookmark(
-      metadata.title,
-      metadata.url,
-      this.utilitySvc.trimToNearestWord(metadata.description, Globals.Bookmarks.DescriptionMaxLength),
-      this.utilitySvc.getTagArrayFromText(metadata.tags)
-    );
-    return metadataAsBookmark;
+    return {
+      description: this.utilitySvc.trimToNearestWord(metadata.description, Globals.Bookmarks.DescriptionMaxLength),
+      tags: this.utilitySvc.getTagArrayFromText(metadata.tags),
+      title: metadata.title,
+      url: metadata.url
+    };
   }
 
   disableSync() {
@@ -1003,7 +1003,7 @@ export default class AppComponent {
   }
 
   getMetadataForCurrentPage() {
-    return this.platformSvc.getPageMetadata(true).then(this.convertPageMetadataToBookmark);
+    return this.platformSvc.getPageMetadata(true).then(this.getPageMetadataAsBookmarkMetadata);
   }
 
   getMetadataForUrl(url) {
@@ -1011,7 +1011,7 @@ export default class AppComponent {
       return this.$q.resolve(null);
     }
 
-    return this.platformSvc.getPageMetadata(true, url).then(this.convertPageMetadataToBookmark);
+    return this.platformSvc.getPageMetadata(true, url).then(this.getPageMetadataAsBookmarkMetadata);
   }
 
   getServiceStatusTextFromStatusCode(statusCode) {
@@ -1178,8 +1178,9 @@ export default class AppComponent {
       .catch((err) => {
         if (err.url) {
           // Set bookmark url
-          const bookmark = this.bookmarkSvc.xBookmark('', err.url);
-          this.bookmark.current = bookmark;
+          this.bookmark.current = {
+            url: err.url
+          } as BookmarkMetadata;
         }
 
         throw err;
@@ -1458,17 +1459,16 @@ export default class AppComponent {
   }
 
   qrPanel_CopySyncId_Click() {
-    return this.platformSvc.copyToClipboard(this.sync.id).then(() => {
+    return this.platformSvc.copyTextToClipboard(this.sync.id).then(() => {
       this.$timeout(() => {
         this.settings.syncIdCopied = true;
       });
     });
   }
 
-  queueSync(syncData, command?) {
-    command = command || MessageCommand.SyncBookmarks;
+  queueSync(sync: Sync, command = MessageCommand.SyncBookmarks): ng.IPromise<any> {
     return this.platformSvc
-      .sync_Queue(syncData, command)
+      .sync_Queue(sync, command)
       .catch((err) => {
         // Swallow error if sync was processed but not committed (offline)
         if (err instanceof Exceptions.SyncUncommittedException) {
@@ -1503,7 +1503,7 @@ export default class AppComponent {
         }
 
         // Render markdown and add link classes to service message
-        let message = response.message ? marked(response.message) : null;
+        let message = response.message ? marked(response.message) : '';
         if (message) {
           const messageDom = new DOMParser().parseFromString(message, 'text/html');
           _.each(messageDom.querySelectorAll('a'), (hyperlink) => {
@@ -1551,7 +1551,7 @@ export default class AppComponent {
       this.settings.displayRestoreForm = false;
       this.settings.dataToRestore = '';
       this.settings.restoreCompletedMessage = this.platformSvc.getConstant(
-        Strings.settings_BackupRestore_RestoreSuccess_Message.key
+        Strings.settings_BackupRestore_RestoreSuccess_Message
       );
 
       if (!this.utilitySvc.isMobilePlatform(this.platformName)) {

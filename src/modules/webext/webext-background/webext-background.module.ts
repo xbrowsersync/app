@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
 import angular from 'angular';
 import { NgModule } from 'angular-ts-decorators';
 import { browser } from 'webextension-polyfill-ts';
-import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
 import ExceptionHandlerService from '../../shared/exceptions/exception-handler.service';
 import GlobalSharedModule from '../../shared/global-shared.module';
+import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
 import WebExtBackgroundComponent from './webext-background.component';
 import WebExtBackgroundService from './webext-background.service';
 

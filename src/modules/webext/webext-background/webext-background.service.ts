@@ -1,26 +1,14 @@
-/* eslint-disable default-case */
-/* eslint-disable no-undef */
-/* eslint-disable no-case-declarations */
-/* eslint-disable no-empty */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable no-param-reassign */
-/* eslint-disable consistent-return */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable global-require */
-
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import browserDetect from 'browser-detect';
 import compareVersions from 'compare-versions';
 import { autobind } from 'core-decorators';
 import _ from 'underscore';
-import { browser } from 'webextension-polyfill-ts';
-import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
+import { Alarms, browser } from 'webextension-polyfill-ts';
+import Strings from '../../../../res/strings/en.json';
+import InstallBackup from '../../../interfaces/install-backup.interface';
 import NativeBookmarksService from '../../../interfaces/native-bookmarks-service.interface';
 import PlatformService from '../../../interfaces/platform-service.interface';
-import Strings from '../../../../res/strings/en.json';
 import Alert from '../../shared/alert/alert.interface';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkService from '../../shared/bookmark/bookmark.service';
@@ -29,10 +17,11 @@ import Globals from '../../shared/globals';
 import LogService from '../../shared/log/log.service';
 import MessageCommand from '../../shared/message-command.enum';
 import NetworkService from '../../shared/network/network.service';
-import StoreService from '../../shared/store/store.service';
 import StoreKey from '../../shared/store/store-key.enum';
+import StoreService from '../../shared/store/store.service';
 import SyncType from '../../shared/sync-type.enum';
 import UtilityService from '../../shared/utility/utility.service';
+import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
 
 @autobind
 @Injectable('WebExtBackgroundService')
@@ -49,7 +38,7 @@ export default class WebExtBackgroundService {
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
-  notificationClickHandlers = [];
+  notificationClickHandlers: any[] = [];
 
   static $inject = [
     '$q',
@@ -95,7 +84,7 @@ export default class WebExtBackgroundService {
     browser.runtime.onMessage.addListener(this.onMessage as any);
   }
 
-  checkForNewVersion() {
+  checkForNewVersion(): void {
     this.utilitySvc.checkForNewVersion().then((newVersion) => {
       if (!newVersion) {
         return;
@@ -109,12 +98,13 @@ export default class WebExtBackgroundService {
     });
   }
 
-  checkForUpdatesOnStartup() {
-    return this.$q((resolve, reject) => {
+  checkForUpdatesOnStartup(): ng.IPromise<any> {
+    return this.$q<boolean>((resolve, reject) => {
       // If network disconnected, skip update check
       if (!this.networkSvc.isNetworkConnected()) {
         this.logSvc.logInfo('Couldn’t check for updates on startup: network offline');
-        return resolve(false);
+        resolve(false);
+        return;
       }
 
       // Check for updates to synced bookmarks
@@ -123,7 +113,8 @@ export default class WebExtBackgroundService {
         .then(resolve)
         .catch((err) => {
           if (!(err instanceof Exceptions.HttpRequestFailedException)) {
-            return reject(err);
+            reject(err);
+            return;
           }
 
           // If request failed, retry once
@@ -132,16 +123,16 @@ export default class WebExtBackgroundService {
             this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
               if (!syncEnabled) {
                 this.logSvc.logInfo('Sync was disabled before retry attempted');
-                return reject(new Exceptions.HttpRequestCancelledException());
+                reject(new Exceptions.HttpRequestCancelledException());
+                return;
               }
-
               this.bookmarkSvc.checkForUpdates().then(resolve).catch(reject);
             });
           }, 5000);
         });
     }).then((updatesAvailable) => {
       if (!updatesAvailable) {
-        return;
+        return null;
       }
 
       // Queue sync
@@ -187,7 +178,7 @@ export default class WebExtBackgroundService {
     });
   }
 
-  getLatestUpdates() {
+  getLatestUpdates(): ng.IPromise<any> {
     // Exit if currently syncing
     const currentSync = this.bookmarkSvc.getCurrentSync();
     if (currentSync) {
@@ -230,7 +221,7 @@ export default class WebExtBackgroundService {
       });
   }
 
-  init() {
+  init(): void {
     this.logSvc.logInfo('Starting up');
     this.storeSvc
       .get([
@@ -279,7 +270,7 @@ export default class WebExtBackgroundService {
       });
   }
 
-  installExtension(currentVersion) {
+  installExtension(currentVersion: string): ng.IPromise<void> {
     // Initialise data storage
     return this.storeSvc
       .clear()
@@ -292,13 +283,13 @@ export default class WebExtBackgroundService {
         ]);
       })
       .then(() => {
-        // Get local bookmarks and save data state at install to local storage
-        return this.platformSvc.bookmarks_Get().then((localBookmarks) => {
-          const data = {
-            bookmarks: localBookmarks,
+        // Get locnativeal bookmarks and save data state at install to local storage
+        return this.platformSvc.bookmarks_Get().then((bookmarks) => {
+          const backup: InstallBackup = {
+            bookmarks,
             date: new Date().toISOString()
           };
-          return this.storeSvc.set(StoreKey.InstallBackup, JSON.stringify(data));
+          return this.storeSvc.set(StoreKey.InstallBackup, JSON.stringify(backup));
         });
       })
       .then(() => {
@@ -306,19 +297,19 @@ export default class WebExtBackgroundService {
       });
   }
 
-  onAlarm(alarm) {
+  onAlarm(alarm: Alarms.Alarm): void {
     // When alarm fires check for sync updates
     if (alarm && alarm.name === Globals.Alarm.Name) {
       this.getLatestUpdates();
     }
   }
 
-  onInstall(event) {
+  onInstall(event: InputEvent): void {
     const currentVersion = browser.runtime.getManifest().version;
     let installOrUpgrade = this.$q.resolve();
 
     // Check for upgrade or do fresh install
-    const details = angular.element(event.currentTarget).data('details');
+    const details = angular.element(event.currentTarget as Element).data('details');
     if (details && details.reason === 'install') {
       installOrUpgrade = this.installExtension(currentVersion);
     } else if (
@@ -334,7 +325,7 @@ export default class WebExtBackgroundService {
     installOrUpgrade.then(this.init);
   }
 
-  onNotificationClicked(notificationId) {
+  onNotificationClicked(notificationId: string): void {
     // Execute the event handler if one exists and then remove
     const notificationClickHandler = this.notificationClickHandlers.find((x) => {
       return x.id === notificationId;
@@ -345,7 +336,7 @@ export default class WebExtBackgroundService {
     }
   }
 
-  onNotificationClosed(notificationId) {
+  onNotificationClosed(notificationId: string): void {
     // Remove the handler for this notification if one exists
     const index = this.notificationClickHandlers.findIndex((x) => {
       return x.id === notificationId;
@@ -355,9 +346,9 @@ export default class WebExtBackgroundService {
     }
   }
 
-  onMessage(message) {
-    return new Promise((resolve, reject) => {
-      let action;
+  onMessage(message: any): ng.IPromise<any> {
+    return new this.$q((resolve, reject) => {
+      let action: ng.IPromise<any>;
       switch (message.command) {
         // Queue bookmarks sync
         case MessageCommand.SyncBookmarks:
@@ -389,7 +380,7 @@ export default class WebExtBackgroundService {
           break;
         // Get current number of syncs on the queue
         case MessageCommand.GetSyncQueueLength:
-          action = this.bookmarkSvc.getSyncQueueLength();
+          action = this.$q.resolve(this.bookmarkSvc.getSyncQueueLength());
           break;
         // Disable sync
         case MessageCommand.DisableSync:
@@ -416,7 +407,7 @@ export default class WebExtBackgroundService {
     });
   }
 
-  restoreBookmarks(restoreData) {
+  restoreBookmarks(restoreData: any): ng.IPromise<any> {
     return this.nativeBookmarksSvc
       .disableEventListeners()
       .then(() => {
@@ -430,7 +421,7 @@ export default class WebExtBackgroundService {
       });
   }
 
-  upgradeExtension(oldVersion, newVersion) {
+  upgradeExtension(oldVersion: string, newVersion: string): ng.IPromise<void> {
     return this.storeSvc
       .set(StoreKey.TraceLog)
       .then(() => {
@@ -441,6 +432,7 @@ export default class WebExtBackgroundService {
           switch (true) {
             case newVersion.indexOf('1.5.3') === 0:
               return this.upgradeTo153();
+            default:
           }
         }
       })
@@ -455,7 +447,7 @@ export default class WebExtBackgroundService {
       });
   }
 
-  upgradeTo153() {
+  upgradeTo153(): ng.IPromise<void> {
     // Convert local storage items to IndexedDB
     return browser.storage.local
       .get()
@@ -483,6 +475,7 @@ export default class WebExtBackgroundService {
             return this.platformSvc.bookmarks_BuildIdMappings(cachedBookmarks);
           });
         });
-      });
+      })
+      .then(() => {});
   }
 }

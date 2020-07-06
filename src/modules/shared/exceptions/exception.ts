@@ -32,9 +32,9 @@ export class DailyNewSyncLimitReachedException extends Exception {}
 
 export class DataOutOfSyncException extends Exception {}
 
-export class FailedGetLocalBookmarksException extends Exception {}
+export class FailedGetNativeBookmarksException extends Exception {}
 
-export class FailedCreateLocalBookmarksException extends Exception {}
+export class FailedCreateNativeBookmarksException extends Exception {}
 
 export class FailedDownloadFileException extends Exception {}
 
@@ -48,7 +48,7 @@ export class FailedRefreshBookmarksException extends Exception {}
 
 export class FailedRegisterAutoUpdatesException extends Exception {}
 
-export class FailedRemoveLocalBookmarksException extends Exception {}
+export class FailedRemoveNativeBookmarksException extends Exception {}
 
 export class FailedRestoreDataException extends Exception {}
 
@@ -62,7 +62,7 @@ export class FailedShareUrlException extends Exception {}
 
 export class FailedShareUrlNotSyncedException extends Exception {}
 
-export class FailedUpdateLocalBookmarksException extends Exception {}
+export class FailedUpdateNativeBookmarksException extends Exception {}
 
 export class HttpRequestCancelledException extends Exception {}
 
@@ -76,9 +76,7 @@ export class InvalidCredentialsException extends Exception {}
 
 export class InvalidServiceException extends Exception {}
 
-export class LocalBookmarkNotFoundException extends Exception {}
-
-export class LocalContainerNotFoundException extends Exception {}
+export class NativeBookmarkNotFoundException extends Exception {}
 
 export class LocalStorageNotAvailableException extends Exception {}
 
