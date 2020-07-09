@@ -1,8 +1,8 @@
 enum BookmarkChangeType {
-  Create = 'create',
-  Delete = 'delete',
-  Update = 'update',
-  Move = 'move'
+  Add = 'add',
+  Modify = 'modify',
+  Move = 'move',
+  Remove = 'remove'
 }
 
 export default BookmarkChangeType;

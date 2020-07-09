@@ -5,6 +5,7 @@ import compareVersions from 'compare-versions';
 import { autobind } from 'core-decorators';
 import _ from 'underscore';
 import Url from '../../../interfaces/url.interface';
+import * as Exceptions from '../exceptions/exception';
 import ExceptionHandler from '../exceptions/exception-handler.interface';
 import Globals from '../globals';
 import LogService from '../log/log.service';
@@ -60,6 +61,14 @@ export default class UtilityService {
         this.logSvc.logInfo('Couldn’t check for new version');
         return '';
       });
+  }
+
+  checkSyncCredentialsExist(): ng.IPromise<void> {
+    return this.storeSvc.get([StoreKey.Password, StoreKey.SyncId]).then((storeContent) => {
+      if (!storeContent.password || !storeContent.syncId) {
+        throw new Exceptions.MissingClientDataException();
+      }
+    });
   }
 
   filterFalsyValues(values: string[]): string[] {

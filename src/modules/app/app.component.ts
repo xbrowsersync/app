@@ -22,8 +22,12 @@ import marked from 'marked';
 import QRCode from 'qrcode-svg';
 import _ from 'underscore';
 import Strings from '../../../res/strings/en.json';
+import BookmarkChange, {
+  AddBookmarkChangeData,
+  ModifyBookmarkChangeData,
+  RemoveBookmarkChangeData
+} from '../../interfaces/bookmark-change.interface';
 import PlatformService from '../../interfaces/platform-service.interface';
-import Sync from '../../interfaces/sync.interface';
 import AlertType from '../shared/alert/alert-type.enum';
 import Alert from '../shared/alert/alert.interface';
 import AlertService from '../shared/alert/alert.service';
@@ -43,6 +47,8 @@ import NetworkService from '../shared/network/network.service';
 import StoreKey from '../shared/store/store-key.enum';
 import StoreService from '../shared/store/store.service';
 import SyncType from '../shared/sync-type.enum';
+import SyncEngineService from '../shared/sync/sync-engine.service';
+import Sync from '../shared/sync/sync.interface';
 import UtilityService from '../shared/utility/utility.service';
 
 @autobind
@@ -64,6 +70,7 @@ export default class AppComponent {
   networkSvc: NetworkService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
+  syncEngineService: SyncEngineService;
   utilitySvc: UtilityService;
 
   alert = {
@@ -223,6 +230,7 @@ export default class AppComponent {
     'NetworkService',
     'PlatformService',
     'StoreService',
+    'SyncEngineService',
     'UtilityService'
   ];
   constructor(
@@ -239,6 +247,7 @@ export default class AppComponent {
     NetworkSvc: NetworkService,
     PlatformSvc: PlatformService,
     StoreSvc: StoreService,
+    SyncEngineSvc: SyncEngineService,
     UtilitySvc: UtilityService
   ) {
     this.$exceptionHandler = $exceptionHandler;
@@ -253,6 +262,7 @@ export default class AppComponent {
     this.networkSvc = NetworkSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
+    this.syncEngineService = SyncEngineSvc;
     this.utilitySvc = UtilitySvc;
 
     this.bookmarkForm = {};
@@ -426,7 +436,7 @@ export default class AppComponent {
     // Display loading overlay
     this.platformSvc.interface_Working_Show();
 
-    // Disable sync and restore local bookmarks to installation state
+    // Disable sync and restore native bookmarks to installation state
     return this.$q
       .all([this.storeSvc.get<any>(StoreKey.InstallBackup), this.disableSync()])
       .then((response) => {
@@ -442,7 +452,7 @@ export default class AppComponent {
         return this.queueSync(
           {
             bookmarks: bookmarksToRestore,
-            type: SyncType.Pull
+            type: SyncType.Local
           },
           MessageCommand.RestoreBookmarks
         );
@@ -563,15 +573,15 @@ export default class AppComponent {
     }
 
     // Clone current bookmark object
-    const bookmarkToCreate = this.bookmarkSvc.cleanBookmark(this.bookmark.current);
+    const bookmarkToAdd = this.bookmarkSvc.cleanBookmark(this.bookmark.current);
 
     // Check for protocol
-    if (!new RegExp(Globals.URL.ProtocolRegex).test(bookmarkToCreate.url)) {
-      bookmarkToCreate.url = `https://${bookmarkToCreate.url}`;
+    if (!new RegExp(Globals.URL.ProtocolRegex).test(bookmarkToAdd.url)) {
+      bookmarkToAdd.url = `https://${bookmarkToAdd.url}`;
     }
 
     // Validate the new bookmark
-    return this.bookmarkForm_ValidateBookmark(bookmarkToCreate)
+    return this.bookmarkForm_ValidateBookmark(bookmarkToAdd)
       .then((isValid) => {
         if (!isValid) {
           // Bookmark URL exists, display validation error
@@ -582,18 +592,22 @@ export default class AppComponent {
         // Display loading overlay
         const loadingTimeout = this.platformSvc.interface_Working_Show();
 
-        // Sync changes
+        // Create change info and sync changes
+        const data: AddBookmarkChangeData = {
+          metadata: bookmarkToAdd
+        };
+        const changeInfo: BookmarkChange = {
+          changeData: data,
+          type: BookmarkChangeType.Add
+        };
         return this.queueSync({
-          type: SyncType.Both,
-          changeInfo: {
-            type: BookmarkChangeType.Create,
-            bookmark: bookmarkToCreate
-          }
+          changeInfo,
+          type: SyncType.LocalAndRemote
         }).then(() => {
           // Set bookmark active status if current bookmark is current page
           return this.platformSvc.getCurrentUrl().then((currentUrl) => {
             // Update bookmark status and switch view
-            const bookmarkStatusActive = currentUrl && currentUrl.toUpperCase() === bookmarkToCreate.url.toUpperCase();
+            const bookmarkStatusActive = currentUrl && currentUrl.toUpperCase() === bookmarkToAdd.url.toUpperCase();
             return this.syncBookmarksSuccess(loadingTimeout, bookmarkStatusActive);
           });
         });
@@ -621,18 +635,22 @@ export default class AppComponent {
   }
 
   bookmarkForm_DeleteBookmark_Click() {
-    const bookmarkToDelete = this.bookmark.current;
+    const bookmarkToRemove = this.bookmark.current;
 
     // Display loading overlay
     const loadingTimeout = this.platformSvc.interface_Working_Show();
 
-    // Sync changes
+    // Create change info and sync changes
+    const data: RemoveBookmarkChangeData = {
+      id: bookmarkToRemove.id
+    };
+    const changeInfo: BookmarkChange = {
+      changeData: data,
+      type: BookmarkChangeType.Remove
+    };
     return this.queueSync({
-      type: SyncType.Both,
-      changeInfo: {
-        type: BookmarkChangeType.Delete,
-        id: bookmarkToDelete.id
-      }
+      changeInfo,
+      type: SyncType.LocalAndRemote
     })
       .then(() => {
         // Set bookmark active status if current bookmark is current page
@@ -687,15 +705,15 @@ export default class AppComponent {
     }
 
     // Clone current bookmark object
-    const bookmarkToUpdate = this.bookmarkSvc.cleanBookmark(this.bookmark.current);
+    const bookmarkToModify = this.bookmarkSvc.cleanBookmark(this.bookmark.current);
 
     // Check for protocol
-    if (!new RegExp(Globals.URL.ProtocolRegex).test(bookmarkToUpdate.url)) {
-      bookmarkToUpdate.url = `https://${bookmarkToUpdate.url}`;
+    if (!new RegExp(Globals.URL.ProtocolRegex).test(bookmarkToModify.url)) {
+      bookmarkToModify.url = `https://${bookmarkToModify.url}`;
     }
 
     // Validate the new bookmark
-    return this.bookmarkForm_ValidateBookmark(bookmarkToUpdate, this.bookmark.originalUrl)
+    return this.bookmarkForm_ValidateBookmark(bookmarkToModify, this.bookmark.originalUrl)
       .then((isValid) => {
         if (!isValid) {
           // Bookmark URL exists, display validation error
@@ -706,13 +724,17 @@ export default class AppComponent {
         // Display loading overlay
         this.platformSvc.interface_Working_Show();
 
-        // Sync changes
+        // Create change info and sync changes
+        const data: ModifyBookmarkChangeData = {
+          bookmark: bookmarkToModify
+        };
+        const changeInfo: BookmarkChange = {
+          changeData: data,
+          type: BookmarkChangeType.Modify
+        };
         return this.queueSync({
-          type: SyncType.Both,
-          changeInfo: {
-            type: BookmarkChangeType.Update,
-            bookmark: bookmarkToUpdate
-          }
+          changeInfo,
+          type: SyncType.LocalAndRemote
         })
           .then(() => {
             // Set bookmark active status if current bookmark is current page
@@ -720,7 +742,7 @@ export default class AppComponent {
           })
           .then((currentUrl) => {
             if (currentUrl && currentUrl.toUpperCase() === this.bookmark.originalUrl.toUpperCase()) {
-              this.bookmark.active = currentUrl && currentUrl.toUpperCase() === bookmarkToUpdate.url.toUpperCase();
+              this.bookmark.active = currentUrl && currentUrl.toUpperCase() === bookmarkToModify.url.toUpperCase();
             }
 
             // Display the search panel
@@ -809,11 +831,12 @@ export default class AppComponent {
 
   checkIfSyncDataRefreshedOnError(err) {
     // If data out of sync display main view
-    return (this.bookmarkSvc.checkIfRefreshSyncedDataOnError(err) ? this.displayMainView() : this.$q.resolve()).then(
-      () => {
-        return err;
-      }
-    );
+    return (this.syncEngineService.checkIfRefreshSyncedDataOnError(err)
+      ? this.displayMainView()
+      : this.$q.resolve()
+    ).then(() => {
+      return err;
+    });
   }
 
   closeAlert(): void {
@@ -1068,7 +1091,7 @@ export default class AppComponent {
             this.logSvc.logInfo('Waiting for syncs to finish...');
 
             // Only display cancel button for push syncs
-            if (currentSync.type === SyncType.Push) {
+            if (currentSync.type === SyncType.Remote) {
               this.working.displayCancelSyncButton = true;
             }
 
@@ -1317,7 +1340,7 @@ export default class AppComponent {
           // Check for available sync updates on non-mobile platforms
           if (this.sync.enabled && !this.utilitySvc.isMobilePlatform(this.platformName)) {
             this.$q
-              .all([this.bookmarkSvc.checkForUpdates(), this.platformSvc.automaticUpdates_NextUpdate()])
+              .all([this.syncEngineService.checkForUpdates(), this.platformSvc.automaticUpdates_NextUpdate()])
               .then((data) => {
                 if (data[0]) {
                   this.settings.updatesAvailable = true;
@@ -1628,7 +1651,7 @@ export default class AppComponent {
         return this.queueSync(
           {
             bookmarks: bookmarksToRestore,
-            type: !syncEnabled ? SyncType.Pull : SyncType.Both
+            type: !syncEnabled ? SyncType.Local : SyncType.LocalAndRemote
           },
           MessageCommand.RestoreBookmarks
         ).then(this.restoreBookmarksSuccess);
@@ -1736,11 +1759,11 @@ export default class AppComponent {
       // Find and remove the deleted bookmark element in the search results
       originalBookmarks = angular.copy(this.search.results);
 
-      const deletedBookmarkIndex = _.findIndex<any>(this.search.results, (result) => {
+      const removedBookmarkIndex = _.findIndex<any>(this.search.results, (result) => {
         return result.id === bookmark.id;
       });
-      if (deletedBookmarkIndex >= 0) {
-        this.search.results.splice(deletedBookmarkIndex, 1);
+      if (removedBookmarkIndex >= 0) {
+        this.search.results.splice(removedBookmarkIndex, 1);
       }
     }
 
@@ -1748,13 +1771,17 @@ export default class AppComponent {
       // Display loading overlay
       this.platformSvc.interface_Working_Show();
 
-      // Sync changes
+      // Create change info and sync changes
+      const data: RemoveBookmarkChangeData = {
+        id: bookmark.id
+      };
+      const changeInfo: BookmarkChange = {
+        changeData: data,
+        type: BookmarkChangeType.Remove
+      };
       this.queueSync({
-        type: SyncType.Both,
-        changeInfo: {
-          type: BookmarkChangeType.Delete,
-          id: bookmark.id
-        }
+        changeInfo,
+        type: SyncType.LocalAndRemote
       }).catch((err) => {
         // Restore current bookmarks view and then handle error
         if (this.search.displayFolderView) {
@@ -2111,7 +2138,7 @@ export default class AppComponent {
         this.logSvc.logInfo('Toolbar sync enabled');
 
         // Refresh local sync data
-        return this.queueSync({ type: SyncType.Pull });
+        return this.queueSync({ type: SyncType.Local });
       });
     });
   }
@@ -2137,7 +2164,7 @@ export default class AppComponent {
         // If a sync ID has not been supplied, get a new one
         if (!this.sync.id) {
           // Set sync type for create new sync
-          syncData.type = SyncType.Push;
+          syncData.type = SyncType.Remote;
 
           // Get new sync ID
           return this.apiSvc.createNewSync().then((newSync) => {
@@ -2159,7 +2186,7 @@ export default class AppComponent {
         syncInfoMessage = `Synced to existing id: ${this.sync.id}`;
 
         // Set sync type for retrieve existing sync
-        syncData.type = SyncType.Pull;
+        syncData.type = SyncType.Local;
 
         // Retrieve sync version for existing id
         return this.apiSvc.getBookmarksVersion(this.sync.id).then((response) => {
@@ -2227,7 +2254,7 @@ export default class AppComponent {
     // Clear cached data
     const keys = [StoreKey.Bookmarks, StoreKey.Password, StoreKey.SyncVersion];
     // If error occurred whilst creating new sync, remove cached sync ID and password
-    if (syncData.type === SyncType.Push) {
+    if (syncData.type === SyncType.Remote) {
       keys.push(StoreKey.SyncId);
     }
     this.storeSvc.set(keys);
@@ -2382,7 +2409,7 @@ export default class AppComponent {
     const loadingTimeout = this.platformSvc.interface_Working_Show();
 
     // Pull updates
-    return this.queueSync({ type: SyncType.Pull }).then(() => {
+    return this.queueSync({ type: SyncType.Local }).then(() => {
       return this.syncBookmarksSuccess(loadingTimeout);
     });
   }
@@ -2537,7 +2564,7 @@ export default class AppComponent {
   }
 
   validateBackupData() {
-    let xBookmarks;
+    let bookmarks;
     let restoreData;
     let validateData = false;
 
@@ -2548,12 +2575,12 @@ export default class AppComponent {
     // Check backup data structure
     try {
       restoreData = JSON.parse(this.settings.dataToRestore);
-      xBookmarks = restoreData.xBrowserSync
+      bookmarks = restoreData.xBrowserSync
         ? restoreData.xBrowserSync.bookmarks
         : restoreData.xbrowsersync && restoreData.xbrowsersync.data
         ? restoreData.xbrowsersync.data.bookmarks
         : null;
-      validateData = !!xBookmarks;
+      validateData = !!bookmarks;
     } catch (err) {}
     this.restoreForm.dataToRestore.$setValidity('InvalidData', validateData);
 

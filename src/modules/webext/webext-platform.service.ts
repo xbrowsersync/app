@@ -3,11 +3,17 @@ import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
 import Strings from '../../../res/strings/en.json';
+import {
+  AddNativeBookmarkChangeData,
+  ModifyNativeBookmarkChangeData,
+  MoveNativeBookmarkChangeData,
+  RemoveNativeBookmarkChangeData
+} from '../../interfaces/bookmark-change.interface';
 import I18nString from '../../interfaces/i18n-string.interface';
 import PlatformService from '../../interfaces/platform-service.interface';
-import Sync from '../../interfaces/sync.interface';
 import WebpageMetadata from '../../interfaces/webpage-metadata.interface';
 import BookmarkContainer from '../shared/bookmark/bookmark-container.enum';
+import BookmarkMetadata from '../shared/bookmark/bookmark-metadata.interface';
 import Bookmark from '../shared/bookmark/bookmark.interface';
 import BookmarkService from '../shared/bookmark/bookmark.service';
 import * as Exceptions from '../shared/exceptions/exception';
@@ -16,6 +22,7 @@ import LogService from '../shared/log/log.service';
 import MessageCommand from '../shared/message-command.enum';
 import StoreService from '../shared/store/store.service';
 import SyncType from '../shared/sync-type.enum';
+import Sync from '../shared/sync/sync.interface';
 import UtilityService from '../shared/utility/utility.service';
 import BookmarkIdMapperService from './bookmark-id-mapper/bookmark-id-mapper.service';
 import BookmarkIdMapping from './bookmark-id-mapper/bookmark-id-mapping.interface';
@@ -44,7 +51,7 @@ export default class WebExtPlatformService implements PlatformService {
   refreshInterfaceTimeout: any;
   showAlert: boolean;
   showWorking: boolean;
-  supportedLocalBookmarkUrlRegex = /^[\w-]+:/i;
+  supportedNativeBookmarkUrlRegex = /^[\w-]+:/i;
   unsupportedContainers = [BookmarkContainer.Menu, BookmarkContainer.Mobile];
 
   static $inject = [
@@ -263,7 +270,7 @@ export default class WebExtPlatformService implements PlatformService {
           .then((results) => {
             return this.$q.all(
               results.map((child) => {
-                return this.deleteNativeBookmarks(child.id);
+                return this.removeNativeBookmarks(child.id);
               })
             );
           })
@@ -284,7 +291,7 @@ export default class WebExtPlatformService implements PlatformService {
             return browser.bookmarks.getChildren(toolbarBookmarksId).then((results) => {
               return this.$q.all(
                 results.map((child) => {
-                  return this.deleteNativeBookmarks(child.id);
+                  return this.removeNativeBookmarks(child.id);
                 })
               );
             });
@@ -301,12 +308,9 @@ export default class WebExtPlatformService implements PlatformService {
       });
   }
 
-  bookmarks_Created(
-    bookmarks: Bookmark[],
-    createdNativeBookmark: NativeBookmarks.BookmarkTreeNode
-  ): ng.IPromise<Bookmark[]> {
+  bookmarks_Created(bookmarks: Bookmark[], changeData: AddNativeBookmarkChangeData): ng.IPromise<Bookmark[]> {
     // Check if the current bookmark is a container
-    return this.getContainerNameFromNativeId(createdNativeBookmark.parentId)
+    return this.getContainerNameFromNativeId(changeData.nativeBookmark.parentId)
       .then((containerName) => {
         if (containerName) {
           // If parent is a container use it's id
@@ -315,7 +319,7 @@ export default class WebExtPlatformService implements PlatformService {
         }
 
         // Get the synced parent id from id mappings and retrieve the synced parent bookmark
-        return this.bookmarkIdMapperSvc.get(createdNativeBookmark.parentId).then((idMapping) => {
+        return this.bookmarkIdMapperSvc.get(changeData.nativeBookmark.parentId).then((idMapping) => {
           if (!idMapping) {
             // No mappings found, skip sync
             this.logSvc.logInfo('No id mapping found, skipping sync');
@@ -331,10 +335,13 @@ export default class WebExtPlatformService implements PlatformService {
         }
 
         // Add new bookmark then check if the change should be synced
-        const newBookmarkInfo = angular.copy(createdNativeBookmark) as any;
-        newBookmarkInfo.parentId = parentId;
-        delete newBookmarkInfo.id;
-        const addBookmarkResult = this.bookmarkSvc.addBookmark(newBookmarkInfo, bookmarks);
+        const newBookmarkMetadata = this.bookmarkSvc.extractBookmarkMetadata(changeData.nativeBookmark);
+        const addBookmarkResult = this.bookmarkSvc.addBookmark(
+          newBookmarkMetadata,
+          parentId,
+          changeData.nativeBookmark.index,
+          bookmarks
+        );
         return this.shouldSyncLocalChanges(addBookmarkResult.bookmark, addBookmarkResult.bookmarks).then(
           (syncChange) => {
             if (!syncChange) {
@@ -344,7 +351,7 @@ export default class WebExtPlatformService implements PlatformService {
             // Add new id mapping
             const idMapping = this.bookmarkIdMapperSvc.createMapping(
               addBookmarkResult.bookmark.id,
-              createdNativeBookmark.id
+              changeData.nativeBookmark.id
             );
             return this.bookmarkIdMapperSvc.add(idMapping).then(() => {
               return addBookmarkResult.bookmarks;
@@ -354,35 +361,32 @@ export default class WebExtPlatformService implements PlatformService {
       });
   }
 
-  bookmarks_CreateSingle(createDetails: any): ng.IPromise<void> {
-    // Create local bookmark in other bookmarks container
+  bookmarks_CreateSingle(id: number, createInfo: BookmarkMetadata): ng.IPromise<void> {
+    // Create native bookmark in other bookmarks container
     return this.getNativeContainerIds()
       .then((nativeContainerIds) => {
         const otherBookmarksId = nativeContainerIds[BookmarkContainer.Other];
-        return this.createNativeBookmark(otherBookmarksId, createDetails.bookmark.title, createDetails.bookmark.url);
+        return this.createNativeBookmark(otherBookmarksId, createInfo.title, createInfo.url);
       })
-      .then((newLocalBookmark) => {
+      .then((newNativeBookmark) => {
         // Add id mapping for new bookmark
-        const idMapping = this.bookmarkIdMapperSvc.createMapping(createDetails.bookmark.id, newLocalBookmark.id);
+        const idMapping = this.bookmarkIdMapperSvc.createMapping(id, newNativeBookmark.id);
         return this.bookmarkIdMapperSvc.add(idMapping);
       });
   }
 
-  bookmarks_Deleted(
-    bookmarks: Bookmark[],
-    deletedNativeBookmark: NativeBookmarks.BookmarkTreeNode
-  ): ng.IPromise<Bookmark[]> {
-    // Check if the deleted bookmark was an unsupported container
+  bookmarks_Deleted(bookmarks: Bookmark[], changeData: RemoveNativeBookmarkChangeData): ng.IPromise<Bookmark[]> {
+    // Check if the removed bookmark was an unsupported container
     const isContainer =
       this.unsupportedContainers.filter((x) => {
-        return x === deletedNativeBookmark.title;
+        return x === changeData.nativeBookmark.title;
       }).length > 0;
     if (isContainer) {
       throw new Exceptions.ContainerChangedException();
     }
 
-    // Get the synced bookmark id from delete info
-    return this.bookmarkIdMapperSvc.get(deletedNativeBookmark.id).then((idMapping) => {
+    // Get the synced bookmark id from change data
+    return this.bookmarkIdMapperSvc.get(changeData.nativeBookmark.id).then((idMapping) => {
       if (!idMapping) {
         // No mappings found, skip sync
         this.logSvc.logInfo('No id mapping found, skipping sync');
@@ -390,16 +394,16 @@ export default class WebExtPlatformService implements PlatformService {
       }
 
       // Check if the change should be synced
-      const bookmarkToDelete = this.bookmarkSvc.findBookmarkById(bookmarks, idMapping.syncedId) as Bookmark;
-      return this.shouldSyncLocalChanges(bookmarkToDelete, bookmarks).then((syncChange) => {
+      const bookmarkToRemove = this.bookmarkSvc.findBookmarkById(bookmarks, idMapping.syncedId) as Bookmark;
+      return this.shouldSyncLocalChanges(bookmarkToRemove, bookmarks).then((syncChange) => {
         if (!syncChange) {
           return;
         }
 
         // Get all child bookmark mappings
-        const descendantsIds = this.bookmarkSvc.getIdsFromDescendants(bookmarkToDelete);
+        const descendantsIds = this.bookmarkSvc.getIdsFromDescendants(bookmarkToRemove);
 
-        // Delete bookmark
+        // Remove bookmark
         return this.bookmarkSvc.removeBookmarkById(idMapping.syncedId, bookmarks).then((updatedBookmarks) => {
           // Remove all retrieved ids from mappings
           const syncedIds = descendantsIds.concat([idMapping.syncedId]);
@@ -411,18 +415,17 @@ export default class WebExtPlatformService implements PlatformService {
     });
   }
 
-  bookmarks_DeleteSingle(deleteDetails: any): ng.IPromise<void> {
-    // Get local bookmark id from id mappings
-    return this.bookmarkIdMapperSvc.get(null, deleteDetails.bookmark.id).then((idMapping) => {
+  bookmarks_DeleteSingle(id: number): ng.IPromise<void> {
+    // Get native bookmark id from id mappings
+    return this.bookmarkIdMapperSvc.get(null, id).then((idMapping) => {
       if (!idMapping) {
-        this.logSvc.logWarning(`No id mapping found for synced id '${deleteDetails.bookmark.id}'`);
+        this.logSvc.logWarning(`No id mapping found for synced id '${id}'`);
         return;
       }
 
-      // Remove local bookmark
-      return this.deleteNativeBookmarks(idMapping.nativeId).then(() => {
-        // Remove id mapping
-        return this.bookmarkIdMapperSvc.remove(deleteDetails.bookmark.id);
+      // Remove bookmark and id mapping
+      return this.removeNativeBookmarks(idMapping.nativeId).then(() => {
+        return this.bookmarkIdMapperSvc.remove(id);
       });
     });
   }
@@ -563,23 +566,23 @@ export default class WebExtPlatformService implements PlatformService {
           return x.dateAdded - y.dateAdded;
         });
 
-        // Iterate local bookmarks to add unique bookmark ids in correct order
-        allNativeBookmarks.forEach((localBookmark) => {
-          this.bookmarkSvc.eachBookmark(bookmarks, (xBookmark) => {
+        // Iterate native bookmarks to add unique bookmark ids in correct order
+        allNativeBookmarks.forEach((nativeBookmark) => {
+          this.bookmarkSvc.eachBookmark(bookmarks, (bookmark) => {
             if (
-              !xBookmark.id &&
-              ((!localBookmark.url && xBookmark.title === localBookmark.title) ||
-                (localBookmark.url && xBookmark.url === localBookmark.url))
+              !bookmark.id &&
+              ((!nativeBookmark.url && bookmark.title === nativeBookmark.title) ||
+                (nativeBookmark.url && bookmark.url === nativeBookmark.url))
             ) {
-              xBookmark.id = this.bookmarkSvc.getNewBookmarkId(bookmarks);
+              bookmark.id = this.bookmarkSvc.getNewBookmarkId(bookmarks);
             }
           });
         });
 
         // Find and fix any bookmarks missing ids
-        this.bookmarkSvc.eachBookmark(bookmarks, (xBookmark) => {
-          if (!xBookmark.id) {
-            xBookmark.id = this.bookmarkSvc.getNewBookmarkId(bookmarks);
+        this.bookmarkSvc.eachBookmark(bookmarks, (bookmark) => {
+          if (!bookmark.id) {
+            bookmark.id = this.bookmarkSvc.getNewBookmarkId(bookmarks);
           }
         });
 
@@ -593,19 +596,19 @@ export default class WebExtPlatformService implements PlatformService {
     });
   }
 
-  bookmarks_Moved(bookmarks: Bookmark[], moveInfo: NativeBookmarks.OnMovedMoveInfoType): ng.IPromise<Bookmark[]> {
+  bookmarks_Moved(bookmarks: Bookmark[], changeData: MoveNativeBookmarkChangeData): ng.IPromise<Bookmark[]> {
     let changesMade = false;
 
     // Get the moved bookmark and new parent ids from id mappings or if container use the existing id
     return this.$q
       .all([
-        this.bookmarkIdMapperSvc.get((moveInfo as any).id),
-        this.getContainerNameFromNativeId(moveInfo.parentId).then((containerName) => {
+        this.bookmarkIdMapperSvc.get(changeData.id),
+        this.getContainerNameFromNativeId(changeData.parentId).then((containerName) => {
           if (containerName) {
             const container = this.bookmarkSvc.getContainer(containerName, bookmarks, true);
             return { syncedId: container.id };
           }
-          return this.bookmarkIdMapperSvc.get(moveInfo.parentId);
+          return this.bookmarkIdMapperSvc.get(changeData.parentId);
         })
       ])
       .then((idMappings) => {
@@ -620,7 +623,7 @@ export default class WebExtPlatformService implements PlatformService {
         //  created in toolbar container whilst not syncing toolbar option enabled
         //  in which case create a new bookmark from the native bookmark
         return (!idMappings[0]
-          ? this.createBookmarkFromNativeBookmarkId((moveInfo as any).id, bookmarks)
+          ? this.createBookmarkFromNativeBookmarkId(changeData.id, bookmarks)
           : this.$q.resolve(this.bookmarkSvc.findBookmarkById(bookmarks, idMappings[0].syncedId) as Bookmark)
         ).then((bookmarkToRemove) => {
           // If old parent is mapped, remove the moved bookmark
@@ -649,13 +652,17 @@ export default class WebExtPlatformService implements PlatformService {
                 addBookmarkPromise = this.$q.resolve(bookmarksAfterRemoval);
               } else {
                 // Add the bookmark then check if change should be synced
-                const newBookmarkInfo: any = angular.copy(bookmarkToRemove);
-                newBookmarkInfo.parentId = idMappings[1].syncedId;
-                addBookmarkPromise = this.countNativeContainersBeforeIndex(moveInfo.parentId, moveInfo.index).then(
+                addBookmarkPromise = this.countNativeContainersBeforeIndex(changeData.parentId, changeData.index).then(
                   (numContainers) => {
                     // Adjust the target index by the number of container folders then add the bookmark
-                    newBookmarkInfo.index = moveInfo.index - numContainers;
-                    const addBookmarkResult = this.bookmarkSvc.addBookmark(newBookmarkInfo, bookmarksAfterRemoval);
+                    const index = changeData.index - numContainers;
+                    const addBookmarkResult = this.bookmarkSvc.addBookmark(
+                      bookmarkToRemove,
+                      idMappings[1].syncedId,
+                      index,
+                      bookmarksAfterRemoval
+                    );
+                    addBookmarkResult.bookmark.id = bookmarkToRemove.id;
                     return this.shouldSyncLocalChanges(addBookmarkResult.bookmark, addBookmarkResult.bookmarks).then(
                       (syncChange) => {
                         if (!syncChange) {
@@ -672,7 +679,7 @@ export default class WebExtPlatformService implements PlatformService {
                         }
                         const idMapping = this.bookmarkIdMapperSvc.createMapping(
                           addBookmarkResult.bookmark.id,
-                          (moveInfo as any).id
+                          (changeData as any).id
                         );
                         return this.bookmarkIdMapperSvc.add(idMapping).then(() => {
                           return addBookmarkResult.bookmarks;
@@ -775,9 +782,7 @@ export default class WebExtPlatformService implements PlatformService {
         return this.$q.all([populateMenu, populateMobile, populateOther, populateToolbar]);
       })
       .then(() => {
-        this.logSvc.logInfo(
-          `Local bookmarks populated in ${((new Date() as any) - (populateStartTime as any)) / 1000}s`
-        );
+        this.logSvc.logInfo(`Bookmarks populated in ${((new Date() as any) - (populateStartTime as any)) / 1000}s`);
         // Move local containers into the correct order
         return this.bookmarks_ReorderContainers();
       });
@@ -805,12 +810,9 @@ export default class WebExtPlatformService implements PlatformService {
     });
   }
 
-  bookmarks_Updated(
-    bookmarks: Bookmark[],
-    updateInfo: NativeBookmarks.OnChangedChangeInfoType
-  ): ng.IPromise<Bookmark[]> {
-    // Get the synced bookmark id from change info
-    return this.bookmarkIdMapperSvc.get((updateInfo as any).id).then((idMapping) => {
+  bookmarks_Updated(bookmarks: Bookmark[], changeData: ModifyNativeBookmarkChangeData): ng.IPromise<Bookmark[]> {
+    // Retrieve id mapping using native bookmark id from change data
+    return this.bookmarkIdMapperSvc.get(changeData.nativeBookmark.id).then((idMapping) => {
       if (!idMapping) {
         // No mappings found, skip sync
         this.logSvc.logInfo('No id mapping found, skipping sync');
@@ -824,26 +826,23 @@ export default class WebExtPlatformService implements PlatformService {
           return;
         }
 
-        // Update the bookmark with the update info
-        return this.bookmarkSvc.updateBookmarkById(idMapping.syncedId, updateInfo, bookmarks);
+        // Modify the bookmark with the update info
+        const updateInfo = this.bookmarkSvc.extractBookmarkMetadata(changeData.nativeBookmark);
+        return this.bookmarkSvc.modifyBookmarkById(idMapping.syncedId, updateInfo, bookmarks);
       });
     });
   }
 
-  bookmarks_UpdateSingle(updateDetails: any): ng.IPromise<void> {
-    // Get local bookmark id from id mappings
-    return this.bookmarkIdMapperSvc.get(null, updateDetails.bookmark.id).then((idMapping) => {
+  bookmarks_UpdateSingle(id: number, updateInfo: BookmarkMetadata): ng.IPromise<void> {
+    // Retrieve native bookmark id from id mappings
+    return this.bookmarkIdMapperSvc.get(null, id).then((idMapping) => {
       if (!idMapping) {
-        this.logSvc.logWarning(`No id mapping found for synced id '${updateDetails.bookmark.id}'`);
+        this.logSvc.logWarning(`No id mapping found for synced id '${id}'`);
         return;
       }
 
-      // Update local bookmark
-      return this.updateLocalBookmark(
-        idMapping.nativeId,
-        updateDetails.bookmark.title,
-        updateDetails.bookmark.url
-      ).then(() => {});
+      // Modify native bookmark
+      return this.modifyNativeBookmark(idMapping.nativeId, updateInfo).then(() => {});
     });
   }
 
@@ -856,8 +855,8 @@ export default class WebExtPlatformService implements PlatformService {
       if (!results || results.length === 0) {
         throw new Exceptions.NativeBookmarkNotFoundException();
       }
-      const localBookmark = results[0];
-      const convertedBookmark = this.bookmarkSvc.convertNativeBookmarkToBookmark(localBookmark, bookmarks);
+      const nativeBookmark = results[0];
+      const convertedBookmark = this.bookmarkSvc.convertNativeBookmarkToBookmark(nativeBookmark, bookmarks);
       return convertedBookmark;
     });
   }
@@ -882,7 +881,7 @@ export default class WebExtPlatformService implements PlatformService {
     }
 
     return browser.bookmarks.create(nativeBookmark).catch((err) => {
-      this.logSvc.logWarning(`Failed to create local bookmark: ${JSON.stringify(nativeBookmark)}`);
+      this.logSvc.logWarning(`Failed to create native bookmark: ${JSON.stringify(nativeBookmark)}`);
       throw new Exceptions.FailedCreateNativeBookmarksException(null, err);
     });
   }
@@ -898,20 +897,20 @@ export default class WebExtPlatformService implements PlatformService {
 
       // Create bookmarks at the top level of the supplied array
       return bookmarksToCreate
-        .reduce((p, xBookmark) => {
+        .reduce((p, bookmark) => {
           return p.then(() => {
             // If an error occurred during the recursive process, prevent any more bookmarks being created
             if (processError) {
               return this.$q.resolve();
             }
 
-            return this.bookmarkSvc.isSeparator(xBookmark)
+            return this.bookmarkSvc.isSeparator(bookmark)
               ? this.createNativeSeparator(id, toolbarId).then(() => {})
-              : this.createNativeBookmark(id, xBookmark.title, xBookmark.url).then((newLocalBookmark) => {
+              : this.createNativeBookmark(id, bookmark.title, bookmark.url).then((newNativeBookmark) => {
                   // If the bookmark has children, recurse
-                  if (xBookmark.children && xBookmark.children.length > 0) {
+                  if (bookmark.children && bookmark.children.length > 0) {
                     createChildBookmarksPromises.push(
-                      createRecursive(newLocalBookmark.id, xBookmark.children, toolbarId)
+                      createRecursive(newNativeBookmark.id, bookmark.children, toolbarId)
                     );
                   }
                 });
@@ -944,13 +943,6 @@ export default class WebExtPlatformService implements PlatformService {
     return browser.bookmarks.create(newSeparator).catch((err) => {
       this.logSvc.logInfo('Failed to create local separator');
       throw new Exceptions.FailedCreateNativeBookmarksException(null, err);
-    });
-  }
-
-  deleteNativeBookmarks(id: string): ng.IPromise<void> {
-    return browser.bookmarks.removeTree(id).catch((err) => {
-      this.logSvc.logInfo(`Failed to delete local bookmark: ${id}`);
-      throw new Exceptions.FailedRemoveNativeBookmarksException(null, err);
     });
   }
 
@@ -1061,7 +1053,7 @@ export default class WebExtPlatformService implements PlatformService {
   getNativeBookmarksAsBookmarks(nativeBookmarks: NativeBookmarks.BookmarkTreeNode[]): Bookmark[] {
     const bookmarks: Bookmark[] = [];
     for (let i = 0; i < nativeBookmarks.length; i += 1) {
-      // Check if current local bookmark is a separator
+      // Check if current native bookmark is a separator
       const nativeBookmark = nativeBookmarks[i];
       const bookmark = this.bookmarkSvc.isSeparator(nativeBookmark)
         ? this.bookmarkSvc.newSeparator()
@@ -1201,7 +1193,7 @@ export default class WebExtPlatformService implements PlatformService {
 
     if (syncType) {
       iconPath =
-        syncType === SyncType.Pull
+        syncType === SyncType.Local
           ? `${Globals.PathToAssets}/downloading.png`
           : `${Globals.PathToAssets}/uploading.png`;
       newTitle += syncingTitle;
@@ -1312,12 +1304,30 @@ export default class WebExtPlatformService implements PlatformService {
     });
   }
 
+  modifyNativeBookmark(id: string, newMetadata: BookmarkMetadata): ng.IPromise<NativeBookmarks.BookmarkTreeNode> {
+    const updateInfo: NativeBookmarks.UpdateChangesType = {
+      title: newMetadata.title,
+      url: newMetadata.url
+    };
+
+    // Check that the url is supported
+    if (!this.nativeBookmarkUrlIsSupported(newMetadata.url)) {
+      this.logSvc.logInfo(`Bookmark url unsupported: ${newMetadata.url}`);
+      updateInfo.url = this.getNewTabUrl();
+    }
+
+    return browser.bookmarks.update(id, updateInfo).catch((err) => {
+      this.logSvc.logInfo(`Failed to modify native bookmark: ${JSON.stringify(newMetadata)}`);
+      throw new Exceptions.FailedUpdateNativeBookmarksException(null, err);
+    });
+  }
+
   nativeBookmarkUrlIsSupported(url: string): boolean {
     if (!url) {
       return true;
     }
 
-    return this.supportedLocalBookmarkUrlRegex.test(url);
+    return this.supportedNativeBookmarkUrlRegex.test(url);
   }
 
   openUrl(url: string): void {
@@ -1367,8 +1377,15 @@ export default class WebExtPlatformService implements PlatformService {
   }
 
   refreshLocalSyncData(): ng.IPromise<void> {
-    return this.sync_Queue({ type: SyncType.Pull }).then(() => {
+    return this.sync_Queue({ type: SyncType.Local }).then(() => {
       this.logSvc.logInfo('Local sync data refreshed');
+    });
+  }
+
+  removeNativeBookmarks(id: string): ng.IPromise<void> {
+    return browser.bookmarks.removeTree(id).catch((err) => {
+      this.logSvc.logInfo(`Failed to remove native bookmark: ${id}`);
+      throw new Exceptions.FailedRemoveNativeBookmarksException(null, err);
     });
   }
 
@@ -1446,24 +1463,6 @@ export default class WebExtPlatformService implements PlatformService {
     message.command = command;
     message.runSync = runSync;
     return this.sendMessage(message);
-  }
-
-  updateLocalBookmark(id: string, title: string, url: string): ng.IPromise<NativeBookmarks.BookmarkTreeNode> {
-    const updateInfo: NativeBookmarks.UpdateChangesType = {
-      title,
-      url
-    };
-
-    // Check that the url is supported
-    if (!this.nativeBookmarkUrlIsSupported(url)) {
-      this.logSvc.logInfo(`Bookmark url unsupported: ${url}`);
-      updateInfo.url = this.getNewTabUrl();
-    }
-
-    return browser.bookmarks.update(id, updateInfo).catch((err) => {
-      this.logSvc.logInfo(`Failed to update local bookmark: ${JSON.stringify(updateInfo)}`);
-      throw new Exceptions.FailedUpdateNativeBookmarksException(null, err);
-    });
   }
 
   wasContainerChanged(changedBookmark: Bookmark, bookmarks: Bookmark[]): ng.IPromise<boolean> {

@@ -1,47 +1,44 @@
-import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
-import { Bookmarks as NativeBookmarks } from 'webextension-polyfill-ts';
-import BookmarkChange from '../../interfaces/bookmark-change.interface';
+import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
+import BookmarkChange, {
+  AddNativeBookmarkChangeData,
+  ModifyNativeBookmarkChangeData,
+  MoveNativeBookmarkChangeData
+} from '../../interfaces/bookmark-change.interface';
 import WebpageMetadata from '../../interfaces/webpage-metadata.interface';
 import ChromiumNativeBookmarksService from '../chromium/chromium-native-bookmarks.service';
 import BookmarkChangeType from '../shared/bookmark/bookmark-change-type.enum';
-import Bookmark from '../shared/bookmark/bookmark.interface';
 
 @autobind
 @Injectable('NativeBookmarksService')
 export default class FirefoxNativeBookmarksService extends ChromiumNativeBookmarksService {
-  changeBookmark(id: string, changes: NativeBookmarks.OnChangedChangeInfoType): ng.IPromise<void> {
+  addBookmark(id: string, nativeBookmark: NativeBookmarks.BookmarkTreeNode): ng.IPromise<void> {
     // Create change info
-    const changeInfo: BookmarkChange = {
-      bookmark: angular.copy(changes),
-      type: BookmarkChangeType.Update
+    const data: AddNativeBookmarkChangeData = {
+      nativeBookmark
     };
-    changeInfo.bookmark.id = id;
-
-    // Queue sync
-    this.syncChange(changeInfo);
-    return this.$q.resolve();
-  }
-
-  createBookmark(id: string, createdBookmark: NativeBookmarks.BookmarkTreeNode): ng.IPromise<void> {
-    // Create change info
     const changeInfo: BookmarkChange = {
-      bookmark: angular.copy(createdBookmark),
-      type: BookmarkChangeType.Create
+      changeData: data,
+      type: BookmarkChangeType.Add
     };
-    changeInfo.bookmark.id = id;
 
     // If bookmark is not folder or separator, get page metadata from current tab
-    return (createdBookmark.url && !this.bookmarkSvc.isSeparator(createdBookmark)
+    return (nativeBookmark.url && !this.bookmarkSvc.isSeparator(nativeBookmark)
       ? this.platformSvc.getPageMetadata()
       : this.$q.resolve<WebpageMetadata>(null)
     ).then((metadata) => {
       // Add metadata if bookmark is current tab location
-      if (metadata && createdBookmark.url === metadata.url) {
-        changeInfo.bookmark.title = this.utilitySvc.stripTags(metadata.title);
-        (changeInfo.bookmark as Bookmark).description = this.utilitySvc.stripTags(metadata.description);
-        (changeInfo.bookmark as Bookmark).tags = this.utilitySvc.getTagArrayFromText(metadata.tags);
+      if (metadata && nativeBookmark.url === metadata.url) {
+        (changeInfo.changeData as AddNativeBookmarkChangeData).nativeBookmark.title = this.utilitySvc.stripTags(
+          metadata.title
+        );
+        (changeInfo.changeData as AddNativeBookmarkChangeData).nativeBookmark.description = this.utilitySvc.stripTags(
+          metadata.description
+        );
+        (changeInfo.changeData as AddNativeBookmarkChangeData).nativeBookmark.tags = this.utilitySvc.getTagArrayFromText(
+          metadata.tags
+        );
       }
 
       // Queue sync
@@ -96,13 +93,35 @@ export default class FirefoxNativeBookmarksService extends ChromiumNativeBookmar
     }
   }
 
+  modifyBookmark(id: string): ng.IPromise<void> {
+    // Retrieve full bookmark info
+    return browser.bookmarks.getSubTree(id).then((results) => {
+      const changedBookmark = results[0];
+
+      // Create change info
+      const data: ModifyNativeBookmarkChangeData = {
+        nativeBookmark: changedBookmark
+      };
+      const changeInfo: BookmarkChange = {
+        changeData: data,
+        type: BookmarkChangeType.Modify
+      };
+
+      // Queue sync
+      this.syncChange(changeInfo);
+    });
+  }
+
   moveBookmark(id: string, moveInfo: NativeBookmarks.OnMovedMoveInfoType): ng.IPromise<void> {
     // Create change info
+    const data: MoveNativeBookmarkChangeData = {
+      ...moveInfo,
+      id
+    };
     const changeInfo: BookmarkChange = {
-      bookmark: angular.copy(moveInfo) as any,
+      changeData: data,
       type: BookmarkChangeType.Move
     };
-    changeInfo.bookmark.id = id;
 
     // Queue sync
     this.syncChange(changeInfo);

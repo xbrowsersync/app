@@ -1,9 +1,9 @@
 enum SyncType {
-  Push = 'push',
-  Pull = 'pull',
-  Both = 'both',
-  Cancel = 'cancel',
-  Upgrade = 'upgrade'
+  Cancel = 'cancel', // Stop current sync, clear sync queue and don't update remote
+  Local = 'local', // Update local data
+  LocalAndRemote = 'local and remote', // Update both local and remote data
+  Remote = 'remote', // Update remote data
+  Upgrade = 'upgrade' // Upgrade synced data
 }
 
 export default SyncType;

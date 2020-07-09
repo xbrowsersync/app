@@ -11,7 +11,7 @@ import WebExtPlatformService from '../webext/webext-platform.service';
 @Injectable('PlatformService')
 export default class FirefoxPlatformService extends WebExtPlatformService {
   nativeConfigUrlRegex = /^about:/i;
-  supportedLocalBookmarkUrlRegex = /^(?!chrome|data)[\w-]+:/i;
+  supportedNativeBookmarkUrlRegex = /^(?!chrome|data)[\w-]+:/i;
   unsupportedContainers = [];
 
   bookmarks_Clear(): ng.IPromise<void> {
@@ -29,7 +29,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
           .then((results) => {
             return this.$q.all(
               results.map((child) => {
-                return this.deleteNativeBookmarks(child.id);
+                return this.removeNativeBookmarks(child.id);
               })
             );
           })
@@ -44,7 +44,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
           .then((results) => {
             return this.$q.all(
               results.map((child) => {
-                return this.deleteNativeBookmarks(child.id);
+                return this.removeNativeBookmarks(child.id);
               })
             );
           })
@@ -59,7 +59,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
           .then((results) => {
             return this.$q.all(
               results.map((child) => {
-                return this.deleteNativeBookmarks(child.id);
+                return this.removeNativeBookmarks(child.id);
               })
             );
           })
@@ -79,7 +79,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
             return browser.bookmarks.getChildren(toolbarBookmarksId).then((results) => {
               return this.$q.all(
                 results.map((child) => {
-                  return this.deleteNativeBookmarks(child.id);
+                  return this.removeNativeBookmarks(child.id);
                 })
               );
             });
@@ -155,16 +155,16 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
                   allNativeBookmarks.push(bookmark);
                 });
 
-                // Convert local bookmarks sub tree to xbookmarks
-                const xBookmarks = this.getNativeBookmarksAsBookmarks(otherBookmarks.children);
+                // Convert native bookmarks sub tree to bookmarks
+                const bookmarks = this.getNativeBookmarksAsBookmarks(otherBookmarks.children);
 
                 // Remove any unsupported container folders present
-                const xBookmarksWithoutContainers = xBookmarks.filter((x) => {
+                const bookmarksWithoutContainers = bookmarks.filter((x) => {
                   return !this.unsupportedContainers.find((y) => {
                     return y === x.title;
                   });
                 });
-                return xBookmarksWithoutContainers;
+                return bookmarksWithoutContainers;
               });
 
         // Get toolbar bookmarks if enabled
@@ -243,7 +243,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
           return x.dateAdded - y.dateAdded;
         });
 
-        // Iterate local bookmarks to add unique bookmark ids in correct order
+        // Iterate native bookmarks to add unique bookmark ids in correct order
         allNativeBookmarks.forEach((nativeBookmark) => {
           this.bookmarkSvc.eachBookmark(bookmarks, (bookmark) => {
             if (
@@ -349,9 +349,7 @@ export default class FirefoxPlatformService extends WebExtPlatformService {
         return this.$q.all([populateMenu, populateMobile, populateOther, populateToolbar]);
       })
       .then(() => {
-        this.logSvc.logInfo(
-          `Local bookmarks populated in ${((new Date() as any) - (populateStartTime as any)) / 1000}s`
-        );
+        this.logSvc.logInfo(`Bookmarks populated in ${((new Date() as any) - (populateStartTime as any)) / 1000}s`);
         // Move local containers into the correct order
         return this.bookmarks_ReorderContainers();
       });

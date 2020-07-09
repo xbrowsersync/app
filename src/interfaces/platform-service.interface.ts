@@ -1,11 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Bookmarks as NativeBookmarks } from 'webextension-polyfill-ts';
+import BookmarkMetadata from '../modules/shared/bookmark/bookmark-metadata.interface';
 import Bookmark from '../modules/shared/bookmark/bookmark.interface';
 import MessageCommand from '../modules/shared/message-command.enum';
 import SyncType from '../modules/shared/sync-type.enum';
+import Sync from '../modules/shared/sync/sync.interface';
+import {
+  AddNativeBookmarkChangeData,
+  ModifyNativeBookmarkChangeData,
+  MoveNativeBookmarkChangeData,
+  RemoveNativeBookmarkChangeData
+} from './bookmark-change.interface';
 import I18nString from './i18n-string.interface';
-import Sync from './sync.interface';
 import WebpageMetadata from './webpage-metadata.interface';
 
 export default interface PlatformService {
@@ -14,27 +21,18 @@ export default interface PlatformService {
   automaticUpdates_Stop: () => ng.IPromise<void>;
   bookmarks_BuildIdMappings: (bookmarks: Bookmark[]) => ng.IPromise<void>;
   bookmarks_Clear: () => ng.IPromise<void>;
-  bookmarks_Created?: (
-    bookmarks: Bookmark[],
-    createdNativeBookmark: NativeBookmarks.BookmarkTreeNode
-  ) => ng.IPromise<Bookmark[]>;
-  bookmarks_CreateSingle: (createDetails: any) => ng.IPromise<void>;
-  bookmarks_Deleted?: (
-    bookmarks: Bookmark[],
-    deletedNativeBookmark: NativeBookmarks.BookmarkTreeNode
-  ) => ng.IPromise<Bookmark[]>;
-  bookmarks_DeleteSingle: (deleteDetails: any) => ng.IPromise<void>;
+  bookmarks_Created?: (bookmarks: Bookmark[], changeData: AddNativeBookmarkChangeData) => ng.IPromise<Bookmark[]>;
+  bookmarks_CreateSingle: (id: number, createInfo: BookmarkMetadata) => ng.IPromise<void>;
+  bookmarks_Deleted?: (bookmarks: Bookmark[], changeData: RemoveNativeBookmarkChangeData) => ng.IPromise<Bookmark[]>;
+  bookmarks_DeleteSingle: (id: number) => ng.IPromise<void>;
   bookmarks_Get: () => ng.IPromise<Bookmark[]>;
   bookmarks_LocalBookmarkInToolbar?: (nativeBookmark: NativeBookmarks.BookmarkTreeNode) => ng.IPromise<boolean>;
-  bookmarks_Moved?: (bookmarks: Bookmark[], moveInfo: NativeBookmarks.OnMovedMoveInfoType) => ng.IPromise<Bookmark[]>;
+  bookmarks_Moved?: (bookmarks: Bookmark[], changeData: MoveNativeBookmarkChangeData) => ng.IPromise<Bookmark[]>;
   bookmarks_Populate: (bookmarks: Bookmark[]) => ng.IPromise<void>;
   bookmarks_ReorderContainers?: () => ng.IPromise<void>;
   bookmarks_Share?: (bookmark: Bookmark) => void;
-  bookmarks_Updated?: (
-    bookmarks: Bookmark[],
-    updateInfo: NativeBookmarks.OnChangedChangeInfoType
-  ) => ng.IPromise<Bookmark[]>;
-  bookmarks_UpdateSingle: (updateDetails: any) => ng.IPromise<void>;
+  bookmarks_Updated?: (bookmarks: Bookmark[], changeData: ModifyNativeBookmarkChangeData) => ng.IPromise<Bookmark[]>;
+  bookmarks_UpdateSingle: (id: number, updateInfo: BookmarkMetadata) => ng.IPromise<void>;
   copyTextToClipboard: (text: string) => ng.IPromise<void>;
   downloadFile: (fileName: string, textContents: string, linkId?: string) => ng.IPromise<string>;
   eventListeners_Enable: () => ng.IPromise<void>;

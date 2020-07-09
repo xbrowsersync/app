@@ -137,7 +137,7 @@ export default class ExceptionHandlerService {
       case Exceptions.FailedGetNativeBookmarksException:
       case Exceptions.FailedRemoveNativeBookmarksException:
       case Exceptions.NativeBookmarkNotFoundException:
-      case Exceptions.SyncedBookmarkNotFoundException:
+      case Exceptions.BookmarkNotFoundException:
         alertMessage.title = this.platformSvc.getConstant(Strings.error_LocalSyncError_Title);
         alertMessage.message = this.platformSvc.getConstant(Strings.error_LocalSyncError_Message);
         break;

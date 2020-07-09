@@ -7,7 +7,6 @@ import { autobind } from 'core-decorators';
 import Strings from '../../../res/strings/en.json';
 import I18nString from '../../interfaces/i18n-string.interface';
 import PlatformService from '../../interfaces/platform-service.interface';
-import Sync from '../../interfaces/sync.interface';
 import WebpageMetadata from '../../interfaces/webpage-metadata.interface';
 import Alert from '../shared/alert/alert.interface';
 import BookmarkChangeType from '../shared/bookmark/bookmark-change-type.enum';
@@ -21,6 +20,8 @@ import MessageCommand from '../shared/message-command.enum';
 import NetworkService from '../shared/network/network.service';
 import StoreKey from '../shared/store/store-key.enum';
 import StoreService from '../shared/store/store.service';
+import SyncEngineService from '../shared/sync/sync-engine.service';
+import Sync from '../shared/sync/sync.interface';
 import UtilityService from '../shared/utility/utility.service';
 
 @autobind
@@ -35,6 +36,7 @@ export default class AndroidPlatformService implements PlatformService {
   logSvc: LogService;
   networkSvc: NetworkService;
   storeSvc: StoreService;
+  syncEngineService: SyncEngineService;
   utilitySvc: UtilityService;
 
   backgroundSyncInterval: ng.IPromise<void>;
@@ -54,6 +56,7 @@ export default class AndroidPlatformService implements PlatformService {
     'LogService',
     'NetworkService',
     'StoreService',
+    'SyncEngineService',
     'UtilityService'
   ];
   constructor(
@@ -66,6 +69,7 @@ export default class AndroidPlatformService implements PlatformService {
     LogSvc: LogService,
     NetworkSvc: NetworkService,
     StoreSvc: StoreService,
+    SyncEngineSvc: SyncEngineService,
     UtilitySvc: UtilityService
   ) {
     this.$exceptionHandler = $exceptionHandler;
@@ -77,6 +81,7 @@ export default class AndroidPlatformService implements PlatformService {
     this.logSvc = LogSvc;
     this.networkSvc = NetworkSvc;
     this.storeSvc = StoreSvc;
+    this.syncEngineService = SyncEngineSvc;
     this.utilitySvc = UtilitySvc;
 
     this.i18nStrings = [];
@@ -351,7 +356,7 @@ export default class AndroidPlatformService implements PlatformService {
     }
 
     // Sync bookmarks
-    return this.bookmarkSvc
+    return this.syncEngineService
       .executeSync(isBackgroundSync)
       .then(() => {
         // Disable background sync if sync successfull
@@ -985,7 +990,7 @@ export default class AndroidPlatformService implements PlatformService {
   sync_Queue(sync: Sync, command = MessageCommand.SyncBookmarks): ng.IPromise<any> {
     // Add sync data to queue and run sync
     sync.command = command;
-    return this.bookmarkSvc
+    return this.syncEngineService
       .queueSync(sync)
       .then(() => {
         if (sync.changeInfo === undefined) {
@@ -993,24 +998,24 @@ export default class AndroidPlatformService implements PlatformService {
         }
         return this.$q.resolve(sync.changeInfo).then((changeInfo) => {
           switch (true) {
-            case changeInfo.type === BookmarkChangeType.Create:
+            case changeInfo.type === BookmarkChangeType.Add:
               this.$timeout(() => {
                 this.vm.displayAlert({
                   message: this.getConstant(Strings.bookmarkCreated_Message)
                 } as Alert);
               }, 200);
               break;
-            case changeInfo.type === BookmarkChangeType.Delete:
-              this.$timeout(() => {
-                this.vm.displayAlert({
-                  message: this.getConstant(Strings.bookmarkDeleted_Message)
-                } as Alert);
-              }, 200);
-              break;
-            case changeInfo.type === BookmarkChangeType.Update:
+            case changeInfo.type === BookmarkChangeType.Modify:
               this.$timeout(() => {
                 this.vm.displayAlert({
                   message: this.getConstant(Strings.bookmarkUpdated_Message)
+                } as Alert);
+              }, 200);
+              break;
+            case changeInfo.type === BookmarkChangeType.Remove:
+              this.$timeout(() => {
+                this.vm.displayAlert({
+                  message: this.getConstant(Strings.bookmarkDeleted_Message)
                 } as Alert);
               }, 200);
               break;
@@ -1020,14 +1025,14 @@ export default class AndroidPlatformService implements PlatformService {
       })
       .catch((err) => {
         // If local data out of sync, queue refresh sync
-        return (this.bookmarkSvc.checkIfRefreshSyncedDataOnError(err)
+        return (this.syncEngineService.checkIfRefreshSyncedDataOnError(err)
           ? this.refreshLocalSyncData()
           : this.$q.resolve()
         ).then(() => {
           // Add uncommitted syncs back to the queue and notify
           if (err instanceof Exceptions.SyncUncommittedException) {
             sync.changeInfo = undefined;
-            this.bookmarkSvc.queueSync(sync, false);
+            this.syncEngineService.queueSync(sync, false);
             this.logSvc.logInfo('Sync not committed: network offline');
             this.vm.displayAlert({
               message: this.getConstant(Strings.error_UncommittedSyncs_Message),
@@ -1132,15 +1137,15 @@ export default class AndroidPlatformService implements PlatformService {
   }
 
   sync_Current(): ng.IPromise<Sync> {
-    return this.$q.resolve(this.bookmarkSvc.getCurrentSync());
+    return this.$q.resolve(this.syncEngineService.getCurrentSync());
   }
 
   sync_Disable(): ng.IPromise<any> {
-    return this.bookmarkSvc.disableSync();
+    return this.syncEngineService.disableSync();
   }
 
   sync_GetQueueLength(): ng.IPromise<number> {
-    return this.$q.resolve(this.bookmarkSvc.getSyncQueueLength());
+    return this.$q.resolve(this.syncEngineService.getSyncQueueLength());
   }
 
   upgradeTo153(): ng.IPromise<void> {

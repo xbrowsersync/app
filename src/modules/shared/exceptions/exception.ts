@@ -24,6 +24,8 @@ export class ApiRequestException extends Exception {}
 
 export class BookmarkMappingNotFoundException extends Exception {}
 
+export class BookmarkNotFoundException extends Exception {}
+
 export class ContainerChangedException extends Exception {}
 
 export class ContainerNotFoundException extends Exception {}
@@ -97,8 +99,6 @@ export class RequestEntityTooLargeException extends Exception {}
 export class ServiceOfflineException extends Exception {}
 
 export class SyncDisabledException extends Exception {}
-
-export class SyncedBookmarkNotFoundException extends Exception {}
 
 export class SyncFailedException extends Exception {}
 

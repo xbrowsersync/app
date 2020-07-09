@@ -1,20 +1,24 @@
-import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
-import BookmarkChange from '../../interfaces/bookmark-change.interface';
+import BookmarkChange, {
+  AddNativeBookmarkChangeData,
+  ModifyNativeBookmarkChangeData,
+  MoveNativeBookmarkChangeData,
+  RemoveNativeBookmarkChangeData
+} from '../../interfaces/bookmark-change.interface';
 import NativeBookmarksService from '../../interfaces/native-bookmarks-service.interface';
 import PlatformService from '../../interfaces/platform-service.interface';
-import Sync from '../../interfaces/sync.interface';
 import WebpageMetadata from '../../interfaces/webpage-metadata.interface';
 import BookmarkChangeType from '../shared/bookmark/bookmark-change-type.enum';
-import Bookmark from '../shared/bookmark/bookmark.interface';
 import BookmarkService from '../shared/bookmark/bookmark.service';
 import * as Exceptions from '../shared/exceptions/exception';
 import Globals from '../shared/globals';
 import LogService from '../shared/log/log.service';
 import MessageCommand from '../shared/message-command.enum';
 import SyncType from '../shared/sync-type.enum';
+import SyncEngineService from '../shared/sync/sync-engine.service';
+import Sync from '../shared/sync/sync.interface';
 import UtilityService from '../shared/utility/utility.service';
 import BookmarkIdMapperService from '../webext/bookmark-id-mapper/bookmark-id-mapper.service';
 
@@ -27,6 +31,7 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
   bookmarkSvc: BookmarkService;
   logSvc: LogService;
   platformSvc: PlatformService;
+  syncEngineService: SyncEngineService;
   utilitySvc: UtilityService;
 
   bookmarkEventsQueue: any[] = [];
@@ -39,6 +44,7 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
     'BookmarkService',
     'LogService',
     'PlatformService',
+    'SyncEngineService',
     'UtilityService'
   ];
   constructor(
@@ -48,6 +54,7 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
     BookmarkSvc: BookmarkService,
     LogSvc: LogService,
     PlatformSvc: PlatformService,
+    SyncEngineSvc: SyncEngineService,
     UtilitySvc: UtilityService
   ) {
     this.$q = $q;
@@ -56,7 +63,47 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
     this.bookmarkSvc = BookmarkSvc;
     this.logSvc = LogSvc;
     this.platformSvc = PlatformSvc;
+    this.syncEngineService = SyncEngineSvc;
     this.utilitySvc = UtilitySvc;
+  }
+
+  addBookmark(id?: string, nativeBookmark?: NativeBookmarks.BookmarkTreeNode): ng.IPromise<void> {
+    // If bookmark is separator update native bookmark properties
+    return (this.bookmarkSvc.isSeparator(nativeBookmark)
+      ? this.convertNativeBookmarkToSeparator(nativeBookmark)
+      : this.$q.resolve(nativeBookmark)
+    ).then((bookmarkNode) => {
+      // Create change info
+      const data: AddNativeBookmarkChangeData = {
+        nativeBookmark: bookmarkNode
+      };
+      const changeInfo: BookmarkChange = {
+        changeData: data,
+        type: BookmarkChangeType.Add
+      };
+
+      // If bookmark is not folder or separator, get page metadata from current tab
+      return (bookmarkNode.url && !this.bookmarkSvc.isSeparator(bookmarkNode)
+        ? this.checkPermsAndGetPageMetadata()
+        : this.$q.resolve<WebpageMetadata>(null)
+      ).then((metadata) => {
+        // Add metadata if bookmark is current tab location
+        if (metadata && bookmarkNode.url === metadata.url) {
+          (changeInfo.changeData as AddNativeBookmarkChangeData).nativeBookmark.title = this.utilitySvc.stripTags(
+            metadata.title
+          );
+          (changeInfo.changeData as AddNativeBookmarkChangeData).nativeBookmark.description = this.utilitySvc.stripTags(
+            metadata.description
+          );
+          (changeInfo.changeData as AddNativeBookmarkChangeData).nativeBookmark.tags = this.utilitySvc.getTagArrayFromText(
+            metadata.tags
+          );
+        }
+
+        // Queue sync
+        this.syncChange(changeInfo);
+      });
+    });
   }
 
   convertNativeBookmarkToSeparator(
@@ -104,44 +151,6 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  changeBookmark(id: string, changes: NativeBookmarks.OnChangedChangeInfoType): ng.IPromise<void> {
-    // Retrieve full bookmark info
-    return browser.bookmarks.getSubTree(id).then((results) => {
-      const changedBookmark = results[0];
-
-      // If bookmark is separator update local bookmark properties
-      (this.bookmarkSvc.isSeparator(changedBookmark)
-        ? this.convertNativeBookmarkToSeparator(changedBookmark)
-        : this.$q.resolve(changedBookmark)
-      ).then((bookmarkNode) => {
-        // If the bookmark was converted to a separator, update id mapping
-        let updateMappingPromise: ng.IPromise<void>;
-        if (bookmarkNode.id !== id) {
-          updateMappingPromise = this.bookmarkIdMapperSvc.get(id).then((idMapping) => {
-            if (!idMapping) {
-              throw new Exceptions.BookmarkMappingNotFoundException();
-            }
-
-            return this.bookmarkIdMapperSvc.remove(idMapping.syncedId).then(() => {
-              const newMapping = this.bookmarkIdMapperSvc.createMapping(idMapping.syncedId, bookmarkNode.id);
-              return this.bookmarkIdMapperSvc.add(newMapping);
-            });
-          });
-        } else {
-          updateMappingPromise = this.$q.resolve();
-        }
-        return updateMappingPromise.then(() => {
-          // Queue sync
-          this.syncChange({
-            bookmark: bookmarkNode,
-            type: BookmarkChangeType.Update
-          });
-        });
-      });
-    });
-  }
-
   checkPermsAndGetPageMetadata(): ng.IPromise<WebpageMetadata> {
     return this.platformSvc.permissions_Check().then((hasPermissions) => {
       if (!hasPermissions) {
@@ -150,36 +159,6 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
 
       // Depending on current perms, get full or partial page metadata
       return hasPermissions ? this.platformSvc.getPageMetadata(true) : this.platformSvc.getPageMetadata(false);
-    });
-  }
-
-  createBookmark(id: string, createdBookmark: NativeBookmarks.BookmarkTreeNode): ng.IPromise<void> {
-    // If bookmark is separator update local bookmark properties
-    return (this.bookmarkSvc.isSeparator(createdBookmark)
-      ? this.convertNativeBookmarkToSeparator(createdBookmark)
-      : this.$q.resolve(createdBookmark)
-    ).then((bookmarkNode) => {
-      // Create change info
-      const changeInfo: BookmarkChange = {
-        bookmark: bookmarkNode,
-        type: BookmarkChangeType.Create
-      };
-
-      // If bookmark is not folder or separator, get page metadata from current tab
-      return (bookmarkNode.url && !this.bookmarkSvc.isSeparator(bookmarkNode)
-        ? this.checkPermsAndGetPageMetadata()
-        : this.$q.resolve<WebpageMetadata>(null)
-      ).then((metadata) => {
-        // Add metadata if bookmark is current tab location
-        if (metadata && bookmarkNode.url === metadata.url) {
-          changeInfo.bookmark.title = this.utilitySvc.stripTags(metadata.title);
-          (changeInfo.bookmark as Bookmark).description = this.utilitySvc.stripTags(metadata.description);
-          (changeInfo.bookmark as Bookmark).tags = this.utilitySvc.getTagArrayFromText(metadata.tags);
-        }
-
-        // Queue sync
-        this.syncChange(changeInfo);
-      });
     });
   }
 
@@ -212,11 +191,54 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
       });
   }
 
-  moveBookmark(id: string, moveInfo: NativeBookmarks.OnMovedMoveInfoType): ng.IPromise<void> {
+  modifyBookmark(id?: string): ng.IPromise<void> {
+    // Retrieve full bookmark info
+    return browser.bookmarks.getSubTree(id).then((results) => {
+      const changedBookmark = results[0];
+
+      // If bookmark is separator update native bookmark properties
+      (this.bookmarkSvc.isSeparator(changedBookmark)
+        ? this.convertNativeBookmarkToSeparator(changedBookmark)
+        : this.$q.resolve(changedBookmark)
+      ).then((bookmarkNode) => {
+        // If the bookmark was converted to a separator, update id mapping
+        let updateMappingPromise: ng.IPromise<void>;
+        if (bookmarkNode.id !== id) {
+          updateMappingPromise = this.bookmarkIdMapperSvc.get(id).then((idMapping) => {
+            if (!idMapping) {
+              throw new Exceptions.BookmarkMappingNotFoundException();
+            }
+
+            return this.bookmarkIdMapperSvc.remove(idMapping.syncedId).then(() => {
+              const newMapping = this.bookmarkIdMapperSvc.createMapping(idMapping.syncedId, bookmarkNode.id);
+              return this.bookmarkIdMapperSvc.add(newMapping);
+            });
+          });
+        } else {
+          updateMappingPromise = this.$q.resolve();
+        }
+        return updateMappingPromise.then(() => {
+          // Create change info
+          const data: ModifyNativeBookmarkChangeData = {
+            nativeBookmark: bookmarkNode
+          };
+          const changeInfo: BookmarkChange = {
+            changeData: data,
+            type: BookmarkChangeType.Modify
+          };
+
+          // Queue sync
+          this.syncChange(changeInfo);
+        });
+      });
+    });
+  }
+
+  moveBookmark(id?: string, moveInfo?: NativeBookmarks.OnMovedMoveInfoType): ng.IPromise<void> {
     return browser.bookmarks.get(id).then((results) => {
       const movedBookmark = results[0];
 
-      // If bookmark is separator update local bookmark properties
+      // If bookmark is separator update native bookmark properties
       return (this.bookmarkSvc.isSeparator(movedBookmark)
         ? this.convertNativeBookmarkToSeparator(movedBookmark)
         : this.$q.resolve(movedBookmark)
@@ -239,11 +261,14 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
         }
         return updateMappingPromise.then(() => {
           // Create change info
+          const data: MoveNativeBookmarkChangeData = {
+            ...moveInfo,
+            id
+          };
           const changeInfo: BookmarkChange = {
-            bookmark: angular.copy(moveInfo) as any,
+            changeData: data,
             type: BookmarkChangeType.Move
           };
-          changeInfo.bookmark.id = id;
 
           // Queue sync
           this.syncChange(changeInfo);
@@ -254,22 +279,22 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
 
   onChanged(...args: any[]): void {
     this.logSvc.logInfo('onChanged event detected');
-    this.queueBookmarkEvent(this.changeBookmark, args);
+    this.queueBookmarkEvent(BookmarkChangeType.Modify, ...args);
   }
 
   onCreated(...args: any[]): void {
     this.logSvc.logInfo('onCreated event detected');
-    this.queueBookmarkEvent(this.createBookmark, args);
+    this.queueBookmarkEvent(BookmarkChangeType.Add, ...args);
   }
 
   onMoved(...args: any[]): void {
     this.logSvc.logInfo('onMoved event detected');
-    this.queueBookmarkEvent(this.moveBookmark, args);
+    this.queueBookmarkEvent(BookmarkChangeType.Move, ...args);
   }
 
   onRemoved(...args: any[]): void {
     this.logSvc.logInfo('onRemoved event detected');
-    this.queueBookmarkEvent(this.removeBookmark, args);
+    this.queueBookmarkEvent(BookmarkChangeType.Remove, ...args);
   }
 
   processBookmarkEventsQueue(): void {
@@ -278,15 +303,26 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
     };
 
     const action = (): any => {
-      // Get first event in the queue
+      // Get first event in the queue and process change
       const currentEvent = this.bookmarkEventsQueue.shift();
-      return currentEvent[0].apply(this, currentEvent[1]);
+      switch (currentEvent.changeType) {
+        case BookmarkChangeType.Add:
+          return this.addBookmark(...currentEvent.eventArgs);
+        case BookmarkChangeType.Remove:
+          return this.removeBookmark(...currentEvent.eventArgs);
+        case BookmarkChangeType.Move:
+          return this.moveBookmark(...currentEvent.eventArgs);
+        case BookmarkChangeType.Modify:
+          return this.modifyBookmark(...currentEvent.eventArgs);
+        default:
+          throw new Exceptions.AmbiguousSyncRequestException();
+      }
     };
 
     // Iterate through the queue and process the events
     this.utilitySvc.promiseWhile(this.bookmarkEventsQueue, doActionUntil, action).then(() => {
       this.$timeout(() => {
-        this.bookmarkSvc.executeSync().then(() => {
+        this.syncEngineService.executeSync().then(() => {
           // Move local containers into the correct order
           return this.disableEventListeners()
             .then(this.platformSvc.bookmarks_ReorderContainers)
@@ -296,35 +332,44 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
     });
   }
 
-  queueBookmarkEvent(...args: any[]): void {
+  queueBookmarkEvent(changeType: BookmarkChangeType, ...eventArgs: any[]): void {
     // Clear timeout
     if (this.processBookmarkEventsTimeout) {
       this.$timeout.cancel(this.processBookmarkEventsTimeout);
     }
 
     // Add event to the queue and trigger processing after a delay
-    this.bookmarkEventsQueue.push(args);
+    this.bookmarkEventsQueue.push({
+      changeType,
+      eventArgs
+    });
     this.processBookmarkEventsTimeout = this.$timeout(this.processBookmarkEventsQueue, 200);
+  }
+
+  removeBookmark(id?: string, removeInfo?: NativeBookmarks.OnRemovedRemoveInfoType): ng.IPromise<void> {
+    // Create change info
+    const data: RemoveNativeBookmarkChangeData = {
+      nativeBookmark: removeInfo.node
+    };
+    const changeInfo: BookmarkChange = {
+      changeData: data,
+      type: BookmarkChangeType.Remove
+    };
+
+    // Queue sync
+    this.syncChange(changeInfo);
+    return this.$q.resolve();
   }
 
   syncChange(changeInfo: BookmarkChange): ng.IPromise<any> {
     const sync: Sync = {
       changeInfo,
-      type: SyncType.Push
+      type: SyncType.Remote
     };
 
     // Queue sync but dont execute sync to allow for batch processing multiple changes
     return this.platformSvc.sync_Queue(sync, MessageCommand.SyncBookmarks, false).catch(() => {
       // Swallow error, sync errors thrown searately by processBookmarkEventsQueue
     });
-  }
-
-  removeBookmark(id: string, removeInfo: NativeBookmarks.OnRemovedRemoveInfoType): ng.IPromise<void> {
-    // Queue sync
-    this.syncChange({
-      bookmark: removeInfo.node,
-      type: BookmarkChangeType.Delete
-    });
-    return this.$q.resolve();
   }
 }

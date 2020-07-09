@@ -5,74 +5,47 @@ import { autobind } from 'core-decorators';
 import _ from 'underscore';
 import { Bookmarks as NativeBookmarks } from 'webextension-polyfill-ts';
 import Strings from '../../../../res/strings/en.json';
-import BookmarkChange from '../../../interfaces/bookmark-change.interface';
 import BookmarkSearchResult from '../../../interfaces/bookmark-search-result.interface';
 import PlatformService from '../../../interfaces/platform-service.interface';
-import Sync from '../../../interfaces/sync.interface';
 import ApiService from '../api/api-service.interface';
 import CryptoService from '../crypto/crypto.service';
 import * as Exceptions from '../exceptions/exception';
-import ExceptionHandler from '../exceptions/exception-handler.interface';
 import Globals from '../globals';
-import LogService from '../log/log.service';
-import MessageCommand from '../message-command.enum';
 import StoreKey from '../store/store-key.enum';
 import StoreService from '../store/store.service';
-import SyncType from '../sync-type.enum';
 import UtilityService from '../utility/utility.service';
-import AddBookmarkResult from './add-bookmark-result.interface';
-import BookmarkChangeType from './bookmark-change-type.enum';
 import BookmarkContainer from './bookmark-container.enum';
+import BookmarkMetadata from './bookmark-metadata.interface';
 import Bookmark from './bookmark.interface';
+import UpdateBookmarksResult from './update-bookmarks-result.interface';
 
 @autobind
 @Injectable('BookmarkService')
 export default class BookmarkService {
-  $exceptionHandler: ExceptionHandler;
   $injector: ng.auto.IInjectorService;
   $q: ng.IQService;
-  $timeout: ng.ITimeoutService;
   apiSvc: ApiService;
   cryptoSvc: CryptoService;
-  logSvc: LogService;
   _platformSvc: PlatformService;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
   cachedBookmarks_encrypted: string;
   cachedBookmarks_plain: Bookmark[];
-  currentSync: Sync;
-  syncQueue: Sync[] = [];
 
-  static $inject = [
-    '$exceptionHandler',
-    '$injector',
-    '$q',
-    '$timeout',
-    'ApiService',
-    'CryptoService',
-    'LogService',
-    'StoreService',
-    'UtilityService'
-  ];
+  static $inject = ['$injector', '$q', 'ApiService', 'CryptoService', 'StoreService', 'UtilityService'];
   constructor(
-    $exceptionHandler: ng.IExceptionHandlerService,
     $injector: ng.auto.IInjectorService,
     $q: ng.IQService,
-    $timeout: ng.ITimeoutService,
     ApiSvc: ApiService,
     CryptoSvc: CryptoService,
-    LogSvc: LogService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
   ) {
-    this.$exceptionHandler = $exceptionHandler;
     this.$injector = $injector;
     this.$q = $q;
-    this.$timeout = $timeout;
     this.apiSvc = ApiSvc;
     this.cryptoSvc = CryptoSvc;
-    this.logSvc = LogSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
   }
@@ -84,38 +57,36 @@ export default class BookmarkService {
     return this._platformSvc;
   }
 
-  addBookmark(newBookmarkInfo: any, bookmarks: Bookmark[]): AddBookmarkResult {
+  addBookmark(
+    bookmarkMetadata: BookmarkMetadata,
+    parentId: number,
+    index: number,
+    bookmarks: Bookmark[]
+  ): UpdateBookmarksResult {
     const updatedBookmarks = angular.copy(bookmarks);
-    const parent = this.findBookmarkById(updatedBookmarks, newBookmarkInfo.parentId);
+    const parent = this.findBookmarkById(updatedBookmarks, parentId);
     if (!parent) {
-      throw new Exceptions.SyncedBookmarkNotFoundException();
+      throw new Exceptions.BookmarkNotFoundException();
     }
 
     // Create new bookmark/separator
-    const bookmark = this.isSeparator(newBookmarkInfo)
+    const bookmark = this.isSeparator(bookmarkMetadata)
       ? this.newSeparator(bookmarks)
       : this.newBookmark(
-          newBookmarkInfo.title,
-          newBookmarkInfo.url || null,
-          newBookmarkInfo.description,
-          newBookmarkInfo.tags,
-          newBookmarkInfo.children,
+          bookmarkMetadata.title,
+          bookmarkMetadata.url || null,
+          bookmarkMetadata.description,
+          bookmarkMetadata.tags,
           bookmarks
         );
 
-    // Use id if supplied or create new id
-    if (!angular.isUndefined(newBookmarkInfo.id)) {
-      bookmark.id = newBookmarkInfo.id;
-    }
-
-    // Clean bookmark and add at index or last index in path
-    const cleanedBookmark = this.cleanBookmark(bookmark);
-    parent.children.splice(newBookmarkInfo.index, 0, cleanedBookmark);
+    // Add bookmark as child at index param
+    parent.children.splice(index, 0, bookmark);
 
     return {
-      bookmark: cleanedBookmark,
+      bookmark,
       bookmarks: updatedBookmarks
-    } as AddBookmarkResult;
+    } as UpdateBookmarksResult;
   }
 
   bookmarkIsContainer(bookmark: Bookmark | NativeBookmarks.BookmarkTreeNode): boolean {
@@ -124,55 +95,6 @@ export default class BookmarkService {
       bookmark.title === BookmarkContainer.Mobile ||
       bookmark.title === BookmarkContainer.Other ||
       bookmark.title === BookmarkContainer.Toolbar
-    );
-  }
-
-  checkForUpdates(): ng.IPromise<boolean> {
-    return this.storeSvc.get<string>(StoreKey.LastUpdated).then((storedLastUpdated) => {
-      // Get last updated date from cache
-      const storedLastUpdatedDate = new Date(storedLastUpdated);
-
-      // Check if bookmarks have been updated
-      return this.apiSvc.getBookmarksLastUpdated().then((response) => {
-        // If last updated is different to the cached date, refresh bookmarks
-        const remoteLastUpdated = new Date(response.lastUpdated);
-        const updatesAvailable =
-          !storedLastUpdatedDate || storedLastUpdatedDate.getTime() !== remoteLastUpdated.getTime();
-
-        if (updatesAvailable) {
-          this.logSvc.logInfo(
-            `Updates available, local:${
-              storedLastUpdatedDate ? storedLastUpdatedDate.toISOString() : 'none'
-            } remote:${remoteLastUpdated.toISOString()}`
-          );
-        }
-
-        return updatesAvailable;
-      });
-    });
-  }
-
-  checkIfDisableSyncOnError(err: Error): boolean {
-    return (
-      err &&
-      (err instanceof Exceptions.SyncRemovedException ||
-        err instanceof Exceptions.MissingClientDataException ||
-        err instanceof Exceptions.NoDataFoundException ||
-        err instanceof Exceptions.TooManyRequestsException)
-    );
-  }
-
-  checkIfRefreshSyncedDataOnError(err: Error): boolean {
-    return (
-      err &&
-      (err instanceof Exceptions.BookmarkMappingNotFoundException ||
-        err instanceof Exceptions.ContainerChangedException ||
-        err instanceof Exceptions.DataOutOfSyncException ||
-        err instanceof Exceptions.FailedCreateNativeBookmarksException ||
-        err instanceof Exceptions.FailedGetNativeBookmarksException ||
-        err instanceof Exceptions.FailedRemoveNativeBookmarksException ||
-        err instanceof Exceptions.NativeBookmarkNotFoundException ||
-        err instanceof Exceptions.SyncedBookmarkNotFoundException)
     );
   }
 
@@ -185,89 +107,20 @@ export default class BookmarkService {
     return cleanedBookmark;
   }
 
-  disableSync(): ng.IPromise<void> {
-    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
-      if (!syncEnabled) {
-        return null;
-      }
-
-      // Disable event listeners and checking for sync updates
-      this.platformSvc.eventListeners_Disable();
-      this.platformSvc.automaticUpdates_Stop();
-
-      // Clear sync queue
-      this.syncQueue = [];
-
-      // Reset syncing flag
-      this.setIsSyncing();
-
-      // Clear cached sync data
-      return this.$q
-        .all([
-          this.storeSvc.remove(StoreKey.BookmarkIdMappings),
-          this.storeSvc.remove(StoreKey.Bookmarks),
-          this.storeSvc.remove(StoreKey.Password),
-          this.storeSvc.remove(StoreKey.SyncVersion),
-          this.storeSvc.set(StoreKey.SyncEnabled, false),
-          this.updateCachedBookmarks(null, null)
-        ])
-        .then(() => {
-          // Update browser action icon
-          this.platformSvc.interface_Refresh();
-          this.logSvc.logInfo('Sync disabled');
-        });
-    });
-  }
-
-  eachBookmark(
-    bookmarks: Bookmark[] | NativeBookmarks.BookmarkTreeNode[],
-    iteratee: (rootBookmark: Bookmark | NativeBookmarks.BookmarkTreeNode) => void,
-    untilCondition = false
-  ): void {
+  eachBookmark<T = Bookmark>(bookmarks: T[], iteratee: (rootBookmark: T) => void, untilCondition = false): void {
     // Run the iteratee function for every bookmark until the condition is met
-    const iterateBookmarks = (bookmarksToIterate: Bookmark[] | NativeBookmarks.BookmarkTreeNode[]): void => {
+    const iterateBookmarks = (bookmarksToIterate: T[]): void => {
       for (let i = 0; i < bookmarksToIterate.length; i += 1) {
         if (untilCondition) {
           return;
         }
         iteratee(bookmarksToIterate[i]);
-        if (bookmarksToIterate[i].children && bookmarksToIterate[i].children.length > 0) {
-          iterateBookmarks(bookmarksToIterate[i].children);
+        if ((bookmarksToIterate[i] as any).children && (bookmarksToIterate[i] as any).children.length > 0) {
+          iterateBookmarks((bookmarksToIterate[i] as any).children);
         }
       }
     };
     iterateBookmarks(bookmarks);
-  }
-
-  enableSync(): ng.IPromise<void> {
-    return this.$q
-      .all([
-        this.storeSvc.set(StoreKey.SyncEnabled, true),
-        this.platformSvc.eventListeners_Enable(),
-        this.platformSvc.automaticUpdates_Start()
-      ])
-      .then(() => {});
-  }
-
-  executeSync(isBackgroundSync = false): ng.IPromise<any> {
-    // Check if sync enabled before running sync
-    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
-      if (!syncEnabled) {
-        throw new Exceptions.SyncDisabledException();
-      }
-
-      // Get available updates if there are no queued syncs, finally process the queue
-      return (this.syncQueue.length === 0 ? this.checkForUpdates() : this.$q.resolve(false))
-        .then((updatesAvailable) => {
-          return (
-            updatesAvailable &&
-            this.queueSync({
-              type: SyncType.Pull
-            })
-          );
-        })
-        .then(() => this.processSyncQueue(isBackgroundSync));
-    });
   }
 
   exportBookmarks(): ng.IPromise<Bookmark[]> {
@@ -381,6 +234,15 @@ export default class BookmarkService {
     return bookmark;
   }
 
+  extractBookmarkMetadata(bookmark: Bookmark | NativeBookmarks.BookmarkTreeNode): BookmarkMetadata {
+    return {
+      description: (bookmark as Bookmark).description,
+      tags: (bookmark as Bookmark).tags,
+      title: bookmark.title,
+      url: bookmark.url
+    };
+  }
+
   getBookmarkTitleForDisplay(bookmark: Bookmark): string {
     // If normal bookmark, return title or if blank url to display
     if (bookmark.url) {
@@ -416,16 +278,17 @@ export default class BookmarkService {
     return this.storeSvc.get<string>(StoreKey.Bookmarks).then((encryptedBookmarksFromStore) => {
       // Return unencrypted cached bookmarks from memory if encrypted bookmarks
       // in storage match cached encrypted bookmarks in memory
+      let getBookmarksPromise: ng.IPromise<Bookmark[]>;
       if (
         encryptedBookmarksFromStore &&
         this.cachedBookmarks_encrypted &&
         encryptedBookmarksFromStore === this.cachedBookmarks_encrypted
       ) {
-        return angular.copy(this.cachedBookmarks_plain);
+        getBookmarksPromise = this.$q.resolve(this.cachedBookmarks_plain);
       }
 
       // If encrypted bookmarks not cached in storage, get synced bookmarks
-      return (encryptedBookmarksFromStore
+      getBookmarksPromise = (encryptedBookmarksFromStore
         ? this.$q.resolve(encryptedBookmarksFromStore)
         : this.apiSvc.getBookmarks().then((response) => {
             return response.bookmarks;
@@ -435,8 +298,14 @@ export default class BookmarkService {
         return this.cryptoSvc.decryptData(encryptedBookmarks).then((decryptedBookmarks) => {
           // Update cache with retrieved bookmarks data
           const bookmarks: Bookmark[] = decryptedBookmarks ? JSON.parse(decryptedBookmarks) : [];
-          return this.updateCachedBookmarks(bookmarks, encryptedBookmarks);
+          return this.updateCachedBookmarks(bookmarks, encryptedBookmarks).then(() => {
+            return bookmarks;
+          });
         });
+      });
+
+      return getBookmarksPromise.then((cachedBookmarks) => {
+        return angular.copy(cachedBookmarks);
       });
     });
   }
@@ -445,7 +314,7 @@ export default class BookmarkService {
     // If container does not exist, create it if specified
     let container = _.findWhere<Bookmark, any>(bookmarks, { title: containerName });
     if (!container && createIfNotPresent) {
-      container = this.newBookmark(containerName, null, null, null, null, bookmarks);
+      container = this.newBookmark(containerName, null, null, null, bookmarks);
       bookmarks.push(container);
     }
     return container;
@@ -472,12 +341,6 @@ export default class BookmarkService {
       );
     });
     return container;
-  }
-
-  getCurrentSync(): Sync {
-    // If nothing on the queue, get the current sync in progress if exists, otherwise get the last
-    // sync in the queue
-    return this.syncQueue.length === 0 ? this.currentSync : this.syncQueue[this.syncQueue.length - 1];
   }
 
   getIdsFromDescendants(bookmark: Bookmark): number[] {
@@ -549,11 +412,8 @@ export default class BookmarkService {
     // Check existing bookmarks for highest id
     let highestId = 0;
     this.eachBookmark(bookmarks, (bookmark) => {
-      if (
-        !angular.isUndefined(bookmark.id) &&
-        parseInt((bookmark as NativeBookmarks.BookmarkTreeNode).id, 10) > highestId
-      ) {
-        highestId = parseInt((bookmark as NativeBookmarks.BookmarkTreeNode).id, 10);
+      if (!angular.isUndefined(bookmark.id) && parseInt(bookmark.id.toString(), 10) > highestId) {
+        highestId = parseInt(bookmark.id.toString(), 10);
       }
     });
 
@@ -573,10 +433,6 @@ export default class BookmarkService {
     });
   }
 
-  getSyncQueueLength(): number {
-    return this.syncQueue.length;
-  }
-
   getSyncSize(): ng.IPromise<number> {
     return this.getCachedBookmarks()
       .then(() => {
@@ -587,69 +443,6 @@ export default class BookmarkService {
         const sizeInBytes = new TextEncoder().encode(encryptedBookmarks).byteLength;
         return sizeInBytes;
       });
-  }
-
-  handleFailedSync(failedSync: Sync, err: Error): ng.IPromise<Error> {
-    return this.$q<Error>((resolve, reject) => {
-      // Update browser action icon
-      this.platformSvc.interface_Refresh();
-
-      // If offline and sync is a change, swallow error and place failed sync back on the queue
-      if (err instanceof Exceptions.NetworkOfflineException && failedSync.type !== SyncType.Pull) {
-        return resolve(new Exceptions.SyncUncommittedException());
-      }
-
-      // Set default exception if none set
-      if (!(err instanceof Exceptions.Exception)) {
-        err = new Exceptions.SyncFailedException(err.message);
-      }
-
-      // Handle failed sync
-      this.logSvc.logWarning(`Sync ${failedSync.uniqueId} failed`);
-      this.$exceptionHandler(err, null, false);
-      if (failedSync.changeInfo && failedSync.changeInfo.type) {
-        this.logSvc.logInfo(failedSync.changeInfo);
-      }
-      return this.storeSvc
-        .get<boolean>(StoreKey.SyncEnabled)
-        .then((syncEnabled) => {
-          return this.setIsSyncing()
-            .then(() => {
-              if (!syncEnabled) {
-                return;
-              }
-
-              // If no data found, sync has been removed
-              if (err instanceof Exceptions.NoDataFoundException) {
-                err = new Exceptions.SyncRemovedException(null, err);
-              } else if (failedSync.type !== SyncType.Pull) {
-                // If local changes made, clear sync queue and refresh sync data if necessary
-                this.syncQueue = [];
-                this.storeSvc.set(StoreKey.LastUpdated, new Date().toISOString());
-                if (this.checkIfRefreshSyncedDataOnError(err)) {
-                  this.currentSync = null;
-                  return this.platformSvc.refreshLocalSyncData().catch((refreshErr) => {
-                    err = refreshErr;
-                  });
-                }
-              }
-            })
-            .then(() => {
-              // Check if sync should be disabled
-              if (!this.checkIfDisableSyncOnError(err)) {
-                return;
-              }
-              return this.disableSync();
-            });
-        })
-        .then(() => {
-          resolve(err);
-        })
-        .catch(reject);
-    }).finally(() => {
-      // Return sync error back to process that queued the sync
-      failedSync.deferred.reject(err);
-    });
   }
 
   isSeparator(bookmark: Bookmark | NativeBookmarks.BookmarkTreeNode): boolean {
@@ -671,16 +464,74 @@ export default class BookmarkService {
     );
   }
 
+  modifyBookmarkById(id: number, newMetadata: BookmarkMetadata, bookmarks: Bookmark[]): ng.IPromise<Bookmark[]> {
+    const updatedBookmarks = angular.copy(bookmarks);
+    const bookmarkToModify = this.findBookmarkById(updatedBookmarks, id) as Bookmark;
+    if (!bookmarkToModify) {
+      throw new Exceptions.BookmarkNotFoundException();
+    }
+
+    // Update description
+    if (bookmarkToModify.description !== newMetadata.description) {
+      bookmarkToModify.description = newMetadata.description;
+    }
+
+    // Update tags
+    if (bookmarkToModify.tags !== newMetadata.tags) {
+      bookmarkToModify.tags = newMetadata.tags;
+    }
+
+    // Update title
+    if (bookmarkToModify.title !== newMetadata.title) {
+      bookmarkToModify.title = newMetadata.title;
+    }
+
+    // Update url accounting for unsupported urls
+    if (
+      newMetadata.url !== undefined &&
+      newMetadata.url !== bookmarkToModify.url &&
+      (newMetadata.url !== this.platformSvc.getNewTabUrl() ||
+        (newMetadata.url === this.platformSvc.getNewTabUrl() &&
+          bookmarkToModify.url === this.platformSvc.getSupportedUrl(bookmarkToModify.url)))
+    ) {
+      bookmarkToModify.url = newMetadata.url;
+    }
+
+    // If bookmark is a separator, convert bookmark to separator
+    if (this.isSeparator(bookmarkToModify)) {
+      // Create a new separator with same id
+      const separator = this.newSeparator();
+      separator.id = bookmarkToModify.id;
+
+      // Clear existing properties
+      // eslint-disable-next-line no-restricted-syntax
+      for (const prop in bookmarkToModify) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (bookmarkToModify.hasOwnProperty(prop)) {
+          delete bookmarkToModify[prop];
+        }
+      }
+
+      // Copy separator properties
+      bookmarkToModify.id = separator.id;
+      bookmarkToModify.title = separator.title;
+    }
+
+    // Clean bookmark and return updated bookmarks
+    const cleanedBookmark = this.cleanBookmark(bookmarkToModify);
+    angular.copy(cleanedBookmark, bookmarkToModify);
+    return this.$q.resolve(updatedBookmarks);
+  }
+
   newBookmark(
     title: string,
     url?: string,
     description?: string,
     tags?: string[],
-    children?: Bookmark[],
     bookmarksToGenerateNewId?: Bookmark[]
   ): Bookmark {
     const newBookmark: Bookmark = {
-      children: children || [],
+      children: [],
       description: this.utilitySvc.trimToNearestWord(description, Globals.Bookmarks.DescriptionMaxLength),
       tags,
       title: title && title.trim(),
@@ -702,296 +553,27 @@ export default class BookmarkService {
       newBookmark.id = this.getNewBookmarkId(bookmarksToGenerateNewId);
     }
 
-    return newBookmark;
+    // Clean new bookmark of empty attributes before returning
+    return this.cleanBookmark(newBookmark);
   }
 
   newSeparator(bookmarksToGenerateNewId?: Bookmark[]): Bookmark {
-    return this.newBookmark('-', null, null, null, null, bookmarksToGenerateNewId);
-  }
-
-  populateNativeBookmarks(bookmarks: Bookmark[]): ng.IPromise<void> {
-    // Clear native bookmarks and then populate with provided bookmarks
-    return this.platformSvc.bookmarks_Clear().then(() => {
-      return this.platformSvc.bookmarks_Populate(bookmarks);
-    });
-  }
-
-  processBookmarkChanges(bookmarks: Bookmark[], changeInfo: BookmarkChange): any {
-    const returnInfo = {
-      bookmark: undefined,
-      bookmarks: undefined,
-      container: undefined
-    };
-
-    // Update bookmarks before syncing
-    let otherContainer: Bookmark;
-    switch (changeInfo.type) {
-      // Create bookmark
-      case BookmarkChangeType.Create:
-        // Get or create other bookmarks container
-        otherContainer = this.getContainer(BookmarkContainer.Other, bookmarks, true);
-
-        // Create new bookmark and add to container
-        const newBookmark = this.newBookmark(
-          (changeInfo.bookmark as Bookmark).title,
-          (changeInfo.bookmark as Bookmark).url,
-          (changeInfo.bookmark as Bookmark).description,
-          (changeInfo.bookmark as Bookmark).tags,
-          (changeInfo.bookmark as Bookmark).children,
-          bookmarks
-        );
-        otherContainer.children.push(newBookmark);
-        returnInfo.bookmark = newBookmark;
-        returnInfo.container = otherContainer.title;
-        break;
-      // Update bookmark
-      case BookmarkChangeType.Update:
-        returnInfo.container = this.getContainerByBookmarkId((changeInfo.bookmark as Bookmark).id, bookmarks).title;
-        bookmarks = this.recursiveUpdate(bookmarks, changeInfo.bookmark as Bookmark);
-        returnInfo.bookmark = changeInfo.bookmark;
-        break;
-      // Delete bookmark
-      case BookmarkChangeType.Delete:
-        returnInfo.container = this.getContainerByBookmarkId(changeInfo.id, bookmarks).title;
-        this.recursiveDelete(bookmarks, changeInfo.id);
-        returnInfo.bookmark = {
-          id: changeInfo.id
-        };
-        break;
-      default:
-        throw new Exceptions.AmbiguousSyncRequestException();
-    }
-
-    returnInfo.bookmarks = bookmarks;
-    return returnInfo;
-  }
-
-  processSyncQueue(isBackgroundSync = false): ng.IPromise<any> {
-    let updateRemote = false;
-
-    // If a sync is in progress, retry later
-    if (this.currentSync || this.syncQueue.length === 0) {
-      return this.$q.resolve();
-    }
-
-    const doActionUntil = (): ng.IPromise<boolean> => {
-      return this.$q.resolve(this.syncQueue.length === 0);
-    };
-
-    const action = (): ng.IPromise<any> => {
-      // Get first sync in the queue
-      this.currentSync = this.syncQueue.shift();
-      this.logSvc.logInfo(
-        `Processing sync ${this.currentSync.uniqueId}${isBackgroundSync ? ' in background' : ''} (${
-          this.syncQueue.length
-        } waiting in queue)`
-      );
-
-      // Enable syncing flag
-      return this.setIsSyncing(this.currentSync.type)
-        .then(() => {
-          // Process sync
-          switch (this.currentSync.type) {
-            // Push bookmarks to xBrowserSync service
-            case SyncType.Push:
-              return this.sync_handlePush(this.currentSync);
-            // Overwrite native bookmarks
-            case SyncType.Pull:
-              return this.sync_handlePull(this.currentSync).then(() => true);
-            // Sync to service and overwrite native bookmarks
-            case SyncType.Both:
-              return this.sync_handleBoth(this.currentSync).then(() => true);
-            // Cancel current sync process
-            case SyncType.Cancel:
-              return this.sync_handleCancel().then(() => false);
-            // Upgrade sync to current version
-            case SyncType.Upgrade:
-              return this.sync_handleUpgrade().then(() => true);
-            // Ambiguous sync
-            default:
-              throw new Exceptions.AmbiguousSyncRequestException();
-          }
-        })
-        .then((syncChange) => {
-          return this.storeSvc
-            .get<boolean>(StoreKey.SyncEnabled)
-            .then((syncEnabled) => {
-              // If syncing for the first time or re-syncing, set sync as enabled
-              return (
-                !syncEnabled &&
-                this.currentSync.command !== MessageCommand.RestoreBookmarks &&
-                this.currentSync.type !== SyncType.Cancel &&
-                this.enableSync().then(() => {
-                  this.logSvc.logInfo('Sync enabled');
-                })
-              );
-            })
-            .then(() => {
-              // Resolve the current sync's promise
-              this.currentSync.deferred.resolve();
-
-              // Set flag if remote bookmarks data should be updated
-              if (!syncChange || this.currentSync.type === SyncType.Cancel) {
-                updateRemote = false;
-              } else if (this.currentSync.type !== SyncType.Pull) {
-                updateRemote = true;
-              }
-
-              // Reset syncing flag
-              return this.setIsSyncing();
-            });
-        });
-    };
-
-    // Disable automatic updates whilst processing syncs
-    return this.storeSvc
-      .get<boolean>(StoreKey.SyncEnabled)
-      .then((cachedSyncEnabled) => {
-        if (cachedSyncEnabled) {
-          return this.platformSvc.automaticUpdates_Stop();
-        }
-      })
-      .then(() => {
-        return this.utilitySvc.promiseWhile(this.syncQueue, doActionUntil, action);
-      })
-      .then(() => {
-        if (!updateRemote) {
-          // Don't update synced bookmarks
-          return;
-        }
-
-        // Update remote bookmarks data
-        return this.storeSvc.get<string>(StoreKey.Bookmarks).then((encryptedBookmarks) => {
-          // Decrypt cached bookmarks data
-          return this.cryptoSvc.decryptData(encryptedBookmarks).then((bookmarksJson) => {
-            // Commit update to service
-            return this.apiSvc
-              .updateBookmarks(encryptedBookmarks)
-              .then((response) => {
-                return this.storeSvc.set(StoreKey.LastUpdated, response.lastUpdated).then(() => {
-                  this.logSvc.logInfo(`Remote bookmarks data updated at ${response.lastUpdated}`);
-                });
-              })
-              .catch((err) => {
-                // If offline update cache and then throw errors
-                return (err instanceof Exceptions.NetworkOfflineException
-                  ? (() => {
-                      const bookmarks = JSON.parse(bookmarksJson);
-                      return this.updateCachedBookmarks(bookmarks, encryptedBookmarks).then(() => {
-                        this.currentSync.bookmarks = bookmarks;
-                      });
-                    })()
-                  : this.$q.resolve()
-                ).then(() => {
-                  throw err;
-                });
-              });
-          });
-        });
-      })
-      .catch((err) => {
-        return this.handleFailedSync(this.currentSync, err).then((innerErr) => {
-          throw innerErr;
-        });
-      })
-      .finally(() => {
-        // Clear current sync
-        this.currentSync = null;
-
-        // Start auto updates if sync enabled
-        return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((cachedSyncEnabled) => {
-          if (cachedSyncEnabled) {
-            return this.platformSvc.automaticUpdates_Start();
-          }
-        });
-      });
-  }
-
-  queueSync(syncToQueue: Sync, runSync = true): ng.IPromise<void> {
-    return this.$q<any>((resolve, reject) => {
-      this.storeSvc
-        .get<boolean>(StoreKey.SyncEnabled)
-        .then((syncEnabled) => {
-          // If new sync ensure sync queue is clear
-          if (!syncEnabled) {
-            this.syncQueue = [];
-          }
-
-          let queuedSync: any;
-          if (syncToQueue) {
-            // If sync is type cancel, clear queue first
-            if (syncToQueue.type === SyncType.Cancel) {
-              this.syncQueue = [];
-            }
-
-            // Add sync to queue
-            queuedSync = this.$q.defer();
-            syncToQueue.deferred = queuedSync;
-            syncToQueue.uniqueId = syncToQueue.uniqueId || this.utilitySvc.getUniqueishId();
-            this.syncQueue.push(syncToQueue);
-            this.logSvc.logInfo(`Sync ${syncToQueue.uniqueId} (${syncToQueue.type}) queued`);
-          }
-
-          // Prepare sync promises to return and check if should also run sync
-          const promises = [queuedSync.promise];
-          if (runSync) {
-            const syncedPromise = this.$q<void>((syncedResolve, syncedReject) => {
-              this.$timeout(() => {
-                this.processSyncQueue().then(syncedResolve).catch(syncedReject);
-              });
-            });
-            promises.push(syncedPromise);
-          }
-
-          return this.$q.all(promises).then(() => {
-            resolve();
-          });
-        })
-        .catch(reject);
-    });
-  }
-
-  recursiveDelete(bookmarks: Bookmark[], id: number): Bookmark[] {
-    return _.map(
-      _.reject(bookmarks, (bookmark) => {
-        return bookmark.id === id;
-      }),
-      (bookmark) => {
-        if (bookmark.children && bookmark.children.length > 0) {
-          bookmark.children = this.recursiveDelete(bookmark.children, id);
-        }
-
-        return bookmark;
-      }
-    );
-  }
-
-  recursiveUpdate(bookmarks: Bookmark[], updatedBookmark: Bookmark) {
-    return _.map(bookmarks, (bookmark) => {
-      if (bookmark.id === updatedBookmark.id) {
-        bookmark.title = updatedBookmark.title;
-        bookmark.url = updatedBookmark.url;
-        bookmark.description = updatedBookmark.description;
-        bookmark.tags = updatedBookmark.tags;
-      }
-
-      if (bookmark.children && bookmark.children.length > 0) {
-        bookmark.children = this.recursiveUpdate(bookmark.children, updatedBookmark);
-      }
-
-      return bookmark;
-    });
+    return this.newBookmark('-', null, null, null, bookmarksToGenerateNewId);
   }
 
   removeBookmarkById(id: number, bookmarks: Bookmark[]): ng.IPromise<Bookmark[]> {
-    return this.$q((resolve, reject) => {
-      try {
-        const updatedBookmarks = this.recursiveDelete(bookmarks, id);
-        resolve(updatedBookmarks);
-      } catch (err) {
-        reject(err);
+    // Iterate through bookmarks and remove the bookmark that matches the id param
+    const updatedBookmarks = angular.copy(bookmarks);
+    this.eachBookmark(updatedBookmarks, (bookmark) => {
+      if (!bookmark.children) {
+        return;
+      }
+      const indexToRemove = bookmark.children.findIndex((child) => child.id === id);
+      if (indexToRemove >= 0) {
+        bookmark.children.splice(indexToRemove, 1);
       }
     });
+    return this.$q.resolve(updatedBookmarks);
   }
 
   removeEmptyContainers(bookmarks: Bookmark[]): Bookmark[] {
@@ -1018,36 +600,6 @@ export default class BookmarkService {
     }
 
     return _.difference(bookmarks, removeArr);
-  }
-
-  repairBookmarkIds(bookmarks: Bookmark[]): Bookmark[] {
-    let allBookmarks: Bookmark[] = [];
-    let idCounter = 1;
-
-    // Get all bookmarks into flat array
-    this.eachBookmark(bookmarks, (bookmark) => {
-      allBookmarks.push(bookmark as Bookmark);
-    });
-
-    // Remove any invalid ids
-    allBookmarks.forEach((bookmark) => {
-      if (typeof bookmark.id !== 'number') {
-        delete bookmark.id;
-      }
-    });
-
-    // Sort by id asc
-    allBookmarks = allBookmarks.sort((x, y) => {
-      return x.id - y.id;
-    });
-
-    // Re-add ids
-    allBookmarks.forEach((bookmark) => {
-      bookmark.id = idCounter;
-      idCounter += 1;
-    });
-
-    return bookmarks;
   }
 
   searchBookmarks(query: any): ng.IPromise<Bookmark[]> {
@@ -1226,378 +778,21 @@ export default class BookmarkService {
     return results;
   }
 
-  setIsSyncing(syncType?: SyncType): ng.IPromise<void> {
-    // Update browser action icon with current sync type
-    if (syncType != null) {
-      return this.platformSvc.interface_Refresh(null, syncType);
-    }
-
-    // Get cached sync enabled value and update browser action icon
-    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then(this.platformSvc.interface_Refresh);
-  }
-
-  sync_handleBoth(sync: Sync): ng.IPromise<void> {
-    let getBookmarksToSync: ng.IPromise<Bookmark[]>;
-    let updateNativeBookmarksInfo: any;
-
-    // changeInfo can be an object or a promise
-    return this.$q.resolve(sync.changeInfo).then((changeInfo) => {
-      if (sync.bookmarks) {
-        // Sync with provided bookmarks, validate bookmark ids
-        getBookmarksToSync = this.$q((resolve) => {
-          if (this.validateBookmarkIds(sync.bookmarks)) {
-            resolve(sync.bookmarks);
-          } else {
-            const repairedBookmarks = this.repairBookmarkIds(sync.bookmarks);
-            resolve(repairedBookmarks);
-          }
-        });
-      } else {
-        if (!changeInfo) {
-          throw new Exceptions.AmbiguousSyncRequestException();
-        }
-
-        // Process bookmark changes
-        updateNativeBookmarksInfo = {
-          type: changeInfo.type
-        };
-
-        getBookmarksToSync = this.getCachedBookmarks()
-          .then((bookmarks) => {
-            return this.processBookmarkChanges(bookmarks, changeInfo);
-          })
-          .then((results) => {
-            updateNativeBookmarksInfo.bookmark = results.bookmark;
-            updateNativeBookmarksInfo.bookmarks = results.bookmarks;
-            updateNativeBookmarksInfo.container = results.container;
-            return results.bookmarks;
-          });
+  updateCachedBookmarks(unencryptedBookmarks: Bookmark[], encryptedBookmarks: string): ng.IPromise<void> {
+    return this.$q<void>((resolve) => {
+      if (angular.isUndefined(encryptedBookmarks)) {
+        return resolve();
       }
 
-      // Sync bookmarks
-      return getBookmarksToSync.then((bookmarks) => {
-        // Encrypt bookmarks
-        bookmarks = bookmarks || [];
-        return this.cryptoSvc.encryptData(JSON.stringify(bookmarks)).then((encryptedBookmarks) => {
-          // Update native bookmarks
-          return this.$q((resolve, reject) => {
-            this.platformSvc
-              .eventListeners_Disable()
-              .then(() => {
-                return sync.command === MessageCommand.RestoreBookmarks
-                  ? this.populateNativeBookmarks(bookmarks)
-                  : this.processNativeBookmarkChanges(updateNativeBookmarksInfo);
-              })
-              .then(resolve)
-              .catch(reject)
-              .finally(this.platformSvc.eventListeners_Enable);
-          }).then(() => {
-            // Update bookmarks cache
-            return this.updateCachedBookmarks(bookmarks, encryptedBookmarks).then((cachedBookmarks) => {
-              // Build id mappings if this was a restore
-              if (sync.command !== MessageCommand.RestoreBookmarks) {
-                return;
-              }
-              return this.platformSvc.bookmarks_BuildIdMappings(cachedBookmarks);
-            });
-          });
-        });
-      });
-    });
-  }
-
-  sync_handleCancel(): ng.IPromise<void> {
-    return this.disableSync();
-  }
-
-  sync_handlePull(sync: Sync): ng.IPromise<void> {
-    if (sync.bookmarks) {
-      // Local import, update native bookmarks
-      return this.populateNativeBookmarks(sync.bookmarks);
-    }
-
-    return this.storeSvc.get([StoreKey.Password, StoreKey.SyncId]).then((storeContent) => {
-      // Check secret and bookmarks ID are present
-      if (!storeContent.password || !storeContent.syncId) {
-        return this.disableSync().then(() => {
-          throw new Exceptions.MissingClientDataException();
-        });
-      }
-
-      // Get synced bookmarks
-      return this.apiSvc.getBookmarks().then((response) => {
-        let encryptedBookmarks = response.bookmarks;
-        const lastUpdated = response.lastUpdated;
-
-        // Decrypt bookmarks
-        let bookmarks: Bookmark[];
-        return this.cryptoSvc
-          .decryptData(response.bookmarks)
-          .then((decryptedData) => {
-            // Update cached bookmarks
-            bookmarks = JSON.parse(decryptedData);
-
-            // Check bookmark ids are all valid
-            if (!this.validateBookmarkIds(bookmarks)) {
-              bookmarks = this.repairBookmarkIds(bookmarks);
-
-              // Encrypt bookmarks with new ids
-              return this.cryptoSvc.encryptData(JSON.stringify(bookmarks)).then((encryptedBookmarksWithNewIds) => {
-                encryptedBookmarks = encryptedBookmarksWithNewIds;
-              });
-            }
-          })
-          .then(() => {
-            return this.updateCachedBookmarks(bookmarks, encryptedBookmarks);
-          })
-          .then((cachedBookmarks) => {
-            // Update browser bookmarks
-            return this.platformSvc
-              .eventListeners_Disable()
-              .then(() => {
-                return this.populateNativeBookmarks(cachedBookmarks);
-              })
-              .then(() => {
-                return this.platformSvc.bookmarks_BuildIdMappings(cachedBookmarks);
-              })
-              .finally(this.platformSvc.eventListeners_Enable);
-          })
-          .then(() => {
-            // Update cached last updated date
-            return this.storeSvc.set(StoreKey.LastUpdated, lastUpdated);
-          });
-      });
-    });
-  }
-
-  sync_handlePush(sync: Sync): ng.IPromise<boolean> {
-    return this.storeSvc
-      .get([StoreKey.LastUpdated, StoreKey.Password, StoreKey.SyncEnabled, StoreKey.SyncId])
-      .then((storeContent) => {
-        // Check for cached sync ID and password
-        if (!storeContent.password || !storeContent.syncId) {
-          return this.disableSync().then(() => {
-            throw new Exceptions.MissingClientDataException();
-          });
-        }
-
-        // If this is a new sync, get native bookmarks and continue
-        if (!storeContent.syncEnabled || !sync.changeInfo) {
-          return this.platformSvc.bookmarks_Get();
-        }
-
-        // Otherwose get cached bookmarks and process changes
-        return this.getCachedBookmarks().then((bookmarks) => {
-          if (!sync.changeInfo) {
-            // Nothing to process
-            this.logSvc.logInfo('No change to process');
-            return;
-          }
-
-          // Update bookmarks data with local changes
-          switch (sync.changeInfo.type) {
-            // Create bookmark
-            case BookmarkChangeType.Create:
-              return this.platformSvc.bookmarks_Created(
-                bookmarks,
-                sync.changeInfo.bookmark as NativeBookmarks.BookmarkTreeNode
-              );
-            // Delete bookmark
-            case BookmarkChangeType.Delete:
-              return this.platformSvc.bookmarks_Deleted(
-                bookmarks,
-                sync.changeInfo.bookmark as NativeBookmarks.BookmarkTreeNode
-              );
-            // Update bookmark
-            case BookmarkChangeType.Update:
-              return this.platformSvc.bookmarks_Updated(
-                bookmarks,
-                sync.changeInfo.bookmark as NativeBookmarks.BookmarkTreeNode
-              );
-            // Move bookmark
-            case BookmarkChangeType.Move:
-              return this.platformSvc.bookmarks_Moved(bookmarks, sync.changeInfo.bookmark as any);
-            // Ambiguous sync
-            default:
-              throw new Exceptions.AmbiguousSyncRequestException();
-          }
-        });
-      })
-      .then((bookmarks) => {
-        if (!bookmarks) {
-          // Don't sync
-          return false;
-        }
-
-        // Update cached bookmarks
-        return this.cryptoSvc
-          .encryptData(JSON.stringify(bookmarks))
-          .then((encryptedBookmarks) => {
-            return this.updateCachedBookmarks(bookmarks, encryptedBookmarks);
-          })
-          .then(() => {
-            // Continue with sync
-            return true;
-          });
-      });
-  }
-
-  sync_handleUpgrade(): ng.IPromise<void> {
-    return this.storeSvc.get([StoreKey.Password, StoreKey.SyncId]).then((storeContent) => {
-      // Check secret and sync ID are present
-      if (!storeContent.password || !storeContent.syncId) {
-        return this.disableSync().then(() => {
-          throw new Exceptions.MissingClientDataException();
-        });
-      }
-
-      // Get synced bookmarks and decrypt
-      return this.apiSvc
-        .getBookmarks()
-        .then((response) => {
-          // Decrypt bookmarks
-          return this.cryptoSvc.decryptData(response.bookmarks);
-        })
-        .then((decryptedData) => {
-          let bookmarks: Bookmark[] = decryptedData ? JSON.parse(decryptedData) : null;
-
-          // Upgrade containers to use current container names
-          bookmarks = this.upgradeContainers(bookmarks || []);
-
-          // Set the sync version to the current app version
-          return this.storeSvc
-            .set(StoreKey.SyncVersion, Globals.AppVersion)
-            .then(() => {
-              // Generate a new password hash from the old clear text password and sync ID
-              return this.cryptoSvc.getPasswordHash(storeContent.password, storeContent.syncId);
-            })
-            .then((passwordHash) => {
-              // Cache the new password hash and encrypt the data
-              return this.storeSvc.set(StoreKey.Password, passwordHash);
-            })
-            .then(() => {
-              return this.cryptoSvc.encryptData(JSON.stringify(bookmarks));
-            })
-            .then((encryptedBookmarks) => {
-              // Sync provided bookmarks and set native bookmarks
-              return this.$q
-                .all([
-                  this.apiSvc.updateBookmarks(encryptedBookmarks, true),
-                  this.platformSvc
-                    .eventListeners_Disable()
-                    .then(() => {
-                      return this.populateNativeBookmarks(bookmarks);
-                    })
-                    .then(() => {
-                      return this.platformSvc.bookmarks_BuildIdMappings(bookmarks);
-                    })
-                    .finally(this.platformSvc.eventListeners_Enable)
-                ])
-                .then((data) => {
-                  // Update cached last updated date and return decrypted bookmarks
-                  return this.$q.all([
-                    this.updateCachedBookmarks(bookmarks, encryptedBookmarks),
-                    this.storeSvc.set(StoreKey.LastUpdated, data[0].lastUpdated)
-                  ]);
-                });
-            })
-            .then(() => {});
-        });
-    });
-  }
-
-  updateBookmarkById(id: number, updateInfo: any, bookmarks: Bookmark[]): ng.IPromise<Bookmark[]> {
-    const updatedBookmarks = angular.copy(bookmarks);
-    const bookmarkToUpdate = this.findBookmarkById(updatedBookmarks, id) as Bookmark;
-    if (!bookmarkToUpdate) {
-      throw new Exceptions.SyncedBookmarkNotFoundException();
-    }
-
-    bookmarkToUpdate.title = updateInfo.title !== undefined ? updateInfo.title : bookmarkToUpdate.title;
-
-    // Update url accounting for unsupported urls
-    if (
-      updateInfo.url !== undefined &&
-      updateInfo.url !== bookmarkToUpdate.url &&
-      (updateInfo.url !== this.platformSvc.getNewTabUrl() ||
-        (updateInfo.url === this.platformSvc.getNewTabUrl() &&
-          bookmarkToUpdate.url === this.platformSvc.getSupportedUrl(bookmarkToUpdate.url)))
-    ) {
-      bookmarkToUpdate.url = updateInfo.url;
-    }
-
-    // If updated bookmark is a separator, convert bookmark to separator
-    if (this.isSeparator(bookmarkToUpdate)) {
-      // Create a new separator with same id
-      const separator = this.newSeparator();
-      separator.id = bookmarkToUpdate.id;
-
-      // Clear existing properties
-      // eslint-disable-next-line no-restricted-syntax
-      for (const prop in bookmarkToUpdate) {
-        // eslint-disable-next-line no-prototype-builtins
-        if (bookmarkToUpdate.hasOwnProperty(prop)) {
-          delete bookmarkToUpdate[prop];
-        }
-      }
-
-      // Copy separator properties
-      bookmarkToUpdate.id = (separator as any).id;
-      bookmarkToUpdate.title = separator.title;
-    }
-
-    // Clean bookmark and return updated bookmarks
-    const cleanedBookmark = this.cleanBookmark(bookmarkToUpdate);
-    angular.copy(cleanedBookmark, bookmarkToUpdate);
-    return this.$q.resolve(updatedBookmarks);
-  }
-
-  updateCachedBookmarks(unencryptedBookmarks: Bookmark[], encryptedBookmarks: string): ng.IPromise<Bookmark[]> {
-    if (encryptedBookmarks !== undefined) {
       // Update storage cache with new encrypted bookmarks
       return this.storeSvc.set(StoreKey.Bookmarks, encryptedBookmarks).then(() => {
         // Update memory cached bookmarks
-        this.cachedBookmarks_encrypted = encryptedBookmarks;
+        this.cachedBookmarks_encrypted = angular.copy(encryptedBookmarks);
         if (unencryptedBookmarks !== undefined) {
-          this.cachedBookmarks_plain = unencryptedBookmarks;
+          this.cachedBookmarks_plain = angular.copy(unencryptedBookmarks);
         }
-
-        return unencryptedBookmarks;
+        resolve();
       });
-    }
-
-    return this.$q.resolve(unencryptedBookmarks);
-  }
-
-  processNativeBookmarkChanges(updateInfo: any): ng.IPromise<void> {
-    if (!updateInfo || !updateInfo.bookmark || !updateInfo.bookmarks || !updateInfo.container) {
-      return this.$q.resolve();
-    }
-
-    // Check if change is in toolbar and is syncing toolbar
-    return (updateInfo.container === BookmarkContainer.Toolbar
-      ? this.getSyncBookmarksToolbar()
-      : this.$q.resolve(true)
-    ).then((updateNativeBookmarks) => {
-      if (!updateNativeBookmarks) {
-        return;
-      }
-
-      switch (updateInfo.type) {
-        // Create new native bookmark
-        case BookmarkChangeType.Create:
-          return this.platformSvc.bookmarks_CreateSingle(updateInfo);
-        // Update native bookmark
-        case BookmarkChangeType.Update:
-          return this.platformSvc.bookmarks_UpdateSingle(updateInfo);
-        // Delete native bookmark
-        case BookmarkChangeType.Delete:
-          return this.platformSvc.bookmarks_DeleteSingle(updateInfo);
-        // Ambiguous sync
-        case !updateInfo:
-        default:
-          throw new Exceptions.AmbiguousSyncRequestException();
-      }
     });
   }
 
@@ -1624,55 +819,5 @@ export default class BookmarkService {
     }
 
     return bookmarks;
-  }
-
-  validateBookmarkIds(bookmarks: Bookmark[]): boolean {
-    if (!bookmarks || bookmarks.length === 0) {
-      return true;
-    }
-
-    // Find any bookmark without an id
-    let bookmarksHaveIds = true;
-    this.eachBookmark(bookmarks, (bookmark) => {
-      if (angular.isUndefined(bookmark.id)) {
-        bookmarksHaveIds = false;
-      }
-    });
-
-    if (!bookmarksHaveIds) {
-      this.logSvc.logWarning('Bookmarks missing ids');
-      return false;
-    }
-
-    // Get all bookmarks into flat array
-    const allBookmarks: Bookmark[] = [];
-    this.eachBookmark(bookmarks, (bookmark) => {
-      allBookmarks.push(bookmark as Bookmark);
-    });
-
-    // Find a bookmark with a non-numeric id
-    const invalidId = allBookmarks.find((bookmark) => {
-      return !angular.isNumber(bookmark.id);
-    });
-
-    if (!angular.isUndefined(invalidId)) {
-      this.logSvc.logWarning(`Invalid bookmark id detected: ${invalidId.id} (${invalidId.url})`);
-      return false;
-    }
-
-    // Find a bookmark with a duplicate id
-    const duplicateId = _.chain(allBookmarks)
-      .countBy('id')
-      .findKey((count) => {
-        return count > 1;
-      })
-      .value();
-
-    if (!angular.isUndefined(duplicateId)) {
-      this.logSvc.logWarning(`Duplicate bookmark id detected: ${duplicateId}`);
-      return false;
-    }
-
-    return true;
   }
 }
