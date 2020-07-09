@@ -196,12 +196,12 @@ export default class SyncEngineService {
 
       // If offline and sync is a change, swallow error and place failed sync back on the queue
       if (err instanceof Exceptions.NetworkOfflineException && failedSync.type !== SyncType.Local) {
-        return resolve(new Exceptions.SyncUncommittedException());
+        return resolve(new Exceptions.SyncUncommittedException(null, err));
       }
 
       // Set default exception if none set
       if (!(err instanceof Exceptions.Exception)) {
-        err = new Exceptions.SyncFailedException(err.message);
+        err = new Exceptions.SyncFailedException(null, err);
       }
 
       // Handle failed sync

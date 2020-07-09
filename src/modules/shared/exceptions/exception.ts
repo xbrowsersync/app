@@ -13,6 +13,10 @@ export class Exception extends Error {
 
     this.logged = false;
     this.name = this.constructor.name;
+
+    if (error) {
+      this.stack = error.stack;
+    }
   }
 }
 

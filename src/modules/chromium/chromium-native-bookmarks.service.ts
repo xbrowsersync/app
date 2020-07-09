@@ -172,7 +172,7 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
       })
       .catch((err) => {
         this.logSvc.logWarning('Failed to enable event listeners');
-        throw new Exceptions.UnspecifiedException(err.message);
+        throw new Exceptions.UnspecifiedException(null, err);
       });
   }
 
@@ -187,7 +187,7 @@ export default class ChromiumNativeBookmarksService implements NativeBookmarksSe
       .then(() => {})
       .catch((err) => {
         this.logSvc.logWarning('Failed to disable event listeners');
-        throw new Exceptions.UnspecifiedException(err.message);
+        throw new Exceptions.UnspecifiedException(null, err);
       });
   }
 
