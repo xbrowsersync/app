@@ -2,12 +2,12 @@ import { Component } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import Strings from '../../../../res/strings/en.json';
 import AppComponent from '../../app/app.component';
-import AlertType from '../../shared/alert/alert-type.enum';
-import Alert from '../../shared/alert/alert.interface';
-import { AndroidException } from '../../shared/exceptions/exception';
-import Globals from '../../shared/globals';
-import PlatformType from '../../shared/platform-type.enum';
-import StoreKey from '../../shared/store/store-key.enum';
+import { AlertType } from '../../shared/alert/alert.enum';
+import { Alert } from '../../shared/alert/alert.interface';
+import { AndroidException } from '../../shared/exception/exception';
+import Globals from '../../shared/global-shared.constants';
+import { PlatformType } from '../../shared/global-shared.enum';
+import { StoreKey } from '../../shared/store/store.enum';
 import AndroidPlatformService from '../android-platform.service';
 
 @autobind

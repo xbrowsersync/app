@@ -2,7 +2,7 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import * as idbKeyval from 'idb-keyval';
-import StoreContent from './store-content.interface';
+import { StoreContent } from './store.interface';
 
 @autobind
 @Injectable('StoreService')

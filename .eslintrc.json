@@ -29,6 +29,7 @@
     "import/no-extraneous-dependencies": ["error", {
       "devDependencies": true
     }],
+    "import/prefer-default-export": "off",
     "no-bitwise": "off",
     "no-empty": "off",
     "no-nested-ternary": "off",

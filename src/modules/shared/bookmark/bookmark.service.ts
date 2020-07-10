@@ -1,23 +1,20 @@
-/* eslint-disable no-case-declarations */
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import _ from 'underscore';
 import { Bookmarks as NativeBookmarks } from 'webextension-polyfill-ts';
 import Strings from '../../../../res/strings/en.json';
-import BookmarkSearchResult from '../../../interfaces/bookmark-search-result.interface';
-import PlatformService from '../../../interfaces/platform-service.interface';
-import ApiService from '../api/api-service.interface';
+import { BookmarkSearchResult } from '../../app/app.interface';
+import { ApiService } from '../api/api.interface';
 import CryptoService from '../crypto/crypto.service';
-import * as Exceptions from '../exceptions/exception';
-import Globals from '../globals';
-import StoreKey from '../store/store-key.enum';
+import * as Exceptions from '../exception/exception';
+import Globals from '../global-shared.constants';
+import { PlatformService } from '../global-shared.interface';
+import { StoreKey } from '../store/store.enum';
 import StoreService from '../store/store.service';
 import UtilityService from '../utility/utility.service';
-import BookmarkContainer from './bookmark-container.enum';
-import BookmarkMetadata from './bookmark-metadata.interface';
-import Bookmark from './bookmark.interface';
-import UpdateBookmarksResult from './update-bookmarks-result.interface';
+import { BookmarkContainer } from './bookmark.enum';
+import { Bookmark, BookmarkMetadata, UpdateBookmarksResult } from './bookmark.interface';
 
 @autobind
 @Injectable('BookmarkService')

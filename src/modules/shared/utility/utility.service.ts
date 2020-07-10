@@ -4,14 +4,14 @@ import { Injectable } from 'angular-ts-decorators';
 import compareVersions from 'compare-versions';
 import { autobind } from 'core-decorators';
 import _ from 'underscore';
-import Url from '../../../interfaces/url.interface';
-import * as Exceptions from '../exceptions/exception';
-import ExceptionHandler from '../exceptions/exception-handler.interface';
-import Globals from '../globals';
+import * as Exceptions from '../exception/exception';
+import { ExceptionHandler } from '../exception/exception.interface';
+import Globals from '../global-shared.constants';
+import { PlatformType } from '../global-shared.enum';
+import { Url } from '../global-shared.interface';
 import LogService from '../log/log.service';
 import NetworkService from '../network/network.service';
-import PlatformType from '../platform-type.enum';
-import StoreKey from '../store/store-key.enum';
+import { StoreKey } from '../store/store.enum';
 import StoreService from '../store/store.service';
 
 @autobind

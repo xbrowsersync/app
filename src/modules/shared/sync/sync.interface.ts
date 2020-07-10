@@ -1,13 +1,29 @@
-import BookmarkChange from '../../../interfaces/bookmark-change.interface';
-import Bookmark from '../bookmark/bookmark.interface';
-import MessageCommand from '../message-command.enum';
-import SyncType from '../sync-type.enum';
+import { Bookmark, BookmarkChange } from '../bookmark/bookmark.interface';
+import { MessageCommand } from '../global-shared.enum';
+import { SyncType } from './sync.enum';
 
-export default interface Sync {
+export interface Sync {
   bookmarks?: Bookmark[];
   changeInfo?: BookmarkChange;
   command?: MessageCommand;
   deferred?: PromiseConstructor;
   type: SyncType;
   uniqueId?: string;
+}
+
+export interface SyncProcessBookmarksData {
+  encryptedBookmarks: string;
+  updatedBookmarks: Bookmark[];
+}
+
+export interface SyncProcessResult {
+  data?: SyncProcessBookmarksData;
+  updateRemote?: boolean;
+}
+
+export interface SyncProvider {
+  disable: () => ng.IPromise<void>;
+  enable: () => ng.IPromise<void>;
+  processSync: (sync: Sync) => ng.IPromise<SyncProcessResult>;
+  handleUpdateRemoteFailed: (err: Error, lastResult: SyncProcessBookmarksData, sync: Sync) => ng.IPromise<void>;
 }

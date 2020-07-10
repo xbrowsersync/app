@@ -22,33 +22,34 @@ import marked from 'marked';
 import QRCode from 'qrcode-svg';
 import _ from 'underscore';
 import Strings from '../../../res/strings/en.json';
-import BookmarkChange, {
+import { AlertType } from '../shared/alert/alert.enum';
+import { Alert } from '../shared/alert/alert.interface';
+import AlertService from '../shared/alert/alert.service';
+import { ApiServiceStatus } from '../shared/api/api.enum';
+import { ApiService } from '../shared/api/api.interface';
+import BackupRestoreService from '../shared/backup-restore/backup-restore.service';
+import { BookmarkChangeType } from '../shared/bookmark/bookmark.enum';
+import {
   AddBookmarkChangeData,
+  BookmarkChange,
+  BookmarkMetadata,
   ModifyBookmarkChangeData,
   RemoveBookmarkChangeData
-} from '../../interfaces/bookmark-change.interface';
-import PlatformService from '../../interfaces/platform-service.interface';
-import AlertType from '../shared/alert/alert-type.enum';
-import Alert from '../shared/alert/alert.interface';
-import AlertService from '../shared/alert/alert.service';
-import ApiServiceStatus from '../shared/api/api-service-status.enum';
-import ApiService from '../shared/api/api-service.interface';
-import BackupRestoreService from '../shared/backup-restore/backup-restore.service';
-import BookmarkChangeType from '../shared/bookmark/bookmark-change-type.enum';
-import BookmarkMetadata from '../shared/bookmark/bookmark-metadata.interface';
+} from '../shared/bookmark/bookmark.interface';
 import BookmarkService from '../shared/bookmark/bookmark.service.js';
 import CryptoService from '../shared/crypto/crypto.service';
-import * as Exceptions from '../shared/exceptions/exception';
-import ExceptionHandler from '../shared/exceptions/exception-handler.interface';
-import Globals from '../shared/globals';
+import * as Exceptions from '../shared/exception/exception';
+import { ExceptionHandler } from '../shared/exception/exception.interface';
+import Globals from '../shared/global-shared.constants';
+import { MessageCommand } from '../shared/global-shared.enum';
+import { PlatformService } from '../shared/global-shared.interface';
 import LogService from '../shared/log/log.service';
-import MessageCommand from '../shared/message-command.enum';
 import NetworkService from '../shared/network/network.service';
-import StoreKey from '../shared/store/store-key.enum';
+import { StoreKey } from '../shared/store/store.enum';
 import StoreService from '../shared/store/store.service';
-import SyncType from '../shared/sync-type.enum';
-import SyncEngineService from '../shared/sync/sync-engine.service';
-import Sync from '../shared/sync/sync.interface';
+import SyncEngineService from '../shared/sync/sync-engine/sync-engine.service';
+import { SyncType } from '../shared/sync/sync.enum';
+import { Sync } from '../shared/sync/sync.interface';
 import UtilityService from '../shared/utility/utility.service';
 
 @autobind

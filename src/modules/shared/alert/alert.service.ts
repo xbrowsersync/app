@@ -1,6 +1,6 @@
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
-import Alert from './alert.interface';
+import { Alert } from './alert.interface';
 
 @autobind
 @Injectable('AlertService')

@@ -1,6 +1,6 @@
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
-import * as Exceptions from '../exceptions/exception';
+import * as Exceptions from '../exception/exception';
 
 @autobind
 @Injectable('NetworkService')

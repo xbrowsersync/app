@@ -27,6 +27,7 @@
   },
   "css.validate": false,
   "editor.codeActionsOnSave": {
+    "source.addMissingImports": true,
     "source.fixAll": true
   },
   "editor.detectIndentation": false,

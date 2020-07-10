@@ -6,24 +6,23 @@ import { autobind } from 'core-decorators';
 import _ from 'underscore';
 import { Alarms, browser } from 'webextension-polyfill-ts';
 import Strings from '../../../../res/strings/en.json';
-import InstallBackup from '../../../interfaces/install-backup.interface';
-import NativeBookmarksService from '../../../interfaces/native-bookmarks-service.interface';
-import PlatformService from '../../../interfaces/platform-service.interface';
-import Alert from '../../shared/alert/alert.interface';
+import { Alert } from '../../shared/alert/alert.interface';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkService from '../../shared/bookmark/bookmark.service';
-import * as Exceptions from '../../shared/exceptions/exception';
-import Globals from '../../shared/globals';
+import * as Exceptions from '../../shared/exception/exception';
+import Globals from '../../shared/global-shared.constants';
+import { MessageCommand } from '../../shared/global-shared.enum';
+import { PlatformService } from '../../shared/global-shared.interface';
 import LogService from '../../shared/log/log.service';
-import MessageCommand from '../../shared/message-command.enum';
 import NetworkService from '../../shared/network/network.service';
-import StoreKey from '../../shared/store/store-key.enum';
+import { StoreKey } from '../../shared/store/store.enum';
 import StoreService from '../../shared/store/store.service';
-import SyncType from '../../shared/sync-type.enum';
-import SyncEngineService from '../../shared/sync/sync-engine.service';
-import Sync from '../../shared/sync/sync.interface';
+import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
+import { SyncType } from '../../shared/sync/sync.enum';
+import { Sync } from '../../shared/sync/sync.interface';
 import UtilityService from '../../shared/utility/utility.service';
 import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
+import { InstallBackup, NativeBookmarkService } from '../webext.interface';
 
 @autobind
 @Injectable('WebExtBackgroundService')
@@ -34,7 +33,7 @@ export default class WebExtBackgroundService {
   bookmarkIdMapperSvc: BookmarkIdMapperService;
   bookmarkSvc: BookmarkService;
   logSvc: LogService;
-  nativeBookmarksSvc: NativeBookmarksService;
+  nativeBookmarksSvc: NativeBookmarkService;
   networkSvc: NetworkService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
@@ -50,7 +49,7 @@ export default class WebExtBackgroundService {
     'BookmarkIdMapperService',
     'BookmarkService',
     'LogService',
-    'NativeBookmarksService',
+    'NativeBookmarkService',
     'NetworkService',
     'PlatformService',
     'StoreService',
@@ -64,7 +63,7 @@ export default class WebExtBackgroundService {
     BookmarkIdMapperSvc: BookmarkIdMapperService,
     BookmarkSvc: BookmarkService,
     LogSvc: LogService,
-    NativeBookmarksSvc: NativeBookmarksService,
+    NativeBookmarksSvc: NativeBookmarkService,
     NetworkSvc: NetworkService,
     PlatformSvc: PlatformService,
     StoreSvc: StoreService,

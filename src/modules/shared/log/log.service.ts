@@ -2,11 +2,11 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import stackTrace from 'stacktrace-js';
-import { Exception } from '../exceptions/exception';
-import StoreKey from '../store/store-key.enum';
+import { Exception } from '../exception/exception';
+import { StoreKey } from '../store/store.enum';
 import StoreService from '../store/store.service';
-import LogLevel from './log-level.enum';
-import LogQueueItem from './log-queue-item.interface';
+import { LogLevel } from './log.enum';
+import { LogQueueItem } from './log.interface';
 
 @autobind
 @Injectable('LogService')

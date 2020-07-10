@@ -1,12 +1,8 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { Component, Input, Output } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import Strings from '../../../res/strings/en.json';
-import PlatformService from '../../interfaces/platform-service.interface';
 import BookmarkService from '../shared/bookmark/bookmark.service';
+import { PlatformService } from '../shared/global-shared.interface';
 import UtilityService from '../shared/utility/utility.service';
 
 @autobind

@@ -2,9 +2,9 @@ import { Injectable } from 'angular-ts-decorators';
 import base64js from 'base64-js';
 import { autobind } from 'core-decorators';
 import lzutf8 from 'lzutf8';
-import * as Exceptions from '../exceptions/exception';
+import * as Exceptions from '../exception/exception';
 import LogService from '../log/log.service';
-import StoreKey from '../store/store-key.enum';
+import { StoreKey } from '../store/store.enum';
 import StoreService from '../store/store.service';
 
 @autobind

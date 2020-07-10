@@ -1,6 +1,6 @@
 import { autobind } from 'core-decorators';
 import AppComponent from '../../app/app.component';
-import StoreKey from '../../shared/store/store-key.enum';
+import { StoreKey } from '../../shared/store/store.enum';
 
 @autobind
 export default class WebExtAppComponent extends AppComponent {
