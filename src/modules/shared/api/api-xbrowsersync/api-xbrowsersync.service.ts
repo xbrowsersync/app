@@ -18,12 +18,12 @@ import {
   ApiUpdateBookmarksRequest,
   ApiUpdateBookmarksResponse
 } from '../api.interface';
-import { XbrowsersyncApiResource } from './xbrowsersync-api.enum';
-import { XbrowsersyncApiErrorResponse, XbrowsersyncApiServiceInfoResponse } from './xbrowsersync-api.interface';
+import { ApiXbrowsersyncResource } from './api-xbrowsersync.enum';
+import { ApiXbrowsersyncErrorResponse, ApiXbrowsersyncServiceInfoResponse } from './api-xbrowsersync.interface';
 
 @autobind
 @Injectable('ApiService')
-export default class XbrowsersyncApiService implements ApiService {
+export default class ApiXbrowsersyncService implements ApiService {
   $http: ng.IHttpService;
   $q: ng.IQService;
   networkSvc: NetworkService;
@@ -69,10 +69,10 @@ export default class XbrowsersyncApiService implements ApiService {
           // Request service info
           const requestConfig: ng.IRequestConfig = {
             method: 'GET',
-            url: `${serviceUrl}/${XbrowsersyncApiResource.ServiceInformation}`,
+            url: `${serviceUrl}/${ApiXbrowsersyncResource.ServiceInformation}`,
             timeout: 3000
           };
-          return this.$http<XbrowsersyncApiServiceInfoResponse>(requestConfig).catch((response) => {
+          return this.$http<ApiXbrowsersyncServiceInfoResponse>(requestConfig).catch((response) => {
             throw this.getExceptionFromHttpResponse(response);
           });
         })
@@ -100,7 +100,7 @@ export default class XbrowsersyncApiService implements ApiService {
         return this.utilitySvc
           .getServiceUrl()
           .then((serviceUrl) => {
-            const requestUrl = `${serviceUrl}/${XbrowsersyncApiResource.Bookmarks}`;
+            const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}`;
             const requestBody: ApiCreateBookmarksRequest = {
               version: Globals.AppVersion
             };
@@ -142,7 +142,7 @@ export default class XbrowsersyncApiService implements ApiService {
           return this.utilitySvc
             .getServiceUrl()
             .then((serviceUrl) => {
-              const requestUrl = `${serviceUrl}/${XbrowsersyncApiResource.Bookmarks}/${storeContent.syncId}`;
+              const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}/${storeContent.syncId}`;
               return this.$http.get<ApiGetBookmarksResponse>(requestUrl).catch((response) => {
                 throw this.getExceptionFromHttpResponse(response);
               });
@@ -180,7 +180,7 @@ export default class XbrowsersyncApiService implements ApiService {
           return this.utilitySvc
             .getServiceUrl()
             .then((serviceUrl) => {
-              const requestUrl = `${serviceUrl}/${XbrowsersyncApiResource.Bookmarks}/${storeContent.syncId}/${XbrowsersyncApiResource.LastUpdated}`;
+              const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}/${storeContent.syncId}/${ApiXbrowsersyncResource.LastUpdated}`;
               return this.$http.get<ApiGetLastUpdatedResponse>(requestUrl).catch((response) => {
                 throw this.getExceptionFromHttpResponse(response);
               });
@@ -211,7 +211,7 @@ export default class XbrowsersyncApiService implements ApiService {
         return this.utilitySvc
           .getServiceUrl()
           .then((serviceUrl) => {
-            const requestUrl = `${serviceUrl}/${XbrowsersyncApiResource.Bookmarks}/${syncId}/${XbrowsersyncApiResource.Version}`;
+            const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}/${syncId}/${ApiXbrowsersyncResource.Version}`;
             return this.$http.get<ApiGetSyncVersionResponse>(requestUrl).catch((response) => {
               throw this.getExceptionFromHttpResponse(response);
             });
@@ -234,7 +234,7 @@ export default class XbrowsersyncApiService implements ApiService {
       });
   }
 
-  getExceptionFromHttpResponse(response: ng.IHttpResponse<XbrowsersyncApiErrorResponse>): Exceptions.Exception {
+  getExceptionFromHttpResponse(response: ng.IHttpResponse<ApiXbrowsersyncErrorResponse>): Exceptions.Exception {
     let message: string;
     if (response && response.data && response.data.message) {
       message = response.data.message;
@@ -302,7 +302,7 @@ export default class XbrowsersyncApiService implements ApiService {
           return this.utilitySvc
             .getServiceUrl()
             .then((serviceUrl) => {
-              const requestUrl = `${serviceUrl}/${XbrowsersyncApiResource.Bookmarks}/${storeContent.syncId}`;
+              const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}/${storeContent.syncId}`;
               const requestBody: ApiUpdateBookmarksRequest = {
                 bookmarks: encryptedBookmarks,
                 lastUpdated: storeContent.lastUpdated

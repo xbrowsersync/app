@@ -1,12 +1,12 @@
 import { ApiServiceStatus } from '../api.enum';
 import { ApiServiceInfoResponse } from '../api.interface';
 
-export interface XbrowsersyncApiErrorResponse {
+export interface ApiXbrowsersyncErrorResponse {
   code: string;
   message: string;
 }
 
-export interface XbrowsersyncApiServiceInfoResponse extends ApiServiceInfoResponse {
+export interface ApiXbrowsersyncServiceInfoResponse extends ApiServiceInfoResponse {
   maxSyncSize: number;
   message?: string;
   status: ApiServiceStatus;

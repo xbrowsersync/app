@@ -1,7 +1,7 @@
 import { IHttpInterceptor } from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
-import Globals from '../global-shared.constants';
+import Globals from '../../global-shared.constants';
 
 @autobind
 @Injectable('ApiRequestInterceptorFactory')

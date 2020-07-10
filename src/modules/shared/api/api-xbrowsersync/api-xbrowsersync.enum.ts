@@ -1,8 +1,8 @@
-enum XbrowsersyncApiResource {
+enum ApiXbrowsersyncResource {
   Bookmarks = 'bookmarks',
   LastUpdated = 'lastUpdated',
   ServiceInformation = 'info',
   Version = 'version'
 }
 
-export { XbrowsersyncApiResource };
+export { ApiXbrowsersyncResource };
