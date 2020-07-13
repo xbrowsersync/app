@@ -99,7 +99,7 @@ export default class UtilityService {
 
   getTagArrayFromText(tagText: string): string[] {
     if (!tagText) {
-      return null;
+      return;
     }
 
     // Conver to lowercase and split tags into array
@@ -263,7 +263,7 @@ export default class UtilityService {
 
         if (format.length !== 1) {
           // all acceptable format strings are of length 1
-          return null;
+          return;
         }
 
         const formatCh = format[0];
@@ -288,7 +288,7 @@ export default class UtilityService {
           dash = false;
           hex = true;
         } else {
-          return null;
+          return;
         }
 
         if (hex) {

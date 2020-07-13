@@ -1,6 +1,7 @@
 import angular from 'angular';
 import { NgModule } from 'angular-ts-decorators';
 import WebExtAppModule from '../../webext-app/webext-app.module';
+import FirefoxBookmarkService from '../firefox-bookmark/firefox-bookmark.service';
 import FirefoxPlatformService from '../firefox-platform/firefox-platform.service';
 import FirefoxAppComponent from './firefox-app.component';
 
@@ -8,7 +9,7 @@ import FirefoxAppComponent from './firefox-app.component';
   declarations: [FirefoxAppComponent],
   id: 'FirefoxAppModule',
   imports: [WebExtAppModule],
-  providers: [FirefoxPlatformService]
+  providers: [FirefoxBookmarkService, FirefoxPlatformService]
 })
 export default class FirefoxAppModule {}
 

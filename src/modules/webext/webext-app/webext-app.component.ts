@@ -22,11 +22,11 @@ export default class WebExtAppComponent extends AppComponent {
 
     return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
       if (!syncEnabled) {
-        return null;
+        return;
       }
 
       // If current page is a bookmark, actvate bookmark icon
-      return this.bookmarkSvc.findCurrentUrlInBookmarks().then((result) => {
+      return this.bookmarkHelperSvc.findCurrentUrlInBookmarks().then((result) => {
         this.bookmark.active = !!result;
       });
     });

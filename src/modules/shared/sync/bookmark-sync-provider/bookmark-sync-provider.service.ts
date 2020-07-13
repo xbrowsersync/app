@@ -3,6 +3,17 @@ import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import _ from 'underscore';
 import { ApiService } from '../../api/api.interface';
+import BookmarkHelperService from '../../bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkChangeType, BookmarkContainer } from '../../bookmark/bookmark.enum';
+import {
+  AddBookmarkChangeData,
+  Bookmark,
+  BookmarkChange,
+  BookmarkService,
+  ModifyBookmarkChangeData,
+  RemoveBookmarkChangeData,
+  UpdateBookmarksResult
+} from '../../bookmark/bookmark.interface';
 import CryptoService from '../../crypto/crypto.service';
 import * as Exceptions from '../../exception/exception';
 import Globals from '../../global-shared.constants';
@@ -11,30 +22,16 @@ import { PlatformService } from '../../global-shared.interface';
 import LogService from '../../log/log.service';
 import { StoreKey } from '../../store/store.enum';
 import StoreService from '../../store/store.service';
-import { SyncType } from '../../sync/sync.enum';
-import { Sync, SyncProcessBookmarksData, SyncProcessResult, SyncProvider } from '../../sync/sync.interface';
 import UtilityService from '../../utility/utility.service';
-import { BookmarkChangeType, BookmarkContainer } from '../bookmark.enum';
-import {
-  AddBookmarkChangeData,
-  AddNativeBookmarkChangeData,
-  Bookmark,
-  BookmarkChange,
-  BookmarkMetadata,
-  ModifyBookmarkChangeData,
-  ModifyNativeBookmarkChangeData,
-  MoveNativeBookmarkChangeData,
-  RemoveBookmarkChangeData,
-  RemoveNativeBookmarkChangeData,
-  UpdateBookmarksResult
-} from '../bookmark.interface';
-import BookmarkService from '../bookmark.service';
+import { SyncType } from '../sync.enum';
+import { Sync, SyncProcessBookmarksData, SyncProcessResult, SyncProvider } from '../sync.interface';
 
 @autobind
 @Injectable('BookmarkSyncProviderService')
 export default class BookmarkSyncProviderService implements SyncProvider {
   $q: ng.IQService;
   apiSvc: ApiService;
+  bookmarkHelperSvc: BookmarkHelperService;
   bookmarkSvc: BookmarkService;
   cryptoSvc: CryptoService;
   logSvc: LogService;
@@ -45,6 +42,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
   static $inject = [
     '$q',
     'ApiService',
+    'BookmarkHelperService',
     'BookmarkService',
     'CryptoService',
     'LogService',
@@ -55,6 +53,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
   constructor(
     $q: ng.IQService,
     ApiSvc: ApiService,
+    BookmarkHelperSvc: BookmarkHelperService,
     BookmarkSvc: BookmarkService,
     CryptoSvc: CryptoService,
     LogSvc: LogService,
@@ -64,6 +63,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
   ) {
     this.$q = $q;
     this.apiSvc = ApiSvc;
+    this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.bookmarkSvc = BookmarkSvc;
     this.cryptoSvc = CryptoSvc;
     this.logSvc = LogSvc;
@@ -79,7 +79,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
         this.platformSvc.eventListeners_Disable(),
         this.storeSvc.remove(StoreKey.BookmarkIdMappings),
         this.storeSvc.remove(StoreKey.Bookmarks),
-        this.bookmarkSvc.updateCachedBookmarks(null, null)
+        this.bookmarkHelperSvc.updateCachedBookmarks(null, null)
       ])
       .then(() => {});
   }
@@ -97,7 +97,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
     // If offline update cache and then throw error
     return err instanceof Exceptions.NetworkOfflineException
       ? (() => {
-          return this.bookmarkSvc
+          return this.bookmarkHelperSvc
             .updateCachedBookmarks(lastResult.updatedBookmarks, lastResult.encryptedBookmarks)
             .then(() => {
               sync.bookmarks = lastResult.updatedBookmarks;
@@ -108,8 +108,8 @@ export default class BookmarkSyncProviderService implements SyncProvider {
 
   populateNativeBookmarks(bookmarks: Bookmark[]): ng.IPromise<void> {
     // Clear native bookmarks and then populate with provided bookmarks
-    return this.platformSvc.bookmarks_Clear().then(() => {
-      return this.platformSvc.bookmarks_Populate(bookmarks);
+    return this.bookmarkSvc.clearNativeBookmarks().then(() => {
+      return this.bookmarkSvc.createNativeBookmarksFromBookmarks(bookmarks);
     });
   }
 
@@ -160,7 +160,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
           throw new Exceptions.AmbiguousSyncRequestException();
         }
 
-        getBookmarksToSync = this.bookmarkSvc
+        getBookmarksToSync = this.bookmarkHelperSvc
           .getCachedBookmarks()
           .then((bookmarks) => {
             // Process bookmark changes
@@ -190,11 +190,15 @@ export default class BookmarkSyncProviderService implements SyncProvider {
                 // Apply updates to native bookmarks
                 // But first check if bookmark container is toolbar and is syncing toolbar
                 return (updatedBookmarkContainer === BookmarkContainer.Toolbar
-                  ? this.bookmarkSvc.getSyncBookmarksToolbar()
+                  ? this.bookmarkHelperSvc.getSyncBookmarksToolbar()
                   : this.$q.resolve(true)
                 ).then((updateNativeBookmarks) => {
                   if (updateNativeBookmarks) {
-                    return this.updateNativeBookmarks(changeInfo.type, updatedBookmark.id, updatedBookmark);
+                    return this.bookmarkSvc.processChangeOnNativeBookmarks(
+                      updatedBookmark.id,
+                      changeInfo.type,
+                      updatedBookmark
+                    );
                   }
                 });
               })
@@ -210,10 +214,10 @@ export default class BookmarkSyncProviderService implements SyncProvider {
               };
 
               // Update bookmarks cache
-              return this.bookmarkSvc.updateCachedBookmarks(bookmarks, encryptedBookmarks).then(() => {
+              return this.bookmarkHelperSvc.updateCachedBookmarks(bookmarks, encryptedBookmarks).then(() => {
                 // Build id mappings if this was a restore
                 if (sync.command === MessageCommand.RestoreBookmarks) {
-                  return this.platformSvc.bookmarks_BuildIdMappings(bookmarks);
+                  return this.bookmarkSvc.buildIdMappings(bookmarks);
                 }
               });
             });
@@ -269,7 +273,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
                 encryptedBookmarks,
                 updatedBookmarks: bookmarks
               };
-              return this.bookmarkSvc.updateCachedBookmarks(bookmarks, encryptedBookmarks).then(() => bookmarks);
+              return this.bookmarkHelperSvc.updateCachedBookmarks(bookmarks, encryptedBookmarks).then(() => bookmarks);
             })
             .then((cachedBookmarks) => {
               // Update browser bookmarks
@@ -279,7 +283,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
                   return this.populateNativeBookmarks(cachedBookmarks);
                 })
                 .then(() => {
-                  return this.platformSvc.bookmarks_BuildIdMappings(cachedBookmarks);
+                  return this.bookmarkSvc.buildIdMappings(cachedBookmarks);
                 })
                 .finally(this.platformSvc.eventListeners_Enable);
             })
@@ -311,11 +315,11 @@ export default class BookmarkSyncProviderService implements SyncProvider {
         // If this is a new sync, get native bookmarks and continue
         if (!syncEnabled || !sync.changeInfo) {
           buildIdMappings = true;
-          return this.platformSvc.bookmarks_Get();
+          return this.bookmarkSvc.getNativeBookmarksAsBookmarks();
         }
 
-        // Otherwose get cached bookmarks and process changes
-        return this.bookmarkSvc.getCachedBookmarks().then((bookmarks) => {
+        // Otherwise get cached bookmarks and process changes
+        return this.bookmarkHelperSvc.getCachedBookmarks().then((bookmarks) => {
           if (!sync.changeInfo) {
             // Nothing to process
             this.logSvc.logInfo('No change to process');
@@ -323,30 +327,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
           }
 
           // Update bookmarks data with local changes
-          switch (sync.changeInfo.type) {
-            case BookmarkChangeType.Add:
-              return this.platformSvc.bookmarks_Created(
-                bookmarks,
-                sync.changeInfo.changeData as AddNativeBookmarkChangeData
-              );
-            case BookmarkChangeType.Modify:
-              return this.platformSvc.bookmarks_Updated(
-                bookmarks,
-                sync.changeInfo.changeData as ModifyNativeBookmarkChangeData
-              );
-            case BookmarkChangeType.Move:
-              return this.platformSvc.bookmarks_Moved(
-                bookmarks,
-                sync.changeInfo.changeData as MoveNativeBookmarkChangeData
-              );
-            case BookmarkChangeType.Remove:
-              return this.platformSvc.bookmarks_Deleted(
-                bookmarks,
-                sync.changeInfo.changeData as RemoveNativeBookmarkChangeData
-              );
-            default:
-              throw new Exceptions.AmbiguousSyncRequestException();
-          }
+          return this.bookmarkSvc.processChangeOnBookmarks(sync.changeInfo, bookmarks);
         });
       })
       .then((bookmarks) => {
@@ -363,12 +344,12 @@ export default class BookmarkSyncProviderService implements SyncProvider {
               encryptedBookmarks,
               updatedBookmarks: bookmarks
             };
-            return this.bookmarkSvc.updateCachedBookmarks(bookmarks, encryptedBookmarks);
+            return this.bookmarkHelperSvc.updateCachedBookmarks(bookmarks, encryptedBookmarks);
           })
           .then(() => {
             // Build id mappings if this is a new sync
             if (buildIdMappings) {
-              return this.platformSvc.bookmarks_BuildIdMappings(bookmarks);
+              return this.bookmarkSvc.buildIdMappings(bookmarks);
             }
           })
           .then(() => {
@@ -404,7 +385,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
             let bookmarks: Bookmark[] = decryptedData ? JSON.parse(decryptedData) : null;
 
             // Upgrade containers to use current container names
-            bookmarks = this.bookmarkSvc.upgradeContainers(bookmarks || []);
+            bookmarks = this.bookmarkHelperSvc.upgradeContainers(bookmarks || []);
 
             // Set the sync version to the current app version
             return this.storeSvc
@@ -431,7 +412,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
                         return this.populateNativeBookmarks(bookmarks);
                       })
                       .then(() => {
-                        return this.platformSvc.bookmarks_BuildIdMappings(bookmarks);
+                        return this.bookmarkSvc.buildIdMappings(bookmarks);
                       })
                       .finally(this.platformSvc.eventListeners_Enable)
                   ])
@@ -443,7 +424,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
 
                     // Update cached last updated date and return decrypted bookmarks
                     return this.$q.all([
-                      this.bookmarkSvc.updateCachedBookmarks(bookmarks, encryptedBookmarks),
+                      this.bookmarkHelperSvc.updateCachedBookmarks(bookmarks, encryptedBookmarks),
                       this.storeSvc.set(StoreKey.LastUpdated, data[0].lastUpdated)
                     ]);
                   });
@@ -462,7 +443,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
     let idCounter = 1;
 
     // Get all bookmarks into flat array
-    this.bookmarkSvc.eachBookmark(bookmarks, (bookmark) => {
+    this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
       allBookmarks.push(bookmark as Bookmark);
     });
 
@@ -509,10 +490,10 @@ export default class BookmarkSyncProviderService implements SyncProvider {
     changeData: AddBookmarkChangeData
   ): ng.IPromise<UpdateBookmarksResult> {
     // Get or create other bookmarks container to add create bookmark to
-    const otherContainer = this.bookmarkSvc.getContainer(BookmarkContainer.Other, bookmarks, true);
+    const otherContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Other, bookmarks, true);
 
     // Create new bookmark and add to container
-    const newBookmark = this.bookmarkSvc.newBookmark(
+    const newBookmark = this.bookmarkHelperSvc.newBookmark(
       changeData.metadata.title,
       changeData.metadata.url,
       changeData.metadata.description,
@@ -533,8 +514,8 @@ export default class BookmarkSyncProviderService implements SyncProvider {
     bookmarks: Bookmark[],
     changeData: RemoveBookmarkChangeData
   ): ng.IPromise<UpdateBookmarksResult> {
-    const container = this.bookmarkSvc.getContainerByBookmarkId(changeData.id, bookmarks).title;
-    return this.bookmarkSvc.removeBookmarkById(changeData.id, bookmarks).then((updatedBookmarks) => {
+    const container = this.bookmarkHelperSvc.getContainerByBookmarkId(changeData.id, bookmarks).title;
+    return this.bookmarkHelperSvc.removeBookmarkById(changeData.id, bookmarks).then((updatedBookmarks) => {
       return {
         bookmark: {
           id: changeData.id
@@ -549,9 +530,9 @@ export default class BookmarkSyncProviderService implements SyncProvider {
     bookmarks: Bookmark[],
     changeData: ModifyBookmarkChangeData
   ): ng.IPromise<UpdateBookmarksResult> {
-    const container = this.bookmarkSvc.getContainerByBookmarkId(changeData.bookmark.id, bookmarks).title;
-    const updateInfo = this.bookmarkSvc.extractBookmarkMetadata(changeData.bookmark);
-    return this.bookmarkSvc
+    const container = this.bookmarkHelperSvc.getContainerByBookmarkId(changeData.bookmark.id, bookmarks).title;
+    const updateInfo = this.bookmarkHelperSvc.extractBookmarkMetadata(changeData.bookmark);
+    return this.bookmarkHelperSvc
       .modifyBookmarkById(changeData.bookmark.id, updateInfo, bookmarks)
       .then((updatedBookmarks) => {
         return {
@@ -562,20 +543,6 @@ export default class BookmarkSyncProviderService implements SyncProvider {
       });
   }
 
-  updateNativeBookmarks(changeType: BookmarkChangeType, id: number, changeInfo: BookmarkMetadata): ng.IPromise<void> {
-    // Check the change type and process native bookmark changes
-    switch (changeType) {
-      case BookmarkChangeType.Add:
-        return this.platformSvc.bookmarks_CreateSingle(id, changeInfo);
-      case BookmarkChangeType.Modify:
-        return this.platformSvc.bookmarks_UpdateSingle(id, changeInfo);
-      case BookmarkChangeType.Remove:
-        return this.platformSvc.bookmarks_DeleteSingle(id);
-      default:
-        throw new Exceptions.AmbiguousSyncRequestException();
-    }
-  }
-
   validateBookmarkIds(bookmarks: Bookmark[]): boolean {
     if (!bookmarks || bookmarks.length === 0) {
       return true;
@@ -583,7 +550,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
 
     // Find any bookmark without an id
     let bookmarksHaveIds = true;
-    this.bookmarkSvc.eachBookmark(bookmarks, (bookmark) => {
+    this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
       if (angular.isUndefined(bookmark.id)) {
         bookmarksHaveIds = false;
       }
@@ -596,7 +563,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
 
     // Get all bookmarks into flat array
     const allBookmarks: Bookmark[] = [];
-    this.bookmarkSvc.eachBookmark(bookmarks, (bookmark) => {
+    this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
       allBookmarks.push(bookmark as Bookmark);
     });
 

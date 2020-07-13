@@ -3,22 +3,22 @@ import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import _ from 'underscore';
 import { Bookmarks as NativeBookmarks } from 'webextension-polyfill-ts';
-import Strings from '../../../../res/strings/en.json';
-import { BookmarkSearchResult } from '../../app/app.interface';
-import { ApiService } from '../api/api.interface';
-import CryptoService from '../crypto/crypto.service';
-import * as Exceptions from '../exception/exception';
-import Globals from '../global-shared.constants';
-import { PlatformService } from '../global-shared.interface';
-import { StoreKey } from '../store/store.enum';
-import StoreService from '../store/store.service';
-import UtilityService from '../utility/utility.service';
-import { BookmarkContainer } from './bookmark.enum';
-import { Bookmark, BookmarkMetadata, UpdateBookmarksResult } from './bookmark.interface';
+import Strings from '../../../../../res/strings/en.json';
+import { BookmarkSearchResult } from '../../../app/app.interface';
+import { ApiService } from '../../api/api.interface';
+import CryptoService from '../../crypto/crypto.service';
+import * as Exceptions from '../../exception/exception';
+import Globals from '../../global-shared.constants';
+import { PlatformService } from '../../global-shared.interface';
+import { StoreKey } from '../../store/store.enum';
+import StoreService from '../../store/store.service';
+import UtilityService from '../../utility/utility.service';
+import { BookmarkContainer } from '../bookmark.enum';
+import { Bookmark, BookmarkMetadata, UpdateBookmarksResult } from '../bookmark.interface';
 
 @autobind
-@Injectable('BookmarkService')
-export default class BookmarkService {
+@Injectable('BookmarkHelperService')
+export default class BookmarkHelperService {
   $injector: ng.auto.IInjectorService;
   $q: ng.IQService;
   apiSvc: ApiService;
@@ -67,7 +67,7 @@ export default class BookmarkService {
     }
 
     // Create new bookmark/separator
-    const bookmark = this.isSeparator(bookmarkMetadata)
+    const bookmark = bookmarkMetadata.isSeparator
       ? this.newSeparator(bookmarks)
       : this.newBookmark(
           bookmarkMetadata.title,
@@ -120,46 +120,12 @@ export default class BookmarkService {
     iterateBookmarks(bookmarks);
   }
 
-  exportBookmarks(): ng.IPromise<Bookmark[]> {
-    const cleanRecursive = (bookmarks: Bookmark[]): Bookmark[] => {
-      return bookmarks.map((bookmark) => {
-        const cleanedBookmark = this.cleanBookmark(bookmark);
-        if (_.isArray(cleanedBookmark.children)) {
-          cleanedBookmark.children = cleanRecursive(cleanedBookmark.children);
-        }
-        return cleanedBookmark;
-      });
-    };
-
-    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
-      // If sync is not enabled, export native bookmarks
-      if (!syncEnabled) {
-        return this.platformSvc.bookmarks_Get();
-      }
-
-      // Otherwise, export synced data
-      return this.apiSvc
-        .getBookmarks()
-        .then((response) => {
-          // Decrypt bookmarks
-          return this.cryptoSvc.decryptData(response.bookmarks);
-        })
-        .then((decryptedData) => {
-          // Remove empty containers
-          const bookmarks = this.removeEmptyContainers(JSON.parse(decryptedData));
-
-          // Clean exported bookmarks and return as json
-          return cleanRecursive(bookmarks);
-        });
-    });
-  }
-
   findBookmarkById(
     bookmarks: Bookmark[] | NativeBookmarks.BookmarkTreeNode[],
     id: number | string
   ): Bookmark | NativeBookmarks.BookmarkTreeNode {
     if (!bookmarks) {
-      return null;
+      return;
     }
 
     // Recursively iterate through all bookmarks until id match is found
@@ -189,7 +155,7 @@ export default class BookmarkService {
     // Check if current url is contained in bookmarks
     return this.platformSvc.getCurrentUrl().then((currentUrl) => {
       if (!currentUrl) {
-        return null;
+        return;
       }
 
       return this.searchBookmarks({ url: currentUrl }).then((searchResults) => {
@@ -208,7 +174,7 @@ export default class BookmarkService {
     takenIds: number[] = []
   ): Bookmark {
     if (!nativeBookmark) {
-      return null;
+      return;
     }
 
     // Get a new bookmark id and add to taken ids array so that ids are not duplicated before bookmarks are updated
@@ -232,12 +198,21 @@ export default class BookmarkService {
   }
 
   extractBookmarkMetadata(bookmark: Bookmark | NativeBookmarks.BookmarkTreeNode): BookmarkMetadata {
-    return {
+    const metadata: BookmarkMetadata = {
       description: (bookmark as Bookmark).description,
+      isSeparator: this.isSeparator(bookmark),
       tags: (bookmark as Bookmark).tags,
       title: bookmark.title,
       url: bookmark.url
     };
+
+    Object.keys(metadata).forEach((key) => {
+      if (angular.isUndefined(metadata[key])) {
+        delete metadata[key];
+      }
+    });
+
+    return metadata;
   }
 
   getBookmarkTitleForDisplay(bookmark: Bookmark): string {
@@ -378,7 +353,7 @@ export default class BookmarkService {
         }
 
         if (lookaheads.length === 0) {
-          return null;
+          return;
         }
 
         // Count lookaheads and return most common
@@ -403,6 +378,24 @@ export default class BookmarkService {
 
         throw err;
       });
+  }
+
+  getNativeBookmarksAsBookmarks(nativeBookmarks: NativeBookmarks.BookmarkTreeNode[]): Bookmark[] {
+    const bookmarks: Bookmark[] = [];
+    for (let i = 0; i < nativeBookmarks.length; i += 1) {
+      // Check if current native bookmark is a separator
+      const nativeBookmark = nativeBookmarks[i];
+      const bookmark = this.isSeparator(nativeBookmark)
+        ? this.newSeparator()
+        : this.newBookmark(nativeBookmark.title, nativeBookmark.url);
+
+      // If this is a folder and has children, process them
+      if (nativeBookmark.children && nativeBookmark.children.length > 0) {
+        bookmark.children = this.getNativeBookmarksAsBookmarks(nativeBookmark.children);
+      }
+      bookmarks.push(bookmark);
+    }
+    return bookmarks;
   }
 
   getNewBookmarkId(bookmarks: Bookmark[], takenIds: number[] = [0]): number {
@@ -468,31 +461,8 @@ export default class BookmarkService {
       throw new Exceptions.BookmarkNotFoundException();
     }
 
-    // Update description
-    if (bookmarkToModify.description !== newMetadata.description) {
-      bookmarkToModify.description = newMetadata.description;
-    }
-
-    // Update tags
-    if (bookmarkToModify.tags !== newMetadata.tags) {
-      bookmarkToModify.tags = newMetadata.tags;
-    }
-
-    // Update title
-    if (bookmarkToModify.title !== newMetadata.title) {
-      bookmarkToModify.title = newMetadata.title;
-    }
-
-    // Update url accounting for unsupported urls
-    if (
-      newMetadata.url !== undefined &&
-      newMetadata.url !== bookmarkToModify.url &&
-      (newMetadata.url !== this.platformSvc.getNewTabUrl() ||
-        (newMetadata.url === this.platformSvc.getNewTabUrl() &&
-          bookmarkToModify.url === this.platformSvc.getSupportedUrl(bookmarkToModify.url)))
-    ) {
-      bookmarkToModify.url = newMetadata.url;
-    }
+    // Copy new metadata to target bookmark
+    Object.assign(bookmarkToModify, newMetadata);
 
     // If bookmark is a separator, convert bookmark to separator
     if (this.isSeparator(bookmarkToModify)) {
@@ -500,23 +470,12 @@ export default class BookmarkService {
       const separator = this.newSeparator();
       separator.id = bookmarkToModify.id;
 
-      // Clear existing properties
-      // eslint-disable-next-line no-restricted-syntax
-      for (const prop in bookmarkToModify) {
-        // eslint-disable-next-line no-prototype-builtins
-        if (bookmarkToModify.hasOwnProperty(prop)) {
-          delete bookmarkToModify[prop];
-        }
-      }
-
       // Copy separator properties
-      bookmarkToModify.id = separator.id;
-      bookmarkToModify.title = separator.title;
+      angular.copy(separator, bookmarkToModify);
     }
 
     // Clean bookmark and return updated bookmarks
-    const cleanedBookmark = this.cleanBookmark(bookmarkToModify);
-    angular.copy(cleanedBookmark, bookmarkToModify);
+    angular.copy(this.cleanBookmark(bookmarkToModify), bookmarkToModify);
     return this.$q.resolve(updatedBookmarks);
   }
 
@@ -555,7 +514,9 @@ export default class BookmarkService {
   }
 
   newSeparator(bookmarksToGenerateNewId?: Bookmark[]): Bookmark {
-    return this.newBookmark('-', null, null, null, bookmarksToGenerateNewId);
+    const separator = this.newBookmark('-', null, null, null, bookmarksToGenerateNewId);
+    delete separator.children;
+    return separator;
   }
 
   removeBookmarkById(id: number, bookmarks: Bookmark[]): ng.IPromise<Bookmark[]> {

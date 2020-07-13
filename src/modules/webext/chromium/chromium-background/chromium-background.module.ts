@@ -1,13 +1,13 @@
 import angular from 'angular';
 import { NgModule } from 'angular-ts-decorators';
 import WebExtBackgroundModule from '../../webext-background/webext-background.module';
-import WebExtPlatformService from '../../webext-platform/webext-platform.service';
 import ChromiumBookmarkService from '../chromium-bookmark/chromium-bookmark.service';
+import ChromiumPlatformService from '../chromium-platform/chromium-platform.service';
 
 @NgModule({
   id: 'ChromiumBackgroundModule',
   imports: [WebExtBackgroundModule],
-  providers: [ChromiumBookmarkService, WebExtPlatformService]
+  providers: [ChromiumBookmarkService, ChromiumPlatformService]
 })
 export default class ChromiumBackgroundModule {}
 

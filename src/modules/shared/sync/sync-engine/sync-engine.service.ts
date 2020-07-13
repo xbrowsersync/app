@@ -2,7 +2,6 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import { ApiService } from '../../api/api.interface';
-import BookmarkSyncProviderService from '../../bookmark/bookmark-sync-provider/bookmark-sync-provider.service';
 import * as Exceptions from '../../exception/exception';
 import { ExceptionHandler } from '../../exception/exception.interface';
 import { MessageCommand } from '../../global-shared.enum';
@@ -11,6 +10,7 @@ import LogService from '../../log/log.service';
 import { StoreKey } from '../../store/store.enum';
 import StoreService from '../../store/store.service';
 import UtilityService from '../../utility/utility.service';
+import BookmarkSyncProviderService from '../bookmark-sync-provider/bookmark-sync-provider.service';
 import { SyncType } from '../sync.enum';
 import { Sync, SyncProcessBookmarksData, SyncProvider } from '../sync.interface';
 
@@ -117,7 +117,7 @@ export default class SyncEngineService {
   disableSync(): ng.IPromise<void> {
     return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
       if (!syncEnabled) {
-        return null;
+        return;
       }
 
       // Disable sync update check and clear cached data
@@ -188,6 +188,7 @@ export default class SyncEngineService {
   }
 
   handleFailedSync(failedSync: Sync, err: Error): ng.IPromise<Error> {
+    let syncException = err;
     return this.$q<Error>((resolve, reject) => {
       // Update browser action icon
       this.platformSvc.interface_Refresh();
@@ -199,12 +200,12 @@ export default class SyncEngineService {
 
       // Set default exception if none set
       if (!(err instanceof Exceptions.Exception)) {
-        err = new Exceptions.SyncFailedException(null, err);
+        syncException = new Exceptions.SyncFailedException(null, err);
       }
 
       // Handle failed sync
       this.logSvc.logWarning(`Sync ${failedSync.uniqueId} failed`);
-      this.$exceptionHandler(err, null, false);
+      this.$exceptionHandler(syncException, null, false);
       if (failedSync.changeInfo && failedSync.changeInfo.type) {
         this.logSvc.logInfo(failedSync.changeInfo);
       }
@@ -219,33 +220,33 @@ export default class SyncEngineService {
 
               // If no data found, sync has been removed
               if (err instanceof Exceptions.NoDataFoundException) {
-                err = new Exceptions.SyncRemovedException(null, err);
+                syncException = new Exceptions.SyncRemovedException(null, err);
               } else if (failedSync.type !== SyncType.Local) {
                 // If local changes made, clear sync queue and refresh sync data if necessary
                 this.syncQueue = [];
                 this.storeSvc.set(StoreKey.LastUpdated, new Date().toISOString());
-                if (this.checkIfRefreshSyncedDataOnError(err)) {
+                if (this.checkIfRefreshSyncedDataOnError(syncException)) {
                   this.currentSync = null;
                   return this.platformSvc.refreshLocalSyncData().catch((refreshErr) => {
-                    err = refreshErr;
+                    syncException = refreshErr;
                   });
                 }
               }
             })
             .then(() => {
               // Check if sync should be disabled
-              if (this.checkIfDisableSyncOnError(err)) {
+              if (this.checkIfDisableSyncOnError(syncException)) {
                 return this.disableSync();
               }
             });
         })
         .then(() => {
-          resolve(err);
+          resolve(syncException);
         })
         .catch(reject);
     }).finally(() => {
       // Return sync error back to process that queued the sync
-      failedSync.deferred.reject(err);
+      failedSync.deferred.reject(syncException);
     });
   }
 

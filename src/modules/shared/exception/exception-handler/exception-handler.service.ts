@@ -1,13 +1,13 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
-import Strings from '../../../../res/strings/en.json';
-import { AlertType } from '../alert/alert.enum';
-import { Alert } from '../alert/alert.interface';
-import AlertService from '../alert/alert.service';
-import { PlatformService } from '../global-shared.interface';
-import LogService from '../log/log.service';
-import * as Exceptions from './exception';
+import Strings from '../../../../../res/strings/en.json';
+import { AlertType } from '../../alert/alert.enum';
+import { Alert } from '../../alert/alert.interface';
+import AlertService from '../../alert/alert.service';
+import { PlatformService } from '../../global-shared.interface';
+import LogService from '../../log/log.service';
+import * as Exceptions from '../exception';
 
 @autobind
 @Injectable('ExceptionHandler')

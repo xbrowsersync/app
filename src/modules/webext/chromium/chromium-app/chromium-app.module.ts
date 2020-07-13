@@ -1,14 +1,15 @@
 import angular from 'angular';
 import { NgModule } from 'angular-ts-decorators';
 import WebExtAppModule from '../../webext-app/webext-app.module';
-import WebExtPlatformService from '../../webext-platform/webext-platform.service';
+import ChromiumBookmarkService from '../chromium-bookmark/chromium-bookmark.service';
+import ChromiumPlatformService from '../chromium-platform/chromium-platform.service';
 import ChromiumAppComponent from './chromium-app.component';
 
 @NgModule({
   declarations: [ChromiumAppComponent],
   id: 'ChromiumAppModule',
   imports: [WebExtAppModule],
-  providers: [WebExtPlatformService]
+  providers: [ChromiumBookmarkService, ChromiumPlatformService]
 })
 export default class ChromiumAppModule {}
 

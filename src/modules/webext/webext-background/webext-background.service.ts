@@ -8,7 +8,7 @@ import { Alarms, browser } from 'webextension-polyfill-ts';
 import Strings from '../../../../res/strings/en.json';
 import { Alert } from '../../shared/alert/alert.interface';
 import AlertService from '../../shared/alert/alert.service';
-import BookmarkService from '../../shared/bookmark/bookmark.service';
+import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../shared/exception/exception';
 import Globals from '../../shared/global-shared.constants';
 import { MessageCommand } from '../../shared/global-shared.enum';
@@ -22,7 +22,8 @@ import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync } from '../../shared/sync/sync.interface';
 import UtilityService from '../../shared/utility/utility.service';
 import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
-import { InstallBackup, NativeBookmarkService } from '../webext.interface';
+import ChromiumBookmarkService from '../chromium/chromium-bookmark/chromium-bookmark.service';
+import { InstallBackup } from '../webext.interface';
 
 @autobind
 @Injectable('WebExtBackgroundService')
@@ -31,9 +32,9 @@ export default class WebExtBackgroundService {
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
   bookmarkIdMapperSvc: BookmarkIdMapperService;
-  bookmarkSvc: BookmarkService;
+  bookmarkHelperSvc: BookmarkHelperService;
+  bookmarkSvc: ChromiumBookmarkService;
   logSvc: LogService;
-  nativeBookmarksSvc: NativeBookmarkService;
   networkSvc: NetworkService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
@@ -46,10 +47,10 @@ export default class WebExtBackgroundService {
     '$q',
     '$timeout',
     'AlertService',
+    'BookmarkHelperService',
     'BookmarkIdMapperService',
     'BookmarkService',
     'LogService',
-    'NativeBookmarkService',
     'NetworkService',
     'PlatformService',
     'StoreService',
@@ -60,10 +61,10 @@ export default class WebExtBackgroundService {
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
     AlertSvc: AlertService,
+    BookmarkHelperSvc: BookmarkHelperService,
     BookmarkIdMapperSvc: BookmarkIdMapperService,
-    BookmarkSvc: BookmarkService,
+    BookmarkSvc: ChromiumBookmarkService,
     LogSvc: LogService,
-    NativeBookmarksSvc: NativeBookmarkService,
     NetworkSvc: NetworkService,
     PlatformSvc: PlatformService,
     StoreSvc: StoreService,
@@ -74,9 +75,9 @@ export default class WebExtBackgroundService {
     this.$timeout = $timeout;
     this.alertSvc = AlertSvc;
     this.bookmarkIdMapperSvc = BookmarkIdMapperSvc;
+    this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.bookmarkSvc = BookmarkSvc;
     this.logSvc = LogSvc;
-    this.nativeBookmarksSvc = NativeBookmarksSvc;
     this.networkSvc = NetworkSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
@@ -105,39 +106,42 @@ export default class WebExtBackgroundService {
 
   checkForUpdatesOnStartup(): ng.IPromise<any> {
     return this.$q<boolean>((resolve, reject) => {
-      // If network disconnected, skip update check
-      if (!this.networkSvc.isNetworkConnected()) {
-        this.logSvc.logInfo('Couldn’t check for updates on startup: network offline');
-        resolve(false);
-        return;
-      }
+      return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
+        if (!syncEnabled) {
+          return resolve(false);
+        }
 
-      // Check for updates to synced bookmarks
-      this.syncEngineService
-        .checkForUpdates()
-        .then(resolve)
-        .catch((err) => {
-          if (!(err instanceof Exceptions.HttpRequestFailedException)) {
-            reject(err);
-            return;
-          }
+        // If network disconnected, skip update check
+        if (!this.networkSvc.isNetworkConnected()) {
+          this.logSvc.logInfo('Couldn’t check for updates on startup: network offline');
+          return resolve(false);
+        }
 
-          // If request failed, retry once
-          this.logSvc.logInfo('Connection to API failed, retrying check for sync updates momentarily');
-          this.$timeout(() => {
-            this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
-              if (!syncEnabled) {
-                this.logSvc.logInfo('Sync was disabled before retry attempted');
-                reject(new Exceptions.HttpRequestCancelledException());
-                return;
-              }
-              this.syncEngineService.checkForUpdates().then(resolve).catch(reject);
-            });
-          }, 5000);
-        });
+        // Check for updates to synced bookmarks
+        this.syncEngineService
+          .checkForUpdates()
+          .then(resolve)
+          .catch((err) => {
+            if (!(err instanceof Exceptions.HttpRequestFailedException)) {
+              return reject(err);
+            }
+
+            // If request failed, retry once
+            this.logSvc.logInfo('Connection to API failed, retrying check for sync updates momentarily');
+            this.$timeout(() => {
+              this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabledAfterError) => {
+                if (!syncEnabledAfterError) {
+                  this.logSvc.logInfo('Sync was disabled before retry attempted');
+                  return reject(new Exceptions.HttpRequestCancelledException());
+                }
+                this.syncEngineService.checkForUpdates().then(resolve).catch(reject);
+              });
+            }, 5000);
+          });
+      });
     }).then((updatesAvailable) => {
       if (!updatesAvailable) {
-        return null;
+        return;
       }
 
       // Queue sync
@@ -289,7 +293,7 @@ export default class WebExtBackgroundService {
       })
       .then(() => {
         // Get locnativeal bookmarks and save data state at install to local storage
-        return this.platformSvc.bookmarks_Get().then((bookmarks) => {
+        return this.bookmarkSvc.getNativeBookmarksAsBookmarks().then((bookmarks) => {
           const backup: InstallBackup = {
             bookmarks,
             date: new Date().toISOString()
@@ -351,13 +355,14 @@ export default class WebExtBackgroundService {
     }
   }
 
-  onMessage(message: any): ng.IPromise<any> {
-    return new this.$q((resolve, reject) => {
+  onMessage(message: any): Promise<any> {
+    // Use native Promise not $q otherwise browser.runtime.sendMessage will return immediately in Firefox
+    return new Promise((resolve, reject) => {
       let action: ng.IPromise<any>;
       switch (message.command) {
         // Queue bookmarks sync
         case MessageCommand.SyncBookmarks:
-          action = this.runSyncBookmarksCommand(message);
+          action = this.runSyncBookmarksCommand(message, message.runSync);
           break;
         // Trigger bookmarks restore
         case MessageCommand.RestoreBookmarks:
@@ -387,7 +392,6 @@ export default class WebExtBackgroundService {
         default:
           action = this.$q.reject(new Exceptions.AmbiguousSyncRequestException());
       }
-
       return action.then(resolve).catch(reject);
     }).catch((err) => {
       // Set message to exception class name so sender can rehydrate the exception
@@ -397,7 +401,7 @@ export default class WebExtBackgroundService {
   }
 
   runDisableEventListenersCommand(): ng.IPromise<void> {
-    return this.nativeBookmarksSvc.disableEventListeners();
+    return this.bookmarkSvc.disableEventListeners();
   }
 
   runDisableSyncCommand(): ng.IPromise<void> {
@@ -405,7 +409,7 @@ export default class WebExtBackgroundService {
   }
 
   runEnableEventListenersCommand(): ng.IPromise<void> {
-    return this.nativeBookmarksSvc.enableEventListeners();
+    return this.bookmarkSvc.enableEventListeners();
   }
 
   runGetCurrentSyncCommand(): ng.IPromise<Sync> {
@@ -417,11 +421,11 @@ export default class WebExtBackgroundService {
   }
 
   runRestoreBookmarksCommand(sync: Sync): ng.IPromise<any> {
-    return this.nativeBookmarksSvc
+    return this.bookmarkSvc
       .disableEventListeners()
       .then(() => {
         // Upgrade containers to use current container names
-        return this.bookmarkSvc.upgradeContainers(sync.bookmarks || []);
+        return this.bookmarkHelperSvc.upgradeContainers(sync.bookmarks || []);
       })
       .then((bookmarksToRestore) => {
         // Queue sync
@@ -430,8 +434,8 @@ export default class WebExtBackgroundService {
       });
   }
 
-  runSyncBookmarksCommand(sync: Sync): ng.IPromise<void> {
-    return this.syncEngineService.queueSync(sync, (sync as any).runSync);
+  runSyncBookmarksCommand(sync: Sync, runSync: boolean): ng.IPromise<void> {
+    return this.syncEngineService.queueSync(sync, runSync);
   }
 
   upgradeExtension(oldVersion: string, newVersion: string): ng.IPromise<void> {
@@ -484,8 +488,8 @@ export default class WebExtBackgroundService {
           if (!syncEnabled) {
             return;
           }
-          return this.bookmarkSvc.getCachedBookmarks().then((cachedBookmarks) => {
-            return this.platformSvc.bookmarks_BuildIdMappings(cachedBookmarks);
+          return this.bookmarkHelperSvc.getCachedBookmarks().then((cachedBookmarks) => {
+            return this.bookmarkSvc.buildIdMappings(cachedBookmarks);
           });
         });
       })

@@ -28,15 +28,17 @@ import AlertService from '../shared/alert/alert.service';
 import { ApiServiceStatus } from '../shared/api/api.enum';
 import { ApiService } from '../shared/api/api.interface';
 import BackupRestoreService from '../shared/backup-restore/backup-restore.service';
+import BookmarkHelperService from '../shared/bookmark/bookmark-helper/bookmark-helper.service.js';
 import { BookmarkChangeType } from '../shared/bookmark/bookmark.enum';
 import {
   AddBookmarkChangeData,
+  Bookmark,
   BookmarkChange,
   BookmarkMetadata,
+  BookmarkService,
   ModifyBookmarkChangeData,
   RemoveBookmarkChangeData
 } from '../shared/bookmark/bookmark.interface';
-import BookmarkService from '../shared/bookmark/bookmark.service.js';
 import CryptoService from '../shared/crypto/crypto.service';
 import * as Exceptions from '../shared/exception/exception';
 import { ExceptionHandler } from '../shared/exception/exception.interface';
@@ -65,6 +67,7 @@ export default class AppComponent {
   alertSvc: AlertService;
   apiSvc: ApiService;
   backupRestoreSvc: BackupRestoreService;
+  bookmarkHelperSvc: BookmarkHelperService;
   bookmarkSvc: BookmarkService;
   cryptoSvc: CryptoService;
   logSvc: LogService;
@@ -225,6 +228,7 @@ export default class AppComponent {
     'AlertService',
     'ApiService',
     'BackupRestoreService',
+    'BookmarkHelperService',
     'BookmarkService',
     'CryptoService',
     'LogService',
@@ -242,6 +246,7 @@ export default class AppComponent {
     AlertSvc: AlertService,
     ApiSvc: ApiService,
     BackupRestoreSvc: BackupRestoreService,
+    BookmarkHelperSvc: BookmarkHelperService,
     BookmarkSvc: BookmarkService,
     CryptoSvc: CryptoService,
     LogSvc: LogService,
@@ -257,6 +262,7 @@ export default class AppComponent {
     this.alertSvc = AlertSvc;
     this.apiSvc = ApiSvc;
     this.backupRestoreSvc = BackupRestoreSvc;
+    this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.bookmarkSvc = BookmarkSvc;
     this.cryptoSvc = CryptoSvc;
     this.logSvc = LogSvc;
@@ -501,7 +507,7 @@ export default class AppComponent {
     // Display lookahead if word length exceeds minimum
     if (lastWord && lastWord.length > Globals.LookaheadMinChars) {
       // Get tags lookahead
-      return this.bookmarkSvc
+      return this.bookmarkHelperSvc
         .getLookahead(lastWord.toLowerCase(), null, true, this.bookmark.current.tags)
         .then((results) => {
           if (!results) {
@@ -574,7 +580,7 @@ export default class AppComponent {
     }
 
     // Clone current bookmark object
-    const bookmarkToAdd = this.bookmarkSvc.cleanBookmark(this.bookmark.current);
+    const bookmarkToAdd = this.bookmarkHelperSvc.cleanBookmark(this.bookmark.current);
 
     // Check for protocol
     if (!new RegExp(Globals.URL.ProtocolRegex).test(bookmarkToAdd.url)) {
@@ -706,7 +712,7 @@ export default class AppComponent {
     }
 
     // Clone current bookmark object
-    const bookmarkToModify = this.bookmarkSvc.cleanBookmark(this.bookmark.current);
+    const bookmarkToModify = this.bookmarkHelperSvc.cleanBookmark(this.bookmark.current);
 
     // Check for protocol
     if (!new RegExp(Globals.URL.ProtocolRegex).test(bookmarkToModify.url)) {
@@ -764,7 +770,7 @@ export default class AppComponent {
     }
 
     // Check if bookmark url already exists
-    return this.bookmarkSvc
+    return this.bookmarkHelperSvc
       .searchBookmarks({
         url: bookmarkToValidate.url
       })
@@ -891,7 +897,7 @@ export default class AppComponent {
     if (this.search.displayFolderView) {
       // Initialise bookmark tree
       this.search.bookmarkTree = null;
-      this.bookmarkSvc.getCachedBookmarks().then((results) => {
+      this.bookmarkHelperSvc.getCachedBookmarks().then((results) => {
         this.$timeout(() => {
           // Display bookmark tree view, sort containers
           this.search.bookmarkTree = results.sort((a, b) => {
@@ -966,7 +972,7 @@ export default class AppComponent {
     // Get data for backup
     return this.$q
       .all([
-        this.bookmarkSvc.exportBookmarks(),
+        this.getBookmarksForExport(),
         this.storeSvc.get([StoreKey.SyncEnabled, StoreKey.SyncId]),
         this.utilitySvc.getServiceUrl()
       ])
@@ -1009,9 +1015,34 @@ export default class AppComponent {
       });
   }
 
+  getBookmarksForExport() {
+    const cleanRecursive = (bookmarks: Bookmark[]): Bookmark[] => {
+      return bookmarks.map((bookmark) => {
+        const cleanedBookmark = this.bookmarkHelperSvc.cleanBookmark(bookmark);
+        if (_.isArray(cleanedBookmark.children)) {
+          cleanedBookmark.children = cleanRecursive(cleanedBookmark.children);
+        }
+        return cleanedBookmark;
+      });
+    };
+
+    return this.storeSvc
+      .get<boolean>(StoreKey.SyncEnabled)
+      .then((syncEnabled) => {
+        // If sync is not enabled, export native bookmarks
+        return syncEnabled
+          ? this.bookmarkHelperSvc.getCachedBookmarks()
+          : this.bookmarkSvc.getNativeBookmarksAsBookmarks();
+      })
+      .then((bookmarks) => {
+        // Clean bookmarks for export
+        return cleanRecursive(this.bookmarkHelperSvc.removeEmptyContainers(bookmarks));
+      });
+  }
+
   getCountryNameFrom2LetterISOCode(isoCode) {
     if (!isoCode) {
-      return null;
+      return;
     }
 
     const country = countriesList.countries[isoCode];
@@ -1040,7 +1071,7 @@ export default class AppComponent {
 
   getServiceStatusTextFromStatusCode(statusCode) {
     if (statusCode == null) {
-      return null;
+      return;
     }
 
     switch (statusCode) {
@@ -1058,7 +1089,7 @@ export default class AppComponent {
 
   init() {
     // Set vm defaults
-    this.bookmark.getTitleForDisplay = this.bookmarkSvc.getBookmarkTitleForDisplay;
+    this.bookmark.getTitleForDisplay = this.bookmarkHelperSvc.getBookmarkTitleForDisplay;
     this.search.displayDefaultState = this.displayDefaultSearchState;
     this.search.execute = this.searchBookmarks;
     this.view.change = this.changeView;
@@ -1149,7 +1180,7 @@ export default class AppComponent {
       }
 
       // Check if current url is a bookmark
-      return this.bookmarkSvc.findCurrentUrlInBookmarks().then((existingBookmark) => {
+      return this.bookmarkHelperSvc.findCurrentUrlInBookmarks().then((existingBookmark) => {
         if (existingBookmark) {
           // Display update bookmark form and return
           this.bookmark.displayUpdateForm = true;
@@ -1322,7 +1353,7 @@ export default class AppComponent {
     // Get current service url and sync bookmarks toolbar setting from cache
     return this.$q
       .all([
-        this.bookmarkSvc.getSyncBookmarksToolbar(),
+        this.bookmarkHelperSvc.getSyncBookmarksToolbar(),
         this.storeSvc.get([StoreKey.CheckForAppUpdates, StoreKey.TraceLog]),
         this.platformSvc.permissions_Check()
       ])
@@ -1560,7 +1591,7 @@ export default class AppComponent {
       }
 
       // Get  bookmarks sync size and calculate sync data percentage used
-      return this.bookmarkSvc.getSyncSize().then((bookmarksSyncSize) => {
+      return this.bookmarkHelperSvc.getSyncSize().then((bookmarksSyncSize) => {
         this.$timeout(() => {
           this.sync.dataSize = bookmarksSyncSize / 1024;
           this.sync.dataUsed = Math.ceil((this.sync.dataSize / this.sync.service.maxSyncSize) * 150);
@@ -1683,7 +1714,7 @@ export default class AppComponent {
       });
     }
 
-    return this.bookmarkSvc.searchBookmarks(queryData).then((results) => {
+    return this.bookmarkHelperSvc.searchBookmarks(queryData).then((results) => {
       this.search.scrollDisplayMoreEnabled = false;
       this.search.resultsDisplayed = this.search.batchResultsNum;
       this.search.results = results;
@@ -1737,7 +1768,7 @@ export default class AppComponent {
       // Find parent of bookmark to delete
       let parent;
       let childIndex = -1;
-      this.bookmarkSvc.eachBookmark(this.search.bookmarkTree, (current) => {
+      this.bookmarkHelperSvc.eachBookmark(this.search.bookmarkTree, (current) => {
         if (!current.children || current.children.length === 0) {
           return;
         }
@@ -1831,7 +1862,7 @@ export default class AppComponent {
     // Display lookahead if word length exceed minimum
     if (lastWord && lastWord.length > Globals.LookaheadMinChars) {
       // Get lookahead
-      return this.bookmarkSvc
+      return this.bookmarkHelperSvc
         .getLookahead(lastWord.toLowerCase(), this.search.results)
         .then((results) => {
           if (!results) {
@@ -2100,7 +2131,7 @@ export default class AppComponent {
     }
 
     return this.$q
-      .all([this.bookmarkSvc.getSyncBookmarksToolbar(), this.storeSvc.get<boolean>(StoreKey.SyncEnabled)])
+      .all([this.bookmarkHelperSvc.getSyncBookmarksToolbar(), this.storeSvc.get<boolean>(StoreKey.SyncEnabled)])
       .then((cachedData) => {
         const syncBookmarksToolbar = cachedData[0];
         const syncEnabled = cachedData[1];

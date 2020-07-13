@@ -6,9 +6,9 @@ import compareVersions from 'compare-versions';
 import { autobind } from 'core-decorators';
 import Strings from '../../../res/strings/en.json';
 import { Alert } from '../shared/alert/alert.interface';
+import BookmarkHelperService from '../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkChangeType } from '../shared/bookmark/bookmark.enum';
 import { Bookmark, BookmarkMetadata } from '../shared/bookmark/bookmark.interface';
-import BookmarkService from '../shared/bookmark/bookmark.service';
 import * as Exceptions from '../shared/exception/exception';
 import Globals from '../shared/global-shared.constants';
 import { MessageCommand } from '../shared/global-shared.enum';
@@ -29,7 +29,7 @@ export default class AndroidPlatformService implements PlatformService {
   $interval: ng.IIntervalService;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
-  bookmarkSvc: BookmarkService;
+  bookmarkHelperSvc: BookmarkHelperService;
   logSvc: LogService;
   networkSvc: NetworkService;
   storeSvc: StoreService;
@@ -49,7 +49,7 @@ export default class AndroidPlatformService implements PlatformService {
     '$interval',
     '$q',
     '$timeout',
-    'BookmarkService',
+    'BookmarkHelperService',
     'LogService',
     'NetworkService',
     'StoreService',
@@ -62,7 +62,7 @@ export default class AndroidPlatformService implements PlatformService {
     $interval: ng.IIntervalService,
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
-    BookmarkSvc: BookmarkService,
+    BookmarkHelperSvc: BookmarkHelperService,
     LogSvc: LogService,
     NetworkSvc: NetworkService,
     StoreSvc: StoreService,
@@ -74,7 +74,7 @@ export default class AndroidPlatformService implements PlatformService {
     this.$interval = $interval;
     this.$q = $q;
     this.$timeout = $timeout;
-    this.bookmarkSvc = BookmarkSvc;
+    this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.logSvc = LogSvc;
     this.networkSvc = NetworkSvc;
     this.storeSvc = StoreSvc;
@@ -96,30 +96,6 @@ export default class AndroidPlatformService implements PlatformService {
     return this.methodNotApplicable();
   }
 
-  bookmarks_BuildIdMappings(): ng.IPromise<void> {
-    return this.methodNotApplicable();
-  }
-
-  bookmarks_Clear(): ng.IPromise<void> {
-    return this.methodNotApplicable();
-  }
-
-  bookmarks_CreateSingle(): ng.IPromise<void> {
-    return this.methodNotApplicable();
-  }
-
-  bookmarks_DeleteSingle(): ng.IPromise<void> {
-    return this.methodNotApplicable();
-  }
-
-  bookmarks_Get(): ng.IPromise<Bookmark[]> {
-    return this.methodNotApplicable();
-  }
-
-  bookmarks_Populate(): ng.IPromise<void> {
-    return this.methodNotApplicable();
-  }
-
   bookmarks_Share(bookmark: Bookmark): void {
     const options = {
       subject: `${bookmark.title} (${this.getConstant(Strings.shareBookmark_Message)})`,
@@ -133,10 +109,6 @@ export default class AndroidPlatformService implements PlatformService {
 
     // Display share sheet
     window.plugins.socialsharing.shareWithOptions(options, null, onError);
-  }
-
-  bookmarks_UpdateSingle(): ng.IPromise<void> {
-    return this.methodNotApplicable();
   }
 
   checkForDarkTheme(): ng.IPromise<void> {
@@ -565,8 +537,6 @@ export default class AndroidPlatformService implements PlatformService {
           if (uniqueKeywords.length > 0) {
             return uniqueKeywords.join();
           }
-
-          return null;
         };
 
         const getPageTitle = (): string => {
@@ -789,7 +759,7 @@ export default class AndroidPlatformService implements PlatformService {
       return this.storeSvc.get().then((storeContent) => {
         // Prime bookmarks cache
         if (storeContent.syncEnabled) {
-          this.bookmarkSvc.getCachedBookmarks();
+          this.bookmarkHelperSvc.getCachedBookmarks();
         }
 
         // Add useful debug info to beginning of trace log
@@ -1162,5 +1132,9 @@ export default class AndroidPlatformService implements PlatformService {
       .then(() => {
         return window.NativeStorage.clear();
       });
+  }
+
+  urlIsSupported(): boolean {
+    return true;
   }
 }

@@ -1,7 +1,7 @@
 import { Component, Input, Output } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import Strings from '../../../res/strings/en.json';
-import BookmarkService from '../shared/bookmark/bookmark.service';
+import BookmarkHelperService from '../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { PlatformService } from '../shared/global-shared.interface';
 import UtilityService from '../shared/utility/utility.service';
 
@@ -13,7 +13,7 @@ import UtilityService from '../shared/utility/utility.service';
 })
 export default class BookmarkTreeComponent {
   $timeout: ng.ITimeoutService;
-  bookmarkSvc: BookmarkService;
+  bookmarkHelperSvc: BookmarkHelperService;
   platformSvc: PlatformService;
   utilitySvc: UtilityService;
 
@@ -29,15 +29,15 @@ export default class BookmarkTreeComponent {
   @Output() selectBookmark: any;
   @Output() shareBookmark: any;
 
-  static $inject = ['$timeout', 'BookmarkService', 'PlatformService', 'UtilityService'];
+  static $inject = ['$timeout', 'BookmarkHelperService', 'PlatformService', 'UtilityService'];
   constructor(
     $timeout: ng.ITimeoutService,
-    BookmarkSvc: BookmarkService,
+    BookmarkHelperSvc: BookmarkHelperService,
     PlatformSvc: PlatformService,
     UtilitySvc: UtilityService
   ) {
     this.$timeout = $timeout;
-    this.bookmarkSvc = BookmarkSvc;
+    this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.platformSvc = PlatformSvc;
     this.utilitySvc = UtilitySvc;
   }
@@ -57,7 +57,7 @@ export default class BookmarkTreeComponent {
 
       // Close any open child folders
       if (!bookmark.open) {
-        this.bookmarkSvc.eachBookmark(bookmark.children, (child) => {
+        this.bookmarkHelperSvc.eachBookmark(bookmark.children, (child) => {
           if ((child as any).open) {
             (child as any).open = false;
             (child as any).displayChildren = false;

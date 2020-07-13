@@ -3,6 +3,7 @@ import './android-app.module.scss';
 import angular from 'angular';
 import { NgModule } from 'angular-ts-decorators';
 import AppModule from '../../app/app.module';
+import AndroidBookmarkService from '../android-bookmark/android-bookmark.service';
 import AndroidPlatformService from '../android-platform.service';
 import AndroidAppComponent from './android-app.component';
 
@@ -10,7 +11,7 @@ import AndroidAppComponent from './android-app.component';
   declarations: [AndroidAppComponent],
   id: 'AndroidAppModule',
   imports: [AppModule, 'hmTouchEvents'],
-  providers: [AndroidPlatformService]
+  providers: [AndroidBookmarkService, AndroidPlatformService]
 })
 export default class AndroidAppModule {}
 

@@ -80,8 +80,6 @@ class WebpageMetadataCollecter {
     if (uniqueKeywords.length > 0) {
       return uniqueKeywords.join();
     }
-
-    return null;
   }
 
   getPageTitle(): string {

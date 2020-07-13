@@ -46,7 +46,7 @@ export default class LogService {
   logError(error: Exception, message?: string): ng.IPromise<void> {
     // Return if no error supplied or has already been logged
     if (!error || error.logged) {
-      return null;
+      return;
     }
 
     // Mark this error as logged to prevent duplication in logs
@@ -56,20 +56,25 @@ export default class LogService {
     this.logToConsole(message, LogLevel.Error, error);
 
     // Convert stack trace to show source files then add to queue and process
-    return stackTrace.fromError(error).then((frames) => {
-      const stack = `${error.name}: ${error.message}\n${frames
-        .map((f) => {
-          return `\tat ${f.functionName} (${f.fileName}:${f.lineNumber}:${f.columnNumber})`;
-        })
-        .join('\n')}`;
-      error.stack = stack;
-      this.addLogItemToQueue({
-        level: LogLevel.Error,
-        message,
-        error
-      });
-      this.processLogItemQueue();
-    });
+    return angular.isUndefined(error.stack)
+      ? this.$q.resolve()
+      : stackTrace.fromError(error).then((frames) => {
+          if (frames) {
+            const stack = `${error.name}: ${error.message}\n${frames
+              .map((f) => {
+                return `\tat ${f.functionName} (${f.fileName}:${f.lineNumber}:${f.columnNumber})`;
+              })
+              .join('\n')}`;
+            error.stack = stack;
+          }
+
+          this.addLogItemToQueue({
+            level: LogLevel.Error,
+            message,
+            error
+          });
+          this.processLogItemQueue();
+        });
   }
 
   logInfo(message: object | string): void {
