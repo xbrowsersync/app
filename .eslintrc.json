@@ -21,6 +21,7 @@
   "rules": {
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/lines-between-class-members": "off",
+    "@typescript-eslint/no-unused-vars": "off",
     "class-methods-use-this": "off",
     "consistent-return": "off",
     "func-style": "warn",

@@ -1447,6 +1447,7 @@ export default class WebExtBookmarkService implements BookmarkService {
       return this.getNativeContainerIds().then((nativeContainerIds) => {
         // If parent is other bookmarks, check other bookmarks children for containers
         const otherBookmarksId = nativeContainerIds[BookmarkContainer.Other];
+        // TODO: check if native bookmarks are passed here (parentId)
         if ((changedBookmark as any).parentId !== otherBookmarksId) {
           return false;
         }

@@ -4,7 +4,7 @@ import browserDetect from 'browser-detect';
 import compareVersions from 'compare-versions';
 import { autobind } from 'core-decorators';
 import _ from 'underscore';
-import { Alarms, browser } from 'webextension-polyfill-ts';
+import { Alarms, browser, Notifications } from 'webextension-polyfill-ts';
 import Strings from '../../../../res/strings/en.json';
 import { Alert } from '../../shared/alert/alert.interface';
 import AlertService from '../../shared/alert/alert.service';
@@ -12,7 +12,7 @@ import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmar
 import * as Exceptions from '../../shared/exception/exception';
 import Globals from '../../shared/global-shared.constants';
 import { MessageCommand } from '../../shared/global-shared.enum';
-import { PlatformService } from '../../shared/global-shared.interface';
+import { Message, PlatformService } from '../../shared/global-shared.interface';
 import LogService from '../../shared/log/log.service';
 import NetworkService from '../../shared/network/network.service';
 import { StoreKey } from '../../shared/store/store.enum';
@@ -87,7 +87,7 @@ export default class WebExtBackgroundService {
     browser.alarms.onAlarm.addListener(this.onAlarm);
     browser.notifications.onClicked.addListener(this.onNotificationClicked);
     browser.notifications.onClosed.addListener(this.onNotificationClosed);
-    browser.runtime.onMessage.addListener(this.onMessage as any);
+    browser.runtime.onMessage.addListener(this.onMessage);
   }
 
   checkForNewVersion(): void {
@@ -160,7 +160,7 @@ export default class WebExtBackgroundService {
         ? alert.message
         : new DOMParser().parseFromString(`<span>${alert.message}</span>`, 'text/xml').firstElementChild.textContent;
 
-    const options = {
+    const options: Notifications.CreateNotificationOptions = {
       iconUrl: `${Globals.PathToAssets}/notification.svg`,
       message: messageToDisplay,
       title: alert.title,
@@ -168,7 +168,7 @@ export default class WebExtBackgroundService {
     };
 
     // Display notification
-    browser.notifications.create(this.utilitySvc.getUniqueishId(), options as any).then((notificationId) => {
+    browser.notifications.create(this.utilitySvc.getUniqueishId(), options).then((notificationId) => {
       // Add a click handler to open url if provided or if the message contains a url
       let urlToOpenOnClick = url;
       if (matches && matches.length > 0) {
@@ -355,18 +355,18 @@ export default class WebExtBackgroundService {
     }
   }
 
-  onMessage(message: any): Promise<any> {
+  onMessage(message: Message): Promise<any> {
     // Use native Promise not $q otherwise browser.runtime.sendMessage will return immediately in Firefox
     return new Promise((resolve, reject) => {
       let action: ng.IPromise<any>;
       switch (message.command) {
         // Queue bookmarks sync
         case MessageCommand.SyncBookmarks:
-          action = this.runSyncBookmarksCommand(message, message.runSync);
+          action = this.runSyncBookmarksCommand(message.sync, message.runSync);
           break;
         // Trigger bookmarks restore
         case MessageCommand.RestoreBookmarks:
-          action = this.runRestoreBookmarksCommand(message);
+          action = this.runRestoreBookmarksCommand(message.sync);
           break;
         // Get current sync in progress
         case MessageCommand.GetCurrentSync:

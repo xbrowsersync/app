@@ -8,7 +8,7 @@ import Strings from '../../../res/strings/en.json';
 import { Alert } from '../shared/alert/alert.interface';
 import BookmarkHelperService from '../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkChangeType } from '../shared/bookmark/bookmark.enum';
-import { Bookmark, BookmarkMetadata } from '../shared/bookmark/bookmark.interface';
+import { BookmarkMetadata } from '../shared/bookmark/bookmark.interface';
 import * as Exceptions from '../shared/exception/exception';
 import Globals from '../shared/global-shared.constants';
 import { MessageCommand } from '../shared/global-shared.enum';
@@ -84,31 +84,12 @@ export default class AndroidPlatformService implements PlatformService {
     this.i18nStrings = [];
   }
 
-  automaticUpdates_NextUpdate(): ng.IPromise<string> {
-    return this.methodNotApplicable();
-  }
-
   automaticUpdates_Start(): ng.IPromise<void> {
     return this.methodNotApplicable();
   }
 
   automaticUpdates_Stop(): ng.IPromise<void> {
     return this.methodNotApplicable();
-  }
-
-  bookmarks_Share(bookmark: Bookmark): void {
-    const options = {
-      subject: `${bookmark.title} (${this.getConstant(Strings.shareBookmark_Message)})`,
-      url: bookmark.url,
-      chooserTitle: this.getConstant(Strings.shareBookmark_Message)
-    };
-
-    const onError = (err: Error) => {
-      this.$exceptionHandler(err);
-    };
-
-    // Display share sheet
-    window.plugins.socialsharing.shareWithOptions(options, null, onError);
   }
 
   checkForDarkTheme(): ng.IPromise<void> {
@@ -179,39 +160,6 @@ export default class AndroidPlatformService implements PlatformService {
     });
   }
 
-  copyTextToClipboard(text: string): ng.IPromise<void> {
-    return this.$q<void>((resolve, reject) => {
-      window.cordova.plugins.clipboard.copy(text, resolve, reject);
-    }).then(() => {});
-  }
-
-  decodeQrCode(qrCodeValue: string): any {
-    let serviceUrl: string;
-    let syncId: string;
-    try {
-      // For v1.5.3 or later codes, expect sync info object
-      const syncInfo = JSON.parse(qrCodeValue);
-      syncId = syncInfo.id;
-      serviceUrl = syncInfo.url;
-    } catch (err) {
-      // For pre-v1.5.3 codes, split the scanned value into it's components
-      const arr = qrCodeValue.split(Globals.QrCode.Delimiter);
-      syncId = arr[0];
-      serviceUrl = arr[1];
-    }
-
-    // Validate decoded values
-    const urlRegex = new RegExp(`^${Globals.URL.ValidUrlRegex}$`, 'i');
-    if (!this.utilitySvc.syncIdIsValid(syncId) || (serviceUrl && !urlRegex.test(serviceUrl))) {
-      throw new Error('Invalid QR code');
-    }
-
-    return {
-      id: syncId,
-      url: serviceUrl
-    };
-  }
-
   disableBackgroundSync(): void {
     if (!this.backgroundSyncInterval) {
       return;
@@ -220,61 +168,6 @@ export default class AndroidPlatformService implements PlatformService {
     this.$interval.cancel(this.backgroundSyncInterval);
     this.backgroundSyncInterval = null;
     window.cordova.plugins.backgroundMode.disable();
-  }
-
-  disableLight(): ng.IPromise<void> {
-    return this.$q<void>((resolve, reject) => {
-      window.QRScanner.disableLight((err: any) => {
-        if (err) {
-          return reject(new Exceptions.AndroidException(err._message || err.name || err.code));
-        }
-        resolve();
-      });
-    });
-  }
-
-  downloadFile(fileName: string, textContents: string): ng.IPromise<string> {
-    if (!fileName) {
-      throw new Error('File name not supplied.');
-    }
-
-    // Set file storage location to external storage root directory
-    const storageLocation = `${window.cordova.file.externalRootDirectory}Download`;
-
-    return this.$q((resolve, reject) => {
-      const onError = (err: Error) => {
-        return reject(new Exceptions.FailedDownloadFileException(null, err));
-      };
-
-      this.logSvc.logInfo(`Downloading file ${fileName}`);
-
-      // Save file to storage location
-      window.resolveLocalFileSystemURL(
-        storageLocation,
-        (dirEntry) => {
-          dirEntry.getFile(
-            fileName,
-            { create: true },
-            (fileEntry) => {
-              fileEntry.createWriter((fileWriter) => {
-                fileWriter.write(textContents);
-                fileWriter.onerror = onError;
-                fileWriter.onwriteend = () => {
-                  // Return message to be displayed
-                  const message = this.getConstant(Strings.downloadFile_Success_Message).replace(
-                    '{fileName}',
-                    fileEntry.name
-                  );
-                  resolve(message);
-                };
-              }, onError);
-            },
-            onError
-          );
-        },
-        onError
-      );
-    });
   }
 
   enableBackgroundSync(): void {
@@ -295,17 +188,6 @@ export default class AndroidPlatformService implements PlatformService {
 
       this.executeSync(true);
     }, 120e3);
-  }
-
-  enableLight(): ng.IPromise<void> {
-    return this.$q<void>((resolve, reject) => {
-      window.QRScanner.enableLight((err) => {
-        if (err) {
-          return reject(new Exceptions.AndroidException(err._message || err.name || err.code));
-        }
-        resolve();
-      });
-    });
   }
 
   eventListeners_Disable(): ng.IPromise<void> {
@@ -413,21 +295,6 @@ export default class AndroidPlatformService implements PlatformService {
     return this.$q.resolve(this.currentPage && this.currentPage.url);
   }
 
-  getHelpPages(): string[] {
-    const pages = [
-      this.getConstant(Strings.help_Page_Welcome_Android_Content),
-      this.getConstant(Strings.help_Page_FirstSync_Android_Content),
-      this.getConstant(Strings.help_Page_ExistingId_Android_Content),
-      this.getConstant(Strings.help_Page_Searching_Android_Content),
-      this.getConstant(Strings.help_Page_AddingBookmarks_Android_Content),
-      this.getConstant(Strings.help_Page_BackingUp_Android_Content),
-      this.getConstant(Strings.help_Page_FurtherSupport_Content)
-    ];
-
-    return pages;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getPageMetadata(getFullMetadata = true, pageUrl?: string): ng.IPromise<WebpageMetadata> {
     let inAppBrowser: any;
     let loadUrlTimeout: ng.IPromise<void>;
@@ -950,10 +817,6 @@ export default class AndroidPlatformService implements PlatformService {
     return this.$q.resolve();
   }
 
-  sync_DisplayConfirmation(): boolean {
-    return false;
-  }
-
   sync_Queue(sync: Sync, command = MessageCommand.SyncBookmarks): ng.IPromise<any> {
     // Add sync data to queue and run sync
     sync.command = command;
@@ -1014,105 +877,8 @@ export default class AndroidPlatformService implements PlatformService {
       });
   }
 
-  scanner_Start(): ng.IPromise<any> {
-    this.vm.scanner.lightEnabled = false;
-    this.vm.scanner.invalidSyncId = false;
-
-    return this.$q<any>((resolve, reject) => {
-      const waitForScan = () => {
-        this.$timeout(() => {
-          this.vm.scanner.invalidSyncId = false;
-        }, 100);
-
-        window.QRScanner.scan((err, scannedText) => {
-          if (err) {
-            return reject(new Exceptions.AndroidException(err._message || err.name || err.code));
-          }
-
-          window.QRScanner.pausePreview(() => {
-            this.logSvc.logInfo(`Scanned: ${scannedText}`);
-
-            let syncInfo: any;
-            try {
-              syncInfo = this.decodeQrCode(scannedText);
-            } catch (decodeQrCodeErr) {
-              // If scanned value is not value resume scanning
-              this.vm.scanner.invalidSyncId = true;
-              this.$timeout(() => {
-                window.QRScanner.resumePreview(waitForScan);
-              }, 3e3);
-              return;
-            }
-
-            this.$timeout(() => {
-              resolve(syncInfo);
-            }, 1e3);
-          });
-        });
-      };
-
-      window.QRScanner.prepare((err, status) => {
-        if (err) {
-          return reject(new Exceptions.AndroidException(err._message || err.name || err.code));
-        }
-
-        if (status.authorized) {
-          window.QRScanner.show(() => {
-            this.$timeout(() => {
-              this.vm.view.change(this.vm.view.views.scan);
-              waitForScan();
-            }, 500);
-          });
-        } else {
-          reject(new Exceptions.AndroidException('Camera use not authorised'));
-        }
-      });
-    }).catch((err) => {
-      throw new Exceptions.FailedScanException(null, err);
-    });
-  }
-
-  scanner_Stop(): ng.IPromise<void> {
-    this.disableLight()
-      .catch(() => {})
-      .finally(() => {
-        window.QRScanner.hide(() => {
-          window.QRScanner.destroy();
-        });
-      });
-    return this.$q.resolve();
-  }
-
-  scanner_ToggleLight(switchOn?: boolean): ng.IPromise<boolean> {
-    // If state was elected toggle light based on value
-    if (switchOn !== undefined) {
-      return (switchOn ? this.enableLight() : this.disableLight()).then(() => {
-        return switchOn;
-      });
-    }
-
-    // Otherwise toggle light based on current state
-    return this.$q((resolve, reject) => {
-      window.QRScanner.getStatus((status) => {
-        (status.lightEnabled ? this.disableLight() : this.enableLight())
-          .then(() => {
-            resolve(!status.lightEnabled);
-          })
-          .catch(reject);
-      });
-    });
-  }
-
-  sync_Current(): ng.IPromise<Sync> {
-    return this.$q.resolve(this.syncEngineService.getCurrentSync());
-  }
-
   sync_Disable(): ng.IPromise<any> {
     return this.syncEngineService.disableSync();
-  }
-
-  sync_GetQueueLength(): ng.IPromise<number> {
-    return this.$q.resolve(this.syncEngineService.getSyncQueueLength());
   }
 
   upgradeTo153(): ng.IPromise<void> {

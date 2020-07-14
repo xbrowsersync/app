@@ -10,7 +10,6 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable consistent-return */
 /* eslint-disable default-case */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import angular from 'angular';
@@ -850,6 +849,11 @@ export default class AppComponent {
     this.alertSvc.clearCurrentAlert();
   }
 
+  copyTextToClipboard(text: string): ng.IPromise<void> {
+    // Implemented in platform app component
+    return this.$q.resolve();
+  }
+
   getPageMetadataAsBookmarkMetadata(metadata: any): BookmarkMetadata {
     if (!metadata) {
       return;
@@ -989,12 +993,17 @@ export default class AppComponent {
 
         // Beautify json and download data
         const beautifiedJson = JSON.stringify(backupData, null, 2);
-        return this.platformSvc.downloadFile(this.backupRestoreSvc.getBackupFileName(), beautifiedJson, 'backupLink');
+        return this.downloadFile(this.backupRestoreSvc.getBackupFileName(), beautifiedJson, 'backupLink');
       })
       .then((message) => {
         // Display message
         this.settings.backupCompletedMessage = message;
       });
+  }
+
+  downloadFile(fileName: string, textContents: string, linkId: string): ng.IPromise<string> {
+    // Implemented in platform app component
+    return this.$q.resolve('');
   }
 
   downloadLogFile() {
@@ -1003,11 +1012,7 @@ export default class AppComponent {
       .get<string[]>(StoreKey.TraceLog)
       .then((debugMessageLog) => {
         // Trigger download
-        return this.platformSvc.downloadFile(
-          this.getLogFileName(),
-          debugMessageLog.join('\r\n'),
-          'downloadLogFileLink'
-        );
+        return this.downloadFile(this.getLogFileName(), debugMessageLog.join('\r\n'), 'downloadLogFileLink');
       })
       .then((message) => {
         // Display message
@@ -1052,6 +1057,11 @@ export default class AppComponent {
     return country.name;
   }
 
+  getHelpPages(): string[] {
+    // Implemented in platform app component
+    return [];
+  }
+
   getLogFileName() {
     const fileName = `xbs_log_${this.utilitySvc.getDateTimeString(new Date())}.txt`;
     return fileName;
@@ -1067,6 +1077,11 @@ export default class AppComponent {
     }
 
     return this.platformSvc.getPageMetadata(true, url).then(this.getPageMetadataAsBookmarkMetadata);
+  }
+
+  getNextScheduledSyncUpdateCheck(): ng.IPromise<string> {
+    // Implemented in platform app component
+    return this.$q.resolve('');
   }
 
   getServiceStatusTextFromStatusCode(statusCode) {
@@ -1118,7 +1133,7 @@ export default class AppComponent {
         this.sync.service.url = cachedData[1];
 
         // Check if a sync is currently in progress
-        return this.platformSvc.sync_Current().then((currentSync) => {
+        return this.sync_Current().then((currentSync) => {
           if (currentSync) {
             this.logSvc.logInfo('Waiting for syncs to finish...');
 
@@ -1372,7 +1387,7 @@ export default class AppComponent {
           // Check for available sync updates on non-mobile platforms
           if (this.sync.enabled && !this.utilitySvc.isMobilePlatform(this.platformName)) {
             this.$q
-              .all([this.syncEngineService.checkForUpdates(), this.platformSvc.automaticUpdates_NextUpdate()])
+              .all([this.syncEngineService.checkForUpdates(), this.getNextScheduledSyncUpdateCheck()])
               .then((data) => {
                 if (data[0]) {
                   this.settings.updatesAvailable = true;
@@ -1466,7 +1481,7 @@ export default class AppComponent {
 
   helpPanel_ShowHelp() {
     this.storeSvc.set(StoreKey.DisplayHelp, false);
-    this.help.pages = this.platformSvc.getHelpPages();
+    this.help.pages = this.getHelpPages();
     this.view.change(this.view.views.help);
     this.displayHelpPage();
   }
@@ -1488,21 +1503,31 @@ export default class AppComponent {
     }
   }
 
+  permissions_Remove(): ng.IPromise<void> {
+    // Implemented in platform app component
+    return this.$q.resolve();
+  }
+
+  permissions_Request(): ng.IPromise<boolean> {
+    // Implemented in platform app component
+    return this.$q.resolve(true);
+  }
+
   permissions_Revoke_Click() {
-    return this.platformSvc.permissions_Remove().then(() => {
+    return this.permissions_Remove().then(() => {
       this.settings.readWebsiteDataPermissionsGranted = false;
     });
   }
 
   permissions_Request_Click() {
-    return this.platformSvc.permissions_Request().then((granted) => {
+    return this.permissions_Request().then((granted) => {
       this.settings.readWebsiteDataPermissionsGranted = granted;
     });
   }
 
   permissionsPanel_RequestPermissions_Click() {
     return this.$q
-      .all([this.platformSvc.permissions_Request(), this.storeSvc.set(StoreKey.DisplayPermissions, false)])
+      .all([this.permissions_Request(), this.storeSvc.set(StoreKey.DisplayPermissions, false)])
       .finally(this.view.displayMainView);
   }
 
@@ -1514,7 +1539,7 @@ export default class AppComponent {
   }
 
   qrPanel_CopySyncId_Click() {
-    return this.platformSvc.copyTextToClipboard(this.sync.id).then(() => {
+    return this.copyTextToClipboard(this.sync.id).then(() => {
       this.$timeout(() => {
         this.settings.syncIdCopied = true;
       });
@@ -2036,7 +2061,7 @@ export default class AppComponent {
     }
 
     // Trigger native share functionality
-    this.platformSvc.bookmarks_Share(bookmarkToShare);
+    this.shareBookmark(bookmarkToShare);
   }
 
   searchForm_ToggleBookmark_Click() {
@@ -2175,6 +2200,10 @@ export default class AppComponent {
     });
   }
 
+  shareBookmark(bookmark: Bookmark): void {
+    // Implemented in platform app component
+  }
+
   startSyncing() {
     const syncData = {} as any;
     let syncInfoMessage;
@@ -2279,6 +2308,20 @@ export default class AppComponent {
       });
   }
 
+  sync_Current(): ng.IPromise<Sync> {
+    // Implemented in platform app component
+    return this.$q.resolve(null);
+  }
+
+  sync_DisplayConfirmation(): boolean {
+    return true;
+  }
+
+  sync_GetQueueLength(): ng.IPromise<number> {
+    // Implemented in platform app component
+    return this.$q.resolve(0);
+  }
+
   syncBookmarksFailed(err, syncData) {
     // Disable upgrade confirmed flag
     this.login.upgradeConfirmed = false;
@@ -2345,7 +2388,7 @@ export default class AppComponent {
   }
 
   syncForm_EnableSync_Click() {
-    if (this.sync.id && this.platformSvc.sync_DisplayConfirmation()) {
+    if (this.sync.id && this.sync_DisplayConfirmation()) {
       // Display overwrite data confirmation panel
       this.login.displaySyncConfirmation = true;
       if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
@@ -2629,10 +2672,7 @@ export default class AppComponent {
     const action = () => {
       return this.$q((resolve, reject) => {
         this.$timeout(() => {
-          this.$q
-            .all([this.platformSvc.sync_Current(), this.platformSvc.sync_GetQueueLength()])
-            .then(resolve)
-            .catch(reject);
+          this.$q.all([this.sync_Current(), this.sync_GetQueueLength()]).then(resolve).catch(reject);
         }, 1e3);
       });
     };

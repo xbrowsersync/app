@@ -1,14 +1,11 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
 import NgAnimate from 'angular-animate';
 import NgFilter from 'angular-filter';
 import NgSanitize from 'angular-sanitize';
 import { NgModule } from 'angular-ts-decorators';
 import NgInfiniteScroll from 'ng-infinite-scroll';
 import ExceptionHandlerService from '../shared/exception/exception-handler/exception-handler.service';
-import GlobalSharedModule from '../shared/global-shared.module';
 import Globals from '../shared/global-shared.constants';
+import GlobalSharedModule from '../shared/global-shared.module';
 import BookmarkTreeComponent from './bookmark-tree.component';
 import ZxcvbnDirective from './zxcvbn.directive';
 

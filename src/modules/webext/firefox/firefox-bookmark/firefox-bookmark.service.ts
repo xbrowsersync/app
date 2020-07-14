@@ -193,7 +193,7 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
       parentId,
       type: 'separator'
     };
-    return browser.bookmarks.create(newSeparator as any).catch((err) => {
+    return browser.bookmarks.create(newSeparator).catch((err) => {
       this.logSvc.logInfo('Failed to create native separator');
       throw new Exceptions.FailedCreateNativeBookmarksException(null, err);
     });

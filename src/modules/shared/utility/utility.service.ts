@@ -75,6 +75,10 @@ export default class UtilityService {
     return values.filter((x) => x);
   }
 
+  get24hrTimeFromDate(date = new Date()): string {
+    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  }
+
   getDateTimeString(date: Date): string {
     if (!date) {
       return '';

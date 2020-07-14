@@ -6,7 +6,7 @@ import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmar
 import * as Exceptions from '../../shared/exception/exception';
 import Globals from '../../shared/global-shared.constants';
 import { MessageCommand } from '../../shared/global-shared.enum';
-import { I18nString, PlatformService, WebpageMetadata } from '../../shared/global-shared.interface';
+import { I18nString, Message, PlatformService, WebpageMetadata } from '../../shared/global-shared.interface';
 import LogService from '../../shared/log/log.service';
 import StoreService from '../../shared/store/store.service';
 import { SyncType } from '../../shared/sync/sync.enum';
@@ -80,16 +80,6 @@ export default class WebExtPlatformService implements PlatformService {
     return this._backgroundSvc;
   }
 
-  automaticUpdates_NextUpdate(): ng.IPromise<string> {
-    return browser.alarms.get(Globals.Alarm.Name).then((alarm) => {
-      if (!alarm) {
-        return '';
-      }
-
-      return this.get24hrTimeFromDate(new Date(alarm.scheduledTime));
-    });
-  }
-
   automaticUpdates_Start(): ng.IPromise<void> {
     // Register alarm
     return browser.alarms
@@ -109,47 +99,6 @@ export default class WebExtPlatformService implements PlatformService {
     return browser.alarms.clear(Globals.Alarm.Name).then(() => {});
   }
 
-  copyTextToClipboard(text: string): ng.IPromise<void> {
-    return navigator.clipboard.writeText(text);
-  }
-
-  downloadFile(fileName: string, textContents: string, linkId: string): ng.IPromise<string> {
-    if (!fileName) {
-      throw new Error('File name not supplied.');
-    }
-
-    // Use provided hyperlink or create new one
-    let downloadLink: HTMLAnchorElement;
-    if (linkId) {
-      downloadLink = document.getElementById(linkId) as HTMLAnchorElement;
-    } else {
-      downloadLink = document.createElement('a');
-      downloadLink.style.display = 'none';
-      document.body.appendChild(downloadLink);
-    }
-
-    if (!downloadLink) {
-      throw new Error('Link element not found.');
-    }
-
-    this.logSvc.logInfo(`Downloading file ${fileName}`);
-
-    // Use hyperlink to trigger file download
-    const file = new Blob([textContents], { type: 'text/plain' });
-    downloadLink.href = URL.createObjectURL(file);
-    downloadLink.innerText = fileName;
-    downloadLink.download = fileName;
-    downloadLink.click();
-
-    if (!linkId) {
-      document.body.removeChild(downloadLink);
-    }
-
-    // Return message to be displayed
-    const message = this.getConstant(Strings.downloadFile_Success_Message);
-    return this.$q.resolve(message);
-  }
-
   eventListeners_Disable(): ng.IPromise<void> {
     return this.sendMessage({
       command: MessageCommand.DisableEventListeners
@@ -160,10 +109,6 @@ export default class WebExtPlatformService implements PlatformService {
     return this.sendMessage({
       command: MessageCommand.EnableEventListeners
     });
-  }
-
-  get24hrTimeFromDate(date = new Date()): string {
-    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
   }
 
   getConstant(i18nString: I18nString): string {
@@ -187,31 +132,10 @@ export default class WebExtPlatformService implements PlatformService {
     });
   }
 
-  getHelpPages(): string[] {
-    const pages = [
-      this.getConstant(Strings.help_Page_Welcome_Desktop_Content),
-      this.getConstant(Strings.help_Page_BeforeYouBegin_Chrome_Content),
-      this.getConstant(Strings.help_Page_FirstSync_Desktop_Content),
-      this.getConstant(Strings.help_Page_Service_Content),
-      this.getConstant(Strings.help_Page_SyncId_Content),
-      this.getConstant(Strings.help_Page_ExistingId_Desktop_Content),
-      this.getConstant(Strings.help_Page_Searching_Desktop_Content),
-      this.getConstant(Strings.help_Page_AddingBookmarks_Chrome_Content),
-      this.getConstant(Strings.help_Page_NativeFeatures_Chrome_Content),
-      this.getConstant(Strings.help_Page_BackingUp_Desktop_Content),
-      this.getConstant(Strings.help_Page_Shortcuts_Chrome_Content),
-      this.getConstant(Strings.help_Page_Mobile_Content),
-      this.getConstant(Strings.help_Page_FurtherSupport_Content)
-    ];
-
-    return pages;
-  }
-
   getNewTabUrl(): string {
     return 'chrome://newtab/';
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getPageMetadata(getFullMetadata = true, pageUrl?: string): ng.IPromise<WebpageMetadata> {
     return browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
       // If active tab empty, throw error
@@ -391,28 +315,13 @@ export default class WebExtPlatformService implements PlatformService {
     });
   }
 
-  permissions_Remove(): ng.IPromise<void> {
-    // Remove optional permissions
-    return browser.permissions.remove(this.optionalPermissions).then(() => {
-      this.logSvc.logInfo('Optional permissions removed');
-    });
-  }
-
-  permissions_Request(): ng.IPromise<boolean> {
-    // Request optional permissions
-    return browser.permissions.request(this.optionalPermissions).then((granted) => {
-      this.logSvc.logInfo(`Optional permissions ${!granted ? 'not ' : ''}granted`);
-      return granted;
-    });
-  }
-
   refreshLocalSyncData(): ng.IPromise<void> {
     return this.sync_Queue({ type: SyncType.Local }).then(() => {
       this.logSvc.logInfo('Local sync data refreshed');
     });
   }
 
-  sendMessage(message: any): ng.IPromise<any> {
+  sendMessage(message: Message): ng.IPromise<any> {
     let module: ng.IModule;
     try {
       module = angular.module('WebExtBackgroundModule');
@@ -432,41 +341,24 @@ export default class WebExtPlatformService implements PlatformService {
     });
   }
 
-  sync_Current(): ng.IPromise<Sync> {
-    return this.sendMessage({
-      command: MessageCommand.GetCurrentSync
-    });
-  }
-
   sync_Disable(): ng.IPromise<any> {
     return this.sendMessage({
       command: MessageCommand.DisableSync
     });
   }
 
-  sync_DisplayConfirmation(): boolean {
-    return true;
-  }
-
-  sync_GetQueueLength(): ng.IPromise<number> {
+  sync_Queue(sync: Sync, command = MessageCommand.SyncBookmarks, runSync = true): ng.IPromise<any> {
     return this.sendMessage({
-      command: MessageCommand.GetSyncQueueLength
+      command,
+      sync,
+      runSync
     });
   }
 
-  sync_Queue(sync: Sync, command = MessageCommand.SyncBookmarks, runSync = true): ng.IPromise<any> {
-    const message: any = angular.copy(sync);
-    message.command = command;
-    message.runSync = runSync;
-    return this.sendMessage(message);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   urlIsNativeConfigPage(url: string): boolean {
     return false;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   urlIsSupported(url: string): boolean {
     return true;
   }
