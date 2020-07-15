@@ -26,9 +26,7 @@ export default class CryptoService {
     this.storeSvc = StoreSvc;
   }
 
-  concatUint8Arrays(firstArr: Uint8Array, secondArr: Uint8Array): Uint8Array {
-    firstArr = firstArr || new Uint8Array();
-    secondArr = secondArr || new Uint8Array();
+  concatUint8Arrays(firstArr: Uint8Array = new Uint8Array(), secondArr: Uint8Array = new Uint8Array()): Uint8Array {
     const totalLength = firstArr.length + secondArr.length;
     const result = new Uint8Array(totalLength);
     result.set(firstArr, 0);
@@ -83,7 +81,7 @@ export default class CryptoService {
       })
       .catch((err) => {
         this.logSvc.logWarning('Decryption failed');
-        throw new Exceptions.InvalidCredentialsException(null, err);
+        throw new Exceptions.InvalidCredentialsException(undefined, err);
       });
   }
 
@@ -131,7 +129,7 @@ export default class CryptoService {
       })
       .catch((err) => {
         this.logSvc.logWarning('Encryption failed');
-        throw new Exceptions.InvalidCredentialsException(null, err);
+        throw new Exceptions.InvalidCredentialsException(undefined, err);
       });
   }
 

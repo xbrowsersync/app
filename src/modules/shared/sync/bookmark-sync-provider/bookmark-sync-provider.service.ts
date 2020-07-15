@@ -382,10 +382,8 @@ export default class BookmarkSyncProviderService implements SyncProvider {
             return this.cryptoSvc.decryptData(response.bookmarks);
           })
           .then((decryptedData) => {
-            let bookmarks: Bookmark[] = decryptedData ? JSON.parse(decryptedData) : null;
-
             // Upgrade containers to use current container names
-            bookmarks = this.bookmarkHelperSvc.upgradeContainers(bookmarks || []);
+            const bookmarks = this.bookmarkHelperSvc.upgradeContainers(decryptedData ? JSON.parse(decryptedData) : []);
 
             // Set the sync version to the current app version
             return this.storeSvc
@@ -544,7 +542,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
   }
 
   validateBookmarkIds(bookmarks: Bookmark[]): boolean {
-    if (!bookmarks || bookmarks.length === 0) {
+    if (bookmarks?.length === 0) {
       return true;
     }
 

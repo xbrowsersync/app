@@ -51,7 +51,7 @@ export default class AndroidAppComponent extends AppComponent {
 
     // Validate decoded values
     const urlRegex = new RegExp(`^${Globals.URL.ValidUrlRegex}$`, 'i');
-    if (!this.utilitySvc.syncIdIsValid(syncId) || (serviceUrl && !urlRegex.test(serviceUrl))) {
+    if (!this.utilitySvc.syncIdIsValid(syncId) || !urlRegex.test(serviceUrl ?? '')) {
       throw new Error('Invalid QR code');
     }
 
@@ -65,7 +65,7 @@ export default class AndroidAppComponent extends AppComponent {
     return this.$q<void>((resolve, reject) => {
       window.QRScanner.disableLight((err: any) => {
         if (err) {
-          return reject(new Exceptions.AndroidException(err._message || err.name || err.code));
+          return reject(new Exceptions.AndroidException(err._message ?? err.name ?? err.code));
         }
         resolve();
       });
@@ -81,12 +81,12 @@ export default class AndroidAppComponent extends AppComponent {
     const urlRegex = new RegExp(Globals.URL.ValidUrlRegex);
     const matches = description.match(urlRegex);
     const descriptionStripped =
-      !matches || matches.length === 0
+      matches?.length === 0
         ? description
         : new DOMParser().parseFromString(`<span>${description}</span>`, 'text/xml').firstElementChild.textContent;
 
     // Add an action to open url if provided or if the message contains a url
-    if (!actionCallback && matches && matches.length > 0) {
+    if (!actionCallback && matches?.length > 0) {
       const urlToOpenOnClick = matches[0];
       action = this.platformSvc.getConstant(Strings.button_Go_Label);
       actionCallback = () => {
@@ -142,7 +142,7 @@ export default class AndroidAppComponent extends AppComponent {
 
     return this.$q((resolve, reject) => {
       const onError = (err: Error) => {
-        return reject(new Exceptions.FailedDownloadFileException(null, err));
+        return reject(new Exceptions.FailedDownloadFileException(undefined, err));
       };
 
       this.logSvc.logInfo(`Downloading file ${fileName}`);
@@ -179,7 +179,7 @@ export default class AndroidAppComponent extends AppComponent {
     return this.$q<void>((resolve, reject) => {
       window.QRScanner.enableLight((err) => {
         if (err) {
-          return reject(new Exceptions.AndroidException(err._message || err.name || err.code));
+          return reject(new Exceptions.AndroidException(err._message ?? err.name ?? err.code));
         }
         resolve();
       });
@@ -247,7 +247,7 @@ export default class AndroidAppComponent extends AppComponent {
 
         window.QRScanner.scan((err, scannedText) => {
           if (err) {
-            return reject(new Exceptions.AndroidException(err._message || err.name || err.code));
+            return reject(new Exceptions.AndroidException(err._message ?? err.name ?? err.code));
           }
 
           window.QRScanner.pausePreview(() => {
@@ -274,7 +274,7 @@ export default class AndroidAppComponent extends AppComponent {
 
       window.QRScanner.prepare((err, status) => {
         if (err) {
-          return reject(new Exceptions.AndroidException(err._message || err.name || err.code));
+          return reject(new Exceptions.AndroidException(err._message ?? err.name ?? err.code));
         }
 
         if (status.authorized) {
@@ -289,7 +289,7 @@ export default class AndroidAppComponent extends AppComponent {
         }
       });
     }).catch((err) => {
-      throw new Exceptions.FailedScanException(null, err);
+      throw new Exceptions.FailedScanException(undefined, err);
     });
   }
 

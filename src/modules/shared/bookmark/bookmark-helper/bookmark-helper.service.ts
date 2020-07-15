@@ -71,7 +71,7 @@ export default class BookmarkHelperService {
       ? this.newSeparator(bookmarks)
       : this.newBookmark(
           bookmarkMetadata.title,
-          bookmarkMetadata.url || null,
+          bookmarkMetadata.url,
           bookmarkMetadata.description,
           bookmarkMetadata.tags,
           bookmarks
@@ -98,7 +98,9 @@ export default class BookmarkHelperService {
   cleanBookmark(bookmark: Bookmark): Bookmark {
     // Remove empty properties, except for children array
     const cleanedBookmark = _.pick<Bookmark, 'id' | 'url'>(angular.copy(bookmark), (value, key) => {
-      return (_.isArray(value) && key !== 'children') || _.isString(value) ? value.length > 0 : value != null;
+      return (angular.isArray(value) && key !== 'children') || angular.isString(value)
+        ? value.length > 0
+        : value != null;
     });
 
     return cleanedBookmark;
@@ -112,7 +114,7 @@ export default class BookmarkHelperService {
           return;
         }
         iteratee(bookmarksToIterate[i]);
-        if ((bookmarksToIterate[i] as any).children && (bookmarksToIterate[i] as any).children.length > 0) {
+        if ((bookmarksToIterate[i] as any).children?.length > 0) {
           iterateBookmarks((bookmarksToIterate[i] as any).children);
         }
       }
@@ -188,7 +190,7 @@ export default class BookmarkHelperService {
     bookmark.id = id;
 
     // Process children if any
-    if (nativeBookmark.children && nativeBookmark.children.length > 0) {
+    if (nativeBookmark.children?.length > 0) {
       bookmark.children = nativeBookmark.children.map((childBookmark) => {
         return this.convertNativeBookmarkToBookmark(childBookmark, bookmarks, takenIds);
       });
@@ -317,7 +319,7 @@ export default class BookmarkHelperService {
 
   getIdsFromDescendants(bookmark: Bookmark): number[] {
     const ids = [];
-    if (!bookmark.children || bookmark.children.length === 0) {
+    if (bookmark.children?.length === 0) {
       return ids;
     }
 
@@ -333,7 +335,7 @@ export default class BookmarkHelperService {
     }
 
     let getBookmarks: ng.IPromise<Bookmark[]>;
-    if (bookmarks && bookmarks.length > 0) {
+    if (bookmarks?.length > 0) {
       // Use supplied bookmarks
       getBookmarks = this.$q.resolve(bookmarks);
     } else {
@@ -390,7 +392,7 @@ export default class BookmarkHelperService {
         : this.newBookmark(nativeBookmark.title, nativeBookmark.url);
 
       // If this is a folder and has children, process them
-      if (nativeBookmark.children && nativeBookmark.children.length > 0) {
+      if (nativeBookmark.children?.length > 0) {
         bookmark.children = this.getNativeBookmarksAsBookmarks(nativeBookmark.children);
       }
       bookmarks.push(bookmark);
@@ -446,11 +448,11 @@ export default class BookmarkHelperService {
     return (
       (bookmark as NativeBookmarks.BookmarkTreeNode).type === 'separator' ||
       (bookmark.title &&
-        (separatorRegex.test(bookmark.title) ||
+        (separatorRegex.test(bookmark.title ?? '') ||
           bookmark.title.indexOf(Globals.Bookmarks.HorizontalSeparatorTitle) >= 0 ||
           bookmark.title === Globals.Bookmarks.VerticalSeparatorTitle) &&
         (!bookmark.url || bookmark.url === this.platformSvc.getNewTabUrl()) &&
-        (!bookmark.children || bookmark.children.length === 0))
+        bookmark.children?.length === 0)
     );
   }
 
@@ -490,8 +492,8 @@ export default class BookmarkHelperService {
       children: [],
       description: this.utilitySvc.trimToNearestWord(description, Globals.Bookmarks.DescriptionMaxLength),
       tags,
-      title: title && title.trim(),
-      url: url && url.trim()
+      title: title?.trim(),
+      url: url?.trim()
     };
 
     if (url) {
@@ -500,7 +502,7 @@ export default class BookmarkHelperService {
       delete newBookmark.url;
     }
 
-    if (tags && tags.length === 0) {
+    if (tags?.length === 0) {
       delete newBookmark.tags;
     }
 
@@ -541,19 +543,19 @@ export default class BookmarkHelperService {
     const toolbarContainer = this.getContainer(BookmarkContainer.Toolbar, bookmarks);
     const removeArr: Bookmark[] = [];
 
-    if (menuContainer && (!menuContainer.children || menuContainer.children.length === 0)) {
+    if (menuContainer?.children?.length === 0) {
       removeArr.push(menuContainer);
     }
 
-    if (mobileContainer && (!mobileContainer.children || mobileContainer.children.length === 0)) {
+    if (mobileContainer?.children?.length === 0) {
       removeArr.push(mobileContainer);
     }
 
-    if (otherContainer && (!otherContainer.children || otherContainer.children.length === 0)) {
+    if (otherContainer?.children?.length === 0) {
       removeArr.push(otherContainer);
     }
 
-    if (toolbarContainer && (!toolbarContainer.children || toolbarContainer.children.length === 0)) {
+    if (toolbarContainer?.children?.length === 0) {
       removeArr.push(toolbarContainer);
     }
 
@@ -571,12 +573,12 @@ export default class BookmarkHelperService {
 
       // If url supplied, first search by url
       if (query.url) {
-        results = this.searchBookmarksByUrl(bookmarks, query.url) || [];
+        results = this.searchBookmarksByUrl(bookmarks, query.url) ?? [];
       }
 
       // Search by keywords and sort (score desc, id desc) using results from url search if relevant
       results = _.chain(
-        this.searchBookmarksByKeywords(results || (bookmarks as BookmarkSearchResult[]), query.keywords)
+        this.searchBookmarksByKeywords(results ?? (bookmarks as BookmarkSearchResult[]), query.keywords)
       )
         .sortBy('id')
         .sortBy('score')
@@ -594,7 +596,7 @@ export default class BookmarkHelperService {
     _.each(bookmarks, (bookmark) => {
       if (!bookmark.url) {
         // If this is a folder, search children
-        if (bookmark.children && bookmark.children.length > 0) {
+        if (bookmark.children?.length > 0) {
           this.searchBookmarksByKeywords(bookmark.children, keywords, results);
         }
       } else {
@@ -613,7 +615,7 @@ export default class BookmarkHelperService {
         const scores = keywords.map((keyword) => {
           let count = 0;
           bookmarkWords.forEach((word) => {
-            if (word && word.toLowerCase().indexOf(keyword.toLowerCase()) === 0) {
+            if (word?.toLowerCase().indexOf(keyword.toLowerCase()) === 0) {
               count += 1;
             }
           });
@@ -665,7 +667,7 @@ export default class BookmarkHelperService {
     );
 
     for (let i = 0; i < bookmarks.length; i += 1) {
-      if (bookmarks[i].children && bookmarks[i].children.length > 0) {
+      if (bookmarks[i].children?.length > 0) {
         results = this.searchBookmarksByUrl(bookmarks[i].children, url, results);
       }
     }
@@ -772,7 +774,7 @@ export default class BookmarkHelperService {
     if (xbsContainerIndex >= 0) {
       const xbsContainer = bookmarks.splice(xbsContainerIndex, 1)[0];
       xbsContainer.title = 'Legacy xBrowserSync bookmarks';
-      otherContainer.children = otherContainer.children || [];
+      otherContainer.children = otherContainer.children ?? [];
       otherContainer.children.splice(0, 0, xbsContainer);
     }
 

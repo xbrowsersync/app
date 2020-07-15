@@ -96,7 +96,7 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
         return this.$q.all([clearMenu, clearMobile, clearOthers, clearToolbar]).then(() => {});
       })
       .catch((err) => {
-        throw new Exceptions.FailedRemoveNativeBookmarksException(null, err);
+        throw new Exceptions.FailedRemoveNativeBookmarksException(undefined, err);
       });
   }
 
@@ -195,7 +195,7 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
     };
     return browser.bookmarks.create(newSeparator).catch((err) => {
       this.logSvc.logInfo('Failed to create native separator');
-      throw new Exceptions.FailedCreateNativeBookmarksException(null, err);
+      throw new Exceptions.FailedCreateNativeBookmarksException(undefined, err);
     });
   }
 
@@ -262,13 +262,11 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
             ? Promise.resolve<Bookmark[]>(null)
             : browser.bookmarks.getSubTree(menuBookmarksId).then((subTree) => {
                 const menuBookmarks = subTree[0];
-
-                if (menuBookmarks.children && menuBookmarks.children.length > 0) {
+                if (menuBookmarks.children?.length > 0) {
                   // Add all bookmarks into flat array
                   this.bookmarkHelperSvc.eachBookmark(menuBookmarks.children, (bookmark) => {
                     allNativeBookmarks.push(bookmark);
                   });
-
                   return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(menuBookmarks.children);
                 }
               });
@@ -279,13 +277,11 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
             ? Promise.resolve<Bookmark[]>(null)
             : browser.bookmarks.getSubTree(mobileBookmarksId).then((subTree) => {
                 const mobileBookmarks = subTree[0];
-
-                if (mobileBookmarks.children && mobileBookmarks.children.length > 0) {
+                if (mobileBookmarks.children?.length > 0) {
                   // Add all bookmarks into flat array
                   this.bookmarkHelperSvc.eachBookmark(mobileBookmarks.children, (bookmark) => {
                     allNativeBookmarks.push(bookmark);
                   });
-
                   return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(mobileBookmarks.children);
                 }
               });
@@ -296,7 +292,7 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
             ? Promise.resolve<Bookmark[]>(null)
             : browser.bookmarks.getSubTree(otherBookmarksId).then((subTree) => {
                 const otherBookmarks = subTree[0];
-                if (!otherBookmarks.children || otherBookmarks.children.length === 0) {
+                if (otherBookmarks.children?.length === 0) {
                   return;
                 }
 
@@ -329,12 +325,10 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
                 .then((results) => {
                   const syncBookmarksToolbar = results[0];
                   const toolbarBookmarks = results[1][0];
-
                   if (!syncBookmarksToolbar) {
                     return;
                   }
-
-                  if (toolbarBookmarks.children && toolbarBookmarks.children.length > 0) {
+                  if (toolbarBookmarks.children?.length > 0) {
                     // Add all bookmarks into flat array
                     this.bookmarkHelperSvc.eachBookmark(toolbarBookmarks.children, (bookmark) => {
                       allNativeBookmarks.push(bookmark);
@@ -357,25 +351,25 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
         let mobileContainer: Bookmark;
 
         // Add other container if bookmarks present
-        if (otherBookmarks && otherBookmarks.length > 0) {
+        if (otherBookmarks?.length > 0) {
           otherContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Other, bookmarks, true);
           otherContainer.children = otherBookmarks;
         }
 
         // Add toolbar container if bookmarks present
-        if (toolbarBookmarks && toolbarBookmarks.length > 0) {
+        if (toolbarBookmarks?.length > 0) {
           toolbarContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Toolbar, bookmarks, true);
           toolbarContainer.children = toolbarBookmarks;
         }
 
         // Add menu container if bookmarks present
-        if (menuBookmarks && menuBookmarks.length > 0) {
+        if (menuBookmarks?.length > 0) {
           menuContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Menu, bookmarks, true);
           menuContainer.children = menuBookmarks;
         }
 
         // Add mobile container if bookmarks present
-        if (mobileBookmarks && mobileBookmarks.length > 0) {
+        if (mobileBookmarks?.length > 0) {
           mobileContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Mobile, bookmarks, true);
           mobileContainer.children = mobileBookmarks;
         }

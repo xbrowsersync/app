@@ -200,16 +200,16 @@ export default class AppComponent {
     change: undefined,
     displayMainView: undefined,
     views: {
-      login: 0,
-      search: 1,
-      bookmark: 2,
-      settings: 3,
-      help: 4,
-      support: 5,
-      updated: 6,
-      permissions: 7,
-      loading: 8,
-      scan: 9
+      login: 1,
+      search: 2,
+      bookmark: 3,
+      settings: 4,
+      help: 5,
+      support: 6,
+      updated: 7,
+      permissions: 8,
+      loading: 9,
+      scan: 10
     }
   };
   vm: AppComponent = this;
@@ -424,7 +424,7 @@ export default class AppComponent {
         }
 
         const installBackupObj = JSON.parse(installBackup);
-        if (installBackupObj && installBackupObj.date && installBackupObj.bookmarks) {
+        if (installBackupObj?.date && installBackupObj?.bookmarks) {
           const date = new Date(installBackupObj.date);
           const confirmationMessage = this.platformSvc.getConstant(
             Strings.settings_BackupRestore_Revert_Confirmation_Message
@@ -492,11 +492,11 @@ export default class AppComponent {
 
   bookmarkForm_BookmarkTags_Change(event?) {
     // Get tag text from event data if provided
-    if (event && event.data) {
+    if (event?.data) {
       this.bookmark.tagText = event.data;
     }
 
-    if (!this.bookmark.tagText || !this.bookmark.tagText.trim()) {
+    if (!this.bookmark.tagText?.trim()) {
       return;
     }
 
@@ -504,7 +504,7 @@ export default class AppComponent {
     const lastWord = _.last<string>(this.bookmark.tagText.split(',')).trimLeft();
 
     // Display lookahead if word length exceeds minimum
-    if (lastWord && lastWord.length > Globals.LookaheadMinChars) {
+    if (lastWord?.length > Globals.LookaheadMinChars) {
       // Get tags lookahead
       return this.bookmarkHelperSvc
         .getLookahead(lastWord.toLowerCase(), null, true, this.bookmark.current.tags)
@@ -553,7 +553,7 @@ export default class AppComponent {
         this.bookmarkForm_CreateTags_Click();
         break;
       // If user pressed tab or right arrow key and lookahead present
-      case (event.keyCode === 9 || event.keyCode === 39) && !!this.bookmark.tagLookahead:
+      case (event.keyCode === 9 || event.keyCode === 39) && this.bookmark.tagLookahead:
         // Add lookahead to tag text
         event.preventDefault();
         this.bookmark.tagText += this.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
@@ -574,7 +574,7 @@ export default class AppComponent {
 
   bookmarkForm_CreateBookmark_Click() {
     // Add tags if tag text present
-    if (this.bookmark.tagText && this.bookmark.tagText.length > 0) {
+    if (this.bookmark.tagText?.length > 0) {
       this.bookmarkForm_CreateTags_Click();
     }
 
@@ -582,7 +582,7 @@ export default class AppComponent {
     const bookmarkToAdd = this.bookmarkHelperSvc.cleanBookmark(this.bookmark.current);
 
     // Check for protocol
-    if (!new RegExp(Globals.URL.ProtocolRegex).test(bookmarkToAdd.url)) {
+    if (!new RegExp(Globals.URL.ProtocolRegex).test(bookmarkToAdd.url ?? '')) {
       bookmarkToAdd.url = `https://${bookmarkToAdd.url}`;
     }
 
@@ -613,7 +613,7 @@ export default class AppComponent {
           // Set bookmark active status if current bookmark is current page
           return this.platformSvc.getCurrentUrl().then((currentUrl) => {
             // Update bookmark status and switch view
-            const bookmarkStatusActive = currentUrl && currentUrl.toUpperCase() === bookmarkToAdd.url.toUpperCase();
+            const bookmarkStatusActive = currentUrl.toUpperCase() === bookmarkToAdd.url.toUpperCase();
             return this.syncBookmarksSuccess(loadingTimeout, bookmarkStatusActive);
           });
         });
@@ -664,9 +664,8 @@ export default class AppComponent {
       })
       .then((currentUrl) => {
         // Update bookmark status and switch view
-        const bookmarkStatusActive = !(
-          currentUrl && currentUrl.toUpperCase() === this.bookmark.originalUrl.toUpperCase()
-        );
+        const bookmarkStatusActive =
+          currentUrl.toUpperCase() === this.bookmark.originalUrl.toUpperCase() ? false : undefined;
         return this.syncBookmarksSuccess(loadingTimeout, bookmarkStatusActive);
       })
       .catch((err) => {
@@ -678,14 +677,14 @@ export default class AppComponent {
 
   bookmarkForm_GetMetadata_Click() {
     return this.getMetadataForUrl(this.bookmark.current.url).then((metadata) => {
-      if (!metadata || (!metadata.title && !metadata.description && !metadata.tags)) {
+      if (!metadata?.title && !metadata?.description && !metadata?.tags) {
         return;
       }
 
       // Update bookmark metadata and set url field as pristine
-      this.bookmark.current.title = metadata.title || this.bookmark.current.title;
-      this.bookmark.current.description = metadata.description || this.bookmark.current.description;
-      this.bookmark.current.tags = metadata.tags || this.bookmark.current.tags;
+      this.bookmark.current.title = metadata.title ?? this.bookmark.current.title;
+      this.bookmark.current.description = metadata.description ?? this.bookmark.current.description;
+      this.bookmark.current.tags = metadata.tags ?? this.bookmark.current.tags;
       this.bookmarkForm.bookmarkUrl.$setPristine();
 
       // Display alert
@@ -706,7 +705,7 @@ export default class AppComponent {
 
   bookmarkForm_UpdateBookmark_Click() {
     // Add tags if tag text present
-    if (this.bookmark.tagText && this.bookmark.tagText.length > 0) {
+    if (this.bookmark.tagText?.length > 0) {
       this.bookmarkForm_CreateTags_Click();
     }
 
@@ -714,7 +713,7 @@ export default class AppComponent {
     const bookmarkToModify = this.bookmarkHelperSvc.cleanBookmark(this.bookmark.current);
 
     // Check for protocol
-    if (!new RegExp(Globals.URL.ProtocolRegex).test(bookmarkToModify.url)) {
+    if (!new RegExp(Globals.URL.ProtocolRegex).test(bookmarkToModify.url ?? '')) {
       bookmarkToModify.url = `https://${bookmarkToModify.url}`;
     }
 
@@ -728,7 +727,7 @@ export default class AppComponent {
         }
 
         // Display loading overlay
-        this.platformSvc.interface_Working_Show();
+        const loadingTimeout = this.platformSvc.interface_Working_Show();
 
         // Create change info and sync changes
         const data: ModifyBookmarkChangeData = {
@@ -741,19 +740,15 @@ export default class AppComponent {
         return this.queueSync({
           changeInfo,
           type: SyncType.LocalAndRemote
-        })
-          .then(() => {
-            // Set bookmark active status if current bookmark is current page
-            return this.platformSvc.getCurrentUrl();
-          })
-          .then((currentUrl) => {
-            if (currentUrl && currentUrl.toUpperCase() === this.bookmark.originalUrl.toUpperCase()) {
-              this.bookmark.active = currentUrl && currentUrl.toUpperCase() === bookmarkToModify.url.toUpperCase();
-            }
-
-            // Display the search panel
-            return this.changeView(this.view.views.search);
+        }).then(() => {
+          // Set bookmark active status if current bookmark is current page
+          return this.platformSvc.getCurrentUrl().then((currentUrl) => {
+            // Update bookmark status and switch view
+            const bookmarkStatusActive =
+              currentUrl.toUpperCase() === bookmarkToModify.url.toUpperCase() ? true : undefined;
+            return this.syncBookmarksSuccess(loadingTimeout, bookmarkStatusActive);
           });
+        });
       })
       .catch((err) => {
         return this.checkIfSyncDataRefreshedOnError(err).then(() => {
@@ -764,7 +759,7 @@ export default class AppComponent {
 
   bookmarkForm_ValidateBookmark(bookmarkToValidate, originalUrl?) {
     // Skip validation if URL is unmodified
-    if (originalUrl && bookmarkToValidate.url.toUpperCase() === originalUrl.toUpperCase()) {
+    if (bookmarkToValidate.url.toUpperCase() === originalUrl?.toUpperCase()) {
       return this.$q.resolve(true);
     }
 
@@ -919,7 +914,7 @@ export default class AppComponent {
       return this.helpPanel_Close();
     }
 
-    this.help.currentPage = panelToDisplay || 0;
+    this.help.currentPage = panelToDisplay ?? 0;
     this.$timeout(() => {
       (document.querySelector('#help-panel .view-content > div') as HTMLDivElement).focus();
     }, 150);
@@ -1570,7 +1565,7 @@ export default class AppComponent {
   }
 
   refreshServiceStatus(serviceObj?, serviceInfo?) {
-    serviceObj = serviceObj || this.sync.service;
+    serviceObj = serviceObj ?? this.sync.service;
 
     // Clear current status
     serviceObj.status = null;
@@ -1794,7 +1789,7 @@ export default class AppComponent {
       let parent;
       let childIndex = -1;
       this.bookmarkHelperSvc.eachBookmark(this.search.bookmarkTree, (current) => {
-        if (!current.children || current.children.length === 0) {
+        if (current.children?.length === 0) {
           return;
         }
 
@@ -1865,7 +1860,7 @@ export default class AppComponent {
     this.alert.show = false;
 
     // Get query from event data if provided
-    if (event && event.data) {
+    if (event?.data) {
       this.search.query = event.data;
     }
 
@@ -1875,7 +1870,7 @@ export default class AppComponent {
     }
 
     // No query, clear results
-    if (!this.search.query || !this.search.query.trim()) {
+    if (!this.search.query?.trim()) {
       this.search.displayDefaultState();
       return;
     }
@@ -1885,7 +1880,7 @@ export default class AppComponent {
     const lastWord = _.last<string>(queryWords);
 
     // Display lookahead if word length exceed minimum
-    if (lastWord && lastWord.length > Globals.LookaheadMinChars) {
+    if (lastWord?.length > Globals.LookaheadMinChars) {
       // Get lookahead
       return this.bookmarkHelperSvc
         .getLookahead(lastWord.toLowerCase(), this.search.results)
@@ -1938,7 +1933,7 @@ export default class AppComponent {
     }
 
     // If user pressed down arrow and search results present
-    if (event.keyCode === 40 && this.search.results && this.search.results.length > 0) {
+    if (event.keyCode === 40 && this.search.results?.length > 0) {
       // Focus on first search result
       event.preventDefault();
       (document.querySelector('.search-results-panel .bookmark-list').firstElementChild as HTMLDivElement).focus();
@@ -2030,7 +2025,7 @@ export default class AppComponent {
   }
 
   searchForm_SearchResults_Scroll() {
-    if (this.search.results && this.search.results.length > 0 && this.search.scrollDisplayMoreEnabled) {
+    if (this.search.results?.length > 0 && this.search.scrollDisplayMoreEnabled) {
       // Display next batch of results
       this.search.resultsDisplayed += this.search.batchResultsNum;
     }
@@ -2106,7 +2101,7 @@ export default class AppComponent {
 
   serviceIsOnline(): boolean {
     return (
-      this.sync.service.status === ApiServiceStatus.NoNewSyncs || this.sync.service.status === ApiServiceStatus.Online
+      this.sync.service.status === ApiServiceStatus.NoNewSyncs ?? this.sync.service.status === ApiServiceStatus.Online
     );
   }
 
@@ -2584,9 +2579,8 @@ export default class AppComponent {
   syncForm_UpdateService_Update_Click() {
     // Check for protocol
     if (
-      this.sync.newService.url &&
-      this.sync.newService.url.trim() &&
-      !new RegExp(Globals.URL.ProtocolRegex).test(this.sync.newService.url)
+      this.sync.newService.url?.trim() &&
+      !new RegExp(Globals.URL.ProtocolRegex).test(this.sync.newService.url ?? '')
     ) {
       this.sync.newService.url = `https://${this.sync.newService.url}`;
     }
@@ -2650,11 +2644,7 @@ export default class AppComponent {
     // Check backup data structure
     try {
       restoreData = JSON.parse(this.settings.dataToRestore);
-      bookmarks = restoreData.xBrowserSync
-        ? restoreData.xBrowserSync.bookmarks
-        : restoreData.xbrowsersync && restoreData.xbrowsersync.data
-        ? restoreData.xbrowsersync.data.bookmarks
-        : null;
+      bookmarks = restoreData.xBrowserSync?.bookmarks ?? restoreData.xbrowsersync?.data?.bookmarks;
       validateData = !!bookmarks;
     } catch (err) {}
     this.restoreForm.dataToRestore.$setValidity('InvalidData', validateData);

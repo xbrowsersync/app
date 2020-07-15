@@ -80,7 +80,7 @@ export default class ApiXbrowsersyncService implements ApiService {
         .then((response) => {
           // Check service is a valid xBrowserSync API
           const { data: serviceInfo } = response;
-          if (!serviceInfo || serviceInfo.status == null || serviceInfo.version == null) {
+          if (!serviceInfo?.status || !serviceInfo?.version) {
             throw new Exceptions.InvalidServiceException();
           }
 
@@ -114,7 +114,7 @@ export default class ApiXbrowsersyncService implements ApiService {
           .then((response) => {
             // Check response data is valid before returning
             const { data } = response;
-            if (!data || !data.id || !data.lastUpdated || !data.version) {
+            if (!data?.id || !data?.lastUpdated || !data?.version) {
               throw new Exceptions.NoDataFoundException();
             }
             return data;
@@ -151,7 +151,7 @@ export default class ApiXbrowsersyncService implements ApiService {
             .then((response) => {
               // Check response data is valid before returning
               const { data } = response;
-              if (!data || !data.lastUpdated) {
+              if (!data?.lastUpdated) {
                 throw new Exceptions.NoDataFoundException();
               }
               return data;
@@ -189,7 +189,7 @@ export default class ApiXbrowsersyncService implements ApiService {
             .then((response) => {
               // Check response data is valid before returning
               const { data } = response;
-              if (!data || !data.lastUpdated) {
+              if (!data?.lastUpdated) {
                 throw new Exceptions.NoDataFoundException();
               }
               return data;
@@ -236,7 +236,7 @@ export default class ApiXbrowsersyncService implements ApiService {
 
   getExceptionFromHttpResponse(response: ng.IHttpResponse<ApiXbrowsersyncErrorResponse>): Exceptions.Exception {
     let message: string;
-    if (response && response.data && response.data.message) {
+    if (response?.data?.message) {
       message = response.data.message;
     }
 
@@ -323,7 +323,7 @@ export default class ApiXbrowsersyncService implements ApiService {
             .then((response) => {
               // Check response data is valid before returning
               const { data } = response;
-              if (!data || !data.lastUpdated) {
+              if (!data?.lastUpdated) {
                 throw new Exceptions.NoDataFoundException();
               }
               return data;

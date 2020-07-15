@@ -4,12 +4,12 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
+    "module": "ES2015",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "sourceMap": true,
     "strictFunctionTypes": true,
-    "target": "ESNext"
+    "target": "ES2018"
   },
   "exclude": ["node_modules"],
   "include": ["src/**/*.ts"]

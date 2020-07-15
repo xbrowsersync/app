@@ -248,7 +248,7 @@ export default class AndroidPlatformService implements PlatformService {
           // Item not found
           return resolve(null);
         }
-        reject(new Exceptions.FailedLocalStorageException(null, err));
+        reject(new Exceptions.FailedLocalStorageException(undefined, err));
       };
 
       const success = (keys: string[]) => {
@@ -280,7 +280,7 @@ export default class AndroidPlatformService implements PlatformService {
   getConstant(i18nString: I18nString): string {
     let message = '';
 
-    if (i18nString && i18nString.key) {
+    if (i18nString?.key) {
       message = this.i18nStrings[i18nString.key];
     }
 
@@ -292,7 +292,7 @@ export default class AndroidPlatformService implements PlatformService {
   }
 
   getCurrentUrl(): ng.IPromise<string> {
-    return this.$q.resolve(this.currentPage && this.currentPage.url);
+    return this.$q.resolve(this.currentPage?.url);
   }
 
   getPageMetadata(getFullMetadata = true, pageUrl?: string): ng.IPromise<WebpageMetadata> {
@@ -302,8 +302,8 @@ export default class AndroidPlatformService implements PlatformService {
 
     // Set default metadata from provided page url or current page
     const metadata: WebpageMetadata = {
-      title: this.currentPage ? this.currentPage.title : null,
-      url: pageUrl || (this.currentPage ? this.currentPage.url : null)
+      title: this.currentPage?.title,
+      url: pageUrl ?? this.currentPage?.url
     };
 
     const promise = this.$q<WebpageMetadata>((resolve, reject) => {
@@ -330,7 +330,7 @@ export default class AndroidPlatformService implements PlatformService {
 
         // Check html content was returned
         if (err || !pageContent) {
-          return reject(new Exceptions.FailedGetPageMetadataException(null, err));
+          return reject(new Exceptions.FailedGetPageMetadataException(undefined, err));
         }
 
         // Extract metadata values
@@ -348,22 +348,22 @@ export default class AndroidPlatformService implements PlatformService {
 
         const getPageDescription = (): string => {
           const ogDescription: HTMLMetaElement =
-            document.querySelector('meta[property="OG:DESCRIPTION"]') ||
+            document.querySelector('meta[property="OG:DESCRIPTION"]') ??
             document.querySelector('meta[property="og:description"]');
-          if (ogDescription && ogDescription.content) {
+          if (ogDescription?.content) {
             return getDecodedTextValue(ogDescription.content);
           }
 
           const twitterDescription: HTMLMetaElement =
-            document.querySelector('meta[name="TWITTER:DESCRIPTION"]') ||
+            document.querySelector('meta[name="TWITTER:DESCRIPTION"]') ??
             document.querySelector('meta[name="twitter:description"]');
-          if (twitterDescription && twitterDescription.content) {
+          if (twitterDescription?.content) {
             return getDecodedTextValue(twitterDescription.content);
           }
 
           const defaultDescription: HTMLMetaElement =
-            document.querySelector('meta[name="DESCRIPTION"]') || document.querySelector('meta[name="description"]');
-          if (defaultDescription && defaultDescription.content) {
+            document.querySelector('meta[name="DESCRIPTION"]') ?? document.querySelector('meta[name="description"]');
+          if (defaultDescription?.content) {
             return getDecodedTextValue(defaultDescription.content);
           }
 
@@ -375,20 +375,20 @@ export default class AndroidPlatformService implements PlatformService {
 
           // Get open graph tag values
           document.querySelectorAll<HTMLMetaElement>('meta[property="OG:VIDEO:TAG"]').forEach((tag) => {
-            if (tag && tag.content) {
+            if (tag?.content) {
               keywords.push(getDecodedTextValue(tag.content));
             }
           });
           document.querySelectorAll<HTMLMetaElement>('meta[property="og:video:tag"]').forEach((tag) => {
-            if (tag && tag.content) {
+            if (tag?.content) {
               keywords.push(getDecodedTextValue(tag.content));
             }
           });
 
           // Get meta tag values
           const metaKeywords: HTMLMetaElement =
-            document.querySelector('meta[name="KEYWORDS"]') || document.querySelector('meta[name="keywords"]');
-          if (metaKeywords && metaKeywords.content) {
+            document.querySelector('meta[name="KEYWORDS"]') ?? document.querySelector('meta[name="keywords"]');
+          if (metaKeywords?.content) {
             metaKeywords.content.split(',').forEach((keyword) => {
               if (keyword) {
                 keywords.push(getDecodedTextValue(keyword));
@@ -408,15 +408,15 @@ export default class AndroidPlatformService implements PlatformService {
 
         const getPageTitle = (): string => {
           const ogTitle: HTMLMetaElement =
-            document.querySelector('meta[property="OG:TITLE"]') || document.querySelector('meta[property="og:title"]');
-          if (ogTitle && ogTitle.content) {
+            document.querySelector('meta[property="OG:TITLE"]') ?? document.querySelector('meta[property="og:title"]');
+          if (ogTitle?.content) {
             return getDecodedTextValue(ogTitle.content);
           }
 
           const twitterTitle: HTMLMetaElement =
-            document.querySelector('meta[name="TWITTER:TITLE"]') ||
+            document.querySelector('meta[name="TWITTER:TITLE"]') ??
             document.querySelector('meta[name="twitter:title"]');
-          if (twitterTitle && twitterTitle.content) {
+          if (twitterTitle?.content) {
             return getDecodedTextValue(twitterTitle.content);
           }
 
@@ -442,7 +442,7 @@ export default class AndroidPlatformService implements PlatformService {
       inAppBrowser = window.cordova.InAppBrowser.open(metadata.url, '_blank', 'hidden=yes');
 
       inAppBrowser.addEventListener('loaderror', (event: any) => {
-        const errMessage = event && event.message ? event.message : 'Failed to load webpage';
+        const errMessage = event?.message ?? 'Failed to load webpage';
         handleResponse(null, new Error(errMessage));
       });
 
@@ -722,7 +722,7 @@ export default class AndroidPlatformService implements PlatformService {
       navigator.globalization.getPreferredLanguage(resolve, reject);
     })
       .then((language) => {
-        if (!language && !language.value) {
+        if (!language?.value) {
           this.logSvc.logWarning('Couldn’t get preferred language');
           return;
         }

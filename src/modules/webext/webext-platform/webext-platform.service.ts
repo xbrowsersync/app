@@ -90,7 +90,7 @@ export default class WebExtPlatformService implements PlatformService {
         });
       })
       .catch((err) => {
-        throw new Exceptions.FailedRegisterAutoUpdatesException(null, err);
+        throw new Exceptions.FailedRegisterAutoUpdatesException(undefined, err);
       });
   }
 
@@ -128,7 +128,7 @@ export default class WebExtPlatformService implements PlatformService {
   getCurrentUrl(): ng.IPromise<string> {
     // Get current tab
     return browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
-      return tabs[0].url;
+      return tabs[0].url ?? '';
     });
   }
 
@@ -139,7 +139,7 @@ export default class WebExtPlatformService implements PlatformService {
   getPageMetadata(getFullMetadata = true, pageUrl?: string): ng.IPromise<WebpageMetadata> {
     return browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
       // If active tab empty, throw error
-      const activeTab = tabs && tabs[0];
+      const activeTab = tabs?.[0];
       if (!activeTab) {
         throw new Exceptions.FailedGetPageMetadataException();
       }
@@ -163,13 +163,13 @@ export default class WebExtPlatformService implements PlatformService {
       return browser.tabs
         .executeScript(activeTab.id, { file: this.contentScriptUrl })
         .then((response) => {
-          if (response && response.length > 0 && response[0].default) {
+          if (response?.length > 0 && response?.[0].default) {
             metadata = response[0].default;
           }
 
           // If no metadata returned, use the info from the active tab
-          metadata.title = metadata.title || activeTab.title;
-          metadata.url = metadata.url || activeTab.url;
+          metadata.title = metadata.title ?? activeTab.title;
+          metadata.url = metadata.url ?? activeTab.url;
           return metadata;
         })
         .catch((err) => {
@@ -301,7 +301,7 @@ export default class WebExtPlatformService implements PlatformService {
       .query({ currentWindow: true, active: true })
       .then((tabs) => {
         // Open url in current tab if new then close the extension window
-        return tabs && tabs.length > 0 && tabs[0].url && tabs[0].url.startsWith(this.getNewTabUrl())
+        return tabs?.length > 0 && tabs?.[0]?.url && tabs?.[0]?.url?.startsWith(this.getNewTabUrl())
           ? browser.tabs.update(tabs[0].id, { url }).then(window.close)
           : openInNewTab(url);
       })

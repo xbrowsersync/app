@@ -27,8 +27,8 @@ export default class ZxcvbnDirective implements AfterViewInit {
   ngAfterViewInit(): void {
     this.ngModel.$validators.passwordStrength = (value) => {
       let minScore = parseInt(this.minScore, 10);
-      minScore = isNaN(minScore) || minScore < 0 || minScore > 4 ? 0 : minScore;
-      this.password = value || '';
+      minScore = isNaN(minScore) ?? minScore < 0 ?? minScore > 4 ? 0 : minScore;
+      this.password = value ?? '';
       this.result = zxcvbn(this.password);
       return minScore <= this.result.score;
     };

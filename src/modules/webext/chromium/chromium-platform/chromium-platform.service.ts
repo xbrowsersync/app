@@ -7,10 +7,10 @@ import WebExtPlatformService from '../../webext-platform/webext-platform.service
 @Injectable('PlatformService')
 export default class ChromiumPlatformService extends WebExtPlatformService implements PlatformService {
   urlIsNativeConfigPage(url: string): boolean {
-    return /chrome:\/\//i.test(url);
+    return /chrome:\/\//i.test(url ?? '');
   }
 
   urlIsSupported(url: string): boolean {
-    return /^[\w-]+:/i.test(url);
+    return /^[\w-]+:/i.test(url ?? '');
   }
 }

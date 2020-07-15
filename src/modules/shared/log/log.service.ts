@@ -45,7 +45,7 @@ export default class LogService {
 
   logError(error: Exception, message?: string): ng.IPromise<void> {
     // Return if no error supplied or has already been logged
-    if (!error || error.logged) {
+    if (!error?.logged) {
       return;
     }
 
@@ -94,7 +94,7 @@ export default class LogService {
   logToConsole(message: object | string, level = LogLevel.Trace, exception?: Exception): void {
     switch (level) {
       case LogLevel.Error:
-        this.$log.warn(exception || message);
+        this.$log.warn(exception ?? message);
         break;
       case LogLevel.Warn:
         this.$log.warn(message);
@@ -145,11 +145,10 @@ export default class LogService {
     // Add message text to log item and add to end of log
     return this.storeSvc
       .get<string[]>(StoreKey.TraceLog)
-      .then((debugMessageLog) => {
-        debugMessageLog = debugMessageLog || [];
+      .then((debugMessageLog = []) => {
         messageLogText += angular.isObject(this.currentLogQueueItem.message)
           ? angular.toJson(this.currentLogQueueItem.message)
-          : this.currentLogQueueItem.message || '';
+          : this.currentLogQueueItem.message ?? '';
         if (this.currentLogQueueItem.error) {
           messageLogText += `${this.currentLogQueueItem.error.stack.replace(/\s+/g, ' ')}`;
         }

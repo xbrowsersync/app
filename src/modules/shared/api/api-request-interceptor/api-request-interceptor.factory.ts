@@ -22,6 +22,6 @@ export default class ApiRequestInterceptorFactory implements IHttpInterceptor {
     // Set default request timeout
     config.timeout = !config.timeout ? 10000 : config.timeout;
 
-    return config || this.$q.when(config);
+    return config ?? this.$q.when(config);
   }
 }

@@ -22,10 +22,10 @@ export default class FirefoxPlatformService extends WebExtPlatformService implem
   }
 
   urlIsNativeConfigPage(url: string): boolean {
-    return /^about:/i.test(url);
+    return /^about:/i.test(url ?? '');
   }
 
   urlIsSupported(url: string): boolean {
-    return /^(?!chrome|data)[\w-]+:/i.test(url);
+    return /^(?!chrome|data)[\w-]+:/i.test(url ?? '');
   }
 }

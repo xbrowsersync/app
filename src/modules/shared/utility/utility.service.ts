@@ -50,7 +50,7 @@ export default class UtilityService {
     return this.$http
       .get<any>(Globals.ReleaseLatestUrl)
       .then((response) => {
-        const latestVersion = response && response.data ? response.data.tag_name : '';
+        const latestVersion = response?.data?.tag_name ?? '';
         if (!compareVersions.compare(latestVersion, Globals.AppVersion, '>')) {
           return '';
         }
@@ -97,7 +97,7 @@ export default class UtilityService {
     // Get service url from local storage
     return this.storeSvc.get<string>(StoreKey.ServiceUrl).then((cachedServiceUrl) => {
       // If no service url cached, use default
-      return cachedServiceUrl || Globals.URL.DefaultServiceUrl;
+      return cachedServiceUrl ?? Globals.URL.DefaultServiceUrl;
     });
   }
 
@@ -258,7 +258,7 @@ export default class UtilityService {
       };
 
       const _toString = (format: string): string => {
-        if (format == null || format.length === 0) format = 'D';
+        if (format?.length === 0) format = 'D';
 
         let guidChars = [];
         let offset = 0;

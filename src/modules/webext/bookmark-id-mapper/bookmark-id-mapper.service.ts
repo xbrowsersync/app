@@ -105,7 +105,7 @@ export default class BookmarkIdMapperService {
         return this.set(idMappingsLessNative);
       })
       .catch((err) => {
-        throw new BookmarkMappingNotFoundException(null, err);
+        throw new BookmarkMappingNotFoundException(undefined, err);
       });
   }
 

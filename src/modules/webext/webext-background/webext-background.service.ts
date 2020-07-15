@@ -156,7 +156,7 @@ export default class WebExtBackgroundService {
     const urlRegex = new RegExp(Globals.URL.ValidUrlRegex);
     const matches = alert.message.match(urlRegex);
     const messageToDisplay =
-      !matches || matches.length === 0
+      matches?.length === 0
         ? alert.message
         : new DOMParser().parseFromString(`<span>${alert.message}</span>`, 'text/xml').firstElementChild.textContent;
 
@@ -171,7 +171,7 @@ export default class WebExtBackgroundService {
     browser.notifications.create(this.utilitySvc.getUniqueishId(), options).then((notificationId) => {
       // Add a click handler to open url if provided or if the message contains a url
       let urlToOpenOnClick = url;
-      if (matches && matches.length > 0) {
+      if (matches?.length > 0) {
         urlToOpenOnClick = matches[0];
       }
 
@@ -223,7 +223,7 @@ export default class WebExtBackgroundService {
         // If ID was removed disable sync
         if (err instanceof Exceptions.NoDataFoundException) {
           this.syncEngineService.disableSync();
-          throw new Exceptions.SyncRemovedException(null, err);
+          throw new Exceptions.SyncRemovedException(undefined, err);
         }
 
         throw err;
@@ -308,7 +308,7 @@ export default class WebExtBackgroundService {
 
   onAlarm(alarm: Alarms.Alarm): void {
     // When alarm fires check for sync updates
-    if (alarm && alarm.name === Globals.Alarm.Name) {
+    if (alarm?.name === Globals.Alarm.Name) {
       this.getLatestUpdates();
     }
   }
@@ -319,12 +319,11 @@ export default class WebExtBackgroundService {
 
     // Check for upgrade or do fresh install
     const details = angular.element(event.currentTarget as Element).data('details');
-    if (details && details.reason === 'install') {
+    if (details?.reason === 'install') {
       installOrUpgrade = this.installExtension(currentVersion);
     } else if (
-      details &&
-      details.reason === 'update' &&
-      details.previousVersion &&
+      details?.reason === 'update' &&
+      details?.previousVersion &&
       compareVersions.compare(details.previousVersion, currentVersion, '<')
     ) {
       installOrUpgrade = this.upgradeExtension(details.previousVersion, currentVersion);
@@ -425,7 +424,7 @@ export default class WebExtBackgroundService {
       .disableEventListeners()
       .then(() => {
         // Upgrade containers to use current container names
-        return this.bookmarkHelperSvc.upgradeContainers(sync.bookmarks || []);
+        return this.bookmarkHelperSvc.upgradeContainers(sync.bookmarks ?? []);
       })
       .then((bookmarksToRestore) => {
         // Queue sync

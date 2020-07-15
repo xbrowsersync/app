@@ -24,21 +24,21 @@ class WebpageMetadataCollecter {
 
   getPageDescription(): string {
     const ogDescription: HTMLMetaElement =
-      document.querySelector('meta[property="OG:DESCRIPTION"]') ||
+      document.querySelector('meta[property="OG:DESCRIPTION"]') ??
       document.querySelector('meta[property="og:description"]');
     if (ogDescription && ogDescription.content) {
       return this.getDecodedTextValue(ogDescription.content);
     }
 
     const twitterDescription: HTMLMetaElement =
-      document.querySelector('meta[name="TWITTER:DESCRIPTION"]') ||
+      document.querySelector('meta[name="TWITTER:DESCRIPTION"]') ??
       document.querySelector('meta[name="twitter:description"]');
     if (twitterDescription && twitterDescription.content) {
       return this.getDecodedTextValue(twitterDescription.content);
     }
 
     const defaultDescription: HTMLMetaElement =
-      document.querySelector('meta[name="DESCRIPTION"]') || document.querySelector('meta[name="description"]');
+      document.querySelector('meta[name="DESCRIPTION"]') ?? document.querySelector('meta[name="description"]');
     if (defaultDescription && defaultDescription.content) {
       return this.getDecodedTextValue(defaultDescription.content);
     }
@@ -63,7 +63,7 @@ class WebpageMetadataCollecter {
 
     // Get meta tag values
     const metaKeywords: HTMLMetaElement =
-      document.querySelector('meta[name="KEYWORDS"]') || document.querySelector('meta[name="keywords"]');
+      document.querySelector('meta[name="KEYWORDS"]') ?? document.querySelector('meta[name="keywords"]');
     if (metaKeywords && metaKeywords.content) {
       metaKeywords.content.split(',').forEach((keyword) => {
         if (keyword) {
@@ -84,13 +84,13 @@ class WebpageMetadataCollecter {
 
   getPageTitle(): string {
     const ogTitle: HTMLMetaElement =
-      document.querySelector('meta[property="OG:TITLE"]') || document.querySelector('meta[property="og:title"]');
+      document.querySelector('meta[property="OG:TITLE"]') ?? document.querySelector('meta[property="og:title"]');
     if (ogTitle && ogTitle.content) {
       return this.getDecodedTextValue(ogTitle.content);
     }
 
     const twitterTitle: HTMLMetaElement =
-      document.querySelector('meta[name="TWITTER:TITLE"]') || document.querySelector('meta[name="twitter:title"]');
+      document.querySelector('meta[name="TWITTER:TITLE"]') ?? document.querySelector('meta[name="twitter:title"]');
     if (twitterTitle && twitterTitle.content) {
       return this.getDecodedTextValue(twitterTitle.content);
     }

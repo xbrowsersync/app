@@ -15,6 +15,6 @@ export default class NetworkService {
   }
 
   isNetworkConnectionError(err: Error): boolean {
-    return err instanceof Exceptions.HttpRequestFailedException || err instanceof Exceptions.NetworkOfflineException;
+    return err instanceof Exceptions.HttpRequestFailedException ?? err instanceof Exceptions.NetworkOfflineException;
   }
 }

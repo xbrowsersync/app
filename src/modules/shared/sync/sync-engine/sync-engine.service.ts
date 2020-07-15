@@ -98,13 +98,12 @@ export default class SyncEngineService {
       return this.apiSvc.getBookmarksLastUpdated().then((response) => {
         // If last updated is different to the cached date, refresh bookmarks
         const remoteLastUpdated = new Date(response.lastUpdated);
-        const updatesAvailable =
-          !storedLastUpdatedDate || storedLastUpdatedDate.getTime() !== remoteLastUpdated.getTime();
+        const updatesAvailable = storedLastUpdatedDate?.getTime() !== remoteLastUpdated.getTime();
 
         if (updatesAvailable) {
           this.logSvc.logInfo(
             `Updates available, local:${
-              storedLastUpdatedDate ? storedLastUpdatedDate.toISOString() : 'none'
+              storedLastUpdatedDate?.toISOString() ?? 'none'
             } remote:${remoteLastUpdated.toISOString()}`
           );
         }
@@ -195,12 +194,12 @@ export default class SyncEngineService {
 
       // If offline and sync is a change, swallow error and place failed sync back on the queue
       if (err instanceof Exceptions.NetworkOfflineException && failedSync.type !== SyncType.Local) {
-        return resolve(new Exceptions.SyncUncommittedException(null, err));
+        return resolve(new Exceptions.SyncUncommittedException(undefined, err));
       }
 
       // Set default exception if none set
       if (!(err instanceof Exceptions.Exception)) {
-        syncException = new Exceptions.SyncFailedException(null, err);
+        syncException = new Exceptions.SyncFailedException(undefined, err);
       }
 
       // Handle failed sync
@@ -220,7 +219,7 @@ export default class SyncEngineService {
 
               // If no data found, sync has been removed
               if (err instanceof Exceptions.NoDataFoundException) {
-                syncException = new Exceptions.SyncRemovedException(null, err);
+                syncException = new Exceptions.SyncRemovedException(undefined, err);
               } else if (failedSync.type !== SyncType.Local) {
                 // If local changes made, clear sync queue and refresh sync data if necessary
                 this.syncQueue = [];
@@ -415,7 +414,7 @@ export default class SyncEngineService {
             // Add sync to queue
             queuedSync = this.$q.defer();
             syncToQueue.deferred = queuedSync;
-            syncToQueue.uniqueId = syncToQueue.uniqueId || this.utilitySvc.getUniqueishId();
+            syncToQueue.uniqueId = syncToQueue.uniqueId ?? this.utilitySvc.getUniqueishId();
             this.syncQueue.push(syncToQueue);
             this.logSvc.logInfo(`Sync ${syncToQueue.uniqueId} (${syncToQueue.type}) queued`);
           }

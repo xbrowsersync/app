@@ -95,9 +95,7 @@ export default class WebExtBookmarkService implements BookmarkService {
         acc.push(mapping);
 
         // Process child nodes
-        return val.children && val.children.length > 0
-          ? acc.concat(mapIds(val.children, syncedBookmarks[index].children))
-          : acc;
+        return val.children?.length > 0 ? acc.concat(mapIds(val.children, syncedBookmarks[index].children)) : acc;
       }, [] as BookmarkIdMapping[]);
     };
 
@@ -115,7 +113,7 @@ export default class WebExtBookmarkService implements BookmarkService {
             ? this.$q.resolve([] as BookmarkIdMapping[])
             : browser.bookmarks.getSubTree(menuBookmarksId).then((subTree) => {
                 const menuBookmarks = subTree[0];
-                if (!menuBookmarks.children || menuBookmarks.children.length === 0) {
+                if (menuBookmarks.children?.length === 0) {
                   return [] as BookmarkIdMapping[];
                 }
 
@@ -123,9 +121,7 @@ export default class WebExtBookmarkService implements BookmarkService {
                 const menuBookmarksContainer = bookmarks.find((x) => {
                   return x.title === BookmarkContainer.Menu;
                 });
-                return !!menuBookmarksContainer &&
-                  menuBookmarksContainer.children &&
-                  menuBookmarksContainer.children.length > 0
+                return menuBookmarksContainer?.children?.length > 0
                   ? mapIds(menuBookmarks.children, menuBookmarksContainer.children)
                   : ([] as BookmarkIdMapping[]);
               });
@@ -136,7 +132,7 @@ export default class WebExtBookmarkService implements BookmarkService {
             ? this.$q.resolve([] as BookmarkIdMapping[])
             : browser.bookmarks.getSubTree(mobileBookmarksId).then((subTree) => {
                 const mobileBookmarks = subTree[0];
-                if (!mobileBookmarks.children || mobileBookmarks.children.length === 0) {
+                if (mobileBookmarks.children?.length === 0) {
                   return [] as BookmarkIdMapping[];
                 }
 
@@ -144,9 +140,7 @@ export default class WebExtBookmarkService implements BookmarkService {
                 const mobileBookmarksContainer = bookmarks.find((x) => {
                   return x.title === BookmarkContainer.Mobile;
                 });
-                return !!mobileBookmarksContainer &&
-                  mobileBookmarksContainer.children &&
-                  mobileBookmarksContainer.children.length > 0
+                return mobileBookmarksContainer?.children?.length > 0
                   ? mapIds(mobileBookmarks.children, mobileBookmarksContainer.children)
                   : ([] as BookmarkIdMapping[]);
               });
@@ -157,7 +151,7 @@ export default class WebExtBookmarkService implements BookmarkService {
             ? this.$q.resolve([] as BookmarkIdMapping[])
             : browser.bookmarks.getSubTree(otherBookmarksId).then((subTree) => {
                 const otherBookmarks = subTree[0];
-                if (!otherBookmarks.children || otherBookmarks.children.length === 0) {
+                if (otherBookmarks.children?.length === 0) {
                   return [] as BookmarkIdMapping[];
                 }
 
@@ -170,9 +164,7 @@ export default class WebExtBookmarkService implements BookmarkService {
                 const otherBookmarksContainer = bookmarks.find((x) => {
                   return x.title === BookmarkContainer.Other;
                 });
-                return !!otherBookmarksContainer &&
-                  otherBookmarksContainer.children &&
-                  otherBookmarksContainer.children.length > 0
+                return otherBookmarksContainer?.children?.length > 0
                   ? mapIds(nodes, otherBookmarksContainer.children)
                   : ([] as BookmarkIdMapping[]);
               });
@@ -190,7 +182,7 @@ export default class WebExtBookmarkService implements BookmarkService {
                   const syncBookmarksToolbar = results[0];
                   const toolbarBookmarks = results[1][0];
 
-                  if (!syncBookmarksToolbar || !toolbarBookmarks.children || toolbarBookmarks.children.length === 0) {
+                  if (!syncBookmarksToolbar || toolbarBookmarks.children?.length === 0) {
                     return [] as BookmarkIdMapping[];
                   }
 
@@ -198,9 +190,7 @@ export default class WebExtBookmarkService implements BookmarkService {
                   const toolbarBookmarksContainer = bookmarks.find((x) => {
                     return x.title === BookmarkContainer.Toolbar;
                   });
-                  return !!toolbarBookmarksContainer &&
-                    toolbarBookmarksContainer.children &&
-                    toolbarBookmarksContainer.children.length > 0
+                  return toolbarBookmarksContainer?.children?.length > 0
                     ? mapIds(toolbarBookmarks.children, toolbarBookmarksContainer.children)
                     : ([] as BookmarkIdMapping[]);
                 });
@@ -303,7 +293,7 @@ export default class WebExtBookmarkService implements BookmarkService {
         return this.$q.all([clearOthers, clearToolbar]).then(() => {});
       })
       .catch((err) => {
-        throw new Exceptions.FailedRemoveNativeBookmarksException(null, err);
+        throw new Exceptions.FailedRemoveNativeBookmarksException(undefined, err);
       });
   }
 
@@ -372,7 +362,7 @@ export default class WebExtBookmarkService implements BookmarkService {
 
   createBookmarkFromNativeBookmarkId(id: string, bookmarks: Bookmark[]): ng.IPromise<Bookmark> {
     return browser.bookmarks.get(id).then((results) => {
-      if (!results || results.length === 0) {
+      if (results?.length === 0) {
         throw new Exceptions.NativeBookmarkNotFoundException();
       }
       const nativeBookmark = results[0];
@@ -400,7 +390,7 @@ export default class WebExtBookmarkService implements BookmarkService {
 
     return browser.bookmarks.create(nativeBookmarkInfo).catch((err) => {
       this.logSvc.logWarning(`Failed to create native bookmark: ${JSON.stringify(nativeBookmarkInfo)}`);
-      throw new Exceptions.FailedCreateNativeBookmarksException(null, err);
+      throw new Exceptions.FailedCreateNativeBookmarksException(undefined, err);
     });
   }
 
@@ -546,7 +536,7 @@ export default class WebExtBookmarkService implements BookmarkService {
     };
     return browser.bookmarks.create(newSeparator).catch((err) => {
       this.logSvc.logInfo('Failed to create native separator');
-      throw new Exceptions.FailedCreateNativeBookmarksException(null, err);
+      throw new Exceptions.FailedCreateNativeBookmarksException(undefined, err);
     });
   }
 
@@ -561,7 +551,7 @@ export default class WebExtBookmarkService implements BookmarkService {
       .then(() => {})
       .catch((err) => {
         this.logSvc.logWarning('Failed to disable event listeners');
-        throw new Exceptions.UnspecifiedException(null, err);
+        throw new Exceptions.UnspecifiedException(undefined, err);
       });
   }
 
@@ -581,7 +571,7 @@ export default class WebExtBookmarkService implements BookmarkService {
       })
       .catch((err) => {
         this.logSvc.logWarning('Failed to enable event listeners');
-        throw new Exceptions.UnspecifiedException(null, err);
+        throw new Exceptions.UnspecifiedException(undefined, err);
       });
   }
 
@@ -660,7 +650,7 @@ export default class WebExtBookmarkService implements BookmarkService {
             ? Promise.resolve<Bookmark[]>(null)
             : browser.bookmarks.getSubTree(otherBookmarksId).then((subTree) => {
                 const otherBookmarks = subTree[0];
-                if (!otherBookmarks.children || otherBookmarks.children.length === 0) {
+                if (otherBookmarks.children?.length === 0) {
                   return;
                 }
 
@@ -858,7 +848,7 @@ export default class WebExtBookmarkService implements BookmarkService {
 
     return browser.bookmarks.update(id, updateInfo).catch((err) => {
       this.logSvc.logInfo(`Failed to modify native bookmark: ${JSON.stringify(newMetadata)}`);
-      throw new Exceptions.FailedUpdateNativeBookmarksException(null, err);
+      throw new Exceptions.FailedUpdateNativeBookmarksException(undefined, err);
     });
   }
 
@@ -1258,7 +1248,7 @@ export default class WebExtBookmarkService implements BookmarkService {
   removeNativeBookmarks(id: string): ng.IPromise<void> {
     return browser.bookmarks.removeTree(id).catch((err) => {
       this.logSvc.logInfo(`Failed to remove native bookmark: ${id}`);
-      throw new Exceptions.FailedRemoveNativeBookmarksException(null, err);
+      throw new Exceptions.FailedRemoveNativeBookmarksException(undefined, err);
     });
   }
 
@@ -1490,7 +1480,7 @@ export default class WebExtBookmarkService implements BookmarkService {
           })
           .catch((err) => {
             this.logSvc.logInfo(`Failed to detect whether container changed: ${JSON.stringify(changedBookmark)}`);
-            throw new Exceptions.FailedGetNativeBookmarksException(null, err);
+            throw new Exceptions.FailedGetNativeBookmarksException(undefined, err);
           });
       });
     });
