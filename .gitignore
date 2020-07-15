@@ -1,6 +1,5 @@
 .DS_Store
 *.log
 build
-css/styles.css
 dist
 node_modules

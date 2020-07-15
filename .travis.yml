@@ -4,5 +4,5 @@ node_js:
 install:
   - npm install
 script:
-  - npm run build:chrome
-  - npm run build:firefox
+  - npm run chromium:package
+  - npm run firefox:package
