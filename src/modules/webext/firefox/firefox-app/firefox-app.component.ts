@@ -8,7 +8,7 @@ import WebExtAppComponent from '../../webext-app/webext-app.component';
 @Component({
   controllerAs: 'vm',
   selector: 'app',
-  template: require('../../../app/app.component.html')
+  template: require('../../../app/app-main/app-main.component.html')
 })
 export default class FirefoxAppComponent extends WebExtAppComponent {
   getHelpPages(): string[] {

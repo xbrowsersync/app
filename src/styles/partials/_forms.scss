@@ -1,0 +1,125 @@
+.checkbox {
+  border-radius: $border-radius-input;
+  cursor: pointer;
+  height: 1.3rem;
+  padding: 0.15rem;
+  position: relative;
+  width: 2.5rem;
+
+  input {
+    display: none;
+
+    &[type='checkbox']:checked + label {
+      left: 1.35rem;
+    }
+  }
+
+  label {
+    border-radius: 50%;
+    display: block;
+    height: 1rem;
+    left: 0.15rem;
+    margin: 0 !important;
+    min-height: 0;
+    min-width: 0;
+    padding: 0;
+    pointer-events: none;
+    position: absolute;
+    width: 1rem;
+
+    &.animate {
+      transition: all 0.25s ease;
+    }
+  }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  position: relative;
+
+  &.btn-icon-container {
+    input {
+      padding-right: 2.3rem !important;
+    }
+
+    .btn-icon {
+      border-radius: $border-radius-input;
+      font-size: 0.9em;
+      height: 2.1em;
+      margin-top: -1.05em;
+      position: absolute;
+      right: 0.3em;
+      top: 50%;
+      width: 2.1em;
+      z-index: 55;
+
+      i {
+        margin: auto;
+        opacity: 1 !important;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      @media (hover: hover) {
+        &:focus {
+          border-style: solid;
+          border-width: 1px;
+
+          &:hover {
+            border: none;
+          }
+        }
+      }
+    }
+  }
+
+  &.has-error {
+    input,
+    textarea {
+      &.form-control {
+        border-style: solid !important;
+        border-width: 1px !important;
+
+        &::placeholder {
+          opacity: 0.8 !important;
+        }
+      }
+    }
+  }
+
+  input,
+  textarea {
+    &.form-control {
+      border-style: solid;
+      border-width: 1px;
+      font-size: 1rem;
+      resize: none;
+      width: 100%;
+    }
+  }
+
+  input.form-control {
+    border-radius: $border-radius-input;
+    line-height: 2.4rem;
+    padding: 0 1rem;
+  }
+
+  textarea.form-control {
+    border-radius: 1.1rem;
+    line-height: 1.2rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+.validation {
+  border-radius: $border-radius-input;
+  font-size: 0.75rem;
+  left: 50%;
+  line-height: 1.15rem;
+  padding: 0 0.5rem;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  z-index: 60;
+}

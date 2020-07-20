@@ -4,7 +4,7 @@ import { autobind } from 'core-decorators';
 import _ from 'underscore';
 import { Bookmarks as NativeBookmarks } from 'webextension-polyfill-ts';
 import Strings from '../../../../../res/strings/en.json';
-import { BookmarkSearchResult } from '../../../app/app.interface';
+import { BookmarkSearchResult } from '../../../app/app-search/app-search.interface';
 import { ApiService } from '../../api/api.interface';
 import CryptoService from '../../crypto/crypto.service';
 import * as Exceptions from '../../exception/exception';
@@ -66,16 +66,15 @@ export default class BookmarkHelperService {
       throw new Exceptions.BookmarkNotFoundException();
     }
 
-    // Create new bookmark/separator
-    const bookmark = bookmarkMetadata.isSeparator
-      ? this.newSeparator(bookmarks)
-      : this.newBookmark(
-          bookmarkMetadata.title,
-          bookmarkMetadata.url,
-          bookmarkMetadata.description,
-          bookmarkMetadata.tags,
-          bookmarks
-        );
+    // Create new bookmark
+    const bookmark = this.newBookmark(
+      bookmarkMetadata.title,
+      bookmarkMetadata.url,
+      bookmarkMetadata.description,
+      bookmarkMetadata.tags,
+      bookmarkMetadata.isSeparator,
+      bookmarks
+    );
 
     // Add bookmark as child at index param
     parent.children.splice(index, 0, bookmark);
@@ -184,9 +183,7 @@ export default class BookmarkHelperService {
     takenIds.push(id);
 
     // Create the new bookmark
-    const bookmark = this.isSeparator(nativeBookmark)
-      ? this.newSeparator()
-      : this.newBookmark(nativeBookmark.title, nativeBookmark.url);
+    const bookmark = this.newBookmark(nativeBookmark.title, nativeBookmark.url);
     bookmark.id = id;
 
     // Process children if any
@@ -288,7 +285,7 @@ export default class BookmarkHelperService {
     // If container does not exist, create it if specified
     let container = _.findWhere<Bookmark, any>(bookmarks, { title: containerName });
     if (!container && createIfNotPresent) {
-      container = this.newBookmark(containerName, null, null, null, bookmarks);
+      container = this.newBookmark(containerName, null, null, null, false, bookmarks);
       bookmarks.push(container);
     }
     return container;
@@ -387,9 +384,7 @@ export default class BookmarkHelperService {
     for (let i = 0; i < nativeBookmarks.length; i += 1) {
       // Check if current native bookmark is a separator
       const nativeBookmark = nativeBookmarks[i];
-      const bookmark = this.isSeparator(nativeBookmark)
-        ? this.newSeparator()
-        : this.newBookmark(nativeBookmark.title, nativeBookmark.url);
+      const bookmark = this.newBookmark(nativeBookmark.title, nativeBookmark.url);
 
       // If this is a folder and has children, process them
       if (nativeBookmark.children?.length > 0) {
@@ -437,8 +432,12 @@ export default class BookmarkHelperService {
       });
   }
 
-  isSeparator(bookmark: Bookmark | NativeBookmarks.BookmarkTreeNode): boolean {
-    if (!bookmark) {
+  isFolder(bookmark: Bookmark | BookmarkMetadata | NativeBookmarks.BookmarkTreeNode): boolean {
+    return !this.isSeparator(bookmark) && !bookmark.url;
+  }
+
+  isSeparator(bookmark: Bookmark | BookmarkMetadata | NativeBookmarks.BookmarkTreeNode): boolean {
+    if (angular.isUndefined(bookmark)) {
       return false;
     }
 
@@ -446,13 +445,14 @@ export default class BookmarkHelperService {
     // or type is separator (in FF)
     const separatorRegex = new RegExp('^[-─]{1,}$');
     return (
+      (bookmark as BookmarkMetadata).isSeparator ||
       (bookmark as NativeBookmarks.BookmarkTreeNode).type === 'separator' ||
       (bookmark.title &&
         (separatorRegex.test(bookmark.title ?? '') ||
           bookmark.title.indexOf(Globals.Bookmarks.HorizontalSeparatorTitle) >= 0 ||
           bookmark.title === Globals.Bookmarks.VerticalSeparatorTitle) &&
         (!bookmark.url || bookmark.url === this.platformSvc.getNewTabUrl()) &&
-        bookmark.children?.length === 0)
+        !(bookmark as Bookmark).children)
     );
   }
 
@@ -468,8 +468,14 @@ export default class BookmarkHelperService {
 
     // If bookmark is a separator, convert bookmark to separator
     if (this.isSeparator(bookmarkToModify)) {
+      // TODO: test this
       // Create a new separator with same id
-      const separator = this.newSeparator();
+      const separator = this.newBookmark(
+        bookmarkToModify.title,
+        bookmarkToModify.url,
+        bookmarkToModify.description,
+        bookmarkToModify.tags
+      );
       separator.id = bookmarkToModify.id;
 
       // Copy separator properties
@@ -486,24 +492,36 @@ export default class BookmarkHelperService {
     url?: string,
     description?: string,
     tags?: string[],
+    isSeparator = false,
     bookmarksToGenerateNewId?: Bookmark[]
   ): Bookmark {
-    const newBookmark: Bookmark = {
-      children: [],
-      description: this.utilitySvc.trimToNearestWord(description, Globals.Bookmarks.DescriptionMaxLength),
-      tags,
-      title: title?.trim(),
-      url: url?.trim()
+    const newSeparator: Bookmark = {
+      title: '-'
     };
 
-    if (url) {
-      delete newBookmark.children;
+    let newBookmark: Bookmark;
+    if (isSeparator) {
+      newBookmark = newSeparator;
     } else {
-      delete newBookmark.url;
-    }
+      newBookmark = {
+        children: [],
+        description: this.utilitySvc.trimToNearestWord(description, Globals.Bookmarks.DescriptionMaxLength),
+        tags,
+        title: title?.trim(),
+        url: url?.trim()
+      };
 
-    if (tags?.length === 0) {
-      delete newBookmark.tags;
+      // If bookmark has a url it is not a folder so delete children prop, otherwise delete url prop
+      if (url) {
+        delete newBookmark.children;
+      } else {
+        delete newBookmark.url;
+      }
+
+      // Check once more if bookmark is a separator
+      if (this.isSeparator(newBookmark)) {
+        newBookmark = newSeparator;
+      }
     }
 
     // If bookmarks provided, generate new id
@@ -513,12 +531,6 @@ export default class BookmarkHelperService {
 
     // Clean new bookmark of empty attributes before returning
     return this.cleanBookmark(newBookmark);
-  }
-
-  newSeparator(bookmarksToGenerateNewId?: Bookmark[]): Bookmark {
-    const separator = this.newBookmark('-', null, null, null, bookmarksToGenerateNewId);
-    delete separator.children;
-    return separator;
   }
 
   removeBookmarkById(id: number, bookmarks: Bookmark[]): ng.IPromise<Bookmark[]> {
@@ -594,15 +606,19 @@ export default class BookmarkHelperService {
     results: BookmarkSearchResult[] = []
   ): BookmarkSearchResult[] {
     _.each(bookmarks, (bookmark) => {
-      if (!bookmark.url) {
-        // If this is a folder, search children
+      // Ignore separators
+      if (this.isSeparator(bookmark)) {
+        return;
+      }
+
+      if (this.isFolder(bookmark)) {
+        // If bookmark is a folder, search children
         if (bookmark.children?.length > 0) {
           this.searchBookmarksByKeywords(bookmark.children, keywords, results);
         }
       } else {
-        let bookmarkWords: string[] = [];
-
         // Add all words in bookmark to array
+        let bookmarkWords: string[] = [];
         bookmarkWords = bookmarkWords.concat(this.utilitySvc.splitTextIntoWords(bookmark.title));
         if (bookmark.description) {
           bookmarkWords = bookmarkWords.concat(this.utilitySvc.splitTextIntoWords(bookmark.description));
@@ -658,10 +674,12 @@ export default class BookmarkHelperService {
   ): BookmarkSearchResult[] {
     results = results.concat(
       _.filter(bookmarks, (bookmark) => {
-        if (!bookmark.url) {
+        // Ignore folders and separators
+        if (this.isFolder(bookmark) || this.isSeparator(bookmark)) {
           return false;
         }
 
+        // Check if the bookmark url contains the url param
         return bookmark.url.toLowerCase().indexOf(url.toLowerCase()) >= 0;
       })
     );
@@ -682,11 +700,16 @@ export default class BookmarkHelperService {
     results: string[] = []
   ): string[] {
     _.each(bookmarks, (bookmark) => {
-      if (!bookmark.url) {
+      // Ignore separators
+      if (this.isSeparator(bookmark)) {
+        return;
+      }
+
+      if (this.isFolder(bookmark)) {
+        // If bookmark is a folder, search children
         results = this.searchBookmarksForLookaheads(bookmark.children, word, tagsOnly, results);
       } else {
         let bookmarkWords: string[] = [];
-
         if (!tagsOnly) {
           if (bookmark.title) {
             // Add all words from title

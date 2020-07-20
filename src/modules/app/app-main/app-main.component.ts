@@ -12,23 +12,23 @@
 /* eslint-disable default-case */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
+import './app-main.component.scss';
 import angular from 'angular';
 import { Component } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import * as countriesList from 'countries-list';
 import DOMPurify from 'dompurify';
 import marked from 'marked';
-import QRCode from 'qrcode-svg';
 import _ from 'underscore';
-import Strings from '../../../res/strings/en.json';
-import { AlertType } from '../shared/alert/alert.enum';
-import { Alert } from '../shared/alert/alert.interface';
-import AlertService from '../shared/alert/alert.service';
-import { ApiServiceStatus } from '../shared/api/api.enum';
-import { ApiService } from '../shared/api/api.interface';
-import BackupRestoreService from '../shared/backup-restore/backup-restore.service';
-import BookmarkHelperService from '../shared/bookmark/bookmark-helper/bookmark-helper.service.js';
-import { BookmarkChangeType } from '../shared/bookmark/bookmark.enum';
+import Strings from '../../../../res/strings/en.json';
+import { AlertType } from '../../shared/alert/alert.enum';
+import { Alert } from '../../shared/alert/alert.interface';
+import AlertService from '../../shared/alert/alert.service';
+import { ApiServiceStatus } from '../../shared/api/api.enum';
+import { ApiService } from '../../shared/api/api.interface';
+import BackupRestoreService from '../../shared/backup-restore/backup-restore.service';
+import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service.js';
+import { BookmarkChangeType } from '../../shared/bookmark/bookmark.enum';
 import {
   AddBookmarkChangeData,
   Bookmark,
@@ -37,29 +37,29 @@ import {
   BookmarkService,
   ModifyBookmarkChangeData,
   RemoveBookmarkChangeData
-} from '../shared/bookmark/bookmark.interface';
-import CryptoService from '../shared/crypto/crypto.service';
-import * as Exceptions from '../shared/exception/exception';
-import { ExceptionHandler } from '../shared/exception/exception.interface';
-import Globals from '../shared/global-shared.constants';
-import { MessageCommand } from '../shared/global-shared.enum';
-import { PlatformService } from '../shared/global-shared.interface';
-import LogService from '../shared/log/log.service';
-import NetworkService from '../shared/network/network.service';
-import { StoreKey } from '../shared/store/store.enum';
-import StoreService from '../shared/store/store.service';
-import SyncEngineService from '../shared/sync/sync-engine/sync-engine.service';
-import { SyncType } from '../shared/sync/sync.enum';
-import { Sync } from '../shared/sync/sync.interface';
-import UtilityService from '../shared/utility/utility.service';
+} from '../../shared/bookmark/bookmark.interface';
+import CryptoService from '../../shared/crypto/crypto.service';
+import * as Exceptions from '../../shared/exception/exception';
+import { ExceptionHandler } from '../../shared/exception/exception.interface';
+import Globals from '../../shared/global-shared.constants';
+import { MessageCommand } from '../../shared/global-shared.enum';
+import { PlatformService } from '../../shared/global-shared.interface';
+import LogService from '../../shared/log/log.service';
+import NetworkService from '../../shared/network/network.service';
+import { StoreKey } from '../../shared/store/store.enum';
+import StoreService from '../../shared/store/store.service';
+import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
+import { SyncType } from '../../shared/sync/sync.enum';
+import { Sync } from '../../shared/sync/sync.interface';
+import UtilityService from '../../shared/utility/utility.service';
 
 @autobind
 @Component({
   controllerAs: 'vm',
   selector: 'app',
-  template: require('./app.component.html')
+  template: require('./app-main.component.html')
 })
-export default class AppComponent {
+export default class AppMainComponent {
   $exceptionHandler: ExceptionHandler;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
@@ -83,13 +83,13 @@ export default class AppComponent {
     type: undefined
   };
   ApiServiceStatus = ApiServiceStatus;
+  appVersion: string;
   bookmark = {
     active: false,
     addButtonDisabledUntilEditForm: false,
     current: undefined,
     descriptionFieldOriginalHeight: undefined,
     displayUpdateForm: false,
-    getTitleForDisplay: undefined,
     originalUrl: undefined,
     tagLookahead: undefined,
     tagText: undefined,
@@ -212,7 +212,7 @@ export default class AppComponent {
       scan: 10
     }
   };
-  vm: AppComponent = this;
+  vm: AppMainComponent = this;
   working = {
     displayCancelSyncButton: false,
     message: undefined,
@@ -783,9 +783,14 @@ export default class AppComponent {
   }
 
   button_ReleaseNotes_Click() {
-    const url = Globals.ReleaseNotesUrlStem + this.utilitySvc.getVersionTag();
-    this.openUrl(null, url);
-    return this.view.displayMainView();
+    return this.platformSvc
+      .getAppVersion()
+      .then((appVersion) => {
+        const versionTag = appVersion.replace(/([a-z]+)\d+$/i, '$1');
+        const url = Globals.ReleaseNotesUrlStem + versionTag;
+        this.openUrl(null, url);
+      })
+      .then(this.view.displayMainView);
   }
 
   changeView(view, viewData?) {
@@ -842,6 +847,10 @@ export default class AppComponent {
 
   closeAlert(): void {
     this.alertSvc.clearCurrentAlert();
+  }
+
+  closeQrPanel(): void {
+    this.settings.displayQrPanel = false;
   }
 
   copyTextToClipboard(text: string): ng.IPromise<void> {
@@ -909,17 +918,6 @@ export default class AppComponent {
     return this.$q.resolve();
   }
 
-  displayHelpPage(panelToDisplay?) {
-    if (panelToDisplay < 0 || panelToDisplay >= this.help.pages.length) {
-      return this.helpPanel_Close();
-    }
-
-    this.help.currentPage = panelToDisplay ?? 0;
-    this.$timeout(() => {
-      (document.querySelector('#help-panel .view-content > div') as HTMLDivElement).focus();
-    }, 150);
-  }
-
   displayMainView() {
     return this.storeSvc
       .get([StoreKey.DisplayHelp, StoreKey.DisplayPermissions, StoreKey.DisplayUpdated, StoreKey.SyncEnabled])
@@ -940,30 +938,6 @@ export default class AppComponent {
   }
 
   displayQrPanel() {
-    // QR code should encode sync info
-    const syncInfo = this.backupRestoreSvc.createSyncInfoObject(this.sync.id, this.sync.service.url);
-
-    // Generate QR code
-    const qrcode = new QRCode({
-      content: JSON.stringify(syncInfo),
-      padding: 4,
-      width: 200,
-      height: 200,
-      color: '#000000',
-      background: '#ffffff',
-      ecl: 'M'
-    });
-    const svgString = qrcode
-      .svg()
-      .replace('width="200" height="200"', 'viewBox="0, 0, 200, 200" preserveAspectRatio="xMidYMid meet"');
-
-    // Add new qr code svg to qr container
-    const svg = new DOMParser().parseFromString(svgString, 'text/xml').firstElementChild;
-    const qrContainer = document.getElementById('qr');
-    while (qrContainer.firstElementChild) {
-      qrContainer.removeChild(qrContainer.firstElementChild);
-    }
-    qrContainer.appendChild(svg);
     this.settings.displayQrPanel = true;
   }
 
@@ -1099,7 +1073,6 @@ export default class AppComponent {
 
   init() {
     // Set vm defaults
-    this.bookmark.getTitleForDisplay = this.bookmarkHelperSvc.getBookmarkTitleForDisplay;
     this.search.displayDefaultState = this.displayDefaultSearchState;
     this.search.execute = this.searchBookmarks;
     this.view.change = this.changeView;
@@ -1109,6 +1082,7 @@ export default class AppComponent {
     // Get cached prefs from storage
     return this.$q
       .all([
+        this.platformSvc.getAppVersion(),
         this.storeSvc.get([
           StoreKey.DarkModeEnabled,
           StoreKey.DisplaySearchBarBeneathResults,
@@ -1120,12 +1094,13 @@ export default class AppComponent {
       ])
       .then((cachedData) => {
         // Set view model values
-        this.settings.darkModeEnabled = !!cachedData[0].darkModeEnabled;
-        this.settings.displaySearchBarBeneathResults = !!cachedData[0].displaySearchBarBeneathResults;
-        this.settings.defaultToFolderView = !!cachedData[0].defaultToFolderView;
-        this.sync.enabled = !!cachedData[0].syncEnabled;
-        this.sync.id = cachedData[0].syncId;
-        this.sync.service.url = cachedData[1];
+        this.appVersion = cachedData[0];
+        this.settings.darkModeEnabled = !!cachedData[1].darkModeEnabled;
+        this.settings.displaySearchBarBeneathResults = !!cachedData[1].displaySearchBarBeneathResults;
+        this.settings.defaultToFolderView = !!cachedData[1].defaultToFolderView;
+        this.sync.enabled = !!cachedData[1].syncEnabled;
+        this.sync.id = cachedData[1].syncId;
+        this.sync.service.url = cachedData[2];
 
         // Check if a sync is currently in progress
         return this.sync_Current().then((currentSync) => {
@@ -1442,43 +1417,9 @@ export default class AppComponent {
     });
   }
 
-  helpPanel_Close() {
-    return this.view.displayMainView();
-  }
-
-  helpPanel_KeyDown(event) {
-    switch (true) {
-      // Escape key
-      case event.keyCode === 27:
-        event.preventDefault();
-        this.helpPanel_Close();
-        break;
-      // Left arrow key
-      case event.keyCode === 37:
-        event.preventDefault();
-        this.displayHelpPage(this.help.currentPage - 1);
-        break;
-      // Right arrow key
-      case event.keyCode === 39:
-        event.preventDefault();
-        this.displayHelpPage(this.help.currentPage + 1);
-        break;
-    }
-  }
-
-  helpPanel_NextPage() {
-    this.displayHelpPage(this.help.currentPage + 1);
-  }
-
-  helpPanel_PreviousPage() {
-    this.displayHelpPage(this.help.currentPage - 1);
-  }
-
   helpPanel_ShowHelp() {
     this.storeSvc.set(StoreKey.DisplayHelp, false);
-    this.help.pages = this.getHelpPages();
     this.view.change(this.view.views.help);
-    this.displayHelpPage();
   }
 
   openUrl(event?, url?) {
@@ -1524,21 +1465,6 @@ export default class AppComponent {
     return this.$q
       .all([this.permissions_Request(), this.storeSvc.set(StoreKey.DisplayPermissions, false)])
       .finally(this.view.displayMainView);
-  }
-
-  qrPanel_Close_Click() {
-    this.settings.displayQrPanel = false;
-    this.$timeout(() => {
-      this.settings.syncIdCopied = false;
-    }, 150);
-  }
-
-  qrPanel_CopySyncId_Click() {
-    return this.copyTextToClipboard(this.sync.id).then(() => {
-      this.$timeout(() => {
-        this.settings.syncIdCopied = true;
-      });
-    });
   }
 
   queueSync(sync: Sync, command = MessageCommand.SyncBookmarks): ng.IPromise<any> {
@@ -1742,7 +1668,7 @@ export default class AppComponent {
       // Scroll to top of search results
       this.$timeout(() => {
         this.search.scrollDisplayMoreEnabled = true;
-        const resultsPanel = document.querySelector('.search-results-panel');
+        const resultsPanel = document.querySelector('.search-results-container');
         if (resultsPanel) {
           resultsPanel.scrollTop = 0;
         }
@@ -1936,7 +1862,8 @@ export default class AppComponent {
     if (event.keyCode === 40 && this.search.results?.length > 0) {
       // Focus on first search result
       event.preventDefault();
-      (document.querySelector('.search-results-panel .bookmark-list').firstElementChild as HTMLDivElement).focus();
+      // TODO: test this
+      (document.querySelectorAll('.search-results-container bookmark')[0] as HTMLDivElement).focus();
       return;
     }
 
@@ -2039,6 +1966,10 @@ export default class AppComponent {
       if (event.srcEvent) {
         event.srcEvent.stopPropagation();
       }
+    }
+
+    if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+      return;
     }
 
     // Display menu for selected bookmark

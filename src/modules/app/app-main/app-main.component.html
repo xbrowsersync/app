@@ -1,0 +1,62 @@
+<div ng-class="vm.settings.darkModeEnabled ? 'theme-dark' : 'theme-default'" ng-if="vm.initialised">
+  <div class="container" ng-class="{ 'search': vm.view.current === vm.view.views.search }">
+    <div id="working-panel" class="overlay animate" ng-include="'./assets/working.html'" ng-show="vm.working.show"
+         ng-class="{ 'darker-overlay': vm.view.current !== vm.view.views.loading, 'fullsize': vm.view.current === vm.view.views.loading }">
+    </div>
+
+    <div id="alert-panel" ng-include="'./assets/alert.html'" ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)">
+    </div>
+
+    <div id="login-panel" class="view animate" ng-if="vm.view.current === vm.view.views.login">
+      <div class="view-content" ng-include="'./assets/login.html'"></div>
+    </div>
+
+    <div id="search-panel" class="view animate"
+         ng-class="{ 'search-bar-bottom': vm.settings.displaySearchBarBeneathResults }"
+         ng-if="vm.view.current === vm.view.views.search">
+      <div class="view-content" ng-include="'./assets/search.html'"></div>
+    </div>
+
+    <div id="bookmark-panel" class="view animate" ng-if="vm.view.current === vm.view.views.bookmark">
+      <div class="view-content" ng-include="'./assets/bookmark.html'"></div>
+    </div>
+
+    <div id="settings-panel" class="view animate" ng-if="vm.view.current === vm.view.views.settings">
+      <div class="view-content" ng-include="'./assets/settings.html'"></div>
+    </div>
+
+    <help-panel class="view overlay-panel animate" close="vm.displayMainView" load-pages="vm.getHelpPages"
+                ng-if="vm.view.current === vm.view.views.help"></help-panel>
+
+    <div id="information-panel" class="view overlay-panel animate" ng-if="vm.view.current === vm.view.views.loading || 
+      vm.view.current === vm.view.views.support || vm.view.current === vm.view.views.updated || 
+      vm.view.current === vm.view.views.permissions">
+      <div id="support-panel" ng-if="vm.view.current === vm.view.views.support">
+        <div class="view-content animate" ng-include="'./assets/support.html'"></div>
+      </div>
+
+      <div id="updated-panel" ng-if="vm.view.current === vm.view.views.updated">
+        <div class="view-content animate" ng-include="'./assets/updated.html'"></div>
+      </div>
+
+      <div id="permissions-panel" ng-if="vm.view.current === vm.view.views.permissions">
+        <div class="view-content animate" ng-include="'./assets/permissions.html'"></div>
+      </div>
+    </div>
+
+    <div id="scan-panel" class="view" ng-if="vm.view.current === vm.view.views.scan">
+      <div class="view-content" ng-include="'./assets/scan.html'"></div>
+    </div>
+
+    <qr-panel class="darker-overlay animate-fade-in animate-fade-out" close="vm.closeQrPanel"
+              copy-text-to-clipboard="vm.copyTextToClipboard" service-url="vm.sync.service.url" sync-id="vm.sync.id"
+              ng-if="vm.settings.displayQrPanel"></qr-panel>
+  </div>
+
+  <div class="background animate" ng-if="vm.view.current !== undefined && vm.view.current !== vm.view.views.scan">
+    <div class="background-img" ng-if="vm.view.current === vm.view.views.loading || vm.view.current === vm.view.views.login || 
+      vm.view.current === vm.view.views.support || vm.view.current === vm.view.views.permissions || 
+      vm.view.current === vm.view.views.updated || vm.view.current === vm.view.views.help">
+    </div>
+  </div>
+</div>

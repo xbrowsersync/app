@@ -111,6 +111,10 @@ export default class WebExtPlatformService implements PlatformService {
     });
   }
 
+  getAppVersion(): ng.IPromise<string> {
+    return this.$q.resolve(browser.runtime.getManifest().version);
+  }
+
   getConstant(i18nString: I18nString): string {
     let message = '';
 

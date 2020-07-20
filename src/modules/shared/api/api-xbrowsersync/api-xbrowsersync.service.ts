@@ -1,8 +1,10 @@
+import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import compareVersions from 'compare-versions';
 import { autobind } from 'core-decorators';
 import * as Exceptions from '../../exception/exception';
 import Globals from '../../global-shared.constants';
+import { PlatformService } from '../../global-shared.interface';
 import NetworkService from '../../network/network.service';
 import { StoreKey } from '../../store/store.enum';
 import StoreService from '../../store/store.service';
@@ -24,27 +26,38 @@ import { ApiXbrowsersyncErrorResponse, ApiXbrowsersyncServiceInfoResponse } from
 @autobind
 @Injectable('ApiService')
 export default class ApiXbrowsersyncService implements ApiService {
+  $injector: ng.auto.IInjectorService;
   $http: ng.IHttpService;
   $q: ng.IQService;
   networkSvc: NetworkService;
+  _platformSvc: PlatformService;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
   skipOnlineCheck = false;
 
-  static $inject = ['$http', '$q', 'NetworkService', 'StoreService', 'UtilityService'];
+  static $inject = ['$injector', '$http', '$q', 'NetworkService', 'StoreService', 'UtilityService'];
   constructor(
+    $injector: ng.auto.IInjectorService,
     $http: ng.IHttpService,
     $q: ng.IQService,
     NetworkSvc: NetworkService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
   ) {
+    this.$injector = $injector;
     this.$http = $http;
     this.$q = $q;
     this.networkSvc = NetworkSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
+  }
+
+  get platformSvc(): PlatformService {
+    if (angular.isUndefined(this._platformSvc)) {
+      this._platformSvc = this.$injector.get('PlatformService');
+    }
+    return this._platformSvc;
   }
 
   apiRequestSucceeded<T>(response: T): ng.IPromise<T> {
@@ -97,12 +110,14 @@ export default class ApiXbrowsersyncService implements ApiService {
   createNewSync(): ng.IPromise<ApiCreateBookmarksResponse> {
     return this.checkNetworkIsOnline()
       .then(() => {
-        return this.utilitySvc
-          .getServiceUrl()
-          .then((serviceUrl) => {
+        return this.$q
+          .all([this.platformSvc.getAppVersion(), this.utilitySvc.getServiceUrl()])
+          .then((data) => {
+            const appVersion = data[0];
+            const serviceUrl = data[1];
             const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}`;
             const requestBody: ApiCreateBookmarksRequest = {
-              version: Globals.AppVersion
+              version: appVersion
             };
             return this.$http
               .post<ApiCreateBookmarksResponse>(requestUrl, JSON.stringify(requestBody))
@@ -240,11 +255,15 @@ export default class ApiXbrowsersyncService implements ApiService {
       message = response.data.message;
     }
 
+    const testError = new Error('test');
+
     let exception: Exceptions.Exception;
     switch (response.status) {
       // 401 Unauthorized: sync data not found
       case 401:
-        exception = new Exceptions.NoDataFoundException(message);
+        // TODO: remove
+        // exception = new Exceptions.NoDataFoundException(message);
+        exception = new Exceptions.NoDataFoundException(null, testError);
         break;
       // 404 Not Found: invalid service
       case 404:
@@ -298,10 +317,11 @@ export default class ApiXbrowsersyncService implements ApiService {
         // If this is a background update, ensure online check is skipped until successfull request
         this.skipOnlineCheck = backgroundUpdate;
         return this.checkNetworkIsOnline().then(() => {
-          // Get current service url
-          return this.utilitySvc
-            .getServiceUrl()
-            .then((serviceUrl) => {
+          return this.$q
+            .all([this.platformSvc.getAppVersion(), this.utilitySvc.getServiceUrl()])
+            .then((data) => {
+              const appVersion = data[0];
+              const serviceUrl = data[1];
               const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}/${storeContent.syncId}`;
               const requestBody: ApiUpdateBookmarksRequest = {
                 bookmarks: encryptedBookmarks,
@@ -310,7 +330,7 @@ export default class ApiXbrowsersyncService implements ApiService {
 
               // If updating sync version, set as current app version
               if (updateSyncVersion) {
-                requestBody.version = Globals.AppVersion;
+                requestBody.version = appVersion;
               }
 
               return this.$http

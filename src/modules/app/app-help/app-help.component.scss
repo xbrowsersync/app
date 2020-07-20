@@ -1,0 +1,46 @@
+@import '../../../styles/modules/all';
+
+help-panel {
+  @include theme-dark {
+    @media (hover: hover) {
+      a {
+        &:active,
+        &:focus,
+        &:hover {
+          border-bottom-color: $colour-text2-dark;
+          color: $colour-text2-dark;
+        }
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+
+    a {
+      position: relative;
+
+      &.next-link {
+        margin-right: 0.5rem;
+
+        span::after {
+          content: '\203A';
+          position: absolute;
+          right: -0.5rem;
+        }
+      }
+
+      &.prev-link {
+        margin-left: 0.5rem;
+
+        span::before {
+          content: '\2039';
+          left: -0.5rem;
+          position: absolute;
+        }
+      }
+    }
+  }
+}

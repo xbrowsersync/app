@@ -1,0 +1,32 @@
+h2 {
+  float: left;
+  font-size: 1.5em;
+  font-weight: 800;
+  line-height: 1.2em;
+  margin: 0;
+}
+
+h4 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.75rem;
+  margin-top: 0;
+}
+
+a {
+  border-bottom-style: dotted;
+  border-bottom-width: 1px;
+  color: inherit;
+  cursor: pointer;
+  transition: all ease-in-out 0.2s;
+
+  &:focus,
+  &:hover {
+    outline: 0;
+    text-decoration: none;
+  }
+}
+
+p {
+  margin: 0 0 0.75rem;
+}

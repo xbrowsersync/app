@@ -12,6 +12,7 @@ interface Window {
 
 interface Cordova {
   file: any;
+  getAppVersion: any;
   InAppBrowser: any;
 }
 

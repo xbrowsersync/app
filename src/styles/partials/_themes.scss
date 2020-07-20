@@ -1,0 +1,216 @@
+.theme-default {
+  @include theme(
+    $colour-bg1-default,
+    $colour-bg2-default,
+    $colour-bg3-default,
+    $colour-text1-default,
+    $colour-text2-default,
+    $colour-text3-default
+  );
+}
+
+.theme-dark {
+  @include theme(
+    $colour-bg1-dark,
+    $colour-bg2-dark,
+    $colour-bg3-dark,
+    $colour-text1-dark,
+    $colour-text2-dark,
+    $colour-text3-dark
+  );
+
+  button {
+    &.btn-default {
+      background-color: rgba($colour-text1-dark, 0.3);
+      border-color: $colour-text2-dark;
+      color: $colour-text2-dark;
+
+      @media (hover: hover) {
+        &:not([disabled]):active {
+          background-color: $colour-text1-dark;
+          border-color: $colour-text2-dark;
+          color: $colour-text2-dark;
+        }
+
+        &:not([disabled]):hover {
+          background-color: $colour-text2-dark;
+          border-color: $colour-text2-dark;
+          color: $colour-bg3-dark;
+        }
+      }
+
+      &[disabled] {
+        background-color: rgba($colour-bg3-dark, 0.3);
+        border-color: $colour-text2-dark;
+        color: $colour-text2-dark;
+      }
+    }
+
+    &.btn-fab {
+      background-color: $colour-text3-dark;
+      color: $colour-text1-dark;
+    }
+  }
+
+  #bookmark-panel {
+    .btn-delete-bookmark {
+      background-color: $colour-danger;
+
+      @media (hover: hover) {
+        &:not([disabled]):hover {
+          color: $colour-danger;
+        }
+      }
+    }
+
+    .tags-container .badge {
+      background-color: $colour-bg3-dark;
+
+      @media (hover: hover) {
+        &:active i {
+          color: $colour-text2-dark !important;
+        }
+
+        &:hover,
+        &:focus {
+          i {
+            color: $colour-text2-dark;
+          }
+        }
+      }
+    }
+  }
+
+  .checkbox input[type='checkbox']:checked + label {
+    background: $colour-text3-dark;
+  }
+
+  .darker-overlay {
+    background-color: rgba(#222, 0.9) !important;
+  }
+
+  #support-panel {
+    @media (hover: hover) {
+      a {
+        &:active,
+        &:focus,
+        &:hover {
+          border-bottom-color: $colour-text2-dark;
+          color: $colour-text2-dark;
+        }
+      }
+    }
+  }
+
+  #information-panel {
+    background-color: transparent;
+  }
+
+  #search-panel {
+    .view-content {
+      .bookmark-tree-container {
+        & > bookmark-tree > .folder > .bookmark-content {
+          background-color: $colour-bg3-dark;
+
+          bookmark {
+            @media (hover: hover) {
+              &:not(.folder) {
+                &:focus,
+                &:hover {
+                  & > .bookmark-content {
+                    background-color: rgba($colour-text3-dark, 0.6);
+                  }
+                }
+              }
+            }
+
+            & > .bookmark-content {
+              background-color: rgba($colour-text3-dark, 0.2);
+            }
+          }
+        }
+
+        .bookmark-content {
+          .bookmark-heading,
+          .bookmark-text {
+            color: $colour-text1-dark !important;
+
+            .url {
+              color: $colour-text2-dark !important;
+            }
+          }
+
+          .bookmark-heading::after {
+            color: rgba($colour-text1-dark, 0.6) !important;
+          }
+
+          .spinner-border-sm {
+            @include spinner-colour(rgba($colour-text1-dark, 0.6));
+          }
+        }
+      }
+
+      .search-results-container {
+        @media (hover: hover) {
+          bookmark {
+            &:focus,
+            &:hover {
+              & > .bookmark-content {
+                background-color: lighten($colour-bg3-dark, 7%);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .status-icon-bg {
+    background-color: $colour-text1-dark !important;
+  }
+
+  .well {
+    @media (hover: hover) {
+      a {
+        &:active {
+          border-bottom-color: $colour-text1-dark;
+          color: $colour-text1-dark;
+        }
+
+        &:focus,
+        &:hover {
+          border-bottom-color: $colour-text1-dark;
+          color: $colour-text1-dark;
+        }
+      }
+    }
+
+    .btn.btn-default {
+      border-color: $colour-text1-dark;
+      color: $colour-text1-dark;
+
+      @media (hover: hover) {
+        &:not([disabled]):active {
+          color: $colour-bg3-dark;
+        }
+
+        &:not([disabled]):hover {
+          background-color: $colour-text1-dark;
+          border-color: $colour-text1-dark;
+          color: $colour-bg3-dark;
+        }
+      }
+    }
+  }
+
+  #working-panel {
+    h3 {
+      color: $colour-text3-dark;
+    }
+
+    .spinner-border {
+      border-color: $colour-text3-dark;
+      border-right-color: transparent;
+    }
+  }
+}

@@ -91,16 +91,18 @@ export default class WebExtBackgroundService {
   }
 
   checkForNewVersion(): void {
-    this.utilitySvc.checkForNewVersion().then((newVersion) => {
-      if (!newVersion) {
-        return;
-      }
+    this.platformSvc.getAppVersion().then((appVersion) => {
+      return this.utilitySvc.checkForNewVersion(appVersion).then((newVersion) => {
+        if (!newVersion) {
+          return;
+        }
 
-      const alert: Alert = {
-        message: this.platformSvc.getConstant(Strings.appUpdateAvailable_Message).replace('{version}', newVersion),
-        title: this.platformSvc.getConstant(Strings.appUpdateAvailable_Title)
-      };
-      this.displayAlert(alert, Globals.ReleaseNotesUrlStem + newVersion.replace(/^v/, ''));
+        const alert: Alert = {
+          message: this.platformSvc.getConstant(Strings.appUpdateAvailable_Message).replace('{version}', newVersion),
+          title: this.platformSvc.getConstant(Strings.appUpdateAvailable_Title)
+        };
+        this.displayAlert(alert, Globals.ReleaseNotesUrlStem + newVersion.replace(/^v/, ''));
+      });
     });
   }
 
@@ -232,20 +234,26 @@ export default class WebExtBackgroundService {
 
   init(): void {
     this.logSvc.logInfo('Starting up');
-    this.storeSvc
-      .get([
-        StoreKey.CheckForAppUpdates,
-        StoreKey.LastUpdated,
-        StoreKey.ServiceUrl,
-        StoreKey.SyncBookmarksToolbar,
-        StoreKey.SyncEnabled,
-        StoreKey.SyncId,
-        StoreKey.SyncVersion
+    this.$q
+      .all([
+        this.platformSvc.getAppVersion(),
+        this.storeSvc.get([
+          StoreKey.CheckForAppUpdates,
+          StoreKey.LastUpdated,
+          StoreKey.ServiceUrl,
+          StoreKey.SyncBookmarksToolbar,
+          StoreKey.SyncEnabled,
+          StoreKey.SyncId,
+          StoreKey.SyncVersion
+        ])
       ])
-      .then((storeContent) => {
+      .then((data) => {
+        const appVersion = data[0];
+        const storeContent = data[1];
+
         // Add useful debug info to beginning of trace log
         const debugInfo = angular.copy(storeContent) as any;
-        debugInfo.appVersion = Globals.AppVersion;
+        debugInfo.appVersion = appVersion;
         debugInfo.platform = _.omit(browserDetect(), 'versionNumber');
         this.logSvc.logInfo(
           Object.keys(debugInfo)
@@ -446,24 +454,26 @@ export default class WebExtBackgroundService {
       .then(() => {
         if (compareVersions(oldVersion, newVersion)) {
           switch (true) {
-            case newVersion.indexOf('1.5.3') === 0:
-              return this.upgradeTo153();
+            case newVersion.indexOf('1.6.0') === 0:
+              return this.upgradeTo160();
             default:
           }
         }
       })
       .then(() => {
-        // Display alert and set update panel to show
-        const alert: Alert = {
-          message: this.platformSvc.getConstant(Strings.appUpdated_Message),
-          title: this.platformSvc.getConstant(Strings.appUpdated_Title) + Globals.AppVersion
-        };
-        this.displayAlert(alert, Globals.ReleaseNotesUrlStem + Globals.AppVersion);
-        return this.storeSvc.set(StoreKey.DisplayUpdated, true);
+        return this.platformSvc.getAppVersion().then((appVersion) => {
+          // Display alert and set update panel to show
+          const alert: Alert = {
+            message: this.platformSvc.getConstant(Strings.appUpdated_Message),
+            title: `${this.platformSvc.getConstant(Strings.appUpdated_Title)} ${appVersion}`
+          };
+          this.displayAlert(alert, Globals.ReleaseNotesUrlStem + appVersion);
+          return this.storeSvc.set(StoreKey.DisplayUpdated, true);
+        });
       });
   }
 
-  upgradeTo153(): ng.IPromise<void> {
+  upgradeTo160(): ng.IPromise<void> {
     // Convert local storage items to IndexedDB
     return browser.storage.local
       .get()

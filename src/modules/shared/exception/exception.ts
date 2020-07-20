@@ -11,12 +11,14 @@ export class Exception extends Error {
 
     super(errMessage);
 
-    this.logged = false;
-    this.name = this.constructor.name;
-
+    // Use error param stacktrace if provided and add exception class name
     if (error && error.stack) {
       this.stack = error.stack;
     }
+    this.stack = this.stack.replace(/^(Error)/, `$1 (${this.constructor.name})`);
+
+    // Set logged flag to default value
+    this.logged = false;
   }
 }
 

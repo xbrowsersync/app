@@ -45,7 +45,7 @@ export default class LogService {
 
   logError(error: Exception, message?: string): ng.IPromise<void> {
     // Return if no error supplied or has already been logged
-    if (!error?.logged) {
+    if (error.logged) {
       return;
     }
 
@@ -60,7 +60,7 @@ export default class LogService {
       ? this.$q.resolve()
       : stackTrace.fromError(error).then((frames) => {
           if (frames) {
-            const stack = `${error.name}: ${error.message}\n${frames
+            const stack = `${error.name} (${error.constructor.name}): ${error.message}\n${frames
               .map((f) => {
                 return `\tat ${f.functionName} (${f.fileName}:${f.lineNumber}:${f.columnNumber})`;
               })

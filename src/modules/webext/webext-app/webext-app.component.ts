@@ -1,7 +1,8 @@
+import './webext-app.component.scss';
 import { autobind } from 'core-decorators';
 import { browser } from 'webextension-polyfill-ts';
 import Strings from '../../../../res/strings/en.json';
-import AppComponent from '../../app/app.component';
+import AppMainComponent from '../../app/app-main/app-main.component';
 import Globals from '../../shared/global-shared.constants';
 import { MessageCommand } from '../../shared/global-shared.enum';
 import { StoreKey } from '../../shared/store/store.enum';
@@ -9,7 +10,7 @@ import { Sync } from '../../shared/sync/sync.interface';
 import WebExtPlatformService from '../webext-platform/webext-platform.service';
 
 @autobind
-export default class WebExtAppComponent extends AppComponent {
+export default class WebExtAppComponent extends AppMainComponent {
   copyTextToClipboard(text: string): ng.IPromise<void> {
     return navigator.clipboard.writeText(text);
   }

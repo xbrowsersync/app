@@ -1,7 +1,7 @@
 {
   "name": "com.xbrowsersync.android",
   "displayName": "xBrowserSync",
-  "version": "1.5.3",
+  "version": "1.6.0",
   "description": "xBrowserSync mobile app for Android.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,6 +15,7 @@
     "com-darryncampbell-cordova-plugin-intent": "^2.0.0",
     "cordova-android": "^8.1.0",
     "cordova-clipboard": "^1.3.0",
+    "cordova-plugin-app-version": "^0.1.9",
     "cordova-plugin-background-mode": "^0.7.3",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-exit": "^1.0.3",
@@ -55,7 +56,8 @@
       "cordova-plugin-qrscanner": {},
       "cordova-plugin-theme-detection": {},
       "cordova-plugin-exit": {},
-      "cordova-plugin-globalization": {}
+      "cordova-plugin-globalization": {},
+      "cordova-plugin-app-version": {}
     },
     "platforms": [
       "android"

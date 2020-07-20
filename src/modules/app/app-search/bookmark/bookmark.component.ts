@@ -1,17 +1,21 @@
+import './bookmark.component.scss';
 import { Component, Input, Output } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
-import Strings from '../../../res/strings/en.json';
-import BookmarkHelperService from '../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import { PlatformService } from '../shared/global-shared.interface';
-import UtilityService from '../shared/utility/utility.service';
+import Strings from '../../../../../res/strings/en.json';
+import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { Bookmark } from '../../../shared/bookmark/bookmark.interface';
+import { PlatformService } from '../../../shared/global-shared.interface';
+import UtilityService from '../../../shared/utility/utility.service';
+import { BookmarkTreeItem } from '../app-search.interface';
 
 @autobind
 @Component({
   controllerAs: 'vm',
-  selector: 'bookmarkTree',
-  template: require('./bookmark-tree.component.html')
+  selector: 'bookmark',
+  template: require('./bookmark.component.html'),
+  transclude: true
 })
-export default class BookmarkTreeComponent {
+export default class BookmarkComponent {
   $timeout: ng.ITimeoutService;
   bookmarkHelperSvc: BookmarkHelperService;
   platformSvc: PlatformService;
@@ -19,15 +23,15 @@ export default class BookmarkTreeComponent {
 
   strings = Strings;
 
-  @Input('=') nodes: any;
-  @Input() platformName: any;
-  @Input() selectedBookmark: any;
+  @Input('<ngModel') bookmark: Bookmark;
+  @Input() enableEditButton: boolean = true;
+  @Input() enableSelect: boolean;
+  @Input() isSelected: boolean;
 
-  @Output() deleteBookmark: any;
-  @Output() editBookmark: any;
-  @Output() openUrl: any;
-  @Output() selectBookmark: any;
-  @Output() shareBookmark: any;
+  @Output() editBookmark: () => any;
+  @Output() deleteBookmark: () => any;
+  @Output() shareBookmark: () => any;
+  @Output() visitBookmark: () => any;
 
   static $inject = ['$timeout', 'BookmarkHelperService', 'PlatformService', 'UtilityService'];
   constructor(
@@ -42,7 +46,7 @@ export default class BookmarkTreeComponent {
     this.utilitySvc = UtilitySvc;
   }
 
-  bookmark_Heading_Click(event, bookmark) {
+  clickBookmarkHeading(event: Event, bookmark: BookmarkTreeItem): void {
     event.stopPropagation();
 
     // If this is not a folder, return
@@ -58,9 +62,9 @@ export default class BookmarkTreeComponent {
       // Close any open child folders
       if (!bookmark.open) {
         this.bookmarkHelperSvc.eachBookmark(bookmark.children, (child) => {
-          if ((child as any).open) {
-            (child as any).open = false;
-            (child as any).displayChildren = false;
+          if ((child as BookmarkTreeItem).open) {
+            (child as BookmarkTreeItem).open = false;
+            (child as BookmarkTreeItem).displayChildren = false;
           }
         });
       }

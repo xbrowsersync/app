@@ -1,3 +1,42 @@
+@mixin animation($str) {
+  animation: $str;
+}
+
+@mixin background-gradient($direction, $startColor, $startColorAmount, $endColor, $endColorAmount) {
+  background: linear-gradient($direction, $startColor $startColorAmount, $endColor $endColorAmount);
+  background-color: $startColor;
+  filter: progid:dximagetransform.microsoft.gradient(startColorStr='#{$startColor}', endColorStr='#{$endColor}');
+}
+
+@mixin box-shadow {
+  box-shadow: 0.5rem 0.9rem 1.5rem rgba(0, 0, 0, 0.25);
+}
+
+@mixin ellipsis {
+  &::after {
+    content: '\2026';
+  }
+}
+
+@mixin icon($unicode) {
+  content: $unicode;
+  font-family: $font-stack-icons;
+  font-weight: 900;
+}
+
+@mixin spinner-colour($colour) {
+  border-color: $colour;
+  border-right-color: transparent;
+}
+
+@mixin text-overflow-ellipsis {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+
 @mixin theme($colour-bg1, $colour-bg2, $colour-bg3, $colour-text1, $colour-text2, $colour-text3) {
   & {
     color: $colour-text1;
@@ -17,7 +56,7 @@
       }
     }
 
-    button.btn {
+    button {
       &.btn-default {
         background-color: rgba($colour-text1, 0.3);
         border-color: $colour-bg3;
@@ -152,14 +191,6 @@
       }
     }
 
-    .overlay {
-      background-color: rgba($colour-text2, 0.5);
-    }
-
-    .darker-overlay {
-      background-color: rgba($colour-text2, 0.9) !important;
-    }
-
     .progress-bar-success {
       background-color: $colour-success !important;
     }
@@ -174,6 +205,8 @@
 
     .spinner-border {
       @include spinner-colour($colour-bg2);
+
+      animation-duration: 1s;
     }
 
     .text-success {
@@ -385,67 +418,6 @@
 
   #search-panel {
     .view-content {
-      .bookmark-list .bookmark {
-        @media (hover: hover) {
-          &:focus,
-          &:hover {
-            & > .bookmark-content {
-              background-color: scale-color($colour-bg2, $lightness: 70%, $saturation: 50%);
-            }
-          }
-        }
-
-        &.folder {
-          color: $colour-text1;
-
-          & > .bookmark-content {
-            background-color: rgba($colour-text2, 0.3);
-
-            & > .bookmark-heading {
-              color: $colour-text1;
-
-              &::after {
-                color: $colour-bg2;
-              }
-            }
-          }
-        }
-
-        &.separator {
-          background-color: rgba($colour-text2, 0.15);
-        }
-
-        .bookmark-content {
-          background-color: $colour-bg3;
-
-          .bookmark-heading {
-            color: $colour-text2;
-          }
-
-          .bookmark-text {
-            color: $colour-text2;
-
-            .url {
-              color: $colour-text3;
-            }
-          }
-        }
-
-        .menu {
-          background-color: rgba($colour-text2, 0.8);
-
-          button {
-            background-color: $colour-bg3;
-            color: $colour-text2;
-
-            &.btn-delete-bookmark {
-              background-color: $colour-danger;
-              color: $colour-text1;
-            }
-          }
-        }
-      }
-
       .header-panel .search-form {
         background-color: $colour-bg3;
 
@@ -501,251 +473,21 @@
   }
 }
 
-.theme-default {
-  @include theme(
-    $colour-bg1-default,
-    $colour-bg2-default,
-    $colour-bg3-default,
-    $colour-text1-default,
-    $colour-text2-default,
-    $colour-text3-default
-  );
-
-  .background {
-    @include background-gradient(20deg, $colour-bg1-default, 0, $colour-bg2-default, 100%);
-  }
-
-  .logo {
-    background-image: url('../../res/images/logo.svg');
+@mixin theme-default() {
+  .theme-default & {
+    @content;
   }
 }
 
-.theme-dark {
-  @include theme(
-    $colour-bg1-dark,
-    $colour-bg2-dark,
-    $colour-bg3-dark,
-    $colour-text1-dark,
-    $colour-text2-dark,
-    $colour-text3-dark
-  );
-
-  button.btn {
-    &.btn-default {
-      background-color: rgba($colour-text1-dark, 0.3);
-      border-color: $colour-text2-dark;
-      color: $colour-text2-dark;
-
-      @media (hover: hover) {
-        &:not([disabled]):active {
-          background-color: $colour-text1-dark;
-          border-color: $colour-text2-dark;
-          color: $colour-text2-dark;
-        }
-
-        &:not([disabled]):hover {
-          background-color: $colour-text2-dark;
-          border-color: $colour-text2-dark;
-          color: $colour-bg3-dark;
-        }
-      }
-
-      &[disabled] {
-        background-color: rgba($colour-bg3-dark, 0.3);
-        border-color: $colour-text2-dark;
-        color: $colour-text2-dark;
-      }
-    }
-
-    &.btn-fab {
-      background-color: $colour-text3-dark;
-      color: $colour-text1-dark;
-    }
+@mixin theme-dark() {
+  .theme-dark & {
+    @content;
   }
+}
 
-  .background {
-    background: $colour-bg1-dark;
-  }
-
-  #bookmark-panel {
-    .btn-delete-bookmark {
-      @extend button.btn.btn-default;
-
-      background-color: $colour-danger;
-
-      @media (hover: hover) {
-        &:not([disabled]):hover {
-          color: $colour-danger;
-        }
-      }
-    }
-
-    .tags-container .badge {
-      background-color: $colour-bg3-dark;
-
-      @media (hover: hover) {
-        &:active i {
-          color: $colour-text2-dark !important;
-        }
-
-        &:hover,
-        &:focus {
-          i {
-            color: $colour-text2-dark;
-          }
-        }
-      }
-    }
-  }
-
-  .checkbox input[type='checkbox']:checked + label {
-    background: $colour-text3-dark;
-  }
-
-  .darker-overlay {
-    background-color: rgba(#222, 0.9) !important;
-  }
-
-  #help-panel,
-  #support-panel {
-    @media (hover: hover) {
-      a {
-        &:active,
-        &:focus,
-        &:hover {
-          border-bottom-color: $colour-text2-dark;
-          color: $colour-text2-dark;
-        }
-      }
-    }
-  }
-
-  #information-panel {
-    background-color: transparent;
-  }
-
-  .logo {
-    background-image: url('../../res/images/logo-dark.svg');
-  }
-
-  .overlay {
-    background-color: rgba(#222, 0.5);
-  }
-
-  #search-panel {
-    .view-content {
-      .bookmark-list .bookmark .menu {
-        background-color: rgba($colour-bg1-dark, 0.5);
-
-        button {
-          background-color: $colour-text3-dark;
-          color: $colour-text1-dark;
-        }
-      }
-
-      .bookmark-tree-panel {
-        & > .bookmark-list > .folder > .bookmark-content {
-          background-color: $colour-bg3-dark;
-
-          .bookmark {
-            @media (hover: hover) {
-              &:not(.folder) {
-                &:focus,
-                &:hover {
-                  & > .bookmark-content {
-                    background-color: rgba($colour-text3-dark, 0.6);
-                  }
-                }
-              }
-            }
-
-            & > .bookmark-content {
-              background-color: rgba($colour-text3-dark, 0.2);
-            }
-          }
-        }
-
-        .bookmark-content {
-          .bookmark-heading,
-          .bookmark-text {
-            color: $colour-text1-dark !important;
-
-            .url {
-              color: $colour-text2-dark !important;
-            }
-          }
-
-          .bookmark-heading::after {
-            color: rgba($colour-text1-dark, 0.6) !important;
-          }
-
-          .spinner-border-sm {
-            @include spinner-colour(rgba($colour-text1-dark, 0.6));
-          }
-        }
-      }
-
-      .search-results-panel .bookmark-list {
-        @media (hover: hover) {
-          .bookmark {
-            &:focus,
-            &:hover {
-              & > .bookmark-content {
-                background-color: lighten($colour-bg3-dark, 7%);
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  .status-icon-bg {
-    background-color: $colour-text1-dark !important;
-  }
-
-  .well {
-    @media (hover: hover) {
-      a {
-        &:active {
-          border-bottom-color: $colour-text1-dark;
-          color: $colour-text1-dark;
-        }
-
-        &:focus,
-        &:hover {
-          border-bottom-color: $colour-text1-dark;
-          color: $colour-text1-dark;
-        }
-      }
-    }
-
-    .btn.btn-default {
-      border-color: $colour-text1-dark;
-      color: $colour-text1-dark;
-
-      @media (hover: hover) {
-        &:not([disabled]):active {
-          color: $colour-bg3-dark;
-        }
-
-        &:not([disabled]):hover {
-          background-color: $colour-text1-dark;
-          border-color: $colour-text1-dark;
-          color: $colour-bg3-dark;
-        }
-      }
-    }
-  }
-
-  #working-panel {
-    h3 {
-      color: $colour-text3-dark;
-    }
-
-    .spinner-border {
-      border-color: $colour-text3-dark;
-      border-right-color: transparent;
-    }
-  }
+@mixin valign {
+  bottom: 0;
+  margin: auto;
+  position: absolute;
+  top: 0;
 }

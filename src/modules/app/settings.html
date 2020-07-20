@@ -10,12 +10,13 @@
   <div class="sync-panel well well-sm">
     <h4>{{ vm.platformSvc.getConstant(vm.strings.settings_Sync_Title) }}</h4>
     <div class="panel-content">
-      <div class="setting-group" data-ng-if="!vm.sync.enabled && vm.utilitySvc.isMobilePlatform(vm.platformName)">
+      <div class="form-group setting-group"
+           data-ng-if="!vm.sync.enabled && vm.utilitySvc.isMobilePlatform(vm.platformName)">
         <p class="description text-center"
            data-ng-bind-html="vm.platformSvc.getConstant(vm.strings.settings_NotAvailable_Message)">
         </p>
       </div>
-      <div class="setting-group" data-ng-if="vm.sync.enabled">
+      <div class="form-group setting-group" data-ng-if="vm.sync.enabled">
         <label>{{ vm.platformSvc.getConstant(vm.strings.settings_Sync_Id_Label) }}</label>
         <div class="setting-value id-url">
           <a title="{{ vm.platformSvc.getConstant(vm.strings.settings_Sync_DisplayQRCode_Message) }}"
@@ -23,7 +24,8 @@
         </div>
         <p class="description">{{ vm.platformSvc.getConstant(vm.strings.settings_Sync_Id_Description) }}</p>
       </div>
-      <div class="setting-group" data-ng-if="vm.sync.enabled || !vm.utilitySvc.isMobilePlatform(vm.platformName)">
+      <div class="form-group setting-group"
+           data-ng-if="vm.sync.enabled || !vm.utilitySvc.isMobilePlatform(vm.platformName)">
         <label>{{ vm.platformSvc.getConstant(vm.strings.settings_Service_Status_Label) }}</label>
         <div class="setting-value service-url">
           <a href="{{ vm.sync.service.url }}" class="new-tab" title="{{ vm.sync.service.url }}">
@@ -65,7 +67,7 @@
              data-ng-bind-html="vm.sync.service.message"></p>
         </div>
       </div>
-      <div class="setting-group"
+      <div class="form-group setting-group"
            data-ng-if="vm.sync.enabled && vm.sync.service.status !== undefined && vm.sync.service.status !== vm.ApiServiceStatus.Error">
         <label>{{ vm.platformSvc.getConstant(vm.strings.settings_Service_DataUsage_Label) }}</label>
         <div class="setting-value" data-ng-class="{ 'text-danger': vm.sync.dataUsed >= 90 }"
@@ -82,7 +84,7 @@
         <p class="description">{{
             vm.platformSvc.getConstant(vm.strings.settings_Service_DataUsage_Description) }}</p>
       </div>
-      <div class="setting-group" data-ng-if="vm.sync.enabled">
+      <div class="form-group setting-group" data-ng-if="vm.sync.enabled">
         <div class="buttons">
           <button class="btn btn-default" data-ng-click="vm.utilitySvc.handleEvent(vm.syncForm_SyncUpdates_Click)"
                   data-ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)"
@@ -106,13 +108,14 @@
   <div class="backup-restore-panel well well-sm">
     <h4>{{ vm.platformSvc.getConstant(vm.strings.settings_BackupRestore_Title) }}</h4>
     <div class="panel-content">
-      <div class="setting-group" data-ng-if="!vm.sync.enabled && vm.utilitySvc.isMobilePlatform(vm.platformName)">
+      <div class="form-group setting-group"
+           data-ng-if="!vm.sync.enabled && vm.utilitySvc.isMobilePlatform(vm.platformName)">
         <p class="description text-center"
            data-ng-bind-html="vm.platformSvc.getConstant(vm.strings.settings_NotAvailable_Message)">
         </p>
       </div>
       <div data-ng-show="vm.sync.enabled || !vm.utilitySvc.isMobilePlatform(vm.platformName)">
-        <div class="setting-group">
+        <div class="form-group setting-group">
           <label>{{ vm.platformSvc.getConstant(vm.strings.settings_BackupRestore_Backup_Label) }}</label>
           <p class="description" data-ng-if="!vm.sync.enabled">{{
             vm.platformSvc.getConstant(vm.strings.settings_BackupRestore_BackupLocal_Description) }}</p>
@@ -142,7 +145,7 @@
             </div>
           </div>
         </div>
-        <div class="setting-group">
+        <div class="form-group setting-group">
           <label>{{ vm.platformSvc.getConstant(vm.strings.settings_BackupRestore_Restore_Label) }}</label>
           <p class="description" data-ng-if="!vm.sync.enabled">{{
             vm.platformSvc.getConstant(vm.strings.settings_BackupRestore_RestoreLocal_Description) }}</p>
@@ -227,7 +230,7 @@
             </div>
           </div>
         </div>
-        <div class="setting-group" data-ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)">
+        <div class="form-group setting-group" data-ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)">
           <label>{{ vm.platformSvc.getConstant(vm.strings.settings_BackupRestore_Revert_Label) }}</label>
           <p class="description">
             {{ vm.platformSvc.getConstant(vm.strings.settings_BackupRestore_Revert_Description) }}</p>
@@ -272,7 +275,7 @@
   <div class="preferences-panel well well-sm">
     <h4>{{ vm.platformSvc.getConstant(vm.strings.settings_Prefs_Title) }}</h4>
     <div class="panel-content">
-      <div class="setting-group" data-ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)">
+      <div class="form-group setting-group" data-ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)">
         <label>{{ vm.platformSvc.getConstant(vm.strings.settings_Prefs_SyncToolbar_Label) }}</label>
         <p class="description">
           {{ vm.platformSvc.getConstant(vm.strings.settings_Prefs_SyncToolbar_Description) }}
@@ -302,7 +305,7 @@
           </div>
         </div>
       </div>
-      <div class="setting-group" data-ng-if="vm.utilitySvc.isMobilePlatform(vm.platformName)">
+      <div class="form-group setting-group" data-ng-if="vm.utilitySvc.isMobilePlatform(vm.platformName)">
         <label>{{ vm.platformSvc.getConstant(vm.strings.settings_Prefs_SearchBar_Label) }}</label>
         <p class="description">
           {{ vm.platformSvc.getConstant(vm.strings.settings_Prefs_SearchBar_Description) }}
@@ -315,7 +318,7 @@
           </div>
         </div>
       </div>
-      <div class="setting-group">
+      <div class="form-group setting-group">
         <label>{{ vm.platformSvc.getConstant(vm.strings.settings_Prefs_DefaultToFolderView_Label) }}</label>
         <p class="description">
           {{ vm.platformSvc.getConstant(vm.strings.settings_Prefs_DefaultToFolderView_Description) }}
@@ -327,7 +330,7 @@
             </div>
           </div>
       </div>
-      <div class="setting-group" data-ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)">
+      <div class="form-group setting-group" data-ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)">
         <label>{{ vm.platformSvc.getConstant(vm.strings.settings_Prefs_DarkMode_Label) }}</label>
         <p class="description">
           {{ vm.platformSvc.getConstant(vm.strings.settings_Prefs_DarkMode_Description) }}
@@ -339,7 +342,7 @@
           </div>
         </div>
       </div>
-      <div class="setting-group">
+      <div class="form-group setting-group">
         <label>{{ vm.platformSvc.getConstant(vm.strings.settings_Prefs_CheckForAppUpdates_Label) }}</label>
         <p class="description">
           {{ vm.platformSvc.getConstant(vm.strings.settings_Prefs_CheckForAppUpdates_Description) }}
@@ -357,7 +360,7 @@
     <h4>{{ vm.platformSvc.getConstant(vm.strings.settings_Permissions_Title) }}</h4>
     <div class="panel-content">
       <div class="animate-fade-in">
-        <div class="setting-group">
+        <div class="form-group setting-group">
           <label>{{ vm.platformSvc.getConstant(vm.strings.settings_Permissions_ReadWebsiteData_Title) }}</label>
           <div class="setting-value status-icon">
             <div class="animate-fade-in" data-ng-show="vm.settings.readWebsiteDataPermissionsGranted"
@@ -395,7 +398,7 @@
   <div class="issues-panel well well-sm">
     <h4>{{ vm.platformSvc.getConstant(vm.strings.settings_Issues_Title) }}</h4>
     <div class="panel-content">
-      <div class="setting-group">
+      <div class="form-group setting-group">
         <label>{{ vm.platformSvc.getConstant(vm.strings.settings_Issues_Help_Label) }}</label>
         <p class="description">{{ vm.platformSvc.getConstant(vm.strings.settings_Issues_Help_Description) }}
         </p>
@@ -410,7 +413,7 @@
           </button>
         </div>
       </div>
-      <div class="setting-group">
+      <div class="form-group setting-group">
         <label>{{ vm.platformSvc.getConstant(vm.strings.settings_Issues_Tracker_Label) }}</label>
         <p class="description">
           {{ vm.platformSvc.getConstant(vm.strings.settings_Issues_Tracker_Description) }}
@@ -422,7 +425,7 @@
           </button>
         </div>
       </div>
-      <div class="setting-group">
+      <div class="form-group setting-group">
         <label>{{ vm.platformSvc.getConstant(vm.strings.settings_Issues_Log_Label) }}</label>
         <p class="description">{{ vm.platformSvc.getConstant(vm.strings.settings_Issues_Log_Description) }}
         </p>
@@ -465,10 +468,10 @@
   <div class="about-panel well well-sm">
     <h4>{{ vm.platformSvc.getConstant(vm.strings.settings_About_Title) }}</h4>
     <div class="panel-content">
-      <div class="setting-group">
+      <div class="form-group setting-group">
         <label>{{ vm.platformSvc.getConstant(vm.strings.settings_About_AppVersion_Label) }}</label>
         <div class="setting-value">
-          <span>{{ vm.globals.AppVersion }}</span>
+          <span>{{ vm.appVersion }}</span>
         </div>
         <div class="buttons">
           <button type="button" class="btn btn-default"

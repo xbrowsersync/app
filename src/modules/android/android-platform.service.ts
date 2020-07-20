@@ -113,31 +113,34 @@ export default class AndroidPlatformService implements PlatformService {
   checkForInstallOrUpgrade(): ng.IPromise<void> {
     // Check for stored app version and compare it to current
     const mobileAppVersion = localStorage.getItem('xBrowserSync-mobileAppVersion');
-    return (mobileAppVersion ? this.$q.resolve(mobileAppVersion) : this.storeSvc.get<string>(StoreKey.AppVersion)).then(
-      (currentVersion) => {
-        return currentVersion
-          ? this.handleUpgrade(currentVersion, Globals.AppVersion)
-          : this.handleInstall(Globals.AppVersion);
-      }
-    );
+    return this.getAppVersion().then((appVersion) => {
+      return (mobileAppVersion
+        ? this.$q.resolve(mobileAppVersion)
+        : this.storeSvc.get<string>(StoreKey.AppVersion)
+      ).then((currentVersion) => {
+        return currentVersion ? this.handleUpgrade(currentVersion, appVersion) : this.handleInstall(appVersion);
+      });
+    });
   }
 
   checkForNewVersion(): void {
     this.$timeout(() => {
-      this.utilitySvc.checkForNewVersion().then((newVersion) => {
-        if (!newVersion) {
-          return;
-        }
-
-        this.vm.displaySnackbar(
-          null,
-          this.getConstant(Strings.appUpdateAvailable_Android_Message).replace('{version}', newVersion),
-          null,
-          this.getConstant(Strings.button_View_Label),
-          () => {
-            this.openUrl(Globals.ReleaseNotesUrlStem + (newVersion as string).replace(/^v/, ''));
+      this.getAppVersion().then((appVersion) => {
+        this.utilitySvc.checkForNewVersion(appVersion).then((newVersion) => {
+          if (!newVersion) {
+            return;
           }
-        );
+
+          this.vm.displaySnackbar(
+            null,
+            this.getConstant(Strings.appUpdateAvailable_Android_Message).replace('{version}', newVersion),
+            null,
+            this.getConstant(Strings.button_View_Label),
+            () => {
+              this.openUrl(Globals.ReleaseNotesUrlStem + (newVersion as string).replace(/^v/, ''));
+            }
+          );
+        });
       });
     }, 1e3);
   }
@@ -275,6 +278,10 @@ export default class AndroidPlatformService implements PlatformService {
 
       window.NativeStorage.keys(success, failure);
     });
+  }
+
+  getAppVersion(): ng.IPromise<string> {
+    return this.$q.resolve().then(window.cordova.getAppVersion.getVersionNumber);
   }
 
   getConstant(i18nString: I18nString): string {
@@ -703,8 +710,8 @@ export default class AndroidPlatformService implements PlatformService {
       .then(() => {
         if (compareVersions(oldVersion, newVersion)) {
           switch (true) {
-            case newVersion.indexOf('1.5.3') === 0:
-              return this.upgradeTo153();
+            case newVersion.indexOf('1.6.0') === 0:
+              return this.upgradeTo160();
             default:
           }
         }
@@ -881,7 +888,7 @@ export default class AndroidPlatformService implements PlatformService {
     return this.syncEngineService.disableSync();
   }
 
-  upgradeTo153(): ng.IPromise<void> {
+  upgradeTo160(): ng.IPromise<void> {
     // Convert local storage items to IndexedDB
     return this.getAllFromNativeStorage()
       .then((cachedData) => {

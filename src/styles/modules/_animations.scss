@@ -31,10 +31,6 @@
   }
 }
 
-.animate-fade-in {
-  @include animation-fade-in();
-}
-
 @mixin animation-fade-out() {
   &.ng-hide-add {
     transition: opacity 0.2s ease-in;
@@ -43,8 +39,13 @@
       opacity: 0;
     }
   }
-}
 
-.animate-fade-out {
-  @include animation-fade-out();
+  &.ng-leave {
+    opacity: 1;
+    transition: opacity 0.2s ease-in;
+
+    &.ng-leave-active {
+      opacity: 0;
+    }
+  }
 }

@@ -1,7 +1,8 @@
+import './android-app.component.scss';
 import { Component } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import Strings from '../../../../res/strings/en.json';
-import AppComponent from '../../app/app.component';
+import AppMainComponent from '../../app/app-main/app-main.component';
 import { AlertType } from '../../shared/alert/alert.enum';
 import { Alert } from '../../shared/alert/alert.interface';
 import { Bookmark } from '../../shared/bookmark/bookmark.interface';
@@ -17,9 +18,9 @@ import AndroidPlatformService from '../android-platform.service';
 @Component({
   controllerAs: 'vm',
   selector: 'app',
-  template: require('../../app/app.component.html')
+  template: require('../../app/app-main/app-main.component.html')
 })
-export default class AndroidAppComponent extends AppComponent {
+export default class AndroidAppComponent extends AppMainComponent {
   platformSvc: AndroidPlatformService;
 
   initialised = false;
@@ -38,12 +39,12 @@ export default class AndroidAppComponent extends AppComponent {
     let serviceUrl: string;
     let syncId: string;
     try {
-      // For v1.5.3 or later codes, expect sync info object
+      // For v1.6.0 or later, expect sync info object
       const syncInfo = JSON.parse(qrCodeValue);
       syncId = syncInfo.id;
       serviceUrl = syncInfo.url;
     } catch (err) {
-      // For pre-v1.5.3 codes, split the scanned value into it's components
+      // For pre-v1.6.0, split the scanned value into it's components
       const arr = qrCodeValue.split(Globals.QrCode.Delimiter);
       syncId = arr[0];
       serviceUrl = arr[1];

@@ -41,7 +41,7 @@ export default class UtilityService {
     this.storeSvc = StoreSvc;
   }
 
-  checkForNewVersion(): ng.IPromise<string> {
+  checkForNewVersion(currentVersion: string): ng.IPromise<string> {
     if (!this.networkSvc.isNetworkConnected()) {
       return this.$q.resolve('');
     }
@@ -51,7 +51,7 @@ export default class UtilityService {
       .get<any>(Globals.ReleaseLatestUrl)
       .then((response) => {
         const latestVersion = response?.data?.tag_name ?? '';
-        if (!compareVersions.compare(latestVersion, Globals.AppVersion, '>')) {
+        if (!compareVersions.compare(latestVersion, currentVersion, '>')) {
           return '';
         }
         this.logSvc.logInfo(`${latestVersion} update available`);
@@ -126,11 +126,6 @@ export default class UtilityService {
 
   getUniqueishId(): string {
     return window.crypto.getRandomValues(new Uint32Array(1))[0].toString(36);
-  }
-
-  getVersionTag(): string {
-    const versionTag = Globals.AppVersion.replace(/([a-z]+)\d+$/i, '$1');
-    return versionTag;
   }
 
   handleEvent(eventHandler: (...args) => any, ...args): void {

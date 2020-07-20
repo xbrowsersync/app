@@ -1,15 +1,7 @@
-@import '../../../styles/styles';
+@import '../../../styles/modules/all';
 
 body {
   overflow: hidden;
-
-  .view {
-    width: 23rem;
-
-    .view-content {
-      height: 37rem;
-    }
-  }
 }
 
 #search-panel {
@@ -25,7 +17,7 @@ body {
         display: flex;
         flex-direction: row-reverse;
 
-        .btn {
+        button {
           flex: none;
 
           &.btn-settings {
@@ -48,5 +40,13 @@ body {
     height: 37rem;
     position: unset;
     width: 23rem;
+  }
+}
+
+.view {
+  width: 23rem;
+
+  .view-content {
+    height: 37rem;
   }
 }

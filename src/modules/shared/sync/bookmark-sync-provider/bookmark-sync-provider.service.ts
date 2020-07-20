@@ -386,8 +386,11 @@ export default class BookmarkSyncProviderService implements SyncProvider {
             const bookmarks = this.bookmarkHelperSvc.upgradeContainers(decryptedData ? JSON.parse(decryptedData) : []);
 
             // Set the sync version to the current app version
-            return this.storeSvc
-              .set(StoreKey.SyncVersion, Globals.AppVersion)
+            return this.platformSvc
+              .getAppVersion()
+              .then((appVersion) => {
+                return this.storeSvc.set(StoreKey.SyncVersion, appVersion);
+              })
               .then(() => {
                 // Generate a new password hash from the old clear text password and sync ID
                 return this.cryptoSvc.getPasswordHash(storeContent.password, storeContent.syncId);
@@ -496,6 +499,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
       changeData.metadata.url,
       changeData.metadata.description,
       changeData.metadata.tags,
+      changeData.metadata.isSeparator,
       bookmarks
     );
     otherContainer.children.push(newBookmark);

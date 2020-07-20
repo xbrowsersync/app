@@ -1,7 +1,3 @@
-/* eslint-disable default-case */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-shadow */
-
 const fs = require('fs');
 const path = require('path');
 const xml2js = require('xml2js');
@@ -11,8 +7,8 @@ const buildNum = process.argv[3] || process.env.TRAVIS_BUILD_NUMBER || 0;
 
 const newVersion = `${process.env.npm_package_version}.${buildNum}`;
 
-const updateBuildNumberForWebext = (platform) => {
-  const fileName = path.resolve(__dirname, `../build/${platform}/manifest.json`);
+const updateBuildNumberForWebext = (platformName) => {
+  const fileName = path.resolve(__dirname, `../build/${platformName}/manifest.json`);
   const file = require(fileName);
   file.version = newVersion;
   fs.writeFileSync(fileName, JSON.stringify(file, null, 2));
@@ -46,4 +42,5 @@ switch (platform) {
   case 'android':
     updateBuildNumberForAndroid();
     break;
+  default:
 }

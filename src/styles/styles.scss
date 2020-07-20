@@ -1,9 +1,7 @@
-@import '~angular/angular-csp.css';
-@import 'variables';
-@import 'font-awesome';
-@import 'bootstrap';
-@import 'fonts';
-@import 'mixins';
-@import 'themes';
-@import 'animations';
-@import 'global';
+@import './partials/base';
+
+body {
+  font-family: $font-stack-regular;
+  line-height: 1.25rem;
+  margin: 0;
+}

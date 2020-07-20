@@ -1,4 +1,4 @@
-@import '../../../styles/styles';
+@import '../../../styles/modules/all';
 
 * {
   user-select: none;
@@ -59,85 +59,30 @@ body {
 body {
   background: transparent;
   overflow: auto;
+}
 
-  a {
-    &:hover {
-      color: unset;
-    }
+a {
+  &:hover {
+    color: unset;
   }
+}
 
-  h2 {
-    font-size: 1.6em;
-    line-height: 1em;
-  }
+h2 {
+  font-size: 1.6em;
+  line-height: 1em;
+}
 
-  input,
-  textarea {
-    user-select: text;
-  }
+input,
+textarea {
+  user-select: text;
+}
 
-  textarea.form-control {
-    padding: 0.5rem 1rem;
-  }
+textarea.form-control {
+  padding: 0.5rem 1rem;
+}
 
-  .background {
-    @include animation-fade-in();
-  }
-
-  .checkbox {
-    height: 1.5rem;
-    width: 3rem;
-
-    input[type='checkbox']:checked + label {
-      left: 1.65rem;
-    }
-
-    label {
-      height: 1.2rem;
-      width: 1.2rem;
-    }
-  }
-
-  .container {
-    height: 100vh;
-  }
-
-  .header-panel {
-    font-size: 1.5rem;
-    margin-bottom: 0.75rem;
-
-    button {
-      font-size: 1.5em;
-      line-height: 0.9em;
-    }
-  }
-
-  .lookahead-container .lookahead::after {
-    @include icon('\f0d0');
-
-    margin-left: 0.25em;
-    position: absolute;
-  }
-
-  .view {
-    .view-content {
-      height: 100%;
-
-      &.ng-enter {
-        z-index: 10 !important;
-      }
-
-      &.ng-leave {
-        z-index: 20;
-      }
-    }
-  }
-
-  .well {
-    button.btn.btn-default {
-      font-size: 1rem;
-    }
-  }
+.background {
+  @include animation-fade-in();
 }
 
 #bookmark-panel {
@@ -191,6 +136,34 @@ body {
     @media (orientation: landscape) {
       flex: 1 0 4rem;
     }
+  }
+}
+
+.checkbox {
+  height: 1.5rem;
+  width: 3rem;
+
+  input[type='checkbox']:checked + label {
+    left: 1.65rem;
+  }
+
+  label {
+    height: 1.2rem;
+    width: 1.2rem;
+  }
+}
+
+.container {
+  height: 100vh;
+}
+
+.header-panel {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+
+  button {
+    font-size: 1.5em;
+    line-height: 0.9em;
   }
 }
 
@@ -260,11 +233,35 @@ body {
   }
 }
 
-#qr-panel {
+.lookahead-container .lookahead::after {
+  @include icon('\f0d0');
+
+  margin-left: 0.25em;
+  position: absolute;
+}
+
+qr-panel {
   #qr {
     @media (orientation: landscape) {
       height: 7rem;
       width: 7rem;
+    }
+  }
+}
+
+#scan-panel {
+  @media (orientation: landscape) {
+    h3 {
+      margin: 0;
+    }
+
+    .buttons {
+      flex: 0 5rem;
+    }
+
+    .target {
+      height: 10rem;
+      width: 10rem;
     }
   }
 }
@@ -274,8 +271,8 @@ body {
     .view-content {
       flex-direction: column-reverse;
 
-      .bookmark-tree-panel,
-      .search-results-panel {
+      .bookmark-tree-container,
+      .search-results-container {
         padding-top: 0.75rem;
       }
 
@@ -288,7 +285,7 @@ body {
   .view-content {
     padding-left: 0;
 
-    .bookmark-list .bookmark {
+    bookmark {
       &:not(.folder) {
         & > .bookmark-content > .bookmark-heading {
           margin-right: 0;
@@ -308,7 +305,7 @@ body {
     }
 
     .header-panel,
-    .search-results-panel {
+    .search-results-container {
       padding-left: 0.75rem;
       padding-right: 0.75rem;
     }
@@ -328,14 +325,14 @@ body {
       }
     }
 
-    .search-results-panel {
+    .search-results-container {
       & > h4 {
         margin: 1rem;
       }
     }
 
     @media all and (orientation: portrait) {
-      .bookmark-tree-panel .description {
+      .bookmark-tree-container .description {
         @include text-overflow-ellipsis;
       }
     }
@@ -354,19 +351,22 @@ body {
   }
 }
 
-#scan-panel {
-  @media (orientation: landscape) {
-    h3 {
-      margin: 0;
+.view {
+  .view-content {
+    height: 100%;
+
+    &.ng-enter {
+      z-index: 10 !important;
     }
 
-    .buttons {
-      flex: 0 5rem;
+    &.ng-leave {
+      z-index: 20;
     }
+  }
+}
 
-    .target {
-      height: 10rem;
-      width: 10rem;
-    }
+.well {
+  button.btn.btn-default {
+    font-size: 1rem;
   }
 }

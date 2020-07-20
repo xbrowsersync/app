@@ -1,3 +1,4 @@
+import '../../styles/styles.scss';
 import NgAnimate from 'angular-animate';
 import NgFilter from 'angular-filter';
 import NgSanitize from 'angular-sanitize';
@@ -6,11 +7,14 @@ import NgInfiniteScroll from 'ng-infinite-scroll';
 import ExceptionHandlerService from '../shared/exception/exception-handler/exception-handler.service';
 import Globals from '../shared/global-shared.constants';
 import GlobalSharedModule from '../shared/global-shared.module';
-import BookmarkTreeComponent from './bookmark-tree.component';
-import ZxcvbnDirective from './zxcvbn.directive';
+import AppHelpComponent from './app-help/app-help.component';
+import PasswordStrengthDirective from './app-login/password-strength/password-strength.directive';
+import AppQrComponent from './app-qr/app-qr.component';
+import BookmarkTreeComponent from './app-search/bookmark-tree/bookmark-tree.component';
+import BookmarkComponent from './app-search/bookmark/bookmark.component';
 
 @NgModule({
-  declarations: [BookmarkTreeComponent, ZxcvbnDirective],
+  declarations: [AppHelpComponent, AppQrComponent, BookmarkComponent, BookmarkTreeComponent, PasswordStrengthDirective],
   id: 'AppModule',
   imports: [GlobalSharedModule, NgAnimate, NgFilter, NgInfiniteScroll, NgSanitize]
 })
@@ -37,10 +41,8 @@ export default class AppModule {}
     ($templateRequest: ng.ITemplateRequestService) => {
       $templateRequest(`${Globals.PathToAssets}/alert.html`, true);
       $templateRequest(`${Globals.PathToAssets}/bookmark.html`, true);
-      $templateRequest(`${Globals.PathToAssets}/help.html`, true);
       $templateRequest(`${Globals.PathToAssets}/login.html`, true);
       $templateRequest(`${Globals.PathToAssets}/permissions.html`, true);
-      $templateRequest(`${Globals.PathToAssets}/qr.html`, true);
       $templateRequest(`${Globals.PathToAssets}/scan.html`, true);
       $templateRequest(`${Globals.PathToAssets}/search.html`, true);
       $templateRequest(`${Globals.PathToAssets}/settings.html`, true);

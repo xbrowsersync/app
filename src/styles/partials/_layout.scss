@@ -1,0 +1,217 @@
+.alert {
+  border: none;
+  border: none;
+  border-radius: 0;
+  margin: 0 auto;
+  max-width: $width-tablet-small;
+  position: fixed;
+  width: 100%;
+  z-index: 1010;
+
+  button.btn-close {
+    float: right;
+    font-size: 1.2rem;
+    line-height: 1.7rem;
+
+    i {
+      opacity: 0.7;
+    }
+
+    @media (min-width: $width-mobile-small + 1) {
+      font-size: 1.5rem;
+      line-height: 2.5rem;
+    }
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+
+  h4 {
+    margin-bottom: 0.5rem;
+  }
+
+  @media (min-width: $width-mobile-small + 1) {
+    font-size: 0.9rem;
+
+    h4 {
+      margin-bottom: 0 !important;
+      margin-top: -0.4rem;
+    }
+
+    p {
+      max-width: 95%;
+    }
+  }
+}
+
+.float-nowrap {
+  overflow: auto;
+  width: 200%;
+}
+
+.float-right {
+  float: right;
+}
+
+.header-panel {
+  font-size: 1.3rem;
+  margin-bottom: 0.25rem;
+  position: relative;
+
+  .btn-icon {
+    font-size: 1.3em;
+    height: 1em;
+    line-height: 1.2em;
+
+    &.btn-close,
+    &.btn-settings {
+      float: right;
+    }
+
+    i {
+      vertical-align: middle;
+    }
+  }
+}
+
+.overlay {
+  @include animation-fade-in();
+  @include animation-fade-out();
+
+  align-items: center;
+  background-color: rgba($colour-text2-default, 0.5);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+
+  @include theme-dark {
+    background-color: rgba(#222, 0.5);
+  }
+}
+
+.overlay-panel {
+  @extend .overlay;
+
+  overflow: hidden;
+  position: relative;
+
+  &.view .view-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  h4 {
+    font-size: 1.5rem;
+    line-height: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  p,
+  ul {
+    font-size: 1.1rem;
+    line-height: 1.4rem;
+  }
+
+  ul {
+    margin-bottom: 0.75rem;
+    padding-left: 1rem;
+  }
+
+  .buttons {
+    margin-top: 1rem;
+
+    &.small {
+      button {
+        font-size: 1rem;
+        line-height: 2.1rem;
+        padding: 0 0.5rem;
+      }
+    }
+  }
+}
+
+.darker-overlay {
+  @extend .overlay;
+
+  background-color: rgba($colour-text2-default, 0.9);
+
+  @include theme-dark {
+    background-color: rgba(#222, 0.9);
+  }
+}
+
+.view {
+  @include animation-fade-in();
+
+  height: 100%;
+  width: 100%;
+
+  .view-content {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem;
+  }
+}
+
+.well {
+  @include box-shadow;
+
+  border: none;
+  border-radius: $border-radius-well;
+  margin-bottom: 0.75rem;
+  padding: 1rem 1.25rem;
+
+  h4 {
+    text-align: center;
+  }
+
+  .btn.btn-default {
+    border-width: 0.1rem;
+    font-weight: normal;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .confirm {
+    margin-bottom: 0;
+    width: 100%;
+
+    button {
+      margin-right: 0.5rem;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .form-group {
+    &.has-error {
+      input,
+      textarea {
+        &.form-control {
+          &::placeholder {
+            opacity: 0.8 !important;
+          }
+        }
+      }
+    }
+
+    input,
+    textarea {
+      &.form-control {
+        border-style: solid !important;
+        border-width: 1px !important;
+      }
+    }
+  }
+}

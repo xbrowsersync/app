@@ -19,6 +19,7 @@ export interface PlatformService {
   automaticUpdates_Stop: () => ng.IPromise<void>;
   eventListeners_Enable: () => ng.IPromise<void>;
   eventListeners_Disable: () => ng.IPromise<void>;
+  getAppVersion: () => ng.IPromise<string>;
   getConstant: (i18nString: I18nString) => string;
   getCurrentUrl: () => ng.IPromise<string>;
   getNewTabUrl?: () => string;

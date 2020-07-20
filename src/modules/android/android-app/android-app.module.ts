@@ -1,5 +1,4 @@
 import 'angular-hammer';
-import './android-app.module.scss';
 import angular from 'angular';
 import { NgModule } from 'angular-ts-decorators';
 import AppModule from '../../app/app.module';

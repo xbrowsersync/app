@@ -3,7 +3,6 @@ export default {
     Name: 'xBrowserSync-alarm',
     Period: 15
   },
-  AppVersion: '1.5.3',
   Bookmarks: {
     ContainerPrefix: '[xbs]',
     DescriptionMaxLength: 300,
