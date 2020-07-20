@@ -843,6 +843,10 @@
     "key": "button_View_Label",
     "message": "View"
   },
+  "button_Go_Label": {
+    "key": "button_Go_Label",
+    "message": "Go"
+  },
   "qr_Copied_Label": {
     "key": "qr_Copied_Label",
     "message": "Copied!"
