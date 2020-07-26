@@ -4,8 +4,8 @@
          ng-class="{ 'darker-overlay': vm.view.current !== vm.view.views.loading, 'fullsize': vm.view.current === vm.view.views.loading }">
     </div>
 
-    <div id="alert-panel" ng-include="'./assets/alert.html'" ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)">
-    </div>
+    <alert-panel class="animate-fade-in animate-fade-out" alert="vm.alert" close="vm.closeAlert"
+                 ng-if="vm.alert.show && !vm.utilitySvc.isMobilePlatform(vm.platformName)"></alert-panel>
 
     <div id="login-panel" class="view animate" ng-if="vm.view.current === vm.view.views.login">
       <div class="view-content" ng-include="'./assets/login.html'"></div>
@@ -25,7 +25,7 @@
       <div class="view-content" ng-include="'./assets/settings.html'"></div>
     </div>
 
-    <help-panel class="view overlay-panel animate" close="vm.displayMainView" load-pages="vm.getHelpPages"
+    <help-panel class="view animate" close="vm.displayMainView" load-pages="vm.getHelpPages"
                 ng-if="vm.view.current === vm.view.views.help"></help-panel>
 
     <div id="information-panel" class="view overlay-panel animate" ng-if="vm.view.current === vm.view.views.loading || 

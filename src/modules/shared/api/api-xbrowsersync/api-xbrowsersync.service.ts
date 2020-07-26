@@ -261,9 +261,7 @@ export default class ApiXbrowsersyncService implements ApiService {
     switch (response.status) {
       // 401 Unauthorized: sync data not found
       case 401:
-        // TODO: remove
-        // exception = new Exceptions.NoDataFoundException(message);
-        exception = new Exceptions.NoDataFoundException(null, testError);
+        exception = new Exceptions.NoDataFoundException(message);
         break;
       // 404 Not Found: invalid service
       case 404:

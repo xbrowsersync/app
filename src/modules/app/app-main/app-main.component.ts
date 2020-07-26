@@ -846,7 +846,10 @@ export default class AppMainComponent {
   }
 
   closeAlert(): void {
-    this.alertSvc.clearCurrentAlert();
+    this.$timeout(() => {
+      this.alert.show = false;
+      this.alertSvc.clearCurrentAlert();
+    });
   }
 
   closeQrPanel(): void {

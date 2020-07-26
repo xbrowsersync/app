@@ -48,7 +48,6 @@ module.exports = {
     new MiniCssExtractPlugin({ filename: '[name].css' }),
     new CopyWebpackPlugin({
       patterns: [
-        Path.resolve(__dirname, '../src/modules/app/alert.html'),
         Path.resolve(__dirname, '../src/modules/app/bookmark.html'),
         Path.resolve(__dirname, '../src/modules/app/login.html'),
         Path.resolve(__dirname, '../src/modules/app/permissions.html'),

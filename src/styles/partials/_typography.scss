@@ -21,7 +21,8 @@ a {
   transition: all ease-in-out 0.2s;
 
   @include theme-dark {
-    color: $colour-text1-dark;
+    border-bottom-color: $colour-text2-dark;
+    color: $colour-text2-dark;
   }
 
   @media (hover: hover) {
@@ -34,8 +35,8 @@ a {
       text-decoration: none;
 
       @include theme-dark {
-        border-bottom-color: $colour-bg2-dark;
-        color: $colour-bg2-dark;
+        border-bottom-color: $colour-text1-dark;
+        color: $colour-text1-dark;
       }
     }
   }

@@ -1,87 +1,5 @@
 @import '../../../styles/modules/all';
 
-.alert {
-  background-color: rgba($colour-danger, 0.9);
-  border: none;
-  border-radius: 0;
-  color: $colour-text1-default;
-  margin: 0 auto;
-  max-width: $width-tablet-small;
-  position: fixed;
-  width: 100%;
-  z-index: 1010;
-
-  @include theme-dark {
-    background-color: rgba($colour-danger, 0.9);
-    color: $colour-text1-dark;
-  }
-
-  button.btn-close {
-    color: $colour-text1-default;
-    float: right;
-    font-size: 1.2rem;
-    line-height: 1.7rem;
-
-    @include theme-dark {
-      color: $colour-text1-dark;
-    }
-
-    i {
-      opacity: 0.7;
-    }
-
-    @media (min-width: $width-mobile-small + 1) {
-      font-size: 1.5rem;
-      line-height: 2.5rem;
-    }
-  }
-
-  p {
-    margin-bottom: 0;
-  }
-
-  h4 {
-    margin-bottom: 0.5rem;
-  }
-
-  @media (hover: hover) {
-    a {
-      &:active,
-      &:focus,
-      &:hover {
-        border-bottom-color: $colour-text2-default;
-        color: $colour-text2-default;
-
-        @include theme-dark {
-          border-bottom-color: $colour-text2-dark;
-          color: $colour-text2-dark;
-        }
-      }
-    }
-
-    p:hover {
-      color: $colour-text1-default;
-
-      @include theme-dark {
-        color: $colour-text1-dark;
-      }
-    }
-  }
-
-  @media (min-width: $width-mobile-small + 1) {
-    font-size: 0.9rem;
-
-    h4 {
-      margin-bottom: 0 !important;
-      margin-top: -0.4rem;
-    }
-
-    p {
-      max-width: 95%;
-    }
-  }
-}
-
 .background {
   @include background-gradient(20deg, $colour-bg1-default, 0, $colour-bg2-default, 100%);
 
@@ -282,7 +200,7 @@
 }
 
 div.theme-dark {
-  color: $colour-text1-dark;
+  color: $colour-text2-dark;
 }
 
 #login-panel {
@@ -305,6 +223,22 @@ div.theme-dark {
         top: 0;
         width: 100%;
         z-index: 10;
+      }
+    }
+
+    @media (hover: hover) {
+      a {
+        &:active,
+        &:focus,
+        &:hover {
+          border-bottom-color: $colour-text2-default;
+          color: $colour-text2-default;
+
+          @include theme-dark {
+            border-bottom-color: $colour-text1-dark;
+            color: $colour-text1-dark;
+          }
+        }
       }
     }
   }
@@ -357,25 +291,6 @@ div.theme-dark {
   .confirm {
     margin-bottom: 0;
     z-index: 10;
-  }
-
-  .form-content,
-  .selected-service {
-    @media (hover: hover) {
-      a {
-        &:active,
-        &:focus,
-        &:hover {
-          border-bottom-color: $colour-text2-default;
-          color: $colour-text2-default;
-
-          @include theme-dark {
-            border-bottom-color: $colour-text2-dark;
-            color: $colour-text2-dark;
-          }
-        }
-      }
-    }
   }
 
   .form-group {
@@ -1075,19 +990,6 @@ div.theme-dark {
 }
 
 #support-panel {
-  @include theme-dark {
-    @media (hover: hover) {
-      a {
-        &:active,
-        &:focus,
-        &:hover {
-          border-bottom-color: $colour-text2-dark;
-          color: $colour-text2-dark;
-        }
-      }
-    }
-  }
-
   h4 {
     margin-bottom: 1rem;
   }

@@ -54,11 +54,11 @@
   overflow: hidden;
   position: relative;
 
-  &.view .view-content {
-    display: flex;
-    flex-direction: column;
+  &.view-content {
+    display: flex !important;
+    flex-direction: column !important;
     justify-content: center;
-    padding: 2rem;
+    padding: 2rem !important;
   }
 
   h4 {
