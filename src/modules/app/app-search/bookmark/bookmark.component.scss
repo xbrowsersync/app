@@ -13,102 +13,10 @@ bookmark {
   position: relative;
   transition: max-height 1s cubic-bezier(0, 1, 0, 1);
 
-  @include theme-dark {
-    .menu {
-      background-color: rgba($colour-bg1-dark, 0.5);
-
-      button {
-        background-color: $colour-text3-dark;
-        color: $colour-text1-dark;
-      }
-    }
-  }
-
   &.ng-leave.ng-leave-active {
     margin-bottom: 0;
     max-height: 0;
     opacity: 0;
-  }
-
-  &.folder {
-    box-shadow: none;
-    color: $colour-text1-default;
-    max-height: none;
-    transition: background-color ease-in-out 0.2s;
-
-    &.open {
-      & > .bookmark-content > .bookmark-heading {
-        margin-bottom: 0.75rem;
-
-        &::before {
-          @include icon('\f07c');
-        }
-
-        @media (hover: hover) {
-          &:hover::after {
-            @include icon('\f106');
-          }
-        }
-      }
-    }
-
-    & > .bookmark-content {
-      background-color: rgba($colour-text2-default, 0.3);
-      padding: 0.5rem 1rem;
-
-      & > .bookmark-heading {
-        color: $colour-text1-default;
-        margin-right: 0;
-        padding-left: 1.75rem;
-        padding-right: 1.5rem;
-
-        &::before {
-          @include icon('\f07b');
-          @include valign;
-
-          left: 0;
-        }
-
-        &::after {
-          @include icon('\f107');
-          @include valign;
-
-          color: $colour-bg2-default;
-          font-size: 1.3em;
-          opacity: 0;
-          right: 0;
-        }
-
-        @media (hover: hover) {
-          &:hover {
-            cursor: pointer;
-
-            &:not(.opening)::after {
-              opacity: 0.6;
-            }
-          }
-        }
-      }
-
-      .empty {
-        font-style: italic;
-        margin: 0.25rem 0 0;
-        text-align: center;
-      }
-
-      .spinner-border {
-        @include valign;
-
-        opacity: 0.6;
-        right: 0;
-      }
-    }
-
-    @media (hover: hover) {
-      &:hover {
-        cursor: default;
-      }
-    }
   }
 
   .bookmark-content {
@@ -116,6 +24,10 @@ bookmark {
     border-radius: $border-radius-well;
     padding: 0.5rem 1rem 0.75rem;
     transition: background-color ease-in-out 0.2s;
+
+    @include theme-dark {
+      background-color: $colour-bg3-dark;
+    }
 
     .bookmark-heading {
       @include text-overflow-ellipsis;
@@ -128,10 +40,18 @@ bookmark {
       margin-right: 1.5rem;
       position: relative;
       transition: color ease-in-out 0.2s;
+
+      @include theme-dark {
+        color: $colour-text2-dark;
+      }
     }
 
     .bookmark-text {
       color: $colour-text2-default;
+
+      @include theme-dark {
+        color: $colour-text2-dark;
+      }
 
       .description {
         font-size: 0.9rem;
@@ -146,11 +66,15 @@ bookmark {
         text-overflow: ellipsis;
         white-space: nowrap;
         width: 100%;
+
+        @include theme-dark {
+          color: $colour-text3-dark;
+        }
       }
     }
   }
 
-  button.btn-edit-bookmark {
+  .btn-edit-bookmark {
     font-size: 1.1rem;
     opacity: 0;
     position: absolute;
@@ -159,7 +83,7 @@ bookmark {
 
     @media (hover: hover) {
       &:hover {
-        opacity: 1;
+        opacity: 1 !important;
       }
     }
   }
@@ -177,22 +101,39 @@ bookmark {
     width: 100%;
     z-index: 60;
 
+    @include theme-dark {
+      background-color: rgba($colour-bg1-dark, 0.5);
+    }
+
     button {
       background-color: $colour-bg3-default;
       color: $colour-text2-default;
       position: static;
 
+      @include theme-dark {
+        background-color: $colour-text3-dark;
+        color: $colour-text1-dark;
+      }
+
       &.btn-delete-bookmark {
         background-color: $colour-danger;
         color: $colour-text1-default;
+
+        @include theme-dark {
+          color: $colour-text1-dark;
+        }
       }
     }
   }
 
   .separator {
-    background-color: rgba($colour-text2-default, 0.15);
+    background-color: rgba($colour-text2-default, 0.3);
     box-shadow: none;
     height: 0.5rem;
+
+    @include theme-dark {
+      background-color: rgba($colour-text2-dark, 0.15);
+    }
 
     @media (hover: hover) {
       &:hover {
@@ -206,6 +147,10 @@ bookmark {
     &:hover {
       & > .bookmark-content {
         background-color: scale-color($colour-bg2-default, $lightness: 70%, $saturation: 50%);
+
+        @include theme-dark {
+          background-color: lighten($colour-bg3-dark, 7%);
+        }
       }
     }
 

@@ -1,4 +1,5 @@
 .checkbox {
+  background: darken($colour-bg2-default, 50%);
   border-radius: $border-radius-input;
   cursor: pointer;
   height: 1.3rem;
@@ -6,11 +7,30 @@
   position: relative;
   width: 2.5rem;
 
+  @include theme-dark {
+    background: darken($colour-bg2-dark, 50%);
+  }
+
   input {
     display: none;
 
-    &[type='checkbox']:checked + label {
-      left: 1.35rem;
+    &[type='checkbox'] {
+      & + label {
+        background: scale-color($colour-bg2-default, $lightness: -30%, $saturation: -70%);
+
+        @include theme-dark {
+          background: scale-color($colour-bg2-dark, $lightness: -30%, $saturation: -70%);
+        }
+      }
+
+      &:checked + label {
+        background: $colour-bg2-default;
+        left: 1.35rem;
+
+        @include theme-dark {
+          background: $colour-text3-dark;
+        }
+      }
     }
   }
 
@@ -43,7 +63,9 @@
     }
 
     .btn-icon {
+      background-color: $colour-text2-default;
       border-radius: $border-radius-input;
+      color: $colour-bg3-default;
       font-size: 0.9em;
       height: 2.1em;
       margin-top: -1.05em;
@@ -52,6 +74,11 @@
       top: 50%;
       width: 2.1em;
       z-index: 55;
+
+      @include theme-dark {
+        background-color: $colour-text2-dark;
+        color: $colour-bg3-dark;
+      }
 
       i {
         margin: auto;
@@ -63,8 +90,13 @@
 
       @media (hover: hover) {
         &:focus {
+          border-color: darken($colour-text3-default, 15%);
           border-style: solid;
           border-width: 1px;
+
+          @include theme-dark {
+            border-color: darken($colour-text3-dark, 15%);
+          }
 
           &:hover {
             border: none;
@@ -78,10 +110,13 @@
     input,
     textarea {
       &.form-control {
+        border-color: $colour-danger !important;
         border-style: solid !important;
         border-width: 1px !important;
+        color: $colour-danger !important;
 
         &::placeholder {
+          color: $colour-danger !important;
           opacity: 0.8 !important;
         }
       }
@@ -91,11 +126,28 @@
   input,
   textarea {
     &.form-control {
+      background-color: $colour-bg3-default;
+      border-color: $colour-bg3-default;
       border-style: solid;
       border-width: 1px;
+      color: $colour-text2-default;
       font-size: 1rem;
       resize: none;
       width: 100%;
+
+      @include theme-dark {
+        background-color: $colour-bg3-dark;
+        border-color: $colour-bg3-dark;
+        color: $colour-text2-dark;
+      }
+
+      &::placeholder {
+        color: $colour-text3-default;
+
+        @include theme-dark {
+          color: $colour-text3-dark;
+        }
+      }
     }
   }
 
@@ -113,7 +165,9 @@
 }
 
 .validation {
+  background: $colour-danger;
   border-radius: $border-radius-input;
+  color: $colour-text1-default;
   font-size: 0.75rem;
   left: 50%;
   line-height: 1.15rem;
@@ -122,4 +176,9 @@
   transform: translate(-50%, -50%);
   white-space: nowrap;
   z-index: 60;
+
+  @include theme-dark {
+    background: $colour-danger;
+    color: $colour-text1-dark;
+  }
 }

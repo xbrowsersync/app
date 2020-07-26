@@ -3,7 +3,7 @@
           enable-select="vm.utilitySvc.isMobilePlatform(vm.platformName)"
           is-selected="vm.selectedBookmark === bookmark.id" share-bookmark="vm.shareBookmark()"
           visit-bookmark="vm.openUrl()"
-          ng-class="{ 'folder': vm.bookmarkHelperSvc.isFolder(bookmark), 'open': bookmark.displayChildren, 'animate': vm.selectedBookmark === bookmark.id, 'separator': vm.bookmarkHelperSvc.isSeparator(bookmark) }"
+          ng-class="{ 'folder': vm.bookmarkHelperSvc.isFolder(bookmark), 'open': bookmark.displayChildren, 'animate': vm.selectedBookmark === bookmark.id }"
           hm-press="vm.utilitySvc.isMobilePlatform(vm.platformName) && bookmark.url && vm.utilitySvc.handleEvent(vm.selectBookmark(), $event, bookmark.id)">
   <bookmark-tree ng-model="bookmark.children" platform-name="vm.platformName" selected-bookmark="vm.selectedBookmark"
                  edit-bookmark="vm.editBookmark()" select-bookmark="vm.selectBookmark()"

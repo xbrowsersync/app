@@ -1,50 +1,3 @@
-.alert {
-  border: none;
-  border: none;
-  border-radius: 0;
-  margin: 0 auto;
-  max-width: $width-tablet-small;
-  position: fixed;
-  width: 100%;
-  z-index: 1010;
-
-  button.btn-close {
-    float: right;
-    font-size: 1.2rem;
-    line-height: 1.7rem;
-
-    i {
-      opacity: 0.7;
-    }
-
-    @media (min-width: $width-mobile-small + 1) {
-      font-size: 1.5rem;
-      line-height: 2.5rem;
-    }
-  }
-
-  p {
-    margin-bottom: 0;
-  }
-
-  h4 {
-    margin-bottom: 0.5rem;
-  }
-
-  @media (min-width: $width-mobile-small + 1) {
-    font-size: 0.9rem;
-
-    h4 {
-      margin-bottom: 0 !important;
-      margin-top: -0.4rem;
-    }
-
-    p {
-      max-width: 95%;
-    }
-  }
-}
-
 .float-nowrap {
   overflow: auto;
   width: 200%;
@@ -145,7 +98,7 @@
   background-color: rgba($colour-text2-default, 0.9);
 
   @include theme-dark {
-    background-color: rgba(#222, 0.9);
+    background-color: rgba(#222, 0.9) !important;
   }
 }
 
@@ -165,20 +118,115 @@
 .well {
   @include box-shadow;
 
+  background-color: $colour-bg3-default;
   border: none;
   border-radius: $border-radius-well;
+  color: $colour-text2-default;
   margin-bottom: 0.75rem;
   padding: 1rem 1.25rem;
+
+  @include theme-dark {
+    background-color: $colour-bg3-dark;
+    color: $colour-text2-dark;
+
+    @media (hover: hover) {
+      a {
+        &:active {
+          border-bottom-color: $colour-text1-dark;
+          color: $colour-text1-dark;
+        }
+
+        &:focus,
+        &:hover {
+          border-bottom-color: $colour-text1-dark;
+          color: $colour-text1-dark;
+        }
+      }
+    }
+  }
+
+  &.dark {
+    background-color: $colour-text2-default;
+    color: $colour-text1-default;
+
+    @include theme-dark {
+      background-color: $colour-text2-dark;
+      color: $colour-text1-dark;
+    }
+
+    a {
+      border-bottom-color: $colour-text1-default;
+
+      @include theme-dark {
+        border-bottom-color: $colour-text1-dark;
+      }
+
+      @media (hover: hover) {
+        &:active,
+        &:focus,
+        &:hover {
+          border-bottom-color: inherit;
+        }
+      }
+    }
+  }
+
+  a {
+    border-bottom-color: unset;
+  }
 
   h4 {
     text-align: center;
   }
 
   .btn.btn-default {
+    border-color: $colour-text2-default;
     border-width: 0.1rem;
+    color: $colour-text2-default;
     font-weight: normal;
     margin-bottom: 0.5rem;
     margin-top: 0.5rem;
+
+    @include theme-dark {
+      border-color: $colour-text1-dark;
+      color: $colour-text1-dark;
+    }
+
+    &[disabled] {
+      border-color: $colour-text2-default;
+      color: $colour-text2-default;
+
+      @include theme-dark {
+        border-color: $colour-text2-dark;
+        color: $colour-text2-dark;
+      }
+    }
+
+    @media (hover: hover) {
+      &:not([disabled]):active {
+        background-color: $colour-text2-default;
+        border-color: $colour-text2-default;
+        color: $colour-bg2-default;
+
+        @include theme-dark {
+          background-color: $colour-text2-dark;
+          border-color: $colour-text2-dark;
+          color: $colour-bg3-dark;
+        }
+      }
+
+      &:not([disabled]):hover {
+        background-color: $colour-text2-default;
+        border-color: $colour-text2-default;
+        color: $colour-bg2-default;
+
+        @include theme-dark {
+          background-color: $colour-text1-dark;
+          border-color: $colour-text1-dark;
+          color: $colour-bg3-dark;
+        }
+      }
+    }
   }
 
   .confirm {
@@ -199,7 +247,11 @@
       input,
       textarea {
         &.form-control {
+          border-color: $colour-danger !important;
+          color: $colour-danger !important;
+
           &::placeholder {
+            color: $colour-danger !important;
             opacity: 0.8 !important;
           }
         }
@@ -209,8 +261,13 @@
     input,
     textarea {
       &.form-control {
+        border-color: $colour-text2-default !important;
         border-style: solid !important;
         border-width: 1px !important;
+
+        @include theme-dark {
+          border-color: $colour-text2-dark !important;
+        }
       }
     }
   }

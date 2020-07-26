@@ -1,5 +1,87 @@
 @import '../../../styles/modules/all';
 
+.alert {
+  background-color: rgba($colour-danger, 0.9);
+  border: none;
+  border-radius: 0;
+  color: $colour-text1-default;
+  margin: 0 auto;
+  max-width: $width-tablet-small;
+  position: fixed;
+  width: 100%;
+  z-index: 1010;
+
+  @include theme-dark {
+    background-color: rgba($colour-danger, 0.9);
+    color: $colour-text1-dark;
+  }
+
+  button.btn-close {
+    color: $colour-text1-default;
+    float: right;
+    font-size: 1.2rem;
+    line-height: 1.7rem;
+
+    @include theme-dark {
+      color: $colour-text1-dark;
+    }
+
+    i {
+      opacity: 0.7;
+    }
+
+    @media (min-width: $width-mobile-small + 1) {
+      font-size: 1.5rem;
+      line-height: 2.5rem;
+    }
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+
+  h4 {
+    margin-bottom: 0.5rem;
+  }
+
+  @media (hover: hover) {
+    a {
+      &:active,
+      &:focus,
+      &:hover {
+        border-bottom-color: $colour-text2-default;
+        color: $colour-text2-default;
+
+        @include theme-dark {
+          border-bottom-color: $colour-text2-dark;
+          color: $colour-text2-dark;
+        }
+      }
+    }
+
+    p:hover {
+      color: $colour-text1-default;
+
+      @include theme-dark {
+        color: $colour-text1-dark;
+      }
+    }
+  }
+
+  @media (min-width: $width-mobile-small + 1) {
+    font-size: 0.9rem;
+
+    h4 {
+      margin-bottom: 0 !important;
+      margin-top: -0.4rem;
+    }
+
+    p {
+      max-width: 95%;
+    }
+  }
+}
+
 .background {
   @include background-gradient(20deg, $colour-bg1-default, 0, $colour-bg2-default, 100%);
 
@@ -47,6 +129,30 @@
     height: 100%;
   }
 
+  .btn-delete-bookmark {
+    background-color: $colour-danger;
+    color: $colour-text1-default;
+
+    @include theme-dark {
+      border-color: $colour-text2-dark;
+      color: $colour-text2-dark;
+    }
+
+    @media (hover: hover) {
+      &:not([disabled]):active,
+      &:not([disabled]):hover {
+        background-color: $colour-bg3-default;
+        border-color: $colour-bg3-default;
+        color: $colour-danger;
+
+        @include theme-dark {
+          background-color: $colour-text2-dark;
+          border-color: $colour-text2-dark;
+        }
+      }
+    }
+  }
+
   .buttons,
   .form-group,
   .header-panel {
@@ -66,7 +172,9 @@
 
     .badge {
       align-items: center;
+      background-color: $colour-text2-default;
       border: 0;
+      color: rgba($colour-text1-default, 0.9);
       display: inline-flex;
       font-size: 0.85rem;
       font-weight: normal;
@@ -74,8 +182,17 @@
       margin: 0 0.5rem 0.5rem 0;
       max-width: 99%;
 
+      @include theme-dark {
+        background-color: $colour-bg3-dark;
+        color: rgba($colour-text1-dark, 0.9);
+      }
+
       i {
         transition: color ease-in-out 0.2s;
+
+        @include theme-dark {
+          color: $colour-text3-dark;
+        }
       }
 
       span {
@@ -91,18 +208,39 @@
       }
 
       @media (hover: hover) {
+        &:active i {
+          color: $colour-bg2-default !important;
+
+          @include theme-dark {
+            color: $colour-text2-dark !important;
+          }
+        }
+
         &:hover,
         &:focus {
           cursor: pointer;
+
+          i {
+            color: $colour-bg2-default;
+
+            @include theme-dark {
+              color: $colour-text2-dark;
+            }
+          }
         }
       }
     }
   }
 
   .tags-input-container {
+    background-color: $colour-bg3-default;
     border-radius: $border-radius-input;
     margin-bottom: 0;
     overflow: hidden;
+
+    @include theme-dark {
+      background-color: $colour-bg3-dark;
+    }
 
     input {
       background: transparent;
@@ -141,6 +279,10 @@
       @include text-overflow-ellipsis;
     }
   }
+}
+
+div.theme-dark {
+  color: $colour-text1-dark;
 }
 
 #login-panel {
@@ -188,12 +330,27 @@
   }
 
   .btn-validating {
+    background-color: $colour-bg3-default;
+    border-color: $colour-bg3-default;
+    color: $colour-bg2-default;
     opacity: 1;
 
+    @include theme-dark {
+      background-color: $colour-bg3-dark;
+      border-color: $colour-bg3-dark;
+      color: $colour-bg2-dark;
+    }
+
     .spinner-border-sm {
+      @include spinner-colour($colour-bg2-default);
+
       border-right-color: transparent !important;
       height: 0.9rem;
       width: 0.9rem;
+
+      @include theme-dark {
+        @include spinner-colour($colour-bg2-dark);
+      }
     }
   }
 
@@ -202,14 +359,39 @@
     z-index: 10;
   }
 
+  .form-content,
+  .selected-service {
+    @media (hover: hover) {
+      a {
+        &:active,
+        &:focus,
+        &:hover {
+          border-bottom-color: $colour-text2-default;
+          color: $colour-text2-default;
+
+          @include theme-dark {
+            border-bottom-color: $colour-text2-dark;
+            color: $colour-text2-dark;
+          }
+        }
+      }
+    }
+  }
+
   .form-group {
     input {
+      border-color: $colour-bg3-default;
       border-style: solid;
       border-width: 1px;
       font-family: $font-stack-code;
       line-height: 1.45rem;
       padding: 0.5rem 0.8rem;
       width: 100%;
+
+      @include theme-dark {
+        border-color: $colour-bg3-dark;
+      }
+
       &::placeholder {
         font-family: $font-stack-regular;
         font-size: 1.1rem;
@@ -262,9 +444,30 @@
 
     .progress {
       background-color: transparent;
+      border-color: $colour-bg3-default;
       border-style: solid;
       border-width: 0.1rem;
       z-index: 10;
+
+      @include theme-dark {
+        border-color: $colour-bg3-dark;
+      }
+
+      .progress-bar {
+        background-color: $colour-danger;
+
+        @include theme-dark {
+          background-color: $colour-danger;
+        }
+      }
+    }
+
+    .progress-bar-background {
+      background-color: $colour-bg3-default;
+
+      @include theme-dark {
+        background-color: $colour-bg3-dark;
+      }
     }
   }
 
@@ -289,7 +492,20 @@
       top: 0.1rem;
 
       .loading .spinner-border {
+        border-color: $colour-bg3-default;
         border-right-color: transparent !important;
+
+        @include theme-dark {
+          border-color: $colour-bg3-dark;
+        }
+      }
+
+      .status-icon-bg {
+        background-color: $colour-bg3-default;
+
+        @include theme-dark {
+          background-color: $colour-bg3-dark;
+        }
       }
     }
   }
@@ -317,10 +533,15 @@
           position: relative;
 
           label {
+            color: $colour-text2-default !important;
             font-weight: bold;
             left: 0;
             margin-bottom: 0;
             position: absolute;
+
+            @include theme-dark {
+              color: $colour-text2-dark !important;
+            }
           }
         }
       }
@@ -363,14 +584,33 @@
   .lookahead,
   .measure {
     background-color: transparent;
+    color: $colour-text3-default;
     cursor: pointer;
     margin: auto 0;
     user-select: none;
     z-index: 60;
+
+    @include theme-dark {
+      color: $colour-text3-dark;
+    }
   }
 
   .measure {
     visibility: hidden;
+  }
+}
+
+.progress-bar {
+  &-danger {
+    background-color: $colour-danger !important;
+  }
+
+  &-success {
+    background-color: $colour-success !important;
+  }
+
+  &-warning {
+    background-color: $colour-warning !important;
   }
 }
 
@@ -385,10 +625,21 @@
     flex: 0 8rem;
 
     button {
+      background-color: $colour-bg3-default;
+      color: $colour-text2-default;
       margin-right: 1.75rem;
+
+      @include theme-dark {
+        background-color: $colour-bg3-dark;
+        color: $colour-text2-dark;
+      }
 
       &:last-child {
         margin-right: 0;
+      }
+
+      &.enabled {
+        color: $colour-warning;
       }
     }
   }
@@ -455,12 +706,18 @@
       }
 
       .search-form {
+        background-color: $colour-bg3-default;
         border-radius: $border-radius-input;
         flex: 0 1 100%;
         margin-bottom: 0;
         position: relative;
 
+        @include theme-dark {
+          background-color: $colour-bg3-dark;
+        }
+
         label {
+          color: $colour-text3-default;
           font-size: 0.85em;
           left: 0.75rem;
           margin-bottom: 0;
@@ -468,6 +725,10 @@
           position: absolute;
           top: 50%;
           z-index: 60;
+
+          @include theme-dark {
+            color: $colour-text3-dark;
+          }
         }
 
         input {
@@ -479,6 +740,14 @@
           position: relative;
           width: 100%;
           z-index: 50;
+
+          &::placeholder {
+            color: $colour-text3-default;
+
+            @include theme-dark {
+              color: $colour-text3-dark;
+            }
+          }
         }
 
         .btn-clear {
@@ -579,6 +848,21 @@
   }
 
   .setting-group {
+    a {
+      @include theme-dark {
+        color: $colour-text2-dark;
+
+        @media (hover: hover) {
+          &:active,
+          &:focus,
+          &:hover {
+            border-bottom-color: $colour-text1-dark;
+            color: $colour-text1-dark;
+          }
+        }
+      }
+    }
+
     label {
       margin-bottom: 0.25rem;
     }
@@ -592,12 +876,23 @@
     }
 
     .description {
-      @media (hover: hover) {
-        a {
-          &:active,
-          &:focus,
-          &:hover {
-            border-bottom-color: inherit;
+      color: $colour-text3-default;
+
+      @include theme-dark {
+        color: $colour-text3-dark;
+      }
+
+      a {
+        @include theme-dark {
+          color: $colour-text3-dark;
+
+          @media (hover: hover) {
+            &:active,
+            &:focus,
+            &:hover {
+              border-bottom-color: $colour-text1-dark;
+              color: $colour-text1-dark;
+            }
           }
         }
       }
@@ -607,6 +902,7 @@
       background: transparent;
       border: 0;
       border-radius: 0;
+      color: $colour-text2-default;
       height: auto;
       padding: 0;
       position: absolute;
@@ -614,6 +910,10 @@
       top: 0;
       transition: none;
       width: auto;
+
+      @include theme-dark {
+        color: $colour-text2-dark;
+      }
     }
   }
 
@@ -629,15 +929,25 @@
     }
 
     .progress {
+      background-color: darken($colour-bg2-default, 50%);
       border-radius: 1rem;
       height: 0.45rem;
       margin: 0.25rem 0 1.5rem;
       overflow: visible;
 
+      @include theme-dark {
+        background-color: $colour-bg1-dark;
+      }
+
       .progress-bar {
+        background-color: $colour-bg2-default;
         border-bottom-left-radius: 1rem;
         border-top-left-radius: 1rem;
         transition: none;
+
+        @include theme-dark {
+          background-color: $colour-text3-dark;
+        }
       }
     }
 
@@ -649,11 +959,21 @@
     }
 
     .max {
+      color: $colour-text2-default;
       right: 0;
+
+      @include theme-dark {
+        color: $colour-text2-dark;
+      }
     }
 
     .used {
+      color: $colour-bg2-default;
       left: 0;
+
+      @include theme-dark {
+        color: $colour-bg2-dark;
+      }
     }
 
     .service-message {
@@ -672,6 +992,14 @@
 
       .status-icon {
         margin: 0.1rem 0 0 0.25rem;
+      }
+    }
+
+    .status-text {
+      color: $colour-text3-default;
+
+      @include theme-dark {
+        color: $colour-text3-dark;
       }
     }
 
@@ -717,6 +1045,16 @@
   }
 }
 
+.spinner-border {
+  @include spinner-colour($colour-bg2-default);
+
+  animation-duration: 1s;
+
+  @include theme-dark {
+    @include spinner-colour($colour-bg2-dark);
+  }
+}
+
 .status-icon {
   position: relative;
   z-index: 5;
@@ -729,10 +1067,27 @@
     top: 0.2rem;
     width: 0.8rem;
     z-index: -1;
+
+    @include theme-dark {
+      background-color: $colour-text1-dark !important;
+    }
   }
 }
 
 #support-panel {
+  @include theme-dark {
+    @media (hover: hover) {
+      a {
+        &:active,
+        &:focus,
+        &:hover {
+          border-bottom-color: $colour-text2-dark;
+          color: $colour-text2-dark;
+        }
+      }
+    }
+  }
+
   h4 {
     margin-bottom: 1rem;
   }
@@ -759,8 +1114,13 @@
   h3 {
     @include ellipsis;
 
+    color: $colour-bg2-default;
     font-size: 1.1rem;
     margin: 0.2rem;
+
+    @include theme-dark {
+      color: $colour-text3-dark;
+    }
   }
 
   .buttons {
@@ -780,5 +1140,10 @@
     height: 30vw;
     position: absolute;
     width: 30vw;
+
+    @include theme-dark {
+      border-color: $colour-text3-dark;
+      border-right-color: transparent;
+    }
   }
 }

@@ -76,7 +76,7 @@
   </div>
 </div>
 <div class="bookmark-tree-container" ng-if="vm.search.displayFolderView">
-  <bookmark-tree ng-model="vm.search.bookmarkTree" platform-name="vm.platformName"
+  <bookmark-tree class="root" ng-model="vm.search.bookmarkTree" platform-name="vm.platformName"
                  selected-bookmark="vm.search.selectedBookmark" edit-bookmark="vm.searchForm_UpdateBookmark_Click"
                  select-bookmark="vm.searchForm_SelectBookmark_Press" share-bookmark="vm.searchForm_ShareBookmark_Click"
                  delete-bookmark="vm.searchForm_DeleteBookmark_Click" open-url="vm.openUrl"
