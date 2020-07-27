@@ -1,4 +1,5 @@
 import './webext-app.component.scss';
+import { OnInit } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import { browser } from 'webextension-polyfill-ts';
 import Strings from '../../../../res/strings/en.json';
@@ -10,7 +11,7 @@ import { Sync } from '../../shared/sync/sync.interface';
 import WebExtPlatformService from '../webext-platform/webext-platform.service';
 
 @autobind
-export default class WebExtAppComponent extends AppMainComponent {
+export default class WebExtAppComponent extends AppMainComponent implements OnInit {
   copyTextToClipboard(text: string): ng.IPromise<void> {
     return navigator.clipboard.writeText(text);
   }
@@ -65,6 +66,10 @@ export default class WebExtAppComponent extends AppMainComponent {
   init(): ng.IPromise<void> {
     // Run init then check if current page is a bookmark
     return super.init().then(this.setBookmarkStatus);
+  }
+
+  ngOnInit(): void {
+    this.init();
   }
 
   permissions_Remove(): ng.IPromise<void> {

@@ -83,7 +83,6 @@ export default class AppMainComponent {
     type: undefined
   };
   ApiServiceStatus = ApiServiceStatus;
-  appVersion: string;
   bookmark = {
     active: false,
     addButtonDisabledUntilEditForm: false,
@@ -123,9 +122,7 @@ export default class AppMainComponent {
     batchResultsNum: 10,
     bookmarkTree: undefined,
     cancelGetBookmarksRequest: undefined,
-    displayDefaultState: undefined,
     displayFolderView: false,
-    execute: undefined,
     getLookaheadTimeout: undefined,
     getSearchResultsTimeout: undefined,
     lastWord: undefined,
@@ -138,6 +135,7 @@ export default class AppMainComponent {
     scrollDisplayMoreEnabled: true
   };
   settings = {
+    appVersion: undefined,
     backupCompletedMessage: undefined,
     backupFileName: undefined,
     checkForAppUpdates: false,
@@ -197,8 +195,6 @@ export default class AppMainComponent {
   syncForm: any;
   view = {
     current: undefined,
-    change: undefined,
-    displayMainView: undefined,
     views: {
       login: 1,
       search: 2,
@@ -301,8 +297,6 @@ export default class AppMainComponent {
         }
       }
     );
-
-    this.$timeout(this.init);
   }
 
   backupRestoreForm_Backup_Click() {
@@ -779,10 +773,10 @@ export default class AppMainComponent {
   }
 
   bookmarkPanel_Close_Click() {
-    return this.view.displayMainView();
+    return this.displayMainView();
   }
 
-  button_ReleaseNotes_Click() {
+  displayReleaseNotes() {
     return this.platformSvc
       .getAppVersion()
       .then((appVersion) => {
@@ -790,7 +784,7 @@ export default class AppMainComponent {
         const url = Globals.ReleaseNotesUrlStem + versionTag;
         this.openUrl(null, url);
       })
-      .then(this.view.displayMainView);
+      .then(this.displayMainView);
   }
 
   changeView(view, viewData?) {
@@ -1075,17 +1069,12 @@ export default class AppMainComponent {
   }
 
   init() {
-    // Set vm defaults
-    this.search.displayDefaultState = this.displayDefaultSearchState;
-    this.search.execute = this.searchBookmarks;
-    this.view.change = this.changeView;
-    this.view.displayMainView = this.displayMainView;
+    // Set default working message
     this.working.message = this.platformSvc.getConstant(Strings.working_Syncing_Message);
 
     // Get cached prefs from storage
     return this.$q
       .all([
-        this.platformSvc.getAppVersion(),
         this.storeSvc.get([
           StoreKey.DarkModeEnabled,
           StoreKey.DisplaySearchBarBeneathResults,
@@ -1097,13 +1086,12 @@ export default class AppMainComponent {
       ])
       .then((cachedData) => {
         // Set view model values
-        this.appVersion = cachedData[0];
-        this.settings.darkModeEnabled = !!cachedData[1].darkModeEnabled;
-        this.settings.displaySearchBarBeneathResults = !!cachedData[1].displaySearchBarBeneathResults;
-        this.settings.defaultToFolderView = !!cachedData[1].defaultToFolderView;
-        this.sync.enabled = !!cachedData[1].syncEnabled;
-        this.sync.id = cachedData[1].syncId;
-        this.sync.service.url = cachedData[2];
+        this.settings.darkModeEnabled = !!cachedData[0].darkModeEnabled;
+        this.settings.displaySearchBarBeneathResults = !!cachedData[0].displaySearchBarBeneathResults;
+        this.settings.defaultToFolderView = !!cachedData[0].defaultToFolderView;
+        this.sync.enabled = !!cachedData[0].syncEnabled;
+        this.sync.id = cachedData[0].syncId;
+        this.sync.service.url = cachedData[1];
 
         // Check if a sync is currently in progress
         return this.sync_Current().then((currentSync) => {
@@ -1116,8 +1104,7 @@ export default class AppMainComponent {
             }
 
             // Display loading panel
-            return this.view
-              .change(this.view.views.loading)
+            return this.changeView(this.view.views.loading)
               .then(this.waitForSyncsToFinish)
               .then(() => {
                 return this.storeSvc.get<boolean>(StoreKey.SyncEnabled);
@@ -1314,10 +1301,11 @@ export default class AppMainComponent {
     this.search.displayFolderView = this.settings.defaultToFolderView;
     this.search.bookmarkTree = null;
     this.search.selectedBookmark = null;
-    return this.search.displayDefaultState();
+    return this.displayDefaultSearchState();
   }
 
   init_settingsView() {
+    this.settings.appVersion = undefined;
     this.settings.displayQrPanel = false;
     this.settings.displayRestoreConfirmation = false;
     this.settings.displayRestoreForm = false;
@@ -1343,14 +1331,17 @@ export default class AppMainComponent {
       .all([
         this.bookmarkHelperSvc.getSyncBookmarksToolbar(),
         this.storeSvc.get([StoreKey.CheckForAppUpdates, StoreKey.TraceLog]),
+        this.platformSvc.getAppVersion(),
         this.platformSvc.permissions_Check()
       ])
       .then((data) => {
         const syncBookmarksToolbar = data[0];
         const checkForAppUpdates = data[1].checkForAppUpdates;
         const traceLog = data[1].traceLog;
-        const readWebsiteDataPermissionsGranted = data[2];
+        const appVersion = data[2];
+        const readWebsiteDataPermissionsGranted = data[3];
 
+        this.settings.appVersion = appVersion;
         this.settings.checkForAppUpdates = checkForAppUpdates;
         this.settings.syncBookmarksToolbar = syncBookmarksToolbar;
         this.settings.readWebsiteDataPermissionsGranted = readWebsiteDataPermissionsGranted;
@@ -1422,7 +1413,7 @@ export default class AppMainComponent {
 
   helpPanel_ShowHelp() {
     this.storeSvc.set(StoreKey.DisplayHelp, false);
-    this.view.change(this.view.views.help);
+    this.changeView(this.view.views.help);
   }
 
   openUrl(event?, url?) {
@@ -1462,12 +1453,6 @@ export default class AppMainComponent {
     return this.permissions_Request().then((granted) => {
       this.settings.readWebsiteDataPermissionsGranted = granted;
     });
-  }
-
-  permissionsPanel_RequestPermissions_Click() {
-    return this.$q
-      .all([this.permissions_Request(), this.storeSvc.set(StoreKey.DisplayPermissions, false)])
-      .finally(this.view.displayMainView);
   }
 
   queueSync(sync: Sync, command = MessageCommand.SyncBookmarks): ng.IPromise<any> {
@@ -1567,7 +1552,7 @@ export default class AppMainComponent {
         this.search.query = null;
         this.search.queryMeasure = null;
         this.search.lookahead = null;
-        return this.search.execute();
+        return this.searchBookmarks();
       }
     });
   }
@@ -1800,7 +1785,7 @@ export default class AppMainComponent {
 
     // No query, clear results
     if (!this.search.query?.trim()) {
-      this.search.displayDefaultState();
+      this.displayDefaultSearchState();
       return;
     }
 
@@ -2290,7 +2275,7 @@ export default class AppMainComponent {
         return this.changeView(this.view.views.search);
       }
 
-      this.search.displayDefaultState();
+      this.displayDefaultSearchState();
     }, 150);
 
     return this.$q.resolve();
@@ -2545,9 +2530,9 @@ export default class AppMainComponent {
     this.startSyncing();
   }
 
-  updatedPanel_Continue_Click() {
+  closeUpdatedPanel() {
     this.storeSvc.set(StoreKey.DisplayUpdated, false);
-    this.view.change(this.view.views.support);
+    this.changeView(this.view.views.support);
   }
 
   updateServiceUrl(url) {

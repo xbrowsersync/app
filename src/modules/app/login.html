@@ -6,7 +6,7 @@
     <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_Help_Label) }}</span>
   </button>
   <button class="btn btn-icon btn-settings" title="{{ vm.platformSvc.getConstant(vm.strings.button_Settings_Label) }}"
-          ng-click="vm.utilitySvc.handleEvent(vm.view.change, vm.view.views.settings)">
+          ng-click="vm.utilitySvc.handleEvent(vm.changeView, vm.view.views.settings)">
     <i class="fas fa-cog" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_Settings_Label) }}</span>
   </button>

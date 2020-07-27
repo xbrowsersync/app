@@ -1,0 +1,10 @@
+<div class="view-content">
+  <h4>{{ vm.platformSvc.getConstant(vm.strings.permissions_Title) }}</h4>
+  <div data-ng-bind-html="vm.platformSvc.getConstant(vm.strings.permissions_Message)"></div>
+  <div class="buttons">
+    <button type="button" class="btn btn-default focused"
+            data-ng-click="vm.utilitySvc.handleEvent(vm.requestPermissions)">
+      {{ vm.platformSvc.getConstant(vm.strings.button_Continue_Label) }}
+    </button>
+  </div>
+</div>

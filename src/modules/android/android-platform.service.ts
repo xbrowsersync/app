@@ -153,7 +153,7 @@ export default class AndroidPlatformService implements PlatformService {
 
     // Set current page as shared bookmark and display bookmark panel
     this.currentPage = bookmark;
-    return this.vm.view.change(this.vm.view.views.bookmark).finally(() => {
+    return this.vm.changeView(this.vm.view.views.bookmark).finally(() => {
       // Set bookmark form fields to display default values
       this.vm.bookmark.current = bookmark;
       this.vm.bookmark.originalUrl = this.vm.bookmark.current.url;
@@ -515,7 +515,7 @@ export default class AndroidPlatformService implements PlatformService {
     ) {
       // Back to login/search panel
       event.preventDefault();
-      this.vm.view.displayMainView();
+      this.vm.displayMainView();
     } else {
       // On main view, exit app
       event.preventDefault();
@@ -614,7 +614,7 @@ export default class AndroidPlatformService implements PlatformService {
 
             // Refresh search results if query not present
             if (this.vm.view.current === this.vm.view.views.search && !this.vm.search.query) {
-              this.vm.search.displayDefaultState();
+              this.vm.displayDefaultSearchState();
             }
           })
           .then(() => {
@@ -672,7 +672,7 @@ export default class AndroidPlatformService implements PlatformService {
 
             // Refresh search results if query not present
             if (this.vm.view.current === this.vm.view.views.search && !this.vm.search.query) {
-              this.vm.search.displayDefaultState();
+              this.vm.displayDefaultSearchState();
             }
           })
           .then(() => {

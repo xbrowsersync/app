@@ -1,7 +1,7 @@
 <div class="header-panel clearfix">
   <h2>{{ vm.platformSvc.getConstant(vm.strings.button_Settings_Label) }}</h2>
   <button class="btn btn-icon btn-close" title="{{ vm.platformSvc.getConstant(vm.strings.button_Close_Label) }}"
-          data-ng-click="vm.utilitySvc.handleEvent(vm.view.displayMainView)">
+          data-ng-click="vm.utilitySvc.handleEvent(vm.displayMainView)">
     <i class="fas fa-times-circle" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_Close_Label) }}</span>
   </button>
@@ -471,7 +471,7 @@
       <div class="form-group setting-group">
         <label>{{ vm.platformSvc.getConstant(vm.strings.settings_About_AppVersion_Label) }}</label>
         <div class="setting-value">
-          <span>{{ vm.appVersion }}</span>
+          <span>{{ vm.settings.appVersion }}</span>
         </div>
         <div class="buttons">
           <button type="button" class="btn btn-default"
@@ -479,7 +479,7 @@
             {{ vm.platformSvc.getConstant(vm.strings.button_ReleaseNotes_Label) }}
           </button>
           <button id="support" type="button" class="btn btn-default"
-                  data-ng-click="vm.utilitySvc.handleEvent(vm.view.change, vm.view.views.support)">
+                  data-ng-click="vm.utilitySvc.handleEvent(vm.changeView, vm.view.views.support)">
             {{ vm.platformSvc.getConstant(vm.strings.button_Support_Label) }}
           </button>
         </div>

@@ -989,29 +989,6 @@ div.theme-dark {
   }
 }
 
-#support-panel {
-  h4 {
-    margin-bottom: 1rem;
-  }
-
-  p,
-  ul {
-    font-size: 1rem;
-    line-height: 1.25rem;
-  }
-
-  .buttons.small {
-    margin: 0.5rem 0 1rem;
-  }
-}
-
-#updated-panel {
-  .buttons button {
-    display: block;
-    margin: 0 auto 1rem;
-  }
-}
-
 #working-panel {
   h3 {
     @include ellipsis;

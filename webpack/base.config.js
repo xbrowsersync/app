@@ -50,12 +50,9 @@ module.exports = {
       patterns: [
         Path.resolve(__dirname, '../src/modules/app/bookmark.html'),
         Path.resolve(__dirname, '../src/modules/app/login.html'),
-        Path.resolve(__dirname, '../src/modules/app/permissions.html'),
         Path.resolve(__dirname, '../src/modules/app/scan.html'),
         Path.resolve(__dirname, '../src/modules/app/search.html'),
         Path.resolve(__dirname, '../src/modules/app/settings.html'),
-        Path.resolve(__dirname, '../src/modules/app/support.html'),
-        Path.resolve(__dirname, '../src/modules/app/updated.html'),
         Path.resolve(__dirname, '../src/modules/app/working.html')
       ]
     })

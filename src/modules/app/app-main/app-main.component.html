@@ -25,24 +25,19 @@
       <div class="view-content" ng-include="'./assets/settings.html'"></div>
     </div>
 
-    <help-panel class="view animate" close="vm.displayMainView" load-pages="vm.getHelpPages"
+    <help-panel class="view view-overlay animate" close="vm.displayMainView" load-pages="vm.getHelpPages"
                 ng-if="vm.view.current === vm.view.views.help"></help-panel>
 
-    <div id="information-panel" class="view overlay-panel animate" ng-if="vm.view.current === vm.view.views.loading || 
-      vm.view.current === vm.view.views.support || vm.view.current === vm.view.views.updated || 
-      vm.view.current === vm.view.views.permissions">
-      <div id="support-panel" ng-if="vm.view.current === vm.view.views.support">
-        <div class="view-content animate" ng-include="'./assets/support.html'"></div>
-      </div>
+    <support-panel class="view view-overlay animate" close="vm.displayMainView" open-url="vm.openUrl"
+                   ng-if="vm.view.current === vm.view.views.support"></support-panel>
 
-      <div id="updated-panel" ng-if="vm.view.current === vm.view.views.updated">
-        <div class="view-content animate" ng-include="'./assets/updated.html'"></div>
-      </div>
+    <updated-panel class="view view-overlay animate" close="vm.closeUpdatedPanel"
+                   display-release-notes="vm.displayReleaseNotes" ng-if="vm.view.current === vm.view.views.updated">
+    </updated-panel>
 
-      <div id="permissions-panel" ng-if="vm.view.current === vm.view.views.permissions">
-        <div class="view-content animate" ng-include="'./assets/permissions.html'"></div>
-      </div>
-    </div>
+    <permissions-panel class="view view-overlay animate" close="vm.displayMainView" request="vm.permissions_Request"
+                       ng-if="vm.view.current === vm.view.views.permissions">
+    </permissions-panel>
 
     <div id="scan-panel" class="view" ng-if="vm.view.current === vm.view.views.scan">
       <div class="view-content" ng-include="'./assets/scan.html'"></div>

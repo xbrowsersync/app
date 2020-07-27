@@ -1,6 +1,6 @@
 <div class="header-panel clearfix" hm-tap="vm.search.selectedBookmark = null">
   <button class="btn btn-icon btn-settings" title="{{ vm.platformSvc.getConstant(vm.strings.button_Settings_Label) }}"
-          ng-click="vm.utilitySvc.handleEvent(vm.view.change, vm.view.views.settings)" tabindex="1002">
+          ng-click="vm.utilitySvc.handleEvent(vm.changeView, vm.view.views.settings)" tabindex="1002">
     <i class="fas fa-cog" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_Settings_Label) }}</span>
   </button>

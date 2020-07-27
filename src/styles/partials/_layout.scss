@@ -29,9 +29,6 @@
 }
 
 .overlay {
-  @include animation-fade-in();
-  @include animation-fade-out();
-
   align-items: center;
   background-color: rgba($colour-text2-default, 0.5);
   display: flex;
@@ -41,54 +38,10 @@
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: -1;
 
   @include theme-dark {
     background-color: rgba(#222, 0.5);
-  }
-}
-
-.overlay-panel {
-  @extend .overlay;
-
-  overflow: hidden;
-  position: relative;
-
-  &.view-content {
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center;
-    padding: 2rem !important;
-  }
-
-  h4 {
-    font-size: 1.5rem;
-    line-height: 1.8rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
-
-  p,
-  ul {
-    font-size: 1.1rem;
-    line-height: 1.4rem;
-  }
-
-  ul {
-    margin-bottom: 0.75rem;
-    padding-left: 1rem;
-  }
-
-  .buttons {
-    margin-top: 1rem;
-
-    &.small {
-      button {
-        font-size: 1rem;
-        line-height: 2.1rem;
-        padding: 0 0.5rem;
-      }
-    }
   }
 }
 
@@ -107,6 +60,53 @@
 
   height: 100%;
   width: 100%;
+
+  &.view-overlay {
+    overflow: hidden;
+
+    &::after {
+      @extend .overlay;
+
+      content: '';
+    }
+
+    h4 {
+      font-size: 1.5rem;
+      line-height: 1.8rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    p,
+    ul {
+      font-size: 1.1rem;
+      line-height: 1.4rem;
+    }
+
+    ul {
+      margin-bottom: 0.75rem;
+      padding-left: 1rem;
+    }
+
+    .buttons {
+      margin-top: 1rem;
+
+      &.small {
+        button {
+          font-size: 1rem;
+          line-height: 2.1rem;
+          padding: 0 0.5rem;
+        }
+      }
+    }
+
+    .view-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem;
+    }
+  }
 
   .view-content {
     display: flex;

@@ -1,5 +1,5 @@
 import './android-app.component.scss';
-import { Component } from 'angular-ts-decorators';
+import { Component, OnInit } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import Strings from '../../../../res/strings/en.json';
 import AppMainComponent from '../../app/app-main/app-main.component';
@@ -20,7 +20,7 @@ import AndroidPlatformService from '../android-platform.service';
   selector: 'app',
   template: require('../../app/app-main/app-main.component.html')
 })
-export default class AndroidAppComponent extends AppMainComponent {
+export default class AndroidAppComponent extends AppMainComponent implements OnInit {
   platformSvc: AndroidPlatformService;
 
   initialised = false;
@@ -236,6 +236,10 @@ export default class AndroidAppComponent extends AppMainComponent {
       });
   }
 
+  ngOnInit(): void {
+    this.init();
+  }
+
   scanner_Start(): ng.IPromise<any> {
     this.scanner.lightEnabled = false;
     this.scanner.invalidSyncId = false;
@@ -281,7 +285,7 @@ export default class AndroidAppComponent extends AppMainComponent {
         if (status.authorized) {
           window.QRScanner.show(() => {
             this.$timeout(() => {
-              this.vm.view.change(this.vm.view.views.scan);
+              this.vm.changeView(this.vm.view.views.scan);
               waitForScan();
             }, 500);
           });
