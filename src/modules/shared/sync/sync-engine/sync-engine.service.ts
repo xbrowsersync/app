@@ -152,7 +152,7 @@ export default class SyncEngineService {
         // Enable syncing for registered providers
         return this.$q.all(this.providers.map((provider) => provider.enable()));
       })
-      .then(() => {});
+      .then(() => this.platformSvc.interface_Refresh(true));
   }
 
   executeSync(isBackgroundSync = false): ng.IPromise<any> {
@@ -301,33 +301,18 @@ export default class SyncEngineService {
             });
         })
         .then((syncChange) => {
-          return this.storeSvc
-            .get<boolean>(StoreKey.SyncEnabled)
-            .then((syncEnabled) => {
-              // If syncing for the first time or re-syncing, set sync as enabled
-              return (
-                !syncEnabled &&
-                this.currentSync.command !== MessageCommand.RestoreBookmarks &&
-                this.currentSync.type !== SyncType.Cancel &&
-                this.enableSync().then(() => {
-                  this.logSvc.logInfo('Sync enabled');
-                })
-              );
-            })
-            .then(() => {
-              // Resolve the current sync's promise
-              this.currentSync.deferred.resolve();
+          // Resolve the current sync's promise
+          this.currentSync.deferred.resolve();
 
-              // Set flag if remote bookmarks data should be updated
-              if (!syncChange) {
-                updateRemote = false;
-              } else if (this.currentSync.type !== SyncType.Local) {
-                updateRemote = true;
-              }
+          // Set flag if remote bookmarks data should be updated
+          if (!syncChange) {
+            updateRemote = false;
+          } else if (this.currentSync.type !== SyncType.Local) {
+            updateRemote = true;
+          }
 
-              // Reset syncing flag
-              return this.setIsSyncing();
-            });
+          // Reset syncing flag
+          return this.setIsSyncing();
         });
     };
 
@@ -430,9 +415,21 @@ export default class SyncEngineService {
             promises.push(syncedPromise);
           }
 
-          return this.$q.all(promises).then(() => {
-            resolve();
-          });
+          return this.$q
+            .all(promises)
+            .then(() => {
+              // Enable sync if required
+              if (
+                !syncEnabled &&
+                ((syncToQueue.type === SyncType.Local && angular.isUndefined(syncToQueue.bookmarks)) ||
+                  syncToQueue.type === SyncType.Remote)
+              ) {
+                return this.enableSync().then(() => {
+                  this.logSvc.logInfo('Sync enabled');
+                });
+              }
+            })
+            .then(resolve);
         })
         .catch(reject);
     });

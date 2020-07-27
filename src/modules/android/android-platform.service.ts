@@ -826,7 +826,6 @@ export default class AndroidPlatformService implements PlatformService {
 
   sync_Queue(sync: Sync, command = MessageCommand.SyncBookmarks): ng.IPromise<any> {
     // Add sync data to queue and run sync
-    sync.command = command;
     return this.syncEngineService
       .queueSync(sync)
       .then(() => {

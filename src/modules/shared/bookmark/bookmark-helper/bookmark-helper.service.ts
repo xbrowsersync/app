@@ -316,7 +316,7 @@ export default class BookmarkHelperService {
 
   getIdsFromDescendants(bookmark: Bookmark): number[] {
     const ids = [];
-    if (bookmark.children?.length === 0) {
+    if (angular.isUndefined(bookmark.children) || bookmark.children.length === 0) {
       return ids;
     }
 

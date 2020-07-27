@@ -38,7 +38,7 @@
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: -1;
+  z-index: 1000;
 
   @include theme-dark {
     background-color: rgba(#222, 0.5);
@@ -68,6 +68,7 @@
       @extend .overlay;
 
       content: '';
+      z-index: -1;
     }
 
     h4 {

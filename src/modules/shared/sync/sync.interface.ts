@@ -1,11 +1,9 @@
 import { Bookmark, BookmarkChange } from '../bookmark/bookmark.interface';
-import { MessageCommand } from '../global-shared.enum';
 import { SyncType } from './sync.enum';
 
 export interface Sync {
   bookmarks?: Bookmark[];
   changeInfo?: BookmarkChange;
-  command?: MessageCommand;
   deferred?: PromiseConstructor;
   type: SyncType;
   uniqueId?: string;

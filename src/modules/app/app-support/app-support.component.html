@@ -1,22 +1,22 @@
 <div class="view-content">
   <h4>{{ vm.platformSvc.getConstant(vm.strings.support_Title) }}</h4>
-  <div data-ng-bind-html="vm.platformSvc.getConstant(vm.strings.support_Message)"></div>
+  <div ng-bind-html="vm.platformSvc.getConstant(vm.strings.support_Message)"></div>
   <div class="buttons small">
     <button type="button" class="btn btn-default"
-            data-ng-click="vm.utilitySvc.handleEvent(vm.openUrl(), $event, 'https://link.xbrowsersync.org/liberapay')">
+            ng-click="vm.utilitySvc.handleEvent(vm.openUrl(), $event, 'https://link.xbrowsersync.org/liberapay')">
       {{ vm.platformSvc.getConstant(vm.strings.button_Liberapay_Label) }}
     </button>
     <button type="button" class="btn btn-default"
-            data-ng-click="vm.utilitySvc.handleEvent(vm.openUrl(), $event, 'https://link.xbrowsersync.org/patreon')">
+            ng-click="vm.utilitySvc.handleEvent(vm.openUrl(), $event, 'https://link.xbrowsersync.org/patreon')">
       {{ vm.platformSvc.getConstant(vm.strings.button_Patreon_Label) }}
     </button>
     <button type="button" class="btn btn-default"
-            data-ng-click="vm.utilitySvc.handleEvent(vm.openUrl(), $event, 'https://link.xbrowsersync.org/cryptos')">
+            ng-click="vm.utilitySvc.handleEvent(vm.openUrl(), $event, 'https://link.xbrowsersync.org/cryptos')">
       {{ vm.platformSvc.getConstant(vm.strings.button_Cryptos_Label) }}
     </button>
   </div>
   <div class="buttons">
-    <button type="button" class="btn btn-default focused" data-ng-click="vm.utilitySvc.handleEvent(vm.close())">
+    <button type="button" class="btn btn-default focused" ng-click="vm.utilitySvc.handleEvent(vm.close())">
       {{ vm.platformSvc.getConstant(vm.strings.button_Continue_Label) }}
     </button>
   </div>

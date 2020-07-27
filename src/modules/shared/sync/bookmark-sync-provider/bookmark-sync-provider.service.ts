@@ -181,8 +181,8 @@ export default class BookmarkSyncProviderService implements SyncProvider {
             this.platformSvc
               .eventListeners_Disable()
               .then(() => {
-                // If this is a restore, populate native bookmarks
-                if (sync.command === MessageCommand.RestoreBookmarks) {
+                // Use provided bookmarks to populate native bookmarks
+                if (sync.bookmarks) {
                   return this.populateNativeBookmarks(bookmarks);
                 }
 
@@ -215,8 +215,8 @@ export default class BookmarkSyncProviderService implements SyncProvider {
 
               // Update bookmarks cache
               return this.bookmarkHelperSvc.updateCachedBookmarks(bookmarks, encryptedBookmarks).then(() => {
-                // Build id mappings if this was a restore
-                if (sync.command === MessageCommand.RestoreBookmarks) {
+                // Build id mappings if bookmarks provided
+                if (sync.bookmarks) {
                   return this.bookmarkSvc.buildIdMappings(bookmarks);
                 }
               });

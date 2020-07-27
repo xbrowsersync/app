@@ -1,8 +1,10 @@
 <div ng-class="vm.settings.darkModeEnabled ? 'theme-dark' : 'theme-default'" ng-if="vm.initialised">
   <div class="container" ng-class="{ 'search': vm.view.current === vm.view.views.search }">
-    <div id="working-panel" class="overlay animate" ng-include="'./assets/working.html'" ng-show="vm.working.show"
-         ng-class="{ 'darker-overlay': vm.view.current !== vm.view.views.loading, 'fullsize': vm.view.current === vm.view.views.loading }">
-    </div>
+    <working-panel cancel-sync="vm.cancelSyncInProgress" darker="vm.view.current !== vm.view.views.loading"
+                   enable-cancel-sync="vm.working.displayCancelSyncButton"
+                   fullsize="vm.view.current === vm.view.views.loading" message="vm.working.message"
+                   ng-show="vm.working.show">
+    </working-panel>
 
     <alert-panel class="animate-fade-in animate-fade-out" alert="vm.alert" close="vm.closeAlert"
                  ng-if="vm.alert.show && !vm.utilitySvc.isMobilePlatform(vm.platformName)"></alert-panel>

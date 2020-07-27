@@ -2590,7 +2590,7 @@ export default class AppMainComponent {
     return this.utilitySvc.promiseWhile([], doActionUntil, action);
   }
 
-  workingPanel_Cancel_Click() {
+  cancelSyncInProgress() {
     this.logSvc.logInfo('Cancelling sync');
 
     return this.queueSync({
