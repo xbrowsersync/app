@@ -76,12 +76,6 @@ export default class AppMainComponent {
   syncEngineService: SyncEngineService;
   utilitySvc: UtilityService;
 
-  alert = {
-    show: false,
-    title: '',
-    message: '',
-    type: undefined
-  };
   ApiServiceStatus = ApiServiceStatus;
   bookmark = {
     active: false,
@@ -272,24 +266,6 @@ export default class AppMainComponent {
     this.syncForm = {};
 
     $scope.$watch(
-      () => AlertSvc.currentAlert,
-      (newVal, oldVal) => {
-        if (newVal !== oldVal) {
-          this.displayAlert(newVal);
-        }
-      }
-    );
-
-    $scope.$watch(
-      () => PlatformSvc.showAlert,
-      (newVal, oldVal) => {
-        if (newVal !== oldVal) {
-          this.alert.show = newVal;
-        }
-      }
-    );
-
-    $scope.$watch(
       () => PlatformSvc.showWorking,
       (newVal, oldVal) => {
         if (newVal !== oldVal) {
@@ -348,7 +324,7 @@ export default class AppMainComponent {
   backupRestoreForm_ConfirmRestore_Click() {
     if (!this.settings.dataToRestore) {
       // Display alert
-      this.displayAlert({
+      this.alertSvc.setCurrentAlert({
         message: this.platformSvc.getConstant(Strings.error_NoDataToRestore_Message),
         title: this.platformSvc.getConstant(Strings.error_NoDataToRestore_Title),
         type: AlertType.Error
@@ -682,7 +658,7 @@ export default class AppMainComponent {
       this.bookmarkForm.bookmarkUrl.$setPristine();
 
       // Display alert
-      this.displayAlert({
+      this.alertSvc.setCurrentAlert({
         message: this.platformSvc.getConstant(Strings.getMetadata_Success_Message),
         type: AlertType.Information
       });
@@ -839,13 +815,6 @@ export default class AppMainComponent {
     });
   }
 
-  closeAlert(): void {
-    this.$timeout(() => {
-      this.alert.show = false;
-      this.alertSvc.clearCurrentAlert();
-    });
-  }
-
   closeQrPanel(): void {
     this.settings.displayQrPanel = false;
   }
@@ -875,20 +844,6 @@ export default class AppMainComponent {
       this.sync.enabled = false;
       this.sync.password = '';
       this.login.passwordComplexity = {};
-    });
-  }
-
-  displayAlert(alert: Alert): void {
-    this.$timeout(() => {
-      if (!alert) {
-        this.alert.show = false;
-        return;
-      }
-
-      this.alert.title = alert.title;
-      this.alert.message = alert.message;
-      this.alert.type = alert.type;
-      this.alert.show = true;
     });
   }
 
@@ -1771,7 +1726,8 @@ export default class AppMainComponent {
   }
 
   searchForm_SearchText_Change(event?) {
-    this.alert.show = false;
+    // Hide alerts
+    this.alertSvc.clearCurrentAlert();
 
     // Get query from event data if provided
     if (event?.data) {

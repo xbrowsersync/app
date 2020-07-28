@@ -4,6 +4,9 @@ alert-panel {
   display: block;
 
   .alert {
+    @include animation-fade-in();
+    @include animation-fade-out();
+
     border: none;
     border-radius: 0;
     color: $colour-text1-default;

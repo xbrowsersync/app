@@ -6,8 +6,7 @@
                    ng-show="vm.working.show">
     </working-panel>
 
-    <alert-panel class="animate-fade-in animate-fade-out" alert="vm.alert" close="vm.closeAlert"
-                 ng-if="vm.alert.show && !vm.utilitySvc.isMobilePlatform(vm.platformName)"></alert-panel>
+    <alert-panel ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)"></alert-panel>
 
     <div id="login-panel" class="view animate" ng-if="vm.view.current === vm.view.views.login">
       <div class="view-content" ng-include="'./assets/login.html'"></div>
