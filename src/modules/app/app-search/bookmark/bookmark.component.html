@@ -1,26 +1,26 @@
 <div class="separator" ng-if="vm.bookmarkHelperSvc.isSeparator(vm.bookmark)"></div>
 <div class="menu" ng-class="{ 'animate animate-fade-in': vm.enableSelect }" ng-if="vm.enableSelect"
      ng-show="vm.isSelected" tabindex="-1">
-  <button class="btn btn-fab" title="{{ vm.platformSvc.getConstant(vm.strings.button_ShareBookmark_Label) }}"
+  <button class="btn btn-fab" title="{{ vm.platformSvc.getI18nString(vm.strings.button_ShareBookmark_Label) }}"
           ng-click="vm.utilitySvc.handleEvent(vm.shareBookmark(), $event,  vm.bookmark)">
     <i class="fas fa-share-alt" aria-hidden="true"></i>
-    <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_ShareBookmark_Label) }}</span>
+    <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.button_ShareBookmark_Label) }}</span>
   </button>
-  <button class="btn btn-fab" title="{{ vm.platformSvc.getConstant(vm.strings.button_EditBookmark_Label) }}"
+  <button class="btn btn-fab" title="{{ vm.platformSvc.getI18nString(vm.strings.button_EditBookmark_Label) }}"
           ng-click="vm.utilitySvc.handleEvent(vm.editBookmark(), $event,  vm.bookmark)">
     <i class="fas fa-edit" aria-hidden="true"></i>
-    <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_EditBookmark_Label) }}</span>
+    <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.button_EditBookmark_Label) }}</span>
   </button>
   <button class="btn btn-fab btn-delete-bookmark"
-          title="{{ vm.platformSvc.getConstant(vm.strings.button_DeleteBookmark_Label) }}"
+          title="{{ vm.platformSvc.getI18nString(vm.strings.button_DeleteBookmark_Label) }}"
           ng-click="vm.utilitySvc.handleEvent(vm.deleteBookmark(), $event,  vm.bookmark)">
     <i class="fas fa-trash" aria-hidden="true"></i>
-    <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_DeleteBookmark_Label) }}</span>
+    <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.button_DeleteBookmark_Label) }}</span>
   </button>
 </div>
 <div class="bookmark-content" ng-if="vm.bookmark.url && !vm.bookmarkHelperSvc.isSeparator(vm.bookmark)"
-     ng-click="!vm.enableSelect && vm.utilitySvc.handleEvent(vm.visitBookmark(), $event,  vm.bookmark.url)"
-     hm-tap="vm.utilitySvc.handleEvent(vm.visitBookmark(), $event,  vm.bookmark.url)">
+     ng-click="!vm.enableSelect && vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event,  vm.bookmark.url)"
+     hm-tap="vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event,  vm.bookmark.url)">
   <h4 class="bookmark-heading" ng-if="vm.bookmark.title">{{ vm.bookmark.title }}</h4>
   <h4 class="bookmark-heading" ng-if="!vm.bookmark.title">
     {{ vm.bookmarkHelperSvc.getBookmarkTitleForDisplay(vm.bookmark) }}
@@ -41,15 +41,15 @@
   </h4>
   <div ng-if="vm.bookmark.displayChildren">
     <p class="empty" ng-if="!vm.bookmark.children || vm.bookmark.children.length === 0">
-      {{ vm.platformSvc.getConstant(vm.strings.search_FolderEmpty_Message) }}
+      {{ vm.platformSvc.getI18nString(vm.strings.search_FolderEmpty_Message) }}
     </p>
     <ng-transclude></ng-transclude>
   </div>
 </div>
 <button class="btn btn-icon btn-edit-bookmark"
-        title="{{ vm.platformSvc.getConstant(vm.strings.button_EditBookmark_Label) }}"
+        title="{{ vm.platformSvc.getI18nString(vm.strings.button_EditBookmark_Label) }}"
         ng-if="vm.enableEditButton && vm.bookmark.url && !vm.bookmarkHelperSvc.isSeparator(vm.bookmark)"
         ng-click="vm.utilitySvc.handleEvent(vm.editBookmark(), $event,  vm.bookmark)">
   <i class="fas fa-edit" aria-hidden="true"></i>
-  <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_EditBookmark_Label) }}</span>
+  <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.button_EditBookmark_Label) }}</span>
 </button>

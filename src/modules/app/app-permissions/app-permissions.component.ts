@@ -6,15 +6,17 @@ import { PlatformService } from '../../shared/global-shared.interface';
 import { StoreKey } from '../../shared/store/store.enum';
 import StoreService from '../../shared/store/store.service';
 import UtilityService from '../../shared/utility/utility.service';
+import { AppHelperService } from '../app.interface';
 
 @autobind
 @Component({
   controllerAs: 'vm',
-  selector: 'permissionsPanel',
+  selector: 'appPermissions',
   template: require('./app-permissions.component.html')
 })
 export default class AppPermissionsComponent {
   $q: ng.IQService;
+  appHelperSvc: AppHelperService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
@@ -22,11 +24,17 @@ export default class AppPermissionsComponent {
   strings = Strings;
 
   @Output() close: () => any;
-  @Output() request: () => any;
 
-  static $inject = ['$q', 'PlatformService', 'StoreService', 'UtilityService'];
-  constructor($q: ng.IQService, PlatformSvc: PlatformService, StoreSvc: StoreService, UtilitySvc: UtilityService) {
+  static $inject = ['$q', 'AppHelperService', 'PlatformService', 'StoreService', 'UtilityService'];
+  constructor(
+    $q: ng.IQService,
+    AppHelperSvc: AppHelperService,
+    PlatformSvc: PlatformService,
+    StoreSvc: StoreService,
+    UtilitySvc: UtilityService
+  ) {
     this.$q = $q;
+    this.appHelperSvc = AppHelperSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
@@ -34,7 +42,7 @@ export default class AppPermissionsComponent {
 
   requestPermissions(): ng.IPromise<void> {
     return this.$q
-      .all([this.request()(), this.storeSvc.set(StoreKey.DisplayPermissions, false)])
+      .all([this.appHelperSvc.requestPermissions(), this.storeSvc.set(StoreKey.DisplayPermissions, false)])
       .then(() => {})
       .finally(this.close());
   }

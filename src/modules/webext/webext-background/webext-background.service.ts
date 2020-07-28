@@ -38,7 +38,7 @@ export default class WebExtBackgroundService {
   networkSvc: NetworkService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
-  syncEngineService: SyncEngineService;
+  syncEngineSvc: SyncEngineService;
   utilitySvc: UtilityService;
 
   notificationClickHandlers: any[] = [];
@@ -81,7 +81,7 @@ export default class WebExtBackgroundService {
     this.networkSvc = NetworkSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
-    this.syncEngineService = SyncEngineSvc;
+    this.syncEngineSvc = SyncEngineSvc;
     this.utilitySvc = UtilitySvc;
 
     browser.alarms.onAlarm.addListener(this.onAlarm);
@@ -98,8 +98,8 @@ export default class WebExtBackgroundService {
         }
 
         const alert: Alert = {
-          message: this.platformSvc.getConstant(Strings.appUpdateAvailable_Message).replace('{version}', newVersion),
-          title: this.platformSvc.getConstant(Strings.appUpdateAvailable_Title)
+          message: this.platformSvc.getI18nString(Strings.appUpdateAvailable_Message).replace('{version}', newVersion),
+          title: this.platformSvc.getI18nString(Strings.appUpdateAvailable_Title)
         };
         this.displayAlert(alert, Globals.ReleaseNotesUrlStem + newVersion.replace(/^v/, ''));
       });
@@ -120,7 +120,7 @@ export default class WebExtBackgroundService {
         }
 
         // Check for updates to synced bookmarks
-        this.syncEngineService
+        this.syncEngineSvc
           .checkForUpdates()
           .then(resolve)
           .catch((err) => {
@@ -136,7 +136,7 @@ export default class WebExtBackgroundService {
                   this.logSvc.logInfo('Sync was disabled before retry attempted');
                   return reject(new Exceptions.HttpRequestCancelledException());
                 }
-                this.syncEngineService.checkForUpdates().then(resolve).catch(reject);
+                this.syncEngineSvc.checkForUpdates().then(resolve).catch(reject);
               });
             }, 5000);
           });
@@ -147,7 +147,7 @@ export default class WebExtBackgroundService {
       }
 
       // Queue sync
-      return this.platformSvc.sync_Queue({
+      return this.platformSvc.queueSync({
         type: SyncType.Local
       });
     });
@@ -191,7 +191,7 @@ export default class WebExtBackgroundService {
 
   getLatestUpdates(): ng.IPromise<any> {
     // Exit if currently syncing
-    const currentSync = this.syncEngineService.getCurrentSync();
+    const currentSync = this.syncEngineSvc.getCurrentSync();
     if (currentSync) {
       return this.$q.resolve();
     }
@@ -204,13 +204,13 @@ export default class WebExtBackgroundService {
           return;
         }
 
-        return this.syncEngineService.checkForUpdates().then((updatesAvailable) => {
+        return this.syncEngineSvc.checkForUpdates().then((updatesAvailable) => {
           if (!updatesAvailable) {
             return;
           }
 
           // Queue sync
-          return this.platformSvc.sync_Queue({
+          return this.platformSvc.queueSync({
             type: SyncType.Local
           });
         });
@@ -224,7 +224,7 @@ export default class WebExtBackgroundService {
 
         // If ID was removed disable sync
         if (err instanceof Exceptions.NoDataFoundException) {
-          this.syncEngineService.disableSync();
+          this.syncEngineSvc.disableSync();
           throw new Exceptions.SyncRemovedException(undefined, err);
         }
 
@@ -267,7 +267,7 @@ export default class WebExtBackgroundService {
         );
 
         // Update browser action icon
-        this.platformSvc.interface_Refresh(storeContent.syncEnabled);
+        this.platformSvc.refreshNativeInterface(storeContent.syncEnabled);
 
         // Check for new app version after a delay
         if (storeContent.checkForAppUpdates) {
@@ -280,7 +280,7 @@ export default class WebExtBackgroundService {
         }
 
         // Enable sync
-        return this.syncEngineService.enableSync().then(() => {
+        return this.syncEngineSvc.enableSync().then(() => {
           // Check for updates after a delay to allow for initialising network connection
           this.$timeout(this.checkForUpdatesOnStartup, 5e3);
         });
@@ -412,7 +412,7 @@ export default class WebExtBackgroundService {
   }
 
   runDisableSyncCommand(): ng.IPromise<void> {
-    return this.syncEngineService.disableSync();
+    return this.syncEngineSvc.disableSync();
   }
 
   runEnableEventListenersCommand(): ng.IPromise<void> {
@@ -420,11 +420,11 @@ export default class WebExtBackgroundService {
   }
 
   runGetCurrentSyncCommand(): ng.IPromise<Sync> {
-    return this.$q.resolve(this.syncEngineService.getCurrentSync());
+    return this.$q.resolve(this.syncEngineSvc.getCurrentSync());
   }
 
   runGetSyncQueueLengthCommand(): ng.IPromise<number> {
-    return this.$q.resolve(this.syncEngineService.getSyncQueueLength());
+    return this.$q.resolve(this.syncEngineSvc.getSyncQueueLength());
   }
 
   runRestoreBookmarksCommand(sync: Sync): ng.IPromise<any> {
@@ -437,12 +437,12 @@ export default class WebExtBackgroundService {
       .then((bookmarksToRestore) => {
         // Queue sync
         sync.bookmarks = bookmarksToRestore;
-        return this.syncEngineService.queueSync(sync);
+        return this.syncEngineSvc.queueSync(sync);
       });
   }
 
   runSyncBookmarksCommand(sync: Sync, runSync: boolean): ng.IPromise<void> {
-    return this.syncEngineService.queueSync(sync, runSync);
+    return this.syncEngineSvc.queueSync(sync, runSync);
   }
 
   upgradeExtension(oldVersion: string, newVersion: string): ng.IPromise<void> {
@@ -464,8 +464,8 @@ export default class WebExtBackgroundService {
         return this.platformSvc.getAppVersion().then((appVersion) => {
           // Display alert and set update panel to show
           const alert: Alert = {
-            message: this.platformSvc.getConstant(Strings.appUpdated_Message),
-            title: `${this.platformSvc.getConstant(Strings.appUpdated_Title)} ${appVersion}`
+            message: this.platformSvc.getI18nString(Strings.appUpdated_Message),
+            title: `${this.platformSvc.getI18nString(Strings.appUpdated_Title)} ${appVersion}`
           };
           this.displayAlert(alert, Globals.ReleaseNotesUrlStem + appVersion);
           return this.storeSvc.set(StoreKey.DisplayUpdated, true);

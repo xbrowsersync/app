@@ -6,6 +6,7 @@ import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/book
 import { Bookmark } from '../../../shared/bookmark/bookmark.interface';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import UtilityService from '../../../shared/utility/utility.service';
+import { AppHelperService } from '../../app.interface';
 import { BookmarkTreeItem } from '../app-search.interface';
 
 @autobind
@@ -17,6 +18,7 @@ import { BookmarkTreeItem } from '../app-search.interface';
 })
 export default class BookmarkComponent {
   $timeout: ng.ITimeoutService;
+  appHelperSvc: AppHelperService;
   bookmarkHelperSvc: BookmarkHelperService;
   platformSvc: PlatformService;
   utilitySvc: UtilityService;
@@ -31,16 +33,17 @@ export default class BookmarkComponent {
   @Output() editBookmark: () => any;
   @Output() deleteBookmark: () => any;
   @Output() shareBookmark: () => any;
-  @Output() visitBookmark: () => any;
 
-  static $inject = ['$timeout', 'BookmarkHelperService', 'PlatformService', 'UtilityService'];
+  static $inject = ['$timeout', 'AppHelperService', 'BookmarkHelperService', 'PlatformService', 'UtilityService'];
   constructor(
     $timeout: ng.ITimeoutService,
+    AppHelperSvc: AppHelperService,
     BookmarkHelperSvc: BookmarkHelperService,
     PlatformSvc: PlatformService,
     UtilitySvc: UtilityService
   ) {
     this.$timeout = $timeout;
+    this.appHelperSvc = AppHelperSvc;
     this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.platformSvc = PlatformSvc;
     this.utilitySvc = UtilitySvc;

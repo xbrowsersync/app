@@ -6,15 +6,17 @@ import Strings from '../../../../res/strings/en.json';
 import BackupRestoreService from '../../shared/backup-restore/backup-restore.service';
 import { PlatformService } from '../../shared/global-shared.interface';
 import UtilityService from '../../shared/utility/utility.service';
+import { AppHelperService } from '../app.interface';
 
 @autobind
 @Component({
   controllerAs: 'vm',
-  selector: 'qrPanel',
+  selector: 'appQr',
   template: require('./app-qr.component.html')
 })
 export default class AppQrComponent implements OnInit {
   $timeout: ng.ITimeoutService;
+  appHelperSvc: AppHelperService;
   backupRestoreSvc: BackupRestoreService;
   platformSvc: PlatformService;
   utilitySvc: UtilityService;
@@ -26,23 +28,24 @@ export default class AppQrComponent implements OnInit {
   @Input() syncId: string;
 
   @Output() close: () => void;
-  @Output() copyTextToClipboard: () => any;
 
-  static $inject = ['$timeout', 'BackupRestoreService', 'PlatformService', 'UtilityService'];
+  static $inject = ['$timeout', 'AppHelperService', 'BackupRestoreService', 'PlatformService', 'UtilityService'];
   constructor(
     $timeout: ng.ITimeoutService,
+    AppHelperSvc: AppHelperService,
     BackupRestoreSvc: BackupRestoreService,
     PlatformSvc: PlatformService,
     UtilitySvc: UtilityService
   ) {
     this.$timeout = $timeout;
+    this.appHelperSvc = AppHelperSvc;
     this.backupRestoreSvc = BackupRestoreSvc;
     this.platformSvc = PlatformSvc;
     this.utilitySvc = UtilitySvc;
   }
 
   copySyncId() {
-    return this.copyTextToClipboard()(this.syncId).then(() => {
+    return this.appHelperSvc.copyTextToClipboard(this.syncId).then(() => {
       this.$timeout(() => {
         this.syncIdCopied = true;
       });

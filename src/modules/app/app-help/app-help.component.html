@@ -7,20 +7,20 @@
     <div class="pagination">
       <a href="#" ng-click="vm.utilitySvc.handleEvent(vm.close())"
          ng-keydown="vm.utilitySvc.handleEvent(vm.handleKeyDown, $event)" ng-show="$index === 0">
-        <span>{{ vm.platformSvc.getConstant(vm.strings.button_OK_Label) }}</span>
+        <span>{{ vm.platformSvc.getI18nString(vm.strings.button_OK_Label) }}</span>
       </a>
       <a class="prev-link" href="#" ng-click="vm.utilitySvc.handleEvent(vm.displayPreviousPage)"
          ng-keydown="vm.utilitySvc.handleEvent(vm.handleKeyDown, $event)" ng-hide="$index === 0">
-        <span>{{ vm.platformSvc.getConstant(vm.strings.button_Previous_Label) }}</span>
+        <span>{{ vm.platformSvc.getI18nString(vm.strings.button_Previous_Label) }}</span>
       </a>
       <span class="page-number">{{$index + 1}} / {{vm.pages.length}}</span>
       <a class="next-link" href="#" ng-click="vm.utilitySvc.handleEvent(vm.displayNextPage)"
          ng-keydown="vm.utilitySvc.handleEvent(vm.handleKeyDown, $event)" ng-hide="$index === vm.pages.length - 1">
-        <span>{{ vm.platformSvc.getConstant(vm.strings.button_Next_Label) }}</span>
+        <span>{{ vm.platformSvc.getI18nString(vm.strings.button_Next_Label) }}</span>
       </a>
       <a href="#" ng-click="vm.utilitySvc.handleEvent(vm.close())"
          ng-keydown="vm.utilitySvc.handleEvent(vm.handleKeyDown, $event)" ng-show="$index === vm.pages.length - 1">
-        <span>{{ vm.platformSvc.getConstant(vm.strings.button_OK_Label) }}</span>
+        <span>{{ vm.platformSvc.getI18nString(vm.strings.button_OK_Label) }}</span>
       </a>
     </div>
   </div>

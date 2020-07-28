@@ -37,7 +37,7 @@ export default class WebExtBookmarkService implements BookmarkService {
   logSvc: LogService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
-  _syncEngineService: SyncEngineService;
+  _syncEngineSvc: SyncEngineService;
   utilitySvc: UtilityService;
 
   nativeBookmarkEventsQueue: any[] = [];
@@ -77,11 +77,11 @@ export default class WebExtBookmarkService implements BookmarkService {
     this.utilitySvc = UtilitySvc;
   }
 
-  get syncEngineService(): SyncEngineService {
-    if (angular.isUndefined(this._syncEngineService)) {
-      this._syncEngineService = this.$injector.get('SyncEngineService');
+  get syncEngineSvc(): SyncEngineService {
+    if (angular.isUndefined(this._syncEngineSvc)) {
+      this._syncEngineSvc = this.$injector.get('SyncEngineService');
     }
-    return this._syncEngineService;
+    return this._syncEngineSvc;
   }
 
   buildIdMappings(bookmarks: Bookmark[]): ng.IPromise<void> {
@@ -236,7 +236,7 @@ export default class WebExtBookmarkService implements BookmarkService {
   }
 
   checkPermsAndGetPageMetadata(): ng.IPromise<WebpageMetadata> {
-    return this.platformSvc.permissions_Check().then((hasPermissions) => {
+    return this.platformSvc.checkOptionalNativePermissions().then((hasPermissions) => {
       if (!hasPermissions) {
         this.logSvc.logInfo('Do not have permission to read active tab content');
       }
@@ -1223,7 +1223,7 @@ export default class WebExtBookmarkService implements BookmarkService {
     // Iterate through the queue and process the events
     this.utilitySvc.promiseWhile(this.nativeBookmarkEventsQueue, doActionUntil, action).then(() => {
       this.$timeout(() => {
-        this.syncEngineService.executeSync().then(() => {
+        this.syncEngineSvc.executeSync().then(() => {
           // Move native unsupported containers into the correct order
           return this.disableEventListeners().then(this.reorderUnsupportedContainers).then(this.enableEventListeners);
         });
@@ -1279,7 +1279,7 @@ export default class WebExtBookmarkService implements BookmarkService {
     };
 
     // Queue sync but dont execute sync to allow for batch processing multiple changes
-    return this.platformSvc.sync_Queue(sync, MessageCommand.SyncBookmarks, false).catch(() => {
+    return this.platformSvc.queueSync(sync, MessageCommand.SyncBookmarks, false).catch(() => {
       // Swallow error, sync errors thrown searately by processBookmarkEventsQueue
     });
   }

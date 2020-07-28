@@ -1,34 +1,34 @@
 <div class="header-panel clearfix" hm-tap="vm.search.selectedBookmark = null">
-  <button class="btn btn-icon btn-settings" title="{{ vm.platformSvc.getConstant(vm.strings.button_Settings_Label) }}"
+  <button class="btn btn-icon btn-settings" title="{{ vm.platformSvc.getI18nString(vm.strings.button_Settings_Label) }}"
           ng-click="vm.utilitySvc.handleEvent(vm.changeView, vm.view.views.settings)" tabindex="1002">
     <i class="fas fa-cog" aria-hidden="true"></i>
-    <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_Settings_Label) }}</span>
+    <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.button_Settings_Label) }}</span>
   </button>
   <button class="btn btn-icon btn-toggle-bookmark" ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)"
           ng-class="{ 'active': vm.bookmark.active }"
-          title="{{ vm.bookmark.active ? vm.platformSvc.getConstant(vm.strings.button_EditBookmark_Label) : vm.platformSvc.getConstant(vm.strings.button_AddBookmark_Label) }}"
+          title="{{ vm.bookmark.active ? vm.platformSvc.getI18nString(vm.strings.button_EditBookmark_Label) : vm.platformSvc.getI18nString(vm.strings.button_AddBookmark_Label) }}"
           ng-click="vm.utilitySvc.handleEvent(vm.searchForm_ToggleBookmark_Click)" tabindex="1001">
     <i class="far fa-bookmark" aria-hidden="true"></i>
     <span class="sr-only" ng-if="vm.bookmark.active">{{
-      vm.platformSvc.getConstant(vm.strings.button_EditBookmark_Label) }}</span>
+      vm.platformSvc.getI18nString(vm.strings.button_EditBookmark_Label) }}</span>
     <span class="sr-only" ng-if="!vm.bookmark.active">{{
-      vm.platformSvc.getConstant(vm.strings.button_AddBookmark_Label) }}</span>
+      vm.platformSvc.getI18nString(vm.strings.button_AddBookmark_Label) }}</span>
   </button>
-  <button class="btn btn-icon" title="{{ vm.search.displayFolderView ? vm.platformSvc.getConstant(vm.strings.button_SearchResults_Label) : 
-      vm.platformSvc.getConstant(vm.strings.button_BookmarkTree_Label) }}"
+  <button class="btn btn-icon" title="{{ vm.search.displayFolderView ? vm.platformSvc.getI18nString(vm.strings.button_SearchResults_Label) : 
+      vm.platformSvc.getI18nString(vm.strings.button_BookmarkTree_Label) }}"
           ng-click="vm.utilitySvc.handleEvent(vm.searchForm_ToggleView_Click)" tabindex="1000">
     <i class="fas fa-list animate-fade-in" ng-if="vm.search.displayFolderView" aria-hidden="true"></i>
     <i class="fas fa-stream animate-fade-in" ng-if="!vm.search.displayFolderView" aria-hidden="true"></i>
     <span class="sr-only" ng-if="vm.search.displayFolderView">
-      {{ vm.platformSvc.getConstant(vm.strings.button_SearchResults_Label) }}
+      {{ vm.platformSvc.getI18nString(vm.strings.button_SearchResults_Label) }}
     </span>
     <span class="sr-only" ng-if="!vm.search.displayFolderView">
-      {{ vm.platformSvc.getConstant(vm.strings.button_BookmarkTree_Label) }}
+      {{ vm.platformSvc.getI18nString(vm.strings.button_BookmarkTree_Label) }}
     </span>
   </button>
   <div class="search-form form-group btn-icon-container">
     <input type="text" class="form-control" name="txtSearch" maxlength="200"
-           placeholder="{{ vm.platformSvc.getConstant(vm.strings.search_Field_Description) }}"
+           placeholder="{{ vm.platformSvc.getI18nString(vm.strings.search_Field_Description) }}"
            ng-model="vm.search.query" ng-change="vm.searchForm_SearchText_Change()"
            ng-keydown="vm.utilitySvc.handleEvent(vm.searchForm_SearchText_KeyDown, $event)" ng-trim="false"
            autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" tabindex="1" />
@@ -42,24 +42,24 @@
         vm.search.lookahead }}</span>
     </div>
     <button class="btn btn-icon btn-clear" ng-show="vm.search.query"
-            title="{{ vm.platformSvc.getConstant(vm.strings.button_Clear_Label) }}"
+            title="{{ vm.platformSvc.getI18nString(vm.strings.button_Clear_Label) }}"
             ng-click="vm.utilitySvc.handleEvent(vm.searchForm_Clear_Click)">
       <i class="fas fa-times" aria-hidden="true"></i>
     </button>
   </div>
 </div>
 <button class="btn btn-fab fixed" ng-if="vm.utilitySvc.isMobilePlatform(vm.platformName)"
-        title="{{ vm.platformSvc.getConstant(vm.strings.button_AddBookmark_Label) }}"
+        title="{{ vm.platformSvc.getI18nString(vm.strings.button_AddBookmark_Label) }}"
         ng-click="vm.utilitySvc.handleEvent(vm.searchForm_AddBookmark_Click)" tabindex="-1">
   <i class="far fa-bookmark" aria-hidden="true"></i>
-  <span class="sr-only">{{ vm.platformSvc.getConstant(vm.strings.button_AddBookmark_Label) }}</span>
+  <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.button_AddBookmark_Label) }}</span>
 </button>
 <div class="search-results-container" ng-if="!vm.search.displayFolderView" ng-show="vm.search.results">
   <h4 ng-show="!vm.search.query && vm.search.results.length === 0">
-    {{ vm.platformSvc.getConstant(vm.strings.search_NoBookmarks_Message) }}
+    {{ vm.platformSvc.getI18nString(vm.strings.search_NoBookmarks_Message) }}
   </h4>
   <h4 ng-show="vm.search.query && vm.search.results.length === 0">
-    {{ vm.platformSvc.getConstant(vm.strings.search_NoResults_Message) }}
+    {{ vm.platformSvc.getI18nString(vm.strings.search_NoResults_Message) }}
   </h4>
   <div ng-show="vm.search.results.length > 0" infinite-scroll="vm.searchForm_SearchResults_Scroll()"
        infinite-scroll-container="'.search-results-container'">
@@ -68,7 +68,6 @@
               enable-edit-button="!vm.utilitySvc.isMobilePlatform(vm.platformName)"
               enable-select="vm.utilitySvc.isMobilePlatform(vm.platformName)"
               is-selected="vm.search.selectedBookmark ===  result.id" share-bookmark="vm.searchForm_ShareBookmark_Click"
-              visit-bookmark="vm.openUrl"
               hm-press="vm.utilitySvc.handleEvent(vm.searchForm_SelectBookmark_Press, $event,  result.id)"
               ng-keydown="vm.utilitySvc.handleEvent(vm.searchForm_SearchResult_KeyDown, $event)"
               ng-class="{ 'animate': vm.search.selectedBookmark ===  result.id }" tabindex="{{ $index + 1 }}">
@@ -79,10 +78,9 @@
   <bookmark-tree class="root" ng-model="vm.search.bookmarkTree" platform-name="vm.platformName"
                  selected-bookmark="vm.search.selectedBookmark" edit-bookmark="vm.searchForm_UpdateBookmark_Click"
                  select-bookmark="vm.searchForm_SelectBookmark_Press" share-bookmark="vm.searchForm_ShareBookmark_Click"
-                 delete-bookmark="vm.searchForm_DeleteBookmark_Click" open-url="vm.openUrl"
-                 ng-if="vm.search.bookmarkTree">
+                 delete-bookmark="vm.searchForm_DeleteBookmark_Click" ng-if="vm.search.bookmarkTree">
   </bookmark-tree>
   <h4 ng-if="vm.search.bookmarkTree.length === 0">
-    {{ vm.platformSvc.getConstant(vm.strings.search_NoBookmarks_Message) }}
+    {{ vm.platformSvc.getI18nString(vm.strings.search_NoBookmarks_Message) }}
   </h4>
 </div>

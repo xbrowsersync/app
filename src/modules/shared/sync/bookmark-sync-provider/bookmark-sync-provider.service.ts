@@ -76,7 +76,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
     // Stop listening for native bookmark events and clear cached data
     return this.$q
       .all([
-        this.platformSvc.eventListeners_Disable(),
+        this.platformSvc.disableNativeEventListeners(),
         this.storeSvc.remove(StoreKey.BookmarkIdMappings),
         this.storeSvc.remove(StoreKey.Bookmarks),
         this.bookmarkHelperSvc.updateCachedBookmarks(null, null)
@@ -86,7 +86,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
 
   enable(): ng.IPromise<void> {
     // Start listening for native bookmark events
-    return this.platformSvc.eventListeners_Enable();
+    return this.platformSvc.enableNativeEventListeners();
   }
 
   handleUpdateRemoteFailed(err: Error, lastResult: SyncProcessBookmarksData, sync: Sync): ng.IPromise<void> {
@@ -179,7 +179,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
           // Update native bookmarks
           return this.$q((resolve, reject) => {
             this.platformSvc
-              .eventListeners_Disable()
+              .disableNativeEventListeners()
               .then(() => {
                 // Use provided bookmarks to populate native bookmarks
                 if (sync.bookmarks) {
@@ -204,7 +204,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
               })
               .then(resolve)
               .catch(reject)
-              .finally(this.platformSvc.eventListeners_Enable);
+              .finally(this.platformSvc.enableNativeEventListeners);
           }).then(() => {
             // Encrypt bookmarks
             return this.cryptoSvc.encryptData(JSON.stringify(bookmarks)).then((encryptedBookmarks) => {
@@ -278,14 +278,14 @@ export default class BookmarkSyncProviderService implements SyncProvider {
             .then((cachedBookmarks) => {
               // Update browser bookmarks
               return this.platformSvc
-                .eventListeners_Disable()
+                .disableNativeEventListeners()
                 .then(() => {
                   return this.populateNativeBookmarks(cachedBookmarks);
                 })
                 .then(() => {
                   return this.bookmarkSvc.buildIdMappings(cachedBookmarks);
                 })
-                .finally(this.platformSvc.eventListeners_Enable);
+                .finally(this.platformSvc.enableNativeEventListeners);
             })
             .then(() => {
               // Update cached last updated date
@@ -408,14 +408,14 @@ export default class BookmarkSyncProviderService implements SyncProvider {
                   .all([
                     this.apiSvc.updateBookmarks(encryptedBookmarks, true),
                     this.platformSvc
-                      .eventListeners_Disable()
+                      .disableNativeEventListeners()
                       .then(() => {
                         return this.populateNativeBookmarks(bookmarks);
                       })
                       .then(() => {
                         return this.bookmarkSvc.buildIdMappings(bookmarks);
                       })
-                      .finally(this.platformSvc.eventListeners_Enable)
+                      .finally(this.platformSvc.enableNativeEventListeners)
                   ])
                   .then((data) => {
                     processResult.data = {

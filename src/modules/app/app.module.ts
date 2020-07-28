@@ -7,7 +7,6 @@ import NgInfiniteScroll from 'ng-infinite-scroll';
 import ExceptionHandlerService from '../shared/exception/exception-handler/exception-handler.service';
 import Globals from '../shared/global-shared.constants';
 import GlobalSharedModule from '../shared/global-shared.module';
-import AppAlertComponent from './app-alert/app-alert.component';
 import AppHelpComponent from './app-help/app-help.component';
 import PasswordStrengthDirective from './app-login/password-strength/password-strength.directive';
 import AppPermissionsComponent from './app-permissions/app-permissions.component';
@@ -20,7 +19,6 @@ import AppWorkingComponent from './app-working/app-working.component';
 
 @NgModule({
   declarations: [
-    AppAlertComponent,
     AppHelpComponent,
     AppPermissionsComponent,
     AppQrComponent,

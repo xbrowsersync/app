@@ -14,7 +14,6 @@
 
 import './app-main.component.scss';
 import angular from 'angular';
-import { Component } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import * as countriesList from 'countries-list';
 import DOMPurify from 'dompurify';
@@ -22,7 +21,6 @@ import marked from 'marked';
 import _ from 'underscore';
 import Strings from '../../../../res/strings/en.json';
 import { AlertType } from '../../shared/alert/alert.enum';
-import { Alert } from '../../shared/alert/alert.interface';
 import AlertService from '../../shared/alert/alert.service';
 import { ApiServiceStatus } from '../../shared/api/api.enum';
 import { ApiService } from '../../shared/api/api.interface';
@@ -52,19 +50,16 @@ import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service
 import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync } from '../../shared/sync/sync.interface';
 import UtilityService from '../../shared/utility/utility.service';
+import { AppHelperService } from '../app.interface';
 
 @autobind
-@Component({
-  controllerAs: 'vm',
-  selector: 'app',
-  template: require('./app-main.component.html')
-})
 export default class AppMainComponent {
   $exceptionHandler: ExceptionHandler;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
   apiSvc: ApiService;
+  appHelperSvc: AppHelperService;
   backupRestoreSvc: BackupRestoreService;
   bookmarkHelperSvc: BookmarkHelperService;
   bookmarkSvc: BookmarkService;
@@ -73,7 +68,7 @@ export default class AppMainComponent {
   networkSvc: NetworkService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
-  syncEngineService: SyncEngineService;
+  syncEngineSvc: SyncEngineService;
   utilitySvc: UtilityService;
 
   ApiServiceStatus = ApiServiceStatus;
@@ -216,6 +211,7 @@ export default class AppMainComponent {
     '$timeout',
     'AlertService',
     'ApiService',
+    'AppHelperService',
     'BackupRestoreService',
     'BookmarkHelperService',
     'BookmarkService',
@@ -234,6 +230,7 @@ export default class AppMainComponent {
     $timeout: ng.ITimeoutService,
     AlertSvc: AlertService,
     ApiSvc: ApiService,
+    AppHelperSvc: AppHelperService,
     BackupRestoreSvc: BackupRestoreService,
     BookmarkHelperSvc: BookmarkHelperService,
     BookmarkSvc: BookmarkService,
@@ -250,6 +247,7 @@ export default class AppMainComponent {
     this.$timeout = $timeout;
     this.alertSvc = AlertSvc;
     this.apiSvc = ApiSvc;
+    this.appHelperSvc = AppHelperSvc;
     this.backupRestoreSvc = BackupRestoreSvc;
     this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.bookmarkSvc = BookmarkSvc;
@@ -258,7 +256,7 @@ export default class AppMainComponent {
     this.networkSvc = NetworkSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
-    this.syncEngineService = SyncEngineSvc;
+    this.syncEngineSvc = SyncEngineSvc;
     this.utilitySvc = UtilitySvc;
 
     this.bookmarkForm = {};
@@ -325,8 +323,8 @@ export default class AppMainComponent {
     if (!this.settings.dataToRestore) {
       // Display alert
       this.alertSvc.setCurrentAlert({
-        message: this.platformSvc.getConstant(Strings.error_NoDataToRestore_Message),
-        title: this.platformSvc.getConstant(Strings.error_NoDataToRestore_Title),
+        message: this.platformSvc.getI18nString(Strings.error_NoDataToRestore_Message),
+        title: this.platformSvc.getI18nString(Strings.error_NoDataToRestore_Title),
         type: AlertType.Error
       });
       return;
@@ -396,7 +394,7 @@ export default class AppMainComponent {
         const installBackupObj = JSON.parse(installBackup);
         if (installBackupObj?.date && installBackupObj?.bookmarks) {
           const date = new Date(installBackupObj.date);
-          const confirmationMessage = this.platformSvc.getConstant(
+          const confirmationMessage = this.platformSvc.getI18nString(
             Strings.settings_BackupRestore_Revert_Confirmation_Message
           );
           this.settings.revertConfirmationMessage = confirmationMessage.replace('{date}', date.toLocaleDateString());
@@ -410,7 +408,7 @@ export default class AppMainComponent {
 
   backupRestoreForm_ConfirmRevert_Click() {
     // Display loading overlay
-    this.platformSvc.interface_Working_Show();
+    this.platformSvc.showWorkingUI();
 
     // Disable sync and restore native bookmarks to installation state
     return this.$q
@@ -422,7 +420,7 @@ export default class AppMainComponent {
         this.logSvc.logInfo(`Reverting data to installation state from ${installBackupDate.toISOString()}`);
 
         // Set working message
-        this.working.message = this.platformSvc.getConstant(Strings.working_Reverting_Message);
+        this.working.message = this.platformSvc.getI18nString(Strings.working_Reverting_Message);
 
         // Start restore
         return this.queueSync(
@@ -440,7 +438,7 @@ export default class AppMainComponent {
           this.settings.revertCompleted = true;
         });
       })
-      .finally(this.platformSvc.interface_Working_Hide);
+      .finally(this.platformSvc.hideWorkingUI);
   }
 
   backupRestoreForm_CancelRevert_Click() {
@@ -566,7 +564,7 @@ export default class AppMainComponent {
         }
 
         // Display loading overlay
-        const loadingTimeout = this.platformSvc.interface_Working_Show();
+        const loadingTimeout = this.platformSvc.showWorkingUI();
 
         // Create change info and sync changes
         const data: AddBookmarkChangeData = {
@@ -614,7 +612,7 @@ export default class AppMainComponent {
     const bookmarkToRemove = this.bookmark.current;
 
     // Display loading overlay
-    const loadingTimeout = this.platformSvc.interface_Working_Show();
+    const loadingTimeout = this.platformSvc.showWorkingUI();
 
     // Create change info and sync changes
     const data: RemoveBookmarkChangeData = {
@@ -659,7 +657,7 @@ export default class AppMainComponent {
 
       // Display alert
       this.alertSvc.setCurrentAlert({
-        message: this.platformSvc.getConstant(Strings.getMetadata_Success_Message),
+        message: this.platformSvc.getI18nString(Strings.getMetadata_Success_Message),
         type: AlertType.Information
       });
     });
@@ -697,7 +695,7 @@ export default class AppMainComponent {
         }
 
         // Display loading overlay
-        const loadingTimeout = this.platformSvc.interface_Working_Show();
+        const loadingTimeout = this.platformSvc.showWorkingUI();
 
         // Create change info and sync changes
         const data: ModifyBookmarkChangeData = {
@@ -752,22 +750,11 @@ export default class AppMainComponent {
     return this.displayMainView();
   }
 
-  displayReleaseNotes() {
-    return this.platformSvc
-      .getAppVersion()
-      .then((appVersion) => {
-        const versionTag = appVersion.replace(/([a-z]+)\d+$/i, '$1');
-        const url = Globals.ReleaseNotesUrlStem + versionTag;
-        this.openUrl(null, url);
-      })
-      .then(this.displayMainView);
-  }
-
   changeView(view, viewData?) {
     let initNewView;
 
     // Hide loading panel
-    this.platformSvc.interface_Working_Hide();
+    this.platformSvc.hideWorkingUI();
 
     // Initialise new view
     switch (view) {
@@ -807,21 +794,15 @@ export default class AppMainComponent {
 
   checkIfSyncDataRefreshedOnError(err) {
     // If data out of sync display main view
-    return (this.syncEngineService.checkIfRefreshSyncedDataOnError(err)
-      ? this.displayMainView()
-      : this.$q.resolve()
-    ).then(() => {
-      return err;
-    });
+    return (this.syncEngineSvc.checkIfRefreshSyncedDataOnError(err) ? this.displayMainView() : this.$q.resolve()).then(
+      () => {
+        return err;
+      }
+    );
   }
 
   closeQrPanel(): void {
     this.settings.displayQrPanel = false;
-  }
-
-  copyTextToClipboard(text: string): ng.IPromise<void> {
-    // Implemented in platform app component
-    return this.$q.resolve();
   }
 
   getPageMetadataAsBookmarkMetadata(metadata: any): BookmarkMetadata {
@@ -838,7 +819,7 @@ export default class AppMainComponent {
   }
 
   disableSync() {
-    return this.platformSvc.sync_Disable().then(() => {
+    return this.platformSvc.disableSync().then(() => {
       this.sync.dataSize = null;
       this.sync.dataUsed = null;
       this.sync.enabled = false;
@@ -914,17 +895,12 @@ export default class AppMainComponent {
 
         // Beautify json and download data
         const beautifiedJson = JSON.stringify(backupData, null, 2);
-        return this.downloadFile(this.backupRestoreSvc.getBackupFileName(), beautifiedJson, 'backupLink');
+        return this.appHelperSvc.downloadFile(this.backupRestoreSvc.getBackupFileName(), beautifiedJson, 'backupLink');
       })
       .then((message) => {
         // Display message
         this.settings.backupCompletedMessage = message;
       });
-  }
-
-  downloadFile(fileName: string, textContents: string, linkId: string): ng.IPromise<string> {
-    // Implemented in platform app component
-    return this.$q.resolve('');
   }
 
   downloadLogFile() {
@@ -933,7 +909,11 @@ export default class AppMainComponent {
       .get<string[]>(StoreKey.TraceLog)
       .then((debugMessageLog) => {
         // Trigger download
-        return this.downloadFile(this.getLogFileName(), debugMessageLog.join('\r\n'), 'downloadLogFileLink');
+        return this.appHelperSvc.downloadFile(
+          this.getLogFileName(),
+          debugMessageLog.join('\r\n'),
+          'downloadLogFileLink'
+        );
       })
       .then((message) => {
         // Display message
@@ -978,11 +958,6 @@ export default class AppMainComponent {
     return country.name;
   }
 
-  getHelpPages(): string[] {
-    // Implemented in platform app component
-    return [];
-  }
-
   getLogFileName() {
     const fileName = `xbs_log_${this.utilitySvc.getDateTimeString(new Date())}.txt`;
     return fileName;
@@ -1000,11 +975,6 @@ export default class AppMainComponent {
     return this.platformSvc.getPageMetadata(true, url).then(this.getPageMetadataAsBookmarkMetadata);
   }
 
-  getNextScheduledSyncUpdateCheck(): ng.IPromise<string> {
-    // Implemented in platform app component
-    return this.$q.resolve('');
-  }
-
   getServiceStatusTextFromStatusCode(statusCode) {
     if (statusCode == null) {
       return;
@@ -1012,20 +982,20 @@ export default class AppMainComponent {
 
     switch (statusCode) {
       case ApiServiceStatus.NoNewSyncs:
-        return this.platformSvc.getConstant(Strings.settings_Service_Status_NoNewSyncs);
+        return this.platformSvc.getI18nString(Strings.settings_Service_Status_NoNewSyncs);
       case ApiServiceStatus.Offline:
-        return this.platformSvc.getConstant(Strings.settings_Service_Status_Offline);
+        return this.platformSvc.getI18nString(Strings.settings_Service_Status_Offline);
       case ApiServiceStatus.Online:
-        return this.platformSvc.getConstant(Strings.settings_Service_Status_Online);
+        return this.platformSvc.getI18nString(Strings.settings_Service_Status_Online);
       case ApiServiceStatus.Error:
       default:
-        return this.platformSvc.getConstant(Strings.settings_Service_Status_Error);
+        return this.platformSvc.getI18nString(Strings.settings_Service_Status_Error);
     }
   }
 
   init() {
     // Set default working message
-    this.working.message = this.platformSvc.getConstant(Strings.working_Syncing_Message);
+    this.working.message = this.platformSvc.getI18nString(Strings.working_Syncing_Message);
 
     // Get cached prefs from storage
     return this.$q
@@ -1049,7 +1019,7 @@ export default class AppMainComponent {
         this.sync.service.url = cachedData[1];
 
         // Check if a sync is currently in progress
-        return this.sync_Current().then((currentSync) => {
+        return this.appHelperSvc.getCurrentSync().then((currentSync) => {
           if (currentSync) {
             this.logSvc.logInfo('Waiting for syncs to finish...');
 
@@ -1187,7 +1157,7 @@ export default class AppMainComponent {
   }
 
   init_loadingView() {
-    this.platformSvc.interface_Working_Show();
+    this.platformSvc.showWorkingUI();
     return this.$q.resolve();
   }
 
@@ -1287,7 +1257,7 @@ export default class AppMainComponent {
         this.bookmarkHelperSvc.getSyncBookmarksToolbar(),
         this.storeSvc.get([StoreKey.CheckForAppUpdates, StoreKey.TraceLog]),
         this.platformSvc.getAppVersion(),
-        this.platformSvc.permissions_Check()
+        this.platformSvc.checkOptionalNativePermissions()
       ])
       .then((data) => {
         const syncBookmarksToolbar = data[0];
@@ -1306,7 +1276,7 @@ export default class AppMainComponent {
           // Check for available sync updates on non-mobile platforms
           if (this.sync.enabled && !this.utilitySvc.isMobilePlatform(this.platformName)) {
             this.$q
-              .all([this.syncEngineService.checkForUpdates(), this.getNextScheduledSyncUpdateCheck()])
+              .all([this.syncEngineSvc.checkForUpdates(), this.appHelperSvc.getNextScheduledSyncUpdateCheck()])
               .then((data) => {
                 if (data[0]) {
                   this.settings.updatesAvailable = true;
@@ -1371,48 +1341,21 @@ export default class AppMainComponent {
     this.changeView(this.view.views.help);
   }
 
-  openUrl(event?, url?) {
-    if (event) {
-      if (event.preventDefault) {
-        event.preventDefault();
-      }
-      if (event.srcEvent) {
-        event.srcEvent.stopPropagation();
-      }
-    }
-
-    if (url) {
-      this.platformSvc.openUrl(url);
-    } else {
-      this.platformSvc.openUrl(event.currentTarget.href);
-    }
-  }
-
-  permissions_Remove(): ng.IPromise<void> {
-    // Implemented in platform app component
-    return this.$q.resolve();
-  }
-
-  permissions_Request(): ng.IPromise<boolean> {
-    // Implemented in platform app component
-    return this.$q.resolve(true);
-  }
-
   permissions_Revoke_Click() {
-    return this.permissions_Remove().then(() => {
+    return this.appHelperSvc.removePermissions().then(() => {
       this.settings.readWebsiteDataPermissionsGranted = false;
     });
   }
 
   permissions_Request_Click() {
-    return this.permissions_Request().then((granted) => {
+    return this.appHelperSvc.requestPermissions().then((granted) => {
       this.settings.readWebsiteDataPermissionsGranted = granted;
     });
   }
 
   queueSync(sync: Sync, command = MessageCommand.SyncBookmarks): ng.IPromise<any> {
     return this.platformSvc
-      .sync_Queue(sync, command)
+      .queueSync(sync, command)
       .catch((err) => {
         // Swallow error if sync was processed but not committed (offline)
         if (err instanceof Exceptions.SyncUncommittedException) {
@@ -1426,9 +1369,9 @@ export default class AppMainComponent {
       })
       .finally(() => {
         // Hide working panel and restore default message
-        this.platformSvc.interface_Working_Hide();
+        this.platformSvc.hideWorkingUI();
         this.$timeout(() => {
-          this.working.message = this.platformSvc.getConstant(Strings.working_Syncing_Message);
+          this.working.message = this.platformSvc.getI18nString(Strings.working_Syncing_Message);
         }, 1e3);
       });
   }
@@ -1494,7 +1437,7 @@ export default class AppMainComponent {
     return this.refreshSyncDataUsageMeter().then(() => {
       this.settings.displayRestoreForm = false;
       this.settings.dataToRestore = '';
-      this.settings.restoreCompletedMessage = this.platformSvc.getConstant(
+      this.settings.restoreCompletedMessage = this.platformSvc.getI18nString(
         Strings.settings_BackupRestore_RestoreSuccess_Message
       );
 
@@ -1537,8 +1480,8 @@ export default class AppMainComponent {
     }
 
     // Set working message and display loading overlay
-    this.working.message = this.platformSvc.getConstant(Strings.working_Restoring_Message);
-    this.platformSvc.interface_Working_Show();
+    this.working.message = this.platformSvc.getI18nString(Strings.working_Restoring_Message);
+    this.platformSvc.showWorkingUI();
 
     return this.storeSvc
       .get<boolean>(StoreKey.SyncEnabled)
@@ -1577,7 +1520,7 @@ export default class AppMainComponent {
           MessageCommand.RestoreBookmarks
         ).then(this.restoreBookmarksSuccess);
       })
-      .finally(this.platformSvc.interface_Working_Hide);
+      .finally(this.platformSvc.hideWorkingUI);
   }
 
   searchBookmarks() {
@@ -1690,7 +1633,7 @@ export default class AppMainComponent {
 
     this.$timeout(() => {
       // Display loading overlay
-      this.platformSvc.interface_Working_Show();
+      this.platformSvc.showWorkingUI();
 
       // Create change info and sync changes
       const data: RemoveBookmarkChangeData = {
@@ -1931,7 +1874,7 @@ export default class AppMainComponent {
     }
 
     // Trigger native share functionality
-    this.shareBookmark(bookmarkToShare);
+    this.appHelperSvc.shareBookmark(bookmarkToShare);
   }
 
   searchForm_ToggleBookmark_Click() {
@@ -1984,7 +1927,7 @@ export default class AppMainComponent {
     const links = document.querySelectorAll('a.new-tab');
     for (let i = 0; i < links.length; i++) {
       const link = links[i] as any;
-      link.onclick = this.openUrl;
+      link.onclick = this.appHelperSvc.openUrl;
     }
   }
 
@@ -2058,7 +2001,7 @@ export default class AppMainComponent {
 
       // Hide sync confirmation and display loading overlay
       this.settings.displaySyncBookmarksToolbarConfirmation = false;
-      this.platformSvc.interface_Working_Show();
+      this.platformSvc.showWorkingUI();
 
       // Enable setting in cache
       return this.storeSvc.set(StoreKey.SyncBookmarksToolbar, true).then(() => {
@@ -2070,10 +2013,6 @@ export default class AppMainComponent {
     });
   }
 
-  shareBookmark(bookmark: Bookmark): void {
-    // Implemented in platform app component
-  }
-
   startSyncing() {
     const syncData = {} as any;
     let syncInfoMessage;
@@ -2082,7 +2021,7 @@ export default class AppMainComponent {
     this.login.displaySyncConfirmation = false;
     this.login.displayOtherSyncsWarning = false;
     this.login.displayUpgradeConfirmation = false;
-    const loadingTimeout = this.platformSvc.interface_Working_Show();
+    const loadingTimeout = this.platformSvc.showWorkingUI();
 
     // Check service status
     return this.apiSvc
@@ -2174,22 +2113,8 @@ export default class AppMainComponent {
       })
       .finally(() => {
         // Hide loading panel
-        this.platformSvc.interface_Working_Hide(null, loadingTimeout);
+        this.platformSvc.hideWorkingUI(null, loadingTimeout);
       });
-  }
-
-  sync_Current(): ng.IPromise<Sync> {
-    // Implemented in platform app component
-    return this.$q.resolve(null);
-  }
-
-  sync_DisplayConfirmation(): boolean {
-    return true;
-  }
-
-  sync_GetQueueLength(): ng.IPromise<number> {
-    // Implemented in platform app component
-    return this.$q.resolve(0);
   }
 
   syncBookmarksFailed(err, syncData) {
@@ -2223,7 +2148,7 @@ export default class AppMainComponent {
 
   syncBookmarksSuccess(loadingTimeout?, bookmarkStatusActive?) {
     // Hide loading panel
-    this.platformSvc.interface_Working_Hide(null, loadingTimeout);
+    this.platformSvc.hideWorkingUI(null, loadingTimeout);
 
     // If initial sync, switch to search panel
     this.$timeout(() => {
@@ -2258,7 +2183,7 @@ export default class AppMainComponent {
   }
 
   syncForm_EnableSync_Click() {
-    if (this.sync.id && this.sync_DisplayConfirmation()) {
+    if (this.sync.id && this.appHelperSvc.confirmBeforeSyncing()) {
       // Display overwrite data confirmation panel
       this.login.displaySyncConfirmation = true;
       if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
@@ -2351,7 +2276,7 @@ export default class AppMainComponent {
 
   syncForm_SyncUpdates_Click() {
     // Display loading panel
-    const loadingTimeout = this.platformSvc.interface_Working_Show();
+    const loadingTimeout = this.platformSvc.showWorkingUI();
 
     // Pull updates
     return this.queueSync({ type: SyncType.Local }).then(() => {
@@ -2537,7 +2462,10 @@ export default class AppMainComponent {
     const action = () => {
       return this.$q((resolve, reject) => {
         this.$timeout(() => {
-          this.$q.all([this.sync_Current(), this.sync_GetQueueLength()]).then(resolve).catch(reject);
+          this.$q
+            .all([this.appHelperSvc.getCurrentSync(), this.appHelperSvc.getSyncQueueLength()])
+            .then(resolve)
+            .catch(reject);
         }, 1e3);
       });
     };

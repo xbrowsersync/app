@@ -122,7 +122,7 @@ export default class SyncEngineService {
       // Disable sync update check and clear cached data
       return this.$q
         .all([
-          this.platformSvc.automaticUpdates_Stop(),
+          this.platformSvc.stopSyncUpdateChecks(),
           this.storeSvc.remove(StoreKey.Password),
           this.storeSvc.remove(StoreKey.SyncVersion),
           this.storeSvc.set(StoreKey.SyncEnabled, false)
@@ -139,7 +139,7 @@ export default class SyncEngineService {
           this.setIsSyncing();
 
           // Update browser action icon
-          this.platformSvc.interface_Refresh();
+          this.platformSvc.refreshNativeInterface();
           this.logSvc.logInfo('Sync disabled');
         });
     });
@@ -147,12 +147,12 @@ export default class SyncEngineService {
 
   enableSync(): ng.IPromise<void> {
     return this.$q
-      .all([this.storeSvc.set(StoreKey.SyncEnabled, true), this.platformSvc.automaticUpdates_Start()])
+      .all([this.storeSvc.set(StoreKey.SyncEnabled, true), this.platformSvc.startSyncUpdateChecks()])
       .then(() => {
         // Enable syncing for registered providers
         return this.$q.all(this.providers.map((provider) => provider.enable()));
       })
-      .then(() => this.platformSvc.interface_Refresh(true));
+      .then(() => this.platformSvc.refreshNativeInterface(true));
   }
 
   executeSync(isBackgroundSync = false): ng.IPromise<any> {
@@ -190,7 +190,7 @@ export default class SyncEngineService {
     let syncException = err;
     return this.$q<Error>((resolve, reject) => {
       // Update browser action icon
-      this.platformSvc.interface_Refresh();
+      this.platformSvc.refreshNativeInterface();
 
       // If offline and sync is a change, swallow error and place failed sync back on the queue
       if (err instanceof Exceptions.NetworkOfflineException && failedSync.type !== SyncType.Local) {
@@ -226,7 +226,7 @@ export default class SyncEngineService {
                 this.storeSvc.set(StoreKey.LastUpdated, new Date().toISOString());
                 if (this.checkIfRefreshSyncedDataOnError(syncException)) {
                   this.currentSync = null;
-                  return this.platformSvc.refreshLocalSyncData().catch((refreshErr) => {
+                  return this.platformSvc.queueLocalResync().catch((refreshErr) => {
                     syncException = refreshErr;
                   });
                 }
@@ -321,7 +321,7 @@ export default class SyncEngineService {
       .get<boolean>(StoreKey.SyncEnabled)
       .then((cachedSyncEnabled) => {
         if (cachedSyncEnabled) {
-          return this.platformSvc.automaticUpdates_Stop();
+          return this.platformSvc.stopSyncUpdateChecks();
         }
       })
       .then(() => {
@@ -373,7 +373,7 @@ export default class SyncEngineService {
         // Start auto updates if sync enabled
         return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((cachedSyncEnabled) => {
           if (cachedSyncEnabled) {
-            return this.platformSvc.automaticUpdates_Start();
+            return this.platformSvc.startSyncUpdateChecks();
           }
         });
       });
@@ -438,11 +438,11 @@ export default class SyncEngineService {
   setIsSyncing(syncType?: SyncType): ng.IPromise<void> {
     // Update browser action icon with current sync type
     if (syncType != null) {
-      return this.platformSvc.interface_Refresh(null, syncType);
+      return this.platformSvc.refreshNativeInterface(null, syncType);
     }
 
     // Get cached sync enabled value and update browser action icon
-    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then(this.platformSvc.interface_Refresh);
+    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then(this.platformSvc.refreshNativeInterface);
   }
 
   sync_handleCancel(): ng.IPromise<void> {

@@ -5,7 +5,7 @@
   <h3>{{ vm.message }}</h3>
   <div class="buttons" ng-if="vm.enableCancelSync">
     <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.cancelSync())">
-      {{ vm.platformSvc.getConstant(vm.strings.button_Cancel_Label) }}
+      {{ vm.platformSvc.getI18nString(vm.strings.button_Cancel_Label) }}
     </button>
   </div>
 </div>

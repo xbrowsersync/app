@@ -1,20 +1,20 @@
-import './app-alert.component.scss';
+import './webext-app-alert.component.scss';
 import angular from 'angular';
 import { Component } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
-import Strings from '../../../../res/strings/en.json';
-import { Alert } from '../../shared/alert/alert.interface';
-import AlertService from '../../shared/alert/alert.service';
-import { PlatformService } from '../../shared/global-shared.interface';
-import UtilityService from '../../shared/utility/utility.service';
+import Strings from '../../../../../res/strings/en.json';
+import { Alert } from '../../../shared/alert/alert.interface';
+import AlertService from '../../../shared/alert/alert.service';
+import { PlatformService } from '../../../shared/global-shared.interface';
+import UtilityService from '../../../shared/utility/utility.service';
 
 @autobind
 @Component({
   controllerAs: 'vm',
-  selector: 'alertPanel',
-  template: require('./app-alert.component.html')
+  selector: 'appAlert',
+  template: require('./webext-app-alert.component.html')
 })
-export default class AppAlertComponent {
+export default class WebExtAppAlertComponent {
   $scope: ng.IScope;
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
@@ -45,15 +45,6 @@ export default class AppAlertComponent {
         if (newVal !== oldVal) {
           this.alert = newVal;
           this.showAlert = !angular.isUndefined(newVal ?? undefined);
-        }
-      }
-    );
-
-    $scope.$watch(
-      () => PlatformSvc.showAlert,
-      (newVal, oldVal) => {
-        if (newVal !== oldVal) {
-          this.showAlert = newVal;
         }
       }
     );

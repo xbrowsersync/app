@@ -1,11 +1,11 @@
 <div id="qr"></div>
-<p>{{ vm.platformSvc.getConstant(vm.strings.qr_Message) }}</p>
+<p>{{ vm.platformSvc.getI18nString(vm.strings.qr_Message) }}</p>
 <div class="buttons">
   <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.copySyncId)"
           ng-disabled="vm.syncIdCopied">
-    {{ vm.syncIdCopied ? vm.platformSvc.getConstant(vm.strings.qr_Copied_Label) : vm.platformSvc.getConstant(vm.strings.qr_CopySyncId_Label) }}
+    {{ vm.syncIdCopied ? vm.platformSvc.getI18nString(vm.strings.qr_Copied_Label) : vm.platformSvc.getI18nString(vm.strings.qr_CopySyncId_Label) }}
   </button>
   <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.close())">
-    {{ vm.platformSvc.getConstant(vm.strings.button_Close_Label) }}
+    {{ vm.platformSvc.getI18nString(vm.strings.button_Close_Label) }}
   </button>
 </div>

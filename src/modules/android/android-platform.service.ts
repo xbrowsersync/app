@@ -6,6 +6,7 @@ import compareVersions from 'compare-versions';
 import { autobind } from 'core-decorators';
 import Strings from '../../../res/strings/en.json';
 import { Alert } from '../shared/alert/alert.interface';
+import AlertService from '../shared/alert/alert.service';
 import BookmarkHelperService from '../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkChangeType } from '../shared/bookmark/bookmark.enum';
 import { BookmarkMetadata } from '../shared/bookmark/bookmark.interface';
@@ -20,6 +21,7 @@ import StoreService from '../shared/store/store.service';
 import SyncEngineService from '../shared/sync/sync-engine/sync-engine.service';
 import { Sync } from '../shared/sync/sync.interface';
 import UtilityService from '../shared/utility/utility.service';
+import { AndroidAlert } from './android-app/android-app.interface';
 
 @autobind
 @Injectable('PlatformService')
@@ -29,11 +31,12 @@ export default class AndroidPlatformService implements PlatformService {
   $interval: ng.IIntervalService;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
+  alertSvc: AlertService;
   bookmarkHelperSvc: BookmarkHelperService;
   logSvc: LogService;
   networkSvc: NetworkService;
   storeSvc: StoreService;
-  syncEngineService: SyncEngineService;
+  syncEngineSvc: SyncEngineService;
   utilitySvc: UtilityService;
 
   backgroundSyncInterval: ng.IPromise<void>;
@@ -49,6 +52,7 @@ export default class AndroidPlatformService implements PlatformService {
     '$interval',
     '$q',
     '$timeout',
+    'AlertService',
     'BookmarkHelperService',
     'LogService',
     'NetworkService',
@@ -62,6 +66,7 @@ export default class AndroidPlatformService implements PlatformService {
     $interval: ng.IIntervalService,
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
+    AlertSvc: AlertService,
     BookmarkHelperSvc: BookmarkHelperService,
     LogSvc: LogService,
     NetworkSvc: NetworkService,
@@ -74,22 +79,15 @@ export default class AndroidPlatformService implements PlatformService {
     this.$interval = $interval;
     this.$q = $q;
     this.$timeout = $timeout;
+    this.alertSvc = AlertSvc;
     this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.logSvc = LogSvc;
     this.networkSvc = NetworkSvc;
     this.storeSvc = StoreSvc;
-    this.syncEngineService = SyncEngineSvc;
+    this.syncEngineSvc = SyncEngineSvc;
     this.utilitySvc = UtilitySvc;
 
     this.i18nStrings = [];
-  }
-
-  automaticUpdates_Start(): ng.IPromise<void> {
-    return this.methodNotApplicable();
-  }
-
-  automaticUpdates_Stop(): ng.IPromise<void> {
-    return this.methodNotApplicable();
   }
 
   checkForDarkTheme(): ng.IPromise<void> {
@@ -131,15 +129,13 @@ export default class AndroidPlatformService implements PlatformService {
             return;
           }
 
-          this.vm.displaySnackbar(
-            null,
-            this.getConstant(Strings.appUpdateAvailable_Android_Message).replace('{version}', newVersion),
-            null,
-            this.getConstant(Strings.button_View_Label),
-            () => {
+          this.alertSvc.setCurrentAlert({
+            message: this.getI18nString(Strings.appUpdateAvailable_Android_Message).replace('{version}', newVersion),
+            action: this.getI18nString(Strings.button_View_Label),
+            actionCallback: () => {
               this.openUrl(Globals.ReleaseNotesUrlStem + (newVersion as string).replace(/^v/, ''));
             }
-          );
+          } as AndroidAlert);
         });
       });
     }, 1e3);
@@ -163,6 +159,10 @@ export default class AndroidPlatformService implements PlatformService {
     });
   }
 
+  checkOptionalNativePermissions(): ng.IPromise<boolean> {
+    return this.methodNotApplicable();
+  }
+
   disableBackgroundSync(): void {
     if (!this.backgroundSyncInterval) {
       return;
@@ -171,6 +171,14 @@ export default class AndroidPlatformService implements PlatformService {
     this.$interval.cancel(this.backgroundSyncInterval);
     this.backgroundSyncInterval = null;
     window.cordova.plugins.backgroundMode.disable();
+  }
+
+  disableSync(): ng.IPromise<any> {
+    return this.syncEngineSvc.disableSync();
+  }
+
+  disableNativeEventListeners(): ng.IPromise<void> {
+    return this.methodNotApplicable();
   }
 
   enableBackgroundSync(): void {
@@ -193,11 +201,7 @@ export default class AndroidPlatformService implements PlatformService {
     }, 120e3);
   }
 
-  eventListeners_Disable(): ng.IPromise<void> {
-    return this.methodNotApplicable();
-  }
-
-  eventListeners_Enable(): ng.IPromise<void> {
+  enableNativeEventListeners(): ng.IPromise<void> {
     return this.methodNotApplicable();
   }
 
@@ -206,11 +210,11 @@ export default class AndroidPlatformService implements PlatformService {
 
     // Display loading panel if not background sync and currently on the search view
     if (!isBackgroundSync) {
-      displayLoadingTimeout = this.interface_Working_Show(displayLoadingId);
+      displayLoadingTimeout = this.showWorkingUI(displayLoadingId);
     }
 
     // Sync bookmarks
-    return this.syncEngineService
+    return this.syncEngineSvc
       .executeSync(isBackgroundSync)
       .then(() => {
         // Disable background sync if sync successfull
@@ -219,7 +223,7 @@ export default class AndroidPlatformService implements PlatformService {
         }
       })
       .finally(() => {
-        this.interface_Working_Hide(displayLoadingId, displayLoadingTimeout);
+        this.hideWorkingUI(displayLoadingId, displayLoadingTimeout);
       });
   }
 
@@ -229,8 +233,8 @@ export default class AndroidPlatformService implements PlatformService {
     // If not online display an alert and return
     if (!isOnline) {
       this.vm.displayAlert({
-        message: this.getConstant(Strings.workingOffline_Message),
-        title: this.getConstant(Strings.workingOffline_Title)
+        message: this.getI18nString(Strings.workingOffline_Message),
+        title: this.getI18nString(Strings.workingOffline_Title)
       } as Alert);
 
       return this.$q.resolve(false);
@@ -284,7 +288,11 @@ export default class AndroidPlatformService implements PlatformService {
     return this.$q.resolve().then(window.cordova.getAppVersion.getVersionNumber);
   }
 
-  getConstant(i18nString: I18nString): string {
+  getCurrentUrl(): ng.IPromise<string> {
+    return this.$q.resolve(this.currentPage?.url);
+  }
+
+  getI18nString(i18nString: I18nString): string {
     let message = '';
 
     if (i18nString?.key) {
@@ -296,10 +304,6 @@ export default class AndroidPlatformService implements PlatformService {
     }
 
     return message;
-  }
-
-  getCurrentUrl(): ng.IPromise<string> {
-    return this.$q.resolve(this.currentPage?.url);
   }
 
   getPageMetadata(getFullMetadata = true, pageUrl?: string): ng.IPromise<WebpageMetadata> {
@@ -327,7 +331,7 @@ export default class AndroidPlatformService implements PlatformService {
       }
 
       const handleResponse = (pageContent?: string, err?: Error): void => {
-        this.interface_Working_Hide('retrievingMetadata', timeout);
+        this.hideWorkingUI('retrievingMetadata', timeout);
 
         // Cancel timeout
         if (loadUrlTimeout) {
@@ -445,7 +449,7 @@ export default class AndroidPlatformService implements PlatformService {
       const cancelledCallback = (): void => {
         resolve(metadata);
       };
-      timeout = this.interface_Working_Show('retrievingMetadata', cancelledCallback);
+      timeout = this.showWorkingUI('retrievingMetadata', cancelledCallback);
       inAppBrowser = window.cordova.InAppBrowser.open(metadata.url, '_blank', 'hidden=yes');
 
       inAppBrowser.addEventListener('loaderror', (event: any) => {
@@ -723,6 +727,18 @@ export default class AndroidPlatformService implements PlatformService {
       });
   }
 
+  hideWorkingUI(id?: string, timeout?: ng.IPromise<void>): void {
+    if (timeout) {
+      this.$timeout.cancel(timeout);
+    }
+
+    // Hide loading panel if supplied if matches current
+    if (!this.loadingId || id === this.loadingId) {
+      window.SpinnerDialog.hide();
+      this.loadingId = null;
+    }
+  }
+
   initI18n(): ng.IPromise<void> {
     let i18nCode = 'en';
     return this.$q<any>((resolve, reject) => {
@@ -746,23 +762,87 @@ export default class AndroidPlatformService implements PlatformService {
       });
   }
 
-  interface_Refresh(): ng.IPromise<void> {
+  isTextInput(element: Element): boolean {
+    return ['INPUT', 'TEXTAREA'].indexOf(element.nodeName) !== -1;
+  }
+
+  methodNotApplicable(): ng.IPromise<any> {
+    // Unused for this platform
+    return this.$q.resolve();
+  }
+
+  openUrl(url: string): void {
+    window.open(url, '_system', '');
+  }
+
+  queueLocalResync(): ng.IPromise<void> {
+    return this.$q.resolve();
+  }
+
+  queueSync(sync: Sync, command = MessageCommand.SyncBookmarks): ng.IPromise<any> {
+    // Add sync data to queue and run sync
+    return this.syncEngineSvc
+      .queueSync(sync)
+      .then(() => {
+        if (sync.changeInfo === undefined) {
+          return;
+        }
+        return this.$q.resolve(sync.changeInfo).then((changeInfo) => {
+          switch (true) {
+            case changeInfo.type === BookmarkChangeType.Add:
+              this.$timeout(() => {
+                this.vm.displayAlert({
+                  message: this.getI18nString(Strings.bookmarkCreated_Message)
+                } as Alert);
+              }, 200);
+              break;
+            case changeInfo.type === BookmarkChangeType.Modify:
+              this.$timeout(() => {
+                this.vm.displayAlert({
+                  message: this.getI18nString(Strings.bookmarkUpdated_Message)
+                } as Alert);
+              }, 200);
+              break;
+            case changeInfo.type === BookmarkChangeType.Remove:
+              this.$timeout(() => {
+                this.vm.displayAlert({
+                  message: this.getI18nString(Strings.bookmarkDeleted_Message)
+                } as Alert);
+              }, 200);
+              break;
+            default:
+          }
+        });
+      })
+      .catch((err) => {
+        // If local data out of sync, queue refresh sync
+        return (this.syncEngineSvc.checkIfRefreshSyncedDataOnError(err)
+          ? this.queueLocalResync()
+          : this.$q.resolve()
+        ).then(() => {
+          // Add uncommitted syncs back to the queue and notify
+          if (err instanceof Exceptions.SyncUncommittedException) {
+            sync.changeInfo = undefined;
+            this.syncEngineSvc.queueSync(sync, false);
+            this.logSvc.logInfo('Sync not committed: network offline');
+            this.vm.displayAlert({
+              message: this.getI18nString(Strings.error_UncommittedSyncs_Message),
+              title: this.getI18nString(Strings.error_UncommittedSyncs_Title)
+            } as Alert);
+            this.enableBackgroundSync();
+            return;
+          }
+
+          throw err;
+        });
+      });
+  }
+
+  refreshNativeInterface(): ng.IPromise<void> {
     return this.methodNotApplicable();
   }
 
-  interface_Working_Hide(id?: string, timeout?: ng.IPromise<void>): void {
-    if (timeout) {
-      this.$timeout.cancel(timeout);
-    }
-
-    // Hide loading panel if supplied if matches current
-    if (!this.loadingId || id === this.loadingId) {
-      window.SpinnerDialog.hide();
-      this.loadingId = null;
-    }
-  }
-
-  interface_Working_Show(id?: string, cancelledCallback?: () => void): ng.IPromise<void> {
+  showWorkingUI(id?: string, cancelledCallback?: () => void): ng.IPromise<void> {
     let timeout: ng.IPromise<void>;
 
     // Return if loading overlay already displayed
@@ -788,13 +868,13 @@ export default class AndroidPlatformService implements PlatformService {
         };
         window.SpinnerDialog.hide();
         timeout = this.$timeout(() => {
-          window.SpinnerDialog.show(null, this.getConstant(Strings.getMetadata_Message), cancel);
+          window.SpinnerDialog.show(null, this.getI18nString(Strings.getMetadata_Message), cancel);
         }, 250);
         break;
       // Display default overlay
       default:
         timeout = this.$timeout(() => {
-          window.SpinnerDialog.show(null, `${this.getConstant(Strings.working_Syncing_Message)}…`, true);
+          window.SpinnerDialog.show(null, `${this.getI18nString(Strings.working_Syncing_Message)}…`, true);
         });
         break;
     }
@@ -803,88 +883,12 @@ export default class AndroidPlatformService implements PlatformService {
     return timeout;
   }
 
-  isTextInput(element: Element): boolean {
-    return ['INPUT', 'TEXTAREA'].indexOf(element.nodeName) !== -1;
-  }
-
-  methodNotApplicable(): ng.IPromise<any> {
-    // Unused for this platform
-    return this.$q.resolve();
-  }
-
-  openUrl(url: string): void {
-    window.open(url, '_system', '');
-  }
-
-  permissions_Check(): ng.IPromise<boolean> {
+  startSyncUpdateChecks(): ng.IPromise<void> {
     return this.methodNotApplicable();
   }
 
-  refreshLocalSyncData(): ng.IPromise<void> {
-    return this.$q.resolve();
-  }
-
-  sync_Queue(sync: Sync, command = MessageCommand.SyncBookmarks): ng.IPromise<any> {
-    // Add sync data to queue and run sync
-    return this.syncEngineService
-      .queueSync(sync)
-      .then(() => {
-        if (sync.changeInfo === undefined) {
-          return;
-        }
-        return this.$q.resolve(sync.changeInfo).then((changeInfo) => {
-          switch (true) {
-            case changeInfo.type === BookmarkChangeType.Add:
-              this.$timeout(() => {
-                this.vm.displayAlert({
-                  message: this.getConstant(Strings.bookmarkCreated_Message)
-                } as Alert);
-              }, 200);
-              break;
-            case changeInfo.type === BookmarkChangeType.Modify:
-              this.$timeout(() => {
-                this.vm.displayAlert({
-                  message: this.getConstant(Strings.bookmarkUpdated_Message)
-                } as Alert);
-              }, 200);
-              break;
-            case changeInfo.type === BookmarkChangeType.Remove:
-              this.$timeout(() => {
-                this.vm.displayAlert({
-                  message: this.getConstant(Strings.bookmarkDeleted_Message)
-                } as Alert);
-              }, 200);
-              break;
-            default:
-          }
-        });
-      })
-      .catch((err) => {
-        // If local data out of sync, queue refresh sync
-        return (this.syncEngineService.checkIfRefreshSyncedDataOnError(err)
-          ? this.refreshLocalSyncData()
-          : this.$q.resolve()
-        ).then(() => {
-          // Add uncommitted syncs back to the queue and notify
-          if (err instanceof Exceptions.SyncUncommittedException) {
-            sync.changeInfo = undefined;
-            this.syncEngineService.queueSync(sync, false);
-            this.logSvc.logInfo('Sync not committed: network offline');
-            this.vm.displayAlert({
-              message: this.getConstant(Strings.error_UncommittedSyncs_Message),
-              title: this.getConstant(Strings.error_UncommittedSyncs_Title)
-            } as Alert);
-            this.enableBackgroundSync();
-            return;
-          }
-
-          throw err;
-        });
-      });
-  }
-
-  sync_Disable(): ng.IPromise<any> {
-    return this.syncEngineService.disableSync();
+  stopSyncUpdateChecks(): ng.IPromise<void> {
+    return this.methodNotApplicable();
   }
 
   upgradeTo160(): ng.IPromise<void> {

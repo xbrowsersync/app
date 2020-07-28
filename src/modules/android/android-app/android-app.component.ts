@@ -1,17 +1,11 @@
 import './android-app.component.scss';
 import { Component, OnInit } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
-import Strings from '../../../../res/strings/en.json';
 import AppMainComponent from '../../app/app-main/app-main.component';
-import { AlertType } from '../../shared/alert/alert.enum';
-import { Alert } from '../../shared/alert/alert.interface';
-import { Bookmark } from '../../shared/bookmark/bookmark.interface';
-import { AndroidException } from '../../shared/exception/exception';
 import * as Exceptions from '../../shared/exception/exception';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformType } from '../../shared/global-shared.enum';
 import { StoreKey } from '../../shared/store/store.enum';
-import { Sync } from '../../shared/sync/sync.interface';
 import AndroidPlatformService from '../android-platform.service';
 
 @autobind
@@ -28,12 +22,6 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     invalidSyncId: false,
     lightEnabled: false
   };
-
-  copyTextToClipboard(text: string): ng.IPromise<void> {
-    return this.$q<void>((resolve, reject) => {
-      window.cordova.plugins.clipboard.copy(text, resolve, reject);
-    }).then(() => {});
-  }
 
   decodeQrCode(qrCodeValue: string): any {
     let serviceUrl: string;
@@ -73,107 +61,9 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     });
   }
 
-  displayAlert(alert: Alert): void {
-    this.displaySnackbar(alert.title, alert.message, alert.type);
-  }
-
-  displaySnackbar(title, description, level, action?, actionCallback?) {
-    // Strip html tags from message
-    const urlRegex = new RegExp(Globals.URL.ValidUrlRegex);
-    const matches = description.match(urlRegex);
-    const descriptionStripped =
-      matches?.length === 0
-        ? description
-        : new DOMParser().parseFromString(`<span>${description}</span>`, 'text/xml').firstElementChild.textContent;
-
-    // Add an action to open url if provided or if the message contains a url
-    if (!actionCallback && matches?.length > 0) {
-      const urlToOpenOnClick = matches[0];
-      action = this.platformSvc.getConstant(Strings.button_Go_Label);
-      actionCallback = () => {
-        this.platformSvc.openUrl(urlToOpenOnClick);
-      };
-    }
-
-    const text = `${(title ? `${title}. ${descriptionStripped}` : descriptionStripped).replace(/\.$/, '')}.`;
-    const textColor = '#ffffff';
-    let bgColor = null;
-    switch (level) {
-      case AlertType.Error:
-        bgColor = '#ea3869';
-        break;
-      case AlertType.Warning:
-        bgColor = '#bdc71b';
-        break;
-      case AlertType.Information:
-      default:
-        bgColor = '#083039';
-        break;
-    }
-    const success = (clicked) => {
-      if (clicked && actionCallback) {
-        actionCallback();
-      }
-    };
-    const failure = (errMessage) => {
-      this.$exceptionHandler(new AndroidException('Failed to create snackbar'), errMessage);
-    };
-
-    // Ensure soft keyboard is hidden
-    if (document.activeElement) {
-      (document.activeElement as HTMLInputElement).blur();
-    }
-
-    // Display snackbar
-    window.cordova.plugins.snackbar.create(text, 5000, bgColor, textColor, 3, action, success, failure);
-  }
-
   displayDefaultSearchState() {
     // Set clear search button to display all bookmarks
     return super.displayDefaultSearchState().then(this.searchBookmarks);
-  }
-
-  downloadFile(fileName: string, textContents: string): ng.IPromise<string> {
-    if (!fileName) {
-      throw new Error('File name not supplied.');
-    }
-
-    // Set file storage location to external storage root directory
-    const storageLocation = `${window.cordova.file.externalRootDirectory}Download`;
-
-    return this.$q((resolve, reject) => {
-      const onError = (err: Error) => {
-        return reject(new Exceptions.FailedDownloadFileException(undefined, err));
-      };
-
-      this.logSvc.logInfo(`Downloading file ${fileName}`);
-
-      // Save file to storage location
-      window.resolveLocalFileSystemURL(
-        storageLocation,
-        (dirEntry) => {
-          dirEntry.getFile(
-            fileName,
-            { create: true },
-            (fileEntry) => {
-              fileEntry.createWriter((fileWriter) => {
-                fileWriter.write(textContents);
-                fileWriter.onerror = onError;
-                fileWriter.onwriteend = () => {
-                  // Return message to be displayed
-                  const message = this.platformSvc
-                    .getConstant(Strings.downloadFile_Success_Message)
-                    .replace('{fileName}', fileEntry.name);
-                  resolve(message);
-                };
-              }, onError);
-            },
-            onError
-          );
-        },
-        onError
-      );
-    });
   }
 
   enableLight(): ng.IPromise<void> {
@@ -185,20 +75,6 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
         resolve();
       });
     });
-  }
-
-  getHelpPages(): string[] {
-    const pages = [
-      this.platformSvc.getConstant(Strings.help_Page_Welcome_Android_Content),
-      this.platformSvc.getConstant(Strings.help_Page_FirstSync_Android_Content),
-      this.platformSvc.getConstant(Strings.help_Page_ExistingId_Android_Content),
-      this.platformSvc.getConstant(Strings.help_Page_Searching_Android_Content),
-      this.platformSvc.getConstant(Strings.help_Page_AddingBookmarks_Android_Content),
-      this.platformSvc.getConstant(Strings.help_Page_BackingUp_Android_Content),
-      this.platformSvc.getConstant(Strings.help_Page_FurtherSupport_Content)
-    ];
-
-    return pages;
   }
 
   init() {
@@ -240,7 +116,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     this.init();
   }
 
-  scanner_Start(): ng.IPromise<any> {
+  startScanning(): ng.IPromise<any> {
     this.scanner.lightEnabled = false;
     this.scanner.invalidSyncId = false;
 
@@ -298,7 +174,8 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     });
   }
 
-  scanner_Stop(): ng.IPromise<void> {
+  stopScanning(): ng.IPromise<void> {
+    this.scanner.lightEnabled = false;
     this.disableLight()
       .catch(() => {})
       .finally(() => {
@@ -309,7 +186,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     return this.$q.resolve();
   }
 
-  scanner_ToggleLight(switchOn?: boolean): ng.IPromise<boolean> {
+  toggleCameraLight(switchOn?: boolean): ng.IPromise<boolean> {
     // If state was elected toggle light based on value
     if (switchOn !== undefined) {
       return (switchOn ? this.enableLight() : this.disableLight()).then(() => {
@@ -331,46 +208,19 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
 
   scanPanel_Cancel_Click() {
     this.login.displayGetSyncIdPanel = false;
-    return this.displayMainView().then(this.scanner_Stop);
+    return this.displayMainView().then(this.stopScanning);
   }
 
   scanPanel_ToggleLight_Click() {
-    return this.scanner_ToggleLight().then((lightEnabled) => {
+    return this.toggleCameraLight().then((lightEnabled) => {
       this.scanner.lightEnabled = lightEnabled;
     });
-  }
-
-  shareBookmark(bookmark: Bookmark): void {
-    const options = {
-      subject: `${bookmark.title} (${this.platformSvc.getConstant(Strings.shareBookmark_Message)})`,
-      url: bookmark.url,
-      chooserTitle: this.platformSvc.getConstant(Strings.shareBookmark_Message)
-    };
-
-    const onError = (err: Error) => {
-      this.$exceptionHandler(err);
-    };
-
-    // Display share sheet
-    window.plugins.socialsharing.shareWithOptions(options, null, onError);
-  }
-
-  sync_Current(): ng.IPromise<Sync> {
-    return this.$q.resolve(this.syncEngineService.getCurrentSync());
-  }
-
-  sync_DisplayConfirmation(): boolean {
-    return false;
-  }
-
-  sync_GetQueueLength(): ng.IPromise<number> {
-    return this.$q.resolve(this.syncEngineService.getSyncQueueLength());
   }
 
   syncForm_ScanCode_Click() {
     let scanSuccess = false;
 
-    this.scanner_Start()
+    this.startScanning()
       .then((scannedSyncInfo: any) => {
         // Update stored sync id and service values
         scanSuccess = true;
@@ -383,7 +233,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
       .finally(() => {
         this.displayMainView().then(() => {
           // Stop scanning
-          this.scanner_Stop();
+          this.stopScanning();
 
           // If ID was scanned focus on password field
           if (scanSuccess) {

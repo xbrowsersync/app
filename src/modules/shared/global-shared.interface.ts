@@ -15,25 +15,24 @@ export interface Message {
 }
 
 export interface PlatformService {
-  automaticUpdates_Start: () => ng.IPromise<void>;
-  automaticUpdates_Stop: () => ng.IPromise<void>;
-  eventListeners_Enable: () => ng.IPromise<void>;
-  eventListeners_Disable: () => ng.IPromise<void>;
+  checkOptionalNativePermissions: () => ng.IPromise<boolean>;
+  disableNativeEventListeners: () => ng.IPromise<void>;
+  disableSync: () => ng.IPromise<any>;
+  enableNativeEventListeners: () => ng.IPromise<void>;
   getAppVersion: () => ng.IPromise<string>;
-  getConstant: (i18nString: I18nString) => string;
   getCurrentUrl: () => ng.IPromise<string>;
+  getI18nString: (i18nString: I18nString) => string;
   getNewTabUrl?: () => string;
   getPageMetadata: (getFullMetadata?: boolean, pageUrl?: string) => ng.IPromise<WebpageMetadata>;
-  interface_Refresh: (syncEnabled?: boolean, syncType?: SyncType) => ng.IPromise<void>;
-  interface_Working_Hide: (id?: string, timeout?: ng.IPromise<void>) => void;
-  interface_Working_Show: (id?: string) => ng.IPromise<void>;
+  hideWorkingUI: (id?: string, timeout?: ng.IPromise<void>) => void;
   openUrl: (url: string) => void;
-  permissions_Check: () => ng.IPromise<boolean>;
-  refreshLocalSyncData: () => ng.IPromise<void>;
-  showAlert?: boolean;
+  queueLocalResync: () => ng.IPromise<void>;
+  queueSync: (sync: Sync, command?: MessageCommand, runSync?: boolean) => ng.IPromise<any>;
+  refreshNativeInterface: (syncEnabled?: boolean, syncType?: SyncType) => ng.IPromise<void>;
   showWorking?: boolean;
-  sync_Disable: () => ng.IPromise<any>;
-  sync_Queue: (sync: Sync, command?: MessageCommand, runSync?: boolean) => ng.IPromise<any>;
+  showWorkingUI: (id?: string) => ng.IPromise<void>;
+  startSyncUpdateChecks: () => ng.IPromise<void>;
+  stopSyncUpdateChecks: () => ng.IPromise<void>;
   urlIsSupported: (url: string) => boolean;
 }
 

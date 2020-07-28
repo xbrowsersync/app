@@ -227,16 +227,16 @@ export default class BookmarkHelperService {
     let containerTitle: string;
     switch (bookmark.title) {
       case BookmarkContainer.Menu:
-        containerTitle = this.platformSvc.getConstant(Strings.bookmarks_Container_Menu_Title);
+        containerTitle = this.platformSvc.getI18nString(Strings.bookmarks_Container_Menu_Title);
         break;
       case BookmarkContainer.Mobile:
-        containerTitle = this.platformSvc.getConstant(Strings.bookmarks_Container_Mobile_Title);
+        containerTitle = this.platformSvc.getI18nString(Strings.bookmarks_Container_Mobile_Title);
         break;
       case BookmarkContainer.Other:
-        containerTitle = this.platformSvc.getConstant(Strings.bookmarks_Container_Other_Title);
+        containerTitle = this.platformSvc.getI18nString(Strings.bookmarks_Container_Other_Title);
         break;
       case BookmarkContainer.Toolbar:
-        containerTitle = this.platformSvc.getConstant(Strings.bookmarks_Container_Toolbar_Title);
+        containerTitle = this.platformSvc.getI18nString(Strings.bookmarks_Container_Toolbar_Title);
         break;
       default:
         containerTitle = `${undefined}`;

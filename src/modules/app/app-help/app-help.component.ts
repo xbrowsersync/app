@@ -4,15 +4,17 @@ import { autobind } from 'core-decorators';
 import Strings from '../../../../res/strings/en.json';
 import { PlatformService } from '../../shared/global-shared.interface';
 import UtilityService from '../../shared/utility/utility.service';
+import { AppHelperService } from '../app.interface';
 
 @autobind
 @Component({
   controllerAs: 'vm',
-  selector: 'helpPanel',
+  selector: 'appHelp',
   template: require('./app-help.component.html')
 })
 export default class AppHelpComponent implements OnInit {
   $timeout: ng.ITimeoutService;
+  appHelperSvc: AppHelperService;
   platformSvc: PlatformService;
   utilitySvc: UtilityService;
 
@@ -21,11 +23,16 @@ export default class AppHelpComponent implements OnInit {
   strings = Strings;
 
   @Output() close: () => any;
-  @Output() loadPages: () => any;
 
-  static $inject = ['$timeout', 'PlatformService', 'UtilityService'];
-  constructor($timeout: ng.ITimeoutService, PlatformSvc: PlatformService, UtilitySvc: UtilityService) {
+  static $inject = ['$timeout', 'AppHelperService', 'PlatformService', 'UtilityService'];
+  constructor(
+    $timeout: ng.ITimeoutService,
+    AppHelperSvc: AppHelperService,
+    PlatformSvc: PlatformService,
+    UtilitySvc: UtilityService
+  ) {
     this.$timeout = $timeout;
+    this.appHelperSvc = AppHelperSvc;
     this.platformSvc = PlatformSvc;
     this.utilitySvc = UtilitySvc;
   }
@@ -37,7 +44,7 @@ export default class AppHelpComponent implements OnInit {
 
     this.currentPage = panelToDisplay;
     this.$timeout(() => {
-      (document.querySelector('help-panel .view-content > div') as HTMLDivElement).focus();
+      (document.querySelector('app-help .view-content > div') as HTMLDivElement).focus();
     }, 150);
   }
 
@@ -72,6 +79,6 @@ export default class AppHelpComponent implements OnInit {
 
   ngOnInit(): void {
     // Load help pages and display first page
-    this.pages = this.loadPages()();
+    this.pages = this.appHelperSvc.getHelpPages();
   }
 }

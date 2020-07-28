@@ -8,7 +8,7 @@ import UtilityService from '../../shared/utility/utility.service';
 @autobind
 @Component({
   controllerAs: 'vm',
-  selector: 'workingPanel',
+  selector: 'appWorking',
   template: require('./app-working.component.html')
 })
 export default class AppWorkingComponent {

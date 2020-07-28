@@ -1,12 +1,12 @@
 <div ng-class="vm.settings.darkModeEnabled ? 'theme-dark' : 'theme-default'" ng-if="vm.initialised">
   <div class="container" ng-class="{ 'search': vm.view.current === vm.view.views.search }">
-    <working-panel cancel-sync="vm.cancelSyncInProgress" darker="vm.view.current !== vm.view.views.loading"
-                   enable-cancel-sync="vm.working.displayCancelSyncButton"
-                   fullsize="vm.view.current === vm.view.views.loading" message="vm.working.message"
-                   ng-show="vm.working.show">
-    </working-panel>
+    <app-working cancel-sync="vm.cancelSyncInProgress" darker="vm.view.current !== vm.view.views.loading"
+                 enable-cancel-sync="vm.working.displayCancelSyncButton"
+                 fullsize="vm.view.current === vm.view.views.loading" message="vm.working.message"
+                 ng-show="vm.working.show">
+    </app-working>
 
-    <alert-panel ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)"></alert-panel>
+    <app-alert></app-alert>
 
     <div id="login-panel" class="view animate" ng-if="vm.view.current === vm.view.views.login">
       <div class="view-content" ng-include="'./assets/login.html'"></div>
@@ -26,27 +26,26 @@
       <div class="view-content" ng-include="'./assets/settings.html'"></div>
     </div>
 
-    <help-panel class="view view-overlay animate" close="vm.displayMainView" load-pages="vm.getHelpPages"
-                ng-if="vm.view.current === vm.view.views.help"></help-panel>
+    <app-help class="view view-overlay animate" close="vm.displayMainView"
+              ng-if="vm.view.current === vm.view.views.help"></app-help>
 
-    <support-panel class="view view-overlay animate" close="vm.displayMainView" open-url="vm.openUrl"
-                   ng-if="vm.view.current === vm.view.views.support"></support-panel>
+    <app-support class="view view-overlay animate" close="vm.displayMainView"
+                 ng-if="vm.view.current === vm.view.views.support"></app-support>
 
-    <updated-panel class="view view-overlay animate" close="vm.closeUpdatedPanel"
-                   display-release-notes="vm.displayReleaseNotes" ng-if="vm.view.current === vm.view.views.updated">
-    </updated-panel>
+    <app-updated class="view view-overlay animate" close="vm.closeUpdatedPanel" display-main-view="vm.displayMainView"
+                 ng-if="vm.view.current === vm.view.views.updated">
+    </app-updated>
 
-    <permissions-panel class="view view-overlay animate" close="vm.displayMainView" request="vm.permissions_Request"
-                       ng-if="vm.view.current === vm.view.views.permissions">
-    </permissions-panel>
+    <app-permissions class="view view-overlay animate" close="vm.displayMainView"
+                     ng-if="vm.view.current === vm.view.views.permissions">
+    </app-permissions>
 
     <div id="scan-panel" class="view" ng-if="vm.view.current === vm.view.views.scan">
       <div class="view-content" ng-include="'./assets/scan.html'"></div>
     </div>
 
-    <qr-panel class="darker-overlay animate-fade-in animate-fade-out" close="vm.closeQrPanel"
-              copy-text-to-clipboard="vm.copyTextToClipboard" service-url="vm.sync.service.url" sync-id="vm.sync.id"
-              ng-if="vm.settings.displayQrPanel"></qr-panel>
+    <app-qr class="darker-overlay animate-fade-in animate-fade-out" close="vm.closeQrPanel"
+            service-url="vm.sync.service.url" sync-id="vm.sync.id" ng-if="vm.settings.displayQrPanel"></app-qr>
   </div>
 
   <div class="background animate" ng-if="vm.view.current !== undefined && vm.view.current !== vm.view.views.scan">

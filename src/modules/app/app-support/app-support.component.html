@@ -1,23 +1,23 @@
 <div class="view-content">
-  <h4>{{ vm.platformSvc.getConstant(vm.strings.support_Title) }}</h4>
-  <div ng-bind-html="vm.platformSvc.getConstant(vm.strings.support_Message)"></div>
+  <h4>{{ vm.platformSvc.getI18nString(vm.strings.support_Title) }}</h4>
+  <div ng-bind-html="vm.platformSvc.getI18nString(vm.strings.support_Message)"></div>
   <div class="buttons small">
     <button type="button" class="btn btn-default"
-            ng-click="vm.utilitySvc.handleEvent(vm.openUrl(), $event, 'https://link.xbrowsersync.org/liberapay')">
-      {{ vm.platformSvc.getConstant(vm.strings.button_Liberapay_Label) }}
+            ng-click="vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event, 'https://link.xbrowsersync.org/liberapay')">
+      {{ vm.platformSvc.getI18nString(vm.strings.button_Liberapay_Label) }}
     </button>
     <button type="button" class="btn btn-default"
-            ng-click="vm.utilitySvc.handleEvent(vm.openUrl(), $event, 'https://link.xbrowsersync.org/patreon')">
-      {{ vm.platformSvc.getConstant(vm.strings.button_Patreon_Label) }}
+            ng-click="vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event, 'https://link.xbrowsersync.org/patreon')">
+      {{ vm.platformSvc.getI18nString(vm.strings.button_Patreon_Label) }}
     </button>
     <button type="button" class="btn btn-default"
-            ng-click="vm.utilitySvc.handleEvent(vm.openUrl(), $event, 'https://link.xbrowsersync.org/cryptos')">
-      {{ vm.platformSvc.getConstant(vm.strings.button_Cryptos_Label) }}
+            ng-click="vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event, 'https://link.xbrowsersync.org/cryptos')">
+      {{ vm.platformSvc.getI18nString(vm.strings.button_Cryptos_Label) }}
     </button>
   </div>
   <div class="buttons">
     <button type="button" class="btn btn-default focused" ng-click="vm.utilitySvc.handleEvent(vm.close())">
-      {{ vm.platformSvc.getConstant(vm.strings.button_Continue_Label) }}
+      {{ vm.platformSvc.getI18nString(vm.strings.button_Continue_Label) }}
     </button>
   </div>
 </div>

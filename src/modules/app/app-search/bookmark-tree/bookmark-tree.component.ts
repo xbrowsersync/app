@@ -24,7 +24,6 @@ export default class BookmarkTreeComponent {
 
   @Output() deleteBookmark: () => any;
   @Output() editBookmark: () => any;
-  @Output() openUrl: () => any;
   @Output() selectBookmark: () => any;
   @Output() shareBookmark: () => any;
 

@@ -2,6 +2,7 @@ import angular from 'angular';
 import { autobind } from 'core-decorators';
 import { browser, Tabs } from 'webextension-polyfill-ts';
 import Strings from '../../../../res/strings/en.json';
+import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../shared/exception/exception';
 import Globals from '../../shared/global-shared.constants';
@@ -21,6 +22,7 @@ export default class WebExtPlatformService implements PlatformService {
   $interval: ng.IIntervalService;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
+  alertSvc: AlertService;
   _backgroundSvc: WebExtBackgroundService;
   bookmarkIdMapperSvc: BookmarkIdMapperService;
   bookmarkHelperSvc: BookmarkHelperService;
@@ -34,7 +36,6 @@ export default class WebExtPlatformService implements PlatformService {
     origins: ['http://*/', 'https://*/']
   };
   refreshInterfaceTimeout: any;
-  showAlert: boolean;
   showWorking: boolean;
 
   static $inject = [
@@ -42,6 +43,7 @@ export default class WebExtPlatformService implements PlatformService {
     '$interval',
     '$q',
     '$timeout',
+    'AlertService',
     'BookmarkHelperService',
     'BookmarkIdMapperService',
     'LogService',
@@ -53,6 +55,7 @@ export default class WebExtPlatformService implements PlatformService {
     $interval: ng.IIntervalService,
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
+    AlertSvc: AlertService,
     BookmarkHelperSvc: BookmarkHelperService,
     BookmarkIdMapperSvc: BookmarkIdMapperService,
     LogSvc: LogService,
@@ -63,13 +66,13 @@ export default class WebExtPlatformService implements PlatformService {
     this.$interval = $interval;
     this.$q = $q;
     this.$timeout = $timeout;
+    this.alertSvc = AlertSvc;
     this.bookmarkIdMapperSvc = BookmarkIdMapperSvc;
     this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.logSvc = LogSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
 
-    this.showAlert = false;
     this.showWorking = false;
   }
 
@@ -80,32 +83,26 @@ export default class WebExtPlatformService implements PlatformService {
     return this._backgroundSvc;
   }
 
-  automaticUpdates_Start(): ng.IPromise<void> {
-    // Register alarm
-    return browser.alarms
-      .clear(Globals.Alarm.Name)
-      .then(() => {
-        return browser.alarms.create(Globals.Alarm.Name, {
-          periodInMinutes: Globals.Alarm.Period
-        });
-      })
-      .catch((err) => {
-        throw new Exceptions.FailedRegisterAutoUpdatesException(undefined, err);
-      });
+  checkOptionalNativePermissions(): ng.IPromise<boolean> {
+    // Check if extension has optional permissions
+    return this.$q.resolve().then(() => {
+      return browser.permissions.contains(this.optionalPermissions);
+    });
   }
 
-  automaticUpdates_Stop(): ng.IPromise<void> {
-    // Clear registered alarm
-    return browser.alarms.clear(Globals.Alarm.Name).then(() => {});
-  }
-
-  eventListeners_Disable(): ng.IPromise<void> {
+  disableNativeEventListeners(): ng.IPromise<void> {
     return this.sendMessage({
       command: MessageCommand.DisableEventListeners
     });
   }
 
-  eventListeners_Enable(): ng.IPromise<void> {
+  disableSync(): ng.IPromise<any> {
+    return this.sendMessage({
+      command: MessageCommand.DisableSync
+    });
+  }
+
+  enableNativeEventListeners(): ng.IPromise<void> {
     return this.sendMessage({
       command: MessageCommand.EnableEventListeners
     });
@@ -115,7 +112,14 @@ export default class WebExtPlatformService implements PlatformService {
     return this.$q.resolve(browser.runtime.getManifest().version);
   }
 
-  getConstant(i18nString: I18nString): string {
+  getCurrentUrl(): ng.IPromise<string> {
+    // Get current tab
+    return browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
+      return tabs[0].url ?? '';
+    });
+  }
+
+  getI18nString(i18nString: I18nString): string {
     let message = '';
 
     if (i18nString && i18nString.key) {
@@ -127,13 +131,6 @@ export default class WebExtPlatformService implements PlatformService {
     }
 
     return message;
-  }
-
-  getCurrentUrl(): ng.IPromise<string> {
-    // Get current tab
-    return browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
-      return tabs[0].url ?? '';
-    });
   }
 
   getNewTabUrl(): string {
@@ -183,12 +180,70 @@ export default class WebExtPlatformService implements PlatformService {
     });
   }
 
-  interface_Refresh(syncEnabled?: boolean, syncType?: SyncType): ng.IPromise<void> {
+  hideWorkingUI(id?: string, timeout?: ng.IPromise<void>): void {
+    if (timeout) {
+      this.$timeout.cancel(timeout);
+    }
+
+    // Hide any alert messages
+    this.alertSvc.clearCurrentAlert();
+
+    // Hide loading overlay if supplied if matches current
+    if (!this.loadingId || id === this.loadingId) {
+      this.showWorking = false;
+      this.loadingId = null;
+    }
+  }
+
+  openUrl(url: string): void {
+    const createProperties: Tabs.CreateCreatePropertiesType = {};
+
+    const openInNewTab = (urlToOpen?: string) => {
+      if (urlToOpen) {
+        createProperties.url = urlToOpen;
+      }
+      return browser.tabs.create(createProperties).then(window.close);
+    };
+
+    // Attempting to navigate to unsupported urls can cause errors
+    // Check url is supported, otherwise navigate to new tab url
+    if (!this.urlIsSupported(url)) {
+      this.logSvc.logInfo(`Attempted to navigate to unsupported url: ${url}`);
+      openInNewTab();
+      return;
+    }
+
+    browser.tabs
+      .query({ currentWindow: true, active: true })
+      .then((tabs) => {
+        // Open url in current tab if new then close the extension window
+        return tabs?.length > 0 && tabs?.[0]?.url && tabs?.[0]?.url?.startsWith(this.getNewTabUrl())
+          ? browser.tabs.update(tabs[0].id, { url }).then(window.close)
+          : openInNewTab(url);
+      })
+      .catch(openInNewTab);
+  }
+
+  queueLocalResync(): ng.IPromise<void> {
+    return this.queueSync({ type: SyncType.Local }).then(() => {
+      this.logSvc.logInfo('Local sync data refreshed');
+    });
+  }
+
+  queueSync(sync: Sync, command = MessageCommand.SyncBookmarks, runSync = true): ng.IPromise<any> {
+    return this.sendMessage({
+      command,
+      sync,
+      runSync
+    });
+  }
+
+  refreshNativeInterface(syncEnabled?: boolean, syncType?: SyncType): ng.IPromise<void> {
     let iconPath: string;
-    let newTitle = this.getConstant(Strings.title);
-    const syncingTitle = ` (${this.getConstant(Strings.tooltip_Syncing_Label)})`;
-    const syncedTitle = ` (${this.getConstant(Strings.tooltip_Synced_Label)})`;
-    const notSyncedTitle = ` (${this.getConstant(Strings.tooltip_NotSynced_Label)})`;
+    let newTitle = this.getI18nString(Strings.title);
+    const syncingTitle = ` (${this.getI18nString(Strings.tooltip_Syncing_Label)})`;
+    const syncedTitle = ` (${this.getI18nString(Strings.tooltip_Synced_Label)})`;
+    const notSyncedTitle = ` (${this.getI18nString(Strings.tooltip_NotSynced_Label)})`;
 
     // Clear timeout
     if (this.refreshInterfaceTimeout) {
@@ -238,93 +293,6 @@ export default class WebExtPlatformService implements PlatformService {
     });
   }
 
-  interface_Working_Hide(id?: string, timeout?: ng.IPromise<void>): void {
-    if (timeout) {
-      this.$timeout.cancel(timeout);
-    }
-
-    // Hide any alert messages
-    this.showAlert = false;
-
-    // Hide loading overlay if supplied if matches current
-    if (!this.loadingId || id === this.loadingId) {
-      this.showWorking = false;
-      this.loadingId = null;
-    }
-  }
-
-  interface_Working_Show(id?: string): ng.IPromise<void> {
-    let timeout: ng.IPromise<void>;
-
-    // Return if loading overlay already displayed
-    if (this.loadingId) {
-      return;
-    }
-
-    // Hide any alert messages
-    this.showAlert = false;
-
-    switch (id) {
-      // Loading bookmark metadata, wait a moment before displaying loading overlay
-      case 'retrievingMetadata':
-        timeout = this.$timeout(() => {
-          this.showWorking = true;
-        }, 500);
-        break;
-      // Display default overlay
-      default:
-        timeout = this.$timeout(() => {
-          this.showWorking = true;
-        });
-        break;
-    }
-
-    this.loadingId = id;
-    return timeout;
-  }
-
-  openUrl(url: string): void {
-    const createProperties: Tabs.CreateCreatePropertiesType = {};
-
-    const openInNewTab = (urlToOpen?: string) => {
-      if (urlToOpen) {
-        createProperties.url = urlToOpen;
-      }
-      return browser.tabs.create(createProperties).then(window.close);
-    };
-
-    // Attempting to navigate to unsupported urls can cause errors
-    // Check url is supported, otherwise navigate to new tab url
-    if (!this.urlIsSupported(url)) {
-      this.logSvc.logInfo(`Attempted to navigate to unsupported url: ${url}`);
-      openInNewTab();
-      return;
-    }
-
-    browser.tabs
-      .query({ currentWindow: true, active: true })
-      .then((tabs) => {
-        // Open url in current tab if new then close the extension window
-        return tabs?.length > 0 && tabs?.[0]?.url && tabs?.[0]?.url?.startsWith(this.getNewTabUrl())
-          ? browser.tabs.update(tabs[0].id, { url }).then(window.close)
-          : openInNewTab(url);
-      })
-      .catch(openInNewTab);
-  }
-
-  permissions_Check(): ng.IPromise<boolean> {
-    // Check if extension has optional permissions
-    return this.$q.resolve().then(() => {
-      return browser.permissions.contains(this.optionalPermissions);
-    });
-  }
-
-  refreshLocalSyncData(): ng.IPromise<void> {
-    return this.sync_Queue({ type: SyncType.Local }).then(() => {
-      this.logSvc.logInfo('Local sync data refreshed');
-    });
-  }
-
   sendMessage(message: Message): ng.IPromise<any> {
     let module: ng.IModule;
     try {
@@ -345,18 +313,53 @@ export default class WebExtPlatformService implements PlatformService {
     });
   }
 
-  sync_Disable(): ng.IPromise<any> {
-    return this.sendMessage({
-      command: MessageCommand.DisableSync
-    });
+  showWorkingUI(id?: string): ng.IPromise<void> {
+    let timeout: ng.IPromise<void>;
+
+    // Return if loading overlay already displayed
+    if (this.loadingId) {
+      return;
+    }
+
+    // Hide any alert messages
+    this.alertSvc.clearCurrentAlert();
+
+    switch (id) {
+      // Loading bookmark metadata, wait a moment before displaying loading overlay
+      case 'retrievingMetadata':
+        timeout = this.$timeout(() => {
+          this.showWorking = true;
+        }, 500);
+        break;
+      // Display default overlay
+      default:
+        timeout = this.$timeout(() => {
+          this.showWorking = true;
+        });
+        break;
+    }
+
+    this.loadingId = id;
+    return timeout;
   }
 
-  sync_Queue(sync: Sync, command = MessageCommand.SyncBookmarks, runSync = true): ng.IPromise<any> {
-    return this.sendMessage({
-      command,
-      sync,
-      runSync
-    });
+  startSyncUpdateChecks(): ng.IPromise<void> {
+    // Register alarm
+    return browser.alarms
+      .clear(Globals.Alarm.Name)
+      .then(() => {
+        return browser.alarms.create(Globals.Alarm.Name, {
+          periodInMinutes: Globals.Alarm.Period
+        });
+      })
+      .catch((err) => {
+        throw new Exceptions.FailedRegisterAutoUpdatesException(undefined, err);
+      });
+  }
+
+  stopSyncUpdateChecks(): ng.IPromise<void> {
+    // Clear registered alarm
+    return browser.alarms.clear(Globals.Alarm.Name).then(() => {});
   }
 
   urlIsNativeConfigPage(url: string): boolean {
