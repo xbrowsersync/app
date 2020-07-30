@@ -17,8 +17,8 @@
       novalidate>
   <button type="submit" class="d-none" ng-click="vm.utilitySvc.handleEvent(vm.syncForm_Submit_Click)"
           tabindex="-1"></button>
-  <div class="selected-service animate-fade-in" ng-show="(!vm.utilitySvc.isMobilePlatform(vm.platformName) && !vm.login.displayUpdateServicePanel) || 
-    (vm.utilitySvc.isMobilePlatform(vm.platformName) && !vm.login.displayGetSyncIdPanel)">
+  <div class="selected-service animate-fade-in" ng-show="(!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName) && !vm.login.displayUpdateServicePanel) || 
+    (vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName) && !vm.login.displayGetSyncIdPanel)">
     <label>{{ vm.platformSvc.getI18nString(vm.strings.login_SelectedService_Label) }}</label>
     <a href="{{ vm.sync.service.url }}" class="new-tab" title="{{ vm.sync.service.url }}">
       {{ vm.sync.service.url }}
@@ -55,7 +55,7 @@
   <div class="form-content">
     <div class="login-form-new animate-fade-in" ng-class="{ 'active-login-form': vm.login.displayNewSyncPanel }"
          ng-show="vm.login.displayNewSyncPanel && !vm.login.displayUpdateServicePanel">
-      <div ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)">
+      <div ng-if="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)">
         <div class="animate-fade-in" ng-hide="vm.login.displayPasswordConfirmation">
           <div class="form-group secret-form-group btn-icon-container"
                ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
@@ -94,7 +94,8 @@
                     ng-click="vm.utilitySvc.handleEvent(vm.syncForm_ConfirmPassword_Click)">
               {{ vm.platformSvc.getI18nString(vm.strings.button_Next_Label) }}
             </button>
-            <button type="button" class="btn btn-default" ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)"
+            <button type="button" class="btn btn-default"
+                    ng-if="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
                     ng-click="vm.utilitySvc.handleEvent(vm.syncForm_UpdateService_Click)">
               Switch service
             </button>
@@ -133,7 +134,7 @@
           </a>
         </div>
       </div>
-      <div ng-if="vm.utilitySvc.isMobilePlatform(vm.platformName)">
+      <div ng-if="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)">
         <div class="well well-sm">
           <h4>{{ vm.platformSvc.getI18nString(vm.strings.login_GetSyncId_Title) }}</h4>
           <p ng-bind-html="vm.platformSvc.getI18nString(vm.strings.login_GetSyncId_Message)"></p>
@@ -148,8 +149,8 @@
     </div>
     <div class="login-form-existing animate-fade-in" ng-class="{ 'active-login-form': !vm.login.displayNewSyncPanel }"
          ng-hide="vm.login.displayNewSyncPanel || vm.login.displayUpdateServicePanel">
-      <div ng-show="!vm.utilitySvc.isMobilePlatform(vm.platformName) || 
-      (vm.utilitySvc.isMobilePlatform(vm.platformName) && !vm.login.displayGetSyncIdPanel)">
+      <div ng-show="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName) || 
+      (vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName) && !vm.login.displayGetSyncIdPanel)">
         <div class="form-group" ng-class="{ 'has-error': vm.syncForm.txtId.$invalid }">
           <label class="sr-only" for="txtId">{{ vm.platformSvc.getI18nString(vm.strings.login_IdField_Label) }}</label>
           <input type="text" name="txtId" ng-model="vm.sync.id" class="form-control" ng-disabled="vm.sync.enabled"
@@ -180,22 +181,25 @@
                   ng-click="vm.utilitySvc.handleEvent(vm.syncForm_EnableSync_Click)">
             {{ vm.platformSvc.getI18nString(vm.strings.button_EnableSync_Label) }}
           </button>
-          <button type="button" class="btn btn-default" ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)"
+          <button type="button" class="btn btn-default"
+                  ng-if="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
                   ng-click="vm.utilitySvc.handleEvent(vm.syncForm_UpdateService_Click)">
             {{ vm.platformSvc.getI18nString(vm.strings.button_UpdateService_Label) }}
           </button>
-          <button type="button" class="btn btn-default" ng-if="vm.utilitySvc.isMobilePlatform(vm.platformName)"
+          <button type="button" class="btn btn-default"
+                  ng-if="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
                   ng-click="vm.utilitySvc.handleEvent(vm.syncForm_ScanCode_Click)">
             {{ vm.platformSvc.getI18nString(vm.strings.button_ScanCode_Label) }}
           </button>
         </div>
-        <div class="form-group toggle-form" ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)">
+        <div class="form-group toggle-form" ng-if="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)">
           <a ng-click="vm.utilitySvc.handleEvent(vm.syncForm_NewSync_Click)" href="#">
             {{ vm.platformSvc.getI18nString(vm.strings.button_NewSync_Label) }}
           </a>
         </div>
       </div>
-      <div ng-if="vm.utilitySvc.isMobilePlatform(vm.platformName)" ng-show="vm.login.displayGetSyncIdPanel">
+      <div ng-if="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
+           ng-show="vm.login.displayGetSyncIdPanel">
         <div class="well well-sm">
           <h4>{{ vm.platformSvc.getI18nString(vm.strings.login_ScanId_Title) }}</h4>
           <p>{{ vm.platformSvc.getI18nString(vm.strings.login_ScanId_Message) }}</p>

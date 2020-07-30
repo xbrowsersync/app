@@ -4,7 +4,7 @@
     <i class="fas fa-cog" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.button_Settings_Label) }}</span>
   </button>
-  <button class="btn btn-icon btn-toggle-bookmark" ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)"
+  <button class="btn btn-icon btn-toggle-bookmark" ng-if="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
           ng-class="{ 'active': vm.bookmark.active }"
           title="{{ vm.bookmark.active ? vm.platformSvc.getI18nString(vm.strings.button_EditBookmark_Label) : vm.platformSvc.getI18nString(vm.strings.button_AddBookmark_Label) }}"
           ng-click="vm.utilitySvc.handleEvent(vm.searchForm_ToggleBookmark_Click)" tabindex="4">
@@ -48,7 +48,7 @@
     </button>
   </div>
 </div>
-<button class="btn btn-fab fixed" ng-if="vm.utilitySvc.isMobilePlatform(vm.platformName)"
+<button class="btn btn-fab fixed" ng-if="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
         title="{{ vm.platformSvc.getI18nString(vm.strings.button_AddBookmark_Label) }}"
         ng-click="vm.utilitySvc.handleEvent(vm.searchForm_AddBookmark_Click)" tabindex="-1">
   <i class="far fa-bookmark" aria-hidden="true"></i>
@@ -65,8 +65,8 @@
        infinite-scroll-container="'.search-results-container'">
     <bookmark ng-repeat="result in vm.search.results | limitTo:vm.search.resultsDisplayed" ng-model="result"
               delete-bookmark="vm.searchForm_DeleteBookmark_Click" edit-bookmark="vm.searchForm_UpdateBookmark_Click"
-              enable-edit-button="!vm.utilitySvc.isMobilePlatform(vm.platformName)"
-              enable-select="vm.utilitySvc.isMobilePlatform(vm.platformName)"
+              enable-edit-button="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
+              enable-select="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
               is-selected="vm.search.selectedBookmark ===  result.id" share-bookmark="vm.searchForm_ShareBookmark_Click"
               hm-press="vm.utilitySvc.handleEvent(vm.searchForm_SelectBookmark_Press, $event,  result.id)"
               ng-keydown="vm.utilitySvc.handleEvent(vm.searchForm_SearchResult_KeyDown, $event)"
@@ -75,10 +75,10 @@
   </div>
 </div>
 <div class="bookmark-tree-container" ng-if="vm.search.displayFolderView">
-  <bookmark-tree class="root" ng-model="vm.search.bookmarkTree" platform-name="vm.platformName"
-                 selected-bookmark="vm.search.selectedBookmark" edit-bookmark="vm.searchForm_UpdateBookmark_Click"
-                 select-bookmark="vm.searchForm_SelectBookmark_Press" share-bookmark="vm.searchForm_ShareBookmark_Click"
-                 delete-bookmark="vm.searchForm_DeleteBookmark_Click" ng-if="vm.search.bookmarkTree">
+  <bookmark-tree class="root" ng-model="vm.search.bookmarkTree" selected-bookmark="vm.search.selectedBookmark"
+                 edit-bookmark="vm.searchForm_UpdateBookmark_Click" select-bookmark="vm.searchForm_SelectBookmark_Press"
+                 share-bookmark="vm.searchForm_ShareBookmark_Click" delete-bookmark="vm.searchForm_DeleteBookmark_Click"
+                 ng-if="vm.search.bookmarkTree">
   </bookmark-tree>
   <h4 ng-if="vm.search.bookmarkTree.length === 0">
     {{ vm.platformSvc.getI18nString(vm.strings.search_NoBookmarks_Message) }}

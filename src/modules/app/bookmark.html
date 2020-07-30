@@ -19,7 +19,7 @@
            placeholder="{{ vm.platformSvc.getI18nString(vm.strings.bookmark_TitleField_Label) }}">
   </div>
   <div class="form-group" data-ng-class="{ 
-      'btn-icon-container': vm.utilitySvc.isMobilePlatform(vm.platformName) && vm.bookmarkForm.bookmarkUrl.$dirty,
+      'btn-icon-container': vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName) && vm.bookmarkForm.bookmarkUrl.$dirty,
       'has-error': vm.bookmarkForm.bookmarkUrl.$invalid
     }">
     <label for="bookmarkUrl" class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.bookmark_UrlField_Label)
@@ -28,7 +28,7 @@
            data-ng-change="vm.bookmarkForm_BookmarkUrl_Change()" maxlength="2000" autocapitalize="off" autocorrect="off"
            spellcheck="false" required
            placeholder="{{ vm.platformSvc.getI18nString(vm.strings.bookmark_UrlField_Label) }}">
-    <button class="btn btn-icon" data-ng-if="vm.utilitySvc.isMobilePlatform(vm.platformName)"
+    <button class="btn btn-icon" data-ng-if="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
             data-ng-show="vm.bookmark.current.url && vm.bookmarkForm.bookmarkUrl.$dirty"
             title="{{ vm.platformSvc.getI18nString(vm.strings.button_UpdateBookmarkProperties_Label) }}"
             data-ng-click="vm.utilitySvc.handleEvent(vm.bookmarkForm_GetMetadata_Click)">
@@ -90,7 +90,7 @@
       {{ vm.platformSvc.getI18nString(vm.strings.button_Update_Label) }}
     </button>
     <button type="button" class="btn btn-default"
-            data-ng-if="vm.utilitySvc.isMobilePlatform(vm.platformName) && vm.bookmark.displayUpdateForm"
+            data-ng-if="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName) && vm.bookmark.displayUpdateForm"
             data-ng-click="vm.utilitySvc.handleEvent(vm.bookmarkForm_ShareBookmark_Click, vm.bookmark.current)">
       {{ vm.platformSvc.getI18nString(vm.strings.button_Share_Label) }}
     </button>

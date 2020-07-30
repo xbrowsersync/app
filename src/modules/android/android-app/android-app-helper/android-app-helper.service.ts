@@ -5,6 +5,7 @@ import { AppHelperService } from '../../../app/app.interface';
 import { Bookmark } from '../../../shared/bookmark/bookmark.interface';
 import * as Exceptions from '../../../shared/exception/exception';
 import { ExceptionHandler } from '../../../shared/exception/exception.interface';
+import { PlatformType } from '../../../shared/global-shared.enum';
 import LogService from '../../../shared/log/log.service';
 import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
 import { Sync } from '../../../shared/sync/sync.interface';
@@ -18,6 +19,8 @@ export default class AndroidAppHelperService implements AppHelperService {
   logSvc: LogService;
   platformSvc: AndroidPlatformService;
   syncEngineSvc: SyncEngineService;
+
+  platformName = PlatformType.Android;
 
   static $inject = ['$exceptionHandler', '$q', 'LogService', 'PlatformService', 'SyncEngineService'];
   constructor(

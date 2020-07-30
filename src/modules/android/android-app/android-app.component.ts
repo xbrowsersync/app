@@ -78,8 +78,6 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
   }
 
   init() {
-    this.platformName = PlatformType.Android;
-
     // Enable select file to restore
     this.vm.settings.fileRestoreEnabled = true;
 

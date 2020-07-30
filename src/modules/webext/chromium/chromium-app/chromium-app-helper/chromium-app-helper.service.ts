@@ -2,11 +2,14 @@ import { Injectable } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import Strings from '../../../../../../res/strings/en.json';
 import { AppHelperService } from '../../../../app/app.interface';
+import { PlatformType } from '../../../../shared/global-shared.enum';
 import WebExtAppHelperService from '../../../webext-app/webext-app-helper/webext-app-helper.service';
 
 @autobind
 @Injectable('AppHelperService')
 export default class ChromiumAppHelperService extends WebExtAppHelperService implements AppHelperService {
+  platformName = PlatformType.Chromium;
+
   getHelpPages(): string[] {
     const pages = [
       this.platformSvc.getI18nString(Strings.help_Page_Welcome_Desktop_Content),

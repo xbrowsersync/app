@@ -10,6 +10,7 @@ export interface AppHelperService {
   getNextScheduledSyncUpdateCheck: () => ng.IPromise<string>;
   getSyncQueueLength: () => ng.IPromise<number>;
   openUrl: (event?: Event, url?: string) => void;
+  platformName: string;
   removePermissions: () => ng.IPromise<void>;
   requestPermissions: () => ng.IPromise<boolean>;
   shareBookmark?: (bookmark: Bookmark) => void;

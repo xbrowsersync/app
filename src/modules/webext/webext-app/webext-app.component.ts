@@ -1,11 +1,16 @@
 import './webext-app.component.scss';
-import { OnInit } from 'angular-ts-decorators';
+import { Component, OnInit } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import AppMainComponent from '../../app/app-main/app-main.component';
 import { StoreKey } from '../../shared/store/store.enum';
 import WebExtPlatformService from '../webext-platform/webext-platform.service';
 
 @autobind
+@Component({
+  controllerAs: 'vm',
+  selector: 'app',
+  template: require('../../app/app-main/app-main.component.html')
+})
 export default class WebExtAppComponent extends AppMainComponent implements OnInit {
   platformSvc: WebExtPlatformService;
 

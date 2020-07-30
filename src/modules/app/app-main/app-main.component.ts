@@ -108,7 +108,6 @@ export default class AppMainComponent {
     upgradeConfirmed: false,
     validatingServiceUrl: false
   };
-  platformName: any;
   restoreForm: any;
   search = {
     batchResultsNum: 10,
@@ -271,7 +270,7 @@ export default class AppMainComponent {
         this.settings.savingBackup = false;
 
         // Focus on done button
-        if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+        if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
           (document.querySelector('.btn-done') as HTMLButtonElement).focus();
         }
       });
@@ -343,7 +342,7 @@ export default class AppMainComponent {
     this.restoreForm.dataToRestore.$setValidity('InvalidData', true);
 
     // Focus on restore textarea
-    if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
       this.$timeout(() => {
         (document.querySelector('#restoreForm textarea') as HTMLTextAreaElement).select();
       });
@@ -360,7 +359,7 @@ export default class AppMainComponent {
     this.settings.displayRestoreConfirmation = true;
 
     // Focus on confirm button
-    if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
       this.$timeout(() => {
         (document.querySelector('.btn-confirm-restore') as HTMLButtonElement).focus();
       });
@@ -486,7 +485,7 @@ export default class AppMainComponent {
   bookmarkForm_BookmarkTags_ClearAll_Click() {
     this.bookmark.current.tags = [];
     this.bookmarkForm.$setDirty();
-    if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
       (document.querySelector('input[name="bookmarkTags"]') as HTMLInputElement).focus();
     }
   }
@@ -494,7 +493,7 @@ export default class AppMainComponent {
   bookmarkForm_BookmarkTags_Lookahead_Click() {
     this.bookmark.tagText += this.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
     this.bookmarkForm_CreateTags_Click();
-    if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
       (document.querySelector('input[name="bookmarkTags"]') as HTMLInputElement).focus();
     }
   }
@@ -513,7 +512,7 @@ export default class AppMainComponent {
         event.preventDefault();
         this.bookmark.tagText += this.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
         this.bookmarkForm_BookmarkTags_Change();
-        if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+        if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
           (document.querySelector('input[name="bookmarkTags"]') as HTMLInputElement).focus();
         }
         break;
@@ -590,7 +589,7 @@ export default class AppMainComponent {
     this.bookmarkForm.$setDirty();
     this.bookmark.tagText = '';
     this.bookmark.tagLookahead = '';
-    if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
       (document.querySelector('input[name="bookmarkTags"]') as HTMLInputElement).focus();
     }
   }
@@ -653,7 +652,7 @@ export default class AppMainComponent {
   bookmarkForm_RemoveTag_Click(tag) {
     this.bookmark.current.tags = _.without(this.bookmark.current.tags, tag);
     this.bookmarkForm.$setDirty();
-    if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
       (document.querySelector('#bookmarkForm input[name="bookmarkTags"]') as HTMLInputElement).focus();
     }
   }
@@ -1095,7 +1094,7 @@ export default class AppMainComponent {
           this.bookmarkForm.$setPristine();
           this.bookmarkForm.$setUntouched();
 
-          if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+          if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
             // Set initial focus
             const element = document.querySelector('.focused') as HTMLInputElement;
             if (element.select) {
@@ -1121,7 +1120,7 @@ export default class AppMainComponent {
   init_infoView() {
     this.$timeout(() => {
       // Focus on button
-      if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+      if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
         const element = document.querySelector('.focused') as HTMLInputElement;
         if (element) {
           element.focus();
@@ -1157,7 +1156,7 @@ export default class AppMainComponent {
     }, 150);
 
     return this.storeSvc.get<boolean>(StoreKey.DisplayOtherSyncsWarning).then((displayOtherSyncsWarning) => {
-      if (this.utilitySvc.isMobilePlatform(this.platformName)) {
+      if (this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
         // Set displayed panels for mobile platform
         this.login.displayGetSyncIdPanel = !this.sync.id;
         this.login.displayNewSyncPanel = false;
@@ -1170,14 +1169,14 @@ export default class AppMainComponent {
           this.login.displayOtherSyncsWarning = true;
 
           // Focus on first button
-          if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+          if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
             this.$timeout(() => {
               (document.querySelector('.otherSyncsWarning .buttons > button') as HTMLButtonElement).focus();
             }, 150);
           }
         } else {
           // Focus on password field
-          if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+          if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
             this.$timeout(() => {
               (document.querySelector('.active-login-form  input[name="txtPassword"]') as HTMLInputElement).focus();
             }, 150);
@@ -1191,7 +1190,7 @@ export default class AppMainComponent {
   }
 
   init_searchView() {
-    if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
       this.$timeout(() => {
         // Focus on search box
         (document.querySelector('input[name=txtSearch]') as HTMLInputElement).focus();
@@ -1250,7 +1249,7 @@ export default class AppMainComponent {
 
         this.$timeout(() => {
           // Check for available sync updates on non-mobile platforms
-          if (this.sync.enabled && !this.utilitySvc.isMobilePlatform(this.platformName)) {
+          if (this.sync.enabled && !this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
             this.$q
               .all([this.syncEngineSvc.checkForUpdates(), this.appHelperSvc.getNextScheduledSyncUpdateCheck()])
               .then((data) => {
@@ -1276,7 +1275,7 @@ export default class AppMainComponent {
           }
 
           // Set backup file change event for mobile platforms
-          if (this.utilitySvc.isMobilePlatform(this.platformName)) {
+          if (this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
             document
               .getElementById('backupFile')
               .addEventListener('change', this.backupRestoreForm_BackupFile_Change, false);
@@ -1305,7 +1304,7 @@ export default class AppMainComponent {
         this.settings.savingLog = false;
 
         // Focus on done button
-        if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+        if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
           (document.querySelector('.btn-done') as HTMLButtonElement).focus();
         }
       });
@@ -1411,7 +1410,7 @@ export default class AppMainComponent {
         Strings.settings_BackupRestore_RestoreSuccess_Message
       );
 
-      if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+      if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
         this.$timeout(() => {
           (document.querySelector('.btn-done') as HTMLButtonElement).focus();
         });
@@ -1544,7 +1543,7 @@ export default class AppMainComponent {
       this.searchBookmarks();
 
       // Focus on search box
-      if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+      if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
         (document.querySelector('input[name=txtSearch]') as HTMLInputElement).focus();
       }
     });
@@ -1629,7 +1628,7 @@ export default class AppMainComponent {
   searchForm_SearchText_Autocomplete() {
     this.search.query = `${this.search.query}${this.search.lookahead}`;
     this.searchForm_SearchText_Change();
-    if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
       this.$timeout(() => {
         (document.querySelector('input[name=txtSearch]') as HTMLInputElement).focus();
       });
@@ -1822,7 +1821,7 @@ export default class AppMainComponent {
       }
     }
 
-    if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
       return;
     }
 
@@ -1858,7 +1857,7 @@ export default class AppMainComponent {
       }
 
       // Focus on search box
-      if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+      if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
         (document.querySelector('input[name=txtSearch]') as HTMLInputElement).focus();
       }
     });
@@ -1875,7 +1874,7 @@ export default class AppMainComponent {
     }
 
     // On mobiles, display bookmark panel with slight delay to avoid focussing on description field
-    if (this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
       this.$timeout(() => {
         this.changeView(this.view.views.bookmark, bookmarkToUpdate);
       }, 500);
@@ -2104,7 +2103,10 @@ export default class AppMainComponent {
     }
 
     // If creds were incorrect, focus on password field
-    if (err instanceof Exceptions.InvalidCredentialsException && !this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (
+      err instanceof Exceptions.InvalidCredentialsException &&
+      !this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)
+    ) {
       this.$timeout(() => {
         (document.querySelector('.login-form-existing input[name="txtPassword"]') as HTMLInputElement).select();
       }, 150);
@@ -2137,7 +2139,7 @@ export default class AppMainComponent {
   syncForm_ConfirmPassword_Click() {
     this.login.displayPasswordConfirmation = true;
 
-    if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
       this.$timeout(() => {
         (document.querySelector('input[name="txtPasswordConfirmation"]') as HTMLInputElement).focus();
       }, 150);
@@ -2153,7 +2155,7 @@ export default class AppMainComponent {
     if (this.sync.id && this.appHelperSvc.confirmBeforeSyncing()) {
       // Display overwrite data confirmation panel
       this.login.displaySyncConfirmation = true;
-      if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+      if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
         this.$timeout(() => {
           (document.querySelector('.btn-confirm-enable-sync') as HTMLInputElement).focus();
         });
@@ -2168,7 +2170,7 @@ export default class AppMainComponent {
     this.login.displayNewSyncPanel = false;
     this.sync.password = '';
 
-    if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
       this.$timeout(() => {
         (document.querySelector('input[name="txtId"]') as HTMLInputElement).focus();
       }, 150);
@@ -2190,7 +2192,7 @@ export default class AppMainComponent {
     this.login.passwordConfirmation = null;
     this.login.passwordComplexity = {};
 
-    if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
       this.$timeout(() => {
         (document.querySelector('.login-form-new input[name="txtPassword"]') as HTMLInputElement).focus();
       }, 150);
@@ -2203,7 +2205,7 @@ export default class AppMainComponent {
     this.storeSvc.set(StoreKey.DisplayOtherSyncsWarning, false);
 
     // Focus on password field
-    if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+    if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
       this.$timeout(() => {
         (document.querySelector('.active-login-form input[name="txtPassword"]') as HTMLInputElement).focus();
       }, 150);
@@ -2287,7 +2289,7 @@ export default class AppMainComponent {
         this.syncForm.$setUntouched();
 
         // Focus on first field
-        if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+        if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
           this.$timeout(() => {
             (document.querySelector('.active-login-form input') as HTMLInputElement).focus();
           }, 150);
@@ -2364,7 +2366,7 @@ export default class AppMainComponent {
         this.login.displayUpdateServiceConfirmation = true;
 
         // Focus on first button
-        if (!this.utilitySvc.isMobilePlatform(this.platformName)) {
+        if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
           this.$timeout(() => {
             (document.querySelector('.update-service-panel .confirm .buttons > button') as HTMLButtonElement).focus();
           }, 150);
