@@ -134,7 +134,7 @@ export default class WebExtAppWorkingComponent {
 
   showView(): void {
     this.appHelperSvc.getCurrentSync().then((currentSync) => {
-      this.enableCancel = currentSync?.type === SyncType.Remote ?? false;
+      this.enableCancel = currentSync?.type === SyncType.Remote || false;
     });
   }
 }

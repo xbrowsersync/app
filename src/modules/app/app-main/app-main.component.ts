@@ -292,7 +292,7 @@ export default class AppMainComponent {
             this.settings.dataToRestore = event.target.result;
 
             // Reset validation interface
-            this.backupRestoreForm_DataToRestore_Change();
+            this.resetBackupRestoreFormValidity();
             this.settings.validatingRestoreData = true;
 
             // Trigger restore data validation
@@ -328,7 +328,7 @@ export default class AppMainComponent {
     return this.restoreData(JSON.parse(this.settings.dataToRestore));
   }
 
-  backupRestoreForm_DataToRestore_Change() {
+  resetBackupRestoreFormValidity() {
     this.restoreForm.dataToRestore.$setValidity('InvalidData', true);
   }
 
@@ -1886,7 +1886,7 @@ export default class AppMainComponent {
 
   serviceIsOnline(): boolean {
     return (
-      this.sync.service.status === ApiServiceStatus.NoNewSyncs ?? this.sync.service.status === ApiServiceStatus.Online
+      this.sync.service.status === ApiServiceStatus.NoNewSyncs || this.sync.service.status === ApiServiceStatus.Online
     );
   }
 

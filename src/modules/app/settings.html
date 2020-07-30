@@ -172,10 +172,10 @@
               </label>
               <div class="form-group" data-ng-class="{ 'has-error': vm.restoreForm.dataToRestore.$invalid }">
                 <input type="hidden" name="dataToRestore" data-ng-model="vm.settings.dataToRestore"></input>
-                <textarea data-ng-model="vm.settings.dataToRestore" class="form-control" rows="3"
-                          data-ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)"
-                          data-ng-change="vm.backupRestoreForm_DataToRestore_Change()" autocapitalize="off"
-                          autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
+                <textarea data-ng-model="vm.settings.dataToRestore" data-ng-model-options="{ updateOn: 'blur' }"
+                          class="form-control" rows="3" data-ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)"
+                          data-ng-change="vm.resetBackupRestoreFormValidity()" autocapitalize="off" autocomplete="off"
+                          autocorrect="off" spellcheck="false"></textarea>
                 <input data-ng-if="vm.utilitySvc.isMobilePlatform(vm.platformName)" type="text" class="form-control"
                        data-ng-model="vm.settings.backupFileName" readonly
                        placeholder="{{ vm.platformSvc.getI18nString(vm.strings.settings_BackupRestore_RestoreForm_BackupFile_Description) }}…"></input>

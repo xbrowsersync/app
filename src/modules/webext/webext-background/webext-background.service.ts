@@ -106,7 +106,50 @@ export default class WebExtBackgroundService {
     });
   }
 
-  checkForUpdatesOnStartup(): ng.IPromise<any> {
+  checkForSyncUpdates(): ng.IPromise<any> {
+    // Exit if currently syncing
+    const currentSync = this.syncEngineSvc.getCurrentSync();
+    if (currentSync) {
+      return this.$q.resolve();
+    }
+
+    // Exit if sync not enabled
+    return this.storeSvc
+      .get<boolean>(StoreKey.SyncEnabled)
+      .then((syncEnabled) => {
+        if (!syncEnabled) {
+          return;
+        }
+
+        return this.syncEngineSvc.checkForUpdates().then((updatesAvailable) => {
+          if (!updatesAvailable) {
+            return;
+          }
+
+          // Queue sync
+          return this.platformSvc.queueSync({
+            type: SyncType.Local
+          });
+        });
+      })
+      .catch((err) => {
+        // Don't display alert if sync failed due to network connection
+        if (this.networkSvc.isNetworkConnectionError(err)) {
+          this.logSvc.logInfo('Could not check for updates, no connection');
+          return;
+        }
+
+        // If ID was removed disable sync
+        if (err instanceof Exceptions.NoDataFoundException) {
+          this.syncEngineSvc.disableSync();
+          throw new Exceptions.SyncRemovedException(undefined, err);
+        }
+
+        throw err;
+      });
+  }
+
+  checkForSyncUpdatesOnStartup(): ng.IPromise<any> {
     return this.$q<boolean>((resolve, reject) => {
       return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
         if (!syncEnabled) {
@@ -189,49 +232,6 @@ export default class WebExtBackgroundService {
     });
   }
 
-  getLatestUpdates(): ng.IPromise<any> {
-    // Exit if currently syncing
-    const currentSync = this.syncEngineSvc.getCurrentSync();
-    if (currentSync) {
-      return this.$q.resolve();
-    }
-
-    // Exit if sync not enabled
-    return this.storeSvc
-      .get<boolean>(StoreKey.SyncEnabled)
-      .then((syncEnabled) => {
-        if (!syncEnabled) {
-          return;
-        }
-
-        return this.syncEngineSvc.checkForUpdates().then((updatesAvailable) => {
-          if (!updatesAvailable) {
-            return;
-          }
-
-          // Queue sync
-          return this.platformSvc.queueSync({
-            type: SyncType.Local
-          });
-        });
-      })
-      .catch((err) => {
-        // Don't display alert if sync failed due to network connection
-        if (this.networkSvc.isNetworkConnectionError(err)) {
-          this.logSvc.logInfo('Could not check for updates, no connection');
-          return;
-        }
-
-        // If ID was removed disable sync
-        if (err instanceof Exceptions.NoDataFoundException) {
-          this.syncEngineSvc.disableSync();
-          throw new Exceptions.SyncRemovedException(undefined, err);
-        }
-
-        throw err;
-      });
-  }
-
   init(): void {
     this.logSvc.logInfo('Starting up');
     this.$q
@@ -282,7 +282,7 @@ export default class WebExtBackgroundService {
         // Enable sync
         return this.syncEngineSvc.enableSync().then(() => {
           // Check for updates after a delay to allow for initialising network connection
-          this.$timeout(this.checkForUpdatesOnStartup, 5e3);
+          this.$timeout(this.checkForSyncUpdatesOnStartup, 5e3);
         });
       });
   }
@@ -317,7 +317,7 @@ export default class WebExtBackgroundService {
   onAlarm(alarm: Alarms.Alarm): void {
     // When alarm fires check for sync updates
     if (alarm?.name === Globals.Alarm.Name) {
-      this.getLatestUpdates();
+      this.checkForSyncUpdates();
     }
   }
 
