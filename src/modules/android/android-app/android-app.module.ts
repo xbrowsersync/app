@@ -6,10 +6,11 @@ import AndroidBookmarkService from '../android-bookmark/android-bookmark.service
 import AndroidPlatformService from '../android-platform.service';
 import AndroidAppAlertComponent from './android-app-alert/android-app-alert.component';
 import AndroidAppHelperService from './android-app-helper/android-app-helper.service';
+import AndroidAppWorkingComponent from './android-app-working/android-app-working.component';
 import AndroidAppComponent from './android-app.component';
 
 @NgModule({
-  declarations: [AndroidAppAlertComponent, AndroidAppComponent],
+  declarations: [AndroidAppAlertComponent, AndroidAppComponent, AndroidAppWorkingComponent],
   id: 'AndroidAppModule',
   imports: [AppModule, 'hmTouchEvents'],
   providers: [AndroidAppHelperService, AndroidBookmarkService, AndroidPlatformService]

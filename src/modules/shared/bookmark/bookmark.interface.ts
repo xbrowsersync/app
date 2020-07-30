@@ -41,7 +41,7 @@ export interface BookmarkService {
   clearNativeBookmarks: () => ng.IPromise<void>;
   createNativeBookmarksFromBookmarks: (bookmarks: Bookmark[]) => ng.IPromise<void>;
   getNativeBookmarksAsBookmarks: () => ng.IPromise<Bookmark[]>;
-  processChangeOnBookmarks: (changeInfo: BookmarkChange, bookmarks: Bookmark[]) => ng.IPromise<Bookmark[]>;
+  processNativeChangeOnBookmarks: (changeInfo: BookmarkChange, bookmarks: Bookmark[]) => ng.IPromise<Bookmark[]>;
   processChangeOnNativeBookmarks: (
     id: number,
     changeType: BookmarkChangeType,

@@ -15,7 +15,6 @@ import BookmarkTreeComponent from './app-search/bookmark-tree/bookmark-tree.comp
 import BookmarkComponent from './app-search/bookmark/bookmark.component';
 import AppSupportComponent from './app-support/app-support.component';
 import AppUpdatedComponent from './app-updated/app-updated.component';
-import AppWorkingComponent from './app-working/app-working.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +23,6 @@ import AppWorkingComponent from './app-working/app-working.component';
     AppQrComponent,
     AppSupportComponent,
     AppUpdatedComponent,
-    AppWorkingComponent,
     BookmarkComponent,
     BookmarkTreeComponent,
     PasswordStrengthDirective

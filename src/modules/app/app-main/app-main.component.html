@@ -1,9 +1,7 @@
 <div ng-class="vm.settings.darkModeEnabled ? 'theme-dark' : 'theme-default'" ng-if="vm.initialised">
   <div class="container" ng-class="{ 'search': vm.view.current === vm.view.views.search }">
-    <app-working cancel-sync="vm.cancelSyncInProgress" darker="vm.view.current !== vm.view.views.loading"
-                 enable-cancel-sync="vm.working.displayCancelSyncButton"
-                 fullsize="vm.view.current === vm.view.views.loading" message="vm.working.message"
-                 ng-show="vm.working.show">
+    <app-working cancel-action="vm.workingCancelAction" close="vm.displayMainView"
+                 full-view-mode="vm.view.current === vm.view.views.loading">
     </app-working>
 
     <app-alert></app-alert>

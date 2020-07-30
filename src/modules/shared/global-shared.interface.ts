@@ -1,4 +1,3 @@
-import { Bookmark } from './bookmark/bookmark.interface';
 import { MessageCommand } from './global-shared.enum';
 import { SyncType } from './sync/sync.enum';
 import { Sync } from './sync/sync.interface';
@@ -24,13 +23,10 @@ export interface PlatformService {
   getI18nString: (i18nString: I18nString) => string;
   getNewTabUrl?: () => string;
   getPageMetadata: (getFullMetadata?: boolean, pageUrl?: string) => ng.IPromise<WebpageMetadata>;
-  hideWorkingUI: (id?: string, timeout?: ng.IPromise<void>) => void;
   openUrl: (url: string) => void;
   queueLocalResync: () => ng.IPromise<void>;
   queueSync: (sync: Sync, command?: MessageCommand, runSync?: boolean) => ng.IPromise<any>;
   refreshNativeInterface: (syncEnabled?: boolean, syncType?: SyncType) => ng.IPromise<void>;
-  showWorking?: boolean;
-  showWorkingUI: (id?: string) => ng.IPromise<void>;
   startSyncUpdateChecks: () => ng.IPromise<void>;
   stopSyncUpdateChecks: () => ng.IPromise<void>;
   urlIsSupported: (url: string) => boolean;

@@ -330,7 +330,8 @@ export default class SyncEngineService {
       })
       .then(() => {
         if (!updateRemote) {
-          // Don't update synced bookmarks
+          // Don't update remote bookmarks
+          this.logSvc.logInfo('No changes made, skipping remote update.');
           return;
         }
 
@@ -339,7 +340,7 @@ export default class SyncEngineService {
           .updateBookmarks(processedBookmarksData.encryptedBookmarks)
           .then((response) => {
             return this.storeSvc.set(StoreKey.LastUpdated, response.lastUpdated).then(() => {
-              this.logSvc.logInfo(`Remote bookmarks data updated at ${response.lastUpdated}`);
+              this.logSvc.logInfo(`Remote bookmarks updated at ${response.lastUpdated}`);
             });
           })
           .catch((err) => {

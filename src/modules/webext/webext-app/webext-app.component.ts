@@ -22,12 +22,12 @@ export default class WebExtAppComponent extends AppMainComponent implements OnIn
     this.init();
   }
 
-  restoreBookmarksSuccess() {
+  restoreBookmarksSuccess(): ng.IPromise<void> {
     // Update current bookmark status before continuing
     return this.setBookmarkStatus().then(super.restoreBookmarksSuccess);
   }
 
-  setBookmarkStatus(isActive?) {
+  setBookmarkStatus(isActive?: boolean): ng.IPromise<void> {
     if (isActive !== undefined) {
       this.bookmark.active = isActive;
       return this.$q.resolve();
@@ -45,8 +45,8 @@ export default class WebExtAppComponent extends AppMainComponent implements OnIn
     });
   }
 
-  syncBookmarksSuccess(loadingTimeout?, bookmarkStatusActive?) {
-    return super.syncBookmarksSuccess(loadingTimeout, bookmarkStatusActive).then(() => {
+  syncBookmarksSuccess(bookmarkStatusActive?: boolean): ng.IPromise<void> {
+    return super.syncBookmarksSuccess(bookmarkStatusActive).then(() => {
       // Update bookmark icon
       return this.setBookmarkStatus(bookmarkStatusActive);
     });

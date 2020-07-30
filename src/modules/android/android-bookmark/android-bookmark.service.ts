@@ -36,7 +36,7 @@ export default class AndroidBookmarkService implements BookmarkService {
     return this.$q.resolve();
   }
 
-  processChangeOnBookmarks(): ng.IPromise<Bookmark[]> {
+  processNativeChangeOnBookmarks(): ng.IPromise<Bookmark[]> {
     return this.methodNotApplicable();
   }
 

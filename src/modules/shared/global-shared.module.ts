@@ -11,6 +11,7 @@ import NetworkService from './network/network.service';
 import StoreService from './store/store.service';
 import SyncModule from './sync/sync.module';
 import UtilityService from './utility/utility.service';
+import WorkingService from './working/working.service';
 
 @NgModule({
   id: 'GlobalSharedModule',
@@ -26,7 +27,8 @@ import UtilityService from './utility/utility.service';
     LogService,
     NetworkService,
     StoreService,
-    UtilityService
+    UtilityService,
+    WorkingService
   ]
 })
 export default class GlobalSharedModule {}

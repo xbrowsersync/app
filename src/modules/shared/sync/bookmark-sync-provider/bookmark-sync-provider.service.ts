@@ -186,7 +186,6 @@ export default class BookmarkSyncProviderService implements SyncProvider {
                   return this.populateNativeBookmarks(bookmarks);
                 }
 
-                // TODO: Test this when bookmarks provided
                 // Apply updates to native bookmarks
                 // But first check if bookmark container is toolbar and is syncing toolbar
                 return (updatedBookmarkContainer === BookmarkContainer.Toolbar
@@ -327,29 +326,29 @@ export default class BookmarkSyncProviderService implements SyncProvider {
           }
 
           // Update bookmarks data with local changes
-          return this.bookmarkSvc.processChangeOnBookmarks(sync.changeInfo, bookmarks);
+          return this.bookmarkSvc.processNativeChangeOnBookmarks(sync.changeInfo, bookmarks);
         });
       })
-      .then((bookmarks) => {
-        if (!bookmarks) {
+      .then((bookmarksToSync) => {
+        if (!bookmarksToSync) {
           // Don't sync
           return processResult;
         }
 
         // Update cached bookmarks
         return this.cryptoSvc
-          .encryptData(JSON.stringify(bookmarks))
+          .encryptData(JSON.stringify(bookmarksToSync))
           .then((encryptedBookmarks) => {
             processResult.data = {
               encryptedBookmarks,
-              updatedBookmarks: bookmarks
+              updatedBookmarks: bookmarksToSync
             };
-            return this.bookmarkHelperSvc.updateCachedBookmarks(bookmarks, encryptedBookmarks);
+            return this.bookmarkHelperSvc.updateCachedBookmarks(bookmarksToSync, encryptedBookmarks);
           })
           .then(() => {
             // Build id mappings if this is a new sync
             if (buildIdMappings) {
-              return this.bookmarkSvc.buildIdMappings(bookmarks);
+              return this.bookmarkSvc.buildIdMappings(bookmarksToSync);
             }
           })
           .then(() => {

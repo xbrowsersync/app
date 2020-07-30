@@ -13,6 +13,7 @@ import StoreService from '../../shared/store/store.service';
 import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync } from '../../shared/sync/sync.interface';
 import UtilityService from '../../shared/utility/utility.service';
+import WorkingService from '../../shared/working/working.service';
 import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
 import WebExtBackgroundService from '../webext-background/webext-background.service';
 
@@ -29,14 +30,13 @@ export default class WebExtPlatformService implements PlatformService {
   logSvc: LogService;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
+  workingSvc: WorkingService;
 
   contentScriptUrl = 'assets/webpage-metadata-collecter.js';
-  loadingId: string;
   optionalPermissions = {
     origins: ['http://*/', 'https://*/']
   };
   refreshInterfaceTimeout: any;
-  showWorking: boolean;
 
   static $inject = [
     '$injector',
@@ -48,7 +48,8 @@ export default class WebExtPlatformService implements PlatformService {
     'BookmarkIdMapperService',
     'LogService',
     'StoreService',
-    'UtilityService'
+    'UtilityService',
+    'WorkingService'
   ];
   constructor(
     $injector: ng.auto.IInjectorService,
@@ -60,7 +61,8 @@ export default class WebExtPlatformService implements PlatformService {
     BookmarkIdMapperSvc: BookmarkIdMapperService,
     LogSvc: LogService,
     StoreSvc: StoreService,
-    UtilitySvc: UtilityService
+    UtilitySvc: UtilityService,
+    WorkingSvc: WorkingService
   ) {
     this.$injector = $injector;
     this.$interval = $interval;
@@ -72,8 +74,7 @@ export default class WebExtPlatformService implements PlatformService {
     this.logSvc = LogSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
-
-    this.showWorking = false;
+    this.workingSvc = WorkingSvc;
   }
 
   get backgroundSvc(): WebExtBackgroundService {
@@ -178,21 +179,6 @@ export default class WebExtPlatformService implements PlatformService {
           return metadata;
         });
     });
-  }
-
-  hideWorkingUI(id?: string, timeout?: ng.IPromise<void>): void {
-    if (timeout) {
-      this.$timeout.cancel(timeout);
-    }
-
-    // Hide any alert messages
-    this.alertSvc.clearCurrentAlert();
-
-    // Hide loading overlay if supplied if matches current
-    if (!this.loadingId || id === this.loadingId) {
-      this.showWorking = false;
-      this.loadingId = null;
-    }
   }
 
   openUrl(url: string): void {
@@ -311,36 +297,6 @@ export default class WebExtPlatformService implements PlatformService {
       exception.logged = true;
       throw exception;
     });
-  }
-
-  showWorkingUI(id?: string): ng.IPromise<void> {
-    let timeout: ng.IPromise<void>;
-
-    // Return if loading overlay already displayed
-    if (this.loadingId) {
-      return;
-    }
-
-    // Hide any alert messages
-    this.alertSvc.clearCurrentAlert();
-
-    switch (id) {
-      // Loading bookmark metadata, wait a moment before displaying loading overlay
-      case 'retrievingMetadata':
-        timeout = this.$timeout(() => {
-          this.showWorking = true;
-        }, 500);
-        break;
-      // Display default overlay
-      default:
-        timeout = this.$timeout(() => {
-          this.showWorking = true;
-        });
-        break;
-    }
-
-    this.loadingId = id;
-    return timeout;
   }
 
   startSyncUpdateChecks(): ng.IPromise<void> {

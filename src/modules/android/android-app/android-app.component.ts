@@ -244,4 +244,9 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
         });
       });
   }
+
+  workingCancelAction(): ng.IPromise<void> {
+    // TODO: implement
+    return this.$q.resolve();
+  }
 }

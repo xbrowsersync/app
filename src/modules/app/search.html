@@ -1,13 +1,13 @@
 <div class="header-panel clearfix" hm-tap="vm.search.selectedBookmark = null">
   <button class="btn btn-icon btn-settings" title="{{ vm.platformSvc.getI18nString(vm.strings.button_Settings_Label) }}"
-          ng-click="vm.utilitySvc.handleEvent(vm.changeView, vm.view.views.settings)" tabindex="1002">
+          ng-click="vm.utilitySvc.handleEvent(vm.changeView, vm.view.views.settings)" tabindex="5">
     <i class="fas fa-cog" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.button_Settings_Label) }}</span>
   </button>
   <button class="btn btn-icon btn-toggle-bookmark" ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformName)"
           ng-class="{ 'active': vm.bookmark.active }"
           title="{{ vm.bookmark.active ? vm.platformSvc.getI18nString(vm.strings.button_EditBookmark_Label) : vm.platformSvc.getI18nString(vm.strings.button_AddBookmark_Label) }}"
-          ng-click="vm.utilitySvc.handleEvent(vm.searchForm_ToggleBookmark_Click)" tabindex="1001">
+          ng-click="vm.utilitySvc.handleEvent(vm.searchForm_ToggleBookmark_Click)" tabindex="4">
     <i class="far fa-bookmark" aria-hidden="true"></i>
     <span class="sr-only" ng-if="vm.bookmark.active">{{
       vm.platformSvc.getI18nString(vm.strings.button_EditBookmark_Label) }}</span>
@@ -16,7 +16,7 @@
   </button>
   <button class="btn btn-icon" title="{{ vm.search.displayFolderView ? vm.platformSvc.getI18nString(vm.strings.button_SearchResults_Label) : 
       vm.platformSvc.getI18nString(vm.strings.button_BookmarkTree_Label) }}"
-          ng-click="vm.utilitySvc.handleEvent(vm.searchForm_ToggleView_Click)" tabindex="1000">
+          ng-click="vm.utilitySvc.handleEvent(vm.searchForm_ToggleView_Click)" tabindex="3">
     <i class="fas fa-list animate-fade-in" ng-if="vm.search.displayFolderView" aria-hidden="true"></i>
     <i class="fas fa-stream animate-fade-in" ng-if="!vm.search.displayFolderView" aria-hidden="true"></i>
     <span class="sr-only" ng-if="vm.search.displayFolderView">
@@ -43,7 +43,7 @@
     </div>
     <button class="btn btn-icon btn-clear" ng-show="vm.search.query"
             title="{{ vm.platformSvc.getI18nString(vm.strings.button_Clear_Label) }}"
-            ng-click="vm.utilitySvc.handleEvent(vm.searchForm_Clear_Click)">
+            ng-click="vm.utilitySvc.handleEvent(vm.searchForm_Clear_Click)" tabindex="2">
       <i class="fas fa-times" aria-hidden="true"></i>
     </button>
   </div>
@@ -70,7 +70,7 @@
               is-selected="vm.search.selectedBookmark ===  result.id" share-bookmark="vm.searchForm_ShareBookmark_Click"
               hm-press="vm.utilitySvc.handleEvent(vm.searchForm_SelectBookmark_Press, $event,  result.id)"
               ng-keydown="vm.utilitySvc.handleEvent(vm.searchForm_SearchResult_KeyDown, $event)"
-              ng-class="{ 'animate': vm.search.selectedBookmark ===  result.id }" tabindex="{{ $index + 1 }}">
+              ng-class="{ 'animate': vm.search.selectedBookmark ===  result.id }" tabindex="{{ $index + 5 }}">
     </bookmark>
   </div>
 </div>

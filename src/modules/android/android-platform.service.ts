@@ -21,6 +21,8 @@ import StoreService from '../shared/store/store.service';
 import SyncEngineService from '../shared/sync/sync-engine/sync-engine.service';
 import { Sync } from '../shared/sync/sync.interface';
 import UtilityService from '../shared/utility/utility.service';
+import { WorkingContext } from '../shared/working/working.enum';
+import WorkingService from '../shared/working/working.service';
 import { AndroidAlert } from './android-app/android-app.interface';
 
 @autobind
@@ -38,6 +40,7 @@ export default class AndroidPlatformService implements PlatformService {
   storeSvc: StoreService;
   syncEngineSvc: SyncEngineService;
   utilitySvc: UtilityService;
+  workingSvc: WorkingService;
 
   backgroundSyncInterval: ng.IPromise<void>;
   currentPage: BookmarkMetadata;
@@ -58,7 +61,8 @@ export default class AndroidPlatformService implements PlatformService {
     'NetworkService',
     'StoreService',
     'SyncEngineService',
-    'UtilityService'
+    'UtilityService',
+    'WorkingService'
   ];
   constructor(
     $exceptionHandler: ng.IExceptionHandlerService,
@@ -72,7 +76,8 @@ export default class AndroidPlatformService implements PlatformService {
     NetworkSvc: NetworkService,
     StoreSvc: StoreService,
     SyncEngineSvc: SyncEngineService,
-    UtilitySvc: UtilityService
+    UtilitySvc: UtilityService,
+    WorkingSvc: WorkingService
   ) {
     this.$exceptionHandler = $exceptionHandler;
     this.$http = $http;
@@ -86,6 +91,7 @@ export default class AndroidPlatformService implements PlatformService {
     this.storeSvc = StoreSvc;
     this.syncEngineSvc = SyncEngineSvc;
     this.utilitySvc = UtilitySvc;
+    this.workingSvc = WorkingSvc;
 
     this.i18nStrings = [];
   }
@@ -205,12 +211,10 @@ export default class AndroidPlatformService implements PlatformService {
     return this.methodNotApplicable();
   }
 
-  executeSync(isBackgroundSync = false, displayLoadingId?: string): ng.IPromise<void> {
-    let displayLoadingTimeout: ng.IPromise<void>;
-
+  executeSync(isBackgroundSync = false, workingContext?: WorkingContext): ng.IPromise<void> {
     // Display loading panel if not background sync and currently on the search view
     if (!isBackgroundSync) {
-      displayLoadingTimeout = this.showWorkingUI(displayLoadingId);
+      this.workingSvc.show(workingContext);
     }
 
     // Sync bookmarks
@@ -223,7 +227,7 @@ export default class AndroidPlatformService implements PlatformService {
         }
       })
       .finally(() => {
-        this.hideWorkingUI(displayLoadingId, displayLoadingTimeout);
+        this.workingSvc.hide();
       });
   }
 
@@ -309,7 +313,6 @@ export default class AndroidPlatformService implements PlatformService {
   getPageMetadata(getFullMetadata = true, pageUrl?: string): ng.IPromise<WebpageMetadata> {
     let inAppBrowser: any;
     let loadUrlTimeout: ng.IPromise<void>;
-    let timeout: ng.IPromise<void>;
 
     // Set default metadata from provided page url or current page
     const metadata: WebpageMetadata = {
@@ -331,7 +334,7 @@ export default class AndroidPlatformService implements PlatformService {
       }
 
       const handleResponse = (pageContent?: string, err?: Error): void => {
-        this.hideWorkingUI('retrievingMetadata', timeout);
+        this.workingSvc.hide();
 
         // Cancel timeout
         if (loadUrlTimeout) {
@@ -449,7 +452,8 @@ export default class AndroidPlatformService implements PlatformService {
       const cancelledCallback = (): void => {
         resolve(metadata);
       };
-      timeout = this.showWorkingUI('retrievingMetadata', cancelledCallback);
+      // TODO: fix cancelledCallback
+      this.workingSvc.show(WorkingContext.RetrievingMetadata);
       inAppBrowser = window.cordova.InAppBrowser.open(metadata.url, '_blank', 'hidden=yes');
 
       inAppBrowser.addEventListener('loaderror', (event: any) => {
@@ -727,18 +731,6 @@ export default class AndroidPlatformService implements PlatformService {
       });
   }
 
-  hideWorkingUI(id?: string, timeout?: ng.IPromise<void>): void {
-    if (timeout) {
-      this.$timeout.cancel(timeout);
-    }
-
-    // Hide loading panel if supplied if matches current
-    if (!this.loadingId || id === this.loadingId) {
-      window.SpinnerDialog.hide();
-      this.loadingId = null;
-    }
-  }
-
   initI18n(): ng.IPromise<void> {
     let i18nCode = 'en';
     return this.$q<any>((resolve, reject) => {
@@ -840,47 +832,6 @@ export default class AndroidPlatformService implements PlatformService {
 
   refreshNativeInterface(): ng.IPromise<void> {
     return this.methodNotApplicable();
-  }
-
-  showWorkingUI(id?: string, cancelledCallback?: () => void): ng.IPromise<void> {
-    let timeout: ng.IPromise<void>;
-
-    // Return if loading overlay already displayed
-    if (this.loadingId) {
-      return;
-    }
-
-    switch (id) {
-      // Display syncing dialog after a slight delay
-      case 'delayDisplayDialog':
-        timeout = this.$timeout(() => {
-          if (this.vm.view.current === this.vm.view.views.search) {
-            window.SpinnerDialog.show(null, `${this.vm.working.message}…`, true);
-          }
-        }, 250);
-        break;
-      // Loading bookmark metadata, display cancellable overlay
-      case 'retrievingMetadata':
-        const cancel = () => {
-          window.SpinnerDialog.hide();
-          this.loadingId = null;
-          cancelledCallback();
-        };
-        window.SpinnerDialog.hide();
-        timeout = this.$timeout(() => {
-          window.SpinnerDialog.show(null, this.getI18nString(Strings.getMetadata_Message), cancel);
-        }, 250);
-        break;
-      // Display default overlay
-      default:
-        timeout = this.$timeout(() => {
-          window.SpinnerDialog.show(null, `${this.getI18nString(Strings.working_Syncing_Message)}…`, true);
-        });
-        break;
-    }
-
-    this.loadingId = id;
-    return timeout;
   }
 
   startSyncUpdateChecks(): ng.IPromise<void> {

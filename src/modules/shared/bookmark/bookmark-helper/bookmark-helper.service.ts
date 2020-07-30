@@ -452,7 +452,7 @@ export default class BookmarkHelperService {
           bookmark.title.indexOf(Globals.Bookmarks.HorizontalSeparatorTitle) >= 0 ||
           bookmark.title === Globals.Bookmarks.VerticalSeparatorTitle) &&
         (!bookmark.url || bookmark.url === this.platformSvc.getNewTabUrl()) &&
-        !(bookmark as Bookmark).children)
+        (!(bookmark as Bookmark).children || (bookmark as Bookmark).children?.length === 0))
     );
   }
 
@@ -468,7 +468,6 @@ export default class BookmarkHelperService {
 
     // If bookmark is a separator, convert bookmark to separator
     if (this.isSeparator(bookmarkToModify)) {
-      // TODO: test this
       // Create a new separator with same id
       const separator = this.newBookmark(
         bookmarkToModify.title,
