@@ -52,6 +52,7 @@ import { Sync } from '../../shared/sync/sync.interface';
 import UtilityService from '../../shared/utility/utility.service';
 import { WorkingContext } from '../../shared/working/working.enum';
 import WorkingService from '../../shared/working/working.service';
+import { AppView } from '../app.enum';
 import { AppHelperService } from '../app.interface';
 
 @autobind
@@ -75,6 +76,7 @@ export default class AppMainComponent {
   workingSvc: WorkingService;
 
   ApiServiceStatus = ApiServiceStatus;
+  appView = AppView;
   bookmark = {
     active: false,
     addButtonDisabledUntilEditForm: false,
@@ -88,10 +90,6 @@ export default class AppMainComponent {
   };
   bookmarkForm: any;
   globals = Globals;
-  help = {
-    currentPage: 0,
-    pages: undefined
-  };
   initialised = true;
   login = {
     displayGetSyncIdPanel: true,
@@ -184,21 +182,7 @@ export default class AppMainComponent {
     }
   };
   syncForm: any;
-  view = {
-    current: undefined,
-    views: {
-      login: 1,
-      search: 2,
-      bookmark: 3,
-      settings: 4,
-      help: 5,
-      support: 6,
-      updated: 7,
-      permissions: 8,
-      loading: 9,
-      scan: 10
-    }
-  };
+  currentView: AppView;
   vm: AppMainComponent = this;
 
   static $inject = [
@@ -736,7 +720,7 @@ export default class AppMainComponent {
     return this.displayMainView();
   }
 
-  changeView(view, viewData?) {
+  changeView(view: AppView, viewData?: any) {
     let initNewView;
 
     // Hide loading panel
@@ -744,25 +728,25 @@ export default class AppMainComponent {
 
     // Initialise new view
     switch (view) {
-      case this.view.views.bookmark:
+      case AppView.Bookmark:
         initNewView = this.init_bookmarkView(viewData);
         break;
-      case this.view.views.search:
+      case AppView.Search:
         initNewView = this.init_searchView();
         break;
-      case this.view.views.settings:
+      case AppView.Settings:
         initNewView = this.init_settingsView();
         break;
-      case this.view.views.help:
-      case this.view.views.permissions:
-      case this.view.views.support:
-      case this.view.views.updated:
+      case AppView.Help:
+      case AppView.Permissions:
+      case AppView.Support:
+      case AppView.Updated:
         initNewView = this.init_infoView();
         break;
-      case this.view.views.loading:
+      case AppView.Working:
         initNewView = this.init_loadingView();
         break;
-      case this.view.views.login:
+      case AppView.Login:
         initNewView = this.init_loginView();
         break;
       default:
@@ -771,7 +755,7 @@ export default class AppMainComponent {
 
     return initNewView.finally(() => {
       // Display new view
-      this.view.current = view;
+      this.currentView = view;
 
       // Attach events to new tab links
       this.$timeout(this.setNewTabLinks, 150);
@@ -843,15 +827,15 @@ export default class AppMainComponent {
       .then((storeContent) => {
         switch (true) {
           case storeContent.displayUpdated:
-            return this.changeView(this.view.views.updated);
+            return this.changeView(AppView.Updated);
           case storeContent.displayPermissions:
-            return this.changeView(this.view.views.permissions);
+            return this.changeView(AppView.Permissions);
           case storeContent.displayHelp:
             return this.helpPanel_ShowHelp();
           case storeContent.syncEnabled:
-            return this.changeView(this.view.views.search);
+            return this.changeView(AppView.Search);
           default:
-            return this.changeView(this.view.views.login);
+            return this.changeView(AppView.Login);
         }
       });
   }
@@ -1001,13 +985,14 @@ export default class AppMainComponent {
         this.sync.id = cachedData[0].syncId;
         this.sync.service.url = cachedData[1];
 
+        // TODO: move this to webext
         // Check if a sync is currently in progress
         return this.appHelperSvc.getCurrentSync().then((currentSync) => {
           if (currentSync) {
             this.logSvc.logInfo('Waiting for syncs to finish...');
 
-            // Display loading panel
-            return this.changeView(this.view.views.loading)
+            // Display working panel
+            return this.changeView(AppView.Working)
               .then(this.waitForSyncsToFinish)
               .then(() => {
                 return this.storeSvc.get<boolean>(StoreKey.SyncEnabled);
@@ -1023,7 +1008,7 @@ export default class AppMainComponent {
           }
 
           // Return here if view has already been set
-          if (this.view.current) {
+          if (this.currentView) {
             return;
           }
 
@@ -1132,8 +1117,7 @@ export default class AppMainComponent {
   }
 
   init_loadingView() {
-    this.workingSvc.show();
-    return this.$q.resolve();
+    return this.$q.resolve().then(() => this.workingSvc.show());
   }
 
   init_loginView() {
@@ -1313,7 +1297,7 @@ export default class AppMainComponent {
 
   helpPanel_ShowHelp() {
     this.storeSvc.set(StoreKey.DisplayHelp, false);
-    this.changeView(this.view.views.help);
+    this.changeView(AppView.Help);
   }
 
   permissions_Revoke_Click() {
@@ -1531,7 +1515,7 @@ export default class AppMainComponent {
 
   searchForm_AddBookmark_Click() {
     // Display bookmark panel
-    return this.changeView(this.view.views.bookmark).then(() => {
+    return this.changeView(AppView.Bookmark).then(() => {
       // Disable add bookmark button by default
       this.bookmark.addButtonDisabledUntilEditForm = true;
     });
@@ -1845,7 +1829,7 @@ export default class AppMainComponent {
 
   searchForm_ToggleBookmark_Click() {
     // Display bookmark panel
-    return this.changeView(this.view.views.bookmark);
+    return this.changeView(AppView.Bookmark);
   }
 
   searchForm_ToggleView_Click() {
@@ -1876,10 +1860,10 @@ export default class AppMainComponent {
     // On mobiles, display bookmark panel with slight delay to avoid focussing on description field
     if (this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
       this.$timeout(() => {
-        this.changeView(this.view.views.bookmark, bookmarkToUpdate);
+        this.changeView(AppView.Bookmark, bookmarkToUpdate);
       }, 500);
     } else {
-      this.changeView(this.view.views.bookmark, bookmarkToUpdate);
+      this.changeView(AppView.Bookmark, bookmarkToUpdate);
     }
   }
 
@@ -2097,7 +2081,7 @@ export default class AppMainComponent {
 
     // If ID was removed disable sync and display login panel
     if (err instanceof Exceptions.SyncRemovedException) {
-      return this.changeView(this.view.views.login).finally(() => {
+      return this.changeView(AppView.Login).finally(() => {
         this.$exceptionHandler(err);
       });
     }
@@ -2121,8 +2105,8 @@ export default class AppMainComponent {
 
     // If initial sync, switch to search panel
     this.$timeout(() => {
-      if (this.view.current !== this.view.views.search) {
-        return this.changeView(this.view.views.search);
+      if (this.currentView !== AppView.Search) {
+        return this.changeView(AppView.Search);
       }
 
       this.displayDefaultSearchState();
@@ -2148,7 +2132,7 @@ export default class AppMainComponent {
 
   syncForm_DisableSync_Click() {
     // Disable sync and switch to login panel
-    return this.$q.all([this.disableSync(), this.changeView(this.view.views.login)]);
+    return this.$q.all([this.disableSync(), this.changeView(AppView.Login)]);
   }
 
   syncForm_EnableSync_Click() {
@@ -2382,7 +2366,7 @@ export default class AppMainComponent {
 
   closeUpdatedPanel() {
     this.storeSvc.set(StoreKey.DisplayUpdated, false);
-    this.changeView(this.view.views.support);
+    this.changeView(AppView.Support);
   }
 
   updateServiceUrl(url) {

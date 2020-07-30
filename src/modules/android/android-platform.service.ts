@@ -5,6 +5,7 @@ import { Injectable } from 'angular-ts-decorators';
 import compareVersions from 'compare-versions';
 import { autobind } from 'core-decorators';
 import Strings from '../../../res/strings/en.json';
+import { AppView } from '../app/app.enum';
 import { Alert } from '../shared/alert/alert.interface';
 import AlertService from '../shared/alert/alert.service';
 import BookmarkHelperService from '../shared/bookmark/bookmark-helper/bookmark-helper.service';
@@ -155,7 +156,7 @@ export default class AndroidPlatformService implements PlatformService {
 
     // Set current page as shared bookmark and display bookmark panel
     this.currentPage = bookmark;
-    return this.vm.changeView(this.vm.view.views.bookmark).finally(() => {
+    return this.vm.changeView(AppView.Bookmark).finally(() => {
       // Set bookmark form fields to display default values
       this.vm.bookmark.current = bookmark;
       this.vm.bookmark.originalUrl = this.vm.bookmark.current.url;
@@ -514,12 +515,12 @@ export default class AndroidPlatformService implements PlatformService {
 
   handleBackButton(event: Event): void {
     if (
-      this.vm.view.current === this.vm.view.views.bookmark ||
-      this.vm.view.current === this.vm.view.views.settings ||
-      this.vm.view.current === this.vm.view.views.help ||
-      this.vm.view.current === this.vm.view.views.support ||
-      this.vm.view.current === this.vm.view.views.updated ||
-      this.vm.view.current === this.vm.view.views.scan
+      this.vm.currentView === AppView.Bookmark ||
+      this.vm.currentView === AppView.Help ||
+      this.vm.currentView === AppView.Scan ||
+      this.vm.currentView === AppView.Settings ||
+      this.vm.currentView === AppView.Support ||
+      this.vm.currentView === AppView.Updated
     ) {
       // Back to login/search panel
       event.preventDefault();
@@ -621,7 +622,7 @@ export default class AndroidPlatformService implements PlatformService {
             }
 
             // Refresh search results if query not present
-            if (this.vm.view.current === this.vm.view.views.search && !this.vm.search.query) {
+            if (this.vm.currentView === AppView.Search && !this.vm.search.query) {
               this.vm.displayDefaultSearchState();
             }
           })
@@ -679,7 +680,7 @@ export default class AndroidPlatformService implements PlatformService {
             }
 
             // Refresh search results if query not present
-            if (this.vm.view.current === this.vm.view.views.search && !this.vm.search.query) {
+            if (this.vm.currentView === AppView.Search && !this.vm.search.query) {
               this.vm.displayDefaultSearchState();
             }
           })

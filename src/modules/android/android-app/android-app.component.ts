@@ -2,6 +2,7 @@ import './android-app.component.scss';
 import { Component, OnInit } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import AppMainComponent from '../../app/app-main/app-main.component';
+import { AppView } from '../../app/app.enum';
 import * as Exceptions from '../../shared/exception/exception';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformType } from '../../shared/global-shared.enum';
@@ -159,7 +160,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
         if (status.authorized) {
           window.QRScanner.show(() => {
             this.$timeout(() => {
-              this.vm.changeView(this.vm.view.views.scan);
+              this.vm.changeView(AppView.Scan);
               waitForScan();
             }, 500);
           });
