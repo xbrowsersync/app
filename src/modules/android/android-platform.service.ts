@@ -1,5 +1,3 @@
-/* eslint-disable no-case-declarations */
-
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import compareVersions from 'compare-versions';

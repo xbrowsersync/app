@@ -4,6 +4,7 @@ import { autobind } from 'core-decorators';
 import Strings from '../../../../res/strings/en.json';
 import { PlatformService } from '../../shared/global-shared.interface';
 import UtilityService from '../../shared/utility/utility.service';
+import { KeyCode } from '../app.enum';
 import { AppHelperService } from '../app.interface';
 
 @autobind
@@ -57,19 +58,16 @@ export default class AppHelpComponent implements OnInit {
   }
 
   handleKeyDown(event: KeyboardEvent): void {
-    switch (true) {
-      // Escape key
-      case event.keyCode === 27:
+    switch (event.keyCode) {
+      case KeyCode.Escape:
         event.preventDefault();
         this.close()();
         break;
-      // Left arrow key
-      case event.keyCode === 37:
+      case KeyCode.ArrowLeft:
         event.preventDefault();
         this.displayPage(this.currentPage - 1);
         break;
-      // Right arrow key
-      case event.keyCode === 39:
+      case KeyCode.ArrowRight:
         event.preventDefault();
         this.displayPage(this.currentPage + 1);
         break;

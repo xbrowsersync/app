@@ -1,17 +1,3 @@
-/* eslint-disable no-unreachable */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-empty */
-/* eslint-disable no-plusplus */
-/* eslint-disable no-fallthrough */
-/* eslint-disable eqeqeq */
-/* eslint-disable no-lonely-if */
-/* eslint-disable no-shadow */
-/* eslint-disable no-param-reassign */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable consistent-return */
-/* eslint-disable default-case */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
 import './app-main.component.scss';
 import angular from 'angular';
 import { autobind } from 'core-decorators';
@@ -52,7 +38,7 @@ import { Sync } from '../../shared/sync/sync.interface';
 import UtilityService from '../../shared/utility/utility.service';
 import { WorkingContext } from '../../shared/working/working.enum';
 import WorkingService from '../../shared/working/working.service';
-import { AppView } from '../app.enum';
+import { AppView, KeyCode } from '../app.enum';
 import { AppHelperService } from '../app.interface';
 
 @autobind
@@ -88,7 +74,7 @@ export default class AppMainComponent {
     tagText: undefined,
     tagTextMeasure: undefined
   };
-  bookmarkForm: any;
+  bookmarkForm: ng.IFormController;
   globals = Globals;
   initialised = true;
   login = {
@@ -106,7 +92,7 @@ export default class AppMainComponent {
     upgradeConfirmed: false,
     validatingServiceUrl: false
   };
-  restoreForm: any;
+  restoreForm: ng.IFormController;
   search = {
     batchResultsNum: 10,
     bookmarkTree: undefined,
@@ -181,7 +167,7 @@ export default class AppMainComponent {
       url: undefined
     }
   };
-  syncForm: any;
+  syncForm: ng.IFormController;
   currentView: AppView;
   vm: AppMainComponent = this;
 
@@ -240,10 +226,6 @@ export default class AppMainComponent {
     this.syncEngineSvc = SyncEngineSvc;
     this.utilitySvc = UtilitySvc;
     this.workingSvc = WorkingSvc;
-
-    this.bookmarkForm = {};
-    this.restoreForm = {};
-    this.syncForm = {};
   }
 
   backupRestoreForm_Backup_Click() {
@@ -483,15 +465,17 @@ export default class AppMainComponent {
   }
 
   bookmarkForm_BookmarkTags_KeyDown(event) {
-    switch (true) {
-      // If user pressed Enter
-      case event.keyCode === 13:
+    switch (event.keyCode) {
+      case KeyCode.Enter:
         // Add new tags
         event.preventDefault();
         this.bookmarkForm_CreateTags_Click();
         break;
-      // If user pressed tab or right arrow key and lookahead present
-      case (event.keyCode === 9 || event.keyCode === 39) && this.bookmark.tagLookahead:
+      case KeyCode.Tab:
+      case KeyCode.ArrowRight:
+        if (!this.bookmark.tagLookahead) {
+          break;
+        }
         // Add lookahead to tag text
         event.preventDefault();
         this.bookmark.tagText += this.bookmark.tagLookahead.replace(/&nbsp;/g, ' ');
@@ -500,6 +484,7 @@ export default class AppMainComponent {
           (document.querySelector('input[name="bookmarkTags"]') as HTMLInputElement).focus();
         }
         break;
+      default:
     }
   }
 
@@ -1158,13 +1143,11 @@ export default class AppMainComponent {
               (document.querySelector('.otherSyncsWarning .buttons > button') as HTMLButtonElement).focus();
             }, 150);
           }
-        } else {
+        } else if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
           // Focus on password field
-          if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
-            this.$timeout(() => {
-              (document.querySelector('.active-login-form  input[name="txtPassword"]') as HTMLInputElement).focus();
-            }, 150);
-          }
+          this.$timeout(() => {
+            (document.querySelector('.active-login-form  input[name="txtPassword"]') as HTMLInputElement).focus();
+          }, 150);
         }
       }
 
@@ -1236,10 +1219,10 @@ export default class AppMainComponent {
           if (this.sync.enabled && !this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
             this.$q
               .all([this.syncEngineSvc.checkForUpdates(), this.appHelperSvc.getNextScheduledSyncUpdateCheck()])
-              .then((data) => {
-                if (data[0]) {
+              .then((results) => {
+                if (results[0]) {
                   this.settings.updatesAvailable = true;
-                  this.settings.nextAutoUpdate = data[1];
+                  this.settings.nextAutoUpdate = results[1];
                 } else {
                   this.settings.updatesAvailable = false;
                 }
@@ -1675,40 +1658,50 @@ export default class AppMainComponent {
   }
 
   searchForm_SearchText_KeyDown(event) {
-    // If user pressed enter and search text present
-    if (event.keyCode === 13) {
-      (document.activeElement as HTMLInputElement).blur();
+    switch (event.keyCode) {
+      case KeyCode.Enter:
+        (document.activeElement as HTMLInputElement).blur();
 
-      if (this.search.getSearchResultsTimeout) {
-        this.$timeout.cancel(this.search.getSearchResultsTimeout);
-        this.search.getSearchResultsTimeout = null;
-      }
+        if (this.search.getSearchResultsTimeout) {
+          this.$timeout.cancel(this.search.getSearchResultsTimeout);
+          this.search.getSearchResultsTimeout = null;
+        }
 
-      // Get search results
-      this.search.displayFolderView = false;
-      this.searchBookmarks();
+        // Get search results
+        this.search.displayFolderView = false;
+        this.searchBookmarks();
 
-      // Return focus to search box
-      this.$timeout(() => {
-        (document.querySelector('input[name=txtSearch]') as HTMLInputElement).focus();
-      });
+        // Return focus to search box
+        this.$timeout(() => {
+          (document.querySelector('input[name=txtSearch]') as HTMLInputElement).focus();
+        });
+        break;
 
-      return;
-    }
+      case KeyCode.ArrowDown:
+        if (this.search.results?.length === 0) {
+          break;
+        }
 
-    // If user pressed down arrow and search results present
-    if (event.keyCode === 40 && this.search.results?.length > 0) {
-      // Focus on first search result
-      event.preventDefault();
-      (document.querySelectorAll('.search-results-container bookmark')[0] as HTMLDivElement).focus();
-      return;
-    }
+        // Focus on first search result
+        event.preventDefault();
+        Array.prototype.slice
+          .call(document.querySelectorAll('.search-results-container bookmark'))
+          .every((searchResult: HTMLDivElement) => {
+            searchResult.focus();
+            return false;
+          });
+        break;
 
-    // If user pressed tab or right arrow key and lookahead present
-    if ((event.keyCode === 9 || event.keyCode === 39) && this.search.lookahead) {
-      // Add lookahead to search query
-      event.preventDefault();
-      this.searchForm_SearchText_Autocomplete();
+      case KeyCode.Tab:
+      case KeyCode.ArrowRight:
+        if (!this.search.lookahead) {
+          break;
+        }
+        // Add lookahead to search query
+        event.preventDefault();
+        this.searchForm_SearchText_Autocomplete();
+        break;
+      default:
     }
   }
 
@@ -1717,13 +1710,11 @@ export default class AppMainComponent {
     let newIndex;
     let elementToFocus;
 
-    switch (true) {
-      // Enter
-      case event.keyCode === 13:
+    switch (event.keyCode) {
+      case KeyCode.Enter:
         event.target.querySelector('.bookmark-content').click();
         break;
-      // Up arrow
-      case event.keyCode === 38:
+      case KeyCode.ArrowUp:
         if (event.target.previousElementSibling) {
           // Focus on previous result
           elementToFocus = event.target.previousElementSibling;
@@ -1732,15 +1723,13 @@ export default class AppMainComponent {
           elementToFocus = document.querySelector('input[name=txtSearch]');
         }
         break;
-      // Down arrow
-      case event.keyCode === 40:
+      case KeyCode.ArrowDown:
         if (event.target.nextElementSibling) {
           // Focus on next result
           elementToFocus = event.target.nextElementSibling;
         }
         break;
-      // Page up
-      case event.keyCode === 33:
+      case KeyCode.PageUp:
         // Focus on result 10 up from current
         currentIndex = _.indexOf(event.target.parentElement.children, event.target);
         newIndex = currentIndex - 10;
@@ -1750,8 +1739,7 @@ export default class AppMainComponent {
           elementToFocus = event.target.parentElement.children[newIndex];
         }
         break;
-      // Page down
-      case event.keyCode === 34:
+      case KeyCode.PageDown:
         // Focus on result 10 down from current
         currentIndex = _.indexOf(event.target.parentElement.children, event.target);
         newIndex = currentIndex + 10;
@@ -1761,25 +1749,25 @@ export default class AppMainComponent {
           elementToFocus = event.target.parentElement.children[newIndex];
         }
         break;
-      // Home
-      case event.keyCode === 36:
+      case KeyCode.Home:
         // Focus on first result
         elementToFocus = event.target.parentElement.firstElementChild;
         break;
-      // End
-      case event.keyCode === 35:
+      case KeyCode.End:
         // Focus on last result
         elementToFocus = event.target.parentElement.lastElementChild;
         break;
-      // Backspace
-      case event.keyCode === 8:
-      // Space
-      case event.keyCode === 32:
-      // Numbers and letters
-      case event.keyCode > 47 && event.keyCode < 112:
+      case KeyCode.Backspace:
+      case KeyCode.Space:
         // Focus on search box
         elementToFocus = document.querySelector('input[name=txtSearch]');
         break;
+      default:
+        // Numbers and letters
+        if (event.keyCode > 47 && event.keyCode < 106) {
+          // Focus on search box
+          elementToFocus = document.querySelector('input[name=txtSearch]');
+        }
     }
 
     if (elementToFocus) {
@@ -1875,7 +1863,7 @@ export default class AppMainComponent {
 
   setNewTabLinks() {
     const links = document.querySelectorAll('a.new-tab');
-    for (let i = 0; i < links.length; i++) {
+    for (let i = 0; i < links.length; i += 1) {
       const link = links[i] as any;
       link.onclick = this.appHelperSvc.openUrl;
     }
