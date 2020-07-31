@@ -323,9 +323,13 @@
     "key": "button_Deny_Label",
     "message": "No"
   },
-  "search_Field_Description": {
-    "key": "search_Field_Description",
+  "search_Field_Description_Desktop": {
+    "key": "search_Field_Description_Desktop",
     "message": "Start typing to find bookmarks or just hit Enter"
+  },
+  "search_Field_Description_Mobile": {
+    "key": "search_Field_Description_Mobile",
+    "message": "Find a bookmark"
   },
   "search_NoBookmarks_Message": {
     "key": "search_NoBookmarks_Message",

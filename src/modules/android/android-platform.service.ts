@@ -29,6 +29,7 @@ import { AndroidAlert } from './android-app/android-app.interface';
 export default class AndroidPlatformService implements PlatformService {
   $exceptionHandler: ng.IExceptionHandlerService;
   $http: ng.IHttpService;
+  $injector: ng.auto.IInjectorService;
   $interval: ng.IIntervalService;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
@@ -37,7 +38,7 @@ export default class AndroidPlatformService implements PlatformService {
   logSvc: LogService;
   networkSvc: NetworkService;
   storeSvc: StoreService;
-  syncEngineSvc: SyncEngineService;
+  _syncEngineSvc: SyncEngineService;
   utilitySvc: UtilityService;
   workingSvc: WorkingService;
 
@@ -51,6 +52,7 @@ export default class AndroidPlatformService implements PlatformService {
   static $inject = [
     '$exceptionHandler',
     '$http',
+    '$injector',
     '$interval',
     '$q',
     '$timeout',
@@ -59,13 +61,13 @@ export default class AndroidPlatformService implements PlatformService {
     'LogService',
     'NetworkService',
     'StoreService',
-    'SyncEngineService',
     'UtilityService',
     'WorkingService'
   ];
   constructor(
     $exceptionHandler: ng.IExceptionHandlerService,
     $http: ng.IHttpService,
+    $injector: ng.auto.IInjectorService,
     $interval: ng.IIntervalService,
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
@@ -74,12 +76,12 @@ export default class AndroidPlatformService implements PlatformService {
     LogSvc: LogService,
     NetworkSvc: NetworkService,
     StoreSvc: StoreService,
-    SyncEngineSvc: SyncEngineService,
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
   ) {
     this.$exceptionHandler = $exceptionHandler;
     this.$http = $http;
+    this.$injector = $injector;
     this.$interval = $interval;
     this.$q = $q;
     this.$timeout = $timeout;
@@ -88,11 +90,17 @@ export default class AndroidPlatformService implements PlatformService {
     this.logSvc = LogSvc;
     this.networkSvc = NetworkSvc;
     this.storeSvc = StoreSvc;
-    this.syncEngineSvc = SyncEngineSvc;
     this.utilitySvc = UtilitySvc;
     this.workingSvc = WorkingSvc;
 
     this.i18nStrings = [];
+  }
+
+  get syncEngineSvc(): SyncEngineService {
+    if (angular.isUndefined(this._syncEngineSvc)) {
+      this._syncEngineSvc = this.$injector.get('SyncEngineService');
+    }
+    return this._syncEngineSvc;
   }
 
   checkForDarkTheme(): ng.IPromise<void> {
@@ -108,7 +116,7 @@ export default class AndroidPlatformService implements PlatformService {
       return this.$q<void>((resolve, reject) => {
         window.cordova.plugins.ThemeDetection.isDarkModeEnabled(resolve, reject);
       }).then((isDarkModeEnabled: any) => {
-        this.vm.settings.darkModeEnabled = isDarkModeEnabled.value;
+        return this.storeSvc.set(StoreKey.DarkModeEnabled, isDarkModeEnabled.value);
       });
     });
   }

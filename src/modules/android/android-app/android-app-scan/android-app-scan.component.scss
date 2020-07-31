@@ -1,0 +1,73 @@
+@import '../../../../styles/modules/all';
+
+app-scan {
+  display: block;
+
+  h3 {
+    font-size: 1rem;
+    margin: 1rem 0 0;
+    text-align: center;
+  }
+
+  .buttons {
+    flex: 0 8rem;
+
+    button {
+      background-color: $colour-bg3-default;
+      color: $colour-text2-default;
+      margin-right: 1.75rem;
+
+      @include theme-dark {
+        background-color: $colour-bg3-dark;
+        color: $colour-text2-dark;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &.enabled {
+        color: $colour-warning;
+      }
+    }
+  }
+
+  .target {
+    background: url('../../../../../res/images/scan.svg') 50% 50% no-repeat;
+    flex: 1;
+    height: 14rem;
+    opacity: 0.5;
+    width: 14rem;
+
+    &.error {
+      background-image: url('../../../../../res/images/scan_error.svg');
+    }
+  }
+
+  .validation {
+    font-size: 1rem;
+    margin-top: -2.5em;
+    padding: 0.25em 1em;
+    position: absolute;
+    top: 50%;
+  }
+
+  .view-content {
+    align-items: center;
+  }
+
+  @media (orientation: landscape) {
+    h3 {
+      margin: 0;
+    }
+
+    .buttons {
+      flex: 0 5rem;
+    }
+
+    .target {
+      height: 10rem;
+      width: 10rem;
+    }
+  }
+}

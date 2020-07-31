@@ -53,7 +53,6 @@ export default class AppModule {}
     ($templateRequest: ng.ITemplateRequestService) => {
       $templateRequest(`${Globals.PathToAssets}/bookmark.html`, true);
       $templateRequest(`${Globals.PathToAssets}/login.html`, true);
-      $templateRequest(`${Globals.PathToAssets}/scan.html`, true);
       $templateRequest(`${Globals.PathToAssets}/search.html`, true);
       $templateRequest(`${Globals.PathToAssets}/settings.html`, true);
     }

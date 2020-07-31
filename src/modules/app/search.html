@@ -28,7 +28,7 @@
   </button>
   <div class="search-form form-group btn-icon-container">
     <input type="text" class="form-control" name="txtSearch" maxlength="200"
-           placeholder="{{ vm.platformSvc.getI18nString(vm.strings.search_Field_Description) }}"
+           placeholder="{{ vm.platformSvc.getI18nString(vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName) ? vm.strings.search_Field_Description_Mobile : vm.strings.search_Field_Description_Desktop) }}"
            ng-model="vm.search.query" ng-change="vm.searchForm_SearchText_Change()"
            ng-keydown="vm.utilitySvc.handleEvent(vm.searchForm_SearchText_KeyDown, $event)" ng-trim="false"
            autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" tabindex="1" />

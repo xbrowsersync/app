@@ -1,3 +1,4 @@
+import angular from 'angular';
 import { Component } from 'angular-ts-decorators';
 import { autobind } from 'core-decorators';
 import Strings from '../../../../../res/strings/en.json';
@@ -34,7 +35,7 @@ export default class AndroidAppAlertComponent {
     $scope.$watch(
       () => AlertSvc.currentAlert,
       (newVal, oldVal) => {
-        if (newVal !== oldVal) {
+        if (newVal !== oldVal && !angular.isUndefined(newVal ?? undefined)) {
           this.displayAlert(newVal);
         }
       }
@@ -44,7 +45,7 @@ export default class AndroidAppAlertComponent {
   displayAlert(alert: AndroidAlert): void {
     // Strip html tags from message
     const urlRegex = new RegExp(Globals.URL.ValidUrlRegex);
-    const matches = alert.message.match(urlRegex);
+    const matches = alert.message?.match(urlRegex);
     const descriptionStripped =
       matches?.length === 0
         ? alert.message
