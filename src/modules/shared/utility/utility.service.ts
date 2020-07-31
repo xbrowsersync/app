@@ -143,6 +143,10 @@ export default class UtilityService {
     return platformName === PlatformType.Android;
   }
 
+  isTextInput(element: Element): boolean {
+    return ['INPUT', 'TEXTAREA'].indexOf(element.nodeName) !== -1;
+  }
+
   parseUrl(url: string): Url {
     const searchObject = {};
     const parser = document.createElement('a');

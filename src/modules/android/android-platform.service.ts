@@ -1,9 +1,7 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import compareVersions from 'compare-versions';
 import { autobind } from 'core-decorators';
 import Strings from '../../../res/strings/en.json';
-import { AppView } from '../app/app.enum';
 import { Alert } from '../shared/alert/alert.interface';
 import AlertService from '../shared/alert/alert.service';
 import BookmarkHelperService from '../shared/bookmark/bookmark-helper/bookmark-helper.service';
@@ -15,14 +13,12 @@ import { MessageCommand } from '../shared/global-shared.enum';
 import { I18nString, PlatformService, WebpageMetadata } from '../shared/global-shared.interface';
 import LogService from '../shared/log/log.service';
 import NetworkService from '../shared/network/network.service';
-import { StoreKey } from '../shared/store/store.enum';
 import StoreService from '../shared/store/store.service';
 import SyncEngineService from '../shared/sync/sync-engine/sync-engine.service';
 import { Sync } from '../shared/sync/sync.interface';
 import UtilityService from '../shared/utility/utility.service';
 import { WorkingContext } from '../shared/working/working.enum';
 import WorkingService from '../shared/working/working.service';
-import { AndroidAlert } from './android-app/android-app.interface';
 
 @autobind
 @Injectable('PlatformService')
@@ -43,11 +39,9 @@ export default class AndroidPlatformService implements PlatformService {
   workingSvc: WorkingService;
 
   backgroundSyncInterval: ng.IPromise<void>;
-  currentPage: BookmarkMetadata;
+  _currentPage: BookmarkMetadata;
   i18nStrings: I18nString[];
   loadingId: string;
-  sharedBookmark: BookmarkMetadata;
-  vm: any;
 
   static $inject = [
     '$exceptionHandler',
@@ -96,80 +90,18 @@ export default class AndroidPlatformService implements PlatformService {
     this.i18nStrings = [];
   }
 
+  get currentPage(): BookmarkMetadata {
+    return this._currentPage;
+  }
+  set currentPage(value: BookmarkMetadata) {
+    this._currentPage = value;
+  }
+
   get syncEngineSvc(): SyncEngineService {
     if (angular.isUndefined(this._syncEngineSvc)) {
       this._syncEngineSvc = this.$injector.get('SyncEngineService');
     }
     return this._syncEngineSvc;
-  }
-
-  checkForDarkTheme(): ng.IPromise<void> {
-    // Check dark theme is supported
-    return this.$q<void>((resolve, reject) => {
-      window.cordova.plugins.ThemeDetection.isAvailable(resolve, reject);
-    }).then((isAvailable: any) => {
-      if (!isAvailable.value) {
-        return;
-      }
-
-      // Check dark theme is enabled
-      return this.$q<void>((resolve, reject) => {
-        window.cordova.plugins.ThemeDetection.isDarkModeEnabled(resolve, reject);
-      }).then((isDarkModeEnabled: any) => {
-        return this.storeSvc.set(StoreKey.DarkModeEnabled, isDarkModeEnabled.value);
-      });
-    });
-  }
-
-  checkForInstallOrUpgrade(): ng.IPromise<void> {
-    // Check for stored app version and compare it to current
-    const mobileAppVersion = localStorage.getItem('xBrowserSync-mobileAppVersion');
-    return this.getAppVersion().then((appVersion) => {
-      return (mobileAppVersion
-        ? this.$q.resolve(mobileAppVersion)
-        : this.storeSvc.get<string>(StoreKey.AppVersion)
-      ).then((currentVersion) => {
-        return currentVersion ? this.handleUpgrade(currentVersion, appVersion) : this.handleInstall(appVersion);
-      });
-    });
-  }
-
-  checkForNewVersion(): void {
-    this.$timeout(() => {
-      this.getAppVersion().then((appVersion) => {
-        this.utilitySvc.checkForNewVersion(appVersion).then((newVersion) => {
-          if (!newVersion) {
-            return;
-          }
-
-          this.alertSvc.setCurrentAlert({
-            message: this.getI18nString(Strings.appUpdateAvailable_Android_Message).replace('{version}', newVersion),
-            action: this.getI18nString(Strings.button_View_Label),
-            actionCallback: () => {
-              this.openUrl(Globals.ReleaseNotesUrlStem + (newVersion as string).replace(/^v/, ''));
-            }
-          } as AndroidAlert);
-        });
-      });
-    }, 1e3);
-  }
-
-  checkForSharedBookmark(): ng.IPromise<void> {
-    const bookmark = this.getSharedBookmark();
-    if (!bookmark) {
-      return this.$q.resolve();
-    }
-
-    // Set current page as shared bookmark and display bookmark panel
-    this.currentPage = bookmark;
-    return this.vm.changeView(AppView.Bookmark).finally(() => {
-      // Set bookmark form fields to display default values
-      this.vm.bookmark.current = bookmark;
-      this.vm.bookmark.originalUrl = this.vm.bookmark.current.url;
-
-      // Clear current page
-      this.currentPage = null;
-    });
   }
 
   checkOptionalNativePermissions(): ng.IPromise<boolean> {
@@ -238,63 +170,6 @@ export default class AndroidPlatformService implements PlatformService {
       });
   }
 
-  executeSyncIfOnline(displayLoadingId): ng.IPromise<boolean> {
-    const isOnline = this.networkSvc.isNetworkConnected();
-
-    // If not online display an alert and return
-    if (!isOnline) {
-      this.vm.displayAlert({
-        message: this.getI18nString(Strings.workingOffline_Message),
-        title: this.getI18nString(Strings.workingOffline_Title)
-      } as Alert);
-
-      return this.$q.resolve(false);
-    }
-
-    // Sync bookmarks
-    return this.executeSync(false, displayLoadingId).then(() => {
-      return true;
-    });
-  }
-
-  getAllFromNativeStorage(): ng.IPromise<any> {
-    return this.$q<any>((resolve, reject) => {
-      const nativeStorageItems: any = {};
-
-      const failure = (err = new Error()) => {
-        if ((err as any).code === 2) {
-          // Item not found
-          return resolve(null);
-        }
-        reject(new Exceptions.FailedLocalStorageException(undefined, err));
-      };
-
-      const success = (keys: string[]) => {
-        this.$q
-          .all(
-            keys.map((key) => {
-              return this.$q((resolveGetItem, rejectGetItem) => {
-                window.NativeStorage.getItem(
-                  key,
-                  (result: any) => {
-                    nativeStorageItems[key] = result;
-                    resolveGetItem();
-                  },
-                  rejectGetItem
-                );
-              });
-            })
-          )
-          .then(() => {
-            resolve(nativeStorageItems);
-          })
-          .catch(failure);
-      };
-
-      window.NativeStorage.keys(success, failure);
-    });
-  }
-
   getAppVersion(): ng.IPromise<string> {
     return this.$q.resolve().then(window.cordova.getAppVersion.getVersionNumber);
   }
@@ -330,7 +205,8 @@ export default class AndroidPlatformService implements PlatformService {
     const promise = this.$q<WebpageMetadata>((resolve, reject) => {
       // Return if no url set
       if (!metadata.url) {
-        this.vm.bookmark.addButtonDisabledUntilEditForm = true;
+        // TODO: Move this to app component
+        // this.vm.bookmark.addButtonDisabledUntilEditForm = true;
         return resolve();
       }
 
@@ -502,240 +378,8 @@ export default class AndroidPlatformService implements PlatformService {
     return promise;
   }
 
-  getSharedBookmark(): BookmarkMetadata {
-    if (!this.sharedBookmark) {
-      return;
-    }
-
-    const bookmark = this.sharedBookmark;
-    const txt = document.createElement('textarea');
-    txt.innerHTML = bookmark.title ? bookmark.title.trim() : '';
-    bookmark.title = txt.value;
-    this.sharedBookmark = null;
-    return bookmark;
-  }
-
   getSupportedUrl(url: string): string {
     return url;
-  }
-
-  handleBackButton(event: Event): void {
-    if (
-      this.vm.currentView === AppView.Bookmark ||
-      this.vm.currentView === AppView.Help ||
-      this.vm.currentView === AppView.Scan ||
-      this.vm.currentView === AppView.Settings ||
-      this.vm.currentView === AppView.Support ||
-      this.vm.currentView === AppView.Updated
-    ) {
-      // Back to login/search panel
-      event.preventDefault();
-      this.vm.displayMainView();
-    } else {
-      // On main view, exit app
-      event.preventDefault();
-      window.cordova.plugins.exit();
-    }
-  }
-
-  handleDeviceReady(viewModel: any, success: () => any, failure: () => any): ng.IPromise<any> {
-    // Set global variables
-    this.vm = viewModel;
-
-    // Configure events
-    document.addEventListener('backbutton', this.handleBackButton, false);
-    document.addEventListener('touchstart', this.handleTouchStart, false);
-    window.addEventListener('keyboardDidShow', this.handleKeyboardDidShow);
-    window.addEventListener('keyboardWillHide', this.handleKeyboardWillHide);
-
-    // Check if an intent started the app and detect future shared intents
-    window.plugins.intentShim.getIntent(this.handleNewIntent, () => {});
-    window.plugins.intentShim.onIntent(this.handleNewIntent);
-
-    // Enable app working in background to check for uncommitted syncs
-    window.cordova.plugins.backgroundMode.setDefaults({ hidden: true, silent: true });
-    window.cordova.plugins.backgroundMode.on('activate', () => {
-      window.cordova.plugins.backgroundMode.disableWebViewOptimizations();
-    });
-
-    // Check for upgrade or do fresh install
-    return (
-      this.checkForInstallOrUpgrade()
-        // Run startup process after install/upgrade
-        .then(this.handleStartup)
-        .then(success)
-        .catch(failure)
-    );
-  }
-
-  handleInstall(installedVersion: string): ng.IPromise<void> {
-    return this.storeSvc
-      .clear()
-      .then(() => {
-        return this.$q.all([
-          this.storeSvc.set(StoreKey.AppVersion, installedVersion),
-          this.storeSvc.set(StoreKey.CheckForAppUpdates, true),
-          this.storeSvc.set(StoreKey.DisplayHelp, true)
-        ]);
-      })
-      .then(() => {
-        this.logSvc.logInfo(`Installed v${installedVersion}`);
-      });
-  }
-
-  handleKeyboardDidShow(event: any): void {
-    document.body.style.height = `calc(100% - ${event.keyboardHeight}px)`;
-    setTimeout(() => {
-      (document.activeElement as any).scrollIntoViewIfNeeded();
-    }, 100);
-  }
-
-  handleKeyboardWillHide(): void {
-    document.body.style.removeProperty('height');
-  }
-
-  handleNewIntent(intent: any): void {
-    if (!intent || !intent.extras) {
-      return;
-    }
-
-    this.logSvc.logInfo(`Detected new intent: ${intent.extras['android.intent.extra.TEXT']}`);
-
-    // Set shared bookmark with shared intent data
-    this.sharedBookmark = {
-      title: intent.extras['android.intent.extra.SUBJECT'],
-      url: intent.extras['android.intent.extra.TEXT']
-    };
-  }
-
-  handleResume(): ng.IPromise<void> {
-    // Set theme
-    return this.checkForDarkTheme().then(() => {
-      // Check if sync enabled and reset network disconnected flag
-      this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
-        // Deselect bookmark
-        this.vm.search.selectedBookmark = null;
-
-        if (!syncEnabled) {
-          return;
-        }
-
-        // Run sync
-        return this.executeSyncIfOnline('delayDisplayDialog')
-          .then((isOnline) => {
-            if (isOnline === false) {
-              return;
-            }
-
-            // Refresh search results if query not present
-            if (this.vm.currentView === AppView.Search && !this.vm.search.query) {
-              this.vm.displayDefaultSearchState();
-            }
-          })
-          .then(() => {
-            // Check if a bookmark was shared
-            return this.checkForSharedBookmark();
-          });
-      });
-    });
-  }
-
-  handleStartup(): ng.IPromise<void> {
-    this.logSvc.logInfo('Starting up');
-
-    // Set theme
-    return this.checkForDarkTheme().then(() => {
-      return this.storeSvc.get().then((storeContent) => {
-        // Prime bookmarks cache
-        if (storeContent.syncEnabled) {
-          this.bookmarkHelperSvc.getCachedBookmarks();
-        }
-
-        // Add useful debug info to beginning of trace log
-        const debugInfo = angular.copy(storeContent) as any;
-        debugInfo.platform = {
-          name: window.device.platform,
-          device: `${window.device.manufacturer} ${window.device.model}`
-        };
-        this.logSvc.logInfo(
-          Object.keys(debugInfo)
-            .filter((key) => {
-              return debugInfo[key] != null;
-            })
-            .reduce((prev, current) => {
-              prev[current] = debugInfo[current];
-              return prev;
-            }, {})
-        );
-
-        // Check for new app version
-        if (storeContent.checkForAppUpdates) {
-          this.checkForNewVersion();
-        }
-
-        // Exit if sync not enabled
-        if (!storeContent.syncEnabled) {
-          return;
-        }
-
-        // Run sync
-        this.executeSyncIfOnline('delayDisplayDialog')
-          .then((isOnline) => {
-            if (isOnline === false) {
-              return;
-            }
-
-            // Refresh search results if query not present
-            if (this.vm.currentView === AppView.Search && !this.vm.search.query) {
-              this.vm.displayDefaultSearchState();
-            }
-          })
-          .then(() => {
-            // Check if a bookmark was shared
-            return this.checkForSharedBookmark();
-          });
-      });
-    });
-  }
-
-  handleTouchStart(event: Event): void {
-    // Blur focus (and hide keyboard) when pressing out of text fields
-    if (!this.isTextInput(event.target as Element) && this.isTextInput(document.activeElement)) {
-      this.$timeout(() => {
-        (document.activeElement as HTMLInputElement).blur();
-      }, 100);
-    } else if (this.vm.search.selectedBookmark) {
-      // Deselect selected bookmark
-      this.vm.search.selectedBookmark = null;
-    }
-  }
-
-  handleUpgrade(oldVersion: string, newVersion: string): ng.IPromise<void> {
-    if (compareVersions.compare(oldVersion, newVersion, '=')) {
-      // No upgrade
-      return this.$q.resolve();
-    }
-
-    // Clear trace log
-    return this.storeSvc
-      .set(StoreKey.TraceLog)
-      .then(() => {
-        this.logSvc.logInfo(`Upgrading from ${oldVersion} to ${newVersion}`);
-      })
-      .then(() => {
-        if (compareVersions(oldVersion, newVersion)) {
-          switch (true) {
-            case newVersion.indexOf('1.6.0') === 0:
-              return this.upgradeTo160();
-            default:
-          }
-        }
-      })
-      .then(() => {
-        return this.$q
-          .all([this.storeSvc.set(StoreKey.AppVersion, newVersion), this.storeSvc.set(StoreKey.DisplayUpdated, true)])
-          .then(() => {});
-      });
   }
 
   initI18n(): ng.IPromise<void> {
@@ -759,10 +403,6 @@ export default class AndroidPlatformService implements PlatformService {
         this.logSvc.logWarning(`Couldn’t load i18n strings: ${i18nCode}`);
         throw err;
       });
-  }
-
-  isTextInput(element: Element): boolean {
-    return ['INPUT', 'TEXTAREA'].indexOf(element.nodeName) !== -1;
   }
 
   methodNotApplicable(): ng.IPromise<any> {
@@ -790,21 +430,21 @@ export default class AndroidPlatformService implements PlatformService {
           switch (true) {
             case changeInfo.type === BookmarkChangeType.Add:
               this.$timeout(() => {
-                this.vm.displayAlert({
+                this.alertSvc.setCurrentAlert({
                   message: this.getI18nString(Strings.bookmarkCreated_Message)
                 } as Alert);
               }, 200);
               break;
             case changeInfo.type === BookmarkChangeType.Modify:
               this.$timeout(() => {
-                this.vm.displayAlert({
+                this.alertSvc.setCurrentAlert({
                   message: this.getI18nString(Strings.bookmarkUpdated_Message)
                 } as Alert);
               }, 200);
               break;
             case changeInfo.type === BookmarkChangeType.Remove:
               this.$timeout(() => {
-                this.vm.displayAlert({
+                this.alertSvc.setCurrentAlert({
                   message: this.getI18nString(Strings.bookmarkDeleted_Message)
                 } as Alert);
               }, 200);
@@ -824,7 +464,7 @@ export default class AndroidPlatformService implements PlatformService {
             sync.changeInfo = undefined;
             this.syncEngineSvc.queueSync(sync, false);
             this.logSvc.logInfo('Sync not committed: network offline');
-            this.vm.displayAlert({
+            this.alertSvc.setCurrentAlert({
               message: this.getI18nString(Strings.error_UncommittedSyncs_Message),
               title: this.getI18nString(Strings.error_UncommittedSyncs_Title)
             } as Alert);
@@ -849,26 +489,8 @@ export default class AndroidPlatformService implements PlatformService {
     return this.methodNotApplicable();
   }
 
-  upgradeTo160(): ng.IPromise<void> {
-    // Convert local storage items to IndexedDB
-    return this.getAllFromNativeStorage()
-      .then((cachedData) => {
-        if (!cachedData || Object.keys(cachedData).length === 0) {
-          return;
-        }
-
-        return this.$q.all(
-          Object.keys(cachedData).map((key) => {
-            return this.storeSvc.set(key, cachedData[key]);
-          })
-        );
-      })
-      .then(() => {
-        return window.NativeStorage.clear();
-      });
-  }
-
   urlIsSupported(): boolean {
+    // Android supports all urls
     return true;
   }
 }

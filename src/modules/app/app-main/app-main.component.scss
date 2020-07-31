@@ -1,376 +1,413 @@
 @import '../../../styles/modules/all';
 
-app {
-  .background {
-    @include background-gradient(20deg, $colour-bg1-default, 0, $colour-bg2-default, 100%);
+.background {
+  @include background-gradient(20deg, $colour-bg1-default, 0, $colour-bg2-default, 100%);
 
-    height: 100%;
-    left: 0;
-    position: fixed;
-    top: 0;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+
+  .background-img {
+    @include animation-clouds;
+
+    background: url('../../../../res/images/clouds.svg');
+    background-repeat: repeat;
+    background-size: $bg-width;
+    display: block;
+    height: $bg-height * 10;
+    opacity: 0.15;
+    position: absolute;
+    top: -$bg-height;
+    width: $bg-width * 10;
+    z-index: 0;
+  }
+}
+
+#bookmark-panel {
+  & > div {
+    display: flex;
+    flex-flow: column;
+  }
+
+  input[type='text'] {
+    text-overflow: ellipsis;
     width: 100%;
-    z-index: 10;
+  }
 
-    .background-img {
-      @include animation-clouds;
+  #bookmarkForm {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+  }
 
-      background: url('../../../../res/images/clouds.svg');
-      background-repeat: repeat;
-      background-size: $bg-width;
-      display: block;
-      height: $bg-height * 10;
-      opacity: 0.15;
-      position: absolute;
-      top: -$bg-height;
-      width: $bg-width * 10;
-      z-index: 0;
+  .btn-delete-bookmark {
+    background-color: $colour-danger;
+    color: $colour-text1-default;
+
+    @include theme-dark {
+      border-color: $colour-text2-dark;
+      color: $colour-text2-dark;
+    }
+
+    @media (hover: hover) {
+      &:not([disabled]):active,
+      &:not([disabled]):hover {
+        background-color: $colour-bg3-default;
+        border-color: $colour-bg3-default;
+        color: $colour-danger;
+
+        @include theme-dark {
+          background-color: $colour-text2-dark;
+          border-color: $colour-text2-dark;
+        }
+      }
     }
   }
 
-  #bookmark-panel {
-    & > div {
-      display: flex;
-      flex-flow: column;
+  .buttons,
+  .form-group,
+  .header-panel {
+    flex: none;
+  }
+
+  .mobile-landscape {
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+
+  .tags-container {
+    height: calc(100% - 3.1rem);
+    margin-bottom: 0;
+    margin-top: 1rem;
+    overflow: auto;
+
+    .badge {
+      align-items: center;
+      background-color: $colour-text2-default;
+      border: 0;
+      color: rgba($colour-text1-default, 0.9);
+      display: inline-flex;
+      font-size: 0.85rem;
+      font-weight: normal;
+      line-height: 1.2rem;
+      margin: 0 0.5rem 0.5rem 0;
+      max-width: 99%;
+
+      @include theme-dark {
+        background-color: $colour-bg3-dark;
+        color: rgba($colour-text1-dark, 0.9);
+      }
+
+      i {
+        transition: color ease-in-out 0.2s;
+
+        @include theme-dark {
+          color: $colour-text3-dark;
+        }
+      }
+
+      span {
+        @include text-overflow-ellipsis;
+
+        margin-right: 0.3rem;
+
+        @media (hover: hover) {
+          &:hover {
+            color: inherit;
+          }
+        }
+      }
+
+      @media (hover: hover) {
+        &:active i {
+          color: $colour-bg2-default !important;
+
+          @include theme-dark {
+            color: $colour-text2-dark !important;
+          }
+        }
+
+        &:hover,
+        &:focus {
+          cursor: pointer;
+
+          i {
+            color: $colour-bg2-default;
+
+            @include theme-dark {
+              color: $colour-text2-dark;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .tags-input-container {
+    background-color: $colour-bg3-default;
+    border-radius: $border-radius-input;
+    margin-bottom: 0;
+    overflow: hidden;
+
+    @include theme-dark {
+      background-color: $colour-bg3-dark;
     }
 
-    input[type='text'] {
-      text-overflow: ellipsis;
+    input {
+      background: transparent;
+      position: relative;
+      text-transform: lowercase;
+      z-index: 50;
+    }
+
+    .lookahead-container {
+      left: 1rem;
+      top: 0;
+
+      .lookahead,
+      .measure {
+        text-transform: lowercase;
+      }
+    }
+  }
+
+  .textarea-container {
+    display: flex;
+    flex: 1 0 10rem;
+  }
+}
+
+.container {
+  height: 100%;
+  margin: 0;
+  max-width: 100%;
+  padding: 0;
+  position: relative;
+  z-index: 20;
+
+  &.search {
+    .alert p {
+      @include text-overflow-ellipsis;
+    }
+  }
+}
+
+#login-panel {
+  form {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+
+    .form-content {
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      position: relative;
+      width: 100%;
+
+      & > div {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 10;
+      }
+    }
+
+    @media (hover: hover) {
+      a {
+        &:active,
+        &:focus,
+        &:hover {
+          border-bottom-color: $colour-text2-default;
+          color: $colour-text2-default;
+
+          @include theme-dark {
+            border-bottom-color: $colour-text1-dark;
+            color: $colour-text1-dark;
+          }
+        }
+      }
+    }
+  }
+
+  .btn-new-sync {
+    text-transform: capitalize;
+  }
+
+  .btn-show-password {
+    &::before {
+      @include icon('\f715');
+
+      margin: auto;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity ease-in-out 0.2s;
+    }
+
+    &.active::before {
+      opacity: 0;
+    }
+  }
+
+  .btn-validating {
+    background-color: $colour-bg3-default;
+    border-color: $colour-bg3-default;
+    color: $colour-bg2-default;
+    opacity: 1;
+
+    @include theme-dark {
+      background-color: $colour-bg3-dark;
+      border-color: $colour-bg3-dark;
+      color: $colour-bg2-dark;
+    }
+
+    .spinner-border-sm {
+      @include spinner-colour($colour-bg2-default);
+
+      border-right-color: transparent !important;
+      height: 0.9rem;
+      width: 0.9rem;
+
+      @include theme-dark {
+        @include spinner-colour($colour-bg2-dark);
+      }
+    }
+  }
+
+  .confirm {
+    margin-bottom: 0;
+    z-index: 10;
+  }
+
+  .form-group {
+    input {
+      border-color: $colour-bg3-default;
+      border-style: solid;
+      border-width: 1px;
+      font-family: $font-stack-code;
+      line-height: 1.45rem;
+      padding: 0.5rem 0.8rem;
+      width: 100%;
+
+      @include theme-dark {
+        border-color: $colour-bg3-dark;
+      }
+
+      &::placeholder {
+        font-family: $font-stack-regular;
+        font-size: 1.1rem;
+      }
+
+      &[name='newServiceUrl'] {
+        font-family: $font-stack-regular;
+        font-size: 1.1rem;
+      }
+    }
+  }
+
+  .header-panel {
+    z-index: 10;
+  }
+
+  .login-form-existing,
+  .login-form-new,
+  .update-service-panel {
+    height: 100%;
+    max-width: 22rem;
+  }
+
+  .login-form-existing {
+    input[name='txtPassword'] {
+      padding-right: 2.7rem;
+    }
+  }
+
+  .login-form-new {
+    input[name='txtPassword'] {
+      background: transparent;
+      position: relative;
+      z-index: 20;
+    }
+  }
+
+  .secret-form-group {
+    margin-bottom: 1.5rem;
+
+    .progress,
+    .progress-bar-background {
+      border-radius: $border-radius-input;
+      font-size: 1.2rem;
+      height: 100%;
+      position: absolute;
+      top: 0;
       width: 100%;
     }
 
-    #bookmarkForm {
-      display: flex;
-      flex-flow: column;
-      height: 100%;
-    }
-
-    .btn-delete-bookmark {
-      background-color: $colour-danger;
-      color: $colour-text1-default;
-
-      @include theme-dark {
-        border-color: $colour-text2-dark;
-        color: $colour-text2-dark;
-      }
-
-      @media (hover: hover) {
-        &:not([disabled]):active,
-        &:not([disabled]):hover {
-          background-color: $colour-bg3-default;
-          border-color: $colour-bg3-default;
-          color: $colour-danger;
-
-          @include theme-dark {
-            background-color: $colour-text2-dark;
-            border-color: $colour-text2-dark;
-          }
-        }
-      }
-    }
-
-    .buttons,
-    .form-group,
-    .header-panel {
-      flex: none;
-    }
-
-    .mobile-landscape {
-      margin-bottom: 1rem;
-      overflow: hidden;
-    }
-
-    .tags-container {
-      height: calc(100% - 3.1rem);
-      margin-bottom: 0;
-      margin-top: 1rem;
-      overflow: auto;
-
-      .badge {
-        align-items: center;
-        background-color: $colour-text2-default;
-        border: 0;
-        color: rgba($colour-text1-default, 0.9);
-        display: inline-flex;
-        font-size: 0.85rem;
-        font-weight: normal;
-        line-height: 1.2rem;
-        margin: 0 0.5rem 0.5rem 0;
-        max-width: 99%;
-
-        @include theme-dark {
-          background-color: $colour-bg3-dark;
-          color: rgba($colour-text1-dark, 0.9);
-        }
-
-        i {
-          transition: color ease-in-out 0.2s;
-
-          @include theme-dark {
-            color: $colour-text3-dark;
-          }
-        }
-
-        span {
-          @include text-overflow-ellipsis;
-
-          margin-right: 0.3rem;
-
-          @media (hover: hover) {
-            &:hover {
-              color: inherit;
-            }
-          }
-        }
-
-        @media (hover: hover) {
-          &:active i {
-            color: $colour-bg2-default !important;
-
-            @include theme-dark {
-              color: $colour-text2-dark !important;
-            }
-          }
-
-          &:hover,
-          &:focus {
-            cursor: pointer;
-
-            i {
-              color: $colour-bg2-default;
-
-              @include theme-dark {
-                color: $colour-text2-dark;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    .tags-input-container {
-      background-color: $colour-bg3-default;
-      border-radius: $border-radius-input;
-      margin-bottom: 0;
-      overflow: hidden;
-
-      @include theme-dark {
-        background-color: $colour-bg3-dark;
-      }
-
-      input {
-        background: transparent;
-        position: relative;
-        text-transform: lowercase;
-        z-index: 50;
-      }
-
-      .lookahead-container {
-        left: 1rem;
-        top: 0;
-
-        .lookahead,
-        .measure {
-          text-transform: lowercase;
-        }
-      }
-    }
-
-    .textarea-container {
-      display: flex;
-      flex: 1 0 10rem;
-    }
-  }
-
-  .container {
-    height: 100%;
-    margin: 0;
-    max-width: 100%;
-    padding: 0;
-    position: relative;
-    z-index: 20;
-
-    &.search {
-      .alert p {
-        @include text-overflow-ellipsis;
-      }
-    }
-  }
-
-  #login-panel {
-    form {
-      align-items: center;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      position: relative;
-
-      .form-content {
-        display: flex;
-        height: 100%;
-        justify-content: center;
-        position: relative;
-        width: 100%;
-
-        & > div {
-          position: absolute;
-          top: 0;
-          width: 100%;
-          z-index: 10;
-        }
-      }
-
-      @media (hover: hover) {
-        a {
-          &:active,
-          &:focus,
-          &:hover {
-            border-bottom-color: $colour-text2-default;
-            color: $colour-text2-default;
-
-            @include theme-dark {
-              border-bottom-color: $colour-text1-dark;
-              color: $colour-text1-dark;
-            }
-          }
-        }
-      }
-    }
-
-    .btn-new-sync {
-      text-transform: capitalize;
-    }
-
-    .btn-show-password {
-      &::before {
-        @include icon('\f715');
-
-        margin: auto;
-        position: absolute;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        transition: opacity ease-in-out 0.2s;
-      }
-
-      &.active::before {
-        opacity: 0;
-      }
-    }
-
-    .btn-validating {
-      background-color: $colour-bg3-default;
+    .progress {
+      background-color: transparent;
       border-color: $colour-bg3-default;
-      color: $colour-bg2-default;
-      opacity: 1;
+      border-style: solid;
+      border-width: 0.1rem;
+      z-index: 10;
+
+      @include theme-dark {
+        border-color: $colour-bg3-dark;
+      }
+
+      .progress-bar {
+        background-color: $colour-danger;
+
+        @include theme-dark {
+          background-color: $colour-danger;
+        }
+      }
+    }
+
+    .progress-bar-background {
+      background-color: $colour-bg3-default;
 
       @include theme-dark {
         background-color: $colour-bg3-dark;
-        border-color: $colour-bg3-dark;
-        color: $colour-bg2-dark;
       }
+    }
+  }
 
-      .spinner-border-sm {
-        @include spinner-colour($colour-bg2-default);
+  .selected-service {
+    display: inline-flex;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    width: 100%;
 
+    a {
+      @include text-overflow-ellipsis;
+    }
+
+    label {
+      flex: 0 0;
+      margin: 0 0.3rem 0 0;
+      white-space: nowrap;
+    }
+
+    .status-icon {
+      margin-left: 0.25rem;
+      top: 0.1rem;
+
+      .loading .spinner-border {
+        border-color: $colour-bg3-default;
         border-right-color: transparent !important;
-        height: 0.9rem;
-        width: 0.9rem;
-
-        @include theme-dark {
-          @include spinner-colour($colour-bg2-dark);
-        }
-      }
-    }
-
-    .confirm {
-      margin-bottom: 0;
-      z-index: 10;
-    }
-
-    .form-group {
-      input {
-        border-color: $colour-bg3-default;
-        border-style: solid;
-        border-width: 1px;
-        font-family: $font-stack-code;
-        line-height: 1.45rem;
-        padding: 0.5rem 0.8rem;
-        width: 100%;
 
         @include theme-dark {
           border-color: $colour-bg3-dark;
         }
-
-        &::placeholder {
-          font-family: $font-stack-regular;
-          font-size: 1.1rem;
-        }
-
-        &[name='newServiceUrl'] {
-          font-family: $font-stack-regular;
-          font-size: 1.1rem;
-        }
-      }
-    }
-
-    .header-panel {
-      z-index: 10;
-    }
-
-    .login-form-existing,
-    .login-form-new,
-    .update-service-panel {
-      height: 100%;
-      max-width: 22rem;
-    }
-
-    .login-form-existing {
-      input[name='txtPassword'] {
-        padding-right: 2.7rem;
-      }
-    }
-
-    .login-form-new {
-      input[name='txtPassword'] {
-        background: transparent;
-        position: relative;
-        z-index: 20;
-      }
-    }
-
-    .secret-form-group {
-      margin-bottom: 1.5rem;
-
-      .progress,
-      .progress-bar-background {
-        border-radius: $border-radius-input;
-        font-size: 1.2rem;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        width: 100%;
       }
 
-      .progress {
-        background-color: transparent;
-        border-color: $colour-bg3-default;
-        border-style: solid;
-        border-width: 0.1rem;
-        z-index: 10;
-
-        @include theme-dark {
-          border-color: $colour-bg3-dark;
-        }
-
-        .progress-bar {
-          background-color: $colour-danger;
-
-          @include theme-dark {
-            background-color: $colour-danger;
-          }
-        }
-      }
-
-      .progress-bar-background {
+      .status-icon-bg {
         background-color: $colour-bg3-default;
 
         @include theme-dark {
@@ -378,332 +415,328 @@ app {
         }
       }
     }
+  }
 
-    .selected-service {
-      display: inline-flex;
-      justify-content: center;
-      margin-bottom: 0.75rem;
+  .toggle-form {
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+
+  .update-service-panel {
+    .service-info {
+      bottom: 0;
+      position: absolute;
       width: 100%;
 
-      a {
-        @include text-overflow-ellipsis;
-      }
+      ul {
+        list-style: none;
+        margin: 0 1rem 0.75rem;
+        padding: 0;
 
-      label {
-        flex: 0 0;
-        margin: 0 0.3rem 0 0;
-        white-space: nowrap;
-      }
+        li {
+          @include text-overflow-ellipsis;
 
-      .status-icon {
-        margin-left: 0.25rem;
-        top: 0.1rem;
-
-        .loading .spinner-border {
-          border-color: $colour-bg3-default;
-          border-right-color: transparent !important;
-
-          @include theme-dark {
-            border-color: $colour-bg3-dark;
-          }
-        }
-
-        .status-icon-bg {
-          background-color: $colour-bg3-default;
-
-          @include theme-dark {
-            background-color: $colour-bg3-dark;
-          }
-        }
-      }
-    }
-
-    .toggle-form {
-      margin-top: 1.5rem;
-      text-align: center;
-    }
-
-    .update-service-panel {
-      .service-info {
-        bottom: 0;
-        position: absolute;
-        width: 100%;
-
-        ul {
-          list-style: none;
-          margin: 0 1rem 0.75rem;
-          padding: 0;
-
-          li {
-            @include text-overflow-ellipsis;
-
-            padding-left: 40%;
-            position: relative;
-
-            label {
-              color: $colour-text2-default !important;
-              font-weight: bold;
-              left: 0;
-              margin-bottom: 0;
-              position: absolute;
-
-              @include theme-dark {
-                color: $colour-text2-dark !important;
-              }
-            }
-          }
-        }
-
-        .service-message {
-          margin: 0 1rem 1rem;
-          max-height: 5rem;
-        }
-
-        .service-warning {
-          font-size: 0.9rem;
-          line-height: 1.2rem;
-        }
-      }
-    }
-  }
-
-  .logo {
-    background-image: url('../../../../res/images/logo.svg');
-    background-position-x: 50%;
-    background-position-y: 1rem;
-    background-repeat: no-repeat;
-    background-size: 11.5rem;
-    flex: 0 0 17.5rem;
-
-    @include theme-dark {
-      background-image: url('../../../../res/images/logo-dark.svg');
-    }
-  }
-
-  .lookahead-container {
-    display: flex;
-    flex-direction: row;
-    height: 100%;
-    overflow: hidden;
-    position: absolute;
-    white-space: nowrap;
-    width: 100%;
-
-    .lookahead,
-    .measure {
-      background-color: transparent;
-      color: $colour-text3-default;
-      cursor: pointer;
-      margin: auto 0;
-      user-select: none;
-      z-index: 60;
-
-      @include theme-dark {
-        color: $colour-text3-dark;
-      }
-    }
-
-    .measure {
-      visibility: hidden;
-    }
-  }
-
-  .progress-bar {
-    &-danger {
-      background-color: $colour-danger !important;
-    }
-
-    &-success {
-      background-color: $colour-success !important;
-    }
-
-    &-warning {
-      background-color: $colour-warning !important;
-    }
-  }
-
-  #search-panel {
-    .view-content {
-      display: flex;
-      flex-flow: column;
-      padding: 0;
-
-      .bookmark-tree-container,
-      .search-results-container {
-        flex: 0 1 100%;
-        overflow: auto;
-        padding: 0 0.75rem;
-
-        & > h4 {
-          font-size: 1.4rem;
-          font-weight: normal;
-          text-align: center;
-        }
-      }
-
-      .header-panel {
-        flex: none;
-        margin-bottom: 0;
-        padding: 0.75rem;
-
-        .btn-icon {
-          margin-left: 0.5rem;
-        }
-
-        .btn-toggle-bookmark {
-          &.active {
-            i {
-              font-weight: 900;
-            }
-          }
-        }
-
-        .search-form {
-          background-color: $colour-bg3-default;
-          border-radius: $border-radius-input;
-          flex: 0 1 100%;
-          margin-bottom: 0;
+          padding-left: 40%;
           position: relative;
 
-          @include theme-dark {
-            background-color: $colour-bg3-dark;
-          }
-
           label {
-            color: $colour-text3-default;
-            font-size: 0.85em;
-            left: 0.75rem;
+            color: $colour-text2-default !important;
+            font-weight: bold;
+            left: 0;
             margin-bottom: 0;
-            margin-top: -0.5em;
             position: absolute;
-            top: 50%;
-            z-index: 60;
+
+            @include theme-dark {
+              color: $colour-text2-dark !important;
+            }
+          }
+        }
+      }
+
+      .service-message {
+        margin: 0 1rem 1rem;
+        max-height: 5rem;
+      }
+
+      .service-warning {
+        font-size: 0.9rem;
+        line-height: 1.2rem;
+      }
+    }
+  }
+}
+
+.logo {
+  background-image: url('../../../../res/images/logo.svg');
+  background-position-x: 50%;
+  background-position-y: 1rem;
+  background-repeat: no-repeat;
+  background-size: 11.5rem;
+  flex: 0 0 17.5rem;
+
+  @include theme-dark {
+    background-image: url('../../../../res/images/logo-dark.svg');
+  }
+}
+
+.lookahead-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 100%;
+
+  .lookahead,
+  .measure {
+    background-color: transparent;
+    color: $colour-text3-default;
+    cursor: pointer;
+    margin: auto 0;
+    user-select: none;
+    z-index: 60;
+
+    @include theme-dark {
+      color: $colour-text3-dark;
+    }
+  }
+
+  .measure {
+    visibility: hidden;
+  }
+}
+
+.progress-bar {
+  &-danger {
+    background-color: $colour-danger !important;
+  }
+
+  &-success {
+    background-color: $colour-success !important;
+  }
+
+  &-warning {
+    background-color: $colour-warning !important;
+  }
+}
+
+#search-panel {
+  .view-content {
+    display: flex;
+    flex-flow: column;
+    padding: 0;
+
+    .bookmark-tree-container,
+    .search-results-container {
+      flex: 0 1 100%;
+      overflow: auto;
+      padding: 0 0.75rem;
+
+      & > h4 {
+        font-size: 1.4rem;
+        font-weight: normal;
+        text-align: center;
+      }
+    }
+
+    .header-panel {
+      flex: none;
+      margin-bottom: 0;
+      padding: 0.75rem;
+
+      .btn-icon {
+        margin-left: 0.5rem;
+      }
+
+      .btn-toggle-bookmark {
+        &.active {
+          i {
+            font-weight: 900;
+          }
+        }
+      }
+
+      .search-form {
+        background-color: $colour-bg3-default;
+        border-radius: $border-radius-input;
+        flex: 0 1 100%;
+        margin-bottom: 0;
+        position: relative;
+
+        @include theme-dark {
+          background-color: $colour-bg3-dark;
+        }
+
+        label {
+          color: $colour-text3-default;
+          font-size: 0.85em;
+          left: 0.75rem;
+          margin-bottom: 0;
+          margin-top: -0.5em;
+          position: absolute;
+          top: 50%;
+          z-index: 60;
+
+          @include theme-dark {
+            color: $colour-text3-dark;
+          }
+        }
+
+        input {
+          background: transparent;
+          border: none;
+          font-size: 1.1em;
+          line-height: 1.5em;
+          padding: 0 1.5em;
+          position: relative;
+          width: 100%;
+          z-index: 50;
+
+          &::placeholder {
+            color: $colour-text3-default;
 
             @include theme-dark {
               color: $colour-text3-dark;
             }
           }
+        }
 
-          input {
-            background: transparent;
-            border: none;
-            font-size: 1.1em;
-            line-height: 1.5em;
-            padding: 0 1.5em;
-            position: relative;
-            width: 100%;
-            z-index: 50;
+        .btn-clear {
+          font-size: 0.7em;
+          height: 1.7em;
+          line-height: 1.5em;
+          margin-top: -0.85em;
+          width: 1.7em;
+        }
 
-            &::placeholder {
-              color: $colour-text3-default;
-
-              @include theme-dark {
-                color: $colour-text3-dark;
-              }
-            }
-          }
-
-          .btn-clear {
-            font-size: 0.7em;
-            height: 1.7em;
-            line-height: 1.5em;
-            margin-top: -0.85em;
-            width: 1.7em;
-          }
-
-          .lookahead-container {
-            font-size: 1.1em;
-            left: 1.5em;
-            top: 0;
-            width: calc(100% - 3em);
-          }
+        .lookahead-container {
+          font-size: 1.1em;
+          left: 1.5em;
+          top: 0;
+          width: calc(100% - 3em);
         }
       }
+    }
 
-      .search-results-container {
-        &.ng-hide {
-          margin-top: 0;
+    .search-results-container {
+      &.ng-hide {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+.service-message {
+  font-style: italic;
+  overflow-y: auto;
+  padding: 1px;
+  quotes: '\201c''\201d';
+  text-align: center;
+
+  &::before {
+    content: open-quote;
+  }
+
+  &::after {
+    content: close-quote;
+  }
+}
+
+#settings-panel {
+  .about-panel {
+    .buttons {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      margin-top: 0.5rem;
+
+      button {
+        margin-right: 0;
+
+        &#support {
+          text-transform: none;
         }
       }
     }
   }
 
-  .service-message {
-    font-style: italic;
+  .backup-restore-panel {
+    #restoreForm {
+      input[type='text'] {
+        padding-right: 2rem;
+      }
+
+      textarea {
+        font-family: $font-stack-code;
+        font-size: 0.8rem;
+        height: 12rem;
+      }
+
+      .form-group {
+        margin-bottom: 0.4rem;
+      }
+
+      .spinner-border {
+        position: absolute;
+        right: 0.75rem;
+        top: 0.6rem;
+      }
+    }
+  }
+
+  .header-panel,
+  .panel-container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .header-panel {
+    flex: none;
+  }
+
+  .panel-container {
     overflow-y: auto;
-    padding: 1px;
-    quotes: '\201c''\201d';
-    text-align: center;
-
-    &::before {
-      content: open-quote;
-    }
-
-    &::after {
-      content: close-quote;
-    }
   }
 
-  #settings-panel {
-    .about-panel {
-      .buttons {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        margin-top: 0.5rem;
+  .setting-group {
+    a {
+      @include theme-dark {
+        color: $colour-text2-dark;
 
-        button {
-          margin-right: 0;
-
-          &#support {
-            text-transform: none;
+        @media (hover: hover) {
+          &:active,
+          &:focus,
+          &:hover {
+            border-bottom-color: $colour-text1-dark;
+            color: $colour-text1-dark;
           }
         }
       }
     }
 
-    .backup-restore-panel {
-      #restoreForm {
-        input[type='text'] {
-          padding-right: 2rem;
-        }
+    label {
+      margin-bottom: 0.25rem;
+    }
 
-        textarea {
-          font-family: $font-stack-code;
-          font-size: 0.8rem;
-          height: 12rem;
-        }
+    p {
+      font-size: 0.95rem;
+    }
 
-        .form-group {
-          margin-bottom: 0.4rem;
-        }
+    #backupLink {
+      font-size: 0.9rem;
+    }
 
-        .spinner-border {
-          position: absolute;
-          right: 0.75rem;
-          top: 0.6rem;
-        }
+    .description {
+      color: $colour-text3-default;
+
+      @include theme-dark {
+        color: $colour-text3-dark;
       }
-    }
 
-    .header-panel,
-    .panel-container {
-      padding-left: 0.75rem;
-      padding-right: 0.75rem;
-    }
-
-    .header-panel {
-      flex: none;
-    }
-
-    .panel-container {
-      overflow-y: auto;
-    }
-
-    .setting-group {
       a {
         @include theme-dark {
-          color: $colour-text2-dark;
+          color: $colour-text3-dark;
 
           @media (hover: hover) {
             &:active,
@@ -715,229 +748,194 @@ app {
           }
         }
       }
-
-      label {
-        margin-bottom: 0.25rem;
-      }
-
-      p {
-        font-size: 0.95rem;
-      }
-
-      #backupLink {
-        font-size: 0.9rem;
-      }
-
-      .description {
-        color: $colour-text3-default;
-
-        @include theme-dark {
-          color: $colour-text3-dark;
-        }
-
-        a {
-          @include theme-dark {
-            color: $colour-text3-dark;
-
-            @media (hover: hover) {
-              &:active,
-              &:focus,
-              &:hover {
-                border-bottom-color: $colour-text1-dark;
-                color: $colour-text1-dark;
-              }
-            }
-          }
-        }
-      }
-
-      .setting-value {
-        background: transparent;
-        border: 0;
-        border-radius: 0;
-        color: $colour-text2-default;
-        height: auto;
-        padding: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-        transition: none;
-        width: auto;
-
-        @include theme-dark {
-          color: $colour-text2-dark;
-        }
-      }
     }
 
-    .sync-panel {
-      .id-url {
-        display: block;
-        font-family: $font-stack-code;
-        font-size: 0.92rem;
-        margin-bottom: 0.5rem;
-        position: relative;
-        text-align: center;
-        width: 100%;
-      }
-
-      .progress {
-        background-color: darken($colour-bg2-default, 50%);
-        border-radius: 1rem;
-        height: 0.45rem;
-        margin: 0.25rem 0 1.5rem;
-        overflow: visible;
-
-        @include theme-dark {
-          background-color: $colour-bg1-dark;
-        }
-
-        .progress-bar {
-          background-color: $colour-bg2-default;
-          border-bottom-left-radius: 1rem;
-          border-top-left-radius: 1rem;
-          transition: none;
-
-          @include theme-dark {
-            background-color: $colour-text3-dark;
-          }
-        }
-      }
-
-      .max,
-      .used {
-        font-size: 0.8rem;
-        margin-top: -1.5rem;
-        position: absolute;
-      }
-
-      .max {
-        color: $colour-text2-default;
-        right: 0;
-
-        @include theme-dark {
-          color: $colour-text2-dark;
-        }
-      }
-
-      .used {
-        color: $colour-bg2-default;
-        left: 0;
-
-        @include theme-dark {
-          color: $colour-bg2-dark;
-        }
-      }
-
-      .service-message {
-        max-height: 7rem;
-      }
-
-      .service-url {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 0.5rem;
-        position: relative;
-
-        & > a {
-          @include text-overflow-ellipsis;
-        }
-
-        .status-icon {
-          margin: 0.1rem 0 0 0.25rem;
-        }
-      }
-
-      .status-text {
-        color: $colour-text3-default;
-
-        @include theme-dark {
-          color: $colour-text3-dark;
-        }
-      }
-
-      .updates-available {
-        @extend .description;
-
-        font-size: 0.9rem;
-        font-style: italic;
-        text-align: center;
-      }
-    }
-
-    .view-content {
-      padding: 0.75rem 0 0;
-    }
-
-    .well {
-      overflow: hidden;
+    .setting-value {
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      color: $colour-text2-default;
+      height: auto;
       padding: 0;
-
-      h4 {
-        margin-bottom: 0;
-        padding: 0.75rem 1rem;
-      }
-
-      .btn.btn-default {
-        font-size: 1.1rem;
-        line-height: 2.3rem;
-      }
-
-      .panel-content {
-        padding: 0 1.25rem;
-      }
-    }
-    @media (hover: hover) {
-      a {
-        &:active,
-        &:focus,
-        &:hover {
-          border-bottom-color: inherit;
-        }
-      }
-    }
-  }
-
-  .spinner-border {
-    @include spinner-colour($colour-bg2-default);
-
-    animation-duration: 1s;
-
-    @include theme-dark {
-      @include spinner-colour($colour-bg2-dark);
-    }
-  }
-
-  .status-icon {
-    position: relative;
-    z-index: 5;
-
-    .status-icon-bg {
-      border-radius: 100%;
-      height: 0.8rem;
-      left: 0.1rem;
       position: absolute;
-      top: 0.2rem;
-      width: 0.8rem;
-      z-index: -1;
+      right: 0;
+      top: 0;
+      transition: none;
+      width: auto;
 
       @include theme-dark {
-        background-color: $colour-text1-dark !important;
+        color: $colour-text2-dark;
       }
     }
   }
 
-  .theme-content {
-    height: 100%;
-    width: 100%;
+  .sync-panel {
+    .id-url {
+      display: block;
+      font-family: $font-stack-code;
+      font-size: 0.92rem;
+      margin-bottom: 0.5rem;
+      position: relative;
+      text-align: center;
+      width: 100%;
+    }
 
-    &.theme-dark {
-      color: $colour-text2-dark;
+    .progress {
+      background-color: darken($colour-bg2-default, 50%);
+      border-radius: 1rem;
+      height: 0.45rem;
+      margin: 0.25rem 0 1.5rem;
+      overflow: visible;
 
-      .background {
-        /* TODO: move this to component */
-        background: $colour-bg1-dark;
+      @include theme-dark {
+        background-color: $colour-bg1-dark;
       }
+
+      .progress-bar {
+        background-color: $colour-bg2-default;
+        border-bottom-left-radius: 1rem;
+        border-top-left-radius: 1rem;
+        transition: none;
+
+        @include theme-dark {
+          background-color: $colour-text3-dark;
+        }
+      }
+    }
+
+    .max,
+    .used {
+      font-size: 0.8rem;
+      margin-top: -1.5rem;
+      position: absolute;
+    }
+
+    .max {
+      color: $colour-text2-default;
+      right: 0;
+
+      @include theme-dark {
+        color: $colour-text2-dark;
+      }
+    }
+
+    .used {
+      color: $colour-bg2-default;
+      left: 0;
+
+      @include theme-dark {
+        color: $colour-bg2-dark;
+      }
+    }
+
+    .service-message {
+      max-height: 7rem;
+    }
+
+    .service-url {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+      position: relative;
+
+      & > a {
+        @include text-overflow-ellipsis;
+      }
+
+      .status-icon {
+        margin: 0.1rem 0 0 0.25rem;
+      }
+    }
+
+    .status-text {
+      color: $colour-text3-default;
+
+      @include theme-dark {
+        color: $colour-text3-dark;
+      }
+    }
+
+    .updates-available {
+      @extend .description;
+
+      font-size: 0.9rem;
+      font-style: italic;
+      text-align: center;
+    }
+  }
+
+  .view-content {
+    padding: 0.75rem 0 0;
+  }
+
+  .well {
+    overflow: hidden;
+    padding: 0;
+
+    h4 {
+      margin-bottom: 0;
+      padding: 0.75rem 1rem;
+    }
+
+    .btn.btn-default {
+      font-size: 1.1rem;
+      line-height: 2.3rem;
+    }
+
+    .panel-content {
+      padding: 0 1.25rem;
+    }
+  }
+  @media (hover: hover) {
+    a {
+      &:active,
+      &:focus,
+      &:hover {
+        border-bottom-color: inherit;
+      }
+    }
+  }
+}
+
+.spinner-border {
+  @include spinner-colour($colour-bg2-default);
+
+  animation-duration: 1s;
+
+  @include theme-dark {
+    @include spinner-colour($colour-bg2-dark);
+  }
+}
+
+.status-icon {
+  position: relative;
+  z-index: 5;
+
+  .status-icon-bg {
+    border-radius: 100%;
+    height: 0.8rem;
+    left: 0.1rem;
+    position: absolute;
+    top: 0.2rem;
+    width: 0.8rem;
+    z-index: -1;
+
+    @include theme-dark {
+      background-color: $colour-text1-dark !important;
+    }
+  }
+}
+
+.theme-content {
+  height: 100%;
+  width: 100%;
+
+  &.theme-dark {
+    color: $colour-text2-dark;
+
+    .background {
+      /* TODO: move this to component */
+      background: $colour-bg1-dark;
     }
   }
 }

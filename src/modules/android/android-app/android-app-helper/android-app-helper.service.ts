@@ -9,32 +9,47 @@ import { PlatformType } from '../../../shared/global-shared.enum';
 import LogService from '../../../shared/log/log.service';
 import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
 import { Sync } from '../../../shared/sync/sync.interface';
+import WorkingService from '../../../shared/working/working.service';
 import AndroidPlatformService from '../../android-platform.service';
 
 @autobind
 @Injectable('AppHelperService')
 export default class AndroidAppHelperService implements AppHelperService {
   $exceptionHandler: ExceptionHandler;
+  $interval: ng.IIntervalService;
   $q: ng.IQService;
   logSvc: LogService;
   platformSvc: AndroidPlatformService;
   syncEngineSvc: SyncEngineService;
+  workingSvc: WorkingService;
 
   platformName = PlatformType.Android;
 
-  static $inject = ['$exceptionHandler', '$q', 'LogService', 'PlatformService', 'SyncEngineService'];
+  static $inject = [
+    '$exceptionHandler',
+    '$interval',
+    '$q',
+    'LogService',
+    'PlatformService',
+    'SyncEngineService',
+    'WorkingService'
+  ];
   constructor(
     $exceptionHandler: ng.IExceptionHandlerService,
+    $interval: ng.IIntervalService,
     $q: ng.IQService,
     LogSvc: LogService,
     PlatformSvc: AndroidPlatformService,
-    SyncEngineSvc: SyncEngineService
+    SyncEngineSvc: SyncEngineService,
+    WorkingSvc: WorkingService
   ) {
     this.$exceptionHandler = $exceptionHandler;
+    this.$interval = $interval;
     this.$q = $q;
     this.logSvc = LogSvc;
     this.platformSvc = PlatformSvc;
     this.syncEngineSvc = SyncEngineSvc;
+    this.workingSvc = WorkingSvc;
   }
 
   confirmBeforeSyncing(): boolean {
