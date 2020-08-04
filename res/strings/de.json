@@ -711,8 +711,12 @@
     "key": "button_Dismiss_Label",
     "message": "Dismiss"
   },
-  "downloadFile_Success_Message": {
-    "key": "downloadFile_Success_Message",
+  "downloadFile_Success_Android_Message": {
+    "key": "downloadFile_Success_Android_Message",
+    "message": "File saved as {fileName}."
+  },
+  "downloadFile_Success_Desktop_Message": {
+    "key": "downloadFile_Success_Desktop_Message",
     "message": "If the file did not download automatically, right click on the link below and “Save link as...”."
   },
   "settings_BackupRestore_RestoreSuccess_Message": {
