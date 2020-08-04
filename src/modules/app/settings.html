@@ -436,7 +436,7 @@
         </p>
         <div class="animate-fade-in" data-ng-hide="vm.settings.downloadLogCompletedMessage">
           <p class="description">{{ vm.platformSvc.getI18nString(vm.strings.settings_Issues_LogSize_Label) }}:
-            {{ vm.settings.logSize | byteFmt : 2 }}</p>
+            <span ng-if="vm.settings.logSize >= 0">{{ vm.settings.logSize | byteFmt : 2 }}</span></p>
           <div class="buttons">
             <button type="button" class="btn btn-default"
                     data-ng-click="vm.utilitySvc.handleEvent(vm.issuesPanel_DownloadLogFile_Click)"

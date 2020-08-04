@@ -22,7 +22,6 @@ import { StoreKey } from '../../shared/store/store.enum';
 import StoreService from '../../shared/store/store.service';
 import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
 import UtilityService from '../../shared/utility/utility.service';
-import { WorkingContext } from '../../shared/working/working.enum';
 import WorkingService from '../../shared/working/working.service';
 import AndroidPlatformService from '../android-platform.service';
 import AndroidAppHelperService from './android-app-helper/android-app-helper.service';
@@ -118,7 +117,9 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
       return this.$q<void>((resolve, reject) => {
         window.cordova.plugins.ThemeDetection.isDarkModeEnabled(resolve, reject);
       }).then((isDarkModeEnabled: any) => {
-        return this.storeSvc.set(StoreKey.DarkModeEnabled, isDarkModeEnabled.value);
+        return this.storeSvc.set(StoreKey.DarkModeEnabled, isDarkModeEnabled.value).then(() => {
+          this.settings.darkModeEnabled = isDarkModeEnabled.value;
+        });
       });
     });
   }
@@ -374,56 +375,67 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
 
     // Set theme
     return this.checkForDarkTheme().then(() => {
-      return this.storeSvc.get().then((storeContent) => {
-        // Prime bookmarks cache
-        if (storeContent.syncEnabled) {
-          this.bookmarkHelperSvc.getCachedBookmarks();
-        }
+      return this.storeSvc
+        .get([
+          StoreKey.AppVersion,
+          StoreKey.CheckForAppUpdates,
+          StoreKey.LastUpdated,
+          StoreKey.ServiceUrl,
+          StoreKey.SyncBookmarksToolbar,
+          StoreKey.SyncEnabled,
+          StoreKey.SyncId,
+          StoreKey.SyncVersion
+        ])
+        .then((storeContent) => {
+          // Prime bookmarks cache
+          if (storeContent.syncEnabled) {
+            this.bookmarkHelperSvc.getCachedBookmarks();
+          }
 
-        // Add useful debug info to beginning of trace log
-        const debugInfo = angular.copy(storeContent) as any;
-        debugInfo.platform = {
-          name: window.device.platform,
-          device: `${window.device.manufacturer} ${window.device.model}`
-        };
-        this.logSvc.logInfo(
-          Object.keys(debugInfo)
-            .filter((key) => {
-              return debugInfo[key] != null;
+          // Add useful debug info to beginning of trace log
+          const debugInfo = angular.copy(storeContent) as any;
+          debugInfo.platform = {
+            name: window.device.platform,
+            device: `${window.device.manufacturer} ${window.device.model}`
+          };
+          this.logSvc.logInfo(
+            Object.keys(debugInfo)
+              .filter((key) => {
+                return debugInfo[key] != null;
+              })
+              .reduce((prev, current) => {
+                prev[current] = debugInfo[current];
+                return prev;
+              }, {})
+          );
+
+          // Check for new app version
+          if (storeContent.checkForAppUpdates) {
+            this.checkForNewVersion();
+          }
+
+          // Exit if sync not enabled
+          if (!storeContent.syncEnabled) {
+            return;
+          }
+
+          // Run sync
+          this.executeSyncIfOnline('delayDisplayDialog')
+            .then((isOnline) => {
+              if (isOnline === false) {
+                return;
+              }
+
+              // Refresh search results if query not present
+              if (this.vm.currentView === AppView.Search && !this.vm.search.query) {
+                this.vm.displayDefaultSearchState();
+              }
             })
-            .reduce((prev, current) => {
-              prev[current] = debugInfo[current];
-              return prev;
-            }, {})
-        );
-
-        // Check for new app version
-        if (storeContent.checkForAppUpdates) {
-          this.checkForNewVersion();
-        }
-
-        // Exit if sync not enabled
-        if (!storeContent.syncEnabled) {
-          return;
-        }
-
-        // Run sync
-        this.executeSyncIfOnline('delayDisplayDialog')
-          .then((isOnline) => {
-            if (isOnline === false) {
-              return;
-            }
-
-            // Refresh search results if query not present
-            if (this.vm.currentView === AppView.Search && !this.vm.search.query) {
-              this.vm.displayDefaultSearchState();
-            }
-          })
-          .then(() => {
-            // Check if a bookmark was shared
-            return this.checkForSharedBookmark();
-          });
-      });
+            .then(() => {
+              // Check if a bookmark was shared
+              return this.checkForSharedBookmark();
+            });
+        });
     });
   }
 
@@ -447,7 +459,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
 
     // Clear trace log
     return this.storeSvc
-      .set(StoreKey.TraceLog)
+      .remove(StoreKey.TraceLog)
       .then(() => {
         this.logSvc.logInfo(`Upgrading from ${oldVersion} to ${newVersion}`);
       })

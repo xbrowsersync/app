@@ -2,7 +2,7 @@
 <div class="menu" ng-class="{ 'animate animate-fade-in': vm.enableSelect }" ng-if="vm.enableSelect"
      ng-show="vm.isSelected" tabindex="-1">
   <button class="btn btn-fab" title="{{ vm.platformSvc.getI18nString(vm.strings.button_ShareBookmark_Label) }}"
-          ng-click="vm.utilitySvc.handleEvent(vm.shareBookmark(), $event,  vm.bookmark)">
+          ng-click="vm.utilitySvc.handleEvent(vm.shareBookmark(), $event, vm.bookmark)">
     <i class="fas fa-share-alt" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.button_ShareBookmark_Label) }}</span>
   </button>

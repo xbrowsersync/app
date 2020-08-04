@@ -4,6 +4,7 @@ import { autobind } from 'core-decorators';
 import stackTrace from 'stacktrace-js';
 import { Exception } from '../exception/exception';
 import { StoreKey } from '../store/store.enum';
+import { TraceLogItem } from '../store/store.interface';
 import StoreService from '../store/store.service';
 import { LogLevel } from './log.enum';
 import { LogQueueItem } from './log.interface';
@@ -128,37 +129,24 @@ export default class LogService {
     // Get the next log item to process
     this.currentLogQueueItem = this.logItemQueue.shift();
 
-    // Format the log item with current time stamp and log type
-    let messageLogText = `${new Date().toISOString().replace(/[A-Z]/g, ' ').trim()}\t`;
-    switch (this.currentLogQueueItem.level) {
-      case LogLevel.Error:
-        messageLogText += '[error]\t';
-        break;
-      case LogLevel.Warn:
-        messageLogText += '[warn]\t';
-        break;
-      case LogLevel.Trace:
-      default:
-        messageLogText += '[trace]\t';
+    // Format log message
+    let message = angular.isObject(this.currentLogQueueItem.message)
+      ? angular.toJson(this.currentLogQueueItem.message)
+      : this.currentLogQueueItem.message ?? '';
+    if (this.currentLogQueueItem.error) {
+      message += `${this.currentLogQueueItem.error.stack.replace(/\s+/g, ' ')}`;
     }
 
-    // Add message text to log item and add to end of log
-    return this.storeSvc
-      .get<string[]>(StoreKey.TraceLog)
-      .then((debugMessageLog = []) => {
-        messageLogText += angular.isObject(this.currentLogQueueItem.message)
-          ? angular.toJson(this.currentLogQueueItem.message)
-          : this.currentLogQueueItem.message ?? '';
-        if (this.currentLogQueueItem.error) {
-          messageLogText += `${this.currentLogQueueItem.error.stack.replace(/\s+/g, ' ')}`;
-        }
-        debugMessageLog.push(messageLogText);
-        return this.storeSvc.set(StoreKey.TraceLog, debugMessageLog);
-      })
-      .then(() => {
-        // Process remaining messages
-        this.currentLogQueueItem = undefined;
-        this.processLogItemQueue();
-      });
+    // Add log item to store
+    const logItem: TraceLogItem = {
+      level: this.currentLogQueueItem.level,
+      message,
+      timestamp: new Date().getTime()
+    };
+    return this.storeSvc.set(StoreKey.TraceLog, logItem).then(() => {
+      // Process remaining messages
+      this.currentLogQueueItem = undefined;
+      this.processLogItemQueue();
+    });
   }
 }

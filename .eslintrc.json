@@ -22,6 +22,7 @@
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/lines-between-class-members": "off",
     "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/semi": "warn",
     "class-methods-use-this": "off",
     "consistent-return": "off",
     "func-style": "warn",
@@ -37,9 +38,11 @@
     "no-param-reassign": "off",
     "no-undef": "error",
     "no-underscore-dangle": "off",
+    "no-unreachable": "warn",
     "prefer-destructuring": "off",
+    "prettier/prettier": "warn",
     "simple-import-sort/sort": [
-      "error",
+      "warn",
       {
         "groups": [
           ["^\\u0000", "^@?\\w", "^[^.]", "^\\."]

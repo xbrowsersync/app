@@ -91,7 +91,7 @@
     </button>
     <button type="button" class="btn btn-default"
             data-ng-if="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName) && vm.bookmark.displayUpdateForm"
-            data-ng-click="vm.utilitySvc.handleEvent(vm.bookmarkForm_ShareBookmark_Click, vm.bookmark.current)">
+            data-ng-click="vm.utilitySvc.handleEvent(vm.shareBookmark_Click, $event, vm.bookmark.current)">
       {{ vm.platformSvc.getI18nString(vm.strings.button_Share_Label) }}
     </button>
     <button type="button" class="btn btn-default btn-delete-bookmark" data-ng-if="vm.bookmark.displayUpdateForm"

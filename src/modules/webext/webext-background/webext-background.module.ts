@@ -4,6 +4,7 @@ import { browser } from 'webextension-polyfill-ts';
 import ExceptionHandlerService from '../../shared/exception/exception-handler/exception-handler.service';
 import GlobalSharedModule from '../../shared/global-shared.module';
 import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
+import WebExtStoreService from '../webext-store/webext-store.service';
 import WebExtBackgroundComponent from './webext-background.component';
 import WebExtBackgroundService from './webext-background.service';
 
@@ -11,7 +12,7 @@ import WebExtBackgroundService from './webext-background.service';
   declarations: [WebExtBackgroundComponent],
   id: 'WebExtBackgroundModule',
   imports: [GlobalSharedModule],
-  providers: [BookmarkIdMapperService, WebExtBackgroundService]
+  providers: [BookmarkIdMapperService, WebExtBackgroundService, WebExtStoreService]
 })
 export default class WebExtBackgroundModule {}
 

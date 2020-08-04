@@ -67,7 +67,7 @@
               delete-bookmark="vm.searchForm_DeleteBookmark_Click" edit-bookmark="vm.searchForm_UpdateBookmark_Click"
               enable-edit-button="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
               enable-select="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
-              is-selected="vm.search.selectedBookmark ===  result.id" share-bookmark="vm.searchForm_ShareBookmark_Click"
+              is-selected="vm.search.selectedBookmark ===  result.id" share-bookmark="vm.shareBookmark_Click"
               hm-press="vm.utilitySvc.handleEvent(vm.searchForm_SelectBookmark_Press, $event,  result.id)"
               ng-keydown="vm.utilitySvc.handleEvent(vm.searchForm_SearchResult_KeyDown, $event)"
               ng-class="{ 'animate': vm.search.selectedBookmark ===  result.id }" tabindex="{{ $index + 5 }}">
@@ -77,7 +77,7 @@
 <div class="bookmark-tree-container" ng-if="vm.search.displayFolderView">
   <bookmark-tree class="root" ng-model="vm.search.bookmarkTree" selected-bookmark="vm.search.selectedBookmark"
                  edit-bookmark="vm.searchForm_UpdateBookmark_Click" select-bookmark="vm.searchForm_SelectBookmark_Press"
-                 share-bookmark="vm.searchForm_ShareBookmark_Click" delete-bookmark="vm.searchForm_DeleteBookmark_Click"
+                 share-bookmark="vm.shareBookmark_Click" delete-bookmark="vm.searchForm_DeleteBookmark_Click"
                  ng-if="vm.search.bookmarkTree">
   </bookmark-tree>
   <h4 ng-if="vm.search.bookmarkTree.length === 0">

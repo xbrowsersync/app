@@ -8,6 +8,7 @@ interface Window {
   QRScanner: any;
   resolveLocalFileSystemURL: any;
   SpinnerDialog: any;
+  sqlitePlugin: any;
 }
 
 interface Cordova {

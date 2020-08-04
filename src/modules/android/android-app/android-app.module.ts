@@ -4,6 +4,7 @@ import { NgModule } from 'angular-ts-decorators';
 import AppModule from '../../app/app.module';
 import AndroidBookmarkService from '../android-bookmark/android-bookmark.service';
 import AndroidPlatformService from '../android-platform.service';
+import AndroidStoreService from '../android-store/android-store.service';
 import AndroidAppAlertComponent from './android-app-alert/android-app-alert.component';
 import AndroidAppHelperService from './android-app-helper/android-app-helper.service';
 import AndroidAppScanComponent from './android-app-scan/android-app-scan.component';
@@ -14,7 +15,7 @@ import AndroidAppComponent from './android-app.component';
   declarations: [AndroidAppAlertComponent, AndroidAppComponent, AndroidAppScanComponent, AndroidAppWorkingComponent],
   id: 'AndroidAppModule',
   imports: [AppModule, 'hmTouchEvents'],
-  providers: [AndroidAppHelperService, AndroidBookmarkService, AndroidPlatformService]
+  providers: [AndroidAppHelperService, AndroidBookmarkService, AndroidPlatformService, AndroidStoreService]
 })
 export default class AndroidAppModule {}
 

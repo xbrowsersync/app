@@ -30,7 +30,7 @@
       <application android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" />
     </edit-config>
     <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:name='MainActivity']" mode="merge">
-      <activity android:theme="@style/AppTheme" android:windowSoftInputMode="adjustPan" />
+      <activity android:allowBackup="false" android:fullBackupOnly="false" android:theme="@style/AppTheme" android:windowSoftInputMode="adjustPan" />
     </edit-config>
     <hook type="before_build" src="scripts/beforeBuild.js" />
     <resource-file src="res/android/drawable/app_background.xml" target="app/src/main/res/drawable/app_background.xml" />

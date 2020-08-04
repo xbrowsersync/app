@@ -64,7 +64,7 @@ export default class WebExtAppHelperService {
     }
 
     // Return message to be displayed
-    const message = this.platformSvc.getI18nString(Strings.downloadFile_Success_Message);
+    const message = this.platformSvc.getI18nString(Strings.downloadFile_Success_Desktop_Message);
     return this.$q.resolve(message);
   }
 

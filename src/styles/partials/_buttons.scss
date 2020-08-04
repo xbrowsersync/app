@@ -7,142 +7,142 @@ button {
     &:focus {
       box-shadow: none;
     }
-  }
 
-  &.btn-default {
-    background-color: rgba($colour-text1-default, 0.3);
-    border-color: $colour-bg3-default;
-    border-radius: $border-radius-input;
-    border-width: 0.15rem;
-    color: $colour-text1-default;
-    font-size: 1.2rem;
-    font-weight: 800;
-    line-height: 2.5rem;
-    min-width: 6rem;
-    padding: 0 1.2rem;
-    text-transform: capitalize;
-    transition: all ease-in-out 0.2s;
-
-    @include theme-dark {
-      background-color: rgba($colour-text1-dark, 0.3);
-      border-color: $colour-text2-dark;
-      color: $colour-text2-dark;
-    }
-
-    &[disabled] {
-      background-color: rgba($colour-bg3-default, 0.3);
+    &.btn-default {
+      background-color: rgba($colour-text1-default, 0.3);
       border-color: $colour-bg3-default;
+      border-radius: $border-radius-input;
+      border-width: 0.15rem;
       color: $colour-text1-default;
-      cursor: default;
-      opacity: 0.5;
+      font-size: 1.2rem;
+      font-weight: 800;
+      line-height: 2.5rem;
+      min-width: 6rem;
+      padding: 0 1.2rem;
+      text-transform: capitalize;
+      transition: all ease-in-out 0.2s;
 
       @include theme-dark {
-        background-color: rgba($colour-bg3-dark, 0.3);
+        background-color: rgba($colour-text1-dark, 0.3);
         border-color: $colour-text2-dark;
         color: $colour-text2-dark;
       }
-    }
 
-    @media (hover: hover) {
-      &:not([disabled]):active {
-        background-color: $colour-text1-default;
-        border-color: $colour-text1-default;
-        color: $colour-bg2-default;
+      &[disabled] {
+        background-color: rgba($colour-bg3-default, 0.3);
+        border-color: $colour-bg3-default;
+        color: $colour-text1-default;
+        cursor: default;
+        opacity: 0.5;
 
         @include theme-dark {
-          background-color: $colour-text1-dark;
+          background-color: rgba($colour-bg3-dark, 0.3);
           border-color: $colour-text2-dark;
           color: $colour-text2-dark;
         }
       }
 
-      &:not([disabled]):focus {
-        text-decoration: underline;
+      @media (hover: hover) {
+        &:not([disabled]):active {
+          background-color: $colour-text1-default;
+          border-color: $colour-text1-default;
+          color: $colour-bg2-default;
 
-        &:active,
-        &:hover {
-          text-decoration: none;
+          @include theme-dark {
+            background-color: $colour-text1-dark;
+            border-color: $colour-text2-dark;
+            color: $colour-text2-dark;
+          }
         }
-      }
 
-      &:not([disabled]):hover {
-        background-color: $colour-bg3-default;
-        border-color: $colour-bg3-default;
-        color: $colour-bg2-default;
+        &:not([disabled]):focus {
+          text-decoration: underline;
 
-        @include theme-dark {
-          background-color: $colour-text2-dark;
-          border-color: $colour-text2-dark;
-          color: $colour-bg3-dark;
+          &:active,
+          &:hover {
+            text-decoration: none;
+          }
         }
-      }
-    }
-  }
 
-  &.btn-fab {
-    align-items: center;
-    background-color: $colour-text2-default;
-    border: none;
-    border-radius: 100%;
-    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12) !important;
-    box-sizing: border-box;
-    color: $colour-text1-default;
-    cursor: pointer;
-    display: inline-flex;
-    font-size: 1.5rem;
-    height: 4rem;
-    justify-content: center;
-    overflow: hidden;
-    padding: 0;
-    position: relative;
-    transition: color ease-in-out 0.2s;
-    width: 4rem;
-    z-index: 10;
+        &:not([disabled]):hover {
+          background-color: $colour-bg3-default;
+          border-color: $colour-bg3-default;
+          color: $colour-bg2-default;
 
-    @include theme-dark {
-      background-color: $colour-text3-dark;
-      color: $colour-text1-dark;
-    }
-
-    &.fixed {
-      bottom: 1rem;
-      position: fixed;
-      right: 1rem;
-    }
-
-    @media (hover: hover) {
-      &:active {
-        background-color: $colour-bg2-default !important;
-        color: $colour-text1-default !important;
-
-        @include theme-dark {
-          background-color: $colour-bg2-dark !important;
-          color: $colour-text1-dark !important;
+          @include theme-dark {
+            background-color: $colour-text2-dark;
+            border-color: $colour-text2-dark;
+            color: $colour-bg3-dark;
+          }
         }
       }
     }
-  }
 
-  &.btn-icon {
-    background: none;
-    border-radius: 0;
-    color: $colour-text2-default;
-    opacity: 0.5;
-    padding: 0;
-    transition: opacity ease-in-out 0.2s;
+    &.btn-fab {
+      align-items: center;
+      background-color: $colour-text2-default;
+      border: none;
+      border-radius: 100%;
+      box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12) !important;
+      box-sizing: border-box;
+      color: $colour-text1-default;
+      cursor: pointer;
+      display: inline-flex;
+      font-size: 1.5rem;
+      height: 4rem;
+      justify-content: center;
+      overflow: hidden;
+      padding: 0;
+      position: relative;
+      transition: color ease-in-out 0.2s;
+      width: 4rem;
+      z-index: 10;
 
-    @include theme-dark {
-      color: $colour-text2-dark;
-    }
-
-    @media (hover: hover) {
-      &:active {
-        opacity: 1 !important;
+      @include theme-dark {
+        background-color: $colour-text3-dark;
+        color: $colour-text1-dark;
       }
 
-      &:hover,
-      &:focus {
-        opacity: 1;
+      &.fixed {
+        bottom: 1rem;
+        position: fixed;
+        right: 1rem;
+      }
+
+      @media (hover: hover) {
+        &:active {
+          background-color: $colour-bg2-default !important;
+          color: $colour-text1-default !important;
+
+          @include theme-dark {
+            background-color: $colour-bg2-dark !important;
+            color: $colour-text1-dark !important;
+          }
+        }
+      }
+    }
+
+    &.btn-icon {
+      background: none;
+      border-radius: 0;
+      color: $colour-text2-default;
+      opacity: 0.5;
+      padding: 0;
+      transition: opacity ease-in-out 0.2s;
+
+      @include theme-dark {
+        color: $colour-text2-dark;
+      }
+
+      @media (hover: hover) {
+        &:active {
+          opacity: 1 !important;
+        }
+
+        &:hover,
+        &:focus {
+          opacity: 1;
+        }
       }
     }
   }

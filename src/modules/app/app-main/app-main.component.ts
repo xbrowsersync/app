@@ -28,9 +28,11 @@ import { ExceptionHandler } from '../../shared/exception/exception.interface';
 import Globals from '../../shared/global-shared.constants';
 import { MessageCommand } from '../../shared/global-shared.enum';
 import { PlatformService } from '../../shared/global-shared.interface';
+import { LogLevel } from '../../shared/log/log.enum';
 import LogService from '../../shared/log/log.service';
 import NetworkService from '../../shared/network/network.service';
 import { StoreKey } from '../../shared/store/store.enum';
+import { TraceLogItem } from '../../shared/store/store.interface';
 import StoreService from '../../shared/store/store.service';
 import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
 import { SyncType } from '../../shared/sync/sync.enum';
@@ -536,7 +538,7 @@ export default class AppMainComponent {
           // Set bookmark active status if current bookmark is current page
           return this.platformSvc.getCurrentUrl().then((currentUrl) => {
             // Update bookmark status and switch view
-            const bookmarkStatusActive = currentUrl.toUpperCase() === bookmarkToAdd.url.toUpperCase();
+            const bookmarkStatusActive = currentUrl?.toUpperCase() === bookmarkToAdd.url.toUpperCase();
             return this.syncBookmarksSuccess(bookmarkStatusActive);
           });
         });
@@ -668,7 +670,7 @@ export default class AppMainComponent {
           return this.platformSvc.getCurrentUrl().then((currentUrl) => {
             // Update bookmark status and switch view
             const bookmarkStatusActive =
-              currentUrl.toUpperCase() === bookmarkToModify.url.toUpperCase() ? true : undefined;
+              currentUrl?.toUpperCase() === bookmarkToModify.url.toUpperCase() ? true : undefined;
             return this.syncBookmarksSuccess(bookmarkStatusActive);
           });
         });
@@ -859,16 +861,30 @@ export default class AppMainComponent {
   }
 
   downloadLogFile() {
-    // Get cached message log
+    // Retrieve trace log items
     return this.storeSvc
-      .get<string[]>(StoreKey.TraceLog)
-      .then((debugMessageLog) => {
+      .get<TraceLogItem[]>(StoreKey.TraceLog)
+      .then((traceLogItems) => {
+        // Convert trace log items into string array
+        const log = traceLogItems.map((traceLogItem) => {
+          let messageLogText = `${new Date(traceLogItem.timestamp).toISOString().replace(/[A-Z]/g, ' ').trim()}\t`;
+          switch (traceLogItem.level) {
+            case LogLevel.Error:
+              messageLogText += '[error]\t';
+              break;
+            case LogLevel.Warn:
+              messageLogText += '[warn]\t';
+              break;
+            case LogLevel.Trace:
+            default:
+              messageLogText += '[trace]\t';
+          }
+          messageLogText += traceLogItem.message;
+          return messageLogText;
+        });
+
         // Trigger download
-        return this.appHelperSvc.downloadFile(
-          this.getLogFileName(),
-          debugMessageLog.join('\r\n'),
-          'downloadLogFileLink'
-        );
+        return this.appHelperSvc.downloadFile(this.getLogFileName(), log.join('\r\n'), 'downloadLogFileLink');
       })
       .then((message) => {
         // Display message
@@ -1197,14 +1213,13 @@ export default class AppMainComponent {
     return this.$q
       .all([
         this.bookmarkHelperSvc.getSyncBookmarksToolbar(),
-        this.storeSvc.get([StoreKey.CheckForAppUpdates, StoreKey.TraceLog]),
+        this.storeSvc.get<boolean>(StoreKey.CheckForAppUpdates),
         this.platformSvc.getAppVersion(),
         this.platformSvc.checkOptionalNativePermissions()
       ])
       .then((data) => {
         const syncBookmarksToolbar = data[0];
-        const checkForAppUpdates = data[1].checkForAppUpdates;
-        const traceLog = data[1].traceLog;
+        const checkForAppUpdates = data[1];
         const appVersion = data[2];
         const readWebsiteDataPermissionsGranted = data[3];
 
@@ -1212,9 +1227,13 @@ export default class AppMainComponent {
         this.settings.checkForAppUpdates = checkForAppUpdates;
         this.settings.syncBookmarksToolbar = syncBookmarksToolbar;
         this.settings.readWebsiteDataPermissionsGranted = readWebsiteDataPermissionsGranted;
-        this.settings.logSize = new TextEncoder().encode(traceLog.join()).length;
 
         this.$timeout(() => {
+          // Calculate log size async
+          this.storeSvc.get<TraceLogItem[]>(StoreKey.TraceLog).then((traceLogItems) => {
+            this.settings.logSize = new TextEncoder().encode(traceLogItems.join()).length;
+          });
+
           // Check for available sync updates on non-mobile platforms
           if (this.sync.enabled && !this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
             this.$q
@@ -1256,7 +1275,7 @@ export default class AppMainComponent {
 
   issuesPanel_ClearLog_Click() {
     // Clear trace log
-    return this.storeSvc.set(StoreKey.TraceLog).then(() => {
+    return this.storeSvc.remove(StoreKey.TraceLog).then(() => {
       this.$timeout(() => {
         this.settings.logSize = 0;
       });
@@ -1431,7 +1450,7 @@ export default class AppMainComponent {
               this.login.passwordComplexity = {};
               this.$q
                 .all([
-                  this.storeSvc.set(StoreKey.Password),
+                  this.storeSvc.remove(StoreKey.Password),
                   syncId ? this.storeSvc.set(StoreKey.SyncId, syncId) : this.$q.resolve(),
                   serviceUrl ? this.updateServiceUrl(serviceUrl) : this.$q.resolve()
                 ])
@@ -1535,7 +1554,7 @@ export default class AppMainComponent {
       let parent;
       let childIndex = -1;
       this.bookmarkHelperSvc.eachBookmark(this.search.bookmarkTree, (current) => {
-        if (current.children?.length === 0) {
+        if (angular.isUndefined(current.children) || current.children.length === 0) {
           return;
         }
 
@@ -1801,7 +1820,7 @@ export default class AppMainComponent {
     this.search.selectedBookmark = bookmarkId;
   }
 
-  searchForm_ShareBookmark_Click(event, bookmarkToShare) {
+  shareBookmark_Click(event, bookmarkToShare) {
     if (event) {
       if (event.preventDefault) {
         event.preventDefault();
@@ -1966,7 +1985,7 @@ export default class AppMainComponent {
       .checkServiceStatus()
       .then(() => {
         // Clear the current cached password
-        return this.storeSvc.set(StoreKey.Password);
+        return this.storeSvc.remove(StoreKey.Password);
       })
       .then(() => {
         // If a sync ID has not been supplied, get a new one
@@ -2065,26 +2084,26 @@ export default class AppMainComponent {
     if (syncData.type === SyncType.Remote) {
       keys.push(StoreKey.SyncId);
     }
-    this.storeSvc.set(keys);
+    return this.storeSvc.remove(keys).then(() => {
+      // If ID was removed disable sync and display login panel
+      if (err instanceof Exceptions.SyncRemovedException) {
+        return this.changeView(AppView.Login).finally(() => {
+          this.$exceptionHandler(err);
+        });
+      }
 
-    // If ID was removed disable sync and display login panel
-    if (err instanceof Exceptions.SyncRemovedException) {
-      return this.changeView(AppView.Login).finally(() => {
-        this.$exceptionHandler(err);
-      });
-    }
+      // If creds were incorrect, focus on password field
+      if (
+        err instanceof Exceptions.InvalidCredentialsException &&
+        !this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)
+      ) {
+        this.$timeout(() => {
+          (document.querySelector('.login-form-existing input[name="txtPassword"]') as HTMLInputElement).select();
+        }, 150);
+      }
 
-    // If creds were incorrect, focus on password field
-    if (
-      err instanceof Exceptions.InvalidCredentialsException &&
-      !this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)
-    ) {
-      this.$timeout(() => {
-        (document.querySelector('.login-form-existing input[name="txtPassword"]') as HTMLInputElement).select();
-      }, 150);
-    }
-
-    throw err;
+      throw err;
+    });
   }
 
   syncBookmarksSuccess(bookmarkStatusActive?) {
@@ -2156,8 +2175,8 @@ export default class AppMainComponent {
   syncForm_NewSync_Click() {
     this.login.displayNewSyncPanel = true;
     this.login.displayPasswordConfirmation = false;
-    this.storeSvc.set(StoreKey.SyncId);
-    this.storeSvc.set(StoreKey.Password);
+    this.storeSvc.remove(StoreKey.SyncId);
+    this.storeSvc.remove(StoreKey.Password);
     this.sync.id = null;
     this.sync.password = '';
     this.syncForm.txtId.$setValidity('InvalidSyncId', true);
@@ -2248,7 +2267,7 @@ export default class AppMainComponent {
     // Update saved credentials
     const url = this.sync.newService.url.replace(/\/$/, '');
     return this.$q
-      .all([this.updateServiceUrl(url), this.storeSvc.set(StoreKey.SyncId), this.storeSvc.set(StoreKey.Password)])
+      .all([this.updateServiceUrl(url), this.storeSvc.remove(StoreKey.SyncId), this.storeSvc.remove(StoreKey.Password)])
       .then(() => {
         // Update view
         this.login.displayUpdateServicePanel = false;

@@ -447,7 +447,7 @@ export default class WebExtBackgroundService {
 
   upgradeExtension(oldVersion: string, newVersion: string): ng.IPromise<void> {
     return this.storeSvc
-      .set(StoreKey.TraceLog)
+      .remove(StoreKey.TraceLog)
       .then(() => {
         this.logSvc.logInfo(`Upgrading from ${oldVersion} to ${newVersion}`);
       })

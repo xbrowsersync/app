@@ -91,7 +91,7 @@ export default class AndroidAppHelperService implements AppHelperService {
                 fileWriter.onwriteend = () => {
                   // Return message to be displayed
                   const message = this.platformSvc
-                    .getI18nString(Strings.downloadFile_Success_Message)
+                    .getI18nString(Strings.downloadFile_Success_Android_Message)
                     .replace('{fileName}', fileEntry.name);
                   resolve(message);
                 };
