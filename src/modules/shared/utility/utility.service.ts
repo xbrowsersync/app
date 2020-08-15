@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 import { Injectable } from 'angular-ts-decorators';
+import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
-import { autobind } from 'core-decorators';
 import _ from 'underscore';
+import { AppEventType } from '../../app/app.enum';
 import * as Exceptions from '../exception/exception';
 import { ExceptionHandler } from '../exception/exception.interface';
 import Globals from '../global-shared.constants';
@@ -20,15 +21,17 @@ export default class UtilityService {
   $exceptionHandler: ExceptionHandler;
   $http: ng.IHttpService;
   $q: ng.IQService;
+  $rootScope: ng.IRootScopeService;
   logSvc: LogService;
   networkSvc: NetworkService;
   storeSvc: StoreService;
 
-  static $inject = ['$exceptionHandler', '$http', '$q', 'LogService', 'NetworkService', 'StoreService'];
+  static $inject = ['$exceptionHandler', '$http', '$q', '$rootScope', 'LogService', 'NetworkService', 'StoreService'];
   constructor(
     $exceptionHandler: ExceptionHandler,
     $http: ng.IHttpService,
     $q: ng.IQService,
+    $rootScope: ng.IRootScopeService,
     LogSvc: LogService,
     NetworkSvc: NetworkService,
     StoreSvc: StoreService
@@ -36,9 +39,14 @@ export default class UtilityService {
     this.$exceptionHandler = $exceptionHandler;
     this.$http = $http;
     this.$q = $q;
+    this.$rootScope = $rootScope;
     this.logSvc = LogSvc;
     this.networkSvc = NetworkSvc;
     this.storeSvc = StoreSvc;
+  }
+
+  broadcastEvent(eventType: AppEventType, eventData?: any[]): void {
+    this.$rootScope.$broadcast(eventType, eventData);
   }
 
   checkForNewVersion(currentVersion: string): ng.IPromise<string> {
@@ -141,6 +149,10 @@ export default class UtilityService {
 
   isMobilePlatform(platformName: string): boolean {
     return platformName === PlatformType.Android;
+  }
+
+  isSyncEnabled(): ng.IPromise<boolean> {
+    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled);
   }
 
   isTextInput(element: Element): boolean {

@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import stackTrace from 'stacktrace-js';
 import { Exception } from '../exception/exception';
 import { StoreKey } from '../store/store.enum';
@@ -57,7 +57,7 @@ export default class LogService {
     this.logToConsole(message, LogLevel.Error, error);
 
     // Convert stack trace to show source files then add to queue and process
-    return angular.isUndefined(error.stack)
+    return angular.isUndefined(error.stack ?? undefined)
       ? this.$q.resolve()
       : stackTrace.fromError(error).then((frames) => {
           if (frames) {

@@ -1,7 +1,7 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
+import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
-import { autobind } from 'core-decorators';
 import * as Exceptions from '../../exception/exception';
 import Globals from '../../global-shared.constants';
 import { PlatformService } from '../../global-shared.interface';

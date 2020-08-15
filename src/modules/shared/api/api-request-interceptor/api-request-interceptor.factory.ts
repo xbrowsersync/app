@@ -1,6 +1,6 @@
 import { IHttpInterceptor } from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import Globals from '../../global-shared.constants';
 
 @autobind

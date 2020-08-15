@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import _ from 'underscore';
 import { Bookmarks as NativeBookmarks } from 'webextension-polyfill-ts';
 import Strings from '../../../../../res/strings/en.json';
@@ -96,7 +96,7 @@ export default class BookmarkHelperService {
 
   cleanBookmark(bookmark: Bookmark): Bookmark {
     // Remove empty properties, except for children array
-    const cleanedBookmark = _.pick<Bookmark, 'id' | 'url'>(angular.copy(bookmark), (value, key) => {
+    const cleanedBookmark = _.pick<Bookmark>(angular.copy(bookmark), (value, key) => {
       return (angular.isArray(value) && key !== 'children') || angular.isString(value)
         ? value.length > 0
         : value != null;
@@ -206,7 +206,7 @@ export default class BookmarkHelperService {
     };
 
     Object.keys(metadata).forEach((key) => {
-      if (angular.isUndefined(metadata[key])) {
+      if (angular.isUndefined(metadata[key] ?? undefined)) {
         delete metadata[key];
       }
     });
@@ -283,7 +283,7 @@ export default class BookmarkHelperService {
 
   getContainer(containerName: string, bookmarks: Bookmark[], createIfNotPresent = false): Bookmark {
     // If container does not exist, create it if specified
-    let container = _.findWhere<Bookmark, any>(bookmarks, { title: containerName });
+    let container = _.findWhere<Bookmark[]>(bookmarks, { title: containerName });
     if (!container && createIfNotPresent) {
       container = this.newBookmark(containerName, null, null, null, false, bookmarks);
       bookmarks.push(container);
@@ -316,7 +316,7 @@ export default class BookmarkHelperService {
 
   getIdsFromDescendants(bookmark: Bookmark): number[] {
     const ids = [];
-    if (angular.isUndefined(bookmark.children) || bookmark.children.length === 0) {
+    if (angular.isUndefined(bookmark.children ?? undefined) || bookmark.children.length === 0) {
       return ids;
     }
 
@@ -356,16 +356,15 @@ export default class BookmarkHelperService {
         }
 
         // Count lookaheads and return most common
-        const lookahead = _.first(
-          _.chain(lookaheads)
-            .sortBy((x) => {
-              return x.length;
-            })
-            .countBy()
-            .pairs()
-            .max(_.last)
-            .value()
-        );
+        const lookahead = _.chain(lookaheads)
+          .sortBy((x) => {
+            return x.length;
+          })
+          .countBy()
+          .pairs()
+          .max(_.last)
+          .first()
+          .value();
 
         return [lookahead, word];
       })
@@ -399,7 +398,7 @@ export default class BookmarkHelperService {
     // Check existing bookmarks for highest id
     let highestId = 0;
     this.eachBookmark(bookmarks, (bookmark) => {
-      if (!angular.isUndefined(bookmark.id) && parseInt(bookmark.id.toString(), 10) > highestId) {
+      if (!angular.isUndefined(bookmark.id ?? undefined) && parseInt(bookmark.id.toString(), 10) > highestId) {
         highestId = parseInt(bookmark.id.toString(), 10);
       }
     });
@@ -407,17 +406,6 @@ export default class BookmarkHelperService {
     // Compare highest id with supplied taken ids
     highestId = _.max(takenIds) > highestId ? _.max(takenIds) : highestId;
     return highestId + 1;
-  }
-
-  getSyncBookmarksToolbar(): ng.IPromise<boolean> {
-    // Get setting from local storage
-    return this.storeSvc.get<boolean>(StoreKey.SyncBookmarksToolbar).then((syncBookmarksToolbar) => {
-      // Set default value to true
-      if (syncBookmarksToolbar == null) {
-        syncBookmarksToolbar = true;
-      }
-      return syncBookmarksToolbar;
-    });
   }
 
   getSyncSize(): ng.IPromise<number> {
@@ -437,7 +425,7 @@ export default class BookmarkHelperService {
   }
 
   isSeparator(bookmark: Bookmark | BookmarkMetadata | NativeBookmarks.BookmarkTreeNode): boolean {
-    if (angular.isUndefined(bookmark)) {
+    if (angular.isUndefined(bookmark ?? undefined)) {
       return false;
     }
 
@@ -762,7 +750,7 @@ export default class BookmarkHelperService {
 
   updateCachedBookmarks(unencryptedBookmarks: Bookmark[], encryptedBookmarks: string): ng.IPromise<void> {
     return this.$q<void>((resolve) => {
-      if (angular.isUndefined(encryptedBookmarks)) {
+      if (angular.isUndefined(encryptedBookmarks ?? undefined)) {
         return resolve();
       }
 

@@ -1,14 +1,21 @@
-enum AppView {
-  Bookmark,
-  Help,
-  Login,
-  Permissions,
-  Scan,
-  Search,
-  Settings,
-  Support,
-  Updated,
-  Working
+enum AppEventType {
+  ClearSelectedBookmark = 'clearSelectedBookmark',
+  RefreshBookmarkSearchResults = 'refreshBookmarkSearchResults',
+  RefreshSyncDataUsage = 'refreshSyncDataUsage',
+  WorkingCancelAction = 'workingCancelAction'
+}
+
+enum AppViewType {
+  Bookmark = 'BOOKMARK',
+  Help = 'HELP',
+  Login = 'LOGIN',
+  Permissions = 'PERMISSIONS',
+  Scan = 'SCAN',
+  Search = 'SEARCH',
+  Settings = 'SETTINGS',
+  Support = 'SUPPORT',
+  Updated = 'UPDATED',
+  Working = 'WORKING'
 }
 
 enum KeyCode {
@@ -27,4 +34,4 @@ enum KeyCode {
   ArrowDown = 40
 }
 
-export { AppView, KeyCode };
+export { AppEventType, AppViewType, KeyCode };

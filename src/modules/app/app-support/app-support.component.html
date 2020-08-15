@@ -16,7 +16,8 @@
     </button>
   </div>
   <div class="buttons">
-    <button type="button" class="btn btn-default focused" ng-click="vm.utilitySvc.handleEvent(vm.close())">
+    <button type="button" class="btn btn-default focused"
+            ng-click="vm.utilitySvc.handleEvent(vm.appHelperSvc.switchView)">
       {{ vm.platformSvc.getI18nString(vm.strings.button_Continue_Label) }}
     </button>
   </div>

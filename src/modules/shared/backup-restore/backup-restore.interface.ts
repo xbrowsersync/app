@@ -1,7 +1,9 @@
 import { ApiServiceType } from '../api/api.enum';
+import { Bookmark } from '../bookmark/bookmark.interface';
 
 export interface Backup {
-  xbrowsersync: BackupRoot;
+  xbrowsersync?: BackupRoot;
+  xBrowserSync?: LegacyBackupRoot;
 }
 
 export interface BackupRoot {
@@ -11,11 +13,16 @@ export interface BackupRoot {
 }
 
 export interface BackupData {
-  bookmarks?: any;
+  bookmarks?: Bookmark[];
 }
 
 export interface BackupSync {
   id?: string;
   type?: ApiServiceType;
   url?: string;
+}
+
+export interface LegacyBackupRoot {
+  bookmarks?: Bookmark[];
+  id?: string;
 }

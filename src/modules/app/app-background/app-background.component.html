@@ -1,0 +1,6 @@
+<div class="background animate" ng-if="vm.currentView !== undefined && vm.currentView !== vm.AppViewType.Scan">
+  <div class="background-img" ng-class="{ 'moving-clouds': vm.animateClouds }" ng-if="vm.currentView === vm.AppViewType.Working || vm.currentView === vm.AppViewType.Login || 
+    vm.currentView === vm.AppViewType.Support || vm.currentView === vm.AppViewType.Permissions || 
+    vm.currentView === vm.AppViewType.Updated || vm.currentView === vm.AppViewType.Help">
+  </div>
+</div>

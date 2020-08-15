@@ -1,13 +1,15 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import Strings from '../../../res/strings/en.json';
+import { AppEventType } from '../app/app.enum';
 import { Alert } from '../shared/alert/alert.interface';
 import AlertService from '../shared/alert/alert.service';
 import BookmarkHelperService from '../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkChangeType } from '../shared/bookmark/bookmark.enum';
 import { BookmarkMetadata } from '../shared/bookmark/bookmark.interface';
 import * as Exceptions from '../shared/exception/exception';
+import { ExceptionHandler } from '../shared/exception/exception.interface';
 import Globals from '../shared/global-shared.constants';
 import { MessageCommand } from '../shared/global-shared.enum';
 import { I18nString, PlatformService, WebpageMetadata } from '../shared/global-shared.interface';
@@ -23,7 +25,7 @@ import WorkingService from '../shared/working/working.service';
 @autobind
 @Injectable('PlatformService')
 export default class AndroidPlatformService implements PlatformService {
-  $exceptionHandler: ng.IExceptionHandlerService;
+  $exceptionHandler: ExceptionHandler;
   $http: ng.IHttpService;
   $injector: ng.auto.IInjectorService;
   $interval: ng.IIntervalService;
@@ -40,6 +42,7 @@ export default class AndroidPlatformService implements PlatformService {
 
   backgroundSyncInterval: ng.IPromise<void>;
   _currentPage: BookmarkMetadata;
+  cancelGetPageMetadata: () => any;
   i18nStrings: I18nString[];
   loadingId: string;
 
@@ -59,7 +62,7 @@ export default class AndroidPlatformService implements PlatformService {
     'WorkingService'
   ];
   constructor(
-    $exceptionHandler: ng.IExceptionHandlerService,
+    $exceptionHandler: ExceptionHandler,
     $http: ng.IHttpService,
     $injector: ng.auto.IInjectorService,
     $interval: ng.IIntervalService,
@@ -205,8 +208,6 @@ export default class AndroidPlatformService implements PlatformService {
     const promise = this.$q<WebpageMetadata>((resolve, reject) => {
       // Return if no url set
       if (!metadata.url) {
-        // TODO: Move this to app component
-        // this.vm.bookmark.addButtonDisabledUntilEditForm = true;
         return resolve();
       }
 
@@ -263,8 +264,6 @@ export default class AndroidPlatformService implements PlatformService {
           if (defaultDescription?.content) {
             return getDecodedTextValue(defaultDescription.content);
           }
-
-          return '';
         };
 
         const getPageKeywords = (): string => {
@@ -332,10 +331,12 @@ export default class AndroidPlatformService implements PlatformService {
         return handleResponse();
       }
 
-      const cancelledCallback = (): void => {
+      // If user cancels loading metadata, return default metadata
+      this.cancelGetPageMetadata = () => {
         resolve(metadata);
+        this.cancelGetPageMetadata = undefined;
       };
-      // TODO: fix cancelledCallback
+
       this.workingSvc.show(WorkingContext.RetrievingMetadata);
       inAppBrowser = window.cordova.InAppBrowser.open(metadata.url, '_blank', 'hidden=yes');
 
@@ -363,7 +364,7 @@ export default class AndroidPlatformService implements PlatformService {
 
       // Time out metadata load after 10 secs
       loadUrlTimeout = this.$timeout(() => {
-        if ((promise as any).$this.$state.status === 0) {
+        if ((promise as any).$$state?.status === 0) {
           handleResponse(null, new Error('Timed out loading URL'));
         }
       }, 10e3);

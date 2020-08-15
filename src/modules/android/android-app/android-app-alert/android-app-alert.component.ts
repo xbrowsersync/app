@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { Component } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import Strings from '../../../../../res/strings/en.json';
 import { AlertType } from '../../../shared/alert/alert.enum';
 import AlertService from '../../../shared/alert/alert.service';
@@ -23,7 +23,7 @@ export default class AndroidAppAlertComponent {
 
   static $inject = ['$exceptionHandler', '$scope', 'AlertService', 'PlatformService'];
   constructor(
-    $exceptionHandler: ng.IExceptionHandlerService,
+    $exceptionHandler: ExceptionHandler,
     $scope: ng.IScope,
     AlertSvc: AlertService,
     PlatformSvc: AndroidPlatformService

@@ -1,9 +1,9 @@
 enum SyncType {
-  Cancel = 'cancel', // Stop current sync, clear sync queue and don't update remote
-  Local = 'local', // Update local data
-  LocalAndRemote = 'local and remote', // Update both local and remote data
-  Remote = 'remote', // Update remote data
-  Upgrade = 'upgrade' // Upgrade synced data
+  Cancel = 'CANCEL', // Stop current sync, clear sync queue and don't update remote
+  Local = 'LOCAL', // Update local data
+  LocalAndRemote = 'LOCAL_REMOTE', // Update both local and remote data
+  Remote = 'REMOTE', // Update remote data
+  Upgrade = 'UPGRADE' // Upgrade synced data
 }
 
 export { SyncType };

@@ -1,5 +1,5 @@
 import angular from 'angular';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import { browser, Tabs } from 'webextension-polyfill-ts';
 import Strings from '../../../../res/strings/en.json';
 import AlertService from '../../shared/alert/alert.service';

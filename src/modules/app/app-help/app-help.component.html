@@ -1,25 +1,23 @@
 <div class="view-content" ng-keydown="vm.utilitySvc.handleEvent(vm.handleKeyDown, $event)"
      hm-swipeleft="vm.utilitySvc.handleEvent(vm.displayNextPage)"
      hm-swiperight="vm.utilitySvc.handleEvent(vm.displayPreviousPage)" tabindex="0">
-  <div id="help-page-{{$index}}" class="animate-fade-in" ng-show="vm.currentPage === $index"
+  <div id="help-page-{{$index}}" class="animate-fade-in" ng-if="vm.currentPage === $index"
        ng-repeat="page in vm.pages track by $index">
     <div ng-bind-html="page"></div>
     <div class="pagination">
-      <a href="#" ng-click="vm.utilitySvc.handleEvent(vm.close())"
-         ng-keydown="vm.utilitySvc.handleEvent(vm.handleKeyDown, $event)" ng-show="$index === 0">
+      <a href="#" ng-click="vm.utilitySvc.handleEvent(vm.close)" ng-show="$index === 0">
         <span>{{ vm.platformSvc.getI18nString(vm.strings.button_OK_Label) }}</span>
       </a>
-      <a class="prev-link" href="#" ng-click="vm.utilitySvc.handleEvent(vm.displayPreviousPage)"
-         ng-keydown="vm.utilitySvc.handleEvent(vm.handleKeyDown, $event)" ng-hide="$index === 0">
+      <a class="prev-link" href="#" ng-click="vm.utilitySvc.handleEvent(vm.displayPreviousPage)" ng-hide="$index === 0">
         <span>{{ vm.platformSvc.getI18nString(vm.strings.button_Previous_Label) }}</span>
       </a>
       <span class="page-number">{{$index + 1}} / {{vm.pages.length}}</span>
-      <a class="next-link" href="#" ng-click="vm.utilitySvc.handleEvent(vm.displayNextPage)"
-         ng-keydown="vm.utilitySvc.handleEvent(vm.handleKeyDown, $event)" ng-hide="$index === vm.pages.length - 1">
+      <a class="next-link focused" href="#" ng-click="vm.utilitySvc.handleEvent(vm.displayNextPage)"
+         ng-hide="$index === vm.pages.length - 1">
         <span>{{ vm.platformSvc.getI18nString(vm.strings.button_Next_Label) }}</span>
       </a>
-      <a href="#" ng-click="vm.utilitySvc.handleEvent(vm.close())"
-         ng-keydown="vm.utilitySvc.handleEvent(vm.handleKeyDown, $event)" ng-show="$index === vm.pages.length - 1">
+      <a href="#" class="focused" ng-click="vm.utilitySvc.handleEvent(vm.close)"
+         ng-show="$index === vm.pages.length - 1">
         <span>{{ vm.platformSvc.getI18nString(vm.strings.button_OK_Label) }}</span>
       </a>
     </div>

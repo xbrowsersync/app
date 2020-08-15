@@ -1,4 +1,4 @@
-<div class="view-content" ng-if="vm.initialised">
+<div class="view-content" ng-if="vm.displayScanInterface">
   <h3>{{ vm.platformSvc.getI18nString(vm.strings.scan_Title) }}</h3>
   <div class="target" ng-class="{ 'error': vm.invalidSyncId }"></div>
   <div class="validation" ng-show="vm.invalidSyncId">
@@ -11,7 +11,7 @@
       <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.button_ToggleLight_Label) }}</span>
     </button>
     <button class="btn btn-fab" title="{{ vm.platformSvc.getI18nString(vm.strings.button_Cancel_Label) }}"
-            ng-click="vm.utilitySvc.handleEvent(vm.close())">
+            ng-click="vm.utilitySvc.handleEvent(vm.close)">
       <i class="fas fa-times" aria-hidden="true"></i>
       <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.button_Cancel_Label) }}</span>
     </button>

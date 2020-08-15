@@ -5,30 +5,29 @@ import NgSanitize from 'angular-sanitize';
 import { NgModule } from 'angular-ts-decorators';
 import NgInfiniteScroll from 'ng-infinite-scroll';
 import ExceptionHandlerService from '../shared/exception/exception-handler/exception-handler.service';
-import Globals from '../shared/global-shared.constants';
 import GlobalSharedModule from '../shared/global-shared.module';
+import AppBackgroundComponent from './app-background/app-background.component';
 import AppHelpComponent from './app-help/app-help.component';
-import PasswordStrengthDirective from './app-login/password-strength/password-strength.directive';
+import AppLoginModule from './app-login/app-login.module';
 import AppPermissionsComponent from './app-permissions/app-permissions.component';
-import AppQrComponent from './app-qr/app-qr.component';
 import BookmarkTreeComponent from './app-search/bookmark-tree/bookmark-tree.component';
 import BookmarkComponent from './app-search/bookmark/bookmark.component';
+import AppSettingsModule from './app-settings/app-settings.module';
 import AppSupportComponent from './app-support/app-support.component';
 import AppUpdatedComponent from './app-updated/app-updated.component';
 
 @NgModule({
   declarations: [
+    AppBackgroundComponent,
     AppHelpComponent,
     AppPermissionsComponent,
-    AppQrComponent,
     AppSupportComponent,
     AppUpdatedComponent,
     BookmarkComponent,
-    BookmarkTreeComponent,
-    PasswordStrengthDirective
+    BookmarkTreeComponent
   ],
   id: 'AppModule',
-  imports: [GlobalSharedModule, NgAnimate, NgFilter, NgInfiniteScroll, NgSanitize]
+  imports: [AppLoginModule, AppSettingsModule, GlobalSharedModule, NgAnimate, NgFilter, NgInfiniteScroll, NgSanitize]
 })
 export default class AppModule {}
 
@@ -46,15 +45,6 @@ export default class AppModule {}
       $compileProvider.debugInfoEnabled(false);
       $compileProvider.aHrefSanitizationWhitelist(/^[\w-]+:.*$/);
       $httpProvider.interceptors.push('ApiRequestInterceptorFactory');
-    }
-  ])
-  .run([
-    '$templateRequest',
-    ($templateRequest: ng.ITemplateRequestService) => {
-      $templateRequest(`${Globals.PathToAssets}/bookmark.html`, true);
-      $templateRequest(`${Globals.PathToAssets}/login.html`, true);
-      $templateRequest(`${Globals.PathToAssets}/search.html`, true);
-      $templateRequest(`${Globals.PathToAssets}/settings.html`, true);
     }
   ])
   .factory('$exceptionHandler', ['$injector', 'AlertService', 'LogService', ExceptionHandlerService.Factory]);

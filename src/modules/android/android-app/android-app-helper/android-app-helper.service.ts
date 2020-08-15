@@ -1,27 +1,26 @@
 import { Injectable } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import Strings from '../../../../../res/strings/en.json';
 import { AppHelperService } from '../../../app/app.interface';
+import BaseAppHelperService from '../../../app/base-app-helper/base-app-helper.service';
+import { ApiService } from '../../../shared/api/api.interface';
 import { Bookmark } from '../../../shared/bookmark/bookmark.interface';
 import * as Exceptions from '../../../shared/exception/exception';
 import { ExceptionHandler } from '../../../shared/exception/exception.interface';
 import { PlatformType } from '../../../shared/global-shared.enum';
 import LogService from '../../../shared/log/log.service';
+import StoreService from '../../../shared/store/store.service';
 import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
 import { Sync } from '../../../shared/sync/sync.interface';
+import UtilityService from '../../../shared/utility/utility.service';
 import WorkingService from '../../../shared/working/working.service';
 import AndroidPlatformService from '../../android-platform.service';
 
 @autobind
 @Injectable('AppHelperService')
-export default class AndroidAppHelperService implements AppHelperService {
-  $exceptionHandler: ExceptionHandler;
+export default class AndroidAppHelperService extends BaseAppHelperService implements AppHelperService {
   $interval: ng.IIntervalService;
-  $q: ng.IQService;
-  logSvc: LogService;
   platformSvc: AndroidPlatformService;
-  syncEngineSvc: SyncEngineService;
-  workingSvc: WorkingService;
 
   platformName = PlatformType.Android;
 
@@ -29,27 +28,43 @@ export default class AndroidAppHelperService implements AppHelperService {
     '$exceptionHandler',
     '$interval',
     '$q',
+    '$timeout',
+    'ApiService',
     'LogService',
     'PlatformService',
+    'StoreService',
     'SyncEngineService',
+    'UtilityService',
     'WorkingService'
   ];
   constructor(
-    $exceptionHandler: ng.IExceptionHandlerService,
+    $exceptionHandler: ExceptionHandler,
     $interval: ng.IIntervalService,
     $q: ng.IQService,
+    $timeout: ng.ITimeoutService,
+    ApiSvc: ApiService,
     LogSvc: LogService,
     PlatformSvc: AndroidPlatformService,
+    StoreSvc: StoreService,
     SyncEngineSvc: SyncEngineService,
+    UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
   ) {
+    super(
+      $exceptionHandler,
+      $q,
+      $timeout,
+      ApiSvc,
+      LogSvc,
+      PlatformSvc,
+      StoreSvc,
+      SyncEngineSvc,
+      UtilitySvc,
+      WorkingSvc
+    );
+
     this.$exceptionHandler = $exceptionHandler;
     this.$interval = $interval;
-    this.$q = $q;
-    this.logSvc = LogSvc;
-    this.platformSvc = PlatformSvc;
-    this.syncEngineSvc = SyncEngineSvc;
-    this.workingSvc = WorkingSvc;
   }
 
   confirmBeforeSyncing(): boolean {

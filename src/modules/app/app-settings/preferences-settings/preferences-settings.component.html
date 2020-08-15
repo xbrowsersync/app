@@ -1,0 +1,86 @@
+<div class="well well-sm">
+  <h4>{{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_Title) }}</h4>
+  <div class="panel-content">
+    <div class="form-group setting-group" ng-if="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)">
+      <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_SyncToolbar_Label) }}</label>
+      <p class="description">
+        {{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_SyncToolbar_Description) }}
+      </p>
+      <div class="animate-fade-in">
+        <div class="setting-value">
+          <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleSyncBookmarksToolbar)">
+            <input type="checkbox" id="syncBookmarksToolbar" ng-model="vm.settings.syncBookmarksToolbar" />
+            <label for="syncBookmarksToolbar" ng-class="{ 'animate': true }"
+                   ng-if="vm.settings.syncBookmarksToolbar !== undefined"></label>
+          </div>
+        </div>
+      </div>
+      <div class=" confirm animate-fade-in" ng-show="vm.displaySyncBookmarksToolbarConfirmation">
+        <div ng-bind-html="vm.platformSvc.getI18nString(vm.strings.settings_Prefs_SyncToolbarConfirmation_Message)">
+        </div>
+        <div class="buttons">
+          <button type="button" class="btn btn-default btn-confirm-sync-toolbar"
+                  ng-click="vm.utilitySvc.handleEvent(vm.confirmSyncBookmarksToolbar)">
+            {{ vm.platformSvc.getI18nString(vm.strings.button_Confirm_Label) }}
+          </button>
+          <button type="button" class="btn btn-default"
+                  ng-click="vm.utilitySvc.handleEvent(vm.cancelSyncBookmarksToolbar)">
+            {{ vm.platformSvc.getI18nString(vm.strings.button_Deny_Label) }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="form-group setting-group" ng-if="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)">
+      <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_SearchBar_Label) }}</label>
+      <p class="description">
+        {{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_SearchBar_Description) }}
+      </p>
+      <div class="setting-value">
+        <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleDisplaySearchBar)">
+          <input type="checkbox" id="displaySearchBarBeneathResults"
+                 ng-model="vm.settings.displaySearchBarBeneathResults" />
+          <label for="displaySearchBarBeneathResults" ng-class="{ 'animate': true }"
+                 ng-if="vm.settings.displaySearchBarBeneathResults !== undefined"></label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group setting-group">
+      <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_DefaultToFolderView_Label) }}</label>
+      <p class="description">
+        {{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_DefaultToFolderView_Description) }}
+        <div class="setting-value">
+          <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleDefaultToFolderView)">
+            <input type="checkbox" id="defaultToFolderView" ng-model="vm.settings.defaultToFolderView" />
+            <label for="defaultToFolderView" ng-class="{ 'animate': true }"
+                   ng-if="vm.settings.defaultToFolderView !== undefined"></label>
+          </div>
+        </div>
+    </div>
+    <div class="form-group setting-group" ng-if="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)">
+      <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_DarkMode_Label) }}</label>
+      <p class="description">
+        {{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_DarkMode_Description) }}
+      </p>
+      <div class="setting-value">
+        <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleEnableDarkMode)">
+          <input type="checkbox" id="enableDarkMode" ng-model="vm.settings.darkModeEnabled" />
+          <label for="enableDarkMode" ng-class="{ 'animate': true }"
+                 ng-if="vm.settings.darkModeEnabled !== undefined"></label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group setting-group">
+      <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_CheckForAppUpdates_Label) }}</label>
+      <p class="description">
+        {{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_CheckForAppUpdates_Description) }}
+      </p>
+      <div class="setting-value">
+        <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleCheckForAppUpdates)">
+          <input type="checkbox" id="checkForAppUpdates" ng-model="vm.settings.checkForAppUpdates" />
+          <label for="checkForAppUpdates" ng-class="{ 'animate': true }"
+                 ng-if="vm.settings.checkForAppUpdates !== undefined"></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

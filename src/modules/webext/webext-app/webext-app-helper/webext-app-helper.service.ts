@@ -1,26 +1,70 @@
-import { autobind } from 'core-decorators';
+import angular from 'angular';
+import autobind from 'autobind-decorator';
 import { browser } from 'webextension-polyfill-ts';
 import Strings from '../../../../../res/strings/en.json';
+import { AppHelperService } from '../../../app/app.interface';
+import BaseAppHelperService from '../../../app/base-app-helper/base-app-helper.service';
+import { ApiService } from '../../../shared/api/api.interface';
+import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { NotImplementedException } from '../../../shared/exception/exception';
+import { ExceptionHandler } from '../../../shared/exception/exception.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { MessageCommand } from '../../../shared/global-shared.enum';
 import LogService from '../../../shared/log/log.service';
+import StoreService from '../../../shared/store/store.service';
+import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
 import { Sync } from '../../../shared/sync/sync.interface';
 import UtilityService from '../../../shared/utility/utility.service';
+import WorkingService from '../../../shared/working/working.service';
 import WebExtPlatformService from '../../webext-platform/webext-platform.service';
 
 @autobind
-export default class WebExtAppHelperService {
-  $q: ng.IQService;
-  logSvc: LogService;
+export default class WebExtAppHelperService extends BaseAppHelperService implements AppHelperService {
+  bookmarkHelperSvc: BookmarkHelperService;
   platformSvc: WebExtPlatformService;
-  utilitySvc: UtilityService;
 
-  static $inject = ['$q', 'LogService', 'PlatformService', 'UtilityService'];
-  constructor($q: ng.IQService, LogSvc: LogService, PlatformSvc: WebExtPlatformService, UtilitySvc: UtilityService) {
-    this.$q = $q;
-    this.logSvc = LogSvc;
-    this.platformSvc = PlatformSvc;
-    this.utilitySvc = UtilitySvc;
+  platformName: string;
+
+  static $inject = [
+    '$exceptionHandler',
+    '$q',
+    '$timeout',
+    'ApiService',
+    'BookmarkHelperService',
+    'LogService',
+    'PlatformService',
+    'StoreService',
+    'SyncEngineService',
+    'UtilityService',
+    'WorkingService'
+  ];
+  constructor(
+    $exceptionHandler: ExceptionHandler,
+    $q: ng.IQService,
+    $timeout: ng.ITimeoutService,
+    ApiSvc: ApiService,
+    BookmarkHelperSvc: BookmarkHelperService,
+    LogSvc: LogService,
+    PlatformSvc: WebExtPlatformService,
+    StoreSvc: StoreService,
+    SyncEngineSvc: SyncEngineService,
+    UtilitySvc: UtilityService,
+    WorkingSvc: WorkingService
+  ) {
+    super(
+      $exceptionHandler,
+      $q,
+      $timeout,
+      ApiSvc,
+      LogSvc,
+      PlatformSvc,
+      StoreSvc,
+      SyncEngineSvc,
+      UtilitySvc,
+      WorkingSvc
+    );
+
+    this.bookmarkHelperSvc = BookmarkHelperSvc;
   }
 
   confirmBeforeSyncing(): boolean {
@@ -28,7 +72,20 @@ export default class WebExtAppHelperService {
   }
 
   copyTextToClipboard(text: string): ng.IPromise<void> {
-    return navigator.clipboard.writeText(text);
+    return this.$q.resolve().then(() => navigator.clipboard.writeText(text));
+  }
+
+  currentUrlBookmarked(): ng.IPromise<boolean> {
+    return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
+      if (!syncEnabled) {
+        return false;
+      }
+
+      // Check if current url exists in bookmarks
+      return this.bookmarkHelperSvc.findCurrentUrlInBookmarks().then((result) => {
+        return !angular.isUndefined(result ?? undefined);
+      });
+    });
   }
 
   downloadFile(fileName: string, textContents: string, linkId: string): ng.IPromise<string> {
@@ -72,6 +129,10 @@ export default class WebExtAppHelperService {
     return this.platformSvc.sendMessage({
       command: MessageCommand.GetCurrentSync
     });
+  }
+
+  getHelpPages(): string[] {
+    throw new NotImplementedException();
   }
 
   getNextScheduledSyncUpdateCheck(): ng.IPromise<string> {

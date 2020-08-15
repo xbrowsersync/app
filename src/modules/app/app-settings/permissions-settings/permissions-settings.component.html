@@ -1,0 +1,39 @@
+<div class="well well-sm">
+  <h4>{{ vm.platformSvc.getI18nString(vm.strings.settings_Permissions_Title) }}</h4>
+  <div class="panel-content">
+    <div class="animate-fade-in">
+      <div class="form-group setting-group">
+        <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_Permissions_ReadWebsiteData_Title) }}</label>
+        <div class="setting-value status-icon">
+          <div class="animate-fade-in" ng-show="vm.readWebsiteDataPermissionsGranted"
+               title="{{ vm.platformSvc.getI18nString(vm.strings.settings_Permissions_ReadWebsiteData_Granted_Label) }}">
+            <span
+                  class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.settings_Permissions_ReadWebsiteData_Granted_Label) }}</span>
+            <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
+            <div class="status-icon-bg animate-fade-in"></div>
+          </div>
+          <div class="animate-fade-in" ng-show="!vm.readWebsiteDataPermissionsGranted"
+               title="{{ vm.platformSvc.getI18nString(vm.strings.settings_Permissions_ReadWebsiteData_NotGranted_Label) }}">
+            <span
+                  class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.settings_Permissions_ReadWebsiteData_NotGranted_Label) }}</span>
+            <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
+            <div class="status-icon-bg animate-fade-in"></div>
+          </div>
+        </div>
+        <p class="description"
+           ng-bind-html="vm.platformSvc.getI18nString(vm.strings.settings_Permissions_ReadWebsiteData_Description)">
+        </p>
+        <div class="buttons animate-fade-in" ng-show="vm.readWebsiteDataPermissionsGranted">
+          <button class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.revokePermissions)">
+            {{ vm.platformSvc.getI18nString(vm.strings.button_Permissions_Remove_Label) }}
+          </button>
+        </div>
+        <div class="buttons animate-fade-in" ng-hide="vm.readWebsiteDataPermissionsGranted">
+          <button class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.requestPermissions)">
+            {{ vm.platformSvc.getI18nString(vm.strings.button_Permissions_Add_Label) }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

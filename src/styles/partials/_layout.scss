@@ -1,3 +1,18 @@
+.container {
+  height: 100%;
+  margin: 0;
+  max-width: 100%;
+  padding: 0;
+  position: relative;
+  z-index: 20;
+
+  &.search {
+    .alert p {
+      @include text-overflow-ellipsis;
+    }
+  }
+}
+
 .float-nowrap {
   overflow: auto;
   width: 200%;
@@ -178,56 +193,6 @@
 
   h4 {
     text-align: center;
-  }
-
-  .btn.btn-default {
-    border-color: $colour-text2-default;
-    border-width: 0.1rem;
-    color: $colour-text2-default;
-    font-weight: normal;
-    margin-bottom: 0.5rem;
-    margin-top: 0.5rem;
-
-    @include theme-dark {
-      border-color: $colour-text1-dark;
-      color: $colour-text1-dark;
-    }
-
-    &[disabled] {
-      border-color: $colour-text2-default;
-      color: $colour-text2-default;
-
-      @include theme-dark {
-        border-color: $colour-text2-dark;
-        color: $colour-text2-dark;
-      }
-    }
-
-    @media (hover: hover) {
-      &:not([disabled]):active {
-        background-color: $colour-text2-default;
-        border-color: $colour-text2-default;
-        color: $colour-bg2-default;
-
-        @include theme-dark {
-          background-color: $colour-text2-dark;
-          border-color: $colour-text2-dark;
-          color: $colour-bg3-dark;
-        }
-      }
-
-      &:not([disabled]):hover {
-        background-color: $colour-text2-default;
-        border-color: $colour-text2-default;
-        color: $colour-bg2-default;
-
-        @include theme-dark {
-          background-color: $colour-text1-dark;
-          border-color: $colour-text1-dark;
-          color: $colour-bg3-dark;
-        }
-      }
-    }
   }
 
   .confirm {

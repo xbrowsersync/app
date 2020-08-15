@@ -4,7 +4,7 @@ body {
   overflow: hidden;
 }
 
-#search-panel {
+app-search {
   &.view {
     height: auto;
     width: 38rem;
@@ -29,9 +29,11 @@ body {
   }
 }
 
-#settings-panel {
-  .backup-restore-panel #restoreForm .validation {
-    bottom: -0.75rem;
+app-settings {
+  backup-restore-settings {
+    #restoreForm .validation {
+      bottom: -0.75rem;
+    }
   }
 }
 

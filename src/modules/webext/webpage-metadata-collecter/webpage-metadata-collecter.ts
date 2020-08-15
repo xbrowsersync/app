@@ -1,4 +1,4 @@
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import { WebpageMetadata } from '../../shared/global-shared.interface';
 
 @autobind

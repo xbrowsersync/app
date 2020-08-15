@@ -1,5 +1,6 @@
 import { Injectable } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
+import { throttle } from 'underscore';
 import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
 import { BookmarkChangeType, BookmarkContainer } from '../../../shared/bookmark/bookmark.enum';
 import {
@@ -74,25 +75,29 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
           });
 
         // Clear bookmarks toolbar if enabled
-        const clearToolbar = this.bookmarkHelperSvc
-          .getSyncBookmarksToolbar()
-          .then((syncBookmarksToolbar) => {
-            if (!syncBookmarksToolbar) {
-              this.logSvc.logInfo('Not clearing toolbar');
-              return;
-            }
-            return browser.bookmarks.getChildren(toolbarBookmarksId).then((results) => {
-              return this.$q.all(
-                results.map((child) => {
-                  return this.removeNativeBookmarks(child.id);
-                })
-              );
+        const clearToolbar = this.$q((resolve, reject) => {
+          return this.settingsSvc
+            .syncBookmarksToolbar()
+            .then((syncBookmarksToolbar) => {
+              if (!syncBookmarksToolbar) {
+                this.logSvc.logInfo('Not clearing toolbar');
+                return resolve();
+              }
+              return browser.bookmarks.getChildren(toolbarBookmarksId).then((results) => {
+                return this.$q.all(
+                  results.map((child) => {
+                    return this.removeNativeBookmarks(child.id);
+                  })
+                );
+              });
+            })
+            .then(resolve)
+            .catch((err) => {
+              this.logSvc.logWarning('Error clearing bookmarks toolbar');
+              reject(err);
             });
-          })
-          .catch((err) => {
-            this.logSvc.logWarning('Error clearing bookmarks toolbar');
-            throw err;
-          });
+        });
+
         return this.$q.all([clearMenu, clearMobile, clearOthers, clearToolbar]).then(() => {});
       })
       .catch((err) => {
@@ -160,23 +165,28 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
         }
 
         // Populate bookmarks toolbar if enabled
-        const populateToolbar = this.bookmarkHelperSvc.getSyncBookmarksToolbar().then((syncBookmarksToolbar) => {
-          if (!syncBookmarksToolbar) {
-            this.logSvc.logInfo('Not populating toolbar');
-            return;
+        const populateToolbar = this.$q((resolve, reject) => {
+          if (!toolbarContainer) {
+            return resolve();
           }
 
-          if (toolbarContainer) {
-            return browser.bookmarks
-              .getSubTree(toolbarBookmarksId)
-              .then(() => {
+          return this.settingsSvc
+            .syncBookmarksToolbar()
+            .then((syncBookmarksToolbar) => {
+              if (!syncBookmarksToolbar) {
+                this.logSvc.logInfo('Not populating toolbar');
+                return resolve();
+              }
+
+              return browser.bookmarks.getSubTree(toolbarBookmarksId).then(() => {
                 return this.createNativeBookmarkTree(toolbarBookmarksId, toolbarContainer.children);
-              })
-              .catch((err) => {
-                this.logSvc.logInfo('Error populating bookmarks toolbar.');
-                throw err;
               });
-          }
+            })
+            .then(resolve)
+            .catch((err) => {
+              this.logSvc.logInfo('Error populating bookmarks toolbar.');
+              reject(err);
+            });
         });
 
         return this.$q.all([populateMenu, populateMobile, populateOther, populateToolbar]);
@@ -317,14 +327,9 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
         const getToolbarBookmarks =
           toolbarBookmarksId == null
             ? this.$q.resolve<Bookmark[]>(null)
-            : this.$q
-                .all([
-                  this.bookmarkHelperSvc.getSyncBookmarksToolbar(),
-                  browser.bookmarks.getSubTree(toolbarBookmarksId)
-                ])
-                .then((results) => {
-                  const syncBookmarksToolbar = results[0];
-                  const toolbarBookmarks = results[1][0];
+            : browser.bookmarks.getSubTree(toolbarBookmarksId).then((results) => {
+                const toolbarBookmarks = results[0];
+                return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
                   if (!syncBookmarksToolbar) {
                     return;
                   }
@@ -336,6 +341,7 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
                     return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(toolbarBookmarks.children);
                   }
                 });
+              });
 
         return this.$q.all([getMenuBookmarks, getMobileBookmarks, getOtherBookmarks, getToolbarBookmarks]);
       })

@@ -1,5 +1,5 @@
 import { Component, Input, Output } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import Strings from '../../../../../res/strings/en.json';
 import { AppHelperService } from '../../../app/app.interface';
 import AlertService from '../../../shared/alert/alert.service';
@@ -66,10 +66,6 @@ export default class AndroidAppWorkingComponent {
         }
       }
     );
-  }
-
-  cancelSync(): void {
-    this.cancelAction()();
   }
 
   hideSpinnerDialog(): void {

@@ -1,23 +1,21 @@
 import './android-app.component.scss';
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
+import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
-import { autobind } from 'core-decorators';
 import Strings from '../../../../res/strings/en.json';
 import AppMainComponent from '../../app/app-main/app-main.component';
-import { AppView } from '../../app/app.enum';
+import { AppEventType, AppViewType } from '../../app/app.enum';
 import { AppHelperService } from '../../app/app.interface';
 import AlertService from '../../shared/alert/alert.service';
-import { ApiService } from '../../shared/api/api.interface';
-import BackupRestoreService from '../../shared/backup-restore/backup-restore.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import { BookmarkMetadata, BookmarkService } from '../../shared/bookmark/bookmark.interface';
-import CryptoService from '../../shared/crypto/crypto.service';
+import { BookmarkMetadata } from '../../shared/bookmark/bookmark.interface';
 import * as Exceptions from '../../shared/exception/exception';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService } from '../../shared/global-shared.interface';
 import LogService from '../../shared/log/log.service';
 import NetworkService from '../../shared/network/network.service';
+import SettingsService from '../../shared/settings/settings.service';
 import { StoreKey } from '../../shared/store/store.enum';
 import StoreService from '../../shared/store/store.service';
 import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
@@ -37,71 +35,62 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
   $interval: ng.IIntervalService;
   appHelperSvc: AndroidAppHelperService;
   platformSvc: AndroidPlatformService;
+  syncEngineSvc: SyncEngineService;
 
-  initialised = false;
   sharedBookmark: BookmarkMetadata;
 
   static $inject = [
-    '$exceptionHandler',
     '$interval',
     '$q',
+    '$scope',
     '$timeout',
     'AlertService',
-    'ApiService',
     'AppHelperService',
-    'BackupRestoreService',
     'BookmarkHelperService',
-    'BookmarkService',
-    'CryptoService',
     'LogService',
     'NetworkService',
     'PlatformService',
+    'SettingsService',
     'StoreService',
     'SyncEngineService',
     'UtilityService',
     'WorkingService'
   ];
   constructor(
-    $exceptionHandler: ng.IExceptionHandlerService,
     $interval: ng.IIntervalService,
     $q: ng.IQService,
+    $scope: ng.IScope,
     $timeout: ng.ITimeoutService,
     AlertSvc: AlertService,
-    ApiSvc: ApiService,
     AppHelperSvc: AppHelperService,
-    BackupRestoreSvc: BackupRestoreService,
     BookmarkHelperSvc: BookmarkHelperService,
-    BookmarkSvc: BookmarkService,
-    CryptoSvc: CryptoService,
     LogSvc: LogService,
     NetworkSvc: NetworkService,
     PlatformSvc: PlatformService,
+    SettingsSvc: SettingsService,
     StoreSvc: StoreService,
     SyncEngineSvc: SyncEngineService,
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
   ) {
     super(
-      $exceptionHandler,
       $q,
+      $scope,
       $timeout,
       AlertSvc,
-      ApiSvc,
       AppHelperSvc,
-      BackupRestoreSvc,
       BookmarkHelperSvc,
-      BookmarkSvc,
-      CryptoSvc,
       LogSvc,
       NetworkSvc,
       PlatformSvc,
+      SettingsSvc,
       StoreSvc,
-      SyncEngineSvc,
       UtilitySvc,
       WorkingSvc
     );
 
     this.$interval = $interval;
+    this.syncEngineSvc = SyncEngineSvc;
   }
 
   checkForDarkTheme(): ng.IPromise<void> {
@@ -116,11 +105,9 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
       // Check dark theme is enabled
       return this.$q<void>((resolve, reject) => {
         window.cordova.plugins.ThemeDetection.isDarkModeEnabled(resolve, reject);
-      }).then((isDarkModeEnabled: any) => {
-        return this.storeSvc.set(StoreKey.DarkModeEnabled, isDarkModeEnabled.value).then(() => {
-          this.settings.darkModeEnabled = isDarkModeEnabled.value;
-        });
-      });
+      })
+        .then((isDarkModeEnabled: any) => this.settingsSvc.darkModeEnabled(isDarkModeEnabled.value))
+        .then(() => {});
     });
   }
 
@@ -167,31 +154,19 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
 
     // Set current page as shared bookmark and display bookmark panel
     this.platformSvc.currentPage = bookmark;
-    return this.vm.changeView(AppView.Bookmark).finally(() => {
-      // Set bookmark form fields to display default values
-      this.vm.bookmark.current = bookmark;
-      this.vm.bookmark.originalUrl = this.vm.bookmark.current.url;
-
+    return this.appHelperSvc.switchView({ data: { bookmark }, view: AppViewType.Bookmark }).finally(() => {
       // Clear current page
       this.platformSvc.currentPage = undefined;
     });
   }
 
-  displayDefaultSearchState() {
-    // Set clear search button to display all bookmarks
-    return super.displayDefaultSearchState().then(this.searchBookmarks);
-  }
-
   executeSyncIfOnline(displayLoadingId): ng.IPromise<boolean> {
-    const isOnline = this.networkSvc.isNetworkConnected();
-
     // If not online display an alert and return
-    if (!isOnline) {
+    if (!this.networkSvc.isNetworkConnected()) {
       this.alertSvc.setCurrentAlert({
         message: this.platformSvc.getI18nString(Strings.workingOffline_Message),
         title: this.platformSvc.getI18nString(Strings.workingOffline_Title)
       });
-
       return this.$q.resolve(false);
     }
 
@@ -253,17 +228,18 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
   }
 
   handleBackButton(event: Event): void {
+    const currentView = this.appHelperSvc.getCurrentView();
     if (
-      this.vm.currentView === AppView.Bookmark ||
-      this.vm.currentView === AppView.Help ||
-      this.vm.currentView === AppView.Scan ||
-      this.vm.currentView === AppView.Settings ||
-      this.vm.currentView === AppView.Support ||
-      this.vm.currentView === AppView.Updated
+      currentView.view === AppViewType.Bookmark ||
+      currentView.view === AppViewType.Help ||
+      currentView.view === AppViewType.Scan ||
+      currentView.view === AppViewType.Settings ||
+      currentView.view === AppViewType.Support ||
+      currentView.view === AppViewType.Updated
     ) {
       // Back to login/search panel
       event.preventDefault();
-      this.vm.displayMainView();
+      this.appHelperSvc.switchView();
     } else {
       // On main view, exit app
       event.preventDefault();
@@ -300,14 +276,8 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
 
   handleInstall(installedVersion: string): ng.IPromise<void> {
     return this.storeSvc
-      .clear()
-      .then(() => {
-        return this.$q.all([
-          this.storeSvc.set(StoreKey.AppVersion, installedVersion),
-          this.storeSvc.set(StoreKey.CheckForAppUpdates, true),
-          this.storeSvc.set(StoreKey.DisplayHelp, true)
-        ]);
-      })
+      .init()
+      .then(() => this.storeSvc.set(StoreKey.AppVersion, installedVersion))
       .then(() => {
         this.logSvc.logInfo(`Installed v${installedVersion}`);
       });
@@ -342,25 +312,43 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     // Set theme
     return this.checkForDarkTheme().then(() => {
       // Check if sync enabled and reset network disconnected flag
-      this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
-        // Deselect bookmark
-        this.vm.search.selectedBookmark = null;
+      this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
+        if (this.appHelperSvc.getCurrentView().view === AppViewType.Search) {
+          // Deselect bookmark
+          this.utilitySvc.broadcastEvent(AppEventType.ClearSelectedBookmark);
+        }
 
         if (!syncEnabled) {
           return;
         }
 
-        // Run sync
-        return this.executeSyncIfOnline('delayDisplayDialog')
-          .then((isOnline) => {
-            if (isOnline === false) {
+        // If not online display an alert and return
+        if (!this.networkSvc.isNetworkConnected()) {
+          this.alertSvc.setCurrentAlert({
+            message: this.platformSvc.getI18nString(Strings.workingOffline_Message),
+            title: this.platformSvc.getI18nString(Strings.workingOffline_Title)
+          });
+          return;
+        }
+
+        // Check for uncommitted syncs or sync updates
+        this.appHelperSvc
+          .getSyncQueueLength()
+          .then((syncQueueLength) => {
+            return syncQueueLength === 0 ? this.syncEngineSvc.checkForUpdates() : true;
+          })
+          .then((runSync) => {
+            if (!runSync) {
               return;
             }
 
-            // Refresh search results if query not present
-            if (this.vm.currentView === AppView.Search && !this.vm.search.query) {
-              this.vm.displayDefaultSearchState();
-            }
+            // Run sync
+            return this.executeSyncIfOnline('delayDisplayDialog').then(() => {
+              // Refresh search results if query not present
+              if (this.appHelperSvc.getCurrentView().view === AppViewType.Search) {
+                this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
+              }
+            });
           })
           .then(() => {
             // Check if a bookmark was shared
@@ -375,29 +363,36 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
 
     // Set theme
     return this.checkForDarkTheme().then(() => {
-      return this.storeSvc
-        .get([
-          StoreKey.AppVersion,
-          StoreKey.CheckForAppUpdates,
-          StoreKey.LastUpdated,
-          StoreKey.ServiceUrl,
-          StoreKey.SyncBookmarksToolbar,
-          StoreKey.SyncEnabled,
-          StoreKey.SyncId,
-          StoreKey.SyncVersion
+      return this.$q
+        .all([
+          this.settingsSvc.checkForAppUpdates(),
+          this.storeSvc.get([
+            StoreKey.AppVersion,
+            StoreKey.LastUpdated,
+            StoreKey.ServiceUrl,
+            StoreKey.SyncId,
+            StoreKey.SyncVersion
+          ]),
+          this.utilitySvc.isSyncEnabled()
         ])
-        .then((storeContent) => {
+        .then((result) => {
+          const checkForAppUpdates = result[0];
+          const storeContent = result[1];
+          const syncEnabled = result[2];
+
           // Prime bookmarks cache
-          if (storeContent.syncEnabled) {
+          if (syncEnabled) {
             this.bookmarkHelperSvc.getCachedBookmarks();
           }
 
           // Add useful debug info to beginning of trace log
           const debugInfo = angular.copy(storeContent) as any;
+          debugInfo.checkForAppUpdates = checkForAppUpdates;
           debugInfo.platform = {
             name: window.device.platform,
             device: `${window.device.manufacturer} ${window.device.model}`
           };
+          debugInfo.syncEnabled = syncEnabled;
           this.logSvc.logInfo(
             Object.keys(debugInfo)
               .filter((key) => {
@@ -410,26 +405,49 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
           );
 
           // Check for new app version
-          if (storeContent.checkForAppUpdates) {
+          if (checkForAppUpdates) {
             this.checkForNewVersion();
           }
 
           // Exit if sync not enabled
-          if (!storeContent.syncEnabled) {
+          if (!syncEnabled) {
             return;
           }
 
-          // Run sync
-          this.executeSyncIfOnline('delayDisplayDialog')
-            .then((isOnline) => {
-              if (isOnline === false) {
+          // If not online display an alert and return
+          if (!this.networkSvc.isNetworkConnected()) {
+            this.alertSvc.setCurrentAlert({
+              message: this.platformSvc.getI18nString(Strings.workingOffline_Message),
+              title: this.platformSvc.getI18nString(Strings.workingOffline_Title)
+            });
+            return;
+          }
+
+          // Check for uncommitted syncs or sync updates
+          this.appHelperSvc
+            .getSyncQueueLength()
+            .then((syncQueueLength) => {
+              return syncQueueLength === 0 ? this.syncEngineSvc.checkForUpdates() : true;
+            })
+            .then((runSync) => {
+              if (!runSync) {
                 return;
               }
 
-              // Refresh search results if query not present
-              if (this.vm.currentView === AppView.Search && !this.vm.search.query) {
-                this.vm.displayDefaultSearchState();
-              }
+              // Run sync
+              this.executeSyncIfOnline('delayDisplayDialog').then((isOnline) => {
+                if (isOnline === false) {
+                  return;
+                }
+
+                // Refresh search results if query not present
+                if (this.appHelperSvc.getCurrentView().view === AppViewType.Search) {
+                  // Refresh search results if query not present
+                  if (this.appHelperSvc.getCurrentView().view === AppViewType.Search) {
+                    this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
+                  }
+                }
+              });
             })
             .then(() => {
               // Check if a bookmark was shared
@@ -445,9 +463,6 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
       this.$timeout(() => {
         (document.activeElement as HTMLInputElement).blur();
       }, 100);
-    } else if (this.vm.search.selectedBookmark) {
-      // Deselect selected bookmark
-      this.vm.search.selectedBookmark = null;
     }
   }
 
@@ -479,16 +494,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
       });
   }
 
-  init() {
-    // Enable select file to restore
-    this.vm.settings.fileRestoreEnabled = true;
-
-    // Increase search results timeout to avoid display lag
-    this.vm.settings.getSearchResultsDelay = 500;
-
-    // Display existing sync panel by default
-    this.vm.login.displayNewSyncPanel = false;
-
+  ngOnInit(): ng.IPromise<void> {
     // Load i18n strings
     return this.platformSvc
       .initI18n()
@@ -505,33 +511,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
           document.addEventListener('resume', this.handleResume, false);
         });
       })
-      .then(() => {
-        // Set component to display and continue initialisation
-        this.initialised = true;
-        return super.init();
-      });
-  }
-
-  ngOnInit(): void {
-    this.init();
-  }
-
-  scanCompleted(scannedSyncInfo: any): ng.IPromise<void> {
-    // Update stored sync id and service values
-    this.sync.id = scannedSyncInfo.id;
-    return this.$q
-      .all([this.storeSvc.set(StoreKey.SyncId, scannedSyncInfo.id), this.updateServiceUrl(scannedSyncInfo.url)])
-      .then(this.displayMainView)
-      .then(() => {
-        // Focus on password field
-        this.$timeout(() => {
-          (document.querySelector('.active-login-form  input[name="txtPassword"]') as HTMLInputElement).focus();
-        });
-      });
-  }
-
-  syncForm_ScanCode_Click() {
-    this.changeView(AppView.Scan);
+      .then(() => super.ngOnInit());
   }
 
   upgradeTo160(): ng.IPromise<void> {
@@ -554,7 +534,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
   }
 
   workingCancelAction(): ng.IPromise<void> {
-    // TODO: implement
+    this.utilitySvc.broadcastEvent(AppEventType.WorkingCancelAction);
     return this.$q.resolve();
   }
 }

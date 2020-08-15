@@ -1,6 +1,6 @@
 import './bookmark.component.scss';
 import { Component, Input, Output } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import Strings from '../../../../../res/strings/en.json';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { Bookmark } from '../../../shared/bookmark/bookmark.interface';

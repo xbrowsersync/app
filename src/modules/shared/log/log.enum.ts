@@ -1,7 +1,7 @@
 enum LogLevel {
-  Error,
-  Trace,
-  Warn
+  Error = 'ERROR',
+  Trace = 'TRACE',
+  Warn = 'WARN'
 }
 
 export { LogLevel };

@@ -1,5 +1,5 @@
 import { AfterViewInit, Directive, Input } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import zxcvbn, { ZXCVBNResult } from 'zxcvbn';
 
 @autobind

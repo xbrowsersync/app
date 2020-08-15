@@ -9,13 +9,16 @@ button {
     }
 
     &.btn-default {
+      align-items: baseline;
       background-color: rgba($colour-text1-default, 0.3);
       border-color: $colour-bg3-default;
       border-radius: $border-radius-input;
       border-width: 0.15rem;
       color: $colour-text1-default;
+      display: inline-flex;
       font-size: 1.2rem;
       font-weight: 800;
+      justify-content: center;
       line-height: 2.5rem;
       min-width: 6rem;
       padding: 0 1.2rem;
@@ -40,6 +43,74 @@ button {
           border-color: $colour-text2-dark;
           color: $colour-text2-dark;
         }
+      }
+
+      .well & {
+        border-color: $colour-text2-default;
+        border-width: 0.1rem;
+        color: $colour-text2-default;
+        font-weight: normal;
+        margin-bottom: 0.5rem;
+        margin-top: 0.5rem;
+
+        @include theme-dark {
+          border-color: $colour-text1-dark;
+          color: $colour-text1-dark;
+        }
+
+        &[disabled] {
+          border-color: $colour-text2-default;
+          color: $colour-text2-default;
+
+          @include theme-dark {
+            border-color: $colour-text2-dark;
+            color: $colour-text2-dark;
+          }
+        }
+
+        .spinner-border-sm {
+          @include spinner-colour($colour-text2-default);
+
+          border-width: 0.1em;
+          height: 0.85rem;
+          width: 0.85rem;
+
+          @include theme-dark {
+            @include spinner-colour($colour-text2-dark);
+          }
+        }
+
+        @media (hover: hover) {
+          &:not([disabled]):active {
+            background-color: $colour-text2-default;
+            border-color: $colour-text2-default;
+            color: $colour-bg2-default;
+
+            @include theme-dark {
+              background-color: $colour-text2-dark;
+              border-color: $colour-text2-dark;
+              color: $colour-bg3-dark;
+            }
+          }
+
+          &:not([disabled]):hover {
+            background-color: $colour-text2-default;
+            border-color: $colour-text2-default;
+            color: $colour-bg2-default;
+
+            @include theme-dark {
+              background-color: $colour-text1-dark;
+              border-color: $colour-text1-dark;
+              color: $colour-bg3-dark;
+            }
+          }
+        }
+      }
+
+      &.working {
+        @include ellipsis;
+
+        opacity: 1 !important;
       }
 
       @media (hover: hover) {
@@ -77,74 +148,6 @@ button {
         }
       }
     }
-
-    &.btn-fab {
-      align-items: center;
-      background-color: $colour-text2-default;
-      border: none;
-      border-radius: 100%;
-      box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12) !important;
-      box-sizing: border-box;
-      color: $colour-text1-default;
-      cursor: pointer;
-      display: inline-flex;
-      font-size: 1.5rem;
-      height: 4rem;
-      justify-content: center;
-      overflow: hidden;
-      padding: 0;
-      position: relative;
-      transition: color ease-in-out 0.2s;
-      width: 4rem;
-      z-index: 10;
-
-      @include theme-dark {
-        background-color: $colour-text3-dark;
-        color: $colour-text1-dark;
-      }
-
-      &.fixed {
-        bottom: 1rem;
-        position: fixed;
-        right: 1rem;
-      }
-
-      @media (hover: hover) {
-        &:active {
-          background-color: $colour-bg2-default !important;
-          color: $colour-text1-default !important;
-
-          @include theme-dark {
-            background-color: $colour-bg2-dark !important;
-            color: $colour-text1-dark !important;
-          }
-        }
-      }
-    }
-
-    &.btn-icon {
-      background: none;
-      border-radius: 0;
-      color: $colour-text2-default;
-      opacity: 0.5;
-      padding: 0;
-      transition: opacity ease-in-out 0.2s;
-
-      @include theme-dark {
-        color: $colour-text2-dark;
-      }
-
-      @media (hover: hover) {
-        &:active {
-          opacity: 1 !important;
-        }
-
-        &:hover,
-        &:focus {
-          opacity: 1;
-        }
-      }
-    }
   }
 
   &:active,
@@ -155,16 +158,82 @@ button {
   }
 
   .spinner-border-sm {
-    @include spinner-colour($colour-text2-default);
+    @include spinner-colour($colour-text1-default);
 
-    border-width: 0.15rem;
-    height: 0.75rem;
-    margin-right: 0.1rem;
-    vertical-align: baseline;
-    width: 0.75rem;
+    height: 0.9rem;
+    margin-right: 0.2rem;
+    width: 0.9rem;
 
     @include theme-dark {
       @include spinner-colour($colour-text2-dark);
+    }
+  }
+}
+
+.btn-fab {
+  align-items: center;
+  background-color: $colour-text2-default;
+  border: none;
+  border-radius: 100%;
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12) !important;
+  box-sizing: border-box;
+  color: $colour-text1-default;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 1.5rem;
+  height: 4rem;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  transition: color ease-in-out 0.2s;
+  width: 4rem;
+  z-index: 10;
+
+  @include theme-dark {
+    background-color: $colour-text3-dark;
+    color: $colour-text1-dark;
+  }
+
+  &.fixed {
+    bottom: 1rem;
+    position: fixed;
+    right: 1rem;
+  }
+
+  @media (hover: hover) {
+    &:active {
+      background-color: $colour-bg2-default !important;
+      color: $colour-text1-default !important;
+
+      @include theme-dark {
+        background-color: $colour-bg2-dark !important;
+        color: $colour-text1-dark !important;
+      }
+    }
+  }
+}
+
+.btn-icon {
+  background: none;
+  border-radius: 0;
+  color: $colour-text2-default;
+  opacity: 0.5;
+  padding: 0;
+  transition: opacity ease-in-out 0.2s;
+
+  @include theme-dark {
+    color: $colour-text2-dark;
+  }
+
+  @media (hover: hover) {
+    &:active {
+      opacity: 1 !important;
+    }
+
+    &:hover,
+    &:focus {
+      opacity: 1;
     }
   }
 }

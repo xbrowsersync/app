@@ -1,8 +1,9 @@
 import './webext-app-alert.component.scss';
 import angular from 'angular';
 import { Component } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import Strings from '../../../../../res/strings/en.json';
+import { AlertType } from '../../../shared/alert/alert.enum';
 import { Alert } from '../../../shared/alert/alert.interface';
 import AlertService from '../../../shared/alert/alert.service';
 import { PlatformService } from '../../../shared/global-shared.interface';
@@ -22,6 +23,7 @@ export default class WebExtAppAlertComponent {
   utilitySvc: UtilityService;
 
   alert: Alert;
+  alertType = AlertType;
   showAlert = false;
   strings = Strings;
 

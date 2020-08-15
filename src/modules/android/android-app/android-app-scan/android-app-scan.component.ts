@@ -1,12 +1,17 @@
 import './android-app-scan.component.scss';
 import { Component, OnDestroy, OnInit, Output } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import Strings from '../../../../../res/strings/en.json';
+import { AppViewType } from '../../../app/app.enum';
+import { BackupSync } from '../../../shared/backup-restore/backup-restore.interface';
 import * as Exceptions from '../../../shared/exception/exception';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import LogService from '../../../shared/log/log.service';
+import { StoreKey } from '../../../shared/store/store.enum';
+import StoreService from '../../../shared/store/store.service';
 import UtilityService from '../../../shared/utility/utility.service';
+import AndroidAppHelperService from '../android-app-helper/android-app-helper.service';
 
 @autobind
 @Component({
@@ -17,31 +22,47 @@ import UtilityService from '../../../shared/utility/utility.service';
 export default class AndroidAppScanComponent implements OnInit, OnDestroy {
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
+  appHelperSvc: AndroidAppHelperService;
   logSvc: LogService;
   platformSvc: PlatformService;
+  storeSvc: StoreService;
   utilitySvc: UtilityService;
 
-  initialised = false;
+  appViewType = AppViewType;
+  displayScanInterface = false;
   invalidSyncId = false;
   lightEnabled = false;
   strings = Strings;
 
-  @Output() callback: () => any;
-  @Output() close: () => any;
-
-  static $inject = ['$q', '$timeout', 'LogService', 'PlatformService', 'UtilityService'];
+  static $inject = [
+    '$q',
+    '$timeout',
+    'AppHelperService',
+    'LogService',
+    'PlatformService',
+    'StoreService',
+    'UtilityService'
+  ];
   constructor(
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
+    AppHelperSvc: AndroidAppHelperService,
     LogSvc: LogService,
     PlatformSvc: PlatformService,
+    StoreSvc: StoreService,
     UtilitySvc: UtilityService
   ) {
     this.$q = $q;
     this.$timeout = $timeout;
+    this.appHelperSvc = AppHelperSvc;
     this.logSvc = LogSvc;
     this.platformSvc = PlatformSvc;
+    this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
+  }
+
+  close(): void {
+    this.appHelperSvc.switchView();
   }
 
   decodeQrCode(qrCodeValue: string): any {
@@ -88,7 +109,7 @@ export default class AndroidAppScanComponent implements OnInit, OnDestroy {
 
   enableLight(): ng.IPromise<void> {
     return this.$q<void>((resolve, reject) => {
-      window.QRScanner.enableLight((err) => {
+      window.QRScanner.enableLight((err: any) => {
         if (err) {
           return reject(new Exceptions.AndroidException(err._message ?? err.name ?? err.code));
         }
@@ -105,19 +126,30 @@ export default class AndroidAppScanComponent implements OnInit, OnDestroy {
     this.startScanning();
   }
 
+  scanCompleted(scannedSyncInfo: BackupSync): ng.IPromise<void> {
+    // Update stored sync id and service values
+    return this.$q
+      .all([
+        this.appHelperSvc.updateServiceUrl(scannedSyncInfo.url),
+        this.storeSvc.set(StoreKey.SyncId, scannedSyncInfo.id)
+      ])
+      .then(() => this.appHelperSvc.switchView())
+      .then(() => this.appHelperSvc.focusOnElement('.active-login-form  input[name="txtPassword"]'));
+  }
+
   startScanning(): ng.IPromise<any> {
     this.lightEnabled = false;
     this.invalidSyncId = false;
 
-    return this.$q<any>((resolve, reject) => {
+    return this.$q<BackupSync>((resolve, reject) => {
       const waitForScan = () => {
-        this.initialised = true;
+        this.displayScanInterface = true;
 
         this.$timeout(() => {
           this.invalidSyncId = false;
         }, 100);
 
-        window.QRScanner.scan((err, scannedText) => {
+        window.QRScanner.scan((err: any, scannedText: string) => {
           if (err) {
             return reject(new Exceptions.AndroidException(err._message ?? err.name ?? err.code));
           }
@@ -125,26 +157,22 @@ export default class AndroidAppScanComponent implements OnInit, OnDestroy {
           window.QRScanner.pausePreview(() => {
             this.logSvc.logInfo(`Scanned: ${scannedText}`);
 
-            let syncInfo: any;
+            let syncInfo: BackupSync;
             try {
               syncInfo = this.decodeQrCode(scannedText);
             } catch (decodeQrCodeErr) {
               // If scanned value is not value resume scanning
               this.invalidSyncId = true;
-              this.$timeout(() => {
-                window.QRScanner.resumePreview(waitForScan);
-              }, 3e3);
+              this.$timeout(() => window.QRScanner.resumePreview(waitForScan), 3e3);
               return;
             }
 
-            this.$timeout(() => {
-              resolve(syncInfo);
-            }, 1e3);
+            this.$timeout(() => resolve(syncInfo), 1e3);
           });
         });
       };
 
-      window.QRScanner.prepare((err, status) => {
+      window.QRScanner.prepare((err: any, status: any) => {
         if (err) {
           return reject(new Exceptions.AndroidException(err._message ?? err.name ?? err.code));
         }
@@ -156,24 +184,24 @@ export default class AndroidAppScanComponent implements OnInit, OnDestroy {
         }
       });
     })
-      .then((scannedSyncInfo) => this.callback()(scannedSyncInfo))
+      .then(this.scanCompleted)
       .catch((err) => {
-        this.close()().then(() => {
+        this.appHelperSvc.switchView().then(() => {
           throw new Exceptions.FailedScanException(undefined, err);
         });
       });
   }
 
-  stopScanning(): ng.IPromise<void> {
+  stopScanning(): void {
+    this.displayScanInterface = false;
     this.lightEnabled = false;
-    this.disableLight()
-      .catch(() => {})
-      .finally(() => {
-        window.QRScanner.hide(() => {
-          window.QRScanner.destroy();
-        });
-      });
-    return this.$q.resolve();
+    this.$timeout(
+      () =>
+        this.disableLight()
+          .catch(() => {})
+          .finally(() => window.QRScanner.hide(() => window.QRScanner.destroy())),
+      Globals.InterfaceReadyTimeout
+    );
   }
 
   toggleCameraLight(switchOn?: boolean): ng.IPromise<void> {
@@ -186,7 +214,7 @@ export default class AndroidAppScanComponent implements OnInit, OnDestroy {
 
     // Otherwise toggle light based on current state
     return this.$q((resolve, reject) => {
-      window.QRScanner.getStatus((status) => {
+      window.QRScanner.getStatus((status: any) => {
         (status.lightEnabled ? this.disableLight() : this.enableLight())
           .then(() => {
             this.lightEnabled = !status.lightEnabled;

@@ -1,5 +1,5 @@
 import { Injectable } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import Strings from '../../../../../../res/strings/en.json';
 import { AppHelperService } from '../../../../app/app.interface';
 import { PlatformType } from '../../../../shared/global-shared.enum';

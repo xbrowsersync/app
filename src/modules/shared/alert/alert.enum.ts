@@ -1,7 +1,7 @@
 enum AlertType {
-  Error,
-  Information,
-  Warning
+  Error = 'ERROR',
+  Information = 'INFORMATION',
+  Warning = 'WARNING'
 }
 
 export { AlertType };

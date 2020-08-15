@@ -1,6 +1,6 @@
 import { Injectable } from 'angular-ts-decorators';
+import autobind from 'autobind-decorator';
 import base64js from 'base64-js';
-import { autobind } from 'core-decorators';
 import lzutf8 from 'lzutf8';
 import * as Exceptions from '../exception/exception';
 import LogService from '../log/log.service';

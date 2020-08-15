@@ -1,6 +1,6 @@
 import './webext-app-working.component.scss';
 import { Component, Input, Output } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import Strings from '../../../../../res/strings/en.json';
 import { AppHelperService } from '../../../app/app.interface';
 import AlertService from '../../../shared/alert/alert.service';
@@ -34,7 +34,6 @@ export default class WebExtAppWorkingComponent {
   @Input() fullViewMode: boolean;
 
   @Output() cancelAction: () => any;
-  @Output() close: () => any;
 
   static $inject = [
     '$scope',
@@ -89,7 +88,7 @@ export default class WebExtAppWorkingComponent {
   }
 
   cancelSync(): void {
-    this.cancelAction()().then(this.close());
+    this.cancelAction()().then(this.appHelperSvc.switchView);
   }
 
   hidePanel(): void {
@@ -133,6 +132,7 @@ export default class WebExtAppWorkingComponent {
   }
 
   showView(): void {
+    this.message = this.platformSvc.getI18nString(Strings.working_Syncing_Message);
     this.appHelperSvc.getCurrentSync().then((currentSync) => {
       this.enableCancel = currentSync?.type === SyncType.Remote || false;
     });

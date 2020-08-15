@@ -1,8 +1,8 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import browserDetect from 'browser-detect';
+import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
-import { autobind } from 'core-decorators';
+import * as detectBrowser from 'detect-browser';
 import _ from 'underscore';
 import { Alarms, browser, Notifications } from 'webextension-polyfill-ts';
 import Strings from '../../../../res/strings/en.json';
@@ -15,6 +15,7 @@ import { MessageCommand } from '../../shared/global-shared.enum';
 import { Message, PlatformService } from '../../shared/global-shared.interface';
 import LogService from '../../shared/log/log.service';
 import NetworkService from '../../shared/network/network.service';
+import SettingsService from '../../shared/settings/settings.service';
 import { StoreKey } from '../../shared/store/store.enum';
 import StoreService from '../../shared/store/store.service';
 import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
@@ -37,6 +38,7 @@ export default class WebExtBackgroundService {
   logSvc: LogService;
   networkSvc: NetworkService;
   platformSvc: PlatformService;
+  settingsSvc: SettingsService;
   storeSvc: StoreService;
   syncEngineSvc: SyncEngineService;
   utilitySvc: UtilityService;
@@ -53,6 +55,7 @@ export default class WebExtBackgroundService {
     'LogService',
     'NetworkService',
     'PlatformService',
+    'SettingsService',
     'StoreService',
     'SyncEngineService',
     'UtilityService'
@@ -67,6 +70,7 @@ export default class WebExtBackgroundService {
     LogSvc: LogService,
     NetworkSvc: NetworkService,
     PlatformSvc: PlatformService,
+    SettingsSvc: SettingsService,
     StoreSvc: StoreService,
     SyncEngineSvc: SyncEngineService,
     UtilitySvc: UtilityService
@@ -80,6 +84,7 @@ export default class WebExtBackgroundService {
     this.logSvc = LogSvc;
     this.networkSvc = NetworkSvc;
     this.platformSvc = PlatformSvc;
+    this.settingsSvc = SettingsSvc;
     this.storeSvc = StoreSvc;
     this.syncEngineSvc = SyncEngineSvc;
     this.utilitySvc = UtilitySvc;
@@ -114,8 +119,8 @@ export default class WebExtBackgroundService {
     }
 
     // Exit if sync not enabled
-    return this.storeSvc
-      .get<boolean>(StoreKey.SyncEnabled)
+    return this.utilitySvc
+      .isSyncEnabled()
       .then((syncEnabled) => {
         if (!syncEnabled) {
           return;
@@ -151,7 +156,7 @@ export default class WebExtBackgroundService {
 
   checkForSyncUpdatesOnStartup(): ng.IPromise<any> {
     return this.$q<boolean>((resolve, reject) => {
-      return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
+      return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
         if (!syncEnabled) {
           return resolve(false);
         }
@@ -174,7 +179,7 @@ export default class WebExtBackgroundService {
             // If request failed, retry once
             this.logSvc.logInfo('Connection to API failed, retrying check for sync updates momentarily');
             this.$timeout(() => {
-              this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabledAfterError) => {
+              this.utilitySvc.isSyncEnabled().then((syncEnabledAfterError) => {
                 if (!syncEnabledAfterError) {
                   this.logSvc.logInfo('Sync was disabled before retry attempted');
                   return reject(new Exceptions.HttpRequestCancelledException());
@@ -237,11 +242,10 @@ export default class WebExtBackgroundService {
     this.$q
       .all([
         this.platformSvc.getAppVersion(),
+        this.settingsSvc.all(),
         this.storeSvc.get([
-          StoreKey.CheckForAppUpdates,
           StoreKey.LastUpdated,
           StoreKey.ServiceUrl,
-          StoreKey.SyncBookmarksToolbar,
           StoreKey.SyncEnabled,
           StoreKey.SyncId,
           StoreKey.SyncVersion
@@ -249,12 +253,15 @@ export default class WebExtBackgroundService {
       ])
       .then((data) => {
         const appVersion = data[0];
-        const storeContent = data[1];
+        const settings = data[1];
+        const storeContent = data[2];
 
         // Add useful debug info to beginning of trace log
         const debugInfo = angular.copy(storeContent) as any;
         debugInfo.appVersion = appVersion;
-        debugInfo.platform = _.omit(browserDetect(), 'versionNumber');
+        debugInfo.checkForAppUpdates = settings.checkForAppUpdates;
+        debugInfo.platform = detectBrowser.detect();
+        debugInfo.syncBookmarksToolbar = settings.syncBookmarksToolbar;
         this.logSvc.logInfo(
           Object.keys(debugInfo)
             .filter((key) => {
@@ -270,7 +277,7 @@ export default class WebExtBackgroundService {
         this.platformSvc.refreshNativeInterface(storeContent.syncEnabled);
 
         // Check for new app version after a delay
-        if (storeContent.checkForAppUpdates) {
+        if (settings.checkForAppUpdates) {
           this.$timeout(this.checkForNewVersion, 5e3);
         }
 
@@ -290,15 +297,14 @@ export default class WebExtBackgroundService {
   installExtension(currentVersion: string): ng.IPromise<void> {
     // Initialise data storage
     return this.storeSvc
-      .clear()
-      .then(() => {
-        return this.$q.all([
-          this.storeSvc.set(StoreKey.CheckForAppUpdates, true),
-          this.storeSvc.set(StoreKey.DisplayHelp, true),
-          this.storeSvc.set(StoreKey.SyncBookmarksToolbar, true),
-          this.storeSvc.set(StoreKey.DisplayPermissions, true)
-        ]);
-      })
+      .init()
+      .then(() =>
+        this.$q.all([
+          this.storeSvc.set(StoreKey.DisplayOtherSyncsWarning, true),
+          this.storeSvc.set(StoreKey.DisplayPermissions, true),
+          this.storeSvc.set(StoreKey.SyncBookmarksToolbar, true)
+        ])
+      )
       .then(() => {
         // Get locnativeal bookmarks and save data state at install to local storage
         return this.bookmarkSvc.getNativeBookmarksAsBookmarks().then((bookmarks) => {
@@ -493,7 +499,7 @@ export default class WebExtBackgroundService {
       })
       .then(() => {
         // If sync enabled, create id mappings
-        return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
+        return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
           if (!syncEnabled) {
             return;
           }

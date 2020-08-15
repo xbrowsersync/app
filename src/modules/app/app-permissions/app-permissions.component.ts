@@ -1,6 +1,6 @@
 import './app-permissions.component.scss';
-import { Component, Output } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import { Component, OnInit } from 'angular-ts-decorators';
+import autobind from 'autobind-decorator';
 import Strings from '../../../../res/strings/en.json';
 import { PlatformService } from '../../shared/global-shared.interface';
 import { StoreKey } from '../../shared/store/store.enum';
@@ -14,8 +14,9 @@ import { AppHelperService } from '../app.interface';
   selector: 'appPermissions',
   template: require('./app-permissions.component.html')
 })
-export default class AppPermissionsComponent {
+export default class AppPermissionsComponent implements OnInit {
   $q: ng.IQService;
+  $timeout: ng.ITimeoutService;
   appHelperSvc: AppHelperService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
@@ -23,27 +24,32 @@ export default class AppPermissionsComponent {
 
   strings = Strings;
 
-  @Output() close: () => any;
-
-  static $inject = ['$q', 'AppHelperService', 'PlatformService', 'StoreService', 'UtilityService'];
+  static $inject = ['$q', '$timeout', 'AppHelperService', 'PlatformService', 'StoreService', 'UtilityService'];
   constructor(
     $q: ng.IQService,
+    $timeout: ng.ITimeoutService,
     AppHelperSvc: AppHelperService,
     PlatformSvc: PlatformService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
   ) {
     this.$q = $q;
+    this.$timeout = $timeout;
     this.appHelperSvc = AppHelperSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
   }
 
+  ngOnInit(): void {
+    // Set initial focus
+    this.appHelperSvc.focusOnElement('.focused');
+  }
+
   requestPermissions(): ng.IPromise<void> {
     return this.$q
       .all([this.appHelperSvc.requestPermissions(), this.storeSvc.set(StoreKey.DisplayPermissions, false)])
       .then(() => {})
-      .finally(this.close());
+      .finally(this.appHelperSvc.switchView);
   }
 }

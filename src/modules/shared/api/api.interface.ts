@@ -1,3 +1,5 @@
+import { ApiServiceStatus } from './api.enum';
+
 export interface ApiCreateBookmarksRequest {
   version: string;
 }
@@ -35,7 +37,22 @@ export interface ApiService {
   ) => ng.IPromise<ApiUpdateBookmarksResponse>;
 }
 
-export interface ApiServiceInfoResponse {}
+export interface ApiServiceInfo {
+  location?: string;
+  maxSyncSize?: number;
+  message?: string;
+  status?: ApiServiceStatus;
+  url?: string;
+  version?: string;
+}
+
+export interface ApiServiceInfoResponse {
+  location?: string;
+  maxSyncSize?: number;
+  message?: string;
+  status: ApiServiceStatus;
+  version?: string;
+}
 
 export interface ApiUpdateBookmarksRequest {
   bookmarks: string;

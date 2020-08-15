@@ -1,5 +1,5 @@
 import angular from 'angular';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkChangeType, BookmarkContainer } from '../../shared/bookmark/bookmark.enum';
@@ -18,7 +18,7 @@ import Globals from '../../shared/global-shared.constants';
 import { MessageCommand } from '../../shared/global-shared.enum';
 import { PlatformService, WebpageMetadata } from '../../shared/global-shared.interface';
 import LogService from '../../shared/log/log.service';
-import { StoreKey } from '../../shared/store/store.enum';
+import SettingsService from '../../shared/settings/settings.service';
 import StoreService from '../../shared/store/store.service';
 import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
 import { SyncType } from '../../shared/sync/sync.enum';
@@ -36,6 +36,7 @@ export default class WebExtBookmarkService implements BookmarkService {
   bookmarkHelperSvc: BookmarkHelperService;
   logSvc: LogService;
   platformSvc: PlatformService;
+  settingsSvc: SettingsService;
   storeSvc: StoreService;
   _syncEngineSvc: SyncEngineService;
   utilitySvc: UtilityService;
@@ -52,6 +53,7 @@ export default class WebExtBookmarkService implements BookmarkService {
     'BookmarkIdMapperService',
     'LogService',
     'PlatformService',
+    'SettingsService',
     'StoreService',
     'UtilityService'
   ];
@@ -63,6 +65,7 @@ export default class WebExtBookmarkService implements BookmarkService {
     BookmarkIdMapperSvc: BookmarkIdMapperService,
     LogSvc: LogService,
     PlatformSvc: PlatformService,
+    SettingsSvc: SettingsService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
   ) {
@@ -73,6 +76,7 @@ export default class WebExtBookmarkService implements BookmarkService {
     this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.logSvc = LogSvc;
     this.platformSvc = PlatformSvc;
+    this.settingsSvc = SettingsSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
   }
@@ -173,14 +177,9 @@ export default class WebExtBookmarkService implements BookmarkService {
         const getToolbarBookmarks =
           toolbarBookmarksId == null
             ? this.$q.resolve([] as BookmarkIdMapping[])
-            : this.$q
-                .all([
-                  this.bookmarkHelperSvc.getSyncBookmarksToolbar(),
-                  browser.bookmarks.getSubTree(toolbarBookmarksId)
-                ])
-                .then((results) => {
-                  const syncBookmarksToolbar = results[0];
-                  const toolbarBookmarks = results[1][0];
+            : browser.bookmarks.getSubTree(toolbarBookmarksId).then((results) => {
+                return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
+                  const toolbarBookmarks = results[0];
 
                   if (!syncBookmarksToolbar || toolbarBookmarks.children?.length === 0) {
                     return [] as BookmarkIdMapping[];
@@ -194,6 +193,7 @@ export default class WebExtBookmarkService implements BookmarkService {
                     ? mapIds(toolbarBookmarks.children, toolbarBookmarksContainer.children)
                     : ([] as BookmarkIdMapping[]);
                 });
+              });
 
         return this.$q.all([getMenuBookmarks, getMobileBookmarks, getOtherBookmarks, getToolbarBookmarks]);
       })
@@ -209,20 +209,16 @@ export default class WebExtBookmarkService implements BookmarkService {
   }
 
   checkIfBookmarkChangeShouldBeSynced(changedBookmark: Bookmark, bookmarks: Bookmark[]): ng.IPromise<boolean> {
-    // If container is Toolbar, check if Toolbar sync is disabled
-    const container = this.bookmarkHelperSvc.getContainerByBookmarkId(changedBookmark.id, bookmarks);
-    if (!container) {
-      throw new Exceptions.ContainerNotFoundException();
-    }
-    return (container.title === BookmarkContainer.Toolbar
-      ? this.bookmarkHelperSvc.getSyncBookmarksToolbar()
-      : this.$q.resolve(true)
-    ).then((syncBookmarksToolbar) => {
-      if (!syncBookmarksToolbar) {
+    return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
+      // If container is Toolbar, check if Toolbar sync is disabled
+      const container = this.bookmarkHelperSvc.getContainerByBookmarkId(changedBookmark.id, bookmarks);
+      if (!container) {
+        throw new Exceptions.ContainerNotFoundException();
+      }
+      if (container.title === BookmarkContainer.Toolbar && !syncBookmarksToolbar) {
         this.logSvc.logInfo('Not syncing toolbar');
         return false;
       }
-
       return true;
     });
   }
@@ -329,7 +325,7 @@ export default class WebExtBookmarkService implements BookmarkService {
     };
 
     // Don't use unsupported urls for native bookmarks
-    if (!angular.isUndefined(url)) {
+    if (!angular.isUndefined(url ?? undefined)) {
       nativeBookmarkInfo.url = this.getSupportedUrl(url);
     }
 
@@ -365,7 +361,7 @@ export default class WebExtBookmarkService implements BookmarkService {
               ? this.createNativeSeparator(id, toolbarId).then(() => {})
               : this.createNativeBookmark(id, bookmark.title, bookmark.url).then((newNativeBookmark) => {
                   // If the bookmark has children, recurse
-                  if (bookmark.children && bookmark.children.length > 0) {
+                  if (bookmark.children?.length > 0) {
                     createChildBookmarksPromises.push(
                       createRecursive(newNativeBookmark.id, bookmark.children, toolbarId)
                     );
@@ -410,7 +406,7 @@ export default class WebExtBookmarkService implements BookmarkService {
   enableEventListeners(): ng.IPromise<void> {
     return this.disableEventListeners()
       .then(() => {
-        return this.storeSvc.get<boolean>(StoreKey.SyncEnabled);
+        return this.utilitySvc.isSyncEnabled();
       })
       .then((syncEnabled) => {
         if (!syncEnabled) {
@@ -472,7 +468,7 @@ export default class WebExtBookmarkService implements BookmarkService {
   }
 
   getSupportedUrl(url: string): string {
-    if (angular.isUndefined(url)) {
+    if (angular.isUndefined(url ?? undefined)) {
       return '';
     }
 
@@ -499,7 +495,7 @@ export default class WebExtBookmarkService implements BookmarkService {
     };
 
     // Don't use unsupported urls for native bookmarks
-    if (!angular.isUndefined(updateInfo.url)) {
+    if (!angular.isUndefined(updateInfo.url ?? undefined)) {
       updateInfo.url = this.getSupportedUrl(updateInfo.url);
     }
 
@@ -589,13 +585,13 @@ export default class WebExtBookmarkService implements BookmarkService {
             changeData.nativeBookmark.index,
             bookmarks
           );
+
           return this.checkIfBookmarkChangeShouldBeSynced(addBookmarkResult.bookmark, addBookmarkResult.bookmarks).then(
-            (syncChanges) => {
-              if (!syncChanges) {
+            (syncThisChange) => {
+              if (!syncThisChange) {
                 // Don't sync this change
                 return;
               }
-
               // Add new id mapping
               const idMapping = this.bookmarkIdMapperSvc.createMapping(
                 addBookmarkResult.bookmark.id,
@@ -644,8 +640,8 @@ export default class WebExtBookmarkService implements BookmarkService {
 
         // Check if the change should be synced
         const bookmarkToUpdate = this.bookmarkHelperSvc.findBookmarkById(bookmarks, idMapping.syncedId) as Bookmark;
-        return this.checkIfBookmarkChangeShouldBeSynced(bookmarkToUpdate, bookmarks).then((syncChange) => {
-          if (!syncChange) {
+        return this.checkIfBookmarkChangeShouldBeSynced(bookmarkToUpdate, bookmarks).then((syncThisChange) => {
+          if (!syncThisChange) {
             // Don't sync this change
             return;
           }
@@ -730,21 +726,23 @@ export default class WebExtBookmarkService implements BookmarkService {
               removeBookmarkPromise = this.$q.resolve(bookmarks);
             } else {
               // Check if change should be synced then remove the bookmark
-              removeBookmarkPromise = this.checkIfBookmarkChangeShouldBeSynced(bookmarkToRemove, bookmarks).then(
-                (syncChange) => {
-                  if (!syncChange) {
-                    // Don't sync this change, return unmodified bookmarks
-                    return bookmarks;
-                  }
-                  return this.bookmarkHelperSvc
-                    .removeBookmarkById(movedBookmarkMapping.syncedId, bookmarks)
-                    .then((updatedBookmarks) => {
-                      // Set flag to ensure update bookmarks are synced
-                      changesMade = true;
-                      return updatedBookmarks;
-                    });
-                }
-              );
+              removeBookmarkPromise = this.$q((resolve, reject) => {
+                this.checkIfBookmarkChangeShouldBeSynced(bookmarkToRemove, bookmarks)
+                  .then((syncThisChange) => {
+                    if (!syncThisChange) {
+                      // Don't sync this change, return unmodified bookmarks
+                      return resolve(bookmarks);
+                    }
+                    return this.bookmarkHelperSvc
+                      .removeBookmarkById(movedBookmarkMapping.syncedId, bookmarks)
+                      .then((updatedBookmarks) => {
+                        // Set flag to ensure update bookmarks are synced
+                        changesMade = true;
+                        resolve(updatedBookmarks);
+                      });
+                  })
+                  .catch(reject);
+              });
             }
             return removeBookmarkPromise
               .then((bookmarksAfterRemoval) => {
@@ -771,8 +769,8 @@ export default class WebExtBookmarkService implements BookmarkService {
                     return this.checkIfBookmarkChangeShouldBeSynced(
                       addBookmarkResult.bookmark,
                       addBookmarkResult.bookmarks
-                    ).then((syncChange) => {
-                      if (!syncChange) {
+                    ).then((syncThisChange) => {
+                      if (!syncThisChange) {
                         // Don't sync this change, return bookmarks after removal processed
                         return bookmarksAfterRemoval;
                       }
@@ -829,8 +827,8 @@ export default class WebExtBookmarkService implements BookmarkService {
 
         // Check if the change should be synced
         const bookmarkToRemove = this.bookmarkHelperSvc.findBookmarkById(bookmarks, idMapping.syncedId) as Bookmark;
-        return this.checkIfBookmarkChangeShouldBeSynced(bookmarkToRemove, bookmarks).then((syncChange) => {
-          if (!syncChange) {
+        return this.checkIfBookmarkChangeShouldBeSynced(bookmarkToRemove, bookmarks).then((syncThisChange) => {
+          if (!syncThisChange) {
             // Don't sync this change
             return;
           }

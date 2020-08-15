@@ -1,55 +1,20 @@
-<div class="theme-content" ng-class="vm.settings.darkModeEnabled ? 'theme-dark' : 'theme-default'"
-     ng-if="vm.initialised">
-  <div class="container" ng-class="{ 'search': vm.currentView === vm.appView.Search }">
-    <app-working cancel-action="vm.workingCancelAction" close="vm.displayMainView"
-                 full-view-mode="vm.currentView === vm.appView.Working">
+<div class="theme-content" ng-class="vm.darkModeEnabled ? 'theme-dark' : 'theme-default'" ng-show="vm.initialised">
+  <div class="container" ng-class="{ 'search': vm.currentView === vm.AppViewType.Search }">
+    <app-working cancel-action="vm.workingCancelAction" full-view-mode="vm.currentView === vm.AppViewType.Working">
     </app-working>
-
     <app-alert></app-alert>
-
-    <div id="login-panel" class="view animate" ng-if="vm.currentView === vm.appView.Login">
-      <div class="view-content" ng-include="'./assets/login.html'"></div>
-    </div>
-
-    <div id="search-panel" class="view animate"
-         ng-class="{ 'search-bar-bottom': vm.settings.displaySearchBarBeneathResults }"
-         ng-if="vm.currentView === vm.appView.Search">
-      <div class="view-content" ng-include="'./assets/search.html'"></div>
-    </div>
-
-    <div id="bookmark-panel" class="view animate" ng-if="vm.currentView === vm.appView.Bookmark">
-      <div class="view-content" ng-include="'./assets/bookmark.html'"></div>
-    </div>
-
-    <div id="settings-panel" class="view animate" ng-if="vm.currentView === vm.appView.Settings">
-      <div class="view-content" ng-include="'./assets/settings.html'"></div>
-    </div>
-
-    <app-help class="view view-overlay animate" close="vm.displayMainView" ng-if="vm.currentView === vm.appView.Help">
+    <app-login class="view animate" ng-if="vm.currentView === vm.AppViewType.Login"></app-login>
+    <app-search class="view animate" ng-if="vm.currentView === vm.AppViewType.Search"></app-search>
+    <app-bookmark class="view animate" ng-if="vm.currentView === vm.AppViewType.Bookmark"></app-bookmark>
+    <app-settings class="view animate" ng-if="vm.currentView === vm.AppViewType.Settings"></app-settings>
+    <app-help class="view view-overlay animate" ng-if="vm.currentView === vm.AppViewType.Help">
     </app-help>
-
-    <app-support class="view view-overlay animate" close="vm.displayMainView"
-                 ng-if="vm.currentView === vm.appView.Support"></app-support>
-
-    <app-updated class="view view-overlay animate" close="vm.closeUpdatedPanel" display-main-view="vm.displayMainView"
-                 ng-if="vm.currentView === vm.appView.Updated">
+    <app-support class="view view-overlay animate" ng-if="vm.currentView === vm.AppViewType.Support"></app-support>
+    <app-updated class="view view-overlay animate" ng-if="vm.currentView === vm.AppViewType.Updated">
     </app-updated>
-
-    <app-permissions class="view view-overlay animate" close="vm.displayMainView"
-                     ng-if="vm.currentView === vm.appView.Permissions">
+    <app-permissions class="view view-overlay animate" ng-if="vm.currentView === vm.AppViewType.Permissions">
     </app-permissions>
-
-    <app-scan class="view animate" callback="vm.scanCompleted" close="vm.displayMainView"
-              ng-if="vm.currentView === vm.appView.Scan"></app-scan>
-
-    <app-qr class="darker-overlay animate-fade-in animate-fade-out" close="vm.closeQrPanel"
-            service-url="vm.sync.service.url" sync-id="vm.sync.id" ng-if="vm.settings.displayQrPanel"></app-qr>
+    <app-scan class="view animate" ng-if="vm.currentView === vm.AppViewType.Scan"></app-scan>
   </div>
-
-  <div class="background animate" ng-if="vm.currentView !== undefined && vm.currentView !== vm.appView.Scan">
-    <div class="background-img" ng-if="vm.currentView === vm.appView.Working || vm.currentView === vm.appView.Login || 
-      vm.currentView === vm.appView.Support || vm.currentView === vm.appView.Permissions || 
-      vm.currentView === vm.appView.Updated || vm.currentView === vm.appView.Help">
-    </div>
-  </div>
+  <app-background current-view="vm.currentView"></app-background>
 </div>

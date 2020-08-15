@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import * as Exceptions from '../../shared/exception/exception';
 import { StoreKey } from '../../shared/store/store.enum';
 import { PlatformStoreService, StoreContent, TraceLogItem } from '../../shared/store/store.interface';
@@ -161,7 +161,7 @@ export default class AndroidStoreService implements PlatformStoreService {
 
   getFromNativeStorage<T = StoreContent>(key: IDBValidKey): ng.IPromise<T> {
     return this.$q<T>((resolve, reject) => {
-      if (angular.isUndefined(key)) {
+      if (angular.isUndefined(key ?? undefined)) {
         return resolve();
       }
 
@@ -221,7 +221,7 @@ export default class AndroidStoreService implements PlatformStoreService {
   }
 
   openDatabase(): ng.IPromise<any> {
-    if (!angular.isUndefined(this.db)) {
+    if (!angular.isUndefined(this.db ?? undefined)) {
       return this.$q.resolve(this.db);
     }
     return this.$q((resolve, reject) => {

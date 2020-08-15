@@ -1,10 +1,9 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import { ApiService } from '../../api/api.interface';
 import * as Exceptions from '../../exception/exception';
 import { ExceptionHandler } from '../../exception/exception.interface';
-import { MessageCommand } from '../../global-shared.enum';
 import { PlatformService } from '../../global-shared.interface';
 import LogService from '../../log/log.service';
 import { StoreKey } from '../../store/store.enum';
@@ -114,7 +113,7 @@ export default class SyncEngineService {
   }
 
   disableSync(): ng.IPromise<void> {
-    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
+    return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
       if (!syncEnabled) {
         return;
       }
@@ -157,7 +156,7 @@ export default class SyncEngineService {
 
   executeSync(isBackgroundSync = false): ng.IPromise<any> {
     // Check if sync enabled before running sync
-    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((syncEnabled) => {
+    return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
       if (!syncEnabled) {
         throw new Exceptions.SyncDisabledException();
       }
@@ -208,8 +207,8 @@ export default class SyncEngineService {
       if (failedSync.changeInfo && failedSync.changeInfo.type) {
         this.logSvc.logInfo(failedSync.changeInfo);
       }
-      return this.storeSvc
-        .get<boolean>(StoreKey.SyncEnabled)
+      return this.utilitySvc
+        .isSyncEnabled()
         .then((syncEnabled) => {
           return this.setIsSyncing()
             .then(() => {
@@ -225,7 +224,7 @@ export default class SyncEngineService {
                 this.syncQueue = [];
                 this.storeSvc.set(StoreKey.LastUpdated, new Date().toISOString());
                 if (this.checkIfRefreshSyncedDataOnError(syncException)) {
-                  this.currentSync = null;
+                  this.currentSync = undefined;
                   return this.platformSvc.queueLocalResync().catch((refreshErr) => {
                     syncException = refreshErr;
                   });
@@ -296,7 +295,7 @@ export default class SyncEngineService {
 
               // Combine all results to determine whether to proceed with update
               return processSyncResults.reduce((prev, current) => {
-                return angular.isUndefined(current.updateRemote) ? prev : prev && current.updateRemote;
+                return angular.isUndefined(current.updateRemote ?? undefined) ? prev : prev && current.updateRemote;
               }, true);
             });
         })
@@ -317,10 +316,10 @@ export default class SyncEngineService {
     };
 
     // Disable automatic updates whilst processing syncs
-    return this.storeSvc
-      .get<boolean>(StoreKey.SyncEnabled)
-      .then((cachedSyncEnabled) => {
-        if (cachedSyncEnabled) {
+    return this.utilitySvc
+      .isSyncEnabled()
+      .then((syncEnabled) => {
+        if (syncEnabled) {
           return this.platformSvc.stopSyncUpdateChecks();
         }
       })
@@ -369,10 +368,10 @@ export default class SyncEngineService {
       })
       .finally(() => {
         // Clear current sync
-        this.currentSync = null;
+        this.currentSync = undefined;
 
         // Start auto updates if sync enabled
-        return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then((cachedSyncEnabled) => {
+        return this.utilitySvc.isSyncEnabled().then((cachedSyncEnabled) => {
           if (cachedSyncEnabled) {
             return this.platformSvc.startSyncUpdateChecks();
           }
@@ -382,8 +381,8 @@ export default class SyncEngineService {
 
   queueSync(syncToQueue: Sync, runSync = true): ng.IPromise<void> {
     return this.$q<any>((resolve, reject) => {
-      this.storeSvc
-        .get<boolean>(StoreKey.SyncEnabled)
+      this.utilitySvc
+        .isSyncEnabled()
         .then((syncEnabled) => {
           // If new sync ensure sync queue is clear
           if (!syncEnabled) {
@@ -422,7 +421,7 @@ export default class SyncEngineService {
               // Enable sync if required
               if (
                 !syncEnabled &&
-                ((syncToQueue.type === SyncType.Local && angular.isUndefined(syncToQueue.bookmarks)) ||
+                ((syncToQueue.type === SyncType.Local && angular.isUndefined(syncToQueue.bookmarks ?? undefined)) ||
                   syncToQueue.type === SyncType.Remote)
               ) {
                 return this.enableSync().then(() => {
@@ -438,12 +437,12 @@ export default class SyncEngineService {
 
   setIsSyncing(syncType?: SyncType): ng.IPromise<void> {
     // Update browser action icon with current sync type
-    if (syncType != null) {
+    if (!angular.isUndefined(syncType ?? undefined)) {
       return this.platformSvc.refreshNativeInterface(null, syncType);
     }
 
     // Get cached sync enabled value and update browser action icon
-    return this.storeSvc.get<boolean>(StoreKey.SyncEnabled).then(this.platformSvc.refreshNativeInterface);
+    return this.utilitySvc.isSyncEnabled().then(this.platformSvc.refreshNativeInterface);
   }
 
   sync_handleCancel(): ng.IPromise<void> {

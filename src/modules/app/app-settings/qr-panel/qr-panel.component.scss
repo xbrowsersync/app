@@ -1,6 +1,6 @@
-@import '../../../styles/modules/all';
+@import '../../../../styles/modules/all';
 
-app-qr {
+qr-panel {
   display: block;
   flex-direction: column;
   padding: 2rem;
@@ -11,6 +11,8 @@ app-qr {
   }
 
   .buttons {
+    display: flex;
+    flex-direction: column;
     margin-top: 0;
 
     button {

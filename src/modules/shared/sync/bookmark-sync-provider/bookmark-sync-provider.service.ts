@@ -1,6 +1,6 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import _ from 'underscore';
 import { ApiService } from '../../api/api.interface';
 import BookmarkHelperService from '../../bookmark/bookmark-helper/bookmark-helper.service';
@@ -16,10 +16,9 @@ import {
 } from '../../bookmark/bookmark.interface';
 import CryptoService from '../../crypto/crypto.service';
 import * as Exceptions from '../../exception/exception';
-import Globals from '../../global-shared.constants';
-import { MessageCommand } from '../../global-shared.enum';
 import { PlatformService } from '../../global-shared.interface';
 import LogService from '../../log/log.service';
+import SettingsService from '../../settings/settings.service';
 import { StoreKey } from '../../store/store.enum';
 import StoreService from '../../store/store.service';
 import UtilityService from '../../utility/utility.service';
@@ -36,6 +35,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
   cryptoSvc: CryptoService;
   logSvc: LogService;
   platformSvc: PlatformService;
+  settingsSvc: SettingsService;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
@@ -47,6 +47,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
     'CryptoService',
     'LogService',
     'PlatformService',
+    'SettingsService',
     'StoreService',
     'UtilityService'
   ];
@@ -58,6 +59,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
     CryptoSvc: CryptoService,
     LogSvc: LogService,
     PlatformSvc: PlatformService,
+    SettingsSvc: SettingsService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
   ) {
@@ -68,6 +70,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
     this.cryptoSvc = CryptoSvc;
     this.logSvc = LogSvc;
     this.platformSvc = PlatformSvc;
+    this.settingsSvc = SettingsSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
   }
@@ -90,7 +93,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
   }
 
   handleUpdateRemoteFailed(err: Error, lastResult: SyncProcessBookmarksData, sync: Sync): ng.IPromise<void> {
-    if (angular.isUndefined(lastResult)) {
+    if (angular.isUndefined(lastResult ?? undefined)) {
       return this.$q.resolve();
     }
 
@@ -186,19 +189,18 @@ export default class BookmarkSyncProviderService implements SyncProvider {
                   return this.populateNativeBookmarks(bookmarks);
                 }
 
-                // Apply updates to native bookmarks
-                // But first check if bookmark container is toolbar and is syncing toolbar
-                return (updatedBookmarkContainer === BookmarkContainer.Toolbar
-                  ? this.bookmarkHelperSvc.getSyncBookmarksToolbar()
-                  : this.$q.resolve(true)
-                ).then((updateNativeBookmarks) => {
-                  if (updateNativeBookmarks) {
-                    return this.bookmarkSvc.processChangeOnNativeBookmarks(
-                      updatedBookmark.id,
-                      changeInfo.type,
-                      updatedBookmark
-                    );
+                // Check if bookmark container is toolbar and toolbar syncing is enabled
+                return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
+                  if (updatedBookmarkContainer === BookmarkContainer.Toolbar && !syncBookmarksToolbar) {
+                    return;
                   }
+
+                  // Apply updates to native bookmarks
+                  return this.bookmarkSvc.processChangeOnNativeBookmarks(
+                    updatedBookmark.id,
+                    changeInfo.type,
+                    updatedBookmark
+                  );
                 });
               })
               .then(resolve)
@@ -278,12 +280,8 @@ export default class BookmarkSyncProviderService implements SyncProvider {
               // Update browser bookmarks
               return this.platformSvc
                 .disableNativeEventListeners()
-                .then(() => {
-                  return this.populateNativeBookmarks(cachedBookmarks);
-                })
-                .then(() => {
-                  return this.bookmarkSvc.buildIdMappings(cachedBookmarks);
-                })
+                .then(() => this.populateNativeBookmarks(cachedBookmarks))
+                .then(() => this.bookmarkSvc.buildIdMappings(cachedBookmarks))
                 .finally(this.platformSvc.enableNativeEventListeners);
             })
             .then(() => {
@@ -307,9 +305,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
     // Ensure sync credentials exist before continuing
     return this.utilitySvc
       .checkSyncCredentialsExist()
-      .then(() => {
-        return this.storeSvc.get<boolean>(StoreKey.SyncEnabled);
-      })
+      .then(() => this.utilitySvc.isSyncEnabled())
       .then((syncEnabled) => {
         // If this is a new sync, get native bookmarks and continue
         if (!syncEnabled || !sync.changeInfo) {
@@ -552,7 +548,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
     // Find any bookmark without an id
     let bookmarksHaveIds = true;
     this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
-      if (angular.isUndefined(bookmark.id)) {
+      if (angular.isUndefined(bookmark.id ?? undefined)) {
         bookmarksHaveIds = false;
       }
     });
@@ -573,7 +569,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
       return !angular.isNumber(bookmark.id);
     });
 
-    if (!angular.isUndefined(invalidId)) {
+    if (!angular.isUndefined(invalidId ?? undefined)) {
       this.logSvc.logWarning(`Invalid bookmark id detected: ${invalidId.id} (${invalidId.url})`);
       return false;
     }
@@ -586,7 +582,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
       })
       .value();
 
-    if (!angular.isUndefined(duplicateId)) {
+    if (!angular.isUndefined(duplicateId ?? undefined)) {
       this.logSvc.logWarning(`Duplicate bookmark id detected: ${duplicateId}`);
       return false;
     }

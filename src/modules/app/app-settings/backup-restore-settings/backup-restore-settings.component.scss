@@ -1,0 +1,27 @@
+@import '../../../../styles/modules/all';
+
+backup-restore-settings {
+  display: block;
+
+  #restoreForm {
+    input[type='text'] {
+      padding-right: 2rem;
+    }
+
+    textarea {
+      font-family: $font-stack-code;
+      font-size: 0.8rem;
+      height: 12rem;
+    }
+
+    .form-group {
+      margin-bottom: 0.4rem;
+    }
+
+    .spinner-border {
+      position: absolute;
+      right: 0.75rem;
+      top: 0.6rem;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { Injectable } from 'angular-ts-decorators';
-import { autobind } from 'core-decorators';
+import autobind from 'autobind-decorator';
 import { ApiServiceType } from '../api/api.enum';
 import UtilityService from '../utility/utility.service';
 import { Backup, BackupSync } from './backup-restore.interface';

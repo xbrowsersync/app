@@ -10,6 +10,7 @@ export default {
       '────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────',
     VerticalSeparatorTitle: '|'
   },
+  InterfaceReadyTimeout: 150,
   LookaheadMinChars: 1,
   MinApiVersion: '1.1.3',
   PathToAssets: 'assets',
