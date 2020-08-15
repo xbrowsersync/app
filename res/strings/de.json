@@ -279,9 +279,13 @@
     "key": "login_DisableOtherSyncs_Title",
     "message": "Disable bookmark sync tools"
   },
-  "login_DisableOtherSyncs_Message": {
-    "key": "login_DisableOtherSyncs_Message",
+  "login_DisableOtherSyncs_Message_Chrome": {
+    "key": "login_DisableOtherSyncs_Message_Chrome",
     "message": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing."
+  },
+  "login_DisableOtherSyncs_Message_Firefox": {
+    "key": "login_DisableOtherSyncs_Message_Firefox",
+    "message": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing."
   },
   "login_UpgradeSync_Title": {
     "key": "login_UpgradeSync_Title",
