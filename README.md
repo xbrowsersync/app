@@ -33,7 +33,11 @@ You must follow the Cordova Android [installation guide](https://cordova.apache.
 
 Run a debug build for the given platform:
 
-    $ npm run [platform]:dev
+    $ npm run build:[platform]
+
+or
+
+    $ npm run watch:[platform]
 
 Replace [platform] with the name of the platform to build. The app code will be output to the 'build/[platform]' folder. Available platforms:
 
@@ -65,7 +69,7 @@ After building, in order to run the app you'll need to execute the relevant [cor
 
 Run a release build and then package for the given platform:
 
-    $ npm run [platform]:package
+    $ npm run package:[platform]
 
 Replace [platform] with the name of the platform to build. The package will be output to the 'dist' folder.
 

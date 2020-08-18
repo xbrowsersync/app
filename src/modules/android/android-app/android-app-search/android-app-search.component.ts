@@ -72,6 +72,11 @@ export default class AndroidAppSearchComponent extends AppSearchComponent {
     });
   }
 
+  clearSearch(): void {
+    // Display default search results and focus on search box
+    this.displayDefaultSearchState().then(this.searchBookmarks);
+  }
+
   displayDefaultSearchState(): ng.IPromise<void> {
     // Set clear search button to display all bookmarks
     return super.displayDefaultSearchState().then(() => {
