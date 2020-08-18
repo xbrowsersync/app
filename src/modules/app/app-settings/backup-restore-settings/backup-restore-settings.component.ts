@@ -2,7 +2,6 @@ import './backup-restore-settings.component.scss';
 import angular from 'angular';
 import { Component, OnInit, ViewParent } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import _ from 'underscore';
 import Strings from '../../../../../res/strings/en.json';
 import { AlertType } from '../../../shared/alert/alert.enum';
 import AlertService from '../../../shared/alert/alert.service';
@@ -251,7 +250,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
     const cleanRecursive = (bookmarks: Bookmark[]): Bookmark[] => {
       return bookmarks.map((bookmark) => {
         const cleanedBookmark = this.bookmarkHelperSvc.cleanBookmark(bookmark);
-        if (_.isArray(cleanedBookmark.children)) {
+        if (angular.isArray(cleanedBookmark.children)) {
           cleanedBookmark.children = cleanRecursive(cleanedBookmark.children);
         }
         return cleanedBookmark;

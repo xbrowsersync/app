@@ -1,7 +1,6 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import _ from 'underscore';
 import { ApiService } from '../../api/api.interface';
 import BookmarkHelperService from '../../bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkChangeType, BookmarkContainer } from '../../bookmark/bookmark.enum';
@@ -574,16 +573,11 @@ export default class BookmarkSyncProviderService implements SyncProvider {
       return false;
     }
 
-    // Find a bookmark with a duplicate id
-    const duplicateId = _.chain(allBookmarks)
-      .countBy('id')
-      .findKey((count) => {
-        return count > 1;
-      })
-      .value();
-
-    if (!angular.isUndefined(duplicateId ?? undefined)) {
-      this.logSvc.logWarning(`Duplicate bookmark id detected: ${duplicateId}`);
+    // Check for duplicate ids
+    const uniqueIds = new Set(allBookmarks.map((x) => x.id));
+    const duplicatesFound = uniqueIds.size < allBookmarks.length;
+    if (duplicatesFound) {
+      this.logSvc.logWarning('Duplicate bookmark ids detected');
       return false;
     }
 

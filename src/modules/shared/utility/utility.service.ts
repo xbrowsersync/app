@@ -3,7 +3,6 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
-import _ from 'underscore';
 import { AppEventType } from '../../app/app.enum';
 import * as Exceptions from '../exception/exception';
 import { ExceptionHandler } from '../exception/exception.interface';
@@ -115,21 +114,18 @@ export default class UtilityService {
     }
 
     // Conver to lowercase and split tags into array
-    let tags = tagText.toLowerCase().replace(/['"]/g, '').split(',');
+    const tags = tagText.toLowerCase().replace(/['"]/g, '').split(',');
 
     // Clean and sort tags
-    tags = _.chain(tags)
-      .map((tag) => {
-        return tag.trim();
-      })
-      .compact()
-      .uniq()
-      .sortBy((tag) => {
-        return tag;
-      })
-      .value();
-
-    return tags;
+    const cleanedTags = [
+      ...new Set(
+        tags
+          .filter((x) => !!x)
+          .map((x) => x.trim())
+          .sort()
+      )
+    ];
+    return cleanedTags;
   }
 
   getUniqueishId(): string {

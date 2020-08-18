@@ -1,7 +1,6 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import _ from 'underscore';
 import { Bookmarks as NativeBookmarks } from 'webextension-polyfill-ts';
 import Strings from '../../../../../res/strings/en.json';
 import { BookmarkSearchResult } from '../../../app/app-search/app-search.interface';
@@ -96,10 +95,18 @@ export default class BookmarkHelperService {
 
   cleanBookmark(bookmark: Bookmark): Bookmark {
     // Remove empty properties, except for children array
-    const cleanedBookmark = _.pick<Bookmark>(angular.copy(bookmark), (value, key) => {
-      return (angular.isArray(value) && key !== 'children') || angular.isString(value)
-        ? value.length > 0
-        : value != null;
+    const cleanedBookmark: Bookmark = {};
+    Object.keys(bookmark).forEach((key) => {
+      if (
+        (angular.isString(bookmark[key]) || (angular.isArray(bookmark[key]) && key !== 'children')) &&
+        bookmark[key].length === 0
+      ) {
+        return;
+      }
+      if (bookmark[key] == null) {
+        return;
+      }
+      cleanedBookmark[key] = bookmark[key];
     });
 
     return cleanedBookmark;
@@ -135,7 +142,7 @@ export default class BookmarkHelperService {
       return x.id === id;
     });
     if (index === -1) {
-      _.each<any>(bookmarks, (x) => {
+      (bookmarks as Bookmark[]).forEach((x) => {
         if (!bookmark) {
           bookmark = this.findBookmarkById(x.children, id);
         }
@@ -160,7 +167,7 @@ export default class BookmarkHelperService {
       }
 
       return this.searchBookmarks({ url: currentUrl }).then((searchResults) => {
-        const searchResult = _.find<any>(searchResults, (bookmark) => {
+        const searchResult = searchResults.find((bookmark) => {
           return bookmark.url.toLowerCase() === currentUrl.toLowerCase();
         });
 
@@ -283,7 +290,7 @@ export default class BookmarkHelperService {
 
   getContainer(containerName: string, bookmarks: Bookmark[], createIfNotPresent = false): Bookmark {
     // If container does not exist, create it if specified
-    let container = _.findWhere<Bookmark[]>(bookmarks, { title: containerName });
+    let container = bookmarks.find((x) => x.title === containerName);
     if (!container && createIfNotPresent) {
       container = this.newBookmark(containerName, null, null, null, false, bookmarks);
       bookmarks.push(container);
@@ -348,7 +355,7 @@ export default class BookmarkHelperService {
 
         // Remove exclusions from lookaheads
         if (exclusions) {
-          lookaheads = _.difference(lookaheads, exclusions);
+          lookaheads = lookaheads.filter((x) => !exclusions.includes(x));
         }
 
         if (lookaheads.length === 0) {
@@ -356,15 +363,13 @@ export default class BookmarkHelperService {
         }
 
         // Count lookaheads and return most common
-        const lookahead = _.chain(lookaheads)
-          .sortBy((x) => {
-            return x.length;
-          })
-          .countBy()
-          .pairs()
-          .max(_.last)
-          .first()
-          .value();
+        const counts = lookaheads.reduce((acc, val) => {
+          acc[val] = acc[val] === undefined ? 1 : (acc[val] += 1);
+          return acc;
+        }, {});
+        const lookahead = Object.keys(counts).reduce((x, y) => {
+          return counts[x] > counts[y] ? x : y;
+        });
 
         return [lookahead, word];
       })
@@ -404,7 +409,8 @@ export default class BookmarkHelperService {
     });
 
     // Compare highest id with supplied taken ids
-    highestId = _.max(takenIds) > highestId ? _.max(takenIds) : highestId;
+    const highestTakenId = takenIds.reduce((x, y) => (x > y ? x : y));
+    highestId = highestTakenId > highestId ? highestTakenId : highestId;
     return highestId + 1;
   }
 
@@ -558,7 +564,7 @@ export default class BookmarkHelperService {
       removeArr.push(toolbarContainer);
     }
 
-    return _.difference(bookmarks, removeArr);
+    return bookmarks.filter((x) => !removeArr.includes(x));
   }
 
   searchBookmarks(query: any): ng.IPromise<Bookmark[]> {
@@ -576,14 +582,16 @@ export default class BookmarkHelperService {
       }
 
       // Search by keywords and sort (score desc, id desc) using results from url search if relevant
-      results = _.chain(
-        this.searchBookmarksByKeywords(results ?? (bookmarks as BookmarkSearchResult[]), query.keywords)
-      )
-        .sortBy('id')
-        .sortBy('score')
-        .value()
+      results = this.searchBookmarksByKeywords(results ?? (bookmarks as BookmarkSearchResult[]), query.keywords);
+      const sortedResults = results
+        .sort((x, y) => {
+          return x.id - y.id;
+        })
+        .sort((x, y) => {
+          return x.score - y.score;
+        })
         .reverse();
-      return results;
+      return sortedResults;
     });
   }
 
@@ -592,7 +600,7 @@ export default class BookmarkHelperService {
     keywords: string[] = [],
     results: BookmarkSearchResult[] = []
   ): BookmarkSearchResult[] {
-    _.each(bookmarks, (bookmark) => {
+    bookmarks.forEach((bookmark) => {
       // Ignore separators
       if (this.isSeparator(bookmark)) {
         return;
@@ -627,21 +635,9 @@ export default class BookmarkHelperService {
         });
 
         // Check all keywords match
-        if (
-          angular.isUndefined(
-            _.find(scores, (score) => {
-              return score === 0;
-            })
-          )
-        ) {
+        if (angular.isUndefined(scores.find((x) => x === 0))) {
           // Calculate score
-          const score = _.reduce(
-            scores,
-            (memo, num) => {
-              return memo + num;
-            },
-            0
-          );
+          const score = scores.reduce((memo, num) => memo + num, 0);
 
           // Add result
           const result: BookmarkSearchResult = angular.copy(bookmark);
@@ -660,7 +656,7 @@ export default class BookmarkHelperService {
     results: BookmarkSearchResult[] = []
   ): BookmarkSearchResult[] {
     results = results.concat(
-      _.filter(bookmarks, (bookmark) => {
+      bookmarks.filter((bookmark) => {
         // Ignore folders and separators
         if (this.isFolder(bookmark) || this.isSeparator(bookmark)) {
           return false;
@@ -686,7 +682,7 @@ export default class BookmarkHelperService {
     tagsOnly = false,
     results: string[] = []
   ): string[] {
-    _.each(bookmarks, (bookmark) => {
+    bookmarks.forEach((bookmark) => {
       // Ignore separators
       if (this.isSeparator(bookmark)) {
         return;
@@ -707,14 +703,11 @@ export default class BookmarkHelperService {
 
           // Split tags into individual words
           if (bookmark.tags) {
-            const tags = _.chain(bookmark.tags)
-              .map((tag) => {
-                return tag.toLowerCase().split(/\s/);
-              })
-              .flatten()
-              .compact()
-              .value();
-
+            const tags = bookmark.tags
+              .reduce((a, b) => {
+                return a.concat(b.toLowerCase().split(/\s/));
+              }, [])
+              .filter(Boolean);
             bookmarkWords = bookmarkWords.concat(tags);
           }
 
@@ -732,13 +725,13 @@ export default class BookmarkHelperService {
         }
 
         // Remove words of two chars or less
-        bookmarkWords = _.filter(bookmarkWords, (item) => {
+        bookmarkWords = bookmarkWords.filter((item) => {
           return item.length > 2;
         });
 
         // Find all words that begin with lookahead word
         results = results.concat(
-          _.filter(bookmarkWords, (innerbookmark) => {
+          bookmarkWords.filter((innerbookmark) => {
             return innerbookmark.indexOf(word) === 0;
           })
         );
@@ -778,7 +771,7 @@ export default class BookmarkHelperService {
       toolbarContainer.title = BookmarkContainer.Toolbar;
     }
 
-    const xbsContainerIndex = _.findIndex(bookmarks, (x) => {
+    const xbsContainerIndex = bookmarks.findIndex((x) => {
       return x.title === '_xBrowserSync_';
     });
     if (xbsContainerIndex >= 0) {

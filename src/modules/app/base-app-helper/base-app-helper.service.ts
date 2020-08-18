@@ -2,7 +2,6 @@ import angular from 'angular';
 import autobind from 'autobind-decorator';
 import DOMPurify from 'dompurify';
 import marked from 'marked';
-import _ from 'underscore';
 import { ApiServiceStatus } from '../../shared/api/api.enum';
 import { ApiService, ApiServiceInfo, ApiServiceInfoResponse } from '../../shared/api/api.interface';
 import * as Exceptions from '../../shared/exception/exception';
@@ -95,7 +94,7 @@ export default class BaseAppHelperService {
         let message = response.message ? marked(response.message) : '';
         if (message) {
           const messageDom = new DOMParser().parseFromString(message, 'text/html');
-          _.each(messageDom.querySelectorAll('a'), (hyperlink) => {
+          messageDom.querySelectorAll('a').forEach((hyperlink) => {
             hyperlink.className = 'new-tab';
           });
           message = DOMPurify.sanitize(messageDom.body.firstElementChild.innerHTML);

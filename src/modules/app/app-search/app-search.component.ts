@@ -2,7 +2,6 @@ import './app-search.component.scss';
 import angular from 'angular';
 import { OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import _ from 'underscore';
 import Strings from '../../../../res/strings/en.json';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
@@ -137,7 +136,7 @@ export default class AppSearchComponent implements OnInit {
       // Find and remove the deleted bookmark element in the search results
       originalBookmarks = angular.copy(this.results);
 
-      const removedBookmarkIndex = _.findIndex<any>(this.results, (result) => {
+      const removedBookmarkIndex = this.results.findIndex((result) => {
         return result.id === bookmark.id;
       });
       if (removedBookmarkIndex >= 0) {
@@ -239,7 +238,7 @@ export default class AppSearchComponent implements OnInit {
     if (this.query) {
       // Iterate query words to form query data object
       const queryWords = this.query.split(/[\s,]+/);
-      _.each<string[]>(queryWords, (queryWord) => {
+      queryWords.forEach((queryWord) => {
         // Add query word as url if query is in url format, otherwise add to keywords
         if (!queryData.url && urlRegex.test(queryWord.trim())) {
           queryData.url = queryWord.trim();
@@ -342,7 +341,7 @@ export default class AppSearchComponent implements OnInit {
         break;
       case KeyCode.PageUp:
         // Focus on result 10 up from current
-        currentIndex = _.indexOf(target.parentElement.children, target);
+        currentIndex = [...target.parentElement.children].indexOf(target);
         newIndex = currentIndex - 10;
         if (newIndex < 0) {
           elementToFocus = target.parentElement.firstElementChild;
@@ -352,7 +351,7 @@ export default class AppSearchComponent implements OnInit {
         break;
       case KeyCode.PageDown:
         // Focus on result 10 down from current
-        currentIndex = _.indexOf(target.parentElement.children, target);
+        currentIndex = [...target.parentElement.children].indexOf(target);
         newIndex = currentIndex + 10;
         if (target.parentElement.children.length <= newIndex) {
           elementToFocus = target.parentElement.lastElementChild;
@@ -405,10 +404,10 @@ export default class AppSearchComponent implements OnInit {
 
     // Get last word of search query
     const queryWords = this.query.split(/[\s]+/);
-    const lastWord = _.last<string[]>(queryWords);
+    const lastWord = queryWords.slice(-1).find(Boolean);
 
     // Display lookahead only if word length exceed minimum
-    if (lastWord?.length <= Globals.LookaheadMinChars) {
+    if (angular.isUndefined(lastWord) || lastWord?.length <= Globals.LookaheadMinChars) {
       this.lookahead = null;
       return;
     }

@@ -1,7 +1,6 @@
 import './preferences-settings.component.scss';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import _ from 'underscore';
 import Strings from '../../../../../res/strings/en.json';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { AllSettings } from '../../../shared/settings/settings.interface';

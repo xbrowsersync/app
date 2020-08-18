@@ -1,6 +1,5 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { throttle } from 'underscore';
 import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
 import { BookmarkChangeType, BookmarkContainer } from '../../../../shared/bookmark/bookmark.enum';
 import {
