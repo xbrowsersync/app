@@ -431,10 +431,6 @@
     "key": "settings_BackupRestore_Revert_Unavailable_Label",
     "message": "Installation state data not available, unable to revert."
   },
-  "settings_About_Title": {
-    "key": "settings_About_Title",
-    "message": "About"
-  },
   "settings_About_AppVersion_Label": {
     "key": "settings_About_AppVersion_Label",
     "message": "Version"
@@ -543,13 +539,9 @@
     "key": "button_BookmarkTree_Label",
     "message": "View bookmark folders"
   },
-  "settings_Service_Title": {
-    "key": "settings_Service_Title",
-    "message": "Service"
-  },
   "settings_Service_Status_Label": {
     "key": "settings_Service_Status_Label",
-    "message": "Service status"
+    "message": "Service"
   },
   "settings_Service_Status_NoNewSyncs": {
     "key": "settings_Service_Status_NoNewSyncs",
@@ -779,8 +771,12 @@
     "key": "settings_Service_DataUsage_Description",
     "message": "How much of the sync data allowed by the service are you using."
   },
-  "settings_BackupRestore_ConfirmRestore_Sync_Message": {
-    "key": "settings_BackupRestore_ConfirmRestore_Sync_Message",
+  "settings_BackupRestore_ConfirmRestore_Sync_Message_Android": {
+    "key": "settings_BackupRestore_ConfirmRestore_Sync_Message_Android",
+    "message": "<p>The data being restored will overwrite your synced data.</p><p>OK to proceed?</p>"
+  },
+  "settings_BackupRestore_ConfirmRestore_Sync_Message_Desktop": {
+    "key": "settings_BackupRestore_ConfirmRestore_Sync_Message_Desktop",
     "message": "<p>As sync is currently enabled, the data being restored will overwrite your synced data.</p><p>To restore data to the local browser only, disable sync before restoring.</p><p>OK to proceed?</p>"
   },
   "settings_BackupRestore_ConfirmRestore_NoSync_Message": {
@@ -822,6 +818,10 @@
   "bookmark_BookmarkForm_Exists_Label": {
     "key": "bookmark_BookmarkForm_Exists_Label",
     "message": "URL has already been bookmarked"
+  },
+  "bookmark_CurrentPageInvalidUrl_Message": {
+    "key": "bookmark_CurrentPageInvalidUrl_Message",
+    "message": "The value that was shared does not contain a valid URL."
   },
   "button_AddTags_Label": {
     "key": "button_AddTags_Label",
@@ -1059,9 +1059,13 @@
     "key": "error_FailedGetPageMetadata_Message",
     "message": "URL is invalid or webpage data could not be retrieved."
   },
+  "error_ScanFailed_Title": {
+    "key": "error_ScanFailed_Title",
+    "message": "Scan failed"
+  },
   "error_ScanFailed_Message": {
     "key": "error_ScanFailed_Message",
-    "message": "Scan failed. Check permission has been granted and try again."
+    "message": "Check permission has been granted and try again."
   },
   "error_ShareFailed_Title": {
     "key": "error_ShareFailed_Title",
