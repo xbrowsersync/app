@@ -27,7 +27,7 @@
       <string name="intent_label">Add Bookmark</string>
     </config-file>
     <edit-config file="AndroidManifest.xml" target="/manifest/application" mode="merge">
-      <application android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" />
+      <application android:icon="@mipmap/ic_launcher" android:networkSecurityConfig="@xml/network_security_config" android:roundIcon="@mipmap/ic_launcher_round" />
     </edit-config>
     <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:name='MainActivity']" mode="merge">
       <activity android:allowBackup="false" android:fullBackupOnly="false" android:theme="@style/AppTheme" android:windowSoftInputMode="adjustPan" />
@@ -55,6 +55,7 @@
     <resource-file src="res/android/values/colors.xml" target="app/src/main/res/values/colors.xml" />
     <resource-file src="res/android/values/styles.xml" target="app/src/main/res/values/styles.xml" />
     <resource-file src="res/android/values-night/colors.xml" target="app/src/main/res/values-night/colors.xml" />
+    <resource-file src="res/android/xml/network_security_config.xml" target="app/src/main/res/xml/network_security_config.xml" />
   </platform>
   <preference name="android-minSdkVersion" value="28" />
   <preference name="android-targetSdkVersion" value="28" />
