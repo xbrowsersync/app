@@ -1,5 +1,5 @@
 import './android-app.component.scss';
-import angular from 'angular';
+import angular, { toJson } from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
@@ -7,6 +7,7 @@ import Strings from '../../../../res/strings/en.json';
 import AppMainComponent from '../../app/app-main/app-main.component';
 import { AppEventType, AppViewType } from '../../app/app.enum';
 import { AppHelperService } from '../../app/app.interface';
+import { AlertType } from '../../shared/alert/alert.enum';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkMetadata } from '../../shared/bookmark/bookmark.interface';
@@ -37,7 +38,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
   platformSvc: AndroidPlatformService;
   syncEngineSvc: SyncEngineService;
 
-  sharedBookmark: BookmarkMetadata;
+  shareMode = false;
 
   static $inject = [
     '$interval',
@@ -91,6 +92,10 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
 
     this.$interval = $interval;
     this.syncEngineSvc = SyncEngineSvc;
+
+    $scope.$on(AppEventType.ShareModeEnabled, () => {
+      this.shareMode = true;
+    });
   }
 
   checkForDarkTheme(): ng.IPromise<void> {
@@ -144,20 +149,6 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
         });
       });
     }, 1e3);
-  }
-
-  checkForSharedBookmark(): ng.IPromise<void> {
-    const bookmark = this.getSharedBookmark();
-    if (!bookmark) {
-      return this.$q.resolve();
-    }
-
-    // Set current page as shared bookmark and display bookmark panel
-    this.platformSvc.currentPage = bookmark;
-    return this.appHelperSvc.switchView({ data: { bookmark }, view: AppViewType.Bookmark }).finally(() => {
-      // Clear current page
-      this.platformSvc.currentPage = undefined;
-    });
   }
 
   executeSyncIfOnline(displayLoadingId): ng.IPromise<boolean> {
@@ -214,20 +205,45 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     });
   }
 
-  getSharedBookmark(): BookmarkMetadata {
-    if (!this.sharedBookmark) {
-      return;
-    }
+  getSharedBookmark(): ng.IPromise<BookmarkMetadata> {
+    return this.$q<any>((resolve, reject) => window.plugins.intentShim.getIntent(resolve, reject))
+      .then((intent) => {
+        if (intent?.type !== 'text/plain' || angular.isUndefined(intent?.extras)) {
+          return;
+        }
+        const intentText = intent.extras['android.intent.extra.TEXT'];
+        const intentSubject = intent.extras['android.intent.extra.SUBJECT'];
 
-    const bookmark = this.sharedBookmark;
-    const txt = document.createElement('textarea');
-    txt.innerHTML = bookmark.title ? bookmark.title.trim() : '';
-    bookmark.title = txt.value;
-    this.sharedBookmark = null;
-    return bookmark;
+        // Set shared bookmark with shared intent data
+        this.logSvc.logInfo(`Detected new intent: ${intentText}`);
+
+        // Extract url from intent
+        const url = intentText?.match(Globals.URL.ValidUrlRegex)?.find(Boolean);
+        return {
+          title: intentSubject,
+          url
+        };
+      })
+      .then((sharedBookmark) => {
+        if (angular.isUndefined(sharedBookmark)) {
+          return;
+        }
+
+        const txt = document.createElement('textarea');
+        txt.innerHTML = sharedBookmark.title ? sharedBookmark.title.trim() : '';
+        sharedBookmark.title = txt.value;
+        return sharedBookmark;
+      });
   }
 
   handleBackButton(event: Event): void {
+    // If share mode is enabled, exit app
+    if (this.shareMode) {
+      event.preventDefault();
+      this.appHelperSvc.exitApp();
+    }
+
+    // Back button action depends on current view
     const currentView = this.appHelperSvc.getCurrentView();
     if (
       currentView.view === AppViewType.Bookmark ||
@@ -243,7 +259,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     } else {
       // On main view, exit app
       event.preventDefault();
-      window.cordova.plugins.exit();
+      this.appHelperSvc.exitApp();
     }
   }
 
@@ -253,10 +269,6 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     document.addEventListener('touchstart', this.handleTouchStart, false);
     window.addEventListener('keyboardDidShow', this.handleKeyboardDidShow);
     window.addEventListener('keyboardWillHide', this.handleKeyboardWillHide);
-
-    // Check if an intent started the app and detect future shared intents
-    window.plugins.intentShim.getIntent(this.handleNewIntent, () => {});
-    window.plugins.intentShim.onIntent(this.handleNewIntent);
 
     // Enable app working in background to check for uncommitted syncs
     window.cordova.plugins.backgroundMode.setDefaults({ hidden: true, silent: true });
@@ -283,6 +295,13 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
       });
   }
 
+  handleBookmarkShared(sharedBookmark: BookmarkMetadata): void {
+    if (!angular.isUndefined(sharedBookmark)) {
+      // Set current page as shared bookmark
+      this.platformSvc.currentPage = sharedBookmark;
+    }
+  }
+
   handleKeyboardDidShow(event: any): void {
     document.body.style.height = `calc(100% - ${event.keyboardHeight}px)`;
     setTimeout(() => {
@@ -294,35 +313,16 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     document.body.style.removeProperty('height');
   }
 
-  handleNewIntent(intent: any): void {
-    if (!intent || !intent.extras) {
-      return;
-    }
-
-    this.logSvc.logInfo(`Detected new intent: ${intent.extras['android.intent.extra.TEXT']}`);
-
-    // Set shared bookmark with shared intent data
-    this.sharedBookmark = {
-      title: intent.extras['android.intent.extra.SUBJECT'],
-      url: intent.extras['android.intent.extra.TEXT']
-    };
-  }
-
   handleResume(): ng.IPromise<void> {
     // Set theme
     return this.checkForDarkTheme().then(() => {
       // Check if sync enabled and reset network disconnected flag
       this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
-        if (this.appHelperSvc.getCurrentView().view === AppViewType.Search) {
-          // Deselect bookmark
-          this.utilitySvc.broadcastEvent(AppEventType.ClearSelectedBookmark);
-        }
-
         if (!syncEnabled) {
           return;
         }
 
-        // If not online display an alert and return
+        // If not online display an alert
         if (!this.networkSvc.isNetworkConnected()) {
           this.alertSvc.setCurrentAlert({
             message: this.platformSvc.getI18nString(Strings.workingOffline_Message),
@@ -331,29 +331,43 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
           return;
         }
 
-        // Check for uncommitted syncs or sync updates
-        this.appHelperSvc
-          .getSyncQueueLength()
-          .then((syncQueueLength) => {
-            return syncQueueLength === 0 ? this.syncEngineSvc.checkForUpdates() : true;
-          })
-          .then((runSync) => {
-            if (!runSync) {
-              return;
-            }
+        // If bookmark was shared, switch to bookmark view
+        return this.getSharedBookmark().then((sharedBookmark) => {
+          if (!angular.isUndefined(sharedBookmark)) {
+            this.handleBookmarkShared(sharedBookmark);
+            return this.appHelperSvc.switchView({ view: AppViewType.Bookmark });
+          }
 
-            // Run sync
-            return this.executeSyncIfOnline('delayDisplayDialog').then(() => {
-              // Refresh search results if query not present
-              if (this.appHelperSvc.getCurrentView().view === AppViewType.Search) {
-                this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
+          // Deselect bookmark
+          if (this.appHelperSvc.getCurrentView()?.view === AppViewType.Search) {
+            this.utilitySvc.broadcastEvent(AppEventType.ClearSelectedBookmark);
+          }
+
+          // If not online return here
+          if (!this.networkSvc.isNetworkConnected()) {
+            return;
+          }
+
+          // Check for uncommitted syncs or sync updates
+          this.appHelperSvc
+            .getSyncQueueLength()
+            .then((syncQueueLength) => {
+              return syncQueueLength === 0 ? this.syncEngineSvc.checkForUpdates() : true;
+            })
+            .then((runSync) => {
+              if (!runSync) {
+                return;
               }
+
+              // Run sync
+              return this.executeSyncIfOnline('delayDisplayDialog').then(() => {
+                // Refresh search results if query not present
+                if (this.appHelperSvc.getCurrentView().view === AppViewType.Search) {
+                  this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
+                }
+              });
             });
-          })
-          .then(() => {
-            // Check if a bookmark was shared
-            return this.checkForSharedBookmark();
-          });
+        });
       });
     });
   }
@@ -379,11 +393,6 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
           const checkForAppUpdates = result[0];
           const storeContent = result[1];
           const syncEnabled = result[2];
-
-          // Prime bookmarks cache
-          if (syncEnabled) {
-            this.bookmarkHelperSvc.getCachedBookmarks();
-          }
 
           // Add useful debug info to beginning of trace log
           const debugInfo = angular.copy(storeContent) as any;
@@ -414,45 +423,55 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
             return;
           }
 
-          // If not online display an alert and return
+          // If not online display an alert
           if (!this.networkSvc.isNetworkConnected()) {
             this.alertSvc.setCurrentAlert({
               message: this.platformSvc.getI18nString(Strings.workingOffline_Message),
               title: this.platformSvc.getI18nString(Strings.workingOffline_Title)
             });
-            return;
           }
 
-          // Check for uncommitted syncs or sync updates
-          this.appHelperSvc
-            .getSyncQueueLength()
-            .then((syncQueueLength) => {
-              return syncQueueLength === 0 ? this.syncEngineSvc.checkForUpdates() : true;
-            })
-            .then((runSync) => {
-              if (!runSync) {
-                return;
-              }
+          // Check if a bookmark was shared
+          return this.getSharedBookmark().then((sharedBookmark) => {
+            if (!angular.isUndefined(sharedBookmark)) {
+              return this.handleBookmarkShared(sharedBookmark);
+            }
 
-              // Run sync
-              this.executeSyncIfOnline('delayDisplayDialog').then((isOnline) => {
-                if (isOnline === false) {
+            // Prime bookmarks cache
+            this.bookmarkHelperSvc.getCachedBookmarks();
+
+            // If not online return here
+            if (!this.networkSvc.isNetworkConnected()) {
+              return;
+            }
+
+            // Check for uncommitted syncs or sync updates
+            this.appHelperSvc
+              .getSyncQueueLength()
+              .then((syncQueueLength) => {
+                return syncQueueLength === 0 ? this.syncEngineSvc.checkForUpdates() : true;
+              })
+              .then((runSync) => {
+                if (!runSync) {
                   return;
                 }
 
-                // Refresh search results if query not present
-                if (this.appHelperSvc.getCurrentView().view === AppViewType.Search) {
+                // Run sync
+                this.executeSyncIfOnline('delayDisplayDialog').then((isOnline) => {
+                  if (isOnline === false) {
+                    return;
+                  }
+
                   // Refresh search results if query not present
                   if (this.appHelperSvc.getCurrentView().view === AppViewType.Search) {
-                    this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
+                    // Refresh search results if query not present
+                    if (this.appHelperSvc.getCurrentView().view === AppViewType.Search) {
+                      this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
+                    }
                   }
-                }
+                });
               });
-            })
-            .then(() => {
-              // Check if a bookmark was shared
-              return this.checkForSharedBookmark();
-            });
+          });
         });
     });
   }
@@ -495,23 +514,36 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
   }
 
   ngOnInit(): ng.IPromise<void> {
-    // Load i18n strings
-    return this.platformSvc
-      .initI18n()
-      .then(() => {
-        // Bind to cordova device events
-        return this.$q<void>((resolve, reject) => {
-          document.addEventListener(
-            'deviceready',
-            () => {
-              this.handleDeviceReady(resolve, reject);
-            },
-            false
-          );
-          document.addEventListener('resume', this.handleResume, false);
-        });
+    // Bind to cordova device events
+    return (
+      this.$q<void>((resolve, reject) => {
+        document.addEventListener(
+          'deviceready',
+          () => {
+            this.handleDeviceReady(resolve, reject);
+          },
+          false
+        );
+        document.addEventListener('resume', this.handleResume, false);
       })
-      .then(() => super.ngOnInit());
+        // Load i18n strings
+        .then(() => this.platformSvc.initI18n())
+        .then(() => {
+          // If bookmark was shared, switch to bookmark view
+          if (!angular.isUndefined(this.platformSvc.currentPage)) {
+            return this.appHelperSvc
+              .switchView({ view: AppViewType.Bookmark })
+              .then(() =>
+                this.$timeout(
+                  () => this.utilitySvc.broadcastEvent(AppEventType.ShareModeEnabled),
+                  Globals.InterfaceReadyTimeout
+                )
+              );
+          }
+        })
+        // Continue initialisation
+        .then(() => super.ngOnInit())
+    );
   }
 
   upgradeTo160(): ng.IPromise<void> {

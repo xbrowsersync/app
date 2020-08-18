@@ -72,8 +72,8 @@ button {
           @include spinner-colour($colour-text2-default);
 
           border-width: 0.1em;
-          height: 0.85rem;
-          width: 0.85rem;
+          height: 0.9rem;
+          width: 0.9rem;
 
           @include theme-dark {
             @include spinner-colour($colour-text2-dark);
@@ -160,9 +160,9 @@ button {
   .spinner-border-sm {
     @include spinner-colour($colour-text1-default);
 
-    height: 0.9rem;
-    margin-right: 0.2rem;
-    width: 0.9rem;
+    height: 1.05rem;
+    margin-right: 0.25rem;
+    width: 1.05rem;
 
     @include theme-dark {
       @include spinner-colour($colour-text2-dark);
@@ -181,13 +181,13 @@ button {
   cursor: pointer;
   display: inline-flex;
   font-size: 1.5rem;
-  height: 4rem;
+  height: 3.5rem;
   justify-content: center;
   overflow: hidden;
   padding: 0;
   position: relative;
   transition: color ease-in-out 0.2s;
-  width: 4rem;
+  width: 3.5rem;
   z-index: 10;
 
   @include theme-dark {

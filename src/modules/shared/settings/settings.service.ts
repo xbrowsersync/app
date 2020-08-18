@@ -18,8 +18,6 @@ export default class SettingsService {
   constructor(LogSvc: LogService, StoreSvc: StoreService) {
     this.logSvc = LogSvc;
     this.storeSvc = StoreSvc;
-
-    this.init();
   }
 
   all(): ng.IPromise<AllSettings> {
@@ -51,7 +49,10 @@ export default class SettingsService {
 
   darkModeEnabled(newValue?: boolean): ng.IPromise<boolean> {
     if (angular.isUndefined(newValue ?? undefined)) {
-      return this.storeSvc.get<boolean>(StoreKey.DarkModeEnabled);
+      return this.storeSvc.get<boolean>(StoreKey.DarkModeEnabled).then((darkModeEnabled) => {
+        this.darkMode = darkModeEnabled;
+        return darkModeEnabled;
+      });
     }
 
     return this.storeSvc.set(StoreKey.DarkModeEnabled, newValue).then(() => {
@@ -80,12 +81,6 @@ export default class SettingsService {
     return this.storeSvc.set(StoreKey.DefaultToFolderView, newValue).then(() => {
       this.logSvc.logInfo(`Folder view setting: ${newValue ? 'enabled' : 'disabled'}`);
       return newValue;
-    });
-  }
-
-  init(): void {
-    this.darkModeEnabled().then((enabled) => {
-      this.darkMode = enabled;
     });
   }
 

@@ -105,7 +105,8 @@ export default class ExceptionHandlerService {
         alertMessage.message = this.platformSvc.getI18nString(Strings.error_FailedGetPageMetadata_Message);
         break;
       case Exceptions.FailedScanException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_ScanFailed_Message);
+        alertMessage.title = this.platformSvc.getI18nString(Strings.error_ScanFailed_Title);
+        alertMessage.message = this.platformSvc.getI18nString(Strings.error_ScanFailed_Message);
         break;
       case Exceptions.FailedShareBookmarkException:
         alertMessage.title = this.platformSvc.getI18nString(Strings.error_ShareFailed_Title);

@@ -1,20 +1,11 @@
-<div class="well well-sm">
-  <h4>{{ vm.platformSvc.getI18nString(vm.strings.settings_About_Title) }}</h4>
-  <div class="panel-content">
-    <div class="form-group setting-group">
-      <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_About_AppVersion_Label) }}</label>
-      <div class="setting-value">
-        <span>{{ vm.appVersion }}</span>
-      </div>
-      <div class="buttons">
-        <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.displayReleaseNotes)">
-          {{ vm.platformSvc.getI18nString(vm.strings.button_ReleaseNotes_Label) }}
-        </button>
-        <button id="support" type="button" class="btn btn-default"
-                ng-click="vm.utilitySvc.handleEvent(vm.switchToSupportView)">
-          {{ vm.platformSvc.getI18nString(vm.strings.button_Support_Label) }}
-        </button>
-      </div>
-    </div>
-  </div>
+<div>
+  <button id="support" type="button" class="btn btn-default"
+          ng-click="vm.utilitySvc.handleEvent(vm.switchToSupportView)">
+    {{ vm.platformSvc.getI18nString(vm.strings.button_Support_Label) }}
+  </button>
+</div>
+<div>
+  {{ vm.platformSvc.getI18nString(vm.strings.settings_About_AppVersion_Label) }}
+  <a class="new-tab" href="#" title="{{ vm.platformSvc.getI18nString(vm.strings.button_ReleaseNotes_Label) }}"
+     ng-click="vm.utilitySvc.handleEvent(vm.displayReleaseNotes)">{{ vm.appVersion }}</a>
 </div>

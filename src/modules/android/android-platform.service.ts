@@ -2,7 +2,6 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import Strings from '../../../res/strings/en.json';
-import { AppEventType } from '../app/app.enum';
 import { Alert } from '../shared/alert/alert.interface';
 import AlertService from '../shared/alert/alert.service';
 import BookmarkHelperService from '../shared/bookmark/bookmark-helper/bookmark-helper.service';

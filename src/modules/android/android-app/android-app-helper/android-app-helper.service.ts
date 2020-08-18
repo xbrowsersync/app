@@ -120,6 +120,10 @@ export default class AndroidAppHelperService extends BaseAppHelperService implem
     });
   }
 
+  exitApp(): void {
+    window.cordova.plugins.exit();
+  }
+
   getCurrentSync(): ng.IPromise<Sync> {
     return this.$q.resolve(this.syncEngineSvc.getCurrentSync());
   }

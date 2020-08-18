@@ -1,3 +1,4 @@
+import './android-app-search.component.scss';
 import { Component } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import AppSearchComponent from '../../../app/app-search/app-search.component';

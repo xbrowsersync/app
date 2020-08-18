@@ -89,6 +89,10 @@ export default class AppBookmarkComponent implements OnInit {
     this.workingSvc = WorkingSvc;
   }
 
+  changesSynced(): ng.IPromise<void> {
+    return this.appHelperSvc.syncBookmarksSuccess();
+  }
+
   clearExistingTags(): void {
     this.bookmarkFormData.tags = [];
     this.bookmarkForm.$setDirty();
@@ -132,12 +136,7 @@ export default class AppBookmarkComponent implements OnInit {
         changeData: data,
         type: BookmarkChangeType.Add
       };
-      return this.appHelperSvc
-        .queueSync({
-          changeInfo,
-          type: SyncType.LocalAndRemote
-        })
-        .then(this.appHelperSvc.syncBookmarksSuccess);
+      return this.queueSync(changeInfo).then(this.changesSynced);
     });
   }
 
@@ -166,12 +165,7 @@ export default class AppBookmarkComponent implements OnInit {
       changeData: data,
       type: BookmarkChangeType.Remove
     };
-    this.appHelperSvc
-      .queueSync({
-        changeInfo,
-        type: SyncType.LocalAndRemote
-      })
-      .then(this.appHelperSvc.syncBookmarksSuccess);
+    this.queueSync(changeInfo).then(this.changesSynced);
   }
 
   descriptionChanged(): void {
@@ -214,61 +208,63 @@ export default class AppBookmarkComponent implements OnInit {
     };
   }
 
-  ngOnInit(): void {
-    this.$q<Bookmark>((resolve) => {
-      // Check if bookmark data provided via view
-      const bookmarkViewData = this.appHelperSvc.getCurrentView().data?.bookmark;
-      if (bookmarkViewData?.id) {
-        this.editMode = true;
-        return resolve(bookmarkViewData);
-      }
-
-      // Check if current url is a bookmark
-      return this.bookmarkHelperSvc.findCurrentUrlInBookmarks().then((existingBookmark) => {
-        if (existingBookmark) {
-          return resolve(existingBookmark);
-        }
-        resolve();
-      });
-    })
-      .then((bookmark) => {
-        // If bookmark was found, set view model for edit
-        if (!angular.isUndefined(bookmark ?? undefined)) {
-          this.bookmarkFormData = this.bookmarkHelperSvc.extractBookmarkMetadata(bookmark);
-          this.currentBookmarkId = bookmark.id;
-          this.editMode = angular.isNumber(this.currentBookmarkId);
-          this.originalUrl = this.bookmarkFormData.url;
-          return;
+  ngOnInit(): ng.IPromise<void> {
+    return (
+      this.$q<Bookmark>((resolve) => {
+        // Check if bookmark data provided via view
+        const bookmarkViewData = this.appHelperSvc.getCurrentView().data?.bookmark;
+        if (bookmarkViewData?.id) {
+          this.editMode = true;
+          return resolve(bookmarkViewData);
         }
 
-        // Set default bookmark form values
-        this.bookmarkFormData = { url: this.defaultProtocol };
-        this.originalUrl = this.bookmarkFormData.url;
-        this.addButtonDisabledUntilEditForm = true;
-
-        // Get current page metadata as bookmark
-        return this.getMetadataForCurrentPage()
-          .then((currentPageMetadata) => {
-            if (currentPageMetadata) {
-              this.bookmarkFormData = currentPageMetadata;
-              this.originalUrl = currentPageMetadata.url;
-              this.addButtonDisabledUntilEditForm = false;
-            }
-          })
-          .catch(this.$exceptionHandler);
+        // Check if current url is a bookmark
+        return this.bookmarkHelperSvc.findCurrentUrlInBookmarks().then((existingBookmark) => {
+          if (existingBookmark) {
+            return resolve(existingBookmark);
+          }
+          resolve(bookmarkViewData);
+        });
       })
-      // Set initial focus
-      .then(() => this.$timeout(() => this.appHelperSvc.focusOnElement('.focused')))
-      .catch((err) => {
-        if (err.url) {
-          // Set bookmark url
-          this.bookmarkFormData = {
-            url: err.url
-          } as BookmarkMetadata;
-        }
+        .then((bookmark) => {
+          // If bookmark was found, set view model for edit
+          if (!angular.isUndefined(bookmark ?? undefined)) {
+            this.bookmarkFormData = this.bookmarkHelperSvc.extractBookmarkMetadata(bookmark);
+            this.currentBookmarkId = bookmark.id;
+            this.editMode = angular.isNumber(this.currentBookmarkId);
+            this.originalUrl = this.bookmarkFormData.url;
+            return;
+          }
 
-        throw err;
-      });
+          // Set default bookmark form values
+          this.bookmarkFormData = { url: this.defaultProtocol };
+          this.originalUrl = this.bookmarkFormData.url;
+          this.addButtonDisabledUntilEditForm = true;
+
+          // Get current page metadata as bookmark
+          return this.getMetadataForCurrentPage()
+            .then((currentPageMetadata) => {
+              if (currentPageMetadata) {
+                this.bookmarkFormData = currentPageMetadata;
+                this.originalUrl = currentPageMetadata.url;
+                this.addButtonDisabledUntilEditForm = false;
+              }
+            })
+            .catch(this.$exceptionHandler);
+        })
+        // Set initial focus
+        .then(() => this.$timeout(() => this.appHelperSvc.focusOnElement('.focused')))
+        .catch((err) => {
+          if (err.url) {
+            // Set bookmark url
+            this.bookmarkFormData = {
+              url: err.url
+            } as BookmarkMetadata;
+          }
+
+          throw err;
+        })
+    );
   }
 
   populateFromUrlMetadata(): void {
@@ -288,6 +284,13 @@ export default class AppBookmarkComponent implements OnInit {
         message: this.platformSvc.getI18nString(Strings.getMetadata_Success_Message),
         type: AlertType.Information
       });
+    });
+  }
+
+  queueSync(changeInfo: BookmarkChange): ng.IPromise<any> {
+    return this.appHelperSvc.queueSync({
+      changeInfo,
+      type: SyncType.LocalAndRemote
     });
   }
 
@@ -388,12 +391,7 @@ export default class AppBookmarkComponent implements OnInit {
         changeData: data,
         type: BookmarkChangeType.Modify
       };
-      return this.appHelperSvc
-        .queueSync({
-          changeInfo,
-          type: SyncType.LocalAndRemote
-        })
-        .then(this.appHelperSvc.syncBookmarksSuccess);
+      return this.queueSync(changeInfo).then(this.changesSynced);
     });
   }
 

@@ -1,6 +1,6 @@
 import './app-search.component.scss';
 import angular from 'angular';
-import { Component, OnInit } from 'angular-ts-decorators';
+import { OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import _ from 'underscore';
 import Strings from '../../../../res/strings/en.json';

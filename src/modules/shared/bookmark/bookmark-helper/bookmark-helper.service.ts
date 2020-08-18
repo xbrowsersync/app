@@ -125,7 +125,7 @@ export default class BookmarkHelperService {
     bookmarks: Bookmark[] | NativeBookmarks.BookmarkTreeNode[],
     id: number | string
   ): Bookmark | NativeBookmarks.BookmarkTreeNode {
-    if (!bookmarks) {
+    if (angular.isUndefined(bookmarks) || angular.isUndefined(id)) {
       return;
     }
 

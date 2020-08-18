@@ -56,11 +56,10 @@
     <resource-file src="res/android/values/styles.xml" target="app/src/main/res/values/styles.xml" />
     <resource-file src="res/android/values-night/colors.xml" target="app/src/main/res/values-night/colors.xml" />
   </platform>
-  <preference name="android-minSdkVersion" value="26" />
+  <preference name="android-minSdkVersion" value="28" />
   <preference name="android-targetSdkVersion" value="28" />
   <preference name="AndroidLaunchMode" value="singleTask" />
   <preference name="BackgroundColor" value="#00000000"/>
   <preference name="DisallowOverscroll" value="true" />
-  <preference name="LoadUrlTimeoutValue" value="5000"/>
   <preference name="OverrideUserAgent" value="Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" />
 </widget>

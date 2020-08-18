@@ -41,7 +41,6 @@
       "cordova-plugin-file": {},
       "cordova-plugin-filepicker": {},
       "cordova-plugin-native-spinner": {},
-      "com-darryncampbell-cordova-plugin-intent": {},
       "cordova-plugin-nativestorage": {},
       "cordova-plugin-whitelist": {},
       "cordova-plugin-device": {},
@@ -59,7 +58,8 @@
       "cordova-plugin-exit": {},
       "cordova-plugin-globalization": {},
       "cordova-plugin-app-version": {},
-      "cordova-sqlite-evcore-extbuild-free": {}
+      "cordova-sqlite-evcore-extbuild-free": {},
+      "com-darryncampbell-cordova-plugin-intent": {}
     },
     "platforms": [
       "android"

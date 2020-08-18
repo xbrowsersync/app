@@ -35,7 +35,7 @@
         vm.nextAutoUpdate }}.</p>
         </div>
       </div>
-      <div class="form-group setting-group" ng-if="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)">
+      <div class="form-group setting-group">
         <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Label) }}</label>
         <div class="setting-value service-url">
           <a href="{{ vm.serviceInfo.url }}" class="new-tab" title="{{ vm.serviceInfo.url }}">

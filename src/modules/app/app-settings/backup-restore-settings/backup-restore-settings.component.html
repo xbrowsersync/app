@@ -94,8 +94,11 @@
           </div>
         </form>
         <div class="confirm animate-fade-in" ng-show="vm.displayRestoreConfirmation">
-          <div ng-if="vm.syncEnabled"
-               ng-bind-html="vm.platformSvc.getI18nString(vm.strings.settings_BackupRestore_ConfirmRestore_Sync_Message)">
+          <div ng-if="vm.syncEnabled && vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
+               ng-bind-html="vm.platformSvc.getI18nString(vm.strings.settings_BackupRestore_ConfirmRestore_Sync_Message_Android)">
+          </div>
+          <div ng-if="vm.syncEnabled && !vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
+               ng-bind-html="vm.platformSvc.getI18nString(vm.strings.settings_BackupRestore_ConfirmRestore_Sync_Message_Desktop)">
           </div>
           <div ng-if="!vm.syncEnabled"
                ng-bind-html="vm.platformSvc.getI18nString(vm.strings.settings_BackupRestore_ConfirmRestore_NoSync_Message)">

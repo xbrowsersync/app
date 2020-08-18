@@ -7,7 +7,6 @@ app-login {
     align-items: center;
     display: flex;
     flex-direction: column;
-    height: 100%;
     position: relative;
 
     .form-content {
@@ -60,11 +59,6 @@ app-login {
     &.active::before {
       opacity: 0;
     }
-  }
-
-  .confirm {
-    margin-bottom: 0;
-    z-index: 10;
   }
 
   .form-group {
@@ -124,7 +118,7 @@ app-login {
     background-position-y: 1rem;
     background-repeat: no-repeat;
     background-size: 11.5rem;
-    flex: 0 0 17.5rem;
+    flex: 0 1 17.5rem;
 
     @include theme-dark {
       background-image: url('../../../../res/images/logo-dark.svg');
@@ -191,13 +185,11 @@ app-login {
 
     .status-icon {
       margin-left: 0.25rem;
-      top: 0.1rem;
+      top: 0.2rem;
 
       .loading .spinner-border {
         border-color: $colour-bg3-default;
         border-right-color: transparent !important;
-        position: relative;
-        top: -0.15em;
 
         @include theme-dark {
           border-color: $colour-bg3-dark;
