@@ -102,7 +102,7 @@ export default class UtilityService {
   }
 
   getServiceUrl(): ng.IPromise<string> {
-    // Get service url from local storage
+    // Get service url from store
     return this.storeSvc.get<string>(StoreKey.ServiceUrl).then((cachedServiceUrl) => {
       // If no service url cached, use default
       return cachedServiceUrl ?? Globals.URL.DefaultServiceUrl;
@@ -368,5 +368,10 @@ export default class UtilityService {
 
     const trimmedText = `${text.substring(0, text.lastIndexOf(' ', limit))}\u2026`;
     return trimmedText;
+  }
+
+  updateServiceUrl(url: string): ng.IPromise<void> {
+    // Update service url in store
+    return this.storeSvc.set(StoreKey.ServiceUrl, url);
   }
 }

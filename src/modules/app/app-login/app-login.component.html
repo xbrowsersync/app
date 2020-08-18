@@ -332,7 +332,8 @@
     <p class="service-warning"
        ng-bind-html="vm.platformSvc.getI18nString(vm.strings.login_ConfirmUpdateService_Warning)"></p>
     <div class="buttons">
-      <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.confirmUpdateService)">
+      <button type="button" class="btn btn-default focused"
+              ng-click="vm.utilitySvc.handleEvent(vm.confirmUpdateService)">
         {{ vm.platformSvc.getI18nString(vm.strings.button_Confirm_Label) }}
       </button>
       <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.cancelUpdateService)">

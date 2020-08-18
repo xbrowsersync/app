@@ -3,7 +3,6 @@ import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
 import * as detectBrowser from 'detect-browser';
-import _ from 'underscore';
 import { Alarms, browser, Notifications } from 'webextension-polyfill-ts';
 import Strings from '../../../../res/strings/en.json';
 import { Alert } from '../../shared/alert/alert.interface';
@@ -248,25 +247,25 @@ export default class WebExtBackgroundService {
       .all([
         this.platformSvc.getAppVersion(),
         this.settingsSvc.all(),
-        this.storeSvc.get([
-          StoreKey.LastUpdated,
-          StoreKey.ServiceUrl,
-          StoreKey.SyncEnabled,
-          StoreKey.SyncId,
-          StoreKey.SyncVersion
-        ])
+        this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId, StoreKey.SyncVersion]),
+        this.utilitySvc.getServiceUrl(),
+        this.utilitySvc.isSyncEnabled()
       ])
       .then((data) => {
         const appVersion = data[0];
         const settings = data[1];
         const storeContent = data[2];
+        const serviceUrl = data[3];
+        const syncEnabled = data[4];
 
         // Add useful debug info to beginning of trace log
         const debugInfo = angular.copy(storeContent) as any;
         debugInfo.appVersion = appVersion;
         debugInfo.checkForAppUpdates = settings.checkForAppUpdates;
         debugInfo.platform = detectBrowser.detect();
+        debugInfo.serviceUrl = serviceUrl;
         debugInfo.syncBookmarksToolbar = settings.syncBookmarksToolbar;
+        debugInfo.syncEnabled = syncEnabled;
         this.logSvc.logInfo(
           Object.keys(debugInfo)
             .filter((key) => {
@@ -279,7 +278,7 @@ export default class WebExtBackgroundService {
         );
 
         // Update browser action icon
-        this.platformSvc.refreshNativeInterface(storeContent.syncEnabled);
+        this.platformSvc.refreshNativeInterface(syncEnabled);
 
         // Check for new app version after a delay
         if (settings.checkForAppUpdates) {
@@ -287,7 +286,7 @@ export default class WebExtBackgroundService {
         }
 
         // Exit if sync not enabled
-        if (!storeContent.syncEnabled) {
+        if (!syncEnabled) {
           return;
         }
 
@@ -311,7 +310,7 @@ export default class WebExtBackgroundService {
         ])
       )
       .then(() => {
-        // Get locnativeal bookmarks and save data state at install to local storage
+        // Get native bookmarks and save data state at install to store
         return this.bookmarkSvc.getNativeBookmarksAsBookmarks().then((bookmarks) => {
           const backup: InstallBackup = {
             bookmarks,

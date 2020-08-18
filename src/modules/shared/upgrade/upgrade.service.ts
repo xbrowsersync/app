@@ -5,7 +5,6 @@ import compareVersions from 'compare-versions';
 import { NotImplementedException } from '../exception/exception';
 import { PlatformUpgradeService } from '../global-shared.interface';
 import LogService from '../log/log.service';
-import { StoreKey } from '../store/store.enum';
 import StoreService from '../store/store.service';
 
 @autobind
@@ -28,8 +27,8 @@ export default class UpgradeService implements PlatformUpgradeService {
     }
 
     // Clear trace log
-    return this.storeSvc
-      .remove(StoreKey.TraceLog)
+    return this.logSvc
+      .clear()
       .then(() => {
         this.logSvc.logInfo(`Upgrading from ${oldVersion} to ${newVersion}`);
       })

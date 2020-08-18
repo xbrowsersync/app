@@ -123,9 +123,15 @@ export default class BaseAppHelperService {
   }
 
   switchToDefaultView(): ng.IPromise<void> {
-    return this.storeSvc
-      .get([StoreKey.DisplayHelp, StoreKey.DisplayPermissions, StoreKey.DisplayUpdated, StoreKey.SyncEnabled])
-      .then((storeContent) => {
+    return this.$q
+      .all([
+        this.storeSvc.get([StoreKey.DisplayHelp, StoreKey.DisplayPermissions, StoreKey.DisplayUpdated]),
+        this.utilitySvc.isSyncEnabled()
+      ])
+      .then((data) => {
+        const storeContent = data[0];
+        const syncEnabled = data[1];
+
         switch (true) {
           case storeContent.displayUpdated:
             return AppViewType.Updated;
@@ -133,7 +139,7 @@ export default class BaseAppHelperService {
             return AppViewType.Permissions;
           case storeContent.displayHelp:
             return AppViewType.Help;
-          case storeContent.syncEnabled:
+          case syncEnabled:
             return AppViewType.Search;
           default:
             return AppViewType.Login;
@@ -184,7 +190,7 @@ export default class BaseAppHelperService {
   updateServiceUrl(newServiceUrl: string): ng.IPromise<ApiServiceInfo> {
     // Update service url in store and refresh service info
     const url = newServiceUrl.replace(/\/$/, '');
-    return this.storeSvc.set(StoreKey.ServiceUrl, url).then(() => {
+    return this.utilitySvc.updateServiceUrl(url).then(() => {
       this.logSvc.logInfo(`Service url changed to: ${url}`);
       return this.formatServiceInfo();
     });

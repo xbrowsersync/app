@@ -245,7 +245,7 @@ export default class BookmarkHelperService {
   }
 
   getCachedBookmarks(): ng.IPromise<Bookmark[]> {
-    // Get cached encrypted bookmarks from local storage
+    // Get cached encrypted bookmarks from store
     return this.storeSvc.get<string>(StoreKey.Bookmarks).then((encryptedBookmarksFromStore) => {
       // Return unencrypted cached bookmarks from memory if encrypted bookmarks
       // in storage match cached encrypted bookmarks in memory

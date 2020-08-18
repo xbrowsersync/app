@@ -48,7 +48,7 @@ export default class AndroidUpgradeService extends UpgradeService implements Pla
   }
 
   upgradeTo160(): ng.IPromise<void> {
-    // Convert local storage items to IndexedDB
+    // Convert native storage items to IndexedDB
     return this.getAllFromNativeStorage()
       .then((cachedData) => {
         if (!cachedData || Object.keys(cachedData).length === 0) {

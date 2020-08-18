@@ -215,7 +215,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
   }
 
   displayRevertPanel(): void {
-    // Retrieve install backup from local storage
+    // Retrieve install backup from store
     this.storeSvc.get<any>(StoreKey.InstallBackup).then((installBackup) => {
       this.$timeout(() => {
         if (!installBackup) {
@@ -387,14 +387,15 @@ export default class BackupRestoreSettingsComponent implements OnInit {
     return this.$q
       .all([
         this.getBookmarksForExport(),
-        this.storeSvc.get([StoreKey.SyncEnabled, StoreKey.SyncId]),
-        this.utilitySvc.getServiceUrl()
+        this.storeSvc.get<string>(StoreKey.SyncId),
+        this.utilitySvc.getServiceUrl(),
+        this.utilitySvc.isSyncEnabled()
       ])
       .then((data) => {
         const bookmarksData = data[0];
-        const syncEnabled = data[1].syncEnabled;
-        const syncId = data[1].syncId;
+        const syncId = data[1];
         const serviceUrl = data[2];
+        const syncEnabled = data[3];
         const backupData = this.backupRestoreSvc.createBackupData(
           bookmarksData,
           syncEnabled ? syncId : null,

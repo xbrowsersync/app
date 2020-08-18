@@ -40,7 +40,7 @@ export default class CryptoService {
       return this.$q.resolve('');
     }
 
-    // Ensure both id and password are in local storage
+    // Ensure both id and password are in store
     return this.storeSvc
       .get([StoreKey.Password, StoreKey.SyncId])
       .then((storeContent) => {
@@ -54,7 +54,7 @@ export default class CryptoService {
           throw new Exceptions.PasswordRemovedException();
         }
 
-        // Retrieve the hashed password from local storage and convert to bytes
+        // Convert hashed password to bytes
         const keyData = base64js.toByteArray(password);
 
         // Convert base64 encoded encrypted data to bytes and extract initialization vector
@@ -91,7 +91,7 @@ export default class CryptoService {
       return this.$q.resolve('');
     }
 
-    // Ensure both id and password are in local storage
+    // Ensure both id and password are in store
     return this.storeSvc
       .get([StoreKey.Password, StoreKey.SyncId])
       .then((storeContent) => {
@@ -105,7 +105,7 @@ export default class CryptoService {
           throw new Exceptions.PasswordRemovedException();
         }
 
-        // Retrieve the hashed password from local storage and convert to bytes
+        // Convert hashed password to bytes
         const keyData = base64js.toByteArray(password);
 
         // Generate a random 16 byte initialization vector

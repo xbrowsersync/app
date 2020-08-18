@@ -130,7 +130,8 @@ export default class AppLoginComponent implements OnInit {
         return this.$q.all([this.storeSvc.remove(StoreKey.SyncId), this.storeSvc.remove(StoreKey.Password)]);
       })
       .then(() => {
-        // Update view
+        // Update view model
+        this.displayUpdateServiceConfirmation = false;
         this.displayUpdateServicePanel = false;
         this.password = undefined;
         this.passwordComplexity = undefined;
@@ -476,19 +477,12 @@ export default class AppLoginComponent implements OnInit {
         return;
       }
 
-      // Retrieve new service status
+      // Retrieve new service status and update view model
       return this.appHelperSvc.formatServiceInfo(newServiceInfo).then((serviceInfo) => {
-        // Set view model
         Object.assign(this.newServiceInfo, serviceInfo);
-
-        // Display confirmation panel
         this.displayUpdateServiceConfirmation = true;
-
-        // Set service message links to open in new tabs
         this.appHelperSvc.attachClickEventsToNewTabLinks(document.querySelector('.service-message'));
-
-        // Focus on first button
-        this.appHelperSvc.focusOnElement('.update-service-panel .confirm .buttons > button');
+        this.appHelperSvc.focusOnElement('.focused');
       });
     });
   }

@@ -5,8 +5,7 @@ import autobind from 'autobind-decorator';
 import Strings from '../../../../../res/strings/en.json';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { LogLevel } from '../../../shared/log/log.enum';
-import { StoreKey } from '../../../shared/store/store.enum';
-import { TraceLogItem } from '../../../shared/store/store.interface';
+import LogService from '../../../shared/log/log.service';
 import StoreService from '../../../shared/store/store.service';
 import UtilityService from '../../../shared/utility/utility.service';
 import { AppViewType } from '../../app.enum';
@@ -20,8 +19,8 @@ import { AppHelperService } from '../../app.interface';
 })
 export default class IssuesSettingsComponent implements OnInit {
   appHelperSvc: AppHelperService;
+  logSvc: LogService;
   platformSvc: PlatformService;
-  storeSvc: StoreService;
   utilitySvc: UtilityService;
 
   downloadLogCompletedMessage: string;
@@ -29,22 +28,22 @@ export default class IssuesSettingsComponent implements OnInit {
   savingLog = false;
   strings = Strings;
 
-  static $inject = ['AppHelperService', 'PlatformService', 'StoreService', 'UtilityService'];
+  static $inject = ['AppHelperService', 'LogService', 'PlatformService', 'UtilityService'];
   constructor(
     AppHelperSvc: AppHelperService,
+    LogSvc: LogService,
     PlatformSvc: PlatformService,
-    StoreSvc: StoreService,
     UtilitySvc: UtilityService
   ) {
     this.appHelperSvc = AppHelperSvc;
+    this.logSvc = LogSvc;
     this.platformSvc = PlatformSvc;
-    this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
   }
 
   clearLog(): void {
-    // Clear trace log
-    this.storeSvc.remove(StoreKey.TraceLog).then(() => {
+    // Clear trace log and update view model
+    this.logSvc.clear().then(() => {
       this.logSize = 0;
     });
   }
@@ -67,7 +66,7 @@ export default class IssuesSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     // Calculate log size and initialise view model values
-    this.storeSvc.get<TraceLogItem[]>(StoreKey.TraceLog).then((traceLogItems) => {
+    this.logSvc.getLogEntries().then((traceLogItems) => {
       if (angular.isUndefined(traceLogItems ?? undefined)) {
         this.logSize = 0;
         return;
@@ -77,9 +76,8 @@ export default class IssuesSettingsComponent implements OnInit {
   }
 
   saveLogFile(): ng.IPromise<void> {
-    // Retrieve trace log items
-    return this.storeSvc
-      .get<TraceLogItem[]>(StoreKey.TraceLog)
+    return this.logSvc
+      .getLogEntries()
       .then((traceLogItems) => {
         // Convert trace log items into string array
         const log = traceLogItems.map((traceLogItem) => {

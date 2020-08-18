@@ -44,6 +44,14 @@ export default class LogService {
     this.logItemQueue.push(logItem);
   }
 
+  getLogEntries(): ng.IPromise<TraceLogItem[]> {
+    return this.storeSvc.get<TraceLogItem[]>(StoreKey.TraceLog);
+  }
+
+  clear(): ng.IPromise<void> {
+    return this.storeSvc.remove(StoreKey.TraceLog);
+  }
+
   logError(error: Exception, message?: string): ng.IPromise<void> {
     // Return if no error supplied or has already been logged
     if (error.logged) {
