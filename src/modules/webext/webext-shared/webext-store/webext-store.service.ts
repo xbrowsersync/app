@@ -1,8 +1,8 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import * as idbKeyval from 'idb-keyval';
-import { StoreKey } from '../../shared/store/store.enum';
-import { PlatformStoreService, StoreContent, TraceLogItem } from '../../shared/store/store.interface';
+import { StoreKey } from '../../../shared/store/store.enum';
+import { PlatformStoreService, StoreContent, TraceLogItem } from '../../../shared/store/store.interface';
 
 @autobind
 @Injectable('PlatformStoreService')

@@ -1,8 +1,8 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { BookmarkMappingNotFoundException } from '../../shared/exception/exception';
-import { StoreKey } from '../../shared/store/store.enum';
-import StoreService from '../../shared/store/store.service';
+import { BookmarkMappingNotFoundException } from '../../../shared/exception/exception';
+import { StoreKey } from '../../../shared/store/store.enum';
+import StoreService from '../../../shared/store/store.service';
 import { BookmarkIdMapping } from './bookmark-id-mapper.interface';
 
 @autobind

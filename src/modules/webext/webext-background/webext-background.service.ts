@@ -21,9 +21,10 @@ import StoreService from '../../shared/store/store.service';
 import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
 import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync } from '../../shared/sync/sync.interface';
+import UpgradeService from '../../shared/upgrade/upgrade.service';
 import UtilityService from '../../shared/utility/utility.service';
-import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
-import ChromiumBookmarkService from '../chromium/chromium-bookmark/chromium-bookmark.service';
+import ChromiumBookmarkService from '../chromium/chromium-shared/chromium-bookmark/chromium-bookmark.service';
+import BookmarkIdMapperService from '../webext-shared/bookmark-id-mapper/bookmark-id-mapper.service';
 import { InstallBackup } from '../webext.interface';
 
 @autobind
@@ -41,6 +42,7 @@ export default class WebExtBackgroundService {
   settingsSvc: SettingsService;
   storeSvc: StoreService;
   syncEngineSvc: SyncEngineService;
+  upgradeSvc: UpgradeService;
   utilitySvc: UtilityService;
 
   notificationClickHandlers: any[] = [];
@@ -58,6 +60,7 @@ export default class WebExtBackgroundService {
     'SettingsService',
     'StoreService',
     'SyncEngineService',
+    'UpgradeService',
     'UtilityService'
   ];
   constructor(
@@ -73,6 +76,7 @@ export default class WebExtBackgroundService {
     SettingsSvc: SettingsService,
     StoreSvc: StoreService,
     SyncEngineSvc: SyncEngineService,
+    UpgradeSvc: UpgradeService,
     UtilitySvc: UtilityService
   ) {
     this.$q = $q;
@@ -87,6 +91,7 @@ export default class WebExtBackgroundService {
     this.settingsSvc = SettingsSvc;
     this.storeSvc = StoreSvc;
     this.syncEngineSvc = SyncEngineSvc;
+    this.upgradeSvc = UpgradeSvc;
     this.utilitySvc = UtilitySvc;
 
     browser.alarms.onAlarm.addListener(this.onAlarm);
@@ -452,62 +457,16 @@ export default class WebExtBackgroundService {
   }
 
   upgradeExtension(oldVersion: string, newVersion: string): ng.IPromise<void> {
-    return this.storeSvc
-      .remove(StoreKey.TraceLog)
-      .then(() => {
-        this.logSvc.logInfo(`Upgrading from ${oldVersion} to ${newVersion}`);
-      })
-      .then(() => {
-        if (compareVersions(oldVersion, newVersion)) {
-          switch (true) {
-            case newVersion.indexOf('1.6.0') === 0:
-              return this.upgradeTo160();
-            default:
-          }
-        }
-      })
-      .then(() => {
-        return this.platformSvc.getAppVersion().then((appVersion) => {
-          // Display alert and set update panel to show
-          const alert: Alert = {
-            message: this.platformSvc.getI18nString(Strings.appUpdated_Message),
-            title: `${this.platformSvc.getI18nString(Strings.appUpdated_Title)} ${appVersion}`
-          };
-          this.displayAlert(alert, Globals.ReleaseNotesUrlStem + appVersion);
-          return this.storeSvc.set(StoreKey.DisplayUpdated, true);
-        });
+    return this.upgradeSvc.upgrade(oldVersion, newVersion).then(() => {
+      return this.platformSvc.getAppVersion().then((appVersion) => {
+        // Display alert and set update panel to show
+        const alert: Alert = {
+          message: this.platformSvc.getI18nString(Strings.appUpdated_Message),
+          title: `${this.platformSvc.getI18nString(Strings.appUpdated_Title)} ${appVersion}`
+        };
+        this.displayAlert(alert, Globals.ReleaseNotesUrlStem + appVersion);
+        return this.storeSvc.set(StoreKey.DisplayUpdated, true);
       });
-  }
-
-  upgradeTo160(): ng.IPromise<void> {
-    // Convert local storage items to IndexedDB
-    return browser.storage.local
-      .get()
-      .then((cachedData) => {
-        if (!cachedData || Object.keys(cachedData).length === 0) {
-          return;
-        }
-
-        return this.$q.all(
-          Object.keys(cachedData).map((key) => {
-            return this.storeSvc.set(key, cachedData[key]);
-          })
-        );
-      })
-      .then(() => {
-        return browser.storage.local.clear();
-      })
-      .then(() => {
-        // If sync enabled, create id mappings
-        return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
-          if (!syncEnabled) {
-            return;
-          }
-          return this.bookmarkHelperSvc.getCachedBookmarks().then((cachedBookmarks) => {
-            return this.bookmarkSvc.buildIdMappings(cachedBookmarks);
-          });
-        });
-      })
-      .then(() => {});
+    });
   }
 }

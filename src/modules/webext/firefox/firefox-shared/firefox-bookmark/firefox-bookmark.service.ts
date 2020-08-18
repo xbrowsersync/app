@@ -2,7 +2,7 @@ import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { throttle } from 'underscore';
 import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
-import { BookmarkChangeType, BookmarkContainer } from '../../../shared/bookmark/bookmark.enum';
+import { BookmarkChangeType, BookmarkContainer } from '../../../../shared/bookmark/bookmark.enum';
 import {
   AddNativeBookmarkChangeData,
   Bookmark,
@@ -10,10 +10,10 @@ import {
   BookmarkService,
   ModifyNativeBookmarkChangeData,
   MoveNativeBookmarkChangeData
-} from '../../../shared/bookmark/bookmark.interface';
-import * as Exceptions from '../../../shared/exception/exception';
-import { WebpageMetadata } from '../../../shared/global-shared.interface';
-import WebExtBookmarkService from '../../webext-bookmark/webext-bookmark.service';
+} from '../../../../shared/bookmark/bookmark.interface';
+import * as Exceptions from '../../../../shared/exception/exception';
+import { WebpageMetadata } from '../../../../shared/global-shared.interface';
+import WebExtBookmarkService from '../../../webext-shared/webext-bookmark/webext-bookmark.service';
 
 @autobind
 @Injectable('BookmarkService')

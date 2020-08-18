@@ -32,6 +32,10 @@ export interface PlatformService {
   urlIsSupported: (url: string) => boolean;
 }
 
+export interface PlatformUpgradeService {
+  upgradeTo160: () => ng.IPromise<void>;
+}
+
 export interface Url {
   protocol: string;
   host: string;

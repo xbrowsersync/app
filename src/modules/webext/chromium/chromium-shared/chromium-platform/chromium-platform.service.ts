@@ -1,7 +1,7 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { PlatformService } from '../../../shared/global-shared.interface';
-import WebExtPlatformService from '../../webext-platform/webext-platform.service';
+import { PlatformService } from '../../../../shared/global-shared.interface';
+import WebExtPlatformService from '../../../webext-shared/webext-platform/webext-platform.service';
 
 @autobind
 @Injectable('PlatformService')

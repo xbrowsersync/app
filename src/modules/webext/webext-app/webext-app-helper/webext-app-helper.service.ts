@@ -16,7 +16,7 @@ import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.serv
 import { Sync } from '../../../shared/sync/sync.interface';
 import UtilityService from '../../../shared/utility/utility.service';
 import WorkingService from '../../../shared/working/working.service';
-import WebExtPlatformService from '../../webext-platform/webext-platform.service';
+import WebExtPlatformService from '../../webext-shared/webext-platform/webext-platform.service';
 
 @autobind
 export default class WebExtAppHelperService extends BaseAppHelperService implements AppHelperService {

@@ -1,8 +1,8 @@
 import angular from 'angular';
 import autobind from 'autobind-decorator';
 import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
-import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import { BookmarkChangeType, BookmarkContainer } from '../../shared/bookmark/bookmark.enum';
+import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkChangeType, BookmarkContainer } from '../../../shared/bookmark/bookmark.enum';
 import {
   AddNativeBookmarkChangeData,
   Bookmark,
@@ -12,18 +12,18 @@ import {
   ModifyNativeBookmarkChangeData,
   MoveNativeBookmarkChangeData,
   RemoveNativeBookmarkChangeData
-} from '../../shared/bookmark/bookmark.interface';
-import * as Exceptions from '../../shared/exception/exception';
-import Globals from '../../shared/global-shared.constants';
-import { MessageCommand } from '../../shared/global-shared.enum';
-import { PlatformService, WebpageMetadata } from '../../shared/global-shared.interface';
-import LogService from '../../shared/log/log.service';
-import SettingsService from '../../shared/settings/settings.service';
-import StoreService from '../../shared/store/store.service';
-import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
-import { SyncType } from '../../shared/sync/sync.enum';
-import { Sync } from '../../shared/sync/sync.interface';
-import UtilityService from '../../shared/utility/utility.service';
+} from '../../../shared/bookmark/bookmark.interface';
+import * as Exceptions from '../../../shared/exception/exception';
+import Globals from '../../../shared/global-shared.constants';
+import { MessageCommand } from '../../../shared/global-shared.enum';
+import { PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
+import LogService from '../../../shared/log/log.service';
+import SettingsService from '../../../shared/settings/settings.service';
+import StoreService from '../../../shared/store/store.service';
+import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
+import { SyncType } from '../../../shared/sync/sync.enum';
+import { Sync } from '../../../shared/sync/sync.interface';
+import UtilityService from '../../../shared/utility/utility.service';
 import { BookmarkIdMapping } from '../bookmark-id-mapper/bookmark-id-mapper.interface';
 import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
 

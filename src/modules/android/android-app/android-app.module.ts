@@ -2,9 +2,7 @@ import 'angular-hammer';
 import angular from 'angular';
 import { NgModule } from 'angular-ts-decorators';
 import AppModule from '../../app/app.module';
-import AndroidBookmarkService from '../android-bookmark/android-bookmark.service';
-import AndroidPlatformService from '../android-platform.service';
-import AndroidStoreService from '../android-store/android-store.service';
+import AndroidSharedModule from '../android-shared/android-shared.module';
 import AndroidAppAlertComponent from './android-app-alert/android-app-alert.component';
 import AndroidAppBookmarkComponent from './android-app-bookmark/android-app-bookmark.component';
 import AndroidAppHelperService from './android-app-helper/android-app-helper.service';
@@ -23,8 +21,8 @@ import AndroidAppComponent from './android-app.component';
     AndroidAppWorkingComponent
   ],
   id: 'AndroidAppModule',
-  imports: [AppModule, 'hmTouchEvents'],
-  providers: [AndroidAppHelperService, AndroidBookmarkService, AndroidPlatformService, AndroidStoreService]
+  imports: [AndroidSharedModule, AppModule, 'hmTouchEvents'],
+  providers: [AndroidAppHelperService]
 })
 export default class AndroidAppModule {}
 

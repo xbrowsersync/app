@@ -1,21 +1,21 @@
 import angular from 'angular';
 import autobind from 'autobind-decorator';
 import { browser, Tabs } from 'webextension-polyfill-ts';
-import Strings from '../../../../res/strings/en.json';
-import AlertService from '../../shared/alert/alert.service';
-import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import * as Exceptions from '../../shared/exception/exception';
-import Globals from '../../shared/global-shared.constants';
-import { MessageCommand } from '../../shared/global-shared.enum';
-import { I18nString, Message, PlatformService, WebpageMetadata } from '../../shared/global-shared.interface';
-import LogService from '../../shared/log/log.service';
-import StoreService from '../../shared/store/store.service';
-import { SyncType } from '../../shared/sync/sync.enum';
-import { Sync } from '../../shared/sync/sync.interface';
-import UtilityService from '../../shared/utility/utility.service';
-import WorkingService from '../../shared/working/working.service';
+import Strings from '../../../../../res/strings/en.json';
+import AlertService from '../../../shared/alert/alert.service';
+import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import * as Exceptions from '../../../shared/exception/exception';
+import Globals from '../../../shared/global-shared.constants';
+import { MessageCommand } from '../../../shared/global-shared.enum';
+import { I18nString, Message, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
+import LogService from '../../../shared/log/log.service';
+import StoreService from '../../../shared/store/store.service';
+import { SyncType } from '../../../shared/sync/sync.enum';
+import { Sync } from '../../../shared/sync/sync.interface';
+import UtilityService from '../../../shared/utility/utility.service';
+import WorkingService from '../../../shared/working/working.service';
+import WebExtBackgroundService from '../../webext-background/webext-background.service';
 import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
-import WebExtBackgroundService from '../webext-background/webext-background.service';
 
 @autobind
 export default class WebExtPlatformService implements PlatformService {

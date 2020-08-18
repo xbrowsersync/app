@@ -1,5 +1,5 @@
 import './android-app.component.scss';
-import angular, { toJson } from 'angular';
+import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
@@ -7,7 +7,6 @@ import Strings from '../../../../res/strings/en.json';
 import AppMainComponent from '../../app/app-main/app-main.component';
 import { AppEventType, AppViewType } from '../../app/app.enum';
 import { AppHelperService } from '../../app/app.interface';
-import { AlertType } from '../../shared/alert/alert.enum';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkMetadata } from '../../shared/bookmark/bookmark.interface';
@@ -20,9 +19,10 @@ import SettingsService from '../../shared/settings/settings.service';
 import { StoreKey } from '../../shared/store/store.enum';
 import StoreService from '../../shared/store/store.service';
 import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
+import UpgradeService from '../../shared/upgrade/upgrade.service';
 import UtilityService from '../../shared/utility/utility.service';
 import WorkingService from '../../shared/working/working.service';
-import AndroidPlatformService from '../android-platform.service';
+import AndroidPlatformService from '../android-shared/android-platform/android-platform.service';
 import AndroidAppHelperService from './android-app-helper/android-app-helper.service';
 import { AndroidAlert } from './android-app.interface';
 
@@ -37,6 +37,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
   appHelperSvc: AndroidAppHelperService;
   platformSvc: AndroidPlatformService;
   syncEngineSvc: SyncEngineService;
+  upgradeSvc: UpgradeService;
 
   shareMode = false;
 
@@ -54,6 +55,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     'SettingsService',
     'StoreService',
     'SyncEngineService',
+    'UpgradeService',
     'UtilityService',
     'WorkingService'
   ];
@@ -71,6 +73,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     SettingsSvc: SettingsService,
     StoreSvc: StoreService,
     SyncEngineSvc: SyncEngineService,
+    UpgradeSvc: UpgradeService,
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
   ) {
@@ -92,6 +95,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
 
     this.$interval = $interval;
     this.syncEngineSvc = SyncEngineSvc;
+    this.upgradeSvc = UpgradeSvc;
 
     $scope.$on(AppEventType.ShareModeEnabled, () => {
       this.shareMode = true;
@@ -164,44 +168,6 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     // Sync bookmarks
     return this.platformSvc.executeSync(false, displayLoadingId).then(() => {
       return true;
-    });
-  }
-
-  getAllFromNativeStorage(): ng.IPromise<any> {
-    return this.$q<any>((resolve, reject) => {
-      const nativeStorageItems: any = {};
-
-      const failure = (err = new Error()) => {
-        if ((err as any).code === 2) {
-          // Item not found
-          return resolve(null);
-        }
-        reject(new Exceptions.FailedLocalStorageException(undefined, err));
-      };
-
-      const success = (keys: string[]) => {
-        this.$q
-          .all(
-            keys.map((key) => {
-              return this.$q((resolveGetItem, rejectGetItem) => {
-                window.NativeStorage.getItem(
-                  key,
-                  (result: any) => {
-                    nativeStorageItems[key] = result;
-                    resolveGetItem();
-                  },
-                  rejectGetItem
-                );
-              });
-            })
-          )
-          .then(() => {
-            resolve(nativeStorageItems);
-          })
-          .catch(failure);
-      };
-
-      window.NativeStorage.keys(success, failure);
     });
   }
 
@@ -491,26 +457,11 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
       return this.$q.resolve();
     }
 
-    // Clear trace log
-    return this.storeSvc
-      .remove(StoreKey.TraceLog)
-      .then(() => {
-        this.logSvc.logInfo(`Upgrading from ${oldVersion} to ${newVersion}`);
-      })
-      .then(() => {
-        if (compareVersions(oldVersion, newVersion)) {
-          switch (true) {
-            case newVersion.indexOf('1.6.0') === 0:
-              return this.upgradeTo160();
-            default:
-          }
-        }
-      })
-      .then(() => {
-        return this.$q
-          .all([this.storeSvc.set(StoreKey.AppVersion, newVersion), this.storeSvc.set(StoreKey.DisplayUpdated, true)])
-          .then(() => {});
-      });
+    return this.upgradeSvc.upgrade(oldVersion, newVersion).then(() => {
+      return this.$q
+        .all([this.storeSvc.set(StoreKey.AppVersion, newVersion), this.storeSvc.set(StoreKey.DisplayUpdated, true)])
+        .then(() => {});
+    });
   }
 
   ngOnInit(): ng.IPromise<void> {
@@ -544,25 +495,6 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
         // Continue initialisation
         .then(() => super.ngOnInit())
     );
-  }
-
-  upgradeTo160(): ng.IPromise<void> {
-    // Convert local storage items to IndexedDB
-    return this.getAllFromNativeStorage()
-      .then((cachedData) => {
-        if (!cachedData || Object.keys(cachedData).length === 0) {
-          return;
-        }
-
-        return this.$q.all(
-          Object.keys(cachedData).map((key) => {
-            return this.storeSvc.set(key, cachedData[key]);
-          })
-        );
-      })
-      .then(() => {
-        return window.NativeStorage.clear();
-      });
   }
 
   workingCancelAction(): ng.IPromise<void> {

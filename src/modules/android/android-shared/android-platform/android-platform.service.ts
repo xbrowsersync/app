@@ -1,25 +1,25 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../res/strings/en.json';
-import { Alert } from '../shared/alert/alert.interface';
-import AlertService from '../shared/alert/alert.service';
-import BookmarkHelperService from '../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import { BookmarkChangeType } from '../shared/bookmark/bookmark.enum';
-import { BookmarkMetadata } from '../shared/bookmark/bookmark.interface';
-import * as Exceptions from '../shared/exception/exception';
-import { ExceptionHandler } from '../shared/exception/exception.interface';
-import Globals from '../shared/global-shared.constants';
-import { MessageCommand } from '../shared/global-shared.enum';
-import { I18nString, PlatformService, WebpageMetadata } from '../shared/global-shared.interface';
-import LogService from '../shared/log/log.service';
-import NetworkService from '../shared/network/network.service';
-import StoreService from '../shared/store/store.service';
-import SyncEngineService from '../shared/sync/sync-engine/sync-engine.service';
-import { Sync } from '../shared/sync/sync.interface';
-import UtilityService from '../shared/utility/utility.service';
-import { WorkingContext } from '../shared/working/working.enum';
-import WorkingService from '../shared/working/working.service';
+import Strings from '../../../../../res/strings/en.json';
+import { Alert } from '../../../shared/alert/alert.interface';
+import AlertService from '../../../shared/alert/alert.service';
+import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkChangeType } from '../../../shared/bookmark/bookmark.enum';
+import { BookmarkMetadata } from '../../../shared/bookmark/bookmark.interface';
+import * as Exceptions from '../../../shared/exception/exception';
+import { ExceptionHandler } from '../../../shared/exception/exception.interface';
+import Globals from '../../../shared/global-shared.constants';
+import { MessageCommand } from '../../../shared/global-shared.enum';
+import { I18nString, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
+import LogService from '../../../shared/log/log.service';
+import NetworkService from '../../../shared/network/network.service';
+import StoreService from '../../../shared/store/store.service';
+import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
+import { Sync } from '../../../shared/sync/sync.interface';
+import UtilityService from '../../../shared/utility/utility.service';
+import { WorkingContext } from '../../../shared/working/working.enum';
+import WorkingService from '../../../shared/working/working.service';
 
 @autobind
 @Injectable('PlatformService')

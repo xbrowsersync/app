@@ -7,7 +7,7 @@ import AlertService from '../../../shared/alert/alert.service';
 import { AndroidException } from '../../../shared/exception/exception';
 import { ExceptionHandler } from '../../../shared/exception/exception.interface';
 import Globals from '../../../shared/global-shared.constants';
-import AndroidPlatformService from '../../android-platform.service';
+import AndroidPlatformService from '../../android-shared/android-platform/android-platform.service';
 import { AndroidAlert } from '../android-app.interface';
 
 @autobind

@@ -14,7 +14,7 @@ import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.serv
 import { Sync } from '../../../shared/sync/sync.interface';
 import UtilityService from '../../../shared/utility/utility.service';
 import WorkingService from '../../../shared/working/working.service';
-import AndroidPlatformService from '../../android-platform.service';
+import AndroidPlatformService from '../../android-shared/android-platform/android-platform.service';
 
 @autobind
 @Injectable('AppHelperService')

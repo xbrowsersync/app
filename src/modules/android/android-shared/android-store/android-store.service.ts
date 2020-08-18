@@ -1,9 +1,9 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import * as Exceptions from '../../shared/exception/exception';
-import { StoreKey } from '../../shared/store/store.enum';
-import { PlatformStoreService, StoreContent, TraceLogItem } from '../../shared/store/store.interface';
+import * as Exceptions from '../../../shared/exception/exception';
+import { StoreKey } from '../../../shared/store/store.enum';
+import { PlatformStoreService, StoreContent, TraceLogItem } from '../../../shared/store/store.interface';
 import { NativeStorageError, Table, TraceLogColumn } from './android-store.enum';
 
 @autobind

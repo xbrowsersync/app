@@ -24,7 +24,7 @@ import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.serv
 import { SyncType } from '../../../shared/sync/sync.enum';
 import UtilityService from '../../../shared/utility/utility.service';
 import WorkingService from '../../../shared/working/working.service';
-import AndroidPlatformService from '../../android-platform.service';
+import AndroidPlatformService from '../../android-shared/android-platform/android-platform.service';
 import AndroidAppHelperService from '../android-app-helper/android-app-helper.service';
 
 @autobind

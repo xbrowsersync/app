@@ -1,6 +1,6 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { Bookmark, BookmarkService } from '../../shared/bookmark/bookmark.interface';
+import { Bookmark, BookmarkService } from '../../../shared/bookmark/bookmark.interface';
 
 @autobind
 @Injectable('BookmarkService')
