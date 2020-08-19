@@ -2,7 +2,6 @@ import './backup-restore-settings.component.scss';
 import angular from 'angular';
 import { Component, OnInit, ViewParent } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import { AlertType } from '../../../shared/alert/alert.enum';
 import AlertService from '../../../shared/alert/alert.service';
 import { ApiService } from '../../../shared/api/api.interface';
@@ -30,6 +29,8 @@ import AppSettingsComponent from '../app-settings.component';
   template: require('./backup-restore-settings.component.html')
 })
 export default class BackupRestoreSettingsComponent implements OnInit {
+  Strings = require('../../../../../res/strings/en.json');
+
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
@@ -59,7 +60,6 @@ export default class BackupRestoreSettingsComponent implements OnInit {
   revertConfirmationMessage: string;
   revertUnavailable = false;
   savingBackup = false;
-  strings = Strings;
   validatingRestoreData = false;
 
   static $inject = [
@@ -149,8 +149,8 @@ export default class BackupRestoreSettingsComponent implements OnInit {
     if (!this.dataToRestore) {
       // Display alert
       this.alertSvc.setCurrentAlert({
-        message: this.platformSvc.getI18nString(Strings.error_NoDataToRestore_Message),
-        title: this.platformSvc.getI18nString(Strings.error_NoDataToRestore_Title),
+        message: this.platformSvc.getI18nString(this.Strings.Exception.NoDataToRestore_Message),
+        title: this.platformSvc.getI18nString(this.Strings.Exception.NoDataToRestore_Title),
         type: AlertType.Error
       });
       return;
@@ -206,7 +206,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
     this.restoreForm.dataToRestore.$setValidity('InvalidData', true);
 
     // Focus on restore textarea
-    if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
+    if (!this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
       this.$timeout(() => {
         (document.querySelector('#restoreForm textarea') as HTMLTextAreaElement).select();
       });
@@ -226,7 +226,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
         if (installBackupObj?.date && installBackupObj?.bookmarks) {
           const date = new Date(installBackupObj.date);
           const confirmationMessage = this.platformSvc.getI18nString(
-            Strings.settings_BackupRestore_Revert_Confirmation_Message
+            this.Strings.View.Settings.BackupRestore.Revert.Confirm
           );
           this.revertConfirmationMessage = confirmationMessage.replace('{date}', date.toLocaleDateString());
           this.displayRevertConfirmation = true;
@@ -273,7 +273,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     // Set backup file change event for mobile platforms
-    if (this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
+    if (this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
       document.getElementById('backupFile').addEventListener('change', this.backupFileChanged, false);
     }
 
@@ -371,7 +371,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
     this.displayRestoreForm = false;
     this.dataToRestore = undefined;
     this.restoreCompletedMessage = this.platformSvc.getI18nString(
-      Strings.settings_BackupRestore_RestoreSuccess_Message
+      this.Strings.View.Settings.BackupRestore.Restore.Done
     );
 
     // Refresh data usage

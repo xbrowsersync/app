@@ -253,6 +253,8 @@ app-login {
   }
 
   .well {
+    margin-bottom: 0;
+
     @media (hover: hover) {
       a {
         &:active,

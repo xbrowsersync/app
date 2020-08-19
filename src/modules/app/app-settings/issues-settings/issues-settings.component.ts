@@ -2,11 +2,9 @@ import './issues-settings.component.scss';
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { LogLevel } from '../../../shared/log/log.enum';
 import LogService from '../../../shared/log/log.service';
-import StoreService from '../../../shared/store/store.service';
 import UtilityService from '../../../shared/utility/utility.service';
 import { AppViewType } from '../../app.enum';
 import { AppHelperService } from '../../app.interface';
@@ -18,6 +16,8 @@ import { AppHelperService } from '../../app.interface';
   template: require('./issues-settings.component.html')
 })
 export default class IssuesSettingsComponent implements OnInit {
+  Strings = require('../../../../../res/strings/en.json');
+
   appHelperSvc: AppHelperService;
   logSvc: LogService;
   platformSvc: PlatformService;
@@ -26,7 +26,6 @@ export default class IssuesSettingsComponent implements OnInit {
   downloadLogCompletedMessage: string;
   logSize: number;
   savingLog = false;
-  strings = Strings;
 
   static $inject = ['AppHelperService', 'LogService', 'PlatformService', 'UtilityService'];
   constructor(

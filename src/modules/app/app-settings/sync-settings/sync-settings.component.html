@@ -1,42 +1,42 @@
 <div class="well well-sm">
-  <h4>{{ vm.platformSvc.getI18nString(vm.strings.settings_Sync_Title) }}</h4>
+  <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.Title) }}</h4>
   <div class="panel-content">
     <div class="form-group setting-group" ng-if="!vm.syncEnabled">
       <p class="description text-center"
-         ng-bind-html="vm.platformSvc.getI18nString(vm.strings.settings_NotAvailable_Message)">
+         ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Settings.NotAvailable)">
       </p>
     </div>
     <div ng-if="vm.syncEnabled">
       <div class="form-group setting-group">
-        <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_Sync_Id_Label) }}</label>
+        <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.Id.Label) }}</label>
         <div class="setting-value id-url">
-          <a title="{{ vm.platformSvc.getI18nString(vm.strings.settings_Sync_DisplayQRCode_Message) }}"
+          <a title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.Qr.Show) }}"
              ng-click="vm.utilitySvc.handleEvent(vm.displayQrPanel)" href="">{{ vm.syncId }}</a>
         </div>
-        <p class="description">{{ vm.platformSvc.getI18nString(vm.strings.settings_Sync_Id_Description) }}</p>
+        <p class="description">{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.Id.Description) }}</p>
       </div>
       <div class="form-group setting-group">
         <div class="buttons">
           <button class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.syncUpdates)"
-                  ng-if="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
+                  ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"
                   ng-disabled="!vm.updatesAvailable">
-            {{ vm.platformSvc.getI18nString(vm.strings.button_SyncUpdates_Label) }}
+            {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.UpdatesAvailable.Sync) }}
           </button>
           <button class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.disableSync)">
-            {{ vm.platformSvc.getI18nString(vm.strings.button_DisableSync_Label) }}
+            {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.Disable) }}
           </button>
         </div>
         <div class="description updates-available"
-             ng-if="vm.updatesAvailable !== undefined && !vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)">
+             ng-if="vm.updatesAvailable !== undefined && !vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
           <p ng-if="!vm.updatesAvailable">{{
-        vm.platformSvc.getI18nString(vm.strings.settings_Sync_UpdatesAvailable_False_Message) }}</p>
+        vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.UpdatesAvailable.False) }}</p>
           <p ng-if="vm.updatesAvailable">{{
-        vm.platformSvc.getI18nString(vm.strings.settings_Sync_UpdatesAvailable_True_Message) }} {{
+        vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.UpdatesAvailable.True) }} {{
         vm.nextAutoUpdate }}.</p>
         </div>
       </div>
       <div class="form-group setting-group">
-        <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Label) }}</label>
+        <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.Service) }}</label>
         <div class="setting-value service-url">
           <a href="{{ vm.serviceInfo.url }}" class="new-tab" title="{{ vm.serviceInfo.url }}">
             {{ vm.serviceInfo.url }}
@@ -44,31 +44,28 @@
           <div class="status-icon">
             <div class="loading animate-fade-in"
                  ng-show="vm.serviceInfo !== undefined && vm.serviceInfo.status === undefined"
-                 title="{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Loading) }}">
-              <span
-                    class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Loading) }}</span>
+                 title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Loading) }}">
+              <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Loading) }}</span>
               <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             </div>
             <div class="animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Error"
-                 title="{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Error) }}">
-              <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Error) }}</span>
+                 title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Error) }}">
+              <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Error) }}</span>
               <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
             </div>
             <div class="animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Online"
-                 title="{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Online) }}">
-              <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Online) }}</span>
+                 title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Online) }}">
+              <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Online) }}</span>
               <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
             </div>
             <div class="animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.Offline"
-                 title="{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Offline) }}">
-              <span
-                    class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Offline) }}</span>
+                 title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Offline) }}">
+              <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Offline) }}</span>
               <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
             </div>
             <div class="animate-fade-in" ng-show="vm.serviceInfo.status === vm.apiServiceStatus.NoNewSyncs"
-                 title="{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_NoNewSyncs) }}">
-              <span
-                    class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_NoNewSyncs) }}</span>
+                 title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.NoNewSyncs) }}">
+              <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.NoNewSyncs) }}</span>
               <i class="fas fa-exclamation-circle text-warning" aria-hidden="true"></i>
             </div>
             <div class="status-icon-bg animate-fade-in" ng-show="vm.serviceInfo.status !== null"></div>
@@ -82,7 +79,7 @@
       </div>
       <div class="form-group setting-group"
            ng-if="vm.serviceInfo.status !== undefined && vm.serviceInfo.status !== vm.apiServiceStatus.Error">
-        <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_DataUsage_Label) }}</label>
+        <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.Data.Label) }}</label>
         <div class="setting-value" ng-class="{ 'text-danger': vm.syncDataUsed >= 90 }"
              ng-show="vm.syncDataUsed != null">{{
       vm.syncDataUsed | number : 0 }}%</div>
@@ -95,7 +92,7 @@
         <span class="max" ng-show="vm.serviceInfo.maxSyncSize != null">{{ vm.serviceInfo.maxSyncSize
       | kbFmt : 0 }}</span>
         <p class="description">{{
-        vm.platformSvc.getI18nString(vm.strings.settings_Service_DataUsage_Description) }}</p>
+        vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.Data.Description) }}</p>
       </div>
     </div>
   </div>

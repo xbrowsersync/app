@@ -2,7 +2,6 @@ import './webext-app-alert.component.scss';
 import angular from 'angular';
 import { Component } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import { AlertType } from '../../../shared/alert/alert.enum';
 import { Alert } from '../../../shared/alert/alert.interface';
 import AlertService from '../../../shared/alert/alert.service';
@@ -16,6 +15,8 @@ import UtilityService from '../../../shared/utility/utility.service';
   template: require('./webext-app-alert.component.html')
 })
 export default class WebExtAppAlertComponent {
+  Strings = require('../../../../../res/strings/en.json');
+
   $scope: ng.IScope;
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
@@ -25,7 +26,6 @@ export default class WebExtAppAlertComponent {
   alert: Alert;
   alertType = AlertType;
   showAlert = false;
-  strings = Strings;
 
   static $inject = ['$scope', '$timeout', 'AlertService', 'PlatformService', 'UtilityService'];
   constructor(

@@ -2,7 +2,6 @@ import './app-search.component.scss';
 import angular from 'angular';
 import { OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../res/strings/en.json';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkChangeType } from '../../shared/bookmark/bookmark.enum';
@@ -20,6 +19,8 @@ import { BookmarkSearchResult, BookmarkTreeItem } from './app-search.interface';
 
 @autobind
 export default class AppSearchComponent implements OnInit {
+  Strings = require('../../../../res/strings/en.json');
+
   $exceptionHandler: ExceptionHandler;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
@@ -48,7 +49,6 @@ export default class AppSearchComponent implements OnInit {
   resultsDisplayed = 10;
   selectedBookmarkId: number;
   scrollDisplayMoreEnabled = true;
-  strings = Strings;
 
   static $inject = [
     '$exceptionHandler',
@@ -209,7 +209,7 @@ export default class AppSearchComponent implements OnInit {
     (event as any)?.srcEvent?.stopPropagation();
 
     // On mobiles, display bookmark panel with slight delay to avoid focussing on description field
-    if (this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
+    if (this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
       this.$timeout(() => {
         this.appHelperSvc.switchView({ data: { bookmark: bookmarkToUpdate }, view: AppViewType.Bookmark });
       }, 500);
@@ -444,7 +444,7 @@ export default class AppSearchComponent implements OnInit {
     event?.preventDefault();
     (event as any)?.srcEvent?.stopPropagation();
 
-    if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
+    if (!this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
       return;
     }
 

@@ -1,7 +1,6 @@
 import angular from 'angular';
 import autobind from 'autobind-decorator';
 import { browser } from 'webextension-polyfill-ts';
-import Strings from '../../../../../res/strings/en.json';
 import { AppHelperService } from '../../../app/app.interface';
 import BaseAppHelperService from '../../../app/base-app-helper/base-app-helper.service';
 import { ApiService } from '../../../shared/api/api.interface';
@@ -22,8 +21,6 @@ import WebExtPlatformService from '../../webext-shared/webext-platform/webext-pl
 export default class WebExtAppHelperService extends BaseAppHelperService implements AppHelperService {
   bookmarkHelperSvc: BookmarkHelperService;
   platformSvc: WebExtPlatformService;
-
-  platformName: string;
 
   static $inject = [
     '$exceptionHandler',
@@ -121,7 +118,7 @@ export default class WebExtAppHelperService extends BaseAppHelperService impleme
     }
 
     // Return message to be displayed
-    const message = this.platformSvc.getI18nString(Strings.downloadFile_Success_Desktop_Message);
+    const message = this.platformSvc.getI18nString(this.Strings.View.Settings.FileDownloaded);
     return this.$q.resolve(message);
   }
 

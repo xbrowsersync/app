@@ -6,19 +6,19 @@
     <div ng-bind-html="page"></div>
     <div class="pagination">
       <a href="#" ng-click="vm.utilitySvc.handleEvent(vm.close)" ng-show="$index === 0">
-        <span>{{ vm.platformSvc.getI18nString(vm.strings.button_OK_Label) }}</span>
+        <span>{{ vm.platformSvc.getI18nString(vm.Strings.Button.OK) }}</span>
       </a>
       <a class="prev-link" href="#" ng-click="vm.utilitySvc.handleEvent(vm.displayPreviousPage)" ng-hide="$index === 0">
-        <span>{{ vm.platformSvc.getI18nString(vm.strings.button_Previous_Label) }}</span>
+        <span>{{ vm.platformSvc.getI18nString(vm.Strings.View.Help.Previous) }}</span>
       </a>
       <span class="page-number">{{$index + 1}} / {{vm.pages.length}}</span>
       <a class="next-link focused" href="#" ng-click="vm.utilitySvc.handleEvent(vm.displayNextPage)"
          ng-hide="$index === vm.pages.length - 1">
-        <span>{{ vm.platformSvc.getI18nString(vm.strings.button_Next_Label) }}</span>
+        <span>{{ vm.platformSvc.getI18nString(vm.Strings.Button.Next) }}</span>
       </a>
       <a href="#" class="focused" ng-click="vm.utilitySvc.handleEvent(vm.close)"
          ng-show="$index === vm.pages.length - 1">
-        <span>{{ vm.platformSvc.getI18nString(vm.strings.button_OK_Label) }}</span>
+        <span>{{ vm.platformSvc.getI18nString(vm.Strings.Button.OK) }}</span>
       </a>
     </div>
   </div>

@@ -1,7 +1,6 @@
 import './app-permissions.component.scss';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../res/strings/en.json';
 import { PlatformService } from '../../shared/global-shared.interface';
 import { StoreKey } from '../../shared/store/store.enum';
 import StoreService from '../../shared/store/store.service';
@@ -15,14 +14,14 @@ import { AppHelperService } from '../app.interface';
   template: require('./app-permissions.component.html')
 })
 export default class AppPermissionsComponent implements OnInit {
+  Strings = require('../../../../res/strings/en.json');
+
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   appHelperSvc: AppHelperService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
-
-  strings = Strings;
 
   static $inject = ['$q', '$timeout', 'AppHelperService', 'PlatformService', 'StoreService', 'UtilityService'];
   constructor(

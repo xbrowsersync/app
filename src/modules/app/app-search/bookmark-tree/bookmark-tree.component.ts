@@ -1,7 +1,6 @@
 import './bookmark-tree.component.scss';
 import { Component, Input, Output } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { Bookmark } from '../../../shared/bookmark/bookmark.interface';
 import UtilityService from '../../../shared/utility/utility.service';
@@ -14,11 +13,11 @@ import { AppHelperService } from '../../app.interface';
   template: require('./bookmark-tree.component.html')
 })
 export default class BookmarkTreeComponent {
+  Strings = require('../../../../../res/strings/en.json');
+
   appHelperSvc: AppHelperService;
   bookmarkHelperSvc: BookmarkHelperService;
   utilitySvc: UtilityService;
-
-  strings = Strings;
 
   @Input('<ngModel') nodes: Bookmark[];
   @Input() selectedBookmark: Bookmark;

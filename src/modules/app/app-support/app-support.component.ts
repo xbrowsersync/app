@@ -1,8 +1,6 @@
 import './app-support.component.scss';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../res/strings/en.json';
-import Globals from '../../shared/global-shared.constants';
 import { PlatformService } from '../../shared/global-shared.interface';
 import UtilityService from '../../shared/utility/utility.service';
 import { AppHelperService } from '../app.interface';
@@ -14,12 +12,12 @@ import { AppHelperService } from '../app.interface';
   template: require('./app-support.component.html')
 })
 export default class AppSupportComponent implements OnInit {
+  Strings = require('../../../../res/strings/en.json');
+
   $timeout: ng.ITimeoutService;
   appHelperSvc: AppHelperService;
   platformSvc: PlatformService;
   utilitySvc: UtilityService;
-
-  strings = Strings;
 
   static $inject = ['$timeout', 'AppHelperService', 'PlatformService', 'UtilityService'];
   constructor(

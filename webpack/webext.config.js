@@ -5,11 +5,18 @@ const BaseConfig = require('./base.config');
 
 const convertI18nForWebExt = (i18n) => {
   return Object.keys(i18n).reduce((acc, val) => {
-    if (!i18n[val].key) {
+    if (!Object.keys(i18n[val]).includes('default')) {
       return Object.assign(acc, convertI18nForWebExt(i18n[val]));
     }
 
-    acc[i18n[val].key] = { message: i18n[val].message };
+    acc[`${i18n[val].key}_Default`] = { message: i18n[val].default };
+    if (Object.keys(i18n[val]).includes('chromium')) {
+      acc[`${i18n[val].key}_Chromium`] = { message: i18n[val].chromium };
+    }
+    if (Object.keys(i18n[val]).includes('firefox')) {
+      acc[`${i18n[val].key}_Firefox`] = { message: i18n[val].firefox };
+    }
+
     return acc;
   }, {});
 };

@@ -4,11 +4,11 @@ const BaseConfig = require('./base.config');
 
 const generateI18nStrings = (i18n) => {
   return Object.keys(i18n).reduce((acc, val) => {
-    if (!i18n[val].key) {
+    if (!Object.keys(i18n[val]).includes('default')) {
       return Object.assign(acc, generateI18nStrings(i18n[val]));
     }
-
-    acc[i18n[val].key] = i18n[val].message;
+    const value = Object.keys(i18n[val]).includes('android') ? i18n[val].android : i18n[val].default;
+    acc[`${i18n[val].key}`] = value;
     return acc;
   }, {});
 };

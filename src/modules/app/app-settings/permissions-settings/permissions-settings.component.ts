@@ -1,7 +1,6 @@
 import './permissions-settings.component.scss';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import UtilityService from '../../../shared/utility/utility.service';
 import { AppHelperService } from '../../app.interface';
@@ -13,12 +12,13 @@ import { AppHelperService } from '../../app.interface';
   template: require('./permissions-settings.component.html')
 })
 export default class PermissionsSettingsComponent implements OnInit {
+  Strings = require('../../../../../res/strings/en.json');
+
   appHelperSvc: AppHelperService;
   platformSvc: PlatformService;
   utilitySvc: UtilityService;
 
   readWebsiteDataPermissionsGranted = false;
-  strings = Strings;
 
   static $inject = ['AppHelperService', 'PlatformService', 'UtilityService'];
   constructor(AppHelperSvc: AppHelperService, PlatformSvc: PlatformService, UtilitySvc: UtilityService) {

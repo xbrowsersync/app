@@ -1,7 +1,6 @@
 import './bookmark.component.scss';
 import { Component, Input, Output } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { Bookmark } from '../../../shared/bookmark/bookmark.interface';
 import { PlatformService } from '../../../shared/global-shared.interface';
@@ -17,13 +16,13 @@ import { BookmarkTreeItem } from '../app-search.interface';
   transclude: true
 })
 export default class BookmarkComponent {
+  Strings = require('../../../../../res/strings/en.json');
+
   $timeout: ng.ITimeoutService;
   appHelperSvc: AppHelperService;
   bookmarkHelperSvc: BookmarkHelperService;
   platformSvc: PlatformService;
   utilitySvc: UtilityService;
-
-  strings = Strings;
 
   @Input('<ngModel') bookmark: Bookmark;
   @Input() enableEditButton: boolean = true;

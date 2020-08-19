@@ -1,7 +1,6 @@
 import './android-app-scan.component.scss';
-import { Component, OnDestroy, OnInit, Output } from 'angular-ts-decorators';
+import { Component, OnDestroy, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import { AppViewType } from '../../../app/app.enum';
 import { BackupSync } from '../../../shared/backup-restore/backup-restore.interface';
 import * as Exceptions from '../../../shared/exception/exception';
@@ -20,6 +19,8 @@ import AndroidAppHelperService from '../android-app-helper/android-app-helper.se
   template: require('./android-app-scan.component.html')
 })
 export default class AndroidAppScanComponent implements OnInit, OnDestroy {
+  Strings = require('../../../../../res/strings/en.json');
+
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   appHelperSvc: AndroidAppHelperService;
@@ -32,7 +33,6 @@ export default class AndroidAppScanComponent implements OnInit, OnDestroy {
   displayScanInterface = false;
   invalidSyncId = false;
   lightEnabled = false;
-  strings = Strings;
 
   static $inject = [
     '$q',

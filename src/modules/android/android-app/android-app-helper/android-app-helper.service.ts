@@ -1,13 +1,11 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import { AppHelperService } from '../../../app/app.interface';
 import BaseAppHelperService from '../../../app/base-app-helper/base-app-helper.service';
 import { ApiService } from '../../../shared/api/api.interface';
 import { Bookmark } from '../../../shared/bookmark/bookmark.interface';
 import * as Exceptions from '../../../shared/exception/exception';
 import { ExceptionHandler } from '../../../shared/exception/exception.interface';
-import { PlatformType } from '../../../shared/global-shared.enum';
 import LogService from '../../../shared/log/log.service';
 import StoreService from '../../../shared/store/store.service';
 import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
@@ -21,8 +19,6 @@ import AndroidPlatformService from '../../android-shared/android-platform/androi
 export default class AndroidAppHelperService extends BaseAppHelperService implements AppHelperService {
   $interval: ng.IIntervalService;
   platformSvc: AndroidPlatformService;
-
-  platformName = PlatformType.Android;
 
   static $inject = [
     '$exceptionHandler',
@@ -106,7 +102,7 @@ export default class AndroidAppHelperService extends BaseAppHelperService implem
                 fileWriter.onwriteend = () => {
                   // Return message to be displayed
                   const message = this.platformSvc
-                    .getI18nString(Strings.downloadFile_Success_Android_Message)
+                    .getI18nString(this.Strings.View.Settings.FileDownloaded)
                     .replace('{fileName}', fileEntry.name);
                   resolve(message);
                 };
@@ -130,13 +126,13 @@ export default class AndroidAppHelperService extends BaseAppHelperService implem
 
   getHelpPages(): string[] {
     const pages = [
-      this.platformSvc.getI18nString(Strings.help_Page_Welcome_Android_Content),
-      this.platformSvc.getI18nString(Strings.help_Page_FirstSync_Android_Content),
-      this.platformSvc.getI18nString(Strings.help_Page_ExistingId_Android_Content),
-      this.platformSvc.getI18nString(Strings.help_Page_Searching_Android_Content),
-      this.platformSvc.getI18nString(Strings.help_Page_AddingBookmarks_Android_Content),
-      this.platformSvc.getI18nString(Strings.help_Page_BackingUp_Android_Content),
-      this.platformSvc.getI18nString(Strings.help_Page_FurtherSupport_Content)
+      this.platformSvc.getI18nString(this.Strings.View.Help.Welcome),
+      this.platformSvc.getI18nString(this.Strings.View.Help.FirstSync),
+      this.platformSvc.getI18nString(this.Strings.View.Help.ExistingId),
+      this.platformSvc.getI18nString(this.Strings.View.Help.Searching),
+      this.platformSvc.getI18nString(this.Strings.View.Help.AddingBookmarks),
+      this.platformSvc.getI18nString(this.Strings.View.Help.BackingUp),
+      this.platformSvc.getI18nString(this.Strings.View.Help.FurtherSupport)
     ];
 
     return pages;
@@ -175,9 +171,9 @@ export default class AndroidAppHelperService extends BaseAppHelperService implem
 
   shareBookmark(bookmark: Bookmark): void {
     const options = {
-      subject: `${bookmark.title} (${this.platformSvc.getI18nString(Strings.shareBookmark_Message)})`,
+      subject: `${bookmark.title} (${this.platformSvc.getI18nString(this.Strings.Share.Bookmark)})`,
       url: bookmark.url,
-      chooserTitle: this.platformSvc.getI18nString(Strings.shareBookmark_Message)
+      chooserTitle: this.platformSvc.getI18nString(this.Strings.Share.Bookmark)
     };
 
     const onError = (err: Error) => {

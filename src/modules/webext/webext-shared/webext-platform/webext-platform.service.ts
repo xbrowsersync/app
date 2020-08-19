@@ -1,13 +1,12 @@
 import angular from 'angular';
 import autobind from 'autobind-decorator';
 import { browser, Tabs } from 'webextension-polyfill-ts';
-import Strings from '../../../../../res/strings/en.json';
 import AlertService from '../../../shared/alert/alert.service';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../../shared/exception/exception';
 import Globals from '../../../shared/global-shared.constants';
 import { MessageCommand } from '../../../shared/global-shared.enum';
-import { I18nString, Message, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
+import { I18nObject, Message, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
 import LogService from '../../../shared/log/log.service';
 import StoreService from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
@@ -19,6 +18,8 @@ import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.se
 
 @autobind
 export default class WebExtPlatformService implements PlatformService {
+  Strings = require('../../../../../res/strings/en.json');
+
   $injector: ng.auto.IInjectorService;
   $interval: ng.IIntervalService;
   $q: ng.IQService;
@@ -76,6 +77,7 @@ export default class WebExtPlatformService implements PlatformService {
     this.utilitySvc = UtilitySvc;
     this.workingSvc = WorkingSvc;
   }
+  platformName: string;
 
   get backgroundSvc(): WebExtBackgroundService {
     if (angular.isUndefined(this._backgroundSvc)) {
@@ -120,18 +122,21 @@ export default class WebExtPlatformService implements PlatformService {
     });
   }
 
-  getI18nString(i18nString: I18nString): string {
-    let message = '';
+  getI18nString(i18nObj: I18nObject): string {
+    let i18nStr: string;
 
-    if (i18nString && i18nString.key) {
-      message = browser.i18n.getMessage(i18nString.key);
+    // If the i18n object contains a string for this platform then use that, otherwise use the default
+    if (Object.keys(i18nObj).includes(this.platformName)) {
+      i18nStr = browser.i18n.getMessage(`${i18nObj.key}_${this.platformName}`);
+    } else {
+      i18nStr = browser.i18n.getMessage(`${i18nObj.key}_Default`);
     }
 
-    if (!message) {
-      this.logSvc.logWarning('I18n string has no value');
+    if (angular.isUndefined(i18nStr ?? undefined)) {
+      throw new Exceptions.I18nException('I18n string has no value');
     }
 
-    return message;
+    return i18nStr;
   }
 
   getNewTabUrl(): string {
@@ -226,10 +231,10 @@ export default class WebExtPlatformService implements PlatformService {
 
   refreshNativeInterface(syncEnabled?: boolean, syncType?: SyncType): ng.IPromise<void> {
     let iconPath: string;
-    let newTitle = this.getI18nString(Strings.title);
-    const syncingTitle = ` (${this.getI18nString(Strings.tooltip_Syncing_Label)})`;
-    const syncedTitle = ` (${this.getI18nString(Strings.tooltip_Synced_Label)})`;
-    const notSyncedTitle = ` (${this.getI18nString(Strings.tooltip_NotSynced_Label)})`;
+    let newTitle = this.getI18nString(this.Strings.App.Title);
+    const syncingTitle = ` (${this.getI18nString(this.Strings.Tooltip.Syncing)})`;
+    const syncedTitle = ` (${this.getI18nString(this.Strings.Tooltip.Synced)})`;
+    const notSyncedTitle = ` (${this.getI18nString(this.Strings.Tooltip.NotSynced)})`;
 
     // Clear timeout
     if (this.refreshInterfaceTimeout) {

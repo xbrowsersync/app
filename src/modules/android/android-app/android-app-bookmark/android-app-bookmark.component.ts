@@ -2,7 +2,6 @@ import './android-app-bookmark.component.scss';
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import AppBookmarkComponent from '../../../app/app-bookmark/app-bookmark.component';
 import { AppEventType } from '../../../app/app.enum';
 import { AppHelperService } from '../../../app/app.interface';
@@ -120,7 +119,7 @@ export default class AndroidAppBookmarkComponent extends AppBookmarkComponent im
       // Show a message if current page has no url - user shared an value that did not contain a valid url
       if (angular.isUndefined(this.platformSvc.currentPage.url)) {
         this.alertSvc.setCurrentAlert({
-          message: this.platformSvc.getI18nString(Strings.bookmark_CurrentPageInvalidUrl_Message),
+          message: this.platformSvc.getI18nString(this.Strings.View.Bookmark.InvalidUrlShared),
           type: AlertType.Error
         });
         this.$timeout(() => (document.activeElement as HTMLInputElement)?.blur(), Globals.InterfaceReadyTimeout * 2);

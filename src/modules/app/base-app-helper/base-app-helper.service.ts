@@ -21,6 +21,8 @@ import { AppHelperService, AppView } from '../app.interface';
 
 @autobind
 export default class BaseAppHelperService {
+  Strings = require('../../../../res/strings/en.json');
+
   $exceptionHandler: ExceptionHandler;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;

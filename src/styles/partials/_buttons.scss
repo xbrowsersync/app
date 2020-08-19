@@ -181,13 +181,13 @@ button {
   cursor: pointer;
   display: inline-flex;
   font-size: 1.5rem;
-  height: 3.5rem;
+  height: 4rem;
   justify-content: center;
   overflow: hidden;
   padding: 0;
   position: relative;
   transition: color ease-in-out 0.2s;
-  width: 3.5rem;
+  width: 4rem;
   z-index: 10;
 
   @include theme-dark {
@@ -242,6 +242,11 @@ button {
   position: relative;
   text-align: center;
   white-space: nowrap;
+
+  &.vertical {
+    display: flex;
+    flex-direction: column;
+  }
 
   button {
     margin-right: 0.5rem;

@@ -3,14 +3,12 @@ import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
-import Strings from '../../../../res/strings/en.json';
 import AppMainComponent from '../../app/app-main/app-main.component';
 import { AppEventType, AppViewType } from '../../app/app.enum';
 import { AppHelperService } from '../../app/app.interface';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkMetadata } from '../../shared/bookmark/bookmark.interface';
-import * as Exceptions from '../../shared/exception/exception';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService } from '../../shared/global-shared.interface';
 import LogService from '../../shared/log/log.service';
@@ -143,9 +141,9 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
 
           this.alertSvc.setCurrentAlert({
             message: this.platformSvc
-              .getI18nString(Strings.appUpdateAvailable_Android_Message)
+              .getI18nString(this.Strings.Alert.AppUpdateAvailable.Message)
               .replace('{version}', newVersion),
-            action: this.platformSvc.getI18nString(Strings.button_View_Label),
+            action: this.platformSvc.getI18nString(this.Strings.Button.View),
             actionCallback: () => {
               this.platformSvc.openUrl(Globals.ReleaseNotesUrlStem + (newVersion as string).replace(/^v/, ''));
             }
@@ -159,8 +157,8 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     // If not online display an alert and return
     if (!this.networkSvc.isNetworkConnected()) {
       this.alertSvc.setCurrentAlert({
-        message: this.platformSvc.getI18nString(Strings.workingOffline_Message),
-        title: this.platformSvc.getI18nString(Strings.workingOffline_Title)
+        message: this.platformSvc.getI18nString(this.Strings.Alert.WorkingOffline.Message),
+        title: this.platformSvc.getI18nString(this.Strings.Alert.WorkingOffline.Title)
       });
       return this.$q.resolve(false);
     }
@@ -291,8 +289,8 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
         // If not online display an alert
         if (!this.networkSvc.isNetworkConnected()) {
           this.alertSvc.setCurrentAlert({
-            message: this.platformSvc.getI18nString(Strings.workingOffline_Message),
-            title: this.platformSvc.getI18nString(Strings.workingOffline_Title)
+            message: this.platformSvc.getI18nString(this.Strings.Alert.WorkingOffline.Message),
+            title: this.platformSvc.getI18nString(this.Strings.Alert.WorkingOffline.Title)
           });
           return;
         }
@@ -389,8 +387,8 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
           // If not online display an alert
           if (!this.networkSvc.isNetworkConnected()) {
             this.alertSvc.setCurrentAlert({
-              message: this.platformSvc.getI18nString(Strings.workingOffline_Message),
-              title: this.platformSvc.getI18nString(Strings.workingOffline_Title)
+              message: this.platformSvc.getI18nString(this.Strings.Alert.WorkingOffline.Message),
+              title: this.platformSvc.getI18nString(this.Strings.Alert.WorkingOffline.Title)
             });
           }
 

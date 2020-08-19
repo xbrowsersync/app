@@ -1,7 +1,6 @@
 import './preferences-settings.component.scss';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { AllSettings } from '../../../shared/settings/settings.interface';
 import SettingsService from '../../../shared/settings/settings.service';
@@ -17,6 +16,8 @@ import { AppHelperService } from '../../app.interface';
   template: require('./preferences-settings.component.html')
 })
 export default class PreferencesSettingsComponent implements OnInit {
+  Strings = require('../../../../../res/strings/en.json');
+
   $timeout: ng.ITimeoutService;
   appHelperSvc: AppHelperService;
   platformSvc: PlatformService;
@@ -26,7 +27,6 @@ export default class PreferencesSettingsComponent implements OnInit {
 
   displaySyncBookmarksToolbarConfirmation = false;
   settings: AllSettings;
-  strings = Strings;
 
   static $inject = [
     '$timeout',

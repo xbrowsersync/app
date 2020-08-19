@@ -1,6 +1,5 @@
-import { Component, Input, Output } from 'angular-ts-decorators';
+import { Component, Output } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import { AppHelperService } from '../../../app/app.interface';
 import AlertService from '../../../shared/alert/alert.service';
 import { PlatformService } from '../../../shared/global-shared.interface';
@@ -14,6 +13,8 @@ import WorkingService from '../../../shared/working/working.service';
   selector: 'appWorking'
 })
 export default class AndroidAppWorkingComponent {
+  Strings = require('../../../../../res/strings/en.json');
+
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
   appHelperSvc: AppHelperService;
@@ -23,7 +24,6 @@ export default class AndroidAppWorkingComponent {
 
   currentContext: WorkingContext;
   message: string;
-  strings = Strings;
   currentTimeout: ng.IPromise<void>;
 
   @Output() cancelAction: () => any;
@@ -90,14 +90,18 @@ export default class AndroidAppWorkingComponent {
     switch (context) {
       case WorkingContext.DelayedSyncing:
         this.currentTimeout = this.$timeout(() => {
-          window.SpinnerDialog.show(null, `${this.platformSvc.getI18nString(Strings.working_Syncing_Message)}…`, true);
+          window.SpinnerDialog.show(
+            null,
+            `${this.platformSvc.getI18nString(this.Strings.View.Working.Syncing)}…`,
+            true
+          );
         }, 250);
         break;
       case WorkingContext.Restoring:
         this.currentTimeout = this.$timeout(() => {
           window.SpinnerDialog.show(
             null,
-            `${this.platformSvc.getI18nString(Strings.working_Restoring_Message)}…`,
+            `${this.platformSvc.getI18nString(this.Strings.View.Working.Restoring)}…`,
             true
           );
         });
@@ -105,17 +109,25 @@ export default class AndroidAppWorkingComponent {
       case WorkingContext.RetrievingMetadata:
         window.SpinnerDialog.hide();
         this.currentTimeout = this.$timeout(() => {
-          window.SpinnerDialog.show(null, this.platformSvc.getI18nString(Strings.getMetadata_Message), () => {
-            window.SpinnerDialog.hide();
-            this.currentContext = undefined;
-            this.cancelAction()();
-          });
+          window.SpinnerDialog.show(
+            null,
+            this.platformSvc.getI18nString(this.Strings.Alert.GetMetadata.Message),
+            () => {
+              window.SpinnerDialog.hide();
+              this.currentContext = undefined;
+              this.cancelAction()();
+            }
+          );
         }, 250);
         break;
       case WorkingContext.Syncing:
       default:
         this.currentTimeout = this.$timeout(() => {
-          window.SpinnerDialog.show(null, `${this.platformSvc.getI18nString(Strings.working_Syncing_Message)}…`, true);
+          window.SpinnerDialog.show(
+            null,
+            `${this.platformSvc.getI18nString(this.Strings.View.Working.Syncing)}…`,
+            true
+          );
         });
     }
   }

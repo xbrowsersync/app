@@ -1,7 +1,6 @@
 import './app-main.component.scss';
 import { OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../res/strings/en.json';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service.js';
 import { PlatformService } from '../../shared/global-shared.interface';
@@ -9,7 +8,6 @@ import LogService from '../../shared/log/log.service';
 import NetworkService from '../../shared/network/network.service';
 import SettingsService from '../../shared/settings/settings.service';
 import StoreService from '../../shared/store/store.service';
-import { SyncType } from '../../shared/sync/sync.enum';
 import UtilityService from '../../shared/utility/utility.service';
 import WorkingService from '../../shared/working/working.service';
 import { AppViewType } from '../app.enum';
@@ -17,6 +15,8 @@ import { AppHelperService } from '../app.interface';
 
 @autobind
 export default class AppMainComponent implements OnInit {
+  Strings = require('../../../../res/strings/en.json');
+
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
@@ -34,7 +34,6 @@ export default class AppMainComponent implements OnInit {
   currentView: AppViewType;
   darkModeEnabled: boolean;
   initialised = false;
-  strings = Strings;
   syncEnabled: boolean;
   vm: AppMainComponent = this;
 

@@ -1,56 +1,55 @@
 <div class="view-content">
   <div class="header-panel clearfix">
     <button class="btn btn-icon btn-help animate-fade-in"
-            title="{{ vm.platformSvc.getI18nString(vm.strings.button_Help_Label) }}"
+            title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Help) }}"
             ng-click="vm.utilitySvc.handleEvent(vm.switchToHelpView)">
       <i class="fas fa-question-circle" aria-hidden="true"></i>
-      <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.button_Help_Label) }}</span>
+      <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.Help) }}</span>
     </button>
-    <button class="btn btn-icon btn-settings"
-            title="{{ vm.platformSvc.getI18nString(vm.strings.button_Settings_Label) }}"
+    <button class="btn btn-icon btn-settings" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Settings) }}"
             ng-click="vm.utilitySvc.handleEvent(vm.switchToSettingsView)">
       <i class="fas fa-cog" aria-hidden="true"></i>
-      <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.button_Settings_Label) }}</span>
+      <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.Settings) }}</span>
     </button>
   </div>
   <div class="logo"></div>
   <form name="vm.syncForm" class="animate-fade-in"
         ng-hide="vm.displayOtherSyncsWarning || vm.displaySyncConfirmation || vm.displayUpgradeConfirmation"
-        ng-if="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName) || (vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName) && vm.displayGetSyncIdPanel !== undefined)"
+        ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) || (vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) && vm.displayGetSyncIdPanel !== undefined)"
         novalidate>
     <button type="submit" class="d-none" ng-click="vm.utilitySvc.handleEvent(vm.submitForm)" tabindex="-1"></button>
     <div class="selected-service animate-fade-in"
-         ng-show="(!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName) && !vm.displayUpdateServicePanel) || 
-    (vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName) && !vm.displayUpdateServicePanel && !vm.displayGetSyncIdPanel)">
-      <label>{{ vm.platformSvc.getI18nString(vm.strings.login_SelectedService_Label) }}</label>
+         ng-show="(!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) && !vm.displayUpdateServicePanel) || 
+    (vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) && !vm.displayUpdateServicePanel && !vm.displayGetSyncIdPanel)">
+      <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Selected) }}</label>
       <a href="{{ vm.serviceInfo.url }}" class="new-tab" title="{{ vm.serviceInfo.url }}">
         {{ vm.serviceInfo.url }}
       </a>
       <div class="status-icon">
         <div class="loading animate-fade-in"
              ng-show="vm.serviceInfo.url !== undefined && vm.serviceInfo.status === undefined"
-             title="{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Loading) }}">
-          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Loading) }}</span>
+             title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Loading) }}">
+          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Loading) }}</span>
           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         </div>
         <div class="animate-fade-in" ng-show="vm.serviceInfo.status === vm.ApiServiceStatus.Error"
-             title="{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Error) }}">
-          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Error) }}</span>
+             title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Error) }}">
+          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Error) }}</span>
           <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
         </div>
         <div class="animate-fade-in" ng-show="vm.serviceInfo.status === vm.ApiServiceStatus.Online"
-             title="{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Online) }}">
-          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Online) }}</span>
+             title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Online) }}">
+          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Online) }}</span>
           <i class="fas fa-check-circle text-success" aria-hidden="true"></i>
         </div>
         <div class="animate-fade-in" ng-show="vm.serviceInfo.status === vm.ApiServiceStatus.Offline"
-             title="{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Offline) }}">
-          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Offline) }}</span>
+             title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Offline) }}">
+          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.Offline) }}</span>
           <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
         </div>
         <div class="animate-fade-in" ng-show="vm.serviceInfo.status === vm.ApiServiceStatus.NoNewSyncs"
-             title="{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_NoNewSyncs) }}">
-          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_NoNewSyncs) }}</span>
+             title="{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.NoNewSyncs) }}">
+          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.NoNewSyncs) }}</span>
           <i class="fas fa-exclamation-circle text-warning" aria-hidden="true"></i>
         </div>
         <div class="status-icon-bg animate-fade-in" ng-show="vm.serviceInfo.status !== undefined"></div>
@@ -59,19 +58,19 @@
     <div class="form-content">
       <div class="login-form-new animate-fade-in" ng-class="{ 'active-login-form': vm.newSync }"
            ng-show="vm.newSync && !vm.displayUpdateServicePanel">
-        <div ng-if="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)">
+        <div ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
           <div class="animate-fade-in" ng-hide="vm.displayPasswordConfirmation">
             <div class="form-group secret-form-group btn-icon-container"
                  ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
               <label class="sr-only" for="txtPassword">{{
-          vm.platformSvc.getI18nString(vm.strings.login_PasswordField_Label) }}</label>
+          vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Label) }}</label>
               <input type="{{ vm.showPassword ? 'text' : 'password' }}" name="txtPassword" ng-model="vm.password"
                      class="form-control" password-strength="vm.passwordComplexity" ng-disabled="vm.syncEnabled"
                      maxlength="150" autocapitalize="off" autocorrect="off" spellcheck="false"
-                     placeholder="{{ vm.platformSvc.getI18nString(vm.strings.login_PasswordField_New_Description) }}" />
+                     placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.New) }}" />
               <button class="btn btn-icon btn-show-password" ng-class="{ 'active': vm.showPassword }"
                       ng-show="vm.password"
-                      title="{{ vm.platformSvc.getI18nString(vm.strings.button_ShowPassword_Label) }}"
+                      title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Show) }}"
                       ng-click="vm.utilitySvc.handleEvent(vm.toggleShowPassword)">
                 <i class="fas fa-eye" aria-hidden="true"></i>
               </button>
@@ -95,26 +94,26 @@
             <div class="buttons">
               <button type="button" class="btn btn-default btn-confirm-password" ng-disabled="!vm.password"
                       ng-click="vm.utilitySvc.handleEvent(vm.confirmPassword)">
-                {{ vm.platformSvc.getI18nString(vm.strings.button_Next_Label) }}
+                {{ vm.platformSvc.getI18nString(vm.Strings.Button.Next) }}
               </button>
               <button type="button" class="btn btn-default"
-                      ng-if="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
+                      ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"
                       ng-click="vm.utilitySvc.handleEvent(vm.switchService)">
-                {{ vm.platformSvc.getI18nString(vm.strings.button_UpdateService_Label) }}
+                {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Update.Button) }}
               </button>
             </div>
           </div>
           <div class="animate-fade-in" ng-show="vm.displayPasswordConfirmation">
             <div class="form-group secret-form-group btn-icon-container">
               <label class="sr-only" for="txtPasswordConfirmation">{{
-          vm.platformSvc.getI18nString(vm.strings.login_PasswordConfirmationField_Label) }}</label>
+          vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Confirm) }}</label>
               <input type="{{ vm.showPassword ? 'text' : 'password' }}" name="txtPasswordConfirmation"
                      ng-model="vm.passwordConfirmation" class="form-control" maxlength="150" autocapitalize="off"
                      autocorrect="off" spellcheck="false"
-                     placeholder="{{ vm.platformSvc.getI18nString(vm.strings.login_PasswordConfirmationField_Label) }}" />
+                     placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Confirm) }}" />
               <button class="btn btn-icon btn-show-password" ng-class="{ 'active': vm.showPassword }"
                       ng-show="vm.password"
-                      title="{{ vm.platformSvc.getI18nString(vm.strings.button_ShowPassword_Label) }}"
+                      title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Show) }}"
                       ng-click="vm.utilitySvc.handleEvent(vm.toggleShowPassword)">
                 <i class="fas fa-eye" aria-hidden="true"></i>
               </button>
@@ -123,28 +122,28 @@
               <button type="button" class="btn btn-default btn-new-sync"
                       ng-disabled="vm.passwordConfirmation !== vm.password"
                       ng-click="vm.utilitySvc.handleEvent(vm.sync)">
-                {{ vm.platformSvc.getI18nString(vm.strings.button_EnableSync_Label) }}
+                {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.Enable) }}
               </button>
               <button type="button" class="btn btn-default"
                       ng-click="vm.utilitySvc.handleEvent(vm.cancelConfirmPassword)">
-                {{ vm.platformSvc.getI18nString(vm.strings.button_Back_Label) }}
+                {{ vm.platformSvc.getI18nString(vm.Strings.Button.Back) }}
               </button>
             </div>
           </div>
           <div class="form-group toggle-form">
             <a ng-click="vm.utilitySvc.handleEvent(vm.displayExistingSyncPanel)" href="#">
-              {{ vm.platformSvc.getI18nString(vm.strings.button_ExistingSync_Label) }}
+              {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.SyncId.Existing) }}
             </a>
           </div>
         </div>
-        <div ng-if="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)">
+        <div ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
           <div class="well well-sm">
-            <h4>{{ vm.platformSvc.getI18nString(vm.strings.login_GetSyncId_Title) }}</h4>
-            <p ng-bind-html="vm.platformSvc.getI18nString(vm.strings.login_GetSyncId_Message)"></p>
+            <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.GetSyncId.Title) }}</h4>
+            <p ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Login.GetSyncId.Content)"></p>
             <div class="buttons">
               <button type="button" class="btn btn-default"
                       ng-click="vm.utilitySvc.handleEvent(vm.displayExistingSyncPanel)">
-                {{ vm.platformSvc.getI18nString(vm.strings.button_OK_Label) }}
+                {{ vm.platformSvc.getI18nString(vm.Strings.Button.OK) }}
               </button>
             </div>
           </div>
@@ -152,29 +151,30 @@
       </div>
       <div class="login-form-existing animate-fade-in" ng-class="{ 'active-login-form': !vm.newSync }"
            ng-hide="vm.newSync || vm.displayUpdateServicePanel">
-        <div class="animate-fade-in" ng-show="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName) || 
-      (vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName) && vm.displayGetSyncIdPanel === false)">
+        <div class="animate-fade-in" ng-show="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) || 
+      (vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) && vm.displayGetSyncIdPanel === false)">
           <div class="form-group" ng-class="{ 'has-error': vm.syncForm.txtId.$invalid }">
             <label class="sr-only"
-                   for="txtId">{{ vm.platformSvc.getI18nString(vm.strings.login_IdField_Label) }}</label>
+                   for="txtId">{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.SyncId.Label) }}</label>
             <input type="text" name="txtId" ng-model="vm.syncId" class="form-control" ng-disabled="vm.syncEnabled"
-                   placeholder="{{ vm.platformSvc.getI18nString(vm.strings.login_IdField_Description) }}" maxlength="32"
-                   ng-change="vm.syncIdChanged()" autocapitalize="off" autocorrect="off" spellcheck="false" />
+                   placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.SyncId.Description) }}"
+                   maxlength="32" ng-change="vm.syncIdChanged()" autocapitalize="off" autocorrect="off"
+                   spellcheck="false" />
             <div class="validation" ng-if="vm.syncId && vm.syncForm.txtId.$error.InvalidSyncId">
-              {{ vm.platformSvc.getI18nString(vm.strings.login_IdField_InvalidSyncId_Label) }}
+              {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.SyncId.Invalid) }}
             </div>
           </div>
           <div class="form-group secret-form-group btn-icon-container"
                ng-class="{ true: 'has-error' }[vm.syncForm.$submitted && vm.syncForm.txtPassword.$invalid]">
             <label class="sr-only" for="txtPassword">{{
-        vm.platformSvc.getI18nString(vm.strings.login_PasswordField_Label) }}</label>
+        vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Label) }}</label>
             <input type="{{ vm.showPassword ? 'text' : 'password' }}" name="txtPassword" ng-model="vm.password"
                    class="form-control" ng-disabled="vm.syncEnabled" maxlength="150" autocapitalize="off"
                    autocorrect="off" spellcheck="false"
-                   placeholder="{{ vm.platformSvc.getI18nString(vm.strings.login_PasswordField_Existing_Description) }}" />
+                   placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Existing) }}" />
             <button class="btn btn-icon btn-show-password" ng-class="{ 'active': vm.showPassword }"
                     ng-show="vm.password"
-                    title="{{ vm.platformSvc.getI18nString(vm.strings.button_ShowPassword_Label) }}"
+                    title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Show) }}"
                     ng-click="vm.utilitySvc.handleEvent(vm.toggleShowPassword)">
               <i class="fas fa-eye" aria-hidden="true"></i>
             </button>
@@ -183,66 +183,66 @@
             <button type="button" class="btn btn-default btn-existing-sync"
                     ng-disabled="!vm.syncId || !vm.password || vm.syncForm.$invalid"
                     ng-click="vm.utilitySvc.handleEvent(vm.sync)">
-              {{ vm.platformSvc.getI18nString(vm.strings.button_EnableSync_Label) }}
+              {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.Enable) }}
             </button>
             <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.switchService)">
-              {{ vm.platformSvc.getI18nString(vm.strings.button_UpdateService_Label) }}
+              {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Update.Button) }}
             </button>
           </div>
           <div class="form-group toggle-form">
             <a ng-click="vm.utilitySvc.handleEvent(vm.displayNewSyncPanel)"
-               ng-if="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)" href="#">
-              {{ vm.platformSvc.getI18nString(vm.strings.button_NewSync_Label) }}
+               ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)" href="#">
+              {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.New) }}
             </a>
             <a ng-click="vm.utilitySvc.handleEvent(vm.scanId)"
-               ng-if="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)" href="#">
-              {{ vm.platformSvc.getI18nString(vm.strings.button_ScanCode_Label) }}
+               ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)" href="#">
+              {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Scan.ScanCode) }}
             </a>
           </div>
         </div>
-        <div ng-if="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
+        <div ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"
              ng-show="vm.displayGetSyncIdPanel === true">
           <div class="well well-sm">
-            <h4>{{ vm.platformSvc.getI18nString(vm.strings.login_ScanId_Title) }}</h4>
-            <p>{{ vm.platformSvc.getI18nString(vm.strings.login_ScanId_Message) }}</p>
+            <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Scan.Title) }}</h4>
+            <p>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Scan.Content) }}</p>
             <div class="buttons">
               <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.scanId)">
-                {{ vm.platformSvc.getI18nString(vm.strings.button_ScanCode_Label) }}
+                {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Scan.ScanCode) }}
               </button>
               <button type="button" class="btn btn-default"
                       ng-click="vm.utilitySvc.handleEvent(vm.displayNewSyncPanel)">
-                {{ vm.platformSvc.getI18nString(vm.strings.button_GetSyncId_Label) }}
+                {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.SyncId.New) }}
               </button>
             </div>
           </div>
           <div class="form-group toggle-form">
             <a ng-click="vm.utilitySvc.handleEvent(vm.enableManualEntry)" href="#">
-              {{ vm.platformSvc.getI18nString(vm.strings.button_ManualEntry_Label) }}
+              {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Scan.ManualEntry) }}
             </a>
           </div>
         </div>
       </div>
       <div class="update-service-panel animate-fade-in" ng-if="vm.displayUpdateServicePanel">
         <div ng-hide="vm.displayUpdateServiceConfirmation">
-          <p ng-bind-html="vm.platformSvc.getI18nString(vm.strings.settings_Service_UpdateForm_Message)">
+          <p ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Update.Description)">
           </p>
           <div class="form-group" ng-class="{ 'has-error': vm.syncForm.newServiceUrl.$invalid }">
             <input type="text" name="newServiceUrl" ng-model="vm.newServiceInfo.url" class="form-control"
                    ng-change="vm.serviceUrlChanged()" ng-readonly="vm.validatingServiceUrl"
-                   placeholder="{{ vm.platformSvc.getI18nString(vm.strings.settings_Service_UpdateForm_Field_Description) }}"
+                   placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Update.Label) }}"
                    maxlength="128" autocapitalize="off" autocorrect="off" spellcheck="false" required />
             <div class="validation" ng-if="vm.syncForm.newServiceUrl.$invalid">
               <span ng-if="vm.syncForm.newServiceUrl.$error.required">
-                {{ vm.platformSvc.getI18nString(vm.strings.settings_Service_UpdateForm_Required_Label) }}
+                {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Update.Required) }}
               </span>
               <span ng-if="vm.syncForm.newServiceUrl.$error.InvalidService">
-                {{ vm.platformSvc.getI18nString(vm.strings.settings_Service_UpdateForm_InvalidService_Label) }}
+                {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Update.Invalid) }}
               </span>
               <span ng-if="vm.syncForm.newServiceUrl.$error.RequestFailed">
-                {{ vm.platformSvc.getI18nString(vm.strings.settings_Service_UpdateForm_RequestFailed_Label) }}
+                {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Update.Failed) }}
               </span>
               <span ng-if="vm.syncForm.newServiceUrl.$error.ServiceVersionNotSupported">
-                {{ vm.platformSvc.getI18nString(vm.strings.settings_Service_UpdateForm_ServiceVersionNotSupported_Label) }}
+                {{ vm.platformSvc.getI18nString(vm.Strings.settings_Service_UpdateForm_ServiceVersionNotSupported_Label) }}
               </span>
             </div>
           </div>
@@ -254,13 +254,13 @@
               <span class="spinner-border spinner-border-sm" ng-show="vm.validatingServiceUrl" role="status"
                     aria-hidden="true"></span>
               <span ng-show="vm.validatingServiceUrl">{{
-          vm.platformSvc.getI18nString(vm.strings.settings_Service_Status_Loading) }}
+          vm.platformSvc.getI18nString(vm.Strings.Service.Status.Loading) }}
               </span>
               <span ng-hide="vm.validatingServiceUrl">{{
-          vm.platformSvc.getI18nString(vm.strings.button_Update_Label) }}</span>
+          vm.platformSvc.getI18nString(vm.Strings.Button.Update) }}</span>
             </button>
             <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.cancelUpdateService)">
-              {{ vm.platformSvc.getI18nString(vm.strings.button_Cancel_Label) }}
+              {{ vm.platformSvc.getI18nString(vm.Strings.Button.Cancel) }}
             </button>
           </div>
         </div>
@@ -268,45 +268,45 @@
     </div>
   </form>
   <div class="confirm well well-sm animate-fade-in" ng-show="vm.displaySyncConfirmation">
-    <h4>{{ vm.platformSvc.getI18nString(vm.strings.login_ConfirmSync_Title) }}</h4>
-    <p>{{ vm.platformSvc.getI18nString(vm.strings.login_ConfirmSync_Message) }}</p>
+    <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.Confirm.Title) }}</h4>
+    <p>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.Confirm.Content) }}</p>
     <div class="buttons">
       <button type="button" class="btn btn-default btn-confirm-enable-sync"
               ng-click="vm.utilitySvc.handleEvent(vm.executeSync)">
-        {{ vm.platformSvc.getI18nString(vm.strings.button_Confirm_Label) }}
+        {{ vm.platformSvc.getI18nString(vm.Strings.Button.Confirm) }}
       </button>
       <button type="button" class="btn btn-default" ng-click="vm.displaySyncConfirmation = false">
-        {{ vm.platformSvc.getI18nString(vm.strings.button_Deny_Label) }}
+        {{ vm.platformSvc.getI18nString(vm.Strings.Button.Deny) }}
       </button>
     </div>
   </div>
   <div class="otherSyncsWarning confirm well well-sm animate-fade-in" ng-show="vm.displayOtherSyncsWarning">
-    <h4>{{ vm.platformSvc.getI18nString(vm.strings.login_DisableOtherSyncs_Title) }}</h4>
-    <p ng-if="vm.appHelperSvc.platformName === vm.platformType.Chromium"
-       ng-bind-html="vm.platformSvc.getI18nString(vm.strings.login_DisableOtherSyncs_Message_Chrome)"></p>
-    <p ng-if="vm.appHelperSvc.platformName === vm.platformType.Firefox"
-       ng-bind-html="vm.platformSvc.getI18nString(vm.strings.login_DisableOtherSyncs_Message_Firefox)"></p>
+    <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.DisableOthers.Title) }}</h4>
+    <p ng-if="vm.platformSvc.platformName === vm.platformType.Chromium"
+       ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.DisableOthers.Content)"></p>
+    <p ng-if="vm.platformSvc.platformName === vm.platformType.Firefox"
+       ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.DisableOthers.Content)"></p>
     <div class="buttons">
       <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.dismissOtherSyncsWarning)">
-        {{ vm.platformSvc.getI18nString(vm.strings.button_Continue_Label) }}
+        {{ vm.platformSvc.getI18nString(vm.Strings.Button.Continue) }}
       </button>
     </div>
   </div>
   <div class="confirm well well-sm animate-fade-in" ng-show="vm.displayUpgradeConfirmation">
-    <h4>{{ vm.platformSvc.getI18nString(vm.strings.login_UpgradeSync_Title) }}</h4>
-    <div ng-bind-html="vm.platformSvc.getI18nString(vm.strings.login_UpgradeSync_Message)"></div>
+    <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.Upgrade.Title) }}</h4>
+    <div ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.Upgrade.Content)"></div>
     <div class="buttons">
       <button type="button" class="btn btn-default btn-confirm-enable-sync"
               ng-click="vm.utilitySvc.handleEvent(vm.upgradeSync)">
-        {{ vm.platformSvc.getI18nString(vm.strings.button_Confirm_Label) }}
+        {{ vm.platformSvc.getI18nString(vm.Strings.Button.Confirm) }}
       </button>
       <button type="button" class="btn btn-default" ng-click="vm.displayUpgradeConfirmation = false">
-        {{ vm.platformSvc.getI18nString(vm.strings.button_Deny_Label) }}
+        {{ vm.platformSvc.getI18nString(vm.Strings.Button.Deny) }}
       </button>
     </div>
   </div>
   <div class="confirm well well-sm animate-fade-in service-info" ng-show="vm.displayUpdateServiceConfirmation">
-    <h4>{{ vm.platformSvc.getI18nString(vm.strings.login_ConfirmUpdateService_Title) }}</h4>
+    <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Confirm) }}</h4>
     <p class="selected-service">
       <a href="{{ vm.newServiceInfo.url }}" class="new-tab"
          title="{{ vm.newServiceInfo.url }}">{{ vm.newServiceInfo.url }}</a>
@@ -314,30 +314,29 @@
     <ul>
       <li
           ng-class="{ 'text-danger': vm.newServiceInfo.status === vm.ApiServiceStatus.Offline || vm.newServiceInfo.status === vm.ApiServiceStatus.Error }">
-        <label>{{ vm.platformSvc.getI18nString(vm.strings.login_ConfirmUpdateService_Status_Label) }}</label>
+        <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Status) }}</label>
         {{ vm.getServiceStatusTextFromStatusCode(vm.newServiceInfo.status) }}
       </li>
       <li ng-if="vm.newServiceInfo.location">
-        <label>{{ vm.platformSvc.getI18nString(vm.strings.login_ConfirmUpdateService_Location_Label) }}</label>
+        <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Location) }}</label>
         {{ vm.getCountryNameFrom2LetterISOCode(vm.newServiceInfo.location) }}</li>
       <li>
-        <label>{{ vm.platformSvc.getI18nString(vm.strings.login_ConfirmUpdateService_MaxSyncSize_Label) }}</label>
+        <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.MaxSyncSize) }}</label>
         {{ vm.newServiceInfo.maxSyncSize | kbFmt : 0 }}</li>
       <li>
-        <label>{{ vm.platformSvc.getI18nString(vm.strings.login_ConfirmUpdateService_ApiVersion_Label) }}</label>
+        <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.ApiVersion) }}</label>
         {{ vm.newServiceInfo.version }}</li>
     </ul>
     <p class="service-message" ng-if="vm.newServiceInfo.message" ng-bind-html="vm.newServiceInfo.message">
     </p>
-    <p class="service-warning"
-       ng-bind-html="vm.platformSvc.getI18nString(vm.strings.login_ConfirmUpdateService_Warning)"></p>
+    <p class="service-warning" ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Warning)"></p>
     <div class="buttons">
       <button type="button" class="btn btn-default focused"
               ng-click="vm.utilitySvc.handleEvent(vm.confirmUpdateService)">
-        {{ vm.platformSvc.getI18nString(vm.strings.button_Confirm_Label) }}
+        {{ vm.platformSvc.getI18nString(vm.Strings.Button.Confirm) }}
       </button>
       <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.cancelUpdateService)">
-        {{ vm.platformSvc.getI18nString(vm.strings.button_Deny_Label) }}
+        {{ vm.platformSvc.getI18nString(vm.Strings.Button.Deny) }}
       </button>
     </div>
   </div>

@@ -1,7 +1,6 @@
 import './webext-app-working.component.scss';
 import { Component, Input, Output } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import { AppHelperService } from '../../../app/app.interface';
 import AlertService from '../../../shared/alert/alert.service';
 import { PlatformService } from '../../../shared/global-shared.interface';
@@ -17,6 +16,8 @@ import WorkingService from '../../../shared/working/working.service';
   template: require('./webext-app-working.component.html')
 })
 export default class WebExtAppWorkingComponent {
+  Strings = require('../../../../../res/strings/en.json');
+
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
   appHelperSvc: AppHelperService;
@@ -28,7 +29,6 @@ export default class WebExtAppWorkingComponent {
   enableCancel: boolean;
   message: string;
   show = false;
-  strings = Strings;
   currentTimeout: ng.IPromise<void>;
 
   @Input() fullViewMode: boolean;
@@ -114,14 +114,14 @@ export default class WebExtAppWorkingComponent {
     let message: string;
     switch (context) {
       case WorkingContext.Restoring:
-        message = this.platformSvc.getI18nString(Strings.working_Restoring_Message);
+        message = this.platformSvc.getI18nString(this.Strings.View.Working.Restoring);
         break;
       case WorkingContext.Reverting:
-        message = this.platformSvc.getI18nString(Strings.working_Reverting_Message);
+        message = this.platformSvc.getI18nString(this.Strings.View.Working.Reverting);
         break;
       case WorkingContext.Syncing:
       default:
-        message = this.platformSvc.getI18nString(Strings.working_Syncing_Message);
+        message = this.platformSvc.getI18nString(this.Strings.View.Working.Syncing);
     }
 
     this.currentTimeout = this.$timeout(() => {
@@ -132,7 +132,7 @@ export default class WebExtAppWorkingComponent {
   }
 
   showView(): void {
-    this.message = this.platformSvc.getI18nString(Strings.working_Syncing_Message);
+    this.message = this.platformSvc.getI18nString(this.Strings.View.Working.Syncing);
     this.appHelperSvc.getCurrentSync().then((currentSync) => {
       this.enableCancel = currentSync?.type === SyncType.Remote || false;
     });

@@ -2,7 +2,6 @@ import './app-bookmark.component.scss';
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../res/strings/en.json';
 import { AlertType } from '../../shared/alert/alert.enum';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
@@ -31,6 +30,8 @@ import { AppHelperService } from '../app.interface';
   template: require('./app-bookmark.component.html')
 })
 export default class AppBookmarkComponent implements OnInit {
+  Strings = require('../../../../res/strings/en.json');
+
   $exceptionHandler: ExceptionHandler;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
@@ -50,7 +51,6 @@ export default class AppBookmarkComponent implements OnInit {
   descriptionFieldOriginalHeight: string;
   editMode = false;
   originalUrl: string;
-  strings = Strings;
   tagLookahead: string;
   tagText: string;
   tagTextMeasure: string;
@@ -277,7 +277,7 @@ export default class AppBookmarkComponent implements OnInit {
 
       // Display alert
       this.alertSvc.setCurrentAlert({
-        message: this.platformSvc.getI18nString(Strings.getMetadata_Success_Message),
+        message: this.platformSvc.getI18nString(this.Strings.Alert.GetMetadata.Success),
         type: AlertType.Information
       });
     });

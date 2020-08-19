@@ -2,9 +2,12 @@ import { MessageCommand } from './global-shared.enum';
 import { SyncType } from './sync/sync.enum';
 import { Sync } from './sync/sync.interface';
 
-export interface I18nString {
+export interface I18nObject {
+  android?: string;
+  default: string;
+  chromium?: string;
   key: string;
-  message: string;
+  firefox?: string;
 }
 
 export interface Message {
@@ -20,10 +23,11 @@ export interface PlatformService {
   enableNativeEventListeners: () => ng.IPromise<void>;
   getAppVersion: () => ng.IPromise<string>;
   getCurrentUrl: () => ng.IPromise<string>;
-  getI18nString: (i18nString: I18nString) => string;
+  getI18nString: (i18nObj: I18nObject) => string;
   getNewTabUrl?: () => string;
   getPageMetadata: (getFullMetadata?: boolean, pageUrl?: string) => ng.IPromise<WebpageMetadata>;
   openUrl: (url: string) => void;
+  platformName: string;
   queueLocalResync: () => ng.IPromise<void>;
   queueSync: (sync: Sync, command?: MessageCommand, runSync?: boolean) => ng.IPromise<any>;
   refreshNativeInterface: (syncEnabled?: boolean, syncType?: SyncType) => ng.IPromise<void>;

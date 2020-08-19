@@ -1,10 +1,10 @@
 <bookmark ng-repeat="bookmark in vm.nodes" ng-model="bookmark" delete-bookmark="vm.deleteBookmark()"
           edit-bookmark="vm.editBookmark()"
-          enable-edit-button="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
-          enable-select="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)"
+          enable-edit-button="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"
+          enable-select="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"
           is-selected="vm.selectedBookmark === bookmark.id" share-bookmark="vm.shareBookmark()"
           ng-class="{ 'folder': vm.bookmarkHelperSvc.isFolder(bookmark), 'open': bookmark.displayChildren, 'animate': vm.selectedBookmark === bookmark.id }"
-          hm-press="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName) && bookmark.url && vm.utilitySvc.handleEvent(vm.selectBookmark(), $event, bookmark.id)">
+          hm-press="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) && bookmark.url && vm.utilitySvc.handleEvent(vm.selectBookmark(), $event, bookmark.id)">
   <bookmark-tree ng-model="bookmark.children" selected-bookmark="vm.selectedBookmark" edit-bookmark="vm.editBookmark()"
                  select-bookmark="vm.selectBookmark()" share-bookmark="vm.shareBookmark()"
                  delete-bookmark="vm.deleteBookmark()">

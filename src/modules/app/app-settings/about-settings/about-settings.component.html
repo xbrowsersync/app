@@ -1,11 +1,11 @@
 <div>
   <button id="support" type="button" class="btn btn-default"
           ng-click="vm.utilitySvc.handleEvent(vm.switchToSupportView)">
-    {{ vm.platformSvc.getI18nString(vm.strings.button_Support_Label) }}
+    {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Support) }}
   </button>
 </div>
 <div>
-  {{ vm.platformSvc.getI18nString(vm.strings.settings_About_AppVersion_Label) }}
-  <a class="new-tab" href="#" title="{{ vm.platformSvc.getI18nString(vm.strings.button_ReleaseNotes_Label) }}"
+  {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.AppVersion) }}
+  <a class="new-tab" href="#" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.ReleaseNotes) }}"
      ng-click="vm.utilitySvc.handleEvent(vm.displayReleaseNotes)">{{ vm.appVersion }}</a>
 </div>

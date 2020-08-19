@@ -3,7 +3,6 @@ import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import * as countriesList from 'countries-list';
 import { ZXCVBNResult } from 'zxcvbn';
-import Strings from '../../../../res/strings/en.json';
 import { ApiServiceStatus } from '../../shared/api/api.enum';
 import { ApiService, ApiServiceInfo } from '../../shared/api/api.interface';
 import CryptoService from '../../shared/crypto/crypto.service';
@@ -29,6 +28,8 @@ import { AppHelperService } from '../app.interface';
   template: require('./app-login.component.html')
 })
 export default class AppLoginComponent implements OnInit {
+  Strings = require('../../../../res/strings/en.json');
+
   $exceptionHandler: ExceptionHandler;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
@@ -57,7 +58,6 @@ export default class AppLoginComponent implements OnInit {
   platformType = PlatformType;
   serviceInfo: ApiServiceInfo;
   showPassword = false;
-  strings = Strings;
   syncEnabled = false;
   syncForm: ng.IFormController;
   syncId: string;
@@ -295,14 +295,14 @@ export default class AppLoginComponent implements OnInit {
   getServiceStatusTextFromStatusCode(statusCode: ApiServiceStatus): string {
     switch (statusCode) {
       case ApiServiceStatus.NoNewSyncs:
-        return this.platformSvc.getI18nString(Strings.settings_Service_Status_NoNewSyncs);
+        return this.platformSvc.getI18nString(this.Strings.Service.Status.NoNewSyncs);
       case ApiServiceStatus.Offline:
-        return this.platformSvc.getI18nString(Strings.settings_Service_Status_Offline);
+        return this.platformSvc.getI18nString(this.Strings.Service.Status.Offline);
       case ApiServiceStatus.Online:
-        return this.platformSvc.getI18nString(Strings.settings_Service_Status_Online);
+        return this.platformSvc.getI18nString(this.Strings.Service.Status.Online);
       case ApiServiceStatus.Error:
       default:
-        return this.platformSvc.getI18nString(Strings.settings_Service_Status_Error);
+        return this.platformSvc.getI18nString(this.Strings.Service.Status.Error);
     }
   }
 
@@ -328,7 +328,7 @@ export default class AppLoginComponent implements OnInit {
           this.$timeout(() => this.validateSyncId(), Globals.InterfaceReadyTimeout);
         }
 
-        if (this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
+        if (this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
           // Set displayed panels for mobile platform
           this.displayGetSyncIdPanel = !this.syncId;
           this.newSync = false;
@@ -340,7 +340,7 @@ export default class AppLoginComponent implements OnInit {
           if (this.displayOtherSyncsWarning) {
             // Focus on first button
             this.appHelperSvc.focusOnElement('.otherSyncsWarning .buttons > button');
-          } else if (!this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
+          } else if (!this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
             // Focus on password field
             this.appHelperSvc.focusOnElement('.active-login-form  input[name="txtPassword"]');
           }
@@ -443,7 +443,7 @@ export default class AppLoginComponent implements OnInit {
       // If creds were incorrect, focus on password field
       if (
         err instanceof Exceptions.InvalidCredentialsException &&
-        !this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)
+        !this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)
       ) {
         this.$timeout(() => {
           (document.querySelector('.login-form-existing input[name="txtPassword"]') as HTMLInputElement).select();

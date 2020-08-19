@@ -105,10 +105,12 @@ bookmark {
       background-color: rgba($colour-bg1-dark, 0.5);
     }
 
-    button {
+    .btn-fab {
       background-color: $colour-bg3-default;
       color: $colour-text2-default;
+      height: 3.5rem;
       position: static;
+      width: 3.5rem;
 
       @include theme-dark {
         background-color: $colour-text3-dark;

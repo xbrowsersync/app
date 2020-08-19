@@ -1,12 +1,12 @@
 <div class="view-content">
-  <h4>{{ vm.platformSvc.getI18nString(vm.strings.updated_Title) }} {{ vm.appVersion }}</h4>
-  <p>{{ vm.platformSvc.getI18nString(vm.strings.updated_Message) }}</p>
-  <div class="buttons">
+  <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Updated.Title) }} {{ vm.appVersion }}</h4>
+  <p>{{ vm.platformSvc.getI18nString(vm.Strings.View.Updated.Content) }}</p>
+  <div class="buttons vertical">
     <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.displayReleaseNotes)">
-      {{ vm.platformSvc.getI18nString(vm.strings.button_ReleaseNotes_Label) }}
+      {{ vm.platformSvc.getI18nString(vm.Strings.Button.ReleaseNotes) }}
     </button>
     <button type="button" class="btn btn-default focused" ng-click="vm.utilitySvc.handleEvent(vm.close)">
-      {{ vm.platformSvc.getI18nString(vm.strings.button_Continue_Label) }}
+      {{ vm.platformSvc.getI18nString(vm.Strings.Button.Continue) }}
     </button>
   </div>
 </div>

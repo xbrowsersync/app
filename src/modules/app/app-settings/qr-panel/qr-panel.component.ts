@@ -2,7 +2,6 @@ import './qr-panel.component.scss';
 import { Component, OnInit, Output } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import QRCode from 'qrcode-svg';
-import Strings from '../../../../../res/strings/en.json';
 import BackupRestoreService from '../../../shared/backup-restore/backup-restore.service';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { StoreKey } from '../../../shared/store/store.enum';
@@ -17,6 +16,8 @@ import { AppHelperService } from '../../app.interface';
   template: require('./qr-panel.component.html')
 })
 export default class AppQrComponent implements OnInit {
+  Strings = require('../../../../../res/strings/en.json');
+
   $q: ng.IQService;
   appHelperSvc: AppHelperService;
   backupRestoreSvc: BackupRestoreService;
@@ -24,7 +25,6 @@ export default class AppQrComponent implements OnInit {
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
-  strings = Strings;
   serviceUrl: string;
   syncId: string;
   syncIdCopied = false;

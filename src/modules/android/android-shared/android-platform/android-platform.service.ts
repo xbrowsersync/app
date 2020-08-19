@@ -1,7 +1,6 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import { Alert } from '../../../shared/alert/alert.interface';
 import AlertService from '../../../shared/alert/alert.service';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
@@ -10,8 +9,8 @@ import { BookmarkMetadata } from '../../../shared/bookmark/bookmark.interface';
 import * as Exceptions from '../../../shared/exception/exception';
 import { ExceptionHandler } from '../../../shared/exception/exception.interface';
 import Globals from '../../../shared/global-shared.constants';
-import { MessageCommand } from '../../../shared/global-shared.enum';
-import { I18nString, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
+import { MessageCommand, PlatformType } from '../../../shared/global-shared.enum';
+import { I18nObject, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
 import LogService from '../../../shared/log/log.service';
 import NetworkService from '../../../shared/network/network.service';
 import StoreService from '../../../shared/store/store.service';
@@ -24,6 +23,8 @@ import WorkingService from '../../../shared/working/working.service';
 @autobind
 @Injectable('PlatformService')
 export default class AndroidPlatformService implements PlatformService {
+  Strings = require('../../../../../res/strings/en.json');
+
   $exceptionHandler: ExceptionHandler;
   $http: ng.IHttpService;
   $injector: ng.auto.IInjectorService;
@@ -42,8 +43,9 @@ export default class AndroidPlatformService implements PlatformService {
   backgroundSyncInterval: ng.IPromise<void>;
   _currentPage: BookmarkMetadata;
   cancelGetPageMetadata: () => any;
-  i18nStrings: I18nString[];
+  i18nObjects: I18nObject[];
   loadingId: string;
+  platformName = PlatformType.Android;
 
   static $inject = [
     '$exceptionHandler',
@@ -89,7 +91,7 @@ export default class AndroidPlatformService implements PlatformService {
     this.utilitySvc = UtilitySvc;
     this.workingSvc = WorkingSvc;
 
-    this.i18nStrings = [];
+    this.i18nObjects = [];
   }
 
   get currentPage(): BookmarkMetadata {
@@ -180,18 +182,12 @@ export default class AndroidPlatformService implements PlatformService {
     return this.$q.resolve(this.currentPage?.url);
   }
 
-  getI18nString(i18nString: I18nString): string {
-    let message = '';
-
-    if (i18nString?.key) {
-      message = this.i18nStrings[i18nString.key];
-    }
-
-    if (!message) {
+  getI18nString(i18nObj: I18nObject): string {
+    const i18nStr = this.i18nObjects[i18nObj.key];
+    if (angular.isUndefined(i18nStr ?? undefined)) {
       throw new Exceptions.I18nException('I18n string has no value');
     }
-
-    return message;
+    return i18nStr;
   }
 
   getPageMetadata(getFullMetadata = true, pageUrl?: string): ng.IPromise<WebpageMetadata> {
@@ -395,8 +391,8 @@ export default class AndroidPlatformService implements PlatformService {
         i18nCode = language.value.split('-')[0];
       })
       .then(() => {
-        return this.$http.get<I18nString[]>(`./assets/strings_${i18nCode}.json`).then((response) => {
-          this.i18nStrings = response.data;
+        return this.$http.get<I18nObject[]>(`./assets/strings_${i18nCode}.json`).then((response) => {
+          this.i18nObjects = response.data;
         });
       })
       .catch((err) => {
@@ -431,21 +427,21 @@ export default class AndroidPlatformService implements PlatformService {
             case changeInfo.type === BookmarkChangeType.Add:
               this.$timeout(() => {
                 this.alertSvc.setCurrentAlert({
-                  message: this.getI18nString(Strings.bookmarkCreated_Message)
+                  message: this.getI18nString(this.Strings.Alert.BookmarkCreated)
                 } as Alert);
               }, 200);
               break;
             case changeInfo.type === BookmarkChangeType.Modify:
               this.$timeout(() => {
                 this.alertSvc.setCurrentAlert({
-                  message: this.getI18nString(Strings.bookmarkUpdated_Message)
+                  message: this.getI18nString(this.Strings.Alert.BookmarkUpdated)
                 } as Alert);
               }, 200);
               break;
             case changeInfo.type === BookmarkChangeType.Remove:
               this.$timeout(() => {
                 this.alertSvc.setCurrentAlert({
-                  message: this.getI18nString(Strings.bookmarkDeleted_Message)
+                  message: this.getI18nString(this.Strings.Alert.BookmarkDeleted)
                 } as Alert);
               }, 200);
               break;
@@ -465,8 +461,8 @@ export default class AndroidPlatformService implements PlatformService {
             this.syncEngineSvc.queueSync(sync, false);
             this.logSvc.logInfo('Sync not committed: network offline');
             this.alertSvc.setCurrentAlert({
-              message: this.getI18nString(Strings.error_UncommittedSyncs_Message),
-              title: this.getI18nString(Strings.error_UncommittedSyncs_Title)
+              message: this.getI18nString(this.Strings.Exception.UncommittedSyncs_Message),
+              title: this.getI18nString(this.Strings.Exception.UncommittedSyncs_Title)
             } as Alert);
             this.enableBackgroundSync();
             return;

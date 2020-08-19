@@ -1,10 +1,10 @@
 <div class="well well-sm">
-  <h4>{{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_Title) }}</h4>
+  <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.Title) }}</h4>
   <div class="panel-content">
-    <div class="form-group setting-group" ng-if="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)">
-      <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_SyncToolbar_Label) }}</label>
+    <div class="form-group setting-group" ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
+      <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.SyncToolbar.Label) }}</label>
       <p class="description">
-        {{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_SyncToolbar_Description) }}
+        {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.SyncToolbar.Description) }}
       </p>
       <div class="animate-fade-in">
         <div class="setting-value">
@@ -16,24 +16,24 @@
         </div>
       </div>
       <div class=" confirm animate-fade-in" ng-show="vm.displaySyncBookmarksToolbarConfirmation">
-        <div ng-bind-html="vm.platformSvc.getI18nString(vm.strings.settings_Prefs_SyncToolbarConfirmation_Message)">
+        <div ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.SyncToolbar.Confirmation)">
         </div>
         <div class="buttons">
           <button type="button" class="btn btn-default btn-confirm-sync-toolbar"
                   ng-click="vm.utilitySvc.handleEvent(vm.confirmSyncBookmarksToolbar)">
-            {{ vm.platformSvc.getI18nString(vm.strings.button_Confirm_Label) }}
+            {{ vm.platformSvc.getI18nString(vm.Strings.Button.Confirm) }}
           </button>
           <button type="button" class="btn btn-default"
                   ng-click="vm.utilitySvc.handleEvent(vm.cancelSyncBookmarksToolbar)">
-            {{ vm.platformSvc.getI18nString(vm.strings.button_Deny_Label) }}
+            {{ vm.platformSvc.getI18nString(vm.Strings.Button.Deny) }}
           </button>
         </div>
       </div>
     </div>
-    <div class="form-group setting-group" ng-if="vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)">
-      <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_SearchBar_Label) }}</label>
+    <div class="form-group setting-group" ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
+      <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.SearchBar.Label) }}</label>
       <p class="description">
-        {{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_SearchBar_Description) }}
+        {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.SearchBar.Description) }}
       </p>
       <div class="setting-value">
         <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleDisplaySearchBar)">
@@ -45,9 +45,9 @@
       </div>
     </div>
     <div class="form-group setting-group">
-      <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_DefaultToFolderView_Label) }}</label>
+      <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.DefaultToFolderView.Label) }}</label>
       <p class="description">
-        {{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_DefaultToFolderView_Description) }}
+        {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.DefaultToFolderView.Description) }}
         <div class="setting-value">
           <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleDefaultToFolderView)">
             <input type="checkbox" id="defaultToFolderView" ng-model="vm.settings.defaultToFolderView" />
@@ -56,10 +56,10 @@
           </div>
         </div>
     </div>
-    <div class="form-group setting-group" ng-if="!vm.utilitySvc.isMobilePlatform(vm.appHelperSvc.platformName)">
-      <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_DarkMode_Label) }}</label>
+    <div class="form-group setting-group" ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
+      <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.DarkMode.Label) }}</label>
       <p class="description">
-        {{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_DarkMode_Description) }}
+        {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.DarkMode.Description) }}
       </p>
       <div class="setting-value">
         <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleEnableDarkMode)">
@@ -70,9 +70,9 @@
       </div>
     </div>
     <div class="form-group setting-group">
-      <label>{{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_CheckForAppUpdates_Label) }}</label>
+      <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.CheckForAppUpdates.Label) }}</label>
       <p class="description">
-        {{ vm.platformSvc.getI18nString(vm.strings.settings_Prefs_CheckForAppUpdates_Description) }}
+        {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.CheckForAppUpdates.Description) }}
       </p>
       <div class="setting-value">
         <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleCheckForAppUpdates)">

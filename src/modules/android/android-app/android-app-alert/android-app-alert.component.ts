@@ -1,7 +1,6 @@
 import angular from 'angular';
 import { Component } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import { AlertType } from '../../../shared/alert/alert.enum';
 import AlertService from '../../../shared/alert/alert.service';
 import { AndroidException } from '../../../shared/exception/exception';
@@ -15,11 +14,11 @@ import { AndroidAlert } from '../android-app.interface';
   selector: 'appAlert'
 })
 export default class AndroidAppAlertComponent {
+  Strings = require('../../../../../res/strings/en.json');
+
   $exceptionHandler: ExceptionHandler;
   $scope: ng.IScope;
   platformSvc: AndroidPlatformService;
-
-  strings = Strings;
 
   static $inject = ['$exceptionHandler', '$scope', 'AlertService', 'PlatformService'];
   constructor(
@@ -54,7 +53,7 @@ export default class AndroidAppAlertComponent {
     // Add an action to open url if provided or if the message contains a url
     if (!alert.actionCallback && matches?.length > 0) {
       const urlToOpenOnClick = matches[0];
-      alert.action = this.platformSvc.getI18nString(Strings.button_Go_Label);
+      alert.action = this.platformSvc.getI18nString(this.Strings.Alert.Go);
       alert.actionCallback = () => {
         this.platformSvc.openUrl(urlToOpenOnClick);
       };

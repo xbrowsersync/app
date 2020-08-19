@@ -2,7 +2,6 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { Bookmarks as NativeBookmarks } from 'webextension-polyfill-ts';
-import Strings from '../../../../../res/strings/en.json';
 import { BookmarkSearchResult } from '../../../app/app-search/app-search.interface';
 import { ApiService } from '../../api/api.interface';
 import CryptoService from '../../crypto/crypto.service';
@@ -18,6 +17,8 @@ import { Bookmark, BookmarkMetadata, UpdateBookmarksResult } from '../bookmark.i
 @autobind
 @Injectable('BookmarkHelperService')
 export default class BookmarkHelperService {
+  Strings = require('../../../../../res/strings/en.json');
+
   $injector: ng.auto.IInjectorService;
   $q: ng.IQService;
   apiSvc: ApiService;
@@ -234,16 +235,16 @@ export default class BookmarkHelperService {
     let containerTitle: string;
     switch (bookmark.title) {
       case BookmarkContainer.Menu:
-        containerTitle = this.platformSvc.getI18nString(Strings.bookmarks_Container_Menu_Title);
+        containerTitle = this.platformSvc.getI18nString(this.Strings.Bookmarks.Container.Menu);
         break;
       case BookmarkContainer.Mobile:
-        containerTitle = this.platformSvc.getI18nString(Strings.bookmarks_Container_Mobile_Title);
+        containerTitle = this.platformSvc.getI18nString(this.Strings.Bookmarks.Container.Mobile);
         break;
       case BookmarkContainer.Other:
-        containerTitle = this.platformSvc.getI18nString(Strings.bookmarks_Container_Other_Title);
+        containerTitle = this.platformSvc.getI18nString(this.Strings.Bookmarks.Container.Other);
         break;
       case BookmarkContainer.Toolbar:
-        containerTitle = this.platformSvc.getI18nString(Strings.bookmarks_Container_Toolbar_Title);
+        containerTitle = this.platformSvc.getI18nString(this.Strings.Bookmarks.Container.Toolbar);
         break;
       default:
         containerTitle = `${undefined}`;

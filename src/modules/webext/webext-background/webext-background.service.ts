@@ -4,7 +4,6 @@ import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
 import * as detectBrowser from 'detect-browser';
 import { Alarms, browser, Notifications } from 'webextension-polyfill-ts';
-import Strings from '../../../../res/strings/en.json';
 import { Alert } from '../../shared/alert/alert.interface';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
@@ -29,6 +28,8 @@ import { InstallBackup } from '../webext.interface';
 @autobind
 @Injectable('WebExtBackgroundService')
 export default class WebExtBackgroundService {
+  Strings = require('../../../../res/strings/en.json');
+
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
@@ -107,8 +108,10 @@ export default class WebExtBackgroundService {
         }
 
         const alert: Alert = {
-          message: this.platformSvc.getI18nString(Strings.appUpdateAvailable_Message).replace('{version}', newVersion),
-          title: this.platformSvc.getI18nString(Strings.appUpdateAvailable_Title)
+          message: this.platformSvc
+            .getI18nString(this.Strings.Alert.AppUpdateAvailable.Message)
+            .replace('{version}', newVersion),
+          title: this.platformSvc.getI18nString(this.Strings.Alert.AppUpdateAvailable.Title)
         };
         this.displayAlert(alert, Globals.ReleaseNotesUrlStem + newVersion.replace(/^v/, ''));
       });
@@ -460,8 +463,8 @@ export default class WebExtBackgroundService {
       return this.platformSvc.getAppVersion().then((appVersion) => {
         // Display alert and set update panel to show
         const alert: Alert = {
-          message: this.platformSvc.getI18nString(Strings.appUpdated_Message),
-          title: `${this.platformSvc.getI18nString(Strings.appUpdated_Title)} ${appVersion}`
+          message: this.platformSvc.getI18nString(this.Strings.Alert.AppUpdated.Message),
+          title: `${this.platformSvc.getI18nString(this.Strings.Alert.AppUpdated.Title)} ${appVersion}`
         };
         this.displayAlert(alert, Globals.ReleaseNotesUrlStem + appVersion);
         return this.storeSvc.set(StoreKey.DisplayUpdated, true);

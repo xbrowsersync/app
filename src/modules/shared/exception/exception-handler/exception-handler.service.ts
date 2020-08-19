@@ -1,7 +1,6 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import { AlertType } from '../../alert/alert.enum';
 import { Alert } from '../../alert/alert.interface';
 import AlertService from '../../alert/alert.service';
@@ -12,6 +11,8 @@ import * as Exceptions from '../exception';
 @autobind
 @Injectable('ExceptionHandler')
 export default class ExceptionHandlerService {
+  Strings = require('../../../../../res/strings/en.json');
+
   $injector: ng.auto.IInjectorService;
   alertSvc: AlertService;
   logSvc: LogService;
@@ -41,110 +42,112 @@ export default class ExceptionHandlerService {
     switch (exception.constructor) {
       case Exceptions.NetworkOfflineException:
       case Exceptions.HttpRequestFailedException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_HttpRequestFailed_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_HttpRequestFailed_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.HttpRequestFailed_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.HttpRequestFailed_Message);
         break;
       case Exceptions.TooManyRequestsException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_TooManyRequests_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_TooManyRequests_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.TooManyRequests_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.TooManyRequests_Message);
         break;
       case Exceptions.RequestEntityTooLargeException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_RequestEntityTooLarge_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_RequestEntityTooLarge_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.RequestEntityTooLarge_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.RequestEntityTooLarge_Message);
         break;
       case Exceptions.NotAcceptingNewSyncsException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_NotAcceptingNewSyncs_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_NotAcceptingNewSyncs_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.NotAcceptingNewSyncs_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.NotAcceptingNewSyncs_Message);
         break;
       case Exceptions.DailyNewSyncLimitReachedException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_DailyNewSyncLimitReached_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_DailyNewSyncLimitReached_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.DailyNewSyncLimitReached_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.DailyNewSyncLimitReached_Message);
         break;
       case Exceptions.MissingClientDataException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_MissingClientData_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_MissingClientData_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.MissingClientData_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.MissingClientData_Message);
         break;
       case Exceptions.NoDataFoundException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_InvalidCredentials_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_InvalidCredentials_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.InvalidCredentials_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.InvalidCredentials_Message);
         break;
       case Exceptions.SyncRemovedException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_SyncRemoved_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_SyncRemoved_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.SyncRemoved_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.SyncRemoved_Message);
         break;
       case Exceptions.InvalidCredentialsException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_InvalidCredentials_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_InvalidCredentials_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.InvalidCredentials_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.InvalidCredentials_Message);
         break;
       case Exceptions.ContainerChangedException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_ContainerChanged_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_ContainerChanged_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.ContainerChanged_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.ContainerChanged_Message);
         break;
       case Exceptions.ContainerNotFoundException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_LocalContainerNotFound_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_LocalContainerNotFound_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.LocalContainerNotFound_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.LocalContainerNotFound_Message);
         break;
       case Exceptions.DataOutOfSyncException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_OutOfSync_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_OutOfSync_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.OutOfSync_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.OutOfSync_Message);
         break;
       case Exceptions.InvalidServiceException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_InvalidService_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_InvalidService_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.InvalidService_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.InvalidService_Message);
         break;
       case Exceptions.ServiceOfflineException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_ServiceOffline_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_ServiceOffline_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.ServiceOffline_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.ServiceOffline_Message);
         break;
       case Exceptions.UnsupportedApiVersionException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_UnsupportedServiceApiVersion_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_UnsupportedServiceApiVersion_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.UnsupportedServiceApiVersion_Title);
+        alertMessage.message = this.platformSvc.getI18nString(
+          this.Strings.Exception.UnsupportedServiceApiVersion_Message
+        );
         break;
       case Exceptions.FailedGetPageMetadataException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_FailedGetPageMetadata_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_FailedGetPageMetadata_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.FailedGetPageMetadata_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.FailedGetPageMetadata_Message);
         break;
       case Exceptions.FailedScanException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_ScanFailed_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_ScanFailed_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.ScanFailed_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.ScanFailed_Message);
         break;
       case Exceptions.FailedShareBookmarkException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_ShareFailed_Title);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.ShareFailed_Title);
         break;
       case Exceptions.FailedDownloadFileException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_FailedDownloadFile_Title);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.FailedDownloadFile_Title);
         break;
       case Exceptions.FailedGetDataToRestoreException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_FailedGetDataToRestore_Title);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.FailedGetDataToRestore_Title);
         break;
       case Exceptions.FailedRestoreDataException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_FailedRestoreData_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_FailedRestoreData_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.FailedRestoreData_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.FailedRestoreData_Message);
         break;
       case Exceptions.FailedShareUrlException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_FailedShareUrl_Title);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.FailedShareUrl_Title);
         break;
       case Exceptions.FailedShareUrlNotSyncedException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_FailedShareUrlNotSynced_Title);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.FailedShareUrlNotSynced_Title);
         break;
       case Exceptions.FailedRefreshBookmarksException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_FailedRefreshBookmarks_Title);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.FailedRefreshBookmarks_Title);
         break;
       case Exceptions.SyncUncommittedException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_UncommittedSyncs_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_UncommittedSyncs_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.UncommittedSyncs_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.UncommittedSyncs_Message);
         break;
       case Exceptions.FailedCreateNativeBookmarksException:
       case Exceptions.FailedGetNativeBookmarksException:
       case Exceptions.FailedRemoveNativeBookmarksException:
       case Exceptions.NativeBookmarkNotFoundException:
       case Exceptions.BookmarkNotFoundException:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_LocalSyncError_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_LocalSyncError_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.LocalSyncError_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.LocalSyncError_Message);
         break;
       default:
-        alertMessage.title = this.platformSvc.getI18nString(Strings.error_Default_Title);
-        alertMessage.message = this.platformSvc.getI18nString(Strings.error_Default_Message);
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.Default_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.Default_Message);
     }
 
     return alertMessage;

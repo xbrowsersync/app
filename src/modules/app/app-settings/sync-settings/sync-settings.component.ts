@@ -1,7 +1,6 @@
 import './sync-settings.component.scss';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import Strings from '../../../../../res/strings/en.json';
 import { ApiServiceStatus } from '../../../shared/api/api.enum';
 import { ApiServiceInfo } from '../../../shared/api/api.interface';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
@@ -24,6 +23,8 @@ import { AppHelperService } from '../../app.interface';
   template: require('./sync-settings.component.html')
 })
 export default class SyncSettingsComponent implements OnInit {
+  Strings = require('../../../../../res/strings/en.json');
+
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   appHelperSvc: AppHelperService;
@@ -40,7 +41,6 @@ export default class SyncSettingsComponent implements OnInit {
   displayQr = false;
   nextAutoUpdate: string;
   serviceInfo: ApiServiceInfo;
-  strings = Strings;
   syncDataSize: number;
   syncDataUsed: number;
   syncEnabled: boolean;
@@ -123,7 +123,7 @@ export default class SyncSettingsComponent implements OnInit {
           .then(() => this.refreshSyncDataUsage());
 
         // Check for available sync updates on non-mobile platforms
-        if (this.syncEnabled && !this.utilitySvc.isMobilePlatform(this.appHelperSvc.platformName)) {
+        if (this.syncEnabled && !this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
           this.$q
             .all([this.syncEngineSvc.checkForUpdates(), this.appHelperSvc.getNextScheduledSyncUpdateCheck()])
             .then((results) => {
