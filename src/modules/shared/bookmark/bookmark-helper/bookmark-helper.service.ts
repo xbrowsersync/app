@@ -613,17 +613,8 @@ export default class BookmarkHelperService {
           this.searchBookmarksByKeywords(bookmark.children, keywords, results);
         }
       } else {
-        // Add all words in bookmark to array
-        let bookmarkWords: string[] = [];
-        bookmarkWords = bookmarkWords.concat(this.utilitySvc.splitTextIntoWords(bookmark.title));
-        if (bookmark.description) {
-          bookmarkWords = bookmarkWords.concat(this.utilitySvc.splitTextIntoWords(bookmark.description));
-        }
-        if (bookmark.tags) {
-          bookmarkWords = bookmarkWords.concat(this.utilitySvc.splitTextIntoWords(bookmark.tags.join(' ')));
-        }
-
         // Get match scores for each keyword against bookmark words
+        const bookmarkWords = this.getKeywordsFromBookmark(bookmark);
         const scores = keywords.map((keyword) => {
           let count = 0;
           bookmarkWords.forEach((word) => {
@@ -677,6 +668,36 @@ export default class BookmarkHelperService {
     return results;
   }
 
+  getKeywordsFromBookmark(bookmark: Bookmark, tagsOnly = false): string[] {
+    let keywords: string[] = [];
+    if (!tagsOnly) {
+      // Add all words in title and description
+      keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.title));
+      keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.description));
+
+      // Add url host
+      const hostMatch = bookmark.url?.toLowerCase().match(/^(https?:\/\/)?(www\.)?([^/]+)/);
+      if (hostMatch) {
+        keywords.push(hostMatch[3]);
+        if (!angular.isUndefined(hostMatch[2])) {
+          keywords.push(hostMatch[2] + hostMatch[3]);
+        }
+      }
+    }
+
+    // Add tags
+    keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.tags?.join(' ')));
+
+    // Remove words of two chars or less
+    keywords = keywords.filter((item) => {
+      return item.length > 2;
+    });
+
+    // Remove duplicates, sort and return
+    const sortedKeywords = this.utilitySvc.sortWords(keywords);
+    return sortedKeywords;
+  }
+
   searchBookmarksForLookaheads(
     bookmarks: Bookmark[],
     word: string,
@@ -693,44 +714,8 @@ export default class BookmarkHelperService {
         // If bookmark is a folder, search children
         results = this.searchBookmarksForLookaheads(bookmark.children, word, tagsOnly, results);
       } else {
-        let bookmarkWords: string[] = [];
-        if (!tagsOnly) {
-          if (bookmark.title) {
-            // Add all words from title
-            bookmarkWords = bookmarkWords.concat(
-              this.utilitySvc.filterFalsyValues(bookmark.title.replace("'", '').toLowerCase().split(/[\W_]/))
-            );
-          }
-
-          // Split tags into individual words
-          if (bookmark.tags) {
-            const tags = bookmark.tags
-              .reduce((a, b) => {
-                return a.concat(b.toLowerCase().split(/\s/));
-              }, [])
-              .filter(Boolean);
-            bookmarkWords = bookmarkWords.concat(tags);
-          }
-
-          // Add url host
-          const hostMatch = bookmark.url.toLowerCase().match(/^(https?:\/\/)?(www\.)?([^/]+)/);
-          if (hostMatch) {
-            bookmarkWords.push(hostMatch[0]);
-            bookmarkWords.push(hostMatch[2] ? hostMatch[2] + hostMatch[3] : hostMatch[3]);
-            if (hostMatch[2]) {
-              bookmarkWords.push(hostMatch[3]);
-            }
-          }
-        } else if (bookmark.tags) {
-          bookmarkWords = bookmarkWords.concat(this.utilitySvc.filterFalsyValues(bookmark.tags));
-        }
-
-        // Remove words of two chars or less
-        bookmarkWords = bookmarkWords.filter((item) => {
-          return item.length > 2;
-        });
-
         // Find all words that begin with lookahead word
+        const bookmarkWords = this.getKeywordsFromBookmark(bookmark, tagsOnly);
         results = results.concat(
           bookmarkWords.filter((innerbookmark) => {
             return innerbookmark.indexOf(word) === 0;

@@ -175,8 +175,8 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
         if (intent?.type !== 'text/plain' || angular.isUndefined(intent?.extras)) {
           return;
         }
-        const intentText = intent.extras['android.intent.extra.TEXT'];
-        const intentSubject = intent.extras['android.intent.extra.SUBJECT'];
+        const intentText = intent.extras[window.plugins.intentShim.EXTRA_TEXT];
+        const intentSubject = intent.extras[window.plugins.intentShim.EXTRA_SUBJECT];
 
         // Set shared bookmark with shared intent data
         this.logSvc.logInfo(`Detected new intent: ${intentText}`);

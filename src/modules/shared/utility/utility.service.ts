@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
+import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
@@ -117,14 +118,7 @@ export default class UtilityService {
     const tags = tagText.toLowerCase().replace(/['"]/g, '').split(',');
 
     // Clean and sort tags
-    const cleanedTags = [
-      ...new Set(
-        tags
-          .filter((x) => !!x)
-          .map((x) => x.trim())
-          .sort()
-      )
-    ];
+    const cleanedTags = this.sortWords(tags.filter((x) => !!x).map((x) => x.trim()));
     return cleanedTags;
   }
 
@@ -194,12 +188,16 @@ export default class UtilityService {
     return whilst(data);
   }
 
+  sortWords(words: string[]): string[] {
+    return [...new Set(words)].sort();
+  }
+
   splitTextIntoWords(text: string): string[] {
-    if (!text) {
+    if (angular.isUndefined(text ?? undefined)) {
       return [];
     }
     const words = text.toLowerCase().replace(/['"]/g, '');
-    return this.filterFalsyValues(words.split(/\s/));
+    return this.filterFalsyValues(words.split(/[\s.,/#!$%^&*;:{}=\-_`~()]/));
   }
 
   stripTags(input: string): string {

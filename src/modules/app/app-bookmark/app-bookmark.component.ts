@@ -142,7 +142,7 @@ export default class AppBookmarkComponent implements OnInit {
   createTags(): void {
     // Clean and sort tags and add them to tag array
     const newTags = this.utilitySvc.getTagArrayFromText(this.tagText);
-    this.bookmarkFormData.tags = [...new Set([...newTags, ...this.bookmarkFormData.tags])].sort();
+    this.bookmarkFormData.tags = this.utilitySvc.sortWords([...newTags, ...this.bookmarkFormData.tags]);
     this.bookmarkForm.$setDirty();
     this.tagText = undefined;
     this.tagLookahead = undefined;
