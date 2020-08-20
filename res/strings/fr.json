@@ -167,25 +167,25 @@
       "default": "Les données de sauvegarde fournies ne sont pas au format attendu."
     },
     "FailedRestoreData_Title": {
-      "default": "Unable to restore data"
+      "default": "Restauration des données impossible"
     },
     "FailedShareUrlNotSynced_Title": {
-      "default": "You must be synced to add a bookmark"
+      "default": "Vous devez être synchronisé pour ajouter un favori"
     },
     "FailedShareUrl_Title": {
-      "default": "Unable to retrieve shared bookmark URL"
+      "default": "Impossible de récupérer l'URL du favori partagé"
     },
     "HttpRequestFailed_Message": {
-      "default": "Check your network connection and try again."
+      "default": "Vérifiez votre connexion réseau et réessayez."
     },
     "HttpRequestFailed_Title": {
-      "default": "Connection to service lost"
+      "default": "Connexion au service perdue"
     },
     "InvalidCredentials_Message": {
-      "default": "Check that your sync ID, password and service URL have been entered correctly."
+      "default": "Vérifiez que votre identifiant, votre mot de passe et l'URL du service ont été saisis correctement."
     },
     "InvalidCredentials_Title": {
-      "default": "Invalid credentials"
+      "default": "Identifiants non valides"
     },
     "InvalidService_Message": {
       "default": "The service URL is not a valid xBrowserSync service."
