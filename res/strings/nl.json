@@ -42,7 +42,7 @@
         "default": "Offline werken"
       },
       "Message": {
-        "default": "Changes will be synced once connection is restored."
+        "default": "Wijzigingen zullen gesynchroniseerd worden zodra de verbinding hersteld is."
       }
     }
   },
@@ -57,16 +57,16 @@
   "Bookmarks": {
     "Container": {
       "Menu": {
-        "default": "Menu bookmarks"
+        "default": "Bladwijzermenu"
       },
       "Mobile": {
-        "default": "Mobile bookmarks"
+        "default": "Mobiele bladwijzers"
       },
       "Other": {
-        "default": "Other bookmarks"
+        "default": "Andere bladwijzers"
       },
       "Toolbar": {
-        "default": "Toolbar bookmarks"
+        "default": "Werkbalkbladwijzers"
       }
     }
   },
@@ -105,7 +105,7 @@
       "default": "Help guide"
     },
     "Next": {
-      "default": "Next"
+      "default": "Volgende"
     },
     "OK": {
       "default": "Got it"
@@ -117,7 +117,7 @@
       "default": "Saving"
     },
     "Settings": {
-      "default": "Settings"
+      "default": "Instellingen"
     },
     "ShareBookmark": {
       "default": "Share bookmark"
@@ -131,10 +131,10 @@
   },
   "Exception": {
     "ContainerChanged_Message": {
-      "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
+      "default": "Probeer a.u.b. geen wijzigen aan [xbs]-mappen te maken, omdat dit synchronisatieproblemen kan veroorzaken."
     },
     "ContainerChanged_Title": {
-      "default": "xBrowserSync folder changed"
+      "default": "xBrowserSync-map gewijzigd"
     },
     "DailyNewSyncLimitReached_Message": {
       "default": "Sync to an existing sync ID, switch to a different service or try again tomorrow."
@@ -143,25 +143,25 @@
       "default": "Daily new sync limit reached"
     },
     "Default_Message": {
-      "default": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
+      "default": "Als het probleem zich blijft voordoen, ga dan naar <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>om het probleem te melden</a>."
     },
     "Default_Title": {
-      "default": "Something went wrong"
+      "default": "Er is iets fout gegaan"
     },
     "FailedDownloadFile_Title": {
       "default": "Backup failed"
     },
     "FailedGetDataToRestore_Title": {
-      "default": "Browse files failed"
+      "default": "Doorbladeren van bestanden mislukt"
     },
     "FailedGetPageMetadata_Message": {
-      "default": "URL is invalid or webpage data could not be retrieved."
+      "default": "URL is ongeldig of de webpaginagegevens konden niet worden opgehaald."
     },
     "FailedGetPageMetadata_Title": {
-      "default": "Couldn’t get bookmark properties"
+      "default": "Kon geen bladwijzereigenschappen ophalen"
     },
     "FailedRefreshBookmarks_Title": {
-      "default": "Couldn’t retrieve updates"
+      "default": "Kon geen updates ophalen"
     },
     "FailedRestoreData_Message": {
       "default": "The backup data provided is not in an expected format."
@@ -248,7 +248,7 @@
       "default": "Service offline"
     },
     "ShareFailed_Title": {
-      "default": "Share failed"
+      "default": "Delen mislukt"
     },
     "SyncRemoved_Message": {
       "default": "The requested sync does not exist, it may have been removed due to inactivity."
@@ -266,7 +266,7 @@
       "default": "Sync will be committed once connection to service is restored."
     },
     "UncommittedSyncs_Title": {
-      "default": "Changes not synced"
+      "default": "Wijzigingen zijn niet gesynchroniseerd"
     },
     "UnsupportedServiceApiVersion_Message": {
       "default": "This service is running an unsupported API version."
@@ -296,15 +296,15 @@
   },
   "Share": {
     "Bookmark": {
-      "default": "Share bookmark with"
+      "default": "Bladwijzer delen met"
     }
   },
   "Tooltip": {
     "NotSynced": {
-      "default": "not synced"
+      "default": "niet gesynchroniseerd"
     },
     "Synced": {
-      "default": "synced"
+      "default": "gesynchroniseerd"
     },
     "Syncing": {
       "default": "syncing"
@@ -324,7 +324,7 @@
         },
         "Url": {
           "Exists": {
-            "default": "URL has already been bookmarked"
+            "default": "De URL is reeds al bladwijzer toegevoegd"
           },
           "Label": {
             "default": "URL"
@@ -338,10 +338,10 @@
         },
         "Tags": {
           "Label": {
-            "default": "Tags"
+            "default": "Labels"
           },
           "Placeholder": {
-            "default": "tag 1, tag 2, tag 3, etc"
+            "default": "label 1,label 2, label 3, etc"
           },
           "Clear": {
             "default": "Clear tags"
@@ -397,7 +397,7 @@
         "firefox": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks toolbar and bookmarks library, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p><p>Please note however, as Firefox’s bookmarks API does not yet support accessing native bookmark tags, any existing tags will be lost when syncing and tags added via xBrowserSync will not be saved as native tags.</p>"
       },
       "Previous": {
-        "default": "Previous"
+        "default": "Vorige"
       },
       "Searching": {
         "default": "<h4>Searching your bookmarks</h4><p>Once synced, simply press Enter to display your recent bookmarks or type some keywords or a URL to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>To edit or delete a bookmark, hover over the bookmark and click the now visible edit icon next to the bookmark’s title.</p>",
@@ -438,7 +438,7 @@
           "default": "Encryption password"
         },
         "New": {
-          "default": "Enter an encryption password"
+          "default": "Voer een encryptiewachtwoord in"
         },
         "Show": {
           "default": "Reveal password"
@@ -460,13 +460,13 @@
       },
       "Service": {
         "ApiVersion": {
-          "default": "API version"
+          "default": "API-versie"
         },
         "Confirm": {
           "default": "Sync to this service?"
         },
         "Location": {
-          "default": "Location"
+          "default": "Locatie"
         },
         "MaxSyncSize": {
           "default": "Max sync size"
@@ -507,7 +507,7 @@
       "Sync": {
         "Confirm": {
           "Title": {
-            "default": "Are you sure?"
+            "default": "Weet u het zeker?"
           },
           "Content": {
             "default": "xBrowserSync will delete all local bookmarks data before restoring synced bookmarks. OK to proceed?"
@@ -589,7 +589,7 @@
         "default": "You have no bookmarks, go add some!"
       },
       "NoResults": {
-        "default": "No bookmarks found"
+        "default": "Geen bladwijzers gevonden"
       },
       "SearchResults": {
         "default": "View search results"
@@ -848,19 +848,19 @@
             "default": "Copy sync ID to clipboard"
           },
           "Copied": {
-            "default": "Copied!"
+            "default": "Gekopieerd!"
           }
         }
       },
       "AppVersion": {
-        "default": "Version"
+        "default": "Versie"
       },
       "NotAvailable": {
         "default": "Settings available when sync is enabled."
       },
       "FileDownloaded": {
         "default": "If the file did not download automatically, right click on the link below and “Save link as...”.",
-        "android": "File saved as {fileName}."
+        "android": "Bestand opgeslagen als {fileName}."
       },
       "Support": {
         "default": "Support xBrowserSync"
