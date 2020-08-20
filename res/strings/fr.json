@@ -714,7 +714,7 @@
             "default": "Journal d'application"
           },
           "Description": {
-            "default": "Download and include the application log when you log an issue."
+            "default": "Télécharger et inclure le journal d'application lorsque du signalement d'un problème."
           },
           "Clear": {
             "default": "Effacer le journal"
@@ -723,7 +723,7 @@
             "default": "Télécharger le journal"
           },
           "Size": {
-            "default": "Current log size"
+            "default": "Taille actuelle du journal"
           }
         }
       },
@@ -732,17 +732,17 @@
           "default": "Optional permissions"
         },
         "Add": {
-          "default": "Grant permissions"
+          "default": "Accorder les autorisations"
         },
         "Granted": {
-          "default": "Granted"
+          "default": "Accordé"
         },
         "NotGranted": {
-          "default": "Not granted"
+          "default": "Non accordé"
         },
         "Read": {
           "Title": {
-            "default": "Read website data"
+            "default": "Lire les données du site"
           },
           "Description": {
             "default": "Required to automatically add metadata to bookmarks when using the browser’s “Bookmark this page” button (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>more info</a>)."
@@ -868,13 +868,13 @@
     },
     "Support": {
       "Title": {
-        "default": "Support xBrowserSync!"
+        "default": "Soutenir xBrowserSync !"
       },
       "Content": {
-        "default": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains an effective tool in protecting our privacy and productivity against the rot of big tech!</p>"
+        "default": "<p>Nous voulons que xBrowserSync soit le premier outil de synchronisation de navigateur, mais il y a encore beaucoup à faire :</p><ul><li>Ajouter la synchronisation des onglets du navigateur et de l'historique</li><li>Prise en charge de tous les principaux navigateurs de bureau</li><li>Traduire en d'autres langues</li><li>Et <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>beaucoup plus</a>!</li></ul><p>Ce n'est qu'avec votre soutien que nous pourrons continuer à améliorer xBrowserSync et nous assurer qu'il reste un outil efficace pour protéger notre vie privée et notre productivité contre la corrosion des géants technologiques !</p>ans"
       },
       "Cryptos": {
-        "default": "Cryptos"
+        "default": "Crypto-monnaies"
       },
       "Liberapay": {
         "default": "Liberapay"
@@ -885,21 +885,21 @@
     },
     "Updated": {
       "Title": {
-        "default": "Updated to"
+        "default": "Mis à jour vers"
       },
       "Content": {
-        "default": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
+        "default": "xBrowserSync a été mis à jour avec les dernières fonctionnalités et correctifs. Pour plus de détails sur les changements contenus dans cette version, consultez les notes de version."
       }
     },
     "Working": {
       "Restoring": {
-        "default": "Restoring"
+        "default": "Restauration en cours"
       },
       "Reverting": {
-        "default": "Reverting"
+        "default": "Rétablissement en cours"
       },
       "Syncing": {
-        "default": "Syncing"
+        "default": "Synchronisation en cours"
       }
     }
   }
