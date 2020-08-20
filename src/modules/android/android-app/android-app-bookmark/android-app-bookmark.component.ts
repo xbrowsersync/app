@@ -38,8 +38,6 @@ export default class AndroidAppBookmarkComponent extends AppBookmarkComponent im
   platformSvc: AndroidPlatformService;
   syncEngineSvc: SyncEngineService;
 
-  shareMode = false;
-
   static $inject = [
     '$exceptionHandler',
     '$q',
@@ -83,35 +81,12 @@ export default class AndroidAppBookmarkComponent extends AppBookmarkComponent im
     this.logSvc = LogSvc;
     this.syncEngineSvc = SyncEngineSvc;
 
-    // If user shares a bookmark to the app
-    $scope.$on(AppEventType.ShareModeEnabled, () => {
-      this.shareMode = true;
-    });
-
     // If user cancels loading bookmark metadata
     $scope.$on(AppEventType.WorkingCancelAction, () => {
       if (this.platformSvc.cancelGetPageMetadata) {
         this.platformSvc.cancelGetPageMetadata();
       }
     });
-  }
-
-  changesSynced(): ng.IPromise<void> {
-    // If share mode enabled, exit app after syncing
-    return super.changesSynced().then(() => {
-      if (this.shareMode) {
-        this.appHelperSvc.exitApp();
-      }
-    });
-  }
-
-  close(): void {
-    // If share mode enabled, exit app on close
-    if (this.shareMode) {
-      this.shareMode = false;
-      return this.appHelperSvc.exitApp();
-    }
-    super.close();
   }
 
   getMetadataForCurrentPage(): ng.IPromise<BookmarkMetadata> {

@@ -37,8 +37,6 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
   syncEngineSvc: SyncEngineService;
   upgradeSvc: UpgradeService;
 
-  shareMode = false;
-
   static $inject = [
     '$interval',
     '$q',
@@ -94,10 +92,6 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     this.$interval = $interval;
     this.syncEngineSvc = SyncEngineSvc;
     this.upgradeSvc = UpgradeSvc;
-
-    $scope.$on(AppEventType.ShareModeEnabled, () => {
-      this.shareMode = true;
-    });
   }
 
   checkForDarkTheme(): ng.IPromise<void> {
@@ -201,12 +195,6 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
   }
 
   handleBackButton(event: Event): void {
-    // If share mode is enabled, exit app
-    if (this.shareMode) {
-      event.preventDefault();
-      this.appHelperSvc.exitApp();
-    }
-
     // Back button action depends on current view
     const currentView = this.appHelperSvc.getCurrentView();
     if (
@@ -477,14 +465,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
         .then(() => {
           // If bookmark was shared, switch to bookmark view
           if (!angular.isUndefined(this.platformSvc.currentPage)) {
-            return this.appHelperSvc
-              .switchView({ view: AppViewType.Bookmark })
-              .then(() =>
-                this.$timeout(
-                  () => this.utilitySvc.broadcastEvent(AppEventType.ShareModeEnabled),
-                  Globals.InterfaceReadyTimeout
-                )
-              );
+            return this.appHelperSvc.switchView({ view: AppViewType.Bookmark });
           }
         })
         // Continue initialisation

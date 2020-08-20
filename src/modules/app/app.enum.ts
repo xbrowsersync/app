@@ -2,7 +2,6 @@ enum AppEventType {
   ClearSelectedBookmark = 'clearSelectedBookmark',
   RefreshBookmarkSearchResults = 'refreshBookmarkSearchResults',
   RefreshSyncDataUsage = 'refreshSyncDataUsage',
-  ShareModeEnabled = 'shareModeEnabled',
   WorkingCancelAction = 'workingCancelAction'
 }
 
