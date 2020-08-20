@@ -2,36 +2,36 @@
   "Alert": {
     "AppUpdateAvailable": {
       "Title": {
-        "default": "xBrowserSync update available"
+        "default": "xBrowserSync-update beschikbaar"
       },
       "Message": {
-        "default": "{version} is available to download. Click for more information.",
-        "android": "xBrowserSync {version} is available to download."
+        "default": "{version} is beschikbaar om te downloaden. Klik voor meer informatie.",
+        "android": "xBrowserSync {version} is beschikbaar om te downloaden."
       }
     },
     "AppUpdated": {
       "Title": {
-        "default": "Updated to"
+        "default": "Bijgewerkt naar"
       },
       "Message": {
-        "default": "xBrowserSync has been updated with the latest features and fixes. Click for release notes."
+        "default": "xBrowserSync is bijgewerkt met de nieuwste functies en foutreparaties. Klik voor uitgavenotities."
       }
     },
     "BookmarkCreated": {
-      "default": "Bookmark created"
+      "default": "Bladwijzer aangemaakt"
     },
     "BookmarkDeleted": {
-      "default": "Bookmark deleted"
+      "default": "Bladwijzer verwijderd"
     },
     "BookmarkUpdated": {
-      "default": "Bookmark updated"
+      "default": "Bladwijzer bijgewerkt"
     },
     "GetMetadata": {
       "Message": {
-        "default": "Fetching bookmark properties, touch to cancel."
+        "default": "Bladwijzereigenschappen worden opgehaald, tik om te annuleren."
       },
       "Success": {
-        "default": "Bookmark properties updated."
+        "default": "Bladwijzereigenschappen bijgewerkt."
       }
     },
     "Go": {
@@ -39,7 +39,7 @@
     },
     "WorkingOffline": {
       "Title": {
-        "default": "Working offline"
+        "default": "Offline werken"
       },
       "Message": {
         "default": "Changes will be synced once connection is restored."
