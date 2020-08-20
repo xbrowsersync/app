@@ -2,53 +2,53 @@
   "Alert": {
     "AppUpdateAvailable": {
       "Title": {
-        "default": "xBrowserSync update available"
+        "default": "xBrowserSync aggiornamento disponibile"
       },
       "Message": {
-        "default": "{version} is available to download. Click for more information.",
-        "android": "xBrowserSync {version} is available to download."
+        "default": "{version} è disponibile per il download. Clicca per ulteriori informazioni.",
+        "android": "xBrowserSync {version} è disponibile per il download."
       }
     },
     "AppUpdated": {
       "Title": {
-        "default": "Updated to"
+        "default": "Aggiornato a"
       },
       "Message": {
-        "default": "xBrowserSync has been updated with the latest features and fixes. Click for release notes."
+        "default": "xBrowserSync è stato aggiornato con le ultime funzionalità e correzioni. Clicca per le note di rilascio."
       }
     },
     "BookmarkCreated": {
-      "default": "Bookmark created"
+      "default": "Segnalibro creato"
     },
     "BookmarkDeleted": {
-      "default": "Bookmark deleted"
+      "default": "Segnalibro eliminato"
     },
     "BookmarkUpdated": {
-      "default": "Bookmark updated"
+      "default": "Segnalibro aggiornato"
     },
     "GetMetadata": {
       "Message": {
-        "default": "Fetching bookmark properties, touch to cancel."
+        "default": "Recupero delle proprietà del segnalibro, tocca per annullare."
       },
       "Success": {
-        "default": "Bookmark properties updated."
+        "default": "Proprietà del segnalibro aggiornate."
       }
     },
     "Go": {
-      "default": "Go"
+      "default": "Vai"
     },
     "WorkingOffline": {
       "Title": {
-        "default": "Working offline"
+        "default": "Modalità offline"
       },
       "Message": {
-        "default": "Changes will be synced once connection is restored."
+        "default": "Le modifiche verranno sincronizzate una volta ripristinata la connessione."
       }
     }
   },
   "App": {
     "Description": {
-      "default": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
+      "default": "La sincronizzazione del browser come dovrebbe essere: sicura, anonima e gratuita! Sincronizza i segnalibri attraverso i tuoi browser e dispositivi, non è richiesta alcuna registrazione."
     },
     "Title": {
       "default": "xBrowserSync"
@@ -57,76 +57,76 @@
   "Bookmarks": {
     "Container": {
       "Menu": {
-        "default": "Menu bookmarks"
+        "default": "Menu segnalibri"
       },
       "Mobile": {
-        "default": "Mobile bookmarks"
+        "default": "Segnalibri mobile"
       },
       "Other": {
-        "default": "Other bookmarks"
+        "default": "Altri segnalibri"
       },
       "Toolbar": {
-        "default": "Toolbar bookmarks"
+        "default": "Segnalibri barra degli strumenti"
       }
     }
   },
   "Button": {
     "AddBookmark": {
-      "default": "Add Bookmark"
+      "default": "Aggiungi segnalibro"
     },
     "Back": {
-      "default": "Back"
+      "default": "Indietro"
     },
     "Cancel": {
-      "default": "Cancel"
+      "default": "Annulla"
     },
     "Close": {
-      "default": "Close"
+      "default": "Chiudi"
     },
     "Confirm": {
-      "default": "Yes"
+      "default": "Si"
     },
     "Continue": {
-      "default": "Continue"
+      "default": "Continua"
     },
     "DeleteBookmark": {
-      "default": "Delete Bookmark"
+      "default": "Elimina segnalibro"
     },
     "Deny": {
       "default": "No"
     },
     "Done": {
-      "default": "Done"
+      "default": "Fatto"
     },
     "EditBookmark": {
-      "default": "Edit Bookmark"
+      "default": "Modifica segnalibro"
     },
     "Help": {
-      "default": "Help guide"
+      "default": "Guida"
     },
     "Next": {
-      "default": "Next"
+      "default": "Successivo"
     },
     "OK": {
-      "default": "Got it"
+      "default": "Fatto"
     },
     "ReleaseNotes": {
-      "default": "View release notes"
+      "default": "Visualizza note di rilascio"
     },
     "Saving": {
-      "default": "Saving"
+      "default": "Salvataggio in corso"
     },
     "Settings": {
-      "default": "Settings"
+      "default": "Impostazioni"
     },
     "ShareBookmark": {
-      "default": "Share bookmark"
+      "default": "Condividi segnalibro"
     },
     "Update": {
-      "default": "Update"
+      "default": "Aggiorna"
     },
     "View": {
-      "default": "View"
+      "default": "Visualizza"
     }
   },
   "Exception": {
@@ -284,7 +284,7 @@
         "default": "Checking"
       },
       "NoNewSyncs": {
-        "default": "Not accepting new syncs"
+        "default": "Non accettare nuove sincronizzazioni"
       },
       "Offline": {
         "default": "Offline"
@@ -296,65 +296,65 @@
   },
   "Share": {
     "Bookmark": {
-      "default": "Share bookmark with"
+      "default": "Condividi segnalibro con"
     }
   },
   "Tooltip": {
     "NotSynced": {
-      "default": "not synced"
+      "default": "non sincronizzato"
     },
     "Synced": {
-      "default": "synced"
+      "default": "sincronizzato"
     },
     "Syncing": {
-      "default": "syncing"
+      "default": "sincronizzazione"
     }
   },
   "View": {
     "Bookmark": {
       "Add": {
-        "default": "Add bookmark"
+        "default": "Aggiungi segnalibro"
       },
       "Edit": {
-        "default": "Edit bookmark"
+        "default": "Modifica segnalibro"
       },
       "Form": {
         "Title": {
-          "default": "Title"
+          "default": "Titolo"
         },
         "Url": {
           "Exists": {
-            "default": "URL has already been bookmarked"
+            "default": "L'URL è già stato contrassegnato come segnalibro"
           },
           "Label": {
             "default": "URL"
           },
           "Required": {
-            "default": "Bookmark URL is required"
+            "default": "È richiesto l'URL del segnalibro"
           }
         },
         "Description": {
-          "default": "Description"
+          "default": "Descrizione"
         },
         "Tags": {
           "Label": {
-            "default": "Tags"
+            "default": "Etichette"
           },
           "Placeholder": {
             "default": "tag 1, tag 2, tag 3, etc"
           },
           "Clear": {
-            "default": "Clear tags"
+            "default": "Cancella etichette"
           },
           "Remove": {
-            "default": "Remove tag"
+            "default": "Rimuovi etichetta"
           }
         },
         "Delete": {
-          "default": "Delete"
+          "default": "Elimina"
         },
         "Share": {
-          "default": "Share"
+          "default": "Condividi"
         },
         "UpdateProperties": {
           "default": "Update bookmark properties"
