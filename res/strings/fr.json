@@ -102,69 +102,69 @@
       "default": "Editer le favori"
     },
     "Help": {
-      "default": "Help guide"
+      "default": "Guide"
     },
     "Next": {
-      "default": "Next"
+      "default": "Suivant"
     },
     "OK": {
-      "default": "Got it"
+      "default": "Compris"
     },
     "ReleaseNotes": {
-      "default": "View release notes"
+      "default": "Voir les notes de version"
     },
     "Saving": {
-      "default": "Saving"
+      "default": "Enregistrement"
     },
     "Settings": {
-      "default": "Settings"
+      "default": "Réglages"
     },
     "ShareBookmark": {
-      "default": "Share bookmark"
+      "default": "Partager le favori"
     },
     "Update": {
-      "default": "Update"
+      "default": "Mise à jour"
     },
     "View": {
-      "default": "View"
+      "default": "Afficher"
     }
   },
   "Exception": {
     "ContainerChanged_Message": {
-      "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
+      "default": "Évitez de modifier les répertoires [xbs]: cela peut causer des problèmes de synchronisation."
     },
     "ContainerChanged_Title": {
-      "default": "xBrowserSync folder changed"
+      "default": "Le dossier xBrowserSync a été modifié"
     },
     "DailyNewSyncLimitReached_Message": {
-      "default": "Sync to an existing sync ID, switch to a different service or try again tomorrow."
+      "default": "Synchroniser avec un identifiant existant, basculer vers un autre service ou réessayer demain."
     },
     "DailyNewSyncLimitReached_Title": {
-      "default": "Daily new sync limit reached"
+      "default": "Limite de synchronisation quotidienne atteinte"
     },
     "Default_Message": {
-      "default": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
+      "default": "Si le problème persiste, merci de <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>signaler le problème</a>."
     },
     "Default_Title": {
-      "default": "Something went wrong"
+      "default": "Une erreur s’est produite"
     },
     "FailedDownloadFile_Title": {
-      "default": "Backup failed"
+      "default": "Échec de la sauvegarde"
     },
     "FailedGetDataToRestore_Title": {
-      "default": "Browse files failed"
+      "default": "La recherche des fichiers a échoué"
     },
     "FailedGetPageMetadata_Message": {
-      "default": "URL is invalid or webpage data could not be retrieved."
+      "default": "L'URL est invalide ou les données de la page Web n'ont pu être récupérées."
     },
     "FailedGetPageMetadata_Title": {
-      "default": "Couldn’t get bookmark properties"
+      "default": "Impossible d'obtenir les propriétés du favori"
     },
     "FailedRefreshBookmarks_Title": {
-      "default": "Couldn’t retrieve updates"
+      "default": "Impossible de récupérer les mises à jour"
     },
     "FailedRestoreData_Message": {
-      "default": "The backup data provided is not in an expected format."
+      "default": "Les données de sauvegarde fournies ne sont pas au format attendu."
     },
     "FailedRestoreData_Title": {
       "default": "Unable to restore data"
@@ -330,7 +330,7 @@
             "default": "URL"
           },
           "Required": {
-            "default": "Bookmark URL is required"
+            "default": "L'URL du favori est requise"
           }
         },
         "Description": {
@@ -344,24 +344,24 @@
             "default": "tag 1, tag 2, tag 3, etc"
           },
           "Clear": {
-            "default": "Clear tags"
+            "default": "Effacer les tags"
           },
           "Remove": {
-            "default": "Remove tag"
+            "default": "Supprimer le tag"
           }
         },
         "Delete": {
-          "default": "Delete"
+          "default": "Effacer"
         },
         "Share": {
-          "default": "Share"
+          "default": "Partager"
         },
         "UpdateProperties": {
-          "default": "Update bookmark properties"
+          "default": "Mettre à jour les propriétés du favori"
         }
       },
       "InvalidUrlShared": {
-        "default": "The value that was shared does not contain a valid URL."
+        "default": "La valeur partagée ne contient pas d'URL valide."
       }
     },
     "Help": {
@@ -397,7 +397,7 @@
         "firefox": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks toolbar and bookmarks library, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p><p>Please note however, as Firefox’s bookmarks API does not yet support accessing native bookmark tags, any existing tags will be lost when syncing and tags added via xBrowserSync will not be saved as native tags.</p>"
       },
       "Previous": {
-        "default": "Previous"
+        "default": "Précédent"
       },
       "Searching": {
         "default": "<h4>Searching your bookmarks</h4><p>Once synced, simply press Enter to display your recent bookmarks or type some keywords or a URL to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>To edit or delete a bookmark, hover over the bookmark and click the now visible edit icon next to the bookmark’s title.</p>",
@@ -421,58 +421,58 @@
     "Login": {
       "GetSyncId": {
         "Title": {
-          "default": "Need a sync ID?"
+          "default": "Besoin d'un identifiant ?"
         },
         "Content": {
-          "default": "Download the xBrowserSync desktop browser extension and create a new sync to access your bookmarks here."
+          "default": "Téléchargez xBrowserSync pour navigateur de bureau et créez une nouvelle synchronisation pour accéder à vos favoris ici."
         }
       },
       "Password": {
         "Confirm": {
-          "default": "Confirm password"
+          "default": "Confirmer le mot de passe"
         },
         "Existing": {
-          "default": "Your encryption password"
+          "default": "Votre mot de passe de chiffrement"
         },
         "Label": {
-          "default": "Encryption password"
+          "default": "Mot de passe de chiffrement"
         },
         "New": {
-          "default": "Enter an encryption password"
+          "default": "Saisissez un mot de passe de chiffrement"
         },
         "Show": {
-          "default": "Reveal password"
+          "default": "Afficher le mot de passe"
         }
       },
       "Scan": {
         "Title": {
-          "default": "Connect to your sync"
+          "default": "Accès au compte"
         },
         "Content": {
-          "default": "Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a QR code which you can scan here."
+          "default": "Ouvrir xBrowserSync sur votre navigateur de bureau, allez dans le panneau Paramètres et cliquez sur votre identifiant de synchronisation pour afficher un code QR."
         },
         "ScanCode": {
-          "default": "Scan code"
+          "default": "Scanner le code"
         },
         "ManualEntry": {
-          "default": "Enter sync details manually"
+          "default": "Saisir les détails de la synchronisation manuellement"
         }
       },
       "Service": {
         "ApiVersion": {
-          "default": "API version"
+          "default": "Version de l'API"
         },
         "Confirm": {
-          "default": "Sync to this service?"
+          "default": "Synchroniser avec ce service ?"
         },
         "Location": {
-          "default": "Location"
+          "default": "Emplacement"
         },
         "MaxSyncSize": {
-          "default": "Max sync size"
+          "default": "Taille maximale de synchronisation"
         },
         "Selected": {
-          "default": "Syncing to"
+          "default": "Synchronisation vers"
         },
         "Status": {
           "default": "Status"
@@ -573,13 +573,13 @@
     },
     "Search": {
       "BookmarkTree": {
-        "default": "View bookmark folders"
+        "default": "Afficher les dossiers de favoris"
       },
       "Clear": {
-        "default": "Clear"
+        "default": "Effacer"
       },
       "FolderEmpty": {
-        "default": "Folder empty"
+        "default": "Dossier vide"
       },
       "Placeholder": {
         "default": "Start typing to find bookmarks or just hit Enter",
