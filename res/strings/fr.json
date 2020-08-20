@@ -582,56 +582,56 @@
         "default": "Dossier vide"
       },
       "Placeholder": {
-        "default": "Start typing to find bookmarks or just hit Enter",
-        "android": "Find a bookmark"
+        "default": "Commencez à taper pour trouver des favoris ou appuyez sur Entrée",
+        "android": "Rechercher un favori"
       },
       "NoBookmarks": {
-        "default": "You have no bookmarks, go add some!"
+        "default": "Vous n'avez pas de favoris, ajoutez en !"
       },
       "NoResults": {
-        "default": "No bookmarks found"
+        "default": "Aucun favori trouvé"
       },
       "SearchResults": {
-        "default": "View search results"
+        "default": "Afficher les résultats de recherche"
       }
     },
     "Settings": {
       "BackupRestore": {
         "Title": {
-          "default": "Back up and restore"
+          "default": "Sauvegarde et restauration"
         },
         "Backup": {
           "Title": {
-            "default": "Back up"
+            "default": "Sauvegarder"
           },
           "Button": {
-            "default": "Back up"
+            "default": "Sauvegarder"
           },
           "Local": {
-            "default": "Back up local browser data to a file."
+            "default": "Sauvegarder les données locales du navigateur dans un fichier."
           },
           "Synced": {
-            "default": "Back up synced data to a file."
+            "default": "Sauvegarder les données synchronisées dans un fichier."
           }
         },
         "Restore": {
           "Title": {
-            "default": "Restore"
+            "default": "Restaurer"
           },
           "Button": {
-            "default": "Restore"
+            "default": "Restaurer"
           },
           "Local": {
             "Description": {
-              "default": "Restore local browser data from a backup."
+              "default": "Restaurer les données locales du navigateur depuis une sauvegarde."
             },
             "Confirm": {
-              "default": "<p>As sync is currently disabled, the data being restored will overwrite the local browser data.</p><p>OK to proceed?</p>"
+              "default": "<p>La synchronisation étant désactivée, les données en cours de restauration écraseront les données du navigateur local.</p><p>OK pour continuer ?</p>"
             }
           },
           "Synced": {
             "Description": {
-              "default": "Restore synced data from a backup."
+              "default": "Restaurer les données synchronisées depuis une sauvegarde."
             },
             "Confirm": {
               "default": "<p>As sync is currently enabled, the data being restored will overwrite your synced data.</p><p>To restore data to the local browser only, disable sync before restoring.</p><p>OK to proceed?</p>",
@@ -639,11 +639,11 @@
             }
           },
           "Done": {
-            "default": "Your data has been restored."
+            "default": "Vos données ont été restaurées."
           },
           "SelectFile": {
             "Button": {
-              "default": "Select file"
+              "default": "Choisir un fichier"
             },
             "Placeholder": {
               "default": "Select a backup file to restore"
@@ -700,27 +700,27 @@
         },
         "Tracker": {
           "Title": {
-            "default": "Issues tracker"
+            "default": "Suivi des problèmes"
           },
           "Description": {
-            "default": "Report an issue to report a bug or request a new feature."
+            "default": "Signaler un problème ou demander une nouvelle fonctionnalité."
           },
           "Report": {
-            "default": "Report issue"
+            "default": "Signaler un problème"
           }
         },
         "Log": {
           "Title": {
-            "default": "Application log"
+            "default": "Journal d'application"
           },
           "Description": {
             "default": "Download and include the application log when you log an issue."
           },
           "Clear": {
-            "default": "Clear log"
+            "default": "Effacer le journal"
           },
           "Download": {
-            "default": "Download log"
+            "default": "Télécharger le journal"
           },
           "Size": {
             "default": "Current log size"
