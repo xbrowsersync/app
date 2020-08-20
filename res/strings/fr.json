@@ -2,53 +2,53 @@
   "Alert": {
     "AppUpdateAvailable": {
       "Title": {
-        "default": "xBrowserSync update available"
+        "default": "Mise à jour xBrowserSync disponible"
       },
       "Message": {
-        "default": "{version} is available to download. Click for more information.",
-        "android": "xBrowserSync {version} is available to download."
+        "default": "{version} est disponible. Cliquez pour plus d'informations.",
+        "android": "xBrowserSync {version} est disponible."
       }
     },
     "AppUpdated": {
       "Title": {
-        "default": "Updated to"
+        "default": "Mise à jour vers"
       },
       "Message": {
-        "default": "xBrowserSync has been updated with the latest features and fixes. Click for release notes."
+        "default": "xBrowserSync a été mis à jour avec les dernières fonctionnalités et correctifs. Cliquez pour les notes de version."
       }
     },
     "BookmarkCreated": {
-      "default": "Bookmark created"
+      "default": "Favori créé"
     },
     "BookmarkDeleted": {
-      "default": "Bookmark deleted"
+      "default": "Favori supprimé"
     },
     "BookmarkUpdated": {
-      "default": "Bookmark updated"
+      "default": "Favori mis à jour"
     },
     "GetMetadata": {
       "Message": {
-        "default": "Fetching bookmark properties, touch to cancel."
+        "default": "Récupération des propriétés du favori, appuyez pour annuler."
       },
       "Success": {
-        "default": "Bookmark properties updated."
+        "default": "Propriétés du favori mises à jour."
       }
     },
     "Go": {
-      "default": "Go"
+      "default": "Aller à"
     },
     "WorkingOffline": {
       "Title": {
-        "default": "Working offline"
+        "default": "Fonctionnement hors ligne"
       },
       "Message": {
-        "default": "Changes will be synced once connection is restored."
+        "default": "Les modifications seront synchronisées une fois la connexion rétablie."
       }
     }
   },
   "App": {
     "Description": {
-      "default": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
+      "default": "Synchronisation du navigateur telle qu'elle devrait être : sécurisée, anonyme et gratuite ! Synchronisez les favoris à travers vos navigateurs et appareils. Pas d'inscription."
     },
     "Title": {
       "default": "xBrowserSync"
@@ -57,49 +57,49 @@
   "Bookmarks": {
     "Container": {
       "Menu": {
-        "default": "Menu bookmarks"
+        "default": "Menu des favoris"
       },
       "Mobile": {
-        "default": "Mobile bookmarks"
+        "default": "Favoris mobiles"
       },
       "Other": {
-        "default": "Other bookmarks"
+        "default": "Autres favoris"
       },
       "Toolbar": {
-        "default": "Toolbar bookmarks"
+        "default": "Favoris de la barre d'outils"
       }
     }
   },
   "Button": {
     "AddBookmark": {
-      "default": "Add Bookmark"
+      "default": "Ajouter un favori"
     },
     "Back": {
-      "default": "Back"
+      "default": "Retour"
     },
     "Cancel": {
-      "default": "Cancel"
+      "default": "Annuler"
     },
     "Close": {
-      "default": "Close"
+      "default": "Fermer"
     },
     "Confirm": {
-      "default": "Yes"
+      "default": "Oui"
     },
     "Continue": {
-      "default": "Continue"
+      "default": "Continuer"
     },
     "DeleteBookmark": {
-      "default": "Delete Bookmark"
+      "default": "Supprimer le favori"
     },
     "Deny": {
-      "default": "No"
+      "default": "Non"
     },
     "Done": {
-      "default": "Done"
+      "default": "Effectué"
     },
     "EditBookmark": {
-      "default": "Edit Bookmark"
+      "default": "Editer le favori"
     },
     "Help": {
       "default": "Help guide"
