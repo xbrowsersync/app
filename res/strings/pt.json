@@ -749,121 +749,121 @@
           }
         },
         "Remove": {
-          "default": "Remove permissions"
+          "default": "Remover permissões"
         }
       },
       "Prefs": {
         "CheckForAppUpdates": {
           "Label": {
-            "default": "Check for app updates"
+            "default": "Procurar atualizações"
           },
           "Description": {
-            "default": "Be notified when a new version of xBrowserSync is available."
+            "default": "Seja notificado(a) quando uma nova versão do xBrowserSync estiver disponível."
           }
         },
         "DarkMode": {
           "Label": {
-            "default": "Enable dark mode"
+            "default": "Ativar o modo escuro"
           },
           "Description": {
-            "default": "Ideal for use in low-light environments."
+            "default": "Ideal para uso em ambientes com pouca luz."
           }
         },
         "DefaultToFolderView": {
           "Label": {
-            "default": "Show bookmark folders"
+            "default": "Visualizar pastas dos favoritos"
           },
           "Description": {
-            "default": "Folder view is displayed by default."
+            "default": "A visualização da pasta é exibida por padrão."
           }
         },
         "SearchBar": {
           "Label": {
-            "default": "Switch search bar position"
+            "default": "Alternar posição da barra de pesquisa"
           },
           "Description": {
-            "default": "Show search bar beneath results."
+            "default": "Mostrar barra de pesquisa abaixo dos resultados."
           }
         },
         "SyncToolbar": {
           "Label": {
-            "default": "Sync bookmarks toolbar"
+            "default": "Sincronizar barra de favoritos"
           },
           "Description": {
-            "default": "Disable this setting to display different toolbar bookmarks across synced browsers."
+            "default": "Desativar esta configuração para exibir diferentes favoritos da barra de ferramentas entre navegadores sincronizados."
           },
           "Confirmation": {
-            "default": "<p>Enabling this setting will replace the bookmarks currently in the bookmarks toolbar with your synced bookmarks.</p><p>OK to proceed?</p>"
+            "default": "<p>Ativar essa configuração substituirá os marcadores que estão na barra de ferramentas de favoritos com os seus favoritos sincronizados.</p><p>OK para prosseguir?</p>"
           }
         },
         "Title": {
-          "default": "Preferences"
+          "default": "Preferências"
         }
       },
       "Sync": {
         "Title": {
-          "default": "Sync"
+          "default": "Sincronizar"
         },
         "Disable": {
-          "default": "Disable sync"
+          "default": "Desativar a sincronização"
         },
         "Id": {
           "Label": {
-            "default": "Sync ID"
+            "default": "ID de sincronização"
           },
           "Description": {
-            "default": "Use your sync ID to connect to your synced data on other devices (click to reveal QR code)."
+            "default": "Use seu ID de sincronização para se conectar aos seus dados sincronizados em outros dispositivos (clique para revelar o código QR)."
           }
         },
         "Data": {
           "Label": {
-            "default": "Data usage"
+            "default": "Utilização de dados"
           },
           "Description": {
-            "default": "How much of the sync data allowed by the service are you using."
+            "default": "Quanto dos dados de sincronização permitidos pelo serviço você está usando."
           }
         },
         "Service": {
-          "default": "Service"
+          "default": "Serviço"
         },
         "UpdatesAvailable": {
           "False": {
-            "default": "Sync is up to date."
+            "default": "A sincronização está atualizada."
           },
           "True": {
-            "default": "Updates available, next sync at"
+            "default": "Atualizações disponíveis, próxima sincronização em"
           },
           "Sync": {
-            "default": "Update Sync"
+            "default": "Atualizar sincronização"
           }
         },
         "Qr": {
           "Description": {
-            "default": "Scan this QR code using the xBrowserSync Android app to connect to your synced data."
+            "default": "Leia este código QR usando o app xBrowserSync para se conectar aos seus dados sincronizados."
           },
           "Show": {
-            "default": "Show QR code"
+            "default": "Mostrar código QR"
           },
           "Copy": {
-            "default": "Copy sync ID to clipboard"
+            "default": "Copiar ID para área de transferência"
           },
           "Copied": {
-            "default": "Copied!"
+            "default": "Copiado!"
           }
         }
       },
       "AppVersion": {
-        "default": "Version"
+        "default": "Versão"
       },
       "NotAvailable": {
-        "default": "Settings available when sync is enabled."
+        "default": "Configurações disponíveis quando a sincronização está ativada."
       },
       "FileDownloaded": {
-        "default": "If the file did not download automatically, right click on the link below and “Save link as...”.",
-        "android": "File saved as {fileName}."
+        "default": "Se o arquivo não foi baixado automaticamente, clique com o botão direito no link abaixo e \"Salvar link como...\".",
+        "android": "Arquivo salvo como {fileName}."
       },
       "Support": {
-        "default": "Support xBrowserSync"
+        "default": "Apoie xBrowserSync"
       }
     },
     "Support": {
