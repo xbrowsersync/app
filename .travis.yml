@@ -12,8 +12,8 @@ deploy:
   api_key: ${github_api_key}
   draft: true
   file:
-    - 'dist/xbrowsersync_1.6.0.0_chromium.zip'
-    - 'dist/xbrowsersync_1.6.0.0_firefox.zip'
+    - 'dist/xbrowsersync_${XBS_VERSION}_chromium.zip'
+    - 'dist/xbrowsersync_${XBS_VERSION}_firefox.zip'
   on:
     all_branches: true
     tags: true
