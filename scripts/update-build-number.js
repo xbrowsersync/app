@@ -8,6 +8,7 @@ const buildNum = process.argv[3] || process.env.TRAVIS_BUILD_NUMBER || 0;
 const newVersion = `${process.env.npm_package_version}.${buildNum}`;
 process.env.XBS_VERSION = newVersion;
 console.log(`XBS_VERSION: ${process.env.XBS_VERSION}`);
+console.log(`TRAVIS_TAG: ${process.env.TRAVIS_TAG}`);
 
 const updateBuildNumberForWebext = (platformName) => {
   const fileName = path.resolve(__dirname, `../build/${platformName}/manifest.json`);
