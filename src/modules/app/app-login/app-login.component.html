@@ -222,7 +222,7 @@
           </div>
         </div>
       </div>
-      <div class="update-service-panel animate-fade-in" ng-if="vm.displayUpdateServicePanel">
+      <div class="update-service-panel animate-fade-in" ng-show="vm.displayUpdateServicePanel">
         <div ng-hide="vm.displayUpdateServiceConfirmation">
           <p ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Update.Description)">
           </p>
