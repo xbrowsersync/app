@@ -7,8 +7,7 @@ script:
   - npm run package:chromium
   - npm run package:firefox
 before_deploy:
-  - export TRAVIS_TAG=${XBS_VERSION}
-  - git tag $TRAVIS_TAG
+  - git tag ${XBS_VERSION}
 deploy:
   provider: releases
   # ⋮
