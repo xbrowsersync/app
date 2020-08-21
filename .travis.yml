@@ -15,6 +15,7 @@ deploy:
   file:
     - dist/xbrowsersync_${XBS_VERSION}_chromium.zip
     - dist/xbrowsersync_${XBS_VERSION}_firefox.zip
+  name: ${XBS_VERSION}
   on:
     all_branches: true
   prerelease: true
