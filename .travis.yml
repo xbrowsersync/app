@@ -5,7 +5,7 @@ install:
   - npm install
 script:
   - npm run package:chromium
-  # - npm run package:firefox
+  - npm run package:firefox
 before_deploy:
   - export XBS_VERSION=$(cat version.txt)
   - git tag v${XBS_VERSION}
@@ -14,7 +14,7 @@ deploy:
   # ⋮
   file:
     - dist/xbrowsersync_${XBS_VERSION}_chromium.zip
-  #  - 'dist/xbrowsersync_${XBS_VERSION}_firefox.zip'
+    - dist/xbrowsersync_${XBS_VERSION}_firefox.zip
   on:
     all_branches: true
   prerelease: true

@@ -21,6 +21,7 @@ export default class AboutSettingsComponent implements OnInit {
   utilitySvc: UtilityService;
 
   appVersion: string;
+  releaseNotesUrl: string;
 
   static $inject = ['AppHelperService', 'PlatformService', 'UtilityService'];
   constructor(AppHelperSvc: AppHelperService, PlatformSvc: PlatformService, UtilitySvc: UtilityService) {
@@ -29,18 +30,12 @@ export default class AboutSettingsComponent implements OnInit {
     this.utilitySvc = UtilitySvc;
   }
 
-  displayReleaseNotes(): void {
-    this.platformSvc.getAppVersion().then((appVersion) => {
-      const versionTag = appVersion.replace(/([a-z]+)\d+$/i, '$1');
-      const url = Globals.ReleaseNotesUrlStem + versionTag;
-      this.appHelperSvc.openUrl(null, url);
-    });
-  }
-
   ngOnInit(): void {
     // Initialise view model values
     this.platformSvc.getAppVersion().then((appVersion) => {
       this.appVersion = appVersion;
+      const versionTag = appVersion.replace(/([a-z]+)\d+$/i, '$1');
+      this.releaseNotesUrl = Globals.ReleaseNotesUrlStem + versionTag;
     });
   }
 

@@ -25,6 +25,7 @@ export default class AppUpdatedComponent implements OnInit {
   utilitySvc: UtilityService;
 
   appVersion: string;
+  releaseNotesUrl: string;
 
   static $inject = ['$timeout', 'AppHelperService', 'PlatformService', 'StoreService', 'UtilityService'];
   constructor(
@@ -47,17 +48,15 @@ export default class AppUpdatedComponent implements OnInit {
   }
 
   displayReleaseNotes(): void {
-    this.platformSvc.getAppVersion().then((appVersion) => {
-      const versionTag = appVersion.replace(/([a-z]+)\d+$/i, '$1');
-      const url = Globals.ReleaseNotesUrlStem + versionTag;
-      this.appHelperSvc.openUrl(null, url);
-    });
+    this.appHelperSvc.openUrl(null, this.releaseNotesUrl);
   }
 
   ngOnInit(): void {
     // Initialise view model values
     this.platformSvc.getAppVersion().then((appVersion) => {
       this.appVersion = appVersion;
+      const versionTag = appVersion.replace(/([a-z]+)\d+$/i, '$1');
+      this.releaseNotesUrl = Globals.ReleaseNotesUrlStem + versionTag;
     });
 
     // Set initial focus
