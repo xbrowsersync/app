@@ -6,10 +6,12 @@ install:
 script:
   - npm run package:chromium
   - npm run package:firefox
-  - echo ${XBS_VERSION} > version.txt
+  - 'echo ${XBS_VERSION} > version.txt'
 before_deploy:
+  - 'echo ready?'
   - export XBS_VERSION=$(cat version.txt)
-  - git tag v1.6.0.686
+  - 'echo ${XBS_VERSION}'
+  - 'git tag v1.6.0.687'
 deploy:
   provider: releases
   # ⋮
