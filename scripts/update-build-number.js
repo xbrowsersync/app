@@ -7,7 +7,7 @@ const buildNum = process.argv[3] || process.env.TRAVIS_BUILD_NUMBER || 0;
 
 const newVersion = `${process.env.npm_package_version}.${buildNum}`;
 const versionFileName = path.resolve(__dirname, '../version.txt');
-fs.writeFileSync(versionFileName, `v${newVersion}`);
+fs.writeFileSync(versionFileName, `${newVersion}`);
 
 const updateBuildNumberForWebext = (platformName) => {
   const fileName = path.resolve(__dirname, `../build/${platformName}/manifest.json`);

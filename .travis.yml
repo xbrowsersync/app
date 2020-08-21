@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - 'stable'
+  - 'lts/*'
 install:
   - npm install
 script:
@@ -8,8 +8,7 @@ script:
   # - npm run package:firefox
 before_deploy:
   - export XBS_VERSION=$(cat version.txt)
-  - echo ${XBS_VERSION}
-  - git tag ${XBS_VERSION}
+  - git tag v${XBS_VERSION}
 deploy:
   provider: releases
   # ⋮
