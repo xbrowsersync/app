@@ -23,7 +23,7 @@
      hm-tap="vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event,  vm.bookmark.url)">
   <h4 class="bookmark-heading" ng-if="vm.bookmark.title">{{ vm.bookmark.title }}</h4>
   <h4 class="bookmark-heading" ng-if="!vm.bookmark.title">
-    {{ vm.bookmarkHelperSvc.getBookmarkTitleForDisplay(vm.bookmark) }}
+    {{ vm.getBookmarkTitleForDisplay(vm.bookmark) }}
   </h4>
   <div class="bookmark-text">
     <div class="description">{{  vm.bookmark.description }}</div>
@@ -33,7 +33,7 @@
 <div class="bookmark-content" ng-if="!vm.bookmark.url && !vm.bookmarkHelperSvc.isSeparator(vm.bookmark)">
   <h4 class="bookmark-heading" ng-class="{ 'opening': vm.bookmark.open && !vm.bookmark.displayChildren }"
       ng-click="vm.utilitySvc.handleEvent(vm.clickBookmarkHeading, $event, vm.bookmark)" ng-if="vm.bookmark.title">
-    {{ vm.bookmarkHelperSvc.getBookmarkTitleForDisplay(vm.bookmark) }}
+    {{ vm.getBookmarkTitleForDisplay(vm.bookmark) }}
     <span ng-show="vm.bookmark.open && !vm.bookmark.displayChildren">
       <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
       </span>

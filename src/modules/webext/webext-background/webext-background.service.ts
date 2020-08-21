@@ -144,34 +144,30 @@ export default class WebExtBackgroundService {
           });
         });
       })
-      .catch((err) => {
-        // Don't display alert if sync failed due to network connection
-        if (this.networkSvc.isNetworkConnectionError(err)) {
-          this.logSvc.logInfo('Could not check for updates, no connection');
-          return;
-        }
+      .catch(this.checkForSyncUpdatesFailed);
+  }
 
-        // If ID was removed disable sync
-        if (err instanceof Exceptions.NoDataFoundException) {
-          this.syncEngineSvc.disableSync();
-          throw new Exceptions.SyncRemovedException(undefined, err);
-        }
+  checkForSyncUpdatesFailed(err: Error): void {
+    // Don't display alert if sync failed due to network connection
+    if (this.networkSvc.isNetworkConnectionError(err)) {
+      this.logSvc.logInfo('Could not check for updates, no connection');
+      return;
+    }
 
-        throw err;
-      });
+    // If ID was removed disable sync
+    if (err instanceof Exceptions.NoDataFoundException) {
+      this.syncEngineSvc.disableSync();
+      throw new Exceptions.SyncRemovedException(undefined, err);
+    }
+
+    throw err;
   }
 
   checkForSyncUpdatesOnStartup(): ng.IPromise<any> {
     return this.$q<boolean>((resolve, reject) => {
       return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
         if (!syncEnabled) {
-          return resolve(false);
-        }
-
-        // If network disconnected, skip update check
-        if (!this.networkSvc.isNetworkConnected()) {
-          this.logSvc.logInfo('Couldn’t check for updates on startup: network offline');
-          return resolve(false);
+          return resolve();
         }
 
         // Check for updates to synced bookmarks
@@ -196,16 +192,18 @@ export default class WebExtBackgroundService {
             }, 5000);
           });
       });
-    }).then((updatesAvailable) => {
-      if (!updatesAvailable) {
-        return;
-      }
+    })
+      .then((updatesAvailable) => {
+        if (!updatesAvailable) {
+          return;
+        }
 
-      // Queue sync
-      return this.platformSvc.queueSync({
-        type: SyncType.Local
-      });
-    });
+        // Queue sync
+        return this.platformSvc.queueSync({
+          type: SyncType.Local
+        });
+      })
+      .catch(this.checkForSyncUpdatesFailed);
   }
 
   displayAlert(alert: Alert, url?: string): void {

@@ -85,11 +85,13 @@ export default class AppMainComponent implements OnInit {
   }
 
   changeView(view: AppViewType): void {
-    // Hide loading panel and set current view
-    this.workingSvc.hide();
     if (this.currentView === view) {
       return;
     }
+
+    // Hide loading panel and alert messages, and set current view
+    this.workingSvc.hide();
+    this.alertSvc.clearCurrentAlert();
     this.currentView = view;
   }
 

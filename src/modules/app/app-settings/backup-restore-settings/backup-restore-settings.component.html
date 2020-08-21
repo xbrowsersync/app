@@ -26,13 +26,13 @@
             vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Backup.Button) }}</span>
           </button>
         </div>
-        <div class="confirm animate-fade-in" ng-show="vm.backupCompletedMessage">
+        <div class="confirm animate-fade-in backup-completed" ng-show="vm.backupCompletedMessage">
           <p>{{ vm.backupCompletedMessage }}</p>
           <p class="text-center">
             <a id="backupLink"></a>
           </p>
           <div class="buttons">
-            <button class="btn btn-default btn-done" ng-click="vm.backupCompletedMessage = null">
+            <button class="btn btn-default focused" ng-click="vm.backupCompletedMessage = null">
               {{ vm.platformSvc.getI18nString(vm.Strings.Button.Done) }}
             </button>
           </div>
@@ -84,7 +84,8 @@
             </div>
           </div>
           <div class="buttons">
-            <button class="btn btn-default" ng-disabled="!vm.dataToRestore || vm.restoreForm.dataToRestore.$invalid"
+            <button class="btn btn-default btn-restore"
+                    ng-disabled="!vm.dataToRestore || vm.restoreForm.dataToRestore.$invalid"
                     ng-click="vm.utilitySvc.handleEvent(vm.restore)">
               {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.RestoreData) }}
             </button>
@@ -109,10 +110,10 @@
             </button>
           </div>
         </div>
-        <div class="confirm animate-fade-in" ng-show="vm.restoreCompletedMessage">
+        <div class="confirm animate-fade-in restore-completed" ng-show="vm.restoreCompletedMessage">
           <p>{{ vm.restoreCompletedMessage }}</p>
           <div class="buttons">
-            <button class="btn btn-default btn-done" ng-click="vm.restoreCompletedMessage = null">
+            <button class="btn btn-default focused" ng-click="vm.restoreCompletedMessage = null">
               {{ vm.platformSvc.getI18nString(vm.Strings.Button.Done) }}
             </button>
           </div>
@@ -139,14 +140,14 @@
             </button>
           </div>
         </div>
-        <div class="confirm animate-fade-in" ng-show="vm.revertCompleted || vm.revertUnavailable">
+        <div class="confirm animate-fade-in revert-completed" ng-show="vm.revertCompleted || vm.revertUnavailable">
           <div></div>
           <p ng-if="vm.revertCompleted">
-            {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Revert.Unavailable) }}</p>
+            {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Revert.Done) }}</p>
           <p ng-if="vm.revertUnavailable">
-            {{ vm.platformSvc.getI18nString(vm.Strings.settings_BackupRestore_Revert_Unavailable_Label) }}</p>
+            {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Revert.Unavailable) }}</p>
           <div class="buttons">
-            <button class="btn btn-default btn-done" ng-click="vm.utilitySvc.handleEvent(vm.closeRevertPanel)">
+            <button class="btn btn-default focused" ng-click="vm.utilitySvc.handleEvent(vm.closeRevertPanel)">
               {{ vm.platformSvc.getI18nString(vm.Strings.Button.Done) }}
             </button>
           </div>

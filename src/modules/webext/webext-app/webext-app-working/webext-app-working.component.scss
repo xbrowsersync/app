@@ -41,7 +41,6 @@ app-working {
 
   .overlay {
     @include animation-fade-in();
-    @include animation-fade-out();
 
     &.fullsize {
       height: 37rem;

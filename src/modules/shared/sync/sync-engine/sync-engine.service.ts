@@ -2,6 +2,7 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { ApiService } from '../../api/api.interface';
+import BookmarkHelperService from '../../bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../exception/exception';
 import { ExceptionHandler } from '../../exception/exception.interface';
 import { PlatformService } from '../../global-shared.interface';
@@ -20,6 +21,7 @@ export default class SyncEngineService {
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   apiSvc: ApiService;
+  bookmarkHelperSvc: BookmarkHelperService;
   logSvc: LogService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
@@ -34,6 +36,7 @@ export default class SyncEngineService {
     '$q',
     '$timeout',
     'ApiService',
+    'BookmarkHelperService',
     'BookmarkSyncProviderService',
     'LogService',
     'PlatformService',
@@ -45,6 +48,7 @@ export default class SyncEngineService {
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
     ApiSvc: ApiService,
+    BookmarkHelperSvc: BookmarkHelperService,
     BookmarkSyncProviderSvc: BookmarkSyncProviderService,
     LogSvc: LogService,
     PlatformSvc: PlatformService,
@@ -55,6 +59,7 @@ export default class SyncEngineService {
     this.$q = $q;
     this.$timeout = $timeout;
     this.apiSvc = ApiSvc;
+    this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.logSvc = LogSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
@@ -62,6 +67,10 @@ export default class SyncEngineService {
 
     // Register sync providers
     this.providers = [BookmarkSyncProviderSvc];
+  }
+
+  cancelSync(): ng.IPromise<void> {
+    return this.disableSync();
   }
 
   checkIfDisableSyncOnError(err: Error): boolean {
@@ -185,6 +194,19 @@ export default class SyncEngineService {
     return this.syncQueue.length;
   }
 
+  getSyncSize(): ng.IPromise<number> {
+    return this.bookmarkHelperSvc
+      .getCachedBookmarks()
+      .then(() => {
+        return this.storeSvc.get<string>(StoreKey.Bookmarks);
+      })
+      .then((encryptedBookmarks) => {
+        // Return size in bytes of cached encrypted bookmarks
+        const sizeInBytes = new TextEncoder().encode(encryptedBookmarks).byteLength;
+        return sizeInBytes;
+      });
+  }
+
   handleFailedSync(failedSync: Sync, err: Error): ng.IPromise<Error> {
     let syncException = err;
     return this.$q<Error>((resolve, reject) => {
@@ -275,7 +297,7 @@ export default class SyncEngineService {
         .then(() => {
           // Process here if this is a cancel
           if (this.currentSync.type === SyncType.Cancel) {
-            return this.sync_handleCancel().then(() => false);
+            return this.cancelSync().then(() => false);
           }
 
           // Process sync for each registered provider
@@ -443,9 +465,5 @@ export default class SyncEngineService {
 
     // Get cached sync enabled value and update browser action icon
     return this.utilitySvc.isSyncEnabled().then(this.platformSvc.refreshNativeInterface);
-  }
-
-  sync_handleCancel(): ng.IPromise<void> {
-    return this.disableSync();
   }
 }

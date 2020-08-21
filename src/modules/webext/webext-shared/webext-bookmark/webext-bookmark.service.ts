@@ -11,7 +11,8 @@ import {
   BookmarkService,
   ModifyNativeBookmarkChangeData,
   MoveNativeBookmarkChangeData,
-  RemoveNativeBookmarkChangeData
+  RemoveNativeBookmarkChangeData,
+  UpdateBookmarksResult
 } from '../../../shared/bookmark/bookmark.interface';
 import * as Exceptions from '../../../shared/exception/exception';
 import Globals from '../../../shared/global-shared.constants';
@@ -86,6 +87,37 @@ export default class WebExtBookmarkService implements BookmarkService {
       this._syncEngineSvc = this.$injector.get('SyncEngineService');
     }
     return this._syncEngineSvc;
+  }
+
+  addBookmark(
+    bookmarkMetadata: BookmarkMetadata,
+    parentId: number,
+    index: number,
+    bookmarks: Bookmark[]
+  ): UpdateBookmarksResult {
+    const updatedBookmarks = angular.copy(bookmarks);
+    const parent = this.bookmarkHelperSvc.findBookmarkById(parentId, updatedBookmarks);
+    if (!parent) {
+      throw new Exceptions.BookmarkNotFoundException();
+    }
+
+    // Create new bookmark
+    const bookmark = this.bookmarkHelperSvc.newBookmark(
+      bookmarkMetadata.title,
+      bookmarkMetadata.url,
+      bookmarkMetadata.description,
+      bookmarkMetadata.tags,
+      bookmarkMetadata.isSeparator,
+      bookmarks
+    );
+
+    // Add bookmark as child at index param
+    parent.children.splice(index, 0, bookmark);
+
+    return {
+      bookmark,
+      bookmarks: updatedBookmarks
+    } as UpdateBookmarksResult;
   }
 
   buildIdMappings(bookmarks: Bookmark[]): ng.IPromise<void> {
@@ -238,6 +270,33 @@ export default class WebExtBookmarkService implements BookmarkService {
     throw new Exceptions.NotImplementedException();
   }
 
+  convertNativeBookmarkToBookmark(
+    nativeBookmark: NativeBookmarks.BookmarkTreeNode,
+    bookmarks: Bookmark[],
+    takenIds: number[] = []
+  ): Bookmark {
+    if (!nativeBookmark) {
+      return;
+    }
+
+    // Get a new bookmark id and add to taken ids array so that ids are not duplicated before bookmarks are updated
+    const id = this.bookmarkHelperSvc.getNewBookmarkId(bookmarks, takenIds);
+    takenIds.push(id);
+
+    // Create the new bookmark
+    const bookmark = this.bookmarkHelperSvc.newBookmark(nativeBookmark.title, nativeBookmark.url);
+    bookmark.id = id;
+
+    // Process children if any
+    if (nativeBookmark.children?.length > 0) {
+      bookmark.children = nativeBookmark.children.map((childBookmark) => {
+        return this.convertNativeBookmarkToBookmark(childBookmark, bookmarks, takenIds);
+      });
+    }
+
+    return bookmark;
+  }
+
   convertNativeBookmarkToSeparator(
     bookmark: NativeBookmarks.BookmarkTreeNode
   ): ng.IPromise<NativeBookmarks.BookmarkTreeNode> {
@@ -307,7 +366,7 @@ export default class WebExtBookmarkService implements BookmarkService {
         throw new Exceptions.NativeBookmarkNotFoundException();
       }
       const nativeBookmark = results[0];
-      const convertedBookmark = this.bookmarkHelperSvc.convertNativeBookmarkToBookmark(nativeBookmark, bookmarks);
+      const convertedBookmark = this.convertNativeBookmarkToBookmark(nativeBookmark, bookmarks);
       return convertedBookmark;
     });
   }
@@ -335,7 +394,7 @@ export default class WebExtBookmarkService implements BookmarkService {
     });
   }
 
-  createNativeBookmarksFromBookmarks(bookmarks: Bookmark[]): ng.IPromise<void> {
+  createNativeBookmarksFromBookmarks(bookmarks: Bookmark[]): ng.IPromise<number> {
     throw new Exceptions.NotImplementedException();
   }
 
@@ -343,9 +402,10 @@ export default class WebExtBookmarkService implements BookmarkService {
     parentId: string,
     bookmarks: Bookmark[],
     nativeToolbarContainerId?: string
-  ): ng.IPromise<void> {
+  ): ng.IPromise<number> {
     let processError: Error;
-    const createRecursive = (id: string, bookmarksToCreate: Bookmark[], toolbarId: string) => {
+    let total = 0;
+    const createRecursive = (id: string, bookmarksToCreate: Bookmark[] = [], toolbarId: string) => {
       const createChildBookmarksPromises = [];
 
       // Create bookmarks at the top level of the supplied array
@@ -369,16 +429,16 @@ export default class WebExtBookmarkService implements BookmarkService {
                 });
           });
         }, this.$q.resolve())
+        .then(() => this.$q.all(createChildBookmarksPromises))
         .then(() => {
-          return this.$q.all(createChildBookmarksPromises);
+          total += bookmarksToCreate.length;
         })
-        .then(() => {})
         .catch((err) => {
           processError = err;
           throw err;
         });
     };
-    return createRecursive(parentId, bookmarks, nativeToolbarContainerId);
+    return createRecursive(parentId, bookmarks, nativeToolbarContainerId).then(() => total);
   }
 
   createNativeSeparator(
@@ -447,6 +507,18 @@ export default class WebExtBookmarkService implements BookmarkService {
       const result = nativeContainers.find((x) => x.nativeId === nativeBookmarkId);
       return result ? result.containerName : '';
     });
+  }
+
+  getIdsFromDescendants(bookmark: Bookmark): number[] {
+    const ids = [];
+    if (angular.isUndefined(bookmark.children ?? undefined) || bookmark.children.length === 0) {
+      return ids;
+    }
+
+    this.bookmarkHelperSvc.eachBookmark(bookmark.children, (child) => {
+      ids.push(child.id);
+    });
+    return ids;
   }
 
   getNativeBookmarkByTitle(title: string): ng.IPromise<NativeBookmarks.BookmarkTreeNode> {
@@ -579,7 +651,7 @@ export default class WebExtBookmarkService implements BookmarkService {
 
           // Add new bookmark then check if the change should be synced
           const newBookmarkMetadata = this.bookmarkHelperSvc.extractBookmarkMetadata(changeData.nativeBookmark);
-          const addBookmarkResult = this.bookmarkHelperSvc.addBookmark(
+          const addBookmarkResult = this.addBookmark(
             newBookmarkMetadata,
             parentId,
             changeData.nativeBookmark.index,
@@ -639,7 +711,7 @@ export default class WebExtBookmarkService implements BookmarkService {
         }
 
         // Check if the change should be synced
-        const bookmarkToUpdate = this.bookmarkHelperSvc.findBookmarkById(bookmarks, idMapping.syncedId) as Bookmark;
+        const bookmarkToUpdate = this.bookmarkHelperSvc.findBookmarkById(idMapping.syncedId, bookmarks) as Bookmark;
         return this.checkIfBookmarkChangeShouldBeSynced(bookmarkToUpdate, bookmarks).then((syncThisChange) => {
           if (!syncThisChange) {
             // Don't sync this change
@@ -716,7 +788,7 @@ export default class WebExtBookmarkService implements BookmarkService {
             : this.$q
                 .resolve()
                 .then(
-                  () => this.bookmarkHelperSvc.findBookmarkById(bookmarks, movedBookmarkMapping.syncedId) as Bookmark
+                  () => this.bookmarkHelperSvc.findBookmarkById(movedBookmarkMapping.syncedId, bookmarks) as Bookmark
                 )
           ).then((bookmarkToRemove) => {
             // If old parent is mapped, remove the moved bookmark
@@ -759,7 +831,7 @@ export default class WebExtBookmarkService implements BookmarkService {
                     // Adjust the target index by the number of container folders then add the bookmark
                     const index = changeData.index - numContainers;
                     const bookmarkMetadata = this.bookmarkHelperSvc.extractBookmarkMetadata(bookmarkToRemove);
-                    const addBookmarkResult = this.bookmarkHelperSvc.addBookmark(
+                    const addBookmarkResult = this.addBookmark(
                       bookmarkMetadata,
                       parentMapping.syncedId,
                       index,
@@ -826,7 +898,7 @@ export default class WebExtBookmarkService implements BookmarkService {
         }
 
         // Check if the change should be synced
-        const bookmarkToRemove = this.bookmarkHelperSvc.findBookmarkById(bookmarks, idMapping.syncedId) as Bookmark;
+        const bookmarkToRemove = this.bookmarkHelperSvc.findBookmarkById(idMapping.syncedId, bookmarks) as Bookmark;
         return this.checkIfBookmarkChangeShouldBeSynced(bookmarkToRemove, bookmarks).then((syncThisChange) => {
           if (!syncThisChange) {
             // Don't sync this change
@@ -834,7 +906,7 @@ export default class WebExtBookmarkService implements BookmarkService {
           }
 
           // Get all child bookmark mappings
-          const descendantsIds = this.bookmarkHelperSvc.getIdsFromDescendants(bookmarkToRemove);
+          const descendantsIds = this.getIdsFromDescendants(bookmarkToRemove);
 
           // Remove bookmark
           return this.bookmarkHelperSvc.removeBookmarkById(idMapping.syncedId, bookmarks).then((updatedBookmarks) => {

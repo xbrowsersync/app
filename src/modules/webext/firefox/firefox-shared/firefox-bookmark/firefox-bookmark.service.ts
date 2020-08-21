@@ -104,9 +104,7 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
       });
   }
 
-  createNativeBookmarksFromBookmarks(bookmarks: Bookmark[]): ng.IPromise<void> {
-    const populateStartTime = new Date();
-
+  createNativeBookmarksFromBookmarks(bookmarks: Bookmark[]): ng.IPromise<number> {
     // Get containers
     const menuContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Menu, bookmarks);
     const mobileContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Mobile, bookmarks);
@@ -122,7 +120,7 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
         const toolbarBookmarksId: string = nativeContainerIds[BookmarkContainer.Toolbar];
 
         // Populate menu bookmarks
-        let populateMenu = this.$q.resolve();
+        let populateMenu = this.$q.resolve(0);
         if (menuContainer) {
           populateMenu = browser.bookmarks
             .getSubTree(menuBookmarksId)
@@ -136,7 +134,7 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
         }
 
         // Populate mobile bookmarks
-        let populateMobile = this.$q.resolve();
+        let populateMobile = this.$q.resolve(0);
         if (mobileContainer) {
           populateMobile = browser.bookmarks
             .getSubTree(mobileBookmarksId)
@@ -150,7 +148,7 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
         }
 
         // Populate other bookmarks
-        let populateOther = this.$q.resolve();
+        let populateOther = this.$q.resolve(0);
         if (otherContainer) {
           populateOther = browser.bookmarks
             .getSubTree(otherBookmarksId)
@@ -164,9 +162,9 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
         }
 
         // Populate bookmarks toolbar if enabled
-        const populateToolbar = this.$q((resolve, reject) => {
+        const populateToolbar = this.$q<number>((resolve, reject) => {
           if (!toolbarContainer) {
-            return resolve();
+            return resolve(0);
           }
 
           return this.settingsSvc
@@ -190,10 +188,11 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
 
         return this.$q.all([populateMenu, populateMobile, populateOther, populateToolbar]);
       })
-      .then(() => {
-        this.logSvc.logInfo(`Bookmarks populated in ${((new Date() as any) - (populateStartTime as any)) / 1000}s`);
+      .then((totals) => {
         // Move native unsupported containers into the correct order
-        return this.reorderUnsupportedContainers();
+        return this.reorderUnsupportedContainers().then(() => {
+          return totals.filter(Boolean).reduce((a, b) => a + b, 0);
+        });
       });
   }
 

@@ -111,7 +111,12 @@ export default class BookmarkSyncProviderService implements SyncProvider {
   populateNativeBookmarks(bookmarks: Bookmark[]): ng.IPromise<void> {
     // Clear native bookmarks and then populate with provided bookmarks
     return this.bookmarkSvc.clearNativeBookmarks().then(() => {
-      return this.bookmarkSvc.createNativeBookmarksFromBookmarks(bookmarks);
+      const populateStartTime = new Date();
+      return this.bookmarkSvc.createNativeBookmarksFromBookmarks(bookmarks).then((numBookmarksCreated) => {
+        this.logSvc.logInfo(
+          `${numBookmarksCreated} bookmarks populated in ${((new Date() as any) - (populateStartTime as any)) / 1000}s`
+        );
+      });
     });
   }
 

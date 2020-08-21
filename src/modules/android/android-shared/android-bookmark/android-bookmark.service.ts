@@ -23,7 +23,7 @@ export default class AndroidBookmarkService implements BookmarkService {
     return this.methodNotApplicable();
   }
 
-  createNativeBookmarksFromBookmarks(): ng.IPromise<void> {
+  createNativeBookmarksFromBookmarks(): ng.IPromise<number> {
     return this.methodNotApplicable();
   }
 

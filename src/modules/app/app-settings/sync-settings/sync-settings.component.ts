@@ -85,6 +85,9 @@ export default class SyncSettingsComponent implements OnInit {
     this.utilitySvc = UtilitySvc;
     this.workingSvc = WorkingSvc;
 
+    $scope.$on(AppEventType.SyncDisabled, () => {
+      this.syncEnabled = false;
+    });
     $scope.$on(AppEventType.RefreshSyncDataUsage, () => this.refreshSyncDataUsage());
   }
 
@@ -164,7 +167,7 @@ export default class SyncSettingsComponent implements OnInit {
       }
 
       // Get bookmarks sync size and calculate sync data percentage used
-      return this.bookmarkHelperSvc.getSyncSize().then((bookmarksSyncSize) => {
+      return this.syncEngineSvc.getSyncSize().then((bookmarksSyncSize) => {
         this.syncDataSize = bookmarksSyncSize / 1024;
         this.syncDataUsed = Math.ceil((this.syncDataSize / this.serviceInfo.maxSyncSize) * 150);
         this.dataUsageProgressWidth = this.syncDataUsed;

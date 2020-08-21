@@ -12,7 +12,7 @@ import { StoreKey } from '../../store/store.enum';
 import StoreService from '../../store/store.service';
 import UtilityService from '../../utility/utility.service';
 import { BookmarkContainer } from '../bookmark.enum';
-import { Bookmark, BookmarkMetadata, UpdateBookmarksResult } from '../bookmark.interface';
+import { Bookmark, BookmarkMetadata } from '../bookmark.interface';
 
 @autobind
 @Injectable('BookmarkHelperService')
@@ -52,37 +52,6 @@ export default class BookmarkHelperService {
       this._platformSvc = this.$injector.get('PlatformService');
     }
     return this._platformSvc;
-  }
-
-  addBookmark(
-    bookmarkMetadata: BookmarkMetadata,
-    parentId: number,
-    index: number,
-    bookmarks: Bookmark[]
-  ): UpdateBookmarksResult {
-    const updatedBookmarks = angular.copy(bookmarks);
-    const parent = this.findBookmarkById(updatedBookmarks, parentId);
-    if (!parent) {
-      throw new Exceptions.BookmarkNotFoundException();
-    }
-
-    // Create new bookmark
-    const bookmark = this.newBookmark(
-      bookmarkMetadata.title,
-      bookmarkMetadata.url,
-      bookmarkMetadata.description,
-      bookmarkMetadata.tags,
-      bookmarkMetadata.isSeparator,
-      bookmarks
-    );
-
-    // Add bookmark as child at index param
-    parent.children.splice(index, 0, bookmark);
-
-    return {
-      bookmark,
-      bookmarks: updatedBookmarks
-    } as UpdateBookmarksResult;
   }
 
   bookmarkIsContainer(bookmark: Bookmark | NativeBookmarks.BookmarkTreeNode): boolean {
@@ -130,8 +99,8 @@ export default class BookmarkHelperService {
   }
 
   findBookmarkById(
-    bookmarks: Bookmark[] | NativeBookmarks.BookmarkTreeNode[],
-    id: number | string
+    id: number | string,
+    bookmarks: Bookmark[] | NativeBookmarks.BookmarkTreeNode[]
   ): Bookmark | NativeBookmarks.BookmarkTreeNode {
     if (angular.isUndefined(bookmarks) || angular.isUndefined(id)) {
       return;
@@ -145,7 +114,7 @@ export default class BookmarkHelperService {
     if (index === -1) {
       (bookmarks as Bookmark[]).forEach((x) => {
         if (!bookmark) {
-          bookmark = this.findBookmarkById(x.children, id);
+          bookmark = this.findBookmarkById(id, x.children);
         }
       });
     } else {
@@ -177,33 +146,6 @@ export default class BookmarkHelperService {
     });
   }
 
-  convertNativeBookmarkToBookmark(
-    nativeBookmark: NativeBookmarks.BookmarkTreeNode,
-    bookmarks: Bookmark[],
-    takenIds: number[] = []
-  ): Bookmark {
-    if (!nativeBookmark) {
-      return;
-    }
-
-    // Get a new bookmark id and add to taken ids array so that ids are not duplicated before bookmarks are updated
-    const id = this.getNewBookmarkId(bookmarks, takenIds);
-    takenIds.push(id);
-
-    // Create the new bookmark
-    const bookmark = this.newBookmark(nativeBookmark.title, nativeBookmark.url);
-    bookmark.id = id;
-
-    // Process children if any
-    if (nativeBookmark.children?.length > 0) {
-      bookmark.children = nativeBookmark.children.map((childBookmark) => {
-        return this.convertNativeBookmarkToBookmark(childBookmark, bookmarks, takenIds);
-      });
-    }
-
-    return bookmark;
-  }
-
   extractBookmarkMetadata(bookmark: Bookmark | NativeBookmarks.BookmarkTreeNode): BookmarkMetadata {
     const metadata: BookmarkMetadata = {
       description: (bookmark as Bookmark).description,
@@ -220,36 +162,6 @@ export default class BookmarkHelperService {
     });
 
     return metadata;
-  }
-
-  getBookmarkTitleForDisplay(bookmark: Bookmark): string {
-    // If normal bookmark, return title or if blank url to display
-    if (bookmark.url) {
-      return bookmark.title ? bookmark.title : bookmark.url.replace(/^https?:\/\//i, '');
-    }
-
-    // Otherwise bookmark is a folder, return title if not a container
-    if (!this.bookmarkIsContainer(bookmark)) {
-      return bookmark.title;
-    }
-    let containerTitle: string;
-    switch (bookmark.title) {
-      case BookmarkContainer.Menu:
-        containerTitle = this.platformSvc.getI18nString(this.Strings.Bookmarks.Container.Menu);
-        break;
-      case BookmarkContainer.Mobile:
-        containerTitle = this.platformSvc.getI18nString(this.Strings.Bookmarks.Container.Mobile);
-        break;
-      case BookmarkContainer.Other:
-        containerTitle = this.platformSvc.getI18nString(this.Strings.Bookmarks.Container.Other);
-        break;
-      case BookmarkContainer.Toolbar:
-        containerTitle = this.platformSvc.getI18nString(this.Strings.Bookmarks.Container.Toolbar);
-        break;
-      default:
-        containerTitle = `${undefined}`;
-    }
-    return containerTitle;
   }
 
   getCachedBookmarks(): ng.IPromise<Bookmark[]> {
@@ -301,7 +213,7 @@ export default class BookmarkHelperService {
 
   getContainerByBookmarkId(id: number, bookmarks: Bookmark[]): Bookmark {
     // Check if the id corresponds to a container
-    const bookmark = this.findBookmarkById(bookmarks, id);
+    const bookmark = this.findBookmarkById(id, bookmarks);
     if (this.bookmarkIsContainer(bookmark as Bookmark)) {
       return bookmark as Bookmark;
     }
@@ -322,16 +234,34 @@ export default class BookmarkHelperService {
     return container;
   }
 
-  getIdsFromDescendants(bookmark: Bookmark): number[] {
-    const ids = [];
-    if (angular.isUndefined(bookmark.children ?? undefined) || bookmark.children.length === 0) {
-      return ids;
+  getKeywordsFromBookmark(bookmark: Bookmark, tagsOnly = false): string[] {
+    let keywords: string[] = [];
+    if (!tagsOnly) {
+      // Add all words in title and description
+      keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.title));
+      keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.description));
+
+      // Add url host
+      const hostMatch = bookmark.url?.toLowerCase().match(/^(https?:\/\/)?(www\.)?([^/]+)/);
+      if (hostMatch) {
+        keywords.push(hostMatch[3]);
+        if (!angular.isUndefined(hostMatch[2])) {
+          keywords.push(hostMatch[2] + hostMatch[3]);
+        }
+      }
     }
 
-    this.eachBookmark(bookmark.children, (child) => {
-      ids.push(child.id);
+    // Add tags
+    keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.tags?.join(' ')));
+
+    // Remove words of two chars or less
+    keywords = keywords.filter((item) => {
+      return item.length > 2;
     });
-    return ids;
+
+    // Remove duplicates, sort and return
+    const sortedKeywords = this.utilitySvc.sortWords(keywords);
+    return sortedKeywords;
   }
 
   getLookahead(word: string, bookmarks: Bookmark[], tagsOnly = false, exclusions: string[] = []): ng.IPromise<any> {
@@ -415,18 +345,6 @@ export default class BookmarkHelperService {
     return highestId + 1;
   }
 
-  getSyncSize(): ng.IPromise<number> {
-    return this.getCachedBookmarks()
-      .then(() => {
-        return this.storeSvc.get<string>(StoreKey.Bookmarks);
-      })
-      .then((encryptedBookmarks) => {
-        // Return size in bytes of cached encrypted bookmarks
-        const sizeInBytes = new TextEncoder().encode(encryptedBookmarks).byteLength;
-        return sizeInBytes;
-      });
-  }
-
   isFolder(bookmark: Bookmark | BookmarkMetadata | NativeBookmarks.BookmarkTreeNode): boolean {
     return !this.isSeparator(bookmark) && !bookmark.url;
   }
@@ -453,7 +371,7 @@ export default class BookmarkHelperService {
 
   modifyBookmarkById(id: number, newMetadata: BookmarkMetadata, bookmarks: Bookmark[]): ng.IPromise<Bookmark[]> {
     const updatedBookmarks = angular.copy(bookmarks);
-    const bookmarkToModify = this.findBookmarkById(updatedBookmarks, id) as Bookmark;
+    const bookmarkToModify = this.findBookmarkById(id, updatedBookmarks) as Bookmark;
     if (!bookmarkToModify) {
       throw new Exceptions.BookmarkNotFoundException();
     }
@@ -666,36 +584,6 @@ export default class BookmarkHelperService {
     }
 
     return results;
-  }
-
-  getKeywordsFromBookmark(bookmark: Bookmark, tagsOnly = false): string[] {
-    let keywords: string[] = [];
-    if (!tagsOnly) {
-      // Add all words in title and description
-      keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.title));
-      keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.description));
-
-      // Add url host
-      const hostMatch = bookmark.url?.toLowerCase().match(/^(https?:\/\/)?(www\.)?([^/]+)/);
-      if (hostMatch) {
-        keywords.push(hostMatch[3]);
-        if (!angular.isUndefined(hostMatch[2])) {
-          keywords.push(hostMatch[2] + hostMatch[3]);
-        }
-      }
-    }
-
-    // Add tags
-    keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.tags?.join(' ')));
-
-    // Remove words of two chars or less
-    keywords = keywords.filter((item) => {
-      return item.length > 2;
-    });
-
-    // Remove duplicates, sort and return
-    const sortedKeywords = this.utilitySvc.sortWords(keywords);
-    return sortedKeywords;
   }
 
   searchBookmarksForLookaheads(

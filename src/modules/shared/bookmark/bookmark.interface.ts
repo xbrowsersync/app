@@ -39,7 +39,7 @@ export interface BookmarkMetadata {
 export interface BookmarkService {
   buildIdMappings: (bookmarks: Bookmark[]) => ng.IPromise<void>;
   clearNativeBookmarks: () => ng.IPromise<void>;
-  createNativeBookmarksFromBookmarks: (bookmarks: Bookmark[]) => ng.IPromise<void>;
+  createNativeBookmarksFromBookmarks: (bookmarks: Bookmark[]) => ng.IPromise<number>;
   getNativeBookmarksAsBookmarks: () => ng.IPromise<Bookmark[]>;
   processNativeChangeOnBookmarks: (changeInfo: BookmarkChange, bookmarks: Bookmark[]) => ng.IPromise<Bookmark[]>;
   processChangeOnNativeBookmarks: (

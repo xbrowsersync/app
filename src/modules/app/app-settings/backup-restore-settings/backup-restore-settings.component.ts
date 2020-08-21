@@ -19,6 +19,7 @@ import { SyncType } from '../../../shared/sync/sync.enum';
 import UtilityService from '../../../shared/utility/utility.service';
 import { WorkingContext } from '../../../shared/working/working.enum';
 import WorkingService from '../../../shared/working/working.service';
+import { AppEventType } from '../../app.enum';
 import { AppHelperService } from '../../app.interface';
 import AppSettingsComponent from '../app-settings.component';
 
@@ -187,11 +188,11 @@ export default class BackupRestoreSettingsComponent implements OnInit {
         );
       })
       .then(() => {
-        this.$timeout(() => {
-          // Display completed message
-          this.displayRevertConfirmation = false;
-          this.revertCompleted = true;
-        });
+        // Update view model
+        this.displayRevertConfirmation = false;
+        this.revertCompleted = true;
+        this.appHelperSvc.focusOnElement('.revert-completed .focused');
+        this.utilitySvc.broadcastEvent(AppEventType.SyncDisabled);
       })
       .finally(this.workingSvc.hide);
   }
@@ -216,33 +217,32 @@ export default class BackupRestoreSettingsComponent implements OnInit {
   displayRevertPanel(): void {
     // Retrieve install backup from store
     this.storeSvc.get<any>(StoreKey.InstallBackup).then((installBackup) => {
-      this.$timeout(() => {
-        if (!installBackup) {
-          this.revertUnavailable = true;
-          return;
-        }
+      if (angular.isUndefined(installBackup)) {
+        this.revertUnavailable = true;
+        this.appHelperSvc.focusOnElement('.revert-completed .focused');
+        return;
+      }
 
-        const installBackupObj = JSON.parse(installBackup);
-        if (installBackupObj?.date && installBackupObj?.bookmarks) {
-          const date = new Date(installBackupObj.date);
-          const confirmationMessage = this.platformSvc.getI18nString(
-            this.Strings.View.Settings.BackupRestore.Revert.Confirm
-          );
-          this.revertConfirmationMessage = confirmationMessage.replace('{date}', date.toLocaleDateString());
-          this.displayRevertConfirmation = true;
-        } else {
-          this.revertUnavailable = true;
-        }
-      });
+      const installBackupObj = JSON.parse(installBackup);
+      if (installBackupObj?.date && installBackupObj?.bookmarks) {
+        const date = new Date(installBackupObj.date);
+        const confirmationMessage = this.platformSvc.getI18nString(
+          this.Strings.View.Settings.BackupRestore.Revert.Confirm
+        );
+        this.revertConfirmationMessage = confirmationMessage.replace('{date}', date.toLocaleDateString());
+        this.displayRevertConfirmation = true;
+      } else {
+        this.revertUnavailable = true;
+      }
     });
   }
 
   downloadBackup(): void {
     this.savingBackup = true;
     this.saveBackupFile().finally(() => {
-      // Focus on done button
-      this.appHelperSvc.focusOnElement('.btn-done');
+      // Update view model
       this.savingBackup = false;
+      this.appHelperSvc.focusOnElement('.backup-completed .focused');
     });
   }
 
@@ -285,6 +285,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
 
   resetFormValidity(): void {
     this.restoreForm.dataToRestore.$setValidity('InvalidData', true);
+    this.appHelperSvc.focusOnElement('.btn-restore');
   }
 
   restore(): void {
@@ -367,7 +368,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
   }
 
   restoreBookmarksSuccess(): void {
-    // Reset restore panel
+    // Update view model
     this.displayRestoreForm = false;
     this.dataToRestore = undefined;
     this.restoreCompletedMessage = this.platformSvc.getI18nString(
@@ -377,8 +378,8 @@ export default class BackupRestoreSettingsComponent implements OnInit {
     // Refresh data usage
     this.appSettingsCtrl.refreshSyncDataUsage();
 
-    // Focus on done button
-    this.appHelperSvc.focusOnElement('.btn-done');
+    // Focus on button
+    this.appHelperSvc.focusOnElement('.restore-completed .focused');
   }
 
   saveBackupFile(): ng.IPromise<void> {

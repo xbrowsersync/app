@@ -1,8 +1,9 @@
 enum AppEventType {
-  ClearSelectedBookmark = 'clearSelectedBookmark',
-  RefreshBookmarkSearchResults = 'refreshBookmarkSearchResults',
-  RefreshSyncDataUsage = 'refreshSyncDataUsage',
-  WorkingCancelAction = 'workingCancelAction'
+  ClearSelectedBookmark = 'CLEAR_SELECTED_BOOKMARK',
+  RefreshBookmarkSearchResults = 'REFRESH_BOOKMARK_SEARCH_RESULTS',
+  RefreshSyncDataUsage = 'REFRESH_SYNC_DATA_USAGE',
+  SyncDisabled = 'SYNC_DISABlED',
+  WorkingCancelAction = 'WORKING_CANCEL_ACTION'
 }
 
 enum AppViewType {

@@ -184,12 +184,10 @@ export default class AppSearchComponent implements OnInit {
       // Initialise bookmark tree
       this.bookmarkTree = null;
       this.bookmarkHelperSvc.getCachedBookmarks().then((results) => {
-        this.$timeout(() => {
-          // Display bookmark tree view, sort containers
-          this.bookmarkTree = results.sort((a, b) => {
-            return b.title.localeCompare(a.title);
-          }) as BookmarkTreeItem[];
-        });
+        // Display bookmark tree view, sort containers
+        this.bookmarkTree = results.sort((a, b) => {
+          return b.title.localeCompare(a.title);
+        }) as BookmarkTreeItem[];
       });
     }
 

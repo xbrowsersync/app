@@ -130,8 +130,8 @@ export default class AndroidAppBookmarkComponent extends AppBookmarkComponent im
                   (changeInfo.changeData as RemoveBookmarkChangeData)?.id ??
                   (changeInfo.changeData as ModifyBookmarkChangeData)?.bookmark?.id;
                 const changedBookmark = this.bookmarkHelperSvc.findBookmarkById(
-                  bookmarks,
-                  changedBookmarkId
+                  changedBookmarkId,
+                  bookmarks
                 ) as Bookmark;
                 if (angular.isUndefined(changedBookmark)) {
                   this.logSvc.logInfo('Changed bookmark could not be found, cancelling sync');

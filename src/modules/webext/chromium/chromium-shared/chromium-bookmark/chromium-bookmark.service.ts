@@ -73,9 +73,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
       });
   }
 
-  createNativeBookmarksFromBookmarks(bookmarks: Bookmark[]): ng.IPromise<void> {
-    const populateStartTime = new Date();
-
+  createNativeBookmarksFromBookmarks(bookmarks: Bookmark[]): ng.IPromise<number> {
     // Get containers
     const menuContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Menu, bookmarks);
     const mobileContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Mobile, bookmarks);
@@ -89,7 +87,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
         const toolbarBookmarksId: string = nativeContainerIds[BookmarkContainer.Toolbar];
 
         // Populate menu bookmarks in other bookmarks
-        let populateMenu = this.$q.resolve();
+        let populateMenu = this.$q.resolve(0);
         if (menuContainer) {
           populateMenu = browser.bookmarks
             .getSubTree(otherBookmarksId)
@@ -103,7 +101,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
         }
 
         // Populate mobile bookmarks in other bookmarks
-        let populateMobile = this.$q.resolve();
+        let populateMobile = this.$q.resolve(0);
         if (mobileContainer) {
           populateMobile = browser.bookmarks
             .getSubTree(otherBookmarksId)
@@ -117,7 +115,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
         }
 
         // Populate other bookmarks
-        let populateOther = this.$q.resolve();
+        let populateOther = this.$q.resolve(0);
         if (otherContainer) {
           populateOther = browser.bookmarks
             .getSubTree(otherBookmarksId)
@@ -131,9 +129,9 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
         }
 
         // Populate bookmarks toolbar if enabled
-        const populateToolbar = this.$q((resolve, reject) => {
+        const populateToolbar = this.$q<number>((resolve, reject) => {
           if (!toolbarContainer) {
-            return resolve();
+            return resolve(0);
           }
           return this.settingsSvc
             .syncBookmarksToolbar()
@@ -155,10 +153,11 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
 
         return this.$q.all([populateMenu, populateMobile, populateOther, populateToolbar]);
       })
-      .then(() => {
-        this.logSvc.logInfo(`Bookmarks populated in ${((new Date() as any) - (populateStartTime as any)) / 1000}s`);
+      .then((totals) => {
         // Move native unsupported containers into the correct order
-        return this.reorderUnsupportedContainers();
+        return this.reorderUnsupportedContainers().then(() => {
+          return totals.filter(Boolean).reduce((a, b) => a + b, 0);
+        });
       });
   }
 
