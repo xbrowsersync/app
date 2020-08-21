@@ -1,25 +1,13 @@
 const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const xml2js = require('xml2js');
 
-const getAndroidAppVersion = () => {
-  const filePath = path.resolve(__dirname, '../build/android/config.xml');
-  const parser = new xml2js.Parser();
-  const data = fs.readFileSync(filePath);
-  let version;
-  parser.parseString(data, (err, result) => {
-    version = result.widget.$.version;
-  });
-  return version;
-};
-
+const version = fs.readFileSync(path.resolve(__dirname, '../version.txt'), 'utf8');
 const pathToApk = path.resolve(
   __dirname,
   '../build/android/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk'
 );
 const outputDir = path.resolve(__dirname, '../dist');
-const version = getAndroidAppVersion();
 const alignedFilePath = `${outputDir}/xbrowsersync_${version}_android.apk`;
 const signedFilePath = `${outputDir}/xbrowsersync_${version}_android_signed.apk`;
 const unsignedFilePath = `${outputDir}/xbrowsersync_${version}_android_unsigned.apk`;

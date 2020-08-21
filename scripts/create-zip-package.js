@@ -3,13 +3,9 @@ const path = require('path');
 const zipdir = require('zip-dir');
 
 const platform = process.argv[2] || 'chromium';
-
+const version = fs.readFileSync(path.resolve(__dirname, '../version.txt'), 'utf8');
 const dirToZip = path.resolve(__dirname, `../build/${platform}`);
 const outputDir = './dist';
-
-const file = require(`${dirToZip}/manifest.json`);
-const version = file.version;
-
 const outputFilePath = `${outputDir}/xbrowsersync_${version}_${platform}.zip`;
 
 if (!fs.existsSync(outputDir)) {
