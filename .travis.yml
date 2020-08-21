@@ -11,7 +11,7 @@ before_deploy:
   - 'echo ready?'
   - export XBS_VERSION=$(cat version.txt)
   - 'echo ${XBS_VERSION}'
-  - 'git tag v1.6.0.687'
+  - 'git tag v1.6.0.688'
 deploy:
   provider: releases
   # ⋮
@@ -20,9 +20,7 @@ deploy:
     - 'dist/xbrowsersync_${XBS_VERSION}_firefox.zip'
   on:
     all_branches: true
-    tags: true
   prerelease: true
-  skip_cleanup: true
   token: ${github_api_key}
 branches:
   only:
