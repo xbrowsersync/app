@@ -6,8 +6,8 @@ const platform = process.argv[2] || 'chromium';
 const buildNum = process.argv[3] || process.env.TRAVIS_BUILD_NUMBER || 0;
 
 const newVersion = `${process.env.npm_package_version}.${buildNum}`;
-process.env.XBS_VERSION = newVersion;
-console.log(`XBS_VERSION: ${process.env.XBS_VERSION}`);
+const versionFileName = path.resolve(__dirname, '../version.txt');
+fs.writeFileSync(versionFileName, `v${newVersion}`);
 
 const updateBuildNumberForWebext = (platformName) => {
   const fileName = path.resolve(__dirname, `../build/${platformName}/manifest.json`);

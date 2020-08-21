@@ -9,7 +9,6 @@ const outputDir = './dist';
 
 const file = require(`${dirToZip}/manifest.json`);
 const version = file.version;
-console.log(`manifest version: ${version}`);
 
 const outputFilePath = `${outputDir}/xbrowsersync_${version}_${platform}.zip`;
 
