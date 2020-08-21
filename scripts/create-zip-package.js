@@ -11,6 +11,7 @@ const file = require(`${dirToZip}/manifest.json`);
 const version = file.version;
 
 const outputFilePath = `${outputDir}/xbrowsersync_${version}_${platform}.zip`;
+console.log(`outputFilePath: ${outputFilePath}`);
 
 if (!fs.existsSync(outputDir)) {
   fs.mkdirSync(outputDir);
