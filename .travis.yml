@@ -6,15 +6,18 @@ install:
 script:
   - npm run package:chromium
   - npm run package:firefox
+before_deploy:
+  - export TRAVIS_TAG=$XBS_VERSION
+  - git tag $TRAVIS_TAG
 deploy:
   provider: releases
   # ⋮
-  api_key: ${github_api_key}
-  draft: true
   file:
     - 'dist/xbrowsersync_${XBS_VERSION}_chromium.zip'
     - 'dist/xbrowsersync_${XBS_VERSION}_firefox.zip'
   on:
     all_branches: true
     tags: true
+  prerelease: true
   skip_cleanup: true
+  token: ${github_api_key}
