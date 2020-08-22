@@ -302,6 +302,15 @@ export default class AppBookmarkComponent implements OnInit {
     this.appHelperSvc.focusOnElement('input[name="bookmarkTags"]');
   }
 
+  shareBookmark(event: Event, bookmarkToShare: Bookmark) {
+    // Stop event propogation
+    event?.preventDefault();
+    (event as any)?.srcEvent?.stopPropagation();
+
+    // Trigger native share functionality
+    this.appHelperSvc.shareBookmark(bookmarkToShare);
+  }
+
   tagsTextChanged(): void {
     if (!this.tagText?.trim()) {
       return;

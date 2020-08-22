@@ -12,7 +12,7 @@ export default {
   },
   InterfaceReadyTimeout: 150,
   LookaheadMinChars: 1,
-  MinApiVersion: '1.1.3',
+  MinApiVersion: '1.1.9',
   PathToAssets: 'assets',
   QrCode: {
     Delimiter: '|$$|'

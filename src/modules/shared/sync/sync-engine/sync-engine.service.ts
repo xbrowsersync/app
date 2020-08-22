@@ -279,8 +279,8 @@ export default class SyncEngineService {
       return this.$q.resolve();
     }
 
-    const doActionUntil = (): ng.IPromise<boolean> => {
-      return this.$q.resolve(this.syncQueue.length === 0);
+    const condition = (): ng.IPromise<boolean> => {
+      return this.$q.resolve(this.syncQueue.length > 0);
     };
 
     const action = (): ng.IPromise<any> => {
@@ -347,7 +347,7 @@ export default class SyncEngineService {
       })
       .then(() => {
         // Process sync queue
-        return this.utilitySvc.promiseWhile(this.syncQueue, doActionUntil, action);
+        return this.utilitySvc.asyncWhile(this.syncQueue, condition, action);
       })
       .then(() => {
         if (!updateRemote) {

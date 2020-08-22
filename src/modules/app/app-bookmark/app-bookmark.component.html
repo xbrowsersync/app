@@ -93,7 +93,7 @@
       </button>
       <button type="button" class="btn btn-default"
               ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) && vm.editMode"
-              ng-click="vm.utilitySvc.handleEvent(vm.shareBookmark_Click, $event, vm.bookmarkFormData)">
+              ng-click="vm.utilitySvc.handleEvent(vm.shareBookmark, $event, vm.bookmarkFormData)">
         {{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Share) }}
       </button>
       <button type="button" class="btn btn-default btn-delete-bookmark" ng-if="vm.editMode"

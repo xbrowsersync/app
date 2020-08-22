@@ -45,6 +45,16 @@ export default class UtilityService {
     this.storeSvc = StoreSvc;
   }
 
+  asyncWhile(data: any, condition: (data: any) => ng.IPromise<any>, action: (data: any) => ng.IPromise<any>) {
+    const whilst = (whilstData): ng.IPromise<any> => {
+      return condition(whilstData).then((conditionIsTrue) => {
+        return conditionIsTrue ? action(whilstData).then(whilst) : this.$q.resolve(whilstData);
+      });
+    };
+
+    return whilst(data);
+  }
+
   broadcastEvent(eventType: AppEventType, eventData?: any[]): void {
     this.$rootScope.$broadcast(eventType, eventData);
   }
@@ -172,20 +182,6 @@ export default class UtilityService {
       searchObject,
       hash: parser.hash
     };
-  }
-
-  promiseWhile(data: any, condition: (data: any) => ng.IPromise<any>, action: (data: any) => ng.IPromise<any>) {
-    const whilst = (whilstData): ng.IPromise<any> => {
-      return condition(whilstData).then((conditionIsTrue) => {
-        if (conditionIsTrue) {
-          return this.$q.resolve(whilstData);
-        }
-
-        return action(whilstData).then(whilst);
-      });
-    };
-
-    return whilst(data);
   }
 
   sortWords(words: string[]): string[] {

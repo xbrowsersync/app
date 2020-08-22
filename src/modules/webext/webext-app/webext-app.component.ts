@@ -63,25 +63,20 @@ export default class WebExtAppComponent extends AppMainComponent implements OnIn
   }
 
   waitForSyncsToFinish() {
-    const doActionUntil = (currentData: [Sync, number]) => {
-      const currentSync = currentData[0];
-      const syncQueueLength = currentData[1];
-      return this.$q.resolve(angular.isUndefined(currentSync ?? undefined) && syncQueueLength === 0);
+    const condition = (currentSync: Sync) => {
+      return this.$q.resolve(!angular.isUndefined(currentSync ?? undefined));
     };
 
     const action = () => {
       return this.$q((resolve, reject) => {
         this.$timeout(() => {
-          this.$q
-            .all([this.appHelperSvc.getCurrentSync(), this.appHelperSvc.getSyncQueueLength()])
-            .then(resolve)
-            .catch(reject);
+          this.appHelperSvc.getCurrentSync().then(resolve).catch(reject);
         }, 1e3);
       });
     };
 
     // Periodically check sync queue until it is empty
-    return this.utilitySvc.promiseWhile([], doActionUntil, action);
+    return this.utilitySvc.asyncWhile([], condition, action);
   }
 
   workingCancelAction(): ng.IPromise<void> {

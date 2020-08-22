@@ -376,8 +376,8 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
   }
 
   processNativeBookmarkEventsQueue(): void {
-    const doActionUntil = (): ng.IPromise<boolean> => {
-      return this.$q.resolve(this.nativeBookmarkEventsQueue.length === 0);
+    const condition = (): ng.IPromise<boolean> => {
+      return this.$q.resolve(this.nativeBookmarkEventsQueue.length > 0);
     };
 
     const action = (): any => {
@@ -398,7 +398,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
     };
 
     // Iterate through the queue and process the events
-    this.utilitySvc.promiseWhile(this.nativeBookmarkEventsQueue, doActionUntil, action).then(() => {
+    this.utilitySvc.asyncWhile(this.nativeBookmarkEventsQueue, condition, action).then(() => {
       this.$timeout(() => {
         this.syncEngineSvc.executeSync().then(() => {
           // Move native unsupported containers into the correct order
