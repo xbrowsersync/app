@@ -2,11 +2,11 @@ language: node_js
 jdk: oraclejdk8
 env:
   global:
-    - JAVA_HOME=/usr/lib/jvm/java-8-oracle
-    - ANDROID_VERSION=28 # Android 9 (API level 28)
-    - BUILD_TOOLS_VERSION=30.0.2
-    - NODEJS=lts/*
+    - ANDROID_VERSION=9
+    - BUILD_TOOLS_VERSION=27.0.3
     - CORDOVA_CLI=9.x
+    - JAVA_HOME=/usr/lib/jvm/java-8-oracle
+    - NODEJS=lts/*
 matrix:
   include:
     - os: linux
@@ -16,7 +16,6 @@ matrix:
         components:
           - tools
           - platform-tools
-          - tools
           - build-tools-$BUILD_TOOLS_VERSION
           - android-$ANDROID_VERSION
           - extra-google-google_play_services
