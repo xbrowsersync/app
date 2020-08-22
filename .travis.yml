@@ -59,8 +59,8 @@ install:
   - cordova prepare
   - popd
 script:
-  # - npm run package:chromium
-  # - npm run package:firefox
+  - npm run package:chromium
+  - npm run package:firefox
   - npm run package:android
 before_deploy:
   - export XBS_VERSION=$(cat version.txt)
@@ -69,8 +69,8 @@ deploy:
   provider: releases
   # ⋮
   file:
-    # - dist/xbrowsersync_${XBS_VERSION}_chromium.zip
-    # - dist/xbrowsersync_${XBS_VERSION}_firefox.zip
+    - dist/xbrowsersync_${XBS_VERSION}_chromium.zip
+    - dist/xbrowsersync_${XBS_VERSION}_firefox.zip
     - dist/xbrowsersync_${XBS_VERSION}_android.apk
     - dist/xbrowsersync_${XBS_VERSION}_android_unsigned.apk
   name: $XBS_VERSION
