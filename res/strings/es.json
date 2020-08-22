@@ -2,36 +2,36 @@
   "Alert": {
     "AppUpdateAvailable": {
       "Title": {
-        "default": "xBrowserSync update available"
+        "default": "Actualización de xBrowserSync disponible"
       },
       "Message": {
-        "default": "{version} is available to download. Click for more information.",
-        "android": "xBrowserSync {version} is available to download."
+        "default": "{version} está disponible para su descarga. Pulse para obtener más información.",
+        "android": "xBrowserSync {version} está disponible para su descarga."
       }
     },
     "AppUpdated": {
       "Title": {
-        "default": "Updated to"
+        "default": "Actualizado a"
       },
       "Message": {
-        "default": "xBrowserSync has been updated with the latest features and fixes. Click for release notes."
+        "default": "xBrowserSync ha sido actualizado con las últimas características y arreglos. Pulsa para las notas de la versión."
       }
     },
     "BookmarkCreated": {
-      "default": "Bookmark created"
+      "default": "Marcador creado"
     },
     "BookmarkDeleted": {
-      "default": "Bookmark deleted"
+      "default": "Marcador borrado"
     },
     "BookmarkUpdated": {
-      "default": "Bookmark updated"
+      "default": "Marcador actualizado"
     },
     "GetMetadata": {
       "Message": {
-        "default": "Fetching bookmark properties, touch to cancel."
+        "default": "Recuperando propiedades del marcador, toque para cancelar."
       },
       "Success": {
-        "default": "Bookmark properties updated."
+        "default": "Propiedades del marcador actualizadas."
       }
     },
     "Go": {
@@ -39,16 +39,16 @@
     },
     "WorkingOffline": {
       "Title": {
-        "default": "Working offline"
+        "default": "Trabajando sin conexión"
       },
       "Message": {
-        "default": "Changes will be synced once connection is restored."
+        "default": "Los cambios se sincronizarán una vez que se restablezca la conexión."
       }
     }
   },
   "App": {
     "Description": {
-      "default": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
+      "default": "La sincronización de navegador como debería ser: ¡seguro, anónimo y gratis! Sincroniza los marcadores entre sus navegadores y dispositivos, no es necesario registrarse."
     },
     "Title": {
       "default": "xBrowserSync"
@@ -57,13 +57,13 @@
   "Bookmarks": {
     "Container": {
       "Menu": {
-        "default": "Menu bookmarks"
+        "default": "Marcadores"
       },
       "Mobile": {
-        "default": "Mobile bookmarks"
+        "default": "Marcadores móvil"
       },
       "Other": {
-        "default": "Other bookmarks"
+        "default": "Otros marcadores"
       },
       "Toolbar": {
         "default": "Toolbar bookmarks"
@@ -72,49 +72,49 @@
   },
   "Button": {
     "AddBookmark": {
-      "default": "Add Bookmark"
+      "default": "Añadir marcador"
     },
     "Back": {
-      "default": "Back"
+      "default": "Volver atrás"
     },
     "Cancel": {
-      "default": "Cancel"
+      "default": "Cancelar"
     },
     "Close": {
-      "default": "Close"
+      "default": "Cerrar"
     },
     "Confirm": {
-      "default": "Yes"
+      "default": "Sí"
     },
     "Continue": {
-      "default": "Continue"
+      "default": "Siguiente"
     },
     "DeleteBookmark": {
-      "default": "Delete Bookmark"
+      "default": "Borrar marcador"
     },
     "Deny": {
       "default": "No"
     },
     "Done": {
-      "default": "Done"
+      "default": "Finalizado"
     },
     "EditBookmark": {
-      "default": "Edit Bookmark"
+      "default": "Editar marcador"
     },
     "Help": {
-      "default": "Help guide"
+      "default": "Ayuda"
     },
     "Next": {
-      "default": "Next"
+      "default": "Siguiente"
     },
     "OK": {
-      "default": "Got it"
+      "default": "Entendido"
     },
     "ReleaseNotes": {
-      "default": "View release notes"
+      "default": "Ver notas de versión"
     },
     "Saving": {
-      "default": "Saving"
+      "default": "Guardando"
     },
     "Settings": {
       "default": "Settings"
