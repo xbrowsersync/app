@@ -29,7 +29,6 @@ matrix:
       licenses:
         - android-sdk-license-.+
         - android-sdk-preview-license-.+
-        - google-gdk-license-.+
   allow_failures:
     - os: osx
       language: objective-c
@@ -70,16 +69,16 @@ deploy:
   provider: releases
   # ⋮
   file:
-    # - dist/xbrowsersync_$XBS_VERSION_chromium.zip
-    # - dist/xbrowsersync_$XBS_VERSION_firefox.zip
-    - dist/xbrowsersync_$XBS_VERSION_android.apk
-    - dist/xbrowsersync_$XBS_VERSION_android_unsigned.apk
+    # - dist/xbrowsersync_${XBS_VERSION}_chromium.zip
+    # - dist/xbrowsersync_${XBS_VERSION}_firefox.zip
+    - dist/xbrowsersync_${XBS_VERSION}_android.apk
+    - dist/xbrowsersync_${XBS_VERSION}_android_unsigned.apk
   name: $XBS_VERSION
   on:
     all_branches: true
   prerelease: true
   skip_cleanup: true
-  token: ${github_api_key}
+  token: $GITHUB_API_KEY
 branches:
   only:
     - master
