@@ -58,6 +58,16 @@ before_install:
   - npm install -g cordova@$CORDOVA_CLI
   - cordova telemetry off
   - export PATH=/usr/local/android-sdk/build-tools/$BUILD_TOOLS_VERSION:$PATH
+  - echo $PATH
+  - pushd /usr/local/android-sdk/
+  - ls -l
+  - popd
+  - pushd /usr/local/android-sdk/build-tools/
+  - ls -l
+  - popd
+  - pushd /usr/local/android-sdk/build-tools/$BUILD_TOOLS_VERSION
+  - ls -l
+  - popd
 install:
   - npm install
   - pushd res/android
