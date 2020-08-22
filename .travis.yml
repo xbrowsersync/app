@@ -14,24 +14,21 @@ matrix:
       language: android
       android:
         components:
-          - tools
-          - platform-tools
-          - build-tools-$BUILD_TOOLS_VERSION
           - android-$ANDROID_VERSION
-          - extra-google-google_play_services
-          - extra-google-m2repository
-          - extra-android-m2repository
+          - build-tools-$BUILD_TOOLS_VERSION
+          - platform-tools
+          - tools
       addons:
         apt:
           chrome: stable
           packages:
+            - gradle
+            - jq
             - oracle-java8-installer
             - oracle-java8-set-default
-            - jq
-            - gradle
       licenses:
-        - android-sdk-preview-license-.+
         - android-sdk-license-.+
+        - android-sdk-preview-license-.+
         - google-gdk-license-.+
   allow_failures:
     - os: osx
@@ -57,16 +54,6 @@ before_install:
   - npm install -g cordova@$CORDOVA_CLI
   - cordova telemetry off
   - export PATH=/usr/local/android-sdk/build-tools/$BUILD_TOOLS_VERSION:$PATH
-  - echo $PATH
-  - pushd /usr/local/android-sdk/
-  - ls -l
-  - popd
-  - pushd /usr/local/android-sdk/build-tools/
-  - ls -l
-  - popd
-  - pushd /usr/local/android-sdk/build-tools/$BUILD_TOOLS_VERSION
-  - ls -l
-  - popd
 install:
   - npm install
   - pushd res/android
