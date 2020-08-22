@@ -226,7 +226,8 @@
         <div ng-hide="vm.displayUpdateServiceConfirmation">
           <p ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Update.Description)">
           </p>
-          <div class="form-group" ng-class="{ 'has-error': vm.syncForm.newServiceUrl.$invalid }">
+          <div class="form-group" ng-if="vm.displayUpdateServicePanel"
+               ng-class="{ 'has-error': vm.syncForm.newServiceUrl.$invalid }">
             <input type="text" name="newServiceUrl" ng-model="vm.newServiceInfo.url" class="form-control"
                    ng-change="vm.serviceUrlChanged()" ng-readonly="vm.validatingServiceUrl"
                    placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Update.Label) }}"
