@@ -55,28 +55,30 @@ before_install:
   - echo -e "\84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-license"
   - echo -e "\8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
   - yes | sdkmanager "platforms;android-27"
+  - npm install -g cordova@$CORDOVA_CLI
+  - cordova telemetry off
+  - export PATH=/usr/local/android-sdk/build-tools/$BUILD_TOOLS_VERSION:$PATH
 install:
   - npm install
-  - npm install -g cordova@$CORDOVA_CLI
-  - cd res/android
+  - pushd res/android
   - cordova prepare
-  - cd ..
+  - popd
 script:
   # - npm run package:chromium
   # - npm run package:firefox
   - npm run package:android
 before_deploy:
   - export XBS_VERSION=$(cat version.txt)
-  - git tag v${XBS_VERSION}
+  - git tag v$XBS_VERSION
 deploy:
   provider: releases
   # ⋮
   file:
-    # - dist/xbrowsersync_${XBS_VERSION}_chromium.zip
-    # - dist/xbrowsersync_${XBS_VERSION}_firefox.zip
-    - dist/xbrowsersync_${XBS_VERSION}_android.apk
-    - dist/xbrowsersync_${XBS_VERSION}_android_unsigned.apk
-  name: ${XBS_VERSION}
+    # - dist/xbrowsersync_$XBS_VERSION_chromium.zip
+    # - dist/xbrowsersync_$XBS_VERSION_firefox.zip
+    - dist/xbrowsersync_$XBS_VERSION_android.apk
+    - dist/xbrowsersync_$XBS_VERSION_android_unsigned.apk
+  name: $XBS_VERSION
   on:
     all_branches: true
   prerelease: true
