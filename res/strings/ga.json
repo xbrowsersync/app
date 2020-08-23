@@ -7,7 +7,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdateAvailable_Message",
-        "default": "{version} is available to download. Click for more information.",
+        "default": "Tá leagan {version} ar fáil chun íoslódáil, clic anseo le tuileadh eolas a fáil.",
         "android": "xBrowserSync {version} is available to download."
       }
     },
@@ -31,7 +31,7 @@
     },
     "BookmarkUpdated": {
       "key": "Alert_BookmarkUpdated",
-      "default": "Bookmark updated"
+      "default": "Leabharmharc uasdátaithe"
     },
     "GetMetadata": {
       "Message": {
@@ -45,7 +45,7 @@
     },
     "Go": {
       "key": "Alert_Go",
-      "default": "Go"
+      "default": "Ar aghaidh"
     },
     "WorkingOffline": {
       "Title": {
@@ -95,26 +95,26 @@
     },
     "Back": {
       "key": "Button_Back",
-      "default": "Back"
+      "default": "Ar Ais"
     },
     "Cancel": {
       "key": "Button_Cancel",
-      "default": "Cancel"
+      "default": "Ceal"
     },
     "Close": {
       "key": "Button_Close",
-      "default": "Close"
+      "default": "Dún"
     },
     "Confirm": {
       "key": "Button_Confirm",
-      "default": "Yes"
+      "default": "Tá"
     },
     "Continue": {
       "key": "Button_Continue",
-      "default": "Continue"
+      "default": "Lean ar aghaidh"
     },
     "DeleteBookmark": {
-      "key": "Button_DeleteBookmark",
+      "key": "Scrios an leabharmharc",
       "default": "Delete Bookmark"
     },
     "Deny": {
@@ -135,11 +135,11 @@
     },
     "Next": {
       "key": "Button_Next",
-      "default": "Next"
+      "default": "Ar Aghaidh"
     },
     "OK": {
       "key": "Button_OK",
-      "default": "Got it"
+      "default": "Tuigim"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
@@ -151,7 +151,7 @@
     },
     "Settings": {
       "key": "Button_Settings",
-      "default": "Settings"
+      "default": "Socruithe"
     },
     "ShareBookmark": {
       "key": "Button_ShareBookmark",
@@ -159,11 +159,11 @@
     },
     "Update": {
       "key": "Button_Update",
-      "default": "Update"
+      "default": "Uasdátaigh"
     },
     "View": {
       "key": "Button_View",
-      "default": "View"
+      "default": "Féach"
     }
   },
   "Exception": {
@@ -173,7 +173,7 @@
     },
     "ContainerChanged_Title": {
       "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync folder changed"
+      "default": "fillteáin xBrowserSync athraithe"
     },
     "DailyNewSyncLimitReached_Message": {
       "key": "Exception_DailyNewSyncLimitReached_Message",
@@ -193,7 +193,7 @@
     },
     "FailedDownloadFile_Title": {
       "key": "Exception_FailedDownloadFile_Title",
-      "default": "Backup failed"
+      "default": "Cúltaca teipthe"
     },
     "FailedGetDataToRestore_Title": {
       "key": "Exception_FailedGetDataToRestore_Title",
