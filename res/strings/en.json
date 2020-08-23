@@ -752,7 +752,7 @@
       "Placeholder": {
         "key": "View_Search_Placeholder",
         "default": "Hit Enter or search for bookmarks",
-        "android": "Search for bookmarks"
+        "android": "Find bookmarks"
       },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
