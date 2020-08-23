@@ -751,8 +751,8 @@
       },
       "Placeholder": {
         "key": "View_Search_Placeholder",
-        "default": "Start typing to find bookmarks or just hit Enter",
-        "android": "Find a bookmark"
+        "default": "Hit Enter or search for bookmarks",
+        "android": "Search for bookmarks"
       },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
