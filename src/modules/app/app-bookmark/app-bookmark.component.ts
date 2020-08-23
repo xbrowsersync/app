@@ -142,7 +142,7 @@ export default class AppBookmarkComponent implements OnInit {
   createTags(): void {
     // Clean and sort tags and add them to tag array
     const newTags = this.utilitySvc.getTagArrayFromText(this.tagText);
-    this.bookmarkFormData.tags = this.utilitySvc.sortWords([...newTags, ...this.bookmarkFormData.tags]);
+    this.bookmarkFormData.tags = this.utilitySvc.sortWords([...newTags, ...(this.bookmarkFormData.tags ?? [])]);
     this.bookmarkForm.$setDirty();
     this.tagText = undefined;
     this.tagLookahead = undefined;
@@ -317,10 +317,13 @@ export default class AppBookmarkComponent implements OnInit {
     }
 
     // Get last word of tag text
-    const lastWord = this.tagText.split(',').slice(-1).find(Boolean).trimLeft();
+    let lastWord = this.utilitySvc.splitTextIntoWords(this.tagText).slice(-1).find(Boolean);
+    if (!angular.isUndefined(lastWord)) {
+      lastWord = lastWord.trimLeft();
+    }
 
     // Display lookahead if word length exceeds minimum
-    if (!(lastWord?.length > Globals.LookaheadMinChars)) {
+    if (!(lastWord?.length >= Globals.LookaheadMinChars)) {
       this.tagLookahead = undefined;
       return;
     }

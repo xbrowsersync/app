@@ -120,15 +120,15 @@ export default class UtilityService {
   }
 
   getTagArrayFromText(tagText: string): string[] {
-    if (!tagText) {
+    if (angular.isUndefined(tagText ?? undefined)) {
       return;
     }
 
-    // Conver to lowercase and split tags into array
-    const tags = tagText.toLowerCase().replace(/['"]/g, '').split(',');
+    // Split tags by comma or semi colon and filter by minimum length
+    const tags = tagText.split(/[,;]/).filter((x) => x.length > Globals.LookaheadMinChars);
 
     // Clean and sort tags
-    const cleanedTags = this.sortWords(tags.filter((x) => !!x).map((x) => x.trim()));
+    const cleanedTags = this.sortWords(tags.filter((x) => !!x?.trim()).map((x) => x.trim()));
     return cleanedTags;
   }
 

@@ -11,7 +11,7 @@ export default {
     VerticalSeparatorTitle: '|'
   },
   InterfaceReadyTimeout: 150,
-  LookaheadMinChars: 1,
+  LookaheadMinChars: 2,
   MinApiVersion: '1.1.9',
   PathToAssets: 'assets',
   QrCode: {

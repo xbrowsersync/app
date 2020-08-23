@@ -216,6 +216,10 @@ export default class AppSearchComponent implements OnInit {
     }
   }
 
+  getKeywords(text: string): string[] {
+    return this.utilitySvc.splitTextIntoWords(text).filter((x) => x.length > Globals.LookaheadMinChars);
+  }
+
   ngOnInit(): ng.IPromise<void> {
     return this.settingsSvc.all().then((settings) => {
       this.displayFolderView = settings.defaultToFolderView;
@@ -234,19 +238,13 @@ export default class AppSearchComponent implements OnInit {
     const urlRegex = new RegExp(`^${Globals.URL.ValidUrlRegex}$`, 'i');
 
     if (this.query) {
-      // Iterate query words to form query data object
-      const queryWords = this.query.split(/[\s,]+/);
-      queryWords.forEach((queryWord) => {
-        // Add query word as url if query is in url format, otherwise add to keywords
-        if (!queryData.url && urlRegex.test(queryWord.trim())) {
-          queryData.url = queryWord.trim();
-        } else {
-          const keyword = queryWord.trim().replace("'", '').replace(/\W$/, '').toLowerCase();
-          if (keyword) {
-            queryData.keywords.push(queryWord.trim());
-          }
-        }
-      });
+      // Add query word as url if query is in url format, otherwise add to keywords
+      if (!queryData.url && urlRegex.test(this.query.trim())) {
+        queryData.url = this.query.trim();
+      } else {
+        // Iterate query words to form query data object
+        queryData.keywords = this.getKeywords(this.query);
+      }
     }
 
     return this.bookmarkHelperSvc.searchBookmarks(queryData).then((results) => {
@@ -405,7 +403,7 @@ export default class AppSearchComponent implements OnInit {
     const lastWord = queryWords.slice(-1).find(Boolean);
 
     // Display lookahead only if word length exceed minimum
-    if (angular.isUndefined(lastWord) || lastWord?.length <= Globals.LookaheadMinChars) {
+    if (angular.isUndefined(lastWord) || lastWord?.length < Globals.LookaheadMinChars) {
       this.lookahead = null;
       return;
     }
