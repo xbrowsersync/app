@@ -23,7 +23,7 @@
     },
     "BookmarkCreated": {
       "key": "Alert_BookmarkCreated",
-      "default": "Bookmark created"
+      "default": "Leabharmharc cruthaithe"
     },
     "BookmarkDeleted": {
       "key": "Alert_BookmarkDeleted",
@@ -119,15 +119,15 @@
     },
     "Deny": {
       "key": "Button_Deny",
-      "default": "No"
+      "default": "Níl"
     },
     "Done": {
       "key": "Button_Done",
-      "default": "Done"
+      "default": "Críochnaithe"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
-      "default": "Edit Bookmark"
+      "default": "Athraigh an leabharmharc"
     },
     "Help": {
       "key": "Button_Help",
@@ -143,11 +143,11 @@
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
-      "default": "View release notes"
+      "default": "Féach ar na nótaí leagain"
     },
     "Saving": {
       "key": "Button_Saving",
-      "default": "Saving"
+      "default": "Ag sábháil"
     },
     "Settings": {
       "key": "Button_Settings",
