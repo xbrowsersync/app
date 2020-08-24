@@ -113,15 +113,38 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
   }
 
   checkForInstallOrUpgrade(): ng.IPromise<void> {
-    // Check for stored app version and compare it to current
-    const mobileAppVersion = localStorage.getItem('xBrowserSync-mobileAppVersion');
+    // Get current app version
     return this.platformSvc.getAppVersion().then((appVersion) => {
-      return (mobileAppVersion
-        ? this.$q.resolve(mobileAppVersion)
-        : this.storeSvc.get<string>(StoreKey.AppVersion)
-      ).then((currentVersion) => {
-        return currentVersion ? this.handleUpgrade(currentVersion, appVersion) : this.handleInstall(appVersion);
-      });
+      // Get previous app version by first checking both legacy and old versions
+      const localStorageAppVersion = localStorage.getItem('xBrowserSync-mobileAppVersion');
+      return this.$q<string>((resolve) => {
+        window.NativeStorage.getItem('appVersion', resolve, () => resolve());
+      })
+        .then((nativeStorageAppVersion) => {
+          return nativeStorageAppVersion ?? localStorageAppVersion ?? undefined;
+        })
+        .then((legacyAppVersion) => {
+          // If no last upgrade version or legacy app version this is a new install
+          // otherwise set last upgrade version to be legacy version if not set
+          return this.upgradeSvc
+            .getLastUpgradeVersion()
+            .then((lastUpgradeVersion) => {
+              if (angular.isUndefined(lastUpgradeVersion)) {
+                if (angular.isUndefined(legacyAppVersion)) {
+                  return this.handleInstall(appVersion);
+                }
+                return this.upgradeSvc.setLastUpgradeVersion(legacyAppVersion);
+              }
+            })
+            .then(() => {
+              // Upgrade if required
+              return this.upgradeSvc.checkIfUpgradeRequired(appVersion).then((upgradeRequired) => {
+                if (upgradeRequired) {
+                  return this.handleUpgrade(appVersion);
+                }
+              });
+            });
+        });
     });
   }
 
@@ -216,21 +239,27 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
   }
 
   handleDeviceReady(success: () => any, failure: () => any): ng.IPromise<any> {
-    // Configure events
-    document.addEventListener('backbutton', this.handleBackButton, false);
-    document.addEventListener('touchstart', this.handleTouchStart, false);
-    window.addEventListener('keyboardDidShow', this.handleKeyboardDidShow);
-    window.addEventListener('keyboardWillHide', this.handleKeyboardWillHide);
-
-    // Enable app working in background to check for uncommitted syncs
-    window.cordova.plugins.backgroundMode.setDefaults({ hidden: true, silent: true });
-    window.cordova.plugins.backgroundMode.on('activate', () => {
-      window.cordova.plugins.backgroundMode.disableWebViewOptimizations();
-    });
-
-    // Check for upgrade or do fresh install
+    // Load i18n strings
     return (
-      this.checkForInstallOrUpgrade()
+      this.platformSvc
+        .initI18n()
+        .then(() => {
+          // Configure events
+          document.addEventListener('backbutton', this.handleBackButton, false);
+          document.addEventListener('touchstart', this.handleTouchStart, false);
+          window.addEventListener('keyboardDidShow', this.handleKeyboardDidShow);
+          window.addEventListener('keyboardWillHide', this.handleKeyboardWillHide);
+
+          // Enable app working in background to check for uncommitted syncs
+          window.cordova.plugins.backgroundMode.setDefaults({ hidden: true, silent: true });
+          window.cordova.plugins.backgroundMode.on('activate', () => {
+            window.cordova.plugins.backgroundMode.disableWebViewOptimizations();
+          });
+
+          // Check for upgrade or do fresh install
+          return this.checkForInstallOrUpgrade();
+        })
+
         // Run startup process after install/upgrade
         .then(this.handleStartup)
         .then(success)
@@ -239,12 +268,13 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
   }
 
   handleInstall(installedVersion: string): ng.IPromise<void> {
-    return this.storeSvc
-      .init()
-      .then(() => this.storeSvc.set(StoreKey.AppVersion, installedVersion))
-      .then(() => {
-        this.logSvc.logInfo(`Installed v${installedVersion}`);
-      });
+    return (
+      this.storeSvc
+        .init()
+        // Set the initial upgrade version
+        .then(() => this.upgradeSvc.setLastUpgradeVersion(installedVersion))
+        .then(() => this.logSvc.logInfo(`Installed v${installedVersion}`))
+    );
   }
 
   handleBookmarkShared(sharedBookmark: BookmarkMetadata): void {
@@ -331,19 +361,22 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     return this.checkForDarkTheme().then(() => {
       return this.$q
         .all([
+          this.platformSvc.getAppVersion(),
           this.settingsSvc.checkForAppUpdates(),
-          this.storeSvc.get([StoreKey.AppVersion, StoreKey.LastUpdated, StoreKey.SyncId, StoreKey.SyncVersion]),
+          this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId, StoreKey.SyncVersion]),
           this.utilitySvc.getServiceUrl(),
           this.utilitySvc.isSyncEnabled()
         ])
         .then((result) => {
-          const checkForAppUpdates = result[0];
-          const storeContent = result[1];
-          const serviceUrl = result[2];
-          const syncEnabled = result[3];
+          const appVersion = result[0];
+          const checkForAppUpdates = result[1];
+          const storeContent = result[2];
+          const serviceUrl = result[3];
+          const syncEnabled = result[4];
 
           // Add useful debug info to beginning of trace log
           const debugInfo = angular.copy(storeContent) as any;
+          debugInfo.appVersion = appVersion;
           debugInfo.checkForAppUpdates = checkForAppUpdates;
           debugInfo.platform = {
             name: window.device.platform,
@@ -434,17 +467,8 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     }
   }
 
-  handleUpgrade(oldVersion: string, newVersion: string): ng.IPromise<void> {
-    if (compareVersions.compare(oldVersion, newVersion, '=')) {
-      // No upgrade
-      return this.$q.resolve();
-    }
-
-    return this.upgradeSvc.upgrade(oldVersion, newVersion).then(() => {
-      return this.$q
-        .all([this.storeSvc.set(StoreKey.AppVersion, newVersion), this.storeSvc.set(StoreKey.DisplayUpdated, true)])
-        .then(() => {});
-    });
+  handleUpgrade(upgradeToVersion: string): ng.IPromise<void> {
+    return this.upgradeSvc.upgrade(upgradeToVersion).then(() => this.storeSvc.set(StoreKey.DisplayUpdated, true));
   }
 
   ngOnInit(): ng.IPromise<void> {
@@ -460,8 +484,6 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
         );
         document.addEventListener('resume', this.handleResume, false);
       })
-        // Load i18n strings
-        .then(() => this.platformSvc.initI18n())
         .then(() => {
           // If bookmark was shared, switch to bookmark view
           if (!angular.isUndefined(this.platformSvc.currentPage)) {

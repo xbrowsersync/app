@@ -1,7 +1,6 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import compareVersions from 'compare-versions';
 import * as detectBrowser from 'detect-browser';
 import { Alarms, browser, Notifications } from 'webextension-polyfill-ts';
 import { Alert } from '../../shared/alert/alert.interface';
@@ -242,6 +241,10 @@ export default class WebExtBackgroundService {
     });
   }
 
+  getCurrentVersion(): string {
+    return browser.runtime.getManifest().version;
+  }
+
   init(): void {
     this.logSvc.logInfo('Starting up');
     this.$q
@@ -250,7 +253,8 @@ export default class WebExtBackgroundService {
         this.settingsSvc.all(),
         this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId, StoreKey.SyncVersion]),
         this.utilitySvc.getServiceUrl(),
-        this.utilitySvc.isSyncEnabled()
+        this.utilitySvc.isSyncEnabled(),
+        this.upgradeSvc.checkIfUpgradeRequired(this.getCurrentVersion())
       ])
       .then((data) => {
         const appVersion = data[0];
@@ -258,6 +262,7 @@ export default class WebExtBackgroundService {
         const storeContent = data[2];
         const serviceUrl = data[3];
         const syncEnabled = data[4];
+        const upgradeRequired = data[5];
 
         // Add useful debug info to beginning of trace log
         const debugInfo = angular.copy(storeContent) as any;
@@ -286,43 +291,48 @@ export default class WebExtBackgroundService {
           this.$timeout(this.checkForNewVersion, 5e3);
         }
 
-        // Exit if sync not enabled
-        if (!syncEnabled) {
-          return;
-        }
+        return (upgradeRequired ? this.upgradeExtension() : this.$q.resolve()).then(() => {
+          if (!syncEnabled) {
+            return;
+          }
 
-        // Enable sync
-        return this.syncEngineSvc.enableSync().then(() => {
-          // Check for updates after a delay to allow for initialising network connection
-          this.$timeout(this.checkForSyncUpdatesOnStartup, 5e3);
+          // Enable sync
+          return this.syncEngineSvc.enableSync().then(() => {
+            // Check for updates after a delay to allow for initialising network connection
+            this.$timeout(this.checkForSyncUpdatesOnStartup, 5e3);
+          });
         });
       });
   }
 
-  installExtension(currentVersion: string): ng.IPromise<void> {
+  installExtension(): ng.IPromise<void> {
     // Initialise data storage
-    return this.storeSvc
-      .init()
-      .then(() =>
-        this.$q.all([
-          this.storeSvc.set(StoreKey.DisplayOtherSyncsWarning, true),
-          this.storeSvc.set(StoreKey.DisplayPermissions, true),
-          this.storeSvc.set(StoreKey.SyncBookmarksToolbar, true)
-        ])
-      )
-      .then(() => {
-        // Get native bookmarks and save data state at install to store
-        return this.bookmarkSvc.getNativeBookmarksAsBookmarks().then((bookmarks) => {
-          const backup: InstallBackup = {
-            bookmarks,
-            date: new Date().toISOString()
-          };
-          return this.storeSvc.set(StoreKey.InstallBackup, JSON.stringify(backup));
-        });
-      })
-      .then(() => {
-        this.logSvc.logInfo(`Installed v${currentVersion}`);
-      });
+    return (
+      this.storeSvc
+        .init()
+        .then(() =>
+          this.$q.all([
+            this.storeSvc.set(StoreKey.DisplayOtherSyncsWarning, true),
+            this.storeSvc.set(StoreKey.DisplayPermissions, true),
+            this.storeSvc.set(StoreKey.SyncBookmarksToolbar, true)
+          ])
+        )
+        .then(() => {
+          // Get native bookmarks and save data state at install to store
+          return this.bookmarkSvc.getNativeBookmarksAsBookmarks().then((bookmarks) => {
+            const backup: InstallBackup = {
+              bookmarks,
+              date: new Date().toISOString()
+            };
+            return this.storeSvc.set(StoreKey.InstallBackup, JSON.stringify(backup));
+          });
+        })
+        // Set the initial upgrade version
+        .then(() => this.upgradeSvc.setLastUpgradeVersion(this.getCurrentVersion()))
+        .then(() => {
+          this.logSvc.logInfo(`Installed v${this.getCurrentVersion()}`);
+        })
+    );
   }
 
   onAlarm(alarm: Alarms.Alarm): void {
@@ -333,23 +343,9 @@ export default class WebExtBackgroundService {
   }
 
   onInstall(event: InputEvent): void {
-    const currentVersion = browser.runtime.getManifest().version;
-    let installOrUpgrade = this.$q.resolve();
-
-    // Check for upgrade or do fresh install
+    // Check if fresh install needed
     const details = angular.element(event.currentTarget as Element).data('details');
-    if (details?.reason === 'install') {
-      installOrUpgrade = this.installExtension(currentVersion);
-    } else if (
-      details?.reason === 'update' &&
-      details?.previousVersion &&
-      compareVersions.compare(details.previousVersion, currentVersion, '<')
-    ) {
-      installOrUpgrade = this.upgradeExtension(details.previousVersion, currentVersion);
-    }
-
-    // Run startup process after install/upgrade
-    installOrUpgrade.then(this.init);
+    (details?.reason === 'install' ? this.installExtension() : this.$q.resolve()).then(this.init);
   }
 
   onNotificationClicked(notificationId: string): void {
@@ -456,8 +452,8 @@ export default class WebExtBackgroundService {
     return this.syncEngineSvc.queueSync(sync, runSync);
   }
 
-  upgradeExtension(oldVersion: string, newVersion: string): ng.IPromise<void> {
-    return this.upgradeSvc.upgrade(oldVersion, newVersion).then(() => {
+  upgradeExtension(): ng.IPromise<void> {
+    return this.upgradeSvc.upgrade(this.getCurrentVersion()).then(() => {
       return this.platformSvc.getAppVersion().then((appVersion) => {
         // Display alert and set update panel to show
         const alert: Alert = {

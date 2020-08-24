@@ -137,6 +137,10 @@ export default class ExceptionHandlerService {
         alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.UncommittedSyncs_Title);
         alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.UncommittedSyncs_Message);
         break;
+      case Exceptions.UpgradeFailedException:
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.UpgradeFailed_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.UpgradeFailed_Message);
+        break;
       case Exceptions.FailedCreateNativeBookmarksException:
       case Exceptions.FailedGetNativeBookmarksException:
       case Exceptions.FailedRemoveNativeBookmarksException:

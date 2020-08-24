@@ -2,9 +2,10 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
-import { NotImplementedException } from '../exception/exception';
+import * as Exceptions from '../exception/exception';
 import { PlatformUpgradeService } from '../global-shared.interface';
 import LogService from '../log/log.service';
+import { StoreKey } from '../store/store.enum';
 import StoreService from '../store/store.service';
 
 @autobind
@@ -20,30 +21,52 @@ export default class UpgradeService implements PlatformUpgradeService {
     this.storeSvc = StoreSvc;
   }
 
-  upgrade(oldVersion: string, newVersion: string): ng.IPromise<void> {
-    if (angular.isUndefined(oldVersion) || angular.isUndefined(newVersion)) {
+  checkIfUpgradeRequired(currentVersion: string): ng.IPromise<boolean> {
+    return this.getLastUpgradeVersion().then((lastUpgradeVersion) => {
+      return (
+        angular.isUndefined(lastUpgradeVersion) || compareVersions.compare(lastUpgradeVersion, currentVersion, '<')
+      );
+    });
+  }
+
+  getLastUpgradeVersion(): ng.IPromise<string> {
+    return this.storeSvc.get<string>(StoreKey.LastUpgradeVersion);
+  }
+
+  setLastUpgradeVersion(version: string): ng.IPromise<void> {
+    return this.storeSvc.set(StoreKey.LastUpgradeVersion, version);
+  }
+
+  upgrade(upgradeToVersion: string): ng.IPromise<void> {
+    if (angular.isUndefined(upgradeToVersion)) {
       this.logSvc.logInfo('Incomplete parameters, cancelling upgrade.');
       return;
     }
 
     // Clear trace log
-    return this.logSvc
-      .clear()
-      .then(() => {
-        this.logSvc.logInfo(`Upgrading from ${oldVersion} to ${newVersion}`);
-      })
-      .then(() => {
-        if (compareVersions(oldVersion, newVersion)) {
-          switch (true) {
-            case newVersion.indexOf('1.6.0') === 0:
-              return this.upgradeTo160();
-            default:
+    return (
+      this.logSvc
+        .clear()
+        .then(this.getLastUpgradeVersion)
+        .then((lastUpgradeVersion) => {
+          if (angular.isUndefined(lastUpgradeVersion) || compareVersions(lastUpgradeVersion, upgradeToVersion)) {
+            switch (true) {
+              case upgradeToVersion.indexOf('1.6.0') === 0:
+                this.logSvc.logInfo(`Upgrading to ${upgradeToVersion}`);
+                return this.upgradeTo160();
+              default:
+            }
           }
-        }
-      });
+        })
+        // Upgrade successful, update last upgrade version
+        .then(() => this.setLastUpgradeVersion(upgradeToVersion))
+        .catch((err) => {
+          throw new Exceptions.UpgradeFailedException(`Failed upgrade to ${upgradeToVersion}`, err);
+        })
+    );
   }
 
   upgradeTo160(): ng.IPromise<void> {
-    throw new NotImplementedException();
+    throw new Exceptions.NotImplementedException();
   }
 }

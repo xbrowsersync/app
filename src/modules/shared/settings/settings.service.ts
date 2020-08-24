@@ -23,9 +23,9 @@ export default class SettingsService {
   all(): ng.IPromise<AllSettings> {
     return this.storeSvc
       .get([
+        StoreKey.AlternateSearchBarPosition,
         StoreKey.CheckForAppUpdates,
         StoreKey.DarkModeEnabled,
-        StoreKey.DisplaySearchBarBeneathResults,
         StoreKey.DefaultToFolderView,
         StoreKey.SyncBookmarksToolbar
       ])
@@ -62,12 +62,12 @@ export default class SettingsService {
     });
   }
 
-  displaySearchBarBeneathResults(newValue?: boolean): ng.IPromise<boolean> {
+  alternateSearchBarPosition(newValue?: boolean): ng.IPromise<boolean> {
     if (angular.isUndefined(newValue ?? undefined)) {
-      return this.storeSvc.get<boolean>(StoreKey.DisplaySearchBarBeneathResults);
+      return this.storeSvc.get<boolean>(StoreKey.AlternateSearchBarPosition);
     }
 
-    return this.storeSvc.set(StoreKey.DisplaySearchBarBeneathResults, newValue).then(() => {
+    return this.storeSvc.set(StoreKey.AlternateSearchBarPosition, newValue).then(() => {
       this.logSvc.logInfo(`Search bar setting: ${newValue ? 'enabled' : 'disabled'}`);
       return newValue;
     });

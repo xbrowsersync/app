@@ -17,7 +17,7 @@ export interface StoreContent {
   displayHelp: boolean;
   displayOtherSyncsWarning: boolean;
   displayPermissions: boolean;
-  displaySearchBarBeneathResults: boolean;
+  alternateSearchBarPosition: boolean;
   displayUpdated: boolean;
   defaultToFolderView: boolean;
   installBackup: any;

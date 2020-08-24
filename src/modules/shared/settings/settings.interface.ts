@@ -1,7 +1,7 @@
 export interface AllSettings {
+  alternateSearchBarPosition: boolean;
   checkForAppUpdates: boolean;
   darkModeEnabled: boolean;
-  displaySearchBarBeneathResults: boolean;
   defaultToFolderView: boolean;
   syncBookmarksToolbar: boolean;
 }

@@ -16,15 +16,15 @@ export default class AndroidStoreService implements PlatformStoreService {
   dbName = 'xbs.db';
   idCol = 'id';
   nativeStorageKeys: IDBValidKey[] = [
-    StoreKey.AppVersion,
+    StoreKey.AlternateSearchBarPosition,
     StoreKey.CheckForAppUpdates,
     StoreKey.DarkModeEnabled,
     StoreKey.DefaultToFolderView,
     StoreKey.DisplayHelp,
     StoreKey.DisplayOtherSyncsWarning,
     StoreKey.DisplayPermissions,
-    StoreKey.DisplaySearchBarBeneathResults,
     StoreKey.DisplayUpdated,
+    StoreKey.LastUpgradeVersion,
     StoreKey.SyncBookmarksToolbar,
     StoreKey.SyncEnabled
   ];

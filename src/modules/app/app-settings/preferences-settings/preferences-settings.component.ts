@@ -81,6 +81,11 @@ export default class PreferencesSettingsComponent implements OnInit {
     });
   }
 
+  toggleAlternateSearchBarPosition(): void {
+    this.settings.alternateSearchBarPosition = !this.settings.alternateSearchBarPosition;
+    this.settingsSvc.alternateSearchBarPosition(this.settings.alternateSearchBarPosition);
+  }
+
   toggleCheckForAppUpdates(): void {
     this.settings.checkForAppUpdates = !this.settings.checkForAppUpdates;
     this.settingsSvc.checkForAppUpdates(this.settings.checkForAppUpdates);
@@ -89,11 +94,6 @@ export default class PreferencesSettingsComponent implements OnInit {
   toggleDefaultToFolderView(): void {
     this.settings.defaultToFolderView = !this.settings.defaultToFolderView;
     this.settingsSvc.defaultToFolderView(this.settings.defaultToFolderView);
-  }
-
-  toggleDisplaySearchBar(): void {
-    this.settings.displaySearchBarBeneathResults = !this.settings.displaySearchBarBeneathResults;
-    this.settingsSvc.displaySearchBarBeneathResults(this.settings.displaySearchBarBeneathResults);
   }
 
   toggleEnableDarkMode(): void {

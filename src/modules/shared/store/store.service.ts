@@ -60,7 +60,7 @@ export default class StoreService {
           this.platformStoreSvc.set(StoreKey.DisplayHelp, true),
           this.platformStoreSvc.set(StoreKey.DisplayOtherSyncsWarning, false),
           this.platformStoreSvc.set(StoreKey.DisplayPermissions, false),
-          this.platformStoreSvc.set(StoreKey.DisplaySearchBarBeneathResults, false),
+          this.platformStoreSvc.set(StoreKey.AlternateSearchBarPosition, false),
           this.platformStoreSvc.set(StoreKey.DisplayUpdated, false),
           this.platformStoreSvc.set(StoreKey.SyncBookmarksToolbar, false),
           this.platformStoreSvc.set(StoreKey.SyncEnabled, false)

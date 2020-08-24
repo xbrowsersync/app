@@ -36,11 +36,10 @@
         {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.SearchBar.Description) }}
       </p>
       <div class="setting-value">
-        <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleDisplaySearchBar)">
-          <input type="checkbox" id="displaySearchBarBeneathResults"
-                 ng-model="vm.settings.displaySearchBarBeneathResults" />
-          <label for="displaySearchBarBeneathResults" ng-class="{ 'animate': true }"
-                 ng-if="vm.settings.displaySearchBarBeneathResults !== undefined"></label>
+        <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleAlternateSearchBarPosition)">
+          <input type="checkbox" id="alternateSearchBarPosition" ng-model="vm.settings.alternateSearchBarPosition" />
+          <label for="alternateSearchBarPosition" ng-class="{ 'animate': true }"
+                 ng-if="vm.settings.alternateSearchBarPosition !== undefined"></label>
         </div>
       </div>
     </div>

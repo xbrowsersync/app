@@ -117,3 +117,5 @@ export class TooManyRequestsException extends Exception {}
 export class UnspecifiedException extends Exception {}
 
 export class UnsupportedApiVersionException extends Exception {}
+
+export class UpgradeFailedException extends Exception {}

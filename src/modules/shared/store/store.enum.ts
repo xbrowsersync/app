@@ -1,5 +1,5 @@
 enum StoreKey {
-  AppVersion = 'appVersion',
+  AlternateSearchBarPosition = 'alternateSearchBarPosition',
   BookmarkIdMappings = 'bookmarkIdMappings',
   Bookmarks = 'bookmarks',
   CheckForAppUpdates = 'checkForAppUpdates',
@@ -12,6 +12,7 @@ enum StoreKey {
   DefaultToFolderView = 'defaultToFolderView',
   InstallBackup = 'installBackup',
   LastUpdated = 'lastUpdated',
+  LastUpgradeVersion = 'lastUpgradeVersion',
   Password = 'password',
   ServiceUrl = 'serviceUrl',
   SyncBookmarksToolbar = 'syncBookmarksToolbar',

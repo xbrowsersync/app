@@ -32,13 +32,13 @@ export default class AppSearchComponent implements OnInit {
   utilitySvc: UtilityService;
   workingSvc: WorkingService;
 
+  alternateSearchBarPosition: boolean;
   AppViewType = AppViewType;
   batchResultsNum = 10;
   bookmarkTree: BookmarkTreeItem[];
   cancelGetBookmarksRequest: any;
   currentUrlBookmarked: boolean;
   displayFolderView: boolean;
-  displaySearchBarBeneathResults: boolean;
   getLookaheadTimeout: any;
   getSearchResultsTimeout: any;
   lastWord: string;
@@ -222,8 +222,8 @@ export default class AppSearchComponent implements OnInit {
 
   ngOnInit(): ng.IPromise<void> {
     return this.settingsSvc.all().then((settings) => {
+      this.alternateSearchBarPosition = settings.alternateSearchBarPosition;
       this.displayFolderView = settings.defaultToFolderView;
-      this.displaySearchBarBeneathResults = settings.displaySearchBarBeneathResults;
       this.bookmarkTree = null;
       this.selectedBookmarkId = null;
       this.displayDefaultSearchState();
