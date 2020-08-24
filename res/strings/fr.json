@@ -401,7 +401,7 @@
     },
     "Syncing": {
       "key": "Tooltip_Syncing",
-      "default": "syncing"
+      "default": "synchronisation en cours"
     }
   },
   "View": {
