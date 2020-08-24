@@ -14,7 +14,7 @@
     "AppUpdated": {
       "Title": {
         "key": "Alert_AppUpdated_Title",
-        "default": "Updated to"
+        "default": "Uasdátaithe chuig"
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
@@ -27,7 +27,7 @@
     },
     "BookmarkDeleted": {
       "key": "Alert_BookmarkDeleted",
-      "default": "Bookmark deleted"
+      "default": "Leabharmharc scriosta"
     },
     "BookmarkUpdated": {
       "key": "Alert_BookmarkUpdated",
@@ -36,11 +36,11 @@
     "GetMetadata": {
       "Message": {
         "key": "Alert_GetMetadata_Message",
-        "default": "Fetching bookmark properties, touch to cancel."
+        "default": "Ag Fáil airí leabharmhairc, brú chun cealadh."
       },
       "Success": {
         "key": "Alert_GetMetadata_Success",
-        "default": "Bookmark properties updated."
+        "default": "Airí leabharmharcanna uasdátaithe."
       }
     },
     "Go": {
@@ -50,11 +50,11 @@
     "WorkingOffline": {
       "Title": {
         "key": "Alert_WorkingOffline_Title",
-        "default": "Working offline"
+        "default": "Ag obair as líne"
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
-        "default": "Changes will be synced once connection is restored."
+        "default": "Beidh na athrú sioncronaithe nuair atá an ceangail athbhunaithe."
       }
     }
   },
@@ -72,26 +72,26 @@
     "Container": {
       "Menu": {
         "key": "Bookmarks_Container_Menu",
-        "default": "Menu bookmarks"
+        "default": "Leabharmharcanna roghchlár"
       },
       "Mobile": {
         "key": "Bookmarks_Container_Mobile",
-        "default": "Mobile bookmarks"
+        "default": "Leabharmharcanna póca"
       },
       "Other": {
         "key": "Bookmarks_Container_Other",
-        "default": "Other bookmarks"
+        "default": "Leabharmharcanna eile"
       },
       "Toolbar": {
         "key": "Bookmarks_Container_Toolbar",
-        "default": "Toolbar bookmarks"
+        "default": "Leabharmharcanna barra-uirlisí"
       }
     }
   },
   "Button": {
     "AddBookmark": {
       "key": "Button_AddBookmark",
-      "default": "Add Bookmark"
+      "default": "Cuir leabharmharc"
     },
     "Back": {
       "key": "Button_Back",
@@ -131,7 +131,7 @@
     },
     "Help": {
       "key": "Button_Help",
-      "default": "Help guide"
+      "default": "Treoraithe"
     },
     "Next": {
       "key": "Button_Next",
