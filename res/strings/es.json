@@ -358,6 +358,15 @@
     "UnsupportedServiceApiVersion_Title": {
       "key": "Exception_UnsupportedServiceApiVersion_Title",
       "default": "Service not supported"
+    },
+    "UpgradeFailed_Message": {
+      "key": "Exception_UpgradeFailed_Message",
+      "android": "Upgrade will be retried on restarting the app. If the problem persists please reinstall xBrowserSync.",
+      "default": "Restart your browser to retry upgrade, if the problem persists please reinstall xBrowserSync."
+    },
+    "UpgradeFailed_Title": {
+      "key": "Exception_UpgradeFailed_Title",
+      "default": "Upgrade failed"
     }
   },
   "Service": {
