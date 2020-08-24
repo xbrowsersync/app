@@ -2,35 +2,35 @@
   "Alert": {
     "AppUpdateAvailable": {
       "Title": {
-        "key": "Alert_AppUpdateAvailable_Title",
+        "key": "Mise à jour disponible",
         "default": "Mise à jour xBrowserSync disponible"
       },
       "Message": {
-        "key": "Alert_AppUpdateAvailable_Message",
+        "key": "Mise à jour disponible",
         "default": "{version} est disponible. Cliquez pour plus d'informations.",
         "android": "xBrowserSync {version} est disponible."
       }
     },
     "AppUpdated": {
       "Title": {
-        "key": "Alert_AppUpdated_Title",
+        "key": "Mise à jour effectuée",
         "default": "Mise à jour vers"
       },
       "Message": {
-        "key": "Alert_AppUpdated_Message",
+        "key": "Mise à jour effectuée",
         "default": "xBrowserSync a été mis à jour avec les dernières fonctionnalités et correctifs. Cliquez pour les notes de version."
       }
     },
     "BookmarkCreated": {
-      "key": "Alert_BookmarkCreated",
+      "key": "Favori créé",
       "default": "Favori créé"
     },
     "BookmarkDeleted": {
-      "key": "Alert_BookmarkDeleted",
+      "key": "Favori supprimé",
       "default": "Favori supprimé"
     },
     "BookmarkUpdated": {
-      "key": "Alert_BookmarkUpdated",
+      "key": "Favori mis à jour",
       "default": "Favori mis à jour"
     },
     "GetMetadata": {
@@ -265,7 +265,7 @@
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
-      "default": "Sync error"
+      "default": "Erreur de synchronisation"
     },
     "MissingClientData_Message": {
       "key": "Exception_MissingClientData_Message",
@@ -273,7 +273,7 @@
     },
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
-      "default": "Missing credentials"
+      "default": "Identifiants manquants"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",
@@ -281,7 +281,7 @@
     },
     "NoDataToRestore_Title": {
       "key": "Exception_NoDataToRestore_Title",
-      "default": "No data to restore"
+      "default": "Aucune donnée à restaurer"
     },
     "NotAcceptingNewSyncs_Message": {
       "key": "Exception_NotAcceptingNewSyncs_Message",
@@ -297,7 +297,7 @@
     },
     "OutOfSync_Title": {
       "key": "Exception_OutOfSync_Title",
-      "default": "Sync conflict detected"
+      "default": "Conflit détecté"
     },
     "RequestEntityTooLarge_Message": {
       "key": "Exception_RequestEntityTooLarge_Message",
@@ -305,15 +305,15 @@
     },
     "RequestEntityTooLarge_Title": {
       "key": "Exception_RequestEntityTooLarge_Title",
-      "default": "Sync data limit exceeded"
+      "default": "Limite de synchronisation des données dépassée"
     },
     "ScanFailed_Message": {
       "key": "Exception_ScanFailed_Message",
-      "default": "Check permission has been granted and try again."
+      "default": "Vérifiez les autorisations et réessayez."
     },
     "ScanFailed_Title": {
       "key": "Exception_ScanFailed_Title",
-      "default": "Scan failed"
+      "default": "Échec de l'analyse"
     },
     "ServiceOffline_Message": {
       "key": "Exception_ServiceOffline_Message",
@@ -321,11 +321,11 @@
     },
     "ServiceOffline_Title": {
       "key": "Exception_ServiceOffline_Title",
-      "default": "Service offline"
+      "default": "Service hors ligne"
     },
     "ShareFailed_Title": {
       "key": "Exception_ShareFailed_Title",
-      "default": "Share failed"
+      "default": "Échec du partage"
     },
     "SyncRemoved_Message": {
       "key": "Exception_SyncRemoved_Message",
@@ -333,7 +333,7 @@
     },
     "SyncRemoved_Title": {
       "key": "Exception_SyncRemoved_Title",
-      "default": "Sync not found"
+      "default": "Synchronisation introuvable"
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
@@ -341,7 +341,7 @@
     },
     "TooManyRequests_Title": {
       "key": "Exception_TooManyRequests_Title",
-      "default": "Service request limit hit"
+      "default": "Limite de requête de service atteinte"
     },
     "UncommittedSyncs_Message": {
       "key": "Exception_UncommittedSyncs_Message",
@@ -372,32 +372,32 @@
       },
       "NoNewSyncs": {
         "key": "Service_Status_NoNewSyncs",
-        "default": "Not accepting new syncs"
+        "default": "Nouvelles synchronisations non acceptées"
       },
       "Offline": {
         "key": "Service_Status_Offline",
-        "default": "Offline"
+        "default": "Déconnecté"
       },
       "Online": {
         "key": "Service_Status_Online",
-        "default": "Online"
+        "default": "Connecté"
       }
     }
   },
   "Share": {
     "Bookmark": {
       "key": "Share_Bookmark",
-      "default": "Share bookmark with"
+      "default": "Partager le favori"
     }
   },
   "Tooltip": {
     "NotSynced": {
       "key": "Tooltip_NotSynced",
-      "default": "not synced"
+      "default": "non synchronisé"
     },
     "Synced": {
       "key": "Tooltip_Synced",
-      "default": "synced"
+      "default": "synchronisé"
     },
     "Syncing": {
       "key": "Tooltip_Syncing",
