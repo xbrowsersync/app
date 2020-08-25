@@ -45,7 +45,7 @@
     },
     "Go": {
       "key": "Alert_Go",
-      "default": "Go"
+      "default": "Vamos"
     },
     "WorkingOffline": {
       "Title": {
@@ -159,33 +159,33 @@
     },
     "Update": {
       "key": "Button_Update",
-      "default": "Update"
+      "default": "Actualizar"
     },
     "View": {
       "key": "Button_View",
-      "default": "View"
+      "default": "Ver"
     }
   },
   "Exception": {
     "ContainerChanged_Message": {
       "key": "Exception_ContainerChanged_Message",
-      "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
+      "default": "Por favor, evite modificar [xbs] carpetas ya que puede causar problemas de sincronización."
     },
     "ContainerChanged_Title": {
       "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync folder changed"
+      "default": "Carpeta xBrowserSync modificada"
     },
     "DailyNewSyncLimitReached_Message": {
       "key": "Exception_DailyNewSyncLimitReached_Message",
-      "default": "Sync to an existing sync ID, switch to a different service or try again tomorrow."
+      "default": "Sincronice con un ID de sincronización existente, cambie a un servicio diferente o vuelva a intentarlo mañana."
     },
     "DailyNewSyncLimitReached_Title": {
       "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "Daily new sync limit reached"
+      "default": "Límite diario de sincronización alcanzado"
     },
     "Default_Message": {
       "key": "Exception_Default_Message",
-      "default": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
+      "default": "Si el problema persiste, por favor <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>reporte el problema</a>."
     },
     "Default_Title": {
       "key": "Exception_Default_Title",
@@ -197,103 +197,103 @@
     },
     "FailedGetDataToRestore_Title": {
       "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "Browse files failed"
+      "default": "Examinar archivos fallidos"
     },
     "FailedGetPageMetadata_Message": {
       "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "URL is invalid or webpage data could not be retrieved."
+      "default": "La URL no es válida o los datos de la página web no pudieron ser recuperados."
     },
     "FailedGetPageMetadata_Title": {
       "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "Couldn’t get bookmark properties"
+      "default": "No se pudieron obtener las propiedades del marcador"
     },
     "FailedRefreshBookmarks_Title": {
       "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "Couldn’t retrieve updates"
+      "default": "No se pudieron recuperar las actualizaciones"
     },
     "FailedRestoreData_Message": {
       "key": "Exception_FailedRestoreData_Message",
-      "default": "The backup data provided is not in an expected format."
+      "default": "Los datos de copia de seguridad proporcionados no están en el formato esperado."
     },
     "FailedRestoreData_Title": {
       "key": "Exception_FailedRestoreData_Title",
-      "default": "Unable to restore data"
+      "default": "No se pueden restaurar los datos"
     },
     "FailedShareUrlNotSynced_Title": {
       "key": "Exception_FailedShareUrlNotSynced_Title",
-      "default": "You must be synced to add a bookmark"
+      "default": "Debe estar sincronizado para añadir un marcador"
     },
     "FailedShareUrl_Title": {
       "key": "Exception_FailedShareUrl_Title",
-      "default": "Unable to retrieve shared bookmark URL"
+      "default": "No se puede recuperar la URL del marcador compartido"
     },
     "HttpRequestFailed_Message": {
       "key": "Exception_HttpRequestFailed_Message",
-      "default": "Check your network connection and try again."
+      "default": "Comprueba tu conexión a internet y vuelve a intentarlo."
     },
     "HttpRequestFailed_Title": {
       "key": "Exception_HttpRequestFailed_Title",
-      "default": "Connection to service lost"
+      "default": "Se ha perdido la conexión al servidor"
     },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
-      "default": "Check that your sync ID, password and service URL have been entered correctly."
+      "default": "Compruebe que su ID de sincronización, contraseña y URL del servicio han sido introducidos correctamente."
     },
     "InvalidCredentials_Title": {
       "key": "Exception_InvalidCredentials_Title",
-      "default": "Invalid credentials"
+      "default": "Credenciales no válidas"
     },
     "InvalidService_Message": {
       "key": "Exception_InvalidService_Message",
-      "default": "The service URL is not a valid xBrowserSync service."
+      "default": "La URL del servicio no es un servicio xBrowserSync válido."
     },
     "InvalidService_Title": {
       "key": "Exception_InvalidService_Title",
-      "default": "Invalid xBrowserSync service"
+      "default": "Servicio xBrowserSync inválido"
     },
     "LocalContainerNotFound_Message": {
       "key": "Exception_LocalContainerNotFound_Message",
-      "default": "Possible corrupt browser profile, try creating a new profile as it may resolve the issue."
+      "default": "Posible perfil corrupto del navegador, intente crear un perfil nuevo ya que puede resolver el problema."
     },
     "LocalContainerNotFound_Title": {
       "key": "Exception_LocalContainerNotFound_Title",
-      "default": "Unexpected bookmarks structure"
+      "default": "Estructura de marcadores inesperada"
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local data has been refreshed, please reapply last change."
+      "default": "Los datos locales han sido actualizados, por favor vuelva a aplicar el último cambio."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
-      "default": "Sync error"
+      "default": "Error de sincronización"
     },
     "MissingClientData_Message": {
       "key": "Exception_MissingClientData_Message",
-      "default": "Unable to find stored credentials. Re-enable sync and try again."
+      "default": "No se han podido encontrar las credenciales almacenadas. Vuelva a habilitar la sincronización y vuelva a intentarlo."
     },
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
-      "default": "Missing credentials"
+      "default": "Faltan las credenciales"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",
-      "default": "Ensure you have provided a valid xBrowserSync back up before restoring."
+      "default": "Asegúrese de haber proporcionado una copia de seguridad de xBrowserSync válida antes de restaurar."
     },
     "NoDataToRestore_Title": {
       "key": "Exception_NoDataToRestore_Title",
-      "default": "No data to restore"
+      "default": "No hay datos para restaurar"
     },
     "NotAcceptingNewSyncs_Message": {
       "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Switch to a different service or try again later."
+      "default": "Cambie a un servicio diferente o inténtelo de nuevo más tarde."
     },
     "NotAcceptingNewSyncs_Title": {
       "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "Service not accepting new syncs"
+      "default": "El servicio no acepta nuevas sincronizaciones"
     },
     "OutOfSync_Message": {
       "key": "Exception_OutOfSync_Message",
-      "default": "Local data was out of sync and has now been refreshed. Please reapply last change."
+      "default": "Los datos locales no estaban sincronizados y ahora han sido actualizados. Vuelva a aplicar el último cambio."
     },
     "OutOfSync_Title": {
       "key": "Exception_OutOfSync_Title",
@@ -366,30 +366,30 @@
     },
     "UpgradeFailed_Title": {
       "key": "Exception_UpgradeFailed_Title",
-      "default": "Upgrade failed"
+      "default": "Error de actualización"
     }
   },
   "Service": {
     "Status": {
       "Error": {
         "key": "Service_Status_Error",
-        "default": "Connection error"
+        "default": "Error de conexión"
       },
       "Loading": {
         "key": "Service_Status_Loading",
-        "default": "Checking"
+        "default": "Comprobando"
       },
       "NoNewSyncs": {
         "key": "Service_Status_NoNewSyncs",
-        "default": "Not accepting new syncs"
+        "default": "No se aceptan nuevas sincronizaciones"
       },
       "Offline": {
         "key": "Service_Status_Offline",
-        "default": "Offline"
+        "default": "Sin conexión"
       },
       "Online": {
         "key": "Service_Status_Online",
-        "default": "Online"
+        "default": "Conectado"
       }
     }
   },
