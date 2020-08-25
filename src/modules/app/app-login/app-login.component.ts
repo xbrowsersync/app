@@ -256,10 +256,9 @@ export default class AppLoginComponent implements OnInit {
         // Generate a password hash, cache it then queue the sync
         return this.cryptoSvc
           .getPasswordHash(this.password, syncId)
-          .then((passwordHash) => {
-            this.storeSvc.set(StoreKey.Password, passwordHash);
-            return this.appHelperSvc.queueSync(syncData);
-          })
+          .then((passwordHash) =>
+            this.storeSvc.set(StoreKey.Password, passwordHash).then(() => this.appHelperSvc.queueSync(syncData))
+          )
           .then(() => {
             this.logSvc.logInfo(syncInfoMessage);
             return this.appHelperSvc.syncBookmarksSuccess();

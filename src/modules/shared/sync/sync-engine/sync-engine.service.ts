@@ -317,7 +317,7 @@ export default class SyncEngineService {
 
               // Combine all results to determine whether to proceed with update
               return processSyncResults.reduce((prev, current) => {
-                return angular.isUndefined(current.updateRemote ?? undefined) ? prev : prev && current.updateRemote;
+                return current.updateRemote ? prev : prev && current.updateRemote;
               }, true);
             });
         })
@@ -326,9 +326,7 @@ export default class SyncEngineService {
           this.currentSync.deferred.resolve();
 
           // Set flag if remote bookmarks data should be updated
-          if (!syncChange) {
-            updateRemote = false;
-          } else if (this.currentSync.type !== SyncType.Local) {
+          if (syncChange || this.currentSync.type !== SyncType.Local) {
             updateRemote = true;
           }
 

@@ -40,6 +40,7 @@ export interface BookmarkService {
   buildIdMappings: (bookmarks: Bookmark[]) => ng.IPromise<void>;
   clearNativeBookmarks: () => ng.IPromise<void>;
   createNativeBookmarksFromBookmarks: (bookmarks: Bookmark[]) => ng.IPromise<number>;
+  ensureContainersExist: (bookmarks: Bookmark[]) => Bookmark[];
   getNativeBookmarksAsBookmarks: () => ng.IPromise<Bookmark[]>;
   processNativeChangeOnBookmarks: (changeInfo: BookmarkChange, bookmarks: Bookmark[]) => ng.IPromise<Bookmark[]>;
   processChangeOnNativeBookmarks: (

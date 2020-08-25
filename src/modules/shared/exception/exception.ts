@@ -28,6 +28,8 @@ export class AndroidException extends Exception {}
 
 export class ApiRequestException extends Exception {}
 
+export class ArgumentException extends Exception {}
+
 export class BookmarkMappingNotFoundException extends Exception {}
 
 export class BookmarkNotFoundException extends Exception {}

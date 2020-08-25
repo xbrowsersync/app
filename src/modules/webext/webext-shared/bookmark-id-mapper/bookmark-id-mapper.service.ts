@@ -111,8 +111,8 @@ export default class BookmarkIdMapperService {
 
   set(idMappings: BookmarkIdMapping[]): ng.IPromise<void> {
     // Sort mappings then save to store
-    const sortedMappings = idMappings.sort((a, b) => {
-      return a.syncedId - b.syncedId;
+    const sortedMappings = idMappings.sort((x, y) => {
+      return x.syncedId - y.syncedId;
     });
     return this.storeSvc.set(StoreKey.BookmarkIdMappings, sortedMappings);
   }

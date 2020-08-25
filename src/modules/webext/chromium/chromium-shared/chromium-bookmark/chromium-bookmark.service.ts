@@ -1,3 +1,4 @@
+import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
@@ -18,6 +19,8 @@ import WebExtBookmarkService from '../../../webext-shared/webext-bookmark/webext
 @autobind
 @Injectable('BookmarkService')
 export default class ChromiumBookmarkService extends WebExtBookmarkService implements BookmarkService {
+  otherBookmarksNodeId = '2';
+  toolbarBookmarksNodeId = '1';
   unsupportedContainers = [BookmarkContainer.Menu, BookmarkContainer.Mobile];
 
   clearNativeBookmarks(): ng.IPromise<void> {
@@ -179,6 +182,28 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
     });
   }
 
+  ensureContainersExist(bookmarks: Bookmark[]): Bookmark[] {
+    if (angular.isUndefined(bookmarks)) {
+      return;
+    }
+
+    // Add supported containers
+    const bookmarksToReturn = angular.copy(bookmarks);
+    this.bookmarkHelperSvc.getContainer(BookmarkContainer.Other, bookmarksToReturn, true);
+    this.bookmarkHelperSvc.getContainer(BookmarkContainer.Toolbar, bookmarksToReturn, true);
+
+    // Return sorted containers
+    return bookmarksToReturn.sort((x, y) => {
+      if (x.title < y.title) {
+        return -1;
+      }
+      if (x.title > y.title) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
   getNativeBookmarksAsBookmarks(): ng.IPromise<Bookmark[]> {
     let allNativeBookmarks = [];
 
@@ -266,30 +291,28 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
         const otherBookmarks = results[2];
         const toolbarBookmarks = results[3];
         const bookmarks: Bookmark[] = [];
-        let otherContainer: Bookmark;
-        let toolbarContainer: Bookmark;
-        let menuContainer: Bookmark;
-        let mobileContainer: Bookmark;
 
         // Add other container if bookmarks present
+        const otherContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Other, bookmarks, true);
         if (otherBookmarks?.length > 0) {
-          otherContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Other, bookmarks, true);
           otherContainer.children = otherBookmarks;
         }
 
         // Add toolbar container if bookmarks present
+        const toolbarContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Toolbar, bookmarks, true);
         if (toolbarBookmarks?.length > 0) {
-          toolbarContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Toolbar, bookmarks, true);
           toolbarContainer.children = toolbarBookmarks;
         }
 
         // Add menu container if bookmarks present
+        let menuContainer: Bookmark;
         if (menuBookmarks?.length > 0) {
           menuContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Menu, bookmarks, true);
           menuContainer.children = menuBookmarks;
         }
 
         // Add mobile container if bookmarks present
+        let mobileContainer: Bookmark;
         if (mobileBookmarks?.length > 0) {
           mobileContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Mobile, bookmarks, true);
           mobileContainer.children = mobileBookmarks;
@@ -339,10 +362,10 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
     return browser.bookmarks.getTree().then((tree) => {
       // Get the root child nodes
       const otherBookmarksNode = tree[0].children.find((x) => {
-        return x.id === '2';
+        return x.id === this.otherBookmarksNodeId;
       });
       const toolbarBookmarksNode = tree[0].children.find((x) => {
-        return x.id === '1';
+        return x.id === this.toolbarBookmarksNodeId;
       });
 
       // Throw an error if a native container node is not found
@@ -372,39 +395,6 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
       containerIds[BookmarkContainer.Mobile] = mobileBookmarksNode ? mobileBookmarksNode.id : undefined;
 
       return containerIds;
-    });
-  }
-
-  processNativeBookmarkEventsQueue(): void {
-    const condition = (): ng.IPromise<boolean> => {
-      return this.$q.resolve(this.nativeBookmarkEventsQueue.length > 0);
-    };
-
-    const action = (): any => {
-      // Get first event in the queue and process change
-      const currentEvent = this.nativeBookmarkEventsQueue.shift();
-      switch (currentEvent.changeType) {
-        case BookmarkChangeType.Add:
-          return this.syncNativeBookmarkCreated(...currentEvent.eventArgs);
-        case BookmarkChangeType.Remove:
-          return this.syncNativeBookmarkRemoved(...currentEvent.eventArgs);
-        case BookmarkChangeType.Move:
-          return this.syncNativeBookmarkMoved(...currentEvent.eventArgs);
-        case BookmarkChangeType.Modify:
-          return this.syncNativeBookmarkChanged(...currentEvent.eventArgs);
-        default:
-          throw new Exceptions.AmbiguousSyncRequestException();
-      }
-    };
-
-    // Iterate through the queue and process the events
-    this.utilitySvc.asyncWhile(this.nativeBookmarkEventsQueue, condition, action).then(() => {
-      this.$timeout(() => {
-        this.syncEngineSvc.executeSync().then(() => {
-          // Move native unsupported containers into the correct order
-          return this.disableEventListeners().then(this.reorderUnsupportedContainers).then(this.enableEventListeners);
-        });
-      }, 100);
     });
   }
 

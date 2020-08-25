@@ -1,3 +1,4 @@
+import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
@@ -207,6 +208,30 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
     });
   }
 
+  ensureContainersExist(bookmarks: Bookmark[]): Bookmark[] {
+    if (angular.isUndefined(bookmarks)) {
+      return;
+    }
+
+    // Add supported containers
+    const bookmarksToReturn = angular.copy(bookmarks);
+    this.bookmarkHelperSvc.getContainer(BookmarkContainer.Menu, bookmarksToReturn, true);
+    this.bookmarkHelperSvc.getContainer(BookmarkContainer.Mobile, bookmarksToReturn, true);
+    this.bookmarkHelperSvc.getContainer(BookmarkContainer.Other, bookmarksToReturn, true);
+    this.bookmarkHelperSvc.getContainer(BookmarkContainer.Toolbar, bookmarksToReturn, true);
+
+    // Return sorted containers
+    return bookmarksToReturn.sort((x, y) => {
+      if (x.title < y.title) {
+        return -1;
+      }
+      if (x.title > y.title) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
   fixMultipleMoveOldIndexes(): void {
     const processBatch = (batch) => {
       // Adjust oldIndexes if bookmarks moved to different parent or to higher indexes
@@ -349,32 +374,28 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
         const otherBookmarks = results[2];
         const toolbarBookmarks = results[3];
         const bookmarks: Bookmark[] = [];
-        let otherContainer: Bookmark;
-        let toolbarContainer: Bookmark;
-        let menuContainer: Bookmark;
-        let mobileContainer: Bookmark;
 
         // Add other container if bookmarks present
+        const otherContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Other, bookmarks, true);
         if (otherBookmarks?.length > 0) {
-          otherContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Other, bookmarks, true);
           otherContainer.children = otherBookmarks;
         }
 
         // Add toolbar container if bookmarks present
+        const toolbarContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Toolbar, bookmarks, true);
         if (toolbarBookmarks?.length > 0) {
-          toolbarContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Toolbar, bookmarks, true);
           toolbarContainer.children = toolbarBookmarks;
         }
 
         // Add menu container if bookmarks present
+        const menuContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Menu, bookmarks, true);
         if (menuBookmarks?.length > 0) {
-          menuContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Menu, bookmarks, true);
           menuContainer.children = menuBookmarks;
         }
 
         // Add mobile container if bookmarks present
+        const mobileContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Mobile, bookmarks, true);
         if (mobileBookmarks?.length > 0) {
-          mobileContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Mobile, bookmarks, true);
           mobileContainer.children = mobileBookmarks;
         }
 

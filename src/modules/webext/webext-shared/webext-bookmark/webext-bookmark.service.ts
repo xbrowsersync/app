@@ -483,6 +483,10 @@ export default class WebExtBookmarkService implements BookmarkService {
       });
   }
 
+  ensureContainersExist(bookmarks: Bookmark[]): Bookmark[] {
+    throw new Exceptions.NotImplementedException();
+  }
+
   getContainerNameFromNativeId(nativeBookmarkId: string): ng.IPromise<string> {
     return this.getNativeContainerIds().then((nativeContainerIds) => {
       const menuBookmarksId = nativeContainerIds[BookmarkContainer.Menu] as string;
@@ -937,7 +941,36 @@ export default class WebExtBookmarkService implements BookmarkService {
   }
 
   processNativeBookmarkEventsQueue(): void {
-    throw new Exceptions.NotImplementedException();
+    const condition = (): ng.IPromise<boolean> => {
+      return this.$q.resolve(this.nativeBookmarkEventsQueue.length > 0);
+    };
+
+    const action = (): any => {
+      // Get first event in the queue and process change
+      const currentEvent = this.nativeBookmarkEventsQueue.shift();
+      switch (currentEvent.changeType) {
+        case BookmarkChangeType.Add:
+          return this.syncNativeBookmarkCreated(...currentEvent.eventArgs);
+        case BookmarkChangeType.Remove:
+          return this.syncNativeBookmarkRemoved(...currentEvent.eventArgs);
+        case BookmarkChangeType.Move:
+          return this.syncNativeBookmarkMoved(...currentEvent.eventArgs);
+        case BookmarkChangeType.Modify:
+          return this.syncNativeBookmarkChanged(...currentEvent.eventArgs);
+        default:
+          throw new Exceptions.AmbiguousSyncRequestException();
+      }
+    };
+
+    // Iterate through the queue and process the events
+    this.utilitySvc.asyncWhile(this.nativeBookmarkEventsQueue, condition, action).then(() => {
+      this.$timeout(() => {
+        this.syncEngineSvc.executeSync().then(() => {
+          // Move native unsupported containers into the correct order
+          return this.disableEventListeners().then(this.reorderUnsupportedContainers).then(this.enableEventListeners);
+        });
+      }, 100);
+    });
   }
 
   processNativeChangeOnBookmarks(changeInfo: BookmarkChange, bookmarks: Bookmark[]): ng.IPromise<Bookmark[]> {

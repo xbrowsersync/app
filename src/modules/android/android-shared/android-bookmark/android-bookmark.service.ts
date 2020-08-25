@@ -27,6 +27,10 @@ export default class AndroidBookmarkService implements BookmarkService {
     return this.methodNotApplicable();
   }
 
+  ensureContainersExist(bookmarks: Bookmark[]): Bookmark[] {
+    return bookmarks;
+  }
+
   getNativeBookmarksAsBookmarks(): ng.IPromise<Bookmark[]> {
     return this.methodNotApplicable();
   }

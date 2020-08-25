@@ -181,57 +181,61 @@ export default class BookmarkSyncProviderService implements SyncProvider {
       }
 
       // Sync bookmarks
-      return getBookmarksToSync
-        .then((bookmarks = []) => {
-          // Update native bookmarks
-          return this.$q((resolve, reject) => {
-            this.platformSvc
-              .disableNativeEventListeners()
-              .then(() => {
-                // Use provided bookmarks to populate native bookmarks
-                if (sync.bookmarks) {
-                  return this.populateNativeBookmarks(bookmarks);
-                }
-
-                // Check if bookmark container is toolbar and toolbar syncing is enabled
-                return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
-                  if (updatedBookmarkContainer === BookmarkContainer.Toolbar && !syncBookmarksToolbar) {
-                    return;
+      return (
+        getBookmarksToSync
+          // Create containers if required
+          .then((bookmarks = []) => this.bookmarkSvc.ensureContainersExist(bookmarks))
+          .then((bookmarks) => {
+            // Update native bookmarks
+            return this.$q((resolve, reject) => {
+              this.platformSvc
+                .disableNativeEventListeners()
+                .then(() => {
+                  // Use provided bookmarks to populate native bookmarks
+                  if (sync.bookmarks) {
+                    return this.populateNativeBookmarks(bookmarks);
                   }
 
-                  // Apply updates to native bookmarks
-                  return this.bookmarkSvc.processChangeOnNativeBookmarks(
-                    updatedBookmark.id,
-                    changeInfo.type,
-                    updatedBookmark
-                  );
-                });
-              })
-              .then(resolve)
-              .catch(reject)
-              .finally(this.platformSvc.enableNativeEventListeners);
-          }).then(() => {
-            // Encrypt bookmarks
-            return this.cryptoSvc.encryptData(JSON.stringify(bookmarks)).then((encryptedBookmarks) => {
-              processResult.data = {
-                encryptedBookmarks,
-                updatedBookmarks: bookmarks
-              };
+                  // Check if bookmark container is toolbar and toolbar syncing is enabled
+                  return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
+                    if (updatedBookmarkContainer === BookmarkContainer.Toolbar && !syncBookmarksToolbar) {
+                      return;
+                    }
 
-              // Update bookmarks cache
-              return this.bookmarkHelperSvc.updateCachedBookmarks(bookmarks, encryptedBookmarks).then(() => {
-                // Build id mappings if bookmarks provided
-                if (sync.bookmarks) {
-                  return this.bookmarkSvc.buildIdMappings(bookmarks);
-                }
+                    // Apply updates to native bookmarks
+                    return this.bookmarkSvc.processChangeOnNativeBookmarks(
+                      updatedBookmark.id,
+                      changeInfo.type,
+                      updatedBookmark
+                    );
+                  });
+                })
+                .then(resolve)
+                .catch(reject)
+                .finally(this.platformSvc.enableNativeEventListeners);
+            }).then(() => {
+              // Encrypt bookmarks
+              return this.cryptoSvc.encryptData(JSON.stringify(bookmarks)).then((encryptedBookmarks) => {
+                processResult.data = {
+                  encryptedBookmarks,
+                  updatedBookmarks: bookmarks
+                };
+
+                // Update bookmarks cache
+                return this.bookmarkHelperSvc.updateCachedBookmarks(bookmarks, encryptedBookmarks).then(() => {
+                  // Build id mappings if bookmarks provided
+                  if (sync.bookmarks) {
+                    return this.bookmarkSvc.buildIdMappings(bookmarks);
+                  }
+                });
               });
             });
-          });
-        })
-        .then(() => {
-          processResult.updateRemote = true;
-          return processResult;
-        });
+          })
+          .then(() => {
+            processResult.updateRemote = true;
+            return processResult;
+          })
+      );
     });
   }
 
@@ -240,8 +244,8 @@ export default class BookmarkSyncProviderService implements SyncProvider {
       updateRemote: false
     };
 
+    // Bookmarks will be provided if this is a restore, if so update native bookmarks and return
     if (sync.bookmarks) {
-      // Local import, update native bookmarks
       return this.populateNativeBookmarks(sync.bookmarks).then(() => processResult);
     }
 
@@ -257,45 +261,57 @@ export default class BookmarkSyncProviderService implements SyncProvider {
 
           // Decrypt bookmarks
           let bookmarks: Bookmark[];
-          return this.cryptoSvc
-            .decryptData(response.bookmarks)
-            .then((decryptedData) => {
-              // Update cached bookmarks
-              bookmarks = JSON.parse(decryptedData);
+          return (
+            this.cryptoSvc
+              .decryptData(response.bookmarks)
+              .then((decryptedData) => {
+                let reEncrypt = false;
+                bookmarks = JSON.parse(decryptedData);
 
-              // Check bookmark ids are all valid
-              if (!this.validateBookmarkIds(bookmarks)) {
-                bookmarks = this.repairBookmarkIds(bookmarks);
+                // Check bookmark ids are all valid
+                if (!this.validateBookmarkIds(bookmarks)) {
+                  bookmarks = this.repairBookmarkIds(bookmarks);
+                  reEncrypt = true;
+                }
 
-                // Encrypt bookmarks with new ids
-                return this.cryptoSvc.encryptData(JSON.stringify(bookmarks)).then((encryptedBookmarksWithNewIds) => {
-                  encryptedBookmarks = encryptedBookmarksWithNewIds;
-                });
-              }
-            })
-            .then(() => {
-              processResult.data = {
-                encryptedBookmarks,
-                updatedBookmarks: bookmarks
-              };
-              return this.bookmarkHelperSvc.updateCachedBookmarks(bookmarks, encryptedBookmarks).then(() => bookmarks);
-            })
-            .then((cachedBookmarks) => {
-              // Update browser bookmarks
-              return this.platformSvc
-                .disableNativeEventListeners()
-                .then(() => this.populateNativeBookmarks(cachedBookmarks))
-                .then(() => this.bookmarkSvc.buildIdMappings(cachedBookmarks))
-                .finally(this.platformSvc.enableNativeEventListeners);
-            })
-            .then(() => {
+                // Create any missing containers
+                const bookmarksWithMissingContainers = this.bookmarkSvc.ensureContainersExist(bookmarks);
+                if (!angular.equals(bookmarks, bookmarksWithMissingContainers)) {
+                  bookmarks = bookmarksWithMissingContainers;
+                  reEncrypt = true;
+                }
+
+                if (reEncrypt) {
+                  // Reencrypt updated bookmarks
+                  return this.cryptoSvc.encryptData(JSON.stringify(bookmarks)).then((reEncryptedBookmarks) => {
+                    encryptedBookmarks = reEncryptedBookmarks;
+                  });
+                }
+              })
+              .then(() => {
+                processResult.data = {
+                  encryptedBookmarks,
+                  updatedBookmarks: bookmarks
+                };
+                return this.bookmarkHelperSvc
+                  .updateCachedBookmarks(bookmarks, encryptedBookmarks)
+                  .then(() => bookmarks);
+              })
+              .then((cachedBookmarks) => {
+                // Update browser bookmarks
+                return this.platformSvc
+                  .disableNativeEventListeners()
+                  .then(() => this.populateNativeBookmarks(cachedBookmarks))
+                  .then(() => this.bookmarkSvc.buildIdMappings(cachedBookmarks))
+                  .finally(this.platformSvc.enableNativeEventListeners);
+              })
               // Update cached last updated date
-              return this.storeSvc.set(StoreKey.LastUpdated, lastUpdated);
-            })
-            .then(() => {
-              processResult.updateRemote = true;
-              return processResult;
-            });
+              .then(() => this.storeSvc.set(StoreKey.LastUpdated, lastUpdated))
+              .then(() => {
+                processResult.updateRemote = true;
+                return processResult;
+              })
+          );
         })
     );
   }
@@ -312,9 +328,14 @@ export default class BookmarkSyncProviderService implements SyncProvider {
       .then(() => this.utilitySvc.isSyncEnabled())
       .then((syncEnabled) => {
         // If this is a new sync, get native bookmarks and continue
-        if (!syncEnabled || !sync.changeInfo) {
+        if (!syncEnabled) {
           buildIdMappings = true;
           return this.bookmarkSvc.getNativeBookmarksAsBookmarks();
+        }
+
+        // If bookmarks provided continue with this
+        if (!angular.isUndefined(sync.bookmarks)) {
+          return sync.bookmarks;
         }
 
         // Otherwise get cached bookmarks and process changes
@@ -325,8 +346,10 @@ export default class BookmarkSyncProviderService implements SyncProvider {
             return;
           }
 
-          // Update bookmarks data with local changes
-          return this.bookmarkSvc.processNativeChangeOnBookmarks(sync.changeInfo, bookmarks);
+          // Update bookmarks data with local changes and create containers if required
+          return this.bookmarkSvc
+            .processNativeChangeOnBookmarks(sync.changeInfo, bookmarks)
+            .then((updatedBookmarks) => this.bookmarkSvc.ensureContainersExist(updatedBookmarks));
         });
       })
       .then((bookmarksToSync) => {

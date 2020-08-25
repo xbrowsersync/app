@@ -164,6 +164,36 @@ export default class BookmarkHelperService {
     return metadata;
   }
 
+  getBookmarkTitleForDisplay(bookmark: Bookmark): string {
+    // If normal bookmark, return title or if blank url to display
+    if (bookmark.url) {
+      return bookmark.title ? bookmark.title : bookmark.url.replace(/^https?:\/\//i, '');
+    }
+
+    // Otherwise bookmark is a folder, return title if not a container
+    if (!this.bookmarkIsContainer(bookmark)) {
+      return bookmark.title;
+    }
+    let containerTitle: string;
+    switch (bookmark.title) {
+      case BookmarkContainer.Menu:
+        containerTitle = this.platformSvc.getI18nString(this.Strings.Bookmarks.Container.Menu);
+        break;
+      case BookmarkContainer.Mobile:
+        containerTitle = this.platformSvc.getI18nString(this.Strings.Bookmarks.Container.Mobile);
+        break;
+      case BookmarkContainer.Other:
+        containerTitle = this.platformSvc.getI18nString(this.Strings.Bookmarks.Container.Other);
+        break;
+      case BookmarkContainer.Toolbar:
+        containerTitle = this.platformSvc.getI18nString(this.Strings.Bookmarks.Container.Toolbar);
+        break;
+      default:
+        containerTitle = `${undefined}`;
+    }
+    return containerTitle;
+  }
+
   getCachedBookmarks(): ng.IPromise<Bookmark[]> {
     // Get cached encrypted bookmarks from store
     return this.storeSvc.get<string>(StoreKey.Bookmarks).then((encryptedBookmarksFromStore) => {

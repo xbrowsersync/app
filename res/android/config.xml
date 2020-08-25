@@ -57,7 +57,7 @@
     <resource-file src="res/android/values-night/colors.xml" target="app/src/main/res/values-night/colors.xml" />
   </platform>
   <preference name="android-minSdkVersion" value="28" />
-  <preference name="android-targetSdkVersion" value="28" />
+  <preference name="android-targetSdkVersion" value="29" />
   <preference name="AndroidLaunchMode" value="singleTask" />
   <preference name="BackgroundColor" value="#00000000"/>
   <preference name="DisallowOverscroll" value="true" />

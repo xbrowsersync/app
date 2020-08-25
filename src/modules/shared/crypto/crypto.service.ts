@@ -1,3 +1,4 @@
+import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import base64js from 'base64-js';
@@ -85,23 +86,22 @@ export default class CryptoService {
       });
   }
 
-  encryptData(data: any): ng.IPromise<string> {
+  encryptData(data: string): ng.IPromise<string> {
     // If no data provided, return an empty string
     if (!data) {
       return this.$q.resolve('');
     }
 
+    // Ensure data is a string
+    if (!angular.isString(data)) {
+      throw new Exceptions.ArgumentException('Argument must be a string');
+    }
+
     // Ensure both id and password are in store
     return this.storeSvc
-      .get([StoreKey.Password, StoreKey.SyncId])
-      .then((storeContent) => {
-        const { password } = storeContent;
-        const { syncId } = storeContent;
-
-        if (!syncId) {
-          throw new Exceptions.SyncRemovedException();
-        }
-        if (!password) {
+      .get<string>(StoreKey.Password)
+      .then((password) => {
+        if (angular.isUndefined(password)) {
           throw new Exceptions.PasswordRemovedException();
         }
 
