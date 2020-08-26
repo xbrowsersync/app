@@ -117,10 +117,10 @@
       "default": "Guardando"
     },
     "Settings": {
-      "default": "Settings"
+      "default": "Preferencias"
     },
     "ShareBookmark": {
-      "default": "Share bookmark"
+      "default": "Compartir marcador"
     },
     "Update": {
       "default": "Actualizar"
@@ -146,10 +146,10 @@
       "default": "Si el problema persiste, por favor <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>reporte el problema</a>."
     },
     "Default_Title": {
-      "default": "Something went wrong"
+      "default": "Algo ha ido mal"
     },
     "FailedDownloadFile_Title": {
-      "default": "Backup failed"
+      "default": "La copia de seguridad ha fallado"
     },
     "FailedGetDataToRestore_Title": {
       "default": "Examinar archivos fallidos"
@@ -227,25 +227,25 @@
       "default": "Los datos locales no estaban sincronizados y ahora han sido actualizados. Vuelva a aplicar el último cambio."
     },
     "OutOfSync_Title": {
-      "default": "Sync conflict detected"
+      "default": "Conflicto de sincronización detectado"
     },
     "RequestEntityTooLarge_Message": {
-      "default": "Delete some bookmarks and try again or switch to a service with a larger sync limit."
+      "default": "Elimina algunos marcadores y vuelve a intentarlo o cambia a un servicio con un límite de sincronización mayor."
     },
     "RequestEntityTooLarge_Title": {
-      "default": "Sync data limit exceeded"
+      "default": "Límite de datos de sincronización excedido"
     },
     "ScanFailed_Message": {
-      "default": "Check permission has been granted and try again."
+      "default": "Compruebe que el permiso ha sido concedido e inténtelo de nuevo."
     },
     "ScanFailed_Title": {
-      "default": "Scan failed"
+      "default": "Error al escanear"
     },
     "ServiceOffline_Message": {
-      "default": "The xBrowserSync service is currently offline, try again later."
+      "default": "El servicio xBrowserSync no responde, inténtalo de nuevo más tarde."
     },
     "ServiceOffline_Title": {
-      "default": "Service offline"
+      "default": "Servicio sin conexión"
     },
     "ShareFailed_Title": {
       "default": "Share failed"
