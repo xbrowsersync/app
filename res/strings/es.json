@@ -248,35 +248,35 @@
       "default": "Servicio sin conexión"
     },
     "ShareFailed_Title": {
-      "default": "Share failed"
+      "default": "Error al compartir"
     },
     "SyncRemoved_Message": {
-      "default": "The requested sync does not exist, it may have been removed due to inactivity."
+      "default": "La sincronización solicitada no existe, puede haber sido eliminada por inactividad."
     },
     "SyncRemoved_Title": {
-      "default": "Sync not found"
+      "default": "Sincronización no encontrada"
     },
     "TooManyRequests_Message": {
-      "default": "Sync has been disabled, re-enable sync to resume syncing."
+      "default": "La sincronización ha sido deshabilitada, vuelve a habilitarla para reanudar la sincronización."
     },
     "TooManyRequests_Title": {
-      "default": "Service request limit hit"
+      "default": "Límite de solicitud de servicio alcanzado"
     },
     "UncommittedSyncs_Message": {
-      "default": "Sync will be committed once connection to service is restored."
+      "default": "La sincronización será confirmada una vez que se restablezca la conexión al servicio."
     },
     "UncommittedSyncs_Title": {
-      "default": "Changes not synced"
+      "default": "Cambios no sincronizados"
     },
     "UnsupportedServiceApiVersion_Message": {
-      "default": "This service is running an unsupported API version."
+      "default": "Este servicio está ejecutando una versión de API no soportada."
     },
     "UnsupportedServiceApiVersion_Title": {
-      "default": "Service not supported"
+      "default": "Servicio no admitido"
     },
     "UpgradeFailed_Message": {
-      "android": "Upgrade will be retried on restarting the app. If the problem persists please reinstall xBrowserSync.",
-      "default": "Restart your browser to retry upgrade, if the problem persists please reinstall xBrowserSync."
+      "android": "La actualización se reintentará al reiniciar la aplicación. Si el problema persiste, por favor reinstale xBrowserSync.",
+      "default": "Reinicie su navegador para volver a intentar actualizar, si el problema persiste, por favor reinstale xBrowserSync."
     },
     "UpgradeFailed_Title": {
       "default": "Error de actualización"
@@ -373,7 +373,7 @@
     },
     "Help": {
       "AddingBookmarks": {
-        "default": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s “Bookmark this page” button as normal and xBrowserSync will automatically populate the bookmark’s properties (optional permissions must be granted for this to work, check the Settings panel).</p>",
+        "default": "<h4>Añadir un marcador</h4><p>Marcar la página actual haciendo clic en el icono del marcador en el panel de búsqueda. Las propiedades del marcador, se rellenarán automáticamente. De lo contrario, agregue una descripción y algunas etiquetas para asegurar mejores resultados de búsqueda.</p><p>Alternativamente, haga clic en el botón “Marcar esta página” del navegador de manera habitual y xBrowserSync automáticamente rellenará las propiedades del marcador (se deben conceder permisos opcionales para que funcione, compruebe el panel de configuración).</p>",
         "android": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be fetched for you, otherwise add a description and some tags to ensure better search results.</p>",
         "firefox": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s “Bookmark this page” button as normal and xBrowserSync will automatically populate the bookmark’s properties.</p>"
       },
@@ -404,7 +404,7 @@
         "firefox": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks toolbar and bookmarks library, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p><p>Please note however, as Firefox’s bookmarks API does not yet support accessing native bookmark tags, any existing tags will be lost when syncing and tags added via xBrowserSync will not be saved as native tags.</p>"
       },
       "Previous": {
-        "default": "Previous"
+        "default": "Anterior"
       },
       "Searching": {
         "default": "<h4>Searching your bookmarks</h4><p>Once synced, simply press Enter to display your recent bookmarks or type some keywords or a URL to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>To edit or delete a bookmark, hover over the bookmark and click the now visible edit icon next to the bookmark’s title.</p>",
@@ -428,15 +428,15 @@
     "Login": {
       "GetSyncId": {
         "Title": {
-          "default": "Need a sync ID?"
+          "default": "¿Necesitas un ID de sincronización?"
         },
         "Content": {
-          "default": "Download the xBrowserSync desktop browser extension and create a new sync to access your bookmarks here."
+          "default": "Descargue la extensión del navegador de escritorio xBrowserSync y cree una nueva sincronización para acceder a sus favoritos aquí."
         }
       },
       "Password": {
         "Confirm": {
-          "default": "Confirm password"
+          "default": "Confirme la contraseña"
         },
         "Existing": {
           "default": "Your encryption password"
@@ -530,14 +530,14 @@
           }
         },
         "Enable": {
-          "default": "Sync"
+          "default": "Sincronizar"
         },
         "New": {
-          "default": "Create new sync"
+          "default": "Crear una nueva sincronización"
         },
         "Upgrade": {
           "Title": {
-            "default": "Ready to upgrade sync?"
+            "default": "¿Listo para actualizar la sincronización?"
           },
           "Content": {
             "default": "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
@@ -546,10 +546,10 @@
       },
       "SyncId": {
         "Description": {
-          "default": "Your sync ID"
+          "default": "Su ID de sincronización"
         },
         "Existing": {
-          "default": "Already got a sync ID?"
+          "default": "¿Ya tiene un ID de sincronización?"
         },
         "Invalid": {
           "default": "Not a valid sync ID"
@@ -671,7 +671,7 @@
         },
         "Revert": {
           "Title": {
-            "default": "Revert"
+            "default": "Deshacer"
           },
           "Description": {
             "default": "Revert local browser data to initial installation state."
@@ -680,7 +680,7 @@
             "default": "<p>If you continue, any active sync will be disabled and your local data will be reverted to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
           },
           "Button": {
-            "default": "Revert"
+            "default": "Deshacer"
           },
           "Done": {
             "default": "Your data has been reverted to initial installation state."
@@ -696,13 +696,13 @@
         },
         "Help": {
           "Title": {
-            "default": "Help"
+            "default": "Ayuda"
           },
           "Description": {
             "default": "Got a question or having an issue? Make sure to read through the help guide, otherwise the answer may be in the FAQs."
           },
           "ViewFaqs": {
-            "default": "View FAQs"
+            "default": "Ver FAQs"
           }
         },
         "Tracker": {
@@ -749,31 +749,31 @@
         },
         "Read": {
           "Title": {
-            "default": "Read website data"
+            "default": "Leer datos del sitio web"
           },
           "Description": {
             "default": "Required to automatically add metadata to bookmarks when using the browser’s “Bookmark this page” button (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>more info</a>)."
           }
         },
         "Remove": {
-          "default": "Remove permissions"
+          "default": "Eliminar permisos"
         }
       },
       "Prefs": {
         "CheckForAppUpdates": {
           "Label": {
-            "default": "Check for app updates"
+            "default": "Buscar actualizaciones de la aplicación"
           },
           "Description": {
-            "default": "Be notified when a new version of xBrowserSync is available."
+            "default": "Ser notificado cuando esté disponible una nueva versión de xBrowserSync."
           }
         },
         "DarkMode": {
           "Label": {
-            "default": "Enable dark mode"
+            "default": "Habilitar el modo oscuro"
           },
           "Description": {
-            "default": "Ideal for use in low-light environments."
+            "default": "Ideal para su uso en ambientes de poca luz."
           }
         },
         "DefaultToFolderView": {
@@ -860,25 +860,25 @@
         }
       },
       "AppVersion": {
-        "default": "Version"
+        "default": "Versión"
       },
       "NotAvailable": {
-        "default": "Settings available when sync is enabled."
+        "default": "Ajustes disponibles cuando la sincronización está activada."
       },
       "FileDownloaded": {
-        "default": "If the file did not download automatically, right click on the link below and “Save link as...”.",
-        "android": "File saved as {fileName}."
+        "default": "Si el archivo no se descargó automáticamente, haga clic con el botón derecho del ratón sobre el enlace de abajo y “Guardar enlace como...”.",
+        "android": "Archivo guardado como {fileName}."
       },
       "Support": {
-        "default": "Support xBrowserSync"
+        "default": "Soporte a xBrowserSync"
       }
     },
     "Support": {
       "Title": {
-        "default": "Support xBrowserSync!"
+        "default": "¡Soporte a xBrowserSync!"
       },
       "Content": {
-        "default": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains an effective tool in protecting our privacy and productivity against the rot of big tech!</p>"
+        "default": "<p>Queremos hacer de xBrowserSync la herramienta de sincronización número uno, pero todavía queda mucho por hacer:</p><ul><li>Añadir sincronización de las pestañas del navegador e historial</li><li>Soporte a todos los navegadores de escritorio principales</li><li>Traducir a otros idiomas</li><li>Y <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>más</a>!</li></ul><p>Sólo con su apoyo podremos seguir mejorando xBrowserSync y asegurarnos de que siga siendo una herramienta eficaz para proteger nuestra privacidad y productividad frente al deterioro de la tecnología!</p>"
       },
       "Cryptos": {
         "default": "Cryptos"
@@ -892,7 +892,7 @@
     },
     "Updated": {
       "Title": {
-        "default": "Updated to"
+        "default": "Actualizado a"
       },
       "Content": {
         "default": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
@@ -900,13 +900,13 @@
     },
     "Working": {
       "Restoring": {
-        "default": "Restoring"
+        "default": "Restaurando"
       },
       "Reverting": {
-        "default": "Reverting"
+        "default": "Revirtiendo"
       },
       "Syncing": {
-        "default": "Syncing"
+        "default": "Sincronizando"
       }
     }
   }
