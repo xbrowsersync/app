@@ -66,7 +66,7 @@
         "default": "Otros marcadores"
       },
       "Toolbar": {
-        "default": "Toolbar bookmarks"
+        "default": "Marcadores barra de herramientas"
       }
     }
   },
@@ -374,11 +374,11 @@
     "Help": {
       "AddingBookmarks": {
         "default": "<h4>Añadir un marcador</h4><p>Marcar la página actual haciendo clic en el icono del marcador en el panel de búsqueda. Las propiedades del marcador, se rellenarán automáticamente. De lo contrario, agregue una descripción y algunas etiquetas para asegurar mejores resultados de búsqueda.</p><p>Alternativamente, haga clic en el botón “Marcar esta página” del navegador de manera habitual y xBrowserSync automáticamente rellenará las propiedades del marcador (se deben conceder permisos opcionales para que funcione, compruebe el panel de configuración).</p>",
-        "android": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be fetched for you, otherwise add a description and some tags to ensure better search results.</p>",
-        "firefox": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s “Bookmark this page” button as normal and xBrowserSync will automatically populate the bookmark’s properties.</p>"
+        "android": "<h4>Añadir un marcador</h4><p>Añada marcadores fácilmente compartiendo a xBrowserSync desde cualquier aplicación que comparta URLs como un navegador, YouTube, Spotify y muchos más.</p><p>Las propiedades del marcador se buscarán para usted, de lo contrario añada una descripción y algunas etiquetas para asegurar mejores resultados de búsqueda.</p>",
+        "firefox": "<h4>Añadir un marcador</h4><p>Marque la página actual haciendo clic en el icono del marcador en el panel de búsqueda. Las propiedades del marcador, se llenarán automáticamente. De lo contrario, agregue una descripción y algunas etiquetas para asegurar mejores resultados de búsqueda.</p><p>Alternativamente, haga clic en el botón “Marcar esta página” del navegador de manera habitual y xBrowserSync automáticamente llenará las propiedades del marcador (se deben conceder permisos opcionales para que funcione, compruebe el panel de configuración).</p>"
       },
       "BackingUp": {
-        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time revert your data back to it’s original state from when xBrowserSync was installed.</p>",
+        "default": "<h4>Recuerde hacer una copia de seguridad</h4><p>Cuando utilice xBrowserSync sus datos son su responsabilidad, así que sea inteligente y asegúrese de hacer copias de seguridad.</p><p>Diríjase al panel de Ajustes y haga una copia de seguridad de sus datos no cifrados en un archivo local que puede utilizarse para restaurar tus datos si lo necesita.</p><p>Si los datos de su navegador local se corrompen y no tiene ninguna copia de seguridad, puede en cualquier momento revertir sus datos a su estado original desde la instalación de xBrowserSync.</p>",
         "android": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
       },
       "BeforeYouBegin": {
