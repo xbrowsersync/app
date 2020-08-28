@@ -453,55 +453,55 @@
       },
       "Scan": {
         "Title": {
-          "default": "Connect to your sync"
+          "default": "Conectar a su cuenta"
         },
         "Content": {
           "default": "Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a QR code which you can scan here."
         },
         "ScanCode": {
-          "default": "Scan code"
+          "default": "Escanear código"
         },
         "ManualEntry": {
-          "default": "Enter sync details manually"
+          "default": "Introduzca manualmente los detalles de la sincronización"
         }
       },
       "Service": {
         "ApiVersion": {
-          "default": "API version"
+          "default": "Versión de API"
         },
         "Confirm": {
-          "default": "Sync to this service?"
+          "default": "¿Sincronizar con este servicio?"
         },
         "Location": {
-          "default": "Location"
+          "default": "Ubicación"
         },
         "MaxSyncSize": {
-          "default": "Max sync size"
+          "default": "Tamaño máximo de sincronización"
         },
         "Selected": {
-          "default": "Syncing to"
+          "default": "Sincronizando con"
         },
         "Status": {
-          "default": "Status"
+          "default": "Estado"
         },
         "Update": {
           "Label": {
-            "default": "xBrowserSync service URL"
+            "default": "URL del servicio xBrowserSync"
           },
           "Description": {
-            "default": "Enter the URL of an alternative xBrowserSync service. Browse the list of public xBrowserSync services <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>here</a>."
+            "default": "Introduzca la URL de un servicio xBrowserSync alternativo. Consulte la lista de servicios xBrowserSync públicos <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>aquí</a>."
           },
           "Button": {
-            "default": "Switch service"
+            "default": "Cambiar de servicio"
           },
           "Required": {
-            "default": "xBrowserSync service URL is required"
+            "default": "La URL del servicio xBrowserSync es necesaria"
           },
           "Invalid": {
-            "default": "Not a valid xBrowserSync service"
+            "default": "No es un servicio xBrowserSync válido"
           },
           "Failed": {
-            "default": "Unable to connect to the service"
+            "default": "No es posible conectar con el servicio"
           },
           "NotSupported": {
             "default": "This service is running an unsupported API version"
