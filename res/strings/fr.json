@@ -188,10 +188,10 @@
       "default": "Identifiants non valides"
     },
     "InvalidService_Message": {
-      "default": "The service URL is not a valid xBrowserSync service."
+      "default": "L'URL de service n'est pas un service xBrowserSync valide."
     },
     "InvalidService_Title": {
-      "default": "Invalid xBrowserSync service"
+      "default": "Service xBrowserSync non valide"
     },
     "LocalContainerNotFound_Message": {
       "default": "Possible corrupt browser profile, try creating a new profile as it may resolve the issue."
