@@ -18,13 +18,13 @@
       }
     },
     "BookmarkCreated": {
-      "default": "Bookmark created"
+      "default": "Lesezeichen erstellt"
     },
     "BookmarkDeleted": {
-      "default": "Bookmark deleted"
+      "default": "Lesezeichen gelöscht"
     },
     "BookmarkUpdated": {
-      "default": "Bookmark updated"
+      "default": "Lesezeichen aktualisiert"
     },
     "GetMetadata": {
       "Message": {
@@ -63,43 +63,43 @@
         "default": "Mobile bookmarks"
       },
       "Other": {
-        "default": "Other bookmarks"
+        "default": "Weitere Lesezeichen"
       },
       "Toolbar": {
-        "default": "Toolbar bookmarks"
+        "default": "Lesezeichen-Symbolleiste"
       }
     }
   },
   "Button": {
     "AddBookmark": {
-      "default": "Add Bookmark"
+      "default": "Lesezeichen hinzufügen"
     },
     "Back": {
-      "default": "Back"
+      "default": "Zurück"
     },
     "Cancel": {
-      "default": "Cancel"
+      "default": "Abbrechen"
     },
     "Close": {
-      "default": "Close"
+      "default": "Schließen"
     },
     "Confirm": {
-      "default": "Yes"
+      "default": "Ja"
     },
     "Continue": {
-      "default": "Continue"
+      "default": "Weiter"
     },
     "DeleteBookmark": {
-      "default": "Delete Bookmark"
+      "default": "Lesezeichen löschen"
     },
     "Deny": {
-      "default": "No"
+      "default": "Nein"
     },
     "Done": {
-      "default": "Done"
+      "default": "Fertig"
     },
     "EditBookmark": {
-      "default": "Edit Bookmark"
+      "default": "Lesezeichen bearbeiten"
     },
     "Help": {
       "default": "Help guide"
@@ -123,10 +123,10 @@
       "default": "Share bookmark"
     },
     "Update": {
-      "default": "Update"
+      "default": "Aktualisieren"
     },
     "View": {
-      "default": "View"
+      "default": "Anzeigen"
     }
   },
   "Exception": {
