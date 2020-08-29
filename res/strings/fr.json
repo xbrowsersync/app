@@ -194,34 +194,34 @@
       "default": "Service xBrowserSync non valide"
     },
     "LocalContainerNotFound_Message": {
-      "default": "Possible corrupt browser profile, try creating a new profile as it may resolve the issue."
+      "default": "Le profil du navigateur est peut-être corrompu. Un nouveau profil peut résoudre le problème."
     },
     "LocalContainerNotFound_Title": {
-      "default": "Unexpected bookmarks structure"
+      "default": "Structure des favoris inattendue"
     },
     "LocalSyncError_Message": {
-      "default": "Local data has been refreshed, please reapply last change."
+      "default": "Les données locales ont été actualisées, merci de réappliquer la dernière modification."
     },
     "LocalSyncError_Title": {
       "default": "Erreur de synchronisation"
     },
     "MissingClientData_Message": {
-      "default": "Unable to find stored credentials. Re-enable sync and try again."
+      "default": "Impossible de trouver les identifiants enregistrés. Réactivez la synchronisation et réessayez."
     },
     "MissingClientData_Title": {
       "default": "Identifiants manquants"
     },
     "NoDataToRestore_Message": {
-      "default": "Ensure you have provided a valid xBrowserSync back up before restoring."
+      "default": "Assurez-vous d'avoir fourni une sauvegarde xBrowserSync valide avant de restaurer."
     },
     "NoDataToRestore_Title": {
       "default": "Aucune donnée à restaurer"
     },
     "NotAcceptingNewSyncs_Message": {
-      "default": "Switch to a different service or try again later."
+      "default": "Passez à un autre service ou réessayez plus tard."
     },
     "NotAcceptingNewSyncs_Title": {
-      "default": "Service not accepting new syncs"
+      "default": "Service n'acceptant pas de nouvelles synchronisation"
     },
     "OutOfSync_Message": {
       "default": "Local data was out of sync and has now been refreshed. Please reapply last change."
