@@ -158,13 +158,13 @@
       "default": "URL 无效或无法获取网页数据。"
     },
     "FailedGetPageMetadata_Title": {
-      "default": "Couldn’t get bookmark properties"
+      "default": "无法获取书签属性"
     },
     "FailedRefreshBookmarks_Title": {
-      "default": "Couldn’t retrieve updates"
+      "default": "无法获取更新"
     },
     "FailedRestoreData_Message": {
-      "default": "The backup data provided is not in an expected format."
+      "default": "提供的备份数据不是预期的格式。"
     },
     "FailedRestoreData_Title": {
       "default": "Unable to restore data"
@@ -327,150 +327,150 @@
       },
       "Form": {
         "Title": {
-          "default": "Title"
+          "default": "标题"
         },
         "Url": {
           "Exists": {
-            "default": "URL has already been bookmarked"
+            "default": "URL 已是书签"
           },
           "Label": {
             "default": "URL"
           },
           "Required": {
-            "default": "Bookmark URL is required"
+            "default": "必需填写书签 URL"
           }
         },
         "Description": {
-          "default": "Description"
+          "default": "描述"
         },
         "Tags": {
           "Label": {
-            "default": "Tags"
+            "default": "标记"
           },
           "Placeholder": {
-            "default": "tag 1, tag 2, tag 3, etc"
+            "default": "标记 1, 标记 2, 标记 3, 等"
           },
           "Clear": {
-            "default": "Clear tags"
+            "default": "清除标记"
           },
           "Remove": {
-            "default": "Remove tag"
+            "default": "移除标记"
           }
         },
         "Delete": {
-          "default": "Delete"
+          "default": "删除"
         },
         "Share": {
-          "default": "Share"
+          "default": "分享"
         },
         "UpdateProperties": {
-          "default": "Update bookmark properties"
+          "default": "更新书签属性"
         }
       },
       "InvalidUrlShared": {
-        "default": "The value that was shared does not contain a valid URL."
+        "default": "共享的值不包含有效的 URL。"
       }
     },
     "Help": {
       "AddingBookmarks": {
-        "default": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s “Bookmark this page” button as normal and xBrowserSync will automatically populate the bookmark’s properties (optional permissions must be granted for this to work, check the Settings panel).</p>",
-        "android": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be fetched for you, otherwise add a description and some tags to ensure better search results.</p>",
-        "firefox": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s “Bookmark this page” button as normal and xBrowserSync will automatically populate the bookmark’s properties.</p>"
+        "default": "<h4>添加书签</h4><p>通过单击“搜索”面板中的书签图标，可以为当前页面添加书签。 将自动为您填充书签属性，您也可以添加描述和一些标记以确保获得更好的搜索结果。</p><p>另外，您只需正常单击浏览器自带的“添加书签”按钮，xBrowserSync 将自动填充书签的属性(必须授予可选权限才能使用，请检查“设置”面板)。</p>",
+        "android": "<h4>添加书签</h4><p>通过浏览器、YouTube、Spotify 等任何可以分享 URL 的应用程序分享到 xBrowserSync，就可以轻松添加书签。</p><p>书签属性将被自动抓取，您也可以添加描述和一些标记以保证更好的搜索结果。</p>",
+        "firefox": "<h4>添加书签</h4><p>通过单击“搜索”面板中的书签图标，可以为当前页面添加书签。 将自动为您填充书签属性，您也可以添加描述和一些标记以确保获得更好的搜索结果。</p><p>另外，只需正常点击浏览器自带的“添加书签”按钮，xBrowserSync 将自动填充书签的属性。</p>"
       },
       "BackingUp": {
-        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time revert your data back to it’s original state from when xBrowserSync was installed.</p>",
-        "android": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
+        "default": "<h4>记住要备份</h4><p>当你使用 xBrowserSync 时，保护你的数据是你的责任，所以聪明点，确保备份。</p><p>转到 “设置” 面板，将未加密的数据备份到本地文件中，如果需要的话，可以用来恢复数据。</p><p>如果您的本地浏览器数据被损坏，而您没有任何备份，您可以随时将数据恢复到安装 xBrowserSync 时的原始状态。</p>",
+        "android": "<h4>记住要备份</h4><p>当你使用 xBrowserSync 时，保护你的数据是你的责任，所以聪明点，确保备份。</p><p>转到 “设置” 面板，将未加密的数据备份到本地文件中，如果需要的话，可以用来恢复数据。</p>"
       },
       "BeforeYouBegin": {
-        "default": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) please disable them to avoid conflicts.</p>",
-        "firefox": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) please disable them to avoid conflicts.</p>"
+        "default": "<h4>开始之前</h4> <p> xBrowserSync 会修改本地浏览器数据，因此最好备份备份书签和其他浏览器数据以防万一，若使用其他浏览器同步服务或工具(例如<a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'> Google Chrome Sync </a>)，请禁用它们以避免冲突。</p>",
+        "firefox": "<h4>开始之前</h4> <p> xBrowserSync 会修改本地浏览器数据，因此最好备份备份书签和其他浏览器数据以防万一，若使用其他浏览器同步服务或工具(例如<a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'> Firefox Sync </a>)，请禁用它们以避免冲突。</p>"
       },
       "ExistingId": {
-        "default": "<h4>Syncing with your existing ID</h4><p>Click on “Already got a sync ID?” to enter your existing sync ID and password. If your sync ID was created on a service different to the one displayed then switch to that service before attempting to sync.</p><p>xBrowserSync will retrieve and decrypt your encrypted data using your locally stored password, then clear your local bookmarks before re-populating them from the decrypted data.</p><p>When synced, xBrowserSync checks in the background every fifteen minutes for updates to your synced data and will automatically update your local bookmarks when required. You can also manually sync available updates to your synced data in the Settings panel.</p>",
-        "android": "<h4>Syncing with your existing ID</h4><p>Start by scanning the sync ID QR code in the Settings panel of the xBrowserSync desktop browser extension (click on your sync ID to reveal it). Make sure you enter the same encryption password used when creating the sync otherwise xBrowserSync will not be able to decrypt your data.</p><p>Also, if you are synced to a different xBrowserSync service make sure it is the active service configured in the Settings panel.</p>"
+        "default": "<h4>使用已有 ID 同步</h4> <p>点击“已获得同步ID？” 输入您已有的同步 ID 和密码。 如果您的同步 ID 是在不同的服务上创建的，则在尝试同步之前切换到该服务。</p> <p> xBrowserSync 将使用本地存储的密码检索和解密加密数据，然后会清除本地书签。 </p> <p>同步后，xBrowserSync 每隔15分钟在后台检查一次同步数据的更新，并在需要时自动更新本地书签。 您还可以在“设置”面板中手动同步数据。</p>",
+        "android": "<h4>使用已有 ID 同步</h4><p>首先在 xBrowserSync 桌面浏览器扩展程序的“设置”面板中扫描同步ID QR码(单击您的同步 ID 可以显示它)。 确保输入创建同步时使用了相同密码，否则xBrowserSync 将无法解密您的数据。</p><p>另外，如果您同步到其他 xBrowserSync 服务，请确保它是在“设置”面板中配置的活动服务。</p>"
       },
       "FirstSync": {
-        "default": "<h4>Syncing for the first time</h4><p>Before xBrowserSync can sync your browser data you will need to provide an encryption password. Be sure to make it strong but also memorable, there are no resets or reminders so if you forget it you won’t be able to access your synced data.</p><p>Your browser data will be encrypted using your password and saved to the active xBrowserSync service configured in the Settings panel.</p><p>Once synced, any changes you make to your local bookmarks will be synced automatically by xBrowserSync.</p>",
-        "android": "<h4>Syncing for the first time</h4><p>xBrowserSync actively syncs your browser data between your desktop browsers (syncing to mobile browsers is not supported at this time), you can use this app to access your synced data on your Android mobile device.</p><p>If you have not already created a sync ID, head over to your desktop browser and <a href='https://link.xbrowsersync.org/download' class='new-tab'>download</a> the xBrowserSync extension (available for Chrome and Firefox). Once you have created a sync you can use your new sync ID within this app to access your data.</p>"
+        "default": "<h4>首次同步</h4> <p>在 xBrowserSync 同步浏览器数据之前，您需要提供加密密码。 请务必使其坚固且令人难忘，如果您忘记了，它将不会重设或提示您，您将无法访问已同步的数据。</p> <p>您的浏览器数据将被你的密码加密并保存到“设置”面板中配置的 xBrowserSync 服务。</p> <p>一旦同步，您对本地书签所做的任何更改都会被 xBrowserSync 自动同步。</p>",
+        "android": "<h4>首次同步</h4> <p> xBrowserSync 会在桌面浏览器之间互相同步浏览器数据(目前不支持与移动浏览器同步)，您可以使用此应用在 Android 移动设备上访问已同步的数据。</p> <p>如果尚未创建同步 ID，请转到桌面浏览器，然后<a href='https://link.xbrowsersync.org/download' class='new-tab'>下载</a> xBrowserSync 扩展(适用于 Chrome 和 Firefox)。 创建同步后，您可以在此应用中使用该同步 ID 来访问数据。</p>"
       },
       "FurtherSupport": {
-        "default": "<h4>Further support</h4><p>You can find the answers to most common questions in the <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>FAQs</a>, also check the current <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>known issues</a> to see if your issue is listed there.</p><p>Alternatively, use the <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>issue tracker</a> to report an issue or request a new feature.</p>"
+        "default": "<h4>进一步的支持</h4><p>您可以在 <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>常见问答</a> 中找到最常见问题的答案，还可以查看当前 <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>已知问题</a> 以查看是否在此处列出了您的问题。</p><p>或者，使用 <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>问题跟踪器</a> 报告问题或请求新功能。</p>"
       },
       "Mobile": {
-        "default": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a> store, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droid</a> or <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>direct download</a>.</p>"
+        "default": "<h4>移动端</h4><p>通过 xBrowserSync Android 应用在移动设备中访问已同步的书签, 可在 <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a> 商店, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droid</a> 或者 <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>直接下载</a>。</p>"
       },
       "NativeFeatures": {
-        "default": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks bar and bookmarks manager, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p>",
-        "firefox": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks toolbar and bookmarks library, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p><p>Please note however, as Firefox’s bookmarks API does not yet support accessing native bookmark tags, any existing tags will be lost when syncing and tags added via xBrowserSync will not be saved as native tags.</p>"
+        "default": "<h4>支持原生功能</h4><p>您可以继续使用浏览器的原生书签功能，如书签栏和书签管理器，您所做的任何更改都会在后台自动同步。</p><p>如果您已经将现有的书签整理成了文件夹，也不用担心，xBrowserSync 将尊重并维护您现有的书签层次结构。</p>",
+        "firefox": "<h4>支持原生功能</h4><p>您可以继续使用浏览器的原生书签功能，如书签栏和书签管理器，您所做的任何更改都会在后台自动同步。</p><p>如果您已经将现有的书签整理成了文件夹，也不用担心，xBrowserSync 将尊重并维护您现有的书签层次结构。</p><p>但请注意，由于 Firefox 的书签 API 还不支持访问原生的书签标记，因此在同步时，任何现有的标记都会丢失，而通过 xBrowserSync 添加的标记不会被保存为原生标记。</p>"
       },
       "Previous": {
-        "default": "Previous"
+        "default": "上一个"
       },
       "Searching": {
-        "default": "<h4>Searching your bookmarks</h4><p>Once synced, simply press Enter to display your recent bookmarks or type some keywords or a URL to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>To edit or delete a bookmark, hover over the bookmark and click the now visible edit icon next to the bookmark’s title.</p>",
-        "android": "<h4>Searching your bookmarks</h4><p>Once synced, your bookmarks are displayed in chronological order when you open xBrowserSync. Type some keywords or a URL in the search box to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>Long pressing on a bookmark will allow you to directly share, modify or delete the bookmark.</p>"
+        "default": "<h4>搜索你的书签</h4><p>首次同步后，只需按 Enter 键即可显示您最近的书签，或键入一些关键字或 URL 来搜索您的书签。</p><p>在搜索结果和书签文件夹之间切换以浏览整个层次结构。</p><p>要编辑或删除书签，请将鼠标悬停在书签上，然后单击书签标题旁边浮现的编辑图标。</p>",
+        "android": "<h4>搜索你的书签</h4><p>首次同步后，打开 xBrowserSync 时，书签将按时间顺序显示。 在搜索框中键入一些关键字或 URL 来搜索您的书签。</p><p>在搜索结果和书签文件夹之间切换以浏览整个层次结构。</p><p>您长按书签可以共享，修改或删除它。</p>"
       },
       "Service": {
-        "default": "<h4>Syncing to another service</h4><p>By default your data is synced to the <a href='https://link.xbrowsersync.org/api' class='new-tab'>official xBrowserSync service</a>, however if you would like to sync your data to an alternative xBrowserSync service you can switch the active service before syncing.</p><p>Check the list of available <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>public xBrowserSync services</a> or <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>run your own service</a>, either for private use for ultimate security and privacy, or for public use so that more people can enjoy xBrowserSync.</p><p><strong>Important:</strong> xBrowserSync services are run independently by volunteers. The service administrator takes no responsibility for your data so please remember to backup regularly.</p>"
+        "default": "<h4>使用其他服务同步</h4><p>默认情况下您的数据已同步到 <a href='https://link.xbrowsersync.org/api' class='new-tab'>官方 xBrowserSync 服务</a>, 如果你愿意,也可以在同步数据之前从 xBrowserSync 服务切换到其他服务。</p><p>选择下列可用的<a href='https://link.xbrowsersync.org/service-list' class='new-tab'>公共 xBrowserSync 服务</a>或<a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>运行在你自己的服务上</a>, 为私人使用提供最高安全和隐私。, 或者公开它以供更多人使用 xBrowserSync。</p><p><strong>重要:</strong> xBrowserSync 服务由志愿者独立运行。 服务管理员对您的数据不承担任何责任，因此请记住要定期备份。</p>"
       },
       "Shortcuts": {
-        "default": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension, then simply press Enter to view your recent bookmarks or start typing to search.</p><p>To change the shortcut, browse to chrome://extensions/shortcuts and update the available shortcuts under xBrowserSync.",
-        "firefox": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension, then simply press Enter to view your recent bookmarks or start typing to search.</p><p>To change the shortcut, browse to about:addons, click on “Manage Extension Shortcuts” in the Settings menu and update the available shortcuts under xBrowserSync."
+        "default": "<h4>使用快捷键！</h4><p>要快速搜索您的书签，请使用默认的键盘快捷键(Ctrl + Space) 激活扩展名，然后只需按 Enter 键即可查看您最近使用的书签或开始输入搜索内容。</p><p>要更改快捷键, 浏览 chrome://extensions/shortcuts 为 xBrowserSync 更改可用的快捷键。",
+        "firefox": "<h4>使用快捷键！</h4><p>要快速搜索您的书签，请使用默认的键盘快捷键(Ctrl + Space) 激活扩展名，然后只需按 Enter 键即可查看您最近使用的书签或开始输入搜索内容。</p><p>要更改快捷键, 浏览 about:addons, 在设置菜单中单击 “管理扩展快捷键” 为 xBrowserSync 更改可用的快捷键。"
       },
       "SyncId": {
-        "default": "<h4>Your sync ID</h4><p>xBrowserSync ensures your privacy as no personal data is ever collected and your browser data is encrypted before being synced. To identify your synced data you are provided with an anonymous sync ID which can be used along with your password to sync your data on other browsers and devices.</p><p>Remember that your sync ID will only work with the xBrowserSync service on which it was created, if you switch to a different xBrowserSync service you must create a new sync or use an existing sync ID created when previously synced to that service.</p><p>Whenever you are synced you can view your sync ID in the Settings panel, click it to reveal a handy QR code to scan when syncing on mobile devices.</p>"
+        "default": "<h4>您的同步 ID </h4> <p> xBrowserSync 可保护您的隐私，不会收集任何个人数据，并且您的浏览器数据在同步之前会被加密。 为了标识您同步的数据，您将获得一个匿名同步 ID，该匿名 ID 可以与您的密码一起用于在其他浏览器和设备上同步数据。</p> <p>请记住，您的同步ID仅适用于 xBrowserSync 服务。 创建该同步的基础上，如果切换到其他 xBrowserSync 服务，则必须创建一个新 ID 或使用以前同步到该服务时已创建的 ID。</p> <p>无论何时同步，您都可以在“设置”面板中查看同步 ID，单击 ID 可以显示 QR 码，以便移动设备扫描二维码进行同步。</p>"
       },
       "Welcome": {
-        "default": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info).</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or the arrow keys to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>",
-        "android": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info).</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or swiping to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>"
+        "default": "<h4>欢迎使用 xBrowserSync！</h4> <p> xBrowserSync 是 Google，Mozilla，Opera 等提供的浏览器同步服务的免费开放源代码替代品，它尊重您的隐私并为您提供完全的匿名性(请参阅 <a href='https://link.xbrowsersync.org/www' class='new-tab'>网站</a>了解更多信息)。</p> <p>请花点时间通读此帮助 请使用下面的页面链接或箭头键在页面之间移动，以熟悉 xBrowserSync。</p> <p>请注意：xBrowserSync 目前仅同步书签。 将来的版本中将添加其他浏览器数据的同步，请查看开发<a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>路线图</a>以查看计划的内容 </p>",
+        "android": "<h4>欢迎使用 xBrowserSync！</h4> <p> xBrowserSync 是 Google，Mozilla，Opera 等提供的浏览器同步服务的免费开放源代码替代品，它尊重您的隐私并为您提供完全的匿名性(请参阅 <a href='https://link.xbrowsersync.org/www' class='new-tab'>网站</a>了解更多信息)。</p> <p>花点时间阅读一下 帮助指南，您可以使用下面的页面链接或在页面之间滑动来熟悉 xBrowserSync。</p> <p>请注意：xBrowserSync 当前仅同步书签。 将来的版本中将添加其他浏览器数据的同步，请查看开发<a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>路线图</a>以查看计划的内容 </p>"
       }
     },
     "Login": {
       "GetSyncId": {
         "Title": {
-          "default": "Need a sync ID?"
+          "default": "需要同步ID？"
         },
         "Content": {
-          "default": "Download the xBrowserSync desktop browser extension and create a new sync to access your bookmarks here."
+          "default": "下载xBrowserSync 桌面浏览器扩展并创建一个新的同步来访问您的书签。"
         }
       },
       "Password": {
         "Confirm": {
-          "default": "Confirm password"
+          "default": "确认密码"
         },
         "Existing": {
-          "default": "Your encryption password"
+          "default": "您的加密密码"
         },
         "Label": {
-          "default": "Encryption password"
+          "default": "加密密码"
         },
         "New": {
-          "default": "Enter an encryption password"
+          "default": "输入加密密码"
         },
         "Show": {
-          "default": "Reveal password"
+          "default": "显示密码"
         }
       },
       "Scan": {
         "Title": {
-          "default": "Connect to your sync"
+          "default": "连接到您的同步"
         },
         "Content": {
-          "default": "Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a QR code which you can scan here."
+          "default": "在桌面浏览器上打开 xBrowserSync，进入设置面板，点击你的同步ID，会显示一个二维码，你可以在这里扫描。"
         },
         "ScanCode": {
-          "default": "Scan code"
+          "default": "扫描二维码"
         },
         "ManualEntry": {
-          "default": "Enter sync details manually"
+          "default": "手动输入同步详细信息"
         }
       },
       "Service": {
         "ApiVersion": {
-          "default": "API version"
+          "default": "API 版本"
         },
         "Confirm": {
-          "default": "Sync to this service?"
+          "default": "同步到此服务？"
         },
         "Location": {
           "default": "Location"
@@ -646,177 +646,177 @@
             }
           },
           "Done": {
-            "default": "Your data has been restored."
+            "default": "您的数据已恢复。"
           },
           "SelectFile": {
             "Button": {
-              "default": "Select file"
+              "default": "选择文件"
             },
             "Placeholder": {
-              "default": "Select a backup file to restore"
+              "default": "选择要恢复的备份文件"
             }
           },
           "Copy": {
-            "default": "Copy the contents of a backup file to restore data."
+            "default": "复制备份文件的内容以恢复数据。"
           },
           "Paste": {
-            "default": "Paste backup data"
+            "default": "粘贴备份数据"
           },
           "RestoreData": {
-            "default": "Restore data"
+            "default": "恢复数据"
           },
           "Invalid": {
-            "default": "Invalid xBrowserSync backup data"
+            "default": "无效的 xBrowserSync 备份数据"
           }
         },
         "Revert": {
           "Title": {
-            "default": "Revert"
+            "default": "还原"
           },
           "Description": {
-            "default": "Revert local browser data to initial installation state."
+            "default": "还原本地浏览器数据到初始安装状态。"
           },
           "Confirm": {
-            "default": "<p>If you continue, any active sync will be disabled and your local data will be reverted to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "<p>若继续，任何激活的同步都将被禁用，您的本地数据将恢复到{date} 安装 xBrowserSync 时的状态。</p><p>确定继续吗？</p>"
           },
           "Button": {
-            "default": "Revert"
+            "default": "还原"
           },
           "Done": {
-            "default": "Your data has been reverted to initial installation state."
+            "default": "您的数据已还原到初始安装状态。"
           },
           "Unavailable": {
-            "default": "Installation state data not available, unable to revert."
+            "default": "安装状态数据不可用，无法还原。"
           }
         }
       },
       "Issues": {
         "Title": {
-          "default": "Issues"
+          "default": "问题"
         },
         "Help": {
           "Title": {
-            "default": "Help"
+            "default": "帮助"
           },
           "Description": {
-            "default": "Got a question or having an issue? Make sure to read through the help guide, otherwise the answer may be in the FAQs."
+            "default": "有问题或遇到问题？请务必阅读帮助指南，答案可能就在常见问答中。"
           },
           "ViewFaqs": {
-            "default": "View FAQs"
+            "default": "查看常见问答"
           }
         },
         "Tracker": {
           "Title": {
-            "default": "Issues tracker"
+            "default": "问题追踪器"
           },
           "Description": {
-            "default": "Report an issue to report a bug or request a new feature."
+            "default": "报告一个问题来反馈错误或请求新功能。"
           },
           "Report": {
-            "default": "Report issue"
+            "default": "反馈问题"
           }
         },
         "Log": {
           "Title": {
-            "default": "Application log"
+            "default": "应用程序日志"
           },
           "Description": {
-            "default": "Download and include the application log when you log an issue."
+            "default": "当您记录反馈问题时，请下载包含此应用程序的日志。"
           },
           "Clear": {
-            "default": "Clear log"
+            "default": "清除日志"
           },
           "Download": {
-            "default": "Download log"
+            "default": "下载日志"
           },
           "Size": {
-            "default": "Current log size"
+            "default": "当前日志大小"
           }
         }
       },
       "Permissions": {
         "Title": {
-          "default": "Optional permissions"
+          "default": "可选权限"
         },
         "Add": {
-          "default": "Grant permissions"
+          "default": "授予权限"
         },
         "Granted": {
-          "default": "Granted"
+          "default": "已授权"
         },
         "NotGranted": {
-          "default": "Not granted"
+          "default": "未授权"
         },
         "Read": {
           "Title": {
-            "default": "Read website data"
+            "default": "读取网站数据"
           },
           "Description": {
-            "default": "Required to automatically add metadata to bookmarks when using the browser’s “Bookmark this page” button (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>more info</a>)."
+            "default": "使用浏览器的“添加书签”按钮时，需要自动将元数据添加到书签(<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>更多信息</a>)。"
           }
         },
         "Remove": {
-          "default": "Remove permissions"
+          "default": "移除权限"
         }
       },
       "Prefs": {
         "CheckForAppUpdates": {
           "Label": {
-            "default": "Check for app updates"
+            "default": "检查更新"
           },
           "Description": {
-            "default": "Be notified when a new version of xBrowserSync is available."
+            "default": "当有新版本的 xBrowsSync 时发出通知。"
           }
         },
         "DarkMode": {
           "Label": {
-            "default": "Enable dark mode"
+            "default": "启用暗色模式"
           },
           "Description": {
-            "default": "Ideal for use in low-light environments."
+            "default": "适合在低光环境中使用。"
           }
         },
         "DefaultToFolderView": {
           "Label": {
-            "default": "Show bookmark folders"
+            "default": "显示书签文件夹"
           },
           "Description": {
-            "default": "Folder view is displayed by default."
+            "default": "默认显示文件夹视图。"
           }
         },
         "SearchBar": {
           "Label": {
-            "default": "Switch search bar position"
+            "default": "切换搜索栏位置"
           },
           "Description": {
-            "default": "Show search bar beneath results."
+            "default": "在结果下方显示搜索栏。"
           }
         },
         "SyncToolbar": {
           "Label": {
-            "default": "Sync bookmarks toolbar"
+            "default": "同步书签工具栏"
           },
           "Description": {
-            "default": "Disable this setting to display different toolbar bookmarks across synced browsers."
+            "default": "禁用此设置可在同步的浏览器中显示不同的工具栏书签。"
           },
           "Confirmation": {
-            "default": "<p>Enabling this setting will replace the bookmarks currently in the bookmarks toolbar with your synced bookmarks.</p><p>OK to proceed?</p>"
+            "default": "<p>启用此设置将用您的同步书签替换当前书签工具栏中的书签。</p><p>确定继续吗？</p>"
           }
         },
         "Title": {
-          "default": "Preferences"
+          "default": "首选项"
         }
       },
       "Sync": {
         "Title": {
-          "default": "Sync"
+          "default": "同步"
         },
         "Disable": {
-          "default": "Disable sync"
+          "default": "禁用同步"
         },
         "Id": {
           "Label": {
-            "default": "Sync ID"
+            "default": "同步 ID"
           },
           "Description": {
             "default": "Use your sync ID to connect to your synced data on other devices (click to reveal QR code)."
