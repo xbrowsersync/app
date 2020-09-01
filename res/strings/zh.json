@@ -167,163 +167,163 @@
       "default": "提供的备份数据不是预期的格式。"
     },
     "FailedRestoreData_Title": {
-      "default": "Unable to restore data"
+      "default": "无法恢复数据"
     },
     "FailedShareUrlNotSynced_Title": {
-      "default": "You must be synced to add a bookmark"
+      "default": "您必须同步才能添加书签"
     },
     "FailedShareUrl_Title": {
-      "default": "Unable to retrieve shared bookmark URL"
+      "default": "无法获取共享书签URL"
     },
     "HttpRequestFailed_Message": {
-      "default": "Check your network connection and try again."
+      "default": "请检查你的网络连接并重试。"
     },
     "HttpRequestFailed_Title": {
-      "default": "Connection to service lost"
+      "default": "与服务器的连接丢失"
     },
     "InvalidCredentials_Message": {
-      "default": "Check that your sync ID, password and service URL have been entered correctly."
+      "default": "检查您的同步ID、密码和服务URL是否正确输入。"
     },
     "InvalidCredentials_Title": {
-      "default": "Invalid credentials"
+      "default": "无效的凭据"
     },
     "InvalidService_Message": {
-      "default": "The service URL is not a valid xBrowserSync service."
+      "default": "服务 URL 不是有效的 xBrowsSync 服务。"
     },
     "InvalidService_Title": {
-      "default": "Invalid xBrowserSync service"
+      "default": "无效的 xBrowserSync 服务"
     },
     "LocalContainerNotFound_Message": {
-      "default": "Possible corrupt browser profile, try creating a new profile as it may resolve the issue."
+      "default": "可能损坏的浏览器配置文件， 请尝试创建新的配置文件来解决这个问题。"
     },
     "LocalContainerNotFound_Title": {
-      "default": "Unexpected bookmarks structure"
+      "default": "意外的书签结构"
     },
     "LocalSyncError_Message": {
-      "default": "Local data has been refreshed, please reapply last change."
+      "default": "本地数据已刷新，请重做以前未同步的更改。"
     },
     "LocalSyncError_Title": {
-      "default": "Sync error"
+      "default": "同步出错"
     },
     "MissingClientData_Message": {
-      "default": "Unable to find stored credentials. Re-enable sync and try again."
+      "default": "找不到存储的凭据。 重新启用同步，然后重试。"
     },
     "MissingClientData_Title": {
-      "default": "Missing credentials"
+      "default": "缺少凭据"
     },
     "NoDataToRestore_Message": {
-      "default": "Ensure you have provided a valid xBrowserSync back up before restoring."
+      "default": "请确保您在恢复之前提供了有效的 xBrowserSync 备份。"
     },
     "NoDataToRestore_Title": {
-      "default": "No data to restore"
+      "default": "没有数据可恢复"
     },
     "NotAcceptingNewSyncs_Message": {
-      "default": "Switch to a different service or try again later."
+      "default": "切换到不同的服务或稍后再试。"
     },
     "NotAcceptingNewSyncs_Title": {
-      "default": "Service not accepting new syncs"
+      "default": "服务不接受新同步"
     },
     "OutOfSync_Message": {
-      "default": "Local data was out of sync and has now been refreshed. Please reapply last change."
+      "default": "本地数据未同步，现已刷新。请重新应用上次更改。"
     },
     "OutOfSync_Title": {
-      "default": "Sync conflict detected"
+      "default": "检测到同步冲突"
     },
     "RequestEntityTooLarge_Message": {
-      "default": "Delete some bookmarks and try again or switch to a service with a larger sync limit."
+      "default": "删除一些书签，然后重试或切换到具有更大同步限制的服务。"
     },
     "RequestEntityTooLarge_Title": {
-      "default": "Sync data limit exceeded"
+      "default": "超过同步数据限制"
     },
     "ScanFailed_Message": {
-      "default": "Check permission has been granted and try again."
+      "default": "检查权限已授予，然后重试。"
     },
     "ScanFailed_Title": {
-      "default": "Scan failed"
+      "default": "扫描失败"
     },
     "ServiceOffline_Message": {
-      "default": "The xBrowserSync service is currently offline, try again later."
+      "default": "XbrowserSync 服务目前处于离线状态，请稍后再试。"
     },
     "ServiceOffline_Title": {
-      "default": "Service offline"
+      "default": "离线服务"
     },
     "ShareFailed_Title": {
-      "default": "Share failed"
+      "default": "分享失败"
     },
     "SyncRemoved_Message": {
-      "default": "The requested sync does not exist, it may have been removed due to inactivity."
+      "default": "请求的同步不存在，可能因为没有活动而被删除。"
     },
     "SyncRemoved_Title": {
-      "default": "Sync not found"
+      "default": "同步未找到"
     },
     "TooManyRequests_Message": {
-      "default": "Sync has been disabled, re-enable sync to resume syncing."
+      "default": "同步已禁用，重新启用同步以恢复同步。"
     },
     "TooManyRequests_Title": {
-      "default": "Service request limit hit"
+      "default": "服务请求数量限制"
     },
     "UncommittedSyncs_Message": {
-      "default": "Sync will be committed once connection to service is restored."
+      "default": "同步将在连接服务恢复后进行。"
     },
     "UncommittedSyncs_Title": {
-      "default": "Changes not synced"
+      "default": "更改没有同步"
     },
     "UnsupportedServiceApiVersion_Message": {
-      "default": "This service is running an unsupported API version."
+      "default": "此服务正在运行一个不支持的 API 版本。"
     },
     "UnsupportedServiceApiVersion_Title": {
-      "default": "Service not supported"
+      "default": "服务不受支持"
     },
     "UpgradeFailed_Message": {
-      "android": "Upgrade will be retried on restarting the app. If the problem persists please reinstall xBrowserSync.",
-      "default": "Restart your browser to retry upgrade, if the problem persists please reinstall xBrowserSync."
+      "android": "重启应用后将重试升级。如果问题仍然存在，请重新安装 xBrowsSync。",
+      "default": "重新启动您的浏览器以重试升级，如果问题仍然存在，请重新安装 xBrowsSync。"
     },
     "UpgradeFailed_Title": {
-      "default": "Upgrade failed"
+      "default": "升级失败"
     }
   },
   "Service": {
     "Status": {
       "Error": {
-        "default": "Connection error"
+        "default": "连接错误"
       },
       "Loading": {
-        "default": "Checking"
+        "default": "正在检查"
       },
       "NoNewSyncs": {
-        "default": "Not accepting new syncs"
+        "default": "不接受新同步"
       },
       "Offline": {
-        "default": "Offline"
+        "default": "离线"
       },
       "Online": {
-        "default": "Online"
+        "default": "在线"
       }
     }
   },
   "Share": {
     "Bookmark": {
-      "default": "Share bookmark with"
+      "default": "分享书签"
     }
   },
   "Tooltip": {
     "NotSynced": {
-      "default": "not synced"
+      "default": "未同步"
     },
     "Synced": {
-      "default": "synced"
+      "default": "已同步"
     },
     "Syncing": {
-      "default": "syncing"
+      "default": "同步中"
     }
   },
   "View": {
     "Bookmark": {
       "Add": {
-        "default": "Add bookmark"
+        "default": "添加书签"
       },
       "Edit": {
-        "default": "Edit bookmark"
+        "default": "编辑书签"
       },
       "Form": {
         "Title": {
@@ -473,176 +473,176 @@
           "default": "同步到此服务？"
         },
         "Location": {
-          "default": "Location"
+          "default": "位置"
         },
         "MaxSyncSize": {
-          "default": "Max sync size"
+          "default": "最大同步大小"
         },
         "Selected": {
-          "default": "Syncing to"
+          "default": "同步到"
         },
         "Status": {
-          "default": "Status"
+          "default": "状态"
         },
         "Update": {
           "Label": {
-            "default": "xBrowserSync service URL"
+            "default": "xBrowserSync 服务 URL"
           },
           "Description": {
-            "default": "Enter the URL of an alternative xBrowserSync service. Browse the list of public xBrowserSync services <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>here</a>."
+            "default": "输入替代的 xBrowserSync 服务的 URL。在这里浏览公开的 xBrowsSync 服务列表 <a href='https://link.xbrowsersync.org/service-list' class='new-tab'></a>。"
           },
           "Button": {
-            "default": "Switch service"
+            "default": "切换服务"
           },
           "Required": {
-            "default": "xBrowserSync service URL is required"
+            "default": "需要 xBrowsSync 服务URL"
           },
           "Invalid": {
-            "default": "Not a valid xBrowserSync service"
+            "default": "无效的 xBrowserSync 服务"
           },
           "Failed": {
-            "default": "Unable to connect to the service"
+            "default": "无法连接到服务"
           },
           "NotSupported": {
-            "default": "This service is running an unsupported API version"
+            "default": "此服务正在运行一个不受支持的API版本"
           }
         },
         "Warning": {
-          "default": "<strong>Important:</strong> xBrowserSync services are run independently by volunteers. The service administrator takes no responsibility for your data so please remember to backup regularly."
+          "default": "<strong>重要：</strong> xBrowserSync 服务由志愿者独立运行。服务管理员对您的数据不负责任，因此请记住定期备份。"
         }
       },
       "Sync": {
         "Confirm": {
           "Title": {
-            "default": "Are you sure?"
+            "default": "是否确定？"
           },
           "Content": {
-            "default": "xBrowserSync will delete all local bookmarks data before restoring synced bookmarks. OK to proceed?"
+            "default": "xBrowserSync 将在恢复同步书签之前删除所有本地书签数据。确定继续吗？"
           }
         },
         "DisableOthers": {
           "Title": {
-            "default": "Disable bookmark sync tools"
+            "default": "禁用书签同步工具"
           },
           "Content": {
-            "default": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "firefox": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing."
+            "default": "将您的浏览器数据与 xBrowserSync 同步，而其他书签同步工具(如 <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>)正在激活，可能会导致重复并可能损坏数据。 请在继续之前禁用它们。",
+            "firefox": "将您的浏览器数据与 xBrowserSync 同步，而其他书签同步工具(如 <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>)正在激活，可能会导致重复并可能损坏数据。 请在继续之前禁用它们。"
           }
         },
         "Enable": {
-          "default": "Sync"
+          "default": "同步"
         },
         "New": {
-          "default": "Create new sync"
+          "default": "创建新同步"
         },
         "Upgrade": {
           "Title": {
-            "default": "Ready to upgrade sync?"
+            "default": "准备更新同步了吗？"
           },
           "Content": {
-            "default": "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
+            "default": "<p>此同步ID必须升级才能与此版本的 xBrowsSync同步。 升级后，您将无法与 xBrowsSync 上的版本同步。</p><p>确保您在继续之前更新了所有的 xBrowserSync 应用。准备好继续吗？</p>"
           }
         }
       },
       "SyncId": {
         "Description": {
-          "default": "Your sync ID"
+          "default": "您的同步 ID"
         },
         "Existing": {
-          "default": "Already got a sync ID?"
+          "default": "已有同步ID？"
         },
         "Invalid": {
-          "default": "Not a valid sync ID"
+          "default": "无效的同步 ID"
         },
         "Label": {
           "default": "ID"
         },
         "New": {
-          "default": "Get a sync ID"
+          "default": "获取同步 ID"
         }
       }
     },
     "Permissions": {
       "Title": {
-        "default": "Optional permissions"
+        "default": "可选权限"
       },
       "Content": {
-        "default": "<p>xBrowserSync automatically enriches bookmarks added using the browser’s Add Bookmark button with available metadata. To enable this, xBrowserSync <a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>requires additional permissions</a> to be able to read visited website data.</p><p>Please indicate if prompted if you are happy to grant these permissions, alternatively you can add or remove permissions at any time in the Settings panel.</p>"
+        "default": "<p> xBrowserSync 会使用可用的元数据自动丰富使用浏览器的“添加书签”按钮添加的书签。要开启它, xBrowserSync <a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'> 需要额外的权限 </a> 才能读取访问的网站数据。</p><p>请确认您是否愿意授予这些权限，或者您可以随时在“设置”面板中添加或删除权限。</p>"
       }
     },
     "Scan": {
       "Title": {
-        "default": "Scan your sync ID QR code"
+        "default": "扫描您的同步 ID 二维码"
       },
       "ToggleLight": {
-        "default": "Toggle light"
+        "default": "切换明暗"
       }
     },
     "Search": {
       "BookmarkTree": {
-        "default": "View bookmark folders"
+        "default": "显示书签文件夹"
       },
       "Clear": {
-        "default": "Clear"
+        "default": "清除"
       },
       "FolderEmpty": {
-        "default": "Folder empty"
+        "default": "文件夹空"
       },
       "Placeholder": {
-        "default": "Hit Enter or search for bookmarks",
-        "android": "Find bookmarks"
+        "default": "点击输入或搜索书签",
+        "android": "查找书签"
       },
       "NoBookmarks": {
-        "default": "You have no bookmarks, go add some!"
+        "default": "您还没有书签，请添加一些！"
       },
       "NoResults": {
-        "default": "No bookmarks found"
+        "default": "未找到书签"
       },
       "SearchResults": {
-        "default": "View search results"
+        "default": "查看搜索结果"
       }
     },
     "Settings": {
       "BackupRestore": {
         "Title": {
-          "default": "Back up and restore"
+          "default": "备份和恢复"
         },
         "Backup": {
           "Title": {
-            "default": "Back up"
+            "default": "备份"
           },
           "Button": {
-            "default": "Back up"
+            "default": "备份"
           },
           "Local": {
-            "default": "Back up local browser data to a file."
+            "default": "备份本地浏览器数据到文件。"
           },
           "Synced": {
-            "default": "Back up synced data to a file."
+            "default": "备份同步数据到文件。"
           }
         },
         "Restore": {
           "Title": {
-            "default": "Restore"
+            "default": "恢复"
           },
           "Button": {
-            "default": "Restore"
+            "default": "恢复"
           },
           "Local": {
             "Description": {
-              "default": "Restore local browser data from a backup."
+              "default": "从备份中恢复本地浏览器数据。"
             },
             "Confirm": {
-              "default": "<p>As sync is currently disabled, the data being restored will overwrite the local browser data.</p><p>OK to proceed?</p>"
+              "default": "<p>由于同步已禁用，正在恢复的数据将覆盖本地浏览器数据。</p><p>确定继续？</p>"
             }
           },
           "Synced": {
             "Description": {
-              "default": "Restore synced data from a backup."
+              "default": "从备份恢复同步数据。"
             },
             "Confirm": {
-              "default": "<p>As sync is currently enabled, the data being restored will overwrite your synced data.</p><p>To restore data to the local browser only, disable sync before restoring.</p><p>OK to proceed?</p>",
-              "android": "<p>The data being restored will overwrite your synced data.</p><p>OK to proceed?</p>"
+              "default": "<p>由于同步已启用，正在恢复的数据将覆盖您的同步数据。</p><p>要将数据恢复到本地浏览器，请在恢复前禁用同步。</p><p>确定继续吗？</p>",
+              "android": "<p>正在恢复的数据将覆盖您同步的数据。</p><p>确定继续吗？</p>"
             }
           },
           "Done": {
@@ -819,69 +819,69 @@
             "default": "同步 ID"
           },
           "Description": {
-            "default": "Use your sync ID to connect to your synced data on other devices (click to reveal QR code)."
+            "default": "使用您的同步 ID 连接到其他设备上的已同步数据(点击显示二维码)。"
           }
         },
         "Data": {
           "Label": {
-            "default": "Data usage"
+            "default": "数据用量"
           },
           "Description": {
-            "default": "How much of the sync data allowed by the service are you using."
+            "default": "您正在使用服务允许的同步数据量。"
           }
         },
         "Service": {
-          "default": "Service"
+          "default": "服务"
         },
         "UpdatesAvailable": {
           "False": {
-            "default": "Sync is up to date."
+            "default": "同步到最新。"
           },
           "True": {
-            "default": "Updates available, next sync at"
+            "default": "更新可用，下次同步于"
           },
           "Sync": {
-            "default": "Update Sync"
+            "default": "更新同步"
           }
         },
         "Qr": {
           "Description": {
-            "default": "Scan this QR code using the xBrowserSync Android app to connect to your synced data."
+            "default": "使用 xBrowserSync Android 应用程序扫描此二维码以连接到您的同步数据。"
           },
           "Show": {
-            "default": "Show QR code"
+            "default": "显示二维码"
           },
           "Copy": {
-            "default": "Copy sync ID to clipboard"
+            "default": "复制同步ID到剪贴板"
           },
           "Copied": {
-            "default": "Copied!"
+            "default": "已复制！"
           }
         }
       },
       "AppVersion": {
-        "default": "Version"
+        "default": "版本"
       },
       "NotAvailable": {
-        "default": "Settings available when sync is enabled."
+        "default": "启用同步时可用设置。"
       },
       "FileDownloaded": {
-        "default": "If the file did not download automatically, right click on the link below and “Save link as...”.",
-        "android": "File saved as {fileName}."
+        "default": "如果文件没有自动下载，请右键点击下面的链接，并将链接另存为...。",
+        "android": "文件已保存为 {fileName}。"
       },
       "Support": {
-        "default": "Support xBrowserSync"
+        "default": "支持 xBrowserSync"
       }
     },
     "Support": {
       "Title": {
-        "default": "Support xBrowserSync!"
+        "default": "支持 xBrowserSync!"
       },
       "Content": {
-        "default": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains an effective tool in protecting our privacy and productivity against the rot of big tech!</p>"
+        "default": "<p>我们想让xBrowserSync成为第一大浏览器同步工具，但还有很多工作要做：</p><ul><li>增加同步浏览器选项卡和历史记录</li><li>支持所有主要的桌面浏览器</li><li>可翻译成其他语言</li><li>还有<a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>更多</a>!</li></ul><p>只有在您的支持下，我们才能继续改进 xBrowserSync，并确保它仍然是一个有效的工具，以保护我们的隐私和生产力，防止大公司的腐蚀！</p>"
       },
       "Cryptos": {
-        "default": "Cryptos"
+        "default": "加密"
       },
       "Liberapay": {
         "default": "Liberapay"
@@ -892,21 +892,21 @@
     },
     "Updated": {
       "Title": {
-        "default": "Updated to"
+        "default": "已更新到"
       },
       "Content": {
-        "default": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
+        "default": "xserSync 已经更新了最新功能和修复。关于此版本中包含的更改的更多详情，请查看发布说明。"
       }
     },
     "Working": {
       "Restoring": {
-        "default": "Restoring"
+        "default": "正在恢复"
       },
       "Reverting": {
-        "default": "Reverting"
+        "default": "正在还原"
       },
       "Syncing": {
-        "default": "Syncing"
+        "default": "正在同步"
       }
     }
   }
