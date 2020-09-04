@@ -159,7 +159,7 @@
     },
     "Undo": {
       "key": "Button_Undo",
-      "default": "Undo"
+      "default": "撤销"
     },
     "Update": {
       "key": "Button_Update",
