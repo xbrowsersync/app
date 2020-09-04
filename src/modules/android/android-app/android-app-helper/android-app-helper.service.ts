@@ -148,8 +148,7 @@ export default class AndroidAppHelperService extends BaseAppHelperService implem
 
   openUrl(event?: Event, url?: string): void {
     // Stop event propogation
-    event?.preventDefault();
-    (event as any)?.srcEvent?.stopPropagation();
+    this.utilitySvc.stopEventPropagation(event);
 
     // Open the target url
     if (url) {

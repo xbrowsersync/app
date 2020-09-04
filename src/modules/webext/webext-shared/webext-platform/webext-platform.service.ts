@@ -10,7 +10,7 @@ import { I18nObject, Message, PlatformService, WebpageMetadata } from '../../../
 import LogService from '../../../shared/log/log.service';
 import StoreService from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
-import { Sync } from '../../../shared/sync/sync.interface';
+import { Sync, SyncResult } from '../../../shared/sync/sync.interface';
 import UtilityService from '../../../shared/utility/utility.service';
 import WorkingService from '../../../shared/working/working.service';
 import WebExtBackgroundService from '../../webext-background/webext-background.service';
@@ -221,12 +221,12 @@ export default class WebExtPlatformService implements PlatformService {
     });
   }
 
-  queueSync(sync: Sync, command = MessageCommand.SyncBookmarks, runSync = true): ng.IPromise<any> {
+  queueSync(sync: Sync, command = MessageCommand.SyncBookmarks, runSync = true): ng.IPromise<SyncResult> {
     return this.sendMessage({
       command,
       sync,
       runSync
-    });
+    }).finally(this.workingSvc.hide);
   }
 
   refreshNativeInterface(syncEnabled?: boolean, syncType?: SyncType): ng.IPromise<void> {
@@ -298,6 +298,7 @@ export default class WebExtPlatformService implements PlatformService {
     }
 
     return promise.catch((err: Error) => {
+      // Recreate the error object as webextension-polyfill wraps the object before returning it
       const exception: Exceptions.Exception = new (<any>Exceptions)[err.message]();
       exception.logged = true;
       throw exception;

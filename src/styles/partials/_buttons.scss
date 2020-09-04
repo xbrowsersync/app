@@ -173,8 +173,8 @@ button {
 .btn-fab {
   align-items: center;
   background-color: $colour-text2-default;
-  border: none;
   border-radius: 100%;
+  border-width: 0;
   box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12) !important;
   box-sizing: border-box;
   color: $colour-text1-default;
@@ -193,6 +193,14 @@ button {
   @include theme-dark {
     background-color: $colour-text3-dark;
     color: $colour-text1-dark;
+
+    &:hover {
+      color: $colour-text1-dark;
+    }
+  }
+
+  &:hover {
+    color: $colour-text1-default;
   }
 
   &.fixed {

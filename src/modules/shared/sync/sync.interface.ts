@@ -1,4 +1,5 @@
 import { Bookmark, BookmarkChange } from '../bookmark/bookmark.interface';
+import { Exception } from '../exception/exception';
 import { SyncType } from './sync.enum';
 
 export interface Sync {
@@ -9,19 +10,19 @@ export interface Sync {
   uniqueId?: string;
 }
 
-export interface SyncProcessBookmarksData {
-  encryptedBookmarks: string;
-  updatedBookmarks: Bookmark[];
+export interface SyncResult {
+  success: boolean;
+  error?: Exception;
 }
 
-export interface SyncProcessResult {
-  data?: SyncProcessBookmarksData;
+export interface ProcessSyncResult {
+  data?: Bookmark[];
   updateRemote?: boolean;
 }
 
 export interface SyncProvider {
   disable: () => ng.IPromise<void>;
   enable: () => ng.IPromise<void>;
-  processSync: (sync: Sync) => ng.IPromise<SyncProcessResult>;
-  handleUpdateRemoteFailed: (err: Error, lastResult: SyncProcessBookmarksData, sync: Sync) => ng.IPromise<void>;
+  processSync: (sync: Sync) => ng.IPromise<ProcessSyncResult>;
+  handleUpdateRemoteFailed: (err: Error, lastResult: Bookmark[], sync: Sync) => ng.IPromise<void>;
 }

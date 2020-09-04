@@ -18,6 +18,7 @@ import { ExceptionHandler } from '../../shared/exception/exception.interface';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService, WebpageMetadata } from '../../shared/global-shared.interface';
 import { SyncType } from '../../shared/sync/sync.enum';
+import { SyncResult } from '../../shared/sync/sync.interface';
 import UtilityService from '../../shared/utility/utility.service';
 import WorkingService from '../../shared/working/working.service';
 import { AppViewType, KeyCode } from '../app.enum';
@@ -102,7 +103,7 @@ export default class AppBookmarkComponent implements OnInit {
     this.appHelperSvc.switchView();
   }
 
-  createBookmark(): void {
+  createBookmark(): ng.IPromise<SyncResult> {
     // Add tags if tag text present
     if (this.tagText?.length > 0) {
       this.createTags();
@@ -117,7 +118,7 @@ export default class AppBookmarkComponent implements OnInit {
     }
 
     // Validate the new bookmark
-    this.validateBookmark(bookmarkToAdd).then((isValid) => {
+    return this.validateBookmark(bookmarkToAdd).then((isValid) => {
       if (!isValid) {
         // Bookmark URL exists, display validation error
         this.bookmarkForm.bookmarkUrl.$setValidity('Exists', false);
@@ -135,7 +136,9 @@ export default class AppBookmarkComponent implements OnInit {
         changeData: data,
         type: BookmarkChangeType.Add
       };
-      return this.queueSync(changeInfo).then(this.changesSynced);
+      return this.queueSync(changeInfo).then((result) => {
+        return this.changesSynced().then(() => result);
+      });
     });
   }
 
@@ -149,7 +152,7 @@ export default class AppBookmarkComponent implements OnInit {
     this.appHelperSvc.focusOnElement('input[name="bookmarkTags"]');
   }
 
-  deleteBookmark(): void {
+  deleteBookmark(): ng.IPromise<void> {
     // Display loading overlay
     this.workingSvc.show();
 
@@ -161,7 +164,7 @@ export default class AppBookmarkComponent implements OnInit {
       changeData: data,
       type: BookmarkChangeType.Remove
     };
-    this.queueSync(changeInfo).then(this.changesSynced);
+    return this.queueSync(changeInfo).then(this.changesSynced);
   }
 
   descriptionChanged(): void {
@@ -283,8 +286,8 @@ export default class AppBookmarkComponent implements OnInit {
     });
   }
 
-  queueSync(changeInfo: BookmarkChange): ng.IPromise<any> {
-    return this.appHelperSvc.queueSync({
+  queueSync(changeInfo: BookmarkChange): ng.IPromise<SyncResult> {
+    return this.platformSvc.queueSync({
       changeInfo,
       type: SyncType.LocalAndRemote
     });
@@ -304,8 +307,7 @@ export default class AppBookmarkComponent implements OnInit {
 
   shareBookmark(event: Event, bookmarkToShare: Bookmark) {
     // Stop event propogation
-    event?.preventDefault();
-    (event as any)?.srcEvent?.stopPropagation();
+    this.utilitySvc.stopEventPropagation(event);
 
     // Trigger native share functionality
     this.appHelperSvc.shareBookmark(bookmarkToShare);
@@ -369,7 +371,7 @@ export default class AppBookmarkComponent implements OnInit {
     }
   }
 
-  updateBookmark(): void {
+  updateBookmark(): ng.IPromise<SyncResult> {
     // Add tags if tag text present
     if (this.tagText?.length > 0) {
       this.createTags();
@@ -381,7 +383,7 @@ export default class AppBookmarkComponent implements OnInit {
     if (!new RegExp(Globals.URL.ProtocolRegex).test(bookmarkToModify.url ?? '')) {
       bookmarkToModify.url = `${this.defaultProtocol}${bookmarkToModify.url}`;
     }
-    this.validateBookmark(bookmarkToModify, this.originalUrl).then((isValid) => {
+    return this.validateBookmark(bookmarkToModify, this.originalUrl).then((isValid) => {
       if (!isValid) {
         // Bookmark URL exists, display validation error
         this.bookmarkForm.bookmarkUrl.$setValidity('Exists', false);
@@ -399,7 +401,9 @@ export default class AppBookmarkComponent implements OnInit {
         changeData: data,
         type: BookmarkChangeType.Modify
       };
-      return this.queueSync(changeInfo).then(this.changesSynced);
+      return this.queueSync(changeInfo).then((result) => {
+        return this.changesSynced().then(() => result);
+      });
     });
   }
 

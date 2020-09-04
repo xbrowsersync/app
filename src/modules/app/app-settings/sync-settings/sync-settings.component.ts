@@ -178,7 +178,7 @@ export default class SyncSettingsComponent implements OnInit {
   syncUpdates() {
     // Display loading panel and pull updates
     this.workingSvc.show();
-    return this.appHelperSvc
+    return this.platformSvc
       .queueSync({ type: SyncType.Local })
       .then(() => this.refreshSyncDataUsage())
       .then(this.appHelperSvc.syncBookmarksSuccess);

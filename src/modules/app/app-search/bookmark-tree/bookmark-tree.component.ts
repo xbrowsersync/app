@@ -3,6 +3,7 @@ import { Component, Input, Output } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { Bookmark } from '../../../shared/bookmark/bookmark.interface';
+import { PlatformService } from '../../../shared/global-shared.interface';
 import UtilityService from '../../../shared/utility/utility.service';
 import { AppHelperService } from '../../app.interface';
 
@@ -17,6 +18,7 @@ export default class BookmarkTreeComponent {
 
   appHelperSvc: AppHelperService;
   bookmarkHelperSvc: BookmarkHelperService;
+  platformSvc: PlatformService;
   utilitySvc: UtilityService;
 
   @Input('<ngModel') nodes: Bookmark[];
@@ -27,10 +29,16 @@ export default class BookmarkTreeComponent {
   @Output() selectBookmark: () => any;
   @Output() shareBookmark: () => any;
 
-  static $inject = ['AppHelperService', 'BookmarkHelperService', 'UtilityService'];
-  constructor(AppHelperSvc: AppHelperService, BookmarkHelperSvc: BookmarkHelperService, UtilitySvc: UtilityService) {
+  static $inject = ['AppHelperService', 'BookmarkHelperService', 'PlatformService', 'UtilityService'];
+  constructor(
+    AppHelperSvc: AppHelperService,
+    BookmarkHelperSvc: BookmarkHelperService,
+    PlatformSvc: PlatformService,
+    UtilitySvc: UtilityService
+  ) {
     this.appHelperSvc = AppHelperSvc;
     this.bookmarkHelperSvc = BookmarkHelperSvc;
+    this.platformSvc = PlatformSvc;
     this.utilitySvc = UtilitySvc;
   }
 }

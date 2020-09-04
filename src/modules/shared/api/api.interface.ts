@@ -28,7 +28,7 @@ export interface ApiService {
   checkServiceStatus: (url?: string) => ng.IPromise<ApiServiceInfoResponse>;
   createNewSync: () => ng.IPromise<ApiCreateBookmarksResponse>;
   getBookmarks: () => ng.IPromise<ApiGetBookmarksResponse>;
-  getBookmarksLastUpdated: () => ng.IPromise<ApiGetLastUpdatedResponse>;
+  getBookmarksLastUpdated: (skipOnlineCheck?: boolean) => ng.IPromise<ApiGetLastUpdatedResponse>;
   getBookmarksVersion: (syncId: string) => ng.IPromise<ApiGetSyncVersionResponse>;
   updateBookmarks: (
     encryptedBookmarks: string,

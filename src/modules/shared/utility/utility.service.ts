@@ -196,6 +196,12 @@ export default class UtilityService {
     return this.filterFalsyValues(words.split(/[\s.,/#!$%^&*;:{}=\-_`~()]/));
   }
 
+  stopEventPropagation(event: Event): void {
+    // Stop event propogation
+    event?.preventDefault();
+    (event as any)?.srcEvent?.stopPropagation();
+  }
+
   stripTags(input: string): string {
     return input ? input.replace(/<(?:.|\n)*?>/gm, '') : input;
   }

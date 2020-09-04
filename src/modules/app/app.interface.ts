@@ -1,6 +1,5 @@
 import { ApiServiceInfo, ApiServiceInfoResponse } from '../shared/api/api.interface';
 import { Bookmark } from '../shared/bookmark/bookmark.interface';
-import { MessageCommand } from '../shared/global-shared.enum';
 import { Sync } from '../shared/sync/sync.interface';
 import { AppViewType } from './app.enum';
 
@@ -17,7 +16,6 @@ export interface AppHelperService {
   getNextScheduledSyncUpdateCheck: () => ng.IPromise<string>;
   getSyncQueueLength: () => ng.IPromise<number>;
   openUrl: (event?: Event, url?: string) => void;
-  queueSync: (sync: Sync, command?: MessageCommand) => ng.IPromise<any>;
   removePermissions: () => ng.IPromise<void>;
   requestPermissions: () => ng.IPromise<boolean>;
   shareBookmark?: (bookmark: Bookmark) => void;

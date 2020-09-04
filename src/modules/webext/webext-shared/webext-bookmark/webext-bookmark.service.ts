@@ -1043,7 +1043,7 @@ export default class WebExtBookmarkService implements BookmarkService {
 
     // Queue sync but dont execute sync to allow for batch processing multiple changes
     return this.platformSvc.queueSync(sync, MessageCommand.SyncBookmarks, false).catch(() => {
-      // Swallow error, sync errors thrown searately by processBookmarkEventsQueue
+      // Swallow error, sync errors thrown separately by processBookmarkEventsQueue
     });
   }
 

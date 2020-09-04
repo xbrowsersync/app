@@ -61,9 +61,12 @@ Firefox will open using a temporary profile and the xBrowserSync extension will 
 
 ### Debugging in Android
 
-After building, in order to run the app you'll need to execute the relevant [cordova cli](https://cordova.apache.org/docs/en/latest/reference/cordova-cli/index.html) command. For example, to run the app on a connected device, CD into `build/android` within the xBrowserSync source directory and run the following command:
+After building, in order to run the app you'll need to execute the relevant [cordova cli](https://cordova.apache.org/docs/en/latest/reference/cordova-cli/index.html) commands. For example, to run the app on a connected device, CD into `build/android` within the xBrowserSync source directory and run the following commands:
 
+    $ cordova build android
     $ cordova run android --device
+
+Make sure to run the `cordova build` command at least once after running a fresh build so that required gradle files are copied (`cordova run` alone does not copy these files).
 
 ## Packaging
 

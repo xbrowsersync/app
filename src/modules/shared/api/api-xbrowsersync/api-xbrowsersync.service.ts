@@ -34,8 +34,6 @@ export default class ApiXbrowsersyncService implements ApiService {
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
-  skipOnlineCheck = false;
-
   static $inject = ['$injector', '$http', '$q', 'NetworkService', 'StoreService', 'UtilityService'];
   constructor(
     $injector: ng.auto.IInjectorService,
@@ -61,16 +59,15 @@ export default class ApiXbrowsersyncService implements ApiService {
   }
 
   apiRequestSucceeded<T>(response: T): ng.IPromise<T> {
-    this.skipOnlineCheck = false;
     return this.$q.resolve(response);
   }
 
   checkNetworkIsOnline(): ng.IPromise<void> {
     return this.$q((resolve, reject) => {
-      if (this.skipOnlineCheck || this.networkSvc.isNetworkConnected()) {
+      if (this.networkSvc.isNetworkConnected()) {
         return resolve();
       }
-      return reject(new Exceptions.NetworkOfflineException());
+      reject(new Exceptions.NetworkOfflineException());
     });
   }
 
@@ -181,7 +178,7 @@ export default class ApiXbrowsersyncService implements ApiService {
       });
   }
 
-  getBookmarksLastUpdated(): ng.IPromise<ApiGetLastUpdatedResponse> {
+  getBookmarksLastUpdated(skipOnlineCheck = false): ng.IPromise<ApiGetLastUpdatedResponse> {
     // Check secret and sync ID are present
     return this.storeSvc
       .get([StoreKey.Password, StoreKey.SyncId])
@@ -190,7 +187,7 @@ export default class ApiXbrowsersyncService implements ApiService {
           throw new Exceptions.MissingClientDataException();
         }
 
-        return this.checkNetworkIsOnline().then(() => {
+        return (skipOnlineCheck ? this.$q.resolve() : this.checkNetworkIsOnline()).then(() => {
           // Get current service url
           return this.utilitySvc
             .getServiceUrl()
@@ -302,7 +299,7 @@ export default class ApiXbrowsersyncService implements ApiService {
   updateBookmarks(
     encryptedBookmarks: string,
     updateSyncVersion = false,
-    backgroundUpdate = false
+    skipOnlineCheck = false
   ): ng.IPromise<ApiUpdateBookmarksResponse> {
     // Check secret and sync ID are present
     return this.storeSvc
@@ -312,9 +309,7 @@ export default class ApiXbrowsersyncService implements ApiService {
           throw new Exceptions.MissingClientDataException();
         }
 
-        // If this is a background update, ensure online check is skipped until successfull request
-        this.skipOnlineCheck = backgroundUpdate;
-        return this.checkNetworkIsOnline().then(() => {
+        return (skipOnlineCheck ? this.$q.resolve() : this.checkNetworkIsOnline()).then(() => {
           return this.$q
             .all([this.platformSvc.getAppVersion(), this.utilitySvc.getServiceUrl()])
             .then((data) => {

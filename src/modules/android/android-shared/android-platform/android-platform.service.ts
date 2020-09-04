@@ -1,11 +1,16 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
+import { AppEventType } from '../../../app/app.enum';
 import { Alert } from '../../../shared/alert/alert.interface';
 import AlertService from '../../../shared/alert/alert.service';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import { BookmarkChangeType } from '../../../shared/bookmark/bookmark.enum';
-import { BookmarkMetadata } from '../../../shared/bookmark/bookmark.interface';
+import {
+  Bookmark,
+  BookmarkMetadata,
+  ModifyBookmarkChangeData,
+  RemoveBookmarkChangeData
+} from '../../../shared/bookmark/bookmark.interface';
 import * as Exceptions from '../../../shared/exception/exception';
 import { ExceptionHandler } from '../../../shared/exception/exception.interface';
 import Globals from '../../../shared/global-shared.constants';
@@ -15,7 +20,8 @@ import LogService from '../../../shared/log/log.service';
 import NetworkService from '../../../shared/network/network.service';
 import StoreService from '../../../shared/store/store.service';
 import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
-import { Sync } from '../../../shared/sync/sync.interface';
+import { SyncType } from '../../../shared/sync/sync.enum';
+import { Sync, SyncResult } from '../../../shared/sync/sync.interface';
 import UtilityService from '../../../shared/utility/utility.service';
 import { WorkingContext } from '../../../shared/working/working.enum';
 import WorkingService from '../../../shared/working/working.service';
@@ -146,7 +152,20 @@ export default class AndroidPlatformService implements PlatformService {
         return;
       }
 
-      this.executeSync(true);
+      this.executeSync(true)
+        // Disable background sync if sync successfull
+        .then(this.disableBackgroundSync)
+        .catch((err) => {
+          // Swallow sync uncommitted and network connection errors to not flood logs with duplicate error messages
+          if (err instanceof Exceptions.SyncUncommittedException || this.networkSvc.isNetworkConnectionError(err)) {
+            this.logSvc.logInfo('Waiting for network connection...');
+            return;
+          }
+
+          // Disable background sync if error encountered
+          this.disableBackgroundSync();
+          throw err;
+        });
     }, 120e3);
   }
 
@@ -161,17 +180,11 @@ export default class AndroidPlatformService implements PlatformService {
     }
 
     // Sync bookmarks
-    return this.syncEngineSvc
-      .executeSync(isBackgroundSync)
-      .then(() => {
-        // Disable background sync if sync successfull
-        if (isBackgroundSync) {
-          this.disableBackgroundSync();
-        }
-      })
-      .finally(() => {
+    return this.syncEngineSvc.executeSync(isBackgroundSync).finally(() => {
+      if (!isBackgroundSync) {
         this.workingSvc.hide();
-      });
+      }
+    });
   }
 
   getAppVersion(): ng.IPromise<string> {
@@ -411,66 +424,73 @@ export default class AndroidPlatformService implements PlatformService {
   }
 
   queueLocalResync(): ng.IPromise<void> {
-    return this.$q.resolve();
+    return this.queueSync({ type: SyncType.Local }).then(() => {
+      this.logSvc.logInfo('Local sync data refreshed');
+    });
   }
 
-  queueSync(sync: Sync, command = MessageCommand.SyncBookmarks): ng.IPromise<any> {
-    // Add sync data to queue and run sync
-    return this.syncEngineSvc
-      .queueSync(sync)
-      .then(() => {
-        if (sync.changeInfo === undefined) {
-          return;
-        }
-        return this.$q.resolve(sync.changeInfo).then((changeInfo) => {
-          switch (true) {
-            case changeInfo.type === BookmarkChangeType.Add:
-              this.$timeout(() => {
-                this.alertSvc.setCurrentAlert({
-                  message: this.getI18nString(this.Strings.Alert.BookmarkCreated)
-                } as Alert);
-              }, 200);
-              break;
-            case changeInfo.type === BookmarkChangeType.Modify:
-              this.$timeout(() => {
-                this.alertSvc.setCurrentAlert({
-                  message: this.getI18nString(this.Strings.Alert.BookmarkUpdated)
-                } as Alert);
-              }, 200);
-              break;
-            case changeInfo.type === BookmarkChangeType.Remove:
-              this.$timeout(() => {
-                this.alertSvc.setCurrentAlert({
-                  message: this.getI18nString(this.Strings.Alert.BookmarkDeleted)
-                } as Alert);
-              }, 200);
-              break;
-            default:
-          }
-        });
-      })
-      .catch((err) => {
-        // If local data out of sync, queue refresh sync
-        return (this.syncEngineSvc.checkIfRefreshSyncedDataOnError(err)
-          ? this.queueLocalResync()
-          : this.$q.resolve()
-        ).then(() => {
-          // Add uncommitted syncs back to the queue and notify
-          if (err instanceof Exceptions.SyncUncommittedException) {
-            sync.changeInfo = undefined;
-            this.syncEngineSvc.queueSync(sync, false);
-            this.logSvc.logInfo('Sync not committed: network offline');
-            this.alertSvc.setCurrentAlert({
-              message: this.getI18nString(this.Strings.Exception.UncommittedSyncs_Message),
-              title: this.getI18nString(this.Strings.Exception.UncommittedSyncs_Title)
-            } as Alert);
-            this.enableBackgroundSync();
-            return;
+  queueSync(sync: Sync, command = MessageCommand.SyncBookmarks): ng.IPromise<SyncResult> {
+    let resyncRequired = false;
+    return this.$q<boolean>((resolve, reject) => {
+      // If pushing a change, check for updates before proceeding with sync
+      if (sync.type !== SyncType.LocalAndRemote && sync.type !== SyncType.Remote) {
+        return resolve(true);
+      }
+
+      // Check for updates before syncing
+      this.syncEngineSvc
+        .checkForUpdates()
+        .then((updatesAvailable) => {
+          if (!updatesAvailable) {
+            return resolve(true);
           }
 
-          throw err;
-        });
-      });
+          // Queue sync to get updates
+          resyncRequired = true;
+          return this.queueSync({
+            type: SyncType.Local
+          }).then(() => {
+            // Proceed with sync only if changed bookmark still exists
+            return this.bookmarkHelperSvc.getCachedBookmarks().then((bookmarks) => {
+              const changedBookmarkId =
+                (sync.changeInfo.changeData as RemoveBookmarkChangeData)?.id ??
+                (sync.changeInfo.changeData as ModifyBookmarkChangeData)?.bookmark?.id;
+              const changedBookmark = this.bookmarkHelperSvc.findBookmarkById(changedBookmarkId, bookmarks) as Bookmark;
+              if (angular.isUndefined(changedBookmark)) {
+                this.logSvc.logInfo('Changed bookmark could not be found, cancelling sync');
+                return resolve(false);
+              }
+              resolve(true);
+            });
+          });
+        })
+        .catch(reject);
+    })
+      .catch(() => true)
+      .then((proceedWithSync) => {
+        return (proceedWithSync ? this.syncEngineSvc.queueSync(sync) : this.$q.resolve())
+          .then(() => {
+            // Ensure bookmark results are refreshed if bookmarks were out of sync
+            if (resyncRequired) {
+              this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
+            }
+            return { success: true } as SyncResult;
+          })
+          .catch((err) => {
+            // Enable background sync if sync uncommitted
+            if (err instanceof Exceptions.SyncUncommittedException) {
+              this.alertSvc.setCurrentAlert({
+                message: this.getI18nString(this.Strings.Exception.UncommittedSyncs_Message),
+                title: this.getI18nString(this.Strings.Exception.UncommittedSyncs_Title)
+              } as Alert);
+              this.enableBackgroundSync();
+              return { error: err, success: false } as SyncResult;
+            }
+
+            throw err;
+          });
+      })
+      .finally(this.workingSvc.hide);
   }
 
   refreshNativeInterface(): ng.IPromise<void> {

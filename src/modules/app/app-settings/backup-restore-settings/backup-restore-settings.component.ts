@@ -179,7 +179,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
         this.logSvc.logInfo(`Reverting data to installation state from ${installBackupDate.toISOString()}`);
 
         // Start restore
-        return this.appHelperSvc.queueSync(
+        return this.platformSvc.queueSync(
           {
             bookmarks: bookmarksToRestore,
             type: SyncType.Local
@@ -193,8 +193,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
         this.revertCompleted = true;
         this.appHelperSvc.focusOnElement('.revert-completed .focused');
         this.utilitySvc.broadcastEvent(AppEventType.SyncDisabled);
-      })
-      .finally(this.workingSvc.hide);
+      });
   }
 
   displayRestorePanel(): void {
@@ -285,7 +284,6 @@ export default class BackupRestoreSettingsComponent implements OnInit {
 
   resetFormValidity(): void {
     this.restoreForm.dataToRestore.$setValidity('InvalidData', true);
-    this.appHelperSvc.focusOnElement('.btn-restore');
   }
 
   restore(): void {
@@ -354,7 +352,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
         }
 
         // Start restore
-        return this.appHelperSvc
+        return this.platformSvc
           .queueSync(
             {
               bookmarks: bookmarksToRestore,
@@ -363,8 +361,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
             MessageCommand.RestoreBookmarks
           )
           .then(this.restoreBookmarksSuccess);
-      })
-      .finally(this.workingSvc.hide);
+      });
   }
 
   restoreBookmarksSuccess(): void {

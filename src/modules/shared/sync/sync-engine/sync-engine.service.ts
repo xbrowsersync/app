@@ -3,16 +3,19 @@ import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { ApiService } from '../../api/api.interface';
 import BookmarkHelperService from '../../bookmark/bookmark-helper/bookmark-helper.service';
+import { Bookmark } from '../../bookmark/bookmark.interface';
+import CryptoService from '../../crypto/crypto.service';
 import * as Exceptions from '../../exception/exception';
 import { ExceptionHandler } from '../../exception/exception.interface';
 import { PlatformService } from '../../global-shared.interface';
 import LogService from '../../log/log.service';
+import NetworkService from '../../network/network.service';
 import { StoreKey } from '../../store/store.enum';
 import StoreService from '../../store/store.service';
 import UtilityService from '../../utility/utility.service';
 import BookmarkSyncProviderService from '../bookmark-sync-provider/bookmark-sync-provider.service';
 import { SyncType } from '../sync.enum';
-import { Sync, SyncProcessBookmarksData, SyncProvider } from '../sync.interface';
+import { Sync, SyncProvider } from '../sync.interface';
 
 @autobind
 @Injectable('SyncEngineService')
@@ -22,7 +25,9 @@ export default class SyncEngineService {
   $timeout: ng.ITimeoutService;
   apiSvc: ApiService;
   bookmarkHelperSvc: BookmarkHelperService;
+  cryptoSvc: CryptoService;
   logSvc: LogService;
+  networkSvc: NetworkService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
@@ -38,7 +43,9 @@ export default class SyncEngineService {
     'ApiService',
     'BookmarkHelperService',
     'BookmarkSyncProviderService',
+    'CryptoService',
     'LogService',
+    'NetworkService',
     'PlatformService',
     'StoreService',
     'UtilityService'
@@ -50,7 +57,9 @@ export default class SyncEngineService {
     ApiSvc: ApiService,
     BookmarkHelperSvc: BookmarkHelperService,
     BookmarkSyncProviderSvc: BookmarkSyncProviderService,
+    CryptoSvc: CryptoService,
     LogSvc: LogService,
+    NetworkSvc: NetworkService,
     PlatformSvc: PlatformService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
@@ -60,7 +69,9 @@ export default class SyncEngineService {
     this.$timeout = $timeout;
     this.apiSvc = ApiSvc;
     this.bookmarkHelperSvc = BookmarkHelperSvc;
+    this.cryptoSvc = CryptoSvc;
     this.logSvc = LogSvc;
+    this.networkSvc = NetworkSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
@@ -97,18 +108,18 @@ export default class SyncEngineService {
     );
   }
 
-  checkForUpdates(): ng.IPromise<boolean> {
+  checkForUpdates(isBackgroundSync = false, outputToLog = true): ng.IPromise<boolean> {
     return this.storeSvc.get<string>(StoreKey.LastUpdated).then((storedLastUpdated) => {
       // Get last updated date from cache
       const storedLastUpdatedDate = new Date(storedLastUpdated);
 
       // Check if bookmarks have been updated
-      return this.apiSvc.getBookmarksLastUpdated().then((response) => {
+      return this.apiSvc.getBookmarksLastUpdated(isBackgroundSync).then((response) => {
         // If last updated is different to the cached date, refresh bookmarks
         const remoteLastUpdated = new Date(response.lastUpdated);
         const updatesAvailable = storedLastUpdatedDate?.getTime() !== remoteLastUpdated.getTime();
 
-        if (updatesAvailable) {
+        if (updatesAvailable && outputToLog) {
           this.logSvc.logInfo(
             `Updates available, local:${
               storedLastUpdatedDate?.toISOString() ?? 'none'
@@ -144,7 +155,7 @@ export default class SyncEngineService {
           this.syncQueue = [];
 
           // Reset syncing flag
-          this.setIsSyncing();
+          this.showInterfaceAsSyncing();
 
           // Update browser action icon
           this.platformSvc.refreshNativeInterface();
@@ -163,7 +174,7 @@ export default class SyncEngineService {
       .then(() => this.platformSvc.refreshNativeInterface(true));
   }
 
-  executeSync(isBackgroundSync = false): ng.IPromise<any> {
+  executeSync(isBackgroundSync = false): ng.IPromise<void> {
     // Check if sync enabled before running sync
     return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
       if (!syncEnabled) {
@@ -171,7 +182,7 @@ export default class SyncEngineService {
       }
 
       // Get available updates if there are no queued syncs, finally process the queue
-      return (this.syncQueue.length === 0 ? this.checkForUpdates() : this.$q.resolve(false))
+      return (this.syncQueue.length === 0 ? this.checkForUpdates(isBackgroundSync) : this.$q.resolve(false))
         .then((updatesAvailable) => {
           return (
             updatesAvailable &&
@@ -185,9 +196,7 @@ export default class SyncEngineService {
   }
 
   getCurrentSync(): Sync {
-    // If nothing on the queue, get the current sync in progress if exists, otherwise get the last
-    // sync in the queue
-    return this.syncQueue.length === 0 ? this.currentSync : this.syncQueue[this.syncQueue.length - 1];
+    return this.currentSync;
   }
 
   getSyncQueueLength(): number {
@@ -207,14 +216,19 @@ export default class SyncEngineService {
       });
   }
 
-  handleFailedSync(failedSync: Sync, err: Error): ng.IPromise<Error> {
+  handleFailedSync(failedSync: Sync, err: Error, isBackgroundSync = false): ng.IPromise<Error> {
     let syncException = err;
     return this.$q<Error>((resolve, reject) => {
-      // Update browser action icon
-      this.platformSvc.refreshNativeInterface();
-
       // If offline and sync is a change, swallow error and place failed sync back on the queue
-      if (err instanceof Exceptions.NetworkOfflineException && failedSync.type !== SyncType.Local) {
+      if (
+        (this.networkSvc.isNetworkOfflineError(err) ||
+          (isBackgroundSync && this.networkSvc.isNetworkConnectionError(err))) &&
+        failedSync.type !== SyncType.Local
+      ) {
+        this.syncQueue.unshift(failedSync);
+        if (!isBackgroundSync) {
+          this.logSvc.logInfo('Sync not committed: network offline');
+        }
         return resolve(new Exceptions.SyncUncommittedException(undefined, err));
       }
 
@@ -232,7 +246,7 @@ export default class SyncEngineService {
       return this.utilitySvc
         .isSyncEnabled()
         .then((syncEnabled) => {
-          return this.setIsSyncing()
+          return this.showInterfaceAsSyncing()
             .then(() => {
               if (!syncEnabled) {
                 return;
@@ -244,7 +258,6 @@ export default class SyncEngineService {
               } else if (failedSync.type !== SyncType.Local) {
                 // If local changes made, clear sync queue and refresh sync data if necessary
                 this.syncQueue = [];
-                this.storeSvc.set(StoreKey.LastUpdated, new Date().toISOString());
                 if (this.checkIfRefreshSyncedDataOnError(syncException)) {
                   this.currentSync = undefined;
                   return this.platformSvc.queueLocalResync().catch((refreshErr) => {
@@ -267,11 +280,13 @@ export default class SyncEngineService {
     }).finally(() => {
       // Return sync error back to process that queued the sync
       failedSync.deferred.reject(syncException);
+      return this.showInterfaceAsSyncing();
     });
   }
 
-  processSyncQueue(isBackgroundSync = false): ng.IPromise<any> {
-    let processedBookmarksData: SyncProcessBookmarksData;
+  processSyncQueue(isBackgroundSync = false): ng.IPromise<void> {
+    let cancel = false;
+    let processedBookmarksData: Bookmark[];
     let updateRemote = false;
 
     // If a sync is in progress, retry later
@@ -283,7 +298,7 @@ export default class SyncEngineService {
       return this.$q.resolve(this.syncQueue.length > 0);
     };
 
-    const action = (): ng.IPromise<any> => {
+    const action = (): ng.IPromise<void> => {
       // Get first sync in the queue
       this.currentSync = this.syncQueue.shift();
       this.logSvc.logInfo(
@@ -293,11 +308,19 @@ export default class SyncEngineService {
       );
 
       // Enable syncing flag
-      return this.setIsSyncing(this.currentSync.type)
+      return this.showInterfaceAsSyncing(this.currentSync.type)
         .then(() => {
           // Process here if this is a cancel
           if (this.currentSync.type === SyncType.Cancel) {
-            return this.cancelSync().then(() => false);
+            return this.cancelSync().then(() => {
+              cancel = true;
+              return false;
+            });
+          }
+
+          // Set sync bookmarks to last processed result if applicable
+          if (angular.isUndefined(this.currentSync.bookmarks) && !angular.isUndefined(processedBookmarksData)) {
+            this.currentSync.bookmarks = processedBookmarksData;
           }
 
           // Process sync for each registered provider
@@ -326,77 +349,79 @@ export default class SyncEngineService {
           this.currentSync.deferred.resolve();
 
           // Set flag if remote bookmarks data should be updated
-          if (syncChange || this.currentSync.type !== SyncType.Local) {
-            updateRemote = true;
-          }
+          updateRemote = !!syncChange;
 
           // Reset syncing flag
-          return this.setIsSyncing();
+          return this.showInterfaceAsSyncing();
         });
     };
 
     // Disable automatic updates whilst processing syncs
-    return this.utilitySvc
-      .isSyncEnabled()
-      .then((syncEnabled) => {
-        if (syncEnabled) {
-          return this.platformSvc.stopSyncUpdateChecks();
-        }
-      })
-      .then(() => {
-        // Process sync queue
-        return this.utilitySvc.asyncWhile(this.syncQueue, condition, action);
-      })
-      .then(() => {
-        if (!updateRemote) {
-          // Don't update remote bookmarks
-          this.logSvc.logInfo('No changes made, skipping remote update.');
-          return;
-        }
-
-        // Update remote bookmarks data
-        return this.apiSvc
-          .updateBookmarks(processedBookmarksData.encryptedBookmarks)
-          .then((response) => {
-            return this.storeSvc.set(StoreKey.LastUpdated, response.lastUpdated).then(() => {
-              this.logSvc.logInfo(`Remote bookmarks updated at ${response.lastUpdated}`);
-            });
-          })
-          .catch((err) => {
-            return this.$q
-              .all(
-                this.providers.map((provider) => {
-                  let lastResult: any;
-                  switch (provider.constructor) {
-                    case BookmarkSyncProviderService:
-                      lastResult = processedBookmarksData;
-                      break;
-                    default:
-                  }
-                  return provider.handleUpdateRemoteFailed(err, lastResult, this.currentSync);
-                })
-              )
-              .then(() => {
-                throw err;
-              });
-          });
-      })
-      .catch((err) => {
-        return this.handleFailedSync(this.currentSync, err).then((innerErr) => {
-          throw innerErr;
-        });
-      })
-      .finally(() => {
-        // Clear current sync
-        this.currentSync = undefined;
-
-        // Start auto updates if sync enabled
-        return this.utilitySvc.isSyncEnabled().then((cachedSyncEnabled) => {
-          if (cachedSyncEnabled) {
-            return this.platformSvc.startSyncUpdateChecks();
+    return (
+      this.utilitySvc
+        .isSyncEnabled()
+        .then((syncEnabled) => {
+          if (syncEnabled) {
+            return this.platformSvc.stopSyncUpdateChecks();
           }
-        });
-      });
+        })
+        // Process sync queue
+        .then(() => this.utilitySvc.asyncWhile(this.syncQueue, condition, action))
+        .then(() => {
+          // If sync was cancelled stop here
+          if (cancel) {
+            return;
+          }
+
+          return this.cryptoSvc.encryptData(JSON.stringify(processedBookmarksData)).then((encryptedBookmarks) => {
+            // Don't update remote bookmarks
+            return (!updateRemote
+              ? this.$q.resolve().then(() => this.logSvc.logInfo('No changes made, skipping remote update.'))
+              : this.apiSvc
+                  .updateBookmarks(encryptedBookmarks, undefined, isBackgroundSync)
+                  .then((response) => {
+                    return this.storeSvc.set(StoreKey.LastUpdated, response.lastUpdated).then(() => {
+                      this.logSvc.logInfo(`Remote bookmarks updated at ${response.lastUpdated}`);
+                    });
+                  })
+                  .catch((err) => {
+                    return this.$q
+                      .all(
+                        this.providers.map((provider) => {
+                          let lastResult: any;
+                          switch (provider.constructor) {
+                            case BookmarkSyncProviderService:
+                              lastResult = processedBookmarksData;
+                              break;
+                            default:
+                          }
+                          return provider.handleUpdateRemoteFailed(err, lastResult, this.currentSync);
+                        })
+                      )
+                      .then(() => {
+                        throw err;
+                      });
+                  })
+            ).then(() => this.bookmarkHelperSvc.updateCachedBookmarks(processedBookmarksData, encryptedBookmarks));
+          });
+        })
+        .catch((err) =>
+          this.handleFailedSync(this.currentSync, err, isBackgroundSync).then((innerErr) => {
+            throw innerErr;
+          })
+        )
+        .finally(() => {
+          // Clear current sync
+          this.currentSync = undefined;
+
+          // Start auto updates if sync enabled
+          return this.utilitySvc.isSyncEnabled().then((cachedSyncEnabled) => {
+            if (cachedSyncEnabled) {
+              return this.platformSvc.startSyncUpdateChecks();
+            }
+          });
+        })
+    );
   }
 
   queueSync(syncToQueue: Sync, runSync = true): ng.IPromise<void> {
@@ -455,10 +480,10 @@ export default class SyncEngineService {
     });
   }
 
-  setIsSyncing(syncType?: SyncType): ng.IPromise<void> {
+  showInterfaceAsSyncing(syncType?: SyncType): ng.IPromise<void> {
     // Update browser action icon with current sync type
     if (!angular.isUndefined(syncType ?? undefined)) {
-      return this.platformSvc.refreshNativeInterface(null, syncType);
+      return this.platformSvc.refreshNativeInterface(undefined, syncType);
     }
 
     // Get cached sync enabled value and update browser action icon

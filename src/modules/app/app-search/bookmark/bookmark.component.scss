@@ -3,8 +3,8 @@
 bookmark {
   @include box-shadow;
 
-  border: none;
   border-radius: $border-radius-well;
+  border-width: 0;
   display: block;
   margin: 0 0 0.75rem;
   max-height: 25rem;
@@ -108,9 +108,7 @@ bookmark {
     .btn-fab {
       background-color: $colour-bg3-default;
       color: $colour-text2-default;
-      height: 3.5rem;
       position: static;
-      width: 3.5rem;
 
       @include theme-dark {
         background-color: $colour-text3-dark;

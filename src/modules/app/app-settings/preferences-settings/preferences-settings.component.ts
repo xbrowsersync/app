@@ -70,7 +70,7 @@ export default class PreferencesSettingsComponent implements OnInit {
       // Enable setting and refresh local sync data
       return this.settingsSvc
         .syncBookmarksToolbar(true)
-        .then(() => this.appHelperSvc.queueSync({ type: SyncType.Local }));
+        .then(() => this.platformSvc.queueSync({ type: SyncType.Local }));
     });
   }
 

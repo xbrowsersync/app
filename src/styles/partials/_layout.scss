@@ -128,6 +128,7 @@
     display: flex;
     flex-direction: column;
     padding: 0.75rem;
+    z-index: 0;
   }
 }
 
@@ -135,8 +136,8 @@
   @include box-shadow;
 
   background-color: $colour-bg3-default;
-  border: none;
   border-radius: $border-radius-well;
+  border-width: 0;
   color: $colour-text2-default;
   margin-bottom: 0.75rem;
   padding: 1rem 1.25rem;

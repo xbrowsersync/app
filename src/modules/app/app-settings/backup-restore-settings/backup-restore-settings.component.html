@@ -62,8 +62,8 @@
             </label>
             <div class="form-group" ng-class="{ 'has-error': vm.restoreForm.dataToRestore.$invalid }">
               <input type="hidden" name="dataToRestore" ng-model="vm.dataToRestore"></input>
-              <textarea ng-model="vm.dataToRestore" ng-model-options="{ updateOn: 'blur' }" class="form-control"
-                        rows="3" ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"
+              <textarea ng-model="vm.dataToRestore" class="form-control" rows="3"
+                        ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"
                         ng-change="vm.resetFormValidity()" autocapitalize="off" autocomplete="off" autocorrect="off"
                         spellcheck="false"></textarea>
               <input type="text" ng-model="vm.backupFileName" class="form-control" readonly

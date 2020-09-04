@@ -1,6 +1,6 @@
 import { MessageCommand } from './global-shared.enum';
 import { SyncType } from './sync/sync.enum';
-import { Sync } from './sync/sync.interface';
+import { Sync, SyncResult } from './sync/sync.interface';
 
 export interface I18nObject {
   android?: string;
@@ -29,7 +29,7 @@ export interface PlatformService {
   openUrl: (url: string) => void;
   platformName: string;
   queueLocalResync: () => ng.IPromise<void>;
-  queueSync: (sync: Sync, command?: MessageCommand, runSync?: boolean) => ng.IPromise<any>;
+  queueSync: (sync: Sync, command?: MessageCommand, runSync?: boolean) => ng.IPromise<SyncResult>;
   refreshNativeInterface: (syncEnabled?: boolean, syncType?: SyncType) => ng.IPromise<void>;
   startSyncUpdateChecks: () => ng.IPromise<void>;
   stopSyncUpdateChecks: () => ng.IPromise<void>;

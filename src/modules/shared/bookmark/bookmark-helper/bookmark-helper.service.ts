@@ -197,37 +197,43 @@ export default class BookmarkHelperService {
   getCachedBookmarks(): ng.IPromise<Bookmark[]> {
     // Get cached encrypted bookmarks from store
     return this.storeSvc.get<string>(StoreKey.Bookmarks).then((encryptedBookmarksFromStore) => {
-      // Return unencrypted cached bookmarks from memory if encrypted bookmarks
-      // in storage match cached encrypted bookmarks in memory
-      let getBookmarksPromise: ng.IPromise<Bookmark[]>;
-      if (
-        encryptedBookmarksFromStore &&
-        this.cachedBookmarks_encrypted &&
-        encryptedBookmarksFromStore === this.cachedBookmarks_encrypted
-      ) {
-        getBookmarksPromise = this.$q.resolve(this.cachedBookmarks_plain);
-      }
+      return (
+        this.$q<Bookmark[]>((resolve, reject) => {
+          // Return unencrypted cached bookmarks from memory if encrypted bookmarks
+          // in storage match cached encrypted bookmarks in memory
+          if (
+            !angular.isUndefined(encryptedBookmarksFromStore ?? undefined) &&
+            !angular.isUndefined(this.cachedBookmarks_encrypted ?? undefined) &&
+            !angular.isUndefined(this.cachedBookmarks_plain ?? undefined) &&
+            encryptedBookmarksFromStore === this.cachedBookmarks_encrypted
+          ) {
+            return resolve(this.cachedBookmarks_plain);
+          }
 
-      // If encrypted bookmarks not cached in storage, get synced bookmarks
-      getBookmarksPromise = (encryptedBookmarksFromStore
-        ? this.$q.resolve(encryptedBookmarksFromStore)
-        : this.apiSvc.getBookmarks().then((response) => {
-            return response.bookmarks;
+          // If encrypted bookmarks not cached in storage, retrieve synced data
+          (!angular.isUndefined(encryptedBookmarksFromStore ?? undefined)
+            ? this.$q.resolve(encryptedBookmarksFromStore)
+            : this.apiSvc.getBookmarks().then((response) => {
+                return response.bookmarks;
+              })
+          )
+            .then((encryptedBookmarks) => {
+              // Decrypt bookmarks
+              return this.cryptoSvc.decryptData(encryptedBookmarks).then((bookmarksJson) => {
+                // Update cache with retrieved bookmarks data
+                const bookmarks: Bookmark[] = bookmarksJson ? JSON.parse(bookmarksJson) : [];
+                return this.updateCachedBookmarks(bookmarks, encryptedBookmarks).then(() => {
+                  resolve(bookmarks);
+                });
+              });
+            })
+            .catch(reject);
+        })
+          // Return a copy so as not to affect cached bookmarks in memory
+          .then((bookmarks) => {
+            return angular.copy(bookmarks);
           })
-      ).then((encryptedBookmarks) => {
-        // Decrypt bookmarks
-        return this.cryptoSvc.decryptData(encryptedBookmarks).then((decryptedBookmarks) => {
-          // Update cache with retrieved bookmarks data
-          const bookmarks: Bookmark[] = decryptedBookmarks ? JSON.parse(decryptedBookmarks) : [];
-          return this.updateCachedBookmarks(bookmarks, encryptedBookmarks).then(() => {
-            return bookmarks;
-          });
-        });
-      });
-
-      return getBookmarksPromise.then((cachedBookmarks) => {
-        return angular.copy(cachedBookmarks);
-      });
+      );
     });
   }
 
@@ -645,7 +651,7 @@ export default class BookmarkHelperService {
     return results;
   }
 
-  updateCachedBookmarks(unencryptedBookmarks: Bookmark[], encryptedBookmarks: string): ng.IPromise<void> {
+  updateCachedBookmarks(bookmarks: Bookmark[], encryptedBookmarks: string): ng.IPromise<void> {
     return this.$q<void>((resolve) => {
       if (angular.isUndefined(encryptedBookmarks ?? undefined)) {
         return resolve();
@@ -655,8 +661,8 @@ export default class BookmarkHelperService {
       return this.storeSvc.set(StoreKey.Bookmarks, encryptedBookmarks).then(() => {
         // Update memory cached bookmarks
         this.cachedBookmarks_encrypted = angular.copy(encryptedBookmarks);
-        if (unencryptedBookmarks !== undefined) {
-          this.cachedBookmarks_plain = angular.copy(unencryptedBookmarks);
+        if (bookmarks !== undefined) {
+          this.cachedBookmarks_plain = angular.copy(bookmarks);
         }
         resolve();
       });

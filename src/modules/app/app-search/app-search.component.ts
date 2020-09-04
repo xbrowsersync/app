@@ -4,13 +4,12 @@ import { OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import { BookmarkChangeType } from '../../shared/bookmark/bookmark.enum';
-import { Bookmark, BookmarkChange, RemoveBookmarkChangeData } from '../../shared/bookmark/bookmark.interface';
+import { Bookmark } from '../../shared/bookmark/bookmark.interface';
+import * as Exceptions from '../../shared/exception/exception';
 import { ExceptionHandler } from '../../shared/exception/exception.interface';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService } from '../../shared/global-shared.interface';
 import SettingsService from '../../shared/settings/settings.service';
-import { SyncType } from '../../shared/sync/sync.enum';
 import UtilityService from '../../shared/utility/utility.service';
 import WorkingService from '../../shared/working/working.service';
 import { AppViewType, KeyCode } from '../app.enum';
@@ -101,76 +100,8 @@ export default class AppSearchComponent implements OnInit {
   }
 
   deleteBookmark(event: Event, bookmark: Bookmark): void {
-    // Stop event propogation
-    event?.preventDefault();
-    (event as any)?.srcEvent?.stopPropagation();
-
-    let originalBookmarks;
-    if (this.displayFolderView) {
-      // Find and remove the deleted bookmark element in the bookmark tree
-      originalBookmarks = angular.copy(this.bookmarkTree);
-
-      // Find parent of bookmark to delete
-      let parent;
-      let childIndex = -1;
-      this.bookmarkHelperSvc.eachBookmark(this.bookmarkTree, (current) => {
-        if (angular.isUndefined(current.children ?? undefined) || current.children.length === 0) {
-          return;
-        }
-
-        // Check children for target bookmark
-        const index = current.children.findIndex((child) => {
-          return child.id === bookmark.id;
-        });
-        if (index >= 0) {
-          parent = current;
-          childIndex = index;
-        }
-      });
-
-      // If target bookmark and parent were found, remove the bookmark
-      if (parent && childIndex >= 0) {
-        parent.children.splice(childIndex, 1);
-      }
-    } else {
-      // Find and remove the deleted bookmark element in the search results
-      originalBookmarks = angular.copy(this.results);
-
-      const removedBookmarkIndex = this.results.findIndex((result) => {
-        return result.id === bookmark.id;
-      });
-      if (removedBookmarkIndex >= 0) {
-        this.results.splice(removedBookmarkIndex, 1);
-      }
-    }
-
-    this.$timeout(() => {
-      // Display loading overlay
-      this.workingSvc.show();
-
-      // Create change info and sync changes
-      const data: RemoveBookmarkChangeData = {
-        id: bookmark.id
-      };
-      const changeInfo: BookmarkChange = {
-        changeData: data,
-        type: BookmarkChangeType.Remove
-      };
-      this.appHelperSvc
-        .queueSync({
-          changeInfo,
-          type: SyncType.LocalAndRemote
-        })
-        .catch((err) => {
-          // Restore current bookmarks view and then handle error
-          if (this.displayFolderView) {
-            this.bookmarkTree = originalBookmarks;
-          } else {
-            this.results = originalBookmarks;
-          }
-          return this.$exceptionHandler(err);
-        });
-    }, 1e3);
+    // Android only method
+    throw new Exceptions.NotImplementedException();
   }
 
   displayDefaultSearchState(): ng.IPromise<void> {
@@ -205,8 +136,7 @@ export default class AppSearchComponent implements OnInit {
 
   editBookmark(event: Event, bookmarkToUpdate: Bookmark): void {
     // Stop event propogation
-    event?.preventDefault();
-    (event as any)?.srcEvent?.stopPropagation();
+    this.utilitySvc.stopEventPropagation(event);
 
     // On mobiles, display bookmark panel with slight delay to avoid focussing on description field
     if (this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
@@ -439,8 +369,7 @@ export default class AppSearchComponent implements OnInit {
 
   selectBookmark(event: Event, bookmarkId: number): void {
     // Stop event propogation
-    event?.preventDefault();
-    (event as any)?.srcEvent?.stopPropagation();
+    this.utilitySvc.stopEventPropagation(event);
 
     if (!this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
       return;
@@ -458,8 +387,7 @@ export default class AppSearchComponent implements OnInit {
 
   shareBookmark(event: Event, bookmarkToShare: Bookmark) {
     // Stop event propogation
-    event?.preventDefault();
-    (event as any)?.srcEvent?.stopPropagation();
+    this.utilitySvc.stopEventPropagation(event);
 
     // Trigger native share functionality
     this.appHelperSvc.shareBookmark(bookmarkToShare);

@@ -257,7 +257,7 @@ export default class AppLoginComponent implements OnInit {
         return this.cryptoSvc
           .getPasswordHash(this.password, syncId)
           .then((passwordHash) =>
-            this.storeSvc.set(StoreKey.Password, passwordHash).then(() => this.appHelperSvc.queueSync(syncData))
+            this.storeSvc.set(StoreKey.Password, passwordHash).then(() => this.platformSvc.queueSync(syncData))
           )
           .then(() => {
             this.logSvc.logInfo(syncInfoMessage);

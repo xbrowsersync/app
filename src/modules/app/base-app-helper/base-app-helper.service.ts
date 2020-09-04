@@ -7,13 +7,11 @@ import { ApiService, ApiServiceInfo, ApiServiceInfoResponse } from '../../shared
 import * as Exceptions from '../../shared/exception/exception';
 import { ExceptionHandler } from '../../shared/exception/exception.interface';
 import Globals from '../../shared/global-shared.constants';
-import { MessageCommand } from '../../shared/global-shared.enum';
 import { PlatformService } from '../../shared/global-shared.interface';
 import LogService from '../../shared/log/log.service';
 import { StoreKey } from '../../shared/store/store.enum';
 import StoreService from '../../shared/store/store.service';
 import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
-import { Sync } from '../../shared/sync/sync.interface';
 import UtilityService from '../../shared/utility/utility.service';
 import WorkingService from '../../shared/working/working.service';
 import { AppViewType } from '../app.enum';
@@ -161,31 +159,8 @@ export default class BaseAppHelperService {
   }
 
   syncBookmarksSuccess(): ng.IPromise<void> {
-    // Hide loading panel and switch to default view
-    this.workingSvc.hide();
+    // Switch to default view
     return this.switchView();
-  }
-
-  queueSync(sync: Sync, command = MessageCommand.SyncBookmarks): ng.IPromise<any> {
-    return this.platformSvc
-      .queueSync(sync, command)
-      .catch((err) => {
-        // Swallow error if sync was processed but not committed (offline)
-        if (err instanceof Exceptions.SyncUncommittedException) {
-          this.$timeout(() => {
-            this.$exceptionHandler(err);
-          }, Globals.InterfaceReadyTimeout);
-          return;
-        }
-
-        // If data out of sync switch to default view
-        return (this.syncEngineSvc.checkIfRefreshSyncedDataOnError(err) ? this.switchView() : this.$q.resolve()).then(
-          () => {
-            throw err;
-          }
-        );
-      })
-      .finally(this.workingSvc.hide);
   }
 
   updateServiceUrl(newServiceUrl: string): ng.IPromise<ApiServiceInfo> {

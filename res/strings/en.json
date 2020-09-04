@@ -157,6 +157,10 @@
       "key": "Button_ShareBookmark",
       "default": "Share bookmark"
     },
+    "Undo": {
+      "key": "Button_Undo",
+      "default": "Undo"
+    },
     "Update": {
       "key": "Button_Update",
       "default": "Update"

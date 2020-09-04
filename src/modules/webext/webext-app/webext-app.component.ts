@@ -81,7 +81,7 @@ export default class WebExtAppComponent extends AppMainComponent implements OnIn
 
   workingCancelAction(): ng.IPromise<void> {
     this.logSvc.logInfo('Cancelling sync');
-    return this.appHelperSvc
+    return this.platformSvc
       .queueSync({
         type: SyncType.Cancel
       })

@@ -17,7 +17,7 @@ import { StoreKey } from '../../shared/store/store.enum';
 import StoreService from '../../shared/store/store.service';
 import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
 import { SyncType } from '../../shared/sync/sync.enum';
-import { Sync } from '../../shared/sync/sync.interface';
+import { Sync, SyncResult } from '../../shared/sync/sync.interface';
 import UpgradeService from '../../shared/upgrade/upgrade.service';
 import UtilityService from '../../shared/utility/utility.service';
 import ChromiumBookmarkService from '../chromium/chromium-shared/chromium-bookmark/chromium-bookmark.service';
@@ -117,7 +117,7 @@ export default class WebExtBackgroundService {
     });
   }
 
-  checkForSyncUpdates(): ng.IPromise<any> {
+  checkForSyncUpdates(): ng.IPromise<SyncResult | void> {
     // Exit if currently syncing
     const currentSync = this.syncEngineSvc.getCurrentSync();
     if (currentSync) {
@@ -162,7 +162,7 @@ export default class WebExtBackgroundService {
     throw err;
   }
 
-  checkForSyncUpdatesOnStartup(): ng.IPromise<any> {
+  checkForSyncUpdatesOnStartup(): ng.IPromise<SyncResult | void> {
     return this.$q<boolean>((resolve, reject) => {
       return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
         if (!syncEnabled) {
@@ -408,7 +408,7 @@ export default class WebExtBackgroundService {
       }
       return action.then(resolve).catch(reject);
     }).catch((err) => {
-      // Set message to exception class name so sender can rehydrate the exception
+      // Set message to exception class name so sender can rehydrate the exception on receipt
       err.message = err.constructor.name;
       throw err;
     });
@@ -434,22 +434,29 @@ export default class WebExtBackgroundService {
     return this.$q.resolve(this.syncEngineSvc.getSyncQueueLength());
   }
 
-  runRestoreBookmarksCommand(sync: Sync): ng.IPromise<any> {
-    return this.bookmarkSvc
-      .disableEventListeners()
-      .then(() => {
-        // Upgrade containers to use current container names
-        return this.bookmarkHelperSvc.upgradeContainers(sync.bookmarks ?? []);
-      })
-      .then((bookmarksToRestore) => {
-        // Queue sync
-        sync.bookmarks = bookmarksToRestore;
-        return this.syncEngineSvc.queueSync(sync);
-      });
+  runRestoreBookmarksCommand(sync: Sync): ng.IPromise<SyncResult> {
+    return this.bookmarkSvc.disableEventListeners().then(() => {
+      // Upgrade containers to use current container names
+      const bookmarksToRestore = this.bookmarkHelperSvc.upgradeContainers(sync.bookmarks ?? []);
+
+      // Queue sync
+      sync.bookmarks = bookmarksToRestore;
+      return this.syncEngineSvc.queueSync(sync).then(
+        () =>
+          ({
+            success: true
+          } as SyncResult)
+      );
+    });
   }
 
-  runSyncBookmarksCommand(sync: Sync, runSync: boolean): ng.IPromise<void> {
-    return this.syncEngineSvc.queueSync(sync, runSync);
+  runSyncBookmarksCommand(sync: Sync, runSync: boolean): ng.IPromise<SyncResult> {
+    return this.syncEngineSvc.queueSync(sync, runSync).then(
+      () =>
+        ({
+          success: true
+        } as SyncResult)
+    );
   }
 
   upgradeExtension(): ng.IPromise<void> {

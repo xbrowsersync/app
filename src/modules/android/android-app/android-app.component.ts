@@ -19,6 +19,7 @@ import StoreService from '../../shared/store/store.service';
 import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
 import UpgradeService from '../../shared/upgrade/upgrade.service';
 import UtilityService from '../../shared/utility/utility.service';
+import { WorkingContext } from '../../shared/working/working.enum';
 import WorkingService from '../../shared/working/working.service';
 import AndroidPlatformService from '../android-shared/android-platform/android-platform.service';
 import AndroidAppHelperService from './android-app-helper/android-app-helper.service';
@@ -170,7 +171,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     }, 1e3);
   }
 
-  executeSyncIfOnline(displayLoadingId): ng.IPromise<boolean> {
+  executeSyncIfOnline(workingContext: WorkingContext): ng.IPromise<boolean> {
     // If not online display an alert and return
     if (!this.networkSvc.isNetworkConnected()) {
       this.alertSvc.setCurrentAlert({
@@ -181,7 +182,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     }
 
     // Sync bookmarks
-    return this.platformSvc.executeSync(false, displayLoadingId).then(() => {
+    return this.platformSvc.executeSync(false, workingContext).then(() => {
       return true;
     });
   }
@@ -330,11 +331,11 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
             return;
           }
 
-          // Check for uncommitted syncs or sync updates
+          // Check for updates and run sync but don't wait before continuing
           this.appHelperSvc
             .getSyncQueueLength()
             .then((syncQueueLength) => {
-              return syncQueueLength === 0 ? this.syncEngineSvc.checkForUpdates() : true;
+              return syncQueueLength === 0 ? this.syncEngineSvc.checkForUpdates(undefined, false) : true;
             })
             .then((runSync) => {
               if (!runSync) {
@@ -342,9 +343,8 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
               }
 
               // Run sync
-              return this.executeSyncIfOnline('delayDisplayDialog').then(() => {
-                // Refresh search results if query not present
-                if (this.appHelperSvc.getCurrentView().view === AppViewType.Search) {
+              this.executeSyncIfOnline(WorkingContext.DelayedSyncing).then((isOnline) => {
+                if (isOnline) {
                   this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
                 }
               });
@@ -427,11 +427,11 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
               return;
             }
 
-            // Check for uncommitted syncs or sync updates
+            // Check for updates and run sync but don't wait before continuing
             this.appHelperSvc
               .getSyncQueueLength()
               .then((syncQueueLength) => {
-                return syncQueueLength === 0 ? this.syncEngineSvc.checkForUpdates() : true;
+                return syncQueueLength === 0 ? this.syncEngineSvc.checkForUpdates(undefined, false) : true;
               })
               .then((runSync) => {
                 if (!runSync) {
@@ -439,17 +439,9 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
                 }
 
                 // Run sync
-                this.executeSyncIfOnline('delayDisplayDialog').then((isOnline) => {
-                  if (isOnline === false) {
-                    return;
-                  }
-
-                  // Refresh search results if query not present
-                  if (this.appHelperSvc.getCurrentView().view === AppViewType.Search) {
-                    // Refresh search results if query not present
-                    if (this.appHelperSvc.getCurrentView().view === AppViewType.Search) {
-                      this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
-                    }
+                this.executeSyncIfOnline(WorkingContext.DelayedSyncing).then((isOnline) => {
+                  if (isOnline) {
+                    this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
                   }
                 });
               });
