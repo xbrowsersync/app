@@ -54,8 +54,7 @@ export default class BookmarkHelperService {
     return this._platformSvc;
   }
 
-  // TODO: don't accept native bookmark as param
-  bookmarkIsContainer(bookmark: Bookmark | NativeBookmarks.BookmarkTreeNode): boolean {
+  bookmarkIsContainer(bookmark: Bookmark): boolean {
     return (
       bookmark.title === BookmarkContainer.Menu ||
       bookmark.title === BookmarkContainer.Mobile ||
@@ -250,8 +249,8 @@ export default class BookmarkHelperService {
 
   getContainerByBookmarkId(id: number, bookmarks: Bookmark[]): Bookmark {
     // Check if the id corresponds to a container
-    const bookmark = this.findBookmarkById(id, bookmarks);
-    if (this.bookmarkIsContainer(bookmark as Bookmark)) {
+    const bookmark = this.findBookmarkById(id, bookmarks) as Bookmark;
+    if (this.bookmarkIsContainer(bookmark)) {
       return bookmark as Bookmark;
     }
 

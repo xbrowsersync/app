@@ -355,7 +355,7 @@ export default class WebExtBookmarkService implements BookmarkService {
       // Get parent bookmark and count containers
       return browser.bookmarks.getSubTree(parentId).then((subTree) => {
         const numContainers = subTree[0].children.filter((child, childIndex) => {
-          return childIndex < index && this.bookmarkHelperSvc.bookmarkIsContainer(child);
+          return childIndex < index && Object.values(nativeContainerIds).includes(child.id);
         }).length;
         return numContainers;
       });
@@ -599,7 +599,7 @@ export default class WebExtBookmarkService implements BookmarkService {
     changeData: AddNativeBookmarkChangeData
   ): ng.IPromise<Bookmark[]> {
     // Check if container was changed
-    return this.wasContainerChanged(changeData.nativeBookmark, bookmarks).then((changedBookmarkIsContainer) => {
+    return this.wasContainerChanged(changeData.nativeBookmark).then((changedBookmarkIsContainer) => {
       if (changedBookmarkIsContainer) {
         throw new Exceptions.ContainerChangedException();
       }
@@ -713,7 +713,7 @@ export default class WebExtBookmarkService implements BookmarkService {
     changeData: ModifyNativeBookmarkChangeData
   ): ng.IPromise<Bookmark[]> {
     // Check if container was changed
-    return this.wasContainerChanged(changeData.nativeBookmark, bookmarks).then((changedBookmarkIsContainer) => {
+    return this.wasContainerChanged(changeData.nativeBookmark).then((changedBookmarkIsContainer) => {
       if (changedBookmarkIsContainer) {
         throw new Exceptions.ContainerChangedException();
       }
@@ -759,139 +759,142 @@ export default class WebExtBookmarkService implements BookmarkService {
     bookmarks: Bookmark[],
     changeData: MoveNativeBookmarkChangeData
   ): ng.IPromise<Bookmark[]> {
-    // Check if moved bookmark is a container
-    return browser.bookmarks.get(changeData.id).then((results) => {
-      const movedBookmark = results[0];
-      if (this.bookmarkHelperSvc.bookmarkIsContainer(movedBookmark)) {
-        if (changeData.oldParentId !== changeData.parentId) {
-          // Container moved to a different folder
-          throw new Exceptions.ContainerChangedException();
-        }
-
-        // Container moved to a different position in same folder, skip sync
-        return;
-      }
-
-      // Get the moved bookmark and new parent ids from id mappings or if container use the existing id
-      return this.$q
-        .all([
-          this.bookmarkIdMapperSvc.get(changeData.id),
-          this.getContainerNameFromNativeId(changeData.parentId).then((parentNameAsContainer) => {
-            if (parentNameAsContainer) {
-              const container = this.bookmarkHelperSvc.getContainer(parentNameAsContainer, bookmarks, true);
-              return { syncedId: container.id };
-            }
-            return this.bookmarkIdMapperSvc.get(changeData.parentId);
-          })
-        ])
-        .then((idMappings) => {
-          const movedBookmarkMapping = idMappings[0];
-          const parentMapping = idMappings[1];
-
-          if (!movedBookmarkMapping && !parentMapping) {
-            // No mappings found, skip sync
-            this.logSvc.logInfo('No id mappings found, skipping sync');
-            return;
+    // Get native container ids
+    return this.getNativeContainerIds().then((nativeContainerIds) => {
+      // Check if moved bookmark is a container
+      return browser.bookmarks.get(changeData.id).then((results) => {
+        const movedBookmark = results[0];
+        if (Object.values(nativeContainerIds).includes(movedBookmark.id)) {
+          if (changeData.oldParentId !== changeData.parentId) {
+            // Container moved to a different folder
+            throw new Exceptions.ContainerChangedException();
           }
 
-          // Get the bookmark to be removed
-          // If no mapping exists then native bookmark will likely have been
-          //  created in toolbar container whilst not syncing toolbar option enabled
-          //  in which case create a new bookmark from the native bookmark
-          let changesMade = false;
-          return (!movedBookmarkMapping
-            ? this.createBookmarkFromNativeBookmarkId(changeData.id, bookmarks)
-            : this.$q
-                .resolve()
-                .then(
-                  () => this.bookmarkHelperSvc.findBookmarkById(movedBookmarkMapping.syncedId, bookmarks) as Bookmark
-                )
-          ).then((bookmarkToRemove) => {
-            // If old parent is mapped, remove the moved bookmark
-            let removeBookmarkPromise: ng.IPromise<Bookmark[]>;
-            if (!movedBookmarkMapping) {
-              // Moved bookmark not mapped, skip remove
-              removeBookmarkPromise = this.$q.resolve(bookmarks);
-            } else {
-              // Check if change should be synced then remove the bookmark
-              removeBookmarkPromise = this.$q((resolve, reject) => {
-                this.checkIfBookmarkChangeShouldBeSynced(bookmarkToRemove, bookmarks)
-                  .then((syncThisChange) => {
-                    if (!syncThisChange) {
-                      // Don't sync this change, return unmodified bookmarks
-                      return resolve(bookmarks);
-                    }
-                    return this.bookmarkHelperSvc
-                      .removeBookmarkById(movedBookmarkMapping.syncedId, bookmarks)
-                      .then((updatedBookmarks) => {
+          // Container moved to a different position in same folder, skip sync
+          return;
+        }
+
+        // Get the moved bookmark and new parent ids from id mappings or if container use the existing id
+        return this.$q
+          .all([
+            this.bookmarkIdMapperSvc.get(changeData.id),
+            this.getContainerNameFromNativeId(changeData.parentId).then((parentNameAsContainer) => {
+              if (parentNameAsContainer) {
+                const container = this.bookmarkHelperSvc.getContainer(parentNameAsContainer, bookmarks, true);
+                return { syncedId: container.id };
+              }
+              return this.bookmarkIdMapperSvc.get(changeData.parentId);
+            })
+          ])
+          .then((idMappings) => {
+            const movedBookmarkMapping = idMappings[0];
+            const parentMapping = idMappings[1];
+
+            if (!movedBookmarkMapping && !parentMapping) {
+              // No mappings found, skip sync
+              this.logSvc.logInfo('No id mappings found, skipping sync');
+              return;
+            }
+
+            // Get the bookmark to be removed
+            // If no mapping exists then native bookmark will likely have been
+            //  created in toolbar container whilst not syncing toolbar option enabled
+            //  in which case create a new bookmark from the native bookmark
+            let changesMade = false;
+            return (!movedBookmarkMapping
+              ? this.createBookmarkFromNativeBookmarkId(changeData.id, bookmarks)
+              : this.$q
+                  .resolve()
+                  .then(
+                    () => this.bookmarkHelperSvc.findBookmarkById(movedBookmarkMapping.syncedId, bookmarks) as Bookmark
+                  )
+            ).then((bookmarkToRemove) => {
+              // If old parent is mapped, remove the moved bookmark
+              let removeBookmarkPromise: ng.IPromise<Bookmark[]>;
+              if (!movedBookmarkMapping) {
+                // Moved bookmark not mapped, skip remove
+                removeBookmarkPromise = this.$q.resolve(bookmarks);
+              } else {
+                // Check if change should be synced then remove the bookmark
+                removeBookmarkPromise = this.$q((resolve, reject) => {
+                  this.checkIfBookmarkChangeShouldBeSynced(bookmarkToRemove, bookmarks)
+                    .then((syncThisChange) => {
+                      if (!syncThisChange) {
+                        // Don't sync this change, return unmodified bookmarks
+                        return resolve(bookmarks);
+                      }
+                      return this.bookmarkHelperSvc
+                        .removeBookmarkById(movedBookmarkMapping.syncedId, bookmarks)
+                        .then((updatedBookmarks) => {
+                          // Set flag to ensure update bookmarks are synced
+                          changesMade = true;
+                          resolve(updatedBookmarks);
+                        });
+                    })
+                    .catch(reject);
+                });
+              }
+              return removeBookmarkPromise
+                .then((bookmarksAfterRemoval) => {
+                  let addBookmarkPromise: ng.IPromise<Bookmark[]>;
+                  if (!parentMapping) {
+                    // New parent not mapped, skip add
+                    addBookmarkPromise = this.$q.resolve(bookmarksAfterRemoval);
+                  } else {
+                    // Add the bookmark then check if change should be synced
+                    addBookmarkPromise = this.countNativeContainersBeforeIndex(
+                      changeData.parentId,
+                      changeData.index
+                    ).then((numContainers) => {
+                      // Adjust the target index by the number of container folders then add the bookmark
+                      const index = changeData.index - numContainers;
+                      const bookmarkMetadata = this.bookmarkHelperSvc.extractBookmarkMetadata(bookmarkToRemove);
+                      const addBookmarkResult = this.addBookmark(
+                        bookmarkMetadata,
+                        parentMapping.syncedId,
+                        index,
+                        bookmarksAfterRemoval
+                      );
+                      addBookmarkResult.bookmark.id = bookmarkToRemove.id;
+                      return this.checkIfBookmarkChangeShouldBeSynced(
+                        addBookmarkResult.bookmark,
+                        addBookmarkResult.bookmarks
+                      ).then((syncThisChange) => {
+                        if (!syncThisChange) {
+                          // Don't sync this change, return bookmarks after removal processed
+                          return bookmarksAfterRemoval;
+                        }
+
                         // Set flag to ensure update bookmarks are synced
                         changesMade = true;
-                        resolve(updatedBookmarks);
-                      });
-                  })
-                  .catch(reject);
-              });
-            }
-            return removeBookmarkPromise
-              .then((bookmarksAfterRemoval) => {
-                let addBookmarkPromise: ng.IPromise<Bookmark[]>;
-                if (!parentMapping) {
-                  // New parent not mapped, skip add
-                  addBookmarkPromise = this.$q.resolve(bookmarksAfterRemoval);
-                } else {
-                  // Add the bookmark then check if change should be synced
-                  addBookmarkPromise = this.countNativeContainersBeforeIndex(
-                    changeData.parentId,
-                    changeData.index
-                  ).then((numContainers) => {
-                    // Adjust the target index by the number of container folders then add the bookmark
-                    const index = changeData.index - numContainers;
-                    const bookmarkMetadata = this.bookmarkHelperSvc.extractBookmarkMetadata(bookmarkToRemove);
-                    const addBookmarkResult = this.addBookmark(
-                      bookmarkMetadata,
-                      parentMapping.syncedId,
-                      index,
-                      bookmarksAfterRemoval
-                    );
-                    addBookmarkResult.bookmark.id = bookmarkToRemove.id;
-                    return this.checkIfBookmarkChangeShouldBeSynced(
-                      addBookmarkResult.bookmark,
-                      addBookmarkResult.bookmarks
-                    ).then((syncThisChange) => {
-                      if (!syncThisChange) {
-                        // Don't sync this change, return bookmarks after removal processed
-                        return bookmarksAfterRemoval;
-                      }
 
-                      // Set flag to ensure update bookmarks are synced
-                      changesMade = true;
-
-                      // Add new id mapping for moved bookmark
-                      if (movedBookmarkMapping) {
-                        // If moved bookmark was already mapped, no need to update id mappings
-                        return addBookmarkResult.bookmarks;
-                      }
-                      const idMapping = this.bookmarkIdMapperSvc.createMapping(
-                        addBookmarkResult.bookmark.id,
-                        changeData.id
-                      );
-                      return this.bookmarkIdMapperSvc.add(idMapping).then(() => {
-                        return addBookmarkResult.bookmarks;
+                        // Add new id mapping for moved bookmark
+                        if (movedBookmarkMapping) {
+                          // If moved bookmark was already mapped, no need to update id mappings
+                          return addBookmarkResult.bookmarks;
+                        }
+                        const idMapping = this.bookmarkIdMapperSvc.createMapping(
+                          addBookmarkResult.bookmark.id,
+                          changeData.id
+                        );
+                        return this.bookmarkIdMapperSvc.add(idMapping).then(() => {
+                          return addBookmarkResult.bookmarks;
+                        });
                       });
                     });
-                  });
-                }
-                return addBookmarkPromise;
-              })
-              .then((updatedBookmarks) => {
-                if (!changesMade) {
-                  // No changes made, skip sync
-                  return;
-                }
-                return updatedBookmarks;
-              });
+                  }
+                  return addBookmarkPromise;
+                })
+                .then((updatedBookmarks) => {
+                  if (!changesMade) {
+                    // No changes made, skip sync
+                    return;
+                  }
+                  return updatedBookmarks;
+                });
+            });
           });
-        });
+      });
     });
   }
 
@@ -900,7 +903,7 @@ export default class WebExtBookmarkService implements BookmarkService {
     changeData: RemoveNativeBookmarkChangeData
   ): ng.IPromise<Bookmark[]> {
     // Check if container was changed
-    return this.wasContainerChanged(changeData.nativeBookmark, bookmarks).then((changedBookmarkIsContainer) => {
+    return this.wasContainerChanged(changeData.nativeBookmark).then((changedBookmarkIsContainer) => {
       if (changedBookmarkIsContainer) {
         throw new Exceptions.ContainerChangedException();
       }
@@ -1100,7 +1103,10 @@ export default class WebExtBookmarkService implements BookmarkService {
   syncNativeBookmarkRemoved(id?: string, removeInfo?: NativeBookmarks.OnRemovedRemoveInfoType): ng.IPromise<void> {
     // Create change info
     const data: RemoveNativeBookmarkChangeData = {
-      nativeBookmark: removeInfo.node
+      nativeBookmark: {
+        ...removeInfo.node,
+        parentId: removeInfo.parentId
+      }
     };
     const changeInfo: BookmarkChange = {
       changeData: data,
@@ -1112,10 +1118,36 @@ export default class WebExtBookmarkService implements BookmarkService {
     return this.$q.resolve();
   }
 
-  wasContainerChanged(
-    changedNativeBookmark: NativeBookmarks.BookmarkTreeNode,
-    bookmarks: Bookmark[]
-  ): ng.IPromise<boolean> {
-    throw new Exceptions.NotImplementedException();
+  wasContainerChanged(changedNativeBookmark: NativeBookmarks.BookmarkTreeNode): ng.IPromise<boolean> {
+    return this.getNativeContainerIds().then((nativeContainerIds) => {
+      // If parent is not other bookmarks, no container was changed
+      const otherBookmarksId = nativeContainerIds[BookmarkContainer.Other];
+      if ((changedNativeBookmark as NativeBookmarks.BookmarkTreeNode).parentId !== otherBookmarksId) {
+        return false;
+      }
+
+      // If any native container ids are undefined, container was removed
+      if (Object.values(nativeContainerIds).filter(angular.isUndefined).length > 0) {
+        return true;
+      }
+
+      return browser.bookmarks
+        .getChildren(otherBookmarksId)
+        .then((children) => {
+          // Get all native bookmarks in other bookmarks that are unsupported containers
+          const containers = children.filter((x) => {
+            return this.unsupportedContainers.find((y) => {
+              return y === x.title;
+            });
+          });
+
+          // Check for duplicates
+          return containers.length === new Set(containers).size;
+        })
+        .catch((err) => {
+          this.logSvc.logInfo(`Failed to detect whether container changed: ${JSON.stringify(changedNativeBookmark)}`);
+          throw new Exceptions.FailedGetNativeBookmarksException(undefined, err);
+        });
+    });
   }
 }

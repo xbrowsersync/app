@@ -592,12 +592,4 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
     this.syncChange(changeInfo);
     return this.$q.resolve();
   }
-
-  wasContainerChanged(
-    changedNativeBookmark: NativeBookmarks.BookmarkTreeNode,
-    bookmarks: Bookmark[]
-  ): ng.IPromise<boolean> {
-    // Check based on title
-    return this.$q.resolve(this.bookmarkHelperSvc.bookmarkIsContainer(changedNativeBookmark));
-  }
 }
