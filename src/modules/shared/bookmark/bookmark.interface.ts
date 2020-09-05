@@ -21,7 +21,8 @@ export type ChangeData =
   | ModifyNativeBookmarkChangeData
   | MoveNativeBookmarkChangeData
   | RemoveBookmarkChangeData
-  | RemoveNativeBookmarkChangeData;
+  | RemoveNativeBookmarkChangeData
+  | ReorderNativeBookmarkChangeData;
 
 export interface BookmarkChange {
   changeData: ChangeData;
@@ -68,12 +69,21 @@ export interface NativeBookmarkWithAdditionalMetadata extends NativeBookmarks.Bo
   tags?: string[];
 }
 
+export interface OnChildrenReorderedReorderInfoType {
+  childIds: string[];
+}
+
 export interface RemoveBookmarkChangeData {
   id: number;
 }
 
 export interface RemoveNativeBookmarkChangeData {
   nativeBookmark: NativeBookmarks.BookmarkTreeNode;
+}
+
+export interface ReorderNativeBookmarkChangeData {
+  childIds: string[];
+  parentId: string;
 }
 
 export interface UpdateBookmarksResult {

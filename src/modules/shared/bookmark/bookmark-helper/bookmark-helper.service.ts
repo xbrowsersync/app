@@ -54,6 +54,7 @@ export default class BookmarkHelperService {
     return this._platformSvc;
   }
 
+  // TODO: don't accept native bookmark as param
   bookmarkIsContainer(bookmark: Bookmark | NativeBookmarks.BookmarkTreeNode): boolean {
     return (
       bookmark.title === BookmarkContainer.Menu ||

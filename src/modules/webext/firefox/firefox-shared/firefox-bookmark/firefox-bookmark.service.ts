@@ -208,6 +208,41 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
     });
   }
 
+  disableEventListeners(): ng.IPromise<void> {
+    return this.$q
+      .all([
+        browser.bookmarks.onCreated.removeListener(this.onNativeBookmarkCreated),
+        browser.bookmarks.onRemoved.removeListener(this.onNativeBookmarkRemoved),
+        browser.bookmarks.onChanged.removeListener(this.onNativeBookmarkChanged),
+        browser.bookmarks.onMoved.removeListener(this.onNativeBookmarkMoved)
+      ])
+      .then(() => {})
+      .catch((err) => {
+        this.logSvc.logWarning('Failed to disable event listeners');
+        throw new Exceptions.UnspecifiedException(undefined, err);
+      });
+  }
+
+  enableEventListeners(): ng.IPromise<void> {
+    return this.disableEventListeners()
+      .then(() => {
+        return this.utilitySvc.isSyncEnabled();
+      })
+      .then((syncEnabled) => {
+        if (!syncEnabled) {
+          return;
+        }
+        browser.bookmarks.onCreated.addListener(this.onNativeBookmarkCreated);
+        browser.bookmarks.onRemoved.addListener(this.onNativeBookmarkRemoved);
+        browser.bookmarks.onChanged.addListener(this.onNativeBookmarkChanged);
+        browser.bookmarks.onMoved.addListener(this.onNativeBookmarkMoved);
+      })
+      .catch((err) => {
+        this.logSvc.logWarning('Failed to enable event listeners');
+        throw new Exceptions.UnspecifiedException(undefined, err);
+      });
+  }
+
   ensureContainersExist(bookmarks: Bookmark[]): Bookmark[] {
     if (angular.isUndefined(bookmarks)) {
       return;

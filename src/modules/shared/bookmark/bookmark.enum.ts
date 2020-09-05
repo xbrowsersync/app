@@ -1,5 +1,6 @@
 enum BookmarkChangeType {
   Add = 'add',
+  ChildrenReordered = 'childrenReordered',
   Modify = 'modify',
   Move = 'move',
   Remove = 'remove'

@@ -11,7 +11,9 @@ import {
   BookmarkService,
   ModifyNativeBookmarkChangeData,
   MoveNativeBookmarkChangeData,
+  OnChildrenReorderedReorderInfoType,
   RemoveNativeBookmarkChangeData,
+  ReorderNativeBookmarkChangeData,
   UpdateBookmarksResult
 } from '../../../shared/bookmark/bookmark.interface';
 import * as Exceptions from '../../../shared/exception/exception';
@@ -449,38 +451,11 @@ export default class WebExtBookmarkService implements BookmarkService {
   }
 
   disableEventListeners(): ng.IPromise<void> {
-    return this.$q
-      .all([
-        browser.bookmarks.onCreated.removeListener(this.onNativeBookmarkCreated),
-        browser.bookmarks.onRemoved.removeListener(this.onNativeBookmarkRemoved),
-        browser.bookmarks.onChanged.removeListener(this.onNativeBookmarkChanged),
-        browser.bookmarks.onMoved.removeListener(this.onNativeBookmarkMoved)
-      ])
-      .then(() => {})
-      .catch((err) => {
-        this.logSvc.logWarning('Failed to disable event listeners');
-        throw new Exceptions.UnspecifiedException(undefined, err);
-      });
+    throw new Exceptions.NotImplementedException();
   }
 
   enableEventListeners(): ng.IPromise<void> {
-    return this.disableEventListeners()
-      .then(() => {
-        return this.utilitySvc.isSyncEnabled();
-      })
-      .then((syncEnabled) => {
-        if (!syncEnabled) {
-          return;
-        }
-        browser.bookmarks.onCreated.addListener(this.onNativeBookmarkCreated);
-        browser.bookmarks.onRemoved.addListener(this.onNativeBookmarkRemoved);
-        browser.bookmarks.onChanged.addListener(this.onNativeBookmarkChanged);
-        browser.bookmarks.onMoved.addListener(this.onNativeBookmarkMoved);
-      })
-      .catch((err) => {
-        this.logSvc.logWarning('Failed to enable event listeners');
-        throw new Exceptions.UnspecifiedException(undefined, err);
-      });
+    throw new Exceptions.NotImplementedException();
   }
 
   ensureContainersExist(bookmarks: Bookmark[]): Bookmark[] {
@@ -680,6 +655,43 @@ export default class WebExtBookmarkService implements BookmarkService {
           );
         });
     });
+  }
+
+  processChangeTypeChildrenReorderedOnBookmarks(
+    bookmarks: Bookmark[],
+    changeData: ReorderNativeBookmarkChangeData
+  ): ng.IPromise<Bookmark[]> {
+    // Check if parent bookmark is a container
+    return this.getNativeContainerIds()
+      .then((nativeContainerIds) => {
+        const containerName = Object.keys(nativeContainerIds).find(
+          (x) => nativeContainerIds[x] === changeData.parentId
+        );
+
+        // If parent is not a contianer, find bookmark using mapped id
+        if (angular.isUndefined(containerName)) {
+          return this.bookmarkIdMapperSvc
+            .get(changeData.parentId)
+            .then((idMapping) => this.bookmarkHelperSvc.findBookmarkById(idMapping.syncedId, bookmarks));
+        }
+
+        // Otherwise get the relavant container
+        return this.$q.resolve().then(() => this.bookmarkHelperSvc.getContainer(containerName, bookmarks));
+      })
+      .then((parentBookmark) => {
+        // Retrieve child id mappings using change data
+        return this.$q
+          .all(changeData.childIds.map((childId) => this.bookmarkIdMapperSvc.get(childId)))
+          .then((idMappings) => {
+            // Reorder children as per change data
+            const childIds = idMappings.map((idMapping) => idMapping.syncedId);
+            parentBookmark.children = childIds.map<Bookmark>((childId) => {
+              return (parentBookmark.children as Bookmark[]).find((x) => x.id === childId);
+            });
+
+            return bookmarks;
+          });
+      });
   }
 
   processChangeTypeAddOnNativeBookmarks(id: number, createInfo: BookmarkMetadata): ng.IPromise<void> {
@@ -951,6 +963,8 @@ export default class WebExtBookmarkService implements BookmarkService {
       switch (currentEvent.changeType) {
         case BookmarkChangeType.Add:
           return this.syncNativeBookmarkCreated(...currentEvent.eventArgs);
+        case BookmarkChangeType.ChildrenReordered:
+          return this.syncNativeBookmarkChildrenReordered(...currentEvent.eventArgs);
         case BookmarkChangeType.Remove:
           return this.syncNativeBookmarkRemoved(...currentEvent.eventArgs);
         case BookmarkChangeType.Move:
@@ -977,6 +991,11 @@ export default class WebExtBookmarkService implements BookmarkService {
     switch (changeInfo.type) {
       case BookmarkChangeType.Add:
         return this.processChangeTypeAddOnBookmarks(bookmarks, changeInfo.changeData as AddNativeBookmarkChangeData);
+      case BookmarkChangeType.ChildrenReordered:
+        return this.processChangeTypeChildrenReorderedOnBookmarks(
+          bookmarks,
+          changeInfo.changeData as ReorderNativeBookmarkChangeData
+        );
       case BookmarkChangeType.Modify:
         return this.processChangeTypeModifyOnBookmarks(
           bookmarks,
@@ -1049,6 +1068,25 @@ export default class WebExtBookmarkService implements BookmarkService {
 
   syncNativeBookmarkChanged(id?: string): ng.IPromise<void> {
     throw new Exceptions.NotImplementedException();
+  }
+
+  syncNativeBookmarkChildrenReordered(
+    id?: string,
+    reorderInfo?: OnChildrenReorderedReorderInfoType
+  ): ng.IPromise<void> {
+    // Create change info
+    const data: ReorderNativeBookmarkChangeData = {
+      childIds: reorderInfo.childIds,
+      parentId: id
+    };
+    const changeInfo: BookmarkChange = {
+      changeData: data,
+      type: BookmarkChangeType.ChildrenReordered
+    };
+
+    // Queue sync
+    this.syncChange(changeInfo);
+    return this.$q.resolve();
   }
 
   syncNativeBookmarkCreated(id?: string, nativeBookmark?: NativeBookmarks.BookmarkTreeNode): ng.IPromise<void> {
