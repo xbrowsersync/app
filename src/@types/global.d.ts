@@ -26,5 +26,6 @@ interface CordovaPlugins {
 }
 
 interface Navigator {
+  brave: any;
   globalization: any;
 }

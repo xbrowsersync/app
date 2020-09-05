@@ -8,7 +8,7 @@ import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../shared/exception/exception';
 import Globals from '../../shared/global-shared.constants';
-import { MessageCommand } from '../../shared/global-shared.enum';
+import { BrowserName, MessageCommand } from '../../shared/global-shared.enum';
 import { Message, PlatformService } from '../../shared/global-shared.interface';
 import LogService from '../../shared/log/log.service';
 import NetworkService from '../../shared/network/network.service';
@@ -252,23 +252,24 @@ export default class WebExtBackgroundService {
         this.platformSvc.getAppVersion(),
         this.settingsSvc.all(),
         this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId, StoreKey.SyncVersion]),
+        this.upgradeSvc.checkIfUpgradeRequired(this.getCurrentVersion()),
         this.utilitySvc.getServiceUrl(),
-        this.utilitySvc.isSyncEnabled(),
-        this.upgradeSvc.checkIfUpgradeRequired(this.getCurrentVersion())
+        this.utilitySvc.isSyncEnabled()
       ])
       .then((data) => {
         const appVersion = data[0];
         const settings = data[1];
         const storeContent = data[2];
-        const serviceUrl = data[3];
-        const syncEnabled = data[4];
-        const upgradeRequired = data[5];
+        const upgradeRequired = data[3];
+        const serviceUrl = data[4];
+        const syncEnabled = data[5];
 
         // Add useful debug info to beginning of trace log
         const debugInfo = angular.copy(storeContent) as any;
         debugInfo.appVersion = appVersion;
         debugInfo.checkForAppUpdates = settings.checkForAppUpdates;
         debugInfo.platform = detectBrowser.detect();
+        debugInfo.platform.name = this.utilitySvc.isBraveBrowser() ? BrowserName.Brave : debugInfo.platform.name;
         debugInfo.serviceUrl = serviceUrl;
         debugInfo.syncBookmarksToolbar = settings.syncBookmarksToolbar;
         debugInfo.syncEnabled = syncEnabled;

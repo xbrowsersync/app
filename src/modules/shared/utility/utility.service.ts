@@ -147,6 +147,10 @@ export default class UtilityService {
     }
   }
 
+  isBraveBrowser(): boolean {
+    return !angular.isUndefined(window.navigator.brave);
+  }
+
   isMobilePlatform(platformName: string): boolean {
     return platformName === PlatformType.Android;
   }

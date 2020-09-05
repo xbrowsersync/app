@@ -1,4 +1,5 @@
 enum BrowserName {
+  Brave = 'brave',
   Edge = 'edge-chromium'
 }
 
