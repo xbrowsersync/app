@@ -1,3 +1,7 @@
+enum BrowserName {
+  Edge = 'edge-chromium'
+}
+
 enum MessageCommand {
   SyncBookmarks = 'SYNC_BOOKMARKS',
   RestoreBookmarks = 'RESTORE_BOOKMARKS',
@@ -15,4 +19,4 @@ enum PlatformType {
   Firefox = 'firefox'
 }
 
-export { MessageCommand, PlatformType };
+export { BrowserName, MessageCommand, PlatformType };

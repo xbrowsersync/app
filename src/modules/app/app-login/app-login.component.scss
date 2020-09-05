@@ -80,6 +80,11 @@ app-login {
         font-size: 1.1rem;
       }
 
+      &::-ms-reveal,
+      &::-ms-clear {
+        display: none;
+      }
+
       &[name='newServiceUrl'] {
         font-family: $font-stack-regular;
         font-size: 1.1rem;

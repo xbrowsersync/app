@@ -140,7 +140,7 @@ export default class WebExtPlatformService implements PlatformService {
   }
 
   getNewTabUrl(): string {
-    return 'chrome://newtab/';
+    throw new Exceptions.NotImplementedException();
   }
 
   getPageMetadata(getFullMetadata = true, pageUrl?: string): ng.IPromise<WebpageMetadata> {

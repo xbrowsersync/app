@@ -683,6 +683,7 @@ export default class WebExtBookmarkService implements BookmarkService {
         return this.$q
           .all(changeData.childIds.map((childId) => this.bookmarkIdMapperSvc.get(childId)))
           .then((idMappings) => {
+            // TODO: account for containers here
             // Reorder children as per change data
             const childIds = idMappings.map((idMapping) => idMapping.syncedId);
             parentBookmark.children = childIds.map<Bookmark>((childId) => {
