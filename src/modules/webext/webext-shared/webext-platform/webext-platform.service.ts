@@ -5,7 +5,7 @@ import AlertService from '../../../shared/alert/alert.service';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../../shared/exception/exception';
 import Globals from '../../../shared/global-shared.constants';
-import { MessageCommand } from '../../../shared/global-shared.enum';
+import { BrowserName, MessageCommand, PlatformType } from '../../../shared/global-shared.enum';
 import { I18nObject, Message, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
 import LogService from '../../../shared/log/log.service';
 import StoreService from '../../../shared/store/store.service';
@@ -124,10 +124,15 @@ export default class WebExtPlatformService implements PlatformService {
 
   getI18nString(i18nObj: I18nObject): string {
     let i18nStr: string;
+    let platformName = this.platformName.toString();
+    if (platformName === PlatformType.Chromium) {
+      const browserName = this.utilitySvc.getBrowserName();
+      platformName = browserName !== BrowserName.Chrome ? browserName : platformName;
+    }
 
     // If the i18n object contains a string for this platform then use that, otherwise use the default
-    if (Object.keys(i18nObj).includes(this.platformName)) {
-      i18nStr = browser.i18n.getMessage(`${i18nObj.key}_${this.platformName}`);
+    if (Object.keys(i18nObj).includes(platformName)) {
+      i18nStr = browser.i18n.getMessage(`${i18nObj.key}_${platformName}`);
     } else {
       i18nStr = browser.i18n.getMessage(`${i18nObj.key}_Default`);
     }

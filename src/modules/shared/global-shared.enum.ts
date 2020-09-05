@@ -1,6 +1,7 @@
 enum BrowserName {
   Brave = 'brave',
-  Edge = 'edge-chromium'
+  Chrome = 'chrome',
+  Edge = 'edge'
 }
 
 enum MessageCommand {

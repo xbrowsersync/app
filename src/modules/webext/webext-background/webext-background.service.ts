@@ -8,7 +8,7 @@ import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../shared/exception/exception';
 import Globals from '../../shared/global-shared.constants';
-import { BrowserName, MessageCommand } from '../../shared/global-shared.enum';
+import { MessageCommand } from '../../shared/global-shared.enum';
 import { Message, PlatformService } from '../../shared/global-shared.interface';
 import LogService from '../../shared/log/log.service';
 import NetworkService from '../../shared/network/network.service';
@@ -269,7 +269,7 @@ export default class WebExtBackgroundService {
         debugInfo.appVersion = appVersion;
         debugInfo.checkForAppUpdates = settings.checkForAppUpdates;
         debugInfo.platform = detectBrowser.detect();
-        debugInfo.platform.name = this.utilitySvc.isBraveBrowser() ? BrowserName.Brave : debugInfo.platform.name;
+        debugInfo.platform.name = this.utilitySvc.getBrowserName();
         debugInfo.serviceUrl = serviceUrl;
         debugInfo.syncBookmarksToolbar = settings.syncBookmarksToolbar;
         debugInfo.syncEnabled = syncEnabled;

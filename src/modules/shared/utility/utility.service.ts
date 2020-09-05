@@ -4,11 +4,12 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
+import * as detectBrowser from 'detect-browser';
 import { AppEventType } from '../../app/app.enum';
 import * as Exceptions from '../exception/exception';
 import { ExceptionHandler } from '../exception/exception.interface';
 import Globals from '../global-shared.constants';
-import { PlatformType } from '../global-shared.enum';
+import { BrowserName, PlatformType } from '../global-shared.enum';
 import { Url } from '../global-shared.interface';
 import LogService from '../log/log.service';
 import NetworkService from '../network/network.service';
@@ -95,6 +96,11 @@ export default class UtilityService {
 
   get24hrTimeFromDate(date = new Date()): string {
     return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  getBrowserName(): string {
+    const browserName = detectBrowser.detect().name.replace('edge-chromium', BrowserName.Edge);
+    return this.isBraveBrowser() ? BrowserName.Brave : browserName;
   }
 
   getDateTimeString(date: Date): string {

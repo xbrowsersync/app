@@ -10,8 +10,14 @@ const convertI18nForWebExt = (i18n) => {
     }
 
     acc[`${i18n[val].key}_Default`] = { message: i18n[val].default };
+    if (Object.keys(i18n[val]).includes('brave')) {
+      acc[`${i18n[val].key}_Brave`] = { message: i18n[val].brave };
+    }
     if (Object.keys(i18n[val]).includes('chromium')) {
       acc[`${i18n[val].key}_Chromium`] = { message: i18n[val].chromium };
+    }
+    if (Object.keys(i18n[val]).includes('edge')) {
+      acc[`${i18n[val].key}_Edge`] = { message: i18n[val].edge };
     }
     if (Object.keys(i18n[val]).includes('firefox')) {
       acc[`${i18n[val].key}_Firefox`] = { message: i18n[val].firefox };
