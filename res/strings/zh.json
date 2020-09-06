@@ -386,8 +386,8 @@
       },
       "BeforeYouBegin": {
         "default": "<h4>开始之前</h4> <p> xBrowserSync 会修改本地浏览器数据，因此最好备份备份书签和其他浏览器数据以防万一，若使用其他浏览器同步服务或工具(例如<a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'> Google Chrome Sync </a>)，请禁用它们以避免冲突。</p>",
-        "brave": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) please disable them to avoid conflicts.</p>",
-        "edge": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) please disable them to avoid conflicts.</p>",
+        "brave": "<h4>开始之前</h4> <p> xBrowserSync会修改本地浏览器数据，因此最好备份备份书签和其他浏览器数据，以防万一，若使用其他任何浏览器同步服务或工具(例如<a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'> Brave Sync </a>)，请禁用它们以避免冲突。</p>",
+        "edge": "<h4>开始之前</h4> <p> xBrowserSync会修改本地浏览器数据，因此最好备份备份书签和其他浏览器数据，以防万一，若使用其他任何浏览器同步服务或工具( 例如<a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'> Microsoft Edge Sync </a>)，请禁用它们以避免冲突。</p>",
         "firefox": "<h4>开始之前</h4> <p> xBrowserSync 会修改本地浏览器数据，因此最好备份备份书签和其他浏览器数据以防万一，若使用其他浏览器同步服务或工具(例如<a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'> Firefox Sync </a>)，请禁用它们以避免冲突。</p>"
       },
       "ExistingId": {
@@ -522,7 +522,7 @@
           },
           "Content": {
             "default": "将您的浏览器数据与 xBrowserSync 同步，而其他书签同步工具(如 <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>)正在激活，可能会导致重复并可能损坏数据。 请在继续之前禁用它们。",
-            "brave": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
+            "brave": "在其他书签同步工具(例如<a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'> Brave Sync </a>)处于活动状态的同时，将浏览器数据与xBrowserSync同步。 可能导致重复并可能损坏数据。 请先禁用它们，然后再继续。",
             "edge": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
             "firefox": "将您的浏览器数据与 xBrowserSync 同步，而其他书签同步工具(如 <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>)正在激活，可能会导致重复并可能损坏数据。 请在继续之前禁用它们。"
           }
