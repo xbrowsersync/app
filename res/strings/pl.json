@@ -11,7 +11,7 @@
     },
     "AppUpdated": {
       "Title": {
-        "default": "Updated to"
+        "default": "Zaktualizowano do"
       },
       "Message": {
         "default": "xBrowserSync został zaktualizowany o najnowsze funkcje i poprawki. Kliknij aby uzyskać informacje o wydaniu."
@@ -66,7 +66,7 @@
         "default": "Inne zakładki"
       },
       "Toolbar": {
-        "default": "Toolbar bookmarks"
+        "default": "Pasek zakładek"
       }
     }
   },
@@ -167,13 +167,13 @@
       "default": "Nie można pobrać aktualizacji"
     },
     "FailedRestoreData_Message": {
-      "default": "The backup data provided is not in an expected format."
+      "default": "Dostarczone dane kopii zapasowej nie są w oczekiwanym formacie."
     },
     "FailedRestoreData_Title": {
-      "default": "Unable to restore data"
+      "default": "Nie można zaimportować danych"
     },
     "FailedShareUrlNotSynced_Title": {
-      "default": "You must be synced to add a bookmark"
+      "default": "Musisz być zsynchronizowany, aby dodać zakładkę"
     },
     "FailedShareUrl_Title": {
       "default": "Unable to retrieve shared bookmark URL"
@@ -182,19 +182,19 @@
       "default": "Check your network connection and try again."
     },
     "HttpRequestFailed_Title": {
-      "default": "Connection to service lost"
+      "default": "Połączenie z serwerem zostało utracone"
     },
     "InvalidCredentials_Message": {
       "default": "Check that your sync ID, password and service URL have been entered correctly."
     },
     "InvalidCredentials_Title": {
-      "default": "Invalid credentials"
+      "default": "Nieprawidłowe dane logowania"
     },
     "InvalidService_Message": {
-      "default": "The service URL is not a valid xBrowserSync service."
+      "default": "Adres URL usługi nie jest poprawną usługą xBrowserSync."
     },
     "InvalidService_Title": {
-      "default": "Invalid xBrowserSync service"
+      "default": "Nieprawidłowa usługa xBrowserSync"
     },
     "LocalContainerNotFound_Message": {
       "default": "Possible corrupt browser profile, try creating a new profile as it may resolve the issue."
@@ -206,7 +206,7 @@
       "default": "Local data has been refreshed, please reapply last change."
     },
     "LocalSyncError_Title": {
-      "default": "Sync error"
+      "default": "Błąd synchronizacji"
     },
     "MissingClientData_Message": {
       "default": "Unable to find stored credentials. Re-enable sync and try again."
@@ -218,7 +218,7 @@
       "default": "Ensure you have provided a valid xBrowserSync back up before restoring."
     },
     "NoDataToRestore_Title": {
-      "default": "No data to restore"
+      "default": "Brak danych do przywrócenia"
     },
     "NotAcceptingNewSyncs_Message": {
       "default": "Switch to a different service or try again later."
@@ -242,7 +242,7 @@
       "default": "Check permission has been granted and try again."
     },
     "ScanFailed_Title": {
-      "default": "Scan failed"
+      "default": "Skanowanie nie powiodło się"
     },
     "ServiceOffline_Message": {
       "default": "The xBrowserSync service is currently offline, try again later."
@@ -376,7 +376,7 @@
     },
     "Help": {
       "AddingBookmarks": {
-        "default": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s “Bookmark this page” button as normal and xBrowserSync will automatically populate the bookmark’s properties (optional permissions must be granted for this to work, check the Settings panel).</p>",
+        "default": "<h4>Dodawanie zakładki</h4><p>Dodaj do zakładek bieżącą stronę klikając ikonę zakładki w panelu wyszukiwania. Właściwości zakładki zostaną automatycznie wypełnione, w przeciwnym razie dodaj opis i niektóre tagi, aby zapewnić lepsze wyniki wyszukiwania.</p><p>Alternatywnie, po prostu kliknij przycisk \"Dodaj tę stronę\" do zakładki jako normalny, a xBrowserSync automatycznie wypełni właściwości zakładki (należy przyznać uprawnienia opcjonalne do działania, sprawdź panel ustawień).</p>",
         "android": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be fetched for you, otherwise add a description and some tags to ensure better search results.</p>",
         "firefox": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s “Bookmark this page” button as normal and xBrowserSync will automatically populate the bookmark’s properties.</p>"
       },
@@ -409,7 +409,7 @@
         "firefox": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks toolbar and bookmarks library, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p><p>Please note however, as Firefox’s bookmarks API does not yet support accessing native bookmark tags, any existing tags will be lost when syncing and tags added via xBrowserSync will not be saved as native tags.</p>"
       },
       "Previous": {
-        "default": "Previous"
+        "default": "Wróć"
       },
       "Searching": {
         "default": "<h4>Searching your bookmarks</h4><p>Once synced, simply press Enter to display your recent bookmarks or type some keywords or a URL to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>To edit or delete a bookmark, hover over the bookmark and click the now visible edit icon next to the bookmark’s title.</p>",
@@ -433,27 +433,27 @@
     "Login": {
       "GetSyncId": {
         "Title": {
-          "default": "Need a sync ID?"
+          "default": "Czy potrzebujesz ID synchronizacji?"
         },
         "Content": {
-          "default": "Download the xBrowserSync desktop browser extension and create a new sync to access your bookmarks here."
+          "default": "Pobierz rozszerzenie xBrowserSync dla przeglądarki desktop i utwórz nową synchronizację, aby uzyskać dostęp do jej zakładek."
         }
       },
       "Password": {
         "Confirm": {
-          "default": "Confirm password"
+          "default": "Potwierdź hasło"
         },
         "Existing": {
-          "default": "Your encryption password"
+          "default": "Twoje hasło szyfrowania"
         },
         "Label": {
-          "default": "Encryption password"
+          "default": "Hasło szyfrowania"
         },
         "New": {
-          "default": "Enter an encryption password"
+          "default": "Ustaw hasło do szyfrowania"
         },
         "Show": {
-          "default": "Reveal password"
+          "default": "Pokaż hasło"
         }
       },
       "Scan": {
@@ -878,25 +878,25 @@
         "default": "Version"
       },
       "NotAvailable": {
-        "default": "Settings available when sync is enabled."
+        "default": "Ustawienia dostępne tylko gdy synchronizacja jest włączona."
       },
       "FileDownloaded": {
-        "default": "If the file did not download automatically, right click on the link below and “Save link as...”.",
-        "android": "File saved as {fileName}."
+        "default": "Jeśli plik nie został pobrany automatycznie, kliknij prawym przyciskiem myszy na poniższy link i wybierz \"Zapisz link jako...\".",
+        "android": "Plik zapisany jako {fileName}."
       },
       "Support": {
-        "default": "Support xBrowserSync"
+        "default": "Wspomóż xBrowserSync"
       }
     },
     "Support": {
       "Title": {
-        "default": "Support xBrowserSync!"
+        "default": "Wspomóż xBrowserSync!"
       },
       "Content": {
-        "default": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains an effective tool in protecting our privacy and productivity against the rot of big tech!</p>"
+        "default": "<p>Chcemy sprawić, by xBrowserSync stał się najlepszym narzędziem synchronizacji przeglądarek, ale wciąż pozostaje wiele do zrobienia:</p><ul><li>Dodanie synchronizacji kart przeglądarki i historii przeglądania</li><li>Wsparcie wszystkich najpopularniejszych przeglądarek desktopowych </li><li>Tłumaczenie na inne języki</li><li>i <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>więcej</a>!</li></ul><p>Tylko z Twoim wsparciem możemy nadal rozwijać xBrowserSync i zapewnić, że pozostanie on skutecznym narzędziem ochrony prywatności i wydajności na przekór gigantom technologicznym!</p>"
       },
       "Cryptos": {
-        "default": "Cryptos"
+        "default": "Kryptowaluta"
       },
       "Liberapay": {
         "default": "Liberapay"
@@ -907,21 +907,21 @@
     },
     "Updated": {
       "Title": {
-        "default": "Updated to"
+        "default": "Zaktualizowano do"
       },
       "Content": {
-        "default": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
+        "default": "xBrowserSync został zaktualizowany najnowszymi funkcjami i poprawkami. Aby uzyskać więcej informacji o zmianach zawartych w tej wersji, sprawdź informacje o wydaniu."
       }
     },
     "Working": {
       "Restoring": {
-        "default": "Restoring"
+        "default": "Odzyskiwanie"
       },
       "Reverting": {
-        "default": "Reverting"
+        "default": "Przywracanie"
       },
       "Syncing": {
-        "default": "Syncing"
+        "default": "Synchronizacja"
       }
     }
   }
