@@ -6,7 +6,7 @@
       },
       "Message": {
         "default": "{version} está disponível para download. Clique para maiores informações.",
-        "android": "xBrowserSync {version} está disponível para download"
+        "android": "xBrowserSync {version} está disponível para download."
       }
     },
     "AppUpdated": {
@@ -291,7 +291,7 @@
         "default": "Problema na conexão"
       },
       "Loading": {
-        "default": "Verificando..."
+        "default": "Verificando"
       },
       "NoNewSyncs": {
         "default": "Serviço não aceita novas sincronizações"
@@ -388,7 +388,7 @@
         "default": "<h4>Antes de começar o</h4><p>xBrowserSync modifica os dados do seu navegador local para que seja uma boa ideia fazer o backup dos seus favoritos e de outros dados do navegador para o caso, e se você estiver usando qualquer outro navegador de sincronização ou ferramentas (como o <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>), desative-os para evitar conflitos.</p>",
         "brave": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) please disable them to avoid conflicts.</p>",
         "edge": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) please disable them to avoid conflicts.</p>",
-        "firefox": "<h4>Antes de começar o</h4><p>xBrowserSync modifica os dados do seu navegador local para que seja uma boa ideia fazer o backup dos seus favoritos e de outros dados do navegador para o caso, e se você estiver usando qualquer outro navegador de sincronização ou ferramentas (como o <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Google Chrome Sync</a>), desative-os para evitar conflitos.</p>"
+        "firefox": "<h4>Antes de começar o</h4><p>xBrowserSync modifica os dados do seu navegador local para que seja uma boa ideia fazer o backup dos seus favoritos e de outros dados do navegador para o caso, e se você estiver usando qualquer outro navegador de sincronização ou ferramentas (como o <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>), desative-os para evitar conflitos.</p>"
       },
       "ExistingId": {
         "default": "<h4>Sincronizando com seu ID existente</h4><p>Clique em \"Já tem um ID de sincronização?\" para inserir seu ID e senha de sincronização existentes. Se o seu ID de sincronização foi criado em um serviço diferente do exibido, então mude para esse serviço antes de tentar sincronizar.</p><p>xBrowserSync irá recuperar e descriptografar seus dados criptografados usando sua senha armazenada localmente, então limpe seus favoritos locais antes de repreenchê-los a partir dos dados descriptografados.</p><p>Quando sincronizado, O xBrowserSync verifica em segundo plano a cada quinze minutos atualizações dos seus dados sincronizados e atualizará automaticamente seus favoritos locais quando necessário. Você também pode sincronizar manualmente as atualizações disponíveis para os seus dados sincronizados no painel de Configurações.</p>",
@@ -533,7 +533,7 @@
             "default": "A sincronização dos dados do seu navegador com o xBrowserSync enquanto outras ferramentas de sincronização de favoritos (como o <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) estão ativas pode causar duplicação e possivelmente corrompidos. Por favor, desative-os antes de continuar.",
             "brave": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
             "edge": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "firefox": "A sincronização dos dados do seu navegador com o xBrowserSync enquanto outras ferramentas de sincronização de favoritos (como o <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Google Chrome Sync</a>) estão ativas pode causar duplicação e possivelmente corrompidos. Por favor, desative-os antes de continuar."
+            "firefox": "A sincronização dos dados do seu navegador com o xBrowserSync enquanto outras ferramentas de sincronização de favoritos (como o <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) estão ativas pode causar duplicação e possivelmente corrompidos. Por favor, desative-os antes de continuar."
           }
         },
         "Enable": {
