@@ -579,7 +579,7 @@
     },
     "Scan": {
       "Title": {
-        "default": "Scan your sync ID QR code"
+        "default": "Scannez votre code QR de synchro"
       },
       "ToggleLight": {
         "default": "Activer la lumière"
@@ -596,7 +596,7 @@
         "default": "Dossier vide"
       },
       "Placeholder": {
-        "default": "Hit Enter or search for bookmarks",
+        "default": "Tapez sur Entrée ou cherchez des marque-pages",
         "android": "Trouver des marque-pages"
       },
       "NoBookmarks": {
