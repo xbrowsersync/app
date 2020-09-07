@@ -660,14 +660,14 @@
               "default": "Choisir un fichier"
             },
             "Placeholder": {
-              "default": "Select a backup file to restore"
+              "default": "Sélectionnez un fichier de sauvegarde à restaurer"
             }
           },
           "Copy": {
-            "default": "Copy the contents of a backup file to restore data."
+            "default": "Copiez les contenus d'un fichier de sauvegarde pour restaurer les données."
           },
           "Paste": {
-            "default": "Paste backup data"
+            "default": "Copier les données de sauvegarde"
           },
           "RestoreData": {
             "default": "Restaurer les données"
@@ -681,7 +681,7 @@
             "default": "Rétablir"
           },
           "Description": {
-            "default": "Revert local browser data to initial installation state."
+            "default": "Réinitialisez les données locales du navigateur à l'état initial d'installation."
           },
           "Confirm": {
             "default": "<p>If you continue, any active sync will be disabled and your local data will be reverted to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
@@ -690,10 +690,10 @@
             "default": "Rétablir"
           },
           "Done": {
-            "default": "Your data has been reverted to initial installation state."
+            "default": "Vos données ont été rétablies à l'état d'installation initial."
           },
           "Unavailable": {
-            "default": "Installation state data not available, unable to revert."
+            "default": "Les données d'installation ne sont pas disponibles. Impossible d'annuler."
           }
         }
       },
