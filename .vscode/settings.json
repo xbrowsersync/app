@@ -13,7 +13,7 @@
     "editor.defaultFormatter": "HookyQR.beautify"
   },
   "[scss]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "[typescript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
@@ -28,7 +28,8 @@
   "css.validate": false,
   "editor.codeActionsOnSave": {
     "source.addMissingImports": true,
-    "source.fixAll": true
+    "source.fixAll": false,
+    "source.fixAll.eslint": true
   },
   "editor.detectIndentation": false,
   "editor.formatOnSave": true,
