@@ -50,6 +50,7 @@ export default class AppBookmarkComponent implements OnInit {
   currentBookmarkId: number;
   defaultProtocol = 'https://';
   descriptionFieldOriginalHeight: string;
+  displayUpdatePropertiesButton = false;
   editMode = false;
   originalUrl: string;
   tagLookahead: string;
@@ -177,7 +178,7 @@ export default class AppBookmarkComponent implements OnInit {
     });
   }
 
-  getMetadataForCurrentPage(): ng.IPromise<BookmarkMetadata> {
+  getMetadataForCurrentPage(): ng.IPromise<Boolean | BookmarkMetadata> {
     return this.platformSvc.getPageMetadata(true).then(this.getPageMetadataAsBookmarkMetadata);
   }
 
@@ -232,7 +233,7 @@ export default class AppBookmarkComponent implements OnInit {
             this.currentBookmarkId = bookmark.id;
             this.editMode = angular.isNumber(this.currentBookmarkId);
             this.originalUrl = this.bookmarkFormData.url;
-            return;
+            return true;
           }
 
           // Set default bookmark form values
@@ -243,16 +244,24 @@ export default class AppBookmarkComponent implements OnInit {
           // Get current page metadata as bookmark
           return this.getMetadataForCurrentPage()
             .then((currentPageMetadata) => {
-              if (currentPageMetadata) {
-                this.bookmarkFormData = currentPageMetadata;
-                this.originalUrl = currentPageMetadata.url;
+              if (currentPageMetadata === false) {
+                return false;
+              }
+              if (!angular.isUndefined(currentPageMetadata)) {
+                this.bookmarkFormData = currentPageMetadata as BookmarkMetadata;
+                this.originalUrl = this.bookmarkFormData.url;
                 this.addButtonDisabledUntilEditForm = false;
               }
+              return true;
             })
             .catch(this.$exceptionHandler);
         })
         // Set initial focus
-        .then(() => this.$timeout(() => this.appHelperSvc.focusOnElement('.focused')))
+        .then((setFocus) => {
+          if (setFocus) {
+            this.$timeout(() => this.appHelperSvc.focusOnElement('.focused'));
+          }
+        })
         .catch((err) => {
           if (err.url) {
             // Set bookmark url
@@ -268,6 +277,7 @@ export default class AppBookmarkComponent implements OnInit {
 
   populateFromUrlMetadata(): void {
     this.getMetadataForUrl(this.bookmarkFormData.url).then((metadata) => {
+      this.displayUpdatePropertiesButton = false;
       if (!metadata?.title && !metadata?.description && !metadata?.tags) {
         return;
       }
@@ -412,6 +422,10 @@ export default class AppBookmarkComponent implements OnInit {
     if (this.bookmarkForm.bookmarkUrl.$invalid) {
       this.bookmarkForm.bookmarkUrl.$setValidity('Exists', true);
     }
+
+    // Display update properties button if value present
+    this.displayUpdatePropertiesButton =
+      !angular.isUndefined(this.bookmarkFormData.url ?? undefined) && this.bookmarkForm.bookmarkUrl.$dirty;
   }
 
   validateBookmark(bookmarkToValidate: BookmarkMetadata, originalUrl?: string): ng.IPromise<boolean> {

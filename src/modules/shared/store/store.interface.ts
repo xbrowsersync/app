@@ -1,3 +1,4 @@
+import { BookmarkIdMapping } from '../../webext/webext-shared/bookmark-id-mapper/bookmark-id-mapper.interface';
 import { LogLevel } from '../log/log.enum';
 
 export interface PlatformStoreService {
@@ -9,18 +10,19 @@ export interface PlatformStoreService {
 }
 
 export interface StoreContent {
+  alternateSearchBarPosition: boolean;
   appVersion: string;
-  bookmarkIdMappings: any;
-  bookmarks: any;
+  autoFetchMetadata: boolean;
+  bookmarkIdMappings: BookmarkIdMapping[];
+  bookmarks: string;
   checkForAppUpdates: boolean;
   darkModeEnabled: boolean;
   displayHelp: boolean;
   displayOtherSyncsWarning: boolean;
   displayPermissions: boolean;
-  alternateSearchBarPosition: boolean;
   displayUpdated: boolean;
   defaultToFolderView: boolean;
-  installBackup: any;
+  installBackup: string;
   lastUpdated: string;
   password: string;
   serviceUrl: string;

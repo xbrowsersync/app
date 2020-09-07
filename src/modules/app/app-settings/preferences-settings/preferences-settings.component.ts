@@ -86,6 +86,11 @@ export default class PreferencesSettingsComponent implements OnInit {
     this.settingsSvc.alternateSearchBarPosition(this.settings.alternateSearchBarPosition);
   }
 
+  toggleAutoFetchMetadata(): void {
+    this.settings.autoFetchMetadata = !this.settings.autoFetchMetadata;
+    this.settingsSvc.autoFetchMetadata(this.settings.autoFetchMetadata);
+  }
+
   toggleCheckForAppUpdates(): void {
     this.settings.checkForAppUpdates = !this.settings.checkForAppUpdates;
     this.settingsSvc.checkForAppUpdates(this.settings.checkForAppUpdates);

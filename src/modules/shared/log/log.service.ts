@@ -139,7 +139,7 @@ export default class LogService {
 
     // Format log message
     let message = angular.isObject(this.currentLogQueueItem.message)
-      ? angular.toJson(this.currentLogQueueItem.message)
+      ? JSON.stringify(this.currentLogQueueItem.message)
       : this.currentLogQueueItem.message ?? '';
     if (this.currentLogQueueItem.error) {
       message += `${this.currentLogQueueItem.error.stack.replace(/\s+/g, ' ')}`;

@@ -30,6 +30,18 @@
         </div>
       </div>
     </div>
+    <div class="form-group setting-group">
+      <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.DefaultToFolderView.Label) }}</label>
+      <p class="description">
+        {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.DefaultToFolderView.Description) }}
+        <div class="setting-value">
+          <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleDefaultToFolderView)">
+            <input type="checkbox" id="defaultToFolderView" ng-model="vm.settings.defaultToFolderView" />
+            <label for="defaultToFolderView" ng-class="{ 'animate': true }"
+                   ng-if="vm.settings.defaultToFolderView !== undefined"></label>
+          </div>
+        </div>
+    </div>
     <div class="form-group setting-group" ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
       <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.SearchBar.Label) }}</label>
       <p class="description">
@@ -43,17 +55,18 @@
         </div>
       </div>
     </div>
-    <div class="form-group setting-group">
-      <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.DefaultToFolderView.Label) }}</label>
+    <div class="form-group setting-group" ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
+      <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.AutoFetchMetadata.Label) }}</label>
       <p class="description">
-        {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.DefaultToFolderView.Description) }}
-        <div class="setting-value">
-          <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleDefaultToFolderView)">
-            <input type="checkbox" id="defaultToFolderView" ng-model="vm.settings.defaultToFolderView" />
-            <label for="defaultToFolderView" ng-class="{ 'animate': true }"
-                   ng-if="vm.settings.defaultToFolderView !== undefined"></label>
-          </div>
+        {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.AutoFetchMetadata.Description) }}
+      </p>
+      <div class="setting-value">
+        <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleAutoFetchMetadata)">
+          <input type="checkbox" id="autoFetchMetadata" ng-model="vm.settings.autoFetchMetadata" />
+          <label for="autoFetchMetadata" ng-class="{ 'animate': true }"
+                 ng-if="vm.settings.autoFetchMetadata !== undefined"></label>
         </div>
+      </div>
     </div>
     <div class="form-group setting-group" ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
       <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.DarkMode.Label) }}</label>

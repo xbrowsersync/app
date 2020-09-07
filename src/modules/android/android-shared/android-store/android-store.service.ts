@@ -17,6 +17,7 @@ export default class AndroidStoreService implements PlatformStoreService {
   idCol = 'id';
   nativeStorageKeys: IDBValidKey[] = [
     StoreKey.AlternateSearchBarPosition,
+    StoreKey.AutoFetchMetadata,
     StoreKey.CheckForAppUpdates,
     StoreKey.DarkModeEnabled,
     StoreKey.DefaultToFolderView,

@@ -20,7 +20,7 @@
              placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Title) }}">
     </div>
     <div class="form-group" ng-class="{ 
-      'btn-icon-container': vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) && vm.bookmarkForm.bookmarkUrl.$dirty,
+      'btn-icon-container': vm.displayUpdatePropertiesButton,
       'has-error': vm.bookmarkForm.bookmarkUrl.$invalid
     }">
       <label for="bookmarkUrl" class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Url.Label)
@@ -30,8 +30,8 @@
              ng-change="vm.urlChanged()" maxlength="2000" autocapitalize="off" autocorrect="off" spellcheck="false"
              required placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Url.Label) }}">
       <button class="btn btn-icon" ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"
-              ng-show="vm.bookmarkFormData.url && vm.bookmarkForm.bookmarkUrl.$dirty"
               title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.UpdateProperties) }}"
+              ng-show="vm.displayUpdatePropertiesButton"
               ng-click="vm.utilitySvc.handleEvent(vm.populateFromUrlMetadata)">
         <i class="fas fa-cloud-download-alt" aria-hidden="true"></i>
       </button>

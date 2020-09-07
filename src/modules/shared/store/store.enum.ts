@@ -1,5 +1,6 @@
 enum StoreKey {
   AlternateSearchBarPosition = 'alternateSearchBarPosition',
+  AutoFetchMetadata = 'autoFetchMetadata',
   BookmarkIdMappings = 'bookmarkIdMappings',
   Bookmarks = 'bookmarks',
   CheckForAppUpdates = 'checkForAppUpdates',

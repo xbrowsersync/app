@@ -985,6 +985,16 @@
         }
       },
       "Prefs": {
+        "AutoFetchMetadata": {
+          "Label": {
+            "key": "View_Settings_Prefs_AutoFetchMetadata_Label",
+            "default": "Auto-fetch bookmark metadata"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_AutoFetchMetadata_Description",
+            "default": "Retrieve metadata automatically when adding a bookmark."
+          }
+        },
         "CheckForAppUpdates": {
           "Label": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Label",
@@ -992,7 +1002,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
-            "default": "Be notified when a new version of xBrowserSync is available."
+            "default": "Display an alert when a new version of xBrowserSync is available."
           }
         },
         "DarkMode": {
@@ -1012,7 +1022,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Description",
-            "default": "Folder view is displayed by default."
+            "default": "Display bookmark folders by default."
           }
         },
         "SearchBar": {

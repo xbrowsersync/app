@@ -54,13 +54,14 @@ export default class StoreService {
       .clear()
       .then(() => {
         return this.$q.all([
+          this.platformStoreSvc.set(StoreKey.AlternateSearchBarPosition, false),
+          this.platformStoreSvc.set(StoreKey.AutoFetchMetadata, true),
           this.platformStoreSvc.set(StoreKey.CheckForAppUpdates, true),
           this.platformStoreSvc.set(StoreKey.DarkModeEnabled, false),
           this.platformStoreSvc.set(StoreKey.DefaultToFolderView, false),
           this.platformStoreSvc.set(StoreKey.DisplayHelp, true),
           this.platformStoreSvc.set(StoreKey.DisplayOtherSyncsWarning, false),
           this.platformStoreSvc.set(StoreKey.DisplayPermissions, false),
-          this.platformStoreSvc.set(StoreKey.AlternateSearchBarPosition, false),
           this.platformStoreSvc.set(StoreKey.DisplayUpdated, false),
           this.platformStoreSvc.set(StoreKey.SyncBookmarksToolbar, false),
           this.platformStoreSvc.set(StoreKey.SyncEnabled, false)

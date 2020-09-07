@@ -24,6 +24,7 @@ export default class SettingsService {
     return this.storeSvc
       .get([
         StoreKey.AlternateSearchBarPosition,
+        StoreKey.AutoFetchMetadata,
         StoreKey.CheckForAppUpdates,
         StoreKey.DarkModeEnabled,
         StoreKey.DefaultToFolderView,
@@ -34,6 +35,28 @@ export default class SettingsService {
           ...values
         };
       });
+  }
+
+  alternateSearchBarPosition(newValue?: boolean): ng.IPromise<boolean> {
+    if (angular.isUndefined(newValue ?? undefined)) {
+      return this.storeSvc.get<boolean>(StoreKey.AlternateSearchBarPosition);
+    }
+
+    return this.storeSvc.set(StoreKey.AlternateSearchBarPosition, newValue).then(() => {
+      this.logSvc.logInfo(`Search bar position setting: ${newValue ? 'enabled' : 'disabled'}`);
+      return newValue;
+    });
+  }
+
+  autoFetchMetadata(newValue?: boolean): ng.IPromise<boolean> {
+    if (angular.isUndefined(newValue ?? undefined)) {
+      return this.storeSvc.get<boolean>(StoreKey.AutoFetchMetadata);
+    }
+
+    return this.storeSvc.set(StoreKey.AutoFetchMetadata, newValue).then(() => {
+      this.logSvc.logInfo(`Auto-fetch metadata setting: ${newValue ? 'enabled' : 'disabled'}`);
+      return newValue;
+    });
   }
 
   checkForAppUpdates(newValue?: boolean): ng.IPromise<boolean> {
@@ -58,17 +81,6 @@ export default class SettingsService {
     return this.storeSvc.set(StoreKey.DarkModeEnabled, newValue).then(() => {
       this.logSvc.logInfo(`Dark mode setting: ${newValue ? 'enabled' : 'disabled'}`);
       this.darkMode = newValue;
-      return newValue;
-    });
-  }
-
-  alternateSearchBarPosition(newValue?: boolean): ng.IPromise<boolean> {
-    if (angular.isUndefined(newValue ?? undefined)) {
-      return this.storeSvc.get<boolean>(StoreKey.AlternateSearchBarPosition);
-    }
-
-    return this.storeSvc.set(StoreKey.AlternateSearchBarPosition, newValue).then(() => {
-      this.logSvc.logInfo(`Search bar setting: ${newValue ? 'enabled' : 'disabled'}`);
       return newValue;
     });
   }

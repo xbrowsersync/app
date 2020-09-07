@@ -13,6 +13,7 @@ import { ExceptionHandler } from '../../../shared/exception/exception.interface'
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import LogService from '../../../shared/log/log.service';
+import SettingsService from '../../../shared/settings/settings.service';
 import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
 import { SyncResult } from '../../../shared/sync/sync.interface';
@@ -32,6 +33,7 @@ export default class AndroidAppBookmarkComponent extends AppBookmarkComponent im
   appHelperSvc: AndroidAppHelperService;
   logSvc: LogService;
   platformSvc: AndroidPlatformService;
+  settingsSvc: SettingsService;
   syncEngineSvc: SyncEngineService;
 
   static $inject = [
@@ -44,6 +46,7 @@ export default class AndroidAppBookmarkComponent extends AppBookmarkComponent im
     'BookmarkHelperService',
     'LogService',
     'PlatformService',
+    'SettingsService',
     'SyncEngineService',
     'UtilityService',
     'WorkingService'
@@ -58,6 +61,7 @@ export default class AndroidAppBookmarkComponent extends AppBookmarkComponent im
     BookmarkHelperSvc: BookmarkHelperService,
     LogSvc: LogService,
     PlatformSvc: PlatformService,
+    SettingsSvc: SettingsService,
     SyncEngineSvc: SyncEngineService,
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
@@ -75,6 +79,7 @@ export default class AndroidAppBookmarkComponent extends AppBookmarkComponent im
     );
 
     this.logSvc = LogSvc;
+    this.settingsSvc = SettingsSvc;
     this.syncEngineSvc = SyncEngineSvc;
 
     // If user cancels loading bookmark metadata
@@ -114,21 +119,30 @@ export default class AndroidAppBookmarkComponent extends AppBookmarkComponent im
     });
   }
 
-  getMetadataForCurrentPage(): ng.IPromise<BookmarkMetadata> {
-    if (!angular.isUndefined(this.platformSvc.currentPage)) {
-      // Show a message if current page has no url - user shared an value that did not contain a valid url
-      if (angular.isUndefined(this.platformSvc.currentPage.url)) {
-        this.alertSvc.setCurrentAlert({
-          message: this.platformSvc.getI18nString(this.Strings.View.Bookmark.InvalidUrlShared),
-          type: AlertType.Error
-        });
-        this.$timeout(() => (document.activeElement as HTMLInputElement)?.blur(), Globals.InterfaceReadyTimeout * 2);
-      } else {
-        this.bookmarkFormData = this.platformSvc.currentPage;
-        this.originalUrl = this.bookmarkFormData.url;
-      }
+  getMetadataForCurrentPage(): ng.IPromise<Boolean | BookmarkMetadata> {
+    if (angular.isUndefined(this.platformSvc.currentPage)) {
+      return this.$q.resolve(undefined);
     }
-    return super.getMetadataForCurrentPage();
+
+    // Show a message if current page has no url - user shared an value that did not contain a valid url
+    if (angular.isUndefined(this.platformSvc.currentPage.url)) {
+      this.alertSvc.setCurrentAlert({
+        message: this.platformSvc.getI18nString(this.Strings.View.Bookmark.InvalidUrlShared),
+        type: AlertType.Error
+      });
+      return this.$q.resolve().then(() => false);
+    }
+
+    // Check auto fetch metadata preference before retrieving metadata
+    this.bookmarkFormData = this.platformSvc.currentPage;
+    this.originalUrl = this.bookmarkFormData.url;
+    return this.settingsSvc.autoFetchMetadata().then((autoFetchMetadata) => {
+      if (!autoFetchMetadata) {
+        this.displayUpdatePropertiesButton = true;
+        return this.platformSvc.currentPage;
+      }
+      return super.getMetadataForCurrentPage();
+    });
   }
 
   ngOnInit(): ng.IPromise<void> {
