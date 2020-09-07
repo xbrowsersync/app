@@ -251,7 +251,7 @@
       "default": "Serviço offline"
     },
     "ShareFailed_Title": {
-      "default": "Falha ao compartilhar."
+      "default": "Falha ao compartilhar"
     },
     "SyncRemoved_Message": {
       "default": "A sincronização solicitada não existe, ela pode ter sido removida devido a inatividade."
