@@ -2,19 +2,19 @@
   "Alert": {
     "AppUpdateAvailable": {
       "Title": {
-        "default": "xBrowserSync update available"
+        "default": "xBrowserSync Update verfügbar"
       },
       "Message": {
-        "default": "{version} is available to download. Click for more information.",
-        "android": "xBrowserSync {version} is available to download."
+        "default": "{version} steht zum Download bereit. Klicken Sie für weitere Informationen.",
+        "android": "xBrowserSync {version} steht zum Download bereit."
       }
     },
     "AppUpdated": {
       "Title": {
-        "default": "Updated to"
+        "default": "Aktualisiert auf"
       },
       "Message": {
-        "default": "xBrowserSync has been updated with the latest features and fixes. Click for release notes."
+        "default": "xBrowserSync wurde auf die neuesten Funktionen und Korrekturen aktualisiert. Klicken Sie für Versionshinweise."
       }
     },
     "BookmarkCreated": {
@@ -28,27 +28,27 @@
     },
     "GetMetadata": {
       "Message": {
-        "default": "Fetching bookmark properties, touch to cancel."
+        "default": "Rufe Lesezeichen-Eigenschaften ab, zum Abbrechen berühren."
       },
       "Success": {
-        "default": "Bookmark properties updated."
+        "default": "Lesezeichen-Eigenschaften aktualisiert."
       }
     },
     "Go": {
-      "default": "Go"
+      "default": "Los"
     },
     "WorkingOffline": {
       "Title": {
-        "default": "Working offline"
+        "default": "Im Offline-Modus"
       },
       "Message": {
-        "default": "Changes will be synced once connection is restored."
+        "default": "Änderungen werden synchronisiert, sobald die Verbindung wiederhergestellt ist."
       }
     }
   },
   "App": {
     "Description": {
-      "default": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
+      "default": "Browser-Synchronisierung wie es sein sollte: sicher, anonym und kostenlos! Synchronisieren Sie Lesezeichen zwischen Ihren Browsern und Geräten, keine Anmeldung erforderlich."
     },
     "Title": {
       "default": "xBrowserSync"
@@ -57,10 +57,10 @@
   "Bookmarks": {
     "Container": {
       "Menu": {
-        "default": "Menu bookmarks"
+        "default": "Menü-Lesezeichen"
       },
       "Mobile": {
-        "default": "Mobile bookmarks"
+        "default": "Mobile Lesezeichen"
       },
       "Other": {
         "default": "Weitere Lesezeichen"
@@ -102,28 +102,28 @@
       "default": "Lesezeichen bearbeiten"
     },
     "Help": {
-      "default": "Help guide"
+      "default": "Hilfe"
     },
     "Next": {
-      "default": "Next"
+      "default": "Weiter"
     },
     "OK": {
-      "default": "Got it"
+      "default": "Verstanden"
     },
     "ReleaseNotes": {
-      "default": "View release notes"
+      "default": "Versionshinweise anzeigen"
     },
     "Saving": {
-      "default": "Saving"
+      "default": "Wird gespeichert"
     },
     "Settings": {
-      "default": "Settings"
+      "default": "Einstellungen"
     },
     "ShareBookmark": {
-      "default": "Share bookmark"
+      "default": "Lesezeichen teilen"
     },
     "Undo": {
-      "default": "Undo"
+      "default": "Rückgängig"
     },
     "Update": {
       "default": "Aktualisieren"
@@ -134,64 +134,64 @@
   },
   "Exception": {
     "ContainerChanged_Message": {
-      "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
+      "default": "Bitte vermeiden Sie das Ändern von [xbs] Ordnern, da dies zu Problemen beim Synchronisieren führen kann."
     },
     "ContainerChanged_Title": {
-      "default": "xBrowserSync folder changed"
+      "default": "xBrowserSync-Ordner geändert"
     },
     "DailyNewSyncLimitReached_Message": {
-      "default": "Sync to an existing sync ID, switch to a different service or try again tomorrow."
+      "default": "Synchronisieren Sie mit einer bestehenden Sync-ID, wechseln Sie zu einem anderen Dienst oder versuchen Sie es morgen erneut."
     },
     "DailyNewSyncLimitReached_Title": {
-      "default": "Daily new sync limit reached"
+      "default": "Tägliches Sync-Limit erreicht"
     },
     "Default_Message": {
-      "default": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
+      "default": "Wenn das Problem weiterhin besteht, bitte <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>melden Sie das Problem</a>."
     },
     "Default_Title": {
-      "default": "Something went wrong"
+      "default": "Etwas ist schiefgelaufen"
     },
     "FailedDownloadFile_Title": {
-      "default": "Backup failed"
+      "default": "Backup fehlgeschlagen"
     },
     "FailedGetDataToRestore_Title": {
-      "default": "Browse files failed"
+      "default": "Durchsuchen der Dateien fehlgeschlagen"
     },
     "FailedGetPageMetadata_Message": {
-      "default": "URL is invalid or webpage data could not be retrieved."
+      "default": "Die URL ist ungültig oder die Daten der Webseite konnten nicht abgerufen werden."
     },
     "FailedGetPageMetadata_Title": {
-      "default": "Couldn’t get bookmark properties"
+      "default": "Lesezeichen-Eigenschaften konnten nicht abgerufen werden"
     },
     "FailedRefreshBookmarks_Title": {
-      "default": "Couldn’t retrieve updates"
+      "default": "Aktualisierungen konnten nicht abgerufen werden"
     },
     "FailedRestoreData_Message": {
-      "default": "The backup data provided is not in an expected format."
+      "default": "Die Backup-Daten sind nicht im erwarteten Format."
     },
     "FailedRestoreData_Title": {
-      "default": "Unable to restore data"
+      "default": "Daten konnten nicht wiederhergestellt werden"
     },
     "FailedShareUrlNotSynced_Title": {
-      "default": "You must be synced to add a bookmark"
+      "default": "Sie müssen synchronisiert sein, um ein Lesezeichen hinzuzufügen"
     },
     "FailedShareUrl_Title": {
-      "default": "Unable to retrieve shared bookmark URL"
+      "default": "Die URL des geteilten Lesezeichens konnte nicht abgerufen werden"
     },
     "HttpRequestFailed_Message": {
-      "default": "Check your network connection and try again."
+      "default": "Überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut."
     },
     "HttpRequestFailed_Title": {
-      "default": "Connection to service lost"
+      "default": "Verbindung zum Dienst verloren"
     },
     "InvalidCredentials_Message": {
-      "default": "Check that your sync ID, password and service URL have been entered correctly."
+      "default": "Stellen Sie sicher, dass Ihre Sync-ID, Ihr Passwort und Ihre Dienst-URL korrekt eingegeben wurden."
     },
     "InvalidCredentials_Title": {
-      "default": "Invalid credentials"
+      "default": "Ungültige Zugangsdaten"
     },
     "InvalidService_Message": {
-      "default": "The service URL is not a valid xBrowserSync service."
+      "default": "Die Dienst-URL ist kein gültiger xBrowserSync-Dienst."
     },
     "InvalidService_Title": {
       "default": "Invalid xBrowserSync service"
@@ -233,10 +233,10 @@
       "default": "Sync conflict detected"
     },
     "RequestEntityTooLarge_Message": {
-      "default": "Delete some bookmarks and try again or switch to a service with a larger sync limit."
+      "default": "Löschen Sie einige Lesezeichen und versuchen Sie es erneut oder wechseln Sie zu einem Dienst mit einem größeren Sync-Limit."
     },
     "RequestEntityTooLarge_Title": {
-      "default": "Sync data limit exceeded"
+      "default": "Sync-Datenlimit überschritten"
     },
     "ScanFailed_Message": {
       "default": "Check permission has been granted and try again."
@@ -910,18 +910,18 @@
         "default": "Updated to"
       },
       "Content": {
-        "default": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
+        "default": "xBrowserSync wurde auf die neuesten Funktionen und Korrekturen aktualisiert. Weitere Informationen zu den Änderungen in dieser Version finden Sie in den Versionshinweisen."
       }
     },
     "Working": {
       "Restoring": {
-        "default": "Restoring"
+        "default": "Wird wiederhergestellt"
       },
       "Reverting": {
-        "default": "Reverting"
+        "default": "Wird zurückgesetzt"
       },
       "Syncing": {
-        "default": "Syncing"
+        "default": "Wird synchronisiert"
       }
     }
   }
