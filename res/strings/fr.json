@@ -527,13 +527,13 @@
         },
         "DisableOthers": {
           "Title": {
-            "default": "Disable bookmark sync tools"
+            "default": "Désactiver les outils de synchronisation des marque-pages"
           },
           "Content": {
-            "default": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "brave": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "edge": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "firefox": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing."
+            "default": "Synchroniser les données de votre navigateur avec xBrowserSync alors que d'autres outils de synchronisation (comme <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) sont actifs peut dupliquer les données, et potentiellement les corrompre. Veuillez désactiver vos autres outils avant de continuer.",
+            "brave": "Synchroniser les données de votre navigateur avec xBrowserSync alors que d'autres outils de synchronisation (comme <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) sont actifs peut dupliquer les données, et potentiellement les corrompre. Veuillez désactiver vos autres outils avant de continuer.",
+            "edge": "Synchroniser les données de votre navigateur avec xBrowserSync alors que d'autres outils de synchronisation (comme <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) sont actifs peut dupliquer les données, et potentiellement les corrompre. Veuillez désactiver vos autres outils avant de continuer.",
+            "firefox": "Synchroniser les données de votre navigateur avec xBrowserSync alors que d'autres outils de synchronisation (comme <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) sont actifs peut dupliquer les données, et potentiellement les corrompre. Veuillez désactiver vos autres outils avant de continuer."
           }
         },
         "Enable": {
@@ -544,22 +544,22 @@
         },
         "Upgrade": {
           "Title": {
-            "default": "Ready to upgrade sync?"
+            "default": "Prêt à mettre la synchro à jour ?"
           },
           "Content": {
-            "default": "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
+            "default": "<p>Cet ID de synchro doit être mis à niveau pour que vous puissiez vous synchroniser avec cette version de xBrowserSync. Après la mise à niveau, vous ne pourrez plus vous synchronisation avec les versions précédentes de xBrowserSync.</p><p>Assurez-vous d'avoir mis à jour toutes vos applications xBrowserSync avant de continuer. Êtes-vous prêt ?</p>"
           }
         }
       },
       "SyncId": {
         "Description": {
-          "default": "Your sync ID"
+          "default": "Votre ID de synchro"
         },
         "Existing": {
-          "default": "Already got a sync ID?"
+          "default": "Vous avez déjà un ID de synchro ?"
         },
         "Invalid": {
-          "default": "Not a valid sync ID"
+          "default": "ID de synchro invalide"
         },
         "Label": {
           "default": "ID"
@@ -684,7 +684,7 @@
             "default": "Réinitialisez les données locales du navigateur à l'état initial d'installation."
           },
           "Confirm": {
-            "default": "<p>If you continue, any active sync will be disabled and your local data will be reverted to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "<p>Si vous continuez, les synchronisations actives seront désactivées et vos données locales sont réinitialisées à leur état du {date}, le jour d'installation de xBrowserSync.</p><p>Voulez-vous continuer ?</p>"
           },
           "Button": {
             "default": "Rétablir"
@@ -777,10 +777,10 @@
         },
         "CheckForAppUpdates": {
           "Label": {
-            "default": "Check for app updates"
+            "default": "Vérifier les mises à jour"
           },
           "Description": {
-            "default": "Display an alert when a new version of xBrowserSync is available."
+            "default": "Affiche une alerte lorsqu'une nouvelle version de xBrowserSync est disponible."
           }
         },
         "DarkMode": {
@@ -809,13 +809,13 @@
         },
         "SyncToolbar": {
           "Label": {
-            "default": "Sync bookmarks toolbar"
+            "default": "Synchronisation de la barre de favoris"
           },
           "Description": {
-            "default": "Disable this setting to display different toolbar bookmarks across synced browsers."
+            "default": "Désactivez ce paramètre pour afficher des barres de favoris différentes selon les navigateurs synchronisés."
           },
           "Confirmation": {
-            "default": "<p>Enabling this setting will replace the bookmarks currently in the bookmarks toolbar with your synced bookmarks.</p><p>OK to proceed?</p>"
+            "default": "<p>Activer ce paramètre remplacera les marque-pages actuellement dans la barre de favoris avec vos marque-pages synchronisés.</p><p>Voulez-vous continuer ?</p>"
           }
         },
         "Title": {
@@ -853,10 +853,10 @@
             "default": "La synchro est à jour."
           },
           "True": {
-            "default": "Updates available, next sync at"
+            "default": "Mises à jour disponibles, prochaine synchro à"
           },
           "Sync": {
-            "default": "Update Sync"
+            "default": "Mise à jour de synchro"
           }
         },
         "Qr": {
@@ -867,7 +867,7 @@
             "default": "Afficher le code QR"
           },
           "Copy": {
-            "default": "Copy sync ID to clipboard"
+            "default": "Copier l'ID de synchro dans le presse‐papiers"
           },
           "Copied": {
             "default": "Copié!"
