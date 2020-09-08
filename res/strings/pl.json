@@ -306,15 +306,15 @@
   },
   "Share": {
     "Bookmark": {
-      "default": "Share bookmark with"
+      "default": "Udostępnij zakładkę z"
     }
   },
   "Tooltip": {
     "NotSynced": {
-      "default": "not synced"
+      "default": "nie zsynchronizowano"
     },
     "Synced": {
-      "default": "synced"
+      "default": "zsynchronizowano"
     },
     "Syncing": {
       "default": "synchronizacja"
