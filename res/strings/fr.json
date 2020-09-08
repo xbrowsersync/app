@@ -870,7 +870,7 @@
             "default": "Copy sync ID to clipboard"
           },
           "Copied": {
-            "default": "Copié !"
+            "default": "Copié!"
           }
         }
       },
