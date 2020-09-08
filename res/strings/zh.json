@@ -191,7 +191,7 @@
       "default": "无效的凭据"
     },
     "InvalidService_Message": {
-      "default": "服务 URL 不是有效的 xBrowsSync 服务。"
+      "default": "服务 URL 不是有效的 xBrowserSync 服务。"
     },
     "InvalidService_Title": {
       "default": "无效的 xBrowserSync 服务"
@@ -245,7 +245,7 @@
       "default": "扫描失败"
     },
     "ServiceOffline_Message": {
-      "default": "XbrowserSync 服务目前处于离线状态，请稍后再试。"
+      "default": "xBrowserSync 服务目前处于离线状态，请稍后再试。"
     },
     "ServiceOffline_Title": {
       "default": "离线服务"
@@ -278,8 +278,8 @@
       "default": "服务不受支持"
     },
     "UpgradeFailed_Message": {
-      "android": "重启应用后将重试升级。如果问题仍然存在，请重新安装 xBrowsSync。",
-      "default": "重新启动您的浏览器以重试升级，如果问题仍然存在，请重新安装 xBrowsSync。"
+      "android": "重启应用后将重试升级。如果问题仍然存在，请重新安装 xBrowserSync。",
+      "default": "重新启动您的浏览器以重试升级，如果问题仍然存在，请重新安装 xBrowserSync。"
     },
     "UpgradeFailed_Title": {
       "default": "升级失败"
@@ -494,13 +494,13 @@
             "default": "xBrowserSync 服务 URL"
           },
           "Description": {
-            "default": "输入替代的 xBrowserSync 服务的 URL。在这里浏览公开的 xBrowsSync 服务列表 <a href='https://link.xbrowsersync.org/service-list' class='new-tab'></a>。"
+            "default": "输入替代的 xBrowserSync 服务的 URL。在这里浏览公开的 xBrowserSync 服务列表 <a href='https://link.xbrowsersync.org/service-list' class='new-tab'></a>。"
           },
           "Button": {
             "default": "切换服务"
           },
           "Required": {
-            "default": "需要 xBrowsSync 服务URL"
+            "default": "需要 xBrowserSync 服务URL"
           },
           "Invalid": {
             "default": "无效的 xBrowserSync 服务"
@@ -547,7 +547,7 @@
             "default": "准备更新同步了吗？"
           },
           "Content": {
-            "default": "<p>此同步ID必须升级才能与此版本的 xBrowsSync同步。 升级后，您将无法与 xBrowsSync 上的版本同步。</p><p>确保您在继续之前更新了所有的 xBrowserSync 应用。准备好继续吗？</p>"
+            "default": "<p>此同步ID必须升级才能与此版本的 xBrowserSync同步。 升级后，您将无法与 xBrowserSync 上的版本同步。</p><p>确保您在继续之前更新了所有的 xBrowserSync 应用。准备好继续吗？</p>"
           }
         }
       },
@@ -780,7 +780,7 @@
             "default": "检查更新"
           },
           "Description": {
-            "default": "当有新版本的 xBrowsSync 时发出通知。"
+            "default": "当有新版本的 xBrowserSync 时发出通知。"
           }
         },
         "DarkMode": {
@@ -910,7 +910,7 @@
         "default": "已更新到"
       },
       "Content": {
-        "default": "xserSync 已经更新了最新功能和修复。关于此版本中包含的更改的更多详情，请查看发布说明。"
+        "default": "xBrowserSync 已经更新了最新功能和修复。关于此版本中包含的更改的更多详情，请查看发布说明。"
       }
     },
     "Working": {
