@@ -2,7 +2,7 @@
   "Alert": {
     "AppUpdateAvailable": {
       "Title": {
-        "default": "xBrowsSync 更新可用"
+        "default": "xBrowserSync 更新可用"
       },
       "Message": {
         "default": "{version} 可以下载。点击获取更多信息。",
