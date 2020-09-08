@@ -137,7 +137,7 @@
       "default": "请避免修改 [xbs] 文件夹，因为它会导致同步问题。"
     },
     "ContainerChanged_Title": {
-      "default": "xBrowsSync 文件夹已更改"
+      "default": "xBrowserSync 文件夹已更改"
     },
     "DailyNewSyncLimitReached_Message": {
       "default": "同步到现有同步ID，切换到不同的服务或明天重试。"
