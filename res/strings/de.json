@@ -282,19 +282,19 @@
       "default": "Restart your browser to retry upgrade, if the problem persists please reinstall xBrowserSync."
     },
     "UpgradeFailed_Title": {
-      "default": "Upgrade failed"
+      "default": "Upgrade fehlgeschlagen"
     }
   },
   "Service": {
     "Status": {
       "Error": {
-        "default": "Connection error"
+        "default": "Verbindungsfehler"
       },
       "Loading": {
-        "default": "Checking"
+        "default": "Überprüfen"
       },
       "NoNewSyncs": {
-        "default": "Not accepting new syncs"
+        "default": "Keine neuen Synchronisierungen akzeptieren"
       },
       "Offline": {
         "default": "Offline"
@@ -314,10 +314,10 @@
       "default": "not synced"
     },
     "Synced": {
-      "default": "synced"
+      "default": "synchronisiert"
     },
     "Syncing": {
-      "default": "syncing"
+      "default": "synchronisieren"
     }
   },
   "View": {
@@ -326,11 +326,11 @@
         "default": "Add bookmark"
       },
       "Edit": {
-        "default": "Edit bookmark"
+        "default": "Lesezeichen hinzufügen"
       },
       "Form": {
         "Title": {
-          "default": "Title"
+          "default": "Titel"
         },
         "Url": {
           "Exists": {
@@ -344,7 +344,7 @@
           }
         },
         "Description": {
-          "default": "Description"
+          "default": "Beschreibung"
         },
         "Tags": {
           "Label": {
@@ -361,7 +361,7 @@
           }
         },
         "Delete": {
-          "default": "Delete"
+          "default": "Löschen"
         },
         "Share": {
           "default": "Share"
@@ -409,7 +409,7 @@
         "firefox": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks toolbar and bookmarks library, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p><p>Please note however, as Firefox’s bookmarks API does not yet support accessing native bookmark tags, any existing tags will be lost when syncing and tags added via xBrowserSync will not be saved as native tags.</p>"
       },
       "Previous": {
-        "default": "Previous"
+        "default": "Vorheriger"
       },
       "Searching": {
         "default": "<h4>Searching your bookmarks</h4><p>Once synced, simply press Enter to display your recent bookmarks or type some keywords or a URL to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>To edit or delete a bookmark, hover over the bookmark and click the now visible edit icon next to the bookmark’s title.</p>",
@@ -441,19 +441,19 @@
       },
       "Password": {
         "Confirm": {
-          "default": "Confirm password"
+          "default": "Passwort bestätigen"
         },
         "Existing": {
           "default": "Your encryption password"
         },
         "Label": {
-          "default": "Encryption password"
+          "default": "Verschlüsselungspasswort"
         },
         "New": {
           "default": "Enter an encryption password"
         },
         "Show": {
-          "default": "Reveal password"
+          "default": "Passwort anzeigen"
         }
       },
       "Scan": {
@@ -478,7 +478,7 @@
           "default": "Sync to this service?"
         },
         "Location": {
-          "default": "Location"
+          "default": "Standort"
         },
         "MaxSyncSize": {
           "default": "Max sync size"
@@ -519,7 +519,7 @@
       "Sync": {
         "Confirm": {
           "Title": {
-            "default": "Are you sure?"
+            "default": "Sind sie sicher?"
           },
           "Content": {
             "default": "xBrowserSync will delete all local bookmarks data before restoring synced bookmarks. OK to proceed?"
@@ -537,10 +537,10 @@
           }
         },
         "Enable": {
-          "default": "Sync"
+          "default": "Synchronisiere"
         },
         "New": {
-          "default": "Create new sync"
+          "default": "Neue Synchronisation erstellen"
         },
         "Upgrade": {
           "Title": {
@@ -553,7 +553,7 @@
       },
       "SyncId": {
         "Description": {
-          "default": "Your sync ID"
+          "default": "Ihre Sync-ID"
         },
         "Existing": {
           "default": "Already got a sync ID?"
