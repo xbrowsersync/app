@@ -206,19 +206,19 @@
       "default": "Local data has been refreshed, please reapply last change."
     },
     "LocalSyncError_Title": {
-      "default": "Sync error"
+      "default": "Synchronisierungsfehler"
     },
     "MissingClientData_Message": {
       "default": "Unable to find stored credentials. Re-enable sync and try again."
     },
     "MissingClientData_Title": {
-      "default": "Missing credentials"
+      "default": "Fehlende Berechtigungsnachweise"
     },
     "NoDataToRestore_Message": {
       "default": "Ensure you have provided a valid xBrowserSync back up before restoring."
     },
     "NoDataToRestore_Title": {
-      "default": "No data to restore"
+      "default": "Keine Daten zum Wiederherstellen"
     },
     "NotAcceptingNewSyncs_Message": {
       "default": "Switch to a different service or try again later."
@@ -230,7 +230,7 @@
       "default": "Local data was out of sync and has now been refreshed. Please reapply last change."
     },
     "OutOfSync_Title": {
-      "default": "Sync conflict detected"
+      "default": "Sync-Konflikt entdeckt"
     },
     "RequestEntityTooLarge_Message": {
       "default": "Löschen Sie einige Lesezeichen und versuchen Sie es erneut oder wechseln Sie zu einem Dienst mit einem größeren Sync-Limit."
@@ -248,10 +248,10 @@
       "default": "The xBrowserSync service is currently offline, try again later."
     },
     "ServiceOffline_Title": {
-      "default": "Service offline"
+      "default": "Dienst offline"
     },
     "ShareFailed_Title": {
-      "default": "Share failed"
+      "default": "Teilen fehlgeschlagen"
     },
     "SyncRemoved_Message": {
       "default": "The requested sync does not exist, it may have been removed due to inactivity."
