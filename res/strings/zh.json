@@ -420,6 +420,8 @@
       },
       "Shortcuts": {
         "default": "<h4>使用快捷键！</h4><p>要快速搜索您的书签，请使用默认的键盘快捷键(Ctrl + Space) 激活扩展名，然后只需按 Enter 键即可查看您最近使用的书签或开始输入搜索内容。</p><p>要更改快捷键, 浏览 chrome://extensions/shortcuts 为 xBrowserSync 更改可用的快捷键。",
+        "brave": "<h4>使用快捷键！</h4><p>要快速搜索您的书签，请使用默认的键盘快捷键(Ctrl + Space) 激活扩展名，然后只需按 Enter 键即可查看您最近使用的书签或开始输入搜索内容。</p><p>要更改快捷键, 浏览 brave://extensions/shortcuts 为 xBrowserSync 更改可用的快捷键。",
+        "edge": "<h4>使用快捷键！</h4><p>要快速搜索您的书签，请使用默认的键盘快捷键(Ctrl + Space) 激活扩展名，然后只需按 Enter 键即可查看您最近使用的书签或开始输入搜索内容。</p><p>要更改快捷键, 浏览 edge://extensions/shortcuts 为 xBrowserSync 更改可用的快捷键。",
         "firefox": "<h4>使用快捷键！</h4><p>要快速搜索您的书签，请使用默认的键盘快捷键(Ctrl + Space) 激活扩展名，然后只需按 Enter 键即可查看您最近使用的书签或开始输入搜索内容。</p><p>要更改快捷键, 浏览 about:addons, 在设置菜单中单击 “管理扩展快捷键” 为 xBrowserSync 更改可用的快捷键。"
       },
       "SyncId": {
