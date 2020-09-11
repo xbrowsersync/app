@@ -1,0 +1,930 @@
+{
+  "Alert": {
+    "AppUpdateAvailable": {
+      "Title": {
+        "default": "xBrowserSync 更新可用"
+      },
+      "Message": {
+        "default": "{version} 可以下载。点击获取更多信息。",
+        "android": "xBrowserSync {version} 可供下载。"
+      }
+    },
+    "AppUpdated": {
+      "Title": {
+        "default": "更新到"
+      },
+      "Message": {
+        "default": "xBrowserSync 已经更新了最新功能和修复。点击查看发行说明。"
+      }
+    },
+    "BookmarkCreated": {
+      "default": "书签已恢复"
+    },
+    "BookmarkDeleted": {
+      "default": "书签已删除"
+    },
+    "BookmarkUpdated": {
+      "default": "书签已更新"
+    },
+    "GetMetadata": {
+      "Message": {
+        "default": "正在获取书签属性，点击以取消。"
+      },
+      "Success": {
+        "default": "书签属性已更新。"
+      }
+    },
+    "Go": {
+      "default": "转到"
+    },
+    "WorkingOffline": {
+      "Title": {
+        "default": "脱机工作"
+      },
+      "Message": {
+        "default": "连接恢复后更改将被同步。"
+      }
+    }
+  },
+  "App": {
+    "Description": {
+      "default": "浏览器同步应该是安全的、匿名的和免费的！在您的浏览器和设备之间同步书签，无需注册。"
+    },
+    "Title": {
+      "default": "xBrowserSync"
+    }
+  },
+  "Bookmarks": {
+    "Container": {
+      "Menu": {
+        "default": "菜单书签"
+      },
+      "Mobile": {
+        "default": "手机书签"
+      },
+      "Other": {
+        "default": "其他书签"
+      },
+      "Toolbar": {
+        "default": "工具栏书签"
+      }
+    }
+  },
+  "Button": {
+    "AddBookmark": {
+      "default": "添加书签"
+    },
+    "Back": {
+      "default": "后退"
+    },
+    "Cancel": {
+      "default": "取消"
+    },
+    "Close": {
+      "default": "关闭"
+    },
+    "Confirm": {
+      "default": "是"
+    },
+    "Continue": {
+      "default": "继续"
+    },
+    "DeleteBookmark": {
+      "default": "删除书签"
+    },
+    "Deny": {
+      "default": "否"
+    },
+    "Done": {
+      "default": "完成"
+    },
+    "EditBookmark": {
+      "default": "编辑书签"
+    },
+    "Help": {
+      "default": "帮助手册"
+    },
+    "Next": {
+      "default": "下一个"
+    },
+    "OK": {
+      "default": "我知道了"
+    },
+    "ReleaseNotes": {
+      "default": "查看发行说明"
+    },
+    "Saving": {
+      "default": "保存中"
+    },
+    "Settings": {
+      "default": "设置"
+    },
+    "ShareBookmark": {
+      "default": "分享书签"
+    },
+    "Undo": {
+      "default": "撤销"
+    },
+    "Update": {
+      "default": "更新"
+    },
+    "View": {
+      "default": "查看"
+    }
+  },
+  "Exception": {
+    "ContainerChanged_Message": {
+      "default": "请避免修改 [xbs] 文件夹，因为它会导致同步问题。"
+    },
+    "ContainerChanged_Title": {
+      "default": "xBrowserSync 文件夹已更改"
+    },
+    "DailyNewSyncLimitReached_Message": {
+      "default": "同步到现有同步ID，切换到不同的服务或明天重试。"
+    },
+    "DailyNewSyncLimitReached_Title": {
+      "default": "达到每日新同步限制"
+    },
+    "Default_Message": {
+      "default": "如果问题仍然存在，请 <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>报告问题</a>。"
+    },
+    "Default_Title": {
+      "default": "出现错误"
+    },
+    "FailedDownloadFile_Title": {
+      "default": "备份失败"
+    },
+    "FailedGetDataToRestore_Title": {
+      "default": "浏览文件失败"
+    },
+    "FailedGetPageMetadata_Message": {
+      "default": "URL 无效或无法获取网页数据。"
+    },
+    "FailedGetPageMetadata_Title": {
+      "default": "无法获取书签属性"
+    },
+    "FailedRefreshBookmarks_Title": {
+      "default": "无法获取更新"
+    },
+    "FailedRestoreData_Message": {
+      "default": "提供的备份数据不是预期的格式。"
+    },
+    "FailedRestoreData_Title": {
+      "default": "无法恢复数据"
+    },
+    "FailedShareUrlNotSynced_Title": {
+      "default": "您必须同步才能添加书签"
+    },
+    "FailedShareUrl_Title": {
+      "default": "无法获取共享书签URL"
+    },
+    "HttpRequestFailed_Message": {
+      "default": "请检查你的网络连接并重试。"
+    },
+    "HttpRequestFailed_Title": {
+      "default": "与服务器的连接丢失"
+    },
+    "InvalidCredentials_Message": {
+      "default": "检查您的同步ID、密码和服务URL是否正确输入。"
+    },
+    "InvalidCredentials_Title": {
+      "default": "无效的凭据"
+    },
+    "InvalidService_Message": {
+      "default": "服务 URL 不是有效的 xBrowserSync 服务。"
+    },
+    "InvalidService_Title": {
+      "default": "无效的 xBrowserSync 服务"
+    },
+    "LocalContainerNotFound_Message": {
+      "default": "可能损坏的浏览器配置文件， 请尝试创建新的配置文件来解决这个问题。"
+    },
+    "LocalContainerNotFound_Title": {
+      "default": "意外的书签结构"
+    },
+    "LocalSyncError_Message": {
+      "default": "本地数据已刷新，请重做以前未同步的更改。"
+    },
+    "LocalSyncError_Title": {
+      "default": "同步出错"
+    },
+    "MissingClientData_Message": {
+      "default": "找不到存储的凭据。 重新启用同步，然后重试。"
+    },
+    "MissingClientData_Title": {
+      "default": "缺少凭据"
+    },
+    "NoDataToRestore_Message": {
+      "default": "请确保您在恢复之前提供了有效的 xBrowserSync 备份。"
+    },
+    "NoDataToRestore_Title": {
+      "default": "没有数据可恢复"
+    },
+    "NotAcceptingNewSyncs_Message": {
+      "default": "切换到不同的服务或稍后再试。"
+    },
+    "NotAcceptingNewSyncs_Title": {
+      "default": "服务不接受新同步"
+    },
+    "OutOfSync_Message": {
+      "default": "本地数据未同步，现已刷新。请重新应用上次更改。"
+    },
+    "OutOfSync_Title": {
+      "default": "检测到同步冲突"
+    },
+    "RequestEntityTooLarge_Message": {
+      "default": "删除一些书签，然后重试或切换到具有更大同步限制的服务。"
+    },
+    "RequestEntityTooLarge_Title": {
+      "default": "超过同步数据限制"
+    },
+    "ScanFailed_Message": {
+      "default": "检查权限已授予，然后重试。"
+    },
+    "ScanFailed_Title": {
+      "default": "扫描失败"
+    },
+    "ServiceOffline_Message": {
+      "default": "xBrowserSync 服务目前处于离线状态，请稍后再试。"
+    },
+    "ServiceOffline_Title": {
+      "default": "离线服务"
+    },
+    "ShareFailed_Title": {
+      "default": "分享失败"
+    },
+    "SyncRemoved_Message": {
+      "default": "请求的同步不存在，可能因为没有活动而被删除。"
+    },
+    "SyncRemoved_Title": {
+      "default": "同步未找到"
+    },
+    "TooManyRequests_Message": {
+      "default": "同步已禁用，重新启用同步以恢复同步。"
+    },
+    "TooManyRequests_Title": {
+      "default": "服务请求数量限制"
+    },
+    "UncommittedSyncs_Message": {
+      "default": "同步将在连接服务恢复后进行。"
+    },
+    "UncommittedSyncs_Title": {
+      "default": "更改没有同步"
+    },
+    "UnsupportedServiceApiVersion_Message": {
+      "default": "此服务正在运行一个不支持的 API 版本。"
+    },
+    "UnsupportedServiceApiVersion_Title": {
+      "default": "服务不受支持"
+    },
+    "UpgradeFailed_Message": {
+      "android": "重启应用后将重试升级。如果问题仍然存在，请重新安装 xBrowserSync。",
+      "default": "重新启动您的浏览器以重试升级，如果问题仍然存在，请重新安装 xBrowserSync。"
+    },
+    "UpgradeFailed_Title": {
+      "default": "升级失败"
+    }
+  },
+  "Service": {
+    "Status": {
+      "Error": {
+        "default": "连接错误"
+      },
+      "Loading": {
+        "default": "正在检查"
+      },
+      "NoNewSyncs": {
+        "default": "不接受新同步"
+      },
+      "Offline": {
+        "default": "离线"
+      },
+      "Online": {
+        "default": "在线"
+      }
+    }
+  },
+  "Share": {
+    "Bookmark": {
+      "default": "分享书签"
+    }
+  },
+  "Tooltip": {
+    "NotSynced": {
+      "default": "未同步"
+    },
+    "Synced": {
+      "default": "已同步"
+    },
+    "Syncing": {
+      "default": "同步中"
+    }
+  },
+  "View": {
+    "Bookmark": {
+      "Add": {
+        "default": "添加书签"
+      },
+      "Edit": {
+        "default": "编辑书签"
+      },
+      "Form": {
+        "Title": {
+          "default": "标题"
+        },
+        "Url": {
+          "Exists": {
+            "default": "URL 已是书签"
+          },
+          "Label": {
+            "default": "URL"
+          },
+          "Required": {
+            "default": "必需填写书签 URL"
+          }
+        },
+        "Description": {
+          "default": "描述"
+        },
+        "Tags": {
+          "Label": {
+            "default": "标记"
+          },
+          "Placeholder": {
+            "default": "标记 1, 标记 2, 标记 3, 等"
+          },
+          "Clear": {
+            "default": "清除标记"
+          },
+          "Remove": {
+            "default": "移除标记"
+          }
+        },
+        "Delete": {
+          "default": "删除"
+        },
+        "Share": {
+          "default": "分享"
+        },
+        "UpdateProperties": {
+          "default": "更新书签属性"
+        }
+      },
+      "InvalidUrlShared": {
+        "default": "共享的值不包含有效的 URL。"
+      }
+    },
+    "Help": {
+      "AddingBookmarks": {
+        "default": "<h4>添加书签</h4><p>通过单击“搜索”面板中的书签图标，可以为当前页面添加书签。 将自动为您填充书签属性，您也可以添加描述和一些标记以确保获得更好的搜索结果。</p><p>另外，您只需正常单击浏览器自带的“添加书签”按钮，xBrowserSync 将自动填充书签的属性(必须授予可选权限才能使用，请检查“设置”面板)。</p>",
+        "android": "<h4>添加书签</h4><p>通过浏览器、YouTube、Spotify 等任何可以分享 URL 的应用程序分享到 xBrowserSync，就可以轻松添加书签。</p><p>书签属性将被自动抓取，您也可以添加描述和一些标记以保证更好的搜索结果。</p>",
+        "firefox": "<h4>添加书签</h4><p>通过单击“搜索”面板中的书签图标，可以为当前页面添加书签。 将自动为您填充书签属性，您也可以添加描述和一些标记以确保获得更好的搜索结果。</p><p>另外，只需正常点击浏览器自带的“添加书签”按钮，xBrowserSync 将自动填充书签的属性。</p>"
+      },
+      "BackingUp": {
+        "default": "<h4>记住要备份</h4><p>当你使用 xBrowserSync 时，保护你的数据是你的责任，所以聪明点，确保备份。</p><p>转到 “设置” 面板，将未加密的数据备份到本地文件中，如果需要的话，可以用来恢复数据。</p><p>如果您的本地浏览器数据被损坏，而您没有任何备份，您可以随时将数据恢复到安装 xBrowserSync 时的原始状态。</p>",
+        "android": "<h4>记住要备份</h4><p>当你使用 xBrowserSync 时，保护你的数据是你的责任，所以聪明点，确保备份。</p><p>转到 “设置” 面板，将未加密的数据备份到本地文件中，如果需要的话，可以用来恢复数据。</p>"
+      },
+      "BeforeYouBegin": {
+        "default": "<h4>开始之前</h4> <p> xBrowserSync 会修改本地浏览器数据，因此最好备份备份书签和其他浏览器数据以防万一，若使用其他浏览器同步服务或工具(例如<a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'> Google Chrome Sync </a>)，请禁用它们以避免冲突。</p>",
+        "brave": "<h4>开始之前</h4> <p> xBrowserSync会修改本地浏览器数据，因此最好备份备份书签和其他浏览器数据，以防万一，若使用其他任何浏览器同步服务或工具(例如<a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'> Brave Sync </a>)，请禁用它们以避免冲突。</p>",
+        "edge": "<h4>开始之前</h4> <p> xBrowserSync会修改本地浏览器数据，因此最好备份备份书签和其他浏览器数据，以防万一，若使用其他任何浏览器同步服务或工具( 例如<a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'> Microsoft Edge Sync </a>)，请禁用它们以避免冲突。</p>",
+        "firefox": "<h4>开始之前</h4> <p> xBrowserSync 会修改本地浏览器数据，因此最好备份备份书签和其他浏览器数据以防万一，若使用其他浏览器同步服务或工具(例如<a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'> Firefox Sync </a>)，请禁用它们以避免冲突。</p>"
+      },
+      "ExistingId": {
+        "default": "<h4>使用已有 ID 同步</h4> <p>点击“已获得同步ID？” 输入您已有的同步 ID 和密码。 如果您的同步 ID 是在不同的服务上创建的，则在尝试同步之前切换到该服务。</p> <p> xBrowserSync 将使用本地存储的密码检索和解密加密数据，然后会清除本地书签。 </p> <p>同步后，xBrowserSync 每隔15分钟在后台检查一次同步数据的更新，并在需要时自动更新本地书签。 您还可以在“设置”面板中手动同步数据。</p>",
+        "android": "<h4>使用已有 ID 同步</h4><p>首先在 xBrowserSync 桌面浏览器扩展程序的“设置”面板中扫描同步ID QR码(单击您的同步 ID 可以显示它)。 确保输入创建同步时使用了相同密码，否则xBrowserSync 将无法解密您的数据。</p><p>另外，如果您同步到其他 xBrowserSync 服务，请确保它是在“设置”面板中配置的活动服务。</p>"
+      },
+      "FirstSync": {
+        "default": "<h4>首次同步</h4> <p>在 xBrowserSync 同步浏览器数据之前，您需要提供加密密码。 请务必使其坚固且令人难忘，如果您忘记了，它将不会重设或提示您，您将无法访问已同步的数据。</p> <p>您的浏览器数据将被你的密码加密并保存到“设置”面板中配置的 xBrowserSync 服务。</p> <p>一旦同步，您对本地书签所做的任何更改都会被 xBrowserSync 自动同步。</p>",
+        "android": "<h4>首次同步</h4> <p> xBrowserSync 会在桌面浏览器之间互相同步浏览器数据(目前不支持与移动浏览器同步)，您可以使用此应用在 Android 移动设备上访问已同步的数据。</p> <p>如果尚未创建同步 ID，请转到桌面浏览器，然后<a href='https://link.xbrowsersync.org/download' class='new-tab'>下载</a> xBrowserSync 扩展(适用于 Chrome 和 Firefox)。 创建同步后，您可以在此应用中使用该同步 ID 来访问数据。</p>"
+      },
+      "FurtherSupport": {
+        "default": "<h4>进一步的支持</h4><p>您可以在 <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>常见问答</a> 中找到最常见问题的答案，还可以查看当前 <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>已知问题</a> 以查看是否在此处列出了您的问题。</p><p>或者，使用 <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>问题跟踪器</a> 报告问题或请求新功能。</p>"
+      },
+      "Mobile": {
+        "default": "<h4>移动端</h4><p>通过 xBrowserSync Android 应用在移动设备中访问已同步的书签, 可在 <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a> 商店, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droid</a> 或者 <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>直接下载</a>。</p>"
+      },
+      "NativeFeatures": {
+        "default": "<h4>支持原生功能</h4><p>您可以继续使用浏览器的原生书签功能，如书签栏和书签管理器，您所做的任何更改都会在后台自动同步。</p><p>如果您已经将现有的书签整理成了文件夹，也不用担心，xBrowserSync 将尊重并维护您现有的书签层次结构。</p>",
+        "firefox": "<h4>支持原生功能</h4><p>您可以继续使用浏览器的原生书签功能，如书签栏和书签管理器，您所做的任何更改都会在后台自动同步。</p><p>如果您已经将现有的书签整理成了文件夹，也不用担心，xBrowserSync 将尊重并维护您现有的书签层次结构。</p><p>但请注意，由于 Firefox 的书签 API 还不支持访问原生的书签标记，因此在同步时，任何现有的标记都会丢失，而通过 xBrowserSync 添加的标记不会被保存为原生标记。</p>"
+      },
+      "Previous": {
+        "default": "上一个"
+      },
+      "Searching": {
+        "default": "<h4>搜索你的书签</h4><p>首次同步后，只需按 Enter 键即可显示您最近的书签，或键入一些关键字或 URL 来搜索您的书签。</p><p>在搜索结果和书签文件夹之间切换以浏览整个层次结构。</p><p>要编辑或删除书签，请将鼠标悬停在书签上，然后单击书签标题旁边浮现的编辑图标。</p>",
+        "android": "<h4>搜索你的书签</h4><p>首次同步后，打开 xBrowserSync 时，书签将按时间顺序显示。 在搜索框中键入一些关键字或 URL 来搜索您的书签。</p><p>在搜索结果和书签文件夹之间切换以浏览整个层次结构。</p><p>您长按书签可以共享，修改或删除它。</p>"
+      },
+      "Service": {
+        "default": "<h4>使用其他服务同步</h4><p>默认情况下您的数据已同步到 <a href='https://link.xbrowsersync.org/api' class='new-tab'>官方 xBrowserSync 服务</a>, 如果你愿意,也可以在同步数据之前从 xBrowserSync 服务切换到其他服务。</p><p>选择下列可用的<a href='https://link.xbrowsersync.org/service-list' class='new-tab'>公共 xBrowserSync 服务</a>或<a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>运行在你自己的服务上</a>, 为私人使用提供最高安全和隐私。, 或者公开它以供更多人使用 xBrowserSync。</p><p><strong>重要:</strong> xBrowserSync 服务由志愿者独立运行。 服务管理员对您的数据不承担任何责任，因此请记住要定期备份。</p>"
+      },
+      "Shortcuts": {
+        "default": "<h4>使用快捷键！</h4><p>要快速搜索您的书签，请使用默认的键盘快捷键(Ctrl + Space) 激活扩展名，然后只需按 Enter 键即可查看您最近使用的书签或开始输入搜索内容。</p><p>要更改快捷键, 浏览 chrome://extensions/shortcuts 为 xBrowserSync 更改可用的快捷键。",
+        "brave": "<h4>使用快捷键！</h4><p>要快速搜索您的书签，请使用默认的键盘快捷键(Ctrl + Space) 激活扩展名，然后只需按 Enter 键即可查看您最近使用的书签或开始输入搜索内容。</p><p>要更改快捷键, 浏览 brave://extensions/shortcuts 为 xBrowserSync 更改可用的快捷键。",
+        "edge": "<h4>使用快捷键！</h4><p>要快速搜索您的书签，请使用默认的键盘快捷键(Ctrl + Space) 激活扩展名，然后只需按 Enter 键即可查看您最近使用的书签或开始输入搜索内容。</p><p>要更改快捷键, 浏览 edge://extensions/shortcuts 为 xBrowserSync 更改可用的快捷键。",
+        "firefox": "<h4>使用快捷键！</h4><p>要快速搜索您的书签，请使用默认的键盘快捷键(Ctrl + Space) 激活扩展名，然后只需按 Enter 键即可查看您最近使用的书签或开始输入搜索内容。</p><p>要更改快捷键, 浏览 about:addons, 在设置菜单中单击 “管理扩展快捷键” 为 xBrowserSync 更改可用的快捷键。"
+      },
+      "SyncId": {
+        "default": "<h4>您的同步 ID </h4> <p> xBrowserSync 可保护您的隐私，不会收集任何个人数据，并且您的浏览器数据在同步之前会被加密。 为了标识您同步的数据，您将获得一个匿名同步 ID，该匿名 ID 可以与您的密码一起用于在其他浏览器和设备上同步数据。</p> <p>请记住，您的同步ID仅适用于 xBrowserSync 服务。 创建该同步的基础上，如果切换到其他 xBrowserSync 服务，则必须创建一个新 ID 或使用以前同步到该服务时已创建的 ID。</p> <p>无论何时同步，您都可以在“设置”面板中查看同步 ID，单击 ID 可以显示 QR 码，以便移动设备扫描二维码进行同步。</p>"
+      },
+      "Welcome": {
+        "default": "<h4>欢迎使用 xBrowserSync！</h4> <p> xBrowserSync 是 Google，Mozilla，Opera 等提供的浏览器同步服务的免费开放源代码替代品，它尊重您的隐私并为您提供完全的匿名性(请参阅 <a href='https://link.xbrowsersync.org/www' class='new-tab'>网站</a>了解更多信息)。</p> <p>请花点时间通读此帮助 请使用下面的页面链接或箭头键在页面之间移动，以熟悉 xBrowserSync。</p> <p>请注意：xBrowserSync 目前仅同步书签。 将来的版本中将添加其他浏览器数据的同步，请查看开发<a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>路线图</a>以查看计划的内容 </p>",
+        "android": "<h4>欢迎使用 xBrowserSync！</h4> <p> xBrowserSync 是 Google，Mozilla，Opera 等提供的浏览器同步服务的免费开放源代码替代品，它尊重您的隐私并为您提供完全的匿名性(请参阅 <a href='https://link.xbrowsersync.org/www' class='new-tab'>网站</a>了解更多信息)。</p> <p>花点时间阅读一下 帮助指南，您可以使用下面的页面链接或在页面之间滑动来熟悉 xBrowserSync。</p> <p>请注意：xBrowserSync 当前仅同步书签。 将来的版本中将添加其他浏览器数据的同步，请查看开发<a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>路线图</a>以查看计划的内容 </p>"
+      }
+    },
+    "Login": {
+      "GetSyncId": {
+        "Title": {
+          "default": "需要同步ID？"
+        },
+        "Content": {
+          "default": "下载xBrowserSync 桌面浏览器扩展并创建一个新的同步来访问您的书签。"
+        }
+      },
+      "Password": {
+        "Confirm": {
+          "default": "确认密码"
+        },
+        "Existing": {
+          "default": "您的加密密码"
+        },
+        "Label": {
+          "default": "加密密码"
+        },
+        "New": {
+          "default": "输入加密密码"
+        },
+        "Show": {
+          "default": "显示密码"
+        }
+      },
+      "Scan": {
+        "Title": {
+          "default": "连接到您的同步"
+        },
+        "Content": {
+          "default": "在桌面浏览器上打开 xBrowserSync，进入设置面板，点击你的同步ID，会显示一个二维码，你可以在这里扫描。"
+        },
+        "ScanCode": {
+          "default": "扫描二维码"
+        },
+        "ManualEntry": {
+          "default": "手动输入同步详细信息"
+        }
+      },
+      "Service": {
+        "ApiVersion": {
+          "default": "API 版本"
+        },
+        "Confirm": {
+          "default": "同步到此服务？"
+        },
+        "Location": {
+          "default": "位置"
+        },
+        "MaxSyncSize": {
+          "default": "最大同步大小"
+        },
+        "Selected": {
+          "default": "同步到"
+        },
+        "Status": {
+          "default": "状态"
+        },
+        "Update": {
+          "Label": {
+            "default": "xBrowserSync 服务 URL"
+          },
+          "Description": {
+            "default": "输入替代的 xBrowserSync 服务的 URL。在这里浏览公开的 xBrowserSync 服务列表 <a href='https://link.xbrowsersync.org/service-list' class='new-tab'></a>。"
+          },
+          "Button": {
+            "default": "切换服务"
+          },
+          "Required": {
+            "default": "需要 xBrowserSync 服务URL"
+          },
+          "Invalid": {
+            "default": "无效的 xBrowserSync 服务"
+          },
+          "Failed": {
+            "default": "无法连接到服务"
+          },
+          "NotSupported": {
+            "default": "此服务正在运行一个不受支持的API版本"
+          }
+        },
+        "Warning": {
+          "default": "<strong>重要：</strong> xBrowserSync 服务由志愿者独立运行。服务管理员对您的数据不负责任，因此请记住定期备份。"
+        }
+      },
+      "Sync": {
+        "Confirm": {
+          "Title": {
+            "default": "是否确定？"
+          },
+          "Content": {
+            "default": "xBrowserSync 将在恢复同步书签之前删除所有本地书签数据。确定继续吗？"
+          }
+        },
+        "DisableOthers": {
+          "Title": {
+            "default": "禁用书签同步工具"
+          },
+          "Content": {
+            "default": "将您的浏览器数据与 xBrowserSync 同步，而其他书签同步工具(如 <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>)正在激活，可能会导致重复并可能损坏数据。 请在继续之前禁用它们。",
+            "brave": "在其他书签同步工具(例如<a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'> Brave Sync </a>)处于活动状态的同时，将浏览器数据与xBrowserSync同步，可能导致重复并可能损坏数据。 请先禁用它们，然后再继续。",
+            "edge": "使用xBrowserSync同步浏览器数据，同时使用其他书签同步工具(如<a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'> Microsoft Edge Sync </a>) 会导致重复并可能损坏数据。 请在继续之前禁用它们。",
+            "firefox": "将您的浏览器数据与 xBrowserSync 同步，而其他书签同步工具(如 <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>)正在激活，可能会导致重复并可能损坏数据。 请在继续之前禁用它们。"
+          }
+        },
+        "Enable": {
+          "default": "同步"
+        },
+        "New": {
+          "default": "创建新同步"
+        },
+        "Upgrade": {
+          "Title": {
+            "default": "准备更新同步了吗？"
+          },
+          "Content": {
+            "default": "<p>此同步ID必须升级才能与此版本的 xBrowserSync同步。 升级后，您将无法与 xBrowserSync 上的版本同步。</p><p>确保您在继续之前更新了所有的 xBrowserSync 应用。准备好继续吗？</p>"
+          }
+        }
+      },
+      "SyncId": {
+        "Description": {
+          "default": "您的同步 ID"
+        },
+        "Existing": {
+          "default": "已有同步ID？"
+        },
+        "Invalid": {
+          "default": "无效的同步 ID"
+        },
+        "Label": {
+          "default": "ID"
+        },
+        "New": {
+          "default": "获取同步 ID"
+        }
+      }
+    },
+    "Permissions": {
+      "Title": {
+        "default": "可选权限"
+      },
+      "Content": {
+        "default": "<p> xBrowserSync 会使用可用的元数据自动丰富使用浏览器的“添加书签”按钮添加的书签。要开启它, xBrowserSync <a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'> 需要额外的权限 </a> 才能读取访问的网站数据。</p><p>请确认您是否愿意授予这些权限，或者您可以随时在“设置”面板中添加或删除权限。</p>"
+      }
+    },
+    "Scan": {
+      "Title": {
+        "default": "扫描您的同步 ID 二维码"
+      },
+      "ToggleLight": {
+        "default": "切换明暗"
+      }
+    },
+    "Search": {
+      "BookmarkTree": {
+        "default": "显示书签文件夹"
+      },
+      "Clear": {
+        "default": "清除"
+      },
+      "FolderEmpty": {
+        "default": "文件夹空"
+      },
+      "Placeholder": {
+        "default": "点击输入或搜索书签",
+        "android": "查找书签"
+      },
+      "NoBookmarks": {
+        "default": "您还没有书签，请添加一些！"
+      },
+      "NoResults": {
+        "default": "未找到书签"
+      },
+      "SearchResults": {
+        "default": "查看搜索结果"
+      }
+    },
+    "Settings": {
+      "BackupRestore": {
+        "Title": {
+          "default": "备份和恢复"
+        },
+        "Backup": {
+          "Title": {
+            "default": "备份"
+          },
+          "Button": {
+            "default": "备份"
+          },
+          "Local": {
+            "default": "备份本地浏览器数据到文件。"
+          },
+          "Synced": {
+            "default": "备份同步数据到文件。"
+          }
+        },
+        "Restore": {
+          "Title": {
+            "default": "恢复"
+          },
+          "Button": {
+            "default": "恢复"
+          },
+          "Local": {
+            "Description": {
+              "default": "从备份中恢复本地浏览器数据。"
+            },
+            "Confirm": {
+              "default": "<p>由于同步已禁用，正在恢复的数据将覆盖本地浏览器数据。</p><p>确定继续？</p>"
+            }
+          },
+          "Synced": {
+            "Description": {
+              "default": "从备份恢复同步数据。"
+            },
+            "Confirm": {
+              "default": "<p>由于同步已启用，正在恢复的数据将覆盖您的同步数据。</p><p>要将数据恢复到本地浏览器，请在恢复前禁用同步。</p><p>确定继续吗？</p>",
+              "android": "<p>正在恢复的数据将覆盖您同步的数据。</p><p>确定继续吗？</p>"
+            }
+          },
+          "Done": {
+            "default": "您的数据已恢复。"
+          },
+          "SelectFile": {
+            "Button": {
+              "default": "选择文件"
+            },
+            "Placeholder": {
+              "default": "选择要恢复的备份文件"
+            }
+          },
+          "Copy": {
+            "default": "复制备份文件的内容以恢复数据。"
+          },
+          "Paste": {
+            "default": "粘贴备份数据"
+          },
+          "RestoreData": {
+            "default": "恢复数据"
+          },
+          "Invalid": {
+            "default": "无效的 xBrowserSync 备份数据"
+          }
+        },
+        "Revert": {
+          "Title": {
+            "default": "还原"
+          },
+          "Description": {
+            "default": "还原本地浏览器数据到初始安装状态。"
+          },
+          "Confirm": {
+            "default": "<p>若继续，任何激活的同步都将被禁用，您的本地数据将恢复到{date} 安装 xBrowserSync 时的状态。</p><p>确定继续吗？</p>"
+          },
+          "Button": {
+            "default": "还原"
+          },
+          "Done": {
+            "default": "您的数据已还原到初始安装状态。"
+          },
+          "Unavailable": {
+            "default": "安装状态数据不可用，无法还原。"
+          }
+        }
+      },
+      "Issues": {
+        "Title": {
+          "default": "问题"
+        },
+        "Help": {
+          "Title": {
+            "default": "帮助"
+          },
+          "Description": {
+            "default": "有问题或遇到问题？请务必阅读帮助指南，答案可能就在常见问答中。"
+          },
+          "ViewFaqs": {
+            "default": "查看常见问答"
+          }
+        },
+        "Tracker": {
+          "Title": {
+            "default": "问题追踪器"
+          },
+          "Description": {
+            "default": "报告一个问题来反馈错误或请求新功能。"
+          },
+          "Report": {
+            "default": "反馈问题"
+          }
+        },
+        "Log": {
+          "Title": {
+            "default": "应用程序日志"
+          },
+          "Description": {
+            "default": "当您记录反馈问题时，请下载包含此应用程序的日志。"
+          },
+          "Clear": {
+            "default": "清除日志"
+          },
+          "Download": {
+            "default": "下载日志"
+          },
+          "Size": {
+            "default": "当前日志大小"
+          }
+        }
+      },
+      "Permissions": {
+        "Title": {
+          "default": "可选权限"
+        },
+        "Add": {
+          "default": "授予权限"
+        },
+        "Granted": {
+          "default": "已授权"
+        },
+        "NotGranted": {
+          "default": "未授权"
+        },
+        "Read": {
+          "Title": {
+            "default": "读取网站数据"
+          },
+          "Description": {
+            "default": "使用浏览器的“添加书签”按钮时，需要自动将元数据添加到书签(<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>更多信息</a>)。"
+          }
+        },
+        "Remove": {
+          "default": "移除权限"
+        }
+      },
+      "Prefs": {
+        "AutoFetchMetadata": {
+          "Label": {
+            "default": "自动获取书签元数据"
+          },
+          "Description": {
+            "default": "添加书签时自动获取元数据。"
+          }
+        },
+        "CheckForAppUpdates": {
+          "Label": {
+            "default": "检查更新"
+          },
+          "Description": {
+            "default": "当有新版本的 xBrowserSync 时发出通知。"
+          }
+        },
+        "DarkMode": {
+          "Label": {
+            "default": "启用暗色模式"
+          },
+          "Description": {
+            "default": "适合在低光环境中使用。"
+          }
+        },
+        "DefaultToFolderView": {
+          "Label": {
+            "default": "显示书签文件夹"
+          },
+          "Description": {
+            "default": "默认显示书签文件夹。"
+          }
+        },
+        "SearchBar": {
+          "Label": {
+            "default": "切换搜索栏位置"
+          },
+          "Description": {
+            "default": "在结果下方显示搜索栏。"
+          }
+        },
+        "SyncToolbar": {
+          "Label": {
+            "default": "同步书签工具栏"
+          },
+          "Description": {
+            "default": "禁用此设置可在同步的浏览器中显示不同的工具栏书签。"
+          },
+          "Confirmation": {
+            "default": "<p>启用此设置将用您的同步书签替换当前书签工具栏中的书签。</p><p>确定继续吗？</p>"
+          }
+        },
+        "Title": {
+          "default": "首选项"
+        }
+      },
+      "Sync": {
+        "Title": {
+          "default": "同步"
+        },
+        "Disable": {
+          "default": "禁用同步"
+        },
+        "Id": {
+          "Label": {
+            "default": "同步 ID"
+          },
+          "Description": {
+            "default": "使用您的同步 ID 连接到其他设备上的已同步数据(点击显示二维码)。"
+          }
+        },
+        "Data": {
+          "Label": {
+            "default": "数据用量"
+          },
+          "Description": {
+            "default": "您正在使用服务允许的同步数据量。"
+          }
+        },
+        "Service": {
+          "default": "服务"
+        },
+        "UpdatesAvailable": {
+          "False": {
+            "default": "同步到最新。"
+          },
+          "True": {
+            "default": "更新可用，下次同步于"
+          },
+          "Sync": {
+            "default": "更新同步"
+          }
+        },
+        "Qr": {
+          "Description": {
+            "default": "使用 xBrowserSync Android 应用程序扫描此二维码以连接到您的同步数据。"
+          },
+          "Show": {
+            "default": "显示二维码"
+          },
+          "Copy": {
+            "default": "复制同步ID到剪贴板"
+          },
+          "Copied": {
+            "default": "已复制！"
+          }
+        }
+      },
+      "AppVersion": {
+        "default": "版本"
+      },
+      "NotAvailable": {
+        "default": "启用同步时可用设置。"
+      },
+      "FileDownloaded": {
+        "default": "如果文件没有自动下载，请右键点击下面的链接，并将链接另存为...。",
+        "android": "文件已保存为 {fileName}。"
+      },
+      "Support": {
+        "default": "支持 xBrowserSync"
+      }
+    },
+    "Support": {
+      "Title": {
+        "default": "支持 xBrowserSync!"
+      },
+      "Content": {
+        "default": "<p>我们想让xBrowserSync成为第一大浏览器同步工具，但还有很多工作要做：</p><ul><li>增加同步浏览器选项卡和历史记录</li><li>支持所有主要的桌面浏览器</li><li>可翻译成其他语言</li><li>还有<a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>更多</a>!</li></ul><p>只有在您的支持下，我们才能继续改进 xBrowserSync，并确保它仍然是一个有效的工具，以保护我们的隐私和生产力，防止大公司的腐蚀！</p>"
+      },
+      "Cryptos": {
+        "default": "加密"
+      },
+      "Liberapay": {
+        "default": "Liberapay"
+      },
+      "Patreon": {
+        "default": "Patreon"
+      }
+    },
+    "Updated": {
+      "Title": {
+        "default": "已更新到"
+      },
+      "Content": {
+        "default": "xBrowserSync 已经更新了最新功能和修复。关于此版本中包含的更改的更多详情，请查看发布说明。"
+      }
+    },
+    "Working": {
+      "Restoring": {
+        "default": "正在恢复"
+      },
+      "Reverting": {
+        "default": "正在还原"
+      },
+      "Syncing": {
+        "default": "正在同步"
+      }
+    }
+  }
+}
