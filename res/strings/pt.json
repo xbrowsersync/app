@@ -412,7 +412,7 @@
         "default": "Anterior"
       },
       "Searching": {
-        "default": "<h4>Searching your bookmarks</h4><p>Once synced, simply press Enter to display your recent bookmarks or type some keywords or a URL to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>To edit or delete a bookmark, hover over the bookmark and click the now visible edit icon next to the bookmark’s title.</p>",
+        "default": "<h4> Pesquisando seus favoritos </h4> <p> Depois de sincronizado, basta pressionar Enter para exibir seus favoritos recentes ou digitar algumas palavras-chave ou alguma URL para pesquisar seus favoritos. </p> <p> Alternar entre resultados de pesquisa e pastas de favoritos para navegar por toda a hierarquia. </p> <p> Para editar ou excluir um favorito, passe o mouse sobre o favorito e clique no ícone de edição agora visível ao lado do título do favorito. </p>",
         "android": "<h4>Searching your bookmarks</h4><p>Once synced, your bookmarks are displayed in chronological order when you open xBrowserSync. Type some keywords or a URL in the search box to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>Long pressing on a bookmark will allow you to directly share, modify or delete the bookmark.</p>"
       },
       "Service": {
