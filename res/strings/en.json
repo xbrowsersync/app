@@ -54,7 +54,7 @@
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
-        "default": "Changes will be synced once connection is restored."
+        "default": "Changes will be synced when connection is restored."
       }
     }
   },
