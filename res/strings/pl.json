@@ -229,11 +229,11 @@
     },
     "FailedShareUrl_Title": {
       "key": "Exception_FailedShareUrl_Title",
-      "default": "Unable to retrieve shared bookmark URL"
+      "default": "Nie można pobrać widoku z adresu URL"
     },
     "HttpRequestFailed_Message": {
       "key": "Exception_HttpRequestFailed_Message",
-      "default": "Check your network connection and try again."
+      "default": "Sprawdź połączenie sieciowe i spróbuj ponownie."
     },
     "HttpRequestFailed_Title": {
       "key": "Exception_HttpRequestFailed_Title",
@@ -241,7 +241,7 @@
     },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
-      "default": "Check that your sync ID, password and service URL have been entered correctly."
+      "default": "Sprawdź, czy ID synchronizacji, hasło i adres URL usługi zostały wprowadzone poprawnie."
     },
     "InvalidCredentials_Title": {
       "key": "Exception_InvalidCredentials_Title",
@@ -257,15 +257,15 @@
     },
     "LocalContainerNotFound_Message": {
       "key": "Exception_LocalContainerNotFound_Message",
-      "default": "Possible corrupt browser profile, try creating a new profile as it may resolve the issue."
+      "default": "Prawdopodobnie uszkodzony profil przeglądarki, spróbuj utworzyć nowy profil, ponieważ może to rozwiązać problem."
     },
     "LocalContainerNotFound_Title": {
       "key": "Exception_LocalContainerNotFound_Title",
-      "default": "Unexpected bookmarks structure"
+      "default": "Nieoczekiwana struktura zakładek"
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local data has been refreshed, please reapply last change."
+      "default": "Dane lokalne zostały odświeżone, proszę ponownie zastosować ostatnią zmianę."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
@@ -273,15 +273,15 @@
     },
     "MissingClientData_Message": {
       "key": "Exception_MissingClientData_Message",
-      "default": "Unable to find stored credentials. Re-enable sync and try again."
+      "default": "Nie można znaleźć przechowywanych danych logowania. Włącz ponownie synchronizację i spróbuj ponownie."
     },
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
-      "default": "Missing credentials"
+      "default": "Brak danych logowania"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",
-      "default": "Ensure you have provided a valid xBrowserSync back up before restoring."
+      "default": "Przed przywróceniem upewnij się, że masz prawidłową kopię zapasową xBrowserSync."
     },
     "NoDataToRestore_Title": {
       "key": "Exception_NoDataToRestore_Title",
@@ -289,7 +289,7 @@
     },
     "NotAcceptingNewSyncs_Message": {
       "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Switch to a different service or try again later."
+      "default": "Przełącz na inną usługę lub spróbuj ponownie później."
     },
     "NotAcceptingNewSyncs_Title": {
       "key": "Exception_NotAcceptingNewSyncs_Title",
