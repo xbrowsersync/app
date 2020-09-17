@@ -1,8 +1,6 @@
-import './android-app.component.scss';
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import compareVersions from 'compare-versions';
 import AppMainComponent from '../../app/app-main/app-main.component';
 import { AppEventType, AppViewType } from '../../app/app.enum';
 import { AppHelperService } from '../../app/app.interface';
@@ -29,6 +27,7 @@ import { AndroidAlert } from './android-app.interface';
 @Component({
   controllerAs: 'vm',
   selector: 'app',
+  styles: [require('./android-app.component.scss')],
   template: require('../../app/app-main/app-main.component.html')
 })
 export default class AndroidAppComponent extends AppMainComponent implements OnInit {
@@ -240,6 +239,9 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
   }
 
   handleDeviceReady(success: () => any, failure: () => any): ng.IPromise<any> {
+    // Prime cache for faster startup
+    this.$q.all([this.bookmarkHelperSvc.getCachedBookmarks(), this.settingsSvc.all()]).catch(() => {});
+
     // Load i18n strings
     return (
       this.platformSvc
@@ -418,9 +420,6 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
             if (!angular.isUndefined(sharedBookmark)) {
               return this.handleBookmarkShared(sharedBookmark);
             }
-
-            // Prime bookmarks cache
-            this.bookmarkHelperSvc.getCachedBookmarks();
 
             // If not online return here
             if (!this.networkSvc.isNetworkConnected()) {

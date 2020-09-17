@@ -72,8 +72,8 @@ button {
           @include spinner-colour($colour-text2-default);
 
           border-width: 0.1em;
-          height: 0.9rem;
-          width: 0.9rem;
+          height: 0.85rem;
+          width: 0.85rem;
 
           @include theme-dark {
             @include spinner-colour($colour-text2-dark);

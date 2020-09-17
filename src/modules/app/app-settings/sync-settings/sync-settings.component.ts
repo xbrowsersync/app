@@ -1,4 +1,3 @@
-import './sync-settings.component.scss';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { ApiServiceStatus } from '../../../shared/api/api.enum';
@@ -20,6 +19,7 @@ import { AppHelperService } from '../../app.interface';
 @Component({
   controllerAs: 'vm',
   selector: 'syncSettings',
+  styles: [require('./sync-settings.component.scss')],
   template: require('./sync-settings.component.html')
 })
 export default class SyncSettingsComponent implements OnInit {

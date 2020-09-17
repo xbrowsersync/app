@@ -1,4 +1,3 @@
-import './webext-app-alert.component.scss';
 import angular from 'angular';
 import { Component } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
@@ -12,6 +11,7 @@ import UtilityService from '../../../shared/utility/utility.service';
 @Component({
   controllerAs: 'vm',
   selector: 'appAlert',
+  styles: [require('./webext-app-alert.component.scss')],
   template: require('./webext-app-alert.component.html')
 })
 export default class WebExtAppAlertComponent {

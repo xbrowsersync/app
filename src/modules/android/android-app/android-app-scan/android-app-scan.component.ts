@@ -1,4 +1,3 @@
-import './android-app-scan.component.scss';
 import { Component, OnDestroy, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AppViewType } from '../../../app/app.enum';
@@ -16,6 +15,7 @@ import AndroidAppHelperService from '../android-app-helper/android-app-helper.se
 @Component({
   controllerAs: 'vm',
   selector: 'appScan',
+  styles: [require('./android-app-scan.component.scss')],
   template: require('./android-app-scan.component.html')
 })
 export default class AndroidAppScanComponent implements OnInit, OnDestroy {

@@ -1,4 +1,3 @@
-import './app-help.component.scss';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { PlatformService } from '../../shared/global-shared.interface';
@@ -12,6 +11,7 @@ import { AppHelperService } from '../app.interface';
 @Component({
   controllerAs: 'vm',
   selector: 'appHelp',
+  styles: [require('./app-help.component.scss')],
   template: require('./app-help.component.html')
 })
 export default class AppHelpComponent implements OnInit {

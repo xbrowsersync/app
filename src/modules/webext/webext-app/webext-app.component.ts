@@ -1,4 +1,3 @@
-import './webext-app.component.scss';
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
@@ -12,6 +11,7 @@ import WebExtPlatformService from '../webext-shared/webext-platform/webext-platf
 @Component({
   controllerAs: 'vm',
   selector: 'app',
+  styles: [require('./webext-app.component.scss')],
   template: require('../../app/app-main/app-main.component.html')
 })
 export default class WebExtAppComponent extends AppMainComponent implements OnInit {

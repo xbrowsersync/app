@@ -1,4 +1,3 @@
-import './android-app-bookmark.component.scss';
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
@@ -27,6 +26,7 @@ import { AndroidAlert } from '../android-app.interface';
 @Component({
   controllerAs: 'vm',
   selector: 'appBookmark',
+  styles: [require('./android-app-bookmark.component.scss')],
   template: require('../../../app/app-bookmark/app-bookmark.component.html')
 })
 export default class AndroidAppBookmarkComponent extends AppBookmarkComponent implements OnInit {

@@ -1,4 +1,3 @@
-import './permissions-settings.component.scss';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { PlatformService } from '../../../shared/global-shared.interface';
@@ -9,6 +8,7 @@ import { AppHelperService } from '../../app.interface';
 @Component({
   controllerAs: 'vm',
   selector: 'permissionsSettings',
+  styles: [require('./permissions-settings.component.scss')],
   template: require('./permissions-settings.component.html')
 })
 export default class PermissionsSettingsComponent implements OnInit {

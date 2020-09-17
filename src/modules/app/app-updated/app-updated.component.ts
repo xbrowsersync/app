@@ -1,4 +1,3 @@
-import './app-updated.component.scss';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import Globals from '../../shared/global-shared.constants';
@@ -13,6 +12,7 @@ import { AppHelperService } from '../app.interface';
 @Component({
   controllerAs: 'vm',
   selector: 'appUpdated',
+  styles: [require('./app-updated.component.scss')],
   template: require('./app-updated.component.html')
 })
 export default class AppUpdatedComponent implements OnInit {

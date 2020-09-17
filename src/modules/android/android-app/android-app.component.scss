@@ -231,3 +231,11 @@ app-settings {
     }
   }
 }
+
+app-support {
+  @media (orientation: landscape) {
+    .footer {
+      margin-top: 0;
+    }
+  }
+}

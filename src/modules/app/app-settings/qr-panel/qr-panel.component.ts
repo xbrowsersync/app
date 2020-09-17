@@ -1,4 +1,3 @@
-import './qr-panel.component.scss';
 import { Component, OnInit, Output } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import QRCode from 'qrcode-svg';
@@ -13,6 +12,7 @@ import { AppHelperService } from '../../app.interface';
 @Component({
   controllerAs: 'vm',
   selector: 'qrPanel',
+  styles: [require('./qr-panel.component.scss')],
   template: require('./qr-panel.component.html')
 })
 export default class AppQrComponent implements OnInit {

@@ -156,8 +156,8 @@ export default class AppSearchComponent implements OnInit {
     return this.settingsSvc.all().then((settings) => {
       this.alternateSearchBarPosition = settings.alternateSearchBarPosition;
       this.displayFolderView = settings.defaultToFolderView;
-      this.bookmarkTree = null;
-      this.selectedBookmarkId = null;
+      this.bookmarkTree = undefined;
+      this.selectedBookmarkId = undefined;
       this.displayDefaultSearchState();
     });
   }

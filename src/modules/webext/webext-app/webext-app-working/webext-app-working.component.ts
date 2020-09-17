@@ -1,4 +1,3 @@
-import './webext-app-working.component.scss';
 import { Component, Input, Output } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AppHelperService } from '../../../app/app.interface';
@@ -13,6 +12,7 @@ import WorkingService from '../../../shared/working/working.service';
 @Component({
   controllerAs: 'vm',
   selector: 'appWorking',
+  styles: [require('./webext-app-working.component.scss')],
   template: require('./webext-app-working.component.html')
 })
 export default class WebExtAppWorkingComponent {

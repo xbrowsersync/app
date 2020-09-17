@@ -1,4 +1,3 @@
-import './app-bookmark.component.scss';
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
@@ -28,6 +27,7 @@ import { AppHelperService } from '../app.interface';
 @Component({
   controllerAs: 'vm',
   selector: 'appBookmark',
+  styles: [require('./app-bookmark.component.scss')],
   template: require('./app-bookmark.component.html')
 })
 export default class AppBookmarkComponent implements OnInit {

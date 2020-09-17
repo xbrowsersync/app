@@ -49,12 +49,23 @@ export default class UpgradeService implements PlatformUpgradeService {
         .clear()
         .then(this.getLastUpgradeVersion)
         .then((lastUpgradeVersion) => {
-          if (angular.isUndefined(lastUpgradeVersion) || compareVersions(lastUpgradeVersion, upgradeToVersion)) {
+          // Process upgrade if no upgrade version set or if new version is greater than last upgrade version
+          let upgradeStep: () => ng.IPromise<void>;
+          if (
+            angular.isUndefined(lastUpgradeVersion) ||
+            compareVersions.compare(upgradeToVersion, lastUpgradeVersion, '>')
+          ) {
             switch (true) {
-              case upgradeToVersion.indexOf('1.6.0') === 0:
-                this.logSvc.logInfo(`Upgrading to ${upgradeToVersion}`);
-                return this.upgradeTo160();
+              case upgradeToVersion.indexOf('1.6.0') === 0 && compareVersions.compare('1.6.0', lastUpgradeVersion, '>'):
+                upgradeStep = this.upgradeTo160;
+                break;
               default:
+            }
+
+            // If upgrade step was determined, run it now
+            if (!angular.isUndefined(upgradeStep)) {
+              this.logSvc.logInfo(`Upgrading to ${upgradeToVersion}`);
+              return upgradeStep();
             }
           }
         })

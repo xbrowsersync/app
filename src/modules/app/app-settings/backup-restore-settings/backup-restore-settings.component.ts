@@ -1,4 +1,3 @@
-import './backup-restore-settings.component.scss';
 import angular from 'angular';
 import { Component, OnInit, ViewParent } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
@@ -27,6 +26,7 @@ import AppSettingsComponent from '../app-settings.component';
 @Component({
   controllerAs: 'vm',
   selector: 'backupRestoreSettings',
+  styles: [require('./backup-restore-settings.component.scss')],
   template: require('./backup-restore-settings.component.html')
 })
 export default class BackupRestoreSettingsComponent implements OnInit {
@@ -238,11 +238,13 @@ export default class BackupRestoreSettingsComponent implements OnInit {
 
   downloadBackup(): void {
     this.savingBackup = true;
-    this.saveBackupFile().finally(() => {
-      // Update view model
-      this.savingBackup = false;
-      this.appHelperSvc.focusOnElement('.backup-completed .focused');
-    });
+    this.$timeout(() =>
+      this.saveBackupFile().finally(() => {
+        // Update view model
+        this.savingBackup = false;
+        this.appHelperSvc.focusOnElement('.backup-completed .focused');
+      })
+    );
   }
 
   getBookmarksForExport(): ng.IPromise<Bookmark[]> {

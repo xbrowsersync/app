@@ -1,4 +1,3 @@
-import './android-app-search.component.scss';
 import angular from 'angular';
 import { Component } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
@@ -24,6 +23,7 @@ import { AndroidAlert } from '../android-app.interface';
 @Component({
   controllerAs: 'vm',
   selector: 'appSearch',
+  styles: [require('./android-app-search.component.scss')],
   template: require('../../../app/app-search/app-search.component.html')
 })
 export default class AndroidAppSearchComponent extends AppSearchComponent {

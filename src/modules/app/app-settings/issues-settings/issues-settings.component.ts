@@ -1,4 +1,3 @@
-import './issues-settings.component.scss';
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
@@ -13,6 +12,7 @@ import { AppHelperService } from '../../app.interface';
 @Component({
   controllerAs: 'vm',
   selector: 'issuesSettings',
+  styles: [require('./issues-settings.component.scss')],
   template: require('./issues-settings.component.html')
 })
 export default class IssuesSettingsComponent implements OnInit {

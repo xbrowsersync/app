@@ -15,10 +15,9 @@
       {{ vm.platformSvc.getI18nString(vm.Strings.View.Support.Cryptos) }}
     </button>
   </div>
-  <div class="buttons">
-    <button type="button" class="btn btn-default focused"
-            ng-click="vm.utilitySvc.handleEvent(vm.appHelperSvc.switchView)">
+  <div class="footer">
+    <a class="focused" ng-click="vm.utilitySvc.handleEvent(vm.appHelperSvc.switchView)" href="#">
       {{ vm.platformSvc.getI18nString(vm.Strings.Button.Continue) }}
-    </button>
+    </a>
   </div>
 </div>

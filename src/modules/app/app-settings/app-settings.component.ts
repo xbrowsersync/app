@@ -1,4 +1,3 @@
-import './app-settings.component.scss';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { PlatformService } from '../../shared/global-shared.interface';
@@ -10,6 +9,7 @@ import { AppHelperService } from '../app.interface';
 @Component({
   controllerAs: 'vm',
   selector: 'appSettings',
+  styles: [require('./app-settings.component.scss')],
   template: require('./app-settings.component.html')
 })
 export default class AppSettingsComponent implements OnInit {

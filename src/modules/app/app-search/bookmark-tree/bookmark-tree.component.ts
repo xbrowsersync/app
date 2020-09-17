@@ -1,4 +1,3 @@
-import './bookmark-tree.component.scss';
 import { Component, Input, Output } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
@@ -11,6 +10,7 @@ import { AppHelperService } from '../../app.interface';
 @Component({
   controllerAs: 'vm',
   selector: 'bookmarkTree',
+  styles: [require('./bookmark-tree.component.scss')],
   template: require('./bookmark-tree.component.html')
 })
 export default class BookmarkTreeComponent {

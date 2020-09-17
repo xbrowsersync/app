@@ -1,4 +1,3 @@
-import './app-login.component.scss';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import * as countriesList from 'countries-list';
@@ -25,6 +24,7 @@ import { AppHelperService } from '../app.interface';
 @Component({
   controllerAs: 'vm',
   selector: 'appLogin',
+  styles: [require('./app-login.component.scss')],
   template: require('./app-login.component.html')
 })
 export default class AppLoginComponent implements OnInit {
