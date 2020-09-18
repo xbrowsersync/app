@@ -247,63 +247,62 @@ export default class WebExtBackgroundService {
 
   init(): void {
     this.logSvc.logInfo('Starting up');
-    this.$q
-      .all([
-        this.platformSvc.getAppVersion(),
-        this.settingsSvc.all(),
-        this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId, StoreKey.SyncVersion]),
-        this.upgradeSvc.checkIfUpgradeRequired(this.getCurrentVersion()),
-        this.utilitySvc.getServiceUrl(),
-        this.utilitySvc.isSyncEnabled()
-      ])
-      .then((data) => {
-        const appVersion = data[0];
-        const settings = data[1];
-        const storeContent = data[2];
-        const upgradeRequired = data[3];
-        const serviceUrl = data[4];
-        const syncEnabled = data[5];
 
-        // Add useful debug info to beginning of trace log
-        const debugInfo = angular.copy(storeContent) as any;
-        debugInfo.appVersion = appVersion;
-        debugInfo.checkForAppUpdates = settings.checkForAppUpdates;
-        debugInfo.platform = detectBrowser.detect();
-        debugInfo.platform.name = this.utilitySvc.getBrowserName();
-        debugInfo.serviceUrl = serviceUrl;
-        debugInfo.syncBookmarksToolbar = settings.syncBookmarksToolbar;
-        debugInfo.syncEnabled = syncEnabled;
-        this.logSvc.logInfo(
-          Object.keys(debugInfo)
-            .filter((key) => {
-              return debugInfo[key] != null;
-            })
-            .reduce((prev, current) => {
-              prev[current] = debugInfo[current];
-              return prev;
-            }, {})
-        );
+    // Before initialising, check if upgrade required
+    this.upgradeSvc
+      .checkIfUpgradeRequired(this.getCurrentVersion())
+      .then((upgradeRequired) => upgradeRequired && this.upgradeExtension())
+      .then(() =>
+        this.$q
+          .all([
+            this.platformSvc.getAppVersion(),
+            this.settingsSvc.all(),
+            this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId, StoreKey.SyncVersion]),
+            this.utilitySvc.getServiceUrl(),
+            this.utilitySvc.isSyncEnabled()
+          ])
+          .then((data) => {
+            const appVersion = data[0];
+            const settings = data[1];
+            const storeContent = data[2];
+            const serviceUrl = data[3];
+            const syncEnabled = data[4];
 
-        // Update browser action icon
-        this.platformSvc.refreshNativeInterface(syncEnabled);
+            // Add useful debug info to beginning of trace log
+            const debugInfo = angular.copy(storeContent) as any;
+            debugInfo.appVersion = appVersion;
+            debugInfo.checkForAppUpdates = settings.checkForAppUpdates;
+            debugInfo.platform = detectBrowser.detect();
+            debugInfo.platform.name = this.utilitySvc.getBrowserName();
+            debugInfo.serviceUrl = serviceUrl;
+            debugInfo.syncBookmarksToolbar = settings.syncBookmarksToolbar;
+            debugInfo.syncEnabled = syncEnabled;
+            this.logSvc.logInfo(
+              Object.keys(debugInfo)
+                .filter((key) => {
+                  return debugInfo[key] != null;
+                })
+                .reduce((prev, current) => {
+                  prev[current] = debugInfo[current];
+                  return prev;
+                }, {})
+            );
 
-        // Check for new app version after a delay
-        if (settings.checkForAppUpdates) {
-          this.$timeout(this.checkForNewVersion, 5e3);
-        }
+            // Update browser action icon
+            this.platformSvc.refreshNativeInterface(syncEnabled);
 
-        return (upgradeRequired ? this.upgradeExtension() : this.$q.resolve()).then(() => {
-          if (!syncEnabled) {
-            return;
-          }
+            // Check for new app version after a delay
+            if (settings.checkForAppUpdates) {
+              this.$timeout(this.checkForNewVersion, 5e3);
+            }
 
-          // Enable sync
-          return this.syncEngineSvc.enableSync().then(() => {
-            // Check for updates after a delay to allow for initialising network connection
-            this.$timeout(this.checkForSyncUpdatesOnStartup, 5e3);
-          });
-        });
-      });
+            // Enable sync and check for updates after a delay to allow for initialising network connection
+            if (!syncEnabled) {
+              return;
+            }
+            return this.syncEngineSvc.enableSync().then(() => this.$timeout(this.checkForSyncUpdatesOnStartup, 5e3));
+          })
+      );
   }
 
   installExtension(): ng.IPromise<void> {

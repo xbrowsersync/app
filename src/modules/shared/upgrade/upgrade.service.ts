@@ -50,13 +50,12 @@ export default class UpgradeService implements PlatformUpgradeService {
         .then(this.getLastUpgradeVersion)
         .then((lastUpgradeVersion) => {
           // Process upgrade if no upgrade version set or if new version is greater than last upgrade version
+          const defaultUpgradeVersion = '1.0.0';
           let upgradeStep: () => ng.IPromise<void>;
-          if (
-            angular.isUndefined(lastUpgradeVersion) ||
-            compareVersions.compare(upgradeToVersion, lastUpgradeVersion, '>')
-          ) {
+          if (compareVersions.compare(upgradeToVersion, lastUpgradeVersion ?? defaultUpgradeVersion, '>')) {
             switch (true) {
-              case upgradeToVersion.indexOf('1.6.0') === 0 && compareVersions.compare('1.6.0', lastUpgradeVersion, '>'):
+              case upgradeToVersion.indexOf('1.6.0') === 0 &&
+                compareVersions.compare('1.6.0', lastUpgradeVersion ?? defaultUpgradeVersion, '>'):
                 upgradeStep = this.upgradeTo160;
                 break;
               default:
@@ -78,6 +77,7 @@ export default class UpgradeService implements PlatformUpgradeService {
   }
 
   upgradeTo160(): ng.IPromise<void> {
-    throw new Exceptions.NotImplementedException();
+    // Initialise data storage
+    return this.storeSvc.init();
   }
 }

@@ -44,35 +44,38 @@ export default class WebExtUpgradeService extends UpgradeService implements Plat
   }
 
   upgradeTo160(): ng.IPromise<void> {
-    // Convert local storage items to IndexedDB
-    return browser.storage.local
-      .get()
-      .then((cachedData) => {
-        if (!cachedData || Object.keys(cachedData).length === 0) {
-          return;
-        }
-
-        return this.$q.all(
-          Object.keys(cachedData).map((key) => {
-            return this.storeSvc.set(key, cachedData[key]);
-          })
-        );
-      })
-      .then(() => {
-        return browser.storage.local.clear();
-      })
-      .then(() => {
-        // If sync enabled, create id mappings
-        return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
-          if (!syncEnabled) {
+    return (
+      super
+        .upgradeTo160()
+        // Convert local storage items to IndexedDB
+        .then(() => browser.storage.local.get())
+        .then((cachedData) => {
+          if (!cachedData || Object.keys(cachedData).length === 0) {
             return;
           }
-          return this.bookmarkHelperSvc
-            .getCachedBookmarks()
-            .then(this.bookmarkSvc.buildIdMappings)
-            .then(() => this.platformSvc.refreshNativeInterface());
-        });
-      })
-      .then(() => {});
+
+          return this.$q.all(
+            Object.keys(cachedData).map((key) => {
+              return this.storeSvc.set(key, cachedData[key]);
+            })
+          );
+        })
+        .then(() => {
+          return browser.storage.local.clear();
+        })
+        .then(() => {
+          // If sync enabled, create id mappings
+          return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
+            if (!syncEnabled) {
+              return;
+            }
+            return this.bookmarkHelperSvc
+              .getCachedBookmarks()
+              .then(this.bookmarkSvc.buildIdMappings)
+              .then(() => this.platformSvc.refreshNativeInterface(true));
+          });
+        })
+        .then(() => {})
+    );
   }
 }
