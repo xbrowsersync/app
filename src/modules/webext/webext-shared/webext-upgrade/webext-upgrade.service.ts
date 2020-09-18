@@ -3,7 +3,7 @@ import autobind from 'autobind-decorator';
 import { browser } from 'webextension-polyfill-ts';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkService } from '../../../shared/bookmark/bookmark.interface';
-import { PlatformUpgradeService } from '../../../shared/global-shared.interface';
+import { PlatformService, PlatformUpgradeService } from '../../../shared/global-shared.interface';
 import LogService from '../../../shared/log/log.service';
 import StoreService from '../../../shared/store/store.service';
 import UpgradeService from '../../../shared/upgrade/upgrade.service';
@@ -14,14 +14,24 @@ import UtilityService from '../../../shared/utility/utility.service';
 export default class WebExtUpgradeService extends UpgradeService implements PlatformUpgradeService {
   bookmarkHelperSvc: BookmarkHelperService;
   bookmarkSvc: BookmarkService;
+  platformSvc: PlatformService;
   utilitySvc: UtilityService;
 
-  static $inject = ['$q', 'BookmarkHelperService', 'BookmarkService', 'LogService', 'StoreService', 'UtilityService'];
+  static $inject = [
+    '$q',
+    'BookmarkHelperService',
+    'BookmarkService',
+    'LogService',
+    'PlatformService',
+    'StoreService',
+    'UtilityService'
+  ];
   constructor(
     $q: ng.IQService,
     BookmarkHelperSvc: BookmarkHelperService,
     BookmarkSvc: BookmarkService,
     LogSvc: LogService,
+    PlatformSvc: PlatformService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
   ) {
@@ -29,6 +39,7 @@ export default class WebExtUpgradeService extends UpgradeService implements Plat
 
     this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.bookmarkSvc = BookmarkSvc;
+    this.platformSvc = PlatformSvc;
     this.utilitySvc = UtilitySvc;
   }
 
@@ -56,9 +67,10 @@ export default class WebExtUpgradeService extends UpgradeService implements Plat
           if (!syncEnabled) {
             return;
           }
-          return this.bookmarkHelperSvc.getCachedBookmarks().then((cachedBookmarks) => {
-            return this.bookmarkSvc.buildIdMappings(cachedBookmarks);
-          });
+          return this.bookmarkHelperSvc
+            .getCachedBookmarks()
+            .then(this.bookmarkSvc.buildIdMappings)
+            .then(() => this.platformSvc.refreshNativeInterface());
         });
       })
       .then(() => {});

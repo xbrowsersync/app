@@ -1,7 +1,7 @@
 import { NgModule } from 'angular-ts-decorators';
 import BookmarkIdMapperService from './bookmark-id-mapper/bookmark-id-mapper.service';
 import WebExtStoreService from './webext-store/webext-store.service';
-import WebExtUpgradeService from './webext-upgrade-service/webext-upgrade.service';
+import WebExtUpgradeService from './webext-upgrade/webext-upgrade.service';
 
 @NgModule({
   id: 'WebExtSharedModule',
