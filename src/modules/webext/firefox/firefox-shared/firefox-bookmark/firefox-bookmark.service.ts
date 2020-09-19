@@ -475,45 +475,53 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
   }
 
   getNativeContainerIds(): ng.IPromise<any> {
-    return browser.bookmarks.getTree().then((tree) => {
-      // Get the root child nodes
-      const menuBookmarksNode = tree[0].children.find((x) => {
-        return x.id === 'menu________';
-      });
-      const mobileBookmarksNode = tree[0].children.find((x) => {
-        return x.id === 'mobile______';
-      });
-      const otherBookmarksNode = tree[0].children.find((x) => {
-        return x.id === 'unfiled_____';
-      });
-      const toolbarBookmarksNode = tree[0].children.find((x) => {
-        return x.id === 'toolbar_____';
-      });
+    return this.bookmarkHelperSvc.getCachedBookmarks().then((bookmarks) => {
+      // Initialise container ids object using containers defined in bookmarks
+      const containerIds = bookmarks.reduce((prev, current) => {
+        prev[current.title] = undefined;
+        return prev;
+      }, {});
 
-      // Throw an error if a native container is not found
-      if (!menuBookmarksNode || !mobileBookmarksNode || !otherBookmarksNode || !toolbarBookmarksNode) {
-        if (!menuBookmarksNode) {
-          this.logSvc.logWarning('Missing container: menu bookmarks');
-        }
-        if (!mobileBookmarksNode) {
-          this.logSvc.logWarning('Missing container: mobile bookmarks');
-        }
-        if (!otherBookmarksNode) {
-          this.logSvc.logWarning('Missing container: other bookmarks');
-        }
-        if (!toolbarBookmarksNode) {
-          this.logSvc.logWarning('Missing container: toolbar bookmarks');
-        }
-        throw new Exceptions.ContainerNotFoundException();
-      }
+      // Populate container ids
+      return browser.bookmarks.getTree().then((tree) => {
+        // Get the root child nodes
+        const menuBookmarksNode = tree[0].children.find((x) => {
+          return x.id === 'menu________';
+        });
+        const mobileBookmarksNode = tree[0].children.find((x) => {
+          return x.id === 'mobile______';
+        });
+        const otherBookmarksNode = tree[0].children.find((x) => {
+          return x.id === 'unfiled_____';
+        });
+        const toolbarBookmarksNode = tree[0].children.find((x) => {
+          return x.id === 'toolbar_____';
+        });
 
-      // Return the container ids
-      const containerIds = {};
-      containerIds[BookmarkContainer.Menu] = menuBookmarksNode.id;
-      containerIds[BookmarkContainer.Mobile] = mobileBookmarksNode.id;
-      containerIds[BookmarkContainer.Other] = otherBookmarksNode.id;
-      containerIds[BookmarkContainer.Toolbar] = toolbarBookmarksNode.id;
-      return containerIds;
+        // Throw an error if a native container is not found
+        if (!menuBookmarksNode || !mobileBookmarksNode || !otherBookmarksNode || !toolbarBookmarksNode) {
+          if (!menuBookmarksNode) {
+            this.logSvc.logWarning('Missing container: menu bookmarks');
+          }
+          if (!mobileBookmarksNode) {
+            this.logSvc.logWarning('Missing container: mobile bookmarks');
+          }
+          if (!otherBookmarksNode) {
+            this.logSvc.logWarning('Missing container: other bookmarks');
+          }
+          if (!toolbarBookmarksNode) {
+            this.logSvc.logWarning('Missing container: toolbar bookmarks');
+          }
+          throw new Exceptions.ContainerNotFoundException();
+        }
+
+        // Return the container ids
+        containerIds[BookmarkContainer.Menu] = menuBookmarksNode.id;
+        containerIds[BookmarkContainer.Mobile] = mobileBookmarksNode.id;
+        containerIds[BookmarkContainer.Other] = otherBookmarksNode.id;
+        containerIds[BookmarkContainer.Toolbar] = toolbarBookmarksNode.id;
+        return containerIds;
+      });
     });
   }
 

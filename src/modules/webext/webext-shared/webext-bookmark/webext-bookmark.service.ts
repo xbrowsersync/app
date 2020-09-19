@@ -91,29 +91,13 @@ export default class WebExtBookmarkService implements BookmarkService {
     return this._syncEngineSvc;
   }
 
-  addBookmark(
-    bookmarkMetadata: BookmarkMetadata,
-    parentId: number,
-    index: number,
-    bookmarks: Bookmark[]
-  ): UpdateBookmarksResult {
+  addBookmark(bookmark: Bookmark, parentId: number, index: number, bookmarks: Bookmark[]): UpdateBookmarksResult {
+    // Add bookmark as child at index param
     const updatedBookmarks = angular.copy(bookmarks);
     const parent = this.bookmarkHelperSvc.findBookmarkById(parentId, updatedBookmarks);
     if (!parent) {
       throw new Exceptions.BookmarkNotFoundException();
     }
-
-    // Create new bookmark
-    const bookmark = this.bookmarkHelperSvc.newBookmark(
-      bookmarkMetadata.title,
-      bookmarkMetadata.url,
-      bookmarkMetadata.description,
-      bookmarkMetadata.tags,
-      bookmarkMetadata.isSeparator,
-      bookmarks
-    );
-
-    // Add bookmark as child at index param
     parent.children.splice(index, 0, bookmark);
 
     return {
@@ -194,9 +178,7 @@ export default class WebExtBookmarkService implements BookmarkService {
                 }
 
                 // Remove any unsupported container folders present
-                const nodes = otherBookmarks.children.filter((x) => {
-                  return Object.values(nativeContainerIds).indexOf(x.id) < 0;
-                });
+                const nodes = otherBookmarks.children.filter((x) => !this.unsupportedContainers.includes(x.title));
 
                 // Map ids between nodes and synced container children
                 const otherBookmarksContainer = bookmarks.find((x) => {
@@ -275,7 +257,7 @@ export default class WebExtBookmarkService implements BookmarkService {
   convertNativeBookmarkToBookmark(
     nativeBookmark: NativeBookmarks.BookmarkTreeNode,
     bookmarks: Bookmark[],
-    takenIds: number[] = []
+    takenIds?: number[]
   ): Bookmark {
     if (!nativeBookmark) {
       return;
@@ -283,6 +265,9 @@ export default class WebExtBookmarkService implements BookmarkService {
 
     // Get a new bookmark id and add to taken ids array so that ids are not duplicated before bookmarks are updated
     const id = this.bookmarkHelperSvc.getNewBookmarkId(bookmarks, takenIds);
+    if (angular.isUndefined(takenIds)) {
+      takenIds = [];
+    }
     takenIds.push(id);
 
     // Create the new bookmark
@@ -630,12 +615,15 @@ export default class WebExtBookmarkService implements BookmarkService {
 
           // Add new bookmark then check if the change should be synced
           const newBookmarkMetadata = this.bookmarkHelperSvc.extractBookmarkMetadata(changeData.nativeBookmark);
-          const addBookmarkResult = this.addBookmark(
-            newBookmarkMetadata,
-            parentId,
-            changeData.nativeBookmark.index,
+          const newBookmark = this.bookmarkHelperSvc.newBookmark(
+            newBookmarkMetadata.title,
+            newBookmarkMetadata.url,
+            newBookmarkMetadata.description,
+            newBookmarkMetadata.tags,
+            newBookmarkMetadata.isSeparator,
             bookmarks
           );
+          const addBookmarkResult = this.addBookmark(newBookmark, parentId, changeData.nativeBookmark.index, bookmarks);
 
           return this.checkIfBookmarkChangeShouldBeSynced(addBookmarkResult.bookmark, addBookmarkResult.bookmarks).then(
             (syncThisChange) => {
@@ -761,16 +749,15 @@ export default class WebExtBookmarkService implements BookmarkService {
   ): ng.IPromise<Bookmark[]> {
     // Get native container ids
     return this.getNativeContainerIds().then((nativeContainerIds) => {
-      // Check if moved bookmark is a container
+      // Check if container was moved to a different folder
+      if (Object.values(nativeContainerIds).includes(undefined)) {
+        throw new Exceptions.ContainerChangedException();
+      }
+
       return browser.bookmarks.get(changeData.id).then((results) => {
+        // If container moved to a different position in same folder, skip sync
         const movedBookmark = results[0];
         if (Object.values(nativeContainerIds).includes(movedBookmark.id)) {
-          if (changeData.oldParentId !== changeData.parentId) {
-            // Container moved to a different folder
-            throw new Exceptions.ContainerChangedException();
-          }
-
-          // Container moved to a different position in same folder, skip sync
           return;
         }
 
@@ -848,9 +835,8 @@ export default class WebExtBookmarkService implements BookmarkService {
                     ).then((numContainers) => {
                       // Adjust the target index by the number of container folders then add the bookmark
                       const index = changeData.index - numContainers;
-                      const bookmarkMetadata = this.bookmarkHelperSvc.extractBookmarkMetadata(bookmarkToRemove);
                       const addBookmarkResult = this.addBookmark(
-                        bookmarkMetadata,
+                        bookmarkToRemove,
                         parentMapping.syncedId,
                         index,
                         bookmarksAfterRemoval
@@ -1134,15 +1120,9 @@ export default class WebExtBookmarkService implements BookmarkService {
       return browser.bookmarks
         .getChildren(otherBookmarksId)
         .then((children) => {
-          // Get all native bookmarks in other bookmarks that are unsupported containers
-          const containers = children.filter((x) => {
-            return this.unsupportedContainers.find((y) => {
-              return y === x.title;
-            });
-          });
-
-          // Check for duplicates
-          return containers.length === new Set(containers).size;
+          // Get all native bookmarks in other bookmarks that are unsupported containers and check for duplicates
+          const containers = children.filter((x) => this.unsupportedContainers.includes(x.title)).map((x) => x.title);
+          return containers.length !== new Set(containers).size;
         })
         .catch((err) => {
           this.logSvc.logInfo(`Failed to detect whether container changed: ${JSON.stringify(changedNativeBookmark)}`);

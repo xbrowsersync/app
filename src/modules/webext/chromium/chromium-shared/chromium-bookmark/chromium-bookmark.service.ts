@@ -396,42 +396,54 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
   }
 
   getNativeContainerIds(): ng.IPromise<any> {
-    return browser.bookmarks.getTree().then((tree) => {
-      // Get the root child nodes
-      const otherBookmarksNode = tree[0].children.find((x) => {
-        return x.id === this.otherBookmarksNodeId;
-      });
-      const toolbarBookmarksNode = tree[0].children.find((x) => {
-        return x.id === this.toolbarBookmarksNodeId;
-      });
+    return this.bookmarkHelperSvc.getCachedBookmarks().then((bookmarks) => {
+      // Initialise container ids object using containers defined in bookmarks
+      const containerIds = bookmarks.reduce((prev, current) => {
+        prev[current.title] = undefined;
+        return prev;
+      }, {});
 
-      // Throw an error if a native container node is not found
-      if (!otherBookmarksNode || !toolbarBookmarksNode) {
-        if (!otherBookmarksNode) {
-          this.logSvc.logWarning('Missing container: other bookmarks');
+      // Populate container ids
+      return browser.bookmarks.getTree().then((tree) => {
+        // Get the root child nodes
+        const otherBookmarksNode = tree[0].children.find((x) => {
+          return x.id === this.otherBookmarksNodeId;
+        });
+        const toolbarBookmarksNode = tree[0].children.find((x) => {
+          return x.id === this.toolbarBookmarksNodeId;
+        });
+
+        // Throw an error if a native container node is not found
+        if (!otherBookmarksNode || !toolbarBookmarksNode) {
+          if (!otherBookmarksNode) {
+            this.logSvc.logWarning('Missing container: other bookmarks');
+          }
+          if (!toolbarBookmarksNode) {
+            this.logSvc.logWarning('Missing container: toolbar bookmarks');
+          }
+          throw new Exceptions.ContainerNotFoundException();
         }
-        if (!toolbarBookmarksNode) {
-          this.logSvc.logWarning('Missing container: toolbar bookmarks');
+
+        // Add containers to results
+        containerIds[BookmarkContainer.Other] = otherBookmarksNode.id;
+        containerIds[BookmarkContainer.Toolbar] = toolbarBookmarksNode.id;
+
+        // Check for unsupported containers
+        if (Object.keys(containerIds).includes(BookmarkContainer.Menu)) {
+          const menuBookmarksNode = otherBookmarksNode.children.find((x) => {
+            return x.title === BookmarkContainer.Menu;
+          });
+          containerIds[BookmarkContainer.Menu] = menuBookmarksNode ? menuBookmarksNode.id : undefined;
         }
-        throw new Exceptions.ContainerNotFoundException();
-      }
+        if (Object.keys(containerIds).includes(BookmarkContainer.Mobile)) {
+          const mobileBookmarksNode = otherBookmarksNode.children.find((x) => {
+            return x.title === BookmarkContainer.Mobile;
+          });
+          containerIds[BookmarkContainer.Mobile] = mobileBookmarksNode ? mobileBookmarksNode.id : undefined;
+        }
 
-      // Add containers to results
-      const containerIds = {};
-      containerIds[BookmarkContainer.Other] = otherBookmarksNode.id;
-      containerIds[BookmarkContainer.Toolbar] = toolbarBookmarksNode.id;
-
-      // Check for unsupported containers
-      const menuBookmarksNode = otherBookmarksNode.children.find((x) => {
-        return x.title === BookmarkContainer.Menu;
+        return containerIds;
       });
-      const mobileBookmarksNode = otherBookmarksNode.children.find((x) => {
-        return x.title === BookmarkContainer.Mobile;
-      });
-      containerIds[BookmarkContainer.Menu] = menuBookmarksNode ? menuBookmarksNode.id : undefined;
-      containerIds[BookmarkContainer.Mobile] = mobileBookmarksNode ? mobileBookmarksNode.id : undefined;
-
-      return containerIds;
     });
   }
 
