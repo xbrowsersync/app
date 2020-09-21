@@ -14,33 +14,33 @@
     "AppUpdated": {
       "Title": {
         "key": "Alert_AppUpdated_Title",
-        "default": "Updated to"
+        "default": "Обновлено до"
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync has been updated with the latest features and fixes. Click for release notes."
+        "default": "xBrowserSync был обновлен с последними функциями и исправлениями. Нажмите для примечаний к выпуску."
       }
     },
     "BookmarkCreated": {
       "key": "Alert_BookmarkCreated",
-      "default": "Bookmark created"
+      "default": "Закладка создана"
     },
     "BookmarkDeleted": {
       "key": "Alert_BookmarkDeleted",
-      "default": "Bookmark deleted"
+      "default": "Закладка удалена"
     },
     "BookmarkUpdated": {
       "key": "Alert_BookmarkUpdated",
-      "default": "Bookmark updated"
+      "default": "Закладка обновлена"
     },
     "GetMetadata": {
       "Message": {
         "key": "Alert_GetMetadata_Message",
-        "default": "Fetching bookmark properties, touch to cancel."
+        "default": "Получение свойств закладки, нажмите для отмены."
       },
       "Success": {
         "key": "Alert_GetMetadata_Success",
-        "default": "Bookmark properties updated."
+        "default": "Свойства закладки обновлены."
       }
     },
     "Go": {
@@ -50,18 +50,18 @@
     "WorkingOffline": {
       "Title": {
         "key": "Alert_WorkingOffline_Title",
-        "default": "Working offline"
+        "default": "Работать оффлайн"
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
-        "default": "Changes will be synced when connection is restored."
+        "default": "Изменения будут синхронизированы после восстановления соединения."
       }
     }
   },
   "App": {
     "Description": {
       "key": "App_Description",
-      "default": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
+      "default": "Синхронизация браузера как она должна быть: безопасная, анонимная и бесплатная! Синхронизируйте закладки между браузерами и устройствами, без регистрации."
     },
     "Title": {
       "key": "App_Title",
@@ -76,62 +76,62 @@
       },
       "Mobile": {
         "key": "Bookmarks_Container_Mobile",
-        "default": "Mobile bookmarks"
+        "default": "Мобильные закладки"
       },
       "Other": {
         "key": "Bookmarks_Container_Other",
-        "default": "Other bookmarks"
+        "default": "Другие закладки"
       },
       "Toolbar": {
         "key": "Bookmarks_Container_Toolbar",
-        "default": "Toolbar bookmarks"
+        "default": "Закладки на панели закладок"
       }
     }
   },
   "Button": {
     "AddBookmark": {
       "key": "Button_AddBookmark",
-      "default": "Add Bookmark"
+      "default": "Добавить закладку"
     },
     "Back": {
       "key": "Button_Back",
-      "default": "Back"
+      "default": "Назад"
     },
     "Cancel": {
       "key": "Button_Cancel",
-      "default": "Cancel"
+      "default": "Отмена"
     },
     "Close": {
       "key": "Button_Close",
-      "default": "Close"
+      "default": "Закрыть"
     },
     "Confirm": {
       "key": "Button_Confirm",
-      "default": "Yes"
+      "default": "Да"
     },
     "Continue": {
       "key": "Button_Continue",
-      "default": "Continue"
+      "default": "Продолжить"
     },
     "DeleteBookmark": {
       "key": "Button_DeleteBookmark",
-      "default": "Delete Bookmark"
+      "default": "Удалить закладку"
     },
     "Deny": {
       "key": "Button_Deny",
-      "default": "No"
+      "default": "Нет"
     },
     "Done": {
       "key": "Button_Done",
-      "default": "Done"
+      "default": "Готово"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
-      "default": "Edit Bookmark"
+      "default": "Редактировать закладку"
     },
     "Help": {
       "key": "Button_Help",
-      "default": "Help guide"
+      "default": "Справочное руководство"
     },
     "Next": {
       "key": "Button_Next",
@@ -139,15 +139,15 @@
     },
     "OK": {
       "key": "Button_OK",
-      "default": "Got it"
+      "default": "Понятно"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
-      "default": "View release notes"
+      "default": "Посмотреть примечания к выпуску"
     },
     "Saving": {
       "key": "Button_Saving",
-      "default": "Saving"
+      "default": "Сохранение"
     },
     "Settings": {
       "key": "Button_Settings",
@@ -155,29 +155,29 @@
     },
     "ShareBookmark": {
       "key": "Button_ShareBookmark",
-      "default": "Share bookmark"
+      "default": "Поделиться закладкой"
     },
     "Undo": {
       "key": "Button_Undo",
-      "default": "Undo"
+      "default": "Отменить"
     },
     "Update": {
       "key": "Button_Update",
-      "default": "Update"
+      "default": "Обновить"
     },
     "View": {
       "key": "Button_View",
-      "default": "View"
+      "default": "Просмотр"
     }
   },
   "Exception": {
     "ContainerChanged_Message": {
       "key": "Exception_ContainerChanged_Message",
-      "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
+      "default": "Пожалуйста, избегайте изменения [xbs] папок, так как это может вызвать проблемы синхронизации."
     },
     "ContainerChanged_Title": {
       "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync folder changed"
+      "default": "Папка xBrowserSync изменена"
     },
     "DailyNewSyncLimitReached_Message": {
       "key": "Exception_DailyNewSyncLimitReached_Message",
@@ -185,35 +185,35 @@
     },
     "DailyNewSyncLimitReached_Title": {
       "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "Daily new sync limit reached"
+      "default": "Достигнут суточный лимит синхронизации"
     },
     "Default_Message": {
       "key": "Exception_Default_Message",
-      "default": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
+      "default": "Если проблема сохраняется, пожалуйста, <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>сообщите о проблеме</a>."
     },
     "Default_Title": {
       "key": "Exception_Default_Title",
-      "default": "Something went wrong"
+      "default": "Что-то пошло не так"
     },
     "FailedDownloadFile_Title": {
       "key": "Exception_FailedDownloadFile_Title",
-      "default": "Backup failed"
+      "default": "Не удалось выполнить резервное копирование"
     },
     "FailedGetDataToRestore_Title": {
       "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "Browse files failed"
+      "default": "Не удалось просмотреть файлы"
     },
     "FailedGetPageMetadata_Message": {
       "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "URL is invalid or webpage data could not be retrieved."
+      "default": "URL-адрес недействителен или данные веб-страницы не могут быть получены."
     },
     "FailedGetPageMetadata_Title": {
       "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "Couldn’t get bookmark properties"
+      "default": "Не удалось получить свойства закладки"
     },
     "FailedRefreshBookmarks_Title": {
       "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "Couldn’t retrieve updates"
+      "default": "Не удалось получить обновления"
     },
     "FailedRestoreData_Message": {
       "key": "Exception_FailedRestoreData_Message",
