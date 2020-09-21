@@ -3,12 +3,12 @@
     "AppUpdateAvailable": {
       "Title": {
         "key": "Alert_AppUpdateAvailable_Title",
-        "default": "xBrowserSync update available"
+        "default": "Доступно обновление xBrowserSync"
       },
       "Message": {
         "key": "Alert_AppUpdateAvailable_Message",
-        "default": "{version} is available to download. Click for more information.",
-        "android": "xBrowserSync {version} is available to download."
+        "default": "{version} доступна для скачивания. Нажмите для получения дополнительной информации.",
+        "android": "xBrowserSync {version} доступен для загрузки."
       }
     },
     "AppUpdated": {
