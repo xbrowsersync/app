@@ -261,139 +261,139 @@
     },
     "LocalContainerNotFound_Title": {
       "key": "Exception_LocalContainerNotFound_Title",
-      "default": "Unexpected bookmarks structure"
+      "default": "Неправильная структура закладки"
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local data has been refreshed, please reapply last change."
+      "default": "Локальные данные были обновлены, пожалуйста, примените последнее изменение."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
-      "default": "Sync error"
+      "default": "Ошибка синхронизации"
     },
     "MissingClientData_Message": {
       "key": "Exception_MissingClientData_Message",
-      "default": "Unable to find stored credentials. Re-enable sync and try again."
+      "default": "Не удалось найти сохраненные учетные данные. Включите синхронизацию повторно и повторите попытку."
     },
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
-      "default": "Missing credentials"
+      "default": "Отсутствуют учетные данные"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",
-      "default": "Ensure you have provided a valid xBrowserSync back up before restoring."
+      "default": "Убедитесь, что вы предоставили правильную резервную копию xBrowserSync перед восстановлением."
     },
     "NoDataToRestore_Title": {
       "key": "Exception_NoDataToRestore_Title",
-      "default": "No data to restore"
+      "default": "Нет данных для восстановления"
     },
     "NotAcceptingNewSyncs_Message": {
       "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Switch to a different service or try again later."
+      "default": "Переключитесь на другую службу или повторите попытку позже."
     },
     "NotAcceptingNewSyncs_Title": {
       "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "Service not accepting new syncs"
+      "default": "Служба не принимает новые синхронизации"
     },
     "OutOfSync_Message": {
       "key": "Exception_OutOfSync_Message",
-      "default": "Local data was out of sync and has now been refreshed. Please reapply last change."
+      "default": "Локальные данные не синхронизированы и были обновлены. Пожалуйста, примените повторно последние изменения."
     },
     "OutOfSync_Title": {
       "key": "Exception_OutOfSync_Title",
-      "default": "Sync conflict detected"
+      "default": "Обнаружен конфликт синхронизации"
     },
     "RequestEntityTooLarge_Message": {
       "key": "Exception_RequestEntityTooLarge_Message",
-      "default": "Delete some bookmarks and try again or switch to a service with a larger sync limit."
+      "default": "Удалите несколько закладок и попробуйте еще раз или переключитесь на службу с большим лимитом синхронизации."
     },
     "RequestEntityTooLarge_Title": {
       "key": "Exception_RequestEntityTooLarge_Title",
-      "default": "Sync data limit exceeded"
+      "default": "Превышен лимит синхронизации данных"
     },
     "ScanFailed_Message": {
       "key": "Exception_ScanFailed_Message",
-      "default": "Check permission has been granted and try again."
+      "default": "Проверьте, что разрешение было предоставлено и попробуйте снова."
     },
     "ScanFailed_Title": {
       "key": "Exception_ScanFailed_Title",
-      "default": "Scan failed"
+      "default": "Ошибка сканирования"
     },
     "ServiceOffline_Message": {
       "key": "Exception_ServiceOffline_Message",
-      "default": "The xBrowserSync service is currently offline, try again later."
+      "default": "Служба xBrowserSync в настоящее время недоступна, повторите попытку позже."
     },
     "ServiceOffline_Title": {
       "key": "Exception_ServiceOffline_Title",
-      "default": "Service offline"
+      "default": "Служба оффлайн"
     },
     "ShareFailed_Title": {
       "key": "Exception_ShareFailed_Title",
-      "default": "Share failed"
+      "default": "Не удалось поделиться"
     },
     "SyncRemoved_Message": {
       "key": "Exception_SyncRemoved_Message",
-      "default": "The requested sync does not exist, it may have been removed due to inactivity."
+      "default": "Запрошенная синхронизация не существует, возможно она была удалена из-за неактивности."
     },
     "SyncRemoved_Title": {
       "key": "Exception_SyncRemoved_Title",
-      "default": "Sync not found"
+      "default": "Синхронизация не найдена"
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
-      "default": "Sync has been disabled, re-enable sync to resume syncing."
+      "default": "Синхронизация была отключена, включите повторную синхронизацию для возобновления синхронизации."
     },
     "TooManyRequests_Title": {
       "key": "Exception_TooManyRequests_Title",
-      "default": "Service request limit hit"
+      "default": "Достигнут лимит запросов к службе"
     },
     "UncommittedSyncs_Message": {
       "key": "Exception_UncommittedSyncs_Message",
-      "default": "Sync will be committed once connection to service is restored."
+      "default": "Синхронизация будет выполнена после восстановления соединения с службой."
     },
     "UncommittedSyncs_Title": {
       "key": "Exception_UncommittedSyncs_Title",
-      "default": "Changes not synced"
+      "default": "Изменения не синхронизированы"
     },
     "UnsupportedServiceApiVersion_Message": {
       "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "This service is running an unsupported API version."
+      "default": "Эта служба использует неподдерживаемую версию API."
     },
     "UnsupportedServiceApiVersion_Title": {
       "key": "Exception_UnsupportedServiceApiVersion_Title",
-      "default": "Service not supported"
+      "default": "Служба не поддерживается"
     },
     "UpgradeFailed_Message": {
       "key": "Exception_UpgradeFailed_Message",
-      "android": "Upgrade will be retried on restarting the app. If the problem persists please reinstall xBrowserSync.",
-      "default": "Restart your browser to retry upgrade, if the problem persists please reinstall xBrowserSync."
+      "android": "Обновление будет повторено при перезапуске приложения. Если проблема не устранена, пожалуйста, переустановите xBrowserSync.",
+      "default": "Перезапустите браузер для повторного обновления, если проблема не устранена, пожалуйста, переустановите xBrowserSync."
     },
     "UpgradeFailed_Title": {
       "key": "Exception_UpgradeFailed_Title",
-      "default": "Upgrade failed"
+      "default": "Ошибка обновления"
     }
   },
   "Service": {
     "Status": {
       "Error": {
         "key": "Service_Status_Error",
-        "default": "Connection error"
+        "default": "Ошибка соединения"
       },
       "Loading": {
         "key": "Service_Status_Loading",
-        "default": "Checking"
+        "default": "Проверка..."
       },
       "NoNewSyncs": {
         "key": "Service_Status_NoNewSyncs",
-        "default": "Not accepting new syncs"
+        "default": "Не принимает новые синхронизации"
       },
       "Offline": {
         "key": "Service_Status_Offline",
-        "default": "Offline"
+        "default": "Оффлайн"
       },
       "Online": {
         "key": "Service_Status_Online",
-        "default": "Online"
+        "default": "Онлайн"
       }
     }
   },
