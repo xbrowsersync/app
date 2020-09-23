@@ -84,7 +84,7 @@
       },
       "Toolbar": {
         "key": "Bookmarks_Container_Toolbar",
-        "default": "Закладки на панели закладок"
+        "default": "Панель закладок"
       }
     }
   },
