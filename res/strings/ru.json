@@ -381,7 +381,7 @@
       },
       "Loading": {
         "key": "Service_Status_Loading",
-        "default": "Проверка..."
+        "default": "Проверка"
       },
       "NoNewSyncs": {
         "key": "Service_Status_NoNewSyncs",
