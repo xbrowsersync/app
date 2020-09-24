@@ -11,7 +11,7 @@
       <a class="prev-link" href="#" ng-click="vm.utilitySvc.handleEvent(vm.displayPreviousPage)" ng-hide="$index === 0">
         <span>{{ vm.platformSvc.getI18nString(vm.Strings.View.Help.Previous) }}</span>
       </a>
-      <span class="page-number">{{$index + 1}} / {{vm.pages.length}}</span>
+      <span class="page-number">{{($index + 1) | number : 0}} / {{vm.pages.length | number : 0}}</span>
       <a class="next-link focused" href="#" ng-click="vm.utilitySvc.handleEvent(vm.displayNextPage)"
          ng-hide="$index === vm.pages.length - 1">
         <span>{{ vm.platformSvc.getI18nString(vm.Strings.Button.Next) }}</span>

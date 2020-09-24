@@ -1,6 +1,7 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
+import { WebExtBookmarkService } from '../../../webext/webext-shared/webext-bookmark/webext-bookmark.interface';
 import { ApiService } from '../../api/api.interface';
 import BookmarkHelperService from '../../bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkChangeType, BookmarkContainer } from '../../bookmark/bookmark.enum';
@@ -309,7 +310,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
         // If this is a new sync, get native bookmarks and continue
         if (!syncEnabled) {
           buildIdMappings = true;
-          return this.bookmarkSvc.getNativeBookmarksAsBookmarks();
+          return (this.bookmarkSvc as WebExtBookmarkService).getNativeBookmarksAsBookmarks();
         }
 
         // Use bookmarks provided or retrieve cached and then process changes
@@ -521,7 +522,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
   }
 
   validateBookmarkIds(bookmarks: Bookmark[]): boolean {
-    if (bookmarks?.length === 0) {
+    if (!bookmarks?.length) {
       return true;
     }
 

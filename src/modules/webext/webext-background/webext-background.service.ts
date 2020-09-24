@@ -7,6 +7,7 @@ import { Alert } from '../../shared/alert/alert.interface';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../shared/exception/exception';
+import { ExceptionHandler } from '../../shared/exception/exception.interface';
 import Globals from '../../shared/global-shared.constants';
 import { MessageCommand } from '../../shared/global-shared.enum';
 import { Message, PlatformService } from '../../shared/global-shared.interface';
@@ -29,6 +30,7 @@ import { InstallBackup } from '../webext.interface';
 export default class WebExtBackgroundService {
   Strings = require('../../../../res/strings/en.json');
 
+  $exceptionHandler: ExceptionHandler;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
@@ -47,6 +49,7 @@ export default class WebExtBackgroundService {
   notificationClickHandlers: any[] = [];
 
   static $inject = [
+    '$exceptionHandler',
     '$q',
     '$timeout',
     'AlertService',
@@ -63,6 +66,7 @@ export default class WebExtBackgroundService {
     'UtilityService'
   ];
   constructor(
+    $exceptionHandler: ExceptionHandler,
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
     AlertSvc: AlertService,
@@ -78,6 +82,7 @@ export default class WebExtBackgroundService {
     UpgradeSvc: UpgradeService,
     UtilitySvc: UtilityService
   ) {
+    this.$exceptionHandler = $exceptionHandler;
     this.$q = $q;
     this.$timeout = $timeout;
     this.alertSvc = AlertSvc;
@@ -225,7 +230,7 @@ export default class WebExtBackgroundService {
     browser.notifications.create(this.utilitySvc.getUniqueishId(), options).then((notificationId) => {
       // Add a click handler to open url if provided or if the message contains a url
       let urlToOpenOnClick = url;
-      if (matches?.length > 0) {
+      if (matches?.length) {
         urlToOpenOnClick = matches[0];
       }
 
@@ -332,6 +337,7 @@ export default class WebExtBackgroundService {
         .then(() => {
           this.logSvc.logInfo(`Installed v${this.getCurrentVersion()}`);
         })
+        .catch(this.$exceptionHandler)
     );
   }
 
@@ -437,7 +443,7 @@ export default class WebExtBackgroundService {
   runRestoreBookmarksCommand(sync: Sync): ng.IPromise<SyncResult> {
     return this.bookmarkSvc.disableEventListeners().then(() => {
       // Upgrade containers to use current container names
-      const bookmarksToRestore = this.bookmarkHelperSvc.upgradeContainers(sync.bookmarks ?? []);
+      const bookmarksToRestore = this.bookmarkHelperSvc.upgradeContainers(sync.bookmarks);
 
       // Queue sync
       sync.bookmarks = bookmarksToRestore;

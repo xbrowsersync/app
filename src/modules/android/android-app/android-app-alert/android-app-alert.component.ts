@@ -51,7 +51,7 @@ export default class AndroidAppAlertComponent {
         : new DOMParser().parseFromString(`<span>${alert.message}</span>`, 'text/xml').firstElementChild.textContent;
 
     // Add an action to open url if provided or if the message contains a url
-    if (!alert.actionCallback && matches?.length > 0) {
+    if (!alert.actionCallback && matches?.length) {
       const urlToOpenOnClick = matches[0];
       alert.action = this.platformSvc.getI18nString(this.Strings.Alert.Go);
       alert.actionCallback = () => {

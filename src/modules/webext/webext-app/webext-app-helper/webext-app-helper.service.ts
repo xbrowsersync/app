@@ -19,11 +19,13 @@ import WebExtPlatformService from '../../webext-shared/webext-platform/webext-pl
 
 @autobind
 export default class WebExtAppHelperService extends BaseAppHelperService implements AppHelperService {
+  $filter: ng.FilterFactory;
   bookmarkHelperSvc: BookmarkHelperService;
   platformSvc: WebExtPlatformService;
 
   static $inject = [
     '$exceptionHandler',
+    '$filter',
     '$q',
     '$timeout',
     'ApiService',
@@ -37,6 +39,7 @@ export default class WebExtAppHelperService extends BaseAppHelperService impleme
   ];
   constructor(
     $exceptionHandler: ExceptionHandler,
+    $filter: ng.FilterFactory,
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
     ApiSvc: ApiService,
@@ -61,6 +64,7 @@ export default class WebExtAppHelperService extends BaseAppHelperService impleme
       WorkingSvc
     );
 
+    this.$filter = $filter;
     this.bookmarkHelperSvc = BookmarkHelperSvc;
   }
 
@@ -138,7 +142,7 @@ export default class WebExtAppHelperService extends BaseAppHelperService impleme
         return '';
       }
 
-      return this.utilitySvc.get24hrTimeFromDate(new Date(alarm.scheduledTime));
+      return (this.$filter('date') as ng.IFilterDate)(new Date(alarm.scheduledTime), 'shortTime');
     });
   }
 

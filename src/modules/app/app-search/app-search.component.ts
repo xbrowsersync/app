@@ -128,7 +128,7 @@ export default class AppSearchComponent implements OnInit {
   }
 
   displayMoreSearchResults(): void {
-    if (this.results?.length > 0 && this.scrollDisplayMoreEnabled) {
+    if (this.results?.length && this.scrollDisplayMoreEnabled) {
       // Display next batch of results
       this.resultsDisplayed += this.batchResultsNum;
     }
@@ -214,7 +214,7 @@ export default class AppSearchComponent implements OnInit {
         break;
 
       case KeyCode.ArrowDown:
-        if (this.results?.length === 0) {
+        if (!this.results?.length) {
           break;
         }
 
@@ -335,7 +335,7 @@ export default class AppSearchComponent implements OnInit {
     const lastWord = queryWords.slice(-1).find(Boolean);
 
     // Display lookahead only if word length exceed minimum
-    if (angular.isUndefined(lastWord) || lastWord?.length < Globals.LookaheadMinChars) {
+    if ((lastWord ?? []).length < Globals.LookaheadMinChars) {
       this.lookahead = null;
       return;
     }

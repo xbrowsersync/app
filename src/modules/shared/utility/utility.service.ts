@@ -94,10 +94,6 @@ export default class UtilityService {
     return values.filter((x) => x);
   }
 
-  get24hrTimeFromDate(date = new Date()): string {
-    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-  }
-
   getBrowserName(): string {
     const browserName = detectBrowser.detect().name.replace('edge-chromium', BrowserName.Edge);
     return this.isBraveBrowser() ? BrowserName.Brave : browserName;
@@ -275,7 +271,7 @@ export default class UtilityService {
       };
 
       const _toString = (format: string): string => {
-        if (format?.length === 0) format = 'D';
+        if (!format?.length) format = 'D';
 
         let guidChars = [];
         let offset = 0;

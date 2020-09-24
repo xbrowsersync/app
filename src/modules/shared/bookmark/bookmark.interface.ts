@@ -42,14 +42,12 @@ export interface BookmarkService {
   clearNativeBookmarks: () => ng.IPromise<void>;
   createNativeBookmarksFromBookmarks: (bookmarks: Bookmark[]) => ng.IPromise<number>;
   ensureContainersExist: (bookmarks: Bookmark[]) => Bookmark[];
-  getNativeBookmarksAsBookmarks: () => ng.IPromise<Bookmark[]>;
   processNativeChangeOnBookmarks: (changeInfo: BookmarkChange, bookmarks: Bookmark[]) => ng.IPromise<Bookmark[]>;
   processChangeOnNativeBookmarks: (
     id: number,
     changeType: BookmarkChangeType,
     changeInfo: BookmarkMetadata
   ) => ng.IPromise<void>;
-  unsupportedContainers: BookmarkContainer[];
 }
 
 export interface ModifyBookmarkChangeData {

@@ -1,11 +1,10 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { AppHelperService } from '../../../../app/app.interface';
 import WebExtAppHelperService from '../../../webext-app/webext-app-helper/webext-app-helper.service';
 
 @autobind
 @Injectable('AppHelperService')
-export default class FirefoxAppHelperService extends WebExtAppHelperService implements AppHelperService {
+export default class FirefoxAppHelperService extends WebExtAppHelperService {
   getHelpPages(): string[] {
     const pages = [
       this.platformSvc.getI18nString(this.Strings.View.Help.Welcome),

@@ -189,7 +189,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
   getSharedBookmark(): ng.IPromise<BookmarkMetadata> {
     return this.$q<any>((resolve, reject) => window.plugins.intentShim.getIntent(resolve, reject))
       .then((intent) => {
-        if (intent?.type !== 'text/plain' || angular.isUndefined(intent?.extras)) {
+        if (intent?.type !== 'text/plain' || !intent?.extras) {
           return;
         }
         const intentText = intent.extras[window.plugins.intentShim.EXTRA_TEXT];

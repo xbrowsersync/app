@@ -8,7 +8,6 @@ export default class AndroidBookmarkService implements BookmarkService {
   $q: ng.IQService;
 
   supportedNativeBookmarkUrlRegex = new RegExp('');
-  unsupportedContainers = [];
 
   static $inject = ['$q'];
   constructor($q: ng.IQService) {
@@ -29,10 +28,6 @@ export default class AndroidBookmarkService implements BookmarkService {
 
   ensureContainersExist(bookmarks: Bookmark[]): Bookmark[] {
     return bookmarks;
-  }
-
-  getNativeBookmarksAsBookmarks(): ng.IPromise<Bookmark[]> {
-    return this.methodNotApplicable();
   }
 
   methodNotApplicable(): ng.IPromise<any> {

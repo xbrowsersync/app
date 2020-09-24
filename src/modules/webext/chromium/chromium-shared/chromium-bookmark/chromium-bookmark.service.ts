@@ -7,18 +7,17 @@ import {
   AddNativeBookmarkChangeData,
   Bookmark,
   BookmarkChange,
-  BookmarkService,
   ModifyNativeBookmarkChangeData,
   MoveNativeBookmarkChangeData
 } from '../../../../shared/bookmark/bookmark.interface';
 import * as Exceptions from '../../../../shared/exception/exception';
 import Globals from '../../../../shared/global-shared.constants';
 import { WebpageMetadata } from '../../../../shared/global-shared.interface';
-import WebExtBookmarkService from '../../../webext-shared/webext-bookmark/webext-bookmark.service';
+import BaseWebExtBookmarkService from '../../../webext-shared/webext-bookmark/webext-bookmark.service';
 
 @autobind
 @Injectable('BookmarkService')
-export default class ChromiumBookmarkService extends WebExtBookmarkService implements BookmarkService {
+export default class ChromiumBookmarkService extends BaseWebExtBookmarkService {
   otherBookmarksNodeId = '2';
   toolbarBookmarksNodeId = '1';
   unsupportedContainers = [BookmarkContainer.Menu, BookmarkContainer.Mobile];
@@ -27,8 +26,8 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
     // Get native container ids
     return this.getNativeContainerIds()
       .then((nativeContainerIds) => {
-        const otherBookmarksId = nativeContainerIds[BookmarkContainer.Other] as string;
-        const toolbarBookmarksId = nativeContainerIds[BookmarkContainer.Toolbar] as string;
+        const otherBookmarksId = nativeContainerIds.get(BookmarkContainer.Other);
+        const toolbarBookmarksId = nativeContainerIds.get(BookmarkContainer.Toolbar);
 
         // Clear other bookmarks
         const clearOthers = browser.bookmarks
@@ -86,8 +85,8 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
     // Get native container ids
     return this.getNativeContainerIds()
       .then((nativeContainerIds) => {
-        const otherBookmarksId: string = nativeContainerIds[BookmarkContainer.Other];
-        const toolbarBookmarksId: string = nativeContainerIds[BookmarkContainer.Toolbar];
+        const otherBookmarksId = nativeContainerIds.get(BookmarkContainer.Other);
+        const toolbarBookmarksId = nativeContainerIds.get(BookmarkContainer.Toolbar);
 
         // Populate menu bookmarks in other bookmarks
         let populateMenu = this.$q.resolve(0);
@@ -245,206 +244,206 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService imple
     let allNativeBookmarks = [];
 
     // Get native container ids
-    return this.getNativeContainerIds()
-      .then((nativeContainerIds) => {
-        const menuBookmarksId: string = nativeContainerIds[BookmarkContainer.Menu];
-        const mobileBookmarksId: string = nativeContainerIds[BookmarkContainer.Mobile];
-        const otherBookmarksId: string = nativeContainerIds[BookmarkContainer.Other];
-        const toolbarBookmarksId: string = nativeContainerIds[BookmarkContainer.Toolbar];
+    return this.getNativeContainerIds().then((nativeContainerIds) => {
+      const menuBookmarksId = nativeContainerIds.get(BookmarkContainer.Menu);
+      const mobileBookmarksId = nativeContainerIds.get(BookmarkContainer.Mobile);
+      const otherBookmarksId = nativeContainerIds.get(BookmarkContainer.Other);
+      const toolbarBookmarksId = nativeContainerIds.get(BookmarkContainer.Toolbar);
 
-        // Get menu bookmarks
-        const getMenuBookmarks =
-          menuBookmarksId == null
-            ? Promise.resolve<Bookmark[]>(null)
-            : browser.bookmarks.getSubTree(menuBookmarksId).then((subTree) => {
-                const menuBookmarks = subTree[0];
-                if (menuBookmarks.children?.length > 0) {
-                  return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(menuBookmarks.children);
-                }
+      // Get menu bookmarks
+      const getMenuBookmarks =
+        menuBookmarksId == null
+          ? Promise.resolve<Bookmark[]>(null)
+          : browser.bookmarks.getSubTree(menuBookmarksId).then((subTree) => {
+              return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(subTree[0].children);
+            });
+
+      // Get mobile bookmarks
+      const getMobileBookmarks =
+        mobileBookmarksId == null
+          ? Promise.resolve<Bookmark[]>(null)
+          : browser.bookmarks.getSubTree(mobileBookmarksId).then((subTree) => {
+              return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(subTree[0].children);
+            });
+
+      // Get other bookmarks
+      const getOtherBookmarks =
+        otherBookmarksId == null
+          ? Promise.resolve<Bookmark[]>(null)
+          : browser.bookmarks.getSubTree(otherBookmarksId).then((subTree) => {
+              const otherBookmarks = subTree[0];
+              if (otherBookmarks.children.length === 0) {
+                return;
+              }
+
+              // Add all bookmarks into flat array
+              this.bookmarkHelperSvc.eachBookmark(otherBookmarks.children, (bookmark) => {
+                allNativeBookmarks.push(bookmark);
               });
 
-        // Get mobile bookmarks
-        const getMobileBookmarks =
-          mobileBookmarksId == null
-            ? Promise.resolve<Bookmark[]>(null)
-            : browser.bookmarks.getSubTree(mobileBookmarksId).then((subTree) => {
-                const mobileBookmarks = subTree[0];
-                if (mobileBookmarks.children?.length > 0) {
-                  return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(mobileBookmarks.children);
-                }
-              });
-
-        // Get other bookmarks
-        const getOtherBookmarks =
-          otherBookmarksId == null
-            ? Promise.resolve<Bookmark[]>(null)
-            : browser.bookmarks.getSubTree(otherBookmarksId).then((subTree) => {
-                const otherBookmarks = subTree[0];
-                if (otherBookmarks.children?.length === 0) {
-                  return;
-                }
-
-                // Add all bookmarks into flat array
-                this.bookmarkHelperSvc.eachBookmark(otherBookmarks.children, (bookmark) => {
-                  allNativeBookmarks.push(bookmark);
-                });
-
-                // Remove any unsupported container folders present
-                const bookmarksWithoutContainers = this.bookmarkHelperSvc
-                  .getNativeBookmarksAsBookmarks(otherBookmarks.children)
-                  .filter((x) => {
-                    return !this.unsupportedContainers.find((y) => {
-                      return y === x.title;
-                    });
+              // Remove any unsupported container folders present
+              const bookmarksWithoutContainers = this.bookmarkHelperSvc
+                .getNativeBookmarksAsBookmarks(otherBookmarks.children)
+                .filter((x) => {
+                  return !this.unsupportedContainers.find((y) => {
+                    return y === x.title;
                   });
-                return bookmarksWithoutContainers;
-              });
-
-        // Get toolbar bookmarks if enabled
-        const getToolbarBookmarks =
-          toolbarBookmarksId == null
-            ? this.$q.resolve<Bookmark[]>(null)
-            : browser.bookmarks.getSubTree(toolbarBookmarksId).then((results) => {
-                const toolbarBookmarks = results[0];
-                return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
-                  if (!syncBookmarksToolbar) {
-                    return;
-                  }
-                  if (toolbarBookmarks.children?.length > 0) {
-                    // Add all bookmarks into flat array
-                    this.bookmarkHelperSvc.eachBookmark(toolbarBookmarks.children, (bookmark) => {
-                      allNativeBookmarks.push(bookmark);
-                    });
-                    return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(toolbarBookmarks.children);
-                  }
                 });
+              return bookmarksWithoutContainers;
+            });
+
+      // Get toolbar bookmarks if enabled
+      const getToolbarBookmarks =
+        toolbarBookmarksId == null
+          ? this.$q.resolve<Bookmark[]>(null)
+          : browser.bookmarks.getSubTree(toolbarBookmarksId).then((results) => {
+              const toolbarBookmarks = results[0];
+              return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
+                if (syncBookmarksToolbar && toolbarBookmarks.children.length > 0) {
+                  // Add all bookmarks into flat array
+                  this.bookmarkHelperSvc.eachBookmark(toolbarBookmarks.children, (bookmark) => {
+                    allNativeBookmarks.push(bookmark);
+                  });
+                  return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(toolbarBookmarks.children);
+                }
+                return [];
               });
+            });
 
-        return this.$q.all([getMenuBookmarks, getMobileBookmarks, getOtherBookmarks, getToolbarBookmarks]);
-      })
-      .then((results) => {
-        const menuBookmarks = results[0];
-        const mobileBookmarks = results[1];
-        const otherBookmarks = results[2];
-        const toolbarBookmarks = results[3];
-        const bookmarks: Bookmark[] = [];
+      return this.$q
+        .all([getMenuBookmarks, getMobileBookmarks, getOtherBookmarks, getToolbarBookmarks])
+        .then((results) => {
+          const menuBookmarks = results[0];
+          const mobileBookmarks = results[1];
+          const otherBookmarks = results[2];
+          const toolbarBookmarks = results[3];
+          const bookmarks: Bookmark[] = [];
 
-        // Add other container if bookmarks present
-        const otherContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Other, bookmarks, true);
-        if (otherBookmarks?.length > 0) {
-          otherContainer.children = otherBookmarks;
-        }
-
-        // Add toolbar container if bookmarks present
-        const toolbarContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Toolbar, bookmarks, true);
-        if (toolbarBookmarks?.length > 0) {
-          toolbarContainer.children = toolbarBookmarks;
-        }
-
-        // Add menu container if bookmarks present
-        let menuContainer: Bookmark;
-        if (menuBookmarks?.length > 0) {
-          menuContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Menu, bookmarks, true);
-          menuContainer.children = menuBookmarks;
-        }
-
-        // Add mobile container if bookmarks present
-        let mobileContainer: Bookmark;
-        if (mobileBookmarks?.length > 0) {
-          mobileContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Mobile, bookmarks, true);
-          mobileContainer.children = mobileBookmarks;
-        }
-
-        // Filter containers from flat array of bookmarks
-        [otherContainer, toolbarContainer, menuContainer, mobileContainer].forEach((container) => {
-          if (!container) {
-            return;
+          // Add other container if bookmarks present
+          const otherContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Other, bookmarks, true);
+          if (otherBookmarks.length > 0) {
+            otherContainer.children = otherBookmarks;
           }
 
-          allNativeBookmarks = allNativeBookmarks.filter((bookmark) => {
-            return bookmark.title !== container.title;
+          // Add toolbar container if bookmarks present
+          const toolbarContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Toolbar, bookmarks, true);
+          if (toolbarBookmarks.length > 0) {
+            toolbarContainer.children = toolbarBookmarks;
+          }
+
+          // Add menu container if bookmarks present
+          let menuContainer: Bookmark;
+          if (!angular.isUndefined(menuBookmarksId)) {
+            menuContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Menu, bookmarks, true);
+            if (menuBookmarks.length > 0) {
+              menuContainer.children = menuBookmarks;
+            }
+          }
+
+          // Add mobile container if bookmarks present
+          let mobileContainer: Bookmark;
+          if (!angular.isUndefined(mobileBookmarksId)) {
+            mobileContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Mobile, bookmarks, true);
+            if (mobileBookmarks.length > 0) {
+              mobileContainer.children = mobileBookmarks;
+            }
+          }
+
+          // Filter containers from flat array of bookmarks
+          [otherContainer, toolbarContainer, menuContainer, mobileContainer].forEach((container) => {
+            if (!container) {
+              return;
+            }
+
+            allNativeBookmarks = allNativeBookmarks.filter((bookmark) => {
+              return bookmark.title !== container.title;
+            });
           });
-        });
 
-        // Sort by date added asc
-        allNativeBookmarks = allNativeBookmarks.sort((x, y) => {
-          return x.dateAdded - y.dateAdded;
-        });
+          // Sort by date added asc
+          allNativeBookmarks = allNativeBookmarks.sort((x, y) => {
+            return x.dateAdded - y.dateAdded;
+          });
 
-        // Iterate native bookmarks to add unique bookmark ids in correct order
-        allNativeBookmarks.forEach((nativeBookmark) => {
+          // Iterate native bookmarks to add unique bookmark ids in correct order
+          allNativeBookmarks.forEach((nativeBookmark) => {
+            this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
+              if (
+                !bookmark.id &&
+                ((!nativeBookmark.url && bookmark.title === nativeBookmark.title) ||
+                  (nativeBookmark.url && bookmark.url === nativeBookmark.url))
+              ) {
+                bookmark.id = this.bookmarkHelperSvc.getNewBookmarkId(bookmarks);
+              }
+            });
+          });
+
+          // Find and fix any bookmarks missing ids
           this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
-            if (
-              !bookmark.id &&
-              ((!nativeBookmark.url && bookmark.title === nativeBookmark.title) ||
-                (nativeBookmark.url && bookmark.url === nativeBookmark.url))
-            ) {
+            if (!bookmark.id) {
               bookmark.id = this.bookmarkHelperSvc.getNewBookmarkId(bookmarks);
             }
           });
-        });
 
-        // Find and fix any bookmarks missing ids
-        this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
-          if (!bookmark.id) {
-            bookmark.id = this.bookmarkHelperSvc.getNewBookmarkId(bookmarks);
-          }
+          return bookmarks;
         });
-
-        return bookmarks;
-      });
+    });
   }
 
-  getNativeContainerIds(): ng.IPromise<any> {
-    return this.bookmarkHelperSvc.getCachedBookmarks().then((bookmarks) => {
-      // Initialise container ids object using containers defined in bookmarks
-      const containerIds = bookmarks.reduce((prev, current) => {
-        prev[current.title] = undefined;
-        return prev;
-      }, {});
-
-      // Populate container ids
-      return browser.bookmarks.getTree().then((tree) => {
-        // Get the root child nodes
-        const otherBookmarksNode = tree[0].children.find((x) => {
-          return x.id === this.otherBookmarksNodeId;
-        });
-        const toolbarBookmarksNode = tree[0].children.find((x) => {
-          return x.id === this.toolbarBookmarksNodeId;
-        });
-
-        // Throw an error if a native container node is not found
-        if (!otherBookmarksNode || !toolbarBookmarksNode) {
-          if (!otherBookmarksNode) {
-            this.logSvc.logWarning('Missing container: other bookmarks');
-          }
-          if (!toolbarBookmarksNode) {
-            this.logSvc.logWarning('Missing container: toolbar bookmarks');
-          }
-          throw new Exceptions.ContainerNotFoundException();
+  getNativeContainerIds(): ng.IPromise<Map<BookmarkContainer, string>> {
+    return this.utilitySvc
+      .isSyncEnabled()
+      .then((syncEnabled) => (syncEnabled ? this.bookmarkHelperSvc.getCachedBookmarks() : undefined))
+      .then((bookmarks) => {
+        // Initialise container ids object using containers defined in bookmarks
+        const containerIds = new Map<BookmarkContainer, string>();
+        if (!angular.isUndefined(bookmarks)) {
+          bookmarks.forEach((x) => {
+            containerIds.set(x.title as BookmarkContainer, undefined);
+          });
         }
 
-        // Add containers to results
-        containerIds[BookmarkContainer.Other] = otherBookmarksNode.id;
-        containerIds[BookmarkContainer.Toolbar] = toolbarBookmarksNode.id;
+        // Populate container ids
+        return browser.bookmarks.getTree().then((tree) => {
+          // Get the root child nodes
+          const otherBookmarksNode = tree[0].children.find((x) => {
+            return x.id === this.otherBookmarksNodeId;
+          });
+          const toolbarBookmarksNode = tree[0].children.find((x) => {
+            return x.id === this.toolbarBookmarksNodeId;
+          });
 
-        // Check for unsupported containers
-        if (Object.keys(containerIds).includes(BookmarkContainer.Menu)) {
+          // Throw an error if a native container node is not found
+          if (!otherBookmarksNode || !toolbarBookmarksNode) {
+            if (!otherBookmarksNode) {
+              this.logSvc.logWarning('Missing container: other bookmarks');
+            }
+            if (!toolbarBookmarksNode) {
+              this.logSvc.logWarning('Missing container: toolbar bookmarks');
+            }
+            throw new Exceptions.ContainerNotFoundException();
+          }
+
+          // Check for unsupported containers
           const menuBookmarksNode = otherBookmarksNode.children.find((x) => {
             return x.title === BookmarkContainer.Menu;
           });
-          containerIds[BookmarkContainer.Menu] = menuBookmarksNode ? menuBookmarksNode.id : undefined;
-        }
-        if (Object.keys(containerIds).includes(BookmarkContainer.Mobile)) {
           const mobileBookmarksNode = otherBookmarksNode.children.find((x) => {
             return x.title === BookmarkContainer.Mobile;
           });
-          containerIds[BookmarkContainer.Mobile] = mobileBookmarksNode ? mobileBookmarksNode.id : undefined;
-        }
 
-        return containerIds;
+          // Add container ids to result
+          containerIds.set(BookmarkContainer.Other, otherBookmarksNode.id);
+          containerIds.set(BookmarkContainer.Toolbar, toolbarBookmarksNode.id);
+          if (!angular.isUndefined(menuBookmarksNode)) {
+            containerIds.set(BookmarkContainer.Menu, menuBookmarksNode.id);
+          }
+          if (!angular.isUndefined(mobileBookmarksNode)) {
+            containerIds.set(BookmarkContainer.Mobile, mobileBookmarksNode.id);
+          }
+          return containerIds;
+        });
       });
-    });
   }
 
   onNativeBookmarkChildrenReordered(...args: any[]): void {

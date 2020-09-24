@@ -18,6 +18,7 @@ import { SyncType } from '../../../shared/sync/sync.enum';
 import UtilityService from '../../../shared/utility/utility.service';
 import { WorkingContext } from '../../../shared/working/working.enum';
 import WorkingService from '../../../shared/working/working.service';
+import { WebExtBookmarkService } from '../../../webext/webext-shared/webext-bookmark/webext-bookmark.interface';
 import { AppEventType } from '../../app.enum';
 import { AppHelperService } from '../../app.interface';
 import AppSettingsComponent from '../app-settings.component';
@@ -32,6 +33,7 @@ import AppSettingsComponent from '../app-settings.component';
 export default class BackupRestoreSettingsComponent implements OnInit {
   Strings = require('../../../../../res/strings/en.json');
 
+  $filter: ng.FilterFactory;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
@@ -64,6 +66,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
   validatingRestoreData = false;
 
   static $inject = [
+    '$filter',
     '$q',
     '$timeout',
     'AlertService',
@@ -79,6 +82,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
     'WorkingService'
   ];
   constructor(
+    $filter: ng.FilterFactory,
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
     AlertSvc: AlertService,
@@ -93,6 +97,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
   ) {
+    this.$filter = $filter;
     this.$q = $q;
     this.$timeout = $timeout;
     this.alertSvc = AlertSvc;
@@ -228,7 +233,10 @@ export default class BackupRestoreSettingsComponent implements OnInit {
         const confirmationMessage = this.platformSvc.getI18nString(
           this.Strings.View.Settings.BackupRestore.Revert.Confirm
         );
-        this.revertConfirmationMessage = confirmationMessage.replace('{date}', date.toLocaleDateString());
+        this.revertConfirmationMessage = confirmationMessage.replace(
+          '{date}',
+          (this.$filter('date') as ng.IFilterDate)(date)
+        );
         this.displayRevertConfirmation = true;
       } else {
         this.revertUnavailable = true;
@@ -264,7 +272,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
         // If sync is not enabled, export native bookmarks
         return syncEnabled
           ? this.bookmarkHelperSvc.getCachedBookmarks()
-          : this.bookmarkSvc.getNativeBookmarksAsBookmarks();
+          : (this.bookmarkSvc as WebExtBookmarkService).getNativeBookmarksAsBookmarks();
       })
       .then((bookmarks) => {
         // Clean bookmarks for export

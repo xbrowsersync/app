@@ -82,7 +82,7 @@ export default class BookmarkHelperService {
     return cleanedBookmark;
   }
 
-  eachBookmark<T = Bookmark>(bookmarks: T[], iteratee: (rootBookmark: T) => void, untilCondition = false): void {
+  eachBookmark<T = Bookmark>(bookmarks: T[] = [], iteratee: (rootBookmark: T) => void, untilCondition = false): void {
     // Run the iteratee function for every bookmark until the condition is met
     const iterateBookmarks = (bookmarksToIterate: T[]): void => {
       for (let i = 0; i < bookmarksToIterate.length; i += 1) {
@@ -90,7 +90,7 @@ export default class BookmarkHelperService {
           return;
         }
         iteratee(bookmarksToIterate[i]);
-        if ((bookmarksToIterate[i] as any).children?.length > 0) {
+        if ((bookmarksToIterate[i] as any).children?.length) {
           iterateBookmarks((bookmarksToIterate[i] as any).children);
         }
       }
@@ -306,7 +306,7 @@ export default class BookmarkHelperService {
     }
 
     let getBookmarks: ng.IPromise<Bookmark[]>;
-    if (bookmarks?.length > 0) {
+    if (bookmarks?.length) {
       // Use supplied bookmarks
       getBookmarks = this.$q.resolve(bookmarks);
     } else {
@@ -350,7 +350,7 @@ export default class BookmarkHelperService {
       });
   }
 
-  getNativeBookmarksAsBookmarks(nativeBookmarks: NativeBookmarks.BookmarkTreeNode[]): Bookmark[] {
+  getNativeBookmarksAsBookmarks(nativeBookmarks: NativeBookmarks.BookmarkTreeNode[] = []): Bookmark[] {
     const bookmarks: Bookmark[] = [];
     for (let i = 0; i < nativeBookmarks.length; i += 1) {
       // Check if current native bookmark is a separator
@@ -358,7 +358,7 @@ export default class BookmarkHelperService {
       const bookmark = this.newBookmark(nativeBookmark.title, nativeBookmark.url);
 
       // If this is a folder and has children, process them
-      if (nativeBookmark.children?.length > 0) {
+      if (nativeBookmark.children?.length) {
         bookmark.children = this.getNativeBookmarksAsBookmarks(nativeBookmark.children);
       }
       bookmarks.push(bookmark);
@@ -400,8 +400,8 @@ export default class BookmarkHelperService {
         (separatorRegex.test(bookmark.title ?? '') ||
           bookmark.title.indexOf(Globals.Bookmarks.HorizontalSeparatorTitle) >= 0 ||
           bookmark.title === Globals.Bookmarks.VerticalSeparatorTitle) &&
-        (!bookmark.url || bookmark.url === this.platformSvc.getNewTabUrl()) &&
-        (!(bookmark as Bookmark).children || (bookmark as Bookmark).children?.length === 0))
+        (angular.isUndefined(bookmark.url) || bookmark.url === this.platformSvc.getNewTabUrl()) &&
+        !(bookmark as Bookmark).children?.length)
     );
   }
 
@@ -503,19 +503,19 @@ export default class BookmarkHelperService {
     const toolbarContainer = this.getContainer(BookmarkContainer.Toolbar, bookmarks);
     const removeArr: Bookmark[] = [];
 
-    if (menuContainer?.children?.length === 0) {
+    if (!menuContainer?.children?.length) {
       removeArr.push(menuContainer);
     }
 
-    if (mobileContainer?.children?.length === 0) {
+    if (!mobileContainer?.children?.length) {
       removeArr.push(mobileContainer);
     }
 
-    if (otherContainer?.children?.length === 0) {
+    if (!otherContainer?.children?.length) {
       removeArr.push(otherContainer);
     }
 
-    if (toolbarContainer?.children?.length === 0) {
+    if (!toolbarContainer?.children?.length) {
       removeArr.push(toolbarContainer);
     }
 
@@ -563,7 +563,7 @@ export default class BookmarkHelperService {
 
       if (this.isFolder(bookmark)) {
         // If bookmark is a folder, search children
-        if (bookmark.children?.length > 0) {
+        if (bookmark.children?.length) {
           this.searchBookmarksByKeywords(bookmark.children, keywords, results);
         }
       } else {
@@ -614,7 +614,7 @@ export default class BookmarkHelperService {
     );
 
     for (let i = 0; i < bookmarks.length; i += 1) {
-      if (bookmarks[i].children?.length > 0) {
+      if (bookmarks[i].children?.length) {
         results = this.searchBookmarksByUrl(bookmarks[i].children, url, results);
       }
     }
@@ -669,7 +669,7 @@ export default class BookmarkHelperService {
     });
   }
 
-  upgradeContainers(bookmarks: Bookmark[]): Bookmark[] {
+  upgradeContainers(bookmarks: Bookmark[] = []): Bookmark[] {
     // Upgrade containers to use current container names
     const otherContainer = this.getContainer('_other_', bookmarks);
     if (otherContainer) {

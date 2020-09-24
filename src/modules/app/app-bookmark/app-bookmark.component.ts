@@ -106,7 +106,7 @@ export default class AppBookmarkComponent implements OnInit {
 
   createBookmark(): ng.IPromise<SyncResult> {
     // Add tags if tag text present
-    if (this.tagText?.length > 0) {
+    if (this.tagText?.length) {
       this.createTags();
     }
 
@@ -383,7 +383,7 @@ export default class AppBookmarkComponent implements OnInit {
 
   updateBookmark(): ng.IPromise<SyncResult> {
     // Add tags if tag text present
-    if (this.tagText?.length > 0) {
+    if (this.tagText?.length) {
       this.createTags();
     }
 

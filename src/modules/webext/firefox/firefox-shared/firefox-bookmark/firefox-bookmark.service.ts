@@ -7,27 +7,26 @@ import {
   AddNativeBookmarkChangeData,
   Bookmark,
   BookmarkChange,
-  BookmarkService,
   ModifyNativeBookmarkChangeData,
   MoveNativeBookmarkChangeData
 } from '../../../../shared/bookmark/bookmark.interface';
 import * as Exceptions from '../../../../shared/exception/exception';
 import { WebpageMetadata } from '../../../../shared/global-shared.interface';
-import WebExtBookmarkService from '../../../webext-shared/webext-bookmark/webext-bookmark.service';
+import BaseWebExtBookmarkService from '../../../webext-shared/webext-bookmark/webext-bookmark.service';
 
 @autobind
 @Injectable('BookmarkService')
-export default class FirefoxBookmarkService extends WebExtBookmarkService implements BookmarkService {
+export default class FirefoxBookmarkService extends BaseWebExtBookmarkService {
   unsupportedContainers = [];
 
   clearNativeBookmarks(): ng.IPromise<void> {
     // Get native container ids
     return this.getNativeContainerIds()
       .then((nativeContainerIds) => {
-        const menuBookmarksId = nativeContainerIds[BookmarkContainer.Menu];
-        const mobileBookmarksId = nativeContainerIds[BookmarkContainer.Mobile];
-        const otherBookmarksId = nativeContainerIds[BookmarkContainer.Other];
-        const toolbarBookmarksId = nativeContainerIds[BookmarkContainer.Toolbar];
+        const menuBookmarksId = nativeContainerIds.get(BookmarkContainer.Menu);
+        const mobileBookmarksId = nativeContainerIds.get(BookmarkContainer.Mobile);
+        const otherBookmarksId = nativeContainerIds.get(BookmarkContainer.Other);
+        const toolbarBookmarksId = nativeContainerIds.get(BookmarkContainer.Toolbar);
 
         // Clear menu bookmarks
         const clearMenu = browser.bookmarks
@@ -115,10 +114,10 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
     // Get native container ids
     return this.getNativeContainerIds()
       .then((nativeContainerIds) => {
-        const menuBookmarksId: string = nativeContainerIds[BookmarkContainer.Menu];
-        const mobileBookmarksId: string = nativeContainerIds[BookmarkContainer.Mobile];
-        const otherBookmarksId: string = nativeContainerIds[BookmarkContainer.Other];
-        const toolbarBookmarksId: string = nativeContainerIds[BookmarkContainer.Toolbar];
+        const menuBookmarksId = nativeContainerIds.get(BookmarkContainer.Menu);
+        const mobileBookmarksId = nativeContainerIds.get(BookmarkContainer.Mobile);
+        const otherBookmarksId = nativeContainerIds.get(BookmarkContainer.Other);
+        const toolbarBookmarksId = nativeContainerIds.get(BookmarkContainer.Toolbar);
 
         // Populate menu bookmarks
         let populateMenu = this.$q.resolve(0);
@@ -319,10 +318,10 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
     // Get native container ids
     return this.getNativeContainerIds()
       .then((nativeContainerIds) => {
-        const menuBookmarksId: string = nativeContainerIds[BookmarkContainer.Menu];
-        const mobileBookmarksId: string = nativeContainerIds[BookmarkContainer.Mobile];
-        const otherBookmarksId: string = nativeContainerIds[BookmarkContainer.Other];
-        const toolbarBookmarksId: string = nativeContainerIds[BookmarkContainer.Toolbar];
+        const menuBookmarksId = nativeContainerIds.get(BookmarkContainer.Menu);
+        const mobileBookmarksId = nativeContainerIds.get(BookmarkContainer.Mobile);
+        const otherBookmarksId = nativeContainerIds.get(BookmarkContainer.Other);
+        const toolbarBookmarksId = nativeContainerIds.get(BookmarkContainer.Toolbar);
 
         // Get menu bookmarks
         const getMenuBookmarks =
@@ -330,13 +329,11 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
             ? Promise.resolve<Bookmark[]>(null)
             : browser.bookmarks.getSubTree(menuBookmarksId).then((subTree) => {
                 const menuBookmarks = subTree[0];
-                if (menuBookmarks.children?.length > 0) {
-                  // Add all bookmarks into flat array
-                  this.bookmarkHelperSvc.eachBookmark(menuBookmarks.children, (bookmark) => {
-                    allNativeBookmarks.push(bookmark);
-                  });
-                  return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(menuBookmarks.children);
-                }
+                // Add all bookmarks into flat array
+                this.bookmarkHelperSvc.eachBookmark(menuBookmarks.children, (bookmark) => {
+                  allNativeBookmarks.push(bookmark);
+                });
+                return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(menuBookmarks.children);
               });
 
         // Get mobile bookmarks
@@ -345,13 +342,11 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
             ? Promise.resolve<Bookmark[]>(null)
             : browser.bookmarks.getSubTree(mobileBookmarksId).then((subTree) => {
                 const mobileBookmarks = subTree[0];
-                if (mobileBookmarks.children?.length > 0) {
-                  // Add all bookmarks into flat array
-                  this.bookmarkHelperSvc.eachBookmark(mobileBookmarks.children, (bookmark) => {
-                    allNativeBookmarks.push(bookmark);
-                  });
-                  return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(mobileBookmarks.children);
-                }
+                // Add all bookmarks into flat array
+                this.bookmarkHelperSvc.eachBookmark(mobileBookmarks.children, (bookmark) => {
+                  allNativeBookmarks.push(bookmark);
+                });
+                return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(mobileBookmarks.children);
               });
 
         // Get other bookmarks
@@ -360,7 +355,7 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
             ? Promise.resolve<Bookmark[]>(null)
             : browser.bookmarks.getSubTree(otherBookmarksId).then((subTree) => {
                 const otherBookmarks = subTree[0];
-                if (otherBookmarks.children?.length === 0) {
+                if (otherBookmarks.children.length === 0) {
                   return;
                 }
 
@@ -388,16 +383,14 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
             : browser.bookmarks.getSubTree(toolbarBookmarksId).then((results) => {
                 const toolbarBookmarks = results[0];
                 return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
-                  if (!syncBookmarksToolbar) {
-                    return;
-                  }
-                  if (toolbarBookmarks.children?.length > 0) {
+                  if (syncBookmarksToolbar && toolbarBookmarks.children.length > 0) {
                     // Add all bookmarks into flat array
                     this.bookmarkHelperSvc.eachBookmark(toolbarBookmarks.children, (bookmark) => {
                       allNativeBookmarks.push(bookmark);
                     });
                     return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(toolbarBookmarks.children);
                   }
+                  return [];
                 });
               });
 
@@ -412,25 +405,25 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
 
         // Add other container if bookmarks present
         const otherContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Other, bookmarks, true);
-        if (otherBookmarks?.length > 0) {
+        if (otherBookmarks.length > 0) {
           otherContainer.children = otherBookmarks;
         }
 
         // Add toolbar container if bookmarks present
         const toolbarContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Toolbar, bookmarks, true);
-        if (toolbarBookmarks?.length > 0) {
+        if (toolbarBookmarks.length > 0) {
           toolbarContainer.children = toolbarBookmarks;
         }
 
         // Add menu container if bookmarks present
         const menuContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Menu, bookmarks, true);
-        if (menuBookmarks?.length > 0) {
+        if (menuBookmarks.length > 0) {
           menuContainer.children = menuBookmarks;
         }
 
         // Add mobile container if bookmarks present
         const mobileContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Mobile, bookmarks, true);
-        if (mobileBookmarks?.length > 0) {
+        if (mobileBookmarks.length > 0) {
           mobileContainer.children = mobileBookmarks;
         }
 
@@ -474,55 +467,60 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService implem
       });
   }
 
-  getNativeContainerIds(): ng.IPromise<any> {
-    return this.bookmarkHelperSvc.getCachedBookmarks().then((bookmarks) => {
-      // Initialise container ids object using containers defined in bookmarks
-      const containerIds = bookmarks.reduce((prev, current) => {
-        prev[current.title] = undefined;
-        return prev;
-      }, {});
-
-      // Populate container ids
-      return browser.bookmarks.getTree().then((tree) => {
-        // Get the root child nodes
-        const menuBookmarksNode = tree[0].children.find((x) => {
-          return x.id === 'menu________';
-        });
-        const mobileBookmarksNode = tree[0].children.find((x) => {
-          return x.id === 'mobile______';
-        });
-        const otherBookmarksNode = tree[0].children.find((x) => {
-          return x.id === 'unfiled_____';
-        });
-        const toolbarBookmarksNode = tree[0].children.find((x) => {
-          return x.id === 'toolbar_____';
-        });
-
-        // Throw an error if a native container is not found
-        if (!menuBookmarksNode || !mobileBookmarksNode || !otherBookmarksNode || !toolbarBookmarksNode) {
-          if (!menuBookmarksNode) {
-            this.logSvc.logWarning('Missing container: menu bookmarks');
-          }
-          if (!mobileBookmarksNode) {
-            this.logSvc.logWarning('Missing container: mobile bookmarks');
-          }
-          if (!otherBookmarksNode) {
-            this.logSvc.logWarning('Missing container: other bookmarks');
-          }
-          if (!toolbarBookmarksNode) {
-            this.logSvc.logWarning('Missing container: toolbar bookmarks');
-          }
-          throw new Exceptions.ContainerNotFoundException();
+  getNativeContainerIds(): ng.IPromise<Map<BookmarkContainer, string>> {
+    return this.utilitySvc
+      .isSyncEnabled()
+      .then((syncEnabled) => (syncEnabled ? this.bookmarkHelperSvc.getCachedBookmarks() : undefined))
+      .then((bookmarks) => {
+        // Initialise container ids object using containers defined in bookmarks
+        const containerIds = new Map<BookmarkContainer, string>();
+        if (!angular.isUndefined(bookmarks)) {
+          bookmarks.forEach((x) => {
+            containerIds.set(x.title as BookmarkContainer, undefined);
+          });
         }
 
-        // Return the container ids
-        containerIds[BookmarkContainer.Menu] = menuBookmarksNode.id;
-        containerIds[BookmarkContainer.Mobile] = mobileBookmarksNode.id;
-        containerIds[BookmarkContainer.Other] = otherBookmarksNode.id;
-        containerIds[BookmarkContainer.Toolbar] = toolbarBookmarksNode.id;
-        return containerIds;
+        // Populate container ids
+        return browser.bookmarks.getTree().then((tree) => {
+          // Get the root child nodes
+          const menuBookmarksNode = tree[0].children.find((x) => {
+            return x.id === 'menu________';
+          });
+          const mobileBookmarksNode = tree[0].children.find((x) => {
+            return x.id === 'mobile______';
+          });
+          const otherBookmarksNode = tree[0].children.find((x) => {
+            return x.id === 'unfiled_____';
+          });
+          const toolbarBookmarksNode = tree[0].children.find((x) => {
+            return x.id === 'toolbar_____';
+          });
+
+          // Throw an error if a native container is not found
+          if (!menuBookmarksNode || !mobileBookmarksNode || !otherBookmarksNode || !toolbarBookmarksNode) {
+            if (!menuBookmarksNode) {
+              this.logSvc.logWarning('Missing container: menu bookmarks');
+            }
+            if (!mobileBookmarksNode) {
+              this.logSvc.logWarning('Missing container: mobile bookmarks');
+            }
+            if (!otherBookmarksNode) {
+              this.logSvc.logWarning('Missing container: other bookmarks');
+            }
+            if (!toolbarBookmarksNode) {
+              this.logSvc.logWarning('Missing container: toolbar bookmarks');
+            }
+            throw new Exceptions.ContainerNotFoundException();
+          }
+
+          // Add container ids to result
+          containerIds.set(BookmarkContainer.Menu, menuBookmarksNode.id);
+          containerIds.set(BookmarkContainer.Mobile, mobileBookmarksNode.id);
+          containerIds.set(BookmarkContainer.Other, otherBookmarksNode.id);
+          containerIds.set(BookmarkContainer.Toolbar, toolbarBookmarksNode.id);
+          return containerIds;
+        });
       });
-    });
   }
 
   processNativeBookmarkEventsQueue(): void {
