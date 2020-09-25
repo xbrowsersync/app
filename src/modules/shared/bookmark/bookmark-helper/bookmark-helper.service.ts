@@ -23,12 +23,12 @@ export default class BookmarkHelperService {
   $q: ng.IQService;
   apiSvc: ApiService;
   cryptoSvc: CryptoService;
-  _platformSvc: PlatformService;
+  _platformSvc: PlatformService | undefined;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
-  cachedBookmarks_encrypted: string;
-  cachedBookmarks_plain: Bookmark[];
+  cachedBookmarks_encrypted: string | undefined;
+  cachedBookmarks_plain: Bookmark[] | undefined;
 
   static $inject = ['$injector', '$q', 'ApiService', 'CryptoService', 'StoreService', 'UtilityService'];
   constructor(
@@ -51,7 +51,7 @@ export default class BookmarkHelperService {
     if (angular.isUndefined(this._platformSvc)) {
       this._platformSvc = this.$injector.get('PlatformService');
     }
-    return this._platformSvc;
+    return this._platformSvc as PlatformService;
   }
 
   bookmarkIsContainer(bookmark: Bookmark): boolean {
@@ -67,16 +67,14 @@ export default class BookmarkHelperService {
     // Remove empty properties, except for children array
     const cleanedBookmark: Bookmark = {};
     Object.keys(bookmark).forEach((key) => {
-      if (
-        (angular.isString(bookmark[key]) || (angular.isArray(bookmark[key]) && key !== 'children')) &&
-        bookmark[key].length === 0
-      ) {
+      const keyValue = Object.entries(bookmark).find(({ 0: prop }) => prop === key)?.[1];
+      if ((angular.isString(keyValue) || (angular.isArray(keyValue) && key !== 'children')) && keyValue.length === 0) {
         return;
       }
-      if (bookmark[key] == null) {
+      if (angular.isUndefined(keyValue ?? undefined)) {
         return;
       }
-      cleanedBookmark[key] = bookmark[key];
+      Object.assign(cleanedBookmark, { [key]: keyValue });
     });
 
     return cleanedBookmark;
@@ -100,15 +98,15 @@ export default class BookmarkHelperService {
 
   findBookmarkById(
     id: number | string,
-    bookmarks: Bookmark[] | NativeBookmarks.BookmarkTreeNode[]
-  ): Bookmark | NativeBookmarks.BookmarkTreeNode {
-    if (angular.isUndefined(bookmarks) || angular.isUndefined(id)) {
+    bookmarks: Bookmark[] | NativeBookmarks.BookmarkTreeNode[] = []
+  ): Bookmark | NativeBookmarks.BookmarkTreeNode | undefined {
+    if (angular.isUndefined(id)) {
       return;
     }
 
     // Recursively iterate through all bookmarks until id match is found
-    let bookmark: Bookmark | NativeBookmarks.BookmarkTreeNode;
-    const index = bookmarks.findIndex((x) => {
+    let bookmark: Bookmark | NativeBookmarks.BookmarkTreeNode | undefined;
+    const index = bookmarks.findIndex((x: Bookmark | NativeBookmarks.BookmarkTreeNode) => {
       return x.id === id;
     });
     if (index === -1) {
@@ -129,7 +127,7 @@ export default class BookmarkHelperService {
     return bookmark;
   }
 
-  findCurrentUrlInBookmarks(): ng.IPromise<Bookmark> {
+  findCurrentUrlInBookmarks(): ng.IPromise<Bookmark | undefined> {
     // Check if current url is contained in bookmarks
     return this.platformSvc.getCurrentUrl().then((currentUrl) => {
       if (!currentUrl) {
@@ -138,7 +136,7 @@ export default class BookmarkHelperService {
 
       return this.searchBookmarks({ url: currentUrl }).then((searchResults) => {
         const searchResult = searchResults.find((bookmark) => {
-          return bookmark.url.toLowerCase() === currentUrl.toLowerCase();
+          return bookmark?.url?.toLowerCase() === currentUrl.toLowerCase();
         });
 
         return this.$q.resolve(searchResult);
@@ -164,7 +162,7 @@ export default class BookmarkHelperService {
     return metadata;
   }
 
-  getBookmarkTitleForDisplay(bookmark: Bookmark): string {
+  getBookmarkTitleForDisplay(bookmark: Bookmark): string | undefined {
     // If normal bookmark, return title or if blank url to display
     if (bookmark.url) {
       return bookmark.title ? bookmark.title : bookmark.url.replace(/^https?:\/\//i, '');
@@ -194,11 +192,11 @@ export default class BookmarkHelperService {
     return containerTitle;
   }
 
-  getCachedBookmarks(): ng.IPromise<Bookmark[]> {
+  getCachedBookmarks(): ng.IPromise<Bookmark[] | undefined> {
     // Get cached encrypted bookmarks from store
     return this.storeSvc.get<string>(StoreKey.Bookmarks).then((encryptedBookmarksFromStore) => {
       return (
-        this.$q<Bookmark[]>((resolve, reject) => {
+        this.$q<Bookmark[] | undefined>((resolve, reject) => {
           // Return unencrypted cached bookmarks from memory if encrypted bookmarks
           // in storage match cached encrypted bookmarks in memory
           if (
@@ -237,17 +235,17 @@ export default class BookmarkHelperService {
     });
   }
 
-  getContainer(containerName: string, bookmarks: Bookmark[], createIfNotPresent = false): Bookmark {
+  getContainer(containerName: string, bookmarks: Bookmark[], createIfNotPresent = false): Bookmark | undefined {
     // If container does not exist, create it if specified
     let container = bookmarks.find((x) => x.title === containerName);
     if (!container && createIfNotPresent) {
-      container = this.newBookmark(containerName, null, null, null, false, bookmarks);
+      container = this.newBookmark(containerName, undefined, undefined, undefined, false, bookmarks);
       bookmarks.push(container);
     }
     return container;
   }
 
-  getContainerByBookmarkId(id: number, bookmarks: Bookmark[]): Bookmark {
+  getContainerByBookmarkId(id: number, bookmarks: Bookmark[]): Bookmark | undefined {
     // Check if the id corresponds to a container
     const bookmark = this.findBookmarkById(id, bookmarks) as Bookmark;
     if (this.bookmarkIsContainer(bookmark)) {
@@ -255,7 +253,7 @@ export default class BookmarkHelperService {
     }
 
     // Search through the child bookmarks of each container to find the bookmark
-    let container: Bookmark;
+    let container: Bookmark | undefined;
     bookmarks.forEach((x) => {
       this.eachBookmark(
         x.children,
@@ -305,7 +303,7 @@ export default class BookmarkHelperService {
       return this.$q.resolve('');
     }
 
-    let getBookmarks: ng.IPromise<Bookmark[]>;
+    let getBookmarks: ng.IPromise<Bookmark[] | undefined>;
     if (bookmarks?.length) {
       // Use supplied bookmarks
       getBookmarks = this.$q.resolve(bookmarks);
@@ -370,8 +368,8 @@ export default class BookmarkHelperService {
     // Check existing bookmarks for highest id
     let highestId = 0;
     this.eachBookmark(bookmarks, (bookmark) => {
-      if (!angular.isUndefined(bookmark.id ?? undefined) && parseInt(bookmark.id.toString(), 10) > highestId) {
-        highestId = parseInt(bookmark.id.toString(), 10);
+      if (!angular.isUndefined(bookmark.id ?? undefined) && parseInt(bookmark.id!.toString(), 10) > highestId) {
+        highestId = parseInt(bookmark.id!.toString(), 10);
       }
     });
 
@@ -394,13 +392,13 @@ export default class BookmarkHelperService {
     // or type is separator (in FF)
     const separatorRegex = new RegExp('^[-─]{1,}$');
     return (
-      (bookmark as BookmarkMetadata).isSeparator ||
+      (bookmark as BookmarkMetadata).isSeparator === true ||
       (bookmark as NativeBookmarks.BookmarkTreeNode).type === 'separator' ||
-      (bookmark.title &&
+      (!angular.isUndefined(bookmark.title) &&
         (separatorRegex.test(bookmark.title ?? '') ||
-          bookmark.title.indexOf(Globals.Bookmarks.HorizontalSeparatorTitle) >= 0 ||
+          bookmark.title!.indexOf(Globals.Bookmarks.HorizontalSeparatorTitle) >= 0 ||
           bookmark.title === Globals.Bookmarks.VerticalSeparatorTitle) &&
-        (angular.isUndefined(bookmark.url) || bookmark.url === this.platformSvc.getNewTabUrl()) &&
+        (angular.isUndefined(bookmark.url) || bookmark.url === this.platformSvc.getNewTabUrl!()) &&
         !(bookmark as Bookmark).children?.length)
     );
   }
@@ -623,7 +621,7 @@ export default class BookmarkHelperService {
   }
 
   searchBookmarksForLookaheads(
-    bookmarks: Bookmark[],
+    bookmarks: Bookmark[] = [],
     word: string,
     tagsOnly = false,
     results: string[] = []

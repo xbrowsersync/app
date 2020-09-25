@@ -47,7 +47,7 @@ export default class UtilityService {
   }
 
   asyncWhile(data: any, condition: (data: any) => ng.IPromise<any>, action: (data: any) => ng.IPromise<any>) {
-    const whilst = (whilstData): ng.IPromise<any> => {
+    const whilst = (whilstData: any): ng.IPromise<any> => {
       return condition(whilstData).then((conditionIsTrue) => {
         return conditionIsTrue ? action(whilstData).then(whilst) : this.$q.resolve(whilstData);
       });
@@ -95,7 +95,7 @@ export default class UtilityService {
   }
 
   getBrowserName(): string {
-    const browserName = detectBrowser.detect().name.replace('edge-chromium', BrowserName.Edge);
+    const browserName = detectBrowser.detect()?.name.replace('edge-chromium', BrowserName.Edge) ?? BrowserName.Chrome;
     return this.isBraveBrowser() ? BrowserName.Brave : browserName;
   }
 
@@ -121,7 +121,7 @@ export default class UtilityService {
     });
   }
 
-  getTagArrayFromText(tagText: string): string[] {
+  getTagArrayFromText(tagText: string): string[] | undefined {
     if (angular.isUndefined(tagText ?? undefined)) {
       return;
     }
@@ -138,7 +138,7 @@ export default class UtilityService {
     return window.crypto.getRandomValues(new Uint32Array(1))[0].toString(36);
   }
 
-  handleEvent(eventHandler: (...args) => any, ...args): void {
+  handleEvent(eventHandler: (...args: any[]) => any, ...args: any[]): void {
     try {
       this.$q
         .resolve()
@@ -166,7 +166,7 @@ export default class UtilityService {
   }
 
   parseUrl(url: string): Url {
-    const searchObject = {};
+    const searchObject: any = {};
     const parser = document.createElement('a');
     parser.href = url;
     const queries = parser.search.replace(/^\?/, '').split('&');
@@ -174,7 +174,6 @@ export default class UtilityService {
     let split;
     for (let i = 0; i < queries.length; i += 1) {
       split = queries[i].split('=');
-      // eslint-disable-next-line prefer-destructuring
       searchObject[split[0]] = split[1];
     }
 
@@ -194,11 +193,11 @@ export default class UtilityService {
     return [...new Set(words)].sort();
   }
 
-  splitTextIntoWords(text: string): string[] {
+  splitTextIntoWords(text: string | undefined): string[] {
     if (angular.isUndefined(text ?? undefined)) {
       return [];
     }
-    const words = text.toLowerCase().replace(/['"]/g, '');
+    const words = text!.toLowerCase().replace(/['"]/g, '');
     return this.filterFalsyValues(words.split(/[\s.,/#!$%^&*;:{}=\-_`~()]/));
   }
 
@@ -225,7 +224,7 @@ export default class UtilityService {
       return bytes;
     };
 
-    const bytesToGuidString = (bytes: Uint8Array): string => {
+    const bytesToGuidString = (bytes: Uint8Array): string | undefined => {
       if (bytes == null) {
         return '';
       }
@@ -270,7 +269,7 @@ export default class UtilityService {
         return offset;
       };
 
-      const _toString = (format: string): string => {
+      const _toString = (format: string): string | undefined => {
         if (!format?.length) format = 'D';
 
         let guidChars = [];
@@ -351,7 +350,7 @@ export default class UtilityService {
         return guidChars.join('');
       };
 
-      return _toString('D').split(',').join('');
+      return _toString('D')?.split(',').join('');
     };
 
     return !!bytesToGuidString(hexStringToBytes(syncId));

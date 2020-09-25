@@ -3,7 +3,7 @@ import autobind from 'autobind-decorator';
 import { browser } from 'webextension-polyfill-ts';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkService } from '../../../shared/bookmark/bookmark.interface';
-import { PlatformService, PlatformUpgradeService } from '../../../shared/global-shared.interface';
+import { PlatformService } from '../../../shared/global-shared.interface';
 import LogService from '../../../shared/log/log.service';
 import StoreService from '../../../shared/store/store.service';
 import UpgradeService from '../../../shared/upgrade/upgrade.service';
@@ -11,7 +11,7 @@ import UtilityService from '../../../shared/utility/utility.service';
 
 @autobind
 @Injectable('UpgradeService')
-export default class WebExtUpgradeService extends UpgradeService implements PlatformUpgradeService {
+export default class WebExtUpgradeService extends UpgradeService {
   bookmarkHelperSvc: BookmarkHelperService;
   bookmarkSvc: BookmarkService;
   platformSvc: PlatformService;
@@ -35,7 +35,7 @@ export default class WebExtUpgradeService extends UpgradeService implements Plat
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
   ) {
-    super($q, LogSvc, StoreSvc);
+    super($q, LogSvc, StoreSvc, UtilitySvc);
 
     this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.bookmarkSvc = BookmarkSvc;

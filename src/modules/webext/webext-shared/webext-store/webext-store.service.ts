@@ -1,3 +1,4 @@
+import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import * as idbKeyval from 'idb-keyval';
@@ -16,6 +17,9 @@ export default class WebExtStoreService implements PlatformStoreService {
   static $inject = ['$q'];
   constructor($q: ng.IQService) {
     this.$q = $q;
+
+    // Initialise the store
+    this.store = new idbKeyval.Store(this.dbName, this.storeName);
   }
 
   addTraceLog(newLogItem: TraceLogItem): ng.IPromise<void> {
@@ -63,7 +67,7 @@ export default class WebExtStoreService implements PlatformStoreService {
   }
 
   getStore(): idbKeyval.Store {
-    return this.store ?? new idbKeyval.Store(this.dbName, this.storeName);
+    return this.store;
   }
 
   keys(): ng.IPromise<IDBValidKey[]> {

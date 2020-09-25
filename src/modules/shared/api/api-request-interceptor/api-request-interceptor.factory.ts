@@ -16,7 +16,7 @@ export default class ApiRequestInterceptorFactory implements IHttpInterceptor {
   request(config: ng.IRequestConfig): ng.IRequestConfig | ng.IPromise<ng.IRequestConfig> {
     // Add the api version to the http Accept-Version header
     if (config.url !== Globals.ReleaseLatestUrl) {
-      config.headers['Accept-Version'] = Globals.MinApiVersion;
+      config.headers!['Accept-Version'] = Globals.MinApiVersion;
     }
 
     // Set default request timeout

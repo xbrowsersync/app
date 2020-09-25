@@ -1,6 +1,7 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { ApiServiceType } from '../api/api.enum';
+import { Bookmark } from '../bookmark/bookmark.interface';
 import UtilityService from '../utility/utility.service';
 import { Backup, BackupSync } from './backup-restore.interface';
 
@@ -14,7 +15,7 @@ export default class BackupRestoreService {
     this.utilitySvc = UtilitySvc;
   }
 
-  createBackupData(bookmarksData, syncId: string, serviceUrl: string): Backup {
+  createBackupData(bookmarksData: Bookmark[], syncId: string, serviceUrl: string): Backup {
     const backupData: Backup = {
       xbrowsersync: {
         date: this.utilitySvc.getDateTimeString(new Date()),
@@ -25,11 +26,11 @@ export default class BackupRestoreService {
 
     // Add sync info if provided
     if (syncId) {
-      backupData.xbrowsersync.sync = this.createSyncInfoObject(syncId, serviceUrl);
+      backupData.xbrowsersync!.sync = this.createSyncInfoObject(syncId, serviceUrl);
     }
 
     // Add bookmarks
-    backupData.xbrowsersync.data.bookmarks = bookmarksData;
+    backupData.xbrowsersync!.data.bookmarks = bookmarksData;
     return backupData;
   }
 

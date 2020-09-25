@@ -1,13 +1,12 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import * as Exceptions from '../../../shared/exception/exception';
-import { PlatformUpgradeService } from '../../../shared/global-shared.interface';
 import UpgradeService from '../../../shared/upgrade/upgrade.service';
 
 @autobind
 @Injectable('UpgradeService')
-export default class AndroidUpgradeService extends UpgradeService implements PlatformUpgradeService {
-  static $inject = ['$q', 'LogService', 'StoreService'];
+export default class AndroidUpgradeService extends UpgradeService {
+  static $inject = ['$q', 'LogService', 'StoreService', 'UtilityService'];
 
   getAllFromNativeStorage(): ng.IPromise<any> {
     return this.$q<any>((resolve, reject) => {

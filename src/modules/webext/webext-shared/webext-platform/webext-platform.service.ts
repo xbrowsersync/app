@@ -6,7 +6,7 @@ import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/book
 import * as Exceptions from '../../../shared/exception/exception';
 import Globals from '../../../shared/global-shared.constants';
 import { BrowserName, MessageCommand, PlatformType } from '../../../shared/global-shared.enum';
-import { I18nObject, Message, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
+import { DesktopPlatformService, I18nObject, Message, WebpageMetadata } from '../../../shared/global-shared.interface';
 import LogService from '../../../shared/log/log.service';
 import StoreService from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
@@ -17,7 +17,7 @@ import WebExtBackgroundService from '../../webext-background/webext-background.s
 import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
 
 @autobind
-export default class WebExtPlatformService implements PlatformService {
+export default class WebExtPlatformService implements DesktopPlatformService {
   Strings = require('../../../../../res/strings/en.json');
 
   $injector: ng.auto.IInjectorService;
@@ -25,7 +25,7 @@ export default class WebExtPlatformService implements PlatformService {
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
-  _backgroundSvc: WebExtBackgroundService;
+  _backgroundSvc: WebExtBackgroundService | undefined;
   bookmarkIdMapperSvc: BookmarkIdMapperService;
   bookmarkHelperSvc: BookmarkHelperService;
   logSvc: LogService;
@@ -77,13 +77,13 @@ export default class WebExtPlatformService implements PlatformService {
     this.utilitySvc = UtilitySvc;
     this.workingSvc = WorkingSvc;
   }
-  platformName: string;
+  platformName = '';
 
   get backgroundSvc(): WebExtBackgroundService {
     if (angular.isUndefined(this._backgroundSvc)) {
       this._backgroundSvc = this.$injector.get('WebExtBackgroundService');
     }
-    return this._backgroundSvc;
+    return this._backgroundSvc as WebExtBackgroundService;
   }
 
   checkOptionalNativePermissions(): ng.IPromise<boolean> {
@@ -126,7 +126,7 @@ export default class WebExtPlatformService implements PlatformService {
     let i18nStr: string;
     let platformName = this.platformName.toString();
     if (platformName === PlatformType.Chromium) {
-      const browserName = this.utilitySvc.getBrowserName();
+      const browserName = this.utilitySvc.getBrowserName() as string;
       platformName = browserName !== BrowserName.Chrome ? browserName : platformName;
     }
 
@@ -213,7 +213,7 @@ export default class WebExtPlatformService implements PlatformService {
       .query({ currentWindow: true, active: true })
       .then((tabs) => {
         // Open url in current tab if new then close the extension window
-        return tabs?.length > 0 && tabs?.[0]?.url && tabs?.[0]?.url?.startsWith(this.getNewTabUrl())
+        return tabs?.length > 0 && tabs?.[0].url && tabs?.[0].url.startsWith(this.getNewTabUrl())
           ? browser.tabs.update(tabs[0].id, { url }).then(window.close)
           : openInNewTab(url);
       })
@@ -290,7 +290,8 @@ export default class WebExtPlatformService implements PlatformService {
   }
 
   sendMessage(message: Message): ng.IPromise<any> {
-    let module: ng.IModule;
+    // If background module loaded use browser API to send the message
+    let module: ng.IModule | undefined;
     try {
       module = angular.module('WebExtBackgroundModule');
     } catch (err) {}
@@ -329,7 +330,7 @@ export default class WebExtPlatformService implements PlatformService {
     return browser.alarms.clear(Globals.Alarm.Name).then(() => {});
   }
 
-  urlIsNativeConfigPage(url: string): boolean {
+  urlIsNativeConfigPage(url: string | undefined): boolean {
     return false;
   }
 

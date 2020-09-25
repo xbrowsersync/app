@@ -36,6 +36,10 @@ export interface PlatformService {
   urlIsSupported: (url: string) => boolean;
 }
 
+export interface DesktopPlatformService extends PlatformService {
+  getNewTabUrl: () => string;
+}
+
 export interface PlatformUpgradeService {
   upgradeTo160: () => ng.IPromise<void>;
 }
@@ -54,6 +58,6 @@ export interface Url {
 export interface WebpageMetadata {
   description?: string;
   tags?: string;
-  title: string;
-  url: string;
+  title: string | undefined;
+  url: string | undefined;
 }

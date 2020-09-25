@@ -5,10 +5,10 @@ import { Alert } from './alert.interface';
 @autobind
 @Injectable('AlertService')
 export default class AlertService {
-  currentAlert: Alert;
+  currentAlert: Alert | undefined;
 
   clearCurrentAlert(): void {
-    this.currentAlert = null;
+    this.currentAlert = undefined;
   }
 
   setCurrentAlert(alert: Alert): void {

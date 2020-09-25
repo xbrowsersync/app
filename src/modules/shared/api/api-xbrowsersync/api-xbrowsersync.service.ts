@@ -30,7 +30,7 @@ export default class ApiXbrowsersyncService implements ApiService {
   $http: ng.IHttpService;
   $q: ng.IQService;
   networkSvc: NetworkService;
-  _platformSvc: PlatformService;
+  _platformSvc: PlatformService | undefined;
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
@@ -55,7 +55,7 @@ export default class ApiXbrowsersyncService implements ApiService {
     if (angular.isUndefined(this._platformSvc)) {
       this._platformSvc = this.$injector.get('PlatformService');
     }
-    return this._platformSvc;
+    return this._platformSvc as PlatformService;
   }
 
   apiRequestSucceeded<T>(response: T): ng.IPromise<T> {
@@ -247,14 +247,8 @@ export default class ApiXbrowsersyncService implements ApiService {
   }
 
   getExceptionFromHttpResponse(response: ng.IHttpResponse<ApiXbrowsersyncErrorResponse>): Exceptions.Exception {
-    let message: string;
-    if (response?.data?.message) {
-      message = response.data.message;
-    }
-
-    const testError = new Error('test');
-
     let exception: Exceptions.Exception;
+    const message = response.data?.message;
     switch (response.status) {
       // 401 Unauthorized: sync data not found
       case 401:
