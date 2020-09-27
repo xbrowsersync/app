@@ -45,7 +45,7 @@
     },
     "Go": {
       "key": "Alert_Go",
-      "default": "Go"
+      "default": "Далее"
     },
     "WorkingOffline": {
       "Title": {
@@ -72,7 +72,7 @@
     "Container": {
       "Menu": {
         "key": "Bookmarks_Container_Menu",
-        "default": "Menu bookmarks"
+        "default": "Закладки в меню"
       },
       "Mobile": {
         "key": "Bookmarks_Container_Mobile",
@@ -135,7 +135,7 @@
     },
     "Next": {
       "key": "Button_Next",
-      "default": "Next"
+      "default": "Далее"
     },
     "OK": {
       "key": "Button_OK",
@@ -151,7 +151,7 @@
     },
     "Settings": {
       "key": "Button_Settings",
-      "default": "Settings"
+      "default": "Настройки"
     },
     "ShareBookmark": {
       "key": "Button_ShareBookmark",
@@ -400,42 +400,42 @@
   "Share": {
     "Bookmark": {
       "key": "Share_Bookmark",
-      "default": "Share bookmark with"
+      "default": "Поделиться закладкой с"
     }
   },
   "Tooltip": {
     "NotSynced": {
       "key": "Tooltip_NotSynced",
-      "default": "not synced"
+      "default": "не синхронизировано"
     },
     "Synced": {
       "key": "Tooltip_Synced",
-      "default": "synced"
+      "default": "синхронизировано"
     },
     "Syncing": {
       "key": "Tooltip_Syncing",
-      "default": "syncing"
+      "default": "синхронизация"
     }
   },
   "View": {
     "Bookmark": {
       "Add": {
         "key": "View_Bookmark_Add",
-        "default": "Add bookmark"
+        "default": "Добавить закладку"
       },
       "Edit": {
         "key": "View_Bookmark_Edit",
-        "default": "Edit bookmark"
+        "default": "Редактировать закладку"
       },
       "Form": {
         "Title": {
           "key": "View_Bookmark_Form_Title",
-          "default": "Title"
+          "default": "Заголовок"
         },
         "Url": {
           "Exists": {
             "key": "View_Bookmark_Form_Url_Exists",
-            "default": "URL has already been bookmarked"
+            "default": "URL-адрес уже был добавлен в закладки"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -443,47 +443,47 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "Bookmark URL is required"
+            "default": "Необходимо указать URL закладки"
           }
         },
         "Description": {
           "key": "View_Bookmark_Form_Description",
-          "default": "Description"
+          "default": "Описание"
         },
         "Tags": {
           "Label": {
             "key": "View_Bookmark_Form_Tags_Label",
-            "default": "Tags"
+            "default": "Теги"
           },
           "Placeholder": {
             "key": "View_Bookmark_Form_Tags_Placeholder",
-            "default": "tag 1, tag 2, tag 3, etc"
+            "default": "тег 1, тег 2, тег 3, и т.д."
           },
           "Clear": {
             "key": "View_Bookmark_Form_Tags_Clear",
-            "default": "Clear tags"
+            "default": "Удалить теги"
           },
           "Remove": {
             "key": "View_Bookmark_Form_Tags_Remove",
-            "default": "Remove tag"
+            "default": "Удалить тег"
           }
         },
         "Delete": {
           "key": "View_Bookmark_Form_Delete",
-          "default": "Delete"
+          "default": "Удалить"
         },
         "Share": {
           "key": "View_Bookmark_Form_Share",
-          "default": "Share"
+          "default": "Поделиться"
         },
         "UpdateProperties": {
           "key": "View_Bookmark_Form_UpdateProperties",
-          "default": "Update bookmark properties"
+          "default": "Обновить свойства закладки"
         }
       },
       "InvalidUrlShared": {
         "key": "View_Bookmark_InvalidUrlShared",
-        "default": "The value that was shared does not contain a valid URL."
+        "default": "Значение, которым поделились, содержит недопустимый URL."
       }
     },
     "Help": {
