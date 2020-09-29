@@ -3,35 +3,35 @@
     "AppUpdateAvailable": {
       "Title": {
         "key": "Alert_AppUpdateAvailable_Title",
-        "default": "xBrowserSync update available"
+        "default": "xBrowserSync-opdatering beskikbaar"
       },
       "Message": {
         "key": "Alert_AppUpdateAvailable_Message",
-        "default": "{version} is available to download. Click for more information.",
-        "android": "xBrowserSync {version} is available to download."
+        "default": "{version} is beskikbaar om af te laai. Klik vir meer inligting.",
+        "android": "xBrowserSync {version} is beskikbaar om af te laai. Klik vir meer inligting."
       }
     },
     "AppUpdated": {
       "Title": {
         "key": "Alert_AppUpdated_Title",
-        "default": "Updated to"
+        "default": "Opgedateer na"
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync has been updated with the latest features and fixes. Click for release notes."
+        "default": "xBrowserSync is opgedateer met die nuutste funksies en regstellings. Klik vir vrystellingsnotas."
       }
     },
     "BookmarkCreated": {
       "key": "Alert_BookmarkCreated",
-      "default": "Bookmark created"
+      "default": "Boekmerk is geskep"
     },
     "BookmarkDeleted": {
       "key": "Alert_BookmarkDeleted",
-      "default": "Bookmark deleted"
+      "default": "Boekmerk is uitgevee"
     },
     "BookmarkUpdated": {
       "key": "Alert_BookmarkUpdated",
-      "default": "Bookmark updated"
+      "default": "Boekmerk is opgedateer"
     },
     "GetMetadata": {
       "Message": {
