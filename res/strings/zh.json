@@ -397,12 +397,6 @@
       }
     }
   },
-  "Share": {
-    "Bookmark": {
-      "key": "Share_Bookmark",
-      "default": "分享书签"
-    }
-  },
   "Tooltip": {
     "NotSynced": {
       "key": "Tooltip_NotSynced",
