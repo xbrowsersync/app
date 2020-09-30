@@ -397,12 +397,6 @@
       }
     }
   },
-  "Share": {
-    "Bookmark": {
-      "key": "Share_Bookmark",
-      "default": "Поделиться закладкой с"
-    }
-  },
   "Tooltip": {
     "NotSynced": {
       "key": "Tooltip_NotSynced",
