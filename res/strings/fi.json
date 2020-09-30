@@ -397,12 +397,6 @@
       }
     }
   },
-  "Share": {
-    "Bookmark": {
-      "key": "Share_Bookmark",
-      "default": "Jaa kirjanmerkki käyttäen"
-    }
-  },
   "Tooltip": {
     "NotSynced": {
       "key": "Tooltip_NotSynced",
