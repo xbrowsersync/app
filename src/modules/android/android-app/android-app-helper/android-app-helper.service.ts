@@ -170,9 +170,7 @@ export default class AndroidAppHelperService extends BaseAppHelperService implem
 
   shareBookmark(bookmark: Bookmark): void {
     const options = {
-      subject: `${bookmark.title} (${this.platformSvc.getI18nString(this.Strings.Share.Bookmark)})`,
-      url: bookmark.url,
-      chooserTitle: this.platformSvc.getI18nString(this.Strings.Share.Bookmark)
+      url: bookmark.url
     };
 
     const onError = (err: Error) => {
