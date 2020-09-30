@@ -61,7 +61,7 @@
   "App": {
     "Description": {
       "key": "App_Description",
-      "default": "Selaimen synkronointi kuten pitää: turvallista, anonyymiä ja ilmaiseksi! Synkronoi kirjanmerkit selaimillesi ja laitteillesi, ilman rekisteröitymistä."
+      "default": "Selainsynkronointi oikein: turvallisesti, anonyymisti ja ilmaiseksi! Synkronoi kirjanmerkit selaimillesi ja laitteillesi, ilman rekisteröitymistä."
     },
     "Title": {
       "key": "App_Title",
@@ -400,7 +400,7 @@
   "Share": {
     "Bookmark": {
       "key": "Share_Bookmark",
-      "default": "Share bookmark with"
+      "default": "Jaa kirjanmerkki käyttäen"
     }
   },
   "Tooltip": {
@@ -555,7 +555,7 @@
       "Welcome": {
         "key": "View_Help_Welcome",
         "default": "<h4>Tervetuloa xBrowserSynciin!</h4><p>xBrowserSync on ilmainen ja avoimen lähdekoodin vaihtoehto Googlen, Mozillan, Operan ja muiden tarjoamille selaimen synkronointipalveluille. xBrowserSync kunnioittaa yksityisyyttäsi ja antaa sinulle täydellisen anonymiteetin (tutustu <a href='https://link.xbrowsersync.org/www' class='new-tab'>sivustoon</a> saadaksesi lisätietoja).</p><p>Käytä hetki lukeaksesi tämä opas läpi tutustuaksesi xBrowserSync-palveluun. Käytä alla olevia hakulinkkejä tai nuolinäppäimiä liikkuaksesi sivujen välillä.</p><p>Huomaa: xBrowserSync synkronoi tällä hetkellä vain kirjanmerkkejä. Selaimen lisätietojen synkronointi lisätään tulevaisuudessa, tutustu <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>kehityssuunnitelmaan</a> nähdäksesi mitä on tulossa.</p>",
-        "android": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info).</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or swiping to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>"
+        "android": "<h4>Tervetuloa xBrowserSynciin!</h4><p>xBrowserSync on ilmainen ja avoimen lähdekoodin vaihtoehto Googlen, Mozillan, Operan ja muiden tarjoamille selaimen synkronointipalveluille. xBrowserSync kunnioittaa yksityisyyttäsi ja antaa sinulle täydellisen anonymiteetin (tutustu <a href='https://link.xbrowsersync.org/www' class='new-tab'>sivustoon</a> saadaksesi lisätietoja).</p><p>Käytä hetki lukeaksesi tämä opas läpi tutustuaksesi xBrowserSync-palveluun. Käytä alla olevia linkkejä tai pyyhkäise näyttöä liikkuaksesi sivujen välillä.</p><p>Huomaa: xBrowserSync synkronoi tällä hetkellä vain kirjanmerkkejä. Selaimen lisätietojen synkronointi lisätään tulevaisuudessa, tutustu <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>kehityssuunnitelmaan</a> nähdäksesi mitä on tulossa.</p>"
       }
     },
     "Login": {
