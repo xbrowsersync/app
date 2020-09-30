@@ -3,65 +3,65 @@
     "AppUpdateAvailable": {
       "Title": {
         "key": "Alert_AppUpdateAvailable_Title",
-        "default": "xBrowserSync update available"
+        "default": "xBrowserSync päivitys saatavilla"
       },
       "Message": {
         "key": "Alert_AppUpdateAvailable_Message",
-        "default": "{version} is available to download. Click for more information.",
-        "android": "xBrowserSync {version} is available to download."
+        "default": "{version} on ladattavissa. Klikkaa saadaksesi lisätietoja.",
+        "android": "xBrowserSync {version} on ladattavissa."
       }
     },
     "AppUpdated": {
       "Title": {
         "key": "Alert_AppUpdated_Title",
-        "default": "Updated to"
+        "default": "Päivitetty versioon"
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync has been updated with the latest features and fixes. Click for release notes."
+        "default": "xBrowserSync on päivitetty uusimmilla ominaisuuksilla ja korjauksilla. Napsauta saadaksesi julkaisutiedot."
       }
     },
     "BookmarkCreated": {
       "key": "Alert_BookmarkCreated",
-      "default": "Bookmark created"
+      "default": "Kirjanmerkki luotu"
     },
     "BookmarkDeleted": {
       "key": "Alert_BookmarkDeleted",
-      "default": "Bookmark deleted"
+      "default": "Kirjanmerkki poistettu"
     },
     "BookmarkUpdated": {
       "key": "Alert_BookmarkUpdated",
-      "default": "Bookmark updated"
+      "default": "Kirjanmerkki päivitetty"
     },
     "GetMetadata": {
       "Message": {
         "key": "Alert_GetMetadata_Message",
-        "default": "Fetching bookmark properties, touch to cancel."
+        "default": "Noudetaan kirjanmerkin ominaisuuksia, kosketa peruuttaaksesi."
       },
       "Success": {
         "key": "Alert_GetMetadata_Success",
-        "default": "Bookmark properties updated."
+        "default": "Kirjanmerkin ominaisuudet päivitetty."
       }
     },
     "Go": {
       "key": "Alert_Go",
-      "default": "Go"
+      "default": "Mene"
     },
     "WorkingOffline": {
       "Title": {
         "key": "Alert_WorkingOffline_Title",
-        "default": "Working offline"
+        "default": "Työskennellään offline-tilassa"
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
-        "default": "Changes will be synced when connection is restored."
+        "default": "Muutokset synkronoidaan kun yhteys on palautettu."
       }
     }
   },
   "App": {
     "Description": {
       "key": "App_Description",
-      "default": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
+      "default": "Selaimen synkronointi kuten pitää: turvallista, anonyymiä ja ilmaiseksi! Synkronoi kirjanmerkit selaimillesi ja laitteillesi, ilman rekisteröitymistä."
     },
     "Title": {
       "key": "App_Title",
