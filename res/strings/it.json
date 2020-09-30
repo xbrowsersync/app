@@ -397,12 +397,6 @@
       }
     }
   },
-  "Share": {
-    "Bookmark": {
-      "key": "Share_Bookmark",
-      "default": "Condividi segnalibro con"
-    }
-  },
   "Tooltip": {
     "NotSynced": {
       "key": "Tooltip_NotSynced",
