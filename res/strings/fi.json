@@ -341,7 +341,7 @@
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
-      "default": "Synkronointi on poistettu käytöstä, ota synkronointi uudelleen käyttöön sen jatkamiseksi."
+      "default": "Synkronointi on poistettu käytöstä, ota synkronointi uudelleen käyttöön jatkaaksesi."
     },
     "TooManyRequests_Title": {
       "key": "Exception_TooManyRequests_Title",
@@ -389,7 +389,7 @@
       },
       "Offline": {
         "key": "Service_Status_Offline",
-        "default": "Offline-tilassa"
+        "default": "Ei yhteyttä"
       },
       "Online": {
         "key": "Service_Status_Online",
@@ -430,7 +430,7 @@
       "Form": {
         "Title": {
           "key": "View_Bookmark_Form_Title",
-          "default": "Otsikko"
+          "default": "Nimi"
         },
         "Url": {
           "Exists": {
@@ -562,7 +562,7 @@
       "GetSyncId": {
         "Title": {
           "key": "View_Login_GetSyncId_Title",
-          "default": "Tarvitsetko synkronointitunnuksen?"
+          "default": "Tarvitsetko synkronointi-ID:n?"
         },
         "Content": {
           "key": "View_Login_GetSyncId_Content",
@@ -616,7 +616,7 @@
         },
         "Confirm": {
           "key": "View_Login_Service_Confirm",
-          "default": "Synkronoidaanko tähän palveluun?"
+          "default": "Synkronoi tähän palveluun?"
         },
         "Location": {
           "key": "View_Login_Service_Location",
@@ -624,7 +624,7 @@
         },
         "MaxSyncSize": {
           "key": "View_Login_Service_MaxSyncSize",
-          "default": "Suurin synkronointikoko"
+          "default": "Suurin synk. koko"
         },
         "Selected": {
           "key": "View_Login_Service_Selected",
@@ -719,7 +719,7 @@
         },
         "Existing": {
           "key": "View_Login_SyncId_Existing",
-          "default": "Onko sinulla jo synkronointitunnus?"
+          "default": "Onko sinulla jo synkronointi-ID?"
         },
         "Invalid": {
           "key": "View_Login_SyncId_Invalid",
@@ -914,7 +914,7 @@
           },
           "ViewFaqs": {
             "key": "View_Settings_Issues_Help_ViewFaqs",
-            "default": "Näytä UKK"
+            "default": "Näytä UKKt"
           }
         },
         "Tracker": {
@@ -928,7 +928,7 @@
           },
           "Report": {
             "key": "View_Settings_Issues_Tracker_Report",
-            "default": "Ilmoita ongelmasta"
+            "default": "Ilmoita ongelma"
           }
         },
         "Log": {
@@ -942,7 +942,7 @@
           },
           "Clear": {
             "key": "View_Settings_Issues_Log_Clear",
-            "default": "Tyhjennä loki"
+            "default": "Tyhjennä"
           },
           "Download": {
             "key": "View_Settings_Issues_Log_Download",
@@ -950,7 +950,7 @@
           },
           "Size": {
             "key": "View_Settings_Issues_Log_Size",
-            "default": "Lokin koko"
+            "default": "Lokitietojen koko"
           }
         }
       },
@@ -961,7 +961,7 @@
         },
         "Add": {
           "key": "View_Settings_Permissions_Add",
-          "default": "Myönnä käyttöoikeudet"
+          "default": "Myönnä oikeudet"
         },
         "Granted": {
           "key": "View_Settings_Permissions_Granted",
@@ -983,7 +983,7 @@
         },
         "Remove": {
           "key": "View_Settings_Permissions_Remove",
-          "default": "Poista käyttöoikeudet"
+          "default": "Poista oikeudet"
         }
       },
       "Prefs": {
@@ -1000,7 +1000,7 @@
         "CheckForAppUpdates": {
           "Label": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Label",
-            "default": "Tarkista sovelluksen päivitykset"
+            "default": "Tarkista päivitykset"
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
@@ -1010,7 +1010,7 @@
         "DarkMode": {
           "Label": {
             "key": "View_Settings_Prefs_DarkMode_Label",
-            "default": "Käytä tummaa tilaa"
+            "default": "Tumma teema"
           },
           "Description": {
             "key": "View_Settings_Prefs_DarkMode_Description",
@@ -1020,7 +1020,7 @@
         "DefaultToFolderView": {
           "Label": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Label",
-            "default": "Näytä kirjanmerkkikansiot"
+            "default": "Kirjanmerkkikansiot"
           },
           "Description": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Description",
@@ -1030,7 +1030,7 @@
         "SearchBar": {
           "Label": {
             "key": "View_Settings_Prefs_SearchBar_Label",
-            "default": "Muuta hakupalkin sijaintia"
+            "default": "Hakupalkin sijainti"
           },
           "Description": {
             "key": "View_Settings_Prefs_SearchBar_Description",
@@ -1040,7 +1040,7 @@
         "SyncToolbar": {
           "Label": {
             "key": "View_Settings_Prefs_SyncToolbar_Label",
-            "default": "Synkronoi kirjanmerkkipalkki"
+            "default": "Synk. kirjanmerkkipalkki"
           },
           "Description": {
             "key": "View_Settings_Prefs_SyncToolbar_Description",
@@ -1078,7 +1078,7 @@
         "Data": {
           "Label": {
             "key": "View_Settings_Sync_Data_Label",
-            "default": "Tiedonsiirtomäärä"
+            "default": "Tilan käyttö"
           },
           "Description": {
             "key": "View_Settings_Sync_Data_Description",
