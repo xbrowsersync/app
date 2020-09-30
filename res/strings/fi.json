@@ -72,184 +72,184 @@
     "Container": {
       "Menu": {
         "key": "Bookmarks_Container_Menu",
-        "default": "Menu bookmarks"
+        "default": "Kirjanmerkkivalikko"
       },
       "Mobile": {
         "key": "Bookmarks_Container_Mobile",
-        "default": "Mobile bookmarks"
+        "default": "Mobiilikirjanmerkit"
       },
       "Other": {
         "key": "Bookmarks_Container_Other",
-        "default": "Other bookmarks"
+        "default": "Muut kirjanmerkit"
       },
       "Toolbar": {
         "key": "Bookmarks_Container_Toolbar",
-        "default": "Toolbar bookmarks"
+        "default": "Kirjanmerkkipalkki"
       }
     }
   },
   "Button": {
     "AddBookmark": {
       "key": "Button_AddBookmark",
-      "default": "Add Bookmark"
+      "default": "Lisää kirjanmerkki"
     },
     "Back": {
       "key": "Button_Back",
-      "default": "Back"
+      "default": "Takaisin"
     },
     "Cancel": {
       "key": "Button_Cancel",
-      "default": "Cancel"
+      "default": "Peruuta"
     },
     "Close": {
       "key": "Button_Close",
-      "default": "Close"
+      "default": "Sulje"
     },
     "Confirm": {
       "key": "Button_Confirm",
-      "default": "Yes"
+      "default": "Kyllä"
     },
     "Continue": {
       "key": "Button_Continue",
-      "default": "Continue"
+      "default": "Jatka"
     },
     "DeleteBookmark": {
       "key": "Button_DeleteBookmark",
-      "default": "Delete Bookmark"
+      "default": "Poista kirjanmerkki"
     },
     "Deny": {
       "key": "Button_Deny",
-      "default": "No"
+      "default": "Ei"
     },
     "Done": {
       "key": "Button_Done",
-      "default": "Done"
+      "default": "Valmis"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
-      "default": "Edit Bookmark"
+      "default": "Muokkaa kirjanmerkkiä"
     },
     "Help": {
       "key": "Button_Help",
-      "default": "Help guide"
+      "default": "Käyttöopas"
     },
     "Next": {
       "key": "Button_Next",
-      "default": "Next"
+      "default": "Seuraava"
     },
     "OK": {
       "key": "Button_OK",
-      "default": "Got it"
+      "default": "Selvä"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
-      "default": "View release notes"
+      "default": "Näytä julkaisutiedot"
     },
     "Saving": {
       "key": "Button_Saving",
-      "default": "Saving"
+      "default": "Tallennetaan"
     },
     "Settings": {
       "key": "Button_Settings",
-      "default": "Settings"
+      "default": "Asetukset"
     },
     "ShareBookmark": {
       "key": "Button_ShareBookmark",
-      "default": "Share bookmark"
+      "default": "Jaa kirjanmerkki"
     },
     "Undo": {
       "key": "Button_Undo",
-      "default": "Undo"
+      "default": "Kumoa"
     },
     "Update": {
       "key": "Button_Update",
-      "default": "Update"
+      "default": "Päivitä"
     },
     "View": {
       "key": "Button_View",
-      "default": "View"
+      "default": "Näytä"
     }
   },
   "Exception": {
     "ContainerChanged_Message": {
       "key": "Exception_ContainerChanged_Message",
-      "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
+      "default": "Älä muokkaa [xbs] kansioita, koska se voi aiheuttaa synkronointiongelmia."
     },
     "ContainerChanged_Title": {
       "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync folder changed"
+      "default": "xBrowserSync-kansio muuttunut"
     },
     "DailyNewSyncLimitReached_Message": {
       "key": "Exception_DailyNewSyncLimitReached_Message",
-      "default": "Sync to an existing sync ID, switch to a different service or try again tomorrow."
+      "default": "Synkronoi olemassa olevalla synkronointitunnuksella, vaihda toiseen palveluun tai yritä huomenna uudelleen."
     },
     "DailyNewSyncLimitReached_Title": {
       "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "Daily new sync limit reached"
+      "default": "Päivittäinen uusien synkronointien raja saavutettu"
     },
     "Default_Message": {
       "key": "Exception_Default_Message",
-      "default": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
+      "default": "Jos ongelma jatkuu, <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>ilmoita ongelmasta</a>."
     },
     "Default_Title": {
       "key": "Exception_Default_Title",
-      "default": "Something went wrong"
+      "default": "Jokin meni pieleen"
     },
     "FailedDownloadFile_Title": {
       "key": "Exception_FailedDownloadFile_Title",
-      "default": "Backup failed"
+      "default": "Varmuuskopiointi epäonnistui"
     },
     "FailedGetDataToRestore_Title": {
       "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "Browse files failed"
+      "default": "Tiedostojen selaus epäonnistui"
     },
     "FailedGetPageMetadata_Message": {
       "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "URL is invalid or webpage data could not be retrieved."
+      "default": "URL-osoite on virheellinen tai verkkosivun teitojen nouto ei onnistunut."
     },
     "FailedGetPageMetadata_Title": {
       "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "Couldn’t get bookmark properties"
+      "default": "Kirjanmerkin ominaisuuksien nouto ei onnistunut"
     },
     "FailedRefreshBookmarks_Title": {
       "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "Couldn’t retrieve updates"
+      "default": "Päivitysten nouto epäonnistui"
     },
     "FailedRestoreData_Message": {
       "key": "Exception_FailedRestoreData_Message",
-      "default": "The backup data provided is not in an expected format."
+      "default": "Annetut varmuuskopiotiedot eivät ole odotetussa muodossa."
     },
     "FailedRestoreData_Title": {
       "key": "Exception_FailedRestoreData_Title",
-      "default": "Unable to restore data"
+      "default": "Tietojen palautus ei onnistunut"
     },
     "FailedShareUrlNotSynced_Title": {
       "key": "Exception_FailedShareUrlNotSynced_Title",
-      "default": "You must be synced to add a bookmark"
+      "default": "Jotta voit lisätä kirjanmerkin, on synkronoinin on oltava ajan tasalla"
     },
     "FailedShareUrl_Title": {
       "key": "Exception_FailedShareUrl_Title",
-      "default": "Unable to retrieve shared bookmark URL"
+      "default": "Jaetun kirjanmerkin URL-osoitetteen nouto ei onnistunut"
     },
     "HttpRequestFailed_Message": {
       "key": "Exception_HttpRequestFailed_Message",
-      "default": "Check your network connection and try again."
+      "default": "Tarkista verkkoyhteys ja yritä uudelleen."
     },
     "HttpRequestFailed_Title": {
       "key": "Exception_HttpRequestFailed_Title",
-      "default": "Connection to service lost"
+      "default": "Yhteys palveluun menetetty"
     },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
-      "default": "Check that your sync ID, password and service URL have been entered correctly."
+      "default": "Tarkista, että synkronointitunnus, salasana ja palvelun URL on syötetty oikein."
     },
     "InvalidCredentials_Title": {
       "key": "Exception_InvalidCredentials_Title",
-      "default": "Invalid credentials"
+      "default": "Virheelliset tunnistetiedot"
     },
     "InvalidService_Message": {
       "key": "Exception_InvalidService_Message",
-      "default": "The service URL is not a valid xBrowserSync service."
+      "default": "Palvelun URL-osoite ei ole kelvollinen xBrowserSync-palvelu."
     },
     "InvalidService_Title": {
       "key": "Exception_InvalidService_Title",
