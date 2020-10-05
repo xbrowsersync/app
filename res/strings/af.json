@@ -197,87 +197,87 @@
     },
     "FailedDownloadFile_Title": {
       "key": "Exception_FailedDownloadFile_Title",
-      "default": "Backup failed"
+      "default": "Rugsteunkopie het misluk"
     },
     "FailedGetDataToRestore_Title": {
       "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "Browse files failed"
+      "default": "Kon nie deur lêers blaai nie"
     },
     "FailedGetPageMetadata_Message": {
       "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "URL is invalid or webpage data could not be retrieved."
+      "default": "URL is ongeldig, of webbladdata kon nie opgespoor word nie."
     },
     "FailedGetPageMetadata_Title": {
       "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "Couldn’t get bookmark properties"
+      "default": "Kon nie boekmerkeienskappe kry nie"
     },
     "FailedRefreshBookmarks_Title": {
       "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "Couldn’t retrieve updates"
+      "default": "Kon nie opdaterings ophaal nie"
     },
     "FailedRestoreData_Message": {
       "key": "Exception_FailedRestoreData_Message",
-      "default": "The backup data provided is not in an expected format."
+      "default": "Die rugsteundata wat verskaf word, is nie in die verwagte formaat nie."
     },
     "FailedRestoreData_Title": {
       "key": "Exception_FailedRestoreData_Title",
-      "default": "Unable to restore data"
+      "default": "Kan nie data herstel nie"
     },
     "FailedShareUrlNotSynced_Title": {
       "key": "Exception_FailedShareUrlNotSynced_Title",
-      "default": "You must be synced to add a bookmark"
+      "default": "U moet gesinkroniseer wees om 'n boekmerk by te voeg"
     },
     "FailedShareUrl_Title": {
       "key": "Exception_FailedShareUrl_Title",
-      "default": "Unable to retrieve shared bookmark URL"
+      "default": "Kan nie die gedeelde boekmerk-URL ophaal nie"
     },
     "HttpRequestFailed_Message": {
       "key": "Exception_HttpRequestFailed_Message",
-      "default": "Check your network connection and try again."
+      "default": "Gaan u netwerkverbinding na en probeer weer."
     },
     "HttpRequestFailed_Title": {
       "key": "Exception_HttpRequestFailed_Title",
-      "default": "Connection to service lost"
+      "default": "Verbinding met diens verlore"
     },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
-      "default": "Check that your sync ID, password and service URL have been entered correctly."
+      "default": "Kyk of u sinkronisasie-ID, wagwoord en diens-URL korrek ingevoer is."
     },
     "InvalidCredentials_Title": {
       "key": "Exception_InvalidCredentials_Title",
-      "default": "Invalid credentials"
+      "default": "Ongeldige aanmeldinligting"
     },
     "InvalidService_Message": {
       "key": "Exception_InvalidService_Message",
-      "default": "The service URL is not a valid xBrowserSync service."
+      "default": "Die diens-URL is nie 'n geldige xBrowserSync-diens nie."
     },
     "InvalidService_Title": {
       "key": "Exception_InvalidService_Title",
-      "default": "Invalid xBrowserSync service"
+      "default": "Ongeldige xBrowserSync-diens"
     },
     "LocalContainerNotFound_Message": {
       "key": "Exception_LocalContainerNotFound_Message",
-      "default": "Possible corrupt browser profile, try creating a new profile as it may resolve the issue."
+      "default": "Moontlike korrupte blaaierprofiel, probeer om 'n nuwe profiel te skep, aangesien dit die probleem kan oplos."
     },
     "LocalContainerNotFound_Title": {
       "key": "Exception_LocalContainerNotFound_Title",
-      "default": "Unexpected bookmarks structure"
+      "default": "Onverwagte boekmerkstruktuur"
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local data has been refreshed, please reapply last change."
+      "default": "Plaaslike data is verfris. Pas die laaste verandering toe."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
-      "default": "Sync error"
+      "default": "Sinchroniseerfout"
     },
     "MissingClientData_Message": {
       "key": "Exception_MissingClientData_Message",
-      "default": "Unable to find stored credentials. Re-enable sync and try again."
+      "default": "Kan nie gestoorde aanmeldinligting vind nie. Aktiveer sinkronisering weer en probeer weer."
     },
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
-      "default": "Missing credentials"
+      "default": "Ontbrekende aanmeldinligting"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",
@@ -459,20 +459,20 @@
           },
           "Remove": {
             "key": "View_Bookmark_Form_Tags_Remove",
-            "default": "Remove tag"
+            "default": "Verwyder die merker"
           }
         },
         "Delete": {
           "key": "View_Bookmark_Form_Delete",
-          "default": "Delete"
+          "default": "Verwyder"
         },
         "Share": {
           "key": "View_Bookmark_Form_Share",
-          "default": "Share"
+          "default": "Deel"
         },
         "UpdateProperties": {
           "key": "View_Bookmark_Form_UpdateProperties",
-          "default": "Update bookmark properties"
+          "default": "Dateer boekmerkeienskappe op"
         }
       },
       "InvalidUrlShared": {
