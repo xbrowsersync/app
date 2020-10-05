@@ -36,32 +36,32 @@
     "GetMetadata": {
       "Message": {
         "key": "Alert_GetMetadata_Message",
-        "default": "Fetching bookmark properties, touch to cancel."
+        "default": "Haal boekmerkeienskappe, klik om te kanselleer."
       },
       "Success": {
         "key": "Alert_GetMetadata_Success",
-        "default": "Bookmark properties updated."
+        "default": "Eienskappe vir boekmerke is opgedateer."
       }
     },
     "Go": {
       "key": "Alert_Go",
-      "default": "Go"
+      "default": "Gaan"
     },
     "WorkingOffline": {
       "Title": {
         "key": "Alert_WorkingOffline_Title",
-        "default": "Working offline"
+        "default": "Werk vanlyn"
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
-        "default": "Changes will be synced when connection is restored."
+        "default": "Veranderinge sal gesinkroniseer word wanneer die verbinding herstel word."
       }
     }
   },
   "App": {
     "Description": {
       "key": "App_Description",
-      "default": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
+      "default": "Blaaier-sinchronisasie soos dit moet wees: veilig, anoniem en gratis! Sinkroniseer boekmerke tussen u blaaiers en toestelle, geen aanmelding is nodig nie."
     },
     "Title": {
       "key": "App_Title",
@@ -72,128 +72,128 @@
     "Container": {
       "Menu": {
         "key": "Bookmarks_Container_Menu",
-        "default": "Menu bookmarks"
+        "default": "Kieslysmerke"
       },
       "Mobile": {
         "key": "Bookmarks_Container_Mobile",
-        "default": "Mobile bookmarks"
+        "default": "Mobiele boekmerke"
       },
       "Other": {
         "key": "Bookmarks_Container_Other",
-        "default": "Other bookmarks"
+        "default": "Ander boekmerke"
       },
       "Toolbar": {
         "key": "Bookmarks_Container_Toolbar",
-        "default": "Toolbar bookmarks"
+        "default": "Toolbar-boekmerke"
       }
     }
   },
   "Button": {
     "AddBookmark": {
       "key": "Button_AddBookmark",
-      "default": "Add Bookmark"
+      "default": "Voeg Boekmerk by"
     },
     "Back": {
       "key": "Button_Back",
-      "default": "Back"
+      "default": "Terug"
     },
     "Cancel": {
       "key": "Button_Cancel",
-      "default": "Cancel"
+      "default": "Kanselleer"
     },
     "Close": {
       "key": "Button_Close",
-      "default": "Close"
+      "default": "Maak toe"
     },
     "Confirm": {
       "key": "Button_Confirm",
-      "default": "Yes"
+      "default": "Ja"
     },
     "Continue": {
       "key": "Button_Continue",
-      "default": "Continue"
+      "default": "Gaan Voort"
     },
     "DeleteBookmark": {
       "key": "Button_DeleteBookmark",
-      "default": "Delete Bookmark"
+      "default": "Vee boekmerk uit"
     },
     "Deny": {
       "key": "Button_Deny",
-      "default": "No"
+      "default": "Nee"
     },
     "Done": {
       "key": "Button_Done",
-      "default": "Done"
+      "default": "Klaar"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
-      "default": "Edit Bookmark"
+      "default": "Wysig boekmerk"
     },
     "Help": {
       "key": "Button_Help",
-      "default": "Help guide"
+      "default": "Hulpgids"
     },
     "Next": {
       "key": "Button_Next",
-      "default": "Next"
+      "default": "Volgende"
     },
     "OK": {
       "key": "Button_OK",
-      "default": "Got it"
+      "default": "Ek verstaan"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
-      "default": "View release notes"
+      "default": "Lees vrystellingsnotas"
     },
     "Saving": {
       "key": "Button_Saving",
-      "default": "Saving"
+      "default": "Stoor"
     },
     "Settings": {
       "key": "Button_Settings",
-      "default": "Settings"
+      "default": "Instellings"
     },
     "ShareBookmark": {
       "key": "Button_ShareBookmark",
-      "default": "Share bookmark"
+      "default": "Deel boekmerk"
     },
     "Undo": {
       "key": "Button_Undo",
-      "default": "Undo"
+      "default": "Ontdoen"
     },
     "Update": {
       "key": "Button_Update",
-      "default": "Update"
+      "default": "Opdateer"
     },
     "View": {
       "key": "Button_View",
-      "default": "View"
+      "default": "Bekyk"
     }
   },
   "Exception": {
     "ContainerChanged_Message": {
       "key": "Exception_ContainerChanged_Message",
-      "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
+      "default": "Vermy die verandering van [xbs] -gidse, want dit kan probleme met die sinkronisering veroorsaak."
     },
     "ContainerChanged_Title": {
       "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync folder changed"
+      "default": "xBrowserSync-lêergids verander"
     },
     "DailyNewSyncLimitReached_Message": {
       "key": "Exception_DailyNewSyncLimitReached_Message",
-      "default": "Sync to an existing sync ID, switch to a different service or try again tomorrow."
+      "default": "Sinkroniseer na 'n bestaande sinkronisasie-ID, skakel oor na 'n ander diens of probeer môre weer."
     },
     "DailyNewSyncLimitReached_Title": {
       "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "Daily new sync limit reached"
+      "default": "Daaglikse nuwe sinkronisasieperk is bereik"
     },
     "Default_Message": {
       "key": "Exception_Default_Message",
-      "default": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
+      "default": "As die probleem voortduur, <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'> rapporteer die probleem </a>."
     },
     "Default_Title": {
       "key": "Exception_Default_Title",
-      "default": "Something went wrong"
+      "default": "Iets het skeefgeloop"
     },
     "FailedDownloadFile_Title": {
       "key": "Exception_FailedDownloadFile_Title",
