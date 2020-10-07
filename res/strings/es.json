@@ -54,7 +54,7 @@
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
-        "default": "Changes will be synced when connection is restored."
+        "default": "Los cambios se sincronizarán cuando se restablezca la conexión."
       }
     }
   },
@@ -159,7 +159,7 @@
     },
     "Undo": {
       "key": "Button_Undo",
-      "default": "Undo"
+      "default": "Deshacer"
     },
     "Update": {
       "key": "Button_Update",
@@ -717,7 +717,7 @@
         },
         "Invalid": {
           "key": "View_Login_SyncId_Invalid",
-          "default": "Not a valid sync ID"
+          "default": "ID de sincronización no válido"
         },
         "Label": {
           "key": "View_Login_SyncId_Label",
@@ -725,14 +725,14 @@
         },
         "New": {
           "key": "View_Login_SyncId_New",
-          "default": "Get a sync ID"
+          "default": "Obtener un ID de sincronización"
         }
       }
     },
     "Permissions": {
       "Title": {
         "key": "View_Permissions_Title",
-        "default": "Optional permissions"
+        "default": "Permisos opcionales"
       },
       "Content": {
         "key": "View_Permissions_Content",
@@ -760,12 +760,12 @@
       },
       "FolderEmpty": {
         "key": "View_Search_FolderEmpty",
-        "default": "Folder empty"
+        "default": "Carpeta vacía"
       },
       "Placeholder": {
         "key": "View_Search_Placeholder",
         "default": "Hit Enter or search for bookmarks",
-        "android": "Find bookmarks"
+        "android": "Buscar marcadores"
       },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
@@ -784,7 +784,7 @@
       "BackupRestore": {
         "Title": {
           "key": "View_Settings_BackupRestore_Title",
-          "default": "Back up and restore"
+          "default": "Respaldar y restaurar"
         },
         "Backup": {
           "Title": {
@@ -841,7 +841,7 @@
           "SelectFile": {
             "Button": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Button",
-              "default": "Select file"
+              "default": "Seleccionar archivo"
             },
             "Placeholder": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Placeholder",
@@ -858,7 +858,7 @@
           },
           "RestoreData": {
             "key": "View_Settings_BackupRestore_Restore_RestoreData",
-            "default": "Restore data"
+            "default": "Restaurar datos"
           },
           "Invalid": {
             "key": "View_Settings_BackupRestore_Restore_Invalid",
@@ -1014,7 +1014,7 @@
         "DefaultToFolderView": {
           "Label": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Label",
-            "default": "Show bookmark folders"
+            "default": "Mostrar carpetas de marcadores"
           },
           "Description": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Description",
@@ -1047,22 +1047,22 @@
         },
         "Title": {
           "key": "View_Settings_Prefs_Title",
-          "default": "Preferences"
+          "default": "Preferencias"
         }
       },
       "Sync": {
         "Title": {
           "key": "View_Settings_Sync_Title",
-          "default": "Sync"
+          "default": "Sincronizar"
         },
         "Disable": {
           "key": "View_Settings_Sync_Disable",
-          "default": "Disable sync"
+          "default": "Desactivar sincronización"
         },
         "Id": {
           "Label": {
             "key": "View_Settings_Sync_Id_Label",
-            "default": "Sync ID"
+            "default": "ID de sincronización"
           },
           "Description": {
             "key": "View_Settings_Sync_Id_Description",
@@ -1072,7 +1072,7 @@
         "Data": {
           "Label": {
             "key": "View_Settings_Sync_Data_Label",
-            "default": "Data usage"
+            "default": "Uso de datos"
           },
           "Description": {
             "key": "View_Settings_Sync_Data_Description",
@@ -1081,12 +1081,12 @@
         },
         "Service": {
           "key": "View_Settings_Sync_Service",
-          "default": "Service"
+          "default": "Servicio"
         },
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Sync is up to date."
+            "default": "La sincronización está al día."
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
