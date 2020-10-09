@@ -544,180 +544,180 @@
       },
       "SyncId": {
         "key": "View_Help_SyncId",
-        "default": "<h4>Your sync ID</h4><p>xBrowserSync ensures your privacy as no personal data is ever collected and your browser data is encrypted before being synced. To identify your synced data you are provided with an anonymous sync ID which can be used along with your password to sync your data on other browsers and devices.</p><p>Remember that your sync ID will only work with the xBrowserSync service on which it was created, if you switch to a different xBrowserSync service you must create a new sync or use an existing sync ID created when previously synced to that service.</p><p>Whenever you are synced you can view your sync ID in the Settings panel, click it to reveal a handy QR code to scan when syncing on mobile devices.</p>"
+        "default": "<h4>Ваш sync ID</h4><p>xBrowserSync гарантирует вашу конфиденциальность, так как никакие персональные данные не собираются, а данные браузера зашифрованы перед синхронизацией. Чтобы идентифицировать синхронизированные данные, вам предоставлен анонимный идентификатор синхронизации (sync ID), который можно использовать вместе с вашим паролем для синхронизации данных на других браузерах и устройствах.</p><p>Помните, что ваш идентификатор синхронизации (sync ID) будет работать только с сервисом xBrowserSync, в котором он был создан, если вы переключитесь на другую службу xBrowserSync, то вы должны создать новую синхронизацию или использовать существующий идентификатор синхронизации (sync ID), созданный при предварительной синхронизации с этой службой.</p><p>Всякий раз, когда вы синхронизируетесь, вы можете просматривать свой идентификатор синхронизации (sync ID) на панели настроек, нажмите, чтобы обнаружить QR-код для сканирования при синхронизации с мобильных устройств.</p>"
       },
       "Welcome": {
         "key": "View_Help_Welcome",
-        "default": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info).</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or the arrow keys to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>",
-        "android": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info).</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or swiping to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>"
+        "default": "<h4> Добро пожаловать в xBrowserSync! </h4> <p> xBrowserSync - это бесплатная альтернатива с открытым исходным кодом службам синхронизации браузера, предлагаемых Google, Mozilla, Opera и другими, которая уважает вашу конфиденциальность и обеспечивает полную анонимность (ознакомьтесь с <a href='https://link.xbrowsersync.org/www' class='new-tab'> сайтом </a> для получения дополнительной информации). </p> <p> Найдите минутку, чтобы прочитать это справочное руководство, чтобы ознакомиться с xBrowserSync, используйте ссылки внизу для перехода на другие страницы или клавиши со стрелками. </p> <p> Обратите внимание: xBrowserSync в настоящее время синхронизирует только закладки. Синхронизация дополнительных данных браузера будет добавлена в будущих версиях, ознакомьтесь с <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'> планом развития </a>, чтобы узнать, что планируется. </p>",
+        "android": "<h4> Добро пожаловать в xBrowserSync! </h4> <p> xBrowserSync - это бесплатная альтернатива с открытым исходным кодом службам синхронизации браузера, предлагаемых Google, Mozilla, Opera и другими, которая уважает вашу конфиденциальность и обеспечивает полную анонимность (ознакомьтесь с <a href='https://link.xbrowsersync.org/www' class='new-tab'> сайтом </a> для получения дополнительной информации). </p> <p> Найдите минутку, чтобы прочитать это справочное руководство, чтобы ознакомиться с xBrowserSync, используйте ссылки внизу для перехода на другие страницы или клавиши со стрелками. </p> <p> Обратите внимание: xBrowserSync в настоящее время синхронизирует только закладки. Синхронизация дополнительных данных браузера будет добавлена в будущих версиях, ознакомьтесь с <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'> планом развития </a>, чтобы узнать, что планируется. </p>"
       }
     },
     "Login": {
       "GetSyncId": {
         "Title": {
           "key": "View_Login_GetSyncId_Title",
-          "default": "Need a sync ID?"
+          "default": "Нужен sync ID?"
         },
         "Content": {
           "key": "View_Login_GetSyncId_Content",
-          "default": "Download the xBrowserSync desktop browser extension and create a new sync to access your bookmarks here."
+          "default": "Загрузите расширение xBrowserSync для настольного браузера и создайте новую синхронизацию для доступа к вашим закладкам."
         }
       },
       "Password": {
         "Confirm": {
           "key": "View_Login_Password_Confirm",
-          "default": "Confirm password"
+          "default": "Подтвердите пароль"
         },
         "Existing": {
           "key": "View_Login_Password_Existing",
-          "default": "Your encryption password"
+          "default": "Ваш пароль для шифрования"
         },
         "Label": {
           "key": "View_Login_Password_Label",
-          "default": "Encryption password"
+          "default": "Пароль для шифрования"
         },
         "New": {
           "key": "View_Login_Password_New",
-          "default": "Enter an encryption password"
+          "default": "Введите пароль шифрования"
         },
         "Show": {
           "key": "View_Login_Password_Show",
-          "default": "Reveal password"
+          "default": "Показать пароль"
         }
       },
       "Scan": {
         "Title": {
           "key": "View_Login_Scan_Title",
-          "default": "Connect to your sync"
+          "default": "Подключиться к Вашей синхронизации"
         },
         "Content": {
           "key": "View_Login_Scan_Content",
-          "default": "Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a QR code which you can scan here."
+          "default": "Откройте xBrowserSync в Вашем браузере, перейдите в Панель настроек и нажмите на идентификатор синхронизации, чтобы отобразить QR-код, который вы можете просканировать здесь."
         },
         "ScanCode": {
           "key": "View_Login_Scan_ScanCode",
-          "default": "Scan code"
+          "default": "Сканировать код"
         },
         "ManualEntry": {
           "key": "View_Login_Scan_ManualEntry",
-          "default": "Enter sync details manually"
+          "default": "Ввести данные синхронизации вручную"
         }
       },
       "Service": {
         "ApiVersion": {
           "key": "View_Login_Service_ApiVersion",
-          "default": "API version"
+          "default": "Версия API"
         },
         "Confirm": {
           "key": "View_Login_Service_Confirm",
-          "default": "Sync to this service?"
+          "default": "Синхронизировать с этой службой?"
         },
         "Location": {
           "key": "View_Login_Service_Location",
-          "default": "Location"
+          "default": "Местоположение"
         },
         "MaxSyncSize": {
           "key": "View_Login_Service_MaxSyncSize",
-          "default": "Max sync size"
+          "default": "Макс. размер синхронизации"
         },
         "Selected": {
           "key": "View_Login_Service_Selected",
-          "default": "Syncing to"
+          "default": "Синхронизировать с"
         },
         "Status": {
           "key": "View_Login_Service_Status",
-          "default": "Status"
+          "default": "Статус"
         },
         "Update": {
           "Label": {
             "key": "View_Login_Service_Update_Label",
-            "default": "xBrowserSync service URL"
+            "default": "URL xBrowserSync сервиса"
           },
           "Description": {
             "key": "View_Login_Service_Update_Description",
-            "default": "Enter the URL of an alternative xBrowserSync service. Browse the list of public xBrowserSync services <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>here</a>."
+            "default": "Введите URL альтернативноq службы xBrowserSync. Просмотрите список публичных провайдеров xBrowserSync <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>здесь</a>."
           },
           "Button": {
             "key": "View_Login_Service_Update_Button",
-            "default": "Switch service"
+            "default": "Переключить сервис"
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
-            "default": "xBrowserSync service URL is required"
+            "default": "Необходимо ввести URL службы xBrowserSync"
           },
           "Invalid": {
             "key": "View_Login_Service_Update_Invalid",
-            "default": "Not a valid xBrowserSync service"
+            "default": "Неправильная служба xBrowserSync"
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",
-            "default": "Unable to connect to the service"
+            "default": "Не удается подключиться к сервису"
           },
           "NotSupported": {
             "key": "View_Login_Service_Update_Failed_NotSupported",
-            "default": "This service is running an unsupported API version"
+            "default": "Эта служба использует неподдерживаемую версию API"
           }
         },
         "Warning": {
           "key": "View_Login_Service_Warning",
-          "default": "<strong>Important:</strong> xBrowserSync services are run independently by volunteers. The service administrator takes no responsibility for your data so please remember to backup regularly."
+          "default": "<strong>Важно:</strong> Сервисы xBrowserSync обслуживаются добровольцами. Администратор сервиса не несет ответственности за ваши данные, поэтому не забудьте регулярно резервное копирование."
         }
       },
       "Sync": {
         "Confirm": {
           "Title": {
             "key": "View_Login_Sync_Confirm_Title",
-            "default": "Are you sure?"
+            "default": "Вы уверены?"
           },
           "Content": {
             "key": "View_Login_Sync_Confirm_Content",
-            "default": "xBrowserSync will delete all local bookmarks data before restoring synced bookmarks. OK to proceed?"
+            "default": "xBrowserSync удалит все локальные закладки перед восстановлением синхронизированных закладок. Продолжить?"
           }
         },
         "DisableOthers": {
           "Title": {
             "key": "View_Login_Sync_DisableOthers_Title",
-            "default": "Disable bookmark sync tools"
+            "default": "Отключить инструменты синхронизации закладок"
           },
           "Content": {
             "key": "View_Login_Sync_DisableOthers_Content",
-            "default": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "brave": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "edge": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "firefox": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing."
+            "default": "Синхронизация данных браузера с xBrowserSync, пока другие инструменты синхронизации закладок (такие как <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) работают, может привести к дублированию и возможно повреждению данных. Пожалуйста, отключите их, прежде чем продолжить.",
+            "brave": "Синхронизация данных браузера с xBrowserSync, пока другие инструменты синхронизации закладок (такие как <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) работают, может привести к дублированию и возможно повреждению данных. Пожалуйста, отключите их, прежде чем продолжить.",
+            "edge": "Синхронизация данных браузера с xBrowserSync, пока другие инструменты синхронизации закладок (такие как <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) работают, может привести к дублированию и возможно повреждению данных. Пожалуйста, отключите их, прежде чем продолжить.",
+            "firefox": "Синхронизация данных браузера с xBrowserSync, пока другие инструменты синхронизации закладок (такие как <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) работают, может привести к дублированию и возможно повреждению данных. Пожалуйста, отключите их, прежде чем продолжить."
           }
         },
         "Enable": {
           "key": "View_Login_Sync_Enable",
-          "default": "Sync"
+          "default": "Синхронизировать"
         },
         "New": {
           "key": "View_Login_Sync_New",
-          "default": "Create new sync"
+          "default": "Создать новую синхронизацию"
         },
         "Upgrade": {
           "Title": {
             "key": "View_Login_Sync_Upgrade_Title",
-            "default": "Ready to upgrade sync?"
+            "default": "Готовы обновить синхронизацию?"
           },
           "Content": {
             "key": "View_Login_Sync_Upgrade_Content",
-            "default": "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
+            "default": "<p>Этот идентификатор синхронизации (sync ID) должен быть обновлен для синхронизации с этой версией xBrowserSync. После обновления вы не сможете синхронизировать данные с предыдущими версиями xBrowserSync.</p><p>Убедитесь, что вы обновили все ваши xBrowserSync приложения перед продолжением. Готовы продолжить?</p>"
           }
         }
       },
       "SyncId": {
         "Description": {
           "key": "View_Login_SyncId_Description",
-          "default": "Your sync ID"
+          "default": "Ваш sync ID"
         },
         "Existing": {
           "key": "View_Login_SyncId_Existing",
-          "default": "Already got a sync ID?"
+          "default": "Уже есть sync ID?"
         },
         "Invalid": {
           "key": "View_Login_SyncId_Invalid",
-          "default": "Not a valid sync ID"
+          "default": "Неверный sync ID"
         },
         "Label": {
           "key": "View_Login_SyncId_Label",
@@ -725,24 +725,24 @@
         },
         "New": {
           "key": "View_Login_SyncId_New",
-          "default": "Get a sync ID"
+          "default": "Получить sync ID"
         }
       }
     },
     "Permissions": {
       "Title": {
         "key": "View_Permissions_Title",
-        "default": "Optional permissions"
+        "default": "Необязательные разрешения"
       },
       "Content": {
         "key": "View_Permissions_Content",
-        "default": "<p>xBrowserSync automatically enriches bookmarks added using the browser’s Add Bookmark button with available metadata. To enable this, xBrowserSync <a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>requires additional permissions</a> to be able to read visited website data.</p><p>Please indicate if prompted if you are happy to grant these permissions, alternatively you can add or remove permissions at any time in the Settings panel.</p>"
+        "default": "<p>xBrowserSync автоматически дополняет закладки, создание с помощью кнопки \"Добавить закладку\" браузера доступными метаданными. Для включения этого, xBrowserSync <a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>требует дополнительные разрешения</a> для чтения посещенных данных веб-сайта.</p><p>Пожалуйста, укажите, или вы готовы предоставить эти права, в качестве альтернативы вы можете добавить или удалить разрешения в любое время на Панели настроек.</p>"
       }
     },
     "Scan": {
       "Title": {
         "key": "View_Scan_Title",
-        "default": "Scan your sync ID QR code"
+        "default": "Сканировать QR-код вашего sync ID"
       },
       "ToggleLight": {
         "key": "View_Scan_ToggleLight",
@@ -752,100 +752,100 @@
     "Search": {
       "BookmarkTree": {
         "key": "View_Search_BookmarkTree",
-        "default": "View bookmark folders"
+        "default": "Просмотреть папки закладок"
       },
       "Clear": {
         "key": "View_Search_Clear",
-        "default": "Clear"
+        "default": "Очистить"
       },
       "FolderEmpty": {
         "key": "View_Search_FolderEmpty",
-        "default": "Folder empty"
+        "default": "Папка пуста"
       },
       "Placeholder": {
         "key": "View_Search_Placeholder",
-        "default": "Hit Enter or search for bookmarks",
-        "android": "Find bookmarks"
+        "default": "Нажмите Enter или найчните вводить текст для поиска",
+        "android": "Найти закладки"
       },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
-        "default": "You have no bookmarks, go add some!"
+        "default": "У вас нет закладок, добавьте что-нибудь!"
       },
       "NoResults": {
         "key": "View_Search_NoResults",
-        "default": "No bookmarks found"
+        "default": "Закладки не найдены"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
-        "default": "View search results"
+        "default": "Просмотреть результаты поиска"
       }
     },
     "Settings": {
       "BackupRestore": {
         "Title": {
           "key": "View_Settings_BackupRestore_Title",
-          "default": "Back up and restore"
+          "default": "Резервное копирование и восстановление"
         },
         "Backup": {
           "Title": {
             "key": "View_Settings_BackupRestore_Backup_Title",
-            "default": "Back up"
+            "default": "Резервное копирование"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Back up"
+            "default": "Резервное копирование"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
-            "default": "Back up local browser data to a file."
+            "default": "Резервное копирование локальных данных в файл."
           },
           "Synced": {
             "key": "View_Settings_BackupRestore_Backup_Synced",
-            "default": "Back up synced data to a file."
+            "default": "Резервное копирование синхронизированных данных в файл."
           }
         },
         "Restore": {
           "Title": {
             "key": "View_Settings_BackupRestore_Restore_Title",
-            "default": "Restore"
+            "default": "Восстановить"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Restore"
+            "default": "Восстановить"
           },
           "Local": {
             "Description": {
               "key": "View_Settings_BackupRestore_Restore_Local_Description",
-              "default": "Restore local browser data from a backup."
+              "default": "Восстановить данные локального браузера из резервной копии."
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Local_Confirm",
-              "default": "<p>As sync is currently disabled, the data being restored will overwrite the local browser data.</p><p>OK to proceed?</p>"
+              "default": "<p>Поскольку синхронизация в данный момент отключена, данные, которые восстанавлятся, перезапишут данные локального браузера.</p><p>ОК, чтобы продолжить?</p>"
             }
           },
           "Synced": {
             "Description": {
               "key": "View_Settings_BackupRestore_Restore_Synced_Description",
-              "default": "Restore synced data from a backup."
+              "default": "Восстановить синхронизированные данные из резервной копии."
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Synced_Confirm",
-              "default": "<p>As sync is currently enabled, the data being restored will overwrite your synced data.</p><p>To restore data to the local browser only, disable sync before restoring.</p><p>OK to proceed?</p>",
-              "android": "<p>The data being restored will overwrite your synced data.</p><p>OK to proceed?</p>"
+              "default": "<p>Так как снхронизация включена, данные которые будут восстановлены, перезапишут синхронизированные.</p><p>Для восстановления данных только в локальном браузере, отключите синхронизацию перед восстановлением.</p><p>ОК, чтобы продолжить?</p>",
+              "android": "<p>Данные которые будут восстановлены, перезапишут синхронизированные данные.</p><p>ОК для продолжения?</p>"
             }
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Your data has been restored."
+            "default": "Ваши данные восстановлены."
           },
           "SelectFile": {
             "Button": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Button",
-              "default": "Select file"
+              "default": "Выберите файл"
             },
             "Placeholder": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Placeholder",
-              "default": "Select a backup file to restore"
+              "default": "Выберите файл с резервной копией для восстановления"
             }
           },
           "Copy": {
