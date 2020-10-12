@@ -876,188 +876,188 @@
           },
           "Confirm": {
             "key": "View_Settings_BackupRestore_Revert_Confirm",
-            "default": "<p>If you continue, any active sync will be disabled and your local data will be reverted to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "<p>Если вы продолжите, любая активная синхронизация будет отключена и ваши локальные данные будут востановленны на момент установки xBrowserSync {date}.</p><p>ОК для продолжения?</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Revert_Button",
-            "default": "Revert"
+            "default": "Откатить изменения"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Revert_Done",
-            "default": "Your data has been reverted to initial installation state."
+            "default": "Ваши данные были возвращены к начальному состоянию установки."
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Revert_Unavailable",
-            "default": "Installation state data not available, unable to revert."
+            "default": "Состояние установки недоступно, невозможно откатить."
           }
         }
       },
       "Issues": {
         "Title": {
           "key": "View_Settings_Issues_Title",
-          "default": "Issues"
+          "default": "Проблемы"
         },
         "Help": {
           "Title": {
             "key": "View_Settings_Issues_Help_Title",
-            "default": "Help"
+            "default": "Помощь"
           },
           "Description": {
             "key": "View_Settings_Issues_Help_Description",
-            "default": "Got a question or having an issue? Make sure to read through the help guide, otherwise the answer may be in the FAQs."
+            "default": "У вас есть вопрос или проблема? Обязательно убедитесь что прочитали справочное руководство, так же ответ может быть в разделе FAQ."
           },
           "ViewFaqs": {
             "key": "View_Settings_Issues_Help_ViewFaqs",
-            "default": "View FAQs"
+            "default": "Показать FAQ"
           }
         },
         "Tracker": {
           "Title": {
             "key": "View_Settings_Issues_Tracker_Title",
-            "default": "Issues tracker"
+            "default": "Трекер задач"
           },
           "Description": {
             "key": "View_Settings_Issues_Tracker_Description",
-            "default": "Report an issue to report a bug or request a new feature."
+            "default": "Сообщите об ошибке, баге или запросите новую функцию."
           },
           "Report": {
             "key": "View_Settings_Issues_Tracker_Report",
-            "default": "Report issue"
+            "default": "Сообщить о проблеме"
           }
         },
         "Log": {
           "Title": {
             "key": "View_Settings_Issues_Log_Title",
-            "default": "Application log"
+            "default": "Лог приложения"
           },
           "Description": {
             "key": "View_Settings_Issues_Log_Description",
-            "default": "Download and include the application log when you log an issue."
+            "default": "Скачайте и добавьте логи приложения при регистрации проблемы."
           },
           "Clear": {
             "key": "View_Settings_Issues_Log_Clear",
-            "default": "Clear log"
+            "default": "Очистить логи"
           },
           "Download": {
             "key": "View_Settings_Issues_Log_Download",
-            "default": "Download log"
+            "default": "Скачать логи"
           },
           "Size": {
             "key": "View_Settings_Issues_Log_Size",
-            "default": "Current log size"
+            "default": "Текущий размер лога"
           }
         }
       },
       "Permissions": {
         "Title": {
           "key": "View_Settings_Permissions_Title",
-          "default": "Optional permissions"
+          "default": "Дополнительные разрешения"
         },
         "Add": {
           "key": "View_Settings_Permissions_Add",
-          "default": "Grant permissions"
+          "default": "Предоставить доступ"
         },
         "Granted": {
           "key": "View_Settings_Permissions_Granted",
-          "default": "Granted"
+          "default": "Предоставлено"
         },
         "NotGranted": {
           "key": "View_Settings_Permissions_NotGranted",
-          "default": "Not granted"
+          "default": "Не предоставлено"
         },
         "Read": {
           "Title": {
             "key": "View_Settings_Permissions_Read_Title",
-            "default": "Read website data"
+            "default": "Читать данные сайта"
           },
           "Description": {
             "key": "View_Settings_Permissions_Read_Description",
-            "default": "Required to automatically add metadata to bookmarks when using the browser’s “Bookmark this page” button (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>more info</a>)."
+            "default": "Обьязательно для автоматического добавления метаданных в закладки при использовании кнопки «Сохранить эту страницу» браузера (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>подробнее</a>)."
           }
         },
         "Remove": {
           "key": "View_Settings_Permissions_Remove",
-          "default": "Remove permissions"
+          "default": "Удалить разрешение"
         }
       },
       "Prefs": {
         "AutoFetchMetadata": {
           "Label": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Label",
-            "default": "Auto-fetch bookmark metadata"
+            "default": "Автозагрузка метаданных закладки"
           },
           "Description": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Description",
-            "default": "Retrieve metadata automatically when adding a bookmark."
+            "default": "Автоматически получать метаданные при добавлении закладки."
           }
         },
         "CheckForAppUpdates": {
           "Label": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Label",
-            "default": "Check for app updates"
+            "default": "Проверить наличие обновлений"
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
-            "default": "Display an alert when a new version of xBrowserSync is available."
+            "default": "Показывать оповещение, когда доступна новая версия xBrowserSync."
           }
         },
         "DarkMode": {
           "Label": {
             "key": "View_Settings_Prefs_DarkMode_Label",
-            "default": "Enable dark mode"
+            "default": "Включить темный режим"
           },
           "Description": {
             "key": "View_Settings_Prefs_DarkMode_Description",
-            "default": "Ideal for use in low-light environments."
+            "default": "Идеально подходит для использования в условиях плохого освещения."
           }
         },
         "DefaultToFolderView": {
           "Label": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Label",
-            "default": "Show bookmark folders"
+            "default": "Просмотреть папки закладок"
           },
           "Description": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Description",
-            "default": "Display bookmark folders by default."
+            "default": "Отображать папки закладок по умолчанию."
           }
         },
         "SearchBar": {
           "Label": {
             "key": "View_Settings_Prefs_SearchBar_Label",
-            "default": "Switch search bar position"
+            "default": "Сменить положение строки поиска"
           },
           "Description": {
             "key": "View_Settings_Prefs_SearchBar_Description",
-            "default": "Show search bar beneath results."
+            "default": "Показывать строку поиска под результатами."
           }
         },
         "SyncToolbar": {
           "Label": {
             "key": "View_Settings_Prefs_SyncToolbar_Label",
-            "default": "Sync bookmarks toolbar"
+            "default": "Синхронизировать панель закладок"
           },
           "Description": {
             "key": "View_Settings_Prefs_SyncToolbar_Description",
-            "default": "Disable this setting to display different toolbar bookmarks across synced browsers."
+            "default": "Отключите этот параметр для отображения разных панелей закладок между синхронизированными браузерами."
           },
           "Confirmation": {
             "key": "View_Settings_Prefs_SyncToolbar_Confirmation",
-            "default": "<p>Enabling this setting will replace the bookmarks currently in the bookmarks toolbar with your synced bookmarks.</p><p>OK to proceed?</p>"
+            "default": "<p>Включение этой настройки заменит закладки, находящиеся на панели закладок, на синхронизированные закладки.</p><p>ОК, чтобы продолжить?</p>"
           }
         },
         "Title": {
           "key": "View_Settings_Prefs_Title",
-          "default": "Preferences"
+          "default": "Настройки"
         }
       },
       "Sync": {
         "Title": {
           "key": "View_Settings_Sync_Title",
-          "default": "Sync"
+          "default": "Синхронизация"
         },
         "Disable": {
           "key": "View_Settings_Sync_Disable",
-          "default": "Disable sync"
+          "default": "Отключить синхронизацию"
         },
         "Id": {
           "Label": {
@@ -1066,17 +1066,17 @@
           },
           "Description": {
             "key": "View_Settings_Sync_Id_Description",
-            "default": "Use your sync ID to connect to your synced data on other devices (click to reveal QR code)."
+            "default": "Используйте ваш Sync ID для подключения к синхронизированным данным на других устройствах (нажмите, чтобы открыть QR-код)."
           }
         },
         "Data": {
           "Label": {
             "key": "View_Settings_Sync_Data_Label",
-            "default": "Data usage"
+            "default": "Расход данных"
           },
           "Description": {
             "key": "View_Settings_Sync_Data_Description",
-            "default": "How much of the sync data allowed by the service are you using."
+            "default": "Как много данных синхронизации, разрешенных сервисом, вы используете."
           }
         },
         "Service": {
