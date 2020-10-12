@@ -850,29 +850,29 @@
           },
           "Copy": {
             "key": "View_Settings_BackupRestore_Restore_Copy",
-            "default": "Copy the contents of a backup file to restore data."
+            "default": "Скопируйте содержимое файла резервной копии для восстановления данных."
           },
           "Paste": {
             "key": "View_Settings_BackupRestore_Restore_Paste",
-            "default": "Paste backup data"
+            "default": "Вставить резервные данные"
           },
           "RestoreData": {
             "key": "View_Settings_BackupRestore_Restore_RestoreData",
-            "default": "Restore data"
+            "default": "Восстановите данные"
           },
           "Invalid": {
             "key": "View_Settings_BackupRestore_Restore_Invalid",
-            "default": "Invalid xBrowserSync backup data"
+            "default": "Неверная резервная копии xBrowserSync"
           }
         },
         "Revert": {
           "Title": {
             "key": "View_Settings_BackupRestore_Revert_Title",
-            "default": "Revert"
+            "default": "Отмена"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_Revert_Description",
-            "default": "Revert local browser data to initial installation state."
+            "default": "Вернуть данные локального браузера в начальное состояние."
           },
           "Confirm": {
             "key": "View_Settings_BackupRestore_Revert_Confirm",
