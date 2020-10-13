@@ -1,0 +1,27 @@
+xBrowserSync on täysin ilmainen ja avoimen lähdekoodin työkalu kirjanmerkkien ja selaimen tietojen synkronointiin työpöytäselainten välillä. xBrowserSync kunnioittaa yksityisyyttäsi ja antaa sinulle täydellisen anonymiteetin — rekisteröitymistä ei vaadita eikä henkilötietoja kerätä koskaan. Se on myös täysin suojattu; tietosi on salattu asiakkaan puolella sotilaallisen luokan salauksella, Vaikka joku kaappaisi tietosi, vain sinä voit purkaa sen salauksen.
+
+xBrowserSync rikastaa kirjanmerkkejäsi lisäämällä kuvauksia ja tunnisteita. Intuitiivisen hakukäyttöliittymän avulla voit löytää kirjanmerkkejä nopeasti ja helposti, tai yksinkertaisesti selata kirjanmerkkihierarkiaa kansioina. Äläkä ole koskaan holissasi tietojen menetyksestä kiitos mukana olevan varmuuskopiointi- ja palautustoiminnon.
+
+Web-laajennus tukee täysin natiiveja työpöytäselainten kirjanmerkkitoimintoja; xBrowserSync säilyttää olemassa olevan kirjanmerkkihierarkian ja kaikki selaimen työkaluilla tekemäsi muutokset synkronoidaan xBrowserSyncillä automaattisesti. xBrowserSync lisää jopa metatietoja uusiin kirjanmerkkeihin automaattisesti!
+
+xBrowserSync-mobiilisovelluksen avulla voit käyttää xBrowserSync-synkronointia liikkeellä ollessasi Android-laitteesi kanssa. Kun olet luonut uuden synkronoinnin työpöytäselaimessasi käyttäen web-laajennusta, skannaa synkronointi-ID:si QR-koodi sovellukseen ja syötä salasanasi, jotta voit muodostaa yhteyden synkronoituihin tietoihisi. Lisää uusia kirjanmerkkejä helposti jakamalla suosikkisovelluksistasi (selaimet, YouTube, Spotify ja mikä tahansa muu sovellus, joka jakaa URL-osoitteet), xBrowserSync jopa täyttää kirjanmerkin ominaisuudet sinulle.
+
+Äärimmäistä yksityisyyttä varten, määritä oma xBrowserSync-pilvipalvelusi Linux- tai Windows-palvelimellesi. xBrowserSync-pilvipalvelun koodi on avointa lähdekoodia ja kenelle tahansa suhteellisen tekniselle henkilölle se on helppo asentaa.
+
+Tervetuloa synkronoimaan selaimesi oikein: turvallisesti, anonyymisti ja ilmaiseksi!
+
+Avainominaisuudet: 
+
+★ Synkronoi kirjanmerkit työpöytäselainten välillä (selaimen lisätietojen synkronointi lisätään tulevaisuudessa) ja käytä kirjanmerkkejä liikkeellä ollessasi xBrowserSyncin Android-sovelluksella.
+★ Ehdottomasti täysin ilmainen, palvelun käytöstä ei veloiteta mitään. Koskaan.
+★ Täysin anonyymi, ei rekisteröitymistä tai tarvetta henkilökohtaisille tiedoille, asenna ja synkronoi.
+★ Salaa selaimesi teidot asiakkaan puolella sotilaallisen luokan salauksella niin, että vain sinä voit purkaa salauksen.
+★ Selaa, etsi, muokkaa ja jaa kirjanmerkkejä nopeasti ja helposti.
+★ Rikasta kirjanmerkkejä kuvauksilla ja tunnisteilla.
+★ Toimii työpöytäselainten natiivien kirjanmerkkitoimintojen kanssa.
+★ Lisää kirjanmerkkejä mobiilisovelluksella jakamalla ne suosikkisovelluksistasi.
+★ Jaa kirjanmerkit kavereiden kanssa mobiilisovelluksella.
+★ Varmuuskopioi ja palauta synkronoidut tietosi täydellistä mielenrauhaa varten.
+★ Pyöritä omaa xBrowserSync-pilvipalveluasi synkronoidaksesi täysin yksityisesti.
+
+Lisätietoja löydät osoitteesta www.xbrowsersync.org.
