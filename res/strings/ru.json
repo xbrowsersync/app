@@ -1081,12 +1081,12 @@
         },
         "Service": {
           "key": "View_Settings_Sync_Service",
-          "default": "Service"
+          "default": "Сервис"
         },
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Sync is up to date."
+            "default": "Синхронизировано"
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
