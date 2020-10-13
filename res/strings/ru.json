@@ -1090,58 +1090,58 @@
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "Updates available, next sync at"
+            "default": "Доступны обновления, следующая синхронизация в"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
-            "default": "Update Sync"
+            "default": "Обновить синхронизацию"
           }
         },
         "Qr": {
           "Description": {
             "key": "View_Settings_Sync_Qr_Description",
-            "default": "Scan this QR code using the xBrowserSync Android app to connect to your synced data."
+            "default": "Отсканируйте этот QR-код, используя приложение xBrowserSync для подключения к синхронизированным данным."
           },
           "Show": {
             "key": "View_Settings_Sync_Qr_Show",
-            "default": "Show QR code"
+            "default": "Показать QR код"
           },
           "Copy": {
             "key": "View_Settings_Sync_Qr_Copy",
-            "default": "Copy sync ID to clipboard"
+            "default": "Скопировать sync ID в буфер обмена"
           },
           "Copied": {
             "key": "View_Settings_Sync_Qr_Copied",
-            "default": "Copied!"
+            "default": "Скопировано!"
           }
         }
       },
       "AppVersion": {
         "key": "View_Settings_AppVersion",
-        "default": "Version"
+        "default": "Версия"
       },
       "NotAvailable": {
         "key": "View_Settings_NotAvailable",
-        "default": "Settings available when sync is enabled."
+        "default": "Настройки доступны, когда включена синхронизация."
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "If the file did not download automatically, right click on the link below and “Save link as...”.",
-        "android": "File saved as {fileName}."
+        "default": "Если файл не загрузился автоматически, нажмите на ссылку ниже и «Сохранить ссылку как...».",
+        "android": "Файл сохранен как {fileName}."
       },
       "Support": {
         "key": "View_Settings_Support",
-        "default": "Support xBrowserSync"
+        "default": "Поддержите xBrowserSync"
       }
     },
     "Support": {
       "Title": {
         "key": "View_Support_Title",
-        "default": "Support xBrowserSync!"
+        "default": "Поддержите xBrowserSync!"
       },
       "Content": {
         "key": "View_Support_Content",
-        "default": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains an effective tool in protecting our privacy and productivity against the rot of big tech!</p>"
+        "default": "<p>Мы хотим сделать xBrowserSync инструментом синхронизации с номером 1, но многое еще предстоит сделать:</p><ul><li>Добавить синхронизацию вкладок и истории браузеров</li><li>Поддерживать все основные настольные браузеры</li><li>Перевести на другие языки</li><li>И <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>намного</a>!</li></ul><p>Только при вашей поддержке мы можем продолжать улучшать xBrowserSync и удостовериться, что он остается эффективным инструментом для защиты конфиденциальности и продуктивности от засилья больших корпораций!</p>"
       },
       "Cryptos": {
         "key": "View_Support_Cryptos",
@@ -1159,25 +1159,25 @@
     "Updated": {
       "Title": {
         "key": "View_Updated_Title",
-        "default": "Updated to"
+        "default": "Обновлено до"
       },
       "Content": {
         "key": "View_Updated_Content",
-        "default": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
+        "default": "xBrowserSync был обновлен с последними функциями и исправлениями. Для получения более подробной информации об изменениях, содержащихся в этой версии, ознакомьтесь с примечаниями к выпуску."
       }
     },
     "Working": {
       "Restoring": {
         "key": "View_Working_Restoring",
-        "default": "Restoring"
+        "default": "Восстановление"
       },
       "Reverting": {
         "key": "View_Working_Reverting",
-        "default": "Reverting"
+        "default": "Возвращение"
       },
       "Syncing": {
         "key": "View_Working_Syncing",
-        "default": "Syncing"
+        "default": "Синхронизация"
       }
     }
   }
