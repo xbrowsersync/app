@@ -325,8 +325,8 @@ export default class FirefoxBookmarkService extends BaseWebExtBookmarkService {
 
         // Get menu bookmarks
         const getMenuBookmarks =
-          menuBookmarksId == null
-            ? Promise.resolve<Bookmark[]>(null)
+          menuBookmarksId === undefined
+            ? Promise.resolve<Bookmark[]>(undefined)
             : browser.bookmarks.getSubTree(menuBookmarksId).then((subTree) => {
                 const menuBookmarks = subTree[0];
                 // Add all bookmarks into flat array
@@ -338,8 +338,8 @@ export default class FirefoxBookmarkService extends BaseWebExtBookmarkService {
 
         // Get mobile bookmarks
         const getMobileBookmarks =
-          mobileBookmarksId == null
-            ? Promise.resolve<Bookmark[]>(null)
+          mobileBookmarksId === undefined
+            ? Promise.resolve<Bookmark[]>(undefined)
             : browser.bookmarks.getSubTree(mobileBookmarksId).then((subTree) => {
                 const mobileBookmarks = subTree[0];
                 // Add all bookmarks into flat array
@@ -351,8 +351,8 @@ export default class FirefoxBookmarkService extends BaseWebExtBookmarkService {
 
         // Get other bookmarks
         const getOtherBookmarks =
-          otherBookmarksId == null
-            ? Promise.resolve<Bookmark[]>(null)
+          otherBookmarksId === undefined
+            ? Promise.resolve<Bookmark[]>(undefined)
             : browser.bookmarks.getSubTree(otherBookmarksId).then((subTree) => {
                 const otherBookmarks = subTree[0];
                 if (otherBookmarks.children.length === 0) {
@@ -378,8 +378,8 @@ export default class FirefoxBookmarkService extends BaseWebExtBookmarkService {
 
         // Get toolbar bookmarks if enabled
         const getToolbarBookmarks =
-          toolbarBookmarksId == null
-            ? this.$q.resolve<Bookmark[]>(null)
+          toolbarBookmarksId === undefined
+            ? this.$q.resolve<Bookmark[]>(undefined)
             : browser.bookmarks.getSubTree(toolbarBookmarksId).then((results) => {
                 const toolbarBookmarks = results[0];
                 return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
@@ -390,7 +390,6 @@ export default class FirefoxBookmarkService extends BaseWebExtBookmarkService {
                     });
                     return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(toolbarBookmarks.children);
                   }
-                  return [];
                 });
               });
 
@@ -405,25 +404,25 @@ export default class FirefoxBookmarkService extends BaseWebExtBookmarkService {
 
         // Add other container if bookmarks present
         const otherContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Other, bookmarks, true);
-        if (otherBookmarks.length > 0) {
+        if (otherBookmarks?.length > 0) {
           otherContainer.children = otherBookmarks;
         }
 
         // Add toolbar container if bookmarks present
         const toolbarContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Toolbar, bookmarks, true);
-        if (toolbarBookmarks.length > 0) {
+        if (toolbarBookmarks?.length > 0) {
           toolbarContainer.children = toolbarBookmarks;
         }
 
         // Add menu container if bookmarks present
         const menuContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Menu, bookmarks, true);
-        if (menuBookmarks.length > 0) {
+        if (menuBookmarks?.length > 0) {
           menuContainer.children = menuBookmarks;
         }
 
         // Add mobile container if bookmarks present
         const mobileContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Mobile, bookmarks, true);
-        if (mobileBookmarks.length > 0) {
+        if (mobileBookmarks?.length > 0) {
           mobileContainer.children = mobileBookmarks;
         }
 
