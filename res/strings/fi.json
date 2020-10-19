@@ -484,8 +484,7 @@
       "AddingBookmarks": {
         "key": "View_Help_AddingBookmarks",
         "default": "<h4>Kirjanmerkin lisäys</h4><p>Lisää nykyinen sivu napsauttamalla kirjanmerkin kuvaketta hakupaneelissa. Kirjanmerkin ominaisuudet täydennetään puolestasi automaattisesti, muuten lisää kuvaus ja joitakin tunnisteita varmistaaksesi paremmat hakutulokset.</p><p>Vaihtoehtoisesti, napsauta selaimen “Lisää kirjanmerkki” -painiketta normaalisti, niin xBrowserSync täydentää kirjanmerkin ominaisuudet (jotta tämä toimii, on laajennukselle myönnettävä valinnaiset oikeudet asetuksista).</p>",
-        "android": "<h4>Kirjanmerkin lisäys</h4><p>Lisää kirjanmerkkejä helposti jakamalla xBrowserSync:iin sovelluksista, joilla voi jakaa URL-osoitteita, kuten selaimista, YouTubesta, Spotifysta ja monesta muusta.</p><p>Kirjanmerkkien ominaisuudet täydennetään puolestasi automaattisesti, muuten lisää kuvaus ja joitakin tunnisteita varmistaaksesi paremmat hakutulokset.</p>",
-        "firefox": "<h4>Kirjanmerkin lisäys</h4><p>Lisää nykyinen sivu napsauttamalla kirjanmerkin kuvaketta hakupaneelissa. Kirjanmerkin ominaisuudet täydennetään puolestasi automaattisesti, muuten lisää kuvaus ja joitakin tunnisteita varmistaaksesi paremmat hakutulokset.</p><p>Vaihtoehtoisesti, napsauta selaimen “Lisää kirjanmerkki” -painiketta normaalisti, niin xBrowserSync täydentää kirjanmerkin ominaisuudet..</p>"
+        "android": "<h4>Kirjanmerkin lisäys</h4><p>Lisää kirjanmerkkejä helposti jakamalla xBrowserSync:iin sovelluksista, joilla voi jakaa URL-osoitteita, kuten selaimista, YouTubesta, Spotifysta ja monesta muusta.</p><p>Kirjanmerkkien ominaisuudet täydennetään puolestasi automaattisesti, muuten lisää kuvaus ja joitakin tunnisteita varmistaaksesi paremmat hakutulokset.</p>"
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
