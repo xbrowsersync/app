@@ -1,7 +1,7 @@
 <div class="view-content">
   <form id="bookmarkForm" name="vm.bookmarkForm" novalidate>
     <button type="submit" class="d-none" tabindex="-1"></button>
-    <div class="header-panel clearfix">
+    <div class="header-panel">
       <h2 ng-if="vm.editMode">{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Edit)
       }}</h2>
       <h2 ng-if="!vm.editMode">{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Add)
@@ -45,7 +45,7 @@
     <div class="form-group textarea-container">
       <label for="bookmarkDescription" class="sr-only">{{
       vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Description) }}</label>
-      <textarea name="bookmarkDescription" ng-model="vm.bookmarkFormData.description" class="form-control" rows="3"
+      <textarea name="bookmarkDescription" ng-model="vm.bookmarkFormData.description" class="form-control"
                 ng-keydown="vm.utilitySvc.handleEvent(vm.descriptionChanged)"
                 placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Description) }}"></textarea>
     </div>
@@ -69,7 +69,7 @@
           <i class="fas fa-trash-alt" aria-hidden="true"></i>
         </button>
       </div>
-      <div class="form-group tags-container clearfix" ng-show="vm.bookmarkFormData.tags.length > 0">
+      <div class="form-group tags-container" ng-show="vm.bookmarkFormData.tags.length > 0">
         <button class="badge badge-pill" ng-repeat="tag in vm.bookmarkFormData.tags track by $index"
                 ng-click="vm.utilitySvc.handleEvent(vm.removeTag, tag)">
           <span>{{ tag }}</span>

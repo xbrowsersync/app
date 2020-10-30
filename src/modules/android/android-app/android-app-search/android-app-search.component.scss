@@ -16,57 +16,57 @@ app-search {
         bottom: 5rem;
       }
     }
+  }
 
-    bookmark {
-      &:not(.folder) {
-        & > .bookmark-content > .bookmark-heading {
-          margin-right: 0;
-          transition: none;
-        }
-      }
-
-      &.folder {
-        &.open > .bookmark-content > .bookmark-heading::after {
-          @include icon('\f106');
-        }
-
-        & > .bookmark-content > .bookmark-heading:not(.opening)::after {
-          opacity: 0.6;
-        }
+  bookmark {
+    &:not(.folder) {
+      & > .bookmark-content > .bookmark-heading {
+        margin-right: 0;
+        transition: none;
       }
     }
 
-    .header-panel,
-    .search-results-container {
-      padding-left: 0.75rem;
-      padding-right: 0.75rem;
-    }
+    &.folder {
+      &.open > .bookmark-content > .bookmark-heading::after {
+        @include icon('\f106');
+      }
 
-    .header-panel {
-      display: flex;
-      flex-direction: row-reverse;
-
-      .search-form {
-        .btn-clear {
-          font-size: 0.7em;
-        }
-
-        .lookahead-container .lookahead::after {
-          font-size: 0.7em;
-        }
+      & > .bookmark-content > .bookmark-heading:not(.opening)::after {
+        opacity: 0.6;
       }
     }
+  }
 
-    .search-results-container {
-      & > h4 {
-        margin: 1rem;
+  .header-panel,
+  .search-results-container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .header-panel {
+    display: flex;
+    flex-direction: row-reverse;
+
+    .search-form {
+      .btn-clear {
+        font-size: 0.7em;
+      }
+
+      .lookahead-container .lookahead::after {
+        font-size: 0.7em;
       }
     }
+  }
 
-    @media all and (orientation: portrait) {
-      .bookmark-tree-container .description {
-        @include text-overflow-ellipsis;
-      }
+  .search-results-container {
+    & > h4 {
+      margin: 1rem;
+    }
+  }
+
+  @media all and (orientation: portrait) {
+    .bookmark-tree-container .description {
+      @include text-overflow-ellipsis;
     }
   }
 }

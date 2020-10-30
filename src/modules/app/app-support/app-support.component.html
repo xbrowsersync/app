@@ -1,6 +1,6 @@
 <div class="view-content">
   <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Support.Title) }}</h4>
-  <div ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Support.Content)"></div>
+  <div class="support-content" ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Support.Content)"></div>
   <div class="buttons small">
     <button type="button" class="btn btn-default"
             ng-click="vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event, 'https://link.xbrowsersync.org/liberapay')">

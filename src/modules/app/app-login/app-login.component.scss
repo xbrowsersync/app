@@ -120,9 +120,9 @@ app-login {
   .logo {
     background-image: url('../../../../res/images/logo.svg');
     background-position-x: 50%;
-    background-position-y: 1rem;
+    background-position-y: 0.5rem;
     background-repeat: no-repeat;
-    background-size: 11.5rem;
+    background-size: 10rem;
     flex: 0 1 17.5rem;
 
     @include theme-dark {
@@ -131,8 +131,6 @@ app-login {
   }
 
   .secret-form-group {
-    margin-bottom: 1.5rem;
-
     .progress,
     .progress-bar-background {
       border-radius: $border-radius-input;
@@ -212,31 +210,31 @@ app-login {
   }
 
   .service-info {
-    /* bottom: 0;
-    position: absolute;
-    width: 100%; */
-
     ul {
       list-style: none;
       margin: 0 1rem 0.75rem;
       padding: 0;
+      position: relative;
 
       li {
-        @include text-overflow-ellipsis;
-
-        padding-left: 40%;
-        position: relative;
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
 
         label {
           color: $colour-text2-default !important;
           font-weight: bold;
-          left: 0;
           margin-bottom: 0;
-          position: absolute;
+          padding-right: 0.5rem;
 
           @include theme-dark {
             color: $colour-text2-dark !important;
           }
+        }
+
+        span {
+          flex: 1 0 auto;
+          text-align: right;
         }
       }
     }
@@ -253,7 +251,7 @@ app-login {
   }
 
   .toggle-form {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     text-align: center;
   }
 

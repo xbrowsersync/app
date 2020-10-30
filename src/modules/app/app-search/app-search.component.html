@@ -1,5 +1,5 @@
 <div class="view-content" ng-class="{ 'search-bar-bottom': vm.alternateSearchBarPosition }">
-  <div class="header-panel clearfix" hm-tap="vm.selectedBookmarkId = null">
+  <div class="header-panel" hm-tap="vm.selectedBookmarkId = null">
     <button class="btn btn-icon btn-settings" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Settings) }}"
             ng-click="vm.utilitySvc.handleEvent(vm.appHelperSvc.switchView, { view: vm.AppViewType.Settings })"
             tabindex="5">

@@ -11,7 +11,8 @@ app-support {
     line-height: 1.25rem;
   }
 
-  .buttons.small {
-    margin: 0.5rem 0 1rem;
+  .support-content {
+    flex: 0 1 auto;
+    overflow: auto;
   }
 }

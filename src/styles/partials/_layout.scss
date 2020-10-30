@@ -23,8 +23,10 @@
 }
 
 .header-panel {
+  display: flex;
   font-size: 1.3rem;
-  margin-bottom: 0.25rem;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
   position: relative;
 
   .btn-icon {
@@ -204,14 +206,6 @@
   .confirm {
     margin-bottom: 0;
     width: 100%;
-
-    button {
-      margin-right: 0.5rem;
-
-      &:last-child {
-        margin-right: 0;
-      }
-    }
   }
 
   .form-group {

@@ -1,5 +1,5 @@
 <div class="view-content">
-  <div class="header-panel clearfix">
+  <div class="header-panel">
     <button class="btn btn-icon btn-help animate-fade-in"
             title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Help) }}"
             ng-click="vm.utilitySvc.handleEvent(vm.switchToHelpView)">
@@ -316,17 +316,20 @@
       <li
           ng-class="{ 'text-danger': vm.newServiceInfo.status === vm.ApiServiceStatus.Offline || vm.newServiceInfo.status === vm.ApiServiceStatus.Error }">
         <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Status) }}</label>
-        {{ vm.getServiceStatusTextFromStatusCode(vm.newServiceInfo.status) }}
+        <span>{{ vm.getServiceStatusTextFromStatusCode(vm.newServiceInfo.status) }}</span>
       </li>
       <li ng-if="vm.newServiceInfo.location">
         <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Location) }}</label>
-        {{ vm.getCountryNameFrom2LetterISOCode(vm.newServiceInfo.location) }}</li>
+        <span>{{ vm.getCountryNameFrom2LetterISOCode(vm.newServiceInfo.location) }}</span>
+      </li>
       <li>
         <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.MaxSyncSize) }}</label>
-        {{ vm.newServiceInfo.maxSyncSize | kbFmt : 0 }}</li>
+        <span>{{ vm.newServiceInfo.maxSyncSize | kbFmt : 0 }}</span>
+      </li>
       <li>
         <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.ApiVersion) }}</label>
-        {{ vm.newServiceInfo.version }}</li>
+        <span>{{ vm.newServiceInfo.version }}</span>
+      </li>
     </ul>
     <p class="service-message" ng-if="vm.newServiceInfo.message" ng-bind-html="vm.newServiceInfo.message">
     </p>

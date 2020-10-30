@@ -9,18 +9,15 @@ button {
     }
 
     &.btn-default {
-      align-items: baseline;
       background-color: rgba($colour-text1-default, 0.3);
       border-color: $colour-bg3-default;
       border-radius: $border-radius-input;
       border-width: 0.15rem;
       color: $colour-text1-default;
-      display: inline-flex;
       font-size: 1.2rem;
       font-weight: 800;
-      justify-content: center;
       line-height: 2.5rem;
-      min-width: 6rem;
+      max-width: 90vw;
       padding: 0 1.2rem;
       text-transform: capitalize;
       transition: all ease-in-out 0.2s;
@@ -50,8 +47,6 @@ button {
         border-width: 0.1rem;
         color: $colour-text2-default;
         font-weight: normal;
-        margin-bottom: 0.5rem;
-        margin-top: 0.5rem;
 
         @include theme-dark {
           border-color: $colour-text1-dark;
@@ -247,20 +242,15 @@ button {
 }
 
 .buttons {
-  position: relative;
-  text-align: center;
-  white-space: nowrap;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 
   &.vertical {
-    display: flex;
     flex-direction: column;
   }
 
   button {
-    margin-right: 0.5rem;
-
-    &:last-child {
-      margin-right: 0;
-    }
+    margin: 0 0 0.75rem;
   }
 }

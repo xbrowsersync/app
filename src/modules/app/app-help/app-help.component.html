@@ -1,9 +1,9 @@
 <div class="view-content" ng-keydown="vm.utilitySvc.handleEvent(vm.handleKeyDown, $event)"
      hm-swipeleft="vm.utilitySvc.handleEvent(vm.displayNextPage)"
      hm-swiperight="vm.utilitySvc.handleEvent(vm.displayPreviousPage)" tabindex="0">
-  <div id="help-page-{{$index}}" class="animate-fade-in" ng-if="vm.currentPage === $index"
+  <div id="help-page-{{$index}}" class="help-page-container animate-fade-in" ng-if="vm.currentPage === $index"
        ng-repeat="page in vm.pages track by $index">
-    <div ng-bind-html="page"></div>
+    <div class="help-page-content" ng-bind-html="page"></div>
     <div class="pagination">
       <a href="#" ng-click="vm.utilitySvc.handleEvent(vm.close)" ng-show="$index === 0">
         <span>{{ vm.platformSvc.getI18nString(vm.Strings.Button.Close) }}</span>
