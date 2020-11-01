@@ -28,6 +28,12 @@ const convertI18nForWebExt = (i18n) => {
 };
 
 module.exports = Object.assign(BaseConfig, {
+  entry: {
+    webpagemetadatacollecter: Path.resolve(
+      __dirname,
+      '../src/modules/webext/webpage-metadata-collecter/webpage-metadata-collecter.ts'
+    )
+  },
   plugins: BaseConfig.plugins.concat([
     new CopyWebpackPlugin({
       patterns: [

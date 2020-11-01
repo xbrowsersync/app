@@ -10,6 +10,7 @@
   ],
   "globals": {
     "Atomics": "readonly",
+    "ng": "readonly",
     "SharedArrayBuffer": "readonly"
   },
   "parserOptions": {
@@ -19,6 +20,7 @@
   },
   "plugins": ["simple-import-sort"],
   "rules": {
+    "@typescript-eslint/comma-dangle": "off",
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/lines-between-class-members": "off",
     "@typescript-eslint/no-unused-vars": "off",
