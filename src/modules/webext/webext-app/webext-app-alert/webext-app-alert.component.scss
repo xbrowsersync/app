@@ -1,0 +1,130 @@
+@import '../../../../styles/modules/all';
+
+app-alert {
+  display: block;
+
+  .alert {
+    @include animation-fade-in();
+    @include animation-fade-out();
+
+    border-radius: 0;
+    border-width: 0;
+    color: $colour-text1-default;
+    margin: 0 auto;
+    max-width: $width-tablet-small;
+    padding: 0.75rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1010;
+
+    @include theme-dark {
+      color: $colour-text1-dark;
+    }
+
+    &-danger {
+      background-color: rgba(darken($colour-danger, 3%), 0.9);
+
+      a {
+        @include theme-dark {
+          border-bottom-color: inherit;
+          color: inherit;
+        }
+
+        @media (hover: hover) {
+          &:active,
+          &:focus,
+          &:hover {
+            border-bottom-color: lighten($colour-danger, 25%);
+            color: lighten($colour-danger, 25%);
+          }
+        }
+      }
+    }
+
+    &-info {
+      background-color: rgba(darken($colour-success, 10%), 0.9);
+
+      a {
+        @include theme-dark {
+          border-bottom-color: inherit;
+          color: inherit;
+        }
+
+        @media (hover: hover) {
+          &:active,
+          &:focus,
+          &:hover {
+            border-bottom-color: lighten($colour-success, 25%);
+            color: lighten($colour-success, 25%);
+          }
+        }
+      }
+    }
+
+    &-warning {
+      background-color: rgba(darken($colour-warning, 10%), 0.9);
+
+      a {
+        @include theme-dark {
+          border-bottom-color: inherit;
+          color: inherit;
+        }
+
+        @media (hover: hover) {
+          &:active,
+          &:focus,
+          &:hover {
+            border-bottom-color: lighten($colour-warning, 25%);
+            color: lighten($colour-warning, 25%);
+          }
+        }
+      }
+    }
+
+    button.btn-close {
+      color: $colour-text1-default;
+      float: right;
+      font-size: 1.2rem;
+      line-height: 1.7rem;
+
+      @include theme-dark {
+        color: $colour-text1-dark;
+      }
+
+      i {
+        opacity: 0.7;
+      }
+
+      @media (min-width: $width-mobile-small + 1) {
+        font-size: 1.5rem;
+        line-height: 2.5rem;
+      }
+    }
+
+    h4,
+    p {
+      margin-right: 2rem;
+    }
+
+    h4 {
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin-bottom: 0;
+    }
+
+    @media (min-width: $width-mobile-small + 1) {
+      font-size: 0.9rem;
+
+      h4 {
+        margin-bottom: 0 !important;
+        margin-top: -0.4rem;
+      }
+
+      p {
+        max-width: 95%;
+      }
+    }
+  }
+}

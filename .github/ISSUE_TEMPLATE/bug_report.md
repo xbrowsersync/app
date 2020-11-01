@@ -4,7 +4,6 @@ about: Log an issue or bug with the xBrowserSync browser extensions or mobile ap
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
 <!--
@@ -24,6 +23,7 @@ A clear and concise description of your issue:
 
 **How can the issue be reproduced?**
 Steps to reproduce the behavior:
+
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
@@ -35,16 +35,16 @@ If applicable, add screenshots to help explain your problem:
 **Desktop browser**
 Please complete the following information for all affected desktop browsers:
 
- - OS: [e.g. Win10]
- - Browser [e.g. Chrome, Firefox]
- - Version [e.g. v1.5.0]
+- OS: [e.g. Win10]
+- Browser [e.g. Chrome, Firefox]
+- Version [e.g. v1.5.0]
 
 **Mobile device**
 Please complete the following information for all affected mobile devices:
 
- - Device: [e.g. Samsung Galaxy S10]
- - OS: [e.g. Android 9 Pie]
- - Version [e.g. v1.5.0]
+- Device: [e.g. Samsung Galaxy S10]
+- OS: [e.g. Android 9 Pie]
+- Version [e.g. v1.5.0]
 
 **Application log**
 Please include the logs from the affected clients:
@@ -55,4 +55,5 @@ Please include the logs from the affected clients:
 ```
 Download the Application log from the Settings panel and paste the contents here.
 ```
+
 </details>

@@ -1,0 +1,20 @@
+<div class="theme-content" ng-class="vm.darkModeEnabled ? 'theme-dark' : 'theme-default'" ng-show="vm.initialised">
+  <div class="container" ng-class="{ 'search': vm.currentView === vm.AppViewType.Search }">
+    <app-working cancel-action="vm.workingCancelAction" full-view-mode="vm.currentView === vm.AppViewType.Working">
+    </app-working>
+    <app-alert></app-alert>
+    <app-login class="view animate" ng-if="vm.currentView === vm.AppViewType.Login"></app-login>
+    <app-search class="view animate" ng-if="vm.currentView === vm.AppViewType.Search"></app-search>
+    <app-bookmark class="view animate" ng-if="vm.currentView === vm.AppViewType.Bookmark"></app-bookmark>
+    <app-settings class="view animate" ng-if="vm.currentView === vm.AppViewType.Settings"></app-settings>
+    <app-help class="view view-overlay animate" ng-if="vm.currentView === vm.AppViewType.Help">
+    </app-help>
+    <app-support class="view view-overlay animate" ng-if="vm.currentView === vm.AppViewType.Support"></app-support>
+    <app-updated class="view view-overlay animate" ng-if="vm.currentView === vm.AppViewType.Updated">
+    </app-updated>
+    <app-permissions class="view view-overlay animate" ng-if="vm.currentView === vm.AppViewType.Permissions">
+    </app-permissions>
+    <app-scan class="view animate" ng-if="vm.currentView === vm.AppViewType.Scan"></app-scan>
+  </div>
+  <app-background current-view="vm.currentView"></app-background>
+</div>

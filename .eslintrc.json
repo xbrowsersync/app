@@ -1,0 +1,55 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "airbnb-typescript/base",
+    "plugin:prettier/recommended"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "ng": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "project": "./tsconfig.eslint.json",
+    "sourceType": "module"
+  },
+  "plugins": ["simple-import-sort"],
+  "rules": {
+    "@typescript-eslint/comma-dangle": "off",
+    "@typescript-eslint/indent": "off",
+    "@typescript-eslint/lines-between-class-members": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/semi": "warn",
+    "class-methods-use-this": "off",
+    "consistent-return": "off",
+    "func-style": "warn",
+    "global-require": "off",
+    "import/no-dynamic-require": "off",
+    "import/no-extraneous-dependencies": ["error", {
+      "devDependencies": true
+    }],
+    "import/prefer-default-export": "off",
+    "no-bitwise": "off",
+    "no-empty": "off",
+    "no-nested-ternary": "off",
+    "no-param-reassign": "off",
+    "no-undef": "error",
+    "no-underscore-dangle": "off",
+    "no-unreachable": "warn",
+    "prefer-destructuring": "off",
+    "prettier/prettier": "warn",
+    "simple-import-sort/sort": [
+      "warn",
+      {
+        "groups": [
+          ["^\\u0000", "^@?\\w", "^[^.]", "^\\."]
+        ]
+      }
+    ]
+  }
+}

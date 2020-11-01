@@ -1,0 +1,9 @@
+<div class="view-content">
+  <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Permissions.Title) }}</h4>
+  <div ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Permissions.Content)"></div>
+  <div class="buttons">
+    <button type="button" class="btn btn-default focused" ng-click="vm.utilitySvc.handleEvent(vm.requestPermissions)">
+      {{ vm.platformSvc.getI18nString(vm.Strings.Button.OK) }}
+    </button>
+  </div>
+</div>

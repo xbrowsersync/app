@@ -1,0 +1,29 @@
+@import '../../../../styles/modules/all';
+
+about-settings {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin: 2rem 0;
+
+  button.btn.btn-default {
+    margin-bottom: 1rem;
+    text-transform: none;
+  }
+
+  @media (hover: hover) {
+    a {
+      &:active,
+      &:focus,
+      &:hover {
+        border-bottom-color: $colour-text2-default;
+        color: $colour-text2-default;
+
+        @include theme-dark {
+          border-bottom-color: $colour-text1-dark;
+          color: $colour-text1-dark;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+android {
+  lintOptions {
+    abortOnError false
+    checkAllWarnings false
+    checkReleaseBuilds false
+    ignoreWarnings true
+    quiet true
+  }
+}

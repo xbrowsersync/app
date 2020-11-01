@@ -1,0 +1,55 @@
+<div class="separator" ng-if="vm.bookmarkHelperSvc.isSeparator(vm.bookmark)"></div>
+<div class="menu" ng-class="{ 'animate animate-fade-in': vm.enableSelect }" ng-if="vm.enableSelect"
+     ng-show="vm.isSelected" tabindex="-1">
+  <button class="btn btn-fab" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.ShareBookmark) }}"
+          hm-tap="vm.utilitySvc.handleEvent(vm.shareBookmark(), $event, vm.bookmark)">
+    <i class="fas fa-share-alt" aria-hidden="true"></i>
+    <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.ShareBookmark) }}</span>
+  </button>
+  <button class="btn btn-fab" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.EditBookmark) }}"
+          hm-tap="vm.utilitySvc.handleEvent(vm.editBookmark(), $event,  vm.bookmark)">
+    <i class="fas fa-edit" aria-hidden="true"></i>
+    <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.EditBookmark) }}</span>
+  </button>
+  <button class="btn btn-fab btn-delete-bookmark"
+          title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.DeleteBookmark) }}"
+          hm-tap="vm.utilitySvc.handleEvent(vm.deleteBookmark(), $event,  vm.bookmark)">
+    <i class="fas fa-trash" aria-hidden="true"></i>
+    <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.DeleteBookmark) }}</span>
+  </button>
+</div>
+<div class="bookmark-content" ng-if="vm.bookmark.url && !vm.bookmarkHelperSvc.isSeparator(vm.bookmark)"
+     ng-click="!vm.enableSelect && vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event,  vm.bookmark.url)"
+     hm-tap="vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event,  vm.bookmark.url)">
+  <h4 class="bookmark-heading" ng-if="vm.bookmark.title">{{ vm.bookmark.title }}</h4>
+  <h4 class="bookmark-heading" ng-if="!vm.bookmark.title">
+    {{ vm.bookmarkHelperSvc.getBookmarkTitleForDisplay(vm.bookmark) }}
+  </h4>
+  <div class="bookmark-text">
+    <div class="description">{{  vm.bookmark.description }}</div>
+    <div class="url">{{  vm.bookmark.url }}</div>
+  </div>
+</div>
+<div class="bookmark-content" ng-if="!vm.bookmark.url && !vm.bookmarkHelperSvc.isSeparator(vm.bookmark)">
+  <h4 class="bookmark-heading" ng-class="{ 'opening': vm.bookmark.open && !vm.bookmark.displayChildren }"
+      ng-click="vm.utilitySvc.handleEvent(vm.clickBookmarkHeading, $event, vm.bookmark)" ng-if="vm.bookmark.title">
+    {{ vm.bookmarkHelperSvc.getBookmarkTitleForDisplay(vm.bookmark) }}
+    <span ng-show="vm.bookmark.open && !vm.bookmark.displayChildren">
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+      </span>
+    </span>
+  </h4>
+  <div ng-if="vm.bookmark.displayChildren">
+    <p class="empty" ng-if="!vm.bookmark.children || vm.bookmark.children.length === 0">
+      {{ vm.platformSvc.getI18nString(vm.Strings.View.Search.FolderEmpty) }}
+    </p>
+    <ng-transclude></ng-transclude>
+  </div>
+</div>
+<button class="btn btn-icon btn-edit-bookmark"
+        title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.EditBookmark) }}"
+        ng-if="vm.enableEditButton && vm.bookmark.url && !vm.bookmarkHelperSvc.isSeparator(vm.bookmark)"
+        ng-click="vm.utilitySvc.handleEvent(vm.editBookmark(), $event,  vm.bookmark)">
+  <i class="fas fa-edit" aria-hidden="true"></i>
+  <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.EditBookmark) }}</span>
+</button>

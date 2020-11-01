@@ -1,0 +1,51 @@
+@keyframes animation-clouds {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-$bg-width, $bg-height, 0);
+  }
+}
+
+@mixin animation-clouds {
+  animation: animation-clouds 100s linear infinite;
+}
+
+@mixin animation-fade-in() {
+  &.ng-hide-remove {
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+
+    &.ng-hide-remove-active {
+      opacity: 1;
+    }
+  }
+
+  &.ng-enter {
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+
+    &.ng-enter-active {
+      opacity: 1;
+    }
+  }
+}
+
+@mixin animation-fade-out() {
+  &.ng-hide-add {
+    transition: opacity 0.2s ease-in;
+
+    &.ng-hide-add-active {
+      opacity: 0;
+    }
+  }
+
+  &.ng-leave {
+    opacity: 1;
+    transition: opacity 0.2s ease-in;
+
+    &.ng-leave-active {
+      opacity: 0;
+    }
+  }
+}

@@ -1,0 +1,18 @@
+<div class="view-content">
+  <div class="header-panel">
+    <h2>{{ vm.platformSvc.getI18nString(vm.Strings.Button.Settings) }}</h2>
+    <button class="btn btn-icon btn-close" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Close) }}"
+            ng-click="vm.utilitySvc.handleEvent(vm.close)">
+      <i class="fas fa-times-circle" aria-hidden="true"></i>
+      <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.Close) }}</span>
+    </button>
+  </div>
+  <div class="panel-container">
+    <sync-settings></sync-settings>
+    <backup-restore-settings></backup-restore-settings>
+    <preferences-settings></preferences-settings>
+    <permissions-settings ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"></permissions-settings>
+    <issues-settings></issues-settings>
+    <about-settings></about-settings>
+  </div>
+</div>

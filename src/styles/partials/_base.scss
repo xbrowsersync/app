@@ -1,0 +1,21 @@
+@import '~angular/angular-csp.css';
+@import 'fontawesome';
+@import 'bootstrap';
+@import '../modules/all';
+
+* {
+  box-shadow: none;
+  outline: none !important;
+}
+
+:root {
+  font-size: $base-font-size;
+}
+
+@import 'fonts';
+@import 'typography';
+@import 'layout';
+@import 'forms';
+@import 'buttons';
+@import 'animations';
+@import 'utilities';

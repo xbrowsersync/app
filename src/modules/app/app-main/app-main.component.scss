@@ -1,0 +1,104 @@
+@import '../../../styles/modules/all';
+
+.lookahead-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 100%;
+
+  .lookahead,
+  .measure {
+    background-color: transparent;
+    color: $colour-text3-default;
+    cursor: pointer;
+    margin: auto 0;
+    user-select: none;
+    z-index: 60;
+
+    @include theme-dark {
+      color: $colour-text3-dark;
+    }
+  }
+
+  .measure {
+    visibility: hidden;
+  }
+}
+
+.progress-bar {
+  &-danger {
+    background-color: $colour-danger !important;
+  }
+
+  &-success {
+    background-color: $colour-success !important;
+  }
+
+  &-warning {
+    background-color: $colour-warning !important;
+  }
+}
+
+.service-message {
+  font-style: italic;
+  overflow-y: auto;
+  padding: 1px;
+  quotes: '\201c''\201d';
+  text-align: center;
+
+  &::before {
+    content: open-quote;
+  }
+
+  &::after {
+    content: close-quote;
+  }
+}
+
+.spinner-border {
+  @include spinner-colour($colour-bg2-default);
+
+  animation-duration: 1s;
+
+  @include theme-dark {
+    @include spinner-colour($colour-bg2-dark);
+  }
+
+  &-sm {
+    border-width: 0.15em;
+    height: 1rem;
+    vertical-align: text-top;
+    width: 1rem;
+  }
+}
+
+.status-icon {
+  position: relative;
+  z-index: 5;
+
+  .status-icon-bg {
+    border-radius: 100%;
+    height: 0.8rem;
+    left: 0.1rem;
+    position: absolute;
+    top: 0.2rem;
+    width: 0.8rem;
+    z-index: -1;
+
+    @include theme-dark {
+      background-color: $colour-text1-dark !important;
+    }
+  }
+}
+
+.theme-content {
+  height: 100%;
+  width: 100%;
+
+  &.theme-dark {
+    color: $colour-text2-dark;
+  }
+}

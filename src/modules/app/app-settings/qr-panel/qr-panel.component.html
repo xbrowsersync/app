@@ -1,0 +1,11 @@
+<div id="qr"></div>
+<p>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.Qr.Description) }}</p>
+<div class="buttons vertical">
+  <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.copySyncId)"
+          ng-disabled="vm.syncIdCopied">
+    {{ vm.syncIdCopied ? vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.Qr.Copied) : vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.Qr.Copy) }}
+  </button>
+  <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.close())">
+    {{ vm.platformSvc.getI18nString(vm.Strings.Button.Close) }}
+  </button>
+</div>

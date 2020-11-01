@@ -1,0 +1,1183 @@
+{
+  "Alert": {
+    "AppUpdateAvailable": {
+      "Title": {
+        "key": "Alert_AppUpdateAvailable_Title",
+        "default": "xBrowserSync päivitys saatavilla"
+      },
+      "Message": {
+        "key": "Alert_AppUpdateAvailable_Message",
+        "default": "{version} on ladattavissa. Napsauta saadaksesi lisätietoja.",
+        "android": "xBrowserSync {version} on ladattavissa."
+      }
+    },
+    "AppUpdated": {
+      "Title": {
+        "key": "Alert_AppUpdated_Title",
+        "default": "Päivitetty versioon"
+      },
+      "Message": {
+        "key": "Alert_AppUpdated_Message",
+        "default": "xBrowserSync on päivitetty uusimmilla ominaisuuksilla ja korjauksilla. Napsauta saadaksesi julkaisutiedot."
+      }
+    },
+    "BookmarkCreated": {
+      "key": "Alert_BookmarkCreated",
+      "default": "Kirjanmerkki luotu"
+    },
+    "BookmarkDeleted": {
+      "key": "Alert_BookmarkDeleted",
+      "default": "Kirjanmerkki poistettu"
+    },
+    "BookmarkUpdated": {
+      "key": "Alert_BookmarkUpdated",
+      "default": "Kirjanmerkki päivitetty"
+    },
+    "GetMetadata": {
+      "Message": {
+        "key": "Alert_GetMetadata_Message",
+        "default": "Noudetaan kirjanmerkin ominaisuuksia, kosketa peruuttaaksesi."
+      },
+      "Success": {
+        "key": "Alert_GetMetadata_Success",
+        "default": "Kirjanmerkin ominaisuudet päivitetty."
+      }
+    },
+    "Go": {
+      "key": "Alert_Go",
+      "default": "Mene"
+    },
+    "WorkingOffline": {
+      "Title": {
+        "key": "Alert_WorkingOffline_Title",
+        "default": "Työskennellään offline-tilassa"
+      },
+      "Message": {
+        "key": "Alert_WorkingOffline_Message",
+        "default": "Muutokset synkronoidaan kun yhteys on palautettu."
+      }
+    }
+  },
+  "App": {
+    "Description": {
+      "key": "App_Description",
+      "default": "Selainsynkronointi oikein: turvallisesti, anonyymisti ja ilmaiseksi! Synkronoi kirjanmerkit selaimillesi ja laitteillesi, ilman rekisteröitymistä."
+    },
+    "Title": {
+      "key": "App_Title",
+      "default": "xBrowserSync"
+    }
+  },
+  "Bookmarks": {
+    "Container": {
+      "Menu": {
+        "key": "Bookmarks_Container_Menu",
+        "default": "Kirjanmerkkivalikko"
+      },
+      "Mobile": {
+        "key": "Bookmarks_Container_Mobile",
+        "default": "Mobiilikirjanmerkit"
+      },
+      "Other": {
+        "key": "Bookmarks_Container_Other",
+        "default": "Muut kirjanmerkit"
+      },
+      "Toolbar": {
+        "key": "Bookmarks_Container_Toolbar",
+        "default": "Kirjanmerkkipalkki"
+      }
+    }
+  },
+  "Button": {
+    "AddBookmark": {
+      "key": "Button_AddBookmark",
+      "default": "Lisää kirjanmerkki"
+    },
+    "Back": {
+      "key": "Button_Back",
+      "default": "Takaisin"
+    },
+    "Cancel": {
+      "key": "Button_Cancel",
+      "default": "Peruuta"
+    },
+    "Close": {
+      "key": "Button_Close",
+      "default": "Sulje"
+    },
+    "Confirm": {
+      "key": "Button_Confirm",
+      "default": "Kyllä"
+    },
+    "Continue": {
+      "key": "Button_Continue",
+      "default": "Jatka"
+    },
+    "DeleteBookmark": {
+      "key": "Button_DeleteBookmark",
+      "default": "Poista kirjanmerkki"
+    },
+    "Deny": {
+      "key": "Button_Deny",
+      "default": "Ei"
+    },
+    "Done": {
+      "key": "Button_Done",
+      "default": "Valmis"
+    },
+    "EditBookmark": {
+      "key": "Button_EditBookmark",
+      "default": "Muokkaa kirjanmerkkiä"
+    },
+    "Help": {
+      "key": "Button_Help",
+      "default": "Käyttöopas"
+    },
+    "Next": {
+      "key": "Button_Next",
+      "default": "Seuraava"
+    },
+    "OK": {
+      "key": "Button_OK",
+      "default": "Selvä"
+    },
+    "ReleaseNotes": {
+      "key": "Button_ReleaseNotes",
+      "default": "Näytä julkaisutiedot"
+    },
+    "Saving": {
+      "key": "Button_Saving",
+      "default": "Tallennetaan"
+    },
+    "Settings": {
+      "key": "Button_Settings",
+      "default": "Asetukset"
+    },
+    "ShareBookmark": {
+      "key": "Button_ShareBookmark",
+      "default": "Jaa kirjanmerkki"
+    },
+    "Undo": {
+      "key": "Button_Undo",
+      "default": "Kumoa"
+    },
+    "Update": {
+      "key": "Button_Update",
+      "default": "Päivitä"
+    },
+    "View": {
+      "key": "Button_View",
+      "default": "Näytä"
+    }
+  },
+  "Exception": {
+    "ContainerChanged_Message": {
+      "key": "Exception_ContainerChanged_Message",
+      "default": "Älä muokkaa [xbs] kansioita, koska se voi aiheuttaa synkronointiongelmia."
+    },
+    "ContainerChanged_Title": {
+      "key": "Exception_ContainerChanged_Title",
+      "default": "xBrowserSync-kansio muuttunut"
+    },
+    "DailyNewSyncLimitReached_Message": {
+      "key": "Exception_DailyNewSyncLimitReached_Message",
+      "default": "Synkronoi olemassa olevalla synkronointitunnuksella, vaihda toiseen palveluun tai yritä huomenna uudelleen."
+    },
+    "DailyNewSyncLimitReached_Title": {
+      "key": "Exception_DailyNewSyncLimitReached_Title",
+      "default": "Päivittäinen uusien synkronointien raja saavutettu"
+    },
+    "Default_Message": {
+      "key": "Exception_Default_Message",
+      "default": "Jos ongelma jatkuu, <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>ilmoita ongelmasta</a>."
+    },
+    "Default_Title": {
+      "key": "Exception_Default_Title",
+      "default": "Jokin meni pieleen"
+    },
+    "FailedDownloadFile_Title": {
+      "key": "Exception_FailedDownloadFile_Title",
+      "default": "Varmuuskopiointi epäonnistui"
+    },
+    "FailedGetDataToRestore_Title": {
+      "key": "Exception_FailedGetDataToRestore_Title",
+      "default": "Tiedostojen selaus epäonnistui"
+    },
+    "FailedGetPageMetadata_Message": {
+      "key": "Exception_FailedGetPageMetadata_Message",
+      "default": "URL-osoite on virheellinen tai verkkosivun teitojen nouto ei onnistunut."
+    },
+    "FailedGetPageMetadata_Title": {
+      "key": "Exception_FailedGetPageMetadata_Title",
+      "default": "Kirjanmerkin ominaisuuksien nouto ei onnistunut"
+    },
+    "FailedRefreshBookmarks_Title": {
+      "key": "Exception_FailedRefreshBookmarks_Title",
+      "default": "Päivitysten nouto epäonnistui"
+    },
+    "FailedRestoreData_Message": {
+      "key": "Exception_FailedRestoreData_Message",
+      "default": "Annetut varmuuskopiotiedot eivät ole odotetussa muodossa."
+    },
+    "FailedRestoreData_Title": {
+      "key": "Exception_FailedRestoreData_Title",
+      "default": "Tietojen palautus ei onnistunut"
+    },
+    "FailedShareUrlNotSynced_Title": {
+      "key": "Exception_FailedShareUrlNotSynced_Title",
+      "default": "Jotta voit lisätä kirjanmerkin, on synkronoinin on oltava ajan tasalla"
+    },
+    "FailedShareUrl_Title": {
+      "key": "Exception_FailedShareUrl_Title",
+      "default": "Jaetun kirjanmerkin URL-osoitetteen nouto ei onnistunut"
+    },
+    "HttpRequestFailed_Message": {
+      "key": "Exception_HttpRequestFailed_Message",
+      "default": "Tarkista verkkoyhteys ja yritä uudelleen."
+    },
+    "HttpRequestFailed_Title": {
+      "key": "Exception_HttpRequestFailed_Title",
+      "default": "Yhteys palveluun menetetty"
+    },
+    "InvalidCredentials_Message": {
+      "key": "Exception_InvalidCredentials_Message",
+      "default": "Tarkista, että synkronointitunnus, salasana ja palvelun URL-osoite on syötetty oikein."
+    },
+    "InvalidCredentials_Title": {
+      "key": "Exception_InvalidCredentials_Title",
+      "default": "Virheelliset tunnistetiedot"
+    },
+    "InvalidService_Message": {
+      "key": "Exception_InvalidService_Message",
+      "default": "URL-osoite ei ole kelvollinen xBrowserSync-palvelu."
+    },
+    "InvalidService_Title": {
+      "key": "Exception_InvalidService_Title",
+      "default": "Virheellinen xBrowserSync-palvelu"
+    },
+    "LocalContainerNotFound_Message": {
+      "key": "Exception_LocalContainerNotFound_Message",
+      "default": "Selainprofiili saattaa olla vaurioitunut, uuden profiilin luonti saattaa ratkaista ongelman."
+    },
+    "LocalContainerNotFound_Title": {
+      "key": "Exception_LocalContainerNotFound_Title",
+      "default": "Odottamaton kirjanmerkkien rakenne"
+    },
+    "LocalSyncError_Message": {
+      "key": "Exception_LocalSyncError_Message",
+      "default": "Paikalliset tiedot on päivitetty, tee viimeisin muutos uudelleen."
+    },
+    "LocalSyncError_Title": {
+      "key": "Exception_LocalSyncError_Title",
+      "default": "Synkronointivirhe"
+    },
+    "MissingClientData_Message": {
+      "key": "Exception_MissingClientData_Message",
+      "default": "Tallennettuja tunnuksia ei löytynyt. Ota synkronointi uudelleen käyttöön ja yritä uudelleen."
+    },
+    "MissingClientData_Title": {
+      "key": "Exception_MissingClientData_Title",
+      "default": "Tunnistautumistietoja puuttuu"
+    },
+    "NoDataToRestore_Message": {
+      "key": "Exception_NoDataToRestore_Message",
+      "default": "Varmista, että olet antanut kelvollisen xBrowserSync-varmuuskopion ennen palauttamista."
+    },
+    "NoDataToRestore_Title": {
+      "key": "Exception_NoDataToRestore_Title",
+      "default": "Ei palautettavia tietoja"
+    },
+    "NotAcceptingNewSyncs_Message": {
+      "key": "Exception_NotAcceptingNewSyncs_Message",
+      "default": "Siirry toiseen palveluun tai yritä myöhemmin uudelleen."
+    },
+    "NotAcceptingNewSyncs_Title": {
+      "key": "Exception_NotAcceptingNewSyncs_Title",
+      "default": "Palvelu ei hyväksy uusia synkronointeja"
+    },
+    "OutOfSync_Message": {
+      "key": "Exception_OutOfSync_Message",
+      "default": "Paikalliset tiedot eivät olleet synkronoituneet ja ne on nyt päivitetty. Tee viimeisin muutos uudelleen."
+    },
+    "OutOfSync_Title": {
+      "key": "Exception_OutOfSync_Title",
+      "default": "Havaittiin synkronointiristiriita"
+    },
+    "RequestEntityTooLarge_Message": {
+      "key": "Exception_RequestEntityTooLarge_Message",
+      "default": "Poista joitakin kirjanmerkkejä ja yritä uudelleen tai vaihda palveluun, jolla on korkeampi synkronointiraja."
+    },
+    "RequestEntityTooLarge_Title": {
+      "key": "Exception_RequestEntityTooLarge_Title",
+      "default": "Synkronointitietojen raja on ylitetty"
+    },
+    "ScanFailed_Message": {
+      "key": "Exception_ScanFailed_Message",
+      "default": "Tarkista, että käyttöoikeus on myönnetty ja yritä uudelleen."
+    },
+    "ScanFailed_Title": {
+      "key": "Exception_ScanFailed_Title",
+      "default": "Skannaus epäonnistui"
+    },
+    "ServiceOffline_Message": {
+      "key": "Exception_ServiceOffline_Message",
+      "default": "xBrowserSync-palvelu on tällä hetkellä offline-tilassa, yritä myöhemmin uudelleen."
+    },
+    "ServiceOffline_Title": {
+      "key": "Exception_ServiceOffline_Title",
+      "default": "Palvelu offline-tilassa"
+    },
+    "ShareFailed_Title": {
+      "key": "Exception_ShareFailed_Title",
+      "default": "Jakaminen epäonnistui"
+    },
+    "SyncRemoved_Message": {
+      "key": "Exception_SyncRemoved_Message",
+      "default": "Pyydettyä synkronointia ei ole olemassa, se on satettu poistaa toimettomuuden vuoksi."
+    },
+    "SyncRemoved_Title": {
+      "key": "Exception_SyncRemoved_Title",
+      "default": "Synkronointia ei löydy"
+    },
+    "TooManyRequests_Message": {
+      "key": "Exception_TooManyRequests_Message",
+      "default": "Synkronointi on poistettu käytöstä, ota synkronointi uudelleen käyttöön jatkaaksesi."
+    },
+    "TooManyRequests_Title": {
+      "key": "Exception_TooManyRequests_Title",
+      "default": "Palvelupyyntöjen raja saavutettu"
+    },
+    "UncommittedSyncs_Message": {
+      "key": "Exception_UncommittedSyncs_Message",
+      "default": "Synkronointi tehdään, kun yhteys palveluun on palautettu."
+    },
+    "UncommittedSyncs_Title": {
+      "key": "Exception_UncommittedSyncs_Title",
+      "default": "Muutoksia ei synkronoitu"
+    },
+    "UnsupportedServiceApiVersion_Message": {
+      "key": "Exception_UnsupportedServiceApiVersion_Message",
+      "default": "Tämä palvelu käyttää API-versiota, jota ei tueta."
+    },
+    "UnsupportedServiceApiVersion_Title": {
+      "key": "Exception_UnsupportedServiceApiVersion_Title",
+      "default": "Palvelua ei tueta"
+    },
+    "UpgradeFailed_Message": {
+      "key": "Exception_UpgradeFailed_Message",
+      "android": "Päivitystä yritetään uudestaan, kun sovellus käynnistyy uudelleen. Jos ongelma jatkuu, asenna xBrowserSync uudelleen.",
+      "default": "Käynnistä selain uudelleen yrittääksesi päivitystä uudestaan. Jos ongelma jatkuu, asenna xBrowserSync uudelleen."
+    },
+    "UpgradeFailed_Title": {
+      "key": "Exception_UpgradeFailed_Title",
+      "default": "Päivitys epäonnistui"
+    }
+  },
+  "Service": {
+    "Status": {
+      "Error": {
+        "key": "Service_Status_Error",
+        "default": "Yhteysvirhe"
+      },
+      "Loading": {
+        "key": "Service_Status_Loading",
+        "default": "Tarkistetaan"
+      },
+      "NoNewSyncs": {
+        "key": "Service_Status_NoNewSyncs",
+        "default": "Ei hyväksy uusia synkronointeja"
+      },
+      "Offline": {
+        "key": "Service_Status_Offline",
+        "default": "Ei yhteyttä"
+      },
+      "Online": {
+        "key": "Service_Status_Online",
+        "default": "Toiminnassa"
+      }
+    }
+  },
+  "Tooltip": {
+    "NotSynced": {
+      "key": "Tooltip_NotSynced",
+      "default": "ei synkronoitu"
+    },
+    "Synced": {
+      "key": "Tooltip_Synced",
+      "default": "synkronoitu"
+    },
+    "Syncing": {
+      "key": "Tooltip_Syncing",
+      "default": "synkronoidaan"
+    }
+  },
+  "View": {
+    "Bookmark": {
+      "Add": {
+        "key": "View_Bookmark_Add",
+        "default": "Lisää kirjanmerkki"
+      },
+      "Edit": {
+        "key": "View_Bookmark_Edit",
+        "default": "Muokkaa kirjanmerkkiä"
+      },
+      "Form": {
+        "Title": {
+          "key": "View_Bookmark_Form_Title",
+          "default": "Nimi"
+        },
+        "Url": {
+          "Exists": {
+            "key": "View_Bookmark_Form_Url_Exists",
+            "default": "URL-osoite on jo kirjanmerkeissä"
+          },
+          "Label": {
+            "key": "View_Bookmark_Form_Url_Label",
+            "default": "URL-osoite"
+          },
+          "Required": {
+            "key": "View_Bookmark_Form_Url_Required",
+            "default": "Kirjanmerkin URL-osoite vaaditaan"
+          }
+        },
+        "Description": {
+          "key": "View_Bookmark_Form_Description",
+          "default": "Kuvaus"
+        },
+        "Tags": {
+          "Label": {
+            "key": "View_Bookmark_Form_Tags_Label",
+            "default": "Tunnisteet"
+          },
+          "Placeholder": {
+            "key": "View_Bookmark_Form_Tags_Placeholder",
+            "default": "tunniste 1, tunniste 2, tunniste 3, jne."
+          },
+          "Clear": {
+            "key": "View_Bookmark_Form_Tags_Clear",
+            "default": "Tyhjennä tunnisteet"
+          },
+          "Remove": {
+            "key": "View_Bookmark_Form_Tags_Remove",
+            "default": "Poista tunniste"
+          }
+        },
+        "Delete": {
+          "key": "View_Bookmark_Form_Delete",
+          "default": "Poista"
+        },
+        "Share": {
+          "key": "View_Bookmark_Form_Share",
+          "default": "Jaa"
+        },
+        "UpdateProperties": {
+          "key": "View_Bookmark_Form_UpdateProperties",
+          "default": "Päivitä kirjanmerkin ominaisuudet"
+        }
+      },
+      "InvalidUrlShared": {
+        "key": "View_Bookmark_InvalidUrlShared",
+        "default": "Jaettu arvo ei sisällä kelvollista URL-osoitetta."
+      }
+    },
+    "Help": {
+      "AddingBookmarks": {
+        "key": "View_Help_AddingBookmarks",
+        "default": "<h4>Kirjanmerkin lisäys</h4><p>Lisää nykyinen sivu napsauttamalla kirjanmerkin kuvaketta hakupaneelissa. Kirjanmerkin ominaisuudet täydennetään puolestasi automaattisesti, muuten lisää kuvaus ja joitakin tunnisteita varmistaaksesi paremmat hakutulokset.</p><p>Vaihtoehtoisesti, napsauta selaimen “Lisää kirjanmerkki” -painiketta normaalisti, niin xBrowserSync täydentää kirjanmerkin ominaisuudet (jotta tämä toimii, on laajennukselle myönnettävä valinnaiset oikeudet asetuksista).</p>",
+        "android": "<h4>Kirjanmerkin lisäys</h4><p>Lisää kirjanmerkkejä helposti jakamalla xBrowserSync:iin sovelluksista, joilla voi jakaa URL-osoitteita, kuten selaimista, YouTubesta, Spotifysta ja monesta muusta.</p><p>Kirjanmerkkien ominaisuudet täydennetään puolestasi automaattisesti, muuten lisää kuvaus ja joitakin tunnisteita varmistaaksesi paremmat hakutulokset.</p>"
+      },
+      "BackingUp": {
+        "key": "View_Help_BackingUp",
+        "default": "<h4>Muista varmuuskopiointi</h4><p>Kun käytät xBrowserSyncia tietosi ovat omalla vastuullasi, joten ole fiksu ja varmuuskopioi.</p><p>Siirry asetuspaneeliin ja varmuuskopioi salaamattomat tiedot paikalliseen tiedostoon, jota voidaan käyttää tietojen palauttamiseen, jos tarvetta ilmenee.</p><p>Jos selaimesi paikalliset tiedot vaurioituvat eikä sinulla ole varmuuskopioita, voit milloin tahansa palauttaa tietosi takaisin alkuperäiseen, xBrowserSyncin asennusta edeltävään tilaan.</p>",
+        "android": "<h4>Muista varmuuskopiointi</h4><p>Kun käytät xBrowserSyncia tietosi ovat omalla vastuullasi, joten ole fiksu ja varmuuskopioi.</p><p>Siirry asetuspaneeliin ja varmuuskopioi salaamattomat tiedot paikalliseen tiedostoon, jota voidaan käyttää tietojen palauttamiseen, jos tarvetta ilmenee.</p>"
+      },
+      "BeforeYouBegin": {
+        "key": "View_Help_BeforeYouBegin",
+        "default": "<h4>Ennen kuin aloitat</h4><p>xBrowserSync muokkaa selaimen tietoja, joten on hyvä idea varmuuskopioida kirjamerkit ja muut selaimen tiedot varmuuden vuoksi. Ja jos käytät muita selaimen synkronointipalveluita tai -työkaluja (kuten <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chromen synkronointia</a>), ole hyvä ja poista ne käytöstä ristiriitojen välttämiseksi.</p>",
+        "brave": "<h4>Ennen kuin aloitat</h4><p>xBrowserSync muokkaa selaimen tietoja, joten on hyvä idea varmuuskopioida kirjamerkit ja muut selaimen tiedot varmuuden vuoksi. Ja jos käytät muita selaimen synkronointipalveluita tai -työkaluja (kuten <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Braven synkronointia</a>), ole hyvä ja poista ne käytöstä ristiriitojen välttämiseksi.</p>",
+        "edge": "<h4>Ennen kuin aloitat</h4><p>xBrowserSync muokkaa selaimen tietoja, joten on hyvä idea varmuuskopioida kirjamerkit ja muut selaimen tiedot varmuuden vuoksi. Ja jos käytät muita selaimen synkronointipalveluita tai -työkaluja (kuten <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edgen synkronointia</a>), ole hyvä ja poista ne käytöstä ristiriitojen välttämiseksi.</p>",
+        "firefox": "<h4>Ennen kuin aloitat</h4><p>xBrowserSync muokkaa selaimen tietoja, joten on hyvä idea varmuuskopioida kirjamerkit ja muut selaimen tiedot varmuuden vuoksi. Ja jos käytät muita selaimen synkronointipalveluita tai -työkaluja (kuten <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefoxin synkronointia</a>), ole hyvä ja poista ne käytöstä ristiriitojen välttämiseksi.</p>"
+      },
+      "ExistingId": {
+        "key": "View_Help_ExistingId",
+        "default": "<h4>Synkronointi olemassa olevalla ID:llä</h4><p>Napsauta “Oletko jo saanut sync ID:n?” syöttääksesi nykyisen sync ID:n ja salasanan. Jos synkronointitunnuksesi luotiin eri palveluun kuin näytettyyn palveluun, vaihda kyseiseen palveluun ennen kuin yrität synkronointia.</p><p>xBrowserSync noutaa ja purkaa salatut tietosi käyttäen paikallisesti tallennettua salasanaa. Tyhjennä paikalliset kirjanmerkit ennen kuin ne täydennetään uudelleen puretuista tiedosta.</p><p>Synkronoinnin jälkeen xBrowserSync tarkistaa taustalla 15 minuutin välein onko tietoihin tullut muutoksia ja päivittää paikalliset kirjanmerkit tarvittaessa. Voit synkronoida saattavilla olevat päivitykset asetuksista myös manuaalisesti.</p>",
+        "android": "<h4>Synkronointi olemassa olevalla ID:llä</h4><p>Aloita skannaamalla synkronointitunnuksen QR-koodi työpöytäselaimesi xBrowserSync-laajennuksen asetuspaneelista (napsauta synkronointitunnusta paljastaaksesi sen). Varmista, että syötät saman salasanan, jota käytettiin synkronoinnin luomisessa tai xBrowserSync ei voi purkaa tietojasi.</p><p>Lisäksi, jos olet synkronoinut tietosi eri xBrowserSync-palveluun, varmista, että se on asetuksissa määritetty aktiiviseksi palveluksi.</p>"
+      },
+      "FirstSync": {
+        "key": "View_Help_FirstSync",
+        "default": "<h4>Ensimmäinen synkronointi</h4><p>Ennen kuin xBrowserSync voi synkronoida selaimesi tiedot, sinun täytyy syöttää salauksen salasana. Varmista, että se vahva ja että muistat sen, sillä käyutettävissäsi ei ole nollauksia tai muistutuksia, joten jos unohdat sen, et voi käyttää synkronoituja tietoja.</p><p>Selaimesi tiedot salataan salasanalla ja tallennetaan aktiiviseen xBrowserSync-palveluun, joka on määritetty asetuksissa.</p><p>Kun synkronointi on suoritettu, kaikki paikallisiin kirjanmerkkeihin tekemäsi muutokset synkronoidaan automaattisesti xBrowserSync:in toimesta.</p>",
+        "android": "<h4>Ensimmäinen synkronointi</h4><p>xBrowserSync synkronoi selaimesi tiedot aktiivisesti työpöytäselainten välillä (synkronointia mobiiliselaimiin ei tueta tällä hetkellä) ja voit käyttää tätä sovellusta päästäksesi käsiksi synkronoituihin tietoihin Android-mobiililaitteessasi.</p><p>Jos et ole jo luonut synkronointitunnusta, siirry työpöytäselaimeesi ja <a href='https://link.xbrowsersync.org/download' class='new-tab'>lataa</a> xBrowserSync-laajennus (saatavana Chromelle ja Firefoxille). Kun olet luonut synkronoinnin, voit käyttää uutta synkronointitunnustasi tässä sovelluksessa päästäksesi käsiksi tietoihisi.</p>"
+      },
+      "FurtherSupport": {
+        "key": "View_Help_FurtherSupport",
+        "default": "<h4>Lisää tukea</h4><p>Löydät vastaukset yleisimpiin kysymyksiin <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>usein kysytyistä kysymyksistä</a> ja tarkista myös nykyiset <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>tunnetut ongelmat</a> nähdäksesi, onko ongelma listattu siellä.</p><p>Vaihtoehtoisesti, käytä <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>tikettijärjestelmää</a> ilmoittaaksesi ongelmasta tai ehdottaaksesi uusia ominaisuuksia.</p>"
+      },
+      "Mobile": {
+        "key": "View_Help_Mobile",
+        "default": "<h4>Lähde liikkeelle</h4><p>Käytä synkronoituja kirjanmerkkejä liikkeessä xBrowserSyncin Android-sovelluksella, saatavilla <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a> kaupasta, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droidista</a> tai <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>suoralla latauksella</a>.</p>"
+      },
+      "NativeFeatures": {
+        "key": "View_Help_NativeFeatures",
+        "default": "<h4>Tukee natiiveja ominaisuuksia</h4><p>Voit jatkaa selaimesi natiivien kirjanmerkkitoimintojen, kuten kirjanmerkkipalkin ja kirjanmerkkien hallinnan käyttöä ja kaikki tekemäsi muutokset synkronoidaan automaattisesti taustalla.</p><p>Jos olet järjestänyt olemassa olevat kirjanmerkit kansioihin, xBrowserSync kunnioittaa ja ylläpitää olemassa olevaa kirjanmerkkihierarkiaasi.</p>",
+        "firefox": "<h4>Tukee natiiveja ominaisuuksia</h4><p>Voit jatkaa selaimesi natiivien kirjanmerkkitoimintojen, kuten kirjanmerkkipalkin ja kirjanmerkkien hallinnan käyttöä ja kaikki tekemäsi muutokset synkronoidaan automaattisesti taustalla.</p><p>Jos olet järjestänyt olemassa olevat kirjanmerkit kansioihin, xBrowserSync kunnioittaa ja ylläpitää olemassa olevaa kirjanmerkkihierarkiaasi.</p><p>Huomaa kuitenkin, että Firefoxin kirjanmerkki-API ei tue vielä selaimen natiivien tunnisteiden käyttämistä ja kaikki tunnisteet menetetään synkronoitaessa, eikä xBrowserSyncin kautta lisättyjä tunnisteita tallenneta natiiveina tunnisteina.</p>"
+      },
+      "Previous": {
+        "key": "View_Help_Previous",
+        "default": "Edellinen"
+      },
+      "Searching": {
+        "key": "View_Help_Searching",
+        "default": "<h4>Etsi kirjanmerkkejäsi</h4><p>Synkronoituasi, paina vain Enter-näppäintä näyttääksesi viimeisimmät kirjanmerkit tai kirjoita joitakin avainsanoja tai URL-osoite etsiäksesi kirjanmerkkejä.</p><p>Vaihda hakutulosten ja kirjanmerkkikansioiden välillä selataksesi koko hierarkiaa.</p><p>Muokataksesi tai poistaaksesi kirjanmerkin, osoita kirjanmerkkiä ja napsauta kirjanmerkin nimen viereen ilmestyvää muokkauskuvaketta.</p>",
+        "android": "<h4>Etsi kirjanmerkkejäsi</h4><p>Synkronoituasi, näytetään kirjanmerkkisi aikajärjestyksessä kun avaat xBrowserSyncin. Kirjoita hakukenttään joitakin avainsanoja tai URL-osoite etsiäksesi kirjanmerkkejä.</p><p>Vaihda hakutulosten ja kirjanmerkkikansioiden välillä selataksesi koko hierarkiaa.</p><p>Painamalla kirjanmerkkiä pitkään, voit jakaa, muokata tai poistaa sen.</p>"
+      },
+      "Service": {
+        "key": "View_Help_Service",
+        "default": "<h4>Synkronointi toiseen palveluun</h4><p>Oletuksena tietosi on synkronoidaan <a href='https://link.xbrowsersync.org/api' class='new-tab'>viralliseen xBrowserSync-palveluun</a>, mutta jos haluat synkronoida tietosi vaihtoehtoiseen xBrowserSync-palveluun, voit vaihtaa aktiivisen palvelun ennen synkronointia.</p><p>Tarkista saatavilla olevien <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>julkisten xBrowserSync-palveluiden</a> tai <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>käytä omaa palveluasi</a>, joko yksityisesti äärimmäisen turvallisuuden ja tietosuojan takaammiseksi tai julkisesti, jotta useammat ihmiset voivat nauttia xBrowserSyncistä.</p><p><strong>Tärkeää:</strong> xBrowserSync-palveluita ylläpitävät itsenäiset vapaaehtoiset. Palvelun ylläpitäjä ei ota vastuuta tiedoistasi, joten muista varmuuskopioida ne säännöllisesti.</p>"
+      },
+      "Shortcuts": {
+        "key": "View_Help_Shortcuts",
+        "default": "<h4>Käytä pikanäppäimiä!</h4><p>Etsiäksesi kirjanmerkkejä nopeasti, käytä oletusnäppäinyhdistelmää (Ctrl+Space) aktivoidaksesi laajennuksen ja paina sitten vain Enter tarkastellaksesi viimeaikaisia kirjanmerkkejä tai aloittaaksesi haun kirjoituksen.</p><p>Muuttaaksesi näppäinyhdistelmää, avaa osoite chrome://extension/shortcuts ja muuta xBrowserSyncin alla olevia näppäinyhdistelmiä.</p>",
+        "brave": "<h4>Käytä pikanäppäimiä!</h4><p>Etsiäksesi kirjanmerkkejä nopeasti, käytä oletusnäppäinyhdistelmää (Ctrl+Space) aktivoidaksesi laajennuksen ja paina sitten vain Enter tarkastellaksesi viimeaikaisia kirjanmerkkejä tai aloittaaksesi haun kirjoituksen.</p><p>Muuttaaksesi näppäinyhdistelmää, avaa osoite brave://extensions/shortcuts ja muuta xBrowserSyncin alla olevia näppäinyhdistelmiä.</p>",
+        "edge": "<h4>Käytä pikanäppäimiä!</h4><p>Etsiäksesi kirjanmerkkejä nopeasti, käytä oletusnäppäinyhdistelmää (Ctrl+Space) aktivoidaksesi laajennuksen ja paina sitten vain Enter tarkastellaksesi viimeaikaisia kirjanmerkkejä tai aloittaaksesi haun kirjoituksen.</p><p>Muuttaaksesi näppäinyhdistelmää, avaa osoite edge://extensions/shortcuts ja muuta xBrowserSyncin alla olevia näppäinyhdistelmiä.</p>",
+        "firefox": "<h4>Käytä pikanäppäimiä!</h4><p>Etsiäksesi kirjanmerkkejä nopeasti, käytä oletusnäppäinyhdistelmää (Ctrl+Space) aktivoidaksesi laajennuksen ja paina sitten vain Enter tarkastellaksesi viimeaikaisia kirjanmerkkejä tai aloittaaksesi haun kirjoituksen.</p><p>Muuttaaksesi näppäinyhdistelmää, avaa osoite about:addons, napsauttamalla asetusvalikosta (kulman rataskuvake) “Hallitse laajennusten pikänäppäimiä” ja muuta xBrowserSyncin alla olevia näppäinyhdistelmiä.</p>"
+      },
+      "SyncId": {
+        "key": "View_Help_SyncId",
+        "default": "<h4>Synkronointi ID:si</h4><p>xBrowserSync takaa yksityisyytesi, koska henkilökohtaisia tietoja ei koskaan kerätä ja selaimesi tiedot on salattu ennen synkronointia. Synkronoidut tiedot tunnistetaan saamallasi anonyymillä synkronointitunnuksella, jota voidaan käyttää yhdessä salasanan kanssa tietojen synkronointiin muiden selainten ja laitteiden välillä.</p><p>Muista, että synkronointitunnuksesi toimii vain sen xBrowserSync-palvelun kanssa, jolle se on luotu ja jos vaihdat toiseen xBrowserSync-palveluun sinun on luotava uusi synkronointi tai käytettävä olemassa olevaa synkronointitunnusta, jota olet aiemmin käyttänyt kyseisen palvelun kanssa.</p><p>Aina kun synkronointi on käytössä, voit tarkastella synkronointitunnustasi asetuksissa. Napsauta sitä paljastaaksesi kätevän QR-koodin, jonka voit skannata synkronoidaksesi mobiililaitteita.</p>"
+      },
+      "Welcome": {
+        "key": "View_Help_Welcome",
+        "default": "<h4>Tervetuloa xBrowserSynciin!</h4><p>xBrowserSync on ilmainen ja avoimen lähdekoodin vaihtoehto Googlen, Mozillan, Operan ja muiden tarjoamille selaimen synkronointipalveluille. xBrowserSync kunnioittaa yksityisyyttäsi ja antaa sinulle täydellisen anonymiteetin (tutustu <a href='https://link.xbrowsersync.org/www' class='new-tab'>sivustoon</a> saadaksesi lisätietoja).</p><p>Käytä hetki lukeaksesi tämä opas läpi tutustuaksesi xBrowserSync-palveluun. Käytä alla olevia hakulinkkejä tai nuolinäppäimiä liikkuaksesi sivujen välillä.</p><p>Huomaa: xBrowserSync synkronoi tällä hetkellä vain kirjanmerkkejä. Selaimen lisätietojen synkronointi lisätään tulevaisuudessa, tutustu <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>kehityssuunnitelmaan</a> nähdäksesi mitä on tulossa.</p>",
+        "android": "<h4>Tervetuloa xBrowserSynciin!</h4><p>xBrowserSync on ilmainen ja avoimen lähdekoodin vaihtoehto Googlen, Mozillan, Operan ja muiden tarjoamille selaimen synkronointipalveluille. xBrowserSync kunnioittaa yksityisyyttäsi ja antaa sinulle täydellisen anonymiteetin (tutustu <a href='https://link.xbrowsersync.org/www' class='new-tab'>sivustoon</a> saadaksesi lisätietoja).</p><p>Käytä hetki lukeaksesi tämä opas läpi tutustuaksesi xBrowserSync-palveluun. Käytä alla olevia linkkejä tai pyyhkäise näyttöä liikkuaksesi sivujen välillä.</p><p>Huomaa: xBrowserSync synkronoi tällä hetkellä vain kirjanmerkkejä. Selaimen lisätietojen synkronointi lisätään tulevaisuudessa, tutustu <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>kehityssuunnitelmaan</a> nähdäksesi mitä on tulossa.</p>"
+      }
+    },
+    "Login": {
+      "GetSyncId": {
+        "Title": {
+          "key": "View_Login_GetSyncId_Title",
+          "default": "Tarvitsetko synkronointi-ID:n?"
+        },
+        "Content": {
+          "key": "View_Login_GetSyncId_Content",
+          "default": "Lataa xBrowserSync-laajennus työpöytäselaimeesi ja luo uusi synkronointi, jotta voit käyttää kirjanmerkkejäsi täällä."
+        }
+      },
+      "Password": {
+        "Confirm": {
+          "key": "View_Login_Password_Confirm",
+          "default": "Vahvista salasana"
+        },
+        "Existing": {
+          "key": "View_Login_Password_Existing",
+          "default": "Salasanasi"
+        },
+        "Label": {
+          "key": "View_Login_Password_Label",
+          "default": "Salasana"
+        },
+        "New": {
+          "key": "View_Login_Password_New",
+          "default": "Syötä salasana"
+        },
+        "Show": {
+          "key": "View_Login_Password_Show",
+          "default": "Näytä salasana"
+        }
+      },
+      "Scan": {
+        "Title": {
+          "key": "View_Login_Scan_Title",
+          "default": "Yhdistä synkronointiisi"
+        },
+        "Content": {
+          "key": "View_Login_Scan_Content",
+          "default": "Avaa xBrowserSync työpöytäselaimessasi, siirry sen asetuksiin ja napsauta synkronointi ID:tä näyttääksesi QR-koodin, jonka voit skannata täällä."
+        },
+        "ScanCode": {
+          "key": "View_Login_Scan_ScanCode",
+          "default": "Skannaa koodi"
+        },
+        "ManualEntry": {
+          "key": "View_Login_Scan_ManualEntry",
+          "default": "Syötä synkronointitiedot manuaalisesti"
+        }
+      },
+      "Service": {
+        "ApiVersion": {
+          "key": "View_Login_Service_ApiVersion",
+          "default": "API-versio"
+        },
+        "Confirm": {
+          "key": "View_Login_Service_Confirm",
+          "default": "Synkronoi tähän palveluun?"
+        },
+        "Location": {
+          "key": "View_Login_Service_Location",
+          "default": "Sijainti"
+        },
+        "MaxSyncSize": {
+          "key": "View_Login_Service_MaxSyncSize",
+          "default": "Suurin synk. koko"
+        },
+        "Selected": {
+          "key": "View_Login_Service_Selected",
+          "default": "Palveluun"
+        },
+        "Status": {
+          "key": "View_Login_Service_Status",
+          "default": "Tila"
+        },
+        "Update": {
+          "Label": {
+            "key": "View_Login_Service_Update_Label",
+            "default": "xBrowserSync-palvelun URL"
+          },
+          "Description": {
+            "key": "View_Login_Service_Update_Description",
+            "default": "Syötä vaihtoehtoisen xBrowserSync-palvelun URL-osoite. Selaa luetteloa julkisista xBrowserSync-palveluista <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>täällä</a>."
+          },
+          "Button": {
+            "key": "View_Login_Service_Update_Button",
+            "default": "Vaihda palvelua"
+          },
+          "Required": {
+            "key": "View_Login_Service_Update_Required",
+            "default": "xBrowserSync-palvelun URL-osoite vaaditaan"
+          },
+          "Invalid": {
+            "key": "View_Login_Service_Update_Invalid",
+            "default": "Virheellinen xBrowserSync-palvelu"
+          },
+          "Failed": {
+            "key": "View_Login_Service_Update_Failed",
+            "default": "Palveluun ei saatu yhteyttä"
+          },
+          "NotSupported": {
+            "key": "View_Login_Service_Update_Failed_NotSupported",
+            "default": "Tämä palvelu käyttää API-versiota, jota ei tueta"
+          }
+        },
+        "Warning": {
+          "key": "View_Login_Service_Warning",
+          "default": "<strong>Tärkeää:</strong> xBrowserSync-palveluita ylläpitävät itsenäiset vapaaehtoiset. Palvelun ylläpitäjä ei ota vastuuta tiedoistasi, joten muista varmuuskopioida ne säännöllisesti."
+        }
+      },
+      "Sync": {
+        "Confirm": {
+          "Title": {
+            "key": "View_Login_Sync_Confirm_Title",
+            "default": "Oletko varma?"
+          },
+          "Content": {
+            "key": "View_Login_Sync_Confirm_Content",
+            "default": "xBrowserSync poistaa kaikki paikalliset kirjanmerkkitiedot ennen synkronoitujen kirjanmerkkien palauttamista. Jatketaanko?"
+          }
+        },
+        "DisableOthers": {
+          "Title": {
+            "key": "View_Login_Sync_DisableOthers_Title",
+            "default": "Poista kirjanmerkkien synkronointityökalut käytöstä"
+          },
+          "Content": {
+            "key": "View_Login_Sync_DisableOthers_Content",
+            "default": "Selaimesi tietojen synkronointi xBrowserSyncin kanssa kun muita kirjanmerkkien synkronointityökaluja (kuten <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chromen synkronointi</a>) on aktiivisena, saattaa aiheuttaa ristiriitoja ja mahdollisesti vioittuneita tietoja. Poista ne käytöstä ennen kuin jatkat.",
+            "brave": "Selaimesi tietojen synkronointi xBrowserSyncin kanssa kun muita kirjanmerkkien synkronointityökaluja (kuten <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Braven synkronointi</a>) on aktiivisena, saattaa aiheuttaa ristiriitoja ja mahdollisesti vioittuneita tietoja. Poista ne käytöstä ennen kuin jatkat.",
+            "edge": "Selaimesi tietojen synkronointi xBrowserSyncin kanssa kun muita kirjanmerkkien synkronointityökaluja (kuten <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edgen synkronointi</a>) on aktiivisena, saattaa aiheuttaa ristiriitoja ja mahdollisesti vioittuneita tietoja. Poista ne käytöstä ennen kuin jatkat.",
+            "firefox": "Selaimesi tietojen synkronointi xBrowserSyncin kanssa kun muita kirjanmerkkien synkronointityökaluja (kuten <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefoxin synkronointi</a>) on aktiivisena, saattaa aiheuttaa ristiriitoja ja mahdollisesti vioittuneita tietoja. Poista ne käytöstä ennen kuin jatkat."
+          }
+        },
+        "Enable": {
+          "key": "View_Login_Sync_Enable",
+          "default": "Synkronoi"
+        },
+        "New": {
+          "key": "View_Login_Sync_New",
+          "default": "Luo uusi synkronointi"
+        },
+        "Upgrade": {
+          "Title": {
+            "key": "View_Login_Sync_Upgrade_Title",
+            "default": "Valmis päivittämään synkronoinnin?"
+          },
+          "Content": {
+            "key": "View_Login_Sync_Upgrade_Content",
+            "default": "<p>Tämä synkronointitunnus on päivitettävä, jotta se voidaan synkronoida tämän xBrowserSync-version kanssa. Päivityksen jälkeen et voi synkronoida aiempien xBrowserSync-versioiden kanssa.</p><p>Varmista, että olet päivittänyt kaikki xBrowserSync-sovelluksesi ennen kuin jatkat. Oletko valmis jatkamaan?</p>"
+          }
+        }
+      },
+      "SyncId": {
+        "Description": {
+          "key": "View_Login_SyncId_Description",
+          "default": "Synkronointitunnuksesi"
+        },
+        "Existing": {
+          "key": "View_Login_SyncId_Existing",
+          "default": "Onko sinulla jo synkronointi-ID?"
+        },
+        "Invalid": {
+          "key": "View_Login_SyncId_Invalid",
+          "default": "Synkronointitunnus ei ole kelvollinen"
+        },
+        "Label": {
+          "key": "View_Login_SyncId_Label",
+          "default": "ID"
+        },
+        "New": {
+          "key": "View_Login_SyncId_New",
+          "default": "Hanki ID"
+        }
+      }
+    },
+    "Permissions": {
+      "Title": {
+        "key": "View_Permissions_Title",
+        "default": "Valinnaiset käyttöoikeudet"
+      },
+      "Content": {
+        "key": "View_Permissions_Content",
+        "default": "<p>xBrowserSync täydentää selaimen \"Lisää kirjanmerkki\" -painikkeella lisättyjä kirjanmerkkejä automaattisesti käytettävissä olevilla metatiedoilla. Tämän ottamiseksi käyttöön xBrowserSync <a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>tarvitsee lisää käyttöoikeuksia</a>, jotta se voi lukea vierailtujen sivustojen tietoja.</p><p>Jos haluat, hyväksy nämä oikeudet pyydettäessä tai vaihtoehtoisesti voit milloin tahansa lisätä ja poistaa käyttöoikeuksia asetuksista.</p>"
+      }
+    },
+    "Scan": {
+      "Title": {
+        "key": "View_Scan_Title",
+        "default": "Skannaa synkronointitunnuksesi QR-koodi"
+      },
+      "ToggleLight": {
+        "key": "View_Scan_ToggleLight",
+        "default": "Kytke valo"
+      }
+    },
+    "Search": {
+      "BookmarkTree": {
+        "key": "View_Search_BookmarkTree",
+        "default": "Näytä kirjanmerkkikansiot"
+      },
+      "Clear": {
+        "key": "View_Search_Clear",
+        "default": "Tyhjennä"
+      },
+      "FolderEmpty": {
+        "key": "View_Search_FolderEmpty",
+        "default": "Kansio on tyhjä"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "Paina Enter tai etsi kirjanmerkkejä",
+        "android": "Etsi kirjanmerkkejä"
+      },
+      "NoBookmarks": {
+        "key": "View_Search_NoBookmarks",
+        "default": "Sinulla ei ole kirjanmerkkejä, ota ja lisää muutama!"
+      },
+      "NoResults": {
+        "key": "View_Search_NoResults",
+        "default": "Kirjanmerkkejä ei löytynyt"
+      },
+      "SearchResults": {
+        "key": "View_Search_SearchResults",
+        "default": "Näytä hakutulokset"
+      }
+    },
+    "Settings": {
+      "BackupRestore": {
+        "Title": {
+          "key": "View_Settings_BackupRestore_Title",
+          "default": "Varmuuskopiointi ja palautus"
+        },
+        "Backup": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_Backup_Title",
+            "default": "Varmuuskopiointi"
+          },
+          "Button": {
+            "key": "View_Settings_BackupRestore_Backup_Button",
+            "default": "Varmuuskopioi"
+          },
+          "Local": {
+            "key": "View_Settings_BackupRestore_Backup_Local",
+            "default": "Varmuuskopioi paikalliset selaimen tiedot tiedostoon."
+          },
+          "Synced": {
+            "key": "View_Settings_BackupRestore_Backup_Synced",
+            "default": "Varmuuskopioi synkronoidut tiedot tiedostoon."
+          }
+        },
+        "Restore": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_Restore_Title",
+            "default": "Varmuuskopion palautus"
+          },
+          "Button": {
+            "key": "View_Settings_BackupRestore_Restore_Button",
+            "default": "Palauta"
+          },
+          "Local": {
+            "Description": {
+              "key": "View_Settings_BackupRestore_Restore_Local_Description",
+              "default": "Palauta selaimen paikalliset tiedot varmuuskopiosta."
+            },
+            "Confirm": {
+              "key": "View_Settings_BackupRestore_Restore_Local_Confirm",
+              "default": "<p>Koska synkronointi on tällä hetkellä pois käytöstä, palautettava data korvaa selaimen paikalliset tiedot.</p><p>Jatketaanko?</p>"
+            }
+          },
+          "Synced": {
+            "Description": {
+              "key": "View_Settings_BackupRestore_Restore_Synced_Description",
+              "default": "Palauta synkronoidut tiedot varmuuskopiosta."
+            },
+            "Confirm": {
+              "key": "View_Settings_BackupRestore_Restore_Synced_Confirm",
+              "default": "<p>Koska synkronointi on tällä hetkellä käytössä, palautettavat tiedot korvaavat synkronoidut tiedot.</p><p>Palautaksesi tiedot vain paikalliseen selaimeen, poista synkronointi käytöstä ennen palauttamista.</p><p>Jatketaanko?</p>",
+              "android": "<p>Palautettavat tiedot korvaavat synkronoidut tiedot.</p><p>Jatketaanko?</p>"
+            }
+          },
+          "Done": {
+            "key": "View_Settings_BackupRestore_Restore_Done",
+            "default": "Tietosi on palautettu."
+          },
+          "SelectFile": {
+            "Button": {
+              "key": "View_Settings_BackupRestore_Restore_SelectFile_Button",
+              "default": "Valitse tiedosto"
+            },
+            "Placeholder": {
+              "key": "View_Settings_BackupRestore_Restore_SelectFile_Placeholder",
+              "default": "Valitse palautettava tiedosto"
+            }
+          },
+          "Copy": {
+            "key": "View_Settings_BackupRestore_Restore_Copy",
+            "default": "Kopioi varmuuskopiotiedoston sisältö palauttaaksesi tiedot."
+          },
+          "Paste": {
+            "key": "View_Settings_BackupRestore_Restore_Paste",
+            "default": "Liitä varmuuskopion tiedot"
+          },
+          "RestoreData": {
+            "key": "View_Settings_BackupRestore_Restore_RestoreData",
+            "default": "Palauta tiedot"
+          },
+          "Invalid": {
+            "key": "View_Settings_BackupRestore_Restore_Invalid",
+            "default": "Virheelliset xBrowserSync-varmuuskopion tiedot"
+          }
+        },
+        "Revert": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_Revert_Title",
+            "default": "Palauta alkutilaan"
+          },
+          "Description": {
+            "key": "View_Settings_BackupRestore_Revert_Description",
+            "default": "Palauta selaimen paikalliset tiedot alkuperäiseen asennustilaan."
+          },
+          "Confirm": {
+            "key": "View_Settings_BackupRestore_Revert_Confirm",
+            "default": "<p>Jos jatkat, aktiivinen synkronointi poistetaan käytöstä ja paikalliset tiedot palautetaan xBrowserSyncin asennushetkeen, {date}.</p><p>Jatketaanko?</p>"
+          },
+          "Button": {
+            "key": "View_Settings_BackupRestore_Revert_Button",
+            "default": "Palauta"
+          },
+          "Done": {
+            "key": "View_Settings_BackupRestore_Revert_Done",
+            "default": "Tietosi on palautettu alkuperäiseen asennuksen tilaan."
+          },
+          "Unavailable": {
+            "key": "View_Settings_BackupRestore_Revert_Unavailable",
+            "default": "Asennustilan tietoja ei ole saatavilla, ei voida palauttaa."
+          }
+        }
+      },
+      "Issues": {
+        "Title": {
+          "key": "View_Settings_Issues_Title",
+          "default": "Ongelmia"
+        },
+        "Help": {
+          "Title": {
+            "key": "View_Settings_Issues_Help_Title",
+            "default": "Ohje"
+          },
+          "Description": {
+            "key": "View_Settings_Issues_Help_Description",
+            "default": "Onko sinulla kysyttävää tai ongelmia? Varmista, että luet oppaan läpi, muulloin vastaus voi olla myös UKK:ssa."
+          },
+          "ViewFaqs": {
+            "key": "View_Settings_Issues_Help_ViewFaqs",
+            "default": "Näytä UKKt"
+          }
+        },
+        "Tracker": {
+          "Title": {
+            "key": "View_Settings_Issues_Tracker_Title",
+            "default": "Tikettijärjestelmä"
+          },
+          "Description": {
+            "key": "View_Settings_Issues_Tracker_Description",
+            "default": "Ilmoita ongelmasta ilmoittaaksesi viasta tai pyytääksesi uutta ominaisuutta."
+          },
+          "Report": {
+            "key": "View_Settings_Issues_Tracker_Report",
+            "default": "Ilmoita ongelma"
+          }
+        },
+        "Log": {
+          "Title": {
+            "key": "View_Settings_Issues_Log_Title",
+            "default": "Sovelluksen loki"
+          },
+          "Description": {
+            "key": "View_Settings_Issues_Log_Description",
+            "default": "Lataa ja sisällytä sovellusloki kun ilmoitat ongelmaan."
+          },
+          "Clear": {
+            "key": "View_Settings_Issues_Log_Clear",
+            "default": "Tyhjennä"
+          },
+          "Download": {
+            "key": "View_Settings_Issues_Log_Download",
+            "default": "Lataa loki"
+          },
+          "Size": {
+            "key": "View_Settings_Issues_Log_Size",
+            "default": "Lokitietojen koko"
+          }
+        }
+      },
+      "Permissions": {
+        "Title": {
+          "key": "View_Settings_Permissions_Title",
+          "default": "Valinnaiset käyttöoikeudet"
+        },
+        "Add": {
+          "key": "View_Settings_Permissions_Add",
+          "default": "Myönnä oikeudet"
+        },
+        "Granted": {
+          "key": "View_Settings_Permissions_Granted",
+          "default": "Myönnetty"
+        },
+        "NotGranted": {
+          "key": "View_Settings_Permissions_NotGranted",
+          "default": "Ei myönnetty"
+        },
+        "Read": {
+          "Title": {
+            "key": "View_Settings_Permissions_Read_Title",
+            "default": "Lue sivuston tiedot"
+          },
+          "Description": {
+            "key": "View_Settings_Permissions_Read_Description",
+            "default": "Vaaditaan automaattista kirjanmerkkien metatietojen lisäämistä varten, kun käytetään selaimen “Lisää kirjanmerkkeihin” -painiketta (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>lisätietoja</a>)."
+          }
+        },
+        "Remove": {
+          "key": "View_Settings_Permissions_Remove",
+          "default": "Poista oikeudet"
+        }
+      },
+      "Prefs": {
+        "AutoFetchMetadata": {
+          "Label": {
+            "key": "View_Settings_Prefs_AutoFetchMetadata_Label",
+            "default": "Nouda kirjanmerkkien metatiedot automaattisesti"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_AutoFetchMetadata_Description",
+            "default": "Nouda metatiedot automaattisesti kun kirjanmerkki lisätään."
+          }
+        },
+        "CheckForAppUpdates": {
+          "Label": {
+            "key": "View_Settings_Prefs_CheckForAppUpdates_Label",
+            "default": "Tarkista päivitykset"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
+            "default": "Näytä ilmoitus kun uusi xBrowserSync-versio on saatavilla."
+          }
+        },
+        "DarkMode": {
+          "Label": {
+            "key": "View_Settings_Prefs_DarkMode_Label",
+            "default": "Tumma teema"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_DarkMode_Description",
+            "default": "Ihanteellinen heikosti valaistuissa olosuhteissa."
+          }
+        },
+        "DefaultToFolderView": {
+          "Label": {
+            "key": "View_Settings_Prefs_DefaultToFolderView_Label",
+            "default": "Kirjanmerkkikansiot"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_DefaultToFolderView_Description",
+            "default": "Näytä kirjanmerkkikansiot oletuksena."
+          }
+        },
+        "SearchBar": {
+          "Label": {
+            "key": "View_Settings_Prefs_SearchBar_Label",
+            "default": "Hakupalkin sijainti"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_SearchBar_Description",
+            "default": "Näytä hakupalkki tulosten alla."
+          }
+        },
+        "SyncToolbar": {
+          "Label": {
+            "key": "View_Settings_Prefs_SyncToolbar_Label",
+            "default": "Synk. kirjanmerkkipalkki"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_SyncToolbar_Description",
+            "default": "Poista tämä asetus käytöstä näyttääksesi synkronoitujen selainten kirjanmerkkipalkeissa selainkohtaiset kirjanmerkit."
+          },
+          "Confirmation": {
+            "key": "View_Settings_Prefs_SyncToolbar_Confirmation",
+            "default": "<p>Tämän asetuksen käyttöönotto korvaa kirjanmerkit, jotka ovat tällä hetkellä kirjanmerkkipalkissasi.</p><p>Jatketaanko?</p>"
+          }
+        },
+        "Title": {
+          "key": "View_Settings_Prefs_Title",
+          "default": "Asetukset"
+        }
+      },
+      "Sync": {
+        "Title": {
+          "key": "View_Settings_Sync_Title",
+          "default": "Synkronointi"
+        },
+        "Disable": {
+          "key": "View_Settings_Sync_Disable",
+          "default": "Poista käytöstä"
+        },
+        "Id": {
+          "Label": {
+            "key": "View_Settings_Sync_Id_Label",
+            "default": "Synkronointitunnus"
+          },
+          "Description": {
+            "key": "View_Settings_Sync_Id_Description",
+            "default": "Käytä synkronointitunnusta yhdistääksesi synkronoituihin tietoihin muissa laitteissa (napsauta näyttääksesi QR-koodin)."
+          }
+        },
+        "Data": {
+          "Label": {
+            "key": "View_Settings_Sync_Data_Label",
+            "default": "Tilan käyttö"
+          },
+          "Description": {
+            "key": "View_Settings_Sync_Data_Description",
+            "default": "Kuinka paljon palvelun sallimasta synkronointitietojen kapasiteetista on käytössäsi."
+          }
+        },
+        "Service": {
+          "key": "View_Settings_Sync_Service",
+          "default": "Palvelu"
+        },
+        "UpdatesAvailable": {
+          "False": {
+            "key": "View_Settings_Sync_UpdatesAvailable_False",
+            "default": "Synkronointi on ajan tasalla."
+          },
+          "True": {
+            "key": "View_Settings_Sync_UpdatesAvailable_True",
+            "default": "Päivityksiä saatavilla, seuraava synkronointi klo"
+          },
+          "Sync": {
+            "key": "View_Settings_Sync_UpdatesAvailable_Sync",
+            "default": "Synkronoi"
+          }
+        },
+        "Qr": {
+          "Description": {
+            "key": "View_Settings_Sync_Qr_Description",
+            "default": "Skannaa tämä QR-koodi käyttämällä xBrowserSyncin Android-sovellusta yhdistääksesi synkronointitietosi."
+          },
+          "Show": {
+            "key": "View_Settings_Sync_Qr_Show",
+            "default": "Näytä QR-koodi"
+          },
+          "Copy": {
+            "key": "View_Settings_Sync_Qr_Copy",
+            "default": "Kopioi synkronointi-ID leikepöydälle"
+          },
+          "Copied": {
+            "key": "View_Settings_Sync_Qr_Copied",
+            "default": "Kopioitu!"
+          }
+        }
+      },
+      "AppVersion": {
+        "key": "View_Settings_AppVersion",
+        "default": "Versio"
+      },
+      "NotAvailable": {
+        "key": "View_Settings_NotAvailable",
+        "default": "Asetukset käytettävissä, kun synkronointi on käytössä."
+      },
+      "FileDownloaded": {
+        "key": "View_Settings_FileDownloaded",
+        "default": "Jos tiedosto ei latautunut automaattisesti, napsauta alla olevaa linkkiä oikealla painikkeella ja valitse “Tallenna kohde levylle...”.",
+        "android": "Tiedosto tallennettu nimellä {fileName}."
+      },
+      "Support": {
+        "key": "View_Settings_Support",
+        "default": "Tue xBrowserSynciä"
+      }
+    },
+    "Support": {
+      "Title": {
+        "key": "View_Support_Title",
+        "default": "Tue xBrowserSynciä!"
+      },
+      "Content": {
+        "key": "View_Support_Content",
+        "default": "<p>Haluamme tehdä xBrowserSyncistä ykkös-selaimen synkronointityökalun, mutta vielä on paljon tehtävää:</p><ul><li>Selaimen välilehtien ja historian synkronoinnin lisäys</li><li>Kaikkien tärkeimpien työpöytäselainten tuki</li><li>Käännös muille kielille</li><li>Ja <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>paljon muuta</a>!</li></ul><p>Vain sinun tuellasi voimme jatkaa xBrowserSyncin parantamista ja varmistaa, että se pysyy tehokkaana työkaluna yksityisyytemme ja tuottavuutemme suojauksessa suuryritysten vakoilua vastaan!</p>"
+      },
+      "Cryptos": {
+        "key": "View_Support_Cryptos",
+        "default": "Kryptot"
+      },
+      "Liberapay": {
+        "key": "View_Support_Liberapay",
+        "default": "Liberapay"
+      },
+      "Patreon": {
+        "key": "View_Support_Patreon",
+        "default": "Patreon"
+      }
+    },
+    "Updated": {
+      "Title": {
+        "key": "View_Updated_Title",
+        "default": "Päivitetty versioon"
+      },
+      "Content": {
+        "key": "View_Updated_Content",
+        "default": "xBrowserSync on päivitetty uusimmilla ominaisuuksilla ja korjauksilla. Jos haluat lisätietoja tämän julkaisun muutoksista, tutustu julkaisutietoihin."
+      }
+    },
+    "Working": {
+      "Restoring": {
+        "key": "View_Working_Restoring",
+        "default": "Palautetaan"
+      },
+      "Reverting": {
+        "key": "View_Working_Reverting",
+        "default": "Palautetaan"
+      },
+      "Syncing": {
+        "key": "View_Working_Syncing",
+        "default": "Synkronoidaan"
+      }
+    }
+  }
+}

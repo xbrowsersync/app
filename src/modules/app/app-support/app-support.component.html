@@ -1,0 +1,23 @@
+<div class="view-content">
+  <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Support.Title) }}</h4>
+  <div class="support-content" ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Support.Content)"></div>
+  <div class="buttons small">
+    <button type="button" class="btn btn-default"
+            ng-click="vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event, 'https://link.xbrowsersync.org/liberapay')">
+      {{ vm.platformSvc.getI18nString(vm.Strings.View.Support.Liberapay) }}
+    </button>
+    <button type="button" class="btn btn-default"
+            ng-click="vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event, 'https://link.xbrowsersync.org/patreon')">
+      {{ vm.platformSvc.getI18nString(vm.Strings.View.Support.Patreon) }}
+    </button>
+    <button type="button" class="btn btn-default"
+            ng-click="vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event, 'https://link.xbrowsersync.org/cryptos')">
+      {{ vm.platformSvc.getI18nString(vm.Strings.View.Support.Cryptos) }}
+    </button>
+  </div>
+  <div class="footer">
+    <a class="focused" ng-click="vm.utilitySvc.handleEvent(vm.appHelperSvc.switchView)" href="#">
+      {{ vm.platformSvc.getI18nString(vm.Strings.Button.Continue) }}
+    </a>
+  </div>
+</div>

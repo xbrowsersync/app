@@ -1,0 +1,160 @@
+@import '../../../styles/modules/all';
+
+app-bookmark {
+  display: block;
+
+  &.view .view-content {
+    display: flex;
+    flex-flow: column;
+  }
+
+  #bookmarkForm {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+  }
+
+  .btn-delete-bookmark {
+    background-color: $colour-danger;
+    color: $colour-text1-default;
+
+    @include theme-dark {
+      border-color: $colour-text2-dark;
+      color: $colour-text2-dark;
+    }
+
+    @media (hover: hover) {
+      &:not([disabled]):active,
+      &:not([disabled]):hover {
+        background-color: $colour-bg3-default;
+        border-color: $colour-bg3-default;
+        color: $colour-danger;
+
+        @include theme-dark {
+          background-color: $colour-text2-dark;
+          border-color: $colour-text2-dark;
+        }
+      }
+    }
+  }
+
+  .buttons,
+  .form-group,
+  .header-panel {
+    flex: none;
+  }
+
+  input[type='text'] {
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+
+  .mobile-landscape {
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+
+  .tags-container {
+    height: calc(100% - 3.5rem);
+    margin-bottom: 0;
+    margin-top: 1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    .badge {
+      align-items: center;
+      background-color: $colour-text2-default;
+      border: 0;
+      color: rgba($colour-text1-default, 0.9);
+      display: inline-flex;
+      font-size: 0.85rem;
+      font-weight: normal;
+      line-height: 1.2rem;
+      margin: 0 0.5rem 0.5rem 0;
+      max-width: 99%;
+
+      @include theme-dark {
+        background-color: $colour-bg3-dark;
+        color: rgba($colour-text1-dark, 0.9);
+      }
+
+      i {
+        transition: color ease-in-out 0.2s;
+
+        @include theme-dark {
+          color: $colour-text3-dark;
+        }
+      }
+
+      span {
+        @include text-overflow-ellipsis;
+
+        margin-right: 0.3rem;
+
+        @media (hover: hover) {
+          &:hover {
+            color: inherit;
+          }
+        }
+      }
+
+      @media (hover: hover) {
+        &:active i {
+          color: $colour-bg2-default !important;
+
+          @include theme-dark {
+            color: $colour-text2-dark !important;
+          }
+        }
+
+        &:hover,
+        &:focus {
+          cursor: pointer;
+
+          i {
+            color: $colour-bg2-default;
+
+            @include theme-dark {
+              color: $colour-text2-dark;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .tags-input-container {
+    background-color: $colour-bg3-default;
+    border-radius: $border-radius-input;
+    margin-bottom: 0;
+    overflow: hidden;
+
+    @include theme-dark {
+      background-color: $colour-bg3-dark;
+    }
+
+    input {
+      background: transparent;
+      border-width: 0;
+      line-height: 2.6rem;
+      position: relative;
+      text-transform: lowercase;
+      z-index: 50;
+    }
+
+    .lookahead-container {
+      left: 1rem;
+      top: 0;
+
+      .lookahead,
+      .measure {
+        text-transform: lowercase;
+      }
+    }
+  }
+
+  .textarea-container {
+    display: flex;
+    flex: 1 0 10rem;
+  }
+}

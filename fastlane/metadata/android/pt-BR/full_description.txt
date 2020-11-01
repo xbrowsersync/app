@@ -1,0 +1,27 @@
+xBrowserSync é uma ferramenta totalmente gratuita e de código aberto para sincronizar seus favoritos e dados do navegador entre os seus navegadores desktop. O xBrowserSync respeita a sua privacidade e lhe dá anonimato total — nenhum registro é necessário e nenhum dado pessoal será coletado. Ele também é completamente seguro; seus dados são criptografados pelo cliente com criptografia de categoria militar, mesmo que alguém tenha interceptado seus dados, só você pode descriptografá-los.
+
+xBrowserSync enriquece seus favoritos com a adição de descrições e tags. Uma interface de busca intuitiva permite encontrar favoritos de forma rápida e fácil, ou simplesmente navegar pela hierarquia de favoritos por pastas. E nunca se preocupe em perder seus dados graças à funcionalidade de backup e restauração incluída.
+
+A extensão da web suporta totalmente os recursos de favoritos do navegador nativo; xBrowserSync preservará sua hierarquia de favoritos existente e quaisquer alterações que você fizer usando a funcionalidade de favoritos nativos serão sincronizadas pelo xBrowserSync automaticamente. xBrowserSync vai até adicionar metadados aos novos favoritos automaticamente!
+
+Com o aplicativo móvel xBrowserSync, você pode usar xBrowserSync em qualquer lugar com o seu dispositivo Android. Depois de criar uma nova sincronização no navegador do computador usando a extensão da web, simplesmente digitalize o seu código de identificação sincronizado no aplicativo e digite sua senha para conectar-se aos seus dados sincronizados. Adicione novos favoritos facilmente compartilhando seus aplicativos favoritos (navegadores, YouTube, Spotify e qualquer outro aplicativo que compartilhe URLs), xBrowserSync até irá preencher as propriedades dos favoritos para você.
+
+Para privacidade suprema, configure seu próprio serviço de nuvem xBrowserSync no seu servidor Linux ou Windows para sincronizar. O código para o serviço de nuvem xBrowserSync é de código aberto e é fácil de configurar para qualquer indivíduo com experiência tecnológica.
+
+Bem-vindo à sincronização do navegador como deve ser: seguro, anônimo e grátis!
+
+Principais recursos:
+
+★ Sincronizar favoritos entre os navegadores do computador (sincronização de dados adicionais do navegador será adicionada em futuras versões), e acesse os favoritos no movimento usando o app Android xBrowserSync.
+★ Absolutamente gratuito, não há nenhuma cobrança por usar o serviço. Jamais.
+★ Totalmente anônimo, sem registro ou submissão de dados pessoais, basta instalar e sincronizar.
+★ Criptografa o lado do cliente de dados do seu navegador usando criptografia de nível militar que somente você pode descriptografar.
+★ Localize, modifique e compartilhe favoritos de forma rápida e fácil.
+★ Enriqueça seus favoritos com descrições e tags.
+★ Funciona com recursos de favoritos nativos do navegador.
+★ Adicione favoritos ao app para dispositivos móveis, compartilhando seus apps favoritos.
+★ Compartilhe favoritos com amigos com o aplicativo para dispositivos móveis.
+★ Faça backup e restaure seus dados sincronizados para total tranquilidade de espírito.
+★ Execute o seu próprio serviço de nuvem xBrowserSync para sincronizar com total privacidade.
+
+Para mais informações visite www.xbrowsersync.org.

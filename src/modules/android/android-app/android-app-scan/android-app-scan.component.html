@@ -1,0 +1,19 @@
+<div class="view-content" ng-if="vm.displayScanInterface">
+  <h3>{{ vm.platformSvc.getI18nString(vm.Strings.View.Scan.Title) }}</h3>
+  <div class="target" ng-class="{ 'error': vm.invalidSyncId }"></div>
+  <div class="validation" ng-show="vm.invalidSyncId">
+    {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.SyncId.Invalid) }}
+  </div>
+  <div class="buttons">
+    <button class="btn btn-fab" title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Scan.ToggleLight) }}"
+            ng-class="{ 'enabled': vm.lightEnabled }" ng-click="vm.utilitySvc.handleEvent(vm.toggleCameraLight)">
+      <i class="fas fa-bolt" aria-hidden="true"></i>
+      <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.View.Scan.ToggleLight) }}</span>
+    </button>
+    <button class="btn btn-fab" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Cancel) }}"
+            ng-click="vm.utilitySvc.handleEvent(vm.close)">
+      <i class="fas fa-times" aria-hidden="true"></i>
+      <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.Cancel) }}</span>
+    </button>
+  </div>
+</div>

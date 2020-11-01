@@ -1,0 +1,47 @@
+@import '../../../styles/modules/all';
+
+app-help {
+  display: block;
+
+  .help-page-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+  }
+
+  .help-page-content {
+    flex: 0 1 auto;
+    overflow: auto;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+
+    a {
+      position: relative;
+
+      &.next-link {
+        margin-right: 0.5rem;
+
+        span::after {
+          content: '\203A';
+          position: absolute;
+          right: -0.5rem;
+        }
+      }
+
+      &.prev-link {
+        margin-left: 0.5rem;
+
+        span::before {
+          content: '\2039';
+          left: -0.5rem;
+          position: absolute;
+        }
+      }
+    }
+  }
+}

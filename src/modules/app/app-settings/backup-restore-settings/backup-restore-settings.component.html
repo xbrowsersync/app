@@ -1,0 +1,158 @@
+<div class="well well-sm">
+  <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Title) }}</h4>
+  <div class="panel-content">
+    <div class="form-group setting-group"
+         ng-if="!vm.syncEnabled && vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
+      <p class="description text-center"
+         ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Settings.NotAvailable)">
+      </p>
+    </div>
+    <div ng-show="vm.syncEnabled || !vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
+      <div class="form-group setting-group">
+        <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Backup.Title) }}</label>
+        <p class="description" ng-if="!vm.syncEnabled">{{
+        vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Backup.Local) }}</p>
+        <p class="description" ng-if="vm.syncEnabled">{{
+        vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Backup.Synced) }}</p>
+        <div class="buttons animate-fade-in" ng-hide="vm.backupCompletedMessage">
+          <button class="btn btn-default" ng-disabled="vm.savingBackup" ng-class="{ 'working': vm.savingBackup }"
+                  ng-click="vm.utilitySvc.handleEvent(vm.downloadBackup)" ng-disabled="vm.savingBackup">
+            <span class="spinner-border spinner-border-sm" ng-show="vm.savingBackup" role="status"
+                  aria-hidden="true"></span>
+            <span ng-show="vm.savingBackup">{{
+            vm.platformSvc.getI18nString(vm.Strings.Button.Saving) }}
+            </span>
+            <span ng-hide="vm.savingBackup">{{
+            vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Backup.Button) }}</span>
+          </button>
+        </div>
+        <div class="confirm animate-fade-in backup-completed" ng-show="vm.backupCompletedMessage">
+          <p>{{ vm.backupCompletedMessage }}</p>
+          <p class="text-center">
+            <a id="backupLink"></a>
+          </p>
+          <div class="buttons">
+            <button class="btn btn-default focused" ng-click="vm.backupCompletedMessage = null">
+              {{ vm.platformSvc.getI18nString(vm.Strings.Button.Done) }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group setting-group">
+        <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.Title) }}</label>
+        <p class="description" ng-if="!vm.syncEnabled">{{
+        vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.Local.Description) }}</p>
+        <p class="description" ng-if="vm.syncEnabled">{{
+        vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.Synced.Description) }}</p>
+        <div class="buttons animate-fade-in"
+             ng-hide="vm.displayRestoreForm || vm.displayRestoreConfirmation || vm.restoreCompletedMessage">
+          <button class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.displayRestorePanel)">
+            {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.Button) }}
+          </button>
+        </div>
+        <form id="restoreForm" name="vm.restoreForm" class="confirm animate-fade-in" ng-show="vm.displayRestoreForm"
+              novalidate>
+          <input type="file" name="files[]" id="backupFile" class="d-none" tabindex="-1" />
+          <p ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
+            {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.Copy) }}
+          </p>
+          <div>
+            <label for="dataToRestore"
+                   class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.Paste) }}
+            </label>
+            <div class="form-group" ng-class="{ 'has-error': vm.restoreForm.dataToRestore.$invalid }">
+              <input type="hidden" name="dataToRestore" ng-model="vm.dataToRestore"></input>
+              <textarea ng-model="vm.dataToRestore" class="form-control" rows="3"
+                        ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"
+                        ng-change="vm.resetFormValidity()" autocapitalize="off" autocomplete="off" autocorrect="off"
+                        spellcheck="false"></textarea>
+              <input type="text" ng-model="vm.backupFileName" class="form-control" readonly
+                     placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.SelectFile.Placeholder) }}…"
+                     ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"></input>
+              <div class="validation" ng-if="vm.restoreForm.dataToRestore.$invalid">
+                <span ng-if="vm.restoreForm.dataToRestore.$error.InvalidData">
+                  {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.Invalid) }}
+                </span>
+              </div>
+              <span class="spinner-border spinner-border-sm" ng-show="vm.validatingRestoreData" role="status"
+                    aria-hidden="true"></span>
+            </div>
+            <div class="buttons" ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
+              <button class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.selectBackupFile)">
+                {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.SelectFile.Button) }}
+              </button>
+            </div>
+          </div>
+          <div class="buttons">
+            <button class="btn btn-default btn-restore"
+                    ng-disabled="!vm.dataToRestore || vm.restoreForm.dataToRestore.$invalid"
+                    ng-click="vm.utilitySvc.handleEvent(vm.restore)">
+              {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.RestoreData) }}
+            </button>
+            <button type="reset" class="btn btn-default" ng-click="vm.displayRestoreForm = false">
+              {{ vm.platformSvc.getI18nString(vm.Strings.Button.Cancel) }}
+            </button>
+          </div>
+        </form>
+        <div class="confirm animate-fade-in" ng-show="vm.displayRestoreConfirmation">
+          <div ng-if="vm.syncEnabled"
+               ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.Synced.Confirm)">
+          </div>
+          <div ng-if="!vm.syncEnabled"
+               ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.Local.Confirm)">
+          </div>
+          <div class="buttons">
+            <button class="btn btn-default btn-confirm-restore" ng-click="vm.utilitySvc.handleEvent(vm.confirmRestore)">
+              {{ vm.platformSvc.getI18nString(vm.Strings.Button.Confirm) }}
+            </button>
+            <button type="reset" class="btn btn-default" ng-click="vm.displayRestoreConfirmation = false">
+              {{ vm.platformSvc.getI18nString(vm.Strings.Button.Deny) }}
+            </button>
+          </div>
+        </div>
+        <div class="confirm animate-fade-in restore-completed" ng-show="vm.restoreCompletedMessage">
+          <p>{{ vm.restoreCompletedMessage }}</p>
+          <div class="buttons">
+            <button class="btn btn-default focused" ng-click="vm.restoreCompletedMessage = null">
+              {{ vm.platformSvc.getI18nString(vm.Strings.Button.Done) }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group setting-group" ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
+        <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Revert.Title) }}</label>
+        <p class="description">
+          {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Revert.Description) }}</p>
+        <div class="buttons animate-fade-in"
+             ng-hide="vm.displayRevertConfirmation || vm.revertCompleted || vm.revertUnavailable">
+          <button class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.displayRevertPanel)">
+            {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Revert.Button) }}
+          </button>
+        </div>
+        <div class="confirm animate-fade-in" ng-show="vm.displayRevertConfirmation">
+          <div ng-bind-html="vm.revertConfirmationMessage"></div>
+          <div class="buttons">
+            <button class="btn btn-default btn-confirm-restore" ng-click="vm.utilitySvc.handleEvent(vm.confirmRevert)">
+              {{ vm.platformSvc.getI18nString(vm.Strings.Button.Confirm) }}
+            </button>
+            <button type="reset" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.closeRevertPanel)">
+              {{ vm.platformSvc.getI18nString(vm.Strings.Button.Deny) }}
+            </button>
+          </div>
+        </div>
+        <div class="confirm animate-fade-in revert-completed" ng-show="vm.revertCompleted || vm.revertUnavailable">
+          <div></div>
+          <p ng-if="vm.revertCompleted">
+            {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Revert.Done) }}</p>
+          <p ng-if="vm.revertUnavailable">
+            {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Revert.Unavailable) }}</p>
+          <div class="buttons">
+            <button class="btn btn-default focused" ng-click="vm.utilitySvc.handleEvent(vm.closeRevertPanel)">
+              {{ vm.platformSvc.getI18nString(vm.Strings.Button.Done) }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

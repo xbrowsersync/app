@@ -1,0 +1,239 @@
+@import '../../../styles/modules/all';
+
+* {
+  user-select: none;
+}
+
+:root {
+  @media (orientation: portrait) and (min-width: 321px) {
+    font-size: 16px;
+  }
+  @media (orientation: portrait) and (min-width: 411px) {
+    font-size: 18px;
+  }
+  @media (orientation: portrait) and (min-width: 480px) {
+    font-size: 20px;
+  }
+  @media (orientation: portrait) and (min-width: 600px) {
+    font-size: 22px;
+  }
+  @media (orientation: portrait) and (min-width: 760px) {
+    font-size: 26px;
+  }
+  @media (orientation: portrait) and (min-width: 800px) {
+    font-size: 30px;
+  }
+  @media (orientation: portrait) and (min-width: 900px) {
+    font-size: 32px;
+  }
+
+  @media (orientation: landscape) and (min-width: 720px) and (min-height: 361px) {
+    font-size: 16px;
+  }
+  @media (orientation: landscape) and (min-width: 813px) {
+    font-size: 18px;
+  }
+  @media (orientation: landscape) and (min-width: 900px) {
+    font-size: 20px;
+  }
+  @media (orientation: landscape) and (min-width: 960px) {
+    font-size: 22px;
+  }
+  @media (orientation: landscape) and (min-width: 980px) {
+    font-size: 24px;
+  }
+  @media (orientation: landscape) and (min-width: 1200px) {
+    font-size: 28px;
+  }
+  @media (orientation: landscape) and (min-width: 1280px) {
+    font-size: 32px;
+  }
+}
+
+html,
+body {
+  height: 100%;
+  overflow: auto;
+}
+
+body {
+  background: transparent;
+  overflow: auto;
+}
+
+a {
+  &:hover {
+    color: unset;
+    text-decoration: none;
+  }
+}
+
+h2 {
+  font-size: 1.6em;
+}
+
+input,
+textarea {
+  user-select: text;
+}
+
+textarea.form-control {
+  padding: 0.5rem 1rem;
+}
+
+.checkbox {
+  height: 1.5rem;
+  width: 3rem;
+
+  input[type='checkbox']:checked + label {
+    left: 1.65rem;
+  }
+
+  label {
+    height: 1.2rem;
+    width: 1.2rem;
+  }
+}
+
+.view-content {
+  height: 100%;
+
+  &.ng-enter {
+    z-index: 10 !important;
+  }
+
+  &.ng-leave {
+    z-index: 20;
+  }
+}
+
+.well {
+  button.btn.btn-default {
+    font-size: 1rem;
+  }
+}
+
+app {
+  .container {
+    height: 100vh;
+  }
+
+  .header-panel {
+    font-size: 1.5rem;
+
+    button {
+      font-size: 1.5em;
+      line-height: 0.9em;
+    }
+  }
+
+  .lookahead-container .lookahead::after {
+    @include icon('\f0d0');
+
+    margin-left: 0.25em;
+    position: absolute;
+  }
+}
+
+app-background {
+  .background {
+    @include animation-fade-in();
+  }
+}
+
+app-login {
+  .form-group {
+    input {
+      font-size: 0.92em;
+    }
+  }
+
+  .login-form-existing,
+  .login-form-new,
+  .update-service-panel {
+    height: auto;
+  }
+
+  .login-form-new {
+    .toggle-form {
+      display: block;
+    }
+  }
+
+  .logo {
+    background-size: 10rem;
+    flex-basis: 16rem;
+  }
+
+  .well {
+    margin-bottom: 0;
+  }
+
+  @media (orientation: landscape) {
+    form {
+      align-items: center;
+      display: flex;
+      flex-basis: 40%;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: center;
+
+      .form-content {
+        display: flex;
+        height: auto;
+        justify-content: center;
+
+        & > div {
+          position: initial;
+        }
+      }
+    }
+
+    .header-panel {
+      position: absolute;
+      top: 0.75rem;
+      width: calc(100% - 1.5rem);
+    }
+
+    .logo {
+      background-position: 90% 50%;
+      background-size: 13rem;
+      flex: 1 12rem;
+      height: 100%;
+    }
+
+    &.view .view-content {
+      align-items: center;
+      flex-direction: row;
+    }
+  }
+}
+
+app-settings {
+  sync-settings {
+    .id-url,
+    .service-url {
+      @media (orientation: landscape) {
+        position: absolute;
+        width: auto;
+      }
+    }
+
+    qr-panel {
+      #qr {
+        @media (orientation: landscape) {
+          height: 7rem;
+          width: 7rem;
+        }
+      }
+    }
+  }
+}
+
+app-support {
+  @media (orientation: landscape) {
+    .footer {
+      margin-top: 0;
+    }
+  }
+}

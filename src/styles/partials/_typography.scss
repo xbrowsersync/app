@@ -1,0 +1,61 @@
+h2 {
+  float: left;
+  font-size: 1.5em;
+  font-weight: 800;
+  line-height: 1em;
+  margin-bottom: 0;
+}
+
+h4 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.75rem;
+  margin-top: 0;
+}
+
+a {
+  border-bottom-style: dotted;
+  border-bottom-width: 1px;
+  color: inherit;
+  cursor: pointer;
+  transition: all ease-in-out 0.2s;
+
+  @include theme-dark {
+    border-bottom-color: $colour-text2-dark;
+    color: $colour-text2-dark;
+  }
+
+  @media (hover: hover) {
+    &:active,
+    &:focus,
+    &:hover {
+      border-bottom-color: $colour-bg2-default;
+      color: $colour-bg2-default;
+      outline: 0;
+      text-decoration: none;
+
+      @include theme-dark {
+        border-bottom-color: $colour-text1-dark;
+        color: $colour-text1-dark;
+      }
+    }
+  }
+}
+
+p {
+  margin: 0 0 0.75rem;
+}
+
+.text {
+  &-success {
+    color: $colour-success !important;
+  }
+
+  &-warning {
+    color: $colour-warning !important;
+  }
+
+  &-danger {
+    color: $colour-danger !important;
+  }
+}

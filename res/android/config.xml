@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.xBrowserSync.android" android-versionCode="16001" version="1.6.0" 
+  xmlns="http://www.w3.org/ns/widgets" 
+  xmlns:android="http://schemas.android.com/apk/res/android" 
+  xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>xBrowserSync</name>
+  <description>Browser syncing as it should be: secure, anonymous and free!</description>
+  <author email="admin@xbrowsersync.org" href="https://www.xbrowsersync.org" />
+  <content src="app.html" />
+  <access origin="*" />
+  <allow-intent href="http://*/*" />
+  <allow-intent href="https://*/*" />
+  <allow-intent href="tel:*" />
+  <allow-intent href="sms:*" />
+  <allow-intent href="mailto:*" />
+  <allow-intent href="geo:*" />
+  <platform name="android">
+    <allow-intent href="market:*" />
+    <config-file target="AndroidManifest.xml" parent="/manifest/application/activity[@android:name='MainActivity']">
+      <intent-filter android:label="@string/intent_label">
+        <action android:name="android.intent.action.SEND" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="text/plain" />
+      </intent-filter>
+    </config-file>
+    <config-file target="res/values/strings.xml" parent="/*">
+      <string name="intent_label">Add Bookmark</string>
+    </config-file>
+    <edit-config file="AndroidManifest.xml" target="/manifest/application" mode="merge">
+      <application android:icon="@mipmap/ic_launcher" android:usesCleartextTraffic="true" android:roundIcon="@mipmap/ic_launcher_round" />
+    </edit-config>
+    <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:name='MainActivity']" mode="merge">
+      <activity android:allowBackup="false" android:fullBackupOnly="false" android:theme="@style/AppTheme" android:windowSoftInputMode="adjustPan" />
+    </edit-config>
+    <hook type="before_build" src="scripts/beforeBuild.js" />
+    <resource-file src="res/android/drawable/app_background.xml" target="app/src/main/res/drawable/app_background.xml" />
+    <resource-file src="res/android/drawable/app_background_bg.xml" target="app/src/main/res/drawable/app_background_bg.xml" />
+    <resource-file src="res/android/drawable/app_background_fg.xml" target="app/src/main/res/drawable/app_background_fg.xml" />
+    <resource-file src="res/android/drawable/ic_launcher_foreground.xml" target="app/src/main/res/drawable/ic_launcher_foreground.xml" />
+    <resource-file src="res/android/drawable-v24/ic_launcher_background.xml" target="app/src/main/res/drawable-v24/ic_launcher_background.xml" />
+    <resource-file src="res/android/drawable-night/app_background_bg.xml" target="app/src/main/res/drawable-night/app_background_bg.xml" />
+    <resource-file src="res/android/drawable-night/app_background_fg.xml" target="app/src/main/res/drawable-night/app_background_fg.xml" />
+    <resource-file src="res/android/mipmap-anydpi-v26/ic_launcher.xml" target="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" />
+    <resource-file src="res/android/mipmap-anydpi-v26/ic_launcher_round.xml" target="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" />
+    <resource-file src="res/android/mipmap-hdpi/ic_launcher.png" target="app/src/main/res/mipmap-hdpi/ic_launcher.png" />
+    <resource-file src="res/android/mipmap-hdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-hdpi/ic_launcher_round.png" />
+    <resource-file src="res/android/mipmap-mdpi/ic_launcher.png" target="app/src/main/res/mipmap-mdpi/ic_launcher.png" />
+    <resource-file src="res/android/mipmap-mdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-mdpi/ic_launcher_round.png" />
+    <resource-file src="res/android/mipmap-xhdpi/ic_launcher.png" target="app/src/main/res/mipmap-xhdpi/ic_launcher.png" />
+    <resource-file src="res/android/mipmap-xhdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-xhdpi/ic_launcher_round.png" />
+    <resource-file src="res/android/mipmap-xxhdpi/ic_launcher.png" target="app/src/main/res/mipmap-xxhdpi/ic_launcher.png" />
+    <resource-file src="res/android/mipmap-xxhdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png" />
+    <resource-file src="res/android/mipmap-xxxhdpi/ic_launcher.png" target="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
+    <resource-file src="res/android/mipmap-xxxhdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" />
+    <resource-file src="res/android/values/colors.xml" target="app/src/main/res/values/colors.xml" />
+    <resource-file src="res/android/values/styles.xml" target="app/src/main/res/values/styles.xml" />
+    <resource-file src="res/android/values-night/colors.xml" target="app/src/main/res/values-night/colors.xml" />
+  </platform>
+  <preference name="android-minSdkVersion" value="28" />
+  <preference name="android-targetSdkVersion" value="29" />
+  <preference name="AndroidLaunchMode" value="singleTask" />
+  <preference name="BackgroundColor" value="#00000000"/>
+  <preference name="DisallowOverscroll" value="true" />
+  <preference name="OverrideUserAgent" value="Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" />
+</widget>

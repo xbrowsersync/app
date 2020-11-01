@@ -1,0 +1,184 @@
+.checkbox {
+  background: darken($colour-bg2-default, 50%);
+  border-radius: $border-radius-input;
+  cursor: pointer;
+  height: 1.3rem;
+  padding: 0.15rem;
+  position: relative;
+  width: 2.5rem;
+
+  @include theme-dark {
+    background: darken($colour-bg2-dark, 50%);
+  }
+
+  input {
+    display: none;
+
+    &[type='checkbox'] {
+      & + label {
+        background: scale-color($colour-bg2-default, $lightness: -30%, $saturation: -70%);
+
+        @include theme-dark {
+          background: scale-color($colour-bg2-dark, $lightness: -30%, $saturation: -70%);
+        }
+      }
+
+      &:checked + label {
+        background: $colour-bg2-default;
+        left: 1.35rem;
+
+        @include theme-dark {
+          background: $colour-text3-dark;
+        }
+      }
+    }
+  }
+
+  label {
+    border-radius: 50%;
+    display: block;
+    height: 1rem;
+    left: 0.15rem;
+    margin: 0 !important;
+    min-height: 0;
+    min-width: 0;
+    padding: 0;
+    pointer-events: none;
+    position: absolute;
+    width: 1rem;
+
+    &.animate {
+      transition: all 0.25s ease;
+    }
+  }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  position: relative;
+
+  &.btn-icon-container {
+    input {
+      padding-right: 2.3rem !important;
+    }
+
+    .btn-icon {
+      background-color: $colour-text2-default;
+      border-radius: $border-radius-input;
+      color: $colour-bg3-default;
+      font-size: 0.9em;
+      height: 2.1em;
+      margin-top: -1.05em;
+      position: absolute;
+      right: 0.3em;
+      top: 50%;
+      width: 2.1em;
+      z-index: 55;
+
+      @include theme-dark {
+        background-color: $colour-text2-dark;
+        color: $colour-bg3-dark;
+      }
+
+      i {
+        margin: auto;
+        opacity: 1 !important;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      @media (hover: hover) {
+        &:focus {
+          border-color: darken($colour-text3-default, 15%);
+          border-style: solid;
+          border-width: 1px;
+
+          @include theme-dark {
+            border-color: darken($colour-text3-dark, 15%);
+          }
+
+          &:hover {
+            border-width: 0;
+          }
+        }
+      }
+    }
+  }
+
+  &.has-error {
+    input,
+    textarea {
+      &.form-control {
+        border-color: $colour-danger !important;
+        border-style: solid !important;
+        border-width: 1px !important;
+        color: $colour-danger !important;
+
+        &::placeholder {
+          color: $colour-danger !important;
+          opacity: 0.8 !important;
+        }
+      }
+    }
+  }
+
+  input,
+  textarea {
+    &.form-control {
+      background-color: $colour-bg3-default;
+      border-color: $colour-bg3-default;
+      border-style: solid;
+      border-width: 1px;
+      color: $colour-text2-default;
+      font-size: 1rem;
+      resize: none;
+      width: 100%;
+
+      @include theme-dark {
+        background-color: $colour-bg3-dark;
+        border-color: $colour-bg3-dark;
+        color: $colour-text2-dark;
+      }
+
+      &::placeholder {
+        color: $colour-text3-default;
+
+        @include theme-dark {
+          color: $colour-text3-dark;
+        }
+      }
+    }
+  }
+
+  input.form-control {
+    border-radius: $border-radius-input;
+    line-height: 2.4rem;
+    padding: 0 1rem;
+  }
+
+  textarea.form-control {
+    border-radius: 1.1rem;
+    line-height: 1.2rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+.validation {
+  background: $colour-danger;
+  border-radius: $border-radius-input;
+  color: $colour-text1-default;
+  font-size: 0.75rem;
+  left: 50%;
+  line-height: 1.15rem;
+  padding: 0 0.5rem;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  z-index: 60;
+
+  @include theme-dark {
+    background: $colour-danger;
+    color: $colour-text1-dark;
+  }
+}

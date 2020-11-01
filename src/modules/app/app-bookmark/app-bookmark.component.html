@@ -1,0 +1,105 @@
+<div class="view-content">
+  <form id="bookmarkForm" name="vm.bookmarkForm" novalidate>
+    <button type="submit" class="d-none" tabindex="-1"></button>
+    <div class="header-panel">
+      <h2 ng-if="vm.editMode">{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Edit)
+      }}</h2>
+      <h2 ng-if="!vm.editMode">{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Add)
+      }}</h2>
+      <button class="btn btn-icon btn-close" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Close) }}"
+              ng-click="vm.utilitySvc.handleEvent(vm.close)" tabindex="1000">
+        <i class="fas fa-times-circle" aria-hidden="true"></i>
+        <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.Close) }}</span>
+      </button>
+    </div>
+    <div class="form-group">
+      <label for="bookmarkTitle" class="sr-only">{{
+      vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Title) }}</label>
+      <input type="text" name="bookmarkTitle" ng-model="vm.bookmarkFormData.title" class="form-control"
+             ng-class="{ 'focused': vm.editMode }" maxlength="255" autocomplete="off"
+             placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Title) }}">
+    </div>
+    <div class="form-group" ng-class="{ 
+      'btn-icon-container': vm.displayUpdatePropertiesButton,
+      'has-error': vm.bookmarkForm.bookmarkUrl.$invalid
+    }">
+      <label for="bookmarkUrl" class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Url.Label)
+      }}</label>
+      <input type="text" name="bookmarkUrl" ng-model="vm.bookmarkFormData.url" class="form-control"
+             ng-class="{ 'focused': !vm.editMode && vm.bookmarkFormData.url === vm.defaultProtocol }" placeholder="URL"
+             ng-change="vm.urlChanged()" maxlength="2000" autocapitalize="off" autocorrect="off" spellcheck="false"
+             required placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Url.Label) }}">
+      <button class="btn btn-icon" ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"
+              title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.UpdateProperties) }}"
+              ng-show="vm.displayUpdatePropertiesButton"
+              ng-click="vm.utilitySvc.handleEvent(vm.populateFromUrlMetadata)">
+        <i class="fas fa-cloud-download-alt" aria-hidden="true"></i>
+      </button>
+      <div class="validation" ng-if="vm.bookmarkFormData && vm.bookmarkForm.bookmarkUrl.$error.required">
+        {{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Url.Required) }}
+      </div>
+      <div class="validation" ng-if="vm.bookmarkFormData && vm.bookmarkForm.bookmarkUrl.$error.Exists">
+        {{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Url.Exists) }}
+      </div>
+    </div>
+    <div class="form-group textarea-container">
+      <label for="bookmarkDescription" class="sr-only">{{
+      vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Description) }}</label>
+      <textarea name="bookmarkDescription" ng-model="vm.bookmarkFormData.description" class="form-control"
+                ng-keydown="vm.utilitySvc.handleEvent(vm.descriptionChanged)"
+                placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Description) }}"></textarea>
+    </div>
+    <div class="mobile-landscape">
+      <div class="form-group tags-input-container btn-icon-container">
+        <label for="bookmarkTags" class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Tags.Label)
+      }}</label>
+        <input type="text" name="bookmarkTags" ng-model="vm.tagText" class="form-control"
+               placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Tags.Placeholder) }}…"
+               maxlength="50" ng-change="vm.tagsTextChanged()"
+               ng-keydown="vm.utilitySvc.handleEvent(vm.tagsTextKeyDown, $event)" ng-trim="false" autocapitalize="off"
+               autocomplete="off" autocorrect="off">
+        <div class="lookahead-container">
+          <span class="measure" ng-bind-html="vm.tagTextMeasure"></span>
+          <span class="lookahead" ng-bind-html="vm.tagLookahead" ng-show="vm.tagLookahead"
+                ng-click="vm.utilitySvc.handleEvent(vm.selectTagsLookahead)"></span>
+        </div>
+        <button class="btn btn-icon" ng-show="vm.bookmarkFormData.tags.length > 0"
+                title="{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Tags.Clear) }}"
+                ng-click="vm.utilitySvc.handleEvent(vm.clearExistingTags)">
+          <i class="fas fa-trash-alt" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="form-group tags-container" ng-show="vm.bookmarkFormData.tags.length > 0">
+        <button class="badge badge-pill" ng-repeat="tag in vm.bookmarkFormData.tags track by $index"
+                ng-click="vm.utilitySvc.handleEvent(vm.removeTag, tag)">
+          <span>{{ tag }}</span>
+          <i class="fas fa-times" aria-hidden="true"></i>
+          <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Tags.Remove) }}</span>
+        </button>
+      </div>
+    </div>
+    <div class="buttons">
+      <button type="button" class="btn btn-default"
+              ng-class="{ 'focused': !vm.editMode && vm.bookmarkFormData.url !== vm.defaultProtocol }"
+              ng-if="!vm.editMode"
+              ng-disabled="(vm.addButtonDisabledUntilEditForm && vm.bookmarkForm.$pristine) || vm.bookmarkForm.$invalid"
+              ng-click="vm.utilitySvc.handleEvent(vm.createBookmark)">
+        {{ vm.platformSvc.getI18nString(vm.Strings.Button.AddBookmark) }}
+      </button>
+      <button type="button" class="btn btn-default" ng-if="vm.editMode"
+              ng-disabled="vm.bookmarkForm.$pristine || vm.bookmarkForm.$invalid"
+              ng-click="vm.utilitySvc.handleEvent(vm.updateBookmark)">
+        {{ vm.platformSvc.getI18nString(vm.Strings.Button.Update) }}
+      </button>
+      <button type="button" class="btn btn-default"
+              ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) && vm.editMode"
+              ng-click="vm.utilitySvc.handleEvent(vm.shareBookmark, $event, vm.bookmarkFormData)">
+        {{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Share) }}
+      </button>
+      <button type="button" class="btn btn-default btn-delete-bookmark" ng-if="vm.editMode"
+              ng-click="vm.utilitySvc.handleEvent(vm.deleteBookmark)">
+        {{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Delete) }}
+      </button>
+    </div>
+  </form>
+</div>

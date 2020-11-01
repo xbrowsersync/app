@@ -1,0 +1,109 @@
+@import '../../../styles/modules/all';
+
+app-search {
+  display: block;
+
+  &.view .view-content {
+    display: flex;
+    flex-flow: column;
+    padding: 0;
+  }
+
+  .bookmark-tree-container,
+  .search-results-container {
+    flex: 0 1 100%;
+    overflow: auto;
+    padding: 0 0.75rem;
+
+    & > h4 {
+      font-size: 1.4rem;
+      font-weight: normal;
+      text-align: center;
+    }
+  }
+
+  .header-panel {
+    flex: none;
+    margin-bottom: 0;
+    padding: 0.75rem;
+
+    .btn-icon {
+      margin-left: 0.5rem;
+    }
+
+    .btn-toggle-bookmark {
+      &.active {
+        i {
+          font-weight: 900;
+        }
+      }
+    }
+
+    .search-form {
+      background-color: $colour-bg3-default;
+      border-radius: $border-radius-input;
+      flex: 0 1 100%;
+      margin-bottom: 0;
+      position: relative;
+
+      @include theme-dark {
+        background-color: $colour-bg3-dark;
+      }
+
+      label {
+        color: $colour-text3-default;
+        font-size: 0.85em;
+        left: 0.75rem;
+        margin-bottom: 0;
+        margin-top: -0.5em;
+        position: absolute;
+        top: 50%;
+        z-index: 60;
+
+        @include theme-dark {
+          color: $colour-text3-dark;
+        }
+      }
+
+      input {
+        background: transparent;
+        border-width: 0;
+        font-size: 1.1em;
+        line-height: 1.5em;
+        padding: 0 1.5em;
+        position: relative;
+        width: 100%;
+        z-index: 50;
+
+        &::placeholder {
+          color: $colour-text3-default;
+
+          @include theme-dark {
+            color: $colour-text3-dark;
+          }
+        }
+      }
+
+      .btn-clear {
+        font-size: 0.7em;
+        height: 1.7em;
+        line-height: 1.5em;
+        margin-top: -0.85em;
+        width: 1.7em;
+      }
+
+      .lookahead-container {
+        font-size: 1.1em;
+        left: 1.5em;
+        top: 0;
+        width: calc(100% - 3em);
+      }
+    }
+  }
+
+  .search-results-container {
+    &.ng-hide {
+      margin-top: 0;
+    }
+  }
+}

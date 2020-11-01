@@ -1,0 +1,27 @@
+@import '../../../../styles/modules/all';
+
+qr-panel {
+  display: block;
+  flex-direction: column;
+  padding: 2rem;
+
+  p {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .buttons {
+    margin-top: 0;
+
+    button {
+      display: block;
+      margin: 1rem auto 0 !important;
+    }
+  }
+
+  #qr {
+    height: 14rem;
+    margin-bottom: 1rem;
+    width: 14rem;
+  }
+}

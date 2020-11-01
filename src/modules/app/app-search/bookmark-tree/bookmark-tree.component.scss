@@ -1,0 +1,133 @@
+@import '../../../../styles/modules/all';
+
+bookmark-tree {
+  &.root > .folder > .bookmark-content {
+    @include theme-dark {
+      background-color: $colour-bg3-dark;
+    }
+  }
+
+  bookmark {
+    &.folder {
+      box-shadow: none;
+      color: $colour-text1-default;
+      max-height: none;
+      transition: background-color ease-in-out 0.2s;
+
+      @include theme-dark {
+        color: $colour-text2-dark;
+      }
+
+      &.open {
+        & > .bookmark-content > .bookmark-heading {
+          margin-bottom: 0.75rem;
+
+          &::before {
+            @include icon('\f07c');
+          }
+
+          @media (hover: hover) {
+            &:hover::after {
+              @include icon('\f106');
+            }
+          }
+        }
+      }
+
+      & > .bookmark-content {
+        background-color: rgba($colour-text2-default, 0.3);
+        padding: 0.5rem 1rem;
+
+        @include theme-dark {
+          background-color: rgba($colour-text3-dark, 0.2);
+        }
+
+        & > .bookmark-heading {
+          color: $colour-text1-default;
+          margin-right: 0;
+          padding-left: 1.75rem;
+          padding-right: 1.5rem;
+
+          @include theme-dark {
+            color: $colour-text2-dark;
+          }
+
+          &::before {
+            @include icon('\f07b');
+            @include valign;
+
+            left: 0;
+          }
+
+          &::after {
+            @include icon('\f107');
+            @include valign;
+
+            color: $colour-bg2-default;
+            font-size: 1.3em;
+            opacity: 0;
+            right: 0;
+
+            @include theme-dark {
+              color: rgba($colour-text1-dark, 0.6);
+            }
+          }
+
+          @media (hover: hover) {
+            &:hover {
+              cursor: pointer;
+
+              &:not(.opening)::after {
+                opacity: 0.6;
+              }
+            }
+          }
+        }
+
+        .empty {
+          font-style: italic;
+          margin: 0.25rem 0 0;
+          text-align: center;
+        }
+
+        .spinner-border {
+          @include valign;
+
+          opacity: 0.6;
+          right: 0;
+
+          @include theme-dark {
+            @include spinner-colour(rgba($colour-text1-dark, 0.6));
+          }
+        }
+      }
+    }
+
+    .bookmark-content {
+      @include theme-dark {
+        background-color: rgba($colour-text3-dark, 0.2);
+      }
+
+      .bookmark-text .url {
+        @include theme-dark {
+          color: darken($colour-text2-dark, 10%);
+        }
+      }
+    }
+
+    @media (hover: hover) {
+      &:not(.folder) {
+        &:focus,
+        &:hover {
+          & > .bookmark-content {
+            background-color: scale-color($colour-bg2-default, $lightness: 70%, $saturation: 50%);
+
+            @include theme-dark {
+              background-color: rgba($colour-text3-dark, 0.4);
+            }
+          }
+        }
+      }
+    }
+  }
+}

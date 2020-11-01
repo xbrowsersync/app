@@ -1,0 +1,23 @@
+.bottom {
+  display: table-cell;
+  position: relative;
+  vertical-align: bottom;
+}
+
+.darken {
+  height: 100%;
+  left: 0;
+  opacity: 0.8;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+.ellipsis {
+  @include ellipsis;
+}
+
+.margin-bottom-0 {
+  margin-bottom: 0 !important;
+}

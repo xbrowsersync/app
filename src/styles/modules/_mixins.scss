@@ -1,0 +1,57 @@
+@mixin animation($str) {
+  animation: $str;
+}
+
+@mixin background-gradient($direction, $startColor, $startColorAmount, $endColor, $endColorAmount) {
+  background: linear-gradient($direction, $startColor $startColorAmount, $endColor $endColorAmount);
+  background-color: $startColor;
+  filter: progid:dximagetransform.microsoft.gradient(startColorStr='#{$startColor}', endColorStr='#{$endColor}');
+}
+
+@mixin box-shadow {
+  box-shadow: 0.5rem 0.9rem 1.5rem rgba(0, 0, 0, 0.25);
+}
+
+@mixin ellipsis {
+  &::after {
+    content: '\2026';
+  }
+}
+
+@mixin icon($unicode) {
+  content: $unicode;
+  font-family: $font-stack-icons;
+  font-weight: 900;
+}
+
+@mixin spinner-colour($colour) {
+  border-color: $colour;
+  border-right-color: transparent;
+}
+
+@mixin text-overflow-ellipsis {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+
+@mixin theme-default() {
+  .theme-default & {
+    @content;
+  }
+}
+
+@mixin theme-dark() {
+  .theme-dark & {
+    @content;
+  }
+}
+
+@mixin valign {
+  bottom: 0;
+  margin: auto;
+  position: absolute;
+  top: 0;
+}

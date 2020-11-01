@@ -1,0 +1,122 @@
+@import '../../../styles/modules/all';
+
+app-settings {
+  display: block;
+
+  &.view .view-content {
+    padding: 0.75rem 0 0;
+  }
+
+  .header-panel,
+  .panel-container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .header-panel {
+    flex: none;
+  }
+
+  .panel-container {
+    overflow-y: auto;
+  }
+
+  .setting-group {
+    a {
+      @include theme-dark {
+        color: $colour-text2-dark;
+
+        @media (hover: hover) {
+          &:active,
+          &:focus,
+          &:hover {
+            border-bottom-color: $colour-text1-dark;
+            color: $colour-text1-dark;
+          }
+        }
+      }
+    }
+
+    label {
+      margin-bottom: 0.25rem;
+    }
+
+    p {
+      font-size: 0.95rem;
+    }
+
+    #backupLink {
+      font-size: 0.9rem;
+    }
+
+    .description {
+      color: $colour-text3-default;
+
+      @include theme-dark {
+        color: $colour-text3-dark;
+      }
+
+      a {
+        @include theme-dark {
+          color: $colour-text3-dark;
+
+          @media (hover: hover) {
+            &:active,
+            &:focus,
+            &:hover {
+              border-bottom-color: $colour-text1-dark;
+              color: $colour-text1-dark;
+            }
+          }
+        }
+      }
+    }
+
+    .setting-value {
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      color: $colour-text2-default;
+      height: auto;
+      padding: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      transition: none;
+      width: auto;
+
+      @include theme-dark {
+        color: $colour-text2-dark;
+      }
+    }
+  }
+
+  .well {
+    overflow: hidden;
+    padding: 0;
+
+    h4 {
+      margin-bottom: 0;
+      padding: 0.75rem 1rem;
+    }
+
+    .btn.btn-default {
+      font-size: 1.1rem;
+      line-height: 2.3rem;
+    }
+
+    .panel-content {
+      padding: 0 1.25rem;
+    }
+  }
+
+  @media (hover: hover) {
+    a {
+      &:active,
+      &:focus,
+      &:hover {
+        border-bottom-color: inherit;
+      }
+    }
+  }
+}

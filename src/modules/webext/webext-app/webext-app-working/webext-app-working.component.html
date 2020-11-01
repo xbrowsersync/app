@@ -1,0 +1,12 @@
+<div class="animate overlay" ng-class="{ 'darker-overlay': !vm.fullViewMode, 'fullsize': vm.fullViewMode }"
+     ng-show="vm.show || vm.fullViewMode">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">{{ vm.message }}</span>
+  </div>
+  <h3>{{ vm.message }}</h3>
+  <div class="buttons" ng-if="vm.enableCancel">
+    <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.cancelSync)">
+      {{ vm.platformSvc.getI18nString(vm.Strings.Button.Cancel) }}
+    </button>
+  </div>
+</div>

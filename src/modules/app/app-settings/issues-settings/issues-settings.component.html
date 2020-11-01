@@ -1,0 +1,67 @@
+<div class="well well-sm">
+  <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Issues.Title) }}</h4>
+  <div class="panel-content">
+    <div class="form-group setting-group">
+      <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Issues.Help.Title) }}</label>
+      <p class="description">{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Issues.Help.Description) }}
+      </p>
+      <div class="buttons">
+        <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.switchToHelpView)">
+          {{ vm.platformSvc.getI18nString(vm.Strings.Button.Help) }}
+        </button>
+        <button type="button" class="btn btn-default"
+                ng-click="vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event, 'https://link.xbrowsersync.org/faqs')">
+          {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Issues.Help.ViewFaqs) }}
+        </button>
+      </div>
+    </div>
+    <div class="form-group setting-group">
+      <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Issues.Tracker.Title) }}</label>
+      <p class="description">
+        {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Issues.Tracker.Description) }}
+      </p>
+      <div class="buttons">
+        <button type="button" class="btn btn-default"
+                ng-click="vm.appHelperSvc.openUrl($event, 'https://link.xbrowsersync.org/app-issues')">
+          {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Issues.Tracker.Report) }}
+        </button>
+      </div>
+    </div>
+    <div class="form-group setting-group">
+      <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Issues.Log.Title) }}</label>
+      <p class="description">{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Issues.Log.Description) }}
+      </p>
+      <div class="animate-fade-in" ng-hide="vm.downloadLogCompletedMessage">
+        <p class="description">{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Issues.Log.Size) }}:
+          <span ng-if="vm.logSize >= 0">{{ vm.logSize | byteFmt : 2 }}</span></p>
+        <div class="buttons">
+          <button type="button" class="btn btn-default" ng-class="{ 'working': vm.savingLog }"
+                  ng-click="vm.utilitySvc.handleEvent(vm.downloadLog)"
+                  ng-disabled="vm.savingLog || vm.logSize === 0 || vm.logSize == null">
+            <span class="spinner-border spinner-border-sm" ng-show="vm.savingLog" role="status"
+                  aria-hidden="true"></span>
+            <span ng-show="vm.savingLog">{{ vm.platformSvc.getI18nString(vm.Strings.Button.Saving) }}
+            </span>
+            <span
+                  ng-hide="vm.savingLog">{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Issues.Log.Download) }}
+            </span>
+          </button>
+          <button type="button" class="btn btn-default" ng-disabled="vm.logSize === 0 || vm.logSize == null"
+                  ng-click="vm.utilitySvc.handleEvent(vm.clearLog)">{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Issues.Log.Clear) }}
+          </button>
+        </div>
+      </div>
+      <div class="confirm animate-fade-in" ng-show="vm.downloadLogCompletedMessage">
+        <p>{{ vm.downloadLogCompletedMessage }}</p>
+        <p class="text-center">
+          <a id="downloadLogFileLink"></a>
+        </p>
+        <div class="buttons">
+          <button class="btn btn-default btn-done" ng-click="vm.downloadLogCompletedMessage = null">
+            {{ vm.platformSvc.getI18nString(vm.Strings.Button.Done) }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

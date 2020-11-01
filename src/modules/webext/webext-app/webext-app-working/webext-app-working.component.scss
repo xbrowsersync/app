@@ -1,0 +1,51 @@
+@import '../../../../styles/modules/all';
+
+app-working {
+  display: block;
+
+  h3 {
+    @include ellipsis;
+
+    color: $colour-bg2-default;
+    font-size: 1.1rem;
+    margin: 0.2rem;
+
+    @include theme-dark {
+      color: $colour-text3-dark;
+    }
+  }
+
+  .buttons {
+    align-items: flex-end;
+    display: flex;
+    height: 50vh;
+    justify-content: center;
+    position: absolute;
+    width: 50vw;
+
+    .button {
+      position: absolute;
+    }
+  }
+
+  .spinner-border {
+    height: 30vw;
+    position: absolute;
+    width: 30vw;
+
+    @include theme-dark {
+      border-color: $colour-text3-dark;
+      border-right-color: transparent;
+    }
+  }
+
+  .overlay {
+    @include animation-fade-in();
+
+    &.fullsize {
+      height: 37rem;
+      position: unset;
+      width: 23rem;
+    }
+  }
+}

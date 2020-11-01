@@ -1,0 +1,277 @@
+@import '../../../styles/modules/all';
+
+app-login {
+  display: block;
+
+  form {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    .form-content {
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      position: relative;
+      width: 100%;
+
+      & > div {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 10;
+      }
+    }
+
+    @media (hover: hover) {
+      a {
+        &:active,
+        &:focus,
+        &:hover {
+          border-bottom-color: $colour-text2-default;
+          color: $colour-text2-default;
+
+          @include theme-dark {
+            border-bottom-color: $colour-text1-dark;
+            color: $colour-text1-dark;
+          }
+        }
+      }
+    }
+  }
+
+  .btn-new-sync {
+    text-transform: capitalize;
+  }
+
+  .btn-show-password {
+    &::before {
+      @include icon('\f715');
+
+      margin: auto;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity ease-in-out 0.2s;
+    }
+
+    &.active::before {
+      opacity: 0;
+    }
+  }
+
+  .form-group {
+    input {
+      border-color: $colour-bg3-default;
+      border-style: solid;
+      border-width: 1px;
+      font-family: $font-stack-code;
+      line-height: 1.45rem;
+      padding: 0.5rem 0.8rem;
+      width: 100%;
+
+      @include theme-dark {
+        border-color: $colour-bg3-dark;
+      }
+
+      &::placeholder {
+        font-family: $font-stack-regular;
+        font-size: 1.1rem;
+      }
+
+      &::-ms-reveal,
+      &::-ms-clear {
+        display: none;
+      }
+
+      &[name='newServiceUrl'] {
+        font-family: $font-stack-regular;
+        font-size: 1.1rem;
+      }
+    }
+  }
+
+  .header-panel {
+    z-index: 10;
+  }
+
+  .login-form-existing,
+  .login-form-new,
+  .update-service-panel {
+    height: 100%;
+    max-width: 22rem;
+  }
+
+  .login-form-existing {
+    input[name='txtPassword'] {
+      padding-right: 2.7rem;
+    }
+  }
+
+  .login-form-new {
+    input[name='txtPassword'] {
+      background: transparent !important;
+      position: relative;
+      z-index: 20;
+    }
+  }
+
+  .logo {
+    background-image: url('../../../../res/images/logo.svg');
+    background-position-x: 50%;
+    background-position-y: 0.5rem;
+    background-repeat: no-repeat;
+    background-size: 10rem;
+    flex: 0 1 17.5rem;
+
+    @include theme-dark {
+      background-image: url('../../../../res/images/logo-dark.svg');
+    }
+  }
+
+  .secret-form-group {
+    .progress,
+    .progress-bar-background {
+      border-radius: $border-radius-input;
+      font-size: 1.2rem;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+
+    .progress {
+      background-color: transparent;
+      border-color: $colour-bg3-default;
+      border-style: solid;
+      border-width: 0.1rem;
+      z-index: 10;
+
+      @include theme-dark {
+        border-color: $colour-bg3-dark;
+      }
+
+      .progress-bar {
+        background-color: $colour-danger;
+
+        @include theme-dark {
+          background-color: $colour-danger;
+        }
+      }
+    }
+
+    .progress-bar-background {
+      background-color: $colour-bg3-default;
+
+      @include theme-dark {
+        background-color: $colour-bg3-dark;
+      }
+    }
+  }
+
+  .selected-service {
+    display: inline-flex;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    width: 100%;
+
+    a {
+      @include text-overflow-ellipsis;
+    }
+
+    label {
+      flex: 0 0;
+      margin: 0 0.3rem 0 0;
+      white-space: nowrap;
+    }
+
+    .status-icon {
+      margin-left: 0.25rem;
+      top: 0.1rem;
+
+      .loading .spinner-border {
+        border-color: $colour-bg3-default;
+        border-right-color: transparent !important;
+
+        @include theme-dark {
+          border-color: $colour-bg3-dark;
+        }
+      }
+
+      .status-icon-bg {
+        background-color: $colour-bg3-default;
+
+        @include theme-dark {
+          background-color: $colour-bg3-dark;
+        }
+      }
+    }
+  }
+
+  .service-info {
+    ul {
+      list-style: none;
+      margin: 0 1rem 0.75rem;
+      padding: 0;
+      position: relative;
+
+      li {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+
+        label {
+          color: $colour-text2-default !important;
+          font-weight: bold;
+          margin-bottom: 0;
+          padding-right: 0.5rem;
+
+          @include theme-dark {
+            color: $colour-text2-dark !important;
+          }
+        }
+
+        span {
+          flex: 1 0 auto;
+          text-align: right;
+        }
+      }
+    }
+
+    .service-message {
+      margin: 0 1rem 1rem;
+      max-height: 5rem;
+    }
+
+    .service-warning {
+      font-size: 0.9rem;
+      line-height: 1.2rem;
+    }
+  }
+
+  .toggle-form {
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .well {
+    margin-bottom: 0;
+
+    @media (hover: hover) {
+      a {
+        &:active,
+        &:focus,
+        &:hover {
+          border-bottom-color: $colour-bg2-default;
+          color: $colour-bg2-default;
+
+          @include theme-dark {
+            border-bottom-color: $colour-text1-dark;
+            color: $colour-text1-dark;
+          }
+        }
+      }
+    }
+  }
+}

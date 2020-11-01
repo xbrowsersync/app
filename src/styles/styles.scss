@@ -1,0 +1,8 @@
+@import './partials/base';
+
+body {
+  color: $colour-text1-default;
+  font-family: $font-stack-regular;
+  line-height: 1.25rem;
+  margin: 0;
+}

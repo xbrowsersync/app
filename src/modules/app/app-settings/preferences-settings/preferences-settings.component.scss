@@ -1,0 +1,18 @@
+@import '../../../../styles/modules/all';
+
+preferences-settings {
+  display: block;
+
+  .setting-title {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+    width: 100%;
+
+    label {
+      margin: 0;
+      padding-right: 0.5rem;
+    }
+  }
+}

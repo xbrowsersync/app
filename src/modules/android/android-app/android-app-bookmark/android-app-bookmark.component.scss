@@ -1,0 +1,54 @@
+@import '../../../../styles/modules/all';
+
+app-bookmark {
+  .mobile-landscape {
+    min-height: 2.9rem;
+
+    @media (orientation: landscape) {
+      display: flex;
+      flex: 1 0;
+      flex-direction: row;
+      overflow: auto;
+    }
+  }
+
+  .tags-container {
+    .badge {
+      font-size: 1rem;
+      line-height: 1.3rem;
+    }
+
+    .label {
+      border-radius: $border-radius-input;
+      margin: 0 0.5rem 0.6rem 0;
+      padding: 0.6rem 1rem;
+    }
+
+    @media (orientation: landscape) {
+      flex: auto;
+      height: 100%;
+      margin: 0;
+      max-height: none;
+    }
+  }
+
+  .tags-input-container {
+    @media (orientation: landscape) {
+      height: 2.9rem;
+      margin-right: 1rem;
+      width: 40%;
+
+      input {
+        line-height: 2rem;
+      }
+    }
+  }
+
+  .textarea-container {
+    max-height: 15rem;
+
+    @media (orientation: landscape) {
+      flex: 1 0 4rem;
+    }
+  }
+}

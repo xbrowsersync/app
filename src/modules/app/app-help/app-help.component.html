@@ -1,0 +1,25 @@
+<div class="view-content" ng-keydown="vm.utilitySvc.handleEvent(vm.handleKeyDown, $event)"
+     hm-swipeleft="vm.utilitySvc.handleEvent(vm.displayNextPage)"
+     hm-swiperight="vm.utilitySvc.handleEvent(vm.displayPreviousPage)" tabindex="0">
+  <div id="help-page-{{$index}}" class="help-page-container animate-fade-in" ng-if="vm.currentPage === $index"
+       ng-repeat="page in vm.pages track by $index">
+    <div class="help-page-content" ng-bind-html="page"></div>
+    <div class="pagination">
+      <a href="#" ng-click="vm.utilitySvc.handleEvent(vm.close)" ng-show="$index === 0">
+        <span>{{ vm.platformSvc.getI18nString(vm.Strings.Button.Close) }}</span>
+      </a>
+      <a class="prev-link" href="#" ng-click="vm.utilitySvc.handleEvent(vm.displayPreviousPage)" ng-hide="$index === 0">
+        <span>{{ vm.platformSvc.getI18nString(vm.Strings.View.Help.Previous) }}</span>
+      </a>
+      <span class="page-number">{{($index + 1) | number : 0}} / {{vm.pages.length | number : 0}}</span>
+      <a class="next-link focused" href="#" ng-click="vm.utilitySvc.handleEvent(vm.displayNextPage)"
+         ng-hide="$index === vm.pages.length - 1">
+        <span>{{ vm.platformSvc.getI18nString(vm.Strings.Button.Next) }}</span>
+      </a>
+      <a href="#" class="focused" ng-click="vm.utilitySvc.handleEvent(vm.close)"
+         ng-show="$index === vm.pages.length - 1">
+        <span>{{ vm.platformSvc.getI18nString(vm.Strings.Button.Close) }}</span>
+      </a>
+    </div>
+  </div>
+</div>

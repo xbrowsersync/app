@@ -1,0 +1,11 @@
+<div>
+  <button id="support" type="button" class="btn btn-default"
+          ng-click="vm.utilitySvc.handleEvent(vm.switchToSupportView)">
+    {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Support) }}
+  </button>
+</div>
+<div>
+  {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.AppVersion) }}
+  <a class="new-tab" href="{{ vm.releaseNotesUrl }}"
+     title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.ReleaseNotes) }}">{{ vm.appVersion }}</a>
+</div>

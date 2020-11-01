@@ -1,8 +1,85 @@
 language: node_js
-node_js:
-  - "stable"
+jdk: oraclejdk8
+env:
+  global:
+    - ANDROID_VERSION=9
+    - BUILD_TOOLS_VERSION=27.0.3
+    - CORDOVA_CLI=9.x
+    - JAVA_HOME=/usr/lib/jvm/java-8-oracle
+    - NODEJS=lts/*
+matrix:
+  include:
+    - os: linux
+      sudo: false
+      language: android
+      android:
+        components:
+          - android-$ANDROID_VERSION
+          - build-tools-$BUILD_TOOLS_VERSION
+          - platform-tools
+          - tools
+      addons:
+        apt:
+          chrome: stable
+          packages:
+            - gradle
+            - jq
+            - oracle-java8-installer
+            - oracle-java8-set-default
+      licenses:
+        - android-sdk-license-.+
+        - android-sdk-preview-license-.+
+  allow_failures:
+    - os: osx
+      language: objective-c
+      osx_image: xcode8.3
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -f  $HOME/.gradle/caches/transforms-1/transforms-1.lock
+  - rm -rf $HOME/.gradle/caches/3.5/fileHashes/
+  - rm -rf $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - '$HOME/.gradle/caches/'
+    - '$HOME/.gradle/wrapper/'
+before_install:
+  - export LANG=en_US.UTF-8
+  - export CHROME_BIN=google-chrome
+  - nvm install $NODEJS
+  - mkdir "$ANDROID_HOME/licenses" || true
+  - echo -e "\84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-license"
+  - echo -e "\8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+  - yes | sdkmanager "platforms;android-27"
+  - npm install -g cordova@$CORDOVA_CLI
+  - cordova telemetry off
+  - export PATH=/usr/local/android-sdk/build-tools/$BUILD_TOOLS_VERSION:$PATH
 install:
   - npm install
+  - pushd res/android
+  - cordova prepare
+  - popd
 script:
-  - npm run build:chrome
-  - npm run build:firefox
+  - npm run package:chromium
+  - npm run package:firefox
+  - npm run package:android
+before_deploy:
+  - export XBS_VERSION=$(cat version.txt)
+  - git tag v$XBS_VERSION
+deploy:
+  provider: releases
+  # ⋮
+  file:
+    - dist/xbrowsersync_${XBS_VERSION}_chromium.zip
+    - dist/xbrowsersync_${XBS_VERSION}_firefox.zip
+    - dist/xbrowsersync_${XBS_VERSION}_android.apk
+    - dist/xbrowsersync_${XBS_VERSION}_android_unsigned.apk
+  name: $XBS_VERSION
+  on:
+    all_branches: true
+  prerelease: true
+  skip_cleanup: true
+  token: $GITHUB_API_KEY
+branches:
+  only:
+    - master
+    - /^v\d+\.\d+\.\d+$/

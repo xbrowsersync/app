@@ -1,0 +1,46 @@
+@import '../../../styles/modules/all';
+
+body {
+  overflow: hidden;
+}
+
+app-search {
+  &.view {
+    height: auto;
+    width: 38rem;
+
+    .view-content {
+      height: auto;
+      max-height: 37rem;
+
+      .header-panel {
+        display: flex;
+        flex-direction: row-reverse;
+
+        button {
+          flex: none;
+
+          &.btn-settings {
+            float: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+app-settings {
+  backup-restore-settings {
+    #restoreForm .validation {
+      bottom: -0.75rem;
+    }
+  }
+}
+
+.view {
+  width: 23rem;
+
+  .view-content {
+    height: 37rem;
+  }
+}
