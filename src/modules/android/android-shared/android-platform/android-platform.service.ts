@@ -5,6 +5,7 @@ import { AppEventType } from '../../../app/app.enum';
 import { Alert } from '../../../shared/alert/alert.interface';
 import AlertService from '../../../shared/alert/alert.service';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkChangeType } from '../../../shared/bookmark/bookmark.enum';
 import {
   Bookmark,
   BookmarkMetadata,
@@ -450,7 +451,11 @@ export default class AndroidPlatformService implements PlatformService {
           return this.queueSync({
             type: SyncType.Local
           }).then(() => {
-            // Proceed with sync only if changed bookmark still exists
+            // Proceed with sync only if queued sync is to add a new bookmark or changed bookmark
+            // still exists
+            if (sync.changeInfo.type === BookmarkChangeType.Add) {
+              return resolve(true);
+            }
             return this.bookmarkHelperSvc.getCachedBookmarks().then((bookmarks) => {
               const changedBookmarkId =
                 (sync.changeInfo.changeData as RemoveBookmarkChangeData)?.id ??
@@ -474,7 +479,7 @@ export default class AndroidPlatformService implements PlatformService {
             if (resyncRequired) {
               this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
             }
-            return { success: true } as SyncResult;
+            return { success: proceedWithSync } as SyncResult;
           })
           .catch((err) => {
             // Enable background sync if sync uncommitted
