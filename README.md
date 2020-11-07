@@ -78,7 +78,7 @@ Replace [platform] with the name of the platform to build. The package will be o
 
 ## Issues
 
-If you’ve found a bug or wish to request a new feature, please submit it [here](https://github.com/xbrowsersync/app/issues/).
+If you’ve found a bug or wish to request a new feature please submit it [here](https://github.com/xbrowsersync/app/issues/).
 
 ## Translation
 
