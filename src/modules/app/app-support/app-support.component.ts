@@ -2,7 +2,7 @@ import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { PlatformService } from '../../shared/global-shared.interface';
 import UtilityService from '../../shared/utility/utility.service';
-import { AppHelperService } from '../app.interface';
+import AppHelperService from '../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({

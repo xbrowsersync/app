@@ -98,8 +98,6 @@ export class NoDataFoundException extends Exception {}
 
 export class NotAcceptingNewSyncsException extends Exception {}
 
-export class NotImplementedException extends Exception {}
-
 export class PasswordRemovedException extends Exception {}
 
 export class RequestEntityTooLargeException extends Exception {}

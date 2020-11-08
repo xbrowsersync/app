@@ -18,9 +18,9 @@ import { SyncType } from '../../../shared/sync/sync.enum';
 import UtilityService from '../../../shared/utility/utility.service';
 import { WorkingContext } from '../../../shared/working/working.enum';
 import WorkingService from '../../../shared/working/working.service';
-import { WebExtBookmarkService } from '../../../webext/webext-shared/webext-bookmark/webext-bookmark.interface';
+import WebExtBookmarkService from '../../../webext/shared/webext-bookmark/webext-bookmark.service';
 import { AppEventType } from '../../app.enum';
-import { AppHelperService } from '../../app.interface';
+import AppHelperService from '../../shared/app-helper/app-helper.service';
 import AppSettingsComponent from '../app-settings.component';
 
 @autobind

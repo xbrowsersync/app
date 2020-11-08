@@ -47,9 +47,10 @@ export default class AndroidUpgradeService extends UpgradeService {
   }
 
   upgradeTo160(): ng.IPromise<void> {
+    // Initialise data storage
     return (
-      super
-        .upgradeTo160()
+      this.storeSvc
+        .init()
         // Convert native storage items to IndexedDB
         .then(() => this.getAllFromNativeStorage())
         .then((cachedData) => {

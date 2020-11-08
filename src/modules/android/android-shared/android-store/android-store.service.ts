@@ -3,14 +3,13 @@ import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import * as Exceptions from '../../../shared/exception/exception';
 import { StoreKey } from '../../../shared/store/store.enum';
-import { PlatformStoreService, StoreContent, TraceLogItem } from '../../../shared/store/store.interface';
+import { StoreContent, TraceLogItem } from '../../../shared/store/store.interface';
+import StoreService from '../../../shared/store/store.service';
 import { NativeStorageError, Table, TraceLogColumn } from './android-store.enum';
 
 @autobind
-@Injectable('PlatformStoreService')
-export default class AndroidStoreService implements PlatformStoreService {
-  $q: ng.IQService;
-
+@Injectable('StoreService')
+export default class AndroidStoreService extends StoreService {
   appRowId = 1;
   db: any;
   dbName = 'xbs.db';
@@ -40,11 +39,8 @@ export default class AndroidStoreService implements PlatformStoreService {
   ];
 
   static $inject = ['$q'];
-  constructor($q: ng.IQService) {
-    this.$q = $q;
-  }
 
-  addTraceLog(log: TraceLogItem): ng.IPromise<void> {
+  protected addTraceLog(log: TraceLogItem): ng.IPromise<void> {
     return this.$q<void>((resolve, reject) => {
       this.openDatabase().then((db) => {
         db.executeSql(
@@ -61,7 +57,7 @@ export default class AndroidStoreService implements PlatformStoreService {
     }).catch(this.handleSqlError);
   }
 
-  clear(): ng.IPromise<void> {
+  protected clear(): ng.IPromise<void> {
     return this.$q
       .all([
         this.$q((resolve, reject) => window.NativeStorage.clear(resolve, reject)),
@@ -70,7 +66,7 @@ export default class AndroidStoreService implements PlatformStoreService {
       .then(() => {});
   }
 
-  clearTraceLog(): ng.IPromise<void> {
+  protected clearTraceLog(): ng.IPromise<void> {
     return this.$q<void>((resolve, reject) => {
       this.openDatabase().then((db) => {
         db.executeSql(`DELETE FROM ${Table.TraceLog}`, [], () => resolve(), reject);
@@ -78,7 +74,7 @@ export default class AndroidStoreService implements PlatformStoreService {
     }).catch(this.handleSqlError);
   }
 
-  createTables(db: any): ng.IPromise<any> {
+  protected createTables(db: any): ng.IPromise<any> {
     return this.$q((resolve, reject) => {
       db.transaction(
         (tx: any) => {
@@ -106,7 +102,7 @@ export default class AndroidStoreService implements PlatformStoreService {
     }).catch(this.handleSqlError);
   }
 
-  get<T = StoreContent>(keys: IDBValidKey[] = []): ng.IPromise<T[]> {
+  protected getFromStore<T = StoreContent>(keys: IDBValidKey[] = []): ng.IPromise<T[]> {
     return this.$q<T[]>((resolve, reject) => {
       // Separate keys
       const keysForNativeStorage = keys.filter((key) => this.nativeStorageKeys.includes(key));
@@ -135,7 +131,7 @@ export default class AndroidStoreService implements PlatformStoreService {
     });
   }
 
-  getAllTraceLogs(): ng.IPromise<TraceLogItem[]> {
+  protected getAllTraceLogs(): ng.IPromise<TraceLogItem[]> {
     return this.$q<TraceLogItem[]>((resolve, reject) => {
       this.openDatabase().then((db) => {
         db.executeSql(
@@ -160,7 +156,7 @@ export default class AndroidStoreService implements PlatformStoreService {
     }).catch(this.handleSqlError);
   }
 
-  getFromNativeStorage<T = StoreContent>(key: IDBValidKey): ng.IPromise<T> {
+  protected getFromNativeStorage<T = StoreContent>(key: IDBValidKey): ng.IPromise<T> {
     return this.$q<T>((resolve, reject) => {
       if (angular.isUndefined(key ?? undefined)) {
         return resolve();
@@ -176,7 +172,7 @@ export default class AndroidStoreService implements PlatformStoreService {
     });
   }
 
-  getFromSql<T = StoreContent>(keys: IDBValidKey[] = []): ng.IPromise<T[]> {
+  protected getFromSql<T = StoreContent>(keys: IDBValidKey[] = []): ng.IPromise<T[]> {
     const values = new Array(keys.length);
     return this.$q<T[]>((resolve, reject) => {
       // Get non-trace log values
@@ -211,17 +207,17 @@ export default class AndroidStoreService implements PlatformStoreService {
       .catch(this.handleSqlError);
   }
 
-  handleSqlError(err: Error): never {
+  protected handleSqlError(err: Error): never {
     throw new Exceptions.FailedLocalStorageException(err.message);
   }
 
-  keys(): ng.IPromise<IDBValidKey[]> {
+  protected keys(): ng.IPromise<IDBValidKey[]> {
     return this.$q<IDBValidKey[]>((resolve, reject) => window.NativeStorage.keys(resolve, reject)).then((keys) => {
       return keys.concat(this.sqlKeys);
     });
   }
 
-  openDatabase(): ng.IPromise<any> {
+  protected openDatabase(): ng.IPromise<any> {
     if (!angular.isUndefined(this.db ?? undefined)) {
       return this.$q.resolve(this.db);
     }
@@ -241,7 +237,7 @@ export default class AndroidStoreService implements PlatformStoreService {
       .catch(this.handleSqlError);
   }
 
-  remove(keys: IDBValidKey[] = []): ng.IPromise<void> {
+  protected removeFromStore(keys: IDBValidKey[] = []): ng.IPromise<void> {
     // Separate keys
     const keysForNativeStorage = keys.filter((key) => this.nativeStorageKeys.includes(key));
     const keysForSql = keys.filter((key) => this.sqlKeys.includes(key));
@@ -256,18 +252,18 @@ export default class AndroidStoreService implements PlatformStoreService {
       .then(() => {});
   }
 
-  set(key: IDBValidKey, value: any): ng.IPromise<void> {
+  protected setInStore(key: IDBValidKey, value: any): ng.IPromise<void> {
     if (this.nativeStorageKeys.includes(key)) {
       return this.setInNativeStorage(key, value);
     }
     return this.setInSql(key, value);
   }
 
-  setInNativeStorage(key: IDBValidKey, value: any): ng.IPromise<void> {
+  protected setInNativeStorage(key: IDBValidKey, value: any): ng.IPromise<void> {
     return this.$q((resolve, reject) => window.NativeStorage.setItem(key, value, resolve, reject));
   }
 
-  setInSql(key: IDBValidKey, value: any): ng.IPromise<void> {
+  protected setInSql(key: IDBValidKey, value: any): ng.IPromise<void> {
     // For trace log use relevant method
     if (key === StoreKey.TraceLog) {
       return angular.isUndefined(value ?? undefined) ? this.clearTraceLog() : this.addTraceLog(value);

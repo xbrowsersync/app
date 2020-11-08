@@ -1,79 +1,74 @@
 import angular from 'angular';
-import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { StoreKey } from './store.enum';
-import { PlatformStoreService, StoreContent } from './store.interface';
+import { StoreContent } from './store.interface';
 
 @autobind
-@Injectable('StoreService')
-export default class StoreService {
+export default abstract class StoreService {
   $q: ng.IQService;
-  platformStoreSvc: PlatformStoreService;
   dbName = 'xbs-store';
   storeName = 'xbs';
 
-  static $inject = ['$q', 'PlatformStoreService'];
-  constructor($q: ng.IQService, PlatformStoreSvc: PlatformStoreService) {
+  constructor($q: ng.IQService) {
     this.$q = $q;
-    this.platformStoreSvc = PlatformStoreSvc;
   }
 
-  clear(): ng.IPromise<void> {
-    return this.platformStoreSvc.clear();
-  }
+  protected abstract clear(): ng.IPromise<void>;
 
   get<T = StoreContent>(keys?: IDBValidKey | IDBValidKey[]): ng.IPromise<T> {
     // If no keys provided, get all keys from store
-    return (angular.isUndefined(keys ?? undefined) ? this.platformStoreSvc.keys() : this.$q.resolve(keys)).then(
-      (allKeys) => {
-        // Ensure the keys param is an array before processing
-        const keysArr = Array.isArray(allKeys) ? (allKeys as IDBValidKey[]) : [allKeys];
-        return this.platformStoreSvc
-          .get(keysArr)
-          .then((keyValues) => {
-            // Convert the keys and key values into a return object
-            return keysArr.reduce((prev, current, index) => {
-              const next = angular.copy(prev);
-              next[current as string] = keyValues[index];
-              return next;
-            }, {} as T);
-          })
-          .then((storeContent) => {
-            // If result object only has one key, simply return the key value
-            if (storeContent && Object.keys(storeContent).length === 1) {
-              return storeContent[keysArr[0] as string];
-            }
-            return storeContent;
-          });
-      }
-    );
+    return (angular.isUndefined(keys ?? undefined) ? this.keys() : this.$q.resolve(keys)).then((allKeys) => {
+      // Ensure the keys param is an array before processing
+      const keysArr = Array.isArray(allKeys) ? (allKeys as IDBValidKey[]) : [allKeys];
+      return this.getFromStore(keysArr)
+        .then((keyValues) => {
+          // Convert the keys and key values into a return object
+          return keysArr.reduce((prev, current, index) => {
+            const next = angular.copy(prev);
+            next[current as string] = keyValues[index];
+            return next;
+          }, {} as T);
+        })
+        .then((storeContent) => {
+          // If result object only has one key, simply return the key value
+          if (storeContent && Object.keys(storeContent).length === 1) {
+            return storeContent[keysArr[0] as string];
+          }
+          return storeContent;
+        });
+    });
   }
 
+  protected abstract getFromStore<T = StoreContent>(keys: IDBValidKey[]): ng.IPromise<T[]>;
+
   init(): ng.IPromise<void> {
-    return this.platformStoreSvc
-      .clear()
+    return this.clear()
       .then(() => {
         return this.$q.all([
-          this.platformStoreSvc.set(StoreKey.AlternateSearchBarPosition, false),
-          this.platformStoreSvc.set(StoreKey.AutoFetchMetadata, true),
-          this.platformStoreSvc.set(StoreKey.CheckForAppUpdates, true),
-          this.platformStoreSvc.set(StoreKey.DarkModeEnabled, false),
-          this.platformStoreSvc.set(StoreKey.DefaultToFolderView, false),
-          this.platformStoreSvc.set(StoreKey.DisplayHelp, true),
-          this.platformStoreSvc.set(StoreKey.DisplayOtherSyncsWarning, false),
-          this.platformStoreSvc.set(StoreKey.DisplayPermissions, false),
-          this.platformStoreSvc.set(StoreKey.DisplayUpdated, false),
-          this.platformStoreSvc.set(StoreKey.SyncBookmarksToolbar, false),
-          this.platformStoreSvc.set(StoreKey.SyncEnabled, false)
+          this.setInStore(StoreKey.AlternateSearchBarPosition, false),
+          this.setInStore(StoreKey.AutoFetchMetadata, true),
+          this.setInStore(StoreKey.CheckForAppUpdates, true),
+          this.setInStore(StoreKey.DarkModeEnabled, false),
+          this.setInStore(StoreKey.DefaultToFolderView, false),
+          this.setInStore(StoreKey.DisplayHelp, true),
+          this.setInStore(StoreKey.DisplayOtherSyncsWarning, false),
+          this.setInStore(StoreKey.DisplayPermissions, false),
+          this.setInStore(StoreKey.DisplayUpdated, false),
+          this.setInStore(StoreKey.SyncBookmarksToolbar, false),
+          this.setInStore(StoreKey.SyncEnabled, false)
         ]);
       })
       .then(() => {});
   }
 
+  protected abstract keys(): ng.IPromise<IDBValidKey[]>;
+
   remove(keys: string | string[]): ng.IPromise<void> {
     const keysArr = Array.isArray(keys) ? keys : [keys];
-    return this.platformStoreSvc.remove(keysArr);
+    return this.removeFromStore(keysArr);
   }
+
+  protected abstract removeFromStore(keys: IDBValidKey[]): ng.IPromise<void>;
 
   set(key: IDBValidKey, value?: any): ng.IPromise<void> {
     if (angular.isUndefined(key ?? undefined)) {
@@ -82,11 +77,13 @@ export default class StoreService {
 
     return this.$q((resolve, reject) => {
       (angular.isUndefined(value ?? undefined)
-        ? this.platformStoreSvc.remove(Array.isArray(key) ? key : [key])
-        : this.platformStoreSvc.set(key, value)
+        ? this.removeFromStore(Array.isArray(key) ? key : [key])
+        : this.setInStore(key, value)
       )
         .then(resolve)
         .catch(reject);
     });
   }
+
+  protected abstract setInStore(key: IDBValidKey, value: any): ng.IPromise<void>;
 }

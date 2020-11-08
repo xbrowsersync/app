@@ -9,7 +9,7 @@ import LogService from '../../../shared/log/log.service';
 import { StoreKey } from '../../../shared/store/store.enum';
 import StoreService from '../../../shared/store/store.service';
 import UtilityService from '../../../shared/utility/utility.service';
-import AndroidAppHelperService from '../android-app-helper/android-app-helper.service';
+import AndroidAppHelperService from '../shared/android-app-helper/android-app-helper.service';
 
 @autobind
 @Component({

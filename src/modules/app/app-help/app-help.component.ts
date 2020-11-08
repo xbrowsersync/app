@@ -5,7 +5,7 @@ import { StoreKey } from '../../shared/store/store.enum';
 import StoreService from '../../shared/store/store.service';
 import UtilityService from '../../shared/utility/utility.service';
 import { KeyCode } from '../app.enum';
-import { AppHelperService } from '../app.interface';
+import AppHelperService from '../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({

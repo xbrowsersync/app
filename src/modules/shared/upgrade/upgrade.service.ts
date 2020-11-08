@@ -2,14 +2,13 @@ import angular from 'angular';
 import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
 import * as Exceptions from '../exception/exception';
-import { PlatformUpgradeService } from '../global-shared.interface';
 import LogService from '../log/log.service';
 import { StoreKey } from '../store/store.enum';
 import StoreService from '../store/store.service';
 import UtilityService from '../utility/utility.service';
 
 @autobind
-export default class UpgradeService implements PlatformUpgradeService {
+export default abstract class UpgradeService {
   $q: ng.IQService;
   logSvc: LogService;
   storeSvc: StoreService;
@@ -51,6 +50,7 @@ export default class UpgradeService implements PlatformUpgradeService {
     }
 
     // Clear trace log
+    // TODO: Causes an error in Android on upgrade as SQL table not provisioned yet
     return this.logSvc
       .clear()
       .then(this.getLastUpgradeVersion)
@@ -83,8 +83,5 @@ export default class UpgradeService implements PlatformUpgradeService {
       });
   }
 
-  upgradeTo160(): ng.IPromise<void> {
-    // Initialise data storage
-    return this.storeSvc.init();
-  }
+  abstract upgradeTo160(): ng.IPromise<void>;
 }

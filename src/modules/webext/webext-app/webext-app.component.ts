@@ -5,7 +5,7 @@ import AppMainComponent from '../../app/app-main/app-main.component';
 import { AppViewType } from '../../app/app.enum';
 import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync } from '../../shared/sync/sync.interface';
-import WebExtPlatformService from '../webext-shared/webext-platform/webext-platform.service';
+import WebExtPlatformService from '../shared/webext-platform/webext-platform.service';
 
 @autobind
 @Component({

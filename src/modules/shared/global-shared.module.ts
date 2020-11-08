@@ -9,7 +9,6 @@ import ExceptionHandlerService from './exception/exception-handler/exception-han
 import LogService from './log/log.service';
 import NetworkService from './network/network.service';
 import SettingsService from './settings/settings.service';
-import StoreService from './store/store.service';
 import SyncModule from './sync/sync.module';
 import UtilityService from './utility/utility.service';
 import WorkingService from './working/working.service';
@@ -28,7 +27,6 @@ import WorkingService from './working/working.service';
     LogService,
     NetworkService,
     SettingsService,
-    StoreService,
     UtilityService,
     WorkingService
   ]

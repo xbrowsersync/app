@@ -1,6 +1,7 @@
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
+import AndroidAppHelperService from '../../android/android-app/shared/android-app-helper/android-app-helper.service';
 import { AlertType } from '../../shared/alert/alert.enum';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
@@ -21,7 +22,7 @@ import { SyncResult } from '../../shared/sync/sync.interface';
 import UtilityService from '../../shared/utility/utility.service';
 import WorkingService from '../../shared/working/working.service';
 import { AppViewType, KeyCode } from '../app.enum';
-import { AppHelperService } from '../app.interface';
+import AppHelperService from '../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({
@@ -320,7 +321,7 @@ export default class AppBookmarkComponent implements OnInit {
     this.utilitySvc.stopEventPropagation(event);
 
     // Trigger native share functionality
-    this.appHelperSvc.shareBookmark(bookmarkToShare);
+    (this.appHelperSvc as AndroidAppHelperService).shareBookmark(bookmarkToShare);
   }
 
   tagsTextChanged(): void {

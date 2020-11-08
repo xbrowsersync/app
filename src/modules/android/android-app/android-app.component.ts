@@ -3,7 +3,7 @@ import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import AppMainComponent from '../../app/app-main/app-main.component';
 import { AppEventType, AppViewType } from '../../app/app.enum';
-import { AppHelperService } from '../../app/app.interface';
+import AppHelperService from '../../app/shared/app-helper/app-helper.service';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkMetadata } from '../../shared/bookmark/bookmark.interface';
@@ -20,8 +20,8 @@ import UtilityService from '../../shared/utility/utility.service';
 import { WorkingContext } from '../../shared/working/working.enum';
 import WorkingService from '../../shared/working/working.service';
 import AndroidPlatformService from '../android-shared/android-platform/android-platform.service';
-import AndroidAppHelperService from './android-app-helper/android-app-helper.service';
 import { AndroidAlert } from './android-app.interface';
+import AndroidAppHelperService from './shared/android-app-helper/android-app-helper.service';
 
 @autobind
 @Component({

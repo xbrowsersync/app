@@ -3,7 +3,7 @@ import { NgModule } from 'angular-ts-decorators';
 import { browser } from 'webextension-polyfill-ts';
 import ExceptionHandlerService from '../../shared/exception/exception-handler/exception-handler.service';
 import GlobalSharedModule from '../../shared/global-shared.module';
-import WebExtSharedModule from '../webext-shared/webext-shared.module';
+import WebExtSharedModule from '../shared/webext-shared.module';
 import WebExtBackgroundComponent from './webext-background.component';
 import WebExtBackgroundService from './webext-background.service';
 

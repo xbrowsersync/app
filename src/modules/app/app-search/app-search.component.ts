@@ -1,7 +1,7 @@
 import './app-search.component.scss';
-import angular from 'angular';
 import { OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
+import AndroidAppHelperService from '../../android/android-app/shared/android-app-helper/android-app-helper.service';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { Bookmark } from '../../shared/bookmark/bookmark.interface';
@@ -13,11 +13,11 @@ import SettingsService from '../../shared/settings/settings.service';
 import UtilityService from '../../shared/utility/utility.service';
 import WorkingService from '../../shared/working/working.service';
 import { AppViewType, KeyCode } from '../app.enum';
-import { AppHelperService } from '../app.interface';
+import AppHelperService from '../shared/app-helper/app-helper.service';
 import { BookmarkSearchResult, BookmarkTreeItem } from './app-search.interface';
 
 @autobind
-export default class AppSearchComponent implements OnInit {
+export default abstract class AppSearchComponent implements OnInit {
   Strings = require('../../../../res/strings/en.json');
 
   $exceptionHandler: ExceptionHandler;
@@ -97,11 +97,6 @@ export default class AppSearchComponent implements OnInit {
       this.searchBookmarks();
       this.appHelperSvc.focusOnElement('input[name=txtSearch]');
     });
-  }
-
-  deleteBookmark(event: Event, bookmark: Bookmark): void {
-    // Android only method
-    throw new Exceptions.NotImplementedException();
   }
 
   displayDefaultSearchState(): ng.IPromise<void> {
@@ -390,7 +385,7 @@ export default class AppSearchComponent implements OnInit {
     this.utilitySvc.stopEventPropagation(event);
 
     // Trigger native share functionality
-    this.appHelperSvc.shareBookmark(bookmarkToShare);
+    (this.appHelperSvc as AndroidAppHelperService).shareBookmark(bookmarkToShare);
   }
 
   switchToBookmarkView(): void {

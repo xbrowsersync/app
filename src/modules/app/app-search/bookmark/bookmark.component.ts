@@ -4,7 +4,7 @@ import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/book
 import { Bookmark } from '../../../shared/bookmark/bookmark.interface';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import UtilityService from '../../../shared/utility/utility.service';
-import { AppHelperService } from '../../app.interface';
+import AppHelperService from '../../shared/app-helper/app-helper.service';
 import { BookmarkTreeItem } from '../app-search.interface';
 
 @autobind

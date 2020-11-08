@@ -3,7 +3,7 @@ import autobind from 'autobind-decorator';
 import { PlatformService } from '../../shared/global-shared.interface';
 import UtilityService from '../../shared/utility/utility.service';
 import { AppEventType } from '../app.enum';
-import { AppHelperService } from '../app.interface';
+import AppHelperService from '../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({

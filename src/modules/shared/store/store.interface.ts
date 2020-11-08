@@ -1,13 +1,5 @@
-import { BookmarkIdMapping } from '../../webext/webext-shared/bookmark-id-mapper/bookmark-id-mapper.interface';
+import { BookmarkIdMapping } from '../../webext/shared/bookmark-id-mapper/bookmark-id-mapper.interface';
 import { LogLevel } from '../log/log.enum';
-
-export interface PlatformStoreService {
-  clear: () => ng.IPromise<void>;
-  get: <T = StoreContent>(keys: IDBValidKey[]) => ng.IPromise<T[]>;
-  keys: () => ng.IPromise<IDBValidKey[]>;
-  remove: (keys: IDBValidKey[]) => ng.IPromise<void>;
-  set: (key: IDBValidKey, value: any) => ng.IPromise<void>;
-}
 
 export interface StoreContent {
   alternateSearchBarPosition: boolean;

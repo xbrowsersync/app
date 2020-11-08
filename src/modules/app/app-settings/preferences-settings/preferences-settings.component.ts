@@ -6,7 +6,7 @@ import SettingsService from '../../../shared/settings/settings.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
 import UtilityService from '../../../shared/utility/utility.service';
 import WorkingService from '../../../shared/working/working.service';
-import { AppHelperService } from '../../app.interface';
+import AppHelperService from '../../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({

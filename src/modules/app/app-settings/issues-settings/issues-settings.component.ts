@@ -6,7 +6,7 @@ import { LogLevel } from '../../../shared/log/log.enum';
 import LogService from '../../../shared/log/log.service';
 import UtilityService from '../../../shared/utility/utility.service';
 import { AppViewType } from '../../app.enum';
-import { AppHelperService } from '../../app.interface';
+import AppHelperService from '../../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({

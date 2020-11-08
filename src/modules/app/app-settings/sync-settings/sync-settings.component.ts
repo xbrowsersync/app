@@ -13,7 +13,7 @@ import { SyncType } from '../../../shared/sync/sync.enum';
 import UtilityService from '../../../shared/utility/utility.service';
 import WorkingService from '../../../shared/working/working.service';
 import { AppEventType, AppViewType } from '../../app.enum';
-import { AppHelperService } from '../../app.interface';
+import AppHelperService from '../../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({

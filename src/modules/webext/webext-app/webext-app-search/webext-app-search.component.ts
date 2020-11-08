@@ -1,7 +1,7 @@
 import { Component } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import AppSearchComponent from '../../../app/app-search/app-search.component';
-import WebExtAppHelperService from '../webext-app-helper/webext-app-helper.service';
+import WebExtAppHelperService from '../shared/webext-app-helper/webext-app-helper.service';
 
 @autobind
 @Component({

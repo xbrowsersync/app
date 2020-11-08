@@ -1,9 +1,9 @@
 import angular from 'angular';
 import { NgModule } from 'angular-ts-decorators';
 import WebExtAppModule from '../../webext-app/webext-app.module';
-import ChromiumBookmarkService from '../chromium-shared/chromium-bookmark/chromium-bookmark.service';
-import ChromiumPlatformService from '../chromium-shared/chromium-platform/chromium-platform.service';
-import ChromiumAppHelperService from './chromium-app-helper/chromium-app-helper.service';
+import ChromiumBookmarkService from '../shared/chromium-bookmark/chromium-bookmark.service';
+import ChromiumPlatformService from '../shared/chromium-platform/chromium-platform.service';
+import ChromiumAppHelperService from './shared/chromium-app-helper/chromium-app-helper.service';
 
 @NgModule({
   id: 'ChromiumAppModule',

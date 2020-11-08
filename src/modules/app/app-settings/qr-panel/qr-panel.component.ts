@@ -6,7 +6,7 @@ import { PlatformService } from '../../../shared/global-shared.interface';
 import { StoreKey } from '../../../shared/store/store.enum';
 import StoreService from '../../../shared/store/store.service';
 import UtilityService from '../../../shared/utility/utility.service';
-import { AppHelperService } from '../../app.interface';
+import AppHelperService from '../../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({

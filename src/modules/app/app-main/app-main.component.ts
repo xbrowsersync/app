@@ -11,7 +11,7 @@ import StoreService from '../../shared/store/store.service';
 import UtilityService from '../../shared/utility/utility.service';
 import WorkingService from '../../shared/working/working.service';
 import { AppViewType } from '../app.enum';
-import { AppHelperService } from '../app.interface';
+import AppHelperService from '../shared/app-helper/app-helper.service';
 
 @autobind
 export default class AppMainComponent implements OnInit {

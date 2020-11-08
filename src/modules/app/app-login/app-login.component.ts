@@ -18,7 +18,7 @@ import { Sync } from '../../shared/sync/sync.interface';
 import UtilityService from '../../shared/utility/utility.service';
 import WorkingService from '../../shared/working/working.service';
 import { AppViewType } from '../app.enum';
-import { AppHelperService } from '../app.interface';
+import AppHelperService from '../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({

@@ -21,8 +21,8 @@ import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync, SyncResult } from '../../shared/sync/sync.interface';
 import UpgradeService from '../../shared/upgrade/upgrade.service';
 import UtilityService from '../../shared/utility/utility.service';
-import ChromiumBookmarkService from '../chromium/chromium-shared/chromium-bookmark/chromium-bookmark.service';
-import BookmarkIdMapperService from '../webext-shared/bookmark-id-mapper/bookmark-id-mapper.service';
+import ChromiumBookmarkService from '../chromium/shared/chromium-bookmark/chromium-bookmark.service';
+import BookmarkIdMapperService from '../shared/bookmark-id-mapper/bookmark-id-mapper.service';
 import { InstallBackup } from '../webext.interface';
 
 @autobind
