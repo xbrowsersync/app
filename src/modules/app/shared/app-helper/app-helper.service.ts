@@ -4,7 +4,6 @@ import DOMPurify from 'dompurify';
 import marked from 'marked';
 import { ApiServiceStatus } from '../../../shared/api/api.enum';
 import { ApiService, ApiServiceInfo, ApiServiceInfoResponse } from '../../../shared/api/api.interface';
-import { Bookmark } from '../../../shared/bookmark/bookmark.interface';
 import * as Exceptions from '../../../shared/exception/exception';
 import { ExceptionHandler } from '../../../shared/exception/exception.interface';
 import Globals from '../../../shared/global-shared.constants';

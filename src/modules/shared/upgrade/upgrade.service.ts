@@ -49,11 +49,8 @@ export default abstract class UpgradeService {
       return this.$q.resolve();
     }
 
-    // Clear trace log
-    // TODO: Causes an error in Android on upgrade as SQL table not provisioned yet
-    return this.logSvc
-      .clear()
-      .then(this.getLastUpgradeVersion)
+    // Run each sequential upgrade from last upgrade version to current
+    return this.getLastUpgradeVersion()
       .then((lastUpgradeVersion) => {
         const condition = (currentVersion = '1.0.0') => {
           // Exit when current version is no longer less than target version
@@ -70,9 +67,9 @@ export default abstract class UpgradeService {
           }
 
           // Run upgrade step
-          this.logSvc.logInfo(`Upgrading to ${upgradeStep![0]}`);
           return upgradeStep![1]()
             .then(() => this.setLastUpgradeVersion(upgradeStep![0]))
+            .then(() => this.logSvc.logInfo(`Upgraded to ${upgradeStep![0]}`))
             .then(() => upgradeStep![0]);
         };
 

@@ -247,7 +247,7 @@ export default class AndroidStoreService extends StoreService {
       .all(
         keysForNativeStorage
           .map((key) => this.$q((resolve, reject) => window.NativeStorage.remove(key, resolve, reject)))
-          .concat(this.$q.all(keysForSql.map((key) => this.set(key, null))))
+          .concat(this.$q.all(keysForSql.map((key) => this.setInSql(key, null))))
       )
       .then(() => {});
   }

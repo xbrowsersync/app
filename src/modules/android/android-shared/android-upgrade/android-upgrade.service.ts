@@ -1,6 +1,7 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import * as Exceptions from '../../../shared/exception/exception';
+import { StoreKey } from '../../../shared/store/store.enum';
 import UpgradeService from '../../../shared/upgrade/upgrade.service';
 
 @autobind
@@ -47,26 +48,36 @@ export default class AndroidUpgradeService extends UpgradeService {
   }
 
   upgradeTo160(): ng.IPromise<void> {
-    // Initialise data storage
-    return (
-      this.storeSvc
+    // Get current native storage items
+    return this.getAllFromNativeStorage().then((cachedData) => {
+      // Initialise store
+      return this.storeSvc
         .init()
-        // Convert native storage items to IndexedDB
-        .then(() => this.getAllFromNativeStorage())
-        .then((cachedData) => {
+        .then(() => {
           if (!cachedData || Object.keys(cachedData).length === 0) {
             return;
           }
 
+          // Add settings from previous version to store
           return this.$q.all(
             Object.keys(cachedData).map((key) => {
+              // Don't include deprecated settings
+              if (key === 'appVersion' || key === 'traceLog') {
+                return;
+              }
+
+              // Update settings whose key has changed
+              if (key === 'displaySearchBarBeneathResults') {
+                const keyValue = cachedData[key];
+                key = StoreKey.AlternateSearchBarPosition;
+                cachedData[key] = keyValue;
+              }
+
               return this.storeSvc.set(key, cachedData[key]);
             })
           );
         })
-        .then(() => {
-          return window.NativeStorage.clear();
-        })
-    );
+        .then(() => {});
+    });
   }
 }
