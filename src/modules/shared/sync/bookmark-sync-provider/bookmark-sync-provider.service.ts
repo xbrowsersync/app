@@ -296,7 +296,6 @@ export default class BookmarkSyncProviderService implements SyncProvider {
   }
 
   processRemoteSync(sync: Sync): ng.IPromise<ProcessSyncResult> {
-    let buildIdMappings = false;
     const processResult: ProcessSyncResult = {
       updateRemote: false
     };
@@ -306,49 +305,36 @@ export default class BookmarkSyncProviderService implements SyncProvider {
       .checkSyncCredentialsExist()
       .then(() => this.utilitySvc.isSyncEnabled())
       .then((syncEnabled) => {
-        // If this is a new sync, get native bookmarks and continue
+        // If this is a new sync, get native bookmarks and build id mappings
         if (!syncEnabled) {
-          buildIdMappings = true;
           // TODO: Fix this circular dependency
-          return (this.bookmarkSvc as any).getNativeBookmarksAsBookmarks();
+          return (this.bookmarkSvc as any).getNativeBookmarksAsBookmarks().then((bookmarks) => {
+            processResult.data = bookmarks;
+            processResult.updateRemote = true;
+            return this.bookmarkSvc.buildIdMappings(bookmarks);
+          });
         }
 
-        // Use bookmarks provided or retrieve cached and then process changes
-        return (angular.isUndefined(sync.bookmarks)
-          ? this.bookmarkHelperSvc.getCachedBookmarks()
-          : this.$q.resolve(sync.bookmarks)
-        ).then((bookmarks) => {
-          if (angular.isUndefined(sync.changeInfo)) {
-            if (!angular.isUndefined(sync.bookmarks)) {
-              // If no change info but bookmarks provided, sync these bookmarks
-              return sync.bookmarks;
+        // Retrieve cached bookmarks and then process changes
+        return this.bookmarkHelperSvc.getCachedBookmarks().then((cachedBookmarks) => {
+          // Use bookmarks provided with sync if exists
+          const bookmarksToSync = angular.isUndefined(sync.bookmarks) ? cachedBookmarks : sync.bookmarks;
+          processResult.data = bookmarksToSync;
+          return (angular.isUndefined(sync.changeInfo)
+            ? this.$q.resolve(bookmarksToSync)
+            : this.bookmarkSvc
+                .processNativeChangeOnBookmarks(sync.changeInfo, bookmarksToSync)
+                .then((updatedBookmarks) => this.bookmarkSvc.ensureContainersExist(updatedBookmarks))
+          ).then((updatedBookmarks) => {
+            // If changes made, add updated bookmarks to process result and mark for remote update
+            if (!angular.equals(updatedBookmarks, bookmarksToSync)) {
+              processResult.data = updatedBookmarks;
+              processResult.updateRemote = true;
             }
-
-            // Otherwise nothing to process or sync
-            this.logSvc.logInfo('No change to process');
-            return;
-          }
-
-          // Update bookmarks data with local changes and create containers if required
-          return this.bookmarkSvc
-            .processNativeChangeOnBookmarks(sync.changeInfo, bookmarks)
-            .then((updatedBookmarks) => this.bookmarkSvc.ensureContainersExist(updatedBookmarks));
+          });
         });
       })
-      .then((bookmarksToSync) => {
-        if (angular.isUndefined(bookmarksToSync)) {
-          // Nothing to sync
-          return processResult;
-        }
-
-        processResult.data = bookmarksToSync;
-
-        // Build id mappings if this is a new sync
-        return (buildIdMappings ? this.bookmarkSvc.buildIdMappings(bookmarksToSync) : this.$q.resolve()).then(() => {
-          processResult.updateRemote = true;
-          return processResult;
-        });
-      });
+      .then(() => processResult);
   }
 
   processUpgradeSync(): ng.IPromise<ProcessSyncResult> {

@@ -593,7 +593,8 @@ export default abstract class WebExtBookmarkService {
         })
         .then((parentId) => {
           if (!parentId) {
-            return;
+            // Don't sync this change
+            return bookmarks;
           }
 
           // Add new bookmark then check if the change should be synced
@@ -612,7 +613,7 @@ export default abstract class WebExtBookmarkService {
             (syncThisChange) => {
               if (!syncThisChange) {
                 // Don't sync this change
-                return;
+                return bookmarks;
               }
               // Add new id mapping
               const idMapping = this.bookmarkIdMapperSvc.createMapping(
@@ -691,7 +692,7 @@ export default abstract class WebExtBookmarkService {
         if (!idMapping) {
           // No mappings found, skip sync
           this.logSvc.logInfo('No id mapping found, skipping sync');
-          return;
+          return bookmarks;
         }
 
         // Check if the change should be synced
@@ -699,7 +700,7 @@ export default abstract class WebExtBookmarkService {
         return this.checkIfBookmarkChangeShouldBeSynced(bookmarkToUpdate, bookmarks).then((syncThisChange) => {
           if (!syncThisChange) {
             // Don't sync this change
-            return;
+            return bookmarks;
           }
 
           // Modify the bookmark with the update info
@@ -801,63 +802,60 @@ export default abstract class WebExtBookmarkService {
                     .catch(reject);
                 });
               }
-              return removeBookmarkPromise
-                .then((bookmarksAfterRemoval) => {
-                  let addBookmarkPromise: ng.IPromise<Bookmark[]>;
-                  if (!parentMapping) {
-                    // New parent not mapped, skip add
-                    addBookmarkPromise = this.$q.resolve(bookmarksAfterRemoval);
-                  } else {
-                    // Add the bookmark then check if change should be synced
-                    addBookmarkPromise = this.countNativeContainersBeforeIndex(
-                      changeData.parentId,
-                      changeData.index
-                    ).then((numContainers) => {
-                      // Adjust the target index by the number of container folders then add the bookmark
-                      const index = changeData.index - numContainers;
-                      const addBookmarkResult = this.addBookmark(
-                        bookmarkToRemove,
-                        parentMapping.syncedId,
-                        index,
-                        bookmarksAfterRemoval
-                      );
-                      addBookmarkResult.bookmark.id = bookmarkToRemove.id;
-                      return this.checkIfBookmarkChangeShouldBeSynced(
-                        addBookmarkResult.bookmark,
-                        addBookmarkResult.bookmarks
-                      ).then((syncThisChange) => {
-                        if (!syncThisChange) {
-                          // Don't sync this change, return bookmarks after removal processed
-                          return bookmarksAfterRemoval;
-                        }
-
-                        // Set flag to ensure update bookmarks are synced
-                        changesMade = true;
-
-                        // Add new id mapping for moved bookmark
-                        if (movedBookmarkMapping) {
-                          // If moved bookmark was already mapped, no need to update id mappings
-                          return addBookmarkResult.bookmarks;
-                        }
-                        const idMapping = this.bookmarkIdMapperSvc.createMapping(
-                          addBookmarkResult.bookmark.id,
-                          changeData.id
+              return (
+                removeBookmarkPromise
+                  .then((bookmarksAfterRemoval) => {
+                    let addBookmarkPromise: ng.IPromise<Bookmark[]>;
+                    if (!parentMapping) {
+                      // New parent not mapped, skip add
+                      addBookmarkPromise = this.$q.resolve(bookmarksAfterRemoval);
+                    } else {
+                      // Add the bookmark then check if change should be synced
+                      addBookmarkPromise = this.countNativeContainersBeforeIndex(
+                        changeData.parentId,
+                        changeData.index
+                      ).then((numContainers) => {
+                        // Adjust the target index by the number of container folders then add the bookmark
+                        const index = changeData.index - numContainers;
+                        const addBookmarkResult = this.addBookmark(
+                          bookmarkToRemove,
+                          parentMapping.syncedId,
+                          index,
+                          bookmarksAfterRemoval
                         );
-                        return this.bookmarkIdMapperSvc.add(idMapping).then(() => {
-                          return addBookmarkResult.bookmarks;
+                        addBookmarkResult.bookmark.id = bookmarkToRemove.id;
+                        return this.checkIfBookmarkChangeShouldBeSynced(
+                          addBookmarkResult.bookmark,
+                          addBookmarkResult.bookmarks
+                        ).then((syncThisChange) => {
+                          if (!syncThisChange) {
+                            // Don't sync this change, return bookmarks after removal processed
+                            return bookmarksAfterRemoval;
+                          }
+
+                          // Set flag to ensure update bookmarks are synced
+                          changesMade = true;
+
+                          // Add new id mapping for moved bookmark
+                          if (movedBookmarkMapping) {
+                            // If moved bookmark was already mapped, no need to update id mappings
+                            return addBookmarkResult.bookmarks;
+                          }
+                          const idMapping = this.bookmarkIdMapperSvc.createMapping(
+                            addBookmarkResult.bookmark.id,
+                            changeData.id
+                          );
+                          return this.bookmarkIdMapperSvc.add(idMapping).then(() => {
+                            return addBookmarkResult.bookmarks;
+                          });
                         });
                       });
-                    });
-                  }
-                  return addBookmarkPromise;
-                })
-                .then((updatedBookmarks) => {
-                  if (!changesMade) {
-                    // No changes made, skip sync
-                    return;
-                  }
-                  return updatedBookmarks;
-                });
+                    }
+                    return addBookmarkPromise;
+                  })
+                  // If no changes made return original bookmarks
+                  .then((updatedBookmarks) => (!changesMade ? bookmarks : updatedBookmarks))
+              );
             });
           });
       });
@@ -879,7 +877,7 @@ export default abstract class WebExtBookmarkService {
         if (!idMapping) {
           // No mappings found, skip sync
           this.logSvc.logInfo('No id mapping found, skipping sync');
-          return;
+          return bookmarks;
         }
 
         // Check if the change should be synced
@@ -887,7 +885,7 @@ export default abstract class WebExtBookmarkService {
         return this.checkIfBookmarkChangeShouldBeSynced(bookmarkToRemove, bookmarks).then((syncThisChange) => {
           if (!syncThisChange) {
             // Don't sync this change
-            return;
+            return bookmarks;
           }
 
           // Get all child bookmark mappings
