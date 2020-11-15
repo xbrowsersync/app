@@ -7,7 +7,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdateAvailable_Message",
-        "default": "{version} on ladattavissa. Napsauta saadaksesi lisätietoja.",
+        "default": "{version} on ladattavissa. Klikkaa saadaksesi lisätietoja.",
         "android": "xBrowserSync {version} on ladattavissa."
       }
     },
@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync on päivitetty uusimmilla ominaisuuksilla ja korjauksilla. Napsauta saadaksesi julkaisutiedot."
+        "default": "xBrowserSync on päivitetty uusimmilla ominaisuuksilla ja korjauksilla. Klikkaa nähdäksesi julkaisutiedot."
       }
     },
     "BookmarkCreated": {
@@ -173,7 +173,7 @@
   "Exception": {
     "ContainerChanged_Message": {
       "key": "Exception_ContainerChanged_Message",
-      "default": "Älä muokkaa [xbs] kansioita, koska se voi aiheuttaa synkronointiongelmia."
+      "default": "Älä muokkaa [xbs]-kansioita, koska se voi aiheuttaa synkronointiongelmia."
     },
     "ContainerChanged_Title": {
       "key": "Exception_ContainerChanged_Title",
@@ -483,7 +483,7 @@
     "Help": {
       "AddingBookmarks": {
         "key": "View_Help_AddingBookmarks",
-        "default": "<h4>Kirjanmerkin lisäys</h4><p>Lisää nykyinen sivu napsauttamalla kirjanmerkin kuvaketta hakupaneelissa. Kirjanmerkin ominaisuudet täydennetään puolestasi automaattisesti, muuten lisää kuvaus ja joitakin tunnisteita varmistaaksesi paremmat hakutulokset.</p><p>Vaihtoehtoisesti, napsauta selaimen “Lisää kirjanmerkki” -painiketta normaalisti, niin xBrowserSync täydentää kirjanmerkin ominaisuudet (jotta tämä toimii, on laajennukselle myönnettävä valinnaiset oikeudet asetuksista).</p>",
+        "default": "<h4>Kirjanmerkin lisäys</h4><p>Lisää nykyinen sivu klikkaamalla kirjanmerkin kuvaketta hakupaneelissa. Kirjanmerkin ominaisuudet täydennetään puolestasi automaattisesti, muuten lisää kuvaus ja joitakin tunnisteita varmistaaksesi paremmat hakutulokset.</p><p>Vaihtoehtoisesti, klikkaa selaimen “Lisää kirjanmerkki” -painiketta normaalisti, niin xBrowserSync täydentää kirjanmerkin ominaisuudet (jotta tämä toimii, on laajennukselle myönnettävä asetuksista käyttöoikeus).</p>",
         "android": "<h4>Kirjanmerkin lisäys</h4><p>Lisää kirjanmerkkejä helposti jakamalla xBrowserSync:iin sovelluksista, joilla voi jakaa URL-osoitteita, kuten selaimista, YouTubesta, Spotifysta ja monesta muusta.</p><p>Kirjanmerkkien ominaisuudet täydennetään puolestasi automaattisesti, muuten lisää kuvaus ja joitakin tunnisteita varmistaaksesi paremmat hakutulokset.</p>"
       },
       "BackingUp": {
@@ -500,13 +500,13 @@
       },
       "ExistingId": {
         "key": "View_Help_ExistingId",
-        "default": "<h4>Synkronointi olemassa olevalla ID:llä</h4><p>Napsauta “Oletko jo saanut sync ID:n?” syöttääksesi nykyisen sync ID:n ja salasanan. Jos synkronointitunnuksesi luotiin eri palveluun kuin näytettyyn palveluun, vaihda kyseiseen palveluun ennen kuin yrität synkronointia.</p><p>xBrowserSync noutaa ja purkaa salatut tietosi käyttäen paikallisesti tallennettua salasanaa. Tyhjennä paikalliset kirjanmerkit ennen kuin ne täydennetään uudelleen puretuista tiedosta.</p><p>Synkronoinnin jälkeen xBrowserSync tarkistaa taustalla 15 minuutin välein onko tietoihin tullut muutoksia ja päivittää paikalliset kirjanmerkit tarvittaessa. Voit synkronoida saattavilla olevat päivitykset asetuksista myös manuaalisesti.</p>",
-        "android": "<h4>Synkronointi olemassa olevalla ID:llä</h4><p>Aloita skannaamalla synkronointitunnuksen QR-koodi työpöytäselaimesi xBrowserSync-laajennuksen asetuspaneelista (napsauta synkronointitunnusta paljastaaksesi sen). Varmista, että syötät saman salasanan, jota käytettiin synkronoinnin luomisessa tai xBrowserSync ei voi purkaa tietojasi.</p><p>Lisäksi, jos olet synkronoinut tietosi eri xBrowserSync-palveluun, varmista, että se on asetuksissa määritetty aktiiviseksi palveluksi.</p>"
+        "default": "<h4>Synkronointi olemassa olevalla synkronointitunnuksella</h4><p>Klikkaa “Oletko jo saanut synkronointitunnuksen?” syöttääksesi nykyisen tunnuksenn ja salasanan. Jos tunnuksesi on luotu eri synkronointipalveluun kuin näytettävään palveluun, vaihda palvelu ennen synkronointia.</p><p>xBrowserSync noutaa ja purkaa salatut tietosi käyttäen paikallisesti tallennettua salasanaa. Tyhjennä paikalliset kirjanmerkit ennen kuin ne täydennetään uudelleen puretuista tiedosta.</p><p>Synkronoinnin jälkeen xBrowserSync tarkistaa taustalla 15 minuutin välein onko tietoihin tullut muutoksia ja päivittää paikalliset kirjanmerkit tarvittaessa. Voit synkronoida saatavilla olevat päivitykset asetuksista myös manuaalisesti.</p>",
+        "android": "<h4>Synkronointi olemassa olevalla synkronointitunnuksella</h4><p>Aloita skannaamalla tunnuksen QR-koodi työpöytäselaimesi xBrowserSync-laajennuksen asetuspaneelista (klikkaa tunnusta paljastaaksesi sen). Varmista, että syötät saman salasanan, jota käytettiin synkronoinnin luonnissa tai xBrowserSync ei voi purkaa tietojasi.</p><p>Lisäksi, jos olet synkronoinut tietosi eri xBrowserSync-palveluun, varmista, että se on asetuksissa määritetty aktiiviseksi palveluksi.</p>"
       },
       "FirstSync": {
         "key": "View_Help_FirstSync",
-        "default": "<h4>Ensimmäinen synkronointi</h4><p>Ennen kuin xBrowserSync voi synkronoida selaimesi tiedot, sinun täytyy syöttää salauksen salasana. Varmista, että se vahva ja että muistat sen, sillä käyutettävissäsi ei ole nollauksia tai muistutuksia, joten jos unohdat sen, et voi käyttää synkronoituja tietoja.</p><p>Selaimesi tiedot salataan salasanalla ja tallennetaan aktiiviseen xBrowserSync-palveluun, joka on määritetty asetuksissa.</p><p>Kun synkronointi on suoritettu, kaikki paikallisiin kirjanmerkkeihin tekemäsi muutokset synkronoidaan automaattisesti xBrowserSync:in toimesta.</p>",
-        "android": "<h4>Ensimmäinen synkronointi</h4><p>xBrowserSync synkronoi selaimesi tiedot aktiivisesti työpöytäselainten välillä (synkronointia mobiiliselaimiin ei tueta tällä hetkellä) ja voit käyttää tätä sovellusta päästäksesi käsiksi synkronoituihin tietoihin Android-mobiililaitteessasi.</p><p>Jos et ole jo luonut synkronointitunnusta, siirry työpöytäselaimeesi ja <a href='https://link.xbrowsersync.org/download' class='new-tab'>lataa</a> xBrowserSync-laajennus (saatavana Chromelle ja Firefoxille). Kun olet luonut synkronoinnin, voit käyttää uutta synkronointitunnustasi tässä sovelluksessa päästäksesi käsiksi tietoihisi.</p>"
+        "default": "<h4>Ensimmäinen synkronointi</h4><p>Ennen kuin xBrowserSync voi synkronoida selaimesi tiedot, sinun täytyy määrittää salasana salausta varten. Varmista, että se on vahva ja muistat sen, sillä käytettävissäsi ei ole palautustoimintoja tai muistutuksia, joten jos unohdat sen, et voi käyttää synkronoituja tietoja.</p><p>Selaimesi tiedot salataan salasanalla ja tallennetaan aktiiviseen xBrowserSync-palveluun, joka on määritetty asetuksissa.</p><p>Kun synkronointi on suoritettu, kaikki paikallisiin kirjanmerkkeihin tekemäsi muutokset synkronoidaan automaattisesti xBrowserSyncin toimesta.</p>",
+        "android": "<h4>Ensimmäinen synkronointi</h4><p>xBrowserSync synkronoi selaimesi tiedot aktiivisesti työpöytäselainten välillä (synkronointia mobiiliselaimiin ei tueta tällä hetkellä) ja voit käyttää tätä sovellusta päästäksesi käsiksi synkronoituihin tietoihin Android-mobiililaitteessasi.</p><p>Jos et ole vielä luonut synkronointitunnusta, siirry työpöytäselaimeesi ja <a href='https://link.xbrowsersync.org/download' class='new-tab'>lataa</a> xBrowserSync-laajennus (saatavana Chromelle ja Firefoxille). Kun olet luonut synkronoinnin, voit käyttää uutta synkronointitunnustasi tässä sovelluksessa päästäksesi käsiksi tietoihisi.</p>"
       },
       "FurtherSupport": {
         "key": "View_Help_FurtherSupport",
@@ -527,12 +527,12 @@
       },
       "Searching": {
         "key": "View_Help_Searching",
-        "default": "<h4>Etsi kirjanmerkkejäsi</h4><p>Synkronoituasi, paina vain Enter-näppäintä näyttääksesi viimeisimmät kirjanmerkit tai kirjoita joitakin avainsanoja tai URL-osoite etsiäksesi kirjanmerkkejä.</p><p>Vaihda hakutulosten ja kirjanmerkkikansioiden välillä selataksesi koko hierarkiaa.</p><p>Muokataksesi tai poistaaksesi kirjanmerkin, osoita kirjanmerkkiä ja napsauta kirjanmerkin nimen viereen ilmestyvää muokkauskuvaketta.</p>",
+        "default": "<h4>Etsi kirjanmerkkejäsi</h4><p>Synkronoituasi, paina Enter-näppäintä näyttääksesi viimeisimmät kirjanmerkit tai kirjoita joitakin avainsanoja tai URL-osoite etsiäksesi kirjanmerkkejä.</p><p>Vaihda hakutulosten ja kirjanmerkkikansioiden välillä selataksesi koko hierarkiaa.</p><p>Muokataksesi tai poistaaksesi kirjanmerkin, osoita kirjanmerkkiä ja klikkaa kirjanmerkin nimen viereen ilmestyvää muokkauskuvaketta.</p>",
         "android": "<h4>Etsi kirjanmerkkejäsi</h4><p>Synkronoituasi, näytetään kirjanmerkkisi aikajärjestyksessä kun avaat xBrowserSyncin. Kirjoita hakukenttään joitakin avainsanoja tai URL-osoite etsiäksesi kirjanmerkkejä.</p><p>Vaihda hakutulosten ja kirjanmerkkikansioiden välillä selataksesi koko hierarkiaa.</p><p>Painamalla kirjanmerkkiä pitkään, voit jakaa, muokata tai poistaa sen.</p>"
       },
       "Service": {
         "key": "View_Help_Service",
-        "default": "<h4>Synkronointi toiseen palveluun</h4><p>Oletuksena tietosi on synkronoidaan <a href='https://link.xbrowsersync.org/api' class='new-tab'>viralliseen xBrowserSync-palveluun</a>, mutta jos haluat synkronoida tietosi vaihtoehtoiseen xBrowserSync-palveluun, voit vaihtaa aktiivisen palvelun ennen synkronointia.</p><p>Tarkista saatavilla olevien <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>julkisten xBrowserSync-palveluiden</a> tai <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>käytä omaa palveluasi</a>, joko yksityisesti äärimmäisen turvallisuuden ja tietosuojan takaammiseksi tai julkisesti, jotta useammat ihmiset voivat nauttia xBrowserSyncistä.</p><p><strong>Tärkeää:</strong> xBrowserSync-palveluita ylläpitävät itsenäiset vapaaehtoiset. Palvelun ylläpitäjä ei ota vastuuta tiedoistasi, joten muista varmuuskopioida ne säännöllisesti.</p>"
+        "default": "<h4>Synkronointi toiseen palveluun</h4><p>Oletusarvoisesti tietosi synkronoidaan <a href='https://link.xbrowsersync.org/api' class='new-tab'>viralliseen xBrowserSync-palveluun</a>, mutta jos haluat synkronoida tietosi toiseen xBrowserSync-palveluun, voit vaihtaa aktiivisen palvelun ennen synkronointia.</p><p>Katso lista saatavilla olevista <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>julkisista xBrowserSync-palveluista</a> tai <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>lue oma palvelusi</a> äärimmäisen turvallisuuden ja tietosuojan takaamiseksi tai jaa se julkisesti, jotta useammat ihmiset voivat nauttia xBrowserSyncistä.</p><p><strong>Tärkeää:</strong> xBrowserSync-palveluita ylläpitävät vapaaehtoiset itsenäisesti ja palvelun ylläpitäjä eivät ota vastuuta tiedoistasi, joten muista varmuuskopioida ne säännöllisesti.</p>"
       },
       "Shortcuts": {
         "key": "View_Help_Shortcuts",
@@ -543,19 +543,19 @@
       },
       "SyncId": {
         "key": "View_Help_SyncId",
-        "default": "<h4>Synkronointi ID:si</h4><p>xBrowserSync takaa yksityisyytesi, koska henkilökohtaisia tietoja ei koskaan kerätä ja selaimesi tiedot on salattu ennen synkronointia. Synkronoidut tiedot tunnistetaan saamallasi anonyymillä synkronointitunnuksella, jota voidaan käyttää yhdessä salasanan kanssa tietojen synkronointiin muiden selainten ja laitteiden välillä.</p><p>Muista, että synkronointitunnuksesi toimii vain sen xBrowserSync-palvelun kanssa, jolle se on luotu ja jos vaihdat toiseen xBrowserSync-palveluun sinun on luotava uusi synkronointi tai käytettävä olemassa olevaa synkronointitunnusta, jota olet aiemmin käyttänyt kyseisen palvelun kanssa.</p><p>Aina kun synkronointi on käytössä, voit tarkastella synkronointitunnustasi asetuksissa. Napsauta sitä paljastaaksesi kätevän QR-koodin, jonka voit skannata synkronoidaksesi mobiililaitteita.</p>"
+        "default": "<h4>Synkronointitunnuksesi</h4><p>xBrowserSync takaa yksityisyytesi, koska henkilökohtaisia tietoja ei koskaan kerätä ja selaimesi tiedot salataan jo ennen synkronointia. Synkronoidut tiedot tunnistetaan saamallasi nimettömällä synkronointitunnuksella, jota voidaan käyttää yhdessä salasanan kanssa tietojen synkronointiin muiden selainten ja laitteiden välillä.</p><p>Muista, että tunnuksesi toimii vain sen xBrowserSync-palvelun kanssa, jolle se on luotu ja jos vaihdat toiseen xBrowserSync-palveluun sinun on luotava uusi synkronointi tai käytettävä olemassa olevaa tunnusta, jota olet aiemmin käyttänyt kyseisen palvelun kanssa.</p><p>Aina kun synkronointi on käytössä, voit tarkastella tunnustasi asetuksissa. Klikkaa sitä paljastaaksesi kätevän QR-koodin, jonka voit skannata synkronoidaksesi mobiililaitteita.</p>"
       },
       "Welcome": {
         "key": "View_Help_Welcome",
-        "default": "<h4>Tervetuloa xBrowserSynciin!</h4><p>xBrowserSync on ilmainen ja avoimen lähdekoodin vaihtoehto Googlen, Mozillan, Operan ja muiden tarjoamille selaimen synkronointipalveluille. xBrowserSync kunnioittaa yksityisyyttäsi ja antaa sinulle täydellisen anonymiteetin (tutustu <a href='https://link.xbrowsersync.org/www' class='new-tab'>sivustoon</a> saadaksesi lisätietoja).</p><p>Käytä hetki lukeaksesi tämä opas läpi tutustuaksesi xBrowserSync-palveluun. Käytä alla olevia hakulinkkejä tai nuolinäppäimiä liikkuaksesi sivujen välillä.</p><p>Huomaa: xBrowserSync synkronoi tällä hetkellä vain kirjanmerkkejä. Selaimen lisätietojen synkronointi lisätään tulevaisuudessa, tutustu <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>kehityssuunnitelmaan</a> nähdäksesi mitä on tulossa.</p>",
-        "android": "<h4>Tervetuloa xBrowserSynciin!</h4><p>xBrowserSync on ilmainen ja avoimen lähdekoodin vaihtoehto Googlen, Mozillan, Operan ja muiden tarjoamille selaimen synkronointipalveluille. xBrowserSync kunnioittaa yksityisyyttäsi ja antaa sinulle täydellisen anonymiteetin (tutustu <a href='https://link.xbrowsersync.org/www' class='new-tab'>sivustoon</a> saadaksesi lisätietoja).</p><p>Käytä hetki lukeaksesi tämä opas läpi tutustuaksesi xBrowserSync-palveluun. Käytä alla olevia linkkejä tai pyyhkäise näyttöä liikkuaksesi sivujen välillä.</p><p>Huomaa: xBrowserSync synkronoi tällä hetkellä vain kirjanmerkkejä. Selaimen lisätietojen synkronointi lisätään tulevaisuudessa, tutustu <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>kehityssuunnitelmaan</a> nähdäksesi mitä on tulossa.</p>"
+        "default": "<h4>Tervetuloa xBrowserSynciin!</h4><p>xBrowserSync on ilmainen avoimen lähdekoodin vaihtoehto Googlen, Mozillan, Operan ja muiden tarjoamille selaimen synkronointipalveluille. xBrowserSync kunnioittaa yksityisyyttäsi ja antaa sinulle täydellisen anonymiteetin (tutustu <a href='https://link.xbrowsersync.org/www' class='new-tab'>sivustoon</a> saadaksesi lisätietoja).</p><p>Käytä hetki lukeaksesi tämä opas läpi tutustuaksesi xBrowserSync-palveluun. Käytä alla olevia hakulinkkejä tai nuolinäppäimiä liikkuaksesi sivujen välillä.</p><p>Huomaa: xBrowserSync synkronoi tällä hetkellä vain kirjanmerkkejä. Selaimen muiden tietojen synkronointi lisätään tulevaisuudessa, tutustu <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>kehityssuunnitelmaan</a> nähdäksesi mitä on tulossa.</p>",
+        "android": "<h4>Tervetuloa xBrowserSynciin!</h4><p>xBrowserSync on ilmainen ja avoimen lähdekoodin vaihtoehto Googlen, Mozillan, Operan ja muiden tarjoamille selaimen synkronointipalveluille. xBrowserSync kunnioittaa yksityisyyttäsi ja antaa sinulle täydellisen anonymiteetin (tutustu <a href='https://link.xbrowsersync.org/www' class='new-tab'>sivustoon</a> saadaksesi lisätietoja).</p><p>Käytä hetki lukeaksesi tämä opas läpi tutustuaksesi xBrowserSynciin. Käytä alla olevia linkkejä tai pyyhkäise näyttöä liikkuaksesi sivujen välillä.</p><p>Huomaa: xBrowserSync synkronoi tällä hetkellä vain kirjanmerkkejä. Selainten muiden tietojen synkronointi lisätään tulevaisuudessa, tutustu <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>kehityssuunnitelmaan</a> nähdäksesi mitä on tulossa.</p>"
       }
     },
     "Login": {
       "GetSyncId": {
         "Title": {
           "key": "View_Login_GetSyncId_Title",
-          "default": "Tarvitsetko synkronointi-ID:n?"
+          "default": "Tarvitsetko synkronointitunnuksen?"
         },
         "Content": {
           "key": "View_Login_GetSyncId_Content",
@@ -591,7 +591,7 @@
         },
         "Content": {
           "key": "View_Login_Scan_Content",
-          "default": "Avaa xBrowserSync työpöytäselaimessasi, siirry sen asetuksiin ja napsauta synkronointi ID:tä näyttääksesi QR-koodin, jonka voit skannata täällä."
+          "default": "Avaa xBrowserSync työpöytäselaimessasi, siirry sen asetuksiin ja klikkaa synkronointitunnusta näyttääksesi QR-koodin, jonka voit skannata tästä."
         },
         "ScanCode": {
           "key": "View_Login_Scan_ScanCode",
@@ -701,7 +701,7 @@
           },
           "Content": {
             "key": "View_Login_Sync_Upgrade_Content",
-            "default": "<p>Tämä synkronointitunnus on päivitettävä, jotta se voidaan synkronoida tämän xBrowserSync-version kanssa. Päivityksen jälkeen et voi synkronoida aiempien xBrowserSync-versioiden kanssa.</p><p>Varmista, että olet päivittänyt kaikki xBrowserSync-sovelluksesi ennen kuin jatkat. Oletko valmis jatkamaan?</p>"
+            "default": "<p>Tämä synkronointitunnus on päivitettävä, jotta se voidaan synkronoida tämän xBrowserSync-version kanssa. Päivityksen jälkeen et enää voi synkronoida vanhempien versioiden kanssa.</p><p>Varmista, että olet päivittänyt kaikki xBrowserSync-sovelluksesi ennen kuin jatkat. Oletko valmis jatkamaan?</p>"
           }
         }
       },
@@ -712,11 +712,11 @@
         },
         "Existing": {
           "key": "View_Login_SyncId_Existing",
-          "default": "Onko sinulla jo synkronointi-ID?"
+          "default": "Onko sinulla jo synkronointitunnus?"
         },
         "Invalid": {
           "key": "View_Login_SyncId_Invalid",
-          "default": "Synkronointitunnus ei ole kelvollinen"
+          "default": "Virheellinen synkronointitunnus"
         },
         "Label": {
           "key": "View_Login_SyncId_Label",
@@ -829,7 +829,7 @@
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Synced_Confirm",
-              "default": "<p>Koska synkronointi on tällä hetkellä käytössä, palautettavat tiedot korvaavat synkronoidut tiedot.</p><p>Palautaksesi tiedot vain paikalliseen selaimeen, poista synkronointi käytöstä ennen palauttamista.</p><p>Jatketaanko?</p>",
+              "default": "<p>Koska synkronointi on tällä hetkellä käytössä, palautettavat tiedot korvaavat synkronoidut tiedot.</p><p>Palauttaaksesi tiedot vain paikalliseen selaimeen, poista synkronointi käytöstä ennen palautusta.</p><p>Jatketaanko?</p>",
               "android": "<p>Palautettavat tiedot korvaavat synkronoidut tiedot.</p><p>Jatketaanko?</p>"
             }
           },
@@ -1065,7 +1065,7 @@
           },
           "Description": {
             "key": "View_Settings_Sync_Id_Description",
-            "default": "Käytä synkronointitunnusta yhdistääksesi synkronoituihin tietoihin muissa laitteissa (napsauta näyttääksesi QR-koodin)."
+            "default": "Käytä synkronointitunnusta yhdistääksesi synkronoituihin tietoihisi muissa laitteissa (klikkaa näyttääksesi QR-koodin)."
           }
         },
         "Data": {
@@ -1099,7 +1099,7 @@
         "Qr": {
           "Description": {
             "key": "View_Settings_Sync_Qr_Description",
-            "default": "Skannaa tämä QR-koodi käyttämällä xBrowserSyncin Android-sovellusta yhdistääksesi synkronointitietosi."
+            "default": "Skannaa tämä QR-koodi käyttämällä xBrowserSyncin Android-sovellusta yhdistääksesi synkronoituihin tietoihisi."
           },
           "Show": {
             "key": "View_Settings_Sync_Qr_Show",
@@ -1107,7 +1107,7 @@
           },
           "Copy": {
             "key": "View_Settings_Sync_Qr_Copy",
-            "default": "Kopioi synkronointi-ID leikepöydälle"
+            "default": "Kopioi synkronointitunnus leikepöydälle"
           },
           "Copied": {
             "key": "View_Settings_Sync_Qr_Copied",
@@ -1125,7 +1125,7 @@
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "Jos tiedosto ei latautunut automaattisesti, napsauta alla olevaa linkkiä oikealla painikkeella ja valitse “Tallenna kohde levylle...”.",
+        "default": "Jos tiedosto ei latautunut automaattisesti, klikkaa alla olevaa linkkiä kakkospainikkeella ja valitse “Tallenna kohde levylle...”.",
         "android": "Tiedosto tallennettu nimellä {fileName}."
       },
       "Support": {
