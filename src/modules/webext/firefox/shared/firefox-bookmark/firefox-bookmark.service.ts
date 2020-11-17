@@ -559,7 +559,7 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService {
     };
 
     // If bookmark is not folder or separator, get page metadata from current tab
-    return (nativeBookmark.url && !this.bookmarkHelperSvc.isSeparator(nativeBookmark)
+    return (nativeBookmark.url && !this.bookmarkHelperSvc.nativeBookmarkIsSeparator(nativeBookmark)
       ? this.platformSvc.getPageMetadata()
       : this.$q.resolve<WebpageMetadata>(null)
     ).then((metadata) => {

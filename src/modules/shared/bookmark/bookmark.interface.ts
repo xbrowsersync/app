@@ -31,7 +31,6 @@ export interface BookmarkChange {
 
 export interface BookmarkMetadata {
   description?: string;
-  isSeparator?: boolean;
   tags?: string[];
   title?: string;
   url?: string;

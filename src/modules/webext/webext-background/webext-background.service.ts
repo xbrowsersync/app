@@ -442,11 +442,7 @@ export default class WebExtBackgroundService {
 
   runRestoreBookmarksCommand(sync: Sync): ng.IPromise<SyncResult> {
     return this.bookmarkSvc.disableEventListeners().then(() => {
-      // Upgrade containers to use current container names
-      const bookmarksToRestore = this.bookmarkHelperSvc.upgradeContainers(sync.bookmarks);
-
       // Queue sync
-      sync.bookmarks = bookmarksToRestore;
       return this.syncEngineSvc.queueSync(sync).then(
         () =>
           ({

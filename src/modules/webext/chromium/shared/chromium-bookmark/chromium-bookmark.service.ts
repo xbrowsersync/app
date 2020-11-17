@@ -2,7 +2,7 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
-import { BookmarkChangeType, BookmarkContainer } from '../../../../shared/bookmark/bookmark.enum';
+import { BookmarkChangeType, BookmarkContainer, BookmarkType } from '../../../../shared/bookmark/bookmark.enum';
 import {
   AddNativeBookmarkChangeData,
   Bookmark,
@@ -72,6 +72,57 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
       })
       .catch((err) => {
         throw new Exceptions.FailedRemoveNativeBookmarksException(undefined, err);
+      });
+  }
+
+  convertNativeBookmarkToSeparator(
+    bookmark: NativeBookmarks.BookmarkTreeNode
+  ): ng.IPromise<NativeBookmarks.BookmarkTreeNode> {
+    // Check if bookmark is in toolbar
+    return this.isNativeBookmarkInToolbarContainer(bookmark)
+      .then((inToolbar) => {
+        // Skip process if bookmark is not in toolbar and already native separator
+        if (
+          (bookmark.url === this.platformSvc.getNewTabUrl() &&
+            !inToolbar &&
+            bookmark.title === Globals.Bookmarks.HorizontalSeparatorTitle) ||
+          (inToolbar && bookmark.title === Globals.Bookmarks.VerticalSeparatorTitle)
+        ) {
+          return bookmark;
+        }
+
+        // Disable event listeners and process conversion
+        return this.disableEventListeners()
+          .then(() => {
+            const title = inToolbar
+              ? Globals.Bookmarks.VerticalSeparatorTitle
+              : Globals.Bookmarks.HorizontalSeparatorTitle;
+
+            // If already a separator just update the title
+            if (
+              (!inToolbar && bookmark.title === Globals.Bookmarks.VerticalSeparatorTitle) ||
+              (inToolbar && bookmark.title === Globals.Bookmarks.HorizontalSeparatorTitle)
+            ) {
+              return browser.bookmarks.update(bookmark.id, { title });
+            }
+
+            // Remove and recreate bookmark as a separator
+            const separator: NativeBookmarks.CreateDetails = {
+              index: bookmark.index,
+              parentId: bookmark.parentId,
+              title,
+              url: this.platformSvc.getNewTabUrl()
+            };
+            return browser.bookmarks.remove(bookmark.id).then(() => {
+              return browser.bookmarks.create(separator);
+            });
+          })
+          .finally(this.enableEventListeners);
+      })
+      .then((nativeSeparator: NativeBookmarks.BookmarkTreeNode) => {
+        // Set type to separator to identify type when syncing
+        nativeSeparator.type = BookmarkType.Separator;
+        return nativeSeparator;
       });
   }
 
@@ -255,7 +306,9 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
         menuBookmarksId === undefined
           ? Promise.resolve<Bookmark[]>(undefined)
           : browser.bookmarks.getSubTree(menuBookmarksId).then((subTree) => {
-              return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(subTree[0].children);
+              return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(
+                this.getNativeBookmarksWithSeparators(subTree[0].children)
+              );
             });
 
       // Get mobile bookmarks
@@ -263,7 +316,9 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
         mobileBookmarksId === undefined
           ? Promise.resolve<Bookmark[]>(undefined)
           : browser.bookmarks.getSubTree(mobileBookmarksId).then((subTree) => {
-              return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(subTree[0].children);
+              return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(
+                this.getNativeBookmarksWithSeparators(subTree[0].children)
+              );
             });
 
       // Get other bookmarks
@@ -283,7 +338,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
 
               // Remove any unsupported container folders present
               const bookmarksWithoutContainers = this.bookmarkHelperSvc
-                .getNativeBookmarksAsBookmarks(otherBookmarks.children)
+                .getNativeBookmarksAsBookmarks(this.getNativeBookmarksWithSeparators(otherBookmarks.children))
                 .filter((x) => {
                   return !this.unsupportedContainers.find((y) => {
                     return y === x.title;
@@ -304,7 +359,9 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
                   this.bookmarkHelperSvc.eachBookmark(toolbarBookmarks.children, (bookmark) => {
                     allNativeBookmarks.push(bookmark);
                   });
-                  return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(toolbarBookmarks.children);
+                  return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(
+                    this.getNativeBookmarksWithSeparators(toolbarBookmarks.children)
+                  );
                 }
               });
             });
@@ -389,6 +446,19 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
     });
   }
 
+  getNativeBookmarksWithSeparators(
+    nativeBookmarks: NativeBookmarks.BookmarkTreeNode[]
+  ): NativeBookmarks.BookmarkTreeNode[] {
+    // Check very bookmark setting type to separator to identify type when syncing
+    this.bookmarkHelperSvc.eachBookmark(nativeBookmarks, (bookmark) => {
+      if (this.isSeparator(bookmark)) {
+        bookmark.type = BookmarkType.Separator;
+      }
+      return bookmark;
+    });
+    return nativeBookmarks;
+  }
+
   getNativeContainerIds(): ng.IPromise<Map<BookmarkContainer, string>> {
     return this.utilitySvc
       .isSyncEnabled()
@@ -445,6 +515,19 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
       });
   }
 
+  isSeparator(nativeBookmark: NativeBookmarks.BookmarkTreeNode): boolean {
+    // Native bookmark is separator if title is dashes or designated separator title
+    // and has no url and no children
+    const separatorRegex = new RegExp('^[-─]{1,}$');
+    return (
+      !angular.isUndefined(nativeBookmark.title) &&
+      ((separatorRegex.test(nativeBookmark.title ?? '') && !nativeBookmark.children?.length) ||
+        ((nativeBookmark.title!.indexOf(Globals.Bookmarks.HorizontalSeparatorTitle) >= 0 ||
+          nativeBookmark.title === Globals.Bookmarks.VerticalSeparatorTitle) &&
+          nativeBookmark.url === this.platformSvc.getNewTabUrl!()))
+    );
+  }
+
   onNativeBookmarkChildrenReordered(...args: any[]): void {
     this.logSvc.logInfo('onChildrenReordered event detected');
     this.queueNativeBookmarkEvent(BookmarkChangeType.ChildrenReordered, ...args);
@@ -456,7 +539,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
       const changedBookmark = results[0];
 
       // If bookmark is separator update native bookmark properties
-      (this.bookmarkHelperSvc.isSeparator(changedBookmark)
+      (this.isSeparator(changedBookmark)
         ? this.convertNativeBookmarkToSeparator(changedBookmark)
         : this.$q.resolve(changedBookmark)
       ).then((bookmarkNode) => {
@@ -495,7 +578,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
 
   syncNativeBookmarkCreated(id?: string, nativeBookmark?: NativeBookmarks.BookmarkTreeNode): ng.IPromise<void> {
     // If bookmark is separator update native bookmark properties
-    return (this.bookmarkHelperSvc.isSeparator(nativeBookmark)
+    return (this.isSeparator(nativeBookmark)
       ? this.convertNativeBookmarkToSeparator(nativeBookmark)
       : this.$q.resolve(nativeBookmark)
     ).then((bookmarkNode) => {
@@ -509,7 +592,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
       };
 
       // If bookmark is not folder or separator, get page metadata from current tab
-      return (bookmarkNode.url && !this.bookmarkHelperSvc.isSeparator(bookmarkNode)
+      return (bookmarkNode.url && !this.isSeparator(bookmarkNode)
         ? this.checkPermsAndGetPageMetadata()
         : this.$q.resolve<WebpageMetadata>(null)
       ).then((metadata) => {
@@ -537,7 +620,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
       const movedBookmark = results[0];
 
       // If bookmark is separator update native bookmark properties
-      return (this.bookmarkHelperSvc.isSeparator(movedBookmark)
+      return (this.isSeparator(movedBookmark)
         ? this.convertNativeBookmarkToSeparator(movedBookmark)
         : this.$q.resolve(movedBookmark)
       ).then((bookmarkNode) => {

@@ -66,7 +66,8 @@
           vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.Label) }}</label>
               <input type="{{ vm.showPassword ? 'text' : 'password' }}" name="txtPassword" ng-model="vm.password"
                      class="form-control" password-strength="vm.passwordComplexity" ng-disabled="vm.syncEnabled"
-                     maxlength="150" autocapitalize="off" autocorrect="off" spellcheck="false"
+                     maxlength="150" autocapitalize="off" autocomplete="new-password" autocorrect="off"
+                     spellcheck="false"
                      placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Password.New) }}" />
               <button class="btn btn-icon btn-show-password" ng-class="{ 'active': vm.showPassword }"
                       ng-show="vm.password"

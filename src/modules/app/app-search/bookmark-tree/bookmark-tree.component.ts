@@ -1,10 +1,12 @@
 import { Component, Input, Output } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkType } from '../../../shared/bookmark/bookmark.enum';
 import { Bookmark } from '../../../shared/bookmark/bookmark.interface';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import UtilityService from '../../../shared/utility/utility.service';
 import AppHelperService from '../../shared/app-helper/app-helper.service';
+import { BookmarkTreeItem } from '../app-search.interface';
 
 @autobind
 @Component({
@@ -40,5 +42,10 @@ export default class BookmarkTreeComponent {
     this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.platformSvc = PlatformSvc;
     this.utilitySvc = UtilitySvc;
+  }
+
+  isFolder(bookmark: BookmarkTreeItem): boolean {
+    const bookmarkType = this.bookmarkHelperSvc.getBookmarkType(bookmark);
+    return bookmarkType === BookmarkType.Container || bookmarkType === BookmarkType.Folder;
   }
 }

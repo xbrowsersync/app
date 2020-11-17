@@ -80,5 +80,8 @@ export default abstract class UpgradeService {
       });
   }
 
+  // TODO: Implement this
+  // Convert existing separators into new format
+  // Update sync version
   abstract upgradeTo160(): ng.IPromise<void>;
 }

@@ -2,7 +2,7 @@ import angular from 'angular';
 import autobind from 'autobind-decorator';
 import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import { BookmarkChangeType, BookmarkContainer } from '../../../shared/bookmark/bookmark.enum';
+import { BookmarkChangeType, BookmarkContainer, BookmarkType } from '../../../shared/bookmark/bookmark.enum';
 import {
   AddNativeBookmarkChangeData,
   Bookmark,
@@ -281,51 +281,6 @@ export default abstract class WebExtBookmarkService {
     return bookmark;
   }
 
-  convertNativeBookmarkToSeparator(
-    bookmark: NativeBookmarks.BookmarkTreeNode
-  ): ng.IPromise<NativeBookmarks.BookmarkTreeNode> {
-    // Check if bookmark is in toolbar
-    return this.isNativeBookmarkInToolbarContainer(bookmark).then((inToolbar) => {
-      // Skip process if bookmark is not in toolbar and already native separator
-      if (
-        (bookmark.url === this.platformSvc.getNewTabUrl() &&
-          !inToolbar &&
-          bookmark.title === Globals.Bookmarks.HorizontalSeparatorTitle) ||
-        (inToolbar && bookmark.title === Globals.Bookmarks.VerticalSeparatorTitle)
-      ) {
-        return bookmark;
-      }
-
-      // Disable event listeners and process conversion
-      return this.disableEventListeners()
-        .then(() => {
-          const title = inToolbar
-            ? Globals.Bookmarks.VerticalSeparatorTitle
-            : Globals.Bookmarks.HorizontalSeparatorTitle;
-
-          // If already a separator just update the title
-          if (
-            (!inToolbar && bookmark.title === Globals.Bookmarks.VerticalSeparatorTitle) ||
-            (inToolbar && bookmark.title === Globals.Bookmarks.HorizontalSeparatorTitle)
-          ) {
-            return browser.bookmarks.update(bookmark.id, { title });
-          }
-
-          // Remove and recreate bookmark as a separator
-          const separator: NativeBookmarks.CreateDetails = {
-            index: bookmark.index,
-            parentId: bookmark.parentId,
-            title,
-            url: this.platformSvc.getNewTabUrl()
-          };
-          return browser.bookmarks.remove(bookmark.id).then(() => {
-            return browser.bookmarks.create(separator);
-          });
-        })
-        .finally(this.enableEventListeners);
-    });
-  }
-
   countNativeContainersBeforeIndex(parentId: string, index: number): ng.IPromise<number> {
     // Get native container ids
     return this.getNativeContainerIds().then((nativeContainerIds) => {
@@ -399,7 +354,7 @@ export default abstract class WebExtBookmarkService {
               return this.$q.resolve();
             }
 
-            return this.bookmarkHelperSvc.isSeparator(bookmark)
+            return this.bookmarkHelperSvc.getBookmarkType(bookmark) === BookmarkType.Separator
               ? this.createNativeSeparator(id, toolbarId).then(() => {})
               : this.createNativeBookmark(id, bookmark.title, bookmark.url).then((newNativeBookmark) => {
                   // If the bookmark has children, recurse
@@ -604,7 +559,6 @@ export default abstract class WebExtBookmarkService {
             newBookmarkMetadata.url,
             newBookmarkMetadata.description,
             newBookmarkMetadata.tags,
-            newBookmarkMetadata.isSeparator,
             bookmarks
           );
           const addBookmarkResult = this.addBookmark(newBookmark, parentId, changeData.nativeBookmark.index, bookmarks);

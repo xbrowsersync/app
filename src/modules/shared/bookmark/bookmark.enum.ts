@@ -13,4 +13,11 @@ enum BookmarkContainer {
   Toolbar = '[xbs] Toolbar'
 }
 
-export { BookmarkChangeType, BookmarkContainer };
+enum BookmarkType {
+  Bookmark = 'bookmark',
+  Container = 'container',
+  Folder = 'folder',
+  Separator = 'separator'
+}
+
+export { BookmarkChangeType, BookmarkContainer, BookmarkType };

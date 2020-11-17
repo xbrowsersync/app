@@ -1,6 +1,7 @@
 import { Component, Input, Output } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkType } from '../../../shared/bookmark/bookmark.enum';
 import { Bookmark } from '../../../shared/bookmark/bookmark.interface';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import UtilityService from '../../../shared/utility/utility.service';
@@ -71,5 +72,9 @@ export default class BookmarkComponent {
         });
       }
     }, 100);
+  }
+
+  isSeparator(bookmark: BookmarkTreeItem): boolean {
+    return this.bookmarkHelperSvc.getBookmarkType(bookmark) === BookmarkType.Separator;
   }
 }

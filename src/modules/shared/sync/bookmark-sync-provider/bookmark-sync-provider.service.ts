@@ -357,10 +357,8 @@ export default class BookmarkSyncProviderService implements SyncProvider {
           .getBookmarks()
           .then((response) => this.cryptoSvc.decryptData(response.bookmarks))
           .then((bookmarksJson) => {
-            // Upgrade containers to use current container names
-            const bookmarks = this.bookmarkHelperSvc.upgradeContainers(bookmarksJson ? JSON.parse(bookmarksJson) : []);
-
             // Set the sync version to the current app version
+            const bookmarks = JSON.parse(bookmarksJson);
             return (
               this.platformSvc
                 .getAppVersion()
@@ -461,7 +459,6 @@ export default class BookmarkSyncProviderService implements SyncProvider {
       changeData.metadata.url,
       changeData.metadata.description,
       changeData.metadata.tags,
-      changeData.metadata.isSeparator,
       bookmarks
     );
     otherContainer.children.push(newBookmark);
