@@ -23,11 +23,11 @@
     },
     "BookmarkCreated": {
       "key": "Alert_BookmarkCreated",
-      "default": "Kirjanmerkki luotu"
+      "default": "Kirjanmerkki on luotu"
     },
     "BookmarkDeleted": {
       "key": "Alert_BookmarkDeleted",
-      "default": "Kirjanmerkki poistettu"
+      "default": "Kirjanmerkki on poistettu"
     },
     "BookmarkUpdated": {
       "key": "Alert_BookmarkUpdated",
@@ -506,7 +506,7 @@
       "FirstSync": {
         "key": "View_Help_FirstSync",
         "default": "<h4>Ensimmäinen synkronointi</h4><p>Ennen kuin xBrowserSync voi synkronoida selaimesi tiedot, sinun täytyy määrittää salasana salausta varten. Varmista, että se on vahva ja muistat sen, sillä käytettävissäsi ei ole palautustoimintoja tai muistutuksia, joten jos unohdat sen, et voi käyttää synkronoituja tietoja.</p><p>Selaimesi tiedot salataan salasanalla ja tallennetaan aktiiviseen xBrowserSync-palveluun, joka on määritetty asetuksissa.</p><p>Kun synkronointi on suoritettu, kaikki paikallisiin kirjanmerkkeihin tekemäsi muutokset synkronoidaan automaattisesti xBrowserSyncin toimesta.</p>",
-        "android": "<h4>Syncing for the first time</h4><p>xBrowserSync actively syncs your browser data between your desktop browsers (syncing to mobile browsers is not supported at this time), you can use this app to access your synced data on your Android mobile device.</p><p>If you have not already created a sync ID, head over to your desktop browser and <a href='https://link.xbrowsersync.org/download' class='new-tab'>download</a> the xBrowserSync extension. Once you have created a sync you can use your new sync ID within this app to access your data.</p>"
+        "android": "<h4>Ensimmäinen synkronointi</h4><p>xBrowserSync synkronoi selaustietosi työpöytäselaintesi välillä (synkronointia mobiiliselaimiin ei tueta tällä hetkellä) ja voit käyttää tätä sovellusta päästäksesi käsiksi synkronoituihin tietoihin Android-mobiililaitteessasi.</p><p>Jos et ole vielä luonut synkronointitunnusta, siirry työpöytäselaimeesi ja <a href='https://link.xbrowsersync.org/download' class='new-tab'>lataa</a> xBrowserSync-laajennus. Kun olet luonut synkronoinnin, voit käyttää uutta synkronointitunnustasi tässä sovelluksessa päästäksesi käsiksi tietoihisi.</p>"
       },
       "FurtherSupport": {
         "key": "View_Help_FurtherSupport",
