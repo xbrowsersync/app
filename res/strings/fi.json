@@ -31,7 +31,7 @@
     },
     "BookmarkUpdated": {
       "key": "Alert_BookmarkUpdated",
-      "default": "Kirjanmerkki päivitetty"
+      "default": "Kirjanmerkki on päivitetty"
     },
     "GetMetadata": {
       "Message": {
@@ -40,7 +40,7 @@
       },
       "Success": {
         "key": "Alert_GetMetadata_Success",
-        "default": "Kirjanmerkin ominaisuudet päivitetty."
+        "default": "Kirjanmerkin ominaisuudet on päivitetty."
       }
     },
     "Go": {
@@ -50,7 +50,7 @@
     "WorkingOffline": {
       "Title": {
         "key": "Alert_WorkingOffline_Title",
-        "default": "Työskennellään offline-tilassa"
+        "default": "Työskennellään yhteydettömässä tilassa"
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
