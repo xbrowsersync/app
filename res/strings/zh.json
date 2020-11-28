@@ -506,7 +506,7 @@
       "FirstSync": {
         "key": "View_Help_FirstSync",
         "default": "<h4>首次同步</h4> <p>在 xBrowserSync 同步浏览器数据之前，您需要提供加密密码。 请务必使其坚固且令人难忘，如果您忘记了，它将不会重设或提示您，您将无法访问已同步的数据。</p> <p>您的浏览器数据将被你的密码加密并保存到“设置”面板中配置的 xBrowserSync 服务。</p> <p>一旦同步，您对本地书签所做的任何更改都会被 xBrowserSync 自动同步。</p>",
-        "android": "<h4>Syncing for the first time</h4><p>xBrowserSync actively syncs your browser data between your desktop browsers (syncing to mobile browsers is not supported at this time), you can use this app to access your synced data on your Android mobile device.</p><p>If you have not already created a sync ID, head over to your desktop browser and <a href='https://link.xbrowsersync.org/download' class='new-tab'>download</a> the xBrowserSync extension. Once you have created a sync you can use your new sync ID within this app to access your data.</p>"
+        "android": "<h4>首次同步</h4> <p> xBrowserSync 会在桌面浏览器之间互相同步浏览器数据(目前不支持与移动浏览器同步)，您可以使用此应用在 Android 移动设备上访问已同步的数据。</p> <p>如果尚未创建同步 ID，请转到桌面浏览器，然后<a href='https://link.xbrowsersync.org/download' class='new-tab'>下载</a> xBrowserSync 扩展。 创建同步后，您可以在此应用中使用该同步 ID 来访问数据。</p>"
       },
       "FurtherSupport": {
         "key": "View_Help_FurtherSupport",
