@@ -3,35 +3,35 @@
     "AppUpdateAvailable": {
       "Title": {
         "key": "Alert_AppUpdateAvailable_Title",
-        "default": "xBrowserSync update available"
+        "default": "xBrowserSync oppdatering tilgjengelig"
       },
       "Message": {
         "key": "Alert_AppUpdateAvailable_Message",
-        "default": "{version} is available to download. Click for more information.",
-        "android": "xBrowserSync {version} is available to download."
+        "default": "{version} er tilgjengelig for å laste ned. Klikk for mer informasjon.",
+        "android": "xBrowserSync {version} er tilgjengelig for nedlasting."
       }
     },
     "AppUpdated": {
       "Title": {
         "key": "Alert_AppUpdated_Title",
-        "default": "Updated to"
+        "default": "Oppdatert til"
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync has been updated with the latest features and fixes. Click for release notes."
+        "default": "xBrowserSync har blitt oppdatert med de nyeste funksjonene og feilrettingene. Klikk for notater til utgaven."
       }
     },
     "BookmarkCreated": {
       "key": "Alert_BookmarkCreated",
-      "default": "Bookmark created"
+      "default": "Bokmerke opprettet"
     },
     "BookmarkDeleted": {
       "key": "Alert_BookmarkDeleted",
-      "default": "Bookmark deleted"
+      "default": "Bokmerke slettet"
     },
     "BookmarkUpdated": {
       "key": "Alert_BookmarkUpdated",
-      "default": "Bookmark updated"
+      "default": "Bokmerke oppdatert"
     },
     "GetMetadata": {
       "Message": {
@@ -45,7 +45,7 @@
     },
     "Go": {
       "key": "Alert_Go",
-      "default": "Go"
+      "default": "Gå"
     },
     "WorkingOffline": {
       "Title": {
@@ -95,23 +95,23 @@
     },
     "Back": {
       "key": "Button_Back",
-      "default": "Back"
+      "default": "Tilbake"
     },
     "Cancel": {
       "key": "Button_Cancel",
-      "default": "Cancel"
+      "default": "Avbryt"
     },
     "Close": {
       "key": "Button_Close",
-      "default": "Close"
+      "default": "Lukk"
     },
     "Confirm": {
       "key": "Button_Confirm",
-      "default": "Yes"
+      "default": "Ja"
     },
     "Continue": {
       "key": "Button_Continue",
-      "default": "Continue"
+      "default": "Fortsett"
     },
     "DeleteBookmark": {
       "key": "Button_DeleteBookmark",
@@ -119,15 +119,15 @@
     },
     "Deny": {
       "key": "Button_Deny",
-      "default": "No"
+      "default": "Nei"
     },
     "Done": {
       "key": "Button_Done",
-      "default": "Done"
+      "default": "Ferdig"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
-      "default": "Edit Bookmark"
+      "default": "Rediger bokmerke"
     },
     "Help": {
       "key": "Button_Help",
@@ -135,39 +135,39 @@
     },
     "Next": {
       "key": "Button_Next",
-      "default": "Next"
+      "default": "Neste"
     },
     "OK": {
       "key": "Button_OK",
-      "default": "Got it"
+      "default": "Greit"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
-      "default": "View release notes"
+      "default": "Se utgivelsnotater"
     },
     "Saving": {
       "key": "Button_Saving",
-      "default": "Saving"
+      "default": "Lagrer"
     },
     "Settings": {
       "key": "Button_Settings",
-      "default": "Settings"
+      "default": "Innstillinger"
     },
     "ShareBookmark": {
       "key": "Button_ShareBookmark",
-      "default": "Share bookmark"
+      "default": "Del bokmerke"
     },
     "Undo": {
       "key": "Button_Undo",
-      "default": "Undo"
+      "default": "Angre"
     },
     "Update": {
       "key": "Button_Update",
-      "default": "Update"
+      "default": "Oppdater"
     },
     "View": {
       "key": "Button_View",
-      "default": "View"
+      "default": "Vis"
     }
   },
   "Exception": {
@@ -177,7 +177,7 @@
     },
     "ContainerChanged_Title": {
       "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync folder changed"
+      "default": "xBrowserSync mappen er endret"
     },
     "DailyNewSyncLimitReached_Message": {
       "key": "Exception_DailyNewSyncLimitReached_Message",
@@ -329,11 +329,11 @@
     },
     "ShareFailed_Title": {
       "key": "Exception_ShareFailed_Title",
-      "default": "Share failed"
+      "default": "Deling mislyktes"
     },
     "SyncRemoved_Message": {
       "key": "Exception_SyncRemoved_Message",
-      "default": "The requested sync does not exist, it may have been removed due to inactivity."
+      "default": "Den forespurte synkroniseringen finnes ikke, den kan ha blitt fjernet på grunn av inaktivitet."
     },
     "SyncRemoved_Title": {
       "key": "Exception_SyncRemoved_Title",
@@ -377,7 +377,7 @@
     "Status": {
       "Error": {
         "key": "Service_Status_Error",
-        "default": "Connection error"
+        "default": "Feil ved tilkobling"
       },
       "Loading": {
         "key": "Service_Status_Loading",
