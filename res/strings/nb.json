@@ -381,7 +381,7 @@
       },
       "Loading": {
         "key": "Service_Status_Loading",
-        "default": "Checking"
+        "default": "Sjekker"
       },
       "NoNewSyncs": {
         "key": "Service_Status_NoNewSyncs",
@@ -389,11 +389,11 @@
       },
       "Offline": {
         "key": "Service_Status_Offline",
-        "default": "Offline"
+        "default": "Frakoblet"
       },
       "Online": {
         "key": "Service_Status_Online",
-        "default": "Online"
+        "default": "Tilkoblet"
       }
     }
   },
@@ -404,27 +404,27 @@
     },
     "Synced": {
       "key": "Tooltip_Synced",
-      "default": "synced"
+      "default": "synkronisert"
     },
     "Syncing": {
       "key": "Tooltip_Syncing",
-      "default": "syncing"
+      "default": "synkroniserer"
     }
   },
   "View": {
     "Bookmark": {
       "Add": {
         "key": "View_Bookmark_Add",
-        "default": "Add bookmark"
+        "default": "Legg til bokmerke"
       },
       "Edit": {
         "key": "View_Bookmark_Edit",
-        "default": "Edit bookmark"
+        "default": "Rediger bokmerke"
       },
       "Form": {
         "Title": {
           "key": "View_Bookmark_Form_Title",
-          "default": "Title"
+          "default": "Tittel"
         },
         "Url": {
           "Exists": {
@@ -442,7 +442,7 @@
         },
         "Description": {
           "key": "View_Bookmark_Form_Description",
-          "default": "Description"
+          "default": "Beskrivelse"
         },
         "Tags": {
           "Label": {
@@ -464,11 +464,11 @@
         },
         "Delete": {
           "key": "View_Bookmark_Form_Delete",
-          "default": "Delete"
+          "default": "Slett"
         },
         "Share": {
           "key": "View_Bookmark_Form_Share",
-          "default": "Share"
+          "default": "Del"
         },
         "UpdateProperties": {
           "key": "View_Bookmark_Form_UpdateProperties",
@@ -569,7 +569,7 @@
         },
         "Existing": {
           "key": "View_Login_Password_Existing",
-          "default": "Your encryption password"
+          "default": "Ditt krypteringspassord"
         },
         "Label": {
           "key": "View_Login_Password_Label",
@@ -581,7 +581,7 @@
         },
         "Show": {
           "key": "View_Login_Password_Show",
-          "default": "Reveal password"
+          "default": "Vis passord"
         }
       },
       "Scan": {
@@ -613,7 +613,7 @@
         },
         "Location": {
           "key": "View_Login_Service_Location",
-          "default": "Location"
+          "default": "Sted"
         },
         "MaxSyncSize": {
           "key": "View_Login_Service_MaxSyncSize",
@@ -638,7 +638,7 @@
           },
           "Button": {
             "key": "View_Login_Service_Update_Button",
-            "default": "Switch service"
+            "default": "Bytt tjeneste"
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
@@ -666,7 +666,7 @@
         "Confirm": {
           "Title": {
             "key": "View_Login_Sync_Confirm_Title",
-            "default": "Are you sure?"
+            "default": "Er du sikker?"
           },
           "Content": {
             "key": "View_Login_Sync_Confirm_Content",
@@ -708,15 +708,15 @@
       "SyncId": {
         "Description": {
           "key": "View_Login_SyncId_Description",
-          "default": "Your sync ID"
+          "default": "Din synk-ID"
         },
         "Existing": {
           "key": "View_Login_SyncId_Existing",
-          "default": "Already got a sync ID?"
+          "default": "Har du allerede en synkroniserings-ID?"
         },
         "Invalid": {
           "key": "View_Login_SyncId_Invalid",
-          "default": "Not a valid sync ID"
+          "default": "Ikke en gyldig synkroniserings-ID"
         },
         "Label": {
           "key": "View_Login_SyncId_Label",
@@ -724,14 +724,14 @@
         },
         "New": {
           "key": "View_Login_SyncId_New",
-          "default": "Get a sync ID"
+          "default": "Få en synkroniserings-ID"
         }
       }
     },
     "Permissions": {
       "Title": {
         "key": "View_Permissions_Title",
-        "default": "Optional permissions"
+        "default": "Valgfrie tillatelser"
       },
       "Content": {
         "key": "View_Permissions_Content",
@@ -755,28 +755,28 @@
       },
       "Clear": {
         "key": "View_Search_Clear",
-        "default": "Clear"
+        "default": "Tøm"
       },
       "FolderEmpty": {
         "key": "View_Search_FolderEmpty",
-        "default": "Folder empty"
+        "default": "Mappen er tom"
       },
       "Placeholder": {
         "key": "View_Search_Placeholder",
-        "default": "Hit Enter or search for bookmarks",
-        "android": "Find bookmarks"
+        "default": "Trykk Enter eller søk etter bokmerker",
+        "android": "Finn bokmerker"
       },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
-        "default": "You have no bookmarks, go add some!"
+        "default": "Du har ingen bokmerker, legg til noen!"
       },
       "NoResults": {
         "key": "View_Search_NoResults",
-        "default": "No bookmarks found"
+        "default": "Ingen bokmerker funnet"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
-        "default": "View search results"
+        "default": "Vis søkeresultater"
       }
     },
     "Settings": {
@@ -921,7 +921,7 @@
           },
           "Report": {
             "key": "View_Settings_Issues_Tracker_Report",
-            "default": "Report issue"
+            "default": "Rapporter en feil"
           }
         },
         "Log": {
@@ -1080,12 +1080,12 @@
         },
         "Service": {
           "key": "View_Settings_Sync_Service",
-          "default": "Service"
+          "default": "Tjeneste"
         },
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Sync is up to date."
+            "default": "Synkronisering er oppdatert."
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
@@ -1117,11 +1117,11 @@
       },
       "AppVersion": {
         "key": "View_Settings_AppVersion",
-        "default": "Version"
+        "default": "Versjon"
       },
       "NotAvailable": {
         "key": "View_Settings_NotAvailable",
-        "default": "Settings available when sync is enabled."
+        "default": "Innstillinger tilgjengelig når synkronisering er aktivert."
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
@@ -1158,7 +1158,7 @@
     "Updated": {
       "Title": {
         "key": "View_Updated_Title",
-        "default": "Updated to"
+        "default": "Oppdatert til"
       },
       "Content": {
         "key": "View_Updated_Content",
