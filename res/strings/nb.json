@@ -72,15 +72,15 @@
     "Container": {
       "Menu": {
         "key": "Bookmarks_Container_Menu",
-        "default": "Menu bookmarks"
+        "default": "Menybokmerker"
       },
       "Mobile": {
         "key": "Bookmarks_Container_Mobile",
-        "default": "Mobile bookmarks"
+        "default": "Mobilbokmerker"
       },
       "Other": {
         "key": "Bookmarks_Container_Other",
-        "default": "Other bookmarks"
+        "default": "Andre bokmerker"
       },
       "Toolbar": {
         "key": "Bookmarks_Container_Toolbar",
