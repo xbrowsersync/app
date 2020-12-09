@@ -84,14 +84,14 @@
       },
       "Toolbar": {
         "key": "Bookmarks_Container_Toolbar",
-        "default": "Toolbar bookmarks"
+        "default": "Bokmerker på verktøylinjen"
       }
     }
   },
   "Button": {
     "AddBookmark": {
       "key": "Button_AddBookmark",
-      "default": "Add Bookmark"
+      "default": "Legg til bokmerke"
     },
     "Back": {
       "key": "Button_Back",
@@ -115,7 +115,7 @@
     },
     "DeleteBookmark": {
       "key": "Button_DeleteBookmark",
-      "default": "Delete Bookmark"
+      "default": "Slett bokmerke"
     },
     "Deny": {
       "key": "Button_Deny",
@@ -131,7 +131,7 @@
     },
     "Help": {
       "key": "Button_Help",
-      "default": "Help guide"
+      "default": "Hjelpeguide"
     },
     "Next": {
       "key": "Button_Next",
@@ -143,7 +143,7 @@
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
-      "default": "Se utgivelsnotater"
+      "default": "Se utgivelsesnotater"
     },
     "Saving": {
       "key": "Button_Saving",
@@ -173,11 +173,11 @@
   "Exception": {
     "ContainerChanged_Message": {
       "key": "Exception_ContainerChanged_Message",
-      "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
+      "default": "Unngå å endre [xbs]-mapper fordi det kan forårsake synkroniseringsproblemer."
     },
     "ContainerChanged_Title": {
       "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync mappen er endret"
+      "default": "xBrowserSync-mappen er endret"
     },
     "DailyNewSyncLimitReached_Message": {
       "key": "Exception_DailyNewSyncLimitReached_Message",
