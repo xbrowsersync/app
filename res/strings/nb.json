@@ -36,11 +36,11 @@
     "GetMetadata": {
       "Message": {
         "key": "Alert_GetMetadata_Message",
-        "default": "Fetching bookmark properties, touch to cancel."
+        "default": "Henter bokmerkeegenskaper. Trykk for å avbryte."
       },
       "Success": {
         "key": "Alert_GetMetadata_Success",
-        "default": "Bookmark properties updated."
+        "default": "Bokmerkeegenskaper er oppdatert."
       }
     },
     "Go": {
@@ -50,18 +50,18 @@
     "WorkingOffline": {
       "Title": {
         "key": "Alert_WorkingOffline_Title",
-        "default": "Working offline"
+        "default": "Arbeider frakoblet"
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
-        "default": "Changes will be synced when connection is restored."
+        "default": "Endringer vil bli synkronisert når tilkoblingen gjenopprettes."
       }
     }
   },
   "App": {
     "Description": {
       "key": "App_Description",
-      "default": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
+      "default": "Nettlesersynkronisering slik det bør være: sikker, anonym og gratis! Synkroniser bokmerker på tvers av nettlesere og enheter. Ingen krav om registrering."
     },
     "Title": {
       "key": "App_Title",
@@ -181,7 +181,7 @@
     },
     "DailyNewSyncLimitReached_Message": {
       "key": "Exception_DailyNewSyncLimitReached_Message",
-      "default": "Sync to an existing sync ID, switch to a different service or try again tomorrow."
+      "default": "Synkroniser til en eksisterende synkroniserings-ID, bytt til en annen tjeneste eller prøv igjen i morgen."
     },
     "DailyNewSyncLimitReached_Title": {
       "key": "Exception_DailyNewSyncLimitReached_Title",
@@ -193,11 +193,11 @@
     },
     "Default_Title": {
       "key": "Exception_Default_Title",
-      "default": "Something went wrong"
+      "default": "Noe gikk galt"
     },
     "FailedDownloadFile_Title": {
       "key": "Exception_FailedDownloadFile_Title",
-      "default": "Backup failed"
+      "default": "Sikkerhetskopiering feilet"
     },
     "FailedGetDataToRestore_Title": {
       "key": "Exception_FailedGetDataToRestore_Title",
