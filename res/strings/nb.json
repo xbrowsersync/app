@@ -185,7 +185,7 @@
     },
     "DailyNewSyncLimitReached_Title": {
       "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "Daily new sync limit reached"
+      "default": "Daglig ny synkroniseringsgrense er nådd"
     },
     "Default_Message": {
       "key": "Exception_Default_Message",
@@ -201,15 +201,15 @@
     },
     "FailedGetDataToRestore_Title": {
       "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "Browse files failed"
+      "default": "Bla gjennom filer feilet"
     },
     "FailedGetPageMetadata_Message": {
       "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "URL is invalid or webpage data could not be retrieved."
+      "default": "URL-adressen er ugyldig eller nettsidedata kunne ikke hentes."
     },
     "FailedGetPageMetadata_Title": {
       "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "Couldn’t get bookmark properties"
+      "default": "Klarte ikke å hente bokmerkeegenskaper"
     },
     "FailedRefreshBookmarks_Title": {
       "key": "Exception_FailedRefreshBookmarks_Title",
@@ -217,35 +217,35 @@
     },
     "FailedRestoreData_Message": {
       "key": "Exception_FailedRestoreData_Message",
-      "default": "The backup data provided is not in an expected format."
+      "default": "De angitte sikkerhetskopidataene er ikke i et forventet format."
     },
     "FailedRestoreData_Title": {
       "key": "Exception_FailedRestoreData_Title",
-      "default": "Unable to restore data"
+      "default": "Kan ikke gjenopprette data"
     },
     "FailedShareUrlNotSynced_Title": {
       "key": "Exception_FailedShareUrlNotSynced_Title",
-      "default": "You must be synced to add a bookmark"
+      "default": "Du må være synkronisert for å legge til et bokmerke"
     },
     "FailedShareUrl_Title": {
       "key": "Exception_FailedShareUrl_Title",
-      "default": "Unable to retrieve shared bookmark URL"
+      "default": "Kan ikke hente delt bokmerke-URL"
     },
     "HttpRequestFailed_Message": {
       "key": "Exception_HttpRequestFailed_Message",
-      "default": "Check your network connection and try again."
+      "default": "Kontroller nettverkstilkoblingen og prøv på nytt."
     },
     "HttpRequestFailed_Title": {
       "key": "Exception_HttpRequestFailed_Title",
-      "default": "Connection to service lost"
+      "default": "Mistet tilkoblingen til tjenesten"
     },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
-      "default": "Check that your sync ID, password and service URL have been entered correctly."
+      "default": "Kontroller at din synkroniserings-ID, passord og service-URL har blitt skrevet inn riktig."
     },
     "InvalidCredentials_Title": {
       "key": "Exception_InvalidCredentials_Title",
-      "default": "Invalid credentials"
+      "default": "Ugyldig brukerinformasjon"
     },
     "InvalidService_Message": {
       "key": "Exception_InvalidService_Message",
@@ -751,7 +751,7 @@
     "Search": {
       "BookmarkTree": {
         "key": "View_Search_BookmarkTree",
-        "default": "View bookmark folders"
+        "default": "Vis bokmerkemapper"
       },
       "Clear": {
         "key": "View_Search_Clear",
@@ -783,39 +783,39 @@
       "BackupRestore": {
         "Title": {
           "key": "View_Settings_BackupRestore_Title",
-          "default": "Back up and restore"
+          "default": "Sikkerhetskopiere og gjenopprette"
         },
         "Backup": {
           "Title": {
             "key": "View_Settings_BackupRestore_Backup_Title",
-            "default": "Back up"
+            "default": "Sikkerhetskopier"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Back up"
+            "default": "Sikkerhetskopier"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
-            "default": "Back up local browser data to a file."
+            "default": "Sikkerhetskopier lokale nettleserdata til en fil."
           },
           "Synced": {
             "key": "View_Settings_BackupRestore_Backup_Synced",
-            "default": "Back up synced data to a file."
+            "default": "Sikkerhetskopier synkroniserte data til en fil."
           }
         },
         "Restore": {
           "Title": {
             "key": "View_Settings_BackupRestore_Restore_Title",
-            "default": "Restore"
+            "default": "Gjenopprett"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Restore"
+            "default": "Gjenopprett"
           },
           "Local": {
             "Description": {
               "key": "View_Settings_BackupRestore_Restore_Local_Description",
-              "default": "Restore local browser data from a backup."
+              "default": "Gjenopprett lokale nettleserdata fra en sikkerhetskopi."
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Local_Confirm",
@@ -835,12 +835,12 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Your data has been restored."
+            "default": "Dine data har blitt gjenopprettet."
           },
           "SelectFile": {
             "Button": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Button",
-              "default": "Select file"
+              "default": "Velg fil"
             },
             "Placeholder": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Placeholder",
@@ -857,7 +857,7 @@
           },
           "RestoreData": {
             "key": "View_Settings_BackupRestore_Restore_RestoreData",
-            "default": "Restore data"
+            "default": "Gjenopprett data"
           },
           "Invalid": {
             "key": "View_Settings_BackupRestore_Restore_Invalid",
@@ -867,11 +867,11 @@
         "Revert": {
           "Title": {
             "key": "View_Settings_BackupRestore_Revert_Title",
-            "default": "Revert"
+            "default": "Tilbakestill"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_Revert_Description",
-            "default": "Revert local browser data to initial installation state."
+            "default": "Tilbakestill lokale nettleserdata til opprinnelig installeringsstatus."
           },
           "Confirm": {
             "key": "View_Settings_BackupRestore_Revert_Confirm",
@@ -879,7 +879,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Revert_Button",
-            "default": "Revert"
+            "default": "Tilbakestill"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Revert_Done",
@@ -894,26 +894,26 @@
       "Issues": {
         "Title": {
           "key": "View_Settings_Issues_Title",
-          "default": "Issues"
+          "default": "Problemer"
         },
         "Help": {
           "Title": {
             "key": "View_Settings_Issues_Help_Title",
-            "default": "Help"
+            "default": "Hjelp"
           },
           "Description": {
             "key": "View_Settings_Issues_Help_Description",
-            "default": "Got a question or having an issue? Make sure to read through the help guide, otherwise the answer may be in the FAQs."
+            "default": "Har du et spørsmål eller et problem? Sørg for at du leser gjennom brukerveiledningen. Det kan hende at svaret finnes i FAQ-en."
           },
           "ViewFaqs": {
             "key": "View_Settings_Issues_Help_ViewFaqs",
-            "default": "View FAQs"
+            "default": "Se FAQ-ene"
           }
         },
         "Tracker": {
           "Title": {
             "key": "View_Settings_Issues_Tracker_Title",
-            "default": "Issues tracker"
+            "default": "Problemsporing"
           },
           "Description": {
             "key": "View_Settings_Issues_Tracker_Description",
@@ -927,23 +927,23 @@
         "Log": {
           "Title": {
             "key": "View_Settings_Issues_Log_Title",
-            "default": "Application log"
+            "default": "Applikasjonslogg"
           },
           "Description": {
             "key": "View_Settings_Issues_Log_Description",
-            "default": "Download and include the application log when you log an issue."
+            "default": "Last ned og inkluder loggen når du logger et problem."
           },
           "Clear": {
             "key": "View_Settings_Issues_Log_Clear",
-            "default": "Clear log"
+            "default": "Tøm logg"
           },
           "Download": {
             "key": "View_Settings_Issues_Log_Download",
-            "default": "Download log"
+            "default": "Last ned logg"
           },
           "Size": {
             "key": "View_Settings_Issues_Log_Size",
-            "default": "Current log size"
+            "default": "Nåværende loggstørrelse"
           }
         }
       },
@@ -958,16 +958,16 @@
         },
         "Granted": {
           "key": "View_Settings_Permissions_Granted",
-          "default": "Granted"
+          "default": "Innvilget"
         },
         "NotGranted": {
           "key": "View_Settings_Permissions_NotGranted",
-          "default": "Not granted"
+          "default": "Ikke innvilget"
         },
         "Read": {
           "Title": {
             "key": "View_Settings_Permissions_Read_Title",
-            "default": "Read website data"
+            "default": "Les nettstedets data"
           },
           "Description": {
             "key": "View_Settings_Permissions_Read_Description",
@@ -1003,7 +1003,7 @@
         "DarkMode": {
           "Label": {
             "key": "View_Settings_Prefs_DarkMode_Label",
-            "default": "Enable dark mode"
+            "default": "Aktiver mørk modus"
           },
           "Description": {
             "key": "View_Settings_Prefs_DarkMode_Description",
