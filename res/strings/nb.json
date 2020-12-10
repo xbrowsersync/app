@@ -189,7 +189,7 @@
     },
     "Default_Message": {
       "key": "Exception_Default_Message",
-      "default": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
+      "default": "Hvis problemet vedvarer, kan du <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>rapportere problemet</a>."
     },
     "Default_Title": {
       "key": "Exception_Default_Title",
@@ -213,7 +213,7 @@
     },
     "FailedRefreshBookmarks_Title": {
       "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "Couldn’t retrieve updates"
+      "default": "Kunne ikke hente oppdateringer"
     },
     "FailedRestoreData_Message": {
       "key": "Exception_FailedRestoreData_Message",
