@@ -337,7 +337,7 @@
     },
     "SyncRemoved_Title": {
       "key": "Exception_SyncRemoved_Title",
-      "default": "Sync not found"
+      "default": "Finner ikke synkronisering"
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
@@ -353,7 +353,7 @@
     },
     "UncommittedSyncs_Title": {
       "key": "Exception_UncommittedSyncs_Title",
-      "default": "Changes not synced"
+      "default": "Endringene er ikke synkronisert"
     },
     "UnsupportedServiceApiVersion_Message": {
       "key": "Exception_UnsupportedServiceApiVersion_Message",
@@ -361,7 +361,7 @@
     },
     "UnsupportedServiceApiVersion_Title": {
       "key": "Exception_UnsupportedServiceApiVersion_Title",
-      "default": "Service not supported"
+      "default": "Tjenesten støttes ikke"
     },
     "UpgradeFailed_Message": {
       "key": "Exception_UpgradeFailed_Message",
@@ -370,7 +370,7 @@
     },
     "UpgradeFailed_Title": {
       "key": "Exception_UpgradeFailed_Title",
-      "default": "Upgrade failed"
+      "default": "Oppgraderingen mislyktes"
     }
   },
   "Service": {
@@ -400,7 +400,7 @@
   "Tooltip": {
     "NotSynced": {
       "key": "Tooltip_NotSynced",
-      "default": "not synced"
+      "default": "ikke synkronisert"
     },
     "Synced": {
       "key": "Tooltip_Synced",
@@ -429,7 +429,7 @@
         "Url": {
           "Exists": {
             "key": "View_Bookmark_Form_Url_Exists",
-            "default": "URL has already been bookmarked"
+            "default": "URL-adressen er allerede bokmerket"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -437,7 +437,7 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "Bookmark URL is required"
+            "default": "URL for bokmerke er påkrevd"
           }
         },
         "Description": {
@@ -447,19 +447,19 @@
         "Tags": {
           "Label": {
             "key": "View_Bookmark_Form_Tags_Label",
-            "default": "Tags"
+            "default": "Etiketter"
           },
           "Placeholder": {
             "key": "View_Bookmark_Form_Tags_Placeholder",
-            "default": "tag 1, tag 2, tag 3, etc"
+            "default": "etikett 1, etikett 2, etikett 3, osv"
           },
           "Clear": {
             "key": "View_Bookmark_Form_Tags_Clear",
-            "default": "Clear tags"
+            "default": "Fjern etiketter"
           },
           "Remove": {
             "key": "View_Bookmark_Form_Tags_Remove",
-            "default": "Remove tag"
+            "default": "Fjern etiketter"
           }
         },
         "Delete": {
@@ -472,7 +472,7 @@
         },
         "UpdateProperties": {
           "key": "View_Bookmark_Form_UpdateProperties",
-          "default": "Update bookmark properties"
+          "default": "Oppdater egenskaper for bokmerker"
         }
       },
       "InvalidUrlShared": {
@@ -853,7 +853,7 @@
           },
           "Paste": {
             "key": "View_Settings_BackupRestore_Restore_Paste",
-            "default": "Paste backup data"
+            "default": "Lim inn data fra sikkerhetskopi"
           },
           "RestoreData": {
             "key": "View_Settings_BackupRestore_Restore_RestoreData",
@@ -861,7 +861,7 @@
           },
           "Invalid": {
             "key": "View_Settings_BackupRestore_Restore_Invalid",
-            "default": "Invalid xBrowserSync backup data"
+            "default": "Ugyldig xBrowserSync sikkerhetskopidata"
           }
         },
         "Revert": {
@@ -875,7 +875,7 @@
           },
           "Confirm": {
             "key": "View_Settings_BackupRestore_Revert_Confirm",
-            "default": "<p>If you continue, any active sync will be disabled and your local data will be reverted to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "<p>Hvis du fortsetter, enhver aktiv synkronisering vil bli deaktivert og dine lokale data vil bli tilbakestilt til når xBrowserSync ble installert {date}.</p><p>Er det OK å fortsette?</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Revert_Button",
@@ -954,7 +954,7 @@
         },
         "Add": {
           "key": "View_Settings_Permissions_Add",
-          "default": "Grant permissions"
+          "default": "Gi tillatelser"
         },
         "Granted": {
           "key": "View_Settings_Permissions_Granted",
@@ -976,24 +976,24 @@
         },
         "Remove": {
           "key": "View_Settings_Permissions_Remove",
-          "default": "Remove permissions"
+          "default": "Fjern tillatelser"
         }
       },
       "Prefs": {
         "AutoFetchMetadata": {
           "Label": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Label",
-            "default": "Auto-fetch bookmark metadata"
+            "default": "Hent bokmerkemetadata automatisk"
           },
           "Description": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Description",
-            "default": "Retrieve metadata automatically when adding a bookmark."
+            "default": "Hent metadata automatisk når du legger til et bokmerke."
           }
         },
         "CheckForAppUpdates": {
           "Label": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Label",
-            "default": "Check for app updates"
+            "default": "Se etter app-oppdateringer"
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
@@ -1007,7 +1007,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_DarkMode_Description",
-            "default": "Ideal for use in low-light environments."
+            "default": "Ideelt for bruk i omgivelser med svakt lys."
           }
         },
         "DefaultToFolderView": {
@@ -1023,11 +1023,11 @@
         "SearchBar": {
           "Label": {
             "key": "View_Settings_Prefs_SearchBar_Label",
-            "default": "Switch search bar position"
+            "default": "Bytt posisjonen til søkefeltet"
           },
           "Description": {
             "key": "View_Settings_Prefs_SearchBar_Description",
-            "default": "Show search bar beneath results."
+            "default": "Vis søkefeltet under resultatene."
           }
         },
         "SyncToolbar": {
