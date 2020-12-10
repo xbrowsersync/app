@@ -3,65 +3,65 @@
     "AppUpdateAvailable": {
       "Title": {
         "key": "Alert_AppUpdateAvailable_Title",
-        "default": "xBrowserSync update available"
+        "default": "xBrowserSync oppdatering tilgjengeleg"
       },
       "Message": {
         "key": "Alert_AppUpdateAvailable_Message",
-        "default": "{version} is available to download. Click for more information.",
-        "android": "xBrowserSync {version} is available to download."
+        "default": "{version} er tilgjengeleg for å lasta ned. Klikk for meir informasjon.",
+        "android": "xBrowserSync {version} er tilgjengeleg for nedlasting."
       }
     },
     "AppUpdated": {
       "Title": {
         "key": "Alert_AppUpdated_Title",
-        "default": "Updated to"
+        "default": "Oppdatert til"
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync has been updated with the latest features and fixes. Click for release notes."
+        "default": "xBrowserSync har vorte oppdatert med dei nyaste funksjonane og feilrettingane. Klikk for notat til utgåva."
       }
     },
     "BookmarkCreated": {
       "key": "Alert_BookmarkCreated",
-      "default": "Bookmark created"
+      "default": "Bokmerke oppretta"
     },
     "BookmarkDeleted": {
       "key": "Alert_BookmarkDeleted",
-      "default": "Bookmark deleted"
+      "default": "Bokmerke sletta"
     },
     "BookmarkUpdated": {
       "key": "Alert_BookmarkUpdated",
-      "default": "Bookmark updated"
+      "default": "Bokmerke oppdatert"
     },
     "GetMetadata": {
       "Message": {
         "key": "Alert_GetMetadata_Message",
-        "default": "Fetching bookmark properties, touch to cancel."
+        "default": "Hentar bokmerkeeigenskapar. Trykk for å avbryta."
       },
       "Success": {
         "key": "Alert_GetMetadata_Success",
-        "default": "Bookmark properties updated."
+        "default": "Bokmerkeeigenskapar er oppdaterte."
       }
     },
     "Go": {
       "key": "Alert_Go",
-      "default": "Go"
+      "default": "Ok"
     },
     "WorkingOffline": {
       "Title": {
         "key": "Alert_WorkingOffline_Title",
-        "default": "Working offline"
+        "default": "Arbeidar fråkopla"
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
-        "default": "Changes will be synced when connection is restored."
+        "default": "Endringar vil bli synkronisert når tilkoplinga blir retta opp igjen."
       }
     }
   },
   "App": {
     "Description": {
       "key": "App_Description",
-      "default": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
+      "default": "Nettlesarsynkronisering slik det bør vera: sikker, anonym og gratis! Synkroniser bokmerke på tvers av nettlesarar og einingar. Ingen krav om registrering."
     },
     "Title": {
       "key": "App_Title",
@@ -72,108 +72,108 @@
     "Container": {
       "Menu": {
         "key": "Bookmarks_Container_Menu",
-        "default": "Menu bookmarks"
+        "default": "Menybokmerke"
       },
       "Mobile": {
         "key": "Bookmarks_Container_Mobile",
-        "default": "Mobile bookmarks"
+        "default": "Mobilbokmerke"
       },
       "Other": {
         "key": "Bookmarks_Container_Other",
-        "default": "Other bookmarks"
+        "default": "Andre bokmerke"
       },
       "Toolbar": {
         "key": "Bookmarks_Container_Toolbar",
-        "default": "Toolbar bookmarks"
+        "default": "Bokmerke på verktøylinja"
       }
     }
   },
   "Button": {
     "AddBookmark": {
       "key": "Button_AddBookmark",
-      "default": "Add Bookmark"
+      "default": "Legg til bokmerke"
     },
     "Back": {
       "key": "Button_Back",
-      "default": "Back"
+      "default": "Tilbake"
     },
     "Cancel": {
       "key": "Button_Cancel",
-      "default": "Cancel"
+      "default": "Avbryt"
     },
     "Close": {
       "key": "Button_Close",
-      "default": "Close"
+      "default": "Lukk"
     },
     "Confirm": {
       "key": "Button_Confirm",
-      "default": "Yes"
+      "default": "Ja"
     },
     "Continue": {
       "key": "Button_Continue",
-      "default": "Continue"
+      "default": "Hald fram"
     },
     "DeleteBookmark": {
       "key": "Button_DeleteBookmark",
-      "default": "Delete Bookmark"
+      "default": "Slett bokmerke"
     },
     "Deny": {
       "key": "Button_Deny",
-      "default": "No"
+      "default": "Nei"
     },
     "Done": {
       "key": "Button_Done",
-      "default": "Done"
+      "default": "Ferdig"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
-      "default": "Edit Bookmark"
+      "default": "Rediger bokmerke"
     },
     "Help": {
       "key": "Button_Help",
-      "default": "Help guide"
+      "default": "Hjelpeguide"
     },
     "Next": {
       "key": "Button_Next",
-      "default": "Next"
+      "default": "Neste"
     },
     "OK": {
       "key": "Button_OK",
-      "default": "Got it"
+      "default": "Greitt"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
-      "default": "View release notes"
+      "default": "Sjå utgivingsnotat"
     },
     "Saving": {
       "key": "Button_Saving",
-      "default": "Saving"
+      "default": "Lagrar"
     },
     "Settings": {
       "key": "Button_Settings",
-      "default": "Settings"
+      "default": "Innstillingar"
     },
     "ShareBookmark": {
       "key": "Button_ShareBookmark",
-      "default": "Share bookmark"
+      "default": "Del bokmerke"
     },
     "Undo": {
       "key": "Button_Undo",
-      "default": "Undo"
+      "default": "Angre"
     },
     "Update": {
       "key": "Button_Update",
-      "default": "Update"
+      "default": "Oppdater"
     },
     "View": {
       "key": "Button_View",
-      "default": "View"
+      "default": "Vis"
     }
   },
   "Exception": {
     "ContainerChanged_Message": {
       "key": "Exception_ContainerChanged_Message",
-      "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
+      "default": "Unngå å endra [xbs]-mapper fordi det kan forårsaka synkroniseringsproblem."
     },
     "ContainerChanged_Title": {
       "key": "Exception_ContainerChanged_Title",
