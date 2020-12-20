@@ -273,43 +273,43 @@
     },
     "MissingClientData_Message": {
       "key": "Exception_MissingClientData_Message",
-      "default": "Unable to find stored credentials. Re-enable sync and try again."
+      "default": "Finner ikke lagrede brukeropplysninger. Reaktiver synkronisering og prøv på nytt."
     },
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
-      "default": "Missing credentials"
+      "default": "Manglende brukeropplysninger"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",
-      "default": "Ensure you have provided a valid xBrowserSync back up before restoring."
+      "default": "Sørg for at du har oppgitt en gyldig xBrowserSync-sikkerhetskopi før du gjenoppretter."
     },
     "NoDataToRestore_Title": {
       "key": "Exception_NoDataToRestore_Title",
-      "default": "No data to restore"
+      "default": "Ingen data å gjenopprette"
     },
     "NotAcceptingNewSyncs_Message": {
       "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Switch to a different service or try again later."
+      "default": "Bytt til en annen tjeneste eller prøv igjen senere."
     },
     "NotAcceptingNewSyncs_Title": {
       "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "Service not accepting new syncs"
+      "default": "Tjenesten godtar ikke nye synkroniseringer"
     },
     "OutOfSync_Message": {
       "key": "Exception_OutOfSync_Message",
-      "default": "Local data was out of sync and has now been refreshed. Please reapply last change."
+      "default": "Lokale data var usynkronisert og har nå blitt oppdatert. Vennligst legg inn siste endring på nytt."
     },
     "OutOfSync_Title": {
       "key": "Exception_OutOfSync_Title",
-      "default": "Sync conflict detected"
+      "default": "Synkroniseringskonflikt oppdaget"
     },
     "RequestEntityTooLarge_Message": {
       "key": "Exception_RequestEntityTooLarge_Message",
-      "default": "Delete some bookmarks and try again or switch to a service with a larger sync limit."
+      "default": "Slett noen bokmerker og prøv igjen, eller bytt til en tjeneste med en større grense for synkronisering."
     },
     "RequestEntityTooLarge_Title": {
       "key": "Exception_RequestEntityTooLarge_Title",
-      "default": "Sync data limit exceeded"
+      "default": "Grense for synkroniseringsdata overskredet"
     },
     "ScanFailed_Message": {
       "key": "Exception_ScanFailed_Message",
@@ -317,15 +317,15 @@
     },
     "ScanFailed_Title": {
       "key": "Exception_ScanFailed_Title",
-      "default": "Scan failed"
+      "default": "Skanningen feilet"
     },
     "ServiceOffline_Message": {
       "key": "Exception_ServiceOffline_Message",
-      "default": "The xBrowserSync service is currently offline, try again later."
+      "default": "xBrowserSync-tjenesten er for øyeblikket frakoblet. Prøv igjen senere."
     },
     "ServiceOffline_Title": {
       "key": "Exception_ServiceOffline_Title",
-      "default": "Service offline"
+      "default": "Tjenesten er frakoblet"
     },
     "ShareFailed_Title": {
       "key": "Exception_ShareFailed_Title",
@@ -357,7 +357,7 @@
     },
     "UnsupportedServiceApiVersion_Message": {
       "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "This service is running an unsupported API version."
+      "default": "Denne tjenesten kjører en API-versjon som ikke er støttet."
     },
     "UnsupportedServiceApiVersion_Title": {
       "key": "Exception_UnsupportedServiceApiVersion_Title",
@@ -365,8 +365,8 @@
     },
     "UpgradeFailed_Message": {
       "key": "Exception_UpgradeFailed_Message",
-      "android": "Upgrade will be retried on restarting the app. If the problem persists please reinstall xBrowserSync.",
-      "default": "Restart your browser to retry upgrade, if the problem persists please reinstall xBrowserSync."
+      "android": "Oppgraderingen vil bli prøvd hentet ved omstart av appen. Hvis problemet vedvarer kan du prøve å reinstallere xBrowserSync.",
+      "default": "Start nettleseren på nytt for å oppgradere. Hvis problemet vedvarer kan du prøve å reinstallere xBrowserSync."
     },
     "UpgradeFailed_Title": {
       "key": "Exception_UpgradeFailed_Title",
@@ -385,7 +385,7 @@
       },
       "NoNewSyncs": {
         "key": "Service_Status_NoNewSyncs",
-        "default": "Not accepting new syncs"
+        "default": "Aksepterer ikke nye synkroniseringer"
       },
       "Offline": {
         "key": "Service_Status_Offline",
