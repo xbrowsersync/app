@@ -523,7 +523,7 @@
       },
       "Previous": {
         "key": "View_Help_Previous",
-        "default": "Previous"
+        "default": "Tilbake"
       },
       "Searching": {
         "key": "View_Help_Searching",
