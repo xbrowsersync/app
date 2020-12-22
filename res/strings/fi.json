@@ -903,11 +903,11 @@
           },
           "Description": {
             "key": "View_Settings_Issues_Help_Description",
-            "default": "Onko sinulla kysyttävää tai ongelmia? Varmista, että luet oppaan läpi, muulloin vastaus voi olla myös UKK:ssa."
+            "default": "Onko sinulla kysyttävää tai ongelmia? Varmista, että luet oppaan läpi, vastaus saattaa löytyä myös UKK:sta."
           },
           "ViewFaqs": {
             "key": "View_Settings_Issues_Help_ViewFaqs",
-            "default": "Näytä UKKt"
+            "default": "Näytä UKK:t"
           }
         },
         "Tracker": {
