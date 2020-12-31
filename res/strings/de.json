@@ -257,7 +257,7 @@
     },
     "LocalContainerNotFound_Message": {
       "key": "Exception_LocalContainerNotFound_Message",
-      "default": "Possible corrupt browser profile, try creating a new profile as it may resolve the issue."
+      "default": "Das Browserprofil ist möglicherweise beschädigt. Versuchen Sie, das Problem zu lösen, indem Sie ein neues Profil erstellen."
     },
     "LocalContainerNotFound_Title": {
       "key": "Exception_LocalContainerNotFound_Title",
