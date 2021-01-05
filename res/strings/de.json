@@ -54,7 +54,7 @@
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
-        "default": "Changes will be synced when connection is restored."
+        "default": "Änderungen werden synchronisiert wenn die Verbindung wiederhergestellt ist."
       }
     }
   },
@@ -253,7 +253,7 @@
     },
     "InvalidService_Title": {
       "key": "Exception_InvalidService_Title",
-      "default": "Invalid xBrowserSync service"
+      "default": "Ungültiger xBrowserSync Service"
     },
     "LocalContainerNotFound_Message": {
       "key": "Exception_LocalContainerNotFound_Message",
@@ -261,11 +261,11 @@
     },
     "LocalContainerNotFound_Title": {
       "key": "Exception_LocalContainerNotFound_Title",
-      "default": "Unexpected bookmarks structure"
+      "default": "Unerwartete Lesezeichenstruktur"
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local data has been refreshed, please reapply last change."
+      "default": "Lokale Daten wurden aktualisiert, bitte letzte Änderung erneut übernehmen."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
@@ -273,7 +273,7 @@
     },
     "MissingClientData_Message": {
       "key": "Exception_MissingClientData_Message",
-      "default": "Unable to find stored credentials. Re-enable sync and try again."
+      "default": "Es konnten keine gespeicherten Anmeldeinformationen gefunden werden. Synchronisierung erneut aktivieren und erneut versuchen."
     },
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
@@ -281,7 +281,7 @@
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",
-      "default": "Ensure you have provided a valid xBrowserSync back up before restoring."
+      "default": "Stellen Sie sicher, dass Sie vor der Wiederherstellung ein gültiges xBrowserSync-Backup erstellt haben."
     },
     "NoDataToRestore_Title": {
       "key": "Exception_NoDataToRestore_Title",
@@ -289,15 +289,15 @@
     },
     "NotAcceptingNewSyncs_Message": {
       "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Switch to a different service or try again later."
+      "default": "Wechseln Sie zu einem anderen Service oder versuchen Sie es später erneut."
     },
     "NotAcceptingNewSyncs_Title": {
       "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "Service not accepting new syncs"
+      "default": "Service akzeptiert keine neuen Synchronisationen"
     },
     "OutOfSync_Message": {
       "key": "Exception_OutOfSync_Message",
-      "default": "Local data was out of sync and has now been refreshed. Please reapply last change."
+      "default": "Lokale Daten wurden nicht synchronisiert und wurden aktualisiert. Bitte die letzte Änderung erneut übernehmen."
     },
     "OutOfSync_Title": {
       "key": "Exception_OutOfSync_Title",
@@ -313,15 +313,15 @@
     },
     "ScanFailed_Message": {
       "key": "Exception_ScanFailed_Message",
-      "default": "Check permission has been granted and try again."
+      "default": "Überprüfe die Berechtigung und versuche es erneut."
     },
     "ScanFailed_Title": {
       "key": "Exception_ScanFailed_Title",
-      "default": "Scan failed"
+      "default": "Scan fehlgeschlagen"
     },
     "ServiceOffline_Message": {
       "key": "Exception_ServiceOffline_Message",
-      "default": "The xBrowserSync service is currently offline, try again later."
+      "default": "Der xBrowserSync-Dienst ist momentan offline, versuchen Sie es später erneut."
     },
     "ServiceOffline_Title": {
       "key": "Exception_ServiceOffline_Title",
@@ -333,40 +333,40 @@
     },
     "SyncRemoved_Message": {
       "key": "Exception_SyncRemoved_Message",
-      "default": "The requested sync does not exist, it may have been removed due to inactivity."
+      "default": "Die angeforderte Synchronisation existiert nicht, sie wurde möglicherweise aufgrund von Inaktivität entfernt."
     },
     "SyncRemoved_Title": {
       "key": "Exception_SyncRemoved_Title",
-      "default": "Sync not found"
+      "default": "Synchronisation wurde nicht gefunden"
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
-      "default": "Sync has been disabled, re-enable sync to resume syncing."
+      "default": "Synchronisation wurde deaktiviert. Aktivieren Sie den Sync erneut, um sie fortzusetzen."
     },
     "TooManyRequests_Title": {
       "key": "Exception_TooManyRequests_Title",
-      "default": "Service request limit hit"
+      "default": "Limit für Serviceanfragen überschritten"
     },
     "UncommittedSyncs_Message": {
       "key": "Exception_UncommittedSyncs_Message",
-      "default": "Sync will be committed once connection to service is restored."
+      "default": "Synchronisation wird übertragen nachdem die Verbindung zum Dienst wiederhergestellt wurde."
     },
     "UncommittedSyncs_Title": {
       "key": "Exception_UncommittedSyncs_Title",
-      "default": "Changes not synced"
+      "default": "Änderungen nicht synchronisiert"
     },
     "UnsupportedServiceApiVersion_Message": {
       "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "This service is running an unsupported API version."
+      "default": "Dieser Service benutzt eine nicht unterstützte API-Version."
     },
     "UnsupportedServiceApiVersion_Title": {
       "key": "Exception_UnsupportedServiceApiVersion_Title",
-      "default": "Service not supported"
+      "default": "Service wird nicht unterstützt"
     },
     "UpgradeFailed_Message": {
       "key": "Exception_UpgradeFailed_Message",
-      "android": "Upgrade will be retried on restarting the app. If the problem persists please reinstall xBrowserSync.",
-      "default": "Restart your browser to retry upgrade, if the problem persists please reinstall xBrowserSync."
+      "android": "Das Upgrade wird beim Neustart der App erneut versucht. Wenn das Problem weiterhin besteht, installieren Sie bitte xBrowserSync erneut.",
+      "default": "Starten Sie Ihren Browser neu, um das Upgrade erneut zu versuchen. Wenn das Problem weiterhin besteht, installieren Sie bitte xBrowserSync erneut."
     },
     "UpgradeFailed_Title": {
       "key": "Exception_UpgradeFailed_Title",
@@ -400,7 +400,7 @@
   "Tooltip": {
     "NotSynced": {
       "key": "Tooltip_NotSynced",
-      "default": "not synced"
+      "default": "Nicht synchronisiert"
     },
     "Synced": {
       "key": "Tooltip_Synced",
@@ -415,7 +415,7 @@
     "Bookmark": {
       "Add": {
         "key": "View_Bookmark_Add",
-        "default": "Add bookmark"
+        "default": "Lesezeichen hinzufügen"
       },
       "Edit": {
         "key": "View_Bookmark_Edit",
@@ -429,7 +429,7 @@
         "Url": {
           "Exists": {
             "key": "View_Bookmark_Form_Url_Exists",
-            "default": "URL has already been bookmarked"
+            "default": "URL wurde bereits gespeichert"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -437,7 +437,7 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "Bookmark URL is required"
+            "default": "Lesezeichen-URL ist erforderlich"
           }
         },
         "Description": {
@@ -447,15 +447,15 @@
         "Tags": {
           "Label": {
             "key": "View_Bookmark_Form_Tags_Label",
-            "default": "Tags"
+            "default": "Stichworte"
           },
           "Placeholder": {
             "key": "View_Bookmark_Form_Tags_Placeholder",
-            "default": "tag 1, tag 2, tag 3, etc"
+            "default": "Stichwort 1, Stichwort 2, Stichwort 3, etc"
           },
           "Clear": {
             "key": "View_Bookmark_Form_Tags_Clear",
-            "default": "Clear tags"
+            "default": "Stichworte löschen"
           },
           "Remove": {
             "key": "View_Bookmark_Form_Tags_Remove",
