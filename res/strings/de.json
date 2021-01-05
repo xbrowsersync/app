@@ -459,7 +459,7 @@
           },
           "Remove": {
             "key": "View_Bookmark_Form_Tags_Remove",
-            "default": "Remove tag"
+            "default": "Stichwort entfernen"
           }
         },
         "Delete": {
@@ -468,28 +468,28 @@
         },
         "Share": {
           "key": "View_Bookmark_Form_Share",
-          "default": "Share"
+          "default": "Teilen"
         },
         "UpdateProperties": {
           "key": "View_Bookmark_Form_UpdateProperties",
-          "default": "Update bookmark properties"
+          "default": "Eigenschaften des Lesezeichens aktualisieren"
         }
       },
       "InvalidUrlShared": {
         "key": "View_Bookmark_InvalidUrlShared",
-        "default": "The value that was shared does not contain a valid URL."
+        "default": "Der eingegebene Wert enthält keine gültige URL."
       }
     },
     "Help": {
       "AddingBookmarks": {
         "key": "View_Help_AddingBookmarks",
-        "default": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s “Bookmark this page” button as normal and xBrowserSync will automatically populate the bookmark’s properties (optional permissions must be granted for this to work, check the Settings panel).</p>",
-        "android": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be fetched for you, otherwise add a description and some tags to ensure better search results.</p>"
+        "default": "<h4>Lesezeichen hinzufügen</h4><p>Speichern Sie ein Lesezeichen der aktuellen Seite, indem Sie auf das Lesezeichensymbol in der Suchleiste klicken. Die Lesezeicheneigenschaften werden automatisch für Sie erzeugt. Gegebenenefalls fügen Sie eine Beschreibung und Stichworte hinzu, um bessere Suchergebnisse zu erzeugen. </p><p>Alternativ klicken Sie einfach wie üblich auf den Browserbutton \"Lesezeichen für diese Seite erstellen\" und xBrowserSync wird automatisch die Lesezeicheneigenschaften erzeugen (Optionale Berechtigungen müssen gewährt werden - siehe Einstellungen).</p>",
+        "android": "<h4>Lesezeichen hinzufügen</h4><p>Fügen Sie Lesezeichen aus anderen Apps wie Browsern, YouTube, Spotify und vielen anderen einfach zu xBrowserSync hinzu.</p><p>Die Eigenschaften des Lesezeichens werden für Sie abgerufen, anderfalls fügen Sie eine Beschreibung und einige Stichworte hinzu, um bessere Suchergebnisse zu erzeugen.</p>"
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time revert your data back to it’s original state from when xBrowserSync was installed.</p>",
-        "android": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
+        "default": "<h4>Denken Sie an eine Sicherung</h4><p>Wenn Sie xBrowserSync nutzen liegen Ihre Daten in Ihren Händen. Seien Sie also schlau und stellen Sie sicher, dass Sie Sicherungskopien anlegen.</p><p>Wechseln Sie in die Einstellungen und sichern Sie Ihre unverschlüsselten Daten in eine lokale Datei. Diese kann benutzt werden, um Ihre Daten bei Bedarf wiederherzustellen.</p><p>Wenn Ihre lokalen Browserdaten beschädigt werden und Sie keine Sicherungskopien haben, können Sie Ihre Daten jederzeit wieder in den ursprünglichen Zustand zurückversetzen, in dem sie sich bei der Installation von xBrowserSync befanden.</p>",
+        "android": "<h4>Denken Sie an eine Sicherung</h4><p>Wenn Sie xBrowserSync nutzen liegen Ihre Daten in Ihren Händen. Seien Sie also schlau und stellen Sie sicher, dass Sie Sicherungskopien anlegen.</p><p>Wechseln Sie in die Einstellungen und sichern Sie Ihre unverschlüsselten Daten in eine lokale Datei. Diese kann benutzt werden, um Ihre Daten bei Bedarf wiederherzustellen.</p>"
       },
       "BeforeYouBegin": {
         "key": "View_Help_BeforeYouBegin",
@@ -712,11 +712,11 @@
         },
         "Existing": {
           "key": "View_Login_SyncId_Existing",
-          "default": "Already got a sync ID?"
+          "default": "Haben Sie bereits eine Sync ID?"
         },
         "Invalid": {
           "key": "View_Login_SyncId_Invalid",
-          "default": "Not a valid sync ID"
+          "default": "Keine gültige Sync ID"
         },
         "Label": {
           "key": "View_Login_SyncId_Label",
@@ -724,14 +724,14 @@
         },
         "New": {
           "key": "View_Login_SyncId_New",
-          "default": "Get a sync ID"
+          "default": "Sync ID erhalten"
         }
       }
     },
     "Permissions": {
       "Title": {
         "key": "View_Permissions_Title",
-        "default": "Optional permissions"
+        "default": "Optionale Berechtigungen"
       },
       "Content": {
         "key": "View_Permissions_Content",
@@ -741,106 +741,106 @@
     "Scan": {
       "Title": {
         "key": "View_Scan_Title",
-        "default": "Scan your sync ID QR code"
+        "default": "Scannen Sie Ihren Sync ID QR-Code"
       },
       "ToggleLight": {
         "key": "View_Scan_ToggleLight",
-        "default": "Toggle light"
+        "default": "Licht ein/aus"
       }
     },
     "Search": {
       "BookmarkTree": {
         "key": "View_Search_BookmarkTree",
-        "default": "View bookmark folders"
+        "default": "Lesezeichen-Ordner anzeigen"
       },
       "Clear": {
         "key": "View_Search_Clear",
-        "default": "Clear"
+        "default": "Löschen"
       },
       "FolderEmpty": {
         "key": "View_Search_FolderEmpty",
-        "default": "Folder empty"
+        "default": "Leerer Ordner"
       },
       "Placeholder": {
         "key": "View_Search_Placeholder",
-        "default": "Hit Enter or search for bookmarks",
-        "android": "Find bookmarks"
+        "default": "Drücke Enter oder suche nach Lesezeichen",
+        "android": "Lesezeichen suchen"
       },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
-        "default": "You have no bookmarks, go add some!"
+        "default": "Sie haben keine Lesezeichen, legen Sie welche an!"
       },
       "NoResults": {
         "key": "View_Search_NoResults",
-        "default": "No bookmarks found"
+        "default": "Keine Lesezeichen gefunden"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
-        "default": "View search results"
+        "default": "Suchergebnisse anzeigen"
       }
     },
     "Settings": {
       "BackupRestore": {
         "Title": {
           "key": "View_Settings_BackupRestore_Title",
-          "default": "Back up and restore"
+          "default": "Sicherung und Wiederherstellung"
         },
         "Backup": {
           "Title": {
             "key": "View_Settings_BackupRestore_Backup_Title",
-            "default": "Back up"
+            "default": "Sichern"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Back up"
+            "default": "Sichern"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
-            "default": "Back up local browser data to a file."
+            "default": "Lokale Browserdaten in einer Datei sichern."
           },
           "Synced": {
             "key": "View_Settings_BackupRestore_Backup_Synced",
-            "default": "Back up synced data to a file."
+            "default": "Synchronisierte Daten in einer Datei sichern."
           }
         },
         "Restore": {
           "Title": {
             "key": "View_Settings_BackupRestore_Restore_Title",
-            "default": "Restore"
+            "default": "Wiederherstellen"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Restore"
+            "default": "Wiederherstellen"
           },
           "Local": {
             "Description": {
               "key": "View_Settings_BackupRestore_Restore_Local_Description",
-              "default": "Restore local browser data from a backup."
+              "default": "Lokale Browserdaten aus einer Sicherung wiederherstellen."
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Local_Confirm",
-              "default": "<p>As sync is currently disabled, the data being restored will overwrite the local browser data.</p><p>OK to proceed?</p>"
+              "default": "<p>Da die Synchronisierung derzeit deaktiviert ist, werden die wiederhergestellten Daten die lokalen Browserdaten überschreiben.</p><p>OK, um fortzufahren?</p>"
             }
           },
           "Synced": {
             "Description": {
               "key": "View_Settings_BackupRestore_Restore_Synced_Description",
-              "default": "Restore synced data from a backup."
+              "default": "Synchronisierte Daten aus einem Backup wiederherstellen."
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Synced_Confirm",
-              "default": "<p>As sync is currently enabled, the data being restored will overwrite your synced data.</p><p>To restore data to the local browser only, disable sync before restoring.</p><p>OK to proceed?</p>",
-              "android": "<p>The data being restored will overwrite your synced data.</p><p>OK to proceed?</p>"
+              "default": "<p>Da die Synchronisierung derzeit aktiviert ist, werden die wiederhergestellten Daten die synchronisierten Daten überschreiben.</p><p>Um nur lokale Browserdaten wiederherzustellen deaktivieren Sie die Synchronisation vor der Wiederherstellung.</p><p>OK, um fortzufahren?</p>",
+              "android": "<p>Die wiederhergestellten Daten werden Ihre synchronisierten Daten überschreiben.</p><p>OK, um fortzufahren?</p>"
             }
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Your data has been restored."
+            "default": "Ihre Daten wurden wiederhergestellt."
           },
           "SelectFile": {
             "Button": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Button",
-              "default": "Select file"
+              "default": "Datei auswählen"
             },
             "Placeholder": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Placeholder",
