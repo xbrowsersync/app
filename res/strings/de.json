@@ -253,7 +253,7 @@
     },
     "InvalidService_Title": {
       "key": "Exception_InvalidService_Title",
-      "default": "Ungültiger xBrowserSync Service"
+      "default": "Ungültiger xBrowserSync Dienst"
     },
     "LocalContainerNotFound_Message": {
       "key": "Exception_LocalContainerNotFound_Message",
@@ -289,11 +289,11 @@
     },
     "NotAcceptingNewSyncs_Message": {
       "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Wechseln Sie zu einem anderen Service oder versuchen Sie es später erneut."
+      "default": "Wechseln Sie zu einem anderen Dienst oder versuchen Sie es später erneut."
     },
     "NotAcceptingNewSyncs_Title": {
       "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "Service akzeptiert keine neuen Synchronisationen"
+      "default": "Dienst akzeptiert keine neuen Synchronisationen"
     },
     "OutOfSync_Message": {
       "key": "Exception_OutOfSync_Message",
@@ -357,11 +357,11 @@
     },
     "UnsupportedServiceApiVersion_Message": {
       "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "Dieser Service benutzt eine nicht unterstützte API-Version."
+      "default": "Dieser Dienst benutzt eine nicht unterstützte API-Version."
     },
     "UnsupportedServiceApiVersion_Title": {
       "key": "Exception_UnsupportedServiceApiVersion_Title",
-      "default": "Service wird nicht unterstützt"
+      "default": "Dienst wird nicht unterstützt"
     },
     "UpgradeFailed_Message": {
       "key": "Exception_UpgradeFailed_Message",
@@ -488,20 +488,20 @@
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Denken Sie an eine Sicherung</h4><p>Wenn Sie xBrowserSync nutzen liegen Ihre Daten in Ihren Händen. Seien Sie also schlau und stellen Sie sicher, dass Sie Sicherungskopien anlegen.</p><p>Wechseln Sie in die Einstellungen und sichern Sie Ihre unverschlüsselten Daten in eine lokale Datei. Diese kann benutzt werden, um Ihre Daten bei Bedarf wiederherzustellen.</p><p>Wenn Ihre lokalen Browserdaten beschädigt werden und Sie keine Sicherungskopien haben, können Sie Ihre Daten jederzeit wieder in den ursprünglichen Zustand zurückversetzen, in dem sie sich bei der Installation von xBrowserSync befanden.</p>",
-        "android": "<h4>Denken Sie an eine Sicherung</h4><p>Wenn Sie xBrowserSync nutzen liegen Ihre Daten in Ihren Händen. Seien Sie also schlau und stellen Sie sicher, dass Sie Sicherungskopien anlegen.</p><p>Wechseln Sie in die Einstellungen und sichern Sie Ihre unverschlüsselten Daten in eine lokale Datei. Diese kann benutzt werden, um Ihre Daten bei Bedarf wiederherzustellen.</p>"
+        "default": "<h4>Denken Sie an eine Sicherung</h4><p>Wenn Sie xBrowserSync nutzen liegen Ihre Daten in Ihren Händen. Seien Sie also schlau und stellen Sie sicher, dass Sie Sicherungskopien anlegen.</p><p>Wechseln Sie in das Einstellungen-Fenster und sichern Sie Ihre unverschlüsselten Daten in eine lokale Datei. Diese kann benutzt werden, um Ihre Daten bei Bedarf wiederherzustellen.</p><p>Wenn Ihre lokalen Browserdaten beschädigt werden und Sie keine Sicherungskopien haben, können Sie Ihre Daten jederzeit wieder in den ursprünglichen Zustand zurückversetzen, in dem sie sich bei der Installation von xBrowserSync befanden.</p>",
+        "android": "<h4>Denken Sie an eine Sicherung</h4><p>Wenn Sie xBrowserSync nutzen liegen Ihre Daten in Ihren Händen. Seien Sie also schlau und stellen Sie sicher, dass Sie Sicherungskopien anlegen.</p><p>Wechseln Sie in das Einstellungen-Fenster und sichern Sie Ihre unverschlüsselten Daten in eine lokale Datei. Diese kann benutzt werden, um Ihre Daten bei Bedarf wiederherzustellen.</p>"
       },
       "BeforeYouBegin": {
         "key": "View_Help_BeforeYouBegin",
         "default": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) please disable them to avoid conflicts.</p>",
         "brave": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) please disable them to avoid conflicts.</p>",
         "edge": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) please disable them to avoid conflicts.</p>",
-        "firefox": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) please disable them to avoid conflicts.</p>"
+        "firefox": "<h4>Bevor Sie beginnen</h4><p>xBrowserSync verändert Ihre lokalen Browserdaten. Daher ist es eine gute Idee Ihre Lesezeichen und andere Browserdaten vorsorglich zu sichern. Sollten Sie andere Dienste oder Tools zur Browsersynchronisation (wie zum Beispiel <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) nutzen, deaktivieren Sie sie bitte, um Konflikte zu vermeiden.</p>"
       },
       "ExistingId": {
         "key": "View_Help_ExistingId",
-        "default": "<h4>Syncing with your existing ID</h4><p>Click on “Already got a sync ID?” to enter your existing sync ID and password. If your sync ID was created on a service different to the one displayed then switch to that service before attempting to sync.</p><p>xBrowserSync will retrieve and decrypt your encrypted data using your locally stored password, then clear your local bookmarks before re-populating them from the decrypted data.</p><p>When synced, xBrowserSync checks in the background every fifteen minutes for updates to your synced data and will automatically update your local bookmarks when required. You can also manually sync available updates to your synced data in the Settings panel.</p>",
-        "android": "<h4>Syncing with your existing ID</h4><p>Start by scanning the sync ID QR code in the Settings panel of the xBrowserSync desktop browser extension (click on your sync ID to reveal it). Make sure you enter the same encryption password used when creating the sync otherwise xBrowserSync will not be able to decrypt your data.</p><p>Also, if you are synced to a different xBrowserSync service make sure it is the active service configured in the Settings panel.</p>"
+        "default": "<h4>Synchronisierung mit Ihrer bestehenden ID</h4><p>Klicken Sie auf „Haben Sie bereits eine Sync-ID?“, um Ihre bestehende Sync-ID und Ihr Passwort einzugeben. Wenn Ihre Sync-ID auf einem Dienst erstellt wurde, der sich von dem angezeigten unterscheidet, wechseln Sie zu diesem Dienst, bevor Sie die Synchronisierung versuchen.</p><p>xBrowserSync holt und entschlüsselt Ihre verschlüsselten Daten mit Ihrem lokal gespeicherten Passwort, löscht danach Sie Ihre lokalen Lesezeichen, bevor es sie wieder aus den entschlüsselten Daten einpflegt.</p><p>Wenn synchronisiert, prüft xBrowserSync alle fünfzehn Minuten im Hintergrund auf Aktualisierungen Ihrer synchronisierten Daten und aktualisiert Ihre lokalen Lesezeichen bei Bedarf automatisch. Sie können die verfügbaren Updates auch manuell im Einstellungen-Fenstersynchronisieren.</p>",
+        "android": "<h4>Synchronisieren mit Ihrer bestehenden ID</h4><p>Scannen Sie den ID QR-Code im Einstellungen-Fenster der xBrowserSync-Desktop-Browser-Erweiterung (klicken Sie auf Ihre Sync-ID, um sie anzuzeigen). Stellen Sie sicher, dass Sie beim Erstellen der Synchronisation das gleiche Verschlüsselungspasswort eingeben, sonst wird xBrowserSync Ihre Daten nicht entschlüsseln können.</p><p>Wenn Sie mit einem anderen xBrowserSync-Dienst synchronisiert werden, stellen Sie sicher, dass er der aktive Dienst ist, der im Einstellungen-Fenster konfiguriert ist.</p>"
       },
       "FirstSync": {
         "key": "View_Help_FirstSync",
@@ -605,11 +605,11 @@
       "Service": {
         "ApiVersion": {
           "key": "View_Login_Service_ApiVersion",
-          "default": "API version"
+          "default": "API-Version"
         },
         "Confirm": {
           "key": "View_Login_Service_Confirm",
-          "default": "Sync to this service?"
+          "default": "Synchronisieren mit diesem Dienst?"
         },
         "Location": {
           "key": "View_Login_Service_Location",
@@ -617,11 +617,11 @@
         },
         "MaxSyncSize": {
           "key": "View_Login_Service_MaxSyncSize",
-          "default": "Max sync size"
+          "default": "Max. Sync-Größe"
         },
         "Selected": {
           "key": "View_Login_Service_Selected",
-          "default": "Syncing to"
+          "default": "Synchronisiere mit"
         },
         "Status": {
           "key": "View_Login_Service_Status",
@@ -630,36 +630,36 @@
         "Update": {
           "Label": {
             "key": "View_Login_Service_Update_Label",
-            "default": "xBrowserSync service URL"
+            "default": "xBrowserSync Dienst-URL"
           },
           "Description": {
             "key": "View_Login_Service_Update_Description",
-            "default": "Enter the URL of an alternative xBrowserSync service. Browse the list of public xBrowserSync services <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>here</a>."
+            "default": "Geben Sie die URL eines alternativen xBrowserSync-Dienstes an. Durchsuchen Sie die Liste von öffentlichen xBrowserSync-Diensten <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>hier</a>."
           },
           "Button": {
             "key": "View_Login_Service_Update_Button",
-            "default": "Switch service"
+            "default": "Dienst wechseln"
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
-            "default": "xBrowserSync service URL is required"
+            "default": "xBrowserSync Dienst-URL ist erforderlich"
           },
           "Invalid": {
             "key": "View_Login_Service_Update_Invalid",
-            "default": "Not a valid xBrowserSync service"
+            "default": "Kein gültiger xBrowserSync-Dienst"
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",
-            "default": "Unable to connect to the service"
+            "default": "Keine Verbindung zum Dienst möglich"
           },
           "NotSupported": {
             "key": "View_Login_Service_Update_Failed_NotSupported",
-            "default": "This service is running an unsupported API version"
+            "default": "Dieser Dienst benutzt eine nicht unterstützte API-Version"
           }
         },
         "Warning": {
           "key": "View_Login_Service_Warning",
-          "default": "<strong>Important:</strong> xBrowserSync services are run independently by volunteers. The service administrator takes no responsibility for your data so please remember to backup regularly."
+          "default": "<strong>Wichtig:</strong> xBrowserSync Dienste werden unabhängig von Freiwilligen betrieben. Der Dienst-Administrator übernimmt keine Verantwortung für Ihre Daten. Bitte denken Sie daher an regelmäßige Sicherungen Ihrer Daten."
         }
       },
       "Sync": {
@@ -907,152 +907,152 @@
           },
           "ViewFaqs": {
             "key": "View_Settings_Issues_Help_ViewFaqs",
-            "default": "View FAQs"
+            "default": "FAQs anzeigen"
           }
         },
         "Tracker": {
           "Title": {
             "key": "View_Settings_Issues_Tracker_Title",
-            "default": "Issues tracker"
+            "default": "Fehler und Probleme"
           },
           "Description": {
             "key": "View_Settings_Issues_Tracker_Description",
-            "default": "Report an issue to report a bug or request a new feature."
+            "default": "Melden Sie ein Problem, um einen Fehler zu melden oder eine neue Funktion anzufordern."
           },
           "Report": {
             "key": "View_Settings_Issues_Tracker_Report",
-            "default": "Report issue"
+            "default": "Fehler melden"
           }
         },
         "Log": {
           "Title": {
             "key": "View_Settings_Issues_Log_Title",
-            "default": "Application log"
+            "default": "Anwendungsprotokoll"
           },
           "Description": {
             "key": "View_Settings_Issues_Log_Description",
-            "default": "Download and include the application log when you log an issue."
+            "default": "Laden Sie das Anwendungsprotokoll herunter und fügen Sie es hinzu, wenn Sie einen Fehler melden."
           },
           "Clear": {
             "key": "View_Settings_Issues_Log_Clear",
-            "default": "Clear log"
+            "default": "Protokoll löschen"
           },
           "Download": {
             "key": "View_Settings_Issues_Log_Download",
-            "default": "Download log"
+            "default": "Protokoll herunterladen"
           },
           "Size": {
             "key": "View_Settings_Issues_Log_Size",
-            "default": "Current log size"
+            "default": "Aktuelle Protokollgröße"
           }
         }
       },
       "Permissions": {
         "Title": {
           "key": "View_Settings_Permissions_Title",
-          "default": "Optional permissions"
+          "default": "Optionale Berechtigungen"
         },
         "Add": {
           "key": "View_Settings_Permissions_Add",
-          "default": "Grant permissions"
+          "default": "Berechtigungen erteilen"
         },
         "Granted": {
           "key": "View_Settings_Permissions_Granted",
-          "default": "Granted"
+          "default": "Zugelassen"
         },
         "NotGranted": {
           "key": "View_Settings_Permissions_NotGranted",
-          "default": "Not granted"
+          "default": "Nicht zugelassen"
         },
         "Read": {
           "Title": {
             "key": "View_Settings_Permissions_Read_Title",
-            "default": "Read website data"
+            "default": "Websitedaten lesen"
           },
           "Description": {
             "key": "View_Settings_Permissions_Read_Description",
-            "default": "Required to automatically add metadata to bookmarks when using the browser’s “Bookmark this page” button (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>more info</a>)."
+            "default": "Wird benötigt, um automatisch Metadaten zu Lesezeichen hinzuzufügen, wenn Sie den Button „Lesezeichen hinzufügen“ des Browsers verwenden (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>Mehr Info</a>)."
           }
         },
         "Remove": {
           "key": "View_Settings_Permissions_Remove",
-          "default": "Remove permissions"
+          "default": "Berechtigung(en) entfernen"
         }
       },
       "Prefs": {
         "AutoFetchMetadata": {
           "Label": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Label",
-            "default": "Auto-fetch bookmark metadata"
+            "default": "Lesezeichen-Metadaten automatisch abrufen"
           },
           "Description": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Description",
-            "default": "Retrieve metadata automatically when adding a bookmark."
+            "default": "Metadaten automatisch beim Hinzufügen eines Lesezeichens abrufen."
           }
         },
         "CheckForAppUpdates": {
           "Label": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Label",
-            "default": "Check for app updates"
+            "default": "Nach Aktualisierungen suchen"
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
-            "default": "Display an alert when a new version of xBrowserSync is available."
+            "default": "Benachrichtigung anzeigen, wenn eine neue Version von xBrowserSync verfügbar ist."
           }
         },
         "DarkMode": {
           "Label": {
             "key": "View_Settings_Prefs_DarkMode_Label",
-            "default": "Enable dark mode"
+            "default": "Dunkles Design aktivieren"
           },
           "Description": {
             "key": "View_Settings_Prefs_DarkMode_Description",
-            "default": "Ideal for use in low-light environments."
+            "default": "Ideal für den Einsatz in Umgebungen mit wenig Beleuchtung."
           }
         },
         "DefaultToFolderView": {
           "Label": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Label",
-            "default": "Show bookmark folders"
+            "default": "Lesezeichen-Ordner anzeigen"
           },
           "Description": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Description",
-            "default": "Display bookmark folders by default."
+            "default": "Lesezeichen-Ordner standardmäßig anzeigen."
           }
         },
         "SearchBar": {
           "Label": {
             "key": "View_Settings_Prefs_SearchBar_Label",
-            "default": "Switch search bar position"
+            "default": "Position der Suchleiste ändern"
           },
           "Description": {
             "key": "View_Settings_Prefs_SearchBar_Description",
-            "default": "Show search bar beneath results."
+            "default": "Suchleiste unter den Ergebnissen anzeigen."
           }
         },
         "SyncToolbar": {
           "Label": {
             "key": "View_Settings_Prefs_SyncToolbar_Label",
-            "default": "Sync bookmarks toolbar"
+            "default": "Lesezeichen-Symbolleiste synchronisieren"
           },
           "Description": {
             "key": "View_Settings_Prefs_SyncToolbar_Description",
-            "default": "Disable this setting to display different toolbar bookmarks across synced browsers."
+            "default": "Deaktivieren Sie diese Einstellung, um verschiedene Lesezeichen-Symbolleisten in synchronisierten Browsern anzuzeigen."
           },
           "Confirmation": {
             "key": "View_Settings_Prefs_SyncToolbar_Confirmation",
-            "default": "<p>Enabling this setting will replace the bookmarks currently in the bookmarks toolbar with your synced bookmarks.</p><p>OK to proceed?</p>"
+            "default": "<p>Durch das Aktivieren dieser Einstellung werden die Lesezeichen in der Lesezeichen-Symbolleiste durch Ihre synchronisierten Lesezeichen ersetzt.</p><p>OK, um fortzufahren?</p>"
           }
         },
         "Title": {
           "key": "View_Settings_Prefs_Title",
-          "default": "Preferences"
+          "default": "Einstellungen"
         }
       },
       "Sync": {
         "Title": {
           "key": "View_Settings_Sync_Title",
-          "default": "Sync"
+          "default": "Synchronisation"
         },
         "Disable": {
           "key": "View_Settings_Sync_Disable",
@@ -1075,12 +1075,12 @@
           },
           "Description": {
             "key": "View_Settings_Sync_Data_Description",
-            "default": "How much of the sync data allowed by the service are you using."
+            "default": "Welchen Datenverbrauch, den der Dienst zulässt, haben Sie."
           }
         },
         "Service": {
           "key": "View_Settings_Sync_Service",
-          "default": "Service"
+          "default": "Dienst"
         },
         "UpdatesAvailable": {
           "False": {
@@ -1158,7 +1158,7 @@
     "Updated": {
       "Title": {
         "key": "View_Updated_Title",
-        "default": "Updated to"
+        "default": "Aktualisiert auf"
       },
       "Content": {
         "key": "View_Updated_Content",
