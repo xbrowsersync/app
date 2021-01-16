@@ -249,7 +249,7 @@
     },
     "InvalidService_Message": {
       "key": "Exception_InvalidService_Message",
-      "default": "The service URL is not a valid xBrowserSync service."
+      "default": "Tjenestens URL er ikke en gyldig xBrowserSync-tjeneste."
     },
     "InvalidService_Title": {
       "key": "Exception_InvalidService_Title",
@@ -1144,7 +1144,7 @@
       },
       "Cryptos": {
         "key": "View_Support_Cryptos",
-        "default": "Cryptos"
+        "default": "Kryptovaluta"
       },
       "Liberapay": {
         "key": "View_Support_Liberapay",
@@ -1168,7 +1168,7 @@
     "Working": {
       "Restoring": {
         "key": "View_Working_Restoring",
-        "default": "Restoring"
+        "default": "Gjenoppretter"
       },
       "Reverting": {
         "key": "View_Working_Reverting",
@@ -1176,7 +1176,7 @@
       },
       "Syncing": {
         "key": "View_Working_Syncing",
-        "default": "Syncing"
+        "default": "Synkroniserer"
       }
     }
   }
