@@ -265,11 +265,11 @@
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local data has been refreshed, please reapply last change."
+      "default": "Lokale data er oppdatert. Bruk den siste endringen på nytt."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
-      "default": "Sync error"
+      "default": "Synkronseringsfeil"
     },
     "MissingClientData_Message": {
       "key": "Exception_MissingClientData_Message",
@@ -313,7 +313,7 @@
     },
     "ScanFailed_Message": {
       "key": "Exception_ScanFailed_Message",
-      "default": "Check permission has been granted and try again."
+      "default": "Sjekk om tillatelse er innvilget og prøv igjen."
     },
     "ScanFailed_Title": {
       "key": "Exception_ScanFailed_Title",
@@ -341,7 +341,7 @@
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
-      "default": "Sync has been disabled, re-enable sync to resume syncing."
+      "default": "Synkronisering er deaktivert. Aktiver på nytt for å synkronisere igjen."
     },
     "TooManyRequests_Title": {
       "key": "Exception_TooManyRequests_Title",
@@ -555,17 +555,17 @@
       "GetSyncId": {
         "Title": {
           "key": "View_Login_GetSyncId_Title",
-          "default": "Need a sync ID?"
+          "default": "Trenger du en synkroniserings-ID?"
         },
         "Content": {
           "key": "View_Login_GetSyncId_Content",
-          "default": "Download the xBrowserSync desktop browser extension and create a new sync to access your bookmarks here."
+          "default": "Last ned xBrowserSync-nettleserutvidelsen på skrivebordet, og opprett en ny synkronisering for å få tilgang til bokmerkene dine her."
         }
       },
       "Password": {
         "Confirm": {
           "key": "View_Login_Password_Confirm",
-          "default": "Confirm password"
+          "default": "Bekreft passord"
         },
         "Existing": {
           "key": "View_Login_Password_Existing",
@@ -573,11 +573,11 @@
         },
         "Label": {
           "key": "View_Login_Password_Label",
-          "default": "Encryption password"
+          "default": "Krypteringspassord"
         },
         "New": {
           "key": "View_Login_Password_New",
-          "default": "Enter an encryption password"
+          "default": "Skriv inn et krypteringspassord"
         },
         "Show": {
           "key": "View_Login_Password_Show",
@@ -587,7 +587,7 @@
       "Scan": {
         "Title": {
           "key": "View_Login_Scan_Title",
-          "default": "Connect to your sync"
+          "default": "Koble til din synkronisering"
         },
         "Content": {
           "key": "View_Login_Scan_Content",
@@ -595,21 +595,21 @@
         },
         "ScanCode": {
           "key": "View_Login_Scan_ScanCode",
-          "default": "Scan code"
+          "default": "Skann kode"
         },
         "ManualEntry": {
           "key": "View_Login_Scan_ManualEntry",
-          "default": "Enter sync details manually"
+          "default": "Angi synkroniseringsdetaljer manuelt"
         }
       },
       "Service": {
         "ApiVersion": {
           "key": "View_Login_Service_ApiVersion",
-          "default": "API version"
+          "default": "API-versjon"
         },
         "Confirm": {
           "key": "View_Login_Service_Confirm",
-          "default": "Sync to this service?"
+          "default": "Synkroniser til denne tjenesten?"
         },
         "Location": {
           "key": "View_Login_Service_Location",
@@ -621,7 +621,7 @@
         },
         "Selected": {
           "key": "View_Login_Service_Selected",
-          "default": "Syncing to"
+          "default": "Synkroniserer til"
         },
         "Status": {
           "key": "View_Login_Service_Status",
@@ -1046,22 +1046,22 @@
         },
         "Title": {
           "key": "View_Settings_Prefs_Title",
-          "default": "Preferences"
+          "default": "Innstillinger"
         }
       },
       "Sync": {
         "Title": {
           "key": "View_Settings_Sync_Title",
-          "default": "Sync"
+          "default": "Synkronisering"
         },
         "Disable": {
           "key": "View_Settings_Sync_Disable",
-          "default": "Disable sync"
+          "default": "Slå av synkronisering"
         },
         "Id": {
           "Label": {
             "key": "View_Settings_Sync_Id_Label",
-            "default": "Sync ID"
+            "default": "Synk-ID"
           },
           "Description": {
             "key": "View_Settings_Sync_Id_Description",
@@ -1103,7 +1103,7 @@
           },
           "Show": {
             "key": "View_Settings_Sync_Qr_Show",
-            "default": "Show QR code"
+            "default": "Vis QR-kode"
           },
           "Copy": {
             "key": "View_Settings_Sync_Qr_Copy",
