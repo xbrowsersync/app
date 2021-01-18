@@ -14,7 +14,7 @@
     "AppUpdated": {
       "Title": {
         "key": "Alert_AppUpdated_Title",
-        "default": "Updated to"
+        "default": "S'ha actualitzat a"
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
