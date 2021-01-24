@@ -724,7 +724,7 @@
         },
         "New": {
           "key": "View_Login_SyncId_New",
-          "default": "Sync ID erhalten"
+          "default": "Neue Sync ID"
         }
       }
     },
