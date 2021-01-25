@@ -261,7 +261,7 @@
     },
     "LocalContainerNotFound_Title": {
       "key": "Exception_LocalContainerNotFound_Title",
-      "default": "Unexpected bookmarks structure"
+      "default": "Struttura dei segnalibri inattesa"
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
