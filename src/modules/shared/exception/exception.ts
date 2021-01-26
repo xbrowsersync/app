@@ -112,6 +112,8 @@ export class SyncRemovedException extends Exception {}
 
 export class SyncUncommittedException extends Exception {}
 
+export class SyncVersionNotSupportedException extends Exception {}
+
 export class TooManyRequestsException extends Exception {}
 
 export class UnspecifiedException extends Exception {}

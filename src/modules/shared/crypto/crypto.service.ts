@@ -7,6 +7,7 @@ import * as Exceptions from '../exception/exception';
 import LogService from '../log/log.service';
 import { StoreKey } from '../store/store.enum';
 import StoreService from '../store/store.service';
+import UtilityService from '../utility/utility.service';
 
 @autobind
 @Injectable('CryptoService')
@@ -14,17 +15,19 @@ export default class CryptoService {
   $q: ng.IQService;
   logSvc: LogService;
   storeSvc: StoreService;
+  utilitySvc: UtilityService;
 
   keyGenAlgorithm = 'PBKDF2';
   keyGenIterations = 250000;
   keyGenHashFunction = 'SHA-256';
   encryptionAlgorithm = 'AES-GCM';
 
-  static $inject = ['$q', 'LogService', 'StoreService'];
-  constructor($q: ng.IQService, LogSvc: LogService, StoreSvc: StoreService) {
+  static $inject = ['$q', 'LogService', 'StoreService', 'UtilityService'];
+  constructor($q: ng.IQService, LogSvc: LogService, StoreSvc: StoreService, UtilitySvc: UtilityService) {
     this.$q = $q;
     this.logSvc = LogSvc;
     this.storeSvc = StoreSvc;
+    this.utilitySvc = UtilitySvc;
   }
 
   concatUint8Arrays(firstArr: Uint8Array = new Uint8Array(), secondArr: Uint8Array = new Uint8Array()): Uint8Array {
@@ -138,7 +141,7 @@ export default class CryptoService {
     const encodedSalt = encoder.encode(salt);
 
     // Get cached sync version
-    return this.storeSvc.get<string>(StoreKey.SyncVersion).then((syncVersion) => {
+    return this.utilitySvc.getSyncVersion().then((syncVersion) => {
       // If old sync version, don't hash password for legacy encryption
       if (!syncVersion) {
         return this.$q.resolve(password);

@@ -1,13 +1,13 @@
 import angular from 'angular';
 import { Component } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import AppSearchComponent from '../../../app/app-search/app-search.component';
 import { AppEventType } from '../../../app/app.enum';
+import AppSearchComponent from '../../../app/app-search/app-search.component';
 import AppHelperService from '../../../app/shared/app-helper/app-helper.service';
 import AlertService from '../../../shared/alert/alert.service';
-import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkChangeType } from '../../../shared/bookmark/bookmark.enum';
 import { Bookmark, BookmarkChange, RemoveBookmarkChangeData } from '../../../shared/bookmark/bookmark.interface';
+import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../../shared/exception/exception';
 import { ExceptionHandler } from '../../../shared/exception/exception.interface';
 import Globals from '../../../shared/global-shared.constants';

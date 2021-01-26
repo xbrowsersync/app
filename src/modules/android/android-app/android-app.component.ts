@@ -1,12 +1,12 @@
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import AppMainComponent from '../../app/app-main/app-main.component';
 import { AppEventType, AppViewType } from '../../app/app.enum';
+import AppMainComponent from '../../app/app-main/app-main.component';
 import AppHelperService from '../../app/shared/app-helper/app-helper.service';
 import AlertService from '../../shared/alert/alert.service';
-import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkMetadata } from '../../shared/bookmark/bookmark.interface';
+import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService } from '../../shared/global-shared.interface';
 import LogService from '../../shared/log/log.service';
@@ -365,8 +365,9 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
         .all([
           this.platformSvc.getAppVersion(),
           this.settingsSvc.checkForAppUpdates(),
-          this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId, StoreKey.SyncVersion]),
+          this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId]),
           this.utilitySvc.getServiceUrl(),
+          this.utilitySvc.getSyncVersion(),
           this.utilitySvc.isSyncEnabled()
         ])
         .then((result) => {
@@ -374,7 +375,8 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
           const checkForAppUpdates = result[1];
           const storeContent = result[2];
           const serviceUrl = result[3];
-          const syncEnabled = result[4];
+          const syncVersion = result[4];
+          const syncEnabled = result[5];
 
           // Add useful debug info to beginning of trace log
           const debugInfo = angular.copy(storeContent) as any;
@@ -386,6 +388,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
           };
           debugInfo.serviceUrl = serviceUrl;
           debugInfo.syncEnabled = syncEnabled;
+          debugInfo.syncVersion = syncVersion;
           this.logSvc.logInfo(
             Object.keys(debugInfo)
               .filter((key) => {

@@ -10,6 +10,7 @@ import LogService from './log/log.service';
 import NetworkService from './network/network.service';
 import SettingsService from './settings/settings.service';
 import SyncModule from './sync/sync.module';
+import UpgradeService from './upgrade/upgrade.service';
 import UtilityService from './utility/utility.service';
 import WorkingService from './working/working.service';
 
@@ -27,6 +28,7 @@ import WorkingService from './working/working.service';
     LogService,
     NetworkService,
     SettingsService,
+    UpgradeService,
     UtilityService,
     WorkingService
   ]

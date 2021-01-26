@@ -3,11 +3,10 @@ import { Component, OnInit, ViewParent } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AlertType } from '../../../shared/alert/alert.enum';
 import AlertService from '../../../shared/alert/alert.service';
-import { ApiService } from '../../../shared/api/api.interface';
 import { Backup } from '../../../shared/backup-restore/backup-restore.interface';
 import BackupRestoreService from '../../../shared/backup-restore/backup-restore.service';
-import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { Bookmark, BookmarkService } from '../../../shared/bookmark/bookmark.interface';
+import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../../shared/exception/exception';
 import { MessageCommand } from '../../../shared/global-shared.enum';
 import { PlatformService } from '../../../shared/global-shared.interface';
@@ -37,7 +36,6 @@ export default class BackupRestoreSettingsComponent implements OnInit {
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
-  apiSvc: ApiService;
   appHelperSvc: AppHelperService;
   backupRestoreSvc: BackupRestoreService;
   bookmarkHelperSvc: BookmarkHelperService;
@@ -45,7 +43,6 @@ export default class BackupRestoreSettingsComponent implements OnInit {
   logSvc: LogService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
-  syncEnabled: boolean;
   utilitySvc: UtilityService;
   workingSvc: WorkingService;
 
@@ -63,6 +60,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
   revertConfirmationMessage: string;
   revertUnavailable = false;
   savingBackup = false;
+  syncEnabled = false;
   validatingRestoreData = false;
 
   static $inject = [
@@ -70,7 +68,6 @@ export default class BackupRestoreSettingsComponent implements OnInit {
     '$q',
     '$timeout',
     'AlertService',
-    'ApiService',
     'AppHelperService',
     'BackupRestoreService',
     'BookmarkHelperService',
@@ -86,7 +83,6 @@ export default class BackupRestoreSettingsComponent implements OnInit {
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
     AlertSvc: AlertService,
-    ApiSvc: ApiService,
     AppHelperSvc: AppHelperService,
     BackupRestoreSvc: BackupRestoreService,
     BookmarkHelperSvc: BookmarkHelperService,
@@ -101,7 +97,6 @@ export default class BackupRestoreSettingsComponent implements OnInit {
     this.$q = $q;
     this.$timeout = $timeout;
     this.alertSvc = AlertSvc;
-    this.apiSvc = ApiSvc;
     this.appHelperSvc = AppHelperSvc;
     this.backupRestoreSvc = BackupRestoreSvc;
     this.bookmarkHelperSvc = BookmarkHelperSvc;
@@ -166,8 +161,24 @@ export default class BackupRestoreSettingsComponent implements OnInit {
     this.displayRestoreConfirmation = false;
     this.displayRestoreForm = true;
 
-    // Start restore
-    this.restoreBackupData(JSON.parse(this.dataToRestore));
+    // Display loading overlay and start restore
+    this.workingSvc.show(WorkingContext.Restoring);
+    this.backupRestoreSvc
+      .restoreBackupData(JSON.parse(this.dataToRestore))
+      .then(this.restoreBookmarksSuccess)
+      .catch((err) => {
+        if (err instanceof Exceptions.SyncVersionNotSupportedException) {
+          // Display specific message if user is trying to restore an unsupported backup version
+          this.alertSvc.setCurrentAlert({
+            message: this.platformSvc.getI18nString(this.Strings.Exception.SyncVersionNotSupported_Restore_Message),
+            title: this.platformSvc.getI18nString(this.Strings.Exception.SyncVersionNotSupported_Title),
+            type: AlertType.Error
+          });
+          return;
+        }
+        throw err;
+      })
+      .finally(this.workingSvc.hide);
   }
 
   confirmRevert(): void {
@@ -309,71 +320,6 @@ export default class BackupRestoreSettingsComponent implements OnInit {
     this.appHelperSvc.focusOnElement('.btn-confirm-restore');
   }
 
-  restoreBackupData(backupData: Backup): ng.IPromise<void> {
-    let bookmarksToRestore: Bookmark[];
-    let serviceUrl: string;
-    let syncId: string;
-    let syncEnabled: boolean;
-
-    this.logSvc.logInfo('Restoring data');
-
-    if (backupData.xbrowsersync) {
-      // Get data to restore from v1.5.0 backup
-      const data = backupData.xbrowsersync.data;
-      const sync = backupData.xbrowsersync.sync;
-      bookmarksToRestore = data?.bookmarks;
-      serviceUrl = sync?.url;
-      syncId = sync && syncId;
-    } else if (backupData.xBrowserSync) {
-      // Get data to restore from backups prior to v1.5.0
-      bookmarksToRestore = backupData.xBrowserSync.bookmarks;
-      syncId = backupData.xBrowserSync.id;
-    } else {
-      // Data to restore invalid, throw error
-      throw new Exceptions.FailedRestoreDataException();
-    }
-
-    this.workingSvc.show(WorkingContext.Restoring);
-
-    return this.utilitySvc
-      .isSyncEnabled()
-      .then((cachedSyncEnabled) => {
-        syncEnabled = cachedSyncEnabled;
-
-        // If synced check service status before starting restore, otherwise restore sync settings
-        return syncEnabled
-          ? this.apiSvc.checkServiceStatus()
-          : this.$q((resolve, reject) => {
-              // Clear current password and set sync ID if supplied
-              this.$q
-                .all([
-                  this.storeSvc.remove(StoreKey.Password),
-                  syncId ? this.storeSvc.set(StoreKey.SyncId, syncId) : this.$q.resolve(),
-                  serviceUrl ? this.appHelperSvc.updateServiceUrl(serviceUrl) : this.$q.resolve()
-                ])
-                .then(resolve)
-                .catch(reject);
-            });
-      })
-      .then(() => {
-        // Return if no bookmarks found
-        if (!bookmarksToRestore) {
-          return;
-        }
-
-        // Start restore
-        return this.platformSvc
-          .queueSync(
-            {
-              bookmarks: bookmarksToRestore,
-              type: !syncEnabled ? SyncType.Local : SyncType.LocalAndRemote
-            },
-            MessageCommand.RestoreBookmarks
-          )
-          .then(this.restoreBookmarksSuccess);
-      });
-  }
-
   restoreBookmarksSuccess(): void {
     // Update view model
     this.displayRestoreForm = false;
@@ -396,17 +342,20 @@ export default class BackupRestoreSettingsComponent implements OnInit {
         this.getBookmarksForExport(),
         this.storeSvc.get<string>(StoreKey.SyncId),
         this.utilitySvc.getServiceUrl(),
+        this.utilitySvc.getSyncVersion(),
         this.utilitySvc.isSyncEnabled()
       ])
       .then((data) => {
         const bookmarksData = data[0];
         const syncId = data[1];
         const serviceUrl = data[2];
-        const syncEnabled = data[3];
+        const syncVersion = data[3];
+        const syncEnabled = data[4];
         const backupData = this.backupRestoreSvc.createBackupData(
           bookmarksData,
-          syncEnabled ? syncId : null,
-          syncEnabled ? serviceUrl : null
+          syncEnabled ? syncId : undefined,
+          syncEnabled ? serviceUrl : undefined,
+          syncEnabled ? syncVersion : undefined
         );
 
         // Beautify json and download data

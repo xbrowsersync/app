@@ -2,8 +2,8 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { ApiService } from '../../api/api.interface';
-import BookmarkHelperService from '../../bookmark/bookmark-helper/bookmark-helper.service';
 import { Bookmark } from '../../bookmark/bookmark.interface';
+import BookmarkHelperService from '../../bookmark/bookmark-helper/bookmark-helper.service';
 import CryptoService from '../../crypto/crypto.service';
 import * as Exceptions from '../../exception/exception';
 import { ExceptionHandler } from '../../exception/exception.interface';
@@ -288,6 +288,7 @@ export default class SyncEngineService {
     let cancel = false;
     let processedBookmarksData: Bookmark[];
     let updateRemote = false;
+    let updateSyncVersion = false;
 
     // If a sync is in progress, retry later
     if (this.currentSync || this.syncQueue.length === 0) {
@@ -316,6 +317,11 @@ export default class SyncEngineService {
               cancel = true;
               return false;
             });
+          }
+
+          // Set update sync version flag if upgrading
+          if (this.currentSync.type === SyncType.Upgrade) {
+            updateSyncVersion = true;
           }
 
           // Set sync bookmarks to last processed result if applicable
@@ -366,7 +372,7 @@ export default class SyncEngineService {
           }
         })
         // Process sync queue
-        .then(() => this.utilitySvc.asyncWhile(this.syncQueue, condition, action))
+        .then(() => this.utilitySvc.asyncWhile<any>(this.syncQueue, condition, action))
         .then(() => {
           // If sync was cancelled stop here
           if (cancel) {
@@ -374,11 +380,11 @@ export default class SyncEngineService {
           }
 
           return this.cryptoSvc.encryptData(JSON.stringify(processedBookmarksData)).then((encryptedBookmarks) => {
-            // Don't update remote bookmarks
+            // Update remote bookmarks if required
             return (!updateRemote
               ? this.$q.resolve().then(() => this.logSvc.logInfo('No changes made, skipping remote update.'))
               : this.apiSvc
-                  .updateBookmarks(encryptedBookmarks, undefined, isBackgroundSync)
+                  .updateBookmarks(encryptedBookmarks, updateSyncVersion, isBackgroundSync)
                   .then((response) => {
                     return this.storeSvc.set(StoreKey.LastUpdated, response.lastUpdated).then(() => {
                       this.logSvc.logInfo(`Remote bookmarks updated at ${response.lastUpdated}`);
@@ -467,7 +473,8 @@ export default class SyncEngineService {
               if (
                 !syncEnabled &&
                 ((syncToQueue.type === SyncType.Local && angular.isUndefined(syncToQueue.bookmarks ?? undefined)) ||
-                  syncToQueue.type === SyncType.Remote)
+                  syncToQueue.type === SyncType.Remote ||
+                  syncToQueue.type === SyncType.Upgrade)
               ) {
                 return this.enableSync().then(() => {
                   this.logSvc.logInfo('Sync enabled');

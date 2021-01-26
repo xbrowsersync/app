@@ -16,9 +16,9 @@ import NetworkService from '../../shared/network/network.service';
 import SettingsService from '../../shared/settings/settings.service';
 import { StoreKey } from '../../shared/store/store.enum';
 import StoreService from '../../shared/store/store.service';
-import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
 import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync, SyncResult } from '../../shared/sync/sync.interface';
+import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
 import UpgradeService from '../../shared/upgrade/upgrade.service';
 import UtilityService from '../../shared/utility/utility.service';
 import ChromiumBookmarkService from '../chromium/shared/chromium-bookmark/chromium-bookmark.service';
@@ -246,24 +246,22 @@ export default class WebExtBackgroundService {
     });
   }
 
-  getCurrentVersion(): string {
-    return browser.runtime.getManifest().version;
-  }
-
   init(): void {
     this.logSvc.logInfo('Starting up');
 
     // Before initialising, check if upgrade required
-    this.upgradeSvc
-      .checkIfUpgradeRequired(this.getCurrentVersion())
+    this.platformSvc
+      .getAppVersion()
+      .then(this.upgradeSvc.checkIfUpgradeRequired)
       .then((upgradeRequired) => upgradeRequired && this.upgradeExtension())
       .then(() =>
         this.$q
           .all([
             this.platformSvc.getAppVersion(),
             this.settingsSvc.all(),
-            this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId, StoreKey.SyncVersion]),
+            this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId]),
             this.utilitySvc.getServiceUrl(),
+            this.utilitySvc.getSyncVersion(),
             this.utilitySvc.isSyncEnabled()
           ])
           .then((data) => {
@@ -271,7 +269,8 @@ export default class WebExtBackgroundService {
             const settings = data[1];
             const storeContent = data[2];
             const serviceUrl = data[3];
-            const syncEnabled = data[4];
+            const syncVersion = data[4];
+            const syncEnabled = data[5];
 
             // Add useful debug info to beginning of trace log
             const debugInfo = angular.copy(storeContent) as any;
@@ -282,6 +281,7 @@ export default class WebExtBackgroundService {
             debugInfo.serviceUrl = serviceUrl;
             debugInfo.syncBookmarksToolbar = settings.syncBookmarksToolbar;
             debugInfo.syncEnabled = syncEnabled;
+            debugInfo.syncVersion = syncVersion;
             this.logSvc.logInfo(
               Object.keys(debugInfo)
                 .filter((key) => {
@@ -333,9 +333,12 @@ export default class WebExtBackgroundService {
           });
         })
         // Set the initial upgrade version
-        .then(() => this.upgradeSvc.setLastUpgradeVersion(this.getCurrentVersion()))
         .then(() => {
-          this.logSvc.logInfo(`Installed v${this.getCurrentVersion()}`);
+          return this.platformSvc.getAppVersion().then((currentVersion) =>
+            this.upgradeSvc.setLastUpgradeVersion(currentVersion).then(() => {
+              this.logSvc.logInfo(`Installed v${currentVersion}`);
+            })
+          );
         })
         .catch(this.$exceptionHandler)
     );
@@ -462,16 +465,19 @@ export default class WebExtBackgroundService {
   }
 
   upgradeExtension(): ng.IPromise<void> {
-    return this.upgradeSvc.upgrade(this.getCurrentVersion()).then(() => {
-      return this.platformSvc.getAppVersion().then((appVersion) => {
-        // Display alert and set update panel to show
-        const alert: Alert = {
-          message: this.platformSvc.getI18nString(this.Strings.Alert.AppUpdated.Message),
-          title: `${this.platformSvc.getI18nString(this.Strings.Alert.AppUpdated.Title)} ${appVersion}`
-        };
-        this.displayAlert(alert, Globals.ReleaseNotesUrlStem + appVersion);
-        return this.storeSvc.set(StoreKey.DisplayUpdated, true);
+    // Run upgrade process and display notification to user
+    return this.platformSvc
+      .getAppVersion()
+      .then(this.upgradeSvc.upgrade)
+      .then(() => {
+        return this.platformSvc.getAppVersion().then((appVersion) => {
+          const alert: Alert = {
+            message: this.platformSvc.getI18nString(this.Strings.Alert.AppUpdated.Message),
+            title: `${this.platformSvc.getI18nString(this.Strings.Alert.AppUpdated.Title)} ${appVersion}`
+          };
+          this.displayAlert(alert, Globals.ReleaseNotesUrlStem + appVersion);
+          return this.storeSvc.set(StoreKey.DisplayUpdated, true);
+        });
       });
-    });
   }
 }

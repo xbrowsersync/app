@@ -1,5 +1,6 @@
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
+import compareVersions from 'compare-versions';
 import * as countriesList from 'countries-list';
 import { ZXCVBNResult } from 'zxcvbn';
 import { ApiServiceStatus } from '../../shared/api/api.enum';
@@ -225,28 +226,36 @@ export default class AppLoginComponent implements OnInit {
           });
         }
 
-        syncInfoMessage = `Synced to existing id: ${this.syncId}`;
-
         // Retrieve sync version for existing id
-        return this.apiSvc.getBookmarksVersion(this.syncId).then((response) => {
-          // If no sync version is set, confirm upgrade
-          if (!response.version) {
-            if (this.upgradeConfirmed) {
-              syncData.type = SyncType.Upgrade;
-            } else {
-              this.displayUpgradeConfirmation = true;
-              return;
-            }
-          }
+        return this.$q
+          .all([this.apiSvc.getBookmarksVersion(this.syncId), this.platformSvc.getAppVersion()])
+          .then((results) => {
+            const response = results[0];
+            const appVersion = results[1];
 
-          // Add sync version to cache and return current sync ID
-          return this.$q
-            .all([
-              this.storeSvc.set(StoreKey.SyncId, this.syncId),
-              this.storeSvc.set(StoreKey.SyncVersion, response.version)
-            ])
-            .then(() => this.syncId);
-        });
+            if (compareVersions.compare(response.version ?? '0', appVersion, '<')) {
+              // Sync version is less than app version, confirm upgrade before proceeding with sync
+              if (this.upgradeConfirmed) {
+                syncData.type = SyncType.Upgrade;
+              } else {
+                this.displayUpgradeConfirmation = true;
+                return;
+              }
+            } else if (compareVersions.compare(response.version ?? '0', appVersion, '>')) {
+              // Sync version is greater than app version, throw error
+              throw new Exceptions.SyncVersionNotSupportedException();
+            }
+
+            syncInfoMessage = `Synced to existing id: ${this.syncId}`;
+
+            // Add sync version to cache and return current sync ID
+            return this.$q
+              .all([
+                this.storeSvc.set(StoreKey.SyncId, this.syncId),
+                this.storeSvc.set(StoreKey.SyncVersion, response.version)
+              ])
+              .then(() => this.syncId);
+          });
       })
       .then((syncId) => {
         if (!syncId) {

@@ -29,7 +29,6 @@ export default class BookmarkHelperService {
 
   cachedBookmarks_encrypted: string | undefined;
   cachedBookmarks_plain: Bookmark[] | undefined;
-  readonly separatorUrl = 'xbs:separator';
 
   static $inject = ['$injector', '$q', 'ApiService', 'CryptoService', 'StoreService', 'UtilityService'];
   constructor(
@@ -116,10 +115,10 @@ export default class BookmarkHelperService {
 
     // Check if separator
     if (
-      this.nativeBookmarkIsSeparator(bookmark as NativeBookmarks.BookmarkTreeNode) ||
-      this.getBookmarkType(bookmark as Bookmark) === BookmarkType.Separator
+      this.getBookmarkType(bookmark as Bookmark) === BookmarkType.Separator ||
+      this.nativeBookmarkIsSeparator(bookmark as NativeBookmarks.BookmarkTreeNode)
     ) {
-      metadata.url = this.separatorUrl;
+      metadata.url = Globals.Bookmarks.SeparatorUrl;
     }
 
     // Remove empty properties
@@ -232,7 +231,7 @@ export default class BookmarkHelperService {
     }
 
     // Check if separator
-    if (bookmark.url === this.separatorUrl) {
+    if (bookmark.url === Globals.Bookmarks.SeparatorUrl) {
       return BookmarkType.Separator;
     }
 
@@ -431,7 +430,12 @@ export default class BookmarkHelperService {
     if (angular.isUndefined(nativeBookmark ?? undefined)) {
       return false;
     }
-    return nativeBookmark.type === BookmarkType.Separator;
+    return (
+      nativeBookmark.type === BookmarkType.Separator ||
+      ((nativeBookmark.title === Globals.Bookmarks.HorizontalSeparatorTitle ||
+        nativeBookmark.title === Globals.Bookmarks.VerticalSeparatorTitle) &&
+        nativeBookmark.url === this.platformSvc.getNewTabUrl())
+    );
   }
 
   modifyBookmarkById(id: number, newMetadata: BookmarkMetadata, bookmarks: Bookmark[]): ng.IPromise<Bookmark[]> {

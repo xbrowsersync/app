@@ -4,7 +4,6 @@ import autobind from 'autobind-decorator';
 import { AppEventType } from '../../../app/app.enum';
 import { Alert } from '../../../shared/alert/alert.interface';
 import AlertService from '../../../shared/alert/alert.service';
-import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkChangeType } from '../../../shared/bookmark/bookmark.enum';
 import {
   Bookmark,
@@ -12,6 +11,7 @@ import {
   ModifyBookmarkChangeData,
   RemoveBookmarkChangeData
 } from '../../../shared/bookmark/bookmark.interface';
+import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../../shared/exception/exception';
 import { ExceptionHandler } from '../../../shared/exception/exception.interface';
 import Globals from '../../../shared/global-shared.constants';
@@ -20,9 +20,9 @@ import { I18nObject, PlatformService, WebpageMetadata } from '../../../shared/gl
 import LogService from '../../../shared/log/log.service';
 import NetworkService from '../../../shared/network/network.service';
 import StoreService from '../../../shared/store/store.service';
-import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
 import { Sync, SyncResult } from '../../../shared/sync/sync.interface';
+import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
 import UtilityService from '../../../shared/utility/utility.service';
 import { WorkingContext } from '../../../shared/working/working.enum';
 import WorkingService from '../../../shared/working/working.service';

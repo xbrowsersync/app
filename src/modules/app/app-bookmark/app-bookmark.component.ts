@@ -4,7 +4,6 @@ import autobind from 'autobind-decorator';
 import AndroidAppHelperService from '../../android/android-app/shared/android-app-helper/android-app-helper.service';
 import { AlertType } from '../../shared/alert/alert.enum';
 import AlertService from '../../shared/alert/alert.service';
-import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkChangeType } from '../../shared/bookmark/bookmark.enum';
 import {
   AddBookmarkChangeData,
@@ -14,6 +13,7 @@ import {
   ModifyBookmarkChangeData,
   RemoveBookmarkChangeData
 } from '../../shared/bookmark/bookmark.interface';
+import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { ExceptionHandler } from '../../shared/exception/exception.interface';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService, WebpageMetadata } from '../../shared/global-shared.interface';

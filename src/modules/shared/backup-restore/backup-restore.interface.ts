@@ -20,6 +20,7 @@ export interface BackupSync {
   id?: string;
   type?: ApiServiceType;
   url?: string;
+  version?: string;
 }
 
 export interface LegacyBackupRoot {

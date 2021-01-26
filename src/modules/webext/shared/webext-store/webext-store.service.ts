@@ -1,6 +1,6 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import * as idbKeyval from 'idb-keyval';
+import { clear, createStore, del, get, keys as idbKeys, set, UseStore } from 'idb-keyval';
 import { StoreKey } from '../../../shared/store/store.enum';
 import { StoreContent, TraceLogItem } from '../../../shared/store/store.interface';
 import StoreService from '../../../shared/store/store.service';
@@ -9,7 +9,7 @@ import StoreService from '../../../shared/store/store.service';
 @Injectable('StoreService')
 export default class WebExtStoreService extends StoreService {
   dbName = 'xbs-store';
-  store: idbKeyval.Store;
+  store: UseStore;
   storeName = 'xbs';
 
   static $inject = ['$q'];
@@ -17,7 +17,7 @@ export default class WebExtStoreService extends StoreService {
     super($q);
 
     // Initialise the store
-    this.store = new idbKeyval.Store(this.dbName, this.storeName);
+    this.store = createStore(this.dbName, this.storeName);
   }
 
   protected addTraceLog(newLogItem: TraceLogItem): ng.IPromise<void> {
@@ -28,7 +28,7 @@ export default class WebExtStoreService extends StoreService {
   }
 
   protected clear(): ng.IPromise<void> {
-    return idbKeyval.clear(this.getStore());
+    return clear(this.getStore());
   }
 
   protected getFromStore<T = StoreContent>(keys: IDBValidKey[] = []): ng.IPromise<T[]> {
@@ -39,7 +39,7 @@ export default class WebExtStoreService extends StoreService {
       if (keysWithoutTraceLog.length === 0) {
         return resolve();
       }
-      return this.$q.all(keysWithoutTraceLog.map((key) => idbKeyval.get<any>(key, this.getStore()))).then((results) => {
+      return this.$q.all(keysWithoutTraceLog.map((key) => get<any>(key, this.getStore()))).then((results) => {
         keysWithoutTraceLog.forEach((key, index) => {
           values[keys.indexOf(key)] = results[index];
         });
@@ -59,21 +59,19 @@ export default class WebExtStoreService extends StoreService {
   }
 
   protected getAllTraceLogs(): ng.IPromise<TraceLogItem[]> {
-    return idbKeyval.get<TraceLogItem[]>(StoreKey.TraceLog, this.getStore()).then((traceLogItems) => {
-      return traceLogItems;
-    });
+    return get<TraceLogItem[]>(StoreKey.TraceLog, this.getStore()).then((traceLogItems) => traceLogItems);
   }
 
-  protected getStore(): idbKeyval.Store {
+  protected getStore(): UseStore {
     return this.store;
   }
 
   protected keys(): ng.IPromise<IDBValidKey[]> {
-    return this.$q.resolve().then(() => idbKeyval.keys(this.getStore()));
+    return this.$q.resolve().then(() => idbKeys(this.getStore()));
   }
 
   protected removeFromStore(keys: IDBValidKey[] = []): ng.IPromise<void> {
-    return this.$q.all(keys.map((key) => idbKeyval.del(key, this.getStore()))).then(() => {});
+    return this.$q.all(keys.map((key) => del(key, this.getStore()))).then(() => {});
   }
 
   protected setInStore(key: IDBValidKey, value: any): ng.IPromise<void> {
@@ -84,6 +82,6 @@ export default class WebExtStoreService extends StoreService {
   }
 
   protected setInIdbKeyval(key: IDBValidKey, value: any): ng.IPromise<void> {
-    return idbKeyval.set(key, value, this.getStore());
+    return set(key, value, this.getStore());
   }
 }

@@ -1,8 +1,8 @@
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import AppMainComponent from '../../app/app-main/app-main.component';
 import { AppViewType } from '../../app/app.enum';
+import AppMainComponent from '../../app/app-main/app-main.component';
 import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync } from '../../shared/sync/sync.interface';
 import WebExtPlatformService from '../shared/webext-platform/webext-platform.service';
@@ -62,12 +62,12 @@ export default class WebExtAppComponent extends AppMainComponent implements OnIn
       .then(() => super.ngOnInit());
   }
 
-  waitForSyncsToFinish() {
-    const condition = (currentSync: Sync) => {
+  waitForSyncsToFinish(): ng.IPromise<void> {
+    const condition = (currentSync: Sync): ng.IPromise<boolean> => {
       return this.$q.resolve(!angular.isUndefined(currentSync ?? undefined));
     };
 
-    const action = () => {
+    const action = (): ng.IPromise<Sync> => {
       return this.$q((resolve, reject) => {
         this.$timeout(() => {
           this.appHelperSvc.getCurrentSync().then(resolve).catch(reject);
@@ -76,7 +76,7 @@ export default class WebExtAppComponent extends AppMainComponent implements OnIn
     };
 
     // Periodically check sync queue until it is empty
-    return this.utilitySvc.asyncWhile([], condition, action);
+    return this.utilitySvc.asyncWhile<Sync>({} as any, condition, action).then(() => {});
   }
 
   workingCancelAction(): ng.IPromise<void> {

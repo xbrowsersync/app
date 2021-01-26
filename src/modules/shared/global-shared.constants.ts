@@ -8,6 +8,7 @@ export default {
     DescriptionMaxLength: 300,
     HorizontalSeparatorTitle:
       '────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────',
+    SeparatorUrl: 'xbs:separator',
     VerticalSeparatorTitle: '|'
   },
   InterfaceReadyTimeout: 150,

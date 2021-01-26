@@ -1,7 +1,6 @@
 import angular from 'angular';
 import autobind from 'autobind-decorator';
 import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
-import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkChangeType, BookmarkContainer, BookmarkType } from '../../../shared/bookmark/bookmark.enum';
 import {
   AddNativeBookmarkChangeData,
@@ -15,16 +14,16 @@ import {
   ReorderNativeBookmarkChangeData,
   UpdateBookmarksResult
 } from '../../../shared/bookmark/bookmark.interface';
+import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../../shared/exception/exception';
-import Globals from '../../../shared/global-shared.constants';
 import { MessageCommand } from '../../../shared/global-shared.enum';
 import { PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
 import LogService from '../../../shared/log/log.service';
 import SettingsService from '../../../shared/settings/settings.service';
 import StoreService from '../../../shared/store/store.service';
-import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
 import { Sync } from '../../../shared/sync/sync.interface';
+import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
 import UtilityService from '../../../shared/utility/utility.service';
 import { BookmarkIdMapping } from '../bookmark-id-mapper/bookmark-id-mapper.interface';
 import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
@@ -878,7 +877,7 @@ export default abstract class WebExtBookmarkService {
       return this.$q.resolve(this.nativeBookmarkEventsQueue.length > 0);
     };
 
-    const action = (): any => {
+    const action = (): ng.IPromise<void> => {
       // Get first event in the queue and process change
       const currentEvent = this.nativeBookmarkEventsQueue.shift();
       switch (currentEvent.changeType) {
@@ -898,7 +897,7 @@ export default abstract class WebExtBookmarkService {
     };
 
     // Iterate through the queue and process the events
-    this.utilitySvc.asyncWhile(this.nativeBookmarkEventsQueue, condition, action).then(() => {
+    this.utilitySvc.asyncWhile<any>(this.nativeBookmarkEventsQueue, condition, action).then(() => {
       this.$timeout(() => {
         this.syncEngineSvc.executeSync().then(() => {
           // Move native unsupported containers into the correct order

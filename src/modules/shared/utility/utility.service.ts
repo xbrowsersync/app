@@ -46,11 +46,11 @@ export default class UtilityService {
     this.storeSvc = StoreSvc;
   }
 
-  asyncWhile(data: any, condition: (data: any) => ng.IPromise<any>, action: (data: any) => ng.IPromise<any>) {
-    const whilst = (whilstData: any): ng.IPromise<any> => {
-      return condition(whilstData).then((conditionIsTrue) => {
-        return conditionIsTrue ? action(whilstData).then(whilst) : this.$q.resolve(whilstData);
-      });
+  asyncWhile<T = any>(data: T, condition: (data: T) => ng.IPromise<boolean>, action: (data: T) => ng.IPromise<T>) {
+    const whilst = (whilstData: T): ng.IPromise<T> => {
+      return condition(whilstData).then((conditionIsTrue) =>
+        conditionIsTrue ? action(whilstData).then(whilst) : this.$q.resolve(whilstData)
+      );
     };
 
     return whilst(data);
@@ -119,6 +119,10 @@ export default class UtilityService {
       // If no service url cached, use default
       return cachedServiceUrl ?? Globals.URL.DefaultServiceUrl;
     });
+  }
+
+  getSyncVersion(): ng.IPromise<string> {
+    return this.storeSvc.get<string>(StoreKey.SyncVersion);
   }
 
   getTagArrayFromText(tagText: string): string[] | undefined {

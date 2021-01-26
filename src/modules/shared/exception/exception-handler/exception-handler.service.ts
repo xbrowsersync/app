@@ -73,6 +73,10 @@ export default class ExceptionHandlerService {
         alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.SyncRemoved_Title);
         alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.SyncRemoved_Message);
         break;
+      case Exceptions.SyncVersionNotSupportedException:
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.SyncVersionNotSupported_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.SyncVersionNotSupported_Message);
+        break;
       case Exceptions.InvalidCredentialsException:
         alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.InvalidCredentials_Title);
         alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.InvalidCredentials_Message);

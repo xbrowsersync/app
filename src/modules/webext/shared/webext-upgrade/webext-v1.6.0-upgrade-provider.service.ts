@@ -1,27 +1,22 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { browser } from 'webextension-polyfill-ts';
-import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { BookmarkService } from '../../../shared/bookmark/bookmark.interface';
+import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { PlatformService } from '../../../shared/global-shared.interface';
-import LogService from '../../../shared/log/log.service';
 import StoreService from '../../../shared/store/store.service';
-import UpgradeService from '../../../shared/upgrade/upgrade.service';
+import V160UpgradeProviderService from '../../../shared/upgrade/v1.6.0-upgrade-provider/v1.6.0-upgrade-provider.service';
 import UtilityService from '../../../shared/utility/utility.service';
 
 @autobind
-@Injectable('UpgradeService')
-export default class WebExtUpgradeService extends UpgradeService {
-  bookmarkHelperSvc: BookmarkHelperService;
+@Injectable('V160UpgradeProviderService')
+export default class WebExtV160UpgradeProviderService extends V160UpgradeProviderService {
   bookmarkSvc: BookmarkService;
-  platformSvc: PlatformService;
-  utilitySvc: UtilityService;
 
   static $inject = [
     '$q',
     'BookmarkHelperService',
     'BookmarkService',
-    'LogService',
     'PlatformService',
     'StoreService',
     'UtilityService'
@@ -30,21 +25,16 @@ export default class WebExtUpgradeService extends UpgradeService {
     $q: ng.IQService,
     BookmarkHelperSvc: BookmarkHelperService,
     BookmarkSvc: BookmarkService,
-    LogSvc: LogService,
     PlatformSvc: PlatformService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService
   ) {
-    super($q, LogSvc, StoreSvc, UtilitySvc);
-
-    this.bookmarkHelperSvc = BookmarkHelperSvc;
+    super($q, BookmarkHelperSvc, PlatformSvc, StoreSvc, UtilitySvc);
     this.bookmarkSvc = BookmarkSvc;
-    this.platformSvc = PlatformSvc;
-    this.utilitySvc = UtilitySvc;
   }
 
-  upgradeTo160(): ng.IPromise<void> {
-    // Initialise data storage
+  upgradeApp(upgradingFromVersion?: string): ng.IPromise<void> {
+    // Initialise IndexedDB data storage
     return (
       this.storeSvc
         .init()
@@ -61,22 +51,7 @@ export default class WebExtUpgradeService extends UpgradeService {
             })
           );
         })
-        .then(() => {
-          return browser.storage.local.clear();
-        })
-        .then(() => {
-          // If sync enabled, create id mappings
-          return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
-            if (!syncEnabled) {
-              return;
-            }
-            return this.bookmarkHelperSvc
-              .getCachedBookmarks()
-              .then(this.bookmarkSvc.buildIdMappings)
-              .then(() => this.platformSvc.refreshNativeInterface(true));
-          });
-        })
-        .then(() => {})
+        .then(() => browser.storage.local.clear())
     );
   }
 }
