@@ -339,6 +339,18 @@
       "key": "Exception_SyncRemoved_Title",
       "default": "Синхронизация не найдена"
     },
+    "SyncVersionNotSupported_Message": {
+      "key": "Exception_SyncVersionNotSupported_Message",
+      "default": "This ID cannot be synced with this version of xBrowserSync as the sync has been upgraded to a later version."
+    },
+    "SyncVersionNotSupported_Restore_Message": {
+      "key": "Exception_SyncVersionNotSupported_Restore_Message",
+      "default": "The backup data cannot be restored by this version of xBrowserSync as it was created with a later version."
+    },
+    "SyncVersionNotSupported_Title": {
+      "key": "Exception_SyncVersionNotSupported_Title",
+      "default": "Sync version not supported"
+    },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
       "default": "Синхронизация была отключена, включите повторную синхронизацию для возобновления синхронизации."
