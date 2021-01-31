@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "HookyQR.beautify",
+    "msjsdiag.debugger-for-chrome",
+    "stylelint.vscode-stylelint"
+  ]
+}
