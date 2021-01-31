@@ -261,7 +261,7 @@
     },
     "LocalContainerNotFound_Title": {
       "key": "Exception_LocalContainerNotFound_Title",
-      "default": "Unexpected bookmarks structure"
+      "default": "Uventet struktur for bokmerkene"
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
@@ -617,7 +617,7 @@
         },
         "MaxSyncSize": {
           "key": "View_Login_Service_MaxSyncSize",
-          "default": "Max sync size"
+          "default": "Maks synk-størrelse"
         },
         "Selected": {
           "key": "View_Login_Service_Selected",
