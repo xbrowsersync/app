@@ -3,65 +3,65 @@
     "AppUpdateAvailable": {
       "Title": {
         "key": "Alert_AppUpdateAvailable_Title",
-        "default": "xBrowserSync oppdatering tilgjengelig"
+        "default": "xBrowserSync update available"
       },
       "Message": {
         "key": "Alert_AppUpdateAvailable_Message",
-        "default": "{version} er tilgjengelig for å laste ned. Klikk for mer informasjon.",
-        "android": "xBrowserSync {version} er tilgjengelig for nedlasting."
+        "default": "{version} is available to download. Click for more information.",
+        "android": "xBrowserSync {version} is available to download."
       }
     },
     "AppUpdated": {
       "Title": {
         "key": "Alert_AppUpdated_Title",
-        "default": "Oppdatert til"
+        "default": "Updated to"
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync har blitt oppdatert med de nyeste funksjonene og feilrettingene. Klikk for notater til utgaven."
+        "default": "xBrowserSync has been updated. Sync has ben disabled, re-enable sync to complete the upgrade process."
       }
     },
     "BookmarkCreated": {
       "key": "Alert_BookmarkCreated",
-      "default": "Bokmerke opprettet"
+      "default": "Bookmark created"
     },
     "BookmarkDeleted": {
       "key": "Alert_BookmarkDeleted",
-      "default": "Bokmerke slettet"
+      "default": "Bookmark deleted"
     },
     "BookmarkUpdated": {
       "key": "Alert_BookmarkUpdated",
-      "default": "Bokmerke oppdatert"
+      "default": "Bookmark updated"
     },
     "GetMetadata": {
       "Message": {
         "key": "Alert_GetMetadata_Message",
-        "default": "Henter bokmerkeegenskaper. Trykk for å avbryte."
+        "default": "Fetching bookmark properties, touch to cancel."
       },
       "Success": {
         "key": "Alert_GetMetadata_Success",
-        "default": "Bokmerkeegenskaper er oppdatert."
+        "default": "Bookmark properties updated."
       }
     },
     "Go": {
       "key": "Alert_Go",
-      "default": "Ok"
+      "default": "Go"
     },
     "WorkingOffline": {
       "Title": {
         "key": "Alert_WorkingOffline_Title",
-        "default": "Arbeider frakoblet"
+        "default": "Working offline"
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
-        "default": "Endringer vil bli synkronisert når tilkoblingen gjenopprettes."
+        "default": "Changes will be synced when connection is restored."
       }
     }
   },
   "App": {
     "Description": {
       "key": "App_Description",
-      "default": "Nettlesersynkronisering slik det bør være: sikker, anonym og gratis! Synkroniser bokmerker på tvers av nettlesere og enheter. Ingen krav om registrering."
+      "default": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
     },
     "Title": {
       "key": "App_Title",
@@ -72,184 +72,184 @@
     "Container": {
       "Menu": {
         "key": "Bookmarks_Container_Menu",
-        "default": "Menybokmerker"
+        "default": "Menu bookmarks"
       },
       "Mobile": {
         "key": "Bookmarks_Container_Mobile",
-        "default": "Mobilbokmerker"
+        "default": "Mobile bookmarks"
       },
       "Other": {
         "key": "Bookmarks_Container_Other",
-        "default": "Andre bokmerker"
+        "default": "Other bookmarks"
       },
       "Toolbar": {
         "key": "Bookmarks_Container_Toolbar",
-        "default": "Bokmerker på verktøylinjen"
+        "default": "Toolbar bookmarks"
       }
     }
   },
   "Button": {
     "AddBookmark": {
       "key": "Button_AddBookmark",
-      "default": "Legg til bokmerke"
+      "default": "Add Bookmark"
     },
     "Back": {
       "key": "Button_Back",
-      "default": "Tilbake"
+      "default": "Back"
     },
     "Cancel": {
       "key": "Button_Cancel",
-      "default": "Avbryt"
+      "default": "Cancel"
     },
     "Close": {
       "key": "Button_Close",
-      "default": "Lukk"
+      "default": "Close"
     },
     "Confirm": {
       "key": "Button_Confirm",
-      "default": "Ja"
+      "default": "Yes"
     },
     "Continue": {
       "key": "Button_Continue",
-      "default": "Fortsett"
+      "default": "Continue"
     },
     "DeleteBookmark": {
       "key": "Button_DeleteBookmark",
-      "default": "Slett bokmerke"
+      "default": "Delete Bookmark"
     },
     "Deny": {
       "key": "Button_Deny",
-      "default": "Nei"
+      "default": "No"
     },
     "Done": {
       "key": "Button_Done",
-      "default": "Ferdig"
+      "default": "Done"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
-      "default": "Rediger bokmerke"
+      "default": "Edit Bookmark"
     },
     "Help": {
       "key": "Button_Help",
-      "default": "Hjelpeguide"
+      "default": "Help guide"
     },
     "Next": {
       "key": "Button_Next",
-      "default": "Neste"
+      "default": "Next"
     },
     "OK": {
       "key": "Button_OK",
-      "default": "Greit"
+      "default": "Got it"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
-      "default": "Se utgivelsesnotater"
+      "default": "View release notes"
     },
     "Saving": {
       "key": "Button_Saving",
-      "default": "Lagrer"
+      "default": "Saving"
     },
     "Settings": {
       "key": "Button_Settings",
-      "default": "Innstillinger"
+      "default": "Settings"
     },
     "ShareBookmark": {
       "key": "Button_ShareBookmark",
-      "default": "Del bokmerke"
+      "default": "Share bookmark"
     },
     "Undo": {
       "key": "Button_Undo",
-      "default": "Angre"
+      "default": "Undo"
     },
     "Update": {
       "key": "Button_Update",
-      "default": "Oppdater"
+      "default": "Update"
     },
     "View": {
       "key": "Button_View",
-      "default": "Vis"
+      "default": "View"
     }
   },
   "Exception": {
     "ContainerChanged_Message": {
       "key": "Exception_ContainerChanged_Message",
-      "default": "Unngå å endre [xbs]-mapper fordi det kan forårsake synkroniseringsproblemer."
+      "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
     },
     "ContainerChanged_Title": {
       "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync-mappen er endret"
+      "default": "xBrowserSync folder changed"
     },
     "DailyNewSyncLimitReached_Message": {
       "key": "Exception_DailyNewSyncLimitReached_Message",
-      "default": "Synkroniser til en eksisterende synkroniserings-ID, bytt til en annen tjeneste eller prøv igjen i morgen."
+      "default": "Sync to an existing sync ID, switch to a different service or try again tomorrow."
     },
     "DailyNewSyncLimitReached_Title": {
       "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "Daglig ny synkroniseringsgrense er nådd"
+      "default": "Daily new sync limit reached"
     },
     "Default_Message": {
       "key": "Exception_Default_Message",
-      "default": "Hvis problemet vedvarer, kan du <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>rapportere problemet</a>."
+      "default": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
     },
     "Default_Title": {
       "key": "Exception_Default_Title",
-      "default": "Noe gikk galt"
+      "default": "Something went wrong"
     },
     "FailedDownloadFile_Title": {
       "key": "Exception_FailedDownloadFile_Title",
-      "default": "Sikkerhetskopiering feilet"
+      "default": "Backup failed"
     },
     "FailedGetDataToRestore_Title": {
       "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "Bla gjennom filer feilet"
+      "default": "Browse files failed"
     },
     "FailedGetPageMetadata_Message": {
       "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "URL-adressen er ugyldig eller nettsidedata kunne ikke hentes."
+      "default": "URL is invalid or webpage data could not be retrieved."
     },
     "FailedGetPageMetadata_Title": {
       "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "Klarte ikke å hente bokmerkeegenskaper"
+      "default": "Couldn’t get bookmark properties"
     },
     "FailedRefreshBookmarks_Title": {
       "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "Kunne ikke hente oppdateringer"
+      "default": "Couldn’t retrieve updates"
     },
     "FailedRestoreData_Message": {
       "key": "Exception_FailedRestoreData_Message",
-      "default": "De angitte sikkerhetskopidataene er ikke i et forventet format."
+      "default": "The backup data provided is not in an expected format."
     },
     "FailedRestoreData_Title": {
       "key": "Exception_FailedRestoreData_Title",
-      "default": "Kan ikke gjenopprette data"
+      "default": "Unable to restore data"
     },
     "FailedShareUrlNotSynced_Title": {
       "key": "Exception_FailedShareUrlNotSynced_Title",
-      "default": "Du må være synkronisert for å legge til et bokmerke"
+      "default": "You must be synced to add a bookmark"
     },
     "FailedShareUrl_Title": {
       "key": "Exception_FailedShareUrl_Title",
-      "default": "Kan ikke hente delt bokmerke-URL"
+      "default": "Unable to retrieve shared bookmark URL"
     },
     "HttpRequestFailed_Message": {
       "key": "Exception_HttpRequestFailed_Message",
-      "default": "Kontroller nettverkstilkoblingen og prøv på nytt."
+      "default": "Check your network connection and try again."
     },
     "HttpRequestFailed_Title": {
       "key": "Exception_HttpRequestFailed_Title",
-      "default": "Mistet tilkoblingen til tjenesten"
+      "default": "Connection to service lost"
     },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
-      "default": "Kontroller at din synkroniserings-ID, passord og service-URL har blitt skrevet inn riktig."
+      "default": "Check that your sync ID, password and service URL have been entered correctly."
     },
     "InvalidCredentials_Title": {
       "key": "Exception_InvalidCredentials_Title",
-      "default": "Ugyldig brukerinformasjon"
+      "default": "Invalid credentials"
     },
     "InvalidService_Message": {
       "key": "Exception_InvalidService_Message",
-      "default": "Tjenestens URL er ikke en gyldig xBrowserSync-tjeneste."
+      "default": "The service URL is not a valid xBrowserSync service."
     },
     "InvalidService_Title": {
       "key": "Exception_InvalidService_Title",
@@ -261,83 +261,83 @@
     },
     "LocalContainerNotFound_Title": {
       "key": "Exception_LocalContainerNotFound_Title",
-      "default": "Uventet struktur for bokmerkene"
+      "default": "Unexpected bookmarks structure"
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Lokale data er oppdatert. Bruk den siste endringen på nytt."
+      "default": "Local data has been refreshed, please reapply last change."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
-      "default": "Synkronseringsfeil"
+      "default": "Sync error"
     },
     "MissingClientData_Message": {
       "key": "Exception_MissingClientData_Message",
-      "default": "Finner ikke lagrede brukeropplysninger. Reaktiver synkronisering og prøv på nytt."
+      "default": "Unable to find stored credentials. Re-enable sync and try again."
     },
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
-      "default": "Manglende brukeropplysninger"
+      "default": "Missing credentials"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",
-      "default": "Sørg for at du har oppgitt en gyldig xBrowserSync-sikkerhetskopi før du gjenoppretter."
+      "default": "Ensure you have provided a valid xBrowserSync back up before restoring."
     },
     "NoDataToRestore_Title": {
       "key": "Exception_NoDataToRestore_Title",
-      "default": "Ingen data å gjenopprette"
+      "default": "No data to restore"
     },
     "NotAcceptingNewSyncs_Message": {
       "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Bytt til en annen tjeneste eller prøv igjen senere."
+      "default": "Switch to a different service or try again later."
     },
     "NotAcceptingNewSyncs_Title": {
       "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "Tjenesten godtar ikke nye synkroniseringer"
+      "default": "Service not accepting new syncs"
     },
     "OutOfSync_Message": {
       "key": "Exception_OutOfSync_Message",
-      "default": "Lokale data var usynkronisert og har nå blitt oppdatert. Vennligst legg inn siste endring på nytt."
+      "default": "Local data was out of sync and has now been refreshed. Please reapply last change."
     },
     "OutOfSync_Title": {
       "key": "Exception_OutOfSync_Title",
-      "default": "Synkroniseringskonflikt oppdaget"
+      "default": "Sync conflict detected"
     },
     "RequestEntityTooLarge_Message": {
       "key": "Exception_RequestEntityTooLarge_Message",
-      "default": "Slett noen bokmerker og prøv igjen, eller bytt til en tjeneste med en større grense for synkronisering."
+      "default": "Delete some bookmarks and try again or switch to a service with a larger sync limit."
     },
     "RequestEntityTooLarge_Title": {
       "key": "Exception_RequestEntityTooLarge_Title",
-      "default": "Grense for synkroniseringsdata overskredet"
+      "default": "Sync data limit exceeded"
     },
     "ScanFailed_Message": {
       "key": "Exception_ScanFailed_Message",
-      "default": "Sjekk om tillatelse er innvilget og prøv igjen."
+      "default": "Check permission has been granted and try again."
     },
     "ScanFailed_Title": {
       "key": "Exception_ScanFailed_Title",
-      "default": "Skanningen feilet"
+      "default": "Scan failed"
     },
     "ServiceOffline_Message": {
       "key": "Exception_ServiceOffline_Message",
-      "default": "xBrowserSync-tjenesten er for øyeblikket frakoblet. Prøv igjen senere."
+      "default": "The xBrowserSync service is currently offline, try again later."
     },
     "ServiceOffline_Title": {
       "key": "Exception_ServiceOffline_Title",
-      "default": "Tjenesten er frakoblet"
+      "default": "Service offline"
     },
     "ShareFailed_Title": {
       "key": "Exception_ShareFailed_Title",
-      "default": "Deling mislyktes"
+      "default": "Share failed"
     },
     "SyncRemoved_Message": {
       "key": "Exception_SyncRemoved_Message",
-      "default": "Den forespurte synkroniseringen finnes ikke, den kan ha blitt fjernet på grunn av inaktivitet."
+      "default": "The requested sync does not exist, it may have been removed due to inactivity."
     },
     "SyncRemoved_Title": {
       "key": "Exception_SyncRemoved_Title",
-      "default": "Finner ikke synkronisering"
+      "default": "Sync not found"
     },
     "SyncVersionNotSupported_Message": {
       "key": "Exception_SyncVersionNotSupported_Message",
@@ -353,7 +353,7 @@
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
-      "default": "Synkronisering er deaktivert. Aktiver på nytt for å synkronisere igjen."
+      "default": "Sync has been disabled, re-enable sync to resume syncing."
     },
     "TooManyRequests_Title": {
       "key": "Exception_TooManyRequests_Title",
@@ -365,83 +365,83 @@
     },
     "UncommittedSyncs_Title": {
       "key": "Exception_UncommittedSyncs_Title",
-      "default": "Endringene er ikke synkronisert"
+      "default": "Changes not synced"
     },
     "UnsupportedServiceApiVersion_Message": {
       "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "Denne tjenesten kjører en API-versjon som ikke er støttet."
+      "default": "This service is running an unsupported API version."
     },
     "UnsupportedServiceApiVersion_Title": {
       "key": "Exception_UnsupportedServiceApiVersion_Title",
-      "default": "Tjenesten støttes ikke"
+      "default": "Service not supported"
     },
     "UpgradeFailed_Message": {
       "key": "Exception_UpgradeFailed_Message",
-      "android": "Oppgraderingen vil bli prøvd hentet ved omstart av appen. Hvis problemet vedvarer kan du prøve å reinstallere xBrowserSync.",
-      "default": "Start nettleseren på nytt for å oppgradere. Hvis problemet vedvarer kan du prøve å reinstallere xBrowserSync."
+      "android": "Upgrade will be retried on restarting the app. If the problem persists please reinstall xBrowserSync.",
+      "default": "Restart your browser to retry upgrade, if the problem persists please reinstall xBrowserSync."
     },
     "UpgradeFailed_Title": {
       "key": "Exception_UpgradeFailed_Title",
-      "default": "Oppgraderingen mislyktes"
+      "default": "Upgrade failed"
     }
   },
   "Service": {
     "Status": {
       "Error": {
         "key": "Service_Status_Error",
-        "default": "Feil ved tilkobling"
+        "default": "Connection error"
       },
       "Loading": {
         "key": "Service_Status_Loading",
-        "default": "Sjekker"
+        "default": "Checking"
       },
       "NoNewSyncs": {
         "key": "Service_Status_NoNewSyncs",
-        "default": "Aksepterer ikke nye synkroniseringer"
+        "default": "Not accepting new syncs"
       },
       "Offline": {
         "key": "Service_Status_Offline",
-        "default": "Frakoblet"
+        "default": "Offline"
       },
       "Online": {
         "key": "Service_Status_Online",
-        "default": "Tilkoblet"
+        "default": "Online"
       }
     }
   },
   "Tooltip": {
     "NotSynced": {
       "key": "Tooltip_NotSynced",
-      "default": "ikke synkronisert"
+      "default": "not synced"
     },
     "Synced": {
       "key": "Tooltip_Synced",
-      "default": "synkronisert"
+      "default": "synced"
     },
     "Syncing": {
       "key": "Tooltip_Syncing",
-      "default": "synkroniserer"
+      "default": "syncing"
     }
   },
   "View": {
     "Bookmark": {
       "Add": {
         "key": "View_Bookmark_Add",
-        "default": "Legg til bokmerke"
+        "default": "Add bookmark"
       },
       "Edit": {
         "key": "View_Bookmark_Edit",
-        "default": "Rediger bokmerke"
+        "default": "Edit bookmark"
       },
       "Form": {
         "Title": {
           "key": "View_Bookmark_Form_Title",
-          "default": "Tittel"
+          "default": "Title"
         },
         "Url": {
           "Exists": {
             "key": "View_Bookmark_Form_Url_Exists",
-            "default": "URL-adressen er allerede bokmerket"
+            "default": "URL has already been bookmarked"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -449,42 +449,42 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "URL for bokmerke er påkrevd"
+            "default": "Bookmark URL is required"
           }
         },
         "Description": {
           "key": "View_Bookmark_Form_Description",
-          "default": "Beskrivelse"
+          "default": "Description"
         },
         "Tags": {
           "Label": {
             "key": "View_Bookmark_Form_Tags_Label",
-            "default": "Etiketter"
+            "default": "Tags"
           },
           "Placeholder": {
             "key": "View_Bookmark_Form_Tags_Placeholder",
-            "default": "etikett 1, etikett 2, etikett 3, osv"
+            "default": "tag 1, tag 2, tag 3, etc"
           },
           "Clear": {
             "key": "View_Bookmark_Form_Tags_Clear",
-            "default": "Fjern etiketter"
+            "default": "Clear tags"
           },
           "Remove": {
             "key": "View_Bookmark_Form_Tags_Remove",
-            "default": "Fjern etiketter"
+            "default": "Remove tag"
           }
         },
         "Delete": {
           "key": "View_Bookmark_Form_Delete",
-          "default": "Slett"
+          "default": "Delete"
         },
         "Share": {
           "key": "View_Bookmark_Form_Share",
-          "default": "Del"
+          "default": "Share"
         },
         "UpdateProperties": {
           "key": "View_Bookmark_Form_UpdateProperties",
-          "default": "Oppdater egenskaper for bokmerker"
+          "default": "Update bookmark properties"
         }
       },
       "InvalidUrlShared": {
@@ -535,7 +535,7 @@
       },
       "Previous": {
         "key": "View_Help_Previous",
-        "default": "Tilbake"
+        "default": "Previous"
       },
       "Searching": {
         "key": "View_Help_Searching",
@@ -567,39 +567,39 @@
       "GetSyncId": {
         "Title": {
           "key": "View_Login_GetSyncId_Title",
-          "default": "Trenger du en synkroniserings-ID?"
+          "default": "Need a sync ID?"
         },
         "Content": {
           "key": "View_Login_GetSyncId_Content",
-          "default": "Last ned xBrowserSync-nettleserutvidelsen på skrivebordet, og opprett en ny synkronisering for å få tilgang til bokmerkene dine her."
+          "default": "Download the xBrowserSync desktop browser extension and create a new sync to access your bookmarks here."
         }
       },
       "Password": {
         "Confirm": {
           "key": "View_Login_Password_Confirm",
-          "default": "Bekreft passord"
+          "default": "Confirm password"
         },
         "Existing": {
           "key": "View_Login_Password_Existing",
-          "default": "Ditt krypteringspassord"
+          "default": "Your encryption password"
         },
         "Label": {
           "key": "View_Login_Password_Label",
-          "default": "Krypteringspassord"
+          "default": "Encryption password"
         },
         "New": {
           "key": "View_Login_Password_New",
-          "default": "Skriv inn et krypteringspassord"
+          "default": "Enter an encryption password"
         },
         "Show": {
           "key": "View_Login_Password_Show",
-          "default": "Vis passord"
+          "default": "Reveal password"
         }
       },
       "Scan": {
         "Title": {
           "key": "View_Login_Scan_Title",
-          "default": "Koble til din synkronisering"
+          "default": "Connect to your sync"
         },
         "Content": {
           "key": "View_Login_Scan_Content",
@@ -607,33 +607,33 @@
         },
         "ScanCode": {
           "key": "View_Login_Scan_ScanCode",
-          "default": "Skann kode"
+          "default": "Scan code"
         },
         "ManualEntry": {
           "key": "View_Login_Scan_ManualEntry",
-          "default": "Angi synkroniseringsdetaljer manuelt"
+          "default": "Enter sync details manually"
         }
       },
       "Service": {
         "ApiVersion": {
           "key": "View_Login_Service_ApiVersion",
-          "default": "API-versjon"
+          "default": "API version"
         },
         "Confirm": {
           "key": "View_Login_Service_Confirm",
-          "default": "Synkroniser til denne tjenesten?"
+          "default": "Sync to this service?"
         },
         "Location": {
           "key": "View_Login_Service_Location",
-          "default": "Sted"
+          "default": "Location"
         },
         "MaxSyncSize": {
           "key": "View_Login_Service_MaxSyncSize",
-          "default": "Maks synk-størrelse"
+          "default": "Max sync size"
         },
         "Selected": {
           "key": "View_Login_Service_Selected",
-          "default": "Synkroniserer til"
+          "default": "Syncing to"
         },
         "Status": {
           "key": "View_Login_Service_Status",
@@ -650,7 +650,7 @@
           },
           "Button": {
             "key": "View_Login_Service_Update_Button",
-            "default": "Bytt tjeneste"
+            "default": "Switch service"
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
@@ -678,7 +678,7 @@
         "Confirm": {
           "Title": {
             "key": "View_Login_Sync_Confirm_Title",
-            "default": "Er du sikker?"
+            "default": "Are you sure?"
           },
           "Content": {
             "key": "View_Login_Sync_Confirm_Content",
@@ -713,22 +713,22 @@
           },
           "Content": {
             "key": "View_Login_Sync_Upgrade_Content",
-            "default": "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
+            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync. After upgrading, you will no longer be able to sync with any previous versions of xBrowserSync.</p><p>Make sure to update xBrowserSync on all synced devices before continuing. Ready to proceed?</p>"
           }
         }
       },
       "SyncId": {
         "Description": {
           "key": "View_Login_SyncId_Description",
-          "default": "Din synk-ID"
+          "default": "Your sync ID"
         },
         "Existing": {
           "key": "View_Login_SyncId_Existing",
-          "default": "Har du allerede en synkroniserings-ID?"
+          "default": "Already got a sync ID?"
         },
         "Invalid": {
           "key": "View_Login_SyncId_Invalid",
-          "default": "Ikke en gyldig synkroniserings-ID"
+          "default": "Not a valid sync ID"
         },
         "Label": {
           "key": "View_Login_SyncId_Label",
@@ -736,14 +736,14 @@
         },
         "New": {
           "key": "View_Login_SyncId_New",
-          "default": "Få en synkroniserings-ID"
+          "default": "Get a sync ID"
         }
       }
     },
     "Permissions": {
       "Title": {
         "key": "View_Permissions_Title",
-        "default": "Valgfrie tillatelser"
+        "default": "Optional permissions"
       },
       "Content": {
         "key": "View_Permissions_Content",
@@ -763,71 +763,71 @@
     "Search": {
       "BookmarkTree": {
         "key": "View_Search_BookmarkTree",
-        "default": "Vis bokmerkemapper"
+        "default": "View bookmark folders"
       },
       "Clear": {
         "key": "View_Search_Clear",
-        "default": "Tøm"
+        "default": "Clear"
       },
       "FolderEmpty": {
         "key": "View_Search_FolderEmpty",
-        "default": "Mappen er tom"
+        "default": "Folder empty"
       },
       "Placeholder": {
         "key": "View_Search_Placeholder",
-        "default": "Trykk Enter eller søk etter bokmerker",
-        "android": "Finn bokmerker"
+        "default": "Hit Enter or search for bookmarks",
+        "android": "Find bookmarks"
       },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
-        "default": "Du har ingen bokmerker, legg til noen!"
+        "default": "You have no bookmarks, go add some!"
       },
       "NoResults": {
         "key": "View_Search_NoResults",
-        "default": "Ingen bokmerker funnet"
+        "default": "No bookmarks found"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
-        "default": "Vis søkeresultater"
+        "default": "View search results"
       }
     },
     "Settings": {
       "BackupRestore": {
         "Title": {
           "key": "View_Settings_BackupRestore_Title",
-          "default": "Sikkerhetskopiere og gjenopprette"
+          "default": "Back up and restore"
         },
         "Backup": {
           "Title": {
             "key": "View_Settings_BackupRestore_Backup_Title",
-            "default": "Sikkerhetskopier"
+            "default": "Back up"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Sikkerhetskopier"
+            "default": "Back up"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
-            "default": "Sikkerhetskopier lokale nettleserdata til en fil."
+            "default": "Back up local browser data to a file."
           },
           "Synced": {
             "key": "View_Settings_BackupRestore_Backup_Synced",
-            "default": "Sikkerhetskopier synkroniserte data til en fil."
+            "default": "Back up synced data to a file."
           }
         },
         "Restore": {
           "Title": {
             "key": "View_Settings_BackupRestore_Restore_Title",
-            "default": "Gjenopprett"
+            "default": "Restore"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Gjenopprett"
+            "default": "Restore"
           },
           "Local": {
             "Description": {
               "key": "View_Settings_BackupRestore_Restore_Local_Description",
-              "default": "Gjenopprett lokale nettleserdata fra en sikkerhetskopi."
+              "default": "Restore local browser data from a backup."
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Local_Confirm",
@@ -847,12 +847,12 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Dine data har blitt gjenopprettet."
+            "default": "Your data has been restored."
           },
           "SelectFile": {
             "Button": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Button",
-              "default": "Velg fil"
+              "default": "Select file"
             },
             "Placeholder": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Placeholder",
@@ -865,33 +865,33 @@
           },
           "Paste": {
             "key": "View_Settings_BackupRestore_Restore_Paste",
-            "default": "Lim inn data fra sikkerhetskopi"
+            "default": "Paste backup data"
           },
           "RestoreData": {
             "key": "View_Settings_BackupRestore_Restore_RestoreData",
-            "default": "Gjenopprett data"
+            "default": "Restore data"
           },
           "Invalid": {
             "key": "View_Settings_BackupRestore_Restore_Invalid",
-            "default": "Ugyldig xBrowserSync sikkerhetskopidata"
+            "default": "Invalid xBrowserSync backup data"
           }
         },
         "Revert": {
           "Title": {
             "key": "View_Settings_BackupRestore_Revert_Title",
-            "default": "Tilbakestill"
+            "default": "Revert"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_Revert_Description",
-            "default": "Tilbakestill lokale nettleserdata til opprinnelig installeringsstatus."
+            "default": "Revert local browser data to initial installation state."
           },
           "Confirm": {
             "key": "View_Settings_BackupRestore_Revert_Confirm",
-            "default": "<p>Hvis du fortsetter, enhver aktiv synkronisering vil bli deaktivert og dine lokale data vil bli tilbakestilt til når xBrowserSync ble installert {date}.</p><p>Er det OK å fortsette?</p>"
+            "default": "<p>If you continue, any active sync will be disabled and your local data will be reverted to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Revert_Button",
-            "default": "Tilbakestill"
+            "default": "Revert"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Revert_Done",
@@ -906,56 +906,56 @@
       "Issues": {
         "Title": {
           "key": "View_Settings_Issues_Title",
-          "default": "Problemer"
+          "default": "Issues"
         },
         "Help": {
           "Title": {
             "key": "View_Settings_Issues_Help_Title",
-            "default": "Hjelp"
+            "default": "Help"
           },
           "Description": {
             "key": "View_Settings_Issues_Help_Description",
-            "default": "Har du et spørsmål eller et problem? Sørg for at du leser gjennom brukerveiledningen. Det kan hende at svaret finnes i FAQ-en."
+            "default": "Got a question or having an issue? Make sure to read through the help guide, otherwise the answer may be in the FAQs."
           },
           "ViewFaqs": {
             "key": "View_Settings_Issues_Help_ViewFaqs",
-            "default": "Se FAQ-ene"
+            "default": "View FAQs"
           }
         },
         "Tracker": {
           "Title": {
             "key": "View_Settings_Issues_Tracker_Title",
-            "default": "Problemsporing"
+            "default": "Issues tracker"
           },
           "Description": {
             "key": "View_Settings_Issues_Tracker_Description",
-            "default": "Report an issue to report a bug or request a new feature."
+            "default": "Create a new issue to report a bug or request a feature."
           },
           "Report": {
             "key": "View_Settings_Issues_Tracker_Report",
-            "default": "Rapporter en feil"
+            "default": "Create issue"
           }
         },
         "Log": {
           "Title": {
             "key": "View_Settings_Issues_Log_Title",
-            "default": "Applikasjonslogg"
+            "default": "Application log"
           },
           "Description": {
             "key": "View_Settings_Issues_Log_Description",
-            "default": "Last ned og inkluder loggen når du logger et problem."
+            "default": "Download and include the application log when you log an issue."
           },
           "Clear": {
             "key": "View_Settings_Issues_Log_Clear",
-            "default": "Tøm logg"
+            "default": "Clear log"
           },
           "Download": {
             "key": "View_Settings_Issues_Log_Download",
-            "default": "Last ned logg"
+            "default": "Download log"
           },
           "Size": {
             "key": "View_Settings_Issues_Log_Size",
-            "default": "Nåværende loggstørrelse"
+            "default": "Current log size"
           }
         }
       },
@@ -966,20 +966,20 @@
         },
         "Add": {
           "key": "View_Settings_Permissions_Add",
-          "default": "Gi tillatelser"
+          "default": "Grant permissions"
         },
         "Granted": {
           "key": "View_Settings_Permissions_Granted",
-          "default": "Innvilget"
+          "default": "Granted"
         },
         "NotGranted": {
           "key": "View_Settings_Permissions_NotGranted",
-          "default": "Ikke innvilget"
+          "default": "Not granted"
         },
         "Read": {
           "Title": {
             "key": "View_Settings_Permissions_Read_Title",
-            "default": "Les nettstedets data"
+            "default": "Read website data"
           },
           "Description": {
             "key": "View_Settings_Permissions_Read_Description",
@@ -988,24 +988,24 @@
         },
         "Remove": {
           "key": "View_Settings_Permissions_Remove",
-          "default": "Fjern tillatelser"
+          "default": "Remove permissions"
         }
       },
       "Prefs": {
         "AutoFetchMetadata": {
           "Label": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Label",
-            "default": "Hent bokmerkemetadata automatisk"
+            "default": "Auto-fetch bookmark metadata"
           },
           "Description": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Description",
-            "default": "Hent metadata automatisk når du legger til et bokmerke."
+            "default": "Retrieve metadata automatically when adding a bookmark."
           }
         },
         "CheckForAppUpdates": {
           "Label": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Label",
-            "default": "Se etter app-oppdateringer"
+            "default": "Check for app updates"
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
@@ -1015,11 +1015,11 @@
         "DarkMode": {
           "Label": {
             "key": "View_Settings_Prefs_DarkMode_Label",
-            "default": "Aktiver mørk modus"
+            "default": "Enable dark mode"
           },
           "Description": {
             "key": "View_Settings_Prefs_DarkMode_Description",
-            "default": "Ideelt for bruk i omgivelser med svakt lys."
+            "default": "Ideal for use in low-light environments."
           }
         },
         "DefaultToFolderView": {
@@ -1035,11 +1035,11 @@
         "SearchBar": {
           "Label": {
             "key": "View_Settings_Prefs_SearchBar_Label",
-            "default": "Bytt posisjonen til søkefeltet"
+            "default": "Switch search bar position"
           },
           "Description": {
             "key": "View_Settings_Prefs_SearchBar_Description",
-            "default": "Vis søkefeltet under resultatene."
+            "default": "Show search bar beneath results."
           }
         },
         "SyncToolbar": {
@@ -1058,22 +1058,22 @@
         },
         "Title": {
           "key": "View_Settings_Prefs_Title",
-          "default": "Innstillinger"
+          "default": "Preferences"
         }
       },
       "Sync": {
         "Title": {
           "key": "View_Settings_Sync_Title",
-          "default": "Synkronisering"
+          "default": "Sync"
         },
         "Disable": {
           "key": "View_Settings_Sync_Disable",
-          "default": "Slå av synkronisering"
+          "default": "Disable sync"
         },
         "Id": {
           "Label": {
             "key": "View_Settings_Sync_Id_Label",
-            "default": "Synk-ID"
+            "default": "Sync ID"
           },
           "Description": {
             "key": "View_Settings_Sync_Id_Description",
@@ -1092,12 +1092,12 @@
         },
         "Service": {
           "key": "View_Settings_Sync_Service",
-          "default": "Tjeneste"
+          "default": "Service"
         },
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Synkronisering er oppdatert."
+            "default": "Sync is up to date."
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
@@ -1115,7 +1115,7 @@
           },
           "Show": {
             "key": "View_Settings_Sync_Qr_Show",
-            "default": "Vis QR-kode"
+            "default": "Show QR code"
           },
           "Copy": {
             "key": "View_Settings_Sync_Qr_Copy",
@@ -1129,11 +1129,11 @@
       },
       "AppVersion": {
         "key": "View_Settings_AppVersion",
-        "default": "Versjon"
+        "default": "Version"
       },
       "NotAvailable": {
         "key": "View_Settings_NotAvailable",
-        "default": "Innstillinger tilgjengelig når synkronisering er aktivert."
+        "default": "Settings available when sync is enabled."
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
@@ -1156,7 +1156,7 @@
       },
       "Cryptos": {
         "key": "View_Support_Cryptos",
-        "default": "Kryptovaluta"
+        "default": "Cryptos"
       },
       "Liberapay": {
         "key": "View_Support_Liberapay",
@@ -1170,17 +1170,17 @@
     "Updated": {
       "Title": {
         "key": "View_Updated_Title",
-        "default": "Oppdatert til"
+        "default": "Updated to"
       },
       "Content": {
         "key": "View_Updated_Content",
-        "default": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
+        "default": "<p>xBrowserSync has been updated with the latest features and fixes.</p><p>If sync was enabled it has now been disabled and your sync must first be upgraded before syncing with this version of xBrowserSync. Re-enable sync to complete the upgrade process.</p><p>For more details about the changes contained in this release, check out the release notes.</p>"
       }
     },
     "Working": {
       "Restoring": {
         "key": "View_Working_Restoring",
-        "default": "Gjenoppretter"
+        "default": "Restoring"
       },
       "Reverting": {
         "key": "View_Working_Reverting",
@@ -1188,7 +1188,7 @@
       },
       "Syncing": {
         "key": "View_Working_Syncing",
-        "default": "Synkroniserer"
+        "default": "Syncing"
       }
     }
   }
