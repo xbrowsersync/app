@@ -1187,7 +1187,7 @@
         "default": "Palautetaan"
       },
       "Syncing": {
-        "key": "View_Working_Syncing",
+        "key": "Näytä_Käynnissä_Synkronoidaan",
         "default": "Synkronoidaan"
       }
     }
