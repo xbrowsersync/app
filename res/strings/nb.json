@@ -666,7 +666,7 @@
           },
           "NotSupported": {
             "key": "View_Login_Service_Update_Failed_NotSupported",
-            "default": "This service is running an unsupported API version"
+            "default": "Denne tjenesten kjører en API-versjon som ikke er støttet"
           }
         },
         "Warning": {
