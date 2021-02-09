@@ -341,15 +341,15 @@
     },
     "SyncVersionNotSupported_Message": {
       "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "This ID cannot be synced with this version of xBrowserSync as the sync has been upgraded to a later version."
+      "default": "Этот ID не может быть синхронизирован с этой версией xBrowserSync, так как синхронизация была обновлена до более поздней версии."
     },
     "SyncVersionNotSupported_Restore_Message": {
       "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "The backup data cannot be restored by this version of xBrowserSync as it was created with a later version."
+      "default": "Данные резервного копирования не могут быть восстановлены этой версией xBrowserSync, поскольку они были созданы в более поздней версии."
     },
     "SyncVersionNotSupported_Title": {
       "key": "Exception_SyncVersionNotSupported_Title",
-      "default": "Sync version not supported"
+      "default": "Версия синхронизации не поддерживается"
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
@@ -1073,7 +1073,7 @@
         "Id": {
           "Label": {
             "key": "View_Settings_Sync_Id_Label",
-            "default": "Sync ID"
+            "default": "ID синхронизации"
           },
           "Description": {
             "key": "View_Settings_Sync_Id_Description",
