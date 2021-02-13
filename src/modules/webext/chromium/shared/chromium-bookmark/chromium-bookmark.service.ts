@@ -461,7 +461,6 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
       if (this.isSeparator(bookmark)) {
         bookmark.type = BookmarkType.Separator;
       }
-      return bookmark;
     });
     return nativeBookmarks;
   }

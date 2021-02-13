@@ -44,7 +44,7 @@ export default abstract class WebExtBookmarkService {
 
   nativeBookmarkEventsQueue: any[] = [];
   processNativeBookmarkEventsTimeout: ng.IPromise<void>;
-  unsupportedContainers = [];
+  unsupportedContainers: BookmarkContainer[] = [];
 
   static $inject = [
     '$injector',
