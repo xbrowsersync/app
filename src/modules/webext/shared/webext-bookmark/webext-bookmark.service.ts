@@ -334,14 +334,10 @@ export default abstract class WebExtBookmarkService {
 
   abstract createNativeBookmarksFromBookmarks(bookmarks: Bookmark[]): ng.IPromise<number>;
 
-  createNativeBookmarkTree(
-    parentId: string,
-    bookmarks: Bookmark[],
-    nativeToolbarContainerId?: string
-  ): ng.IPromise<number> {
+  createNativeBookmarkTree(parentId: string, bookmarks: Bookmark[]): ng.IPromise<number> {
     let processError: Error;
     let total = 0;
-    const createRecursive = (id: string, bookmarksToCreate: Bookmark[] = [], toolbarId: string) => {
+    const createRecursive = (id: string, bookmarksToCreate: Bookmark[] = []) => {
       const createChildBookmarksPromises = [];
 
       // Create bookmarks at the top level of the supplied array
@@ -354,13 +350,11 @@ export default abstract class WebExtBookmarkService {
             }
 
             return this.bookmarkHelperSvc.getBookmarkType(bookmark) === BookmarkType.Separator
-              ? this.createNativeSeparator(id, toolbarId).then(() => {})
+              ? this.createNativeSeparator(id).then(() => {})
               : this.createNativeBookmark(id, bookmark.title, bookmark.url).then((newNativeBookmark) => {
                   // If the bookmark has children, recurse
                   if (bookmark.children?.length) {
-                    createChildBookmarksPromises.push(
-                      createRecursive(newNativeBookmark.id, bookmark.children, toolbarId)
-                    );
+                    createChildBookmarksPromises.push(createRecursive(newNativeBookmark.id, bookmark.children));
                   }
                 });
           });
@@ -374,13 +368,10 @@ export default abstract class WebExtBookmarkService {
           throw err;
         });
     };
-    return createRecursive(parentId, bookmarks, nativeToolbarContainerId).then(() => total);
+    return createRecursive(parentId, bookmarks).then(() => total);
   }
 
-  abstract createNativeSeparator(
-    parentId: string,
-    nativeToolbarContainerId: string
-  ): ng.IPromise<NativeBookmarks.BookmarkTreeNode>;
+  abstract createNativeSeparator(parentId: string): ng.IPromise<NativeBookmarks.BookmarkTreeNode>;
 
   abstract disableEventListeners(): ng.IPromise<void>;
 
@@ -455,9 +446,9 @@ export default abstract class WebExtBookmarkService {
     return returnUrl;
   }
 
-  isNativeBookmarkInToolbarContainer(nativeBookmark: NativeBookmarks.BookmarkTreeNode): ng.IPromise<boolean> {
+  isNativeBookmarkIdOfToolbarContainer(nativeBookmarkId: string): ng.IPromise<boolean> {
     return this.getNativeContainerIds().then((nativeContainerIds) => {
-      return nativeBookmark.parentId === nativeContainerIds.get(BookmarkContainer.Toolbar);
+      return nativeBookmarkId === nativeContainerIds.get(BookmarkContainer.Toolbar);
     });
   }
 

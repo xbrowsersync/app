@@ -79,7 +79,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
     bookmark: NativeBookmarks.BookmarkTreeNode
   ): ng.IPromise<NativeBookmarks.BookmarkTreeNode> {
     // Check if bookmark is in toolbar
-    return this.isNativeBookmarkInToolbarContainer(bookmark)
+    return this.isNativeBookmarkIdOfToolbarContainer(bookmark.parentId)
       .then((inToolbar) => {
         // Skip process if bookmark is not in toolbar and already native separator
         if (
@@ -215,18 +215,19 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
   }
 
   createNativeSeparator(
-    parentId: string,
-    nativeToolbarContainerId: string
+    parentId: string
   ): ng.IPromise<NativeBookmarks.BookmarkTreeNode> {
-    const newSeparator: NativeBookmarks.CreateDetails = {
-      parentId,
-      title:
-        parentId === nativeToolbarContainerId
-          ? Globals.Bookmarks.VerticalSeparatorTitle
-          : Globals.Bookmarks.HorizontalSeparatorTitle,
-      url: this.platformSvc.getNewTabUrl()
-    };
-    return browser.bookmarks.create(newSeparator).catch((err) => {
+    return this.isNativeBookmarkIdOfToolbarContainer(parentId).then(inToolbar => {
+      const newSeparator: NativeBookmarks.CreateDetails = {
+        parentId,
+        title:
+          inToolbar
+            ? Globals.Bookmarks.VerticalSeparatorTitle
+            : Globals.Bookmarks.HorizontalSeparatorTitle,
+        url: this.platformSvc.getNewTabUrl()
+      };
+      return browser.bookmarks.create(newSeparator);
+    }).catch((err) => {
       this.logSvc.logInfo('Failed to create native separator');
       throw new Exceptions.FailedCreateNativeBookmarksException(undefined, err);
     });
