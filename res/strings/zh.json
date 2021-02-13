@@ -341,15 +341,15 @@
     },
     "SyncVersionNotSupported_Message": {
       "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "This ID cannot be synced with this version of xBrowserSync as the sync has been upgraded to a later version."
+      "default": "此ID不能与此版本的 xBrowserSync 同步，因为同步已经升级到更高版本。"
     },
     "SyncVersionNotSupported_Restore_Message": {
       "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "The backup data cannot be restored by this version of xBrowserSync as it was created with a later version."
+      "default": "无法通过此版本的 xBrowserSync 还原备份数据，因为它是用更高版本创建的。"
     },
     "SyncVersionNotSupported_Title": {
       "key": "Exception_SyncVersionNotSupported_Title",
-      "default": "Sync version not supported"
+      "default": "同步的版本不被支持"
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
