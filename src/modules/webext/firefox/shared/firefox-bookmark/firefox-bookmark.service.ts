@@ -530,7 +530,7 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService {
     super.processNativeBookmarkEventsQueue();
   }
 
-  syncNativeBookmarkChanged(id: string): ng.IPromise<void> {
+  syncNativeBookmarkChanged(id?: string): ng.IPromise<void> {
     // Retrieve full bookmark info
     return browser.bookmarks.getSubTree(id).then((results) => {
       const changedBookmark = results[0];
@@ -549,7 +549,7 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService {
     });
   }
 
-  syncNativeBookmarkCreated(id: string, nativeBookmark: NativeBookmarks.BookmarkTreeNode): ng.IPromise<void> {
+  syncNativeBookmarkCreated(id?: string, nativeBookmark?: NativeBookmarks.BookmarkTreeNode): ng.IPromise<void> {
     // Create change info
     const data: AddNativeBookmarkChangeData = {
       nativeBookmark
@@ -583,7 +583,7 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService {
     });
   }
 
-  syncNativeBookmarkMoved(id: string, moveInfo: NativeBookmarks.OnMovedMoveInfoType): ng.IPromise<void> {
+  syncNativeBookmarkMoved(id?: string, moveInfo?: NativeBookmarks.OnMovedMoveInfoType): ng.IPromise<void> {
     // Create change info
     const data: MoveNativeBookmarkChangeData = {
       ...moveInfo,
