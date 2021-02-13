@@ -27,6 +27,7 @@ import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.serv
 import UtilityService from '../../../shared/utility/utility.service';
 import { BookmarkIdMapping } from '../bookmark-id-mapper/bookmark-id-mapper.interface';
 import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
+import { NativeContainersInfo } from './NativeContainersInfo';
 
 @autobind
 export default abstract class WebExtBookmarkService {
@@ -429,7 +430,7 @@ export default abstract class WebExtBookmarkService {
 
   abstract getNativeBookmarksAsBookmarks(): ng.IPromise<Bookmark[]>;
 
-  abstract getNativeContainerIds(): ng.IPromise<Map<BookmarkContainer, string>>;
+  abstract getNativeContainerIds(): ng.IPromise<NativeContainersInfo>;
 
   getSupportedUrl(url: string): string {
     if (angular.isUndefined(url ?? undefined)) {
@@ -1022,22 +1023,31 @@ export default abstract class WebExtBookmarkService {
 
   wasContainerChanged(changedNativeBookmark: NativeBookmarks.BookmarkTreeNode): ng.IPromise<boolean> {
     return this.getNativeContainerIds().then((nativeContainerIds) => {
-      // If parent is not other bookmarks, no container was changed
-      const otherBookmarksId = nativeContainerIds.get(BookmarkContainer.Other);
-      if ((changedNativeBookmark as NativeBookmarks.BookmarkTreeNode).parentId !== otherBookmarksId) {
+      // If parent is not platform-default bookmarks, no container was changed
+      const platformDefaultBookmarksNodeId = nativeContainerIds.platformDefaultBookmarksNodeId;
+      if (changedNativeBookmark.parentId !== platformDefaultBookmarksNodeId) {
         return false;
       }
 
+      //   Michal Kotoun's note: this would not work before my changes and certainly will not work now! Replacement bellow.
       // If any native container ids are undefined, container was removed
-      if (Array.from(nativeContainerIds.values()).includes(undefined)) {
+      // if (Array.from(nativeContainerIds.values()).includes(undefined)) {
+      //   return true;
+      // }
+      // If its an unsupported container bookmark native node && its native container ids is undefined, container was removed
+      const titleAsBookmarkContainer = changedNativeBookmark.title as BookmarkContainer;
+      const isUnsupportedContainerBookmark = this.unsupportedContainers.includes(titleAsBookmarkContainer);
+      if (isUnsupportedContainerBookmark && angular.isUndefined(nativeContainerIds.get(titleAsBookmarkContainer))) {
         return true;
       }
 
       return browser.bookmarks
-        .getChildren(otherBookmarksId)
+        .getChildren(platformDefaultBookmarksNodeId)
         .then((children) => {
-          // Get all native bookmarks in other bookmarks that are unsupported containers and check for duplicates
-          const containers = children.filter((x) => this.unsupportedContainers.includes(x.title)).map((x) => x.title);
+          // Get all native bookmarks - in platform-default bookmarks node - that are unsupported containers and check for duplicates
+          const containers = children
+            .filter((x) => this.unsupportedContainers.includes(x.title as BookmarkContainer))
+            .map((x) => x.title);
           return containers.length !== new Set(containers).size;
         })
         .catch((err) => {

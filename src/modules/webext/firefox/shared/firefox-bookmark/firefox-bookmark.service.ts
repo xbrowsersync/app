@@ -13,6 +13,7 @@ import {
 import * as Exceptions from '../../../../shared/exception/exception';
 import { WebpageMetadata } from '../../../../shared/global-shared.interface';
 import WebExtBookmarkService from '../../../shared/webext-bookmark/webext-bookmark.service';
+import { NativeContainersInfo } from "../../../shared/webext-bookmark/NativeContainersInfo";
 
 @autobind
 @Injectable('BookmarkService')
@@ -466,13 +467,13 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService {
       });
   }
 
-  getNativeContainerIds(): ng.IPromise<Map<BookmarkContainer, string>> {
+  getNativeContainerIds(): ng.IPromise<NativeContainersInfo> {
     return this.utilitySvc
       .isSyncEnabled()
       .then((syncEnabled) => (syncEnabled ? this.bookmarkHelperSvc.getCachedBookmarks() : undefined))
       .then((bookmarks) => {
         // Initialise container ids object using containers defined in bookmarks
-        const containerIds = new Map<BookmarkContainer, string>();
+        const containerIds = new NativeContainersInfo();
         if (!angular.isUndefined(bookmarks)) {
           bookmarks.forEach((x) => {
             containerIds.set(x.title as BookmarkContainer, undefined);

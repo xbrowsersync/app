@@ -18,13 +18,16 @@ import {
 import * as Exceptions from '../../../../shared/exception/exception';
 import Globals from '../../../../shared/global-shared.constants';
 import { WebpageMetadata } from '../../../../shared/global-shared.interface';
+import { NativeContainersInfo } from '../../../shared/webext-bookmark/NativeContainersInfo';
 import WebExtBookmarkService from '../../../shared/webext-bookmark/webext-bookmark.service';
 
 @autobind
 @Injectable('BookmarkService')
 export default class ChromiumBookmarkService extends WebExtBookmarkService {
-  otherBookmarksNodeId = '2';
-  toolbarBookmarksNodeId = '1';
+  otherBookmarksNodeTitle = 'Other bookmarks';
+  toolbarBookmarksNodeTitle = 'Bookmarks bar';
+  menuBookmarksNodeTitle = 'Menu bookmarks';
+  mobileBookmarksNodeTitle = 'Mobile bookmarks';
   unsupportedContainers = [BookmarkContainer.Menu, BookmarkContainer.Mobile];
 
   clearNativeBookmarks(): ng.IPromise<void> {
@@ -465,13 +468,13 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
     return nativeBookmarks;
   }
 
-  getNativeContainerIds(): ng.IPromise<Map<BookmarkContainer, string>> {
+  getNativeContainerIds(): ng.IPromise<NativeContainersInfo> {
     return this.utilitySvc
       .isSyncEnabled()
       .then((syncEnabled) => (syncEnabled ? this.bookmarkHelperSvc.getCachedBookmarks() : undefined))
       .then((bookmarks) => {
         // Initialise container ids object using containers defined in bookmarks
-        const containerIds = new Map<BookmarkContainer, string>();
+        const containerIds = new NativeContainersInfo();
         if (!angular.isUndefined(bookmarks)) {
           bookmarks.forEach((x) => {
             containerIds.set(x.title as BookmarkContainer, undefined);
@@ -481,35 +484,75 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
         // Populate container ids
         return browser.bookmarks.getTree().then((tree) => {
           // Get the root child nodes
-          const otherBookmarksNode = tree[0].children.find((x) => {
-            return x.id === this.otherBookmarksNodeId;
+          let otherBookmarksNode = tree[0].children.find((x) => {
+            return x.title === this.otherBookmarksNodeTitle;
           });
-          const toolbarBookmarksNode = tree[0].children.find((x) => {
-            return x.id === this.toolbarBookmarksNodeId;
+          let toolbarBookmarksNode = tree[0].children.find((x) => {
+            return x.title === this.toolbarBookmarksNodeTitle;
+          });
+          let menuBookmarksNode = tree[0].children.find((x) => {
+            return x.title === this.menuBookmarksNodeTitle;
+          });
+          let mobileBookmarksNode = tree[0].children.find((x) => {
+            return x.title === this.mobileBookmarksNodeTitle;
           });
 
-          // Throw an error if a native container node is not found
-          if (!otherBookmarksNode || !toolbarBookmarksNode) {
-            if (!otherBookmarksNode) {
-              this.logSvc.logWarning('Missing container: other bookmarks');
-            }
-            if (!toolbarBookmarksNode) {
-              this.logSvc.logWarning('Missing container: toolbar bookmarks');
-            }
+          // TODO: improve this logic
+          const defaultBookmarksNode = otherBookmarksNode || mobileBookmarksNode;
+          if (!defaultBookmarksNode) {
+            // coulnd not find a default container to create folders to place other containers in
             throw new Exceptions.ContainerNotFoundException();
           }
 
+          // TODO: FINISH THIS!
+          // HACK!!!!
+          this.unsupportedContainers = [];
+
           // Check for unsupported containers
-          const menuBookmarksNode = otherBookmarksNode.children.find((x) => {
-            return x.title === BookmarkContainer.Menu;
-          });
-          const mobileBookmarksNode = otherBookmarksNode.children.find((x) => {
-            return x.title === BookmarkContainer.Mobile;
-          });
+          if (!otherBookmarksNode) {
+            this.logSvc.logWarning('Unsupported container: other bookmarks');
+            // HACK!!!!
+            this.unsupportedContainers.push(BookmarkContainer.Other);
+            otherBookmarksNode = defaultBookmarksNode.children.find((x) => {
+              return x.title === BookmarkContainer.Other;
+            });
+          }
+          if (!toolbarBookmarksNode) {
+            this.logSvc.logWarning('Unsupported container: toolbar bookmarks');
+            // HACK!!!!
+            this.unsupportedContainers.push(BookmarkContainer.Toolbar);
+            toolbarBookmarksNode = defaultBookmarksNode.children.find((x) => {
+              return x.title === BookmarkContainer.Toolbar;
+            });
+          }
+          if (!menuBookmarksNode) {
+            this.logSvc.logWarning('Unsupported container: menu bookmarks');
+            // HACK!!!!
+            this.unsupportedContainers.push(BookmarkContainer.Menu);
+            menuBookmarksNode = defaultBookmarksNode.children.find((x) => {
+              return x.title === BookmarkContainer.Menu;
+            });
+          }
+          if (!mobileBookmarksNode) {
+            this.logSvc.logWarning('Unsupported container: mobile bookmarks');
+            // HACK!!!!
+            this.unsupportedContainers.push(BookmarkContainer.Mobile);
+            mobileBookmarksNode = defaultBookmarksNode.children.find((x) => {
+              return x.title === BookmarkContainer.Mobile;
+            });
+          }
 
           // Add container ids to result
-          containerIds.set(BookmarkContainer.Other, otherBookmarksNode.id);
-          containerIds.set(BookmarkContainer.Toolbar, toolbarBookmarksNode.id);
+          {
+            // must be always defined!
+            containerIds.platformDefaultBookmarksNodeId = defaultBookmarksNode.id;
+          }
+          if (!angular.isUndefined(otherBookmarksNode)) {
+            containerIds.set(BookmarkContainer.Other, otherBookmarksNode.id);
+          }
+          if (!angular.isUndefined(toolbarBookmarksNode)) {
+            containerIds.set(BookmarkContainer.Toolbar, toolbarBookmarksNode.id);
+          }
           if (!angular.isUndefined(menuBookmarksNode)) {
             containerIds.set(BookmarkContainer.Menu, menuBookmarksNode.id);
           }
