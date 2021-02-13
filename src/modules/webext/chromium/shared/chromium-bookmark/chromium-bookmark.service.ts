@@ -158,10 +158,22 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
 
             // Populate bookmarks for the container
             if (container) {
+              let parentNodeId: string;
+              let childrenToCreate: Bookmark[];
+              if (nativeBookmarkNodeId)
+              {
+                parentNodeId = nativeBookmarkNodeId;
+                childrenToCreate = container.children;
+              }
+              else
+              { // there is no nativeContainerId -> it must be one of unsupportedContainers -> create it now
+                parentNodeId = nativeContainerIds.platformDefaultBookmarksNodeId;
+                childrenToCreate = [container];
+              }
               const populatePromise = browser.bookmarks
-                .getSubTree(nativeBookmarkNodeId)
+                .getSubTree(parentNodeId)
                 .then(() => {
-                  return this.createNativeBookmarkTree(nativeBookmarkNodeId, container.children);
+                  return this.createNativeBookmarkTree(parentNodeId, childrenToCreate);
                 })
                 .catch((err) => {
                   this.logSvc.logInfo(`Error populating ${containerEnumVal}.`);
@@ -419,6 +431,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
           }
 
           // TODO: FINISH THIS!
+          // is related to createNativeBookmarksFromBookmarks
           // HACK!!!!
           this.unsupportedContainers = [];
 
