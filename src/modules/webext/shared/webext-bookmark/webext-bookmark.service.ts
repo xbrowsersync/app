@@ -473,6 +473,7 @@ export default abstract class WebExtBookmarkService {
             return container.id as number;
           }
 
+          //  Michal Kotoun's notes: what is the use-case for this??? If getContainerNameFromNativeId() can't return a result, I doubt this would either...
           // Get the synced parent id from id mappings and retrieve the synced parent bookmark
           return this.bookmarkIdMapperSvc.get(changeData.nativeBookmark.parentId).then((idMapping) => {
             if (!idMapping) {
