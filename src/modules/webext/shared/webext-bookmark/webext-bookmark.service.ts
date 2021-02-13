@@ -284,8 +284,8 @@ export default abstract class WebExtBookmarkService {
   countNativeContainersBeforeIndex(parentId: string, index: number): ng.IPromise<number> {
     // Get native container ids
     return this.getNativeContainerIds().then((nativeContainerIds) => {
-      // No containers to adjust for if parent is not other bookmarks
-      if (parentId !== nativeContainerIds.get(BookmarkContainer.Other)) {
+      // No containers to adjust for if parent is not platform-default bookmarks node
+      if (parentId !== nativeContainerIds.platformDefaultBookmarksNodeId) {
         return 0;
       }
 
@@ -609,11 +609,11 @@ export default abstract class WebExtBookmarkService {
   }
 
   processChangeTypeAddOnNativeBookmarks(id: number, createInfo: BookmarkMetadata): ng.IPromise<void> {
-    // Create native bookmark in other bookmarks container
+    // Create native bookmark in platform default bookmarks container
     return this.getNativeContainerIds()
       .then((nativeContainerIds) => {
-        const otherBookmarksId = nativeContainerIds.get(BookmarkContainer.Other);
-        return this.createNativeBookmark(otherBookmarksId, createInfo.title, createInfo.url);
+        const platformDefaultBookmarksNodeId = nativeContainerIds.platformDefaultBookmarksNodeId;
+        return this.createNativeBookmark(platformDefaultBookmarksNodeId, createInfo.title, createInfo.url);
       })
       .then((newNativeBookmark) => {
         // Add id mapping for new bookmark
