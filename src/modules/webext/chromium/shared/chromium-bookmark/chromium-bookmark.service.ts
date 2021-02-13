@@ -30,59 +30,6 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
   mobileBookmarksNodeTitle = 'Mobile bookmarks';
   unsupportedContainers = [BookmarkContainer.Menu, BookmarkContainer.Mobile];
 
-  clearNativeBookmarks(): ng.IPromise<void> {
-    // Get native container ids
-    return this.getNativeContainerIds()
-      .then((nativeContainerIds) => {
-        // Get whether syncBookmarksToolbar
-        return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
-          const clearPromises = [];
-
-          for (const containerEnumVal of Object.keys(BookmarkContainer)) {
-            const containerName = BookmarkContainer[containerEnumVal];
-            // Get native bookmark node id
-            const nativeBookmarkNodeId = nativeContainerIds.get(containerName);
-
-            if (containerName === BookmarkContainer.Toolbar) {
-              if (!syncBookmarksToolbar) {
-                this.logSvc.logInfo('Not clearing toolbar');
-                continue;
-              }
-            }
-
-            // Clear bookmarks of that type
-            if (nativeBookmarkNodeId) {
-              const clearPromise = browser.bookmarks
-                .getChildren(nativeBookmarkNodeId)
-                .then((children) => {
-                  // Do not remove the bookmark-folders that server as mount-point for unsupported containers
-                  if (nativeBookmarkNodeId === nativeContainerIds.platformDefaultBookmarksNodeId) {
-                    children = children.filter(
-                      (x) => !this.unsupportedContainers.includes(x.title as BookmarkContainer)
-                    );
-                  }
-                  return this.$q.all(
-                    children.map((child) => {
-                      return this.removeNativeBookmarks(child.id);
-                    })
-                  );
-                })
-                .catch((err) => {
-                  this.logSvc.logWarning(`Error clearing ${containerEnumVal} bookmarks`);
-                  throw err;
-                });
-              clearPromises.push(clearPromise);
-            }
-          }
-
-          return this.$q.all(clearPromises).then(() => {});
-        });
-      })
-      .catch((err) => {
-        throw new Exceptions.FailedRemoveNativeBookmarksException(undefined, err);
-      });
-  }
-
   convertNativeBookmarkToSeparator(
     bookmark: NativeBookmarks.BookmarkTreeNode
   ): ng.IPromise<NativeBookmarks.BookmarkTreeNode> {
@@ -131,66 +78,6 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
         // Set type to separator to identify type when syncing
         nativeSeparator.type = BookmarkType.Separator;
         return nativeSeparator;
-      });
-  }
-
-  createNativeBookmarksFromBookmarks(bookmarks: Bookmark[]): ng.IPromise<number> {
-    // Get native container ids
-    return this.getNativeContainerIds()
-      .then((nativeContainerIds) => {
-        // Get whether syncBookmarksToolbar
-        return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
-          const populatePromises = [];
-
-          for (const containerEnumVal of Object.keys(BookmarkContainer)) {
-            const containerName = BookmarkContainer[containerEnumVal];
-            // Get container
-            const container = this.bookmarkHelperSvc.getContainer(containerName, bookmarks);
-            // Get native bookmark node id
-            const nativeBookmarkNodeId = nativeContainerIds.get(containerName);
-
-            if (containerName === BookmarkContainer.Toolbar) {
-              if (!syncBookmarksToolbar) {
-                this.logSvc.logInfo('Not populating toolbar');
-                continue;
-              }
-            }
-
-            // Populate bookmarks for the container
-            if (container) {
-              let parentNodeId: string;
-              let childrenToCreate: Bookmark[];
-              if (nativeBookmarkNodeId)
-              {
-                parentNodeId = nativeBookmarkNodeId;
-                childrenToCreate = container.children;
-              }
-              else
-              { // there is no nativeContainerId -> it must be one of unsupportedContainers -> create it now
-                parentNodeId = nativeContainerIds.platformDefaultBookmarksNodeId;
-                childrenToCreate = [container];
-              }
-              const populatePromise = browser.bookmarks
-                .getSubTree(parentNodeId)
-                .then(() => {
-                  return this.createNativeBookmarkTree(parentNodeId, childrenToCreate);
-                })
-                .catch((err) => {
-                  this.logSvc.logInfo(`Error populating ${containerEnumVal}.`);
-                  throw err;
-                });
-              populatePromises.push(populatePromise);
-            }
-          }
-
-          return this.$q.all(populatePromises);
-        });
-      })
-      .then((totals) => {
-        // Move native unsupported containers into the correct order
-        return this.reorderUnsupportedContainers().then(() => {
-          return totals.reduce((a, b) => a + b, 0);
-        });
       });
   }
 
@@ -247,6 +134,9 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
       });
   }
 
+  // TODO: unify with firefox somehow?
+  // probably auto-detect all supported containers in getNativeContainer (maybe call it explicitely for detection?)
+  // and then ensure that all supported containers are created
   ensureContainersExist(bookmarks: Bookmark[]): Bookmark[] {
     if (angular.isUndefined(bookmarks)) {
       return;
@@ -270,118 +160,6 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
     });
   }
 
-  getNativeBookmarksAsBookmarks(): ng.IPromise<Bookmark[]> {
-    let allNativeBookmarks: NativeBookmarks.BookmarkTreeNode[] = [];
-
-    // Get native container ids
-    return this.getNativeContainerIds().then((nativeContainerIds) => {
-      // Get whether syncBookmarksToolbar
-      return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
-        const getBookmarkPromises = new Array<Promise<[BookmarkContainer, Array<Bookmark>]>>();
-
-        for (const containerEnumVal of Object.keys(BookmarkContainer)) {
-          const containerName: BookmarkContainer = BookmarkContainer[containerEnumVal];
-          // Get native bookmark node id
-          const nativeBookmarkNodeId = nativeContainerIds.get(containerName);
-
-          if (containerName === BookmarkContainer.Toolbar) {
-            if (!syncBookmarksToolbar) {
-              // skip
-              continue;
-            }
-          }
-
-          // Map bookmarks of that type
-          if (nativeBookmarkNodeId) {
-            const getBookmarkPromise: Promise<[BookmarkContainer, Array<Bookmark>]> = browser.bookmarks
-              .getSubTree(nativeBookmarkNodeId)
-              .then((subTree) => {
-                const bookmarksNode = subTree[0];
-
-                if (!bookmarksNode.children?.length) {
-                  return [containerName, [] as Bookmark[]];
-                }
-
-                let bookmarksNodeChildren: NativeBookmarks.BookmarkTreeNode[];
-                // Skip over any unsupported container mount-point bookmark folders present,
-                //  if we are now "in" the platform-default bookmark node.
-                //  The skipped bookmarks will be processed in this loop for their own nativeContainerIds entry
-                if (nativeBookmarkNodeId === nativeContainerIds.platformDefaultBookmarksNodeId) {
-                  bookmarksNodeChildren = bookmarksNode.children.filter(
-                    (x) => !this.unsupportedContainers.includes(x.title as BookmarkContainer)
-                  );
-                } else {
-                  bookmarksNodeChildren = bookmarksNode.children;
-                }
-
-                // Add all native bookmarks (except the "unsupported containers" mount-point folders) into flat array
-                this.bookmarkHelperSvc.eachBookmark(bookmarksNodeChildren, (bookmark) => {
-                  allNativeBookmarks.push(bookmark);
-                });
-
-                // Return all native bookmarks (except the "unsupported containers" mount-point folders)
-                //  converted to "our" bookmarks.
-                const convertedBookmarks = this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(
-                  this.getNativeBookmarksWithSeparators(bookmarksNodeChildren)
-                );
-                return [containerName, convertedBookmarks];
-              });
-
-            getBookmarkPromises.push(getBookmarkPromise);
-          }
-        }
-
-        return this.$q.all(getBookmarkPromises).then((containerBookmarksPairArray) => {
-          const bookmarks: Bookmark[] = [];
-
-          containerBookmarksPairArray.forEach((tuple) => {
-            const [containerName, convertedBookmarks] = tuple;
-
-            const container = this.bookmarkHelperSvc.getContainer(containerName, bookmarks, true);
-            if (convertedBookmarks.length > 0) {
-              container.children = convertedBookmarks;
-            }
-
-            //   Michal Kotoun's note: this is probably a no-op, since we only added to allNativeBookmarks:
-            //   1) children of non-default containers
-            //   2) children of default container except for virtual/unsupportedContainers
-            // Filter containers from flat array of bookmarks
-            allNativeBookmarks = allNativeBookmarks.filter((bookmark) => {
-              return bookmark.title !== container.title;
-            });
-          });
-
-          // Sort by date added asc
-          allNativeBookmarks = allNativeBookmarks.sort((x, y) => {
-            return x.dateAdded - y.dateAdded;
-          });
-
-          // Iterate native bookmarks to add unique bookmark ids in correct order
-          allNativeBookmarks.forEach((nativeBookmark) => {
-            this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
-              if (
-                !bookmark.id &&
-                ((!nativeBookmark.url && bookmark.title === nativeBookmark.title) ||
-                  (nativeBookmark.url && bookmark.url === nativeBookmark.url))
-              ) {
-                bookmark.id = this.bookmarkHelperSvc.getNewBookmarkId(bookmarks);
-              }
-            });
-          });
-
-          // Find and fix any bookmarks missing ids
-          this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
-            if (!bookmark.id) {
-              bookmark.id = this.bookmarkHelperSvc.getNewBookmarkId(bookmarks);
-            }
-          });
-
-          return bookmarks;
-        });
-      });
-    });
-  }
-
   getNativeBookmarksWithSeparators(
     nativeBookmarks: NativeBookmarks.BookmarkTreeNode[]
   ): NativeBookmarks.BookmarkTreeNode[] {
@@ -394,6 +172,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
     return nativeBookmarks;
   }
 
+  // TODO: unify/share more code with firefox
   getNativeContainerIds(): ng.IPromise<NativeContainersInfo> {
     return this.utilitySvc
       .isSyncEnabled()
