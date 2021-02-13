@@ -13,6 +13,12 @@ enum BookmarkContainer {
   Toolbar = '[xbs] Toolbar'
 }
 
+const MandatoryBookmarkContainers: Array<BookmarkContainer> = [
+  BookmarkContainer.Other,
+  BookmarkContainer.Mobile,
+  BookmarkContainer.Toolbar
+];
+
 enum BookmarkType {
   Bookmark = 'bookmark',
   Container = 'container',
@@ -20,4 +26,4 @@ enum BookmarkType {
   Separator = 'separator'
 }
 
-export { BookmarkChangeType, BookmarkContainer, BookmarkType };
+export { BookmarkChangeType, BookmarkContainer, BookmarkType, MandatoryBookmarkContainers };

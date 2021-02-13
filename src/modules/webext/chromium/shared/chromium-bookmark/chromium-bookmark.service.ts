@@ -2,7 +2,12 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
-import { BookmarkChangeType, BookmarkContainer, BookmarkType } from '../../../../shared/bookmark/bookmark.enum';
+import {
+  BookmarkChangeType,
+  BookmarkContainer,
+  BookmarkType,
+  MandatoryBookmarkContainers
+} from '../../../../shared/bookmark/bookmark.enum';
 import {
   AddNativeBookmarkChangeData,
   Bookmark,
@@ -277,8 +282,9 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
 
     // Add supported containers
     const bookmarksToReturn = angular.copy(bookmarks);
-    this.bookmarkHelperSvc.getContainer(BookmarkContainer.Other, bookmarksToReturn, true);
-    this.bookmarkHelperSvc.getContainer(BookmarkContainer.Toolbar, bookmarksToReturn, true);
+    MandatoryBookmarkContainers.forEach((element) => {
+      this.bookmarkHelperSvc.getContainer(element, bookmarksToReturn, true);
+    });
 
     // Return sorted containers
     return bookmarksToReturn.sort((x, y) => {
