@@ -139,60 +139,48 @@ export default class FirefoxBookmarkService extends WebExtBookmarkService {
 
   // TODO: unify/share more code with chromium
   getNativeContainerIds(): ng.IPromise<NativeContainersInfo> {
-    return this.utilitySvc
-      .isSyncEnabled()
-      .then((syncEnabled) => (syncEnabled ? this.bookmarkHelperSvc.getCachedBookmarks() : undefined))
-      .then((bookmarks) => {
-        // Initialise container ids object using containers defined in bookmarks
-        const containerIds = new NativeContainersInfo();
-        if (!angular.isUndefined(bookmarks)) {
-          bookmarks.forEach((x) => {
-            containerIds.set(x.title as BookmarkContainer, undefined);
-          });
-        }
-
-        // Populate container ids
-        return browser.bookmarks.getTree().then((tree) => {
-          // Get the root child nodes
-          const menuBookmarksNode = tree[0].children.find((x) => {
-            return x.id === 'menu________';
-          });
-          const mobileBookmarksNode = tree[0].children.find((x) => {
-            return x.id === 'mobile______';
-          });
-          const otherBookmarksNode = tree[0].children.find((x) => {
-            return x.id === 'unfiled_____';
-          });
-          const toolbarBookmarksNode = tree[0].children.find((x) => {
-            return x.id === 'toolbar_____';
-          });
-
-          // Throw an error if a native container is not found
-          if (!menuBookmarksNode || !mobileBookmarksNode || !otherBookmarksNode || !toolbarBookmarksNode) {
-            if (!menuBookmarksNode) {
-              this.logSvc.logWarning('Missing container: menu bookmarks');
-            }
-            if (!mobileBookmarksNode) {
-              this.logSvc.logWarning('Missing container: mobile bookmarks');
-            }
-            if (!otherBookmarksNode) {
-              this.logSvc.logWarning('Missing container: other bookmarks');
-            }
-            if (!toolbarBookmarksNode) {
-              this.logSvc.logWarning('Missing container: toolbar bookmarks');
-            }
-            throw new Exceptions.ContainerNotFoundException();
-          }
-
-          // Add container ids to result
-          containerIds.platformDefaultBookmarksNodeId = otherBookmarksNode.id;
-          containerIds.set(BookmarkContainer.Menu, menuBookmarksNode.id);
-          containerIds.set(BookmarkContainer.Mobile, mobileBookmarksNode.id);
-          containerIds.set(BookmarkContainer.Other, otherBookmarksNode.id);
-          containerIds.set(BookmarkContainer.Toolbar, toolbarBookmarksNode.id);
-          return containerIds;
-        });
+    const containerIds = new NativeContainersInfo();
+    // Populate container ids
+    return browser.bookmarks.getTree().then((tree) => {
+      // Get the root child nodes
+      const menuBookmarksNode = tree[0].children.find((x) => {
+        return x.id === 'menu________';
       });
+      const mobileBookmarksNode = tree[0].children.find((x) => {
+        return x.id === 'mobile______';
+      });
+      const otherBookmarksNode = tree[0].children.find((x) => {
+        return x.id === 'unfiled_____';
+      });
+      const toolbarBookmarksNode = tree[0].children.find((x) => {
+        return x.id === 'toolbar_____';
+      });
+
+      // Throw an error if a native container is not found
+      if (!menuBookmarksNode || !mobileBookmarksNode || !otherBookmarksNode || !toolbarBookmarksNode) {
+        if (!menuBookmarksNode) {
+          this.logSvc.logWarning('Missing container: menu bookmarks');
+        }
+        if (!mobileBookmarksNode) {
+          this.logSvc.logWarning('Missing container: mobile bookmarks');
+        }
+        if (!otherBookmarksNode) {
+          this.logSvc.logWarning('Missing container: other bookmarks');
+        }
+        if (!toolbarBookmarksNode) {
+          this.logSvc.logWarning('Missing container: toolbar bookmarks');
+        }
+        throw new Exceptions.ContainerNotFoundException();
+      }
+
+      // Add container ids to result
+      containerIds.platformDefaultBookmarksNodeId = otherBookmarksNode.id;
+      containerIds.set(BookmarkContainer.Menu, menuBookmarksNode.id);
+      containerIds.set(BookmarkContainer.Mobile, mobileBookmarksNode.id);
+      containerIds.set(BookmarkContainer.Other, otherBookmarksNode.id);
+      containerIds.set(BookmarkContainer.Toolbar, toolbarBookmarksNode.id);
+      return containerIds;
+    });
   }
 
   processNativeBookmarkEventsQueue(): void {
