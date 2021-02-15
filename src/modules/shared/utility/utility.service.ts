@@ -16,6 +16,10 @@ import NetworkService from '../network/network.service';
 import { StoreKey } from '../store/store.enum';
 import StoreService from '../store/store.service';
 
+declare global {
+  const opr: any;
+}
+
 @autobind
 @Injectable('UtilityService')
 export default class UtilityService {
@@ -155,6 +159,27 @@ export default class UtilityService {
 
   isBraveBrowser(): boolean {
     return !angular.isUndefined(window.navigator.brave);
+  }
+
+  // as per https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser/9851769#9851769
+  // Opera 20.0+
+  isOperaBrowser(): boolean {
+    const windowsAny: any = window;
+    // eslint-disable-next-line no-undef
+    return (!!windowsAny.opr && !!opr.addons) || navigator.userAgent.indexOf(' OPR/') >= 0;
+  }
+
+  // as per https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser/9851769#9851769
+  // Chrome 1 - 79
+  isChromeLikeBrowser(): boolean {
+    const windowsAny: any = window;
+    return !!windowsAny.chrome && (!!windowsAny.chrome.webstore || !!windowsAny.chrome.runtime);
+  }
+
+  // as per https://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser/9851769#9851769
+  // Edge (based on chromium) detection
+  isEdgeChromiumBrowser(): boolean {
+    return this.isChromeLikeBrowser() && navigator.userAgent.indexOf('Edg') !== -1;
   }
 
   isMobilePlatform(platformName: string): boolean {
