@@ -287,7 +287,7 @@ export default class BackupRestoreSettingsComponent implements OnInit {
       })
       .then((bookmarks) => {
         // Clean bookmarks for export
-        return cleanRecursive(this.bookmarkHelperSvc.removeEmptyContainers(bookmarks));
+        return cleanRecursive(bookmarks.filter((container) => container.children?.length));
       });
   }
 
