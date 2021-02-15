@@ -129,6 +129,7 @@ export default abstract class WebExtBookmarkService {
         return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
           const getBookmarkPromises = new Array<Promise<BookmarkIdMapping[]>>();
 
+          // eslint-disable-next-line no-restricted-syntax
           for (const containerEnumVal of Object.keys(BookmarkContainer)) {
             const containerName = BookmarkContainer[containerEnumVal];
             // Get native bookmark node id
@@ -137,6 +138,7 @@ export default abstract class WebExtBookmarkService {
             if (containerName === BookmarkContainer.Toolbar) {
               if (!syncBookmarksToolbar) {
                 this.logSvc.logInfo('Not mapping toolbar');
+                // eslint-disable-next-line no-continue
                 continue;
               }
             }
@@ -221,6 +223,7 @@ export default abstract class WebExtBookmarkService {
         return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
           const clearPromises = [];
 
+          // eslint-disable-next-line no-restricted-syntax
           for (const containerEnumVal of Object.keys(BookmarkContainer)) {
             const containerName = BookmarkContainer[containerEnumVal];
             // Get native bookmark node id
@@ -229,6 +232,7 @@ export default abstract class WebExtBookmarkService {
             if (containerName === BookmarkContainer.Toolbar) {
               if (!syncBookmarksToolbar) {
                 this.logSvc.logInfo('Not clearing toolbar');
+                // eslint-disable-next-line no-continue
                 continue;
               }
             }
@@ -357,6 +361,7 @@ export default abstract class WebExtBookmarkService {
         return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
           const populatePromises: ng.IPromise<number>[] = [];
 
+          // eslint-disable-next-line no-restricted-syntax
           for (const containerEnumVal of Object.keys(BookmarkContainer)) {
             const containerName = BookmarkContainer[containerEnumVal];
             // Get container
@@ -367,6 +372,7 @@ export default abstract class WebExtBookmarkService {
             if (containerName === BookmarkContainer.Toolbar) {
               if (!syncBookmarksToolbar) {
                 this.logSvc.logInfo('Not populating toolbar');
+                // eslint-disable-next-line no-continue
                 continue;
               }
             }
@@ -458,7 +464,8 @@ export default abstract class WebExtBookmarkService {
     if (angular.isUndefined(nativeBookmarkId)) return this.$q.resolve('');
 
     return this.getNativeContainerIds().then((nativeContainerIds) => {
-      for (const [nativeBookmarkNodeId, containerName] of nativeContainerIds.entries()) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const [containerName, nativeBookmarkNodeId] of nativeContainerIds.entries()) {
         if (nativeBookmarkNodeId === nativeBookmarkId) return containerName;
       }
       return '';
@@ -496,6 +503,7 @@ export default abstract class WebExtBookmarkService {
       return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
         const getBookmarkPromises = new Array<Promise<[BookmarkContainer, Array<Bookmark>]>>();
 
+        // eslint-disable-next-line no-restricted-syntax
         for (const containerEnumVal of Object.keys(BookmarkContainer)) {
           const containerName: BookmarkContainer = BookmarkContainer[containerEnumVal];
           // Get native bookmark node id
@@ -504,6 +512,7 @@ export default abstract class WebExtBookmarkService {
           if (containerName === BookmarkContainer.Toolbar) {
             if (!syncBookmarksToolbar) {
               // skip
+              // eslint-disable-next-line no-continue
               continue;
             }
           }
@@ -512,6 +521,7 @@ export default abstract class WebExtBookmarkService {
           if (nativeBookmarkNodeId) {
             const getBookmarkPromise: Promise<[BookmarkContainer, Array<Bookmark>]> = browser.bookmarks
               .getSubTree(nativeBookmarkNodeId)
+              // eslint-disable-next-line @typescript-eslint/no-loop-func
               .then((subTree) => {
                 const bookmarksNode = subTree[0];
 
