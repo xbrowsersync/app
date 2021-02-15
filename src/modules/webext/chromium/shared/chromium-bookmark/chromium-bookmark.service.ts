@@ -171,6 +171,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
   getNativeContainerInfo(containerName: BookmarkContainer): ng.IPromise<{ id?: string; throwIfNotFound: boolean }> {
     const browserDetection = this.getBrowserDetection();
     if (browserDetection.isOpera) {
+      this.logSvc.logInfo('detected browser: Opera');
       const getByName: (
         id: string,
         callback: (node: NativeBookmarks.BookmarkTreeNode) => void
@@ -189,6 +190,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
       }
       // eslint-disable-next-line no-else-return
     } else {
+      this.logSvc.logInfo('detected browser: generic Chromium');
       return browser.bookmarks.getTree().then((tree) => {
         const baseInfo = this.chromiumSupportedContainersInfo.map.get(containerName);
         let info: { id?: string; throwIfNotFound: boolean };
