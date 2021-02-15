@@ -339,6 +339,18 @@
       "key": "Exception_SyncRemoved_Title",
       "default": "Синхронизация не найдена"
     },
+    "SyncVersionNotSupported_Message": {
+      "key": "Exception_SyncVersionNotSupported_Message",
+      "default": "Этот ID не может быть синхронизирован с этой версией xBrowserSync, так как синхронизация была обновлена до более поздней версии."
+    },
+    "SyncVersionNotSupported_Restore_Message": {
+      "key": "Exception_SyncVersionNotSupported_Restore_Message",
+      "default": "Данные резервного копирования не могут быть восстановлены этой версией xBrowserSync, поскольку они были созданы в более поздней версии."
+    },
+    "SyncVersionNotSupported_Title": {
+      "key": "Exception_SyncVersionNotSupported_Title",
+      "default": "Версия синхронизации не поддерживается"
+    },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
       "default": "Синхронизация была отключена, включите повторную синхронизацию для возобновления синхронизации."
@@ -1061,7 +1073,7 @@
         "Id": {
           "Label": {
             "key": "View_Settings_Sync_Id_Label",
-            "default": "Sync ID"
+            "default": "ID синхронизации"
           },
           "Description": {
             "key": "View_Settings_Sync_Id_Description",

@@ -339,6 +339,18 @@
       "key": "Exception_SyncRemoved_Title",
       "default": "同步未找到"
     },
+    "SyncVersionNotSupported_Message": {
+      "key": "Exception_SyncVersionNotSupported_Message",
+      "default": "此ID不能与此版本的 xBrowserSync 同步，因为同步已经升级到更高版本。"
+    },
+    "SyncVersionNotSupported_Restore_Message": {
+      "key": "Exception_SyncVersionNotSupported_Restore_Message",
+      "default": "无法通过此版本的 xBrowserSync 还原备份数据，因为它是用更高版本创建的。"
+    },
+    "SyncVersionNotSupported_Title": {
+      "key": "Exception_SyncVersionNotSupported_Title",
+      "default": "同步的版本不被支持"
+    },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
       "default": "同步已禁用，重新启用同步以恢复同步。"

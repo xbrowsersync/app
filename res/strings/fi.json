@@ -339,6 +339,18 @@
       "key": "Exception_SyncRemoved_Title",
       "default": "Synkronointia ei löydy"
     },
+    "SyncVersionNotSupported_Message": {
+      "key": "Exception_SyncVersionNotSupported_Message",
+      "default": "Tämän synkronointitunnuksen synkronointi ei ole mahdollista tällä xBrowserSyncin versiolla, koska tämä synkronointi on päivitetty uudempaan versioon."
+    },
+    "SyncVersionNotSupported_Restore_Message": {
+      "key": "Exception_SyncVersionNotSupported_Restore_Message",
+      "default": "Varmuuskopion tietojen palautus ei onnistu tällä xBrowserSyncin versiolla, koska varmuuskopio on tehty uudemmalla versiolla."
+    },
+    "SyncVersionNotSupported_Title": {
+      "key": "Exception_SyncVersionNotSupported_Title",
+      "default": "Synkronoinnin versiota ei tueta"
+    },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
       "default": "Synkronointi on poistettu käytöstä, ota synkronointi uudelleen käyttöön jatkaaksesi."
@@ -720,7 +732,7 @@
         },
         "Label": {
           "key": "View_Login_SyncId_Label",
-          "default": "ID"
+          "default": "Synkronointitunnus"
         },
         "New": {
           "key": "View_Login_SyncId_New",
