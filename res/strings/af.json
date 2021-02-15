@@ -289,159 +289,159 @@
     },
     "NotAcceptingNewSyncs_Message": {
       "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Switch to a different service or try again later."
+      "default": "Skakel oor na 'n ander diens of probeer later weer."
     },
     "NotAcceptingNewSyncs_Title": {
       "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "Service not accepting new syncs"
+      "default": "Diens aanvaar nie nuwe sinkronisasies nie"
     },
     "OutOfSync_Message": {
       "key": "Exception_OutOfSync_Message",
-      "default": "Local data was out of sync and has now been refreshed. Please reapply last change."
+      "default": "Plaaslike data kon nie gesinkroniseer word nie en is nou verfris. Pas asseblief die laaste verandering weer toe."
     },
     "OutOfSync_Title": {
       "key": "Exception_OutOfSync_Title",
-      "default": "Sync conflict detected"
+      "default": "Sinkroniseringkonflik is bespeur"
     },
     "RequestEntityTooLarge_Message": {
       "key": "Exception_RequestEntityTooLarge_Message",
-      "default": "Delete some bookmarks and try again or switch to a service with a larger sync limit."
+      "default": "Vee sommige boekmerke uit en probeer weer of skakel oor na 'n diens met 'n groter sinkronisasielimiet."
     },
     "RequestEntityTooLarge_Title": {
       "key": "Exception_RequestEntityTooLarge_Title",
-      "default": "Sync data limit exceeded"
+      "default": "Sinkroniseringsdatalimiet is oorskry"
     },
     "ScanFailed_Message": {
       "key": "Exception_ScanFailed_Message",
-      "default": "Check permission has been granted and try again."
+      "default": "Kontroleer toestemming is verleen en probeer weer."
     },
     "ScanFailed_Title": {
       "key": "Exception_ScanFailed_Title",
-      "default": "Scan failed"
+      "default": "Skandering het misluk"
     },
     "ServiceOffline_Message": {
       "key": "Exception_ServiceOffline_Message",
-      "default": "The xBrowserSync service is currently offline, try again later."
+      "default": "Die xBrowserSync-diens is tans vanlyn, probeer later weer."
     },
     "ServiceOffline_Title": {
       "key": "Exception_ServiceOffline_Title",
-      "default": "Service offline"
+      "default": "Diens vanlyn"
     },
     "ShareFailed_Title": {
       "key": "Exception_ShareFailed_Title",
-      "default": "Share failed"
+      "default": "Skandering het misluk"
     },
     "SyncRemoved_Message": {
       "key": "Exception_SyncRemoved_Message",
-      "default": "The requested sync does not exist, it may have been removed due to inactivity."
+      "default": "Die gevraagde sinkronisering bestaan ​​nie. Dit is moontlik verwyder as gevolg van onaktiwiteit."
     },
     "SyncRemoved_Title": {
       "key": "Exception_SyncRemoved_Title",
-      "default": "Sync not found"
+      "default": "Sinkronisering nie gevind nie"
     },
     "SyncVersionNotSupported_Message": {
       "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "This ID cannot be synced with this version of xBrowserSync as the sync has been upgraded to a later version."
+      "default": "Hierdie ID kan nie met hierdie weergawe van xBrowserSync gesinkroniseer word nie, aangesien die sinkronisering opgegradeer is na 'n latere weergawe."
     },
     "SyncVersionNotSupported_Restore_Message": {
       "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "The backup data cannot be restored by this version of xBrowserSync as it was created with a later version."
+      "default": "Die rugsteundata kan nie met hierdie weergawe van xBrowserSync herstel word nie, aangesien dit met 'n latere weergawe geskep is."
     },
     "SyncVersionNotSupported_Title": {
       "key": "Exception_SyncVersionNotSupported_Title",
-      "default": "Sync version not supported"
+      "default": "Sinkroniseringweergawe word nie ondersteun nie"
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
-      "default": "Sync has been disabled, re-enable sync to resume syncing."
+      "default": "Sinkronisering is gedeaktiveer, heraktiveer sinkronisering om weer te sinkroniseer."
     },
     "TooManyRequests_Title": {
       "key": "Exception_TooManyRequests_Title",
-      "default": "Service request limit hit"
+      "default": "Diensversoeklimiet getref"
     },
     "UncommittedSyncs_Message": {
       "key": "Exception_UncommittedSyncs_Message",
-      "default": "Sync will be committed once connection to service is restored."
+      "default": "Sinkronisering sal plaasvind sodra die verbinding met die diens herstel is."
     },
     "UncommittedSyncs_Title": {
       "key": "Exception_UncommittedSyncs_Title",
-      "default": "Changes not synced"
+      "default": "Veranderinge is nie gesinkroniseer nie"
     },
     "UnsupportedServiceApiVersion_Message": {
       "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "This service is running an unsupported API version."
+      "default": "Hierdie diens het 'n nie-ondersteunde API-weergawe."
     },
     "UnsupportedServiceApiVersion_Title": {
       "key": "Exception_UnsupportedServiceApiVersion_Title",
-      "default": "Service not supported"
+      "default": "Diens word nie ondersteun nie"
     },
     "UpgradeFailed_Message": {
       "key": "Exception_UpgradeFailed_Message",
-      "android": "Upgrade will be retried on restarting the app. If the problem persists please reinstall xBrowserSync.",
-      "default": "Restart your browser to retry upgrade, if the problem persists please reinstall xBrowserSync."
+      "android": "Opgradering sal weer probeer word wanneer die app weer begin word. Installeer xBrowserSync weer as die probleem voortduur.",
+      "default": "Herbegin u blaaier om weer op te gradeer. As die probleem aanhou, moet u xBrowserSync weer installeer."
     },
     "UpgradeFailed_Title": {
       "key": "Exception_UpgradeFailed_Title",
-      "default": "Upgrade failed"
+      "default": "Opgradering het misluk"
     }
   },
   "Service": {
     "Status": {
       "Error": {
         "key": "Service_Status_Error",
-        "default": "Connection error"
+        "default": "Verbindingsfout"
       },
       "Loading": {
         "key": "Service_Status_Loading",
-        "default": "Checking"
+        "default": "Nagaan"
       },
       "NoNewSyncs": {
         "key": "Service_Status_NoNewSyncs",
-        "default": "Not accepting new syncs"
+        "default": "Diens aanvaar nie nuwe sinkronisasies nie"
       },
       "Offline": {
         "key": "Service_Status_Offline",
-        "default": "Offline"
+        "default": "Aflyn"
       },
       "Online": {
         "key": "Service_Status_Online",
-        "default": "Online"
+        "default": "Aanlyn"
       }
     }
   },
   "Tooltip": {
     "NotSynced": {
       "key": "Tooltip_NotSynced",
-      "default": "not synced"
+      "default": "nie gesinkroniseer nie"
     },
     "Synced": {
       "key": "Tooltip_Synced",
-      "default": "synced"
+      "default": "gesinkroniseer"
     },
     "Syncing": {
       "key": "Tooltip_Syncing",
-      "default": "syncing"
+      "default": "sinchroniseer"
     }
   },
   "View": {
     "Bookmark": {
       "Add": {
         "key": "View_Bookmark_Add",
-        "default": "Add bookmark"
+        "default": "Voeg boekmerk by"
       },
       "Edit": {
         "key": "View_Bookmark_Edit",
-        "default": "Edit bookmark"
+        "default": "Wysig boekmerk"
       },
       "Form": {
         "Title": {
           "key": "View_Bookmark_Form_Title",
-          "default": "Title"
+          "default": "Titel"
         },
         "Url": {
           "Exists": {
             "key": "View_Bookmark_Form_Url_Exists",
-            "default": "URL has already been bookmarked"
+            "default": "URL is reeds geboekmerk"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -449,25 +449,25 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "Bookmark URL is required"
+            "default": "Bladsy-URL is nodig"
           }
         },
         "Description": {
           "key": "View_Bookmark_Form_Description",
-          "default": "Description"
+          "default": "Beskrywing"
         },
         "Tags": {
           "Label": {
             "key": "View_Bookmark_Form_Tags_Label",
-            "default": "Tags"
+            "default": "Merkers"
           },
           "Placeholder": {
             "key": "View_Bookmark_Form_Tags_Placeholder",
-            "default": "tag 1, tag 2, tag 3, etc"
+            "default": "tag 1, tag 2, tag 3, ens"
           },
           "Clear": {
             "key": "View_Bookmark_Form_Tags_Clear",
-            "default": "Clear tags"
+            "default": "Vee etikette uit"
           },
           "Remove": {
             "key": "View_Bookmark_Form_Tags_Remove",
@@ -489,13 +489,13 @@
       },
       "InvalidUrlShared": {
         "key": "View_Bookmark_InvalidUrlShared",
-        "default": "The value that was shared does not contain a valid URL."
+        "default": "Die waarde wat gedeel is, bevat nie 'n geldige URL nie."
       }
     },
     "Help": {
       "AddingBookmarks": {
         "key": "View_Help_AddingBookmarks",
-        "default": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s “Bookmark this page” button as normal and xBrowserSync will automatically populate the bookmark’s properties (optional permissions must be granted for this to work, check the Settings panel).</p>",
+        "default": "<h4>Voeg 'n boekmerk by</h4><p>Merk die huidige bladsy deur op die boekmerkikoon in die soekpaneel te klik. Die eienskappe van die boekmerk word outomaties vir u ingevul, anders voeg u 'n beskrywing en 'n paar etikette by om beter soekresultate te verseker.</p><p>Alternatiewelik, klik op die blaaier se \"Bookmark this page\" -knoppie soos normaal en xBrowserSync sal outomaties die eienskappe van die boekmerk (opsionele toestemmings moet verleen word om dit te laat werk, kyk in die paneel Instellings).</p>",
         "android": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be fetched for you, otherwise add a description and some tags to ensure better search results.</p>"
       },
       "BackingUp": {
