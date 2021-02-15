@@ -38,7 +38,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
       .then((inToolbar) => {
         // Skip process if bookmark is not in toolbar and already native separator
         if (
-          (bookmark.url === this.platformSvc.getNewTabUrl() &&
+          (bookmark.url === this.platformSvc.getNewTabUrl!() &&
             !inToolbar &&
             bookmark.title === Globals.Bookmarks.HorizontalSeparatorTitle) ||
           (inToolbar && bookmark.title === Globals.Bookmarks.VerticalSeparatorTitle)
@@ -66,7 +66,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
               index: bookmark.index,
               parentId: bookmark.parentId,
               title,
-              url: this.platformSvc.getNewTabUrl()
+              url: this.platformSvc.getNewTabUrl!()
             };
             return browser.bookmarks.remove(bookmark.id).then(() => {
               return browser.bookmarks.create(separator);
@@ -87,7 +87,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
         const newSeparator: NativeBookmarks.CreateDetails = {
           parentId,
           title: inToolbar ? Globals.Bookmarks.VerticalSeparatorTitle : Globals.Bookmarks.HorizontalSeparatorTitle,
-          url: this.platformSvc.getNewTabUrl()
+          url: this.platformSvc.getNewTabUrl!()
         };
         return browser.bookmarks.create(newSeparator);
       })
@@ -319,7 +319,7 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
     });
   }
 
-  syncNativeBookmarkCreated(id?: string, nativeBookmark?: NativeBookmarks.BookmarkTreeNode): ng.IPromise<void> {
+  syncNativeBookmarkCreated(id: string, nativeBookmark: NativeBookmarks.BookmarkTreeNode): ng.IPromise<void> {
     // If bookmark is separator update native bookmark properties
     return (this.isSeparator(nativeBookmark)
       ? this.convertNativeBookmarkToSeparator(nativeBookmark)
