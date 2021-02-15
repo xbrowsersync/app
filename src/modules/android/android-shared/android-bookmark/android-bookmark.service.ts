@@ -30,6 +30,10 @@ export default class AndroidBookmarkService implements BookmarkService {
     return bookmarks;
   }
 
+  identifySupportedContainers(): ng.IPromise<void> {
+    return this.methodNotApplicable();
+  }
+
   methodNotApplicable(): ng.IPromise<any> {
     // Unused for this platform
     return this.$q.resolve();

@@ -7,6 +7,7 @@ import {
   Bookmark,
   BookmarkChange,
   BookmarkMetadata,
+  BookmarkService,
   ModifyNativeBookmarkChangeData,
   MoveNativeBookmarkChangeData,
   OnChildrenReorderedReorderInfoType,
@@ -30,7 +31,7 @@ import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.se
 import { NativeContainersInfo } from './NativeContainersInfo';
 
 @autobind
-export default abstract class WebExtBookmarkService {
+export default abstract class WebExtBookmarkService implements BookmarkService {
   $injector: ng.auto.IInjectorService;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
@@ -45,7 +46,6 @@ export default abstract class WebExtBookmarkService {
 
   nativeBookmarkEventsQueue: any[] = [];
   processNativeBookmarkEventsTimeout: ng.IPromise<void>;
-  unsupportedContainers: BookmarkContainer[] = [];
 
   static $inject = [
     '$injector',
@@ -155,9 +155,9 @@ export default abstract class WebExtBookmarkService {
                 // Skip over any unsupported container mount-point bookmark folders present,
                 //  if we are now "in" the platform-default bookmark node
                 //  The skipped bookmarks will be processed in this loop for their own nativeContainerIds entry
-                if (nativeBookmarkNodeId === nativeContainerIds.platformDefaultBookmarksNodeId) {
+                if (nativeBookmarkNodeId === nativeContainerIds.defaultNativeContainerId) {
                   bookmarksNodeChildren = bookmarksNode.children.filter(
-                    (x) => !this.unsupportedContainers.includes(x.title as BookmarkContainer)
+                    (x) => !this.getUnsupportedContainers().includes(x.title as BookmarkContainer)
                   );
                 } else {
                   bookmarksNodeChildren = bookmarksNode.children;
@@ -244,9 +244,9 @@ export default abstract class WebExtBookmarkService {
                 .then((children) => {
                   // TODO: alternatively the other way arround... do not clear unsupported containers bookmark nodes but clear the default bookmark node completely
                   // Do not remove the bookmark-folders that server as mount-point for unsupported containers
-                  if (nativeBookmarkNodeId === nativeContainerIds.platformDefaultBookmarksNodeId) {
+                  if (nativeBookmarkNodeId === nativeContainerIds.defaultNativeContainerId) {
                     children = children.filter(
-                      (x) => !this.unsupportedContainers.includes(x.title as BookmarkContainer)
+                      (x) => !this.getUnsupportedContainers().includes(x.title as BookmarkContainer)
                     );
                   }
                   return this.$q.all(
@@ -305,7 +305,7 @@ export default abstract class WebExtBookmarkService {
     // Get native container ids
     return this.getNativeContainerIds().then((nativeContainerIds) => {
       // No containers to adjust for if parent is not platform-default bookmarks node
-      if (parentId !== nativeContainerIds.platformDefaultBookmarksNodeId) {
+      if (parentId !== nativeContainerIds.defaultNativeContainerId) {
         return 0;
       }
 
@@ -388,7 +388,7 @@ export default abstract class WebExtBookmarkService {
               } else {
                 // there is no nativeContainerId -> it's not a natively supported container
                 //  -> create it's mount-point bookmark folder now
-                parentNodeId = nativeContainerIds.platformDefaultBookmarksNodeId;
+                parentNodeId = nativeContainerIds.defaultNativeContainerId;
                 childrenToCreate = [container];
               }
               const populatePromise = browser.bookmarks
@@ -458,7 +458,28 @@ export default abstract class WebExtBookmarkService {
 
   abstract enableEventListeners(): ng.IPromise<void>;
 
-  abstract ensureContainersExist(bookmarks: Bookmark[]): Bookmark[];
+  ensureContainersExist(bookmarks: Bookmark[]): Bookmark[] {
+    if (angular.isUndefined(bookmarks)) {
+      return undefined!;
+    }
+
+    // Add supported containers
+    const bookmarksToReturn = angular.copy(bookmarks);
+    this.getSupportedContainers().forEach((element) => {
+      this.bookmarkHelperSvc.getContainer(element, bookmarksToReturn, true);
+    });
+
+    // Return sorted containers
+    return bookmarksToReturn.sort((x, y) => {
+      if (x.title! < y.title!) {
+        return -1;
+      }
+      if (x.title! > y.title!) {
+        return 1;
+      }
+      return 0;
+    });
+  }
 
   getContainerNameFromNativeId(nativeBookmarkId: string): ng.IPromise<string> {
     if (angular.isUndefined(nativeBookmarkId)) return this.$q.resolve('');
@@ -533,9 +554,9 @@ export default abstract class WebExtBookmarkService {
                 // Skip over any unsupported container mount-point bookmark folders present,
                 //  if we are now "in" the platform-default bookmark node.
                 //  The skipped bookmarks will be processed in this loop for their own nativeContainerIds entry
-                if (nativeBookmarkNodeId === nativeContainerIds.platformDefaultBookmarksNodeId) {
+                if (nativeBookmarkNodeId === nativeContainerIds.defaultNativeContainerId) {
                   bookmarksNodeChildren = bookmarksNode.children.filter(
-                    (x) => !this.unsupportedContainers.includes(x.title as BookmarkContainer)
+                    (x) => !this.getUnsupportedContainers().includes(x.title as BookmarkContainer)
                   );
                 } else {
                   bookmarksNodeChildren = bookmarksNode.children;
@@ -617,13 +638,114 @@ export default abstract class WebExtBookmarkService {
   }
 
   /**
+   * to be overridden; used in getNativeContainerIds()
+   *
+   * id: the native id, if it is supported \
+   * throwIfNotFound: whether getNativeContainerIds should throw an exception, when the id is undefined
+   */
+  abstract getNativeContainerInfo(
+    containerName: BookmarkContainer
+  ): ng.IPromise<{ id?: string; throwIfNotFound: boolean }>;
+
+  /**
+   * to be overridden; used in getNativeContainerIds()
+   */
+  abstract getDefaultNativeContainerCandidates(): BookmarkContainer[];
+
+  unsupportedNativeContainerCache: BookmarkContainer[];
+  supportedNativeContainerCache: BookmarkContainer[];
+  supportedNativeContainerIdsCache: Map<BookmarkContainer, string>;
+
+  /** wrapper for unsupportedNativeContainerCache */
+  getUnsupportedContainers(): BookmarkContainer[] {
+    return this.unsupportedNativeContainerCache;
+  }
+
+  /** wrapper for supportedNativeContainerCache */
+  getSupportedContainers(): BookmarkContainer[] {
+    return this.supportedNativeContainerCache;
+  }
+
+  /**
+   * must be called before any getSupportedContainers() / getUnsupportedContainers() calls
+   */
+  identifySupportedContainers(): ng.IPromise<void> {
+    let promise: ng.IPromise<any>;
+    if (this.supportedNativeContainerCache === undefined) {
+      // initialize
+      this.supportedNativeContainerCache = [];
+      this.supportedNativeContainerIdsCache = new Map();
+
+      const promises = Object.values(BookmarkContainer).map((containerName) => {
+        return this.getNativeContainerInfo(containerName).then((info) => {
+          if (info.id) {
+            // add to supported cache
+            this.supportedNativeContainerCache.push(containerName);
+            this.supportedNativeContainerIdsCache.set(containerName, info.id);
+          } else {
+            this.logSvc.logWarning(`Missing container for: ${containerName}`);
+            if (info.throwIfNotFound) {
+              throw new Exceptions.ContainerNotFoundException();
+            }
+          }
+        });
+      });
+      promise = this.$q.all(promises).then(() => {
+        this.unsupportedNativeContainerCache = Object.values(BookmarkContainer).filter(
+          (bc) => !this.supportedNativeContainerCache.includes(bc)
+        );
+      });
+      return promise;
+    }
+    // else
+    return this.$q.resolve();
+  }
+
+  /**
    * Returns the mapping of BookmarkContainer to native BookmarkTreeNode ids.
    * For natively supported containers, their ids are returned.
    * For (natively) unsupported containers, it returns the id the bookmark-folder they are mapped to - the detection is based on:
    * 1) they are children of the browser-default container;
    * 2) the name of the folder equals to the name of the bookmark container.
    */
-  abstract getNativeContainerIds(): ng.IPromise<NativeContainersInfo>;
+  getNativeContainerIds(): ng.IPromise<NativeContainersInfo> {
+    return this.identifySupportedContainers().then(() => {
+      const containerIds = new NativeContainersInfo(this.supportedNativeContainerIdsCache);
+
+      // Throw an error if a default container is not found
+      let defaultNativeContainerId: string | undefined;
+      // eslint-disable-next-line no-restricted-syntax
+      for (const candidate of this.getDefaultNativeContainerCandidates()) {
+        defaultNativeContainerId = containerIds.get(candidate);
+        if (defaultNativeContainerId) break;
+      }
+
+      if (!defaultNativeContainerId) {
+        // could not find a default container to create folders to mount natively unsupported containers into
+        throw new Exceptions.ContainerNotFoundException();
+      }
+      containerIds.defaultNativeContainerId = defaultNativeContainerId;
+
+      // if all BookmarkContainer have now associated IDs, return
+      if (!Object.values(BookmarkContainer).find((containerName) => containerIds.get(containerName) === undefined)) {
+        return containerIds;
+      }
+
+      return browser.bookmarks.getTree().then((tree) => {
+        const defaultBookmarksNode = tree[0].children!.find((x) => {
+          return x.id === defaultNativeContainerId;
+        })!;
+        // eslint-disable-next-line no-restricted-syntax
+        for (const containerName of Object.values(BookmarkContainer)) {
+          if (!containerIds.get(containerName)) {
+            const mountPointNode = defaultBookmarksNode.children!.find((x) => x.title === containerName);
+            if (mountPointNode) containerIds.set(containerName, mountPointNode.id);
+          }
+        }
+        return containerIds;
+      });
+    });
+  }
 
   getSupportedUrl(url?: string): string {
     if (angular.isUndefined(url ?? undefined)) {
@@ -807,8 +929,7 @@ export default abstract class WebExtBookmarkService {
     // Create native bookmark in platform default bookmarks container
     return this.getNativeContainerIds()
       .then((nativeContainerIds) => {
-        const platformDefaultBookmarksNodeId = nativeContainerIds.platformDefaultBookmarksNodeId;
-        return this.createNativeBookmark(platformDefaultBookmarksNodeId, createInfo.title, createInfo.url);
+        return this.createNativeBookmark(nativeContainerIds.defaultNativeContainerId, createInfo.title, createInfo.url);
       })
       .then((newNativeBookmark) => {
         // Add id mapping for new bookmark
@@ -1153,7 +1274,7 @@ export default abstract class WebExtBookmarkService {
 
   reorderUnsupportedContainers(): ng.IPromise<void> {
     // Get unsupported containers
-    return this.$q.all(this.unsupportedContainers.map(this.getNativeBookmarkByTitle)).then((results) => {
+    return this.$q.all(this.getUnsupportedContainers().map(this.getNativeBookmarkByTitle)).then((results) => {
       return this.$q
         .all(
           results
@@ -1231,12 +1352,9 @@ export default abstract class WebExtBookmarkService {
         .isSyncEnabled()
         .then((syncEnabled) => (syncEnabled ? this.bookmarkHelperSvc.getCachedBookmarks() : undefined))
     ]).then(([nativeContainerIds, bookmarks]) => {
-      // If parent is not platform-default bookmarks, no container was changed
-      const platformDefaultBookmarksNodeId = nativeContainerIds.platformDefaultBookmarksNodeId;
-      if (
-        angular.isDefined(changedNativeBookmark) &&
-        changedNativeBookmark.parentId !== platformDefaultBookmarksNodeId
-      ) {
+      // If parent is not browser-default container, no (natively unsupported) container was changed
+      const defaultNativeContainerId = nativeContainerIds.defaultNativeContainerId;
+      if (angular.isDefined(changedNativeBookmark) && changedNativeBookmark.parentId !== defaultNativeContainerId) {
         return false;
       }
 
@@ -1249,11 +1367,11 @@ export default abstract class WebExtBookmarkService {
       }
 
       return browser.bookmarks
-        .getChildren(platformDefaultBookmarksNodeId)
+        .getChildren(defaultNativeContainerId)
         .then((children) => {
           // Get all native bookmarks - in platform-default bookmarks node - that are unsupported containers and check for duplicates
           const containers = children
-            .filter((x) => this.unsupportedContainers.includes(x.title as BookmarkContainer))
+            .filter((x) => this.getUnsupportedContainers().includes(x.title as BookmarkContainer))
             .map((x) => x.title);
           return containers.length !== new Set(containers).size;
         })

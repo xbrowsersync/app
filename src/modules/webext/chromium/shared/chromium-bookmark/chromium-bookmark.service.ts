@@ -2,15 +2,9 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
-import {
-  BookmarkChangeType,
-  BookmarkContainer,
-  BookmarkType,
-  MandatoryBookmarkContainers
-} from '../../../../shared/bookmark/bookmark.enum';
+import { BookmarkChangeType, BookmarkContainer, BookmarkType } from '../../../../shared/bookmark/bookmark.enum';
 import {
   AddNativeBookmarkChangeData,
-  Bookmark,
   BookmarkChange,
   ModifyNativeBookmarkChangeData,
   MoveNativeBookmarkChangeData
@@ -18,18 +12,11 @@ import {
 import * as Exceptions from '../../../../shared/exception/exception';
 import Globals from '../../../../shared/global-shared.constants';
 import { WebpageMetadata } from '../../../../shared/global-shared.interface';
-import { NativeContainersInfo } from '../../../shared/webext-bookmark/NativeContainersInfo';
 import WebExtBookmarkService from '../../../shared/webext-bookmark/webext-bookmark.service';
 
 @autobind
 @Injectable('BookmarkService')
 export default class ChromiumBookmarkService extends WebExtBookmarkService {
-  otherBookmarksNodeTitle = 'Other bookmarks';
-  toolbarBookmarksNodeTitle = 'Bookmarks bar';
-  menuBookmarksNodeTitle = 'Menu bookmarks';
-  mobileBookmarksNodeTitle = 'Mobile bookmarks';
-  unsupportedContainers = [BookmarkContainer.Menu, BookmarkContainer.Mobile];
-
   convertNativeBookmarkToSeparator(
     bookmark: NativeBookmarks.BookmarkTreeNode
   ): ng.IPromise<NativeBookmarks.BookmarkTreeNode> {
@@ -134,32 +121,6 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
       });
   }
 
-  // TODO: unify with firefox somehow?
-  // probably auto-detect all supported containers in getNativeContainer (maybe call it explicitely for detection?)
-  // and then ensure that all supported containers are created
-  ensureContainersExist(bookmarks: Bookmark[]): Bookmark[] {
-    if (angular.isUndefined(bookmarks)) {
-      return;
-    }
-
-    // Add supported containers
-    const bookmarksToReturn = angular.copy(bookmarks);
-    MandatoryBookmarkContainers.forEach((element) => {
-      this.bookmarkHelperSvc.getContainer(element, bookmarksToReturn, true);
-    });
-
-    // Return sorted containers
-    return bookmarksToReturn.sort((x, y) => {
-      if (x.title < y.title) {
-        return -1;
-      }
-      if (x.title > y.title) {
-        return 1;
-      }
-      return 0;
-    });
-  }
-
   getNativeBookmarksWithSeparators(
     nativeBookmarks: NativeBookmarks.BookmarkTreeNode[]
   ): NativeBookmarks.BookmarkTreeNode[] {
@@ -172,90 +133,83 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
     return nativeBookmarks;
   }
 
-  // TODO: unify/share more code with firefox
-  getNativeContainerIds(): ng.IPromise<NativeContainersInfo> {    
-    const containerIds = new NativeContainersInfo();
-    // Populate container ids
-    return browser.bookmarks.getTree().then((tree) => {
-      // Get the root child nodes
-      let otherBookmarksNode = tree[0].children.find((x) => {
-        return x.title === this.otherBookmarksNodeTitle;
-      });
-      let toolbarBookmarksNode = tree[0].children.find((x) => {
-        return x.title === this.toolbarBookmarksNodeTitle;
-      });
-      let menuBookmarksNode = tree[0].children.find((x) => {
-        return x.title === this.menuBookmarksNodeTitle;
-      });
-      let mobileBookmarksNode = tree[0].children.find((x) => {
-        return x.title === this.mobileBookmarksNodeTitle;
-      });
+  browserDetection: { isOpera: boolean };
+  getBrowserDetection() {
+    if (this.browserDetection) return this.browserDetection;
 
-      // TODO: improve this logic
-      const defaultBookmarksNode = otherBookmarksNode || mobileBookmarksNode;
-      if (!defaultBookmarksNode) {
-        // coulnd not find a default container to create folders to place other containers in
-        throw new Exceptions.ContainerNotFoundException();
-      }
+    const browserDetection: any = {};
+    browserDetection.isChromeLike = this.utilitySvc.isChromeLikeBrowser();
+    browserDetection.isOpera = this.utilitySvc.isOperaBrowser();
+    browserDetection.isEdgeChromium = this.utilitySvc.isEdgeChromiumBrowser();
 
-      // TODO: FINISH THIS!
-      // is related to createNativeBookmarksFromBookmarks
-      // HACK!!!!
-      this.unsupportedContainers = [];
+    this.browserDetection = browserDetection;
+    return this.browserDetection;
+  }
 
-      // Check for unsupported containers
-      if (!otherBookmarksNode) {
-        this.logSvc.logWarning('Unsupported container: other bookmarks');
-        // HACK!!!!
-        this.unsupportedContainers.push(BookmarkContainer.Other);
-        otherBookmarksNode = defaultBookmarksNode.children.find((x) => {
-          return x.title === BookmarkContainer.Other;
-        });
-      }
-      if (!toolbarBookmarksNode) {
-        this.logSvc.logWarning('Unsupported container: toolbar bookmarks');
-        // HACK!!!!
-        this.unsupportedContainers.push(BookmarkContainer.Toolbar);
-        toolbarBookmarksNode = defaultBookmarksNode.children.find((x) => {
-          return x.title === BookmarkContainer.Toolbar;
-        });
-      }
-      if (!menuBookmarksNode) {
-        this.logSvc.logWarning('Unsupported container: menu bookmarks');
-        // HACK!!!!
-        this.unsupportedContainers.push(BookmarkContainer.Menu);
-        menuBookmarksNode = defaultBookmarksNode.children.find((x) => {
-          return x.title === BookmarkContainer.Menu;
-        });
-      }
-      if (!mobileBookmarksNode) {
-        this.logSvc.logWarning('Unsupported container: mobile bookmarks');
-        // HACK!!!!
-        this.unsupportedContainers.push(BookmarkContainer.Mobile);
-        mobileBookmarksNode = defaultBookmarksNode.children.find((x) => {
-          return x.title === BookmarkContainer.Mobile;
-        });
-      }
+  chromiumSupportedContainersInfo = {
+    map: new Map<BookmarkContainer, { id: string; throwIfNotFound: boolean }>([
+      [BookmarkContainer.Toolbar, { id: '1', throwIfNotFound: false }],
+      [BookmarkContainer.Other, { id: '2', throwIfNotFound: false }],
+      [BookmarkContainer.Mobile, { id: '3', throwIfNotFound: false }]
+    ]),
+    default: [BookmarkContainer.Other, BookmarkContainer.Mobile]
+  };
 
-      // Add container ids to result
-      {
-        // must be always defined!
-        containerIds.platformDefaultBookmarksNodeId = defaultBookmarksNode.id;
+  operaSupportedContainersInfo = {
+    map: new Map<BookmarkContainer, { id: string; throwIfNotFound: boolean }>([
+      [BookmarkContainer.Toolbar, { id: 'bookmarks_bar', throwIfNotFound: false }],
+      [BookmarkContainer.Other, { id: 'other', throwIfNotFound: true }]
+      // [, { id: 'unsorted', throwIfNotFound: false }],
+      // [, { id: 'user_root', throwIfNotFound: false }],
+      // [, { id: 'shared', throwIfNotFound: false }],
+      // [, { id: 'trash', throwIfNotFound: false }],
+      // [, { id: 'speed_dial', throwIfNotFound: false }],
+    ]),
+    default: [BookmarkContainer.Other]
+  };
+
+  getNativeContainerInfo(containerName: BookmarkContainer): ng.IPromise<{ id?: string; throwIfNotFound: boolean }> {
+    const browserDetection = this.getBrowserDetection();
+    if (browserDetection.isOpera) {
+      const getByName: (
+        id: string,
+        callback: (node: NativeBookmarks.BookmarkTreeNode) => void
+      ) => void = (browser as any).bookmarks.getRootByName;
+
+      const baseInfo = this.operaSupportedContainersInfo.map.get(containerName);
+      if (baseInfo) {
+        return this.$q((resolve) => {
+          getByName(baseInfo.id, (node) => {
+            resolve({ id: node.id, throwIfNotFound: baseInfo.throwIfNotFound });
+          });
+        });
+        // eslint-disable-next-line no-else-return
+      } else {
+        return this.$q.resolve({ id: undefined, throwIfNotFound: false });
       }
-      if (!angular.isUndefined(otherBookmarksNode)) {
-        containerIds.set(BookmarkContainer.Other, otherBookmarksNode.id);
-      }
-      if (!angular.isUndefined(toolbarBookmarksNode)) {
-        containerIds.set(BookmarkContainer.Toolbar, toolbarBookmarksNode.id);
-      }
-      if (!angular.isUndefined(menuBookmarksNode)) {
-        containerIds.set(BookmarkContainer.Menu, menuBookmarksNode.id);
-      }
-      if (!angular.isUndefined(mobileBookmarksNode)) {
-        containerIds.set(BookmarkContainer.Mobile, mobileBookmarksNode.id);
-      }
-      return containerIds;
-    });
+      // eslint-disable-next-line no-else-return
+    } else {
+      return browser.bookmarks.getTree().then((tree) => {
+        const baseInfo = this.chromiumSupportedContainersInfo.map.get(containerName);
+        let info: { id?: string; throwIfNotFound: boolean };
+        if (baseInfo && tree[0].children!.find((x) => x.id === baseInfo.id)) {
+          info = { ...baseInfo }; // make a copy
+        } else {
+          info = { id: undefined, throwIfNotFound: false };
+        }
+        return info;
+      });
+    }
+  }
+
+  getDefaultNativeContainerCandidates(): BookmarkContainer[] {
+    const browserDetection = this.getBrowserDetection();
+    if (browserDetection.isOpera) {
+      return this.operaSupportedContainersInfo.default;
+      // eslint-disable-next-line no-else-return
+    } else {
+      return this.chromiumSupportedContainersInfo.default;
+    }
   }
 
   isSeparator(nativeBookmark: NativeBookmarks.BookmarkTreeNode): boolean {

@@ -137,24 +137,26 @@ export default class BookmarkSyncProviderService implements SyncProvider {
   }
 
   processSync(sync: Sync): ng.IPromise<ProcessSyncResult> {
-    // Process sync
-    switch (sync.type) {
-      // Sync native bookmarks to service
-      case SyncType.Remote:
-        return this.processRemoteSync(sync);
-      // Overwrite native bookmarks with synced bookmarks
-      case SyncType.Local:
-        return this.processLocalSync(sync);
-      // Sync bookmarks to service and overwrite native bookmarks
-      case SyncType.LocalAndRemote:
-        return this.processLocalAndRemoteSync(sync);
-      // Upgrade sync to current version
-      case SyncType.Upgrade:
-        return this.processUpgradeSync();
-      // Ambiguous sync
-      default:
-        throw new Exceptions.AmbiguousSyncRequestException();
-    }
+    return this.bookmarkSvc.identifySupportedContainers().then(() => {
+      // Process sync
+      switch (sync.type) {
+        // Sync native bookmarks to service
+        case SyncType.Remote:
+          return this.processRemoteSync(sync);
+        // Overwrite native bookmarks with synced bookmarks
+        case SyncType.Local:
+          return this.processLocalSync(sync);
+        // Sync bookmarks to service and overwrite native bookmarks
+        case SyncType.LocalAndRemote:
+          return this.processLocalAndRemoteSync(sync);
+        // Upgrade sync to current version
+        case SyncType.Upgrade:
+          return this.processUpgradeSync();
+        // Ambiguous sync
+        default:
+          throw new Exceptions.AmbiguousSyncRequestException();
+      }
+    });
   }
 
   processLocalAndRemoteSync(sync: Sync): ng.IPromise<ProcessSyncResult> {
