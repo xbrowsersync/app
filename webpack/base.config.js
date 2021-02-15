@@ -59,7 +59,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts'],
     fallback: {
-      stream: false
+      buffer: 'buffer'
     }
   },
   stats: 'errors-only'
