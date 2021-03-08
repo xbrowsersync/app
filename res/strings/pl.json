@@ -329,79 +329,79 @@
     },
     "ShareFailed_Title": {
       "key": "Exception_ShareFailed_Title",
-      "default": "Share failed"
+      "default": "Udostępnienie nie powiodło się"
     },
     "SyncRemoved_Message": {
       "key": "Exception_SyncRemoved_Message",
-      "default": "The requested sync does not exist, it may have been removed due to inactivity."
+      "default": "Żądana synchronizacja nie istnieje, mogła zostać usunięta ze względu na brak aktywności."
     },
     "SyncRemoved_Title": {
       "key": "Exception_SyncRemoved_Title",
-      "default": "Sync not found"
+      "default": "Synchronizacja nie została znaleziona"
     },
     "SyncVersionNotSupported_Message": {
       "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "This ID cannot be synced with this version of xBrowserSync as the sync has been upgraded to a later version."
+      "default": "Ten identyfikator nie może być zsynchronizowany z tą wersją xBrowserSync, ponieważ synchronizacja została zaktualizowana do nowszej wersji."
     },
     "SyncVersionNotSupported_Restore_Message": {
       "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "The backup data cannot be restored by this version of xBrowserSync as it was created with a later version."
+      "default": "Kopia zapasowa nie może zostać przywrócona przez tę wersję xBrowserSync, ponieważ została utworzona z nowszą wersją."
     },
     "SyncVersionNotSupported_Title": {
       "key": "Exception_SyncVersionNotSupported_Title",
-      "default": "Sync version not supported"
+      "default": "Nieobsługiwana wersja serwera"
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
-      "default": "Sync has been disabled, re-enable sync to resume syncing."
+      "default": "Synchronizacja została wyłączona, włącz ponownie ją ponownie, aby wznowić synchronizację."
     },
     "TooManyRequests_Title": {
       "key": "Exception_TooManyRequests_Title",
-      "default": "Service request limit hit"
+      "default": "Limit żądań usługi został przekroczony"
     },
     "UncommittedSyncs_Message": {
       "key": "Exception_UncommittedSyncs_Message",
-      "default": "Sync will be committed once connection to service is restored."
+      "default": "Synchronizacja zostanie włączona po przywróceniu połączenia z usługą."
     },
     "UncommittedSyncs_Title": {
       "key": "Exception_UncommittedSyncs_Title",
-      "default": "Changes not synced"
+      "default": "Zmiany nie zostały zsynchronizowane"
     },
     "UnsupportedServiceApiVersion_Message": {
       "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "This service is running an unsupported API version."
+      "default": "Ta usługa działa w nieobsługiwanej wersji API."
     },
     "UnsupportedServiceApiVersion_Title": {
       "key": "Exception_UnsupportedServiceApiVersion_Title",
-      "default": "Service not supported"
+      "default": "Usługa nie jest obsługiwana"
     },
     "UpgradeFailed_Message": {
       "key": "Exception_UpgradeFailed_Message",
-      "android": "Upgrade will be retried on restarting the app. If the problem persists please reinstall xBrowserSync.",
-      "default": "Restart your browser to retry upgrade, if the problem persists please reinstall xBrowserSync."
+      "android": "Aktualizacja zostanie ponownie wykonana po ponownym uruchomieniu aplikacji. Jeśli problem będzie się powtarzał, zainstaluj ponownie xBrowserSync.",
+      "default": "Zrestartuj przeglądarkę, aby ponowić próbę uaktualnienia, jeśli problem będzie się powtarzał, zainstaluj ponownie xBrowserSync."
     },
     "UpgradeFailed_Title": {
       "key": "Exception_UpgradeFailed_Title",
-      "default": "Upgrade failed"
+      "default": "Aktualizacja nie powiodła się"
     }
   },
   "Service": {
     "Status": {
       "Error": {
         "key": "Service_Status_Error",
-        "default": "Connection error"
+        "default": "Błąd połączenia"
       },
       "Loading": {
         "key": "Service_Status_Loading",
-        "default": "Checking"
+        "default": "Sprawdzanie"
       },
       "NoNewSyncs": {
         "key": "Service_Status_NoNewSyncs",
-        "default": "Not accepting new syncs"
+        "default": "Usługa nie akceptuje nowych synchronizacji"
       },
       "Offline": {
         "key": "Service_Status_Offline",
-        "default": "Offline"
+        "default": "Tryb offline"
       },
       "Online": {
         "key": "Service_Status_Online",
@@ -496,42 +496,42 @@
       "AddingBookmarks": {
         "key": "View_Help_AddingBookmarks",
         "default": "<h4>Dodawanie zakładki</h4><p>Dodaj do zakładek bieżącą stronę klikając ikonę zakładki w panelu wyszukiwania. Właściwości zakładki zostaną automatycznie wypełnione, w przeciwnym razie dodaj opis i niektóre tagi, aby zapewnić lepsze wyniki wyszukiwania.</p><p>Alternatywnie, po prostu kliknij przycisk \"Dodaj tę stronę\" do zakładki jako normalny, a xBrowserSync automatycznie wypełni właściwości zakładki (należy przyznać uprawnienia opcjonalne do działania, sprawdź panel ustawień).</p>",
-        "android": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be fetched for you, otherwise add a description and some tags to ensure better search results.</p>"
+        "android": "<h4>Dodawanie zakładki</h4><p>Dodaj zakładki poprzez udostępnianie do xBrowserSync z aplikacji udostępniających adresy URL, takie jak przeglądarki, YouTube, Spotify i wiele innych.</p><p>Właściwości zakładki zostaną pobrane dla Ciebie, w przeciwnym razie dodaj opis i niektóre tagi, aby zapewnić lepsze wyniki wyszukiwania.</p>"
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time revert your data back to it’s original state from when xBrowserSync was installed.</p>",
-        "android": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
+        "default": "<h4>Pamiętaj, aby wykonać kopię zapasową</h4><p>Kiedy korzystasz z xBrowserSync, twoja odpowiedzialność spoczywa na Ciebie, więc bądź przezorny i upewnij się, że wykonasz kopie zapasowe.</p><p>Przejdź do panelu ustawień i utwórz kopię zapasową niezaszyfrowanych danych do pliku lokalnego, który może być użyty do przywrócenia Twoich danych w razie potrzeby.</p><p>Jeśli lokalne dane przeglądarki staną się uszkodzone i nie masz żadnych kopii zapasowych, możesz w każdej chwili przywrócić swoje dane z powrotem do oryginalnego stanu, z którego został zainstalowany xBrowserSync.</p>",
+        "android": "<h4>Pamiętaj, aby wykonać kopię zapasową</h4><p>Kiedy korzystasz z xBrowserSync, twoja odpowiedzialność spoczywa na Ciebie, więc bądź przezorny i upewnij się, że wykonujeszkopie zapasowe.</p><p>Przejdź do panelu ustawień i utwórz kopię zapasową niezaszyfrowanych danych do pliku lokalnego, który może być użyty do przywrócenia Twoich danych w razie potrzeby.</p>"
       },
       "BeforeYouBegin": {
         "key": "View_Help_BeforeYouBegin",
-        "default": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) please disable them to avoid conflicts.</p>",
-        "brave": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) please disable them to avoid conflicts.</p>",
-        "edge": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) please disable them to avoid conflicts.</p>",
-        "firefox": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) please disable them to avoid conflicts.</p>"
+        "default": "<h4>Zanim zaczniesz</h4><p>xBrowserSync zmodyfikuje dane Twojej lokalnej przeglądarki, więc utworzenie kopii zapasowej zakładek i innych danych przeglądarki jest dobrym pomysłem na wszelki wypadek, i jeśli używasz innych usług lub narzędzi synchronizacji przeglądarki (takich jak <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) proszę wyłączyć je, aby uniknąć konfliktów.</p>",
+        "brave": "<h4>Zanim zaczniesz</h4><p>xBrowserSync zmodyfikuje dane Twojej lokalnej przeglądarki, więc utworzenie kopii zapasowej zakładek i innych danych przeglądarki jest dobrym pomysłem na wszelki wypadek, i jeśli używasz innych usług lub narzędzi synchronizacji przeglądarki (takich jak <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Google Chrome Sync</a>) proszę wyłączyć je, aby uniknąć konfliktów.</p>",
+        "edge": "<h4>Zanim zaczniesz</h4><p>xBrowserSync zmodyfikuje dane Twojej lokalnej przeglądarki, więc utworzenie kopii zapasowej zakładek i innych danych przeglądarki jest dobrym pomysłem na wszelki wypadek, i jeśli używasz innych usług lub narzędzi synchronizacji przeglądarki (takich jak <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Google Chrome Sync</a>) proszę wyłączyć je, aby uniknąć konfliktów.</p>",
+        "firefox": "<h4>Zanim zaczniesz</h4><p>xBrowserSync zmodyfikuje dane Twojej lokalnej przeglądarki, więc utworzenie kopii zapasowej zakładek i innych danych przeglądarki jest dobrym pomysłem na wszelki wypadek, i jeśli używasz innych usług lub narzędzi synchronizacji przeglądarki (takich jak <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Google Chrome Sync</a>) proszę wyłączyć je, aby uniknąć konfliktów.</p>"
       },
       "ExistingId": {
         "key": "View_Help_ExistingId",
-        "default": "<h4>Syncing with your existing ID</h4><p>Click on “Already got a sync ID?” to enter your existing sync ID and password. If your sync ID was created on a service different to the one displayed then switch to that service before attempting to sync.</p><p>xBrowserSync will retrieve and decrypt your encrypted data using your locally stored password, then clear your local bookmarks before re-populating them from the decrypted data.</p><p>When synced, xBrowserSync checks in the background every fifteen minutes for updates to your synced data and will automatically update your local bookmarks when required. You can also manually sync available updates to your synced data in the Settings panel.</p>",
-        "android": "<h4>Syncing with your existing ID</h4><p>Start by scanning the sync ID QR code in the Settings panel of the xBrowserSync desktop browser extension (click on your sync ID to reveal it). Make sure you enter the same encryption password used when creating the sync otherwise xBrowserSync will not be able to decrypt your data.</p><p>Also, if you are synced to a different xBrowserSync service make sure it is the active service configured in the Settings panel.</p>"
+        "default": "<h4>Synchronizacja z istniejącym ID</h4><p>Kliknij na \"Już masz ID synchronizacji\", aby móc wprowadzić istniejące ID synchronizacji i hasło. Jeśli Twój identyfikator synchronizacji został utworzony w serwisie innym niż wyświetlany, przełącz się na tę usługę przed próbą synchronizacji.</p><p>xBrowserSync odzyska i odszyfruje Twoje zaszyfrowane dane przy użyciu lokalnego hasła, następnie wyczyść lokalne zakładki przed ponownym załadowaniem ich z odszyfrowanych danych.</p><p>Po synchronizacji, xBrowserSync sprawdza w tle co piętnaście minut aktualizacje zsynchronizowanych danych i automatycznie aktualizuje lokalne zakładki. Możesz również ręcznie zsynchronizować dostępne aktualizacje z synchronizowanymi danymi w panelu Ustawień.</p>",
+        "android": "<h4>Synchronizacja z istniejącym ID</h4><p>Zacznij od skanowania kodu QR synchronizacji w panelu ustawień rozszerzenia xBrowserSync na pulpicie przeglądarki (kliknij na ID synchronizacji, aby go pokazać). Upewnij się, że podczas tworzenia synchronizacji wprowadziłeś to samo hasło szyfrowania, w przeciwnym razie xBrowserSync nie będzie w stanie odszyfrować Twoich danych.</p><p>Ponadto, jeśli jesteś zsynchronizowany z inną usługą xBrowserSync, upewnij się, że jest to usługa aktywna skonfigurowana w panelu Ustawień.</p>"
       },
       "FirstSync": {
         "key": "View_Help_FirstSync",
-        "default": "<h4>Syncing for the first time</h4><p>Before xBrowserSync can sync your browser data you will need to provide an encryption password. Be sure to make it strong but also memorable, there are no resets or reminders so if you forget it you won’t be able to access your synced data.</p><p>Your browser data will be encrypted using your password and saved to the active xBrowserSync service configured in the Settings panel.</p><p>Once synced, any changes you make to your local bookmarks will be synced automatically by xBrowserSync.</p>",
-        "android": "<h4>Syncing for the first time</h4><p>xBrowserSync actively syncs your browser data between your desktop browsers (syncing to mobile browsers is not supported at this time), you can use this app to access your synced data on your Android mobile device.</p><p>If you have not already created a sync ID, head over to your desktop browser and <a href='https://link.xbrowsersync.org/download' class='new-tab'>download</a> the xBrowserSync extension. Once you have created a sync you can use your new sync ID within this app to access your data.</p>"
+        "default": "<h4>Synchronizacja po raz pierwszy</h4><p>Zanim xBrowserSync będzie mógł zsynchronizować dane przeglądarki musisz podać hasło szyfrowania. Upewnij się, że jest silne, ale również łatwe do zapamiętania, nie ma resetów ani przypomnień hasła, więc jeśli je zapomnisz nie będziesz mógł uzyskać dostępu do synchronizowanych danych.</p><p>Twoje dane przeglądarki zostaną zaszyfrowane przy użyciu hasła i zapisane w aktywnej usłudze xBrowserSync skonfigurowanej w panelu Ustawienia.</p><p>Po zsynchronizowaniu wszystkie zmiany wprowadzone w lokalnych zakładkach zostaną automatycznie zsynchronizowane przez xBrowserSync.</p>",
+        "android": "<h4>Synchronizacja po raz pierwszy</h4><p>xBrowserSync aktywnie synchronizuje dane przeglądarki pomiędzy przeglądarkami komputerowymi (synchronizacja z przeglądarkami mobilnymi nie jest obecnie obsługiwana), możesz użyć tej aplikacji, aby uzyskać dostęp do zsynchronizowanych danych na urządzeniu mobilnym Android.</p><p>Jeśli nie utworzyłeś jeszcze ID synchronizacji, przejdź do przeglądarki na pulpicie i <a href='https://link.xbrowsersync.org/download' class='new-tab'>pobierz</a> rozszerzenie xBrowserSync. Po utworzeniu synchronizacji możesz użyć nowego ID synchronizacji w tej aplikacji, aby uzyskać dostęp do danych.</p>"
       },
       "FurtherSupport": {
         "key": "View_Help_FurtherSupport",
-        "default": "<h4>Further support</h4><p>You can find the answers to most common questions in the <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>FAQs</a>, also check the current <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>known issues</a> to see if your issue is listed there.</p><p>Alternatively, use the <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>issue tracker</a> to report an issue or request a new feature.</p>"
+        "default": "<h4>Dalsze wsparcie</h4><p>Odpowiedzi na najczęściej zadawane pytania znajdziesz w <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>FAQ</a>, sprawdź również bieżące <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>znane problemy</a>, aby sprawdzić, czy problem jest tam wymieniony.</p><p>Alternatywnie, użyj <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>trackera problemów</a>, aby zgłosić problem lub poprosić o nową funkcję.</p>"
       },
       "Mobile": {
         "key": "View_Help_Mobile",
-        "default": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a> store, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droid</a> or <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>direct download</a>.</p>"
+        "default": "<h4>Przejdź na komórkę</h4><p>Uzyskaj dostęp do zsynchronizowanych zakładek z aplikacją xBrowserSync Android dostępną w sklepie <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a>, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droid</a> lub <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>bezpośrednie pobranie</a>.</p>"
       },
       "NativeFeatures": {
         "key": "View_Help_NativeFeatures",
-        "default": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks bar and bookmarks manager, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p>",
-        "firefox": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks toolbar and bookmarks library, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p><p>Please note however, as Firefox’s bookmarks API does not yet support accessing native bookmark tags, any existing tags will be lost when syncing and tags added via xBrowserSync will not be saved as native tags.</p>"
+        "default": "<h4>Obsługiwane funkcje natywne</h4><p>Możesz nadal korzystać z natywnych funkcji zakładek w przeglądarce, takich jak pasek zakładek i menedżer zakładek, wszelkie wprowadzone zmiany zostaną automatycznie zsynchronizowane w tle.</p><p>Jeśli zorganizowałeś swoje istniejące zakładki w foldery nie martw się, xBrowserSync będzie respektował i utrzymywał istniejącą hierarchię zakładek.</p>",
+        "firefox": "<h4>Obsługiwane funkcje natywne</h4><p>Możesz nadal korzystać z natywnych funkcji zakładek w przeglądarce, takich jak pasek narzędzi zakładek i biblioteka zakładek, wszelkie wprowadzone zmiany zostaną automatycznie zsynchronizowane w tle.</p><p>Jeśli zorganizowałeś swoje istniejące zakładki w folderach nie martw się, xBrowserSync będzie respektował i utrzymywał istniejącą hierarchię zakładek.</p><p>Pamiętaj, że API zakładek Firefox nie obsługuje jeszcze dostępu do natywnych znaczników zakładek, wszystkie istniejące tagi zostaną utracone podczas synchronizacji, a tagi dodane przez xBrowserSync nie będą zapisywane jako natywne tagi.</p>"
       },
       "Previous": {
         "key": "View_Help_Previous",
@@ -539,18 +539,18 @@
       },
       "Searching": {
         "key": "View_Help_Searching",
-        "default": "<h4>Searching your bookmarks</h4><p>Once synced, simply press Enter to display your recent bookmarks or type some keywords or a URL to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>To edit or delete a bookmark, hover over the bookmark and click the now visible edit icon next to the bookmark’s title.</p>",
-        "android": "<h4>Searching your bookmarks</h4><p>Once synced, your bookmarks are displayed in chronological order when you open xBrowserSync. Type some keywords or a URL in the search box to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>Long pressing on a bookmark will allow you to directly share, modify or delete the bookmark.</p>"
+        "default": "<h4>Wyszukiwanie zakładek</h4><p>Po zsynchronizowaniu, po prostu naciśnij Enter, aby wyświetlić Twoje ostatnie zakładki lub wpisz słowa kluczowe lub adres URL, aby wyszukać zakładki.</p><p>Przełącz pomiędzy wynikami wyszukiwania i folderami zakładek, aby przeglądać całą hierarchię.</p><p>Aby edytować lub usunąć zakładkę, najedź na zakładkę i kliknij teraz widoczną ikonę edycji obok tytułu zakładki.</p>",
+        "android": "<h4>Wyszukiwanie zakładek</h4><p>Po zsynchronizowaniu, zakładki są wyświetlane w porządku chronologicznym po otwarciu xBrowserSync. Wpisz niektóre słowa kluczowe lub adres URL w polu wyszukiwania, aby wyszukać zakładki.</p><p>Przełączaj się pomiędzy wynikami wyszukiwania i folderami zakładek, aby przeglądać całą hierarchię.</p><p>Długie naciśnięcie zakładki pozwoli Ci bezpośrednio udostępniać, modyfikować lub usuwać zakładkę.</p>"
       },
       "Service": {
         "key": "View_Help_Service",
-        "default": "<h4>Syncing to another service</h4><p>By default your data is synced to the <a href='https://link.xbrowsersync.org/api' class='new-tab'>official xBrowserSync service</a>, however if you would like to sync your data to an alternative xBrowserSync service you can switch the active service before syncing.</p><p>Check the list of available <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>public xBrowserSync services</a> or <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>run your own service</a>, either for private use for ultimate security and privacy, or for public use so that more people can enjoy xBrowserSync.</p><p><strong>Important:</strong> xBrowserSync services are run independently by volunteers. The service administrator takes no responsibility for your data so please remember to backup regularly.</p>"
+        "default": "<h4>Synchronizacja z inną usługą</h4><p>Domyślnie Twoje dane są zsynchronizowane z <a href='https://link.xbrowsersync.org/api' class='new-tab'>oficjalną usługą xBrowserSync</a>, jeśli chcesz zsynchronizować swoje dane z alternatywną usługą xBrowserSync możesz przełączyć aktywną usługę przed synchronizacją.</p><p>Sprawdź listę dostępnych <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>publicznych usług xBrowserSync</a> lub <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>uruchom własną usługę</a>do użytku prywatnego w celu zapewnienia bezpieczeństwa i prywatności, lub do użytku publicznego, tak aby więcej osób mogło cieszyć się xBrowserSync.</p><p><strong>Ważne:</strong> usługi xBrowserSync są wykonywane niezależnie przez wolontariuszy. Administrator serwisu nie ponosi odpowiedzialności za Twoje dane, więc pamiętaj, aby regularnie wykonywać kopie zapasowe.</p>"
       },
       "Shortcuts": {
         "key": "View_Help_Shortcuts",
-        "default": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension, then simply press Enter to view your recent bookmarks or start typing to search.</p><p>To change the shortcut, browse to chrome://extensions/shortcuts and update the available shortcuts under xBrowserSync.</p>",
-        "brave": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension, then simply press Enter to view your recent bookmarks or start typing to search.</p><p>To change the shortcut, browse to brave://extensions/shortcuts and update the available shortcuts under xBrowserSync.</p>",
-        "edge": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension, then simply press Enter to view your recent bookmarks or start typing to search.</p><p>To change the shortcut, browse to edge://extensions/shortcuts and update the available shortcuts under xBrowserSync.</p>",
+        "default": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do chrome://extensions/skróty i zaktualizuj dostępne skróty w xBrowserSync.</p>",
+        "brave": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do chrome://extensions/skróty i zaktualizuj dostępne skróty w xBrowserSync.</p>",
+        "edge": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do chrome://extensions/skróty i zaktualizuj dostępne skróty w xBrowserSync.</p>",
         "firefox": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension, then simply press Enter to view your recent bookmarks or start typing to search.</p><p>To change the shortcut, browse to about:addons, click on “Manage Extension Shortcuts” in the Settings menu and update the available shortcuts under xBrowserSync.</p>"
       },
       "SyncId": {
@@ -800,132 +800,132 @@
         "Backup": {
           "Title": {
             "key": "View_Settings_BackupRestore_Backup_Title",
-            "default": "Back up"
+            "default": "Kopia zapasowa"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Back up"
+            "default": "Kopia zapasowa"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
-            "default": "Back up local browser data to a file."
+            "default": "Kopia zapasowa lokalnych danych przeglądarki do pliku."
           },
           "Synced": {
             "key": "View_Settings_BackupRestore_Backup_Synced",
-            "default": "Back up synced data to a file."
+            "default": "Kopia zapasowa zsynchronizowanych danych do pliku."
           }
         },
         "Restore": {
           "Title": {
             "key": "View_Settings_BackupRestore_Restore_Title",
-            "default": "Restore"
+            "default": "Przywróć"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Restore"
+            "default": "Przywróć"
           },
           "Local": {
             "Description": {
               "key": "View_Settings_BackupRestore_Restore_Local_Description",
-              "default": "Restore local browser data from a backup."
+              "default": "Przywróć dane przeglądarki z kopii zapasowej."
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Local_Confirm",
-              "default": "<p>As sync is currently disabled, the data being restored will overwrite the local browser data.</p><p>OK to proceed?</p>"
+              "default": "<p>Ponieważ synchronizacja jest obecnie wyłączona, przywrócone dane nadpiszą lokalne dane przeglądarki.</p><p>OK, aby kontynuować?</p>"
             }
           },
           "Synced": {
             "Description": {
               "key": "View_Settings_BackupRestore_Restore_Synced_Description",
-              "default": "Restore synced data from a backup."
+              "default": "Przywróć zsynchronizowane dane z kopii zapasowej."
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Synced_Confirm",
-              "default": "<p>As sync is currently enabled, the data being restored will overwrite your synced data.</p><p>To restore data to the local browser only, disable sync before restoring.</p><p>OK to proceed?</p>",
-              "android": "<p>The data being restored will overwrite your synced data.</p><p>OK to proceed?</p>"
+              "default": "<p>Ponieważ synchronizacja jest obecnie włączona, przywrócone dane nadpiszą Twoje zsynchronizowane dane.</p><p>Aby przywrócić dane tylko do lokalnej przeglądarki, wyłącz synchronizację przed przywróceniem.</p><p>OK, aby kontynuować?</p>",
+              "android": "<p>Przywracane dane nadpiszą Twoje zsynchronizowane dane.</p><p>Czy chcesz kontynuować?</p>"
             }
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Your data has been restored."
+            "default": "Kopia zapasowa została przywrócona."
           },
           "SelectFile": {
             "Button": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Button",
-              "default": "Select file"
+              "default": "Wybierz plik"
             },
             "Placeholder": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Placeholder",
-              "default": "Select a backup file to restore"
+              "default": "Wybierz kopię zapasową do przywrócenia"
             }
           },
           "Copy": {
             "key": "View_Settings_BackupRestore_Restore_Copy",
-            "default": "Copy the contents of a backup file to restore data."
+            "default": "Skopiuj zawartość pliku kopii zapasowej, aby przywrócić dane."
           },
           "Paste": {
             "key": "View_Settings_BackupRestore_Restore_Paste",
-            "default": "Paste backup data"
+            "default": "Wklej dane kopii zapasowej"
           },
           "RestoreData": {
             "key": "View_Settings_BackupRestore_Restore_RestoreData",
-            "default": "Restore data"
+            "default": "Przywróć dane"
           },
           "Invalid": {
             "key": "View_Settings_BackupRestore_Restore_Invalid",
-            "default": "Invalid xBrowserSync backup data"
+            "default": "Nieprawidłowe dane kopii zapasowej xBrowserSync"
           }
         },
         "Revert": {
           "Title": {
             "key": "View_Settings_BackupRestore_Revert_Title",
-            "default": "Revert"
+            "default": "Przywróć"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_Revert_Description",
-            "default": "Revert local browser data to initial installation state."
+            "default": "Przywróć lokalne dane przeglądarki do początkowego stanu instalacji."
           },
           "Confirm": {
             "key": "View_Settings_BackupRestore_Revert_Confirm",
-            "default": "<p>If you continue, any active sync will be disabled and your local data will be reverted to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "<p>Jeśli kontynuujesz, każda aktywna synchronizacja zostanie wyłączona, a Twoje dane lokalne zostaną przywrócone po zainstalowaniu xBrowserSync na {date}.</p><p>Czy chcesz kontynuować?</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Revert_Button",
-            "default": "Revert"
+            "default": "Przywróć"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Revert_Done",
-            "default": "Your data has been reverted to initial installation state."
+            "default": "Twoje dane zostały przywrócone do początkowego stanu instalacji."
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Revert_Unavailable",
-            "default": "Installation state data not available, unable to revert."
+            "default": "Dane stanu instalacji są niedostępne, nie można przywrócić."
           }
         }
       },
       "Issues": {
         "Title": {
           "key": "View_Settings_Issues_Title",
-          "default": "Issues"
+          "default": "Problemy"
         },
         "Help": {
           "Title": {
             "key": "View_Settings_Issues_Help_Title",
-            "default": "Help"
+            "default": "Pomoc"
           },
           "Description": {
             "key": "View_Settings_Issues_Help_Description",
-            "default": "Got a question or having an issue? Make sure to read through the help guide, otherwise the answer may be in the FAQs."
+            "default": "Masz pytanie lub problem? Upewnij się, że przeczytałeś poradnik pomocy, jeśli nie znalazłeś odpowiedzi na swoje pytania sprawdź FAQ."
           },
           "ViewFaqs": {
             "key": "View_Settings_Issues_Help_ViewFaqs",
-            "default": "View FAQs"
+            "default": "Zobacz FAQ"
           }
         },
         "Tracker": {
           "Title": {
             "key": "View_Settings_Issues_Tracker_Title",
-            "default": "Issues tracker"
+            "default": "Lista problemów"
           },
           "Description": {
             "key": "View_Settings_Issues_Tracker_Description",
@@ -939,103 +939,103 @@
         "Log": {
           "Title": {
             "key": "View_Settings_Issues_Log_Title",
-            "default": "Application log"
+            "default": "Logi aplikacji"
           },
           "Description": {
             "key": "View_Settings_Issues_Log_Description",
-            "default": "Download and include the application log when you log an issue."
+            "default": "Pobierz i dołącz dziennik aplikacji podczas logowania problemu."
           },
           "Clear": {
             "key": "View_Settings_Issues_Log_Clear",
-            "default": "Clear log"
+            "default": "Wyczyść Logi"
           },
           "Download": {
             "key": "View_Settings_Issues_Log_Download",
-            "default": "Download log"
+            "default": "Pobierz logi"
           },
           "Size": {
             "key": "View_Settings_Issues_Log_Size",
-            "default": "Current log size"
+            "default": "Bieżący rozmiar loga"
           }
         }
       },
       "Permissions": {
         "Title": {
           "key": "View_Settings_Permissions_Title",
-          "default": "Optional permissions"
+          "default": "Uprawnienia opcjonalne"
         },
         "Add": {
           "key": "View_Settings_Permissions_Add",
-          "default": "Grant permissions"
+          "default": "Przyznaj uprawnienia"
         },
         "Granted": {
           "key": "View_Settings_Permissions_Granted",
-          "default": "Granted"
+          "default": "Przyznane"
         },
         "NotGranted": {
           "key": "View_Settings_Permissions_NotGranted",
-          "default": "Not granted"
+          "default": "Nieprzyznane"
         },
         "Read": {
           "Title": {
             "key": "View_Settings_Permissions_Read_Title",
-            "default": "Read website data"
+            "default": "Odczyt danych witryny"
           },
           "Description": {
             "key": "View_Settings_Permissions_Read_Description",
-            "default": "Required to automatically add metadata to bookmarks when using the browser’s “Bookmark this page” button (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>more info</a>)."
+            "default": "Wymagane do automatycznego dodawania metadanych do zakładek podczas korzystania z przycisku \"Dodaj tę stronę\" w przeglądarce (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>więcej informacji</a>)."
           }
         },
         "Remove": {
           "key": "View_Settings_Permissions_Remove",
-          "default": "Remove permissions"
+          "default": "Usuń uprawnienie"
         }
       },
       "Prefs": {
         "AutoFetchMetadata": {
           "Label": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Label",
-            "default": "Auto-fetch bookmark metadata"
+            "default": "Automatyczne pobieranie metadanych zakładek"
           },
           "Description": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Description",
-            "default": "Retrieve metadata automatically when adding a bookmark."
+            "default": "Pobierz metadane automatycznie podczas dodawania zakładki."
           }
         },
         "CheckForAppUpdates": {
           "Label": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Label",
-            "default": "Check for app updates"
+            "default": "Sprawdź dostępność aktualizacji"
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
-            "default": "Display an alert when a new version of xBrowserSync is available."
+            "default": "Wyświetlaj powiadomienie, gdy nowa wersja xBrowserSync jest dostępna."
           }
         },
         "DarkMode": {
           "Label": {
             "key": "View_Settings_Prefs_DarkMode_Label",
-            "default": "Enable dark mode"
+            "default": "Włącz tryb ciemny"
           },
           "Description": {
             "key": "View_Settings_Prefs_DarkMode_Description",
-            "default": "Ideal for use in low-light environments."
+            "default": "Idealne do stosowania w środowiskach o niskim poziomie oświetlenia."
           }
         },
         "DefaultToFolderView": {
           "Label": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Label",
-            "default": "Show bookmark folders"
+            "default": "Pokaż foldery zakładek"
           },
           "Description": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Description",
-            "default": "Display bookmark folders by default."
+            "default": "Domyślnie wyświetlaj foldery zakładek."
           }
         },
         "SearchBar": {
           "Label": {
             "key": "View_Settings_Prefs_SearchBar_Label",
-            "default": "Switch search bar position"
+            "default": "Zmień pozycję paska wyszukiwania"
           },
           "Description": {
             "key": "View_Settings_Prefs_SearchBar_Description",
