@@ -551,16 +551,16 @@
         "default": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do chrome://extensions/skróty i zaktualizuj dostępne skróty w xBrowserSync.</p>",
         "brave": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do chrome://extensions/skróty i zaktualizuj dostępne skróty w xBrowserSync.</p>",
         "edge": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do chrome://extensions/skróty i zaktualizuj dostępne skróty w xBrowserSync.</p>",
-        "firefox": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension, then simply press Enter to view your recent bookmarks or start typing to search.</p><p>To change the shortcut, browse to about:addons, click on “Manage Extension Shortcuts” in the Settings menu and update the available shortcuts under xBrowserSync.</p>"
+        "firefox": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do chrome://extensions/skróty i zaktualizuj dostępne skróty w xBrowserSync.</p>"
       },
       "SyncId": {
         "key": "View_Help_SyncId",
-        "default": "<h4>Your sync ID</h4><p>xBrowserSync ensures your privacy as no personal data is ever collected and your browser data is encrypted before being synced. To identify your synced data you are provided with an anonymous sync ID which can be used along with your password to sync your data on other browsers and devices.</p><p>Remember that your sync ID will only work with the xBrowserSync service on which it was created, if you switch to a different xBrowserSync service you must create a new sync or use an existing sync ID created when previously synced to that service.</p><p>Whenever you are synced you can view your sync ID in the Settings panel, click it to reveal a handy QR code to scan when syncing on mobile devices.</p>"
+        "default": "<h4>Twój identyfikator synchronizacji</h4><p>xBrowserSync zapewnia Twoją prywatność, ponieważ żadne dane osobowe nie są gromadzone a dane przeglądarki są szyfrowane przed synchronizacją. Aby zidentyfikować zsynchronizowane dane, otrzymujesz anonimowy identyfikator synchronizacji, który może być używany wraz z hasłem do synchronizacji danych na innych przeglądarkach i urządzeniach.</p><p>Pamiętaj, że Twój identyfikator synchronizacji będzie działać tylko z usługą xBrowserSync, na której został utworzony, jeśli przełączysz się na inną usługę xBrowserSync musisz utworzyć nową synchronizację lub użyć istniejącego ID synchronizacji utworzonego podczas poprzedniej synchronizacji z tą usługą.</p><p>Za każdym razem, gdy synchronizujesz się możesz wyświetlić ID synchronizacji w panelu ustawień, kliknij go, aby pokazać poręczny kod QR do skanowania podczas synchronizacji na urządzeniach mobilnych.</p>"
       },
       "Welcome": {
         "key": "View_Help_Welcome",
-        "default": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info).</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or the arrow keys to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>",
-        "android": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info).</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or swiping to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>"
+        "default": "<h4>Witamy w xBrowserSync!</h4><p>xBrowserSync jest darmową i otwartą alternatywą dla usług synchronizacji przeglądarki oferowanych przez Google, Mozillę, Opera i inne, która szanuje Twoją prywatność i zapewnia pełną anonimowość (sprawdź stronę <a href='https://link.xbrowsersync.org/www' class='new-tab'></a>, aby uzyskać więcej informacji).</p><p>Poświęć chwilę, aby przeczytać ten przewodnik pomocy, aby zapoznać się z xBrowserSync, za pomocą linków do stronicowania poniżej lub klawiszy strzałek, aby poruszać się między stronami.</p><p>Uwaga: xBrowserSync obecnie synchronizuje tylko zakładki. Synchronizacja dodatkowych danych przeglądarki zostanie dodana w przyszłych wersjach, sprawdź mapę drogową <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'></a>, aby zobaczyć co jest planowane.</p>",
+        "android": "<h4>Witamy w xBrowserSync!</h4><p>xBrowserSync jest darmową i otwartą alternatywą dla usług synchronizacji przeglądarki oferowanych przez Google, Mozillę, Opera i inne, która szanuje Twoją prywatność i zapewnia pełną anonimowość (sprawdź stronę <a href='https://link.xbrowsersync.org/www' class='new-tab'></a>, aby uzyskać więcej informacji).</p><p>Poświęć chwilę, aby przeczytać ten przewodnik pomocy, aby zapoznać się z xBrowserSync, za pomocą linków do stronicowania poniżej lub klawiszy strzałek, aby poruszać się między stronami.</p><p>Uwaga: xBrowserSync obecnie synchronizuje tylko zakładki. Synchronizacja dodatkowych danych przeglądarki zostanie dodana w przyszłych wersjach, sprawdź mapę drogową <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'></a>, aby zobaczyć co jest planowane.</p>"
       }
     },
     "Login": {
@@ -599,15 +599,15 @@
       "Scan": {
         "Title": {
           "key": "View_Login_Scan_Title",
-          "default": "Connect to your sync"
+          "default": "Połącz z synchronizacją"
         },
         "Content": {
           "key": "View_Login_Scan_Content",
-          "default": "Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a QR code which you can scan here."
+          "default": "Otwórz xBrowserSync w przeglądarce komputera, przejdź do panelu ustawień i kliknij na ID synchronizacji, aby wyświetlić kod QR, który możesz zeskanować tutaj."
         },
         "ScanCode": {
           "key": "View_Login_Scan_ScanCode",
-          "default": "Scan code"
+          "default": "Skanuj kod QR"
         },
         "ManualEntry": {
           "key": "View_Login_Scan_ManualEntry",
