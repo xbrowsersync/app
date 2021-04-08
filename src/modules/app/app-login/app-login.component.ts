@@ -47,6 +47,7 @@ export default class AppLoginComponent implements OnInit {
   displayGetSyncIdPanel: boolean;
   displayOtherSyncsWarning = false;
   displayPasswordConfirmation = false;
+  displayPasswordValidationFeedback = false;
   displaySyncConfirmation = false;
   displayUpdateServiceConfirmation = false;
   displayUpdateServicePanel = false;
@@ -146,6 +147,10 @@ export default class AppLoginComponent implements OnInit {
         this.appHelperSvc.focusOnElement('.active-login-form input');
       })
       .catch((err) => this.logSvc.logError(err));
+  }
+
+  currentLocaleIsEnglish(): ng.IPromise<boolean> {
+    return this.platformSvc.getCurrentLocale().then((locale) => locale.toLowerCase().indexOf('en') === 0);
   }
 
   disableSync(): ng.IPromise<void> {
@@ -319,13 +324,15 @@ export default class AppLoginComponent implements OnInit {
       .all([
         this.storeSvc.get([StoreKey.DisplayOtherSyncsWarning, StoreKey.SyncId]),
         this.utilitySvc.isSyncEnabled(),
-        this.utilitySvc.getServiceUrl()
+        this.utilitySvc.getServiceUrl(),
+        this.currentLocaleIsEnglish()
       ])
       .then((data) => {
         this.displayOtherSyncsWarning = data[0].displayOtherSyncsWarning;
         this.syncId = data[0].syncId;
         this.syncEnabled = data[1];
         const serviceUrl = data[2];
+        this.displayPasswordValidationFeedback = data[3];
 
         this.serviceInfo = {
           url: serviceUrl

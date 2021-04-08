@@ -115,6 +115,10 @@ export default abstract class WebExtPlatformService implements PlatformService {
     return this.$q.resolve(browser.runtime.getManifest().version);
   }
 
+  getCurrentLocale(): ng.IPromise<string> {
+    return Promise.resolve(browser.i18n.getUILanguage());
+  }
+
   getCurrentUrl(): ng.IPromise<string> {
     // Get current tab
     return browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {

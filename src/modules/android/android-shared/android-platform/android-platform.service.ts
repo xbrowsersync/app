@@ -192,6 +192,23 @@ export default class AndroidPlatformService implements PlatformService {
     return this.$q.resolve().then(window.cordova.getAppVersion.getVersionNumber);
   }
 
+  getCurrentLocale(): ng.IPromise<string> {
+    let currentLocale = Globals.I18n.DefaultLocale;
+    return this.$q<any>((resolve, reject) => {
+      navigator.globalization.getPreferredLanguage(resolve, reject);
+    })
+      .then((language) => {
+        if (!angular.isUndefined(language?.value)) {
+          currentLocale = language?.value;
+        }
+        return currentLocale;
+      })
+      .catch((err) => {
+        this.logSvc.logWarning(`Couldn’t get current locale: ${err.message}`);
+        return currentLocale;
+      });
+  }
+
   getCurrentUrl(): ng.IPromise<string> {
     return this.$q.resolve(this.currentPage?.url);
   }

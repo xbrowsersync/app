@@ -22,6 +22,7 @@ export interface PlatformService {
   disableSync: () => ng.IPromise<any>;
   enableNativeEventListeners: () => ng.IPromise<void>;
   getAppVersion: () => ng.IPromise<string>;
+  getCurrentLocale: () => ng.IPromise<string>;
   getCurrentUrl: () => ng.IPromise<string>;
   getI18nString: (i18nObj: I18nObject) => string;
   getNewTabUrl?: () => string;

@@ -11,6 +11,9 @@ export default {
     SeparatorUrl: 'xbs:separator',
     VerticalSeparatorTitle: '|'
   },
+  I18n: {
+    DefaultLocale: 'en'
+  },
   InterfaceReadyTimeout: 150,
   LookaheadMinChars: 2,
   MinApiVersion: '1.1.9',
