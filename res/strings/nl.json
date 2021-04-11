@@ -539,12 +539,12 @@
       },
       "Searching": {
         "key": "View_Help_Searching",
-        "default": "<h4> Bladwijzers doorzoeken</h4> <p> Druk na synchronisatie op Enter om je recente bladwijzers weer te geven of typ enkele trefwoorden of een URL om in je bladwijzers te zoeken. </p> <p> Schakel tussen zoekresultaten en bladwijzermappen om door de hele hiërarchie te bladeren. </p> <p> Om een bladwijzer te bewerken of te verwijderen, beweeg je de muisaanwijzer over de bladwijzer en klik je op het nu zichtbare bewerkingspictogram naast de titel van de bladwijzer. </p>",
-        "android": "<h4>Searching your bookmarks</h4><p>Once synced, your bookmarks are displayed in chronological order when you open xBrowserSync. Type some keywords or a URL in the search box to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>Long pressing on a bookmark will allow you to directly share, modify or delete the bookmark.</p>"
+        "default": "<h4>Bladwijzers doorzoeken</h4><p>Druk na synchronisatie op Enter om je recente bladwijzers weer te geven of typ enkele trefwoorden of een URL om je bladwijzers te doorzoeken.</p><p>Schakel tussen zoekresultaten en bladwijzermappen om door de hele hiërarchie te bladeren.</p><p>Om een bladwijzer te bewerken of te verwijderen, beweeg je de muisaanwijzer over de bladwijzer en klik je op het dan zichtbare bewerkingspictogram naast de titel van de bladwijzer.</p>",
+        "android": "<h4>Bladwijzers doorzoeken</h4><p>Na synchronisatie worden je bladwijzers in chronologische volgorde weergegeven wanneer je xBrowserSync opent. Typ enkele trefwoorden of een URL in het zoekvak om je bladwijzers te doorzoeken.</p><p>Schakel tussen zoekresultaten en bladwijzermappen om door de hele hiërarchie te bladeren.</p><p>Door lang op een bladwijzer te drukken, kun je deze rechtstreeks delen, wijzigen of verwijderen.</p>"
       },
       "Service": {
         "key": "View_Help_Service",
-        "default": "<h4>Syncing to another service</h4><p>By default your data is synced to the <a href='https://link.xbrowsersync.org/api' class='new-tab'>official xBrowserSync service</a>, however if you would like to sync your data to an alternative xBrowserSync service you can switch the active service before syncing.</p><p>Check the list of available <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>public xBrowserSync services</a> or <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>run your own service</a>, either for private use for ultimate security and privacy, or for public use so that more people can enjoy xBrowserSync.</p><p><strong>Important:</strong> xBrowserSync services are run independently by volunteers. The service administrator takes no responsibility for your data so please remember to backup regularly.</p>"
+        "default": "<h4>Synchronisatie met een andere service</h4><p>Standaard worden je gegevens gesynchroniseerd met de <a href='https://link.xbrowsersync.org/api' class='new-tab'> officiële xBrowserSync-service</a>, maar als je je gegevens wilt synchroniseren met een alternatieve xBrowserSync-service, kun je de actieve service wijzigen voordat u synchroniseert.</p><p>Controleer de lijst met beschikbare <a href='https://link.xbrowsersync.org/service-list' class='new-tab '> openbare xBrowserSync-services </a> of <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'> draai je eigen service </a>, hetzij voor privégebruik voor ultieme veiligheid en privacy, of voor openbaar gebruik zodat meer mensen kunnen genieten van xBrowserSync.</p><p><strong>Belangrijk:</strong> xBrowserSync diensten worden onafhankelijk gerund door vrijwilligers. De servicebeheerder is niet verantwoordelijk voor jouw gegevens, dus vergeet niet om regelmatig een back-up te maken.</p>"
       },
       "Shortcuts": {
         "key": "View_Help_Shortcuts",
@@ -567,25 +567,25 @@
       "GetSyncId": {
         "Title": {
           "key": "View_Login_GetSyncId_Title",
-          "default": "Need a sync ID?"
+          "default": "Een synchronisatie-ID nodig?"
         },
         "Content": {
           "key": "View_Login_GetSyncId_Content",
-          "default": "Download the xBrowserSync desktop browser extension and create a new sync to access your bookmarks here."
+          "default": "Download de xBrowserSync-desktopbrowser-extensie en maak een nieuwe synchronisatie om hier toegang te krijgen tot je bladwijzers."
         }
       },
       "Password": {
         "Confirm": {
           "key": "View_Login_Password_Confirm",
-          "default": "Confirm password"
+          "default": "Wachtwoord bevestigen"
         },
         "Existing": {
           "key": "View_Login_Password_Existing",
-          "default": "Your encryption password"
+          "default": "Je versleutelingswachtwoord"
         },
         "Label": {
           "key": "View_Login_Password_Label",
-          "default": "Encryption password"
+          "default": "Versleutelingswachtwoord"
         },
         "New": {
           "key": "View_Login_Password_New",
@@ -593,17 +593,17 @@
         },
         "Show": {
           "key": "View_Login_Password_Show",
-          "default": "Reveal password"
+          "default": "Wachtwoord tonen"
         }
       },
       "Scan": {
         "Title": {
           "key": "View_Login_Scan_Title",
-          "default": "Connect to your sync"
+          "default": "Maak verbinding met je synchronisatie"
         },
         "Content": {
           "key": "View_Login_Scan_Content",
-          "default": "Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a QR code which you can scan here."
+          "default": "Open xBrowserSync in je desktopbrowser, ga naar het paneel Instellingen en klik op je synchronisatie-ID om een QR-code weer te geven die je hier kunt scannen."
         },
         "ScanCode": {
           "key": "View_Login_Scan_ScanCode",
@@ -611,7 +611,7 @@
         },
         "ManualEntry": {
           "key": "View_Login_Scan_ManualEntry",
-          "default": "Enter sync details manually"
+          "default": "Synchronisatiegegevens handmatig invoeren"
         }
       },
       "Service": {
@@ -621,7 +621,7 @@
         },
         "Confirm": {
           "key": "View_Login_Service_Confirm",
-          "default": "Sync to this service?"
+          "default": "Synchroniseren met deze service?"
         },
         "Location": {
           "key": "View_Login_Service_Location",
@@ -629,11 +629,11 @@
         },
         "MaxSyncSize": {
           "key": "View_Login_Service_MaxSyncSize",
-          "default": "Max sync size"
+          "default": "Maximale synchronisatiegrootte"
         },
         "Selected": {
           "key": "View_Login_Service_Selected",
-          "default": "Syncing to"
+          "default": "Synchroniseren met"
         },
         "Status": {
           "key": "View_Login_Service_Status",
@@ -642,15 +642,15 @@
         "Update": {
           "Label": {
             "key": "View_Login_Service_Update_Label",
-            "default": "xBrowserSync service URL"
+            "default": "URL van xBrowserSync-service"
           },
           "Description": {
             "key": "View_Login_Service_Update_Description",
-            "default": "Enter the URL of an alternative xBrowserSync service. Browse the list of public xBrowserSync services <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>here</a>."
+            "default": "Voer de URL in van een alternatieve xBrowserSync-service. Blader <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>hier</a> door de lijst met openbare xBrowserSync-services."
           },
           "Button": {
             "key": "View_Login_Service_Update_Button",
-            "default": "Switch service"
+            "default": "Wissel van service"
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
