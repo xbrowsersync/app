@@ -317,11 +317,11 @@
     },
     "ScanFailed_Title": {
       "key": "Exception_ScanFailed_Title",
-      "default": "Scan failed"
+      "default": "Scan is mislukt"
     },
     "ServiceOffline_Message": {
       "key": "Exception_ServiceOffline_Message",
-      "default": "The xBrowserSync service is currently offline, try again later."
+      "default": "De xBrowserSync-service is momenteel offline, probeer het later opnieuw."
     },
     "ServiceOffline_Title": {
       "key": "Exception_ServiceOffline_Title",
@@ -333,35 +333,35 @@
     },
     "SyncRemoved_Message": {
       "key": "Exception_SyncRemoved_Message",
-      "default": "The requested sync does not exist, it may have been removed due to inactivity."
+      "default": "De opgevraagde synchronisatie bestaat niet, het kan zijn verwijderd vanwege inactiviteit."
     },
     "SyncRemoved_Title": {
       "key": "Exception_SyncRemoved_Title",
-      "default": "Sync not found"
+      "default": "Synchronisatie niet gevonden"
     },
     "SyncVersionNotSupported_Message": {
       "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "This ID cannot be synced with this version of xBrowserSync as the sync has been upgraded to a later version."
+      "default": "Deze ID kan niet worden gesynchroniseerd met deze versie van xBrowserSync, omdat de synchronisatie is bijgewerkt naar een latere versie."
     },
     "SyncVersionNotSupported_Restore_Message": {
       "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "The backup data cannot be restored by this version of xBrowserSync as it was created with a later version."
+      "default": "De back-upgegevens kunnen niet worden hersteld door deze versie van xBrowserSync, omdat deze zijn aangemaakt met een latere versie."
     },
     "SyncVersionNotSupported_Title": {
       "key": "Exception_SyncVersionNotSupported_Title",
-      "default": "Sync version not supported"
+      "default": "Synchronisatieversie niet ondersteund"
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
-      "default": "Sync has been disabled, re-enable sync to resume syncing."
+      "default": "Synchronisatie is uitgeschakeld, schakel deze opnieuw in om te hervatten."
     },
     "TooManyRequests_Title": {
       "key": "Exception_TooManyRequests_Title",
-      "default": "Service request limit hit"
+      "default": "Limiet voor serviceaanvraag"
     },
     "UncommittedSyncs_Message": {
       "key": "Exception_UncommittedSyncs_Message",
-      "default": "Sync will be committed once connection to service is restored."
+      "default": "De synchronisatie wordt uitgevoerd zodra de verbinding is hersteld."
     },
     "UncommittedSyncs_Title": {
       "key": "Exception_UncommittedSyncs_Title",
@@ -369,35 +369,35 @@
     },
     "UnsupportedServiceApiVersion_Message": {
       "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "This service is running an unsupported API version."
+      "default": "Deze service gebruikt een niet-ondersteunde API-versie."
     },
     "UnsupportedServiceApiVersion_Title": {
       "key": "Exception_UnsupportedServiceApiVersion_Title",
-      "default": "Service not supported"
+      "default": "Service wordt niet ondersteund"
     },
     "UpgradeFailed_Message": {
       "key": "Exception_UpgradeFailed_Message",
-      "android": "Upgrade will be retried on restarting the app. If the problem persists please reinstall xBrowserSync.",
-      "default": "Restart your browser to retry upgrade, if the problem persists please reinstall xBrowserSync."
+      "android": "Upgrade zal opnieuw worden geprobeerd bij het herstarten van de app. Als het probleem zich blijft voordoen, installeer dan xBrowserSync opnieuw.",
+      "default": "Herstart uw browser om opnieuw te upgraden, als het probleem zich blijft voordoen, installeer xBrowserSync opnieuw."
     },
     "UpgradeFailed_Title": {
       "key": "Exception_UpgradeFailed_Title",
-      "default": "Upgrade failed"
+      "default": "Upgrade mislukt"
     }
   },
   "Service": {
     "Status": {
       "Error": {
         "key": "Service_Status_Error",
-        "default": "Connection error"
+        "default": "Verbindingsfout"
       },
       "Loading": {
         "key": "Service_Status_Loading",
-        "default": "Checking"
+        "default": "Controleren"
       },
       "NoNewSyncs": {
         "key": "Service_Status_NoNewSyncs",
-        "default": "Not accepting new syncs"
+        "default": "Nieuwe synchronisaties worden niet geaccepteerd"
       },
       "Offline": {
         "key": "Service_Status_Offline",
@@ -420,23 +420,23 @@
     },
     "Syncing": {
       "key": "Tooltip_Syncing",
-      "default": "syncing"
+      "default": "synchronisatie"
     }
   },
   "View": {
     "Bookmark": {
       "Add": {
         "key": "View_Bookmark_Add",
-        "default": "Add bookmark"
+        "default": "Bladwijzer toevoegen"
       },
       "Edit": {
         "key": "View_Bookmark_Edit",
-        "default": "Edit bookmark"
+        "default": "Bladwijzer bewerken"
       },
       "Form": {
         "Title": {
           "key": "View_Bookmark_Form_Title",
-          "default": "Title"
+          "default": "Titel"
         },
         "Url": {
           "Exists": {
@@ -449,12 +449,12 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "Bookmark URL is required"
+            "default": "Bladwijzer-URL is vereist"
           }
         },
         "Description": {
           "key": "View_Bookmark_Form_Description",
-          "default": "Description"
+          "default": "Beschrijving"
         },
         "Tags": {
           "Label": {
@@ -467,71 +467,71 @@
           },
           "Clear": {
             "key": "View_Bookmark_Form_Tags_Clear",
-            "default": "Clear tags"
+            "default": "Labels wissen"
           },
           "Remove": {
             "key": "View_Bookmark_Form_Tags_Remove",
-            "default": "Remove tag"
+            "default": "Label verwijderen"
           }
         },
         "Delete": {
           "key": "View_Bookmark_Form_Delete",
-          "default": "Delete"
+          "default": "Verwijderen"
         },
         "Share": {
           "key": "View_Bookmark_Form_Share",
-          "default": "Share"
+          "default": "Delen"
         },
         "UpdateProperties": {
           "key": "View_Bookmark_Form_UpdateProperties",
-          "default": "Update bookmark properties"
+          "default": "Bladwijzereigenschappen bijwerken"
         }
       },
       "InvalidUrlShared": {
         "key": "View_Bookmark_InvalidUrlShared",
-        "default": "The value that was shared does not contain a valid URL."
+        "default": "De waarde die werd gedeeld bevat geen geldige URL."
       }
     },
     "Help": {
       "AddingBookmarks": {
         "key": "View_Help_AddingBookmarks",
-        "default": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s “Bookmark this page” button as normal and xBrowserSync will automatically populate the bookmark’s properties (optional permissions must be granted for this to work, check the Settings panel).</p>",
-        "android": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be fetched for you, otherwise add a description and some tags to ensure better search results.</p>"
+        "default": "<h4>Een bladwijzer toevoegen</h4><p>Maak een bladwijzer voor de huidige pagina door te klikken op het bladwijzerpictogram in het zoekvenster. De eigenschappen van de bladwijzer worden automatisch ingevuld, of voeg anders een beschrijving en enkele labels toe om verzekerd te zijn betere zoekresultaten.</p><p>Als alternatief. Klik eenvoudig normaal op de browserknop \"Bladwijzer deze pagina\" en xBrowserSync zal de eigenschappen van de bladwijzer automatisch vullen (optionele machtigingen moeten worden verleend om dit te laten werken. Vink dit aan in het instellingenpaneel).</p>",
+        "android": "<h4>Een bladwijzer toevoegen</h4><p>Voeg eenvoudig bladwijzers toe door het te delen met xBrowserSync vanuit apps die URL's delen zoals browsers, YouTube, Spotify en nog veel meer.</p><p>De eigenschappen van de bladwijzer worden voor je opgehaald, of voeg zelf een beschrijving en enkele labels toe om verzekerd te zijn van betere zoekresultaten.</p>"
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time revert your data back to it’s original state from when xBrowserSync was installed.</p>",
-        "android": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
+        "default": "<h4>Vergeet niet om een back-up te maken van</h4><p>Als je xBrowserSync gebruikt, zijn je gegevens jouw verantwoordelijkheid. Wees verstandig en zorg ervoor dat je back-ups maakt.</p><p>Ga naar het instellingenpaneel en maak een back-up van je niet-versleutelde gegevens naar een lokaal bestand dat gebruikt kan worden om uw gegevens te herstellen als dat nodig is.</p><p>Als je lokale browsergegevens beschadigd raken en je geen back-ups hebt, kun je op elk moment je gegevens terugzetten naar de originele toestand van het moment dat xBrowserSync werd geïnstalleerd.</p>",
+        "android": "<h4>Vergeet niet om een back-up te maken</h4><p>Als je xBrowserSync gebruikt, zijn jouw gegevens jouw verantwoordelijkheid. Daarom is het verstandig dat je back-ups maakt.</p><p>Ga naar het instellingenpaneel en maak een back-up van je niet-versleutelde gegevens naar een lokaal bestand dat gebruikt kan worden om je gegevens te herstellen als dat nodig is.</p>"
       },
       "BeforeYouBegin": {
         "key": "View_Help_BeforeYouBegin",
-        "default": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) please disable them to avoid conflicts.</p>",
-        "brave": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) please disable them to avoid conflicts.</p>",
-        "edge": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) please disable them to avoid conflicts.</p>",
-        "firefox": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) please disable them to avoid conflicts.</p>"
+        "default": "<h4>Voordat je begint</h4><p>xBrowserSync wijzigt jouw lokale browsergegevens en daarom is het een goed idee om een back-up te maken van je bladwijzers en andere browsergegevens, voor het geval dat. Wanneer je een andere browser synchronisatiediensten of tools gebuikt (zoals <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>), schakel deze dan uit om conflicten te voorkomen.</p>",
+        "brave": "<h4>Voordat je begint</h4><p>xBrowserSync wijzigt jouw lokale browsergegevens en daarom is het een goed idee om een back-up te maken van je bladwijzers en andere browsergegevens, voor het geval dat. Wanneer je een andere browser synchronisatiediensten of tools gebuikt (zoals <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>), schakel deze dan uit om conflicten te voorkomen.</p>",
+        "edge": "<h4>Voordat je begint</h4><p>xBrowserSync wijzigt jouw lokale browsergegevens en daarom is het een goed idee om een back-up te maken van je bladwijzers en andere browsergegevens, voor het geval dat. Wanneer je een andere browser synchronisatiediensten of tools gebuikt (zoals <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>), schakel deze dan uit om conflicten te voorkomen.</p>",
+        "firefox": "<h4>Voordat je begint</h4><p>xBrowserSync wijzigt jouw lokale browsergegevens en daarom is het een goed idee om een back-up te maken van je bladwijzers en andere browsergegevens, voor het geval dat. Wanneer je een andere browser synchronisatiediensten of tools gebuikt (zoals <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>), schakel deze dan uit om conflicten te voorkomen.</p>"
       },
       "ExistingId": {
         "key": "View_Help_ExistingId",
-        "default": "<h4>Syncing with your existing ID</h4><p>Click on “Already got a sync ID?” to enter your existing sync ID and password. If your sync ID was created on a service different to the one displayed then switch to that service before attempting to sync.</p><p>xBrowserSync will retrieve and decrypt your encrypted data using your locally stored password, then clear your local bookmarks before re-populating them from the decrypted data.</p><p>When synced, xBrowserSync checks in the background every fifteen minutes for updates to your synced data and will automatically update your local bookmarks when required. You can also manually sync available updates to your synced data in the Settings panel.</p>",
-        "android": "<h4>Syncing with your existing ID</h4><p>Start by scanning the sync ID QR code in the Settings panel of the xBrowserSync desktop browser extension (click on your sync ID to reveal it). Make sure you enter the same encryption password used when creating the sync otherwise xBrowserSync will not be able to decrypt your data.</p><p>Also, if you are synced to a different xBrowserSync service make sure it is the active service configured in the Settings panel.</p>"
+        "default": "<h4>Synchroniseren met uw bestaande ID</h4><p>Klik op \"Heb je al een synchronisatie-ID?\" om je bestaande synchronisatie-ID en wachtwoord in te voeren. Als je synchronisatie-ID is aangemaakt op een service die verschilt van die welke wordt weergegeven, schakel dan over naar die service voordat je probeert te synchroniseren.</p><p>xBrowserSync zal je versleutelde gegevens ophalen en ontsleutelen met het lokaal opgeslagen wachtwoord, en wis vervolgens uw lokale bladwijzers voordat ze opnieuw gevuld worden door de ontsleutelde gegevens.</p><p>Eenmaal gesynchroniseerd, controleert xBrowserSync elke vijftien minuten in de achtergrond voor updates aan uw gesynchroniseerde gegevens en zal zo nodig je lokale bladwijzers automatisch bijwerken. Je kan ook handmatig beschikbare updates synchroniseren met je gesynchroniseerde gegevens in het instellingenvenster.</p>",
+        "android": "<h4>Synchroniseren met je bestaande ID </h4><p>Begin met het scannen van de QR-code van de synchronisatie-ID in het paneel Instellingen van de xBrowserSync-desktopbrowser-extensie (klik op je synchronisatie-ID om deze weer te geven). Zorg ervoor dat je hetzelfde versleutelingswachtwoord invoert als bij het aanmaken van de synchronisatie, anders kan xBrowserSync je gegevens niet ontsleutelen.</p><p>Wanneer er gesynchroniseerd wordt met een andere xBrowserSync-service, zorg er dan voor dat dit de actieve service is die is geconfigureerd in het instellingenpaneel. </p>"
       },
       "FirstSync": {
         "key": "View_Help_FirstSync",
-        "default": "<h4>Syncing for the first time</h4><p>Before xBrowserSync can sync your browser data you will need to provide an encryption password. Be sure to make it strong but also memorable, there are no resets or reminders so if you forget it you won’t be able to access your synced data.</p><p>Your browser data will be encrypted using your password and saved to the active xBrowserSync service configured in the Settings panel.</p><p>Once synced, any changes you make to your local bookmarks will be synced automatically by xBrowserSync.</p>",
-        "android": "<h4>Syncing for the first time</h4><p>xBrowserSync actively syncs your browser data between your desktop browsers (syncing to mobile browsers is not supported at this time), you can use this app to access your synced data on your Android mobile device.</p><p>If you have not already created a sync ID, head over to your desktop browser and <a href='https://link.xbrowsersync.org/download' class='new-tab'>download</a> the xBrowserSync extension. Once you have created a sync you can use your new sync ID within this app to access your data.</p>"
+        "default": "<h4>De eerste keer synchroniseren</h4><p>Voordat xBrowserSync jouw browsergegevens kan synchroniseren, moet je een coderingswachtwoord opgeven. Zorg ervoor dat je het sterk maar ook memorabel maakt, er zijn geen resets of herinneringen, dus als je het vergeet, verlies je de toegang tot tot je gesynchroniseerde gegevens.</p><p>Jouw browsergegevens worden versleuteld met je wachtwoord en opgeslagen in de actieve xBrowserSync-service die is geconfigureerd in het paneel Instellingen.</p><p>Eenmaal gesynchroniseerd, worden alle wijzigingen die je aanbrengt in je lokale bladwijzers door xBrowserSync automatisch gesynchroniseerd.</p>",
+        "android": "<h4>De eerste keer synchroniseren</h4><p>xBrowserSync synchroniseert actief jouw browsergegevens tussen je desktopbrowsers (synchronisatie met mobiele browsers wordt momenteel niet ondersteund). Je kunt deze app gebruiken om toegang te krijgen tot je gesynchroniseerde gegevens op je Android mobiel apparaat.</p><p>Als je nog geen synchronisatie-ID hebt aangemaakt, ga dan naar je desktopbrowser en <a href='https://link.xbrowsersync.org/download' class='new- tab '>download</a> de xBrowserSync-extensie. Wanneer je een synchronisatie heeft gemaakt, kun je je nieuwe synchronisatie-ID binnen deze app gebruiken om toegang te krijgen tot je gegevens. </p>"
       },
       "FurtherSupport": {
         "key": "View_Help_FurtherSupport",
-        "default": "<h4>Further support</h4><p>You can find the answers to most common questions in the <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>FAQs</a>, also check the current <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>known issues</a> to see if your issue is listed there.</p><p>Alternatively, use the <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>issue tracker</a> to report an issue or request a new feature.</p>"
+        "default": "<h4>Verdere ondersteuning</h4><p>Je kunt de antwoorden op vaak gestelde vragen vinden in de <a href='https://link.xbrowsersync.org/faqs' class='new-tab'> FAQs</a>. Controleer ook de huidige <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>bekende problemen</a> om te zien of jouw probleem daar wordt vermeld.</p><p>Je kunt ook de <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>issue tracker</a> gebruiken om een probleem te melden of verzoek om een nieuwe functie te doen.</p>"
       },
       "Mobile": {
         "key": "View_Help_Mobile",
-        "default": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a> store, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droid</a> or <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>direct download</a>.</p>"
+        "default": "<h4>Ga mobiel</h4><p>Krijg onderweg toegang tot je gesynchroniseerde bladwijzers met de xBrowserSync Android-app, beschikbaar op <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a> winkel, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'> F-Droid</a> of <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'> directe download</a>. </p>"
       },
       "NativeFeatures": {
         "key": "View_Help_NativeFeatures",
-        "default": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks bar and bookmarks manager, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p>",
-        "firefox": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks toolbar and bookmarks library, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p><p>Please note however, as Firefox’s bookmarks API does not yet support accessing native bookmark tags, any existing tags will be lost when syncing and tags added via xBrowserSync will not be saved as native tags.</p>"
+        "default": "<h4>Standaardfuncties worden ondersteund</h4><p>Voel je vrij om gebruik te blijven maken van de originele bladwijzerfunctie van je browser zoals de bladwijzerbalk en bladwijzerbeheer. Wijzigingen die je aanbrengt worden automatisch op de achtergrond gesynchroniseerd.</p><p>Als je je bestaande bladwijzers in mappen hebt georganiseerd, zal xBrowserSync je bestaande hiërarchie respecteren en onderhouden.</p>",
+        "firefox": "<h4>Standaardfuncties ondersteund</h4><p>Voel je vrij om gebruik te blijven maken van de originele bladwijzerfunctie van je browser zoals de bladwijzerwerkbalk en bladwijzerbibliotheek. Wijzigingen die je aanbrengt worden automatisch op de achtergrond gesynchroniseerd.</p><p>Als je je bestaande bladwijzers in mappen hebt georganiseerd, zal xBrowserSync je bestaande bladwijzerhiërarchie respecteren en onderhouden.</p><p>Houd er echter rekening mee dat Firefox's bladwijzer-API de toegang tot oorspronkelijke bladwijzerlabels nog niet ondersteunt. Bestaande labels zullen verloren gaan bij het synchroniseren en labels toegevoegd via xBrowserSync zullen niet worden opgeslagen als standaard-labels.</p>"
       },
       "Previous": {
         "key": "View_Help_Previous",
@@ -852,50 +852,50 @@
           "SelectFile": {
             "Button": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Button",
-              "default": "Select file"
+              "default": "Selecteer bestand"
             },
             "Placeholder": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Placeholder",
-              "default": "Select a backup file to restore"
+              "default": "Selecteer een back-upbestand om te herstellen"
             }
           },
           "Copy": {
             "key": "View_Settings_BackupRestore_Restore_Copy",
-            "default": "Copy the contents of a backup file to restore data."
+            "default": "Kopieer de inhoud van een back-upbestand om gegevens te herstellen."
           },
           "Paste": {
             "key": "View_Settings_BackupRestore_Restore_Paste",
-            "default": "Paste backup data"
+            "default": "Back-upgegevens plakken"
           },
           "RestoreData": {
             "key": "View_Settings_BackupRestore_Restore_RestoreData",
-            "default": "Restore data"
+            "default": "Gegevens terugzetten"
           },
           "Invalid": {
             "key": "View_Settings_BackupRestore_Restore_Invalid",
-            "default": "Invalid xBrowserSync backup data"
+            "default": "Ongeldige xBrowserSync back-upgegevens"
           }
         },
         "Revert": {
           "Title": {
             "key": "View_Settings_BackupRestore_Revert_Title",
-            "default": "Revert"
+            "default": "Terugzetten"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_Revert_Description",
-            "default": "Revert local browser data to initial installation state."
+            "default": "Lokale browsergegevens terugzetten naar de initiële installatiestatus."
           },
           "Confirm": {
             "key": "View_Settings_BackupRestore_Revert_Confirm",
-            "default": "<p>If you continue, any active sync will be disabled and your local data will be reverted to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "<p>Als je doorgaat, wordt elke actieve synchronisatie uitgeschakeld en je lokale gegevens worden teruggezet naar de toestand dat xBrowserSync op {date} is geïnstalleerd.</p><p>OK om verder te gaan?</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Revert_Button",
-            "default": "Revert"
+            "default": "Terugzetten"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Revert_Done",
-            "default": "Your data has been reverted to initial installation state."
+            "default": "Jouw gegevens zijn teruggezet naar de initiële installatiestatus."
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Revert_Unavailable",
