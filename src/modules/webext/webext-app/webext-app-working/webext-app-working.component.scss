@@ -6,13 +6,9 @@ app-working {
   h3 {
     @include ellipsis;
 
-    color: $colour-bg2-default;
+    color: var(--color-spinner);
     font-size: 1.1rem;
     margin: 0.2rem;
-
-    @include theme-dark {
-      color: $colour-text3-dark;
-    }
   }
 
   .buttons {
@@ -32,11 +28,6 @@ app-working {
     height: 30vw;
     position: absolute;
     width: 30vw;
-
-    @include theme-dark {
-      border-color: $colour-text3-dark;
-      border-right-color: transparent;
-    }
   }
 
   .overlay {

@@ -1,7 +1,15 @@
 @import '../../../../styles/modules/all';
 
 app-scan {
+  --color-button-fab-bg: #{$color-bg3-default};
+  --color-button-fab-text: #{$color-text2-default};
+
   display: block;
+
+  @include theme-dark {
+    --color-button-fab-bg: #{$color-text3-dark};
+    --color-button-fab-text: #{$color-text1-dark};
+  }
 
   h3 {
     font-size: 1rem;
@@ -12,22 +20,15 @@ app-scan {
   .buttons {
     flex: 0 8rem;
 
-    button {
-      background-color: $colour-bg3-default;
-      color: $colour-text2-default;
+    button.btn.btn-fab {
       margin-right: 1.75rem;
-
-      @include theme-dark {
-        background-color: $colour-bg3-dark;
-        color: $colour-text2-dark;
-      }
 
       &:last-child {
         margin-right: 0;
       }
 
       &.enabled {
-        color: $colour-warning;
+        background-color: var(--color-warning);
       }
     }
   }

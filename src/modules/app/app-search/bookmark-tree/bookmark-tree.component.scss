@@ -1,22 +1,33 @@
 @import '../../../../styles/modules/all';
 
 bookmark-tree {
+  --color-bookmark-tree-root-bg: rgba(#{rgb($color-text2-default)}, 0.3);
+  --color-bookmark-tree-root-text: #{$color-text1-default};
+  --color-bookmark-tree-folder-bg: var(--color-separator-bg);
+  --color-bookmark-tree-folder-text: #{$color-text1-default};
+  --color-bookmark-tree-folder-icon: #{$color-bg2-default};
+  --color-bookmark-tree-bookmark-hover: #{scale-color($color-bg2-default, $lightness: 70%, $saturation: 50%)};
+
+  @include theme-dark {
+    --color-bookmark-bg: var(--color-separator-bg);
+    --color-bookmark-tree-root-bg: #{$color-bg2-dark};
+    --color-bookmark-tree-root-text: #{$color-text2-dark};
+    --color-bookmark-tree-folder-bg: var(--color-separator-bg);
+    --color-bookmark-tree-folder-text: #{$color-text2-dark};
+    --color-bookmark-tree-folder-icon: rgba(#{rgb($color-text1-dark)}, 0.6);
+    --color-bookmark-tree-bookmark-hover: rgba(#{rgb($color-text3-dark)}, 0.4);
+  }
+
   &.root > .folder > .bookmark-content {
-    @include theme-dark {
-      background-color: $colour-bg3-dark;
-    }
+    background-color: var(--color-bookmark-tree-root-bg);
   }
 
   bookmark {
     &.folder {
       box-shadow: none;
-      color: $colour-text1-default;
+      color: var(--color-bookmark-tree-root-text);
       max-height: none;
       transition: background-color ease-in-out 0.2s;
-
-      @include theme-dark {
-        color: $colour-text2-dark;
-      }
 
       &.open {
         & > .bookmark-content > .bookmark-heading {
@@ -35,22 +46,14 @@ bookmark-tree {
       }
 
       & > .bookmark-content {
-        background-color: rgba($colour-text2-default, 0.3);
+        background-color: var(--color-bookmark-tree-folder-bg);
         padding: 0.5rem 1rem;
 
-        @include theme-dark {
-          background-color: rgba($colour-text3-dark, 0.2);
-        }
-
         & > .bookmark-heading {
-          color: $colour-text1-default;
+          color: var(--color-bookmark-tree-folder-text);
           margin-right: 0;
           padding-left: 1.75rem;
           padding-right: 1.5rem;
-
-          @include theme-dark {
-            color: $colour-text2-dark;
-          }
 
           &::before {
             @include icon('\f07b');
@@ -63,14 +66,10 @@ bookmark-tree {
             @include icon('\f107');
             @include valign;
 
-            color: $colour-bg2-default;
+            color: var(--color-bookmark-tree-folder-icon);
             font-size: 1.3em;
             opacity: 0;
             right: 0;
-
-            @include theme-dark {
-              color: rgba($colour-text1-dark, 0.6);
-            }
           }
 
           @media (hover: hover) {
@@ -91,26 +90,11 @@ bookmark-tree {
         }
 
         .spinner-border {
+          @include spinner-colour(var(--color-bookmark-tree-folder-icon));
           @include valign;
 
           opacity: 0.6;
           right: 0;
-
-          @include theme-dark {
-            @include spinner-colour(rgba($colour-text1-dark, 0.6));
-          }
-        }
-      }
-    }
-
-    .bookmark-content {
-      @include theme-dark {
-        background-color: rgba($colour-text3-dark, 0.2);
-      }
-
-      .bookmark-text .url {
-        @include theme-dark {
-          color: darken($colour-text2-dark, 10%);
         }
       }
     }
@@ -120,11 +104,7 @@ bookmark-tree {
         &:focus,
         &:hover {
           & > .bookmark-content {
-            background-color: scale-color($colour-bg2-default, $lightness: 70%, $saturation: 50%);
-
-            @include theme-dark {
-              background-color: rgba($colour-text3-dark, 0.4);
-            }
+            background-color: var(--color-bookmark-tree-bookmark-hover);
           }
         }
       }

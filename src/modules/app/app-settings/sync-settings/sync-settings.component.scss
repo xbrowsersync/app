@@ -1,7 +1,19 @@
 @import '../../../../styles/modules/all';
 
 sync-settings {
+  --color-sync-settings-data-bg: #{$color-text2-default};
+  --color-sync-settings-data-progress: #{$color-bg2-default};
+  --color-sync-settings-data-max: #{$color-text2-default};
+  --color-sync-settings-data-used: #{$color-bg2-default};
+
   display: block;
+
+  @include theme-dark {
+    --color-sync-settings-data-bg: #{$color-bg1-dark};
+    --color-sync-settings-data-progress: #{$color-text2-dark};
+    --color-sync-settings-data-max: #{$color-text3-dark};
+    --color-sync-settings-data-used: #{$color-text2-dark};
+  }
 
   .setting-group {
     .max,
@@ -9,36 +21,24 @@ sync-settings {
       font-size: 0.8rem;
       margin-top: -1.5rem;
       position: absolute;
-
-      @include theme-dark {
-        color: $colour-text2-dark;
-      }
     }
 
     .max {
-      color: $colour-text2-default;
+      color: var(--color-sync-settings-data-max);
       right: 0;
     }
 
     .progress {
-      background-color: darken($colour-bg2-default, 50%);
+      background-color: var(--color-sync-settings-data-bg);
       border-radius: 1rem;
       height: 0.45rem;
       margin: 0.25rem 0 1.5rem;
       overflow: visible;
 
-      @include theme-dark {
-        background-color: $colour-bg1-dark;
-      }
-
       .progress-bar {
-        background-color: $colour-bg2-default;
+        background-color: var(--color-sync-settings-data-progress);
         border-bottom-left-radius: 1rem;
         border-top-left-radius: 1rem;
-
-        @include theme-dark {
-          background-color: $colour-text3-dark;
-        }
       }
     }
 
@@ -75,7 +75,7 @@ sync-settings {
     }
 
     .used {
-      color: $colour-bg2-default;
+      color: var(--color-sync-settings-data-used);
       left: 0;
     }
 

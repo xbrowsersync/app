@@ -47,7 +47,7 @@
 
 .overlay {
   align-items: center;
-  background-color: rgba($colour-text2-default, 0.5);
+  background-color: var(--color-overlay);
   display: flex;
   height: 100%;
   justify-content: center;
@@ -56,20 +56,12 @@
   top: 0;
   width: 100%;
   z-index: 1000;
-
-  @include theme-dark {
-    background-color: rgba(#222, 0.5);
-  }
 }
 
 .darker-overlay {
   @extend .overlay;
 
-  background-color: rgba($colour-text2-default, 0.9);
-
-  @include theme-dark {
-    background-color: rgba(#222, 0.9) !important;
-  }
+  background-color: var(--color-darker-overlay);
 }
 
 .footer {
@@ -142,61 +134,25 @@
 .well {
   @include box-shadow;
 
-  background-color: $colour-bg3-default;
+  background-color: var(--color-well-bg);
   border-radius: $border-radius-well;
   border-width: 0;
-  color: $colour-text2-default;
+  color: var(--color-well-text);
   margin-bottom: 0.75rem;
   padding: 1rem 1.25rem;
 
-  @include theme-dark {
-    background-color: $colour-bg3-dark;
-    color: $colour-text2-dark;
+  a {
+    border-bottom-color: var(--color-well-link);
+    color: var(--color-well-link);
 
     @media (hover: hover) {
-      a {
-        &:active {
-          border-bottom-color: $colour-text1-dark;
-          color: $colour-text1-dark;
-        }
-
-        &:focus,
-        &:hover {
-          border-bottom-color: $colour-text1-dark;
-          color: $colour-text1-dark;
-        }
+      &:active,
+      &:focus,
+      &:hover {
+        border-bottom-color: var(--color-well-link-hover);
+        color: var(--color-well-link-hover);
       }
     }
-  }
-
-  &.dark {
-    background-color: $colour-text2-default;
-    color: $colour-text1-default;
-
-    @include theme-dark {
-      background-color: $colour-text2-dark;
-      color: $colour-text1-dark;
-    }
-
-    a {
-      border-bottom-color: $colour-text1-default;
-
-      @include theme-dark {
-        border-bottom-color: $colour-text1-dark;
-      }
-
-      @media (hover: hover) {
-        &:active,
-        &:focus,
-        &:hover {
-          border-bottom-color: inherit;
-        }
-      }
-    }
-  }
-
-  a {
-    border-bottom-color: unset;
   }
 
   h4 {
@@ -213,11 +169,11 @@
       input,
       textarea {
         &.form-control {
-          border-color: $colour-danger !important;
-          color: $colour-danger !important;
+          border-color: var(--color-danger) !important;
+          color: var(--color-danger) !important;
 
           &::placeholder {
-            color: $colour-danger !important;
+            color: var(--color-danger) !important;
             opacity: 0.8 !important;
           }
         }
@@ -227,13 +183,9 @@
     input,
     textarea {
       &.form-control {
-        border-color: $colour-text2-default !important;
+        border-color: var(--color-well-input-border) !important;
         border-style: solid !important;
         border-width: 1px !important;
-
-        @include theme-dark {
-          border-color: $colour-text2-dark !important;
-        }
       }
     }
   }

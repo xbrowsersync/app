@@ -1,7 +1,13 @@
 @import '../../../styles/modules/all';
 
 app-login {
+  --color-login-link-hover: #{$color-text2-default};
+
   display: block;
+
+  @include theme-dark {
+    --color-login-link-hover: #{$color-text1-dark};
+  }
 
   form {
     align-items: center;
@@ -29,13 +35,8 @@ app-login {
         &:active,
         &:focus,
         &:hover {
-          border-bottom-color: $colour-text2-default;
-          color: $colour-text2-default;
-
-          @include theme-dark {
-            border-bottom-color: $colour-text1-dark;
-            color: $colour-text1-dark;
-          }
+          border-bottom-color: var(--color-login-link-hover);
+          color: var(--color-login-link-hover);
         }
       }
     }
@@ -63,17 +64,7 @@ app-login {
 
   .form-group {
     input {
-      border-color: $colour-bg3-default;
-      border-style: solid;
-      border-width: 1px;
       font-family: $font-stack-code;
-      line-height: 1.45rem;
-      padding: 0.5rem 0.8rem;
-      width: 100%;
-
-      @include theme-dark {
-        border-color: $colour-bg3-dark;
-      }
 
       &::placeholder {
         font-family: $font-stack-regular;
@@ -143,30 +134,22 @@ app-login {
 
     .progress {
       background-color: transparent;
-      border-color: $colour-bg3-default;
+      border-color: var(--color-input-bg);
       border-style: solid;
       border-width: 0.1rem;
       z-index: 10;
 
-      @include theme-dark {
-        border-color: $colour-bg3-dark;
-      }
-
       .progress-bar {
-        background-color: $colour-danger;
+        background-color: var(--color-danger);
 
         @include theme-dark {
-          background-color: $colour-danger;
+          background-color: var(--color-danger);
         }
       }
     }
 
     .progress-bar-background {
-      background-color: $colour-bg3-default;
-
-      @include theme-dark {
-        background-color: $colour-bg3-dark;
-      }
+      background-color: var(--color-input-bg);
     }
   }
 
@@ -191,20 +174,8 @@ app-login {
       top: 0.1rem;
 
       .loading .spinner-border {
-        border-color: $colour-bg3-default;
+        border-color: var(--color-text);
         border-right-color: transparent !important;
-
-        @include theme-dark {
-          border-color: $colour-bg3-dark;
-        }
-      }
-
-      .status-icon-bg {
-        background-color: $colour-bg3-default;
-
-        @include theme-dark {
-          background-color: $colour-bg3-dark;
-        }
       }
     }
   }
@@ -222,14 +193,9 @@ app-login {
         justify-content: space-between;
 
         label {
-          color: $colour-text2-default !important;
           font-weight: bold;
           margin-bottom: 0;
           padding-right: 0.5rem;
-
-          @include theme-dark {
-            color: $colour-text2-dark !important;
-          }
         }
 
         span {
@@ -258,18 +224,16 @@ app-login {
   .well {
     margin-bottom: 0;
 
-    @media (hover: hover) {
-      a {
+    a {
+      border-bottom-color: var(--color-well-text);
+      color: var(--color-well-text);
+
+      @media (hover: hover) {
         &:active,
         &:focus,
         &:hover {
-          border-bottom-color: $colour-bg2-default;
-          color: $colour-bg2-default;
-
-          @include theme-dark {
-            border-bottom-color: $colour-text1-dark;
-            color: $colour-text1-dark;
-          }
+          border-bottom-color: var(--color-well-link-hover);
+          color: var(--color-well-link-hover);
         }
       }
     }

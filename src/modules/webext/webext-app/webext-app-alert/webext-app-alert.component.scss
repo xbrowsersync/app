@@ -1,7 +1,13 @@
 @import '../../../../styles/modules/all';
 
 app-alert {
+  --color-alert-text: #{$color-text1-default};
+
   display: block;
+
+  @include theme-dark {
+    --color-alert-text: #{$color-text1-dark};
+  }
 
   .alert {
     @include animation-fade-in();
@@ -9,7 +15,7 @@ app-alert {
 
     border-radius: 0;
     border-width: 0;
-    color: $colour-text1-default;
+    color: var(--color-alert-text);
     margin: 0 auto;
     max-width: $width-tablet-small;
     padding: 0.75rem;
@@ -17,87 +23,40 @@ app-alert {
     width: 100%;
     z-index: 1010;
 
-    @include theme-dark {
-      color: $colour-text1-dark;
-    }
-
     &-danger {
-      background-color: rgba(darken($colour-danger, 3%), 0.9);
-
-      a {
-        @include theme-dark {
-          border-bottom-color: inherit;
-          color: inherit;
-        }
-
-        @media (hover: hover) {
-          &:active,
-          &:focus,
-          &:hover {
-            border-bottom-color: lighten($colour-danger, 25%);
-            color: lighten($colour-danger, 25%);
-          }
-        }
-      }
+      background-color: var(--color-danger);
     }
 
     &-info {
-      background-color: rgba(darken($colour-success, 10%), 0.9);
-
-      a {
-        @include theme-dark {
-          border-bottom-color: inherit;
-          color: inherit;
-        }
-
-        @media (hover: hover) {
-          &:active,
-          &:focus,
-          &:hover {
-            border-bottom-color: lighten($colour-success, 25%);
-            color: lighten($colour-success, 25%);
-          }
-        }
-      }
+      background-color: var(--color-success);
     }
 
     &-warning {
-      background-color: rgba(darken($colour-warning, 10%), 0.9);
+      background-color: var(--color-warning);
+    }
 
-      a {
-        @include theme-dark {
-          border-bottom-color: inherit;
-          color: inherit;
-        }
+    a {
+      border-bottom-color: var(--color-alert-text);
+      color: var(--color-alert-text);
 
-        @media (hover: hover) {
-          &:active,
-          &:focus,
-          &:hover {
-            border-bottom-color: lighten($colour-warning, 25%);
-            color: lighten($colour-warning, 25%);
-          }
+      @media (hover: hover) {
+        &:active,
+        &:focus,
+        &:hover {
+          border-bottom-color: var(--color-alert-text);
+          color: var(--color-alert-text);
         }
       }
     }
 
     button.btn-close {
-      color: $colour-text1-default;
+      color: var(--color-alert-text);
       float: right;
       font-size: 1.2rem;
       line-height: 1.7rem;
 
-      @include theme-dark {
-        color: $colour-text1-dark;
-      }
-
-      i {
-        opacity: 0.7;
-      }
-
       @media (min-width: $width-mobile-small + 1) {
         font-size: 1.5rem;
-        line-height: 2.5rem;
       }
     }
 

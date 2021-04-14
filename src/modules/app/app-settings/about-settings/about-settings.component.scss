@@ -1,10 +1,16 @@
 @import '../../../../styles/modules/all';
 
 about-settings {
+  --color-settings-about-link-hover: #{$color-text2-default};
+
   align-items: center;
   display: flex;
   flex-direction: column;
   margin: 2rem 0;
+
+  @include theme-dark {
+    --color-settings-about-link-hover: #{$color-text1-dark};
+  }
 
   button.btn.btn-default {
     margin-bottom: 1rem;
@@ -16,13 +22,8 @@ about-settings {
       &:active,
       &:focus,
       &:hover {
-        border-bottom-color: $colour-text2-default;
-        color: $colour-text2-default;
-
-        @include theme-dark {
-          border-bottom-color: $colour-text1-dark;
-          color: $colour-text1-dark;
-        }
+        border-bottom-color: var(--color-settings-about-link-hover);
+        color: var(--color-settings-about-link-hover);
       }
     }
   }

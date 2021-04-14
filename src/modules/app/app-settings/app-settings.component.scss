@@ -1,7 +1,19 @@
 @import '../../../styles/modules/all';
 
 app-settings {
+  --color-settings-description-text: #{$color-text3-default};
+  --color-settings-description-link: #{$color-text3-default};
+  --color-settings-description-link-hover: #{$color-bg2-default};
+  --color-settings-value-text: #{$color-text2-default};
+
   display: block;
+
+  @include theme-dark {
+    --color-settings-description-text: #{$color-text3-dark};
+    --color-settings-description-link: #{$color-text3-dark};
+    --color-settings-description-link-hover: #{$color-text1-dark};
+    --color-settings-value-text: #{$color-text2-dark};
+  }
 
   &.view .view-content {
     padding: 0.75rem 0 0;
@@ -22,21 +34,6 @@ app-settings {
   }
 
   .setting-group {
-    a {
-      @include theme-dark {
-        color: $colour-text2-dark;
-
-        @media (hover: hover) {
-          &:active,
-          &:focus,
-          &:hover {
-            border-bottom-color: $colour-text1-dark;
-            color: $colour-text1-dark;
-          }
-        }
-      }
-    }
-
     label {
       margin-bottom: 0.25rem;
     }
@@ -50,23 +47,18 @@ app-settings {
     }
 
     .description {
-      color: $colour-text3-default;
-
-      @include theme-dark {
-        color: $colour-text3-dark;
-      }
+      color: var(--color-settings-description-text);
 
       a {
-        @include theme-dark {
-          color: $colour-text3-dark;
+        border-bottom-color: var(--color-settings-description-link);
+        color: var(--color-settings-description-link);
 
-          @media (hover: hover) {
-            &:active,
-            &:focus,
-            &:hover {
-              border-bottom-color: $colour-text1-dark;
-              color: $colour-text1-dark;
-            }
+        @media (hover: hover) {
+          &:active,
+          &:focus,
+          &:hover {
+            border-bottom-color: var(--color-settings-description-link-hover);
+            color: var(--color-settings-description-link-hover);
           }
         }
       }
@@ -76,7 +68,7 @@ app-settings {
       background: transparent;
       border: 0;
       border-radius: 0;
-      color: $colour-text2-default;
+      color: var(--color-settings-value-text);
       height: auto;
       padding: 0;
       position: absolute;
@@ -84,10 +76,6 @@ app-settings {
       top: 0;
       transition: none;
       width: auto;
-
-      @include theme-dark {
-        color: $colour-text2-dark;
-      }
     }
   }
 
@@ -107,16 +95,6 @@ app-settings {
 
     .panel-content {
       padding: 0 1.25rem;
-    }
-  }
-
-  @media (hover: hover) {
-    a {
-      &:active,
-      &:focus,
-      &:hover {
-        border-bottom-color: inherit;
-      }
     }
   }
 }

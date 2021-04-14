@@ -1,7 +1,15 @@
 @import '../../../styles/modules/all';
 
 app-bookmark {
+  --color-badge-bg: #{$color-text2-default};
+  --color-badge-text: #{$color-text1-default};
+
   display: block;
+
+  @include theme-dark {
+    --color-badge-bg: #{$color-bg3-dark};
+    --color-badge-text: #{$color-text2-dark};
+  }
 
   &.view .view-content {
     display: flex;
@@ -14,26 +22,13 @@ app-bookmark {
     height: 100%;
   }
 
-  .btn-delete-bookmark {
-    background-color: $colour-danger;
-    color: $colour-text1-default;
-
-    @include theme-dark {
-      border-color: $colour-text2-dark;
-      color: $colour-text2-dark;
-    }
+  button.btn.btn-default.btn-delete-bookmark {
+    background-color: var(--color-danger);
 
     @media (hover: hover) {
       &:not([disabled]):active,
       &:not([disabled]):hover {
-        background-color: $colour-bg3-default;
-        border-color: $colour-bg3-default;
-        color: $colour-danger;
-
-        @include theme-dark {
-          background-color: $colour-text2-dark;
-          border-color: $colour-text2-dark;
-        }
+        color: var(--color-danger);
       }
     }
   }
@@ -63,9 +58,9 @@ app-bookmark {
 
     .badge {
       align-items: center;
-      background-color: $colour-text2-default;
+      background-color: var(--color-badge-bg);
       border: 0;
-      color: rgba($colour-text1-default, 0.9);
+      color: var(--color-badge-text);
       display: inline-flex;
       font-size: 0.85rem;
       font-weight: normal;
@@ -73,17 +68,10 @@ app-bookmark {
       margin: 0 0.5rem 0.5rem 0;
       max-width: 99%;
 
-      @include theme-dark {
-        background-color: $colour-bg3-dark;
-        color: rgba($colour-text1-dark, 0.9);
-      }
-
       i {
-        transition: color ease-in-out 0.2s;
-
-        @include theme-dark {
-          color: $colour-text3-dark;
-        }
+        color: var(--color-badge-text);
+        opacity: 0.5;
+        transition: opacity ease-in-out 0.2s;
       }
 
       span {
@@ -99,39 +87,24 @@ app-bookmark {
       }
 
       @media (hover: hover) {
-        &:active i {
-          color: $colour-bg2-default !important;
-
-          @include theme-dark {
-            color: $colour-text2-dark !important;
+        &:active,
+        &:hover {
+          i {
+            opacity: 1;
           }
         }
 
-        &:hover,
-        &:focus {
-          cursor: pointer;
-
-          i {
-            color: $colour-bg2-default;
-
-            @include theme-dark {
-              color: $colour-text2-dark;
-            }
-          }
+        &:focus span {
+          text-decoration: underline;
         }
       }
     }
   }
 
   .tags-input-container {
-    background-color: $colour-bg3-default;
     border-radius: $border-radius-input;
     margin-bottom: 0;
     overflow: hidden;
-
-    @include theme-dark {
-      background-color: $colour-bg3-dark;
-    }
 
     input {
       background: transparent;
@@ -143,9 +116,6 @@ app-bookmark {
     }
 
     .lookahead-container {
-      left: 1rem;
-      top: 0;
-
       .lookahead,
       .measure {
         text-transform: lowercase;

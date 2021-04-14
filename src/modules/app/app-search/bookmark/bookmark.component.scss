@@ -20,19 +20,15 @@ bookmark {
   }
 
   .bookmark-content {
-    background-color: $colour-bg3-default;
+    background-color: var(--color-bookmark-bg);
     border-radius: $border-radius-well;
     padding: 0.5rem 1rem 0.75rem;
     transition: background-color ease-in-out 0.2s;
 
-    @include theme-dark {
-      background-color: $colour-bg3-dark;
-    }
-
     .bookmark-heading {
       @include text-overflow-ellipsis;
 
-      color: $colour-text2-default;
+      color: var(--color-bookmark-heading);
       font-size: 1.2rem;
       font-weight: normal;
       line-height: 1.75rem;
@@ -40,18 +36,10 @@ bookmark {
       margin-right: 1.5rem;
       position: relative;
       transition: color ease-in-out 0.2s;
-
-      @include theme-dark {
-        color: $colour-text2-dark;
-      }
     }
 
     .bookmark-text {
-      color: $colour-text2-default;
-
-      @include theme-dark {
-        color: $colour-text2-dark;
-      }
+      color: var(--color-bookmark-text);
 
       .description {
         font-size: 0.9rem;
@@ -60,16 +48,12 @@ bookmark {
       }
 
       .url {
-        color: $colour-text3-default;
+        color: var(--color-bookmark-url);
         font-size: 0.85rem;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         width: 100%;
-
-        @include theme-dark {
-          color: $colour-text3-dark;
-        }
       }
     }
   }
@@ -90,7 +74,7 @@ bookmark {
 
   .menu {
     align-items: center;
-    background-color: rgba($colour-text2-default, 0.8);
+    background-color: var(--color-bookmark-menu-bg);
     border-radius: $border-radius-well;
     display: flex;
     height: 100%;
@@ -101,39 +85,22 @@ bookmark {
     width: 100%;
     z-index: 60;
 
-    @include theme-dark {
-      background-color: rgba($colour-bg1-dark, 0.5);
-    }
-
     .btn-fab {
-      background-color: $colour-bg3-default;
-      color: $colour-text2-default;
+      background-color: var(--color-bookmark-menu-button-bg);
+      color: var(--color-bookmark-menu-button-icon);
       position: static;
 
-      @include theme-dark {
-        background-color: $colour-text3-dark;
-        color: $colour-text1-dark;
-      }
-
       &.btn-delete-bookmark {
-        background-color: $colour-danger;
-        color: $colour-text1-default;
-
-        @include theme-dark {
-          color: $colour-text1-dark;
-        }
+        background-color: var(--color-danger);
+        color: var(--color-bookmark-menu-button-delete-icon);
       }
     }
   }
 
   .separator {
-    background-color: rgba($colour-text2-default, 0.3);
+    background-color: var(--color-separator-bg);
     box-shadow: none;
     height: 0.5rem;
-
-    @include theme-dark {
-      background-color: rgba($colour-text2-dark, 0.15);
-    }
 
     @media (hover: hover) {
       &:hover {
@@ -146,11 +113,7 @@ bookmark {
     &:focus,
     &:hover {
       & > .bookmark-content {
-        background-color: scale-color($colour-bg2-default, $lightness: 70%, $saturation: 50%);
-
-        @include theme-dark {
-          background-color: lighten($colour-bg3-dark, 7%);
-        }
+        background-color: var(--color-bookmark-bg-hover);
       }
     }
 

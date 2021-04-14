@@ -1,4 +1,4 @@
-<div class="theme-content" ng-class="vm.darkModeEnabled ? 'theme-dark' : 'theme-default'" ng-show="vm.initialised">
+<div class="theme-container" ng-class="{ 'theme-dark': vm.darkModeEnabled }" ng-show="vm.initialised">
   <div class="container" ng-class="{ 'search': vm.currentView === vm.AppViewType.Search }">
     <app-working cancel-action="vm.workingCancelAction" full-view-mode="vm.currentView === vm.AppViewType.Working">
     </app-working>

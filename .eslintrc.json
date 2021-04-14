@@ -54,6 +54,7 @@
     ],
     "simple-import-sort/exports": "warn",
     "sort-imports": "off",
+    "spaced-comment": "off",
     "unused-imports/no-unused-imports-ts": "warn"
   }
 }

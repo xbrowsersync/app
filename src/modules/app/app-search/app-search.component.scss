@@ -40,18 +40,14 @@ app-search {
     }
 
     .search-form {
-      background-color: $colour-bg3-default;
+      background-color: var(--color-input-bg);
       border-radius: $border-radius-input;
       flex: 0 1 100%;
       margin-bottom: 0;
       position: relative;
 
-      @include theme-dark {
-        background-color: $colour-bg3-dark;
-      }
-
       label {
-        color: $colour-text3-default;
+        color: var(--color-input-placeholder);
         font-size: 0.85em;
         left: 0.75rem;
         margin-bottom: 0;
@@ -59,10 +55,6 @@ app-search {
         position: absolute;
         top: 50%;
         z-index: 60;
-
-        @include theme-dark {
-          color: $colour-text3-dark;
-        }
       }
 
       input {
@@ -76,11 +68,7 @@ app-search {
         z-index: 50;
 
         &::placeholder {
-          color: $colour-text3-default;
-
-          @include theme-dark {
-            color: $colour-text3-dark;
-          }
+          color: var(--color-input-placeholder);
         }
       }
 
@@ -93,9 +81,10 @@ app-search {
       }
 
       .lookahead-container {
+        border: 0;
         font-size: 1.1em;
         left: 1.5em;
-        top: 0;
+        line-height: 1.5em;
         width: calc(100% - 3em);
       }
     }

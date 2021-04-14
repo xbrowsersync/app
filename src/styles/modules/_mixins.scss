@@ -37,14 +37,12 @@
   word-wrap: normal;
 }
 
-@mixin theme-default() {
-  .theme-default & {
-    @content;
-  }
-}
-
 @mixin theme-dark() {
   .theme-dark & {
+    @content;
+  }
+
+  @media (prefers-color-scheme: dark) {
     @content;
   }
 }
