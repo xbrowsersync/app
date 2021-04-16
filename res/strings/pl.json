@@ -463,7 +463,7 @@
           },
           "Placeholder": {
             "key": "View_Bookmark_Form_Tags_Placeholder",
-            "default": "tag 1, tag 2, tag 3 itp."
+            "default": "tag 1, tag 2, tag 3 itp"
           },
           "Clear": {
             "key": "View_Bookmark_Form_Tags_Clear",
@@ -506,9 +506,9 @@
       "BeforeYouBegin": {
         "key": "View_Help_BeforeYouBegin",
         "default": "<h4>Zanim zaczniesz</h4><p>xBrowserSync zmodyfikuje dane Twojej lokalnej przeglądarki, więc utworzenie kopii zapasowej zakładek i innych danych przeglądarki jest dobrym pomysłem na wszelki wypadek, i jeśli używasz innych usług lub narzędzi synchronizacji przeglądarki (takich jak <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) proszę wyłączyć je, aby uniknąć konfliktów.</p>",
-        "brave": "<h4>Zanim zaczniesz</h4><p>xBrowserSync zmodyfikuje dane Twojej lokalnej przeglądarki, więc utworzenie kopii zapasowej zakładek i innych danych przeglądarki jest dobrym pomysłem na wszelki wypadek, i jeśli używasz innych usług lub narzędzi synchronizacji przeglądarki (takich jak <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Google Chrome Sync</a>) proszę wyłączyć je, aby uniknąć konfliktów.</p>",
-        "edge": "<h4>Zanim zaczniesz</h4><p>xBrowserSync zmodyfikuje dane Twojej lokalnej przeglądarki, więc utworzenie kopii zapasowej zakładek i innych danych przeglądarki jest dobrym pomysłem na wszelki wypadek, i jeśli używasz innych usług lub narzędzi synchronizacji przeglądarki (takich jak <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Google Chrome Sync</a>) proszę wyłączyć je, aby uniknąć konfliktów.</p>",
-        "firefox": "<h4>Zanim zaczniesz</h4><p>xBrowserSync zmodyfikuje dane Twojej lokalnej przeglądarki, więc utworzenie kopii zapasowej zakładek i innych danych przeglądarki jest dobrym pomysłem na wszelki wypadek, i jeśli używasz innych usług lub narzędzi synchronizacji przeglądarki (takich jak <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Google Chrome Sync</a>) proszę wyłączyć je, aby uniknąć konfliktów.</p>"
+        "brave": "<h4>Zanim zaczniesz</h4><p>xBrowserSync zmodyfikuje dane Twojej lokalnej przeglądarki, więc utworzenie kopii zapasowej zakładek i innych danych przeglądarki jest dobrym pomysłem na wszelki wypadek, i jeśli używasz innych usług lub narzędzi synchronizacji przeglądarki (takich jak <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) proszę wyłączyć je, aby uniknąć konfliktów.</p>",
+        "edge": "<h4>Zanim zaczniesz</h4><p>xBrowserSync zmodyfikuje dane Twojej lokalnej przeglądarki, więc utworzenie kopii zapasowej zakładek i innych danych przeglądarki jest dobrym pomysłem na wszelki wypadek, i jeśli używasz innych usług lub narzędzi synchronizacji przeglądarki (takich jak <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) proszę wyłączyć je, aby uniknąć konfliktów.</p>",
+        "firefox": "<h4>Zanim zaczniesz</h4><p>xBrowserSync zmodyfikuje dane Twojej lokalnej przeglądarki, więc utworzenie kopii zapasowej zakładek i innych danych przeglądarki jest dobrym pomysłem na wszelki wypadek, i jeśli używasz innych usług lub narzędzi synchronizacji przeglądarki (takich jak <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) proszę wyłączyć je, aby uniknąć konfliktów.</p>"
       },
       "ExistingId": {
         "key": "View_Help_ExistingId",
@@ -548,9 +548,9 @@
       },
       "Shortcuts": {
         "key": "View_Help_Shortcuts",
-        "default": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do chrome://extensions/skróty i zaktualizuj dostępne skróty w xBrowserSync.</p>",
-        "brave": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do chrome://extensions/skróty i zaktualizuj dostępne skróty w xBrowserSync.</p>",
-        "edge": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do chrome://extensions/skróty i zaktualizuj dostępne skróty w xBrowserSync.</p>",
+        "default": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do chrome://extensions/shortcuts i zaktualizuj dostępne skróty w xBrowserSync.</p>",
+        "brave": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do brave://extensions/shortcuts i zaktualizuj dostępne skróty w xBrowserSync.</p>",
+        "edge": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do edge://extensions/shortcuts i zaktualizuj dostępne skróty w xBrowserSync.</p>",
         "firefox": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do chrome://extensions/skróty i zaktualizuj dostępne skróty w xBrowserSync.</p>"
       },
       "SyncId": {
@@ -693,9 +693,9 @@
           "Content": {
             "key": "View_Login_Sync_DisableOthers_Content",
             "default": "Synchronizowanie danych przeglądarki z xBrowserSync, podczas gdy inne narzędzia synchronizacji zakładek (takie jak <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) są aktywne, mogą spowodować duplikację i być może uszkodzenie danych. Proszę je wyłączyć przed kontynuowaniem.",
-            "brave": "Synchronizowanie danych przeglądarki z xBrowserSync, podczas gdy inne narzędzia synchronizacji zakładek (takie jak <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Google Chrome Sync</a>) są aktywne, mogą spowodować duplikację i być może uszkodzenie danych. Proszę je wyłączyć przed kontynuowaniem.",
-            "edge": "Synchronizowanie danych przeglądarki z xBrowserSync, podczas gdy inne narzędzia synchronizacji zakładek (takie jak <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Google Chrome Sync</a>) są aktywne, mogą spowodować duplikację i być może uszkodzenie danych. Proszę je wyłączyć przed kontynuowaniem.",
-            "firefox": "Synchronizowanie danych przeglądarki z xBrowserSync, podczas gdy inne narzędzia synchronizacji zakładek (takie jak <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Google Chrome Sync</a>) są aktywne, mogą spowodować duplikację i być może uszkodzenie danych. Proszę je wyłączyć przed kontynuowaniem."
+            "brave": "Synchronizowanie danych przeglądarki z xBrowserSync, podczas gdy inne narzędzia synchronizacji zakładek (takie jak <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) są aktywne, mogą spowodować duplikację i być może uszkodzenie danych. Proszę je wyłączyć przed kontynuowaniem.",
+            "edge": "Synchronizowanie danych przeglądarki z xBrowserSync, podczas gdy inne narzędzia synchronizacji zakładek (takie jak <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) są aktywne, mogą spowodować duplikację i być może uszkodzenie danych. Proszę je wyłączyć przed kontynuowaniem.",
+            "firefox": "Synchronizowanie danych przeglądarki z xBrowserSync, podczas gdy inne narzędzia synchronizacji zakładek (takie jak <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) są aktywne, mogą spowodować duplikację i być może uszkodzenie danych. Proszę je wyłączyć przed kontynuowaniem."
           }
         },
         "Enable": {
@@ -713,7 +713,7 @@
           },
           "Content": {
             "key": "View_Login_Sync_Upgrade_Content",
-            "default": "<p>This sync ID must be upgraded in order to sync with this version of xBrowserSync. After upgrading, you will not be able to sync with previous versions of xBrowserSync.</p><p>Ensure you have updated all of your xBrowserSync apps before continuing. Ready to proceed?</p>"
+            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync. After upgrading, you will no longer be able to sync with any previous versions of xBrowserSync.</p><p>Make sure to update xBrowserSync on all synced devices before continuing. Ready to proceed?</p>"
           }
         }
       },
