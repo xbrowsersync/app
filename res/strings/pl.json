@@ -551,7 +551,7 @@
         "default": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do chrome://extensions/shortcuts i zaktualizuj dostępne skróty w xBrowserSync.</p>",
         "brave": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do brave://extensions/shortcuts i zaktualizuj dostępne skróty w xBrowserSync.</p>",
         "edge": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do edge://extensions/shortcuts i zaktualizuj dostępne skróty w xBrowserSync.</p>",
-        "firefox": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić skrót, przejdź do chrome://extensions/skróty i zaktualizuj dostępne skróty w xBrowserSync.</p>"
+        "firefox": "<h4>Użyj skrótów!</h4><p>Aby szybko wyszukać zakładki, użyj domyślnego skrótu klawiszowego (Ctrl+Space), aby aktywować rozszerzenie, następnie po prostu naciśnij Enter, aby wyświetlić ostatnie zakładki lub zacznij pisać aby wyszukać.</p><p>Aby zmienić przypisany skrót klawiszowy, przejdź do about:addons, wybierz z menu Opcji \"Zarządzaj skrótami rozszerzeń\" i zaktualizuj dostępne skróty dla xBrowserSync.</p>"
       },
       "SyncId": {
         "key": "View_Help_SyncId",
@@ -713,7 +713,7 @@
           },
           "Content": {
             "key": "View_Login_Sync_Upgrade_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync. After upgrading, you will no longer be able to sync with any previous versions of xBrowserSync.</p><p>Make sure to update xBrowserSync on all synced devices before continuing. Ready to proceed?</p>"
+            "default": "<p>Twoja synchronizacja musi zostać zaktualizowana przed synchronizacją z tą wersją xBrowserSync. Po aktualizacji nie będziesz już w stanie synchronizować z poprzednimi wersjami xBrowserSync.</p><p>Upewnij się, że chcesz zaktualizować xBrowserSync na wszystkich zsynchronizowanych urządzeniach przed kontynuowaniem. Czy chcesz kontynuować?</p>"
           }
         }
       },
