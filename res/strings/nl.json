@@ -463,7 +463,7 @@
           },
           "Placeholder": {
             "key": "View_Bookmark_Form_Tags_Placeholder",
-            "default": "label 1, label 2, label 3, etc."
+            "default": "label 1, label 2, label 3, etc"
           },
           "Clear": {
             "key": "View_Bookmark_Form_Tags_Clear",
@@ -929,11 +929,11 @@
           },
           "Description": {
             "key": "View_Settings_Issues_Tracker_Description",
-            "default": "Report an issue to report a bug or request a new feature."
+            "default": "Create a new issue to report a bug or request a feature."
           },
           "Report": {
             "key": "View_Settings_Issues_Tracker_Report",
-            "default": "Report issue"
+            "default": "Create issue"
           }
         },
         "Log": {
