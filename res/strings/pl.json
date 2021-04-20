@@ -1097,11 +1097,11 @@
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Synchronizacja jest aktualna."
+            "default": "Up to date (last synced {date})"
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "Dostępne aktualizacje, następna synchronizacja o"
+            "default": "Updates available (next sync {date})"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
