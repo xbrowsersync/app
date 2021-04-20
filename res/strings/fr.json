@@ -747,7 +747,7 @@
       },
       "Content": {
         "key": "View_Permissions_Content",
-        "default": "<p>xBrowserSync automatically enriches bookmarks added using the browser’s Add Bookmark button with available metadata. To enable this, xBrowserSync <a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>requires additional permissions</a> to be able to read visited website data.</p><p>Please indicate if prompted if you are happy to grant these permissions, alternatively you can add or remove permissions at any time in the Settings panel.</p>"
+        "default": "<p>xBrowserSync enrichit automatiquement les signets ajoutés en utilisant le bouton Ajouter un signet avec les métadonnées disponibles. Pour activer ceci, xBrowserSync <a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>nécessite des autorisations supplémentaires</a> pour pouvoir lire les données du site visité.</p><p>Veuillez indiquer si vous y êtes invité si vous êtes heureux d'accorder ces autorisations. Vous pouvez ajouter ou supprimer des autorisations à tout moment dans le panneau Paramètres.</p>"
       }
     },
     "Scan": {
@@ -983,7 +983,7 @@
           },
           "Description": {
             "key": "View_Settings_Permissions_Read_Description",
-            "default": "Required to automatically add metadata to bookmarks when using the browser’s “Bookmark this page” button (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>more info</a>)."
+            "default": "Requis pour ajouter automatiquement des métadonnées aux signets lorsque vous utilisez le bouton « Marquer cette page» du navigateur (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>plus d'infos</a>)."
           }
         },
         "Remove": {
@@ -995,11 +995,11 @@
         "AutoFetchMetadata": {
           "Label": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Label",
-            "default": "Auto-fetch bookmark metadata"
+            "default": "Récupération automatique des métadonnées du signet"
           },
           "Description": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Description",
-            "default": "Retrieve metadata automatically when adding a bookmark."
+            "default": "Récupérer automatiquement les métadonnées lors de l'ajout d'un signet."
           }
         },
         "CheckForAppUpdates": {
