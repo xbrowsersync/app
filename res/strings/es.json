@@ -341,15 +341,15 @@
     },
     "SyncVersionNotSupported_Message": {
       "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "This ID cannot be synced with this version of xBrowserSync as the sync has been upgraded to a later version."
+      "default": "Este ID no puede ser sincronizado con esta versión de xBrowserSync ya que la sincronización se actualizó a una versión posterior."
     },
     "SyncVersionNotSupported_Restore_Message": {
       "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "The backup data cannot be restored by this version of xBrowserSync as it was created with a later version."
+      "default": "Los datos de la copia no pueden ser restaurados por esta versión de xBrowserSync ya que fueron creados con una versión posterior."
     },
     "SyncVersionNotSupported_Title": {
       "key": "Exception_SyncVersionNotSupported_Title",
-      "default": "Sync version not supported"
+      "default": "No se admite la versión de sincronizado"
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
@@ -501,14 +501,14 @@
       "BackingUp": {
         "key": "View_Help_BackingUp",
         "default": "<h4>Recuerde hacer una copia de seguridad</h4><p>Cuando utilice xBrowserSync sus datos son su responsabilidad, así que sea inteligente y asegúrese de hacer copias de seguridad.</p><p>Diríjase al panel de Ajustes y haga una copia de seguridad de sus datos no cifrados en un archivo local que puede utilizarse para restaurar tus datos si lo necesita.</p><p>Si los datos de su navegador local se corrompen y no tiene ninguna copia de seguridad, puede en cualquier momento revertir sus datos a su estado original desde la instalación de xBrowserSync.</p>",
-        "android": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
+        "android": "<h4>Recuerde hacer una copia de seguridad</h4><p>Cuando utilice xBrowserSync sus datos son su responsabilidad, así que sea inteligente y recuerde hacer copias de seguridad.</p><p>Diríjase al panel de Ajustes y haga una copia de seguridad de sus datos no cifrados en un archivo local que puede utilizarse para restaurar tus datos si lo necesita.</p>"
       },
       "BeforeYouBegin": {
         "key": "View_Help_BeforeYouBegin",
-        "default": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) please disable them to avoid conflicts.</p>",
-        "brave": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) please disable them to avoid conflicts.</p>",
-        "edge": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) please disable them to avoid conflicts.</p>",
-        "firefox": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) please disable them to avoid conflicts.</p>"
+        "default": "<h4>Antes de comenzar</h4><p>xBrowserSync modifica los datos locales de tu navegador por eso es buena idea realizar una copia de seguridad de tus marcadores y de otros datos del navegador por si acaso, y si estás usando cualquier otra herramienta o servicio de sincronización de navegador (como <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>), por favor deshabilítalas para evitar conflictos.</p>",
+        "brave": "<h4>Antes de comenzar</h4><p>xBrowserSync modifica los datos locales de tu navegador por eso es buena idea realizar una copia de seguridad de tus marcadores y de otros datos del navegador por si acaso, y si estás usando cualquier otra herramienta o servicio de sincronización de navegador (como <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>), por favor deshabilítalas para evitar conflictos.</p>",
+        "edge": "<h4>Antes de comenzar</h4><p>xBrowserSync modifica los datos locales de tu navegador por eso es buena idea realizar una copia de seguridad de tus marcadores y de otros datos del navegador por si acaso, y si estás usando cualquier otra herramienta o servicio de sincronización de navegador (como <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Edge Sync</a>), por favor deshabilítalas para evitar conflictos.</p>",
+        "firefox": "<h4>Antes de comenzar</h4><p>xBrowserSync modifica los datos locales de tu navegador por eso es buena idea realizar una copia de seguridad de tus marcadores y de otros datos del navegador por si acaso, y si estás usando cualquier otra herramienta o servicio de sincronización de navegador (como <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>), por favor deshabilítalas para evitar conflictos.</p>"
       },
       "ExistingId": {
         "key": "View_Help_ExistingId",
