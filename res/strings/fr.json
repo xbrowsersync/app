@@ -345,11 +345,11 @@
     },
     "SyncVersionNotSupported_Restore_Message": {
       "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "The backup data cannot be restored by this version of xBrowserSync as it was created with a later version."
+      "default": "La sauvegarde ne peut pas être restaurée par cette version de xBrowserSync car elle a été créée avec une version ultérieure."
     },
     "SyncVersionNotSupported_Title": {
       "key": "Exception_SyncVersionNotSupported_Title",
-      "default": "Sync version not supported"
+      "default": "Version de synchronisation non prise en charge"
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
