@@ -28,11 +28,8 @@
         </div>
         <div class="description updates-available"
              ng-if="vm.updatesAvailable !== undefined && !vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
-          <p ng-if="!vm.updatesAvailable">{{
-        vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.UpdatesAvailable.False) }}</p>
-          <p ng-if="vm.updatesAvailable">{{
-        vm.platformSvc.getI18nString(vm.Strings.View.Settings.Sync.UpdatesAvailable.True) }} {{
-        vm.nextAutoUpdate }}.</p>
+          <p ng-if="!vm.updatesAvailable">{{ vm.lastUpdated }}</p>
+          <p ng-if="vm.updatesAvailable">{{ vm.nextUpdate }}.</p>
         </div>
       </div>
       <div class="form-group setting-group">

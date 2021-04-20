@@ -39,7 +39,8 @@ export default class SyncSettingsComponent implements OnInit {
   apiServiceStatus = ApiServiceStatus;
   dataUsageProgressWidth = 0;
   displayQr = false;
-  nextAutoUpdate: string;
+  lastUpdated: string;
+  nextUpdate: string;
   serviceInfo: ApiServiceInfo;
   syncDataSize: number;
   syncDataUsed: number;
@@ -91,6 +92,42 @@ export default class SyncSettingsComponent implements OnInit {
     $scope.$on(AppEventType.RefreshSyncDataUsage, () => this.refreshSyncDataUsage());
   }
 
+  checkForSyncUpdates(): ng.IPromise<void> {
+    return this.$q
+      .all([
+        this.syncEngineSvc.checkForUpdates(),
+        this.appHelperSvc.getNextScheduledSyncUpdateCheck(),
+        this.storeSvc.get<string>(StoreKey.LastUpdated)
+      ])
+      .then((results) => {
+        if (results[0]) {
+          this.updatesAvailable = true;
+          const nextUpdateDate = new Date(results[1]);
+          this.nextUpdate = this.platformSvc
+            .getI18nString(this.Strings.View.Settings.Sync.UpdatesAvailable.True)
+            .replace('{date}', nextUpdateDate.toLocaleTimeString());
+        } else {
+          this.updatesAvailable = false;
+          const lastUpdatedDate = new Date(results[2]);
+          this.lastUpdated = this.platformSvc
+            .getI18nString(this.Strings.View.Settings.Sync.UpdatesAvailable.False)
+            .replace('{date}', lastUpdatedDate.toLocaleString());
+        }
+      })
+      .catch((err) => {
+        // Swallow error if sync failed due to network connection
+        if (
+          this.networkSvc.isNetworkConnectionError(err) ||
+          err instanceof Exceptions.InvalidServiceException ||
+          err instanceof Exceptions.ServiceOfflineException
+        ) {
+          return;
+        }
+
+        throw err;
+      });
+  }
+
   closeQrPanel(): void {
     this.displayQr = false;
   }
@@ -127,28 +164,7 @@ export default class SyncSettingsComponent implements OnInit {
 
         // Check for available sync updates on non-mobile platforms
         if (this.syncEnabled && !this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
-          this.$q
-            .all([this.syncEngineSvc.checkForUpdates(), this.appHelperSvc.getNextScheduledSyncUpdateCheck()])
-            .then((results) => {
-              if (results[0]) {
-                this.updatesAvailable = true;
-                this.nextAutoUpdate = results[1];
-              } else {
-                this.updatesAvailable = false;
-              }
-            })
-            .catch((err) => {
-              // Swallow error if sync failed due to network connection
-              if (
-                this.networkSvc.isNetworkConnectionError(err) ||
-                err instanceof Exceptions.InvalidServiceException ||
-                err instanceof Exceptions.ServiceOfflineException
-              ) {
-                return;
-              }
-
-              throw err;
-            });
+          this.checkForSyncUpdates();
         }
       });
   }

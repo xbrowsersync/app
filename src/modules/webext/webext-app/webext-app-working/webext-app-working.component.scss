@@ -8,7 +8,7 @@ app-working {
 
     color: var(--color-spinner);
     font-size: 1.1rem;
-    margin: 0.2rem;
+    margin: 1rem 0 0;
   }
 
   .buttons {
@@ -25,13 +25,14 @@ app-working {
   }
 
   .spinner-border {
-    height: 30vw;
-    position: absolute;
-    width: 30vw;
+    height: 20vw;
+    width: 20vw;
   }
 
   .overlay {
     @include animation-fade-in();
+
+    flex-direction: column;
 
     &.fullsize {
       height: 37rem;
