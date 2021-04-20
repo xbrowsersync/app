@@ -495,12 +495,12 @@
     "Help": {
       "AddingBookmarks": {
         "key": "View_Help_AddingBookmarks",
-        "default": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s “Bookmark this page” button as normal and xBrowserSync will automatically populate the bookmark’s properties (optional permissions must be granted for this to work, check the Settings panel).</p>",
-        "android": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be fetched for you, otherwise add a description and some tags to ensure better search results.</p>"
+        "default": "<h4>Ajout d'un signet</h4><p>Sauvegardez la page actuelle en cliquant sur l'icône de signet dans le panneau de recherche. Les propriétés du favori seront remplies automatiquement pour vous, sinon ajoutez une description et quelques balises pour assurer de meilleurs résultats de recherche.</p><p>Sinon, cliquez simplement sur le bouton “Marquer cette page” du navigateur comme normal et xBrowserSync remplira automatiquement les propriétés du signet (les autorisations facultatives doivent être accordées pour que cela fonctionne, vérifiez le panneau Paramètres).</p>",
+        "android": "<h4>Ajout d'un signet</h4><p>Ajoutez facilement des signets en partageant sur xBrowserSync à partir de toutes les applications qui partagent des URL tels que navigateurs, YouTube, Spotify et bien plus encore.</p><p>Les propriétés du favori seront récupérées pour vous, sinon ajoutez une description et quelques balises pour assurer de meilleurs résultats de recherche.</p>"
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time revert your data back to it’s original state from when xBrowserSync was installed.</p>",
+        "default": "<h4>N'oubliez pas de sauvegarder</h4><p>Lorsque vous utilisez xBrowserSync vos données sont de votre responsabilité, alors soyez vigilant et assurez-vous de faire des sauvegardes.</p><p>Rendez-vous sur le panneau Paramètres et sauvegardez vos données non chiffrées dans un fichier local qui peut être utilisé pour restaurer vos données si vous en avez besoin.</p><p>Si les données de votre navigateur local sont corrompues et que vous n'avez aucune sauvegarde, vous pouvez à tout moment rétablir l'état d'origine de vos données depuis l'installation de xBrowserSync.</p>",
         "android": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
       },
       "BeforeYouBegin": {
@@ -1035,11 +1035,11 @@
         "SearchBar": {
           "Label": {
             "key": "View_Settings_Prefs_SearchBar_Label",
-            "default": "Switch search bar position"
+            "default": "Changer la position de la barre de recherche"
           },
           "Description": {
             "key": "View_Settings_Prefs_SearchBar_Description",
-            "default": "Show search bar beneath results."
+            "default": "Afficher la barre de recherche en-dessous des résultats."
           }
         },
         "SyncToolbar": {
@@ -1083,11 +1083,11 @@
         "Data": {
           "Label": {
             "key": "View_Settings_Sync_Data_Label",
-            "default": "Data usage"
+            "default": "Utilisation des données"
           },
           "Description": {
             "key": "View_Settings_Sync_Data_Description",
-            "default": "How much of the sync data allowed by the service are you using."
+            "default": "Quantité de données de synchronisation autorisées par le service utilisées."
           }
         },
         "Service": {
@@ -1142,7 +1142,7 @@
       },
       "Support": {
         "key": "View_Settings_Support",
-        "default": "Support xBrowserSync"
+        "default": "Soutenir xBrowserSync"
       }
     },
     "Support": {
