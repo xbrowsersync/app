@@ -895,18 +895,18 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Revert_Done",
-            "default": "Your data has been reverted to initial installation state."
+            "default": "Sus datos han sido revertidos al estado de instalación inicial."
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Revert_Unavailable",
-            "default": "Installation state data not available, unable to revert."
+            "default": "Datos de estado de instalación no disponibles, no se puede revertir."
           }
         }
       },
       "Issues": {
         "Title": {
           "key": "View_Settings_Issues_Title",
-          "default": "Issues"
+          "default": "Incidencias"
         },
         "Help": {
           "Title": {
@@ -915,7 +915,7 @@
           },
           "Description": {
             "key": "View_Settings_Issues_Help_Description",
-            "default": "Got a question or having an issue? Make sure to read through the help guide, otherwise the answer may be in the FAQs."
+            "default": "¿Tienes alguna pregunta o tienes un problema? Asegúrate de leer la guía de ayuda, de lo contrario la respuesta puede estar en las preguntas frecuentes."
           },
           "ViewFaqs": {
             "key": "View_Settings_Issues_Help_ViewFaqs",
@@ -925,7 +925,7 @@
         "Tracker": {
           "Title": {
             "key": "View_Settings_Issues_Tracker_Title",
-            "default": "Issues tracker"
+            "default": "Gestor de incidencias"
           },
           "Description": {
             "key": "View_Settings_Issues_Tracker_Description",
@@ -939,42 +939,42 @@
         "Log": {
           "Title": {
             "key": "View_Settings_Issues_Log_Title",
-            "default": "Application log"
+            "default": "Registros de aplicación"
           },
           "Description": {
             "key": "View_Settings_Issues_Log_Description",
-            "default": "Download and include the application log when you log an issue."
+            "default": "Descargue e incluya el registro de la aplicación cuando registre un problema."
           },
           "Clear": {
             "key": "View_Settings_Issues_Log_Clear",
-            "default": "Clear log"
+            "default": "Limpiar registros"
           },
           "Download": {
             "key": "View_Settings_Issues_Log_Download",
-            "default": "Download log"
+            "default": "Descargar registro"
           },
           "Size": {
             "key": "View_Settings_Issues_Log_Size",
-            "default": "Current log size"
+            "default": "Tamaño actual del log"
           }
         }
       },
       "Permissions": {
         "Title": {
           "key": "View_Settings_Permissions_Title",
-          "default": "Optional permissions"
+          "default": "Permisos opcionales"
         },
         "Add": {
           "key": "View_Settings_Permissions_Add",
-          "default": "Grant permissions"
+          "default": "Otorgar permisos"
         },
         "Granted": {
           "key": "View_Settings_Permissions_Granted",
-          "default": "Granted"
+          "default": "Otorgado"
         },
         "NotGranted": {
           "key": "View_Settings_Permissions_NotGranted",
-          "default": "Not granted"
+          "default": "No otorgado"
         },
         "Read": {
           "Title": {
@@ -983,7 +983,7 @@
           },
           "Description": {
             "key": "View_Settings_Permissions_Read_Description",
-            "default": "Required to automatically add metadata to bookmarks when using the browser’s “Bookmark this page” button (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>more info</a>)."
+            "default": "Requerido para añadir automáticamente metadatos a marcadores al usar el botón \"Marcar esta página\" del navegador (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>más información</a>)."
           }
         },
         "Remove": {
@@ -995,11 +995,11 @@
         "AutoFetchMetadata": {
           "Label": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Label",
-            "default": "Auto-fetch bookmark metadata"
+            "default": "Auto-recuperar metadatos de marcadores"
           },
           "Description": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Description",
-            "default": "Retrieve metadata automatically when adding a bookmark."
+            "default": "Recuperar metadatos automáticamente al añadir un marcador."
           }
         },
         "CheckForAppUpdates": {
@@ -1009,7 +1009,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
-            "default": "Display an alert when a new version of xBrowserSync is available."
+            "default": "Mostrar una alerta cuando una nueva versión de xBrowserSync esté disponible."
           }
         },
         "DarkMode": {
@@ -1029,31 +1029,31 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Description",
-            "default": "Display bookmark folders by default."
+            "default": "Mostrar carpetas de marcadores por defecto."
           }
         },
         "SearchBar": {
           "Label": {
             "key": "View_Settings_Prefs_SearchBar_Label",
-            "default": "Switch search bar position"
+            "default": "Cambiar la posición de la barra de búsqueda"
           },
           "Description": {
             "key": "View_Settings_Prefs_SearchBar_Description",
-            "default": "Show search bar beneath results."
+            "default": "Mostrar la barra de búsqueda debajo de los resultados."
           }
         },
         "SyncToolbar": {
           "Label": {
             "key": "View_Settings_Prefs_SyncToolbar_Label",
-            "default": "Sync bookmarks toolbar"
+            "default": "Sincronizar barra de herramientas de marcadores"
           },
           "Description": {
             "key": "View_Settings_Prefs_SyncToolbar_Description",
-            "default": "Disable this setting to display different toolbar bookmarks across synced browsers."
+            "default": "Deshabilita esta opción para mostrar diferentes marcadores de la barra de herramientas a través de navegadores sincronizados."
           },
           "Confirmation": {
             "key": "View_Settings_Prefs_SyncToolbar_Confirmation",
-            "default": "<p>Enabling this setting will replace the bookmarks currently in the bookmarks toolbar with your synced bookmarks.</p><p>OK to proceed?</p>"
+            "default": "<p>Habilitar esta configuración reemplazará los marcadores actualmente en la barra de herramientas de marcadores con sus marcadores sincronizados.</p><p>¿Está seguro de continuar?</p>"
           }
         },
         "Title": {
@@ -1077,7 +1077,7 @@
           },
           "Description": {
             "key": "View_Settings_Sync_Id_Description",
-            "default": "Use your sync ID to connect to your synced data on other devices (click to reveal QR code)."
+            "default": "Usa tu ID de sincronización para conectarte a tus datos sincronizados en otros dispositivos (haz clic para revelar código QR)."
           }
         },
         "Data": {
@@ -1087,7 +1087,7 @@
           },
           "Description": {
             "key": "View_Settings_Sync_Data_Description",
-            "default": "How much of the sync data allowed by the service are you using."
+            "default": "Cuántos de los datos de sincronización permitidos por el servicio está utilizando."
           }
         },
         "Service": {
@@ -1101,29 +1101,29 @@
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "Updates available, next sync at"
+            "default": "Actualizaciones disponibles, siguiente sincronización en"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
-            "default": "Update Sync"
+            "default": "Actualizar sincronización"
           }
         },
         "Qr": {
           "Description": {
             "key": "View_Settings_Sync_Qr_Description",
-            "default": "Scan this QR code using the xBrowserSync Android app to connect to your synced data."
+            "default": "Escanee este código QR usando la aplicación xBrowserSync Android para conectarse a sus datos sincronizados."
           },
           "Show": {
             "key": "View_Settings_Sync_Qr_Show",
-            "default": "Show QR code"
+            "default": "Mostrar código QR"
           },
           "Copy": {
             "key": "View_Settings_Sync_Qr_Copy",
-            "default": "Copy sync ID to clipboard"
+            "default": "Copiar ID de sincronización al portapapeles"
           },
           "Copied": {
             "key": "View_Settings_Sync_Qr_Copied",
-            "default": "Copied!"
+            "default": "¡Copiado!"
           }
         }
       },
