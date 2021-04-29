@@ -1097,11 +1097,11 @@
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Up to date (last synced {date})"
+            "default": "Bijgewerkt (laatste sync {date})"
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "Updates available (next sync {date})"
+            "default": "Updates beschikbaar (volgende sync {date})"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
