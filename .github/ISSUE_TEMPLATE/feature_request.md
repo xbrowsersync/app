@@ -4,6 +4,7 @@ about: Suggest an idea to improve xBrowserSync
 title: ''
 labels: ''
 assignees: ''
+
 ---
 
 <!--
