@@ -6,6 +6,9 @@ enum BookmarkChangeType {
   Remove = 'remove'
 }
 
+// when adding a new container, add a translation to bookmark-helper.service.ts getBookmarkTitleForDisplay(...)
+// do NOT reference any of these constants unless you absolutely have to
+// (e.g. .Toolbar in conjunction with SettingsSvc.syncBookmarksToolbar() )
 enum BookmarkContainer {
   Menu = '[xbs] Menu',
   Mobile = '[xbs] Mobile',

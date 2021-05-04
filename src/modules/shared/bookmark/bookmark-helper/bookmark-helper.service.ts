@@ -213,15 +213,8 @@ export default class BookmarkHelperService {
   }
 
   getBookmarkType(bookmark: Bookmark): BookmarkType {
-    const bookmarkType = BookmarkType.Bookmark;
-
     // Check if container
-    if (
-      bookmark.title === BookmarkContainer.Menu ||
-      bookmark.title === BookmarkContainer.Mobile ||
-      bookmark.title === BookmarkContainer.Other ||
-      bookmark.title === BookmarkContainer.Toolbar
-    ) {
+    if (Object.values(BookmarkContainer).includes(bookmark.title as BookmarkContainer)) {
       return BookmarkType.Container;
     }
 
@@ -235,7 +228,7 @@ export default class BookmarkHelperService {
       return BookmarkType.Separator;
     }
 
-    return bookmarkType;
+    return BookmarkType.Bookmark;
   }
 
   getCachedBookmarks(): ng.IPromise<Bookmark[] | undefined> {
@@ -520,32 +513,6 @@ export default class BookmarkHelperService {
       }
     });
     return this.$q.resolve(updatedBookmarks);
-  }
-
-  removeEmptyContainers(bookmarks: Bookmark[]): Bookmark[] {
-    const menuContainer = this.getContainer(BookmarkContainer.Menu, bookmarks);
-    const mobileContainer = this.getContainer(BookmarkContainer.Mobile, bookmarks);
-    const otherContainer = this.getContainer(BookmarkContainer.Other, bookmarks);
-    const toolbarContainer = this.getContainer(BookmarkContainer.Toolbar, bookmarks);
-    const removeArr: Bookmark[] = [];
-
-    if (!menuContainer?.children?.length) {
-      removeArr.push(menuContainer);
-    }
-
-    if (!mobileContainer?.children?.length) {
-      removeArr.push(mobileContainer);
-    }
-
-    if (!otherContainer?.children?.length) {
-      removeArr.push(otherContainer);
-    }
-
-    if (!toolbarContainer?.children?.length) {
-      removeArr.push(toolbarContainer);
-    }
-
-    return bookmarks.filter((x) => !removeArr.includes(x));
   }
 
   searchBookmarks(query: any): ng.IPromise<Bookmark[]> {

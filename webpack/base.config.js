@@ -5,7 +5,13 @@ module.exports = {
   devtool: 'inline-cheap-module-source-map',
   module: {
     rules: [
-      { test: /\.ts$/, loader: 'ts-loader' },
+      {
+        test: /\.ts$/,
+        loader: 'ts-loader',
+        options: {
+          configFile: 'tsconfig.build.json'
+        }
+      },
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
