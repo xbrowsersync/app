@@ -3,6 +3,7 @@ const WebExtConfig = require('./webext.config');
 
 module.exports = Object.assign(WebExtConfig, {
   entry: {
+    ...WebExtConfig.entry,
     app: Path.resolve(__dirname, '../src/modules/webext/chromium/chromium-app/chromium-app.module.ts'),
     background: Path.resolve(
       __dirname,

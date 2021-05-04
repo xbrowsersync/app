@@ -98,4 +98,4 @@ class WebpageMetadataCollecter {
     return this.getDecodedTextValue(document.title);
   }
 }
-export default WebpageMetadataCollecter.CollectMetadata();
+export default WebpageMetadataCollecter;
