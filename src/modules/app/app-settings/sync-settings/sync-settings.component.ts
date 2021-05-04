@@ -102,7 +102,7 @@ export default class SyncSettingsComponent implements OnInit {
       .then((results) => {
         if (results[0]) {
           this.updatesAvailable = true;
-          const nextUpdateDate = new Date(results[1]);
+          const nextUpdateDate = results[1];
           this.nextUpdate = this.platformSvc
             .getI18nString(this.Strings.View.Settings.Sync.UpdatesAvailable.True)
             .replace('{date}', nextUpdateDate.toLocaleTimeString());

@@ -137,8 +137,8 @@ export default class AndroidAppHelperService extends AppHelperService {
     return pages;
   }
 
-  getNextScheduledSyncUpdateCheck(): ng.IPromise<string> {
-    return this.$q.resolve('');
+  getNextScheduledSyncUpdateCheck(): ng.IPromise<Date> {
+    return this.$q.resolve(new Date(''));
   }
 
   getSyncQueueLength(): ng.IPromise<number> {
