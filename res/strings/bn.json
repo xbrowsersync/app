@@ -99,11 +99,11 @@
     },
     "Cancel": {
       "key": "Button_Cancel",
-      "default": "Cancel"
+      "default": "বাতিল"
     },
     "Close": {
       "key": "Button_Close",
-      "default": "Close"
+      "default": "বন্ধ"
     },
     "Confirm": {
       "key": "Button_Confirm",
@@ -139,7 +139,7 @@
     },
     "OK": {
       "key": "Button_OK",
-      "default": "Got it"
+      "default": "বুঝেছি"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
@@ -147,7 +147,7 @@
     },
     "Saving": {
       "key": "Button_Saving",
-      "default": "Saving"
+      "default": "সংরক্ষণরত"
     },
     "Settings": {
       "key": "Button_Settings",
@@ -163,11 +163,11 @@
     },
     "Update": {
       "key": "Button_Update",
-      "default": "Update"
+      "default": "হালনাগাদ"
     },
     "View": {
       "key": "Button_View",
-      "default": "View"
+      "default": "প্রদর্শন"
     }
   },
   "Exception": {
@@ -405,7 +405,7 @@
       },
       "Online": {
         "key": "Service_Status_Online",
-        "default": "Online"
+        "default": "তারযোগে অবস্থিত"
       }
     }
   },
@@ -416,7 +416,7 @@
     },
     "Synced": {
       "key": "Tooltip_Synced",
-      "default": "synced"
+      "default": "সিঙ্ককৃত"
     },
     "Syncing": {
       "key": "Tooltip_Syncing",
@@ -436,7 +436,7 @@
       "Form": {
         "Title": {
           "key": "View_Bookmark_Form_Title",
-          "default": "Title"
+          "default": "শিরোনাম"
         },
         "Url": {
           "Exists": {
@@ -459,7 +459,7 @@
         "Tags": {
           "Label": {
             "key": "View_Bookmark_Form_Tags_Label",
-            "default": "Tags"
+            "default": "চিরকুট"
           },
           "Placeholder": {
             "key": "View_Bookmark_Form_Tags_Placeholder",
@@ -476,11 +476,11 @@
         },
         "Delete": {
           "key": "View_Bookmark_Form_Delete",
-          "default": "Delete"
+          "default": "মুছো"
         },
         "Share": {
           "key": "View_Bookmark_Form_Share",
-          "default": "Share"
+          "default": "ভাগ করো"
         },
         "UpdateProperties": {
           "key": "View_Bookmark_Form_UpdateProperties",
@@ -637,7 +637,7 @@
         },
         "Status": {
           "key": "View_Login_Service_Status",
-          "default": "Status"
+          "default": "অবস্থা"
         },
         "Update": {
           "Label": {
@@ -700,7 +700,7 @@
         },
         "Enable": {
           "key": "View_Login_Sync_Enable",
-          "default": "Sync"
+          "default": "সিঙ্ক"
         },
         "New": {
           "key": "View_Login_Sync_New",
@@ -767,7 +767,7 @@
       },
       "Clear": {
         "key": "View_Search_Clear",
-        "default": "Clear"
+        "default": "পরিষ্কার"
       },
       "FolderEmpty": {
         "key": "View_Search_FolderEmpty",
@@ -879,7 +879,7 @@
         "Revert": {
           "Title": {
             "key": "View_Settings_BackupRestore_Revert_Title",
-            "default": "Revert"
+            "default": "প্রত্যাবর্তন"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_Revert_Description",
@@ -891,7 +891,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Revert_Button",
-            "default": "Revert"
+            "default": "প্রত্যাবর্তন"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Revert_Done",
@@ -911,7 +911,7 @@
         "Help": {
           "Title": {
             "key": "View_Settings_Issues_Help_Title",
-            "default": "Help"
+            "default": "সহায়তা"
           },
           "Description": {
             "key": "View_Settings_Issues_Help_Description",
@@ -1064,7 +1064,7 @@
       "Sync": {
         "Title": {
           "key": "View_Settings_Sync_Title",
-          "default": "Sync"
+          "default": "সিঙ্ক"
         },
         "Disable": {
           "key": "View_Settings_Sync_Disable",
