@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync был обновлен с последними функциями и исправлениями. Нажмите для примечаний к выпуску."
+        "default": "xBrowserSync has been updated. Sync has been disabled, re-enable sync to complete the upgrade process."
       }
     },
     "BookmarkCreated": {
