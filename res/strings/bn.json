@@ -3,18 +3,18 @@
     "AppUpdateAvailable": {
       "Title": {
         "key": "Alert_AppUpdateAvailable_Title",
-        "default": "xBrowserSync update available"
+        "default": "এক্সব্রাউজারসিঙ্ক এর হালনাগাদ আছে"
       },
       "Message": {
         "key": "Alert_AppUpdateAvailable_Message",
-        "default": "{version} is available to download. Click for more information.",
-        "android": "xBrowserSync {version} is available to download."
+        "default": "ডাউনলোডের জন্য {version} তৈরি। আরো জানতে টিপ দাও।",
+        "android": "এক্সব্রাউজারসিঙ্ক এর সংস্করণ {version} ডাউনলোডের জন্য তৈরি।"
       }
     },
     "AppUpdated": {
       "Title": {
         "key": "Alert_AppUpdated_Title",
-        "default": "Updated to"
+        "default": "হালনাগাদ করা হয়েছে"
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
@@ -45,7 +45,7 @@
     },
     "Go": {
       "key": "Alert_Go",
-      "default": "Go"
+      "default": "যাও"
     },
     "WorkingOffline": {
       "Title": {
@@ -95,7 +95,7 @@
     },
     "Back": {
       "key": "Button_Back",
-      "default": "Back"
+      "default": "পিছনে"
     },
     "Cancel": {
       "key": "Button_Cancel",
@@ -107,7 +107,7 @@
     },
     "Confirm": {
       "key": "Button_Confirm",
-      "default": "Yes"
+      "default": "হ্যাঁ"
     },
     "Continue": {
       "key": "Button_Continue",
@@ -119,11 +119,11 @@
     },
     "Deny": {
       "key": "Button_Deny",
-      "default": "No"
+      "default": "না"
     },
     "Done": {
       "key": "Button_Done",
-      "default": "Done"
+      "default": "সম্পন্ন"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
@@ -135,7 +135,7 @@
     },
     "Next": {
       "key": "Button_Next",
-      "default": "Next"
+      "default": "পরবর্তী"
     },
     "OK": {
       "key": "Button_OK",
@@ -159,7 +159,7 @@
     },
     "Undo": {
       "key": "Button_Undo",
-      "default": "Undo"
+      "default": "আগের অবস্থা"
     },
     "Update": {
       "key": "Button_Update",
@@ -445,7 +445,7 @@
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
-            "default": "URL"
+            "default": "ইউআরএল"
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
@@ -732,7 +732,7 @@
         },
         "Label": {
           "key": "View_Login_SyncId_Label",
-          "default": "ID"
+          "default": "আইডি"
         },
         "New": {
           "key": "View_Login_SyncId_New",
