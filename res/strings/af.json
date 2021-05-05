@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync is opgedateer met die nuutste funksies en regstellings. Klik vir vrystellingsnotas."
+        "default": "xBrowserSync has been updated. Sync has been disabled, re-enable sync to complete the upgrade process."
       }
     },
     "BookmarkCreated": {
