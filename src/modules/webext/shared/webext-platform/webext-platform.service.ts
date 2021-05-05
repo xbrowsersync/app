@@ -176,9 +176,14 @@ export default abstract class WebExtPlatformService implements PlatformService {
 
       return browser.tabs
         .executeScript(activeTab.id, { file: this.contentScriptUrl })
+        .then(() => {
+          return browser.tabs.executeScript(activeTab.id, {
+            code: 'WebpageMetadataCollecter.CollectMetadata();'
+          });
+        })
         .then((response) => {
-          if (response?.length && response?.[0].default) {
-            metadata = response[0].default;
+          if (response?.length && response?.[0]) {
+            metadata = response[0];
           }
 
           // If no metadata returned, use the info from the active tab
