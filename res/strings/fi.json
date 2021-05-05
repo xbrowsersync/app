@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync on päivitetty uusimmilla ominaisuuksilla ja korjauksilla. Klikkaa nähdäksesi julkaisutiedot."
+        "default": "xBrowserSync has been updated. Sync has been disabled, re-enable sync to complete the upgrade process."
       }
     },
     "BookmarkCreated": {
