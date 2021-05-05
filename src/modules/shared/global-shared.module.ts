@@ -7,6 +7,7 @@ import BookmarkHelperService from './bookmark/bookmark-helper/bookmark-helper.se
 import CryptoService from './crypto/crypto.service';
 import ExceptionHandlerService from './exception/exception-handler/exception-handler.service';
 import LogService from './log/log.service';
+import MetadataService from './metadata/metadata.service';
 import NetworkService from './network/network.service';
 import SettingsService from './settings/settings.service';
 import SyncModule from './sync/sync.module';
@@ -26,6 +27,7 @@ import WorkingService from './working/working.service';
     CryptoService,
     ExceptionHandlerService,
     LogService,
+    MetadataService,
     NetworkService,
     SettingsService,
     UpgradeService,

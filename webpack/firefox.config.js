@@ -1,7 +1,8 @@
 const Path = require('path');
 const WebExtConfig = require('./webext.config');
 
-module.exports = Object.assign(WebExtConfig, {
+module.exports = {
+  ...WebExtConfig,
   entry: {
     ...WebExtConfig.entry,
     app: Path.resolve(__dirname, '../src/modules/webext/firefox/firefox-app/firefox-app.module.ts'),
@@ -10,4 +11,4 @@ module.exports = Object.assign(WebExtConfig, {
   output: {
     path: Path.resolve(__dirname, '../build/firefox/assets')
   }
-});
+};

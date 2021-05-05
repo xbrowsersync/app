@@ -18,6 +18,7 @@ import Globals from '../../../shared/global-shared.constants';
 import { MessageCommand, PlatformType } from '../../../shared/global-shared.enum';
 import { I18nObject, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
 import LogService from '../../../shared/log/log.service';
+import MetadataService from '../../../shared/metadata/metadata.service';
 import NetworkService from '../../../shared/network/network.service';
 import StoreService from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
@@ -41,6 +42,7 @@ export default class AndroidPlatformService implements PlatformService {
   alertSvc: AlertService;
   bookmarkHelperSvc: BookmarkHelperService;
   logSvc: LogService;
+  metadataSvc: MetadataService;
   networkSvc: NetworkService;
   storeSvc: StoreService;
   _syncEngineSvc: SyncEngineService;
@@ -64,6 +66,7 @@ export default class AndroidPlatformService implements PlatformService {
     'AlertService',
     'BookmarkHelperService',
     'LogService',
+    'MetadataService',
     'NetworkService',
     'StoreService',
     'UtilityService',
@@ -79,6 +82,7 @@ export default class AndroidPlatformService implements PlatformService {
     AlertSvc: AlertService,
     BookmarkHelperSvc: BookmarkHelperService,
     LogSvc: LogService,
+    MetadataSvc: MetadataService,
     NetworkSvc: NetworkService,
     StoreSvc: StoreService,
     UtilitySvc: UtilityService,
@@ -93,6 +97,7 @@ export default class AndroidPlatformService implements PlatformService {
     this.alertSvc = AlertSvc;
     this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.logSvc = LogSvc;
+    this.metadataSvc = MetadataSvc;
     this.networkSvc = NetworkSvc;
     this.storeSvc = StoreSvc;
     this.utilitySvc = UtilitySvc;
@@ -257,98 +262,11 @@ export default class AndroidPlatformService implements PlatformService {
           return reject(new Exceptions.FailedGetPageMetadataException(undefined, err));
         }
 
-        // Extract metadata values
-        const parser = new DOMParser();
-        const document = parser.parseFromString(pageContent, 'text/html');
-
-        const getDecodedTextValue = (text: string): string => {
-          if (!text) {
-            return '';
-          }
-          const txt = document.createElement('textarea');
-          txt.innerHTML = text.trim();
-          return txt.value;
-        };
-
-        const getPageDescription = (): string => {
-          const ogDescription: HTMLMetaElement =
-            document.querySelector('meta[property="OG:DESCRIPTION"]') ??
-            document.querySelector('meta[property="og:description"]');
-          if (ogDescription?.content) {
-            return getDecodedTextValue(ogDescription.content);
-          }
-
-          const twitterDescription: HTMLMetaElement =
-            document.querySelector('meta[name="TWITTER:DESCRIPTION"]') ??
-            document.querySelector('meta[name="twitter:description"]');
-          if (twitterDescription?.content) {
-            return getDecodedTextValue(twitterDescription.content);
-          }
-
-          const defaultDescription: HTMLMetaElement =
-            document.querySelector('meta[name="DESCRIPTION"]') ?? document.querySelector('meta[name="description"]');
-          if (defaultDescription?.content) {
-            return getDecodedTextValue(defaultDescription.content);
-          }
-        };
-
-        const getPageKeywords = (): string => {
-          const keywords = [];
-
-          // Get open graph tag values
-          document.querySelectorAll<HTMLMetaElement>('meta[property="OG:VIDEO:TAG"]').forEach((tag) => {
-            if (tag?.content) {
-              keywords.push(getDecodedTextValue(tag.content));
-            }
-          });
-          document.querySelectorAll<HTMLMetaElement>('meta[property="og:video:tag"]').forEach((tag) => {
-            if (tag?.content) {
-              keywords.push(getDecodedTextValue(tag.content));
-            }
-          });
-
-          // Get meta tag values
-          const metaKeywords: HTMLMetaElement =
-            document.querySelector('meta[name="KEYWORDS"]') ?? document.querySelector('meta[name="keywords"]');
-          if (metaKeywords?.content) {
-            metaKeywords.content.split(',').forEach((keyword) => {
-              if (keyword) {
-                keywords.push(getDecodedTextValue(keyword));
-              }
-            });
-          }
-
-          // Remove duplicates
-          const uniqueKeywords = keywords.filter((value, index, self) => {
-            return self.indexOf(value) === index;
-          });
-
-          if (uniqueKeywords.length > 0) {
-            return uniqueKeywords.join();
-          }
-        };
-
-        const getPageTitle = (): string => {
-          const ogTitle: HTMLMetaElement =
-            document.querySelector('meta[property="OG:TITLE"]') ?? document.querySelector('meta[property="og:title"]');
-          if (ogTitle?.content) {
-            return getDecodedTextValue(ogTitle.content);
-          }
-
-          const twitterTitle: HTMLMetaElement =
-            document.querySelector('meta[name="TWITTER:TITLE"]') ??
-            document.querySelector('meta[name="twitter:title"]');
-          if (twitterTitle?.content) {
-            return getDecodedTextValue(twitterTitle.content);
-          }
-
-          return getDecodedTextValue(document.title);
-        };
-
         // Update metadata with retrieved page data and return
-        metadata.title = getPageTitle();
-        metadata.description = getPageDescription();
-        metadata.tags = getPageKeywords();
+        const pageMetadata = this.metadataSvc.getMetadata(metadata.url, pageContent);
+        if (pageMetadata) {
+          return resolve(pageMetadata);
+        }
         resolve(metadata);
       };
 

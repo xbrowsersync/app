@@ -13,14 +13,16 @@ const generateI18nStrings = (i18n) => {
   }, {});
 };
 
-module.exports = Object.assign(BaseConfig, {
+module.exports = {
+  ...BaseConfig,
   entry: {
     app: Path.resolve(__dirname, '../src/modules/android/android-app/android-app.module.ts')
   },
   output: {
     path: Path.resolve(__dirname, '../build/android/www/assets')
   },
-  plugins: BaseConfig.plugins.concat([
+  plugins: [
+    ...BaseConfig.plugins,
     new CopyWebpackPlugin({
       patterns: [
         {
@@ -39,5 +41,5 @@ module.exports = Object.assign(BaseConfig, {
         }
       ]
     })
-  ])
-});
+  ]
+};

@@ -27,13 +27,11 @@ const convertI18nForWebExt = (i18n) => {
   }, {});
 };
 
-module.exports = Object.assign(BaseConfig, {
+module.exports = {
+  ...BaseConfig,
   entry: {
-    "webpage-metadata-collecter": {
-      import: Path.resolve(
-        __dirname,
-        '../src/modules/webext/webpage-metadata-collecter/webpage-metadata-collecter.ts'
-      ),
+    'webpage-metadata-collecter': {
+      import: Path.resolve(__dirname, '../src/modules/webext/webpage-metadata-collecter/webpage-metadata-collecter.ts'),
       library: {
         name: 'WebpageMetadataCollecter',
         type: 'var',
@@ -41,7 +39,8 @@ module.exports = Object.assign(BaseConfig, {
       }
     }
   },
-  plugins: BaseConfig.plugins.concat([
+  plugins: [
+    ...BaseConfig.plugins,
     new CopyWebpackPlugin({
       patterns: [
         {
@@ -73,5 +72,5 @@ module.exports = Object.assign(BaseConfig, {
       filename: '../background.html',
       template: Path.resolve(__dirname, '../res/webext/background.html')
     })
-  ])
-});
+  ]
+};
