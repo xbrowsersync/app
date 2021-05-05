@@ -160,7 +160,7 @@ export default abstract class AppHelperService {
       });
   }
 
-  abstract getNextScheduledSyncUpdateCheck(): ng.IPromise<string>;
+  abstract getNextScheduledSyncUpdateCheck(): ng.IPromise<Date>;
 
   abstract getSyncQueueLength(): ng.IPromise<number>;
 

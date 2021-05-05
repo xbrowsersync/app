@@ -132,13 +132,13 @@ export default abstract class WebExtAppHelperService extends AppHelperService {
 
   abstract getHelpPages(): string[];
 
-  getNextScheduledSyncUpdateCheck(): ng.IPromise<string> {
+  getNextScheduledSyncUpdateCheck(): ng.IPromise<Date> {
     return browser.alarms.get(Globals.Alarm.Name).then((alarm) => {
       if (!alarm) {
-        return '';
+        return new Date('');
       }
 
-      return (this.$filter('date') as ng.IFilterDate)(new Date(alarm.scheduledTime), 'shortTime');
+      return new Date(alarm.scheduledTime);
     });
   }
 
