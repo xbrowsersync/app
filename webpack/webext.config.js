@@ -27,50 +27,56 @@ const convertI18nForWebExt = (i18n) => {
   }, {});
 };
 
-module.exports = {
-  ...BaseConfig,
-  entry: {
-    'webpage-metadata-collecter': {
-      import: Path.resolve(__dirname, '../src/modules/webext/webpage-metadata-collecter/webpage-metadata-collecter.ts'),
-      library: {
-        name: 'WebpageMetadataCollecter',
-        type: 'var',
-        export: 'default'
-      }
-    }
-  },
-  plugins: [
-    ...BaseConfig.plugins,
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: Path.resolve(__dirname, '../res/strings'),
-          to: '../_locales/[name]/messages.json',
-          toType: 'template',
-          transform(buffer) {
-            const i18n = JSON.parse(buffer.toString());
-            const messages = convertI18nForWebExt(i18n);
-            return JSON.stringify(messages, null, 2);
-          }
-        },
-        {
-          from: Path.resolve(__dirname, '../res/webext/images')
-        },
-        {
-          from: Path.resolve(__dirname, '../res/webext/manifest.json'),
-          to: '../manifest.json'
+module.exports = (env, argv) => {
+  const baseConfig = BaseConfig(env, argv);
+  return {
+    ...baseConfig,
+    entry: {
+      'webpage-metadata-collecter': {
+        import: Path.resolve(
+          __dirname,
+          '../src/modules/webext/webpage-metadata-collecter/webpage-metadata-collecter.ts'
+        ),
+        library: {
+          name: 'WebpageMetadataCollecter',
+          type: 'var',
+          export: 'default'
         }
-      ]
-    }),
-    new HtmlWebpackPlugin({
-      chunks: ['app'],
-      filename: '../app.html',
-      template: Path.resolve(__dirname, '../res/webext/app.html')
-    }),
-    new HtmlWebpackPlugin({
-      chunks: ['background'],
-      filename: '../background.html',
-      template: Path.resolve(__dirname, '../res/webext/background.html')
-    })
-  ]
+      }
+    },
+    plugins: [
+      ...baseConfig.plugins,
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: Path.resolve(__dirname, '../res/strings'),
+            to: '../_locales/[name]/messages.json',
+            toType: 'template',
+            transform(buffer) {
+              const i18n = JSON.parse(buffer.toString());
+              const messages = convertI18nForWebExt(i18n);
+              return JSON.stringify(messages, null, 2);
+            }
+          },
+          {
+            from: Path.resolve(__dirname, '../res/webext/images')
+          },
+          {
+            from: Path.resolve(__dirname, '../res/webext/manifest.json'),
+            to: '../manifest.json'
+          }
+        ]
+      }),
+      new HtmlWebpackPlugin({
+        chunks: ['app'],
+        filename: '../app.html',
+        template: Path.resolve(__dirname, '../res/webext/app.html')
+      }),
+      new HtmlWebpackPlugin({
+        chunks: ['background'],
+        filename: '../background.html',
+        template: Path.resolve(__dirname, '../res/webext/background.html')
+      })
+    ]
+  };
 };
