@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync har vorte oppdatert med dei nyaste funksjonane og feilrettingane. Klikk for notat til utgåva."
+        "default": "xBrowserSync has been updated. Sync has been disabled, re-enable sync to complete the upgrade process."
       }
     },
     "BookmarkCreated": {
