@@ -706,14 +706,24 @@
           "key": "View_Login_Sync_New",
           "default": "Criar nova sincronização"
         },
-        "Upgrade": {
+        "UpgradeReady": {
           "Title": {
-            "key": "View_Login_Sync_Upgrade_Title",
+            "key": "View_Login_Sync_UpgradeReady_Title",
             "default": "Pronto para atualizar?"
           },
           "Content": {
-            "key": "View_Login_Sync_Upgrade_Content",
+            "key": "View_Login_Sync_UpgradeReady_Content",
             "default": "<p>Este ID de sincronização deve ser atualizado para sincronizar com esta versão do xBrowserSync. Após a atualização, você não poderá sincronizar com versões anteriores do xBrowserSync.</p><p>Certifique-se de ter atualizado todos os seus aplicativos xBrowserSync antes de continuar. Pronto para prosseguir?</p>"
+          }
+        },
+        "UpgradeRequired": {
+          "Title": {
+            "key": "View_Login_Sync_UpgradeRequired_Title",
+            "default": ""
+          },
+          "Content": {
+            "key": "View_Login_Sync_UpgradeRequired_Content",
+            "default": ""
           }
         }
       },

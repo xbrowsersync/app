@@ -86,11 +86,15 @@ export default class UpgradeService {
           const upgradeVersion = upgradeStep && upgradeStep[0];
           const upgradeProvider = upgradeStep && upgradeStep[1];
 
-          // If provider found, run app upgrade process
-          return (upgradeProvider ? upgradeProvider.upgradeApp(lastUpgradeVersion) : this.$q.resolve())
-            .then(() => this.setLastUpgradeVersion(upgradeVersion))
-            .then(() => this.logSvc.logInfo(`Upgraded to ${upgradeVersion}`))
-            .then(() => upgradeVersion);
+          // If upgrade found, run app upgrade process
+          return (upgradeVersion
+            ? upgradeProvider.upgradeApp(lastUpgradeVersion).then(() => upgradeVersion)
+            : this.$q.resolve(targetVersion)
+          ).then((newVersion) => {
+            return this.setLastUpgradeVersion(newVersion)
+              .then(() => this.logSvc.logInfo(`Upgraded to ${newVersion}`))
+              .then(() => newVersion);
+          });
         };
 
         // Run each sequential upgrade from last upgrade version to target
@@ -130,16 +134,16 @@ export default class UpgradeService {
     const action = (currentVersion): ng.IPromise<string> => {
       // Get the next sequential upgrade step from upgrade map
       const upgradeStep = [...this.upgradeMap].find(({ 0: x }) => compareVersions.compare(currentVersion, x, '<'));
-      const upgradeVersion = upgradeStep![0];
-      const upgradeProvider = upgradeStep![1];
+      const upgradeVersion = upgradeStep?.[0];
+      const upgradeProvider = upgradeStep?.[1];
 
       // Run provider upgrade process if exists
-      return (upgradeProvider
+      return (upgradeVersion
         ? upgradeProvider.upgradeBookmarks(upgradedBookmarks, currentVersion)
         : this.$q.resolve(upgradedBookmarks)
       ).then((bookmarksUpgradeResult) => {
         upgradedBookmarks = bookmarksUpgradeResult;
-        return upgradeVersion;
+        return upgradeVersion ?? targetVersion;
       });
     };
 

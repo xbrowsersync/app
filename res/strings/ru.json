@@ -706,14 +706,24 @@
           "key": "View_Login_Sync_New",
           "default": "Создать новую синхронизацию"
         },
-        "Upgrade": {
+        "UpgradeReady": {
           "Title": {
-            "key": "View_Login_Sync_Upgrade_Title",
+            "key": "View_Login_Sync_UpgradeReady_Title",
             "default": "Готовы обновить синхронизацию?"
           },
           "Content": {
-            "key": "View_Login_Sync_Upgrade_Content",
+            "key": "View_Login_Sync_UpgradeReady_Content",
             "default": "<p>Этот идентификатор синхронизации (sync ID) должен быть обновлен для синхронизации с этой версией xBrowserSync. После обновления вы не сможете синхронизировать данные с предыдущими версиями xBrowserSync.</p><p>Убедитесь, что вы обновили все ваши xBrowserSync приложения перед продолжением. Готовы продолжить?</p>"
+          }
+        },
+        "UpgradeRequired": {
+          "Title": {
+            "key": "View_Login_Sync_UpgradeRequired_Title",
+            "default": ""
+          },
+          "Content": {
+            "key": "View_Login_Sync_UpgradeRequired_Content",
+            "default": ""
           }
         }
       },

@@ -295,16 +295,27 @@
     </div>
   </div>
   <div class="confirm well well-sm animate-fade-in" ng-show="vm.displayUpgradeConfirmation">
-    <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.Upgrade.Title) }}</h4>
-    <div ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.Upgrade.Content)"></div>
-    <div class="buttons">
-      <button type="button" class="btn btn-default btn-confirm-enable-sync"
-              ng-click="vm.utilitySvc.handleEvent(vm.upgradeSync)">
-        {{ vm.platformSvc.getI18nString(vm.Strings.Button.Confirm) }}
-      </button>
-      <button type="button" class="btn btn-default" ng-click="vm.displayUpgradeConfirmation = false">
-        {{ vm.platformSvc.getI18nString(vm.Strings.Button.Deny) }}
-      </button>
+    <div ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
+      <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.UpgradeRequired.Title) }}</h4>
+      <div ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.UpgradeRequired.Content)"></div>
+      <div class="buttons">
+        <button type="button" class="btn btn-default" ng-click="vm.displayUpgradeConfirmation = false">
+          {{ vm.platformSvc.getI18nString(vm.Strings.Button.OK) }}
+        </button>
+      </div>
+    </div>
+    <div ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
+      <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.UpgradeReady.Title) }}</h4>
+      <div ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.UpgradeReady.Content)"></div>
+      <div class="buttons">
+        <button type="button" class="btn btn-default btn-confirm-enable-sync"
+                ng-click="vm.utilitySvc.handleEvent(vm.upgradeSync)">
+          {{ vm.platformSvc.getI18nString(vm.Strings.Button.Confirm) }}
+        </button>
+        <button type="button" class="btn btn-default" ng-click="vm.displayUpgradeConfirmation = false">
+          {{ vm.platformSvc.getI18nString(vm.Strings.Button.Deny) }}
+        </button>
+      </div>
     </div>
   </div>
   <div class="confirm well well-sm animate-fade-in service-info" ng-show="vm.displayUpdateServiceConfirmation">

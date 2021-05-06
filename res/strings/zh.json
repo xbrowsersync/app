@@ -706,14 +706,24 @@
           "key": "View_Login_Sync_New",
           "default": "创建新同步"
         },
-        "Upgrade": {
+        "UpgradeReady": {
           "Title": {
-            "key": "View_Login_Sync_Upgrade_Title",
+            "key": "View_Login_Sync_UpgradeReady_Title",
             "default": "准备更新同步了吗？"
           },
           "Content": {
-            "key": "View_Login_Sync_Upgrade_Content",
+            "key": "View_Login_Sync_UpgradeReady_Content",
             "default": "<p>此同步ID必须升级才能与此版本的 xBrowserSync同步。 升级后，您将无法与 xBrowserSync 上的版本同步。</p><p>确保您在继续之前更新了所有的 xBrowserSync 应用。准备好继续吗？</p>"
+          }
+        },
+        "UpgradeRequired": {
+          "Title": {
+            "key": "View_Login_Sync_UpgradeRequired_Title",
+            "default": ""
+          },
+          "Content": {
+            "key": "View_Login_Sync_UpgradeRequired_Content",
+            "default": ""
           }
         }
       },
