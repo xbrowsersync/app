@@ -139,7 +139,7 @@
     },
     "OK": {
       "key": "Button_OK",
-      "default": "Понятно"
+      "default": "OK"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
@@ -706,14 +706,24 @@
           "key": "View_Login_Sync_New",
           "default": "Создать новую синхронизацию"
         },
-        "Upgrade": {
+        "UpgradeReady": {
           "Title": {
-            "key": "View_Login_Sync_Upgrade_Title",
-            "default": "Готовы обновить синхронизацию?"
+            "key": "View_Login_Sync_UpgradeReady_Title",
+            "default": "Ready to upgrade sync?"
           },
           "Content": {
-            "key": "View_Login_Sync_Upgrade_Content",
-            "default": "<p>Этот идентификатор синхронизации (sync ID) должен быть обновлен для синхронизации с этой версией xBrowserSync. После обновления вы не сможете синхронизировать данные с предыдущими версиями xBrowserSync.</p><p>Убедитесь, что вы обновили все ваши xBrowserSync приложения перед продолжением. Готовы продолжить?</p>"
+            "key": "View_Login_Sync_UpgradeReady_Content",
+            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync. After upgrading, you will no longer be able to sync with any previous versions of xBrowserSync.</p><p>Make sure to update xBrowserSync on all synced devices before continuing. Ready to proceed?</p>"
+          }
+        },
+        "UpgradeRequired": {
+          "Title": {
+            "key": "View_Login_Sync_UpgradeRequired_Title",
+            "default": "Upgrade sync"
+          },
+          "Content": {
+            "key": "View_Login_Sync_UpgradeRequired_Content",
+            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync.</p><p>Use the xBrowserSync desktop browser extension to upgrade your sync and then retry syncing here.</p>"
           }
         }
       },
@@ -1097,15 +1107,15 @@
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Up to date (last synced {date})"
+            "default": "Last synced {date}"
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "Updates available (next sync {date})"
+            "default": "Ready to sync (scheduled for {date})"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
-            "default": "Обновить синхронизацию"
+            "default": "Sync Now"
           }
         },
         "Qr": {
