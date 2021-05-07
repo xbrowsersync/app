@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync is bijgewerkt. Synchronisatie is uitgeschakeld, schakel synchronisatie opnieuw in om het upgradeproces te voltooien."
+        "default": "xBrowserSync is bijgewerkt. In verband hiermee is synchronisatie uitgeschakeld. Schakel synchronisatie opnieuw in om het upgradeproces te voltooien."
       }
     },
     "BookmarkCreated": {
@@ -709,7 +709,7 @@
         "UpgradeReady": {
           "Title": {
             "key": "View_Login_Sync_UpgradeReady_Title",
-            "default": "Klaar om de synchronisatie te upgraden?"
+            "default": "Klaar om synchronisatie te upgraden?"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
