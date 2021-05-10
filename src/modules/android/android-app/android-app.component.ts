@@ -7,6 +7,7 @@ import AppHelperService from '../../app/shared/app-helper/app-helper.service';
 import AlertService from '../../shared/alert/alert.service';
 import { BookmarkMetadata } from '../../shared/bookmark/bookmark.interface';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import * as Exceptions from '../../shared/exception/exception';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService } from '../../shared/global-shared.interface';
 import LogService from '../../shared/log/log.service';
@@ -14,7 +15,7 @@ import NetworkService from '../../shared/network/network.service';
 import SettingsService from '../../shared/settings/settings.service';
 import { StoreKey } from '../../shared/store/store.enum';
 import StoreService from '../../shared/store/store.service';
-import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
+import SyncService from '../../shared/sync/sync.service';
 import UpgradeService from '../../shared/upgrade/upgrade.service';
 import UtilityService from '../../shared/utility/utility.service';
 import { WorkingContext } from '../../shared/working/working.enum';
@@ -34,8 +35,10 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
   $interval: ng.IIntervalService;
   appHelperSvc: AndroidAppHelperService;
   platformSvc: AndroidPlatformService;
-  syncEngineSvc: SyncEngineService;
+  syncSvc: SyncService;
   upgradeSvc: UpgradeService;
+
+  darkThemeEnabled = false;
 
   static $inject = [
     '$interval',
@@ -50,7 +53,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     'PlatformService',
     'SettingsService',
     'StoreService',
-    'SyncEngineService',
+    'SyncService',
     'UpgradeService',
     'UtilityService',
     'WorkingService'
@@ -68,7 +71,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     PlatformSvc: PlatformService,
     SettingsSvc: SettingsService,
     StoreSvc: StoreService,
-    SyncEngineSvc: SyncEngineService,
+    SyncSvc: SyncService,
     UpgradeSvc: UpgradeService,
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
@@ -90,25 +93,32 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     );
 
     this.$interval = $interval;
-    this.syncEngineSvc = SyncEngineSvc;
+    this.syncSvc = SyncSvc;
     this.upgradeSvc = UpgradeSvc;
   }
 
   checkForDarkTheme(): ng.IPromise<void> {
-    // Check dark theme is supported
-    return this.$q<void>((resolve, reject) => {
-      window.cordova.plugins.ThemeDetection.isAvailable(resolve, reject);
-    }).then((isAvailable: any) => {
-      if (!isAvailable.value) {
+    // If dark mode setting is enabled, skip dark theme check
+    return this.settingsSvc.darkModeEnabled().then((darkModeEnabled) => {
+      if (darkModeEnabled) {
         return;
       }
 
-      // Check dark theme is enabled
+      // Check dark theme is supported
       return this.$q<void>((resolve, reject) => {
-        window.cordova.plugins.ThemeDetection.isDarkModeEnabled(resolve, reject);
-      })
-        .then((isDarkModeEnabled: any) => this.settingsSvc.darkModeEnabled(isDarkModeEnabled.value))
-        .then(() => {});
+        window.cordova.plugins.ThemeDetection.isAvailable(resolve, reject);
+      }).then((isAvailable: any) => {
+        if (!isAvailable.value) {
+          return;
+        }
+
+        // Check dark theme is enabled
+        return this.$q<void>((resolve, reject) => {
+          window.cordova.plugins.ThemeDetection.isDarkModeEnabled(resolve, reject);
+        }).then((isDarkModeEnabled: any) => {
+          this.darkThemeEnabled = isDarkModeEnabled.value;
+        });
+      });
     });
   }
 
@@ -170,7 +180,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
     }, 1e3);
   }
 
-  executeSyncIfOnline(workingContext: WorkingContext): ng.IPromise<boolean> {
+  executeSyncIfOnline(workingContext: WorkingContext): ng.IPromise<void | boolean> {
     // If not online display an alert and return
     if (!this.networkSvc.isNetworkConnected()) {
       this.alertSvc.setCurrentAlert({
@@ -337,7 +347,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
           this.appHelperSvc
             .getSyncQueueLength()
             .then((syncQueueLength) => {
-              return syncQueueLength === 0 ? this.syncEngineSvc.checkForUpdates(undefined, false) : true;
+              return syncQueueLength === 0 ? this.syncSvc.checkForUpdates(undefined, false) : true;
             })
             .then((runSync) => {
               if (!runSync) {
@@ -350,6 +360,13 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
                   this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
                 }
               });
+            })
+            .catch((err) => {
+              // Handle sync removed from service
+              if (err instanceof Exceptions.SyncNotFoundException) {
+                return this.syncSvc.setSyncRemoved().then(() => this.appHelperSvc.switchView());
+              }
+              throw err;
             });
         });
       });
@@ -433,7 +450,7 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
             this.appHelperSvc
               .getSyncQueueLength()
               .then((syncQueueLength) => {
-                return syncQueueLength === 0 ? this.syncEngineSvc.checkForUpdates(undefined, false) : true;
+                return syncQueueLength === 0 ? this.syncSvc.checkForUpdates(undefined, false) : true;
               })
               .then((runSync) => {
                 if (!runSync) {
@@ -446,6 +463,13 @@ export default class AndroidAppComponent extends AppMainComponent implements OnI
                     this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
                   }
                 });
+              })
+              .catch((err) => {
+                // Handle sync removed from service
+                if (err instanceof Exceptions.SyncNotFoundException) {
+                  return this.syncSvc.setSyncRemoved().then(() => this.appHelperSvc.switchView());
+                }
+                throw err;
               });
           });
         });

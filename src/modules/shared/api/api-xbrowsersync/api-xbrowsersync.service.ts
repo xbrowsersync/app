@@ -127,7 +127,7 @@ export default class ApiXbrowsersyncService implements ApiService {
             // Check response data is valid before returning
             const { data } = response;
             if (!data?.id || !data?.lastUpdated || !data?.version) {
-              throw new Exceptions.NoDataFoundException();
+              throw new Exceptions.UnexpectedResponseDataException();
             }
             return data;
           });
@@ -146,7 +146,7 @@ export default class ApiXbrowsersyncService implements ApiService {
       .get([StoreKey.Password, StoreKey.SyncId])
       .then((storeContent) => {
         if (!storeContent.password || !storeContent.syncId) {
-          throw new Exceptions.MissingClientDataException();
+          throw new Exceptions.ClientDataNotFoundException();
         }
 
         return this.checkNetworkIsOnline().then(() => {
@@ -164,7 +164,7 @@ export default class ApiXbrowsersyncService implements ApiService {
               // Check response data is valid before returning
               const { data } = response;
               if (!data?.lastUpdated) {
-                throw new Exceptions.NoDataFoundException();
+                throw new Exceptions.UnexpectedResponseDataException();
               }
               return data;
             });
@@ -184,7 +184,7 @@ export default class ApiXbrowsersyncService implements ApiService {
       .get([StoreKey.Password, StoreKey.SyncId])
       .then((storeContent) => {
         if (!storeContent.password || !storeContent.syncId) {
-          throw new Exceptions.MissingClientDataException();
+          throw new Exceptions.ClientDataNotFoundException();
         }
 
         return (skipOnlineCheck ? this.$q.resolve() : this.checkNetworkIsOnline()).then(() => {
@@ -202,7 +202,7 @@ export default class ApiXbrowsersyncService implements ApiService {
               // Check response data is valid before returning
               const { data } = response;
               if (!data?.lastUpdated) {
-                throw new Exceptions.NoDataFoundException();
+                throw new Exceptions.UnexpectedResponseDataException();
               }
               return data;
             });
@@ -231,11 +231,11 @@ export default class ApiXbrowsersyncService implements ApiService {
           .then(this.apiRequestSucceeded)
           .then((response) => {
             // Check response data is valid before returning
-            const { data } = response;
-            if (!data) {
-              throw new Exceptions.NoDataFoundException();
+            const { data: version } = response;
+            if (!version) {
+              throw new Exceptions.UnexpectedResponseDataException();
             }
-            return data;
+            return version;
           });
       })
       .catch((err) => {
@@ -252,7 +252,7 @@ export default class ApiXbrowsersyncService implements ApiService {
     switch (response.status) {
       // 401 Unauthorized: sync data not found
       case 401:
-        exception = new Exceptions.NoDataFoundException(message);
+        exception = new Exceptions.SyncNotFoundException(message);
         break;
       // 404 Not Found: invalid service
       case 404:
@@ -300,7 +300,7 @@ export default class ApiXbrowsersyncService implements ApiService {
       .get([StoreKey.LastUpdated, StoreKey.Password, StoreKey.SyncId])
       .then((storeContent) => {
         if (!storeContent.lastUpdated || !storeContent.password || !storeContent.syncId) {
-          throw new Exceptions.MissingClientDataException();
+          throw new Exceptions.ClientDataNotFoundException();
         }
 
         return (skipOnlineCheck ? this.$q.resolve() : this.checkNetworkIsOnline()).then(() => {
@@ -331,7 +331,7 @@ export default class ApiXbrowsersyncService implements ApiService {
               // Check response data is valid before returning
               const { data } = response;
               if (!data?.lastUpdated) {
-                throw new Exceptions.NoDataFoundException();
+                throw new Exceptions.UnexpectedResponseDataException();
               }
               return data;
             });

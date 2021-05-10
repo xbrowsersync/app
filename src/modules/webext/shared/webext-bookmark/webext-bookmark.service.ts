@@ -23,7 +23,7 @@ import SettingsService from '../../../shared/settings/settings.service';
 import StoreService from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
 import { Sync } from '../../../shared/sync/sync.interface';
-import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
+import SyncService from '../../../shared/sync/sync.service';
 import UtilityService from '../../../shared/utility/utility.service';
 import { BookmarkIdMapping } from '../bookmark-id-mapper/bookmark-id-mapper.interface';
 import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
@@ -39,7 +39,7 @@ export default abstract class WebExtBookmarkService {
   platformSvc: PlatformService;
   settingsSvc: SettingsService;
   storeSvc: StoreService;
-  _syncEngineSvc: SyncEngineService;
+  _syncSvc: SyncService;
   utilitySvc: UtilityService;
 
   nativeBookmarkEventsQueue: any[] = [];
@@ -82,11 +82,11 @@ export default abstract class WebExtBookmarkService {
     this.utilitySvc = UtilitySvc;
   }
 
-  get syncEngineSvc(): SyncEngineService {
-    if (angular.isUndefined(this._syncEngineSvc)) {
-      this._syncEngineSvc = this.$injector.get('SyncEngineService');
+  get syncSvc(): SyncService {
+    if (angular.isUndefined(this._syncSvc)) {
+      this._syncSvc = this.$injector.get('SyncService');
     }
-    return this._syncEngineSvc;
+    return this._syncSvc;
   }
 
   addBookmark(bookmark: Bookmark, parentId: number, index: number, bookmarks: Bookmark[]): UpdateBookmarksResult {
@@ -899,7 +899,7 @@ export default abstract class WebExtBookmarkService {
     // Iterate through the queue and process the events
     this.utilitySvc.asyncWhile<any>(this.nativeBookmarkEventsQueue, condition, action).then(() => {
       this.$timeout(() => {
-        this.syncEngineSvc.executeSync().then(() => {
+        this.syncSvc.executeSync().then(() => {
           // Move native unsupported containers into the correct order
           return this.disableEventListeners().then(this.reorderUnsupportedContainers).then(this.enableEventListeners);
         });

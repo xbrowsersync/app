@@ -2,6 +2,14 @@ import { Bookmark, BookmarkChange } from '../bookmark/bookmark.interface';
 import { Exception } from '../exception/exception';
 import { SyncType } from './sync.enum';
 
+export interface RemovedSync {
+  bookmarks: Bookmark[];
+  lastUpdated: string;
+  serviceUrl: string;
+  syncId: string;
+  syncVersion: string;
+}
+
 export interface Sync {
   bookmarks?: Bookmark[];
   changeInfo?: BookmarkChange;

@@ -34,6 +34,8 @@ export class BookmarkMappingNotFoundException extends Exception {}
 
 export class BookmarkNotFoundException extends Exception {}
 
+export class ClientDataNotFoundException extends Exception {}
+
 export class ContainerChangedException extends Exception {}
 
 export class ContainerNotFoundException extends Exception {}
@@ -90,15 +92,9 @@ export class NativeBookmarkNotFoundException extends Exception {}
 
 export class LocalStorageNotAvailableException extends Exception {}
 
-export class MissingClientDataException extends Exception {}
-
 export class NetworkOfflineException extends Exception {}
 
-export class NoDataFoundException extends Exception {}
-
 export class NotAcceptingNewSyncsException extends Exception {}
-
-export class PasswordRemovedException extends Exception {}
 
 export class RequestEntityTooLargeException extends Exception {}
 
@@ -108,13 +104,15 @@ export class SyncDisabledException extends Exception {}
 
 export class SyncFailedException extends Exception {}
 
-export class SyncRemovedException extends Exception {}
+export class SyncNotFoundException extends Exception {}
 
 export class SyncUncommittedException extends Exception {}
 
 export class SyncVersionNotSupportedException extends Exception {}
 
 export class TooManyRequestsException extends Exception {}
+
+export class UnexpectedResponseDataException extends Exception {}
 
 export class UnspecifiedException extends Exception {}
 

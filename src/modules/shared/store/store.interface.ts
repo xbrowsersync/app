@@ -1,5 +1,6 @@
 import { BookmarkIdMapping } from '../../webext/shared/bookmark-id-mapper/bookmark-id-mapper.interface';
 import { LogLevel } from '../log/log.enum';
+import { RemovedSync } from '../sync/sync.interface';
 
 export interface StoreContent {
   alternateSearchBarPosition: boolean;
@@ -17,6 +18,7 @@ export interface StoreContent {
   installBackup: string;
   lastUpdated: string;
   password: string;
+  removedSync: RemovedSync;
   serviceUrl: string;
   syncBookmarksToolbar: boolean;
   syncEnabled: boolean;

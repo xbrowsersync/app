@@ -8,7 +8,7 @@ import { ExceptionHandler } from '../../../../shared/exception/exception.interfa
 import LogService from '../../../../shared/log/log.service';
 import StoreService from '../../../../shared/store/store.service';
 import { Sync } from '../../../../shared/sync/sync.interface';
-import SyncEngineService from '../../../../shared/sync/sync-engine/sync-engine.service';
+import SyncService from '../../../../shared/sync/sync.service';
 import UtilityService from '../../../../shared/utility/utility.service';
 import WorkingService from '../../../../shared/working/working.service';
 import AndroidPlatformService from '../../../android-shared/android-platform/android-platform.service';
@@ -28,7 +28,7 @@ export default class AndroidAppHelperService extends AppHelperService {
     'LogService',
     'PlatformService',
     'StoreService',
-    'SyncEngineService',
+    'SyncService',
     'UtilityService',
     'WorkingService'
   ];
@@ -41,22 +41,11 @@ export default class AndroidAppHelperService extends AppHelperService {
     LogSvc: LogService,
     PlatformSvc: AndroidPlatformService,
     StoreSvc: StoreService,
-    SyncEngineSvc: SyncEngineService,
+    SyncSvc: SyncService,
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
   ) {
-    super(
-      $exceptionHandler,
-      $q,
-      $timeout,
-      ApiSvc,
-      LogSvc,
-      PlatformSvc,
-      StoreSvc,
-      SyncEngineSvc,
-      UtilitySvc,
-      WorkingSvc
-    );
+    super($exceptionHandler, $q, $timeout, ApiSvc, LogSvc, PlatformSvc, StoreSvc, SyncSvc, UtilitySvc, WorkingSvc);
 
     this.$exceptionHandler = $exceptionHandler;
     this.$interval = $interval;
@@ -120,7 +109,7 @@ export default class AndroidAppHelperService extends AppHelperService {
   }
 
   getCurrentSync(): ng.IPromise<Sync> {
-    return this.$q.resolve(this.syncEngineSvc.getCurrentSync());
+    return this.$q.resolve(this.syncSvc.getCurrentSync());
   }
 
   getHelpPages(): string[] {
@@ -142,7 +131,7 @@ export default class AndroidAppHelperService extends AppHelperService {
   }
 
   getSyncQueueLength(): ng.IPromise<number> {
-    return this.$q.resolve(this.syncEngineSvc.getSyncQueueLength());
+    return this.$q.resolve(this.syncSvc.getSyncQueueLength());
   }
 
   openUrl(event?: Event, url?: string): void {

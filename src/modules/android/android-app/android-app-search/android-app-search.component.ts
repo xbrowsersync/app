@@ -161,6 +161,11 @@ export default class AndroidAppSearchComponent extends AppSearchComponent {
             });
         })
         .catch((err) => {
+          // Handle sync removed from service
+          if (err instanceof Exceptions.SyncNotFoundException) {
+            return this.appHelperSvc.switchView();
+          }
+
           return (err instanceof Exceptions.DataOutOfSyncException
             ? this.displayDefaultSearchState()
             : this.$q.resolve().then(() => {

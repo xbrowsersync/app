@@ -14,6 +14,7 @@ import {
   RemoveBookmarkChangeData
 } from '../../shared/bookmark/bookmark.interface';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import * as Exceptions from '../../shared/exception/exception';
 import { ExceptionHandler } from '../../shared/exception/exception.interface';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService, WebpageMetadata } from '../../shared/global-shared.interface';
@@ -298,10 +299,18 @@ export default class AppBookmarkComponent implements OnInit {
   }
 
   queueSync(changeInfo: BookmarkChange): ng.IPromise<SyncResult> {
-    return this.platformSvc.queueSync({
-      changeInfo,
-      type: SyncType.LocalAndRemote
-    });
+    return this.platformSvc
+      .queueSync({
+        changeInfo,
+        type: SyncType.LocalAndRemote
+      })
+      .catch((err) => {
+        // Handle sync removed from service
+        if (err instanceof Exceptions.SyncNotFoundException) {
+          return this.appHelperSvc.switchView().then(() => ({ error: err, success: false }));
+        }
+        throw err;
+      });
   }
 
   removeTag(tag: string): void {

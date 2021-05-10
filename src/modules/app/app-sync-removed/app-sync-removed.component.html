@@ -1,0 +1,34 @@
+<div class="view-content">
+  <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.SyncRemoved.Title) }}</h4>
+  <div ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.SyncRemoved.Content)"></div>
+  <div class="buttons vertical animate-fade-in" ng-show="!vm.backupCompletedMessage">
+    <button class="btn btn-default" ng-disabled="vm.savingBackup" ng-class="{ 'working': vm.savingBackup }"
+            ng-click="vm.utilitySvc.handleEvent(vm.downloadBackup)" ng-disabled="vm.savingBackup">
+      <span class="spinner-border spinner-border-sm" ng-show="vm.savingBackup" role="status" aria-hidden="true"></span>
+      <span ng-show="vm.savingBackup">
+        {{ vm.platformSvc.getI18nString(vm.Strings.Button.Saving) }}
+      </span>
+      <span ng-hide="vm.savingBackup">
+        {{ vm.platformSvc.getI18nString(vm.Strings.Button.DownloadBackup) }}
+      </span>
+    </button>
+    <div class="footer">
+      <a ng-click="vm.utilitySvc.handleEvent(vm.close)" href="#">
+        {{ vm.platformSvc.getI18nString(vm.Strings.Button.Continue) }}
+      </a>
+    </div>
+  </div>
+  <div class="animate-fade-in" ng-show="vm.backupCompletedMessage">
+    <div class="backup-completed">
+      <p>{{ vm.backupCompletedMessage }}</p>
+      <p class="text-center">
+        <a id="backupLink"></a>
+      </p>
+    </div>
+    <div class="buttons">
+      <button class="btn btn-default focused" ng-click="vm.utilitySvc.handleEvent(vm.close)">
+        {{ vm.platformSvc.getI18nString(vm.Strings.Button.Done) }}
+      </button>
+    </div>
+  </div>
+</div>

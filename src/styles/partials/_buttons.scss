@@ -20,7 +20,9 @@ button {
       max-width: 90vw;
       padding: 0 1.2rem;
       text-transform: capitalize;
-      transition: all ease-in-out 0.2s;
+      transition-duration: 0.2s;
+      transition-property: background-color, border-color, color;
+      transition-timing-function: ease-in-out;
 
       &[disabled] {
         background-color: var(--color-button-default-bg-disabled);

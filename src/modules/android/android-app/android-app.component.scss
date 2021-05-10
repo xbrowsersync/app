@@ -97,6 +97,7 @@ textarea.form-control {
 
 .view-content {
   height: 100%;
+  padding-top: 1.75rem !important;
 
   &.ng-enter {
     z-index: 10 !important;
@@ -191,7 +192,7 @@ app-login {
 
     .header-panel {
       position: absolute;
-      top: 0.75rem;
+      top: 1.75rem;
       width: calc(100% - 1.5rem);
     }
 

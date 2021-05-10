@@ -3,13 +3,12 @@ import autobind from 'autobind-decorator';
 import { ApiServiceStatus } from '../../../shared/api/api.enum';
 import { ApiServiceInfo } from '../../../shared/api/api.interface';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import * as Exceptions from '../../../shared/exception/exception';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import NetworkService from '../../../shared/network/network.service';
 import { StoreKey } from '../../../shared/store/store.enum';
 import StoreService from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
-import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
+import SyncService from '../../../shared/sync/sync.service';
 import UtilityService from '../../../shared/utility/utility.service';
 import WorkingService from '../../../shared/working/working.service';
 import { AppEventType, AppViewType } from '../../app.enum';
@@ -32,7 +31,7 @@ export default class SyncSettingsComponent implements OnInit {
   networkSvc: NetworkService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
-  syncEngineSvc: SyncEngineService;
+  syncSvc: SyncService;
   utilitySvc: UtilityService;
   workingSvc: WorkingService;
 
@@ -58,7 +57,7 @@ export default class SyncSettingsComponent implements OnInit {
     'NetworkService',
     'PlatformService',
     'StoreService',
-    'SyncEngineService',
+    'SyncService',
     'UtilityService',
     'WorkingService'
   ];
@@ -71,7 +70,7 @@ export default class SyncSettingsComponent implements OnInit {
     NetworkSvc: NetworkService,
     PlatformSvc: PlatformService,
     StoreSvc: StoreService,
-    SyncEngineSvc: SyncEngineService,
+    SyncSvc: SyncService,
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
   ) {
@@ -82,7 +81,7 @@ export default class SyncSettingsComponent implements OnInit {
     this.networkSvc = NetworkSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
-    this.syncEngineSvc = SyncEngineSvc;
+    this.syncSvc = SyncSvc;
     this.utilitySvc = UtilitySvc;
     this.workingSvc = WorkingSvc;
 
@@ -95,36 +94,24 @@ export default class SyncSettingsComponent implements OnInit {
   checkForSyncUpdates(): ng.IPromise<void> {
     return this.$q
       .all([
-        this.syncEngineSvc.checkForUpdates(),
+        this.syncSvc.checkForUpdates().catch(() => {}),
         this.appHelperSvc.getNextScheduledSyncUpdateCheck(),
         this.storeSvc.get<string>(StoreKey.LastUpdated)
       ])
-      .then((results) => {
-        if (results[0]) {
+      .then((data) => {
+        const [updatesAvailable, nextUpdateDate, lastUpdated] = data;
+        if (updatesAvailable) {
           this.updatesAvailable = true;
-          const nextUpdateDate = results[1];
           this.nextUpdate = this.platformSvc
             .getI18nString(this.Strings.View.Settings.Sync.UpdatesAvailable.True)
             .replace('{date}', nextUpdateDate.toLocaleTimeString());
         } else {
           this.updatesAvailable = false;
-          const lastUpdatedDate = new Date(results[2]);
+          const lastUpdatedDate = new Date(lastUpdated);
           this.lastUpdated = this.platformSvc
             .getI18nString(this.Strings.View.Settings.Sync.UpdatesAvailable.False)
             .replace('{date}', lastUpdatedDate.toLocaleString());
         }
-      })
-      .catch((err) => {
-        // Swallow error if sync failed due to network connection
-        if (
-          this.networkSvc.isNetworkConnectionError(err) ||
-          err instanceof Exceptions.InvalidServiceException ||
-          err instanceof Exceptions.ServiceOfflineException
-        ) {
-          return;
-        }
-
-        throw err;
       });
   }
 
@@ -183,7 +170,7 @@ export default class SyncSettingsComponent implements OnInit {
       }
 
       // Get bookmarks sync size and calculate sync data percentage used
-      return this.syncEngineSvc.getSyncSize().then((bookmarksSyncSize) => {
+      return this.syncSvc.getSyncSize().then((bookmarksSyncSize) => {
         this.syncDataSize = bookmarksSyncSize / 1024;
         this.syncDataUsed = Math.ceil((this.syncDataSize / this.serviceInfo.maxSyncSize) * 150);
         this.dataUsageProgressWidth = this.syncDataUsed;

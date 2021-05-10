@@ -61,15 +61,11 @@ export default class ExceptionHandlerService {
         alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.DailyNewSyncLimitReached_Title);
         alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.DailyNewSyncLimitReached_Message);
         break;
-      case Exceptions.MissingClientDataException:
+      case Exceptions.ClientDataNotFoundException:
         alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.MissingClientData_Title);
         alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.MissingClientData_Message);
         break;
-      case Exceptions.NoDataFoundException:
-        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.InvalidCredentials_Title);
-        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.InvalidCredentials_Message);
-        break;
-      case Exceptions.SyncRemovedException:
+      case Exceptions.SyncNotFoundException:
         alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.SyncRemoved_Title);
         alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.SyncRemoved_Message);
         break;

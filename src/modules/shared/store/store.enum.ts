@@ -15,6 +15,7 @@ enum StoreKey {
   LastUpdated = 'lastUpdated',
   LastUpgradeVersion = 'lastUpgradeVersion',
   Password = 'password',
+  RemovedSync = 'removedSync',
   ServiceUrl = 'serviceUrl',
   SyncBookmarksToolbar = 'syncBookmarksToolbar',
   SyncEnabled = 'syncEnabled',

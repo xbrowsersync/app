@@ -48,14 +48,9 @@ export default class CryptoService {
     return this.storeSvc
       .get([StoreKey.Password, StoreKey.SyncId])
       .then((storeContent) => {
-        const { password } = storeContent;
-        const { syncId } = storeContent;
-
-        if (!syncId) {
-          throw new Exceptions.SyncRemovedException();
-        }
-        if (!password) {
-          throw new Exceptions.PasswordRemovedException();
+        const { password, syncId } = storeContent;
+        if (!password || !syncId) {
+          throw new Exceptions.ClientDataNotFoundException();
         }
 
         // Convert hashed password to bytes
@@ -100,12 +95,11 @@ export default class CryptoService {
       throw new Exceptions.ArgumentException('Argument must be a string');
     }
 
-    // Ensure both id and password are in store
     return this.storeSvc
       .get<string>(StoreKey.Password)
       .then((password) => {
         if (angular.isUndefined(password)) {
-          throw new Exceptions.PasswordRemovedException();
+          throw new Exceptions.ClientDataNotFoundException();
         }
 
         // Convert hashed password to bytes

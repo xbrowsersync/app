@@ -1,5 +1,5 @@
 .checkbox {
-  background: var(--color-checkbox-bg);
+  background-color: var(--color-checkbox-bg);
   border-radius: $border-radius-input;
   cursor: pointer;
   height: 1.3rem;
@@ -12,7 +12,7 @@
 
     &[type='checkbox'] {
       & + label {
-        background: var(--color-checkbox-toggle);
+        background-color: var(--color-checkbox-toggle);
         opacity: 0.6;
       }
 
@@ -37,7 +37,9 @@
     width: 1rem;
 
     &.animate {
-      transition: all 0.25s ease;
+      transition-duration: 0.25s;
+      transition-property: background-color, left, opacity;
+      transition-timing-function: ease;
     }
   }
 }

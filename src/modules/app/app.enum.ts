@@ -15,6 +15,7 @@ enum AppViewType {
   Search = 'SEARCH',
   Settings = 'SETTINGS',
   Support = 'SUPPORT',
+  SyncRemoved = 'SYNC_REMOVED',
   Updated = 'UPDATED',
   Working = 'WORKING'
 }

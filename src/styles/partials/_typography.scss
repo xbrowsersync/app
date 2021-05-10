@@ -19,7 +19,9 @@ a {
   border-bottom-width: 1px;
   color: var(--color-link);
   cursor: pointer;
-  transition: all ease-in-out 0.2s;
+  transition-duration: 0.2s;
+  transition-property: border-bottom-color, color;
+  transition-timing-function: ease-in-out;
 
   @media (hover: hover) {
     &:active,

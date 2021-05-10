@@ -23,7 +23,7 @@ import NetworkService from '../../../shared/network/network.service';
 import StoreService from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
 import { Sync, SyncResult } from '../../../shared/sync/sync.interface';
-import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
+import SyncService from '../../../shared/sync/sync.service';
 import UtilityService from '../../../shared/utility/utility.service';
 import { WorkingContext } from '../../../shared/working/working.enum';
 import WorkingService from '../../../shared/working/working.service';
@@ -45,7 +45,7 @@ export default class AndroidPlatformService implements PlatformService {
   metadataSvc: MetadataService;
   networkSvc: NetworkService;
   storeSvc: StoreService;
-  _syncEngineSvc: SyncEngineService;
+  _syncSvc: SyncService;
   utilitySvc: UtilityService;
   workingSvc: WorkingService;
 
@@ -113,11 +113,11 @@ export default class AndroidPlatformService implements PlatformService {
     this._currentPage = value;
   }
 
-  get syncEngineSvc(): SyncEngineService {
-    if (angular.isUndefined(this._syncEngineSvc)) {
-      this._syncEngineSvc = this.$injector.get('SyncEngineService');
+  get syncSvc(): SyncService {
+    if (angular.isUndefined(this._syncSvc)) {
+      this._syncSvc = this.$injector.get('SyncService');
     }
-    return this._syncEngineSvc;
+    return this._syncSvc;
   }
 
   checkOptionalNativePermissions(): ng.IPromise<boolean> {
@@ -135,7 +135,7 @@ export default class AndroidPlatformService implements PlatformService {
   }
 
   disableSync(): ng.IPromise<any> {
-    return this.syncEngineSvc.disableSync();
+    return this.syncSvc.disableSync();
   }
 
   disableNativeEventListeners(): ng.IPromise<void> {
@@ -186,7 +186,7 @@ export default class AndroidPlatformService implements PlatformService {
     }
 
     // Sync bookmarks
-    return this.syncEngineSvc.executeSync(isBackgroundSync).finally(() => {
+    return this.syncSvc.executeSync(isBackgroundSync).finally(() => {
       if (!isBackgroundSync) {
         this.workingSvc.hide();
       }
@@ -374,7 +374,7 @@ export default class AndroidPlatformService implements PlatformService {
       }
 
       // Check for updates before syncing
-      this.syncEngineSvc
+      this.syncSvc
         .checkForUpdates()
         .then((updatesAvailable) => {
           if (!updatesAvailable) {
@@ -408,13 +408,13 @@ export default class AndroidPlatformService implements PlatformService {
     })
       .catch(() => true)
       .then((proceedWithSync) => {
-        return (proceedWithSync ? this.syncEngineSvc.queueSync(sync) : this.$q.resolve())
+        return (proceedWithSync ? this.syncSvc.queueSync(sync) : this.$q.resolve())
           .then(() => {
             // Ensure bookmark results are refreshed if bookmarks were out of sync
             if (resyncRequired) {
               this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
             }
-            return { success: proceedWithSync } as SyncResult;
+            return { success: proceedWithSync };
           })
           .catch((err) => {
             // Enable background sync if sync uncommitted
@@ -424,7 +424,7 @@ export default class AndroidPlatformService implements PlatformService {
                 title: this.getI18nString(this.Strings.Exception.UncommittedSyncs_Title)
               } as Alert);
               this.enableBackgroundSync();
-              return { error: err, success: false } as SyncResult;
+              return { error: err, success: false };
             }
 
             throw err;

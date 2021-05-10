@@ -15,7 +15,7 @@ import LogService from '../../../shared/log/log.service';
 import SettingsService from '../../../shared/settings/settings.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
 import { SyncResult } from '../../../shared/sync/sync.interface';
-import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
+import SyncService from '../../../shared/sync/sync.service';
 import UtilityService from '../../../shared/utility/utility.service';
 import WorkingService from '../../../shared/working/working.service';
 import AndroidPlatformService from '../../android-shared/android-platform/android-platform.service';
@@ -34,7 +34,7 @@ export default class AndroidAppBookmarkComponent extends AppBookmarkComponent im
   logSvc: LogService;
   platformSvc: AndroidPlatformService;
   settingsSvc: SettingsService;
-  syncEngineSvc: SyncEngineService;
+  syncSvc: SyncService;
 
   static $inject = [
     '$exceptionHandler',
@@ -47,7 +47,7 @@ export default class AndroidAppBookmarkComponent extends AppBookmarkComponent im
     'LogService',
     'PlatformService',
     'SettingsService',
-    'SyncEngineService',
+    'SyncService',
     'UtilityService',
     'WorkingService'
   ];
@@ -62,7 +62,7 @@ export default class AndroidAppBookmarkComponent extends AppBookmarkComponent im
     LogSvc: LogService,
     PlatformSvc: PlatformService,
     SettingsSvc: SettingsService,
-    SyncEngineSvc: SyncEngineService,
+    SyncSvc: SyncService,
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
   ) {
@@ -80,7 +80,7 @@ export default class AndroidAppBookmarkComponent extends AppBookmarkComponent im
 
     this.logSvc = LogSvc;
     this.settingsSvc = SettingsSvc;
-    this.syncEngineSvc = SyncEngineSvc;
+    this.syncSvc = SyncSvc;
 
     // If user cancels loading bookmark metadata
     $scope.$on(AppEventType.WorkingCancelAction, () => {

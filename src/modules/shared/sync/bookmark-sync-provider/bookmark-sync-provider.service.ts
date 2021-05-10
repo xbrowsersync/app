@@ -351,7 +351,7 @@ export default class BookmarkSyncProviderService implements SyncProvider {
       // Check secret and sync ID are present
       if (!storeContent.password || !storeContent.syncId) {
         return this.disable().then(() => {
-          throw new Exceptions.MissingClientDataException();
+          throw new Exceptions.ClientDataNotFoundException();
         });
       }
 

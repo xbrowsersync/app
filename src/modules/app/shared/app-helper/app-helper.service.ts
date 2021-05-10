@@ -12,7 +12,7 @@ import LogService from '../../../shared/log/log.service';
 import { StoreKey } from '../../../shared/store/store.enum';
 import StoreService from '../../../shared/store/store.service';
 import { Sync } from '../../../shared/sync/sync.interface';
-import SyncEngineService from '../../../shared/sync/sync-engine/sync-engine.service';
+import SyncService from '../../../shared/sync/sync.service';
 import UtilityService from '../../../shared/utility/utility.service';
 import WorkingService from '../../../shared/working/working.service';
 import { AppViewType } from '../../app.enum';
@@ -29,7 +29,7 @@ export default abstract class AppHelperService {
   logSvc: LogService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
-  syncEngineSvc: SyncEngineService;
+  syncSvc: SyncService;
   utilitySvc: UtilityService;
   workingSvc: WorkingService;
 
@@ -43,7 +43,7 @@ export default abstract class AppHelperService {
     LogSvc: LogService,
     PlatformSvc: PlatformService,
     StoreSvc: StoreService,
-    SyncEngineSvc: SyncEngineService,
+    SyncSvc: SyncService,
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
   ) {
@@ -54,7 +54,7 @@ export default abstract class AppHelperService {
     this.logSvc = LogSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
-    this.syncEngineSvc = SyncEngineSvc;
+    this.syncSvc = SyncSvc;
     this.utilitySvc = UtilitySvc;
     this.workingSvc = WorkingSvc;
   }
@@ -73,7 +73,7 @@ export default abstract class AppHelperService {
 
   abstract copyTextToClipboard(text: string): ng.IPromise<void>;
 
-  abstract downloadFile(fileName: string, textContents: string, linkId: string): ng.IPromise<string>;
+  abstract downloadFile(fileName: string, textContents: string, linkId?: string): ng.IPromise<string>;
 
   focusOnElement(domSelector: string, select = false): void {
     this.$timeout(() => {
@@ -132,34 +132,6 @@ export default abstract class AppHelperService {
     return this.currentView;
   }
 
-  switchToDefaultView(): ng.IPromise<void> {
-    return this.$q
-      .all([
-        this.storeSvc.get([StoreKey.DisplayHelp, StoreKey.DisplayPermissions, StoreKey.DisplayUpdated]),
-        this.utilitySvc.isSyncEnabled()
-      ])
-      .then((data) => {
-        const storeContent = data[0];
-        const syncEnabled = data[1];
-
-        switch (true) {
-          case storeContent.displayUpdated:
-            return AppViewType.Updated;
-          case storeContent.displayPermissions:
-            return AppViewType.Permissions;
-          case storeContent.displayHelp:
-            return AppViewType.Help;
-          case syncEnabled:
-            return AppViewType.Search;
-          default:
-            return AppViewType.Login;
-        }
-      })
-      .then((view) => {
-        this.currentView = { view };
-      });
-  }
-
   abstract getNextScheduledSyncUpdateCheck(): ng.IPromise<Date>;
 
   abstract getSyncQueueLength(): ng.IPromise<number>;
@@ -172,10 +144,40 @@ export default abstract class AppHelperService {
 
   switchView(view?: AppView): ng.IPromise<void> {
     return this.$q.resolve().then(() => {
-      if (angular.isUndefined(view ?? undefined)) {
-        return this.switchToDefaultView();
+      if (!angular.isUndefined(view)) {
+        this.currentView = angular.copy(view);
+        return;
       }
-      this.currentView = angular.copy(view);
+      return this.$q
+        .all([
+          this.storeSvc.get([
+            StoreKey.DisplayHelp,
+            StoreKey.DisplayPermissions,
+            StoreKey.DisplayUpdated,
+            StoreKey.RemovedSync
+          ]),
+          this.utilitySvc.isSyncEnabled()
+        ])
+        .then((data) => {
+          const [storeContent, syncEnabled] = data;
+          switch (true) {
+            case storeContent.displayUpdated:
+              return AppViewType.Updated;
+            case storeContent.displayPermissions:
+              return AppViewType.Permissions;
+            case storeContent.displayHelp:
+              return AppViewType.Help;
+            case !!storeContent.removedSync:
+              return AppViewType.SyncRemoved;
+            case syncEnabled:
+              return AppViewType.Search;
+            default:
+              return AppViewType.Login;
+          }
+        })
+        .then((newView) => {
+          this.currentView = { view: newView };
+        });
     });
   }
 

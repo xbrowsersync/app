@@ -10,7 +10,7 @@ import { MessageCommand } from '../../../../shared/global-shared.enum';
 import LogService from '../../../../shared/log/log.service';
 import StoreService from '../../../../shared/store/store.service';
 import { Sync } from '../../../../shared/sync/sync.interface';
-import SyncEngineService from '../../../../shared/sync/sync-engine/sync-engine.service';
+import SyncService from '../../../../shared/sync/sync.service';
 import UtilityService from '../../../../shared/utility/utility.service';
 import WorkingService from '../../../../shared/working/working.service';
 import WebExtPlatformService from '../../../shared/webext-platform/webext-platform.service';
@@ -31,7 +31,7 @@ export default abstract class WebExtAppHelperService extends AppHelperService {
     'LogService',
     'PlatformService',
     'StoreService',
-    'SyncEngineService',
+    'SyncService',
     'UtilityService',
     'WorkingService'
   ];
@@ -45,22 +45,11 @@ export default abstract class WebExtAppHelperService extends AppHelperService {
     LogSvc: LogService,
     PlatformSvc: WebExtPlatformService,
     StoreSvc: StoreService,
-    SyncEngineSvc: SyncEngineService,
+    SyncSvc: SyncService,
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
   ) {
-    super(
-      $exceptionHandler,
-      $q,
-      $timeout,
-      ApiSvc,
-      LogSvc,
-      PlatformSvc,
-      StoreSvc,
-      SyncEngineSvc,
-      UtilitySvc,
-      WorkingSvc
-    );
+    super($exceptionHandler, $q, $timeout, ApiSvc, LogSvc, PlatformSvc, StoreSvc, SyncSvc, UtilitySvc, WorkingSvc);
 
     this.$filter = $filter;
     this.bookmarkHelperSvc = BookmarkHelperSvc;
@@ -87,7 +76,7 @@ export default abstract class WebExtAppHelperService extends AppHelperService {
     });
   }
 
-  downloadFile(fileName: string, textContents: string, linkId: string): ng.IPromise<string> {
+  downloadFile(fileName: string, textContents: string, linkId?: string): ng.IPromise<string> {
     if (!fileName) {
       throw new Error('File name not supplied.');
     }

@@ -125,6 +125,10 @@
       "key": "Button_Done",
       "default": "Fertig"
     },
+    "DownloadBackup": {
+      "key": "Button_DownloadBackup",
+      "default": ""
+    },
     "EditBookmark": {
       "key": "Button_EditBookmark",
       "default": "Lesezeichen bearbeiten"
@@ -1175,6 +1179,16 @@
       "Patreon": {
         "key": "View_Support_Patreon",
         "default": "Patreon"
+      }
+    },
+    "SyncRemoved": {
+      "Title": {
+        "key": "View_SyncRemoved_Title",
+        "default": ""
+      },
+      "Content": {
+        "key": "View_SyncRemoved_Content",
+        "default": ""
       }
     },
     "Updated": {

@@ -32,6 +32,7 @@ export default class AndroidStoreService extends StoreService {
     StoreKey.Bookmarks,
     StoreKey.LastUpdated,
     StoreKey.Password,
+    StoreKey.RemovedSync,
     StoreKey.ServiceUrl,
     StoreKey.SyncId,
     StoreKey.SyncVersion,
@@ -84,6 +85,7 @@ export default class AndroidStoreService extends StoreService {
             ${StoreKey.Bookmarks} TEXT,
             ${StoreKey.LastUpdated} TEXT,
             ${StoreKey.Password} TEXT,
+            ${StoreKey.RemovedSync} TEXT,
             ${StoreKey.ServiceUrl} TEXT,
             ${StoreKey.SyncId} TEXT,
             ${StoreKey.SyncVersion} TEXT

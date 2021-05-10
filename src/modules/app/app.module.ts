@@ -14,6 +14,7 @@ import BookmarkComponent from './app-search/bookmark/bookmark.component';
 import BookmarkTreeComponent from './app-search/bookmark-tree/bookmark-tree.component';
 import AppSettingsModule from './app-settings/app-settings.module';
 import AppSupportComponent from './app-support/app-support.component';
+import AppSyncRemovedComponent from './app-sync-removed/app-sync-removed.component';
 import AppUpdatedComponent from './app-updated/app-updated.component';
 
 @NgModule({
@@ -22,6 +23,7 @@ import AppUpdatedComponent from './app-updated/app-updated.component';
     AppHelpComponent,
     AppPermissionsComponent,
     AppSupportComponent,
+    AppSyncRemovedComponent,
     AppUpdatedComponent,
     BookmarkComponent,
     BookmarkTreeComponent

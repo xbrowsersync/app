@@ -18,7 +18,7 @@ import { StoreKey } from '../../shared/store/store.enum';
 import StoreService from '../../shared/store/store.service';
 import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync, SyncResult } from '../../shared/sync/sync.interface';
-import SyncEngineService from '../../shared/sync/sync-engine/sync-engine.service';
+import SyncService from '../../shared/sync/sync.service';
 import UpgradeService from '../../shared/upgrade/upgrade.service';
 import UtilityService from '../../shared/utility/utility.service';
 import ChromiumBookmarkService from '../chromium/shared/chromium-bookmark/chromium-bookmark.service';
@@ -42,7 +42,7 @@ export default class WebExtBackgroundService {
   platformSvc: PlatformService;
   settingsSvc: SettingsService;
   storeSvc: StoreService;
-  syncEngineSvc: SyncEngineService;
+  syncSvc: SyncService;
   upgradeSvc: UpgradeService;
   utilitySvc: UtilityService;
 
@@ -61,7 +61,7 @@ export default class WebExtBackgroundService {
     'PlatformService',
     'SettingsService',
     'StoreService',
-    'SyncEngineService',
+    'SyncService',
     'UpgradeService',
     'UtilityService'
   ];
@@ -78,7 +78,7 @@ export default class WebExtBackgroundService {
     PlatformSvc: PlatformService,
     SettingsSvc: SettingsService,
     StoreSvc: StoreService,
-    SyncEngineSvc: SyncEngineService,
+    SyncSvc: SyncService,
     UpgradeSvc: UpgradeService,
     UtilitySvc: UtilityService
   ) {
@@ -94,7 +94,7 @@ export default class WebExtBackgroundService {
     this.platformSvc = PlatformSvc;
     this.settingsSvc = SettingsSvc;
     this.storeSvc = StoreSvc;
-    this.syncEngineSvc = SyncEngineSvc;
+    this.syncSvc = SyncSvc;
     this.upgradeSvc = UpgradeSvc;
     this.utilitySvc = UtilitySvc;
 
@@ -124,7 +124,7 @@ export default class WebExtBackgroundService {
 
   checkForSyncUpdates(): ng.IPromise<SyncResult | void> {
     // Exit if currently syncing
-    const currentSync = this.syncEngineSvc.getCurrentSync();
+    const currentSync = this.syncSvc.getCurrentSync();
     if (currentSync) {
       return this.$q.resolve();
     }
@@ -137,7 +137,7 @@ export default class WebExtBackgroundService {
           return;
         }
 
-        return this.syncEngineSvc.checkForUpdates().then((updatesAvailable) => {
+        return this.syncSvc.checkForUpdates().then((updatesAvailable) => {
           if (!updatesAvailable) {
             return;
           }
@@ -158,10 +158,9 @@ export default class WebExtBackgroundService {
       return;
     }
 
-    // If ID was removed disable sync
-    if (err instanceof Exceptions.NoDataFoundException) {
-      this.syncEngineSvc.disableSync();
-      throw new Exceptions.SyncRemovedException(undefined, err);
+    // Handle sync removed from service
+    if (err instanceof Exceptions.SyncNotFoundException) {
+      this.syncSvc.setSyncRemoved();
     }
 
     throw err;
@@ -175,7 +174,7 @@ export default class WebExtBackgroundService {
         }
 
         // Check for updates to synced bookmarks
-        this.syncEngineSvc
+        this.syncSvc
           .checkForUpdates()
           .then(resolve)
           .catch((err) => {
@@ -191,7 +190,7 @@ export default class WebExtBackgroundService {
                   this.logSvc.logInfo('Sync was disabled before retry attempted');
                   return reject(new Exceptions.HttpRequestCancelledException());
                 }
-                this.syncEngineSvc.checkForUpdates().then(resolve).catch(reject);
+                this.syncSvc.checkForUpdates().then(resolve).catch(reject);
               });
             }, 5000);
           });
@@ -305,7 +304,7 @@ export default class WebExtBackgroundService {
             if (!syncEnabled) {
               return;
             }
-            return this.syncEngineSvc.enableSync().then(() => this.$timeout(this.checkForSyncUpdatesOnStartup, 5e3));
+            return this.syncSvc.enableSync().then(() => this.$timeout(this.checkForSyncUpdatesOnStartup, 5e3));
           })
       );
   }
@@ -428,7 +427,7 @@ export default class WebExtBackgroundService {
   }
 
   runDisableSyncCommand(): ng.IPromise<void> {
-    return this.syncEngineSvc.disableSync();
+    return this.syncSvc.disableSync();
   }
 
   runEnableEventListenersCommand(): ng.IPromise<void> {
@@ -436,32 +435,22 @@ export default class WebExtBackgroundService {
   }
 
   runGetCurrentSyncCommand(): ng.IPromise<Sync> {
-    return this.$q.resolve(this.syncEngineSvc.getCurrentSync());
+    return this.$q.resolve(this.syncSvc.getCurrentSync());
   }
 
   runGetSyncQueueLengthCommand(): ng.IPromise<number> {
-    return this.$q.resolve(this.syncEngineSvc.getSyncQueueLength());
+    return this.$q.resolve(this.syncSvc.getSyncQueueLength());
   }
 
   runRestoreBookmarksCommand(sync: Sync): ng.IPromise<SyncResult> {
     return this.bookmarkSvc.disableEventListeners().then(() => {
       // Queue sync
-      return this.syncEngineSvc.queueSync(sync).then(
-        () =>
-          ({
-            success: true
-          } as SyncResult)
-      );
+      return this.syncSvc.queueSync(sync).then(() => ({ success: true }));
     });
   }
 
   runSyncBookmarksCommand(sync: Sync, runSync: boolean): ng.IPromise<SyncResult> {
-    return this.syncEngineSvc.queueSync(sync, runSync).then(
-      () =>
-        ({
-          success: true
-        } as SyncResult)
-    );
+    return this.syncSvc.queueSync(sync, runSync).then(() => ({ success: true }));
   }
 
   upgradeExtension(): ng.IPromise<void> {

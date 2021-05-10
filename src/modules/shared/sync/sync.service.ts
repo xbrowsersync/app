@@ -1,25 +1,25 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { ApiService } from '../../api/api.interface';
-import { Bookmark } from '../../bookmark/bookmark.interface';
-import BookmarkHelperService from '../../bookmark/bookmark-helper/bookmark-helper.service';
-import CryptoService from '../../crypto/crypto.service';
-import * as Exceptions from '../../exception/exception';
-import { ExceptionHandler } from '../../exception/exception.interface';
-import { PlatformService } from '../../global-shared.interface';
-import LogService from '../../log/log.service';
-import NetworkService from '../../network/network.service';
-import { StoreKey } from '../../store/store.enum';
-import StoreService from '../../store/store.service';
-import UtilityService from '../../utility/utility.service';
-import BookmarkSyncProviderService from '../bookmark-sync-provider/bookmark-sync-provider.service';
-import { SyncType } from '../sync.enum';
-import { Sync, SyncProvider } from '../sync.interface';
+import { ApiService } from '../api/api.interface';
+import { Bookmark } from '../bookmark/bookmark.interface';
+import BookmarkHelperService from '../bookmark/bookmark-helper/bookmark-helper.service';
+import CryptoService from '../crypto/crypto.service';
+import * as Exceptions from '../exception/exception';
+import { ExceptionHandler } from '../exception/exception.interface';
+import { PlatformService } from '../global-shared.interface';
+import LogService from '../log/log.service';
+import NetworkService from '../network/network.service';
+import { StoreKey } from '../store/store.enum';
+import StoreService from '../store/store.service';
+import UtilityService from '../utility/utility.service';
+import BookmarkSyncProviderService from './bookmark-sync-provider/bookmark-sync-provider.service';
+import { SyncType } from './sync.enum';
+import { RemovedSync, Sync, SyncProvider } from './sync.interface';
 
 @autobind
-@Injectable('SyncEngineService')
-export default class SyncEngineService {
+@Injectable('SyncService')
+export default class SyncService {
   $exceptionHandler: ExceptionHandler;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
@@ -87,9 +87,8 @@ export default class SyncEngineService {
   checkIfDisableSyncOnError(err: Error): boolean {
     return (
       err &&
-      (err instanceof Exceptions.SyncRemovedException ||
-        err instanceof Exceptions.MissingClientDataException ||
-        err instanceof Exceptions.NoDataFoundException ||
+      (err instanceof Exceptions.ClientDataNotFoundException ||
+        err instanceof Exceptions.SyncNotFoundException ||
         err instanceof Exceptions.TooManyRequestsException)
     );
   }
@@ -166,7 +165,11 @@ export default class SyncEngineService {
 
   enableSync(): ng.IPromise<void> {
     return this.$q
-      .all([this.storeSvc.set(StoreKey.SyncEnabled, true), this.platformSvc.startSyncUpdateChecks()])
+      .all([
+        this.storeSvc.remove(StoreKey.RemovedSync),
+        this.storeSvc.set(StoreKey.SyncEnabled, true),
+        this.platformSvc.startSyncUpdateChecks()
+      ])
       .then(() => {
         // Enable syncing for registered providers
         return this.$q.all(this.providers.map((provider) => provider.enable()));
@@ -206,9 +209,7 @@ export default class SyncEngineService {
   getSyncSize(): ng.IPromise<number> {
     return this.bookmarkHelperSvc
       .getCachedBookmarks()
-      .then(() => {
-        return this.storeSvc.get<string>(StoreKey.Bookmarks);
-      })
+      .then(() => this.storeSvc.get<string>(StoreKey.Bookmarks))
       .then((encryptedBookmarks) => {
         // Return size in bytes of cached encrypted bookmarks
         const sizeInBytes = new TextEncoder().encode(encryptedBookmarks).byteLength;
@@ -246,32 +247,36 @@ export default class SyncEngineService {
       return this.utilitySvc
         .isSyncEnabled()
         .then((syncEnabled) => {
-          return this.showInterfaceAsSyncing()
-            .then(() => {
-              if (!syncEnabled) {
-                return;
-              }
+          return this.showInterfaceAsSyncing().then(() => {
+            if (!syncEnabled) {
+              return;
+            }
 
-              // If no data found, sync has been removed
-              if (err instanceof Exceptions.NoDataFoundException) {
-                syncException = new Exceptions.SyncRemovedException(undefined, err);
-              } else if (failedSync.type !== SyncType.Local) {
+            // Handle sync removed from service
+            if (err instanceof Exceptions.SyncNotFoundException) {
+              return this.setSyncRemoved();
+            }
+
+            return Promise.resolve()
+              .then(() => {
                 // If local changes made, clear sync queue and refresh sync data if necessary
-                this.syncQueue = [];
-                if (this.checkIfRefreshSyncedDataOnError(syncException)) {
-                  this.currentSync = undefined;
-                  return this.platformSvc.queueLocalResync().catch((refreshErr) => {
-                    syncException = refreshErr;
-                  });
+                if (failedSync.type !== SyncType.Local) {
+                  this.syncQueue = [];
+                  if (this.checkIfRefreshSyncedDataOnError(syncException)) {
+                    this.currentSync = undefined;
+                    return this.platformSvc.queueLocalResync().catch((refreshErr) => {
+                      syncException = refreshErr;
+                    });
+                  }
                 }
-              }
-            })
-            .then(() => {
-              // Check if sync should be disabled
-              if (this.checkIfDisableSyncOnError(syncException)) {
-                return this.disableSync();
-              }
-            });
+              })
+              .then(() => {
+                // Check if sync should be disabled
+                if (this.checkIfDisableSyncOnError(syncException)) {
+                  return this.disableSync();
+                }
+              });
+          });
         })
         .then(() => {
           resolve(syncException);
@@ -485,6 +490,33 @@ export default class SyncEngineService {
         })
         .catch(reject);
     });
+  }
+
+  setSyncRemoved(): ng.IPromise<void> {
+    return Promise.all([
+      this.bookmarkHelperSvc.getCachedBookmarks(),
+      this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId, StoreKey.SyncVersion]),
+      this.utilitySvc.getServiceUrl()
+    ])
+      .then((data) => {
+        const [bookmarks, storeContent, serviceUrl] = data;
+        const removedSync: RemovedSync = {
+          bookmarks,
+          lastUpdated: storeContent.lastUpdated,
+          serviceUrl,
+          syncId: storeContent.syncId,
+          syncVersion: storeContent.syncVersion
+        };
+        return this.storeSvc
+          .set(StoreKey.RemovedSync, removedSync)
+          .then(() =>
+            this.logSvc.logWarning(
+              `Sync ID ${storeContent.syncId} removed from service ${serviceUrl}; last updated ${storeContent.lastUpdated}`
+            )
+          );
+      })
+      .then(() => this.disableSync())
+      .then(() => this.storeSvc.remove(StoreKey.SyncId));
   }
 
   showInterfaceAsSyncing(syncType?: SyncType): ng.IPromise<void> {

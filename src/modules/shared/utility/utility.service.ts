@@ -85,7 +85,7 @@ export default class UtilityService {
   checkSyncCredentialsExist(): ng.IPromise<void> {
     return this.storeSvc.get([StoreKey.Password, StoreKey.SyncId]).then((storeContent) => {
       if (!storeContent.password || !storeContent.syncId) {
-        throw new Exceptions.MissingClientDataException();
+        throw new Exceptions.ClientDataNotFoundException();
       }
     });
   }

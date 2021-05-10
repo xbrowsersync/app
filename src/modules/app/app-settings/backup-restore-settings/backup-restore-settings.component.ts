@@ -360,7 +360,8 @@ export default class BackupRestoreSettingsComponent implements OnInit {
 
         // Beautify json and download data
         const beautifiedJson = JSON.stringify(backupData, null, 2);
-        return this.appHelperSvc.downloadFile(this.backupRestoreSvc.getBackupFileName(), beautifiedJson, 'backupLink');
+        const fileName = this.backupRestoreSvc.getBackupFileName();
+        return this.appHelperSvc.downloadFile(fileName, beautifiedJson, 'backupLink');
       })
       .then((message) => {
         // Display message

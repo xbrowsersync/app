@@ -52,9 +52,7 @@
     <resource-file src="res/android/mipmap-xxhdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png" />
     <resource-file src="res/android/mipmap-xxxhdpi/ic_launcher.png" target="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
     <resource-file src="res/android/mipmap-xxxhdpi/ic_launcher_round.png" target="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" />
-    <resource-file src="res/android/values/colors.xml" target="app/src/main/res/values/colors.xml" />
     <resource-file src="res/android/values/styles.xml" target="app/src/main/res/values/styles.xml" />
-    <resource-file src="res/android/values-night/colors.xml" target="app/src/main/res/values-night/colors.xml" />
   </platform>
   <preference name="android-minSdkVersion" value="28" />
   <preference name="android-targetSdkVersion" value="29" />
