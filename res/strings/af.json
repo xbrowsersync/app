@@ -125,6 +125,10 @@
       "key": "Button_Done",
       "default": "Klaar"
     },
+    "DownloadBackup": {
+      "key": "Button_DownloadBackup",
+      "default": "Download Backup"
+    },
     "EditBookmark": {
       "key": "Button_EditBookmark",
       "default": "Wysig boekmerk"
@@ -1175,6 +1179,16 @@
       "Patreon": {
         "key": "View_Support_Patreon",
         "default": "Patreon"
+      }
+    },
+    "SyncRemoved": {
+      "Title": {
+        "key": "View_SyncRemoved_Title",
+        "default": "Sync not found"
+      },
+      "Content": {
+        "key": "View_SyncRemoved_Content",
+        "default": "<p>Your sync could not be found and may have been removed due to inactivity.</p><p>You will need to create a new sync, but first click the button below to download a backup of your synced data which you can then restore to your new sync.</p>"
       }
     },
     "Updated": {
