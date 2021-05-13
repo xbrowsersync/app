@@ -818,7 +818,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Back-up"
+            "default": "Download Back up"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -1151,8 +1151,7 @@
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "Als het bestand niet automatisch gedownload is, klik dan met de rechtermuisknop op de link hieronder en gebruik \"Koppeling opslaan als...\".",
-        "android": "Bestand opgeslagen als {fileName}."
+        "default": "File saved to Downloads"
       },
       "Support": {
         "key": "View_Settings_Support",
