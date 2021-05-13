@@ -818,7 +818,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Varmuuskopioi"
+            "default": "Download Back up"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -1151,8 +1151,7 @@
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "Jos tiedosto ei latautunut automaattisesti, klikkaa alla olevaa linkkiä kakkospainikkeella ja valitse “Tallenna kohde levylle...”.",
-        "android": "Tiedosto tallennettu nimellä {fileName}."
+        "default": "File saved to Downloads"
       },
       "Support": {
         "key": "View_Settings_Support",
