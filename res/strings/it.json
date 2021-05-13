@@ -818,7 +818,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Backup"
+            "default": "Download Back up"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -1151,8 +1151,7 @@
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "Se il file non è stato scaricato automaticamente, fare clic destro sul link qui sotto e “Salva link come...”.",
-        "android": "File salvato come {fileName}."
+        "default": "File saved to Downloads"
       },
       "Support": {
         "key": "View_Settings_Support",
