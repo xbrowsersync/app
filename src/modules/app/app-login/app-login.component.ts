@@ -420,9 +420,7 @@ export default class AppLoginComponent implements OnInit {
     this.validatingServiceUrl = false;
 
     // Validate service url and then focus on url field
-    this.validateServiceUrl().finally(() => {
-      (document.querySelector('.update-service-panel input') as HTMLInputElement).focus();
-    });
+    this.validateServiceUrl().finally(() => this.appHelperSvc.focusOnElement('.update-service-panel input'));
   }
 
   switchToHelpView(): void {
@@ -527,7 +525,7 @@ export default class AppLoginComponent implements OnInit {
         }
 
         // Focus on url field
-        (document.querySelector('input[name=newServiceUrl]') as HTMLInputElement).focus();
+        this.appHelperSvc.focusOnElement('input[name=newServiceUrl]');
       })
       .finally(() => {
         this.validatingServiceUrl = false;

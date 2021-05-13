@@ -818,7 +818,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "备份"
+            "default": ""
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -1151,8 +1151,7 @@
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "如果文件没有自动下载，请右键点击下面的链接，并将链接另存为...。",
-        "android": "文件已保存为 {fileName}。"
+        "default": ""
       },
       "Support": {
         "key": "View_Settings_Support",

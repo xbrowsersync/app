@@ -49,16 +49,23 @@ export default class IssuesSettingsComponent implements OnInit {
 
   downloadLog(): void {
     this.savingLog = true;
-
-    this.saveLogFile().finally(() => {
-      this.savingLog = false;
-
-      // Focus on done button
-      this.appHelperSvc.focusOnElement('.btn-done');
-    });
+    this.saveLogFile()
+      .then((filename) => {
+        if (!filename) {
+          return;
+        }
+        // Only mobile platforms display a file downloaded message
+        this.downloadLogCompletedMessage = this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)
+          ? `${this.platformSvc.getI18nString(this.Strings.View.Settings.FileDownloaded)}: ${filename}`
+          : '';
+      })
+      .finally(() => {
+        this.savingLog = false;
+        this.appHelperSvc.focusOnElement('.btn-done');
+      });
   }
 
-  getLogFileName(): string {
+  getLogFilename(): string {
     const fileName = `xbs_log_${this.utilitySvc.getDateTimeString(new Date())}.txt`;
     return fileName;
   }
@@ -74,35 +81,29 @@ export default class IssuesSettingsComponent implements OnInit {
     });
   }
 
-  saveLogFile(): ng.IPromise<void> {
-    return this.logSvc
-      .getLogEntries()
-      .then((traceLogItems) => {
-        // Convert trace log items into string array
-        const log = traceLogItems.map((traceLogItem) => {
-          let messageLogText = `${new Date(traceLogItem.timestamp).toISOString().replace(/[A-Z]/g, ' ').trim()}\t`;
-          switch (traceLogItem.level) {
-            case LogLevel.Error:
-              messageLogText += '[error]\t';
-              break;
-            case LogLevel.Warn:
-              messageLogText += '[warn]\t';
-              break;
-            case LogLevel.Trace:
-            default:
-              messageLogText += '[trace]\t';
-          }
-          messageLogText += traceLogItem.message;
-          return messageLogText;
-        });
-
-        // Trigger download
-        return this.appHelperSvc.downloadFile(this.getLogFileName(), log.join('\r\n'), 'downloadLogFileLink');
-      })
-      .then((message) => {
-        // Display message
-        this.downloadLogCompletedMessage = message;
+  saveLogFile(): ng.IPromise<string | void> {
+    return this.logSvc.getLogEntries().then((traceLogItems) => {
+      // Convert trace log items into string array
+      const log = traceLogItems.map((traceLogItem) => {
+        let messageLogText = `${new Date(traceLogItem.timestamp).toISOString().replace(/[A-Z]/g, ' ').trim()}\t`;
+        switch (traceLogItem.level) {
+          case LogLevel.Error:
+            messageLogText += '[error]\t';
+            break;
+          case LogLevel.Warn:
+            messageLogText += '[warn]\t';
+            break;
+          case LogLevel.Trace:
+          default:
+            messageLogText += '[trace]\t';
+        }
+        messageLogText += traceLogItem.message;
+        return messageLogText;
       });
+
+      // Trigger download
+      return this.appHelperSvc.downloadFile(this.getLogFilename(), log.join('\r\n'));
+    });
   }
 
   switchToHelpView(): void {

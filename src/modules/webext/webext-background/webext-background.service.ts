@@ -2,7 +2,7 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import * as detectBrowser from 'detect-browser';
-import { Alarms, browser, Notifications } from 'webextension-polyfill-ts';
+import { Alarms, browser, Downloads, Notifications } from 'webextension-polyfill-ts';
 import { Alert } from '../../shared/alert/alert.interface';
 import AlertService from '../../shared/alert/alert.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
@@ -10,7 +10,7 @@ import * as Exceptions from '../../shared/exception/exception';
 import { ExceptionHandler } from '../../shared/exception/exception.interface';
 import Globals from '../../shared/global-shared.constants';
 import { MessageCommand } from '../../shared/global-shared.enum';
-import { Message, PlatformService } from '../../shared/global-shared.interface';
+import { DownloadFileMessage, Message, PlatformService } from '../../shared/global-shared.interface';
 import LogService from '../../shared/log/log.service';
 import NetworkService from '../../shared/network/network.service';
 import SettingsService from '../../shared/settings/settings.service';
@@ -245,6 +245,17 @@ export default class WebExtBackgroundService {
     });
   }
 
+  getDownloadById(id: number): ng.IPromise<Downloads.DownloadItem> {
+    return browser.downloads.search({ id }).then((results) => {
+      const download = results[0];
+      if ((download ?? undefined) === undefined) {
+        this.logSvc.logWarning('Unable to find download');
+        return;
+      }
+      return download;
+    });
+  }
+
   init(): void {
     this.logSvc.logInfo('Starting up');
 
@@ -402,6 +413,10 @@ export default class WebExtBackgroundService {
         case MessageCommand.DisableSync:
           action = this.runDisableSyncCommand();
           break;
+        // Download file
+        case MessageCommand.DownloadFile:
+          action = this.runDownloadFileCommand(message as DownloadFileMessage);
+          break;
         // Enable event listeners
         case MessageCommand.EnableEventListeners:
           action = this.runEnableEventListenersCommand();
@@ -428,6 +443,53 @@ export default class WebExtBackgroundService {
 
   runDisableSyncCommand(): ng.IPromise<void> {
     return this.syncSvc.disableSync();
+  }
+
+  runDownloadFileCommand(message: DownloadFileMessage): ng.IPromise<string | void> {
+    const { filename, textContents, displaySaveDialog = true } = message;
+    if (!filename) {
+      return Promise.reject(new Error('File name parameter missing.'));
+    }
+    if (!textContents) {
+      return Promise.reject(new Error('File contents parameter missing.'));
+    }
+
+    return new Promise<string | void>((resolve, reject) => {
+      // Use create a new object url using contents and trigger download
+      const file = new Blob([textContents], { type: 'text/plain' });
+      const url = URL.createObjectURL(file);
+      return browser.downloads
+        .download({
+          filename,
+          saveAs: displaySaveDialog,
+          url
+        })
+        .then((downloadId) => {
+          const onChangedHandler = (delta: Downloads.OnChangedDownloadDeltaType) => {
+            switch (delta.state?.current) {
+              case 'complete':
+                URL.revokeObjectURL(url);
+                browser.downloads.onChanged.removeListener(onChangedHandler);
+                this.getDownloadById(downloadId).then((download) => {
+                  this.logSvc.logInfo(`Downloaded file ${download.filename}`);
+                  resolve(download.filename);
+                });
+                break;
+              case 'interrupted':
+                URL.revokeObjectURL(url);
+                browser.downloads.onChanged.removeListener(onChangedHandler);
+                if (delta.error?.current === 'USER_CANCELED') {
+                  resolve();
+                } else {
+                  reject(new Exceptions.FailedDownloadFileException());
+                }
+                break;
+              default:
+            }
+          };
+          browser.downloads.onChanged.addListener(onChangedHandler);
+        }, reject);
+    });
   }
 
   runEnableEventListenersCommand(): ng.IPromise<void> {

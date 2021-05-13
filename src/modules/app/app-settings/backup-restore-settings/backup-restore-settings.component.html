@@ -14,7 +14,7 @@
         vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Backup.Local) }}</p>
         <p class="description" ng-if="vm.syncEnabled">{{
         vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Backup.Synced) }}</p>
-        <div class="buttons animate-fade-in" ng-hide="vm.backupCompletedMessage">
+        <div class="buttons animate-fade-in" ng-show="vm.backupCompletedMessage == null">
           <button class="btn btn-default" ng-disabled="vm.savingBackup" ng-class="{ 'working': vm.savingBackup }"
                   ng-click="vm.utilitySvc.handleEvent(vm.downloadBackup)" ng-disabled="vm.savingBackup">
             <span class="spinner-border spinner-border-sm" ng-show="vm.savingBackup" role="status"
@@ -26,11 +26,8 @@
             vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Backup.Button) }}</span>
           </button>
         </div>
-        <div class="confirm animate-fade-in backup-completed" ng-show="vm.backupCompletedMessage">
-          <p>{{ vm.backupCompletedMessage }}</p>
-          <p class="text-center">
-            <a id="backupLink"></a>
-          </p>
+        <div class="confirm animate-fade-in file-downloaded" ng-show="vm.backupCompletedMessage != null">
+          <p ng-if="vm.backupCompletedMessage !== ''">{{ vm.backupCompletedMessage }}</p>
           <div class="buttons">
             <button class="btn btn-default focused" ng-click="vm.backupCompletedMessage = null">
               {{ vm.platformSvc.getI18nString(vm.Strings.Button.Done) }}

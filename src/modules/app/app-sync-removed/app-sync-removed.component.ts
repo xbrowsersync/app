@@ -70,33 +70,36 @@ export default class AppSyncRemovedComponent {
    */
   downloadBackup(): void {
     this.savingBackup = true;
-    this.$timeout(() =>
-      this.saveRemovedSyncAsBackupFile().finally(() => {
+    this.saveRemovedSyncAsBackupFile()
+      .then((filename) => {
+        if (!filename) {
+          return;
+        }
+        // Only mobile platforms display a file downloaded message
+        this.backupCompletedMessage = this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)
+          ? `${this.platformSvc.getI18nString(this.Strings.View.Settings.FileDownloaded)}: ${filename}`
+          : '';
+      })
+      .finally(() => {
         this.savingBackup = false;
         this.appHelperSvc.focusOnElement('.focused');
-      })
-    );
+      });
   }
 
   /**
    * Retrieves removed sync from store and saves it as a backup file.
    */
-  saveRemovedSyncAsBackupFile(): ng.IPromise<void> {
-    return this.storeSvc
-      .get<RemovedSync>(StoreKey.RemovedSync)
-      .then((removedSync) => {
-        const backupData = this.backupRestoreSvc.createBackupData(
-          removedSync.bookmarks,
-          removedSync.syncId,
-          removedSync.serviceUrl,
-          removedSync.syncVersion
-        );
-        const beautifiedJson = JSON.stringify(backupData, null, 2);
-        const fileName = this.backupRestoreSvc.getBackupFileName();
-        return this.appHelperSvc.downloadFile(fileName, beautifiedJson, 'backupLink');
-      })
-      .then((message) => {
-        this.backupCompletedMessage = message;
-      });
+  saveRemovedSyncAsBackupFile(): ng.IPromise<string | void> {
+    return this.storeSvc.get<RemovedSync>(StoreKey.RemovedSync).then((removedSync) => {
+      const backupData = this.backupRestoreSvc.createBackupData(
+        removedSync.bookmarks,
+        removedSync.syncId,
+        removedSync.serviceUrl,
+        removedSync.syncVersion
+      );
+      const beautifiedJson = JSON.stringify(backupData, null, 2);
+      const filename = this.backupRestoreSvc.getBackupFilename();
+      return this.appHelperSvc.downloadFile(filename, beautifiedJson);
+    });
   }
 }

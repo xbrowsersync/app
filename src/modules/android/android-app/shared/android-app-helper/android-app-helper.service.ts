@@ -61,8 +61,8 @@ export default class AndroidAppHelperService extends AppHelperService {
     }).then(() => {});
   }
 
-  downloadFile(fileName: string, textContents: string): ng.IPromise<string> {
-    if (!fileName) {
+  downloadFile(filename: string, textContents: string): ng.IPromise<string | void> {
+    if (!filename) {
       throw new Error('File name not supplied.');
     }
 
@@ -74,26 +74,20 @@ export default class AndroidAppHelperService extends AppHelperService {
         return reject(new Exceptions.FailedDownloadFileException(undefined, err));
       };
 
-      this.logSvc.logInfo(`Downloading file ${fileName}`);
+      this.logSvc.logInfo(`Downloading file ${filename}`);
 
       // Save file to storage location
       window.resolveLocalFileSystemURL(
         storageLocation,
         (dirEntry) => {
           dirEntry.getFile(
-            fileName,
+            filename,
             { create: true },
             (fileEntry) => {
               fileEntry.createWriter((fileWriter) => {
                 fileWriter.write(textContents);
                 fileWriter.onerror = onError;
-                fileWriter.onwriteend = () => {
-                  // Return message to be displayed
-                  const message = this.platformSvc
-                    .getI18nString(this.Strings.View.Settings.FileDownloaded)
-                    .replace('{fileName}', fileEntry.name);
-                  resolve(message);
-                };
+                fileWriter.onwriteend = () => resolve(filename);
               }, onError);
             },
             onError

@@ -257,13 +257,20 @@ export default class BackupRestoreSettingsComponent implements OnInit {
 
   downloadBackup(): void {
     this.savingBackup = true;
-    this.$timeout(() =>
-      this.saveBackupFile().finally(() => {
-        // Update view model
-        this.savingBackup = false;
-        this.appHelperSvc.focusOnElement('.backup-completed .focused');
+    this.saveBackupFile()
+      .then((filename) => {
+        if (!filename) {
+          return;
+        }
+        // Only mobile platforms display a file downloaded message
+        this.backupCompletedMessage = this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)
+          ? `${this.platformSvc.getI18nString(this.Strings.View.Settings.FileDownloaded)}: ${filename}`
+          : '';
       })
-    );
+      .finally(() => {
+        this.savingBackup = false;
+        this.appHelperSvc.focusOnElement('.focused');
+      });
   }
 
   getBookmarksForExport(): ng.IPromise<Bookmark[]> {
@@ -335,8 +342,9 @@ export default class BackupRestoreSettingsComponent implements OnInit {
     this.appHelperSvc.focusOnElement('.restore-completed .focused');
   }
 
-  saveBackupFile(): ng.IPromise<void> {
+  saveBackupFile(): ng.IPromise<string | void> {
     // Get data for backup
+    let filename: string;
     return this.$q
       .all([
         this.getBookmarksForExport(),
@@ -360,12 +368,8 @@ export default class BackupRestoreSettingsComponent implements OnInit {
 
         // Beautify json and download data
         const beautifiedJson = JSON.stringify(backupData, null, 2);
-        const fileName = this.backupRestoreSvc.getBackupFileName();
-        return this.appHelperSvc.downloadFile(fileName, beautifiedJson, 'backupLink');
-      })
-      .then((message) => {
-        // Display message
-        this.backupCompletedMessage = message;
+        filename = this.backupRestoreSvc.getBackupFilename();
+        return this.appHelperSvc.downloadFile(filename, beautifiedJson);
       });
   }
 

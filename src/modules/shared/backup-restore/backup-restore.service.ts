@@ -86,8 +86,8 @@ export default class BackupRestoreService {
     } as BackupSync;
   }
 
-  getBackupFileName(): string {
-    const fileName = `xbs_backup_${this.utilitySvc.getDateTimeString(new Date())}.json`;
+  getBackupFilename(): string {
+    const fileName = `xbs_backup_${this.utilitySvc.getDateTimeString(new Date())}.txt`;
     return fileName;
   }
 

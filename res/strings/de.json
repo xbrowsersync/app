@@ -818,7 +818,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Sichern"
+            "default": ""
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -1151,8 +1151,7 @@
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "Falls die Datei nicht automatisch heruntergeladen wurde, klicken Sie mit der rechten Maustaste auf den unten stehenden Link und \"Link speichern unter...\".",
-        "android": "Datei gespeichert als {fileName}."
+        "default": ""
       },
       "Support": {
         "key": "View_Settings_Support",

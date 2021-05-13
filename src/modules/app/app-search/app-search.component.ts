@@ -204,7 +204,7 @@ export default abstract class AppSearchComponent implements OnInit {
         this.searchBookmarks();
 
         // Return focus to search box
-        this.$timeout(() => (document.querySelector('input[name=txtSearch]') as HTMLInputElement).focus());
+        this.appHelperSvc.focusOnElement('input[name=txtSearch]');
         break;
 
       case KeyCode.ArrowDown:

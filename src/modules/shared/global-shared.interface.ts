@@ -16,6 +16,12 @@ export interface Message {
   sync?: Sync;
 }
 
+export interface DownloadFileMessage extends Message {
+  displaySaveDialog: boolean;
+  filename: string;
+  textContents: string;
+}
+
 export interface PlatformService {
   checkOptionalNativePermissions: () => ng.IPromise<boolean>;
   disableNativeEventListeners: () => ng.IPromise<void>;

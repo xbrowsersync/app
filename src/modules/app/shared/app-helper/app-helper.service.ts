@@ -73,7 +73,11 @@ export default abstract class AppHelperService {
 
   abstract copyTextToClipboard(text: string): ng.IPromise<void>;
 
-  abstract downloadFile(fileName: string, textContents: string, linkId?: string): ng.IPromise<string>;
+  abstract downloadFile(
+    filename: string,
+    textContents: string,
+    displaySaveDialog?: boolean
+  ): ng.IPromise<string | void>;
 
   focusOnElement(domSelector: string, select = false): void {
     this.$timeout(() => {

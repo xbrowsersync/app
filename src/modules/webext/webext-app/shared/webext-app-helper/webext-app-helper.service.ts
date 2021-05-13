@@ -7,6 +7,7 @@ import BookmarkHelperService from '../../../../shared/bookmark/bookmark-helper/b
 import { ExceptionHandler } from '../../../../shared/exception/exception.interface';
 import Globals from '../../../../shared/global-shared.constants';
 import { MessageCommand } from '../../../../shared/global-shared.enum';
+import { DownloadFileMessage } from '../../../../shared/global-shared.interface';
 import LogService from '../../../../shared/log/log.service';
 import StoreService from '../../../../shared/store/store.service';
 import { Sync } from '../../../../shared/sync/sync.interface';
@@ -76,41 +77,14 @@ export default abstract class WebExtAppHelperService extends AppHelperService {
     });
   }
 
-  downloadFile(fileName: string, textContents: string, linkId?: string): ng.IPromise<string> {
-    if (!fileName) {
-      throw new Error('File name not supplied.');
-    }
-
-    // Use provided hyperlink or create new one
-    let downloadLink: HTMLAnchorElement;
-    if (linkId) {
-      downloadLink = document.getElementById(linkId) as HTMLAnchorElement;
-    } else {
-      downloadLink = document.createElement('a');
-      downloadLink.style.display = 'none';
-      document.body.appendChild(downloadLink);
-    }
-
-    if (!downloadLink) {
-      throw new Error('Link element not found.');
-    }
-
-    this.logSvc.logInfo(`Downloading file ${fileName}`);
-
-    // Use hyperlink to trigger file download
-    const file = new Blob([textContents], { type: 'text/plain' });
-    downloadLink.href = URL.createObjectURL(file);
-    downloadLink.innerText = fileName;
-    downloadLink.download = fileName;
-    downloadLink.click();
-
-    if (!linkId) {
-      document.body.removeChild(downloadLink);
-    }
-
-    // Return message to be displayed
-    const message = this.platformSvc.getI18nString(this.Strings.View.Settings.FileDownloaded);
-    return this.$q.resolve(message);
+  downloadFile(filename: string, textContents: string, displaySaveDialog = true): ng.IPromise<string | void> {
+    const message: DownloadFileMessage = {
+      command: MessageCommand.DownloadFile,
+      displaySaveDialog,
+      filename,
+      textContents
+    };
+    return this.platformSvc.sendMessage(message);
   }
 
   getCurrentSync(): ng.IPromise<Sync> {

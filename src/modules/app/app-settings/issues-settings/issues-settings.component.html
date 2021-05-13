@@ -31,7 +31,7 @@
       <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Issues.Log.Title) }}</label>
       <p class="description">{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Issues.Log.Description) }}
       </p>
-      <div class="animate-fade-in" ng-hide="vm.downloadLogCompletedMessage">
+      <div class="animate-fade-in" ng-show="vm.downloadLogCompletedMessage == null">
         <p class="description">{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Issues.Log.Size) }}:
           <span ng-if="vm.logSize >= 0">{{ vm.logSize | byteFmt : 2 }}</span></p>
         <div class="buttons">
@@ -51,11 +51,8 @@
           </button>
         </div>
       </div>
-      <div class="confirm animate-fade-in" ng-show="vm.downloadLogCompletedMessage">
-        <p>{{ vm.downloadLogCompletedMessage }}</p>
-        <p class="text-center">
-          <a id="downloadLogFileLink"></a>
-        </p>
+      <div class="confirm animate-fade-in file-downloaded" ng-show="vm.downloadLogCompletedMessage != null">
+        <p ng-if="vm.downloadLogCompletedMessage !== ''">{{ vm.downloadLogCompletedMessage }}</p>
         <div class="buttons">
           <button class="btn btn-default btn-done" ng-click="vm.downloadLogCompletedMessage = null">
             {{ vm.platformSvc.getI18nString(vm.Strings.Button.Done) }}

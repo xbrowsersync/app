@@ -818,7 +818,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Резервное копирование"
+            "default": ""
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -1151,8 +1151,7 @@
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "Если файл не загрузился автоматически, нажмите на ссылку ниже и «Сохранить ссылку как...».",
-        "android": "Файл сохранен как {fileName}."
+        "default": ""
       },
       "Support": {
         "key": "View_Settings_Support",
