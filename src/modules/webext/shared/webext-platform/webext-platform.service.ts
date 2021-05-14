@@ -6,13 +6,14 @@ import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/book
 import * as Exceptions from '../../../shared/exception/exception';
 import Globals from '../../../shared/global-shared.constants';
 import { BrowserName, MessageCommand, PlatformType } from '../../../shared/global-shared.enum';
-import { I18nObject, Message, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
+import { I18nObject, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
 import LogService from '../../../shared/log/log.service';
 import StoreService from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
 import { Sync, SyncResult } from '../../../shared/sync/sync.interface';
 import UtilityService from '../../../shared/utility/utility.service';
 import WorkingService from '../../../shared/working/working.service';
+import { Message, SyncBookmarksMessage } from '../../webext.interface';
 import WebExtBackgroundService from '../../webext-background/webext-background.service';
 import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
 
@@ -234,11 +235,12 @@ export default abstract class WebExtPlatformService implements PlatformService {
   }
 
   queueSync(sync: Sync, command = MessageCommand.SyncBookmarks, runSync = true): ng.IPromise<SyncResult> {
-    return this.sendMessage({
+    const message: SyncBookmarksMessage = {
       command,
       sync,
       runSync
-    }).finally(this.workingSvc.hide);
+    };
+    return this.sendMessage(message).finally(this.workingSvc.hide);
   }
 
   refreshNativeInterface(syncEnabled?: boolean, syncType?: SyncType): ng.IPromise<void> {

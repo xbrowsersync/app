@@ -10,7 +10,7 @@ import * as Exceptions from '../../shared/exception/exception';
 import { ExceptionHandler } from '../../shared/exception/exception.interface';
 import Globals from '../../shared/global-shared.constants';
 import { MessageCommand } from '../../shared/global-shared.enum';
-import { DownloadFileMessage, Message, PlatformService } from '../../shared/global-shared.interface';
+import { PlatformService } from '../../shared/global-shared.interface';
 import LogService from '../../shared/log/log.service';
 import NetworkService from '../../shared/network/network.service';
 import SettingsService from '../../shared/settings/settings.service';
@@ -23,7 +23,7 @@ import UpgradeService from '../../shared/upgrade/upgrade.service';
 import UtilityService from '../../shared/utility/utility.service';
 import ChromiumBookmarkService from '../chromium/shared/chromium-bookmark/chromium-bookmark.service';
 import BookmarkIdMapperService from '../shared/bookmark-id-mapper/bookmark-id-mapper.service';
-import { InstallBackup } from '../webext.interface';
+import { DownloadFileMessage, InstallBackup, Message, SyncBookmarksMessage } from '../webext.interface';
 
 @autobind
 @Injectable('WebExtBackgroundService')
@@ -395,11 +395,11 @@ export default class WebExtBackgroundService {
       switch (message.command) {
         // Queue bookmarks sync
         case MessageCommand.SyncBookmarks:
-          action = this.runSyncBookmarksCommand(message.sync, message.runSync);
+          action = this.runSyncBookmarksCommand(message as SyncBookmarksMessage);
           break;
         // Trigger bookmarks restore
         case MessageCommand.RestoreBookmarks:
-          action = this.runRestoreBookmarksCommand(message.sync);
+          action = this.runRestoreBookmarksCommand(message as SyncBookmarksMessage);
           break;
         // Get current sync in progress
         case MessageCommand.GetCurrentSync:
@@ -504,14 +504,16 @@ export default class WebExtBackgroundService {
     return this.$q.resolve(this.syncSvc.getSyncQueueLength());
   }
 
-  runRestoreBookmarksCommand(sync: Sync): ng.IPromise<SyncResult> {
+  runRestoreBookmarksCommand(message: SyncBookmarksMessage): ng.IPromise<SyncResult> {
+    const { sync } = message;
     return this.bookmarkSvc.disableEventListeners().then(() => {
       // Queue sync
       return this.syncSvc.queueSync(sync).then(() => ({ success: true }));
     });
   }
 
-  runSyncBookmarksCommand(sync: Sync, runSync: boolean): ng.IPromise<SyncResult> {
+  runSyncBookmarksCommand(message: SyncBookmarksMessage): ng.IPromise<SyncResult> {
+    const { sync, runSync } = message;
     return this.syncSvc.queueSync(sync, runSync).then(() => ({ success: true }));
   }
 

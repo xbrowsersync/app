@@ -7,7 +7,6 @@ import BookmarkHelperService from '../../../../shared/bookmark/bookmark-helper/b
 import { ExceptionHandler } from '../../../../shared/exception/exception.interface';
 import Globals from '../../../../shared/global-shared.constants';
 import { MessageCommand } from '../../../../shared/global-shared.enum';
-import { DownloadFileMessage } from '../../../../shared/global-shared.interface';
 import LogService from '../../../../shared/log/log.service';
 import StoreService from '../../../../shared/store/store.service';
 import { Sync } from '../../../../shared/sync/sync.interface';
@@ -15,6 +14,7 @@ import SyncService from '../../../../shared/sync/sync.service';
 import UtilityService from '../../../../shared/utility/utility.service';
 import WorkingService from '../../../../shared/working/working.service';
 import WebExtPlatformService from '../../../shared/webext-platform/webext-platform.service';
+import { DownloadFileMessage } from '../../../webext.interface';
 
 @autobind
 export default abstract class WebExtAppHelperService extends AppHelperService {

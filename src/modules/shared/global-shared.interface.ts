@@ -10,18 +10,6 @@ export interface I18nObject {
   firefox?: string;
 }
 
-export interface Message {
-  command: MessageCommand;
-  runSync?: boolean;
-  sync?: Sync;
-}
-
-export interface DownloadFileMessage extends Message {
-  displaySaveDialog: boolean;
-  filename: string;
-  textContents: string;
-}
-
 export interface PlatformService {
   checkOptionalNativePermissions: () => ng.IPromise<boolean>;
   disableNativeEventListeners: () => ng.IPromise<void>;
