@@ -8,7 +8,7 @@ import BackupRestoreService from '../../../shared/backup-restore/backup-restore.
 import { Bookmark, BookmarkService } from '../../../shared/bookmark/bookmark.interface';
 import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../../shared/exception/exception';
-import { MessageCommand } from '../../../shared/global-shared.enum';
+import { MessageCommand, PlatformType } from '../../../shared/global-shared.enum';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import LogService from '../../../shared/log/log.service';
 import { StoreKey } from '../../../shared/store/store.enum';
@@ -220,12 +220,13 @@ export default class BackupRestoreSettingsComponent implements OnInit {
     this.displayRestoreForm = true;
     (document.querySelector('#backupFile') as HTMLInputElement).value = null;
     this.restoreForm.dataToRestore.$setValidity('InvalidData', true);
-
-    // Focus on restore textarea
-    if (!this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
+    if (this.platformSvc.platformName === PlatformType.Firefox) {
+      // Focus on restore textarea
       this.$timeout(() => {
         (document.querySelector('#restoreForm textarea') as HTMLTextAreaElement).select();
       });
+    } else {
+      this.appHelperSvc.focusOnElement('#restoreForm .focused');
     }
   }
 
@@ -299,8 +300,8 @@ export default class BackupRestoreSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Set backup file change event for mobile platforms
-    if (this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
+    // Set backup file change event for non-firefox platforms
+    if (this.platformSvc.platformName !== PlatformType.Firefox) {
       document.getElementById('backupFile').addEventListener('change', this.backupFileChanged, false);
     }
 

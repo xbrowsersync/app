@@ -49,8 +49,8 @@
         </div>
         <form id="restoreForm" name="vm.restoreForm" class="confirm animate-fade-in" ng-show="vm.displayRestoreForm"
               novalidate>
-          <input type="file" name="files[]" id="backupFile" class="d-none" tabindex="-1" />
-          <p ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
+          <input type="file" name="files[]" id="backupFile" class="d-none" tabindex="-1">
+          <p ng-if="vm.platformSvc.platformName === 'firefox'">
             {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.Copy) }}
           </p>
           <div>
@@ -58,14 +58,13 @@
                    class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.Paste) }}
             </label>
             <div class="form-group" ng-class="{ 'has-error': vm.restoreForm.dataToRestore.$invalid }">
-              <input type="hidden" name="dataToRestore" ng-model="vm.dataToRestore"></input>
+              <input type="hidden" name="dataToRestore" ng-model="vm.dataToRestore">
               <textarea ng-model="vm.dataToRestore" class="form-control" rows="3"
-                        ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"
-                        ng-change="vm.resetFormValidity()" autocapitalize="off" autocomplete="off" autocorrect="off"
-                        spellcheck="false"></textarea>
+                        ng-if="vm.platformSvc.platformName === 'firefox'" ng-change="vm.resetFormValidity()"
+                        autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
               <input type="text" ng-model="vm.backupFileName" class="form-control" readonly
                      placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.SelectFile.Placeholder) }}…"
-                     ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)"></input>
+                     ng-if="vm.platformSvc.platformName !== 'firefox'">
               <div class="validation" ng-if="vm.restoreForm.dataToRestore.$invalid">
                 <span ng-if="vm.restoreForm.dataToRestore.$error.InvalidData">
                   {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.Invalid) }}
@@ -74,11 +73,10 @@
               <span class="spinner-border spinner-border-sm" ng-show="vm.validatingRestoreData" role="status"
                     aria-hidden="true"></span>
             </div>
-            <div class="buttons" ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
-              <button class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.selectBackupFile)">
-                {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.SelectFile.Button) }}
-              </button>
-            </div>
+            <button class="btn btn-default btn-select-file focused" ng-if="vm.platformSvc.platformName !== 'firefox'"
+                    ng-click="vm.utilitySvc.handleEvent(vm.selectBackupFile)">
+              {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.SelectFile.Button) }}
+            </button>
           </div>
           <div class="buttons">
             <button class="btn btn-default btn-restore"

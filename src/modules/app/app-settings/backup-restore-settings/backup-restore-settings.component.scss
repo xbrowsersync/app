@@ -14,8 +14,14 @@ backup-restore-settings {
       height: 12rem;
     }
 
+    .btn-select-file {
+      display: block;
+      margin: 0 auto 1rem;
+    }
+
     .form-group {
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.4rem;
     }
 
     .spinner-border {

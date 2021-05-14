@@ -98,8 +98,6 @@ export default class BackupRestoreService {
     let syncId: string;
     let syncVersion: string;
 
-    this.logSvc.logInfo('Restoring data');
-
     switch (true) {
       case !angular.isUndefined(backupData.xbrowsersync): // v1.5.0+
         bookmarksToRestore = backupData.xbrowsersync.data?.bookmarks;
@@ -115,6 +113,8 @@ export default class BackupRestoreService {
         // Invalid restore data
         throw new Exceptions.FailedRestoreDataException();
     }
+
+    this.logSvc.logInfo('Restoring data');
 
     // Upgrade the bookmarks if required
     return this.platformSvc
