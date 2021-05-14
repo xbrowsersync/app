@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync has been updated. Sync has been disabled, re-enable sync to complete the upgrade process."
+        "default": "xBrowserSync on päivitetty ja synkronointi on kytketty pois päältä. Viimeistele päivitys ottamalla synkronointi uudelleen käyttöön."
       }
     },
     "BookmarkCreated": {
@@ -127,7 +127,7 @@
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": "Download Backup"
+      "default": "Lataa varmuuskopio"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
@@ -713,21 +713,21 @@
         "UpgradeReady": {
           "Title": {
             "key": "View_Login_Sync_UpgradeReady_Title",
-            "default": "Ready to upgrade sync?"
+            "default": "Valmis päivittämään synkronoinnin?"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync. After upgrading, you will no longer be able to sync with any previous versions of xBrowserSync.</p><p>Make sure to update xBrowserSync on all synced devices before continuing. Ready to proceed?</p>"
+            "default": "<p>Synkronointisi on päivitettävä ennen synkronoida tämän xBrowserSync-version kanssa. Päivityksen jälkeen et enää voi synkronoida edellisten versioiden kanssa.</p><p>Varmista, että olet päivittänyt kaikki xBrowserSync asennuksesi ennen kuin jatkat. Jatketaanko?</p>"
           }
         },
         "UpgradeRequired": {
           "Title": {
             "key": "View_Login_Sync_UpgradeRequired_Title",
-            "default": "Upgrade sync"
+            "default": "Päivitä synkronointi"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync.</p><p>Use the xBrowserSync desktop browser extension to upgrade your sync and then retry syncing here.</p>"
+            "default": "<p>Synkronointi on päivitettävä ennen synkronointia tämän xBrowserSync-version kanssa.</p><p>KäytPäivitä synkronointisi käyttäen xBrowserSyncin laajennusta työpöytäselaimessa ja yritä sitten synkronoida uudelleen täällä.</p>"
           }
         }
       },
@@ -818,7 +818,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Download Back up"
+            "default": "Lataa varmuuskopio"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -1111,15 +1111,15 @@
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Last synced {date}"
+            "default": "Viimeisin synkronointi {date}"
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "Ready to sync (scheduled for {date})"
+            "default": "Valmis synkronoimaan (ajastettu {date})"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
-            "default": "Sync Now"
+            "default": "Synkronoi nyt"
           }
         },
         "Qr": {
@@ -1151,7 +1151,7 @@
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "File saved to Downloads"
+        "default": "Lompakon tiedot tallennettu latauskansioon"
       },
       "Support": {
         "key": "View_Settings_Support",
@@ -1183,11 +1183,11 @@
     "SyncRemoved": {
       "Title": {
         "key": "View_SyncRemoved_Title",
-        "default": "Sync not found"
+        "default": "Synkronointia ei löydy"
       },
       "Content": {
         "key": "View_SyncRemoved_Content",
-        "default": "<p>Your sync could not be found and may have been removed due to inactivity.</p><p>You will need to create a new sync, but first click the button below to download a backup of your synced data which you can then restore to your new sync.</p>"
+        "default": "<p>Synkronointiasi ei löydy ja se on saatettu poistaa käyttämättömyyden vuoksi.</p><p>Sinun on luotava uusi synkronointi, mutta lataa ensin varmuuskopio synkronoiduista tiedoistasi klikkaamalla alla olevaa painiketta. Voit sitten palauttaa varmuuskopion uuteen synkronointiisi.</p>"
       }
     },
     "Updated": {
