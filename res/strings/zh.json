@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync has been updated. Sync has been disabled, re-enable sync to complete the upgrade process."
+        "default": "xBrowserSync 已更新。同步已禁用，重新启用同步以完成升级过程。"
       }
     },
     "BookmarkCreated": {
@@ -127,7 +127,7 @@
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": "Download Backup"
+      "default": "下载备份"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
@@ -143,7 +143,7 @@
     },
     "OK": {
       "key": "Button_OK",
-      "default": "OK"
+      "default": "确定"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
@@ -713,7 +713,7 @@
         "UpgradeReady": {
           "Title": {
             "key": "View_Login_Sync_UpgradeReady_Title",
-            "default": "Ready to upgrade sync?"
+            "default": "准备升级同步吗？"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
@@ -723,7 +723,7 @@
         "UpgradeRequired": {
           "Title": {
             "key": "View_Login_Sync_UpgradeRequired_Title",
-            "default": "Upgrade sync"
+            "default": "升级同步"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
@@ -818,7 +818,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Download Back up"
+            "default": "下载备份"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -1111,15 +1111,15 @@
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Last synced {date}"
+            "default": "上次同步 {date}"
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "Ready to sync (scheduled for {date})"
+            "default": "准备同步 (计划为 {date})"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
-            "default": "Sync Now"
+            "default": "立即同步"
           }
         },
         "Qr": {
@@ -1151,7 +1151,7 @@
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "File saved to Downloads"
+        "default": "文件已保存到下载"
       },
       "Support": {
         "key": "View_Settings_Support",
@@ -1183,11 +1183,11 @@
     "SyncRemoved": {
       "Title": {
         "key": "View_SyncRemoved_Title",
-        "default": "Sync not found"
+        "default": "同步未找到"
       },
       "Content": {
         "key": "View_SyncRemoved_Content",
-        "default": "<p>Your sync could not be found and may have been removed due to inactivity.</p><p>You will need to create a new sync, but first click the button below to download a backup of your synced data which you can then restore to your new sync.</p>"
+        "default": "<p>您的同步未找到可能因为没有活动而被删除。</p><p>您将需要创建一个新的同步, 但首先点击下面的按钮下载您同步数据的备份，然后恢复到新的同步状态。</p>"
       }
     },
     "Updated": {
