@@ -505,14 +505,14 @@
       "BackingUp": {
         "key": "View_Help_BackingUp",
         "default": "<h4>N'oubliez pas de sauvegarder</h4><p>Lorsque vous utilisez xBrowserSync vos données sont de votre responsabilité, alors soyez vigilant et assurez-vous de faire des sauvegardes.</p><p>Rendez-vous sur le panneau Paramètres et sauvegardez vos données non chiffrées dans un fichier local qui peut être utilisé pour restaurer vos données si vous en avez besoin.</p><p>Si les données de votre navigateur local sont corrompues et que vous n'avez aucune sauvegarde, vous pouvez à tout moment rétablir l'état d'origine de vos données depuis l'installation de xBrowserSync.</p>",
-        "android": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
+        "android": "<h4>N'oubliez pas de faire une sauvegarde</h4><p>Lorsque vous utilisez xBrowserSync, vos données sont de votre responsabilité, alors soyez intelligent et assurez-vous de faire des sauvegardes.</p><p>Rendez-vous dans les Paramètres et sauvegardez vos données dans un fichier local non chiffrées qui peut être utilisé pour restaurer vos données si vous en avez besoin.</p>"
       },
       "BeforeYouBegin": {
         "key": "View_Help_BeforeYouBegin",
-        "default": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) please disable them to avoid conflicts.</p>",
-        "brave": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) please disable them to avoid conflicts.</p>",
-        "edge": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) please disable them to avoid conflicts.</p>",
-        "firefox": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) please disable them to avoid conflicts.</p>"
+        "default": "<h4>Avant de commencer</h4><p>xBrowserSync modifie les données de votre navigateur local, c'est donc une bonne idée de sauvegarder vos signets et autres données de navigateur au cas où, et si vous utilisez d'autres services ou outils de synchronisation de navigateur (comme <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>La synchronisation de Google Chrome</a>), veuillez les désactiver pour éviter les conflits.</p>",
+        "brave": "<h4>Avant de commencer</h4><p>xBrowserSync modifie les données de votre navigateur local, c'est donc une bonne idée de sauvegarder vos signets et autres données de navigateur au cas où, et si vous utilisez d'autres services ou outils de synchronisation de navigateur (comme <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) veuillez les désactiver pour éviter les conflits.</p>",
+        "edge": "<h4>Avant de commencer</h4> <p> xBrowserSync modifie les données de votre navigateur local, c'est donc une bonne idée de sauvegarder vos signets et autres données de navigateur au cas où, et si vous utilisez d'autres services ou outils de synchronisation de navigateur (comme <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>la synchronisation de Microsoft Edge</a>) veuillez les désactiver pour éviter les conflits.</p>",
+        "firefox": "<h4>Avant de commencer</h4> <p>xBrowserSync modifie les données de votre navigateur local, c'est donc une bonne idée de sauvegarder vos signets et autres données de navigateur au cas où, et si vous utilisez d'autres services ou outils de synchronisation de navigateur (comme <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'> Firefox Sync</a>), veuillez les désactiver pour éviter les conflits.</p>"
       },
       "ExistingId": {
         "key": "View_Help_ExistingId",
@@ -530,11 +530,11 @@
       },
       "Mobile": {
         "key": "View_Help_Mobile",
-        "default": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a> store, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droid</a> or <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>direct download</a>.</p>"
+        "default": "<h4>Passez au mobile </h4><p>Accédez à vos favoris synchronisés lors de vos déplacements avec l'application xBrowserSync Android, disponible sur <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a> store, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droid</a> ou en <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>téléchargement direct</a>.</p>"
       },
       "NativeFeatures": {
         "key": "View_Help_NativeFeatures",
-        "default": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks bar and bookmarks manager, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p>",
+        "default": "<h4>Fonctionnalités natives prises en charge</h4> <p>N'hésitez pas à continuer à utiliser les fonctionnalités natives de création de favoris de votre navigateur, telles que la barre de favoris et le gestionnaire de favoris, toutes les modifications que vous apportez seront automatiquement synchronisées en arrière-plan.</p><p>Si vous avez organisé vos signets existants dans des dossiers, ne vous inquiétez pas, xBrowserSync respectera et maintiendra votre hiérarchie de signets existante.</p>",
         "firefox": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks toolbar and bookmarks library, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p><p>Please note however, as Firefox’s bookmarks API does not yet support accessing native bookmark tags, any existing tags will be lost when syncing and tags added via xBrowserSync will not be saved as native tags.</p>"
       },
       "Previous": {
@@ -563,8 +563,8 @@
       },
       "Welcome": {
         "key": "View_Help_Welcome",
-        "default": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info).</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or the arrow keys to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>",
-        "android": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info).</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or swiping to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>"
+        "default": "<h4>Bienvenue dans xBrowserSync!</h4><p>xBrowserSync est une alternative gratuite et open-source aux services de synchronisation de navigateur offerts par Google, Mozilla, Opera et autres, qui respecte votre vie privée et vous donne un anonymat complet (consultez le<a href='https://link.xbrowsersync.org/www' class='new-tab'> site Web </a>pour plus d'informations).</p><p>Prenez un moment pour lire le guide d'aide pour vous familiariser avec xBrowserSync, en utilisant les liens ci-dessous ou les touches fléchées pour vous déplacer entre les pages. </p> <p> Remarque: xBrowserSync ne synchronise actuellement que les signets. La synchronisation des données supplémentaires du navigateur sera ajoutée dans les versions futures, consultez la<a href='https://link.xbrowsersync.org/roadmap' class='new-tab'> roadmap</a> pour voir ce qui est prévu .</p>",
+        "android": "<h4>Bienvenue dans xBrowserSync!</h4><p> xBrowserSync est une alternative gratuite et open-source aux services de synchronisation de navigateur offerts par Google, Mozilla, Opera et autres, qui respecte votre vie privée et vous donne un anonymat complet (consultez le<a href='https://link.xbrowsersync.org/www' class='new-tab'> site Web </a>pour plus d'informations).</p><p>Prenez un moment pour lire le guide d'aide pour vous familiariser avec xBrowserSync, en utilisant les liens ci-dessous ou en glissant pour vous déplacer entre les pages. </p><p> Remarque: XbrowserSync ne synchronise actuellement que les signets. La synchronisation des données supplémentaires du navigateur sera ajoutée dans les versions futures, consultez la<a href='https://link.xbrowsersync.org/roadmap' class='new-tab'> roadmap</a> de développement pour voir ce qui est prévu .</p>"
       }
     },
     "Login": {
@@ -675,7 +675,7 @@
         },
         "Warning": {
           "key": "View_Login_Service_Warning",
-          "default": "<strong>Important:</strong> xBrowserSync services are run independently by volunteers. The service administrator takes no responsibility for your data so please remember to backup regularly."
+          "default": "<strong>Important:</strong> xBrowserSync est géré indépendamment par des bénévoles. L'administrateur du service n'assume aucune responsabilité pour vos données, alors n'oubliez pas de les sauvegarder régulièrement."
         }
       },
       "Sync": {
@@ -713,11 +713,11 @@
         "UpgradeReady": {
           "Title": {
             "key": "View_Login_Sync_UpgradeReady_Title",
-            "default": "Ready to upgrade sync?"
+            "default": "Prêt à mettre la synchro à jour ?"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync. After upgrading, you will no longer be able to sync with any previous versions of xBrowserSync.</p><p>Make sure to update xBrowserSync on all synced devices before continuing. Ready to proceed?</p>"
+            "default": "<p>Votre synchronisation doit être mise à niveau avant la synchronisation avec cette version de xBrowserSync. Après la mise à niveau, vous ne pourrez plus vous synchroniser avec les versions précédentes de xBrowserSync. </p><p>Assurez-vous de mettre à jour xBrowserSync sur tous les appareils synchronisés avant de continuer. Prêt à continuer ?</p>"
           }
         },
         "UpgradeRequired": {
@@ -727,7 +727,7 @@
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync.</p><p>Use the xBrowserSync desktop browser extension to upgrade your sync and then retry syncing here.</p>"
+            "default": "<p>Votre synchronisation doit être mise à niveau avant de la synchroniser avec cette version de XbrowserSync.</p><p>Utilisez l'extension de navigateur pour mettre à niveau votre synchronisation, puis réessayez la synchronisation ici.</p>"
           }
         }
       },
