@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync has been updated. Sync has been disabled, re-enable sync to complete the upgrade process."
+        "default": "xbrowserSync a été mis à jour. La synchronisation a été désactivé, réactivez la pour terminer le processus de mise à jour."
       }
     },
     "BookmarkCreated": {
@@ -127,7 +127,7 @@
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": "Download Backup"
+      "default": "Télécharger la sauvegarde"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
@@ -818,7 +818,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Download Back up"
+            "default": "Télécharger la sauvegarde"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -1111,15 +1111,15 @@
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Last synced {date}"
+            "default": "Dernière synchro le {date}"
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "Ready to sync (scheduled for {date})"
+            "default": "Prêt à synchroniser (prévu pour le {date})"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
-            "default": "Sync Now"
+            "default": "Synchroniser maintenant"
           }
         },
         "Qr": {
@@ -1151,7 +1151,7 @@
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "File saved to Downloads"
+        "default": "Fichier enregistré dans Téléchargements"
       },
       "Support": {
         "key": "View_Settings_Support",
@@ -1183,7 +1183,7 @@
     "SyncRemoved": {
       "Title": {
         "key": "View_SyncRemoved_Title",
-        "default": "Sync not found"
+        "default": "Synchronisation introuvable"
       },
       "Content": {
         "key": "View_SyncRemoved_Content",
