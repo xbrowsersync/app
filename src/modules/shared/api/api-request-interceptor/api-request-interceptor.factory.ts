@@ -5,7 +5,7 @@ import Globals from '../../global-shared.constants';
 
 @autobind
 @Injectable('ApiRequestInterceptorFactory')
-export default class ApiRequestInterceptorFactory implements IHttpInterceptor {
+export class ApiRequestInterceptorFactory implements IHttpInterceptor {
   $q: ng.IQService;
 
   static $inject = ['$q'];

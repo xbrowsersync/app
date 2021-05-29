@@ -1,7 +1,7 @@
 import { Component } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import AlertService from '../../shared/alert/alert.service';
-import WebExtBackgroundService from './webext-background.service';
+import { AlertService } from '../../shared/alert/alert.service';
+import { WebExtBackgroundService } from './webext-background.service';
 
 @autobind
 @Component({
@@ -9,7 +9,7 @@ import WebExtBackgroundService from './webext-background.service';
   selector: 'webextBackground',
   template: require('./webext-background.component.html')
 })
-export default class WebExtBackgroundComponent {
+export class WebExtBackgroundComponent {
   backgroundSvc: WebExtBackgroundService;
 
   startupInitiated = false;

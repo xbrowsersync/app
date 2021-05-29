@@ -3,23 +3,23 @@ import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { ApiService } from '../api/api.interface';
 import { Bookmark } from '../bookmark/bookmark.interface';
-import BookmarkHelperService from '../bookmark/bookmark-helper/bookmark-helper.service';
-import CryptoService from '../crypto/crypto.service';
+import { BookmarkHelperService } from '../bookmark/bookmark-helper/bookmark-helper.service';
+import { CryptoService } from '../crypto/crypto.service';
 import * as Exceptions from '../exception/exception';
 import { ExceptionHandler } from '../exception/exception.interface';
 import { PlatformService } from '../global-shared.interface';
-import LogService from '../log/log.service';
-import NetworkService from '../network/network.service';
+import { LogService } from '../log/log.service';
+import { NetworkService } from '../network/network.service';
 import { StoreKey } from '../store/store.enum';
-import StoreService from '../store/store.service';
-import UtilityService from '../utility/utility.service';
-import BookmarkSyncProviderService from './bookmark-sync-provider/bookmark-sync-provider.service';
+import { StoreService } from '../store/store.service';
+import { UtilityService } from '../utility/utility.service';
+import { BookmarkSyncProviderService } from './bookmark-sync-provider/bookmark-sync-provider.service';
 import { SyncType } from './sync.enum';
 import { RemovedSync, Sync, SyncProvider } from './sync.interface';
 
 @autobind
 @Injectable('SyncService')
-export default class SyncService {
+export class SyncService {
   $exceptionHandler: ExceptionHandler;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;

@@ -1,24 +1,24 @@
 import angular from 'angular';
 import autobind from 'autobind-decorator';
 import { browser, Tabs } from 'webextension-polyfill-ts';
-import AlertService from '../../../shared/alert/alert.service';
-import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { AlertService } from '../../../shared/alert/alert.service';
+import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../../shared/exception/exception';
 import Globals from '../../../shared/global-shared.constants';
 import { BrowserName, MessageCommand, PlatformType } from '../../../shared/global-shared.enum';
 import { I18nObject, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
-import LogService from '../../../shared/log/log.service';
-import StoreService from '../../../shared/store/store.service';
+import { LogService } from '../../../shared/log/log.service';
+import { StoreService } from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
 import { Sync, SyncResult } from '../../../shared/sync/sync.interface';
-import UtilityService from '../../../shared/utility/utility.service';
-import WorkingService from '../../../shared/working/working.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
+import { WorkingService } from '../../../shared/working/working.service';
 import { DownloadFileMessage, Message, SyncBookmarksMessage } from '../../webext.interface';
-import WebExtBackgroundService from '../../webext-background/webext-background.service';
-import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
+import { WebExtBackgroundService } from '../../webext-background/webext-background.service';
+import { BookmarkIdMapperService } from '../bookmark-id-mapper/bookmark-id-mapper.service';
 
 @autobind
-export default abstract class WebExtPlatformService implements PlatformService {
+export abstract class WebExtPlatformService implements PlatformService {
   Strings = require('../../../../../res/strings/en.json');
 
   $injector: ng.auto.IInjectorService;

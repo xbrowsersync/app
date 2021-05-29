@@ -5,7 +5,7 @@ import { WorkingStatus } from './working.interface';
 
 @autobind
 @Injectable('WorkingService')
-export default class WorkingService {
+export class WorkingService {
   status: WorkingStatus;
 
   constructor() {

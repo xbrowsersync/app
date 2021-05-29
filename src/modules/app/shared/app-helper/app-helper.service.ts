@@ -8,18 +8,18 @@ import * as Exceptions from '../../../shared/exception/exception';
 import { ExceptionHandler } from '../../../shared/exception/exception.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
-import LogService from '../../../shared/log/log.service';
+import { LogService } from '../../../shared/log/log.service';
 import { StoreKey } from '../../../shared/store/store.enum';
-import StoreService from '../../../shared/store/store.service';
+import { StoreService } from '../../../shared/store/store.service';
 import { Sync } from '../../../shared/sync/sync.interface';
-import SyncService from '../../../shared/sync/sync.service';
-import UtilityService from '../../../shared/utility/utility.service';
-import WorkingService from '../../../shared/working/working.service';
+import { SyncService } from '../../../shared/sync/sync.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
+import { WorkingService } from '../../../shared/working/working.service';
 import { AppViewType } from '../../app.enum';
 import { AppView } from '../../app.interface';
 
 @autobind
-export default abstract class AppHelperService {
+export abstract class AppHelperService {
   Strings = require('../../../../../res/strings/en.json');
 
   $exceptionHandler: ExceptionHandler;

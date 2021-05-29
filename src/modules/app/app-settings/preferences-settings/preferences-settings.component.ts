@@ -2,11 +2,11 @@ import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { AllSettings } from '../../../shared/settings/settings.interface';
-import SettingsService from '../../../shared/settings/settings.service';
+import { SettingsService } from '../../../shared/settings/settings.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
-import UtilityService from '../../../shared/utility/utility.service';
-import WorkingService from '../../../shared/working/working.service';
-import AppHelperService from '../../shared/app-helper/app-helper.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
+import { WorkingService } from '../../../shared/working/working.service';
+import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({
@@ -15,7 +15,7 @@ import AppHelperService from '../../shared/app-helper/app-helper.service';
   styles: [require('./preferences-settings.component.scss')],
   template: require('./preferences-settings.component.html')
 })
-export default class PreferencesSettingsComponent implements OnInit {
+export class PreferencesSettingsComponent implements OnInit {
   Strings = require('../../../../../res/strings/en.json');
 
   $timeout: ng.ITimeoutService;

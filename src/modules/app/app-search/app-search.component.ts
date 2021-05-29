@@ -1,22 +1,22 @@
 import './app-search.component.scss';
 import { OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import AndroidAppHelperService from '../../android/android-app/shared/android-app-helper/android-app-helper.service';
-import AlertService from '../../shared/alert/alert.service';
+import { AndroidAppHelperService } from '../../android/android-app/shared/android-app-helper/android-app-helper.service';
+import { AlertService } from '../../shared/alert/alert.service';
 import { Bookmark } from '../../shared/bookmark/bookmark.interface';
-import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkHelperService } from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { ExceptionHandler } from '../../shared/exception/exception.interface';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService } from '../../shared/global-shared.interface';
-import SettingsService from '../../shared/settings/settings.service';
-import UtilityService from '../../shared/utility/utility.service';
-import WorkingService from '../../shared/working/working.service';
+import { SettingsService } from '../../shared/settings/settings.service';
+import { UtilityService } from '../../shared/utility/utility.service';
+import { WorkingService } from '../../shared/working/working.service';
 import { AppViewType, KeyCode } from '../app.enum';
-import AppHelperService from '../shared/app-helper/app-helper.service';
+import { AppHelperService } from '../shared/app-helper/app-helper.service';
 import { BookmarkSearchResult, BookmarkTreeItem } from './app-search.interface';
 
 @autobind
-export default abstract class AppSearchComponent implements OnInit {
+export abstract class AppSearchComponent implements OnInit {
   Strings = require('../../../../res/strings/en.json');
 
   $exceptionHandler: ExceptionHandler;

@@ -11,14 +11,14 @@ import { ExceptionHandler } from '../exception/exception.interface';
 import Globals from '../global-shared.constants';
 import { BrowserName, PlatformType } from '../global-shared.enum';
 import { Url } from '../global-shared.interface';
-import LogService from '../log/log.service';
-import NetworkService from '../network/network.service';
+import { LogService } from '../log/log.service';
+import { NetworkService } from '../network/network.service';
 import { StoreKey } from '../store/store.enum';
-import StoreService from '../store/store.service';
+import { StoreService } from '../store/store.service';
 
 @autobind
 @Injectable('UtilityService')
-export default class UtilityService {
+export class UtilityService {
   $exceptionHandler: ExceptionHandler;
   $http: ng.IHttpService;
   $q: ng.IQService;

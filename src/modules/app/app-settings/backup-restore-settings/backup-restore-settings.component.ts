@@ -2,26 +2,26 @@ import angular from 'angular';
 import { OnInit, ViewParent } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AlertType } from '../../../shared/alert/alert.enum';
-import AlertService from '../../../shared/alert/alert.service';
+import { AlertService } from '../../../shared/alert/alert.service';
 import { Backup } from '../../../shared/backup-restore/backup-restore.interface';
-import BackupRestoreService from '../../../shared/backup-restore/backup-restore.service';
+import { BackupRestoreService } from '../../../shared/backup-restore/backup-restore.service';
 import { BookmarkService } from '../../../shared/bookmark/bookmark.interface';
-import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../../shared/exception/exception';
 import { MessageCommand, PlatformType } from '../../../shared/global-shared.enum';
 import { PlatformService } from '../../../shared/global-shared.interface';
-import LogService from '../../../shared/log/log.service';
+import { LogService } from '../../../shared/log/log.service';
 import { StoreKey } from '../../../shared/store/store.enum';
-import StoreService from '../../../shared/store/store.service';
+import { StoreService } from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
-import UtilityService from '../../../shared/utility/utility.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
 import { WorkingContext } from '../../../shared/working/working.enum';
-import WorkingService from '../../../shared/working/working.service';
+import { WorkingService } from '../../../shared/working/working.service';
 import { AppEventType } from '../../app.enum';
-import AppHelperService from '../../shared/app-helper/app-helper.service';
-import AppSettingsComponent from '../app-settings.component';
+import { AppHelperService } from '../../shared/app-helper/app-helper.service';
+import { AppSettingsComponent } from '../app-settings.component';
 
-export default abstract class BackupRestoreSettingsComponent implements OnInit {
+export abstract class BackupRestoreSettingsComponent implements OnInit {
   Strings = require('../../../../../res/strings/en.json');
 
   $filter: ng.FilterFactory;

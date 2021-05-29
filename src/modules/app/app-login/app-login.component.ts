@@ -5,21 +5,21 @@ import * as countriesList from 'countries-list';
 import { ZXCVBNResult } from 'zxcvbn';
 import { ApiServiceStatus } from '../../shared/api/api.enum';
 import { ApiService, ApiServiceInfo } from '../../shared/api/api.interface';
-import CryptoService from '../../shared/crypto/crypto.service';
+import { CryptoService } from '../../shared/crypto/crypto.service';
 import * as Exceptions from '../../shared/exception/exception';
 import { ExceptionHandler } from '../../shared/exception/exception.interface';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformType } from '../../shared/global-shared.enum';
 import { PlatformService } from '../../shared/global-shared.interface';
-import LogService from '../../shared/log/log.service';
+import { LogService } from '../../shared/log/log.service';
 import { StoreKey } from '../../shared/store/store.enum';
-import StoreService from '../../shared/store/store.service';
+import { StoreService } from '../../shared/store/store.service';
 import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync } from '../../shared/sync/sync.interface';
-import UtilityService from '../../shared/utility/utility.service';
-import WorkingService from '../../shared/working/working.service';
+import { UtilityService } from '../../shared/utility/utility.service';
+import { WorkingService } from '../../shared/working/working.service';
 import { AppViewType } from '../app.enum';
-import AppHelperService from '../shared/app-helper/app-helper.service';
+import { AppHelperService } from '../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({
@@ -28,7 +28,7 @@ import AppHelperService from '../shared/app-helper/app-helper.service';
   styles: [require('./app-login.component.scss')],
   template: require('./app-login.component.html')
 })
-export default class AppLoginComponent implements OnInit {
+export class AppLoginComponent implements OnInit {
   Strings = require('../../../../res/strings/en.json');
 
   $exceptionHandler: ExceptionHandler;

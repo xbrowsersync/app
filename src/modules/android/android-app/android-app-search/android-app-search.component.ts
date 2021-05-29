@@ -2,22 +2,22 @@ import angular from 'angular';
 import { Component } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AppEventType } from '../../../app/app.enum';
-import AppSearchComponent from '../../../app/app-search/app-search.component';
-import AppHelperService from '../../../app/shared/app-helper/app-helper.service';
-import AlertService from '../../../shared/alert/alert.service';
+import { AppSearchComponent } from '../../../app/app-search/app-search.component';
+import { AppHelperService } from '../../../app/shared/app-helper/app-helper.service';
+import { AlertService } from '../../../shared/alert/alert.service';
 import { BookmarkChangeType } from '../../../shared/bookmark/bookmark.enum';
 import { Bookmark, BookmarkChange, RemoveBookmarkChangeData } from '../../../shared/bookmark/bookmark.interface';
-import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../../shared/exception/exception';
 import { ExceptionHandler } from '../../../shared/exception/exception.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
-import SettingsService from '../../../shared/settings/settings.service';
+import { SettingsService } from '../../../shared/settings/settings.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
-import UtilityService from '../../../shared/utility/utility.service';
-import WorkingService from '../../../shared/working/working.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
+import { WorkingService } from '../../../shared/working/working.service';
 import { AndroidAlert } from '../android-app.interface';
-import AndroidAppHelperService from '../shared/android-app-helper/android-app-helper.service';
+import { AndroidAppHelperService } from '../shared/android-app-helper/android-app-helper.service';
 
 @autobind
 @Component({
@@ -26,7 +26,7 @@ import AndroidAppHelperService from '../shared/android-app-helper/android-app-he
   styles: [require('./android-app-search.component.scss')],
   template: require('../../../app/app-search/app-search.component.html')
 })
-export default class AndroidAppSearchComponent extends AppSearchComponent {
+export class AndroidAppSearchComponent extends AppSearchComponent {
   appHelperSvc: AndroidAppHelperService;
 
   static $inject = [

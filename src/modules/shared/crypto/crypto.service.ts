@@ -4,14 +4,14 @@ import autobind from 'autobind-decorator';
 import base64js from 'base64-js';
 import lzutf8 from 'lzutf8';
 import * as Exceptions from '../exception/exception';
-import LogService from '../log/log.service';
+import { LogService } from '../log/log.service';
 import { StoreKey } from '../store/store.enum';
-import StoreService from '../store/store.service';
-import UtilityService from '../utility/utility.service';
+import { StoreService } from '../store/store.service';
+import { UtilityService } from '../utility/utility.service';
 
 @autobind
 @Injectable('CryptoService')
-export default class CryptoService {
+export class CryptoService {
   $q: ng.IQService;
   logSvc: LogService;
   storeSvc: StoreService;

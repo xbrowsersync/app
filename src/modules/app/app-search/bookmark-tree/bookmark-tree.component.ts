@@ -2,10 +2,10 @@ import { Component, Input, Output } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { BookmarkType } from '../../../shared/bookmark/bookmark.enum';
 import { Bookmark } from '../../../shared/bookmark/bookmark.interface';
-import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { PlatformService } from '../../../shared/global-shared.interface';
-import UtilityService from '../../../shared/utility/utility.service';
-import AppHelperService from '../../shared/app-helper/app-helper.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
+import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 import { BookmarkTreeItem } from '../app-search.interface';
 
 @autobind
@@ -15,7 +15,7 @@ import { BookmarkTreeItem } from '../app-search.interface';
   styles: [require('./bookmark-tree.component.scss')],
   template: require('./bookmark-tree.component.html')
 })
-export default class BookmarkTreeComponent {
+export class BookmarkTreeComponent {
   Strings = require('../../../../../res/strings/en.json');
 
   appHelperSvc: AppHelperService;

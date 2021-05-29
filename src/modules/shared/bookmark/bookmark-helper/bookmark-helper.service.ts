@@ -4,19 +4,19 @@ import autobind from 'autobind-decorator';
 import { Bookmarks as NativeBookmarks } from 'webextension-polyfill-ts';
 import { BookmarkSearchResult } from '../../../app/app-search/app-search.interface';
 import { ApiService } from '../../api/api.interface';
-import CryptoService from '../../crypto/crypto.service';
+import { CryptoService } from '../../crypto/crypto.service';
 import * as Exceptions from '../../exception/exception';
 import Globals from '../../global-shared.constants';
 import { PlatformService } from '../../global-shared.interface';
 import { StoreKey } from '../../store/store.enum';
-import StoreService from '../../store/store.service';
-import UtilityService from '../../utility/utility.service';
+import { StoreService } from '../../store/store.service';
+import { UtilityService } from '../../utility/utility.service';
 import { BookmarkContainer, BookmarkType } from '../bookmark.enum';
 import { Bookmark, BookmarkMetadata } from '../bookmark.interface';
 
 @autobind
 @Injectable('BookmarkHelperService')
-export default class BookmarkHelperService {
+export class BookmarkHelperService {
   Strings = require('../../../../../res/strings/en.json');
 
   $injector: ng.auto.IInjectorService;

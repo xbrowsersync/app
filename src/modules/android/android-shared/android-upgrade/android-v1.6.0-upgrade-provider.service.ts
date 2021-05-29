@@ -2,11 +2,11 @@ import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import * as Exceptions from '../../../shared/exception/exception';
 import { StoreKey } from '../../../shared/store/store.enum';
-import V160UpgradeProviderService from '../../../shared/upgrade/v1.6.0-upgrade-provider/v1.6.0-upgrade-provider.service';
+import { V160UpgradeProviderService } from '../../../shared/upgrade/v1.6.0-upgrade-provider/v1.6.0-upgrade-provider.service';
 
 @autobind
 @Injectable('V160UpgradeProviderService')
-export default class AndroidV160UpgradeProviderService extends V160UpgradeProviderService {
+export class AndroidV160UpgradeProviderService extends V160UpgradeProviderService {
   static $inject = ['$q', 'BookmarkHelperService', 'PlatformService', 'StoreService', 'UtilityService'];
 
   getAllFromNativeStorage(): ng.IPromise<any> {

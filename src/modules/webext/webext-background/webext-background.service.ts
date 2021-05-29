@@ -4,26 +4,26 @@ import autobind from 'autobind-decorator';
 import * as detectBrowser from 'detect-browser';
 import { Alarms, browser, Downloads, Notifications } from 'webextension-polyfill-ts';
 import { Alert } from '../../shared/alert/alert.interface';
-import AlertService from '../../shared/alert/alert.service';
-import BackupRestoreService from '../../shared/backup-restore/backup-restore.service';
-import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { AlertService } from '../../shared/alert/alert.service';
+import { BackupRestoreService } from '../../shared/backup-restore/backup-restore.service';
+import { BookmarkHelperService } from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../shared/exception/exception';
 import { ExceptionHandler } from '../../shared/exception/exception.interface';
 import Globals from '../../shared/global-shared.constants';
 import { MessageCommand } from '../../shared/global-shared.enum';
 import { PlatformService } from '../../shared/global-shared.interface';
-import LogService from '../../shared/log/log.service';
-import NetworkService from '../../shared/network/network.service';
-import SettingsService from '../../shared/settings/settings.service';
+import { LogService } from '../../shared/log/log.service';
+import { NetworkService } from '../../shared/network/network.service';
+import { SettingsService } from '../../shared/settings/settings.service';
 import { StoreKey } from '../../shared/store/store.enum';
-import StoreService from '../../shared/store/store.service';
+import { StoreService } from '../../shared/store/store.service';
 import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync, SyncResult } from '../../shared/sync/sync.interface';
-import SyncService from '../../shared/sync/sync.service';
-import UpgradeService from '../../shared/upgrade/upgrade.service';
-import UtilityService from '../../shared/utility/utility.service';
-import ChromiumBookmarkService from '../chromium/shared/chromium-bookmark/chromium-bookmark.service';
-import BookmarkIdMapperService from '../shared/bookmark-id-mapper/bookmark-id-mapper.service';
+import { SyncService } from '../../shared/sync/sync.service';
+import { UpgradeService } from '../../shared/upgrade/upgrade.service';
+import { UtilityService } from '../../shared/utility/utility.service';
+import { ChromiumBookmarkService } from '../chromium/shared/chromium-bookmark/chromium-bookmark.service';
+import { BookmarkIdMapperService } from '../shared/bookmark-id-mapper/bookmark-id-mapper.service';
 import {
   DownloadFileMessage,
   EnableAutoBackUpMessage,
@@ -34,7 +34,7 @@ import {
 
 @autobind
 @Injectable('WebExtBackgroundService')
-export default class WebExtBackgroundService {
+export class WebExtBackgroundService {
   Strings = require('../../../../res/strings/en.json');
 
   $exceptionHandler: ExceptionHandler;

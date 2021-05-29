@@ -4,12 +4,12 @@ import autobind from 'autobind-decorator';
 import * as Exceptions from '../../../shared/exception/exception';
 import { StoreKey } from '../../../shared/store/store.enum';
 import { StoreContent, TraceLogItem } from '../../../shared/store/store.interface';
-import StoreService from '../../../shared/store/store.service';
+import { StoreService } from '../../../shared/store/store.service';
 import { NativeStorageError, Table, TraceLogColumn } from './android-store.enum';
 
 @autobind
 @Injectable('StoreService')
-export default class AndroidStoreService extends StoreService {
+export class AndroidStoreService extends StoreService {
   appRowId = 1;
   db: any;
   dbName = 'xbs.db';

@@ -1,22 +1,22 @@
 import angular from 'angular';
 import autobind from 'autobind-decorator';
 import { browser } from 'webextension-polyfill-ts';
-import AppHelperService from '../../../../app/shared/app-helper/app-helper.service';
+import { AppHelperService } from '../../../../app/shared/app-helper/app-helper.service';
 import { ApiService } from '../../../../shared/api/api.interface';
-import BookmarkHelperService from '../../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkHelperService } from '../../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { ExceptionHandler } from '../../../../shared/exception/exception.interface';
 import Globals from '../../../../shared/global-shared.constants';
 import { MessageCommand } from '../../../../shared/global-shared.enum';
-import LogService from '../../../../shared/log/log.service';
-import StoreService from '../../../../shared/store/store.service';
+import { LogService } from '../../../../shared/log/log.service';
+import { StoreService } from '../../../../shared/store/store.service';
 import { Sync } from '../../../../shared/sync/sync.interface';
-import SyncService from '../../../../shared/sync/sync.service';
-import UtilityService from '../../../../shared/utility/utility.service';
-import WorkingService from '../../../../shared/working/working.service';
-import WebExtPlatformService from '../../../shared/webext-platform/webext-platform.service';
+import { SyncService } from '../../../../shared/sync/sync.service';
+import { UtilityService } from '../../../../shared/utility/utility.service';
+import { WorkingService } from '../../../../shared/working/working.service';
+import { WebExtPlatformService } from '../../../shared/webext-platform/webext-platform.service';
 
 @autobind
-export default abstract class WebExtAppHelperService extends AppHelperService {
+export abstract class WebExtAppHelperService extends AppHelperService {
   $filter: ng.FilterFactory;
   bookmarkHelperSvc: BookmarkHelperService;
   platformSvc: WebExtPlatformService;

@@ -1,8 +1,8 @@
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { PlatformService } from '../../../shared/global-shared.interface';
-import UtilityService from '../../../shared/utility/utility.service';
-import AppHelperService from '../../shared/app-helper/app-helper.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
+import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({
@@ -11,7 +11,7 @@ import AppHelperService from '../../shared/app-helper/app-helper.service';
   styles: [require('./permissions-settings.component.scss')],
   template: require('./permissions-settings.component.html')
 })
-export default class PermissionsSettingsComponent implements OnInit {
+export class PermissionsSettingsComponent implements OnInit {
   Strings = require('../../../../../res/strings/en.json');
 
   appHelperSvc: AppHelperService;

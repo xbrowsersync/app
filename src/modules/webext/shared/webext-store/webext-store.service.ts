@@ -3,11 +3,11 @@ import autobind from 'autobind-decorator';
 import { clear, createStore, del, get, keys as idbKeys, set, UseStore } from 'idb-keyval';
 import { StoreKey } from '../../../shared/store/store.enum';
 import { StoreContent, TraceLogItem } from '../../../shared/store/store.interface';
-import StoreService from '../../../shared/store/store.service';
+import { StoreService } from '../../../shared/store/store.service';
 
 @autobind
 @Injectable('StoreService')
-export default class WebExtStoreService extends StoreService {
+export class WebExtStoreService extends StoreService {
   dbName = 'xbs-store';
   store: UseStore;
   storeName = 'xbs';

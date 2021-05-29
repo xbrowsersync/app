@@ -3,10 +3,10 @@ import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { LogLevel } from '../../../shared/log/log.enum';
-import LogService from '../../../shared/log/log.service';
-import UtilityService from '../../../shared/utility/utility.service';
+import { LogService } from '../../../shared/log/log.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
 import { AppViewType } from '../../app.enum';
-import AppHelperService from '../../shared/app-helper/app-helper.service';
+import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({
@@ -15,7 +15,7 @@ import AppHelperService from '../../shared/app-helper/app-helper.service';
   styles: [require('./issues-settings.component.scss')],
   template: require('./issues-settings.component.html')
 })
-export default class IssuesSettingsComponent implements OnInit {
+export class IssuesSettingsComponent implements OnInit {
   Strings = require('../../../../../res/strings/en.json');
 
   appHelperSvc: AppHelperService;

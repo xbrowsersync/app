@@ -5,16 +5,16 @@ import compareVersions from 'compare-versions';
 import { Bookmark } from '../bookmark/bookmark.interface';
 import * as Exceptions from '../exception/exception';
 import { PlatformService } from '../global-shared.interface';
-import LogService from '../log/log.service';
+import { LogService } from '../log/log.service';
 import { StoreKey } from '../store/store.enum';
-import StoreService from '../store/store.service';
-import UtilityService from '../utility/utility.service';
-import UpgradeProvider from './upgrade.interface';
-import V160UpgradeProviderService from './v1.6.0-upgrade-provider/v1.6.0-upgrade-provider.service';
+import { StoreService } from '../store/store.service';
+import { UtilityService } from '../utility/utility.service';
+import { UpgradeProvider } from './upgrade.interface';
+import { V160UpgradeProviderService } from './v1.6.0-upgrade-provider/v1.6.0-upgrade-provider.service';
 
 @autobind
 @Injectable('UpgradeService')
-export default class UpgradeService {
+export class UpgradeService {
   $q: ng.IQService;
   logSvc: LogService;
   platformSvc: PlatformService;

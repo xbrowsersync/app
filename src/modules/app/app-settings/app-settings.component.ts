@@ -1,9 +1,9 @@
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { PlatformService } from '../../shared/global-shared.interface';
-import UtilityService from '../../shared/utility/utility.service';
+import { UtilityService } from '../../shared/utility/utility.service';
 import { AppEventType } from '../app.enum';
-import AppHelperService from '../shared/app-helper/app-helper.service';
+import { AppHelperService } from '../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({
@@ -12,7 +12,7 @@ import AppHelperService from '../shared/app-helper/app-helper.service';
   styles: [require('./app-settings.component.scss')],
   template: require('./app-settings.component.html')
 })
-export default class AppSettingsComponent implements OnInit {
+export class AppSettingsComponent implements OnInit {
   Strings = require('../../../../res/strings/en.json');
 
   $timeout: ng.ITimeoutService;

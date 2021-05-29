@@ -5,11 +5,11 @@ import { BackupSync } from '../../../shared/backup-restore/backup-restore.interf
 import * as Exceptions from '../../../shared/exception/exception';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
-import LogService from '../../../shared/log/log.service';
+import { LogService } from '../../../shared/log/log.service';
 import { StoreKey } from '../../../shared/store/store.enum';
-import StoreService from '../../../shared/store/store.service';
-import UtilityService from '../../../shared/utility/utility.service';
-import AndroidAppHelperService from '../shared/android-app-helper/android-app-helper.service';
+import { StoreService } from '../../../shared/store/store.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
+import { AndroidAppHelperService } from '../shared/android-app-helper/android-app-helper.service';
 
 @autobind
 @Component({
@@ -18,7 +18,7 @@ import AndroidAppHelperService from '../shared/android-app-helper/android-app-he
   styles: [require('./android-app-scan.component.scss')],
   template: require('./android-app-scan.component.html')
 })
-export default class AndroidAppScanComponent implements OnInit, OnDestroy {
+export class AndroidAppScanComponent implements OnInit, OnDestroy {
   Strings = require('../../../../../res/strings/en.json');
 
   $q: ng.IQService;

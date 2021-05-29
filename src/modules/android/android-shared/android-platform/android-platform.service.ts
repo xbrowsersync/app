@@ -3,7 +3,7 @@ import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AppEventType } from '../../../app/app.enum';
 import { Alert } from '../../../shared/alert/alert.interface';
-import AlertService from '../../../shared/alert/alert.service';
+import { AlertService } from '../../../shared/alert/alert.service';
 import { BookmarkChangeType } from '../../../shared/bookmark/bookmark.enum';
 import {
   Bookmark,
@@ -11,26 +11,26 @@ import {
   ModifyBookmarkChangeData,
   RemoveBookmarkChangeData
 } from '../../../shared/bookmark/bookmark.interface';
-import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../../shared/exception/exception';
 import { ExceptionHandler } from '../../../shared/exception/exception.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { MessageCommand, PlatformType } from '../../../shared/global-shared.enum';
 import { I18nObject, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
-import LogService from '../../../shared/log/log.service';
-import MetadataService from '../../../shared/metadata/metadata.service';
-import NetworkService from '../../../shared/network/network.service';
-import StoreService from '../../../shared/store/store.service';
+import { LogService } from '../../../shared/log/log.service';
+import { MetadataService } from '../../../shared/metadata/metadata.service';
+import { NetworkService } from '../../../shared/network/network.service';
+import { StoreService } from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
 import { Sync, SyncResult } from '../../../shared/sync/sync.interface';
-import SyncService from '../../../shared/sync/sync.service';
-import UtilityService from '../../../shared/utility/utility.service';
+import { SyncService } from '../../../shared/sync/sync.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
 import { WorkingContext } from '../../../shared/working/working.enum';
-import WorkingService from '../../../shared/working/working.service';
+import { WorkingService } from '../../../shared/working/working.service';
 
 @autobind
 @Injectable('PlatformService')
-export default class AndroidPlatformService implements PlatformService {
+export class AndroidPlatformService implements PlatformService {
   Strings = require('../../../../../res/strings/en.json');
 
   $exceptionHandler: ExceptionHandler;

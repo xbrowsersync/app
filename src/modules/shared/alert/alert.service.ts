@@ -4,7 +4,7 @@ import { Alert } from './alert.interface';
 
 @autobind
 @Injectable('AlertService')
-export default class AlertService {
+export class AlertService {
   currentAlert: Alert | undefined;
 
   clearCurrentAlert(): void {

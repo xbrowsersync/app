@@ -2,25 +2,25 @@ import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AppEventType } from '../../../app/app.enum';
-import AppBookmarkComponent from '../../../app/app-bookmark/app-bookmark.component';
-import AppHelperService from '../../../app/shared/app-helper/app-helper.service';
+import { AppBookmarkComponent } from '../../../app/app-bookmark/app-bookmark.component';
+import { AppHelperService } from '../../../app/shared/app-helper/app-helper.service';
 import { AlertType } from '../../../shared/alert/alert.enum';
-import AlertService from '../../../shared/alert/alert.service';
+import { AlertService } from '../../../shared/alert/alert.service';
 import { Bookmark, BookmarkMetadata } from '../../../shared/bookmark/bookmark.interface';
-import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { ExceptionHandler } from '../../../shared/exception/exception.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
-import LogService from '../../../shared/log/log.service';
-import SettingsService from '../../../shared/settings/settings.service';
+import { LogService } from '../../../shared/log/log.service';
+import { SettingsService } from '../../../shared/settings/settings.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
 import { SyncResult } from '../../../shared/sync/sync.interface';
-import SyncService from '../../../shared/sync/sync.service';
-import UtilityService from '../../../shared/utility/utility.service';
-import WorkingService from '../../../shared/working/working.service';
-import AndroidPlatformService from '../../android-shared/android-platform/android-platform.service';
+import { SyncService } from '../../../shared/sync/sync.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
+import { WorkingService } from '../../../shared/working/working.service';
+import { AndroidPlatformService } from '../../android-shared/android-platform/android-platform.service';
 import { AndroidAlert } from '../android-app.interface';
-import AndroidAppHelperService from '../shared/android-app-helper/android-app-helper.service';
+import { AndroidAppHelperService } from '../shared/android-app-helper/android-app-helper.service';
 
 @autobind
 @Component({
@@ -29,7 +29,7 @@ import AndroidAppHelperService from '../shared/android-app-helper/android-app-he
   styles: [require('./android-app-bookmark.component.scss')],
   template: require('../../../app/app-bookmark/app-bookmark.component.html')
 })
-export default class AndroidAppBookmarkComponent extends AppBookmarkComponent implements OnInit {
+export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements OnInit {
   appHelperSvc: AndroidAppHelperService;
   logSvc: LogService;
   platformSvc: AndroidPlatformService;

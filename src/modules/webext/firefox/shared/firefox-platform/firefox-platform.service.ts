@@ -2,11 +2,11 @@ import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { browser } from 'webextension-polyfill-ts';
 import { PlatformType } from '../../../../shared/global-shared.enum';
-import WebExtPlatformService from '../../../shared/webext-platform/webext-platform.service';
+import { WebExtPlatformService } from '../../../shared/webext-platform/webext-platform.service';
 
 @autobind
 @Injectable('PlatformService')
-export default class FirefoxPlatformService extends WebExtPlatformService {
+export class FirefoxPlatformService extends WebExtPlatformService {
   platformName = PlatformType.Firefox;
 
   getNewTabUrl(): string {

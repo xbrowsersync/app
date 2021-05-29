@@ -4,18 +4,18 @@ import NgFilter from 'angular-filter';
 import NgSanitize from 'angular-sanitize';
 import { NgModule } from 'angular-ts-decorators';
 import NgInfiniteScroll from 'ng-infinite-scroll';
-import ExceptionHandlerService from '../shared/exception/exception-handler/exception-handler.service';
-import GlobalSharedModule from '../shared/global-shared.module';
-import AppBackgroundComponent from './app-background/app-background.component';
-import AppHelpComponent from './app-help/app-help.component';
-import AppLoginModule from './app-login/app-login.module';
-import AppPermissionsComponent from './app-permissions/app-permissions.component';
-import BookmarkComponent from './app-search/bookmark/bookmark.component';
-import BookmarkTreeComponent from './app-search/bookmark-tree/bookmark-tree.component';
-import AppSettingsModule from './app-settings/app-settings.module';
-import AppSupportComponent from './app-support/app-support.component';
-import AppSyncRemovedComponent from './app-sync-removed/app-sync-removed.component';
-import AppUpdatedComponent from './app-updated/app-updated.component';
+import { ExceptionHandlerService } from '../shared/exception/exception-handler/exception-handler.service';
+import { GlobalSharedModule } from '../shared/global-shared.module';
+import { AppBackgroundComponent } from './app-background/app-background.component';
+import { AppHelpComponent } from './app-help/app-help.component';
+import { AppLoginModule } from './app-login/app-login.module';
+import { AppPermissionsComponent } from './app-permissions/app-permissions.component';
+import { BookmarkComponent } from './app-search/bookmark/bookmark.component';
+import { BookmarkTreeComponent } from './app-search/bookmark-tree/bookmark-tree.component';
+import { AppSettingsModule } from './app-settings/app-settings.module';
+import { AppSupportComponent } from './app-support/app-support.component';
+import { AppSyncRemovedComponent } from './app-sync-removed/app-sync-removed.component';
+import { AppUpdatedComponent } from './app-updated/app-updated.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +31,7 @@ import AppUpdatedComponent from './app-updated/app-updated.component';
   id: 'AppModule',
   imports: [AppLoginModule, AppSettingsModule, GlobalSharedModule, NgAnimate, NgFilter, NgInfiniteScroll, NgSanitize]
 })
-export default class AppModule {}
+export class AppModule {}
 
 (AppModule as NgModule).module
   .config([

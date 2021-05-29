@@ -13,11 +13,11 @@ import {
 import * as Exceptions from '../../../../shared/exception/exception';
 import Globals from '../../../../shared/global-shared.constants';
 import { WebpageMetadata } from '../../../../shared/global-shared.interface';
-import WebExtBookmarkService from '../../../shared/webext-bookmark/webext-bookmark.service';
+import { WebExtBookmarkService } from '../../../shared/webext-bookmark/webext-bookmark.service';
 
 @autobind
 @Injectable('BookmarkService')
-export default class ChromiumBookmarkService extends WebExtBookmarkService {
+export class ChromiumBookmarkService extends WebExtBookmarkService {
   otherBookmarksNodeId = '2';
   toolbarBookmarksNodeId = '1';
   unsupportedContainers = [BookmarkContainer.Menu, BookmarkContainer.Mobile];

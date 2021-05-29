@@ -2,9 +2,9 @@ import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { PlatformService } from '../../shared/global-shared.interface';
 import { StoreKey } from '../../shared/store/store.enum';
-import StoreService from '../../shared/store/store.service';
-import UtilityService from '../../shared/utility/utility.service';
-import AppHelperService from '../shared/app-helper/app-helper.service';
+import { StoreService } from '../../shared/store/store.service';
+import { UtilityService } from '../../shared/utility/utility.service';
+import { AppHelperService } from '../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({
@@ -13,7 +13,7 @@ import AppHelperService from '../shared/app-helper/app-helper.service';
   styles: [require('./app-permissions.component.scss')],
   template: require('./app-permissions.component.html')
 })
-export default class AppPermissionsComponent implements OnInit {
+export class AppPermissionsComponent implements OnInit {
   Strings = require('../../../../res/strings/en.json');
 
   $q: ng.IQService;

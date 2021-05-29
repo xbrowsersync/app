@@ -1,9 +1,9 @@
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import AndroidAppHelperService from '../../android/android-app/shared/android-app-helper/android-app-helper.service';
+import { AndroidAppHelperService } from '../../android/android-app/shared/android-app-helper/android-app-helper.service';
 import { AlertType } from '../../shared/alert/alert.enum';
-import AlertService from '../../shared/alert/alert.service';
+import { AlertService } from '../../shared/alert/alert.service';
 import { BookmarkChangeType } from '../../shared/bookmark/bookmark.enum';
 import {
   AddBookmarkChangeData,
@@ -13,17 +13,17 @@ import {
   ModifyBookmarkChangeData,
   RemoveBookmarkChangeData
 } from '../../shared/bookmark/bookmark.interface';
-import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkHelperService } from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../shared/exception/exception';
 import { ExceptionHandler } from '../../shared/exception/exception.interface';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService, WebpageMetadata } from '../../shared/global-shared.interface';
 import { SyncType } from '../../shared/sync/sync.enum';
 import { SyncResult } from '../../shared/sync/sync.interface';
-import UtilityService from '../../shared/utility/utility.service';
-import WorkingService from '../../shared/working/working.service';
+import { UtilityService } from '../../shared/utility/utility.service';
+import { WorkingService } from '../../shared/working/working.service';
 import { AppViewType, KeyCode } from '../app.enum';
-import AppHelperService from '../shared/app-helper/app-helper.service';
+import { AppHelperService } from '../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({
@@ -32,7 +32,7 @@ import AppHelperService from '../shared/app-helper/app-helper.service';
   styles: [require('./app-bookmark.component.scss')],
   template: require('./app-bookmark.component.html')
 })
-export default class AppBookmarkComponent implements OnInit {
+export class AppBookmarkComponent implements OnInit {
   Strings = require('../../../../res/strings/en.json');
 
   $exceptionHandler: ExceptionHandler;

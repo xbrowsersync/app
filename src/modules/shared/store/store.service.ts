@@ -4,7 +4,7 @@ import { StoreKey } from './store.enum';
 import { StoreContent } from './store.interface';
 
 @autobind
-export default abstract class StoreService {
+export abstract class StoreService {
   $q: ng.IQService;
   dbName = 'xbs-store';
   storeName = 'xbs';

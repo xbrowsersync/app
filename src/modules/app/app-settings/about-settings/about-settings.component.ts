@@ -2,9 +2,9 @@ import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
-import UtilityService from '../../../shared/utility/utility.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
 import { AppViewType } from '../../app.enum';
-import AppHelperService from '../../shared/app-helper/app-helper.service';
+import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({
@@ -13,7 +13,7 @@ import AppHelperService from '../../shared/app-helper/app-helper.service';
   styles: [require('./about-settings.component.scss')],
   template: require('./about-settings.component.html')
 })
-export default class AboutSettingsComponent implements OnInit {
+export class AboutSettingsComponent implements OnInit {
   Strings = require('../../../../../res/strings/en.json');
 
   appHelperSvc: AppHelperService;

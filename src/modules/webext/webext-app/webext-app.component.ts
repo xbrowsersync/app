@@ -2,10 +2,10 @@ import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AppViewType } from '../../app/app.enum';
-import AppMainComponent from '../../app/app-main/app-main.component';
+import { AppMainComponent } from '../../app/app-main/app-main.component';
 import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync } from '../../shared/sync/sync.interface';
-import WebExtPlatformService from '../shared/webext-platform/webext-platform.service';
+import { WebExtPlatformService } from '../shared/webext-platform/webext-platform.service';
 
 @autobind
 @Component({
@@ -14,7 +14,7 @@ import WebExtPlatformService from '../shared/webext-platform/webext-platform.ser
   styles: [require('./webext-app.component.scss')],
   template: require('../../app/app-main/app-main.component.html')
 })
-export default class WebExtAppComponent extends AppMainComponent implements OnInit {
+export class WebExtAppComponent extends AppMainComponent implements OnInit {
   platformSvc: WebExtPlatformService;
 
   static $inject = [

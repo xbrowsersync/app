@@ -12,23 +12,23 @@ import {
   RemoveBookmarkChangeData,
   UpdateBookmarksResult
 } from '../../bookmark/bookmark.interface';
-import BookmarkHelperService from '../../bookmark/bookmark-helper/bookmark-helper.service';
-import CryptoService from '../../crypto/crypto.service';
+import { BookmarkHelperService } from '../../bookmark/bookmark-helper/bookmark-helper.service';
+import { CryptoService } from '../../crypto/crypto.service';
 import * as Exceptions from '../../exception/exception';
 import { PlatformService } from '../../global-shared.interface';
-import LogService from '../../log/log.service';
-import NetworkService from '../../network/network.service';
-import SettingsService from '../../settings/settings.service';
+import { LogService } from '../../log/log.service';
+import { NetworkService } from '../../network/network.service';
+import { SettingsService } from '../../settings/settings.service';
 import { StoreKey } from '../../store/store.enum';
-import StoreService from '../../store/store.service';
-import UpgradeService from '../../upgrade/upgrade.service';
-import UtilityService from '../../utility/utility.service';
+import { StoreService } from '../../store/store.service';
+import { UpgradeService } from '../../upgrade/upgrade.service';
+import { UtilityService } from '../../utility/utility.service';
 import { SyncType } from '../sync.enum';
 import { ProcessSyncResult, Sync, SyncProvider } from '../sync.interface';
 
 @autobind
 @Injectable('BookmarkSyncProviderService')
-export default class BookmarkSyncProviderService implements SyncProvider {
+export class BookmarkSyncProviderService implements SyncProvider {
   $q: ng.IQService;
   apiSvc: ApiService;
   bookmarkHelperSvc: BookmarkHelperService;

@@ -10,7 +10,7 @@ import { AppViewType } from '../app.enum';
   styles: [require('./app-background.component.scss')],
   template: require('./app-background.component.html')
 })
-export default class AppBackgroundComponent implements OnInit {
+export class AppBackgroundComponent implements OnInit {
   $timeout: ng.ITimeoutService;
 
   @Input() currentView: AppViewType;

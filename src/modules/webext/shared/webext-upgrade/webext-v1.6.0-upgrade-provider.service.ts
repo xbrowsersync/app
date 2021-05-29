@@ -2,15 +2,15 @@ import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { browser } from 'webextension-polyfill-ts';
 import { BookmarkService } from '../../../shared/bookmark/bookmark.interface';
-import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { PlatformService } from '../../../shared/global-shared.interface';
-import StoreService from '../../../shared/store/store.service';
-import V160UpgradeProviderService from '../../../shared/upgrade/v1.6.0-upgrade-provider/v1.6.0-upgrade-provider.service';
-import UtilityService from '../../../shared/utility/utility.service';
+import { StoreService } from '../../../shared/store/store.service';
+import { V160UpgradeProviderService } from '../../../shared/upgrade/v1.6.0-upgrade-provider/v1.6.0-upgrade-provider.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
 
 @autobind
 @Injectable('V160UpgradeProviderService')
-export default class WebExtV160UpgradeProviderService extends V160UpgradeProviderService {
+export class WebExtV160UpgradeProviderService extends V160UpgradeProviderService {
   bookmarkSvc: BookmarkService;
 
   static $inject = [

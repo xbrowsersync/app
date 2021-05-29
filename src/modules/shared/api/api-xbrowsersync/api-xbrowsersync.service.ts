@@ -5,10 +5,10 @@ import compareVersions from 'compare-versions';
 import * as Exceptions from '../../exception/exception';
 import Globals from '../../global-shared.constants';
 import { PlatformService } from '../../global-shared.interface';
-import NetworkService from '../../network/network.service';
+import { NetworkService } from '../../network/network.service';
 import { StoreKey } from '../../store/store.enum';
-import StoreService from '../../store/store.service';
-import UtilityService from '../../utility/utility.service';
+import { StoreService } from '../../store/store.service';
+import { UtilityService } from '../../utility/utility.service';
 import {
   ApiCreateBookmarksRequest,
   ApiCreateBookmarksResponse,
@@ -25,7 +25,7 @@ import { ApiXbrowsersyncErrorResponse, ApiXbrowsersyncServiceInfoResponse } from
 
 @autobind
 @Injectable('ApiService')
-export default class ApiXbrowsersyncService implements ApiService {
+export class ApiXbrowsersyncService implements ApiService {
   $injector: ng.auto.IInjectorService;
   $http: ng.IHttpService;
   $q: ng.IQService;

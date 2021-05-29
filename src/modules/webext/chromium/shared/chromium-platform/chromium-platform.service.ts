@@ -2,11 +2,11 @@ import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import * as detectBrowser from 'detect-browser';
 import { BrowserName, PlatformType } from '../../../../shared/global-shared.enum';
-import WebExtPlatformService from '../../../shared/webext-platform/webext-platform.service';
+import { WebExtPlatformService } from '../../../shared/webext-platform/webext-platform.service';
 
 @autobind
 @Injectable('PlatformService')
-export default class ChromiumPlatformService extends WebExtPlatformService {
+export class ChromiumPlatformService extends WebExtPlatformService {
   platformName = PlatformType.Chromium;
 
   getNewTabUrl(): string {

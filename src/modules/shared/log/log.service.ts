@@ -5,13 +5,13 @@ import stackTrace from 'stacktrace-js';
 import { Exception } from '../exception/exception';
 import { StoreKey } from '../store/store.enum';
 import { TraceLogItem } from '../store/store.interface';
-import StoreService from '../store/store.service';
+import { StoreService } from '../store/store.service';
 import { LogLevel } from './log.enum';
 import { LogQueueItem } from './log.interface';
 
 @autobind
 @Injectable('LogService')
-export default class LogService {
+export class LogService {
   $injector: ng.auto.IInjectorService;
   $log: ng.ILogService;
   _$q: ng.IQService;

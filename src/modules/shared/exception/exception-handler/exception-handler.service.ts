@@ -3,14 +3,14 @@ import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AlertType } from '../../alert/alert.enum';
 import { Alert } from '../../alert/alert.interface';
-import AlertService from '../../alert/alert.service';
+import { AlertService } from '../../alert/alert.service';
 import { PlatformService } from '../../global-shared.interface';
-import LogService from '../../log/log.service';
+import { LogService } from '../../log/log.service';
 import * as Exceptions from '../exception';
 
 @autobind
 @Injectable('ExceptionHandler')
-export default class ExceptionHandlerService {
+export class ExceptionHandlerService {
   Strings = require('../../../../../res/strings/en.json');
 
   $injector: ng.auto.IInjectorService;

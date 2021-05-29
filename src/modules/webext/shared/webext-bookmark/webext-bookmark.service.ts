@@ -15,22 +15,22 @@ import {
   ReorderNativeBookmarkChangeData,
   UpdateBookmarksResult
 } from '../../../shared/bookmark/bookmark.interface';
-import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../../shared/exception/exception';
 import { MessageCommand } from '../../../shared/global-shared.enum';
 import { PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
-import LogService from '../../../shared/log/log.service';
-import SettingsService from '../../../shared/settings/settings.service';
-import StoreService from '../../../shared/store/store.service';
+import { LogService } from '../../../shared/log/log.service';
+import { SettingsService } from '../../../shared/settings/settings.service';
+import { StoreService } from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
 import { Sync } from '../../../shared/sync/sync.interface';
-import SyncService from '../../../shared/sync/sync.service';
-import UtilityService from '../../../shared/utility/utility.service';
+import { SyncService } from '../../../shared/sync/sync.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
 import { BookmarkIdMapping } from '../bookmark-id-mapper/bookmark-id-mapper.interface';
-import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
+import { BookmarkIdMapperService } from '../bookmark-id-mapper/bookmark-id-mapper.service';
 
 @autobind
-export default abstract class WebExtBookmarkService implements BookmarkService {
+export abstract class WebExtBookmarkService implements BookmarkService {
   $injector: ng.auto.IInjectorService;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;

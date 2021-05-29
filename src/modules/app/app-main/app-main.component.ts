@@ -1,20 +1,20 @@
 import './app-main.component.scss';
 import { OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import AlertService from '../../shared/alert/alert.service';
-import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service.js';
+import { AlertService } from '../../shared/alert/alert.service';
+import { BookmarkHelperService } from '../../shared/bookmark/bookmark-helper/bookmark-helper.service.js';
 import { PlatformService } from '../../shared/global-shared.interface';
-import LogService from '../../shared/log/log.service';
-import NetworkService from '../../shared/network/network.service';
-import SettingsService from '../../shared/settings/settings.service';
-import StoreService from '../../shared/store/store.service';
-import UtilityService from '../../shared/utility/utility.service';
-import WorkingService from '../../shared/working/working.service';
+import { LogService } from '../../shared/log/log.service';
+import { NetworkService } from '../../shared/network/network.service';
+import { SettingsService } from '../../shared/settings/settings.service';
+import { StoreService } from '../../shared/store/store.service';
+import { UtilityService } from '../../shared/utility/utility.service';
+import { WorkingService } from '../../shared/working/working.service';
 import { AppViewType } from '../app.enum';
-import AppHelperService from '../shared/app-helper/app-helper.service';
+import { AppHelperService } from '../shared/app-helper/app-helper.service';
 
 @autobind
-export default class AppMainComponent implements OnInit {
+export class AppMainComponent implements OnInit {
   Strings = require('../../../../res/strings/en.json');
 
   $q: ng.IQService;

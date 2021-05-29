@@ -3,10 +3,10 @@ import autobind from 'autobind-decorator';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService } from '../../shared/global-shared.interface';
 import { StoreKey } from '../../shared/store/store.enum';
-import StoreService from '../../shared/store/store.service';
-import UtilityService from '../../shared/utility/utility.service';
+import { StoreService } from '../../shared/store/store.service';
+import { UtilityService } from '../../shared/utility/utility.service';
 import { AppViewType } from '../app.enum';
-import AppHelperService from '../shared/app-helper/app-helper.service';
+import { AppHelperService } from '../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({
@@ -15,7 +15,7 @@ import AppHelperService from '../shared/app-helper/app-helper.service';
   styles: [require('./app-updated.component.scss')],
   template: require('./app-updated.component.html')
 })
-export default class AppUpdatedComponent implements OnInit {
+export class AppUpdatedComponent implements OnInit {
   Strings = require('../../../../res/strings/en.json');
 
   $timeout: ng.ITimeoutService;

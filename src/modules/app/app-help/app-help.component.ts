@@ -2,10 +2,10 @@ import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { PlatformService } from '../../shared/global-shared.interface';
 import { StoreKey } from '../../shared/store/store.enum';
-import StoreService from '../../shared/store/store.service';
-import UtilityService from '../../shared/utility/utility.service';
+import { StoreService } from '../../shared/store/store.service';
+import { UtilityService } from '../../shared/utility/utility.service';
 import { KeyCode } from '../app.enum';
-import AppHelperService from '../shared/app-helper/app-helper.service';
+import { AppHelperService } from '../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({
@@ -14,7 +14,7 @@ import AppHelperService from '../shared/app-helper/app-helper.service';
   styles: [require('./app-help.component.scss')],
   template: require('./app-help.component.html')
 })
-export default class AppHelpComponent implements OnInit {
+export class AppHelpComponent implements OnInit {
   Strings = require('../../../../res/strings/en.json');
 
   $timeout: ng.ITimeoutService;

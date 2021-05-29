@@ -3,9 +3,9 @@ import { Component } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AlertType } from '../../../shared/alert/alert.enum';
 import { Alert } from '../../../shared/alert/alert.interface';
-import AlertService from '../../../shared/alert/alert.service';
+import { AlertService } from '../../../shared/alert/alert.service';
 import { PlatformService } from '../../../shared/global-shared.interface';
-import UtilityService from '../../../shared/utility/utility.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
 
 @autobind
 @Component({
@@ -14,7 +14,7 @@ import UtilityService from '../../../shared/utility/utility.service';
   styles: [require('./webext-app-alert.component.scss')],
   template: require('./webext-app-alert.component.html')
 })
-export default class WebExtAppAlertComponent {
+export class WebExtAppAlertComponent {
   Strings = require('../../../../../res/strings/en.json');
 
   $scope: ng.IScope;

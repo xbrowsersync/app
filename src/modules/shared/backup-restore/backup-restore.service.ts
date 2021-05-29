@@ -7,17 +7,17 @@ import { Bookmark, BookmarkService } from '../bookmark/bookmark.interface';
 import * as Exceptions from '../exception/exception';
 import { MessageCommand } from '../global-shared.enum';
 import { PlatformService } from '../global-shared.interface';
-import LogService from '../log/log.service';
+import { LogService } from '../log/log.service';
 import { StoreKey } from '../store/store.enum';
-import StoreService from '../store/store.service';
+import { StoreService } from '../store/store.service';
 import { SyncType } from '../sync/sync.enum';
-import UpgradeService from '../upgrade/upgrade.service';
-import UtilityService from '../utility/utility.service';
+import { UpgradeService } from '../upgrade/upgrade.service';
+import { UtilityService } from '../utility/utility.service';
 import { AutoBackUpSchedule, Backup, BackupSync } from './backup-restore.interface';
 
 @autobind
 @Injectable('BackupRestoreService')
-export default class BackupRestoreService {
+export class BackupRestoreService {
   $q: ng.IQService;
   apiSvc: ApiService;
   bookmarkSvc: BookmarkService;

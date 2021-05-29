@@ -2,17 +2,17 @@ import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { ApiServiceStatus } from '../../../shared/api/api.enum';
 import { ApiServiceInfo } from '../../../shared/api/api.interface';
-import BookmarkHelperService from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
+import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { PlatformService } from '../../../shared/global-shared.interface';
-import NetworkService from '../../../shared/network/network.service';
+import { NetworkService } from '../../../shared/network/network.service';
 import { StoreKey } from '../../../shared/store/store.enum';
-import StoreService from '../../../shared/store/store.service';
+import { StoreService } from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
-import SyncService from '../../../shared/sync/sync.service';
-import UtilityService from '../../../shared/utility/utility.service';
-import WorkingService from '../../../shared/working/working.service';
+import { SyncService } from '../../../shared/sync/sync.service';
+import { UtilityService } from '../../../shared/utility/utility.service';
+import { WorkingService } from '../../../shared/working/working.service';
 import { AppEventType, AppViewType } from '../../app.enum';
-import AppHelperService from '../../shared/app-helper/app-helper.service';
+import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 
 @autobind
 @Component({
@@ -21,7 +21,7 @@ import AppHelperService from '../../shared/app-helper/app-helper.service';
   styles: [require('./sync-settings.component.scss')],
   template: require('./sync-settings.component.html')
 })
-export default class SyncSettingsComponent implements OnInit {
+export class SyncSettingsComponent implements OnInit {
   Strings = require('../../../../../res/strings/en.json');
 
   $q: ng.IQService;

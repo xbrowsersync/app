@@ -4,7 +4,7 @@ import * as Exceptions from '../exception/exception';
 
 @autobind
 @Injectable('NetworkService')
-export default class NetworkService {
+export class NetworkService {
   isNetworkConnected(): boolean {
     return (window as any).Connection &&
       (window.navigator as any).connection &&

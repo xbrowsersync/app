@@ -10,7 +10,7 @@ import zxcvbn, { ZXCVBNResult } from 'zxcvbn';
   },
   selector: '[passwordStrength]'
 })
-export default class PasswordStrengthDirective implements AfterViewInit {
+export class PasswordStrengthDirective implements AfterViewInit {
   ngModel: ng.INgModelController;
   @Input('=passwordStrength') result: ZXCVBNResult;
 

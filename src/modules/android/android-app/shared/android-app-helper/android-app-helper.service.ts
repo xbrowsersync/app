@@ -1,20 +1,20 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import AppHelperService from '../../../../app/shared/app-helper/app-helper.service';
+import { AppHelperService } from '../../../../app/shared/app-helper/app-helper.service';
 import { ApiService } from '../../../../shared/api/api.interface';
 import { Bookmark } from '../../../../shared/bookmark/bookmark.interface';
 import { ExceptionHandler } from '../../../../shared/exception/exception.interface';
-import LogService from '../../../../shared/log/log.service';
-import StoreService from '../../../../shared/store/store.service';
+import { LogService } from '../../../../shared/log/log.service';
+import { StoreService } from '../../../../shared/store/store.service';
 import { Sync } from '../../../../shared/sync/sync.interface';
-import SyncService from '../../../../shared/sync/sync.service';
-import UtilityService from '../../../../shared/utility/utility.service';
-import WorkingService from '../../../../shared/working/working.service';
-import AndroidPlatformService from '../../../android-shared/android-platform/android-platform.service';
+import { SyncService } from '../../../../shared/sync/sync.service';
+import { UtilityService } from '../../../../shared/utility/utility.service';
+import { WorkingService } from '../../../../shared/working/working.service';
+import { AndroidPlatformService } from '../../../android-shared/android-platform/android-platform.service';
 
 @autobind
 @Injectable('AppHelperService')
-export default class AndroidAppHelperService extends AppHelperService {
+export class AndroidAppHelperService extends AppHelperService {
   $interval: ng.IIntervalService;
   platformSvc: AndroidPlatformService;
 

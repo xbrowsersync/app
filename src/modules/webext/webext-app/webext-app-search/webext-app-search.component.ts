@@ -1,7 +1,7 @@
 import { Component } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import AppSearchComponent from '../../../app/app-search/app-search.component';
-import WebExtAppHelperService from '../shared/webext-app-helper/webext-app-helper.service';
+import { AppSearchComponent } from '../../../app/app-search/app-search.component';
+import { WebExtAppHelperService } from '../shared/webext-app-helper/webext-app-helper.service';
 
 @autobind
 @Component({
@@ -9,7 +9,7 @@ import WebExtAppHelperService from '../shared/webext-app-helper/webext-app-helpe
   selector: 'appSearch',
   template: require('../../../app/app-search/app-search.component.html')
 })
-export default class WebExtAppSearchComponent extends AppSearchComponent {
+export class WebExtAppSearchComponent extends AppSearchComponent {
   appHelperSvc: WebExtAppHelperService;
 
   ngOnInit(): ng.IPromise<void> {

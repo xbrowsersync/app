@@ -12,11 +12,11 @@ import {
 } from '../../../../shared/bookmark/bookmark.interface';
 import * as Exceptions from '../../../../shared/exception/exception';
 import { WebpageMetadata } from '../../../../shared/global-shared.interface';
-import WebExtBookmarkService from '../../../shared/webext-bookmark/webext-bookmark.service';
+import { WebExtBookmarkService } from '../../../shared/webext-bookmark/webext-bookmark.service';
 
 @autobind
 @Injectable('BookmarkService')
-export default class FirefoxBookmarkService extends WebExtBookmarkService {
+export class FirefoxBookmarkService extends WebExtBookmarkService {
   unsupportedContainers = [];
 
   clearNativeBookmarks(): ng.IPromise<void> {
