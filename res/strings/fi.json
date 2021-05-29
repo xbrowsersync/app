@@ -504,7 +504,7 @@
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time reset your data back to it’s original state from when xBrowserSync was installed.</p>",
+        "default": "<h4>Muista varmuuskopiointi</h4><p>Kun käytät xBrowserSyncia tietosi ovat omalla vastuullasi, joten ole fiksu ja varmuuskopioi.</p><p>Siirry asetuspaneeliin ja varmuuskopioi salaamattomat tiedot paikalliseen tiedostoon, jota voidaan käyttää tietojen palauttamiseen, jos tarvetta ilmenee.</p><p>Jos selaimesi paikalliset tiedot vaurioituvat eikä sinulla ole varmuuskopioita, voit milloin tahansa palauttaa tietosi takaisin alkuperäiseen, xBrowserSyncin asennusta edeltävään tilaan.</p>",
         "android": "<h4>Muista varmuuskopiointi</h4><p>Kun käytät xBrowserSyncia tietosi ovat omalla vastuullasi, joten ole fiksu ja varmuuskopioi.</p><p>Siirry asetuspaneeliin ja varmuuskopioi salaamattomat tiedot paikalliseen tiedostoon, jota voidaan käyttää tietojen palauttamiseen, jos tarvetta ilmenee.</p>"
       },
       "BeforeYouBegin": {
@@ -814,82 +814,82 @@
         "AutoBackup": {
           "Title": {
             "key": "View_Settings_BackupRestore_AutoBackup_Title",
-            "default": "Auto back up"
+            "default": "Automaattinen varmuuskopiointi"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_AutoBackup_Description",
-            "default": "Automatically download backups on a schedule."
+            "default": "Lataa varmuuskopiot automaattisesti ajoitetusti."
           },
           "RunsAt": {
             "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
-            "default": "Back up runs at"
+            "default": "Varmuuskopiointi alkaa"
           },
           "Every": {
             "key": "View_Settings_BackupRestore_AutoBackup_Every",
-            "default": "every"
+            "default": "joka"
           },
           "Numbers": {
             "Single": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
-              "default": "single"
+              "default": "yksi"
             },
             "Two": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
-              "default": "two"
+              "default": "kaksi"
             },
             "Three": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
-              "default": "three"
+              "default": "kolme"
             },
             "Four": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
-              "default": "four"
+              "default": "neljä"
             },
             "Five": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
-              "default": "five"
+              "default": "viisi"
             },
             "Six": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
-              "default": "six"
+              "default": "kuusi"
             },
             "Seven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
-              "default": "seven"
+              "default": "seitsemän"
             },
             "Eight": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
-              "default": "eight"
+              "default": "kahdeksan"
             },
             "Nine": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
-              "default": "nine"
+              "default": "yhdeksän"
             },
             "Ten": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
-              "default": "ten"
+              "default": "kymmenen"
             },
             "Eleven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
-              "default": "eleven"
+              "default": "yksitoista"
             },
             "Twelve": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
-              "default": "twelve"
+              "default": "kaksitoista"
             }
           },
           "Units": {
             "Day": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
-              "default": "day(s)"
+              "default": "päivä(ä)"
             },
             "Week": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
-              "default": "week(s)"
+              "default": "viikko(a)"
             },
             "Month": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
-              "default": "month(s)"
+              "default": "kuukautta"
             }
           },
           "Confirmation": {
@@ -904,7 +904,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Download Back Up"
+            "default": "Lataa varmuuskopio"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -922,7 +922,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Restore From Backup"
+            "default": "Palauta varmuuskopiosta"
           },
           "Local": {
             "Description": {
@@ -947,7 +947,7 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Backup has been restored."
+            "default": "Varmuuskopio on palautettu."
           },
           "SelectFile": {
             "Button": {
@@ -983,15 +983,15 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Reset_Button",
-            "default": "Reset Local Data"
+            "default": "Palauta paikalliset tiedot"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Reset_Done",
-            "default": "Local data has been reset to initial installation state."
+            "default": "Paikalliset tiedot on palautettu alkuperäiseen asennustilaan."
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Reset_Unavailable",
-            "default": "Installation state data not available, unable to reset."
+            "default": "Asennuksen tilatietoja ei ole saatavilla, palautus ei onnistu."
           }
         }
       },
@@ -1285,7 +1285,7 @@
       },
       "Resetting": {
         "key": "View_Working_Resetting",
-        "default": "Resetting"
+        "default": "Palautetaan"
       },
       "Syncing": {
         "key": "View_Working_Syncing",
