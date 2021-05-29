@@ -10,7 +10,12 @@ import {
   ModifyNativeBookmarkChangeData,
   MoveNativeBookmarkChangeData
 } from '../../../../shared/bookmark/bookmark.interface';
-import * as Exceptions from '../../../../shared/exception/exception';
+import {
+  ContainerNotFoundException,
+  Exception,
+  FailedCreateNativeBookmarksException,
+  FailedRemoveNativeBookmarksException
+} from '../../../../shared/exception/exception';
 import { WebpageMetadata } from '../../../../shared/global-shared.interface';
 import { WebExtBookmarkService } from '../../../shared/webext-bookmark/webext-bookmark.service';
 
@@ -101,7 +106,7 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
         return this.$q.all([clearMenu, clearMobile, clearOthers, clearToolbar]).then(() => {});
       })
       .catch((err) => {
-        throw new Exceptions.FailedRemoveNativeBookmarksException(undefined, err);
+        throw new FailedRemoveNativeBookmarksException(undefined, err);
       });
   }
 
@@ -205,7 +210,7 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
     };
     return browser.bookmarks.create(newSeparator).catch((err) => {
       this.logSvc.logInfo('Failed to create native separator');
-      throw new Exceptions.FailedCreateNativeBookmarksException(undefined, err);
+      throw new FailedCreateNativeBookmarksException(undefined, err);
     });
   }
 
@@ -220,7 +225,7 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
       .then(() => {})
       .catch((err) => {
         this.logSvc.logWarning('Failed to disable event listeners');
-        throw new Exceptions.UnspecifiedException(undefined, err);
+        throw new Exception(undefined, err);
       });
   }
 
@@ -240,7 +245,7 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
       })
       .catch((err) => {
         this.logSvc.logWarning('Failed to enable event listeners');
-        throw new Exceptions.UnspecifiedException(undefined, err);
+        throw new Exception(undefined, err);
       });
   }
 
@@ -511,7 +516,7 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
             if (!toolbarBookmarksNode) {
               this.logSvc.logWarning('Missing container: toolbar bookmarks');
             }
-            throw new Exceptions.ContainerNotFoundException();
+            throw new ContainerNotFoundException();
           }
 
           // Add container ids to result
@@ -561,9 +566,10 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
     };
 
     // If bookmark is not folder or separator, get page metadata from current tab
-    return (nativeBookmark.url && !this.bookmarkHelperSvc.nativeBookmarkIsSeparator(nativeBookmark)
-      ? this.platformSvc.getPageMetadata()
-      : this.$q.resolve<WebpageMetadata>(null)
+    return (
+      nativeBookmark.url && !this.bookmarkHelperSvc.nativeBookmarkIsSeparator(nativeBookmark)
+        ? this.platformSvc.getPageMetadata()
+        : this.$q.resolve<WebpageMetadata>(null)
     ).then((metadata) => {
       // Add metadata if bookmark is current tab location
       if (metadata && nativeBookmark.url === metadata.url) {
@@ -573,9 +579,8 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
         (changeInfo.changeData as AddNativeBookmarkChangeData).nativeBookmark.description = this.utilitySvc.stripTags(
           metadata.description
         );
-        (changeInfo.changeData as AddNativeBookmarkChangeData).nativeBookmark.tags = this.utilitySvc.getTagArrayFromText(
-          metadata.tags
-        );
+        (changeInfo.changeData as AddNativeBookmarkChangeData).nativeBookmark.tags =
+          this.utilitySvc.getTagArrayFromText(metadata.tags);
       }
 
       // Queue sync

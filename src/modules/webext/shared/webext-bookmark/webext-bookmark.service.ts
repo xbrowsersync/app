@@ -736,13 +736,15 @@ export abstract class WebExtBookmarkService implements BookmarkService {
             //  created in toolbar container whilst not syncing toolbar option enabled
             //  in which case create a new bookmark from the native bookmark
             let changesMade = false;
-            return (!movedBookmarkMapping
-              ? this.createBookmarkFromNativeBookmarkId(changeData.id, bookmarks)
-              : this.$q
-                  .resolve()
-                  .then(
-                    () => this.bookmarkHelperSvc.findBookmarkById(movedBookmarkMapping.syncedId, bookmarks) as Bookmark
-                  )
+            return (
+              !movedBookmarkMapping
+                ? this.createBookmarkFromNativeBookmarkId(changeData.id, bookmarks)
+                : this.$q
+                    .resolve()
+                    .then(
+                      () =>
+                        this.bookmarkHelperSvc.findBookmarkById(movedBookmarkMapping.syncedId, bookmarks) as Bookmark
+                    )
             ).then((bookmarkToRemove) => {
               // If old parent is mapped, remove the moved bookmark
               let removeBookmarkPromise: ng.IPromise<Bookmark[]>;

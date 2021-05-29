@@ -325,11 +325,12 @@ export class BookmarkSyncProviderService implements SyncProvider {
           // Use bookmarks provided with sync if exists
           const bookmarksToSync = angular.isUndefined(sync.bookmarks) ? cachedBookmarks : sync.bookmarks;
           processResult.data = bookmarksToSync;
-          return (angular.isUndefined(sync.changeInfo)
-            ? this.$q.resolve(bookmarksToSync)
-            : this.bookmarkSvc
-                .processNativeChangeOnBookmarks(sync.changeInfo, bookmarksToSync)
-                .then((updatedBookmarks) => this.bookmarkSvc.ensureContainersExist(updatedBookmarks))
+          return (
+            angular.isUndefined(sync.changeInfo)
+              ? this.$q.resolve(bookmarksToSync)
+              : this.bookmarkSvc
+                  .processNativeChangeOnBookmarks(sync.changeInfo, bookmarksToSync)
+                  .then((updatedBookmarks) => this.bookmarkSvc.ensureContainersExist(updatedBookmarks))
           ).then((updatedBookmarks) => {
             // If changes made, add updated bookmarks to process result and mark for remote update
             if (!angular.equals(updatedBookmarks, bookmarksToSync)) {

@@ -166,16 +166,17 @@ export class AndroidAppSearchComponent extends AppSearchComponent {
             return this.appHelperSvc.switchView();
           }
 
-          return (err instanceof Exceptions.DataOutOfSyncException
-            ? this.displayDefaultSearchState()
-            : this.$q.resolve().then(() => {
-                // Restore previous bookmarks results
-                if (this.displayFolderView) {
-                  this.bookmarkTree = originalBookmarks;
-                } else {
-                  this.results = originalBookmarks;
-                }
-              })
+          return (
+            err instanceof Exceptions.DataOutOfSyncException
+              ? this.displayDefaultSearchState()
+              : this.$q.resolve().then(() => {
+                  // Restore previous bookmarks results
+                  if (this.displayFolderView) {
+                    this.bookmarkTree = originalBookmarks;
+                  } else {
+                    this.results = originalBookmarks;
+                  }
+                })
           ).then(() => this.$exceptionHandler(err));
         });
     }, 1e3);

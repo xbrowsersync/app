@@ -10,7 +10,13 @@ import {
   ModifyNativeBookmarkChangeData,
   MoveNativeBookmarkChangeData
 } from '../../../../shared/bookmark/bookmark.interface';
-import * as Exceptions from '../../../../shared/exception/exception';
+import {
+  BookmarkMappingNotFoundException,
+  ContainerNotFoundException,
+  Exception,
+  FailedCreateNativeBookmarksException,
+  FailedRemoveNativeBookmarksException
+} from '../../../../shared/exception/exception';
 import Globals from '../../../../shared/global-shared.constants';
 import { WebpageMetadata } from '../../../../shared/global-shared.interface';
 import { WebExtBookmarkService } from '../../../shared/webext-bookmark/webext-bookmark.service';
@@ -72,7 +78,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
         return this.$q.all([clearOthers, clearToolbar]).then(() => {});
       })
       .catch((err) => {
-        throw new Exceptions.FailedRemoveNativeBookmarksException(undefined, err);
+        throw new FailedRemoveNativeBookmarksException(undefined, err);
       });
   }
 
@@ -230,7 +236,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
     };
     return browser.bookmarks.create(newSeparator).catch((err) => {
       this.logSvc.logInfo('Failed to create native separator');
-      throw new Exceptions.FailedCreateNativeBookmarksException(undefined, err);
+      throw new FailedCreateNativeBookmarksException(undefined, err);
     });
   }
 
@@ -246,7 +252,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
       .then(() => {})
       .catch((err) => {
         this.logSvc.logWarning('Failed to disable event listeners');
-        throw new Exceptions.UnspecifiedException(undefined, err);
+        throw new Exception(undefined, err);
       });
   }
 
@@ -267,7 +273,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
       })
       .catch((err) => {
         this.logSvc.logWarning('Failed to enable event listeners');
-        throw new Exceptions.UnspecifiedException(undefined, err);
+        throw new Exception(undefined, err);
       });
   }
 
@@ -492,7 +498,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
             if (!toolbarBookmarksNode) {
               this.logSvc.logWarning('Missing container: toolbar bookmarks');
             }
-            throw new Exceptions.ContainerNotFoundException();
+            throw new ContainerNotFoundException();
           }
 
           // Check for unsupported containers
@@ -550,7 +556,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
         if (bookmarkNode.id !== id) {
           updateMappingPromise = this.bookmarkIdMapperSvc.get(id).then((idMapping) => {
             if (!idMapping) {
-              throw new Exceptions.BookmarkMappingNotFoundException();
+              throw new BookmarkMappingNotFoundException();
             }
 
             return this.bookmarkIdMapperSvc.remove(idMapping.syncedId).then(() => {
@@ -580,9 +586,10 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
 
   syncNativeBookmarkCreated(id?: string, nativeBookmark?: NativeBookmarks.BookmarkTreeNode): ng.IPromise<void> {
     // If bookmark is separator update native bookmark properties
-    return (this.isSeparator(nativeBookmark)
-      ? this.convertNativeBookmarkToSeparator(nativeBookmark)
-      : this.$q.resolve(nativeBookmark)
+    return (
+      this.isSeparator(nativeBookmark)
+        ? this.convertNativeBookmarkToSeparator(nativeBookmark)
+        : this.$q.resolve(nativeBookmark)
     ).then((bookmarkNode) => {
       // Create change info
       const data: AddNativeBookmarkChangeData = {
@@ -594,9 +601,10 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
       };
 
       // If bookmark is not folder or separator, get page metadata from current tab
-      return (bookmarkNode.url && !this.isSeparator(bookmarkNode)
-        ? this.checkPermsAndGetPageMetadata()
-        : this.$q.resolve<WebpageMetadata>(null)
+      return (
+        bookmarkNode.url && !this.isSeparator(bookmarkNode)
+          ? this.checkPermsAndGetPageMetadata()
+          : this.$q.resolve<WebpageMetadata>(null)
       ).then((metadata) => {
         // Add metadata if bookmark is current tab location
         if (metadata && bookmarkNode.url === metadata.url) {
@@ -606,9 +614,8 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
           (changeInfo.changeData as AddNativeBookmarkChangeData).nativeBookmark.description = this.utilitySvc.stripTags(
             metadata.description
           );
-          (changeInfo.changeData as AddNativeBookmarkChangeData).nativeBookmark.tags = this.utilitySvc.getTagArrayFromText(
-            metadata.tags
-          );
+          (changeInfo.changeData as AddNativeBookmarkChangeData).nativeBookmark.tags =
+            this.utilitySvc.getTagArrayFromText(metadata.tags);
         }
 
         // Queue sync
@@ -622,16 +629,17 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
       const movedBookmark = results[0];
 
       // If bookmark is separator update native bookmark properties
-      return (this.isSeparator(movedBookmark)
-        ? this.convertNativeBookmarkToSeparator(movedBookmark)
-        : this.$q.resolve(movedBookmark)
+      return (
+        this.isSeparator(movedBookmark)
+          ? this.convertNativeBookmarkToSeparator(movedBookmark)
+          : this.$q.resolve(movedBookmark)
       ).then((bookmarkNode) => {
         // If the bookmark was converted to a separator, update id mapping
         let updateMappingPromise: ng.IPromise<void>;
         if (bookmarkNode.id !== id) {
           updateMappingPromise = this.bookmarkIdMapperSvc.get(id).then((idMapping) => {
             if (!idMapping) {
-              throw new Exceptions.BookmarkMappingNotFoundException();
+              throw new BookmarkMappingNotFoundException();
             }
 
             return this.bookmarkIdMapperSvc.remove(idMapping.syncedId).then(() => {

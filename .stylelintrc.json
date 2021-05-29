@@ -6,6 +6,8 @@
     "font-family-no-missing-generic-family-keyword": null,
     "max-nesting-depth": 20,
     "no-descending-specificity": null,
+    "no-invalid-position-at-import-rule": null,
+    "no-irregular-whitespace": null,
     "scss/at-extend-no-missing-placeholder": null,
     "scss/selector-no-redundant-nesting-selector": null,
     "selector-max-compound-selectors": null,

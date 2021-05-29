@@ -87,9 +87,10 @@ export class UpgradeService {
           const upgradeProvider = upgradeStep && upgradeStep[1];
 
           // If upgrade found, run app upgrade process
-          return (upgradeVersion
-            ? upgradeProvider.upgradeApp(lastUpgradeVersion).then(() => upgradeVersion)
-            : this.$q.resolve(targetVersion)
+          return (
+            upgradeVersion
+              ? upgradeProvider.upgradeApp(lastUpgradeVersion).then(() => upgradeVersion)
+              : this.$q.resolve(targetVersion)
           ).then((newVersion) => {
             return this.setLastUpgradeVersion(newVersion)
               .then(() => this.logSvc.logInfo(`Upgraded to ${newVersion}`))
@@ -138,9 +139,10 @@ export class UpgradeService {
       const upgradeProvider = upgradeStep?.[1];
 
       // Run provider upgrade process if exists
-      return (upgradeVersion
-        ? upgradeProvider.upgradeBookmarks(upgradedBookmarks, currentVersion)
-        : this.$q.resolve(upgradedBookmarks)
+      return (
+        upgradeVersion
+          ? upgradeProvider.upgradeBookmarks(upgradedBookmarks, currentVersion)
+          : this.$q.resolve(upgradedBookmarks)
       ).then((bookmarksUpgradeResult) => {
         upgradedBookmarks = bookmarksUpgradeResult;
         return upgradeVersion ?? targetVersion;

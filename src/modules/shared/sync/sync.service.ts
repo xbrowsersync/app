@@ -386,33 +386,34 @@ export class SyncService {
 
           return this.cryptoSvc.encryptData(JSON.stringify(processedBookmarksData)).then((encryptedBookmarks) => {
             // Update remote bookmarks if required
-            return (!updateRemote
-              ? this.$q.resolve().then(() => this.logSvc.logInfo('No changes made, skipping remote update.'))
-              : this.apiSvc
-                  .updateBookmarks(encryptedBookmarks, updateSyncVersion, isBackgroundSync)
-                  .then((response) => {
-                    return this.storeSvc.set(StoreKey.LastUpdated, response.lastUpdated).then(() => {
-                      this.logSvc.logInfo(`Remote bookmarks updated at ${response.lastUpdated}`);
-                    });
-                  })
-                  .catch((err) => {
-                    return this.$q
-                      .all(
-                        this.providers.map((provider) => {
-                          let lastResult: any;
-                          switch (provider.constructor) {
-                            case BookmarkSyncProviderService:
-                              lastResult = processedBookmarksData;
-                              break;
-                            default:
-                          }
-                          return provider.handleUpdateRemoteFailed(err, lastResult, this.currentSync);
-                        })
-                      )
-                      .then(() => {
-                        throw err;
+            return (
+              !updateRemote
+                ? this.$q.resolve().then(() => this.logSvc.logInfo('No changes made, skipping remote update.'))
+                : this.apiSvc
+                    .updateBookmarks(encryptedBookmarks, updateSyncVersion, isBackgroundSync)
+                    .then((response) => {
+                      return this.storeSvc.set(StoreKey.LastUpdated, response.lastUpdated).then(() => {
+                        this.logSvc.logInfo(`Remote bookmarks updated at ${response.lastUpdated}`);
                       });
-                  })
+                    })
+                    .catch((err) => {
+                      return this.$q
+                        .all(
+                          this.providers.map((provider) => {
+                            let lastResult: any;
+                            switch (provider.constructor) {
+                              case BookmarkSyncProviderService:
+                                lastResult = processedBookmarksData;
+                                break;
+                              default:
+                            }
+                            return provider.handleUpdateRemoteFailed(err, lastResult, this.currentSync);
+                          })
+                        )
+                        .then(() => {
+                          throw err;
+                        });
+                    })
             ).then(() => this.bookmarkHelperSvc.updateCachedBookmarks(processedBookmarksData, encryptedBookmarks));
           });
         })
