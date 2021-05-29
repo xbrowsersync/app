@@ -116,8 +116,8 @@ export default class WebExtAppWorkingComponent {
       case WorkingContext.Restoring:
         message = this.platformSvc.getI18nString(this.Strings.View.Working.Restoring);
         break;
-      case WorkingContext.Reverting:
-        message = this.platformSvc.getI18nString(this.Strings.View.Working.Reverting);
+      case WorkingContext.Resetting:
+        message = this.platformSvc.getI18nString(this.Strings.View.Working.Resetting);
         break;
       case WorkingContext.Syncing:
       default:

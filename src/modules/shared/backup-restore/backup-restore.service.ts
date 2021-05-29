@@ -1,10 +1,9 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import AppHelperService from '../../app/shared/app-helper/app-helper.service';
 import { ApiServiceType } from '../api/api.enum';
 import { ApiService } from '../api/api.interface';
-import { Bookmark } from '../bookmark/bookmark.interface';
+import { Bookmark, BookmarkService } from '../bookmark/bookmark.interface';
 import * as Exceptions from '../exception/exception';
 import { MessageCommand } from '../global-shared.enum';
 import { PlatformService } from '../global-shared.interface';
@@ -14,14 +13,14 @@ import StoreService from '../store/store.service';
 import { SyncType } from '../sync/sync.enum';
 import UpgradeService from '../upgrade/upgrade.service';
 import UtilityService from '../utility/utility.service';
-import { Backup, BackupSync } from './backup-restore.interface';
+import { AutoBackUpSchedule, Backup, BackupSync } from './backup-restore.interface';
 
 @autobind
 @Injectable('BackupRestoreService')
 export default class BackupRestoreService {
   $q: ng.IQService;
   apiSvc: ApiService;
-  appHelperSvc: AppHelperService;
+  bookmarkSvc: BookmarkService;
   logSvc: LogService;
   platformSvc: PlatformService;
   storeSvc: StoreService;
@@ -31,7 +30,7 @@ export default class BackupRestoreService {
   static $inject = [
     '$q',
     'ApiService',
-    'AppHelperService',
+    'BookmarkService',
     'LogService',
     'PlatformService',
     'StoreService',
@@ -41,7 +40,7 @@ export default class BackupRestoreService {
   constructor(
     $q: ng.IQService,
     ApiSvc: ApiService,
-    AppHelperSvc: AppHelperService,
+    BookmarkSvc: BookmarkService,
     LogSvc: LogService,
     PlatformSvc: PlatformService,
     StoreSvc: StoreService,
@@ -50,7 +49,7 @@ export default class BackupRestoreService {
   ) {
     this.$q = $q;
     this.apiSvc = ApiSvc;
-    this.appHelperSvc = AppHelperSvc;
+    this.bookmarkSvc = BookmarkSvc;
     this.logSvc = LogSvc;
     this.platformSvc = PlatformSvc;
     this.storeSvc = StoreSvc;
@@ -89,6 +88,22 @@ export default class BackupRestoreService {
   getBackupFilename(): string {
     const fileName = `xbs_backup_${this.utilitySvc.getDateTimeString(new Date())}.txt`;
     return fileName;
+  }
+
+  getSetAutoBackUpSchedule(newValue?: AutoBackUpSchedule | null): ng.IPromise<AutoBackUpSchedule> {
+    if (angular.isUndefined(newValue)) {
+      return this.storeSvc.get<AutoBackUpSchedule>(StoreKey.AutoBackUpSchedule);
+    }
+    return this.storeSvc.set(StoreKey.AutoBackUpSchedule, newValue).then(() => {
+      if (newValue === null) {
+        this.logSvc.logInfo(`Auto back up schedule cleared`);
+      } else {
+        this.logSvc.logInfo(
+          `Auto back up schedule: ${newValue.autoBackUpHour}:${newValue.autoBackUpMinute} every ${newValue.autoBackUpNumber} ${newValue.autoBackUpUnit}`
+        );
+      }
+      return newValue;
+    });
   }
 
   restoreBackupData(backupData: Backup): ng.IPromise<void> {
@@ -139,7 +154,7 @@ export default class BackupRestoreService {
                     .all([
                       this.storeSvc.remove(StoreKey.Password),
                       syncId ? this.storeSvc.set(StoreKey.SyncId, syncId) : this.$q.resolve(),
-                      serviceUrl ? this.appHelperSvc.updateServiceUrl(serviceUrl) : this.$q.resolve()
+                      serviceUrl ? this.utilitySvc.updateServiceUrl(serviceUrl) : this.$q.resolve()
                     ])
                     .then(resolve)
                     .catch(reject);
@@ -157,5 +172,40 @@ export default class BackupRestoreService {
           )
       )
       .then(() => {});
+  }
+
+  runAutoBackUp(): void {
+    this.logSvc.logInfo('Running auto back up');
+    this.saveBackupFile(false);
+  }
+
+  saveBackupFile(displaySaveDialog?: boolean): ng.IPromise<string | void> {
+    let filename: string;
+    return this.$q
+      .all([
+        this.bookmarkSvc.getBookmarksForExport(),
+        this.storeSvc.get<string>(StoreKey.SyncId),
+        this.utilitySvc.getServiceUrl(),
+        this.utilitySvc.getSyncVersion(),
+        this.utilitySvc.isSyncEnabled()
+      ])
+      .then((data) => {
+        const bookmarksData = data[0];
+        const syncId = data[1];
+        const serviceUrl = data[2];
+        const syncVersion = data[3];
+        const syncEnabled = data[4];
+        const backupData = this.createBackupData(
+          bookmarksData,
+          syncEnabled ? syncId : undefined,
+          syncEnabled ? serviceUrl : undefined,
+          syncEnabled ? syncVersion : undefined
+        );
+
+        // Beautify json and download data
+        const beautifiedJson = JSON.stringify(backupData, null, 2);
+        filename = this.getBackupFilename();
+        return this.platformSvc.downloadFile(filename, beautifiedJson, displaySaveDialog);
+      });
   }
 }

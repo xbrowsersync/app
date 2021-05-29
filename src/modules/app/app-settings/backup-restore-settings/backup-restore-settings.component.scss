@@ -3,6 +3,29 @@
 backup-restore-settings {
   display: block;
 
+  #autoBackUpForm {
+    .buttons {
+      margin-top: 1rem;
+    }
+
+    .form-group {
+      align-items: baseline;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+
+      label {
+        color: var(--color-settings-description-text);
+        font-size: 0.95rem;
+        margin-bottom: 0;
+      }
+
+      select {
+        margin: 0 0.25rem;
+      }
+    }
+  }
+
   #restoreForm {
     input[type='text'] {
       padding-right: 2rem;
@@ -28,6 +51,18 @@ backup-restore-settings {
       position: absolute;
       right: 0.75rem;
       top: 0.6rem;
+    }
+  }
+
+  .setting-title {
+    align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+    width: 100%;
+
+    label {
+      margin-bottom: 0;
     }
   }
 }

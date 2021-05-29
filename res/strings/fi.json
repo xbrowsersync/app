@@ -811,6 +811,92 @@
           "key": "View_Settings_BackupRestore_Title",
           "default": "Varmuuskopiointi ja palautus"
         },
+        "AutoBackup": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Title",
+            "default": ""
+          },
+          "Description": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Description",
+            "default": ""
+          },
+          "RunsAt": {
+            "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
+            "default": ""
+          },
+          "Every": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Every",
+            "default": ""
+          },
+          "Numbers": {
+            "Single": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
+              "default": ""
+            },
+            "Two": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
+              "default": ""
+            },
+            "Three": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
+              "default": ""
+            },
+            "Four": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
+              "default": ""
+            },
+            "Five": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
+              "default": ""
+            },
+            "Six": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
+              "default": ""
+            },
+            "Seven": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
+              "default": ""
+            },
+            "Eight": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
+              "default": ""
+            },
+            "Nine": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
+              "default": ""
+            },
+            "Ten": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
+              "default": ""
+            },
+            "Eleven": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
+              "default": ""
+            },
+            "Twelve": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
+              "default": ""
+            }
+          },
+          "Units": {
+            "Day": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
+              "default": ""
+            },
+            "Week": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
+              "default": ""
+            },
+            "Month": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
+              "default": ""
+            }
+          },
+          "Confirmation": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
+            "default": ""
+          }
+        },
         "Backup": {
           "Title": {
             "key": "View_Settings_BackupRestore_Backup_Title",
@@ -890,29 +976,21 @@
             "default": "Virheelliset xBrowserSync-varmuuskopion tiedot"
           }
         },
-        "Revert": {
-          "Title": {
-            "key": "View_Settings_BackupRestore_Revert_Title",
-            "default": "Palauta alkutilaan"
-          },
-          "Description": {
-            "key": "View_Settings_BackupRestore_Revert_Description",
-            "default": "Palauta selaimen paikalliset tiedot alkuperäiseen asennustilaan."
-          },
+        "Reset": {
           "Confirm": {
-            "key": "View_Settings_BackupRestore_Revert_Confirm",
+            "key": "View_Settings_BackupRestore_Reset_Confirm",
             "default": "<p>Jos jatkat, aktiivinen synkronointi poistetaan käytöstä ja paikalliset tiedot palautetaan xBrowserSyncin asennushetkeen, {date}.</p><p>Jatketaanko?</p>"
           },
           "Button": {
-            "key": "View_Settings_BackupRestore_Revert_Button",
+            "key": "View_Settings_BackupRestore_Reset_Button",
             "default": "Palauta"
           },
           "Done": {
-            "key": "View_Settings_BackupRestore_Revert_Done",
+            "key": "View_Settings_BackupRestore_Reset_Done",
             "default": "Tietosi on palautettu alkuperäiseen asennuksen tilaan."
           },
           "Unavailable": {
-            "key": "View_Settings_BackupRestore_Revert_Unavailable",
+            "key": "View_Settings_BackupRestore_Reset_Unavailable",
             "default": "Asennustilan tietoja ei ole saatavilla, ei voida palauttaa."
           }
         }
@@ -1205,8 +1283,8 @@
         "key": "View_Working_Restoring",
         "default": "Palautetaan"
       },
-      "Reverting": {
-        "key": "View_Working_Reverting",
+      "Resetting": {
+        "key": "View_Working_Resetting",
         "default": "Palautetaan"
       },
       "Syncing": {

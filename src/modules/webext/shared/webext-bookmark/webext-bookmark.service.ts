@@ -7,6 +7,7 @@ import {
   Bookmark,
   BookmarkChange,
   BookmarkMetadata,
+  BookmarkService,
   ModifyNativeBookmarkChangeData,
   MoveNativeBookmarkChangeData,
   OnChildrenReorderedReorderInfoType,
@@ -29,7 +30,7 @@ import { BookmarkIdMapping } from '../bookmark-id-mapper/bookmark-id-mapper.inte
 import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
 
 @autobind
-export default abstract class WebExtBookmarkService {
+export default abstract class WebExtBookmarkService implements BookmarkService {
   $injector: ng.auto.IInjectorService;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
@@ -387,6 +388,19 @@ export default abstract class WebExtBookmarkService {
   abstract enableEventListeners(): ng.IPromise<void>;
 
   abstract ensureContainersExist(bookmarks: Bookmark[]): Bookmark[];
+
+  getBookmarksForExport(): ng.IPromise<Bookmark[]> {
+    return this.utilitySvc
+      .isSyncEnabled()
+      .then((syncEnabled) => {
+        // If sync is not enabled, export native bookmarks
+        return syncEnabled ? this.bookmarkHelperSvc.getCachedBookmarks() : this.getNativeBookmarksAsBookmarks();
+      })
+      .then((bookmarks) => {
+        // Clean bookmarks for export
+        return this.bookmarkHelperSvc.cleanAllBookmarks(this.bookmarkHelperSvc.removeEmptyContainers(bookmarks));
+      });
+  }
 
   getContainerNameFromNativeId(nativeBookmarkId: string): ng.IPromise<string> {
     return this.getNativeContainerIds().then((nativeContainerIds) => {

@@ -1,7 +1,12 @@
 export default {
-  Alarm: {
-    Name: 'xBrowserSync-alarm',
-    Period: 15
+  Alarms: {
+    AutoBackUp: {
+      Name: 'ALARM_AUTO_BACK_UP'
+    },
+    SyncUpdatesCheck: {
+      Name: 'ALARM_SYNC_UPDATES_CHECK',
+      Period: 15
+    }
   },
   Bookmarks: {
     ContainerPrefix: '[xbs]',

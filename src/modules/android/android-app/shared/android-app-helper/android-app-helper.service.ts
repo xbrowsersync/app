@@ -3,7 +3,6 @@ import autobind from 'autobind-decorator';
 import AppHelperService from '../../../../app/shared/app-helper/app-helper.service';
 import { ApiService } from '../../../../shared/api/api.interface';
 import { Bookmark } from '../../../../shared/bookmark/bookmark.interface';
-import * as Exceptions from '../../../../shared/exception/exception';
 import { ExceptionHandler } from '../../../../shared/exception/exception.interface';
 import LogService from '../../../../shared/log/log.service';
 import StoreService from '../../../../shared/store/store.service';
@@ -59,43 +58,6 @@ export default class AndroidAppHelperService extends AppHelperService {
     return this.$q<void>((resolve, reject) => {
       window.cordova.plugins.clipboard.copy(text, resolve, reject);
     }).then(() => {});
-  }
-
-  downloadFile(filename: string, textContents: string): ng.IPromise<string | void> {
-    if (!filename) {
-      throw new Error('File name not supplied.');
-    }
-
-    // Set file storage location to external storage root directory
-    const storageLocation = `${window.cordova.file.externalRootDirectory}Download`;
-
-    return this.$q((resolve, reject) => {
-      const onError = (err: Error) => {
-        return reject(new Exceptions.FailedDownloadFileException(undefined, err));
-      };
-
-      this.logSvc.logInfo(`Downloading file ${filename}`);
-
-      // Save file to storage location
-      window.resolveLocalFileSystemURL(
-        storageLocation,
-        (dirEntry) => {
-          dirEntry.getFile(
-            filename,
-            { create: true },
-            (fileEntry) => {
-              fileEntry.createWriter((fileWriter) => {
-                fileWriter.write(textContents);
-                fileWriter.onerror = onError;
-                fileWriter.onwriteend = () => resolve(filename);
-              }, onError);
-            },
-            onError
-          );
-        },
-        onError
-      );
-    });
   }
 
   exitApp(): void {

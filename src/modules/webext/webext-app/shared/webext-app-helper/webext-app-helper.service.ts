@@ -14,7 +14,6 @@ import SyncService from '../../../../shared/sync/sync.service';
 import UtilityService from '../../../../shared/utility/utility.service';
 import WorkingService from '../../../../shared/working/working.service';
 import WebExtPlatformService from '../../../shared/webext-platform/webext-platform.service';
-import { DownloadFileMessage } from '../../../webext.interface';
 
 @autobind
 export default abstract class WebExtAppHelperService extends AppHelperService {
@@ -77,16 +76,6 @@ export default abstract class WebExtAppHelperService extends AppHelperService {
     });
   }
 
-  downloadFile(filename: string, textContents: string, displaySaveDialog = true): ng.IPromise<string | void> {
-    const message: DownloadFileMessage = {
-      command: MessageCommand.DownloadFile,
-      displaySaveDialog,
-      filename,
-      textContents
-    };
-    return this.platformSvc.sendMessage(message);
-  }
-
   getCurrentSync(): ng.IPromise<Sync> {
     return this.platformSvc.sendMessage({
       command: MessageCommand.GetCurrentSync
@@ -96,12 +85,8 @@ export default abstract class WebExtAppHelperService extends AppHelperService {
   abstract getHelpPages(): string[];
 
   getNextScheduledSyncUpdateCheck(): ng.IPromise<Date> {
-    return browser.alarms.get(Globals.Alarm.Name).then((alarm) => {
-      if (!alarm) {
-        return new Date('');
-      }
-
-      return new Date(alarm.scheduledTime);
+    return browser.alarms.get(Globals.Alarms.SyncUpdatesCheck.Name).then((alarm) => {
+      return !alarm ? new Date('') : new Date(alarm.scheduledTime);
     });
   }
 

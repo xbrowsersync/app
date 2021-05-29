@@ -73,12 +73,6 @@ export default abstract class AppHelperService {
 
   abstract copyTextToClipboard(text: string): ng.IPromise<void>;
 
-  abstract downloadFile(
-    filename: string,
-    textContents: string,
-    displaySaveDialog?: boolean
-  ): ng.IPromise<string | void>;
-
   focusOnElement(domSelector: string, select = false): void {
     this.$timeout(() => {
       const element = document.querySelector(domSelector) as HTMLInputElement;
@@ -192,10 +186,6 @@ export default abstract class AppHelperService {
 
   updateServiceUrl(newServiceUrl: string): ng.IPromise<ApiServiceInfo> {
     // Update service url in store and refresh service info
-    const url = newServiceUrl.replace(/\/$/, '');
-    return this.utilitySvc.updateServiceUrl(url).then(() => {
-      this.logSvc.logInfo(`Service url changed to: ${url}`);
-      return this.formatServiceInfo();
-    });
+    return this.utilitySvc.updateServiceUrl(newServiceUrl).then(() => this.formatServiceInfo());
   }
 }

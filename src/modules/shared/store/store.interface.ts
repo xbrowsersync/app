@@ -1,10 +1,12 @@
 import { BookmarkIdMapping } from '../../webext/shared/bookmark-id-mapper/bookmark-id-mapper.interface';
+import { AutoBackUpSchedule } from '../backup-restore/backup-restore.interface';
 import { LogLevel } from '../log/log.enum';
 import { RemovedSync } from '../sync/sync.interface';
 
 export interface StoreContent {
   alternateSearchBarPosition: boolean;
   appVersion: string;
+  autoBackUpSchedule: AutoBackUpSchedule;
   autoFetchMetadata: boolean;
   bookmarkIdMappings: BookmarkIdMapping[];
   bookmarks: string;

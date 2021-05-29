@@ -5,6 +5,7 @@ import AppModule from '../../app/app.module';
 import AndroidSharedModule from '../android-shared/android-shared.module';
 import AndroidAppComponent from './android-app.component';
 import AndroidAppAlertComponent from './android-app-alert/android-app-alert.component';
+import AndroidAppBackupRestoreSettingsComponent from './android-app-backup-restore-settings/android-app-backup-restore-settings.component';
 import AndroidAppBookmarkComponent from './android-app-bookmark/android-app-bookmark.component';
 import AndroidAppScanComponent from './android-app-scan/android-app-scan.component';
 import AndroidAppSearchComponent from './android-app-search/android-app-search.component';
@@ -14,6 +15,7 @@ import AndroidAppHelperService from './shared/android-app-helper/android-app-hel
 @NgModule({
   declarations: [
     AndroidAppAlertComponent,
+    AndroidAppBackupRestoreSettingsComponent,
     AndroidAppBookmarkComponent,
     AndroidAppComponent,
     AndroidAppScanComponent,

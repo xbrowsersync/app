@@ -99,7 +99,7 @@ export default class AppSyncRemovedComponent {
       );
       const beautifiedJson = JSON.stringify(backupData, null, 2);
       const filename = this.backupRestoreSvc.getBackupFilename();
-      return this.appHelperSvc.downloadFile(filename, beautifiedJson);
+      return this.platformSvc.downloadFile(filename, beautifiedJson);
     });
   }
 }

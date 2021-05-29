@@ -1,8 +1,8 @@
 enum WorkingContext {
   DelayedSyncing = 'DELAYED_SYNCING',
+  Resetting = 'RESETTING',
   Restoring = 'RESTORING',
   RetrievingMetadata = 'RETRIEVING_METADATA',
-  Reverting = 'REVERTING',
   Syncing = 'SYNCING'
 }
 export { WorkingContext };

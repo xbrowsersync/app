@@ -13,7 +13,7 @@ import { SyncType } from '../../../shared/sync/sync.enum';
 import { Sync, SyncResult } from '../../../shared/sync/sync.interface';
 import UtilityService from '../../../shared/utility/utility.service';
 import WorkingService from '../../../shared/working/working.service';
-import { Message, SyncBookmarksMessage } from '../../webext.interface';
+import { DownloadFileMessage, Message, SyncBookmarksMessage } from '../../webext.interface';
 import WebExtBackgroundService from '../../webext-background/webext-background.service';
 import BookmarkIdMapperService from '../bookmark-id-mapper/bookmark-id-mapper.service';
 
@@ -104,6 +104,16 @@ export default abstract class WebExtPlatformService implements PlatformService {
     return this.sendMessage({
       command: MessageCommand.DisableSync
     });
+  }
+
+  downloadFile(filename: string, textContents: string, displaySaveDialog = true): ng.IPromise<string | void> {
+    const message: DownloadFileMessage = {
+      command: MessageCommand.DownloadFile,
+      displaySaveDialog,
+      filename,
+      textContents
+    };
+    return this.sendMessage(message);
   }
 
   enableNativeEventListeners(): ng.IPromise<void> {
@@ -323,10 +333,10 @@ export default abstract class WebExtPlatformService implements PlatformService {
   startSyncUpdateChecks(): ng.IPromise<void> {
     // Register alarm
     return browser.alarms
-      .clear(Globals.Alarm.Name)
+      .clear(Globals.Alarms.SyncUpdatesCheck.Name)
       .then(() => {
-        return browser.alarms.create(Globals.Alarm.Name, {
-          periodInMinutes: Globals.Alarm.Period
+        return browser.alarms.create(Globals.Alarms.SyncUpdatesCheck.Name, {
+          periodInMinutes: Globals.Alarms.SyncUpdatesCheck.Period
         });
       })
       .catch((err) => {
@@ -336,7 +346,7 @@ export default abstract class WebExtPlatformService implements PlatformService {
 
   stopSyncUpdateChecks(): ng.IPromise<void> {
     // Clear registered alarm
-    return browser.alarms.clear(Globals.Alarm.Name).then(() => {});
+    return browser.alarms.clear(Globals.Alarms.SyncUpdatesCheck.Name).then(() => {});
   }
 
   urlIsNativeConfigPage(url: string | undefined): boolean {

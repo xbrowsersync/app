@@ -13,7 +13,9 @@ enum MessageCommand {
   DownloadFile = 'DOWNLOAD_FILE',
   GetPageMetadata = 'GET_PAGE_METADATA',
   EnableEventListeners = 'ENABLE_EVENT_LISTENERS',
-  DisableEventListeners = 'DISABLE_EVENT_LISTENERS'
+  DisableEventListeners = 'DISABLE_EVENT_LISTENERS',
+  EnableAutoBackUp = 'ENABLE_AUTO_BACK_UP',
+  DisableAutoBackUp = 'DISABLE_AUTO_BACK_UP'
 }
 
 enum PlatformType {

@@ -811,6 +811,92 @@
           "key": "View_Settings_BackupRestore_Title",
           "default": "备份和恢复"
         },
+        "AutoBackup": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Title",
+            "default": ""
+          },
+          "Description": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Description",
+            "default": ""
+          },
+          "RunsAt": {
+            "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
+            "default": ""
+          },
+          "Every": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Every",
+            "default": ""
+          },
+          "Numbers": {
+            "Single": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
+              "default": ""
+            },
+            "Two": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
+              "default": ""
+            },
+            "Three": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
+              "default": ""
+            },
+            "Four": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
+              "default": ""
+            },
+            "Five": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
+              "default": ""
+            },
+            "Six": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
+              "default": ""
+            },
+            "Seven": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
+              "default": ""
+            },
+            "Eight": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
+              "default": ""
+            },
+            "Nine": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
+              "default": ""
+            },
+            "Ten": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
+              "default": ""
+            },
+            "Eleven": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
+              "default": ""
+            },
+            "Twelve": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
+              "default": ""
+            }
+          },
+          "Units": {
+            "Day": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
+              "default": ""
+            },
+            "Week": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
+              "default": ""
+            },
+            "Month": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
+              "default": ""
+            }
+          },
+          "Confirmation": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
+            "default": ""
+          }
+        },
         "Backup": {
           "Title": {
             "key": "View_Settings_BackupRestore_Backup_Title",
@@ -890,29 +976,21 @@
             "default": "无效的 xBrowserSync 备份数据"
           }
         },
-        "Revert": {
-          "Title": {
-            "key": "View_Settings_BackupRestore_Revert_Title",
-            "default": "还原"
-          },
-          "Description": {
-            "key": "View_Settings_BackupRestore_Revert_Description",
-            "default": "还原本地浏览器数据到初始安装状态。"
-          },
+        "Reset": {
           "Confirm": {
-            "key": "View_Settings_BackupRestore_Revert_Confirm",
+            "key": "View_Settings_BackupRestore_Reset_Confirm",
             "default": "<p>若继续，任何激活的同步都将被禁用，您的本地数据将恢复到{date} 安装 xBrowserSync 时的状态。</p><p>确定继续吗？</p>"
           },
           "Button": {
-            "key": "View_Settings_BackupRestore_Revert_Button",
+            "key": "View_Settings_BackupRestore_Reset_Button",
             "default": "还原"
           },
           "Done": {
-            "key": "View_Settings_BackupRestore_Revert_Done",
+            "key": "View_Settings_BackupRestore_Reset_Done",
             "default": "您的数据已还原到初始安装状态。"
           },
           "Unavailable": {
-            "key": "View_Settings_BackupRestore_Revert_Unavailable",
+            "key": "View_Settings_BackupRestore_Reset_Unavailable",
             "default": "安装状态数据不可用，无法还原。"
           }
         }
@@ -1205,8 +1283,8 @@
         "key": "View_Working_Restoring",
         "default": "正在恢复"
       },
-      "Reverting": {
-        "key": "View_Working_Reverting",
+      "Resetting": {
+        "key": "View_Working_Resetting",
         "default": "正在还原"
       },
       "Syncing": {

@@ -142,6 +142,43 @@ export default class AndroidPlatformService implements PlatformService {
     return this.methodNotApplicable();
   }
 
+  downloadFile(filename: string, textContents: string): ng.IPromise<string | void> {
+    if (!filename) {
+      throw new Error('File name not supplied.');
+    }
+
+    // Set file storage location to external storage root directory
+    const storageLocation = `${window.cordova.file.externalRootDirectory}Download`;
+
+    return this.$q((resolve, reject) => {
+      const onError = (err: Error) => {
+        return reject(new Exceptions.FailedDownloadFileException(undefined, err));
+      };
+
+      this.logSvc.logInfo(`Downloading file ${filename}`);
+
+      // Save file to storage location
+      window.resolveLocalFileSystemURL(
+        storageLocation,
+        (dirEntry) => {
+          dirEntry.getFile(
+            filename,
+            { create: true },
+            (fileEntry) => {
+              fileEntry.createWriter((fileWriter) => {
+                fileWriter.write(textContents);
+                fileWriter.onerror = onError;
+                fileWriter.onwriteend = () => resolve(filename);
+              }, onError);
+            },
+            onError
+          );
+        },
+        onError
+      );
+    });
+  }
+
   enableBackgroundSync(): void {
     // Exit if background sync already enabled
     if (this.backgroundSyncInterval) {

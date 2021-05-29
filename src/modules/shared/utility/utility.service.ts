@@ -375,8 +375,11 @@ export default class UtilityService {
     return trimmedText;
   }
 
-  updateServiceUrl(url: string): ng.IPromise<void> {
+  updateServiceUrl(newServiceUrl: string): ng.IPromise<void> {
     // Update service url in store
-    return this.storeSvc.set(StoreKey.ServiceUrl, url);
+    const url = newServiceUrl.replace(/\/$/, '');
+    return this.storeSvc.set(StoreKey.ServiceUrl, url).then(() => {
+      this.logSvc.logInfo(`Service url changed to: ${url}`);
+    });
   }
 }

@@ -1,6 +1,13 @@
 import { ApiServiceType } from '../api/api.enum';
 import { Bookmark } from '../bookmark/bookmark.interface';
 
+export interface AutoBackUpSchedule {
+  autoBackUpNumber: string;
+  autoBackUpUnit: string;
+  autoBackUpHour: string;
+  autoBackUpMinute: string;
+}
+
 export interface Backup {
   xbrowsersync?: BackupRoot;
   xBrowserSync?: LegacyBackupRoot;

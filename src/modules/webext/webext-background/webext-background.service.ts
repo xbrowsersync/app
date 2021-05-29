@@ -5,6 +5,7 @@ import * as detectBrowser from 'detect-browser';
 import { Alarms, browser, Downloads, Notifications } from 'webextension-polyfill-ts';
 import { Alert } from '../../shared/alert/alert.interface';
 import AlertService from '../../shared/alert/alert.service';
+import BackupRestoreService from '../../shared/backup-restore/backup-restore.service';
 import BookmarkHelperService from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import * as Exceptions from '../../shared/exception/exception';
 import { ExceptionHandler } from '../../shared/exception/exception.interface';
@@ -23,7 +24,13 @@ import UpgradeService from '../../shared/upgrade/upgrade.service';
 import UtilityService from '../../shared/utility/utility.service';
 import ChromiumBookmarkService from '../chromium/shared/chromium-bookmark/chromium-bookmark.service';
 import BookmarkIdMapperService from '../shared/bookmark-id-mapper/bookmark-id-mapper.service';
-import { DownloadFileMessage, InstallBackup, Message, SyncBookmarksMessage } from '../webext.interface';
+import {
+  DownloadFileMessage,
+  EnableAutoBackUpMessage,
+  InstallBackup,
+  Message,
+  SyncBookmarksMessage
+} from '../webext.interface';
 
 @autobind
 @Injectable('WebExtBackgroundService')
@@ -34,6 +41,7 @@ export default class WebExtBackgroundService {
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
+  backupRestoreSvc: BackupRestoreService;
   bookmarkIdMapperSvc: BookmarkIdMapperService;
   bookmarkHelperSvc: BookmarkHelperService;
   bookmarkSvc: ChromiumBookmarkService;
@@ -53,6 +61,7 @@ export default class WebExtBackgroundService {
     '$q',
     '$timeout',
     'AlertService',
+    'BackupRestoreService',
     'BookmarkHelperService',
     'BookmarkIdMapperService',
     'BookmarkService',
@@ -70,6 +79,7 @@ export default class WebExtBackgroundService {
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
     AlertSvc: AlertService,
+    BackupRestoreSvc: BackupRestoreService,
     BookmarkHelperSvc: BookmarkHelperService,
     BookmarkIdMapperSvc: BookmarkIdMapperService,
     BookmarkSvc: ChromiumBookmarkService,
@@ -86,6 +96,7 @@ export default class WebExtBackgroundService {
     this.$q = $q;
     this.$timeout = $timeout;
     this.alertSvc = AlertSvc;
+    this.backupRestoreSvc = BackupRestoreSvc;
     this.bookmarkIdMapperSvc = BookmarkIdMapperSvc;
     this.bookmarkHelperSvc = BookmarkHelperSvc;
     this.bookmarkSvc = BookmarkSvc;
@@ -350,14 +361,22 @@ export default class WebExtBackgroundService {
             })
           );
         })
-        .catch(this.$exceptionHandler)
+        .catch((err) => {
+          this.$exceptionHandler(err);
+          return this.$q.reject(err);
+        })
     );
   }
 
   onAlarm(alarm: Alarms.Alarm): void {
-    // When alarm fires check for sync updates
-    if (alarm?.name === Globals.Alarm.Name) {
-      this.checkForSyncUpdates();
+    switch (alarm?.name) {
+      case Globals.Alarms.AutoBackUp.Name:
+        this.backupRestoreSvc.runAutoBackUp();
+        break;
+      case Globals.Alarms.SyncUpdatesCheck.Name:
+        this.checkForSyncUpdates();
+        break;
+      default:
     }
   }
 
@@ -425,6 +444,14 @@ export default class WebExtBackgroundService {
         case MessageCommand.DisableEventListeners:
           action = this.runDisableEventListenersCommand();
           break;
+        // Enable auto back up
+        case MessageCommand.EnableAutoBackUp:
+          action = this.runEnableAutoBackUpCommand(message as EnableAutoBackUpMessage);
+          break;
+        // Disable auto back up
+        case MessageCommand.DisableAutoBackUp:
+          action = this.runDisableAutoBackUpCommand();
+          break;
         // Unknown command
         default:
           action = this.$q.reject(new Exceptions.AmbiguousSyncRequestException());
@@ -435,6 +462,10 @@ export default class WebExtBackgroundService {
       err.message = err.constructor.name;
       throw err;
     });
+  }
+
+  runDisableAutoBackUpCommand(): ng.IPromise<void> {
+    return browser.alarms.clear(Globals.Alarms.AutoBackUp.Name).then(() => {});
   }
 
   runDisableEventListenersCommand(): ng.IPromise<void> {
@@ -489,6 +520,48 @@ export default class WebExtBackgroundService {
           };
           browser.downloads.onChanged.addListener(onChangedHandler);
         }, reject);
+    });
+  }
+
+  runEnableAutoBackUpCommand(message: EnableAutoBackUpMessage): ng.IPromise<void> {
+    const { schedule } = message;
+
+    // Calculate alarm delay from schedule
+    let delayInMinutes = 0;
+    const now = new Date();
+    const runTime = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      parseInt(schedule.autoBackUpHour, 10),
+      parseInt(schedule.autoBackUpMinute, 10)
+    );
+    if (runTime < now) {
+      runTime.setDate(now.getDate() + 1);
+    }
+    delayInMinutes = Math.round((runTime.getTime() - now.getTime()) / 1e3 / 60);
+
+    // Calculate alarm period from schedule
+    let periodInMinutes;
+    switch (schedule.autoBackUpUnit) {
+      case 'week':
+        periodInMinutes = 60 * 24 * 7;
+        break;
+      case 'month':
+        periodInMinutes = 60 * 24 * (365 / 12);
+        break;
+      case 'day':
+      default:
+        periodInMinutes = 60 * 24;
+    }
+    periodInMinutes *= parseInt(schedule.autoBackUpNumber, 10);
+
+    // Register alarm
+    return browser.alarms.clear(Globals.Alarms.AutoBackUp.Name).then(() => {
+      return browser.alarms.create(Globals.Alarms.AutoBackUp.Name, {
+        delayInMinutes,
+        periodInMinutes
+      });
     });
   }
 

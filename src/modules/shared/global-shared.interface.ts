@@ -14,6 +14,7 @@ export interface PlatformService {
   checkOptionalNativePermissions: () => ng.IPromise<boolean>;
   disableNativeEventListeners: () => ng.IPromise<void>;
   disableSync: () => ng.IPromise<any>;
+  downloadFile: (filename: string, textContents: string, displaySaveDialog?: boolean) => ng.IPromise<string | void>;
   enableNativeEventListeners: () => ng.IPromise<void>;
   getAppVersion: () => ng.IPromise<string>;
   getCurrentLocale: () => ng.IPromise<string>;

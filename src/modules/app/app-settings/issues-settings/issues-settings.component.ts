@@ -102,7 +102,7 @@ export default class IssuesSettingsComponent implements OnInit {
       });
 
       // Trigger download
-      return this.appHelperSvc.downloadFile(this.getLogFilename(), log.join('\r\n'));
+      return this.platformSvc.downloadFile(this.getLogFilename(), log.join('\r\n'));
     });
   }
 

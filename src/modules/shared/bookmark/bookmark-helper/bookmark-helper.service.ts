@@ -54,6 +54,16 @@ export default class BookmarkHelperService {
     return this._platformSvc as PlatformService;
   }
 
+  cleanAllBookmarks(bookmarks: Bookmark[]): Bookmark[] {
+    return bookmarks.map((bookmark) => {
+      const cleanedBookmark = this.cleanBookmark(bookmark);
+      if (angular.isArray(cleanedBookmark.children)) {
+        cleanedBookmark.children = this.cleanAllBookmarks(cleanedBookmark.children);
+      }
+      return cleanedBookmark;
+    });
+  }
+
   cleanBookmark(bookmark: Bookmark): Bookmark {
     const validKeys = ['children', 'description', 'id', 'tags', 'title', 'url'];
 
