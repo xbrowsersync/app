@@ -504,7 +504,7 @@
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Не забудьте создать резервную копию</h4><p>При использовании xBrowserSync ваши данные являются предметом вашей ответственности, поэтому будьте ответственными и не забывайте создавать резервные копии.</p><p>Зайдите на Панель настроек и сделайте резервную копию незашифрованных данных в локальный файл, который можно использовать для восстановления Ваших данных.</p><p>Если данные локального браузера повреждены и у вас нет резервных копий, в любое время вы можете вернуть данные обратно в исходное состояние с момента установки xBrowserSync.</p>",
+        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time reset your data back to it’s original state from when xBrowserSync was installed.</p>",
         "android": "<h4>Не забудьте создать резервную копию</h4><p>При использовании xBrowserSync ваши данные являются предметом вашей ответственности, поэтому будьте ответственными и не забывайте создавать резервные копии</p><p>Зайдите на Панель настроек и сделайте резервную копию незашифрованных данных в локальный файл, который можно использовать для восстановления ваших данных.</p>"
       },
       "BeforeYouBegin": {
@@ -811,6 +811,92 @@
           "key": "View_Settings_BackupRestore_Title",
           "default": "Резервное копирование и восстановление"
         },
+        "AutoBackup": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Title",
+            "default": "Auto back up"
+          },
+          "Description": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Description",
+            "default": "Automatically download backups on a schedule."
+          },
+          "RunsAt": {
+            "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
+            "default": "Back up runs at"
+          },
+          "Every": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Every",
+            "default": "every"
+          },
+          "Numbers": {
+            "Single": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
+              "default": "single"
+            },
+            "Two": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
+              "default": "two"
+            },
+            "Three": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
+              "default": "three"
+            },
+            "Four": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
+              "default": "four"
+            },
+            "Five": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
+              "default": "five"
+            },
+            "Six": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
+              "default": "six"
+            },
+            "Seven": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
+              "default": "seven"
+            },
+            "Eight": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
+              "default": "eight"
+            },
+            "Nine": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
+              "default": "nine"
+            },
+            "Ten": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
+              "default": "ten"
+            },
+            "Eleven": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
+              "default": "eleven"
+            },
+            "Twelve": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
+              "default": "twelve"
+            }
+          },
+          "Units": {
+            "Day": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
+              "default": "day(s)"
+            },
+            "Week": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
+              "default": "week(s)"
+            },
+            "Month": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
+              "default": "month(s)"
+            }
+          },
+          "Confirmation": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
+            "default": "To prevent “Save As...” dialog from showing when downloading backups, disable the browser setting “Ask where to save each file before downloading”."
+          }
+        },
         "Backup": {
           "Title": {
             "key": "View_Settings_BackupRestore_Backup_Title",
@@ -818,7 +904,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Download Back up"
+            "default": "Download Back Up"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -836,7 +922,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Восстановить"
+            "default": "Restore From Backup"
           },
           "Local": {
             "Description": {
@@ -861,7 +947,7 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Ваши данные восстановлены."
+            "default": "Backup has been restored."
           },
           "SelectFile": {
             "Button": {
@@ -890,30 +976,22 @@
             "default": "Неверная резервная копии xBrowserSync"
           }
         },
-        "Revert": {
-          "Title": {
-            "key": "View_Settings_BackupRestore_Revert_Title",
-            "default": "Отмена"
-          },
-          "Description": {
-            "key": "View_Settings_BackupRestore_Revert_Description",
-            "default": "Вернуть данные локального браузера в начальное состояние."
-          },
+        "Reset": {
           "Confirm": {
-            "key": "View_Settings_BackupRestore_Revert_Confirm",
-            "default": "<p>Если вы продолжите, любая активная синхронизация будет отключена и ваши локальные данные будут востановленны на момент установки xBrowserSync {date}.</p><p>ОК для продолжения?</p>"
+            "key": "View_Settings_BackupRestore_Reset_Confirm",
+            "default": "<p>If you continue, any active sync will be disabled and your local data will be reset to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
           },
           "Button": {
-            "key": "View_Settings_BackupRestore_Revert_Button",
-            "default": "Откатить изменения"
+            "key": "View_Settings_BackupRestore_Reset_Button",
+            "default": "Reset Local Data"
           },
           "Done": {
-            "key": "View_Settings_BackupRestore_Revert_Done",
-            "default": "Ваши данные были возвращены к начальному состоянию установки."
+            "key": "View_Settings_BackupRestore_Reset_Done",
+            "default": "Local data has been reset to initial installation state."
           },
           "Unavailable": {
-            "key": "View_Settings_BackupRestore_Revert_Unavailable",
-            "default": "Состояние установки недоступно, невозможно откатить."
+            "key": "View_Settings_BackupRestore_Reset_Unavailable",
+            "default": "Installation state data not available, unable to reset."
           }
         }
       },
@@ -1205,9 +1283,9 @@
         "key": "View_Working_Restoring",
         "default": "Восстановление"
       },
-      "Reverting": {
-        "key": "View_Working_Reverting",
-        "default": "Возвращение"
+      "Resetting": {
+        "key": "View_Working_Resetting",
+        "default": "Resetting"
       },
       "Syncing": {
         "key": "View_Working_Syncing",
