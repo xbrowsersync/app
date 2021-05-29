@@ -504,7 +504,7 @@
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Pamiętaj, aby wykonać kopię zapasową</h4><p>Kiedy korzystasz z xBrowserSync, twoja odpowiedzialność spoczywa na Ciebie, więc bądź przezorny i upewnij się, że wykonasz kopie zapasowe.</p><p>Przejdź do panelu ustawień i utwórz kopię zapasową niezaszyfrowanych danych do pliku lokalnego, który może być użyty do przywrócenia Twoich danych w razie potrzeby.</p><p>Jeśli lokalne dane przeglądarki staną się uszkodzone i nie masz żadnych kopii zapasowych, możesz w każdej chwili przywrócić swoje dane z powrotem do oryginalnego stanu, z którego został zainstalowany xBrowserSync.</p>",
+        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time reset your data back to it’s original state from when xBrowserSync was installed.</p>",
         "android": "<h4>Pamiętaj, aby wykonać kopię zapasową</h4><p>Kiedy korzystasz z xBrowserSync, twoja odpowiedzialność spoczywa na Ciebie, więc bądź przezorny i upewnij się, że wykonujeszkopie zapasowe.</p><p>Przejdź do panelu ustawień i utwórz kopię zapasową niezaszyfrowanych danych do pliku lokalnego, który może być użyty do przywrócenia Twoich danych w razie potrzeby.</p>"
       },
       "BeforeYouBegin": {
@@ -811,6 +811,92 @@
           "key": "View_Settings_BackupRestore_Title",
           "default": "Kopia zapasowa i przywracanie"
         },
+        "AutoBackup": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Title",
+            "default": "Auto back up"
+          },
+          "Description": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Description",
+            "default": "Automatically download backups on a schedule."
+          },
+          "RunsAt": {
+            "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
+            "default": "Back up runs at"
+          },
+          "Every": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Every",
+            "default": "every"
+          },
+          "Numbers": {
+            "Single": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
+              "default": "single"
+            },
+            "Two": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
+              "default": "two"
+            },
+            "Three": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
+              "default": "three"
+            },
+            "Four": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
+              "default": "four"
+            },
+            "Five": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
+              "default": "five"
+            },
+            "Six": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
+              "default": "six"
+            },
+            "Seven": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
+              "default": "seven"
+            },
+            "Eight": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
+              "default": "eight"
+            },
+            "Nine": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
+              "default": "nine"
+            },
+            "Ten": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
+              "default": "ten"
+            },
+            "Eleven": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
+              "default": "eleven"
+            },
+            "Twelve": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
+              "default": "twelve"
+            }
+          },
+          "Units": {
+            "Day": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
+              "default": "day(s)"
+            },
+            "Week": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
+              "default": "week(s)"
+            },
+            "Month": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
+              "default": "month(s)"
+            }
+          },
+          "Confirmation": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
+            "default": "To prevent “Save As...” dialog from showing when downloading backups, disable the browser setting “Ask where to save each file before downloading”."
+          }
+        },
         "Backup": {
           "Title": {
             "key": "View_Settings_BackupRestore_Backup_Title",
@@ -818,7 +904,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Download Back up"
+            "default": "Download Back Up"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -836,7 +922,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Przywróć"
+            "default": "Restore From Backup"
           },
           "Local": {
             "Description": {
@@ -861,7 +947,7 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Kopia zapasowa została przywrócona."
+            "default": "Backup has been restored."
           },
           "SelectFile": {
             "Button": {
@@ -890,30 +976,22 @@
             "default": "Nieprawidłowe dane kopii zapasowej xBrowserSync"
           }
         },
-        "Revert": {
-          "Title": {
-            "key": "View_Settings_BackupRestore_Revert_Title",
-            "default": "Przywróć"
-          },
-          "Description": {
-            "key": "View_Settings_BackupRestore_Revert_Description",
-            "default": "Przywróć lokalne dane przeglądarki do początkowego stanu instalacji."
-          },
+        "Reset": {
           "Confirm": {
-            "key": "View_Settings_BackupRestore_Revert_Confirm",
-            "default": "<p>Jeśli kontynuujesz, każda aktywna synchronizacja zostanie wyłączona, a Twoje dane lokalne zostaną przywrócone po zainstalowaniu xBrowserSync na {date}.</p><p>Czy chcesz kontynuować?</p>"
+            "key": "View_Settings_BackupRestore_Reset_Confirm",
+            "default": "<p>If you continue, any active sync will be disabled and your local data will be reset to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
           },
           "Button": {
-            "key": "View_Settings_BackupRestore_Revert_Button",
-            "default": "Przywróć"
+            "key": "View_Settings_BackupRestore_Reset_Button",
+            "default": "Reset Local Data"
           },
           "Done": {
-            "key": "View_Settings_BackupRestore_Revert_Done",
-            "default": "Twoje dane zostały przywrócone do początkowego stanu instalacji."
+            "key": "View_Settings_BackupRestore_Reset_Done",
+            "default": "Local data has been reset to initial installation state."
           },
           "Unavailable": {
-            "key": "View_Settings_BackupRestore_Revert_Unavailable",
-            "default": "Dane stanu instalacji są niedostępne, nie można przywrócić."
+            "key": "View_Settings_BackupRestore_Reset_Unavailable",
+            "default": "Installation state data not available, unable to reset."
           }
         }
       },
@@ -1205,9 +1283,9 @@
         "key": "View_Working_Restoring",
         "default": "Odzyskiwanie"
       },
-      "Reverting": {
-        "key": "View_Working_Reverting",
-        "default": "Przywracanie"
+      "Resetting": {
+        "key": "View_Working_Resetting",
+        "default": "Resetting"
       },
       "Syncing": {
         "key": "View_Working_Syncing",
