@@ -33,6 +33,7 @@ export class AppMainComponent implements OnInit {
   AppViewType = AppViewType;
   currentView: AppViewType;
   darkModeEnabled: boolean;
+  disableTransitions = true;
   initialised = false;
   syncEnabled: boolean;
   vm: AppMainComponent = this;
@@ -92,7 +93,13 @@ export class AppMainComponent implements OnInit {
     // Hide loading panel and alert messages, and set current view
     this.workingSvc.hide();
     this.alertSvc.clearCurrentAlert();
-    this.currentView = view;
+    this.$timeout(() => {
+      this.disableTransitions = true;
+      this.currentView = view;
+      this.$timeout(() => {
+        this.disableTransitions = false;
+      });
+    });
   }
 
   ngOnInit(): ng.IPromise<void> {
@@ -117,6 +124,9 @@ export class AppMainComponent implements OnInit {
       })
       .finally(() => {
         this.initialised = true;
+      })
+      .finally(() => {
+        this.disableTransitions = false;
       });
   }
 }

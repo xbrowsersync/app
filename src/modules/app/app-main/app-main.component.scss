@@ -1,5 +1,11 @@
 @import '../../../styles/modules/all';
 
+.disable-transitions {
+  .view-content * {
+    transition: none !important;
+  }
+}
+
 .lookahead-container {
   border: 1px solid transparent;
   display: flex;
