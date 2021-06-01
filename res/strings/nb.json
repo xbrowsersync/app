@@ -787,11 +787,6 @@
         "key": "View_Search_FolderEmpty",
         "default": "Mappen er tom"
       },
-      "Placeholder": {
-        "key": "View_Search_Placeholder",
-        "default": "Trykk Enter eller søk etter bokmerker",
-        "android": "Finn bokmerker"
-      },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
         "default": "Du har ingen bokmerker, legg til noen!"
@@ -799,6 +794,19 @@
       "NoResults": {
         "key": "View_Search_NoResults",
         "default": "Ingen bokmerker funnet"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "Trykk Enter eller søk etter bokmerker",
+        "android": "Finn bokmerker"
+      },
+      "Pulling": {
+        "key": "View_Search_Pulling",
+        "default": "Pull down to sync"
+      },
+      "Pulled": {
+        "key": "View_Search_Pulled",
+        "default": "Release to sync"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
