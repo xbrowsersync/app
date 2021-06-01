@@ -787,11 +787,6 @@
         "key": "View_Search_FolderEmpty",
         "default": "Leerer Ordner"
       },
-      "Placeholder": {
-        "key": "View_Search_Placeholder",
-        "default": "Drücke Enter oder suche nach Lesezeichen",
-        "android": "Lesezeichen suchen"
-      },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
         "default": "Sie haben keine Lesezeichen, legen Sie welche an!"
@@ -799,6 +794,19 @@
       "NoResults": {
         "key": "View_Search_NoResults",
         "default": "Keine Lesezeichen gefunden"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "Drücke Enter oder suche nach Lesezeichen",
+        "android": "Lesezeichen suchen"
+      },
+      "Pulling": {
+        "key": "View_Search_Pulling",
+        "default": "Pull down to sync"
+      },
+      "Pulled": {
+        "key": "View_Search_Pulled",
+        "default": "Release to sync"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
