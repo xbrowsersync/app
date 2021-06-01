@@ -787,11 +787,6 @@
         "key": "View_Search_FolderEmpty",
         "default": "Dossier vide"
       },
-      "Placeholder": {
-        "key": "View_Search_Placeholder",
-        "default": "Tapez sur Entrée ou cherchez des marque-pages",
-        "android": "Trouver des marque-pages"
-      },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
         "default": "Vous n'avez pas de favoris, ajoutez en !"
@@ -799,6 +794,19 @@
       "NoResults": {
         "key": "View_Search_NoResults",
         "default": "Aucun favori trouvé"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "Tapez sur Entrée ou cherchez des marque-pages",
+        "android": "Trouver des marque-pages"
+      },
+      "Pulling": {
+        "key": "View_Search_Pulling",
+        "default": "Pull down to sync"
+      },
+      "Pulled": {
+        "key": "View_Search_Pulled",
+        "default": "Release to sync"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
