@@ -787,11 +787,6 @@
         "key": "View_Search_FolderEmpty",
         "default": "La cartella è vuota"
       },
-      "Placeholder": {
-        "key": "View_Search_Placeholder",
-        "default": "Premi Invio o cerca segnalibri",
-        "android": "Trova segnalibri"
-      },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
         "default": "Non hai segnalibri, aggiungine qualcuno!"
@@ -799,6 +794,19 @@
       "NoResults": {
         "key": "View_Search_NoResults",
         "default": "Nessun segnalibro trovato"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "Premi Invio o cerca segnalibri",
+        "android": "Trova segnalibri"
+      },
+      "Pulling": {
+        "key": "View_Search_Pulling",
+        "default": "Pull down to sync"
+      },
+      "Pulled": {
+        "key": "View_Search_Pulled",
+        "default": "Release to sync"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
