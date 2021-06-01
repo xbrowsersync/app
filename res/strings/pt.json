@@ -787,11 +787,6 @@
         "key": "View_Search_FolderEmpty",
         "default": "A pasta está vazia"
       },
-      "Placeholder": {
-        "key": "View_Search_Placeholder",
-        "default": "Pressione Enter ou pesquise por favoritos",
-        "android": "Procurar favoritos"
-      },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
         "default": "Você não possui nenhum favorito, vá e adicione alguns!"
@@ -799,6 +794,19 @@
       "NoResults": {
         "key": "View_Search_NoResults",
         "default": "Nenhum favorito encontrado"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "Pressione Enter ou pesquise por favoritos",
+        "android": "Procurar favoritos"
+      },
+      "Pulling": {
+        "key": "View_Search_Pulling",
+        "default": "Pull down to sync"
+      },
+      "Pulled": {
+        "key": "View_Search_Pulled",
+        "default": "Release to sync"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
