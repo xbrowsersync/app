@@ -787,11 +787,6 @@
         "key": "View_Search_FolderEmpty",
         "default": "Map is leeg"
       },
-      "Placeholder": {
-        "key": "View_Search_Placeholder",
-        "default": "Druk op Enter of Bladwijzers zoeken",
-        "android": "Bladwijzers zoeken"
-      },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
         "default": "Je hebt geen bladwijzers, voeg er een toe!"
@@ -799,6 +794,19 @@
       "NoResults": {
         "key": "View_Search_NoResults",
         "default": "Geen bladwijzers gevonden"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "Druk op Enter of Bladwijzers zoeken",
+        "android": "Bladwijzers zoeken"
+      },
+      "Pulling": {
+        "key": "View_Search_Pulling",
+        "default": "Pull down to sync"
+      },
+      "Pulled": {
+        "key": "View_Search_Pulled",
+        "default": "Release to sync"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
