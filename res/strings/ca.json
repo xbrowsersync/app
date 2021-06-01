@@ -787,11 +787,6 @@
         "key": "View_Search_FolderEmpty",
         "default": "Folder empty"
       },
-      "Placeholder": {
-        "key": "View_Search_Placeholder",
-        "default": "Hit Enter or search for bookmarks",
-        "android": "Find bookmarks"
-      },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
         "default": "You have no bookmarks, go add some!"
@@ -799,6 +794,19 @@
       "NoResults": {
         "key": "View_Search_NoResults",
         "default": "No bookmarks found"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "Hit Enter or search for bookmarks",
+        "android": "Find bookmarks"
+      },
+      "Pulling": {
+        "key": "View_Search_Pulling",
+        "default": "Pull down to sync"
+      },
+      "Pulled": {
+        "key": "View_Search_Pulled",
+        "default": "Release to sync"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
