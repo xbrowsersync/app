@@ -787,11 +787,6 @@
         "key": "View_Search_FolderEmpty",
         "default": "文件夹空"
       },
-      "Placeholder": {
-        "key": "View_Search_Placeholder",
-        "default": "点击输入或搜索书签",
-        "android": "查找书签"
-      },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
         "default": "您还没有书签，请添加一些！"
@@ -799,6 +794,19 @@
       "NoResults": {
         "key": "View_Search_NoResults",
         "default": "未找到书签"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "点击输入或搜索书签",
+        "android": "查找书签"
+      },
+      "Pulling": {
+        "key": "View_Search_Pulling",
+        "default": "Pull down to sync"
+      },
+      "Pulled": {
+        "key": "View_Search_Pulled",
+        "default": "Release to sync"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
