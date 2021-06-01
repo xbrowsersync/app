@@ -787,11 +787,6 @@
         "key": "View_Search_FolderEmpty",
         "default": "Kansio on tyhjä"
       },
-      "Placeholder": {
-        "key": "View_Search_Placeholder",
-        "default": "Paina Enter tai etsi kirjanmerkkejä",
-        "android": "Etsi kirjanmerkkejä"
-      },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
         "default": "Sinulla ei ole kirjanmerkkejä, ota ja lisää muutama!"
@@ -799,6 +794,19 @@
       "NoResults": {
         "key": "View_Search_NoResults",
         "default": "Kirjanmerkkejä ei löytynyt"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "Paina Enter tai etsi kirjanmerkkejä",
+        "android": "Etsi kirjanmerkkejä"
+      },
+      "Pulling": {
+        "key": "View_Search_Pulling",
+        "default": ""
+      },
+      "Pulled": {
+        "key": "View_Search_Pulled",
+        "default": ""
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",

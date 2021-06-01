@@ -98,7 +98,7 @@ export class AppMainComponent implements OnInit {
       this.currentView = view;
       this.$timeout(() => {
         this.disableTransitions = false;
-      });
+      }, 250);
     });
   }
 
@@ -124,8 +124,6 @@ export class AppMainComponent implements OnInit {
       })
       .finally(() => {
         this.initialised = true;
-      })
-      .finally(() => {
         this.disableTransitions = false;
       });
   }

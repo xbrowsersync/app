@@ -60,6 +60,7 @@ app-bookmark {
       align-items: center;
       background-color: var(--color-badge-bg);
       border: 0;
+      border-radius: $border-radius-input;
       color: var(--color-badge-text);
       display: inline-flex;
       font-size: 0.85rem;

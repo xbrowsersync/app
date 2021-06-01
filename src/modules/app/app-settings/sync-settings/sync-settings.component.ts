@@ -136,11 +136,17 @@ export class SyncSettingsComponent implements OnInit {
         this.utilitySvc.isSyncEnabled()
       ])
       .then((data) => {
-        this.syncId = data[0];
+        const [syncId, serviceUrl, syncEnabled] = data;
+        this.syncId = syncId;
         this.serviceInfo = {
-          url: data[1]
+          url: serviceUrl
         };
-        this.syncEnabled = data[2];
+        this.syncEnabled = syncEnabled;
+
+        // Check for available sync updates on non-mobile platforms
+        if (this.syncEnabled && !this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
+          this.checkForSyncUpdates();
+        }
 
         // Update service status and display info
         this.refreshServiceStatus()
@@ -148,11 +154,6 @@ export class SyncSettingsComponent implements OnInit {
           .then(() => this.appHelperSvc.attachClickEventsToNewTabLinks(document.querySelector('.service-message')))
           // Refresh data usage meter
           .then(() => this.refreshSyncDataUsage());
-
-        // Check for available sync updates on non-mobile platforms
-        if (this.syncEnabled && !this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
-          this.checkForSyncUpdates();
-        }
       });
   }
 
@@ -173,7 +174,10 @@ export class SyncSettingsComponent implements OnInit {
       return this.syncSvc.getSyncSize().then((bookmarksSyncSize) => {
         this.syncDataSize = bookmarksSyncSize / 1024;
         this.syncDataUsed = Math.ceil((this.syncDataSize / this.serviceInfo.maxSyncSize) * 150);
-        this.dataUsageProgressWidth = this.syncDataUsed;
+        this.$timeout(() => {
+          // Add a slight delay when setting progress bar width to ensure transitions are enabled
+          this.dataUsageProgressWidth = this.syncDataUsed;
+        }, 250);
       });
     });
   }

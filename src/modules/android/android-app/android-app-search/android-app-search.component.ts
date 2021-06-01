@@ -1,6 +1,7 @@
 import angular from 'angular';
-import { Component } from 'angular-ts-decorators';
+import { Component, OnDestroy } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
+import PullToRefresh from 'pulltorefreshjs';
 import { AppEventType } from '../../../app/app.enum';
 import { AppSearchComponent } from '../../../app/app-search/app-search.component';
 import { AppHelperService } from '../../../app/shared/app-helper/app-helper.service';
@@ -26,7 +27,7 @@ import { AndroidAppHelperService } from '../shared/android-app-helper/android-ap
   styles: [require('./android-app-search.component.scss')],
   template: require('../../../app/app-search/app-search.component.html')
 })
-export class AndroidAppSearchComponent extends AppSearchComponent {
+export class AndroidAppSearchComponent extends AppSearchComponent implements OnDestroy {
   appHelperSvc: AndroidAppHelperService;
 
   static $inject = [
@@ -191,6 +192,38 @@ export class AndroidAppSearchComponent extends AppSearchComponent {
     });
   }
 
+  initPullToRefresh(): void {
+    // Set up pull to refresh
+    const selector = '.pull-to-refresh';
+    PullToRefresh.destroyAll();
+    this.$timeout(() =>
+      PullToRefresh.init({
+        distMax: 75,
+        distReload: 1,
+        distThreshold: 74,
+        instructionsPullToRefresh: this.platformSvc.getI18nString(this.Strings.View.Search.Pulling),
+        instructionsReleaseToRefresh: this.platformSvc.getI18nString(this.Strings.View.Search.Pulled),
+        instructionsRefreshing: this.platformSvc.getI18nString(this.Strings.View.Search.Pulled),
+        mainElement: selector,
+        onRefresh: () => {
+          // Display loading overlay
+          this.workingSvc.show();
+          return this.platformSvc
+            .queueSync({
+              type: SyncType.Local
+            })
+            .then(() => this.displayDefaultSearchState());
+        },
+        refreshTimeout: 0,
+        shouldPullToRefresh: () => !document.querySelector(selector)?.scrollTop
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    PullToRefresh.destroyAll();
+  }
+
   ngOnInit(): ng.IPromise<void> {
     // Clear selected bookmark on touch
     this.$timeout(() =>
@@ -204,7 +237,13 @@ export class AndroidAppSearchComponent extends AppSearchComponent {
       )
     );
 
+    this.$timeout(() => this.initPullToRefresh(), 500);
+
     return super.ngOnInit();
+  }
+
+  toggleBookmarkTreeView(): ng.IPromise<void> {
+    return super.toggleBookmarkTreeView().then(() => this.initPullToRefresh());
   }
 
   undoBookmarkAction(bookmarks: Bookmark[]): void {

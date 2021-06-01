@@ -1,4 +1,3 @@
-const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (env, argv) => {
@@ -22,14 +21,6 @@ module.exports = (env, argv) => {
             'css-loader',
             'resolve-url-loader',
             {
-              loader: 'postcss-loader',
-              options: {
-                postcssOptions: {
-                  plugins: [autoprefixer]
-                }
-              }
-            },
-            {
               loader: 'sass-loader',
               options: {
                 sourceMap: true
@@ -43,7 +34,10 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.html$/i,
-          loader: 'html-loader'
+          loader: 'html-loader',
+          options: {
+            esModule: false
+          }
         }
       ]
     },

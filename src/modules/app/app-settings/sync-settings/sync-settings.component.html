@@ -65,7 +65,7 @@
               <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Service.Status.NoNewSyncs) }}</span>
               <i class="fas fa-exclamation-circle text-warning" aria-hidden="true"></i>
             </div>
-            <div class="status-icon-bg animate-fade-in" ng-show="vm.serviceInfo.status !== null"></div>
+            <div class="status-icon-bg animate-fade-in" ng-show="vm.serviceInfo.status !== undefined"></div>
           </div>
         </div>
         <div

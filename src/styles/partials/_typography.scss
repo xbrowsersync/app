@@ -19,6 +19,7 @@ a {
   border-bottom-width: 1px;
   color: var(--color-link);
   cursor: pointer;
+  text-decoration: none;
   transition-duration: 0.2s;
   transition-property: border-bottom-color, color;
   transition-timing-function: ease-in-out;

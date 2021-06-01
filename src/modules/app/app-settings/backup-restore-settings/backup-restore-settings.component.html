@@ -153,7 +153,7 @@
         </div>
         <form id="restoreForm" name="vm.restoreForm" class="confirm animate-fade-in" ng-show="vm.displayRestoreForm"
               novalidate>
-          <input type="file" name="files[]" id="backupFile" class="d-none" tabindex="-1" />
+          <input type="file" name="files[]" id="backupFile" class="display-none" tabindex="-1" />
           <p ng-if="vm.platformSvc.platformName === 'firefox'">
             {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.BackupRestore.Restore.Copy) }}
           </p>

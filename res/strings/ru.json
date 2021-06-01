@@ -787,11 +787,6 @@
         "key": "View_Search_FolderEmpty",
         "default": "Папка пуста"
       },
-      "Placeholder": {
-        "key": "View_Search_Placeholder",
-        "default": "Нажмите Enter или найчните вводить текст для поиска",
-        "android": "Найти закладки"
-      },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
         "default": "У вас нет закладок, добавьте что-нибудь!"
@@ -799,6 +794,19 @@
       "NoResults": {
         "key": "View_Search_NoResults",
         "default": "Закладки не найдены"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "Нажмите Enter или найчните вводить текст для поиска",
+        "android": "Найти закладки"
+      },
+      "Pulling": {
+        "key": "View_Search_Pulling",
+        "default": ""
+      },
+      "Pulled": {
+        "key": "View_Search_Pulled",
+        "default": ""
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",

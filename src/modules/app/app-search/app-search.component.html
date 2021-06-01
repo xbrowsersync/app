@@ -56,7 +56,7 @@
     <i class="far fa-bookmark" aria-hidden="true"></i>
     <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.AddBookmark) }}</span>
   </button>
-  <div class="search-results-container" ng-if="!vm.displayFolderView" ng-show="vm.results">
+  <div class="search-results-container pull-to-refresh" ng-if="!vm.displayFolderView" ng-show="vm.results">
     <h4 ng-show="!vm.query && vm.results.length === 0">
       {{ vm.platformSvc.getI18nString(vm.Strings.View.Search.NoBookmarks) }}
     </h4>
@@ -76,7 +76,7 @@
       </bookmark>
     </div>
   </div>
-  <div class="bookmark-tree-container" ng-if="vm.displayFolderView">
+  <div class="bookmark-tree-container pull-to-refresh" ng-if="vm.displayFolderView">
     <bookmark-tree class="root" ng-model="vm.bookmarkTree" selected-bookmark="vm.selectedBookmarkId"
                    edit-bookmark="vm.editBookmark" select-bookmark="vm.selectBookmark" share-bookmark="vm.shareBookmark"
                    delete-bookmark="vm.deleteBookmark" ng-if="vm.bookmarkTree">

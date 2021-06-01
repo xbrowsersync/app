@@ -14,6 +14,10 @@
   z-index: 100;
 }
 
+.display-none {
+  display: none !important;
+}
+
 .ellipsis {
   @include ellipsis;
 }

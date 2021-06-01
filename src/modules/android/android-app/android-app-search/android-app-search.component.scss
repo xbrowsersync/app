@@ -1,6 +1,12 @@
 @import '../../../../styles/modules/all';
 
 app-search {
+  --color-pull-to-refresh-link: #{$color-text2-default};
+
+  @include theme-dark {
+    --color-pull-to-refresh-link: #{$color-text3-dark};
+  }
+
   &.view .view-content {
     padding-left: 0;
 
@@ -55,6 +61,26 @@ app-search {
       .lookahead-container .lookahead::after {
         font-size: 0.7em;
       }
+    }
+  }
+
+  .ptr--ptr {
+    box-shadow: none !important;
+
+    .ptr--box {
+      margin: 0;
+      padding: 15px;
+    }
+
+    .ptr--icon {
+      display: none;
+    }
+
+    .ptr--text {
+      color: var(--color-pull-to-refresh-link);
+      font-size: 0.9rem;
+      margin-top: 0;
+      opacity: 0.5;
     }
   }
 

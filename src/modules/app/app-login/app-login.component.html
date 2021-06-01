@@ -17,7 +17,8 @@
         ng-hide="vm.displayOtherSyncsWarning || vm.displaySyncConfirmation || vm.displayUpgradeConfirmation"
         ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) || (vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) && vm.displayGetSyncIdPanel !== undefined)"
         novalidate>
-    <button type="submit" class="d-none" ng-click="vm.utilitySvc.handleEvent(vm.submitForm)" tabindex="-1"></button>
+    <button type="submit" class="display-none" ng-click="vm.utilitySvc.handleEvent(vm.submitForm)"
+            tabindex="-1"></button>
     <div class="selected-service animate-fade-in"
          ng-show="(!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) && !vm.displayUpdateServicePanel) || 
     (vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) && !vm.displayUpdateServicePanel && !vm.displayGetSyncIdPanel)">
