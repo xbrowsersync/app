@@ -787,11 +787,6 @@
         "key": "View_Search_FolderEmpty",
         "default": "Folder jest pusty"
       },
-      "Placeholder": {
-        "key": "View_Search_Placeholder",
-        "default": "Wciśnij Enter lub wyszukaj zakładki",
-        "android": "Znajdź zakładki"
-      },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
         "default": "Nie masz żadnych zakładek, idź i dodaj coś nowego!"
@@ -799,6 +794,19 @@
       "NoResults": {
         "key": "View_Search_NoResults",
         "default": "Nie znaleziono zakładek"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "Wciśnij Enter lub wyszukaj zakładki",
+        "android": "Znajdź zakładki"
+      },
+      "Pulling": {
+        "key": "View_Search_Pulling",
+        "default": "Pull down to sync"
+      },
+      "Pulled": {
+        "key": "View_Search_Pulled",
+        "default": "Release to sync"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
