@@ -787,11 +787,6 @@
         "key": "View_Search_FolderEmpty",
         "default": "Carpeta vacía"
       },
-      "Placeholder": {
-        "key": "View_Search_Placeholder",
-        "default": "Pulsa Enter o busca marcadores",
-        "android": "Buscar marcadores"
-      },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
         "default": "No tienes marcadores, ve a agregar algunos!"
@@ -799,6 +794,19 @@
       "NoResults": {
         "key": "View_Search_NoResults",
         "default": "No se encontraron marcadores"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "Pulsa Enter o busca marcadores",
+        "android": "Buscar marcadores"
+      },
+      "Pulling": {
+        "key": "View_Search_Pulling",
+        "default": "Pull down to sync"
+      },
+      "Pulled": {
+        "key": "View_Search_Pulled",
+        "default": "Release to sync"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
