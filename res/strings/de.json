@@ -504,7 +504,7 @@
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time reset your data back to it’s original state from when xBrowserSync was installed.</p>",
+        "default": "<h4>Denken Sie an eine Sicherung</h4><p>Wenn Sie xBrowserSync nutzen liegen Ihre Daten in Ihren Händen. Seien Sie also schlau und stellen Sie sicher, dass Sie Sicherungskopien anlegen.</p><p>Wechseln Sie in das Einstellungen-Fenster und sichern Sie Ihre unverschlüsselten Daten in eine lokale Datei. Diese kann benutzt werden, um Ihre Daten bei Bedarf wiederherzustellen.</p><p>Wenn Ihre lokalen Browserdaten beschädigt werden und Sie keinerlei Sicherungskopien haben, können Sie Ihre Daten jederzeit wieder in den ursprünglichen Zustand zurückversetzen, in dem sie sich bei der Installation von xBrowserSync befanden.</p>",
         "android": "<h4>Denken Sie an eine Sicherung</h4><p>Wenn Sie xBrowserSync nutzen liegen Ihre Daten in Ihren Händen. Seien Sie also schlau und stellen Sie sicher, dass Sie Sicherungskopien anlegen.</p><p>Wechseln Sie in das Einstellungen-Fenster und sichern Sie Ihre unverschlüsselten Daten in eine lokale Datei. Diese kann benutzt werden, um Ihre Daten bei Bedarf wiederherzustellen.</p>"
       },
       "BeforeYouBegin": {
@@ -717,7 +717,7 @@
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync. After upgrading, you will no longer be able to sync with any previous versions of xBrowserSync.</p><p>Make sure to update xBrowserSync on all synced devices before continuing. Ready to proceed?</p>"
+            "default": "<p>Ihre Sync-ID muss aktualisiert werden, um mit dieser Version von xBrowserSync zu funktionieren. Nach der Aktualisierung können Sie nicht mehr mit früheren Versionen von xBrowserSync synchronisieren.</p><p>Stellen Sie sicher, dass Sie alle xBrowserSync-Apps aktualisiert haben, bevor Sie fortfahren. Fertig?</p>"
           }
         },
         "UpgradeRequired": {
@@ -727,7 +727,7 @@
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync.</p><p>Use the xBrowserSync desktop browser extension to upgrade your sync and then retry syncing here.</p>"
+            "default": "<p>Ihre Synchronisation muss vor der Synchronisierung mit dieser Version von xBrowserSync aktualisiert werden.</p><p>Benutzen Sie die Desktop-Browser-Erweiterung xBrowserSync, um Ihre Synchronisation zu aktualisieren und versuchen Sie es erneut hier.</p>"
           }
         }
       },
@@ -839,70 +839,70 @@
           "Numbers": {
             "Single": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
-              "default": "single"
+              "default": "einzelnes"
             },
             "Two": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
-              "default": "two"
+              "default": "zwei"
             },
             "Three": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
-              "default": "three"
+              "default": "drei"
             },
             "Four": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
-              "default": "four"
+              "default": "vier"
             },
             "Five": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
-              "default": "five"
+              "default": "fünf"
             },
             "Six": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
-              "default": "six"
+              "default": "sechs"
             },
             "Seven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
-              "default": "seven"
+              "default": "sieben"
             },
             "Eight": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
-              "default": "eight"
+              "default": "acht"
             },
             "Nine": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
-              "default": "nine"
+              "default": "neun"
             },
             "Ten": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
-              "default": "ten"
+              "default": "zehn"
             },
             "Eleven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
-              "default": "eleven"
+              "default": "elf"
             },
             "Twelve": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
-              "default": "twelve"
+              "default": "zwölf"
             }
           },
           "Units": {
             "Day": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
-              "default": "day(s)"
+              "default": "Tag(e)"
             },
             "Week": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
-              "default": "week(s)"
+              "default": "Woche(n)"
             },
             "Month": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
-              "default": "month(s)"
+              "default": "Monat(e)"
             }
           },
           "Confirmation": {
             "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
-            "default": "To prevent “Save As...” dialog from showing when downloading backups, disable the browser setting “Ask where to save each file before downloading”."
+            "default": "Um zu verhindern, dass der Dialog „Speichern unter...“ beim Herunterladen von Sicherungen angezeigt wird, deaktivieren Sie die Browser-Einstellung „Fragen Sie, wo jede Datei vor dem Download gespeichert werden sollte“."
           }
         },
         "Backup": {
@@ -912,7 +912,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Download Back Up"
+            "default": "Sicherung herunterladen"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -930,7 +930,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Restore From Backup"
+            "default": "Sicherung wiederherstellen"
           },
           "Local": {
             "Description": {
@@ -955,7 +955,7 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Backup has been restored."
+            "default": "Die Sicherung wurde wiederhergestellt."
           },
           "SelectFile": {
             "Button": {
@@ -987,19 +987,19 @@
         "Reset": {
           "Confirm": {
             "key": "View_Settings_BackupRestore_Reset_Confirm",
-            "default": "<p>If you continue, any active sync will be disabled and your local data will be reset to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "<p>Wenn Sie fortfahren, wird jede aktive Synchronisation deaktiviert. Ihre lokalen Daten werden auf den Stand zurückgesetzt, in dem sie waren als xBrowserSync am {date} installiert wurde.</p><p>OK, um fortzufahren?</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Reset_Button",
-            "default": "Reset Local Data"
+            "default": "Lokale Daten zurücksetzen"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Reset_Done",
-            "default": "Local data has been reset to initial installation state."
+            "default": "Lokale Daten wurden auf den ursprünglichen Installationsstatus zurückgesetzt."
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Reset_Unavailable",
-            "default": "Installation state data not available, unable to reset."
+            "default": "Installationsstatusdaten nicht verfügbar, Zurücksetzen nicht möglich."
           }
         }
       },
@@ -1197,15 +1197,15 @@
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Last synced {date}"
+            "default": "Zuletzt synchronisiert {date}"
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "Ready to sync (scheduled for {date})"
+            "default": "Bereit zum Synchronisieren (geplant für {date})"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
-            "default": "Sync Now"
+            "default": "Jetzt synchronisieren"
           }
         },
         "Qr": {
@@ -1237,7 +1237,7 @@
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "File saved to Downloads"
+        "default": "Datei in Downloads gespeichert"
       },
       "Support": {
         "key": "View_Settings_Support",
@@ -1269,11 +1269,11 @@
     "SyncRemoved": {
       "Title": {
         "key": "View_SyncRemoved_Title",
-        "default": "Sync not found"
+        "default": "Synchronisation nicht gefunden"
       },
       "Content": {
         "key": "View_SyncRemoved_Content",
-        "default": "<p>Your sync could not be found and may have been removed due to inactivity.</p><p>You will need to create a new sync, but first click the button below to download a backup of your synced data which you can then restore to your new sync.</p>"
+        "default": "<p>Dein Sync konnte nicht gefunden werden und wurde möglicherweise aufgrund von Inaktivität entfernt.</p><p>Sie müssen eine neue Synchronisation erstellen, aber klicken Sie zuerst auf die Schaltfläche unten, um eine Sicherung Ihrer synchronisierten Daten herunterzuladen, die Sie dann wieder auf Ihre neue Synchronisation zurücksetzen können.</p>"
       }
     },
     "Updated": {
@@ -1293,7 +1293,7 @@
       },
       "Resetting": {
         "key": "View_Working_Resetting",
-        "default": "Resetting"
+        "default": "Setze zurück"
       },
       "Syncing": {
         "key": "View_Working_Syncing",
