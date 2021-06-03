@@ -447,6 +447,10 @@
             "key": "View_Bookmark_Form_Url_Exists",
             "default": "URL is reeds geboekmerk"
           },
+          "Invalid": {
+            "key": "View_Bookmark_Form_Url_Invalid",
+            "default": "Bookmark URL must be a valid URL"
+          },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
             "default": "URL"
