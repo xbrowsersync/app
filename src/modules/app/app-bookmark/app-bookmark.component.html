@@ -38,6 +38,9 @@
       <div class="validation" ng-if="vm.bookmarkFormData && vm.bookmarkForm.bookmarkUrl.$error.required">
         {{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Url.Required) }}
       </div>
+      <div class="validation" ng-if="vm.bookmarkFormData && vm.bookmarkForm.bookmarkUrl.$error.Invalid">
+        {{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Url.Invalid) }}
+      </div>
       <div class="validation" ng-if="vm.bookmarkFormData && vm.bookmarkForm.bookmarkUrl.$error.Exists">
         {{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Url.Exists) }}
       </div>

@@ -431,11 +431,23 @@ export class AppBookmarkComponent implements OnInit {
     // Reset form if field is invalid
     if (this.bookmarkForm.bookmarkUrl.$invalid) {
       this.bookmarkForm.bookmarkUrl.$setValidity('Exists', true);
+      this.bookmarkForm.bookmarkUrl.$setValidity('Invalid', true);
+      this.displayUpdatePropertiesButton = false;
     }
 
-    // Display update properties button if value present
+    if ((this.bookmarkFormData.url ?? undefined) === undefined) {
+      return;
+    }
+
+    // Check url is valid
+    if (!new RegExp(`^${Globals.URL.ValidUrlRegex}$`).test(this.bookmarkFormData.url)) {
+      this.bookmarkForm.bookmarkUrl.$setValidity('Invalid', false);
+      return;
+    }
+
+    // Display update properties button if url is valid
     this.displayUpdatePropertiesButton =
-      !angular.isUndefined(this.bookmarkFormData.url ?? undefined) && this.bookmarkForm.bookmarkUrl.$dirty;
+      this.bookmarkForm.bookmarkUrl.$dirty && !this.bookmarkForm.bookmarkUrl.$invalid;
   }
 
   validateBookmark(bookmarkToValidate: BookmarkMetadata, originalUrl?: string): ng.IPromise<boolean> {

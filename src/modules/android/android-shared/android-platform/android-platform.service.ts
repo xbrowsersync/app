@@ -267,10 +267,16 @@ export class AndroidPlatformService implements PlatformService {
     let inAppBrowser: any;
     let loadUrlTimeout: ng.IPromise<void>;
 
+    // Check for protocol
+    let metadataUrl = pageUrl ?? this.currentPage?.url;
+    if (metadataUrl && !new RegExp(Globals.URL.ProtocolRegex).test(metadataUrl)) {
+      metadataUrl = `https://${metadataUrl}`;
+    }
+
     // Set default metadata from provided page url or current page
     const metadata: WebpageMetadata = {
       title: this.currentPage?.title,
-      url: pageUrl ?? this.currentPage?.url
+      url: metadataUrl
     };
 
     const promise = this.$q<WebpageMetadata>((resolve, reject) => {
@@ -279,9 +285,8 @@ export class AndroidPlatformService implements PlatformService {
         return resolve();
       }
 
-      // If url was provided, check connection and is valid http url
-      const httpRegex = new RegExp(Globals.URL.HttpRegex, 'i');
-      if (pageUrl && (!this.networkSvc.isNetworkConnected() || !httpRegex.test(pageUrl))) {
+      // Check connection
+      if (!this.networkSvc.isNetworkConnected()) {
         return reject(new Exceptions.FailedGetPageMetadataException());
       }
 
