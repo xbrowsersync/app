@@ -127,7 +127,7 @@
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": "Download Backup"
+      "default": "Sicherung herunterladen"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
@@ -713,7 +713,7 @@
         "UpgradeReady": {
           "Title": {
             "key": "View_Login_Sync_UpgradeReady_Title",
-            "default": "Ready to upgrade sync?"
+            "default": "Bereit zum Aktualisieren der Synchronisierung?"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
@@ -723,7 +723,7 @@
         "UpgradeRequired": {
           "Title": {
             "key": "View_Login_Sync_UpgradeRequired_Title",
-            "default": "Upgrade sync"
+            "default": "Synchronisation aktualisieren"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
@@ -802,11 +802,11 @@
       },
       "Pulling": {
         "key": "View_Search_Pulling",
-        "default": "Pull down to sync"
+        "default": "Zum Synchronisieren herunterziehen"
       },
       "Pulled": {
         "key": "View_Search_Pulled",
-        "default": "Release to sync"
+        "default": "Zum Synchronisieren loslassen"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
@@ -822,19 +822,19 @@
         "AutoBackup": {
           "Title": {
             "key": "View_Settings_BackupRestore_AutoBackup_Title",
-            "default": "Auto back up"
+            "default": "Automatische Sicherung"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_AutoBackup_Description",
-            "default": "Automatically download backups on a schedule."
+            "default": "Sicherungen automatisch nach einem Zeitplan herunterladen."
           },
           "RunsAt": {
             "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
-            "default": "Back up runs at"
+            "default": "Sicherung läuft um"
           },
           "Every": {
             "key": "View_Settings_BackupRestore_AutoBackup_Every",
-            "default": "every"
+            "default": "jedes"
           },
           "Numbers": {
             "Single": {
