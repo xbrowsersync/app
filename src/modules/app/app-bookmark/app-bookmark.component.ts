@@ -440,7 +440,7 @@ export class AppBookmarkComponent implements OnInit {
     }
 
     // Check url is valid
-    if (!new RegExp(`^${Globals.URL.ValidUrlRegex}$`).test(this.bookmarkFormData.url)) {
+    if (!new RegExp(`^${Globals.URL.ValidUrlRegex}$`, 'i').test(this.bookmarkFormData.url)) {
       this.bookmarkForm.bookmarkUrl.$setValidity('Invalid', false);
       return;
     }

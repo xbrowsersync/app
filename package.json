@@ -67,6 +67,7 @@
     "stacktrace-js": "^2.0.2",
     "typeface-roboto-condensed": "^1.1.13",
     "webextension-polyfill-ts": "^0.25.0",
+    "xregexp": "^5.0.2",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {

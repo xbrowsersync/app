@@ -222,13 +222,11 @@ export class WebExtBackgroundService {
 
   displayAlert(alert: Alert, url?: string): void {
     // Strip html tags from message
-    const urlRegex = new RegExp(Globals.URL.ValidUrlRegex);
-    const matches = alert.message.match(urlRegex);
-    const messageToDisplay =
-      matches?.length === 0
-        ? alert.message
-        : new DOMParser().parseFromString(`<span>${alert.message}</span>`, 'text/xml').firstElementChild.textContent;
-
+    const urlRegex = new RegExp(Globals.URL.ValidUrlRegex, 'i');
+    const urlInAlert = alert.message.match(urlRegex)?.find(Boolean);
+    const messageToDisplay = urlInAlert
+      ? new DOMParser().parseFromString(`<span>${alert.message}</span>`, 'text/xml').firstElementChild.textContent
+      : alert.message;
     const options: Notifications.CreateNotificationOptions = {
       iconUrl: `${Globals.PathToAssets}/notification.svg`,
       message: messageToDisplay,
@@ -239,11 +237,7 @@ export class WebExtBackgroundService {
     // Display notification
     browser.notifications.create(this.utilitySvc.getUniqueishId(), options).then((notificationId) => {
       // Add a click handler to open url if provided or if the message contains a url
-      let urlToOpenOnClick = url;
-      if (matches?.length) {
-        urlToOpenOnClick = matches[0];
-      }
-
+      const urlToOpenOnClick = urlInAlert ?? url;
       if (urlToOpenOnClick) {
         const openUrlInNewTab = () => {
           this.platformSvc.openUrl(urlToOpenOnClick);

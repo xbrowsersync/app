@@ -36,6 +36,11 @@ export interface BookmarkMetadata {
   url?: string;
 }
 
+export interface BookmarkSearchQuery {
+  keywords?: string[];
+  url?: string;
+}
+
 export interface BookmarkService {
   buildIdMappings: (bookmarks: Bookmark[]) => ng.IPromise<void>;
   clearNativeBookmarks: () => ng.IPromise<void>;

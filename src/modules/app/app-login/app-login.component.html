@@ -239,7 +239,10 @@
                 {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Update.Required) }}
               </span>
               <span ng-if="vm.syncForm.newServiceUrl.$error.InvalidService">
-                {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Update.Invalid) }}
+                {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Update.InvalidService) }}
+              </span>
+              <span ng-if="vm.syncForm.newServiceUrl.$error.InvalidUrl">
+                {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Update.InvalidUrl) }}
               </span>
               <span ng-if="vm.syncForm.newServiceUrl.$error.RequestFailed">
                 {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Service.Update.Failed) }}

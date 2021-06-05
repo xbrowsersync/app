@@ -209,7 +209,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
         this.logSvc.logInfo(`Detected new intent: ${intentText}`);
 
         // Extract url from intent
-        const url = intentText?.match(Globals.URL.ValidUrlRegex)?.find(Boolean);
+        const url = intentText?.match(new RegExp(Globals.URL.ValidUrlRegex, 'i'))?.find(Boolean);
         return {
           title: intentSubject,
           url

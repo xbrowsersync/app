@@ -664,9 +664,13 @@
             "key": "View_Login_Service_Update_Required",
             "default": "需要 xBrowserSync 服务URL"
           },
-          "Invalid": {
-            "key": "View_Login_Service_Update_Invalid",
+          "InvalidService": {
+            "key": "View_Login_Service_Update_InvalidService",
             "default": "无效的 xBrowserSync 服务"
+          },
+          "InvalidUrl": {
+            "key": "View_Login_Service_Update_InvalidUrl",
+            "default": ""
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",

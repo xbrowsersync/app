@@ -5,6 +5,7 @@ import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
 import * as detectBrowser from 'detect-browser';
+import XRegExp from 'xregexp';
 import { AppEventType } from '../../app/app.enum';
 import * as Exceptions from '../exception/exception';
 import { ExceptionHandler } from '../exception/exception.interface';
@@ -202,7 +203,8 @@ export class UtilityService {
       return [];
     }
     const words = text!.toLowerCase().replace(/['"]/g, '');
-    return this.filterFalsyValues(words.split(/[\s.,/#!$%^&*;:{}=\-_`~()]/));
+    const wordsArr = words.split(XRegExp('[^\\p{L}\\p{Nd}]', 'g'));
+    return this.filterFalsyValues(wordsArr);
   }
 
   stopEventPropagation(event: Event): void {

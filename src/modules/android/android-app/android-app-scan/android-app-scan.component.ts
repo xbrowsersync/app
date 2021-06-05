@@ -82,7 +82,7 @@ export class AndroidAppScanComponent implements OnInit, OnDestroy {
 
     // Validate decoded values
     const urlRegex = new RegExp(`^${Globals.URL.ValidUrlRegex}$`, 'i');
-    if (!this.utilitySvc.syncIdIsValid(syncId) || !urlRegex.test(serviceUrl ?? '')) {
+    if (!this.utilitySvc.syncIdIsValid(syncId) || !urlRegex.test(serviceUrl)) {
       throw new Error('Invalid QR code');
     }
 

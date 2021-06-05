@@ -388,8 +388,18 @@ export class AppLoginComponent implements OnInit {
     // Reset form if field is invalid
     if (this.syncForm.newServiceUrl.$invalid) {
       this.syncForm.newServiceUrl.$setValidity('InvalidService', true);
+      this.syncForm.newServiceUrl.$setValidity('InvalidUrl', true);
       this.syncForm.newServiceUrl.$setValidity('RequestFailed', true);
       this.syncForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', true);
+    }
+
+    if ((this.newServiceInfo.url ?? undefined) === undefined) {
+      return;
+    }
+
+    // Check url is valid
+    if (!new RegExp(`^${Globals.URL.ValidUrlRegex}$`, 'i').test(this.newServiceInfo.url)) {
+      this.syncForm.newServiceUrl.$setValidity('InvalidUrl', false);
     }
   }
 
@@ -525,7 +535,7 @@ export class AppLoginComponent implements OnInit {
         }
 
         // Focus on url field
-        this.appHelperSvc.focusOnElement('input[name=newServiceUrl]');
+        this.appHelperSvc.focusOnElement('input[name=newServiceUrl]', true);
       })
       .finally(() => {
         this.validatingServiceUrl = false;

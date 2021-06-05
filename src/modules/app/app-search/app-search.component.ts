@@ -3,7 +3,7 @@ import { OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AndroidAppHelperService } from '../../android/android-app/shared/android-app-helper/android-app-helper.service';
 import { AlertService } from '../../shared/alert/alert.service';
-import { Bookmark } from '../../shared/bookmark/bookmark.interface';
+import { Bookmark, BookmarkSearchQuery } from '../../shared/bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
 import { ExceptionHandler } from '../../shared/exception/exception.interface';
 import Globals from '../../shared/global-shared.constants';
@@ -157,23 +157,26 @@ export abstract class AppSearchComponent implements OnInit {
   }
 
   searchBookmarks(): ng.IPromise<void> {
-    const queryData = {
+    let queryText = this.query;
+    const searchQuery: BookmarkSearchQuery = {
       url: undefined,
       keywords: []
     };
-    const urlRegex = new RegExp(`^${Globals.URL.ValidUrlRegex}$`, 'i');
-
-    if (this.query) {
-      // Add query word as url if query is in url format, otherwise add to keywords
-      if (!queryData.url && urlRegex.test(this.query.trim())) {
-        queryData.url = this.query.trim();
-      } else {
-        // Iterate query words to form query data object
-        queryData.keywords = this.getKeywords(this.query);
+    if (queryText) {
+      // Match url in query
+      const urlRegex = new RegExp(`^${Globals.URL.ValidUrlRegex}`, 'i');
+      const url = queryText.match(urlRegex)?.find(Boolean);
+      if (url) {
+        searchQuery.url = url;
+        queryText = queryText.replace(urlRegex, '').trim();
       }
+
+      // Iterate query words to form query data object
+      searchQuery.keywords = this.getKeywords(queryText);
     }
 
-    return this.bookmarkHelperSvc.searchBookmarks(queryData).then((results) => {
+    // Execute search and display results
+    return this.bookmarkHelperSvc.searchBookmarks(searchQuery).then((results) => {
       this.scrollDisplayMoreEnabled = false;
       this.resultsDisplayed = this.batchResultsNum;
       this.results = results;
@@ -334,9 +337,9 @@ export abstract class AppSearchComponent implements OnInit {
       return;
     }
 
-    // Get lookahead
+    // Get lookahead, use current results only if multiple query words are present
     this.bookmarkHelperSvc
-      .getLookahead(lastWord.toLowerCase(), this.results)
+      .getLookahead(lastWord.toLowerCase(), queryWords.length > 1 ? this.results : undefined)
       .then((results) => {
         if (!results) {
           this.lookahead = null;
@@ -345,6 +348,12 @@ export abstract class AppSearchComponent implements OnInit {
 
         let lookahead = results[0];
         const word = results[1];
+
+        // If lookahead is already in query, ignore
+        if (queryWords.findIndex((x) => x.toLowerCase() === lookahead.toLowerCase()) >= 0) {
+          this.lookahead = null;
+          return;
+        }
 
         if (lookahead && word.toLowerCase() === lastWord.toLowerCase()) {
           // Set lookahead after trimming word

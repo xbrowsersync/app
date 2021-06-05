@@ -43,16 +43,14 @@ export class AndroidAppAlertComponent {
 
   displayAlert(alert: AndroidAlert): void {
     // Strip html tags from message
-    const urlRegex = new RegExp(Globals.URL.ValidUrlRegex);
-    const matches = alert.message?.match(urlRegex);
-    const descriptionStripped =
-      matches?.length === 0
-        ? alert.message
-        : new DOMParser().parseFromString(`<span>${alert.message}</span>`, 'text/xml').firstElementChild.textContent;
+    const urlInAlert = alert.message?.match(new RegExp(Globals.URL.ValidUrlRegex, 'i'))?.find(Boolean);
+    const descriptionStripped = urlInAlert
+      ? new DOMParser().parseFromString(`<span>${alert.message}</span>`, 'text/xml').firstElementChild.textContent
+      : alert.message;
 
     // Add an action to open url if provided or if the message contains a url
-    if (!alert.actionCallback && matches?.length) {
-      const urlToOpenOnClick = matches[0];
+    if (!alert.actionCallback && urlInAlert) {
+      const urlToOpenOnClick = urlInAlert;
       alert.action = this.platformSvc.getI18nString(this.Strings.Alert.Go);
       alert.actionCallback = () => {
         this.platformSvc.openUrl(urlToOpenOnClick);

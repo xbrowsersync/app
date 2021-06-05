@@ -664,9 +664,13 @@
             "key": "View_Login_Service_Update_Required",
             "default": "xBrowserSync Dienst-URL ist erforderlich"
           },
-          "Invalid": {
-            "key": "View_Login_Service_Update_Invalid",
+          "InvalidService": {
+            "key": "View_Login_Service_Update_InvalidService",
             "default": "Kein gültiger xBrowserSync-Dienst"
+          },
+          "InvalidUrl": {
+            "key": "View_Login_Service_Update_InvalidUrl",
+            "default": ""
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",

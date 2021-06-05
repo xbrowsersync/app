@@ -12,7 +12,7 @@ import { StoreKey } from '../../store/store.enum';
 import { StoreService } from '../../store/store.service';
 import { UtilityService } from '../../utility/utility.service';
 import { BookmarkContainer, BookmarkType } from '../bookmark.enum';
-import { Bookmark, BookmarkMetadata } from '../bookmark.interface';
+import { Bookmark, BookmarkMetadata, BookmarkSearchQuery } from '../bookmark.interface';
 
 @autobind
 @Injectable('BookmarkHelperService')
@@ -324,20 +324,19 @@ export class BookmarkHelperService {
     return container;
   }
 
-  getKeywordsFromBookmark(bookmark: Bookmark, tagsOnly = false): string[] {
+  getKeywordsFromBookmark(bookmark: Bookmark, tagsOnly = false, includeUrl = false): string[] {
     let keywords: string[] = [];
     if (!tagsOnly) {
       // Add all words in title and description
       keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.title));
       keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.description));
 
-      // Add url host
-      const hostMatch = bookmark.url?.toLowerCase().match(/^(https?:\/\/)?(www\.)?([^/]+)/);
-      if (hostMatch) {
-        keywords.push(hostMatch[3]);
-        if (!angular.isUndefined(hostMatch[2])) {
-          keywords.push(hostMatch[2] + hostMatch[3]);
-        }
+      if (includeUrl) {
+        // Add url host
+        try {
+          const host = new URL(bookmark.url).hostname;
+          keywords.push(host);
+        } catch {}
       }
     }
 
@@ -360,12 +359,12 @@ export class BookmarkHelperService {
     }
 
     let getBookmarks: ng.IPromise<Bookmark[] | undefined>;
-    if (bookmarks?.length) {
-      // Use supplied bookmarks
-      getBookmarks = this.$q.resolve(bookmarks);
-    } else {
+    if ((bookmarks ?? undefined) === undefined) {
       // Get cached bookmarks
       getBookmarks = this.getCachedBookmarks();
+    } else {
+      // Use supplied bookmarks
+      getBookmarks = this.$q.resolve(bookmarks);
     }
 
     // With bookmarks
@@ -558,7 +557,7 @@ export class BookmarkHelperService {
     return bookmarks.filter((x) => !removeArr.includes(x));
   }
 
-  searchBookmarks(query: any): ng.IPromise<Bookmark[]> {
+  searchBookmarks(query: BookmarkSearchQuery): ng.IPromise<Bookmark[]> {
     if (!query) {
       query = { keywords: [] };
     }
@@ -680,7 +679,7 @@ export class BookmarkHelperService {
         results = this.searchBookmarksForLookaheads(bookmark.children, word, tagsOnly, results);
       } else {
         // Find all words that begin with lookahead word
-        const bookmarkWords = this.getKeywordsFromBookmark(bookmark, tagsOnly);
+        const bookmarkWords = this.getKeywordsFromBookmark(bookmark, tagsOnly, true);
         results = results.concat(
           bookmarkWords.filter((innerbookmark) => {
             return innerbookmark.indexOf(word) === 0;
