@@ -135,7 +135,7 @@
     },
     "Help": {
       "key": "Button_Help",
-      "default": "Hjelpeguide"
+      "default": "View help guide"
     },
     "Next": {
       "key": "Button_Next",
@@ -449,7 +449,7 @@
           },
           "Invalid": {
             "key": "View_Bookmark_Form_Url_Invalid",
-            "default": "Bookmark URL must be a valid URL"
+            "default": "Not a valid URL"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -457,7 +457,7 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "URL for bokmerke er påkrevd"
+            "default": "URL is required"
           }
         },
         "Description": {
@@ -662,11 +662,15 @@
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
-            "default": "xBrowserSync service URL is required"
+            "default": "URL is required"
           },
-          "Invalid": {
-            "key": "View_Login_Service_Update_Invalid",
-            "default": "Ikke en gyldig xBrowserSync-tjeneste"
+          "InvalidService": {
+            "key": "View_Login_Service_Update_InvalidService",
+            "default": "Not a valid xBrowserSync service"
+          },
+          "InvalidUrl": {
+            "key": "View_Login_Service_Update_InvalidUrl",
+            "default": "Not a valid URL"
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",
@@ -1010,12 +1014,12 @@
       "Issues": {
         "Title": {
           "key": "View_Settings_Issues_Title",
-          "default": "Problemer"
+          "default": "Help and support"
         },
         "Help": {
           "Title": {
             "key": "View_Settings_Issues_Help_Title",
-            "default": "Hjelp"
+            "default": "Help guide"
           },
           "Description": {
             "key": "View_Settings_Issues_Help_Description",
@@ -1029,15 +1033,15 @@
         "Tracker": {
           "Title": {
             "key": "View_Settings_Issues_Tracker_Title",
-            "default": "Problemsporing"
+            "default": "Support"
           },
           "Description": {
             "key": "View_Settings_Issues_Tracker_Description",
-            "default": "Report an issue to report a bug or request a new feature."
+            "default": "Need support? Use the issues tracker to report a bug or request a feature."
           },
           "Report": {
             "key": "View_Settings_Issues_Tracker_Report",
-            "default": "Rapporter en feil"
+            "default": "View Issues Tracker"
           }
         },
         "Log": {
