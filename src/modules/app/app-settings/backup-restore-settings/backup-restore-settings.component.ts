@@ -1,5 +1,5 @@
 import angular from 'angular';
-import { OnInit, ViewParent } from 'angular-ts-decorators';
+import { OnDestroy, OnInit, ViewParent } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AlertType } from '../../../shared/alert/alert.enum';
 import { AlertService } from '../../../shared/alert/alert.service';
@@ -21,7 +21,7 @@ import { AppEventType } from '../../app.enum';
 import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 import { AppSettingsComponent } from '../app-settings.component';
 
-export abstract class BackupRestoreSettingsComponent implements OnInit {
+export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestroy {
   Strings = require('../../../../../res/strings/en.json');
 
   $filter: ng.FilterFactory;
@@ -283,6 +283,10 @@ export abstract class BackupRestoreSettingsComponent implements OnInit {
     this.displayRestoreForm = false;
     this.restoreForm.$setPristine();
     this.restoreForm.$setUntouched();
+  }
+
+  ngOnDestroy(): void {
+    document.getElementById('backupFile').removeEventListener('change', this.backupFileChanged, false);
   }
 
   ngOnInit(): void {
