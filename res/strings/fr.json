@@ -810,7 +810,7 @@
       },
       "Pulling": {
         "key": "View_Search_Pulling",
-        "default": "Pull down to sync"
+        "default": "Tirer vers le bas pour synchroniser"
       },
       "Pulled": {
         "key": "View_Search_Pulled",
@@ -897,15 +897,15 @@
           "Units": {
             "Day": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
-              "default": "day(s)"
+              "default": "jour(s)"
             },
             "Week": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
-              "default": "week(s)"
+              "default": "semaine(s)"
             },
             "Month": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
-              "default": "month(s)"
+              "default": "mois"
             }
           },
           "Confirmation": {
@@ -920,7 +920,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Download Back Up"
+            "default": "Télécharger la sauvegarde"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -938,7 +938,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Restore From Backup"
+            "default": "Restaurer à partir d'une sauvegarde"
           },
           "Local": {
             "Description": {
@@ -963,7 +963,7 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Backup has been restored."
+            "default": "Votre sauvegarde a été restaurée."
           },
           "SelectFile": {
             "Button": {
