@@ -3,40 +3,40 @@
     "AppUpdateAvailable": {
       "Title": {
         "key": "Alert_AppUpdateAvailable_Title",
-        "default": "xBrowserSync update available"
+        "default": "يتوفر تحديث إكس براوزر سينك"
       },
       "Message": {
         "key": "Alert_AppUpdateAvailable_Message",
-        "default": "{version} is available to download. Click for more information.",
-        "android": "xBrowserSync {version} is available to download."
+        "default": "الإصدار: {version} متاح للتنزيل. انقر لمزيد من المعلومات.",
+        "android": "إكس براوزر سينك إصدار {version} متاح للتنزيل."
       }
     },
     "AppUpdated": {
       "Title": {
         "key": "Alert_AppUpdated_Title",
-        "default": "Updated to"
+        "default": "تم التحديث لـ"
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync has been updated. Sync has been disabled, re-enable sync to complete the upgrade process."
+        "default": "تم تحديث إكس براوزر سينك. تم تعطيل المزامنة، أعد تفعيل المزامنة لإكمال عملية التحديث."
       }
     },
     "BookmarkCreated": {
       "key": "Alert_BookmarkCreated",
-      "default": "Bookmark created"
+      "default": "تم إنشاء الإشارة المرجعية"
     },
     "BookmarkDeleted": {
       "key": "Alert_BookmarkDeleted",
-      "default": "Bookmark deleted"
+      "default": "تم حذف الإشارة المرجعية"
     },
     "BookmarkUpdated": {
       "key": "Alert_BookmarkUpdated",
-      "default": "Bookmark updated"
+      "default": "تم تحديث الإشارة المرجعية"
     },
     "GetMetadata": {
       "Message": {
         "key": "Alert_GetMetadata_Message",
-        "default": "Fetching bookmark properties, touch to cancel."
+        "default": "جارِ جلب بيانات الإشارة المرجعية، اضغط للإلغاء."
       },
       "Success": {
         "key": "Alert_GetMetadata_Success",
