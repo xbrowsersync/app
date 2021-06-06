@@ -40,28 +40,28 @@
       },
       "Success": {
         "key": "Alert_GetMetadata_Success",
-        "default": "Bookmark properties updated."
+        "default": "تم تحديث بيانات الإشارة المرجعية."
       }
     },
     "Go": {
       "key": "Alert_Go",
-      "default": "Go"
+      "default": "الذهاب"
     },
     "WorkingOffline": {
       "Title": {
         "key": "Alert_WorkingOffline_Title",
-        "default": "Working offline"
+        "default": "يعمل دون اتصال"
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
-        "default": "Changes will be synced when connection is restored."
+        "default": "ستتم مزامنة التغييرات عند رجوع الاتصال."
       }
     }
   },
   "App": {
     "Description": {
       "key": "App_Description",
-      "default": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
+      "default": "مزامنة المتصفح كما يجب أن تكون: آمنة، ومتخفية، ومجانية! قم بمزامنة الإشارات المرجعية عبر المتصفحات والأجهزة خاصتك، لا يتطلب التسجيل."
     },
     "Title": {
       "key": "App_Title",
@@ -72,160 +72,160 @@
     "Container": {
       "Menu": {
         "key": "Bookmarks_Container_Menu",
-        "default": "Menu bookmarks"
+        "default": "الإشارات المرجعية بالقائمة"
       },
       "Mobile": {
         "key": "Bookmarks_Container_Mobile",
-        "default": "Mobile bookmarks"
+        "default": "الإشارات المرجعية بالهاتف"
       },
       "Other": {
         "key": "Bookmarks_Container_Other",
-        "default": "Other bookmarks"
+        "default": "إشارات مرجعية أخرى"
       },
       "Toolbar": {
         "key": "Bookmarks_Container_Toolbar",
-        "default": "Toolbar bookmarks"
+        "default": "الإشارات المرجعية بشريط الأدوات"
       }
     }
   },
   "Button": {
     "AddBookmark": {
       "key": "Button_AddBookmark",
-      "default": "Add Bookmark"
+      "default": "إضافة إشارة مرجعية"
     },
     "Back": {
       "key": "Button_Back",
-      "default": "Back"
+      "default": "الرجوع"
     },
     "Cancel": {
       "key": "Button_Cancel",
-      "default": "Cancel"
+      "default": "إلغاء"
     },
     "Close": {
       "key": "Button_Close",
-      "default": "Close"
+      "default": "إغلاق"
     },
     "Confirm": {
       "key": "Button_Confirm",
-      "default": "Yes"
+      "default": "نعم"
     },
     "Continue": {
       "key": "Button_Continue",
-      "default": "Continue"
+      "default": "استمرار"
     },
     "DeleteBookmark": {
       "key": "Button_DeleteBookmark",
-      "default": "Delete Bookmark"
+      "default": "حذف الإشارة المرجعية"
     },
     "Deny": {
       "key": "Button_Deny",
-      "default": "No"
+      "default": "لا"
     },
     "Done": {
       "key": "Button_Done",
-      "default": "Done"
+      "default": "تم"
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": "Download Backup"
+      "default": "تحميل نسخة احتياطية"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
-      "default": "Edit Bookmark"
+      "default": "تعديل الإشارة المرجعية"
     },
     "Help": {
       "key": "Button_Help",
-      "default": "View help guide"
+      "default": "عرض دليل المساعدة"
     },
     "Next": {
       "key": "Button_Next",
-      "default": "Next"
+      "default": "التالي"
     },
     "OK": {
       "key": "Button_OK",
-      "default": "OK"
+      "default": "حسنا"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
-      "default": "View release notes"
+      "default": "عرض ملاحظات الإصدار"
     },
     "Saving": {
       "key": "Button_Saving",
-      "default": "Saving"
+      "default": "جاري الحفظ"
     },
     "Settings": {
       "key": "Button_Settings",
-      "default": "Settings"
+      "default": "الإعدادات"
     },
     "ShareBookmark": {
       "key": "Button_ShareBookmark",
-      "default": "Share bookmark"
+      "default": "مشاركة الإشارة المرجعية"
     },
     "Undo": {
       "key": "Button_Undo",
-      "default": "Undo"
+      "default": "تراجع"
     },
     "Update": {
       "key": "Button_Update",
-      "default": "Update"
+      "default": "تحديث"
     },
     "View": {
       "key": "Button_View",
-      "default": "View"
+      "default": "عرض"
     }
   },
   "Exception": {
     "ContainerChanged_Message": {
       "key": "Exception_ContainerChanged_Message",
-      "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
+      "default": "الرجاء تجنب تعديل مجلدات [xbs] حيث أنه يمكن أن يسبب مشاكل في المزامنة."
     },
     "ContainerChanged_Title": {
       "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync folder changed"
+      "default": "تم تغيير مجلد إكس براوزر سينك"
     },
     "DailyNewSyncLimitReached_Message": {
       "key": "Exception_DailyNewSyncLimitReached_Message",
-      "default": "Sync to an existing sync ID, switch to a different service or try again tomorrow."
+      "default": "قم بالمزامنة مع رمز مزامنة حالِ أو قم بالتبديل إلى خدمة مختلفة أو حاول مرة أخرى غدًا."
     },
     "DailyNewSyncLimitReached_Title": {
       "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "Daily new sync limit reached"
+      "default": "تم الوصول إلى حد المزامنة الجديدة اليومي"
     },
     "Default_Message": {
       "key": "Exception_Default_Message",
-      "default": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
+      "default": "إذا استمرت المشكلة من فضلك <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>أبلغ عن المشكلة</a>."
     },
     "Default_Title": {
       "key": "Exception_Default_Title",
-      "default": "Something went wrong"
+      "default": "حدث خطأ ما"
     },
     "FailedDownloadFile_Title": {
       "key": "Exception_FailedDownloadFile_Title",
-      "default": "Backup failed"
+      "default": "فشل النسخ الاحتياطي"
     },
     "FailedGetDataToRestore_Title": {
       "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "Browse files failed"
+      "default": "فشل استعراض الملفات"
     },
     "FailedGetPageMetadata_Message": {
       "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "URL is invalid or webpage data could not be retrieved."
+      "default": "عنوان يو آر إل غير صالح أو فشل استلام بيانات صفحة الويب."
     },
     "FailedGetPageMetadata_Title": {
       "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "Couldn’t get bookmark properties"
+      "default": "فشل الحصول على بيانات الإشارة المرجعية"
     },
     "FailedRefreshBookmarks_Title": {
       "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "Couldn’t retrieve updates"
+      "default": "فشل الحصول على التحديثات"
     },
     "FailedRestoreData_Message": {
       "key": "Exception_FailedRestoreData_Message",
-      "default": "The backup data provided is not in an expected format."
+      "default": "بيانات النسخ الاحتياطي المزوَّدة ليست بتنسيق متوقع."
     },
     "FailedRestoreData_Title": {
       "key": "Exception_FailedRestoreData_Title",
-      "default": "Unable to restore data"
+      "default": "غير قادر على استعادة البيانات"
     },
     "FailedShareUrlNotSynced_Title": {
       "key": "Exception_FailedShareUrlNotSynced_Title",
