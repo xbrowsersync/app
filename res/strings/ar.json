@@ -567,140 +567,140 @@
       },
       "Welcome": {
         "key": "View_Help_Welcome",
-        "default": "<h4>مرحباً بك في إكس براوزر سينك!</h4><p>إكس براوزر سينك هو بديل مجاني ومفتوح المصدر لخدمات مزامنة المتصفح التي تقدمها كوكل وموزيلا وأوبيرا وغيرها، ويحترم خصوصيتك ويمنحك إخفاء هوية كامل (تحقق من <a href='https://link.xbrowsersync.org/www' class='new-tab'>الموقع الالكتروني</a> لمزيد من المعلومات).</p><p>أقضِ لحظة لقراءة دليل المساعدة هذا للتعرف على إكس براوزر سينك، باستخدام روابط الترحيل أدناه أو مفاتيح الأسهم للتنقل بين الصفحات.</p><p>يرجى الملاحظة: يقوم إكس براوزر سينك حاليًا بمزامنة الإشارات المرجعية فقط. ستتم إضافة مزامنة بيانات متصفح إضافية في الإصدارات المستقبلية، تحقق من حالة التطوير <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>خريطة الأهداف</a> لمعرفة ما تم تخطيطة.</p>",
-        "android": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info).</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or swiping to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>"
+        "default": "<h4>مرحباً بك في إكس براوزر سينك!</h4><p>إكس براوزر سينك هو بديل مجاني ومفتوح المصدر لخدمات مزامنة المتصفح التي تقدمها كوكل وموزيلا وأوبيرا وغيرها، ويحترم خصوصيتك ويمنحك إخفاء هوية كامل (تحقق من <a href='https://link.xbrowsersync.org/www' class='new-tab'>الموقع الالكتروني</a> لمزيد من المعلومات).</p><p>أقضِ لحظة لقراءة دليل المساعدة هذا للتعرف على إكس براوزر سينك، باستخدام روابط الترحيل أدناه أو مفاتيح الأسهم للتنقل بين الصفحات.</p><p>يرجى الملاحظة: يقوم إكس براوزر سينك حاليًا بمزامنة الإشارات المرجعية فقط. ستتم إضافة مزامنة بيانات متصفح إضافية في الإصدارات المستقبلية، تحقق من حالة التطوير <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>بخريطة الأهداف</a> لمعرفة ما تم تخطيطة.</p>",
+        "android": "<h4>مرحباً بك في إكس براوزر سينك!</h4><p>إكس براوزر سينك هو بديل مجاني ومفتوح المصدر لخدمات مزامنة المتصفح التي تقدمها كوكل وموزيلا وأوبيرا وغيرها، ويحترم خصوصيتك ويمنحك إخفاء هوية كامل (تحقق من <a href='https://link.xbrowsersync.org/www' class='new-tab'>الموقع الالكتروني</a> لمزيد من المعلومات).</p><p>أقضِ لحظة لقراءة دليل المساعدة هذا للتعرف على إكس براوزر سينك، باستخدام روابط الترحيل أدناه أو السحب على الشاشة للتنقل بين الصفحات.</p><p>يرجى الملاحظة: يقوم إكس براوزر سينك حاليًا بمزامنة الإشارات المرجعية فقط. ستتم إضافة مزامنة بيانات متصفح إضافية في الإصدارات المستقبلية، تحقق من حالة التطوير <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>بخريطة الأهداف</a> لمعرفة ما تم تخطيطة.</p>"
       }
     },
     "Login": {
       "GetSyncId": {
         "Title": {
           "key": "View_Login_GetSyncId_Title",
-          "default": "Need a sync ID?"
+          "default": "أتحتاج إلى رمز مزامنة؟"
         },
         "Content": {
           "key": "View_Login_GetSyncId_Content",
-          "default": "Download the xBrowserSync desktop browser extension and create a new sync to access your bookmarks here."
+          "default": "قم بتنزيل إضافة متصفح سطح المكتب إكس براوزر سينك وأنشئ مزامنة جديدة للوصول إلى إشاراتك المرجعية هنا."
         }
       },
       "Password": {
         "Confirm": {
           "key": "View_Login_Password_Confirm",
-          "default": "Confirm password"
+          "default": "تأكيد كلمة المرور"
         },
         "Existing": {
           "key": "View_Login_Password_Existing",
-          "default": "Your encryption password"
+          "default": "كلمة مرور التشفير خاصتك"
         },
         "Label": {
           "key": "View_Login_Password_Label",
-          "default": "Encryption password"
+          "default": "كلمة مرور التشفير"
         },
         "New": {
           "key": "View_Login_Password_New",
-          "default": "Enter an encryption password"
+          "default": "أدخل كلمة مرور التشفير"
         },
         "Show": {
           "key": "View_Login_Password_Show",
-          "default": "Reveal password"
+          "default": "عرض كلمة المرور"
         }
       },
       "Scan": {
         "Title": {
           "key": "View_Login_Scan_Title",
-          "default": "Connect to your sync"
+          "default": "اتصل بالمزامنة خاصتك"
         },
         "Content": {
           "key": "View_Login_Scan_Content",
-          "default": "Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a QR code which you can scan here."
+          "default": "افتح إكس براوزر سينك على متصفح سطح المكتب، واذهب إلى لوحة الإعدادات وانقر على رمز المزامنة لعرض رمز الاستجابة السريعة الذي يمكنك مسحه هنا."
         },
         "ScanCode": {
           "key": "View_Login_Scan_ScanCode",
-          "default": "Scan code"
+          "default": "مسح الرمز"
         },
         "ManualEntry": {
           "key": "View_Login_Scan_ManualEntry",
-          "default": "Enter sync details manually"
+          "default": "أدخل تفاصيل المزامنة يدوياً"
         }
       },
       "Service": {
         "ApiVersion": {
           "key": "View_Login_Service_ApiVersion",
-          "default": "API version"
+          "default": "إصدار إيه بي آي"
         },
         "Confirm": {
           "key": "View_Login_Service_Confirm",
-          "default": "Sync to this service?"
+          "default": "المزامنة مع هذه الخدمة؟"
         },
         "Location": {
           "key": "View_Login_Service_Location",
-          "default": "Location"
+          "default": "الموقع"
         },
         "MaxSyncSize": {
           "key": "View_Login_Service_MaxSyncSize",
-          "default": "Max sync size"
+          "default": "حجم المزامنة الأقصى"
         },
         "Selected": {
           "key": "View_Login_Service_Selected",
-          "default": "Syncing to"
+          "default": "مزامناً مع"
         },
         "Status": {
           "key": "View_Login_Service_Status",
-          "default": "Status"
+          "default": "الحالة"
         },
         "Update": {
           "Label": {
             "key": "View_Login_Service_Update_Label",
-            "default": "xBrowserSync service URL"
+            "default": "عنوان خدمه إكس براوزر سينك"
           },
           "Description": {
             "key": "View_Login_Service_Update_Description",
-            "default": "Enter the URL of an alternative xBrowserSync service. Browse the list of public xBrowserSync services <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>here</a>."
+            "default": "أدخل عنوان يو آر إل لخدمة إكس براوزر سينك بديلة. تصفح قائمة خدمات إكس براوزر سينك العامة <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>هنا</a>."
           },
           "Button": {
             "key": "View_Login_Service_Update_Button",
-            "default": "Switch service"
+            "default": "تبديل الخدمة"
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
-            "default": "URL is required"
+            "default": "مطلوب عنوان يو آر إل"
           },
           "InvalidService": {
             "key": "View_Login_Service_Update_InvalidService",
-            "default": "Not a valid xBrowserSync service"
+            "default": "خدمة إكس براوزر سينك غير صحيحة"
           },
           "InvalidUrl": {
             "key": "View_Login_Service_Update_InvalidUrl",
-            "default": "Not a valid URL"
+            "default": "يو آر إل غير صحيح"
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",
-            "default": "Unable to connect to the service"
+            "default": "فشل الإتصال بالخدمة"
           },
           "NotSupported": {
             "key": "View_Login_Service_Update_Failed_NotSupported",
-            "default": "This service is running an unsupported API version"
+            "default": "هذه الخدمة تعمل بإصدار إيه بي آي غير مدعوم"
           }
         },
         "Warning": {
           "key": "View_Login_Service_Warning",
-          "default": "<strong>Important:</strong> xBrowserSync services are run independently by volunteers. The service administrator takes no responsibility for your data so please remember to backup regularly."
+          "default": "<strong>مهم:</strong> يتم تشغيل خدمات إكس براوزر سينك بشكل مستقل من قبل المتطوعين. لا يتحمل مسؤول الخدمة أي مسؤولية عن بياناتك، لذا يرجى تذكر إجراء نسخ احتياطية بانتظام."
         }
       },
       "Sync": {
         "Confirm": {
           "Title": {
             "key": "View_Login_Sync_Confirm_Title",
-            "default": "Are you sure?"
+            "default": "هل أنت متأكد؟"
           },
           "Content": {
             "key": "View_Login_Sync_Confirm_Content",
-            "default": "xBrowserSync will delete all local bookmarks data before restoring synced bookmarks. OK to proceed?"
+            "default": "سيحذف إكس براوزر سينك جميع بيانات الإشارات المرجعية المحلية قبل استعادة الإشارات المرجعية المتزامنة. تريد المتابعة؟"
           }
         },
         "DisableOthers": {
           "Title": {
             "key": "View_Login_Sync_DisableOthers_Title",
-            "default": "Disable bookmark sync tools"
+            "default": "تعطيل أدوات مزامنة الإشارة المرجعية"
           },
           "Content": {
             "key": "View_Login_Sync_DisableOthers_Content",
