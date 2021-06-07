@@ -526,24 +526,24 @@
       "FirstSync": {
         "key": "View_Help_FirstSync",
         "default": "<h4>المزامنة لأول مرة</h4><p>قبل أن يتمكن إكس براوزر سينك من مزامنة بيانات المتصفح الخاص بك، ستحتاج إلى وضع كلمة مرور للتشفير. تأكد من جعلها قوية وقابلة للتذكر أيضًا، فلا توجد عمليات إعادة تعيين أو تذكير، لذا إذا نسيتها فلن تتمكن من الوصول إلى بياناتك المتزامنة.</p><p>سيتم تشفير بيانات المتصفح الخاصة بك باستخدام كلمة المرور الخاصة بك وحفظها في خدمة إكس براوزر سينك النشطة التي تم تهيئتها في لوحة الإعدادات.</p><p>بمجرد المزامنة، ستتم مزامنة أي تغييرات تجريها على الإشارات المرجعية المحلية تلقائياً بواسطة إكس براوزر سينك.</p>",
-        "android": "<h4>Syncing for the first time</h4><p>xBrowserSync actively syncs your browser data between your desktop browsers (syncing to mobile browsers is not supported at this time), you can use this app to access your synced data on your Android mobile device.</p><p>If you have not already created a sync ID, head over to your desktop browser and <a href='https://link.xbrowsersync.org/download' class='new-tab'>download</a> the xBrowserSync extension. Once you have created a sync you can use your new sync ID within this app to access your data.</p>"
+        "android": "<h4>المزامنة لأول مرة</h4><p>يقوم إكس براوزر سينك بمزامنة بيانات المتصفح بشكل نشط بين متصفحات سطح المكتب (المزامنة مع متصفحات الهاتف المحمول غير مدعومة في الوقت الحالي)، يمكنك استخدام هذا التطبيق للوصول إلى البيانات المتزامنة على جهازك المحمول الذي يعمل بنظام أندرويد.</p><p>إذا لم تكن قد أنشأت رمز مزامنة بالفعل، فانتقل إلى متصفح سطح المكتب الخاص بك و <a href='https://link.xbrowsersync.org/download' class='new-tab'>نزّل</a> إضافة إكس براوزر سينك. بمجرد إنشاء مزامنة، يمكنك استخدام رمز المزامنة الجديد خاصتك داخل هذا التطبيق للوصول لبياناتك.</p>"
       },
       "FurtherSupport": {
         "key": "View_Help_FurtherSupport",
-        "default": "<h4>Further support</h4><p>You can find the answers to most common questions in the <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>FAQs</a>, also check the current <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>known issues</a> to see if your issue is listed there.</p><p>Alternatively, use the <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>issue tracker</a> to report an issue or request a new feature.</p>"
+        "default": "<h4>مزيد من الدعم</h4><p>يمكنك العثور على إجابات لأكثر الأسئلة شيوعًا في <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>أسئلة شائعة</a>، تحقق أيضًا من <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>المشاكل المعروفة</a> الحالية لمعرفة ما إذا كانت مشكلتك مدرجة هناك.</p><p>بديلاً لذلك، استخدم <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>متابع المشاكل</a> للإبلاغ عن مشكلة أو طلب ميزة جديدة.</p>"
       },
       "Mobile": {
         "key": "View_Help_Mobile",
-        "default": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a> store, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droid</a> or <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>direct download</a>.</p>"
+        "default": "<h4>انطلق إلى الهاتف</h4><p>قم بالوصول إلى إشاراتك المرجعية التي تمت مزامنتها متنقلاً باستخدام تطبيق الأندرويد إكس براوزر سينك، والمتاح على متجر <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>كوكل بلاي</a> أو <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>إف درويد</a> أو حتى <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>تحميل مباشر</a>.</p>"
       },
       "NativeFeatures": {
         "key": "View_Help_NativeFeatures",
-        "default": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks bar and bookmarks manager, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p>",
-        "firefox": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks toolbar and bookmarks library, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p><p>Please note however, as Firefox’s bookmarks API does not yet support accessing native bookmark tags, any existing tags will be lost when syncing and tags added via xBrowserSync will not be saved as native tags.</p>"
+        "default": "<h4>الميزات الأصلية مدعومة</h4><p>لا تتردد في الاستمرار في استخدام ميزات الإشارات المرجعية الأصلية لمتصفحك مثل شريط الإشارات ومدير الإشارات، وستتم مزامنة أي تغييرات تجريها تلقائياً في الخلفية.</p><p>إذا كنت قد نظمت إشاراتك المرجعية الحالية في مجلدات، فلا تقلق، فإن إكس براوزر سينك سيحترم ويحافظ على تسلسل المجلدات الحالي للإشارات المرجعية.</p>",
+        "firefox": "<h4>الميزات الأصلية مدعومة</h4><p>لا تتردد في الاستمرار في استخدام ميزات الإشارات المرجعية الأصلية لمتصفحك مثل شريط الإشارات ومدير الإشارات، وستتم مزامنة أي تغييرات تجريها تلقائياً في الخلفية.</p><p>إذا كنت قد نظمت إشاراتك المرجعية الحالية في مجلدات، فلا تقلق، فإن إكس براوزر سينك سيحترم ويحافظ على تسلسل المجلدات الحالي للإشارات المرجعية.</p><p>يرجى ملاحظة أنه نظراً لأن واجهة برمجة تطبيقات الإشارات المرجعية في فَيَرفُكس لا تدعم حتى الآن الوصول إلى علامات الإشارات المرجعية الأصلية، فسيتم فقد أي علامات حالية عند المزامنة ولن يتم حفظ العلامات المضافة عبر إكس براوزر سينك كعلامات أصلية بالمتصفح.</p>"
       },
       "Previous": {
         "key": "View_Help_Previous",
-        "default": "Previous"
+        "default": "السابق"
       },
       "Searching": {
         "key": "View_Help_Searching",
