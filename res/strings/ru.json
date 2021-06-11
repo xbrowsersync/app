@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync has been updated. Sync has been disabled, re-enable sync to complete the upgrade process."
+        "default": "xBrowserSync был обновлен. Синхронизация была отключена, включите синхронизацию для завершения процесса обновления."
       }
     },
     "BookmarkCreated": {
@@ -127,7 +127,7 @@
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": "Download Backup"
+      "default": "Скачать резервную копию"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
@@ -135,7 +135,7 @@
     },
     "Help": {
       "key": "Button_Help",
-      "default": "View help guide"
+      "default": "Посмотреть руководство"
     },
     "Next": {
       "key": "Button_Next",
@@ -143,7 +143,7 @@
     },
     "OK": {
       "key": "Button_OK",
-      "default": "OK"
+      "default": "ОК"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
@@ -269,7 +269,7 @@
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local browser data has been refreshed, please reapply last change."
+      "default": "Локальные данные были обновлены, пожалуйста, примените последнее изменение."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
@@ -449,7 +449,7 @@
           },
           "Invalid": {
             "key": "View_Bookmark_Form_Url_Invalid",
-            "default": "Not a valid URL"
+            "default": "Недействительная ссылка"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -457,7 +457,7 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "URL is required"
+            "default": "Требуется URL-адрес"
           }
         },
         "Description": {
@@ -508,7 +508,7 @@
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time reset your data back to it’s original state from when xBrowserSync was installed.</p>",
+        "default": "<h4>Не забудьте создать резервную копию</h4><p>При использовании xBrowserSync ваши данные являются предметом вашей ответственности, поэтому будьте ответственными и не забывайте создавать резервные копии.</p><p>Зайдите в Панель настроек и сделайте резервную копию незашифрованных данных в локальный файл, который можно использовать для восстановления Ваших данных.</p><p>Если данные локального браузера повреждены и у вас нет резервных копий, в любое время вы можете вернуть данные обратно в исходное состояние с момента установки xBrowserSync.</p>",
         "android": "<h4>Не забудьте создать резервную копию</h4><p>При использовании xBrowserSync ваши данные являются предметом вашей ответственности, поэтому будьте ответственными и не забывайте создавать резервные копии</p><p>Зайдите на Панель настроек и сделайте резервную копию незашифрованных данных в локальный файл, который можно использовать для восстановления ваших данных.</p>"
       },
       "BeforeYouBegin": {
@@ -662,15 +662,15 @@
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
-            "default": "URL is required"
+            "default": "Требуется URL-адрес"
           },
           "InvalidService": {
             "key": "View_Login_Service_Update_InvalidService",
-            "default": "Not a valid xBrowserSync service"
+            "default": "Некорректный сервис xBrowserSync"
           },
           "InvalidUrl": {
             "key": "View_Login_Service_Update_InvalidUrl",
-            "default": "Not a valid URL"
+            "default": "Недействительная ссылка"
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",
@@ -721,21 +721,21 @@
         "UpgradeReady": {
           "Title": {
             "key": "View_Login_Sync_UpgradeReady_Title",
-            "default": "Ready to upgrade sync?"
+            "default": "Готовы обновить синхронизацию?"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync. After upgrading, you will no longer be able to sync with any previous versions of xBrowserSync.</p><p>Make sure to update xBrowserSync on all synced devices before continuing. Ready to proceed?</p>"
+            "default": "<p>Ваша синхронизация должна быть обновлена перед синхронизацией с этой версией xBrowserSync. После обновления вы больше не сможете синхронизировать данные с предыдущими версиями xBrowserSync.</p><p>Перед продолжением убедитесь, что хотите обновить xBrowserSync на всех синхронизированных устройствах. Готовы продолжить?</p>"
           }
         },
         "UpgradeRequired": {
           "Title": {
             "key": "View_Login_Sync_UpgradeRequired_Title",
-            "default": "Upgrade sync"
+            "default": "Обновить"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync.</p><p>Use the xBrowserSync desktop browser extension to upgrade your sync and then retry syncing here.</p>"
+            "default": "<p>Ваша синхронизация должна быть обновлена перед синхронизацией с этой версией xBrowserSync.</p><p>Для обновления синхронизации используйте расширение для рабочего стола xBrowserSync и повторите синхронизацию.</p>"
           }
         }
       },
@@ -810,11 +810,11 @@
       },
       "Pulling": {
         "key": "View_Search_Pulling",
-        "default": "Pull down to sync"
+        "default": "Потяните вниз для синхронизации"
       },
       "Pulled": {
         "key": "View_Search_Pulled",
-        "default": "Release to sync"
+        "default": "Отпустите, чтобы синхронизировать"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
@@ -830,87 +830,87 @@
         "AutoBackup": {
           "Title": {
             "key": "View_Settings_BackupRestore_AutoBackup_Title",
-            "default": "Auto back up"
+            "default": "Автоматическое резервное копирование"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_AutoBackup_Description",
-            "default": "Automatically download backups on a schedule."
+            "default": "Автоматически загружать резервные копии по расписанию."
           },
           "RunsAt": {
             "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
-            "default": "Back up runs at"
+            "default": "Копирование будет запускается в"
           },
           "Every": {
             "key": "View_Settings_BackupRestore_AutoBackup_Every",
-            "default": "every"
+            "default": "каждый"
           },
           "Numbers": {
             "Single": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
-              "default": "single"
+              "default": "одинарный"
             },
             "Two": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
-              "default": "two"
+              "default": "два"
             },
             "Three": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
-              "default": "three"
+              "default": "три"
             },
             "Four": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
-              "default": "four"
+              "default": "четыре"
             },
             "Five": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
-              "default": "five"
+              "default": "пять"
             },
             "Six": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
-              "default": "six"
+              "default": "шесть"
             },
             "Seven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
-              "default": "seven"
+              "default": "семь"
             },
             "Eight": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
-              "default": "eight"
+              "default": "восемь"
             },
             "Nine": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
-              "default": "nine"
+              "default": "девять"
             },
             "Ten": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
-              "default": "ten"
+              "default": "десять"
             },
             "Eleven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
-              "default": "eleven"
+              "default": "одинадцать"
             },
             "Twelve": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
-              "default": "twelve"
+              "default": "двенадцать"
             }
           },
           "Units": {
             "Day": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
-              "default": "day(s)"
+              "default": "дня(дней)"
             },
             "Week": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
-              "default": "week(s)"
+              "default": "недели(ь)"
             },
             "Month": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
-              "default": "month(s)"
+              "default": "месяца(ев)"
             }
           },
           "Confirmation": {
             "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
-            "default": "To prevent “Save As...” dialog from showing when downloading backups, disable the browser setting “Ask where to save each file before downloading”."
+            "default": "Чтобы предотвратить отображение диалогового окна «Сохранить как...» при загрузке резервных копий, отключите опцию «Спросить, где сохранить каждый файл перед загрузкой»."
           }
         },
         "Backup": {
@@ -920,7 +920,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Download Back Up"
+            "default": "Скачать резервную копию"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -938,7 +938,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Restore From Backup"
+            "default": "Восстановить из резервной копии"
           },
           "Local": {
             "Description": {
@@ -963,7 +963,7 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Backup has been restored."
+            "default": "Резервная копия восстановлена."
           },
           "SelectFile": {
             "Button": {
@@ -995,31 +995,31 @@
         "Reset": {
           "Confirm": {
             "key": "View_Settings_BackupRestore_Reset_Confirm",
-            "default": "<p>If you continue, sync will be disabled and your local browser data will be reset to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "<p>Если вы продолжите, синхронизация будет отключена, и данные вашего локального браузера будут сброшены после установки xBrowserSync на {date}.</p><p>Готовы продолжить?</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Reset_Button",
-            "default": "Reset Local Data"
+            "default": "Сбросить локальные данные"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Reset_Done",
-            "default": "Local browser data has been reset to initial installation state."
+            "default": "Локальные данные браузера были сброшены в первоначальное состояние."
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Reset_Unavailable",
-            "default": "Installation state data not available, unable to reset."
+            "default": "Состояние установки недоступно, невозможно сбросить."
           }
         }
       },
       "Issues": {
         "Title": {
           "key": "View_Settings_Issues_Title",
-          "default": "Help and support"
+          "default": "Помощь и поддержка"
         },
         "Help": {
           "Title": {
             "key": "View_Settings_Issues_Help_Title",
-            "default": "Help guide"
+            "default": "Справочное руководство"
           },
           "Description": {
             "key": "View_Settings_Issues_Help_Description",
@@ -1033,15 +1033,15 @@
         "Tracker": {
           "Title": {
             "key": "View_Settings_Issues_Tracker_Title",
-            "default": "Support"
+            "default": "Поддержка"
           },
           "Description": {
             "key": "View_Settings_Issues_Tracker_Description",
-            "default": "Need support? Use the issues tracker to report a bug or request a feature."
+            "default": "Нужна поддержка? Используйте трекер для сообщения об ошибке или запроса функции."
           },
           "Report": {
             "key": "View_Settings_Issues_Tracker_Report",
-            "default": "View Issues Tracker"
+            "default": "Просмотр трекера проблем"
           }
         },
         "Log": {
@@ -1117,7 +1117,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
-            "default": "Be notified when a new version of xBrowserSync is available."
+            "default": "Получать уведомления, когда доступна новая версия xBrowserSync."
           }
         },
         "DarkMode": {
@@ -1205,15 +1205,15 @@
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Last synced {date}"
+            "default": "Последняя синхронизация {date}"
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "Ready to sync (scheduled for {date})"
+            "default": "Готово к синхронизации (запланировано для {date})"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
-            "default": "Sync Now"
+            "default": "Синхронизировать"
           }
         },
         "Qr": {
@@ -1245,7 +1245,7 @@
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "File saved to Downloads"
+        "default": "Файл сохранен в «Загрузки»"
       },
       "Support": {
         "key": "View_Settings_Support",
@@ -1259,7 +1259,7 @@
       },
       "Content": {
         "key": "View_Support_Content",
-        "default": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains effective in protecting online privacy and enhancing productivity.</p>"
+        "default": "<p>Мы хотим сделать xBrowserSync инструментом синхронизации № 1, но многое еще предстоит сделать:</p><ul><li>Добавить синхронизацию вкладок и истории браузеров</li><li>Поддерживать все основные настольные браузеры</li><li>Перевести на другие языки</li><li>и <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>ещё кучу всего</a>!</li></ul><p>Только при вашей поддержке мы можем продолжать улучшать xBrowserSync и следить за тем, чтобы он оставился эффективным в сфере защиты конфиденциальности в сети и повышении производительности.</p>"
       },
       "Cryptos": {
         "key": "View_Support_Cryptos",
@@ -1277,11 +1277,11 @@
     "SyncRemoved": {
       "Title": {
         "key": "View_SyncRemoved_Title",
-        "default": "Sync not found"
+        "default": "Синхронизация не найдена"
       },
       "Content": {
         "key": "View_SyncRemoved_Content",
-        "default": "<p>Your sync could not be found and may have been removed due to inactivity.</p><p>You will need to create a new sync, but first click the button below to download a backup of your synced data which you can then restore to your new sync.</p>"
+        "default": "<p>Ваша синхронизация не найдена и может быть удалена из-за неактивности.</p><p>Вам нужно создать новую синхронизацию, но сначала нажмите на кнопку ниже, чтобы загрузить резервную копию ваших синхронизированных данных, которые вы можете затем восстановить до новой синхронизации.</p>"
       }
     },
     "Updated": {
@@ -1301,7 +1301,7 @@
       },
       "Resetting": {
         "key": "View_Working_Resetting",
-        "default": "Resetting"
+        "default": "Сброс"
       },
       "Syncing": {
         "key": "View_Working_Syncing",
