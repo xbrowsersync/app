@@ -269,7 +269,7 @@
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local data has been refreshed, please reapply last change."
+      "default": "Local browser data has been refreshed, please reapply last change."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
@@ -995,7 +995,7 @@
         "Reset": {
           "Confirm": {
             "key": "View_Settings_BackupRestore_Reset_Confirm",
-            "default": "<p>If you continue, any active sync will be disabled and your local data will be reset to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "<p>If you continue, sync will be disabled and your local browser data will be reset to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Reset_Button",
@@ -1003,7 +1003,7 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Reset_Done",
-            "default": "Local data has been reset to initial installation state."
+            "default": "Local browser data has been reset to initial installation state."
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Reset_Unavailable",
@@ -1117,7 +1117,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
-            "default": "Display an alert when a new version of xBrowserSync is available."
+            "default": "Be notified when a new version of xBrowserSync is available."
           }
         },
         "DarkMode": {
@@ -1259,7 +1259,7 @@
       },
       "Content": {
         "key": "View_Support_Content",
-        "default": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains an effective tool in protecting our privacy and productivity against the rot of big tech!</p>"
+        "default": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains effective in protecting online privacy and enhancing productivity.</p>"
       },
       "Cryptos": {
         "key": "View_Support_Cryptos",
