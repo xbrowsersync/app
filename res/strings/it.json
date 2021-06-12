@@ -135,7 +135,7 @@
     },
     "Help": {
       "key": "Button_Help",
-      "default": "View help guide"
+      "default": "Visualizza guida"
     },
     "Next": {
       "key": "Button_Next",
@@ -269,7 +269,7 @@
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local browser data has been refreshed, please reapply last change."
+      "default": "I dati del browser locale sono stati aggiornati, si prega di riaggiungere l'ultima modifica."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
@@ -449,7 +449,7 @@
           },
           "Invalid": {
             "key": "View_Bookmark_Form_Url_Invalid",
-            "default": "Not a valid URL"
+            "default": "URL non valido"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -457,7 +457,7 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "URL is required"
+            "default": "L'URL è obbligatorio"
           }
         },
         "Description": {
@@ -508,7 +508,7 @@
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time reset your data back to it’s original state from when xBrowserSync was installed.</p>",
+        "default": "<h4>Ricordati di eseguire il backup</h4><p>Quando utilizzi xBrowserSync i tuoi dati sono di tua responsabilità, quindi sii intelligente e assicurati di fare dei backup.</p><p>Vai al pannello Impostazioni e esegui il backup dei dati non crittografati in un file locale che può essere utilizzato per ripristinare i tuoi dati in caso di necessità.</p><p>Se i dati del tuo browser locale vengono corrotti e non hai alcun backup, è possibile in qualsiasi momento ripristinare i dati allo stato originale da quando xBrowserSync è stato installato.</p>",
         "android": "<h4>Ricordati di eseguire il backup</h4><p>Quando utilizzi xBrowserSync i tuoi dati sono di tua responsabilità, quindi sii intelligente e assicurati di fare dei backup.</p><p>Vai al pannello Impostazioni e esegui il backup dei dati non crittografati in un file locale che può essere utilizzato per ripristinare i tuoi dati in caso di necessità.</p>"
       },
       "BeforeYouBegin": {
@@ -662,7 +662,7 @@
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
-            "default": "URL is required"
+            "default": "L'URL è obbligatorio"
           },
           "InvalidService": {
             "key": "View_Login_Service_Update_InvalidService",
