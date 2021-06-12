@@ -345,11 +345,11 @@
     },
     "SyncVersionNotSupported_Message": {
       "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "Tämän synkronointitunnuksen synkronointi ei ole mahdollista tällä xBrowserSyncin versiolla, koska tämä synkronointi on päivitetty uudempaan versioon."
+      "default": "Synkronointitunnuksen synkronointi ei ole mahdollista tällä xBrowserSyncin versiolla, koska se on jo päivitetty uudemmalle versiolle."
     },
     "SyncVersionNotSupported_Restore_Message": {
       "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "Varmuuskopion tietojen palautus ei onnistu tällä xBrowserSyncin versiolla, koska varmuuskopio on tehty uudemmalla versiolla."
+      "default": "Varmuuskopion palautus ei ole mahdollista tällä xBrowserSyncin versiolla, koska se on luotu uudemmalla versiolla."
     },
     "SyncVersionNotSupported_Title": {
       "key": "Exception_SyncVersionNotSupported_Title",
@@ -1117,7 +1117,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
-            "default": "Ilmoita uusista xBrowserSync-versioista."
+            "default": "Ilmoita xBrowserSyncin uusista versioista."
           }
         },
         "DarkMode": {
@@ -1209,7 +1209,7 @@
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "Valmis synkronoimaan (ajastettu {date})"
+            "default": "Valmis synkronointiin (ajastettu päivälle {date})"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
@@ -1245,7 +1245,7 @@
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "Lompakon tiedot tallennettu latauskansioon"
+        "default": "Tiedosto tallennettiin latauskansioon"
       },
       "Support": {
         "key": "View_Settings_Support",
@@ -1281,7 +1281,7 @@
       },
       "Content": {
         "key": "View_SyncRemoved_Content",
-        "default": "<p>Synkronointiasi ei löydy ja se on saatettu poistaa käyttämättömyyden vuoksi.</p><p>Sinun on luotava uusi synkronointi, mutta lataa ensin varmuuskopio synkronoiduista tiedoistasi klikkaamalla alla olevaa painiketta. Voit sitten palauttaa varmuuskopion uuteen synkronointiisi.</p>"
+        "default": "<p>Synkronointiasi ei löydy ja se on saatettu poistaa käyttämättömänä.</p><p>Sinun on luotava uusi synkronointi. Jos haluat säilyttää tietosi, tallenna varmuuskopio synkronoiduista tiedoistasi klikkaamalla alla olevaa painiketta ja lopuksi palauta varmuuskopio uuteen synkronointiisi.</p>"
       }
     },
     "Updated": {
