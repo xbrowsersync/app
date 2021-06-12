@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync on päivitetty ja synkronointi on kytketty pois päältä. Viimeistele päivitys ottamalla synkronointi uudelleen käyttöön."
+        "default": "xBrowserSync on päivitetty ja synkronointi on poistettu käytöstä. Viimeistele päivitys ottamalla synkronointi uudelleen käyttöön."
       }
     },
     "BookmarkCreated": {
@@ -135,7 +135,7 @@
     },
     "Help": {
       "key": "Button_Help",
-      "default": "Näytä käyttöopas"
+      "default": "Näytä ohje"
     },
     "Next": {
       "key": "Button_Next",
@@ -269,7 +269,7 @@
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Paikalliset tiedot on päivitetty, tee viimeisin muutos uudelleen."
+      "default": "Paikalliset tiedot on päivitetty. Tee viimeisin muutos uudelleen."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
@@ -345,7 +345,7 @@
     },
     "SyncVersionNotSupported_Message": {
       "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "Synkronointitunnuksen synkronointi ei ole mahdollista tällä xBrowserSyncin versiolla, koska se on jo päivitetty uudemmalle versiolle."
+      "default": "Synkronointitunnuksen synkronointi ei ole mahdollista tällä xBrowserSync-versiolla, koska se on päivitetty uudemmalla versiolla."
     },
     "SyncVersionNotSupported_Restore_Message": {
       "key": "Exception_SyncVersionNotSupported_Restore_Message",
@@ -449,7 +449,7 @@
           },
           "Invalid": {
             "key": "View_Bookmark_Form_Url_Invalid",
-            "default": "Virheellinen URL"
+            "default": "Virheellinen URL-osoite"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -457,7 +457,7 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "URL vaaditaan"
+            "default": "URL-osoite vaaditaan"
           }
         },
         "Description": {
@@ -508,7 +508,7 @@
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Muista varmuuskopiointi</h4><p>Kun käytät xBrowserSyncia tietosi ovat omalla vastuullasi, joten ole fiksu ja varmuuskopioi.</p><p>Siirry asetuspaneeliin ja varmuuskopioi salaamattomat tiedot paikalliseen tiedostoon, jota voidaan käyttää tietojen palauttamiseen, jos tarvetta ilmenee.</p><p>Jos selaimesi paikalliset tiedot vaurioituvat eikä sinulla ole varmuuskopioita, voit milloin tahansa palauttaa tietosi takaisin alkuperäiseen, xBrowserSyncin asennusta edeltävään tilaan.</p>",
+        "default": "<h4>Muista varmuuskopiointi</h4><p>Kun käytät xBrowserSyncia tietosi ovat omalla vastuullasi, joten ole fiksu ja varmuuskopioi.</p><p>Siirry asetuspaneeliin ja varmuuskopioi salaamattomat tiedot paikalliseen tiedostoon, josta ne on helppo palauttaa tarvittaess.</p><p>Jos selaimesi paikalliset tiedot vaurioituvat eikä sinulla ole varmuuskopioita, voit milloin tahansa palauttaa tietosi takaisin alkuperäiseen, xBrowserSyncin asennusta edeltävään tilaan.</p>",
         "android": "<h4>Muista varmuuskopiointi</h4><p>Kun käytät xBrowserSyncia tietosi ovat omalla vastuullasi, joten ole fiksu ja varmuuskopioi.</p><p>Siirry asetuspaneeliin ja varmuuskopioi salaamattomat tiedot paikalliseen tiedostoon, jota voidaan käyttää tietojen palauttamiseen, jos tarvetta ilmenee.</p>"
       },
       "BeforeYouBegin": {
