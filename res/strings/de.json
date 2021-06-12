@@ -814,7 +814,7 @@
       },
       "Pulled": {
         "key": "View_Search_Pulled",
-        "default": "Zum Synchronisieren loslassen"
+        "default": "Zum Synchronisieren freigeben"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
@@ -910,7 +910,7 @@
           },
           "Confirmation": {
             "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
-            "default": "Um zu verhindern, dass der Dialog „Speichern unter...“ beim Herunterladen von Sicherungen angezeigt wird, deaktivieren Sie die Browser-Einstellung „Fragen Sie, wo jede Datei vor dem Download gespeichert werden sollte“."
+            "default": "Um zu verhindern, dass der Dialog „Speichern unter...“ beim Herunterladen von Sicherungen angezeigt wird, deaktivieren Sie die Browser-Einstellung „Fragen, wo jede Datei vor dem Download gespeichert werden sollte“."
           }
         },
         "Backup": {
@@ -1281,7 +1281,7 @@
       },
       "Content": {
         "key": "View_SyncRemoved_Content",
-        "default": "<p>Dein Sync konnte nicht gefunden werden und wurde möglicherweise aufgrund von Inaktivität entfernt.</p><p>Sie müssen eine neue Synchronisation erstellen, aber klicken Sie zuerst auf die Schaltfläche unten, um eine Sicherung Ihrer synchronisierten Daten herunterzuladen, die Sie dann wieder auf Ihre neue Synchronisation zurücksetzen können.</p>"
+        "default": "<p>Ihr Sync konnte nicht gefunden werden und wurde möglicherweise aufgrund von Inaktivität entfernt.</p><p>Sie müssen eine neue Synchronisation erstellen, klicken Sie jedoch zuerst auf die Schaltfläche unten, um eine Sicherung Ihrer synchronisierten Daten herunterzuladen, die Sie dann wieder auf Ihre neue Synchronisation zurücksetzen können.</p>"
       }
     },
     "Updated": {
