@@ -269,7 +269,7 @@
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local browser data has been refreshed, please reapply last change."
+      "default": "Paikalliset tiedot on päivitetty, tee viimeisin muutos uudelleen."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
@@ -938,7 +938,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Palauta varmuuskopiosta"
+            "default": "Palauta varmuuskopio"
           },
           "Local": {
             "Description": {
@@ -995,7 +995,7 @@
         "Reset": {
           "Confirm": {
             "key": "View_Settings_BackupRestore_Reset_Confirm",
-            "default": "<p>If you continue, sync will be disabled and your local browser data will be reset to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "<p>Jos jatkat, synkronointi poistetaan käytöstä ja selaimesi tiedot palautetaan xBrowserSyncin alkuperäiseen asennuspäivään {date}.</p>\n<p>Jatketaanko?</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Reset_Button",
@@ -1003,18 +1003,18 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Reset_Done",
-            "default": "Local browser data has been reset to initial installation state."
+            "default": "Paikalliset selaimen tiedot on palautettu alkuperäiseen asennustilaan."
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Reset_Unavailable",
-            "default": "Asennuksen tilatietoja ei ole saatavilla, palautus ei onnistu."
+            "default": "Asennuksen tilasta ei ole tietoa, eikä palautus onnistu."
           }
         }
       },
       "Issues": {
         "Title": {
           "key": "View_Settings_Issues_Title",
-          "default": "Ohjeet ja tuki"
+          "default": "Ohje ja tuki"
         },
         "Help": {
           "Title": {
@@ -1117,7 +1117,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
-            "default": "Be notified when a new version of xBrowserSync is available."
+            "default": "Ilmoita uusista xBrowserSync-versioista."
           }
         },
         "DarkMode": {
@@ -1205,7 +1205,7 @@
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Viimeisin synkronointi {date}"
+            "default": "Sykronoitu viimeksi {date}"
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
@@ -1259,7 +1259,7 @@
       },
       "Content": {
         "key": "View_Support_Content",
-        "default": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains effective in protecting online privacy and enhancing productivity.</p>"
+        "default": "<p>Haluamme tehdä xBrowserSyncistä parhaan selaimen synkronointityökalun, mutta tähän on vielä matkaa:</p><ul><li>Selaimen välilehtien ja historian synkronointi</li><li>Tuki merkittävimmille työpöytäselaimille</li><li>Käännökset muille kielille</li><li>Ja <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>paljon muuta</a>!</li></ul><p>Vain sinun tuellasi voimme jatkaa xBrowserSyncin kehitystä ja varmistamme, että se on jatkossakin tehokas työkalu yksityisyyden suojaukseen sekä tuottavuuden parantamiseen!</p>"
       },
       "Cryptos": {
         "key": "View_Support_Cryptos",
