@@ -349,7 +349,7 @@
     },
     "SyncVersionNotSupported_Restore_Message": {
       "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "Varmuuskopion palautus ei ole mahdollista tällä xBrowserSyncin versiolla, koska se on luotu uudemmalla versiolla."
+      "default": "Varmuuskopion palautus ei ole mahdollista tällä xBrowserSync-versiolla, koska se on luotu uudemmalla versiolla."
     },
     "SyncVersionNotSupported_Title": {
       "key": "Exception_SyncVersionNotSupported_Title",
@@ -508,7 +508,7 @@
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Muista varmuuskopiointi</h4><p>Kun käytät xBrowserSyncia tietosi ovat omalla vastuullasi, joten ole fiksu ja varmuuskopioi.</p><p>Siirry asetuspaneeliin ja varmuuskopioi salaamattomat tiedot paikalliseen tiedostoon, josta ne on helppo palauttaa tarvittaess.</p><p>Jos selaimesi paikalliset tiedot vaurioituvat eikä sinulla ole varmuuskopioita, voit milloin tahansa palauttaa tietosi takaisin alkuperäiseen, xBrowserSyncin asennusta edeltävään tilaan.</p>",
+        "default": "<h4>Muista varmuuskopiointi</h4><p>Kun käytät xBrowserSyncia, tietosi ovat omalla vastuullasi, joten ole fiksu ja varmuuskopioi.</p><p>Siirry asetuksiin ja varmuuskopioi salaamattomat tietosi paikalliseen tiedostoon, josta ne on helppo tarvittaessa palauttaa.</p><p>Jos selaimesi paikalliset tiedot vaurioituvat eikä sinulla ole varmuuskopioita, voit milloin tahansa palauttaa tietosi takaisin alkuperäiseen, xBrowserSyncin asennusta edeltävään tilaan.</p>",
         "android": "<h4>Muista varmuuskopiointi</h4><p>Kun käytät xBrowserSyncia tietosi ovat omalla vastuullasi, joten ole fiksu ja varmuuskopioi.</p><p>Siirry asetuspaneeliin ja varmuuskopioi salaamattomat tiedot paikalliseen tiedostoon, jota voidaan käyttää tietojen palauttamiseen, jos tarvetta ilmenee.</p>"
       },
       "BeforeYouBegin": {
@@ -662,7 +662,7 @@
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
-            "default": "URL vaaditaan"
+            "default": "URL-osoite vaaditaan"
           },
           "InvalidService": {
             "key": "View_Login_Service_Update_InvalidService",
@@ -670,7 +670,7 @@
           },
           "InvalidUrl": {
             "key": "View_Login_Service_Update_InvalidUrl",
-            "default": "Virheellinen URL"
+            "default": "Virheellinen URL-osoite"
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",
@@ -725,7 +725,7 @@
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
-            "default": "<p>Synkronointisi on päivitettävä ennen synkronoida tämän xBrowserSync-version kanssa. Päivityksen jälkeen et enää voi synkronoida edellisten versioiden kanssa.</p><p>Varmista, että olet päivittänyt kaikki xBrowserSync asennuksesi ennen kuin jatkat. Jatketaanko?</p>"
+            "default": "<p>Synkronointisi on päivitettävä ennen kuin sitä voidaan käyttää tämän xBrowserSync-version kanssa. Päivityksen jälkeen et enää voi synkronoida aiempien versioiden kanssa.</p><p>Varmista, että olet päivittänyt kaikki xBrowserSync asennuksesi ennen kuin jatkat. Jatketaanko?</p>"
           }
         },
         "UpgradeRequired": {
@@ -735,7 +735,7 @@
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
-            "default": "<p>Synkronointi on päivitettävä ennen synkronointia tämän xBrowserSync-version kanssa.</p><p>KäytPäivitä synkronointisi käyttäen xBrowserSyncin laajennusta työpöytäselaimessa ja yritä sitten synkronoida uudelleen täällä.</p>"
+            "default": "<p>Synkronointi on päivitettävä ennen kuin sitä voidaan käyttää tämän xBrowserSync-version kanssa.</p><p>Päivitä synkronointi käyttäen työpöytäselaimen xBrowserSync-laajennusta ja yritä synkronointia sitten täällä uudelleen.</p>"
           }
         }
       },
@@ -838,7 +838,7 @@
           },
           "RunsAt": {
             "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
-            "default": "Varmuuskopiointi alkaa"
+            "default": "Varmuuskopiointi suoritetaan"
           },
           "Every": {
             "key": "View_Settings_BackupRestore_AutoBackup_Every",
@@ -851,61 +851,61 @@
             },
             "Two": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
-              "default": "kaksi"
+              "default": "toinen"
             },
             "Three": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
-              "default": "kolme"
+              "default": "kolmas"
             },
             "Four": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
-              "default": "neljä"
+              "default": "neljäs"
             },
             "Five": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
-              "default": "viisi"
+              "default": "viides"
             },
             "Six": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
-              "default": "kuusi"
+              "default": "kuudes"
             },
             "Seven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
-              "default": "seitsemän"
+              "default": "seitsemäs"
             },
             "Eight": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
-              "default": "kahdeksan"
+              "default": "kahdeksas"
             },
             "Nine": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
-              "default": "yhdeksän"
+              "default": "yhdeksäs"
             },
             "Ten": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
-              "default": "kymmenen"
+              "default": "kymmenes"
             },
             "Eleven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
-              "default": "yksitoista"
+              "default": "yhdestoista"
             },
             "Twelve": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
-              "default": "kaksitoista"
+              "default": "kahdestoista"
             }
           },
           "Units": {
             "Day": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
-              "default": "päivä(ä)"
+              "default": "päivä"
             },
             "Week": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
-              "default": "viikko(a)"
+              "default": "viikko"
             },
             "Month": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
-              "default": "kuukautta"
+              "default": "kuukausi"
             }
           },
           "Confirmation": {
@@ -1117,7 +1117,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
-            "default": "Ilmoita xBrowserSyncin uusista versioista."
+            "default": "Ilmoita kun uusi xBrowserSync-versio on saatavilla."
           }
         },
         "DarkMode": {
@@ -1259,7 +1259,7 @@
       },
       "Content": {
         "key": "View_Support_Content",
-        "default": "<p>Haluamme tehdä xBrowserSyncistä parhaan selaimen synkronointityökalun, mutta tähän on vielä matkaa:</p><ul><li>Selaimen välilehtien ja historian synkronointi</li><li>Tuki merkittävimmille työpöytäselaimille</li><li>Käännökset muille kielille</li><li>Ja <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>paljon muuta</a>!</li></ul><p>Vain sinun tuellasi voimme jatkaa xBrowserSyncin kehitystä ja varmistamme, että se on jatkossakin tehokas työkalu yksityisyyden suojaukseen sekä tuottavuuden parantamiseen!</p>"
+        "default": "<p>Haluamme tehdä xBrowserSyncistä parhaan selaimen synkronointityökalun, mutta tämä vaatii vielä paljon lisättävää:</p><ul><li>Selaimen välilehtien ja historian synkronointi</li><li>Tuki merkittävimmille työpöytäselaimille</li><li>Käännökset muille kielille</li><li>Ja <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>paljon muuta</a>!</li></ul><p>Vain sinun tuellasi voimme jatkaa xBrowserSyncin kehitystä ja varmistamme, että se on jatkossakin tehokas työkalu yksityisyyden suojaukseen sekä tuottavuuden parantamiseen!</p>"
       },
       "Cryptos": {
         "key": "View_Support_Cryptos",
