@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync has been updated. Sync has been disabled, re-enable sync to complete the upgrade process."
+        "default": "xBrowserSync został zaktualizowany. Synchronizacja została wyłączona, włącz synchronizację, aby zakończyć proces aktualizacji."
       }
     },
     "BookmarkCreated": {
@@ -127,7 +127,7 @@
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": "Download Backup"
+      "default": "Pobierz kopię zapasową"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
@@ -135,7 +135,7 @@
     },
     "Help": {
       "key": "Button_Help",
-      "default": "View help guide"
+      "default": "Zobacz poradnik pomocy"
     },
     "Next": {
       "key": "Button_Next",
@@ -269,7 +269,7 @@
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local browser data has been refreshed, please reapply last change."
+      "default": "Dane lokalne zostały odświeżone, proszę ponownie zastosować ostatnią zmianę."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
@@ -449,7 +449,7 @@
           },
           "Invalid": {
             "key": "View_Bookmark_Form_Url_Invalid",
-            "default": "Not a valid URL"
+            "default": "To nie jest prawidłowy adres URL"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -457,7 +457,7 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "URL is required"
+            "default": "Adres URL jest wymagany"
           }
         },
         "Description": {
@@ -508,7 +508,7 @@
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time reset your data back to it’s original state from when xBrowserSync was installed.</p>",
+        "default": "<h4>Pamiętaj, aby wykonać kopię zapasową</h4><p>Kiedy korzystasz z xBrowserSync, twoja odpowiedzialność spoczywa na Ciebie, więc bądź przezorny i upewnij się, że wykonasz kopie zapasowe.</p><p>Przejdź do panelu ustawień i utwórz kopię zapasową niezaszyfrowanych danych do pliku lokalnego, który może być użyty do przywrócenia Twoich danych w razie potrzeby.</p><p>Jeśli lokalne dane przeglądarki staną się uszkodzone i nie masz żadnych kopii zapasowych, możesz w każdej chwili przywrócić swoje dane z powrotem do oryginalnego stanu, z którego został zainstalowany xBrowserSync.</p>",
         "android": "<h4>Pamiętaj, aby wykonać kopię zapasową</h4><p>Kiedy korzystasz z xBrowserSync, twoja odpowiedzialność spoczywa na Ciebie, więc bądź przezorny i upewnij się, że wykonujeszkopie zapasowe.</p><p>Przejdź do panelu ustawień i utwórz kopię zapasową niezaszyfrowanych danych do pliku lokalnego, który może być użyty do przywrócenia Twoich danych w razie potrzeby.</p>"
       },
       "BeforeYouBegin": {
@@ -662,15 +662,15 @@
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
-            "default": "URL is required"
+            "default": "Adres URL jest wymagany"
           },
           "InvalidService": {
-            "key": "View_Login_Service_Update_InvalidService",
-            "default": "Not a valid xBrowserSync service"
+            "key": "Wyświetl_Usługa_Logowania_Aktualizacja_Niepoprawna Usługa",
+            "default": "Nieprawidłowa usługa xBrowserSync"
           },
           "InvalidUrl": {
-            "key": "View_Login_Service_Update_InvalidUrl",
-            "default": "Not a valid URL"
+            "key": "Wyświetl_Usługa_Logowania_Aktualizacja_Nieważny Url",
+            "default": "To nie jest prawidłowy adres URL"
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",
