@@ -127,7 +127,7 @@
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": "Download Backup"
+      "default": "Backup downloaden"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
@@ -135,7 +135,7 @@
     },
     "Help": {
       "key": "Button_Help",
-      "default": "View help guide"
+      "default": "Help-gids bekijken"
     },
     "Next": {
       "key": "Button_Next",
@@ -269,7 +269,7 @@
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local browser data has been refreshed, please reapply last change."
+      "default": "Lokale browsergegevens werden vernieuwd, pas de laatste wijziging opnieuw aan."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
@@ -449,7 +449,7 @@
           },
           "Invalid": {
             "key": "View_Bookmark_Form_Url_Invalid",
-            "default": "Not a valid URL"
+            "default": "Geen geldige URL"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -457,7 +457,7 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "URL is required"
+            "default": "URL is vereist"
           }
         },
         "Description": {
@@ -662,15 +662,15 @@
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
-            "default": "URL is required"
+            "default": "URL is vereist"
           },
           "InvalidService": {
             "key": "View_Login_Service_Update_InvalidService",
-            "default": "Not a valid xBrowserSync service"
+            "default": "Geen geldige xBrowserSync-service"
           },
           "InvalidUrl": {
             "key": "View_Login_Service_Update_InvalidUrl",
-            "default": "Not a valid URL"
+            "default": "Geen geldige URL"
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",
@@ -810,11 +810,11 @@
       },
       "Pulling": {
         "key": "View_Search_Pulling",
-        "default": "Pull down to sync"
+        "default": "Trek naar beneden om te synchroniseren"
       },
       "Pulled": {
         "key": "View_Search_Pulled",
-        "default": "Release to sync"
+        "default": "Loslaten om te synchroniseren"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
@@ -830,82 +830,82 @@
         "AutoBackup": {
           "Title": {
             "key": "View_Settings_BackupRestore_AutoBackup_Title",
-            "default": "Auto back up"
+            "default": "Automatische back-up"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_AutoBackup_Description",
-            "default": "Automatically download backups on a schedule."
+            "default": "Back-ups automatisch downloaden volgens schema."
           },
           "RunsAt": {
             "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
-            "default": "Back up runs at"
+            "default": "Back-up maken op"
           },
           "Every": {
             "key": "View_Settings_BackupRestore_AutoBackup_Every",
-            "default": "every"
+            "default": "elke"
           },
           "Numbers": {
             "Single": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
-              "default": "single"
+              "default": "enkele"
             },
             "Two": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
-              "default": "two"
+              "default": "twee"
             },
             "Three": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
-              "default": "three"
+              "default": "drie"
             },
             "Four": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
-              "default": "four"
+              "default": "vier"
             },
             "Five": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
-              "default": "five"
+              "default": "vijf"
             },
             "Six": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
-              "default": "six"
+              "default": "zes"
             },
             "Seven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
-              "default": "seven"
+              "default": "zeven"
             },
             "Eight": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
-              "default": "eight"
+              "default": "acht"
             },
             "Nine": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
-              "default": "nine"
+              "default": "negen"
             },
             "Ten": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
-              "default": "ten"
+              "default": "tien"
             },
             "Eleven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
-              "default": "eleven"
+              "default": "elf"
             },
             "Twelve": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
-              "default": "twelve"
+              "default": "twaalf"
             }
           },
           "Units": {
             "Day": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
-              "default": "day(s)"
+              "default": "dag(en)"
             },
             "Week": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
-              "default": "week(s)"
+              "default": "we(e)k(en)"
             },
             "Month": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
-              "default": "month(s)"
+              "default": "maand(en)"
             }
           },
           "Confirmation": {
