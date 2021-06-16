@@ -721,21 +721,21 @@
         "UpgradeReady": {
           "Title": {
             "key": "View_Login_Sync_UpgradeReady_Title",
-            "default": "Ready to upgrade sync?"
+            "default": "Gotowy do aktualizacji synchronizacji?"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync. After upgrading, you will no longer be able to sync with any previous versions of xBrowserSync.</p><p>Make sure to update xBrowserSync on all synced devices before continuing. Ready to proceed?</p>"
+            "default": "<p>Twoja synchronizacja musi zostać zaktualizowana przed synchronizacją z tą wersją xBrowserSync. Po aktualizacji nie będziesz już w stanie synchronizować z poprzednimi wersjami xBrowserSync.</p><p>Upewnij się, że chcesz zaktualizować xBrowserSync na wszystkich zsynchronizowanych urządzeniach przed kontynuowaniem. Czy chcesz kontynuować?</p>"
           }
         },
         "UpgradeRequired": {
           "Title": {
             "key": "View_Login_Sync_UpgradeRequired_Title",
-            "default": "Upgrade sync"
+            "default": "Aktualizuj synchronizację"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync.</p><p>Use the xBrowserSync desktop browser extension to upgrade your sync and then retry syncing here.</p>"
+            "default": "<p>Twoja synchronizacja musi zostać zaktualizowana przed synchronizacją z tą wersją xBrowserSync.</p><p>Użyj rozszerzenia przeglądarki xBrowserSync do aktualizacji synchronizacji, a następnie spróbuj ponownie tutaj.</p>"
           }
         }
       },
@@ -810,11 +810,11 @@
       },
       "Pulling": {
         "key": "View_Search_Pulling",
-        "default": "Pull down to sync"
+        "default": "Przeciągnij w dół, aby wyszukać"
       },
       "Pulled": {
         "key": "View_Search_Pulled",
-        "default": "Release to sync"
+        "default": "Puść aby zsynchronizować"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
@@ -830,56 +830,56 @@
         "AutoBackup": {
           "Title": {
             "key": "View_Settings_BackupRestore_AutoBackup_Title",
-            "default": "Auto back up"
+            "default": "Automatyczna kopia zapasowa"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_AutoBackup_Description",
-            "default": "Automatically download backups on a schedule."
+            "default": "Automatycznie pobieraj kopie zapasowe w harmonogramie."
           },
           "RunsAt": {
             "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
-            "default": "Back up runs at"
+            "default": "Kopia zapasowa uruchamiana"
           },
           "Every": {
             "key": "View_Settings_BackupRestore_AutoBackup_Every",
-            "default": "every"
+            "default": "co"
           },
           "Numbers": {
             "Single": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
-              "default": "single"
+              "default": "jeden raz"
             },
             "Two": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
-              "default": "two"
+              "default": "dwa"
             },
             "Three": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
-              "default": "three"
+              "default": "trzy"
             },
             "Four": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
-              "default": "four"
+              "default": "cztery"
             },
             "Five": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
-              "default": "five"
+              "default": "pięć"
             },
             "Six": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
-              "default": "six"
+              "default": "sześć"
             },
             "Seven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
-              "default": "seven"
+              "default": "siedem"
             },
             "Eight": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
-              "default": "eight"
+              "default": "osiem"
             },
             "Nine": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
-              "default": "nine"
+              "default": "dziewięć"
             },
             "Ten": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
@@ -887,30 +887,30 @@
             },
             "Eleven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
-              "default": "eleven"
+              "default": "jedenaście"
             },
             "Twelve": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
-              "default": "twelve"
+              "default": "dwanaście"
             }
           },
           "Units": {
             "Day": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
-              "default": "day(s)"
+              "default": "dzień (dni)"
             },
             "Week": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
-              "default": "week(s)"
+              "default": "tygodni"
             },
             "Month": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
-              "default": "month(s)"
+              "default": "miesięcy"
             }
           },
           "Confirmation": {
             "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
-            "default": "To prevent “Save As...” dialog from showing when downloading backups, disable the browser setting “Ask where to save each file before downloading”."
+            "default": "Aby zapobiec wyświetlaniu okna dialogowego „Zapisz jako...” podczas pobierania kopii zapasowych, wyłącz ustawienie „Zapytaj gdzie zapisać każdy plik przed pobraniem”."
           }
         },
         "Backup": {
@@ -920,7 +920,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Download Back Up"
+            "default": "Pobierz kopię zapasową"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -938,7 +938,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Restore From Backup"
+            "default": "Przywróć z kopii zapasowej"
           },
           "Local": {
             "Description": {
@@ -963,7 +963,7 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Backup has been restored."
+            "default": "Kopia została przywrócona."
           },
           "SelectFile": {
             "Button": {
@@ -995,19 +995,19 @@
         "Reset": {
           "Confirm": {
             "key": "View_Settings_BackupRestore_Reset_Confirm",
-            "default": "<p>If you continue, sync will be disabled and your local browser data will be reset to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "<p>Jeśli kontynuujesz, każda aktywna synchronizacja zostanie wyłączona, a Twoje dane lokalne zostaną przywrócone po zainstalowaniu xBrowserSync na {date}.</p><p>Czy chcesz kontynuować?</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Reset_Button",
-            "default": "Reset Local Data"
+            "default": "Zastąp Dane Lokalne"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Reset_Done",
-            "default": "Local browser data has been reset to initial installation state."
+            "default": "Twoje dane zostały przywrócone do początkowego stanu instalacji."
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Reset_Unavailable",
-            "default": "Installation state data not available, unable to reset."
+            "default": "Dane stanu instalacji są niedostępne, nie można zresetować."
           }
         }
       },
