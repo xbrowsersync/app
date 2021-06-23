@@ -920,7 +920,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Download Backup"
+            "default": "Télécharger la sauvegarde"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
