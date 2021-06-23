@@ -3,65 +3,65 @@
     "AppUpdateAvailable": {
       "Title": {
         "key": "Alert_AppUpdateAvailable_Title",
-        "default": "xBrowserSync update available"
+        "default": "يتوفر تحديث إكس براوزر سينك"
       },
       "Message": {
         "key": "Alert_AppUpdateAvailable_Message",
-        "default": "{version} is available to download. Click for more information.",
-        "android": "xBrowserSync {version} is available to download."
+        "default": "الإصدار: {version} متاح للتنزيل. انقر لمزيد من المعلومات.",
+        "android": "إكس براوزر سينك إصدار {version} متاح للتنزيل."
       }
     },
     "AppUpdated": {
       "Title": {
         "key": "Alert_AppUpdated_Title",
-        "default": "Updated to"
+        "default": "تم التحديث لـ"
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync has been updated. Sync has been disabled, re-enable sync to complete the upgrade process."
+        "default": "تم تحديث إكس براوزر سينك. تم تعطيل المزامنة، أعد تفعيل المزامنة لإكمال عملية التحديث."
       }
     },
     "BookmarkCreated": {
       "key": "Alert_BookmarkCreated",
-      "default": "Bookmark created"
+      "default": "تم إنشاء الإشارة المرجعية"
     },
     "BookmarkDeleted": {
       "key": "Alert_BookmarkDeleted",
-      "default": "Bookmark deleted"
+      "default": "تم حذف الإشارة المرجعية"
     },
     "BookmarkUpdated": {
       "key": "Alert_BookmarkUpdated",
-      "default": "Bookmark updated"
+      "default": "تم تحديث الإشارة المرجعية"
     },
     "GetMetadata": {
       "Message": {
         "key": "Alert_GetMetadata_Message",
-        "default": "Fetching bookmark properties, touch to cancel."
+        "default": "جارِ جلب بيانات الإشارة المرجعية، اضغط للإلغاء."
       },
       "Success": {
         "key": "Alert_GetMetadata_Success",
-        "default": "Bookmark properties updated."
+        "default": "تم تحديث بيانات الإشارة المرجعية."
       }
     },
     "Go": {
       "key": "Alert_Go",
-      "default": "Go"
+      "default": "الذهاب"
     },
     "WorkingOffline": {
       "Title": {
         "key": "Alert_WorkingOffline_Title",
-        "default": "Working offline"
+        "default": "يعمل دون اتصال"
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
-        "default": "Changes will be synced when connection is restored."
+        "default": "ستتم مزامنة التغييرات عند رجوع الاتصال."
       }
     }
   },
   "App": {
     "Description": {
       "key": "App_Description",
-      "default": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
+      "default": "مزامنة المتصفح كما يجب أن تكون: آمنة، ومتخفية، ومجانية! قم بمزامنة الإشارات المرجعية عبر المتصفحات والأجهزة خاصتك، لا يتطلب التسجيل."
     },
     "Title": {
       "key": "App_Title",
@@ -72,192 +72,192 @@
     "Container": {
       "Menu": {
         "key": "Bookmarks_Container_Menu",
-        "default": "Menu bookmarks"
+        "default": "الإشارات المرجعية بالقائمة"
       },
       "Mobile": {
         "key": "Bookmarks_Container_Mobile",
-        "default": "Mobile bookmarks"
+        "default": "الإشارات المرجعية بالهاتف"
       },
       "Other": {
         "key": "Bookmarks_Container_Other",
-        "default": "Other bookmarks"
+        "default": "إشارات مرجعية أخرى"
       },
       "Toolbar": {
         "key": "Bookmarks_Container_Toolbar",
-        "default": "Toolbar bookmarks"
+        "default": "الإشارات المرجعية بشريط الأدوات"
       }
     }
   },
   "Button": {
     "AddBookmark": {
       "key": "Button_AddBookmark",
-      "default": "Add Bookmark"
+      "default": "إضافة إشارة مرجعية"
     },
     "Back": {
       "key": "Button_Back",
-      "default": "Back"
+      "default": "الرجوع"
     },
     "Cancel": {
       "key": "Button_Cancel",
-      "default": "Cancel"
+      "default": "إلغاء"
     },
     "Close": {
       "key": "Button_Close",
-      "default": "Close"
+      "default": "إغلاق"
     },
     "Confirm": {
       "key": "Button_Confirm",
-      "default": "Yes"
+      "default": "نعم"
     },
     "Continue": {
       "key": "Button_Continue",
-      "default": "Continue"
+      "default": "استمرار"
     },
     "DeleteBookmark": {
       "key": "Button_DeleteBookmark",
-      "default": "Delete Bookmark"
+      "default": "حذف الإشارة المرجعية"
     },
     "Deny": {
       "key": "Button_Deny",
-      "default": "No"
+      "default": "لا"
     },
     "Done": {
       "key": "Button_Done",
-      "default": "Done"
+      "default": "تم"
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": "Download Backup"
+      "default": "تحميل نسخة احتياطية"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
-      "default": "Edit Bookmark"
+      "default": "تعديل الإشارة المرجعية"
     },
     "Help": {
       "key": "Button_Help",
-      "default": "View help guide"
+      "default": "عرض دليل المساعدة"
     },
     "Next": {
       "key": "Button_Next",
-      "default": "Next"
+      "default": "التالي"
     },
     "OK": {
       "key": "Button_OK",
-      "default": "OK"
+      "default": "حسنا"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
-      "default": "View release notes"
+      "default": "عرض ملاحظات الإصدار"
     },
     "Saving": {
       "key": "Button_Saving",
-      "default": "Saving"
+      "default": "جاري الحفظ"
     },
     "Settings": {
       "key": "Button_Settings",
-      "default": "Settings"
+      "default": "الإعدادات"
     },
     "ShareBookmark": {
       "key": "Button_ShareBookmark",
-      "default": "Share bookmark"
+      "default": "مشاركة الإشارة المرجعية"
     },
     "Undo": {
       "key": "Button_Undo",
-      "default": "Undo"
+      "default": "تراجع"
     },
     "Update": {
       "key": "Button_Update",
-      "default": "Update"
+      "default": "تحديث"
     },
     "View": {
       "key": "Button_View",
-      "default": "View"
+      "default": "عرض"
     }
   },
   "Exception": {
     "ContainerChanged_Message": {
       "key": "Exception_ContainerChanged_Message",
-      "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
+      "default": "الرجاء تجنب تعديل مجلدات [xbs] حيث أنه يمكن أن يسبب مشاكل في المزامنة."
     },
     "ContainerChanged_Title": {
       "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync folder changed"
+      "default": "تم تغيير مجلد إكس براوزر سينك"
     },
     "DailyNewSyncLimitReached_Message": {
       "key": "Exception_DailyNewSyncLimitReached_Message",
-      "default": "Sync to an existing sync ID, switch to a different service or try again tomorrow."
+      "default": "قم بالمزامنة مع رمز مزامنة حالِ أو قم بالتبديل إلى خدمة مختلفة أو حاول مرة أخرى غدًا."
     },
     "DailyNewSyncLimitReached_Title": {
       "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "Daily new sync limit reached"
+      "default": "تم الوصول إلى حد المزامنة الجديدة اليومي"
     },
     "Default_Message": {
       "key": "Exception_Default_Message",
-      "default": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
+      "default": "إذا استمرت المشكلة من فضلك <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>أبلغ عن المشكلة</a>."
     },
     "Default_Title": {
       "key": "Exception_Default_Title",
-      "default": "Something went wrong"
+      "default": "حدث خطأ ما"
     },
     "FailedDownloadFile_Title": {
       "key": "Exception_FailedDownloadFile_Title",
-      "default": "Backup failed"
+      "default": "فشل النسخ الاحتياطي"
     },
     "FailedGetDataToRestore_Title": {
       "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "Browse files failed"
+      "default": "فشل استعراض الملفات"
     },
     "FailedGetPageMetadata_Message": {
       "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "URL is invalid or webpage data could not be retrieved."
+      "default": "عنوان يو آر إل غير صالح أو فشل استلام بيانات صفحة الويب."
     },
     "FailedGetPageMetadata_Title": {
       "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "Couldn’t get bookmark properties"
+      "default": "فشل الحصول على بيانات الإشارة المرجعية"
     },
     "FailedRefreshBookmarks_Title": {
       "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "Couldn’t retrieve updates"
+      "default": "فشل الحصول على التحديثات"
     },
     "FailedRestoreData_Message": {
       "key": "Exception_FailedRestoreData_Message",
-      "default": "The backup data provided is not in an expected format."
+      "default": "بيانات النسخ الاحتياطي المزوَّدة ليست بتنسيق متوقع."
     },
     "FailedRestoreData_Title": {
       "key": "Exception_FailedRestoreData_Title",
-      "default": "Unable to restore data"
+      "default": "غير قادر على استعادة البيانات"
     },
     "FailedShareUrlNotSynced_Title": {
       "key": "Exception_FailedShareUrlNotSynced_Title",
-      "default": "You must be synced to add a bookmark"
+      "default": "يجب أن تتم المزامنة لإضافة إشارة مرجعية"
     },
     "FailedShareUrl_Title": {
       "key": "Exception_FailedShareUrl_Title",
-      "default": "Unable to retrieve shared bookmark URL"
+      "default": "فشل استرداد عنوان يو آر إل للإشارة المرجعية المشارَكة"
     },
     "HttpRequestFailed_Message": {
       "key": "Exception_HttpRequestFailed_Message",
-      "default": "Check your network connection and try again."
+      "default": "تحقق من اتصالك بالشبكة وحاول مرة أخرى."
     },
     "HttpRequestFailed_Title": {
       "key": "Exception_HttpRequestFailed_Title",
-      "default": "Connection to service lost"
+      "default": "انقطع الاتصال بالخدمة"
     },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
-      "default": "Check that your sync ID, password and service URL have been entered correctly."
+      "default": "تحقق من إدخال رمز المزامنة وكلمة المرور وعنوان يو آر إل الخدمة بشكل صحيح."
     },
     "InvalidCredentials_Title": {
       "key": "Exception_InvalidCredentials_Title",
-      "default": "Invalid credentials"
+      "default": "البيانات غير صحيحة"
     },
     "InvalidService_Message": {
       "key": "Exception_InvalidService_Message",
-      "default": "The service URL is not a valid xBrowserSync service."
+      "default": "عنوان يو آر إل للخدمة ليس بخدمة إكس براوزر سينك صحيحة."
     },
     "InvalidService_Title": {
       "key": "Exception_InvalidService_Title",
-      "default": "Invalid xBrowserSync service"
+      "default": "خدمة إكس براوزر سينك غير صحيحة"
     },
     "LocalContainerNotFound_Message": {
       "key": "Exception_LocalContainerNotFound_Message",
@@ -471,236 +471,236 @@
           },
           "Placeholder": {
             "key": "View_Bookmark_Form_Tags_Placeholder",
-            "default": "tag 1, tag 2, tag 3, etc"
+            "default": "العلامة 1، العلامة 2، العلامة 3، إلخ"
           },
           "Clear": {
             "key": "View_Bookmark_Form_Tags_Clear",
-            "default": "Clear tags"
+            "default": "مسح العلامات"
           },
           "Remove": {
             "key": "View_Bookmark_Form_Tags_Remove",
-            "default": "Remove tag"
+            "default": "حذف العلامة"
           }
         },
         "Delete": {
           "key": "View_Bookmark_Form_Delete",
-          "default": "Delete"
+          "default": "حذف"
         },
         "Share": {
           "key": "View_Bookmark_Form_Share",
-          "default": "Share"
+          "default": "مشاركة"
         },
         "UpdateProperties": {
           "key": "View_Bookmark_Form_UpdateProperties",
-          "default": "Update bookmark properties"
+          "default": "تحديث بيانات الإشارة المرجعية"
         }
       },
       "InvalidUrlShared": {
         "key": "View_Bookmark_InvalidUrlShared",
-        "default": "The value that was shared does not contain a valid URL."
+        "default": "القيمة التي تمت مشاركتها لا تحتوي على عنوان يو آر إل صحيح."
       }
     },
     "Help": {
       "AddingBookmarks": {
         "key": "View_Help_AddingBookmarks",
-        "default": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s “Bookmark this page” button as normal and xBrowserSync will automatically populate the bookmark’s properties (optional permissions must be granted for this to work, check the Settings panel).</p>",
-        "android": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be fetched for you, otherwise add a description and some tags to ensure better search results.</p>"
+        "default": "<h4>إضافة إشارة مرجعية</h4><p>قم بوضع إشارة مرجعية على الصفحة الحالية بالنقر على رمز الإشارة المرجعية في شريط البحث. ستتم تعبئة بيانات الإشارة المرجعية لك تلقائيًا، على خلاف ذلك، أضف وصفاً وبعض العلامات لضمان نتائج بحث أفضل.</p><p>بديلاً لذلك، ما عليك سوى النقر على الزر \"إشارة مرجعية لهذه الصفحة\" بالمتصفح كالمعتاد وسيقوم إكس براوزر سينك تلقائيًا بملء بيانات الإشارة المرجعية (يجب منح أذونات اختيارية حتى يعمل هذا، تحقق من الإعدادات).</p>",
+        "android": "<h4>إضافة إشارة مرجعية</h4><p>أضف إشارات مرجعية بسهولة من خلال المشاركة إلى إكس براوزر سينك من أي تطبيقات تشارك عناوين يو آر إل مثل المتصفحات و يوتيوب و سبوتيفاي وغيرها الكثير.</p><p>سيتم جلب بيانات الإشارة المرجعية لك، على خلاف ذلك، أضف وصفًا وبعض العلامات لضمان نتائج بحث أفضل.</p>"
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time reset your data back to it’s original state from when xBrowserSync was installed.</p>",
-        "android": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
+        "default": "<h4>تذكر القيام بالنسخ الاحتياطي</h4><p>عند استخدام إكس براوزر سينك، فإن بياناتك هي مسؤوليتك، لذا كن ذكيًا وتأكد من عمل نسخ احتياطية.</p><p>توجه إلى لوحة الإعدادات وقم بنسخ بياناتك غير المشفرة احتياطياً إلى ملف محلي يمكن استخدامه لاستعادة بياناتك إذا احتجت إلى ذلك.</p><p>في حالة تلف بيانات متصفحك المحلية ولم يكن لديك أي نسخ احتياطية، يمكنك في أي وقت إعادة تعيين بياناتك إلى حالتها الأصلية في وقت تثبيت إكس براوزر سينك.</p>",
+        "android": "<h4>تذكر القيام بالنسخ الاحتياطي</h4><p>عند استخدام إكس براوزر سينك، فإن بياناتك هي مسؤوليتك، لذا كن ذكيًا وتأكد من عمل نسخ احتياطية.</p><p>توجه إلى لوحة الإعدادات وقم بنسخ بياناتك غير المشفرة احتياطياً إلى ملف محلي يمكن استخدامه لاستعادة بياناتك إذا احتجت إلى ذلك.</p>"
       },
       "BeforeYouBegin": {
         "key": "View_Help_BeforeYouBegin",
-        "default": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) please disable them to avoid conflicts.</p>",
-        "brave": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) please disable them to avoid conflicts.</p>",
-        "edge": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) please disable them to avoid conflicts.</p>",
-        "firefox": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) please disable them to avoid conflicts.</p>"
+        "default": "<h4>قبل ان تبدأ</h4><p>يعدّل إكس براوزر سينك بيانات المتصفح المحلي الخاص بك، لذا فمن الجيد إجراء نسخ احتياطي للإشارات المرجعية وبيانات المتصفح الأخرى، في حالة ما إذا كنت تستخدم أي خدمات أو أدوات أخرى لمزامنة المتصفح (مثل <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>مزامنة جوجل كروم</a>) يرجى تعطيلها لتجنب التعارضات.</p>",
+        "brave": "<h4>قبل ان تبدأ</h4><p>يعدّل إكس براوزر سينك بيانات المتصفح المحلي الخاص بك، لذا فمن الجيد إجراء نسخ احتياطي للإشارات المرجعية وبيانات المتصفح الأخرى، في حالة ما إذا كنت تستخدم أي خدمات أو أدوات أخرى لمزامنة المتصفح (مثل <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>مزامنة متصفح بريف</a>) يرجى تعطيلها لتجنب التعارضات.</p>",
+        "edge": "<h4>قبل ان تبدأ</h4><p>يعدّل إكس براوزر سينك بيانات المتصفح المحلي الخاص بك، لذا فمن الجيد إجراء نسخ احتياطي للإشارات المرجعية وبيانات المتصفح الأخرى، في حالة ما إذا كنت تستخدم أي خدمات أو أدوات أخرى لمزامنة المتصفح (مثل <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>مزامنة متصفح إيدج</a>) يرجى تعطيلها لتجنب التعارضات.</p>",
+        "firefox": "<h4>قبل ان تبدأ</h4><p>يعدّل إكس براوزر سينك بيانات المتصفح المحلي الخاص بك، لذا فمن الجيد إجراء نسخ احتياطي للإشارات المرجعية وبيانات المتصفح الأخرى، في حالة ما إذا كنت تستخدم أي خدمات أو أدوات أخرى لمزامنة المتصفح (مثل <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>مزامنة متصفح فَيَرفُكس</a>) يرجى تعطيلها لتجنب التعارضات.</p>"
       },
       "ExistingId": {
         "key": "View_Help_ExistingId",
-        "default": "<h4>Syncing with your existing ID</h4><p>Click on “Already got a sync ID?” to enter your existing sync ID and password. If your sync ID was created on a service different to the one displayed then switch to that service before attempting to sync.</p><p>xBrowserSync will retrieve and decrypt your encrypted data using your locally stored password, then clear your local bookmarks before re-populating them from the decrypted data.</p><p>When synced, xBrowserSync checks in the background every fifteen minutes for updates to your synced data and will automatically update your local bookmarks when required. You can also manually sync available updates to your synced data in the Settings panel.</p>",
-        "android": "<h4>Syncing with your existing ID</h4><p>Start by scanning the sync ID QR code in the Settings panel of the xBrowserSync desktop browser extension (click on your sync ID to reveal it). Make sure you enter the same encryption password used when creating the sync otherwise xBrowserSync will not be able to decrypt your data.</p><p>Also, if you are synced to a different xBrowserSync service make sure it is the active service configured in the Settings panel.</p>"
+        "default": "<h4>المزامنة مع الرمز الحالي الخاص بك</h4><p>انقر على \"هل حصلت بالفعل على رمز مزامنة؟\" لإدخال رمز المزامنة الحالي وكلمة المرور. إذا تم إنشاء رمز المزامنة الخاص بك على خدمة مختلفة عن تلك المعروضة، فانتقل إلى تلك الخدمة قبل محاولة المزامنة.</p><p>سيقوم إكس براوزر سينك باستلام وفك تشفير بياناتك المشفرة باستخدام كلمة مرورك المخزنة محليًا، ثم مسح إشاراتك المرجعية المحلية قبل إعادة ملئها من البيانات التي تم فك تشفيرها.</p><p>عند المزامنة، يتحقق إكس براوزر سينك في الخلفية كل خمس عشرة دقيقة للحصول على تحديثات لبياناتك المتزامنة وسيقوم تلقائيًا بتحديث الإشارات المرجعية المحلية عند الحاجة. يمكنك أيضًا مزامنة التحديثات المتوفرة يدويًا لبياناتك المتزامنة في لوحة الإعدادات.</p>",
+        "android": "<h4>المزامنة مع الرمز الحالي الخاص بك</h4><p>ابدأ بمسح رمز الاستجابة السريعة لرمز المزامنة في لوحة الإعدادات داخل إضافة إكس براوزر سينك لمتصفح سطح المكتب (انقر على رمز المزامنة للكشف عنه). تأكد من إدخال نفس كلمة مرور التشفير المستخدمة عند إنشاء المزامنة وإلا فلن يتمكن إكس براوزر سينك من فك تشفير بياناتك.</p><p>أيضًا، إذا تمت مزامنتك مع خدمة إكس براوزر سينك مختلفة، فتأكد من أنها الخدمة النشطة و تم تهيئتها في لوحة الإعدادات.</p>"
       },
       "FirstSync": {
         "key": "View_Help_FirstSync",
-        "default": "<h4>Syncing for the first time</h4><p>Before xBrowserSync can sync your browser data you will need to provide an encryption password. Be sure to make it strong but also memorable, there are no resets or reminders so if you forget it you won’t be able to access your synced data.</p><p>Your browser data will be encrypted using your password and saved to the active xBrowserSync service configured in the Settings panel.</p><p>Once synced, any changes you make to your local bookmarks will be synced automatically by xBrowserSync.</p>",
-        "android": "<h4>Syncing for the first time</h4><p>xBrowserSync actively syncs your browser data between your desktop browsers (syncing to mobile browsers is not supported at this time), you can use this app to access your synced data on your Android mobile device.</p><p>If you have not already created a sync ID, head over to your desktop browser and <a href='https://link.xbrowsersync.org/download' class='new-tab'>download</a> the xBrowserSync extension. Once you have created a sync you can use your new sync ID within this app to access your data.</p>"
+        "default": "<h4>المزامنة لأول مرة</h4><p>قبل أن يتمكن إكس براوزر سينك من مزامنة بيانات المتصفح الخاص بك، ستحتاج إلى وضع كلمة مرور للتشفير. تأكد من جعلها قوية وقابلة للتذكر أيضًا، فلا توجد عمليات إعادة تعيين أو تذكير، لذا إذا نسيتها فلن تتمكن من الوصول إلى بياناتك المتزامنة.</p><p>سيتم تشفير بيانات المتصفح الخاصة بك باستخدام كلمة المرور الخاصة بك وحفظها في خدمة إكس براوزر سينك النشطة التي تم تهيئتها في لوحة الإعدادات.</p><p>بمجرد المزامنة، ستتم مزامنة أي تغييرات تجريها على الإشارات المرجعية المحلية تلقائياً بواسطة إكس براوزر سينك.</p>",
+        "android": "<h4>المزامنة لأول مرة</h4><p>يقوم إكس براوزر سينك بمزامنة بيانات المتصفح بشكل نشط بين متصفحات سطح المكتب (المزامنة مع متصفحات الهاتف المحمول غير مدعومة في الوقت الحالي)، يمكنك استخدام هذا التطبيق للوصول إلى البيانات المتزامنة على جهازك المحمول الذي يعمل بنظام أندرويد.</p><p>إذا لم تكن قد أنشأت رمز مزامنة بالفعل، فانتقل إلى متصفح سطح المكتب الخاص بك و <a href='https://link.xbrowsersync.org/download' class='new-tab'>نزّل</a> إضافة إكس براوزر سينك. بمجرد إنشاء مزامنة، يمكنك استخدام رمز المزامنة الجديد خاصتك داخل هذا التطبيق للوصول لبياناتك.</p>"
       },
       "FurtherSupport": {
         "key": "View_Help_FurtherSupport",
-        "default": "<h4>Further support</h4><p>You can find the answers to most common questions in the <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>FAQs</a>, also check the current <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>known issues</a> to see if your issue is listed there.</p><p>Alternatively, use the <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>issue tracker</a> to report an issue or request a new feature.</p>"
+        "default": "<h4>مزيد من الدعم</h4><p>يمكنك العثور على إجابات لأكثر الأسئلة شيوعًا في <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>أسئلة شائعة</a>، تحقق أيضًا من <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>المشاكل المعروفة</a> الحالية لمعرفة ما إذا كانت مشكلتك مدرجة هناك.</p><p>بديلاً لذلك، استخدم <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>متابع المشاكل</a> للإبلاغ عن مشكلة أو طلب ميزة جديدة.</p>"
       },
       "Mobile": {
         "key": "View_Help_Mobile",
-        "default": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a> store, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droid</a> or <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>direct download</a>.</p>"
+        "default": "<h4>انطلق إلى الهاتف</h4><p>قم بالوصول إلى إشاراتك المرجعية التي تمت مزامنتها متنقلاً باستخدام تطبيق الأندرويد إكس براوزر سينك، والمتاح على متجر <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>كوكل بلاي</a> أو <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>إف درويد</a> أو حتى <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>تحميل مباشر</a>.</p>"
       },
       "NativeFeatures": {
         "key": "View_Help_NativeFeatures",
-        "default": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks bar and bookmarks manager, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p>",
-        "firefox": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks toolbar and bookmarks library, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p><p>Please note however, as Firefox’s bookmarks API does not yet support accessing native bookmark tags, any existing tags will be lost when syncing and tags added via xBrowserSync will not be saved as native tags.</p>"
+        "default": "<h4>الميزات الأصلية مدعومة</h4><p>لا تتردد في الاستمرار في استخدام ميزات الإشارات المرجعية الأصلية لمتصفحك مثل شريط الإشارات ومدير الإشارات، وستتم مزامنة أي تغييرات تجريها تلقائياً في الخلفية.</p><p>إذا كنت قد نظمت إشاراتك المرجعية الحالية في مجلدات، فلا تقلق، فإن إكس براوزر سينك سيحترم ويحافظ على تسلسل المجلدات الحالي للإشارات المرجعية.</p>",
+        "firefox": "<h4>الميزات الأصلية مدعومة</h4><p>لا تتردد في الاستمرار في استخدام ميزات الإشارات المرجعية الأصلية لمتصفحك مثل شريط الإشارات ومدير الإشارات، وستتم مزامنة أي تغييرات تجريها تلقائياً في الخلفية.</p><p>إذا كنت قد نظمت إشاراتك المرجعية الحالية في مجلدات، فلا تقلق، فإن إكس براوزر سينك سيحترم ويحافظ على تسلسل المجلدات الحالي للإشارات المرجعية.</p><p>يرجى ملاحظة أنه نظراً لأن واجهة برمجة تطبيقات الإشارات المرجعية في فَيَرفُكس لا تدعم حتى الآن الوصول إلى علامات الإشارات المرجعية الأصلية، فسيتم فقد أي علامات حالية عند المزامنة ولن يتم حفظ العلامات المضافة عبر إكس براوزر سينك كعلامات أصلية بالمتصفح.</p>"
       },
       "Previous": {
         "key": "View_Help_Previous",
-        "default": "Previous"
+        "default": "السابق"
       },
       "Searching": {
         "key": "View_Help_Searching",
-        "default": "<h4>Searching your bookmarks</h4><p>Once synced, simply press Enter to display your recent bookmarks or type some keywords or a URL to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>To edit or delete a bookmark, hover over the bookmark and click the now visible edit icon next to the bookmark’s title.</p>",
-        "android": "<h4>Searching your bookmarks</h4><p>Once synced, your bookmarks are displayed in chronological order when you open xBrowserSync. Type some keywords or a URL in the search box to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>Long pressing on a bookmark will allow you to directly share, modify or delete the bookmark.</p>"
+        "default": "<h4>البحث في إشاراتك المرجعية</h4><p>بمجرد المزامنة، ما عليك سوى الضغط على زر إنتَر لعرض إشاراتك المرجعية الأخيرة أو كتابة بعض الكلمات أو عنوان يو آر إل للبحث في الإشارات المرجعية الخاصة بك.</p><p>قم بالتنقل بين نتائج البحث ومجلدات الإشارات المرجعية لتصفح التسلسل الهرمي بأكمله.</p><p>لتعديل إشارة مرجعية أو حذفها، مرر مؤشر الماوس على الإشارة المرجعية وانقر على رمز التحرير الذي سيظهر بجوار عنوان الإشارة المرجعية.</p>",
+        "android": "<h4>البحث في إشاراتك المرجعية</h4><p>بمجرد المزامنة، يتم عرض إشاراتك المرجعية بترتيب زمني عند فتح إكس براوزر سينك. اكتب بعض الكلمات أو عنوان يو آر إل في مربع البحث للبحث في الإشارات المرجعية الخاصة بك.</p><p>قم بالتنقل بين نتائج البحث ومجلدات الإشارات المرجعية لتصفح التسلسل الهرمي بأكمله.</p><p>سيسمح لك الضغط لفترة طويلة على إشارة مرجعية بمشاركة الإشارة المرجعية مباشرةً أو تعديلها أو حذفها.</p>"
       },
       "Service": {
         "key": "View_Help_Service",
-        "default": "<h4>Syncing to another service</h4><p>By default your data is synced to the <a href='https://link.xbrowsersync.org/api' class='new-tab'>official xBrowserSync service</a>, however if you would like to sync your data to an alternative xBrowserSync service you can switch the active service before syncing.</p><p>Check the list of available <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>public xBrowserSync services</a> or <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>run your own service</a>, either for private use for ultimate security and privacy, or for public use so that more people can enjoy xBrowserSync.</p><p><strong>Important:</strong> xBrowserSync services are run independently by volunteers. The service administrator takes no responsibility for your data so please remember to backup regularly.</p>"
+        "default": "<h4>المزامنة مع خدمة أخرى</h4><p>بشكل افتراضي، تتم مزامنة بياناتك مع <a href='https://link.xbrowsersync.org/api' class='new-tab'>خدمة إكس براوزر سينك الرسمية</a>، ومع ذلك إذا كنت ترغب في مزامنة بياناتك مع خدمة إكس براوزر سينك بديلة، فيمكنك تبديل الخدمة المفعَّلة قبل المزامنة.</p><p>تحقق من قائمة <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>خدمات إكس براوزر سينك العامة</a> المتاحة أو <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>شغّل خدمتك الخاصة</a>، إما للاستخدام الخاص لتحقيق أقصى درجات الأمان والخصوصية، أو للاستخدام العام حتى يتمكن المزيد من الأشخاص من الاستمتاع ببرنامج إكس براوزر سينك.</p><p><strong>مهم:</strong> يتم تشغيل خدمات إكس براوزر سينك بشكل مستقل من قبل المتطوعين. لا يتحمل مسؤول الخدمة أي مسؤولية عن بياناتك، لذا يرجى تذكر إجراء نسخ احتياطية بانتظام.</p>"
       },
       "Shortcuts": {
         "key": "View_Help_Shortcuts",
-        "default": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension, then simply press Enter to view your recent bookmarks or start typing to search.</p><p>To change the shortcut, browse to chrome://extensions/shortcuts and update the available shortcuts under xBrowserSync.</p>",
-        "brave": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension, then simply press Enter to view your recent bookmarks or start typing to search.</p><p>To change the shortcut, browse to brave://extensions/shortcuts and update the available shortcuts under xBrowserSync.</p>",
-        "edge": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension, then simply press Enter to view your recent bookmarks or start typing to search.</p><p>To change the shortcut, browse to edge://extensions/shortcuts and update the available shortcuts under xBrowserSync.</p>",
-        "firefox": "<h4>Use shortcuts!</h4><p>To search your bookmarks quickly, use the default keyboard shortcut (Ctrl+Space) to activate the extension, then simply press Enter to view your recent bookmarks or start typing to search.</p><p>To change the shortcut, browse to about:addons, click on “Manage Extension Shortcuts” in the Settings menu and update the available shortcuts under xBrowserSync.</p>"
+        "default": "<h4>استخدم الاختصارات!</h4><p>للبحث في الإشارات المرجعية الخاصة بك بسرعة، استخدم اختصار لوحة المفاتيح الافتراضي (كنترول + مسافة) لتنشيط الإضافة، ثم اضغط ببساطة على إنتر لعرض الإشارات المرجعية الأخيرة أو ابدأ الكتابة للبحث.</p><p>لتغيير الاختصار, إذهب الى:<br>chrome://extensions/shortcuts<br>وغير الاختصارات المتاحة الخاصة بإكس براوزر سينك.</p>",
+        "brave": "<h4>استخدم الاختصارات!</h4><p>للبحث في الإشارات المرجعية الخاصة بك بسرعة، استخدم اختصار لوحة المفاتيح الافتراضي (كنترول + مسافة) لتنشيط الإضافة، ثم اضغط ببساطة على إنتر لعرض الإشارات المرجعية الأخيرة أو ابدأ الكتابة للبحث.</p><p>لتغيير الاختصار, إذهب الى:<br>brave://extensions/shortcuts<br>وغير الاختصارات المتاحة الخاصة بإكس براوزر سينك.</p>",
+        "edge": "<h4>استخدم الاختصارات!</h4><p>للبحث في الإشارات المرجعية الخاصة بك بسرعة، استخدم اختصار لوحة المفاتيح الافتراضي (كنترول + مسافة) لتنشيط الإضافة، ثم اضغط ببساطة على إنتر لعرض الإشارات المرجعية الأخيرة أو ابدأ الكتابة للبحث.</p><p>لتغيير الاختصار, إذهب الى:<br>edge://extensions/shortcuts<br>وغير الاختصارات المتاحة الخاصة بإكس براوزر سينك.</p>",
+        "firefox": "<h4>استخدم الاختصارات!</h4><p>للبحث في الإشارات المرجعية الخاصة بك بسرعة، استخدم اختصار لوحة المفاتيح الافتراضي (كنترول + مسافة) لتنشيط الإضافة، ثم اضغط ببساطة على إنتر لعرض الإشارات المرجعية الأخيرة أو ابدأ الكتابة للبحث.</p><p>لتغيير الاختصار, إذهب الى:<br>about:addons<br>وانقر على <br>“Manage Extension Shortcuts”<br> في قائمة الإعدادات وقم بتغيير الاختصارات المتاحة الخاصة بإكس براوزر سينك.</p>"
       },
       "SyncId": {
         "key": "View_Help_SyncId",
-        "default": "<h4>Your sync ID</h4><p>xBrowserSync ensures your privacy as no personal data is ever collected and your browser data is encrypted before being synced. To identify your synced data you are provided with an anonymous sync ID which can be used along with your password to sync your data on other browsers and devices.</p><p>Remember that your sync ID will only work with the xBrowserSync service on which it was created, if you switch to a different xBrowserSync service you must create a new sync or use an existing sync ID created when previously synced to that service.</p><p>Whenever you are synced you can view your sync ID in the Settings panel, click it to reveal a handy QR code to scan when syncing on mobile devices.</p>"
+        "default": "<h4>رمز المزامنة الخاص بك</h4><p>يضمن إكس براوزر سينك خصوصيتك لأنه لا يجمع أي بيانات شخصية على الإطلاق ويتم تشفير بيانات المتصفح الخاص بك قبل مزامنتها. للتعريف ببياناتك المتزامنة، يتم تزويدك برمز مزامنة متخفي يمكن استخدامه مع كلمة المرور الخاصة بك لمزامنة بياناتك على المتصفحات والأجهزة الأخرى.</p><p>تذكر أن رمز المزامنة الخاص بك سيعمل فقط مع خدمة إكس براوزر سينك التي تم إنشاؤها من خلالها، إذا قمت بالتبديل إلى خدمة إكس براوزر سينك مختلفة، فيجب عليك إنشاء مزامنة جديدة أو استخدام رمز مزامنة حالى تم إنشاؤه عند المزامنة مسبقًا مع تلك الخدمة.</p><p>في أي وقت تتم فيه المزامنة، يمكنك عرض رمز المزامنة الخاص بك في لوحة الإعدادات، انقر عليه للكشف عن رمز الاستجابة السريعة العملي لمسحه عند المزامنة على الهواتف المحمولة.</p>"
       },
       "Welcome": {
         "key": "View_Help_Welcome",
-        "default": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info).</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or the arrow keys to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>",
-        "android": "<h4>Welcome to xBrowserSync!</h4><p>xBrowserSync is a free and open-source alternative to browser sync services offered by Google, Mozilla, Opera and others, that respects your privacy and gives you complete anonymity (check out the <a href='https://link.xbrowsersync.org/www' class='new-tab'>website</a> for more info).</p><p>Take a moment to read through this help guide to familiarise yourself with xBrowserSync, using the paging links below or swiping to move between pages.</p><p>Please note: xBrowserSync currently only syncs bookmarks. Syncing of additional browser data will be added in future versions, check out the development <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>roadmap</a> to see what’s planned.</p>"
+        "default": "<h4>مرحباً بك في إكس براوزر سينك!</h4><p>إكس براوزر سينك هو بديل مجاني ومفتوح المصدر لخدمات مزامنة المتصفح التي تقدمها كوكل وموزيلا وأوبيرا وغيرها، ويحترم خصوصيتك ويمنحك إخفاء هوية كامل (تحقق من <a href='https://link.xbrowsersync.org/www' class='new-tab'>الموقع الالكتروني</a> لمزيد من المعلومات).</p><p>أقضِ لحظة لقراءة دليل المساعدة هذا للتعرف على إكس براوزر سينك، باستخدام روابط الترحيل أدناه أو مفاتيح الأسهم للتنقل بين الصفحات.</p><p>يرجى الملاحظة: يقوم إكس براوزر سينك حاليًا بمزامنة الإشارات المرجعية فقط. ستتم إضافة مزامنة بيانات متصفح إضافية في الإصدارات المستقبلية، تحقق من حالة التطوير <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>بخريطة الأهداف</a> لمعرفة ما تم تخطيطة.</p>",
+        "android": "<h4>مرحباً بك في إكس براوزر سينك!</h4><p>إكس براوزر سينك هو بديل مجاني ومفتوح المصدر لخدمات مزامنة المتصفح التي تقدمها كوكل وموزيلا وأوبيرا وغيرها، ويحترم خصوصيتك ويمنحك إخفاء هوية كامل (تحقق من <a href='https://link.xbrowsersync.org/www' class='new-tab'>الموقع الالكتروني</a> لمزيد من المعلومات).</p><p>أقضِ لحظة لقراءة دليل المساعدة هذا للتعرف على إكس براوزر سينك، باستخدام روابط الترحيل أدناه أو السحب على الشاشة للتنقل بين الصفحات.</p><p>يرجى الملاحظة: يقوم إكس براوزر سينك حاليًا بمزامنة الإشارات المرجعية فقط. ستتم إضافة مزامنة بيانات متصفح إضافية في الإصدارات المستقبلية، تحقق من حالة التطوير <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>بخريطة الأهداف</a> لمعرفة ما تم تخطيطة.</p>"
       }
     },
     "Login": {
       "GetSyncId": {
         "Title": {
           "key": "View_Login_GetSyncId_Title",
-          "default": "Need a sync ID?"
+          "default": "أتحتاج إلى رمز مزامنة؟"
         },
         "Content": {
           "key": "View_Login_GetSyncId_Content",
-          "default": "Download the xBrowserSync desktop browser extension and create a new sync to access your bookmarks here."
+          "default": "قم بتنزيل إضافة متصفح سطح المكتب إكس براوزر سينك وأنشئ مزامنة جديدة للوصول إلى إشاراتك المرجعية هنا."
         }
       },
       "Password": {
         "Confirm": {
           "key": "View_Login_Password_Confirm",
-          "default": "Confirm password"
+          "default": "تأكيد كلمة المرور"
         },
         "Existing": {
           "key": "View_Login_Password_Existing",
-          "default": "Your encryption password"
+          "default": "كلمة مرور التشفير خاصتك"
         },
         "Label": {
           "key": "View_Login_Password_Label",
-          "default": "Encryption password"
+          "default": "كلمة مرور التشفير"
         },
         "New": {
           "key": "View_Login_Password_New",
-          "default": "Enter an encryption password"
+          "default": "أدخل كلمة مرور التشفير"
         },
         "Show": {
           "key": "View_Login_Password_Show",
-          "default": "Reveal password"
+          "default": "عرض كلمة المرور"
         }
       },
       "Scan": {
         "Title": {
           "key": "View_Login_Scan_Title",
-          "default": "Connect to your sync"
+          "default": "اتصل بالمزامنة خاصتك"
         },
         "Content": {
           "key": "View_Login_Scan_Content",
-          "default": "Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a QR code which you can scan here."
+          "default": "افتح إكس براوزر سينك على متصفح سطح المكتب، واذهب إلى لوحة الإعدادات وانقر على رمز المزامنة لعرض رمز الاستجابة السريعة الذي يمكنك مسحه هنا."
         },
         "ScanCode": {
           "key": "View_Login_Scan_ScanCode",
-          "default": "Scan code"
+          "default": "مسح الرمز"
         },
         "ManualEntry": {
           "key": "View_Login_Scan_ManualEntry",
-          "default": "Enter sync details manually"
+          "default": "أدخل تفاصيل المزامنة يدوياً"
         }
       },
       "Service": {
         "ApiVersion": {
           "key": "View_Login_Service_ApiVersion",
-          "default": "API version"
+          "default": "إصدار إيه بي آي"
         },
         "Confirm": {
           "key": "View_Login_Service_Confirm",
-          "default": "Sync to this service?"
+          "default": "المزامنة مع هذه الخدمة؟"
         },
         "Location": {
           "key": "View_Login_Service_Location",
-          "default": "Location"
+          "default": "الموقع"
         },
         "MaxSyncSize": {
           "key": "View_Login_Service_MaxSyncSize",
-          "default": "Max sync size"
+          "default": "حجم المزامنة الأقصى"
         },
         "Selected": {
           "key": "View_Login_Service_Selected",
-          "default": "Syncing to"
+          "default": "مزامناً مع"
         },
         "Status": {
           "key": "View_Login_Service_Status",
-          "default": "Status"
+          "default": "الحالة"
         },
         "Update": {
           "Label": {
             "key": "View_Login_Service_Update_Label",
-            "default": "xBrowserSync service URL"
+            "default": "عنوان خدمه إكس براوزر سينك"
           },
           "Description": {
             "key": "View_Login_Service_Update_Description",
-            "default": "Enter the URL of an alternative xBrowserSync service. Browse the list of public xBrowserSync services <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>here</a>."
+            "default": "أدخل عنوان يو آر إل لخدمة إكس براوزر سينك بديلة. تصفح قائمة خدمات إكس براوزر سينك العامة <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>هنا</a>."
           },
           "Button": {
             "key": "View_Login_Service_Update_Button",
-            "default": "Switch service"
+            "default": "تبديل الخدمة"
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
-            "default": "URL is required"
+            "default": "مطلوب عنوان يو آر إل"
           },
           "InvalidService": {
             "key": "View_Login_Service_Update_InvalidService",
-            "default": "Not a valid xBrowserSync service"
+            "default": "خدمة إكس براوزر سينك غير صحيحة"
           },
           "InvalidUrl": {
             "key": "View_Login_Service_Update_InvalidUrl",
-            "default": "Not a valid URL"
+            "default": "يو آر إل غير صحيح"
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",
-            "default": "Unable to connect to the service"
+            "default": "فشل الإتصال بالخدمة"
           },
           "NotSupported": {
             "key": "View_Login_Service_Update_Failed_NotSupported",
-            "default": "This service is running an unsupported API version"
+            "default": "هذه الخدمة تعمل بإصدار إيه بي آي غير مدعوم"
           }
         },
         "Warning": {
           "key": "View_Login_Service_Warning",
-          "default": "<strong>Important:</strong> xBrowserSync services are run independently by volunteers. The service administrator takes no responsibility for your data so please remember to backup regularly."
+          "default": "<strong>مهم:</strong> يتم تشغيل خدمات إكس براوزر سينك بشكل مستقل من قبل المتطوعين. لا يتحمل مسؤول الخدمة أي مسؤولية عن بياناتك، لذا يرجى تذكر إجراء نسخ احتياطية بانتظام."
         }
       },
       "Sync": {
         "Confirm": {
           "Title": {
             "key": "View_Login_Sync_Confirm_Title",
-            "default": "Are you sure?"
+            "default": "هل أنت متأكد؟"
           },
           "Content": {
             "key": "View_Login_Sync_Confirm_Content",
-            "default": "xBrowserSync will delete all local bookmarks data before restoring synced bookmarks. OK to proceed?"
+            "default": "سيحذف إكس براوزر سينك جميع بيانات الإشارات المرجعية المحلية قبل استعادة الإشارات المرجعية المتزامنة. تريد المتابعة؟"
           }
         },
         "DisableOthers": {
           "Title": {
             "key": "View_Login_Sync_DisableOthers_Title",
-            "default": "Disable bookmark sync tools"
+            "default": "تعطيل أدوات مزامنة الإشارة المرجعية"
           },
           "Content": {
             "key": "View_Login_Sync_DisableOthers_Content",
@@ -920,7 +920,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Download Backup"
+            "default": "Download Back Up"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",

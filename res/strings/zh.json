@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync 已经更新了最新功能和修复。点击查看发行说明。"
+        "default": "xBrowserSync 已更新。同步已禁用，重新启用同步以完成升级过程。"
       }
     },
     "BookmarkCreated": {
@@ -127,7 +127,7 @@
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": ""
+      "default": "下载备份"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
@@ -135,7 +135,7 @@
     },
     "Help": {
       "key": "Button_Help",
-      "default": "帮助手册"
+      "default": "查看帮助指南"
     },
     "Next": {
       "key": "Button_Next",
@@ -143,7 +143,7 @@
     },
     "OK": {
       "key": "Button_OK",
-      "default": "我知道了"
+      "default": "确定"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
@@ -269,7 +269,7 @@
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "本地数据已刷新，请重做以前未同步的更改。"
+      "default": "本地浏览器数据已刷新，请重新应用上次更改。"
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
@@ -449,7 +449,7 @@
           },
           "Invalid": {
             "key": "View_Bookmark_Form_Url_Invalid",
-            "default": ""
+            "default": "无效URL"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -457,7 +457,7 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "必需填写书签 URL"
+            "default": "URL必填"
           }
         },
         "Description": {
@@ -508,7 +508,7 @@
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>记住要备份</h4><p>当你使用 xBrowserSync 时，保护你的数据是你的责任，所以聪明点，确保备份。</p><p>转到 “设置” 面板，将未加密的数据备份到本地文件中，如果需要的话，可以用来恢复数据。</p><p>如果您的本地浏览器数据被损坏，而您没有任何备份，您可以随时将数据恢复到安装 xBrowserSync 时的原始状态。</p>",
+        "default": "<h4>记得备份</h4><p>当你使用 xBrowserSync 时，保护你的数据是你的责任，所以聪明点，确保备份。</p><p>转到 “设置” 面板，将未加密的数据备份到本地文件中，如果需要的话，可以用来恢复数据。</p><p>如果您的本地浏览器数据被损坏，而您没有任何备份，您可以随时将数据重置到安装 xBrowserSync 时的原始状态。</p>",
         "android": "<h4>记住要备份</h4><p>当你使用 xBrowserSync 时，保护你的数据是你的责任，所以聪明点，确保备份。</p><p>转到 “设置” 面板，将未加密的数据备份到本地文件中，如果需要的话，可以用来恢复数据。</p>"
       },
       "BeforeYouBegin": {
@@ -662,7 +662,7 @@
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
-            "default": "需要 xBrowserSync 服务URL"
+            "default": "URL是必须的"
           },
           "InvalidService": {
             "key": "View_Login_Service_Update_InvalidService",
@@ -670,7 +670,7 @@
           },
           "InvalidUrl": {
             "key": "View_Login_Service_Update_InvalidUrl",
-            "default": ""
+            "default": "无效URL"
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",
@@ -721,21 +721,21 @@
         "UpgradeReady": {
           "Title": {
             "key": "View_Login_Sync_UpgradeReady_Title",
-            "default": "准备更新同步了吗？"
+            "default": "准备升级同步吗？"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
-            "default": "<p>此同步ID必须升级才能与此版本的 xBrowserSync同步。 升级后，您将无法与 xBrowserSync 上的版本同步。</p><p>确保您在继续之前更新了所有的 xBrowserSync 应用。准备好继续吗？</p>"
+            "default": "<p>此同步ID必须升级才能与此版本的 xBrowserSync同步。 升级后，您将无法与任一旧版本的 xBrowserSync 上的版本同步。</p><p>确保您在继续之前更新所有的 xBrowserSync 应用。准备好继续吗？</p>"
           }
         },
         "UpgradeRequired": {
           "Title": {
             "key": "View_Login_Sync_UpgradeRequired_Title",
-            "default": ""
+            "default": "升级同步"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
-            "default": ""
+            "default": "<p>您的同步必须先升级才能与此版本的 xBrowserSync 同步。</p><p>使用 xBrowserSync 桌面浏览器扩展来升级您的同步，然后在这里重试同步。</p>"
           }
         }
       },
@@ -810,11 +810,11 @@
       },
       "Pulling": {
         "key": "View_Search_Pulling",
-        "default": ""
+        "default": "下拉来同步"
       },
       "Pulled": {
         "key": "View_Search_Pulled",
-        "default": ""
+        "default": "松开来同步"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
@@ -830,87 +830,87 @@
         "AutoBackup": {
           "Title": {
             "key": "View_Settings_BackupRestore_AutoBackup_Title",
-            "default": ""
+            "default": "自动备份"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_AutoBackup_Description",
-            "default": ""
+            "default": "自动下载计划中的备份。"
           },
           "RunsAt": {
             "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
-            "default": ""
+            "default": "备份运行在"
           },
           "Every": {
             "key": "View_Settings_BackupRestore_AutoBackup_Every",
-            "default": ""
+            "default": "每"
           },
           "Numbers": {
             "Single": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
-              "default": ""
+              "default": "一"
             },
             "Two": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
-              "default": ""
+              "default": "二"
             },
             "Three": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
-              "default": ""
+              "default": "三"
             },
             "Four": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
-              "default": ""
+              "default": "四"
             },
             "Five": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
-              "default": ""
+              "default": "五"
             },
             "Six": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
-              "default": ""
+              "default": "六"
             },
             "Seven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
-              "default": ""
+              "default": "七"
             },
             "Eight": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
-              "default": ""
+              "default": "八"
             },
             "Nine": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
-              "default": ""
+              "default": "九"
             },
             "Ten": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
-              "default": ""
+              "default": "十"
             },
             "Eleven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
-              "default": ""
+              "default": "十一"
             },
             "Twelve": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
-              "default": ""
+              "default": "十二"
             }
           },
           "Units": {
             "Day": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
-              "default": ""
+              "default": "天"
             },
             "Week": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
-              "default": ""
+              "default": "周"
             },
             "Month": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
-              "default": ""
+              "default": "月"
             }
           },
           "Confirmation": {
             "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
-            "default": ""
+            "default": "为了防止“另存为...”对话框在下载备份时显示，请禁用浏览器设置“在下载前询问保存每个文件的位置”。"
           }
         },
         "Backup": {
@@ -920,7 +920,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": ""
+            "default": "下载备份"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -938,7 +938,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "恢复"
+            "default": "从备份中恢复"
           },
           "Local": {
             "Description": {
@@ -963,7 +963,7 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "您的数据已恢复。"
+            "default": "备份已恢复。"
           },
           "SelectFile": {
             "Button": {
@@ -995,31 +995,31 @@
         "Reset": {
           "Confirm": {
             "key": "View_Settings_BackupRestore_Reset_Confirm",
-            "default": "<p>若继续，任何激活的同步都将被禁用，您的本地数据将恢复到{date} 安装 xBrowserSync 时的状态。</p><p>确定继续吗？</p>"
+            "default": "<p>如果你继续， 同步将被禁用，当在 {date} 安装了 xBrowserSync时，您的本地浏览器数据将被重置。</p><p>确定继续？</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Reset_Button",
-            "default": "还原"
+            "default": "重置本地数据"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Reset_Done",
-            "default": "您的数据已还原到初始安装状态。"
+            "default": "本地浏览器数据已重置为初始安装状态。"
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Reset_Unavailable",
-            "default": "安装状态数据不可用，无法还原。"
+            "default": "安装状态数据不可用，无法重置。"
           }
         }
       },
       "Issues": {
         "Title": {
           "key": "View_Settings_Issues_Title",
-          "default": "问题"
+          "default": "帮助和支持"
         },
         "Help": {
           "Title": {
             "key": "View_Settings_Issues_Help_Title",
-            "default": "帮助"
+            "default": "帮助指南"
           },
           "Description": {
             "key": "View_Settings_Issues_Help_Description",
@@ -1033,15 +1033,15 @@
         "Tracker": {
           "Title": {
             "key": "View_Settings_Issues_Tracker_Title",
-            "default": "问题追踪器"
+            "default": "支持"
           },
           "Description": {
             "key": "View_Settings_Issues_Tracker_Description",
-            "default": "报告一个问题来反馈错误或请求新功能。"
+            "default": "需要支持？使用问题跟踪器报告错误或请求功能。"
           },
           "Report": {
             "key": "View_Settings_Issues_Tracker_Report",
-            "default": "反馈问题"
+            "default": "查看问题跟踪器"
           }
         },
         "Log": {
@@ -1205,15 +1205,15 @@
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "同步到最新。"
+            "default": "上次同步 {date}"
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "更新可用，下次同步于"
+            "default": "准备同步 (计划为 {date})"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
-            "default": "更新同步"
+            "default": "立即同步"
           }
         },
         "Qr": {
@@ -1245,7 +1245,7 @@
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": ""
+        "default": "文件已保存到下载"
       },
       "Support": {
         "key": "View_Settings_Support",
@@ -1259,7 +1259,7 @@
       },
       "Content": {
         "key": "View_Support_Content",
-        "default": "<p>我们想让xBrowserSync成为第一大浏览器同步工具，但还有很多工作要做：</p><ul><li>增加同步浏览器选项卡和历史记录</li><li>支持所有主要的桌面浏览器</li><li>可翻译成其他语言</li><li>还有<a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>更多</a>!</li></ul><p>只有在您的支持下，我们才能继续改进 xBrowserSync，并确保它仍然是一个有效的工具，以保护我们的隐私和生产力，防止大公司的腐蚀！</p>"
+        "default": "<p>我们想要将 xBrowserSync 变成一个浏览器同步工具。 但还有很多事情要做：</p><ul><li>添加浏览器标签和历史同步</li><li>支持所有主要桌面浏览器</li><li>翻译成其他语言</li><li> <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>更多</a>！</li></ul><p>只有在您的支持下，我们才能继续改进xBrowserSync 并确保它在保护在线隐私和提高生产率方面仍然有效。</p>"
       },
       "Cryptos": {
         "key": "View_Support_Cryptos",
@@ -1277,11 +1277,11 @@
     "SyncRemoved": {
       "Title": {
         "key": "View_SyncRemoved_Title",
-        "default": ""
+        "default": "同步未找到"
       },
       "Content": {
         "key": "View_SyncRemoved_Content",
-        "default": ""
+        "default": "<p>您的同步未找到可能因为没有活动而被删除。</p><p>您将需要创建一个新的同步, 但首先点击下面的按钮下载您同步数据的备份，然后恢复到新的同步状态。</p>"
       }
     },
     "Updated": {
@@ -1301,7 +1301,7 @@
       },
       "Resetting": {
         "key": "View_Working_Resetting",
-        "default": "正在还原"
+        "default": "重置中"
       },
       "Syncing": {
         "key": "View_Working_Syncing",

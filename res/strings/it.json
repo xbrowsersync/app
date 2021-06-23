@@ -1,0 +1,1312 @@
+{
+  "Alert": {
+    "AppUpdateAvailable": {
+      "Title": {
+        "key": "Alert_AppUpdateAvailable_Title",
+        "default": "xBrowserSync aggiornamento disponibile"
+      },
+      "Message": {
+        "key": "Alert_AppUpdateAvailable_Message",
+        "default": "{version} è disponibile per il download. Clicca per ulteriori informazioni.",
+        "android": "xBrowserSync {version} è disponibile per il download."
+      }
+    },
+    "AppUpdated": {
+      "Title": {
+        "key": "Alert_AppUpdated_Title",
+        "default": "Aggiornato a"
+      },
+      "Message": {
+        "key": "Alert_AppUpdated_Message",
+        "default": "xBrowserSync è stato aggiornato. La sincronizzazione è stata disattivata, riattiva la sincronizzazione per completare il processo di aggiornamento."
+      }
+    },
+    "BookmarkCreated": {
+      "key": "Alert_BookmarkCreated",
+      "default": "Segnalibro creato"
+    },
+    "BookmarkDeleted": {
+      "key": "Alert_BookmarkDeleted",
+      "default": "Segnalibro eliminato"
+    },
+    "BookmarkUpdated": {
+      "key": "Alert_BookmarkUpdated",
+      "default": "Segnalibro aggiornato"
+    },
+    "GetMetadata": {
+      "Message": {
+        "key": "Alert_GetMetadata_Message",
+        "default": "Recupero delle proprietà del segnalibro, tocca per annullare."
+      },
+      "Success": {
+        "key": "Alert_GetMetadata_Success",
+        "default": "Proprietà del segnalibro aggiornate."
+      }
+    },
+    "Go": {
+      "key": "Alert_Go",
+      "default": "Vai"
+    },
+    "WorkingOffline": {
+      "Title": {
+        "key": "Alert_WorkingOffline_Title",
+        "default": "Modalità offline"
+      },
+      "Message": {
+        "key": "Alert_WorkingOffline_Message",
+        "default": "Le modifiche verranno sincronizzate una volta ripristinata la connessione."
+      }
+    }
+  },
+  "App": {
+    "Description": {
+      "key": "App_Description",
+      "default": "La sincronizzazione del browser come dovrebbe essere: sicura, anonima e gratuita! Sincronizza i segnalibri attraverso i tuoi browser e dispositivi, non è richiesta alcuna registrazione."
+    },
+    "Title": {
+      "key": "App_Title",
+      "default": "xBrowserSync"
+    }
+  },
+  "Bookmarks": {
+    "Container": {
+      "Menu": {
+        "key": "Bookmarks_Container_Menu",
+        "default": "Menu segnalibri"
+      },
+      "Mobile": {
+        "key": "Bookmarks_Container_Mobile",
+        "default": "Segnalibri sul cellulare"
+      },
+      "Other": {
+        "key": "Bookmarks_Container_Other",
+        "default": "Altri segnalibri"
+      },
+      "Toolbar": {
+        "key": "Bookmarks_Container_Toolbar",
+        "default": "Segnalibri barra degli strumenti"
+      }
+    }
+  },
+  "Button": {
+    "AddBookmark": {
+      "key": "Button_AddBookmark",
+      "default": "Aggiungi segnalibro"
+    },
+    "Back": {
+      "key": "Button_Back",
+      "default": "Indietro"
+    },
+    "Cancel": {
+      "key": "Button_Cancel",
+      "default": "Annulla"
+    },
+    "Close": {
+      "key": "Button_Close",
+      "default": "Chiudi"
+    },
+    "Confirm": {
+      "key": "Button_Confirm",
+      "default": "Si"
+    },
+    "Continue": {
+      "key": "Button_Continue",
+      "default": "Continua"
+    },
+    "DeleteBookmark": {
+      "key": "Button_DeleteBookmark",
+      "default": "Elimina segnalibro"
+    },
+    "Deny": {
+      "key": "Button_Deny",
+      "default": "No"
+    },
+    "Done": {
+      "key": "Button_Done",
+      "default": "Fatto"
+    },
+    "DownloadBackup": {
+      "key": "Button_DownloadBackup",
+      "default": "Scarica Backup"
+    },
+    "EditBookmark": {
+      "key": "Button_EditBookmark",
+      "default": "Modifica segnalibro"
+    },
+    "Help": {
+      "key": "Button_Help",
+      "default": "Visualizza guida"
+    },
+    "Next": {
+      "key": "Button_Next",
+      "default": "Successivo"
+    },
+    "OK": {
+      "key": "Button_OK",
+      "default": "OK"
+    },
+    "ReleaseNotes": {
+      "key": "Button_ReleaseNotes",
+      "default": "Visualizza note di rilascio"
+    },
+    "Saving": {
+      "key": "Button_Saving",
+      "default": "Salvataggio in corso"
+    },
+    "Settings": {
+      "key": "Button_Settings",
+      "default": "Impostazioni"
+    },
+    "ShareBookmark": {
+      "key": "Button_ShareBookmark",
+      "default": "Condividi segnalibro"
+    },
+    "Undo": {
+      "key": "Button_Undo",
+      "default": "Annulla"
+    },
+    "Update": {
+      "key": "Button_Update",
+      "default": "Aggiorna"
+    },
+    "View": {
+      "key": "Button_View",
+      "default": "Visualizza"
+    }
+  },
+  "Exception": {
+    "ContainerChanged_Message": {
+      "key": "Exception_ContainerChanged_Message",
+      "default": "Si prega di evitare di modificare le cartelle [xbs] in quanto possono causare problemi di sincronizzazione."
+    },
+    "ContainerChanged_Title": {
+      "key": "Exception_ContainerChanged_Title",
+      "default": "Cartella xBrowserSync cambiata"
+    },
+    "DailyNewSyncLimitReached_Message": {
+      "key": "Exception_DailyNewSyncLimitReached_Message",
+      "default": "Sincronizza con un ID di sincronizzazione esistente, passa a un altro server o riprova domani."
+    },
+    "DailyNewSyncLimitReached_Title": {
+      "key": "Exception_DailyNewSyncLimitReached_Title",
+      "default": "Raggiunto un nuovo limite di sincronizzazione giornaliero"
+    },
+    "Default_Message": {
+      "key": "Exception_Default_Message",
+      "default": "Se il problema persiste, <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>segnala il problema</a>."
+    },
+    "Default_Title": {
+      "key": "Exception_Default_Title",
+      "default": "Qualcosa è andato storto"
+    },
+    "FailedDownloadFile_Title": {
+      "key": "Exception_FailedDownloadFile_Title",
+      "default": "Backup non riuscito"
+    },
+    "FailedGetDataToRestore_Title": {
+      "key": "Exception_FailedGetDataToRestore_Title",
+      "default": "Sfoglia file non riuscita"
+    },
+    "FailedGetPageMetadata_Message": {
+      "key": "Exception_FailedGetPageMetadata_Message",
+      "default": "L'URL non è valido o i dati della pagina web non possono essere recuperati."
+    },
+    "FailedGetPageMetadata_Title": {
+      "key": "Exception_FailedGetPageMetadata_Title",
+      "default": "Impossibile ottenere le proprietà del segnalibro"
+    },
+    "FailedRefreshBookmarks_Title": {
+      "key": "Exception_FailedRefreshBookmarks_Title",
+      "default": "Impossibile recuperare gli aggiornamenti"
+    },
+    "FailedRestoreData_Message": {
+      "key": "Exception_FailedRestoreData_Message",
+      "default": "I dati di backup forniti non sono in un formato previsto."
+    },
+    "FailedRestoreData_Title": {
+      "key": "Exception_FailedRestoreData_Title",
+      "default": "Impossibile ripristinare i dati"
+    },
+    "FailedShareUrlNotSynced_Title": {
+      "key": "Exception_FailedShareUrlNotSynced_Title",
+      "default": "Devi essere sincronizzato per aggiungere un segnalibro"
+    },
+    "FailedShareUrl_Title": {
+      "key": "Exception_FailedShareUrl_Title",
+      "default": "Impossibile recuperare l'URL del segnalibro condiviso"
+    },
+    "HttpRequestFailed_Message": {
+      "key": "Exception_HttpRequestFailed_Message",
+      "default": "Controllare la connessione di rete e riprovare."
+    },
+    "HttpRequestFailed_Title": {
+      "key": "Exception_HttpRequestFailed_Title",
+      "default": "Connessione al server persa"
+    },
+    "InvalidCredentials_Message": {
+      "key": "Exception_InvalidCredentials_Message",
+      "default": "Verificare che l'ID di sincronizzazione, la password e l'URL del server siano stati inseriti correttamente."
+    },
+    "InvalidCredentials_Title": {
+      "key": "Exception_InvalidCredentials_Title",
+      "default": "Credenziali non valide"
+    },
+    "InvalidService_Message": {
+      "key": "Exception_InvalidService_Message",
+      "default": "L'URL del server non è un server xBrowserSync valido."
+    },
+    "InvalidService_Title": {
+      "key": "Exception_InvalidService_Title",
+      "default": "Server xBrowserSync non valido"
+    },
+    "LocalContainerNotFound_Message": {
+      "key": "Exception_LocalContainerNotFound_Message",
+      "default": "Possibile profilo del browser danneggiato, provare a creare un nuovo profilo in quanto potrebbe risolvere il problema."
+    },
+    "LocalContainerNotFound_Title": {
+      "key": "Exception_LocalContainerNotFound_Title",
+      "default": "Struttura dei segnalibri inattesa"
+    },
+    "LocalSyncError_Message": {
+      "key": "Exception_LocalSyncError_Message",
+      "default": "I dati del browser locale sono stati aggiornati, si prega di riaggiungere l'ultima modifica."
+    },
+    "LocalSyncError_Title": {
+      "key": "Exception_LocalSyncError_Title",
+      "default": "Errore di sincronizzazione"
+    },
+    "MissingClientData_Message": {
+      "key": "Exception_MissingClientData_Message",
+      "default": "Impossibile trovare le credenziali memorizzate. Riattiva la sincronizzazione e riprova."
+    },
+    "MissingClientData_Title": {
+      "key": "Exception_MissingClientData_Title",
+      "default": "Credenziali mancanti"
+    },
+    "NoDataToRestore_Message": {
+      "key": "Exception_NoDataToRestore_Message",
+      "default": "Assicurati di aver fornito un backup xBrowserSync valido prima del ripristino."
+    },
+    "NoDataToRestore_Title": {
+      "key": "Exception_NoDataToRestore_Title",
+      "default": "Nessun dato da ripristinare"
+    },
+    "NotAcceptingNewSyncs_Message": {
+      "key": "Exception_NotAcceptingNewSyncs_Message",
+      "default": "Passa a un server diverso o riprova più tardi."
+    },
+    "NotAcceptingNewSyncs_Title": {
+      "key": "Exception_NotAcceptingNewSyncs_Title",
+      "default": "Server che non accetta nuove sincronizzazioni"
+    },
+    "OutOfSync_Message": {
+      "key": "Exception_OutOfSync_Message",
+      "default": "I dati locali non sono sincronizzati e sono stati aggiornati. Si prega di riapplicare l'ultima modifica."
+    },
+    "OutOfSync_Title": {
+      "key": "Exception_OutOfSync_Title",
+      "default": "Rilevato conflitto di sincronizzazione"
+    },
+    "RequestEntityTooLarge_Message": {
+      "key": "Exception_RequestEntityTooLarge_Message",
+      "default": "Elimina alcuni segnalibri e riprova o passa a un server con un limite di sincronizzazione più grande."
+    },
+    "RequestEntityTooLarge_Title": {
+      "key": "Exception_RequestEntityTooLarge_Title",
+      "default": "Limite dati sincronizzati superato"
+    },
+    "ScanFailed_Message": {
+      "key": "Exception_ScanFailed_Message",
+      "default": "È stata concessa l'autorizzazione di verifica e riprova."
+    },
+    "ScanFailed_Title": {
+      "key": "Exception_ScanFailed_Title",
+      "default": "Fallita scansione"
+    },
+    "ServiceOffline_Message": {
+      "key": "Exception_ServiceOffline_Message",
+      "default": "Il server xBrowserSync è attualmente non in linea, riprova più tardi."
+    },
+    "ServiceOffline_Title": {
+      "key": "Exception_ServiceOffline_Title",
+      "default": "Server non in linea"
+    },
+    "ShareFailed_Title": {
+      "key": "Exception_ShareFailed_Title",
+      "default": "Fallita condivisione"
+    },
+    "SyncRemoved_Message": {
+      "key": "Exception_SyncRemoved_Message",
+      "default": "La sincronizzazione richiesta non esiste, potrebbe essere stata rimossa a causa di inattività."
+    },
+    "SyncRemoved_Title": {
+      "key": "Exception_SyncRemoved_Title",
+      "default": "Sincronizzazione non trovata"
+    },
+    "SyncVersionNotSupported_Message": {
+      "key": "Exception_SyncVersionNotSupported_Message",
+      "default": "Questo ID non può essere sincronizzato con questa versione di xBrowserSync perché la sincronizzazione è stata aggiornata a una versione successiva."
+    },
+    "SyncVersionNotSupported_Restore_Message": {
+      "key": "Exception_SyncVersionNotSupported_Restore_Message",
+      "default": "I dati di backup non possono essere ripristinati da questa versione di xBrowserSync in quanto sono stati creati con una versione successiva."
+    },
+    "SyncVersionNotSupported_Title": {
+      "key": "Exception_SyncVersionNotSupported_Title",
+      "default": "Versione di sincronizzazione non supportata"
+    },
+    "TooManyRequests_Message": {
+      "key": "Exception_TooManyRequests_Message",
+      "default": "La sincronizzazione è stata disattivata, riabilita la sincronizzazione per riprendere la sincronizzazione."
+    },
+    "TooManyRequests_Title": {
+      "key": "Exception_TooManyRequests_Title",
+      "default": "Limite richieste di server raggiunto"
+    },
+    "UncommittedSyncs_Message": {
+      "key": "Exception_UncommittedSyncs_Message",
+      "default": "La sincronizzazione verrà eseguita una volta ripristinata la connessione al server."
+    },
+    "UncommittedSyncs_Title": {
+      "key": "Exception_UncommittedSyncs_Title",
+      "default": "Modifiche non sincronizzate"
+    },
+    "UnsupportedServiceApiVersion_Message": {
+      "key": "Exception_UnsupportedServiceApiVersion_Message",
+      "default": "Questo server sta eseguendo una versione API non supportata."
+    },
+    "UnsupportedServiceApiVersion_Title": {
+      "key": "Exception_UnsupportedServiceApiVersion_Title",
+      "default": "Server non supportato"
+    },
+    "UpgradeFailed_Message": {
+      "key": "Exception_UpgradeFailed_Message",
+      "android": "L'aggiornamento verrà riprovato al riavvio dell'app. Se il problema persiste, reinstalla xBrowserSync.",
+      "default": "Riavvia il tuo browser per riprovare l'aggiornamento, se il problema persiste reinstalla xBrowserSync."
+    },
+    "UpgradeFailed_Title": {
+      "key": "Exception_UpgradeFailed_Title",
+      "default": "Aggiornamento non riuscito"
+    }
+  },
+  "Service": {
+    "Status": {
+      "Error": {
+        "key": "Service_Status_Error",
+        "default": "Errore di connessione"
+      },
+      "Loading": {
+        "key": "Service_Status_Loading",
+        "default": "Controllo in corso"
+      },
+      "NoNewSyncs": {
+        "key": "Service_Status_NoNewSyncs",
+        "default": "Non accettare nuove sincronizzazioni"
+      },
+      "Offline": {
+        "key": "Service_Status_Offline",
+        "default": "Non in linea"
+      },
+      "Online": {
+        "key": "Service_Status_Online",
+        "default": "In linea"
+      }
+    }
+  },
+  "Tooltip": {
+    "NotSynced": {
+      "key": "Tooltip_NotSynced",
+      "default": "non sincronizzato"
+    },
+    "Synced": {
+      "key": "Tooltip_Synced",
+      "default": "sincronizzato"
+    },
+    "Syncing": {
+      "key": "Tooltip_Syncing",
+      "default": "sincronizzazione"
+    }
+  },
+  "View": {
+    "Bookmark": {
+      "Add": {
+        "key": "View_Bookmark_Add",
+        "default": "Aggiungi segnalibro"
+      },
+      "Edit": {
+        "key": "View_Bookmark_Edit",
+        "default": "Modifica segnalibro"
+      },
+      "Form": {
+        "Title": {
+          "key": "View_Bookmark_Form_Title",
+          "default": "Titolo"
+        },
+        "Url": {
+          "Exists": {
+            "key": "View_Bookmark_Form_Url_Exists",
+            "default": "L'URL è già stato contrassegnato come segnalibro"
+          },
+          "Invalid": {
+            "key": "View_Bookmark_Form_Url_Invalid",
+            "default": "URL non valido"
+          },
+          "Label": {
+            "key": "View_Bookmark_Form_Url_Label",
+            "default": "URL"
+          },
+          "Required": {
+            "key": "View_Bookmark_Form_Url_Required",
+            "default": "L'URL è obbligatorio"
+          }
+        },
+        "Description": {
+          "key": "View_Bookmark_Form_Description",
+          "default": "Descrizione"
+        },
+        "Tags": {
+          "Label": {
+            "key": "View_Bookmark_Form_Tags_Label",
+            "default": "Etichette"
+          },
+          "Placeholder": {
+            "key": "View_Bookmark_Form_Tags_Placeholder",
+            "default": "etichetta 1, etichetta 2, etichetta 3, eccetera"
+          },
+          "Clear": {
+            "key": "View_Bookmark_Form_Tags_Clear",
+            "default": "Cancella etichette"
+          },
+          "Remove": {
+            "key": "View_Bookmark_Form_Tags_Remove",
+            "default": "Rimuovi etichetta"
+          }
+        },
+        "Delete": {
+          "key": "View_Bookmark_Form_Delete",
+          "default": "Elimina"
+        },
+        "Share": {
+          "key": "View_Bookmark_Form_Share",
+          "default": "Condividi"
+        },
+        "UpdateProperties": {
+          "key": "View_Bookmark_Form_UpdateProperties",
+          "default": "Aggiorna proprietà del segnalibro"
+        }
+      },
+      "InvalidUrlShared": {
+        "key": "View_Bookmark_InvalidUrlShared",
+        "default": "Il valore condiviso non contiene un URL valido."
+      }
+    },
+    "Help": {
+      "AddingBookmarks": {
+        "key": "View_Help_AddingBookmarks",
+        "default": "<h4>Aggiunta di un segnalibro</h4><p>Aggiungi un segnalibro alla pagina corrente facendo clic sull'icona del segnalibro nel pannello di ricerca. Le proprietà del segnalibro saranno generate automaticamente per te, altrimenti aggiungi una descrizione e alcuni tag per garantire migliori risultati di ricerca.</p><p>In alternativa, semplicemente fai clic sul pulsante “Aggiungi un segnalibro a questa pagina” del browser come normale e xBrowserSync genererà automaticamente le proprietà del segnalibro (permessi opzionali devono essere concessi per funzionare, controllare il pannello Impostazioni).</p>",
+        "android": "<h4>Aggiunta di un segnalibro</h4><p>Aggiungi facilmente i segnalibri condividendo xBrowserSync da tutte le applicazioni che condividono URL come i browser, YouTube, Spotify e molti altri.</p><p>Le proprietà del segnalibro saranno recuperate per te, altrimenti aggiungi una descrizione e alcuni tag per garantire risultati di ricerca migliori.</p>"
+      },
+      "BackingUp": {
+        "key": "View_Help_BackingUp",
+        "default": "<h4>Ricordati di eseguire il backup</h4><p>Quando utilizzi xBrowserSync i tuoi dati sono di tua responsabilità, quindi sii intelligente e assicurati di fare dei backup.</p><p>Vai al pannello Impostazioni e esegui il backup dei dati non crittografati in un file locale che può essere utilizzato per ripristinare i tuoi dati in caso di necessità.</p><p>Se i dati del tuo browser locale vengono corrotti e non hai alcun backup, è possibile in qualsiasi momento ripristinare i dati allo stato originale da quando xBrowserSync è stato installato.</p>",
+        "android": "<h4>Ricordati di eseguire il backup</h4><p>Quando utilizzi xBrowserSync i tuoi dati sono di tua responsabilità, quindi sii intelligente e assicurati di fare dei backup.</p><p>Vai al pannello Impostazioni e esegui il backup dei dati non crittografati in un file locale che può essere utilizzato per ripristinare i tuoi dati in caso di necessità.</p>"
+      },
+      "BeforeYouBegin": {
+        "key": "View_Help_BeforeYouBegin",
+        "default": "<h4>Prima di iniziare</h4><p>xBrowserSync modifica i dati locali del tuo browser quindi è una buona idea fare un backup dei tuoi segnalibri e degli altri dati del browser nel caso, e se stai usando altri servizi o strumenti di sincronizzazione del browser (come <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) disabilitali per evitare conflitti.</p>",
+        "brave": "<h4>Prima di iniziare</h4><p>xBrowserSync modifica i dati locali del tuo browser quindi è una buona idea fare un backup dei tuoi segnalibri e degli altri dati del browser nel caso, e se stai usando altri servizi o strumenti di sincronizzazione del browser (come <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) disabilitali per evitare conflitti.</p>",
+        "edge": "<h4>Prima di iniziare</h4><p>xBrowserSync modifica i dati locali del tuo browser quindi è una buona idea fare un backup dei tuoi segnalibri e degli altri dati del browser nel caso, e se stai usando altri servizi o strumenti di sincronizzazione del browser (come <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) disabilitali per evitare conflitti.</p>",
+        "firefox": "<h4>Prima di iniziare</h4><p>xBrowserSync modifica i dati locali del tuo browser quindi è una buona idea fare un backup dei tuoi segnalibri e degli altri dati del browser nel caso, e se stai usando altri servizi o strumenti di sincronizzazione del browser (come <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) disabilitali per evitare conflitti.</p>"
+      },
+      "ExistingId": {
+        "key": "View_Help_ExistingId",
+        "default": "<h4>Sincronizzazione con il tuo ID esistente</h4><p>Clicca su “Hai già un ID di sincronizzazione?” per inserire il tuo ID di sincronizzazione esistente e la tua password. Se l'ID di sincronizzazione è stato creato su un server diverso da quello visualizzato, passare al server prima di tentare di sincronizzare.</p><p>xBrowserSync recupererà e decrittograferà i dati crittografati utilizzando la password memorizzata localmente, poi cancella i tuoi segnalibri locali prima di generarli con i dati decrittografati.</p><p>Quando sincronizzato, xBrowserSync controlla in background ogni quindici minuti per aggiornare i tuoi dati sincronizzati e aggiornerà automaticamente i tuoi segnalibri locali quando necessario. Puoi anche sincronizzare manualmente gli aggiornamenti disponibili per i tuoi dati sincronizzati nel pannello Impostazioni.</p>",
+        "android": "<h4>Sincronizzazione con il tuo ID esistente</h4><p>Inizia scansionando il codice QR ID di sincronizzazione nel pannello Impostazioni dell'estensione del browser desktop xBrowserSync (clicca sul tuo ID di sincronizzazione per rivelarlo). Assicurati di inserire la stessa password di crittografia utilizzata per creare la sincronizzazione altrimenti xBrowserSync non sarà in grado di decifrare i tuoi dati.</p><p>Inoltre, se si è sincronizzati con un altro server xBrowserSync assicurarsi che sia il server attivo configurato nel pannello Impostazioni.</p>"
+      },
+      "FirstSync": {
+        "key": "View_Help_FirstSync",
+        "default": "<h4>Sincronizzazione per la prima volta</h4><p>Prima che xBrowserSync possa sincronizzare i dati del browser è necessario fornire una password di cifratura. Assicurarsi di rendere forte ma anche ricordabile, non ci sono reset o promemoria quindi se lo dimentichi non potrai accedere ai tuoi dati sincronizzati.</p><p>I dati del browser verranno crittografati utilizzando la password e salvati nel server xBrowserSync attivo configurato nel pannello Impostazioni.</p><p>Una volta sincronizzato, qualsiasi modifica apportata ai segnalibri locali verrà sincronizzata automaticamente da xBrowserSync.</p>",
+        "android": "<h4>Sincronizzazione per la prima volta</h4><p>xBrowserSync sincronizza attivamente i dati del browser tra i tuoi browser desktop (la sincronizzazione con i browser mobile non è supportata in questo momento), puoi utilizzare questa app per accedere ai tuoi dati sincronizzati sul tuo dispositivo mobile Android.</p><p>Se non hai già creato un ID di sincronizzazione, vai al tuo browser desktop e <a href='https://link.xbrowsersync.org/download' class='new-tab'>scarica</a> l'estensione xBrowserSync. Una volta creata una sincronizzazione puoi utilizzare il tuo nuovo ID di sincronizzazione all'interno di questa app per accedere ai tuoi dati.</p>"
+      },
+      "FurtherSupport": {
+        "key": "View_Help_FurtherSupport",
+        "default": "<h4>Ulteriore supporto</h4><p>Puoi trovare le risposte alle domande più comuni nelle <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>Domande Frequenti</a>, controlla anche gli attuali <a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>problemi conosciuti</a> per vedere se il tuo problema è elencato.</p><p>In alternativa, utilizza il <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>issue tracker</a> per segnalare un problema o richiedere una nuova funzionalità.</p>"
+      },
+      "Mobile": {
+        "key": "View_Help_Mobile",
+        "default": "<h4>Vai su cellulare</h4><p>Accedi ai segnalibri sincronizzati in giro con l'app xBrowserSync Android, disponibile su <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a> store, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droid</a> o <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>download diretto</a>.</p>"
+      },
+      "NativeFeatures": {
+        "key": "View_Help_NativeFeatures",
+        "default": "<h4>Funzionalità native supportate</h4><p>Sentiti libero di continuare a utilizzare le funzionalità di segnalibri nativi del tuo browser, come la barra dei segnalibri e il gestore dei segnalibri, qualsiasi modifica apportata verrà sincronizzata automaticamente in background.</p><p>Se hai organizzato i segnalibri esistenti in cartelle non ti preoccupare, xBrowserSync rispetterà e manterrà la gerarchia dei segnalibri esistenti.</p>",
+        "firefox": "<h4>Funzionalità native supportate</h4><p>Sentiti libero di continuare a utilizzare le funzionalità di segnalibri nativi del tuo browser, come la barra degli strumenti dei segnalibri e la libreria dei segnalibri, qualsiasi modifica apportata verrà sincronizzata automaticamente in background.</p><p>Se hai organizzato i segnalibri esistenti in cartelle non ti preoccupare, xBrowserSync rispetterà e manterrà la gerarchia dei segnalibri esistenti.</p><p>Si prega di notare tuttavia, come l'API dei segnalibri di Firefox non supporta ancora l'accesso ai tag dei segnalibri nativi, eventuali tag esistenti verranno persi quando la sincronizzazione e i tag aggiunti tramite xBrowserSync non verranno salvati come tag nativi.</p>"
+      },
+      "Previous": {
+        "key": "View_Help_Previous",
+        "default": "Precedente"
+      },
+      "Searching": {
+        "key": "View_Help_Searching",
+        "default": "<h4>Ricerca dei segnalibri</h4><p>Una volta sincronizzata, basta premere Invio per visualizzare i segnalibri recenti o digitare alcune parole chiave o un URL per cercare i segnalibri.</p><p>Commuta tra i risultati della ricerca e le cartelle dei segnalibri per sfogliare l'intera gerarchia.</p><p>Per modificare o eliminare un segnalibro, passa sopra il segnalibro e fai clic sull'icona di modifica ora visibile accanto al titolo del segnalibro.</p>",
+        "android": "<h4>Ricerca dei segnalibri</h4><p>Una volta sincronizzati, i segnalibri vengono visualizzati in ordine cronologico quando apri xBrowserSync. Digita alcune parole chiave o un URL nella casella di ricerca per cercare i segnalibri.</p><p>Commuta tra i risultati della ricerca e le cartelle dei segnalibri per sfogliare l'intera gerarchia.</p><p>Una pressione prolungata su un segnalibro ti permetterà di condividere, modificare o eliminare direttamente il segnalibro.</p>"
+      },
+      "Service": {
+        "key": "View_Help_Service",
+        "default": "<h4>Sincronizzazione con un altro server</h4><p>Per impostazione predefinita i dati vengono sincronizzati con il server <a href='https://link.xbrowsersync.org/api' class='new-tab'>ufficiale xBrowserSync</a>, tuttavia, se si desidera sincronizzare i dati con un server xBrowserSync alternativo è possibile cambiare il server attivo prima della sincronizzazione.</p><p>Controlla l'elenco dei server <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>pubblici xBrowserSync</a> o <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>esegui il tuo server</a>, sia per uso privato per la massima sicurezza e privacy, o per uso pubblico in modo che più persone possano godere di xBrowserSync.</p><p><strong>Importante:</strong> i server xBrowserSync sono gestiti indipendentemente da volontari. L'amministratore del server non si assume alcuna responsabilità per i tuoi dati, quindi ti ricordatii di eseguire regolarmente il backup.</p>"
+      },
+      "Shortcuts": {
+        "key": "View_Help_Shortcuts",
+        "default": "<h4>Usa le scorciatoie!</h4><p>Per cercare rapidamente i segnalibri, usa la scorciatoia da tastiera (Ctrl+Space) per attivare l'estensione, poi basta premere Invio per visualizzare i segnalibri recenti o iniziare a digitare per la ricerca.</p><p>Per cambiare la scorciatoia, cerca di chrome://extensions/shortcuts e aggiorna le scorciatoie disponibili sotto xBrowserSync.</p>",
+        "brave": "<h4>Usa le scorciatoie!</h4><p>Per cercare rapidamente i segnalibri, usa la scorciatoia da tastiera (Ctrl+Space) per attivare l'estensione, poi basta premere Invio per visualizzare i segnalibri recenti o iniziare a digitare per la ricerca.</p><p>Per cambiare la scorciatoia, cerca di brave://extensions/shortcuts e aggiorna le scorciatoie disponibili sotto xBrowserSync.</p>",
+        "edge": "<h4>Usa le scorciatoie!</h4><p>Per cercare rapidamente i segnalibri, usa la scorciatoia da tastiera (Ctrl+Space) per attivare l'estensione, poi basta premere Invio per visualizzare i segnalibri recenti o iniziare a digitare per la ricerca.</p><p>Per cambiare la scorciatoia, cerca di edge://extensions/shortcuts e aggiorna le scorciatoie disponibili sotto xBrowserSync.</p>",
+        "firefox": "<h4>Usa le scorciatoie!</h4><p>Per cercare rapidamente i segnalibri, usa la scorciatoia da tastiera (Ctrl+Space) per attivare l'estensione, poi basta premere Invio per visualizzare i segnalibri recenti o iniziare a digitare per la ricerca.</p><p>Per cambiare la scorciatoia, vai su about:addons, clicca su “Gestisci le scorciatoie di estensione” nel menu Impostazioni e aggiorna le scorciatoie disponibili sotto xBrowserSync.</p>"
+      },
+      "SyncId": {
+        "key": "View_Help_SyncId",
+        "default": "<h4>Il tuo ID di sincronizzazione</h4><p>xBrowserSync garantisce la tua privacy poiché nessun dato personale viene mai raccolto e i dati del tuo browser vengono crittografati prima di essere sincronizzati. Per identificare i tuoi dati sincronizzati ti viene fornito un ID di sincronizzazione anonimo che può essere utilizzato insieme alla tua password per sincronizzare i tuoi dati su altri browser e dispositivi.</p><p>Ricorda che il tuo ID di sincronizzazione funzionerà solo con il server xBrowserSync su cui è stato creato, se si passa a un altro seerver xBrowserSync è necessario creare una nuova sincronizzazione o utilizzare un ID di sincronizzazione esistente creato quando precedentemente sincronizzato con quel servizio.</p><p>Ogni volta che si è sincronizzati è possibile visualizzare l'ID di sincronizzazione nel pannello Impostazioni, fare clic su di esso per rivelare un pratico codice QR per eseguire la scansione durante la sincronizzazione su dispositivi mobili.</p>"
+      },
+      "Welcome": {
+        "key": "View_Help_Welcome",
+        "default": "<h4>Benvenuto su xBrowserSync!</h4><p>xBrowserSync è un'alternativa gratuita e open-source ai servizi di sincronizzazione del browser offerti da Google, Mozilla, Opera e altri, che rispetta la tua privacy e ti dà totale anonimato (consulta il sito <a href='https://link.xbrowsersync.org/www' class='new-tab'></a> per maggiori informazioni).</p><p>Prenditi un momento per leggere questa guida di aiuto per familiarizzarti con xBrowserSync, utilizzando i link di paginazione qui sotto o i tasti freccia per spostarsi tra le pagine.</p><p>Si prega di notare: xBrowserSync attualmente sincronizza solo i segnalibri. La sincronizzazione dei dati aggiuntivi del browser sarà aggiunta nelle versioni future, controlla il <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>piano d'azione</a> per vedere cosa è previsto.</p>",
+        "android": "<h4>Benvenuto su xBrowserSync!</h4><p>xBrowserSync è un'alternativa gratuita e open-source ai servizi di sincronizzazione del browser offerti da Google, Mozilla, Opera e altri, che rispetta la tua privacy e ti dà totale anonimato (consulta il sito <a href='https://link.xbrowsersync.org/www' class='new-tab'></a> per maggiori informazioni).</p><p>Prenditi un momento per leggere questa guida di aiuto per familiarizzarti con xBrowserSync, utilizzando i link di paginazione qui sotto o scorrendo per spostarsi tra le pagine.</p><p>Si prega di notare: xBrowserSync attualmente sincronizza solo i segnalibri. La sincronizzazione dei dati aggiuntivi del browser sarà aggiunta nelle versioni future, controlla il <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>piano d'azione</a> per vedere cosa è previsto.</p>"
+      }
+    },
+    "Login": {
+      "GetSyncId": {
+        "Title": {
+          "key": "View_Login_GetSyncId_Title",
+          "default": "Hai bisogno di un ID di sincronizzazione?"
+        },
+        "Content": {
+          "key": "View_Login_GetSyncId_Content",
+          "default": "Scarica l'estensione del browser desktop xBrowserSync e crea una nuova sincronizzazione per accedere ai segnalibri qui."
+        }
+      },
+      "Password": {
+        "Confirm": {
+          "key": "View_Login_Password_Confirm",
+          "default": "Conferma password"
+        },
+        "Existing": {
+          "key": "View_Login_Password_Existing",
+          "default": "Tua password di cifratura"
+        },
+        "Label": {
+          "key": "View_Login_Password_Label",
+          "default": "Password di cifratura"
+        },
+        "New": {
+          "key": "View_Login_Password_New",
+          "default": "Inserire password di cifratura"
+        },
+        "Show": {
+          "key": "View_Login_Password_Show",
+          "default": "Mostra password"
+        }
+      },
+      "Scan": {
+        "Title": {
+          "key": "View_Login_Scan_Title",
+          "default": "Connettiti alla tua sincronizzazione"
+        },
+        "Content": {
+          "key": "View_Login_Scan_Content",
+          "default": "Apri xBrowserSync sul tuo browser desktop, vai al pannello di impostazioni e clicca sul tuo ID di sincronizzazione per visualizzare il codice QR che puoi scansionare qui."
+        },
+        "ScanCode": {
+          "key": "View_Login_Scan_ScanCode",
+          "default": "Scansiona codice"
+        },
+        "ManualEntry": {
+          "key": "View_Login_Scan_ManualEntry",
+          "default": "Inserire manualmente dettagli di sincronizzazione"
+        }
+      },
+      "Service": {
+        "ApiVersion": {
+          "key": "View_Login_Service_ApiVersion",
+          "default": "Versione API"
+        },
+        "Confirm": {
+          "key": "View_Login_Service_Confirm",
+          "default": "Sincronizzare con questo server?"
+        },
+        "Location": {
+          "key": "View_Login_Service_Location",
+          "default": "Luogo"
+        },
+        "MaxSyncSize": {
+          "key": "View_Login_Service_MaxSyncSize",
+          "default": "Dimensione massima della sincronizzazione"
+        },
+        "Selected": {
+          "key": "View_Login_Service_Selected",
+          "default": "Sincronizzazione in"
+        },
+        "Status": {
+          "key": "View_Login_Service_Status",
+          "default": "Stato"
+        },
+        "Update": {
+          "Label": {
+            "key": "View_Login_Service_Update_Label",
+            "default": "xBrowserSync server URL"
+          },
+          "Description": {
+            "key": "View_Login_Service_Update_Description",
+            "default": "Inserisci l'URL di un server alternativo xBrowserSync. Sfoglia l'elenco dei server pubblici xBrowserSync <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>qui</a>."
+          },
+          "Button": {
+            "key": "View_Login_Service_Update_Button",
+            "default": "Cambia server"
+          },
+          "Required": {
+            "key": "View_Login_Service_Update_Required",
+            "default": "L'URL è obbligatorio"
+          },
+          "InvalidService": {
+            "key": "View_Login_Service_Update_InvalidService",
+            "default": "Server xBrowserSync non valido"
+          },
+          "InvalidUrl": {
+            "key": "View_Login_Service_Update_InvalidUrl",
+            "default": "URL non valido"
+          },
+          "Failed": {
+            "key": "View_Login_Service_Update_Failed",
+            "default": "Non è possibile connettersi al server"
+          },
+          "NotSupported": {
+            "key": "View_Login_Service_Update_Failed_NotSupported",
+            "default": "Questo server sta eseguendo una versione API non supportata"
+          }
+        },
+        "Warning": {
+          "key": "View_Login_Service_Warning",
+          "default": "<strong>Importante:</strong> I server xBrowserSync sono eseguiti indipendentemente dai volontari. L'amministratore del server non si assume alcuna responsabilità per i tuoi dati, quindi ricorda di eseguire il backup regolarmente."
+        }
+      },
+      "Sync": {
+        "Confirm": {
+          "Title": {
+            "key": "View_Login_Sync_Confirm_Title",
+            "default": "Sei sicuro?"
+          },
+          "Content": {
+            "key": "View_Login_Sync_Confirm_Content",
+            "default": "xBrowserSync eliminerà tutti i dati dei segnalibri locali prima di ripristinare i segnalibri sincronizzati. OK per procedere?"
+          }
+        },
+        "DisableOthers": {
+          "Title": {
+            "key": "View_Login_Sync_DisableOthers_Title",
+            "default": "Disabilita strumenti di sincronizzazione dei segnalibri"
+          },
+          "Content": {
+            "key": "View_Login_Sync_DisableOthers_Content",
+            "default": "Sincronizza i dati del browser con xBrowserSync mentre altri strumenti di sincronizzazione dei segnalibri (come <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) sono attivi può causare duplicazioni e forse dati danneggiati. Per favore, disabilitali prima di continuare.",
+            "brave": "Sincronizza i dati del browser con xBrowserSync mentre altri strumenti di sincronizzazione dei segnalibri (come <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) sono attivi può causare duplicazioni e forse dati danneggiati. Per favore, disabilitali prima di continuare.",
+            "edge": "Sincronizza i dati del browser con xBrowserSync mentre altri strumenti di sincronizzazione dei segnalibri (come <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) sono attivi può causare duplicazioni e forse dati danneggiati. Per favore, disabilitali prima di continuare.",
+            "firefox": "Sincronizza i dati del browser con xBrowserSync mentre altri strumenti di sincronizzazione dei segnalibri (come <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) sono attivi può causare duplicazioni e forse dati danneggiati. Per favore, disabilitali prima di continuare."
+          }
+        },
+        "Enable": {
+          "key": "View_Login_Sync_Enable",
+          "default": "Sincronizzazione"
+        },
+        "New": {
+          "key": "View_Login_Sync_New",
+          "default": "Creare nuova sincronizzazione"
+        },
+        "UpgradeReady": {
+          "Title": {
+            "key": "View_Login_Sync_UpgradeReady_Title",
+            "default": "Sei pronto ad aggiornare la sincronizzazione?"
+          },
+          "Content": {
+            "key": "View_Login_Sync_UpgradeReady_Content",
+            "default": "<p>La sincronizzazione deve essere aggiornata prima di sincronizzare con questa versione di xBrowserSync. Dopo l'aggiornamento, non sarai più in grado di sincronizzare con le versioni precedenti di xBrowserSync.</p><p>Assicurati di aggiornare xBrowserSync su tutti i dispositivi sincronizzati prima di continuare. Sei pronto a procedere?</p>"
+          }
+        },
+        "UpgradeRequired": {
+          "Title": {
+            "key": "View_Login_Sync_UpgradeRequired_Title",
+            "default": "Aggiorna sincronizzazione"
+          },
+          "Content": {
+            "key": "View_Login_Sync_UpgradeRequired_Content",
+            "default": "<p>La sincronizzazione deve essere aggiornata prima di sincronizzare con questa versione di xBrowserSync.</p><p>Usa l'estensione del browser desktop xBrowserSync per aggiornare la sincronizzazione e riprovare la sincronizzazione qui.</p>"
+          }
+        }
+      },
+      "SyncId": {
+        "Description": {
+          "key": "View_Login_SyncId_Description",
+          "default": "Il tuo ID di sincronizzazione"
+        },
+        "Existing": {
+          "key": "View_Login_SyncId_Existing",
+          "default": "Hai già un ID di sincronizzazione?"
+        },
+        "Invalid": {
+          "key": "View_Login_SyncId_Invalid",
+          "default": "ID di sincronizzazione non valido"
+        },
+        "Label": {
+          "key": "View_Login_SyncId_Label",
+          "default": "ID"
+        },
+        "New": {
+          "key": "View_Login_SyncId_New",
+          "default": "Ottieni un ID di sincronizzazione"
+        }
+      }
+    },
+    "Permissions": {
+      "Title": {
+        "key": "View_Permissions_Title",
+        "default": "Permessi opzionali"
+      },
+      "Content": {
+        "key": "View_Permissions_Content",
+        "default": "<p>xBrowserSync arricchisce automaticamente i segnalibri aggiunti utilizzando il pulsante Aggiungi segnalibro del browser con i metadati disponibili. Per abilitare questa funzione, xBrowserSync <a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>richiede permessi aggiuntivi</a> per poter leggere i dati del sito web visitato.</p><p>Si prega di indicare se siete felici di concedere questi permessi, in alternativa è possibile aggiungere o rimuovere i permessi in qualsiasi momento nel pannello Impostazioni.</p>"
+      }
+    },
+    "Scan": {
+      "Title": {
+        "key": "View_Scan_Title",
+        "default": "Scansiona il codice QR del tuo ID di sincronizzazione"
+      },
+      "ToggleLight": {
+        "key": "View_Scan_ToggleLight",
+        "default": "Accendi/spegni luce"
+      }
+    },
+    "Search": {
+      "BookmarkTree": {
+        "key": "View_Search_BookmarkTree",
+        "default": "Visualizza le cartelle dei segnalibri"
+      },
+      "Clear": {
+        "key": "View_Search_Clear",
+        "default": "Cancella"
+      },
+      "FolderEmpty": {
+        "key": "View_Search_FolderEmpty",
+        "default": "La cartella è vuota"
+      },
+      "NoBookmarks": {
+        "key": "View_Search_NoBookmarks",
+        "default": "Non hai segnalibri, aggiungine qualcuno!"
+      },
+      "NoResults": {
+        "key": "View_Search_NoResults",
+        "default": "Nessun segnalibro trovato"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "Premi Invio o cerca segnalibri",
+        "android": "Trova segnalibri"
+      },
+      "Pulling": {
+        "key": "View_Search_Pulling",
+        "default": "Trascina in basso per sincronizzare"
+      },
+      "Pulled": {
+        "key": "View_Search_Pulled",
+        "default": "Rilascia per sincronizzare"
+      },
+      "SearchResults": {
+        "key": "View_Search_SearchResults",
+        "default": "Visualizza i risultati della ricerca"
+      }
+    },
+    "Settings": {
+      "BackupRestore": {
+        "Title": {
+          "key": "View_Settings_BackupRestore_Title",
+          "default": "Backup e ripristino"
+        },
+        "AutoBackup": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Title",
+            "default": "Backup automatico"
+          },
+          "Description": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Description",
+            "default": "Scarica automaticamente i backup in modo programmato."
+          },
+          "RunsAt": {
+            "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
+            "default": "Backup in esecuzione a"
+          },
+          "Every": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Every",
+            "default": "tutti"
+          },
+          "Numbers": {
+            "Single": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
+              "default": "singolo"
+            },
+            "Two": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
+              "default": "due"
+            },
+            "Three": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
+              "default": "tre"
+            },
+            "Four": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
+              "default": "quattro"
+            },
+            "Five": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
+              "default": "cinque"
+            },
+            "Six": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
+              "default": "sei"
+            },
+            "Seven": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
+              "default": "sette"
+            },
+            "Eight": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
+              "default": "otto"
+            },
+            "Nine": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
+              "default": "nove"
+            },
+            "Ten": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
+              "default": "dieci"
+            },
+            "Eleven": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
+              "default": "undici"
+            },
+            "Twelve": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
+              "default": "dodici"
+            }
+          },
+          "Units": {
+            "Day": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
+              "default": "giorno/i"
+            },
+            "Week": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
+              "default": "settimana/e"
+            },
+            "Month": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
+              "default": "mese/i"
+            }
+          },
+          "Confirmation": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
+            "default": "Per evitare la finestra di dialogo “Salva come...” da mostrare durante il download di backup, disabilitare l'impostazione del browser “Chiedi dove salvare ogni file prima di scaricare”."
+          }
+        },
+        "Backup": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_Backup_Title",
+            "default": "Backup"
+          },
+          "Button": {
+            "key": "View_Settings_BackupRestore_Backup_Button",
+            "default": "Scarica Backup"
+          },
+          "Local": {
+            "key": "View_Settings_BackupRestore_Backup_Local",
+            "default": "Esegui il backup dei dati del browser locale su un file."
+          },
+          "Synced": {
+            "key": "View_Settings_BackupRestore_Backup_Synced",
+            "default": "Backup dei dati sincronizzati su file."
+          }
+        },
+        "Restore": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_Restore_Title",
+            "default": "Ripristina"
+          },
+          "Button": {
+            "key": "View_Settings_BackupRestore_Restore_Button",
+            "default": "Ripristino Da Backup"
+          },
+          "Local": {
+            "Description": {
+              "key": "View_Settings_BackupRestore_Restore_Local_Description",
+              "default": "Ripristina i dati locali del browser da un backup."
+            },
+            "Confirm": {
+              "key": "View_Settings_BackupRestore_Restore_Local_Confirm",
+              "default": "<p>Poiché la sincronizzazione è attualmente disabilitata, i dati ripristinati sovrascriveranno i dati del browser locale.</p><p>OK per procedere?</p>"
+            }
+          },
+          "Synced": {
+            "Description": {
+              "key": "View_Settings_BackupRestore_Restore_Synced_Description",
+              "default": "Ripristina i dati sincronizzati da un backup."
+            },
+            "Confirm": {
+              "key": "View_Settings_BackupRestore_Restore_Synced_Confirm",
+              "default": "<p>Poiché la sincronizzazione è attualmente abilitata, i dati ripristinati sovrascriveranno i dati sincronizzati.</p><p>Per ripristinare i dati solo nel browser locale, disabilitare la sincronizzazione prima del ripristino.</p><p>OK per procedere?</p>",
+              "android": "<p>I dati ripristinati sovrascriveranno i dati sincronizzati.</p><p>OK per procedere?</p>"
+            }
+          },
+          "Done": {
+            "key": "View_Settings_BackupRestore_Restore_Done",
+            "default": "Backup ripristinato."
+          },
+          "SelectFile": {
+            "Button": {
+              "key": "View_Settings_BackupRestore_Restore_SelectFile_Button",
+              "default": "Seleziona file"
+            },
+            "Placeholder": {
+              "key": "View_Settings_BackupRestore_Restore_SelectFile_Placeholder",
+              "default": "Selezionare il file di backup da ripristinare"
+            }
+          },
+          "Copy": {
+            "key": "View_Settings_BackupRestore_Restore_Copy",
+            "default": "Copia i contenuti di un file di backup per ripristinare i dati."
+          },
+          "Paste": {
+            "key": "View_Settings_BackupRestore_Restore_Paste",
+            "default": "Ripristina i dati di backup"
+          },
+          "RestoreData": {
+            "key": "View_Settings_BackupRestore_Restore_RestoreData",
+            "default": "Ripristino dati"
+          },
+          "Invalid": {
+            "key": "View_Settings_BackupRestore_Restore_Invalid",
+            "default": "Dati di backup xBrowserSync non validi"
+          }
+        },
+        "Reset": {
+          "Confirm": {
+            "key": "View_Settings_BackupRestore_Reset_Confirm",
+            "default": "<p>Se continui, la sincronizzazione sarà disabilitata e i dati del browser locale verranno ripristinati quando xBrowserSync è stato installato il {date}.</p><p>OK per procedere?</p>"
+          },
+          "Button": {
+            "key": "View_Settings_BackupRestore_Reset_Button",
+            "default": "Ripristina Dati Locali"
+          },
+          "Done": {
+            "key": "View_Settings_BackupRestore_Reset_Done",
+            "default": "I dati del browser locali sono stati ripristinati allo stato di installazione iniziale."
+          },
+          "Unavailable": {
+            "key": "View_Settings_BackupRestore_Reset_Unavailable",
+            "default": "Stato dei dati di installazione non disponibili, impossibile reimpostare."
+          }
+        }
+      },
+      "Issues": {
+        "Title": {
+          "key": "View_Settings_Issues_Title",
+          "default": "Aiuto e assistenza"
+        },
+        "Help": {
+          "Title": {
+            "key": "View_Settings_Issues_Help_Title",
+            "default": "Guida di aiuto"
+          },
+          "Description": {
+            "key": "View_Settings_Issues_Help_Description",
+            "default": "Hai una domanda o un problema? Assicurati di leggere la guida di aiuto, altrimenti la risposta potrebbe essere nelle Domande Frequenti."
+          },
+          "ViewFaqs": {
+            "key": "View_Settings_Issues_Help_ViewFaqs",
+            "default": "Visualizza Domande Frequenti"
+          }
+        },
+        "Tracker": {
+          "Title": {
+            "key": "View_Settings_Issues_Tracker_Title",
+            "default": "Assistenza"
+          },
+          "Description": {
+            "key": "View_Settings_Issues_Tracker_Description",
+            "default": "Hai bisogno di assistenza? Utilizza il tracker dei problemi per segnalare un bug o richiedere una funzionalità."
+          },
+          "Report": {
+            "key": "View_Settings_Issues_Tracker_Report",
+            "default": "Visualizza Tracker Dei Problemi"
+          }
+        },
+        "Log": {
+          "Title": {
+            "key": "View_Settings_Issues_Log_Title",
+            "default": "Registro dell'applicazione"
+          },
+          "Description": {
+            "key": "View_Settings_Issues_Log_Description",
+            "default": "Scarica e includi il registro delle applicazioni quando si registra un problema."
+          },
+          "Clear": {
+            "key": "View_Settings_Issues_Log_Clear",
+            "default": "Svuota registro"
+          },
+          "Download": {
+            "key": "View_Settings_Issues_Log_Download",
+            "default": "Scarica registro"
+          },
+          "Size": {
+            "key": "View_Settings_Issues_Log_Size",
+            "default": "Dimensione registro attuale"
+          }
+        }
+      },
+      "Permissions": {
+        "Title": {
+          "key": "View_Settings_Permissions_Title",
+          "default": "Permessi opzionali"
+        },
+        "Add": {
+          "key": "View_Settings_Permissions_Add",
+          "default": "Concedi permessi"
+        },
+        "Granted": {
+          "key": "View_Settings_Permissions_Granted",
+          "default": "Concesso"
+        },
+        "NotGranted": {
+          "key": "View_Settings_Permissions_NotGranted",
+          "default": "Non concesso"
+        },
+        "Read": {
+          "Title": {
+            "key": "View_Settings_Permissions_Read_Title",
+            "default": "Leggi dati del sito"
+          },
+          "Description": {
+            "key": "View_Settings_Permissions_Read_Description",
+            "default": "Richiesto per aggiungere automaticamente metadati ai segnalibri quando si utilizza il pulsante “Aggiungi questa pagina” del browser (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>ulteriori informazioni</a>)."
+          }
+        },
+        "Remove": {
+          "key": "View_Settings_Permissions_Remove",
+          "default": "Rimuovi i permessi"
+        }
+      },
+      "Prefs": {
+        "AutoFetchMetadata": {
+          "Label": {
+            "key": "View_Settings_Prefs_AutoFetchMetadata_Label",
+            "default": "Recupero automatico metadati dei segnalibri"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_AutoFetchMetadata_Description",
+            "default": "Recupera automaticamente i metadati quando si aggiunge un segnalibro."
+          }
+        },
+        "CheckForAppUpdates": {
+          "Label": {
+            "key": "View_Settings_Prefs_CheckForAppUpdates_Label",
+            "default": "Controlla nuovi aggiornamenti app"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
+            "default": "Ricevi una notifica quando è disponibile una nuova versione di xBrowserSync."
+          }
+        },
+        "DarkMode": {
+          "Label": {
+            "key": "View_Settings_Prefs_DarkMode_Label",
+            "default": "Attiva modalità scura"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_DarkMode_Description",
+            "default": "Ideale per l'uso in ambienti a bassa luminosità."
+          }
+        },
+        "DefaultToFolderView": {
+          "Label": {
+            "key": "View_Settings_Prefs_DefaultToFolderView_Label",
+            "default": "Mostra la barra dei preferiti"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_DefaultToFolderView_Description",
+            "default": "Visualizza le cartelle dei segnalibri in modo predefinito."
+          }
+        },
+        "SearchBar": {
+          "Label": {
+            "key": "View_Settings_Prefs_SearchBar_Label",
+            "default": "Cambia posizione barra di ricerca"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_SearchBar_Description",
+            "default": "Mostra la barra di ricerca sotto i risultati."
+          }
+        },
+        "SyncToolbar": {
+          "Label": {
+            "key": "View_Settings_Prefs_SyncToolbar_Label",
+            "default": "Sincronizza barra dei segnalibri"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_SyncToolbar_Description",
+            "default": "Disabilita questa impostazione per visualizzare diversi segnalibri nella barra degli strumenti attraverso i browser sincronizzati."
+          },
+          "Confirmation": {
+            "key": "View_Settings_Prefs_SyncToolbar_Confirmation",
+            "default": "<p>Abilitare questa impostazione sostituirà i segnalibri attualmente presenti nella barra dei segnalibri con i segnalibri sincronizzati.</p><p>OK per procedere?</p>"
+          }
+        },
+        "Title": {
+          "key": "View_Settings_Prefs_Title",
+          "default": "Preferenze"
+        }
+      },
+      "Sync": {
+        "Title": {
+          "key": "View_Settings_Sync_Title",
+          "default": "Sincronizzazione"
+        },
+        "Disable": {
+          "key": "View_Settings_Sync_Disable",
+          "default": "Disabilita sincronizzazione"
+        },
+        "Id": {
+          "Label": {
+            "key": "View_Settings_Sync_Id_Label",
+            "default": "ID sincronizzazione"
+          },
+          "Description": {
+            "key": "View_Settings_Sync_Id_Description",
+            "default": "Usa il tuo ID di sincronizzazione per connetterti ai tuoi dati sincronizzati su altri dispositivi (clicca per rivelare il codice QR)."
+          }
+        },
+        "Data": {
+          "Label": {
+            "key": "View_Settings_Sync_Data_Label",
+            "default": "Utilizzo dati"
+          },
+          "Description": {
+            "key": "View_Settings_Sync_Data_Description",
+            "default": "Quanti dei dati di sincronizzazione consentiti dal servizio stai utilizzando."
+          }
+        },
+        "Service": {
+          "key": "View_Settings_Sync_Service",
+          "default": "Servizio"
+        },
+        "UpdatesAvailable": {
+          "False": {
+            "key": "View_Settings_Sync_UpdatesAvailable_False",
+            "default": "Ultima sincronizzazione {date}"
+          },
+          "True": {
+            "key": "View_Settings_Sync_UpdatesAvailable_True",
+            "default": "Pronto per la sincronizzazione (pianificata per {date})"
+          },
+          "Sync": {
+            "key": "View_Settings_Sync_UpdatesAvailable_Sync",
+            "default": "Sincronizza Ora"
+          }
+        },
+        "Qr": {
+          "Description": {
+            "key": "View_Settings_Sync_Qr_Description",
+            "default": "Scansiona questo codice QR utilizzando l'app xBrowserSync Android per connetterti ai tuoi dati sincronizzati."
+          },
+          "Show": {
+            "key": "View_Settings_Sync_Qr_Show",
+            "default": "Mostra codice QR"
+          },
+          "Copy": {
+            "key": "View_Settings_Sync_Qr_Copy",
+            "default": "Copia ID sincronizzazione negli appunti"
+          },
+          "Copied": {
+            "key": "View_Settings_Sync_Qr_Copied",
+            "default": "Copiato!"
+          }
+        }
+      },
+      "AppVersion": {
+        "key": "View_Settings_AppVersion",
+        "default": "Versione"
+      },
+      "NotAvailable": {
+        "key": "View_Settings_NotAvailable",
+        "default": "Impostazioni disponibili quando la sincronizzazione è abilitata."
+      },
+      "FileDownloaded": {
+        "key": "View_Settings_FileDownloaded",
+        "default": "File salvato negli scaricamenti"
+      },
+      "Support": {
+        "key": "View_Settings_Support",
+        "default": "Supporta xBrowserSync"
+      }
+    },
+    "Support": {
+      "Title": {
+        "key": "View_Support_Title",
+        "default": "Supporta xBrowserSync!"
+      },
+      "Content": {
+        "key": "View_Support_Content",
+        "default": "<p>Vogliamo fare xBrowserSync lo strumento di sincronizzazione numero uno del browser, ma c'è ancora molto da fare:</p><ul><li>Aggiungere la sincronizzazione delle schede del browser</li><li>Supportare tutti i principali browser desktop</li><li>Tradurre in altre lingue</li><li>E <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>molto altro</a>!</li></ul><p>Solo con il tuo supporto possiamo continuare a migliorare xBrowserSync e assicurarci che rimanga efficace nel proteggere la privacy online e migliorare la produttività.</p>"
+      },
+      "Cryptos": {
+        "key": "View_Support_Cryptos",
+        "default": "Criptovalute"
+      },
+      "Liberapay": {
+        "key": "View_Support_Liberapay",
+        "default": "Liberapay"
+      },
+      "Patreon": {
+        "key": "View_Support_Patreon",
+        "default": "Patreon"
+      }
+    },
+    "SyncRemoved": {
+      "Title": {
+        "key": "View_SyncRemoved_Title",
+        "default": "Sincronizzazione non trovata"
+      },
+      "Content": {
+        "key": "View_SyncRemoved_Content",
+        "default": "<p>La sincronizzazione non è stata trovata e potrebbe essere stata rimossa a causa dell'inattività.</p><p>Dovrai creare una nuova sincronizzazione, ma prima fare clic sul pulsante qui sotto per scaricare un backup dei dati sincronizzati che è possibile quindi ripristinare alla nuova sincronizzazione.</p>"
+      }
+    },
+    "Updated": {
+      "Title": {
+        "key": "View_Updated_Title",
+        "default": "Aggiornato il"
+      },
+      "Content": {
+        "key": "View_Updated_Content",
+        "default": "<p>xBrowserSync è stato aggiornato con le ultime funzionalità e correzioni.</p><p>Se la sincronizzazione è stata attivata, è stata disattivata e la sincronizzazione deve essere aggiornata prima di sincronizzare con questa versione di xBrowserSync. Riattiva la sincronizzazione per completare il processo di aggiornamento.</p><p>Per maggiori dettagli sulle modifiche contenute in questa versione, consulta le note di rilascio.</p>"
+      }
+    },
+    "Working": {
+      "Restoring": {
+        "key": "View_Working_Restoring",
+        "default": "Ripristino in corso"
+      },
+      "Resetting": {
+        "key": "View_Working_Resetting",
+        "default": "Reimpostando"
+      },
+      "Syncing": {
+        "key": "View_Working_Syncing",
+        "default": "Sincronizzazione in corso"
+      }
+    }
+  }
+}

@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync wurde auf die neuesten Funktionen und Korrekturen aktualisiert. Klicken Sie für Versionshinweise."
+        "default": "xBrowserSync wurde aktualisiert. Die Synchronisation wurde deaktiviert, bitte aktiviere sie erneut, um den Aktualisierungsprozess abzuschließen."
       }
     },
     "BookmarkCreated": {
@@ -127,7 +127,7 @@
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": ""
+      "default": "Sicherung herunterladen"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
@@ -135,7 +135,7 @@
     },
     "Help": {
       "key": "Button_Help",
-      "default": "Hilfe"
+      "default": "Hilfeanleitung anzeigen"
     },
     "Next": {
       "key": "Button_Next",
@@ -143,7 +143,7 @@
     },
     "OK": {
       "key": "Button_OK",
-      "default": "Verstanden"
+      "default": "OK"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
@@ -269,7 +269,7 @@
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Lokale Daten wurden aktualisiert, bitte letzte Änderung erneut übernehmen."
+      "default": "Lokale Browserdaten wurden aktualisiert, bitte die letzte Änderung erneut übernehmen."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
@@ -449,7 +449,7 @@
           },
           "Invalid": {
             "key": "View_Bookmark_Form_Url_Invalid",
-            "default": ""
+            "default": "Keine gültige URL"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -457,7 +457,7 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "Lesezeichen-URL ist erforderlich"
+            "default": "URL ist erforderlich"
           }
         },
         "Description": {
@@ -508,7 +508,7 @@
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Denken Sie an eine Sicherung</h4><p>Wenn Sie xBrowserSync nutzen liegen Ihre Daten in Ihren Händen. Seien Sie also schlau und stellen Sie sicher, dass Sie Sicherungskopien anlegen.</p><p>Wechseln Sie in das Einstellungen-Fenster und sichern Sie Ihre unverschlüsselten Daten in eine lokale Datei. Diese kann benutzt werden, um Ihre Daten bei Bedarf wiederherzustellen.</p><p>Wenn Ihre lokalen Browserdaten beschädigt werden und Sie keine Sicherungskopien haben, können Sie Ihre Daten jederzeit wieder in den ursprünglichen Zustand zurückversetzen, in dem sie sich bei der Installation von xBrowserSync befanden.</p>",
+        "default": "<h4>Denken Sie an eine Sicherung</h4><p>Wenn Sie xBrowserSync nutzen liegen Ihre Daten in Ihren Händen. Seien Sie also schlau und stellen Sie sicher, dass Sie Sicherungskopien anlegen.</p><p>Wechseln Sie in das Einstellungen-Fenster und sichern Sie Ihre unverschlüsselten Daten in eine lokale Datei. Diese kann benutzt werden, um Ihre Daten bei Bedarf wiederherzustellen.</p><p>Wenn Ihre lokalen Browserdaten beschädigt werden und Sie keinerlei Sicherungskopien haben, können Sie Ihre Daten jederzeit wieder in den ursprünglichen Zustand zurückversetzen, in dem sie sich bei der Installation von xBrowserSync befanden.</p>",
         "android": "<h4>Denken Sie an eine Sicherung</h4><p>Wenn Sie xBrowserSync nutzen liegen Ihre Daten in Ihren Händen. Seien Sie also schlau und stellen Sie sicher, dass Sie Sicherungskopien anlegen.</p><p>Wechseln Sie in das Einstellungen-Fenster und sichern Sie Ihre unverschlüsselten Daten in eine lokale Datei. Diese kann benutzt werden, um Ihre Daten bei Bedarf wiederherzustellen.</p>"
       },
       "BeforeYouBegin": {
@@ -662,7 +662,7 @@
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
-            "default": "xBrowserSync Dienst-URL ist erforderlich"
+            "default": "URL ist erforderlich"
           },
           "InvalidService": {
             "key": "View_Login_Service_Update_InvalidService",
@@ -670,7 +670,7 @@
           },
           "InvalidUrl": {
             "key": "View_Login_Service_Update_InvalidUrl",
-            "default": ""
+            "default": "Keine gültige URL"
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",
@@ -721,21 +721,21 @@
         "UpgradeReady": {
           "Title": {
             "key": "View_Login_Sync_UpgradeReady_Title",
-            "default": "Bereit zum Upgrade der Synchronisation?"
+            "default": "Bereit zum Aktualisieren der Synchronisierung?"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
-            "default": "<p>Diese Sync-ID muss aktualisiert werden, um mit dieser Version von xBrowserSync zu synchronisieren. Nach der Aktualisierung können Sie nicht mehr mit früheren Versionen von xBrowserSync synchronisieren.</p><p>Stellen Sie sicher, dass Sie alle xBrowserSync-Apps aktualisiert haben, bevor Sie fortfahren. Fertig?</p>"
+            "default": "<p>Ihre Sync-ID muss aktualisiert werden, um mit dieser Version von xBrowserSync zu funktionieren. Nach der Aktualisierung können Sie nicht mehr mit früheren Versionen von xBrowserSync synchronisieren.</p><p>Stellen Sie sicher, dass Sie alle xBrowserSync-Apps aktualisiert haben, bevor Sie fortfahren. Fertig?</p>"
           }
         },
         "UpgradeRequired": {
           "Title": {
             "key": "View_Login_Sync_UpgradeRequired_Title",
-            "default": ""
+            "default": "Synchronisation aktualisieren"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
-            "default": ""
+            "default": "<p>Ihre Synchronisation muss vor der Synchronisierung mit dieser Version von xBrowserSync aktualisiert werden.</p><p>Benutzen Sie die Desktop-Browser-Erweiterung xBrowserSync, um Ihre Synchronisation zu aktualisieren und versuchen Sie es erneut hier.</p>"
           }
         }
       },
@@ -810,11 +810,11 @@
       },
       "Pulling": {
         "key": "View_Search_Pulling",
-        "default": ""
+        "default": "Zum Synchronisieren herunterziehen"
       },
       "Pulled": {
         "key": "View_Search_Pulled",
-        "default": ""
+        "default": "Zum Synchronisieren freigeben"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
@@ -830,87 +830,87 @@
         "AutoBackup": {
           "Title": {
             "key": "View_Settings_BackupRestore_AutoBackup_Title",
-            "default": ""
+            "default": "Automatische Sicherung"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_AutoBackup_Description",
-            "default": ""
+            "default": "Sicherungen automatisch nach einem Zeitplan herunterladen."
           },
           "RunsAt": {
             "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
-            "default": ""
+            "default": "Sicherung läuft um"
           },
           "Every": {
             "key": "View_Settings_BackupRestore_AutoBackup_Every",
-            "default": ""
+            "default": "jedes"
           },
           "Numbers": {
             "Single": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
-              "default": ""
+              "default": "einzelnes"
             },
             "Two": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
-              "default": ""
+              "default": "zwei"
             },
             "Three": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
-              "default": ""
+              "default": "drei"
             },
             "Four": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
-              "default": ""
+              "default": "vier"
             },
             "Five": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
-              "default": ""
+              "default": "fünf"
             },
             "Six": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
-              "default": ""
+              "default": "sechs"
             },
             "Seven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
-              "default": ""
+              "default": "sieben"
             },
             "Eight": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
-              "default": ""
+              "default": "acht"
             },
             "Nine": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
-              "default": ""
+              "default": "neun"
             },
             "Ten": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
-              "default": ""
+              "default": "zehn"
             },
             "Eleven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
-              "default": ""
+              "default": "elf"
             },
             "Twelve": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
-              "default": ""
+              "default": "zwölf"
             }
           },
           "Units": {
             "Day": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
-              "default": ""
+              "default": "Tag(e)"
             },
             "Week": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
-              "default": ""
+              "default": "Woche(n)"
             },
             "Month": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
-              "default": ""
+              "default": "Monat(e)"
             }
           },
           "Confirmation": {
             "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
-            "default": ""
+            "default": "Um zu verhindern, dass der Dialog „Speichern unter...“ beim Herunterladen von Sicherungen angezeigt wird, deaktivieren Sie die Browser-Einstellung „Fragen, wo jede Datei vor dem Download gespeichert werden sollte“."
           }
         },
         "Backup": {
@@ -920,7 +920,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": ""
+            "default": "Sicherung herunterladen"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -938,7 +938,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Wiederherstellen"
+            "default": "Sicherung wiederherstellen"
           },
           "Local": {
             "Description": {
@@ -963,7 +963,7 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Ihre Daten wurden wiederhergestellt."
+            "default": "Die Sicherung wurde wiederhergestellt."
           },
           "SelectFile": {
             "Button": {
@@ -995,26 +995,26 @@
         "Reset": {
           "Confirm": {
             "key": "View_Settings_BackupRestore_Reset_Confirm",
-            "default": "<p>Wenn Sie fortfahren, wird jede aktive Synchronisation deaktiviert. Ihre lokalen Daten werden auf den Stand zurückgesetzt, in dem sie waren als xBrowserSync am {date} installiert wurde.</p><p>OK, um fortzufahren?</p>"
+            "default": "<p>Wenn Sie fortfahren, wird die Synchronisation deaktiviert und Ihre lokalen Browserdaten werden auf den Stand zurückgesetzt, in dem sie waren als xBrowserSync am {date} installiert wurde.</p><p>OK, um fortzufahren?</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Reset_Button",
-            "default": "Zurücksetzen"
+            "default": "Lokale Daten zurücksetzen"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Reset_Done",
-            "default": "Ihre Daten wurden auf den ersten Installationszustand zurückgesetzt."
+            "default": "Lokale Browserdaten wurden auf den ursprünglichen Installationszustand zurückgesetzt."
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Reset_Unavailable",
-            "default": "Installationsstatusdaten nicht verfügbar. Kann nicht zurückgesetzt werden."
+            "default": "Installationsstatusdaten nicht verfügbar, Zurücksetzen nicht möglich."
           }
         }
       },
       "Issues": {
         "Title": {
           "key": "View_Settings_Issues_Title",
-          "default": "Hilfe und Fehler"
+          "default": "Hilfe und Support"
         },
         "Help": {
           "Title": {
@@ -1033,15 +1033,15 @@
         "Tracker": {
           "Title": {
             "key": "View_Settings_Issues_Tracker_Title",
-            "default": "Fehler und Probleme"
+            "default": "Support"
           },
           "Description": {
             "key": "View_Settings_Issues_Tracker_Description",
-            "default": "Melden Sie ein Problem, um einen Fehler zu melden oder eine neue Funktion anzufordern."
+            "default": "Benötigen Sie Unterstützung? Verwenden Sie die Problemverfolgung, um einen Fehler zu melden oder eine Funktion anzufordern."
           },
           "Report": {
             "key": "View_Settings_Issues_Tracker_Report",
-            "default": "Fehler melden"
+            "default": "Problemverfolgung anzeigen"
           }
         },
         "Log": {
@@ -1117,7 +1117,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
-            "default": "Benachrichtigung anzeigen, wenn eine neue Version von xBrowserSync verfügbar ist."
+            "default": "Benachrichtigung erhalten, wenn eine neue Version von xBrowserSync verfügbar ist."
           }
         },
         "DarkMode": {
@@ -1205,15 +1205,15 @@
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Synchronisation ist aktuell."
+            "default": "Zuletzt synchronisiert {date}"
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "Updates verfügbar, nächste Synchronisation um"
+            "default": "Bereit zum Synchronisieren (geplant für {date})"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
-            "default": "Aktualisiere Sync"
+            "default": "Jetzt synchronisieren"
           }
         },
         "Qr": {
@@ -1245,7 +1245,7 @@
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": ""
+        "default": "Datei in Downloads gespeichert"
       },
       "Support": {
         "key": "View_Settings_Support",
@@ -1259,7 +1259,7 @@
       },
       "Content": {
         "key": "View_Support_Content",
-        "default": "<p>Wir wollen xBrowserSync zum Sync-Tool Nummer eins machen, aber es gibt noch viel zu tun:</p><ul><li>Synchronisieren von Browser-Tabs und Verlauf hinzufügen</li><li>Unterstützung aller wichtigen Desktop-Browser</li><li>Übersetzung in andere Sprachen</li><li>Und <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>viel mehr</a>!</li></ul><p>Nur mit Ihrer Unterstützung können wir xBrowserSync weiter verbessern und sicherstellen, dass es ein wirksames Werkzeug bleibt, um unsere Privatsphäre und Produktivität vor den großen Technologiegiganten zu schützen!</p>"
+        "default": "<p>Wir wollen xBrowserSync zum Sync-Tool Nummer eins machen, aber es gibt noch viel zu tun:</p><ul><li>Hinzufügen von Browsertab- und Verlaufssynchronisierung </li><li>Unterstützung aller wichtigen Desktop-Browser</li><li>Übersetzung in andere Sprachen</li><li>Und <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>viel mehr</a>!</li></ul><p>Nur mit Ihrer Unterstützung können wir xBrowserSync weiter verbessern und sicherstellen, dass es weiterhin effektiv zum Schutz der Online-Privatsphäre und zur Verbesserung der Produktivität beiträgt.</p>"
       },
       "Cryptos": {
         "key": "View_Support_Cryptos",
@@ -1277,11 +1277,11 @@
     "SyncRemoved": {
       "Title": {
         "key": "View_SyncRemoved_Title",
-        "default": ""
+        "default": "Synchronisation nicht gefunden"
       },
       "Content": {
         "key": "View_SyncRemoved_Content",
-        "default": ""
+        "default": "<p>Ihr Sync konnte nicht gefunden werden und wurde möglicherweise aufgrund von Inaktivität entfernt.</p><p>Sie müssen eine neue Synchronisation erstellen, klicken Sie jedoch zuerst auf die Schaltfläche unten, um eine Sicherung Ihrer synchronisierten Daten herunterzuladen, die Sie dann wieder auf Ihre neue Synchronisation zurücksetzen können.</p>"
       }
     },
     "Updated": {
@@ -1301,7 +1301,7 @@
       },
       "Resetting": {
         "key": "View_Working_Resetting",
-        "default": "Wird zurückgesetzt"
+        "default": "Setze zurück"
       },
       "Syncing": {
         "key": "View_Working_Syncing",
