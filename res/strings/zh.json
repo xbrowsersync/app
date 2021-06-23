@@ -735,7 +735,7 @@
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
-            "default": "<p>您的同步必须先升级才能与此版本的 xBrowsSync 同步。</p><p>使用 xBrowserSync 桌面浏览器扩展来升级您的同步，然后在这里重试同步。</p>"
+            "default": "<p>您的同步必须先升级才能与此版本的 xBrowserSync 同步。</p><p>使用 xBrowserSync 桌面浏览器扩展来升级您的同步，然后在这里重试同步。</p>"
           }
         }
       },
@@ -1117,7 +1117,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
-            "default": "当有新版本的 xBrowsSync 时发出通知。"
+            "default": "当有新版本的 xBrowserSync 时发出通知。"
           }
         },
         "DarkMode": {
