@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync ha sido actualizado. La sinctronización ha sido desactivada, rehabilítalala para completar el proceso de actualización."
+        "default": "xBrowserSync ha sido actualizado. La sincronización ha sido desactivada, rehabilítalala para completar el proceso de actualización."
       }
     },
     "BookmarkCreated": {
