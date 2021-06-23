@@ -50,7 +50,7 @@
     "WorkingOffline": {
       "Title": {
         "key": "Alert_WorkingOffline_Title",
-        "default": "Työskennellään offline-tilassa"
+        "default": "Työskennellään yhteydettömässä tilassa"
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
@@ -61,7 +61,7 @@
   "App": {
     "Description": {
       "key": "App_Description",
-      "default": "Selainsynkronointi oikein: turvallisesti, anonyymisti ja ilmaiseksi! Synkronoi kirjanmerkit selaimillesi ja laitteillesi, ilman rekisteröitymistä."
+      "default": "Selainsynkronointi oikein: turvallisesti, nimettömästi ja ilmaiseksi! Synkronoi kirjanmerkit selaimillesi ja laitteillesi, ilman rekisteröitymistä."
     },
     "Title": {
       "key": "App_Title",
@@ -209,11 +209,11 @@
     },
     "FailedGetPageMetadata_Message": {
       "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "URL-osoite on virheellinen tai verkkosivun teitojen nouto ei onnistunut."
+      "default": "URL-osoite on virheellinen tai verkkosivun tietojen nouto epäonnistui."
     },
     "FailedGetPageMetadata_Title": {
       "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "Kirjanmerkin ominaisuuksien nouto ei onnistunut"
+      "default": "Kirjanmerkin tietojen nouto epäonnistui"
     },
     "FailedRefreshBookmarks_Title": {
       "key": "Exception_FailedRefreshBookmarks_Title",
@@ -221,19 +221,19 @@
     },
     "FailedRestoreData_Message": {
       "key": "Exception_FailedRestoreData_Message",
-      "default": "Annetut varmuuskopiotiedot eivät ole odotetussa muodossa."
+      "default": "Varmuuskopion tiedot eivät ole odotetussa muodossa."
     },
     "FailedRestoreData_Title": {
       "key": "Exception_FailedRestoreData_Title",
-      "default": "Tietojen palautus ei onnistunut"
+      "default": "Tietojen palautus epäonnistui"
     },
     "FailedShareUrlNotSynced_Title": {
       "key": "Exception_FailedShareUrlNotSynced_Title",
-      "default": "Jotta voit lisätä kirjanmerkin, on synkronoinin on oltava ajan tasalla"
+      "default": "Synkronoinin oltava ajan tasalla kirjanmerkin lisäystä varten"
     },
     "FailedShareUrl_Title": {
       "key": "Exception_FailedShareUrl_Title",
-      "default": "Jaetun kirjanmerkin URL-osoitetteen nouto ei onnistunut"
+      "default": "Jaetun kirjanmerkin URL-osoitteen nouto epäonnistui"
     },
     "HttpRequestFailed_Message": {
       "key": "Exception_HttpRequestFailed_Message",
@@ -261,7 +261,7 @@
     },
     "LocalContainerNotFound_Message": {
       "key": "Exception_LocalContainerNotFound_Message",
-      "default": "Selainprofiili saattaa olla vaurioitunut, uuden profiilin luonti saattaa ratkaista ongelman."
+      "default": "Selaimen profiili saattaa olla vaurioitunut. Uuden profiilin luonti saattaa korjata ongelman."
     },
     "LocalContainerNotFound_Title": {
       "key": "Exception_LocalContainerNotFound_Title",
@@ -277,27 +277,27 @@
     },
     "MissingClientData_Message": {
       "key": "Exception_MissingClientData_Message",
-      "default": "Tallennettuja tunnuksia ei löytynyt. Ota synkronointi uudelleen käyttöön ja yritä uudelleen."
+      "default": "Tallennettuja tunnistetietoja ei löytynyt. Ota synkronointi uudelleen käyttöön ja yritä uudelleen."
     },
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
-      "default": "Tunnistautumistietoja puuttuu"
+      "default": "Tunnistetiedot puuttuvat"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",
-      "default": "Varmista, että olet antanut kelvollisen xBrowserSync-varmuuskopion ennen palauttamista."
+      "default": "Varmista, että olet antanut oikean xBrowserSync-varmuuskopion ennen palautusta."
     },
     "NoDataToRestore_Title": {
       "key": "Exception_NoDataToRestore_Title",
-      "default": "Ei palautettavia tietoja"
+      "default": "Palautettavia tietoja ei ole"
     },
     "NotAcceptingNewSyncs_Message": {
       "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Siirry toiseen palveluun tai yritä myöhemmin uudelleen."
+      "default": "Vaihda toiseen palveluun tai yritä myöhemmin uudelleen."
     },
     "NotAcceptingNewSyncs_Title": {
       "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "Palvelu ei hyväksy uusia synkronointeja"
+      "default": "Palvelu ei salli uusia synkronointeja"
     },
     "OutOfSync_Message": {
       "key": "Exception_OutOfSync_Message",
@@ -309,7 +309,7 @@
     },
     "RequestEntityTooLarge_Message": {
       "key": "Exception_RequestEntityTooLarge_Message",
-      "default": "Poista joitakin kirjanmerkkejä ja yritä uudelleen tai vaihda palveluun, jolla on korkeampi synkronointiraja."
+      "default": "Poista kirjanmerkkejä ja yritä uudelleen tai vaihda palveluun, joka sallii enemmän synkronoitavia tietoja."
     },
     "RequestEntityTooLarge_Title": {
       "key": "Exception_RequestEntityTooLarge_Title",
@@ -325,19 +325,19 @@
     },
     "ServiceOffline_Message": {
       "key": "Exception_ServiceOffline_Message",
-      "default": "xBrowserSync-palvelu on tällä hetkellä offline-tilassa, yritä myöhemmin uudelleen."
+      "default": "xBrowserSync-palvelu ei ole tällä hetkellä tavoitettavissa. Yritä myöhemmin uudelleen."
     },
     "ServiceOffline_Title": {
       "key": "Exception_ServiceOffline_Title",
-      "default": "Palvelu offline-tilassa"
+      "default": "Palvelu ei ole tavoitettavissa"
     },
     "ShareFailed_Title": {
       "key": "Exception_ShareFailed_Title",
-      "default": "Jakaminen epäonnistui"
+      "default": "Jako epäonnistui"
     },
     "SyncRemoved_Message": {
       "key": "Exception_SyncRemoved_Message",
-      "default": "Pyydettyä synkronointia ei ole olemassa, se on satettu poistaa toimettomuuden vuoksi."
+      "default": "Synkronointia ei ole olemassa ja se on saatettu poistaa käyttämättömänä."
     },
     "SyncRemoved_Title": {
       "key": "Exception_SyncRemoved_Title",
@@ -357,7 +357,7 @@
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
-      "default": "Synkronointi on poistettu käytöstä, ota synkronointi uudelleen käyttöön jatkaaksesi."
+      "default": "Synkronointi on poistettu käytöstä. Ota se uudelleen käyttöön jatkaaksesi synkronointia."
     },
     "TooManyRequests_Title": {
       "key": "Exception_TooManyRequests_Title",
@@ -365,7 +365,7 @@
     },
     "UncommittedSyncs_Message": {
       "key": "Exception_UncommittedSyncs_Message",
-      "default": "Synkronointi tehdään, kun yhteys palveluun on palautettu."
+      "default": "Synkronointi suoritetaan kun yhteys palveluun on palautettu."
     },
     "UncommittedSyncs_Title": {
       "key": "Exception_UncommittedSyncs_Title",
@@ -373,7 +373,7 @@
     },
     "UnsupportedServiceApiVersion_Message": {
       "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "Tämä palvelu käyttää API-versiota, jota ei tueta."
+      "default": "Palvelu käyttää rajapinnan versiota, jota ei tueta."
     },
     "UnsupportedServiceApiVersion_Title": {
       "key": "Exception_UnsupportedServiceApiVersion_Title",
@@ -381,7 +381,7 @@
     },
     "UpgradeFailed_Message": {
       "key": "Exception_UpgradeFailed_Message",
-      "android": "Päivitystä yritetään uudestaan, kun sovellus käynnistyy uudelleen. Jos ongelma jatkuu, asenna xBrowserSync uudelleen.",
+      "android": "Päivitystä yritetään uudelleen sovelluksen käynnistyessä. Jos ongelma jatkuu, asenna xBrowserSync uudelleen.",
       "default": "Käynnistä selain uudelleen yrittääksesi päivitystä uudestaan. Jos ongelma jatkuu, asenna xBrowserSync uudelleen."
     },
     "UpgradeFailed_Title": {
@@ -401,7 +401,7 @@
       },
       "NoNewSyncs": {
         "key": "Service_Status_NoNewSyncs",
-        "default": "Ei hyväksy uusia synkronointeja"
+        "default": "Uusia synkronointeja ei sallita"
       },
       "Offline": {
         "key": "Service_Status_Offline",
@@ -492,7 +492,7 @@
         },
         "UpdateProperties": {
           "key": "View_Bookmark_Form_UpdateProperties",
-          "default": "Päivitä kirjanmerkin ominaisuudet"
+          "default": "Päivitä kirjanmerkin tiedot"
         }
       },
       "InvalidUrlShared": {
@@ -539,7 +539,7 @@
       "NativeFeatures": {
         "key": "View_Help_NativeFeatures",
         "default": "<h4>Tukee natiiveja ominaisuuksia</h4><p>Voit jatkaa selaimesi natiivien kirjanmerkkitoimintojen, kuten kirjanmerkkipalkin ja kirjanmerkkien hallinnan käyttöä ja kaikki tekemäsi muutokset synkronoidaan automaattisesti taustalla.</p><p>Jos olet järjestänyt olemassa olevat kirjanmerkit kansioihin, xBrowserSync kunnioittaa ja ylläpitää olemassa olevaa kirjanmerkkihierarkiaasi.</p>",
-        "firefox": "<h4>Tukee natiiveja ominaisuuksia</h4><p>Voit jatkaa selaimesi natiivien kirjanmerkkitoimintojen, kuten kirjanmerkkipalkin ja kirjanmerkkien hallinnan käyttöä ja kaikki tekemäsi muutokset synkronoidaan automaattisesti taustalla.</p><p>Jos olet järjestänyt olemassa olevat kirjanmerkit kansioihin, xBrowserSync kunnioittaa ja ylläpitää olemassa olevaa kirjanmerkkihierarkiaasi.</p><p>Huomaa kuitenkin, että Firefoxin kirjanmerkki-API ei tue vielä selaimen natiivien tunnisteiden käyttämistä ja kaikki tunnisteet menetetään synkronoitaessa, eikä xBrowserSyncin kautta lisättyjä tunnisteita tallenneta natiiveina tunnisteina.</p>"
+        "firefox": "<h4>Tukee natiiveja ominaisuuksia</h4><p>Voit jatkaa selaimesi natiivien kirjanmerkkitoimintojen, kuten kirjanmerkkipalkin ja kirjanmerkkien hallinnan käyttöä ja kaikki tekemäsi muutokset synkronoidaan automaattisesti taustalla.</p><p>Jos olet järjestänyt olemassa olevat kirjanmerkit kansioihin, kunnioittaa ja ylläpitää xBrowserSync olemassa olevaa kirjanmerkkihierarkiaasi.</p><p>Huomioithan, että Firefoxin kirjanmerkkirajapinta ei tue vielä selaimen natiivien tunnisteiden käyttöä ja tunnisteet menetetään synkronoinnin yhteydessä, eikä xBrowserSyncin kautta lisättyjä tunnisteita tallenneta natiiveina tunnisteina.</p>"
       },
       "Previous": {
         "key": "View_Help_Previous",
@@ -552,7 +552,7 @@
       },
       "Service": {
         "key": "View_Help_Service",
-        "default": "<h4>Synkronointi toiseen palveluun</h4><p>Oletusarvoisesti tietosi synkronoidaan <a href='https://link.xbrowsersync.org/api' class='new-tab'>viralliseen xBrowserSync-palveluun</a>, mutta jos haluat synkronoida tietosi toiseen xBrowserSync-palveluun, voit vaihtaa aktiivisen palvelun ennen synkronointia.</p><p>Katso lista saatavilla olevista <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>julkisista xBrowserSync-palveluista</a> tai <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>lue oma palvelusi</a> äärimmäisen turvallisuuden ja tietosuojan takaamiseksi tai jaa se julkisesti, jotta useammat ihmiset voivat nauttia xBrowserSyncistä.</p><p><strong>Tärkeää:</strong> xBrowserSync-palveluita ylläpitävät vapaaehtoiset itsenäisesti ja palvelun ylläpitäjä eivät ota vastuuta tiedoistasi, joten muista varmuuskopioida ne säännöllisesti.</p>"
+        "default": "<h4>Synkronointi toiseen palveluun</h4><p>Oletusarvoisesti tietosi synkronoidaan <a href='https://link.xbrowsersync.org/api' class='new-tab'>viralliseen xBrowserSync-palveluun</a>, mutta halutessasi voit synkronoida tietosi toiseen xBrowserSync-palveluun vaihtamalla aktiivisen palvelun ennen synkronointia.</p><p>Katso lista saatavilla olevista <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>julkisista xBrowserSync-palveluista</a> tai <a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>luo oma palvelusi</a> äärimmäisen turvallisuuden ja tietosuojan takaamiseksi tai jaa se julkisesti, jotta useammat ihmiset voivat nauttia xBrowserSyncistä.</p><p><strong>Tärkeää:</strong> xBrowserSync-palveluiden ylläpitäjät ovat riippumattomia vapaaehtoisia, eivätkä he ota vastuuta tiedoistasi, joten muistathan varmuuskopioida ne säännöllisesti.</p>"
       },
       "Shortcuts": {
         "key": "View_Help_Shortcuts",
@@ -579,7 +579,7 @@
         },
         "Content": {
           "key": "View_Login_GetSyncId_Content",
-          "default": "Lataa xBrowserSync-laajennus työpöytäselaimeesi ja luo uusi synkronointi, jotta voit käyttää kirjanmerkkejäsi täällä."
+          "default": "Käyttääksesi kirjanmerkkejäsi täällä, lataa xBrowserSync-laajennus työpöytäselaimeesi ja luo uusi synkronointi."
         }
       },
       "Password": {
