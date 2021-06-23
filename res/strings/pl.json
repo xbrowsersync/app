@@ -665,11 +665,11 @@
             "default": "Adres URL jest wymagany"
           },
           "InvalidService": {
-            "key": "Wyświetl_Usługa_Logowania_Aktualizacja_Niepoprawna Usługa",
+            "key": "View_Login_Service_Update_InvalidService",
             "default": "Nieprawidłowa usługa xBrowserSync"
           },
           "InvalidUrl": {
-            "key": "Wyświetl_Usługa_Logowania_Aktualizacja_Nieważny Url",
+            "key": "View_Login_Service_Update_InvalidUrl",
             "default": "To nie jest prawidłowy adres URL"
           },
           "Failed": {
@@ -810,7 +810,7 @@
       },
       "Pulling": {
         "key": "View_Search_Pulling",
-        "default": "Przeciągnij w dół, aby wyszukać"
+        "default": "Przeciągnij w dół, aby zsynchronizować"
       },
       "Pulled": {
         "key": "View_Search_Pulled",
