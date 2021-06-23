@@ -665,11 +665,11 @@
             "default": "URL ist erforderlich"
           },
           "InvalidService": {
-            "key": "Ansicht_Login_Service_Update_InvalidUrl",
+            "key": "View_Login_Service_Update_InvalidService",
             "default": "Kein gültiger xBrowserSync-Dienst"
           },
           "InvalidUrl": {
-            "key": "Ansicht_Login_Service_Update_InvalidUrl",
+            "key": "View_Login_Service_Update_InvalidUrl",
             "default": "Keine gültige URL"
           },
           "Failed": {
