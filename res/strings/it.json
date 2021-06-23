@@ -313,7 +313,7 @@
     },
     "RequestEntityTooLarge_Title": {
       "key": "Exception_RequestEntityTooLarge_Title",
-      "default": "Superato limite dati 4G"
+      "default": "Limite dati sincronizzati superato"
     },
     "ScanFailed_Message": {
       "key": "Exception_ScanFailed_Message",
