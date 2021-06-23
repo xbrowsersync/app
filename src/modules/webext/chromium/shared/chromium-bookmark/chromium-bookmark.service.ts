@@ -51,7 +51,8 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
             .then((syncBookmarksToolbar) => {
               if (!syncBookmarksToolbar) {
                 this.logSvc.logInfo('Not clearing toolbar');
-                return resolve();
+                resolve();
+                return;
               }
               return browser.bookmarks.getChildren(toolbarBookmarksId).then((results) => {
                 return this.$q.all(
@@ -191,7 +192,8 @@ export default class ChromiumBookmarkService extends WebExtBookmarkService {
             .then((syncBookmarksToolbar) => {
               if (!syncBookmarksToolbar) {
                 this.logSvc.logInfo('Not populating toolbar');
-                return resolve();
+                resolve();
+                return;
               }
               return browser.bookmarks.getSubTree(toolbarBookmarksId).then(() => {
                 return this.createNativeBookmarkTree(toolbarBookmarksId, toolbarContainer.children);
