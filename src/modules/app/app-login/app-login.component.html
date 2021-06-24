@@ -76,7 +76,7 @@
                       ng-click="vm.utilitySvc.handleEvent(vm.toggleShowPassword)">
                 <i class="fas fa-eye" aria-hidden="true"></i>
               </button>
-              <div class="validation" ng-if="vm.displayPasswordValidationFeedback && vm.password && ((vm.passwordComplexity.feedback.suggestions && vm.passwordComplexity.feedback.suggestions.length > 0) || 
+              <div class="validation" ng-if="vm.enablePasswordValidation && vm.password && ((vm.passwordComplexity.feedback.suggestions && vm.passwordComplexity.feedback.suggestions.length > 0) || 
           vm.passwordComplexity.feedback.warning)">
                 {{ vm.passwordComplexity.feedback.warning ? vm.passwordComplexity.feedback.warning :
           vm.passwordComplexity.feedback.suggestions.length > 0 ?

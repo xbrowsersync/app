@@ -1,8 +1,8 @@
-import { AfterViewInit, Directive, Input } from 'angular-ts-decorators';
-import autobind from 'autobind-decorator';
-import zxcvbn, { ZXCVBNResult } from 'zxcvbn';
+import { zxcvbn, ZxcvbnOptions } from '@zxcvbn-ts/core';
+import { IPromise } from 'angular';
+import { Directive, Input, OnInit } from 'angular-ts-decorators';
+import { PlatformService } from '../../../shared/global-shared.interface';
 
-@autobind
 @Directive({
   bindToController: true,
   require: {
@@ -10,14 +10,58 @@ import zxcvbn, { ZXCVBNResult } from 'zxcvbn';
   },
   selector: '[passwordStrength]'
 })
-export class PasswordStrengthDirective implements AfterViewInit {
-  ngModel: ng.INgModelController;
-  @Input('=passwordStrength') result: ZXCVBNResult;
+export class PasswordStrengthDirective implements OnInit {
+  platformSvc: PlatformService;
 
-  ngAfterViewInit(): void {
-    this.ngModel.$validators.passwordStrength = (value) => {
-      this.result = zxcvbn(value ?? '');
-      return true;
-    };
+  ngModel: ng.INgModelController;
+  @Input('=passwordStrength') result: any;
+
+  static $inject = ['PlatformService'];
+  constructor(PlatformSvc: PlatformService) {
+    this.platformSvc = PlatformSvc;
+  }
+
+  loadOptions(locale: string): IPromise<any> {
+    let languagePackagesImports: any[] = [
+      import(/* webpackChunkName: "zxcvbn-language-common" */ '@zxcvbn-ts/language-common')
+    ];
+    switch (locale.replace(/-.*$/, '').toLowerCase()) {
+      case 'de':
+        languagePackagesImports = [
+          ...languagePackagesImports,
+          import(/* webpackChunkName: "zxcvbn-language-de" */ '@zxcvbn-ts/language-de')
+        ];
+        break;
+      default:
+        languagePackagesImports = [
+          ...languagePackagesImports,
+          import(/* webpackChunkName: "zxcvbn-language-en" */ '@zxcvbn-ts/language-en')
+        ];
+    }
+
+    return Promise.all(languagePackagesImports).then((packages) => {
+      const [zxcvbnLanguageCommon, zxcvbnLanguageEn] = packages;
+      return {
+        dictionary: {
+          ...zxcvbnLanguageCommon.default.dictionary,
+          ...zxcvbnLanguageEn.default.dictionary
+        },
+        graphs: zxcvbnLanguageCommon.default.adjacencyGraphs,
+        translations: zxcvbnLanguageEn.default.translations
+      };
+    });
+  }
+
+  ngOnInit(): void {
+    this.platformSvc
+      .getCurrentLocale()
+      .then((currentLocale) => this.loadOptions(currentLocale))
+      .then((options) => ZxcvbnOptions.setOptions(options))
+      .then(() => {
+        this.ngModel.$validators.passwordStrength = (value) => {
+          this.result = zxcvbn(value ?? '');
+          return true;
+        };
+      });
   }
 }

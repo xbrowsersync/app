@@ -2,7 +2,6 @@ import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import compareVersions from 'compare-versions';
 import * as countriesList from 'countries-list';
-import { ZXCVBNResult } from 'zxcvbn';
 import { ApiServiceStatus } from '../../shared/api/api.enum';
 import { ApiService, ApiServiceInfo } from '../../shared/api/api.interface';
 import { CryptoService } from '../../shared/crypto/crypto.service';
@@ -47,7 +46,7 @@ export class AppLoginComponent implements OnInit {
   displayGetSyncIdPanel: boolean;
   displayOtherSyncsWarning = false;
   displayPasswordConfirmation = false;
-  displayPasswordValidationFeedback = false;
+  enablePasswordValidation = false;
   displaySyncConfirmation = false;
   displayUpdateServiceConfirmation = false;
   displayUpdateServicePanel = false;
@@ -55,7 +54,7 @@ export class AppLoginComponent implements OnInit {
   newServiceInfo: ApiServiceInfo;
   newSync = false;
   password: string;
-  passwordComplexity: ZXCVBNResult;
+  passwordComplexity: any;
   passwordConfirmation = null;
   platformType = PlatformType;
   serviceInfo: ApiServiceInfo;
@@ -149,8 +148,16 @@ export class AppLoginComponent implements OnInit {
       .catch((err) => this.logSvc.logError(err));
   }
 
-  currentLocaleIsEnglish(): ng.IPromise<boolean> {
-    return this.platformSvc.getCurrentLocale().then((locale) => locale.toLowerCase().indexOf('en') === 0);
+  /**
+   * Checks if the current locale supports zxcvbn password validation messages.
+   * @returns `true` if the current locale supports password validation, otherwise 'false'.
+   */
+  currentLocaleSupportsPasswordValidation(): ng.IPromise<boolean> {
+    return this.platformSvc.getCurrentLocale().then((currentLocale) => {
+      const locale = currentLocale.toLowerCase();
+      // Only english and german are currently supported
+      return locale.indexOf('en') === 0 || locale.indexOf('de') === 0;
+    });
   }
 
   disableSync(): ng.IPromise<void> {
@@ -325,14 +332,14 @@ export class AppLoginComponent implements OnInit {
         this.storeSvc.get([StoreKey.DisplayOtherSyncsWarning, StoreKey.SyncId]),
         this.utilitySvc.isSyncEnabled(),
         this.utilitySvc.getServiceUrl(),
-        this.currentLocaleIsEnglish()
+        this.currentLocaleSupportsPasswordValidation()
       ])
       .then((data) => {
-        this.displayOtherSyncsWarning = data[0].displayOtherSyncsWarning;
-        this.syncId = data[0].syncId;
-        this.syncEnabled = data[1];
-        const serviceUrl = data[2];
-        this.displayPasswordValidationFeedback = data[3];
+        const [storeContent, syncEnabled, serviceUrl, currentLocaleIsEnglish] = data;
+        this.displayOtherSyncsWarning = storeContent.displayOtherSyncsWarning;
+        this.syncId = storeContent.syncId;
+        this.syncEnabled = syncEnabled;
+        this.enablePasswordValidation = currentLocaleIsEnglish;
 
         this.serviceInfo = {
           url: serviceUrl

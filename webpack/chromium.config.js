@@ -14,6 +14,7 @@ module.exports = (env, argv) => {
       )
     },
     output: {
+      ...webExtConfig.output,
       path: Path.resolve(__dirname, '../build/chromium/assets')
     }
   };

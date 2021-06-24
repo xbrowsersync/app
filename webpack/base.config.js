@@ -1,7 +1,9 @@
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (env, argv) => {
   const devMode = argv.mode === 'development';
+  const createBundleReport = false;
   return {
     devtool: devMode ? 'inline-cheap-module-source-map' : 'source-map',
     externals: ['fs'],
@@ -42,9 +44,15 @@ module.exports = (env, argv) => {
       ]
     },
     output: {
+      chunkFilename: '[name].js',
       filename: '[name].js'
     },
-    plugins: [new MiniCssExtractPlugin({ filename: '[name].css' })],
+    plugins: [
+      new MiniCssExtractPlugin({ filename: '[name].css' }),
+      new BundleAnalyzerPlugin({
+        analyzerMode: createBundleReport ? 'static' : 'disabled'
+      })
+    ],
     resolve: {
       extensions: ['.js', '.ts']
     }
