@@ -3,7 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = (env, argv) => {
   const devMode = argv.mode === 'development';
   return {
-    devtool: devMode ? 'inline-cheap-module-source-map' : undefined,
+    devtool: devMode ? 'inline-cheap-module-source-map' : 'source-map',
     externals: ['fs'],
     mode: devMode ? 'development' : 'production',
     module: {
