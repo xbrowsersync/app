@@ -125,7 +125,7 @@ export class AppBookmarkComponent implements OnInit {
       if (!isValid) {
         // Bookmark URL exists, display validation error
         this.bookmarkForm.bookmarkUrl.$setValidity('Exists', false);
-        return;
+        return { success: false };
       }
 
       // Display loading overlay
