@@ -14,10 +14,6 @@ jobs:
     name: Build platform:android
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      ANDROID_SDK_ROOT:
-      JAVA_HOME:
-      PATH:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Node.js
