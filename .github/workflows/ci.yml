@@ -24,4 +24,5 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '8'
+      - uses: android-actions/setup-android@v2
       - run: sdkmanager --list
