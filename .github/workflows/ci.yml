@@ -10,8 +10,8 @@ on:
     paths-ignore:
       - '**.md'
 jobs:
-  build_android:
-    name: Build platform:android
+  build:
+    name: Build platforms
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -35,9 +35,12 @@ jobs:
           cordova telemetry off
           cordova prepare
           popd
-      - name: Build Android platform
-        run: npm run build:android
-      - name: Run Cordova build
+      - name: Build platform:chromium
+        run: npm run build:chromium
+      - name: Build platform:firefox
+        run: npm run build:firefox
+      - name: Build platform:android
         run: |
+          npm run build:android
           cd build/android
-          cordova build android --release
+          cordova build android

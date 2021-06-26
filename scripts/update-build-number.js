@@ -3,7 +3,7 @@ const path = require('path');
 const xml2js = require('xml2js');
 
 const platform = process.argv[2] || 'chromium';
-const buildNum = process.argv[3] || process.env.TRAVIS_BUILD_NUMBER || 0;
+const buildNum = process.argv[3] || process.env.GITHUB_RUN_NUMBER || 0;
 
 const newVersion = `${process.env.npm_package_version}.${buildNum}`;
 const versionFileName = path.resolve(__dirname, '../version.txt');
