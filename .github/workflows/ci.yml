@@ -25,4 +25,19 @@ jobs:
           distribution: 'adopt'
           java-version: '8'
       - uses: android-actions/setup-android@v2
-      - run: sdkmanager --list
+      - name: Install Cordova
+        run: npm install -g cordova@9.0.0
+      - name: Install dependencies
+        run: npm install
+      - name: Prepare Cordova
+        run: |
+          pushd res/android
+          cordova telemetry off
+          cordova prepare
+          popd
+      - name: Build Android platform
+        run: npm run build:android
+      - name: Run Cordova build
+        run: |
+          cd build/android
+          cordova build android --release
