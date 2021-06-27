@@ -1,14 +1,10 @@
 name: CI
 on:
-  workflow_dispatch:
   pull_request:
-    paths-ignore:
-      - '**.md'
   push:
-    branches:
-      - main
     paths-ignore:
       - '**.md'
+  workflow_dispatch:
 jobs:
   test:
     name: Run tests
@@ -21,7 +17,11 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Run tests
-        run: npm run test
+        run: npm run test -- --coverage
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
   build:
     name: Build platforms
     needs: test

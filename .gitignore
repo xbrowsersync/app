@@ -1,6 +1,7 @@
 .DS_Store
 *.log
 build
+coverage
 dist
 node_modules
 version.txt
