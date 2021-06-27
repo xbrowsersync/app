@@ -24,6 +24,7 @@ jobs:
         run: npm run test
   build:
     name: Build platforms
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
