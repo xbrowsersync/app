@@ -10,14 +10,22 @@ on:
     paths-ignore:
       - '**.md'
 jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Run tests
+        run: npm run test
   build:
     name: Build platforms
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v1
         with:
           node-version: 14
       - uses: actions/setup-java@v2
@@ -25,16 +33,15 @@ jobs:
           distribution: 'adopt'
           java-version: '8'
       - uses: android-actions/setup-android@v2
-      - name: Install Cordova
-        run: npm install -g cordova@9.0.0
-      - name: Install dependencies
-        run: npm install
-      - name: Prepare Cordova
+      - name: Install cordova
         run: |
+          npm install -g cordova@9.0.0
           pushd res/android
           cordova telemetry off
           cordova prepare
           popd
+      - name: Install dependencies
+        run: npm install
       - name: Build platform:chromium
         run: npm run build:chromium
       - name: Build platform:firefox

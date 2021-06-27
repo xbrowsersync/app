@@ -18,6 +18,7 @@
     }
   },
   "scripts": {
+    "test": "jest --passWithNoTests",
     "lint": "echo Checking for lint errors... && eslint ./src --ext .ts && stylelint \"./src/**/*.scss\"",
     "lint:fix": "echo Checking and fixing lint errors... && eslint ./src --fix --ext .ts && stylelint \"./src/**/*.scss\" --fix",
     "webpack:chromium": "webpack --config ./webpack/chromium.config.js",
@@ -96,6 +97,7 @@
     "file-loader": "^6.2.0",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.2",
+    "jest": "^27.0.5",
     "js-beautify": "^1.14.0",
     "mini-css-extract-plugin": "^1.6.0",
     "node-sass": "^6.0.1",
@@ -109,6 +111,7 @@
     "stylelint-config-sass-guidelines": "^8.0.0",
     "stylelint-config-standard": "^22.0.0",
     "stylelint-prettier": "^1.2.0",
+    "ts-jest": "^27.0.3",
     "ts-loader": "^9.2.3",
     "typescript": "^4.3.4",
     "webpack": "^5.40.0",
