@@ -10,10 +10,26 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '8'
+      - uses: android-actions/setup-android@v2
+      - name: Install cordova
+        run: |
+          npm install -g cordova@9.0.0
+          pushd res/android
+          cordova telemetry off
+          cordova prepare
+          popd
       - name: Install dependencies
         run: npm install
       - name: Package platform:chromium
         run: npm run package:chromium
+      - name: Package platform:firefox
+        run: npm run package:firefox
+      - name: Package platform:android
+        run: npm run package:android
       - name: Set release version env var
         run: echo "RELEASE_VERSION=$(cat version.txt)" >> $GITHUB_ENV
       - name: Create release
@@ -23,5 +39,8 @@ jobs:
           tag_name: v${{ env.RELEASE_VERSION }}
           files: |
             dist/xbrowsersync_${{ env.RELEASE_VERSION }}_chromium.zip
+            dist/xbrowsersync_${{ env.RELEASE_VERSION }}_firefox.zip
+            dist/xbrowsersync_${{ env.RELEASE_VERSION }}_android.apk
+            dist/xbrowsersync_${{ env.RELEASE_VERSION }}_android_unsigned.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
