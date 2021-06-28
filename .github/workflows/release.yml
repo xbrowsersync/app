@@ -12,12 +12,16 @@ jobs:
           node-version: 14
       - name: Install dependencies
         run: npm install
-      - run: npm run package:chromium
+      - name: Package platform:chromium
+        run: npm run package:chromium
       - name: Set release version env var
         run: echo "RELEASE_VERSION=$(cat version.txt)" >> $GITHUB_ENV
-      - run: echo "RELEASE_VERSION = $RELEASE_VERSION"
-      - name: Upload chromium package
-        uses: actions/upload-artifact@v2
+      - name: Create release
+        uses: softprops/action-gh-release@v1
         with:
-          name: chromium-package
-          path: dist/xbrowsersync_${{ env.RELEASE_VERSION }}_chromium.zip
+          draft: true
+          tag_name: v${{ env.RELEASE_VERSION }}
+          files: |
+            dist/xbrowsersync_${{ env.RELEASE_VERSION }}_chromium.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
