@@ -12,13 +12,10 @@ jobs:
           node-version: 14
       - name: Install dependencies
         run: npm install
-      - name: Package platform:chromium
-        run: npm run package:chromium
-      - name: Get release version
-        run: export XBS_VERSION=$(cat version.txt)
-      - run: echo "XBS_VERSION = $XBS_VERSION ; GITHUB_RUN_NUMBER = $GITHUB_RUN_NUMBER"
-      - name: Upload chromium package
-        uses: actions/upload-artifact@v2
-        with:
-          name: chromium-package
-          path: dist/xbrowsersync_${{ env.XBS_VERSION }}_chromium.zip
+      - run: npm run package:test
+      - name: Env vars
+        run: |
+          cat version.txt
+          echo "$(cat version.txt)" > XBS_VERSION
+          echo "XBS_VERSION = $XBS_VERSION"
+          echo "GITHUB_RUN_NUMBER = $GITHUB_RUN_NUMBER"
