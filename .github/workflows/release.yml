@@ -13,12 +13,11 @@ jobs:
       - name: Install dependencies
         run: npm install
       - run: npm run package:chromium
-      - name: Set env vars
-        run: |
-          echo "1.6.0.0" > XBS_VERSION_1
-          echo "$(cat version.txt):latest" > XBS_VERSION_2
-      - name: Print env vars
-        run: |
-          echo "XBS_VERSION_1 = $XBS_VERSION_1"
-          echo "XBS_VERSION_2 = $XBS_VERSION_2"
-          echo "GITHUB_RUN_NUMBER = $GITHUB_RUN_NUMBER"
+      - name: Set release version env var
+        run: echo "::set-env name=RELEASE_VERSION::$(cat release.txt)"
+      - run: echo "RELEASE_VERSION = $RELEASE_VERSION"
+      - name: Upload chromium package
+        uses: actions/upload-artifact@v2
+        with:
+          name: chromium-package
+          path: dist/xbrowsersync_${{ env.RELEASE_VERSION }}_chromium.zip
