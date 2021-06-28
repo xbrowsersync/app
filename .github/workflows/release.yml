@@ -15,8 +15,6 @@ jobs:
       - run: npm run package:chromium
       - name: Env vars
         run: |
-          cat version.txt > XBS_VERSION_1
-          $(cat version.txt) > XBS_VERSION_2
-          echo "XBS_VERSION_1 = $XBS_VERSION_1"
-          echo "XBS_VERSION_2 = $XBS_VERSION_2"
+          $(cat version.txt) > XBS_VERSION
+          echo "XBS_VERSION = $XBS_VERSION"
           echo "GITHUB_RUN_NUMBER = $GITHUB_RUN_NUMBER"
