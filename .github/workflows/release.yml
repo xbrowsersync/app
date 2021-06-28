@@ -16,7 +16,7 @@ jobs:
       - name: Set env vars
         run: |
           echo "1.6.0.0" > XBS_VERSION_1
-          $(cat version.txt) > XBS_VERSION_2
+          echo "$(cat version.txt):latest" > XBS_VERSION_2
       - name: Print env vars
         run: |
           echo "XBS_VERSION_1 = $XBS_VERSION_1"
