@@ -14,9 +14,7 @@ jobs:
         run: npm install
       - run: npm run package:chromium
       - name: Set release version env var
-        run: |
-          echo "::set-env name=RELEASE_VERSION::$(cat release.txt)"
-          echo "RELEASE_VERSION=$(cat release.txt)" >> $GITHUB_ENV
+        run: echo "RELEASE_VERSION=$(cat release.txt)" >> $GITHUB_ENV
       - run: echo "RELEASE_VERSION = $RELEASE_VERSION"
       - name: Upload chromium package
         uses: actions/upload-artifact@v2
