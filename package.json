@@ -38,8 +38,7 @@
     "build:android:dev": "npm run build:android -- -- --mode=development",
     "watch:android": "npm run build:android:dev -- --watch",
     "package:android": "npm run build:android && echo Packaging platform ANDROID... && node ./scripts/update-build-number.js android && node ./scripts/create-apk-package.js",
-    "postpackage:android": "echo Package saved to ./dist",
-    "package:test": "node ./scripts/update-build-number.js chromium"
+    "postpackage:android": "echo Package saved to ./dist"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
