@@ -35,12 +35,13 @@ jobs:
           popd
       - name: Install dependencies
         run: npm install
-      - name: Package platform:chromium
-        run: npm run package:chromium
-      - name: Package platform:firefox
-        run: npm run package:firefox
-      - name: Package platform:android
-        run: npm run package:android
+      - name: Create packages
+        run: |
+          npm run package:chromium
+          npm run package:firefox
+          npm run package:android
+        env:
+          BETA: ${{ github.event.inputs.beta_release == 'true' }}
       - name: Set release version env var
         run: echo "RELEASE_VERSION=$(cat version.txt)" >> $GITHUB_ENV
       - name: Create release

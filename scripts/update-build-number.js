@@ -2,10 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const xml2js = require('xml2js');
 
-const platform = process.argv[2] || 'chromium';
-const buildNum = process.argv[3] || process.env.GITHUB_RUN_NUMBER || 0;
+const platform = process.argv[2] ?? 'chromium';
+const buildNum = process.argv[3] ?? process.env.GITHUB_RUN_NUMBER ?? 0;
+const isBetaRelease = JSON.parse(process.env.BETA ?? 'false');
 
-const newVersion = `${process.env.npm_package_version}.${buildNum}`;
+const newVersion = isBetaRelease
+  ? `${process.env.npm_package_version}-beta.${buildNum}`
+  : `${process.env.npm_package_version}.${buildNum}`;
 const versionFileName = path.resolve(__dirname, '../version.txt');
 fs.writeFileSync(versionFileName, `${newVersion}`);
 
@@ -19,7 +22,7 @@ const updateBuildNumberForWebext = (platformName) => {
 const getAndroidVersionCode = (version) => {
   const versionArr = version.split('.');
   const build = versionArr.pop();
-  return `${versionArr.join('')}${build.padStart(2, 0)}`;
+  return `${versionArr.map((x) => x.replace(/\D/g, '')).join('')}${build.padStart(2, 0)}`;
 };
 
 const updateBuildNumberForAndroid = () => {
