@@ -45,7 +45,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           draft: true
-          prerelease: ${{ github.event.inputs.beta_release == "true" }}
+          prerelease: ${{ github.event.inputs.beta_release == 'true' }}
           tag_name: v${{ env.RELEASE_VERSION }}
           body_path: CHANGELOG.md
           files: |
