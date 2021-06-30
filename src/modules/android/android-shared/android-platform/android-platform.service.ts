@@ -234,6 +234,10 @@ export class AndroidPlatformService implements PlatformService {
     return this.$q.resolve().then(window.cordova.getAppVersion.getVersionNumber);
   }
 
+  getAppVersionName(): ng.IPromise<string> {
+    return this.$q.resolve().then(window.cordova.getAppVersion.getVersionNumber);
+  }
+
   getCurrentLocale(): ng.IPromise<string> {
     let currentLocale = Globals.I18n.DefaultLocale;
     return this.$q<any>((resolve, reject) => {

@@ -126,6 +126,10 @@ export abstract class WebExtPlatformService implements PlatformService {
     return this.$q.resolve(browser.runtime.getManifest().version);
   }
 
+  getAppVersionName(): ng.IPromise<string> {
+    return this.$q.resolve((browser.runtime.getManifest() as any).version_name);
+  }
+
   getCurrentLocale(): ng.IPromise<string> {
     return Promise.resolve(browser.i18n.getUILanguage());
   }

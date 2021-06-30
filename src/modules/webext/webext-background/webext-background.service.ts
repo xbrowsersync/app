@@ -351,7 +351,7 @@ export class WebExtBackgroundService {
         .then(() => {
           return this.platformSvc.getAppVersion().then((currentVersion) =>
             this.upgradeSvc.setLastUpgradeVersion(currentVersion).then(() => {
-              this.logSvc.logInfo(`Installed v${currentVersion}`);
+              this.logSvc.logInfo(`Installed ${currentVersion}`);
             })
           );
         })

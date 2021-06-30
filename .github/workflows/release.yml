@@ -43,7 +43,8 @@ jobs:
         env:
           BETA: ${{ github.event.inputs.beta_release == 'true' }}
       - name: Set release version env var
-        run: echo "RELEASE_VERSION=$(cat version.txt)" >> $GITHUB_ENV
+        run: |
+          echo "RELEASE_VERSION=$(cat PACKAGE_VERSION)" >> $GITHUB_ENV
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:

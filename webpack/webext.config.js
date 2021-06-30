@@ -1,5 +1,6 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const fs = require('fs');
 const Path = require('path');
 const BaseConfig = require('./base.config');
 
@@ -53,6 +54,7 @@ module.exports = (env, argv) => {
             to: '../_locales/[name]/messages.json',
             toType: 'template',
             transform(buffer) {
+              // Convert strings to proper webext messages format
               const i18n = JSON.parse(buffer.toString());
               const messages = convertI18nForWebExt(i18n);
               return JSON.stringify(messages, null, 2);
@@ -63,7 +65,15 @@ module.exports = (env, argv) => {
           },
           {
             from: Path.resolve(__dirname, '../res/webext/manifest.json'),
-            to: '../manifest.json'
+            to: '../manifest.json',
+            transform(buffer) {
+              // Set version in webext manifest
+              const appPackage = JSON.parse(fs.readFileSync(Path.resolve(__dirname, '../package.json')));
+              const manifest = JSON.parse(buffer.toString());
+              manifest.version = appPackage.version;
+              manifest.version_name = `v${appPackage.version}`;
+              return JSON.stringify(manifest, null, 2);
+            }
           }
         ]
       }),

@@ -1,5 +1,8 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const fs = require('fs');
 const Path = require('path');
+const xml2js = require('xml2js');
+const { getAndroidVersionCode } = require('../scripts/android-utils');
 const BaseConfig = require('./base.config');
 
 const generateI18nStrings = (i18n) => {
@@ -33,6 +36,7 @@ module.exports = (env, argv) => {
             to: './strings_[name].json',
             toType: 'template',
             transform(buffer) {
+              // Convert strings to proper webext messages format
               const i18n = JSON.parse(buffer.toString());
               const messages = generateI18nStrings(i18n);
               return JSON.stringify(messages, null, 2);
@@ -41,6 +45,23 @@ module.exports = (env, argv) => {
           {
             from: Path.resolve(__dirname, '../res/android'),
             to: '../../'
+          },
+          {
+            from: Path.resolve(__dirname, '../res/android/config.xml'),
+            to: '../../',
+            transform(buffer) {
+              // Set version in android config
+              const appPackage = JSON.parse(fs.readFileSync(Path.resolve(__dirname, '../package.json')));
+              const parser = new xml2js.Parser();
+              const builder = new xml2js.Builder();
+              let xml = '';
+              parser.parseString(buffer.toString(), (err, result) => {
+                result.widget.$.version = `v${appPackage.version}`;
+                result.widget.$['android-versionCode'] = getAndroidVersionCode(`${appPackage.version}.0`);
+                xml = builder.buildObject(result);
+              });
+              return xml;
+            }
           }
         ]
       })

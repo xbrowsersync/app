@@ -17,6 +17,10 @@ about-settings {
     text-transform: none;
   }
 
+  .version {
+    font-size: 0.95rem;
+  }
+
   @media (hover: hover) {
     a {
       &:active,

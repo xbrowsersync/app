@@ -286,7 +286,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
         .init()
         // Set the initial upgrade version
         .then(() => this.upgradeSvc.setLastUpgradeVersion(installedVersion))
-        .then(() => this.logSvc.logInfo(`Installed v${installedVersion}`))
+        .then(() => this.logSvc.logInfo(`Installed ${installedVersion}`))
     );
   }
 

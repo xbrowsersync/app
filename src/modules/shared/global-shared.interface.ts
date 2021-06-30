@@ -17,6 +17,7 @@ export interface PlatformService {
   downloadFile: (filename: string, textContents: string, displaySaveDialog?: boolean) => ng.IPromise<string | void>;
   enableNativeEventListeners: () => ng.IPromise<void>;
   getAppVersion: () => ng.IPromise<string>;
+  getAppVersionName: () => ng.IPromise<string>;
   getCurrentLocale: () => ng.IPromise<string>;
   getCurrentUrl: () => ng.IPromise<string>;
   getI18nString: (i18nObj: I18nObject) => string;

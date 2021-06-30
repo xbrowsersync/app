@@ -53,10 +53,9 @@ export class AppUpdatedComponent implements OnInit {
 
   ngOnInit(): void {
     // Initialise view model values
-    this.platformSvc.getAppVersion().then((appVersion) => {
+    this.platformSvc.getAppVersionName().then((appVersion) => {
       this.appVersion = appVersion;
-      const versionTag = appVersion.replace(/([a-z]+)\d+$/i, '$1');
-      this.releaseNotesUrl = Globals.ReleaseNotesUrlStem + versionTag;
+      this.releaseNotesUrl = `${Globals.ReleaseNotesUrlStem}${appVersion}`;
     });
 
     // Set initial focus

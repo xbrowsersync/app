@@ -1,28 +1,25 @@
 const fs = require('fs');
 const path = require('path');
 const xml2js = require('xml2js');
+const { getAndroidVersionCode } = require('./android-utils');
 
 const platform = process.argv[2] ?? 'chromium';
 const buildNum = process.argv[3] ?? process.env.GITHUB_RUN_NUMBER ?? 0;
 const isBetaRelease = JSON.parse(process.env.BETA ?? 'false');
 
-const newVersion = isBetaRelease
+const versionNum = `${process.env.npm_package_version}.${buildNum}`;
+const versionName = isBetaRelease
   ? `${process.env.npm_package_version}-beta.${buildNum}`
-  : `${process.env.npm_package_version}.${buildNum}`;
-const versionFileName = path.resolve(__dirname, '../version.txt');
-fs.writeFileSync(versionFileName, `${newVersion}`);
+  : process.env.npm_package_version;
+const versionFileName = path.resolve(__dirname, '../PACKAGE_VERSION');
+fs.writeFileSync(versionFileName, `${isBetaRelease ? versionName : versionNum}`);
 
 const updateBuildNumberForWebext = (platformName) => {
   const fileName = path.resolve(__dirname, `../build/${platformName}/manifest.json`);
   const file = require(fileName);
-  file.version = newVersion;
+  file.version = versionNum;
+  file.version_name = `v${versionName}`;
   fs.writeFileSync(fileName, JSON.stringify(file, null, 2));
-};
-
-const getAndroidVersionCode = (version) => {
-  const versionArr = version.split('.');
-  const build = versionArr.pop();
-  return `${versionArr.map((x) => x.replace(/\D/g, '')).join('')}${build.padStart(2, 0)}`;
 };
 
 const updateBuildNumberForAndroid = () => {
@@ -32,8 +29,8 @@ const updateBuildNumberForAndroid = () => {
 
   const data = fs.readFileSync(filePath);
   parser.parseString(data, (err, result) => {
-    result.widget.$.version = newVersion;
-    result.widget.$['android-versionCode'] = getAndroidVersionCode(newVersion);
+    result.widget.$.version = `v${versionName}`;
+    result.widget.$['android-versionCode'] = getAndroidVersionCode(versionNum);
     const xml = builder.buildObject(result);
     fs.writeFileSync(filePath, xml);
   });

@@ -2,7 +2,7 @@ const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const version = fs.readFileSync(path.resolve(__dirname, '../version.txt'), 'utf8');
+const version = fs.readFileSync(path.resolve(__dirname, '../PACKAGE_VERSION'), 'utf8');
 const pathToApk = path.resolve(
   __dirname,
   '../build/android/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk'

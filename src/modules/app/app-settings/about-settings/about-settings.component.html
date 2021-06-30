@@ -4,8 +4,7 @@
     {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Support) }}
   </button>
 </div>
-<div>
-  {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.AppVersion) }}
+<div class="version">
   <a class="new-tab" href="{{ vm.releaseNotesUrl }}"
      title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.ReleaseNotes) }}">{{ vm.appVersion }}</a>
 </div>
