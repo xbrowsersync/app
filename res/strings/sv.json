@@ -84,7 +84,7 @@
       },
       "Toolbar": {
         "key": "Bookmarks_Container_Toolbar",
-        "default": "Bokmärken i verktygsfältet"
+        "default": "Bokmärkesfältet"
       }
     }
   },
@@ -694,7 +694,7 @@
           },
           "Content": {
             "key": "View_Login_Sync_Confirm_Content",
-            "default": "xBrowserSync will delete all local bookmarks data before restoring synced bookmarks. OK to proceed?"
+            "default": "xBrowserSync kommer att radera all lokal bokmärkesdata innan återställning av synkroniserade bokmärken. OK för att fortsätta?"
           }
         },
         "DisableOthers": {
@@ -704,10 +704,10 @@
           },
           "Content": {
             "key": "View_Login_Sync_DisableOthers_Content",
-            "default": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "brave": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "edge": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "firefox": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing."
+            "default": "Att synkronisera din webbläsares data med xBrowserSync medan andra synkroniseringsverktyg för bokmärken (t.ex. <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) är aktiva kan orsaka dubbletter och eventuellt skadad data. Inaktivera dessa innan du fortsätter.",
+            "brave": "Att synkronisera din webbläsares data med xBrowserSync medan andra synkroniseringsverktyg för bokmärken (t.ex. <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) är aktiva kan orsaka dubbletter och eventuellt skadad data. Inaktivera dessa innan du fortsätter.",
+            "edge": "Att synkronisera din webbläsares data med xBrowserSync medan andra synkroniseringsverktyg för bokmärken (t.ex. <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) är aktiva kan orsaka dubbletter och eventuellt skadad data. Inaktivera dessa innan du fortsätter.",
+            "firefox": "Att synkronisera din webbläsares data med xBrowserSync medan andra synkroniseringsverktyg för bokmärken (t.ex. <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) är aktiva kan orsaka dubbletter och eventuellt skadad data. Inaktivera dessa innan du fortsätter."
           }
         },
         "Enable": {
@@ -977,7 +977,7 @@
           },
           "Copy": {
             "key": "View_Settings_BackupRestore_Restore_Copy",
-            "default": "Copy the contents of a backup file to restore data."
+            "default": "Kopiera innehållet i en säkerhetskopieringsfil för att återställa data."
           },
           "Paste": {
             "key": "View_Settings_BackupRestore_Restore_Paste",
@@ -1007,7 +1007,7 @@
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Reset_Unavailable",
-            "default": "Installation state data not available, unable to reset."
+            "default": "Data för installationstillstånd är inte tillgänglig, kan inte återställa."
           }
         }
       },
@@ -1287,7 +1287,7 @@
       },
       "Content": {
         "key": "View_Updated_Content",
-        "default": "<p>xBrowserSync has been updated with the latest features and fixes.</p><p>If sync was enabled it has now been disabled and your sync must first be upgraded before syncing with this version of xBrowserSync. Re-enable sync to complete the upgrade process.</p><p>For more details about the changes contained in this release, check out the release notes.</p>"
+        "default": "<p>xBrowserSync har uppdaterats med de senaste funktionerna och korrigeringarna.</p><p>Om synkronisering var aktiverad, har den nu inaktiverats och din synkronisering måste först uppgraderas innan den synkroniseras med denna version av xBrowserSync. Återaktivera synkronisering för att slutföra uppgraderingsprocessen.</p><p>För mer information om ändringarna i denna version, titta i versionsinformationen.</p>"
       }
     },
     "Working": {
