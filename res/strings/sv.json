@@ -277,91 +277,91 @@
     },
     "MissingClientData_Message": {
       "key": "Exception_MissingClientData_Message",
-      "default": "Unable to find stored credentials. Re-enable sync and try again."
+      "default": "Kunde inte hitta sparade inloggningsuppgifter. Återaktivera synkronisering och försök igen."
     },
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
-      "default": "Missing credentials"
+      "default": "Saknar inloggningsuppgifter"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",
-      "default": "Ensure you have provided a valid xBrowserSync back up before restoring."
+      "default": "Se till att du har angett en giltig xBrowserSync-säkerhetskopiering innan du återställer."
     },
     "NoDataToRestore_Title": {
       "key": "Exception_NoDataToRestore_Title",
-      "default": "No data to restore"
+      "default": "Ingen data att återställa"
     },
     "NotAcceptingNewSyncs_Message": {
       "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Switch to a different service or try again later."
+      "default": "Byt till en annan tjänst eller försök igen senare."
     },
     "NotAcceptingNewSyncs_Title": {
       "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "Service not accepting new syncs"
+      "default": "Tjänsten accepterar inte nya synkroniseringar"
     },
     "OutOfSync_Message": {
       "key": "Exception_OutOfSync_Message",
-      "default": "Local data was out of sync and has now been refreshed. Please reapply last change."
+      "default": "Lokal data var inte synkroniserad och har nu uppdaterats. Vänligen verkställ senaste ändring igen."
     },
     "OutOfSync_Title": {
       "key": "Exception_OutOfSync_Title",
-      "default": "Sync conflict detected"
+      "default": "Synkroniseringskonflikt upptäckt"
     },
     "RequestEntityTooLarge_Message": {
       "key": "Exception_RequestEntityTooLarge_Message",
-      "default": "Delete some bookmarks and try again or switch to a service with a larger sync limit."
+      "default": "Radera några bokmärken och försök igen eller byt till en tjänst med en större synkroniseringsgräns."
     },
     "RequestEntityTooLarge_Title": {
       "key": "Exception_RequestEntityTooLarge_Title",
-      "default": "Sync data limit exceeded"
+      "default": "Gränsen för synkroniseringsdata överskriden"
     },
     "ScanFailed_Message": {
       "key": "Exception_ScanFailed_Message",
-      "default": "Check permission has been granted and try again."
+      "default": "Kontrollera att behörighet har beviljats och försök igen."
     },
     "ScanFailed_Title": {
       "key": "Exception_ScanFailed_Title",
-      "default": "Scan failed"
+      "default": "Skanning misslyckades"
     },
     "ServiceOffline_Message": {
       "key": "Exception_ServiceOffline_Message",
-      "default": "The xBrowserSync service is currently offline, try again later."
+      "default": "xBrowserSync-tjänsten är för närvarande offline, försök igen senare."
     },
     "ServiceOffline_Title": {
       "key": "Exception_ServiceOffline_Title",
-      "default": "Service offline"
+      "default": "Tjänsten offline"
     },
     "ShareFailed_Title": {
       "key": "Exception_ShareFailed_Title",
-      "default": "Share failed"
+      "default": "Delning misslyckades"
     },
     "SyncRemoved_Message": {
       "key": "Exception_SyncRemoved_Message",
-      "default": "The requested sync does not exist, it may have been removed due to inactivity."
+      "default": "Den efterfrågade synkroniseringen finns inte, den kan ha tagits bort på grund av inaktivitet."
     },
     "SyncRemoved_Title": {
       "key": "Exception_SyncRemoved_Title",
-      "default": "Sync not found"
+      "default": "Synkronisering hittades inte"
     },
     "SyncVersionNotSupported_Message": {
       "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "This ID cannot be synced with this version of xBrowserSync as the sync has been upgraded to a later version."
+      "default": "Detta ID kan inte synkroniseras med denna version av xBrowserSync eftersom synkroniseringen har uppgraderats till en senare version."
     },
     "SyncVersionNotSupported_Restore_Message": {
       "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "The backup data cannot be restored by this version of xBrowserSync as it was created with a later version."
+      "default": "Säkerhetskopieringsdatan kan inte återställas av denna version av xBrowserSync eftersom den skapades med en senare version."
     },
     "SyncVersionNotSupported_Title": {
       "key": "Exception_SyncVersionNotSupported_Title",
-      "default": "Sync version not supported"
+      "default": "Synkroniseringsversionen stöds inte"
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
-      "default": "Sync has been disabled, re-enable sync to resume syncing."
+      "default": "Synkroniseringen har inaktiverats, återaktivera synkroniseringen för att återuppta synkroniseringen."
     },
     "TooManyRequests_Title": {
       "key": "Exception_TooManyRequests_Title",
-      "default": "Service request limit hit"
+      "default": "Gränsen uppnådd för tjänstebegäran"
     },
     "UncommittedSyncs_Message": {
       "key": "Exception_UncommittedSyncs_Message",
@@ -386,22 +386,22 @@
     },
     "UpgradeFailed_Title": {
       "key": "Exception_UpgradeFailed_Title",
-      "default": "Upgrade failed"
+      "default": "Uppgradering misslyckades"
     }
   },
   "Service": {
     "Status": {
       "Error": {
         "key": "Service_Status_Error",
-        "default": "Connection error"
+        "default": "Anslutningsfel"
       },
       "Loading": {
         "key": "Service_Status_Loading",
-        "default": "Checking"
+        "default": "Kontrollerar"
       },
       "NoNewSyncs": {
         "key": "Service_Status_NoNewSyncs",
-        "default": "Not accepting new syncs"
+        "default": "Accepterar inte nya synkroniseringar"
       },
       "Offline": {
         "key": "Service_Status_Offline",
@@ -416,31 +416,31 @@
   "Tooltip": {
     "NotSynced": {
       "key": "Tooltip_NotSynced",
-      "default": "not synced"
+      "default": "ej synkroniserad"
     },
     "Synced": {
       "key": "Tooltip_Synced",
-      "default": "synced"
+      "default": "synkroniserad"
     },
     "Syncing": {
       "key": "Tooltip_Syncing",
-      "default": "syncing"
+      "default": "synkroniserar"
     }
   },
   "View": {
     "Bookmark": {
       "Add": {
         "key": "View_Bookmark_Add",
-        "default": "Add bookmark"
+        "default": "Lägg till bokmärke"
       },
       "Edit": {
         "key": "View_Bookmark_Edit",
-        "default": "Edit bookmark"
+        "default": "Redigera bokmärke"
       },
       "Form": {
         "Title": {
           "key": "View_Bookmark_Form_Title",
-          "default": "Title"
+          "default": "Titel"
         },
         "Url": {
           "Exists": {
@@ -543,7 +543,7 @@
       },
       "Previous": {
         "key": "View_Help_Previous",
-        "default": "Previous"
+        "default": "Föregående"
       },
       "Searching": {
         "key": "View_Help_Searching",
@@ -619,29 +619,29 @@
         },
         "ManualEntry": {
           "key": "View_Login_Scan_ManualEntry",
-          "default": "Enter sync details manually"
+          "default": "Ange synkroniseringsdetaljer manuellt"
         }
       },
       "Service": {
         "ApiVersion": {
           "key": "View_Login_Service_ApiVersion",
-          "default": "API version"
+          "default": "API-version"
         },
         "Confirm": {
           "key": "View_Login_Service_Confirm",
-          "default": "Sync to this service?"
+          "default": "Synkronisera till denna tjänst?"
         },
         "Location": {
           "key": "View_Login_Service_Location",
-          "default": "Location"
+          "default": "Plats"
         },
         "MaxSyncSize": {
           "key": "View_Login_Service_MaxSyncSize",
-          "default": "Max sync size"
+          "default": "Maximal synkroniseringsstorlek"
         },
         "Selected": {
           "key": "View_Login_Service_Selected",
-          "default": "Syncing to"
+          "default": "Synkroniserar till"
         },
         "Status": {
           "key": "View_Login_Service_Status",
@@ -650,35 +650,35 @@
         "Update": {
           "Label": {
             "key": "View_Login_Service_Update_Label",
-            "default": "xBrowserSync service URL"
+            "default": "xBrowserSync-tjänstens webbadress"
           },
           "Description": {
             "key": "View_Login_Service_Update_Description",
-            "default": "Enter the URL of an alternative xBrowserSync service. Browse the list of public xBrowserSync services <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>here</a>."
+            "default": "Ange webbadressen till en alternativ xBrowserSync-tjänst. Bläddra i listan över offentliga xBrowserSync-tjänster <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>här</a>."
           },
           "Button": {
             "key": "View_Login_Service_Update_Button",
-            "default": "Switch service"
+            "default": "Byt tjänst"
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
-            "default": "URL is required"
+            "default": "Webbadress krävs"
           },
           "InvalidService": {
             "key": "View_Login_Service_Update_InvalidService",
-            "default": "Not a valid xBrowserSync service"
+            "default": "Inte en giltig xBrowserSync-tjänst"
           },
           "InvalidUrl": {
             "key": "View_Login_Service_Update_InvalidUrl",
-            "default": "Not a valid URL"
+            "default": "Inte en giltig webbadress"
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",
-            "default": "Unable to connect to the service"
+            "default": "Kunde inte ansluta till tjänsten"
           },
           "NotSupported": {
             "key": "View_Login_Service_Update_Failed_NotSupported",
-            "default": "This service is running an unsupported API version"
+            "default": "Denna tjänst kör en API-version som inte stöds"
           }
         },
         "Warning": {
@@ -690,7 +690,7 @@
         "Confirm": {
           "Title": {
             "key": "View_Login_Sync_Confirm_Title",
-            "default": "Are you sure?"
+            "default": "Är du säker?"
           },
           "Content": {
             "key": "View_Login_Sync_Confirm_Content",
@@ -775,175 +775,175 @@
     "Scan": {
       "Title": {
         "key": "View_Scan_Title",
-        "default": "Scan your sync ID QR code"
+        "default": "Skanna din synkroniserings-ID QR-kod"
       },
       "ToggleLight": {
         "key": "View_Scan_ToggleLight",
-        "default": "Toggle light"
+        "default": "Växla ljus"
       }
     },
     "Search": {
       "BookmarkTree": {
         "key": "View_Search_BookmarkTree",
-        "default": "View bookmark folders"
+        "default": "Visa bokmärkesmappar"
       },
       "Clear": {
         "key": "View_Search_Clear",
-        "default": "Clear"
+        "default": "Rensa"
       },
       "FolderEmpty": {
         "key": "View_Search_FolderEmpty",
-        "default": "Folder empty"
+        "default": "Mapp är tom"
       },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
-        "default": "You have no bookmarks, go add some!"
+        "default": "Du har inga bokmärken, lägg till några!"
       },
       "NoResults": {
         "key": "View_Search_NoResults",
-        "default": "No bookmarks found"
+        "default": "Inga bokmärken hittades"
       },
       "Placeholder": {
         "key": "View_Search_Placeholder",
-        "default": "Hit Enter or search for bookmarks",
-        "android": "Find bookmarks"
+        "default": "Tryck på Enter eller sök efter bokmärken",
+        "android": "Hitta bokmärken"
       },
       "Pulling": {
         "key": "View_Search_Pulling",
-        "default": "Pull down to sync"
+        "default": "Dra ned för att synkronisera"
       },
       "Pulled": {
         "key": "View_Search_Pulled",
-        "default": "Release to sync"
+        "default": "Släpp för att synkronisera"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
-        "default": "View search results"
+        "default": "Visa sökresultat"
       }
     },
     "Settings": {
       "BackupRestore": {
         "Title": {
           "key": "View_Settings_BackupRestore_Title",
-          "default": "Back up and restore"
+          "default": "Säkerhetskopiering och återställning"
         },
         "AutoBackup": {
           "Title": {
             "key": "View_Settings_BackupRestore_AutoBackup_Title",
-            "default": "Auto back up"
+            "default": "Automatisk säkerhetskopiering"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_AutoBackup_Description",
-            "default": "Automatically download backups on a schedule."
+            "default": "Ladda ned säkerhetskopior automatiskt enligt ett schema."
           },
           "RunsAt": {
             "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
-            "default": "Back up runs at"
+            "default": "Säkerhetskopiering körs"
           },
           "Every": {
             "key": "View_Settings_BackupRestore_AutoBackup_Every",
-            "default": "every"
+            "default": "varje"
           },
           "Numbers": {
             "Single": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
-              "default": "single"
+              "default": "enstaka"
             },
             "Two": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
-              "default": "two"
+              "default": "två"
             },
             "Three": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
-              "default": "three"
+              "default": "tre"
             },
             "Four": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
-              "default": "four"
+              "default": "fyra"
             },
             "Five": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
-              "default": "five"
+              "default": "fem"
             },
             "Six": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
-              "default": "six"
+              "default": "sex"
             },
             "Seven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
-              "default": "seven"
+              "default": "sju"
             },
             "Eight": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
-              "default": "eight"
+              "default": "åtta"
             },
             "Nine": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
-              "default": "nine"
+              "default": "nio"
             },
             "Ten": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
-              "default": "ten"
+              "default": "tio"
             },
             "Eleven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
-              "default": "eleven"
+              "default": "elva"
             },
             "Twelve": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
-              "default": "twelve"
+              "default": "tolv"
             }
           },
           "Units": {
             "Day": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
-              "default": "day(s)"
+              "default": "dagar"
             },
             "Week": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
-              "default": "week(s)"
+              "default": "veckor"
             },
             "Month": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
-              "default": "month(s)"
+              "default": "månader"
             }
           },
           "Confirmation": {
             "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
-            "default": "To prevent “Save As...” dialog from showing when downloading backups, disable the browser setting “Ask where to save each file before downloading”."
+            "default": "För att förhindra att dialogrutan “Spara som...” visas när du laddar ned säkerhetskopior, inaktivera webbläsarinställningen “Fråga var filerna ska sparas före nedladdning\"."
           }
         },
         "Backup": {
           "Title": {
             "key": "View_Settings_BackupRestore_Backup_Title",
-            "default": "Back up"
+            "default": "Säkerhetskopiering"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Download Backup"
+            "default": "Ladda ned säkerhetskopia"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
-            "default": "Back up local browser data to a file."
+            "default": "Säkerhetskopiera lokal webbläsardata till en fil."
           },
           "Synced": {
             "key": "View_Settings_BackupRestore_Backup_Synced",
-            "default": "Back up synced data to a file."
+            "default": "Säkerhetskopiera synkroniserad data till en fil."
           }
         },
         "Restore": {
           "Title": {
             "key": "View_Settings_BackupRestore_Restore_Title",
-            "default": "Restore"
+            "default": "Återställning"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Restore From Backup"
+            "default": "Återställ från säkerhetskopia"
           },
           "Local": {
             "Description": {
               "key": "View_Settings_BackupRestore_Restore_Local_Description",
-              "default": "Restore local browser data from a backup."
+              "default": "Återställ lokal webbläsardata från en säkerhetskopia."
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Local_Confirm",
@@ -953,7 +953,7 @@
           "Synced": {
             "Description": {
               "key": "View_Settings_BackupRestore_Restore_Synced_Description",
-              "default": "Restore synced data from a backup."
+              "default": "Återställ synkroniserad data från en säkerhetskopia."
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Synced_Confirm",
@@ -963,16 +963,16 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Backup has been restored."
+            "default": "Säkerhetskopian har återställts."
           },
           "SelectFile": {
             "Button": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Button",
-              "default": "Select file"
+              "default": "Välj fil"
             },
             "Placeholder": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Placeholder",
-              "default": "Select a backup file to restore"
+              "default": "Välj en säkerhetskopieringsfil att återställa"
             }
           },
           "Copy": {
@@ -981,11 +981,11 @@
           },
           "Paste": {
             "key": "View_Settings_BackupRestore_Restore_Paste",
-            "default": "Paste backup data"
+            "default": "Klistra in säkerhetskopieringsdata"
           },
           "RestoreData": {
             "key": "View_Settings_BackupRestore_Restore_RestoreData",
-            "default": "Restore data"
+            "default": "Återställ data"
           },
           "Invalid": {
             "key": "View_Settings_BackupRestore_Restore_Invalid",
@@ -1014,12 +1014,12 @@
       "Issues": {
         "Title": {
           "key": "View_Settings_Issues_Title",
-          "default": "Help and support"
+          "default": "Hjälp och support"
         },
         "Help": {
           "Title": {
             "key": "View_Settings_Issues_Help_Title",
-            "default": "Help guide"
+            "default": "Hjälpguide"
           },
           "Description": {
             "key": "View_Settings_Issues_Help_Description",
@@ -1205,33 +1205,33 @@
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Last synced {date}"
+            "default": "Senast synkroniserad {date}"
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "Ready to sync (scheduled for {date})"
+            "default": "Redo att synkronisera (schemalagd till {date})"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
-            "default": "Sync Now"
+            "default": "Synkronisera nu"
           }
         },
         "Qr": {
           "Description": {
             "key": "View_Settings_Sync_Qr_Description",
-            "default": "Scan this QR code using the xBrowserSync Android app to connect to your synced data."
+            "default": "Skanna denna QR-kod med Android-appen xBrowserSync för att ansluta till dina synkroniserade data."
           },
           "Show": {
             "key": "View_Settings_Sync_Qr_Show",
-            "default": "Show QR code"
+            "default": "Visa QR-kod"
           },
           "Copy": {
             "key": "View_Settings_Sync_Qr_Copy",
-            "default": "Copy sync ID to clipboard"
+            "default": "Kopiera synkroniserings-ID till urklipp"
           },
           "Copied": {
             "key": "View_Settings_Sync_Qr_Copied",
-            "default": "Copied!"
+            "default": "Kopierad!"
           }
         }
       },
