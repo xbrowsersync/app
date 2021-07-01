@@ -95,27 +95,27 @@
     },
     "Back": {
       "key": "Button_Back",
-      "default": "Back"
+      "default": "Tillbaka"
     },
     "Cancel": {
       "key": "Button_Cancel",
-      "default": "Cancel"
+      "default": "Avbryt"
     },
     "Close": {
       "key": "Button_Close",
-      "default": "Close"
+      "default": "Stäng"
     },
     "Confirm": {
       "key": "Button_Confirm",
-      "default": "Yes"
+      "default": "Ja"
     },
     "Continue": {
       "key": "Button_Continue",
-      "default": "Continue"
+      "default": "Fortsätt"
     },
     "DeleteBookmark": {
       "key": "Button_DeleteBookmark",
-      "default": "Delete Bookmark"
+      "default": "Radera bokmärke"
     },
     "Deny": {
       "key": "Button_Deny",
