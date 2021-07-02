@@ -509,14 +509,14 @@
       "BackingUp": {
         "key": "View_Help_BackingUp",
         "default": "<h4>Kom ihåg att säkerhetskopiera</h4><p>Din data är ditt ansvar när du använder xBrowserSync så var smart och se till att ta säkerhetskopior.</p><p>Gå till panelen Inställningar och säkerhetskopiera din okrypterade data till en lokal fil som kan användas för att återställa din data om du skulle behöva.</p><p>Om din lokala webbläsardata blir skadad och du inte har några säkerhetskopior, kan du när som helst återställa din data till sitt ursprungliga tillstånd från när xBrowserSync installerades.</p>",
-        "android": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
+        "android": "<h4>Kom ihåg att säkerhetskopiera</h4><p>Din data är ditt ansvar när du använder xBrowserSync så var smart och se till att ta säkerhetskopior.</p><p>Gå till panelen Inställningar och säkerhetskopiera din okrypterade data till en lokal fil som kan användas för att återställa din data om du skulle behöva.</p>"
       },
       "BeforeYouBegin": {
         "key": "View_Help_BeforeYouBegin",
-        "default": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) please disable them to avoid conflicts.</p>",
-        "brave": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) please disable them to avoid conflicts.</p>",
-        "edge": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) please disable them to avoid conflicts.</p>",
-        "firefox": "<h4>Before you begin</h4><p>xBrowserSync modifies your local browser data so it’s a good idea to back up your bookmarks and other browser data just in case, and if you are using any other browser sync services or tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) please disable them to avoid conflicts.</p>"
+        "default": "<h4>Innan du börjar</h4><p>xBrowserSync ändrar din lokala webbläsardata så det är en bra idé att säkerhetskopiera dina bokmärken och andra webbläsardata för säkerhetskull, och om du använder andra synkroniseringstjänster eller verktyg för webbläsaren (t.ex. <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>), inaktivera dem för att undvika konflikter.</p>",
+        "brave": "<h4>Innan du börjar</h4><p>xBrowserSync ändrar din lokala webbläsardata så det är en bra idé att säkerhetskopiera dina bokmärken och andra webbläsardata för säkerhetskull, och om du använder andra synkroniseringstjänster eller verktyg för webbläsaren (t.ex. <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>), inaktivera dem för att undvika konflikter.</p>",
+        "edge": "<h4>Innan du börjar</h4><p>xBrowserSync ändrar din lokala webbläsardata så det är en bra idé att säkerhetskopiera dina bokmärken och andra webbläsardata för säkerhetskull, och om du använder andra synkroniseringstjänster eller verktyg för webbläsaren (t.ex. <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>), inaktivera dem för att undvika konflikter.</p>",
+        "firefox": "<h4>Innan du börjar</h4><p>xBrowserSync ändrar din lokala webbläsardata så det är en bra idé att säkerhetskopiera dina bokmärken och andra webbläsardata för säkerhetskull, och om du använder andra synkroniseringstjänster eller verktyg för webbläsaren (t.ex. <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>), inaktivera dem för att undvika konflikter.</p>"
       },
       "ExistingId": {
         "key": "View_Help_ExistingId",
@@ -538,8 +538,8 @@
       },
       "NativeFeatures": {
         "key": "View_Help_NativeFeatures",
-        "default": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks bar and bookmarks manager, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p>",
-        "firefox": "<h4>Native features supported</h4><p>Feel free to continue using your browser’s native bookmarking features such as the bookmarks toolbar and bookmarks library, any changes you make will be synced automatically in the background.</p><p>If you have organised your existing bookmarks into folders don’t worry, xBrowserSync will respect and maintain your existing bookmarks hierarchy.</p><p>Please note however, as Firefox’s bookmarks API does not yet support accessing native bookmark tags, any existing tags will be lost when syncing and tags added via xBrowserSync will not be saved as native tags.</p>"
+        "default": "<h4>Inbyggda funktioner som stöds</h4><p>Fortsätt gärna använda webbläsarens inbyggda bokmärkningsfunktioner som bokmärkesfältet och bokmärkeshanteraren, eventuella ändringar du gör kommer att synkroniseras automatiskt i bakgrunden.</p><p>Om du har organiserat dina befintliga bokmärken i mappar, oroa dig inte, xBrowserSync kommer att respektera och upprätthålla din befintliga bokmärkeshierarki.</p>",
+        "firefox": "<h4>Inbyggda funktioner som stöds</h4><p>Fortsätt gärna använda webbläsarens inbyggda bokmärkningsfunktioner som bokmärkesfältet och bokmärkesbibliotek, eventuella ändringar du gör kommer att synkroniseras automatiskt i bakgrunden.</p><p>Om du har organiserat dina befintliga bokmärken i mappar, oroa dig inte, xBrowserSync kommer att respektera och upprätthålla din befintliga bokmärkeshierarki.</p><p>Observera dock, eftersom Firefox bokmärkes-API ännu inte stöder åtkomst till inbyggda bokmärkestaggar, kommer alla befintliga taggar att förloras vid synkronisering och taggar som lagts till via xBrowserSync kommer inte att sparas som inbyggda taggar.</p>"
       },
       "Previous": {
         "key": "View_Help_Previous",
@@ -547,8 +547,8 @@
       },
       "Searching": {
         "key": "View_Help_Searching",
-        "default": "<h4>Searching your bookmarks</h4><p>Once synced, simply press Enter to display your recent bookmarks or type some keywords or a URL to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>To edit or delete a bookmark, hover over the bookmark and click the now visible edit icon next to the bookmark’s title.</p>",
-        "android": "<h4>Searching your bookmarks</h4><p>Once synced, your bookmarks are displayed in chronological order when you open xBrowserSync. Type some keywords or a URL in the search box to search your bookmarks.</p><p>Toggle between search results and bookmark folders to browse the entire hierarchy.</p><p>Long pressing on a bookmark will allow you to directly share, modify or delete the bookmark.</p>"
+        "default": "<h4>Sök i dina bokmärken</h4><p>Efter synkronisering, tryck helt enkelt på Enter för att visa dina senaste bokmärken eller skriv några sökord eller en webbadress för att söka bland dina bokmärken.</p><p>Växla mellan sökresultat och bokmärkesmappar för att bläddra i hela hierarkin.</p><p>För att redigera eller radera ett bokmärke, håll muspekaren över bokmärket och klickar på den nu synliga redigeringsikonen bredvid bokmärkets titel.</p>",
+        "android": "<h4>Söka i dina bokmärken</h4><p>Efter synkronisering visas dina bokmärken i kronologisk ordning när du öppnar xBrowserSync. Skriv några sökord eller en webbadress i sökrutan för att söka bland dina bokmärken.</p><p>Växla mellan sökresultat och bokmärkesmappar för att bläddra i hela hierarkin.</p><p>Långtryck på ett bokmärke gör att du direkt kan dela, ändra eller radera bokmärket.</p>"
       },
       "Service": {
         "key": "View_Help_Service",
@@ -683,7 +683,7 @@
         },
         "Warning": {
           "key": "View_Login_Service_Warning",
-          "default": "<strong>Important:</strong> xBrowserSync services are run independently by volunteers. The service administrator takes no responsibility for your data so please remember to backup regularly."
+          "default": "<strong>Viktigt:</strong> xBrowserSync-tjänster drivs självständigt av volontärer. Tjänsteadministratören tar inget ansvar för din data så kom ihåg att säkerhetskopiera regelbundet."
         }
       },
       "Sync": {
@@ -725,7 +725,7 @@
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync. After upgrading, you will no longer be able to sync with any previous versions of xBrowserSync.</p><p>Make sure to update xBrowserSync on all synced devices before continuing. Ready to proceed?</p>"
+            "default": "<p>Din synkronisering måste uppgraderas innan du synkroniserar med denna version av xBrowserSync. Efter uppgradering kommer du inte längre att kunna synkronisera med tidigare versioner av xBrowserSync.</p><p>Var noga med att uppdatera xBrowserSync på alla synkroniserade enheter innan du fortsätter. Redo att fortsätta?</p>"
           }
         },
         "UpgradeRequired": {
@@ -769,7 +769,7 @@
       },
       "Content": {
         "key": "View_Permissions_Content",
-        "default": "<p>xBrowserSync automatically enriches bookmarks added using the browser’s Add Bookmark button with available metadata. To enable this, xBrowserSync <a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>requires additional permissions</a> to be able to read visited website data.</p><p>Please indicate if prompted if you are happy to grant these permissions, alternatively you can add or remove permissions at any time in the Settings panel.</p>"
+        "default": "<p>xBrowserSync berikar automatiskt bokmärken med tillgängliga metadata som lagts till med webbläsarens Lägg till bokmärke-knapp. För att aktivera detta kräver xBrowserSync <a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>ytterligare behörigheter</a> för att kunna läsa besökta webbplatsdata.</p><p>Om du får frågan, välj om du är okej med att bevilja dessa behörigheter, alternativt kan du lägga till eller ta bort behörigheter när som helst i panelen Inställningar.</p>"
       }
     },
     "Scan": {
@@ -947,7 +947,7 @@
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Local_Confirm",
-              "default": "<p>As sync is currently disabled, the data being restored will overwrite the local browser data.</p><p>OK to proceed?</p>"
+              "default": "<p>Eftersom synkronisering förnärvarande är inaktiverat kommer data som återställs att skriva över lokal webbläsardata.</p><p>OK för att fortsätta?</p>"
             }
           },
           "Synced": {
@@ -957,8 +957,8 @@
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Synced_Confirm",
-              "default": "<p>As sync is currently enabled, the data being restored will overwrite your synced data.</p><p>To restore data to the local browser only, disable sync before restoring.</p><p>OK to proceed?</p>",
-              "android": "<p>The data being restored will overwrite your synced data.</p><p>OK to proceed?</p>"
+              "default": "<p>Eftersom synkronisering förnärvarande är aktiverat kommer data som återställs att skriva över dina synkroniserade data.</p><p>För att endast återställa data till den lokala webbläsaren, inaktivera synkronisering innan du återställer.</p><p>OK för att fortsätta?</p>",
+              "android": "<p>Data som återställs kommer att skriva över din synkroniserade data.</p><p>OK för att fortsätta?</p>"
             }
           },
           "Done": {
@@ -995,7 +995,7 @@
         "Reset": {
           "Confirm": {
             "key": "View_Settings_BackupRestore_Reset_Confirm",
-            "default": "<p>If you continue, sync will be disabled and your local browser data will be reset to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "<p>Om du fortsätter kommer synkronisering att inaktiveras och din lokala webbläsardata kommer att återställas till när xBrowserSync installerades den {date}.</p><p>OK för att fortsätta?</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Reset_Button",
