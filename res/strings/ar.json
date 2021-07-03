@@ -261,39 +261,39 @@
     },
     "LocalContainerNotFound_Message": {
       "key": "Exception_LocalContainerNotFound_Message",
-      "default": "Possible corrupt browser profile, try creating a new profile as it may resolve the issue."
+      "default": "يحتمَل تلف الملف الشخصي للمتصفح، جرّب إنشاء ملف شخصي جديد مما قد يحل المشكلة."
     },
     "LocalContainerNotFound_Title": {
       "key": "Exception_LocalContainerNotFound_Title",
-      "default": "Unexpected bookmarks structure"
+      "default": "بنية الإشارات المرجعية غير متوقعة"
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local browser data has been refreshed, please reapply last change."
+      "default": "تم تحديث بيانات المتصفح المحلية، يرجى إعادة تطبيق التغيير الأخير."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
-      "default": "Sync error"
+      "default": "خطأ بالمزامنة"
     },
     "MissingClientData_Message": {
       "key": "Exception_MissingClientData_Message",
-      "default": "Unable to find stored credentials. Re-enable sync and try again."
+      "default": "لم يتم إيجاد بيانات الاعتماد المخزنة. أعد تفعيل المزامنة وحاول مرة أخرى."
     },
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
-      "default": "Missing credentials"
+      "default": "بيانات الاعتماد مفقودة"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",
-      "default": "Ensure you have provided a valid xBrowserSync back up before restoring."
+      "default": "تأكد من أنك وفرت نسخة احتياطية سليمة لإكس براوزر سينك قبل استعادتها."
     },
     "NoDataToRestore_Title": {
       "key": "Exception_NoDataToRestore_Title",
-      "default": "No data to restore"
+      "default": "لا توجد بيانات للإستعادة"
     },
     "NotAcceptingNewSyncs_Message": {
       "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Switch to a different service or try again later."
+      "default": "قم بالتبديل إلى خدمة أخرى أو حاول لاحقاً."
     },
     "NotAcceptingNewSyncs_Title": {
       "key": "Exception_NotAcceptingNewSyncs_Title",
