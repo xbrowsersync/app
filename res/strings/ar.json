@@ -8,7 +8,7 @@
       "Message": {
         "key": "Alert_AppUpdateAvailable_Message",
         "default": "الإصدار: {version} متاح للتنزيل. انقر لمزيد من المعلومات.",
-        "android": "إكس براوزر سينك إصدار {version} متاح للتنزيل."
+        "android": "إصدار إكس براوزر سينك {version} متاح للتنزيل."
       }
     },
     "AppUpdated": {
