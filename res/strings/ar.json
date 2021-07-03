@@ -957,7 +957,7 @@
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Synced_Confirm",
-              "default": "<p>As sync is currently enabled, the data being restored will overwrite your synced data.</p><p>To restore data to the local browser only, disable sync before restoring.</p><p>OK to proceed?</p>",
+              "default": "<p>نظرًا لأن المزامنة مفعلة حاليًا، فإن البيانات التي يجري استعادتها ستحل محل البيانات المتزامنة بالحال.</p><p>لاستعادة البيانات إلى المتصفح المحلي فقط، قم بتعطيل المزامنة قبل الاستعادة.</p><p>موافق/ة للمتابعة؟</p>",
               "android": "<p>ستحل البيانات التي تتم استعادتها محل البيانات المتزامنة.</p><p>موافق/ة للمتابعة؟</p>"
             }
           },
@@ -1113,145 +1113,145 @@
         "CheckForAppUpdates": {
           "Label": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Label",
-            "default": "Check for app updates"
+            "default": "تحقق تحديثات التطبيق"
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
-            "default": "Be notified when a new version of xBrowserSync is available."
+            "default": "الإعلام عند توفر إصدار جديد من إكس براوزر سينك."
           }
         },
         "DarkMode": {
           "Label": {
             "key": "View_Settings_Prefs_DarkMode_Label",
-            "default": "Enable dark mode"
+            "default": "تفعيل الوضع المظلم"
           },
           "Description": {
             "key": "View_Settings_Prefs_DarkMode_Description",
-            "default": "Ideal for use in low-light environments."
+            "default": "مثالي للاستخدام في البيئات منخفضة الضوء."
           }
         },
         "DefaultToFolderView": {
           "Label": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Label",
-            "default": "Show bookmark folders"
+            "default": "عرض مجلدات الإشارات المرجعية"
           },
           "Description": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Description",
-            "default": "Display bookmark folders by default."
+            "default": "عرض مجلدات الإشارات المرجعية افتراضياً."
           }
         },
         "SearchBar": {
           "Label": {
             "key": "View_Settings_Prefs_SearchBar_Label",
-            "default": "Switch search bar position"
+            "default": "تغيير موضع شريط البحث"
           },
           "Description": {
             "key": "View_Settings_Prefs_SearchBar_Description",
-            "default": "Show search bar beneath results."
+            "default": "إظهار شريط البحث تحت النتائج."
           }
         },
         "SyncToolbar": {
           "Label": {
             "key": "View_Settings_Prefs_SyncToolbar_Label",
-            "default": "Sync bookmarks toolbar"
+            "default": "مزامنة شريط أدوات العلامات المرجعية"
           },
           "Description": {
             "key": "View_Settings_Prefs_SyncToolbar_Description",
-            "default": "Disable this setting to display different toolbar bookmarks across synced browsers."
+            "default": "الغِ تفعيل هذا الإعداد لعرض إشارات مرجعية مختلفة بشريط الأدوات بكل متصفح متزامن."
           },
           "Confirmation": {
             "key": "View_Settings_Prefs_SyncToolbar_Confirmation",
-            "default": "<p>Enabling this setting will replace the bookmarks currently in the bookmarks toolbar with your synced bookmarks.</p><p>OK to proceed?</p>"
+            "default": "<p>سيؤدي تفعيل هذا الإعداد إلى استبدال الإشارات المرجعية الموجودة حاليًا في شريط أدوات الإشارات المرجعية بإشاراتك المرجعية المتزامنة.</p><p>موافق/ة للمتابعة؟</p>"
           }
         },
         "Title": {
           "key": "View_Settings_Prefs_Title",
-          "default": "Preferences"
+          "default": "الإعدادات"
         }
       },
       "Sync": {
         "Title": {
           "key": "View_Settings_Sync_Title",
-          "default": "Sync"
+          "default": "المزامنة"
         },
         "Disable": {
           "key": "View_Settings_Sync_Disable",
-          "default": "Disable sync"
+          "default": "تعطيل المزامنة"
         },
         "Id": {
           "Label": {
             "key": "View_Settings_Sync_Id_Label",
-            "default": "Sync ID"
+            "default": "رمز المزامنة"
           },
           "Description": {
             "key": "View_Settings_Sync_Id_Description",
-            "default": "Use your sync ID to connect to your synced data on other devices (click to reveal QR code)."
+            "default": "استخدم رمز المزامنة الخاص بك للاتصال ببياناتك المتزامنة على الأجهزة الأخرى (انقر للكشف عن رمز الاستجابة السريعة)."
           }
         },
         "Data": {
           "Label": {
             "key": "View_Settings_Sync_Data_Label",
-            "default": "Data usage"
+            "default": "استخدام البيانات"
           },
           "Description": {
             "key": "View_Settings_Sync_Data_Description",
-            "default": "How much of the sync data allowed by the service are you using."
+            "default": "كمية بيانات المزامنة التي تسمح بها الخدمة التي تستخدمها."
           }
         },
         "Service": {
           "key": "View_Settings_Sync_Service",
-          "default": "Service"
+          "default": "الخدمة"
         },
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Last synced {date}"
+            "default": "آخر مزامنة {date}"
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "Ready to sync (scheduled for {date})"
+            "default": "جاهز للمزامنة (بميعاد {date})"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
-            "default": "Sync Now"
+            "default": "مزامنة الآن"
           }
         },
         "Qr": {
           "Description": {
             "key": "View_Settings_Sync_Qr_Description",
-            "default": "Scan this QR code using the xBrowserSync Android app to connect to your synced data."
+            "default": "قم بمسح رمز الاستجابة السريعة هذا باستخدام تطبيق إكس براوزر سينك للأندرويد للاتصال ببياناتك المتزامنة."
           },
           "Show": {
             "key": "View_Settings_Sync_Qr_Show",
-            "default": "Show QR code"
+            "default": "عرض رمز الاستجابة السريعة"
           },
           "Copy": {
             "key": "View_Settings_Sync_Qr_Copy",
-            "default": "Copy sync ID to clipboard"
+            "default": "نسخ رمز المزامنة إلى الحافظة"
           },
           "Copied": {
             "key": "View_Settings_Sync_Qr_Copied",
-            "default": "Copied!"
+            "default": "تم النسخ!"
           }
         }
       },
       "NotAvailable": {
         "key": "View_Settings_NotAvailable",
-        "default": "Settings available when sync is enabled."
+        "default": "الإعدادات متاحة عند تمكين المزامنة."
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "File saved to Downloads"
+        "default": "تم حفظ الملف في التنزيلات"
       },
       "Support": {
         "key": "View_Settings_Support",
-        "default": "Support xBrowserSync"
+        "default": "ادعم إكس براوزر سينك"
       }
     },
     "Support": {
       "Title": {
         "key": "View_Support_Title",
-        "default": "Support xBrowserSync!"
+        "default": "ادعم إكس براوزر سينك!"
       },
       "Content": {
         "key": "View_Support_Content",
