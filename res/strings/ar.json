@@ -742,58 +742,58 @@
       "SyncId": {
         "Description": {
           "key": "View_Login_SyncId_Description",
-          "default": "Your sync ID"
+          "default": "رمز المزامنة الخاص بك"
         },
         "Existing": {
           "key": "View_Login_SyncId_Existing",
-          "default": "Already got a sync ID?"
+          "default": "ألديك بالفعل رمز مزامنة؟"
         },
         "Invalid": {
           "key": "View_Login_SyncId_Invalid",
-          "default": "Not a valid sync ID"
+          "default": "رمز مزامنة غير صحيح"
         },
         "Label": {
           "key": "View_Login_SyncId_Label",
-          "default": "ID"
+          "default": "الرمز"
         },
         "New": {
           "key": "View_Login_SyncId_New",
-          "default": "Get a sync ID"
+          "default": "احصل على رمز مزامنة"
         }
       }
     },
     "Permissions": {
       "Title": {
         "key": "View_Permissions_Title",
-        "default": "Optional permissions"
+        "default": "الصلاحيات الاختيارية"
       },
       "Content": {
         "key": "View_Permissions_Content",
-        "default": "<p>xBrowserSync automatically enriches bookmarks added using the browser’s Add Bookmark button with available metadata. To enable this, xBrowserSync <a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>requires additional permissions</a> to be able to read visited website data.</p><p>Please indicate if prompted if you are happy to grant these permissions, alternatively you can add or remove permissions at any time in the Settings panel.</p>"
+        "default": "<p>يقوم إكس براوزر سينك تلقائيًا بإثراء الإشارات المرجعية المضافة باستخدام زر إضافة إشارة مرجعية بالمتصفح بالبيانات الوصفية المتاحة. لتمكين هذا، يحتاج إكس براوزر سينك <a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>صلاحيات إضافية</a> ليتمكن من قراءة بيانات مواقع الويب التي تمت زيارته.</p><p>يُرجى توضيح في حال طُلب منك ما إذا كنت سعيدًا بمنح هذه الصلاحيات، يمكنك إضافة الأذونات أو إزالتها في أي وقت في لوحة الإعدادات.</p>"
       }
     },
     "Scan": {
       "Title": {
         "key": "View_Scan_Title",
-        "default": "Scan your sync ID QR code"
+        "default": "مسح رمز الاستجابة السريعة الخاص بمزامنتك"
       },
       "ToggleLight": {
         "key": "View_Scan_ToggleLight",
-        "default": "Toggle light"
+        "default": "تشغيل/ايقاف الضوء"
       }
     },
     "Search": {
       "BookmarkTree": {
         "key": "View_Search_BookmarkTree",
-        "default": "View bookmark folders"
+        "default": "عرض مجلدات الإشارات المرجعية"
       },
       "Clear": {
         "key": "View_Search_Clear",
-        "default": "Clear"
+        "default": "محو"
       },
       "FolderEmpty": {
         "key": "View_Search_FolderEmpty",
-        "default": "Folder empty"
+        "default": "المجلد فارغ"
       },
       "NoBookmarks": {
         "key": "View_Search_NoBookmarks",
@@ -989,125 +989,125 @@
           },
           "Invalid": {
             "key": "View_Settings_BackupRestore_Restore_Invalid",
-            "default": "Invalid xBrowserSync backup data"
+            "default": "بيانات النسخ الاحتياطي لإكس براوزر سينك غير صحيحة"
           }
         },
         "Reset": {
           "Confirm": {
             "key": "View_Settings_BackupRestore_Reset_Confirm",
-            "default": "<p>If you continue, sync will be disabled and your local browser data will be reset to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "<p>إذا تابعت/ي، سيتم تعطيل المزامنة وستتم إعادة تعيين بيانات المتصفح المحلي كما كانت عند تثبيت إكس براوزر سينك في {date}.</p><p>موافق/ة للمتابعة؟</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Reset_Button",
-            "default": "Reset Local Data"
+            "default": "إعادة ضبط البيانات المحلية"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Reset_Done",
-            "default": "Local browser data has been reset to initial installation state."
+            "default": "تم إعادة ظبط بيانات المتصفح المحلية إلى حالة التثبيت الأولية."
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Reset_Unavailable",
-            "default": "Installation state data not available, unable to reset."
+            "default": "بيانات حالة التثبيت غير متوفرة، غير قادر على إعادة الظبط."
           }
         }
       },
       "Issues": {
         "Title": {
           "key": "View_Settings_Issues_Title",
-          "default": "Help and support"
+          "default": "المساعدة والدعم"
         },
         "Help": {
           "Title": {
             "key": "View_Settings_Issues_Help_Title",
-            "default": "Help guide"
+            "default": "دليل المساعدة"
           },
           "Description": {
             "key": "View_Settings_Issues_Help_Description",
-            "default": "Got a question or having an issue? Make sure to read through the help guide, otherwise the answer may be in the FAQs."
+            "default": "هل لديك سؤال أو تواجه مشكلة؟ تأكد من القراءة من خلال دليل المساعدة، وعلى غير ذلك قد تكون الإجابة في قسم الأسئلة الشائعة."
           },
           "ViewFaqs": {
             "key": "View_Settings_Issues_Help_ViewFaqs",
-            "default": "View FAQs"
+            "default": "عرض الأسئلة الشائعة"
           }
         },
         "Tracker": {
           "Title": {
             "key": "View_Settings_Issues_Tracker_Title",
-            "default": "Support"
+            "default": "الدعم"
           },
           "Description": {
             "key": "View_Settings_Issues_Tracker_Description",
-            "default": "Need support? Use the issues tracker to report a bug or request a feature."
+            "default": "أتحتاج دعم؟ استخدم متتبع المشاكل للإبلاغ عن خطأ أو طلب ميزة."
           },
           "Report": {
             "key": "View_Settings_Issues_Tracker_Report",
-            "default": "View Issues Tracker"
+            "default": "عرض متتبع المشاكل"
           }
         },
         "Log": {
           "Title": {
             "key": "View_Settings_Issues_Log_Title",
-            "default": "Application log"
+            "default": "سجل التطبيق"
           },
           "Description": {
             "key": "View_Settings_Issues_Log_Description",
-            "default": "Download and include the application log when you log an issue."
+            "default": "قم بتنزيل وإرفاق سجل التطبيق عند تسجيل المشكلة."
           },
           "Clear": {
             "key": "View_Settings_Issues_Log_Clear",
-            "default": "Clear log"
+            "default": "حذف السجل"
           },
           "Download": {
             "key": "View_Settings_Issues_Log_Download",
-            "default": "Download log"
+            "default": "تنزيل السجل"
           },
           "Size": {
             "key": "View_Settings_Issues_Log_Size",
-            "default": "Current log size"
+            "default": "حجم السجل الحالي"
           }
         }
       },
       "Permissions": {
         "Title": {
           "key": "View_Settings_Permissions_Title",
-          "default": "Optional permissions"
+          "default": "الصلاحيات الاختيارية"
         },
         "Add": {
           "key": "View_Settings_Permissions_Add",
-          "default": "Grant permissions"
+          "default": "منح الصلاحيات"
         },
         "Granted": {
           "key": "View_Settings_Permissions_Granted",
-          "default": "Granted"
+          "default": "تم المنح"
         },
         "NotGranted": {
           "key": "View_Settings_Permissions_NotGranted",
-          "default": "Not granted"
+          "default": "غير ممنوح"
         },
         "Read": {
           "Title": {
             "key": "View_Settings_Permissions_Read_Title",
-            "default": "Read website data"
+            "default": "قراءة بيانات الموقع"
           },
           "Description": {
             "key": "View_Settings_Permissions_Read_Description",
-            "default": "Required to automatically add metadata to bookmarks when using the browser’s “Bookmark this page” button (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>more info</a>)."
+            "default": "مطلوب لإضافة البيانات الوصفية تلقائيًا إلى الإشارات المرجعية عند استخدام زر \"إشارة مرجعية لهذه الصفحة\" في المتصفح (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>مزيد من المعلومات</a>)."
           }
         },
         "Remove": {
           "key": "View_Settings_Permissions_Remove",
-          "default": "Remove permissions"
+          "default": "إزالة الصلاحيات"
         }
       },
       "Prefs": {
         "AutoFetchMetadata": {
           "Label": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Label",
-            "default": "Auto-fetch bookmark metadata"
+            "default": "إحضار البيانات الوصفية للإشارات تلقائياً"
           },
           "Description": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Description",
-            "default": "Retrieve metadata automatically when adding a bookmark."
+            "default": "إحضار البيانات الوصفية للإشارات تلقائياً عن إضافتها."
           }
         },
         "CheckForAppUpdates": {
