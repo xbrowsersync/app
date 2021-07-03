@@ -382,92 +382,92 @@
     "UpgradeFailed_Message": {
       "key": "Exception_UpgradeFailed_Message",
       "android": "سيتم إعادة محاولة التحديث عند إعادة تشغيل التطبيق. إذا استمرت المشكلة، الرجاء إعادة تثبيت إكس براوزر سينك.",
-      "default": "Restart your browser to retry upgrade, if the problem persists please reinstall xBrowserSync."
+      "default": "أعد تشغيل المتصفح الخاص بك لمحاولة إعادة التحديث، إذا استمرت المشكلة، الرجاء إعادة تثبيت إكس براوزر سينك."
     },
     "UpgradeFailed_Title": {
       "key": "Exception_UpgradeFailed_Title",
-      "default": "Upgrade failed"
+      "default": "فشل التحديث"
     }
   },
   "Service": {
     "Status": {
       "Error": {
         "key": "Service_Status_Error",
-        "default": "Connection error"
+        "default": "خطأ في الإتصال"
       },
       "Loading": {
         "key": "Service_Status_Loading",
-        "default": "Checking"
+        "default": "جار التحقق"
       },
       "NoNewSyncs": {
         "key": "Service_Status_NoNewSyncs",
-        "default": "Not accepting new syncs"
+        "default": "لا يتم قبول مزامنات جديدة"
       },
       "Offline": {
         "key": "Service_Status_Offline",
-        "default": "Offline"
+        "default": "غير متصل"
       },
       "Online": {
         "key": "Service_Status_Online",
-        "default": "Online"
+        "default": "متصل"
       }
     }
   },
   "Tooltip": {
     "NotSynced": {
       "key": "Tooltip_NotSynced",
-      "default": "not synced"
+      "default": "غير متزامن"
     },
     "Synced": {
       "key": "Tooltip_Synced",
-      "default": "synced"
+      "default": "متزامن"
     },
     "Syncing": {
       "key": "Tooltip_Syncing",
-      "default": "syncing"
+      "default": "جار المزامنة"
     }
   },
   "View": {
     "Bookmark": {
       "Add": {
         "key": "View_Bookmark_Add",
-        "default": "Add bookmark"
+        "default": "أضف إشارة مرجعية"
       },
       "Edit": {
         "key": "View_Bookmark_Edit",
-        "default": "Edit bookmark"
+        "default": "تعديل الإشارة المرجعية"
       },
       "Form": {
         "Title": {
           "key": "View_Bookmark_Form_Title",
-          "default": "Title"
+          "default": "العنوان"
         },
         "Url": {
           "Exists": {
             "key": "View_Bookmark_Form_Url_Exists",
-            "default": "URL has already been bookmarked"
+            "default": "تم بالفعل إضافة إشارة لعنوان اليو آر إل"
           },
           "Invalid": {
             "key": "View_Bookmark_Form_Url_Invalid",
-            "default": "Not a valid URL"
+            "default": "يو آر إل غير صحيح"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
-            "default": "URL"
+            "default": "يو آر إل"
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "URL is required"
+            "default": "مطلوب عنوان يو آر إل"
           }
         },
         "Description": {
           "key": "View_Bookmark_Form_Description",
-          "default": "Description"
+          "default": "الوصف"
         },
         "Tags": {
           "Label": {
             "key": "View_Bookmark_Form_Tags_Label",
-            "default": "Tags"
+            "default": "العلامات"
           },
           "Placeholder": {
             "key": "View_Bookmark_Form_Tags_Placeholder",
@@ -704,38 +704,38 @@
           },
           "Content": {
             "key": "View_Login_Sync_DisableOthers_Content",
-            "default": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "brave": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "edge": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "firefox": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing."
+            "default": "مزامنة بيانات المتصفح الخاص بك مع إكس براوزر سينك أثناء استخدام أدوات مزامنة أخرى (<a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>كمزامنة جوجل كروم</a>) يمكن أن يسبب التكرار وربما تلف البيانات. يرجى إلغاء تفعيلها قبل المتابعة.",
+            "brave": "مزامنة بيانات المتصفح الخاص بك مع إكس براوزر سينك أثناء استخدام أدوات مزامنة أخرى (<a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>كمزامنة متصفح بريف</a>) يمكن أن يسبب التكرار وربما تلف البيانات. يرجى إلغاء تفعيلها قبل المتابعة.",
+            "edge": "مزامنة بيانات المتصفح الخاص بك مع إكس براوزر سينك أثناء استخدام أدوات مزامنة أخرى (<a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>كمزامنة متصفح إيدج</a>) يمكن أن يسبب التكرار وربما تلف البيانات. يرجى إلغاء تفعيلها قبل المتابعة.",
+            "firefox": "مزامنة بيانات المتصفح الخاص بك مع إكس براوزر سينك أثناء استخدام أدوات مزامنة أخرى (<a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>كمزامنة متصفح فايرفُكس</a>) يمكن أن يسبب التكرار وربما تلف البيانات. يرجى إلغاء تفعيلها قبل المتابعة."
           }
         },
         "Enable": {
           "key": "View_Login_Sync_Enable",
-          "default": "Sync"
+          "default": "مزامنة"
         },
         "New": {
           "key": "View_Login_Sync_New",
-          "default": "Create new sync"
+          "default": "إنشاء مزامنة جديدة"
         },
         "UpgradeReady": {
           "Title": {
             "key": "View_Login_Sync_UpgradeReady_Title",
-            "default": "Ready to upgrade sync?"
+            "default": "مستعد/ة لترقية المزامنة؟"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync. After upgrading, you will no longer be able to sync with any previous versions of xBrowserSync.</p><p>Make sure to update xBrowserSync on all synced devices before continuing. Ready to proceed?</p>"
+            "default": "<p>يجب ترقية المزامنة قبل اجرائها مع هذا الإصدار من إكس براوزر سينك. بعد الترقية، لن تتمكن من المزامنة مع أي إصدارات سابقة من إكس براوزر سينك.</p><p>تأكد من تحديث إكس براوزر سينك على جميع الأجهزة المتزامنة قبل المتابعة. هل أنت جاهز/ة للمتابعة؟</p>"
           }
         },
         "UpgradeRequired": {
           "Title": {
             "key": "View_Login_Sync_UpgradeRequired_Title",
-            "default": "Upgrade sync"
+            "default": "ترقية المزامنة"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync.</p><p>Use the xBrowserSync desktop browser extension to upgrade your sync and then retry syncing here.</p>"
+            "default": "<p>يجب ترقية المزامنة قبل اجرائها مع هذا الإصدار من إكس براوزر سينك.</p><p> استخدم إضافة إكس براوزر سينك لمتصفح سطح المكتب لترقية المزامنة ثم أعد محاولة المزامنة هنا.</p>"
           }
         }
       },
@@ -958,34 +958,34 @@
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Synced_Confirm",
               "default": "<p>As sync is currently enabled, the data being restored will overwrite your synced data.</p><p>To restore data to the local browser only, disable sync before restoring.</p><p>OK to proceed?</p>",
-              "android": "<p>The data being restored will overwrite your synced data.</p><p>OK to proceed?</p>"
+              "android": "<p>ستحل البيانات التي تتم استعادتها محل البيانات المتزامنة.</p><p>موافق/ة للمتابعة؟</p>"
             }
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Backup has been restored."
+            "default": "تمت استعادة النسخة الاحتياطية."
           },
           "SelectFile": {
             "Button": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Button",
-              "default": "Select file"
+              "default": "حدد ملف"
             },
             "Placeholder": {
               "key": "View_Settings_BackupRestore_Restore_SelectFile_Placeholder",
-              "default": "Select a backup file to restore"
+              "default": "حدد ملف نسخة احتياطية للاستعادة"
             }
           },
           "Copy": {
             "key": "View_Settings_BackupRestore_Restore_Copy",
-            "default": "Copy the contents of a backup file to restore data."
+            "default": "نسخ محتويات ملف النسخ الاحتياطي لاستعادة البيانات."
           },
           "Paste": {
             "key": "View_Settings_BackupRestore_Restore_Paste",
-            "default": "Paste backup data"
+            "default": "لصق بيانات النسخ الاحتياطي"
           },
           "RestoreData": {
             "key": "View_Settings_BackupRestore_Restore_RestoreData",
-            "default": "Restore data"
+            "default": "استعادة البيانات"
           },
           "Invalid": {
             "key": "View_Settings_BackupRestore_Restore_Invalid",
