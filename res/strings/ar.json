@@ -1255,53 +1255,53 @@
       },
       "Content": {
         "key": "View_Support_Content",
-        "default": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains effective in protecting online privacy and enhancing productivity.</p>"
+        "default": "<p>نريد أن نجعل إكس براوزر سينك الأداة الأولى لمزامنة المتصفح، ولكن لا يزال هناك الكثير للقيام به:</p><ul><li>أضافة مزامنة علامات تبويب المتصفح وتاريخ التصفح</li><li>دعم جميع متصفحات سطح المكتب الرئيسية</li><li>الترجمة إلى لغات أخرى</li><li>و<a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>المزيد</a>!</li></ul><p>فقط بدعمك يمكننا الاستمرار في تحسين إكس براوزر سينك والتأكد من أنه يظل فعال في حماية الخصوصية عبر الإنترنت وتعزيز الإنتاجية.</p>"
       },
       "Cryptos": {
         "key": "View_Support_Cryptos",
-        "default": "Cryptos"
+        "default": "العملات الرقمية"
       },
       "Liberapay": {
         "key": "View_Support_Liberapay",
-        "default": "Liberapay"
+        "default": "ليبرا باي"
       },
       "Patreon": {
         "key": "View_Support_Patreon",
-        "default": "Patreon"
+        "default": "باتريون"
       }
     },
     "SyncRemoved": {
       "Title": {
         "key": "View_SyncRemoved_Title",
-        "default": "Sync not found"
+        "default": "لم يتم العثور على المزامنة"
       },
       "Content": {
         "key": "View_SyncRemoved_Content",
-        "default": "<p>Your sync could not be found and may have been removed due to inactivity.</p><p>You will need to create a new sync, but first click the button below to download a backup of your synced data which you can then restore to your new sync.</p>"
+        "default": "<p>تعذر العثور على المزامنة الخاصة بك وربما تمت إزالتها بسبب عدم النشاط.</p><p>ستحتاج إلى إنشاء مزامنة جديدة، ولكن انقر أولاً فوق الزر بالأسفل لتنزيل نسخة احتياطية من بياناتك المتزامنة والتي يمكنك بعد ذلك استعادتها إلى المزامنة الجديدة.</p>"
       }
     },
     "Updated": {
       "Title": {
         "key": "View_Updated_Title",
-        "default": "Updated to"
+        "default": "تم التحديث لـ"
       },
       "Content": {
         "key": "View_Updated_Content",
-        "default": "<p>xBrowserSync has been updated with the latest features and fixes.</p><p>If sync was enabled it has now been disabled and your sync must first be upgraded before syncing with this version of xBrowserSync. Re-enable sync to complete the upgrade process.</p><p>For more details about the changes contained in this release, check out the release notes.</p>"
+        "default": "<p>تم تحديث إكس براوزر سينك بأحدث الميزات والإصلاحات.</p><p>إذا كانت المزامنة مفعلة، فقد تم تعطيلها الآن ويجب أولاً ترقية المزامنة قبل اجرائها مع هذا الإصدار من إكس براوزر سينك. أعد تفعيل المزامنة لإكمال عملية الترقية.</p><p>لمزيد من التفاصيل حول التغييرات الواردة في هذا الإصدار، راجع ملاحظات الإصدار.</p>"
       }
     },
     "Working": {
       "Restoring": {
         "key": "View_Working_Restoring",
-        "default": "Restoring"
+        "default": "جار الاستعادة"
       },
       "Resetting": {
         "key": "View_Working_Resetting",
-        "default": "Resetting"
+        "default": "جار إعادة الضبط"
       },
       "Syncing": {
         "key": "View_Working_Syncing",
-        "default": "Syncing"
+        "default": "جار المزامنة"
       }
     }
   }
