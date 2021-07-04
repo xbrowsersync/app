@@ -3,7 +3,7 @@ on:
   pull_request:
   push:
     branches:
-      - 'master'
+      - '!master_translations'
     paths-ignore:
       - '**.md'
       - '.github/workflows/**.yml'
