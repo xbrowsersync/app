@@ -503,13 +503,13 @@
     "Help": {
       "AddingBookmarks": {
         "key": "View_Help_AddingBookmarks",
-        "default": "<h4>Adding a bookmark</h4><p>Bookmark the current page by clicking on the bookmark icon in the Search panel. The bookmark’s properties will be populated for you automatically, otherwise add a description and some tags to ensure better search results.</p><p>Alternatively, simply click the browser’s “Bookmark this page” button as normal and xBrowserSync will automatically populate the bookmark’s properties (optional permissions must be granted for this to work, check the Settings panel).</p>",
-        "android": "<h4>Adding a bookmark</h4><p>Add bookmarks easily by sharing to xBrowserSync from any apps that share URLs such as browsers, YouTube, Spotify and many more.</p><p>The bookmark’s properties will be fetched for you, otherwise add a description and some tags to ensure better search results.</p>"
+        "default": "<h4>Engadir un marcador</h4><p>Marca a páxina actual pinchando no icono de marcador no panel de Búsqueda. As propiedades do marcador encheranse automaticamente. Do contrario, agreg unha descripción e algunhas etiquetas para asegurar mellores resultados de búsqueda.</p><p>Alternativamente, simplemente pincha no botón de “Engadir esta páxina a marcadores” como de xeito habitual e xBrowserSync encherá as propiedades do marcador de xeito automático (quizais requira permisos adicionais, revisa o panel de Preferencias).</p>",
+        "android": "<h4>Engadir un marcador</h4><p>Engade marcadores de xeito doado compartindo xBrowserSync desde calquera aplicación que comparta URLs como un navegador, YouTube, Spotify e moitas máis.</p><p>As propiedades do marcador buscaranse por ti, do contrario engade unha descripción e algunhas etiquetas para asegurar mellores resultados de búsqueda.</p>"
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time reset your data back to it’s original state from when xBrowserSync was installed.</p>",
-        "android": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p>"
+        "default": "<h4>Lembra facer copias de seguridade</h4><p>Cando usas xBrowserSync os teus datos son a túa responsabilidade así que sé intelixente e asegúrate de facer copias de seguridade.</p><p>Diríxete ao panel de Preferencias e fai copia dos datos sen cifrar a un ficheiro local que poida ser empregado para restaurar a información en caso de necesitala.</p><p>Se os teus datos locais se corrompen e non tes copias de seguridade, en calquera momento podes resetear a túa data ao seu estado orixinal, cando instalaches xBrowserSync.</p>",
+        "android": "<h4>Lembra facer copias de seguridade</h4><p>Cando usas xBrowserSync os teus datos son a túa responsabilidade así que sé intelixente e asegúrate de facer copias de seguridade.</p><p>Diríxete ao panel de Preferencias e fai copia dos datos sen cifrar a un ficheiro local que poida ser empregado para restaurar a información en caso de necesitala.</p>"
       },
       "BeforeYouBegin": {
         "key": "View_Help_BeforeYouBegin",
@@ -735,7 +735,7 @@
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync.</p><p>Use the xBrowserSync desktop browser extension to upgrade your sync and then retry syncing here.</p>"
+            "default": "<p>A túa sincronización debe actualizarse antes de sincronizarse con esta versión de xBrowserSync.</p><p>Usa a extensión de navegador de escritorio de xBrowserSync para actualizar a túa sincronización e tenta sincronizar de novo aquí.</p>"
           }
         }
       },
@@ -910,7 +910,7 @@
           },
           "Confirmation": {
             "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
-            "default": "To prevent “Save As...” dialog from showing when downloading backups, disable the browser setting “Ask where to save each file before downloading”."
+            "default": "Para previr que apareza a ventá “Gardar como...” na descarga de copias de seguridade, deshabilita a preferencia do navegador “Preguntar onde gardo cada ficheiro antes de descargalo”."
           }
         },
         "Backup": {
@@ -947,7 +947,7 @@
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Local_Confirm",
-              "default": "<p>As sync is currently disabled, the data being restored will overwrite the local browser data.</p><p>OK to proceed?</p>"
+              "default": "<p>Como a sincronización está deshabilitada, os datos que se van restaurar sobreescribirán os datos locais do navegador.</p><p>Desexas continuar?</p>"
             }
           },
           "Synced": {
@@ -957,8 +957,8 @@
             },
             "Confirm": {
               "key": "View_Settings_BackupRestore_Restore_Synced_Confirm",
-              "default": "<p>As sync is currently enabled, the data being restored will overwrite your synced data.</p><p>To restore data to the local browser only, disable sync before restoring.</p><p>OK to proceed?</p>",
-              "android": "<p>The data being restored will overwrite your synced data.</p><p>OK to proceed?</p>"
+              "default": "<p>Como a sincronización está activada, os datos que se están a restaurar sobreescribirán os teus datos sincronizados.</p><p>Para restaurar datos só no navegador local, deshabilita a sincronización antes de restaurar.</p><p>Desexas continuar?</p>",
+              "android": "<p>Os datos que se restauren sobreescribirán os datos sincronizados.</p><p>Desexas continuar?</p>"
             }
           },
           "Done": {
@@ -995,7 +995,7 @@
         "Reset": {
           "Confirm": {
             "key": "View_Settings_BackupRestore_Reset_Confirm",
-            "default": "<p>If you continue, sync will be disabled and your local browser data will be reset to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "<p>Se continuas, a sincronización deshabilitarase e os teus datos locais resetearanse a cando xBrowserSync foi instalada con data {date}.</p><p>Desexas continuar?</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Reset_Button",
@@ -1091,7 +1091,7 @@
           },
           "Description": {
             "key": "View_Settings_Permissions_Read_Description",
-            "default": "Required to automatically add metadata to bookmarks when using the browser’s “Bookmark this page” button (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>more info</a>)."
+            "default": "Requerido para engadir metadados automaticamente aos marcadores cando se emprega o botón “Engadir esta páxina a marcadores” (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>máis información</a>)."
           }
         },
         "Remove": {
@@ -1107,7 +1107,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Description",
-            "default": "Retrieve metadata automatically when adding a bookmark."
+            "default": "Recuperar metadatos automaticamente ao engadir un marcador."
           }
         },
         "CheckForAppUpdates": {
@@ -1255,7 +1255,7 @@
       },
       "Content": {
         "key": "View_Support_Content",
-        "default": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains effective in protecting online privacy and enhancing productivity.</p>"
+        "default": "<p>Queremos facer de xBrowserSync a ferramenta de sincronización número un, pero aínda queda moito por facer:</p><ul><li>Engadir sincronización das pestañas do navegador e historial</li><li>Soporte a tódolos navegadores de escritorio principais</li><li>Traducir a outros idiomas</li><li>E <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>moito máis</a>!</li></ul><p>Só co teu apoio poderemos seguir mellorando xBrowserSync e asegurarnos de que siga sendo unha ferramenta eficaz para protexer a nosa privacidade e productividade frente ao deterioro da tecnoloxía!</p>"
       },
       "Cryptos": {
         "key": "View_Support_Cryptos",
@@ -1287,7 +1287,7 @@
       },
       "Content": {
         "key": "View_Updated_Content",
-        "default": "<p>xBrowserSync has been updated with the latest features and fixes.</p><p>If sync was enabled it has now been disabled and your sync must first be upgraded before syncing with this version of xBrowserSync. Re-enable sync to complete the upgrade process.</p><p>For more details about the changes contained in this release, check out the release notes.</p>"
+        "default": "<p>xBrowserSync foi actualizado coas últimas características e coreccións.</p><p>Si a sincronización estaba activada, agora foi desactivada e a túa sincronización debe actualizarse antes de sincronizarse con esta versión de xBrowserSync. Rehabilita a sincronización para completar o proceso de actualización.</p><p>Para máis detalles acerca dos cambios contidos nesta versión, revisa as notas de lanzamento.</p>"
       }
     },
     "Working": {
