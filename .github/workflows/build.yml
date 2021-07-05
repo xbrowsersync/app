@@ -1,12 +1,15 @@
 name: Build
 on:
   pull_request:
-  push:
-    branches-ignore:
-      - 'master_translations'
     paths-ignore:
       - '**.md'
       - '.github/workflows/**.yml'
+      - 'res/strings/*.json'
+  push:
+    paths-ignore:
+      - '**.md'
+      - '.github/workflows/**.yml'
+      - 'res/strings/*.json'
   workflow_dispatch:
 jobs:
   test:
