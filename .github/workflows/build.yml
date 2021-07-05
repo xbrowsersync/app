@@ -2,6 +2,8 @@ name: Build
 on:
   pull_request:
   push:
+    branches-ignore:
+      - 'master_translations'
     paths-ignore:
       - '**.md'
       - '.github/workflows/**.yml'
