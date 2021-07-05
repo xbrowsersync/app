@@ -23,11 +23,11 @@
     },
     "BookmarkCreated": {
       "key": "Alert_BookmarkCreated",
-      "default": "Creado Favorito"
+      "default": "Creado marcador"
     },
     "BookmarkDeleted": {
       "key": "Alert_BookmarkDeleted",
-      "default": "Borrado Favorito"
+      "default": "Borrado marcador"
     },
     "BookmarkUpdated": {
       "key": "Alert_BookmarkUpdated",
@@ -36,32 +36,32 @@
     "GetMetadata": {
       "Message": {
         "key": "Alert_GetMetadata_Message",
-        "default": "Recollendo propiedades de Favoritos, toca para cancelar."
+        "default": "Recollendo propiedades de Marcadores, toca para cancelar."
       },
       "Success": {
         "key": "Alert_GetMetadata_Success",
-        "default": "Bookmark properties updated."
+        "default": "Actualizadas propiedades de marcadores."
       }
     },
     "Go": {
       "key": "Alert_Go",
-      "default": "Go"
+      "default": "Ir"
     },
     "WorkingOffline": {
       "Title": {
         "key": "Alert_WorkingOffline_Title",
-        "default": "Working offline"
+        "default": "Traballando sen conexión"
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
-        "default": "Changes will be synced when connection is restored."
+        "default": "Os cambios sincronizaranse cando a conexión se restaure."
       }
     }
   },
   "App": {
     "Description": {
       "key": "App_Description",
-      "default": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
+      "default": "A sincronización do navegador como debería ser: segura, anónima e libre! Sincronizar marcadores en varios navegadores e dispositivos, sen rexistro previo."
     },
     "Title": {
       "key": "App_Title",
@@ -72,106 +72,106 @@
     "Container": {
       "Menu": {
         "key": "Bookmarks_Container_Menu",
-        "default": "Menu bookmarks"
+        "default": "Menu de marcadores"
       },
       "Mobile": {
         "key": "Bookmarks_Container_Mobile",
-        "default": "Mobile bookmarks"
+        "default": "Marcadores de Móvil"
       },
       "Other": {
         "key": "Bookmarks_Container_Other",
-        "default": "Other bookmarks"
+        "default": "Outros marcadores"
       },
       "Toolbar": {
         "key": "Bookmarks_Container_Toolbar",
-        "default": "Toolbar bookmarks"
+        "default": "Barra de marcadores"
       }
     }
   },
   "Button": {
     "AddBookmark": {
       "key": "Button_AddBookmark",
-      "default": "Add Bookmark"
+      "default": "Engadir marcador"
     },
     "Back": {
       "key": "Button_Back",
-      "default": "Back"
+      "default": "Atrás"
     },
     "Cancel": {
       "key": "Button_Cancel",
-      "default": "Cancel"
+      "default": "Cancelar"
     },
     "Close": {
       "key": "Button_Close",
-      "default": "Close"
+      "default": "Pechar"
     },
     "Confirm": {
       "key": "Button_Confirm",
-      "default": "Yes"
+      "default": "Si"
     },
     "Continue": {
       "key": "Button_Continue",
-      "default": "Continue"
+      "default": "Continuar"
     },
     "DeleteBookmark": {
       "key": "Button_DeleteBookmark",
-      "default": "Delete Bookmark"
+      "default": "Eliminar marcador"
     },
     "Deny": {
       "key": "Button_Deny",
-      "default": "No"
+      "default": "Non"
     },
     "Done": {
       "key": "Button_Done",
-      "default": "Done"
+      "default": "Feito"
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": "Download Backup"
+      "default": "Descargar copia de seguridade"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
-      "default": "Edit Bookmark"
+      "default": "Editar marcador"
     },
     "Help": {
       "key": "Button_Help",
-      "default": "View help guide"
+      "default": "Ver guía de axuda"
     },
     "Next": {
       "key": "Button_Next",
-      "default": "Next"
+      "default": "Seguinte"
     },
     "OK": {
       "key": "Button_OK",
-      "default": "OK"
+      "default": "Feito"
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
-      "default": "View release notes"
+      "default": "Ver notas da versión"
     },
     "Saving": {
       "key": "Button_Saving",
-      "default": "Saving"
+      "default": "Gardando"
     },
     "Settings": {
       "key": "Button_Settings",
-      "default": "Settings"
+      "default": "Axustes"
     },
     "ShareBookmark": {
       "key": "Button_ShareBookmark",
-      "default": "Share bookmark"
+      "default": "Compartir marcador"
     },
     "Undo": {
       "key": "Button_Undo",
-      "default": "Undo"
+      "default": "Desfacer"
     },
     "Update": {
       "key": "Button_Update",
-      "default": "Update"
+      "default": "Actualizar"
     },
     "View": {
       "key": "Button_View",
-      "default": "View"
+      "default": "Ver"
     }
   },
   "Exception": {
@@ -181,67 +181,67 @@
     },
     "ContainerChanged_Title": {
       "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync folder changed"
+      "default": "Cambiado directorio de xBrowserSync"
     },
     "DailyNewSyncLimitReached_Message": {
       "key": "Exception_DailyNewSyncLimitReached_Message",
-      "default": "Sync to an existing sync ID, switch to a different service or try again tomorrow."
+      "default": "Sicnroniza cun ID existente, cambia a outro servizo ou téntao de novo mañá."
     },
     "DailyNewSyncLimitReached_Title": {
       "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "Daily new sync limit reached"
+      "default": "Acadado o límite diario de sincronizacións"
     },
     "Default_Message": {
       "key": "Exception_Default_Message",
-      "default": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
+      "default": "Se o problema persiste faga o favor de <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>reportar esta incidencia</a>."
     },
     "Default_Title": {
       "key": "Exception_Default_Title",
-      "default": "Something went wrong"
+      "default": "Algo foi mal"
     },
     "FailedDownloadFile_Title": {
       "key": "Exception_FailedDownloadFile_Title",
-      "default": "Backup failed"
+      "default": "Erro na copia de seguridade"
     },
     "FailedGetDataToRestore_Title": {
       "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "Browse files failed"
+      "default": "Erro percorrendo ficheiros"
     },
     "FailedGetPageMetadata_Message": {
       "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "URL is invalid or webpage data could not be retrieved."
+      "default": "A URL é inválida ou os datos da web non se puideron recoller."
     },
     "FailedGetPageMetadata_Title": {
       "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "Couldn’t get bookmark properties"
+      "default": "Non se puideron obter as propiedades dos marcadores"
     },
     "FailedRefreshBookmarks_Title": {
       "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "Couldn’t retrieve updates"
+      "default": "Non se puideron recoller actualizacións"
     },
     "FailedRestoreData_Message": {
       "key": "Exception_FailedRestoreData_Message",
-      "default": "The backup data provided is not in an expected format."
+      "default": "Os datos da copia de seguridade indicados non están no formato agardado."
     },
     "FailedRestoreData_Title": {
       "key": "Exception_FailedRestoreData_Title",
-      "default": "Unable to restore data"
+      "default": "Non se puideron restaurar os datos"
     },
     "FailedShareUrlNotSynced_Title": {
       "key": "Exception_FailedShareUrlNotSynced_Title",
-      "default": "You must be synced to add a bookmark"
+      "default": "Debes sincronizar para engadir un marcador"
     },
     "FailedShareUrl_Title": {
       "key": "Exception_FailedShareUrl_Title",
-      "default": "Unable to retrieve shared bookmark URL"
+      "default": "Non se puido recoller a URL compartida dos marcadores"
     },
     "HttpRequestFailed_Message": {
       "key": "Exception_HttpRequestFailed_Message",
-      "default": "Check your network connection and try again."
+      "default": "Comproba a túa conexión de rede e téntao de novo."
     },
     "HttpRequestFailed_Title": {
       "key": "Exception_HttpRequestFailed_Title",
-      "default": "Connection to service lost"
+      "default": "Conexión perdida a servizo"
     },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
@@ -249,7 +249,7 @@
     },
     "InvalidCredentials_Title": {
       "key": "Exception_InvalidCredentials_Title",
-      "default": "Invalid credentials"
+      "default": "Credenciais non válidas"
     },
     "InvalidService_Message": {
       "key": "Exception_InvalidService_Message",
@@ -257,39 +257,39 @@
     },
     "InvalidService_Title": {
       "key": "Exception_InvalidService_Title",
-      "default": "Invalid xBrowserSync service"
+      "default": "Servizo inválido de xBrowserSync"
     },
     "LocalContainerNotFound_Message": {
       "key": "Exception_LocalContainerNotFound_Message",
-      "default": "Possible corrupt browser profile, try creating a new profile as it may resolve the issue."
+      "default": "Probablemente Perfil de navegador inválido, tenta crear un novo perfil porque pode resolvelo problema."
     },
     "LocalContainerNotFound_Title": {
       "key": "Exception_LocalContainerNotFound_Title",
-      "default": "Unexpected bookmarks structure"
+      "default": "Estructura de marcadores inesperada"
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local browser data has been refreshed, please reapply last change."
+      "default": "Os datos locais do navegador foron actualizados, podes tentar aplicar o último cambio."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
-      "default": "Sync error"
+      "default": "Erro ao sincronizar"
     },
     "MissingClientData_Message": {
       "key": "Exception_MissingClientData_Message",
-      "default": "Unable to find stored credentials. Re-enable sync and try again."
+      "default": "Non foi posible atopar credencias almacenadas. Volve a habilitar a sincronización e téntao de novo."
     },
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
-      "default": "Missing credentials"
+      "default": "Credenciais perdidas"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",
-      "default": "Ensure you have provided a valid xBrowserSync back up before restoring."
+      "default": "Asegúrate que indicaches unha copia de seguridade válida de xBrowserSync antes de restaurar."
     },
     "NoDataToRestore_Title": {
       "key": "Exception_NoDataToRestore_Title",
-      "default": "No data to restore"
+      "default": "Sen datos que restaurar"
     },
     "NotAcceptingNewSyncs_Message": {
       "key": "Exception_NotAcceptingNewSyncs_Message",
@@ -321,7 +321,7 @@
     },
     "ScanFailed_Title": {
       "key": "Exception_ScanFailed_Title",
-      "default": "Scan failed"
+      "default": "Erro ao escanear"
     },
     "ServiceOffline_Message": {
       "key": "Exception_ServiceOffline_Message",
@@ -329,11 +329,11 @@
     },
     "ServiceOffline_Title": {
       "key": "Exception_ServiceOffline_Title",
-      "default": "Service offline"
+      "default": "Servizo sen conexión"
     },
     "ShareFailed_Title": {
       "key": "Exception_ShareFailed_Title",
-      "default": "Share failed"
+      "default": "Erro ao compartir"
     },
     "SyncRemoved_Message": {
       "key": "Exception_SyncRemoved_Message",
@@ -341,7 +341,7 @@
     },
     "SyncRemoved_Title": {
       "key": "Exception_SyncRemoved_Title",
-      "default": "Sync not found"
+      "default": "Non se atopou sincronización"
     },
     "SyncVersionNotSupported_Message": {
       "key": "Exception_SyncVersionNotSupported_Message",
@@ -369,15 +369,15 @@
     },
     "UncommittedSyncs_Title": {
       "key": "Exception_UncommittedSyncs_Title",
-      "default": "Changes not synced"
+      "default": "Cambios non sincronizados"
     },
     "UnsupportedServiceApiVersion_Message": {
       "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "This service is running an unsupported API version."
+      "default": "Este servizo está funcionando cunha versión de API non soportada."
     },
     "UnsupportedServiceApiVersion_Title": {
       "key": "Exception_UnsupportedServiceApiVersion_Title",
-      "default": "Service not supported"
+      "default": "Servizo non soportado"
     },
     "UpgradeFailed_Message": {
       "key": "Exception_UpgradeFailed_Message",
@@ -386,61 +386,61 @@
     },
     "UpgradeFailed_Title": {
       "key": "Exception_UpgradeFailed_Title",
-      "default": "Upgrade failed"
+      "default": "Erro ao actualizar"
     }
   },
   "Service": {
     "Status": {
       "Error": {
         "key": "Service_Status_Error",
-        "default": "Connection error"
+        "default": "Erro de conexión"
       },
       "Loading": {
         "key": "Service_Status_Loading",
-        "default": "Checking"
+        "default": "Comprobando"
       },
       "NoNewSyncs": {
         "key": "Service_Status_NoNewSyncs",
-        "default": "Not accepting new syncs"
+        "default": "Non se aceptan novas sincronizacións"
       },
       "Offline": {
         "key": "Service_Status_Offline",
-        "default": "Offline"
+        "default": "Sen conexión"
       },
       "Online": {
         "key": "Service_Status_Online",
-        "default": "Online"
+        "default": "Conectado"
       }
     }
   },
   "Tooltip": {
     "NotSynced": {
       "key": "Tooltip_NotSynced",
-      "default": "not synced"
+      "default": "sen sincronizar"
     },
     "Synced": {
       "key": "Tooltip_Synced",
-      "default": "synced"
+      "default": "sincronizado"
     },
     "Syncing": {
       "key": "Tooltip_Syncing",
-      "default": "syncing"
+      "default": "sincronizando"
     }
   },
   "View": {
     "Bookmark": {
       "Add": {
         "key": "View_Bookmark_Add",
-        "default": "Add bookmark"
+        "default": "Engadir marcador"
       },
       "Edit": {
         "key": "View_Bookmark_Edit",
-        "default": "Edit bookmark"
+        "default": "Editar marcador"
       },
       "Form": {
         "Title": {
           "key": "View_Bookmark_Form_Title",
-          "default": "Title"
+          "default": "Título"
         },
         "Url": {
           "Exists": {
@@ -449,7 +449,7 @@
           },
           "Invalid": {
             "key": "View_Bookmark_Form_Url_Invalid",
-            "default": "Not a valid URL"
+            "default": "URL non válido"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -462,37 +462,37 @@
         },
         "Description": {
           "key": "View_Bookmark_Form_Description",
-          "default": "Description"
+          "default": "Descrición"
         },
         "Tags": {
           "Label": {
             "key": "View_Bookmark_Form_Tags_Label",
-            "default": "Tags"
+            "default": "Etiquetas"
           },
           "Placeholder": {
             "key": "View_Bookmark_Form_Tags_Placeholder",
-            "default": "tag 1, tag 2, tag 3, etc"
+            "default": "etiqueta 1, etiqueta2, etiqueta 3, etc"
           },
           "Clear": {
             "key": "View_Bookmark_Form_Tags_Clear",
-            "default": "Clear tags"
+            "default": "Limpar etiquetas"
           },
           "Remove": {
             "key": "View_Bookmark_Form_Tags_Remove",
-            "default": "Remove tag"
+            "default": "Eliminar etiqueta"
           }
         },
         "Delete": {
           "key": "View_Bookmark_Form_Delete",
-          "default": "Delete"
+          "default": "Borrar"
         },
         "Share": {
           "key": "View_Bookmark_Form_Share",
-          "default": "Share"
+          "default": "Compartir"
         },
         "UpdateProperties": {
           "key": "View_Bookmark_Form_UpdateProperties",
-          "default": "Update bookmark properties"
+          "default": "Actualizar propiedades de marcadores"
         }
       },
       "InvalidUrlShared": {
@@ -543,7 +543,7 @@
       },
       "Previous": {
         "key": "View_Help_Previous",
-        "default": "Previous"
+        "default": "Anterior"
       },
       "Searching": {
         "key": "View_Help_Searching",
@@ -625,7 +625,7 @@
       "Service": {
         "ApiVersion": {
           "key": "View_Login_Service_ApiVersion",
-          "default": "API version"
+          "default": "Versión de API"
         },
         "Confirm": {
           "key": "View_Login_Service_Confirm",
@@ -633,7 +633,7 @@
         },
         "Location": {
           "key": "View_Login_Service_Location",
-          "default": "Location"
+          "default": "Localización"
         },
         "MaxSyncSize": {
           "key": "View_Login_Service_MaxSyncSize",
@@ -645,7 +645,7 @@
         },
         "Status": {
           "key": "View_Login_Service_Status",
-          "default": "Status"
+          "default": "Estado"
         },
         "Update": {
           "Label": {
@@ -670,11 +670,11 @@
           },
           "InvalidUrl": {
             "key": "View_Login_Service_Update_InvalidUrl",
-            "default": "Not a valid URL"
+            "default": "URL non válido"
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",
-            "default": "Unable to connect to the service"
+            "default": "Non é posible conectarse ao servizo"
           },
           "NotSupported": {
             "key": "View_Login_Service_Update_Failed_NotSupported",
@@ -690,7 +690,7 @@
         "Confirm": {
           "Title": {
             "key": "View_Login_Sync_Confirm_Title",
-            "default": "Are you sure?"
+            "default": "Está seguro?"
           },
           "Content": {
             "key": "View_Login_Sync_Confirm_Content",
@@ -712,16 +712,16 @@
         },
         "Enable": {
           "key": "View_Login_Sync_Enable",
-          "default": "Sync"
+          "default": "Sincronizar"
         },
         "New": {
           "key": "View_Login_Sync_New",
-          "default": "Create new sync"
+          "default": "Crear nova sincronización"
         },
         "UpgradeReady": {
           "Title": {
             "key": "View_Login_Sync_UpgradeReady_Title",
-            "default": "Ready to upgrade sync?"
+            "default": "Preparado para actualizar sincronización?"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
@@ -731,7 +731,7 @@
         "UpgradeRequired": {
           "Title": {
             "key": "View_Login_Sync_UpgradeRequired_Title",
-            "default": "Upgrade sync"
+            "default": "Actualizar sincronización"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
@@ -742,7 +742,7 @@
       "SyncId": {
         "Description": {
           "key": "View_Login_SyncId_Description",
-          "default": "Your sync ID"
+          "default": "O teu ID de sincronización"
         },
         "Existing": {
           "key": "View_Login_SyncId_Existing",
@@ -765,7 +765,7 @@
     "Permissions": {
       "Title": {
         "key": "View_Permissions_Title",
-        "default": "Optional permissions"
+        "default": "Permisos opcionais"
       },
       "Content": {
         "key": "View_Permissions_Content",
@@ -789,7 +789,7 @@
       },
       "Clear": {
         "key": "View_Search_Clear",
-        "default": "Clear"
+        "default": "Limpar"
       },
       "FolderEmpty": {
         "key": "View_Search_FolderEmpty",
@@ -842,32 +842,32 @@
           },
           "Every": {
             "key": "View_Settings_BackupRestore_AutoBackup_Every",
-            "default": "every"
+            "default": "cada"
           },
           "Numbers": {
             "Single": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
-              "default": "single"
+              "default": "único"
             },
             "Two": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
-              "default": "two"
+              "default": "dous"
             },
             "Three": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
-              "default": "three"
+              "default": "tres"
             },
             "Four": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
-              "default": "four"
+              "default": "catro"
             },
             "Five": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
-              "default": "five"
+              "default": "cinco"
             },
             "Six": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
-              "default": "six"
+              "default": "seis"
             },
             "Seven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
@@ -1033,7 +1033,7 @@
         "Tracker": {
           "Title": {
             "key": "View_Settings_Issues_Tracker_Title",
-            "default": "Support"
+            "default": "Soporte"
           },
           "Description": {
             "key": "View_Settings_Issues_Tracker_Description",
@@ -1055,34 +1055,34 @@
           },
           "Clear": {
             "key": "View_Settings_Issues_Log_Clear",
-            "default": "Clear log"
+            "default": "Limpar rexistro"
           },
           "Download": {
             "key": "View_Settings_Issues_Log_Download",
-            "default": "Download log"
+            "default": "Descarga rexistro"
           },
           "Size": {
             "key": "View_Settings_Issues_Log_Size",
-            "default": "Current log size"
+            "default": "Tamaño de rexistro actual"
           }
         }
       },
       "Permissions": {
         "Title": {
           "key": "View_Settings_Permissions_Title",
-          "default": "Optional permissions"
+          "default": "Permisos opcionais"
         },
         "Add": {
           "key": "View_Settings_Permissions_Add",
-          "default": "Grant permissions"
+          "default": "Conceder permisos"
         },
         "Granted": {
           "key": "View_Settings_Permissions_Granted",
-          "default": "Granted"
+          "default": "Permitir"
         },
         "NotGranted": {
           "key": "View_Settings_Permissions_NotGranted",
-          "default": "Not granted"
+          "default": "Non permitir"
         },
         "Read": {
           "Title": {
@@ -1096,14 +1096,14 @@
         },
         "Remove": {
           "key": "View_Settings_Permissions_Remove",
-          "default": "Remove permissions"
+          "default": "Eliminar permisos"
         }
       },
       "Prefs": {
         "AutoFetchMetadata": {
           "Label": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Label",
-            "default": "Auto-fetch bookmark metadata"
+            "default": "Auto-recoller metadata de marcadores"
           },
           "Description": {
             "key": "View_Settings_Prefs_AutoFetchMetadata_Description",
@@ -1113,37 +1113,37 @@
         "CheckForAppUpdates": {
           "Label": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Label",
-            "default": "Check for app updates"
+            "default": "Comprobar actualizacións"
           },
           "Description": {
             "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
-            "default": "Be notified when a new version of xBrowserSync is available."
+            "default": "Notificarme cando unha nova versión de xBrowserSync estea dispoñible."
           }
         },
         "DarkMode": {
           "Label": {
             "key": "View_Settings_Prefs_DarkMode_Label",
-            "default": "Enable dark mode"
+            "default": "Activa o tema escuro"
           },
           "Description": {
             "key": "View_Settings_Prefs_DarkMode_Description",
-            "default": "Ideal for use in low-light environments."
+            "default": "Ideal para empregar en entornos con pouca luminosidade."
           }
         },
         "DefaultToFolderView": {
           "Label": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Label",
-            "default": "Show bookmark folders"
+            "default": "Amosar directorios de marcadores"
           },
           "Description": {
             "key": "View_Settings_Prefs_DefaultToFolderView_Description",
-            "default": "Display bookmark folders by default."
+            "default": "Amosar directorio de marcadores por defecto."
           }
         },
         "SearchBar": {
           "Label": {
             "key": "View_Settings_Prefs_SearchBar_Label",
-            "default": "Switch search bar position"
+            "default": "Cambiar posición de barra de búsqueda"
           },
           "Description": {
             "key": "View_Settings_Prefs_SearchBar_Description",
@@ -1153,35 +1153,35 @@
         "SyncToolbar": {
           "Label": {
             "key": "View_Settings_Prefs_SyncToolbar_Label",
-            "default": "Sync bookmarks toolbar"
+            "default": "Sincronizar barra de marcadores"
           },
           "Description": {
             "key": "View_Settings_Prefs_SyncToolbar_Description",
-            "default": "Disable this setting to display different toolbar bookmarks across synced browsers."
+            "default": "Desactiva esta preferencia para amosar diferentes barras de marcadores en diferentes navegadores sincronizados."
           },
           "Confirmation": {
             "key": "View_Settings_Prefs_SyncToolbar_Confirmation",
-            "default": "<p>Enabling this setting will replace the bookmarks currently in the bookmarks toolbar with your synced bookmarks.</p><p>OK to proceed?</p>"
+            "default": "<p>Activando esta preferencia reemprazaranse os marcadores actuais cos marcadores sincronizados.</p><p>Dacordo en continuar?</p>"
           }
         },
         "Title": {
           "key": "View_Settings_Prefs_Title",
-          "default": "Preferences"
+          "default": "Preferencias"
         }
       },
       "Sync": {
         "Title": {
           "key": "View_Settings_Sync_Title",
-          "default": "Sync"
+          "default": "Sincronizar"
         },
         "Disable": {
           "key": "View_Settings_Sync_Disable",
-          "default": "Disable sync"
+          "default": "Deshabilitar sincronización"
         },
         "Id": {
           "Label": {
             "key": "View_Settings_Sync_Id_Label",
-            "default": "Sync ID"
+            "default": "ID de sincronización"
           },
           "Description": {
             "key": "View_Settings_Sync_Id_Description",
@@ -1297,11 +1297,11 @@
       },
       "Resetting": {
         "key": "View_Working_Resetting",
-        "default": "Resetting"
+        "default": "Reseteando"
       },
       "Syncing": {
         "key": "View_Working_Syncing",
-        "default": "Syncing"
+        "default": "Sincronizando"
       }
     }
   }
