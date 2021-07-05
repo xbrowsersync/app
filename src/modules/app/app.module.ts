@@ -17,6 +17,8 @@ import { AppSupportComponent } from './app-support/app-support.component';
 import { AppSyncRemovedComponent } from './app-sync-removed/app-sync-removed.component';
 import { AppUpdatedComponent } from './app-updated/app-updated.component';
 
+// test
+
 @NgModule({
   declarations: [
     AppBackgroundComponent,
