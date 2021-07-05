@@ -177,7 +177,7 @@
   "Exception": {
     "ContainerChanged_Message": {
       "key": "Exception_ContainerChanged_Message",
-      "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
+      "default": "Por favor, evite modificar [xbs] cartafoles xa que pode causar problemas de sincronización."
     },
     "ContainerChanged_Title": {
       "key": "Exception_ContainerChanged_Title",
@@ -245,7 +245,7 @@
     },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
-      "default": "Check that your sync ID, password and service URL have been entered correctly."
+      "default": "Comproba que introduciches correctamente a túa ID de sincronización, contrasinal e URL de servizo."
     },
     "InvalidCredentials_Title": {
       "key": "Exception_InvalidCredentials_Title",
@@ -253,7 +253,7 @@
     },
     "InvalidService_Message": {
       "key": "Exception_InvalidService_Message",
-      "default": "The service URL is not a valid xBrowserSync service."
+      "default": "A URL indicada non é un servizo xBrowserSync válido."
     },
     "InvalidService_Title": {
       "key": "Exception_InvalidService_Title",
@@ -293,15 +293,15 @@
     },
     "NotAcceptingNewSyncs_Message": {
       "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Switch to a different service or try again later."
+      "default": "Cambia a un servizo diferente ou téntao de novo."
     },
     "NotAcceptingNewSyncs_Title": {
       "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "Service not accepting new syncs"
+      "default": "Non se aceptan novas sincronizacións"
     },
     "OutOfSync_Message": {
       "key": "Exception_OutOfSync_Message",
-      "default": "Local data was out of sync and has now been refreshed. Please reapply last change."
+      "default": "Os datos locais non estaban sincronizados e foron actualizados. Volve aplicar o último cambio."
     },
     "OutOfSync_Title": {
       "key": "Exception_OutOfSync_Title",
@@ -325,7 +325,7 @@
     },
     "ServiceOffline_Message": {
       "key": "Exception_ServiceOffline_Message",
-      "default": "The xBrowserSync service is currently offline, try again later."
+      "default": "O servizo de xBrowserSync está actualmente desconectado, téntao de novo nun anaco."
     },
     "ServiceOffline_Title": {
       "key": "Exception_ServiceOffline_Title",
@@ -337,7 +337,7 @@
     },
     "SyncRemoved_Message": {
       "key": "Exception_SyncRemoved_Message",
-      "default": "The requested sync does not exist, it may have been removed due to inactivity."
+      "default": "A sincronización pedida non existe, pode que se borrara por inactividade."
     },
     "SyncRemoved_Title": {
       "key": "Exception_SyncRemoved_Title",
@@ -345,11 +345,11 @@
     },
     "SyncVersionNotSupported_Message": {
       "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "This ID cannot be synced with this version of xBrowserSync as the sync has been upgraded to a later version."
+      "default": "Ese ID non pode sincronizarse con esta versión de xBrowserSync xa que actualizouse a unha versión posterior."
     },
     "SyncVersionNotSupported_Restore_Message": {
       "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "The backup data cannot be restored by this version of xBrowserSync as it was created with a later version."
+      "default": "Os datos da copia de seguridade non poden ser restaurados con esta versión de xBrowserSync porque foron creados cunha versión posterior."
     },
     "SyncVersionNotSupported_Title": {
       "key": "Exception_SyncVersionNotSupported_Title",
@@ -357,15 +357,15 @@
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
-      "default": "Sync has been disabled, re-enable sync to resume syncing."
+      "default": "A sincronización foi deshabilitada, re-habilita a sincronización para reanudar a sincronización."
     },
     "TooManyRequests_Title": {
       "key": "Exception_TooManyRequests_Title",
-      "default": "Service request limit hit"
+      "default": "Límite de solicitude de servizo alcanzado"
     },
     "UncommittedSyncs_Message": {
       "key": "Exception_UncommittedSyncs_Message",
-      "default": "Sync will be committed once connection to service is restored."
+      "default": "A sincronización confirmarase unha vez que se restableza a conexión ao servizo."
     },
     "UncommittedSyncs_Title": {
       "key": "Exception_UncommittedSyncs_Title",
@@ -381,8 +381,8 @@
     },
     "UpgradeFailed_Message": {
       "key": "Exception_UpgradeFailed_Message",
-      "android": "Upgrade will be retried on restarting the app. If the problem persists please reinstall xBrowserSync.",
-      "default": "Restart your browser to retry upgrade, if the problem persists please reinstall xBrowserSync."
+      "android": "A actualizació reintentaras ao reiniciar a aplicación. Se o problema persiste, por favor reinstale xBrowserSync.",
+      "default": "Reinicia o teu navegador para reintentar actualizar, se o problema persiste reinstala xBrowserSync."
     },
     "UpgradeFailed_Title": {
       "key": "Exception_UpgradeFailed_Title",
@@ -497,7 +497,7 @@
       },
       "InvalidUrlShared": {
         "key": "View_Bookmark_InvalidUrlShared",
-        "default": "The value that was shared does not contain a valid URL."
+        "default": "O valor que compartiches non contén unha URL válida."
       }
     },
     "Help": {
@@ -579,7 +579,7 @@
         },
         "Content": {
           "key": "View_Login_GetSyncId_Content",
-          "default": "Download the xBrowserSync desktop browser extension and create a new sync to access your bookmarks here."
+          "default": "Descarga a extensión de navegador de escritorio de xBrowserSync e crea unha nova sincronización para acceder aos teus marcadores aquí."
         }
       },
       "Password": {
@@ -611,7 +611,7 @@
         },
         "Content": {
           "key": "View_Login_Scan_Content",
-          "default": "Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a QR code which you can scan here."
+          "default": "ABre xBrowserSync no teu navegador de escritorio, vai ao Panel de Preferencias e pincha no teu ID de sincronización para amosar o código QR que podes escanear aquí."
         },
         "ScanCode": {
           "key": "View_Login_Scan_ScanCode",
@@ -683,7 +683,7 @@
         },
         "Warning": {
           "key": "View_Login_Service_Warning",
-          "default": "<strong>Important:</strong> xBrowserSync services are run independently by volunteers. The service administrator takes no responsibility for your data so please remember to backup regularly."
+          "default": "<strong>Importante:</strong> Os servizos de xBrowserSync funcionan independentemente rexidos por voluntarios/as. O administrador do servizo non ten nengunha responsabilidade sobre os teus datos polo que lembra facer copia de seguridade de xeito habitual."
         }
       },
       "Sync": {
@@ -694,20 +694,20 @@
           },
           "Content": {
             "key": "View_Login_Sync_Confirm_Content",
-            "default": "xBrowserSync will delete all local bookmarks data before restoring synced bookmarks. OK to proceed?"
+            "default": "xBrowserSync borrará todos os teus marcadores locais antes de restaurar cos da sincronizacións. Desexas continuar?"
           }
         },
         "DisableOthers": {
           "Title": {
             "key": "View_Login_Sync_DisableOthers_Title",
-            "default": "Disable bookmark sync tools"
+            "default": "Deshabilitar ferramentas de sincronización de marcadores"
           },
           "Content": {
             "key": "View_Login_Sync_DisableOthers_Content",
-            "default": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "brave": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "edge": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "firefox": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing."
+            "default": "Sincronizar os datos do teu navegador con xBrowserSync mentres outras ferramentas de sincronización de marcadores (como <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) están activas pode causar duplicacións e posibilidade de corrupción de datos. Por favor desactívaa antes de continuar.",
+            "brave": "Sincronizar os datos do teu navegador con xBrowserSync mentres outras ferramentas de sincronización de marcadores (como <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) están activas pode causar duplicacións e posibilidade de corrupción de datos. Por favor desactívaa antes de continuar.",
+            "edge": "Sincronizar os datos do teu navegador con xBrowserSync mentres outras ferramentas de sincronización de marcadores (como <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) están activas pode causar duplicacións e posibilidade de corrupción de datos. Por favor desactívaa antes de continuar.",
+            "firefox": "Sincronizar os datos do teu navegador con xBrowserSync mentres outras ferramentas de sincronización de marcadores (como <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) están activas pode causar duplicacións e posibilidade de corrupción de datos. Por favor desactívaa antes de continuar."
           }
         },
         "Enable": {
@@ -1023,7 +1023,7 @@
           },
           "Description": {
             "key": "View_Settings_Issues_Help_Description",
-            "default": "Got a question or having an issue? Make sure to read through the help guide, otherwise the answer may be in the FAQs."
+            "default": "Tes algunha pregunta ou algún problema que comunicar? Asegúrate de ler a Guía de axuda, pode que a túa resposta tamén se atope nas FAQs."
           },
           "ViewFaqs": {
             "key": "View_Settings_Issues_Help_ViewFaqs",
@@ -1147,7 +1147,7 @@
           },
           "Description": {
             "key": "View_Settings_Prefs_SearchBar_Description",
-            "default": "Show search bar beneath results."
+            "default": "Amosar a barra de búsqueda debaixo dos resultados."
           }
         },
         "SyncToolbar": {
@@ -1185,7 +1185,7 @@
           },
           "Description": {
             "key": "View_Settings_Sync_Id_Description",
-            "default": "Use your sync ID to connect to your synced data on other devices (click to reveal QR code)."
+            "default": "Emprega a túa ID de sincronización para conectar coa túa data sincronizada noutros dispositivos (pincha para ver o código QR)."
           }
         },
         "Data": {
@@ -1195,7 +1195,7 @@
           },
           "Description": {
             "key": "View_Settings_Sync_Data_Description",
-            "default": "How much of the sync data allowed by the service are you using."
+            "default": "Cantos datos sincronizados permitidos polo servizo estás a empregar."
           }
         },
         "Service": {
@@ -1219,7 +1219,7 @@
         "Qr": {
           "Description": {
             "key": "View_Settings_Sync_Qr_Description",
-            "default": "Scan this QR code using the xBrowserSync Android app to connect to your synced data."
+            "default": "Escanea este código QR usando a app de Android de xBrowserSync para conectar cos teus datos sincronizados."
           },
           "Show": {
             "key": "View_Settings_Sync_Qr_Show",
@@ -1227,7 +1227,7 @@
           },
           "Copy": {
             "key": "View_Settings_Sync_Qr_Copy",
-            "default": "Copy sync ID to clipboard"
+            "default": "Copiar ID de sincronización ao portapapeis"
           },
           "Copied": {
             "key": "View_Settings_Sync_Qr_Copied",
@@ -1237,7 +1237,7 @@
       },
       "NotAvailable": {
         "key": "View_Settings_NotAvailable",
-        "default": "Settings available when sync is enabled."
+        "default": "As preferencias están dispoñibles cando a sincronización estea activada."
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
@@ -1245,13 +1245,13 @@
       },
       "Support": {
         "key": "View_Settings_Support",
-        "default": "Support xBrowserSync"
+        "default": "Apoio a xBrowserSync"
       }
     },
     "Support": {
       "Title": {
         "key": "View_Support_Title",
-        "default": "Support xBrowserSync!"
+        "default": "Apoio a xBrowserSync!"
       },
       "Content": {
         "key": "View_Support_Content",
@@ -1277,13 +1277,13 @@
       },
       "Content": {
         "key": "View_SyncRemoved_Content",
-        "default": "<p>Your sync could not be found and may have been removed due to inactivity.</p><p>You will need to create a new sync, but first click the button below to download a backup of your synced data which you can then restore to your new sync.</p>"
+        "default": "<p>A túa sincronización non se atopou e pode que fora eliminar por inactividade.</p><p>Necesitas crear unha nova sincronización, pero primeiro pincha no botón de abaixo para descargar unha copia de seguridade dos teus datos sincronizados que poderás empregar para restaurar na túa nova sincronización.</p>"
       }
     },
     "Updated": {
       "Title": {
         "key": "View_Updated_Title",
-        "default": "Updated to"
+        "default": "Actualizado a"
       },
       "Content": {
         "key": "View_Updated_Content",
