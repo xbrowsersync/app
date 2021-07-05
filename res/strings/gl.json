@@ -36,7 +36,7 @@
     "GetMetadata": {
       "Message": {
         "key": "Alert_GetMetadata_Message",
-        "default": "Fetching bookmark properties, touch to cancel."
+        "default": "Recollendo propiedades de Favoritos, toca para cancelar."
       },
       "Success": {
         "key": "Alert_GetMetadata_Success",
