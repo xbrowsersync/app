@@ -3,35 +3,35 @@
     "AppUpdateAvailable": {
       "Title": {
         "key": "Alert_AppUpdateAvailable_Title",
-        "default": "xBrowserSync update available"
+        "default": "Dispoñible actualización de xBrowserSync"
       },
       "Message": {
         "key": "Alert_AppUpdateAvailable_Message",
-        "default": "{version} is available to download. Click for more information.",
-        "android": "xBrowserSync {version} is available to download."
+        "default": "{version} está dispoñible para descarga. Pincha para máis información.",
+        "android": "{version} de xBrowserSync está dispoñible para descarga."
       }
     },
     "AppUpdated": {
       "Title": {
         "key": "Alert_AppUpdated_Title",
-        "default": "Updated to"
+        "default": "Actualizado a"
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync has been updated. Sync has been disabled, re-enable sync to complete the upgrade process."
+        "default": "xBrowserSync foi actualizado. Sync foi deshabilitado, re-activa sync para completar o proceso de actualización."
       }
     },
     "BookmarkCreated": {
       "key": "Alert_BookmarkCreated",
-      "default": "Bookmark created"
+      "default": "Creado Favorito"
     },
     "BookmarkDeleted": {
       "key": "Alert_BookmarkDeleted",
-      "default": "Bookmark deleted"
+      "default": "Borrado Favorito"
     },
     "BookmarkUpdated": {
       "key": "Alert_BookmarkUpdated",
-      "default": "Bookmark updated"
+      "default": "Favorito actualizado"
     },
     "GetMetadata": {
       "Message": {
