@@ -534,7 +534,7 @@
       },
       "Mobile": {
         "key": "View_Help_Mobile",
-        "default": "<h4>Go mobile</h4><p>Access your synced bookmarks on the move with the xBrowserSync Android app, available on <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a> store, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droid</a> or <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>direct download</a>.</p>"
+        "default": "<h4>Emprega o móbil</h4><p>Acede aos teus marcadores sincronizados en movemento coa aplicación Android xBrowserSync, dispoñible na tenda de <a href='https://link.xbrowsersync.org/download-android' class='new-tab'>Google Play</a>, <a href='https://link.xbrowsersync.org/fdroid' class='new-tab'>F-Droid</a> ou con <a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>descarga directa</a>.</p>"
       },
       "NativeFeatures": {
         "key": "View_Help_NativeFeatures",
