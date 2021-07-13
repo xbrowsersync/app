@@ -3,44 +3,44 @@
     "AppUpdateAvailable": {
       "Title": {
         "key": "Alert_AppUpdateAvailable_Title",
-        "default": "xBrowserSync update available"
+        "default": "Pembaruan xBrowserSync tersedia"
       },
       "Message": {
         "key": "Alert_AppUpdateAvailable_Message",
-        "default": "{version} is available to download. Click for more information.",
-        "android": "xBrowserSync {version} is available to download."
+        "default": "{version} tersedia untuk diunduh. Klik untuk informasi lebih lanjut.",
+        "android": "xBrowserSync {version} tersedia untuk diunduh."
       }
     },
     "AppUpdated": {
       "Title": {
         "key": "Alert_AppUpdated_Title",
-        "default": "Updated to"
+        "default": "Diperbarui ke"
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync has been updated. Sync has been disabled, re-enable sync to complete the upgrade process."
+        "default": "xBrowserSync telah diperbarui. Sinkronisasi telah dimatikan, nyalakan kembali sinkronisasi untuk menyelesaikan proses peningkatan."
       }
     },
     "BookmarkCreated": {
       "key": "Alert_BookmarkCreated",
-      "default": "Bookmark created"
+      "default": "Markah dibuat"
     },
     "BookmarkDeleted": {
       "key": "Alert_BookmarkDeleted",
-      "default": "Bookmark deleted"
+      "default": "Markah dihapus"
     },
     "BookmarkUpdated": {
       "key": "Alert_BookmarkUpdated",
-      "default": "Bookmark updated"
+      "default": "Markah diperbarui"
     },
     "GetMetadata": {
       "Message": {
         "key": "Alert_GetMetadata_Message",
-        "default": "Fetching bookmark properties, touch to cancel."
+        "default": "Mengambil properti markah, sentuh untuk membatalkan."
       },
       "Success": {
         "key": "Alert_GetMetadata_Success",
-        "default": "Bookmark properties updated."
+        "default": "Properti markah diperbarui."
       }
     },
     "Go": {
@@ -54,14 +54,14 @@
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
-        "default": "Changes will be synced when connection is restored."
+        "default": "Perubahan akan disinkronisasi ketika sambungan terpulihkan."
       }
     }
   },
   "App": {
     "Description": {
       "key": "App_Description",
-      "default": "Browser syncing as it should be: secure, anonymous and free! Sync bookmarks across your browsers and devices, no sign up required."
+      "default": "Sinkronisasi peramban sebagaimana mestinya: aman, awanama, dan gratis! Sinkronisasi markah antar peramban dan perangkat Anda, tidak diperlukan pendaftaran."
     },
     "Title": {
       "key": "App_Title",
@@ -72,74 +72,74 @@
     "Container": {
       "Menu": {
         "key": "Bookmarks_Container_Menu",
-        "default": "Menu bookmarks"
+        "default": "Menu markah"
       },
       "Mobile": {
         "key": "Bookmarks_Container_Mobile",
-        "default": "Mobile bookmarks"
+        "default": "Markah ponsel"
       },
       "Other": {
         "key": "Bookmarks_Container_Other",
-        "default": "Other bookmarks"
+        "default": "Markah lain-lain"
       },
       "Toolbar": {
         "key": "Bookmarks_Container_Toolbar",
-        "default": "Toolbar bookmarks"
+        "default": "Markah bilah alat"
       }
     }
   },
   "Button": {
     "AddBookmark": {
       "key": "Button_AddBookmark",
-      "default": "Add Bookmark"
+      "default": "Tambahkan Markah"
     },
     "Back": {
       "key": "Button_Back",
-      "default": "Back"
+      "default": "Kembali"
     },
     "Cancel": {
       "key": "Button_Cancel",
-      "default": "Cancel"
+      "default": "Batal"
     },
     "Close": {
       "key": "Button_Close",
-      "default": "Close"
+      "default": "Tutup"
     },
     "Confirm": {
       "key": "Button_Confirm",
-      "default": "Yes"
+      "default": "Ya"
     },
     "Continue": {
       "key": "Button_Continue",
-      "default": "Continue"
+      "default": "Lanjut"
     },
     "DeleteBookmark": {
       "key": "Button_DeleteBookmark",
-      "default": "Delete Bookmark"
+      "default": "Hapus Markah"
     },
     "Deny": {
       "key": "Button_Deny",
-      "default": "No"
+      "default": "Tidak"
     },
     "Done": {
       "key": "Button_Done",
-      "default": "Done"
+      "default": "Selesai"
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": "Download Backup"
+      "default": "Unduh Cadangan"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
-      "default": "Edit Bookmark"
+      "default": "Sunting Markah"
     },
     "Help": {
       "key": "Button_Help",
-      "default": "View help guide"
+      "default": "Lihat panduan pembantu"
     },
     "Next": {
       "key": "Button_Next",
-      "default": "Next"
+      "default": "Berikutnya"
     },
     "OK": {
       "key": "Button_OK",
@@ -147,65 +147,65 @@
     },
     "ReleaseNotes": {
       "key": "Button_ReleaseNotes",
-      "default": "View release notes"
+      "default": "Lihat catatan rilis"
     },
     "Saving": {
       "key": "Button_Saving",
-      "default": "Saving"
+      "default": "Menyimpan"
     },
     "Settings": {
       "key": "Button_Settings",
-      "default": "Settings"
+      "default": "Pengaturan"
     },
     "ShareBookmark": {
       "key": "Button_ShareBookmark",
-      "default": "Share bookmark"
+      "default": "Bagikan markah"
     },
     "Undo": {
       "key": "Button_Undo",
-      "default": "Undo"
+      "default": "Urungkan"
     },
     "Update": {
       "key": "Button_Update",
-      "default": "Update"
+      "default": "Pembaruan"
     },
     "View": {
       "key": "Button_View",
-      "default": "View"
+      "default": "Lihat"
     }
   },
   "Exception": {
     "ContainerChanged_Message": {
       "key": "Exception_ContainerChanged_Message",
-      "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
+      "default": "Mohon menghindari mengubah folder [xbs] karena bisa mengakibatkan masalah sinkronisasi."
     },
     "ContainerChanged_Title": {
       "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync folder changed"
+      "default": "Folder xBrowserSync diubah"
     },
     "DailyNewSyncLimitReached_Message": {
       "key": "Exception_DailyNewSyncLimitReached_Message",
-      "default": "Sync to an existing sync ID, switch to a different service or try again tomorrow."
+      "default": "Sinkronisasi ke ID Sinkronisasi yang telah ada, ganti ke layanan yang berbeda, atau coba kembali esok hari."
     },
     "DailyNewSyncLimitReached_Title": {
       "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "Daily new sync limit reached"
+      "default": "Batas harian sinkronisasi baru tercapai"
     },
     "Default_Message": {
       "key": "Exception_Default_Message",
-      "default": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
+      "default": "Jika masalah terus terjadi, mohon untuk <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>melaporkan isu tersebut</a>."
     },
     "Default_Title": {
       "key": "Exception_Default_Title",
-      "default": "Something went wrong"
+      "default": "Terjadi galat"
     },
     "FailedDownloadFile_Title": {
       "key": "Exception_FailedDownloadFile_Title",
-      "default": "Backup failed"
+      "default": "Pencadangan gagal"
     },
     "FailedGetDataToRestore_Title": {
       "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "Browse files failed"
+      "default": "Gagal menjelajahi berkas"
     },
     "FailedGetPageMetadata_Message": {
       "key": "Exception_FailedGetPageMetadata_Message",
@@ -1287,7 +1287,7 @@
       },
       "Content": {
         "key": "View_Updated_Content",
-        "default": "xBrowserSync has been updated with the latest features and fixes. For more details about the changes contained in this release, check out the release notes."
+        "default": "<p>xBrowserSync telah diperbarui dengan fitur dan perbaikan terbaru.</p><p>Jika sinkronisasi dinyalakan sebelumnya maka telah dimatikan dan sinkronisasi Anda harus ditingkatkan terlebih dahulu sebelum menyinkronkan dengan xBrowserSync versi ini. Nyalakan kembali sinkronisasi untuk menyelesaikan proses peningkatan.</p><p>Untuk detail lebih lanjut tentang perubahan yang ada di rilis ini, silakan periksa catatan rilis.</p>"
       }
     },
     "Working": {
