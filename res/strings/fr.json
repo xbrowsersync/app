@@ -269,7 +269,7 @@
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local browser data has been refreshed, please reapply last change."
+      "default": "Les données locales du navigateur ont été actualisées, merci de renouveller votre dernière modification."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
@@ -508,7 +508,7 @@
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time reset your data back to it’s original state from when xBrowserSync was installed.</p>",
+        "default": "N'oubliez pas de faire des sauvegardes. Quand vous utilisez xBrowserSync, vos données sont votre responsabilité alors soyez malins et assurez-vous de faire des sauvegardes. Rendez-vous dans le menu Paramètres et sauvegardez vos données non-cryptés dans un fichier local qui peut être utilisé pour restaurer vos données si besoin est. Si vos données issues d'une sauvegarde locale sont compromises, vous pourrez à tout moment les recréer à leur état initial à partir de l'endroit ou a été installé xBrowserSync",
         "android": "<h4>N'oubliez pas de faire une sauvegarde</h4><p>Lorsque vous utilisez xBrowserSync, vos données sont de votre responsabilité, alors soyez intelligent et assurez-vous de faire des sauvegardes.</p><p>Rendez-vous dans les Paramètres et sauvegardez vos données dans un fichier local non chiffrées qui peut être utilisé pour restaurer vos données si vous en avez besoin.</p>"
       },
       "BeforeYouBegin": {
@@ -521,7 +521,7 @@
       "ExistingId": {
         "key": "View_Help_ExistingId",
         "default": "<h4>Syncing with your existing ID</h4><p>Click on “Already got a sync ID?” to enter your existing sync ID and password. If your sync ID was created on a service different to the one displayed then switch to that service before attempting to sync.</p><p>xBrowserSync will retrieve and decrypt your encrypted data using your locally stored password, then clear your local bookmarks before re-populating them from the decrypted data.</p><p>When synced, xBrowserSync checks in the background every fifteen minutes for updates to your synced data and will automatically update your local bookmarks when required. You can also manually sync available updates to your synced data in the Settings panel.</p>",
-        "android": "<h4>Syncing with your existing ID</h4><p>Start by scanning the sync ID QR code in the Settings panel of the xBrowserSync desktop browser extension (click on your sync ID to reveal it). Make sure you enter the same encryption password used when creating the sync otherwise xBrowserSync will not be able to decrypt your data.</p><p>Also, if you are synced to a different xBrowserSync service make sure it is the active service configured in the Settings panel.</p>"
+        "android": "Synchronisation avec votre ID. Commencez par scanner le QR code dans le menu Paramètres de votre extension de navigateur (Cliquez sur votre ID pour l'afficher). Assurez vous d'inscrire le même mot de passe crypté utilisé lors de la création de la synchronisation sinon xBrowserSync ne sera pas capable de décrypter vos données. Par ailleurs, si vous êtes synchronisé avec un service xBrowserSync différent, assurez vous de choisir le service actif dans le menu Paramètres"
       },
       "FirstSync": {
         "key": "View_Help_FirstSync",
