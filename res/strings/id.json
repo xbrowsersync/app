@@ -61,7 +61,7 @@
   "App": {
     "Description": {
       "key": "App_Description",
-      "default": "Sinkronisasi peramban sebagaimana mestinya: aman, awanama, dan gratis! Sinkronisasi markah antar peramban dan perangkat Anda, tidak diperlukan pendaftaran."
+      "default": "Sinkronisasi peramban sebagaimana mestinya: aman, awanama, dan gratis dan bebas! Sinkronisasi markah antar peramban dan perangkat Anda, pendaftaran tidak diperlukan."
     },
     "Title": {
       "key": "App_Title",
@@ -209,11 +209,11 @@
     },
     "FailedGetPageMetadata_Message": {
       "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "URL is invalid or webpage data could not be retrieved."
+      "default": "URL tidak valid atau data situs tidak dapat didapatkan."
     },
     "FailedGetPageMetadata_Title": {
       "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "Couldn’t get bookmark properties"
+      "default": "Tidak dapat mengambil properti markah"
     },
     "FailedRefreshBookmarks_Title": {
       "key": "Exception_FailedRefreshBookmarks_Title",
