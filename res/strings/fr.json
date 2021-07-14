@@ -666,7 +666,7 @@
           },
           "InvalidService": {
             "key": "View_Login_Service_Update_InvalidService",
-            "default": "Not a valid xBrowserSync service"
+            "default": "Ce n'est pas un service xBrowserSync valide"
           },
           "InvalidUrl": {
             "key": "View_Login_Service_Update_InvalidUrl",
@@ -910,7 +910,7 @@
           },
           "Confirmation": {
             "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
-            "default": "To prevent “Save As...” dialog from showing when downloading backups, disable the browser setting “Ask where to save each file before downloading”."
+            "default": "Afin de prévenir le message\"Enregistrer sous...\" lorsque vous téléchargez vos sauvegardes, désactivez le paramètre \"Demander ou télécharger chaque fichier pour chaque téléchargement\"."
           }
         },
         "Backup": {
@@ -995,26 +995,26 @@
         "Reset": {
           "Confirm": {
             "key": "View_Settings_BackupRestore_Reset_Confirm",
-            "default": "<p>If you continue, sync will be disabled and your local browser data will be reset to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "Si vous continuez, les données de ce navigateur vont être désactivées et réinitialisées depuis le jour ou xBrowserSync a été installé le {date}. Êtes vous sûr de vouloir poursuivre"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Reset_Button",
-            "default": "Reset Local Data"
+            "default": "Réinitialiser les données locales"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Reset_Done",
-            "default": "Local browser data has been reset to initial installation state."
+            "default": "Les données de ce navigateur ont été réinitialisées à leur état d'installation initial."
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Reset_Unavailable",
-            "default": "Installation state data not available, unable to reset."
+            "default": "L'état de l'installation n'est pas disponible, impossible à réinitialiser."
           }
         }
       },
       "Issues": {
         "Title": {
           "key": "View_Settings_Issues_Title",
-          "default": "Help and support"
+          "default": "Aide et assistance"
         },
         "Help": {
           "Title": {
@@ -1255,7 +1255,7 @@
       },
       "Content": {
         "key": "View_Support_Content",
-        "default": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains effective in protecting online privacy and enhancing productivity.</p>"
+        "default": "Nous voulons que xBrowserSync devienne le numéro un des outils de synchronisation de navigateurs mais il y a toujours beaucoup à faire. Ajouter la synchronisation des onglets et de l'historique. Prendre en charge tout les navigateurs majeurs. Traduire d'autres langues. Et bien plus. C'est seulement avec votre soutien que nous pourrons coutinuer d'améliorer xBrowserSync et s'assurer qu'il reste efficace dans la protection de la vie privée en ligne et l'amélioration de la productivité"
       },
       "Cryptos": {
         "key": "View_Support_Cryptos",
@@ -1277,7 +1277,7 @@
       },
       "Content": {
         "key": "View_SyncRemoved_Content",
-        "default": "<p>Your sync could not be found and may have been removed due to inactivity.</p><p>You will need to create a new sync, but first click the button below to download a backup of your synced data which you can then restore to your new sync.</p>"
+        "default": "Votre synchronisation n'as pas pu être trouvée et pourrait avoir été supprimée en raison d'inactivité. Vous allez devoir créer une nouvelle synchronisation, mais avant tout, cliquez sur le bouton ci-dessous pour télécharger une sauvegarde de vos données synchronisées que vous pourrez ensuite restaurer au sein de la nouvelle synchronisation"
       }
     },
     "Updated": {
