@@ -217,7 +217,7 @@
     },
     "FailedRefreshBookmarks_Title": {
       "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "Couldn’t retrieve updates"
+      "default": "Tidak bisa mendapatkan pembaruan"
     },
     "FailedRestoreData_Message": {
       "key": "Exception_FailedRestoreData_Message",
