@@ -431,25 +431,25 @@
     "Bookmark": {
       "Add": {
         "key": "View_Bookmark_Add",
-        "default": "Add bookmark"
+        "default": "Tambahkan markah"
       },
       "Edit": {
         "key": "View_Bookmark_Edit",
-        "default": "Edit bookmark"
+        "default": "Sunting markah"
       },
       "Form": {
         "Title": {
           "key": "View_Bookmark_Form_Title",
-          "default": "Title"
+          "default": "Judul"
         },
         "Url": {
           "Exists": {
             "key": "View_Bookmark_Form_Url_Exists",
-            "default": "URL has already been bookmarked"
+            "default": "URL sudah dimarkahkan"
           },
           "Invalid": {
             "key": "View_Bookmark_Form_Url_Invalid",
-            "default": "Not a valid URL"
+            "default": "URL tidak valid"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -457,42 +457,42 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "URL is required"
+            "default": "URL diperlukan"
           }
         },
         "Description": {
           "key": "View_Bookmark_Form_Description",
-          "default": "Description"
+          "default": "Deskripsi"
         },
         "Tags": {
           "Label": {
             "key": "View_Bookmark_Form_Tags_Label",
-            "default": "Tags"
+            "default": "Tanda"
           },
           "Placeholder": {
             "key": "View_Bookmark_Form_Tags_Placeholder",
-            "default": "tag 1, tag 2, tag 3, etc"
+            "default": "tanda 1, tanda 2, tanda 3, dst."
           },
           "Clear": {
             "key": "View_Bookmark_Form_Tags_Clear",
-            "default": "Clear tags"
+            "default": "Bersihkan tanda"
           },
           "Remove": {
             "key": "View_Bookmark_Form_Tags_Remove",
-            "default": "Remove tag"
+            "default": "Hapus tanda"
           }
         },
         "Delete": {
           "key": "View_Bookmark_Form_Delete",
-          "default": "Delete"
+          "default": "Hapus"
         },
         "Share": {
           "key": "View_Bookmark_Form_Share",
-          "default": "Share"
+          "default": "Bagikan"
         },
         "UpdateProperties": {
           "key": "View_Bookmark_Form_UpdateProperties",
-          "default": "Update bookmark properties"
+          "default": "Perbarui properti markah"
         }
       },
       "InvalidUrlShared": {
