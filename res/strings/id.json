@@ -50,7 +50,7 @@
     "WorkingOffline": {
       "Title": {
         "key": "Alert_WorkingOffline_Title",
-        "default": "Working offline"
+        "default": "Bekerja luring"
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
@@ -257,7 +257,7 @@
     },
     "InvalidService_Title": {
       "key": "Exception_InvalidService_Title",
-      "default": "Layanan xBrowserSync tidak valid"
+      "default": "Bukan layanan xBrowser yang valid"
     },
     "LocalContainerNotFound_Message": {
       "key": "Exception_LocalContainerNotFound_Message",
@@ -273,7 +273,7 @@
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
-      "default": "Gagal mensinkronisasi"
+      "default": "Gagal menyinkronkan"
     },
     "MissingClientData_Message": {
       "key": "Exception_MissingClientData_Message",
@@ -333,7 +333,7 @@
     },
     "ShareFailed_Title": {
       "key": "Exception_ShareFailed_Title",
-      "default": "Share failed"
+      "default": "Gagal membagikan"
     },
     "SyncRemoved_Message": {
       "key": "Exception_SyncRemoved_Message",
@@ -420,11 +420,11 @@
     },
     "Synced": {
       "key": "Tooltip_Synced",
-      "default": "synced"
+      "default": "tersinkronisasi"
     },
     "Syncing": {
       "key": "Tooltip_Syncing",
-      "default": "syncing"
+      "default": "menyinkronkan"
     }
   },
   "View": {
@@ -497,7 +497,7 @@
       },
       "InvalidUrlShared": {
         "key": "View_Bookmark_InvalidUrlShared",
-        "default": "The value that was shared does not contain a valid URL."
+        "default": "Yang dibagikan tidak memiliki URL yang valid."
       }
     },
     "Help": {
@@ -543,7 +543,7 @@
       },
       "Previous": {
         "key": "View_Help_Previous",
-        "default": "Previous"
+        "default": "Sebelumnya"
       },
       "Searching": {
         "key": "View_Help_Searching",
@@ -575,73 +575,73 @@
       "GetSyncId": {
         "Title": {
           "key": "View_Login_GetSyncId_Title",
-          "default": "Need a sync ID?"
+          "default": "Memerlukan ID Sinkronisasi?"
         },
         "Content": {
           "key": "View_Login_GetSyncId_Content",
-          "default": "Download the xBrowserSync desktop browser extension and create a new sync to access your bookmarks here."
+          "default": "Unduh ekstensi xBrowserSync di peramban komputer dan buat sinkronisasi baru untuk mengakses markah Anda di sini."
         }
       },
       "Password": {
         "Confirm": {
           "key": "View_Login_Password_Confirm",
-          "default": "Confirm password"
+          "default": "Konfirmasi kata sandi"
         },
         "Existing": {
           "key": "View_Login_Password_Existing",
-          "default": "Your encryption password"
+          "default": "Kata sandi enkripsi Anda"
         },
         "Label": {
           "key": "View_Login_Password_Label",
-          "default": "Encryption password"
+          "default": "Kata sandi enkripsi"
         },
         "New": {
           "key": "View_Login_Password_New",
-          "default": "Enter an encryption password"
+          "default": "Masukkan sebuah kata sandi enkripsi"
         },
         "Show": {
           "key": "View_Login_Password_Show",
-          "default": "Reveal password"
+          "default": "Perlihatkan kata sandi"
         }
       },
       "Scan": {
         "Title": {
           "key": "View_Login_Scan_Title",
-          "default": "Connect to your sync"
+          "default": "Hubungkan ke sinkronisasi Anda"
         },
         "Content": {
           "key": "View_Login_Scan_Content",
-          "default": "Open xBrowserSync on your desktop browser, go to the Settings panel and click on your sync ID to display a QR code which you can scan here."
+          "default": "Buka xBrowserSync di peramban komputer Anda, pergi ke panel Pengaturan dan pencet di ID Sinkronisasi Anda untuk menamplikan Kode QR yang mana Anda pindai."
         },
         "ScanCode": {
           "key": "View_Login_Scan_ScanCode",
-          "default": "Scan code"
+          "default": "Pindai kode"
         },
         "ManualEntry": {
           "key": "View_Login_Scan_ManualEntry",
-          "default": "Enter sync details manually"
+          "default": "Masukkan detail sinkronisasi secara manual"
         }
       },
       "Service": {
         "ApiVersion": {
           "key": "View_Login_Service_ApiVersion",
-          "default": "API version"
+          "default": "Versi API"
         },
         "Confirm": {
           "key": "View_Login_Service_Confirm",
-          "default": "Sync to this service?"
+          "default": "Sinkronkan ke layanan ini?"
         },
         "Location": {
           "key": "View_Login_Service_Location",
-          "default": "Location"
+          "default": "Lokasi"
         },
         "MaxSyncSize": {
           "key": "View_Login_Service_MaxSyncSize",
-          "default": "Max sync size"
+          "default": "Ukuran maksimal sinkronisasi"
         },
         "Selected": {
           "key": "View_Login_Service_Selected",
-          "default": "Syncing to"
+          "default": "Menyinkronkan ke"
         },
         "Status": {
           "key": "View_Login_Service_Status",
@@ -650,57 +650,57 @@
         "Update": {
           "Label": {
             "key": "View_Login_Service_Update_Label",
-            "default": "xBrowserSync service URL"
+            "default": "URL layanan xBrowserSync"
           },
           "Description": {
             "key": "View_Login_Service_Update_Description",
-            "default": "Enter the URL of an alternative xBrowserSync service. Browse the list of public xBrowserSync services <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>here</a>."
+            "default": "Masukkan URL dari layanan alternatif xBrowserSync. Browse the list of public xBrowserSync servicesJelajahi daftar layanan publik xBrowserSync <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>disini</a>."
           },
           "Button": {
             "key": "View_Login_Service_Update_Button",
-            "default": "Switch service"
+            "default": "Pindah layanan"
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
-            "default": "URL is required"
+            "default": "URL diperlukan"
           },
           "InvalidService": {
             "key": "View_Login_Service_Update_InvalidService",
-            "default": "Not a valid xBrowserSync service"
+            "default": "Bukan layanan xBrowserSync yang valid"
           },
           "InvalidUrl": {
             "key": "View_Login_Service_Update_InvalidUrl",
-            "default": "Not a valid URL"
+            "default": "Bukan URL yang valid"
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",
-            "default": "Unable to connect to the service"
+            "default": "Tidak dapat terhubung ke layanan"
           },
           "NotSupported": {
             "key": "View_Login_Service_Update_Failed_NotSupported",
-            "default": "This service is running an unsupported API version"
+            "default": "Layanan ini menjalankan versi API yang tidak didukung"
           }
         },
         "Warning": {
           "key": "View_Login_Service_Warning",
-          "default": "<strong>Important:</strong> xBrowserSync services are run independently by volunteers. The service administrator takes no responsibility for your data so please remember to backup regularly."
+          "default": "<strong>Penting:</strong> layanan xBrowserSync dijalankan secara mandiri oleh relawan. Administrator layanan tidak bertanggung jawab atas data Anda, jadi harap ingat untuk membuat cadangan secara teratur."
         }
       },
       "Sync": {
         "Confirm": {
           "Title": {
             "key": "View_Login_Sync_Confirm_Title",
-            "default": "Are you sure?"
+            "default": "Apakah Anda yakin?"
           },
           "Content": {
             "key": "View_Login_Sync_Confirm_Content",
-            "default": "xBrowserSync will delete all local bookmarks data before restoring synced bookmarks. OK to proceed?"
+            "default": "xBrowserSync akan menghapus seluruh data markah lokal sebelum memulihkan markah yang tersinkronisasi. OK untuk melanjutkan?"
           }
         },
         "DisableOthers": {
           "Title": {
             "key": "View_Login_Sync_DisableOthers_Title",
-            "default": "Disable bookmark sync tools"
+            "default": "Matikan alat sinkronisasi markah"
           },
           "Content": {
             "key": "View_Login_Sync_DisableOthers_Content",
@@ -712,26 +712,26 @@
         },
         "Enable": {
           "key": "View_Login_Sync_Enable",
-          "default": "Sync"
+          "default": "Sinkronisasi"
         },
         "New": {
           "key": "View_Login_Sync_New",
-          "default": "Create new sync"
+          "default": "Buat sinkronisasi baru"
         },
         "UpgradeReady": {
           "Title": {
             "key": "View_Login_Sync_UpgradeReady_Title",
-            "default": "Ready to upgrade sync?"
+            "default": "Siap untuk meningkatkan sinkronisasi?"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync. After upgrading, you will no longer be able to sync with any previous versions of xBrowserSync.</p><p>Make sure to update xBrowserSync on all synced devices before continuing. Ready to proceed?</p>"
+            "default": "<p>Sinkronisasi Anda harus ditingkatkan terlebih dahulu sebelum menyinkronkan dengan xBrowserSync versi ini. Setelah peningkatan, Anda tidak bisa lagi menyinkronkan dengan versi xBrowserSync sebelumnya .</p><p>Pastikan sudah memperbarui xBrowserSync di semua perangkat tersinkron sebelum melanjutkan. Siap untuk melanjutkan?</p>"
           }
         },
         "UpgradeRequired": {
           "Title": {
             "key": "View_Login_Sync_UpgradeRequired_Title",
-            "default": "Upgrade sync"
+            "default": "Tingkatkan sinkronisasi"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
