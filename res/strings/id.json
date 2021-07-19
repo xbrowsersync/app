@@ -704,10 +704,10 @@
           },
           "Content": {
             "key": "View_Login_Sync_DisableOthers_Content",
-            "default": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "brave": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "edge": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing.",
-            "firefox": "Syncing your browser data with xBrowserSync whilst other bookmark sync tools (such as <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) are active can cause duplication and possibly corrupted data. Please disable them before continuing."
+            "default": "Menyinkronkan data peramban Anda dengan xBrowserSync ketika alat penyinkronan markah (seperti <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>) aktif bisa menimbulkan duplikasi dan kemungkinan data korup. Mohon untuk mematikannya sebelum melanjutkan.",
+            "brave": "Menyinkronkan data peramban Anda dengan xBrowserSync ketika alat penyinkronan markah (seperti <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>) aktif bisa menimbulkan duplikasi dan kemungkinan data korup. Mohon untuk mematikannya sebelum melanjutkan.",
+            "edge": "Menyinkronkan data peramban Anda dengan xBrowserSync ketika alat penyinkronan markah (seperti <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Microsoft Edge Sync</a>) aktif bisa menimbulkan duplikasi dan kemungkinan data korup. Mohon untuk mematikannya sebelum melanjutkan.",
+            "firefox": "Menyinkronkan data peramban Anda dengan xBrowserSync ketika alat penyinkronan markah (seperti <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefox Sync</a>) aktif bisa menimbulkan duplikasi dan kemungkinan data korup. Mohon untuk mematikannya sebelum melanjutkan."
           }
         },
         "Enable": {
@@ -825,12 +825,12 @@
       "BackupRestore": {
         "Title": {
           "key": "View_Settings_BackupRestore_Title",
-          "default": "Back up and restore"
+          "default": "Cadangkan dan Pulihkan"
         },
         "AutoBackup": {
           "Title": {
             "key": "View_Settings_BackupRestore_AutoBackup_Title",
-            "default": "Auto back up"
+            "default": "Otomatis Cadangkan"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_AutoBackup_Description",
@@ -838,74 +838,74 @@
           },
           "RunsAt": {
             "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
-            "default": "Back up runs at"
+            "default": "Pencadangan berjalan"
           },
           "Every": {
             "key": "View_Settings_BackupRestore_AutoBackup_Every",
-            "default": "every"
+            "default": "setiap"
           },
           "Numbers": {
             "Single": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
-              "default": "single"
+              "default": "satu"
             },
             "Two": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
-              "default": "two"
+              "default": "dua"
             },
             "Three": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
-              "default": "three"
+              "default": "tiga"
             },
             "Four": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
-              "default": "four"
+              "default": "empat"
             },
             "Five": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
-              "default": "five"
+              "default": "lima"
             },
             "Six": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
-              "default": "six"
+              "default": "enam"
             },
             "Seven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
-              "default": "seven"
+              "default": "tujuh"
             },
             "Eight": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
-              "default": "eight"
+              "default": "delapan"
             },
             "Nine": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
-              "default": "nine"
+              "default": "sembilan"
             },
             "Ten": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
-              "default": "ten"
+              "default": "sepuluh"
             },
             "Eleven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
-              "default": "eleven"
+              "default": "sebelas"
             },
             "Twelve": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
-              "default": "twelve"
+              "default": "dua belas"
             }
           },
           "Units": {
             "Day": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
-              "default": "day(s)"
+              "default": "hari"
             },
             "Week": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
-              "default": "week(s)"
+              "default": "minggu"
             },
             "Month": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
-              "default": "month(s)"
+              "default": "bulan"
             }
           },
           "Confirmation": {
@@ -1172,94 +1172,94 @@
       "Sync": {
         "Title": {
           "key": "View_Settings_Sync_Title",
-          "default": "Sync"
+          "default": "Sinkronisasi"
         },
         "Disable": {
           "key": "View_Settings_Sync_Disable",
-          "default": "Disable sync"
+          "default": "Matikan sinkronisasi"
         },
         "Id": {
           "Label": {
             "key": "View_Settings_Sync_Id_Label",
-            "default": "Sync ID"
+            "default": "ID Sinkronisasi"
           },
           "Description": {
             "key": "View_Settings_Sync_Id_Description",
-            "default": "Use your sync ID to connect to your synced data on other devices (click to reveal QR code)."
+            "default": "Gunakan ID Sinkronisasi Anda untuk menghubungkan ke data tersinkronisasi di perangkat lainnya (klik untuk memperlihatkan Kode QR)."
           }
         },
         "Data": {
           "Label": {
             "key": "View_Settings_Sync_Data_Label",
-            "default": "Data usage"
+            "default": "Penggunaan data"
           },
           "Description": {
             "key": "View_Settings_Sync_Data_Description",
-            "default": "How much of the sync data allowed by the service are you using."
+            "default": "Berapa banyak data sinkronisasi yang diperbolehkan oleh layanan yang Anda gunakan."
           }
         },
         "Service": {
           "key": "View_Settings_Sync_Service",
-          "default": "Service"
+          "default": "Layanan"
         },
         "UpdatesAvailable": {
           "False": {
             "key": "View_Settings_Sync_UpdatesAvailable_False",
-            "default": "Last synced {date}"
+            "default": "Sinkronisasi terakhir {date}"
           },
           "True": {
             "key": "View_Settings_Sync_UpdatesAvailable_True",
-            "default": "Ready to sync (scheduled for {date})"
+            "default": "Siap untuk disinkronkan (dijadwalkan untuk {date})"
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
-            "default": "Sync Now"
+            "default": "Sinkronkan Sekarang"
           }
         },
         "Qr": {
           "Description": {
             "key": "View_Settings_Sync_Qr_Description",
-            "default": "Scan this QR code using the xBrowserSync Android app to connect to your synced data."
+            "default": "Pindai Kode QR ini menggunakan aplikasi Android xBrowserSync untuk menghubungkan dengan data tersinkron Anda."
           },
           "Show": {
             "key": "View_Settings_Sync_Qr_Show",
-            "default": "Show QR code"
+            "default": "Perlihatkan Kode QR"
           },
           "Copy": {
             "key": "View_Settings_Sync_Qr_Copy",
-            "default": "Copy sync ID to clipboard"
+            "default": "Salin ID Sinkronisasi ke papan klip"
           },
           "Copied": {
             "key": "View_Settings_Sync_Qr_Copied",
-            "default": "Copied!"
+            "default": "Disalin!"
           }
         }
       },
       "NotAvailable": {
         "key": "View_Settings_NotAvailable",
-        "default": "Settings available when sync is enabled."
+        "default": "Pengaturan tersedia ketika sinkronisasi diaktifkan."
       },
       "FileDownloaded": {
         "key": "View_Settings_FileDownloaded",
-        "default": "File saved to Downloads"
+        "default": "Berkas disimpan ke Unduhan"
       },
       "Support": {
         "key": "View_Settings_Support",
-        "default": "Support xBrowserSync"
+        "default": "Dukung xBrowserSync"
       }
     },
     "Support": {
       "Title": {
         "key": "View_Support_Title",
-        "default": "Support xBrowserSync!"
+        "default": "Dukung xBrowserSync!"
       },
       "Content": {
         "key": "View_Support_Content",
-        "default": "<p>We want to make xBrowserSync the number one browser sync tool, but there’s still a lot to do:</p><ul><li>Add syncing of browser tabs and history</li><li>Support all major desktop browsers</li><li>Translate into other languages</li><li>And <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>much more</a>!</li></ul><p>Only with your support can we continue to improve xBrowserSync and ensure that it remains effective in protecting online privacy and enhancing productivity.</p>"
+        "default": "<p>Kami ingin membuat xBrowserSync ala sinkronisasi peramban nomor satu, tapi masih banyak yang harus dilakukan:</p><ul><li>Menambahkan sinkronisasi tab dan riwayat peramban</li><li>Mendukung seluruh peramban komputer umum</li><li>Menerjemahkan ke bahasa lain</li><li>Dan <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>banyak lainnya</a>!</li></ul><p>Hanya dengan dukungan Anda kami bisa melanjutkan pengembangan xBrowserSync dan menjamin akan tetap efektif melindungi privasi daring dan meningkatkan produktivitas.</p>"
       },
       "Cryptos": {
         "key": "View_Support_Cryptos",
-        "default": "Cryptos"
+        "default": "Kripto"
       },
       "Liberapay": {
         "key": "View_Support_Liberapay",
@@ -1273,11 +1273,11 @@
     "SyncRemoved": {
       "Title": {
         "key": "View_SyncRemoved_Title",
-        "default": "Sync not found"
+        "default": "Sinkronisasi tidak ditemukan"
       },
       "Content": {
         "key": "View_SyncRemoved_Content",
-        "default": "<p>Your sync could not be found and may have been removed due to inactivity.</p><p>You will need to create a new sync, but first click the button below to download a backup of your synced data which you can then restore to your new sync.</p>"
+        "default": "<p>Sinkronisasi Anda tidak dapat ditemukan dan mungkin sudah dihapus karena ketidakaktifan.</p><p>Anda harus membuat sinkronisasi yang baru, tapi pertama-tama klik tombol di bawah ini untuk mengunduh cadangan data tersinkron Anda yang dimana selanjutnya Anda bisa memulihkannya ke sinkronisasi yang baru.</p>"
       }
     },
     "Updated": {
@@ -1293,15 +1293,15 @@
     "Working": {
       "Restoring": {
         "key": "View_Working_Restoring",
-        "default": "Restoring"
+        "default": "Memulihkan"
       },
       "Resetting": {
         "key": "View_Working_Resetting",
-        "default": "Resetting"
+        "default": "Mengatur ulang"
       },
       "Syncing": {
         "key": "View_Working_Syncing",
-        "default": "Syncing"
+        "default": "Menyinkronkan"
       }
     }
   }
