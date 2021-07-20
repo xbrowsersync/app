@@ -353,7 +353,7 @@
     },
     "SyncVersionNotSupported_Title": {
       "key": "Exception_SyncVersionNotSupported_Title",
-      "default": "Sync version not supported"
+      "default": "Versão da sincronização não suportada"
     },
     "TooManyRequests_Message": {
       "key": "Exception_TooManyRequests_Message",
@@ -405,11 +405,11 @@
       },
       "Offline": {
         "key": "Service_Status_Offline",
-        "default": "Offline"
+        "default": "Desconectado"
       },
       "Online": {
         "key": "Service_Status_Online",
-        "default": "Online"
+        "default": "Conectado"
       }
     }
   },
@@ -449,7 +449,7 @@
           },
           "Invalid": {
             "key": "View_Bookmark_Form_Url_Invalid",
-            "default": "Not a valid URL"
+            "default": "URL inválida"
           },
           "Label": {
             "key": "View_Bookmark_Form_Url_Label",
@@ -457,7 +457,7 @@
           },
           "Required": {
             "key": "View_Bookmark_Form_Url_Required",
-            "default": "URL is required"
+            "default": "Uma URL é necessária"
           }
         },
         "Description": {
@@ -467,11 +467,11 @@
         "Tags": {
           "Label": {
             "key": "View_Bookmark_Form_Tags_Label",
-            "default": "Tags"
+            "default": "Marcadores"
           },
           "Placeholder": {
             "key": "View_Bookmark_Form_Tags_Placeholder",
-            "default": "tag 1, tag 2, tag 3, etc"
+            "default": "marcador 1, marcador 2, marcador 3, etc"
           },
           "Clear": {
             "key": "View_Bookmark_Form_Tags_Clear",
@@ -479,7 +479,7 @@
           },
           "Remove": {
             "key": "View_Bookmark_Form_Tags_Remove",
-            "default": "Remove tag"
+            "default": "Remover marcador"
           }
         },
         "Delete": {
@@ -508,7 +508,7 @@
       },
       "BackingUp": {
         "key": "View_Help_BackingUp",
-        "default": "<h4>Remember to back up</h4><p>When you use xBrowserSync your data is your responsibility so be smart and make sure to take backups.</p><p>Head over to the Settings panel and back up your unencrypted data to a local file which can be used to restore your data should you need to.</p><p>If your local browser data becomes corrupted and you don’t have any backups, you can at any time reset your data back to it’s original state from when xBrowserSync was installed.</p>",
+        "default": "<h4>Lembre-se de fazer backup</h4><p>Quando você usa o xBrowserSync, seus dados são sua responsabilidade, então seja esperto e certifique-se de fazer backups.</p><p>Vá para o painel de configurações e faça backup dos seus dados não criptografados em um arquivo local, que depois pode ser usado para restaurar seus dados sempre que você precisar.</p><p>Se os dados do seu navegador local ficarem corrompidos e você não tiver backups, a qualquer momento você pode reverter seus dados para seu estado original no momento em que o xBrowserSync foi instalado.</p>",
         "android": "<h4>Lembre-se de fazer backup de</h4><p>Quando você usa xBrowserSync é de sua responsabilidade e interessante certificar de fazer backups.</p><p>Vá para o painel de configurações e faça backup dos seus dados não criptografados em um arquivo local que pode ser usado para restaurar seus dados se você precisar.</p>"
       },
       "BeforeYouBegin": {
@@ -662,15 +662,15 @@
           },
           "Required": {
             "key": "View_Login_Service_Update_Required",
-            "default": "URL is required"
+            "default": "Uma URL é necessária"
           },
           "InvalidService": {
             "key": "View_Login_Service_Update_InvalidService",
-            "default": "Not a valid xBrowserSync service"
+            "default": "Não é um serviço válido do xBrowserSync"
           },
           "InvalidUrl": {
             "key": "View_Login_Service_Update_InvalidUrl",
-            "default": "Not a valid URL"
+            "default": "Não é uma URL válida"
           },
           "Failed": {
             "key": "View_Login_Service_Update_Failed",
@@ -721,21 +721,21 @@
         "UpgradeReady": {
           "Title": {
             "key": "View_Login_Sync_UpgradeReady_Title",
-            "default": "Ready to upgrade sync?"
+            "default": "Pronto para atualizar a sincronização?"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeReady_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync. After upgrading, you will no longer be able to sync with any previous versions of xBrowserSync.</p><p>Make sure to update xBrowserSync on all synced devices before continuing. Ready to proceed?</p>"
+            "default": "<p>Este ID de sincronização deve ser atualizado para sincronizar com esta versão do xBrowserSync. Após a atualização, você não poderá sincronizar com versões anteriores do xBrowserSync.</p><p>Certifique-se de ter atualizado o xBrowserSync em todos os dispositivos sincronizados antes de continuar. Pronto para prosseguir?</p>"
           }
         },
         "UpgradeRequired": {
           "Title": {
             "key": "View_Login_Sync_UpgradeRequired_Title",
-            "default": "Upgrade sync"
+            "default": "Atualizar a sincronização"
           },
           "Content": {
             "key": "View_Login_Sync_UpgradeRequired_Content",
-            "default": "<p>Your sync must be upgraded before syncing with this version of xBrowserSync.</p><p>Use the xBrowserSync desktop browser extension to upgrade your sync and then retry syncing here.</p>"
+            "default": "<p>Sua sincronização deve ser atualizada antes de ser sincronizada com esta versão do xBrowserSync.</p><p>Use a extensão de navegador xBrowserSync desktop para atualizar sua sincronização e então tente sincronizar novamente aqui.</p>"
           }
         }
       },
@@ -810,11 +810,11 @@
       },
       "Pulling": {
         "key": "View_Search_Pulling",
-        "default": "Pull down to sync"
+        "default": "Puxe para baixo para sincronizar"
       },
       "Pulled": {
         "key": "View_Search_Pulled",
-        "default": "Release to sync"
+        "default": "Solte para sincronizar"
       },
       "SearchResults": {
         "key": "View_Search_SearchResults",
@@ -830,19 +830,19 @@
         "AutoBackup": {
           "Title": {
             "key": "View_Settings_BackupRestore_AutoBackup_Title",
-            "default": "Auto back up"
+            "default": "Fazer backup automático"
           },
           "Description": {
             "key": "View_Settings_BackupRestore_AutoBackup_Description",
-            "default": "Automatically download backups on a schedule."
+            "default": "Agendar download automático de backups."
           },
           "RunsAt": {
             "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
-            "default": "Back up runs at"
+            "default": "Rodar o backup às"
           },
           "Every": {
             "key": "View_Settings_BackupRestore_AutoBackup_Every",
-            "default": "every"
+            "default": "a cada"
           },
           "Numbers": {
             "Single": {
@@ -851,66 +851,66 @@
             },
             "Two": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
-              "default": "two"
+              "default": "dois"
             },
             "Three": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
-              "default": "three"
+              "default": "três"
             },
             "Four": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
-              "default": "four"
+              "default": "quatro"
             },
             "Five": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
-              "default": "five"
+              "default": "cinco"
             },
             "Six": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
-              "default": "six"
+              "default": "seis"
             },
             "Seven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
-              "default": "seven"
+              "default": "sete"
             },
             "Eight": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
-              "default": "eight"
+              "default": "oito"
             },
             "Nine": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
-              "default": "nine"
+              "default": "nove"
             },
             "Ten": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
-              "default": "ten"
+              "default": "dez"
             },
             "Eleven": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
-              "default": "eleven"
+              "default": "onze"
             },
             "Twelve": {
               "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
-              "default": "twelve"
+              "default": "doze"
             }
           },
           "Units": {
             "Day": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
-              "default": "day(s)"
+              "default": "dia(s)"
             },
             "Week": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
-              "default": "week(s)"
+              "default": "semana(s)"
             },
             "Month": {
               "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
-              "default": "month(s)"
+              "default": "mês(es)"
             }
           },
           "Confirmation": {
             "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
-            "default": "To prevent “Save As...” dialog from showing when downloading backups, disable the browser setting “Ask where to save each file before downloading”."
+            "default": "Para evitar que a caixa de diálogo \"Salvar como...\" seja exibida quando baixar os backups, desabilite a configuração do navegador \"Pergunte onde salvar cada arquivo antes de baixar\"."
           }
         },
         "Backup": {
@@ -920,7 +920,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Download Backup"
+            "default": "Baixar o Backup"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -938,7 +938,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Restore From Backup"
+            "default": "Restaurar backup"
           },
           "Local": {
             "Description": {
@@ -963,7 +963,7 @@
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Restore_Done",
-            "default": "Backup has been restored."
+            "default": "O backup foi restaurado."
           },
           "SelectFile": {
             "Button": {
@@ -995,31 +995,31 @@
         "Reset": {
           "Confirm": {
             "key": "View_Settings_BackupRestore_Reset_Confirm",
-            "default": "<p>If you continue, sync will be disabled and your local browser data will be reset to when xBrowserSync was installed on {date}.</p><p>OK to proceed?</p>"
+            "default": "<p>Se você continuar, qualquer sincronização ativa será desativada e seus dados locais serão revertidos para seu estado em no {date}, data em que o xBrowserSync foi instalado.</p><p>Deseja prosseguir?</p>"
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Reset_Button",
-            "default": "Reset Local Data"
+            "default": "Reiniciar dados locais"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Reset_Done",
-            "default": "Local browser data has been reset to initial installation state."
+            "default": "Os dados do navegador local foram redefinidos para o estado inicial da instalação."
           },
           "Unavailable": {
             "key": "View_Settings_BackupRestore_Reset_Unavailable",
-            "default": "Installation state data not available, unable to reset."
+            "default": "Dados de estado de instalação indisponíveis, impossível reverter."
           }
         }
       },
       "Issues": {
         "Title": {
           "key": "View_Settings_Issues_Title",
-          "default": "Help and support"
+          "default": "Ajuda e suporte"
         },
         "Help": {
           "Title": {
             "key": "View_Settings_Issues_Help_Title",
-            "default": "Help guide"
+            "default": "Guia de ajuda"
           },
           "Description": {
             "key": "View_Settings_Issues_Help_Description",
