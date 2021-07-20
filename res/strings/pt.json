@@ -18,7 +18,7 @@
       },
       "Message": {
         "key": "Alert_AppUpdated_Message",
-        "default": "xBrowserSync has been updated. Sync has been disabled, re-enable sync to complete the upgrade process."
+        "default": "O xBrowserSync foi atualizado. A sincronização foi desativada, reative a sincronização para completar o processo de atualização."
       }
     },
     "BookmarkCreated": {
@@ -127,7 +127,7 @@
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": "Download Backup"
+      "default": "Baixar o Backup"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
@@ -135,7 +135,7 @@
     },
     "Help": {
       "key": "Button_Help",
-      "default": "View help guide"
+      "default": "Ver o guia de ajuda"
     },
     "Next": {
       "key": "Button_Next",
@@ -269,7 +269,7 @@
     },
     "LocalSyncError_Message": {
       "key": "Exception_LocalSyncError_Message",
-      "default": "Local browser data has been refreshed, please reapply last change."
+      "default": "Os dados locais foram atualizados. Por favor, reaplique a última alteração."
     },
     "LocalSyncError_Title": {
       "key": "Exception_LocalSyncError_Title",
@@ -345,11 +345,11 @@
     },
     "SyncVersionNotSupported_Message": {
       "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "This ID cannot be synced with this version of xBrowserSync as the sync has been upgraded to a later version."
+      "default": "Esta ID não pode ser sincronizada com a versão atual do xBrowserSync pois a sincronização foi atualizada para uma versão posterior."
     },
     "SyncVersionNotSupported_Restore_Message": {
       "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "The backup data cannot be restored by this version of xBrowserSync as it was created with a later version."
+      "default": "Os dados de backup não podem ser restaurados por esta versão do xBrowserSync pois foram criados com uma versão posterior."
     },
     "SyncVersionNotSupported_Title": {
       "key": "Exception_SyncVersionNotSupported_Title",
