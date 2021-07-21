@@ -45,12 +45,12 @@
     },
     "Go": {
       "key": "Alert_Go",
-      "default": "OK"
+      "default": "Prosseguir"
     },
     "WorkingOffline": {
       "Title": {
         "key": "Alert_WorkingOffline_Title",
-        "default": "Trabalhar offline"
+        "default": "Funcionando offline"
       },
       "Message": {
         "key": "Alert_WorkingOffline_Message",
@@ -61,7 +61,7 @@
   "App": {
     "Description": {
       "key": "App_Description",
-      "default": "Sincronização do navegador como ela deve ser: segura, anônima e gratuita! Sincronize favoritos entre os seus navegadores e dispositivos, sem que seja necessário fazer registro."
+      "default": "Sincronização de navegadores como deve ser: segura, anônima e gratuita! Sincronize favoritos entre os seus navegadores e dispositivos sem precisar fazer registro."
     },
     "Title": {
       "key": "App_Title",
@@ -91,7 +91,7 @@
   "Button": {
     "AddBookmark": {
       "key": "Button_AddBookmark",
-      "default": "Adicionar ao favoritos"
+      "default": "Adicionar aos favoritos"
     },
     "Back": {
       "key": "Button_Back",
