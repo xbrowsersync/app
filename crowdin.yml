@@ -1,3 +1,5 @@
+pull_request_title: New translations
+
 files:
   - source: /res/strings/en.json
     translation: /res/strings/%two_letters_code%.json
