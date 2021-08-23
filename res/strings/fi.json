@@ -61,7 +61,7 @@
   "App": {
     "Description": {
       "key": "App_Description",
-      "default": "Selainsynkronointi oikein: turvallisesti, nimettömästi ja ilmaiseksi! Synkronoi kirjanmerkit selaimillesi ja laitteillesi, ilman rekisteröitymistä."
+      "default": "Selainsynkronointi oikein: turvallisesti, nimettömästi ja ilmaiseksi! Synkronoi kirjanmerkit selainten ja laitteiden välillä, ilman rekisteröitymistä."
     },
     "Title": {
       "key": "App_Title",
@@ -229,7 +229,7 @@
     },
     "FailedShareUrlNotSynced_Title": {
       "key": "Exception_FailedShareUrlNotSynced_Title",
-      "default": "Synkronoinin oltava ajan tasalla kirjanmerkin lisäystä varten"
+      "default": "Synkronoinin on oltava ajan tasalla kirjanmerkin lisäystä varten"
     },
     "FailedShareUrl_Title": {
       "key": "Exception_FailedShareUrl_Title",
@@ -261,7 +261,7 @@
     },
     "LocalContainerNotFound_Message": {
       "key": "Exception_LocalContainerNotFound_Message",
-      "default": "Selaimen profiili saattaa olla vaurioitunut. Uuden profiilin luonti saattaa korjata ongelman."
+      "default": "Selaimen profiili on mahdollisesti vioittunut. Uuden profiilin luonti saattaa korjata ongelman."
     },
     "LocalContainerNotFound_Title": {
       "key": "Exception_LocalContainerNotFound_Title",
@@ -337,7 +337,7 @@
     },
     "SyncRemoved_Message": {
       "key": "Exception_SyncRemoved_Message",
-      "default": "Synkronointia ei ole olemassa ja se on saatettu poistaa käyttämättömänä."
+      "default": "Synkronointia ei ole olemassa. Se on saatettu poistaa käyttämättömänä."
     },
     "SyncRemoved_Title": {
       "key": "Exception_SyncRemoved_Title",
@@ -345,7 +345,7 @@
     },
     "SyncVersionNotSupported_Message": {
       "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "Synkronointitunnuksen synkronointi ei ole mahdollista tällä xBrowserSync-versiolla, koska se on päivitetty uudemmalla versiolla."
+      "default": "Tunnuksen synkronointi ei ole mahdollista tällä xBrowserSync-versiolla, koska se on päivitetty uudempaan versioon."
     },
     "SyncVersionNotSupported_Restore_Message": {
       "key": "Exception_SyncVersionNotSupported_Restore_Message",
