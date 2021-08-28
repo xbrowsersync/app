@@ -241,7 +241,7 @@
     },
     "HttpRequestFailed_Title": {
       "key": "Exception_HttpRequestFailed_Title",
-      "default": "Yhteys palveluun menetetty"
+      "default": "Yhteys palveluun katkesi"
     },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
@@ -382,7 +382,7 @@
     "UpgradeFailed_Message": {
       "key": "Exception_UpgradeFailed_Message",
       "android": "Päivitystä yritetään uudelleen sovelluksen käynnistyessä. Jos ongelma jatkuu, asenna xBrowserSync uudelleen.",
-      "default": "Käynnistä selain uudelleen yrittääksesi päivitystä uudestaan. Jos ongelma jatkuu, asenna xBrowserSync uudelleen."
+      "default": "Yritä päivitystä uudestaan käynnistämällä selain uudelleen. Jos ongelma jatkuu, asenna xBrowserSync uudelleen."
     },
     "UpgradeFailed_Title": {
       "key": "Exception_UpgradeFailed_Title",
@@ -409,7 +409,7 @@
       },
       "Online": {
         "key": "Service_Status_Online",
-        "default": "Toiminnassa"
+        "default": "Yhdistetty"
       }
     }
   },
