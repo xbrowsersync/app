@@ -1,0 +1,1308 @@
+{
+  "Alert": {
+    "AppUpdateAvailable": {
+      "Title": {
+        "key": "Alert_AppUpdateAvailable_Title",
+        "default": "xBrowserSync の更新があります"
+      },
+      "Message": {
+        "key": "Alert_AppUpdateAvailable_Message",
+        "default": "{version} はダウンロード可能です。詳細はクリックしてください。",
+        "android": "xBrowserSync {version} をダウンロードできます。"
+      }
+    },
+    "AppUpdated": {
+      "Title": {
+        "key": "Alert_AppUpdated_Title",
+        "default": "次のバージョンに更新します"
+      },
+      "Message": {
+        "key": "Alert_AppUpdated_Message",
+        "default": "xBrowserSync が更新されました。同期は無効になりました。アップグレードプロセスを完了するには同期を再度有効にしてください。"
+      }
+    },
+    "BookmarkCreated": {
+      "key": "Alert_BookmarkCreated",
+      "default": "ブックマークが作成 されました"
+    },
+    "BookmarkDeleted": {
+      "key": "Alert_BookmarkDeleted",
+      "default": "ブックマークが削除 されました"
+    },
+    "BookmarkUpdated": {
+      "key": "Alert_BookmarkUpdated",
+      "default": "ブックマークが 更新されました"
+    },
+    "GetMetadata": {
+      "Message": {
+        "key": "Alert_GetMetadata_Message",
+        "default": "ブックマークのプロパティを取得しています。 クリックしてキャンセルします。"
+      },
+      "Success": {
+        "key": "Alert_GetMetadata_Success",
+        "default": "ブックマークのプロパティを更新しました。 "
+      }
+    },
+    "Go": {
+      "key": "Alert_Go",
+      "default": "進む！"
+    },
+    "WorkingOffline": {
+      "Title": {
+        "key": "Alert_WorkingOffline_Title",
+        "default": "オフラインで 利用可能にします"
+      },
+      "Message": {
+        "key": "Alert_WorkingOffline_Message",
+        "default": "ネットワークに接続された場合、変更が同期されます。 "
+      }
+    }
+  },
+  "App": {
+    "Description": {
+      "key": "App_Description",
+      "default": "本来あるべきブラウザの同期は「安全かつ匿名で無料」です。 ブラウザやデバイス間でブックマークを同期します。サインアップは必要ありません。 "
+    },
+    "Title": {
+      "key": "App_Title",
+      "default": "xBrowserSync "
+    }
+  },
+  "Bookmarks": {
+    "Container": {
+      "Menu": {
+        "key": "Bookmarks_Container_Menu",
+        "default": "ブックマークのメニュー "
+      },
+      "Mobile": {
+        "key": "Bookmarks_Container_Mobile",
+        "default": "スマートフォンのブックマーク"
+      },
+      "Other": {
+        "key": "Bookmarks_Container_Other",
+        "default": "その他のブックマーク"
+      },
+      "Toolbar": {
+        "key": "Bookmarks_Container_Toolbar",
+        "default": "ツールバーのブックマーク"
+      }
+    }
+  },
+  "Button": {
+    "AddBookmark": {
+      "key": "Button_AddBookmark",
+      "default": "ブックマークを追加"
+    },
+    "Back": {
+      "key": "Button_Back",
+      "default": "戻る"
+    },
+    "Cancel": {
+      "key": "Button_Cancel",
+      "default": "キャンセル"
+    },
+    "Close": {
+      "key": "Button_Close",
+      "default": "閉じる"
+    },
+    "Confirm": {
+      "key": "Button_Confirm",
+      "default": "はい！"
+    },
+    "Continue": {
+      "key": "Button_Continue",
+      "default": "続ける"
+    },
+    "DeleteBookmark": {
+      "key": "Button_DeleteBookmark",
+      "default": "ブックマークを削除"
+    },
+    "Deny": {
+      "key": "Button_Deny",
+      "default": "いいえ"
+    },
+    "Done": {
+      "key": "Button_Done",
+      "default": "完了！"
+    },
+    "DownloadBackup": {
+      "key": "Button_DownloadBackup",
+      "default": "バックアップをダウンロード"
+    },
+    "EditBookmark": {
+      "key": "Button_EditBookmark",
+      "default": "ブックマークを編集"
+    },
+    "Help": {
+      "key": "Button_Help",
+      "default": "ヘルプガイドを見る"
+    },
+    "Next": {
+      "key": "Button_Next",
+      "default": "次へ"
+    },
+    "OK": {
+      "key": "Button_OK",
+      "default": "決定"
+    },
+    "ReleaseNotes": {
+      "key": "Button_ReleaseNotes",
+      "default": "リリースノートを見る"
+    },
+    "Saving": {
+      "key": "Button_Saving",
+      "default": "保存中..."
+    },
+    "Settings": {
+      "key": "Button_Settings",
+      "default": "Syncの設定"
+    },
+    "ShareBookmark": {
+      "key": "Button_ShareBookmark",
+      "default": "ブックマークを共有"
+    },
+    "Undo": {
+      "key": "Button_Undo",
+      "default": "元に戻す"
+    },
+    "Update": {
+      "key": "Button_Update",
+      "default": "アップデート"
+    },
+    "View": {
+      "key": "Button_View",
+      "default": "表示"
+    }
+  },
+  "Exception": {
+    "ContainerChanged_Message": {
+      "key": "Exception_ContainerChanged_Message",
+      "default": "同期が壊れる可能性があるため、[xbs] フォルダの変更はしないでください"
+    },
+    "ContainerChanged_Title": {
+      "key": "Exception_ContainerChanged_Title",
+      "default": "xBrowserSync はフォルダを変更しました"
+    },
+    "DailyNewSyncLimitReached_Message": {
+      "key": "Exception_DailyNewSyncLimitReached_Message",
+      "default": "お使いの同期 ID を利用するか、別のサーバに切り替えるか再試行してください"
+    },
+    "DailyNewSyncLimitReached_Title": {
+      "key": "Exception_DailyNewSyncLimitReached_Title",
+      "default": "今日の同期可能数の上限に達しました。"
+    },
+    "Default_Message": {
+      "key": "Exception_Default_Message",
+      "default": "問題が解決しない場合は、 <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>問題</a> を報告してください。"
+    },
+    "Default_Title": {
+      "key": "Exception_Default_Title",
+      "default": "問題が発生しました"
+    },
+    "FailedDownloadFile_Title": {
+      "key": "Exception_FailedDownloadFile_Title",
+      "default": "バックアップに失敗しました"
+    },
+    "FailedGetDataToRestore_Title": {
+      "key": "Exception_FailedGetDataToRestore_Title",
+      "default": "ファイルの閲覧に失敗しました"
+    },
+    "FailedGetPageMetadata_Message": {
+      "key": "Exception_FailedGetPageMetadata_Message",
+      "default": "URLが無効またはWebページデータを取得できませんでした。"
+    },
+    "FailedGetPageMetadata_Title": {
+      "key": "Exception_FailedGetPageMetadata_Title",
+      "default": "ブックマークのプロパティを取得できませんでした"
+    },
+    "FailedRefreshBookmarks_Title": {
+      "key": "Exception_FailedRefreshBookmarks_Title",
+      "default": "更新情報を取得できませんでした"
+    },
+    "FailedRestoreData_Message": {
+      "key": "Exception_FailedRestoreData_Message",
+      "default": "提供されるバックアップデータは、対応している形式ではありません。 "
+    },
+    "FailedRestoreData_Title": {
+      "key": "Exception_FailedRestoreData_Title",
+      "default": "ファイルを復元することができません。 "
+    },
+    "FailedShareUrlNotSynced_Title": {
+      "key": "Exception_FailedShareUrlNotSynced_Title",
+      "default": "ブックマークを追加するには同期する必要があります"
+    },
+    "FailedShareUrl_Title": {
+      "key": "Exception_FailedShareUrl_Title",
+      "default": "共有ブックマークのURLを取得できません"
+    },
+    "HttpRequestFailed_Message": {
+      "key": "Exception_HttpRequestFailed_Message",
+      "default": "ネットワーク接続を確認し、もう一度お試しください"
+    },
+    "HttpRequestFailed_Title": {
+      "key": "Exception_HttpRequestFailed_Title",
+      "default": "サーバーへの接続が失われました。"
+    },
+    "InvalidCredentials_Message": {
+      "key": "Exception_InvalidCredentials_Message",
+      "default": "同期ID、パスワード、サーバのURLが正しく入力されていることを確認してください。"
+    },
+    "InvalidCredentials_Title": {
+      "key": "Exception_InvalidCredentials_Title",
+      "default": "無効なログイン情報"
+    },
+    "InvalidService_Message": {
+      "key": "Exception_InvalidService_Message",
+      "default": "このサーバのURLは有効なxBrowserSyncサービスではありません。"
+    },
+    "InvalidService_Title": {
+      "key": "Exception_InvalidService_Title",
+      "default": "無効なxBrowserSyncサービス"
+    },
+    "LocalContainerNotFound_Message": {
+      "key": "Exception_LocalContainerNotFound_Message",
+      "default": "ブラウザプロファイルが破損している可能性があります。問題が解決する可能性があるため、新しいプロファイルを作成してみてください。"
+    },
+    "LocalContainerNotFound_Title": {
+      "key": "Exception_LocalContainerNotFound_Title",
+      "default": "ブックマークの構造の読み取りができません"
+    },
+    "LocalSyncError_Message": {
+      "key": "Exception_LocalSyncError_Message",
+      "default": "ローカルブラウザのデータが更新されました。最後の変更を再度適用してください。"
+    },
+    "LocalSyncError_Title": {
+      "key": "Exception_LocalSyncError_Title",
+      "default": "同期エラー"
+    },
+    "MissingClientData_Message": {
+      "key": "Exception_MissingClientData_Message",
+      "default": "保存されたユーザの情報が見つかりません。同期を再度有効にして再度お試し下さい。"
+    },
+    "MissingClientData_Title": {
+      "key": "Exception_MissingClientData_Title",
+      "default": "ユーザの情報が間違っています"
+    },
+    "NoDataToRestore_Message": {
+      "key": "Exception_NoDataToRestore_Message",
+      "default": "復元する前に、現在有効な同期のバックアップしていることを確認してください。"
+    },
+    "NoDataToRestore_Title": {
+      "key": "Exception_NoDataToRestore_Title",
+      "default": "復元するファイルがありません。"
+    },
+    "NotAcceptingNewSyncs_Message": {
+      "key": "Exception_NotAcceptingNewSyncs_Message",
+      "default": "別のサーバに切り替えるか、後でもう一度お試しください。"
+    },
+    "NotAcceptingNewSyncs_Title": {
+      "key": "Exception_NotAcceptingNewSyncs_Title",
+      "default": "サーバが新しい同期を受け付けていません"
+    },
+    "OutOfSync_Message": {
+      "key": "Exception_OutOfSync_Message",
+      "default": "ローカルデータは同期されていないため、更新されました。最後の変更を再度適用してください。"
+    },
+    "OutOfSync_Title": {
+      "key": "Exception_OutOfSync_Title",
+      "default": "同期の競合を検出しました！"
+    },
+    "RequestEntityTooLarge_Message": {
+      "key": "Exception_RequestEntityTooLarge_Message",
+      "default": "ブックマークを削除し、再度やり直すか、同期可能容量の大きいサーバに変更してください"
+    },
+    "RequestEntityTooLarge_Title": {
+      "key": "Exception_RequestEntityTooLarge_Title",
+      "default": "同期可能容量の上限を超えました"
+    },
+    "ScanFailed_Message": {
+      "key": "Exception_ScanFailed_Message",
+      "default": "Syncに権限が付与されているか確認して再試行してください"
+    },
+    "ScanFailed_Title": {
+      "key": "Exception_ScanFailed_Title",
+      "default": "スキャンに失敗しました"
+    },
+    "ServiceOffline_Message": {
+      "key": "Exception_ServiceOffline_Message",
+      "default": "xBrowserSyncサービスは現在オフラインです。後でもう一度お試しください。"
+    },
+    "ServiceOffline_Title": {
+      "key": "Exception_ServiceOffline_Title",
+      "default": "サービスはオフラインです"
+    },
+    "ShareFailed_Title": {
+      "key": "Exception_ShareFailed_Title",
+      "default": "共有に失敗しました"
+    },
+    "SyncRemoved_Message": {
+      "key": "Exception_SyncRemoved_Message",
+      "default": "要求された同期は存在しません。非アクティブのため削除されている可能性があります。"
+    },
+    "SyncRemoved_Title": {
+      "key": "Exception_SyncRemoved_Title",
+      "default": "同期が見つかりません"
+    },
+    "SyncVersionNotSupported_Message": {
+      "key": "Exception_SyncVersionNotSupported_Message",
+      "default": "同期が以降のバージョンにアップグレードされたため、この ID はこの xBrowserSync のバージョンと同期できません。"
+    },
+    "SyncVersionNotSupported_Restore_Message": {
+      "key": "Exception_SyncVersionNotSupported_Restore_Message",
+      "default": "このバージョンの xBrowserSync では、バックアップデータを復元することはできません。"
+    },
+    "SyncVersionNotSupported_Title": {
+      "key": "Exception_SyncVersionNotSupported_Title",
+      "default": "サポートされていない API バージョンです。"
+    },
+    "TooManyRequests_Message": {
+      "key": "Exception_TooManyRequests_Message",
+      "default": "同期が無効になりました。同期を再開するには再度同期を有効にしてください。"
+    },
+    "TooManyRequests_Title": {
+      "key": "Exception_TooManyRequests_Title",
+      "default": "サーバへのリクエストの上限に達しました"
+    },
+    "UncommittedSyncs_Message": {
+      "key": "Exception_UncommittedSyncs_Message",
+      "default": "サービスへの接続が復元されると、同期が保存されます。"
+    },
+    "UncommittedSyncs_Title": {
+      "key": "Exception_UncommittedSyncs_Title",
+      "default": "変更は同期されていません"
+    },
+    "UnsupportedServiceApiVersion_Message": {
+      "key": "Exception_UnsupportedServiceApiVersion_Message",
+      "default": "このサーバはサポートされていないAPIバージョンを実行しています。"
+    },
+    "UnsupportedServiceApiVersion_Title": {
+      "key": "Exception_UnsupportedServiceApiVersion_Title",
+      "default": "このサーバはサポートされていません"
+    },
+    "UpgradeFailed_Message": {
+      "key": "Exception_UpgradeFailed_Message",
+      "android": "アプリの再起動時にアップグレードが再試行されます。問題が解決しない場合は、xBrowserSync を再インストールしてください。",
+      "default": "アップグレードを再試行するためにブラウザを再起動してください。問題が解決しない場合は、xBrowserSync を再インストールしてください。"
+    },
+    "UpgradeFailed_Title": {
+      "key": "Exception_UpgradeFailed_Title",
+      "default": "アップグレードできませんでした"
+    }
+  },
+  "Service": {
+    "Status": {
+      "Error": {
+        "key": "Service_Status_Error",
+        "default": "ネットワークのエラー..."
+      },
+      "Loading": {
+        "key": "Service_Status_Loading",
+        "default": "チェック中..."
+      },
+      "NoNewSyncs": {
+        "key": "Service_Status_NoNewSyncs",
+        "default": "サーバが新しい同期を受け付けていません"
+      },
+      "Offline": {
+        "key": "Service_Status_Offline",
+        "default": "オフライン"
+      },
+      "Online": {
+        "key": "Service_Status_Online",
+        "default": "オンライン"
+      }
+    }
+  },
+  "Tooltip": {
+    "NotSynced": {
+      "key": "Tooltip_NotSynced",
+      "default": "同期していません"
+    },
+    "Synced": {
+      "key": "Tooltip_Synced",
+      "default": "同期済み"
+    },
+    "Syncing": {
+      "key": "Tooltip_Syncing",
+      "default": "同期中..."
+    }
+  },
+  "View": {
+    "Bookmark": {
+      "Add": {
+        "key": "View_Bookmark_Add",
+        "default": "ブックマークを追加"
+      },
+      "Edit": {
+        "key": "View_Bookmark_Edit",
+        "default": "ブックマークを編集"
+      },
+      "Form": {
+        "Title": {
+          "key": "View_Bookmark_Form_Title",
+          "default": "タイトル"
+        },
+        "Url": {
+          "Exists": {
+            "key": "View_Bookmark_Form_Url_Exists",
+            "default": "このURL は既にブックマークされています"
+          },
+          "Invalid": {
+            "key": "View_Bookmark_Form_Url_Invalid",
+            "default": "有効な URL ではありません。"
+          },
+          "Label": {
+            "key": "View_Bookmark_Form_Url_Label",
+            "default": "URL"
+          },
+          "Required": {
+            "key": "View_Bookmark_Form_Url_Required",
+            "default": "URLが必要です。"
+          }
+        },
+        "Description": {
+          "key": "View_Bookmark_Form_Description",
+          "default": "概要"
+        },
+        "Tags": {
+          "Label": {
+            "key": "View_Bookmark_Form_Tags_Label",
+            "default": "タグ"
+          },
+          "Placeholder": {
+            "key": "View_Bookmark_Form_Tags_Placeholder",
+            "default": "タグ 1, タグ 2, タグ 3, その他"
+          },
+          "Clear": {
+            "key": "View_Bookmark_Form_Tags_Clear",
+            "default": "タグをクリア"
+          },
+          "Remove": {
+            "key": "View_Bookmark_Form_Tags_Remove",
+            "default": "タグを削除"
+          }
+        },
+        "Delete": {
+          "key": "View_Bookmark_Form_Delete",
+          "default": "削除"
+        },
+        "Share": {
+          "key": "View_Bookmark_Form_Share",
+          "default": "共有"
+        },
+        "UpdateProperties": {
+          "key": "View_Bookmark_Form_UpdateProperties",
+          "default": "ブックマークのプロパティを更新"
+        }
+      },
+      "InvalidUrlShared": {
+        "key": "View_Bookmark_InvalidUrlShared",
+        "default": "共有された値は有効な URL を含んでいません。"
+      }
+    },
+    "Help": {
+      "AddingBookmarks": {
+        "key": "View_Help_AddingBookmarks",
+        "default": "<h4>ブックマークを追加する</h4><p> 検索パネルのブックマーク アイコンをクリックして、現在のページをブックマークに追加します。ブックマークのプロパティは自動的に入力されますが、より良い検索結果を得るために、説明といくつかのタグを追加してください。</p><p> 別の方法として、通常どおりブラウザの「このページをブックマーク」ボタンをクリックするだけで、xBrowserSync がブックマークのプロパティを自動的に入力します (これを動作させるには、追加の許可が必要です。設定パネルを確認してください)。</p>",
+        "android": "<h4>ブックマークの追加</h4><p>ブラウザ、YouTube、Spotifyなど、URLを共有するすべてのアプリからxBrowserSyncに共有することで、簡単にブックマークを追加できます。</p><p>ブックマークのプロパティはあなたのために取得されますが、より良い検索結果を得るために、説明といくつかのタグを追加してください。</p>"
+      },
+      "BackingUp": {
+        "key": "View_Help_BackingUp",
+        "default": "<h4>バックアップすることを忘れないでください</h4> <p> xBrowserSyncを使用する場合、データはあなたの責任ですので、賢く、必ずバックアップを取ってください。</p> <p>設定パネルに移動して、バックアップしてください。 暗号化されていないデータをローカルファイルに保存します。必要に応じてデータを復元できます。</p> <p>ローカルブラウザのデータが破損し、バックアップがない場合は、いつでもデータをリセットできます。 xBrowserSyncは初期状態に戻ります。</p>",
+        "android": "<h4>バックアップすることを忘れないでください</h4> <p> xBrowserSyncを使用する場合、データ管理はあなたの義務ですので、必ずバックアップを取ってください。</p> <p>設定パネルに移動して、バックアップしてください。 暗号化されていないデータをローカルファイルに保存します。このファイルを使用して、必要に応じてデータを復元できます。</p>"
+      },
+      "BeforeYouBegin": {
+        "key": "View_Help_BeforeYouBegin",
+        "default": "<h4>始める前に</h4> <p> xBrowserSyncはローカルブラウザデータを変更するため、万が一の場合や、他のブラウザ同期サービスやツールを使用している場合は、ブックマークや他のブラウザデータをバックアップすることをお勧めします（ <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'> Google Chromeの同期</a>など）競合を避けるために無効にしてください。</p>",
+        "brave": "<h4>始める前に</h4> <p> xBrowserSyncはローカルブラウザデータを変更するため、万が一の場合や、他のブラウザ同期サービスやツールを使用している場合は、ブックマークや他のブラウザデータをバックアップすることをお勧めします（ <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'> Braveの同期</a>など）競合を避けるために無効にしてください。</p>",
+        "edge": "<h4>始める前に</h4> <p> xBrowserSyncはローカルブラウザデータを変更するため、万が一の場合や、他のブラウザ同期サービスやツールを使用している場合は、ブックマークや他のブラウザデータをバックアップすることをお勧めします（ <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'> Edgeの同期</a>など）競合を避けるために無効にしてください。</p>",
+        "firefox": "<h4>始める前に</h4> <p> xBrowserSyncはローカルブラウザデータを変更するため、万が一の場合や、他のブラウザ同期サービスやツールを使用している場合は、ブックマークや他のブラウザデータをバックアップすることをお勧めします（ <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'> Firefoxの同期</a>など）競合を避けるために無効にしてください。</p>"
+      },
+      "ExistingId": {
+        "key": "View_Help_ExistingId",
+        "default": "<h4>既存のIDで同期する</h4><p>「すでに同期IDをお持ちの方はこちら」をクリックして、既存の同期IDとパスワードを入力します。</p><p>xBrowserSyncは、ローカルに保存されたパスワードを使用して暗号化されたデータを取得して復号化し、復号化されたデータから再入力する前にローカルブックマークを消去します。</p><p>同期されると、xBrowserSyncは15分ごとにバックグラウンドで同期データの更新をチェックし、必要に応じてローカルブックマークを自動的に更新します。また、同期されたデータの利用可能な更新を設定パネルで手動で同期することもできます</p>。",
+        "android": "<h4>既存のIDで同期する</h4><p>まず、xBrowserSyncデスクトップ・ブラウザ拡張機能の設定パネルにある同期IDのQRコードをスキャンします（同期IDをクリックすると表示されます）。</p><p>また、別のxBrowserSyncサービスに同期している場合は、それが設定パネルで設定されたアクティブなサービスであることを確認してください。</p>"
+      },
+      "FirstSync": {
+        "key": "View_Help_FirstSync",
+        "default": "<h4>Syncing for first time</h4><p>xBrowserSync がブラウザ データを同期する前に、暗号化パスワードを提供する必要があります。リセットやリマインダーはありませんので、忘れてしまうと同期されたデータにアクセスできなくなります。</p><p>あなたのブラウザ データはパスワードで暗号化され、設定パネルで設定されたアクティブな xBrowserSync サービスに保存されます。</p><p>同期されると、ローカルのブックマークに加えた変更は、xBrowserSyncによって自動的に同期されます。</p>",
+        "android": "<h4>同期する前に</h4></p><p>xBrowserSync は、デスクトップ ブラウザ間でブラウザ データを積極的に同期します (モバイル ブラウザへの同期は現時点ではサポートされていません)。</p><p>まだ同期 ID を作成していない場合は、デスクトップ ブラウザで <a href='https://link.xbrowsersync.org/download' class='new-tab'>ダウンロード</a>してください。シンクを作成したら、このアプリで新しいシンクIDを使ってデータにアクセスできます</p>。"
+      },
+      "FurtherSupport": {
+        "key": "View_Help_FurtherSupport",
+        "default": "<h4>その他のサポート</h4><p> <a href='https://link.xbrowsersync.org/faqs' class='new-tab'>FAQ</a>では、最も一般的な質問に対する答えを見つけることができます。また、現在の<a href='https://link.xbrowsersync.org/known-issues' class='new-tab'>known issues</a>をチェックして、あなたの問題がそこに記載されているかどうかを確認してください。</p><p>あるいは、<a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>issue tracker</a>を使用して、問題を報告したり、新しい機能を要求したりしてください。</p>"
+      },
+      "Mobile": {
+        "key": "View_Help_Mobile",
+        "default": "<h4>モバイル化</h4> <p> xBrowserSync Androidアプリを使用して、移動中に同期されたブックマークにアクセスします。このアプリは、<a href = 'https：//link.xbrowsersync.org/download-android' class = 'newで入手できます。 -tab '> Google Play </a>ストア、<a href='https://link.xbrowsersync.org/fdroid' class='new-tab'> F-Droid </a>または<a href='https://link.xbrowsersync.org/app-releases-latest' class='new-tab'>直接ダウンロード</a></p>"
+      },
+      "NativeFeatures": {
+        "key": "View_Help_NativeFeatures",
+        "default": "<h4>サポートされているネイティブ機能</h4> <p>ブックマークバーやブックマークマネージャーなど、ブラウザのネイティブブックマーク機能を引き続き使用してください。行った変更はすべてバックグラウンドで自動的に同期されます。</p> <p>既存のブックマークをフォルダに整理している場合でも心配はいりません。xBrowserSyncは既存のブックマーク階層を尊重して維持します。</p>",
+        "firefox": "<h4>サポートされているネイティブ機能</h4> <p>ブックマークツールバーやブックマークライブラリなど、ブラウザのネイティブブックマーク機能を引き続き使用してください。行った変更はすべてバックグラウンドで自動的に同期されます。</p> <p>既存のブックマークをフォルダに整理している場合でも心配はいりません。xBrowserSyncは既存のブックマーク階層を尊重して維持します。</p> <p>ただし、FirefoxのブックマークAPIはネイティブブックマークタグへのアクセスをまだサポートしていないため、 同期時に既存のタグは失われ、xBrowserSyncを介して追加されたタグはネイティブタグとして保存されません。</p>"
+      },
+      "Previous": {
+        "key": "View_Help_Previous",
+        "default": "戻る"
+      },
+      "Searching": {
+        "key": "View_Help_Searching",
+        "default": "<h4>ブックマークの検索</h4> <p>同期したら、Enterキーを押して最近のブックマークを表示するか、キーワードまたはURLを入力してブックマークを検索します。</p> <p>検索結果とブックマークフォルダを切り替えます。 階層全体を参照します。</p> <p>ブックマークを編集または削除するには、ブックマークにカーソルを合わせ、ブックマークのタイトルの横に表示されている編集アイコンをクリックします。</p>",
+        "android": "<h4>ブックマークの検索</h4> <p>同期すると、xBrowserSyncを開いたときにブックマークが時系列で表示されます。 検索ボックスにキーワードまたはURLを入力して、ブックマークを検索します。</p> <p>検索結果とブックマークフォルダを切り替えて、階層全体を参照します。</p> <p>ブックマークを長押しすると、ブックマークを長押しできます。 ブックマークを直接共有、変更、または削除します。</p>"
+      },
+      "Service": {
+        "key": "View_Help_Service",
+        "default": "<h4>別のサービスとの同期</h4> <p>デフォルトでは、データは<a href='https://link.xbrowsersync.org/api'class='new-tab'>公式xBrowserSyncサービスに同期されます </a>ただし、データを別のxBrowserSyncサービスに同期する場合は、同期する前にアクティブなサービスを切り替えることができます。</p> <p>利用可能な<a href='https://link.xbrowsersync.org/service-list' class='new-tab'> public xBrowserSync services </a>または<a href='https://link.xbrowsersync.org/api-repo' class='new-tab'>独自のサービスを実行</a>して、究極のセキュリティとプライバシーのためにプライベートで使用するか、より多くの人がxBrowserSyncを楽しめるようにパブリックで使用します。</p> <p> <strong>重要：</strong> xBrowserSync サービスはボランティアによって独立して運営されています。 サービス管理者はデータに対して責任を負わないため、定期的にバックアップすることを忘れないでください。</p>"
+      },
+      "Shortcuts": {
+        "key": "View_Help_Shortcuts",
+        "default": "<h4>ショートカットを使用してください！</h4> <p>ブックマークをすばやく検索するには、デフォルトのキーボードショートカット（Ctrl + Space）を使用して拡張機能をアクティブにし、Enterキーを押して最近のブックマークを表示するか、入力を開始して検索します。</p> <p>ショートカットを変更するには、chrome://extensions/shortcutsにアクセスし、xBrowserSyncで使用可能なショートカットを更新します。</p>",
+        "brave": "<h4>ショートカットを使用してください！</h4> <p>ブックマークをすばやく検索するには、デフォルトのキーボードショートカット（Ctrl + Space）を使用して拡張機能をアクティブにし、Enterキーを押して最近のブックマークを表示するか、入力を開始して検索します。</p> <p>ショートカットを変更するには、brave://extensions/shortcutsにアクセスし、xBrowserSyncで使用可能なショートカットを更新します。</p>",
+        "edge": "<h4>ショートカットを使用してください！</h4> <p>ブックマークをすばやく検索するには、デフォルトのキーボードショートカット（Ctrl + Space）を使用して拡張機能をアクティブにし、Enterキーを押して最近のブックマークを表示するか、入力を開始して検索します。</p> <p>ショートカットを変更するには、edge://extensions/shortcutsにアクセスし、xBrowserSyncで使用可能なショートカットを更新します。</p>",
+        "firefox": "<h4>ショートカットを使用!</h4><p>ブックマークをすばやく検索するには、デフォルトのキーボードショートカット(Ctrl + Space)を使用して拡張機能を有効にし、Enterキーを押して最近のブックマークを表示するか、検索を開始します。</p><p>ショートカットを変更するには、about:addonsを参照し、[設定]メニューの[拡張ショートカットの管理]をクリックし、xBrowserSyncの下で利用可能なショートカットを更新します。</p>"
+      },
+      "SyncId": {
+        "key": "View_Help_SyncId",
+        "default": "<h4>同期ID </h4> <p> xBrowserSyncは、個人データが収集されることはなく、同期される前にブラウザデータが暗号化されるため、プライバシーを保護します。 同期されたデータを識別するために、パスワードと一緒に使用して他のブラウザやデバイスでデータを同期できる匿名の同期IDが提供されます。</p> <p>同期IDはxBrowserSyncサービスでのみ機能することに注意してください。 それが作成された場所で、別のxBrowserSyncサービスに切り替える場合は、新しい同期を作成するか、以前にそのサービスに同期したときに作成した既存の同期IDを使用する必要があります。</p> <p>同期するたびに、同期を表示できます [設定] パネルのIDをクリックしてクリックすると、モバイルデバイスで同期するときにスキャンする便利なQRコードが表示されます。</p>"
+      },
+      "Welcome": {
+        "key": "View_Help_Welcome",
+        "default": "<h4> xBrowserSyncへようこそ！</h4> <p> xBrowserSyncは、Google、Mozilla、Operaなどが提供するブラウザ同期サービスに代わる無料のオープンソースの代替手段であり、プライバシーを尊重し、完全な匿名性を提供します（ 詳細については、<a href='https://link.xbrowsersync.org/www' class='new-tab'>ウェブサイト</a>をご覧ください。</p> <p>このヘルプをお読みください。 以下のページングリンクまたは矢印キーを使用してページ間を移動し、xBrowserSyncに慣れるためのガイド。</p> <p>注意：xBrowserSyncは現在、ブックマークのみを同期します。 追加のブラウザデータの同期は将来のバージョンで追加される予定です。開発中の <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>ロードマップ</a>をチェックして、計画内容を確認してください。</p>",
+        "android": "<h4> xBrowserSyncへようこそ！</h4> <p> xBrowserSyncは、Google、Mozilla、Operaなどが提供するブラウザ同期サービスに代わる無料のオープンソースの代替手段であり、プライバシーを尊重し、完全な匿名性を提供します（ 詳細については、<a href='https://link.xbrowsersync.org/www' class='new-tab'>ウェブサイト</a>をご覧ください。</p> <p>このヘルプをお読みください。 以下のページングリンクまたは矢印キーを使用してページ間を移動し、xBrowserSyncに慣れるためのガイド。</p> <p>注意：xBrowserSyncは現在、ブックマークのみを同期します。 追加のブラウザデータの同期は将来のバージョンで追加される予定です。開発中の <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>ロードマップ</a>をチェックして、計画内容を確認してください。</p>"
+      }
+    },
+    "Login": {
+      "GetSyncId": {
+        "Title": {
+          "key": "View_Login_GetSyncId_Title",
+          "default": "同期IDが必要ですか？"
+        },
+        "Content": {
+          "key": "View_Login_GetSyncId_Content",
+          "default": "xBrowserSyncデスクトップブラウザ拡張機能をダウンロードし、ここでブックマークにアクセスするための新しい同期を作成します。"
+        }
+      },
+      "Password": {
+        "Confirm": {
+          "key": "View_Login_Password_Confirm",
+          "default": "パスワードをもう一度入力"
+        },
+        "Existing": {
+          "key": "View_Login_Password_Existing",
+          "default": "暗号化パスワードを入力"
+        },
+        "Label": {
+          "key": "View_Login_Password_Label",
+          "default": "暗号化パスワード"
+        },
+        "New": {
+          "key": "View_Login_Password_New",
+          "default": "暗号化パスワードを入力"
+        },
+        "Show": {
+          "key": "View_Login_Password_Show",
+          "default": "パスワードを表示"
+        }
+      },
+      "Scan": {
+        "Title": {
+          "key": "View_Login_Scan_Title",
+          "default": "同期に接続します"
+        },
+        "Content": {
+          "key": "View_Login_Scan_Content",
+          "default": "デスクトップブラウザでxBrowserSyncを開き、[設定] パネルに移動し、同期IDをクリックして、ここでスキャンできるQRコードを表示します。"
+        },
+        "ScanCode": {
+          "key": "View_Login_Scan_ScanCode",
+          "default": "QRコードをスキャン"
+        },
+        "ManualEntry": {
+          "key": "View_Login_Scan_ManualEntry",
+          "default": "手動で情報を入力する"
+        }
+      },
+      "Service": {
+        "ApiVersion": {
+          "key": "View_Login_Service_ApiVersion",
+          "default": "APIのバージョン"
+        },
+        "Confirm": {
+          "key": "View_Login_Service_Confirm",
+          "default": "このサーバに同期しますか？"
+        },
+        "Location": {
+          "key": "View_Login_Service_Location",
+          "default": "同期先の場所"
+        },
+        "MaxSyncSize": {
+          "key": "View_Login_Service_MaxSyncSize",
+          "default": "最大の同期可能容量"
+        },
+        "Selected": {
+          "key": "View_Login_Service_Selected",
+          "default": "同期先"
+        },
+        "Status": {
+          "key": "View_Login_Service_Status",
+          "default": "サーバの状態"
+        },
+        "Update": {
+          "Label": {
+            "key": "View_Login_Service_Update_Label",
+            "default": "xBrowserSyncの同期先のサーバのURL"
+          },
+          "Description": {
+            "key": "View_Login_Service_Update_Description",
+            "default": "代替の xBrowserSync サーバの URL を入力します。xBrowserSync サービスの <a href='https://link.xbrowsersync.org/service-list' class='new-tab'>リスト</a> を参照します。"
+          },
+          "Button": {
+            "key": "View_Login_Service_Update_Button",
+            "default": "サービスを切り替える"
+          },
+          "Required": {
+            "key": "View_Login_Service_Update_Required",
+            "default": "URLが必要です。"
+          },
+          "InvalidService": {
+            "key": "View_Login_Service_Update_InvalidService",
+            "default": "有効な xBrowserSync サービスではありません"
+          },
+          "InvalidUrl": {
+            "key": "View_Login_Service_Update_InvalidUrl",
+            "default": "有効な URL ではありません。"
+          },
+          "Failed": {
+            "key": "View_Login_Service_Update_Failed",
+            "default": "サーバーに接続できませんでした。"
+          },
+          "NotSupported": {
+            "key": "View_Login_Service_Update_Failed_NotSupported",
+            "default": "このサーバはサポートされていないAPIバージョンを実行しています。"
+          }
+        },
+        "Warning": {
+          "key": "View_Login_Service_Warning",
+          "default": "<strong>重要:</strong> xBrowserSync サービスはボランティアによって独立して実行されます。サービス管理者はあなたのデータに対して一切責任を負いませんので、定期的にバックアップすることを忘れないでください。"
+        }
+      },
+      "Sync": {
+        "Confirm": {
+          "Title": {
+            "key": "View_Login_Sync_Confirm_Title",
+            "default": "本当によろしいですか？"
+          },
+          "Content": {
+            "key": "View_Login_Sync_Confirm_Content",
+            "default": "xBrowserSync は同期ブックマークを復元する前にすべての現在のブラウザのブックマークを削除します。続行しますか？"
+          }
+        },
+        "DisableOthers": {
+          "Title": {
+            "key": "View_Login_Sync_DisableOthers_Title",
+            "default": "ブックマーク同期ツールを無効にします"
+          },
+          "Content": {
+            "key": "View_Login_Sync_DisableOthers_Content",
+            "default": "他のブックマーク同期ツール ( <a href='https://link.xbrowsersync.org/chrome-sync' class='new-tab'>Google Chrome Sync</a>など) がアクティブな間、ブラウザーデータを xBrowserSync と同期すると、重複やデータが破損する可能性があります。 続行する前にChrome Syncを無効にしてください。",
+            "brave": "他のブックマーク同期ツール ( <a href='https://link.xbrowsersync.org/brave-sync' class='new-tab'>Brave Sync</a>など) がアクティブな間、ブラウザーデータを xBrowserSync と同期すると、重複やデータが破損する可能性があります。 続行する前にBrave Syncを無効にしてください。",
+            "edge": "他のブックマーク同期ツール ( <a href='https://link.xbrowsersync.org/edge-sync' class='new-tab'>Edgeの同期機能</a>など) がアクティブな間、ブラウザーデータを xBrowserSync と同期すると、重複やデータが破損する可能性があります。 続行する前にEdgeの同期を無効にしてください。",
+            "firefox": "他のブックマーク同期ツール ( <a href='https://link.xbrowsersync.org/firefox-sync' class='new-tab'>Firefoxの同期</a>など) がアクティブな間、ブラウザーデータを xBrowserSync と同期すると、重複やデータが破損する可能性があります。 続行する前にFirefoxの同期を無効にしてください。"
+          }
+        },
+        "Enable": {
+          "key": "View_Login_Sync_Enable",
+          "default": "同期"
+        },
+        "New": {
+          "key": "View_Login_Sync_New",
+          "default": "新しい同期の作成"
+        },
+        "UpgradeReady": {
+          "Title": {
+            "key": "View_Login_Sync_UpgradeReady_Title",
+            "default": "同期をアップグレードする準備はできましたか？"
+          },
+          "Content": {
+            "key": "View_Login_Sync_UpgradeReady_Content",
+            "default": "<p>このバージョンの xBrowserSync と同期する前に、同期をアップグレードする必要があります。 アップグレード後、xBrowserSync の以前のバージョンと同期することができなくなります。</p><p>続行する前にすべての同期デバイスで xBrowserSync を更新してください。続行する準備ができましたか？</p>"
+          }
+        },
+        "UpgradeRequired": {
+          "Title": {
+            "key": "View_Login_Sync_UpgradeRequired_Title",
+            "default": "同期をアップグレード"
+          },
+          "Content": {
+            "key": "View_Login_Sync_UpgradeRequired_Content",
+            "default": "<p>このバージョンの xBrowserSync と同期する前に、同期をアップグレードする必要があります。 </p><p>xBrowserSync デスクトップブラウザ拡張機能を使用して同期をアップグレードし、ここで同期を再試行してください。</p>"
+          }
+        }
+      },
+      "SyncId": {
+        "Description": {
+          "key": "View_Login_SyncId_Description",
+          "default": "ご利用中の同期ID"
+        },
+        "Existing": {
+          "key": "View_Login_SyncId_Existing",
+          "default": "すでに同期IDを持っていますか？"
+        },
+        "Invalid": {
+          "key": "View_Login_SyncId_Invalid",
+          "default": "有効な同期IDではありません"
+        },
+        "Label": {
+          "key": "View_Login_SyncId_Label",
+          "default": "ID"
+        },
+        "New": {
+          "key": "View_Login_SyncId_New",
+          "default": "同期IDを取得"
+        }
+      }
+    },
+    "Permissions": {
+      "Title": {
+        "key": "View_Permissions_Title",
+        "default": "オプションの権限"
+      },
+      "Content": {
+        "key": "View_Permissions_Content",
+        "default": "<p>xBrowserSyncは、ブラウザの「ブックマークの追加」ボタンで追加されたブックマークに、利用可能なメタデータを自動的に付与します。この機能を有効にするために、xBrowserSyncは<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>訪問したウェブサイトのデータを読み取れるようにするための追加の権限</a>を必要とします。</p><p>これらの権限を許可するかどうか、プロンプトが表示されたら指示してください。</p>"
+      }
+    },
+    "Scan": {
+      "Title": {
+        "key": "View_Scan_Title",
+        "default": "利用中の同期IDのQRコードをスキャンする"
+      },
+      "ToggleLight": {
+        "key": "View_Scan_ToggleLight",
+        "default": "トグルライト"
+      }
+    },
+    "Search": {
+      "BookmarkTree": {
+        "key": "View_Search_BookmarkTree",
+        "default": "ブックマークフォルダを表示"
+      },
+      "Clear": {
+        "key": "View_Search_Clear",
+        "default": "クリア"
+      },
+      "FolderEmpty": {
+        "key": "View_Search_FolderEmpty",
+        "default": "フォルダが空です"
+      },
+      "NoBookmarks": {
+        "key": "View_Search_NoBookmarks",
+        "default": "ブックマークがありません。追加しましょう！"
+      },
+      "NoResults": {
+        "key": "View_Search_NoResults",
+        "default": "ブックマークが追加されていません"
+      },
+      "Placeholder": {
+        "key": "View_Search_Placeholder",
+        "default": "ブックマークを検索",
+        "android": "ブックマークを探す"
+      },
+      "Pulling": {
+        "key": "View_Search_Pulling",
+        "default": "同期を引き下げる"
+      },
+      "Pulled": {
+        "key": "View_Search_Pulled",
+        "default": "リリースで同期します"
+      },
+      "SearchResults": {
+        "key": "View_Search_SearchResults",
+        "default": "検索結果を表示"
+      }
+    },
+    "Settings": {
+      "BackupRestore": {
+        "Title": {
+          "key": "View_Settings_BackupRestore_Title",
+          "default": "バックアップと復元"
+        },
+        "AutoBackup": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Title",
+            "default": "自動バックアップ"
+          },
+          "Description": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Description",
+            "default": "自動的にバックアップをダウンロードします。"
+          },
+          "RunsAt": {
+            "key": "View_Settings_BackupRestore_AutoBackup_RunsAt",
+            "default": "バックアップ日時"
+          },
+          "Every": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Every",
+            "default": "日時または時刻の指定"
+          },
+          "Numbers": {
+            "Single": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Single",
+              "default": "１"
+            },
+            "Two": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Two",
+              "default": "2"
+            },
+            "Three": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Three",
+              "default": "3"
+            },
+            "Four": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Four",
+              "default": "4"
+            },
+            "Five": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Five",
+              "default": "5"
+            },
+            "Six": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Six",
+              "default": "6"
+            },
+            "Seven": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Seven",
+              "default": "7"
+            },
+            "Eight": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eight",
+              "default": "8"
+            },
+            "Nine": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Nine",
+              "default": "9"
+            },
+            "Ten": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Ten",
+              "default": "10"
+            },
+            "Eleven": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Eleven",
+              "default": "11"
+            },
+            "Twelve": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Numbers_Twelve",
+              "default": "12"
+            }
+          },
+          "Units": {
+            "Day": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Day",
+              "default": "日ごと"
+            },
+            "Week": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Week",
+              "default": "週ごと"
+            },
+            "Month": {
+              "key": "View_Settings_BackupRestore_AutoBackup_Units_Month",
+              "default": "月ごと"
+            }
+          },
+          "Confirmation": {
+            "key": "View_Settings_BackupRestore_AutoBackup_Confirmation",
+            "default": "バックアップのダウンロード時に「名前を付けて保存...」ダイアログが表示されないようにするには、ブラウザの設定「ダウンロードする前に各ファイルをどこに保存するか確認」を無効にしてください。"
+          }
+        },
+        "Backup": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_Backup_Title",
+            "default": "バックアップの設定 "
+          },
+          "Button": {
+            "key": "View_Settings_BackupRestore_Backup_Button",
+            "default": "バックアップをダウンロード "
+          },
+          "Local": {
+            "key": "View_Settings_BackupRestore_Backup_Local",
+            "default": "ローカルブラウザのデータをお使いのデバイスにバックアップします。"
+          },
+          "Synced": {
+            "key": "View_Settings_BackupRestore_Backup_Synced",
+            "default": "同期されたデータをお使いのデバイスにバックアップします。"
+          }
+        },
+        "Restore": {
+          "Title": {
+            "key": "View_Settings_BackupRestore_Restore_Title",
+            "default": "復元"
+          },
+          "Button": {
+            "key": "View_Settings_BackupRestore_Restore_Button",
+            "default": "バックアップから復元"
+          },
+          "Local": {
+            "Description": {
+              "key": "View_Settings_BackupRestore_Restore_Local_Description",
+              "default": "バックアップからローカルブラウザデータを復元します。"
+            },
+            "Confirm": {
+              "key": "View_Settings_BackupRestore_Restore_Local_Confirm",
+              "default": "<p>同期が現在無効になっているため、復元中のデータはローカルブラウザデータを上書きします。</p><p>よろしいですか？</p>"
+            }
+          },
+          "Synced": {
+            "Description": {
+              "key": "View_Settings_BackupRestore_Restore_Synced_Description",
+              "default": "バックアップからローカルブラウザデータを復元します。"
+            },
+            "Confirm": {
+              "key": "View_Settings_BackupRestore_Restore_Synced_Confirm",
+              "default": "<p>現在同期が有効になっているため、復元中のデータは同期データを上書きします。 </p><p>ローカルブラウザのみにデータを復元するには、復元する前に同期を無効にしてください。</p><p>続行してよろしいですか？</p>",
+              "android": "<p>復元中のデータは同期されたデータを上書きします。</p><p>続行してよろしいですか？</p>"
+            }
+          },
+          "Done": {
+            "key": "View_Settings_BackupRestore_Restore_Done",
+            "default": "バックアップが復元されました。"
+          },
+          "SelectFile": {
+            "Button": {
+              "key": "View_Settings_BackupRestore_Restore_SelectFile_Button",
+              "default": "ファイルを選択"
+            },
+            "Placeholder": {
+              "key": "View_Settings_BackupRestore_Restore_SelectFile_Placeholder",
+              "default": "復元するバックアップ ファイルを選択します。"
+            }
+          },
+          "Copy": {
+            "key": "View_Settings_BackupRestore_Restore_Copy",
+            "default": "バックアップファイルの内容をコピーしてデータを復元します。"
+          },
+          "Paste": {
+            "key": "View_Settings_BackupRestore_Restore_Paste",
+            "default": "バックアップデータを復元"
+          },
+          "RestoreData": {
+            "key": "View_Settings_BackupRestore_Restore_RestoreData",
+            "default": "データを復元する"
+          },
+          "Invalid": {
+            "key": "View_Settings_BackupRestore_Restore_Invalid",
+            "default": "xBrowserSync のバックアップデータが無効です"
+          }
+        },
+        "Reset": {
+          "Confirm": {
+            "key": "View_Settings_BackupRestore_Reset_Confirm",
+            "default": "<p>続行すると、同期が無効になり、ローカルブラウザのデータが{date}にxBrowserSyncがインストールされたときにリセットされます。</p> <p>続行しますか？</p>"
+          },
+          "Button": {
+            "key": "View_Settings_BackupRestore_Reset_Button",
+            "default": "同期データをリセット！"
+          },
+          "Done": {
+            "key": "View_Settings_BackupRestore_Reset_Done",
+            "default": "ローカルブラウザのデータが初期インストール状態にリセットされました。"
+          },
+          "Unavailable": {
+            "key": "View_Settings_BackupRestore_Reset_Unavailable",
+            "default": "初期状態のデータが利用できません。リセットできません。"
+          }
+        }
+      },
+      "Issues": {
+        "Title": {
+          "key": "View_Settings_Issues_Title",
+          "default": "ヘルプとサポート"
+        },
+        "Help": {
+          "Title": {
+            "key": "View_Settings_Issues_Help_Title",
+            "default": "ヘルプガイド"
+          },
+          "Description": {
+            "key": "View_Settings_Issues_Help_Description",
+            "default": "質問がありますか？または、問題がありますか? ヘルプガイドを読んでください。そうでなければ、答えはFAQにあります。"
+          },
+          "ViewFaqs": {
+            "key": "View_Settings_Issues_Help_ViewFaqs",
+            "default": "FAQを確認"
+          }
+        },
+        "Tracker": {
+          "Title": {
+            "key": "View_Settings_Issues_Tracker_Title",
+            "default": "サポート"
+          },
+          "Description": {
+            "key": "View_Settings_Issues_Tracker_Description",
+            "default": "サポートが必要ですか？課題トラッカーを使用してバグを報告するか、機能をリクエストしてください。"
+          },
+          "Report": {
+            "key": "View_Settings_Issues_Tracker_Report",
+            "default": "プロセストラッカーを表示"
+          }
+        },
+        "Log": {
+          "Title": {
+            "key": "View_Settings_Issues_Log_Title",
+            "default": "アプリのログ"
+          },
+          "Description": {
+            "key": "View_Settings_Issues_Log_Description",
+            "default": "問題をログに記録するときに、アプリケーションログをダウンロードして含めます。"
+          },
+          "Clear": {
+            "key": "View_Settings_Issues_Log_Clear",
+            "default": "ログをクリア"
+          },
+          "Download": {
+            "key": "View_Settings_Issues_Log_Download",
+            "default": "ログをダウンロード"
+          },
+          "Size": {
+            "key": "View_Settings_Issues_Log_Size",
+            "default": "現在のフォントサイズ"
+          }
+        }
+      },
+      "Permissions": {
+        "Title": {
+          "key": "View_Settings_Permissions_Title",
+          "default": "追加の権限"
+        },
+        "Add": {
+          "key": "View_Settings_Permissions_Add",
+          "default": "アクセス許可を付与"
+        },
+        "Granted": {
+          "key": "View_Settings_Permissions_Granted",
+          "default": "許可"
+        },
+        "NotGranted": {
+          "key": "View_Settings_Permissions_NotGranted",
+          "default": "許可しない"
+        },
+        "Read": {
+          "Title": {
+            "key": "View_Settings_Permissions_Read_Title",
+            "default": "ウェブサイトデータの読み取り"
+          },
+          "Description": {
+            "key": "View_Settings_Permissions_Read_Description",
+            "default": "ブラウザーの「このページをブックマーク」ボタンを使用する場合、自動的にブックマークにメタデータを追加するために必要です (<a href='https://link.xbrowsersync.org/optional-perms-faq' class='new-tab'>詳細情報</a>)。"
+          }
+        },
+        "Remove": {
+          "key": "View_Settings_Permissions_Remove",
+          "default": "権限の削除"
+        }
+      },
+      "Prefs": {
+        "AutoFetchMetadata": {
+          "Label": {
+            "key": "View_Settings_Prefs_AutoFetchMetadata_Label",
+            "default": "ブックマークメタデータの自動取得"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_AutoFetchMetadata_Description",
+            "default": "ブックマークを追加するときに自動的にメタデータを取得します。"
+          }
+        },
+        "CheckForAppUpdates": {
+          "Label": {
+            "key": "View_Settings_Prefs_CheckForAppUpdates_Label",
+            "default": "アップデートの確認"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_CheckForAppUpdates_Description",
+            "default": "xBrowserSync の新しいバージョンが利用可能になったときに通知されます。"
+          }
+        },
+        "DarkMode": {
+          "Label": {
+            "key": "View_Settings_Prefs_DarkMode_Label",
+            "default": "ダークモードを有効にする"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_DarkMode_Description",
+            "default": "暗い場所での使用に最適です。"
+          }
+        },
+        "DefaultToFolderView": {
+          "Label": {
+            "key": "View_Settings_Prefs_DefaultToFolderView_Label",
+            "default": "ブックマークフォルダを表示"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_DefaultToFolderView_Description",
+            "default": "既定でブックマークフォルダを表示します。"
+          }
+        },
+        "SearchBar": {
+          "Label": {
+            "key": "View_Settings_Prefs_SearchBar_Label",
+            "default": "検索バーの位置を変更"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_SearchBar_Description",
+            "default": "結果の下に検索バーを表示します。"
+          }
+        },
+        "SyncToolbar": {
+          "Label": {
+            "key": "View_Settings_Prefs_SyncToolbar_Label",
+            "default": "ブックマークツールバーを同期"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_SyncToolbar_Description",
+            "default": "この設定を無効にすると、同期ブラウザ間で異なるツールバーブックマークを表示できます。"
+          },
+          "Confirmation": {
+            "key": "View_Settings_Prefs_SyncToolbar_Confirmation",
+            "default": "<p>この設定を有効にすると、現在ブックマークツールバーにあるブックマークが同期ブックマークに置き換えられます。</p><p>続行しますか？</p>"
+          }
+        },
+        "Title": {
+          "key": "View_Settings_Prefs_Title",
+          "default": "環境設定"
+        }
+      },
+      "Sync": {
+        "Title": {
+          "key": "View_Settings_Sync_Title",
+          "default": "同期"
+        },
+        "Disable": {
+          "key": "View_Settings_Sync_Disable",
+          "default": "無効化する"
+        },
+        "Id": {
+          "Label": {
+            "key": "View_Settings_Sync_Id_Label",
+            "default": "同期ID"
+          },
+          "Description": {
+            "key": "View_Settings_Sync_Id_Description",
+            "default": "同期IDを使用して、他のデバイス上の同期データに接続します（クリックしてQRコードを表示）"
+          }
+        },
+        "Data": {
+          "Label": {
+            "key": "View_Settings_Sync_Data_Label",
+            "default": "使用済みの使用量"
+          },
+          "Description": {
+            "key": "View_Settings_Sync_Data_Description",
+            "default": "サーバで利用可能な容量うち以下の容量を利用しています"
+          }
+        },
+        "Service": {
+          "key": "View_Settings_Sync_Service",
+          "default": "サーバ"
+        },
+        "UpdatesAvailable": {
+          "False": {
+            "key": "View_Settings_Sync_UpdatesAvailable_False",
+            "default": "前回同期した日は {date} です"
+          },
+          "True": {
+            "key": "View_Settings_Sync_UpdatesAvailable_True",
+            "default": "次の同期は {date} に予定されいます"
+          },
+          "Sync": {
+            "key": "View_Settings_Sync_UpdatesAvailable_Sync",
+            "default": "今すぐ同期"
+          }
+        },
+        "Qr": {
+          "Description": {
+            "key": "View_Settings_Sync_Qr_Description",
+            "default": "同期データに接続するには、xBrowserSync Androidアプリを使用してこのQRコードをスキャンしてください。"
+          },
+          "Show": {
+            "key": "View_Settings_Sync_Qr_Show",
+            "default": "QR コードを表示"
+          },
+          "Copy": {
+            "key": "View_Settings_Sync_Qr_Copy",
+            "default": "クリップボードに ID をコピー"
+          },
+          "Copied": {
+            "key": "View_Settings_Sync_Qr_Copied",
+            "default": "コピーしました!"
+          }
+        }
+      },
+      "NotAvailable": {
+        "key": "View_Settings_NotAvailable",
+        "default": "同期が有効になっているときに利用できる設定です。"
+      },
+      "FileDownloaded": {
+        "key": "View_Settings_FileDownloaded",
+        "default": "ファイルが「ダウンロード」に保存されました"
+      },
+      "Support": {
+        "key": "View_Settings_Support",
+        "default": "xBrowserSync をサポート"
+      }
+    },
+    "Support": {
+      "Title": {
+        "key": "View_Support_Title",
+        "default": "xBrowserSync をサポート!"
+      },
+      "Content": {
+        "key": "View_Support_Content",
+        "default": "<p>私たちはxBrowserSyncを1番のブラウザ同期ツールにしたいと考えていますが、まだまだやるべきことはたくさんあります。</p><ul><li>ブラウザのタブと履歴の同期を追加する</li><li> <li>すべての主要なデスクトップブラウザをサポートする</li><li> <li>他の言語に翻訳する</li><li>そして <a href='https://link.xbrowsersync.org/roadmap' class='new-tab'>その他</a>！</li></ul><p>皆様のサポートがあってこそ、xBrowserSyncを継続的に改善し、オンラインプライバシーの保護と生産性の向上に効果的であり続けることができます。</p>"
+      },
+      "Cryptos": {
+        "key": "View_Support_Cryptos",
+        "default": "仮想通貨(Bitcoin)"
+      },
+      "Liberapay": {
+        "key": "View_Support_Liberapay",
+        "default": "Liberapay"
+      },
+      "Patreon": {
+        "key": "View_Support_Patreon",
+        "default": "Patreon"
+      }
+    },
+    "SyncRemoved": {
+      "Title": {
+        "key": "View_SyncRemoved_Title",
+        "default": "同期が見つかりません"
+      },
+      "Content": {
+        "key": "View_SyncRemoved_Content",
+        "default": "<p>あなたの同期が見つかりませんでした。最近使用されていないために削除された可能性があります。</p><p>新しい同期を作成する必要がありますが、まず下のボタンをクリックして同期データのバックアップをダウンロードし、新しい同期に復元してください。"
+      }
+    },
+    "Updated": {
+      "Title": {
+        "key": "View_Updated_Title",
+        "default": "次のバージョンに更新しました！"
+      },
+      "Content": {
+        "key": "View_Updated_Content",
+        "default": "<p>xBrowserSync は最新の機能と修正で更新されました。</p><p>同期が有効になっていた場合、現在は無効になっており、このバージョンの xBrowserSync と同期する前に、まず同期をアップグレードする必要があります。</p><p>このリリースに含まれる変更点の詳細については、リリースノートをご覧ください。</p>"
+      }
+    },
+    "Working": {
+      "Restoring": {
+        "key": "View_Working_Restoring",
+        "default": "復元中..."
+      },
+      "Resetting": {
+        "key": "View_Working_Resetting",
+        "default": "リセット中..."
+      },
+      "Syncing": {
+        "key": "View_Working_Syncing",
+        "default": "同期中..."
+      }
+    }
+  }
+}
