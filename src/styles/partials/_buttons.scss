@@ -37,7 +37,7 @@ button {
         border-color: var(--color-well-button-border);
         border-width: 0.1rem;
         color: var(--color-well-button-text);
-        font-weight: normal;
+        font-weight: 400;
 
         &[disabled] {
           background-color: var(--color-well-button-bg-disabled);

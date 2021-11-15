@@ -1,10 +1,10 @@
 {
   "env": {
     "browser": true,
-    "es6": true,
     "jest": true
   },
   "extends": [
+    "airbnb-base",
     "airbnb-typescript/base",
     "plugin:prettier/recommended"
   ],
@@ -14,11 +14,14 @@
     "SharedArrayBuffer": "readonly"
   },
   "parserOptions": {
-    "ecmaVersion": 2018,
+    "ecmaVersion": "latest",
     "project": "./tsconfig.eslint.json",
     "sourceType": "module"
   },
-  "plugins": ["simple-import-sort", "unused-imports"],
+  "plugins": [
+    "simple-import-sort",
+    "unused-imports"
+  ],
   "rules": {
     "@typescript-eslint/comma-dangle": "off",
     "@typescript-eslint/indent": "off",
@@ -27,6 +30,7 @@
     "@typescript-eslint/semi": "warn",
     "class-methods-use-this": "off",
     "consistent-return": "off",
+    "default-param-last": "off",
     "func-style": "warn",
     "global-require": "off",
     "import/no-dynamic-require": "off",

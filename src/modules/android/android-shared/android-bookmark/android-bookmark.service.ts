@@ -11,8 +11,6 @@ export class AndroidBookmarkService implements BookmarkService {
   bookmarkHelperSvc: BookmarkHelperService;
   utilitySvc: UtilityService;
 
-  supportedNativeBookmarkUrlRegex = new RegExp('');
-
   static $inject = ['$q', 'BookmarkHelperService', 'UtilityService'];
   constructor($q: ng.IQService, BookmarkHelperSvc: BookmarkHelperService, UtilitySvc: UtilityService) {
     this.$q = $q;

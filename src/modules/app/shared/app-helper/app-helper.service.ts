@@ -1,7 +1,7 @@
 import angular from 'angular';
 import autobind from 'autobind-decorator';
 import DOMPurify from 'dompurify';
-import marked from 'marked';
+import { marked } from 'marked';
 import { ApiServiceStatus } from '../../../shared/api/api.enum';
 import { ApiService, ApiServiceInfo, ApiServiceInfoResponse } from '../../../shared/api/api.interface';
 import * as Exceptions from '../../../shared/exception/exception';

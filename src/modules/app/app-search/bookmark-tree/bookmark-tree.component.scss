@@ -1,7 +1,7 @@
 @import '../../../../styles/modules/all';
 
 bookmark-tree {
-  --color-bookmark-tree-root-bg: rgba(#{rgb($color-text2-default)}, 0.3);
+  --color-bookmark-tree-root-bg: rgba(#{hex2rgb($color-text2-default)}, 0.3);
   --color-bookmark-tree-root-text: #{$color-text1-default};
   --color-bookmark-tree-folder-bg: var(--color-separator-bg);
   --color-bookmark-tree-folder-text: #{$color-text1-default};
@@ -14,8 +14,8 @@ bookmark-tree {
     --color-bookmark-tree-root-text: #{$color-text2-dark};
     --color-bookmark-tree-folder-bg: var(--color-separator-bg);
     --color-bookmark-tree-folder-text: #{$color-text2-dark};
-    --color-bookmark-tree-folder-icon: rgba(#{rgb($color-text1-dark)}, 0.6);
-    --color-bookmark-tree-bookmark-hover: rgba(#{rgb($color-text3-dark)}, 0.4);
+    --color-bookmark-tree-folder-icon: rgba(#{hex2rgb($color-text1-dark)}, 0.6);
+    --color-bookmark-tree-bookmark-hover: rgba(#{hex2rgb($color-text3-dark)}, 0.4);
   }
 
   &.root > .folder > .bookmark-content {

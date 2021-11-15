@@ -1,6 +1,6 @@
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import compareVersions from 'compare-versions';
+import { compare } from 'compare-versions';
 import * as countriesList from 'countries-list';
 import { ApiServiceStatus } from '../../shared/api/api.enum';
 import { ApiService, ApiServiceInfo } from '../../shared/api/api.interface';
@@ -245,7 +245,7 @@ export class AppLoginComponent implements OnInit {
             const response = results[0];
             const appVersion = results[1];
 
-            if (compareVersions.compare(response.version ?? '0', appVersion, '<')) {
+            if (compare(response.version ?? '0', appVersion, '<')) {
               // Sync version is less than app version, confirm upgrade before proceeding with sync
               if (this.upgradeConfirmed) {
                 syncData.type = SyncType.Upgrade;
@@ -253,7 +253,7 @@ export class AppLoginComponent implements OnInit {
                 this.displayUpgradeConfirmation = true;
                 return;
               }
-            } else if (compareVersions.compare(response.version ?? '0', appVersion, '>')) {
+            } else if (compare(response.version ?? '0', appVersion, '>')) {
               // Sync version is greater than app version, throw error
               throw new Exceptions.SyncVersionNotSupportedException();
             }

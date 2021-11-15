@@ -3,7 +3,7 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import compareVersions from 'compare-versions';
+import { compare } from 'compare-versions';
 import * as detectBrowser from 'detect-browser';
 import XRegExp from 'xregexp';
 import { AppEventType } from '../../app/app.enum';
@@ -71,7 +71,7 @@ export class UtilityService {
       .get<any>(Globals.ReleaseLatestUrl)
       .then((response) => {
         const latestVersion = response?.data?.tag_name ?? '';
-        if (!compareVersions.compare(latestVersion, currentVersion, '>')) {
+        if (!compare(latestVersion, currentVersion, '>')) {
           return '';
         }
         this.logSvc.logInfo(`${latestVersion} update available`);

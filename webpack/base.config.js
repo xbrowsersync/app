@@ -5,12 +5,17 @@ module.exports = (env, argv) => {
   const devMode = argv.mode === 'development';
   const createBundleReport = false;
   return {
-    devtool: devMode ? 'inline-cheap-module-source-map' : 'source-map',
+    devtool: devMode && 'inline-source-map',
     externals: ['fs'],
     mode: devMode ? 'development' : 'production',
     module: {
       rules: [
         { test: /\.ts$/, loader: 'ts-loader' },
+        {
+          test: /\.js$/,
+          use: ['source-map-loader'],
+          enforce: 'pre'
+        },
         {
           test: /\.(sa|sc|c)ss$/,
           use: [
@@ -32,7 +37,7 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.(eot|gif|jpg|otf|png|svg|ttf|woff|woff2)$/,
-          use: 'file-loader'
+          type: 'asset/resource'
         },
         {
           test: /\.html$/i,

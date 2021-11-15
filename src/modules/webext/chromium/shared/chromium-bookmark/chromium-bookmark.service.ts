@@ -526,7 +526,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
   isSeparator(nativeBookmark: NativeBookmarks.BookmarkTreeNode): boolean {
     // Native bookmark is separator if title is dashes or designated separator title
     // and has no url and no children
-    const separatorRegex = new RegExp('^[-─]{1,}$');
+    const separatorRegex = /^[-─]{1,}$/;
     return (
       !angular.isUndefined(nativeBookmark.title) &&
       ((separatorRegex.test(nativeBookmark.title ?? '') && !nativeBookmark.children?.length) ||

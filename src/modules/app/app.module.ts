@@ -45,7 +45,7 @@ export class AppModule {}
     ) => {
       $animateProvider.classNameFilter(/animate/);
       $compileProvider.debugInfoEnabled(false);
-      $compileProvider.aHrefSanitizationWhitelist(/^[\w-]+:.*$/);
+      $compileProvider.aHrefSanitizationTrustedUrlList(/^[\w-]+:.*$/);
       $httpProvider.interceptors.push('ApiRequestInterceptorFactory');
     }
   ])

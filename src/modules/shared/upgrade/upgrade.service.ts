@@ -1,7 +1,7 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import compareVersions from 'compare-versions';
+import { compare } from 'compare-versions';
 import { Bookmark } from '../bookmark/bookmark.interface';
 import * as Exceptions from '../exception/exception';
 import { PlatformService } from '../global-shared.interface';
@@ -54,9 +54,7 @@ export class UpgradeService {
 
   checkIfUpgradeRequired(currentVersion: string): ng.IPromise<boolean> {
     return this.getLastUpgradeVersion().then((lastUpgradeVersion) => {
-      return (
-        angular.isUndefined(lastUpgradeVersion) || compareVersions.compare(lastUpgradeVersion, currentVersion, '<')
-      );
+      return angular.isUndefined(lastUpgradeVersion) || compare(lastUpgradeVersion, currentVersion, '<');
     });
   }
 
@@ -77,12 +75,12 @@ export class UpgradeService {
       .then((lastUpgradeVersion = '1.0.0') => {
         const condition = (currentVersion): ng.IPromise<boolean> => {
           // Exit when current version is no longer less than target version
-          return this.$q.resolve(compareVersions.compare(currentVersion, targetVersion, '<'));
+          return this.$q.resolve(compare(currentVersion, targetVersion, '<'));
         };
 
         const action = (currentVersion): ng.IPromise<string> => {
           // Get the next sequential upgrade step from upgrade map
-          const upgradeStep = [...this.upgradeMap].find(({ 0: x }) => compareVersions.compare(currentVersion, x, '<'));
+          const upgradeStep = [...this.upgradeMap].find(({ 0: x }) => compare(currentVersion, x, '<'));
           const upgradeVersion = upgradeStep && upgradeStep[0];
           const upgradeProvider = upgradeStep && upgradeStep[1];
 
@@ -120,7 +118,7 @@ export class UpgradeService {
       throw new Exceptions.UpgradeFailedException('Failed upgrade bookmarks, target version not provided');
     }
 
-    if (compareVersions.compare(syncVersion, targetVersion, '>')) {
+    if (compare(syncVersion, targetVersion, '>')) {
       // Sync version is greater than target version, throw error
       throw new Exceptions.SyncVersionNotSupportedException();
     }
@@ -129,12 +127,12 @@ export class UpgradeService {
 
     const condition = (currentVersion): ng.IPromise<boolean> => {
       // Exit when current version is no longer less than target version
-      return this.$q.resolve(compareVersions.compare(currentVersion, targetVersion, '<'));
+      return this.$q.resolve(compare(currentVersion, targetVersion, '<'));
     };
 
     const action = (currentVersion): ng.IPromise<string> => {
       // Get the next sequential upgrade step from upgrade map
-      const upgradeStep = [...this.upgradeMap].find(({ 0: x }) => compareVersions.compare(currentVersion, x, '<'));
+      const upgradeStep = [...this.upgradeMap].find(({ 0: x }) => compare(currentVersion, x, '<'));
       const upgradeVersion = upgradeStep?.[0];
       const upgradeProvider = upgradeStep?.[1];
 

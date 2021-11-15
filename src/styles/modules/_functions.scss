@@ -1,7 +1,6 @@
-@function rgb($hexcolor) {
+@function hex2rgb($hexcolor) {
   $red: red($hexcolor);
   $green: green($hexcolor);
   $blue: blue($hexcolor);
-  $alpha: alpha($hexcolor);
-  @return unquote('#{$red},#{$green},#{$blue}');
+  @return unquote('#{$red}, #{$green}, #{$blue}');
 }

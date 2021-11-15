@@ -450,7 +450,7 @@ export class WebExtBackgroundService {
         default:
           action = this.$q.reject(new Exceptions.AmbiguousSyncRequestException());
       }
-      return action.then(resolve).catch(reject);
+      action.then(resolve).catch(reject);
     }).catch((err) => {
       // Set message to exception class name so sender can rehydrate the exception on receipt
       err.message = err.constructor.name;
@@ -483,7 +483,7 @@ export class WebExtBackgroundService {
       // Use create a new object url using contents and trigger download
       const file = new Blob([textContents], { type: 'text/plain' });
       const url = URL.createObjectURL(file);
-      return browser.downloads
+      browser.downloads
         .download({
           filename,
           saveAs: displaySaveDialog,
