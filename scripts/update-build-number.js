@@ -7,10 +7,10 @@ const platform = process.argv[2] ?? 'chromium';
 const buildNum = process.argv[3] ?? process.env.GITHUB_RUN_NUMBER ?? 0;
 const isBetaRelease = JSON.parse(process.env.BETA ?? 'false');
 
-const versionNum = `${process.env.npm_package_version}.${buildNum}`;
-const versionName = isBetaRelease
-  ? `${process.env.npm_package_version}-beta.${buildNum}`
-  : process.env.npm_package_version;
+const packageFilePath = path.resolve(__dirname, `../package.json`);
+const packageFile = require(packageFilePath);
+const versionNum = `${packageFile.version}.${buildNum}`;
+const versionName = isBetaRelease ? `${packageFile.version}-beta.${buildNum}` : packageFile.version;
 const versionFileName = path.resolve(__dirname, '../PACKAGE_VERSION');
 fs.writeFileSync(versionFileName, `${isBetaRelease ? versionName : versionNum}`);
 
@@ -45,4 +45,5 @@ switch (platform) {
     updateBuildNumberForAndroid();
     break;
   default:
+    throw new Error('No platform specified');
 }

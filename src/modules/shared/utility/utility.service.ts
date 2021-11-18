@@ -71,7 +71,7 @@ export class UtilityService {
       .get<any>(Globals.ReleaseLatestUrl)
       .then((response) => {
         const latestVersion = response?.data?.tag_name ?? '';
-        if (!compare(latestVersion, currentVersion, '>')) {
+        if (!this.compareVersions(latestVersion, currentVersion, '>')) {
           return '';
         }
         this.logSvc.logInfo(`${latestVersion} update available`);
@@ -89,6 +89,11 @@ export class UtilityService {
         throw new Exceptions.ClientDataNotFoundException();
       }
     });
+  }
+
+  compareVersions(firstVersion = '', secondVersion = '', operator: string): boolean {
+    const betaRegex = /-beta/i;
+    return compare(firstVersion.replace(betaRegex, ''), secondVersion.replace(betaRegex, ''), operator as any);
   }
 
   filterFalsyValues(values: string[]): string[] {

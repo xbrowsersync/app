@@ -1,7 +1,6 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { compare } from 'compare-versions';
 import * as Exceptions from '../../exception/exception';
 import Globals from '../../global-shared.constants';
 import { PlatformService } from '../../global-shared.interface';
@@ -95,7 +94,7 @@ export class ApiXbrowsersyncService implements ApiService {
           }
 
           // Check service version is supported by this client
-          if (compare(serviceInfo.version, Globals.MinApiVersion, '<')) {
+          if (this.utilitySvc.compareVersions(serviceInfo.version, Globals.MinApiVersion, '<')) {
             throw new Exceptions.UnsupportedApiVersionException();
           }
 
