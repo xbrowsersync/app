@@ -332,11 +332,14 @@ export class BookmarkSyncProviderService implements SyncProvider {
                   .processNativeChangeOnBookmarks(sync.changeInfo, bookmarksToSync)
                   .then((updatedBookmarks) => this.bookmarkSvc.ensureContainersExist(updatedBookmarks))
           ).then((updatedBookmarks) => {
-            // If changes made, add updated bookmarks to process result and mark for remote update
-            if (!angular.equals(updatedBookmarks, bookmarksToSync)) {
-              processResult.data = updatedBookmarks;
-              processResult.updateRemote = true;
+            // If no data returned, do not sync
+            if (angular.isUndefined(updatedBookmarks)) {
+              return processResult;
             }
+
+            // If changes made, add updated bookmarks to process result and mark for remote update
+            processResult.data = updatedBookmarks;
+            processResult.updateRemote = true;
           });
         });
       })

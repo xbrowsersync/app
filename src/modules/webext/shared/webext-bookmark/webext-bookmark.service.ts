@@ -596,6 +596,11 @@ export abstract class WebExtBookmarkService implements BookmarkService {
     });
   }
 
+  /**
+   * Triggered when using "sort by name" in Chromium to sort bookmarks.
+   *
+   * Note: Firefox does not implement this, see https://bugzilla.mozilla.org/show_bug.cgi?id=1319530
+   */
   processChangeTypeChildrenReorderedOnBookmarks(
     bookmarks: Bookmark[],
     changeData: ReorderNativeBookmarkChangeData
