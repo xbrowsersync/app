@@ -46,16 +46,6 @@
     "Go": {
       "key": "Alert_Go",
       "default": "Gå"
-    },
-    "WorkingOffline": {
-      "Title": {
-        "key": "Alert_WorkingOffline_Title",
-        "default": "Arbetar offline"
-      },
-      "Message": {
-        "key": "Alert_WorkingOffline_Message",
-        "default": "Ändringar kommer att synkroniseras när anslutningen är återställd."
-      }
     }
   },
   "App": {
@@ -235,14 +225,6 @@
       "key": "Exception_FailedShareUrl_Title",
       "default": "Kunde inte hämta delad bokmärkeswebbadress"
     },
-    "HttpRequestFailed_Message": {
-      "key": "Exception_HttpRequestFailed_Message",
-      "default": "Kontrollera din nätverksanslutning och försök igen."
-    },
-    "HttpRequestFailed_Title": {
-      "key": "Exception_HttpRequestFailed_Title",
-      "default": "Anslutning till tjänsten förlorad"
-    },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
       "default": "Kontrollera att ditt synknings-ID, lösenord och tjänstens webbadress har angetts korrekt."
@@ -282,6 +264,14 @@
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
       "default": "Saknar inloggningsuppgifter"
+    },
+    "NetworkConnection_Message": {
+      "key": "Exception_NetworkConnection_Message",
+      "default": "Kontrollera din nätverksanslutning och försök igen."
+    },
+    "NetworkConnection_Title": {
+      "key": "Exception_NetworkConnection_Title",
+      "default": "Anslutning till tjänsten förlorad"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",

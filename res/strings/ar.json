@@ -46,16 +46,6 @@
     "Go": {
       "key": "Alert_Go",
       "default": "الذهاب"
-    },
-    "WorkingOffline": {
-      "Title": {
-        "key": "Alert_WorkingOffline_Title",
-        "default": "يعمل دون اتصال"
-      },
-      "Message": {
-        "key": "Alert_WorkingOffline_Message",
-        "default": "ستتم مزامنة التغييرات عند رجوع الاتصال."
-      }
     }
   },
   "App": {
@@ -235,14 +225,6 @@
       "key": "Exception_FailedShareUrl_Title",
       "default": "فشل استرداد عنوان يو آر إل للإشارة المرجعية المشارَكة"
     },
-    "HttpRequestFailed_Message": {
-      "key": "Exception_HttpRequestFailed_Message",
-      "default": "تحقق من اتصالك بالشبكة وحاول مرة أخرى."
-    },
-    "HttpRequestFailed_Title": {
-      "key": "Exception_HttpRequestFailed_Title",
-      "default": "انقطع الاتصال بالخدمة"
-    },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
       "default": "تحقق من إدخال رمز المزامنة وكلمة المرور وعنوان يو آر إل الخدمة بشكل صحيح."
@@ -282,6 +264,14 @@
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
       "default": "بيانات الاعتماد مفقودة"
+    },
+    "NetworkConnection_Message": {
+      "key": "Exception_NetworkConnection_Message",
+      "default": "تحقق من اتصالك بالشبكة وحاول مرة أخرى."
+    },
+    "NetworkConnection_Title": {
+      "key": "Exception_NetworkConnection_Title",
+      "default": "انقطع الاتصال بالخدمة"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",

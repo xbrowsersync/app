@@ -46,16 +46,6 @@
     "Go": {
       "key": "Alert_Go",
       "default": "進む！"
-    },
-    "WorkingOffline": {
-      "Title": {
-        "key": "Alert_WorkingOffline_Title",
-        "default": "オフラインで 利用可能にします"
-      },
-      "Message": {
-        "key": "Alert_WorkingOffline_Message",
-        "default": "ネットワークに接続された場合、変更が同期されます。 "
-      }
     }
   },
   "App": {
@@ -235,14 +225,6 @@
       "key": "Exception_FailedShareUrl_Title",
       "default": "共有ブックマークのURLを取得できません"
     },
-    "HttpRequestFailed_Message": {
-      "key": "Exception_HttpRequestFailed_Message",
-      "default": "ネットワーク接続を確認し、もう一度お試しください"
-    },
-    "HttpRequestFailed_Title": {
-      "key": "Exception_HttpRequestFailed_Title",
-      "default": "サーバーへの接続が失われました。"
-    },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
       "default": "同期ID、パスワード、サーバのURLが正しく入力されていることを確認してください。"
@@ -282,6 +264,14 @@
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
       "default": "ユーザの情報が間違っています"
+    },
+    "NetworkConnection_Message": {
+      "key": "Exception_NetworkConnection_Message",
+      "default": "ネットワーク接続を確認し、もう一度お試しください"
+    },
+    "NetworkConnection_Title": {
+      "key": "Exception_NetworkConnection_Title",
+      "default": "サーバーへの接続が失われました。"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",

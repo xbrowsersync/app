@@ -92,7 +92,7 @@ export class NativeBookmarkNotFoundException extends Exception {}
 
 export class LocalStorageNotAvailableException extends Exception {}
 
-export class NetworkOfflineException extends Exception {}
+export class NetworkConnectionException extends Exception {}
 
 export class NotAcceptingNewSyncsException extends Exception {}
 

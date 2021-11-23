@@ -46,16 +46,6 @@
     "Go": {
       "key": "Alert_Go",
       "default": "Далее"
-    },
-    "WorkingOffline": {
-      "Title": {
-        "key": "Alert_WorkingOffline_Title",
-        "default": "Работать оффлайн"
-      },
-      "Message": {
-        "key": "Alert_WorkingOffline_Message",
-        "default": "Изменения будут синхронизированы после восстановления соединения."
-      }
     }
   },
   "App": {
@@ -235,14 +225,6 @@
       "key": "Exception_FailedShareUrl_Title",
       "default": "Не удалось получить URL общей закладки"
     },
-    "HttpRequestFailed_Message": {
-      "key": "Exception_HttpRequestFailed_Message",
-      "default": "Проверьте сетевое подключение и попробуйте снова."
-    },
-    "HttpRequestFailed_Title": {
-      "key": "Exception_HttpRequestFailed_Title",
-      "default": "Соединение с сервером потеряно"
-    },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
       "default": "Убедитесь, что ваш sync ID, пароль и URL-адрес сервиса были введены правильно."
@@ -282,6 +264,14 @@
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
       "default": "Отсутствуют учетные данные"
+    },
+    "NetworkConnection_Message": {
+      "key": "Exception_NetworkConnection_Message",
+      "default": "Проверьте сетевое подключение и попробуйте снова."
+    },
+    "NetworkConnection_Title": {
+      "key": "Exception_NetworkConnection_Title",
+      "default": "Соединение с сервером потеряно"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",

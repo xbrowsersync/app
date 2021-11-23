@@ -46,16 +46,6 @@
     "Go": {
       "key": "Alert_Go",
       "default": "转到"
-    },
-    "WorkingOffline": {
-      "Title": {
-        "key": "Alert_WorkingOffline_Title",
-        "default": "脱机工作"
-      },
-      "Message": {
-        "key": "Alert_WorkingOffline_Message",
-        "default": "连接恢复后更改将被同步。"
-      }
     }
   },
   "App": {
@@ -235,14 +225,6 @@
       "key": "Exception_FailedShareUrl_Title",
       "default": "无法获取共享书签URL"
     },
-    "HttpRequestFailed_Message": {
-      "key": "Exception_HttpRequestFailed_Message",
-      "default": "请检查你的网络连接并重试。"
-    },
-    "HttpRequestFailed_Title": {
-      "key": "Exception_HttpRequestFailed_Title",
-      "default": "与服务器的连接丢失"
-    },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
       "default": "检查您的同步ID、密码和服务URL是否正确输入。"
@@ -282,6 +264,14 @@
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
       "default": "缺少凭据"
+    },
+    "NetworkConnection_Message": {
+      "key": "Exception_NetworkConnection_Message",
+      "default": "请检查你的网络连接并重试。"
+    },
+    "NetworkConnection_Title": {
+      "key": "Exception_NetworkConnection_Title",
+      "default": "与服务器的连接丢失"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",

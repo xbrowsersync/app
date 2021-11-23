@@ -1,5 +1,5 @@
 import 'jest';
-import { Exception, HttpRequestFailedException, NetworkOfflineException } from '../exception/exception';
+import { Exception, NetworkConnectionException } from '../exception/exception';
 import { NetworkService } from './network.service';
 
 describe('NetworkService', () => {
@@ -7,18 +7,10 @@ describe('NetworkService', () => {
     jest.restoreAllMocks();
   });
 
-  it('isNetworkConnectionError: Returns true for HttpRequestFailedException', async () => {
+  it('isNetworkConnectionError: Returns true for isNetworkConnectionError', async () => {
     const networkSvc = new NetworkService();
 
-    const isNetworkConnectionErrorResult = networkSvc.isNetworkConnectionError(new HttpRequestFailedException());
-
-    expect(isNetworkConnectionErrorResult).toBe(true);
-  });
-
-  it('isNetworkConnectionError: Returns true for NetworkOfflineException', async () => {
-    const networkSvc = new NetworkService();
-
-    const isNetworkConnectionErrorResult = networkSvc.isNetworkConnectionError(new NetworkOfflineException());
+    const isNetworkConnectionErrorResult = networkSvc.isNetworkConnectionError(new NetworkConnectionException());
 
     expect(isNetworkConnectionErrorResult).toBe(true);
   });

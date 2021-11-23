@@ -40,10 +40,9 @@ export class ExceptionHandlerService {
     };
 
     switch (exception.constructor) {
-      case Exceptions.NetworkOfflineException:
-      case Exceptions.HttpRequestFailedException:
-        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.HttpRequestFailed_Title);
-        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.HttpRequestFailed_Message);
+      case Exceptions.NetworkConnectionException:
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.NetworkConnection_Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Exception.NetworkConnection_Message);
         break;
       case Exceptions.TooManyRequestsException:
         alertMessage.title = this.platformSvc.getI18nString(this.Strings.Exception.TooManyRequests_Title);
@@ -162,9 +161,9 @@ export class ExceptionHandlerService {
       case Exceptions.HttpRequestCancelledException:
         displayAlert = false;
         return;
-      case Exceptions.NetworkOfflineException:
+      case Exceptions.NetworkConnectionException:
         if (!exception.logged) {
-          this.logSvc.logWarning('Network offline');
+          this.logSvc.logWarning('Connection lost');
         }
         exception.logged = true;
         break;

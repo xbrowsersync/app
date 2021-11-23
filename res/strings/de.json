@@ -46,16 +46,6 @@
     "Go": {
       "key": "Alert_Go",
       "default": "Los"
-    },
-    "WorkingOffline": {
-      "Title": {
-        "key": "Alert_WorkingOffline_Title",
-        "default": "Im Offline-Modus"
-      },
-      "Message": {
-        "key": "Alert_WorkingOffline_Message",
-        "default": "Änderungen werden synchronisiert wenn die Verbindung wiederhergestellt ist."
-      }
     }
   },
   "App": {
@@ -235,14 +225,6 @@
       "key": "Exception_FailedShareUrl_Title",
       "default": "Die URL des geteilten Lesezeichens konnte nicht abgerufen werden"
     },
-    "HttpRequestFailed_Message": {
-      "key": "Exception_HttpRequestFailed_Message",
-      "default": "Überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut."
-    },
-    "HttpRequestFailed_Title": {
-      "key": "Exception_HttpRequestFailed_Title",
-      "default": "Verbindung zum Dienst verloren"
-    },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
       "default": "Stellen Sie sicher, dass Ihre Sync-ID, Ihr Passwort und Ihre Dienst-URL korrekt eingegeben wurden."
@@ -282,6 +264,14 @@
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
       "default": "Fehlende Berechtigungsnachweise"
+    },
+    "NetworkConnection_Message": {
+      "key": "Exception_NetworkConnection_Message",
+      "default": "Überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut."
+    },
+    "NetworkConnection_Title": {
+      "key": "Exception_NetworkConnection_Title",
+      "default": "Verbindung zum Dienst verloren"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",

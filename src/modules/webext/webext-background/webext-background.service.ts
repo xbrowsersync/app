@@ -189,12 +189,12 @@ export class WebExtBackgroundService {
           .checkForUpdates()
           .then(resolve)
           .catch((err) => {
-            if (!(err instanceof Exceptions.HttpRequestFailedException)) {
+            if (!this.networkSvc.isNetworkConnectionError(err)) {
               return reject(err);
             }
 
             // If request failed, retry once
-            this.logSvc.logInfo('Connection to API failed, retrying check for sync updates momentarily');
+            this.logSvc.logInfo('Connection lost, retrying check for sync updates momentarily');
             this.$timeout(() => {
               this.utilitySvc.isSyncEnabled().then((syncEnabledAfterError) => {
                 if (!syncEnabledAfterError) {

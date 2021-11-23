@@ -46,16 +46,6 @@
     "Go": {
       "key": "Alert_Go",
       "default": "Prosseguir"
-    },
-    "WorkingOffline": {
-      "Title": {
-        "key": "Alert_WorkingOffline_Title",
-        "default": "Funcionando offline"
-      },
-      "Message": {
-        "key": "Alert_WorkingOffline_Message",
-        "default": "As alterações serão sincronizadas quando a conexão for restaurada."
-      }
     }
   },
   "App": {
@@ -235,14 +225,6 @@
       "key": "Exception_FailedShareUrl_Title",
       "default": "Não foi possível recuperar a URL do favorito compartilhado"
     },
-    "HttpRequestFailed_Message": {
-      "key": "Exception_HttpRequestFailed_Message",
-      "default": "Verifique sua conexão de internet e tente novamente."
-    },
-    "HttpRequestFailed_Title": {
-      "key": "Exception_HttpRequestFailed_Title",
-      "default": "Conexão com o servidor perdida"
-    },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
       "default": "Verifique se o seu ID de sincronização, senha e URL de serviço foram inseridos corretamente."
@@ -282,6 +264,14 @@
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
       "default": "Credenciais ausentes"
+    },
+    "NetworkConnection_Message": {
+      "key": "Exception_NetworkConnection_Message",
+      "default": "Verifique sua conexão de internet e tente novamente."
+    },
+    "NetworkConnection_Title": {
+      "key": "Exception_NetworkConnection_Title",
+      "default": "Conexão com o servidor perdida"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",

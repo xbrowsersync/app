@@ -46,16 +46,6 @@
     "Go": {
       "key": "Alert_Go",
       "default": "Ir"
-    },
-    "WorkingOffline": {
-      "Title": {
-        "key": "Alert_WorkingOffline_Title",
-        "default": "Traballando sen conexión"
-      },
-      "Message": {
-        "key": "Alert_WorkingOffline_Message",
-        "default": "Os cambios sincronizaranse cando a conexión se restaure."
-      }
     }
   },
   "App": {
@@ -235,14 +225,6 @@
       "key": "Exception_FailedShareUrl_Title",
       "default": "Non se puido recoller a URL compartida dos marcadores"
     },
-    "HttpRequestFailed_Message": {
-      "key": "Exception_HttpRequestFailed_Message",
-      "default": "Comproba a túa conexión de rede e téntao de novo."
-    },
-    "HttpRequestFailed_Title": {
-      "key": "Exception_HttpRequestFailed_Title",
-      "default": "Conexión perdida a servizo"
-    },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
       "default": "Comproba que introduciches correctamente a túa ID de sincronización, contrasinal e URL de servizo."
@@ -282,6 +264,14 @@
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
       "default": "Credenciais perdidas"
+    },
+    "NetworkConnection_Message": {
+      "key": "Exception_NetworkConnection_Message",
+      "default": "Comproba a túa conexión de rede e téntao de novo."
+    },
+    "NetworkConnection_Title": {
+      "key": "Exception_NetworkConnection_Title",
+      "default": "Conexión perdida a servizo"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",

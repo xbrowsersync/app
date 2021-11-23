@@ -181,11 +181,11 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
   }
 
   executeSyncIfOnline(workingContext: WorkingContext): ng.IPromise<void | boolean> {
-    // If not online display an alert and return
+    // If no connection display an alert and return
     if (!this.networkSvc.isNetworkConnected()) {
       this.alertSvc.setCurrentAlert({
-        message: this.platformSvc.getI18nString(this.Strings.Alert.WorkingOffline.Message),
-        title: this.platformSvc.getI18nString(this.Strings.Alert.WorkingOffline.Title)
+        message: this.platformSvc.getI18nString(this.Strings.Exception.UncommittedSyncs_Message),
+        title: this.platformSvc.getI18nString(this.Strings.Exception.UncommittedSyncs_Title)
       });
       return this.$q.resolve(false);
     }
@@ -317,15 +317,6 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
           return;
         }
 
-        // If not online display an alert
-        if (!this.networkSvc.isNetworkConnected()) {
-          this.alertSvc.setCurrentAlert({
-            message: this.platformSvc.getI18nString(this.Strings.Alert.WorkingOffline.Message),
-            title: this.platformSvc.getI18nString(this.Strings.Alert.WorkingOffline.Title)
-          });
-          return;
-        }
-
         // If bookmark was shared, switch to bookmark view
         return this.getSharedBookmark().then((sharedBookmark) => {
           if (!angular.isUndefined(sharedBookmark)) {
@@ -425,14 +416,6 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
           // Exit if sync not enabled
           if (!syncEnabled) {
             return;
-          }
-
-          // If not online display an alert
-          if (!this.networkSvc.isNetworkConnected()) {
-            this.alertSvc.setCurrentAlert({
-              message: this.platformSvc.getI18nString(this.Strings.Alert.WorkingOffline.Message),
-              title: this.platformSvc.getI18nString(this.Strings.Alert.WorkingOffline.Title)
-            });
           }
 
           // Check if a bookmark was shared

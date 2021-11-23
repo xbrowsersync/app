@@ -46,16 +46,6 @@
     "Go": {
       "key": "Alert_Go",
       "default": "Vai"
-    },
-    "WorkingOffline": {
-      "Title": {
-        "key": "Alert_WorkingOffline_Title",
-        "default": "Modalità offline"
-      },
-      "Message": {
-        "key": "Alert_WorkingOffline_Message",
-        "default": "Le modifiche verranno sincronizzate una volta ripristinata la connessione."
-      }
     }
   },
   "App": {
@@ -235,14 +225,6 @@
       "key": "Exception_FailedShareUrl_Title",
       "default": "Impossibile recuperare l'URL del segnalibro condiviso"
     },
-    "HttpRequestFailed_Message": {
-      "key": "Exception_HttpRequestFailed_Message",
-      "default": "Controllare la connessione di rete e riprovare."
-    },
-    "HttpRequestFailed_Title": {
-      "key": "Exception_HttpRequestFailed_Title",
-      "default": "Connessione al server persa"
-    },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
       "default": "Verificare che l'ID di sincronizzazione, la password e l'URL del server siano stati inseriti correttamente."
@@ -282,6 +264,14 @@
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
       "default": "Credenziali mancanti"
+    },
+    "NetworkConnection_Message": {
+      "key": "Exception_NetworkConnection_Message",
+      "default": "Controllare la connessione di rete e riprovare."
+    },
+    "NetworkConnection_Title": {
+      "key": "Exception_NetworkConnection_Title",
+      "default": "Connessione al server persa"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",

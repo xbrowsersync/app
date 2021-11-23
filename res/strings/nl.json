@@ -46,16 +46,6 @@
     "Go": {
       "key": "Alert_Go",
       "default": "Gaan"
-    },
-    "WorkingOffline": {
-      "Title": {
-        "key": "Alert_WorkingOffline_Title",
-        "default": "Offline werken"
-      },
-      "Message": {
-        "key": "Alert_WorkingOffline_Message",
-        "default": "Wijzigingen worden gesynchroniseerd wanneer de verbinding is hersteld."
-      }
     }
   },
   "App": {
@@ -235,14 +225,6 @@
       "key": "Exception_FailedShareUrl_Title",
       "default": "Kan de gedeelde bladwijzer-URL niet ophalen"
     },
-    "HttpRequestFailed_Message": {
-      "key": "Exception_HttpRequestFailed_Message",
-      "default": "Controleer de netwerkverbinding en probeer het opnieuw."
-    },
-    "HttpRequestFailed_Title": {
-      "key": "Exception_HttpRequestFailed_Title",
-      "default": "De verbinding met de service is verbroken"
-    },
     "InvalidCredentials_Message": {
       "key": "Exception_InvalidCredentials_Message",
       "default": "Controleer of je synchronisatie-ID, wachtwoord en service-URL correct zijn ingevoerd."
@@ -282,6 +264,14 @@
     "MissingClientData_Title": {
       "key": "Exception_MissingClientData_Title",
       "default": "Inloggegevens ontbreken"
+    },
+    "NetworkConnection_Message": {
+      "key": "Exception_NetworkConnection_Message",
+      "default": "Controleer de netwerkverbinding en probeer het opnieuw."
+    },
+    "NetworkConnection_Title": {
+      "key": "Exception_NetworkConnection_Title",
+      "default": "De verbinding met de service is verbroken"
     },
     "NoDataToRestore_Message": {
       "key": "Exception_NoDataToRestore_Message",

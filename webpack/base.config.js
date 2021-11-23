@@ -5,7 +5,7 @@ module.exports = (env, argv) => {
   const devMode = argv.mode === 'development';
   const createBundleReport = false;
   return {
-    devtool: devMode && 'inline-source-map',
+    devtool: 'inline-source-map',
     externals: ['fs'],
     mode: devMode ? 'development' : 'production',
     module: {
@@ -47,6 +47,9 @@ module.exports = (env, argv) => {
           }
         }
       ]
+    },
+    optimization: {
+      minimize: false
     },
     output: {
       chunkFilename: '[name].js',

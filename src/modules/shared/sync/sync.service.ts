@@ -220,15 +220,11 @@ export class SyncService {
   handleFailedSync(failedSync: Sync, err: Error, isBackgroundSync = false): ng.IPromise<Error> {
     let syncException = err;
     return this.$q<Error>((resolve, reject) => {
-      // If offline and sync is a change, swallow error and place failed sync back on the queue
-      if (
-        (this.networkSvc.isNetworkOfflineError(err) ||
-          (isBackgroundSync && this.networkSvc.isNetworkConnectionError(err))) &&
-        failedSync.type !== SyncType.Local
-      ) {
+      // If connection failed and sync is a change, swallow error and place failed sync back on the queue
+      if (this.networkSvc.isNetworkConnectionError(err) && failedSync.type !== SyncType.Local) {
         this.syncQueue.unshift(failedSync);
         if (!isBackgroundSync) {
-          this.logSvc.logInfo('Sync not committed: network offline');
+          this.logSvc.logInfo('Changes not synced: connection lost');
         }
         return resolve(new Exceptions.SyncUncommittedException(undefined, err));
       }

@@ -106,8 +106,8 @@ export class BookmarkSyncProviderService implements SyncProvider {
       return this.$q.resolve();
     }
 
-    // If offline update cache and then throw error
-    return this.networkSvc.isNetworkOfflineError(err)
+    // If connection failed, update cache and then throw error
+    return this.networkSvc.isNetworkConnectionError(err)
       ? (() =>
           this.cryptoSvc.encryptData(JSON.stringify(lastResult)).then((encryptedBookmarks) =>
             this.bookmarkHelperSvc.updateCachedBookmarks(lastResult, encryptedBookmarks).then(() => {

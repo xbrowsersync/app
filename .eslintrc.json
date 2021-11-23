@@ -14,7 +14,7 @@
     "SharedArrayBuffer": "readonly"
   },
   "parserOptions": {
-    "ecmaVersion": "latest",
+    "ecmaVersion": 2020,
     "project": "./tsconfig.eslint.json",
     "sourceType": "module"
   },
@@ -22,6 +22,7 @@
     "simple-import-sort",
     "unused-imports"
   ],
+  "root": true,
   "rules": {
     "@typescript-eslint/comma-dangle": "off",
     "@typescript-eslint/indent": "off",

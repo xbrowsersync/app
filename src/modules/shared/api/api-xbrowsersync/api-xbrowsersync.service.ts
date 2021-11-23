@@ -61,17 +61,17 @@ export class ApiXbrowsersyncService implements ApiService {
     return this.$q.resolve(response);
   }
 
-  checkNetworkIsOnline(): ng.IPromise<void> {
+  checkNetworkConnection(): ng.IPromise<void> {
     return this.$q((resolve, reject) => {
       if (this.networkSvc.isNetworkConnected()) {
         return resolve();
       }
-      reject(new Exceptions.NetworkOfflineException());
+      reject(new Exceptions.NetworkConnectionException());
     });
   }
 
   checkServiceStatus(url?: string): ng.IPromise<ApiServiceInfoResponse> {
-    return this.checkNetworkIsOnline().then(() => {
+    return this.checkNetworkConnection().then(() => {
       // Get current service url if not provided
       return (!url ? this.utilitySvc.getServiceUrl() : this.$q.resolve(url))
         .then((serviceUrl) => {
@@ -104,7 +104,7 @@ export class ApiXbrowsersyncService implements ApiService {
   }
 
   createNewSync(): ng.IPromise<ApiCreateBookmarksResponse> {
-    return this.checkNetworkIsOnline()
+    return this.checkNetworkConnection()
       .then(() => {
         return this.$q
           .all([this.platformSvc.getAppVersion(), this.utilitySvc.getServiceUrl()])
@@ -148,7 +148,7 @@ export class ApiXbrowsersyncService implements ApiService {
           throw new Exceptions.ClientDataNotFoundException();
         }
 
-        return this.checkNetworkIsOnline().then(() => {
+        return this.checkNetworkConnection().then(() => {
           // Get current service url
           return this.utilitySvc
             .getServiceUrl()
@@ -177,7 +177,7 @@ export class ApiXbrowsersyncService implements ApiService {
       });
   }
 
-  getBookmarksLastUpdated(skipOnlineCheck = false): ng.IPromise<ApiGetLastUpdatedResponse> {
+  getBookmarksLastUpdated(skipNetworkConnectionCheck = false): ng.IPromise<ApiGetLastUpdatedResponse> {
     // Check secret and sync ID are present
     return this.storeSvc
       .get([StoreKey.Password, StoreKey.SyncId])
@@ -186,7 +186,7 @@ export class ApiXbrowsersyncService implements ApiService {
           throw new Exceptions.ClientDataNotFoundException();
         }
 
-        return (skipOnlineCheck ? this.$q.resolve() : this.checkNetworkIsOnline()).then(() => {
+        return (skipNetworkConnectionCheck ? this.$q.resolve() : this.checkNetworkConnection()).then(() => {
           // Get current service url
           return this.utilitySvc
             .getServiceUrl()
@@ -216,7 +216,7 @@ export class ApiXbrowsersyncService implements ApiService {
   }
 
   getBookmarksVersion(syncId: string): ng.IPromise<ApiGetSyncVersionResponse> {
-    return this.checkNetworkIsOnline()
+    return this.checkNetworkConnection()
       .then(() => {
         // Get current service url
         return this.utilitySvc
@@ -248,37 +248,37 @@ export class ApiXbrowsersyncService implements ApiService {
   getExceptionFromHttpResponse(response: ng.IHttpResponse<ApiXbrowsersyncErrorResponse>): Exceptions.Exception {
     let exception: Exceptions.Exception;
     const message = response.data?.message;
-    switch (response.status) {
+    switch (true) {
       // 401 Unauthorized: sync data not found
-      case 401:
+      case response.status === 401:
         exception = new Exceptions.SyncNotFoundException(message);
         break;
       // 404 Not Found: invalid service
-      case 404:
+      case response.status === 404:
         exception = new Exceptions.InvalidServiceException(message);
         break;
       // 405 Method Not Allowed: service not accepting new syncs
-      case 405:
+      case response.status === 405:
         exception = new Exceptions.NotAcceptingNewSyncsException(message);
         break;
       // 406 Not Acceptable: daily new sync limit reached
-      case 406:
+      case response.status === 406:
         exception = new Exceptions.DailyNewSyncLimitReachedException(message);
         break;
       // 409 Conflict: sync update conflict
-      case 409:
+      case response.status === 409:
         exception = new Exceptions.DataOutOfSyncException(message);
         break;
       // 413 Request Entity Too Large: sync data size exceeds service limit
-      case 413:
+      case response.status === 413:
         exception = new Exceptions.RequestEntityTooLargeException(message);
         break;
       // 429 Too Many Requests: daily new sync limit reached
-      case 429:
+      case response.status === 429:
         exception = new Exceptions.TooManyRequestsException(message);
         break;
-      // 503 Service Unavailable: service offline
-      case 503:
+      // 500 server error responses
+      case response.status >= 500:
         exception = new Exceptions.ServiceOfflineException(message);
         break;
       // Otherwise generic request failed
@@ -292,7 +292,7 @@ export class ApiXbrowsersyncService implements ApiService {
   updateBookmarks(
     encryptedBookmarks: string,
     updateSyncVersion = false,
-    skipOnlineCheck = false
+    skipNetworkConnectionCheck = false
   ): ng.IPromise<ApiUpdateBookmarksResponse> {
     // Check secret and sync ID are present
     return this.storeSvc
@@ -302,7 +302,7 @@ export class ApiXbrowsersyncService implements ApiService {
           throw new Exceptions.ClientDataNotFoundException();
         }
 
-        return (skipOnlineCheck ? this.$q.resolve() : this.checkNetworkIsOnline()).then(() => {
+        return (skipNetworkConnectionCheck ? this.$q.resolve() : this.checkNetworkConnection()).then(() => {
           return this.$q
             .all([this.platformSvc.getAppVersion(), this.utilitySvc.getServiceUrl()])
             .then((data) => {
