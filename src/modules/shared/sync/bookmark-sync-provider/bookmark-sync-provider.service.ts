@@ -14,7 +14,7 @@ import {
 } from '../../bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../bookmark/bookmark-helper/bookmark-helper.service';
 import { CryptoService } from '../../crypto/crypto.service';
-import * as Exceptions from '../../exception/exception';
+import { AmbiguousSyncRequestError, ClientDataNotFoundError } from '../../errors/errors';
 import { PlatformService } from '../../global-shared.interface';
 import { LogService } from '../../log/log.service';
 import { NetworkService } from '../../network/network.service';
@@ -153,7 +153,7 @@ export class BookmarkSyncProviderService implements SyncProvider {
         return this.processUpgradeSync();
       // Ambiguous sync
       default:
-        throw new Exceptions.AmbiguousSyncRequestException();
+        throw new AmbiguousSyncRequestError();
     }
   }
 
@@ -180,7 +180,7 @@ export class BookmarkSyncProviderService implements SyncProvider {
             }
 
             if (!changeInfo) {
-              throw new Exceptions.AmbiguousSyncRequestException();
+              throw new AmbiguousSyncRequestError();
             }
             return this.bookmarkHelperSvc.getCachedBookmarks();
           })
@@ -355,7 +355,7 @@ export class BookmarkSyncProviderService implements SyncProvider {
       // Check secret and sync ID are present
       if (!storeContent.password || !storeContent.syncId) {
         return this.disable().then(() => {
-          throw new Exceptions.ClientDataNotFoundException();
+          throw new ClientDataNotFoundError();
         });
       }
 
@@ -448,7 +448,7 @@ export class BookmarkSyncProviderService implements SyncProvider {
       case BookmarkChangeType.Remove:
         return this.updateBookmarksForChangeTypeRemove(bookmarks, changeInfo.changeData as RemoveBookmarkChangeData);
       default:
-        throw new Exceptions.AmbiguousSyncRequestException();
+        throw new AmbiguousSyncRequestError();
     }
   }
 

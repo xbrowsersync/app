@@ -1,7 +1,7 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
+import browser, { Bookmarks as NativeBookmarks } from 'webextension-polyfill';
 import { BookmarkChangeType, BookmarkContainer } from '../../../../shared/bookmark/bookmark.enum';
 import {
   AddNativeBookmarkChangeData,
@@ -11,11 +11,11 @@ import {
   MoveNativeBookmarkChangeData
 } from '../../../../shared/bookmark/bookmark.interface';
 import {
-  ContainerNotFoundException,
-  Exception,
-  FailedCreateNativeBookmarksException,
-  FailedRemoveNativeBookmarksException
-} from '../../../../shared/exception/exception';
+  BaseError,
+  ContainerNotFoundError,
+  FailedCreateNativeBookmarksError,
+  FailedRemoveNativeBookmarksError
+} from '../../../../shared/errors/errors';
 import { WebpageMetadata } from '../../../../shared/global-shared.interface';
 import { WebExtBookmarkService } from '../../../shared/webext-bookmark/webext-bookmark.service';
 
@@ -106,7 +106,7 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
         return this.$q.all([clearMenu, clearMobile, clearOthers, clearToolbar]).then(() => {});
       })
       .catch((err) => {
-        throw new FailedRemoveNativeBookmarksException(undefined, err);
+        throw new FailedRemoveNativeBookmarksError(undefined, err);
       });
   }
 
@@ -210,7 +210,7 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
     };
     return browser.bookmarks.create(newSeparator).catch((err) => {
       this.logSvc.logInfo('Failed to create native separator');
-      throw new FailedCreateNativeBookmarksException(undefined, err);
+      throw new FailedCreateNativeBookmarksError(undefined, err);
     });
   }
 
@@ -225,7 +225,7 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
       .then(() => {})
       .catch((err) => {
         this.logSvc.logWarning('Failed to disable event listeners');
-        throw new Exception(undefined, err);
+        throw new BaseError(undefined, err);
       });
   }
 
@@ -245,7 +245,7 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
       })
       .catch((err) => {
         this.logSvc.logWarning('Failed to enable event listeners');
-        throw new Exception(undefined, err);
+        throw new BaseError(undefined, err);
       });
   }
 
@@ -516,7 +516,7 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
             if (!toolbarBookmarksNode) {
               this.logSvc.logWarning('Missing container: toolbar bookmarks');
             }
-            throw new ContainerNotFoundException();
+            throw new ContainerNotFoundError();
           }
 
           // Add container ids to result

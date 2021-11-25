@@ -164,219 +164,279 @@
       "default": "View"
     }
   },
-  "Exception": {
-    "ContainerChanged_Message": {
-      "key": "Exception_ContainerChanged_Message",
-      "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
+  "Error": {
+    "ContainerChanged": {
+      "Message": {
+        "key": "Error_ContainerChanged_Message",
+        "default": "Please avoid modifying [xbs] folders as it can cause sync issues."
+      },
+      "Title": {
+        "key": "Error_ContainerChanged_Title",
+        "default": "xBrowserSync folder changed"
+      }
     },
-    "ContainerChanged_Title": {
-      "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync folder changed"
+    "DailyNewSyncLimitReached": {
+      "Message": {
+        "key": "Error_DailyNewSyncLimitReached_Message",
+        "default": "Sync to an existing sync ID, switch to a different service or try again tomorrow."
+      },
+      "Title": {
+        "key": "Error_DailyNewSyncLimitReached_Title",
+        "default": "Daily new sync limit reached"
+      }
     },
-    "DailyNewSyncLimitReached_Message": {
-      "key": "Exception_DailyNewSyncLimitReached_Message",
-      "default": "Sync to an existing sync ID, switch to a different service or try again tomorrow."
+    "Default": {
+      "Message": {
+        "key": "Error_Default_Message",
+        "default": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
+      },
+      "Title": {
+        "key": "Error_Default_Title",
+        "default": "Something went wrong"
+      }
     },
-    "DailyNewSyncLimitReached_Title": {
-      "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "Daily new sync limit reached"
+    "FailedDownloadFile": {
+      "Title": {
+        "key": "Error_FailedDownloadFile_Title",
+        "default": "Backup failed"
+      }
     },
-    "Default_Message": {
-      "key": "Exception_Default_Message",
-      "default": "If the problem persists please <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>report the issue</a>."
+    "FailedGetDataToRestore": {
+      "Title": {
+        "key": "Error_FailedGetDataToRestore_Title",
+        "default": "Browse files failed"
+      }
     },
-    "Default_Title": {
-      "key": "Exception_Default_Title",
-      "default": "Something went wrong"
+    "FailedGetPageMetadata": {
+      "Message": {
+        "key": "Error_FailedGetPageMetadata_Message",
+        "default": "URL is invalid or webpage data could not be retrieved."
+      },
+      "Title": {
+        "key": "Error_FailedGetPageMetadata_Title",
+        "default": "Couldn’t get bookmark properties"
+      }
     },
-    "FailedDownloadFile_Title": {
-      "key": "Exception_FailedDownloadFile_Title",
-      "default": "Backup failed"
+    "FailedRefreshBookmarks": {
+      "Title": {
+        "key": "Error_FailedRefreshBookmarks_Title",
+        "default": "Couldn’t retrieve updates"
+      }
     },
-    "FailedGetDataToRestore_Title": {
-      "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "Browse files failed"
+    "FailedRestoreData": {
+      "Message": {
+        "key": "Error_FailedRestoreData_Message",
+        "default": "The backup data provided is not in an expected format."
+      },
+      "Title": {
+        "key": "Error_FailedRestoreData_Title",
+        "default": "Unable to restore data"
+      }
     },
-    "FailedGetPageMetadata_Message": {
-      "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "URL is invalid or webpage data could not be retrieved."
+    "FailedShareUrlNotSynced": {
+      "Title": {
+        "key": "Error_FailedShareUrlNotSynced_Title",
+        "default": "You must be synced to add a bookmark"
+      }
     },
-    "FailedGetPageMetadata_Title": {
-      "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "Couldn’t get bookmark properties"
+    "FailedShareUrl": {
+      "Title": {
+        "key": "Error_FailedShareUrl_Title",
+        "default": "Unable to retrieve shared bookmark URL"
+      }
     },
-    "FailedRefreshBookmarks_Title": {
-      "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "Couldn’t retrieve updates"
+    "InvalidCredentials": {
+      "Message": {
+        "key": "Error_InvalidCredentials_Message",
+        "default": "Check that your sync ID, password and service URL have been entered correctly."
+      },
+      "Title": {
+        "key": "Error_InvalidCredentials_Title",
+        "default": "Invalid credentials"
+      }
     },
-    "FailedRestoreData_Message": {
-      "key": "Exception_FailedRestoreData_Message",
-      "default": "The backup data provided is not in an expected format."
+    "InvalidService": {
+      "Message": {
+        "key": "Error_InvalidService_Message",
+        "default": "The service URL is not a valid xBrowserSync service."
+      },
+      "Title": {
+        "key": "Error_InvalidService_Title",
+        "default": "Invalid xBrowserSync service"
+      }
     },
-    "FailedRestoreData_Title": {
-      "key": "Exception_FailedRestoreData_Title",
-      "default": "Unable to restore data"
+    "LocalContainerNotFound": {
+      "Message": {
+        "key": "Error_LocalContainerNotFound_Message",
+        "default": "Possible corrupt browser profile, try creating a new profile as it may resolve the issue."
+      },
+      "Title": {
+        "key": "Error_LocalContainerNotFound_Title",
+        "default": "Unexpected bookmarks structure"
+      }
     },
-    "FailedShareUrlNotSynced_Title": {
-      "key": "Exception_FailedShareUrlNotSynced_Title",
-      "default": "You must be synced to add a bookmark"
+    "LocalSyncError": {
+      "Message": {
+        "key": "Error_LocalSyncError_Message",
+        "default": "Local browser data has been refreshed, please reapply last change."
+      },
+      "Title": {
+        "key": "Error_LocalSyncError_Title",
+        "default": "Sync error"
+      }
     },
-    "FailedShareUrl_Title": {
-      "key": "Exception_FailedShareUrl_Title",
-      "default": "Unable to retrieve shared bookmark URL"
+    "MissingClientData": {
+      "Message": {
+        "key": "Error_MissingClientData_Message",
+        "default": "Unable to find stored credentials. Re-enable sync and try again."
+      },
+      "Title": {
+        "key": "Error_MissingClientData_Title",
+        "default": "Missing credentials"
+      }
     },
-    "InvalidCredentials_Message": {
-      "key": "Exception_InvalidCredentials_Message",
-      "default": "Check that your sync ID, password and service URL have been entered correctly."
+    "NetworkConnection": {
+      "Message": {
+        "key": "Error_NetworkConnection_Message",
+        "default": "Check your network connection and try again."
+      },
+      "Title": {
+        "key": "Error_NetworkConnection_Title",
+        "default": "Connection lost"
+      }
     },
-    "InvalidCredentials_Title": {
-      "key": "Exception_InvalidCredentials_Title",
-      "default": "Invalid credentials"
+    "NoDataToRestore": {
+      "Message": {
+        "key": "Error_NoDataToRestore_Message",
+        "default": "Ensure you have provided a valid xBrowserSync back up before restoring."
+      },
+      "Title": {
+        "key": "Error_NoDataToRestore_Title",
+        "default": "No data to restore"
+      }
     },
-    "InvalidService_Message": {
-      "key": "Exception_InvalidService_Message",
-      "default": "The service URL is not a valid xBrowserSync service."
+    "NotAcceptingNewSyncs": {
+      "Message": {
+        "key": "Error_NotAcceptingNewSyncs_Message",
+        "default": "Switch to a different service or try again later."
+      },
+      "Title": {
+        "key": "Error_NotAcceptingNewSyncs_Title",
+        "default": "Service not accepting new syncs"
+      }
     },
-    "InvalidService_Title": {
-      "key": "Exception_InvalidService_Title",
-      "default": "Invalid xBrowserSync service"
+    "OutOfSync": {
+      "Message": {
+        "key": "Error_OutOfSync_Message",
+        "default": "Local data was out of sync and has now been refreshed. Please reapply last change."
+      },
+      "Title": {
+        "key": "Error_OutOfSync_Title",
+        "default": "Sync conflict detected"
+      }
     },
-    "LocalContainerNotFound_Message": {
-      "key": "Exception_LocalContainerNotFound_Message",
-      "default": "Possible corrupt browser profile, try creating a new profile as it may resolve the issue."
+    "RequestEntityTooLarge": {
+      "Message": {
+        "key": "Error_RequestEntityTooLarge_Message",
+        "default": "Delete some bookmarks and try again or switch to a service with a larger sync limit."
+      },
+      "Title": {
+        "key": "Error_RequestEntityTooLarge_Title",
+        "default": "Sync data limit exceeded"
+      }
     },
-    "LocalContainerNotFound_Title": {
-      "key": "Exception_LocalContainerNotFound_Title",
-      "default": "Unexpected bookmarks structure"
+    "ScanFailed": {
+      "Message": {
+        "key": "Error_ScanFailed_Message",
+        "default": "Check permission has been granted and try again."
+      },
+      "Title": {
+        "key": "Error_ScanFailed_Title",
+        "default": "Scan failed"
+      }
     },
-    "LocalSyncError_Message": {
-      "key": "Exception_LocalSyncError_Message",
-      "default": "Local browser data has been refreshed, please reapply last change."
+    "ServiceOffline": {
+      "Message": {
+        "key": "Error_ServiceOffline_Message",
+        "default": "The xBrowserSync service is currently offline, try again later."
+      },
+      "Title": {
+        "key": "Error_ServiceOffline_Title",
+        "default": "Service offline"
+      }
     },
-    "LocalSyncError_Title": {
-      "key": "Exception_LocalSyncError_Title",
-      "default": "Sync error"
+    "ShareFailed": {
+      "Title": {
+        "key": "Error_ShareFailed_Title",
+        "default": "Share failed"
+      }
     },
-    "MissingClientData_Message": {
-      "key": "Exception_MissingClientData_Message",
-      "default": "Unable to find stored credentials. Re-enable sync and try again."
+    "SyncRemoved": {
+      "Message": {
+        "key": "Error_SyncRemoved_Message",
+        "default": "The requested sync does not exist, it may have been removed due to inactivity."
+      },
+      "Title": {
+        "key": "Error_SyncRemoved_Title",
+        "default": "Sync not found"
+      }
     },
-    "MissingClientData_Title": {
-      "key": "Exception_MissingClientData_Title",
-      "default": "Missing credentials"
+    "SyncVersionNotSupported": {
+      "Restore": {
+        "Message": {
+          "key": "Error_SyncVersionNotSupported_Restore_Message",
+          "default": "The backup data cannot be restored by this version of xBrowserSync as it was created with a later version."
+        }
+      },
+      "Message": {
+        "key": "Error_SyncVersionNotSupported_Message",
+        "default": "This ID cannot be synced with this version of xBrowserSync as the sync has been upgraded to a later version."
+      },
+      "Title": {
+        "key": "Error_SyncVersionNotSupported_Title",
+        "default": "Sync version not supported"
+      }
     },
-    "NetworkConnection_Message": {
-      "key": "Exception_NetworkConnection_Message",
-      "default": "Check your network connection and try again."
+    "TooManyRequests": {
+      "Message": {
+        "key": "Error_TooManyRequests_Message",
+        "default": "Sync has been disabled, re-enable sync to resume syncing."
+      },
+      "Title": {
+        "key": "Error_TooManyRequests_Title",
+        "default": "Service request limit hit"
+      }
     },
-    "NetworkConnection_Title": {
-      "key": "Exception_NetworkConnection_Title",
-      "default": "Connection lost"
+    "UncommittedSyncs": {
+      "Message": {
+        "key": "Error_UncommittedSyncs_Message",
+        "default": "Changes will be synced once connection is restored."
+      },
+      "Title": {
+        "key": "Error_UncommittedSyncs_Title",
+        "default": "Connection lost"
+      }
     },
-    "NoDataToRestore_Message": {
-      "key": "Exception_NoDataToRestore_Message",
-      "default": "Ensure you have provided a valid xBrowserSync back up before restoring."
+    "UnsupportedServiceApiVersion": {
+      "Message": {
+        "key": "Error_UnsupportedServiceApiVersion_Message",
+        "default": "This service is running an unsupported API version."
+      },
+      "Title": {
+        "key": "Error_UnsupportedServiceApiVersion_Title",
+        "default": "Service not supported"
+      }
     },
-    "NoDataToRestore_Title": {
-      "key": "Exception_NoDataToRestore_Title",
-      "default": "No data to restore"
-    },
-    "NotAcceptingNewSyncs_Message": {
-      "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Switch to a different service or try again later."
-    },
-    "NotAcceptingNewSyncs_Title": {
-      "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "Service not accepting new syncs"
-    },
-    "OutOfSync_Message": {
-      "key": "Exception_OutOfSync_Message",
-      "default": "Local data was out of sync and has now been refreshed. Please reapply last change."
-    },
-    "OutOfSync_Title": {
-      "key": "Exception_OutOfSync_Title",
-      "default": "Sync conflict detected"
-    },
-    "RequestEntityTooLarge_Message": {
-      "key": "Exception_RequestEntityTooLarge_Message",
-      "default": "Delete some bookmarks and try again or switch to a service with a larger sync limit."
-    },
-    "RequestEntityTooLarge_Title": {
-      "key": "Exception_RequestEntityTooLarge_Title",
-      "default": "Sync data limit exceeded"
-    },
-    "ScanFailed_Message": {
-      "key": "Exception_ScanFailed_Message",
-      "default": "Check permission has been granted and try again."
-    },
-    "ScanFailed_Title": {
-      "key": "Exception_ScanFailed_Title",
-      "default": "Scan failed"
-    },
-    "ServiceOffline_Message": {
-      "key": "Exception_ServiceOffline_Message",
-      "default": "The xBrowserSync service is currently offline, try again later."
-    },
-    "ServiceOffline_Title": {
-      "key": "Exception_ServiceOffline_Title",
-      "default": "Service offline"
-    },
-    "ShareFailed_Title": {
-      "key": "Exception_ShareFailed_Title",
-      "default": "Share failed"
-    },
-    "SyncRemoved_Message": {
-      "key": "Exception_SyncRemoved_Message",
-      "default": "The requested sync does not exist, it may have been removed due to inactivity."
-    },
-    "SyncRemoved_Title": {
-      "key": "Exception_SyncRemoved_Title",
-      "default": "Sync not found"
-    },
-    "SyncVersionNotSupported_Message": {
-      "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "This ID cannot be synced with this version of xBrowserSync as the sync has been upgraded to a later version."
-    },
-    "SyncVersionNotSupported_Restore_Message": {
-      "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "The backup data cannot be restored by this version of xBrowserSync as it was created with a later version."
-    },
-    "SyncVersionNotSupported_Title": {
-      "key": "Exception_SyncVersionNotSupported_Title",
-      "default": "Sync version not supported"
-    },
-    "TooManyRequests_Message": {
-      "key": "Exception_TooManyRequests_Message",
-      "default": "Sync has been disabled, re-enable sync to resume syncing."
-    },
-    "TooManyRequests_Title": {
-      "key": "Exception_TooManyRequests_Title",
-      "default": "Service request limit hit"
-    },
-    "UncommittedSyncs_Message": {
-      "key": "Exception_UncommittedSyncs_Message",
-      "default": "Changes will be synced once connection is restored."
-    },
-    "UncommittedSyncs_Title": {
-      "key": "Exception_UncommittedSyncs_Title",
-      "default": "Connection lost"
-    },
-    "UnsupportedServiceApiVersion_Message": {
-      "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "This service is running an unsupported API version."
-    },
-    "UnsupportedServiceApiVersion_Title": {
-      "key": "Exception_UnsupportedServiceApiVersion_Title",
-      "default": "Service not supported"
-    },
-    "UpgradeFailed_Message": {
-      "key": "Exception_UpgradeFailed_Message",
-      "android": "Upgrade will be retried on restarting the app. If the problem persists please reinstall xBrowserSync.",
-      "default": "Restart your browser to retry upgrade, if the problem persists please reinstall xBrowserSync."
-    },
-    "UpgradeFailed_Title": {
-      "key": "Exception_UpgradeFailed_Title",
-      "default": "Upgrade failed"
+    "UpgradeFailed": {
+      "Message": {
+        "key": "Error_UpgradeFailed_Message",
+        "android": "Upgrade will be retried on restarting the app. If the problem persists please reinstall xBrowserSync.",
+        "default": "Restart your browser to retry upgrade, if the problem persists please reinstall xBrowserSync."
+      },
+      "Title": {
+        "key": "Error_UpgradeFailed_Title",
+        "default": "Upgrade failed"
+      }
     }
   },
   "Service": {

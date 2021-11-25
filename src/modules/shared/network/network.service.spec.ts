@@ -1,5 +1,4 @@
-import 'jest';
-import { Exception, NetworkConnectionException } from '../exception/exception';
+import { BaseError, NetworkConnectionError } from '../errors/errors';
 import { NetworkService } from './network.service';
 
 describe('NetworkService', () => {
@@ -10,15 +9,15 @@ describe('NetworkService', () => {
   it('isNetworkConnectionError: Returns true for isNetworkConnectionError', async () => {
     const networkSvc = new NetworkService();
 
-    const isNetworkConnectionErrorResult = networkSvc.isNetworkConnectionError(new NetworkConnectionException());
+    const isNetworkConnectionErrorResult = networkSvc.isNetworkConnectionError(new NetworkConnectionError());
 
     expect(isNetworkConnectionErrorResult).toBe(true);
   });
 
-  it('isNetworkConnectionError: Returns false for base Exception', async () => {
+  it('isNetworkConnectionError: Returns false for base Error', async () => {
     const networkSvc = new NetworkService();
 
-    const isNetworkConnectionErrorResult = networkSvc.isNetworkConnectionError(new Exception());
+    const isNetworkConnectionErrorResult = networkSvc.isNetworkConnectionError(new BaseError());
 
     expect(isNetworkConnectionErrorResult).toBe(false);
   });

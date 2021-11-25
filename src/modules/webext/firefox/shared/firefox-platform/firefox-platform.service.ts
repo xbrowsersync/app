@@ -1,6 +1,6 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { browser } from 'webextension-polyfill-ts';
+import browser from 'webextension-polyfill';
 import { PlatformType } from '../../../../shared/global-shared.enum';
 import { WebExtPlatformService } from '../../../shared/webext-platform/webext-platform.service';
 

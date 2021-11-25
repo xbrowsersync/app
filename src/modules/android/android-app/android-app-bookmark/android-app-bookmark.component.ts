@@ -8,7 +8,7 @@ import { AlertType } from '../../../shared/alert/alert.enum';
 import { AlertService } from '../../../shared/alert/alert.service';
 import { Bookmark, BookmarkMetadata } from '../../../shared/bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import { ExceptionHandler } from '../../../shared/exception/exception.interface';
+import { ExceptionHandler } from '../../../shared/errors/errors.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { LogService } from '../../../shared/log/log.service';

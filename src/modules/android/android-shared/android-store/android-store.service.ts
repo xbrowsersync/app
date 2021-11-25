@@ -1,7 +1,7 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import * as Exceptions from '../../../shared/exception/exception';
+import { FailedLocalStorageError } from '../../../shared/errors/errors';
 import { StoreKey } from '../../../shared/store/store.enum';
 import { StoreContent, TraceLogItem } from '../../../shared/store/store.interface';
 import { StoreService } from '../../../shared/store/store.service';
@@ -168,7 +168,7 @@ export class AndroidStoreService extends StoreService {
         if ((err as any).code === NativeStorageError.ItemNotFound) {
           return resolve();
         }
-        reject(new Exceptions.FailedLocalStorageException(NativeStorageError[(err as any).code], err));
+        reject(new FailedLocalStorageError(NativeStorageError[(err as any).code], err));
       };
       window.NativeStorage.getItem(key, resolve, failure);
     });
@@ -210,7 +210,7 @@ export class AndroidStoreService extends StoreService {
   }
 
   protected handleSqlError(err: Error): never {
-    throw new Exceptions.FailedLocalStorageException(err.message);
+    throw new FailedLocalStorageError(err.message);
   }
 
   protected keys(): ng.IPromise<IDBValidKey[]> {

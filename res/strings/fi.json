@@ -164,219 +164,279 @@
       "default": "Näytä"
     }
   },
-  "Exception": {
-    "ContainerChanged_Message": {
-      "key": "Exception_ContainerChanged_Message",
-      "default": "Älä muokkaa [xbs]-kansioita, koska se voi aiheuttaa synkronointiongelmia."
+  "Error": {
+    "ContainerChanged": {
+      "Message": {
+        "key": "Error_ContainerChanged_Message",
+        "default": "Älä muokkaa [xbs]-kansioita, koska se voi aiheuttaa synkronointiongelmia."
+      },
+      "Title": {
+        "key": "Error_ContainerChanged_Title",
+        "default": "xBrowserSync-kansio muuttunut"
+      }
     },
-    "ContainerChanged_Title": {
-      "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync-kansio muuttunut"
+    "DailyNewSyncLimitReached": {
+      "Message": {
+        "key": "Error_DailyNewSyncLimitReached_Message",
+        "default": "Synkronoi olemassa olevalla synkronointitunnuksella, vaihda toiseen palveluun tai yritä huomenna uudelleen."
+      },
+      "Title": {
+        "key": "Error_DailyNewSyncLimitReached_Title",
+        "default": "Päivittäinen uusien synkronointien raja saavutettu"
+      }
     },
-    "DailyNewSyncLimitReached_Message": {
-      "key": "Exception_DailyNewSyncLimitReached_Message",
-      "default": "Synkronoi olemassa olevalla synkronointitunnuksella, vaihda toiseen palveluun tai yritä huomenna uudelleen."
+    "Default": {
+      "Message": {
+        "key": "Error_Default_Message",
+        "default": "Jos ongelma jatkuu, <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>ilmoita ongelmasta</a>."
+      },
+      "Title": {
+        "key": "Error_Default_Title",
+        "default": "Jokin meni pieleen"
+      }
     },
-    "DailyNewSyncLimitReached_Title": {
-      "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "Päivittäinen uusien synkronointien raja saavutettu"
+    "FailedDownloadFile": {
+      "Title": {
+        "key": "Error_FailedDownloadFile_Title",
+        "default": "Varmuuskopiointi epäonnistui"
+      }
     },
-    "Default_Message": {
-      "key": "Exception_Default_Message",
-      "default": "Jos ongelma jatkuu, <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>ilmoita ongelmasta</a>."
+    "FailedGetDataToRestore": {
+      "Title": {
+        "key": "Error_FailedGetDataToRestore_Title",
+        "default": "Tiedostojen selaus epäonnistui"
+      }
     },
-    "Default_Title": {
-      "key": "Exception_Default_Title",
-      "default": "Jokin meni pieleen"
+    "FailedGetPageMetadata": {
+      "Message": {
+        "key": "Error_FailedGetPageMetadata_Message",
+        "default": "URL-osoite on virheellinen tai verkkosivun tietojen nouto epäonnistui."
+      },
+      "Title": {
+        "key": "Error_FailedGetPageMetadata_Title",
+        "default": "Kirjanmerkin tietojen nouto epäonnistui"
+      }
     },
-    "FailedDownloadFile_Title": {
-      "key": "Exception_FailedDownloadFile_Title",
-      "default": "Varmuuskopiointi epäonnistui"
+    "FailedRefreshBookmarks": {
+      "Title": {
+        "key": "Error_FailedRefreshBookmarks_Title",
+        "default": "Päivitysten nouto epäonnistui"
+      }
     },
-    "FailedGetDataToRestore_Title": {
-      "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "Tiedostojen selaus epäonnistui"
+    "FailedRestoreData": {
+      "Message": {
+        "key": "Error_FailedRestoreData_Message",
+        "default": "Varmuuskopion tiedot eivät ole odotetussa muodossa."
+      },
+      "Title": {
+        "key": "Error_FailedRestoreData_Title",
+        "default": "Tietojen palautus epäonnistui"
+      }
     },
-    "FailedGetPageMetadata_Message": {
-      "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "URL-osoite on virheellinen tai verkkosivun tietojen nouto epäonnistui."
+    "FailedShareUrlNotSynced": {
+      "Title": {
+        "key": "Error_FailedShareUrlNotSynced_Title",
+        "default": "Synkronoinin on oltava ajan tasalla kirjanmerkin lisäystä varten"
+      }
     },
-    "FailedGetPageMetadata_Title": {
-      "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "Kirjanmerkin tietojen nouto epäonnistui"
+    "FailedShareUrl": {
+      "Title": {
+        "key": "Error_FailedShareUrl_Title",
+        "default": "Jaetun kirjanmerkin URL-osoitteen nouto epäonnistui"
+      }
     },
-    "FailedRefreshBookmarks_Title": {
-      "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "Päivitysten nouto epäonnistui"
+    "InvalidCredentials": {
+      "Message": {
+        "key": "Error_InvalidCredentials_Message",
+        "default": "Tarkista, että synkronointitunnus, salasana ja palvelun URL-osoite on syötetty oikein."
+      },
+      "Title": {
+        "key": "Error_InvalidCredentials_Title",
+        "default": "Virheelliset tunnistetiedot"
+      }
     },
-    "FailedRestoreData_Message": {
-      "key": "Exception_FailedRestoreData_Message",
-      "default": "Varmuuskopion tiedot eivät ole odotetussa muodossa."
+    "InvalidService": {
+      "Message": {
+        "key": "Error_InvalidService_Message",
+        "default": "URL-osoite ei ole kelvollinen xBrowserSync-palvelu."
+      },
+      "Title": {
+        "key": "Error_InvalidService_Title",
+        "default": "Virheellinen xBrowserSync-palvelu"
+      }
     },
-    "FailedRestoreData_Title": {
-      "key": "Exception_FailedRestoreData_Title",
-      "default": "Tietojen palautus epäonnistui"
+    "LocalContainerNotFound": {
+      "Message": {
+        "key": "Error_LocalContainerNotFound_Message",
+        "default": "Selaimen profiili on mahdollisesti vioittunut. Uuden profiilin luonti saattaa korjata ongelman."
+      },
+      "Title": {
+        "key": "Error_LocalContainerNotFound_Title",
+        "default": "Odottamaton kirjanmerkkien rakenne"
+      }
     },
-    "FailedShareUrlNotSynced_Title": {
-      "key": "Exception_FailedShareUrlNotSynced_Title",
-      "default": "Synkronoinin on oltava ajan tasalla kirjanmerkin lisäystä varten"
+    "LocalSyncError": {
+      "Message": {
+        "key": "Error_LocalSyncError_Message",
+        "default": "Paikalliset tiedot on päivitetty. Tee viimeisin muutos uudelleen."
+      },
+      "Title": {
+        "key": "Error_LocalSyncError_Title",
+        "default": "Synkronointivirhe"
+      }
     },
-    "FailedShareUrl_Title": {
-      "key": "Exception_FailedShareUrl_Title",
-      "default": "Jaetun kirjanmerkin URL-osoitteen nouto epäonnistui"
+    "MissingClientData": {
+      "Message": {
+        "key": "Error_MissingClientData_Message",
+        "default": "Tallennettuja tunnistetietoja ei löytynyt. Ota synkronointi uudelleen käyttöön ja yritä uudelleen."
+      },
+      "Title": {
+        "key": "Error_MissingClientData_Title",
+        "default": "Tunnistetiedot puuttuvat"
+      }
     },
-    "InvalidCredentials_Message": {
-      "key": "Exception_InvalidCredentials_Message",
-      "default": "Tarkista, että synkronointitunnus, salasana ja palvelun URL-osoite on syötetty oikein."
+    "NetworkConnection": {
+      "Message": {
+        "key": "Error_NetworkConnection_Message",
+        "default": "Tarkista verkkoyhteys ja yritä uudelleen."
+      },
+      "Title": {
+        "key": "Error_NetworkConnection_Title",
+        "default": "Yhteys palveluun katkesi"
+      }
     },
-    "InvalidCredentials_Title": {
-      "key": "Exception_InvalidCredentials_Title",
-      "default": "Virheelliset tunnistetiedot"
+    "NoDataToRestore": {
+      "Message": {
+        "key": "Error_NoDataToRestore_Message",
+        "default": "Varmista, että olet antanut oikean xBrowserSync-varmuuskopion ennen palautusta."
+      },
+      "Title": {
+        "key": "Error_NoDataToRestore_Title",
+        "default": "Palautettavia tietoja ei ole"
+      }
     },
-    "InvalidService_Message": {
-      "key": "Exception_InvalidService_Message",
-      "default": "URL-osoite ei ole kelvollinen xBrowserSync-palvelu."
+    "NotAcceptingNewSyncs": {
+      "Message": {
+        "key": "Error_NotAcceptingNewSyncs_Message",
+        "default": "Vaihda toiseen palveluun tai yritä myöhemmin uudelleen."
+      },
+      "Title": {
+        "key": "Error_NotAcceptingNewSyncs_Title",
+        "default": "Palvelu ei salli uusia synkronointeja"
+      }
     },
-    "InvalidService_Title": {
-      "key": "Exception_InvalidService_Title",
-      "default": "Virheellinen xBrowserSync-palvelu"
+    "OutOfSync": {
+      "Message": {
+        "key": "Error_OutOfSync_Message",
+        "default": "Paikalliset tiedot eivät olleet synkronoituneet ja ne on nyt päivitetty. Tee viimeisin muutos uudelleen."
+      },
+      "Title": {
+        "key": "Error_OutOfSync_Title",
+        "default": "Havaittiin synkronointiristiriita"
+      }
     },
-    "LocalContainerNotFound_Message": {
-      "key": "Exception_LocalContainerNotFound_Message",
-      "default": "Selaimen profiili on mahdollisesti vioittunut. Uuden profiilin luonti saattaa korjata ongelman."
+    "RequestEntityTooLarge": {
+      "Message": {
+        "key": "Error_RequestEntityTooLarge_Message",
+        "default": "Poista kirjanmerkkejä ja yritä uudelleen tai vaihda palveluun, joka sallii enemmän synkronoitavia tietoja."
+      },
+      "Title": {
+        "key": "Error_RequestEntityTooLarge_Title",
+        "default": "Synkronointitietojen raja on ylitetty"
+      }
     },
-    "LocalContainerNotFound_Title": {
-      "key": "Exception_LocalContainerNotFound_Title",
-      "default": "Odottamaton kirjanmerkkien rakenne"
+    "ScanFailed": {
+      "Message": {
+        "key": "Error_ScanFailed_Message",
+        "default": "Tarkista, että käyttöoikeus on myönnetty ja yritä uudelleen."
+      },
+      "Title": {
+        "key": "Error_ScanFailed_Title",
+        "default": "Skannaus epäonnistui"
+      }
     },
-    "LocalSyncError_Message": {
-      "key": "Exception_LocalSyncError_Message",
-      "default": "Paikalliset tiedot on päivitetty. Tee viimeisin muutos uudelleen."
+    "ServiceOffline": {
+      "Message": {
+        "key": "Error_ServiceOffline_Message",
+        "default": "xBrowserSync-palvelu ei ole tällä hetkellä tavoitettavissa. Yritä myöhemmin uudelleen."
+      },
+      "Title": {
+        "key": "Error_ServiceOffline_Title",
+        "default": "Palvelu ei ole tavoitettavissa"
+      }
     },
-    "LocalSyncError_Title": {
-      "key": "Exception_LocalSyncError_Title",
-      "default": "Synkronointivirhe"
+    "ShareFailed": {
+      "Title": {
+        "key": "Error_ShareFailed_Title",
+        "default": "Jako epäonnistui"
+      }
     },
-    "MissingClientData_Message": {
-      "key": "Exception_MissingClientData_Message",
-      "default": "Tallennettuja tunnistetietoja ei löytynyt. Ota synkronointi uudelleen käyttöön ja yritä uudelleen."
+    "SyncRemoved": {
+      "Message": {
+        "key": "Error_SyncRemoved_Message",
+        "default": "Synkronointia ei ole olemassa. Se on saatettu poistaa käyttämättömänä."
+      },
+      "Title": {
+        "key": "Error_SyncRemoved_Title",
+        "default": "Synkronointia ei löydy"
+      }
     },
-    "MissingClientData_Title": {
-      "key": "Exception_MissingClientData_Title",
-      "default": "Tunnistetiedot puuttuvat"
+    "SyncVersionNotSupported": {
+      "Restore": {
+        "Message": {
+          "key": "Error_SyncVersionNotSupported_Restore_Message",
+          "default": "Varmuuskopion palautus ei ole mahdollista tällä xBrowserSync-versiolla, koska se on luotu uudemmalla versiolla."
+        }
+      },
+      "Message": {
+        "key": "Error_SyncVersionNotSupported_Message",
+        "default": "Tunnuksen synkronointi ei ole mahdollista tällä xBrowserSync-versiolla, koska se on päivitetty uudempaan versioon."
+      },
+      "Title": {
+        "key": "Error_SyncVersionNotSupported_Title",
+        "default": "Synkronoinnin versiota ei tueta"
+      }
     },
-    "NetworkConnection_Message": {
-      "key": "Exception_NetworkConnection_Message",
-      "default": "Tarkista verkkoyhteys ja yritä uudelleen."
+    "TooManyRequests": {
+      "Message": {
+        "key": "Error_TooManyRequests_Message",
+        "default": "Synkronointi on poistettu käytöstä. Ota se uudelleen käyttöön jatkaaksesi synkronointia."
+      },
+      "Title": {
+        "key": "Error_TooManyRequests_Title",
+        "default": "Palvelupyyntöjen raja saavutettu"
+      }
     },
-    "NetworkConnection_Title": {
-      "key": "Exception_NetworkConnection_Title",
-      "default": "Yhteys palveluun katkesi"
+    "UncommittedSyncs": {
+      "Message": {
+        "key": "Error_UncommittedSyncs_Message",
+        "default": "Synkronointi suoritetaan kun yhteys palveluun on palautettu."
+      },
+      "Title": {
+        "key": "Error_UncommittedSyncs_Title",
+        "default": "Muutoksia ei synkronoitu"
+      }
     },
-    "NoDataToRestore_Message": {
-      "key": "Exception_NoDataToRestore_Message",
-      "default": "Varmista, että olet antanut oikean xBrowserSync-varmuuskopion ennen palautusta."
+    "UnsupportedServiceApiVersion": {
+      "Message": {
+        "key": "Error_UnsupportedServiceApiVersion_Message",
+        "default": "Palvelu käyttää rajapinnan versiota, jota ei tueta."
+      },
+      "Title": {
+        "key": "Error_UnsupportedServiceApiVersion_Title",
+        "default": "Palvelua ei tueta"
+      }
     },
-    "NoDataToRestore_Title": {
-      "key": "Exception_NoDataToRestore_Title",
-      "default": "Palautettavia tietoja ei ole"
-    },
-    "NotAcceptingNewSyncs_Message": {
-      "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Vaihda toiseen palveluun tai yritä myöhemmin uudelleen."
-    },
-    "NotAcceptingNewSyncs_Title": {
-      "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "Palvelu ei salli uusia synkronointeja"
-    },
-    "OutOfSync_Message": {
-      "key": "Exception_OutOfSync_Message",
-      "default": "Paikalliset tiedot eivät olleet synkronoituneet ja ne on nyt päivitetty. Tee viimeisin muutos uudelleen."
-    },
-    "OutOfSync_Title": {
-      "key": "Exception_OutOfSync_Title",
-      "default": "Havaittiin synkronointiristiriita"
-    },
-    "RequestEntityTooLarge_Message": {
-      "key": "Exception_RequestEntityTooLarge_Message",
-      "default": "Poista kirjanmerkkejä ja yritä uudelleen tai vaihda palveluun, joka sallii enemmän synkronoitavia tietoja."
-    },
-    "RequestEntityTooLarge_Title": {
-      "key": "Exception_RequestEntityTooLarge_Title",
-      "default": "Synkronointitietojen raja on ylitetty"
-    },
-    "ScanFailed_Message": {
-      "key": "Exception_ScanFailed_Message",
-      "default": "Tarkista, että käyttöoikeus on myönnetty ja yritä uudelleen."
-    },
-    "ScanFailed_Title": {
-      "key": "Exception_ScanFailed_Title",
-      "default": "Skannaus epäonnistui"
-    },
-    "ServiceOffline_Message": {
-      "key": "Exception_ServiceOffline_Message",
-      "default": "xBrowserSync-palvelu ei ole tällä hetkellä tavoitettavissa. Yritä myöhemmin uudelleen."
-    },
-    "ServiceOffline_Title": {
-      "key": "Exception_ServiceOffline_Title",
-      "default": "Palvelu ei ole tavoitettavissa"
-    },
-    "ShareFailed_Title": {
-      "key": "Exception_ShareFailed_Title",
-      "default": "Jako epäonnistui"
-    },
-    "SyncRemoved_Message": {
-      "key": "Exception_SyncRemoved_Message",
-      "default": "Synkronointia ei ole olemassa. Se on saatettu poistaa käyttämättömänä."
-    },
-    "SyncRemoved_Title": {
-      "key": "Exception_SyncRemoved_Title",
-      "default": "Synkronointia ei löydy"
-    },
-    "SyncVersionNotSupported_Message": {
-      "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "Tunnuksen synkronointi ei ole mahdollista tällä xBrowserSync-versiolla, koska se on päivitetty uudempaan versioon."
-    },
-    "SyncVersionNotSupported_Restore_Message": {
-      "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "Varmuuskopion palautus ei ole mahdollista tällä xBrowserSync-versiolla, koska se on luotu uudemmalla versiolla."
-    },
-    "SyncVersionNotSupported_Title": {
-      "key": "Exception_SyncVersionNotSupported_Title",
-      "default": "Synkronoinnin versiota ei tueta"
-    },
-    "TooManyRequests_Message": {
-      "key": "Exception_TooManyRequests_Message",
-      "default": "Synkronointi on poistettu käytöstä. Ota se uudelleen käyttöön jatkaaksesi synkronointia."
-    },
-    "TooManyRequests_Title": {
-      "key": "Exception_TooManyRequests_Title",
-      "default": "Palvelupyyntöjen raja saavutettu"
-    },
-    "UncommittedSyncs_Message": {
-      "key": "Exception_UncommittedSyncs_Message",
-      "default": "Synkronointi suoritetaan kun yhteys palveluun on palautettu."
-    },
-    "UncommittedSyncs_Title": {
-      "key": "Exception_UncommittedSyncs_Title",
-      "default": "Muutoksia ei synkronoitu"
-    },
-    "UnsupportedServiceApiVersion_Message": {
-      "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "Palvelu käyttää rajapinnan versiota, jota ei tueta."
-    },
-    "UnsupportedServiceApiVersion_Title": {
-      "key": "Exception_UnsupportedServiceApiVersion_Title",
-      "default": "Palvelua ei tueta"
-    },
-    "UpgradeFailed_Message": {
-      "key": "Exception_UpgradeFailed_Message",
-      "android": "Päivitystä yritetään uudelleen sovelluksen käynnistyessä. Jos ongelma jatkuu, asenna xBrowserSync uudelleen.",
-      "default": "Yritä päivitystä uudestaan käynnistämällä selain uudelleen. Jos ongelma jatkuu, asenna xBrowserSync uudelleen."
-    },
-    "UpgradeFailed_Title": {
-      "key": "Exception_UpgradeFailed_Title",
-      "default": "Päivitys epäonnistui"
+    "UpgradeFailed": {
+      "Message": {
+        "key": "Error_UpgradeFailed_Message",
+        "android": "Päivitystä yritetään uudelleen sovelluksen käynnistyessä. Jos ongelma jatkuu, asenna xBrowserSync uudelleen.",
+        "default": "Yritä päivitystä uudestaan käynnistämällä selain uudelleen. Jos ongelma jatkuu, asenna xBrowserSync uudelleen."
+      },
+      "Title": {
+        "key": "Error_UpgradeFailed_Title",
+        "default": "Päivitys epäonnistui"
+      }
     }
   },
   "Service": {

@@ -1,6 +1,6 @@
 import angular from 'angular';
 import autobind from 'autobind-decorator';
-import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
+import browser, { Bookmarks as NativeBookmarks } from 'webextension-polyfill';
 import { BookmarkChangeType, BookmarkContainer, BookmarkType } from '../../../shared/bookmark/bookmark.enum';
 import {
   AddNativeBookmarkChangeData,
@@ -16,7 +16,17 @@ import {
   UpdateBookmarksResult
 } from '../../../shared/bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import * as Exceptions from '../../../shared/exception/exception';
+import {
+  AmbiguousSyncRequestError,
+  BookmarkNotFoundError,
+  ContainerChangedError,
+  ContainerNotFoundError,
+  FailedCreateNativeBookmarksError,
+  FailedGetNativeBookmarksError,
+  FailedRemoveNativeBookmarksError,
+  FailedUpdateNativeBookmarksError,
+  NativeBookmarkNotFoundError
+} from '../../../shared/errors/errors';
 import { MessageCommand } from '../../../shared/global-shared.enum';
 import { PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
 import { LogService } from '../../../shared/log/log.service';
@@ -95,7 +105,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
     const updatedBookmarks = angular.copy(bookmarks);
     const parent = this.bookmarkHelperSvc.findBookmarkById(parentId, updatedBookmarks);
     if (!parent) {
-      throw new Exceptions.BookmarkNotFoundException();
+      throw new BookmarkNotFoundError();
     }
     parent.children.splice(index, 0, bookmark);
 
@@ -228,7 +238,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
       // If container is Toolbar, check if Toolbar sync is disabled
       const container = this.bookmarkHelperSvc.getContainerByBookmarkId(changedBookmark.id, bookmarks);
       if (!container) {
-        throw new Exceptions.ContainerNotFoundException();
+        throw new ContainerNotFoundError();
       }
       if (container.title === BookmarkContainer.Toolbar && !syncBookmarksToolbar) {
         this.logSvc.logInfo('Not syncing toolbar');
@@ -302,7 +312,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
   createBookmarkFromNativeBookmarkId(id: string, bookmarks: Bookmark[]): ng.IPromise<Bookmark> {
     return browser.bookmarks.get(id).then((results) => {
       if (results?.length === 0) {
-        throw new Exceptions.NativeBookmarkNotFoundException();
+        throw new NativeBookmarkNotFoundError();
       }
       const nativeBookmark = results[0];
       const convertedBookmark = this.convertNativeBookmarkToBookmark(nativeBookmark, bookmarks);
@@ -329,7 +339,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
 
     return browser.bookmarks.create(nativeBookmarkInfo).catch((err) => {
       this.logSvc.logWarning(`Failed to create native bookmark: ${JSON.stringify(nativeBookmarkInfo)}`);
-      throw new Exceptions.FailedCreateNativeBookmarksException(undefined, err);
+      throw new FailedCreateNativeBookmarksError(undefined, err);
     });
   }
 
@@ -488,7 +498,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
 
     return browser.bookmarks.update(id, updateInfo).catch((err) => {
       this.logSvc.logInfo(`Failed to modify native bookmark: ${JSON.stringify(newMetadata)}`);
-      throw new Exceptions.FailedUpdateNativeBookmarksException(undefined, err);
+      throw new FailedUpdateNativeBookmarksError(undefined, err);
     });
   }
 
@@ -526,7 +536,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
       case BookmarkChangeType.Remove:
         return this.processChangeTypeRemoveOnNativeBookmarks(id);
       default:
-        throw new Exceptions.AmbiguousSyncRequestException();
+        throw new AmbiguousSyncRequestError();
     }
   }
 
@@ -537,7 +547,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
     // Check if container was changed
     return this.wasContainerChanged(changeData.nativeBookmark).then((changedBookmarkIsContainer) => {
       if (changedBookmarkIsContainer) {
-        throw new Exceptions.ContainerChangedException();
+        throw new ContainerChangedError();
       }
 
       return this.getContainerNameFromNativeId(changeData.nativeBookmark.parentId)
@@ -656,7 +666,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
     // Check if container was changed
     return this.wasContainerChanged(changeData.nativeBookmark).then((changedBookmarkIsContainer) => {
       if (changedBookmarkIsContainer) {
-        throw new Exceptions.ContainerChangedException();
+        throw new ContainerChangedError();
       }
 
       // Retrieve id mapping using change data
@@ -704,7 +714,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
     return this.getNativeContainerIds().then((nativeContainerIds) => {
       // Check if container was moved to a different folder
       if (Array.from(nativeContainerIds.values()).includes(undefined)) {
-        throw new Exceptions.ContainerChangedException();
+        throw new ContainerChangedError();
       }
 
       return browser.bookmarks.get(changeData.id).then((results) => {
@@ -843,7 +853,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
     // Check if container was changed
     return this.wasContainerChanged(changeData.nativeBookmark).then((changedBookmarkIsContainer) => {
       if (changedBookmarkIsContainer) {
-        throw new Exceptions.ContainerChangedException();
+        throw new ContainerChangedError();
       }
 
       // Retrieve the id mapping using change data
@@ -913,7 +923,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
         case BookmarkChangeType.Modify:
           return this.syncNativeBookmarkChanged(...currentEvent.eventArgs);
         default:
-          throw new Exceptions.AmbiguousSyncRequestException();
+          throw new AmbiguousSyncRequestError();
       }
     };
 
@@ -950,7 +960,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
           changeInfo.changeData as RemoveNativeBookmarkChangeData
         );
       default:
-        throw new Exceptions.AmbiguousSyncRequestException();
+        throw new AmbiguousSyncRequestError();
     }
   }
 
@@ -971,7 +981,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
   removeNativeBookmarks(id: string): ng.IPromise<void> {
     return browser.bookmarks.removeTree(id).catch((err) => {
       this.logSvc.logInfo(`Failed to remove native bookmark: ${id}`);
-      throw new Exceptions.FailedRemoveNativeBookmarksException(undefined, err);
+      throw new FailedRemoveNativeBookmarksError(undefined, err);
     });
   }
 
@@ -1072,7 +1082,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
         })
         .catch((err) => {
           this.logSvc.logInfo(`Failed to detect whether container changed: ${JSON.stringify(changedNativeBookmark)}`);
-          throw new Exceptions.FailedGetNativeBookmarksException(undefined, err);
+          throw new FailedGetNativeBookmarksError(undefined, err);
         });
     });
   }

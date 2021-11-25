@@ -1,11 +1,11 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { Bookmarks as NativeBookmarks } from 'webextension-polyfill-ts';
+import { Bookmarks as NativeBookmarks } from 'webextension-polyfill';
 import { BookmarkSearchResult } from '../../../app/app-search/app-search.interface';
 import { ApiService } from '../../api/api.interface';
 import { CryptoService } from '../../crypto/crypto.service';
-import * as Exceptions from '../../exception/exception';
+import { BookmarkNotFoundError, HttpRequestCancelledError } from '../../errors/errors';
 import Globals from '../../global-shared.constants';
 import { PlatformService } from '../../global-shared.interface';
 import { StoreKey } from '../../store/store.enum';
@@ -395,7 +395,7 @@ export class BookmarkHelperService {
       })
       .catch((err) => {
         // Swallow error if request was cancelled
-        if (err instanceof Exceptions.HttpRequestCancelledException) {
+        if (err instanceof HttpRequestCancelledError) {
           return;
         }
 
@@ -451,7 +451,7 @@ export class BookmarkHelperService {
     const updatedBookmarks = angular.copy(bookmarks);
     const bookmarkToModify = this.findBookmarkById(id, updatedBookmarks) as Bookmark;
     if (!bookmarkToModify) {
-      throw new Exceptions.BookmarkNotFoundException();
+      throw new BookmarkNotFoundError();
     }
 
     // Create a new bookmark with the new metadata

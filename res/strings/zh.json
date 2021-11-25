@@ -164,219 +164,279 @@
       "default": "查看"
     }
   },
-  "Exception": {
-    "ContainerChanged_Message": {
-      "key": "Exception_ContainerChanged_Message",
-      "default": "请避免修改 [xbs] 文件夹，因为它会导致同步问题。"
+  "Error": {
+    "ContainerChanged": {
+      "Message": {
+        "key": "Error_ContainerChanged_Message",
+        "default": "请避免修改 [xbs] 文件夹，因为它会导致同步问题。"
+      },
+      "Title": {
+        "key": "Error_ContainerChanged_Title",
+        "default": "xBrowserSync 文件夹已更改"
+      }
     },
-    "ContainerChanged_Title": {
-      "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync 文件夹已更改"
+    "DailyNewSyncLimitReached": {
+      "Message": {
+        "key": "Error_DailyNewSyncLimitReached_Message",
+        "default": "同步到现有同步ID，切换到不同的服务或明天重试。"
+      },
+      "Title": {
+        "key": "Error_DailyNewSyncLimitReached_Title",
+        "default": "达到每日新同步限制"
+      }
     },
-    "DailyNewSyncLimitReached_Message": {
-      "key": "Exception_DailyNewSyncLimitReached_Message",
-      "default": "同步到现有同步ID，切换到不同的服务或明天重试。"
+    "Default": {
+      "Message": {
+        "key": "Error_Default_Message",
+        "default": "如果问题仍然存在，请 <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>报告问题</a>。"
+      },
+      "Title": {
+        "key": "Error_Default_Title",
+        "default": "出现错误"
+      }
     },
-    "DailyNewSyncLimitReached_Title": {
-      "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "达到每日新同步限制"
+    "FailedDownloadFile": {
+      "Title": {
+        "key": "Error_FailedDownloadFile_Title",
+        "default": "备份失败"
+      }
     },
-    "Default_Message": {
-      "key": "Exception_Default_Message",
-      "default": "如果问题仍然存在，请 <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>报告问题</a>。"
+    "FailedGetDataToRestore": {
+      "Title": {
+        "key": "Error_FailedGetDataToRestore_Title",
+        "default": "浏览文件失败"
+      }
     },
-    "Default_Title": {
-      "key": "Exception_Default_Title",
-      "default": "出现错误"
+    "FailedGetPageMetadata": {
+      "Message": {
+        "key": "Error_FailedGetPageMetadata_Message",
+        "default": "URL 无效或无法获取网页数据。"
+      },
+      "Title": {
+        "key": "Error_FailedGetPageMetadata_Title",
+        "default": "无法获取书签属性"
+      }
     },
-    "FailedDownloadFile_Title": {
-      "key": "Exception_FailedDownloadFile_Title",
-      "default": "备份失败"
+    "FailedRefreshBookmarks": {
+      "Title": {
+        "key": "Error_FailedRefreshBookmarks_Title",
+        "default": "无法获取更新"
+      }
     },
-    "FailedGetDataToRestore_Title": {
-      "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "浏览文件失败"
+    "FailedRestoreData": {
+      "Message": {
+        "key": "Error_FailedRestoreData_Message",
+        "default": "提供的备份数据不是预期的格式。"
+      },
+      "Title": {
+        "key": "Error_FailedRestoreData_Title",
+        "default": "无法恢复数据"
+      }
     },
-    "FailedGetPageMetadata_Message": {
-      "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "URL 无效或无法获取网页数据。"
+    "FailedShareUrlNotSynced": {
+      "Title": {
+        "key": "Error_FailedShareUrlNotSynced_Title",
+        "default": "您必须同步才能添加书签"
+      }
     },
-    "FailedGetPageMetadata_Title": {
-      "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "无法获取书签属性"
+    "FailedShareUrl": {
+      "Title": {
+        "key": "Error_FailedShareUrl_Title",
+        "default": "无法获取共享书签URL"
+      }
     },
-    "FailedRefreshBookmarks_Title": {
-      "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "无法获取更新"
+    "InvalidCredentials": {
+      "Message": {
+        "key": "Error_InvalidCredentials_Message",
+        "default": "检查您的同步ID、密码和服务URL是否正确输入。"
+      },
+      "Title": {
+        "key": "Error_InvalidCredentials_Title",
+        "default": "无效的凭据"
+      }
     },
-    "FailedRestoreData_Message": {
-      "key": "Exception_FailedRestoreData_Message",
-      "default": "提供的备份数据不是预期的格式。"
+    "InvalidService": {
+      "Message": {
+        "key": "Error_InvalidService_Message",
+        "default": "服务 URL 不是有效的 xBrowserSync 服务。"
+      },
+      "Title": {
+        "key": "Error_InvalidService_Title",
+        "default": "无效的 xBrowserSync 服务"
+      }
     },
-    "FailedRestoreData_Title": {
-      "key": "Exception_FailedRestoreData_Title",
-      "default": "无法恢复数据"
+    "LocalContainerNotFound": {
+      "Message": {
+        "key": "Error_LocalContainerNotFound_Message",
+        "default": "可能损坏的浏览器配置文件， 请尝试创建新的配置文件来解决这个问题。"
+      },
+      "Title": {
+        "key": "Error_LocalContainerNotFound_Title",
+        "default": "意外的书签结构"
+      }
     },
-    "FailedShareUrlNotSynced_Title": {
-      "key": "Exception_FailedShareUrlNotSynced_Title",
-      "default": "您必须同步才能添加书签"
+    "LocalSyncError": {
+      "Message": {
+        "key": "Error_LocalSyncError_Message",
+        "default": "本地浏览器数据已刷新，请重新应用上次更改。"
+      },
+      "Title": {
+        "key": "Error_LocalSyncError_Title",
+        "default": "同步出错"
+      }
     },
-    "FailedShareUrl_Title": {
-      "key": "Exception_FailedShareUrl_Title",
-      "default": "无法获取共享书签URL"
+    "MissingClientData": {
+      "Message": {
+        "key": "Error_MissingClientData_Message",
+        "default": "找不到存储的凭据。 重新启用同步，然后重试。"
+      },
+      "Title": {
+        "key": "Error_MissingClientData_Title",
+        "default": "缺少凭据"
+      }
     },
-    "InvalidCredentials_Message": {
-      "key": "Exception_InvalidCredentials_Message",
-      "default": "检查您的同步ID、密码和服务URL是否正确输入。"
+    "NetworkConnection": {
+      "Message": {
+        "key": "Error_NetworkConnection_Message",
+        "default": "请检查你的网络连接并重试。"
+      },
+      "Title": {
+        "key": "Error_NetworkConnection_Title",
+        "default": "与服务器的连接丢失"
+      }
     },
-    "InvalidCredentials_Title": {
-      "key": "Exception_InvalidCredentials_Title",
-      "default": "无效的凭据"
+    "NoDataToRestore": {
+      "Message": {
+        "key": "Error_NoDataToRestore_Message",
+        "default": "请确保您在恢复之前提供了有效的 xBrowserSync 备份。"
+      },
+      "Title": {
+        "key": "Error_NoDataToRestore_Title",
+        "default": "没有数据可恢复"
+      }
     },
-    "InvalidService_Message": {
-      "key": "Exception_InvalidService_Message",
-      "default": "服务 URL 不是有效的 xBrowserSync 服务。"
+    "NotAcceptingNewSyncs": {
+      "Message": {
+        "key": "Error_NotAcceptingNewSyncs_Message",
+        "default": "切换到不同的服务或稍后再试。"
+      },
+      "Title": {
+        "key": "Error_NotAcceptingNewSyncs_Title",
+        "default": "服务不接受新同步"
+      }
     },
-    "InvalidService_Title": {
-      "key": "Exception_InvalidService_Title",
-      "default": "无效的 xBrowserSync 服务"
+    "OutOfSync": {
+      "Message": {
+        "key": "Error_OutOfSync_Message",
+        "default": "本地数据未同步，现已刷新。请重新应用上次更改。"
+      },
+      "Title": {
+        "key": "Error_OutOfSync_Title",
+        "default": "检测到同步冲突"
+      }
     },
-    "LocalContainerNotFound_Message": {
-      "key": "Exception_LocalContainerNotFound_Message",
-      "default": "可能损坏的浏览器配置文件， 请尝试创建新的配置文件来解决这个问题。"
+    "RequestEntityTooLarge": {
+      "Message": {
+        "key": "Error_RequestEntityTooLarge_Message",
+        "default": "删除一些书签，然后重试或切换到具有更大同步限制的服务。"
+      },
+      "Title": {
+        "key": "Error_RequestEntityTooLarge_Title",
+        "default": "超过同步数据限制"
+      }
     },
-    "LocalContainerNotFound_Title": {
-      "key": "Exception_LocalContainerNotFound_Title",
-      "default": "意外的书签结构"
+    "ScanFailed": {
+      "Message": {
+        "key": "Error_ScanFailed_Message",
+        "default": "检查权限已授予，然后重试。"
+      },
+      "Title": {
+        "key": "Error_ScanFailed_Title",
+        "default": "扫描失败"
+      }
     },
-    "LocalSyncError_Message": {
-      "key": "Exception_LocalSyncError_Message",
-      "default": "本地浏览器数据已刷新，请重新应用上次更改。"
+    "ServiceOffline": {
+      "Message": {
+        "key": "Error_ServiceOffline_Message",
+        "default": "xBrowserSync 服务目前处于离线状态，请稍后再试。"
+      },
+      "Title": {
+        "key": "Error_ServiceOffline_Title",
+        "default": "离线服务"
+      }
     },
-    "LocalSyncError_Title": {
-      "key": "Exception_LocalSyncError_Title",
-      "default": "同步出错"
+    "ShareFailed": {
+      "Title": {
+        "key": "Error_ShareFailed_Title",
+        "default": "分享失败"
+      }
     },
-    "MissingClientData_Message": {
-      "key": "Exception_MissingClientData_Message",
-      "default": "找不到存储的凭据。 重新启用同步，然后重试。"
+    "SyncRemoved": {
+      "Message": {
+        "key": "Error_SyncRemoved_Message",
+        "default": "请求的同步不存在，可能因为没有活动而被删除。"
+      },
+      "Title": {
+        "key": "Error_SyncRemoved_Title",
+        "default": "同步未找到"
+      }
     },
-    "MissingClientData_Title": {
-      "key": "Exception_MissingClientData_Title",
-      "default": "缺少凭据"
+    "SyncVersionNotSupported": {
+      "Restore": {
+        "Message": {
+          "key": "Error_SyncVersionNotSupported_Restore_Message",
+          "default": "无法通过此版本的 xBrowserSync 还原备份数据，因为它是用更高版本创建的。"
+        }
+      },
+      "Message": {
+        "key": "Error_SyncVersionNotSupported_Message",
+        "default": "此ID不能与此版本的 xBrowserSync 同步，因为同步已经升级到更高版本。"
+      },
+      "Title": {
+        "key": "Error_SyncVersionNotSupported_Title",
+        "default": "同步的版本不被支持"
+      }
     },
-    "NetworkConnection_Message": {
-      "key": "Exception_NetworkConnection_Message",
-      "default": "请检查你的网络连接并重试。"
+    "TooManyRequests": {
+      "Message": {
+        "key": "Error_TooManyRequests_Message",
+        "default": "同步已禁用，重新启用同步以恢复同步。"
+      },
+      "Title": {
+        "key": "Error_TooManyRequests_Title",
+        "default": "服务请求数量限制"
+      }
     },
-    "NetworkConnection_Title": {
-      "key": "Exception_NetworkConnection_Title",
-      "default": "与服务器的连接丢失"
+    "UncommittedSyncs": {
+      "Message": {
+        "key": "Error_UncommittedSyncs_Message",
+        "default": "同步将在连接服务恢复后进行。"
+      },
+      "Title": {
+        "key": "Error_UncommittedSyncs_Title",
+        "default": "更改没有同步"
+      }
     },
-    "NoDataToRestore_Message": {
-      "key": "Exception_NoDataToRestore_Message",
-      "default": "请确保您在恢复之前提供了有效的 xBrowserSync 备份。"
+    "UnsupportedServiceApiVersion": {
+      "Message": {
+        "key": "Error_UnsupportedServiceApiVersion_Message",
+        "default": "此服务正在运行一个不支持的 API 版本。"
+      },
+      "Title": {
+        "key": "Error_UnsupportedServiceApiVersion_Title",
+        "default": "服务不受支持"
+      }
     },
-    "NoDataToRestore_Title": {
-      "key": "Exception_NoDataToRestore_Title",
-      "default": "没有数据可恢复"
-    },
-    "NotAcceptingNewSyncs_Message": {
-      "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "切换到不同的服务或稍后再试。"
-    },
-    "NotAcceptingNewSyncs_Title": {
-      "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "服务不接受新同步"
-    },
-    "OutOfSync_Message": {
-      "key": "Exception_OutOfSync_Message",
-      "default": "本地数据未同步，现已刷新。请重新应用上次更改。"
-    },
-    "OutOfSync_Title": {
-      "key": "Exception_OutOfSync_Title",
-      "default": "检测到同步冲突"
-    },
-    "RequestEntityTooLarge_Message": {
-      "key": "Exception_RequestEntityTooLarge_Message",
-      "default": "删除一些书签，然后重试或切换到具有更大同步限制的服务。"
-    },
-    "RequestEntityTooLarge_Title": {
-      "key": "Exception_RequestEntityTooLarge_Title",
-      "default": "超过同步数据限制"
-    },
-    "ScanFailed_Message": {
-      "key": "Exception_ScanFailed_Message",
-      "default": "检查权限已授予，然后重试。"
-    },
-    "ScanFailed_Title": {
-      "key": "Exception_ScanFailed_Title",
-      "default": "扫描失败"
-    },
-    "ServiceOffline_Message": {
-      "key": "Exception_ServiceOffline_Message",
-      "default": "xBrowserSync 服务目前处于离线状态，请稍后再试。"
-    },
-    "ServiceOffline_Title": {
-      "key": "Exception_ServiceOffline_Title",
-      "default": "离线服务"
-    },
-    "ShareFailed_Title": {
-      "key": "Exception_ShareFailed_Title",
-      "default": "分享失败"
-    },
-    "SyncRemoved_Message": {
-      "key": "Exception_SyncRemoved_Message",
-      "default": "请求的同步不存在，可能因为没有活动而被删除。"
-    },
-    "SyncRemoved_Title": {
-      "key": "Exception_SyncRemoved_Title",
-      "default": "同步未找到"
-    },
-    "SyncVersionNotSupported_Message": {
-      "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "此ID不能与此版本的 xBrowserSync 同步，因为同步已经升级到更高版本。"
-    },
-    "SyncVersionNotSupported_Restore_Message": {
-      "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "无法通过此版本的 xBrowserSync 还原备份数据，因为它是用更高版本创建的。"
-    },
-    "SyncVersionNotSupported_Title": {
-      "key": "Exception_SyncVersionNotSupported_Title",
-      "default": "同步的版本不被支持"
-    },
-    "TooManyRequests_Message": {
-      "key": "Exception_TooManyRequests_Message",
-      "default": "同步已禁用，重新启用同步以恢复同步。"
-    },
-    "TooManyRequests_Title": {
-      "key": "Exception_TooManyRequests_Title",
-      "default": "服务请求数量限制"
-    },
-    "UncommittedSyncs_Message": {
-      "key": "Exception_UncommittedSyncs_Message",
-      "default": "同步将在连接服务恢复后进行。"
-    },
-    "UncommittedSyncs_Title": {
-      "key": "Exception_UncommittedSyncs_Title",
-      "default": "更改没有同步"
-    },
-    "UnsupportedServiceApiVersion_Message": {
-      "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "此服务正在运行一个不支持的 API 版本。"
-    },
-    "UnsupportedServiceApiVersion_Title": {
-      "key": "Exception_UnsupportedServiceApiVersion_Title",
-      "default": "服务不受支持"
-    },
-    "UpgradeFailed_Message": {
-      "key": "Exception_UpgradeFailed_Message",
-      "android": "重启应用后将重试升级。如果问题仍然存在，请重新安装 xBrowserSync。",
-      "default": "重新启动您的浏览器以重试升级，如果问题仍然存在，请重新安装 xBrowserSync。"
-    },
-    "UpgradeFailed_Title": {
-      "key": "Exception_UpgradeFailed_Title",
-      "default": "升级失败"
+    "UpgradeFailed": {
+      "Message": {
+        "key": "Error_UpgradeFailed_Message",
+        "android": "重启应用后将重试升级。如果问题仍然存在，请重新安装 xBrowserSync。",
+        "default": "重新启动您的浏览器以重试升级，如果问题仍然存在，请重新安装 xBrowserSync。"
+      },
+      "Title": {
+        "key": "Error_UpgradeFailed_Title",
+        "default": "升级失败"
+      }
     }
   },
   "Service": {

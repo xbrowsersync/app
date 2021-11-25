@@ -3,8 +3,8 @@ import { Component } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AlertType } from '../../../shared/alert/alert.enum';
 import { AlertService } from '../../../shared/alert/alert.service';
-import { AndroidException } from '../../../shared/exception/exception';
-import { ExceptionHandler } from '../../../shared/exception/exception.interface';
+import { AndroidError } from '../../../shared/errors/errors';
+import { ExceptionHandler } from '../../../shared/errors/errors.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { AndroidPlatformService } from '../../android-shared/android-platform/android-platform.service';
 import { AndroidAlert } from '../android-app.interface';
@@ -81,7 +81,7 @@ export class AndroidAppAlertComponent {
       }
     };
     const failure = (errMessage) => {
-      this.$exceptionHandler(new AndroidException('Failed to create snackbar'), errMessage);
+      this.$exceptionHandler(new AndroidError('Failed to create snackbar'), errMessage);
     };
 
     // Ensure soft keyboard is hidden

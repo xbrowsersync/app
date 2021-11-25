@@ -4,7 +4,7 @@ import NgFilter from 'angular-filter';
 import NgSanitize from 'angular-sanitize';
 import { NgModule } from 'angular-ts-decorators';
 import NgInfiniteScroll from 'ng-infinite-scroll';
-import { ExceptionHandlerService } from '../shared/exception/exception-handler/exception-handler.service';
+import { ExceptionHandlerService } from '../shared/errors/exception-handler/exception-handler.service';
 import { GlobalSharedModule } from '../shared/global-shared.module';
 import { AppBackgroundComponent } from './app-background/app-background.component';
 import { AppHelpComponent } from './app-help/app-help.component';

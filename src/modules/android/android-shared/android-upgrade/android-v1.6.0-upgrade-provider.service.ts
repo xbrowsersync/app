@@ -1,6 +1,6 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import * as Exceptions from '../../../shared/exception/exception';
+import { FailedLocalStorageError } from '../../../shared/errors/errors';
 import { StoreKey } from '../../../shared/store/store.enum';
 import { V160UpgradeProviderService } from '../../../shared/upgrade/v1.6.0-upgrade-provider/v1.6.0-upgrade-provider.service';
 
@@ -18,7 +18,7 @@ export class AndroidV160UpgradeProviderService extends V160UpgradeProviderServic
           // Item not found
           return resolve(null);
         }
-        reject(new Exceptions.FailedLocalStorageException(undefined, err));
+        reject(new FailedLocalStorageError(undefined, err));
       };
 
       const success = (keys: string[]) => {

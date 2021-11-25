@@ -2,13 +2,18 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import * as detectBrowser from 'detect-browser';
-import { Alarms, browser, Downloads, Notifications } from 'webextension-polyfill-ts';
+import browser, { Alarms, Downloads, Notifications } from 'webextension-polyfill';
 import { Alert } from '../../shared/alert/alert.interface';
 import { AlertService } from '../../shared/alert/alert.service';
 import { BackupRestoreService } from '../../shared/backup-restore/backup-restore.service';
 import { BookmarkHelperService } from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import * as Exceptions from '../../shared/exception/exception';
-import { ExceptionHandler } from '../../shared/exception/exception.interface';
+import {
+  AmbiguousSyncRequestError,
+  FailedDownloadFileError,
+  HttpRequestCancelledError,
+  SyncNotFoundError
+} from '../../shared/errors/errors';
+import { ExceptionHandler } from '../../shared/errors/errors.interface';
 import Globals from '../../shared/global-shared.constants';
 import { MessageCommand } from '../../shared/global-shared.enum';
 import { PlatformService } from '../../shared/global-shared.interface';
@@ -170,7 +175,7 @@ export class WebExtBackgroundService {
     }
 
     // Handle sync removed from service
-    if (err instanceof Exceptions.SyncNotFoundException) {
+    if (err instanceof SyncNotFoundError) {
       this.syncSvc.setSyncRemoved();
     }
 
@@ -199,7 +204,7 @@ export class WebExtBackgroundService {
               this.utilitySvc.isSyncEnabled().then((syncEnabledAfterError) => {
                 if (!syncEnabledAfterError) {
                   this.logSvc.logInfo('Sync was disabled before retry attempted');
-                  return reject(new Exceptions.HttpRequestCancelledException());
+                  return reject(new HttpRequestCancelledError());
                 }
                 this.syncSvc.checkForUpdates().then(resolve).catch(reject);
               });
@@ -448,11 +453,11 @@ export class WebExtBackgroundService {
           break;
         // Unknown command
         default:
-          action = this.$q.reject(new Exceptions.AmbiguousSyncRequestException());
+          action = this.$q.reject(new AmbiguousSyncRequestError());
       }
       action.then(resolve).catch(reject);
     }).catch((err) => {
-      // Set message to exception class name so sender can rehydrate the exception on receipt
+      // Set message to error class name so sender can rehydrate the error on receipt
       err.message = err.constructor.name;
       throw err;
     });
@@ -506,7 +511,7 @@ export class WebExtBackgroundService {
                 if (delta.error?.current === 'USER_CANCELED') {
                   resolve();
                 } else {
-                  reject(new Exceptions.FailedDownloadFileException());
+                  reject(new FailedDownloadFileError());
                 }
                 break;
               default:

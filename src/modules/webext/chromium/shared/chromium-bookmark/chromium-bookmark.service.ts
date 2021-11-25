@@ -1,7 +1,7 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { Bookmarks as NativeBookmarks, browser } from 'webextension-polyfill-ts';
+import browser, { Bookmarks as NativeBookmarks } from 'webextension-polyfill';
 import { BookmarkChangeType, BookmarkContainer, BookmarkType } from '../../../../shared/bookmark/bookmark.enum';
 import {
   AddNativeBookmarkChangeData,
@@ -11,12 +11,12 @@ import {
   MoveNativeBookmarkChangeData
 } from '../../../../shared/bookmark/bookmark.interface';
 import {
-  BookmarkMappingNotFoundException,
-  ContainerNotFoundException,
-  Exception,
-  FailedCreateNativeBookmarksException,
-  FailedRemoveNativeBookmarksException
-} from '../../../../shared/exception/exception';
+  BaseError,
+  BookmarkMappingNotFoundError,
+  ContainerNotFoundError,
+  FailedCreateNativeBookmarksError,
+  FailedRemoveNativeBookmarksError
+} from '../../../../shared/errors/errors';
 import Globals from '../../../../shared/global-shared.constants';
 import { WebpageMetadata } from '../../../../shared/global-shared.interface';
 import { WebExtBookmarkService } from '../../../shared/webext-bookmark/webext-bookmark.service';
@@ -78,7 +78,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
         return this.$q.all([clearOthers, clearToolbar]).then(() => {});
       })
       .catch((err) => {
-        throw new FailedRemoveNativeBookmarksException(undefined, err);
+        throw new FailedRemoveNativeBookmarksError(undefined, err);
       });
   }
 
@@ -236,7 +236,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
     };
     return browser.bookmarks.create(newSeparator).catch((err) => {
       this.logSvc.logInfo('Failed to create native separator');
-      throw new FailedCreateNativeBookmarksException(undefined, err);
+      throw new FailedCreateNativeBookmarksError(undefined, err);
     });
   }
 
@@ -252,7 +252,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
       .then(() => {})
       .catch((err) => {
         this.logSvc.logWarning('Failed to disable event listeners');
-        throw new Exception(undefined, err);
+        throw new BaseError(undefined, err);
       });
   }
 
@@ -273,7 +273,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
       })
       .catch((err) => {
         this.logSvc.logWarning('Failed to enable event listeners');
-        throw new Exception(undefined, err);
+        throw new BaseError(undefined, err);
       });
   }
 
@@ -498,7 +498,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
             if (!toolbarBookmarksNode) {
               this.logSvc.logWarning('Missing container: toolbar bookmarks');
             }
-            throw new ContainerNotFoundException();
+            throw new ContainerNotFoundError();
           }
 
           // Check for unsupported containers
@@ -556,7 +556,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
         if (bookmarkNode.id !== id) {
           updateMappingPromise = this.bookmarkIdMapperSvc.get(id).then((idMapping) => {
             if (!idMapping) {
-              throw new BookmarkMappingNotFoundException();
+              throw new BookmarkMappingNotFoundError();
             }
 
             return this.bookmarkIdMapperSvc.remove(idMapping.syncedId).then(() => {
@@ -639,7 +639,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
         if (bookmarkNode.id !== id) {
           updateMappingPromise = this.bookmarkIdMapperSvc.get(id).then((idMapping) => {
             if (!idMapping) {
-              throw new BookmarkMappingNotFoundException();
+              throw new BookmarkMappingNotFoundError();
             }
 
             return this.bookmarkIdMapperSvc.remove(idMapping.syncedId).then(() => {

@@ -1,8 +1,8 @@
-import { Exception } from '../exception/exception';
+import { BaseError } from '../errors/errors';
 import { LogLevel } from './log.enum';
 
 export interface LogQueueItem {
   level: LogLevel;
   message: object | string;
-  error?: Exception;
+  error?: BaseError;
 }

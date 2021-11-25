@@ -5,7 +5,7 @@ import { ApiXbrowsersyncService } from './api/api-xbrowsersync/api-xbrowsersync.
 import { BackupRestoreService } from './backup-restore/backup-restore.service';
 import { BookmarkHelperService } from './bookmark/bookmark-helper/bookmark-helper.service';
 import { CryptoService } from './crypto/crypto.service';
-import { ExceptionHandlerService } from './exception/exception-handler/exception-handler.service';
+import { ExceptionHandlerService } from './errors/exception-handler/exception-handler.service';
 import { LogService } from './log/log.service';
 import { MetadataService } from './metadata/metadata.service';
 import { NetworkService } from './network/network.service';

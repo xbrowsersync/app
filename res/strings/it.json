@@ -164,219 +164,279 @@
       "default": "Visualizza"
     }
   },
-  "Exception": {
-    "ContainerChanged_Message": {
-      "key": "Exception_ContainerChanged_Message",
-      "default": "Si prega di evitare di modificare le cartelle [xbs] in quanto possono causare problemi di sincronizzazione."
+  "Error": {
+    "ContainerChanged": {
+      "Message": {
+        "key": "Error_ContainerChanged_Message",
+        "default": "Si prega di evitare di modificare le cartelle [xbs] in quanto possono causare problemi di sincronizzazione."
+      },
+      "Title": {
+        "key": "Error_ContainerChanged_Title",
+        "default": "Cartella xBrowserSync cambiata"
+      }
     },
-    "ContainerChanged_Title": {
-      "key": "Exception_ContainerChanged_Title",
-      "default": "Cartella xBrowserSync cambiata"
+    "DailyNewSyncLimitReached": {
+      "Message": {
+        "key": "Error_DailyNewSyncLimitReached_Message",
+        "default": "Sincronizza con un ID di sincronizzazione esistente, passa a un altro server o riprova domani."
+      },
+      "Title": {
+        "key": "Error_DailyNewSyncLimitReached_Title",
+        "default": "Raggiunto un nuovo limite di sincronizzazione giornaliero"
+      }
     },
-    "DailyNewSyncLimitReached_Message": {
-      "key": "Exception_DailyNewSyncLimitReached_Message",
-      "default": "Sincronizza con un ID di sincronizzazione esistente, passa a un altro server o riprova domani."
+    "Default": {
+      "Message": {
+        "key": "Error_Default_Message",
+        "default": "Se il problema persiste, <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>segnala il problema</a>."
+      },
+      "Title": {
+        "key": "Error_Default_Title",
+        "default": "Qualcosa è andato storto"
+      }
     },
-    "DailyNewSyncLimitReached_Title": {
-      "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "Raggiunto un nuovo limite di sincronizzazione giornaliero"
+    "FailedDownloadFile": {
+      "Title": {
+        "key": "Error_FailedDownloadFile_Title",
+        "default": "Backup non riuscito"
+      }
     },
-    "Default_Message": {
-      "key": "Exception_Default_Message",
-      "default": "Se il problema persiste, <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>segnala il problema</a>."
+    "FailedGetDataToRestore": {
+      "Title": {
+        "key": "Error_FailedGetDataToRestore_Title",
+        "default": "Sfoglia file non riuscita"
+      }
     },
-    "Default_Title": {
-      "key": "Exception_Default_Title",
-      "default": "Qualcosa è andato storto"
+    "FailedGetPageMetadata": {
+      "Message": {
+        "key": "Error_FailedGetPageMetadata_Message",
+        "default": "L'URL non è valido o i dati della pagina web non possono essere recuperati."
+      },
+      "Title": {
+        "key": "Error_FailedGetPageMetadata_Title",
+        "default": "Impossibile ottenere le proprietà del segnalibro"
+      }
     },
-    "FailedDownloadFile_Title": {
-      "key": "Exception_FailedDownloadFile_Title",
-      "default": "Backup non riuscito"
+    "FailedRefreshBookmarks": {
+      "Title": {
+        "key": "Error_FailedRefreshBookmarks_Title",
+        "default": "Impossibile recuperare gli aggiornamenti"
+      }
     },
-    "FailedGetDataToRestore_Title": {
-      "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "Sfoglia file non riuscita"
+    "FailedRestoreData": {
+      "Message": {
+        "key": "Error_FailedRestoreData_Message",
+        "default": "I dati di backup forniti non sono in un formato previsto."
+      },
+      "Title": {
+        "key": "Error_FailedRestoreData_Title",
+        "default": "Impossibile ripristinare i dati"
+      }
     },
-    "FailedGetPageMetadata_Message": {
-      "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "L'URL non è valido o i dati della pagina web non possono essere recuperati."
+    "FailedShareUrlNotSynced": {
+      "Title": {
+        "key": "Error_FailedShareUrlNotSynced_Title",
+        "default": "Devi essere sincronizzato per aggiungere un segnalibro"
+      }
     },
-    "FailedGetPageMetadata_Title": {
-      "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "Impossibile ottenere le proprietà del segnalibro"
+    "FailedShareUrl": {
+      "Title": {
+        "key": "Error_FailedShareUrl_Title",
+        "default": "Impossibile recuperare l'URL del segnalibro condiviso"
+      }
     },
-    "FailedRefreshBookmarks_Title": {
-      "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "Impossibile recuperare gli aggiornamenti"
+    "InvalidCredentials": {
+      "Message": {
+        "key": "Error_InvalidCredentials_Message",
+        "default": "Verificare che l'ID di sincronizzazione, la password e l'URL del server siano stati inseriti correttamente."
+      },
+      "Title": {
+        "key": "Error_InvalidCredentials_Title",
+        "default": "Credenziali non valide"
+      }
     },
-    "FailedRestoreData_Message": {
-      "key": "Exception_FailedRestoreData_Message",
-      "default": "I dati di backup forniti non sono in un formato previsto."
+    "InvalidService": {
+      "Message": {
+        "key": "Error_InvalidService_Message",
+        "default": "L'URL del server non è un server xBrowserSync valido."
+      },
+      "Title": {
+        "key": "Error_InvalidService_Title",
+        "default": "Server xBrowserSync non valido"
+      }
     },
-    "FailedRestoreData_Title": {
-      "key": "Exception_FailedRestoreData_Title",
-      "default": "Impossibile ripristinare i dati"
+    "LocalContainerNotFound": {
+      "Message": {
+        "key": "Error_LocalContainerNotFound_Message",
+        "default": "Possibile profilo del browser danneggiato, provare a creare un nuovo profilo in quanto potrebbe risolvere il problema."
+      },
+      "Title": {
+        "key": "Error_LocalContainerNotFound_Title",
+        "default": "Struttura dei segnalibri inattesa"
+      }
     },
-    "FailedShareUrlNotSynced_Title": {
-      "key": "Exception_FailedShareUrlNotSynced_Title",
-      "default": "Devi essere sincronizzato per aggiungere un segnalibro"
+    "LocalSyncError": {
+      "Message": {
+        "key": "Error_LocalSyncError_Message",
+        "default": "I dati del browser locale sono stati aggiornati, si prega di riaggiungere l'ultima modifica."
+      },
+      "Title": {
+        "key": "Error_LocalSyncError_Title",
+        "default": "Errore di sincronizzazione"
+      }
     },
-    "FailedShareUrl_Title": {
-      "key": "Exception_FailedShareUrl_Title",
-      "default": "Impossibile recuperare l'URL del segnalibro condiviso"
+    "MissingClientData": {
+      "Message": {
+        "key": "Error_MissingClientData_Message",
+        "default": "Impossibile trovare le credenziali memorizzate. Riattiva la sincronizzazione e riprova."
+      },
+      "Title": {
+        "key": "Error_MissingClientData_Title",
+        "default": "Credenziali mancanti"
+      }
     },
-    "InvalidCredentials_Message": {
-      "key": "Exception_InvalidCredentials_Message",
-      "default": "Verificare che l'ID di sincronizzazione, la password e l'URL del server siano stati inseriti correttamente."
+    "NetworkConnection": {
+      "Message": {
+        "key": "Error_NetworkConnection_Message",
+        "default": "Controllare la connessione di rete e riprovare."
+      },
+      "Title": {
+        "key": "Error_NetworkConnection_Title",
+        "default": "Connessione al server persa"
+      }
     },
-    "InvalidCredentials_Title": {
-      "key": "Exception_InvalidCredentials_Title",
-      "default": "Credenziali non valide"
+    "NoDataToRestore": {
+      "Message": {
+        "key": "Error_NoDataToRestore_Message",
+        "default": "Assicurati di aver fornito un backup xBrowserSync valido prima del ripristino."
+      },
+      "Title": {
+        "key": "Error_NoDataToRestore_Title",
+        "default": "Nessun dato da ripristinare"
+      }
     },
-    "InvalidService_Message": {
-      "key": "Exception_InvalidService_Message",
-      "default": "L'URL del server non è un server xBrowserSync valido."
+    "NotAcceptingNewSyncs": {
+      "Message": {
+        "key": "Error_NotAcceptingNewSyncs_Message",
+        "default": "Passa a un server diverso o riprova più tardi."
+      },
+      "Title": {
+        "key": "Error_NotAcceptingNewSyncs_Title",
+        "default": "Server che non accetta nuove sincronizzazioni"
+      }
     },
-    "InvalidService_Title": {
-      "key": "Exception_InvalidService_Title",
-      "default": "Server xBrowserSync non valido"
+    "OutOfSync": {
+      "Message": {
+        "key": "Error_OutOfSync_Message",
+        "default": "I dati locali non sono sincronizzati e sono stati aggiornati. Si prega di riapplicare l'ultima modifica."
+      },
+      "Title": {
+        "key": "Error_OutOfSync_Title",
+        "default": "Rilevato conflitto di sincronizzazione"
+      }
     },
-    "LocalContainerNotFound_Message": {
-      "key": "Exception_LocalContainerNotFound_Message",
-      "default": "Possibile profilo del browser danneggiato, provare a creare un nuovo profilo in quanto potrebbe risolvere il problema."
+    "RequestEntityTooLarge": {
+      "Message": {
+        "key": "Error_RequestEntityTooLarge_Message",
+        "default": "Elimina alcuni segnalibri e riprova o passa a un server con un limite di sincronizzazione più grande."
+      },
+      "Title": {
+        "key": "Error_RequestEntityTooLarge_Title",
+        "default": "Limite dati sincronizzati superato"
+      }
     },
-    "LocalContainerNotFound_Title": {
-      "key": "Exception_LocalContainerNotFound_Title",
-      "default": "Struttura dei segnalibri inattesa"
+    "ScanFailed": {
+      "Message": {
+        "key": "Error_ScanFailed_Message",
+        "default": "È stata concessa l'autorizzazione di verifica e riprova."
+      },
+      "Title": {
+        "key": "Error_ScanFailed_Title",
+        "default": "Fallita scansione"
+      }
     },
-    "LocalSyncError_Message": {
-      "key": "Exception_LocalSyncError_Message",
-      "default": "I dati del browser locale sono stati aggiornati, si prega di riaggiungere l'ultima modifica."
+    "ServiceOffline": {
+      "Message": {
+        "key": "Error_ServiceOffline_Message",
+        "default": "Il server xBrowserSync è attualmente non in linea, riprova più tardi."
+      },
+      "Title": {
+        "key": "Error_ServiceOffline_Title",
+        "default": "Server non in linea"
+      }
     },
-    "LocalSyncError_Title": {
-      "key": "Exception_LocalSyncError_Title",
-      "default": "Errore di sincronizzazione"
+    "ShareFailed": {
+      "Title": {
+        "key": "Error_ShareFailed_Title",
+        "default": "Fallita condivisione"
+      }
     },
-    "MissingClientData_Message": {
-      "key": "Exception_MissingClientData_Message",
-      "default": "Impossibile trovare le credenziali memorizzate. Riattiva la sincronizzazione e riprova."
+    "SyncRemoved": {
+      "Message": {
+        "key": "Error_SyncRemoved_Message",
+        "default": "La sincronizzazione richiesta non esiste, potrebbe essere stata rimossa a causa di inattività."
+      },
+      "Title": {
+        "key": "Error_SyncRemoved_Title",
+        "default": "Sincronizzazione non trovata"
+      }
     },
-    "MissingClientData_Title": {
-      "key": "Exception_MissingClientData_Title",
-      "default": "Credenziali mancanti"
+    "SyncVersionNotSupported": {
+      "Restore": {
+        "Message": {
+          "key": "Error_SyncVersionNotSupported_Restore_Message",
+          "default": "I dati di backup non possono essere ripristinati da questa versione di xBrowserSync in quanto sono stati creati con una versione successiva."
+        }
+      },
+      "Message": {
+        "key": "Error_SyncVersionNotSupported_Message",
+        "default": "Questo ID non può essere sincronizzato con questa versione di xBrowserSync perché la sincronizzazione è stata aggiornata a una versione successiva."
+      },
+      "Title": {
+        "key": "Error_SyncVersionNotSupported_Title",
+        "default": "Versione di sincronizzazione non supportata"
+      }
     },
-    "NetworkConnection_Message": {
-      "key": "Exception_NetworkConnection_Message",
-      "default": "Controllare la connessione di rete e riprovare."
+    "TooManyRequests": {
+      "Message": {
+        "key": "Error_TooManyRequests_Message",
+        "default": "La sincronizzazione è stata disattivata, riabilita la sincronizzazione per riprendere la sincronizzazione."
+      },
+      "Title": {
+        "key": "Error_TooManyRequests_Title",
+        "default": "Limite richieste di server raggiunto"
+      }
     },
-    "NetworkConnection_Title": {
-      "key": "Exception_NetworkConnection_Title",
-      "default": "Connessione al server persa"
+    "UncommittedSyncs": {
+      "Message": {
+        "key": "Error_UncommittedSyncs_Message",
+        "default": "La sincronizzazione verrà eseguita una volta ripristinata la connessione al server."
+      },
+      "Title": {
+        "key": "Error_UncommittedSyncs_Title",
+        "default": "Modifiche non sincronizzate"
+      }
     },
-    "NoDataToRestore_Message": {
-      "key": "Exception_NoDataToRestore_Message",
-      "default": "Assicurati di aver fornito un backup xBrowserSync valido prima del ripristino."
+    "UnsupportedServiceApiVersion": {
+      "Message": {
+        "key": "Error_UnsupportedServiceApiVersion_Message",
+        "default": "Questo server sta eseguendo una versione API non supportata."
+      },
+      "Title": {
+        "key": "Error_UnsupportedServiceApiVersion_Title",
+        "default": "Server non supportato"
+      }
     },
-    "NoDataToRestore_Title": {
-      "key": "Exception_NoDataToRestore_Title",
-      "default": "Nessun dato da ripristinare"
-    },
-    "NotAcceptingNewSyncs_Message": {
-      "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Passa a un server diverso o riprova più tardi."
-    },
-    "NotAcceptingNewSyncs_Title": {
-      "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "Server che non accetta nuove sincronizzazioni"
-    },
-    "OutOfSync_Message": {
-      "key": "Exception_OutOfSync_Message",
-      "default": "I dati locali non sono sincronizzati e sono stati aggiornati. Si prega di riapplicare l'ultima modifica."
-    },
-    "OutOfSync_Title": {
-      "key": "Exception_OutOfSync_Title",
-      "default": "Rilevato conflitto di sincronizzazione"
-    },
-    "RequestEntityTooLarge_Message": {
-      "key": "Exception_RequestEntityTooLarge_Message",
-      "default": "Elimina alcuni segnalibri e riprova o passa a un server con un limite di sincronizzazione più grande."
-    },
-    "RequestEntityTooLarge_Title": {
-      "key": "Exception_RequestEntityTooLarge_Title",
-      "default": "Limite dati sincronizzati superato"
-    },
-    "ScanFailed_Message": {
-      "key": "Exception_ScanFailed_Message",
-      "default": "È stata concessa l'autorizzazione di verifica e riprova."
-    },
-    "ScanFailed_Title": {
-      "key": "Exception_ScanFailed_Title",
-      "default": "Fallita scansione"
-    },
-    "ServiceOffline_Message": {
-      "key": "Exception_ServiceOffline_Message",
-      "default": "Il server xBrowserSync è attualmente non in linea, riprova più tardi."
-    },
-    "ServiceOffline_Title": {
-      "key": "Exception_ServiceOffline_Title",
-      "default": "Server non in linea"
-    },
-    "ShareFailed_Title": {
-      "key": "Exception_ShareFailed_Title",
-      "default": "Fallita condivisione"
-    },
-    "SyncRemoved_Message": {
-      "key": "Exception_SyncRemoved_Message",
-      "default": "La sincronizzazione richiesta non esiste, potrebbe essere stata rimossa a causa di inattività."
-    },
-    "SyncRemoved_Title": {
-      "key": "Exception_SyncRemoved_Title",
-      "default": "Sincronizzazione non trovata"
-    },
-    "SyncVersionNotSupported_Message": {
-      "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "Questo ID non può essere sincronizzato con questa versione di xBrowserSync perché la sincronizzazione è stata aggiornata a una versione successiva."
-    },
-    "SyncVersionNotSupported_Restore_Message": {
-      "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "I dati di backup non possono essere ripristinati da questa versione di xBrowserSync in quanto sono stati creati con una versione successiva."
-    },
-    "SyncVersionNotSupported_Title": {
-      "key": "Exception_SyncVersionNotSupported_Title",
-      "default": "Versione di sincronizzazione non supportata"
-    },
-    "TooManyRequests_Message": {
-      "key": "Exception_TooManyRequests_Message",
-      "default": "La sincronizzazione è stata disattivata, riabilita la sincronizzazione per riprendere la sincronizzazione."
-    },
-    "TooManyRequests_Title": {
-      "key": "Exception_TooManyRequests_Title",
-      "default": "Limite richieste di server raggiunto"
-    },
-    "UncommittedSyncs_Message": {
-      "key": "Exception_UncommittedSyncs_Message",
-      "default": "La sincronizzazione verrà eseguita una volta ripristinata la connessione al server."
-    },
-    "UncommittedSyncs_Title": {
-      "key": "Exception_UncommittedSyncs_Title",
-      "default": "Modifiche non sincronizzate"
-    },
-    "UnsupportedServiceApiVersion_Message": {
-      "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "Questo server sta eseguendo una versione API non supportata."
-    },
-    "UnsupportedServiceApiVersion_Title": {
-      "key": "Exception_UnsupportedServiceApiVersion_Title",
-      "default": "Server non supportato"
-    },
-    "UpgradeFailed_Message": {
-      "key": "Exception_UpgradeFailed_Message",
-      "android": "L'aggiornamento verrà riprovato al riavvio dell'app. Se il problema persiste, reinstalla xBrowserSync.",
-      "default": "Riavvia il tuo browser per riprovare l'aggiornamento, se il problema persiste reinstalla xBrowserSync."
-    },
-    "UpgradeFailed_Title": {
-      "key": "Exception_UpgradeFailed_Title",
-      "default": "Aggiornamento non riuscito"
+    "UpgradeFailed": {
+      "Message": {
+        "key": "Error_UpgradeFailed_Message",
+        "android": "L'aggiornamento verrà riprovato al riavvio dell'app. Se il problema persiste, reinstalla xBrowserSync.",
+        "default": "Riavvia il tuo browser per riprovare l'aggiornamento, se il problema persiste reinstalla xBrowserSync."
+      },
+      "Title": {
+        "key": "Error_UpgradeFailed_Title",
+        "default": "Aggiornamento non riuscito"
+      }
     }
   },
   "Service": {

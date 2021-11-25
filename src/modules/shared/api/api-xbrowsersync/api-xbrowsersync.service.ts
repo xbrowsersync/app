@@ -1,7 +1,22 @@
 import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import * as Exceptions from '../../exception/exception';
+import {
+  BaseError,
+  ClientDataNotFoundError,
+  DailyNewSyncLimitReachedError,
+  DataOutOfSyncError,
+  HttpRequestFailedError,
+  InvalidServiceError,
+  NetworkConnectionError,
+  NotAcceptingNewSyncsError,
+  RequestEntityTooLargeError,
+  ServiceOfflineError,
+  SyncNotFoundError,
+  TooManyRequestsError,
+  UnexpectedResponseDataError,
+  UnsupportedApiVersionError
+} from '../../errors/errors';
 import Globals from '../../global-shared.constants';
 import { PlatformService } from '../../global-shared.interface';
 import { NetworkService } from '../../network/network.service';
@@ -66,7 +81,7 @@ export class ApiXbrowsersyncService implements ApiService {
       if (this.networkSvc.isNetworkConnected()) {
         return resolve();
       }
-      reject(new Exceptions.NetworkConnectionException());
+      reject(new NetworkConnectionError());
     });
   }
 
@@ -82,7 +97,7 @@ export class ApiXbrowsersyncService implements ApiService {
             timeout: 3000
           };
           return this.$http<ApiXbrowsersyncServiceInfoResponse>(requestConfig).catch((response) => {
-            throw this.getExceptionFromHttpResponse(response);
+            throw this.getErrorFromHttpResponse(response);
           });
         })
         .then(this.apiRequestSucceeded)
@@ -90,12 +105,12 @@ export class ApiXbrowsersyncService implements ApiService {
           // Check service is a valid xBrowserSync API
           const { data: serviceInfo } = response;
           if (!serviceInfo?.status || !serviceInfo?.version) {
-            throw new Exceptions.InvalidServiceException();
+            throw new InvalidServiceError();
           }
 
           // Check service version is supported by this client
           if (this.utilitySvc.compareVersions(serviceInfo.version, Globals.MinApiVersion, '<')) {
-            throw new Exceptions.UnsupportedApiVersionException();
+            throw new UnsupportedApiVersionError();
           }
 
           return serviceInfo;
@@ -118,7 +133,7 @@ export class ApiXbrowsersyncService implements ApiService {
             return this.$http
               .post<ApiCreateBookmarksResponse>(requestUrl, JSON.stringify(requestBody))
               .catch((response) => {
-                throw this.getExceptionFromHttpResponse(response);
+                throw this.getErrorFromHttpResponse(response);
               });
           })
           .then(this.apiRequestSucceeded)
@@ -126,14 +141,14 @@ export class ApiXbrowsersyncService implements ApiService {
             // Check response data is valid before returning
             const { data } = response;
             if (!data?.id || !data?.lastUpdated || !data?.version) {
-              throw new Exceptions.UnexpectedResponseDataException();
+              throw new UnexpectedResponseDataError();
             }
             return data;
           });
       })
       .catch((err) => {
-        if (err instanceof Exceptions.InvalidServiceException) {
-          throw new Exceptions.ServiceOfflineException();
+        if (err instanceof InvalidServiceError) {
+          throw new ServiceOfflineError();
         }
         throw err;
       });
@@ -145,7 +160,7 @@ export class ApiXbrowsersyncService implements ApiService {
       .get([StoreKey.Password, StoreKey.SyncId])
       .then((storeContent) => {
         if (!storeContent.password || !storeContent.syncId) {
-          throw new Exceptions.ClientDataNotFoundException();
+          throw new ClientDataNotFoundError();
         }
 
         return this.checkNetworkConnection().then(() => {
@@ -155,7 +170,7 @@ export class ApiXbrowsersyncService implements ApiService {
             .then((serviceUrl) => {
               const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}/${storeContent.syncId}`;
               return this.$http.get<ApiGetBookmarksResponse>(requestUrl).catch((response) => {
-                throw this.getExceptionFromHttpResponse(response);
+                throw this.getErrorFromHttpResponse(response);
               });
             })
             .then(this.apiRequestSucceeded)
@@ -163,15 +178,15 @@ export class ApiXbrowsersyncService implements ApiService {
               // Check response data is valid before returning
               const { data } = response;
               if (!data?.lastUpdated) {
-                throw new Exceptions.UnexpectedResponseDataException();
+                throw new UnexpectedResponseDataError();
               }
               return data;
             });
         });
       })
       .catch((err) => {
-        if (err instanceof Exceptions.InvalidServiceException) {
-          throw new Exceptions.ServiceOfflineException();
+        if (err instanceof InvalidServiceError) {
+          throw new ServiceOfflineError();
         }
         throw err;
       });
@@ -183,7 +198,7 @@ export class ApiXbrowsersyncService implements ApiService {
       .get([StoreKey.Password, StoreKey.SyncId])
       .then((storeContent) => {
         if (!storeContent.password || !storeContent.syncId) {
-          throw new Exceptions.ClientDataNotFoundException();
+          throw new ClientDataNotFoundError();
         }
 
         return (skipNetworkConnectionCheck ? this.$q.resolve() : this.checkNetworkConnection()).then(() => {
@@ -193,7 +208,7 @@ export class ApiXbrowsersyncService implements ApiService {
             .then((serviceUrl) => {
               const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}/${storeContent.syncId}/${ApiXbrowsersyncResource.LastUpdated}`;
               return this.$http.get<ApiGetLastUpdatedResponse>(requestUrl).catch((response) => {
-                throw this.getExceptionFromHttpResponse(response);
+                throw this.getErrorFromHttpResponse(response);
               });
             })
             .then(this.apiRequestSucceeded)
@@ -201,15 +216,15 @@ export class ApiXbrowsersyncService implements ApiService {
               // Check response data is valid before returning
               const { data } = response;
               if (!data?.lastUpdated) {
-                throw new Exceptions.UnexpectedResponseDataException();
+                throw new UnexpectedResponseDataError();
               }
               return data;
             });
         });
       })
       .catch((err) => {
-        if (err instanceof Exceptions.InvalidServiceException) {
-          throw new Exceptions.ServiceOfflineException();
+        if (err instanceof InvalidServiceError) {
+          throw new ServiceOfflineError();
         }
         throw err;
       });
@@ -224,7 +239,7 @@ export class ApiXbrowsersyncService implements ApiService {
           .then((serviceUrl) => {
             const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}/${syncId}/${ApiXbrowsersyncResource.Version}`;
             return this.$http.get<ApiGetSyncVersionResponse>(requestUrl).catch((response) => {
-              throw this.getExceptionFromHttpResponse(response);
+              throw this.getErrorFromHttpResponse(response);
             });
           })
           .then(this.apiRequestSucceeded)
@@ -232,61 +247,60 @@ export class ApiXbrowsersyncService implements ApiService {
             // Check response data is valid before returning
             const { data: version } = response;
             if (!version) {
-              throw new Exceptions.UnexpectedResponseDataException();
+              throw new UnexpectedResponseDataError();
             }
             return version;
           });
       })
       .catch((err) => {
-        if (err instanceof Exceptions.InvalidServiceException) {
-          throw new Exceptions.ServiceOfflineException();
+        if (err instanceof InvalidServiceError) {
+          throw new ServiceOfflineError();
         }
         throw err;
       });
   }
 
-  getExceptionFromHttpResponse(response: ng.IHttpResponse<ApiXbrowsersyncErrorResponse>): Exceptions.Exception {
-    let exception: Exceptions.Exception;
+  getErrorFromHttpResponse(response: ng.IHttpResponse<ApiXbrowsersyncErrorResponse>): BaseError {
+    let error: BaseError;
     const message = response.data?.message;
     switch (true) {
       // 401 Unauthorized: sync data not found
       case response.status === 401:
-        exception = new Exceptions.SyncNotFoundException(message);
+        error = new SyncNotFoundError(message);
         break;
       // 404 Not Found: invalid service
       case response.status === 404:
-        exception = new Exceptions.InvalidServiceException(message);
+        error = new InvalidServiceError(message);
         break;
       // 405 Method Not Allowed: service not accepting new syncs
       case response.status === 405:
-        exception = new Exceptions.NotAcceptingNewSyncsException(message);
+        error = new NotAcceptingNewSyncsError(message);
         break;
       // 406 Not Acceptable: daily new sync limit reached
       case response.status === 406:
-        exception = new Exceptions.DailyNewSyncLimitReachedException(message);
+        error = new DailyNewSyncLimitReachedError(message);
         break;
       // 409 Conflict: sync update conflict
       case response.status === 409:
-        exception = new Exceptions.DataOutOfSyncException(message);
+        error = new DataOutOfSyncError(message);
         break;
       // 413 Request Entity Too Large: sync data size exceeds service limit
       case response.status === 413:
-        exception = new Exceptions.RequestEntityTooLargeException(message);
+        error = new RequestEntityTooLargeError(message);
         break;
       // 429 Too Many Requests: daily new sync limit reached
       case response.status === 429:
-        exception = new Exceptions.TooManyRequestsException(message);
+        error = new TooManyRequestsError(message);
         break;
       // 500 server error responses
       case response.status >= 500:
-        exception = new Exceptions.ServiceOfflineException(message);
+        error = new ServiceOfflineError(message);
         break;
       // Otherwise generic request failed
       default:
-        exception = new Exceptions.HttpRequestFailedException(message);
+        error = new HttpRequestFailedError(message);
     }
-
-    return exception;
+    return error;
   }
 
   updateBookmarks(
@@ -299,7 +313,7 @@ export class ApiXbrowsersyncService implements ApiService {
       .get([StoreKey.LastUpdated, StoreKey.Password, StoreKey.SyncId])
       .then((storeContent) => {
         if (!storeContent.lastUpdated || !storeContent.password || !storeContent.syncId) {
-          throw new Exceptions.ClientDataNotFoundException();
+          throw new ClientDataNotFoundError();
         }
 
         return (skipNetworkConnectionCheck ? this.$q.resolve() : this.checkNetworkConnection()).then(() => {
@@ -322,7 +336,7 @@ export class ApiXbrowsersyncService implements ApiService {
               return this.$http
                 .put<ApiUpdateBookmarksResponse>(requestUrl, JSON.stringify(requestBody))
                 .catch((response) => {
-                  throw this.getExceptionFromHttpResponse(response);
+                  throw this.getErrorFromHttpResponse(response);
                 });
             })
             .then(this.apiRequestSucceeded)
@@ -330,15 +344,15 @@ export class ApiXbrowsersyncService implements ApiService {
               // Check response data is valid before returning
               const { data } = response;
               if (!data?.lastUpdated) {
-                throw new Exceptions.UnexpectedResponseDataException();
+                throw new UnexpectedResponseDataError();
               }
               return data;
             });
         });
       })
       .catch((err) => {
-        if (err instanceof Exceptions.InvalidServiceException) {
-          throw new Exceptions.ServiceOfflineException();
+        if (err instanceof InvalidServiceError) {
+          throw new ServiceOfflineError();
         }
         throw err;
       });

@@ -2,7 +2,7 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import stackTrace from 'stacktrace-js';
-import { Exception } from '../exception/exception';
+import { BaseError } from '../errors/errors';
 import { StoreKey } from '../store/store.enum';
 import { TraceLogItem } from '../store/store.interface';
 import { StoreService } from '../store/store.service';
@@ -52,7 +52,7 @@ export class LogService {
     return this.storeSvc.remove(StoreKey.TraceLog);
   }
 
-  logError(error: Exception, message?: string): ng.IPromise<void> {
+  logError(error: BaseError, message?: string): ng.IPromise<void> {
     // Return if no error supplied or has already been logged
     if (error.logged) {
       return;
@@ -100,10 +100,10 @@ export class LogService {
     this.processLogItemQueue();
   }
 
-  logToConsole(message: object | string, level = LogLevel.Trace, exception?: Exception): void {
+  logToConsole(message: object | string, level = LogLevel.Trace, error?: BaseError): void {
     switch (level) {
       case LogLevel.Error:
-        this.$log.warn(exception ?? message);
+        this.$log.warn(error ?? message);
         break;
       case LogLevel.Warn:
         this.$log.warn(message);

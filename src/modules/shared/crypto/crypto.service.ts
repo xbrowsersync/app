@@ -3,7 +3,7 @@ import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import base64js from 'base64-js';
 import lzutf8 from 'lzutf8';
-import * as Exceptions from '../exception/exception';
+import { ArgumentError, ClientDataNotFoundError, InvalidCredentialsError } from '../errors/errors';
 import { LogService } from '../log/log.service';
 import { StoreKey } from '../store/store.enum';
 import { StoreService } from '../store/store.service';
@@ -50,7 +50,7 @@ export class CryptoService {
       .then((storeContent) => {
         const { password, syncId } = storeContent;
         if (!password || !syncId) {
-          throw new Exceptions.ClientDataNotFoundException();
+          throw new ClientDataNotFoundError();
         }
 
         // Convert hashed password to bytes
@@ -80,7 +80,7 @@ export class CryptoService {
       })
       .catch((err) => {
         this.logSvc.logWarning('Decryption failed');
-        throw new Exceptions.InvalidCredentialsException(undefined, err);
+        throw new InvalidCredentialsError(undefined, err);
       });
   }
 
@@ -92,14 +92,14 @@ export class CryptoService {
 
     // Ensure data is a string
     if (!angular.isString(data)) {
-      throw new Exceptions.ArgumentException('Argument must be a string');
+      throw new ArgumentError('Argument must be a string');
     }
 
     return this.storeSvc
       .get<string>(StoreKey.Password)
       .then((password) => {
         if (angular.isUndefined(password)) {
-          throw new Exceptions.ClientDataNotFoundException();
+          throw new ClientDataNotFoundError();
         }
 
         // Convert hashed password to bytes
@@ -126,7 +126,7 @@ export class CryptoService {
       })
       .catch((err) => {
         this.logSvc.logWarning('Encryption failed');
-        throw new Exceptions.InvalidCredentialsException(undefined, err);
+        throw new InvalidCredentialsError(undefined, err);
       });
   }
 

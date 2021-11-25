@@ -44,6 +44,7 @@
     "@fontsource/roboto-condensed": "^4.5.0",
     "@fontsource/source-code-pro": "^4.5.0",
     "@fortawesome/fontawesome-free": "^5.15.4",
+    "@types/webextension-polyfill": "^0.8.2",
     "@zxcvbn-ts/core": "^1.0.0",
     "@zxcvbn-ts/language-common": "^1.0.0",
     "@zxcvbn-ts/language-de": "^1.0.0",
@@ -71,7 +72,7 @@
     "pulltorefreshjs": "^0.1.22",
     "qrcode-svg": "^1.1.0",
     "stacktrace-js": "^2.0.2",
-    "webextension-polyfill-ts": "^0.26.0",
+    "webextension-polyfill": "^0.8.0",
     "xregexp": "^5.1.0"
   },
   "devDependencies": {

@@ -1,5 +1,5 @@
 import { Bookmark, BookmarkChange } from '../bookmark/bookmark.interface';
-import { Exception } from '../exception/exception';
+import { BaseError } from '../errors/errors';
 import { SyncType } from './sync.enum';
 
 export interface RemovedSync {
@@ -20,7 +20,7 @@ export interface Sync {
 
 export interface SyncResult {
   success: boolean;
-  error?: Exception;
+  error?: BaseError;
 }
 
 export interface ProcessSyncResult {

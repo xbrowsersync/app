@@ -5,8 +5,24 @@ import { ApiService } from '../api/api.interface';
 import { Bookmark } from '../bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../bookmark/bookmark-helper/bookmark-helper.service';
 import { CryptoService } from '../crypto/crypto.service';
-import * as Exceptions from '../exception/exception';
-import { ExceptionHandler } from '../exception/exception.interface';
+import {
+  BaseError,
+  BookmarkMappingNotFoundError,
+  BookmarkNotFoundError,
+  ClientDataNotFoundError,
+  ContainerChangedError,
+  DataOutOfSyncError,
+  FailedCreateNativeBookmarksError,
+  FailedGetNativeBookmarksError,
+  FailedRemoveNativeBookmarksError,
+  NativeBookmarkNotFoundError,
+  SyncDisabledError,
+  SyncFailedError,
+  SyncNotFoundError,
+  SyncUncommittedError,
+  TooManyRequestsError
+} from '../errors/errors';
+import { ExceptionHandler } from '../errors/errors.interface';
 import { PlatformService } from '../global-shared.interface';
 import { LogService } from '../log/log.service';
 import { NetworkService } from '../network/network.service';
@@ -87,23 +103,23 @@ export class SyncService {
   checkIfDisableSyncOnError(err: Error): boolean {
     return (
       err &&
-      (err instanceof Exceptions.ClientDataNotFoundException ||
-        err instanceof Exceptions.SyncNotFoundException ||
-        err instanceof Exceptions.TooManyRequestsException)
+      (err instanceof ClientDataNotFoundError ||
+        err instanceof SyncNotFoundError ||
+        err instanceof TooManyRequestsError)
     );
   }
 
   checkIfRefreshSyncedDataOnError(err: Error): boolean {
     return (
       err &&
-      (err instanceof Exceptions.BookmarkMappingNotFoundException ||
-        err instanceof Exceptions.ContainerChangedException ||
-        err instanceof Exceptions.DataOutOfSyncException ||
-        err instanceof Exceptions.FailedCreateNativeBookmarksException ||
-        err instanceof Exceptions.FailedGetNativeBookmarksException ||
-        err instanceof Exceptions.FailedRemoveNativeBookmarksException ||
-        err instanceof Exceptions.NativeBookmarkNotFoundException ||
-        err instanceof Exceptions.BookmarkNotFoundException)
+      (err instanceof BookmarkMappingNotFoundError ||
+        err instanceof ContainerChangedError ||
+        err instanceof DataOutOfSyncError ||
+        err instanceof FailedCreateNativeBookmarksError ||
+        err instanceof FailedGetNativeBookmarksError ||
+        err instanceof FailedRemoveNativeBookmarksError ||
+        err instanceof NativeBookmarkNotFoundError ||
+        err instanceof BookmarkNotFoundError)
     );
   }
 
@@ -181,7 +197,7 @@ export class SyncService {
     // Check if sync enabled before running sync
     return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
       if (!syncEnabled) {
-        throw new Exceptions.SyncDisabledException();
+        throw new SyncDisabledError();
       }
 
       // Get available updates if there are no queued syncs, finally process the queue
@@ -218,7 +234,7 @@ export class SyncService {
   }
 
   handleFailedSync(failedSync: Sync, err: Error, isBackgroundSync = false): ng.IPromise<Error> {
-    let syncException = err;
+    let syncError = err;
     return this.$q<Error>((resolve, reject) => {
       // If connection failed and sync is a change, swallow error and place failed sync back on the queue
       if (this.networkSvc.isNetworkConnectionError(err) && failedSync.type !== SyncType.Local) {
@@ -226,17 +242,17 @@ export class SyncService {
         if (!isBackgroundSync) {
           this.logSvc.logInfo('Changes not synced: connection lost');
         }
-        return resolve(new Exceptions.SyncUncommittedException(undefined, err));
+        return resolve(new SyncUncommittedError(undefined, err));
       }
 
-      // Set default exception if none set
-      if (!(err instanceof Exceptions.Exception)) {
-        syncException = new Exceptions.SyncFailedException(undefined, err);
+      // Set default error if none set
+      if (!(err instanceof BaseError)) {
+        syncError = new SyncFailedError(undefined, err);
       }
 
       // Handle failed sync
       this.logSvc.logWarning(`Sync ${failedSync.uniqueId} failed`);
-      this.$exceptionHandler(syncException, null, false);
+      this.$exceptionHandler(syncError, null, false);
       if (failedSync.changeInfo && failedSync.changeInfo.type) {
         this.logSvc.logInfo(failedSync.changeInfo);
       }
@@ -249,7 +265,7 @@ export class SyncService {
             }
 
             // Handle sync removed from service
-            if (err instanceof Exceptions.SyncNotFoundException) {
+            if (err instanceof SyncNotFoundError) {
               return this.setSyncRemoved();
             }
 
@@ -258,29 +274,29 @@ export class SyncService {
                 // If local changes made, clear sync queue and refresh sync data if necessary
                 if (failedSync.type !== SyncType.Local) {
                   this.syncQueue = [];
-                  if (this.checkIfRefreshSyncedDataOnError(syncException)) {
+                  if (this.checkIfRefreshSyncedDataOnError(syncError)) {
                     this.currentSync = undefined;
                     return this.platformSvc.queueLocalResync().catch((refreshErr) => {
-                      syncException = refreshErr;
+                      syncError = refreshErr;
                     });
                   }
                 }
               })
               .then(() => {
                 // Check if sync should be disabled
-                if (this.checkIfDisableSyncOnError(syncException)) {
+                if (this.checkIfDisableSyncOnError(syncError)) {
                   return this.disableSync();
                 }
               });
           });
         })
         .then(() => {
-          resolve(syncException);
+          resolve(syncError);
         })
         .catch(reject);
     }).finally(() => {
       // Return sync error back to process that queued the sync
-      failedSync.deferred.reject(syncException);
+      failedSync.deferred.reject(syncError);
       return this.showInterfaceAsSyncing();
     });
   }

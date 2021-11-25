@@ -1,9 +1,15 @@
 import angular from 'angular';
 import autobind from 'autobind-decorator';
-import { browser, Tabs } from 'webextension-polyfill-ts';
+import browser, { Tabs } from 'webextension-polyfill';
 import { AlertService } from '../../../shared/alert/alert.service';
 import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import * as Exceptions from '../../../shared/exception/exception';
+import {
+  BaseError,
+  FailedGetPageMetadataError,
+  FailedRegisterAutoUpdatesError,
+  I18nError
+} from '../../../shared/errors/errors';
+import * as Errors from '../../../shared/errors/errors';
 import Globals from '../../../shared/global-shared.constants';
 import { BrowserName, MessageCommand, PlatformType } from '../../../shared/global-shared.enum';
 import { I18nObject, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
@@ -157,7 +163,7 @@ export abstract class WebExtPlatformService implements PlatformService {
     }
 
     if (angular.isUndefined(i18nStr ?? undefined)) {
-      throw new Exceptions.I18nException('I18n string has no value');
+      throw new I18nError('I18n string has no value');
     }
 
     return i18nStr;
@@ -170,7 +176,7 @@ export abstract class WebExtPlatformService implements PlatformService {
       // If active tab empty, throw error
       const activeTab = tabs?.[0];
       if (!activeTab) {
-        throw new Exceptions.FailedGetPageMetadataException();
+        throw new FailedGetPageMetadataError();
       }
 
       // Default metadata to the info from the active tab
@@ -328,9 +334,9 @@ export abstract class WebExtPlatformService implements PlatformService {
 
     return promise.catch((err: Error) => {
       // Recreate the error object as webextension-polyfill wraps the object before returning it
-      const exception: Exceptions.Exception = new (<any>Exceptions)[err.message]();
-      exception.logged = true;
-      throw exception;
+      const error: BaseError = new (<any>Errors)[err.message]();
+      error.logged = true;
+      throw error;
     });
   }
 
@@ -344,7 +350,7 @@ export abstract class WebExtPlatformService implements PlatformService {
         });
       })
       .catch((err) => {
-        throw new Exceptions.FailedRegisterAutoUpdatesException(undefined, err);
+        throw new FailedRegisterAutoUpdatesError(undefined, err);
       });
   }
 

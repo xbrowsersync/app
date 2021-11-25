@@ -4,8 +4,8 @@ import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import { ApiServiceStatus } from '../../../shared/api/api.enum';
 import { ApiService, ApiServiceInfo, ApiServiceInfoResponse } from '../../../shared/api/api.interface';
-import * as Exceptions from '../../../shared/exception/exception';
-import { ExceptionHandler } from '../../../shared/exception/exception.interface';
+import { ServiceOfflineError } from '../../../shared/errors/errors';
+import { ExceptionHandler } from '../../../shared/errors/errors.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { LogService } from '../../../shared/log/log.service';
@@ -114,8 +114,7 @@ export abstract class AppHelperService {
         };
       })
       .catch((err) => {
-        const status =
-          err instanceof Exceptions.ServiceOfflineException ? ApiServiceStatus.Offline : ApiServiceStatus.Error;
+        const status = err instanceof ServiceOfflineError ? ApiServiceStatus.Offline : ApiServiceStatus.Error;
         return {
           status
         };

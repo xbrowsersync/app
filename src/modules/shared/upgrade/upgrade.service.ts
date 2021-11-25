@@ -2,7 +2,7 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { Bookmark } from '../bookmark/bookmark.interface';
-import * as Exceptions from '../exception/exception';
+import { SyncVersionNotSupportedError, UpgradeFailedError } from '../errors/errors';
 import { PlatformService } from '../global-shared.interface';
 import { LogService } from '../log/log.service';
 import { StoreKey } from '../store/store.enum';
@@ -70,7 +70,7 @@ export class UpgradeService {
 
   upgrade(targetVersion: string): ng.IPromise<void> {
     if (angular.isUndefined(targetVersion)) {
-      throw new Exceptions.UpgradeFailedException('Failed upgrade, target version not provided');
+      throw new UpgradeFailedError('Failed upgrade, target version not provided');
     }
 
     return this.getLastUpgradeVersion()
@@ -105,7 +105,7 @@ export class UpgradeService {
       })
       .then(() => this.platformSvc.disableSync())
       .catch((err) => {
-        throw new Exceptions.UpgradeFailedException(`Failed upgrade to ${targetVersion}`, err);
+        throw new UpgradeFailedError(`Failed upgrade to ${targetVersion}`, err);
       });
   }
 
@@ -119,12 +119,12 @@ export class UpgradeService {
     }
 
     if (angular.isUndefined(targetVersion)) {
-      throw new Exceptions.UpgradeFailedException('Failed upgrade bookmarks, target version not provided');
+      throw new UpgradeFailedError('Failed upgrade bookmarks, target version not provided');
     }
 
     if (this.utilitySvc.compareVersions(syncVersion, targetVersion, '>')) {
       // Sync version is greater than target version, throw error
-      throw new Exceptions.SyncVersionNotSupportedException();
+      throw new SyncVersionNotSupportedError();
     }
 
     let upgradedBookmarks = angular.copy(bookmarks);

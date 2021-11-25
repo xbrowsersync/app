@@ -7,8 +7,8 @@ import { compare } from 'compare-versions';
 import * as detectBrowser from 'detect-browser';
 import XRegExp from 'xregexp';
 import { AppEventType } from '../../app/app.enum';
-import * as Exceptions from '../exception/exception';
-import { ExceptionHandler } from '../exception/exception.interface';
+import { ClientDataNotFoundError } from '../errors/errors';
+import { ExceptionHandler } from '../errors/errors.interface';
 import Globals from '../global-shared.constants';
 import { BrowserName, PlatformType } from '../global-shared.enum';
 import { Url } from '../global-shared.interface';
@@ -86,7 +86,7 @@ export class UtilityService {
   checkSyncCredentialsExist(): ng.IPromise<void> {
     return this.storeSvc.get([StoreKey.Password, StoreKey.SyncId]).then((storeContent) => {
       if (!storeContent.password || !storeContent.syncId) {
-        throw new Exceptions.ClientDataNotFoundException();
+        throw new ClientDataNotFoundError();
       }
     });
   }

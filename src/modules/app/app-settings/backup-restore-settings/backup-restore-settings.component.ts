@@ -7,7 +7,7 @@ import { Backup } from '../../../shared/backup-restore/backup-restore.interface'
 import { BackupRestoreService } from '../../../shared/backup-restore/backup-restore.service';
 import { BookmarkService } from '../../../shared/bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import * as Exceptions from '../../../shared/exception/exception';
+import { SyncVersionNotSupportedError } from '../../../shared/errors/errors';
 import { MessageCommand, PlatformType } from '../../../shared/global-shared.enum';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { LogService } from '../../../shared/log/log.service';
@@ -141,8 +141,8 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
     if (!this.dataToRestore) {
       // Display alert
       this.alertSvc.setCurrentAlert({
-        message: this.platformSvc.getI18nString(this.Strings.Exception.NoDataToRestore_Message),
-        title: this.platformSvc.getI18nString(this.Strings.Exception.NoDataToRestore_Title),
+        message: this.platformSvc.getI18nString(this.Strings.Error.NoDataToRestore.Message),
+        title: this.platformSvc.getI18nString(this.Strings.Error.NoDataToRestore.Title),
         type: AlertType.Error
       });
       return;
@@ -158,11 +158,11 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
       .restoreBackupData(JSON.parse(this.dataToRestore))
       .then(this.restoreBookmarksSuccess)
       .catch((err) => {
-        if (err instanceof Exceptions.SyncVersionNotSupportedException) {
+        if (err instanceof SyncVersionNotSupportedError) {
           // Display specific message if user is trying to restore an unsupported backup version
           this.alertSvc.setCurrentAlert({
-            message: this.platformSvc.getI18nString(this.Strings.Exception.SyncVersionNotSupported_Restore_Message),
-            title: this.platformSvc.getI18nString(this.Strings.Exception.SyncVersionNotSupported_Title),
+            message: this.platformSvc.getI18nString(this.Strings.Error.SyncVersionNotSupported.Restore.Message),
+            title: this.platformSvc.getI18nString(this.Strings.Error.SyncVersionNotSupported.Title),
             type: AlertType.Error
           });
           return;

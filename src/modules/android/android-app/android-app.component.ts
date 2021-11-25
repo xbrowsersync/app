@@ -7,7 +7,7 @@ import { AppHelperService } from '../../app/shared/app-helper/app-helper.service
 import { AlertService } from '../../shared/alert/alert.service';
 import { BookmarkMetadata } from '../../shared/bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import * as Exceptions from '../../shared/exception/exception';
+import * as Errors from '../../shared/errors/errors';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService } from '../../shared/global-shared.interface';
 import { LogService } from '../../shared/log/log.service';
@@ -184,8 +184,8 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     // If no connection display an alert and return
     if (!this.networkSvc.isNetworkConnected()) {
       this.alertSvc.setCurrentAlert({
-        message: this.platformSvc.getI18nString(this.Strings.Exception.UncommittedSyncs_Message),
-        title: this.platformSvc.getI18nString(this.Strings.Exception.UncommittedSyncs_Title)
+        message: this.platformSvc.getI18nString(this.Strings.Error.UncommittedSyncs.Message),
+        title: this.platformSvc.getI18nString(this.Strings.Error.UncommittedSyncs.Title)
       });
       return this.$q.resolve(false);
     }
@@ -354,7 +354,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
             })
             .catch((err) => {
               // Handle sync removed from service
-              if (err instanceof Exceptions.SyncNotFoundException) {
+              if (err instanceof Errors.SyncNotFoundError) {
                 return this.syncSvc.setSyncRemoved().then(() => this.appHelperSvc.switchView());
               }
               throw err;
@@ -449,7 +449,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
               })
               .catch((err) => {
                 // Handle sync removed from service
-                if (err instanceof Exceptions.SyncNotFoundException) {
+                if (err instanceof Errors.SyncNotFoundError) {
                   return this.syncSvc.setSyncRemoved().then(() => this.appHelperSvc.switchView());
                 }
                 throw err;

@@ -4,7 +4,7 @@ import autobind from 'autobind-decorator';
 import { ApiServiceType } from '../api/api.enum';
 import { ApiService } from '../api/api.interface';
 import { Bookmark, BookmarkService } from '../bookmark/bookmark.interface';
-import * as Exceptions from '../exception/exception';
+import { FailedRestoreDataError } from '../errors/errors';
 import { MessageCommand } from '../global-shared.enum';
 import { PlatformService } from '../global-shared.interface';
 import { LogService } from '../log/log.service';
@@ -126,7 +126,7 @@ export class BackupRestoreService {
         break;
       default:
         // Invalid restore data
-        throw new Exceptions.FailedRestoreDataException();
+        throw new FailedRestoreDataError();
     }
 
     this.logSvc.logInfo('Restoring data');

@@ -4,8 +4,14 @@ import * as countriesList from 'countries-list';
 import { ApiServiceStatus } from '../../shared/api/api.enum';
 import { ApiService, ApiServiceInfo } from '../../shared/api/api.interface';
 import { CryptoService } from '../../shared/crypto/crypto.service';
-import * as Exceptions from '../../shared/exception/exception';
-import { ExceptionHandler } from '../../shared/exception/exception.interface';
+import {
+  BaseError,
+  InvalidCredentialsError,
+  InvalidServiceError,
+  SyncVersionNotSupportedError,
+  UnsupportedApiVersionError
+} from '../../shared/errors/errors';
+import { ExceptionHandler } from '../../shared/errors/errors.interface';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformType } from '../../shared/global-shared.enum';
 import { PlatformService } from '../../shared/global-shared.interface';
@@ -254,7 +260,7 @@ export class AppLoginComponent implements OnInit {
               }
             } else if (this.utilitySvc.compareVersions(response.version ?? '0', appVersion, '>')) {
               // Sync version is greater than app version, throw error
-              throw new Exceptions.SyncVersionNotSupportedException();
+              throw new SyncVersionNotSupportedError();
             }
 
             syncInfoMessage = `Synced to existing id: ${this.syncId}`;
@@ -458,7 +464,7 @@ export class AppLoginComponent implements OnInit {
     }
   }
 
-  syncFailed(err: Exceptions.Exception, sync: Sync): void {
+  syncFailed(err: BaseError, sync: Sync): void {
     // Disable upgrade confirmed flag
     this.upgradeConfirmed = false;
 
@@ -470,10 +476,7 @@ export class AppLoginComponent implements OnInit {
     }
     this.storeSvc.remove(keys).then(() => {
       // If creds were incorrect, focus on password field
-      if (
-        err instanceof Exceptions.InvalidCredentialsException &&
-        !this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)
-      ) {
+      if (err instanceof InvalidCredentialsError && !this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
         this.$timeout(() => {
           (document.querySelector('.login-form-existing input[name="txtPassword"]') as HTMLInputElement).select();
         }, Globals.InterfaceReadyTimeout);
@@ -530,10 +533,10 @@ export class AppLoginComponent implements OnInit {
       .checkServiceStatus(url)
       .catch((err) => {
         switch (err.constructor) {
-          case Exceptions.UnsupportedApiVersionException:
+          case UnsupportedApiVersionError:
             this.syncForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', false);
             break;
-          case Exceptions.InvalidServiceException:
+          case InvalidServiceError:
             this.syncForm.newServiceUrl.$setValidity('InvalidService', false);
             break;
           default:

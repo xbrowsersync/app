@@ -9,8 +9,8 @@ import { AlertService } from '../../../shared/alert/alert.service';
 import { BookmarkChangeType } from '../../../shared/bookmark/bookmark.enum';
 import { Bookmark, BookmarkChange, RemoveBookmarkChangeData } from '../../../shared/bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import * as Exceptions from '../../../shared/exception/exception';
-import { ExceptionHandler } from '../../../shared/exception/exception.interface';
+import { DataOutOfSyncError, SyncNotFoundError } from '../../../shared/errors/errors';
+import { ExceptionHandler } from '../../../shared/errors/errors.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { SettingsService } from '../../../shared/settings/settings.service';
@@ -163,12 +163,12 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
         })
         .catch((err) => {
           // Handle sync removed from service
-          if (err instanceof Exceptions.SyncNotFoundException) {
+          if (err instanceof SyncNotFoundError) {
             return this.appHelperSvc.switchView();
           }
 
           return (
-            err instanceof Exceptions.DataOutOfSyncException
+            err instanceof DataOutOfSyncError
               ? this.displayDefaultSearchState()
               : this.$q.resolve().then(() => {
                   // Restore previous bookmarks results

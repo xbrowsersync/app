@@ -164,219 +164,279 @@
       "default": "表示"
     }
   },
-  "Exception": {
-    "ContainerChanged_Message": {
-      "key": "Exception_ContainerChanged_Message",
-      "default": "同期が壊れる可能性があるため、[xbs] フォルダの変更はしないでください"
+  "Error": {
+    "ContainerChanged": {
+      "Message": {
+        "key": "Error_ContainerChanged_Message",
+        "default": "同期が壊れる可能性があるため、[xbs] フォルダの変更はしないでください"
+      },
+      "Title": {
+        "key": "Error_ContainerChanged_Title",
+        "default": "xBrowserSync はフォルダを変更しました"
+      }
     },
-    "ContainerChanged_Title": {
-      "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync はフォルダを変更しました"
+    "DailyNewSyncLimitReached": {
+      "Message": {
+        "key": "Error_DailyNewSyncLimitReached_Message",
+        "default": "お使いの同期 ID を利用するか、別のサーバに切り替えるか再試行してください"
+      },
+      "Title": {
+        "key": "Error_DailyNewSyncLimitReached_Title",
+        "default": "今日の同期可能数の上限に達しました。"
+      }
     },
-    "DailyNewSyncLimitReached_Message": {
-      "key": "Exception_DailyNewSyncLimitReached_Message",
-      "default": "お使いの同期 ID を利用するか、別のサーバに切り替えるか再試行してください"
+    "Default": {
+      "Message": {
+        "key": "Error_Default_Message",
+        "default": "問題が解決しない場合は、 <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>問題</a> を報告してください。"
+      },
+      "Title": {
+        "key": "Error_Default_Title",
+        "default": "問題が発生しました"
+      }
     },
-    "DailyNewSyncLimitReached_Title": {
-      "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "今日の同期可能数の上限に達しました。"
+    "FailedDownloadFile": {
+      "Title": {
+        "key": "Error_FailedDownloadFile_Title",
+        "default": "バックアップに失敗しました"
+      }
     },
-    "Default_Message": {
-      "key": "Exception_Default_Message",
-      "default": "問題が解決しない場合は、 <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>問題</a> を報告してください。"
+    "FailedGetDataToRestore": {
+      "Title": {
+        "key": "Error_FailedGetDataToRestore_Title",
+        "default": "ファイルの閲覧に失敗しました"
+      }
     },
-    "Default_Title": {
-      "key": "Exception_Default_Title",
-      "default": "問題が発生しました"
+    "FailedGetPageMetadata": {
+      "Message": {
+        "key": "Error_FailedGetPageMetadata_Message",
+        "default": "URLが無効またはWebページデータを取得できませんでした。"
+      },
+      "Title": {
+        "key": "Error_FailedGetPageMetadata_Title",
+        "default": "ブックマークのプロパティを取得できませんでした"
+      }
     },
-    "FailedDownloadFile_Title": {
-      "key": "Exception_FailedDownloadFile_Title",
-      "default": "バックアップに失敗しました"
+    "FailedRefreshBookmarks": {
+      "Title": {
+        "key": "Error_FailedRefreshBookmarks_Title",
+        "default": "更新情報を取得できませんでした"
+      }
     },
-    "FailedGetDataToRestore_Title": {
-      "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "ファイルの閲覧に失敗しました"
+    "FailedRestoreData": {
+      "Message": {
+        "key": "Error_FailedRestoreData_Message",
+        "default": "提供されるバックアップデータは、対応している形式ではありません。 "
+      },
+      "Title": {
+        "key": "Error_FailedRestoreData_Title",
+        "default": "ファイルを復元することができません。 "
+      }
     },
-    "FailedGetPageMetadata_Message": {
-      "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "URLが無効またはWebページデータを取得できませんでした。"
+    "FailedShareUrlNotSynced": {
+      "Title": {
+        "key": "Error_FailedShareUrlNotSynced_Title",
+        "default": "ブックマークを追加するには同期する必要があります"
+      }
     },
-    "FailedGetPageMetadata_Title": {
-      "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "ブックマークのプロパティを取得できませんでした"
+    "FailedShareUrl": {
+      "Title": {
+        "key": "Error_FailedShareUrl_Title",
+        "default": "共有ブックマークのURLを取得できません"
+      }
     },
-    "FailedRefreshBookmarks_Title": {
-      "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "更新情報を取得できませんでした"
+    "InvalidCredentials": {
+      "Message": {
+        "key": "Error_InvalidCredentials_Message",
+        "default": "同期ID、パスワード、サーバのURLが正しく入力されていることを確認してください。"
+      },
+      "Title": {
+        "key": "Error_InvalidCredentials_Title",
+        "default": "無効なログイン情報"
+      }
     },
-    "FailedRestoreData_Message": {
-      "key": "Exception_FailedRestoreData_Message",
-      "default": "提供されるバックアップデータは、対応している形式ではありません。 "
+    "InvalidService": {
+      "Message": {
+        "key": "Error_InvalidService_Message",
+        "default": "このサーバのURLは有効なxBrowserSyncサービスではありません。"
+      },
+      "Title": {
+        "key": "Error_InvalidService_Title",
+        "default": "無効なxBrowserSyncサービス"
+      }
     },
-    "FailedRestoreData_Title": {
-      "key": "Exception_FailedRestoreData_Title",
-      "default": "ファイルを復元することができません。 "
+    "LocalContainerNotFound": {
+      "Message": {
+        "key": "Error_LocalContainerNotFound_Message",
+        "default": "ブラウザプロファイルが破損している可能性があります。問題が解決する可能性があるため、新しいプロファイルを作成してみてください。"
+      },
+      "Title": {
+        "key": "Error_LocalContainerNotFound_Title",
+        "default": "ブックマークの構造の読み取りができません"
+      }
     },
-    "FailedShareUrlNotSynced_Title": {
-      "key": "Exception_FailedShareUrlNotSynced_Title",
-      "default": "ブックマークを追加するには同期する必要があります"
+    "LocalSyncError": {
+      "Message": {
+        "key": "Error_LocalSyncError_Message",
+        "default": "ローカルブラウザのデータが更新されました。最後の変更を再度適用してください。"
+      },
+      "Title": {
+        "key": "Error_LocalSyncError_Title",
+        "default": "同期エラー"
+      }
     },
-    "FailedShareUrl_Title": {
-      "key": "Exception_FailedShareUrl_Title",
-      "default": "共有ブックマークのURLを取得できません"
+    "MissingClientData": {
+      "Message": {
+        "key": "Error_MissingClientData_Message",
+        "default": "保存されたユーザの情報が見つかりません。同期を再度有効にして再度お試し下さい。"
+      },
+      "Title": {
+        "key": "Error_MissingClientData_Title",
+        "default": "ユーザの情報が間違っています"
+      }
     },
-    "InvalidCredentials_Message": {
-      "key": "Exception_InvalidCredentials_Message",
-      "default": "同期ID、パスワード、サーバのURLが正しく入力されていることを確認してください。"
+    "NetworkConnection": {
+      "Message": {
+        "key": "Error_NetworkConnection_Message",
+        "default": "ネットワーク接続を確認し、もう一度お試しください"
+      },
+      "Title": {
+        "key": "Error_NetworkConnection_Title",
+        "default": "サーバーへの接続が失われました。"
+      }
     },
-    "InvalidCredentials_Title": {
-      "key": "Exception_InvalidCredentials_Title",
-      "default": "無効なログイン情報"
+    "NoDataToRestore": {
+      "Message": {
+        "key": "Error_NoDataToRestore_Message",
+        "default": "復元する前に、現在有効な同期のバックアップしていることを確認してください。"
+      },
+      "Title": {
+        "key": "Error_NoDataToRestore_Title",
+        "default": "復元するファイルがありません。"
+      }
     },
-    "InvalidService_Message": {
-      "key": "Exception_InvalidService_Message",
-      "default": "このサーバのURLは有効なxBrowserSyncサービスではありません。"
+    "NotAcceptingNewSyncs": {
+      "Message": {
+        "key": "Error_NotAcceptingNewSyncs_Message",
+        "default": "別のサーバに切り替えるか、後でもう一度お試しください。"
+      },
+      "Title": {
+        "key": "Error_NotAcceptingNewSyncs_Title",
+        "default": "サーバが新しい同期を受け付けていません"
+      }
     },
-    "InvalidService_Title": {
-      "key": "Exception_InvalidService_Title",
-      "default": "無効なxBrowserSyncサービス"
+    "OutOfSync": {
+      "Message": {
+        "key": "Error_OutOfSync_Message",
+        "default": "ローカルデータは同期されていないため、更新されました。最後の変更を再度適用してください。"
+      },
+      "Title": {
+        "key": "Error_OutOfSync_Title",
+        "default": "同期の競合を検出しました！"
+      }
     },
-    "LocalContainerNotFound_Message": {
-      "key": "Exception_LocalContainerNotFound_Message",
-      "default": "ブラウザプロファイルが破損している可能性があります。問題が解決する可能性があるため、新しいプロファイルを作成してみてください。"
+    "RequestEntityTooLarge": {
+      "Message": {
+        "key": "Error_RequestEntityTooLarge_Message",
+        "default": "ブックマークを削除し、再度やり直すか、同期可能容量の大きいサーバに変更してください"
+      },
+      "Title": {
+        "key": "Error_RequestEntityTooLarge_Title",
+        "default": "同期可能容量の上限を超えました"
+      }
     },
-    "LocalContainerNotFound_Title": {
-      "key": "Exception_LocalContainerNotFound_Title",
-      "default": "ブックマークの構造の読み取りができません"
+    "ScanFailed": {
+      "Message": {
+        "key": "Error_ScanFailed_Message",
+        "default": "Syncに権限が付与されているか確認して再試行してください"
+      },
+      "Title": {
+        "key": "Error_ScanFailed_Title",
+        "default": "スキャンに失敗しました"
+      }
     },
-    "LocalSyncError_Message": {
-      "key": "Exception_LocalSyncError_Message",
-      "default": "ローカルブラウザのデータが更新されました。最後の変更を再度適用してください。"
+    "ServiceOffline": {
+      "Message": {
+        "key": "Error_ServiceOffline_Message",
+        "default": "xBrowserSyncサービスは現在オフラインです。後でもう一度お試しください。"
+      },
+      "Title": {
+        "key": "Error_ServiceOffline_Title",
+        "default": "サービスはオフラインです"
+      }
     },
-    "LocalSyncError_Title": {
-      "key": "Exception_LocalSyncError_Title",
-      "default": "同期エラー"
+    "ShareFailed": {
+      "Title": {
+        "key": "Error_ShareFailed_Title",
+        "default": "共有に失敗しました"
+      }
     },
-    "MissingClientData_Message": {
-      "key": "Exception_MissingClientData_Message",
-      "default": "保存されたユーザの情報が見つかりません。同期を再度有効にして再度お試し下さい。"
+    "SyncRemoved": {
+      "Message": {
+        "key": "Error_SyncRemoved_Message",
+        "default": "要求された同期は存在しません。非アクティブのため削除されている可能性があります。"
+      },
+      "Title": {
+        "key": "Error_SyncRemoved_Title",
+        "default": "同期が見つかりません"
+      }
     },
-    "MissingClientData_Title": {
-      "key": "Exception_MissingClientData_Title",
-      "default": "ユーザの情報が間違っています"
+    "SyncVersionNotSupported": {
+      "Restore": {
+        "Message": {
+          "key": "Error_SyncVersionNotSupported_Restore_Message",
+          "default": "このバージョンの xBrowserSync では、バックアップデータを復元することはできません。"
+        }
+      },
+      "Message": {
+        "key": "Error_SyncVersionNotSupported_Message",
+        "default": "同期が以降のバージョンにアップグレードされたため、この ID はこの xBrowserSync のバージョンと同期できません。"
+      },
+      "Title": {
+        "key": "Error_SyncVersionNotSupported_Title",
+        "default": "サポートされていない API バージョンです。"
+      }
     },
-    "NetworkConnection_Message": {
-      "key": "Exception_NetworkConnection_Message",
-      "default": "ネットワーク接続を確認し、もう一度お試しください"
+    "TooManyRequests": {
+      "Message": {
+        "key": "Error_TooManyRequests_Message",
+        "default": "同期が無効になりました。同期を再開するには再度同期を有効にしてください。"
+      },
+      "Title": {
+        "key": "Error_TooManyRequests_Title",
+        "default": "サーバへのリクエストの上限に達しました"
+      }
     },
-    "NetworkConnection_Title": {
-      "key": "Exception_NetworkConnection_Title",
-      "default": "サーバーへの接続が失われました。"
+    "UncommittedSyncs": {
+      "Message": {
+        "key": "Error_UncommittedSyncs_Message",
+        "default": "サービスへの接続が復元されると、同期が保存されます。"
+      },
+      "Title": {
+        "key": "Error_UncommittedSyncs_Title",
+        "default": "変更は同期されていません"
+      }
     },
-    "NoDataToRestore_Message": {
-      "key": "Exception_NoDataToRestore_Message",
-      "default": "復元する前に、現在有効な同期のバックアップしていることを確認してください。"
+    "UnsupportedServiceApiVersion": {
+      "Message": {
+        "key": "Error_UnsupportedServiceApiVersion_Message",
+        "default": "このサーバはサポートされていないAPIバージョンを実行しています。"
+      },
+      "Title": {
+        "key": "Error_UnsupportedServiceApiVersion_Title",
+        "default": "このサーバはサポートされていません"
+      }
     },
-    "NoDataToRestore_Title": {
-      "key": "Exception_NoDataToRestore_Title",
-      "default": "復元するファイルがありません。"
-    },
-    "NotAcceptingNewSyncs_Message": {
-      "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "別のサーバに切り替えるか、後でもう一度お試しください。"
-    },
-    "NotAcceptingNewSyncs_Title": {
-      "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "サーバが新しい同期を受け付けていません"
-    },
-    "OutOfSync_Message": {
-      "key": "Exception_OutOfSync_Message",
-      "default": "ローカルデータは同期されていないため、更新されました。最後の変更を再度適用してください。"
-    },
-    "OutOfSync_Title": {
-      "key": "Exception_OutOfSync_Title",
-      "default": "同期の競合を検出しました！"
-    },
-    "RequestEntityTooLarge_Message": {
-      "key": "Exception_RequestEntityTooLarge_Message",
-      "default": "ブックマークを削除し、再度やり直すか、同期可能容量の大きいサーバに変更してください"
-    },
-    "RequestEntityTooLarge_Title": {
-      "key": "Exception_RequestEntityTooLarge_Title",
-      "default": "同期可能容量の上限を超えました"
-    },
-    "ScanFailed_Message": {
-      "key": "Exception_ScanFailed_Message",
-      "default": "Syncに権限が付与されているか確認して再試行してください"
-    },
-    "ScanFailed_Title": {
-      "key": "Exception_ScanFailed_Title",
-      "default": "スキャンに失敗しました"
-    },
-    "ServiceOffline_Message": {
-      "key": "Exception_ServiceOffline_Message",
-      "default": "xBrowserSyncサービスは現在オフラインです。後でもう一度お試しください。"
-    },
-    "ServiceOffline_Title": {
-      "key": "Exception_ServiceOffline_Title",
-      "default": "サービスはオフラインです"
-    },
-    "ShareFailed_Title": {
-      "key": "Exception_ShareFailed_Title",
-      "default": "共有に失敗しました"
-    },
-    "SyncRemoved_Message": {
-      "key": "Exception_SyncRemoved_Message",
-      "default": "要求された同期は存在しません。非アクティブのため削除されている可能性があります。"
-    },
-    "SyncRemoved_Title": {
-      "key": "Exception_SyncRemoved_Title",
-      "default": "同期が見つかりません"
-    },
-    "SyncVersionNotSupported_Message": {
-      "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "同期が以降のバージョンにアップグレードされたため、この ID はこの xBrowserSync のバージョンと同期できません。"
-    },
-    "SyncVersionNotSupported_Restore_Message": {
-      "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "このバージョンの xBrowserSync では、バックアップデータを復元することはできません。"
-    },
-    "SyncVersionNotSupported_Title": {
-      "key": "Exception_SyncVersionNotSupported_Title",
-      "default": "サポートされていない API バージョンです。"
-    },
-    "TooManyRequests_Message": {
-      "key": "Exception_TooManyRequests_Message",
-      "default": "同期が無効になりました。同期を再開するには再度同期を有効にしてください。"
-    },
-    "TooManyRequests_Title": {
-      "key": "Exception_TooManyRequests_Title",
-      "default": "サーバへのリクエストの上限に達しました"
-    },
-    "UncommittedSyncs_Message": {
-      "key": "Exception_UncommittedSyncs_Message",
-      "default": "サービスへの接続が復元されると、同期が保存されます。"
-    },
-    "UncommittedSyncs_Title": {
-      "key": "Exception_UncommittedSyncs_Title",
-      "default": "変更は同期されていません"
-    },
-    "UnsupportedServiceApiVersion_Message": {
-      "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "このサーバはサポートされていないAPIバージョンを実行しています。"
-    },
-    "UnsupportedServiceApiVersion_Title": {
-      "key": "Exception_UnsupportedServiceApiVersion_Title",
-      "default": "このサーバはサポートされていません"
-    },
-    "UpgradeFailed_Message": {
-      "key": "Exception_UpgradeFailed_Message",
-      "android": "アプリの再起動時にアップグレードが再試行されます。問題が解決しない場合は、xBrowserSync を再インストールしてください。",
-      "default": "アップグレードを再試行するためにブラウザを再起動してください。問題が解決しない場合は、xBrowserSync を再インストールしてください。"
-    },
-    "UpgradeFailed_Title": {
-      "key": "Exception_UpgradeFailed_Title",
-      "default": "アップグレードできませんでした"
+    "UpgradeFailed": {
+      "Message": {
+        "key": "Error_UpgradeFailed_Message",
+        "android": "アプリの再起動時にアップグレードが再試行されます。問題が解決しない場合は、xBrowserSync を再インストールしてください。",
+        "default": "アップグレードを再試行するためにブラウザを再起動してください。問題が解決しない場合は、xBrowserSync を再インストールしてください。"
+      },
+      "Title": {
+        "key": "Error_UpgradeFailed_Title",
+        "default": "アップグレードできませんでした"
+      }
     }
   },
   "Service": {

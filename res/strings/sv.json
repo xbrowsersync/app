@@ -164,219 +164,279 @@
       "default": "Visa"
     }
   },
-  "Exception": {
-    "ContainerChanged_Message": {
-      "key": "Exception_ContainerChanged_Message",
-      "default": "Vänligen undvik att ändra [xbs]-mappar eftersom det kan orsaka synkroniseringsproblem."
+  "Error": {
+    "ContainerChanged": {
+      "Message": {
+        "key": "Error_ContainerChanged_Message",
+        "default": "Vänligen undvik att ändra [xbs]-mappar eftersom det kan orsaka synkroniseringsproblem."
+      },
+      "Title": {
+        "key": "Error_ContainerChanged_Title",
+        "default": "xBrowserSync-mappen ändrad"
+      }
     },
-    "ContainerChanged_Title": {
-      "key": "Exception_ContainerChanged_Title",
-      "default": "xBrowserSync-mappen ändrad"
+    "DailyNewSyncLimitReached": {
+      "Message": {
+        "key": "Error_DailyNewSyncLimitReached_Message",
+        "default": "Synkronisera till ett befintligt synkroniserings-ID, byt till en annan tjänst eller försök igen imorgon."
+      },
+      "Title": {
+        "key": "Error_DailyNewSyncLimitReached_Title",
+        "default": "Daglig gräns för ny synkronisering har uppnåtts"
+      }
     },
-    "DailyNewSyncLimitReached_Message": {
-      "key": "Exception_DailyNewSyncLimitReached_Message",
-      "default": "Synkronisera till ett befintligt synkroniserings-ID, byt till en annan tjänst eller försök igen imorgon."
+    "Default": {
+      "Message": {
+        "key": "Error_Default_Message",
+        "default": "Om problemet kvarstår, vänligen <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>rapportera problemet</a>."
+      },
+      "Title": {
+        "key": "Error_Default_Title",
+        "default": "Något gick fel"
+      }
     },
-    "DailyNewSyncLimitReached_Title": {
-      "key": "Exception_DailyNewSyncLimitReached_Title",
-      "default": "Daglig gräns för ny synkronisering har uppnåtts"
+    "FailedDownloadFile": {
+      "Title": {
+        "key": "Error_FailedDownloadFile_Title",
+        "default": "Säkerhetskopiering misslyckades"
+      }
     },
-    "Default_Message": {
-      "key": "Exception_Default_Message",
-      "default": "Om problemet kvarstår, vänligen <a href='https://link.xbrowsersync.org/app-issues' class='new-tab'>rapportera problemet</a>."
+    "FailedGetDataToRestore": {
+      "Title": {
+        "key": "Error_FailedGetDataToRestore_Title",
+        "default": "Bläddring bland filer misslyckades"
+      }
     },
-    "Default_Title": {
-      "key": "Exception_Default_Title",
-      "default": "Något gick fel"
+    "FailedGetPageMetadata": {
+      "Message": {
+        "key": "Error_FailedGetPageMetadata_Message",
+        "default": "Webbadressen är ogiltig eller webbsidedata kunde inte hämtas."
+      },
+      "Title": {
+        "key": "Error_FailedGetPageMetadata_Title",
+        "default": "Kunde inte hämta bokmärkesegenskaper"
+      }
     },
-    "FailedDownloadFile_Title": {
-      "key": "Exception_FailedDownloadFile_Title",
-      "default": "Säkerhetskopiering misslyckades"
+    "FailedRefreshBookmarks": {
+      "Title": {
+        "key": "Error_FailedRefreshBookmarks_Title",
+        "default": "Kunde inte hämta uppdateringar"
+      }
     },
-    "FailedGetDataToRestore_Title": {
-      "key": "Exception_FailedGetDataToRestore_Title",
-      "default": "Bläddring bland filer misslyckades"
+    "FailedRestoreData": {
+      "Message": {
+        "key": "Error_FailedRestoreData_Message",
+        "default": "Den säkerhetskopierade datan som tillhandahållits är inte i ett förväntat format."
+      },
+      "Title": {
+        "key": "Error_FailedRestoreData_Title",
+        "default": "Kunde inte återställa data"
+      }
     },
-    "FailedGetPageMetadata_Message": {
-      "key": "Exception_FailedGetPageMetadata_Message",
-      "default": "Webbadressen är ogiltig eller webbsidedata kunde inte hämtas."
+    "FailedShareUrlNotSynced": {
+      "Title": {
+        "key": "Error_FailedShareUrlNotSynced_Title",
+        "default": "Du måste vara synkroniserad för att lägga till ett bokmärke"
+      }
     },
-    "FailedGetPageMetadata_Title": {
-      "key": "Exception_FailedGetPageMetadata_Title",
-      "default": "Kunde inte hämta bokmärkesegenskaper"
+    "FailedShareUrl": {
+      "Title": {
+        "key": "Error_FailedShareUrl_Title",
+        "default": "Kunde inte hämta delad bokmärkeswebbadress"
+      }
     },
-    "FailedRefreshBookmarks_Title": {
-      "key": "Exception_FailedRefreshBookmarks_Title",
-      "default": "Kunde inte hämta uppdateringar"
+    "InvalidCredentials": {
+      "Message": {
+        "key": "Error_InvalidCredentials_Message",
+        "default": "Kontrollera att ditt synknings-ID, lösenord och tjänstens webbadress har angetts korrekt."
+      },
+      "Title": {
+        "key": "Error_InvalidCredentials_Title",
+        "default": "Ogiltiga inloggningsuppgifter"
+      }
     },
-    "FailedRestoreData_Message": {
-      "key": "Exception_FailedRestoreData_Message",
-      "default": "Den säkerhetskopierade datan som tillhandahållits är inte i ett förväntat format."
+    "InvalidService": {
+      "Message": {
+        "key": "Error_InvalidService_Message",
+        "default": "Tjänstens webbadress är inte en giltig xBrowserSync-tjänst."
+      },
+      "Title": {
+        "key": "Error_InvalidService_Title",
+        "default": "Ogiltig xBrowserSync-tjänst"
+      }
     },
-    "FailedRestoreData_Title": {
-      "key": "Exception_FailedRestoreData_Title",
-      "default": "Kunde inte återställa data"
+    "LocalContainerNotFound": {
+      "Message": {
+        "key": "Error_LocalContainerNotFound_Message",
+        "default": "Möjlig korrupt webbläsarprofil, försök att skapa en ny profil eftersom det kan lösa problemet."
+      },
+      "Title": {
+        "key": "Error_LocalContainerNotFound_Title",
+        "default": "Oväntad bokmärkesstruktur"
+      }
     },
-    "FailedShareUrlNotSynced_Title": {
-      "key": "Exception_FailedShareUrlNotSynced_Title",
-      "default": "Du måste vara synkroniserad för att lägga till ett bokmärke"
+    "LocalSyncError": {
+      "Message": {
+        "key": "Error_LocalSyncError_Message",
+        "default": "Lokal webbläsardata har uppdaterats, vänligen verkställ senaste ändring igen."
+      },
+      "Title": {
+        "key": "Error_LocalSyncError_Title",
+        "default": "Synkroniseringsfel"
+      }
     },
-    "FailedShareUrl_Title": {
-      "key": "Exception_FailedShareUrl_Title",
-      "default": "Kunde inte hämta delad bokmärkeswebbadress"
+    "MissingClientData": {
+      "Message": {
+        "key": "Error_MissingClientData_Message",
+        "default": "Kunde inte hitta sparade inloggningsuppgifter. Återaktivera synkronisering och försök igen."
+      },
+      "Title": {
+        "key": "Error_MissingClientData_Title",
+        "default": "Saknar inloggningsuppgifter"
+      }
     },
-    "InvalidCredentials_Message": {
-      "key": "Exception_InvalidCredentials_Message",
-      "default": "Kontrollera att ditt synknings-ID, lösenord och tjänstens webbadress har angetts korrekt."
+    "NetworkConnection": {
+      "Message": {
+        "key": "Error_NetworkConnection_Message",
+        "default": "Kontrollera din nätverksanslutning och försök igen."
+      },
+      "Title": {
+        "key": "Error_NetworkConnection_Title",
+        "default": "Anslutning till tjänsten förlorad"
+      }
     },
-    "InvalidCredentials_Title": {
-      "key": "Exception_InvalidCredentials_Title",
-      "default": "Ogiltiga inloggningsuppgifter"
+    "NoDataToRestore": {
+      "Message": {
+        "key": "Error_NoDataToRestore_Message",
+        "default": "Se till att du har angett en giltig xBrowserSync-säkerhetskopiering innan du återställer."
+      },
+      "Title": {
+        "key": "Error_NoDataToRestore_Title",
+        "default": "Ingen data att återställa"
+      }
     },
-    "InvalidService_Message": {
-      "key": "Exception_InvalidService_Message",
-      "default": "Tjänstens webbadress är inte en giltig xBrowserSync-tjänst."
+    "NotAcceptingNewSyncs": {
+      "Message": {
+        "key": "Error_NotAcceptingNewSyncs_Message",
+        "default": "Byt till en annan tjänst eller försök igen senare."
+      },
+      "Title": {
+        "key": "Error_NotAcceptingNewSyncs_Title",
+        "default": "Tjänsten accepterar inte nya synkroniseringar"
+      }
     },
-    "InvalidService_Title": {
-      "key": "Exception_InvalidService_Title",
-      "default": "Ogiltig xBrowserSync-tjänst"
+    "OutOfSync": {
+      "Message": {
+        "key": "Error_OutOfSync_Message",
+        "default": "Lokal data var inte synkroniserad och har nu uppdaterats. Vänligen verkställ senaste ändring igen."
+      },
+      "Title": {
+        "key": "Error_OutOfSync_Title",
+        "default": "Synkroniseringskonflikt upptäckt"
+      }
     },
-    "LocalContainerNotFound_Message": {
-      "key": "Exception_LocalContainerNotFound_Message",
-      "default": "Möjlig korrupt webbläsarprofil, försök att skapa en ny profil eftersom det kan lösa problemet."
+    "RequestEntityTooLarge": {
+      "Message": {
+        "key": "Error_RequestEntityTooLarge_Message",
+        "default": "Radera några bokmärken och försök igen eller byt till en tjänst med en större synkroniseringsgräns."
+      },
+      "Title": {
+        "key": "Error_RequestEntityTooLarge_Title",
+        "default": "Gränsen för synkroniseringsdata överskriden"
+      }
     },
-    "LocalContainerNotFound_Title": {
-      "key": "Exception_LocalContainerNotFound_Title",
-      "default": "Oväntad bokmärkesstruktur"
+    "ScanFailed": {
+      "Message": {
+        "key": "Error_ScanFailed_Message",
+        "default": "Kontrollera att behörighet har beviljats och försök igen."
+      },
+      "Title": {
+        "key": "Error_ScanFailed_Title",
+        "default": "Skanning misslyckades"
+      }
     },
-    "LocalSyncError_Message": {
-      "key": "Exception_LocalSyncError_Message",
-      "default": "Lokal webbläsardata har uppdaterats, vänligen verkställ senaste ändring igen."
+    "ServiceOffline": {
+      "Message": {
+        "key": "Error_ServiceOffline_Message",
+        "default": "xBrowserSync-tjänsten är för närvarande offline, försök igen senare."
+      },
+      "Title": {
+        "key": "Error_ServiceOffline_Title",
+        "default": "Tjänsten offline"
+      }
     },
-    "LocalSyncError_Title": {
-      "key": "Exception_LocalSyncError_Title",
-      "default": "Synkroniseringsfel"
+    "ShareFailed": {
+      "Title": {
+        "key": "Error_ShareFailed_Title",
+        "default": "Delning misslyckades"
+      }
     },
-    "MissingClientData_Message": {
-      "key": "Exception_MissingClientData_Message",
-      "default": "Kunde inte hitta sparade inloggningsuppgifter. Återaktivera synkronisering och försök igen."
+    "SyncRemoved": {
+      "Message": {
+        "key": "Error_SyncRemoved_Message",
+        "default": "Den efterfrågade synkroniseringen finns inte, den kan ha tagits bort på grund av inaktivitet."
+      },
+      "Title": {
+        "key": "Error_SyncRemoved_Title",
+        "default": "Synkronisering hittades inte"
+      }
     },
-    "MissingClientData_Title": {
-      "key": "Exception_MissingClientData_Title",
-      "default": "Saknar inloggningsuppgifter"
+    "SyncVersionNotSupported": {
+      "Message": {
+        "key": "Error_SyncVersionNotSupported_Message",
+        "default": "Detta ID kan inte synkroniseras med denna version av xBrowserSync eftersom synkroniseringen har uppgraderats till en senare version."
+      },
+      "Restore": {
+        "Message": {
+          "key": "Error_SyncVersionNotSupported_Restore_Message",
+          "default": "Säkerhetskopieringsdatan kan inte återställas av denna version av xBrowserSync eftersom den skapades med en senare version."
+        }
+      },
+      "Title": {
+        "key": "Error_SyncVersionNotSupported_Title",
+        "default": "Synkroniseringsversionen stöds inte"
+      }
     },
-    "NetworkConnection_Message": {
-      "key": "Exception_NetworkConnection_Message",
-      "default": "Kontrollera din nätverksanslutning och försök igen."
+    "TooManyRequests": {
+      "Message": {
+        "key": "Error_TooManyRequests_Message",
+        "default": "Synkroniseringen har inaktiverats, återaktivera synkroniseringen för att återuppta synkroniseringen."
+      },
+      "Title": {
+        "key": "Error_TooManyRequests_Title",
+        "default": "Gränsen uppnådd för tjänstebegäran"
+      }
     },
-    "NetworkConnection_Title": {
-      "key": "Exception_NetworkConnection_Title",
-      "default": "Anslutning till tjänsten förlorad"
+    "UncommittedSyncs": {
+      "Message": {
+        "key": "Error_UncommittedSyncs_Message",
+        "default": "Synkronisering kommer att göras när anslutningen till tjänsten har återställts."
+      },
+      "Title": {
+        "key": "Error_UncommittedSyncs_Title",
+        "default": "Ändringar inte synkroniserade"
+      }
     },
-    "NoDataToRestore_Message": {
-      "key": "Exception_NoDataToRestore_Message",
-      "default": "Se till att du har angett en giltig xBrowserSync-säkerhetskopiering innan du återställer."
+    "UnsupportedServiceApiVersion": {
+      "Message": {
+        "key": "Error_UnsupportedServiceApiVersion_Message",
+        "default": "Denna tjänst kör en API-version som inte stöds."
+      },
+      "Title": {
+        "key": "Error_UnsupportedServiceApiVersion_Title",
+        "default": "Tjänsten stöds inte"
+      }
     },
-    "NoDataToRestore_Title": {
-      "key": "Exception_NoDataToRestore_Title",
-      "default": "Ingen data att återställa"
-    },
-    "NotAcceptingNewSyncs_Message": {
-      "key": "Exception_NotAcceptingNewSyncs_Message",
-      "default": "Byt till en annan tjänst eller försök igen senare."
-    },
-    "NotAcceptingNewSyncs_Title": {
-      "key": "Exception_NotAcceptingNewSyncs_Title",
-      "default": "Tjänsten accepterar inte nya synkroniseringar"
-    },
-    "OutOfSync_Message": {
-      "key": "Exception_OutOfSync_Message",
-      "default": "Lokal data var inte synkroniserad och har nu uppdaterats. Vänligen verkställ senaste ändring igen."
-    },
-    "OutOfSync_Title": {
-      "key": "Exception_OutOfSync_Title",
-      "default": "Synkroniseringskonflikt upptäckt"
-    },
-    "RequestEntityTooLarge_Message": {
-      "key": "Exception_RequestEntityTooLarge_Message",
-      "default": "Radera några bokmärken och försök igen eller byt till en tjänst med en större synkroniseringsgräns."
-    },
-    "RequestEntityTooLarge_Title": {
-      "key": "Exception_RequestEntityTooLarge_Title",
-      "default": "Gränsen för synkroniseringsdata överskriden"
-    },
-    "ScanFailed_Message": {
-      "key": "Exception_ScanFailed_Message",
-      "default": "Kontrollera att behörighet har beviljats och försök igen."
-    },
-    "ScanFailed_Title": {
-      "key": "Exception_ScanFailed_Title",
-      "default": "Skanning misslyckades"
-    },
-    "ServiceOffline_Message": {
-      "key": "Exception_ServiceOffline_Message",
-      "default": "xBrowserSync-tjänsten är för närvarande offline, försök igen senare."
-    },
-    "ServiceOffline_Title": {
-      "key": "Exception_ServiceOffline_Title",
-      "default": "Tjänsten offline"
-    },
-    "ShareFailed_Title": {
-      "key": "Exception_ShareFailed_Title",
-      "default": "Delning misslyckades"
-    },
-    "SyncRemoved_Message": {
-      "key": "Exception_SyncRemoved_Message",
-      "default": "Den efterfrågade synkroniseringen finns inte, den kan ha tagits bort på grund av inaktivitet."
-    },
-    "SyncRemoved_Title": {
-      "key": "Exception_SyncRemoved_Title",
-      "default": "Synkronisering hittades inte"
-    },
-    "SyncVersionNotSupported_Message": {
-      "key": "Exception_SyncVersionNotSupported_Message",
-      "default": "Detta ID kan inte synkroniseras med denna version av xBrowserSync eftersom synkroniseringen har uppgraderats till en senare version."
-    },
-    "SyncVersionNotSupported_Restore_Message": {
-      "key": "Exception_SyncVersionNotSupported_Restore_Message",
-      "default": "Säkerhetskopieringsdatan kan inte återställas av denna version av xBrowserSync eftersom den skapades med en senare version."
-    },
-    "SyncVersionNotSupported_Title": {
-      "key": "Exception_SyncVersionNotSupported_Title",
-      "default": "Synkroniseringsversionen stöds inte"
-    },
-    "TooManyRequests_Message": {
-      "key": "Exception_TooManyRequests_Message",
-      "default": "Synkroniseringen har inaktiverats, återaktivera synkroniseringen för att återuppta synkroniseringen."
-    },
-    "TooManyRequests_Title": {
-      "key": "Exception_TooManyRequests_Title",
-      "default": "Gränsen uppnådd för tjänstebegäran"
-    },
-    "UncommittedSyncs_Message": {
-      "key": "Exception_UncommittedSyncs_Message",
-      "default": "Synkronisering kommer att göras när anslutningen till tjänsten har återställts."
-    },
-    "UncommittedSyncs_Title": {
-      "key": "Exception_UncommittedSyncs_Title",
-      "default": "Ändringar inte synkroniserade"
-    },
-    "UnsupportedServiceApiVersion_Message": {
-      "key": "Exception_UnsupportedServiceApiVersion_Message",
-      "default": "Denna tjänst kör en API-version som inte stöds."
-    },
-    "UnsupportedServiceApiVersion_Title": {
-      "key": "Exception_UnsupportedServiceApiVersion_Title",
-      "default": "Tjänsten stöds inte"
-    },
-    "UpgradeFailed_Message": {
-      "key": "Exception_UpgradeFailed_Message",
-      "android": "Uppgradering försöks på nytt vid omstart av appen. Om problemet kvarstår, installera om xBrowserSync.",
-      "default": "Starta om din webbläsare för att försöka uppgradera igen. Om problemet kvarstår, installera om xBrowserSync."
-    },
-    "UpgradeFailed_Title": {
-      "key": "Exception_UpgradeFailed_Title",
-      "default": "Uppgradering misslyckades"
+    "UpgradeFailed": {
+      "Message": {
+        "key": "Error_UpgradeFailed_Message",
+        "android": "Uppgradering försöks på nytt vid omstart av appen. Om problemet kvarstår, installera om xBrowserSync.",
+        "default": "Starta om din webbläsare för att försöka uppgradera igen. Om problemet kvarstår, installera om xBrowserSync."
+      },
+      "Title": {
+        "key": "Error_UpgradeFailed_Title",
+        "default": "Uppgradering misslyckades"
+      }
     }
   },
   "Service": {

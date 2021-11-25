@@ -1,10 +1,10 @@
 import angular from 'angular';
 import autobind from 'autobind-decorator';
-import { browser } from 'webextension-polyfill-ts';
+import browser from 'webextension-polyfill';
 import { AppHelperService } from '../../../../app/shared/app-helper/app-helper.service';
 import { ApiService } from '../../../../shared/api/api.interface';
 import { BookmarkHelperService } from '../../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import { ExceptionHandler } from '../../../../shared/exception/exception.interface';
+import { ExceptionHandler } from '../../../../shared/errors/errors.interface';
 import Globals from '../../../../shared/global-shared.constants';
 import { MessageCommand } from '../../../../shared/global-shared.enum';
 import { LogService } from '../../../../shared/log/log.service';

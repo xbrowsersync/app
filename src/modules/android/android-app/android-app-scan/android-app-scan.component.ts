@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AppViewType } from '../../../app/app.enum';
 import { BackupSync } from '../../../shared/backup-restore/backup-restore.interface';
-import * as Exceptions from '../../../shared/exception/exception';
+import { AndroidError, FailedScanError } from '../../../shared/errors/errors';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { LogService } from '../../../shared/log/log.service';
@@ -100,7 +100,7 @@ export class AndroidAppScanComponent implements OnInit, OnDestroy {
     return this.$q<void>((resolve, reject) => {
       window.QRScanner.disableLight((err: any) => {
         if (err) {
-          return reject(new Exceptions.AndroidException(err._message ?? err.name ?? err.code));
+          return reject(new AndroidError(err._message ?? err.name ?? err.code));
         }
         resolve();
       });
@@ -111,7 +111,7 @@ export class AndroidAppScanComponent implements OnInit, OnDestroy {
     return this.$q<void>((resolve, reject) => {
       window.QRScanner.enableLight((err: any) => {
         if (err) {
-          return reject(new Exceptions.AndroidException(err._message ?? err.name ?? err.code));
+          return reject(new AndroidError(err._message ?? err.name ?? err.code));
         }
         resolve();
       });
@@ -151,7 +151,7 @@ export class AndroidAppScanComponent implements OnInit, OnDestroy {
 
         window.QRScanner.scan((err: any, scannedText: string) => {
           if (err) {
-            return reject(new Exceptions.AndroidException(err._message ?? err.name ?? err.code));
+            return reject(new AndroidError(err._message ?? err.name ?? err.code));
           }
 
           window.QRScanner.pausePreview(() => {
@@ -174,20 +174,20 @@ export class AndroidAppScanComponent implements OnInit, OnDestroy {
 
       window.QRScanner.prepare((err: any, status: any) => {
         if (err) {
-          return reject(new Exceptions.AndroidException(err._message ?? err.name ?? err.code));
+          return reject(new AndroidError(err._message ?? err.name ?? err.code));
         }
 
         if (status.authorized) {
           window.QRScanner.show(() => waitForScan());
         } else {
-          reject(new Exceptions.AndroidException('Camera use not authorised'));
+          reject(new AndroidError('Camera use not authorised'));
         }
       });
     })
       .then(this.scanCompleted)
       .catch((err) => {
         this.appHelperSvc.switchView().then(() => {
-          throw new Exceptions.FailedScanException(undefined, err);
+          throw new FailedScanError(undefined, err);
         });
       });
   }

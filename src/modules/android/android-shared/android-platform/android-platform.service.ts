@@ -12,8 +12,13 @@ import {
   RemoveBookmarkChangeData
 } from '../../../shared/bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import * as Exceptions from '../../../shared/exception/exception';
-import { ExceptionHandler } from '../../../shared/exception/exception.interface';
+import {
+  FailedDownloadFileError,
+  FailedGetPageMetadataError,
+  I18nError,
+  SyncUncommittedError
+} from '../../../shared/errors/errors';
+import { ExceptionHandler } from '../../../shared/errors/errors.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { MessageCommand, PlatformType } from '../../../shared/global-shared.enum';
 import { I18nObject, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
@@ -152,7 +157,7 @@ export class AndroidPlatformService implements PlatformService {
 
     return this.$q((resolve, reject) => {
       const onError = (err: Error) => {
-        return reject(new Exceptions.FailedDownloadFileException(undefined, err));
+        return reject(new FailedDownloadFileError(undefined, err));
       };
 
       this.logSvc.logInfo(`Downloading file ${filename}`);
@@ -200,7 +205,7 @@ export class AndroidPlatformService implements PlatformService {
         .then(this.disableBackgroundSync)
         .catch((err) => {
           // Swallow sync uncommitted and network connection errors to not flood logs with duplicate error messages
-          if (err instanceof Exceptions.SyncUncommittedException || this.networkSvc.isNetworkConnectionError(err)) {
+          if (err instanceof SyncUncommittedError || this.networkSvc.isNetworkConnectionError(err)) {
             this.logSvc.logInfo('Waiting for network connection...');
             return;
           }
@@ -262,7 +267,7 @@ export class AndroidPlatformService implements PlatformService {
   getI18nString(i18nObj: I18nObject): string {
     const i18nStr = this.i18nObjects[i18nObj.key];
     if (angular.isUndefined(i18nStr ?? undefined)) {
-      throw new Exceptions.I18nException('I18n string has no value');
+      throw new I18nError('I18n string has no value');
     }
     return i18nStr;
   }
@@ -291,7 +296,7 @@ export class AndroidPlatformService implements PlatformService {
 
       // Check connection
       if (!this.networkSvc.isNetworkConnected()) {
-        return reject(new Exceptions.FailedGetPageMetadataException());
+        return reject(new FailedGetPageMetadataError());
       }
 
       const handleResponse = (pageContent?: string, err?: Error): void => {
@@ -305,7 +310,7 @@ export class AndroidPlatformService implements PlatformService {
 
         // Check html content was returned
         if (err || !pageContent) {
-          return reject(new Exceptions.FailedGetPageMetadataException(undefined, err));
+          return reject(new FailedGetPageMetadataError(undefined, err));
         }
 
         // Update metadata with retrieved page data and return
@@ -464,10 +469,10 @@ export class AndroidPlatformService implements PlatformService {
           })
           .catch((err) => {
             // Enable background sync if sync uncommitted
-            if (err instanceof Exceptions.SyncUncommittedException) {
+            if (err instanceof SyncUncommittedError) {
               this.alertSvc.setCurrentAlert({
-                message: this.getI18nString(this.Strings.Exception.UncommittedSyncs_Message),
-                title: this.getI18nString(this.Strings.Exception.UncommittedSyncs_Title)
+                message: this.getI18nString(this.Strings.Error.UncommittedSyncs.Message),
+                title: this.getI18nString(this.Strings.Error.UncommittedSyncs.Title)
               } as Alert);
               this.enableBackgroundSync();
               return { error: err, success: false };

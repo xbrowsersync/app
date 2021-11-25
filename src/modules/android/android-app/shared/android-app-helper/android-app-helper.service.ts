@@ -3,7 +3,7 @@ import autobind from 'autobind-decorator';
 import { AppHelperService } from '../../../../app/shared/app-helper/app-helper.service';
 import { ApiService } from '../../../../shared/api/api.interface';
 import { Bookmark } from '../../../../shared/bookmark/bookmark.interface';
-import { ExceptionHandler } from '../../../../shared/exception/exception.interface';
+import { ExceptionHandler } from '../../../../shared/errors/errors.interface';
 import { LogService } from '../../../../shared/log/log.service';
 import { StoreService } from '../../../../shared/store/store.service';
 import { Sync } from '../../../../shared/sync/sync.interface';

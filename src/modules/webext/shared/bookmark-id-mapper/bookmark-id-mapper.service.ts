@@ -1,6 +1,6 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { BookmarkMappingNotFoundException } from '../../../shared/exception/exception';
+import { BookmarkMappingNotFoundError } from '../../../shared/errors/errors';
 import { StoreKey } from '../../../shared/store/store.enum';
 import { StoreService } from '../../../shared/store/store.service';
 import { BookmarkIdMapping } from './bookmark-id-mapper.interface';
@@ -105,7 +105,7 @@ export class BookmarkIdMapperService {
         return this.set(idMappingsLessNative);
       })
       .catch((err) => {
-        throw new BookmarkMappingNotFoundException(undefined, err);
+        throw new BookmarkMappingNotFoundError(undefined, err);
       });
   }
 

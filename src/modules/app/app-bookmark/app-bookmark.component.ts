@@ -14,8 +14,8 @@ import {
   RemoveBookmarkChangeData
 } from '../../shared/bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import * as Exceptions from '../../shared/exception/exception';
-import { ExceptionHandler } from '../../shared/exception/exception.interface';
+import { SyncNotFoundError } from '../../shared/errors/errors';
+import { ExceptionHandler } from '../../shared/errors/errors.interface';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService, WebpageMetadata } from '../../shared/global-shared.interface';
 import { SyncType } from '../../shared/sync/sync.enum';
@@ -306,7 +306,7 @@ export class AppBookmarkComponent implements OnInit {
       })
       .catch((err) => {
         // Handle sync removed from service
-        if (err instanceof Exceptions.SyncNotFoundException) {
+        if (err instanceof SyncNotFoundError) {
           return this.appHelperSvc.switchView().then(() => ({ error: err, success: false }));
         }
         throw err;
