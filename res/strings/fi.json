@@ -298,7 +298,7 @@
       },
       "Title": {
         "key": "Error_NetworkConnection_Title",
-        "default": "Yhteys palveluun katkesi"
+        "default": "Yhteys katkennut"
       }
     },
     "NoDataToRestore": {
@@ -406,11 +406,11 @@
     "UncommittedSyncs": {
       "Message": {
         "key": "Error_UncommittedSyncs_Message",
-        "default": "Synkronointi suoritetaan kun yhteys palveluun on palautettu."
+        "default": "Muutokset synkronoidaan kun yhteys on palautettu."
       },
       "Title": {
         "key": "Error_UncommittedSyncs_Title",
-        "default": "Muutoksia ei synkronoitu"
+        "default": "Yhteys katkennut"
       }
     },
     "UnsupportedServiceApiVersion": {
