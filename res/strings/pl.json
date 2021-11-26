@@ -64,10 +64,6 @@
         "key": "Bookmarks_Container_Menu",
         "default": "Menu zakładki"
       },
-      "Mobile": {
-        "key": "Bookmarks_Container_Mobile",
-        "default": "Zakładki na telefonie"
-      },
       "Other": {
         "key": "Bookmarks_Container_Other",
         "default": "Inne zakładki"

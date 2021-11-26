@@ -203,9 +203,6 @@ export class BookmarkHelperService {
         case BookmarkContainer.Menu:
           containerTitle = this.platformSvc.getI18nString(this.Strings.Bookmarks.Container.Menu);
           break;
-        case BookmarkContainer.Mobile:
-          containerTitle = this.platformSvc.getI18nString(this.Strings.Bookmarks.Container.Mobile);
-          break;
         case BookmarkContainer.Other:
           containerTitle = this.platformSvc.getI18nString(this.Strings.Bookmarks.Container.Other);
           break;
@@ -228,7 +225,6 @@ export class BookmarkHelperService {
     // Check if container
     if (
       bookmark.title === BookmarkContainer.Menu ||
-      bookmark.title === BookmarkContainer.Mobile ||
       bookmark.title === BookmarkContainer.Other ||
       bookmark.title === BookmarkContainer.Toolbar
     ) {
@@ -533,17 +529,12 @@ export class BookmarkHelperService {
 
   removeEmptyContainers(bookmarks: Bookmark[]): Bookmark[] {
     const menuContainer = this.getContainer(BookmarkContainer.Menu, bookmarks);
-    const mobileContainer = this.getContainer(BookmarkContainer.Mobile, bookmarks);
     const otherContainer = this.getContainer(BookmarkContainer.Other, bookmarks);
     const toolbarContainer = this.getContainer(BookmarkContainer.Toolbar, bookmarks);
     const removeArr: Bookmark[] = [];
 
     if (!menuContainer?.children?.length) {
       removeArr.push(menuContainer);
-    }
-
-    if (!mobileContainer?.children?.length) {
-      removeArr.push(mobileContainer);
     }
 
     if (!otherContainer?.children?.length) {

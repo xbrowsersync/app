@@ -64,10 +64,6 @@
         "key": "Bookmarks_Container_Menu",
         "default": "Bladwijzermenu"
       },
-      "Mobile": {
-        "key": "Bookmarks_Container_Mobile",
-        "default": "Mobiele bladwijzers"
-      },
       "Other": {
         "key": "Bookmarks_Container_Other",
         "default": "Andere bladwijzers"

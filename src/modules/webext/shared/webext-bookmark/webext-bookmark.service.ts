@@ -134,7 +134,6 @@ export abstract class WebExtBookmarkService implements BookmarkService {
     return this.getNativeContainerIds()
       .then((nativeContainerIds) => {
         const menuBookmarksId = nativeContainerIds.get(BookmarkContainer.Menu);
-        const mobileBookmarksId = nativeContainerIds.get(BookmarkContainer.Mobile);
         const otherBookmarksId = nativeContainerIds.get(BookmarkContainer.Other);
         const toolbarBookmarksId = nativeContainerIds.get(BookmarkContainer.Toolbar);
 
@@ -154,25 +153,6 @@ export abstract class WebExtBookmarkService implements BookmarkService {
                 });
                 return menuBookmarksContainer?.children?.length
                   ? mapIds(menuBookmarks.children, menuBookmarksContainer.children)
-                  : ([] as BookmarkIdMapping[]);
-              });
-
-        // Map mobile bookmarks
-        const getMobileBookmarks =
-          mobileBookmarksId == null
-            ? this.$q.resolve([] as BookmarkIdMapping[])
-            : browser.bookmarks.getSubTree(mobileBookmarksId).then((subTree) => {
-                const mobileBookmarks = subTree[0];
-                if (!mobileBookmarks.children?.length) {
-                  return [] as BookmarkIdMapping[];
-                }
-
-                // Map ids between nodes and synced container children
-                const mobileBookmarksContainer = bookmarks.find((x) => {
-                  return x.title === BookmarkContainer.Mobile;
-                });
-                return mobileBookmarksContainer?.children?.length
-                  ? mapIds(mobileBookmarks.children, mobileBookmarksContainer.children)
                   : ([] as BookmarkIdMapping[]);
               });
 
@@ -220,7 +200,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
                 });
               });
 
-        return this.$q.all([getMenuBookmarks, getMobileBookmarks, getOtherBookmarks, getToolbarBookmarks]);
+        return this.$q.all([getMenuBookmarks, getOtherBookmarks, getToolbarBookmarks]);
       })
       .then((results) => {
         // Combine all mappings
@@ -415,7 +395,6 @@ export abstract class WebExtBookmarkService implements BookmarkService {
   getContainerNameFromNativeId(nativeBookmarkId: string): ng.IPromise<string> {
     return this.getNativeContainerIds().then((nativeContainerIds) => {
       const menuBookmarksId = nativeContainerIds.get(BookmarkContainer.Menu);
-      const mobileBookmarksId = nativeContainerIds.get(BookmarkContainer.Mobile);
       const otherBookmarksId = nativeContainerIds.get(BookmarkContainer.Other);
       const toolbarBookmarksId = nativeContainerIds.get(BookmarkContainer.Toolbar);
 
@@ -426,10 +405,6 @@ export abstract class WebExtBookmarkService implements BookmarkService {
 
       if (menuBookmarksId) {
         nativeContainers.push({ nativeId: menuBookmarksId, containerName: BookmarkContainer.Menu });
-      }
-
-      if (mobileBookmarksId) {
-        nativeContainers.push({ nativeId: mobileBookmarksId, containerName: BookmarkContainer.Mobile });
       }
 
       // Check if the native bookmark id resolves to a container

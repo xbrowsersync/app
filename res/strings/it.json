@@ -64,10 +64,6 @@
         "key": "Bookmarks_Container_Menu",
         "default": "Menu segnalibri"
       },
-      "Mobile": {
-        "key": "Bookmarks_Container_Mobile",
-        "default": "Segnalibri sul cellulare"
-      },
       "Other": {
         "key": "Bookmarks_Container_Other",
         "default": "Altri segnalibri"

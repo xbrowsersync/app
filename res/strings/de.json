@@ -64,10 +64,6 @@
         "key": "Bookmarks_Container_Menu",
         "default": "Menü-Lesezeichen"
       },
-      "Mobile": {
-        "key": "Bookmarks_Container_Mobile",
-        "default": "Mobile Lesezeichen"
-      },
       "Other": {
         "key": "Bookmarks_Container_Other",
         "default": "Weitere Lesezeichen"

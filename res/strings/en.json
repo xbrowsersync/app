@@ -64,10 +64,6 @@
         "key": "Bookmarks_Container_Menu",
         "default": "Menu bookmarks"
       },
-      "Mobile": {
-        "key": "Bookmarks_Container_Mobile",
-        "default": "Mobile bookmarks"
-      },
       "Other": {
         "key": "Bookmarks_Container_Other",
         "default": "Other bookmarks"

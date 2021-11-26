@@ -1,5 +1,6 @@
 import angular from 'angular';
 import autobind from 'autobind-decorator';
+import { BookmarkContainer } from '../../bookmark/bookmark.enum';
 import { Bookmark } from '../../bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../bookmark/bookmark-helper/bookmark-helper.service';
 import Globals from '../../global-shared.constants';
@@ -42,6 +43,15 @@ export abstract class V160UpgradeProviderService implements UpgradeProvider {
         delete bookmark.title;
       }
     });
+
+    // Move mobile bookmarks container into other bookmarks if present
+    const mobileContainerIndex = upgradedBookmarks.findIndex((bookmark) => bookmark.title === '[xbs] Mobile');
+    if (mobileContainerIndex >= 0) {
+      const mobileContainerArr = upgradedBookmarks.splice(mobileContainerIndex, 1);
+      mobileContainerArr[0].title = 'Mobile bookmarks';
+      const otherContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Other, upgradedBookmarks, true);
+      otherContainer.children = [...mobileContainerArr, ...otherContainer.children];
+    }
 
     return this.$q.resolve(upgradedBookmarks);
   }

@@ -64,10 +64,6 @@
         "key": "Bookmarks_Container_Menu",
         "default": "Menu de marcadores"
       },
-      "Mobile": {
-        "key": "Bookmarks_Container_Mobile",
-        "default": "Marcadores de Móvil"
-      },
       "Other": {
         "key": "Bookmarks_Container_Other",
         "default": "Outros marcadores"

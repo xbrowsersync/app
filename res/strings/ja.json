@@ -64,10 +64,6 @@
         "key": "Bookmarks_Container_Menu",
         "default": "ブックマークのメニュー "
       },
-      "Mobile": {
-        "key": "Bookmarks_Container_Mobile",
-        "default": "スマートフォンのブックマーク"
-      },
       "Other": {
         "key": "Bookmarks_Container_Other",
         "default": "その他のブックマーク"

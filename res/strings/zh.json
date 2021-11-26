@@ -64,10 +64,6 @@
         "key": "Bookmarks_Container_Menu",
         "default": "菜单书签"
       },
-      "Mobile": {
-        "key": "Bookmarks_Container_Mobile",
-        "default": "手机书签"
-      },
       "Other": {
         "key": "Bookmarks_Container_Other",
         "default": "其他书签"

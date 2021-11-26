@@ -64,10 +64,6 @@
         "key": "Bookmarks_Container_Menu",
         "default": "Kirjanmerkkivalikko"
       },
-      "Mobile": {
-        "key": "Bookmarks_Container_Mobile",
-        "default": "Mobiilikirjanmerkit"
-      },
       "Other": {
         "key": "Bookmarks_Container_Other",
         "default": "Muut kirjanmerkit"
