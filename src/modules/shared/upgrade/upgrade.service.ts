@@ -85,8 +85,7 @@ export class UpgradeService {
           const upgradeStep = [...this.upgradeMap].find(({ 0: x }) =>
             this.utilitySvc.compareVersions(currentVersion, x, '<')
           );
-          const upgradeVersion = upgradeStep && upgradeStep[0];
-          const upgradeProvider = upgradeStep && upgradeStep[1];
+          const [upgradeVersion, upgradeProvider] = upgradeStep ?? [];
 
           // If upgrade found, run app upgrade process
           return (
@@ -139,8 +138,7 @@ export class UpgradeService {
       const upgradeStep = [...this.upgradeMap].find(({ 0: x }) =>
         this.utilitySvc.compareVersions(currentVersion, x, '<')
       );
-      const upgradeVersion = upgradeStep?.[0];
-      const upgradeProvider = upgradeStep?.[1];
+      const [upgradeVersion, upgradeProvider] = upgradeStep ?? [];
 
       // Run provider upgrade process if exists
       return (

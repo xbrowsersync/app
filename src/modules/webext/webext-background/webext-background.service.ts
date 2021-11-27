@@ -257,7 +257,7 @@ export class WebExtBackgroundService {
 
   getDownloadById(id: number): ng.IPromise<Downloads.DownloadItem> {
     return browser.downloads.search({ id }).then((results) => {
-      const download = results[0];
+      const [download] = results;
       if ((download ?? undefined) === undefined) {
         this.logSvc.logWarning('Unable to find download');
         return;
@@ -285,14 +285,8 @@ export class WebExtBackgroundService {
             this.utilitySvc.isSyncEnabled()
           ])
           .then((data) => {
-            const appVersion = data[0];
-            const settings = data[1];
-            const storeContent = data[2];
-            const serviceUrl = data[3];
-            const syncVersion = data[4];
-            const syncEnabled = data[5];
-
             // Add useful debug info to beginning of trace log
+            const [appVersion, settings, storeContent, serviceUrl, syncVersion, syncEnabled] = data;
             const debugInfo = angular.copy(storeContent) as any;
             debugInfo.appVersion = appVersion;
             debugInfo.checkForAppUpdates = settings.checkForAppUpdates;
@@ -595,12 +589,12 @@ export class WebExtBackgroundService {
       .getAppVersion()
       .then(this.upgradeSvc.upgrade)
       .then(() => {
-        return this.platformSvc.getAppVersion().then((appVersion) => {
+        return this.platformSvc.getAppVersionName().then((appVersion) => {
           const alert: Alert = {
             message: this.platformSvc.getI18nString(this.Strings.Alert.AppUpdated.Message),
             title: `${this.platformSvc.getI18nString(this.Strings.Alert.AppUpdated.Title)} ${appVersion}`
           };
-          this.displayAlert(alert, Globals.ReleaseNotesUrlStem + appVersion);
+          this.displayAlert(alert, `${Globals.ReleaseNotesUrlStem}${appVersion}`);
           return this.storeSvc.set(StoreKey.DisplayUpdated, true);
         });
       });

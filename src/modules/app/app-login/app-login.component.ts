@@ -247,9 +247,7 @@ export class AppLoginComponent implements OnInit {
         return this.$q
           .all([this.apiSvc.getBookmarksVersion(this.syncId), this.platformSvc.getAppVersion()])
           .then((results) => {
-            const response = results[0];
-            const appVersion = results[1];
-
+            const [response, appVersion] = results;
             if (this.utilitySvc.compareVersions(response.version ?? '0', appVersion, '<')) {
               // Sync version is less than app version, confirm upgrade before proceeding with sync
               if (this.upgradeConfirmed) {

@@ -190,11 +190,7 @@ export class BackupRestoreService {
         this.utilitySvc.isSyncEnabled()
       ])
       .then((data) => {
-        const bookmarksData = data[0];
-        const syncId = data[1];
-        const serviceUrl = data[2];
-        const syncVersion = data[3];
-        const syncEnabled = data[4];
+        const [bookmarksData, syncId, serviceUrl, syncVersion, syncEnabled] = data;
         const backupData = this.createBackupData(
           bookmarksData,
           syncEnabled ? syncId : undefined,

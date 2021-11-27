@@ -371,8 +371,7 @@ export class BookmarkSyncProviderService implements SyncProvider {
                 .all([this.platformSvc.getAppVersion(), this.utilitySvc.getSyncVersion()])
                 .then((result) => {
                   // Upgrade bookmarks
-                  const appVersion = result[0];
-                  const syncVersion = result[1];
+                  const [appVersion, syncVersion] = result;
                   return this.upgradeSvc
                     .upgradeBookmarks(bookmarks, syncVersion, appVersion)
                     .then((upgradedBookmarks) => {

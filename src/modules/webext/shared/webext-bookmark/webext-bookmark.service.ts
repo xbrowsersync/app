@@ -142,8 +142,8 @@ export abstract class WebExtBookmarkService implements BookmarkService {
           menuBookmarksId == null
             ? this.$q.resolve([] as BookmarkIdMapping[])
             : browser.bookmarks.getSubTree(menuBookmarksId).then((subTree) => {
-                const menuBookmarks = subTree[0];
-                if (!menuBookmarks.children?.length) {
+                const [menuContainer] = subTree;
+                if (!menuContainer.children?.length) {
                   return [] as BookmarkIdMapping[];
                 }
 
@@ -152,7 +152,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
                   return x.title === BookmarkContainer.Menu;
                 });
                 return menuBookmarksContainer?.children?.length
-                  ? mapIds(menuBookmarks.children, menuBookmarksContainer.children)
+                  ? mapIds(menuContainer.children, menuBookmarksContainer.children)
                   : ([] as BookmarkIdMapping[]);
               });
 
@@ -161,13 +161,13 @@ export abstract class WebExtBookmarkService implements BookmarkService {
           otherBookmarksId == null
             ? this.$q.resolve([] as BookmarkIdMapping[])
             : browser.bookmarks.getSubTree(otherBookmarksId).then((subTree) => {
-                const otherBookmarks = subTree[0];
-                if (!otherBookmarks.children?.length) {
+                const [otherContainer] = subTree;
+                if (!otherContainer.children?.length) {
                   return [] as BookmarkIdMapping[];
                 }
 
                 // Remove any unsupported container folders present
-                const nodes = otherBookmarks.children.filter((x) => !this.unsupportedContainers.includes(x.title));
+                const nodes = otherContainer.children.filter((x) => !this.unsupportedContainers.includes(x.title));
 
                 // Map ids between nodes and synced container children
                 const otherBookmarksContainer = bookmarks.find((x) => {
@@ -184,9 +184,8 @@ export abstract class WebExtBookmarkService implements BookmarkService {
             ? this.$q.resolve([] as BookmarkIdMapping[])
             : browser.bookmarks.getSubTree(toolbarBookmarksId).then((results) => {
                 return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
-                  const toolbarBookmarks = results[0];
-
-                  if (!syncBookmarksToolbar || !toolbarBookmarks.children?.length) {
+                  const [toolbarContainer] = results;
+                  if (!syncBookmarksToolbar || !toolbarContainer.children?.length) {
                     return [] as BookmarkIdMapping[];
                   }
 
@@ -195,7 +194,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
                     return x.title === BookmarkContainer.Toolbar;
                   });
                   return toolbarBookmarksContainer?.children?.length
-                    ? mapIds(toolbarBookmarks.children, toolbarBookmarksContainer.children)
+                    ? mapIds(toolbarContainer.children, toolbarBookmarksContainer.children)
                     : ([] as BookmarkIdMapping[]);
                 });
               });
@@ -281,7 +280,8 @@ export abstract class WebExtBookmarkService implements BookmarkService {
 
       // Get parent bookmark and count containers
       return browser.bookmarks.getSubTree(parentId).then((subTree) => {
-        const numContainers = subTree[0].children.filter((child, childIndex) => {
+        const [parent] = subTree;
+        const numContainers = parent.children.filter((child, childIndex) => {
           return childIndex < index && Array.from(nativeContainerIds.values()).includes(child.id);
         }).length;
         return numContainers;
@@ -294,7 +294,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
       if (results?.length === 0) {
         throw new NativeBookmarkNotFoundError();
       }
-      const nativeBookmark = results[0];
+      const [nativeBookmark] = results;
       const convertedBookmark = this.convertNativeBookmarkToBookmark(nativeBookmark, bookmarks);
       return convertedBookmark;
     });
@@ -431,7 +431,8 @@ export abstract class WebExtBookmarkService implements BookmarkService {
     }
 
     return browser.bookmarks.search({ title }).then((results) => {
-      return results?.[0];
+      const [bookmark] = results ?? [];
+      return bookmark;
     });
   }
 
@@ -694,7 +695,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
 
       return browser.bookmarks.get(changeData.id).then((results) => {
         // If container moved to a different position in same folder, skip sync
-        const movedBookmark = results[0];
+        const [movedBookmark] = results;
         if (Array.from(nativeContainerIds.values()).includes(movedBookmark.id)) {
           return;
         }
@@ -712,9 +713,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
             })
           ])
           .then((idMappings) => {
-            const movedBookmarkMapping = idMappings[0];
-            const parentMapping = idMappings[1];
-
+            const [movedBookmarkMapping, parentMapping] = idMappings;
             if (!movedBookmarkMapping && !parentMapping) {
               // No mappings found, skip sync
               this.logSvc.logInfo('No id mappings found, skipping sync');

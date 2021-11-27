@@ -48,7 +48,8 @@ export abstract class V160UpgradeProviderService implements UpgradeProvider {
     const mobileContainerIndex = upgradedBookmarks.findIndex((bookmark) => bookmark.title === '[xbs] Mobile');
     if (mobileContainerIndex >= 0) {
       const mobileContainerArr = upgradedBookmarks.splice(mobileContainerIndex, 1);
-      mobileContainerArr[0].title = 'Mobile bookmarks';
+      const [mobileContainer] = mobileContainerArr;
+      mobileContainer.title = 'Mobile bookmarks';
       const otherContainer = this.bookmarkHelperSvc.getContainer(BookmarkContainer.Other, upgradedBookmarks, true);
       otherContainer.children = [...mobileContainerArr, ...otherContainer.children];
     }

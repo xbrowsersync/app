@@ -76,8 +76,7 @@ export class AndroidAppScanComponent implements OnInit, OnDestroy {
     } catch (err) {
       // For pre-v1.6.0, split the scanned value into it's components
       const arr = qrCodeValue.split(Globals.QrCode.Delimiter);
-      syncId = arr[0];
-      serviceUrl = arr[1];
+      [syncId, serviceUrl] = arr;
     }
 
     // Validate decoded values

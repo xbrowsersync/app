@@ -298,8 +298,9 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
         menuBookmarksId === undefined
           ? Promise.resolve<Bookmark[]>(undefined)
           : browser.bookmarks.getSubTree(menuBookmarksId).then((subTree) => {
+              const [menuContainer] = subTree;
               return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(
-                this.getNativeBookmarksWithSeparators(subTree[0].children)
+                this.getNativeBookmarksWithSeparators(menuContainer.children)
               );
             });
 
@@ -308,19 +309,19 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
         otherBookmarksId === undefined
           ? Promise.resolve<Bookmark[]>(undefined)
           : browser.bookmarks.getSubTree(otherBookmarksId).then((subTree) => {
-              const otherBookmarks = subTree[0];
-              if (otherBookmarks.children.length === 0) {
+              const [otherContainer] = subTree;
+              if (otherContainer.children.length === 0) {
                 return;
               }
 
               // Add all bookmarks into flat array
-              this.bookmarkHelperSvc.eachBookmark(otherBookmarks.children, (bookmark) => {
+              this.bookmarkHelperSvc.eachBookmark(otherContainer.children, (bookmark) => {
                 allNativeBookmarks.push(bookmark);
               });
 
               // Remove any unsupported container folders present
               const bookmarksWithoutContainers = this.bookmarkHelperSvc
-                .getNativeBookmarksAsBookmarks(this.getNativeBookmarksWithSeparators(otherBookmarks.children))
+                .getNativeBookmarksAsBookmarks(this.getNativeBookmarksWithSeparators(otherContainer.children))
                 .filter((x) => {
                   return !this.unsupportedContainers.find((y) => {
                     return y === x.title;
@@ -334,24 +335,22 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
         toolbarBookmarksId === undefined
           ? this.$q.resolve<Bookmark[]>(undefined)
           : browser.bookmarks.getSubTree(toolbarBookmarksId).then((results) => {
-              const toolbarBookmarks = results[0];
+              const [toolbarContainer] = results;
               return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
-                if (syncBookmarksToolbar && toolbarBookmarks.children.length > 0) {
+                if (syncBookmarksToolbar && toolbarContainer.children.length > 0) {
                   // Add all bookmarks into flat array
-                  this.bookmarkHelperSvc.eachBookmark(toolbarBookmarks.children, (bookmark) => {
+                  this.bookmarkHelperSvc.eachBookmark(toolbarContainer.children, (bookmark) => {
                     allNativeBookmarks.push(bookmark);
                   });
                   return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(
-                    this.getNativeBookmarksWithSeparators(toolbarBookmarks.children)
+                    this.getNativeBookmarksWithSeparators(toolbarContainer.children)
                   );
                 }
               });
             });
 
       return this.$q.all([getMenuBookmarks, getOtherBookmarks, getToolbarBookmarks]).then((results) => {
-        const menuBookmarks = results[0];
-        const otherBookmarks = results[1];
-        const toolbarBookmarks = results[2];
+        const [menuBookmarks, otherBookmarks, toolbarBookmarks] = results;
         const bookmarks: Bookmark[] = [];
 
         // Add other container if bookmarks present
@@ -445,10 +444,11 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
         // Populate container ids
         return browser.bookmarks.getTree().then((tree) => {
           // Get the root child nodes
-          const otherBookmarksNode = tree[0].children.find((x) => {
+          const [root] = tree;
+          const otherBookmarksNode = root.children.find((x) => {
             return x.id === this.otherBookmarksNodeId;
           });
-          const toolbarBookmarksNode = tree[0].children.find((x) => {
+          const toolbarBookmarksNode = root.children.find((x) => {
             return x.id === this.toolbarBookmarksNodeId;
           });
 
@@ -500,7 +500,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
   syncNativeBookmarkChanged(id?: string): ng.IPromise<void> {
     // Retrieve full bookmark info
     return browser.bookmarks.getSubTree(id).then((results) => {
-      const changedBookmark = results[0];
+      const [changedBookmark] = results;
 
       // If bookmark is separator update native bookmark properties
       (this.isSeparator(changedBookmark)
@@ -582,7 +582,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
 
   syncNativeBookmarkMoved(id?: string, moveInfo?: NativeBookmarks.OnMovedMoveInfoType): ng.IPromise<void> {
     return browser.bookmarks.get(id).then((results) => {
-      const movedBookmark = results[0];
+      const [movedBookmark] = results;
 
       // If bookmark is separator update native bookmark properties
       return (

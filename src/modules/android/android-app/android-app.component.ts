@@ -379,14 +379,8 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
           this.utilitySvc.isSyncEnabled()
         ])
         .then((result) => {
-          const appVersion = result[0];
-          const checkForAppUpdates = result[1];
-          const storeContent = result[2];
-          const serviceUrl = result[3];
-          const syncVersion = result[4];
-          const syncEnabled = result[5];
-
           // Add useful debug info to beginning of trace log
+          const [appVersion, checkForAppUpdates, storeContent, serviceUrl, syncVersion, syncEnabled] = result;
           const debugInfo = angular.copy(storeContent) as any;
           debugInfo.appVersion = appVersion;
           debugInfo.checkForAppUpdates = checkForAppUpdates;

@@ -404,7 +404,15 @@ export class SyncService {
                 : this.apiSvc
                     .updateBookmarks(encryptedBookmarks, updateSyncVersion, isBackgroundSync)
                     .then((response) => {
-                      return this.storeSvc.set(StoreKey.LastUpdated, response.lastUpdated).then(() => {
+                      const updateCache = [this.storeSvc.set(StoreKey.LastUpdated, response.lastUpdated)];
+                      if (updateSyncVersion) {
+                        updateCache.push(
+                          this.platformSvc
+                            .getAppVersion()
+                            .then((appVersion) => this.storeSvc.set(StoreKey.SyncVersion, appVersion))
+                        );
+                      }
+                      return this.$q.all(updateCache).then(() => {
                         this.logSvc.logInfo(`Remote bookmarks updated at ${response.lastUpdated}`);
                       });
                     })

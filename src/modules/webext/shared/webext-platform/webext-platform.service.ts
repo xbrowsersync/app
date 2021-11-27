@@ -143,7 +143,8 @@ export abstract class WebExtPlatformService implements PlatformService {
   getCurrentUrl(): ng.IPromise<string> {
     // Get current tab
     return browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
-      return tabs[0].url ?? '';
+      const [activeTab] = tabs;
+      return activeTab.url ?? '';
     });
   }
 
@@ -174,7 +175,7 @@ export abstract class WebExtPlatformService implements PlatformService {
   getPageMetadata(getFullMetadata = true, pageUrl?: string): ng.IPromise<WebpageMetadata> {
     return browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
       // If active tab empty, throw error
-      const activeTab = tabs?.[0];
+      const [activeTab] = tabs;
       if (!activeTab) {
         throw new FailedGetPageMetadataError();
       }
@@ -204,7 +205,7 @@ export abstract class WebExtPlatformService implements PlatformService {
         })
         .then((response) => {
           if (response?.length && response?.[0]) {
-            metadata = response[0];
+            [metadata] = response;
           }
 
           // If no metadata returned, use the info from the active tab
@@ -241,8 +242,9 @@ export abstract class WebExtPlatformService implements PlatformService {
       .query({ currentWindow: true, active: true })
       .then((tabs) => {
         // Open url in current tab if new then close the extension window
-        return tabs?.length > 0 && tabs?.[0].url && tabs?.[0].url.startsWith(this.getNewTabUrl())
-          ? browser.tabs.update(tabs[0].id, { url }).then(window.close)
+        const [activeTab] = tabs;
+        return tabs.length > 0 && activeTab.url && activeTab.url.startsWith(this.getNewTabUrl())
+          ? browser.tabs.update(activeTab.id, { url }).then(window.close)
           : openInNewTab(url);
       })
       .catch(openInNewTab);

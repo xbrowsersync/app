@@ -124,8 +124,7 @@ export class ApiXbrowsersyncService implements ApiService {
         return this.$q
           .all([this.platformSvc.getAppVersion(), this.utilitySvc.getServiceUrl()])
           .then((data) => {
-            const appVersion = data[0];
-            const serviceUrl = data[1];
+            const [appVersion, serviceUrl] = data;
             const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}`;
             const requestBody: ApiCreateBookmarksRequest = {
               version: appVersion
@@ -320,8 +319,7 @@ export class ApiXbrowsersyncService implements ApiService {
           return this.$q
             .all([this.platformSvc.getAppVersion(), this.utilitySvc.getServiceUrl()])
             .then((data) => {
-              const appVersion = data[0];
-              const serviceUrl = data[1];
+              const [appVersion, serviceUrl] = data;
               const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}/${storeContent.syncId}`;
               const requestBody: ApiUpdateBookmarksRequest = {
                 bookmarks: encryptedBookmarks,

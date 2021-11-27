@@ -107,7 +107,7 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
     const fileInput = document.getElementById('backupFile') as HTMLInputElement;
 
     if (fileInput.files.length > 0) {
-      const file = fileInput.files[0];
+      const [file] = fileInput.files;
       this.backupFileName = file.name;
       const reader = new FileReader();
 
@@ -181,9 +181,10 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
     this.$q
       .all([this.storeSvc.get<any>(StoreKey.InstallBackup), this.platformSvc.disableSync()])
       .then((response) => {
-        const installBackupObj = JSON.parse(response[0]);
-        const installBackupDate = new Date(installBackupObj.date);
-        const bookmarksToRestore = installBackupObj.bookmarks;
+        const [installBackupData] = response;
+        const installBackup = JSON.parse(installBackupData);
+        const installBackupDate = new Date(installBackup.date);
+        const bookmarksToRestore = installBackup.bookmarks;
         this.logSvc.logInfo(`Resetting to installation state from ${installBackupDate.toISOString()}`);
 
         // Start restore

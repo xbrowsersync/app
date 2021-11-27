@@ -9,7 +9,7 @@ const isBetaRelease = JSON.parse(process.env.BETA ?? 'false');
 
 const packageFilePath = path.resolve(__dirname, `../package.json`);
 const packageFile = require(packageFilePath);
-const versionNum = `${packageFile.version}.${buildNum}`;
+const versionNum = packageFile.version;
 const versionName = isBetaRelease ? `${packageFile.version}-beta.${buildNum}` : packageFile.version;
 const versionFileName = path.resolve(__dirname, '../PACKAGE_VERSION');
 fs.writeFileSync(versionFileName, `${isBetaRelease ? versionName : versionNum}`);

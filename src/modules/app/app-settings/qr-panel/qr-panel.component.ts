@@ -64,8 +64,7 @@ export class AppQrComponent implements OnInit {
   ngOnInit(): void {
     // Retrieve sync data from store
     this.$q.all([this.storeSvc.get<string>(StoreKey.SyncId), this.utilitySvc.getServiceUrl()]).then((data) => {
-      this.syncId = data[0];
-      this.serviceUrl = data[1];
+      [this.syncId, this.serviceUrl] = data;
 
       // QR code should encode sync info
       const syncInfo = this.backupRestoreSvc.createSyncInfoObject(this.syncId, this.serviceUrl);

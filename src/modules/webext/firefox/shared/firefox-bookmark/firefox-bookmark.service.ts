@@ -243,7 +243,8 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
   fixMultipleMoveOldIndexes(): void {
     const processBatch = (batch) => {
       // Adjust oldIndexes if bookmarks moved to different parent or to higher indexes
-      if (batch[0].parentId !== batch[0].oldParentId || batch[0].index > batch[0].oldIndex) {
+      const [moveInfo] = batch;
+      if (moveInfo.parentId !== moveInfo.oldParentId || moveInfo.index > moveInfo.oldIndex) {
         for (let i = batch.length - 1; i >= 0; i -= 1) {
           batch[i].oldIndex -= 1;
         }
@@ -301,12 +302,12 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
           menuBookmarksId === undefined
             ? Promise.resolve<Bookmark[]>(undefined)
             : browser.bookmarks.getSubTree(menuBookmarksId).then((subTree) => {
-                const menuBookmarks = subTree[0];
+                const [menuContainer] = subTree;
                 // Add all bookmarks into flat array
-                this.bookmarkHelperSvc.eachBookmark(menuBookmarks.children, (bookmark) => {
+                this.bookmarkHelperSvc.eachBookmark(menuContainer.children, (bookmark) => {
                   allNativeBookmarks.push(bookmark);
                 });
-                return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(menuBookmarks.children);
+                return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(menuContainer.children);
               });
 
         // Get other bookmarks
@@ -314,18 +315,18 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
           otherBookmarksId === undefined
             ? Promise.resolve<Bookmark[]>(undefined)
             : browser.bookmarks.getSubTree(otherBookmarksId).then((subTree) => {
-                const otherBookmarks = subTree[0];
-                if (otherBookmarks.children.length === 0) {
+                const [otherContainer] = subTree;
+                if (otherContainer.children.length === 0) {
                   return;
                 }
 
                 // Add all bookmarks into flat array
-                this.bookmarkHelperSvc.eachBookmark(otherBookmarks.children, (bookmark) => {
+                this.bookmarkHelperSvc.eachBookmark(otherContainer.children, (bookmark) => {
                   allNativeBookmarks.push(bookmark);
                 });
 
                 // Convert native bookmarks sub tree to bookmarks
-                const bookmarks = this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(otherBookmarks.children);
+                const bookmarks = this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(otherContainer.children);
 
                 // Remove any unsupported container folders present
                 const bookmarksWithoutContainers = bookmarks.filter((x) => {
@@ -341,14 +342,14 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
           toolbarBookmarksId === undefined
             ? this.$q.resolve<Bookmark[]>(undefined)
             : browser.bookmarks.getSubTree(toolbarBookmarksId).then((results) => {
-                const toolbarBookmarks = results[0];
+                const [toolbarContainer] = results;
                 return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
-                  if (syncBookmarksToolbar && toolbarBookmarks.children.length > 0) {
+                  if (syncBookmarksToolbar && toolbarContainer.children.length > 0) {
                     // Add all bookmarks into flat array
-                    this.bookmarkHelperSvc.eachBookmark(toolbarBookmarks.children, (bookmark) => {
+                    this.bookmarkHelperSvc.eachBookmark(toolbarContainer.children, (bookmark) => {
                       allNativeBookmarks.push(bookmark);
                     });
-                    return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(toolbarBookmarks.children);
+                    return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(toolbarContainer.children);
                   }
                 });
               });
@@ -356,9 +357,7 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
         return this.$q.all([getMenuBookmarks, getOtherBookmarks, getToolbarBookmarks]);
       })
       .then((results) => {
-        const menuBookmarks = results[0];
-        const otherBookmarks = results[1];
-        const toolbarBookmarks = results[2];
+        const [menuBookmarks, otherBookmarks, toolbarBookmarks] = results;
         const bookmarks: Bookmark[] = [];
 
         // Add other container if bookmarks present
@@ -435,13 +434,14 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
         // Populate container ids
         return browser.bookmarks.getTree().then((tree) => {
           // Get the root child nodes
-          const menuBookmarksNode = tree[0].children.find((x) => {
+          const [root] = tree;
+          const menuBookmarksNode = root.children.find((x) => {
             return x.id === 'menu________';
           });
-          const otherBookmarksNode = tree[0].children.find((x) => {
+          const otherBookmarksNode = root.children.find((x) => {
             return x.id === 'unfiled_____';
           });
-          const toolbarBookmarksNode = tree[0].children.find((x) => {
+          const toolbarBookmarksNode = root.children.find((x) => {
             return x.id === 'toolbar_____';
           });
 
@@ -478,7 +478,7 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
   syncNativeBookmarkChanged(id: string): ng.IPromise<void> {
     // Retrieve full bookmark info
     return browser.bookmarks.getSubTree(id).then((results) => {
-      const changedBookmark = results[0];
+      const [changedBookmark] = results;
 
       // Create change info
       const data: ModifyNativeBookmarkChangeData = {
