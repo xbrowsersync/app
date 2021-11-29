@@ -294,11 +294,11 @@
     "NetworkConnection": {
       "Message": {
         "key": "Error_NetworkConnection_Message",
-        "default": "Sprawdź połączenie sieciowe i spróbuj ponownie."
+        "default": "Sprawdź swoje połączenie sieciowe i spróbuj ponownie."
       },
       "Title": {
         "key": "Error_NetworkConnection_Title",
-        "default": "Połączenie z serwerem zostało utracone"
+        "default": "Utracono połączenie"
       }
     },
     "NoDataToRestore": {
@@ -365,13 +365,13 @@
       "Title": {
         "key": "Error_ShareFailed_Title",
         "default": "Udostępnienie nie powiodło się"
-      },
-      "Message": {
-        "key": "Error_SyncRemoved_Message",
-        "default": "Żądana synchronizacja nie istnieje, mogła zostać usunięta ze względu na brak aktywności."
       }
     },
     "SyncRemoved": {
+      "Message": {
+        "key": "Error_SyncRemoved_Message",
+        "default": "Żądana synchronizacja nie istnieje, mogła zostać usunięta ze względu na brak aktywności."
+      },
       "Title": {
         "key": "Error_SyncRemoved_Title",
         "default": "Synchronizacja nie została znaleziona"
@@ -406,11 +406,11 @@
     "UncommittedSyncs": {
       "Message": {
         "key": "Error_UncommittedSyncs_Message",
-        "default": "Synchronizacja zostanie włączona po przywróceniu połączenia z usługą."
+        "default": "Zmiany zostaną zsynchronizowane po przywróceniu połączenia."
       },
       "Title": {
         "key": "Error_UncommittedSyncs_Title",
-        "default": "Zmiany nie zostały zsynchronizowane"
+        "default": "Utracono połączenie"
       }
     },
     "UnsupportedServiceApiVersion": {
