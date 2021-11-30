@@ -65,7 +65,7 @@ jobs:
           body_path: CHANGELOG.md
           files: |
             dist/xbrowsersync_${{ env.RELEASE_VERSION }}_chromium.zip
-            dist/xbrowsersync_${{ env.RELEASE_VERSION }}_firefox.zip
+            dist/xbrowsersync_${{ env.RELEASE_VERSION }}_firefox.xpi
             dist/xbrowsersync_${{ env.RELEASE_VERSION }}_android.apk
             dist/xbrowsersync_${{ env.RELEASE_VERSION }}_android_unsigned.apk
         env:
