@@ -53,7 +53,7 @@ module.exports = (env, argv) => {
             from: Path.resolve(__dirname, '../res/strings'),
             to: '../_locales/[name]/messages.json',
             toType: 'template',
-            transform(buffer) {
+            transform: (buffer) => {
               // Convert strings to proper webext messages format
               const i18n = JSON.parse(buffer.toString());
               const messages = convertI18nForWebExt(i18n);
@@ -66,7 +66,7 @@ module.exports = (env, argv) => {
           {
             from: Path.resolve(__dirname, '../res/webext/manifest.json'),
             to: '../manifest.json',
-            transform(buffer) {
+            transform: (buffer) => {
               // Set version in webext manifest
               const appPackage = JSON.parse(fs.readFileSync(Path.resolve(__dirname, '../package.json')));
               const manifest = JSON.parse(buffer.toString());

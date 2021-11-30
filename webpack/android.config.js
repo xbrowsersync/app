@@ -35,7 +35,7 @@ module.exports = (env, argv) => {
             from: Path.resolve(__dirname, '../res/strings'),
             to: './strings_[name].json',
             toType: 'template',
-            transform(buffer) {
+            transform: (buffer) => {
               // Convert strings to proper webext messages format
               const i18n = JSON.parse(buffer.toString());
               const messages = generateI18nStrings(i18n);
@@ -49,7 +49,7 @@ module.exports = (env, argv) => {
           {
             from: Path.resolve(__dirname, '../res/android/config.xml'),
             to: '../../',
-            transform(buffer) {
+            transform: (buffer) => {
               // Set version in android config
               const appPackage = JSON.parse(fs.readFileSync(Path.resolve(__dirname, '../package.json')));
               const parser = new xml2js.Parser();
