@@ -92,8 +92,9 @@ export class UtilityService {
   }
 
   compareVersions(firstVersion = '', secondVersion = '', operator: string): boolean {
-    const betaRegex = /-beta/i;
-    return compare(firstVersion.replace(betaRegex, ''), secondVersion.replace(betaRegex, ''), operator as any);
+    // Remove beta flag and build number if present before comparing versions
+    const regex = /^(\d+\.\d+\.\d+)(-\w+)?\.\d+$/;
+    return compare(firstVersion.replace(regex, '$1'), secondVersion.replace(regex, '$1'), operator as any);
   }
 
   filterFalsyValues(values: string[]): string[] {
