@@ -1,6 +1,7 @@
 import angular from 'angular';
 import { OnDestroy, OnInit, ViewParent } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
+import { detect } from 'detect-browser';
 import { AlertType } from '../../../shared/alert/alert.enum';
 import { AlertService } from '../../../shared/alert/alert.service';
 import { Backup } from '../../../shared/backup-restore/backup-restore.interface';
@@ -55,6 +56,7 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
   resetUnavailable = false;
   savingBackup = false;
   syncEnabled = false;
+  useTextarea = false;
   validatingRestoreData = false;
 
   static $inject = [
@@ -291,8 +293,15 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
   }
 
   ngOnInit(): void {
-    // Set backup file change event for non-firefox platforms
-    if (this.platformSvc.platformName !== PlatformType.Firefox) {
+    // Firefox on all platforms and Chromium on linux cannot use backup file select input
+    // because extension pop up closes when a file is selected
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=1292701
+    this.useTextarea =
+      this.platformSvc.platformName === PlatformType.Firefox ||
+      (this.platformSvc.platformName === PlatformType.Chromium && detect().os.toLowerCase() === 'linux');
+
+    // Set backup file change event if not using textarea fallback
+    if (!this.useTextarea) {
       document.getElementById('backupFile').addEventListener('change', this.backupFileChanged, false);
     }
 
