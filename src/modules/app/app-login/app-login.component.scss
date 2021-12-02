@@ -42,10 +42,6 @@ app-login {
     }
   }
 
-  .btn-new-sync {
-    text-transform: capitalize;
-  }
-
   .btn-show-password {
     &::before {
       @include icon('\f715');

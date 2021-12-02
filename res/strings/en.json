@@ -77,7 +77,7 @@
   "Button": {
     "AddBookmark": {
       "key": "Button_AddBookmark",
-      "default": "Add Bookmark"
+      "default": "Add bookmark"
     },
     "Back": {
       "key": "Button_Back",
@@ -101,7 +101,7 @@
     },
     "DeleteBookmark": {
       "key": "Button_DeleteBookmark",
-      "default": "Delete Bookmark"
+      "default": "Delete bookmark"
     },
     "Deny": {
       "key": "Button_Deny",
@@ -113,11 +113,11 @@
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": "Download Backup"
+      "default": "Download backup"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
-      "default": "Edit Bookmark"
+      "default": "Edit bookmark"
     },
     "Help": {
       "key": "Button_Help",
@@ -966,7 +966,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "Download Backup"
+            "default": "Download backup"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
@@ -984,7 +984,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Restore From Backup"
+            "default": "Restore from backup"
           },
           "Local": {
             "Description": {
@@ -1045,7 +1045,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Reset_Button",
-            "default": "Reset Local Data"
+            "default": "Reset local data"
           },
           "Done": {
             "key": "View_Settings_BackupRestore_Reset_Done",
@@ -1087,7 +1087,7 @@
           },
           "Report": {
             "key": "View_Settings_Issues_Tracker_Report",
-            "default": "View Issues Tracker"
+            "default": "View issues tracker"
           }
         },
         "Log": {
@@ -1259,7 +1259,7 @@
           },
           "Sync": {
             "key": "View_Settings_Sync_UpdatesAvailable_Sync",
-            "default": "Sync Now"
+            "default": "Sync now"
           }
         },
         "Qr": {
