@@ -204,11 +204,11 @@ export class UtilityService {
     return [...new Set(words)].sort();
   }
 
-  splitTextIntoWords(text: string | undefined): string[] {
+  splitTextIntoWords(text: string, locale: string): string[] {
     if (angular.isUndefined(text ?? undefined)) {
       return [];
     }
-    const words = text!.toLowerCase().replace(/['"]/g, '');
+    const words = text!.toLocaleLowerCase(locale).replace(/['"]/g, '');
     const wordsArr = words.split(XRegExp('[^\\p{L}\\p{Nd}]', 'g'));
     return this.filterFalsyValues(wordsArr);
   }
@@ -217,6 +217,10 @@ export class UtilityService {
     // Stop event propogation
     event?.preventDefault();
     (event as any)?.srcEvent?.stopPropagation();
+  }
+
+  stringsAreEquivalent(str1 = '', str2 = '', locale?: string): boolean {
+    return str1.localeCompare(str2, locale, { sensitivity: 'base' }) === 0;
   }
 
   stripTags(input: string): string {

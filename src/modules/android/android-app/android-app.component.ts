@@ -372,6 +372,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
       return this.$q
         .all([
           this.platformSvc.getAppVersion(),
+          this.platformSvc.getCurrentLocale(),
           this.settingsSvc.checkForAppUpdates(),
           this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId]),
           this.utilitySvc.getServiceUrl(),
@@ -380,10 +381,12 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
         ])
         .then((result) => {
           // Add useful debug info to beginning of trace log
-          const [appVersion, checkForAppUpdates, storeContent, serviceUrl, syncVersion, syncEnabled] = result;
+          const [appVersion, currentLocale, checkForAppUpdates, storeContent, serviceUrl, syncVersion, syncEnabled] =
+            result;
           const debugInfo = angular.copy(storeContent) as any;
           debugInfo.appVersion = appVersion;
           debugInfo.checkForAppUpdates = checkForAppUpdates;
+          debugInfo.currentLocale = currentLocale;
           debugInfo.platform = {
             name: window.device.platform,
             device: `${window.device.manufacturer} ${window.device.model}`

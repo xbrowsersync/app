@@ -112,15 +112,7 @@ app-bookmark {
       border-width: 0;
       line-height: 2.6rem;
       position: relative;
-      text-transform: lowercase;
       z-index: 50;
-    }
-
-    .lookahead-container {
-      .lookahead,
-      .measure {
-        text-transform: lowercase;
-      }
     }
   }
 

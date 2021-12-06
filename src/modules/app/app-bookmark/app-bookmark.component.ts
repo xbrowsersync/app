@@ -146,13 +146,15 @@ export class AppBookmarkComponent implements OnInit {
   }
 
   createTags(): void {
-    // Clean and sort tags and add them to tag array
-    const newTags = this.utilitySvc.getTagArrayFromText(this.tagText);
-    this.bookmarkFormData.tags = this.utilitySvc.sortWords([...newTags, ...(this.bookmarkFormData.tags ?? [])]);
-    this.bookmarkForm.$setDirty();
-    this.tagText = undefined;
-    this.tagLookahead = undefined;
-    this.appHelperSvc.focusOnElement('input[name="bookmarkTags"]');
+    this.platformSvc.getCurrentLocale().then((currentLocale) => {
+      // Clean and sort tags and add them to tag array
+      const newTags = this.utilitySvc.getTagArrayFromText(this.tagText.toLocaleLowerCase(currentLocale));
+      this.bookmarkFormData.tags = this.utilitySvc.sortWords([...newTags, ...(this.bookmarkFormData.tags ?? [])]);
+      this.bookmarkForm.$setDirty();
+      this.tagText = undefined;
+      this.tagLookahead = undefined;
+      this.appHelperSvc.focusOnElement('input[name="bookmarkTags"]');
+    });
   }
 
   deleteBookmark(): ng.IPromise<void> {
@@ -339,34 +341,37 @@ export class AppBookmarkComponent implements OnInit {
     }
 
     // Get last word of tag text
-    let lastWord = this.utilitySvc.splitTextIntoWords(this.tagText).slice(-1).find(Boolean);
-    if (!angular.isUndefined(lastWord)) {
-      lastWord = lastWord.trimLeft();
-    }
+    this.platformSvc.getCurrentLocale().then((currentLocale) => {
+      const words = this.utilitySvc.splitTextIntoWords(this.tagText, currentLocale);
+      let lastWord = words.slice(-1).find(Boolean);
+      if (!angular.isUndefined(lastWord)) {
+        lastWord = lastWord.trimLeft();
+      }
 
-    // Display lookahead if word length exceeds minimum
-    if (!(lastWord?.length >= Globals.LookaheadMinChars)) {
-      this.tagLookahead = undefined;
-      return;
-    }
-    this.bookmarkHelperSvc
-      .getLookahead(lastWord.toLowerCase(), null, true, this.bookmarkFormData.tags)
-      .then((results) => {
-        if (!results) {
-          this.tagLookahead = undefined;
-          return;
-        }
+      // Display lookahead if word length exceeds minimum
+      if (!(lastWord?.length >= Globals.LookaheadMinChars)) {
+        this.tagLookahead = undefined;
+        return;
+      }
+      return this.bookmarkHelperSvc
+        .getLookahead(lastWord.toLocaleLowerCase(currentLocale), null, true, this.bookmarkFormData.tags)
+        .then((results) => {
+          if (!results) {
+            this.tagLookahead = undefined;
+            return;
+          }
 
-        let lookahead = results[0];
-        const word = results[1];
+          let lookahead = results[0];
+          const word = results[1];
 
-        if (lookahead && word.toLowerCase() === lastWord.toLowerCase()) {
-          // Set lookahead after trimming word
-          lookahead = lookahead ? lookahead.substring(word.length) : undefined;
-          this.tagTextMeasure = this.tagText.replace(/\s/g, '&nbsp;');
-          this.tagLookahead = lookahead.replace(/\s/g, '&nbsp;');
-        }
-      });
+          if (lookahead && this.utilitySvc.stringsAreEquivalent(word, lastWord, currentLocale)) {
+            // Set lookahead after trimming word
+            lookahead = lookahead ? lookahead.substring(word.length) : undefined;
+            this.tagTextMeasure = this.tagText.replace(/\s/g, '&nbsp;');
+            this.tagLookahead = lookahead.replace(/\s/g, '&nbsp;');
+          }
+        });
+    });
   }
 
   tagsTextKeyDown(event: KeyboardEvent): void {
@@ -451,23 +456,25 @@ export class AppBookmarkComponent implements OnInit {
   }
 
   validateBookmark(bookmarkToValidate: BookmarkMetadata, originalUrl?: string): ng.IPromise<boolean> {
-    // Skip validation if URL is unmodified
-    if (bookmarkToValidate.url.toUpperCase() === originalUrl?.toUpperCase()) {
-      return this.$q.resolve(true);
-    }
+    return this.platformSvc.getCurrentLocale().then((currentLocale) => {
+      // Skip validation if URL is unmodified
+      if (this.utilitySvc.stringsAreEquivalent(bookmarkToValidate.url, originalUrl, currentLocale)) {
+        return true;
+      }
 
-    // Check if bookmark url already exists
-    return this.bookmarkHelperSvc
-      .searchBookmarks({
-        url: bookmarkToValidate.url
-      })
-      .then((results) => {
-        // Filter search results for bookmarks wuth matching urls
-        const duplicateBookmarks = results.filter((b) => {
-          return b.url.toUpperCase() === bookmarkToValidate.url.toUpperCase();
+      // Check if bookmark url already exists
+      return this.bookmarkHelperSvc
+        .searchBookmarks({
+          url: bookmarkToValidate.url
+        })
+        .then((results) => {
+          // Filter search results for bookmarks with matching urls
+          const duplicateBookmarks = results.filter((b) => {
+            return this.utilitySvc.stringsAreEquivalent(b.url, bookmarkToValidate.url, currentLocale);
+          });
+
+          return duplicateBookmarks.length === 0;
         });
-
-        return duplicateBookmarks.length === 0;
-      });
+    });
   }
 }

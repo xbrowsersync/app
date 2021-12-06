@@ -99,12 +99,16 @@ export class BookmarkHelperService {
     return cleanedBookmark;
   }
 
-  eachBookmark<T = Bookmark>(bookmarks: T[] = [], iteratee: (rootBookmark: T) => void, untilCondition = false): void {
+  eachBookmark<T = Bookmark>(
+    bookmarks: T[] = [],
+    iteratee: (rootBookmark: T) => void,
+    untilCondition?: () => boolean
+  ): void {
     // Run the iteratee function for every bookmark until the condition is met
     const iterateBookmarks = (bookmarksToIterate: T[]): void => {
       for (let i = 0; i < bookmarksToIterate.length; i += 1) {
-        if (untilCondition) {
-          return;
+        if (untilCondition?.() === true) {
+          break;
         }
         iteratee(bookmarksToIterate[i]);
         if ((bookmarksToIterate[i] as any).children?.length) {
@@ -174,17 +178,23 @@ export class BookmarkHelperService {
 
   findCurrentUrlInBookmarks(): ng.IPromise<Bookmark | undefined> {
     // Check if current url is contained in bookmarks
-    return this.platformSvc.getCurrentUrl().then((currentUrl) => {
+    return this.$q.all([this.platformSvc.getCurrentUrl(), this.platformSvc.getCurrentLocale()]).then((results) => {
+      const [currentUrl, currentLocale] = results;
       if (!currentUrl) {
         return;
       }
-
-      return this.searchBookmarks({ url: currentUrl }).then((searchResults) => {
-        const searchResult = searchResults.find((bookmark) => {
-          return bookmark?.url?.toLowerCase() === currentUrl.toLowerCase();
-        });
-
-        return this.$q.resolve(searchResult);
+      return this.getCachedBookmarks().then((bookmarks) => {
+        let targetBookmark: Bookmark | undefined;
+        this.eachBookmark(
+          bookmarks,
+          (bookmark) => {
+            if (this.utilitySvc.stringsAreEquivalent(bookmark?.url, currentUrl, currentLocale)) {
+              targetBookmark = bookmark;
+            }
+          },
+          () => !!targetBookmark
+        );
+        return targetBookmark;
       });
     });
   }
@@ -314,39 +324,44 @@ export class BookmarkHelperService {
             container = x;
           }
         },
-        container != null
+        () => !!container
       );
     });
     return container;
   }
 
-  getKeywordsFromBookmark(bookmark: Bookmark, tagsOnly = false, includeUrl = false): string[] {
+  getKeywordsFromBookmark(bookmark: Bookmark, locale: string, tagsOnly = false, includeUrl = false): string[] {
     let keywords: string[] = [];
     if (!tagsOnly) {
       // Add all words in title and description
-      keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.title));
-      keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.description));
+      keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.title, locale));
+      keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.description, locale));
 
       if (includeUrl) {
         // Add url host
         try {
-          const host = new URL(bookmark.url).hostname;
-          keywords.push(host);
+          const url = new URL(bookmark.url);
+          const noProtocolUrl = bookmark.url.replace(new RegExp(`^${url.protocol}[/]*`), '');
+          const relativeUrl = `${url.pathname}${url.search}${url.hash}`;
+          if (relativeUrl !== '/') {
+            keywords.push(noProtocolUrl.toLocaleLowerCase(locale).replace(/\/$/, ''));
+          } else {
+            keywords.push(noProtocolUrl.substring(0, noProtocolUrl.indexOf(relativeUrl)).toLocaleLowerCase(locale));
+          }
         } catch {}
       }
     }
 
     // Add tags
-    keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.tags?.join(' ')));
+    keywords = keywords.concat(this.utilitySvc.splitTextIntoWords(bookmark.tags?.join(' '), locale));
 
     // Remove words of two chars or less
     keywords = keywords.filter((item) => {
       return item.length > 2;
     });
 
-    // Remove duplicates, sort and return
-    const sortedKeywords = this.utilitySvc.sortWords(keywords);
-    return sortedKeywords;
+    // Sort keywords and return
+    return this.utilitySvc.sortWords(keywords);
   }
 
   getLookahead(word: string, bookmarks: Bookmark[], tagsOnly = false, exclusions: string[] = []): ng.IPromise<any> {
@@ -363,12 +378,14 @@ export class BookmarkHelperService {
       getBookmarks = this.$q.resolve(bookmarks);
     }
 
-    // With bookmarks
-    return getBookmarks
-      .then((bookmarksToSearch) => {
-        // Get lookaheads
-        let lookaheads = this.searchBookmarksForLookaheads(bookmarksToSearch, word, tagsOnly);
-
+    // Get lookaheads
+    return this.$q
+      .all([getBookmarks, this.platformSvc.getCurrentLocale()])
+      .then((results) => {
+        const [bookmarksToSearch, currentLocale] = results;
+        return this.searchBookmarksForLookaheads(bookmarksToSearch, word, currentLocale, tagsOnly);
+      })
+      .then((lookaheads) => {
         // Remove exclusions from lookaheads
         if (exclusions) {
           lookaheads = lookaheads.filter((x) => !exclusions.includes(x));
@@ -552,19 +569,22 @@ export class BookmarkHelperService {
     if (!query) {
       query = { keywords: [] };
     }
-
-    // Get cached bookmarks
-    return this.getCachedBookmarks().then((bookmarks) => {
+    return this.$q.all([this.getCachedBookmarks(), this.platformSvc.getCurrentLocale()]).then((response) => {
+      const [bookmarks, currentLocale] = response;
       let results: BookmarkSearchResult[];
 
       // If url supplied, first search by url
       if (query.url) {
-        results = this.searchBookmarksByUrl(bookmarks, query.url) ?? [];
+        results = this.searchBookmarksByUrl(bookmarks, query.url, currentLocale) ?? [];
       }
 
       // Search by keywords and sort (score desc, id desc) using results from url search if relevant
-      results = this.searchBookmarksByKeywords(results ?? (bookmarks as BookmarkSearchResult[]), query.keywords);
-      const sortedResults = results
+      results = this.searchBookmarksByKeywords(
+        results ?? (bookmarks as BookmarkSearchResult[]),
+        query.keywords,
+        currentLocale
+      );
+      return results
         .sort((x, y) => {
           return x.id - y.id;
         })
@@ -572,13 +592,13 @@ export class BookmarkHelperService {
           return x.score - y.score;
         })
         .reverse();
-      return sortedResults;
     });
   }
 
   searchBookmarksByKeywords(
     bookmarks: Bookmark[],
     keywords: string[] = [],
+    locale: string,
     results: BookmarkSearchResult[] = []
   ): BookmarkSearchResult[] {
     bookmarks.forEach((bookmark) => {
@@ -592,15 +612,15 @@ export class BookmarkHelperService {
       // If bookmark is a container or folder, search children
       if (bookmarkType === BookmarkType.Container || bookmarkType === BookmarkType.Folder) {
         if (bookmark.children?.length) {
-          this.searchBookmarksByKeywords(bookmark.children, keywords, results);
+          this.searchBookmarksByKeywords(bookmark.children, keywords, locale, results);
         }
       } else {
         // Get match scores for each keyword against bookmark words
-        const bookmarkWords = this.getKeywordsFromBookmark(bookmark);
+        const bookmarkWords = this.getKeywordsFromBookmark(bookmark, locale);
         const scores = keywords.map((keyword) => {
           let count = 0;
           bookmarkWords.forEach((word) => {
-            if (word?.toLowerCase().indexOf(keyword.toLowerCase()) === 0) {
+            if (word?.toLocaleLowerCase(locale).indexOf(keyword.toLocaleLowerCase(locale)) === 0) {
               count += 1;
             }
           });
@@ -627,6 +647,7 @@ export class BookmarkHelperService {
   searchBookmarksByUrl(
     bookmarks: Bookmark[],
     url: string,
+    locale: string,
     results: BookmarkSearchResult[] = []
   ): BookmarkSearchResult[] {
     results = results.concat(
@@ -638,13 +659,13 @@ export class BookmarkHelperService {
         }
 
         // Check if the bookmark url contains the url param
-        return bookmark.url.toLowerCase().indexOf(url.toLowerCase()) >= 0;
+        return bookmark.url.toLocaleLowerCase(locale).indexOf(url.toLocaleLowerCase(locale)) >= 0;
       })
     );
 
     for (let i = 0; i < bookmarks.length; i += 1) {
       if (bookmarks[i].children?.length) {
-        results = this.searchBookmarksByUrl(bookmarks[i].children, url, results);
+        results = this.searchBookmarksByUrl(bookmarks[i].children, url, locale, results);
       }
     }
 
@@ -654,6 +675,7 @@ export class BookmarkHelperService {
   searchBookmarksForLookaheads(
     bookmarks: Bookmark[] = [],
     word: string,
+    locale: string,
     tagsOnly = false,
     results: string[] = []
   ): string[] {
@@ -667,10 +689,10 @@ export class BookmarkHelperService {
 
       // If bookmark is a container or folder, search children
       if (bookmarkType === BookmarkType.Container || bookmarkType === BookmarkType.Folder) {
-        results = this.searchBookmarksForLookaheads(bookmark.children, word, tagsOnly, results);
+        results = this.searchBookmarksForLookaheads(bookmark.children, word, locale, tagsOnly, results);
       } else {
         // Find all words that begin with lookahead word
-        const bookmarkWords = this.getKeywordsFromBookmark(bookmark, tagsOnly, true);
+        const bookmarkWords = this.getKeywordsFromBookmark(bookmark, locale, tagsOnly, true);
         results = results.concat(
           bookmarkWords.filter((innerbookmark) => {
             return innerbookmark.indexOf(word) === 0;

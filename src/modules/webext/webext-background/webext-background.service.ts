@@ -278,6 +278,7 @@ export class WebExtBackgroundService {
         this.$q
           .all([
             this.platformSvc.getAppVersion(),
+            this.platformSvc.getCurrentLocale(),
             this.settingsSvc.all(),
             this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId]),
             this.utilitySvc.getServiceUrl(),
@@ -286,10 +287,11 @@ export class WebExtBackgroundService {
           ])
           .then((data) => {
             // Add useful debug info to beginning of trace log
-            const [appVersion, settings, storeContent, serviceUrl, syncVersion, syncEnabled] = data;
+            const [appVersion, currentLocale, settings, storeContent, serviceUrl, syncVersion, syncEnabled] = data;
             const debugInfo = angular.copy(storeContent) as any;
             debugInfo.appVersion = appVersion;
             debugInfo.checkForAppUpdates = settings.checkForAppUpdates;
+            debugInfo.currentLocale = currentLocale;
             debugInfo.platform = detectBrowser.detect();
             debugInfo.platform.name = this.utilitySvc.getBrowserName();
             debugInfo.serviceUrl = serviceUrl;

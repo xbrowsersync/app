@@ -159,9 +159,8 @@ export class AppLoginComponent implements OnInit {
    */
   currentLocaleSupportsPasswordValidation(): ng.IPromise<boolean> {
     return this.platformSvc.getCurrentLocale().then((currentLocale) => {
-      const locale = currentLocale.toLowerCase();
       // Only english and german are currently supported
-      return locale.indexOf('en') === 0 || locale.indexOf('de') === 0;
+      return currentLocale.indexOf('en') === 0 || currentLocale.indexOf('de') === 0;
     });
   }
 

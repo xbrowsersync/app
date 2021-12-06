@@ -25,7 +25,7 @@ export class PasswordStrengthDirective implements OnInit {
     let languagePackagesImports: any[] = [
       import(/* webpackChunkName: "zxcvbn-language-common" */ '@zxcvbn-ts/language-common')
     ];
-    switch (locale.replace(/-.*$/, '').toLowerCase()) {
+    switch (locale.replace(/-.*$/, '')) {
       case 'de':
         languagePackagesImports = [
           ...languagePackagesImports,

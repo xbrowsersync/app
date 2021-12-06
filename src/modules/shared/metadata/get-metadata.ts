@@ -4,6 +4,7 @@ export const getMetadata = (url: string, html: string): WebpageMetadata => {
   // Extract metadata values
   const parser = new DOMParser();
   const htmlDoc = parser.parseFromString(html, 'text/html');
+  const locale = navigator.language;
 
   const getDecodedTextValue = (text: string): string => {
     if (!text) {
@@ -54,14 +55,14 @@ export const getMetadata = (url: string, html: string): WebpageMetadata => {
     const ogVideoTags = getMetaElements('og:video:tag', true) as HTMLMetaElement[];
     ogVideoTags?.forEach((tag) => {
       if (tag?.content) {
-        keywordsArr.add(getDecodedTextValue(tag.content?.toLowerCase()));
+        keywordsArr.add(getDecodedTextValue(tag.content?.toLocaleLowerCase(locale)));
       }
     });
     const metaKeywords = getMetaElements('keywords') as HTMLMetaElement;
     if (metaKeywords?.content) {
       metaKeywords.content.split(',').forEach((keyword) => {
         if (keyword) {
-          keywordsArr.add(getDecodedTextValue(keyword?.toLowerCase()));
+          keywordsArr.add(getDecodedTextValue(keyword?.toLocaleLowerCase(locale)));
         }
       });
     }

@@ -361,7 +361,7 @@ export abstract class WebExtPlatformService implements PlatformService {
     return browser.alarms.clear(Globals.Alarms.SyncUpdatesCheck.Name).then(() => {});
   }
 
-  urlIsNativeConfigPage(url: string | undefined): boolean {
+  urlIsNativeConfigPage(url?: string): boolean {
     return false;
   }
 

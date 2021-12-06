@@ -142,8 +142,11 @@ export abstract class AppSearchComponent implements OnInit {
     }
   }
 
-  getKeywords(text: string): string[] {
-    return this.utilitySvc.splitTextIntoWords(text).filter((x) => x.length > Globals.LookaheadMinChars);
+  getKeywords(text: string): ng.IPromise<string[]> {
+    return this.platformSvc
+      .getCurrentLocale()
+      .then((currentLocale) => this.utilitySvc.splitTextIntoWords(text, currentLocale))
+      .then((words) => words.filter((x) => x.length > Globals.LookaheadMinChars));
   }
 
   ngOnInit(): ng.IPromise<void> {
@@ -158,38 +161,47 @@ export abstract class AppSearchComponent implements OnInit {
 
   searchBookmarks(): ng.IPromise<void> {
     let queryText = this.query;
-    const searchQuery: BookmarkSearchQuery = {
-      url: undefined,
-      keywords: []
-    };
-    if (queryText) {
-      // Match url in query
-      const urlRegex = new RegExp(`^${Globals.URL.ValidUrlRegex}`, 'i');
-      const url = queryText.match(urlRegex)?.find(Boolean);
-      if (url) {
-        searchQuery.url = url;
-        queryText = queryText.replace(urlRegex, '').trim();
-      }
+    return (
+      Promise.resolve()
+        .then(() => {
+          const searchQuery: BookmarkSearchQuery = {
+            url: undefined,
+            keywords: []
+          };
+          if (!queryText) {
+            return searchQuery;
+          }
+          // Match url in query
+          const urlRegex = new RegExp(`^${Globals.URL.ValidUrlRegex}`, 'i');
+          const url = queryText.match(urlRegex)?.find(Boolean);
+          if (url) {
+            searchQuery.url = url;
+            queryText = queryText.replace(urlRegex, '').trim();
+          }
 
-      // Iterate query words to form query data object
-      searchQuery.keywords = this.getKeywords(queryText);
-    }
+          // Iterate query words to form query data object
+          return this.getKeywords(queryText).then((keywords) => {
+            searchQuery.keywords = keywords;
+            return searchQuery;
+          });
+        })
+        // Execute search and display results
+        .then((searchQuery) => this.bookmarkHelperSvc.searchBookmarks(searchQuery))
+        .then((results) => {
+          this.scrollDisplayMoreEnabled = false;
+          this.resultsDisplayed = this.batchResultsNum;
+          this.results = results;
 
-    // Execute search and display results
-    return this.bookmarkHelperSvc.searchBookmarks(searchQuery).then((results) => {
-      this.scrollDisplayMoreEnabled = false;
-      this.resultsDisplayed = this.batchResultsNum;
-      this.results = results;
-
-      // Scroll to top of search results
-      this.$timeout(() => {
-        this.scrollDisplayMoreEnabled = true;
-        const resultsPanel = document.querySelector('.search-results-container');
-        if (resultsPanel) {
-          resultsPanel.scrollTop = 0;
-        }
-      }, Globals.InterfaceReadyTimeout);
-    });
+          // Scroll to top of search results
+          this.$timeout(() => {
+            this.scrollDisplayMoreEnabled = true;
+            const resultsPanel = document.querySelector('.search-results-container');
+            if (resultsPanel) {
+              resultsPanel.scrollTop = 0;
+            }
+          }, Globals.InterfaceReadyTimeout);
+        })
+    );
   }
 
   searchBoxKeyDown(event: KeyboardEvent): void {
@@ -338,36 +350,38 @@ export abstract class AppSearchComponent implements OnInit {
     }
 
     // Get lookahead, use current results only if multiple query words are present
-    this.bookmarkHelperSvc
-      .getLookahead(lastWord.toLowerCase(), queryWords.length > 1 ? this.results : undefined)
-      .then((results) => {
-        if (!results) {
-          this.lookahead = null;
-          return;
-        }
+    this.platformSvc.getCurrentLocale().then((currentLocale) => {
+      return this.bookmarkHelperSvc
+        .getLookahead(lastWord.toLocaleLowerCase(currentLocale), queryWords.length > 1 ? this.results : undefined)
+        .then((results) => {
+          if (!results) {
+            this.lookahead = null;
+            return;
+          }
 
-        let lookahead = results[0];
-        const word = results[1];
+          let lookahead = results[0];
+          const word = results[1];
 
-        // If lookahead is already in query, ignore
-        if (queryWords.findIndex((x) => x.toLowerCase() === lookahead.toLowerCase()) >= 0) {
-          this.lookahead = null;
-          return;
-        }
+          // If lookahead is already in query, ignore
+          if (queryWords.findIndex((x) => this.utilitySvc.stringsAreEquivalent(x, lookahead, currentLocale)) >= 0) {
+            this.lookahead = null;
+            return;
+          }
 
-        if (lookahead && word.toLowerCase() === lastWord.toLowerCase()) {
-          // Set lookahead after trimming word
-          lookahead = lookahead ? lookahead.substring(word.length) : undefined;
-          this.queryMeasure = this.query.replace(/\s/g, '&nbsp;');
-          this.lookahead = lookahead.replace(/\s/g, '&nbsp;');
-        }
+          if (lookahead && this.utilitySvc.stringsAreEquivalent(word, lastWord, currentLocale)) {
+            // Set lookahead after trimming word
+            lookahead = lookahead ? lookahead.substring(word.length) : undefined;
+            this.queryMeasure = this.query.replace(/\s/g, '&nbsp;');
+            this.lookahead = lookahead.replace(/\s/g, '&nbsp;');
+          }
 
-        this.cancelGetBookmarksRequest = null;
-      })
-      .then(() => {
-        this.displayFolderView = false;
-        return this.searchBookmarks();
-      });
+          this.cancelGetBookmarksRequest = null;
+        })
+        .then(() => {
+          this.displayFolderView = false;
+          return this.searchBookmarks();
+        });
+    });
   }
 
   selectBookmark(event: Event, bookmarkId: number): void {

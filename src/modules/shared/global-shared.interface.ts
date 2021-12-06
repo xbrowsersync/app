@@ -47,6 +47,6 @@ export interface Url {
 export interface WebpageMetadata {
   description?: string;
   tags?: string;
-  title: string | undefined;
-  url: string | undefined;
+  title?: string;
+  url?: string;
 }
