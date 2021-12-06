@@ -26,7 +26,15 @@ export const getMetadata = (url: string, html: string): WebpageMetadata => {
     return returnAll ? elements : elements.slice(-1)[0];
   };
 
+  const getYouTubeData = (): any => {
+    return JSON.parse(document.querySelector<HTMLScriptElement>('#microformat script')?.text ?? 'null');
+  };
+
   const getPageDescription = (): string => {
+    const ytData = getYouTubeData();
+    if (ytData?.description) {
+      return getDecodedTextValue(ytData?.description);
+    }
     const ogDescription = getMetaElements('og:description') as HTMLMetaElement;
     if (ogDescription?.content) {
       return getDecodedTextValue(ogDescription.content);
@@ -64,6 +72,10 @@ export const getMetadata = (url: string, html: string): WebpageMetadata => {
   };
 
   const getPageTitle = (): string => {
+    const ytData = getYouTubeData();
+    if (ytData?.name) {
+      return getDecodedTextValue(ytData?.name);
+    }
     const ogTitle = getMetaElements('og:title') as HTMLMetaElement;
     if (ogTitle?.content) {
       return getDecodedTextValue(ogTitle.content);
