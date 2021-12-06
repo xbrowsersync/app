@@ -379,24 +379,15 @@ export class AndroidPlatformService implements PlatformService {
   }
 
   initI18n(): ng.IPromise<void> {
-    let i18nCode = 'en';
-    return this.$q<any>((resolve, reject) => {
-      navigator.globalization.getPreferredLanguage(resolve, reject);
-    })
-      .then((language) => {
-        if (!language?.value) {
-          this.logSvc.logWarning('Couldn’t get preferred language');
-          return;
-        }
-        i18nCode = language.value.split('-')[0];
-      })
-      .then(() => {
+    return this.getCurrentLocale()
+      .then((currentLocale) => {
+        const i18nCode = currentLocale.split('-')[0];
         return this.$http.get<I18nObject[]>(`./assets/strings_${i18nCode}.json`).then((response) => {
           this.i18nObjects = response.data;
         });
       })
       .catch((err) => {
-        this.logSvc.logWarning(`Couldn’t load i18n strings: ${i18nCode}`);
+        this.logSvc.logWarning(`Couldn’t load i18n strings`);
         throw err;
       });
   }
