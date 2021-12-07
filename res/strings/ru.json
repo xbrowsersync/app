@@ -298,7 +298,7 @@
       },
       "Title": {
         "key": "Error_NetworkConnection_Title",
-        "default": "Соединение с сервером потеряно"
+        "default": "Соединение потеряно"
       }
     },
     "NoDataToRestore": {
@@ -406,11 +406,11 @@
     "UncommittedSyncs": {
       "Message": {
         "key": "Error_UncommittedSyncs_Message",
-        "default": "Синхронизация будет выполнена после восстановления соединения с службой."
+        "default": "Изменения будут синхронизированы после восстановления соединения."
       },
       "Title": {
         "key": "Error_UncommittedSyncs_Title",
-        "default": "Изменения не синхронизированы"
+        "default": "Соединение потеряно"
       }
     },
     "UnsupportedServiceApiVersion": {
