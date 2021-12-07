@@ -298,7 +298,7 @@
       },
       "Title": {
         "key": "Error_NetworkConnection_Title",
-        "default": "Connessione al server persa"
+        "default": "Collegamento perso"
       }
     },
     "NoDataToRestore": {
@@ -406,11 +406,11 @@
     "UncommittedSyncs": {
       "Message": {
         "key": "Error_UncommittedSyncs_Message",
-        "default": "La sincronizzazione verrà eseguita una volta ripristinata la connessione al server."
+        "default": "Le modifiche verranno sincronizzate una volta ripristinata la connessione."
       },
       "Title": {
         "key": "Error_UncommittedSyncs_Title",
-        "default": "Modifiche non sincronizzate"
+        "default": "Collegamento perso"
       }
     },
     "UnsupportedServiceApiVersion": {
