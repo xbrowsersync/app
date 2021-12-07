@@ -77,7 +77,7 @@
   "Button": {
     "AddBookmark": {
       "key": "Button_AddBookmark",
-      "default": "إضافة إشارة مرجعية"
+      "default": "أضف إشارة مرجعية"
     },
     "Back": {
       "key": "Button_Back",
@@ -298,7 +298,7 @@
       },
       "Title": {
         "key": "Error_NetworkConnection_Title",
-        "default": "انقطع الاتصال بالخدمة"
+        "default": "فقد الاتصال"
       }
     },
     "NoDataToRestore": {
@@ -406,11 +406,11 @@
     "UncommittedSyncs": {
       "Message": {
         "key": "Error_UncommittedSyncs_Message",
-        "default": "سيتم تطبيق المزامنة بمجرد استعادة الاتصال بالخدمة."
+        "default": "ستتم مزامنة التغييرات عند رجوع الاتصال."
       },
       "Title": {
         "key": "Error_UncommittedSyncs_Title",
-        "default": "التغييرات غير متزامنة"
+        "default": "فقد الاتصال"
       }
     },
     "UnsupportedServiceApiVersion": {
