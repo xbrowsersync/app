@@ -162,7 +162,8 @@ export abstract class AppSearchComponent implements OnInit {
   searchBookmarks(): ng.IPromise<void> {
     let queryText = this.query;
     return (
-      Promise.resolve()
+      this.$q
+        .resolve()
         .then(() => {
           const searchQuery: BookmarkSearchQuery = {
             url: undefined,

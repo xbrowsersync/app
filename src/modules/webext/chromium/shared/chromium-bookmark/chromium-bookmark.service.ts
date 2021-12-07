@@ -296,7 +296,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
       // Get menu bookmarks
       const getMenuBookmarks =
         menuBookmarksId === undefined
-          ? Promise.resolve<Bookmark[]>(undefined)
+          ? this.$q.resolve<Bookmark[]>(undefined)
           : browser.bookmarks.getSubTree(menuBookmarksId).then((subTree) => {
               const [menuContainer] = subTree;
               return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(
@@ -307,7 +307,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
       // Get other bookmarks
       const getOtherBookmarks =
         otherBookmarksId === undefined
-          ? Promise.resolve<Bookmark[]>(undefined)
+          ? this.$q.resolve<Bookmark[]>(undefined)
           : browser.bookmarks.getSubTree(otherBookmarksId).then((subTree) => {
               const [otherContainer] = subTree;
               if (otherContainer.children.length === 0) {

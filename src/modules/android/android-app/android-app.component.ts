@@ -371,7 +371,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     return this.checkForDarkTheme().then(() => {
       return this.$q
         .all([
-          this.platformSvc.getAppVersion(),
+          this.platformSvc.getAppVersionName(),
           this.platformSvc.getCurrentLocale(),
           this.settingsSvc.checkForAppUpdates(),
           this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId]),

@@ -11,13 +11,15 @@ import { PlatformService } from '../../../shared/global-shared.interface';
   selector: '[passwordStrength]'
 })
 export class PasswordStrengthDirective implements OnInit {
+  $q: ng.IQService;
   platformSvc: PlatformService;
 
   ngModel: ng.INgModelController;
   @Input('=passwordStrength') result: any;
 
-  static $inject = ['PlatformService'];
-  constructor(PlatformSvc: PlatformService) {
+  static $inject = ['$q', 'PlatformService'];
+  constructor($q: ng.IQService, PlatformSvc: PlatformService) {
+    this.$q = $q;
     this.platformSvc = PlatformSvc;
   }
 
@@ -39,7 +41,7 @@ export class PasswordStrengthDirective implements OnInit {
         ];
     }
 
-    return Promise.all(languagePackagesImports).then((packages) => {
+    return this.$q.all(languagePackagesImports).then((packages) => {
       const [zxcvbnLanguageCommon, zxcvbnLanguageEn] = packages;
       return {
         dictionary: {

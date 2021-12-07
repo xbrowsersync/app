@@ -269,7 +269,8 @@ export class SyncService {
               return this.setSyncRemoved();
             }
 
-            return Promise.resolve()
+            return this.$q
+              .resolve()
               .then(() => {
                 // If local changes made, clear sync queue and refresh sync data if necessary
                 if (failedSync.type !== SyncType.Local) {
@@ -514,11 +515,12 @@ export class SyncService {
   }
 
   setSyncRemoved(): ng.IPromise<void> {
-    return Promise.all([
-      this.bookmarkHelperSvc.getCachedBookmarks(),
-      this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId, StoreKey.SyncVersion]),
-      this.utilitySvc.getServiceUrl()
-    ])
+    return this.$q
+      .all([
+        this.bookmarkHelperSvc.getCachedBookmarks(),
+        this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId, StoreKey.SyncVersion]),
+        this.utilitySvc.getServiceUrl()
+      ])
       .then((data) => {
         const [bookmarks, storeContent, serviceUrl] = data;
         const removedSync: RemovedSync = {

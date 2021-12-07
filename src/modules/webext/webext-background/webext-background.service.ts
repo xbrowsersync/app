@@ -277,7 +277,7 @@ export class WebExtBackgroundService {
       .then(() =>
         this.$q
           .all([
-            this.platformSvc.getAppVersion(),
+            this.platformSvc.getAppVersionName(),
             this.platformSvc.getCurrentLocale(),
             this.settingsSvc.all(),
             this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId]),
@@ -349,13 +349,13 @@ export class WebExtBackgroundService {
           });
         })
         // Set the initial upgrade version
-        .then(() => {
-          return this.platformSvc.getAppVersion().then((currentVersion) =>
+        .then(() =>
+          this.platformSvc.getAppVersion().then((currentVersion) =>
             this.upgradeSvc.setLastUpgradeVersion(currentVersion).then(() => {
               this.logSvc.logInfo(`Installed ${currentVersion}`);
             })
-          );
-        })
+          )
+        )
         .catch((err) => {
           this.$exceptionHandler(err);
           return this.$q.reject(err);
@@ -474,13 +474,13 @@ export class WebExtBackgroundService {
   runDownloadFileCommand(message: DownloadFileMessage): ng.IPromise<string | void> {
     const { filename, textContents, displaySaveDialog = true } = message;
     if (!filename) {
-      return Promise.reject(new Error('File name parameter missing.'));
+      return this.$q.reject(new Error('File name parameter missing.'));
     }
     if (!textContents) {
-      return Promise.reject(new Error('File contents parameter missing.'));
+      return this.$q.reject(new Error('File contents parameter missing.'));
     }
 
-    return new Promise<string | void>((resolve, reject) => {
+    return new this.$q<string | void>((resolve, reject) => {
       // Use create a new object url using contents and trigger download
       const file = new Blob([textContents], { type: 'text/plain' });
       const url = URL.createObjectURL(file);

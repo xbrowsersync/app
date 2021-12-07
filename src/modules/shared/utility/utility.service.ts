@@ -71,7 +71,7 @@ export class UtilityService {
       .get<any>(Globals.ReleaseLatestUrl)
       .then((response) => {
         const latestVersion = response?.data?.tag_name ?? '';
-        if (!this.compareVersions(latestVersion, currentVersion, '>')) {
+        if (!this.compareVersions(latestVersion, currentVersion, '>', true)) {
           return '';
         }
         this.logSvc.logInfo(`${latestVersion} update available`);
@@ -91,9 +91,10 @@ export class UtilityService {
     });
   }
 
-  compareVersions(firstVersion = '', secondVersion = '', operator: string): boolean {
-    // Remove beta flag and build number if present before comparing versions
-    const regex = /^(\d+\.\d+\.\d+)(-\w+)?\.\d+$/;
+  compareVersions(firstVersion = '', secondVersion = '', operator: string, includeBeta = false): boolean {
+    const regex = includeBeta
+      ? /^[vV]?(\d+\.\d+\.\d+(-\w+\.\d+)?)(\.\d+)?$/
+      : /^[vV]?(\d+\.\d+\.\d+)(\.\d+|-\w+\.\d+)$/;
     return compare(firstVersion.replace(regex, '$1'), secondVersion.replace(regex, '$1'), operator as any);
   }
 

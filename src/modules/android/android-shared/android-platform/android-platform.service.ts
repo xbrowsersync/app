@@ -236,11 +236,13 @@ export class AndroidPlatformService implements PlatformService {
   }
 
   getAppVersion(): ng.IPromise<string> {
-    return this.$q.resolve().then(window.cordova.getAppVersion.getVersionNumber);
+    return this.$q.when(window.cordova.getAppVersion.getVersionNumber()).then((versionNumber: string) => {
+      return versionNumber.replace(/^[vV]?(\d+\.\d+\.\d+)(\.\d+|-\w+\.\d+)$/, '$1');
+    });
   }
 
   getAppVersionName(): ng.IPromise<string> {
-    return this.$q.resolve().then(window.cordova.getAppVersion.getVersionNumber);
+    return this.$q.when(window.cordova.getAppVersion.getVersionNumber());
   }
 
   getCurrentLocale(): ng.IPromise<string> {

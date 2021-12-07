@@ -137,7 +137,7 @@ export abstract class WebExtPlatformService implements PlatformService {
   }
 
   getCurrentLocale(): ng.IPromise<string> {
-    return Promise.resolve(browser.i18n.getUILanguage());
+    return this.$q.resolve(browser.i18n.getUILanguage());
   }
 
   getCurrentUrl(): ng.IPromise<string> {
