@@ -77,7 +77,7 @@
   "Button": {
     "AddBookmark": {
       "key": "Button_AddBookmark",
-      "default": "Añadir marcador"
+      "default": "Agregar un marcador"
     },
     "Back": {
       "key": "Button_Back",
@@ -298,7 +298,7 @@
       },
       "Title": {
         "key": "Error_NetworkConnection_Title",
-        "default": "Se ha perdido la conexión al servidor"
+        "default": "Conexión perdida"
       }
     },
     "NoDataToRestore": {
@@ -406,11 +406,11 @@
     "UncommittedSyncs": {
       "Message": {
         "key": "Error_UncommittedSyncs_Message",
-        "default": "La sincronización será confirmada una vez que se restablezca la conexión al servicio."
+        "default": "Los cambios se sincronizarán una vez que se restablezca la conexión."
       },
       "Title": {
         "key": "Error_UncommittedSyncs_Title",
-        "default": "Cambios no sincronizados"
+        "default": "Conexión perdida"
       }
     },
     "UnsupportedServiceApiVersion": {

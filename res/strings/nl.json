@@ -113,7 +113,7 @@
     },
     "DownloadBackup": {
       "key": "Button_DownloadBackup",
-      "default": "Backup downloaden"
+      "default": "Back-up downloaden"
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
@@ -298,7 +298,7 @@
       },
       "Title": {
         "key": "Error_NetworkConnection_Title",
-        "default": "De verbinding met de service is verbroken"
+        "default": "Verbinding verbroken"
       }
     },
     "NoDataToRestore": {
@@ -406,11 +406,11 @@
     "UncommittedSyncs": {
       "Message": {
         "key": "Error_UncommittedSyncs_Message",
-        "default": "De synchronisatie wordt uitgevoerd zodra de verbinding is hersteld."
+        "default": "Wijzigingen zullen gesynchroniseerd worden zodra de verbinding hersteld is."
       },
       "Title": {
         "key": "Error_UncommittedSyncs_Title",
-        "default": "Wijzigingen zijn niet gesynchroniseerd"
+        "default": "Verbinding verbroken"
       }
     },
     "UnsupportedServiceApiVersion": {

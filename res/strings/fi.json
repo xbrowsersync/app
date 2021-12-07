@@ -121,7 +121,7 @@
     },
     "Help": {
       "key": "Button_Help",
-      "default": "Näytä ohje"
+      "default": "Käyttöopas"
     },
     "Next": {
       "key": "Button_Next",
@@ -671,7 +671,7 @@
       "Service": {
         "ApiVersion": {
           "key": "View_Login_Service_ApiVersion",
-          "default": "Rajapinnan versio"
+          "default": "API-versio"
         },
         "Confirm": {
           "key": "View_Login_Service_Confirm",
@@ -724,7 +724,7 @@
           },
           "NotSupported": {
             "key": "View_Login_Service_Update_Failed_NotSupported",
-            "default": "Palvelu käyttää rajapinnan versiota, jota ei tueta"
+            "default": "Palvelu käyttää API-versiota, jota ei tueta"
           }
         },
         "Warning": {
@@ -804,7 +804,7 @@
         },
         "New": {
           "key": "View_Login_SyncId_New",
-          "default": "Hanki synkronointitunnus"
+          "default": "Hanki tunnus"
         }
       }
     },
@@ -984,7 +984,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Restore_Button",
-            "default": "Palauta varmuuskopio"
+            "default": "Palauta varmuuskopiosta"
           },
           "Local": {
             "Description": {
@@ -1069,11 +1069,11 @@
           },
           "Description": {
             "key": "View_Settings_Issues_Help_Description",
-            "default": "Onko sinulla kysymyksiä tai ongelmia? Tutustu käyttöoppaaseen tai etsi vastausta UKK:stä."
+            "default": "Onko sinulla kysymyksiä tai ongelmia? Tutustu käyttöoppaaseen tai etsi vastausta usein kysytyistä kysymyksistä."
           },
           "ViewFaqs": {
             "key": "View_Settings_Issues_Help_ViewFaqs",
-            "default": "Näytä UKK:t"
+            "default": "UKK"
           }
         },
         "Tracker": {
@@ -1083,11 +1083,11 @@
           },
           "Description": {
             "key": "View_Settings_Issues_Tracker_Description",
-            "default": "Tarvitsetko tukea? Käytä tikettijärjestelmää raportoidaksesi virheestä tai ehdottaaksesi uutta ominaisuutta."
+            "default": "Tarvitsetko tukea? Ongelmaseurannassa voit tehdä virheilmoituksia tai kehitysehdotuksia."
           },
           "Report": {
             "key": "View_Settings_Issues_Tracker_Report",
-            "default": "Näytä tikettijärjestelmä"
+            "default": "Ongelmaseuranta"
           }
         },
         "Log": {
@@ -1101,7 +1101,7 @@
           },
           "Clear": {
             "key": "View_Settings_Issues_Log_Clear",
-            "default": "Tyhjennä loki"
+            "default": "Tyhjennä"
           },
           "Download": {
             "key": "View_Settings_Issues_Log_Download",

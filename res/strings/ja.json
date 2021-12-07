@@ -298,7 +298,7 @@
       },
       "Title": {
         "key": "Error_NetworkConnection_Title",
-        "default": "サーバーへの接続が失われました。"
+        "default": "接続切断"
       }
     },
     "NoDataToRestore": {
@@ -406,11 +406,11 @@
     "UncommittedSyncs": {
       "Message": {
         "key": "Error_UncommittedSyncs_Message",
-        "default": "サービスへの接続が復元されると、同期が保存されます。"
+        "default": "ネットワークに接続された場合、変更が同期されます。"
       },
       "Title": {
         "key": "Error_UncommittedSyncs_Title",
-        "default": "変更は同期されていません"
+        "default": "接続切断"
       }
     },
     "UnsupportedServiceApiVersion": {
@@ -966,7 +966,7 @@
           },
           "Button": {
             "key": "View_Settings_BackupRestore_Backup_Button",
-            "default": "バックアップをダウンロード "
+            "default": "バックアップをダウンロード"
           },
           "Local": {
             "key": "View_Settings_BackupRestore_Backup_Local",
