@@ -217,13 +217,13 @@
       "Title": {
         "key": "Error_FailedRefreshBookmarks_Title",
         "default": "Non se puideron recoller actualizacións"
-      },
-      "Message": {
-        "key": "Error_FailedRestoreData_Message",
-        "default": "Os datos da copia de seguridade indicados non están no formato agardado."
       }
     },
     "FailedRestoreData": {
+      "Message": {
+        "key": "Error_FailedRestoreData_Message",
+        "default": "Os datos da copia de seguridade indicados non están no formato agardado."
+      },
       "Title": {
         "key": "Error_FailedRestoreData_Title",
         "default": "Non se puideron restaurar os datos"
@@ -298,7 +298,7 @@
       },
       "Title": {
         "key": "Error_NetworkConnection_Title",
-        "default": "Conexión perdida a servizo"
+        "default": "Perdeuse a conexión"
       }
     },
     "NoDataToRestore": {
@@ -406,11 +406,11 @@
     "UncommittedSyncs": {
       "Message": {
         "key": "Error_UncommittedSyncs_Message",
-        "default": "A sincronización confirmarase unha vez que se restableza a conexión ao servizo."
+        "default": "Os cambios sincronizaranse cando a conexión se restaure."
       },
       "Title": {
         "key": "Error_UncommittedSyncs_Title",
-        "default": "Cambios non sincronizados"
+        "default": "Perdeuse a conexión"
       }
     },
     "UnsupportedServiceApiVersion": {
