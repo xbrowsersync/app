@@ -117,7 +117,7 @@
     },
     "EditBookmark": {
       "key": "Button_EditBookmark",
-      "default": "Lesezeichen bearbeiten"
+      "default": "Lesezeichen hinzufügen"
     },
     "Help": {
       "key": "Button_Help",
@@ -298,7 +298,7 @@
       },
       "Title": {
         "key": "Error_NetworkConnection_Title",
-        "default": "Verbindung zum Dienst verloren"
+        "default": "Verbindung unterbrochen"
       }
     },
     "NoDataToRestore": {
@@ -365,13 +365,13 @@
       "Title": {
         "key": "Error_ShareFailed_Title",
         "default": "Teilen fehlgeschlagen"
-      },
-      "Message": {
-        "key": "Error_SyncRemoved_Message",
-        "default": "Die angeforderte Synchronisation existiert nicht, sie wurde möglicherweise aufgrund von Inaktivität entfernt."
       }
     },
     "SyncRemoved": {
+      "Message": {
+        "key": "Error_SyncRemoved_Message",
+        "default": "Die angeforderte Synchronisation existiert nicht, sie wurde möglicherweise aufgrund von Inaktivität entfernt."
+      },
       "Title": {
         "key": "Error_SyncRemoved_Title",
         "default": "Synchronisation wurde nicht gefunden"
@@ -406,11 +406,11 @@
     "UncommittedSyncs": {
       "Message": {
         "key": "Error_UncommittedSyncs_Message",
-        "default": "Synchronisation wird übertragen nachdem die Verbindung zum Dienst wiederhergestellt wurde."
+        "default": "Änderungen werden synchronisiert, sobald die Verbindung wiederhergestellt ist."
       },
       "Title": {
         "key": "Error_UncommittedSyncs_Title",
-        "default": "Änderungen nicht synchronisiert"
+        "default": "Verbindung unterbrochen"
       }
     },
     "UnsupportedServiceApiVersion": {
