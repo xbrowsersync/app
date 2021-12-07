@@ -298,7 +298,7 @@
       },
       "Title": {
         "key": "Error_NetworkConnection_Title",
-        "default": "与服务器的连接丢失"
+        "default": "连接丢失"
       }
     },
     "NoDataToRestore": {
@@ -406,11 +406,11 @@
     "UncommittedSyncs": {
       "Message": {
         "key": "Error_UncommittedSyncs_Message",
-        "default": "同步将在连接服务恢复后进行。"
+        "default": "连接恢复后更改将被同步。"
       },
       "Title": {
         "key": "Error_UncommittedSyncs_Title",
-        "default": "更改没有同步"
+        "default": "连接丢失"
       }
     },
     "UnsupportedServiceApiVersion": {
