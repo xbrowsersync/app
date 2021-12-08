@@ -30,11 +30,11 @@
       </span>
     </button>
     <div class="search-form form-group btn-icon-container">
-      <input type="text" name="txtSearch" ng-model="vm.query" class="form-control" maxlength="200"
+      <input type="text" name="txtSearch" ng-model="vm.query" ng-model-options="{ debounce: 300 }" class="form-control"
+             maxlength="200"
              placeholder="{{ vm.platformSvc.getI18nString(vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName) ? vm.Strings.View.Search.Placeholder : vm.Strings.View.Search.Placeholder) }}"
-             ng-change="vm.searchTextChanged()" ng-keydown="vm.utilitySvc.handleEvent(vm.searchBoxKeyDown, $event)"
-             ng-trim="false" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"
-             tabindex="1" />
+             ng-keydown="vm.utilitySvc.handleEvent(vm.searchBoxKeyDown, $event)" ng-trim="false" autocapitalize="off"
+             autocomplete="off" autocorrect="off" spellcheck="false" tabindex="1" />
       <label for="txtSearch">
         <i class="fas fa-search"></i>
       </label>

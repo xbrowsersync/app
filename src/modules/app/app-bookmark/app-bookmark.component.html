@@ -56,11 +56,11 @@
       <div class="form-group tags-input-container btn-icon-container">
         <label for="bookmarkTags" class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Tags.Label)
       }}</label>
-        <input type="text" name="bookmarkTags" ng-model="vm.tagText" class="form-control"
+        <input type="text" name="bookmarkTags" ng-model="vm.tagText" ng-model-options="{ debounce: 300 }"
+               class="form-control"
                placeholder="{{ vm.platformSvc.getI18nString(vm.Strings.View.Bookmark.Form.Tags.Placeholder) }}…"
-               maxlength="50" ng-change="vm.tagsTextChanged()"
-               ng-keydown="vm.utilitySvc.handleEvent(vm.tagsTextKeyDown, $event)" ng-trim="false" autocapitalize="off"
-               autocomplete="off" autocorrect="off">
+               maxlength="50" ng-keydown="vm.utilitySvc.handleEvent(vm.tagsTextKeyDown, $event)" ng-trim="false"
+               autocapitalize="off" autocomplete="off" autocorrect="off">
         <div class="lookahead-container">
           <span class="measure" ng-bind-html="vm.tagTextMeasure"></span>
           <span class="lookahead" ng-bind-html="vm.tagLookahead" ng-show="vm.tagLookahead"

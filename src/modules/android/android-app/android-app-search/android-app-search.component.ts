@@ -30,19 +30,6 @@ import { AndroidAppHelperService } from '../shared/android-app-helper/android-ap
 export class AndroidAppSearchComponent extends AppSearchComponent implements OnDestroy {
   appHelperSvc: AndroidAppHelperService;
 
-  static $inject = [
-    '$exceptionHandler',
-    '$q',
-    '$scope',
-    '$timeout',
-    'AlertService',
-    'AppHelperService',
-    'BookmarkHelperService',
-    'PlatformService',
-    'SettingsService',
-    'UtilityService',
-    'WorkingService'
-  ];
   constructor(
     $exceptionHandler: ExceptionHandler,
     $q: ng.IQService,
@@ -59,6 +46,7 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
     super(
       $exceptionHandler,
       $q,
+      $scope,
       $timeout,
       AlertSvc,
       AppHelperSvc,

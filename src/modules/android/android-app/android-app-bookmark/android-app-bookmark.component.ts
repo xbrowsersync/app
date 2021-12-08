@@ -69,6 +69,7 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
     super(
       $exceptionHandler,
       $q,
+      $scope,
       $timeout,
       AlertSvc,
       AppHelperSvc,

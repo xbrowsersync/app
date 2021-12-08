@@ -62,6 +62,7 @@ export class AppBookmarkComponent implements OnInit {
   static $inject = [
     '$exceptionHandler',
     '$q',
+    '$scope',
     '$timeout',
     'AlertService',
     'AppHelperService',
@@ -73,6 +74,7 @@ export class AppBookmarkComponent implements OnInit {
   constructor(
     $exceptionHandler: ExceptionHandler,
     $q: ng.IQService,
+    $scope: ng.IScope,
     $timeout: ng.ITimeoutService,
     AlertSvc: AlertService,
     AppHelperSvc: AppHelperService,
@@ -90,6 +92,15 @@ export class AppBookmarkComponent implements OnInit {
     this.platformSvc = PlatformSvc;
     this.utilitySvc = UtilitySvc;
     this.workingSvc = WorkingSvc;
+
+    $scope.$watch(
+      () => this.tagText,
+      (newVal, oldVal) => {
+        if (newVal !== oldVal) {
+          this.tagsTextChanged();
+        }
+      }
+    );
   }
 
   changesSynced(): ng.IPromise<void> {

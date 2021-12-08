@@ -34,11 +34,8 @@ export abstract class AppSearchComponent implements OnInit {
   AppViewType = AppViewType;
   batchResultsNum = 10;
   bookmarkTree: BookmarkTreeItem[];
-  cancelGetBookmarksRequest: any;
   currentUrlBookmarked: boolean;
   displayFolderView: boolean;
-  getLookaheadTimeout: any;
-  getSearchResultsTimeout: any;
   lastWord: string;
   lookahead: string;
   query: string;
@@ -51,6 +48,7 @@ export abstract class AppSearchComponent implements OnInit {
   static $inject = [
     '$exceptionHandler',
     '$q',
+    '$scope',
     '$timeout',
     'AlertService',
     'AppHelperService',
@@ -63,6 +61,7 @@ export abstract class AppSearchComponent implements OnInit {
   constructor(
     $exceptionHandler: ExceptionHandler,
     $q: ng.IQService,
+    $scope: ng.IScope,
     $timeout: ng.ITimeoutService,
     AlertSvc: AlertService,
     AppHelperSvc: AppHelperService,
@@ -82,6 +81,15 @@ export abstract class AppSearchComponent implements OnInit {
     this.settingsSvc = SettingsSvc;
     this.utilitySvc = UtilitySvc;
     this.workingSvc = WorkingSvc;
+
+    $scope.$watch(
+      () => this.query,
+      (newVal, oldVal) => {
+        if (newVal !== oldVal) {
+          this.searchTextChanged();
+        }
+      }
+    );
   }
 
   addBookmark(): void {
@@ -210,11 +218,6 @@ export abstract class AppSearchComponent implements OnInit {
       case KeyCode.Enter:
         (document.activeElement as HTMLInputElement).blur();
 
-        if (this.getSearchResultsTimeout) {
-          this.$timeout.cancel(this.getSearchResultsTimeout);
-          this.getSearchResultsTimeout = null;
-        }
-
         // Get search results
         this.displayFolderView = false;
         this.searchBookmarks();
@@ -328,12 +331,6 @@ export abstract class AppSearchComponent implements OnInit {
     // Hide alerts
     this.alertSvc.clearCurrentAlert();
 
-    // Cancel existing timeout
-    if (this.getSearchResultsTimeout) {
-      this.$timeout.cancel(this.getSearchResultsTimeout);
-      this.getSearchResultsTimeout = null;
-    }
-
     // No query, clear results
     if (!this.query?.trim()) {
       this.displayDefaultSearchState();
@@ -375,8 +372,6 @@ export abstract class AppSearchComponent implements OnInit {
             this.queryMeasure = this.query.replace(/\s/g, '&nbsp;');
             this.lookahead = lookahead.replace(/\s/g, '&nbsp;');
           }
-
-          this.cancelGetBookmarksRequest = null;
         })
         .then(() => {
           this.displayFolderView = false;
