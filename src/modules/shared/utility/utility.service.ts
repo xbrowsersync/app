@@ -29,7 +29,16 @@ export class UtilityService {
   networkSvc: NetworkService;
   storeSvc: StoreService;
 
-  static $inject = ['$exceptionHandler', '$http', '$location', '$q', '$rootScope', 'LogService', 'NetworkService', 'StoreService'];
+  static $inject = [
+    '$exceptionHandler',
+    '$http',
+    '$location',
+    '$q',
+    '$rootScope',
+    'LogService',
+    'NetworkService',
+    'StoreService'
+  ];
   constructor(
     $exceptionHandler: ExceptionHandler,
     $http: ng.IHttpService,
