@@ -1,6 +1,7 @@
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import Globals from '../../shared/global-shared.constants';
+import { UtilityService } from '../../shared/utility/utility.service';
 import { RoutePath } from '../app.enum';
 
 @autobind
@@ -11,29 +12,29 @@ import { RoutePath } from '../app.enum';
   template: require('./app-background.component.html')
 })
 export class AppBackgroundComponent implements OnInit {
-  $location: ng.ILocationService;
   $timeout: ng.ITimeoutService;
+  utilitySvc: UtilityService;
 
   animateClouds = false;
 
-  static $inject = ['$location', '$timeout'];
-  constructor($location: ng.ILocationService, $timeout: ng.ITimeoutService) {
-    this.$location = $location;
+  static $inject = ['$timeout', 'UtilityService'];
+  constructor($timeout: ng.ITimeoutService, UtilitySvc: UtilityService) {
     this.$timeout = $timeout;
+    this.utilitySvc = UtilitySvc;
   }
 
   pageHasBackground(): boolean {
-    return this.$location.path() !== RoutePath.Scan;
+    return !this.utilitySvc.checkCurrentRoute(RoutePath.Scan);
   }
 
   pageHasCloudBackground(): boolean {
     return (
-      this.$location.path() === RoutePath.Login ||
-      this.$location.path() === RoutePath.Support ||
-      this.$location.path() === RoutePath.Permissions ||
-      this.$location.path() === RoutePath.SyncRemoved ||
-      this.$location.path() === RoutePath.Updated ||
-      this.$location.path().indexOf(RoutePath.Help) === 0
+      this.utilitySvc.checkCurrentRoute(RoutePath.Login) ||
+      this.utilitySvc.checkCurrentRoute(RoutePath.Support) ||
+      this.utilitySvc.checkCurrentRoute(RoutePath.Permissions) ||
+      this.utilitySvc.checkCurrentRoute(RoutePath.SyncRemoved) ||
+      this.utilitySvc.checkCurrentRoute(RoutePath.Updated) ||
+      this.utilitySvc.checkCurrentRoute(RoutePath.Help)
     );
   }
 

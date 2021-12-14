@@ -231,14 +231,13 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
   }
 
   handleBackButton(event: Event): void {
-    const path = this.$location.path();
     if (
-      path === RoutePath.Bookmark ||
-      path === RoutePath.Help ||
-      path === RoutePath.Scan ||
-      path === RoutePath.Settings ||
-      path === RoutePath.Support ||
-      path === RoutePath.Updated
+      this.utilitySvc.checkCurrentRoute(RoutePath.Bookmark) ||
+      this.utilitySvc.checkCurrentRoute(RoutePath.Help) ||
+      this.utilitySvc.checkCurrentRoute(RoutePath.Scan) ||
+      this.utilitySvc.checkCurrentRoute(RoutePath.Settings) ||
+      this.utilitySvc.checkCurrentRoute(RoutePath.Support) ||
+      this.utilitySvc.checkCurrentRoute(RoutePath.Updated)
     ) {
       // Back to login/search panel
       event.preventDefault();
@@ -327,7 +326,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
           }
 
           // Deselect bookmark
-          if (this.$location.path() === RoutePath.Search) {
+          if (this.utilitySvc.checkCurrentRoute(RoutePath.Search)) {
             this.utilitySvc.broadcastEvent(AppEventType.ClearSelectedBookmark);
           }
 

@@ -6,7 +6,7 @@ import autobind from 'autobind-decorator';
 import { compare } from 'compare-versions';
 import * as detectBrowser from 'detect-browser';
 import XRegExp from 'xregexp';
-import { AppEventType } from '../../app/app.enum';
+import { AppEventType, RoutePath } from '../../app/app.enum';
 import { ClientDataNotFoundError } from '../errors/errors';
 import { ExceptionHandler } from '../errors/errors.interface';
 import Globals from '../global-shared.constants';
@@ -22,16 +22,18 @@ import { StoreService } from '../store/store.service';
 export class UtilityService {
   $exceptionHandler: ExceptionHandler;
   $http: ng.IHttpService;
+  $location: ng.ILocationService;
   $q: ng.IQService;
   $rootScope: ng.IRootScopeService;
   logSvc: LogService;
   networkSvc: NetworkService;
   storeSvc: StoreService;
 
-  static $inject = ['$exceptionHandler', '$http', '$q', '$rootScope', 'LogService', 'NetworkService', 'StoreService'];
+  static $inject = ['$exceptionHandler', '$http', '$location', '$q', '$rootScope', 'LogService', 'NetworkService', 'StoreService'];
   constructor(
     $exceptionHandler: ExceptionHandler,
     $http: ng.IHttpService,
+    $location: ng.ILocationService,
     $q: ng.IQService,
     $rootScope: ng.IRootScopeService,
     LogSvc: LogService,
@@ -40,6 +42,7 @@ export class UtilityService {
   ) {
     this.$exceptionHandler = $exceptionHandler;
     this.$http = $http;
+    this.$location = $location;
     this.$q = $q;
     this.$rootScope = $rootScope;
     this.logSvc = LogSvc;
@@ -59,6 +62,10 @@ export class UtilityService {
 
   broadcastEvent(eventType: AppEventType, eventData?: any[]): void {
     this.$rootScope.$broadcast(eventType, eventData);
+  }
+
+  checkCurrentRoute(route: RoutePath): boolean {
+    return this.$location.path().indexOf(route) === 0;
   }
 
   checkForNewVersion(currentVersion: string): ng.IPromise<string> {
