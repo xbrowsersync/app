@@ -5,7 +5,7 @@ import { PlatformService } from '../../shared/global-shared.interface';
 import { StoreKey } from '../../shared/store/store.enum';
 import { StoreService } from '../../shared/store/store.service';
 import { UtilityService } from '../../shared/utility/utility.service';
-import { AppViewType } from '../app.enum';
+import { RoutePath } from '../app.enum';
 import { AppHelperService } from '../shared/app-helper/app-helper.service';
 
 @autobind
@@ -42,9 +42,10 @@ export class AppUpdatedComponent implements OnInit {
     this.utilitySvc = UtilitySvc;
   }
 
-  close(): void {
+  close(event?: Event): void {
+    event?.preventDefault();
     this.storeSvc.set(StoreKey.DisplayUpdated, false);
-    this.appHelperSvc.switchView({ view: AppViewType.Support });
+    this.appHelperSvc.switchView(RoutePath.Support);
   }
 
   displayReleaseNotes(): void {

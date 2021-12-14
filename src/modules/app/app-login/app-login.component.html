@@ -133,7 +133,7 @@
             </div>
           </div>
           <div class="form-group toggle-form">
-            <a ng-click="vm.utilitySvc.handleEvent(vm.displayExistingSyncPanel)" href="#">
+            <a href="#" ng-click="vm.utilitySvc.handleEvent(vm.displayExistingSyncPanel, $event)">
               {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.SyncId.Existing) }}
             </a>
           </div>
@@ -192,12 +192,12 @@
             </button>
           </div>
           <div class="form-group toggle-form">
-            <a ng-click="vm.utilitySvc.handleEvent(vm.displayNewSyncPanel)"
-               ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)" href="#">
+            <a href="#" ng-click="vm.utilitySvc.handleEvent(vm.displayNewSyncPanel, $event)"
+               ng-if="!vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
               {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Sync.New) }}
             </a>
-            <a ng-click="vm.utilitySvc.handleEvent(vm.scanId)"
-               ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)" href="#">
+            <a href="#" ng-click="vm.utilitySvc.handleEvent(vm.scanId, $event)"
+               ng-if="vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName)">
               {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Scan.ScanCode) }}
             </a>
           </div>
@@ -218,7 +218,7 @@
             </div>
           </div>
           <div class="form-group toggle-form">
-            <a ng-click="vm.utilitySvc.handleEvent(vm.enableManualEntry)" href="#">
+            <a href="#" ng-click="vm.utilitySvc.handleEvent(vm.enableManualEntry, $event)">
               {{ vm.platformSvc.getI18nString(vm.Strings.View.Login.Scan.ManualEntry) }}
             </a>
           </div>

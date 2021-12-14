@@ -1,7 +1,7 @@
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { AppEventType, AppViewType } from '../../app/app.enum';
+import { AppEventType, RoutePath } from '../../app/app.enum';
 import { AppMainComponent } from '../../app/app-main/app-main.component';
 import { AppHelperService } from '../../app/shared/app-helper/app-helper.service';
 import { AlertService } from '../../shared/alert/alert.service';
@@ -42,6 +42,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
 
   static $inject = [
     '$interval',
+    '$location',
     '$q',
     '$scope',
     '$timeout',
@@ -60,6 +61,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
   ];
   constructor(
     $interval: ng.IIntervalService,
+    $location: ng.ILocationService,
     $q: ng.IQService,
     $scope: ng.IScope,
     $timeout: ng.ITimeoutService,
@@ -77,6 +79,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     WorkingSvc: WorkingService
   ) {
     super(
+      $location,
       $q,
       $scope,
       $timeout,
@@ -228,15 +231,14 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
   }
 
   handleBackButton(event: Event): void {
-    // Back button action depends on current view
-    const currentView = this.appHelperSvc.getCurrentView();
+    const path = this.$location.path();
     if (
-      currentView.view === AppViewType.Bookmark ||
-      currentView.view === AppViewType.Help ||
-      currentView.view === AppViewType.Scan ||
-      currentView.view === AppViewType.Settings ||
-      currentView.view === AppViewType.Support ||
-      currentView.view === AppViewType.Updated
+      path === RoutePath.Bookmark ||
+      path === RoutePath.Help ||
+      path === RoutePath.Scan ||
+      path === RoutePath.Settings ||
+      path === RoutePath.Support ||
+      path === RoutePath.Updated
     ) {
       // Back to login/search panel
       event.preventDefault();
@@ -321,11 +323,11 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
         return this.getSharedBookmark().then((sharedBookmark) => {
           if (!angular.isUndefined(sharedBookmark)) {
             this.handleBookmarkShared(sharedBookmark);
-            return this.appHelperSvc.switchView({ view: AppViewType.Bookmark });
+            return this.appHelperSvc.switchView(RoutePath.Bookmark);
           }
 
           // Deselect bookmark
-          if (this.appHelperSvc.getCurrentView()?.view === AppViewType.Search) {
+          if (this.$location.path() === RoutePath.Search) {
             this.utilitySvc.broadcastEvent(AppEventType.ClearSelectedBookmark);
           }
 
@@ -485,7 +487,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
         .then(() => {
           // If bookmark was shared, switch to bookmark view
           if (!angular.isUndefined(this.platformSvc.currentPage)) {
-            return this.appHelperSvc.switchView({ view: AppViewType.Bookmark });
+            return this.appHelperSvc.switchView(RoutePath.Bookmark);
           }
         })
         // Continue initialisation

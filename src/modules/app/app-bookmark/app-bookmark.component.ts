@@ -22,8 +22,9 @@ import { SyncType } from '../../shared/sync/sync.enum';
 import { SyncResult } from '../../shared/sync/sync.interface';
 import { UtilityService } from '../../shared/utility/utility.service';
 import { WorkingService } from '../../shared/working/working.service';
-import { AppViewType, KeyCode } from '../app.enum';
+import { KeyCode, RoutePath } from '../app.enum';
 import { AppHelperService } from '../shared/app-helper/app-helper.service';
+import { BookmarkRouteParams } from './app-bookmark.interface';
 
 @autobind
 @Component({
@@ -37,6 +38,7 @@ export class AppBookmarkComponent implements OnInit {
 
   $exceptionHandler: ExceptionHandler;
   $q: ng.IQService;
+  $routeParams: ng.route.IRouteParamsService;
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
   appHelperSvc: AppHelperService;
@@ -46,7 +48,7 @@ export class AppBookmarkComponent implements OnInit {
   workingSvc: WorkingService;
 
   addButtonDisabledUntilEditForm = false;
-  AppViewType = AppViewType;
+  RoutePath = RoutePath;
   bookmarkForm: ng.IFormController;
   bookmarkFormData: BookmarkMetadata;
   currentBookmarkId: number;
@@ -62,6 +64,7 @@ export class AppBookmarkComponent implements OnInit {
   static $inject = [
     '$exceptionHandler',
     '$q',
+    '$routeParams',
     '$scope',
     '$timeout',
     'AlertService',
@@ -74,6 +77,7 @@ export class AppBookmarkComponent implements OnInit {
   constructor(
     $exceptionHandler: ExceptionHandler,
     $q: ng.IQService,
+    $routeParams: ng.route.IRouteParamsService,
     $scope: ng.IScope,
     $timeout: ng.ITimeoutService,
     AlertSvc: AlertService,
@@ -85,6 +89,7 @@ export class AppBookmarkComponent implements OnInit {
   ) {
     this.$exceptionHandler = $exceptionHandler;
     this.$q = $q;
+    this.$routeParams = $routeParams;
     this.$timeout = $timeout;
     this.alertSvc = AlertSvc;
     this.appHelperSvc = AppHelperSvc;
@@ -226,11 +231,11 @@ export class AppBookmarkComponent implements OnInit {
   ngOnInit(): ng.IPromise<void> {
     return (
       this.$q<Bookmark>((resolve) => {
-        // Check if bookmark data provided via view
-        const bookmarkViewData = this.appHelperSvc.getCurrentView().data?.bookmark;
-        if (bookmarkViewData?.id) {
+        // Get bookmark if specified in route
+        const bookmarkId = (this.$routeParams as BookmarkRouteParams).id;
+        if (bookmarkId) {
           this.editMode = true;
-          return resolve(bookmarkViewData);
+          return this.bookmarkHelperSvc.getBookmarkById(parseInt(bookmarkId, 10)).then(resolve);
         }
 
         // Check if current url is a bookmark
@@ -238,7 +243,7 @@ export class AppBookmarkComponent implements OnInit {
           if (existingBookmark) {
             return resolve(existingBookmark);
           }
-          resolve(bookmarkViewData);
+          resolve();
         });
       })
         .then((bookmark) => {

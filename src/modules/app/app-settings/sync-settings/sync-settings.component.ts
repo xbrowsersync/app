@@ -11,7 +11,7 @@ import { SyncType } from '../../../shared/sync/sync.enum';
 import { SyncService } from '../../../shared/sync/sync.service';
 import { UtilityService } from '../../../shared/utility/utility.service';
 import { WorkingService } from '../../../shared/working/working.service';
-import { AppEventType, AppViewType } from '../../app.enum';
+import { AppEventType, RoutePath } from '../../app.enum';
 import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 
 @autobind
@@ -120,7 +120,7 @@ export class SyncSettingsComponent implements OnInit {
   }
 
   disableSync(): void {
-    this.platformSvc.disableSync().then(() => this.appHelperSvc.switchView({ view: AppViewType.Login }));
+    this.platformSvc.disableSync().then(() => this.appHelperSvc.switchView(RoutePath.Login));
   }
 
   displayQrPanel(): void {

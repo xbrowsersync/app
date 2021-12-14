@@ -21,6 +21,7 @@ export class AndroidAppHelperService extends AppHelperService {
   static $inject = [
     '$exceptionHandler',
     '$interval',
+    '$location',
     '$q',
     '$timeout',
     'ApiService',
@@ -34,6 +35,7 @@ export class AndroidAppHelperService extends AppHelperService {
   constructor(
     $exceptionHandler: ExceptionHandler,
     $interval: ng.IIntervalService,
+    $location: ng.ILocationService,
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
     ApiSvc: ApiService,
@@ -44,7 +46,19 @@ export class AndroidAppHelperService extends AppHelperService {
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
   ) {
-    super($exceptionHandler, $q, $timeout, ApiSvc, LogSvc, PlatformSvc, StoreSvc, SyncSvc, UtilitySvc, WorkingSvc);
+    super(
+      $exceptionHandler,
+      $location,
+      $q,
+      $timeout,
+      ApiSvc,
+      LogSvc,
+      PlatformSvc,
+      StoreSvc,
+      SyncSvc,
+      UtilitySvc,
+      WorkingSvc
+    );
 
     this.$exceptionHandler = $exceptionHandler;
     this.$interval = $interval;

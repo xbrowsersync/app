@@ -11,7 +11,7 @@ import { PlatformService } from '../../shared/global-shared.interface';
 import { SettingsService } from '../../shared/settings/settings.service';
 import { UtilityService } from '../../shared/utility/utility.service';
 import { WorkingService } from '../../shared/working/working.service';
-import { AppViewType, KeyCode } from '../app.enum';
+import { KeyCode, RoutePath } from '../app.enum';
 import { AppHelperService } from '../shared/app-helper/app-helper.service';
 import { BookmarkSearchResult, BookmarkTreeItem } from './app-search.interface';
 
@@ -31,7 +31,7 @@ export abstract class AppSearchComponent implements OnInit {
   workingSvc: WorkingService;
 
   alternateSearchBarPosition: boolean;
-  AppViewType = AppViewType;
+  RoutePath = RoutePath;
   batchResultsNum = 10;
   bookmarkTree: BookmarkTreeItem[];
   currentUrlBookmarked: boolean;
@@ -93,9 +93,7 @@ export abstract class AppSearchComponent implements OnInit {
   }
 
   addBookmark(): void {
-    this.appHelperSvc.switchView({
-      view: AppViewType.Bookmark
-    });
+    this.appHelperSvc.switchView(RoutePath.Bookmark);
   }
 
   clearSearch(): void {
@@ -143,10 +141,10 @@ export abstract class AppSearchComponent implements OnInit {
     // On mobiles, display bookmark panel with slight delay to avoid focussing on description field
     if (this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
       this.$timeout(() => {
-        this.appHelperSvc.switchView({ data: { bookmark: bookmarkToUpdate }, view: AppViewType.Bookmark });
+        this.appHelperSvc.switchView(`${RoutePath.Bookmark}/${bookmarkToUpdate.id}`);
       }, 500);
     } else {
-      this.appHelperSvc.switchView({ data: { bookmark: bookmarkToUpdate }, view: AppViewType.Bookmark });
+      this.appHelperSvc.switchView(`${RoutePath.Bookmark}/${bookmarkToUpdate.id}`);
     }
   }
 
@@ -381,9 +379,7 @@ export abstract class AppSearchComponent implements OnInit {
   }
 
   selectBookmark(event: Event, bookmarkId: number): void {
-    // Stop event propogation
     this.utilitySvc.stopEventPropagation(event);
-
     if (!this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
       return;
     }
@@ -407,8 +403,11 @@ export abstract class AppSearchComponent implements OnInit {
   }
 
   switchToBookmarkView(): void {
-    // Display bookmark panel
-    this.appHelperSvc.switchView({ view: AppViewType.Bookmark });
+    this.appHelperSvc.switchView(RoutePath.Bookmark);
+  }
+
+  switchToSettingsView(): void {
+    this.appHelperSvc.switchView(RoutePath.Settings);
   }
 
   toggleBookmarkTreeView(): ng.IPromise<void> {

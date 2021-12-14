@@ -3,12 +3,6 @@
 app-search {
   display: block;
 
-  &.view .view-content {
-    display: flex;
-    flex-flow: column;
-    padding: 0;
-  }
-
   .bookmark-tree-container,
   .search-results-container {
     flex: 0 1 100%;
@@ -94,5 +88,9 @@ app-search {
     &.ng-hide {
       margin-top: 0;
     }
+  }
+
+  .view-content {
+    padding: 0;
   }
 }

@@ -7,23 +7,6 @@ app-search {
     --color-pull-to-refresh-link: #{$color-text3-dark};
   }
 
-  &.view .view-content {
-    padding-left: 0;
-
-    &.search-bar-bottom {
-      flex-direction: column-reverse;
-
-      .bookmark-tree-container,
-      .search-results-container {
-        padding-top: 0.75rem;
-      }
-
-      .btn-fab.fixed {
-        bottom: 5rem;
-      }
-    }
-  }
-
   bookmark {
     &:not(.folder) {
       & > .bookmark-content > .bookmark-heading {
@@ -52,6 +35,10 @@ app-search {
   .header-panel {
     display: flex;
     flex-direction: row-reverse;
+
+    .btn-icon {
+      line-height: initial;
+    }
 
     .search-form {
       .btn-clear {
@@ -87,6 +74,23 @@ app-search {
   .search-results-container {
     & > h4 {
       margin: 1rem;
+    }
+  }
+
+  .view-content {
+    padding-left: 0;
+
+    &.search-bar-bottom {
+      flex-direction: column-reverse;
+
+      .bookmark-tree-container,
+      .search-results-container {
+        padding-top: 0.75rem;
+      }
+
+      .btn-fab.fixed {
+        bottom: 5rem;
+      }
     }
   }
 

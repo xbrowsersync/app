@@ -39,6 +39,7 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
   static $inject = [
     '$exceptionHandler',
     '$q',
+    '$routeParams',
     '$scope',
     '$timeout',
     'AlertService',
@@ -54,6 +55,7 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
   constructor(
     $exceptionHandler: ExceptionHandler,
     $q: ng.IQService,
+    $routeParams: ng.route.IRouteParamsService,
     $scope: ng.IScope,
     $timeout: ng.ITimeoutService,
     AlertSvc: AlertService,
@@ -69,6 +71,7 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
     super(
       $exceptionHandler,
       $q,
+      $routeParams,
       $scope,
       $timeout,
       AlertSvc,

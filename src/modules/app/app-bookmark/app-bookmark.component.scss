@@ -11,11 +11,6 @@ app-bookmark {
     --color-badge-text: #{$color-text2-dark};
   }
 
-  &.view .view-content {
-    display: flex;
-    flex-flow: column;
-  }
-
   #bookmarkForm {
     display: flex;
     flex-flow: column;
@@ -119,5 +114,10 @@ app-bookmark {
   .textarea-container {
     display: flex;
     flex: 1 0 10rem;
+  }
+
+  .view-content {
+    display: flex;
+    flex-flow: column;
   }
 }

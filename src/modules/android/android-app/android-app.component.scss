@@ -70,6 +70,7 @@ a {
 
 h2 {
   font-size: 1.6em;
+  line-height: 3.1rem;
 }
 
 input,
@@ -96,8 +97,7 @@ textarea.form-control {
 }
 
 .view-content {
-  height: 100%;
-  padding-top: 1.75rem !important;
+  padding-top: 1.5rem !important;
 
   &.ng-enter {
     z-index: 10 !important;
@@ -116,15 +116,18 @@ textarea.form-control {
 
 app {
   .container {
-    height: 100vh;
+    .view,
+    .view-content {
+      height: 100vh;
+    }
   }
 
   .header-panel {
     font-size: 1.5rem;
+    margin-bottom: 0.5rem;
 
-    button {
-      font-size: 1.5em;
-      line-height: 0.9em;
+    .btn-icon {
+      line-height: 1.6em;
     }
   }
 
@@ -203,7 +206,7 @@ app-login {
       height: 100%;
     }
 
-    &.view .view-content {
+    .view-content {
       align-items: center;
       flex-direction: row;
     }

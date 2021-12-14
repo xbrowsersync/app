@@ -22,7 +22,7 @@ import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync } from '../../shared/sync/sync.interface';
 import { UtilityService } from '../../shared/utility/utility.service';
 import { WorkingService } from '../../shared/working/working.service';
-import { AppViewType } from '../app.enum';
+import { RoutePath } from '../app.enum';
 import { AppHelperService } from '../shared/app-helper/app-helper.service';
 
 @autobind
@@ -181,13 +181,15 @@ export class AppLoginComponent implements OnInit {
     this.appHelperSvc.focusOnElement('.active-login-form input[name="txtPassword"]');
   }
 
-  displayExistingSyncPanel(): void {
+  displayExistingSyncPanel(event?: Event): void {
+    event?.preventDefault();
     this.newSync = false;
     this.password = undefined;
     this.appHelperSvc.focusOnElement('input[name="txtId"]');
   }
 
-  displayNewSyncPanel(): void {
+  displayNewSyncPanel(event?: Event): void {
+    event?.preventDefault();
     this.newSync = true;
     this.displayPasswordConfirmation = false;
     this.password = undefined;
@@ -200,7 +202,8 @@ export class AppLoginComponent implements OnInit {
     this.appHelperSvc.focusOnElement('.login-form-new input[name="txtPassword"]');
   }
 
-  enableManualEntry(): void {
+  enableManualEntry(event?: Event): void {
+    event?.preventDefault();
     this.displayGetSyncIdPanel = false;
   }
 
@@ -383,8 +386,9 @@ export class AppLoginComponent implements OnInit {
     });
   }
 
-  scanId() {
-    this.appHelperSvc.switchView({ view: AppViewType.Scan });
+  scanId(event?: Event) {
+    event?.preventDefault();
+    this.appHelperSvc.switchView(RoutePath.Scan);
   }
 
   serviceIsOnline(): boolean {
@@ -443,11 +447,11 @@ export class AppLoginComponent implements OnInit {
   }
 
   switchToHelpView(): void {
-    this.appHelperSvc.switchView({ view: AppViewType.Help });
+    this.appHelperSvc.switchView(RoutePath.Help);
   }
 
   switchToSettingsView(): void {
-    this.appHelperSvc.switchView({ view: AppViewType.Settings });
+    this.appHelperSvc.switchView(RoutePath.Settings);
   }
 
   sync(): void {

@@ -9,7 +9,6 @@ export class WorkingService {
   status: WorkingStatus;
 
   constructor() {
-    // Initialise status
     this.status = {
       activated: false
     };

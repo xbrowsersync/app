@@ -18,7 +18,7 @@ export default {
   I18n: {
     DefaultLocale: 'en'
   },
-  InterfaceReadyTimeout: 150,
+  InterfaceReadyTimeout: 10,
   LookaheadMinChars: 2,
   MinApiVersion: '1.1.9',
   PathToAssets: 'assets',

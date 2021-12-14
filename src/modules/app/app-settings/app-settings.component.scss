@@ -15,10 +15,6 @@ app-settings {
     --color-settings-value-text: #{$color-text2-dark};
   }
 
-  &.view .view-content {
-    padding: 0.75rem 0 0;
-  }
-
   .header-panel,
   .panel-container {
     padding-left: 0.75rem;
@@ -74,6 +70,10 @@ app-settings {
       transition: none;
       width: auto;
     }
+  }
+
+  .view-content {
+    padding: 0.75rem 0 0;
   }
 
   .well {

@@ -15,14 +15,14 @@ import { Sync } from '../../../shared/sync/sync.interface';
 import { SyncService } from '../../../shared/sync/sync.service';
 import { UtilityService } from '../../../shared/utility/utility.service';
 import { WorkingService } from '../../../shared/working/working.service';
-import { AppViewType } from '../../app.enum';
-import { AppView } from '../../app.interface';
+import { RoutePath } from '../../app.enum';
 
 @autobind
 export abstract class AppHelperService {
   Strings = require('../../../../../res/strings/en.json');
 
   $exceptionHandler: ExceptionHandler;
+  $location: ng.ILocationService;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   apiSvc: ApiService;
@@ -33,10 +33,9 @@ export abstract class AppHelperService {
   utilitySvc: UtilityService;
   workingSvc: WorkingService;
 
-  currentView: AppView;
-
   constructor(
     $exceptionHandler: ng.IExceptionHandlerService,
+    $location: ng.ILocationService,
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
     ApiSvc: ApiService,
@@ -48,6 +47,7 @@ export abstract class AppHelperService {
     WorkingSvc: WorkingService
   ) {
     this.$exceptionHandler = $exceptionHandler;
+    this.$location = $location;
     this.$q = $q;
     this.$timeout = $timeout;
     this.apiSvc = ApiSvc;
@@ -125,10 +125,6 @@ export abstract class AppHelperService {
 
   abstract getCurrentSync(): ng.IPromise<Sync>;
 
-  getCurrentView(): AppView {
-    return this.currentView;
-  }
-
   abstract getNextScheduledSyncUpdateCheck(): ng.IPromise<Date>;
 
   abstract getSyncQueueLength(): ng.IPromise<number>;
@@ -139,43 +135,44 @@ export abstract class AppHelperService {
 
   abstract requestPermissions(): ng.IPromise<boolean>;
 
-  switchView(view?: AppView): ng.IPromise<void> {
-    return this.$q.resolve().then(() => {
-      if (!angular.isUndefined(view)) {
-        this.currentView = angular.copy(view);
-        return;
-      }
-      return this.$q
-        .all([
-          this.storeSvc.get([
-            StoreKey.DisplayHelp,
-            StoreKey.DisplayPermissions,
-            StoreKey.DisplayUpdated,
-            StoreKey.RemovedSync
-          ]),
-          this.utilitySvc.isSyncEnabled()
-        ])
-        .then((data) => {
-          const [storeContent, syncEnabled] = data;
-          switch (true) {
-            case storeContent.displayUpdated:
-              return AppViewType.Updated;
-            case storeContent.displayPermissions:
-              return AppViewType.Permissions;
-            case storeContent.displayHelp:
-              return AppViewType.Help;
-            case !!storeContent.removedSync:
-              return AppViewType.SyncRemoved;
-            case syncEnabled:
-              return AppViewType.Search;
-            default:
-              return AppViewType.Login;
-          }
-        })
-        .then((newView) => {
-          this.currentView = { view: newView };
-        });
-    });
+  switchView(view?: string): ng.IPromise<void> {
+    return this.$q
+      .resolve()
+      .then(() => {
+        if (!angular.isUndefined(view)) {
+          return view;
+        }
+        return this.$q
+          .all([
+            this.storeSvc.get([
+              StoreKey.DisplayHelp,
+              StoreKey.DisplayPermissions,
+              StoreKey.DisplayUpdated,
+              StoreKey.RemovedSync
+            ]),
+            this.utilitySvc.isSyncEnabled()
+          ])
+          .then((data) => {
+            const [storeContent, syncEnabled] = data;
+            switch (true) {
+              case storeContent.displayUpdated:
+                return RoutePath.Updated;
+              case storeContent.displayPermissions:
+                return RoutePath.Permissions;
+              case storeContent.displayHelp:
+                return RoutePath.Help;
+              case !!storeContent.removedSync:
+                return RoutePath.SyncRemoved;
+              case syncEnabled:
+                return RoutePath.Search;
+              default:
+                return RoutePath.Login;
+            }
+          });
+      })
+      .then((newRoute) => {
+        this.$location.path(newRoute);
+      });
   }
 
   syncBookmarksSuccess(): ng.IPromise<void> {

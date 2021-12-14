@@ -5,7 +5,7 @@ import { PlatformService } from '../../../shared/global-shared.interface';
 import { LogLevel } from '../../../shared/log/log.enum';
 import { LogService } from '../../../shared/log/log.service';
 import { UtilityService } from '../../../shared/utility/utility.service';
-import { AppViewType } from '../../app.enum';
+import { RoutePath } from '../../app.enum';
 import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 
 @autobind
@@ -107,6 +107,6 @@ export class IssuesSettingsComponent implements OnInit {
   }
 
   switchToHelpView(): void {
-    this.appHelperSvc.switchView({ view: AppViewType.Help });
+    this.appHelperSvc.switchView(RoutePath.Help);
   }
 }

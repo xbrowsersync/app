@@ -24,6 +24,7 @@ export abstract class WebExtAppHelperService extends AppHelperService {
   static $inject = [
     '$exceptionHandler',
     '$filter',
+    '$location',
     '$q',
     '$timeout',
     'ApiService',
@@ -38,6 +39,7 @@ export abstract class WebExtAppHelperService extends AppHelperService {
   constructor(
     $exceptionHandler: ExceptionHandler,
     $filter: ng.FilterFactory,
+    $location: ng.ILocationService,
     $q: ng.IQService,
     $timeout: ng.ITimeoutService,
     ApiSvc: ApiService,
@@ -49,7 +51,19 @@ export abstract class WebExtAppHelperService extends AppHelperService {
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
   ) {
-    super($exceptionHandler, $q, $timeout, ApiSvc, LogSvc, PlatformSvc, StoreSvc, SyncSvc, UtilitySvc, WorkingSvc);
+    super(
+      $exceptionHandler,
+      $location,
+      $q,
+      $timeout,
+      ApiSvc,
+      LogSvc,
+      PlatformSvc,
+      StoreSvc,
+      SyncSvc,
+      UtilitySvc,
+      WorkingSvc
+    );
 
     this.$filter = $filter;
     this.bookmarkHelperSvc = BookmarkHelperSvc;

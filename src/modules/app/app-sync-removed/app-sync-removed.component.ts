@@ -59,7 +59,8 @@ export class AppSyncRemovedComponent {
   /**
    * Removes removed sync from store and switches to the default view.
    */
-  close(): void {
+  close(event?: Event): void {
+    event?.preventDefault();
     this.storeSvc.remove(StoreKey.RemovedSync);
     this.appHelperSvc.switchView();
   }

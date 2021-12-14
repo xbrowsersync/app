@@ -1,4 +1,4 @@
-import { Component, Input, Output } from 'angular-ts-decorators';
+import { Component, Output } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AppHelperService } from '../../../app/shared/app-helper/app-helper.service';
 import { AlertService } from '../../../shared/alert/alert.service';
@@ -26,12 +26,11 @@ export class WebExtAppWorkingComponent {
   workingSvc: WorkingService;
 
   currentContext: WorkingContext;
+  currentTimeout: ng.IPromise<void>;
   enableCancel: boolean;
   message: string;
   show = false;
-  currentTimeout: ng.IPromise<void>;
-
-  @Input() fullViewMode: boolean;
+  WorkingContext = WorkingContext;
 
   @Output() cancelAction: () => any;
 
@@ -67,21 +66,15 @@ export class WebExtAppWorkingComponent {
         if (newVal !== oldVal) {
           if (this.show !== newVal.activated) {
             if (newVal.activated) {
-              this.showPanel(newVal.context);
+              if (newVal.context === WorkingContext.WaitingForSyncsToFinish) {
+                this.showView(newVal.context);
+              } else {
+                this.showPanel(newVal.context);
+              }
             } else {
               this.hidePanel();
             }
           }
-        }
-      }
-    );
-
-    // Watch for view model changes to display as view
-    $scope.$watch(
-      () => this.fullViewMode,
-      (newVal, oldVal) => {
-        if (newVal !== oldVal && newVal === true) {
-          this.showView();
         }
       }
     );
@@ -100,7 +93,7 @@ export class WebExtAppWorkingComponent {
     this.show = false;
   }
 
-  showPanel(context?: WorkingContext): void {
+  showPanel(context: WorkingContext): void {
     // Return if working panel already displayed
     if (this.currentContext) {
       return;
@@ -119,7 +112,6 @@ export class WebExtAppWorkingComponent {
       case WorkingContext.Resetting:
         message = this.platformSvc.getI18nString(this.Strings.View.Working.Resetting);
         break;
-      case WorkingContext.Syncing:
       default:
         message = this.platformSvc.getI18nString(this.Strings.View.Working.Syncing);
     }
@@ -131,10 +123,12 @@ export class WebExtAppWorkingComponent {
     });
   }
 
-  showView(): void {
+  showView(context: WorkingContext): void {
+    this.currentContext = context;
     this.message = this.platformSvc.getI18nString(this.Strings.View.Working.Syncing);
     this.appHelperSvc.getCurrentSync().then((currentSync) => {
       this.enableCancel = currentSync?.type === SyncType.Remote || false;
+      this.show = true;
     });
   }
 }

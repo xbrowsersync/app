@@ -70,64 +70,66 @@
 }
 
 .view {
-  @include animation-fade-in();
-
+  display: flex;
+  flex-direction: column;
   height: 100%;
+  justify-content: center;
   width: 100%;
+}
 
-  &.view-overlay {
-    overflow: hidden;
+.view-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0.75rem;
+  z-index: 0;
+}
 
-    &::after {
-      @extend .overlay;
+.view-overlay {
+  overflow: hidden;
 
-      content: '';
-      z-index: -1;
-    }
+  &::after {
+    @extend .overlay;
 
-    h4 {
-      font-size: 1.5rem;
-      line-height: 1.8rem;
-      margin-bottom: 1.5rem;
-      text-align: center;
-    }
+    content: '';
+    z-index: -1;
+  }
 
-    p,
-    ul {
-      font-size: 1.1rem;
-      line-height: 1.4rem;
-    }
+  h4 {
+    font-size: 1.5rem;
+    line-height: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
 
-    ul {
-      margin-bottom: 0.75rem;
-      padding-left: 1rem;
-    }
+  p,
+  ul {
+    font-size: 1.1rem;
+    line-height: 1.4rem;
+  }
 
-    .buttons {
-      margin-top: 1rem;
+  ul {
+    margin-bottom: 0.75rem;
+    padding-left: 1rem;
+  }
 
-      &.small {
-        button {
-          font-size: 1rem;
-          line-height: 2.1rem;
-          padding: 0 0.5rem;
-        }
+  .buttons {
+    margin-top: 1rem;
+
+    &.small {
+      button {
+        font-size: 1rem;
+        line-height: 2.1rem;
+        padding: 0 0.5rem;
       }
-    }
-
-    .view-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 2rem;
     }
   }
 
   .view-content {
     display: flex;
     flex-direction: column;
-    padding: 0.75rem;
-    z-index: 0;
+    justify-content: center;
+    padding: 2rem;
   }
 }
 

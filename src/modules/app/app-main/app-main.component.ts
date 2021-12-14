@@ -10,13 +10,14 @@ import { SettingsService } from '../../shared/settings/settings.service';
 import { StoreService } from '../../shared/store/store.service';
 import { UtilityService } from '../../shared/utility/utility.service';
 import { WorkingService } from '../../shared/working/working.service';
-import { AppViewType } from '../app.enum';
+import { RoutePath } from '../app.enum';
 import { AppHelperService } from '../shared/app-helper/app-helper.service';
 
 @autobind
-export class AppMainComponent implements OnInit {
+export abstract class AppMainComponent implements OnInit {
   Strings = require('../../../../res/strings/en.json');
 
+  $location: ng.ILocationService;
   $q: ng.IQService;
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
@@ -30,15 +31,14 @@ export class AppMainComponent implements OnInit {
   utilitySvc: UtilityService;
   workingSvc: WorkingService;
 
-  AppViewType = AppViewType;
-  currentView: AppViewType;
+  RoutePath = RoutePath;
   darkModeEnabled: boolean;
   disableTransitions = true;
   initialised = false;
-  syncEnabled: boolean;
   vm: AppMainComponent = this;
 
   constructor(
+    $location: ng.ILocationService,
     $q: ng.IQService,
     $scope: ng.IScope,
     $timeout: ng.ITimeoutService,
@@ -53,6 +53,7 @@ export class AppMainComponent implements OnInit {
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
   ) {
+    this.$location = $location;
     this.$q = $q;
     this.$timeout = $timeout;
     this.alertSvc = AlertSvc;
@@ -67,15 +68,6 @@ export class AppMainComponent implements OnInit {
     this.workingSvc = WorkingSvc;
 
     $scope.$watch(
-      () => this.appHelperSvc.getCurrentView(),
-      (newVal, oldVal) => {
-        if (newVal !== oldVal) {
-          this.changeView(newVal.view);
-        }
-      }
-    );
-
-    $scope.$watch(
       () => this.settingsSvc.darkMode,
       (newVal, oldVal) => {
         if (newVal !== oldVal) {
@@ -85,23 +77,6 @@ export class AppMainComponent implements OnInit {
     );
   }
 
-  changeView(view: AppViewType): void {
-    if (this.currentView === view) {
-      return;
-    }
-
-    // Hide loading panel and alert messages, and set current view
-    this.workingSvc.hide();
-    this.alertSvc.clearCurrentAlert();
-    this.$timeout(() => {
-      this.disableTransitions = true;
-      this.currentView = view;
-      this.$timeout(() => {
-        this.disableTransitions = false;
-      }, 250);
-    });
-  }
-
   ngOnInit(): ng.IPromise<void> {
     // Get required view model data from store
     return this.settingsSvc
@@ -109,13 +84,16 @@ export class AppMainComponent implements OnInit {
       .then((darkModeEnabled) => {
         this.darkModeEnabled = darkModeEnabled;
 
-        // Return here if view has already been set
-        if (this.currentView) {
-          return;
-        }
+        // Check if a sync is currently in progress
+        return this.appHelperSvc.getCurrentSync().then((currentSync) => {
+          // Return here if view has already been set or waiting for syncs to finish
+          if (this.$location.path() !== '/' || currentSync) {
+            return;
+          }
 
-        // Set initial view
-        return this.appHelperSvc.switchView();
+          // Set initial view
+          return this.appHelperSvc.switchView();
+        });
       })
       .catch((err) => {
         this.appHelperSvc.switchView().then(() => {
@@ -127,4 +105,6 @@ export class AppMainComponent implements OnInit {
         this.disableTransitions = false;
       });
   }
+
+  protected abstract workingCancelAction(): ng.IPromise<void>;
 }

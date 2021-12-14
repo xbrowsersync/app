@@ -24,6 +24,12 @@ app-working {
     }
   }
 
+  .fullsize {
+    height: 37rem;
+    position: unset;
+    width: 23rem;
+  }
+
   .spinner-border {
     height: 20vw;
     width: 20vw;
@@ -33,11 +39,5 @@ app-working {
     @include animation-fade-in();
 
     flex-direction: column;
-
-    &.fullsize {
-      height: 37rem;
-      position: unset;
-      width: 23rem;
-    }
   }
 }

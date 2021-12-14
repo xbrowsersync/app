@@ -32,6 +32,11 @@ export class AppSupportComponent implements OnInit {
     this.utilitySvc = UtilitySvc;
   }
 
+  close(event?: Event): void {
+    event?.preventDefault();
+    this.appHelperSvc.switchView();
+  }
+
   ngOnInit(): void {
     // Set initial focus
     this.appHelperSvc.focusOnElement('.focused');

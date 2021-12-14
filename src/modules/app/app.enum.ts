@@ -6,20 +6,6 @@ enum AppEventType {
   WorkingCancelAction = 'WORKING_CANCEL_ACTION'
 }
 
-enum AppViewType {
-  Bookmark = 'BOOKMARK',
-  Help = 'HELP',
-  Login = 'LOGIN',
-  Permissions = 'PERMISSIONS',
-  Scan = 'SCAN',
-  Search = 'SEARCH',
-  Settings = 'SETTINGS',
-  Support = 'SUPPORT',
-  SyncRemoved = 'SYNC_REMOVED',
-  Updated = 'UPDATED',
-  Working = 'WORKING'
-}
-
 enum KeyCode {
   Enter = 13,
   Backspace = 8,
@@ -36,4 +22,17 @@ enum KeyCode {
   ArrowDown = 40
 }
 
-export { AppEventType, AppViewType, KeyCode };
+enum RoutePath {
+  Bookmark = '/bookmark',
+  Help = '/help',
+  Login = '/login',
+  Permissions = '/permissions',
+  Scan = '/scan',
+  Search = '/search',
+  Settings = '/settings',
+  Support = '/support',
+  SyncRemoved = '/sync-removed',
+  Updated = '/updated'
+}
+
+export { AppEventType, KeyCode, RoutePath };

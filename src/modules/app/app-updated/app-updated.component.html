@@ -6,7 +6,7 @@
       {{ vm.platformSvc.getI18nString(vm.Strings.Button.ReleaseNotes) }}
     </button>
     <div class="footer">
-      <a class="focused" ng-click="vm.utilitySvc.handleEvent(vm.close)" href="#">
+      <a href="#" class="focused" ng-click="vm.utilitySvc.handleEvent(vm.close, $event)">
         {{ vm.platformSvc.getI18nString(vm.Strings.Button.Continue) }}
       </a>
     </div>

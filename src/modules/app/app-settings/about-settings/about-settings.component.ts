@@ -3,7 +3,7 @@ import autobind from 'autobind-decorator';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { UtilityService } from '../../../shared/utility/utility.service';
-import { AppViewType } from '../../app.enum';
+import { RoutePath } from '../../app.enum';
 import { AppHelperService } from '../../shared/app-helper/app-helper.service';
 
 @autobind
@@ -39,6 +39,6 @@ export class AboutSettingsComponent implements OnInit {
   }
 
   switchToSupportView(): void {
-    this.appHelperSvc.switchView({ view: AppViewType.Support });
+    this.appHelperSvc.switchView(RoutePath.Support);
   }
 }

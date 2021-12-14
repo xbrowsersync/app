@@ -199,6 +199,22 @@ export class BookmarkHelperService {
     });
   }
 
+  getBookmarkById(id: number): ng.IPromise<Bookmark | undefined> {
+    return this.getCachedBookmarks().then((bookmarks) => {
+      let targetBookmark: Bookmark;
+      this.eachBookmark(
+        bookmarks,
+        (bookmark) => {
+          if (bookmark.id === id) {
+            targetBookmark = bookmark;
+          }
+        },
+        () => !!targetBookmark
+      );
+      return targetBookmark;
+    });
+  }
+
   getBookmarkTitleForDisplay(bookmark: Bookmark): string | undefined {
     const bookmarkType = this.getBookmarkType(bookmark);
 

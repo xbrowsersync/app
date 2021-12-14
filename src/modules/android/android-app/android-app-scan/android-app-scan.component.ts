@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { AppViewType } from '../../../app/app.enum';
 import { BackupSync } from '../../../shared/backup-restore/backup-restore.interface';
 import { AndroidError, FailedScanError } from '../../../shared/errors/errors';
 import Globals from '../../../shared/global-shared.constants';
@@ -29,7 +28,6 @@ export class AndroidAppScanComponent implements OnInit, OnDestroy {
   storeSvc: StoreService;
   utilitySvc: UtilityService;
 
-  appViewType = AppViewType;
   displayScanInterface = false;
   invalidSyncId = false;
   lightEnabled = false;

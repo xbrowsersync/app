@@ -6,6 +6,7 @@ import { NgModule } from 'angular-ts-decorators';
 import NgInfiniteScroll from 'ng-infinite-scroll';
 import { ExceptionHandlerService } from '../shared/errors/exception-handler/exception-handler.service';
 import { GlobalSharedModule } from '../shared/global-shared.module';
+import { AppRoutesModule } from './app.routes';
 import { AppBackgroundComponent } from './app-background/app-background.component';
 import { AppHelpComponent } from './app-help/app-help.component';
 import { AppLoginModule } from './app-login/app-login.module';
@@ -29,7 +30,16 @@ import { AppUpdatedComponent } from './app-updated/app-updated.component';
     BookmarkTreeComponent
   ],
   id: 'AppModule',
-  imports: [AppLoginModule, AppSettingsModule, GlobalSharedModule, NgAnimate, NgFilter, NgInfiniteScroll, NgSanitize]
+  imports: [
+    AppLoginModule,
+    AppRoutesModule,
+    AppSettingsModule,
+    GlobalSharedModule,
+    NgAnimate,
+    NgFilter,
+    NgInfiniteScroll,
+    NgSanitize
+  ]
 })
 export class AppModule {}
 

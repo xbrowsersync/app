@@ -1,10 +1,10 @@
 import angular from 'angular';
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { AppViewType } from '../../app/app.enum';
 import { AppMainComponent } from '../../app/app-main/app-main.component';
 import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync } from '../../shared/sync/sync.interface';
+import { WorkingContext } from '../../shared/working/working.enum';
 import { WebExtPlatformService } from '../shared/webext-platform/webext-platform.service';
 
 @autobind
@@ -18,6 +18,7 @@ export class WebExtAppComponent extends AppMainComponent implements OnInit {
   platformSvc: WebExtPlatformService;
 
   static $inject = [
+    '$location',
     '$q',
     '$scope',
     '$timeout',
@@ -38,28 +39,33 @@ export class WebExtAppComponent extends AppMainComponent implements OnInit {
   }
 
   ngOnInit(): ng.IPromise<void> {
-    // Check if a sync is currently in progress
-    return this.appHelperSvc
-      .getCurrentSync()
-      .then((currentSync) => {
-        if (currentSync) {
-          this.logSvc.logInfo('Waiting for syncs to finish...');
+    return (
+      super
+        .ngOnInit()
+        // Check if a sync is currently in progress
+        .then(() => this.appHelperSvc.getCurrentSync())
+        .then((currentSync) => {
+          if (!currentSync) {
+            return;
+          }
 
           // Display working panel
+          this.logSvc.logInfo('Waiting for syncs to finish...');
           this.initialised = true;
-          this.changeView(AppViewType.Working);
-          return this.waitForSyncsToFinish().then(() => {
-            // Check that user didn't cancel sync
-            return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
-              if (syncEnabled) {
-                this.logSvc.logInfo('Syncs finished, resuming');
-                return this.appHelperSvc.syncBookmarksSuccess();
-              }
-            });
-          });
-        }
-      })
-      .then(() => super.ngOnInit());
+          this.workingSvc.show(WorkingContext.WaitingForSyncsToFinish);
+          return this.waitForSyncsToFinish()
+            .then(() => {
+              // Sync was a success if sync is still enabled
+              return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
+                if (syncEnabled) {
+                  this.logSvc.logInfo('Syncs finished, resuming');
+                  return this.appHelperSvc.syncBookmarksSuccess();
+                }
+              });
+            })
+            .finally(() => this.workingSvc.hide());
+        })
+    );
   }
 
   waitForSyncsToFinish(): ng.IPromise<void> {
@@ -85,8 +91,6 @@ export class WebExtAppComponent extends AppMainComponent implements OnInit {
       .queueSync({
         type: SyncType.Cancel
       })
-      .then(() => {
-        this.syncEnabled = false;
-      });
+      .then(() => {});
   }
 }

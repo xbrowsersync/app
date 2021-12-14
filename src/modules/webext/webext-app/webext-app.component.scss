@@ -4,14 +4,19 @@ body {
   overflow: hidden;
 }
 
-app-search {
-  &.view {
-    height: auto;
-    width: 38rem;
-
+.container {
+  &.search,
+  &.settings {
+    .view,
     .view-content {
-      height: auto;
       max-height: 37rem;
+    }
+  }
+
+  &.search {
+    .view {
+      height: auto;
+      width: 38rem;
 
       .header-panel {
         display: flex;
@@ -27,20 +32,17 @@ app-search {
       }
     }
   }
-}
 
-app-settings {
-  backup-restore-settings {
-    #restoreForm .validation {
-      bottom: -0.75rem;
+  &.settings {
+    backup-restore-settings {
+      #restoreForm .validation {
+        bottom: -0.75rem;
+      }
     }
   }
-}
 
-.view {
-  width: 23rem;
-
-  .view-content {
+  .view {
     height: 37rem;
+    width: 23rem;
   }
 }

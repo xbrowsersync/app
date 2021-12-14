@@ -120,7 +120,6 @@ export class AndroidAppWorkingComponent {
           );
         }, 250);
         break;
-      case WorkingContext.Syncing:
       default:
         this.currentTimeout = this.$timeout(() => {
           window.SpinnerDialog.show(

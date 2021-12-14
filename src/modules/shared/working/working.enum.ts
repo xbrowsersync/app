@@ -3,6 +3,7 @@ enum WorkingContext {
   Resetting = 'RESETTING',
   Restoring = 'RESTORING',
   RetrievingMetadata = 'RETRIEVING_METADATA',
-  Syncing = 'SYNCING'
+  Syncing = 'SYNCING',
+  WaitingForSyncsToFinish = 'WAITING'
 }
 export { WorkingContext };
