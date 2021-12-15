@@ -241,6 +241,16 @@
         "default": "Nie można pobrać widoku z adresu URL"
       }
     },
+    "HttpRequestFailed": {
+      "Message": {
+        "key": "Error_HttpRequestFailed_Message",
+        "default": "Sprawdź połączenie sieciowe i spróbuj ponownie. Jeśli problem będzie się powtarzał, może to oznaczać problem z usługą xBrowserSync."
+      },
+      "Title": {
+        "key": "Error_HttpRequestFailed_Title",
+        "default": "Synchronizacja nie powiodła się"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
