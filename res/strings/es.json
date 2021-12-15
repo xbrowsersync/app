@@ -241,6 +241,16 @@
         "default": "No se puede recuperar la URL del marcador compartido"
       }
     },
+    "HttpRequestFailed": {
+      "Message": {
+        "key": "Error_HttpRequestFailed_Message",
+        "default": "Verifique su conexión de red y vuelva a intentarlo. Si el problema persiste, podría haber un problema con el servicio xBrowserSync."
+      },
+      "Title": {
+        "key": "Error_HttpRequestFailed_Title",
+        "default": "Sincronización fallida"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
