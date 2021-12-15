@@ -241,6 +241,16 @@
         "default": "Kan de gedeelde bladwijzer-URL niet ophalen"
       }
     },
+    "HttpRequestFailed": {
+      "Message": {
+        "key": "Error_HttpRequestFailed_Message",
+        "default": "Controleer uw netwerkverbinding en probeer het opnieuw. Als het probleem aanhoudt, is er mogelijk een probleem met de xBrowserSync-service."
+      },
+      "Title": {
+        "key": "Error_HttpRequestFailed_Title",
+        "default": "Synchronisatie mislukt"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
