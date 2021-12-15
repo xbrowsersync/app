@@ -241,6 +241,16 @@
         "default": "Non se puido recoller a URL compartida dos marcadores"
       }
     },
+    "HttpRequestFailed": {
+      "Message": {
+        "key": "Error_HttpRequestFailed_Message",
+        "default": "Comproba a túa conexión de rede e téntao de novo. Se o problema persiste, pode haber un problema co servizo xBrowserSync."
+      },
+      "Title": {
+        "key": "Error_HttpRequestFailed_Title",
+        "default": "Fallou a sincronización"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
