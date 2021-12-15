@@ -241,6 +241,16 @@
         "default": "Impossibile recuperare l'URL del segnalibro condiviso"
       }
     },
+    "HttpRequestFailed": {
+      "Message": {
+        "key": "Error_HttpRequestFailed_Message",
+        "default": "Controlla la tua connessione di rete e riprova. Se il problema persiste, potrebbe esserci un problema con il servizio xBrowserSync."
+      },
+      "Title": {
+        "key": "Error_HttpRequestFailed_Title",
+        "default": "Sincronizzazione non riuscita"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",

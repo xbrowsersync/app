@@ -241,6 +241,16 @@
         "default": "فشل استرداد عنوان يو آر إل للإشارة المرجعية المشارَكة"
       }
     },
+    "HttpRequestFailed": {
+      "Message": {
+        "key": "Error_HttpRequestFailed_Message",
+        "default": "تحقق من اتصالك بالشبكة وحاول مرة أخرى. إذا استمرت المشكلة ، فقد تكون هناك مشكلة في خدمة xBrowserSync."
+      },
+      "Title": {
+        "key": "Error_HttpRequestFailed_Title",
+        "default": "فشل المزامنة"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",

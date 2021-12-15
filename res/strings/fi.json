@@ -241,6 +241,16 @@
         "default": "Jaetun kirjanmerkin URL-osoitteen nouto epäonnistui"
       }
     },
+    "HttpRequestFailed": {
+      "Message": {
+        "key": "Error_HttpRequestFailed_Message",
+        "default": "Tarkista verkkoyhteytesi ja yritä uudelleen. Jos ongelma jatkuu, ongelma saattaa olla xBrowserSync-palvelussa."
+      },
+      "Title": {
+        "key": "Error_HttpRequestFailed_Title",
+        "default": "Synkronointi epäonnistui"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",

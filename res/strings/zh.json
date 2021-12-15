@@ -241,6 +241,16 @@
         "default": "无法获取共享书签URL"
       }
     },
+    "HttpRequestFailed": {
+      "Message": {
+        "key": "Error_HttpRequestFailed_Message",
+        "default": "检查您的网络连接，然后重试。 如果问题仍然存在，则 xBrowserSync 服务可能存在问题。"
+      },
+      "Title": {
+        "key": "Error_HttpRequestFailed_Title",
+        "default": "同步失败"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",

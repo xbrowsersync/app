@@ -241,6 +241,16 @@
         "default": "Die URL des geteilten Lesezeichens konnte nicht abgerufen werden"
       }
     },
+    "HttpRequestFailed": {
+      "Message": {
+        "key": "Error_HttpRequestFailed_Message",
+        "default": "Überprüfen Sie Ihre Netzwerkverbindung und versuchen Sie es erneut. Wenn das Problem weiterhin besteht, liegt möglicherweise ein Problem mit dem xBrowserSync-Dienst vor."
+      },
+      "Title": {
+        "key": "Error_HttpRequestFailed_Title",
+        "default": "Synchronisierung fehlgeschlagen"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",

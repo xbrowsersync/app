@@ -241,6 +241,16 @@
         "default": "共有ブックマークのURLを取得できません"
       }
     },
+    "HttpRequestFailed": {
+      "Message": {
+        "key": "Error_HttpRequestFailed_Message",
+        "default": "ネットワーク接続を確認して、再試行してください。 問題が解決しない場合は、xBrowserSyncサービスに問題がある可能性があります。"
+      },
+      "Title": {
+        "key": "Error_HttpRequestFailed_Title",
+        "default": "同期に失敗しました"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",

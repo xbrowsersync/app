@@ -241,6 +241,16 @@
         "default": "Não foi possível recuperar a URL do favorito compartilhado"
       }
     },
+    "HttpRequestFailed": {
+      "Message": {
+        "key": "Error_HttpRequestFailed_Message",
+        "default": "Verifique sua conexão de rede e tente novamente. Se o problema persistir, pode haver um problema com o serviço xBrowserSync."
+      },
+      "Title": {
+        "key": "Error_HttpRequestFailed_Title",
+        "default": "Sincronização falhou"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",

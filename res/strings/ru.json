@@ -241,6 +241,16 @@
         "default": "Не удалось получить URL общей закладки"
       }
     },
+    "HttpRequestFailed": {
+      "Message": {
+        "key": "Error_HttpRequestFailed_Message",
+        "default": "Проверьте подключение к сети и попробуйте еще раз. Если проблема не исчезнет, возможно, проблема связана со службой xBrowserSync."
+      },
+      "Title": {
+        "key": "Error_HttpRequestFailed_Title",
+        "default": "Ошибка синхронизации"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
