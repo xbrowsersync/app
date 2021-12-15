@@ -289,7 +289,6 @@ export class AppBookmarkComponent implements OnInit {
               url: err.url
             } as BookmarkMetadata;
           }
-
           throw err;
         })
     );

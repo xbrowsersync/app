@@ -6,7 +6,9 @@ import {
   ClientDataNotFoundError,
   DailyNewSyncLimitReachedError,
   DataOutOfSyncError,
+  HttpRequestAbortedError,
   HttpRequestFailedError,
+  HttpRequestTimedOutError,
   InvalidServiceError,
   NetworkConnectionError,
   NotAcceptingNewSyncsError,
@@ -96,9 +98,7 @@ export class ApiXbrowsersyncService implements ApiService {
             url: `${serviceUrl}/${ApiXbrowsersyncResource.ServiceInformation}`,
             timeout: 3000
           };
-          return this.$http<ApiXbrowsersyncServiceInfoResponse>(requestConfig).catch((response) => {
-            throw this.getErrorFromHttpResponse(response);
-          });
+          return this.$http<ApiXbrowsersyncServiceInfoResponse>(requestConfig).catch(this.handleFailedRequest);
         })
         .then(this.apiRequestSucceeded)
         .then((response) => {
@@ -131,9 +131,7 @@ export class ApiXbrowsersyncService implements ApiService {
             };
             return this.$http
               .post<ApiCreateBookmarksResponse>(requestUrl, JSON.stringify(requestBody))
-              .catch((response) => {
-                throw this.getErrorFromHttpResponse(response);
-              });
+              .catch(this.handleFailedRequest);
           })
           .then(this.apiRequestSucceeded)
           .then((response) => {
@@ -168,9 +166,7 @@ export class ApiXbrowsersyncService implements ApiService {
             .getServiceUrl()
             .then((serviceUrl) => {
               const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}/${storeContent.syncId}`;
-              return this.$http.get<ApiGetBookmarksResponse>(requestUrl).catch((response) => {
-                throw this.getErrorFromHttpResponse(response);
-              });
+              return this.$http.get<ApiGetBookmarksResponse>(requestUrl).catch(this.handleFailedRequest);
             })
             .then(this.apiRequestSucceeded)
             .then((response) => {
@@ -206,9 +202,7 @@ export class ApiXbrowsersyncService implements ApiService {
             .getServiceUrl()
             .then((serviceUrl) => {
               const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}/${storeContent.syncId}/${ApiXbrowsersyncResource.LastUpdated}`;
-              return this.$http.get<ApiGetLastUpdatedResponse>(requestUrl).catch((response) => {
-                throw this.getErrorFromHttpResponse(response);
-              });
+              return this.$http.get<ApiGetLastUpdatedResponse>(requestUrl).catch(this.handleFailedRequest);
             })
             .then(this.apiRequestSucceeded)
             .then((response) => {
@@ -237,9 +231,7 @@ export class ApiXbrowsersyncService implements ApiService {
           .getServiceUrl()
           .then((serviceUrl) => {
             const requestUrl = `${serviceUrl}/${ApiXbrowsersyncResource.Bookmarks}/${syncId}/${ApiXbrowsersyncResource.Version}`;
-            return this.$http.get<ApiGetSyncVersionResponse>(requestUrl).catch((response) => {
-              throw this.getErrorFromHttpResponse(response);
-            });
+            return this.$http.get<ApiGetSyncVersionResponse>(requestUrl).catch(this.handleFailedRequest);
           })
           .then(this.apiRequestSucceeded)
           .then((response) => {
@@ -295,11 +287,23 @@ export class ApiXbrowsersyncService implements ApiService {
       case response.status >= 500:
         error = new ServiceOfflineError(message);
         break;
+      // Request timed out
+      case response.xhrStatus === 'timeout':
+        error = new HttpRequestTimedOutError();
+        break;
+      // Request timed out
+      case response.xhrStatus === 'abort':
+        error = new HttpRequestAbortedError();
+        break;
       // Otherwise generic request failed
       default:
         error = new HttpRequestFailedError(message);
     }
     return error;
+  }
+
+  handleFailedRequest(response: ng.IHttpResponse<ApiXbrowsersyncErrorResponse>): never {
+    throw this.getErrorFromHttpResponse(response);
   }
 
   updateBookmarks(
@@ -333,9 +337,7 @@ export class ApiXbrowsersyncService implements ApiService {
 
               return this.$http
                 .put<ApiUpdateBookmarksResponse>(requestUrl, JSON.stringify(requestBody))
-                .catch((response) => {
-                  throw this.getErrorFromHttpResponse(response);
-                });
+                .catch(this.handleFailedRequest);
             })
             .then(this.apiRequestSucceeded)
             .then((response) => {

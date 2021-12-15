@@ -76,9 +76,11 @@ export class FailedShareUrlNotSyncedError extends BaseError {}
 
 export class FailedUpdateNativeBookmarksError extends BaseError {}
 
-export class HttpRequestCancelledError extends BaseError {}
+export class HttpRequestAbortedError extends BaseError {}
 
 export class HttpRequestFailedError extends BaseError {}
+
+export class HttpRequestTimedOutError extends BaseError {}
 
 export class I18nError extends BaseError {}
 

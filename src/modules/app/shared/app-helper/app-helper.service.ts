@@ -81,6 +81,10 @@ export abstract class AppHelperService {
       }
       if (select && element.select) {
         element.select();
+      } else if (element.setSelectionRange) {
+        const strLength = element.value.length * 2;
+        element.focus();
+        element.setSelectionRange(strLength, strLength);
       } else if (element.focus) {
         element.focus();
       }

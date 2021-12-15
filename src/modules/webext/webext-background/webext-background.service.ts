@@ -10,7 +10,7 @@ import { BookmarkHelperService } from '../../shared/bookmark/bookmark-helper/boo
 import {
   AmbiguousSyncRequestError,
   FailedDownloadFileError,
-  HttpRequestCancelledError,
+  HttpRequestAbortedError,
   SyncNotFoundError
 } from '../../shared/errors/errors';
 import { ExceptionHandler } from '../../shared/errors/errors.interface';
@@ -204,7 +204,7 @@ export class WebExtBackgroundService {
               this.utilitySvc.isSyncEnabled().then((syncEnabledAfterError) => {
                 if (!syncEnabledAfterError) {
                   this.logSvc.logInfo('Sync was disabled before retry attempted');
-                  return reject(new HttpRequestCancelledError());
+                  return reject(new HttpRequestAbortedError());
                 }
                 this.syncSvc.checkForUpdates().then(resolve).catch(reject);
               });

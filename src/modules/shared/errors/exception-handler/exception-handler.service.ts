@@ -40,9 +40,14 @@ export class ExceptionHandlerService {
     };
 
     switch (error.constructor) {
+      case Errors.HttpRequestTimedOutError:
       case Errors.NetworkConnectionError:
         alertMessage.title = this.platformSvc.getI18nString(this.Strings.Error.NetworkConnection.Title);
         alertMessage.message = this.platformSvc.getI18nString(this.Strings.Error.NetworkConnection.Message);
+        break;
+      case Errors.HttpRequestFailedError:
+        alertMessage.title = this.platformSvc.getI18nString(this.Strings.Error.HttpRequestFailed.Title);
+        alertMessage.message = this.platformSvc.getI18nString(this.Strings.Error.HttpRequestFailed.Message);
         break;
       case Errors.TooManyRequestsError:
         alertMessage.title = this.platformSvc.getI18nString(this.Strings.Error.TooManyRequests.Title);
@@ -156,7 +161,7 @@ export class ExceptionHandlerService {
 
   handleError(error: Errors.BaseError, cause?: string, displayAlert = true): void {
     switch (error.constructor) {
-      case Errors.HttpRequestCancelledError:
+      case Errors.HttpRequestAbortedError:
         displayAlert = false;
         return;
       case Errors.NetworkConnectionError:

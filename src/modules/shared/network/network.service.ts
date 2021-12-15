@@ -1,6 +1,6 @@
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import { NetworkConnectionError } from '../errors/errors';
+import { HttpRequestTimedOutError, NetworkConnectionError } from '../errors/errors';
 
 @autobind
 @Injectable('NetworkService')
@@ -15,6 +15,6 @@ export class NetworkService {
   }
 
   isNetworkConnectionError(err: Error): boolean {
-    return err instanceof NetworkConnectionError;
+    return err instanceof HttpRequestTimedOutError || err instanceof NetworkConnectionError;
   }
 }

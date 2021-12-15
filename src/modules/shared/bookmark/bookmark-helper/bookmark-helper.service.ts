@@ -5,7 +5,7 @@ import { Bookmarks as NativeBookmarks } from 'webextension-polyfill';
 import { BookmarkSearchResult } from '../../../app/app-search/app-search.interface';
 import { ApiService } from '../../api/api.interface';
 import { CryptoService } from '../../crypto/crypto.service';
-import { BookmarkNotFoundError, HttpRequestCancelledError } from '../../errors/errors';
+import { BookmarkNotFoundError, HttpRequestAbortedError } from '../../errors/errors';
 import Globals from '../../global-shared.constants';
 import { PlatformService } from '../../global-shared.interface';
 import { StoreKey } from '../../store/store.enum';
@@ -424,7 +424,7 @@ export class BookmarkHelperService {
       })
       .catch((err) => {
         // Swallow error if request was cancelled
-        if (err instanceof HttpRequestCancelledError) {
+        if (err instanceof HttpRequestAbortedError) {
           return;
         }
 

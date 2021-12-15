@@ -241,6 +241,16 @@
         "default": "Unable to retrieve shared bookmark URL"
       }
     },
+    "HttpRequestFailed": {
+      "Message": {
+        "key": "Error_HttpRequestFailed_Message",
+        "default": "Check your network connection and try again. If the issue persists, there could be a problem with the xBrowserSync service."
+      },
+      "Title": {
+        "key": "Error_HttpRequestFailed_Title",
+        "default": "Sync failed"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
