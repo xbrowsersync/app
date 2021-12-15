@@ -241,6 +241,16 @@
         "default": "Kunde inte hämta delad bokmärkeswebbadress"
       }
     },
+    "HttpRequestFailed": {
+      "Message": {
+        "key": "Error_HttpRequestFailed_Message",
+        "default": "Kontrollera din nätverksanslutning och försök igen. Om problemet kvarstår kan det finnas ett problem med xBrowserSync-tjänsten."
+      },
+      "Title": {
+        "key": "Error_HttpRequestFailed_Title",
+        "default": "Synkronisering misslyckades"
+      }
+    },
     "InvalidCredentials": {
       "Message": {
         "key": "Error_InvalidCredentials_Message",
