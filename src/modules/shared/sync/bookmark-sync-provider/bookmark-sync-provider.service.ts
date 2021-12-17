@@ -373,7 +373,7 @@ export class BookmarkSyncProviderService implements SyncProvider {
                   // Upgrade bookmarks
                   const [appVersion, syncVersion] = result;
                   return this.upgradeSvc
-                    .upgradeBookmarks(bookmarks, syncVersion, appVersion)
+                    .upgradeBookmarks(appVersion, syncVersion, bookmarks)
                     .then((upgradedBookmarks) => {
                       // Check bookmark ids are all valid
                       if (!this.validateBookmarkIds(upgradedBookmarks)) {
@@ -409,9 +409,9 @@ export class BookmarkSyncProviderService implements SyncProvider {
     let idCounter = 1;
 
     // Get all bookmarks into flat array
-    this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
+    this.bookmarkHelperSvc.eachBookmark((bookmark) => {
       allBookmarks.push(bookmark as Bookmark);
-    });
+    }, bookmarks);
 
     // Remove any invalid ids
     allBookmarks.forEach((bookmark) => {
@@ -516,11 +516,11 @@ export class BookmarkSyncProviderService implements SyncProvider {
 
     // Find any bookmark without an id
     let bookmarksHaveIds = true;
-    this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
+    this.bookmarkHelperSvc.eachBookmark((bookmark) => {
       if (angular.isUndefined(bookmark.id ?? undefined)) {
         bookmarksHaveIds = false;
       }
-    });
+    }, bookmarks);
 
     if (!bookmarksHaveIds) {
       this.logSvc.logWarning('Bookmarks missing ids');
@@ -529,9 +529,9 @@ export class BookmarkSyncProviderService implements SyncProvider {
 
     // Get all bookmarks into flat array
     const allBookmarks: Bookmark[] = [];
-    this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
+    this.bookmarkHelperSvc.eachBookmark((bookmark) => {
       allBookmarks.push(bookmark as Bookmark);
-    });
+    }, bookmarks);
 
     // Find a bookmark with a non-numeric id
     const invalidId = allBookmarks.find((bookmark) => {

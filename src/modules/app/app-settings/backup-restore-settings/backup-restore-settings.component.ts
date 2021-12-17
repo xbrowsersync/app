@@ -114,9 +114,9 @@ export abstract class BackupRestoreSettingsComponent implements OnInit, OnDestro
       const reader = new FileReader();
 
       reader.onload = ((data) => {
-        return (event) => {
+        return () => {
           this.$timeout(() => {
-            this.dataToRestore = event.target.result;
+            this.dataToRestore = reader.result as string;
 
             // Reset validation interface
             this.resetRestoreFormValidity();

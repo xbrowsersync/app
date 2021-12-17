@@ -39,5 +39,6 @@
   "optional_permissions": [
     "http://*/",
     "https://*/"
-  ]
+  ],
+  "incognito": "not_allowed"
 }

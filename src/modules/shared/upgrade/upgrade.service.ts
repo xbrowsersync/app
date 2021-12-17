@@ -109,9 +109,9 @@ export class UpgradeService {
   }
 
   upgradeBookmarks(
-    bookmarks: Bookmark[] = [],
+    targetVersion: string,
     syncVersion: string = '1.0.0',
-    targetVersion: string
+    bookmarks: Bookmark[] = []
   ): ng.IPromise<Bookmark[]> {
     if (bookmarks.length === 0) {
       return this.$q.resolve(bookmarks);

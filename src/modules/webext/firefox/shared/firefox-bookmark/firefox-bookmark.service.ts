@@ -304,9 +304,9 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
             : browser.bookmarks.getSubTree(menuBookmarksId).then((subTree) => {
                 const [menuContainer] = subTree;
                 // Add all bookmarks into flat array
-                this.bookmarkHelperSvc.eachBookmark(menuContainer.children, (bookmark) => {
+                this.bookmarkHelperSvc.eachBookmark((bookmark) => {
                   allNativeBookmarks.push(bookmark);
-                });
+                }, menuContainer.children);
                 return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(menuContainer.children);
               });
 
@@ -321,9 +321,9 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
                 }
 
                 // Add all bookmarks into flat array
-                this.bookmarkHelperSvc.eachBookmark(otherContainer.children, (bookmark) => {
+                this.bookmarkHelperSvc.eachBookmark((bookmark) => {
                   allNativeBookmarks.push(bookmark);
-                });
+                }, otherContainer.children);
 
                 // Convert native bookmarks sub tree to bookmarks
                 const bookmarks = this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(otherContainer.children);
@@ -346,9 +346,9 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
                 return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
                   if (syncBookmarksToolbar && toolbarContainer.children.length > 0) {
                     // Add all bookmarks into flat array
-                    this.bookmarkHelperSvc.eachBookmark(toolbarContainer.children, (bookmark) => {
+                    this.bookmarkHelperSvc.eachBookmark((bookmark) => {
                       allNativeBookmarks.push(bookmark);
-                    });
+                    }, toolbarContainer.children);
                     return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(toolbarContainer.children);
                   }
                 });
@@ -396,7 +396,7 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
 
         // Iterate native bookmarks to add unique bookmark ids in correct order
         allNativeBookmarks.forEach((nativeBookmark) => {
-          this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
+          this.bookmarkHelperSvc.eachBookmark((bookmark) => {
             if (
               !bookmark.id &&
               ((!nativeBookmark.url && bookmark.title === nativeBookmark.title) ||
@@ -404,15 +404,15 @@ export class FirefoxBookmarkService extends WebExtBookmarkService {
             ) {
               bookmark.id = this.bookmarkHelperSvc.getNewBookmarkId(bookmarks);
             }
-          });
+          }, bookmarks);
         });
 
         // Find and fix any bookmarks missing ids
-        this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
+        this.bookmarkHelperSvc.eachBookmark((bookmark) => {
           if (!bookmark.id) {
             bookmark.id = this.bookmarkHelperSvc.getNewBookmarkId(bookmarks);
           }
-        });
+        }, bookmarks);
 
         return bookmarks;
       });

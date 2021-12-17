@@ -37,12 +37,12 @@ export abstract class V160UpgradeProviderService implements UpgradeProvider {
     const upgradedBookmarks = angular.copy(bookmarks);
 
     // Upgrade separators
-    this.bookmarkHelperSvc.eachBookmark(upgradedBookmarks, (bookmark) => {
+    this.bookmarkHelperSvc.eachBookmark((bookmark) => {
       if (bookmark.title === '-' && !bookmark.url && !bookmark.children) {
         bookmark.url = Globals.Bookmarks.SeparatorUrl;
         delete bookmark.title;
       }
-    });
+    }, upgradedBookmarks);
 
     // Move mobile bookmarks container into other bookmarks if present
     const mobileContainerIndex = upgradedBookmarks.findIndex((bookmark) => bookmark.title === '[xbs] Mobile');

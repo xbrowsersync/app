@@ -137,7 +137,7 @@ export class BackupRestoreService {
       .then((currentVersion) => {
         return syncVersion === currentVersion
           ? bookmarksToRestore
-          : this.upgradeSvc.upgradeBookmarks(bookmarksToRestore, syncVersion, currentVersion);
+          : this.upgradeSvc.upgradeBookmarks(currentVersion, syncVersion, bookmarksToRestore);
       })
       .then((upgradedBookmarks) =>
         this.utilitySvc

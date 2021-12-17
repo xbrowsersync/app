@@ -100,8 +100,8 @@ export class BookmarkHelperService {
   }
 
   eachBookmark<T = Bookmark>(
-    bookmarks: T[] = [],
     iteratee: (rootBookmark: T) => void,
+    bookmarks: T[] = [],
     untilCondition?: () => boolean
   ): void {
     // Run the iteratee function for every bookmark until the condition is met
@@ -186,12 +186,12 @@ export class BookmarkHelperService {
       return this.getCachedBookmarks().then((bookmarks) => {
         let targetBookmark: Bookmark | undefined;
         this.eachBookmark(
-          bookmarks,
           (bookmark) => {
             if (this.utilitySvc.stringsAreEquivalent(bookmark?.url, currentUrl, currentLocale)) {
               targetBookmark = bookmark;
             }
           },
+          bookmarks,
           () => !!targetBookmark
         );
         return targetBookmark;
@@ -203,12 +203,12 @@ export class BookmarkHelperService {
     return this.getCachedBookmarks().then((bookmarks) => {
       let targetBookmark: Bookmark;
       this.eachBookmark(
-        bookmarks,
         (bookmark) => {
           if (bookmark.id === id) {
             targetBookmark = bookmark;
           }
         },
+        bookmarks,
         () => !!targetBookmark
       );
       return targetBookmark;
@@ -334,12 +334,12 @@ export class BookmarkHelperService {
     let container: Bookmark | undefined;
     bookmarks.forEach((x) => {
       this.eachBookmark(
-        x.children,
         (child) => {
           if (child.id === id) {
             container = x;
           }
         },
+        x.children,
         () => !!container
       );
     });
@@ -399,7 +399,7 @@ export class BookmarkHelperService {
       .all([getBookmarks, this.platformSvc.getCurrentLocale()])
       .then((results) => {
         const [bookmarksToSearch, currentLocale] = results;
-        return this.searchBookmarksForLookaheads(bookmarksToSearch, word, currentLocale, tagsOnly);
+        return this.searchBookmarksForLookaheads(word, currentLocale, tagsOnly, bookmarksToSearch);
       })
       .then((lookaheads) => {
         // Remove exclusions from lookaheads
@@ -452,11 +452,11 @@ export class BookmarkHelperService {
   getNewBookmarkId(bookmarks: Bookmark[], takenIds: number[] = [0]): number {
     // Check existing bookmarks for highest id
     let highestId = 0;
-    this.eachBookmark(bookmarks, (bookmark) => {
+    this.eachBookmark((bookmark) => {
       if (!angular.isUndefined(bookmark.id ?? undefined) && parseInt(bookmark.id!.toString(), 10) > highestId) {
         highestId = parseInt(bookmark.id!.toString(), 10);
       }
-    });
+    }, bookmarks);
 
     // Compare highest id with supplied taken ids
     const highestTakenId = takenIds.reduce((x, y) => (x > y ? x : y));
@@ -548,7 +548,7 @@ export class BookmarkHelperService {
   removeBookmarkById(id: number, bookmarks: Bookmark[]): ng.IPromise<Bookmark[]> {
     // Iterate through bookmarks and remove the bookmark that matches the id param
     const updatedBookmarks = angular.copy(bookmarks);
-    this.eachBookmark(updatedBookmarks, (bookmark) => {
+    this.eachBookmark((bookmark) => {
       if (!bookmark.children) {
         return;
       }
@@ -556,7 +556,7 @@ export class BookmarkHelperService {
       if (indexToRemove >= 0) {
         bookmark.children.splice(indexToRemove, 1);
       }
-    });
+    }, updatedBookmarks);
     return this.$q.resolve(updatedBookmarks);
   }
 
@@ -597,8 +597,8 @@ export class BookmarkHelperService {
       // Search by keywords and sort (score desc, id desc) using results from url search if relevant
       results = this.searchBookmarksByKeywords(
         results ?? (bookmarks as BookmarkSearchResult[]),
-        query.keywords,
-        currentLocale
+        currentLocale,
+        query.keywords
       );
       return results
         .sort((x, y) => {
@@ -613,8 +613,8 @@ export class BookmarkHelperService {
 
   searchBookmarksByKeywords(
     bookmarks: Bookmark[],
-    keywords: string[] = [],
     locale: string,
+    keywords: string[] = [],
     results: BookmarkSearchResult[] = []
   ): BookmarkSearchResult[] {
     bookmarks.forEach((bookmark) => {
@@ -628,7 +628,7 @@ export class BookmarkHelperService {
       // If bookmark is a container or folder, search children
       if (bookmarkType === BookmarkType.Container || bookmarkType === BookmarkType.Folder) {
         if (bookmark.children?.length) {
-          this.searchBookmarksByKeywords(bookmark.children, keywords, locale, results);
+          this.searchBookmarksByKeywords(bookmark.children, locale, keywords, results);
         }
       } else {
         // Get match scores for each keyword against bookmark words
@@ -689,10 +689,10 @@ export class BookmarkHelperService {
   }
 
   searchBookmarksForLookaheads(
-    bookmarks: Bookmark[] = [],
     word: string,
     locale: string,
     tagsOnly = false,
+    bookmarks: Bookmark[] = [],
     results: string[] = []
   ): string[] {
     bookmarks.forEach((bookmark) => {
@@ -705,7 +705,7 @@ export class BookmarkHelperService {
 
       // If bookmark is a container or folder, search children
       if (bookmarkType === BookmarkType.Container || bookmarkType === BookmarkType.Folder) {
-        results = this.searchBookmarksForLookaheads(bookmark.children, word, locale, tagsOnly, results);
+        results = this.searchBookmarksForLookaheads(word, locale, tagsOnly, bookmark.children, results);
       } else {
         // Find all words that begin with lookahead word
         const bookmarkWords = this.getKeywordsFromBookmark(bookmark, locale, tagsOnly, true);

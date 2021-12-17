@@ -315,9 +315,9 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
               }
 
               // Add all bookmarks into flat array
-              this.bookmarkHelperSvc.eachBookmark(otherContainer.children, (bookmark) => {
+              this.bookmarkHelperSvc.eachBookmark((bookmark) => {
                 allNativeBookmarks.push(bookmark);
-              });
+              }, otherContainer.children);
 
               // Remove any unsupported container folders present
               const bookmarksWithoutContainers = this.bookmarkHelperSvc
@@ -339,9 +339,9 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
               return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
                 if (syncBookmarksToolbar && toolbarContainer.children.length > 0) {
                   // Add all bookmarks into flat array
-                  this.bookmarkHelperSvc.eachBookmark(toolbarContainer.children, (bookmark) => {
+                  this.bookmarkHelperSvc.eachBookmark((bookmark) => {
                     allNativeBookmarks.push(bookmark);
-                  });
+                  }, toolbarContainer.children);
                   return this.bookmarkHelperSvc.getNativeBookmarksAsBookmarks(
                     this.getNativeBookmarksWithSeparators(toolbarContainer.children)
                   );
@@ -392,7 +392,7 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
 
         // Iterate native bookmarks to add unique bookmark ids in correct order
         allNativeBookmarks.forEach((nativeBookmark) => {
-          this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
+          this.bookmarkHelperSvc.eachBookmark((bookmark) => {
             if (
               !bookmark.id &&
               ((!nativeBookmark.url && bookmark.title === nativeBookmark.title) ||
@@ -400,15 +400,15 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
             ) {
               bookmark.id = this.bookmarkHelperSvc.getNewBookmarkId(bookmarks);
             }
-          });
+          }, bookmarks);
         });
 
         // Find and fix any bookmarks missing ids
-        this.bookmarkHelperSvc.eachBookmark(bookmarks, (bookmark) => {
+        this.bookmarkHelperSvc.eachBookmark((bookmark) => {
           if (!bookmark.id) {
             bookmark.id = this.bookmarkHelperSvc.getNewBookmarkId(bookmarks);
           }
-        });
+        }, bookmarks);
 
         return bookmarks;
       });
@@ -419,12 +419,12 @@ export class ChromiumBookmarkService extends WebExtBookmarkService {
     nativeBookmarks: NativeBookmarks.BookmarkTreeNode[]
   ): NativeBookmarks.BookmarkTreeNode[] {
     // Check very bookmark setting type to separator to identify type when syncing
-    this.bookmarkHelperSvc.eachBookmark(nativeBookmarks, (bookmark) => {
+    this.bookmarkHelperSvc.eachBookmark((bookmark) => {
       if (this.isSeparator(bookmark)) {
         bookmark.type = BookmarkType.Separator;
       }
       return bookmark;
-    });
+    }, nativeBookmarks);
     return nativeBookmarks;
   }
 

@@ -62,7 +62,7 @@ export class AppHelpComponent implements OnInit {
     this.storeSvc.set(StoreKey.DisplayHelp, false).then(() => this.appHelperSvc.switchView());
   }
 
-  displayPage(pageToDisplay = 0, event: Event): void {
+  displayPage(event: Event, pageToDisplay = 0): void {
     this.utilitySvc.stopEventPropagation(event);
     if (pageToDisplay <= 0 || pageToDisplay > this.pages.length) {
       return this.close(event);
@@ -71,11 +71,11 @@ export class AppHelpComponent implements OnInit {
   }
 
   displayNextPage(event: Event): void {
-    this.displayPage(this.currentPage + 1, event);
+    this.displayPage(event, this.currentPage + 1);
   }
 
   displayPreviousPage(event: Event): void {
-    this.displayPage(this.currentPage - 1, event);
+    this.displayPage(event, this.currentPage - 1);
   }
 
   handleKeyDown(event: KeyboardEvent): void {

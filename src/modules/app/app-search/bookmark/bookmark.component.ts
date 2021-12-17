@@ -64,12 +64,12 @@ export class BookmarkComponent {
 
       // Close any open child folders
       if (!bookmark.open) {
-        this.bookmarkHelperSvc.eachBookmark(bookmark.children, (child) => {
+        this.bookmarkHelperSvc.eachBookmark((child) => {
           if ((child as BookmarkTreeItem).open) {
             (child as BookmarkTreeItem).open = false;
             (child as BookmarkTreeItem).displayChildren = false;
           }
-        });
+        }, bookmark.children);
       }
     }, 100);
   }

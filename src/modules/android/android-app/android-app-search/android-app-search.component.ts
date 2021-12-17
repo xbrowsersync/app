@@ -83,7 +83,7 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
       // Find parent of bookmark to delete
       let parent;
       let childIndex = -1;
-      this.bookmarkHelperSvc.eachBookmark(this.bookmarkTree, (current) => {
+      this.bookmarkHelperSvc.eachBookmark((current) => {
         if (angular.isUndefined(current.children ?? undefined) || current.children.length === 0) {
           return;
         }
@@ -96,7 +96,7 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
           parent = current;
           childIndex = index;
         }
-      });
+      }, this.bookmarkTree);
 
       // If target bookmark and parent were found, remove the bookmark
       if (parent && childIndex >= 0) {

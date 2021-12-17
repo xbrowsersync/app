@@ -332,7 +332,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
   ): ng.IPromise<number> {
     let processError: Error;
     let total = 0;
-    const createRecursive = (id: string, bookmarksToCreate: Bookmark[] = [], toolbarId: string) => {
+    const createRecursive = (id: string, toolbarId: string, bookmarksToCreate: Bookmark[] = []) => {
       const createChildBookmarksPromises = [];
 
       // Create bookmarks at the top level of the supplied array
@@ -350,7 +350,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
                   // If the bookmark has children, recurse
                   if (bookmark.children?.length) {
                     createChildBookmarksPromises.push(
-                      createRecursive(newNativeBookmark.id, bookmark.children, toolbarId)
+                      createRecursive(newNativeBookmark.id, toolbarId, bookmark.children)
                     );
                   }
                 });
@@ -365,7 +365,7 @@ export abstract class WebExtBookmarkService implements BookmarkService {
           throw err;
         });
     };
-    return createRecursive(parentId, bookmarks, nativeToolbarContainerId).then(() => total);
+    return createRecursive(parentId, nativeToolbarContainerId, bookmarks).then(() => total);
   }
 
   abstract createNativeSeparator(
@@ -419,9 +419,9 @@ export abstract class WebExtBookmarkService implements BookmarkService {
       return ids;
     }
 
-    this.bookmarkHelperSvc.eachBookmark(bookmark.children, (child) => {
+    this.bookmarkHelperSvc.eachBookmark((child) => {
       ids.push(child.id);
-    });
+    }, bookmark.children);
     return ids;
   }
 
