@@ -25,7 +25,7 @@ CD into the source directory and install the package and dependencies using NPM:
 
 You must follow the Cordova Android [installation guide](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html) in order to develop xBrowserSync for Android. Once that's done, run the following commands in the xBrowserSync source directory:
 
-    $ npm install -g cordova
+    $ npm install -g cordova@11.0.0
     $ cd ./res/android
     $ cordova prepare
 

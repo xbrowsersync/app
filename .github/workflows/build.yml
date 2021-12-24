@@ -55,7 +55,7 @@ jobs:
 
       - name: Install cordova
         run: |
-          npm install -g cordova@9.0.0
+          npm install -g cordova@11.0.0
           pushd res/android
           cordova telemetry off
           cordova prepare
