@@ -17,6 +17,7 @@ jobs:
   test:
     name: Run tests
     runs-on: ubuntu-latest
+    if: ${{false}}
     steps:
       - uses: actions/checkout@v2
 
@@ -37,7 +38,6 @@ jobs:
 
   build:
     name: Build platforms
-    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
