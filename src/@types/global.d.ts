@@ -22,7 +22,6 @@ interface CordovaPlugins {
   clipboard: any;
   exit: () => void;
   snackbar: any;
-  ThemeDetection: any;
 }
 
 interface Navigator {

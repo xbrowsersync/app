@@ -45,6 +45,13 @@ module.exports = (env, argv) => {
         }
       }
     },
+    optimization: {
+      splitChunks: {
+        chunks: 'all',
+        maxSize: 250000,
+        minSize: 10000
+      }
+    },
     plugins: [
       ...baseConfig.plugins,
       new CopyWebpackPlugin({

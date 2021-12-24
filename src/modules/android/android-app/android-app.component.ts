@@ -100,31 +100,6 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     this.upgradeSvc = UpgradeSvc;
   }
 
-  checkForDarkTheme(): ng.IPromise<void> {
-    // If dark mode setting is enabled, skip dark theme check
-    return this.settingsSvc.darkModeEnabled().then((darkModeEnabled) => {
-      if (darkModeEnabled) {
-        return;
-      }
-
-      // Check dark theme is supported
-      return this.$q<void>((resolve, reject) => {
-        window.cordova.plugins.ThemeDetection.isAvailable(resolve, reject);
-      }).then((isAvailable: any) => {
-        if (!isAvailable.value) {
-          return;
-        }
-
-        // Check dark theme is enabled
-        return this.$q<void>((resolve, reject) => {
-          window.cordova.plugins.ThemeDetection.isDarkModeEnabled(resolve, reject);
-        }).then((isDarkModeEnabled: any) => {
-          this.darkThemeEnabled = isDarkModeEnabled.value;
-        });
-      });
-    });
-  }
-
   checkForInstallOrUpgrade(): ng.IPromise<void> {
     // Get current app version
     return this.platformSvc.getAppVersion().then((appVersion) => {
@@ -310,24 +285,111 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
   }
 
   handleResume(): ng.IPromise<void> {
-    // Set theme
-    return this.checkForDarkTheme().then(() => {
-      // Check if sync enabled and reset network disconnected flag
-      this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
+    // Check if sync enabled and reset network disconnected flag
+    return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
+      if (!syncEnabled) {
+        return;
+      }
+
+      // If bookmark was shared, switch to bookmark view
+      return this.getSharedBookmark().then((sharedBookmark) => {
+        if (!angular.isUndefined(sharedBookmark)) {
+          this.handleBookmarkShared(sharedBookmark);
+          return this.appHelperSvc.switchView(RoutePath.Bookmark);
+        }
+
+        // Deselect bookmark
+        if (this.utilitySvc.checkCurrentRoute(RoutePath.Search)) {
+          this.utilitySvc.broadcastEvent(AppEventType.ClearSelectedBookmark);
+        }
+
+        // If not online return here
+        if (!this.networkSvc.isNetworkConnected()) {
+          return;
+        }
+
+        // Check for updates and run sync but don't wait before continuing
+        this.appHelperSvc
+          .getSyncQueueLength()
+          .then((syncQueueLength) => {
+            return syncQueueLength === 0 ? this.syncSvc.checkForUpdates(undefined, false) : true;
+          })
+          .then((runSync) => {
+            if (!runSync) {
+              return;
+            }
+
+            // Run sync
+            this.executeSyncIfOnline(WorkingContext.DelayedSyncing).then((isOnline) => {
+              if (isOnline) {
+                this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
+              }
+            });
+          })
+          .catch((err) => {
+            // Handle sync removed from service
+            if (err instanceof Errors.SyncNotFoundError) {
+              return this.syncSvc.setSyncRemoved().then(() => this.appHelperSvc.switchView());
+            }
+            throw err;
+          });
+      });
+    });
+  }
+
+  handleStartup(): ng.IPromise<void> {
+    this.logSvc.logInfo('Starting up');
+
+    return this.$q
+      .all([
+        this.platformSvc.getAppVersionName(),
+        this.platformSvc.getCurrentLocale(),
+        this.settingsSvc.checkForAppUpdates(),
+        this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId]),
+        this.utilitySvc.getServiceUrl(),
+        this.utilitySvc.getSyncVersion(),
+        this.utilitySvc.isSyncEnabled()
+      ])
+      .then((result) => {
+        // Add useful debug info to beginning of trace log
+        const [appVersion, currentLocale, checkForAppUpdates, storeContent, serviceUrl, syncVersion, syncEnabled] =
+          result;
+        const debugInfo = angular.copy(storeContent) as any;
+        debugInfo.appVersion = appVersion;
+        debugInfo.checkForAppUpdates = checkForAppUpdates;
+        debugInfo.currentLocale = currentLocale;
+        debugInfo.platform = {
+          name: window.device.platform,
+          device: `${window.device.manufacturer} ${window.device.model}`
+        };
+        debugInfo.serviceUrl = serviceUrl;
+        debugInfo.syncEnabled = syncEnabled;
+        debugInfo.syncVersion = syncVersion;
+        this.logSvc.logInfo(
+          Object.keys(debugInfo)
+            .filter((key) => {
+              return debugInfo[key] != null;
+            })
+            .reduce((prev, current) => {
+              prev[current] = debugInfo[current];
+              return prev;
+            }, {})
+        );
+
+        // Check for new app version
+        if (checkForAppUpdates) {
+          this.checkForNewVersion();
+        }
+
+        // Exit if sync not enabled
         if (!syncEnabled) {
           return;
         }
 
-        // If bookmark was shared, switch to bookmark view
+        // Check if a bookmark was shared
         return this.getSharedBookmark().then((sharedBookmark) => {
           if (!angular.isUndefined(sharedBookmark)) {
-            this.handleBookmarkShared(sharedBookmark);
-            return this.appHelperSvc.switchView(RoutePath.Bookmark);
-          }
-
-          // Deselect bookmark
-          if (this.utilitySvc.checkCurrentRoute(RoutePath.Search)) {
-            this.utilitySvc.broadcastEvent(AppEventType.ClearSelectedBookmark);
+            return this.handleBookmarkShared(sharedBookmark);
           }
 
           // If not online return here
@@ -362,99 +424,6 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
             });
         });
       });
-    });
-  }
-
-  handleStartup(): ng.IPromise<void> {
-    this.logSvc.logInfo('Starting up');
-
-    // Set theme
-    return this.checkForDarkTheme().then(() => {
-      return this.$q
-        .all([
-          this.platformSvc.getAppVersionName(),
-          this.platformSvc.getCurrentLocale(),
-          this.settingsSvc.checkForAppUpdates(),
-          this.storeSvc.get([StoreKey.LastUpdated, StoreKey.SyncId]),
-          this.utilitySvc.getServiceUrl(),
-          this.utilitySvc.getSyncVersion(),
-          this.utilitySvc.isSyncEnabled()
-        ])
-        .then((result) => {
-          // Add useful debug info to beginning of trace log
-          const [appVersion, currentLocale, checkForAppUpdates, storeContent, serviceUrl, syncVersion, syncEnabled] =
-            result;
-          const debugInfo = angular.copy(storeContent) as any;
-          debugInfo.appVersion = appVersion;
-          debugInfo.checkForAppUpdates = checkForAppUpdates;
-          debugInfo.currentLocale = currentLocale;
-          debugInfo.platform = {
-            name: window.device.platform,
-            device: `${window.device.manufacturer} ${window.device.model}`
-          };
-          debugInfo.serviceUrl = serviceUrl;
-          debugInfo.syncEnabled = syncEnabled;
-          debugInfo.syncVersion = syncVersion;
-          this.logSvc.logInfo(
-            Object.keys(debugInfo)
-              .filter((key) => {
-                return debugInfo[key] != null;
-              })
-              .reduce((prev, current) => {
-                prev[current] = debugInfo[current];
-                return prev;
-              }, {})
-          );
-
-          // Check for new app version
-          if (checkForAppUpdates) {
-            this.checkForNewVersion();
-          }
-
-          // Exit if sync not enabled
-          if (!syncEnabled) {
-            return;
-          }
-
-          // Check if a bookmark was shared
-          return this.getSharedBookmark().then((sharedBookmark) => {
-            if (!angular.isUndefined(sharedBookmark)) {
-              return this.handleBookmarkShared(sharedBookmark);
-            }
-
-            // If not online return here
-            if (!this.networkSvc.isNetworkConnected()) {
-              return;
-            }
-
-            // Check for updates and run sync but don't wait before continuing
-            this.appHelperSvc
-              .getSyncQueueLength()
-              .then((syncQueueLength) => {
-                return syncQueueLength === 0 ? this.syncSvc.checkForUpdates(undefined, false) : true;
-              })
-              .then((runSync) => {
-                if (!runSync) {
-                  return;
-                }
-
-                // Run sync
-                this.executeSyncIfOnline(WorkingContext.DelayedSyncing).then((isOnline) => {
-                  if (isOnline) {
-                    this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
-                  }
-                });
-              })
-              .catch((err) => {
-                // Handle sync removed from service
-                if (err instanceof Errors.SyncNotFoundError) {
-                  return this.syncSvc.setSyncRemoved().then(() => this.appHelperSvc.switchView());
-                }
-                throw err;
-              });
-          });
-        });
-    });
   }
 
   handleTouchStart(event: Event): void {

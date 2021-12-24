@@ -55,8 +55,12 @@
     <resource-file src="res/android/values/styles.xml" target="app/src/main/res/values/styles.xml" />
     <resource-file src="res/android/xml/network_security_config.xml" target="app/src/main/res/xml/network_security_config.xml" />
   </platform>
-  <preference name="android-minSdkVersion" value="28" />
+  <preference name="android-minSdkVersion" value="29" />
   <preference name="android-targetSdkVersion" value="29" />
+  <preference name="AndroidXEnabled" value="true" />
+  <preference name="GradlePluginKotlinEnabled" value="true" />
+  <preference name="GradlePluginKotlinCodeStyle" value="official" />
+  <preference name="GradlePluginKotlinVersion" value="1.3.50" />
   <preference name="AndroidLaunchMode" value="singleTask" />
   <preference name="BackgroundColor" value="#00000000"/>
   <preference name="DisallowOverscroll" value="true" />
