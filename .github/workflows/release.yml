@@ -25,6 +25,12 @@ jobs:
 
       - uses: android-actions/setup-android@v2
 
+      - name: Fix android build tools cordova issue
+        run: |
+          $ANDROID_SDK_ROOT/tools/bin/sdkmanager --uninstall "build-tools;32.0.0"
+          $ANDROID_SDK_ROOT/tools/bin/sdkmanager --uninstall "build-tools;31.0.0"
+          $ANDROID_SDK_ROOT/tools/bin/sdkmanager --install "build-tools;30.0.3"
+
       - name: Add android sdk build tools to PATH
         run: |
           cd $ANDROID_SDK_ROOT/build-tools/32.0.0

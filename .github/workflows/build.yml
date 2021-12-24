@@ -17,7 +17,6 @@ jobs:
   test:
     name: Run tests
     runs-on: ubuntu-latest
-    if: ${{false}}
     steps:
       - uses: actions/checkout@v2
 
@@ -39,6 +38,7 @@ jobs:
   build:
     name: Build platforms
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - uses: actions/checkout@v2
 
@@ -56,6 +56,7 @@ jobs:
       - name: Fix android build tools cordova issue
         run: |
           $ANDROID_SDK_ROOT/tools/bin/sdkmanager --uninstall "build-tools;32.0.0"
+          $ANDROID_SDK_ROOT/tools/bin/sdkmanager --uninstall "build-tools;31.0.0"
           $ANDROID_SDK_ROOT/tools/bin/sdkmanager --install "build-tools;30.0.3"
 
       - name: Install cordova
@@ -71,11 +72,9 @@ jobs:
 
       - name: Build platform:chromium
         run: npm run build:chromium
-        if: ${{false}}
 
       - name: Build platform:firefox
         run: npm run build:firefox
-        if: ${{false}}
 
       - name: Build platform:android
         run: |
