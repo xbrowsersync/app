@@ -33,7 +33,7 @@ jobs:
 
       - name: Add android sdk build tools to PATH
         run: |
-          cd $ANDROID_SDK_ROOT/build-tools/30.0.3"
+          cd $ANDROID_SDK_ROOT/build-tools/30.0.3
           ls -l
           echo "${{ env.ANDROID_SDK_ROOT }}/build-tools/30.0.3" >> $GITHUB_PATH
           echo "GITHUB_PATH = $GITHUB_PATH"
