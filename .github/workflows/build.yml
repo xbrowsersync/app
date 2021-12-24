@@ -66,9 +66,11 @@ jobs:
 
       - name: Build platform:chromium
         run: npm run build:chromium
+        if: ${{false}}
 
       - name: Build platform:firefox
         run: npm run build:firefox
+        if: ${{false}}
 
       - name: Build platform:android
         run: |
