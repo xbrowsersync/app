@@ -50,12 +50,22 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Create packages
-        run: |
-          npm run package:chromium
-          npm run package:firefox
-          npm run package:android
+      - name: Create Chromium package
+        run: npm run package:chromium
         env:
+          BETA: ${{ github.event.inputs.beta_release == 'true' }}
+
+      - name: Create Firefox package
+        run: npm run package:firefox
+        env:
+          BETA: ${{ github.event.inputs.beta_release == 'true' }}
+
+      - name: Create Android package
+        run: npm run package:android
+        env:
+          SIGNING_ALIAS: ${{ secrets.ANDROID_SIGNING_ALIAS }}
+          SIGNING_PASSWORD: ${{ secrets.ANDROID_SIGNING_PASSWORD }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.ANDROID_SIGNING_STORE_PASSWORD }}
           BETA: ${{ github.event.inputs.beta_release == 'true' }}
 
       - name: Set release version env var
