@@ -14,6 +14,10 @@ const signingAlias = process.env.SIGNING_ALIAS;
 const signingPassword = process.env.SIGNING_PASSWORD;
 const signingStorePassword = process.env.SIGNING_STORE_PASSWORD;
 
+if (!signingAlias || !signingPassword || !signingStorePassword) {
+  throw new Error('Signing values incomplete');
+}
+
 if (fs.existsSync(pathToApk)) {
   fs.unlinkSync(pathToApk);
 }
@@ -46,11 +50,10 @@ runCommand(
   `cordova build android --release -- --keystore=${pathToKeyStore} --storePassword=${signingStorePassword} --alias=${signingAlias} --password=${signingPassword}`,
   './build/android',
   () => {
+    console.log('Build complete');
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir);
     }
-    if (fs.existsSync(pathToApk)) {
-      fs.copyFileSync(pathToApk, outputFilePath);
-    }
+    fs.copyFileSync(pathToApk, outputFilePath);
   }
 );

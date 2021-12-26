@@ -51,11 +51,13 @@ jobs:
         run: npm install
 
       - name: Create Chromium package
+        if: ${{false}}
         run: npm run package:chromium
         env:
           BETA: ${{ github.event.inputs.beta_release == 'true' }}
 
       - name: Create Firefox package
+        if: ${{false}}
         run: npm run package:firefox
         env:
           BETA: ${{ github.event.inputs.beta_release == 'true' }}
@@ -83,6 +85,5 @@ jobs:
             dist/xbrowsersync_${{ env.RELEASE_VERSION }}_chromium.zip
             dist/xbrowsersync_${{ env.RELEASE_VERSION }}_firefox.xpi
             dist/xbrowsersync_${{ env.RELEASE_VERSION }}_android.apk
-            dist/xbrowsersync_${{ env.RELEASE_VERSION }}_android_unsigned.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
