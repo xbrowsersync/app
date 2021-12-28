@@ -30,7 +30,7 @@ const updateBuildNumberForAndroid = () => {
   const data = fs.readFileSync(filePath);
   parser.parseString(data, (err, result) => {
     result.widget.$.version = `v${versionName}`;
-    result.widget.$['android-versionCode'] = getAndroidVersionCode(versionNum);
+    result.widget.$['android-versionCode'] = getAndroidVersionCode(versionName);
     const xml = builder.buildObject(result);
     fs.writeFileSync(filePath, xml);
   });
