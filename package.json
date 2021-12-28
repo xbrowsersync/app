@@ -47,7 +47,6 @@
     "@types/webextension-polyfill": "^0.8.2",
     "@zxcvbn-ts/core": "^1.0.0",
     "@zxcvbn-ts/language-common": "^1.0.0",
-    "@zxcvbn-ts/language-de": "^1.0.0",
     "@zxcvbn-ts/language-en": "^1.0.0",
     "angular": "^1.8.2",
     "angular-animate": "^1.8.2",

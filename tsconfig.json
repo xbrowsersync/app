@@ -4,12 +4,12 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "ES2020",
+    "module": "ES2015",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "sourceMap": true,
     "strictFunctionTypes": true,
-    "target": "ES2020"
+    "target": "ES2015"
   },
   "include": ["src/**/*.ts"]
 }

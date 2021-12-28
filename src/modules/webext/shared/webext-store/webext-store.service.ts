@@ -31,7 +31,7 @@ export class WebExtStoreService extends StoreService {
     return clear(this.getStore());
   }
 
-  protected getFromStore<T = StoreContent>(keys: IDBValidKey[] = []): ng.IPromise<T[]> {
+  protected getFromStore<T = StoreContent>(keys: string[] = []): ng.IPromise<T[]> {
     const values = new Array(keys.length);
     return this.$q<T[]>((resolve, reject) => {
       // Get non-trace log values
@@ -66,22 +66,22 @@ export class WebExtStoreService extends StoreService {
     return this.store;
   }
 
-  protected keys(): ng.IPromise<IDBValidKey[]> {
+  protected keys(): ng.IPromise<string[]> {
     return this.$q.resolve().then(() => idbKeys(this.getStore()));
   }
 
-  protected removeFromStore(keys: IDBValidKey[] = []): ng.IPromise<void> {
+  protected removeFromStore(keys: string[] = []): ng.IPromise<void> {
     return this.$q.all(keys.map((key) => del(key, this.getStore()))).then(() => {});
   }
 
-  protected setInStore(key: IDBValidKey, value: any): ng.IPromise<void> {
+  protected setInStore(key: string, value: any): ng.IPromise<void> {
     if (key === StoreKey.TraceLog) {
       return this.addTraceLog(value);
     }
     return this.setInIdbKeyval(key, value);
   }
 
-  protected setInIdbKeyval(key: IDBValidKey, value: any): ng.IPromise<void> {
+  protected setInIdbKeyval(key: string, value: any): ng.IPromise<void> {
     return set(key, value, this.getStore());
   }
 }

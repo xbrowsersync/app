@@ -15,11 +15,11 @@ export abstract class StoreService {
 
   protected abstract clear(): ng.IPromise<void>;
 
-  get<T = StoreContent>(keys?: IDBValidKey | IDBValidKey[]): ng.IPromise<T> {
+  get<T = StoreContent>(keys?: string | string[]): ng.IPromise<T> {
     // If no keys provided, get all keys from store
     return (angular.isUndefined(keys ?? undefined) ? this.keys() : this.$q.resolve(keys)).then((allKeys) => {
       // Ensure the keys param is an array before processing
-      const keysArr = Array.isArray(allKeys) ? (allKeys as IDBValidKey[]) : [allKeys];
+      const keysArr = Array.isArray(allKeys) ? (allKeys as string[]) : [allKeys];
       return this.getFromStore(keysArr)
         .then((keyValues) => {
           // Convert the keys and key values into a return object
@@ -39,7 +39,7 @@ export abstract class StoreService {
     });
   }
 
-  protected abstract getFromStore<T = StoreContent>(keys: IDBValidKey[]): ng.IPromise<T[]>;
+  protected abstract getFromStore<T = StoreContent>(keys: string[]): ng.IPromise<T[]>;
 
   init(): ng.IPromise<void> {
     return this.clear()
@@ -61,16 +61,16 @@ export abstract class StoreService {
       .then(() => {});
   }
 
-  protected abstract keys(): ng.IPromise<IDBValidKey[]>;
+  protected abstract keys(): ng.IPromise<string[]>;
 
   remove(keys: string | string[]): ng.IPromise<void> {
     const keysArr = Array.isArray(keys) ? keys : [keys];
     return this.removeFromStore(keysArr);
   }
 
-  protected abstract removeFromStore(keys: IDBValidKey[]): ng.IPromise<void>;
+  protected abstract removeFromStore(keys: string[]): ng.IPromise<void>;
 
-  set(key: IDBValidKey, value?: any): ng.IPromise<void> {
+  set(key: string, value?: any): ng.IPromise<void> {
     if (angular.isUndefined(key ?? undefined)) {
       return this.$q.resolve();
     }
@@ -85,5 +85,5 @@ export abstract class StoreService {
     });
   }
 
-  protected abstract setInStore(key: IDBValidKey, value: any): ng.IPromise<void>;
+  protected abstract setInStore(key: string, value: any): ng.IPromise<void>;
 }

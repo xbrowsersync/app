@@ -14,7 +14,7 @@ export class AndroidStoreService extends StoreService {
   db: any;
   dbName = 'xbs.db';
   idCol = 'id';
-  nativeStorageKeys: IDBValidKey[] = [
+  nativeStorageKeys: string[] = [
     StoreKey.AlternateSearchBarPosition,
     StoreKey.AutoFetchMetadata,
     StoreKey.CheckForAppUpdates,
@@ -28,7 +28,7 @@ export class AndroidStoreService extends StoreService {
     StoreKey.SyncBookmarksToolbar,
     StoreKey.SyncEnabled
   ];
-  sqlKeys: IDBValidKey[] = [
+  sqlKeys: string[] = [
     StoreKey.Bookmarks,
     StoreKey.LastUpdated,
     StoreKey.Password,
@@ -104,7 +104,7 @@ export class AndroidStoreService extends StoreService {
     }).catch(this.handleSqlError);
   }
 
-  protected getFromStore<T = StoreContent>(keys: IDBValidKey[] = []): ng.IPromise<T[]> {
+  protected getFromStore<T = StoreContent>(keys: string[] = []): ng.IPromise<T[]> {
     return this.$q<T[]>((resolve, reject) => {
       // Separate keys
       const keysForNativeStorage = keys.filter((key) => this.nativeStorageKeys.includes(key));
@@ -158,7 +158,7 @@ export class AndroidStoreService extends StoreService {
     }).catch(this.handleSqlError);
   }
 
-  protected getFromNativeStorage<T = StoreContent>(key: IDBValidKey): ng.IPromise<T> {
+  protected getFromNativeStorage<T = StoreContent>(key: string): ng.IPromise<T> {
     return this.$q<T>((resolve, reject) => {
       if (angular.isUndefined(key ?? undefined)) {
         return resolve();
@@ -174,7 +174,7 @@ export class AndroidStoreService extends StoreService {
     });
   }
 
-  protected getFromSql<T = StoreContent>(keys: IDBValidKey[] = []): ng.IPromise<T[]> {
+  protected getFromSql<T = StoreContent>(keys: string[] = []): ng.IPromise<T[]> {
     const values = new Array(keys.length);
     return this.$q<T[]>((resolve, reject) => {
       // Get non-trace log values
@@ -213,8 +213,8 @@ export class AndroidStoreService extends StoreService {
     throw new FailedLocalStorageError(err.message);
   }
 
-  protected keys(): ng.IPromise<IDBValidKey[]> {
-    return this.$q<IDBValidKey[]>((resolve, reject) => window.NativeStorage.keys(resolve, reject)).then((keys) => {
+  protected keys(): ng.IPromise<string[]> {
+    return this.$q<string[]>((resolve, reject) => window.NativeStorage.keys(resolve, reject)).then((keys) => {
       return keys.concat(this.sqlKeys);
     });
   }
@@ -239,7 +239,7 @@ export class AndroidStoreService extends StoreService {
       .catch(this.handleSqlError);
   }
 
-  protected removeFromStore(keys: IDBValidKey[] = []): ng.IPromise<void> {
+  protected removeFromStore(keys: string[] = []): ng.IPromise<void> {
     // Separate keys
     const keysForNativeStorage = keys.filter((key) => this.nativeStorageKeys.includes(key));
     const keysForSql = keys.filter((key) => this.sqlKeys.includes(key));
@@ -254,18 +254,18 @@ export class AndroidStoreService extends StoreService {
       .then(() => {});
   }
 
-  protected setInStore(key: IDBValidKey, value: any): ng.IPromise<void> {
+  protected setInStore(key: string, value: any): ng.IPromise<void> {
     if (this.nativeStorageKeys.includes(key)) {
       return this.setInNativeStorage(key, value);
     }
     return this.setInSql(key, value);
   }
 
-  protected setInNativeStorage(key: IDBValidKey, value: any): ng.IPromise<void> {
+  protected setInNativeStorage(key: string, value: any): ng.IPromise<void> {
     return this.$q((resolve, reject) => window.NativeStorage.setItem(key, value, resolve, reject));
   }
 
-  protected setInSql(key: IDBValidKey, value: any): ng.IPromise<void> {
+  protected setInSql(key: string, value: any): ng.IPromise<void> {
     // For trace log use relevant method
     if (key === StoreKey.TraceLog) {
       return angular.isUndefined(value ?? undefined) ? this.clearTraceLog() : this.addTraceLog(value);

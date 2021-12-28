@@ -50,7 +50,6 @@ runCommand(
   `cordova build android --release -- --keystore=${pathToKeyStore} --storePassword=${signingStorePassword} --alias=${signingAlias} --password=${signingPassword}`,
   './build/android',
   () => {
-    console.log('Build complete');
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir);
     }
