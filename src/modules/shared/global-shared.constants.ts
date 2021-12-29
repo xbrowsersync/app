@@ -25,7 +25,7 @@ export default {
   QrCode: {
     Delimiter: '|$$|'
   },
-  ReleaseNotesUrlStem: 'https://github.com/xbrowsersync/app/releases/tag/',
+  ReleaseNotesUrlStem: 'https://github.com/xbrowsersync/app/releases/tag/v',
   ReleaseLatestUrl: 'https://api.github.com/repos/xbrowsersync/app/releases/latest',
   Title: 'xBrowserSync',
   URL: {

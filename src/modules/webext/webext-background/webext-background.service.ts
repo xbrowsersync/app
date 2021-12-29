@@ -133,7 +133,7 @@ export class WebExtBackgroundService {
             .replace('{version}', newVersion),
           title: this.platformSvc.getI18nString(this.Strings.Alert.AppUpdateAvailable.Title)
         };
-        this.displayAlert(alert, Globals.ReleaseNotesUrlStem + newVersion.replace(/^v/, ''));
+        this.displayAlert(alert, `${Globals.ReleaseNotesUrlStem}${newVersion}`);
       });
     });
   }

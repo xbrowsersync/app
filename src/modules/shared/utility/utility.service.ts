@@ -86,7 +86,7 @@ export class UtilityService {
     return this.$http
       .get<any>(Globals.ReleaseLatestUrl)
       .then((response) => {
-        const latestVersion = response?.data?.tag_name ?? '';
+        const latestVersion = this.getSemVerAlignedVersion(response?.data?.tag_name ?? '');
         if (!this.compareVersions(latestVersion, currentVersion, '>', true)) {
           return '';
         }
@@ -110,7 +110,7 @@ export class UtilityService {
   compareVersions(firstVersion: string, secondVersion: string, operator: string, includeBeta = false): boolean {
     const regex = includeBeta
       ? /^[vV]?(\d+\.\d+\.\d+(-\w+\.\d+)?)(\.\d+)?$/
-      : /^[vV]?(\d+\.\d+\.\d+)(\.\d+|-\w+\.\d+)$/;
+      : /^[vV]?(\d+\.\d+\.\d+)(\.\d+|-\w+\.\d+)?$/;
     return compare(firstVersion?.replace(regex, '$1'), secondVersion?.replace(regex, '$1'), operator as any);
   }
 
@@ -135,6 +135,10 @@ export class UtilityService {
     const month = `0${date.getMonth() + 1}`.slice(-2);
     const year = date.getFullYear();
     return year + month + day + hour + minute + second;
+  }
+
+  getSemVerAlignedVersion(version: string): string {
+    return version.replace(/^[vV]?(\d+\.\d+\.\d+)(\.\d+|-\w+\.\d+)?$/, '$1');
   }
 
   getServiceUrl(): ng.IPromise<string> {

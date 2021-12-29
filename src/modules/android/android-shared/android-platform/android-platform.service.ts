@@ -237,7 +237,7 @@ export class AndroidPlatformService implements PlatformService {
 
   getAppVersion(): ng.IPromise<string> {
     return this.$q.when(window.cordova.getAppVersion.getVersionNumber()).then((versionNumber: string) => {
-      return versionNumber.replace(/^[vV]?(\d+\.\d+\.\d+)(\.\d+|-\w+\.\d+)$/, '$1');
+      return this.utilitySvc.getSemVerAlignedVersion(versionNumber);
     });
   }
 

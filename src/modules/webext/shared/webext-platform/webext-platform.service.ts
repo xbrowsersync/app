@@ -129,7 +129,8 @@ export abstract class WebExtPlatformService implements PlatformService {
   }
 
   getAppVersion(): ng.IPromise<string> {
-    return this.$q.resolve(browser.runtime.getManifest().version);
+    const appVersion = browser.runtime.getManifest().version;
+    return this.$q.resolve(this.utilitySvc.getSemVerAlignedVersion(appVersion));
   }
 
   getAppVersionName(): ng.IPromise<string> {

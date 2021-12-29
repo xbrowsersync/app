@@ -150,7 +150,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
               .replace('{version}', newVersion),
             action: this.platformSvc.getI18nString(this.Strings.Button.View),
             actionCallback: () => {
-              this.platformSvc.openUrl(Globals.ReleaseNotesUrlStem + (newVersion as string).replace(/^v/, ''));
+              this.platformSvc.openUrl(`${Globals.ReleaseNotesUrlStem}${newVersion}`);
             }
           } as AndroidAlert);
         });

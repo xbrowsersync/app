@@ -1,5 +1,5 @@
 <div class="view-content">
-  <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Updated.Title) }} {{ vm.appVersion }}</h4>
+  <h4>{{ vm.platformSvc.getI18nString(vm.Strings.View.Updated.Title) }} v{{ vm.appVersion }}</h4>
   <div ng-bind-html="vm.platformSvc.getI18nString(vm.Strings.View.Updated.Content)"></div>
   <div class="buttons vertical">
     <button type="button" class="btn btn-default" ng-click="vm.utilitySvc.handleEvent(vm.displayReleaseNotes)">
