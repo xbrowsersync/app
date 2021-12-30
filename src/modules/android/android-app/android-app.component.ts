@@ -147,7 +147,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
           this.alertSvc.setCurrentAlert({
             message: this.platformSvc
               .getI18nString(this.Strings.Alert.AppUpdateAvailable.Message)
-              .replace('{version}', newVersion),
+              .replace('{version}', `v${newVersion}`),
             action: this.platformSvc.getI18nString(this.Strings.Button.View),
             actionCallback: () => {
               this.platformSvc.openUrl(`${Globals.ReleaseNotesUrlStem}${newVersion}`);

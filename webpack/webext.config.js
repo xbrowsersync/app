@@ -46,6 +46,7 @@ module.exports = (env, argv) => {
       }
     },
     optimization: {
+      ...baseConfig.optimization,
       splitChunks: {
         chunks: 'all',
         maxSize: 250000,
@@ -78,7 +79,7 @@ module.exports = (env, argv) => {
               const appPackage = JSON.parse(fs.readFileSync(Path.resolve(__dirname, '../package.json')));
               const manifest = JSON.parse(buffer.toString());
               manifest.version = appPackage.version;
-              manifest.version_name = `v${appPackage.version}`;
+              manifest.version_name = appPackage.version;
               return JSON.stringify(manifest, null, 2);
             }
           }

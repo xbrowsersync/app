@@ -56,7 +56,7 @@ module.exports = (env, argv) => {
               const builder = new xml2js.Builder();
               let xml = '';
               parser.parseString(buffer.toString(), (err, result) => {
-                result.widget.$.version = `v${appPackage.version}`;
+                result.widget.$.version = appPackage.version;
                 result.widget.$['android-versionCode'] = getAndroidVersionCode(`${appPackage.version}.0`);
                 xml = builder.buildObject(result);
               });

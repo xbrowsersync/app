@@ -130,7 +130,7 @@ export class WebExtBackgroundService {
         const alert: Alert = {
           message: this.platformSvc
             .getI18nString(this.Strings.Alert.AppUpdateAvailable.Message)
-            .replace('{version}', newVersion),
+            .replace('{version}', `v${newVersion}`),
           title: this.platformSvc.getI18nString(this.Strings.Alert.AppUpdateAvailable.Title)
         };
         this.displayAlert(alert, `${Globals.ReleaseNotesUrlStem}${newVersion}`);
@@ -594,7 +594,7 @@ export class WebExtBackgroundService {
         return this.platformSvc.getAppVersionName().then((appVersion) => {
           const alert: Alert = {
             message: this.platformSvc.getI18nString(this.Strings.Alert.AppUpdated.Message),
-            title: `${this.platformSvc.getI18nString(this.Strings.Alert.AppUpdated.Title)} ${appVersion}`
+            title: `${this.platformSvc.getI18nString(this.Strings.Alert.AppUpdated.Title)} v${appVersion}`
           };
           this.displayAlert(alert, `${Globals.ReleaseNotesUrlStem}${appVersion}`);
           return this.storeSvc.set(StoreKey.DisplayUpdated, true);
