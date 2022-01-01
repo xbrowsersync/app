@@ -1,230 +1,232 @@
 @import '../../../styles/modules/all';
 
-.disable-transitions {
-  .view-content * {
-    transition: none !important;
-  }
-}
-
-.lookahead-container {
-  border: 1px solid transparent;
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  left: 1rem;
-  line-height: 2.4rem;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  white-space: nowrap;
-  width: 100%;
-
-  .lookahead,
-  .measure {
-    background-color: transparent;
-    color: var(--color-input-placeholder);
-    cursor: pointer;
-    margin: auto 0;
-    user-select: none;
-    z-index: 60;
+app {
+  .disable-transitions {
+    .view-content * {
+      transition: none !important;
+    }
   }
 
-  .measure {
-    visibility: hidden;
-  }
-}
-
-.progress-bar {
-  &-danger {
-    background-color: var(--color-danger) !important;
-  }
-
-  &-success {
-    background-color: var(--color-success) !important;
-  }
-
-  &-warning {
-    background-color: var(--color-warning) !important;
-  }
-}
-
-.service-message {
-  font-style: italic;
-  overflow-y: auto;
-  padding: 1px;
-  quotes: '\201c''\201d';
-  text-align: center;
-
-  &::before {
-    content: open-quote;
-  }
-
-  &::after {
-    content: close-quote;
-  }
-}
-
-.spinner-border {
-  @include spinner-colour(var(--color-spinner));
-
-  animation-duration: 1s;
-
-  &-sm {
-    border-width: 0.15em;
-    height: 1rem;
-    vertical-align: baseline;
-    width: 1rem;
-  }
-}
-
-.status-icon {
-  position: relative;
-  z-index: 5;
-
-  .status-icon-bg {
-    background-color: var(--color-status-bg);
-    border-radius: 100%;
-    height: 0.8rem;
-    left: 0.1rem;
+  .lookahead-container {
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    left: 1rem;
+    line-height: 2.4rem;
+    overflow: hidden;
     position: absolute;
-    top: 0.2rem;
-    width: 0.8rem;
-    z-index: -1;
-  }
-}
+    top: 0;
+    white-space: nowrap;
+    width: 100%;
 
-.theme-container {
-  @mixin theme-dark() {
-    @media (prefers-color-scheme: dark) {
-      @content;
+    .lookahead,
+    .measure {
+      background-color: transparent;
+      color: var(--color-input-placeholder);
+      cursor: pointer;
+      margin: auto 0;
+      user-select: none;
+      z-index: 60;
     }
 
-    &.theme-dark {
-      @content;
+    .measure {
+      visibility: hidden;
     }
   }
 
-  --color-bg-primary: #{$color-bg1-default};
-  --color-bg-secondary: #{$color-bg2-default};
-  --color-text: #{$color-text1-default};
-  --color-link: #{$color-text1-default};
-  --color-link-hover: #{$color-bg2-default};
-  --color-button-default-bg: rgba(#{hex2rgb($color-text1-default)}, 0.3);
-  --color-button-default-border: #{$color-bg3-default};
-  --color-button-default-text: #{$color-text1-default};
-  --color-button-default-bg-disabled: rgba(#{hex2rgb($color-bg3-default)}, 0.3);
-  --color-button-default-border-disabled: #{$color-bg3-default};
-  --color-button-default-text-disabled: #{$color-text1-default};
-  --color-button-default-bg-hover: #{$color-text1-default};
-  --color-button-default-border-hover: #{$color-text1-default};
-  --color-button-default-text-hover: #{$color-bg2-default};
-  --color-button-fab-bg: #{$color-text2-default};
-  --color-button-fab-text: #{$color-text1-default};
-  --color-button-icon-text: #{$color-text2-default};
-  --color-input-bg: #{$color-bg3-default};
-  --color-input-border: #{$color-bg3-default};
-  --color-input-text: #{$color-text2-default};
-  --color-input-placeholder: #{$color-text3-default};
-  --color-input-button-bg: #{$color-text2-default};
-  --color-input-button-icon: #{$color-bg3-default};
-  --color-input-button-icon-hover: #{darken($color-text3-default, 15%)};
-  --color-checkbox-bg: #{$color-text2-default};
-  --color-checkbox-toggle: #{$color-bg2-default};
-  --color-validation-text: #{$color-text1-default};
-  --color-overlay: rgba(#{hex2rgb($color-text2-default)}, 0.5);
-  --color-darker-overlay: rgba(#{hex2rgb($color-text2-default)}, 0.9);
-  --color-well-bg: #{$color-bg3-default};
-  --color-well-text: #{$color-text2-default};
-  --color-well-link: #{$color-text2-default};
-  --color-well-link-hover: #{$color-bg2-default};
-  --color-well-input-border: #{$color-text2-default};
-  --color-well-button-bg: #{$color-bg3-default};
-  --color-well-button-border: #{$color-text2-default};
-  --color-well-button-text: #{$color-text2-default};
-  --color-well-button-bg-disabled: #{$color-bg3-default};
-  --color-well-button-border-disabled: #{$color-text2-default};
-  --color-well-button-text-disabled: #{$color-text2-default};
-  --color-well-button-bg-hover: #{$color-text2-default};
-  --color-well-button-border-hover: #{$color-text2-default};
-  --color-well-button-text-hover: #{$color-bg2-default};
-  --color-spinner: #{$color-bg2-default};
-  --color-status-bg: #{$color-text1-default};
-  --color-bookmark-bg: #{$color-bg3-default};
-  --color-bookmark-bg-hover: #{scale-color($color-bg2-default, $lightness: 70%, $saturation: 50%)};
-  --color-bookmark-heading: #{$color-text2-default};
-  --color-bookmark-menu-bg: rgba(#{hex2rgb($color-text2-default)}, 0.8);
-  --color-bookmark-menu-button-delete-icon: #{$color-text1-default};
-  --color-bookmark-menu-button-icon: #{$color-text2-default};
-  --color-bookmark-menu-button-bg: #{$color-bg3-default};
-  --color-bookmark-text: #{$color-text2-default};
-  --color-bookmark-url: #{$color-text3-default};
-  --color-separator-bg: rgba(#{hex2rgb($color-text2-default)}, 0.2);
-  --color-success: #{$color-success-default};
-  --color-warning: #{$color-warning-default};
-  --color-danger: #{$color-danger-default};
+  .progress-bar {
+    &-danger {
+      background-color: var(--color-danger) !important;
+    }
 
-  color: var(--color-text);
-  height: 100%;
-  width: 100%;
+    &-success {
+      background-color: var(--color-success) !important;
+    }
 
-  @include theme-dark {
-    --color-bg-primary: #{$color-bg1-dark};
-    --color-bg-secondary: #{$color-bg1-dark};
-    --color-text: #{$color-text3-dark};
-    --color-link: #{$color-text3-dark};
-    --color-link-hover: #{$color-text1-dark};
-    --color-button-default-bg: #{$color-bg2-dark};
-    --color-button-default-border: #{$color-text3-dark};
-    --color-button-default-text: #{$color-text3-dark};
-    --color-button-default-bg-disabled: rgba(#{hex2rgb($color-bg2-dark)}, 0.3);
-    --color-button-default-border-disabled: #{$color-text2-dark};
-    --color-button-default-text-disabled: #{$color-text2-dark};
-    --color-button-default-bg-hover: #{$color-text2-dark};
-    --color-button-default-border-hover: #{$color-text2-dark};
-    --color-button-default-text-hover: #{$color-bg2-dark};
-    --color-button-fab-bg: #{$color-text3-dark};
-    --color-button-fab-text: #{$color-text1-dark};
-    --color-button-icon-text: #{$color-text2-dark};
-    --color-input-bg: #{$color-bg2-dark};
-    --color-input-border: #{$color-bg2-dark};
-    --color-input-text: #{$color-text2-dark};
-    --color-input-placeholder: #{$color-text3-dark};
-    --color-input-button-bg: #{$color-text2-dark};
-    --color-input-button-icon: #{$color-bg2-dark};
-    --color-input-button-icon-hover: #{darken($color-text3-dark, 15%)};
-    --color-checkbox-bg: #{$color-bg1-dark};
-    --color-checkbox-toggle: #{$color-text3-dark};
-    --color-validation-text: #{$color-text1-dark};
-    --color-overlay: rgba(#{hex2rgb(#222)}, 0.5);
-    --color-darker-overlay: rgba(#{hex2rgb(#222)}, 0.9);
-    --color-well-bg: #{$color-bg2-dark};
-    --color-well-text: #{$color-text2-dark};
-    --color-well-link: #{$color-text2-dark};
-    --color-well-link-hover: #{$color-text1-dark};
-    --color-well-input-border: #{$color-text2-dark};
-    --color-well-button-bg: #{$color-bg2-dark};
-    --color-well-button-border: #{$color-text2-dark};
-    --color-well-button-text: #{$color-text2-dark};
-    --color-well-button-bg-disabled: #{$color-bg2-dark};
-    --color-well-button-border-disabled: #{$color-text2-dark};
-    --color-well-button-text-disabled: #{$color-text2-dark};
-    --color-well-button-bg-hover: #{$color-text2-dark};
-    --color-well-button-border-hover: #{$color-text2-dark};
-    --color-well-button-text-hover: #{$color-bg1-dark};
-    --color-spinner: #{$color-text2-dark};
-    --color-status-bg: #{$color-text1-dark};
-    --color-bookmark-bg: #{$color-bg2-dark};
-    --color-bookmark-bg-hover: #{lighten($color-bg2-dark, 7%)};
-    --color-bookmark-heading: #{$color-text2-dark};
-    --color-bookmark-menu-bg: rgba(#{hex2rgb($color-bg1-dark)}, 0.5);
-    --color-bookmark-menu-button-delete-icon: #{$color-text1-dark};
-    --color-bookmark-menu-button-icon: #{$color-text1-dark};
-    --color-bookmark-menu-button-bg: #{$color-text3-dark};
-    --color-bookmark-text: #{$color-text2-dark};
-    --color-bookmark-url: #{$color-text3-dark};
-    --color-separator-bg: rgba(#{hex2rgb($color-text3-dark)}, 0.15);
-    --color-success: #{$color-success-dark};
-    --color-warning: #{$color-warning-dark};
-    --color-danger: #{$color-danger-dark};
+    &-warning {
+      background-color: var(--color-warning) !important;
+    }
+  }
+
+  .service-message {
+    font-style: italic;
+    overflow-y: auto;
+    padding: 1px;
+    quotes: '\201c''\201d';
+    text-align: center;
+
+    &::before {
+      content: open-quote;
+    }
+
+    &::after {
+      content: close-quote;
+    }
+  }
+
+  .spinner-border {
+    @include spinner-colour(var(--color-spinner));
+
+    animation-duration: 1s;
+
+    &-sm {
+      border-width: 0.15em;
+      height: 1rem;
+      vertical-align: baseline;
+      width: 1rem;
+    }
+  }
+
+  .status-icon {
+    position: relative;
+    z-index: 5;
+
+    .status-icon-bg {
+      background-color: var(--color-status-bg);
+      border-radius: 100%;
+      height: 0.8rem;
+      left: 0.1rem;
+      position: absolute;
+      top: 0.2rem;
+      width: 0.8rem;
+      z-index: -1;
+    }
+  }
+
+  .theme-container {
+    @mixin theme-dark() {
+      @media (prefers-color-scheme: dark) {
+        @content;
+      }
+
+      &.theme-dark {
+        @content;
+      }
+    }
+
+    --color-bg-primary: #{$color-bg1-default};
+    --color-bg-secondary: #{$color-bg2-default};
+    --color-text: #{$color-text1-default};
+    --color-link: #{$color-text1-default};
+    --color-link-hover: #{$color-bg2-default};
+    --color-button-default-bg: rgba(#{hex2rgb($color-text1-default)}, 0.3);
+    --color-button-default-border: #{$color-bg3-default};
+    --color-button-default-text: #{$color-text1-default};
+    --color-button-default-bg-disabled: rgba(#{hex2rgb($color-bg3-default)}, 0.3);
+    --color-button-default-border-disabled: #{$color-bg3-default};
+    --color-button-default-text-disabled: #{$color-text1-default};
+    --color-button-default-bg-hover: #{$color-text1-default};
+    --color-button-default-border-hover: #{$color-text1-default};
+    --color-button-default-text-hover: #{$color-bg2-default};
+    --color-button-fab-bg: #{$color-text2-default};
+    --color-button-fab-text: #{$color-text1-default};
+    --color-button-icon-text: #{$color-text2-default};
+    --color-input-bg: #{$color-bg3-default};
+    --color-input-border: #{$color-bg3-default};
+    --color-input-text: #{$color-text2-default};
+    --color-input-placeholder: #{$color-text3-default};
+    --color-input-button-bg: #{$color-text2-default};
+    --color-input-button-icon: #{$color-bg3-default};
+    --color-input-button-icon-hover: #{darken($color-text3-default, 15%)};
+    --color-checkbox-bg: #{$color-text2-default};
+    --color-checkbox-toggle: #{$color-bg2-default};
+    --color-validation-text: #{$color-text1-default};
+    --color-overlay: rgba(#{hex2rgb($color-text2-default)}, 0.5);
+    --color-darker-overlay: rgba(#{hex2rgb($color-text2-default)}, 0.9);
+    --color-well-bg: #{$color-bg3-default};
+    --color-well-text: #{$color-text2-default};
+    --color-well-link: #{$color-text2-default};
+    --color-well-link-hover: #{$color-bg2-default};
+    --color-well-input-border: #{$color-text2-default};
+    --color-well-button-bg: #{$color-bg3-default};
+    --color-well-button-border: #{$color-text2-default};
+    --color-well-button-text: #{$color-text2-default};
+    --color-well-button-bg-disabled: #{$color-bg3-default};
+    --color-well-button-border-disabled: #{$color-text2-default};
+    --color-well-button-text-disabled: #{$color-text2-default};
+    --color-well-button-bg-hover: #{$color-text2-default};
+    --color-well-button-border-hover: #{$color-text2-default};
+    --color-well-button-text-hover: #{$color-bg2-default};
+    --color-spinner: #{$color-bg2-default};
+    --color-status-bg: #{$color-text1-default};
+    --color-bookmark-bg: #{$color-bg3-default};
+    --color-bookmark-bg-hover: #{scale-color($color-bg2-default, $lightness: 70%, $saturation: 50%)};
+    --color-bookmark-heading: #{$color-text2-default};
+    --color-bookmark-menu-bg: rgba(#{hex2rgb($color-text2-default)}, 0.8);
+    --color-bookmark-menu-button-delete-icon: #{$color-text1-default};
+    --color-bookmark-menu-button-icon: #{$color-text2-default};
+    --color-bookmark-menu-button-bg: #{$color-bg3-default};
+    --color-bookmark-text: #{$color-text2-default};
+    --color-bookmark-url: #{$color-text3-default};
+    --color-separator-bg: rgba(#{hex2rgb($color-text2-default)}, 0.2);
+    --color-success: #{$color-success-default};
+    --color-warning: #{$color-warning-default};
+    --color-danger: #{$color-danger-default};
+
+    color: var(--color-text);
+    height: 100%;
+    width: 100%;
+
+    @include theme-dark {
+      --color-bg-primary: #{$color-bg1-dark};
+      --color-bg-secondary: #{$color-bg1-dark};
+      --color-text: #{$color-text3-dark};
+      --color-link: #{$color-text3-dark};
+      --color-link-hover: #{$color-text1-dark};
+      --color-button-default-bg: #{$color-bg2-dark};
+      --color-button-default-border: #{$color-text3-dark};
+      --color-button-default-text: #{$color-text3-dark};
+      --color-button-default-bg-disabled: rgba(#{hex2rgb($color-bg2-dark)}, 0.3);
+      --color-button-default-border-disabled: #{$color-text2-dark};
+      --color-button-default-text-disabled: #{$color-text2-dark};
+      --color-button-default-bg-hover: #{$color-text2-dark};
+      --color-button-default-border-hover: #{$color-text2-dark};
+      --color-button-default-text-hover: #{$color-bg2-dark};
+      --color-button-fab-bg: #{$color-text3-dark};
+      --color-button-fab-text: #{$color-text1-dark};
+      --color-button-icon-text: #{$color-text2-dark};
+      --color-input-bg: #{$color-bg2-dark};
+      --color-input-border: #{$color-bg2-dark};
+      --color-input-text: #{$color-text2-dark};
+      --color-input-placeholder: #{$color-text3-dark};
+      --color-input-button-bg: #{$color-text2-dark};
+      --color-input-button-icon: #{$color-bg2-dark};
+      --color-input-button-icon-hover: #{darken($color-text3-dark, 15%)};
+      --color-checkbox-bg: #{$color-bg1-dark};
+      --color-checkbox-toggle: #{$color-text3-dark};
+      --color-validation-text: #{$color-text1-dark};
+      --color-overlay: rgba(#{hex2rgb(#222)}, 0.5);
+      --color-darker-overlay: rgba(#{hex2rgb(#222)}, 0.9);
+      --color-well-bg: #{$color-bg2-dark};
+      --color-well-text: #{$color-text2-dark};
+      --color-well-link: #{$color-text2-dark};
+      --color-well-link-hover: #{$color-text1-dark};
+      --color-well-input-border: #{$color-text2-dark};
+      --color-well-button-bg: #{$color-bg2-dark};
+      --color-well-button-border: #{$color-text2-dark};
+      --color-well-button-text: #{$color-text2-dark};
+      --color-well-button-bg-disabled: #{$color-bg2-dark};
+      --color-well-button-border-disabled: #{$color-text2-dark};
+      --color-well-button-text-disabled: #{$color-text2-dark};
+      --color-well-button-bg-hover: #{$color-text2-dark};
+      --color-well-button-border-hover: #{$color-text2-dark};
+      --color-well-button-text-hover: #{$color-bg1-dark};
+      --color-spinner: #{$color-text2-dark};
+      --color-status-bg: #{$color-text1-dark};
+      --color-bookmark-bg: #{$color-bg2-dark};
+      --color-bookmark-bg-hover: #{lighten($color-bg2-dark, 7%)};
+      --color-bookmark-heading: #{$color-text2-dark};
+      --color-bookmark-menu-bg: rgba(#{hex2rgb($color-bg1-dark)}, 0.5);
+      --color-bookmark-menu-button-delete-icon: #{$color-text1-dark};
+      --color-bookmark-menu-button-icon: #{$color-text1-dark};
+      --color-bookmark-menu-button-bg: #{$color-text3-dark};
+      --color-bookmark-text: #{$color-text2-dark};
+      --color-bookmark-url: #{$color-text3-dark};
+      --color-separator-bg: rgba(#{hex2rgb($color-text3-dark)}, 0.15);
+      --color-success: #{$color-success-dark};
+      --color-warning: #{$color-warning-dark};
+      --color-danger: #{$color-danger-dark};
+    }
   }
 }

@@ -179,6 +179,13 @@ export abstract class AppHelperService {
       });
   }
 
+  syncBookmarksFailed(err: Error): void {
+    // Switch to default view if determined by sync error
+    if (this.syncSvc.shouldDisplayDefaultPageOnError(err)) {
+      this.$timeout(() => this.switchView(), Globals.InterfaceReadyTimeout);
+    }
+  }
+
   syncBookmarksSuccess(): ng.IPromise<void> {
     // Switch to default view
     return this.switchView();

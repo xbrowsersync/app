@@ -4,45 +4,47 @@ body {
   overflow: hidden;
 }
 
-.container {
-  &.search,
-  &.settings {
-    .view,
-    .view-content {
-      max-height: 37rem;
+app {
+  .container {
+    &.search,
+    &.settings {
+      .view,
+      .view-content {
+        max-height: 37rem;
+      }
     }
-  }
 
-  &.search {
-    .view {
-      height: auto;
-      width: 38rem;
+    &.search {
+      .view {
+        height: auto;
+        width: 38rem;
 
-      .header-panel {
-        display: flex;
-        flex-direction: row-reverse;
+        .header-panel {
+          display: flex;
+          flex-direction: row-reverse;
 
-        button {
-          flex: none;
+          button {
+            flex: none;
 
-          &.btn-settings {
-            float: none;
+            &.btn-settings {
+              float: none;
+            }
           }
         }
       }
     }
-  }
 
-  &.settings {
-    backup-restore-settings {
-      #restoreForm .validation {
-        bottom: -0.75rem;
+    &.settings {
+      backup-restore-settings {
+        #restoreForm .validation {
+          bottom: -0.75rem;
+        }
       }
     }
-  }
 
-  .view {
-    height: 37rem;
-    width: 23rem;
+    .view {
+      height: 37rem;
+      width: 23rem;
+    }
   }
 }

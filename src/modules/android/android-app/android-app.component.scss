@@ -61,60 +61,42 @@ body {
   overflow: auto;
 }
 
-a {
-  &:hover {
-    color: unset;
-    text-decoration: none;
-  }
-}
-
-h2 {
-  font-size: 1.6em;
-  line-height: 3.1rem;
-}
-
-input,
-textarea {
-  user-select: text;
-}
-
-textarea.form-control {
-  padding: 0.5rem 1rem;
-}
-
-.checkbox {
-  height: 1.5rem;
-  width: 3rem;
-
-  input[type='checkbox']:checked + label {
-    left: 1.65rem;
-  }
-
-  label {
-    height: 1.2rem;
-    width: 1.2rem;
-  }
-}
-
-.view-content {
-  padding-top: 1.5rem !important;
-
-  &.ng-enter {
-    z-index: 10 !important;
-  }
-
-  &.ng-leave {
-    z-index: 20;
-  }
-}
-
-.well {
-  button.btn.btn-default {
-    font-size: 1rem;
-  }
-}
-
 app {
+  a {
+    &:hover {
+      color: unset;
+      text-decoration: none;
+    }
+  }
+
+  h2 {
+    font-size: 1.6em;
+    line-height: 3.1rem;
+  }
+
+  input,
+  textarea {
+    user-select: text;
+  }
+
+  textarea.form-control {
+    padding: 0.5rem 1rem;
+  }
+
+  .checkbox {
+    height: 1.5rem;
+    width: 3rem;
+
+    input[type='checkbox']:checked + label {
+      left: 1.65rem;
+    }
+
+    label {
+      height: 1.2rem;
+      width: 1.2rem;
+    }
+  }
+
   .container {
     .view,
     .view-content {
@@ -136,6 +118,24 @@ app {
 
     margin-left: 0.25em;
     position: absolute;
+  }
+
+  .view-content {
+    padding-top: 1.5rem !important;
+
+    &.ng-enter {
+      z-index: 10 !important;
+    }
+
+    &.ng-leave {
+      z-index: 20;
+    }
+  }
+
+  .well {
+    button.btn.btn-default {
+      font-size: 1rem;
+    }
   }
 }
 

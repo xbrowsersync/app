@@ -9,12 +9,13 @@ import { AlertService } from '../../../shared/alert/alert.service';
 import { BookmarkChangeType } from '../../../shared/bookmark/bookmark.enum';
 import { Bookmark, BookmarkChange, RemoveBookmarkChangeData } from '../../../shared/bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import { DataOutOfSyncError, SyncNotFoundError } from '../../../shared/errors/errors';
+import { DataOutOfSyncError } from '../../../shared/errors/errors';
 import { ExceptionHandler } from '../../../shared/errors/errors.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
 import { SettingsService } from '../../../shared/settings/settings.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
+import { SyncService } from '../../../shared/sync/sync.service';
 import { UtilityService } from '../../../shared/utility/utility.service';
 import { WorkingService } from '../../../shared/working/working.service';
 import { AndroidAlert } from '../android-app.interface';
@@ -29,7 +30,22 @@ import { AndroidAppHelperService } from '../shared/android-app-helper/android-ap
 })
 export class AndroidAppSearchComponent extends AppSearchComponent implements OnDestroy {
   appHelperSvc: AndroidAppHelperService;
+  syncSvc: SyncService;
 
+  static $inject = [
+    '$exceptionHandler',
+    '$q',
+    '$scope',
+    '$timeout',
+    'AlertService',
+    'AppHelperService',
+    'BookmarkHelperService',
+    'PlatformService',
+    'SettingsService',
+    'SyncService',
+    'UtilityService',
+    'WorkingService'
+  ];
   constructor(
     $exceptionHandler: ExceptionHandler,
     $q: ng.IQService,
@@ -40,6 +56,7 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
     BookmarkHelperSvc: BookmarkHelperService,
     PlatformSvc: PlatformService,
     SettingsSvc: SettingsService,
+    SyncSvc: SyncService,
     UtilitySvc: UtilityService,
     WorkingSvc: WorkingService
   ) {
@@ -56,6 +73,8 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
       UtilitySvc,
       WorkingSvc
     );
+
+    this.syncSvc = SyncSvc;
 
     $scope.$on(AppEventType.ClearSelectedBookmark, () => {
       this.selectedBookmarkId = undefined;
@@ -150,23 +169,25 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
             });
         })
         .catch((err) => {
-          // Handle sync removed from service
-          if (err instanceof SyncNotFoundError) {
-            return this.appHelperSvc.switchView();
-          }
+          let promise: ng.IPromise<void>;
 
-          return (
-            err instanceof DataOutOfSyncError
-              ? this.displayDefaultSearchState()
-              : this.$q.resolve().then(() => {
-                  // Restore previous bookmarks results
-                  if (this.displayFolderView) {
-                    this.bookmarkTree = originalBookmarks;
-                  } else {
-                    this.results = originalBookmarks;
-                  }
-                })
-          ).then(() => this.$exceptionHandler(err));
+          // Switch to default page if required
+          if (this.syncSvc.shouldDisplayDefaultPageOnError(err)) {
+            promise = this.appHelperSvc.switchView();
+          } else {
+            promise =
+              err instanceof DataOutOfSyncError
+                ? this.displayDefaultSearchState()
+                : this.$q.resolve().then(() => {
+                    // Restore previous bookmarks results
+                    if (this.displayFolderView) {
+                      this.bookmarkTree = originalBookmarks;
+                    } else {
+                      this.results = originalBookmarks;
+                    }
+                  });
+          }
+          promise.then(() => this.$exceptionHandler(err));
         });
     }, 1e3);
   }

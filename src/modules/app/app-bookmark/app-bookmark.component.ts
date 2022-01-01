@@ -322,10 +322,12 @@ export class AppBookmarkComponent implements OnInit {
         type: SyncType.LocalAndRemote
       })
       .catch((err) => {
+        // TODO: check this for switching
         // Handle sync removed from service
         if (err instanceof SyncNotFoundError) {
           return this.appHelperSvc.switchView().then(() => ({ error: err, success: false }));
         }
+        this.appHelperSvc.syncBookmarksFailed(err);
         throw err;
       });
   }

@@ -49,7 +49,7 @@ module.exports = (env, argv) => {
       ]
     },
     optimization: {
-      minimize: !devMode
+      minimize: false
     },
     output: {
       chunkFilename: '[name].js',

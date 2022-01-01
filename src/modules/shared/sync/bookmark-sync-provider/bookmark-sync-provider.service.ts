@@ -14,7 +14,7 @@ import {
 } from '../../bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../bookmark/bookmark-helper/bookmark-helper.service';
 import { CryptoService } from '../../crypto/crypto.service';
-import { AmbiguousSyncRequestError, ClientDataNotFoundError } from '../../errors/errors';
+import { AmbiguousSyncRequestError, ClientDataNotFoundError, SyncVersionNotSupportedError } from '../../errors/errors';
 import { PlatformService } from '../../global-shared.interface';
 import { LogService } from '../../log/log.service';
 import { NetworkService } from '../../network/network.service';
@@ -82,6 +82,20 @@ export class BookmarkSyncProviderService implements SyncProvider {
     this.storeSvc = StoreSvc;
     this.upgradeSvc = UpgradeSvc;
     this.utilitySvc = UtilitySvc;
+  }
+
+  checkSyncVersionIsSupported(): ng.IPromise<void> {
+    return this.storeSvc.get<string>(StoreKey.SyncId).then((syncId) => {
+      return this.$q
+        .all([this.apiSvc.getBookmarksVersion(syncId), this.platformSvc.getAppVersion()])
+        .then((results) => {
+          const [response, appVersion] = results;
+          const { version: bookmarksVersion } = response;
+          if (this.utilitySvc.compareVersions(bookmarksVersion ?? '0', appVersion, '>')) {
+            throw new SyncVersionNotSupportedError();
+          }
+        });
+    });
   }
 
   disable(): ng.IPromise<void> {
@@ -163,82 +177,94 @@ export class BookmarkSyncProviderService implements SyncProvider {
     };
     let rebuildIdMappings = false;
 
-    // changeInfo can be an object or a promise
-    return this.$q.resolve(sync.changeInfo).then((changeInfo) =>
-      this.$q<Bookmark[]>((resolve, reject) => {
-        this.$q
-          .resolve()
-          .then(() => {
-            // Use bookmarks provided or retrieve cached bookmarks
-            if (sync.bookmarks) {
-              // Validate provided bookmark ids first
-              if (this.validateBookmarkIds(sync.bookmarks)) {
-                return sync.bookmarks;
-              }
-              const repairedBookmarks = this.repairBookmarkIds(sync.bookmarks);
-              return repairedBookmarks;
-            }
+    // Ensure sync credentials exist before continuing
+    return (
+      this.utilitySvc
+        .checkSyncCredentialsExist()
+        // Ensure sync version is supported
+        .then(() => this.checkSyncVersionIsSupported())
+        // changeInfo can be an object or a promise
+        .then(() => this.$q.resolve(sync.changeInfo))
+        .then((changeInfo) =>
+          this.$q<Bookmark[]>((resolve, reject) => {
+            this.$q
+              .resolve()
+              .then(() => {
+                // Use bookmarks provided or retrieve cached bookmarks
+                if (sync.bookmarks) {
+                  // Validate provided bookmark ids first
+                  if (this.validateBookmarkIds(sync.bookmarks)) {
+                    return sync.bookmarks;
+                  }
+                  const repairedBookmarks = this.repairBookmarkIds(sync.bookmarks);
+                  return repairedBookmarks;
+                }
 
-            if (!changeInfo) {
-              throw new AmbiguousSyncRequestError();
-            }
-            return this.bookmarkHelperSvc.getCachedBookmarks();
+                if (!changeInfo) {
+                  throw new AmbiguousSyncRequestError();
+                }
+                return this.bookmarkHelperSvc.getCachedBookmarks();
+              })
+              .then(resolve)
+              .catch(reject);
           })
-          .then(resolve)
-          .catch(reject);
-      })
-        .then((bookmarks) => {
-          // Process bookmark updates if change info provided
-          return (
-            (angular.isUndefined(changeInfo) ? this.$q.resolve(undefined) : this.updateBookmarks(bookmarks, changeInfo))
-              // Update native bookmarks
-              .then((updateResults) =>
-                this.platformSvc
-                  .disableNativeEventListeners()
-                  .then(() => {
-                    // If no change info provided, populate native bookmarks from bookmarks provided or
-                    // return unmodified bookmarks
-                    if (angular.isUndefined(updateResults)) {
-                      if (angular.isUndefined(sync.bookmarks)) {
-                        return bookmarks;
-                      }
-                      rebuildIdMappings = true;
-                      return this.populateNativeBookmarks(bookmarks).then(() => bookmarks);
-                    }
+            .then((bookmarks) => {
+              // Process bookmark updates if change info provided
+              return (
+                (
+                  angular.isUndefined(changeInfo)
+                    ? this.$q.resolve(undefined)
+                    : this.updateBookmarks(bookmarks, changeInfo)
+                )
+                  // Update native bookmarks
+                  .then((updateResults) =>
+                    this.platformSvc
+                      .disableNativeEventListeners()
+                      .then(() => {
+                        // If no change info provided, populate native bookmarks from bookmarks provided or
+                        // return unmodified bookmarks
+                        if (angular.isUndefined(updateResults)) {
+                          if (angular.isUndefined(sync.bookmarks)) {
+                            return bookmarks;
+                          }
+                          rebuildIdMappings = true;
+                          return this.populateNativeBookmarks(bookmarks).then(() => bookmarks);
+                        }
 
-                    // Check if bookmark container is toolbar and toolbar syncing is enabled
-                    return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
-                      if (updateResults.container === BookmarkContainer.Toolbar && !syncBookmarksToolbar) {
-                        return updateResults.bookmarks;
-                      }
+                        // Check if bookmark container is toolbar and toolbar syncing is enabled
+                        return this.settingsSvc.syncBookmarksToolbar().then((syncBookmarksToolbar) => {
+                          if (updateResults.container === BookmarkContainer.Toolbar && !syncBookmarksToolbar) {
+                            return updateResults.bookmarks;
+                          }
 
-                      // Process updates on native bookmarks
-                      return this.bookmarkSvc
-                        .processChangeOnNativeBookmarks(
-                          updateResults.bookmark.id,
-                          changeInfo.type,
-                          updateResults.bookmark
-                        )
-                        .then(() => updateResults.bookmarks);
-                    });
-                  })
-                  .finally(this.platformSvc.enableNativeEventListeners)
-              )
-          );
-        })
-        // Create containers if required
-        .then((bookmarks) => this.bookmarkSvc.ensureContainersExist(bookmarks))
-        .then((bookmarks) => {
-          // Build id mappings if required
-          processResult.data = bookmarks;
-          if (rebuildIdMappings) {
-            return this.bookmarkSvc.buildIdMappings(bookmarks);
-          }
-        })
-        .then(() => {
-          processResult.updateRemote = true;
-          return processResult;
-        })
+                          // Process updates on native bookmarks
+                          return this.bookmarkSvc
+                            .processChangeOnNativeBookmarks(
+                              updateResults.bookmark.id,
+                              changeInfo.type,
+                              updateResults.bookmark
+                            )
+                            .then(() => updateResults.bookmarks);
+                        });
+                      })
+                      .finally(this.platformSvc.enableNativeEventListeners)
+                  )
+              );
+            })
+            // Create containers if required
+            .then((bookmarks) => this.bookmarkSvc.ensureContainersExist(bookmarks))
+            .then((bookmarks) => {
+              // Build id mappings if required
+              processResult.data = bookmarks;
+              if (rebuildIdMappings) {
+                return this.bookmarkSvc.buildIdMappings(bookmarks);
+              }
+            })
+            .then(() => {
+              processResult.updateRemote = true;
+              return processResult;
+            })
+        )
     );
   }
 
@@ -256,11 +282,12 @@ export class BookmarkSyncProviderService implements SyncProvider {
       // Ensure sync credentials exist before continuing
       this.utilitySvc
         .checkSyncCredentialsExist()
+        // Ensure sync version is supported
+        .then(() => this.checkSyncVersionIsSupported())
         // Get synced bookmarks
         .then(() => this.apiSvc.getBookmarks())
         .then((response) => {
-          const encryptedBookmarks = response.bookmarks;
-          const lastUpdated = response.lastUpdated;
+          const { bookmarks: encryptedBookmarks, lastUpdated } = response;
 
           // Decrypt bookmarks
           let bookmarks: Bookmark[];
@@ -320,28 +347,33 @@ export class BookmarkSyncProviderService implements SyncProvider {
           });
         }
 
-        // Retrieve cached bookmarks and then process changes
-        return this.bookmarkHelperSvc.getCachedBookmarks().then((cachedBookmarks) => {
-          // Use bookmarks provided with sync if exists
-          const bookmarksToSync = angular.isUndefined(sync.bookmarks) ? cachedBookmarks : sync.bookmarks;
-          processResult.data = bookmarksToSync;
-          return (
-            angular.isUndefined(sync.changeInfo)
-              ? this.$q.resolve(bookmarksToSync)
-              : this.bookmarkSvc
-                  .processNativeChangeOnBookmarks(sync.changeInfo, bookmarksToSync)
-                  .then((updatedBookmarks) => this.bookmarkSvc.ensureContainersExist(updatedBookmarks))
-          ).then((updatedBookmarks) => {
-            // If no data returned, do not sync
-            if (angular.isUndefined(updatedBookmarks)) {
-              return processResult;
-            }
+        // Ensure sync version is supported
+        return (
+          this.checkSyncVersionIsSupported()
+            // Retrieve cached bookmarks and then process changes
+            .then(() => this.bookmarkHelperSvc.getCachedBookmarks())
+            .then((cachedBookmarks) => {
+              // Use bookmarks provided with sync if exists
+              const bookmarksToSync = angular.isUndefined(sync.bookmarks) ? cachedBookmarks : sync.bookmarks;
+              processResult.data = bookmarksToSync;
+              return (
+                angular.isUndefined(sync.changeInfo)
+                  ? this.$q.resolve(bookmarksToSync)
+                  : this.bookmarkSvc
+                      .processNativeChangeOnBookmarks(sync.changeInfo, bookmarksToSync)
+                      .then((updatedBookmarks) => this.bookmarkSvc.ensureContainersExist(updatedBookmarks))
+              ).then((updatedBookmarks) => {
+                // If no data returned, do not sync
+                if (angular.isUndefined(updatedBookmarks)) {
+                  return processResult;
+                }
 
-            // If changes made, add updated bookmarks to process result and mark for remote update
-            processResult.data = updatedBookmarks;
-            processResult.updateRemote = true;
-          });
-        });
+                // If changes made, add updated bookmarks to process result and mark for remote update
+                processResult.data = updatedBookmarks;
+                processResult.updateRemote = true;
+              });
+            })
+        );
       })
       .then(() => processResult);
   }

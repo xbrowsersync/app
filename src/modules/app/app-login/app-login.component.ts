@@ -8,7 +8,6 @@ import {
   BaseError,
   InvalidCredentialsError,
   InvalidServiceError,
-  SyncVersionNotSupportedError,
   UnsupportedApiVersionError
 } from '../../shared/errors/errors';
 import { ExceptionHandler } from '../../shared/errors/errors.interface';
@@ -245,22 +244,21 @@ export class AppLoginComponent implements OnInit {
           });
         }
 
-        // Retrieve sync version for existing id
+        // Check if existing id requires sync upgrade
         return this.$q
           .all([this.apiSvc.getBookmarksVersion(this.syncId), this.platformSvc.getAppVersion()])
           .then((results) => {
             const [response, appVersion] = results;
-            if (this.utilitySvc.compareVersions(response.version ?? '0', appVersion, '<')) {
-              // Sync version is less than app version, confirm upgrade before proceeding with sync
+            const { version: bookmarksVersion } = response;
+
+            // If sync version is less than app version, confirm upgrade before proceeding with sync
+            if (this.utilitySvc.compareVersions(bookmarksVersion ?? '0', appVersion, '<')) {
               if (this.upgradeConfirmed) {
                 syncData.type = SyncType.Upgrade;
               } else {
                 this.displayUpgradeConfirmation = true;
                 return;
               }
-            } else if (this.utilitySvc.compareVersions(response.version ?? '0', appVersion, '>')) {
-              // Sync version is greater than app version, throw error
-              throw new SyncVersionNotSupportedError();
             }
 
             syncInfoMessage = `Synced to existing id: ${this.syncId}`;
@@ -269,7 +267,7 @@ export class AppLoginComponent implements OnInit {
             return this.$q
               .all([
                 this.storeSvc.set(StoreKey.SyncId, this.syncId),
-                this.storeSvc.set(StoreKey.SyncVersion, response.version)
+                this.storeSvc.set(StoreKey.SyncVersion, bookmarksVersion)
               ])
               .then(() => this.syncId);
           });

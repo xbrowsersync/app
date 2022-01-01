@@ -20,6 +20,7 @@ import {
   SyncFailedError,
   SyncNotFoundError,
   SyncUncommittedError,
+  SyncVersionNotSupportedError,
   TooManyRequestsError
 } from '../errors/errors';
 import { ExceptionHandler } from '../errors/errors.interface';
@@ -105,6 +106,7 @@ export class SyncService {
       err &&
       (err instanceof ClientDataNotFoundError ||
         err instanceof SyncNotFoundError ||
+        err instanceof SyncVersionNotSupportedError ||
         err instanceof TooManyRequestsError)
     );
   }
@@ -540,6 +542,10 @@ export class SyncService {
       })
       .then(() => this.disableSync())
       .then(() => this.storeSvc.remove(StoreKey.SyncId));
+  }
+
+  shouldDisplayDefaultPageOnError(err: Error): boolean {
+    return this.checkIfDisableSyncOnError(err);
   }
 
   showInterfaceAsSyncing(syncType?: SyncType): ng.IPromise<void> {
