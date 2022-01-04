@@ -140,50 +140,56 @@ export abstract class AppHelperService {
   abstract requestPermissions(): ng.IPromise<boolean>;
 
   switchView(view?: string): ng.IPromise<void> {
-    return this.$q
-      .resolve()
-      .then(() => {
-        if (!angular.isUndefined(view)) {
-          return view;
-        }
-        return this.$q
-          .all([
-            this.storeSvc.get([
-              StoreKey.DisplayHelp,
-              StoreKey.DisplayPermissions,
-              StoreKey.DisplayUpdated,
-              StoreKey.RemovedSync
-            ]),
-            this.utilitySvc.isSyncEnabled()
-          ])
-          .then((data) => {
-            const [storeContent, syncEnabled] = data;
-            switch (true) {
-              case storeContent.displayUpdated:
-                return RoutePath.Updated;
-              case storeContent.displayPermissions:
-                return RoutePath.Permissions;
-              case storeContent.displayHelp:
-                return RoutePath.Help;
-              case !!storeContent.removedSync:
-                return RoutePath.SyncRemoved;
-              case syncEnabled:
-                return RoutePath.Search;
-              default:
-                return RoutePath.Login;
-            }
-          });
-      })
-      .then((newRoute) => {
-        this.$location.path(newRoute);
-      });
+    return this.$q((resolve, reject) => {
+      return this.$q
+        .resolve()
+        .then(() => {
+          if (!angular.isUndefined(view)) {
+            return view;
+          }
+          return this.$q
+            .all([
+              this.storeSvc.get([
+                StoreKey.DisplayHelp,
+                StoreKey.DisplayPermissions,
+                StoreKey.DisplayUpdated,
+                StoreKey.RemovedSync
+              ]),
+              this.utilitySvc.isSyncEnabled()
+            ])
+            .then((data) => {
+              const [storeContent, syncEnabled] = data;
+              switch (true) {
+                case storeContent.displayUpdated:
+                  return RoutePath.Updated;
+                case storeContent.displayPermissions:
+                  return RoutePath.Permissions;
+                case storeContent.displayHelp:
+                  return RoutePath.Help;
+                case !!storeContent.removedSync:
+                  return RoutePath.SyncRemoved;
+                case syncEnabled:
+                  return RoutePath.Search;
+                default:
+                  return RoutePath.Login;
+              }
+            });
+        })
+        .then((newRoute) => {
+          this.$location.path(newRoute);
+          this.$timeout(resolve, Globals.InterfaceReadyTimeout);
+        })
+        .catch(reject);
+    });
   }
 
-  syncBookmarksFailed(err: Error): void {
-    // Switch to default view if determined by sync error
-    if (this.syncSvc.shouldDisplayDefaultPageOnError(err)) {
-      this.$timeout(() => this.switchView(), Globals.InterfaceReadyTimeout);
-    }
+  syncBookmarksFailed(err: Error): ng.IPromise<void> {
+    return this.$q.resolve().then(() => {
+      // Switch to default view if determined by sync error
+      if (this.syncSvc.shouldDisplayDefaultPageOnError(err)) {
+        return this.switchView();
+      }
+    });
   }
 
   syncBookmarksSuccess(): ng.IPromise<void> {

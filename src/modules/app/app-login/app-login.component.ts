@@ -8,6 +8,7 @@ import {
   BaseError,
   InvalidCredentialsError,
   InvalidServiceError,
+  SyncVersionNotSupportedError,
   UnsupportedApiVersionError
 } from '../../shared/errors/errors';
 import { ExceptionHandler } from '../../shared/errors/errors.interface';
@@ -259,6 +260,10 @@ export class AppLoginComponent implements OnInit {
                 this.displayUpgradeConfirmation = true;
                 return;
               }
+            }
+            // If sync version is greater than app version, sync version is not supported
+            else if (this.utilitySvc.compareVersions(bookmarksVersion ?? '0', appVersion, '>')) {
+              throw new SyncVersionNotSupportedError();
             }
 
             syncInfoMessage = `Synced to existing id: ${this.syncId}`;

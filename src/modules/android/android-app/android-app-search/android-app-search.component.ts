@@ -9,7 +9,7 @@ import { AlertService } from '../../../shared/alert/alert.service';
 import { BookmarkChangeType } from '../../../shared/bookmark/bookmark.enum';
 import { Bookmark, BookmarkChange, RemoveBookmarkChangeData } from '../../../shared/bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import { DataOutOfSyncError } from '../../../shared/errors/errors';
+import { DataOutOfSyncError, SyncUncommittedError } from '../../../shared/errors/errors';
 import { ExceptionHandler } from '../../../shared/errors/errors.interface';
 import Globals from '../../../shared/global-shared.constants';
 import { PlatformService } from '../../../shared/global-shared.interface';
@@ -154,11 +154,7 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
               changeInfo,
               type: SyncType.LocalAndRemote
             })
-            .then((result) => {
-              if (!result.success) {
-                return;
-              }
-
+            .then(() => {
               this.$timeout(() => {
                 this.alertSvc.setCurrentAlert({
                   action: this.platformSvc.getI18nString(this.Strings.Button.Undo),
@@ -169,25 +165,28 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
             });
         })
         .catch((err) => {
-          let promise: ng.IPromise<void>;
-
-          // Switch to default page if required
-          if (this.syncSvc.shouldDisplayDefaultPageOnError(err)) {
-            promise = this.appHelperSvc.switchView();
-          } else {
-            promise =
-              err instanceof DataOutOfSyncError
-                ? this.displayDefaultSearchState()
-                : this.$q.resolve().then(() => {
-                    // Restore previous bookmarks results
-                    if (this.displayFolderView) {
-                      this.bookmarkTree = originalBookmarks;
-                    } else {
-                      this.results = originalBookmarks;
-                    }
-                  });
-          }
-          promise.then(() => this.$exceptionHandler(err));
+          this.$q
+            .resolve()
+            .then(() => {
+              switch (true) {
+                case err instanceof DataOutOfSyncError:
+                  // Update search results to reflect re-sync
+                  return this.displayDefaultSearchState();
+                case err instanceof SyncUncommittedError:
+                case this.syncSvc.shouldDisplayDefaultPageOnError(err):
+                  // Do nothing
+                  return;
+                default:
+                  // On any other error, restore previous bookmarks results
+                  if (this.displayFolderView) {
+                    this.bookmarkTree = originalBookmarks;
+                  } else {
+                    this.results = originalBookmarks;
+                  }
+              }
+            })
+            .then(() => this.appHelperSvc.syncBookmarksFailed(err))
+            .then(() => this.$exceptionHandler(err));
         });
     }, 1e3);
   }

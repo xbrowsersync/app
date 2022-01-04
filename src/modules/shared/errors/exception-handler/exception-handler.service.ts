@@ -138,6 +138,7 @@ export class ExceptionHandlerService {
       case Errors.SyncUncommittedError:
         alertMessage.title = this.platformSvc.getI18nString(this.Strings.Error.UncommittedSyncs.Title);
         alertMessage.message = this.platformSvc.getI18nString(this.Strings.Error.UncommittedSyncs.Message);
+        alertMessage.type = AlertType.Information;
         break;
       case Errors.UpgradeFailedError:
         alertMessage.title = this.platformSvc.getI18nString(this.Strings.Error.UpgradeFailed.Title);

@@ -1,5 +1,4 @@
 import { Bookmark, BookmarkChange } from '../bookmark/bookmark.interface';
-import { BaseError } from '../errors/errors';
 import { SyncType } from './sync.enum';
 
 export interface RemovedSync {
@@ -13,14 +12,9 @@ export interface RemovedSync {
 export interface Sync {
   bookmarks?: Bookmark[];
   changeInfo?: BookmarkChange;
-  deferred?: PromiseConstructor;
+  deferred?: ng.IDeferred<void>;
   type: SyncType;
   uniqueId?: string;
-}
-
-export interface SyncResult {
-  success: boolean;
-  error?: BaseError;
 }
 
 export interface ProcessSyncResult {

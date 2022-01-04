@@ -16,7 +16,7 @@ import { I18nObject, PlatformService, WebpageMetadata } from '../../../shared/gl
 import { LogService } from '../../../shared/log/log.service';
 import { StoreService } from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
-import { Sync, SyncResult } from '../../../shared/sync/sync.interface';
+import { Sync } from '../../../shared/sync/sync.interface';
 import { UtilityService } from '../../../shared/utility/utility.service';
 import { WorkingService } from '../../../shared/working/working.service';
 import { DownloadFileMessage, Message, SyncBookmarksMessage } from '../../webext.interface';
@@ -257,7 +257,7 @@ export abstract class WebExtPlatformService implements PlatformService {
     });
   }
 
-  queueSync(sync: Sync, command = MessageCommand.SyncBookmarks, runSync = true): ng.IPromise<SyncResult> {
+  queueSync(sync: Sync, command = MessageCommand.SyncBookmarks, runSync = true): ng.IPromise<void> {
     const message: SyncBookmarksMessage = {
       command,
       sync,

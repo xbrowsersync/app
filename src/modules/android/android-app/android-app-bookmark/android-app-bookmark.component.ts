@@ -14,7 +14,6 @@ import { PlatformService } from '../../../shared/global-shared.interface';
 import { LogService } from '../../../shared/log/log.service';
 import { SettingsService } from '../../../shared/settings/settings.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
-import { SyncResult } from '../../../shared/sync/sync.interface';
 import { SyncService } from '../../../shared/sync/sync.service';
 import { UtilityService } from '../../../shared/utility/utility.service';
 import { WorkingService } from '../../../shared/working/working.service';
@@ -94,12 +93,8 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
     });
   }
 
-  createBookmark(): ng.IPromise<SyncResult> {
+  createBookmark(): ng.IPromise<void> {
     return super.createBookmark().then((result) => {
-      if (!result.success) {
-        return result;
-      }
-
       this.$timeout(() => {
         this.alertSvc.setCurrentAlert({
           message: this.platformSvc.getI18nString(this.Strings.Alert.BookmarkCreated)
@@ -167,14 +162,10 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
       .finally(() => this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults));
   }
 
-  updateBookmark(): ng.IPromise<SyncResult> {
+  updateBookmark(): ng.IPromise<void> {
     // Get current cached bookmarks for undo
     return this.bookmarkHelperSvc.getCachedBookmarks().then((cachedBookmarks) => {
-      return super.updateBookmark().then((result) => {
-        if (!result.success) {
-          return result;
-        }
-
+      return super.updateBookmark().then(() => {
         this.$timeout(() => {
           this.alertSvc.setCurrentAlert({
             action: this.platformSvc.getI18nString(this.Strings.Button.Undo),

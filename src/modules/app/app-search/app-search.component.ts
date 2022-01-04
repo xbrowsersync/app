@@ -85,7 +85,7 @@ export abstract class AppSearchComponent implements OnInit {
     $scope.$watch(
       () => this.query,
       (newVal, oldVal) => {
-        if (newVal !== oldVal) {
+        if (newVal ?? undefined !== oldVal) {
           this.searchTextChanged();
         }
       }

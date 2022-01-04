@@ -14,12 +14,10 @@ import {
   RemoveBookmarkChangeData
 } from '../../shared/bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import { SyncNotFoundError } from '../../shared/errors/errors';
 import { ExceptionHandler } from '../../shared/errors/errors.interface';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService, WebpageMetadata } from '../../shared/global-shared.interface';
 import { SyncType } from '../../shared/sync/sync.enum';
-import { SyncResult } from '../../shared/sync/sync.interface';
 import { UtilityService } from '../../shared/utility/utility.service';
 import { WorkingService } from '../../shared/working/working.service';
 import { KeyCode, RoutePath } from '../app.enum';
@@ -122,7 +120,7 @@ export class AppBookmarkComponent implements OnInit {
     this.appHelperSvc.switchView();
   }
 
-  createBookmark(): ng.IPromise<SyncResult> {
+  createBookmark(): ng.IPromise<void> {
     // Add tags if tag text present
     if (this.tagText?.length) {
       this.createTags();
@@ -141,7 +139,7 @@ export class AppBookmarkComponent implements OnInit {
       if (!isValid) {
         // Bookmark URL exists, display validation error
         this.bookmarkForm.bookmarkUrl.$setValidity('Exists', false);
-        return { success: false };
+        return;
       }
 
       // Display loading overlay
@@ -155,9 +153,7 @@ export class AppBookmarkComponent implements OnInit {
         changeData: data,
         type: BookmarkChangeType.Add
       };
-      return this.queueSync(changeInfo).then((result) => {
-        return this.changesSynced().then(() => result);
-      });
+      return this.queueSync(changeInfo).then(() => this.changesSynced());
     });
   }
 
@@ -315,21 +311,17 @@ export class AppBookmarkComponent implements OnInit {
     });
   }
 
-  queueSync(changeInfo: BookmarkChange): ng.IPromise<SyncResult> {
+  queueSync(changeInfo: BookmarkChange): ng.IPromise<void> {
     return this.platformSvc
       .queueSync({
         changeInfo,
         type: SyncType.LocalAndRemote
       })
-      .catch((err) => {
-        // TODO: check this for switching
-        // Handle sync removed from service
-        if (err instanceof SyncNotFoundError) {
-          return this.appHelperSvc.switchView().then(() => ({ error: err, success: false }));
-        }
-        this.appHelperSvc.syncBookmarksFailed(err);
-        throw err;
-      });
+      .catch((err) =>
+        this.appHelperSvc.syncBookmarksFailed(err).then(() => {
+          throw err;
+        })
+      );
   }
 
   removeTag(tag: string): void {
@@ -413,7 +405,7 @@ export class AppBookmarkComponent implements OnInit {
     }
   }
 
-  updateBookmark(): ng.IPromise<SyncResult> {
+  updateBookmark(): ng.IPromise<void> {
     // Add tags if tag text present
     if (this.tagText?.length) {
       this.createTags();
@@ -443,8 +435,8 @@ export class AppBookmarkComponent implements OnInit {
         changeData: data,
         type: BookmarkChangeType.Modify
       };
-      return this.queueSync(changeInfo).then((result) => {
-        return this.changesSynced().then(() => result);
+      return this.queueSync(changeInfo).then(() => {
+        return this.changesSynced();
       });
     });
   }

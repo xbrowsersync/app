@@ -23,7 +23,7 @@ import { SettingsService } from '../../shared/settings/settings.service';
 import { StoreKey } from '../../shared/store/store.enum';
 import { StoreService } from '../../shared/store/store.service';
 import { SyncType } from '../../shared/sync/sync.enum';
-import { Sync, SyncResult } from '../../shared/sync/sync.interface';
+import { Sync } from '../../shared/sync/sync.interface';
 import { SyncService } from '../../shared/sync/sync.service';
 import { UpgradeService } from '../../shared/upgrade/upgrade.service';
 import { UtilityService } from '../../shared/utility/utility.service';
@@ -138,7 +138,7 @@ export class WebExtBackgroundService {
     });
   }
 
-  checkForSyncUpdates(): ng.IPromise<SyncResult | void> {
+  checkForSyncUpdates(): ng.IPromise<void> {
     // Exit if currently syncing
     const currentSync = this.syncSvc.getCurrentSync();
     if (currentSync) {
@@ -182,7 +182,7 @@ export class WebExtBackgroundService {
     throw err;
   }
 
-  checkForSyncUpdatesOnStartup(): ng.IPromise<SyncResult | void> {
+  checkForSyncUpdatesOnStartup(): ng.IPromise<void> {
     return this.$q<boolean>((resolve, reject) => {
       return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
         if (!syncEnabled) {
@@ -572,17 +572,14 @@ export class WebExtBackgroundService {
     return this.$q.resolve(this.syncSvc.getSyncQueueLength());
   }
 
-  runRestoreBookmarksCommand(message: SyncBookmarksMessage): ng.IPromise<SyncResult> {
+  runRestoreBookmarksCommand(message: SyncBookmarksMessage): ng.IPromise<void> {
     const { sync } = message;
-    return this.bookmarkSvc.disableEventListeners().then(() => {
-      // Queue sync
-      return this.syncSvc.queueSync(sync).then(() => ({ success: true }));
-    });
+    return this.syncSvc.queueSync(sync);
   }
 
-  runSyncBookmarksCommand(message: SyncBookmarksMessage): ng.IPromise<SyncResult> {
+  runSyncBookmarksCommand(message: SyncBookmarksMessage): ng.IPromise<void> {
     const { sync, runSync } = message;
-    return this.syncSvc.queueSync(sync, runSync).then(() => ({ success: true }));
+    return this.syncSvc.queueSync(sync, runSync);
   }
 
   upgradeExtension(): ng.IPromise<void> {

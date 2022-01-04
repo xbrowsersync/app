@@ -2,7 +2,6 @@ import angular from 'angular';
 import { Injectable } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AppEventType } from '../../../app/app.enum';
-import { Alert } from '../../../shared/alert/alert.interface';
 import { AlertService } from '../../../shared/alert/alert.service';
 import { BookmarkChangeType } from '../../../shared/bookmark/bookmark.enum';
 import {
@@ -20,14 +19,14 @@ import {
 } from '../../../shared/errors/errors';
 import { ExceptionHandler } from '../../../shared/errors/errors.interface';
 import Globals from '../../../shared/global-shared.constants';
-import { MessageCommand, PlatformType } from '../../../shared/global-shared.enum';
+import { PlatformType } from '../../../shared/global-shared.enum';
 import { I18nObject, PlatformService, WebpageMetadata } from '../../../shared/global-shared.interface';
 import { LogService } from '../../../shared/log/log.service';
 import { MetadataService } from '../../../shared/metadata/metadata.service';
 import { NetworkService } from '../../../shared/network/network.service';
 import { StoreService } from '../../../shared/store/store.service';
 import { SyncType } from '../../../shared/sync/sync.enum';
-import { Sync, SyncResult } from '../../../shared/sync/sync.interface';
+import { Sync } from '../../../shared/sync/sync.interface';
 import { SyncService } from '../../../shared/sync/sync.service';
 import { UtilityService } from '../../../shared/utility/utility.service';
 import { WorkingContext } from '../../../shared/working/working.enum';
@@ -409,7 +408,7 @@ export class AndroidPlatformService implements PlatformService {
     });
   }
 
-  queueSync(sync: Sync, command = MessageCommand.SyncBookmarks): ng.IPromise<SyncResult> {
+  queueSync(sync: Sync): ng.IPromise<void> {
     let resyncRequired = false;
     return this.$q<boolean>((resolve, reject) => {
       // If pushing a change, check for updates before proceeding with sync
@@ -458,19 +457,12 @@ export class AndroidPlatformService implements PlatformService {
             if (resyncRequired) {
               this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
             }
-            return { success: proceedWithSync };
           })
           .catch((err) => {
             // Enable background sync if sync uncommitted
             if (err instanceof SyncUncommittedError) {
-              this.alertSvc.setCurrentAlert({
-                message: this.getI18nString(this.Strings.Error.UncommittedSyncs.Message),
-                title: this.getI18nString(this.Strings.Error.UncommittedSyncs.Title)
-              } as Alert);
               this.enableBackgroundSync();
-              return { error: err, success: false };
             }
-
             throw err;
           });
       })

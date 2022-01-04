@@ -149,6 +149,20 @@ export class SyncService {
     });
   }
 
+  checkSyncVersionIsSupported(): ng.IPromise<void> {
+    return this.storeSvc.get<string>(StoreKey.SyncId).then((syncId) => {
+      return this.$q
+        .all([this.apiSvc.getBookmarksVersion(syncId), this.platformSvc.getAppVersion()])
+        .then((results) => {
+          const [response, appVersion] = results;
+          const { version: bookmarksVersion } = response;
+          if (this.utilitySvc.compareVersions(bookmarksVersion ?? '0', appVersion, '>')) {
+            throw new SyncVersionNotSupportedError();
+          }
+        });
+    });
+  }
+
   disableSync(): ng.IPromise<void> {
     return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
       if (!syncEnabled) {
@@ -235,32 +249,33 @@ export class SyncService {
       });
   }
 
-  handleFailedSync(failedSync: Sync, err: Error, isBackgroundSync = false): ng.IPromise<Error> {
+  handleFailedSync(failedSync: Sync, err: Error, isBackgroundSync = false): ng.IPromise<void> {
     let syncError = err;
-    return this.$q<Error>((resolve, reject) => {
-      // If connection failed and sync is a change, swallow error and place failed sync back on the queue
-      if (this.networkSvc.isNetworkConnectionError(err) && failedSync.type !== SyncType.Local) {
-        this.syncQueue.unshift(failedSync);
-        if (!isBackgroundSync) {
-          this.logSvc.logInfo('Changes not synced: connection lost');
+    return this.$q
+      .resolve()
+      .then(() => {
+        // If connection failed and sync is a change, swallow error and place failed sync back on the queue
+        if (this.networkSvc.isNetworkConnectionError(err) && failedSync.type !== SyncType.Local) {
+          this.syncQueue.unshift(failedSync);
+          if (!isBackgroundSync) {
+            this.logSvc.logWarning('No connection, changes re-queued for syncing');
+          }
+          syncError = new SyncUncommittedError(undefined, err);
+          return;
         }
-        return resolve(new SyncUncommittedError(undefined, err));
-      }
 
-      // Set default error if none set
-      if (!(err instanceof BaseError)) {
-        syncError = new SyncFailedError(undefined, err);
-      }
+        // Set default error if none set
+        if (!(err instanceof BaseError)) {
+          syncError = new SyncFailedError(undefined, err);
+        }
 
-      // Handle failed sync
-      this.logSvc.logWarning(`Sync ${failedSync.uniqueId} failed`);
-      this.$exceptionHandler(syncError, null, false);
-      if (failedSync.changeInfo && failedSync.changeInfo.type) {
-        this.logSvc.logInfo(failedSync.changeInfo);
-      }
-      return this.utilitySvc
-        .isSyncEnabled()
-        .then((syncEnabled) => {
+        // Handle failed sync
+        this.logSvc.logWarning(`Sync ${failedSync.uniqueId} failed`);
+        this.$exceptionHandler(syncError, null, false);
+        if (failedSync.changeInfo && failedSync.changeInfo.type) {
+          this.logSvc.logInfo(failedSync.changeInfo);
+        }
+        return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
           return this.showInterfaceAsSyncing().then(() => {
             if (!syncEnabled) {
               return;
@@ -292,16 +307,16 @@ export class SyncService {
                 }
               });
           });
-        })
-        .then(() => {
-          resolve(syncError);
-        })
-        .catch(reject);
-    }).finally(() => {
-      // Return sync error back to process that queued the sync
-      failedSync.deferred.reject(syncError);
-      return this.showInterfaceAsSyncing();
-    });
+        });
+      })
+      .then(() => {
+        throw syncError;
+      })
+      .finally(() => {
+        // Return sync error back to process that queued the sync
+        failedSync.deferred.reject(syncError);
+        return this.showInterfaceAsSyncing();
+      });
   }
 
   processSyncQueue(isBackgroundSync = false): ng.IPromise<void> {
@@ -404,8 +419,8 @@ export class SyncService {
             return (
               !updateRemote
                 ? this.$q.resolve().then(() => this.logSvc.logInfo('No changes made, skipping remote update.'))
-                : this.apiSvc
-                    .updateBookmarks(encryptedBookmarks, updateSyncVersion, isBackgroundSync)
+                : this.checkSyncVersionIsSupported()
+                    .then(() => this.apiSvc.updateBookmarks(encryptedBookmarks, updateSyncVersion, isBackgroundSync))
                     .then((response) => {
                       const updateCache = [this.storeSvc.set(StoreKey.LastUpdated, response.lastUpdated)];
                       if (updateSyncVersion) {
@@ -440,11 +455,7 @@ export class SyncService {
             ).then(() => this.bookmarkHelperSvc.updateCachedBookmarks(processedBookmarksData, encryptedBookmarks));
           });
         })
-        .catch((err) =>
-          this.handleFailedSync(this.currentSync, err, isBackgroundSync).then((innerErr) => {
-            throw innerErr;
-          })
-        )
+        .catch((err) => this.handleFailedSync(this.currentSync, err, isBackgroundSync))
         .finally(() => {
           // Clear current sync
           this.currentSync = undefined;
@@ -460,7 +471,7 @@ export class SyncService {
   }
 
   queueSync(syncToQueue: Sync, runSync = true): ng.IPromise<void> {
-    return this.$q<any>((resolve, reject) => {
+    return this.$q<void>((resolve, reject) => {
       this.utilitySvc
         .isSyncEnabled()
         .then((syncEnabled) => {
@@ -469,7 +480,7 @@ export class SyncService {
             this.syncQueue = [];
           }
 
-          let queuedSync: any;
+          let queuedSync: ng.IDeferred<void>;
           if (syncToQueue) {
             // If sync is type cancel, clear queue first
             if (syncToQueue.type === SyncType.Cancel) {
@@ -477,7 +488,7 @@ export class SyncService {
             }
 
             // Add sync to queue
-            queuedSync = this.$q.defer();
+            queuedSync = this.$q.defer<void>();
             syncToQueue.deferred = queuedSync;
             syncToQueue.uniqueId = syncToQueue.uniqueId ?? this.utilitySvc.getUniqueishId();
             this.syncQueue.push(syncToQueue);
@@ -487,12 +498,11 @@ export class SyncService {
           // Prepare sync promises to return and check if should also run sync
           const promises = [queuedSync.promise];
           if (runSync) {
-            const syncedPromise = this.$q<void>((syncedResolve, syncedReject) => {
-              this.$timeout(() => {
-                this.processSyncQueue().then(syncedResolve).catch(syncedReject);
-              });
-            });
-            promises.push(syncedPromise);
+            promises.push(
+              this.$q<void>((syncedResolve, syncedReject) =>
+                this.$timeout(() => this.processSyncQueue().then(syncedResolve).catch(syncedReject))
+              )
+            );
           }
 
           return this.$q
@@ -545,7 +555,7 @@ export class SyncService {
   }
 
   shouldDisplayDefaultPageOnError(err: Error): boolean {
-    return this.checkIfDisableSyncOnError(err);
+    return this.checkIfDisableSyncOnError(err) || err instanceof SyncUncommittedError;
   }
 
   showInterfaceAsSyncing(syncType?: SyncType): ng.IPromise<void> {
