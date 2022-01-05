@@ -51,6 +51,9 @@ export class SyncService {
 
   currentSync: Sync;
   providers: SyncProvider[];
+
+  // IMPORTANT: For web extension platforms, as syncQueue is stored in memory it should NEVER be
+  // referenced directly in code running in the context of the browser action, only in the background page
   syncQueue: Sync[] = [];
 
   static $inject = [
@@ -217,7 +220,9 @@ export class SyncService {
       }
 
       // Get available updates if there are no queued syncs, finally process the queue
-      return (this.syncQueue.length === 0 ? this.checkForUpdates(isBackgroundSync) : this.$q.resolve(false))
+      return (
+        this.syncQueue.length === 0 ? this.checkForUpdates(isBackgroundSync).catch(() => true) : this.$q.resolve(false)
+      )
         .then((updatesAvailable) => {
           return (
             updatesAvailable &&

@@ -257,7 +257,7 @@ export abstract class WebExtPlatformService implements PlatformService {
     });
   }
 
-  queueSync(sync: Sync, command = MessageCommand.SyncBookmarks, runSync = true): ng.IPromise<void> {
+  queueSync(sync?: Sync, command = MessageCommand.SyncBookmarks, runSync = true): ng.IPromise<void> {
     const message: SyncBookmarksMessage = {
       command,
       sync,

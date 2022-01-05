@@ -10,8 +10,7 @@ import { BookmarkHelperService } from '../../shared/bookmark/bookmark-helper/boo
 import {
   AmbiguousSyncRequestError,
   FailedDownloadFileError,
-  HttpRequestAbortedError,
-  SyncNotFoundError
+  HttpRequestAbortedError
 } from '../../shared/errors/errors';
 import { ExceptionHandler } from '../../shared/errors/errors.interface';
 import Globals from '../../shared/global-shared.constants';
@@ -22,7 +21,6 @@ import { NetworkService } from '../../shared/network/network.service';
 import { SettingsService } from '../../shared/settings/settings.service';
 import { StoreKey } from '../../shared/store/store.enum';
 import { StoreService } from '../../shared/store/store.service';
-import { SyncType } from '../../shared/sync/sync.enum';
 import { Sync } from '../../shared/sync/sync.interface';
 import { SyncService } from '../../shared/sync/sync.service';
 import { UpgradeService } from '../../shared/upgrade/upgrade.service';
@@ -146,25 +144,7 @@ export class WebExtBackgroundService {
     }
 
     // Exit if sync not enabled
-    return this.utilitySvc
-      .isSyncEnabled()
-      .then((syncEnabled) => {
-        if (!syncEnabled) {
-          return;
-        }
-
-        return this.syncSvc.checkForUpdates().then((updatesAvailable) => {
-          if (!updatesAvailable) {
-            return;
-          }
-
-          // Queue sync
-          return this.platformSvc.queueSync({
-            type: SyncType.Local
-          });
-        });
-      })
-      .catch(this.checkForSyncUpdatesFailed);
+    return this.syncSvc.executeSync().catch(this.checkForSyncUpdatesFailed);
   }
 
   checkForSyncUpdatesFailed(err: Error): void {
@@ -173,25 +153,18 @@ export class WebExtBackgroundService {
       this.logSvc.logInfo('Could not check for updates, no connection');
       return;
     }
-
-    // Handle sync removed from service
-    if (err instanceof SyncNotFoundError) {
-      this.syncSvc.setSyncRemoved();
-    }
-
     throw err;
   }
 
   checkForSyncUpdatesOnStartup(): ng.IPromise<void> {
-    return this.$q<boolean>((resolve, reject) => {
-      return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
+    return this.$q<void>((resolve, reject) => {
+      this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
         if (!syncEnabled) {
           return resolve();
         }
 
         // Check for updates to synced bookmarks
-        this.syncSvc
-          .checkForUpdates()
+        this.checkForSyncUpdates()
           .then(resolve)
           .catch((err) => {
             if (!this.networkSvc.isNetworkConnectionError(err)) {
@@ -206,23 +179,12 @@ export class WebExtBackgroundService {
                   this.logSvc.logInfo('Sync was disabled before retry attempted');
                   return reject(new HttpRequestAbortedError());
                 }
-                this.syncSvc.checkForUpdates().then(resolve).catch(reject);
+                this.checkForSyncUpdates().then(resolve).catch(reject);
               });
             }, 5000);
           });
       });
-    })
-      .then((updatesAvailable) => {
-        if (!updatesAvailable) {
-          return;
-        }
-
-        // Queue sync
-        return this.platformSvc.queueSync({
-          type: SyncType.Local
-        });
-      })
-      .catch(this.checkForSyncUpdatesFailed);
+    });
   }
 
   displayAlert(alert: Alert, url?: string): void {
@@ -579,6 +541,10 @@ export class WebExtBackgroundService {
 
   runSyncBookmarksCommand(message: SyncBookmarksMessage): ng.IPromise<void> {
     const { sync, runSync } = message;
+    // If no sync has been provided, process current sync queue and check for updates
+    if (angular.isUndefined(sync)) {
+      return this.syncSvc.executeSync();
+    }
     return this.syncSvc.queueSync(sync, runSync);
   }
 

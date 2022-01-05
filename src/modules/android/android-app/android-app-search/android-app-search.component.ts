@@ -18,6 +18,7 @@ import { SyncType } from '../../../shared/sync/sync.enum';
 import { SyncService } from '../../../shared/sync/sync.service';
 import { UtilityService } from '../../../shared/utility/utility.service';
 import { WorkingService } from '../../../shared/working/working.service';
+import { AndroidPlatformService } from '../../android-shared/android-platform/android-platform.service';
 import { AndroidAlert } from '../android-app.interface';
 import { AndroidAppHelperService } from '../shared/android-app-helper/android-app-helper.service';
 
@@ -30,6 +31,7 @@ import { AndroidAppHelperService } from '../shared/android-app-helper/android-ap
 })
 export class AndroidAppSearchComponent extends AppSearchComponent implements OnDestroy {
   appHelperSvc: AndroidAppHelperService;
+  platformSvc: AndroidPlatformService;
   syncSvc: SyncService;
 
   static $inject = [
@@ -216,11 +218,7 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
         onRefresh: () => {
           // Display loading overlay
           this.workingSvc.show();
-          return this.platformSvc
-            .queueSync({
-              type: SyncType.Local
-            })
-            .then(() => this.displayDefaultSearchState());
+          return this.platformSvc.executeSync().then(() => this.displayDefaultSearchState());
         },
         refreshTimeout: 0,
         shouldPullToRefresh: () => !document.querySelector(selector)?.scrollTop

@@ -7,7 +7,6 @@ import { PlatformService } from '../../../shared/global-shared.interface';
 import { NetworkService } from '../../../shared/network/network.service';
 import { StoreKey } from '../../../shared/store/store.enum';
 import { StoreService } from '../../../shared/store/store.service';
-import { SyncType } from '../../../shared/sync/sync.enum';
 import { SyncService } from '../../../shared/sync/sync.service';
 import { UtilityService } from '../../../shared/utility/utility.service';
 import { WorkingService } from '../../../shared/working/working.service';
@@ -96,11 +95,12 @@ export class SyncSettingsComponent implements OnInit {
       .all([
         this.syncSvc.checkForUpdates().catch(() => {}),
         this.appHelperSvc.getNextScheduledSyncUpdateCheck(),
+        this.appHelperSvc.getSyncQueueLength(),
         this.storeSvc.get<string>(StoreKey.LastUpdated)
       ])
       .then((data) => {
-        const [updatesAvailable, nextUpdateDate, lastUpdated] = data;
-        if (updatesAvailable) {
+        const [updatesAvailable, nextUpdateDate, syncQueueLength, lastUpdated] = data;
+        if (updatesAvailable || syncQueueLength > 0) {
           this.updatesAvailable = true;
           this.nextUpdate = this.platformSvc
             .getI18nString(this.Strings.View.Settings.Sync.UpdatesAvailable.True)
@@ -183,11 +183,15 @@ export class SyncSettingsComponent implements OnInit {
   }
 
   syncUpdates() {
-    // Display loading panel and pull updates
+    // Display loading panel and sync updates
     this.workingSvc.show();
     return this.platformSvc
-      .queueSync({ type: SyncType.Local })
-      .then(() => this.refreshSyncDataUsage())
-      .then(this.appHelperSvc.syncBookmarksSuccess);
+      .queueSync()
+      .then(() => this.appHelperSvc.syncBookmarksSuccess())
+      .catch((err) => {
+        return this.appHelperSvc.syncBookmarksFailed(err).then(() => {
+          throw err;
+        });
+      });
   }
 }

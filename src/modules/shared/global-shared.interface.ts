@@ -26,7 +26,7 @@ export interface PlatformService {
   openUrl: (url: string) => void;
   platformName: string;
   queueLocalResync: () => ng.IPromise<void>;
-  queueSync: (sync: Sync, command?: MessageCommand, runSync?: boolean) => ng.IPromise<void>;
+  queueSync: (sync?: Sync, command?: MessageCommand, runSync?: boolean) => ng.IPromise<void>;
   refreshNativeInterface: (syncEnabled?: boolean, syncType?: SyncType) => ng.IPromise<void>;
   startSyncUpdateChecks: () => ng.IPromise<void>;
   stopSyncUpdateChecks: () => ng.IPromise<void>;

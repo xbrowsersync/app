@@ -57,10 +57,8 @@ export class AndroidAppAlertComponent {
       };
     }
 
-    const text = `${(alert.title ? `${alert.title}. ${descriptionStripped}` : descriptionStripped).replace(
-      /\.$/,
-      ''
-    )}.`;
+    // Join title and description to form alert text
+    const text = `${[alert.title, descriptionStripped.replace(/\.$/, '')].filter(Boolean).join('. ')}.`;
     const textColor = '#ffffff';
     let bgColor = null;
     switch (alert.type) {

@@ -7,7 +7,6 @@ import { AppHelperService } from '../../app/shared/app-helper/app-helper.service
 import { AlertService } from '../../shared/alert/alert.service';
 import { BookmarkMetadata } from '../../shared/bookmark/bookmark.interface';
 import { BookmarkHelperService } from '../../shared/bookmark/bookmark-helper/bookmark-helper.service';
-import * as Errors from '../../shared/errors/errors';
 import Globals from '../../shared/global-shared.constants';
 import { PlatformService } from '../../shared/global-shared.interface';
 import { LogService } from '../../shared/log/log.service';
@@ -158,20 +157,23 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     }, 1e3);
   }
 
-  executeSyncIfOnline(workingContext: WorkingContext): ng.IPromise<void | boolean> {
-    // If no connection display an alert and return
-    if (!this.networkSvc.isNetworkConnected()) {
-      this.alertSvc.setCurrentAlert({
-        message: this.platformSvc.getI18nString(this.Strings.Error.UncommittedSyncs.Message),
-        title: this.platformSvc.getI18nString(this.Strings.Error.UncommittedSyncs.Title)
+  executeSyncIfOnline(workingContext: WorkingContext): ng.IPromise<void> {
+    return this.$q
+      .resolve()
+      .then(() => {
+        // Execute sync if connected
+        if (!this.networkSvc.isNetworkConnected()) {
+          return;
+        }
+        return this.platformSvc
+          .executeSync(false, workingContext)
+          .then(() => this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults));
+      })
+      .catch((err) => {
+        return this.appHelperSvc.syncBookmarksFailed(err).then(() => {
+          throw err;
+        });
       });
-      return this.$q.resolve(false);
-    }
-
-    // Sync bookmarks
-    return this.platformSvc.executeSync(false, workingContext).then(() => {
-      return true;
-    });
   }
 
   getSharedBookmark(): ng.IPromise<BookmarkMetadata> {
@@ -303,36 +305,8 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
           this.utilitySvc.broadcastEvent(AppEventType.ClearSelectedBookmark);
         }
 
-        // If not online return here
-        if (!this.networkSvc.isNetworkConnected()) {
-          return;
-        }
-
-        // Check for updates and run sync but don't wait before continuing
-        this.appHelperSvc
-          .getSyncQueueLength()
-          .then((syncQueueLength) => {
-            return syncQueueLength === 0 ? this.syncSvc.checkForUpdates(undefined, false) : true;
-          })
-          .then((runSync) => {
-            if (!runSync) {
-              return;
-            }
-
-            // Run sync
-            this.executeSyncIfOnline(WorkingContext.DelayedSyncing).then((isOnline) => {
-              if (isOnline) {
-                this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
-              }
-            });
-          })
-          .catch((err) => {
-            // Handle sync removed from service
-            if (err instanceof Errors.SyncNotFoundError) {
-              return this.syncSvc.setSyncRemoved().then(() => this.appHelperSvc.switchView());
-            }
-            throw err;
-          });
+        // Run sync
+        this.executeSyncIfOnline(WorkingContext.DelayedSyncing);
       });
     });
   }
@@ -392,36 +366,8 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
             return this.handleBookmarkShared(sharedBookmark);
           }
 
-          // If not online return here
-          if (!this.networkSvc.isNetworkConnected()) {
-            return;
-          }
-
-          // Check for updates and run sync but don't wait before continuing
-          this.appHelperSvc
-            .getSyncQueueLength()
-            .then((syncQueueLength) => {
-              return syncQueueLength === 0 ? this.syncSvc.checkForUpdates(undefined, false) : true;
-            })
-            .then((runSync) => {
-              if (!runSync) {
-                return;
-              }
-
-              // Run sync
-              this.executeSyncIfOnline(WorkingContext.DelayedSyncing).then((isOnline) => {
-                if (isOnline) {
-                  this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults);
-                }
-              });
-            })
-            .catch((err) => {
-              // Handle sync removed from service
-              if (err instanceof Errors.SyncNotFoundError) {
-                return this.syncSvc.setSyncRemoved().then(() => this.appHelperSvc.switchView());
-              }
-              throw err;
-            });
+          // Run sync
+          this.executeSyncIfOnline(WorkingContext.DelayedSyncing);
         });
       });
   }

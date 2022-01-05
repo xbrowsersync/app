@@ -408,9 +408,14 @@ export class AndroidPlatformService implements PlatformService {
     });
   }
 
-  queueSync(sync: Sync): ng.IPromise<void> {
+  queueSync(sync?: Sync): ng.IPromise<void> {
     let resyncRequired = false;
     return this.$q<boolean>((resolve, reject) => {
+      // If no sync has been provided, process current sync queue and check for updates
+      if (angular.isUndefined(sync)) {
+        return this.executeSync();
+      }
+
       // If pushing a change, check for updates before proceeding with sync
       if (sync.type !== SyncType.LocalAndRemote && sync.type !== SyncType.Remote) {
         return resolve(true);
