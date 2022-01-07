@@ -268,7 +268,10 @@ export class AppBookmarkComponent implements OnInit {
               }
               return true;
             })
-            .catch(this.$exceptionHandler);
+            .catch(this.$exceptionHandler)
+            .finally(() => {
+              this.addButtonDisabledUntilEditForm = false;
+            });
         })
         // Set initial focus
         .then((setFocus) => {
