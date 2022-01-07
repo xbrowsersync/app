@@ -157,23 +157,34 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     }, 1e3);
   }
 
-  executeSyncIfOnline(workingContext: WorkingContext): ng.IPromise<void> {
-    return this.$q
-      .resolve()
-      .then(() => {
-        // Execute sync if connected
-        if (!this.networkSvc.isNetworkConnected()) {
-          return;
-        }
-        return this.platformSvc
-          .executeSync(false, workingContext)
-          .then(() => this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults));
-      })
-      .catch((err) => {
-        return this.appHelperSvc.syncBookmarksFailed(err).then(() => {
-          throw err;
+  executeSync(workingContext: WorkingContext): ng.IPromise<void> {
+    return this.$q.resolve().then(() => {
+      // Don't attempt to sync if no connection
+      if (!this.networkSvc.isNetworkConnected()) {
+        return;
+      }
+
+      // Check if there are uncommitted syncs or sync updates before syncing
+      return this.appHelperSvc
+        .getSyncQueueLength()
+        .then((syncQueueLength) => {
+          return syncQueueLength === 0 ? this.syncSvc.checkForUpdates(undefined, false) : true;
+        })
+        .then((runSync) => {
+          if (!runSync) {
+            return;
+          }
+
+          return this.platformSvc
+            .executeSync(false, workingContext)
+            .then(() => this.utilitySvc.broadcastEvent(AppEventType.RefreshBookmarkSearchResults))
+            .catch((err) => {
+              return this.appHelperSvc.syncBookmarksFailed(err).then(() => {
+                throw err;
+              });
+            });
         });
-      });
+    });
   }
 
   getSharedBookmark(): ng.IPromise<BookmarkMetadata> {
@@ -301,7 +312,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
         }
 
         // Run sync
-        this.executeSyncIfOnline(WorkingContext.DelayedSyncing);
+        this.executeSync(WorkingContext.DelayedSyncing);
       });
     });
   }
@@ -362,7 +373,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
           }
 
           // Run sync
-          this.executeSyncIfOnline(WorkingContext.DelayedSyncing);
+          this.executeSync(WorkingContext.DelayedSyncing);
         });
       });
   }
