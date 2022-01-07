@@ -226,6 +226,13 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     }
   }
 
+  handleBookmarkShared(sharedBookmark: BookmarkMetadata): void {
+    if (!angular.isUndefined(sharedBookmark)) {
+      // Set current page as shared bookmark
+      this.platformSvc.currentPage = sharedBookmark;
+    }
+  }
+
   handleDeviceReady(success: () => any, failure: () => any): ng.IPromise<any> {
     // Prime cache for faster startup
     this.$q.all([this.bookmarkHelperSvc.getCachedBookmarks(), this.settingsSvc.all()]).catch(() => {});
@@ -268,13 +275,6 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
     );
   }
 
-  handleBookmarkShared(sharedBookmark: BookmarkMetadata): void {
-    if (!angular.isUndefined(sharedBookmark)) {
-      // Set current page as shared bookmark
-      this.platformSvc.currentPage = sharedBookmark;
-    }
-  }
-
   handleKeyboardDidShow(event: any): void {
     document.body.style.height = `calc(100% - ${event.keyboardHeight}px)`;
     setTimeout(() => {
@@ -298,11 +298,6 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
         if (!angular.isUndefined(sharedBookmark)) {
           this.handleBookmarkShared(sharedBookmark);
           return this.appHelperSvc.switchView(RoutePath.Bookmark);
-        }
-
-        // Deselect bookmark
-        if (this.utilitySvc.checkCurrentRoute(RoutePath.Search)) {
-          this.utilitySvc.broadcastEvent(AppEventType.ClearSelectedBookmark);
         }
 
         // Run sync

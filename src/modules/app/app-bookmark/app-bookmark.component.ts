@@ -265,8 +265,6 @@ export class AppBookmarkComponent implements OnInit {
               }
               if (!angular.isUndefined(currentPageMetadata)) {
                 this.bookmarkFormData = currentPageMetadata as BookmarkMetadata;
-                this.originalUrl = this.bookmarkFormData.url;
-                this.addButtonDisabledUntilEditForm = false;
               }
               return true;
             })

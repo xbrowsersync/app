@@ -1,4 +1,4 @@
-<div class="separator" ng-if="vm.isSeparator(vm.bookmark)"></div>
+<div class="separator" ng-if="vm.isSeparator(vm.bookmark)" data-id="{{vm.bookmark.id}}"></div>
 <div class="menu" ng-class="{ 'animate animate-fade-in': vm.enableSelect }" ng-if="vm.enableSelect"
      ng-show="vm.isSelected" tabindex="-1">
   <button class="btn btn-fab" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.ShareBookmark) }}"
@@ -20,7 +20,7 @@
 </div>
 <div class="bookmark-content" ng-if="vm.bookmark.url && !vm.isSeparator(vm.bookmark)"
      ng-click="!vm.enableSelect && vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event,  vm.bookmark.url)"
-     hm-tap="vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event,  vm.bookmark.url)">
+     hm-tap="vm.utilitySvc.handleEvent(vm.appHelperSvc.openUrl, $event,  vm.bookmark.url)" data-id="{{vm.bookmark.id}}">
   <h4 class="bookmark-heading" ng-if="vm.bookmark.title">{{ vm.bookmark.title }}</h4>
   <h4 class="bookmark-heading" ng-if="!vm.bookmark.title">
     {{ vm.bookmarkHelperSvc.getBookmarkTitleForDisplay(vm.bookmark) }}
@@ -30,7 +30,7 @@
     <div class="url">{{  vm.bookmark.url }}</div>
   </div>
 </div>
-<div class="bookmark-content" ng-if="!vm.bookmark.url && !vm.isSeparator(vm.bookmark)">
+<div class="bookmark-content" ng-if="!vm.bookmark.url && !vm.isSeparator(vm.bookmark)" data-id="{{vm.bookmark.id}}">
   <h4 class="bookmark-heading" ng-class="{ 'opening': vm.bookmark.open && !vm.bookmark.displayChildren }"
       ng-click="vm.utilitySvc.handleEvent(vm.clickBookmarkHeading, $event, vm.bookmark)" ng-if="vm.bookmark.title">
     {{ vm.bookmarkHelperSvc.getBookmarkTitleForDisplay(vm.bookmark) }}

@@ -1,4 +1,5 @@
 import './app-search.component.scss';
+import angular, { IScope } from 'angular';
 import { OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
 import { AndroidAppHelperService } from '../../android/android-app/shared/android-app-helper/android-app-helper.service';
@@ -21,6 +22,7 @@ export abstract class AppSearchComponent implements OnInit {
 
   $exceptionHandler: ExceptionHandler;
   $q: ng.IQService;
+  $scope: IScope;
   $timeout: ng.ITimeoutService;
   alertSvc: AlertService;
   appHelperSvc: AppHelperService;
@@ -34,7 +36,9 @@ export abstract class AppSearchComponent implements OnInit {
   RoutePath = RoutePath;
   batchResultsNum = 10;
   bookmarkTree: BookmarkTreeItem[];
+  cachedBookmarks: Bookmark[];
   currentUrlBookmarked: boolean;
+  disableQueryWatch: () => void;
   displayFolderView: boolean;
   lastWord: string;
   lookahead: string;
@@ -73,6 +77,7 @@ export abstract class AppSearchComponent implements OnInit {
   ) {
     this.$exceptionHandler = $exceptionHandler;
     this.$q = $q;
+    this.$scope = $scope;
     this.$timeout = $timeout;
     this.alertSvc = AlertSvc;
     this.appHelperSvc = AppHelperSvc;
@@ -82,49 +87,53 @@ export abstract class AppSearchComponent implements OnInit {
     this.utilitySvc = UtilitySvc;
     this.workingSvc = WorkingSvc;
 
-    $scope.$watch(
-      () => this.query,
-      (newVal, oldVal) => {
-        if (newVal ?? undefined !== oldVal) {
-          this.searchTextChanged();
-        }
-      }
-    );
+    this.enableQueryWatch();
   }
 
   addBookmark(): void {
     this.appHelperSvc.switchView(RoutePath.Bookmark);
   }
 
-  clearSearch(): void {
-    this.displayDefaultSearchState().then(() => {
-      // Display default search results and focus on search box
-      this.searchBookmarks();
-      this.appHelperSvc.focusOnElement('input[name=txtSearch]');
-    });
+  bookmarksAreEquivalent(b1: Bookmark[], b2: Bookmark[]): boolean {
+    const getAllBookmarkProps = (bookmarks: Bookmark[]) => {
+      // Convert bookmarks
+      const allProps = [];
+      this.bookmarkHelperSvc.eachBookmark((bookmark) => {
+        const props = Object.entries(bookmark).filter((resultProps) => {
+          const [propertyName] = resultProps;
+          return (
+            propertyName !== '$$hashKey' &&
+            propertyName !== 'children' &&
+            propertyName !== 'displayChildren' &&
+            propertyName !== 'open'
+          );
+        });
+        allProps.push(props);
+      }, bookmarks);
+      return allProps;
+    };
+
+    // Iterate
+    const b1Props = getAllBookmarkProps(b1);
+    const b2Props = getAllBookmarkProps(b2);
+    return angular.equals(b1Props, b2Props);
   }
 
-  displayDefaultSearchState(): ng.IPromise<void> {
-    // Clear search and results
+  clearSearch(): void {
+    // Clear current query and display default search results
+    this.clearSearchQuery();
+    this.displayFolderView = false;
+    this.results = this.results ?? [];
+    this.refreshBookmarks();
+    this.appHelperSvc.focusOnElement('input[name=txtSearch]');
+  }
+
+  clearSearchQuery(): void {
+    this.disableQueryWatch();
     this.query = null;
     this.queryMeasure = null;
     this.lookahead = null;
-    this.results = null;
-
-    if (this.displayFolderView) {
-      // Initialise bookmark tree
-      this.bookmarkTree = null;
-      this.bookmarkHelperSvc.getCachedBookmarks().then((results) => {
-        // Display bookmark tree view, sort containers by display title
-        this.bookmarkTree = results.sort((x, y) => {
-          return this.bookmarkHelperSvc
-            .getBookmarkTitleForDisplay(x)
-            .localeCompare(this.bookmarkHelperSvc.getBookmarkTitleForDisplay(y));
-        }) as BookmarkTreeItem[];
-      });
-    }
-
-    return this.$q.resolve();
+    this.enableQueryWatch();
   }
 
   displayMoreSearchResults(): void {
@@ -132,6 +141,21 @@ export abstract class AppSearchComponent implements OnInit {
       // Display next batch of results
       this.resultsDisplayed += this.batchResultsNum;
     }
+  }
+
+  displaySearchResults(results: Bookmark[]): void {
+    this.scrollDisplayMoreEnabled = false;
+    this.resultsDisplayed = this.batchResultsNum;
+    this.results = results;
+
+    // Scroll to top of search results
+    this.$timeout(() => {
+      this.scrollDisplayMoreEnabled = true;
+      const resultsPanel = document.querySelector('.search-results-container');
+      if (resultsPanel) {
+        resultsPanel.scrollTop = 0;
+      }
+    }, Globals.InterfaceReadyTimeout);
   }
 
   editBookmark(event: Event, bookmarkToUpdate: Bookmark): void {
@@ -148,6 +172,17 @@ export abstract class AppSearchComponent implements OnInit {
     }
   }
 
+  enableQueryWatch(): void {
+    this.disableQueryWatch = this.$scope.$watch(
+      () => this.query,
+      (newVal, oldVal) => {
+        if ((newVal ?? null) !== (oldVal ?? null)) {
+          this.searchTextChanged();
+        }
+      }
+    );
+  }
+
   getKeywords(text: string): ng.IPromise<string[]> {
     return this.platformSvc
       .getCurrentLocale()
@@ -155,17 +190,7 @@ export abstract class AppSearchComponent implements OnInit {
       .then((words) => words.filter((x) => x.length > Globals.LookaheadMinChars));
   }
 
-  ngOnInit(): ng.IPromise<void> {
-    return this.settingsSvc.all().then((settings) => {
-      this.alternateSearchBarPosition = settings.alternateSearchBarPosition;
-      this.displayFolderView = settings.defaultToFolderView;
-      this.bookmarkTree = undefined;
-      this.selectedBookmarkId = undefined;
-      this.displayDefaultSearchState();
-    });
-  }
-
-  searchBookmarks(): ng.IPromise<void> {
+  getSearchResults(): ng.IPromise<Bookmark[]> {
     let queryText = this.query;
     return (
       this.$q
@@ -192,23 +217,48 @@ export abstract class AppSearchComponent implements OnInit {
             return searchQuery;
           });
         })
-        // Execute search and display results
+        // Execute search and return results
         .then((searchQuery) => this.bookmarkHelperSvc.searchBookmarks(searchQuery))
-        .then((results) => {
-          this.scrollDisplayMoreEnabled = false;
-          this.resultsDisplayed = this.batchResultsNum;
-          this.results = results;
-
-          // Scroll to top of search results
-          this.$timeout(() => {
-            this.scrollDisplayMoreEnabled = true;
-            const resultsPanel = document.querySelector('.search-results-container');
-            if (resultsPanel) {
-              resultsPanel.scrollTop = 0;
-            }
-          }, Globals.InterfaceReadyTimeout);
-        })
     );
+  }
+
+  ngOnInit(): ng.IPromise<void> {
+    return this.settingsSvc.all().then((settings) => {
+      this.alternateSearchBarPosition = settings.alternateSearchBarPosition;
+      this.displayFolderView = settings.defaultToFolderView;
+      this.refreshBookmarks();
+    });
+  }
+
+  refreshBookmarks(): ng.IPromise<boolean> {
+    return this.bookmarkHelperSvc.getCachedBookmarks().then((cachedBookmarks) => {
+      // Update bookmark tree only if bookmarks have changed or if visible bookmarks not set
+      const doRefresh =
+        !angular.equals(cachedBookmarks, this.cachedBookmarks) ||
+        (this.displayFolderView ? !this.bookmarkTree : !this.results);
+      if (doRefresh) {
+        this.selectedBookmarkId = undefined;
+        this.cachedBookmarks = cachedBookmarks;
+
+        if (this.displayFolderView) {
+          // When in folder view, sort containers by display title
+          const bookmarkTreeItems = angular
+            .copy(cachedBookmarks)
+            .sort((x, y) =>
+              this.bookmarkHelperSvc
+                .getBookmarkTitleForDisplay(x)
+                .localeCompare(this.bookmarkHelperSvc.getBookmarkTitleForDisplay(y))
+            ) as BookmarkTreeItem[];
+
+          this.bookmarkTree = bookmarkTreeItems;
+        }
+      }
+      return doRefresh;
+    });
+  }
+
+  searchBookmarks(): ng.IPromise<void> {
+    return this.getSearchResults().then(this.displaySearchResults);
   }
 
   searchBoxKeyDown(event: KeyboardEvent): void {
@@ -331,7 +381,7 @@ export abstract class AppSearchComponent implements OnInit {
 
     // No query, clear results
     if (!this.query?.trim()) {
-      this.displayDefaultSearchState();
+      this.refreshBookmarks();
       return;
     }
 
@@ -411,11 +461,13 @@ export abstract class AppSearchComponent implements OnInit {
   }
 
   toggleBookmarkTreeView(): ng.IPromise<void> {
+    // Clear current query and switch view
+    this.clearSearchQuery();
     this.displayFolderView = !this.displayFolderView;
-    return this.displayDefaultSearchState().then(() => {
-      // Display default search results
+    return this.refreshBookmarks().then(() => {
+      // Ensure search results are displayed in results view
       if (!this.displayFolderView) {
-        this.searchBookmarks();
+        return this.getSearchResults().then((results) => this.displaySearchResults(results));
       }
     });
   }

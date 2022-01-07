@@ -1,5 +1,4 @@
 enum AppEventType {
-  ClearSelectedBookmark = 'CLEAR_SELECTED_BOOKMARK',
   RefreshBookmarkSearchResults = 'REFRESH_BOOKMARK_SEARCH_RESULTS',
   RefreshSyncDataUsage = 'REFRESH_SYNC_DATA_USAGE',
   SyncDisabled = 'SYNC_DISABlED',

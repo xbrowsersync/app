@@ -78,18 +78,9 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
 
     this.syncSvc = SyncSvc;
 
-    $scope.$on(AppEventType.ClearSelectedBookmark, () => {
-      this.selectedBookmarkId = undefined;
-    });
-
     $scope.$on(AppEventType.RefreshBookmarkSearchResults, () => {
-      this.displayDefaultSearchState();
+      this.refreshBookmarks();
     });
-  }
-
-  clearSearch(): void {
-    // Display default search results and focus on search box
-    this.displayDefaultSearchState().then(this.searchBookmarks);
   }
 
   deleteBookmark(event: Event, bookmark: Bookmark): void {
@@ -172,8 +163,8 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
             .then(() => {
               switch (true) {
                 case err instanceof DataOutOfSyncError:
-                  // Update search results to reflect re-sync
-                  return this.displayDefaultSearchState();
+                  // Refresh bookmarks to reflect re-sync
+                  return this.refreshBookmarks();
                 case err instanceof SyncUncommittedError:
                 case this.syncSvc.shouldDisplayDefaultPageOnError(err):
                   // Do nothing
@@ -193,15 +184,6 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
     }, 1e3);
   }
 
-  displayDefaultSearchState(): ng.IPromise<void> {
-    // Set clear search button to display all bookmarks
-    return super.displayDefaultSearchState().then(() => {
-      if (!this.displayFolderView) {
-        return this.searchBookmarks();
-      }
-    });
-  }
-
   initPullToRefresh(): void {
     // Set up pull to refresh
     const selector = '.pull-to-refresh';
@@ -218,7 +200,10 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
         onRefresh: () => {
           // Display loading overlay
           this.workingSvc.show();
-          return this.platformSvc.executeSync().then(() => this.displayDefaultSearchState());
+          return this.platformSvc.executeSync().then(() => {
+            this.clearSearchQuery();
+            this.refreshBookmarks();
+          });
         },
         refreshTimeout: 0,
         shouldPullToRefresh: () => !document.querySelector(selector)?.scrollTop
@@ -243,9 +228,22 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
       )
     );
 
+    // Enable pull to refresh
     this.$timeout(() => this.initPullToRefresh(), 500);
 
     return super.ngOnInit();
+  }
+
+  refreshBookmarks(): ng.IPromise<boolean> {
+    return super.refreshBookmarks().then((doRefresh) => {
+      if (doRefresh && !this.displayFolderView) {
+        // Update search results if new results are different to current results
+        return this.getSearchResults()
+          .then(this.displaySearchResults)
+          .then(() => true);
+      }
+      return false;
+    });
   }
 
   toggleBookmarkTreeView(): ng.IPromise<void> {
@@ -260,6 +258,9 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
         bookmarks,
         type: SyncType.LocalAndRemote
       })
-      .finally(this.displayDefaultSearchState);
+      .finally(() => {
+        this.cachedBookmarks = null;
+        this.refreshBookmarks();
+      });
   }
 }
