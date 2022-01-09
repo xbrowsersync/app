@@ -168,7 +168,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
       return this.appHelperSvc
         .getSyncQueueLength()
         .then((syncQueueLength) => {
-          return syncQueueLength === 0 ? this.syncSvc.checkForUpdates(undefined, false) : true;
+          return syncQueueLength === 0 ? this.syncSvc.checkForUpdates().catch(() => false) : true;
         })
         .then((runSync) => {
           if (!runSync) {
