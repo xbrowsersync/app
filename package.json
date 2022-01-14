@@ -66,7 +66,7 @@
     "hammerjs": "^2.0.8",
     "idb-keyval": "^6.0.3",
     "lzutf8": "^0.6.0",
-    "marked": "^4.0.3",
+    "marked": "^4.0.10",
     "ng-infinite-scroll": "^1.3.0",
     "popper.js": "^1.16.0",
     "pulltorefreshjs": "^0.1.22",
