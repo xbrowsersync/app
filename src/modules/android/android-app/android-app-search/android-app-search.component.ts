@@ -201,7 +201,7 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
           // Display loading overlay
           this.workingSvc.show();
           return this.platformSvc.executeSync().then(() => {
-            this.clearSearchQuery();
+            this.resetSearch();
             this.refreshBookmarks();
           });
         },
@@ -244,6 +244,11 @@ export class AndroidAppSearchComponent extends AppSearchComponent implements OnD
       }
       return false;
     });
+  }
+
+  resetSearch(): void {
+    super.resetSearch();
+    this.refreshBookmarks();
   }
 
   toggleBookmarkTreeView(): ng.IPromise<void> {

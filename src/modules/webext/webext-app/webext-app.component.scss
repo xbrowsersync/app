@@ -6,15 +6,12 @@ body {
 
 app {
   .container {
-    &.search,
-    &.settings {
+    &.search {
       .view,
       .view-content {
-        max-height: 37rem;
+        max-height: 599px;
       }
-    }
 
-    &.search {
       .view {
         height: auto;
         width: 38rem;
@@ -39,6 +36,11 @@ app {
         #restoreForm .validation {
           bottom: -0.75rem;
         }
+      }
+
+      .view,
+      .view-content {
+        max-height: 37rem;
       }
     }
 

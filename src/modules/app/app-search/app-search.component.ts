@@ -120,20 +120,9 @@ export abstract class AppSearchComponent implements OnInit {
   }
 
   clearSearch(): void {
-    // Clear current query and display default search results
-    this.clearSearchQuery();
+    this.resetSearch();
     this.displayFolderView = false;
-    this.results = this.results ?? [];
-    this.refreshBookmarks();
     this.appHelperSvc.focusOnElement('input[name=txtSearch]');
-  }
-
-  clearSearchQuery(): void {
-    this.disableQueryWatch();
-    this.query = null;
-    this.queryMeasure = null;
-    this.lookahead = null;
-    this.enableQueryWatch();
   }
 
   displayMoreSearchResults(): void {
@@ -255,6 +244,16 @@ export abstract class AppSearchComponent implements OnInit {
       }
       return doRefresh;
     });
+  }
+
+  resetSearch(): void {
+    // Clear current query and display default search results
+    this.disableQueryWatch();
+    this.query = null;
+    this.queryMeasure = null;
+    this.lookahead = null;
+    this.enableQueryWatch();
+    this.results = undefined;
   }
 
   searchBookmarks(): ng.IPromise<void> {
@@ -381,7 +380,7 @@ export abstract class AppSearchComponent implements OnInit {
 
     // No query, clear results
     if (!this.query?.trim()) {
-      this.refreshBookmarks();
+      this.resetSearch();
       return;
     }
 
@@ -462,7 +461,7 @@ export abstract class AppSearchComponent implements OnInit {
 
   toggleBookmarkTreeView(): ng.IPromise<void> {
     // Clear current query and switch view
-    this.clearSearchQuery();
+    this.resetSearch();
     this.displayFolderView = !this.displayFolderView;
     return this.refreshBookmarks().then(() => {
       // Ensure search results are displayed in results view
