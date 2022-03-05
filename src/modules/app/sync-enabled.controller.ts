@@ -4,10 +4,15 @@ import { RoutePath } from './app.enum';
 export class SyncEnabledController {
   showComponent = false;
 
-  static $inject = ['$location', 'SyncService'];
-  constructor($location: ng.ILocationService, syncService: SyncService) {
-    syncService
-      .checkSyncExists()
+  static $inject = ['$location', '$q', '$timeout', 'SyncService'];
+  constructor(
+    $location: ng.ILocationService,
+    $q: ng.IQService,
+    $timeout: ng.ITimeoutService,
+    syncService: SyncService
+  ) {
+    // Check if the current sync has been removed before showing page content
+    $q.race([syncService.checkSyncExists(), new $q((resolve) => $timeout(() => resolve(true), 150))])
       .then((syncExists) => {
         if (!syncExists) {
           $location.path(RoutePath.SyncRemoved);
