@@ -54,7 +54,7 @@ export class AndroidPlatformService implements PlatformService {
   workingSvc: WorkingService;
 
   backgroundSyncInterval: ng.IPromise<void>;
-  _currentPage: BookmarkMetadata;
+  _sharedBookmark: BookmarkMetadata;
   cancelGetPageMetadata: () => any;
   i18nObjects: I18nObject[];
   loadingId: string;
@@ -110,11 +110,11 @@ export class AndroidPlatformService implements PlatformService {
     this.i18nObjects = [];
   }
 
-  get currentPage(): BookmarkMetadata {
-    return this._currentPage;
+  get sharedBookmark(): BookmarkMetadata {
+    return this._sharedBookmark;
   }
-  set currentPage(value: BookmarkMetadata) {
-    this._currentPage = value;
+  set sharedBookmark(value: BookmarkMetadata) {
+    this._sharedBookmark = value;
   }
 
   get syncSvc(): SyncService {
@@ -262,7 +262,7 @@ export class AndroidPlatformService implements PlatformService {
   }
 
   getCurrentUrl(): ng.IPromise<string> {
-    return this.$q.resolve(this.currentPage?.url);
+    return this.$q.resolve(this.sharedBookmark?.url);
   }
 
   getI18nString(i18nObj: I18nObject): string {
@@ -278,14 +278,14 @@ export class AndroidPlatformService implements PlatformService {
     let loadUrlTimeout: ng.IPromise<void>;
 
     // Check for protocol
-    let metadataUrl = pageUrl ?? this.currentPage?.url;
+    let metadataUrl = pageUrl ?? this.sharedBookmark?.url;
     if (metadataUrl && !new RegExp(Globals.URL.ProtocolRegex).test(metadataUrl)) {
       metadataUrl = `https://${metadataUrl}`;
     }
 
     // Set default metadata from provided page url or current page
     const metadata: WebpageMetadata = {
-      title: this.currentPage?.title,
+      title: this.sharedBookmark?.title,
       url: metadataUrl
     };
 

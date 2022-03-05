@@ -1,4 +1,4 @@
-import { zxcvbn, ZxcvbnOptions } from '@zxcvbn-ts/core';
+import { zxcvbn, zxcvbnOptions } from '@zxcvbn-ts/core';
 import zxcvbnLanguageCommon from '@zxcvbn-ts/language-common';
 import zxcvbnLanguageEn from '@zxcvbn-ts/language-en';
 import { Directive, Input, OnInit } from 'angular-ts-decorators';
@@ -25,7 +25,7 @@ export class PasswordStrengthDirective implements OnInit {
   }
 
   ngOnInit(): void {
-    ZxcvbnOptions.setOptions({
+    zxcvbnOptions.setOptions({
       dictionary: {
         ...zxcvbnLanguageCommon.dictionary,
         ...zxcvbnLanguageEn.dictionary

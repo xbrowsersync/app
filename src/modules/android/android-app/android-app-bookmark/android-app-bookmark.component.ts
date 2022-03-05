@@ -119,12 +119,12 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
   }
 
   getMetadataForCurrentPage(): ng.IPromise<Boolean | BookmarkMetadata> {
-    if (angular.isUndefined(this.platformSvc.currentPage)) {
+    if (angular.isUndefined(this.platformSvc.sharedBookmark)) {
       return this.$q.resolve(undefined);
     }
 
     // Show a message if current page has no url - user shared an value that did not contain a valid url
-    if (angular.isUndefined(this.platformSvc.currentPage.url)) {
+    if (angular.isUndefined(this.platformSvc.sharedBookmark.url)) {
       this.alertSvc.setCurrentAlert({
         message: this.platformSvc.getI18nString(this.Strings.View.Bookmark.InvalidUrlShared),
         type: AlertType.Error
@@ -133,12 +133,12 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
     }
 
     // Check auto fetch metadata preference before retrieving metadata
-    this.bookmarkFormData = this.platformSvc.currentPage;
+    this.bookmarkFormData = this.platformSvc.sharedBookmark;
     this.originalUrl = this.bookmarkFormData.url;
     return this.settingsSvc.autoFetchMetadata().then((autoFetchMetadata) => {
       if (!autoFetchMetadata) {
         this.displayUpdatePropertiesButton = true;
-        return this.platformSvc.currentPage;
+        return this.platformSvc.sharedBookmark;
       }
       return super.getMetadataForCurrentPage();
     });
@@ -147,7 +147,7 @@ export class AndroidAppBookmarkComponent extends AppBookmarkComponent implements
   ngOnInit(): ng.IPromise<void> {
     return super.ngOnInit().finally(() => {
       // Clear current page
-      this.platformSvc.currentPage = undefined;
+      this.platformSvc.sharedBookmark = undefined;
     });
   }
 

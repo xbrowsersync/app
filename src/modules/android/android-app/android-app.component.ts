@@ -240,7 +240,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
   handleBookmarkShared(sharedBookmark: BookmarkMetadata): void {
     if (!angular.isUndefined(sharedBookmark)) {
       // Set current page as shared bookmark
-      this.platformSvc.currentPage = sharedBookmark;
+      this.platformSvc.sharedBookmark = sharedBookmark;
     }
   }
 
@@ -406,7 +406,7 @@ export class AndroidAppComponent extends AppMainComponent implements OnInit {
       })
         .then(() => {
           // If bookmark was shared, switch to bookmark view
-          if (!angular.isUndefined(this.platformSvc.currentPage)) {
+          if (!angular.isUndefined(this.platformSvc.sharedBookmark)) {
             return this.appHelperSvc.switchView(RoutePath.Bookmark);
           }
         })
