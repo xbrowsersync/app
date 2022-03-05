@@ -51,18 +51,22 @@ app-search {
     }
   }
 
+  /* stylelint-disable-next-line selector-class-pattern */
   .ptr--ptr {
     box-shadow: none !important;
 
+    /* stylelint-disable-next-line selector-class-pattern */
     .ptr--box {
       margin: 0;
       padding: 15px;
     }
 
+    /* stylelint-disable-next-line selector-class-pattern */
     .ptr--icon {
       display: none;
     }
 
+    /* stylelint-disable-next-line selector-class-pattern */
     .ptr--text {
       color: var(--color-pull-to-refresh-link);
       font-size: 0.9rem;

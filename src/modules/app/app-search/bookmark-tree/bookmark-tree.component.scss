@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import '../../../../styles/modules/all';
 
 bookmark-tree {
@@ -6,7 +7,7 @@ bookmark-tree {
   --color-bookmark-tree-folder-bg: var(--color-separator-bg);
   --color-bookmark-tree-folder-text: #{$color-text1-default};
   --color-bookmark-tree-folder-icon: #{$color-bg2-default};
-  --color-bookmark-tree-bookmark-hover: #{scale-color($color-bg2-default, $lightness: 70%, $saturation: 50%)};
+  --color-bookmark-tree-bookmark-hover: #{color.scale($color-bg2-default, $lightness: 70%, $saturation: 50%)};
 
   @include theme-dark {
     --color-bookmark-bg: var(--color-separator-bg);

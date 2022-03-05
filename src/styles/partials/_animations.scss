@@ -1,7 +1,7 @@
 .animate-fade-in {
-  @include animation-fade-in();
+  @include animation-fade-in;
 }
 
 .animate-fade-out {
-  @include animation-fade-out();
+  @include animation-fade-out;
 }

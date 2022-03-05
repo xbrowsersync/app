@@ -10,8 +10,8 @@ app-alert {
   }
 
   .alert {
-    @include animation-fade-in();
-    @include animation-fade-out();
+    @include animation-fade-in;
+    @include animation-fade-out;
 
     border-radius: 0;
     border-width: 0;

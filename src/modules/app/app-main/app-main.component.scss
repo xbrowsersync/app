@@ -1,3 +1,4 @@
+@use 'sass:color';
 @import '../../../styles/modules/all';
 
 app {
@@ -128,7 +129,7 @@ app {
     --color-input-placeholder: #{$color-text3-default};
     --color-input-button-bg: #{$color-text2-default};
     --color-input-button-icon: #{$color-bg3-default};
-    --color-input-button-icon-hover: #{darken($color-text3-default, 15%)};
+    --color-input-button-icon-hover: #{color.adjust($color-text3-default, $lightness: -15%)};
     --color-checkbox-bg: #{$color-text2-default};
     --color-checkbox-toggle: #{$color-bg2-default};
     --color-validation-text: #{$color-text1-default};
@@ -151,7 +152,7 @@ app {
     --color-spinner: #{$color-bg2-default};
     --color-status-bg: #{$color-text1-default};
     --color-bookmark-bg: #{$color-bg3-default};
-    --color-bookmark-bg-hover: #{scale-color($color-bg2-default, $lightness: 70%, $saturation: 50%)};
+    --color-bookmark-bg-hover: #{color.scale($color-bg2-default, $lightness: 70%, $saturation: 50%)};
     --color-bookmark-heading: #{$color-text2-default};
     --color-bookmark-menu-bg: rgba(#{hex2rgb($color-text2-default)}, 0.8);
     --color-bookmark-menu-button-delete-icon: #{$color-text1-default};
@@ -192,7 +193,7 @@ app {
       --color-input-placeholder: #{$color-text3-dark};
       --color-input-button-bg: #{$color-text2-dark};
       --color-input-button-icon: #{$color-bg2-dark};
-      --color-input-button-icon-hover: #{darken($color-text3-dark, 15%)};
+      --color-input-button-icon-hover: #{color.adjust($color-text3-dark, $lightness: -15%)};
       --color-checkbox-bg: #{$color-bg1-dark};
       --color-checkbox-toggle: #{$color-text3-dark};
       --color-validation-text: #{$color-text1-dark};
@@ -215,7 +216,7 @@ app {
       --color-spinner: #{$color-text2-dark};
       --color-status-bg: #{$color-text1-dark};
       --color-bookmark-bg: #{$color-bg2-dark};
-      --color-bookmark-bg-hover: #{lighten($color-bg2-dark, 7%)};
+      --color-bookmark-bg-hover: #{color.adjust($color-bg2-dark, $lightness: 7%)};
       --color-bookmark-heading: #{$color-text2-dark};
       --color-bookmark-menu-bg: rgba(#{hex2rgb($color-bg1-dark)}, 0.5);
       --color-bookmark-menu-button-delete-icon: #{$color-text1-dark};

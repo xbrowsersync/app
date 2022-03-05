@@ -36,7 +36,7 @@ app-working {
   }
 
   .overlay {
-    @include animation-fade-in();
+    @include animation-fade-in;
 
     flex-direction: column;
   }

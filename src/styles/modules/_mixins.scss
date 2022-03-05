@@ -5,7 +5,6 @@
 @mixin background-gradient($direction, $startColor, $startColorAmount, $endColor, $endColorAmount) {
   background: linear-gradient($direction, $startColor $startColorAmount, $endColor $endColorAmount);
   background-color: $startColor;
-  filter: progid:dximagetransform.microsoft.gradient(startColorStr='#{$startColor}', endColorStr='#{$endColor}');
 }
 
 @mixin box-shadow {

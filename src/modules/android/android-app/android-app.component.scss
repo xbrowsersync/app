@@ -141,7 +141,7 @@ app {
 
 app-background {
   .background {
-    @include animation-fade-in();
+    @include animation-fade-in;
   }
 }
 
