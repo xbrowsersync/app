@@ -152,6 +152,25 @@ export class SyncService {
     });
   }
 
+  checkSyncExists(): ng.IPromise<boolean> {
+    return this.utilitySvc.isSyncEnabled().then((syncEnabled) => {
+      if (!syncEnabled) {
+        throw new SyncDisabledError();
+      }
+      return this.apiSvc
+        .getBookmarksLastUpdated()
+        .then(() => true)
+        .catch((err) => {
+          // Handle sync removed from service
+          if (err instanceof SyncNotFoundError) {
+            this.setSyncRemoved();
+            return false;
+          }
+          return true;
+        });
+    });
+  }
+
   checkSyncVersionIsSupported(): ng.IPromise<void> {
     return this.storeSvc.get<string>(StoreKey.SyncId).then((syncId) => {
       return this.$q
