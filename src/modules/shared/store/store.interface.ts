@@ -11,6 +11,7 @@ export interface StoreContent {
   bookmarkIdMappings: BookmarkIdMapping[];
   bookmarks: string;
   checkForAppUpdates: boolean;
+  compactDisplay: boolean;
   darkModeEnabled: boolean;
   displayHelp: boolean;
   displayOtherSyncsWarning: boolean;

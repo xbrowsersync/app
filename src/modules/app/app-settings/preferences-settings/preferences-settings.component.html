@@ -32,6 +32,21 @@
     </div>
     <div class="form-group setting-group">
       <div class="setting-title">
+        <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.CompactDisplay.Label) }}</label>
+        <div>
+          <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleCompactDisplay)">
+            <input type="checkbox" id="compactDisplay" ng-model="vm.settings.compactDisplay" />
+            <label for="compactDisplay" ng-class="{ 'animate': true }"
+                   ng-if="vm.settings.compactDisplay !== undefined"></label>
+          </div>
+        </div>
+      </div>
+      <p class="description">
+        {{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.CompactDisplay.Description) }}
+      </p>
+    </div>
+    <div class="form-group setting-group">
+      <div class="setting-title">
         <label>{{ vm.platformSvc.getI18nString(vm.Strings.View.Settings.Prefs.DefaultToFolderView.Label) }}</label>
         <div>
           <div class="checkbox" ng-click="vm.utilitySvc.handleEvent(vm.toggleDefaultToFolderView)">

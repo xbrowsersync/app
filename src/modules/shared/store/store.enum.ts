@@ -5,6 +5,7 @@ enum StoreKey {
   BookmarkIdMappings = 'bookmarkIdMappings',
   Bookmarks = 'bookmarks',
   CheckForAppUpdates = 'checkForAppUpdates',
+  CompactDisplay = 'compactDisplay',
   DarkModeEnabled = 'darkModeEnabled',
   DisplayHelp = 'displayHelp',
   DisplayOtherSyncsWarning = 'displayOtherSyncsWarning',

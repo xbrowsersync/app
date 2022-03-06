@@ -1,8 +1,8 @@
-<div class="view-content" ng-class="{ 'search-bar-bottom': vm.alternateSearchBarPosition }">
+<div class="view-content"
+     ng-class="{ 'compact': vm.compactDisplay, 'mobile': vm.utilitySvc.isMobilePlatform(vm.platformSvc.platformName), 'search-bar-bottom': vm.alternateSearchBarPosition }">
   <div class="header-panel" hm-tap="vm.selectedBookmarkId = null">
     <button class="btn btn-icon btn-settings" title="{{ vm.platformSvc.getI18nString(vm.Strings.Button.Settings) }}"
-            ng-click="vm.utilitySvc.handleEvent(vm.switchToSettingsView)"
-            tabindex="5">
+            ng-click="vm.utilitySvc.handleEvent(vm.switchToSettingsView)" tabindex="5">
       <i class="fas fa-cog" aria-hidden="true"></i>
       <span class="sr-only">{{ vm.platformSvc.getI18nString(vm.Strings.Button.Settings) }}</span>
     </button>

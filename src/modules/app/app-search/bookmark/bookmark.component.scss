@@ -22,7 +22,7 @@ bookmark {
   .bookmark-content {
     background-color: var(--color-bookmark-bg);
     border-radius: $border-radius-well;
-    padding: 0.5rem 1rem 0.75rem;
+    padding: 0.5rem 1rem;
     transition: background-color ease-in-out 0.2s;
 
     .bookmark-heading {

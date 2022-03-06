@@ -1176,6 +1176,16 @@
             "default": "Be notified when a new version of xBrowserSync is available."
           }
         },
+        "CompactDisplay": {
+          "Label": {
+            "key": "View_Settings_Prefs_CompactDisplay_Label",
+            "default": "Compact display"
+          },
+          "Description": {
+            "key": "View_Settings_Prefs_CompactDisplay_Description",
+            "default": "Increases the number of bookmarks displayed on screen."
+          }
+        },
         "DarkMode": {
           "Label": {
             "key": "View_Settings_Prefs_DarkMode_Label",

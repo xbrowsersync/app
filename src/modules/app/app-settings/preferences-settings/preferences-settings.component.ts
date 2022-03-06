@@ -96,6 +96,11 @@ export class PreferencesSettingsComponent implements OnInit {
     this.settingsSvc.checkForAppUpdates(this.settings.checkForAppUpdates);
   }
 
+  toggleCompactDisplay(): void {
+    this.settings.compactDisplay = !this.settings.compactDisplay;
+    this.settingsSvc.compactDisplay(this.settings.compactDisplay);
+  }
+
   toggleDefaultToFolderView(): void {
     this.settings.defaultToFolderView = !this.settings.defaultToFolderView;
     this.settingsSvc.defaultToFolderView(this.settings.defaultToFolderView);

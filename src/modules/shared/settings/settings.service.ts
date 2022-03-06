@@ -26,6 +26,7 @@ export class SettingsService {
         StoreKey.AlternateSearchBarPosition,
         StoreKey.AutoFetchMetadata,
         StoreKey.CheckForAppUpdates,
+        StoreKey.CompactDisplay,
         StoreKey.DarkModeEnabled,
         StoreKey.DefaultToFolderView,
         StoreKey.SyncBookmarksToolbar
@@ -66,6 +67,17 @@ export class SettingsService {
 
     return this.storeSvc.set(StoreKey.CheckForAppUpdates, newValue).then(() => {
       this.logSvc.logInfo(`Check for app updates setting: ${newValue ? 'enabled' : 'disabled'}`);
+      return newValue;
+    });
+  }
+
+  compactDisplay(newValue?: boolean): ng.IPromise<boolean> {
+    if (angular.isUndefined(newValue ?? undefined)) {
+      return this.storeSvc.get<boolean>(StoreKey.CompactDisplay);
+    }
+
+    return this.storeSvc.set(StoreKey.CompactDisplay, newValue).then(() => {
+      this.logSvc.logInfo(`Compact view setting: ${newValue ? 'enabled' : 'disabled'}`);
       return newValue;
     });
   }

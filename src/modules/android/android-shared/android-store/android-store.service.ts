@@ -18,6 +18,7 @@ export class AndroidStoreService extends StoreService {
     StoreKey.AlternateSearchBarPosition,
     StoreKey.AutoFetchMetadata,
     StoreKey.CheckForAppUpdates,
+    StoreKey.CompactDisplay,
     StoreKey.DarkModeEnabled,
     StoreKey.DefaultToFolderView,
     StoreKey.DisplayHelp,

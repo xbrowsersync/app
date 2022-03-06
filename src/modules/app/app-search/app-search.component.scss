@@ -92,5 +92,59 @@ app-search {
 
   .view-content {
     padding: 0;
+
+    &.compact {
+      .bookmark-content {
+        .bookmark-heading {
+          font-size: 1.1rem !important;
+          line-height: 1.5rem !important;
+        }
+
+        .bookmark-text .description {
+          display: none !important;
+        }
+      }
+
+      .menu .btn-fab {
+        font-size: 1.2rem !important;
+        height: 3rem !important;
+        width: 3rem !important;
+      }
+
+      bookmark-tree {
+        bookmark.folder > .bookmark-content > .bookmark-heading {
+          padding-left: 1.5rem !important;
+
+          &::before {
+            font-size: 1rem !important;
+          }
+        }
+      }
+
+      &.mobile {
+        .bookmark-content {
+          padding: 0.75rem 1rem 0.5rem !important;
+
+          .bookmark-heading {
+            font-size: 1rem !important;
+            line-height: 1rem !important;
+          }
+        }
+
+        bookmark-tree {
+          bookmark.folder > .bookmark-content {
+            padding: 0.75rem 1rem !important;
+
+            & > .bookmark-heading {
+              padding-left: 1.5rem !important;
+
+              &::before {
+                font-size: 0.9rem !important;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

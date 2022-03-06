@@ -48,6 +48,7 @@ export abstract class StoreService {
           this.setInStore(StoreKey.AlternateSearchBarPosition, false),
           this.setInStore(StoreKey.AutoFetchMetadata, true),
           this.setInStore(StoreKey.CheckForAppUpdates, true),
+          this.setInStore(StoreKey.CompactDisplay, false),
           this.setInStore(StoreKey.DarkModeEnabled, false),
           this.setInStore(StoreKey.DefaultToFolderView, false),
           this.setInStore(StoreKey.DisplayHelp, true),

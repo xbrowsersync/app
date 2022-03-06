@@ -37,6 +37,7 @@ export abstract class AppSearchComponent implements OnInit {
   batchResultsNum = 10;
   bookmarkTree: BookmarkTreeItem[];
   cachedBookmarks: Bookmark[];
+  compactDisplay: boolean;
   currentUrlBookmarked: boolean;
   disableQueryWatch: () => void;
   displayFolderView: boolean;
@@ -214,6 +215,7 @@ export abstract class AppSearchComponent implements OnInit {
   ngOnInit(): ng.IPromise<void> {
     return this.settingsSvc.all().then((settings) => {
       this.alternateSearchBarPosition = settings.alternateSearchBarPosition;
+      this.compactDisplay = settings.compactDisplay;
       this.displayFolderView = settings.defaultToFolderView;
       this.refreshBookmarks();
     });
