@@ -26,7 +26,7 @@ export class AndroidAppWorkingComponent {
   message: string;
   currentTimeout: ng.IPromise<void>;
 
-  @Output() cancelAction: () => any;
+  @Output() cancelAction: () => () => void;
 
   static $inject = [
     '$scope',

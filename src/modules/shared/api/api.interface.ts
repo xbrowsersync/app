@@ -1,4 +1,4 @@
-import { ApiServiceStatus } from './api.enum';
+import { ApiServiceStatus, ApiServiceType } from './api.enum';
 
 export interface ApiCreateBookmarksRequest {
   version: string;
@@ -52,6 +52,12 @@ export interface ApiServiceInfoResponse {
   message?: string;
   status: ApiServiceStatus;
   version?: string;
+}
+
+export interface ApiServiceSyncInfo {
+  serviceType: ApiServiceType;
+  syncId?: string;
+  syncPassword: string;
 }
 
 export interface ApiUpdateBookmarksRequest {

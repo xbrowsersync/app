@@ -1,5 +1,5 @@
 import { ApiServiceStatus } from '../api.enum';
-import { ApiServiceInfoResponse } from '../api.interface';
+import { ApiServiceInfoResponse, ApiServiceSyncInfo } from '../api.interface';
 
 export interface ApiXbrowsersyncErrorResponse {
   code: string;
@@ -11,4 +11,8 @@ export interface ApiXbrowsersyncServiceInfoResponse extends ApiServiceInfoRespon
   message?: string;
   status: ApiServiceStatus;
   version: string;
+}
+
+export interface ApiXbrowsersyncServiceSyncInfo extends ApiServiceSyncInfo {
+  serviceUrl: string;
 }

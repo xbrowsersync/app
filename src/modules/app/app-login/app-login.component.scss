@@ -67,6 +67,10 @@ app-login {
     z-index: 10;
   }
 
+  .login-form-container {
+    flex-grow: 1;
+  }
+
   .login-form-existing,
   .login-form-new,
   .update-service-panel {

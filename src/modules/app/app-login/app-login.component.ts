@@ -1,15 +1,13 @@
 import { Component, OnInit } from 'angular-ts-decorators';
 import autobind from 'autobind-decorator';
-import * as countriesList from 'countries-list';
-import { ApiServiceStatus } from '../../shared/api/api.enum';
-import { ApiService, ApiServiceInfo } from '../../shared/api/api.interface';
+import { ApiServiceType } from '../../shared/api/api.enum';
+import { ApiService, ApiServiceSyncInfo } from '../../shared/api/api.interface';
 import { CryptoService } from '../../shared/crypto/crypto.service';
 import {
   BaseError,
+  ClientDataNotFoundError,
   InvalidCredentialsError,
-  InvalidServiceError,
-  SyncVersionNotSupportedError,
-  UnsupportedApiVersionError
+  SyncVersionNotSupportedError
 } from '../../shared/errors/errors';
 import { ExceptionHandler } from '../../shared/errors/errors.interface';
 import Globals from '../../shared/global-shared.constants';
@@ -47,28 +45,14 @@ export class AppLoginComponent implements OnInit {
   utilitySvc: UtilityService;
   workingSvc: WorkingService;
 
-  apiServiceStatus = ApiServiceStatus;
-  displayGetSyncIdPanel: boolean;
-  displayOtherSyncsWarning = false;
-  displayPasswordConfirmation = false;
-  enablePasswordValidation = false;
-  displaySyncConfirmation = false;
-  displayUpdateServiceConfirmation = false;
-  displayUpdateServicePanel = false;
-  displayUpgradeConfirmation = false;
-  newServiceInfo: ApiServiceInfo;
-  newSync = false;
-  password: string;
-  passwordComplexity: any;
-  passwordConfirmation = null;
+  apiServiceType = ApiServiceType;
+  otherSyncsWarningVisible = false;
   platformType = PlatformType;
-  serviceInfo: ApiServiceInfo;
-  showPassword = false;
-  syncEnabled = false;
-  syncForm: ng.IFormController;
-  syncId: string;
+  selectedServiceType: ApiServiceType;
+  syncConfirmationVisible = false;
+  syncInfo: ApiServiceSyncInfo;
+  upgradeConfirmationVisible = false;
   upgradeConfirmed = false;
-  validatingServiceUrl = false;
 
   static $inject = [
     '$exceptionHandler',
@@ -109,114 +93,30 @@ export class AppLoginComponent implements OnInit {
     this.workingSvc = WorkingSvc;
   }
 
-  cancelConfirmPassword(): void {
-    this.displayPasswordConfirmation = false;
-    this.passwordConfirmation = null;
-  }
-
-  cancelUpdateService(): void {
-    this.displayUpdateServiceConfirmation = false;
-    this.displayUpdateServicePanel = false;
-  }
-
-  confirmPassword(): void {
-    this.displayPasswordConfirmation = true;
-    this.appHelperSvc.focusOnElement('input[name="txtPasswordConfirmation"]');
-  }
-
-  confirmUpdateService(): void {
-    // Update stored service info
-    const url = this.newServiceInfo.url.replace(/\/$/, '');
-    this.appHelperSvc
-      .updateServiceUrl(url)
-      .then((serviceInfo) => {
-        // Update view model and remove stored creds
-        this.serviceInfo = serviceInfo;
-        this.serviceInfo.url = url;
-        return this.$q.all([this.storeSvc.remove(StoreKey.SyncId), this.storeSvc.remove(StoreKey.Password)]);
-      })
-      .then(() => {
-        // Update view model
-        this.displayUpdateServiceConfirmation = false;
-        this.displayUpdateServicePanel = false;
-        this.password = undefined;
-        this.passwordComplexity = undefined;
-        this.passwordConfirmation = undefined;
-        this.syncId = undefined;
-        this.syncForm.txtId.$setValidity('InvalidSyncId', true);
-        this.syncForm.$setPristine();
-        this.syncForm.$setUntouched();
-
-        // Focus on first field
-        this.appHelperSvc.focusOnElement('.active-login-form input');
-      })
-      .catch((err) => this.logSvc.logError(err));
-  }
-
-  /**
-   * Checks if the current locale supports zxcvbn password validation messages.
-   * @returns `true` if the current locale supports password validation, otherwise 'false'.
-   */
-  currentLocaleSupportsPasswordValidation(): ng.IPromise<boolean> {
-    return this.platformSvc.getCurrentLocale().then((currentLocale) => {
-      // Only english and german are currently supported
-      return currentLocale.indexOf('en') === 0 || currentLocale.indexOf('de') === 0;
-    });
-  }
-
-  disableSync(): ng.IPromise<void> {
-    return this.platformSvc.disableSync().then(() => {
-      this.syncEnabled = false;
-      this.password = undefined;
-      this.passwordComplexity = undefined;
-    });
-  }
-
   dismissOtherSyncsWarning(): void {
     // Hide disable other syncs warning panel and update cache setting
-    this.displayOtherSyncsWarning = false;
+    this.otherSyncsWarningVisible = false;
     this.storeSvc.set(StoreKey.DisplayOtherSyncsWarning, false);
 
     // Focus on password field
     this.appHelperSvc.focusOnElement('.active-login-form input[name="txtPassword"]');
   }
 
-  displayExistingSyncPanel(event?: Event): void {
-    event?.preventDefault();
-    this.newSync = false;
-    this.password = undefined;
-    this.appHelperSvc.focusOnElement('input[name="txtId"]');
-  }
-
-  displayNewSyncPanel(event?: Event): void {
-    event?.preventDefault();
-    this.newSync = true;
-    this.displayPasswordConfirmation = false;
-    this.password = undefined;
-    this.passwordComplexity = undefined;
-    this.passwordConfirmation = undefined;
-    this.storeSvc.remove(StoreKey.SyncId);
-    this.storeSvc.remove(StoreKey.Password);
-    this.syncId = undefined;
-    this.syncForm.txtId.$setValidity('InvalidSyncId', true);
-    this.appHelperSvc.focusOnElement('.login-form-new input[name="txtPassword"]');
-  }
-
-  enableManualEntry(event?: Event): void {
-    event?.preventDefault();
-    this.displayGetSyncIdPanel = false;
-  }
-
   executeSync(): void {
+    // Check sync info was provided
+    if (!this.syncInfo) {
+      throw new ClientDataNotFoundError('Sync info not provided');
+    }
+
     const syncData: Sync = {
       type: SyncType.Local
     };
     let syncInfoMessage: string;
 
     // Display loading panel
-    this.displaySyncConfirmation = false;
-    this.displayOtherSyncsWarning = false;
-    this.displayUpgradeConfirmation = false;
+    this.otherSyncsWarningVisible = false;
+    this.syncConfirmationVisible = false;
+    this.upgradeConfirmationVisible = false;
     this.workingSvc.show();
 
     // Check service status
@@ -226,7 +126,7 @@ export class AppLoginComponent implements OnInit {
       .then(() => this.storeSvc.remove(StoreKey.Password))
       .then(() => {
         // If a sync ID has not been supplied, get a new one
-        if (!this.syncId) {
+        if (!this.syncInfo.syncId) {
           // Set sync type for create new sync
           syncData.type = SyncType.Remote;
 
@@ -241,23 +141,24 @@ export class AppLoginComponent implements OnInit {
                 this.storeSvc.set(StoreKey.SyncId, newSync.id),
                 this.storeSvc.set(StoreKey.SyncVersion, newSync.version)
               ])
-              .then(() => newSync.id);
+              .then(() => {
+                this.syncInfo.syncId = newSync.id;
+              });
           });
         }
 
         // Check if existing id requires sync upgrade
         return this.$q
-          .all([this.apiSvc.getBookmarksVersion(this.syncId), this.platformSvc.getAppVersion()])
+          .all([this.apiSvc.getBookmarksVersion(this.syncInfo.syncId), this.platformSvc.getAppVersion()])
           .then((results) => {
             const [response, appVersion] = results;
             const { version: bookmarksVersion } = response;
 
             // If sync version is less than app version, confirm upgrade before proceeding with sync
             if (this.utilitySvc.compareVersions(bookmarksVersion ?? '0', appVersion, '<')) {
-              if (this.upgradeConfirmed) {
-                syncData.type = SyncType.Upgrade;
-              } else {
-                this.displayUpgradeConfirmation = true;
+              syncData.type = SyncType.Upgrade;
+              if (!this.upgradeConfirmed) {
+                this.upgradeConfirmationVisible = true;
                 return;
               }
             }
@@ -266,35 +167,32 @@ export class AppLoginComponent implements OnInit {
               throw new SyncVersionNotSupportedError();
             }
 
-            syncInfoMessage = `Synced to existing id: ${this.syncId}`;
+            syncInfoMessage = `Synced to existing id: ${this.syncInfo.syncId}`;
 
             // Add sync version to cache and return current sync ID
             return this.$q
               .all([
-                this.storeSvc.set(StoreKey.SyncId, this.syncId),
+                this.storeSvc.set(StoreKey.SyncId, this.syncInfo.syncId),
                 this.storeSvc.set(StoreKey.SyncVersion, bookmarksVersion)
               ])
-              .then(() => this.syncId);
+              .then(() => {});
           });
       })
-      .then((syncId) => {
-        if (!syncId) {
+      .then(() => {
+        // Don't continue with sync if user needs to confirm sync upgrade
+        if (this.upgradeConfirmationVisible) {
           return;
         }
 
         // Generate a password hash, cache it then queue the sync
         return this.cryptoSvc
-          .getPasswordHash(this.password, syncId)
+          .getPasswordHash(this.syncInfo.syncPassword, this.syncInfo.syncId)
           .then((passwordHash) =>
             this.storeSvc.set(StoreKey.Password, passwordHash).then(() => this.platformSvc.queueSync(syncData))
           )
           .then(() => {
             this.logSvc.logInfo(syncInfoMessage);
             return this.appHelperSvc.syncBookmarksSuccess();
-          })
-          .then(() => {
-            this.syncEnabled = true;
-            this.syncId = syncId;
           })
           .catch((err) => this.syncFailed(err, syncData));
       })
@@ -308,145 +206,24 @@ export class AppLoginComponent implements OnInit {
       .finally(() => this.workingSvc.hide());
   }
 
-  getCountryNameFrom2LetterISOCode(isoCode: string): string {
-    if (!isoCode) {
-      return;
-    }
-
-    const country = countriesList.countries[isoCode];
-    if (!country) {
-      this.logSvc.logWarning(`No country found matching ISO code: ${isoCode}`);
-    }
-    return country.name;
-  }
-
-  getServiceStatusTextFromStatusCode(statusCode: ApiServiceStatus): string {
-    switch (statusCode) {
-      case ApiServiceStatus.NoNewSyncs:
-        return this.platformSvc.getI18nString(this.Strings.Service.Status.NoNewSyncs);
-      case ApiServiceStatus.Offline:
-        return this.platformSvc.getI18nString(this.Strings.Service.Status.Offline);
-      case ApiServiceStatus.Online:
-        return this.platformSvc.getI18nString(this.Strings.Service.Status.Online);
-      case ApiServiceStatus.Error:
-      default:
-        return this.platformSvc.getI18nString(this.Strings.Service.Status.Error);
-    }
-  }
-
   ngOnInit(): void {
-    this.$q
-      .all([
-        this.storeSvc.get([StoreKey.DisplayOtherSyncsWarning, StoreKey.SyncId]),
-        this.utilitySvc.isSyncEnabled(),
-        this.utilitySvc.getServiceUrl(),
-        this.currentLocaleSupportsPasswordValidation()
-      ])
-      .then((data) => {
-        const [storeContent, syncEnabled, serviceUrl, currentLocaleIsEnglish] = data;
-        this.displayOtherSyncsWarning = storeContent.displayOtherSyncsWarning;
-        this.syncId = storeContent.syncId;
-        this.syncEnabled = syncEnabled;
-        this.enablePasswordValidation = currentLocaleIsEnglish;
+    this.selectedServiceType = ApiServiceType.xBrowserSync;
 
-        this.serviceInfo = {
-          url: serviceUrl
-        };
-
-        // Validate sync id if present
-        if (this.syncId) {
-          this.$timeout(() => this.validateSyncId(), Globals.InterfaceReadyTimeout);
-        }
-
-        if (this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
-          // Set displayed panels for mobile platform
-          this.displayGetSyncIdPanel = !this.syncId;
-          this.newSync = false;
-        } else {
-          // Set displayed panels for browsers
-          this.newSync = !this.syncId;
-
-          // If not synced before, display warning to disable other sync tools
-          if (this.displayOtherSyncsWarning) {
-            // Focus on first button
-            this.appHelperSvc.focusOnElement('.otherSyncsWarning .buttons > button');
-          } else if (!this.utilitySvc.isMobilePlatform(this.platformSvc.platformName)) {
-            // Focus on password field
-            this.appHelperSvc.focusOnElement('.active-login-form  input[name="txtPassword"]');
-          }
-        }
-
-        // Refresh service info
-        this.refreshServiceStatus()
-          // Set links to open in new tabs
-          .then(() => this.appHelperSvc.attachClickEventsToNewTabLinks());
-      });
-  }
-
-  refreshServiceStatus(): ng.IPromise<void> {
-    return this.appHelperSvc.formatServiceInfo().then((formattedServiceInfo) => {
-      Object.assign(this.serviceInfo, formattedServiceInfo);
-    });
-  }
-
-  scanId(event?: Event) {
-    event?.preventDefault();
-    this.appHelperSvc.switchView(RoutePath.Scan);
-  }
-
-  serviceIsOnline(): boolean {
-    return (
-      this.serviceInfo.status === ApiServiceStatus.NoNewSyncs || this.serviceInfo.status === ApiServiceStatus.Online
-    );
-  }
-
-  serviceUrlChanged(): void {
-    // Reset form if field is invalid
-    if (this.syncForm.newServiceUrl.$invalid) {
-      this.syncForm.newServiceUrl.$setValidity('InvalidService', true);
-      this.syncForm.newServiceUrl.$setValidity('InvalidUrl', true);
-      this.syncForm.newServiceUrl.$setValidity('RequestFailed', true);
-      this.syncForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', true);
-    }
-
-    if ((this.newServiceInfo.url ?? undefined) === undefined) {
-      return;
-    }
-
-    // Check url is valid
-    if (!new RegExp(`^${Globals.URL.ValidUrlRegex}$`, 'i').test(this.newServiceInfo.url)) {
-      this.syncForm.newServiceUrl.$setValidity('InvalidUrl', false);
-    }
-  }
-
-  submitForm(): void {
-    this.$timeout(() => {
-      // Handle enter key press
-      if (this.displayUpdateServicePanel) {
-        (document.querySelector('.update-service-panel .btn-update-service-url') as HTMLButtonElement).click();
-      } else if (this.newSync) {
-        if (this.displayPasswordConfirmation) {
-          (document.querySelector('.login-form-new .btn-new-sync') as HTMLButtonElement).click();
-        } else {
-          (document.querySelector('.login-form-new .btn-confirm-password') as HTMLButtonElement).click();
-        }
-      } else {
-        (document.querySelector('.login-form-existing .btn-existing-sync') as HTMLButtonElement).click();
+    this.storeSvc.get<boolean>(StoreKey.DisplayOtherSyncsWarning).then((displayOtherSyncsWarning) => {
+      this.otherSyncsWarningVisible = displayOtherSyncsWarning;
+      if (this.otherSyncsWarningVisible) {
+        // Focus on first button
+        this.appHelperSvc.focusOnElement('.otherSyncsWarning .buttons > button');
       }
     });
   }
 
-  switchService(): void {
-    // Reset view
-    this.newServiceInfo = {
-      url: this.serviceInfo.url
-    };
-    this.displayUpdateServiceConfirmation = false;
-    this.displayUpdateServicePanel = true;
-    this.validatingServiceUrl = false;
+  setSyncConfirmationVisible(isVisible = true): void {
+    this.syncConfirmationVisible = isVisible;
+  }
 
-    // Validate service url and then focus on url field
-    this.validateServiceUrl().finally(() => this.appHelperSvc.focusOnElement('.update-service-panel input'));
+  setSyncInfo(syncInfo: ApiServiceSyncInfo): void {
+    this.syncInfo = syncInfo;
   }
 
   switchToHelpView(): void {
@@ -455,17 +232,6 @@ export class AppLoginComponent implements OnInit {
 
   switchToSettingsView(): void {
     this.appHelperSvc.switchView(RoutePath.Settings);
-  }
-
-  sync(): void {
-    if (this.syncId && this.appHelperSvc.confirmBeforeSyncing()) {
-      // Display overwrite data confirmation panel
-      this.displaySyncConfirmation = true;
-      this.appHelperSvc.focusOnElement('.btn-confirm-enable-sync');
-    } else {
-      // If no ID provided start syncing
-      this.executeSync();
-    }
   }
 
   syncFailed(err: BaseError, sync: Sync): void {
@@ -490,74 +256,8 @@ export class AppLoginComponent implements OnInit {
     });
   }
 
-  syncIdChanged(): void {
-    if (this.validateSyncId()) {
-      this.storeSvc.set(StoreKey.SyncId, this.syncId);
-    }
-  }
-
-  toggleShowPassword(): void {
-    // Toggle show password
-    this.showPassword = !this.showPassword;
-  }
-
-  updateServiceUrl(): void {
-    // Check for protocol
-    if (this.newServiceInfo.url?.trim() && !new RegExp(Globals.URL.ProtocolRegex).test(this.newServiceInfo.url ?? '')) {
-      this.newServiceInfo.url = `https://${this.newServiceInfo.url}`;
-    }
-
-    // Validate service url
-    this.validateServiceUrl().then((newServiceInfo) => {
-      if (!newServiceInfo) {
-        return;
-      }
-
-      // Retrieve new service status and update view model
-      return this.appHelperSvc.formatServiceInfo(newServiceInfo).then((serviceInfo) => {
-        Object.assign(this.newServiceInfo, serviceInfo);
-        this.displayUpdateServiceConfirmation = true;
-        this.appHelperSvc.attachClickEventsToNewTabLinks(document.querySelector('.service-message'));
-        this.appHelperSvc.focusOnElement('.focused');
-      });
-    });
-  }
-
   upgradeSync(): void {
     this.upgradeConfirmed = true;
     this.executeSync();
-  }
-
-  validateServiceUrl() {
-    this.validatingServiceUrl = true;
-
-    // Check service url status
-    const url = this.newServiceInfo.url.replace(/\/$/, '');
-    return this.apiSvc
-      .checkServiceStatus(url)
-      .catch((err) => {
-        switch (err.constructor) {
-          case UnsupportedApiVersionError:
-            this.syncForm.newServiceUrl.$setValidity('ServiceVersionNotSupported', false);
-            break;
-          case InvalidServiceError:
-            this.syncForm.newServiceUrl.$setValidity('InvalidService', false);
-            break;
-          default:
-            this.syncForm.newServiceUrl.$setValidity('RequestFailed', false);
-        }
-
-        // Focus on url field
-        this.appHelperSvc.focusOnElement('input[name=newServiceUrl]', true);
-      })
-      .finally(() => {
-        this.validatingServiceUrl = false;
-      });
-  }
-
-  validateSyncId(): boolean {
-    const isValid = !this.syncId || this.utilitySvc.syncIdIsValid(this.syncId);
-    this.syncForm.txtId.$setValidity('InvalidSyncId', isValid);
-    return isValid;
   }
 }
